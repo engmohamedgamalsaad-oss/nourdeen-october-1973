@@ -1,58 +1,41 @@
-
+```html
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 
 <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
->
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
 
 <title>رجال البحر في أكتوبر | نوردين محمد جمال</title>
 
-<meta
-  name="description"
-  content="حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال"
-/>
-
+<meta name="description"
+      content="حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
-<link
-  rel="preconnect"
-  href="https://fonts.gstatic.com"
->
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
 
-<link
-  href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Marhey:wght@500;600;700&display=swap"
-  rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Marhey:wght@500;600;700&display=swap"
+      rel="stylesheet">
 
 
 <style>
 
-/* =====================================================
-   COLORS
-===================================================== */
-
 :root{
 
   --black:#02080c;
-
   --deep:#03151e;
-
   --sea:#063442;
-
   --sea2:#0b4d5c;
 
   --bronze:#b8874b;
-
   --gold:#e3bd78;
 
   --light:#e4eeee;
-
   --muted:#9eb7bb;
 
   --red:#a93232;
@@ -60,17 +43,15 @@
 }
 
 
-/* =====================================================
-   RESET
-===================================================== */
-
 *{
   box-sizing:border-box;
 }
 
+
 html{
   scroll-behavior:smooth;
 }
+
 
 body{
 
@@ -97,10 +78,6 @@ body{
 }
 
 
-/* =====================================================
-   TEXTURE
-===================================================== */
-
 body:before{
 
   content:"";
@@ -113,7 +90,7 @@ body:before{
 
   z-index:-1;
 
-  opacity:.08;
+  opacity:.07;
 
   background:
 
@@ -139,7 +116,7 @@ body:before{
   left:0;
   right:0;
 
-  height:68px;
+  height:70px;
 
   z-index:100;
 
@@ -151,21 +128,21 @@ body:before{
 
   padding:
     0
-    clamp(15px,5vw,70px);
+    clamp(12px,4vw,60px);
 
   background:
-    rgba(2,8,12,.88);
+    rgba(2,8,12,.9);
 
-  backdrop-filter:blur(12px);
+  backdrop-filter:blur(14px);
 
   border-bottom:
     1px solid
-    rgba(184,135,75,.3);
+    rgba(184,135,75,.35);
 
 }
 
 
-.topbar a{
+.home-link{
 
   color:var(--gold);
 
@@ -173,14 +150,82 @@ body:before{
 
   font-size:.85rem;
 
+  white-space:nowrap;
+
 }
 
 
-.top-title{
+.school-brand{
 
-  font-family:"Marhey",sans-serif;
+  display:flex;
 
-  color:var(--gold);
+  align-items:center;
+
+  gap:10px;
+
+}
+
+
+.school-brand img{
+
+  width:45px;
+
+  height:45px;
+
+  object-fit:contain;
+
+  filter:
+    drop-shadow(
+      0 2px 5px
+      rgba(0,0,0,.8)
+    );
+
+}
+
+
+.school-info{
+
+  text-align:right;
+
+}
+
+
+.school-name{
+
+  color:#e4c98f;
+
+  font-size:.68rem;
+
+  font-weight:700;
+
+  line-height:1.4;
+
+}
+
+
+.page-name{
+
+  color:#9fb8bc;
+
+  font-size:.72rem;
+
+}
+
+
+@media(max-width:600px){
+
+  .school-name{
+    display:none;
+  }
+
+  .page-name{
+    display:none;
+  }
+
+  .school-brand img{
+    width:40px;
+    height:40px;
+  }
 
 }
 
@@ -206,7 +251,7 @@ body:before{
   overflow:hidden;
 
   padding:
-    100px 20px 70px;
+    110px 20px 80px;
 
 }
 
@@ -223,8 +268,8 @@ body:before{
 
     linear-gradient(
       180deg,
-      rgba(0,0,0,.15),
-      rgba(0,0,0,.7)
+      rgba(0,0,0,.05),
+      rgba(0,0,0,.72)
     );
 
   pointer-events:none;
@@ -232,69 +277,13 @@ body:before{
 }
 
 
-/* =====================================================
-   HERO WATER
-===================================================== */
-
-.water{
-
-  position:absolute;
-
-  left:-10%;
-
-  right:-10%;
-
-  bottom:-70px;
-
-  height:230px;
-
-  background:
-
-    linear-gradient(
-      to bottom,
-      #0b5060,
-      #03151e
-    );
-
-  border-radius:
-    50% 50% 0 0;
-
-  animation:
-    waterMove
-    8s
-    ease-in-out
-    infinite
-    alternate;
-
-}
-
-
-@keyframes waterMove{
-
-  from{
-    transform:translateX(-30px);
-  }
-
-  to{
-    transform:translateX(30px);
-  }
-
-}
-
-
-/* =====================================================
-   BRONZE RING
-===================================================== */
-
 .hero-ring{
 
   position:absolute;
 
-  width:
-    min(650px,90vw);
+  width:min(650px,90vw);
 
-  height:
-    min(650px,90vw);
+  height:min(650px,90vw);
 
   border-radius:50%;
 
@@ -312,10 +301,7 @@ body:before{
     rgba(184,135,75,.08);
 
   animation:
-    ringPulse
-    8s
-    ease-in-out
-    infinite;
+    ringPulse 8s ease-in-out infinite;
 
 }
 
@@ -340,7 +326,7 @@ body:before{
   font-weight:bold;
 
   color:
-    rgba(184,135,75,.15);
+    rgba(184,135,75,.13);
 
 }
 
@@ -354,9 +340,47 @@ body:before{
 }
 
 
-/* =====================================================
-   HERO CONTENT
-===================================================== */
+.water{
+
+  position:absolute;
+
+  left:-10%;
+
+  right:-10%;
+
+  bottom:-80px;
+
+  height:230px;
+
+  background:
+
+    linear-gradient(
+      to bottom,
+      #0b5060,
+      #03151e
+    );
+
+  border-radius:
+    50% 50% 0 0;
+
+  animation:
+    waterMove 8s ease-in-out infinite alternate;
+
+}
+
+
+@keyframes waterMove{
+
+  from{
+    transform:translateX(-30px);
+  }
+
+  to{
+    transform:translateX(30px);
+  }
+
+}
+
 
 .hero-content{
 
@@ -382,8 +406,7 @@ body:before{
 
 .hero h1{
 
-  margin:
-    18px 0;
+  margin:18px 0;
 
   font-family:"Marhey",sans-serif;
 
@@ -433,10 +456,6 @@ body:before{
 }
 
 
-/* =====================================================
-   SCROLL
-===================================================== */
-
 .scroll{
 
   position:absolute;
@@ -460,7 +479,7 @@ body:before{
    SECTIONS
 ===================================================== */
 
-section.story{
+.story{
 
   padding:
     110px 20px;
@@ -575,31 +594,10 @@ p{
 
   object-fit:cover;
 
-  background:
-    #071c25;
+  background:#071c25;
 
 }
 
-
-.image-caption{
-
-  padding:
-    12px 15px;
-
-  text-align:center;
-
-  color:#aebfc1;
-
-  font-size:.78rem;
-
-  background:#07151c;
-
-}
-
-
-/* =====================================================
-   PLACEHOLDER
-===================================================== */
 
 .photo-placeholder{
 
@@ -635,6 +633,22 @@ p{
   color:var(--gold);
 
   margin-bottom:8px;
+
+}
+
+
+.image-caption{
+
+  padding:
+    12px 15px;
+
+  text-align:center;
+
+  color:#aebfc1;
+
+  font-size:.78rem;
+
+  background:#07151c;
 
 }
 
@@ -758,13 +772,6 @@ p{
 }
 
 
-.event p{
-
-  margin-top:5px;
-
-}
-
-
 /* =====================================================
    QUOTE
 ===================================================== */
@@ -837,7 +844,7 @@ p{
 
 
 /* =====================================================
-   HERO PERSON
+   PERSON
 ===================================================== */
 
 .person{
@@ -883,19 +890,20 @@ p{
       #543019
     );
 
+  overflow:hidden;
+
 }
 
 
 .person-photo img{
 
   width:100%;
+
   height:100%;
 
   border-radius:50%;
 
   object-fit:cover;
-
-  background:#06151c;
 
 }
 
@@ -947,6 +955,43 @@ p{
 .lesson p{
 
   font-size:.95rem;
+
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.home-button{
+
+  display:inline-block;
+
+  margin-top:25px;
+
+  padding:
+    13px 28px;
+
+  color:#171006;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #e3bd78,
+      #a8753d
+    );
+
+  text-decoration:none;
+
+  font-weight:800;
+
+  border-radius:5px;
+
+  box-shadow:
+
+    0 8px 25px
+    rgba(0,0,0,.4);
 
 }
 
@@ -1081,23 +1126,50 @@ footer strong{
 
 
 <!-- =====================================================
-     TOP BAR
+     HEADER
 ===================================================== -->
 
 <header class="topbar">
 
-  <a href="../../index.html">
+
+  <a
+    class="home-link"
+    href="../../index.html"
+  >
 
     ← الصفحة الرئيسية
 
   </a>
 
 
-  <div class="top-title">
+  <div class="school-brand">
 
-    حكايات أكتوبر
+
+    <img
+      src="../../assets/logo/school-logo.png"
+      alt="شعار مدرسة المنار القومية للغات للبنات"
+    >
+
+
+    <div class="school-info">
+
+      <div class="school-name">
+
+        مدرسة المنار القومية للغات للبنات
+
+      </div>
+
+      <div class="page-name">
+
+        حكايات أكتوبر
+
+      </div>
+
+    </div>
+
 
   </div>
+
 
 </header>
 
@@ -1111,7 +1183,6 @@ footer strong{
 
 
   <div class="hero-ring"></div>
-
 
   <div class="water"></div>
 
@@ -1226,6 +1297,7 @@ footer strong{
 
     <div class="image-frame">
 
+
       <div class="photo-placeholder">
 
         <div>
@@ -1241,12 +1313,14 @@ footer strong{
 
       </div>
 
+
       <div class="image-caption">
 
         صورة تاريخية — سيتم إضافة المصدر
         مع الصورة عند تجهيز الأرشيف.
 
       </div>
+
 
     </div>
 
@@ -1258,7 +1332,7 @@ footer strong{
 
 
 <!-- =====================================================
-     BEFORE 1973
+     TIMELINE
 ===================================================== -->
 
 <section class="story">
@@ -1442,75 +1516,13 @@ footer strong{
 
       </div>
 
+
       <div class="image-caption">
 
         القوات البحرية المصرية — أكتوبر 1973
 
       </div>
 
-    </div>
-
-
-  </div>
-
-</section>
-
-
-
-<!-- =====================================================
-     FIVE SHIPS
-===================================================== -->
-
-<section class="story">
-
-
-  <div class="container reveal">
-
-
-    <div class="heading">
-
-      <div class="kicker">
-        العمليات البحرية
-      </div>
-
-      <h2>
-        خمس قطع بحرية
-      </h2>
-
-    </div>
-
-
-    <p>
-
-      في اليوم الأول للحرب أعلنت القيادة المصرية
-      نجاح القوات البحرية في تدمير خمس قطع بحرية
-      للعدو في البحر المتوسط، بالإضافة إلى قصف
-      مواقع للعدو.
-
-    </p>
-
-
-    <div class="image-frame">
-
-      <div class="photo-placeholder">
-
-        <div>
-
-          <strong>
-            صورة أرشيفية
-          </strong>
-
-          سيتم وضع الصورة التاريخية هنا.
-
-        </div>
-
-      </div>
-
-      <div class="image-caption">
-
-        عمليات القوات البحرية المصرية
-
-      </div>
 
     </div>
 
@@ -1568,6 +1580,7 @@ footer strong{
 
     <div class="map-box">
 
+
       <div class="photo-placeholder">
 
         <div>
@@ -1582,6 +1595,7 @@ footer strong{
         </div>
 
       </div>
+
 
     </div>
 
@@ -1790,7 +1804,7 @@ footer strong{
 
 
 <!-- =====================================================
-     NOURDEEN SUMMARY
+     END
 ===================================================== -->
 
 <section class="end">
@@ -1849,14 +1863,6 @@ footer strong{
     </p>
 
 
-    <p>
-
-      وكان وراء هذه العمليات رجال تدربوا لسنوات،
-      ومنهم رجال الضفادع البشرية.
-
-    </p>
-
-
     <div class="quote">
 
       <p>
@@ -1872,7 +1878,7 @@ footer strong{
 
 
     <a
-      class="btn"
+      class="home-button"
       href="../../index.html"
     >
 
@@ -1887,10 +1893,6 @@ footer strong{
 </section>
 
 
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
 
 <footer>
 
@@ -1915,10 +1917,6 @@ footer strong{
 </footer>
 
 
-
-<!-- =====================================================
-     JAVASCRIPT
-===================================================== -->
 
 <script>
 
@@ -1959,9 +1957,9 @@ revealElements.forEach(
     observer.observe(element)
 );
 
-
 </script>
 
 
 </body>
 </html>
+```
