@@ -1,0 +1,1775 @@
+```html
+<!doctype html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1">
+
+<title>رجال البحر في أكتوبر | نوردين محمد جمال</title>
+
+<meta name="description"
+      content="حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال">
+
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
+
+<link rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=Marhey:wght@500;600;700&display=swap"
+      rel="stylesheet">
+
+
+<style>
+
+/* =====================================================
+   COLORS
+===================================================== */
+
+:root{
+
+  --black:#02080c;
+
+  --deep:#03151e;
+
+  --sea:#063442;
+
+  --sea2:#0b4d5c;
+
+  --bronze:#b8874b;
+
+  --gold:#e3bd78;
+
+  --light:#e4eeee;
+
+  --muted:#9eb7bb;
+
+  --red:#a93232;
+
+}
+
+
+/* =====================================================
+   BASIC
+===================================================== */
+
+*{
+  box-sizing:border-box;
+}
+
+
+html{
+  scroll-behavior:smooth;
+}
+
+
+body{
+
+  margin:0;
+
+  color:var(--light);
+
+  font-family:
+    "Cairo",
+    Tahoma,
+    sans-serif;
+
+  background:
+
+    radial-gradient(
+      ellipse at 50% 0%,
+      #0b4554 0%,
+      var(--deep) 38%,
+      var(--black) 100%
+    );
+
+  overflow-x:hidden;
+
+}
+
+
+/* texture */
+
+body:before{
+
+  content:"";
+
+  position:fixed;
+
+  inset:0;
+
+  pointer-events:none;
+
+  z-index:-1;
+
+  opacity:.07;
+
+  background:
+
+    repeating-linear-gradient(
+      120deg,
+      transparent 0 80px,
+      rgba(227,189,120,.35) 81px,
+      transparent 82px 160px
+    );
+
+}
+
+
+/* =====================================================
+   TOP BAR
+===================================================== */
+
+.topbar{
+
+  position:fixed;
+
+  top:0;
+  left:0;
+  right:0;
+
+  height:70px;
+
+  z-index:100;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  padding:
+    0
+    clamp(12px,4vw,60px);
+
+  background:
+    rgba(2,8,12,.9);
+
+  backdrop-filter:blur(14px);
+
+  border-bottom:
+    1px solid
+    rgba(184,135,75,.35);
+
+}
+
+
+/* home */
+
+.home-link{
+
+  color:var(--gold);
+
+  text-decoration:none;
+
+  font-size:.85rem;
+
+  white-space:nowrap;
+
+}
+
+
+/* school logo */
+
+.school-brand{
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+}
+
+
+/*
+   اللوجو بدون إطار
+   وبدون ظل
+   وبدون خلفية
+*/
+
+.school-brand img{
+
+  width:45px;
+
+  height:45px;
+
+  object-fit:contain;
+
+  border:none;
+
+  background:transparent;
+
+  box-shadow:none;
+
+  filter:none;
+
+}
+
+
+.school-info{
+
+  text-align:right;
+
+}
+
+
+.school-name{
+
+  color:#e4c98f;
+
+  font-size:.68rem;
+
+  font-weight:700;
+
+  line-height:1.4;
+
+}
+
+
+.page-name{
+
+  color:#9fb8bc;
+
+  font-size:.72rem;
+
+}
+
+
+@media(max-width:600px){
+
+  .school-name{
+    display:none;
+  }
+
+  .page-name{
+    display:none;
+  }
+
+  .school-brand img{
+
+    width:40px;
+
+    height:40px;
+
+  }
+
+}
+
+
+/* =====================================================
+   HERO
+===================================================== */
+
+.hero{
+
+  min-height:100svh;
+
+  position:relative;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  overflow:hidden;
+
+  padding:
+    110px 20px 80px;
+
+}
+
+
+.hero:after{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  background:
+
+    linear-gradient(
+      180deg,
+      rgba(0,0,0,.05),
+      rgba(0,0,0,.72)
+    );
+
+  pointer-events:none;
+
+}
+
+
+/* large bronze circle */
+
+.hero-ring{
+
+  position:absolute;
+
+  width:min(650px,90vw);
+
+  height:min(650px,90vw);
+
+  border-radius:50%;
+
+  border:
+    2px solid
+    rgba(184,135,75,.4);
+
+  box-shadow:
+
+    inset
+    0 0 70px
+    rgba(184,135,75,.08),
+
+    0 0 80px
+    rgba(184,135,75,.08);
+
+  animation:
+    ringPulse 8s ease-in-out infinite;
+
+}
+
+
+.hero-ring:before{
+
+  content:"1973";
+
+  position:absolute;
+
+  inset:0;
+
+  display:grid;
+
+  place-items:center;
+
+  font-family:Georgia,serif;
+
+  font-size:
+    clamp(5rem,16vw,12rem);
+
+  font-weight:bold;
+
+  color:
+    rgba(184,135,75,.13);
+
+}
+
+
+@keyframes ringPulse{
+
+  50%{
+    transform:scale(1.04);
+  }
+
+}
+
+
+/* water */
+
+.water{
+
+  position:absolute;
+
+  left:-10%;
+
+  right:-10%;
+
+  bottom:-80px;
+
+  height:230px;
+
+  background:
+
+    linear-gradient(
+      to bottom,
+      #0b5060,
+      #03151e
+    );
+
+  border-radius:
+    50% 50% 0 0;
+
+  animation:
+    waterMove 8s ease-in-out infinite alternate;
+
+}
+
+
+@keyframes waterMove{
+
+  from{
+    transform:translateX(-30px);
+  }
+
+  to{
+    transform:translateX(30px);
+  }
+
+}
+
+
+/* hero text */
+
+.hero-content{
+
+  position:relative;
+
+  z-index:5;
+
+  width:min(850px,100%);
+
+}
+
+
+.eyebrow{
+
+  color:var(--gold);
+
+  font-size:.85rem;
+
+  letter-spacing:2px;
+
+}
+
+
+.hero h1{
+
+  margin:18px 0;
+
+  font-family:"Marhey",sans-serif;
+
+  font-size:
+    clamp(3rem,10vw,7rem);
+
+  line-height:1.05;
+
+  color:var(--gold);
+
+  text-shadow:
+
+    3px 4px 0 #442b16,
+
+    7px 10px 25px #000;
+
+}
+
+
+.hero-subtitle{
+
+  color:#c4d4d6;
+
+  font-size:
+    clamp(1rem,3vw,1.4rem);
+
+  line-height:2;
+
+}
+
+
+.author{
+
+  margin-top:28px;
+
+  color:white;
+
+}
+
+
+.author strong{
+
+  color:var(--gold);
+
+  font-family:"Marhey",sans-serif;
+
+}
+
+
+.scroll{
+
+  position:absolute;
+
+  bottom:30px;
+
+  left:50%;
+
+  transform:translateX(-50%);
+
+  color:var(--muted);
+
+  font-size:.8rem;
+
+  z-index:5;
+
+}
+
+
+/* =====================================================
+   SECTIONS
+===================================================== */
+
+.story{
+
+  padding:
+    110px 20px;
+
+}
+
+
+.container{
+
+  width:min(900px,100%);
+
+  margin:auto;
+
+}
+
+
+.heading{
+
+  margin-bottom:40px;
+
+}
+
+
+.kicker{
+
+  color:var(--gold);
+
+  font-size:.8rem;
+
+  letter-spacing:2px;
+
+}
+
+
+h2{
+
+  font-family:"Marhey",sans-serif;
+
+  font-size:
+    clamp(2rem,5vw,3.5rem);
+
+  margin:
+    8px 0 20px;
+
+  color:#e6eeee;
+
+}
+
+
+h3{
+
+  color:var(--gold);
+
+  font-family:"Marhey",sans-serif;
+
+}
+
+
+p{
+
+  color:#c6d5d7;
+
+  font-size:
+    clamp(1rem,2vw,1.15rem);
+
+  line-height:2.25;
+
+}
+
+
+/* =====================================================
+   IMAGE FRAME
+===================================================== */
+
+.image-frame{
+
+  position:relative;
+
+  margin:
+    45px auto;
+
+  padding:9px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #d0a05c,
+      #67401f,
+      #2b190d
+    );
+
+  box-shadow:
+
+    0 25px 60px
+    rgba(0,0,0,.55),
+
+    inset
+    1px 1px 2px
+    rgba(255,255,255,.5);
+
+}
+
+
+.image-frame img{
+
+  display:block;
+
+  width:100%;
+
+  min-height:260px;
+
+  object-fit:cover;
+
+  background:#071c25;
+
+}
+
+
+.photo-placeholder{
+
+  min-height:300px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  text-align:center;
+
+  padding:30px;
+
+  color:#718c91;
+
+  background:
+
+    radial-gradient(
+      circle,
+      #104653,
+      #04141c
+    );
+
+}
+
+
+.photo-placeholder strong{
+
+  display:block;
+
+  color:var(--gold);
+
+  margin-bottom:8px;
+
+}
+
+
+.image-caption{
+
+  padding:
+    12px 15px;
+
+  text-align:center;
+
+  color:#aebfc1;
+
+  font-size:.78rem;
+
+  background:#07151c;
+
+}
+
+
+/* =====================================================
+   TWO COLUMNS
+===================================================== */
+
+.two{
+
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:25px;
+
+}
+
+
+.panel{
+
+  padding:30px;
+
+  border:
+    1px solid
+    rgba(184,135,75,.28);
+
+  background:
+
+    linear-gradient(
+      145deg,
+      rgba(8,62,76,.5),
+      rgba(2,12,18,.75)
+    );
+
+}
+
+
+.panel h3{
+
+  margin-top:0;
+
+}
+
+
+@media(max-width:700px){
+
+  .two{
+    grid-template-columns:1fr;
+  }
+
+}
+
+
+/* =====================================================
+   TIMELINE
+===================================================== */
+
+.timeline{
+
+  position:relative;
+
+  margin-top:45px;
+
+  padding-right:30px;
+
+  border-right:
+    2px solid
+    rgba(184,135,75,.4);
+
+}
+
+
+.event{
+
+  position:relative;
+
+  margin-bottom:45px;
+
+}
+
+
+.event:before{
+
+  content:"";
+
+  position:absolute;
+
+  right:-39px;
+
+  top:7px;
+
+  width:14px;
+
+  height:14px;
+
+  border-radius:50%;
+
+  background:var(--gold);
+
+  border:
+    3px solid
+    #09252e;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(184,135,75,.3);
+
+}
+
+
+.year{
+
+  color:var(--gold);
+
+  font-family:"Marhey",sans-serif;
+
+  font-size:1.5rem;
+
+}
+
+
+/* =====================================================
+   QUOTE
+===================================================== */
+
+.quote{
+
+  margin:
+    50px 0;
+
+  padding:
+    30px;
+
+  border-right:
+    5px solid
+    var(--gold);
+
+  background:
+    rgba(184,135,75,.07);
+
+}
+
+
+.quote p{
+
+  margin:0;
+
+  color:#e0d0b4;
+
+  font-family:"Marhey",sans-serif;
+
+}
+
+
+/* =====================================================
+   MAP
+===================================================== */
+
+.map-box{
+
+  margin:
+    50px auto;
+
+  padding:10px;
+
+  max-width:750px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #a8783d,
+      #4c2b15,
+      #1e120a
+    );
+
+  box-shadow:
+    0 25px 60px
+    rgba(0,0,0,.5);
+
+}
+
+
+.map-box img{
+
+  width:100%;
+
+  display:block;
+
+}
+
+
+/* =====================================================
+   PERSON
+===================================================== */
+
+.person{
+
+  text-align:center;
+
+  padding:
+    55px 30px;
+
+  border:
+    1px solid
+    rgba(184,135,75,.4);
+
+  background:
+
+    radial-gradient(
+      circle at center,
+      rgba(10,70,84,.6),
+      rgba(2,10,15,.8)
+    );
+
+}
+
+
+.person-photo{
+
+  width:190px;
+
+  height:190px;
+
+  margin:
+    0 auto 25px;
+
+  border-radius:50%;
+
+  padding:7px;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #e0b66d,
+      #543019
+    );
+
+  overflow:hidden;
+
+}
+
+
+.person-photo img{
+
+  width:100%;
+
+  height:100%;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+}
+
+
+/* =====================================================
+   LESSONS
+===================================================== */
+
+.lessons{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(210px,1fr)
+    );
+
+  gap:18px;
+
+}
+
+
+.lesson{
+
+  padding:25px;
+
+  border:
+    1px solid
+    rgba(184,135,75,.25);
+
+  background:
+    rgba(2,14,20,.6);
+
+}
+
+
+.lesson-number{
+
+  color:var(--gold);
+
+  font-family:"Marhey",sans-serif;
+
+  font-size:1.5rem;
+
+}
+
+
+.lesson p{
+
+  font-size:.95rem;
+
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.home-button{
+
+  display:inline-block;
+
+  margin-top:25px;
+
+  padding:
+    13px 28px;
+
+  color:#171006;
+
+  background:
+
+    linear-gradient(
+      145deg,
+      #e3bd78,
+      #a8753d
+    );
+
+  text-decoration:none;
+
+  font-weight:800;
+
+  border-radius:5px;
+
+  box-shadow:
+
+    0 8px 25px
+    rgba(0,0,0,.4);
+
+}
+
+
+/* =====================================================
+   END
+===================================================== */
+
+.end{
+
+  text-align:center;
+
+  padding:
+    130px 20px;
+
+  background:
+
+    radial-gradient(
+      ellipse at center,
+      #0b4655,
+      #02080c 70%
+    );
+
+}
+
+
+.end h2{
+
+  color:var(--gold);
+
+}
+
+
+.end-line{
+
+  width:
+    min(600px,90%);
+
+  height:1px;
+
+  margin:
+    35px auto;
+
+  background:
+
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--bronze),
+      transparent
+    );
+
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer{
+
+  padding:
+    50px 20px;
+
+  text-align:center;
+
+  color:#789196;
+
+  font-size:.8rem;
+
+  border-top:
+    1px solid
+    rgba(184,135,75,.2);
+
+}
+
+
+footer strong{
+
+  color:var(--gold);
+
+}
+
+
+/* =====================================================
+   REVEAL ANIMATION
+===================================================== */
+
+.reveal{
+
+  opacity:0;
+
+  transform:
+    translateY(35px);
+
+  transition:
+    opacity .8s ease,
+    transform .8s ease;
+
+}
+
+
+.reveal.show{
+
+  opacity:1;
+
+  transform:none;
+
+}
+
+
+@media(prefers-reduced-motion:reduce){
+
+  *,
+  *:before,
+  *:after{
+
+    animation:none!important;
+
+    transition:none!important;
+
+  }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="topbar">
+
+
+  <a
+    class="home-link"
+    href="../../index.html"
+  >
+
+    ← الصفحة الرئيسية
+
+  </a>
+
+
+  <div class="school-brand">
+
+
+    <img
+      src="../../assets/logo/school-logo.png"
+      alt="شعار مدرسة المنار القومية للغات للبنات"
+    >
+
+
+    <div class="school-info">
+
+      <div class="school-name">
+
+        مدرسة المنار القومية للغات للبنات
+
+      </div>
+
+      <div class="page-name">
+
+        حكايات أكتوبر
+
+      </div>
+
+    </div>
+
+
+  </div>
+
+
+</header>
+
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero">
+
+
+  <div class="hero-ring"></div>
+
+  <div class="water"></div>
+
+
+  <div class="hero-content reveal">
+
+
+    <div class="eyebrow">
+
+      EGYPT • 6 OCTOBER 1973
+
+    </div>
+
+
+    <h1>
+
+      رجال البحر
+
+    </h1>
+
+
+    <div class="hero-subtitle">
+
+      المعركة التي لم يرها معظم الناس
+
+    </div>
+
+
+    <div class="author">
+
+      إعداد وتقديم
+
+      <br>
+
+      <strong>
+        نوردين محمد جمال
+      </strong>
+
+      <br>
+
+      الصف الأول الإعدادي • Class 1B
+
+    </div>
+
+
+  </div>
+
+
+  <div class="scroll">
+
+    انزل لتبدأ الحكاية ↓
+
+  </div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+     INTRO
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="heading">
+
+      <div class="kicker">
+        البداية
+      </div>
+
+      <h2>
+        الحكاية التي لم تبدأ في السادس من أكتوبر
+      </h2>
+
+    </div>
+
+
+    <p>
+
+      عندما نتحدث عن حرب أكتوبر 1973،
+      نتذكر عبور قناة السويس وتحطيم خط بارليف
+      وتقدم الجنود المصريين شرقًا.
+
+      لكن في الوقت نفسه كانت هناك معركة أخرى
+      تجري بعيدًا عن عيون معظم الناس.
+
+    </p>
+
+
+    <p>
+
+      كانت البحرية المصرية تؤدي مهامها
+      في البحر المتوسط والبحر الأحمر،
+      وتعمل على حماية أجناب القوات المصرية
+      وتنفيذ عمليات ضد العدو.
+
+    </p>
+
+
+    <p>
+
+      ولهذا فإن قصة رجال البحر هي جزء مهم
+      من قصة النصر في أكتوبر.
+
+    </p>
+
+
+    <div class="image-frame">
+
+
+      <div class="photo-placeholder">
+
+        <div>
+
+          <strong>
+            صورة تاريخية من حرب أكتوبر
+          </strong>
+
+          ستوضع هنا صورة حقيقية
+          مرتبطة بالبحرية المصرية.
+
+        </div>
+
+      </div>
+
+
+      <div class="image-caption">
+
+        صورة تاريخية — سيتم إضافة المصدر
+        مع الصورة عند تجهيز الأرشيف.
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     TIMELINE
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="heading">
+
+      <div class="kicker">
+        الطريق إلى الحرب
+      </div>
+
+      <h2>
+        سنوات من التدريب والخبرة
+      </h2>
+
+    </div>
+
+
+    <p>
+
+      لم تبدأ الاستعدادات للحرب في أكتوبر فقط.
+
+      خلال السنوات السابقة، خاضت القوات المصرية
+      تجارب وعمليات عديدة، واكتسبت خبرة مهمة
+      في التعامل مع العدو.
+
+    </p>
+
+
+    <div class="timeline">
+
+
+      <div class="event">
+
+        <div class="year">
+          1967
+        </div>
+
+        <p>
+
+          شهدت البحرية المصرية واحدة من أشهر
+          عملياتها عندما تم إغراق المدمرة
+          الإسرائيلية «إيلات» باستخدام زوارق
+          الصواريخ المصرية.
+
+        </p>
+
+      </div>
+
+
+      <div class="event">
+
+        <div class="year">
+          حرب الاستنزاف
+        </div>
+
+        <p>
+
+          استمرت العمليات والتدريبات،
+          وشاركت القوات البحرية والضفادع البشرية
+          في مهام استطلاع وعمليات خاصة.
+
+        </p>
+
+      </div>
+
+
+      <div class="event">
+
+        <div class="year">
+          1973
+        </div>
+
+        <p>
+
+          أصبحت سنوات التدريب والخبرة جزءًا
+          من الاستعداد للحرب القادمة.
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     OCTOBER
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="heading">
+
+      <div class="kicker">
+        6 OCTOBER 1973
+      </div>
+
+      <h2>
+        في اليوم الأول للحرب
+      </h2>
+
+    </div>
+
+
+    <p>
+
+      بينما كانت القوات المصرية تعبر قناة السويس،
+      كانت القوات البحرية تؤدي مهامها في البحر.
+
+    </p>
+
+
+    <div class="two">
+
+
+      <div class="panel">
+
+        <h3>
+          حماية الجناحين
+        </h3>
+
+        <p>
+
+          كان من المهم حماية أجناب القوات المصرية
+          ومنع القوات البحرية الإسرائيلية من التأثير
+          في عملية العبور.
+
+        </p>
+
+      </div>
+
+
+      <div class="panel">
+
+        <h3>
+          الهجوم والضغط
+        </h3>
+
+        <p>
+
+          شاركت البحرية في عمليات هجومية
+          في البحرين المتوسط والأحمر،
+          وضرب أهداف ومواقع للعدو.
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="image-frame">
+
+      <div class="photo-placeholder">
+
+        <div>
+
+          <strong>
+            صورة بحرية تاريخية
+          </strong>
+
+          صورة حقيقية لسفينة أو زورق
+          مصري من فترة الحرب.
+
+        </div>
+
+      </div>
+
+
+      <div class="image-caption">
+
+        القوات البحرية المصرية — أكتوبر 1973
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     BAB EL MANDEB
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="heading">
+
+      <div class="kicker">
+        البحر الأحمر
+      </div>
+
+      <h2>
+        باب المندب
+      </h2>
+
+    </div>
+
+
+    <p>
+
+      لم تكن المعركة البحرية محصورة في منطقة
+      قناة السويس.
+
+      ففي جنوب البحر الأحمر توجد نقطة استراتيجية
+      مهمة جدًا هي مضيق باب المندب.
+
+    </p>
+
+
+    <p>
+
+      كان البحر الأحمر طريقًا مهمًا بالنسبة
+      للملاحة والإمدادات المتجهة إلى ميناء إيلات.
+
+      ولذلك كان تقييد الحركة في هذه المنطقة
+      ذا أهمية استراتيجية.
+
+    </p>
+
+
+    <div class="map-box">
+
+
+      <div class="photo-placeholder">
+
+        <div>
+
+          <strong>
+            خريطة البحر الأحمر وباب المندب
+          </strong>
+
+          سيتم وضع خريطة واضحة هنا توضح
+          موقع باب المندب بالنسبة لمصر وإيلات.
+
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+    <div class="quote">
+
+      <p>
+
+        أحيانًا تكون نقطة صغيرة على الخريطة
+        قادرة على تغيير حسابات معركة كاملة.
+
+      </p>
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     NABEEL
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="person">
+
+
+      <div class="person-photo">
+
+
+        <div class="photo-placeholder"
+             style="min-height:100%;">
+
+          <div>
+
+            <strong>
+              صورة الربان نبيل عبد الوهاب
+            </strong>
+
+            ستضاف الصورة التاريخية هنا.
+
+          </div>
+
+        </div>
+
+
+      </div>
+
+
+      <h2>
+        الربان نبيل عبد الوهاب
+      </h2>
+
+
+      <p>
+
+        كان من رجال الضفادع البشرية،
+        وشارك في عمليات خلال حرب الاستنزاف،
+        ثم واصل أداء مهامه مع اندلاع حرب أكتوبر.
+
+      </p>
+
+
+      <div class="quote">
+
+        <p>
+
+          من القصص المرتبطة به إصراره على
+          إنقاذ زميل له أصيب أثناء إحدى العمليات
+          وسحبه إلى منطقة آمنة.
+
+        </p>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+</section>
+
+
+
+<!-- =====================================================
+     LESSONS
+===================================================== -->
+
+<section class="story">
+
+
+  <div class="container reveal">
+
+
+    <div class="heading">
+
+      <div class="kicker">
+        ماذا نتعلم؟
+      </div>
+
+      <h2>
+        البطولة ليست كلمة واحدة
+      </h2>
+
+    </div>
+
+
+    <div class="lessons">
+
+
+      <div class="lesson">
+
+        <div class="lesson-number">
+          ١
+        </div>
+
+        <h3>
+          الاستعداد
+        </h3>
+
+        <p>
+
+          ما حدث في أكتوبر سبقه سنوات من
+          التدريب والتخطيط والتجربة.
+
+        </p>
+
+      </div>
+
+
