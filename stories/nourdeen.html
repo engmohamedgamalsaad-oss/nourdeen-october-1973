@@ -1,6 +1,7 @@
 ```html
 <!doctype html>
 <html lang="ar" dir="rtl">
+
 <head>
 
 <meta charset="utf-8">
@@ -13,7 +14,8 @@
 <meta name="description"
       content="حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect"
+      href="https://fonts.googleapis.com">
 
 <link rel="preconnect"
       href="https://fonts.gstatic.com"
@@ -25,23 +27,36 @@
 
 <style>
 
+/* =====================================================
+   COLORS
+===================================================== */
+
 :root{
 
   --black:#02080c;
+
   --deep:#03151e;
+
   --sea:#063442;
+
   --sea2:#0b4d5c;
 
   --bronze:#b8874b;
+
   --gold:#e3bd78;
 
   --light:#e4eeee;
+
   --muted:#9eb7bb;
 
   --red:#a93232;
 
 }
 
+
+/* =====================================================
+   BASIC
+===================================================== */
 
 *{
   box-sizing:border-box;
@@ -77,6 +92,8 @@ body{
 
 }
 
+
+/* texture */
 
 body:before{
 
@@ -142,6 +159,8 @@ body:before{
 }
 
 
+/* home */
+
 .home-link{
 
   color:var(--gold);
@@ -155,6 +174,8 @@ body:before{
 }
 
 
+/* school logo */
+
 .school-brand{
 
   display:flex;
@@ -166,6 +187,12 @@ body:before{
 }
 
 
+/*
+   اللوجو بدون إطار
+   وبدون ظل
+   وبدون خلفية
+*/
+
 .school-brand img{
 
   width:45px;
@@ -174,11 +201,13 @@ body:before{
 
   object-fit:contain;
 
-  filter:
-    drop-shadow(
-      0 2px 5px
-      rgba(0,0,0,.8)
-    );
+  border:none;
+
+  background:transparent;
+
+  box-shadow:none;
+
+  filter:none;
 
 }
 
@@ -223,8 +252,11 @@ body:before{
   }
 
   .school-brand img{
+
     width:40px;
+
     height:40px;
+
   }
 
 }
@@ -276,6 +308,8 @@ body:before{
 
 }
 
+
+/* large bronze circle */
 
 .hero-ring{
 
@@ -340,6 +374,8 @@ body:before{
 }
 
 
+/* water */
+
 .water{
 
   position:absolute;
@@ -381,6 +417,8 @@ body:before{
 
 }
 
+
+/* hero text */
 
 .hero-content{
 
@@ -1077,7 +1115,7 @@ footer strong{
 
 
 /* =====================================================
-   REVEAL
+   REVEAL ANIMATION
 ===================================================== */
 
 .reveal{
@@ -1633,6 +1671,7 @@ footer strong{
 
       <div class="person-photo">
 
+
         <div class="photo-placeholder"
              style="min-height:100%;">
 
@@ -1647,6 +1686,7 @@ footer strong{
           </div>
 
         </div>
+
 
       </div>
 
@@ -1894,31 +1934,58 @@ footer strong{
 
 
 
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
 <footer>
 
+
   إعداد وتقديم:
+
+  <br>
 
   <strong>
     نوردين محمد جمال
   </strong>
 
-  <br>
+
+  <br><br>
+
 
   الصف الأول الإعدادي • Class 1B
 
+
   <br><br>
+
 
   مدرسة المنار القومية للغات للبنات
 
+
   <br><br>
 
+
   أكتوبر 1973
+
+
+  <br><br>
+
+
+  <strong>
+    تصميم الطالبة نوردين محمد جمال
+  </strong>
+
 
 </footer>
 
 
 
 <script>
+
+
+/* =====================================================
+   SCROLL REVEAL
+===================================================== */
 
 const revealElements =
   document.querySelectorAll(".reveal");
@@ -1957,9 +2024,11 @@ revealElements.forEach(
     observer.observe(element)
 );
 
+
 </script>
 
 
 </body>
+
 </html>
 ```
