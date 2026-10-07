@@ -2,28 +2,30 @@
   {
     "name": "نوردين محمد جمال",
     "grade": "الصف الأول الإعدادي",
-    "className": "1B",
-    "title": "حكاية رجال البحر في أكتوبر",
-    "image": "assets/students/nordine.jpg",
-    "page": "stories/nordine.html",
-    "gradeColor": "#d6a84f"
+    "className": "Class 1B",
+    "title": "رجال البحر في أكتوبر",
+    "image": "assets/students/nourdeen.jpg",
+    "page": "stories/nourdeen/",
+    "gradeColor": "#b8874b"
   },
+
   {
-    "name": "كارما محمد جمال",
-    "grade": "الصف الأول الإعدادي",
-    "className": "1B",
-    "title": "قصة من قصص حرب أكتوبر",
+    "name": "كارما",
+    "grade": "الصف الابتدائي",
+    "className": "",
+    "title": "حكاية من حكايات أكتوبر",
     "image": "assets/students/karma.jpg",
-    "page": "stories/karma.html",
-    "gradeColor": "#d6a84f"
+    "page": "stories/karma/",
+    "gradeColor": "#4f9bb0"
   },
+
   {
-    "name": "مليكة محمد جمال",
-    "grade": "الصف الأول الإعدادي",
-    "className": "1B",
-    "title": "حكاية من يوم العبور",
+    "name": "مليكة",
+    "grade": "الصف الابتدائي",
+    "className": "",
+    "title": "حكاية من حكايات أكتوبر",
     "image": "assets/students/malika.jpg",
-    "page": "stories/malika.html",
-    "gradeColor": "#d6a84f"
+    "page": "stories/malika/",
+    "gradeColor": "#8b6bb1"
   }
 ]
