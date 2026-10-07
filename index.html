@@ -1,0 +1,1439 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>حكاية رجال البحر في أكتوبر - نوردين</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --abyss:#04141f;
+  --deep:#0b3a4a;
+  --foam:#dff3f1;
+  --lamp:#f2a33a;
+  --rust:#c2523f;
+  --mute:#8fb3b8;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+  scroll-padding-top:20px;
+}
+
+body{
+  margin:0;
+  color:var(--foam);
+  font:400 1.15rem/2.05 "Noto Naskh Arabic",Tahoma,serif;
+  background:
+    linear-gradient(
+      #1d4560 0,
+      #0b2a3b 22%,
+      #04141f 55%,
+      #02090f 100%
+    );
+}
+
+h1,h2,h3{
+  font-family:"Reem Kufi","Noto Naskh Arabic",Tahoma,sans-serif;
+  font-weight:700;
+  line-height:1.3;
+  margin:0 0 .6em;
+}
+
+section{
+  min-height:100svh;
+  padding:12vh 1.4rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.w{
+  max-width:36rem;
+  width:100%;
+}
+
+p{
+  margin:0 0 1em;
+}
+
+.mute{
+  color:var(--mute);
+}
+
+/* =========================
+   HERO
+========================= */
+
+.hero{
+  position:relative;
+  overflow:hidden;
+  text-align:center;
+  min-height:100svh;
+}
+
+.hero h1{
+  font-size:clamp(2.7rem,13vw,6.5rem);
+  margin-bottom:.2em;
+}
+
+.hero .date{
+  font-family:"Reem Kufi",sans-serif;
+  color:var(--lamp);
+  font-size:1.25rem;
+}
+
+.hero .subtitle{
+  font-size:1.1rem;
+  color:var(--mute);
+}
+
+.hero .student{
+  margin-top:18px;
+  font-family:"Reem Kufi",sans-serif;
+  color:#fff;
+  font-size:1rem;
+}
+
+.hero .hint{
+  position:absolute;
+  bottom:22vh;
+  left:0;
+  right:0;
+  font-size:.95rem;
+  color:var(--mute);
+}
+
+.waves{
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:30vh;
+  min-height:150px;
+}
+
+.waves .a{
+  animation:sway 9s ease-in-out infinite alternate;
+}
+
+.waves .b{
+  animation:sway 6s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes sway{
+  to{
+    transform:translateX(-120px);
+  }
+}
+
+/* =========================
+   DEPTH GAUGE
+========================= */
+
+.gauge{
+  position:fixed;
+  left:calc(env(safe-area-inset-left,0px) + 8px);
+  top:50%;
+  transform:translateY(-50%);
+  direction:ltr;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  font:600 .8rem "Reem Kufi",sans-serif;
+  color:var(--mute);
+  z-index:5;
+  pointer-events:none;
+}
+
+.gauge .bar{
+  width:3px;
+  height:30vh;
+  background:rgba(223,243,241,.18);
+  position:relative;
+  border-radius:2px;
+}
+
+.gauge .bar i{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:0;
+  background:var(--lamp);
+  border-radius:2px;
+}
+
+.gauge b{
+  color:var(--lamp);
+  font-size:1rem;
+}
+
+/* =========================
+   SPLIT
+========================= */
+
+.split{
+  padding:0;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:0;
+  align-items:stretch;
+  justify-content:stretch;
+}
+
+.split>div{
+  padding:12vh 1.6rem;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+.land{
+  background:linear-gradient(#3b2a22,#2a1c17);
+}
+
+.sea{
+  background:linear-gradient(#0b3a4a,#06222d);
+}
+
+.split h2{
+  font-size:2rem;
+}
+
+.land h2{
+  color:#e7b189;
+}
+
+.sea h2{
+  color:var(--lamp);
+}
+
+@media(min-width:760px){
+  .split{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* =========================
+   TIMELINE
+========================= */
+
+.tl{
+  border-inline-start:2px solid rgba(223,243,241,.25);
+  padding-inline-start:1.4rem;
+  margin-top:1.5rem;
+}
+
+.tl>div{
+  position:relative;
+  margin-bottom:1.6rem;
+}
+
+.tl>div:before{
+  content:"";
+  position:absolute;
+  inset-inline-start:calc(-1.4rem - 7px);
+  top:.85rem;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--abyss);
+  border:2px solid var(--lamp);
+}
+
+.tl>div.now:before{
+  background:var(--lamp);
+  box-shadow:0 0 0 6px rgba(242,163,58,.25);
+}
+
+.tl h3{
+  font-size:1.5rem;
+  color:var(--lamp);
+  margin:0;
+}
+
+.tl p{
+  margin:0;
+  color:#c5dcde;
+}
+
+/* =========================
+   FLEET GAME
+========================= */
+
+.fleet{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px 14px;
+  justify-content:center;
+  margin:1.4rem 0 .6rem;
+  direction:ltr;
+}
+
+.ship{
+  width:84px;
+  height:62px;
+  background:none;
+  border:0;
+  padding:0;
+  cursor:pointer;
+  overflow:hidden;
+  position:relative;
+}
+
+.ship svg{
+  width:100%;
+  height:100%;
+  transition:
+    transform 1.4s ease-in,
+    opacity 1.4s ease-in;
+  transform-origin:50% 100%;
+}
+
+.ship.sunk svg{
+  transform:translateY(46px) rotate(18deg);
+  opacity:0;
+}
+
+.ship:after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:16px;
+  background:#06222d;
+  border-top:2px solid rgba(223,243,241,.35);
+}
+
+.ship:focus-visible,
+.btn:focus-visible{
+  outline:3px solid var(--lamp);
+  outline-offset:3px;
+}
+
+.count{
+  font-family:"Reem Kufi",sans-serif;
+  color:var(--lamp);
+  text-align:center;
+  min-height:2em;
+}
+
+/* =========================
+   BAB EL MANDEB MAP
+========================= */
+
+.btn{
+  font:700 1.1rem "Reem Kufi",sans-serif;
+  background:var(--lamp);
+  color:#1b1205;
+  border:0;
+  border-radius:6px;
+  padding:.6em 1.4em;
+  cursor:pointer;
+}
+
+.btn[aria-pressed=true]{
+  background:var(--rust);
+  color:#fff;
+}
+
+.map{
+  width:100%;
+  max-width:340px;
+  margin:1rem auto 0;
+  display:block;
+}
+
+.map text{
+  font:600 13px "Reem Kufi",sans-serif;
+  fill:var(--foam);
+}
+
+.dot{
+  fill:var(--foam);
+  animation:run 7s linear infinite;
+}
+
+.dot:nth-of-type(2){
+  animation-delay:-2.3s;
+}
+
+.dot:nth-of-type(3){
+  animation-delay:-4.6s;
+}
+
+@keyframes run{
+  0%{
+    transform:translate(0,0);
+    opacity:0;
+  }
+
+  8%{
+    opacity:1;
+  }
+
+  92%{
+    opacity:1;
+  }
+
+  100%{
+    transform:translate(-106px,-340px);
+    opacity:0;
+  }
+}
+
+@keyframes bump{
+  0%,100%{
+    transform:translate(0,0);
+  }
+
+  50%{
+    transform:translate(-3px,-14px);
+  }
+}
+
+.closed .dot{
+  animation:bump 2s ease-in-out infinite;
+  opacity:1;
+  fill:var(--rust);
+}
+
+.gate{
+  stroke:var(--lamp);
+  stroke-width:5;
+  stroke-linecap:round;
+  opacity:0;
+  transition:opacity .5s;
+}
+
+.closed .gate{
+  opacity:1;
+}
+
+.mapnote{
+  text-align:center;
+  min-height:3.5em;
+  font-size:1rem;
+  color:var(--mute);
+  margin-top:.8rem;
+}
+
+/* =========================
+   HERO STORY
+========================= */
+
+.story-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(223,243,241,.12);
+  border-radius:14px;
+  padding:1.2rem;
+  margin-top:1rem;
+}
+
+.story-card h3{
+  color:var(--lamp);
+  font-size:1.35rem;
+}
+
+/* =========================
+   NABIL
+========================= */
+
+.hero-person{
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(242,163,58,.10),
+      transparent 45%
+    );
+}
+
+.quote{
+  border-right:4px solid var(--lamp);
+  padding-right:1rem;
+  color:#f0dfc4;
+}
+
+/* =========================
+   END
+========================= */
+
+.end{
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.end h2{
+  font-size:clamp(1.8rem,7vw,3rem);
+  max-width:20ch;
+  margin-inline:auto;
+}
+
+.rings{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:min(120vw,700px);
+  height:min(120vw,700px);
+  opacity:.5;
+  pointer-events:none;
+}
+
+.rings circle{
+  fill:none;
+  stroke:var(--lamp);
+  stroke-width:1;
+  transform-origin:50% 50%;
+  animation:ping 6s ease-out infinite;
+}
+
+.rings circle:nth-child(2){
+  animation-delay:-2s;
+}
+
+.rings circle:nth-child(3){
+  animation-delay:-4s;
+}
+
+@keyframes ping{
+  0%{
+    transform:scale(.05);
+    opacity:1;
+  }
+
+  100%{
+    transform:scale(1);
+    opacity:0;
+  }
+}
+
+.end .w{
+  position:relative;
+}
+
+.footer{
+  margin-top:2rem;
+  font-size:.85rem;
+  color:var(--mute);
+}
+
+@media(max-width:480px){
+  .gauge{
+    display:none;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    animation:none!important;
+    transition:none!important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- مؤشر العمق -->
+<div class="gauge" aria-hidden="true">
+  <span>0</span>
+
+  <div class="bar">
+    <i id="gi"></i>
+  </div>
+
+  <b id="gv">0 م</b>
+</div>
+
+
+<!-- =========================
+     الغلاف
+========================= -->
+
+<section class="hero">
+
+  <div>
+
+    <div class="date">
+      مساء السادس من أكتوبر 1973
+    </div>
+
+    <h1>
+      حكاية رجال البحر
+    </h1>
+
+    <p class="subtitle">
+      المعركة التي لم يرها معظم الناس
+    </p>
+
+    <div class="student">
+      حكاية تاريخية ترويها نوردين
+      <br>
+      الصف الأول الإعدادي
+    </div>
+
+  </div>
+
+  <div class="hint">
+    انزل لتغوص في الحكاية ↓
+  </div>
+
+  <svg
+    class="waves"
+    viewBox="0 0 600 120"
+    preserveAspectRatio="none"
+    aria-hidden="true"
+  >
+
+    <path
+      class="a"
+      fill="#0b3a4a"
+      d="
+      M-200 50
+      Q-150 20 -100 50
+      T0 50
+      T100 50
+      T200 50
+      T300 50
+      T400 50
+      T500 50
+      T600 50
+      T700 50
+      V120
+      H-200Z"
+    />
+
+    <path
+      class="b"
+      fill="#06222d"
+      d="
+      M-200 75
+      Q-150 50 -100 75
+      T0 75
+      T100 75
+      T200 75
+      T300 75
+      T400 75
+      T500 75
+      T600 75
+      T700 75
+      V120
+      H-200Z"
+    />
+
+  </svg>
+
+</section>
+
+
+<!-- =========================
+     الأرض والبحر
+========================= -->
+
+<section
+  class="split"
+  aria-label="معركتان في وقت واحد"
+>
+
+  <div class="land">
+
+    <div class="w" style="margin-inline:auto">
+
+      <h2>
+        على الأرض
+      </h2>
+
+      <p>
+        القوات المصرية بدأت عبور قناة السويس.
+        المدفعية تضرب مواقع خط بارليف،
+        والجنود يتحركون شرقًا.
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="sea">
+
+    <div class="w" style="margin-inline:auto">
+
+      <h2>
+        في البحر
+      </h2>
+
+      <p>
+        كانت هناك معركة أخرى لا يراها معظم الناس.
+        وبطلها بحّار يعمل بعيدًا عن الأضواء.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     بداية الحكاية
+========================= -->
+
+<section>
+
+  <div class="w">
+
+    <h2>
+      لكن الحكاية لم تبدأ في أكتوبر
+    </h2>
+
+    <p>
+      منذ حرب الاستنزاف كانت البحرية المصرية تتعلم
+      شيئًا مهمًا:
+      المعركة البحرية لا يشترط أن تكون سفينة أمام سفينة.
+    </p>
+
+    <p>
+      يمكن أن تكون غواصًا يتحرك تحت الماء،
+      أو زورقًا سريعًا يقترب من هدفه،
+      أو قوة صغيرة تعمل خلف خطوط العدو.
+    </p>
+
+    <div class="tl">
+
+      <div>
+
+        <h3>
+          1967
+        </h3>
+
+        <p>
+          إغراق المدمرة الإسرائيلية «إيلات»
+          بواسطة زوارق الصواريخ المصرية.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          حرب الاستنزاف
+        </h3>
+
+        <p>
+          عمليات استطلاع وضفادع بشرية
+          وضرب أهداف بحرية،
+          وخبرة حقيقية في العمل خلف خطوط العدو.
+        </p>
+
+      </div>
+
+
+      <div>
+
+        <h3>
+          رجال الضفادع البشرية
+        </h3>
+
+        <p>
+          نفذوا عمليات جريئة ضد أهداف في منطقة إيلات،
+          رغم تشديد العدو لإجراءات الحراسة بعد كل عملية.
+        </p>
+
+      </div>
+
+
+      <div class="now">
+
+        <h3>
+          6 أكتوبر 1973
+        </h3>
+
+        <p>
+          جاء وقت استخدام سنوات التدريب والخبرة
+          في حرب واسعة.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     بداية الحرب
+========================= -->
+
+<section>
+
+  <div class="w">
+
+    <h2>
+      السادس من أكتوبر
+    </h2>
+
+    <p>
+      بينما كانت القوات المصرية تعبر قناة السويس،
+      كانت القوات البحرية تؤدي مهامها في البحر.
+    </p>
+
+    <div class="story-card">
+
+      <h3>
+        المهمة الأولى
+      </h3>
+
+      <p>
+        تأمين الجناحين البحريين للقوات المصرية
+        ومنع البحرية الإسرائيلية من التأثير
+        في عملية العبور.
+      </p>
+
+    </div>
+
+
+    <div class="story-card">
+
+      <h3>
+        والمهمة الثانية
+      </h3>
+
+      <p>
+        تنفيذ عمليات هجومية في البحر المتوسط
+        والبحر الأحمر،
+        وضرب أهداف ومواقع للعدو.
+      </p>
+
+    </div>
+
+
+    <p>
+      وهكذا لم تكن البحرية تقف بعيدًا عن المعركة.
+      كانت تعمل في الوقت نفسه مع القوات البرية والجوية.
+    </p>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     السفن الخمس
+========================= -->
+
+<section>
+
+  <div class="w">
+
+    <h2>
+      خمس قطع بحرية
+    </h2>
+
+    <p>
+      في اليوم الأول للحرب أعلنت القيادة المصرية
+      نجاح القوات البحرية في تدمير خمس قطع بحرية
+      للعدو في البحر المتوسط،
+      بالإضافة إلى قصف مواقع للعدو.
+    </p>
+
+    <p>
+      جرّبي الآن إغراق السفن الخمس:
+    </p>
+
+    <div
+      class="fleet"
+      id="fleet"
+    ></div>
+
+    <div
+      class="count"
+      id="count"
+    >
+      ٠ من ٥
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     باب المندب
+========================= -->
+
+<section>
+
+  <div class="w">
+
+    <h2>
+      باب المندب
+    </h2>
+
+    <p>
+      لكن هناك جبهة أخرى كانت بعيدة جدًا عن قناة السويس.
+    </p>
+
+    <p>
+      في جنوب البحر الأحمر توجد منطقة استراتيجية
+      اسمها باب المندب.
+    </p>
+
+    <p>
+      كانت هذه المنطقة مهمة بالنسبة لإسرائيل
+      لأن البحر الأحمر كان طريقًا لوصول النفط
+      والإمدادات إلى ميناء إيلات.
+    </p>
+
+    <p>
+      لذلك شاركت القوات البحرية المصرية
+      في عملية هدفت إلى تقييد حركة الملاحة الإسرائيلية
+      في البحر الأحمر.
+    </p>
+
+
+    <div style="text-align:center">
+
+      <button
+        class="btn"
+        id="gb"
+        aria-pressed="false"
+      >
+        أغلق المضيق
+      </button>
+
+    </div>
+
+
+    <svg
+      class="map"
+      id="map"
+      viewBox="0 0 300 420"
+      role="img"
+      aria-label="رسم تخطيطي للبحر الأحمر وباب المندب"
+    >
+
+      <path
+        d="
+        M108 8
+        L134 8
+        L160 120
+        L232 330
+        L246 376
+        L222 380
+        L196 322
+        L124 170Z"
+        fill="#0b3a4a"
+        stroke="#2c7a8c"
+        stroke-width="2"
+      />
+
+      <circle
+        class="dot"
+        cx="236"
+        cy="372"
+        r="5"
+      />
+
+      <circle
+        class="dot"
+        cx="236"
+        cy="372"
+        r="5"
+      />
+
+      <circle
+        class="dot"
+        cx="236"
+        cy="372"
+        r="5"
+      />
+
+      <line
+        class="gate"
+        x1="212"
+        y1="352"
+        x2="256"
+        y2="352"
+      />
+
+      <text
+        x="150"
+        y="22"
+      >
+        السويس
+      </text>
+
+      <text
+        x="40"
+        y="200"
+      >
+        مصر
+      </text>
+
+      <text
+        x="262"
+        y="356"
+        text-anchor="start"
+      >
+        باب المندب
+      </text>
+
+    </svg>
+
+
+    <div
+      class="mapnote"
+      id="mn"
+    >
+      سفن الإمداد تتجه شمالًا في البحر الأحمر.
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     الربان نبيل عبد الوهاب
+========================= -->
+
+<section class="hero-person">
+
+  <div class="w">
+
+    <h2>
+      بطل من رجال البحر
+    </h2>
+
+    <h3 style="color:var(--lamp)">
+      الربان نبيل عبد الوهاب
+    </h3>
+
+    <p>
+      كان من رجال الضفادع البشرية،
+      وشارك في عمليات خلال حرب الاستنزاف،
+      ثم واصل أداء مهامه مع اندلاع حرب أكتوبر.
+    </p>
+
+    <div class="quote">
+
+      <p>
+        ومن أشهر القصص المرتبطة به
+        إصراره على إنقاذ زميل له أصيب
+        أثناء إحدى العمليات،
+        وسحبه إلى منطقة آمنة.
+      </p>
+
+    </div>
+
+    <div class="story-card">
+
+      <h3>
+        لماذا هذه القصة مهمة؟
+      </h3>
+
+      <p>
+        لأن البطولة ليست مجرد شجاعة في مواجهة الخطر.
+        البطولة أيضًا أن تكون مسؤولًا عن زميلك،
+        وأن تحافظ على هدوئك وتنفذ مهمتك
+        رغم الظروف الصعبة.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     ماذا نتعلم؟
+========================= -->
+
+<section>
+
+  <div class="w">
+
+    <h2>
+      ماذا نتعلم من رجال البحر؟
+    </h2>
+
+
+    <div class="story-card">
+
+      <h3>
+        ١ — الاستعداد
+      </h3>
+
+      <p>
+        ما حدث في أكتوبر لم يبدأ يوم 6 أكتوبر.
+        سبقه سنوات من التدريب والتجارب
+        والعمليات خلال حرب الاستنزاف.
+      </p>
+
+    </div>
+
+
+    <div class="story-card">
+
+      <h3>
+        ٢ — العمل الجماعي
+      </h3>
+
+      <p>
+        النصر لم يكن نتيجة سلاح واحد.
+        القوات البرية والجوية والبحرية
+        عملت ضمن خطة واحدة.
+      </p>
+
+    </div>
+
+
+    <div class="story-card">
+
+      <h3>
+        ٣ — العمل بعيدًا عن الأضواء
+      </h3>
+
+      <p>
+        بعض أهم مهام البحرية حدثت بعيدًا
+        عن قناة السويس،
+        لكن بعدها كان له تأثير في الحرب.
+      </p>
+
+    </div>
+
+
+    <div class="story-card">
+
+      <h3>
+        ٤ — الشجاعة المنضبطة
+      </h3>
+
+      <p>
+        الشجاعة ليست التهور.
+        أن تعرف الخطر وتواجهه بالتدريب
+        والخطة والانضباط.
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     نوردين تحكي
+========================= -->
+
+<section class="end">
+
+  <svg
+    class="rings"
+    viewBox="0 0 400 400"
+    aria-hidden="true"
+  >
+
+    <circle
+      cx="200"
+      cy="200"
+      r="195"
+    />
+
+    <circle
+      cx="200"
+      cy="200"
+      r="195"
+    />
+
+    <circle
+      cx="200"
+      cy="200"
+      r="195"
+    />
+
+  </svg>
+
+
+  <div class="w">
+
+    <h2>
+      نوردين تحكي الحكاية
+    </h2>
+
+    <p>
+      في السادس من أكتوبر 1973 بدأت مصر حربها لتحرير سيناء.
+    </p>
+
+    <p>
+      وبينما كان الجنود المصريون يعبرون قناة السويس،
+      كانت القوات البحرية المصرية تؤدي مهامها
+      في البحر المتوسط والبحر الأحمر.
+    </p>
+
+    <p>
+      حمت البحرية أجناب القوات المصرية،
+      وضربت أهدافًا للعدو،
+      ونفذت عمليات خاصة.
+    </p>
+
+    <p>
+      وفي البحر الأحمر شاركت القوات المصرية
+      في تقييد الملاحة الإسرائيلية عند باب المندب،
+      فأصبح العدو تحت ضغط في جبهة بعيدة عن القناة.
+    </p>
+
+    <p>
+      وكان وراء هذه العمليات رجال تدربوا لسنوات،
+      ومنهم رجال الضفادع البشرية.
+    </p>
+
+    <p>
+      لذلك فإن قصة رجال البحر في أكتوبر
+      تعلمنا أن النصر لا يصنعه بطل واحد،
+      بل يصنعه جيش كامل،
+      وكل فرد فيه يؤدي مهمته بإخلاص وشجاعة وانضباط.
+    </p>
+
+
+    <div class="story-card">
+
+      <h3>
+        الخلاصة
+      </h3>
+
+      <p>
+        البحرية المصرية لم تكن على هامش حرب أكتوبر.
+        كانت جزءًا من خطة النصر.
+      </p>
+
+    </div>
+
+
+    <div class="footer">
+
+      إعداد وتقديم:
+      <strong>نوردين محمد جمال</strong>
+      <br>
+  (1 B)  الصف الأول الإعدادي  • 
+      <br><br>
+      أكتوبر 1973
+      <br>
+      جبهات متعددة… ومهمة واحدة: النصر.
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<script>
+
+/* =========================
+   مؤشر العمق
+========================= */
+
+(function(){
+
+  var gi=document.getElementById("gi");
+  var gv=document.getElementById("gv");
+
+  function sc(){
+
+    var h=document.documentElement.scrollHeight-innerHeight;
+
+    var p=h>0
+      ? Math.min(1,scrollY/h)
+      : 0;
+
+    gi.style.height=(p*100)+"%";
+
+    gv.textContent=
+      Math.round(p*300)+" م";
+
+  }
+
+  addEventListener(
+    "scroll",
+    sc,
+    {passive:true}
+  );
+
+  sc();
+
+})();
+
+
+/* =========================
+   لعبة السفن الخمس
+========================= */
+
+(function(){
+
+  var fleet=document.getElementById("fleet");
+  var count=document.getElementById("count");
+
+  var arabicNumbers=[
+    "٠",
+    "١",
+    "٢",
+    "٣",
+    "٤",
+    "٥"
+  ];
+
+  var n=0;
+
+
+  var svg=
+
+  '<svg viewBox="0 0 84 46" aria-hidden="true">'+
+
+  '<path '+
+  'd="M4 30 H80 L70 42 H14Z" '+
+  'fill="#8fb3b8"/>'+
+
+  '<rect '+
+  'x="30" y="18" width="24" height="12" '+
+  'fill="#dff3f1"/>'+
+
+  '<rect '+
+  'x="38" y="8" width="8" height="10" '+
+  'fill="#dff3f1"/>'+
+
+  '<rect '+
+  'x="41" y="0" width="2" height="8" '+
+  'fill="#dff3f1"/>'+
+
+  '</svg>';
+
+
+  for(
+    var i=0;
+    i<5;
+    i++
+  ){
+
+    var b=document.createElement("button");
+
+    b.className="ship";
+
+    b.setAttribute(
+      "aria-label",
+      "سفينة معادية، المس لإغراقها"
+    );
+
+    b.innerHTML=svg;
+
+
+    b.onclick=function(){
+
+      if(
+        this.classList.contains("sunk")
+      )
+        return;
+
+
+      this.classList.add("sunk");
+
+      n++;
+
+
+      count.textContent=
+        arabicNumbers[n]+
+        " من ٥";
+
+
+      if(n===5){
+
+        count.textContent=
+          "٥ من ٥ — أحسنتِ!";
+
+      }
+
+    };
+
+
+    fleet.appendChild(b);
+
+  }
+
+})();
+
+
+/* =========================
+   باب المندب
+========================= */
+
+(function(){
+
+  var button=
+    document.getElementById("gb");
+
+  var map=
+    document.getElementById("map");
+
+  var note=
+    document.getElementById("mn");
+
+
+  button.onclick=function(){
+
+    var closed=
+      map.classList.toggle("closed");
+
+
+    button.setAttribute(
+      "aria-pressed",
+      closed
+    );
+
+
+    if(closed){
+
+      button.textContent=
+        "افتح المضيق";
+
+      note.textContent=
+        "تم تقييد حركة الملاحة — هكذا تصبح نقطة بحرية صغيرة ذات أهمية استراتيجية كبيرة.";
+
+    }
+
+    else{
+
+      button.textContent=
+        "أغلق المضيق";
+
+      note.textContent=
+        "سفن الإمداد تتجه شمالًا في البحر الأحمر.";
+
+    }
+
+  };
+
+})();
+
+</script>
+
+</body>
+</html>
