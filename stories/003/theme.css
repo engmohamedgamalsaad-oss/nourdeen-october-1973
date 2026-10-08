@@ -1,0 +1,37 @@
+:root{
+  --accent:#e8a33d;
+  --gold:#e8a33d;
+  --terra:#b5532f;
+  --turq:#2fa7a0;
+  --bg:linear-gradient(180deg,#1a0f0a,#0f2a38 55%,#07141c);
+}
+.zigzag{height:20px;background:
+  linear-gradient(135deg,var(--terra) 25%,transparent 25%) -10px 0,
+  linear-gradient(225deg,var(--terra) 25%,transparent 25%) -10px 0,
+  linear-gradient(315deg,var(--terra) 25%,transparent 25%),
+  linear-gradient(45deg,var(--terra) 25%,transparent 25%);
+  background-size:20px 20px}
+.zigzag.turq{--terra:var(--turq)}
+
+.hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:110px 20px 90px}
+.hero:before{content:"";position:absolute;width:min(480px,80vw);height:min(480px,80vw);border-radius:50%;background:radial-gradient(circle,rgba(232,163,61,.35),rgba(181,83,47,.12) 60%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-55%)}
+.hero-band{position:absolute;left:0;right:0;bottom:0}
+.hero-content{position:relative;z-index:5;width:min(850px,100%)}
+.eyebrow{color:var(--gold);font-size:.85rem;letter-spacing:2px}
+.hero h1{margin:18px 0;font-family:"Marhey","Cairo",sans-serif;font-size:clamp(2.8rem,9vw,5.8rem);line-height:1.2;color:#ffd48a;text-shadow:3px 4px 0 #4a2210,7px 10px 25px #000}
+.hero-subtitle{color:#d8e4e0;font-size:clamp(1rem,3vw,1.4rem);line-height:2}
+.author{margin-top:26px;color:#fff;line-height:1.9}
+.author strong{color:var(--gold);font-family:"Marhey","Cairo",sans-serif}
+.scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);color:#c9b99a;font-size:.8rem;z-index:5}
+
+.panel{border-color:rgba(232,163,61,.35);background:linear-gradient(145deg,rgba(181,83,47,.22),rgba(7,20,28,.85))}
+.words{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin:35px 0}
+.word{padding:22px;text-align:center;border:1px solid rgba(47,167,160,.45);background:rgba(7,28,36,.7)}
+.word b{display:block;color:var(--accent);font-family:"Marhey","Cairo",sans-serif;font-size:1.8rem}
+.word span{color:#c6d5d7}
+.note{margin:40px 0;padding:24px;border:1px dashed rgba(47,167,160,.7);background:rgba(47,167,160,.07)}
+.note h3{margin-top:0;color:var(--turq)}
+.note p{margin:0}
+.lesson{border-color:rgba(47,167,160,.35)}
+.event:before{background:var(--turq)}
+.timeline{border-right-color:rgba(47,167,160,.5)}
