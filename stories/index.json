@@ -9,5 +9,27 @@
     "order": 1,
     "published": true,
     "id": "001"
+  },
+  {
+    "name": "كارما",
+    "grade": "الصف الثاني الابتدائي",
+    "className": "",
+    "title": "العقل قبل السلاح",
+    "subtitle": "كيف فتحت المياه طريق العبور",
+    "color": "#f0a44a",
+    "order": 2,
+    "published": true,
+    "id": "002"
+  },
+  {
+    "name": "مليكة",
+    "grade": "الصف الأول الابتدائي",
+    "className": "",
+    "title": "لغة لا يفهمها العدو",
+    "subtitle": "حكاية الشفرة النوبية",
+    "color": "#2fa7a0",
+    "order": 3,
+    "published": true,
+    "id": "003"
   }
 ]
