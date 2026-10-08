@@ -1,0 +1,30 @@
+:root{
+  --accent:#f0a44a;
+  --gold:#f0a44a;
+  --bg:
+    linear-gradient(rgba(94,170,220,.07) 1px,transparent 1px) 0 0/42px 42px,
+    linear-gradient(90deg,rgba(94,170,220,.07) 1px,transparent 1px) 0 0/42px 42px,
+    linear-gradient(180deg,#07121b,#0b2233 60%,#050d14);
+}
+.hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:110px 20px 80px}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.7));pointer-events:none}
+.hero-art{position:absolute;left:0;right:0;bottom:0;opacity:.55}
+.hero-art svg{display:block;width:100%;height:auto;max-height:55vh}
+.jet{fill:none;stroke:#7fd0ff;stroke-width:4;stroke-linecap:round;stroke-dasharray:14 12;animation:flow 1.6s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-52}}
+.hero-content{position:relative;z-index:5;width:min(850px,100%)}
+.eyebrow{color:var(--gold);font-size:.85rem;letter-spacing:2px}
+.hero h1{margin:18px 0;font-family:"Marhey","Cairo",sans-serif;font-size:clamp(2.8rem,9vw,6rem);line-height:1.15;color:#ffd08a;text-shadow:3px 4px 0 #4a2a0b,7px 10px 25px #000}
+.hero-subtitle{color:#c4d4d6;font-size:clamp(1rem,3vw,1.4rem);line-height:2}
+.author{margin-top:26px;color:#fff;line-height:1.9}
+.author strong{color:var(--gold);font-family:"Marhey","Cairo",sans-serif}
+.scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:.8rem;z-index:5}
+.panel{border-color:rgba(94,170,220,.35);background:linear-gradient(145deg,rgba(14,55,85,.55),rgba(4,12,20,.8))}
+.lesson,.event:before{border-color:rgba(94,170,220,.3)}
+.note{margin:40px 0;padding:24px;border:1px dashed rgba(240,164,74,.6);background:rgba(240,164,74,.06)}
+.note h3{margin-top:0}
+.note p{margin:0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin:35px 0}
+.step{padding:22px;border:1px solid rgba(94,170,220,.35);background:rgba(4,16,26,.7)}
+.step b{display:block;color:var(--accent);font-family:"Marhey","Cairo",sans-serif;font-size:1.6rem}
+.step p{font-size:.95rem;margin:6px 0 0}
