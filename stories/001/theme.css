@@ -1,3 +1,4 @@
+CSS
 
 :root {
   --accent: #e3bd78;
@@ -19,7 +20,7 @@
   background: #03151e;
 }
 
-/* صورة الغلاف الشفافة */
+/* صورة الغلاف */
 .hero-photo {
   position: absolute;
   inset: 0;
@@ -33,37 +34,35 @@
   animation: cover-drift 24s ease-in-out infinite alternate;
 }
 
-/* طبقة تحافظ على وضوح النص */
+/* طبقة داكنة لزيادة وضوح الكلام */
 .hero-tint {
   position: absolute;
   inset: 0;
   z-index: -2;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(2, 12, 19, 0.68) 0%,
-      rgba(3, 30, 40, 0.62) 45%,
-      rgba(2, 8, 12, 0.94) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(2, 12, 19, 0.68) 0%,
+    rgba(3, 30, 40, 0.62) 45%,
+    rgba(2, 8, 12, 0.94) 100%
+  );
 }
 
-/* ملمس زخرفي خفيف */
+/* زخرفة خلفية */
 .hero-texture {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
   opacity: 0.12;
-  background:
-    repeating-linear-gradient(
-      120deg,
-      transparent 0 80px,
-      rgba(227, 189, 120, 0.35) 81px,
-      transparent 82px 160px
-    );
+  background: repeating-linear-gradient(
+    120deg,
+    transparent 0 80px,
+    rgba(227, 189, 120, 0.35) 81px,
+    transparent 82px 160px
+  );
 }
 
-/* دائرة سنة 1973 */
+/* دائرة 1973 */
 .hero-ring {
   position: absolute;
   width: min(620px, 88vw);
@@ -86,7 +85,7 @@
   color: rgba(227, 189, 120, 0.15);
 }
 
-/* النص */
+/* محتوى الغلاف */
 .hero-content {
   position: relative;
   z-index: 5;
@@ -108,6 +107,7 @@
   box-shadow: 0 0 14px rgba(169, 50, 50, 0.4);
 }
 
+/* العنوان */
 .hero h1 {
   margin: 18px 0;
   font-family: "Marhey", "Cairo", sans-serif;
@@ -137,7 +137,7 @@
   font-family: "Marhey", "Cairo", sans-serif;
 }
 
-/* موجة البحر */
+/* موجة البحر المتحركة */
 .hero-waves {
   position: absolute;
   left: 0;
@@ -172,6 +172,7 @@
   }
 }
 
+/* حركة بطيئة لصورة الخلفية */
 @keyframes cover-drift {
   from {
     transform: scale(1.04) translateY(0);
@@ -181,7 +182,7 @@
   }
 }
 
-/* مؤشر النزول */
+/* إشارة النزول */
 .scroll {
   position: absolute;
   bottom: 26px;
@@ -198,13 +199,14 @@
     opacity: 0.65;
     transform: translate(-50%, 0);
   }
+
   50% {
     opacity: 1;
     transform: translate(-50%, -6px);
   }
 }
 
-/* تحسين ظهور الصور والإطارات */
+/* إطارات الصور */
 .image-frame {
   overflow: hidden;
   border-radius: 4px;
@@ -214,7 +216,9 @@
 }
 
 .image-frame img {
-  transition: transform 0.8s ease, filter 0.8s ease;
+  transition:
+    transform 0.8s ease,
+    filter 0.8s ease;
 }
 
 .image-frame:hover {
@@ -227,7 +231,7 @@
   filter: saturate(1.08);
 }
 
-/* ظهور المحتوى أثناء النزول */
+/* ظهور الفقرات والصور أثناء النزول */
 .reveal {
   opacity: 0;
   transform: translateY(28px);
@@ -241,7 +245,7 @@
   transform: translateY(0);
 }
 
-/* الموبايل */
+/* تحسين العرض على الموبايل */
 @media (max-width: 600px) {
   .hero {
     padding-inline: 18px;
@@ -261,7 +265,7 @@
   }
 }
 
-/* احترام إعداد تقليل الحركة بالجهاز */
+/* تقليل الحركة لو إعداد الجهاز يطلب ذلك */
 @media (prefers-reduced-motion: reduce) {
   .hero-photo,
   .hero-waves svg,
