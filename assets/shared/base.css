@@ -1,0 +1,71 @@
+:root{
+  --black:#02080c; --deep:#03151e; --sea:#063442; --sea2:#0b4d5c;
+  --bronze:#b8874b; --gold:#e3bd78; --light:#e4eeee; --muted:#9eb7bb;
+  --red:#a93232; --accent:#e3bd78;
+  --bg:radial-gradient(ellipse at 50% 0%,#0b4554 0%,#03151e 38%,#02080c 100%);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--light);font-family:"Cairo",Tahoma,sans-serif;background:var(--bg);overflow-x:hidden}
+img{max-width:100%}
+p{color:#c6d5d7;font-size:clamp(1rem,2vw,1.15rem);line-height:2.2}
+h2{font-family:"Marhey","Cairo",sans-serif;font-size:clamp(1.8rem,5vw,3.2rem);margin:8px 0 20px;color:#e6eeee}
+h3{font-family:"Marhey","Cairo",sans-serif;color:var(--accent)}
+.kicker{color:var(--accent);font-size:.8rem;letter-spacing:2px}
+.container{width:min(900px,100%);margin:auto}
+.story{padding:90px 20px}
+
+.topbar{position:fixed;top:0;left:0;right:0;height:64px;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(12px,4vw,60px);background:rgba(2,8,12,.9);backdrop-filter:blur(14px);border-bottom:1px solid rgba(184,135,75,.35)}
+.home-link{color:var(--gold);text-decoration:none;font-size:.85rem;white-space:nowrap}
+.school-brand{display:flex;align-items:center;gap:10px}
+.school-brand img{width:42px;height:42px;object-fit:contain}
+.school-name{color:#e4c98f;font-size:.68rem;font-weight:700;line-height:1.4}
+.page-name{color:var(--muted);font-size:.72rem}
+@media(max-width:600px){.school-name,.page-name{display:none}}
+
+.image-frame{margin:40px auto;padding:9px;background:linear-gradient(145deg,#d0a05c,#67401f,#2b190d);box-shadow:0 25px 60px rgba(0,0,0,.55)}
+.image-frame img{display:block;width:100%;min-height:200px;object-fit:cover;background:#071c25;cursor:zoom-in}
+.image-frame figcaption{padding:12px 15px;text-align:center;color:#aebfc1;font-size:.8rem;background:#07151c}
+.image-frame figcaption small{display:block;color:#7f989d;margin-top:4px}
+.photo-placeholder{min-height:260px;display:flex;align-items:center;justify-content:center;text-align:center;padding:28px;color:#718c91;background:radial-gradient(circle,#104653,#04141c)}
+.photo-placeholder strong{display:block;color:var(--gold);margin-bottom:8px}
+
+.panel{padding:28px;border:1px solid rgba(184,135,75,.28);background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.75))}
+.panel h3{margin-top:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.quote{margin:45px 0;padding:26px;border-right:5px solid var(--accent);background:rgba(184,135,75,.07)}
+.quote p{margin:0;font-family:"Marhey","Cairo",sans-serif;color:#e0d0b4}
+
+.timeline{margin-top:40px;padding-right:30px;border-right:2px solid rgba(184,135,75,.4)}
+.event{position:relative;margin-bottom:40px}
+.event:before{content:"";position:absolute;right:-39px;top:8px;width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid #09252e;box-shadow:0 0 0 3px rgba(184,135,75,.3)}
+.year{color:var(--accent);font-family:"Marhey","Cairo",sans-serif;font-size:1.4rem}
+
+.lessons{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.lesson{padding:24px;border:1px solid rgba(184,135,75,.25);background:rgba(2,14,20,.6)}
+.lesson-number{color:var(--accent);font-family:"Marhey","Cairo",sans-serif;font-size:1.5rem}
+.lesson p{font-size:.95rem}
+
+.sources{padding:50px 20px;border-top:1px solid rgba(184,135,75,.2)}
+.sources ol{color:#9db3b7;font-size:.9rem;line-height:2}
+.sources a{color:var(--gold)}
+
+.home-button{display:inline-block;margin-top:25px;padding:13px 28px;color:#171006;background:linear-gradient(145deg,#e3bd78,#a8753d);text-decoration:none;font-weight:800;border-radius:5px}
+.end{text-align:center;padding:110px 20px;background:radial-gradient(ellipse at center,#0b4655,#02080c 70%)}
+.end h2{color:var(--accent)}
+footer{padding:45px 20px;text-align:center;color:#789196;font-size:.8rem;border-top:1px solid rgba(184,135,75,.2)}
+footer strong{color:var(--gold)}
+
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+.reveal.show{opacity:1;transform:none}
+
+.lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.92);cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:100%;max-height:92vh;object-fit:contain}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
