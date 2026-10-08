@@ -2,9 +2,9 @@
   "name": "مليكة",
   "grade": "الصف الابتدائي",
   "className": "",
-  "title": "اللغة النوبية في حرب أكتوبر",
-  "subtitle": "",
-  "color": "#8b6bb1",
+  "title": "لغة لا يفهمها العدو",
+  "subtitle": "حكاية الشفرة النوبية",
+  "color": "#2fa7a0",
   "order": 3,
-  "published": false
+  "published": true
 }
