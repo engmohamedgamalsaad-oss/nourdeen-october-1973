@@ -5,13 +5,9 @@
 
 .hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:110px 20px 80px}
 
-/* الطبقة 1: صورة تاريخية كبيرة (اختيارية) */
 .hero-photo{position:absolute;inset:0;background:url("bg.jpg") center/cover no-repeat;opacity:.55}
-/* الطبقة 2: تعتيم أزرق بحري */
 .hero-tint{position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,21,30,.82),rgba(6,52,66,.78) 55%,rgba(2,8,12,.96))}
-/* الطبقة 3: texture خفيف */
 .hero-texture{position:absolute;inset:0;opacity:.09;background:repeating-linear-gradient(120deg,transparent 0 80px,rgba(227,189,120,.5) 81px,transparent 82px 160px)}
-/* الطبقة 4: موج البحر */
 .hero-waves{position:absolute;left:0;right:0;bottom:0;height:120px;opacity:.5}
 .hero-waves svg{width:200%;height:100%;animation:wave 14s linear infinite}
 @keyframes wave{from{transform:translateX(0)}to{transform:translateX(-50%)}}
