@@ -10,6 +10,7 @@
 
 /* ===== الغلاف الرئيسي ===== */
 .hero {
+  min-height: 100vh;
   min-height: 100svh;
   position: relative;
   display: flex;
@@ -17,25 +18,26 @@
   justify-content: center;
   text-align: center;
   overflow: hidden;
-  padding: 110px 20px 80px;
   isolation: isolate;
+  padding: 100px 20px 105px;
   background: #061820;
 }
 
-/* صورة الخلفية */
 .hero-photo {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: -3;
   background: url("cover.jpg") center / cover no-repeat;
   opacity: .55;
+  transform: scale(1.04);
+  animation: cover-drift 13s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
-/* تدرج لزيادة وضوح الكلام */
 .hero-tint {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: -2;
   background: linear-gradient(
     180deg,
     rgba(3,21,30,.60),
@@ -44,11 +46,10 @@
   );
 }
 
-/* نسيج زخرفي */
 .hero-texture {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: -1;
   opacity: .09;
   pointer-events: none;
   background: repeating-linear-gradient(
@@ -59,10 +60,9 @@
   );
 }
 
-/* الإطار الدائري */
 .hero-ring {
   position: absolute;
-  z-index: 2;
+  z-index: 0;
   width: min(620px, 88vw);
   height: min(620px, 88vw);
   border-radius: 50%;
@@ -71,7 +71,7 @@
   pointer-events: none;
 }
 
-.hero-ring:before {
+.hero-ring::before {
   content: "1973";
   position: absolute;
   inset: 0;
@@ -83,14 +83,67 @@
   color: rgba(184,135,75,.13);
 }
 
-/* ===== البحر: جسم ثابت وتموج متحرك ===== */
+/* ===== محتوى الغلاف ===== */
+.hero-content {
+  position: relative;
+  z-index: 5;
+  width: min(850px, 100%);
+  animation: title-drift 8s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.eyebrow {
+  color: var(--gold);
+  font-size: .85rem;
+  letter-spacing: 2px;
+  transform: translateY(-10px);
+  text-shadow: 0 2px 12px #000;
+}
+
+.red-line {
+  width: 70px;
+  height: 3px;
+  margin: 14px auto 0;
+  background: #b52b30;
+  box-shadow: 0 0 14px rgba(181,43,48,.4);
+}
+
+.hero h1 {
+  margin: 18px 0;
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(2.6rem, 10vw, 6.5rem);
+  line-height: 1.35;
+  color: #f1d18d;
+  text-shadow: 3px 4px 0 #442b16, 7px 10px 25px #000;
+}
+
+.hero-subtitle {
+  color: #edf5f5;
+  font-size: clamp(1rem, 3vw, 1.4rem);
+  line-height: 2;
+  text-shadow: 0 2px 8px #000;
+}
+
+.author {
+  margin-top: 38px;
+  color: #fff;
+  line-height: 1.9;
+  text-shadow: 0 2px 10px #000;
+}
+
+.author strong {
+  color: var(--gold);
+  font-family: "Marhey", "Cairo", sans-serif;
+}
+
+/* ===== موج البحر ===== */
 .hero-waves {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 0;
+  bottom: -1px;
   z-index: 3;
-  height: 120px;
+  height: clamp(85px, 13vw, 125px);
   opacity: .75;
   overflow: hidden;
   pointer-events: none;
@@ -103,10 +156,6 @@
   overflow: visible;
 }
 
-/*
-  نحرك نقاط مسار الموجة نفسها عبر SVG.
-  لا نحرك الـ SVG كله يمينًا أو شمالًا.
-*/
 .hero-waves .wave-back {
   fill: #126477;
   opacity: .65;
@@ -125,7 +174,6 @@
   animation: wave-line 3.6s ease-in-out infinite alternate;
 }
 
-/* تموج خلفي هادئ */
 @keyframes wave-flow-back {
   0% {
     d: path("M0 48 Q150 15 300 48 T600 48 T900 48 T1200 48 V120 H0Z");
@@ -138,7 +186,6 @@
   }
 }
 
-/* الموجة الأمامية */
 @keyframes wave-flow-front {
   0% {
     d: path("M0 68 Q150 35 300 68 T600 68 T900 68 T1200 68 V120 H0Z");
@@ -151,7 +198,6 @@
   }
 }
 
-/* خط رفيع فوق الموجة */
 @keyframes wave-line {
   0% {
     d: path("M0 68 Q150 35 300 68 T600 68 T900 68 T1200 68");
@@ -164,64 +210,44 @@
   }
 }
 
-/* ===== محتوى الغلاف ===== */
-.hero-content {
-  position: relative;
-  z-index: 5;
-  width: min(850px, 100%);
+/* الصورة الشفافة والعنوان بسرعتين مختلفتين */
+@keyframes cover-drift {
+  from { transform: scale(1.04) translateY(0); }
+  to   { transform: scale(1.10) translateY(-1.2%); }
 }
 
-.eyebrow {
-  color: var(--gold);
-  font-size: .85rem;
-  letter-spacing: 2px;
+@keyframes title-drift {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-7px); }
 }
 
-.red-line {
-  width: 70px;
-  height: 3px;
-  margin: 14px auto 0;
-  background: #b52b30;
-}
-
-.hero h1 {
-  margin: 18px 0;
-  font-family: "Marhey", "Cairo", sans-serif;
-  font-size: clamp(3rem, 10vw, 6.5rem);
-  line-height: 1.25;
-  color: var(--gold);
-  text-shadow: 3px 4px 0 #442b16, 7px 10px 25px #000;
-}
-
-.hero-subtitle {
-  color: #c4d4d6;
-  font-size: clamp(1rem, 3vw, 1.4rem);
-  line-height: 2;
-}
-
-.author {
-  margin-top: 26px;
-  color: #fff;
-  line-height: 1.9;
-}
-
-.author strong {
-  color: var(--gold);
-  font-family: "Marhey", "Cairo", sans-serif;
-}
-
+/* إشارة بدء الحكاية: أعلى من الموج */
 .scroll {
   position: absolute;
-  bottom: 26px;
+  bottom: 68px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--muted);
-  font-size: .8rem;
+  color: #e4eeee;
+  font-size: .85rem;
+  font-weight: 700;
+  text-shadow: 0 2px 9px #000, 0 0 12px rgba(0,0,0,.8);
   z-index: 5;
   white-space: nowrap;
+  animation: scroll-hint 2.4s ease-in-out infinite;
 }
 
-/* ===== تنسيق محتوى القصة ===== */
+@keyframes scroll-hint {
+  0%, 100% {
+    opacity: .7;
+    margin-bottom: 0;
+  }
+  50% {
+    opacity: 1;
+    margin-bottom: 7px;
+  }
+}
+
+/* ===== محتوى الحكاية ===== */
 .story {
   position: relative;
   padding: 70px 20px;
@@ -287,8 +313,10 @@
   margin: 34px auto;
   overflow: hidden;
   border: 1px solid rgba(184,135,75,.3);
+  border-radius: 4px;
   background: rgba(2,12,18,.85);
   box-shadow: 0 12px 32px rgba(0,0,0,.22);
+  transition: box-shadow .6s ease, transform .6s ease;
 }
 
 .image-frame img {
@@ -298,12 +326,18 @@
   object-fit: contain;
   background: #031017;
   cursor: zoom-in;
+  transition: transform .7s ease;
+}
+
+.image-frame:hover img {
+  transform: scale(1.025);
 }
 
 .image-frame figcaption {
   padding: 12px 16px;
   color: #e6d2ad;
   line-height: 1.9;
+  text-align: center;
 }
 
 .image-frame figcaption small {
@@ -312,7 +346,6 @@
   font-size: .8rem;
 }
 
-/* مكان الصورة المؤقتة */
 .photo-placeholder {
   min-height: 200px;
   display: grid;
@@ -343,7 +376,7 @@
   padding: 0 15px 0 0;
 }
 
-.event:before {
+.event::before {
   content: "";
   position: absolute;
   right: -34px;
@@ -361,7 +394,7 @@
   margin-bottom: 8px;
 }
 
-/* ===== الاقتباس ===== */
+/* ===== الاقتباسات ===== */
 .quote {
   margin: 35px 0;
   padding: 22px 26px;
@@ -454,19 +487,28 @@ footer strong {
   color: var(--gold);
 }
 
-/* ===== تأثير ظهور المحتوى ===== */
+/* الحاويات القديمة تظل ظاهرة؛ الحركة أصبحت لكل عنصر */
 .reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity .8s ease, transform .8s ease;
+  opacity: 1;
+  transform: none;
 }
 
-.reveal.show {
+/* الحركة أثناء النزول والرجوع أثناء الصعود */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(42px);
+  transition:
+    opacity .75s ease,
+    transform .75s cubic-bezier(.2,.65,.3,1);
+  will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ===== تكبير الصورة ===== */
+/* تكبير الصورة */
 .lightbox {
   position: fixed;
   inset: 0;
@@ -494,10 +536,15 @@ footer strong {
   object-fit: contain;
 }
 
+/* شاشة افتتاح الحكاية */
+.story-splash {
+  font-family: "Cairo", Tahoma, sans-serif;
+}
+
 /* ===== الموبايل ===== */
 @media (max-width: 600px) {
   .hero {
-    padding: 100px 15px 75px;
+    padding: 90px 15px 105px;
   }
 
   .hero-waves {
@@ -507,6 +554,19 @@ footer strong {
   .hero-ring {
     width: 88vw;
     height: 88vw;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.3rem, 10vw, 4rem);
+  }
+
+  .author {
+    margin-top: 44px;
+  }
+
+  .scroll {
+    bottom: 54px;
+    font-size: .8rem;
   }
 
   .story {
@@ -521,19 +581,31 @@ footer strong {
   .image-frame img {
     max-height: 430px;
   }
+
+  .scroll-reveal {
+    transform: translateY(28px);
+  }
 }
 
-/* إيقاف الحركة عند تفضيل تقليلها */
+/* احترام إعداد تقليل الحركة */
 @media (prefers-reduced-motion: reduce) {
+  .hero-photo,
+  .hero-content,
   .hero-waves .wave-back,
   .hero-waves .wave-front,
-  .hero-waves .wave-highlight {
+  .hero-waves .wave-highlight,
+  .scroll {
     animation: none !important;
   }
 
-  .reveal {
+  .scroll-reveal {
     opacity: 1;
     transform: none;
+    transition: none;
+  }
+
+  .image-frame,
+  .image-frame img {
     transition: none;
   }
 }
