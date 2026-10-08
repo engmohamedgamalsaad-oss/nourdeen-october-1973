@@ -31,6 +31,17 @@
 .card-title{color:#e6eeee;line-height:1.8}
 .card-btn{display:inline-block;margin-top:14px;padding:8px 18px;color:#171006;background:linear-gradient(145deg,#e3bd78,#a8753d);font-weight:800;border-radius:5px;font-size:.9rem}
 .empty{color:var(--muted);text-align:center;padding:40px 0}
+
+/* الصفحة الرئيسية الجديدة: صورة الغلاف المرفوعة كما هي + Parallax/Fade */
+.hero-home{height:100svh;min-height:560px;position:relative;overflow:hidden;background:linear-gradient(180deg,#8e765b,#80603e)}
+.hero-home-image-wrap{position:absolute;inset:0;will-change:transform,opacity}
+.hero-home-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;will-change:transform,opacity;background:transparent}
+.hero-home-shade{display:none}
+.home-after{position:relative;z-index:4;background:linear-gradient(180deg,#07141c 0,#041018 100%)}
+.supervision{padding:35px 20px 15px;text-align:center;background:#02080c;border-top:1px solid rgba(184,135,75,.22)}
+.supervision-title{color:var(--gold);font-family:"Marhey","Cairo",sans-serif;font-size:1.35rem;margin-bottom:10px}
+.supervision-line{color:#d8e1e2;line-height:2;font-size:.98rem}
+@media(max-width:600px){.hero-home{min-height:100svh}.hero-home-image{object-position:center center}}
 </style>
 </head>
 <body>
@@ -46,16 +57,15 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="hero-ring"></div>
-  <div class="hero-content reveal">
-    <div class="eyebrow">EGYPT • 6 OCTOBER 1973</div>
-    <h1>حكايات أكتوبر 1973</h1>
-    <p>أرشيف رقمي صغير، تحكي فيه طالبات مدرسة المنار بطولات حقيقية من حرب أكتوبر.</p>
+<section class="hero-home" id="homeHero">
+  <h1 class="visually-hidden">حكايات أكتوبر 1973</h1>
+  <div class="hero-home-image-wrap">
+    <img class="hero-home-image" id="heroHomeImage" src="assets/homepage/main-cover.jpg" alt="غلاف «حكايات أكتوبر 1973»: مشهد رمزي لجنود مصريين يرفعون علم مصر" loading="eager">
+    <div class="hero-home-shade"></div>
   </div>
 </section>
 
-<section class="intro">
+<section class="intro home-after">
   <div class="container reveal">
     <div class="kicker">مقدمة</div>
     <h2>السادس من أكتوبر 1973</h2>
@@ -73,6 +83,14 @@
   </div>
 </section>
 
+<section class="supervision">
+  <div class="container">
+    <div class="supervision-title">تحت إشراف</div>
+    <div class="supervision-line">وكيل القسم الإعدادي الأستاذة/ دينا الفقى</div>
+    <div class="supervision-line">مديرة المدرسة الأستاذة / نهى جعفر</div>
+  </div>
+</section>
+
 <footer>
   مدرسة المنار القومية للغات للبنات<br><br>
   <strong>حكايات أكتوبر 1973</strong>
@@ -80,6 +98,24 @@
 
 <script src="assets/shared/story.js"></script>
 <script>
+
+(function(){
+  var hero=document.getElementById('homeHero');
+  var img=document.getElementById('heroHomeImage');
+  if(!hero || !img) return;
+  function update(){
+    var rect=hero.getBoundingClientRect();
+    var p=Math.max(0,Math.min(1,(-rect.top)/(hero.offsetHeight*.78)));
+    img.style.opacity=String(1-p);
+    img.style.transform='translateY('+(-p*7)+'vh) scale('+(1+p*.035)+')';
+    var wrap=img.parentElement;
+    wrap.style.opacity=String(1-p*.15);
+  }
+  addEventListener('scroll',update,{passive:true});
+  addEventListener('resize',update);
+  update();
+})();
+
 (function () {
   var box = document.getElementById('cards');
 
