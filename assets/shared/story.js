@@ -2,29 +2,65 @@
 (function () {
   'use strict';
 
-  /* 1) إظهار عناصر الحكاية أثناء التمرير */
-  var els = document.querySelectorAll('.reveal');
+  /* إظهار العناصر عند دخولها الشاشة وإخفاؤها عند خروجها،
+     بحيث تعود الحركة في الاتجاه العكسي عند الصعود */
+  var selectors = [
+    '.story .kicker',
+    '.story h2',
+    '.story p',
+    '.story figure',
+    '.story .event',
+    '.story .panel',
+    '.story .quote',
+    '.story .lesson',
+    '.end .kicker',
+    '.end h2',
+    '.end p',
+    '.end .quote',
+    '.end .home-button',
+    '.sources .kicker',
+    '.sources h2',
+    '.sources li',
+    '.sources > .container > p',
+    'footer'
+  ];
 
-  if (!('IntersectionObserver' in window)) {
-    els.forEach(function (el) {
-      el.classList.add('show');
-    });
-  } else {
+  /* أوقف حركة الحاويات القديمة حتى تتحرك النصوص والصور منفردة */
+  document.querySelectorAll('.reveal').forEach(function (el) {
+    el.classList.add('show');
+  });
+
+  var targets = document.querySelectorAll(selectors.join(','));
+
+  targets.forEach(function (el, index) {
+    el.classList.add('scroll-reveal');
+    el.style.transitionDelay = (index % 3) * 65 + 'ms';
+  });
+
+  if ('IntersectionObserver' in window) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-          observer.unobserve(entry.target);
+          entry.target.classList.add('is-visible');
+        } else {
+          entry.target.classList.remove('is-visible');
         }
       });
-    }, { threshold: 0.12 });
+    }, {
+      threshold: 0.08,
+      rootMargin: '0px 0px -3% 0px'
+    });
 
-    els.forEach(function (el) {
+    targets.forEach(function (el) {
       observer.observe(el);
+    });
+  } else {
+    targets.forEach(function (el) {
+      el.classList.add('is-visible');
     });
   }
 
-  /* 2) شاشة افتتاحية اختيارية من إعدادات الصفحة */
+  /* شاشة الغلاف الافتتاحية: cover-popup.jpg */
   var splashImage = document.body.getAttribute('data-splash');
 
   if (splashImage) {
@@ -43,73 +79,62 @@
     var altText =
       document.body.getAttribute('data-splash-alt') || 'غلاف الحكاية';
 
-    splash.innerHTML =
-      '<style>' +
-      '.story-splash{' +
-        'position:fixed;inset:0;z-index:9999;' +
-        'display:flex;flex-direction:column;align-items:center;' +
-        'justify-content:center;gap:22px;padding:24px 16px;' +
-        'overflow:auto;text-align:center;' +
-        'background:linear-gradient(180deg,' + topColor + ',' + bottomColor + ');' +
-        'opacity:1;visibility:visible;' +
-        'transition:opacity .45s ease,visibility .45s ease;' +
-      '}' +
-      '.story-splash.is-closing{' +
-        'opacity:0;visibility:hidden;pointer-events:none;' +
-      '}' +
-      '.story-splash img{' +
-        'display:block;width:auto;height:auto;' +
-        'max-width:min(100%,1000px);max-height:76vh;' +
-        'object-fit:contain;border-radius:5px;' +
-        'box-shadow:0 18px 55px rgba(0,0,0,.4);' +
-      '}' +
-      '.story-splash button{' +
-        'font:700 1rem Cairo,Tahoma,sans-serif;' +
-        'padding:13px 32px;border:1px solid #f0d59c;' +
-        'border-radius:5px;color:#171006;' +
-        'background:linear-gradient(145deg,#f0d59c,#b8874b);' +
-        'box-shadow:0 8px 24px rgba(0,0,0,.25);cursor:pointer;' +
-      '}' +
-      '.story-splash button:focus-visible{' +
-        'outline:3px solid white;outline-offset:4px;' +
-      '}' +
-      '.story-splash .splash-error{' +
-        'color:#fff;padding:20px;line-height:1.9;' +
-      '}' +
-      '@media(max-width:600px){' +
-        '.story-splash{gap:18px;padding:16px 12px;}' +
-        '.story-splash img{max-height:72vh;max-width:100%;}' +
-      '}' +
-      '@media(prefers-reduced-motion:reduce){' +
-        '.story-splash{transition:none;}' +
-      '}' +
-      '</style>' +
-      '<img class="splash-art" alt="">' +
-      '<div class="splash-error" hidden>' +
-        'تعذّر تحميل صورة الغلاف. يمكنك بدء الحكاية.' +
-      '</div>' +
-      '<button type="button" class="splash-start">ابدأ الحكاية ←</button>';
+    splash.style.cssText =
+      'position:fixed;inset:0;z-index:10000;' +
+      'display:flex;flex-direction:column;align-items:center;' +
+      'justify-content:center;gap:22px;padding:20px;' +
+      'overflow:auto;text-align:center;' +
+      'background:linear-gradient(180deg,' + topColor + ',' + bottomColor + ');' +
+      'opacity:1;visibility:visible;' +
+      'transition:opacity .45s ease,visibility .45s ease;';
 
+    var art = document.createElement('img');
+    art.alt = altText;
+    art.src = splashImage;
+    art.style.cssText =
+      'display:block;width:auto;height:auto;' +
+      'max-width:min(100%,1000px);max-height:76vh;' +
+      'object-fit:contain;border-radius:5px;' +
+      'box-shadow:0 18px 55px rgba(0,0,0,.4);';
+
+    var errorMessage = document.createElement('div');
+    errorMessage.textContent =
+      'تعذّر تحميل صورة الغلاف. يمكنك بدء الحكاية.';
+    errorMessage.hidden = true;
+    errorMessage.style.color = '#fff';
+
+    var startButton = document.createElement('button');
+    startButton.type = 'button';
+    startButton.textContent = 'ابدأ الحكاية ←';
+    startButton.style.cssText =
+      'font:700 1rem Cairo,Tahoma,sans-serif;' +
+      'padding:13px 32px;border:1px solid #f0d59c;' +
+      'border-radius:5px;color:#171006;' +
+      'background:linear-gradient(145deg,#f0d59c,#b8874b);' +
+      'cursor:pointer;';
+
+    splash.appendChild(art);
+    splash.appendChild(errorMessage);
+    splash.appendChild(startButton);
     document.body.appendChild(splash);
 
-    var splashArt = splash.querySelector('.splash-art');
-    var splashError = splash.querySelector('.splash-error');
-    var startButton = splash.querySelector('.splash-start');
-    var previousOverflow = document.body.style.overflow;
-
-    splashArt.alt = altText;
-    splashArt.src = splashImage;
-
-    splashArt.addEventListener('error', function () {
-      splashArt.hidden = true;
-      splashError.hidden = false;
-    });
-
+    var oldOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
+    art.addEventListener('error', function () {
+      art.hidden = true;
+      errorMessage.hidden = false;
+    });
+
+    var splashClosed = false;
+
     function closeSplash() {
-      splash.classList.add('is-closing');
-      document.body.style.overflow = previousOverflow;
+      if (splashClosed) return;
+      splashClosed = true;
+
+      splash.style.opacity = '0';
+      splash.style.visibility = 'hidden';
+      document.body.style.overflow = oldOverflow;
 
       window.setTimeout(function () {
         if (splash.parentNode) {
@@ -120,26 +145,26 @@
 
     startButton.addEventListener('click', closeSplash);
 
-    document.addEventListener('keydown', function onSplashKey(event) {
-      if (event.key === 'Escape' && splash.parentNode) {
+    splash.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
         closeSplash();
-        document.removeEventListener('keydown', onSplashKey);
       }
     });
 
     startButton.focus();
   }
 
-  /* 3) تكبير الصور عند الضغط عليها */
+  /* تكبير الصور عند الضغط عليها */
   var lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
-  lightbox.innerHTML = '<img alt="">';
   lightbox.setAttribute('role', 'dialog');
   lightbox.setAttribute('aria-modal', 'true');
   lightbox.setAttribute('aria-label', 'عرض الصورة بحجم كبير');
-  document.body.appendChild(lightbox);
 
-  var bigImage = lightbox.querySelector('img');
+  var bigImage = document.createElement('img');
+  bigImage.alt = '';
+  lightbox.appendChild(bigImage);
+  document.body.appendChild(lightbox);
 
   function closeLightbox() {
     lightbox.classList.remove('open');
@@ -150,6 +175,9 @@
     var target = event.target;
 
     if (!target || typeof target.closest !== 'function') {
+      if (lightbox.classList.contains('open')) {
+        closeLightbox();
+      }
       return;
     }
 
