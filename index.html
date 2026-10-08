@@ -1,55 +1,465 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>حكايات أكتوبر 1973 | مدرسة المنار القومية للغات للبنات</title>
 <meta name="description" content="أرشيف رقمي لحكايات طالبات مدرسة المنار عن بطولات حرب أكتوبر 1973">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/shared/base.css">
-<style>
-.hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:110px 20px 80px}
-.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05),rgba(0,0,0,.7));pointer-events:none}
-.hero-ring{position:absolute;width:min(620px,88vw);height:min(620px,88vw);border-radius:50%;border:2px solid rgba(184,135,75,.4)}
-.hero-ring:before{content:"1973";position:absolute;inset:0;display:grid;place-items:center;font-family:Georgia,serif;font-size:clamp(5rem,16vw,12rem);font-weight:bold;color:rgba(184,135,75,.13)}
-.hero-content{position:relative;z-index:5;width:min(800px,100%)}
-.eyebrow{color:var(--gold);font-size:.85rem;letter-spacing:2px}
-.hero h1{margin:18px 0;font-family:"Marhey","Cairo",sans-serif;font-size:clamp(2.6rem,9vw,6rem);line-height:1.15;color:var(--gold);text-shadow:3px 4px 0 #442b16,7px 10px 25px #000}
-.hero p{color:#c4d4d6}
-.intro{padding:90px 20px}
-.big-quote{margin:40px 0;padding:30px;border-right:5px solid var(--gold);background:rgba(184,135,75,.07);font-family:"Marhey","Cairo",sans-serif;font-size:clamp(1.2rem,3.5vw,1.8rem);color:#e0d0b4;line-height:2}
-.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px;margin-top:35px}
-.card{display:block;text-decoration:none;color:inherit;border:1px solid rgba(184,135,75,.3);background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.85));overflow:hidden;transition:transform .3s ease,border-color .3s ease}
-.card:hover{transform:translateY(-6px);border-color:var(--gold)}
-.card-photo{height:220px;background:radial-gradient(circle,#104653,#04141c);display:flex;align-items:center;justify-content:center;color:var(--gold);font-family:"Marhey","Cairo",sans-serif;font-size:3rem}
-.card-photo img{width:100%;height:100%;object-fit:cover;display:block}
-.card-body{padding:20px;border-top:3px solid var(--c,#b8874b)}
-.card-name{font-family:"Marhey","Cairo",sans-serif;color:var(--gold);font-size:1.2rem}
-.card-grade{color:var(--muted);font-size:.85rem;margin:4px 0 10px}
-.card-title{color:#e6eeee;line-height:1.8}
-.card-btn{display:inline-block;margin-top:14px;padding:8px 18px;color:#171006;background:linear-gradient(145deg,#e3bd78,#a8753d);font-weight:800;border-radius:5px;font-size:.9rem}
-.empty{color:var(--muted);text-align:center;padding:40px 0}
 
-/* الصفحة الرئيسية الجديدة: صورة الغلاف المرفوعة كما هي + Parallax/Fade */
-.hero-home{height:100svh;min-height:560px;position:relative;overflow:hidden;background:linear-gradient(180deg,#8e765b,#80603e)}
-.hero-home-image-wrap{position:absolute;inset:0;will-change:transform,opacity}
-.hero-home-image{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;display:block;will-change:transform,opacity;background:transparent}
-.hero-home-shade{display:none}
-.home-after{position:relative;z-index:4;background:linear-gradient(180deg,#07141c 0,#041018 100%)}
-.supervision{padding:35px 20px 15px;text-align:center;background:#02080c;border-top:1px solid rgba(184,135,75,.22)}
-.supervision-title{color:var(--gold);font-family:"Marhey","Cairo",sans-serif;font-size:1.35rem;margin-bottom:10px}
-.supervision-line{color:#d8e1e2;line-height:2;font-size:.98rem}
-@media(max-width:600px){.hero-home{min-height:100svh}.hero-home-image{object-position:center center}}
+<link rel="stylesheet" href="assets/shared/base.css">
+
+<style>
+:root {
+  --home-brown-top: #8e765b;
+  --home-brown-bottom: #80603e;
+  --home-gold: #e3bd78;
+}
+
+/* ===== الهيدر وشعار المدرسة ===== */
+.topbar {
+  min-height: 94px;
+  padding: 12px 24px;
+  gap: 18px;
+  background: rgba(3, 13, 19, .97);
+  border-bottom: 1px solid rgba(184,135,75,.38);
+}
+
+.school-brand {
+  gap: 15px;
+  align-items: center;
+}
+
+.school-brand img {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.school-name {
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.page-name {
+  font-size: .9rem;
+}
+
+.home-link {
+  font-size: .92rem;
+}
+
+/* ===== الغلاف الرئيسي ===== */
+.hero-home {
+  min-height: 590px;
+  height: calc(100svh - 94px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    var(--home-brown-top) 0%,
+    var(--home-brown-bottom) 100%
+  );
+}
+
+/* نفس لون الخلفية الأصلية حول الصورة */
+.hero-home-image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: linear-gradient(
+    180deg,
+    var(--home-brown-top),
+    var(--home-brown-bottom)
+  );
+  will-change: transform;
+}
+
+.hero-home-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  will-change: transform;
+}
+
+/* تظليل خفيف أسفل الغلاف فقط */
+.hero-home-shade {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(40,25,13,.04) 35%,
+    rgba(35,20,10,.12) 65%,
+    rgba(3,12,17,.68) 100%
+  );
+  pointer-events: none;
+}
+
+/* طبقة الكلام فوق الغلاف */
+.hero-home-content {
+  position: relative;
+  z-index: 2;
+  width: min(900px, 94%);
+  padding: 35px 18px;
+  margin-top: auto;
+  margin-bottom: 26px;
+  text-shadow: 0 3px 15px rgba(0,0,0,.85);
+}
+
+.hero-home-content .eyebrow {
+  color: #fff0d0;
+  font-size: clamp(.78rem, 2vw, 1rem);
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.hero-home-content h1 {
+  margin: 10px 0 14px;
+  color: #ffe0a0;
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  line-height: 1.5;
+  text-shadow: 2px 3px 0 #442b16, 0 7px 22px #000;
+}
+
+.hero-home-content p {
+  max-width: 720px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: clamp(.95rem, 2.4vw, 1.2rem);
+  line-height: 2.1;
+}
+
+.hero-home-rule {
+  width: 85px;
+  height: 3px;
+  margin: 15px auto;
+  background: var(--home-gold);
+}
+
+.hero-home-scroll {
+  position: absolute;
+  z-index: 3;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff0d0;
+  font-size: .85rem;
+  white-space: nowrap;
+  animation: scroll-hint 2s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 6px; }
+}
+
+/* ===== الحركة عند ظهور المحتوى ===== */
+.float-up {
+  opacity: 0;
+  transform: translateY(38px);
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+.float-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.float-delay-1 { transition-delay: .10s; }
+.float-delay-2 { transition-delay: .20s; }
+.float-delay-3 { transition-delay: .30s; }
+
+/* ===== المقدمة ===== */
+.intro {
+  padding: 85px 20px;
+  position: relative;
+}
+
+.home-after {
+  background: linear-gradient(180deg, #07141c 0, #041018 100%);
+}
+
+.intro-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.intro-heading h2 {
+  margin-top: 10px;
+}
+
+.intro-copy {
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.intro-copy p {
+  color: #d8e1e2;
+  line-height: 2.15;
+  font-size: 1.02rem;
+}
+
+.big-quote {
+  margin: 35px 0 0;
+  padding: 25px;
+  border-right: 5px solid var(--gold);
+  background: rgba(184,135,75,.08);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(1.15rem, 3.5vw, 1.8rem);
+  color: #e0d0b4;
+  line-height: 2;
+}
+
+/* ===== كروت الحكايات ===== */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 22px;
+  margin-top: 35px;
+  perspective: 1000px;
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(184,135,75,.3);
+  background: linear-gradient(
+    145deg,
+    rgba(8,62,76,.5),
+    rgba(2,12,18,.92)
+  );
+  overflow: hidden;
+  position: relative;
+  transition:
+    transform .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease;
+  transform-origin: center bottom;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.012);
+  border-color: var(--gold);
+  box-shadow: 0 16px 35px rgba(0,0,0,.28);
+}
+
+.card-photo {
+  height: 220px;
+  background: radial-gradient(circle, #104653, #04141c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--gold);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: 3rem;
+  overflow: hidden;
+}
+
+.card-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .65s ease;
+}
+
+.card:hover .card-photo img {
+  transform: scale(1.06);
+}
+
+.card-photo-letter {
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card-body {
+  padding: 20px;
+  border-top: 3px solid var(--c, #b8874b);
+}
+
+.card-name {
+  font-family: "Marhey", "Cairo", sans-serif;
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.card-grade {
+  color: var(--muted);
+  font-size: .85rem;
+  margin: 4px 0 10px;
+}
+
+.card-title {
+  color: #e6eeee;
+  line-height: 1.9;
+}
+
+.card-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 8px 18px;
+  color: #171006;
+  background: linear-gradient(145deg, #e3bd78, #a8753d);
+  font-weight: 800;
+  border-radius: 5px;
+  font-size: .9rem;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 40px 0;
+  grid-column: 1 / -1;
+}
+
+/* ===== الإشراف ===== */
+.supervision {
+  padding: 35px 20px 20px;
+  text-align: center;
+  background: #02080c;
+  border-top: 1px solid rgba(184,135,75,.22);
+}
+
+.supervision-title {
+  color: var(--gold);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.supervision-line {
+  color: #d8e1e2;
+  line-height: 2.1;
+  font-size: .98rem;
+}
+
+footer {
+  text-align: center;
+  padding: 28px 16px;
+  line-height: 2;
+}
+
+/* ===== الموبايل ===== */
+@media (max-width: 700px) {
+  .topbar {
+    min-height: 82px;
+    padding: 9px 12px;
+    gap: 8px;
+  }
+
+  .school-brand {
+    gap: 9px;
+  }
+
+  .school-brand img {
+    width: 64px;
+    height: 64px;
+  }
+
+  .school-name {
+    font-size: .86rem;
+    line-height: 1.7;
+  }
+
+  .page-name {
+    font-size: .75rem;
+  }
+
+  .home-link {
+    font-size: .76rem;
+    max-width: 105px;
+  }
+
+  .hero-home {
+    height: calc(100svh - 82px);
+    min-height: 520px;
+  }
+
+  .hero-home-content {
+    width: 100%;
+    padding: 24px 15px 42px;
+    margin-bottom: 20px;
+  }
+
+  .hero-home-content h1 {
+    font-size: clamp(1.9rem, 8vw, 3rem);
+  }
+
+  .hero-home-content p {
+    font-size: .92rem;
+    line-height: 2;
+  }
+
+  .hero-home-scroll {
+    bottom: 8px;
+  }
+
+  .intro {
+    padding: 60px 17px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .card-photo {
+    height: 225px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .float-up {
+    opacity: 1;
+    transform: none;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header class="topbar">
   <span class="home-link">حكايات أكتوبر 1973</span>
+
   <div class="school-brand">
-    <img src="assets/logo/school-logo.png" alt="شعار مدرسة المنار القومية للغات للبنات">
+    <img src="assets/logo/school-logo.png"
+         alt="شعار مدرسة المنار القومية للغات للبنات">
+
     <div class="school-info">
       <div class="school-name">مدرسة المنار القومية للغات للبنات</div>
       <div class="page-name">أرشيف حكايات الطالبات</div>
@@ -57,34 +467,84 @@
   </div>
 </header>
 
+<!-- الغلاف الرئيسي -->
 <section class="hero-home" id="homeHero">
+
   <h1 class="visually-hidden">حكايات أكتوبر 1973</h1>
-  <div class="hero-home-image-wrap">
-    <img class="hero-home-image" id="heroHomeImage" src="assets/homepage/main-cover.jpg" alt="غلاف «حكايات أكتوبر 1973»: مشهد رمزي لجنود مصريين يرفعون علم مصر" loading="eager">
+
+  <div class="hero-home-image-wrap" id="heroHomeWrap">
+    <img
+      class="hero-home-image"
+      id="heroHomeImage"
+      src="assets/homepage/main-cover.jpg"
+      alt="غلاف حكايات أكتوبر 1973"
+      loading="eager"
+    >
     <div class="hero-home-shade"></div>
   </div>
+
+  <div class="hero-home-content">
+    <div class="eyebrow float-up">EGYPT • 6 OCTOBER 1973</div>
+    <div class="hero-home-rule float-up float-delay-1"></div>
+
+    <h1 class="float-up float-delay-1">حكايات أكتوبر 1973</h1>
+
+    <p class="float-up float-delay-2">
+      أرشيف رقمي لحكايات طالبات مدرسة المنار القومية للغات للبنات،
+      نستعيد من خلاله بطولات حرب أكتوبر وقصص الأبطال الذين شاركوا في صنع النصر.
+    </p>
+  </div>
+
+  <div class="hero-home-scroll">اكتشف الحكايات ↓</div>
 </section>
 
+<!-- المقدمة -->
 <section class="intro home-after">
-  <div class="container reveal">
-    <div class="kicker">مقدمة</div>
-    <h2>السادس من أكتوبر 1973</h2>
-    <p>في السادس من أكتوبر 1973 بدأت مصر حرب أكتوبر لتحرير سيناء، بعد سنوات من الاستعداد والتدريب والتخطيط. شاركت فيها قوات برية وجوية وبحرية ودفاع جوي، ولكل منها دوره.</p>
-    <p>لكن الحرب لم تكن أرقامًا وتواريخ فقط، بل كانت أشخاصًا قاموا بمهام حقيقية، بعضها معروف وبعضها لم يسمع عنه كثيرون.</p>
-    <div class="big-quote">التاريخ ليس مجرد أرقام وتواريخ، بل قصص لأشخاص قاموا بمهام وبطولات حقيقية.</div>
+  <div class="container intro-copy">
+
+    <div class="intro-heading float-up">
+      <div class="kicker">مقدمة</div>
+      <h2>السادس من أكتوبر 1973</h2>
+    </div>
+
+    <p class="float-up">
+      في السادس من أكتوبر 1973 بدأت مصر حرب أكتوبر لتحرير سيناء،
+      بعد سنوات من الاستعداد والتدريب والتخطيط. شاركت فيها قوات برية
+      وجوية وبحرية ودفاع جوي، ولكل منها دوره.
+    </p>
+
+    <p class="float-up">
+      لكن الحرب لم تكن أرقامًا وتواريخ فقط، بل كانت أشخاصًا قاموا
+      بمهام حقيقية، بعضها معروف وبعضها لم يسمع عنه كثيرون.
+    </p>
+
+    <div class="big-quote float-up">
+      التاريخ ليس مجرد أرقام وتواريخ، بل قصص لأشخاص قاموا بمهام وبطولات حقيقية.
+    </div>
+
   </div>
 </section>
 
+<!-- الحكايات -->
 <section class="intro">
   <div class="container">
-    <div class="kicker">حكايات الطالبات</div>
-    <h2>اختر حكاية</h2>
-    <div class="cards" id="cards"><div class="empty">جارٍ التحميل...</div></div>
+
+    <div class="intro-heading float-up">
+      <div class="kicker">حكايات الطالبات</div>
+      <h2>اختر حكاية</h2>
+      <p>كل حكاية نافذة على جانب من بطولات أكتوبر.</p>
+    </div>
+
+    <div class="cards" id="cards">
+      <div class="empty">جارٍ تحميل الحكايات...</div>
+    </div>
+
   </div>
 </section>
 
+<!-- الإشراف -->
 <section class="supervision">
-  <div class="container">
+  <div class="container float-up">
     <div class="supervision-title">تحت إشراف</div>
     <div class="supervision-line">وكيل القسم الإعدادي الأستاذة/ دينا الفقى</div>
     <div class="supervision-line">مديرة المدرسة الأستاذة / نهى جعفر</div>
@@ -96,56 +556,150 @@
   <strong>حكايات أكتوبر 1973</strong>
 </footer>
 
-<script src="assets/shared/story.js"></script>
 <script>
-
-(function(){
-  var hero=document.getElementById('homeHero');
-  var img=document.getElementById('heroHomeImage');
-  if(!hero || !img) return;
-  function update(){
-    var rect=hero.getBoundingClientRect();
-    var p=Math.max(0,Math.min(1,(-rect.top)/(hero.offsetHeight*.78)));
-    img.style.opacity=String(1-p);
-    img.style.transform='translateY('+(-p*7)+'vh) scale('+(1+p*.035)+')';
-    var wrap=img.parentElement;
-    wrap.style.opacity=String(1-p*.15);
-  }
-  addEventListener('scroll',update,{passive:true});
-  addEventListener('resize',update);
-  update();
-})();
-
 (function () {
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ظهور العناصر من أسفل إلى أعلى */
+  var observed = new WeakSet();
+
+  function observeFloatElements(root) {
+    root = root || document;
+
+    var elements = root.querySelectorAll('.float-up');
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      elements.forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -35px 0px'
+    });
+
+    elements.forEach(function (el) {
+      if (!observed.has(el)) {
+        observed.add(el);
+        observer.observe(el);
+      }
+    });
+  }
+
+  observeFloatElements();
+
+  /* حركة خفيفة للغلاف مع التمرير، مع بقاء لونه الأصلي */
+  var hero = document.getElementById('homeHero');
+  var img = document.getElementById('heroHomeImage');
+  var wrap = document.getElementById('heroHomeWrap');
+  var ticking = false;
+
+  function updateHero() {
+    ticking = false;
+
+    if (!hero || !img || !wrap || reduceMotion) return;
+
+    var rect = hero.getBoundingClientRect();
+    var distance = Math.max(0, Math.min(1, -rect.top / hero.offsetHeight));
+
+    img.style.transform =
+      'translateY(' + (distance * -2.5) + 'vh) scale(' +
+      (1 + distance * 0.025) + ')';
+
+    /* لا نخفي الغلاف أثناء النزول */
+    img.style.opacity = '1';
+  }
+
+  function requestHeroUpdate() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateHero);
+    }
+  }
+
+  window.addEventListener('scroll', requestHeroUpdate, { passive: true });
+  window.addEventListener('resize', requestHeroUpdate);
+  updateHero();
+
+  /* تحميل الحكايات من ملف الفهرس الحالي */
   var box = document.getElementById('cards');
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
-      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c];
     });
   }
 
   fetch('stories/index.json')
-    .then(function (r) { if (!r.ok) throw new Error('no index'); return r.json(); })
+    .then(function (response) {
+      if (!response.ok) throw new Error('تعذر تحميل الفهرس');
+      return response.json();
+    })
     .then(function (list) {
-      if (!list.length) { box.innerHTML = '<div class="empty">لا توجد حكايات بعد.</div>'; return; }
-      box.innerHTML = list.map(function (s) {
-        var grade = s.grade + (s.className ? ' • ' + s.className : '');
-        var first = esc((s.name || '').charAt(0));
-        return '<a class="card" href="stories/' + esc(s.id) + '/" style="--c:' + esc(s.color || '#b8874b') + '">' +
-          '<div class="card-photo"><img src="stories/' + esc(s.id) + '/cover.jpg" alt="' + esc(s.name) + '" loading="lazy" onerror="this.remove()">' + first + '</div>' +
-          '<div class="card-body">' +
-            '<div class="card-name">' + esc(s.name) + '</div>' +
-            '<div class="card-grade">' + esc(grade) + '</div>' +
-            '<div class="card-title">' + esc(s.title) + '</div>' +
-            '<span class="card-btn">افتح الحكاية</span>' +
-          '</div></a>';
+      if (!Array.isArray(list) || !list.length) {
+        box.innerHTML = '<div class="empty">لا توجد حكايات بعد.</div>';
+        return;
+      }
+
+      box.innerHTML = list.map(function (story, index) {
+        var id = esc(story.id);
+        var name = esc(story.name || 'حكاية جديدة');
+        var gradeText = (story.grade || '') +
+          (story.className ? ' • ' + story.className : '');
+        var grade = esc(gradeText);
+        var title = esc(story.title || '');
+        var color = esc(story.color || '#b8874b');
+        var first = esc((story.name || 'ح').charAt(0));
+        var delayClass = index % 3 === 1
+          ? 'float-delay-1'
+          : index % 3 === 2
+            ? 'float-delay-2'
+            : '';
+
+        return ''
+          + '<a class="card float-up ' + delayClass + '"'
+          + ' href="stories/' + id + '/"'
+          + ' style="--c:' + color + '">'
+          +   '<div class="card-photo">'
+          +     '<span class="card-photo-letter">' + first + '</span>'
+          +     '<img src="stories/' + id + '/cover.jpg"'
+          +       ' alt="' + name + '" loading="lazy"'
+          +       ' onerror="this.style.display=\'none\'">'
+          +   '</div>'
+          +   '<div class="card-body">'
+          +     '<div class="card-name">' + name + '</div>'
+          +     '<div class="card-grade">' + grade + '</div>'
+          +     '<div class="card-title">' + title + '</div>'
+          +     '<span class="card-btn">افتح الحكاية</span>'
+          +   '</div>'
+          + '</a>';
       }).join('');
+
+      /* العناصر أُضيفت بعد تحميل الصفحة؛ نبدأ مراقبتها الآن */
+      observeFloatElements(box);
     })
     .catch(function () {
-      box.innerHTML = '<div class="empty">تعذّر تحميل الحكايات. افتح الموقع من رابط GitHub Pages وليس من الملف مباشرة.</div>';
+      box.innerHTML =
+        '<div class="empty">تعذّر تحميل الحكايات. تأكد من فتح الموقع من رابط GitHub Pages وأن ملف stories/index.json موجود.</div>';
     });
 })();
 </script>
+
 </body>
 </html>
