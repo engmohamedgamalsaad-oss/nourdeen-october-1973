@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
@@ -5,112 +6,615 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>رجال البحر في أكتوبر | نوردين محمد جمال</title>
 <meta name="description" content="حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+
 <link rel="stylesheet" href="../../assets/shared/base.css">
 <link rel="stylesheet" href="theme.css">
+
+<style>
+/* تحسينات الصور داخل الحكاية */
+.story-photo {
+  margin: 38px auto;
+}
+
+.story-photo img {
+  display: block;
+  width: 100%;
+  max-height: 540px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.story-photo figcaption {
+  line-height: 1.9;
+}
+
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 35px 0;
+}
+
+.photo-gallery .image-frame {
+  margin: 0;
+  min-width: 0;
+}
+
+.photo-gallery img {
+  display: block;
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+}
+
+.story p {
+  text-align: right;
+}
+
+.story .panel,
+.story .lesson {
+  border-radius: 5px;
+}
+
+.section-divider {
+  width: 90px;
+  height: 3px;
+  margin: 32px auto;
+  background: linear-gradient(
+    to left,
+    transparent,
+    #e3bd78,
+    transparent
+  );
+}
+
+.image-frame {
+  transition: transform .45s ease, box-shadow .45s ease;
+}
+
+.image-frame img {
+  transition: transform .7s ease, filter .7s ease;
+}
+
+.image-frame:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 45px rgba(0,0,0,.4);
+}
+
+.image-frame:hover img {
+  filter: saturate(1.08);
+}
+
+@media (max-width: 600px) {
+  .photo-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .photo-gallery img {
+    height: auto;
+    max-height: 430px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-frame,
+  .image-frame img {
+    transition: none;
+  }
+}
+</style>
 </head>
-<body data-splash="cover-popup.jpg" data-splash-alt="تصميم فني: جندي وامرأة مصرية أمام الأهرامات والعلم ودبابة ومراكب شراعية" data-splash-top="#705d4b" data-splash-bottom="#564132">
+
+<body
+  data-splash="cover-popup.jpg"
+  data-splash-alt="تصميم فني: جندي وامرأة مصرية أمام الأهرامات والعلم ودبابة ومراكب شراعية"
+  data-splash-top="#705d4b"
+  data-splash-bottom="#564132"
+>
+
 <header class="topbar">
   <a class="home-link" href="../../index.html">← الصفحة الرئيسية</a>
+
   <div class="school-brand">
-    <img src="../../assets/logo/school-logo.png" alt="شعار مدرسة المنار القومية للغات للبنات">
-    <div class="school-info"><div class="school-name">مدرسة المنار القومية للغات للبنات</div><div class="page-name">حكايات أكتوبر</div></div>
+    <img src="../../assets/logo/school-logo.png"
+         alt="شعار مدرسة المنار القومية للغات للبنات">
+
+    <div class="school-info">
+      <div class="school-name">مدرسة المنار القومية للغات للبنات</div>
+      <div class="page-name">حكايات أكتوبر</div>
+    </div>
   </div>
 </header>
 
+<!-- الغلاف الرئيسي -->
 <section class="hero">
-  <div class="hero-photo"></div><div class="hero-tint"></div><div class="hero-texture"></div><div class="hero-ring"></div>
-  <div class="hero-waves"><svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path fill="#0b4d5c" d="M0 60 Q150 20 300 60 T600 60 T900 60 T1200 60 V120 H0Z"/></svg></div>
+  <div class="hero-photo"></div>
+  <div class="hero-tint"></div>
+  <div class="hero-texture"></div>
+  <div class="hero-ring"></div>
+
+  <div class="hero-waves" aria-hidden="true">
+    <svg viewBox="0 0 2400 120" preserveAspectRatio="none">
+      <path d="M0 60 Q150 20 300 60 T600 60 T900 60 T1200 60 V120 H0Z"/>
+      <path d="M1200 60 Q1350 20 1500 60 T1800 60 T2100 60 T2400 60 V120 H1200Z"/>
+    </svg>
+  </div>
+
   <div class="hero-content reveal">
-    <div class="eyebrow">EGYPT • 6 OCTOBER 1973</div><div class="red-line"></div>
+    <div class="eyebrow">EGYPT • 6 OCTOBER 1973</div>
+    <div class="red-line"></div>
+
     <h1>رجال البحر في أكتوبر</h1>
     <div class="hero-subtitle">المعركة التي لم يرها معظم الناس</div>
-    <div class="author">إعداد وتقديم<br><strong>نوردين محمد جمال</strong><br>الصف الأول الإعدادي • Class 1B</div>
+
+    <div class="author">
+      إعداد وتقديم<br>
+      <strong>نوردين محمد جمال</strong><br>
+      الصف الأول الإعدادي • Class 1B
+    </div>
   </div>
+
   <div class="scroll">انزل لتبدأ الحكاية ↓</div>
 </section>
 
-<section class="story"><div class="container reveal">
+<!-- البداية -->
+<section class="story">
+<div class="container reveal">
+
   <div class="kicker">البداية</div>
   <h2>الحكاية التي لم تبدأ في السادس من أكتوبر</h2>
-  <p>عندما نتحدث عن حرب أكتوبر 1973، نتذكر عبور قناة السويس وتحطيم خط بارليف وتقدم الجنود المصريين شرقًا. لكن في الوقت نفسه كانت هناك معركة أخرى تجري بعيدًا عن عيون معظم الناس.</p>
-  <p>كانت القوات البحرية المصرية تؤدي مهامها في البحر المتوسط والبحر الأحمر، وتؤمّن الأجناب البحرية للقوات المصرية، وتضرب أهدافًا للعدو، وتنفذ عمليات خاصة.</p>
-  <p>ولهذا فإن قصة رجال البحر ليست قصة جانبية؛ إنها جزء من قصة النصر نفسها.</p>
-  <figure class="image-frame"><div class="photo-placeholder"><div><strong>صورة نوردين البحرية</strong>ستُضاف هنا عند إرسال الصورة الخاصة بالحكاية.</div></div><figcaption>صورة مرتبطة بالحكاية<small>سيُضاف مصدر الصورة مع الصورة النهائية.</small></figcaption></figure>
-</div></section>
 
-<section class="story"><div class="container reveal">
-  <div class="kicker">الطريق إلى الحرب</div><h2>سنوات من التدريب والخبرة</h2>
-  <p>لم تبدأ الاستعدادات للحرب في أكتوبر فقط. خلال حرب الاستنزاف خاضت القوات البحرية المصرية عمليات وتجارب مهمة، واكتسب رجالها خبرة في العمل قرب سواحل العدو وفي تنفيذ المهام الخاصة.</p>
+  <p>
+    عندما نتحدث عن حرب أكتوبر 1973، نتذكر عبور قناة السويس
+    وتحطيم خط بارليف وتقدم الجنود المصريين شرقًا. لكن في الوقت
+    نفسه كانت هناك معركة أخرى تجري بعيدًا عن عيون معظم الناس.
+  </p>
+
+  <p>
+    كانت القوات البحرية المصرية تؤدي مهامها في البحر المتوسط
+    والبحر الأحمر، وتؤمّن الأجناب البحرية للقوات المصرية،
+    وتضرب أهدافًا للعدو، وتنفذ عمليات خاصة.
+  </p>
+
+  <p>
+    ولهذا فإن قصة رجال البحر ليست قصة جانبية؛ إنها جزء من قصة النصر نفسها.
+  </p>
+
+  <figure class="image-frame story-photo reveal">
+    <img
+      src="Egyptian_soldiers_raising_flag.jpg"
+      alt="جنود مصريون يرفعون العلم المصري"
+      loading="lazy"
+    >
+    <figcaption>
+      رجال القوات المسلحة المصرية في معركة التحرير
+      <small>صورة تاريخية مرتبطة بحرب أكتوبر.</small>
+    </figcaption>
+  </figure>
+
+  <div class="quote reveal">
+    <p>
+      خلف كل لحظة نصر، كانت هناك سنوات من الاستعداد
+      ورجال يؤدون واجبهم في البر والجو والبحر.
+    </p>
+  </div>
+
+</div>
+</section>
+
+<!-- الطريق إلى الحرب -->
+<section class="story">
+<div class="container reveal">
+
+  <div class="kicker">الطريق إلى الحرب</div>
+  <h2>سنوات من التدريب والخبرة</h2>
+
+  <p>
+    لم تبدأ الاستعدادات للحرب في أكتوبر فقط. خلال حرب الاستنزاف
+    خاضت القوات البحرية المصرية عمليات وتجارب مهمة، واكتسب رجالها
+    خبرة في العمل قرب سواحل العدو وفي تنفيذ المهام الخاصة.
+  </p>
+
   <div class="timeline">
-    <div class="event"><div class="year">21 أكتوبر 1967</div><p>أغرقت زوارق الصواريخ المصرية المدمرة الإسرائيلية «إيلات» بصواريخ سطح–سطح. وكان ذلك حدثًا بارزًا في تاريخ الحرب البحرية الحديثة.</p></div>
-    <div class="event"><div class="year">1969 – 1970</div><p>نفذت الضفادع البشرية المصرية ثلاث عمليات في ميناء إيلات خلال حرب الاستنزاف، استهدفت سفنًا وأهدافًا حيوية داخل الميناء.</p></div>
-    <div class="event"><div class="year">8 مارس 1970</div><p>نجحت عناصر الضفادع البشرية في تفجير وإغراق حفار النفط «كنتينج» في أبيدجان، في عملية بعيدة عن أرض المعركة المباشرة.</p></div>
-    <div class="event"><div class="year">1973</div><p>تحولت سنوات الخبرة والتدريب إلى استعداد لحرب واسعة متعددة الجبهات.</p></div>
+
+    <div class="event reveal">
+      <div class="year">21 أكتوبر 1967</div>
+      <p>
+        أغرقت زوارق الصواريخ المصرية المدمرة الإسرائيلية «إيلات»
+        بصواريخ سطح–سطح. وكان ذلك حدثًا بارزًا في تاريخ الحرب البحرية الحديثة.
+      </p>
+    </div>
+
+    <div class="event reveal">
+      <div class="year">1969 – 1970</div>
+      <p>
+        نفذت الضفادع البشرية المصرية ثلاث عمليات في ميناء إيلات
+        خلال حرب الاستنزاف، استهدفت سفنًا وأهدافًا حيوية داخل الميناء.
+      </p>
+    </div>
+
+    <div class="event reveal">
+      <div class="year">8 مارس 1970</div>
+      <p>
+        نجحت عناصر الضفادع البشرية في تفجير وإغراق حفار النفط
+        «كنتينج» في أبيدجان، في عملية بعيدة عن أرض المعركة المباشرة.
+      </p>
+    </div>
+
+    <div class="event reveal">
+      <div class="year">1973</div>
+      <p>
+        تحولت سنوات الخبرة والتدريب إلى استعداد لحرب واسعة متعددة الجبهات.
+      </p>
+    </div>
+
   </div>
-</div></section>
 
-<section class="story"><div class="container reveal">
-  <div class="kicker">6 OCTOBER 1973</div><h2>في اليوم الأول للحرب</h2>
-  <p>عندما بدأت القوات المصرية عبور قناة السويس، كانت القوات البحرية تؤدي مهامها في الوقت نفسه. وبحسب بيانات القيادة العامة، قامت البحرية بحماية الجانب الأيسر للقوات المصرية على ساحل البحر المتوسط، وضربت أهدافًا مهمة للعدو على الساحل الشمالي لسيناء.</p>
-  <p>وفي مجمل قتال يوم 6 أكتوبر، أعلنت القيادة العامة أن القوات البحرية دمرت خمس قطع بحرية للعدو في البحر المتوسط، وقصفت مناطق معادية على الشاطئ الشرقي لخليج السويس.</p>
-  <div class="two"><div class="panel"><h3>حماية الأجناب</h3><p>كان على البحرية منع القوات البحرية الإسرائيلية من التأثير في عملية العبور وحماية أجناب القوات المصرية.</p></div><div class="panel"><h3>الهجوم والضغط</h3><p>نفذت وحدات بحرية قصفًا لأهداف ساحلية وبحرية، وشاركت في الضغط على العدو من أكثر من اتجاه.</p></div></div>
-</div></section>
+</div>
+</section>
 
-<section class="story"><div class="container reveal">
-  <div class="kicker">البحر الأحمر</div><h2>باب المندب: المعركة البعيدة</h2>
-  <p>في جنوب البحر الأحمر يقع مضيق باب المندب، وهو ممر بحري استراتيجي. وكان طريق البحر الأحمر مهمًا للملاحة المتجهة إلى ميناء إيلات.</p>
-  <p>لذلك بدأت مصر التخطيط لهذه المهمة قبل الحرب بوقت طويل. وتذكر مصادر صحفية عسكرية أن خبراء بحريين درسوا المنطقة منذ عام 1971، ثم خرجت قوة بحرية في بداية أكتوبر 1973 في تحرك أُعلن عنه على أنه رحلة إلى باكستان، بينما كان الهدف الحقيقي اتخاذ أوضاع القتال عند باب المندب.</p>
-  <p>بعد بدء الحرب في 6 أكتوبر وصلت الإشارة إلى القوة البحرية لتبدأ مهمتها، ففرضت السيطرة على المضيق وقيّدت حركة السفن التي تحمل العلم الإسرائيلي.</p>
-  <figure class="image-frame"><div class="photo-placeholder"><div><strong>خريطة باب المندب</strong>ستُضاف الخريطة عند تجهيز صورة الحكاية.</div></div><figcaption>باب المندب والبحر الأحمر<small>المصدر: الهيئة العامة للاستعلامات + الأهرام.</small></figcaption></figure>
-  <div class="quote"><p>المعركة لا تكون دائمًا عند المكان الذي تسمعين فيه صوت المدافع؛ أحيانًا يكون الطريق البعيد جزءًا من المعركة.</p></div>
-</div></section>
+<!-- اليوم الأول -->
+<section class="story">
+<div class="container reveal">
 
-<section class="story"><div class="container reveal">
-  <div class="kicker">رجال الضفادع البشرية</div><h2>الربان نبيل عبد الوهاب</h2>
-  <p>من الأسماء البارزة في تاريخ الضفادع البشرية المصرية الربان نبيل عبد الوهاب. تخرج في الكلية البحرية عام 1966، وشارك في عمليتين من العمليات الثلاث التي نفذتها الضفادع البشرية المصرية في ميناء إيلات خلال حرب الاستنزاف.</p>
-  <p>وفي العملية الثالثة عام 1970، شارك في زرع ألغام على الرصيف الحربي للميناء. وبعد استشهاد زميله، رفض تركه في مياه العدو، وسحبه لمسافة وصلت إلى 16 كيلومترًا حتى وصل إلى ميناء العقبة الأردني، وفق روايته التي نشرتها بوابة الأهرام.</p>
-  <p>وفي حرب أكتوبر نفسها شارك مع قوة الضفادع البشرية في مهام ضد أهداف استولى عليها العدو في منطقة البترول، لتستمر مشاركته في القتال بعد سنوات من العمليات والتدريب.</p>
-  <div class="panel"><h3>ما الذي يجعل قصته مختلفة؟</h3><p>ليست البطولة هنا في تنفيذ المهمة فقط، بل في المسؤولية عن الزميل حتى بعد انتهاء المهمة. لقد كان يستطيع أن ينسحب، لكنه اختار أن يحمل زميله ويعود به.</p></div>
-  <figure class="image-frame"><div class="photo-placeholder"><div><strong>صورة الربان نبيل عبد الوهاب</strong>ستُضاف عند إرسال الصورة الخاصة بالحكاية.</div></div><figcaption>الربان نبيل عبد الوهاب<small>المصدر: بوابة الأهرام، 6 أكتوبر 2023.</small></figcaption></figure>
-</div></section>
+  <div class="kicker">6 OCTOBER 1973</div>
+  <h2>في اليوم الأول للحرب</h2>
 
-<section class="story"><div class="container reveal">
-  <div class="kicker">الصورة الأكبر</div><h2>البحرية لم تكن على هامش النصر</h2>
-  <p>توضح بيانات القيادة العامة وتقارير عن حرب أكتوبر أن مهام البحرية شملت حماية أجناب القوات، وقصف أهداف ساحلية، ومواجهة محاولات العدو البحرية، وزرع الألغام في بعض الممرات، وتنفيذ عمليات خاصة.</p>
-  <p>وفي البحر الأحمر كان باب المندب جبهة استراتيجية بعيدة، بينما كانت في البحر المتوسط وخليج السويس أهداف أخرى تحت ضغط القوات البحرية.</p>
+  <p>
+    عندما بدأت القوات المصرية عبور قناة السويس، كانت القوات البحرية
+    تؤدي مهامها في الوقت نفسه. وبحسب بيانات القيادة العامة، قامت
+    البحرية بحماية الجانب الأيسر للقوات المصرية على ساحل البحر المتوسط،
+    وضربت أهدافًا مهمة للعدو على الساحل الشمالي لسيناء.
+  </p>
+
+  <p>
+    وفي مجمل قتال يوم 6 أكتوبر، أعلنت القيادة العامة أن القوات البحرية
+    دمرت خمس قطع بحرية للعدو في البحر المتوسط، وقصفت مناطق معادية
+    على الشاطئ الشرقي لخليج السويس.
+  </p>
+
+  <div class="two">
+
+    <div class="panel reveal">
+      <h3>حماية الأجناب</h3>
+      <p>
+        كان على البحرية منع القوات البحرية الإسرائيلية من التأثير
+        في عملية العبور وحماية أجناب القوات المصرية.
+      </p>
+    </div>
+
+    <div class="panel reveal">
+      <h3>الهجوم والضغط</h3>
+      <p>
+        نفذت وحدات بحرية قصفًا لأهداف ساحلية وبحرية،
+        وشاركت في الضغط على العدو من أكثر من اتجاه.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="section-divider"></div>
+
+  <p>
+    لم تكن المعركة البحرية منفصلة عن بقية المعركة؛ فكل مهمة ناجحة
+    كانت تساعد على حماية القوات المصرية ودعم تقدمها.
+  </p>
+
+</div>
+</section>
+
+<!-- باب المندب -->
+<section class="story">
+<div class="container reveal">
+
+  <div class="kicker">البحر الأحمر</div>
+  <h2>باب المندب: المعركة البعيدة</h2>
+
+  <p>
+    في جنوب البحر الأحمر يقع مضيق باب المندب، وهو ممر بحري استراتيجي.
+    وكان طريق البحر الأحمر مهمًا للملاحة المتجهة إلى ميناء إيلات.
+  </p>
+
+  <p>
+    لذلك بدأت مصر التخطيط لهذه المهمة قبل الحرب بوقت طويل.
+    وتذكر مصادر صحفية عسكرية أن خبراء بحريين درسوا المنطقة منذ عام
+    1971، ثم خرجت قوة بحرية في بداية أكتوبر 1973 في تحرك أُعلن عنه
+    على أنه رحلة إلى باكستان، بينما كان الهدف الحقيقي اتخاذ أوضاع
+    القتال عند باب المندب.
+  </p>
+
+  <figure class="image-frame story-photo reveal">
+    <img
+      src="bab-el-mandeb-map.png"
+      alt="خريطة توضح موقع مضيق باب المندب"
+      loading="lazy"
+    >
+    <figcaption>
+      موقع مضيق باب المندب بين البحر الأحمر وخليج عدن
+      <small>خريطة توضيحية للموقع الجغرافي.</small>
+    </figcaption>
+  </figure>
+
+  <figure class="image-frame story-photo reveal">
+    <img
+      src="bab-el-mandeb-satellite.jpg"
+      alt="صورة فضائية لمنطقة مضيق باب المندب"
+      loading="lazy"
+    >
+    <figcaption>
+      مضيق باب المندب من منظور فضائي
+      <small>صورة توضيحية لطبيعة الممر البحري.</small>
+    </figcaption>
+  </figure>
+
+  <p>
+    بعد بدء الحرب في 6 أكتوبر وصلت الإشارة إلى القوة البحرية لتبدأ
+    مهمتها، ففرضت السيطرة على المضيق وقيّدت حركة السفن التي تحمل
+    العلم الإسرائيلي.
+  </p>
+
+  <div class="quote reveal">
+    <p>
+      المعركة لا تكون دائمًا عند المكان الذي تسمعين فيه صوت المدافع؛
+      أحيانًا يكون الطريق البعيد جزءًا من المعركة.
+    </p>
+  </div>
+
+</div>
+</section>
+
+<!-- الربان نبيل عبد الوهاب -->
+<section class="story">
+<div class="container reveal">
+
+  <div class="kicker">رجال الضفادع البشرية</div>
+  <h2>الربان نبيل عبد الوهاب</h2>
+
+  <p>
+    من الأسماء البارزة في تاريخ الضفادع البشرية المصرية الربان
+    نبيل عبد الوهاب. تخرج في الكلية البحرية عام 1966، وشارك في
+    عمليتين من العمليات الثلاث التي نفذتها الضفادع البشرية المصرية
+    في ميناء إيلات خلال حرب الاستنزاف.
+  </p>
+
+  <figure class="image-frame story-photo reveal">
+    <img
+      src="nabil-01.jpg"
+      alt="صورة تاريخية للربان نبيل عبد الوهاب"
+      loading="lazy"
+    >
+    <figcaption>
+      الربان نبيل عبد الوهاب
+      <small>من الصور المخصصة لحكاية رجال البحر.</small>
+    </figcaption>
+  </figure>
+
+  <p>
+    وفي العملية الثالثة عام 1970، شارك في زرع ألغام على الرصيف
+    الحربي للميناء. وبعد استشهاد زميله، رفض تركه في مياه العدو،
+    وسحبه لمسافة وصلت إلى 16 كيلومترًا حتى وصل إلى ميناء العقبة
+    الأردني، وفق روايته التي نشرتها بوابة الأهرام.
+  </p>
+
+  <div class="photo-gallery">
+
+    <figure class="image-frame reveal">
+      <img src="nabil-02.jpg"
+           alt="صورة أخرى للربان نبيل عبد الوهاب"
+           loading="lazy">
+      <figcaption>من سجل بطولات الضفادع البشرية</figcaption>
+    </figure>
+
+    <figure class="image-frame reveal">
+      <img src="nabil-03.jpg"
+           alt="صورة تاريخية مرتبطة بالربان نبيل عبد الوهاب"
+           loading="lazy">
+      <figcaption>رجال البحرية المصرية</figcaption>
+    </figure>
+
+    <figure class="image-frame reveal">
+      <img src="nabil-04.jpg"
+           alt="صورة تاريخية إضافية للربان نبيل عبد الوهاب"
+           loading="lazy">
+      <figcaption>من تاريخ القوات البحرية</figcaption>
+    </figure>
+
+    <figure class="image-frame reveal">
+      <img src="nabil-05.jpg"
+           alt="صورة إضافية مرتبطة بحكاية نبيل عبد الوهاب"
+           loading="lazy">
+      <figcaption>ذكريات من تاريخ البحرية المصرية</figcaption>
+    </figure>
+
+  </div>
+
+  <p>
+    وفي حرب أكتوبر نفسها شارك مع قوة الضفادع البشرية في مهام ضد
+    أهداف استولى عليها العدو في منطقة البترول، لتستمر مشاركته
+    في القتال بعد سنوات من العمليات والتدريب.
+  </p>
+
+  <div class="panel reveal">
+    <h3>ما الذي يجعل قصته مختلفة؟</h3>
+    <p>
+      ليست البطولة هنا في تنفيذ المهمة فقط، بل في المسؤولية عن الزميل
+      حتى بعد انتهاء المهمة. لقد كان يستطيع أن ينسحب، لكنه اختار
+      أن يحمل زميله ويعود به.
+    </p>
+  </div>
+
+</div>
+</section>
+
+<!-- الصورة الأكبر -->
+<section class="story">
+<div class="container reveal">
+
+  <div class="kicker">الصورة الأكبر</div>
+  <h2>البحرية لم تكن على هامش النصر</h2>
+
+  <p>
+    توضح بيانات القيادة العامة وتقارير عن حرب أكتوبر أن مهام البحرية
+    شملت حماية أجناب القوات، وقصف أهداف ساحلية، ومواجهة محاولات العدو
+    البحرية، وزرع الألغام في بعض الممرات، وتنفيذ عمليات خاصة.
+  </p>
+
+  <p>
+    وفي البحر الأحمر كان باب المندب جبهة استراتيجية بعيدة، بينما
+    كانت في البحر المتوسط وخليج السويس أهداف أخرى تحت ضغط القوات البحرية.
+  </p>
+
   <div class="lessons">
-    <div class="lesson"><div class="lesson-number">١</div><h3>الاستعداد</h3><p>النجاح الذي ظهر في أكتوبر سبقه تدريب وخبرة وعمليات خلال سنوات الاستنزاف.</p></div>
-    <div class="lesson"><div class="lesson-number">٢</div><h3>العمل الجماعي</h3><p>النصر لم يكن نتيجة فرع واحد؛ البرية والجوية والبحرية عملت ضمن خطة واحدة.</p></div>
-    <div class="lesson"><div class="lesson-number">٣</div><h3>المسؤولية</h3><p>الجندي يؤدي مهمته من أجل زملائه ووطنه، وليس من أجل نفسه فقط.</p></div>
-    <div class="lesson"><div class="lesson-number">٤</div><h3>الشجاعة المنضبطة</h3><p>الشجاعة الحقيقية هي مواجهة الخطر بالتدريب والخطة والانضباط.</p></div>
+
+    <div class="lesson reveal">
+      <div class="lesson-number">١</div>
+      <h3>الاستعداد</h3>
+      <p>
+        النجاح الذي ظهر في أكتوبر سبقه تدريب وخبرة وعمليات
+        خلال سنوات الاستنزاف.
+      </p>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="lesson-number">٢</div>
+      <h3>العمل الجماعي</h3>
+      <p>
+        النصر لم يكن نتيجة فرع واحد؛ البرية والجوية والبحرية
+        عملت ضمن خطة واحدة.
+      </p>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="lesson-number">٣</div>
+      <h3>المسؤولية</h3>
+      <p>
+        الجندي يؤدي مهمته من أجل زملائه ووطنه،
+        وليس من أجل نفسه فقط.
+      </p>
+    </div>
+
+    <div class="lesson reveal">
+      <div class="lesson-number">٤</div>
+      <h3>الشجاعة المنضبطة</h3>
+      <p>
+        الشجاعة الحقيقية هي مواجهة الخطر بالتدريب والخطة والانضباط.
+      </p>
+    </div>
+
   </div>
-</div></section>
 
-<section class="end"><div class="container reveal">
-  <div class="kicker">نوردين تحكي</div><h2>رجال البحر في أكتوبر</h2>
-  <p>في السادس من أكتوبر 1973 بدأت مصر حربها لتحرير سيناء. وبينما كان الجنود المصريون يعبرون قناة السويس، كانت القوات البحرية المصرية تتحرك في البحر المتوسط والبحر الأحمر.</p>
-  <p>حمت البحرية أجناب القوات المصرية، وضربت أهدافًا للعدو، ونفذت عمليات خاصة، وتحركت في جبهة بعيدة عند باب المندب لتقييد الملاحة الإسرائيلية.</p>
-  <p>وكان وراء هذه العمليات رجال تدربوا لسنوات، عرفوا أن البحر قد يكون طريقًا للعدو، لكنه يمكن أن يكون أيضًا طريقًا للنصر.</p>
-  <div class="quote"><p>النصر لا يصنعه بطل واحد، بل يصنعه جيش كامل، وكل فرد فيه يؤدي مهمته بإخلاص وشجاعة وانضباط.</p></div>
-  <a class="home-button" href="../../index.html">← العودة إلى حكايات أكتوبر</a>
-</div></section>
+</div>
+</section>
 
-<section class="sources"><div class="container">
-  <div class="kicker">المصادر</div><h2>المصادر والمراجع</h2>
+<!-- النهاية -->
+<section class="end">
+<div class="container reveal">
+
+  <div class="kicker">نوردين تحكي</div>
+  <h2>رجال البحر في أكتوبر</h2>
+
+  <p>
+    في السادس من أكتوبر 1973 بدأت مصر حربها لتحرير سيناء.
+    وبينما كان الجنود المصريون يعبرون قناة السويس، كانت القوات
+    البحرية المصرية تتحرك في البحر المتوسط والبحر الأحمر.
+  </p>
+
+  <p>
+    حمت البحرية أجناب القوات المصرية، وضربت أهدافًا للعدو،
+    ونفذت عمليات خاصة، وتحركت في جبهة بعيدة عند باب المندب
+    لتقييد الملاحة الإسرائيلية.
+  </p>
+
+  <p>
+    وكان وراء هذه العمليات رجال تدربوا لسنوات، عرفوا أن البحر
+    قد يكون طريقًا للعدو، لكنه يمكن أن يكون أيضًا طريقًا للنصر.
+  </p>
+
+  <div class="quote reveal">
+    <p>
+      النصر لا يصنعه بطل واحد، بل يصنعه جيش كامل،
+      وكل فرد فيه يؤدي مهمته بإخلاص وشجاعة وانضباط.
+    </p>
+  </div>
+
+  <a class="home-button" href="../../index.html">
+    ← العودة إلى حكايات أكتوبر
+  </a>
+
+</div>
+</section>
+
+<!-- المصادر -->
+<section class="sources">
+<div class="container">
+
+  <div class="kicker">المصادر</div>
+  <h2>المصادر والمراجع</h2>
+
   <ol>
-    <li><a href="https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A7%D8%B9%D9%8A%D8%A7%D8%AF-%D9%88%D9%85%D9%86%D8%A7%D8%B3%D8%A8%D8%A7%D8%AA/%D8%A7%D9%86%D8%AA%D8%B5%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A3%D9%83%D8%AA%D9%88%D8%A8%D8%B1/" target="_blank" rel="noopener">الهيئة العامة للاستعلامات المصرية — انتصارات أكتوبر وبيانات القيادة العامة</a></li>
-    <li><a href="https://www.mod.gov.eg/ModWebSite/Documents.aspx" target="_blank" rel="noopener">وزارة الدفاع المصرية — وثائق حرب أكتوبر 1973</a></li>
-    <li><a href="https://www.mod.gov.eg/ModWebSite/MuseumDetailsAr.aspx?id=1" target="_blank" rel="noopener">وزارة الدفاع المصرية — المتحف الحربي / حرب أكتوبر وبعض أعمال القوات البحرية</a></li>
-    <li><a href="https://gate.ahram.org.eg/daily/NewsPrint/957733.aspx" target="_blank" rel="noopener">الأهرام اليومي — القوات البحرية المصرية: ملوك البحر، 7 أكتوبر 2024</a></li>
-    <li><a href="https://gate.ahram.org.eg/News/4579453.aspx" target="_blank" rel="noopener">بوابة الأهرام — الربان نبيل عبد الوهاب وبطولات الضفادع البشرية، 6 أكتوبر 2023</a></li>
-    <li><a href="https://gate.ahram.org.eg/News/5016284.aspx" target="_blank" rel="noopener">بوابة الأهرام — لقاء مع اللواء بحري نبيل عبد الوهاب، 25 أكتوبر 2024</a></li>
-  </ol>
-  <p style="font-size:.85rem">تمت إعادة صياغة المعلومات بأسلوب مناسب للصف الأول الإعدادي، مع الاعتماد على المصادر المذكورة.</p>
-</div></section>
+    <li>
+      <a href="https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A7%D8%B9%D9%8A%D8%A7%D8%AF-%D9%88%D9%85%D9%86%D8%A7%D8%B3%D8%A8%D8%A7%D8%AA/%D8%A7%D9%86%D8%AA%D8%B5%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A3%D9%83%D8%AA%D9%88%D8%A8%D8%B1/"
+         target="_blank" rel="noopener">
+        الهيئة العامة للاستعلامات المصرية — انتصارات أكتوبر وبيانات القيادة العامة
+      </a>
+    </li>
 
-<footer>إعداد وتقديم:<br><strong>نوردين محمد جمال</strong><br><br>الصف الأول الإعدادي • Class 1B<br><br>مدرسة المنار القومية للغات للبنات<br><br>أكتوبر 1973</footer>
+    <li>
+      <a href="https://www.mod.gov.eg/ModWebSite/Documents.aspx"
+         target="_blank" rel="noopener">
+        وزارة الدفاع المصرية — وثائق حرب أكتوبر 1973
+      </a>
+    </li>
+
+    <li>
+      <a href="https://www.mod.gov.eg/ModWebSite/MuseumDetailsAr.aspx?id=1"
+         target="_blank" rel="noopener">
+        وزارة الدفاع المصرية — المتحف الحربي / حرب أكتوبر وبعض أعمال القوات البحرية
+      </a>
+    </li>
+
+    <li>
+      <a href="https://gate.ahram.org.eg/daily/NewsPrint/957733.aspx"
+         target="_blank" rel="noopener">
+        الأهرام اليومي — القوات البحرية المصرية: ملوك البحر، 7 أكتوبر 2024
+      </a>
+    </li>
+
+    <li>
+      <a href="https://gate.ahram.org.eg/News/4579453.aspx"
+         target="_blank" rel="noopener">
+        بوابة الأهرام — الربان نبيل عبد الوهاب وبطولات الضفادع البشرية، 6 أكتوبر 2023
+      </a>
+    </li>
+
+    <li>
+      <a href="https://gate.ahram.org.eg/News/5016284.aspx"
+         target="_blank" rel="noopener">
+        بوابة الأهرام — لقاء مع اللواء بحري نبيل عبد الوهاب، 25 أكتوبر 2024
+      </a>
+    </li>
+  </ol>
+
+  <p style="font-size:.85rem">
+    تمت إعادة صياغة المعلومات بأسلوب مناسب للصف الأول الإعدادي،
+    مع الاعتماد على المصادر المذكورة.
+  </p>
+
+</div>
+</section>
+
+<footer>
+  إعداد وتقديم:<br>
+  <strong>نوردين محمد جمال</strong><br><br>
+  الصف الأول الإعدادي • Class 1B<br><br>
+  مدرسة المنار القومية للغات للبنات<br><br>
+  أكتوبر 1973
+</footer>
+
 <script src="../../assets/shared/story.js"></script>
-</body></html>
+</body>
+</html>
