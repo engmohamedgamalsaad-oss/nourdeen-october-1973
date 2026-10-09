@@ -7,10 +7,10 @@
     linear-gradient(180deg,#07121b,#0b2233 60%,#050d14);
 }
 .hero{min-height:100svh;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:110px 20px 80px}
-.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(0,0,0,.7));pointer-events:none}
-.hero-art{position:absolute;left:0;right:0;bottom:0;opacity:.55}
-.hero-art svg{display:block;width:100%;height:auto;max-height:55vh}
-.jet{fill:none;stroke:#7fd0ff;stroke-width:4;stroke-linecap:round;stroke-dasharray:14 12;animation:flow 1.6s linear infinite}
+.hero:after{content:"";position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(0,0,0,.08),rgba(0,0,0,.56));pointer-events:none}
+.hero-art{position:absolute;left:0;right:0;bottom:72px;z-index:1;opacity:.96;pointer-events:none}
+.hero-art svg{display:block;width:100%;height:auto;max-height:42vh;filter:drop-shadow(0 8px 16px rgba(0,0,0,.25))}
+.jet{fill:none;stroke:#7fd0ff;stroke-width:9;stroke-linecap:round;stroke-dasharray:14 12;animation:flow 1.6s linear infinite}
 @keyframes flow{to{stroke-dashoffset:-52}}
 .hero-content{position:relative;z-index:5;width:min(850px,100%)}
 .eyebrow{color:var(--gold);font-size:.85rem;letter-spacing:2px}
@@ -18,7 +18,7 @@
 .hero-subtitle{color:#c4d4d6;font-size:clamp(1rem,3vw,1.4rem);line-height:2}
 .author{margin-top:26px;color:#fff;line-height:1.9}
 .author strong{color:var(--gold);font-family:"Marhey","Cairo",sans-serif}
-.scroll{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);color:var(--muted);font-size:.8rem;z-index:5}
+.scroll{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);color:#e5f5fb;font-size:.86rem;font-weight:800;z-index:6;text-shadow:0 2px 9px #000,0 0 14px rgba(0,0,0,.85);white-space:nowrap}
 .panel{border-color:rgba(94,170,220,.35);background:linear-gradient(145deg,rgba(14,55,85,.55),rgba(4,12,20,.8))}
 .lesson,.event:before{border-color:rgba(94,170,220,.3)}
 .note{margin:40px 0;padding:24px;border:1px dashed rgba(240,164,74,.6);background:rgba(240,164,74,.06)}
@@ -47,4 +47,11 @@
   .scroll-reveal,
   .event.scroll-reveal { opacity: 1; transform: none; transition: none; }
   .jet { animation: none !important; }
+}
+
+@media (max-width: 600px) {
+  .hero-art { bottom: 68px; }
+  .hero-art svg { max-height: 34vh; }
+  .hero { padding-bottom: 88px; }
+  .scroll { bottom: 14px; font-size: .82rem; }
 }
