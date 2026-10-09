@@ -161,6 +161,47 @@ body {
   will-change: transform;
 }
 
+/* ===== حركة سينمائية للغلاف الرئيسي ===== */
+/* حركة هادئة للصورة نفسها؛ لا تغيّر ملف الصورة أو مساراته */
+.hero-home-image {
+  animation: hero-scene-drift 18s ease-in-out infinite alternate;
+  filter: saturate(1.04) contrast(1.025);
+}
+
+/* وهج ضوئي متحرك وغبار خفيف لإعطاء المشهد إحساسًا بالحياة */
+.hero-home-image-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    radial-gradient(ellipse at 18% 70%, rgba(244, 190, 103, .22), transparent 28%),
+    radial-gradient(ellipse at 78% 38%, rgba(255, 226, 164, .15), transparent 24%),
+    linear-gradient(112deg, transparent 35%, rgba(255, 225, 165, .10) 48%, transparent 61%);
+  background-size: 100% 100%, 100% 100%, 220% 100%;
+  animation: hero-atmosphere 14s ease-in-out infinite alternate;
+}
+
+/* حركة الصورة بطيئة حتى لا تشتت القارئ */
+@keyframes hero-scene-drift {
+  0%   { object-position: 49% 50%; filter: saturate(1.02) contrast(1.02) brightness(.98); }
+  100% { object-position: 52% 48%; filter: saturate(1.08) contrast(1.04) brightness(1.04); }
+}
+
+@keyframes hero-atmosphere {
+  0%   { transform: translate3d(-1%, 1%, 0); background-position: 0 0, 0 0, 0% 0; opacity: .14; }
+  100% { transform: translate3d(1%, -1%, 0); background-position: 0 0, 0 0, 100% 0; opacity: .28; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-home-image,
+  .hero-home-image-wrap::after {
+    animation: none !important;
+  }
+}
+
 /* تظليل تدريجي حتى يبان الكلام بوضوح */
 .hero-home-shade {
   position: absolute;
