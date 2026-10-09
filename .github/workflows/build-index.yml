@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'stories/*/data.json'
+      - '.github/workflows/build-index.yml'
   workflow_dispatch:
 permissions:
   contents: write
