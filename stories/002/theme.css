@@ -28,3 +28,23 @@
 .step{padding:22px;border:1px solid rgba(94,170,220,.35);background:rgba(4,16,26,.7)}
 .step b{display:block;color:var(--accent);font-family:"Marhey","Cairo",sans-serif;font-size:1.6rem}
 .step p{font-size:.95rem;margin:6px 0 0}
+
+/* حركات الظهور أثناء التمرير — متوافقة مع صفحة نوردين */
+.scroll-reveal {
+  opacity: 0;
+  transform: translate3d(0, 38px, 0);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.65,.3,1);
+}
+.event.scroll-reveal { transform: translate3d(26px, 0, 0); }
+.scroll-reveal.is-visible,
+.event.scroll-reveal.is-visible { opacity: 1; transform: none; }
+
+@media (max-width: 600px) {
+  .scroll-reveal { transform: translate3d(0, 26px, 0); }
+  .event.scroll-reveal { transform: translate3d(18px, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal,
+  .event.scroll-reveal { opacity: 1; transform: none; transition: none; }
+  .jet { animation: none !important; }
+}
