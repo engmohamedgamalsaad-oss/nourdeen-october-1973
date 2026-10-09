@@ -6,8 +6,8 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* الصفحة "الغنية" = صفحة فيها صورة غلاف متحركة (قصة نوردين حاليًا) */
-  var richStory = !!document.querySelector('.hero-photo');
+  /* القصص التي تستخدم الغلاف الافتتاحي تحصل أيضًا على حركات الظهور أثناء التمرير. */
+  var richStory = !!document.querySelector('.hero-photo') || !!body.getAttribute('data-splash');
 
   /* =========================================
      1) شاشة البداية (اختيارية)
@@ -20,6 +20,7 @@
     splash.className = 'story-splash';
     splash.setAttribute('role', 'dialog');
     splash.setAttribute('aria-modal', 'true');
+    splash.setAttribute('aria-label', body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
 
     Object.assign(splash.style, {
       position: 'fixed',
