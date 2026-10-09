@@ -26,14 +26,43 @@
 
 <section class="hero">
   <div class="hero-art" aria-hidden="true">
-    <svg viewBox="0 0 600 260" preserveAspectRatio="xMidYMax meet">
-      <rect x="0" y="215" width="600" height="45" fill="#0b4d7a"/>
-      <polygon points="300,215 350,70 480,70 540,215" fill="#8a6a3c"/>
-      <polygon points="330,215 365,95 470,95 515,215" fill="#a98250"/>
-      <rect x="40" y="190" width="46" height="26" fill="#c9792b"/>
-      <path class="jet" d="M86 200 Q200 120 335 135"/>
-      <path class="jet" d="M86 205 Q210 150 340 165" style="animation-delay:.4s"/>
-      <path class="jet" d="M86 210 Q220 180 345 195" style="animation-delay:.8s"/>
+    <svg viewBox="0 0 800 300" preserveAspectRatio="xMidYMax meet" role="img" aria-label="رسم متحرك يوضح مضخة تضخ الماء لتفتح ثغرة في الساتر الترابي">
+      <defs>
+        <linearGradient id="sandWall" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e8c98d"/>
+          <stop offset="1" stop-color="#92683a"/>
+        </linearGradient>
+        <linearGradient id="canalWater" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#40b6d9"/>
+          <stop offset="1" stop-color="#075078"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="238" width="800" height="62" fill="url(#canalWater)"/>
+      <path d="M0 238 Q80 224 160 238 T320 238 T480 238 T640 238 T800 238" fill="none" stroke="#9beaff" stroke-width="3" opacity=".8"/>
+      <!-- الساتر الترابي الطويل -->
+      <path d="M275 238 L330 95 Q360 78 395 95 L450 238 Z" fill="url(#sandWall)" stroke="#f4d8a2" stroke-width="3"/>
+      <path d="M305 238 L348 132 L373 124 L407 238" fill="#6d4c2d" opacity=".7"/>
+      <!-- الثغرة التي جرفتها المياه -->
+      <path d="M350 238 L366 177 L383 177 L399 238 Z" fill="#071b29" stroke="#f2c779" stroke-width="2"/>
+      <!-- المضخة والعربة -->
+      <g transform="translate(55 165)">
+        <rect x="0" y="20" width="126" height="54" rx="7" fill="#d67d32" stroke="#ffd08a" stroke-width="4"/>
+        <rect x="18" y="0" width="48" height="25" rx="4" fill="#dbe8e8" stroke="#ffd08a" stroke-width="3"/>
+        <circle cx="26" cy="77" r="13" fill="#132c39" stroke="#c8d9dd" stroke-width="3"/>
+        <circle cx="99" cy="77" r="13" fill="#132c39" stroke="#c8d9dd" stroke-width="3"/>
+        <rect x="78" y="32" width="32" height="25" rx="4" fill="#12384c" stroke="#f6c66f" stroke-width="2"/>
+      </g>
+      <!-- خرطوم المياه المتجه إلى الساتر -->
+      <path d="M181 207 Q265 178 354 190" class="jet"/>
+      <path d="M181 207 Q265 178 354 190" fill="none" stroke="#e6fbff" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+      <g fill="#c9f5ff" opacity=".9">
+        <circle cx="359" cy="183" r="5"/><circle cx="371" cy="189" r="4"/><circle cx="363" cy="198" r="3"/>
+      </g>
+      <g fill="#ffe0a1" font-family="Arial, sans-serif" font-size="21" font-weight="700">
+        <text x="118" y="145" text-anchor="middle">مضخة المياه</text>
+        <text x="365" y="65" text-anchor="middle">الساتر الترابي</text>
+        <text x="560" y="275" text-anchor="middle" fill="#d8f6ff">قناة السويس</text>
+      </g>
     </svg>
   </div>
   <div class="hero-content reveal">
@@ -55,7 +84,15 @@
     <p>بعد عام 1967 أقامت إسرائيل على الضفة الشرقية لقناة السويس ساترًا ترابيًا ضخمًا، وخلفه نقاط حصينة. عُرف هذا الخط باسم «خط بارليف»، وكان هدفه منع القوات المصرية من العبور.</p>
     <p>وكان على المهندسين المصريين أن يفكروا: كيف تفتح مصر ثغرات في هذا الساتر بسرعة، حتى تعبر الدبابات والمعدات؟</p>
 
-    <figure class="image-frame"><svg viewBox="0 0 800 330" role="img" aria-label="رسم توضيحي لكيفية استخدام مضخات المياه لفتح ممر في ساتر رملي" style="display:block;width:100%;height:auto;background:#071b29;border-radius:12px"><rect width="800" height="330" fill="#071b29"/><rect y="250" width="800" height="80" fill="#0e5572"/><path d="M0 250 Q100 230 200 250 T400 250 T600 250 T800 250" fill="none" stroke="#64c6e8" stroke-width="4"/><path d="M300 250 L350 105 Q400 75 450 105 L500 250Z" fill="#c6a06a"/><path d="M350 250 L380 170 L420 170 L450 250Z" fill="#071b29"/><rect x="60" y="180" width="100" height="55" rx="8" fill="#d67d32" stroke="#ffd08a" stroke-width="4"/><circle cx="88" cy="240" r="12" fill="#172a32"/><circle cx="135" cy="240" r="12" fill="#172a32"/><path d="M160 200 L345 185" stroke="#75dcff" stroke-width="12" stroke-linecap="round"/><path d="M160 200 L345 185" stroke="#e0faff" stroke-width="3"/><text x="110" y="150" fill="#ffd08a" font-size="22" text-anchor="middle">مضخة مياه</text><text x="400" y="72" fill="#ffd08a" font-size="22" text-anchor="middle">الساتر الرملي</text><text x="400" y="300" fill="#d8f6ff" font-size="20" text-anchor="middle">مياه القناة</text></svg><figcaption>رسم توضيحي يشرح فكرة فتح ثغرة في الساتر الرملي بمياه القناة؛ الرسم ليس صورة تاريخية.</figcaption></figure>
+    <figure class="image-frame">
+      <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg?width=1200"
+           alt="جنود مصريون يعبرون خط بارليف في حرب أكتوبر 1973"
+           loading="lazy" decoding="async">
+      <figcaption>
+        صورة أرشيفية لجنود مصريين أثناء عبور خط بارليف في حرب أكتوبر 1973.
+        <small>المصدر: <a href="https://commons.wikimedia.org/wiki/File:Crossing_the_Bar_Lev_Line,_October_War.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>؛ صفحة الملف تذكر أن الصورة من أكتوبر 1973 وتصنفها ضمن الملكية العامة في مصر.</small>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
@@ -141,6 +178,7 @@
       <li><a href="https://thenational-the-national-prod.cdn.arcpublishing.com/world/mena/baki-zaki-youssef-egyptian-military-engineer-who-became-a-hero-1.745926" target="_blank" rel="noopener">The National — Baki Zaki Youssef: Egyptian military engineer who became a hero</a></li>
       <li><a href="https://gulfnews.com/amp/story/general%2Fcommander-who-stuck-to-his-guns-1.40499" target="_blank" rel="noopener">Gulf News — Commander who stuck to his guns</a></li>
       <li><a href="https://en.wikipedia.org/wiki/Bar_Lev_Line" target="_blank" rel="noopener">Wikipedia — Bar Lev Line (للاطلاع العام ومقارنة المعلومات)</a></li><li><a href="https://www.ahram.org.eg/daily/NewsPrint/657562.aspx" target="_blank" rel="noopener">الأهرام — تقرير عن باقي زكي يوسف واستخدام مضخات المياه</a></li><li><a href="https://commons.wikimedia.org/wiki/File:Egyptian_soldiers_during_their_storming_of_the_Bar_Lev_Line.png" target="_blank" rel="noopener">Wikimedia Commons — صورة أرشيفية لاقتحام خط بارليف، مرجع بصري منفصل عن الرسم أعلاه.</a></li>
+      <li><a href="https://commons.wikimedia.org/wiki/File:Crossing_the_Bar_Lev_Line,_October_War.jpg" target="_blank" rel="noopener">Wikimedia Commons — صورة عبور خط بارليف، أكتوبر 1973.</a></li>
     </ol>
     <p style="font-size:.85rem">تمت إعادة صياغة المعلومات بأسلوب الطالبة، ولم تُنسخ نصوص المصادر.</p>
   </div>
