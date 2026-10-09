@@ -6,13 +6,6 @@
   const body = document.body;
   const storySlug = body.dataset.storySlug || "001";
   const storagePrefix = "story-reactions:v1:";
-  const reactionLabels = {
-    like: "إعجاب",
-    loved: "حكاية أعجبتني كثيرًا",
-    unknown_before: "حكاية لم أكن أعرفها من قبل",
-    inspiring: "حكاية ملهمة",
-    more_stories: "أحب أقرأ حكايات تانية"
-  };
   const visitorKey = storagePrefix + "visitor";
   const getVisitorId = () => {
     let id = localStorage.getItem(visitorKey);
@@ -54,18 +47,19 @@
     });
   }
   function paintSavedState() {
-    if (savedLike() && likeButton) {
-      likeButton.classList.add("is-selected");
-      likeButton.setAttribute("aria-pressed", "true");
-      likeButton.disabled = true;
-      likeButton.querySelector(".reaction-label").textContent = "تم تسجيل إعجابك";
-    }
+    const liked = savedLike();
     const feedback = savedFeedback();
+    if (likeButton) {
+      likeButton.classList.toggle("is-selected", liked);
+      likeButton.setAttribute("aria-pressed", liked ? "true" : "false");
+      likeButton.disabled = liked;
+      likeButton.querySelector(".reaction-label").textContent = liked ? "تم تسجيل إعجابك" : "❤️ أعجبتني";
+    }
     choiceButtons.forEach(button => {
       const selected = button.dataset.reactionChoice === feedback;
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", selected ? "true" : "false");
-      if (feedback) button.disabled = true;
+      button.disabled = Boolean(feedback);
     });
   }
   async function submitReaction(type) {
@@ -97,7 +91,11 @@
         setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
       }
       paintSavedState();
-      await loadCounts();
+      try {
+        await loadCounts();
+      } catch (countError) {
+        setStatus("اختيارك اتسجل، لكن تعذر تحديث العدادات الآن. حدّث الصفحة لاحقًا.");
+      }
     } catch (error) {
       setStatus("ماقدرناش نسجل الاختيار الآن. جرّب تاني بعد قليل.");
       buttons.forEach(button => { button.disabled = false; });
