@@ -7,7 +7,6 @@
   const storySlug = body.dataset.storySlug || "001";
   const storagePrefix = "story-reactions:v1:";
   const visitorKey = storagePrefix + "visitor";
-  const siteLikeKey = storagePrefix + "site:like";
   const getVisitorId = () => {
     let id = localStorage.getItem(visitorKey);
     if (!id) {
@@ -29,8 +28,7 @@
     countNodes[node.dataset.reactionCount] = node;
   });
   const stateKey = type => storagePrefix + storySlug + ":" + (type === "like" ? "like" : "feedback");
-  const savedLike = () => localStorage.getItem(siteLikeKey) === storySlug;
-  const hasAnyLike = () => Boolean(localStorage.getItem(siteLikeKey));
+  const savedLike = () => Boolean(localStorage.getItem(stateKey("like")));
   const savedFeedback = () => localStorage.getItem(stateKey("feedback")) || "";
   const headers = {
     "Content-Type": "application/json",
@@ -54,9 +52,8 @@
     if (likeButton) {
       likeButton.classList.toggle("is-selected", liked);
       likeButton.setAttribute("aria-pressed", liked ? "true" : "false");
-      const likedElsewhere = hasAnyLike() && !liked;
-      likeButton.disabled = liked || likedElsewhere;
-      likeButton.querySelector(".reaction-label").textContent = liked ? "تم تسجيل إعجابك" : likedElsewhere ? "سجّلت إعجابك بحكاية أخرى" : "❤️ أعجبتني";
+      likeButton.disabled = liked;
+      likeButton.querySelector(".reaction-label").textContent = liked ? "تم تسجيل إعجابك" : "❤️ أعجبتني";
     }
     choiceButtons.forEach(button => {
       const selected = button.dataset.reactionChoice === feedback;
@@ -70,8 +67,8 @@
       setStatus("سجّلت رد فعل لهذه الحكاية بالفعل من هذا المتصفح.");
       return;
     }
-    if (type === "like" && hasAnyLike()) {
-      setStatus(savedLike() ? "سجّلت إعجابك بهذه الحكاية بالفعل." : "مسموح بإعجاب واحد فقط على مستوى الموقع كله.");
+    if (type === "like" && savedLike()) {
+      setStatus("سجّلت إعجابك بهذه الحكاية بالفعل.");
       paintSavedState();
       return;
     }
@@ -90,13 +87,12 @@
       }
       const inserted = await response.json();
       if (inserted === true) {
-        if (type === "like") localStorage.setItem(siteLikeKey, storySlug);
-        else localStorage.setItem(stateKey(type), type);
+        localStorage.setItem(stateKey(type), type);
         setStatus("شكرًا لك! تم تسجيل اختيارك.");
       } else {
         if (type === "like") {
-          if (!hasAnyLike()) localStorage.setItem(siteLikeKey, "__already_liked__");
-          setStatus(savedLike() ? "الاختيار مسجّل بالفعل لهذه الحكاية." : "سبق تسجيل إعجاب على حكاية أخرى؛ لا يمكن تسجيل إعجاب ثانٍ.");
+          localStorage.setItem(stateKey("like"), "__already_liked__");
+          setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
         } else {
           localStorage.setItem(stateKey("feedback"), "__already_recorded__");
           setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
