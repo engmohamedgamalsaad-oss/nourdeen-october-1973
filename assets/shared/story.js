@@ -1,7 +1,10 @@
 (function () {
 'use strict';
 
-/* عناصر القصة التي تتحرك مع التمرير */
+/* =========================================
+حركة محتوى القصة مع التمرير
+========================================= */
+
 var selectors = [
 '.story .kicker',
 '.story h2',
@@ -23,7 +26,7 @@ var selectors = [
 'footer'
 ];
 
-/* إلغاء حركة الحاويات القديمة دون إخفاء محتواها */
+/* إلغاء تأثير الحركة القديم على الحاويات */
 document.querySelectorAll('.reveal').forEach(function (el) {
 el.classList.add('show');
 });
@@ -35,14 +38,15 @@ el.classList.add('scroll-reveal');
 el.style.transitionDelay = (index % 3) * 50 + 'ms';
 });
 
-/* الظهور عند النزول والاختفاء التدريجي عند الصعود */
+/* إظهار العناصر عند النزول وإخفاؤها عند الرجوع */
 if ('IntersectionObserver' in window) {
 var observer = new IntersectionObserver(function (entries) {
 entries.forEach(function (entry) {
-entry.target.classList.toggle(
-'is-visible',
-entry.isIntersecting
-);
+if (entry.isIntersecting) {
+entry.target.classList.add('is-visible');
+} else {
+entry.target.classList.remove('is-visible');
+}
 });
 }, {
 threshold: 0.08,
@@ -59,36 +63,45 @@ el.classList.add('is-visible');
 });
 }
 
-/* تحريك خلفية الغلاف والعنوان عند تمرير الصفحة فقط */
+/* =========================================
+حركة خلفية الغلاف مع تمرير الصفحة فقط
+========================================= */
+
 var hero = document.querySelector('.hero');
 var heroPhoto = document.querySelector('.hero-photo');
 var heroContent = document.querySelector('.hero-content');
+
 var scrollFramePending = false;
 
 function updateHeroOnScroll() {
 scrollFramePending = false;
 
-if (!hero || !heroPhoto || !heroContent) return;
+if (!hero || !heroPhoto || !heroContent) {
+  return;
+}
 
 var scrollY = Math.max(0, window.scrollY || 0);
 var heroHeight = hero.offsetHeight || window.innerHeight;
 var progress = Math.min(scrollY, heroHeight);
 
-/* الخلفية تتحرك أبطأ من تمرير الصفحة */
+/* الخلفية تتحرك بمقدار أقل من حركة الصفحة */
 heroPhoto.style.transform =
-  'translate3d(0,' + (progress * -0.12) +
-  'px,0) scale(1.06)';
+  'translate3d(0,' + (-progress * 0.12) + 'px,0) scale(1.06)';
 
-/* العنوان يتحرك حركة خفيفة مع التمرير */
+/* العنوان يتحرك بهدوء مع التمرير */
 heroContent.style.transform =
-  'translate3d(0,' + (progress * -0.045) + 'px,0)';
+  'translate3d(0,' + (-progress * 0.045) + 'px,0)';
 
 }
 
 function requestHeroUpdate() {
-if (scrollFramePending) return;
+if (scrollFramePending) {
+return;
+}
+
 scrollFramePending = true;
 window.requestAnimationFrame(updateHeroOnScroll);
+
 }
 
 window.addEventListener('scroll', requestHeroUpdate, {
@@ -96,9 +109,13 @@ passive: true
 });
 
 window.addEventListener('resize', requestHeroUpdate);
+
 updateHeroOnScroll();
 
-/* تكبير الصور عند الضغط عليها */
+/* =========================================
+تكبير الصور عند الضغط عليها
+========================================= */
+
 var lightbox = document.createElement('div');
 lightbox.className = 'lightbox';
 lightbox.setAttribute('role', 'dialog');
@@ -107,6 +124,7 @@ lightbox.setAttribute('aria-label', 'عرض الصورة بحجم كبير');
 
 var bigImage = document.createElement('img');
 bigImage.alt = '';
+
 lightbox.appendChild(bigImage);
 document.body.appendChild(lightbox);
 
@@ -139,4 +157,5 @@ if (event.key === 'Escape') {
 closeLightbox();
 }
 });
+
 })();
