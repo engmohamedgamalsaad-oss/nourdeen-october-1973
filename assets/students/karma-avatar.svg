@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-label="كارما">
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3b514b"/><stop offset="100%" stop-color="#07151d"/></linearGradient></defs>
+  <circle cx="120" cy="120" r="112" fill="url(#bg)" stroke="#d6b77a" stroke-width="8"/>
+  <circle cx="120" cy="120" r="98" fill="none" stroke="#d6b77a" stroke-opacity=".35" stroke-width="2"/>
+  <text x="120" y="151" text-anchor="middle" font-family="Cairo, Arial, sans-serif" font-size="100" font-weight="700" fill="#f4e5c8">ك</text>
+</svg>
