@@ -423,12 +423,34 @@ body {
   margin-bottom: 4px;
 }
 
+.student-avatar-wrap {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  position: relative;
+}
+
+.student-avatar-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffe2a0;
+  background: linear-gradient(135deg, #174653, #07151d);
+  border: 2px solid var(--c, #b8874b);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
 .student-avatar {
+  position: relative;
+  z-index: 1;
   width: 46px;
   height: 46px;
   border-radius: 50%;
   object-fit: cover;
-  flex: 0 0 46px;
   border: 2px solid var(--c, #b8874b);
   box-shadow: 0 0 0 3px rgba(227,189,120,.10);
   background: #10232b;
@@ -879,9 +901,9 @@ footer {
         var color = esc(story.color || '#b8874b');
         var first = esc((story.name || 'ح').charAt(0));
         var studentPhoto = {
-          '001': 'assets/students/nourdeen-avatar.svg',
-          '002': 'assets/students/karma-avatar.svg',
-          '003': 'assets/students/malika-avatar.svg'
+          '001': 'assets/students/nourdeen-avatar.jpg',
+          '002': 'assets/students/karma-avatar.jpg',
+          '003': 'assets/students/malika-avatar.jpg'
         }[story.id] || '';
         var safePhoto = esc(studentPhoto);
 
