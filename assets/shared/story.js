@@ -1,13 +1,25 @@
 (function () {
   'use strict';
 
-  /* ===== شاشة البداية ===== */
   var body = document.body;
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* الصفحة "الغنية" = صفحة فيها صورة غلاف متحركة (قصة نوردين حاليًا) */
+  var richStory = !!document.querySelector('.hero-photo');
+
+  /* =========================================
+     1) شاشة البداية (اختيارية)
+     تُفعّل بوضع data-splash في وسم body
+  ========================================= */
   var splashImage = body.getAttribute('data-splash');
 
   if (splashImage) {
     var splash = document.createElement('div');
     splash.className = 'story-splash';
+    splash.setAttribute('role', 'dialog');
+    splash.setAttribute('aria-modal', 'true');
 
     Object.assign(splash.style, {
       position: 'fixed',
@@ -28,7 +40,8 @@
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       textAlign: 'center',
-      direction: 'rtl'
+      direction: 'rtl',
+      transition: reduceMotion ? 'none' : 'opacity .35s ease'
     });
 
     var splashContent = document.createElement('div');
@@ -41,7 +54,8 @@
     });
 
     var splashTitle = document.createElement('h1');
-    splashTitle.textContent = 'رجال البحر في أكتوبر';
+    splashTitle.textContent =
+      body.getAttribute('data-splash-title') || 'رجال البحر في أكتوبر';
 
     Object.assign(splashTitle.style, {
       fontFamily: '"Marhey", "Cairo", Tahoma, sans-serif',
@@ -52,7 +66,9 @@
     });
 
     var splashSubtitle = document.createElement('p');
-    splashSubtitle.textContent = 'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
+    splashSubtitle.textContent =
+      body.getAttribute('data-splash-subtitle') ||
+      'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
 
     Object.assign(splashSubtitle.style, {
       fontFamily: '"Cairo", Tahoma, sans-serif',
@@ -87,73 +103,152 @@
     body.appendChild(splash);
     body.style.overflow = 'hidden';
 
-    function closeSplash() {
-      if (!splash.parentNode) return;
+    try { startButton.focus({ preventScroll: true }); } catch (e) {}
 
-      splash.remove();
+    var splashClosing = false;
+
+    var closeSplash = function () {
+      if (splashClosing || !splash.parentNode) { return; }
+      splashClosing = true;
+
       body.style.overflow = previousOverflow;
-    }
+
+      if (reduceMotion) {
+        splash.remove();
+        return;
+      }
+
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+      setTimeout(function () { splash.remove(); }, 380);
+    };
 
     startButton.addEventListener('click', closeSplash);
   }
 
-  /* ===== ظهور عناصر القصة مع التمرير ===== */
-  var selectors = [
-    '.story .kicker',
-    '.story h2',
-    '.story p',
-    '.story figure',
-    '.story .event',
-    '.story .panel',
-    '.story .quote',
-    '.story .lesson',
-    '.end .kicker',
-    '.end h2',
-    '.end p',
-    '.end .quote',
-    '.end .home-button',
-    '.sources .kicker',
-    '.sources h2',
-    '.sources li',
-    '.sources > .container > p',
-    'footer'
-  ];
+  /* =========================================
+     2) الحركة القديمة: الرئيسية وبقية القصص
+  ========================================= */
+  var legacy = document.querySelectorAll('.reveal');
 
-  document.querySelectorAll('.reveal').forEach(function (el) {
-    el.classList.add('show');
-  });
-
-  var targets = document.querySelectorAll(selectors.join(','));
-
-  targets.forEach(function (el, index) {
-    el.classList.add('scroll-reveal');
-    el.style.transitionDelay = (index % 3) * 50 + 'ms';
-  });
-
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-        } else {
-          entry.target.classList.remove('is-visible');
-        }
-      });
-    }, {
-      threshold: 0.08,
-      rootMargin: '0px 0px -3% 0px'
-    });
-
-    targets.forEach(function (el) {
-      observer.observe(el);
-    });
-  } else {
-    targets.forEach(function (el) {
-      el.classList.add('is-visible');
-    });
+  function showAll(list) {
+    list.forEach(function (el) { el.classList.add('show'); });
   }
 
-  /* ===== تكبير الصور عند الضغط ===== */
+  if (richStory || reduceMotion || !('IntersectionObserver' in window)) {
+    showAll(legacy);
+  } else {
+    var legacyObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          legacyObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    legacy.forEach(function (el) { legacyObserver.observe(el); });
+  }
+
+  /* =========================================
+     3) ظهور المحتوى في الاتجاهين (قصة نوردين)
+  ========================================= */
+  function initScrollReveal() {
+    if (!('IntersectionObserver' in window)) { return; }
+
+    var selectors = [
+      '.container > .kicker',
+      '.container > h2',
+      '.container > p',
+      '.container > figure',
+      '.container > .quote',
+      '.container > .home-button',
+      '.panel',
+      '.event',
+      '.lesson',
+      '.sources li',
+      'footer'
+    ].join(',');
+
+    var targets = document.querySelectorAll(selectors);
+
+    targets.forEach(function (el) {
+      el.classList.add('scroll-reveal');
+    });
+
+    var observer = new IntersectionObserver(function (entries) {
+      var order = 0;
+
+      entries.forEach(function (entry) {
+        var el = entry.target;
+
+        if (entry.isIntersecting) {
+          el.style.transitionDelay = Math.min(order, 4) * 70 + 'ms';
+          order++;
+          el.classList.add('is-visible');
+        } else if (entry.boundingClientRect.top > 0) {
+          /* أصبح أسفل الشاشة (المستخدم صعد): يختفي ليظهر مجددًا عند النزول */
+          el.style.transitionDelay = '0ms';
+          el.classList.remove('is-visible');
+        }
+        /* لو خرج من أعلى الشاشة نتركه ظاهرًا لتفادي الرجفة */
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -4% 0px'
+    });
+
+    targets.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* =========================================
+     4) Parallax لخلفية الغلاف
+  ========================================= */
+  function initHeroParallax() {
+    var hero = document.querySelector('.hero');
+    var photo = document.querySelector('.hero-photo');
+    var content = document.querySelector('.hero-content');
+
+    if (!hero || !photo) { return; }
+
+    var pending = false;
+
+    function update() {
+      pending = false;
+
+      var y = window.pageYOffset || 0;
+      var h = hero.offsetHeight || window.innerHeight;
+
+      if (y > h) { return; }
+
+      photo.style.transform =
+        'translate3d(0,' + (y * 0.25).toFixed(1) + 'px,0) scale(1.05)';
+
+      if (content) {
+        content.style.transform =
+          'translate3d(0,' + (y * -0.05).toFixed(1) + 'px,0)';
+      }
+    }
+
+    function request() {
+      if (pending) { return; }
+      pending = true;
+      window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    update();
+  }
+
+  if (richStory && !reduceMotion) {
+    initScrollReveal();
+    initHeroParallax();
+  }
+
+  /* =========================================
+     5) تكبير الصور عند الضغط عليها
+  ========================================= */
   var lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
   lightbox.setAttribute('role', 'dialog');
@@ -174,9 +269,7 @@
   document.addEventListener('click', function (event) {
     var target = event.target;
 
-    if (!target || typeof target.closest !== 'function') {
-      return;
-    }
+    if (!target || typeof target.closest !== 'function') { return; }
 
     var image = target.closest('.image-frame img');
 
@@ -190,8 +283,6 @@
   });
 
   document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') {
-      closeLightbox();
-    }
+    if (event.key === 'Escape') { closeLightbox(); }
   });
 })();
