@@ -1,166 +1,142 @@
-
 (function () {
-  'use strict';
+'use strict';
 
-  /* الغلاف: حركة مستمرة للصورة والعنوان */
-  var heroContent = document.querySelector('.hero-content');
-  if (heroContent) heroContent.classList.add('show');
+/* عناصر القصة التي تتحرك مع التمرير */
+var selectors = [
+'.story .kicker',
+'.story h2',
+'.story p',
+'.story figure',
+'.story .event',
+'.story .panel',
+'.story .quote',
+'.story .lesson',
+'.end .kicker',
+'.end h2',
+'.end p',
+'.end .quote',
+'.end .home-button',
+'.sources .kicker',
+'.sources h2',
+'.sources li',
+'.sources > .container > p',
+'footer'
+];
 
-  /* إزالة الحركة من الحاويات الكبيرة، لتتحرك العناصر منفردة */
-  document.querySelectorAll('.container.reveal').forEach(function (el) {
-    el.classList.remove('reveal', 'show');
-  });
+/* إلغاء حركة الحاويات القديمة دون إخفاء محتواها */
+document.querySelectorAll('.reveal').forEach(function (el) {
+el.classList.add('show');
+});
 
-  /* تحديد النصوص والصور والتواريخ */
-  var selectors = [
-    '.story .container > .kicker',
-    '.story .container > h2',
-    '.story .container > p',
-    '.story .container > figure',
-    '.story .container > .quote',
-    '.story .container > .panel',
-    '.story .timeline > .event',
-    '.story .two > .panel',
-    '.story .lessons > .lesson',
-    '.end .container > *',
-    '.sources .container > *',
-    'footer'
-  ];
+var targets = document.querySelectorAll(selectors.join(','));
 
-  var items = document.querySelectorAll(selectors.join(','));
+targets.forEach(function (el, index) {
+el.classList.add('scroll-reveal');
+el.style.transitionDelay = (index % 3) * 50 + 'ms';
+});
 
-  items.forEach(function (el, index) {
-    el.classList.add('reveal');
-    el.classList.remove('show');
-    el.style.transitionDelay = (index % 3) * 80 + 'ms';
-  });
+/* الظهور عند النزول والاختفاء التدريجي عند الصعود */
+if ('IntersectionObserver' in window) {
+var observer = new IntersectionObserver(function (entries) {
+entries.forEach(function (entry) {
+entry.target.classList.toggle(
+'is-visible',
+entry.isIntersecting
+);
+});
+}, {
+threshold: 0.08,
+rootMargin: '0px 0px -3% 0px'
+});
 
-  /* الدخول إلى الشاشة = ظهور، الخروج منها = اختفاء.
-     وده اللي يسمح بالحركة العكسية عند الصعود. */
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        } else {
-          entry.target.classList.remove('show');
-        }
-      });
-    }, {
-      threshold: 0.12,
-      rootMargin: '0px 0px -4% 0px'
-    });
+targets.forEach(function (el) {
+  observer.observe(el);
+});
 
-    items.forEach(function (el) {
-      observer.observe(el);
-    });
-  } else {
-    items.forEach(function (el) {
-      el.classList.add('show');
-    });
-  }
+} else {
+targets.forEach(function (el) {
+el.classList.add('is-visible');
+});
+}
 
-  /* غلاف الافتتاح */
-  var splashImage = document.body.getAttribute('data-splash');
+/* تحريك خلفية الغلاف والعنوان عند تمرير الصفحة فقط */
+var hero = document.querySelector('.hero');
+var heroPhoto = document.querySelector('.hero-photo');
+var heroContent = document.querySelector('.hero-content');
+var scrollFramePending = false;
 
-  if (splashImage) {
-    var splash = document.createElement('div');
-    splash.className = 'story-splash';
-    splash.setAttribute('role', 'dialog');
-    splash.setAttribute('aria-modal', 'true');
+function updateHeroOnScroll() {
+scrollFramePending = false;
 
-    splash.style.cssText =
-      'position:fixed;inset:0;z-index:10000;' +
-      'display:flex;flex-direction:column;align-items:center;' +
-      'justify-content:center;gap:22px;padding:18px;' +
-      'overflow:auto;text-align:center;' +
-      'background:linear-gradient(180deg,' +
-      (document.body.getAttribute('data-splash-top') || '#705d4b') +
-      ',' +
-      (document.body.getAttribute('data-splash-bottom') || '#564132') +
-      ');';
+if (!hero || !heroPhoto || !heroContent) return;
 
-    var art = document.createElement('img');
-    art.src = splashImage;
-    art.alt = document.body.getAttribute('data-splash-alt') || 'غلاف الحكاية';
-    art.style.cssText =
-      'display:block;width:auto;height:auto;max-width:100%;' +
-      'max-height:76vh;object-fit:contain;' +
-      'box-shadow:0 18px 55px rgba(0,0,0,.4);';
+var scrollY = Math.max(0, window.scrollY || 0);
+var heroHeight = hero.offsetHeight || window.innerHeight;
+var progress = Math.min(scrollY, heroHeight);
 
-    var error = document.createElement('p');
-    error.textContent = 'تعذّر تحميل صورة الغلاف، يمكنك بدء الحكاية.';
-    error.hidden = true;
-    error.style.color = '#fff';
+/* الخلفية تتحرك أبطأ من تمرير الصفحة */
+heroPhoto.style.transform =
+  'translate3d(0,' + (progress * -0.12) +
+  'px,0) scale(1.06)';
 
-    var button = document.createElement('button');
-    button.type = 'button';
-    button.textContent = 'ابدأ الحكاية ←';
-    button.style.cssText =
-      'font:700 1rem Cairo,Tahoma,sans-serif;padding:13px 30px;' +
-      'border:1px solid #f0d59c;border-radius:5px;' +
-      'color:#171006;background:linear-gradient(145deg,#f0d59c,#b8874b);';
+/* العنوان يتحرك حركة خفيفة مع التمرير */
+heroContent.style.transform =
+  'translate3d(0,' + (progress * -0.045) + 'px,0)';
 
-    art.addEventListener('error', function () {
-      art.hidden = true;
-      error.hidden = false;
-    });
+}
 
-    splash.append(art, error, button);
-    document.body.appendChild(splash);
+function requestHeroUpdate() {
+if (scrollFramePending) return;
+scrollFramePending = true;
+window.requestAnimationFrame(updateHeroOnScroll);
+}
 
-    var oldOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    var closed = false;
+window.addEventListener('scroll', requestHeroUpdate, {
+passive: true
+});
 
-    function closeSplash() {
-      if (closed) return;
-      closed = true;
-      splash.style.transition = 'opacity .45s ease';
-      splash.style.opacity = '0';
+window.addEventListener('resize', requestHeroUpdate);
+updateHeroOnScroll();
 
-      window.setTimeout(function () {
-        splash.remove();
-        document.body.style.overflow = oldOverflow;
-      }, 460);
-    }
+/* تكبير الصور عند الضغط عليها */
+var lightbox = document.createElement('div');
+lightbox.className = 'lightbox';
+lightbox.setAttribute('role', 'dialog');
+lightbox.setAttribute('aria-modal', 'true');
+lightbox.setAttribute('aria-label', 'عرض الصورة بحجم كبير');
 
-    button.addEventListener('click', closeSplash);
-    button.focus();
-  }
+var bigImage = document.createElement('img');
+bigImage.alt = '';
+lightbox.appendChild(bigImage);
+document.body.appendChild(lightbox);
 
-  /* تكبير الصور عند الضغط عليها */
-  var lightbox = document.querySelector('.lightbox');
+function closeLightbox() {
+lightbox.classList.remove('open');
+bigImage.removeAttribute('src');
+}
 
-  if (!lightbox) {
-    lightbox = document.createElement('div');
-    lightbox.className = 'lightbox';
-    lightbox.innerHTML = '<img alt="">';
-    document.body.appendChild(lightbox);
-  }
+document.addEventListener('click', function (event) {
+var target = event.target;
 
-  var bigImage = lightbox.querySelector('img');
+if (!target || typeof target.closest !== 'function') {
+  return;
+}
 
-  function closeLightbox() {
-    lightbox.classList.remove('open');
-  }
+var image = target.closest('.image-frame img');
 
-  document.addEventListener('click', function (event) {
-    var target = event.target;
-    if (!target || !target.closest) return;
+if (image) {
+  bigImage.src = image.src;
+  bigImage.alt = image.alt || '';
+  lightbox.classList.add('open');
+} else if (lightbox.contains(target)) {
+  closeLightbox();
+}
 
-    var image = target.closest('.image-frame img');
+});
 
-    if (image) {
-      bigImage.src = image.src;
-      bigImage.alt = image.alt || '';
-      lightbox.classList.add('open');
-    } else if (lightbox.contains(target)) {
-      closeLightbox();
-    }
-  });
-
-  document.addEventListener('keydown', function (event) {
-    if (event.key === 'Escape') closeLightbox();
-  });
+document.addEventListener('keydown', function (event) {
+if (event.key === 'Escape') {
+closeLightbox();
+}
+});
 })();
