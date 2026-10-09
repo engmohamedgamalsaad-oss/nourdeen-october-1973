@@ -93,7 +93,7 @@
         setStatus("شكرًا لك! تم تسجيل اختيارك.");
       } else {
         if (type === "like") localStorage.setItem(stateKey("like"), "1");
-        else localStorage.setItem(stateKey("feedback"), type);
+        else localStorage.setItem(stateKey("feedback"), "__already_recorded__");
         setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
       }
       paintSavedState();
