@@ -51,7 +51,7 @@
     js_new_story:'Nouveau récit',js_photo_of:'Photo de',js_likes_label:'Nombre de mentions J’aime',js_likes:'J’aime',js_no_stories:'Aucun récit pour le moment.',
     js_open_story:'Lire le récit',js_likes_err:'Impossible de charger le nombre de mentions J’aime',
     js_stories_err:'Impossible de charger les récits. Ouvrez le site via GitHub Pages et vérifiez stories/index.json.',
-    js_language_label:'Choisir la langue',js_school_logo_alt:'Logo de l’école de langues Al-Manar pour filles',js_home_cover_alt:'Couverture des récits d’octobre 1973',
+    js_language_label:'Choisir la langue',js_school_logo_alt:'Logo de l’École nationale de langues Al-Manar pour filles',js_home_cover_alt:'Couverture des récits d’octobre 1973',
     media_flag_alt:'Des soldats égyptiens hissant le drapeau égyptien',media_crossing_alt:'Photographie historique du franchissement de la ligne Bar-Lev pendant la guerre d’octobre',media_map_alt:'Carte illustrative du détroit de Bab el-Mandeb et de la mer Rouge',media_hero_alt:'Photographie d’archive du pilote égyptien Atef El-Sadat',media_stamp_alt:'Création artistique représentant un timbre commémoratif de la guerre d’octobre'
   });
   window.I18N.register('it',{
