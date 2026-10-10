@@ -214,7 +214,15 @@ Object.assign(translations,{
 "يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.":{en:"You can submit one like and one reaction per story from the same browser.",fr:"Vous pouvez envoyer un J’aime et une réaction par récit depuis le même navigateur.",it:"Puoi inviare un Mi piace e una reazione per racconto dallo stesso browser."},
 "نوردين محمد جمال":{en:"Nourdeen Mohamed Gamal",fr:"Nourdeen Mohamed Gamal",it:"Nourdeen Mohamed Gamal"},
 "كارما محمد جمال":{en:"Karma Mohamed Gamal",fr:"Karma Mohamed Gamal",it:"Karma Mohamed Gamal"},
-"مليكة محمد جمال":{en:"Malika Mohamed Gamal",fr:"Malika Mohamed Gamal",it:"Malika Mohamed Gamal"}
+"مليكة محمد جمال":{en:"Malika Mohamed Gamal",fr:"Malika Mohamed Gamal",it:"Malika Mohamed Gamal"},
+"مضخة المياه":{en:"Water pump",fr:"Pompe à eau",it:"Pompa dell’acqua"},
+"الساتر الترابي":{en:"Sand embankment",fr:"Remblai de sable",it:"Terrapieno di sabbia"},
+"قناة السويس":{en:"Suez Canal",fr:"Canal de Suez",it:"Canale di Suez"},
+"مضخة مياه":{en:"Water pump",fr:"Pompe à eau",it:"Pompa dell’acqua"},
+"الساتر الرملي":{en:"Sand embankment",fr:"Remblai de sable",it:"Terrapieno di sabbia"},
+"مياه القناة":{en:"Canal water",fr:"Eau du canal",it:"Acqua del canale"},
+"رسم توضيحي مستوحى من قرى النوبة — ليس صورة تاريخية":{en:"Illustration inspired by Nubian villages — not a historical photograph",fr:"Illustration inspirée des villages nubiens — pas une photographie historique",it:"Illustrazione ispirata ai villaggi nubiani — non è una fotografia storica"},
+"رسم توضيحي — ليس صورة تاريخية لأحمد إدريس":{en:"Illustration — not a historical photograph of Ahmed Idris",fr:"Illustration — pas une photographie historique d’Ahmed Idris",it:"Illustrazione — non è una fotografia storica di Ahmed Idris"}
 });
 
 
@@ -271,7 +279,7 @@ function applyFooterText(lang){
 }
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
- document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,.kicker,.reaction-count-line,footer strong').forEach(function(el){
+ document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,.story svg text,.kicker,.reaction-count-line,.author strong,footer strong').forEach(function(el){
    if(!original.has(el)) original.set(el,el.textContent);
    var ar=original.get(el);
    if(el.querySelector && el.querySelector('a')) return;
