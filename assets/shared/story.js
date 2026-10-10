@@ -442,16 +442,24 @@
 
   var fixes = [
     ['pulled him to Jordan’s Port of Aqaba', 'pulled him to the Jordanian port of Aqaba'],
+    ['October 6, 1973', '6 October 1973'],
+    ['October 6', '6 October'],
     ['Illustration of the nature of the sea passage.', 'Illustrative image of the sea passage.'],
     ['3rd Grade Primary', '3rd Grade (Primary)'],
     ['3e année primaire', '3e année du primaire'],
     ['1re année primaire', '1re année du primaire'],
     ['Logo de l’école de langues Al-Manar pour filles', 'Logo de l’École nationale de langues Al-Manar pour filles'],
-    ['Scuola nazionale linguistica femminile Al-Manar', 'Scuola nazionale linguistica Al-Manar per ragazze'],
-    ['Logo della Scuola linguistica Al-Manar per ragazze', 'Logo della Scuola nazionale linguistica Al-Manar per ragazze'],
+    ['Scuola nazionale linguistica femminile Al-Manar', 'Scuola nazionale di lingue Al-Manar per ragazze'],
+    ['Logo della Scuola linguistica Al-Manar per ragazze', 'Logo della Scuola nazionale di lingue Al-Manar per ragazze'],
+    ['Logo della Scuola nazionale linguistica Al-Manar per ragazze', 'Logo della Scuola nazionale di lingue Al-Manar per ragazze'],
     ['Prima classe della scuola preparatoria', '1ª media'],
-    ['3ª primaria', '3ª elementare'],
-    ['1ª primaria', '1ª elementare'],
+    ['1ª classe della scuola media', '1ª media'],
+    ['3ª elementare', '3ª primaria'],
+    ['1ª elementare', '1ª primaria'],
+    ['motosiluranti', 'imbarcazioni lanciamissili'],
+    ['Motosiluranti', 'Imbarcazioni lanciamissili'],
+    ['Il terrapieno di terra', 'Il terrapieno'],
+    ['Una storia con paralleli altrove', 'Una storia con analogie in altri contesti'],
     ['La battaglia che molti non videro', 'La battaglia che la maggior parte delle persone non ha visto']
   ];
 
@@ -479,7 +487,15 @@
         ['alt', 'aria-label', 'title'].forEach(function (attr) {
           var current = el.getAttribute(attr);
           if (!current) { return; }
-          var next = fixText(current);
+          var lang = window.I18N.lang();
+          var logoTranslations = {
+            'شعار مدرسة المنار القومية للغات للبنات': {
+              en: 'Al-Manar National Language School for Girls logo',
+              fr: 'Logo de l’École nationale de langues Al-Manar pour filles',
+              it: 'Logo della Scuola nazionale di lingue Al-Manar per ragazze'
+            }
+          };
+          var next = (logoTranslations[current] && logoTranslations[current][lang]) || fixText(current);
           if (next !== current) { el.setAttribute(attr, next); }
         });
       });
