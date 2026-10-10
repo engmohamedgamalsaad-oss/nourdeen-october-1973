@@ -15,7 +15,8 @@
     js_new_story:'حكاية جديدة',js_photo_of:'صورة',js_likes_label:'عدد الإعجابات',js_likes:'الإعجابات',js_no_stories:'لا توجد حكايات بعد.',
     js_open_story:'افتح الحكاية',js_likes_err:'تعذر تحميل عدد الإعجابات الآن',
     js_stories_err:'تعذّر تحميل الحكايات. تأكد من فتح الموقع من رابط GitHub Pages وأن ملف stories/index.json موجود.',
-    js_language_label:'اختيار اللغة',js_school_logo_alt:'شعار مدرسة المنار القومية للغات للبنات',js_home_cover_alt:'غلاف حكايات أكتوبر 1973'
+    js_language_label:'اختيار اللغة',js_school_logo_alt:'شعار مدرسة المنار القومية للغات للبنات',js_home_cover_alt:'غلاف حكايات أكتوبر 1973',
+    media_flag_alt:'جنود مصريون يرفعون العلم المصري',media_crossing_alt:'صورة تاريخية لعبور خط بارليف في حرب أكتوبر',media_map_alt:'خريطة توضيحية لمضيق باب المندب والبحر الأحمر',media_hero_alt:'صورة أرشيفية للطيار المصري عاطف السادات',media_stamp_alt:'تصميم فني تخيلي لطابع تذكاري عن حرب أكتوبر'
   });
   window.I18N.register('en',{
     k1:'Immortal Heroes Through History',k2:'Al-Manar National Language School for Girls',k3:'Students’ Story Archive',
@@ -32,7 +33,8 @@
     js_new_story:'New story',js_photo_of:'Photo of',js_likes_label:'Like count',js_likes:'Likes',js_no_stories:'No stories yet.',
     js_open_story:'Read story',js_likes_err:'Could not load the like count right now',
     js_stories_err:'Could not load stories. Open the site through GitHub Pages and check that stories/index.json exists.',
-    js_language_label:'Choose language',js_school_logo_alt:'Al-Manar National Language School for Girls logo',js_home_cover_alt:'Cover of the October 1973 stories'
+    js_language_label:'Choose language',js_school_logo_alt:'Al-Manar National Language School for Girls logo',js_home_cover_alt:'Cover of the October 1973 stories',
+    media_flag_alt:'Egyptian soldiers raising the Egyptian flag',media_crossing_alt:'Historical photograph of the crossing of the Bar-Lev Line during the October War',media_map_alt:'Illustrative map of the Bab el-Mandeb Strait and the Red Sea',media_hero_alt:'Archival photograph of Egyptian pilot Atef El-Sadat',media_stamp_alt:'Artistic concept of a commemorative stamp for the October War'
   });
   window.I18N.register('fr',{
     k1:'Héros immortels à travers l’histoire',k2:'École nationale de langues Al-Manar pour filles',k3:'Archives des récits des élèves',
@@ -49,7 +51,8 @@
     js_new_story:'Nouveau récit',js_photo_of:'Photo de',js_likes_label:'Nombre de mentions J’aime',js_likes:'J’aime',js_no_stories:'Aucun récit pour le moment.',
     js_open_story:'Lire le récit',js_likes_err:'Impossible de charger le nombre de mentions J’aime',
     js_stories_err:'Impossible de charger les récits. Ouvrez le site via GitHub Pages et vérifiez stories/index.json.',
-    js_language_label:'Choisir la langue',js_school_logo_alt:'Logo de l’école de langues Al-Manar pour filles',js_home_cover_alt:'Couverture des récits d’octobre 1973'
+    js_language_label:'Choisir la langue',js_school_logo_alt:'Logo de l’école de langues Al-Manar pour filles',js_home_cover_alt:'Couverture des récits d’octobre 1973',
+    media_flag_alt:'Des soldats égyptiens hissant le drapeau égyptien',media_crossing_alt:'Photographie historique du franchissement de la ligne Bar-Lev pendant la guerre d’octobre',media_map_alt:'Carte illustrative du détroit de Bab el-Mandeb et de la mer Rouge',media_hero_alt:'Photographie d’archive du pilote égyptien Atef El-Sadat',media_stamp_alt:'Création artistique représentant un timbre commémoratif de la guerre d’octobre'
   });
   window.I18N.register('it',{
     k1:'Eroi immortali nella storia',k2:'Scuola nazionale linguistica Al-Manar per ragazze',k3:'Archivio dei racconti delle studentesse',
@@ -66,7 +69,8 @@
     js_new_story:'Nuovo racconto',js_photo_of:'Foto di',js_likes_label:'Numero di Mi piace',js_likes:'Mi piace',js_no_stories:'Ancora nessun racconto.',
     js_open_story:'Leggi il racconto',js_likes_err:'Impossibile caricare il numero di Mi piace',
     js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.',
-    js_language_label:'Seleziona la lingua',js_school_logo_alt:'Logo della Scuola linguistica Al-Manar per ragazze',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973'
+    js_language_label:'Seleziona la lingua',js_school_logo_alt:'Logo della Scuola linguistica Al-Manar per ragazze',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973',
+    media_flag_alt:'Soldati egiziani che issano la bandiera egiziana',media_crossing_alt:'Fotografia storica dell’attraversamento della linea Bar-Lev durante la guerra d’ottobre',media_map_alt:'Mappa illustrativa dello stretto di Bab el-Mandeb e del Mar Rosso',media_hero_alt:'Fotografia d’archivio del pilota egiziano Atef El-Sadat',media_stamp_alt:'Concept artistico di un francobollo commemorativo della guerra d’ottobre'
   });
   window.I18N.apply();
 
