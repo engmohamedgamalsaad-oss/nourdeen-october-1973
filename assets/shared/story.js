@@ -207,7 +207,14 @@
       'footer'
     ].join(',');
 
-    var targets = document.querySelectorAll(selectors);
+    var targets = Array.prototype.slice.call(document.querySelectorAll(selectors));
+
+    /* الحكاية 004 فيها بطاقات معلومات ومعرض صور؛ أضف عناصرها لحركة الصعود أثناء التمرير. */
+    if (body.getAttribute('data-story-slug') === '004') {
+      document.querySelectorAll('.story .container > *, .memorial-gallery .container > *, .fact-grid > *, .memorial-card, .memorial-caption > *').forEach(function (el) {
+        if (targets.indexOf(el) === -1) targets.push(el);
+      });
+    }
 
     targets.forEach(function (el) {
       el.classList.add('scroll-reveal');
