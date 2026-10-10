@@ -443,7 +443,8 @@
   var fixes = [
     ['pulled him to Jordan’s Port of Aqaba', 'pulled him to the Jordanian port of Aqaba'],
     ['October 6, 1973', '6 October 1973'],
-    ['October 6', '6 October'],
+    ['on October 6, the military command', 'on 6 October, the military command'],
+    ['After the war began on October 6,', 'After the war began on 6 October,'],
     ['Illustration of the nature of the sea passage.', 'Illustrative image of the sea passage.'],
     ['3rd Grade Primary', '3rd Grade (Primary)'],
     ['3e année primaire', '3e année du primaire'],
