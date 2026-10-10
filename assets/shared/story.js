@@ -26,7 +26,7 @@
       ar: {title:'العقل قبل السلاح', subtitle:'حكاية كارما محمد جمال — كيف فتحت المياه طريق العبور', start:'ابدأ الحكاية ←'},
       en: {title:'Brains Before Weapons', subtitle:'Karma Mohamed Gamal tells how water opened a passage across the canal', start:'Start the story →'},
       fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert un passage à travers le canal', start:'Commencer le récit →'},
-      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua ha aperto un varco attraverso il canale', start:'Inizia il racconto →'}
+      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua ha aperto un passaggio attraverso il canale', start:'Inizia il racconto →'}
     },
     '003': {
       ar: {title:'لغة لا يفهمها العدو', subtitle:'حكاية مليكة محمد جمال — الشفرة النوبية في حرب أكتوبر', start:'ابدأ الحكاية ←'},
