@@ -1,33 +1,32 @@
-/* Shared language-switcher styles for the October stories site */
+/* Shared language-switcher styles: compact text links, no pill boxes */
 .lang-switch {
   display: flex;
-  gap: 5px;
-  flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  max-width: 320px;
+  gap: clamp(7px, 1.2vw, 14px);
+  min-width: 0;
+  white-space: nowrap;
 }
 .lang-option {
-  font: 600 .75rem "Cairo", sans-serif;
-  color: #f4e5c8;
-  background: #10232b;
-  border: 1px solid rgba(227,189,120,.35);
-  border-radius: 999px;
-  padding: 5px 9px;
+  font: 600 .72rem "Cairo", sans-serif;
+  color: #d9e3e4;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 4px 0;
   cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  text-underline-offset: 5px;
 }
+.lang-option:hover,
 .lang-option.is-active {
-  background: #e3bd78;
-  color: #171006;
-  border-color: #e3bd78;
+  color: #e3bd78;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
 }
 .lang-option:focus-visible {
   outline: 2px solid #fff;
-  outline-offset: 2px;
-}
-.story-lang-switch { margin-inline: 12px; }
-@media (max-width: 700px) {
-  .topbar { flex-wrap: wrap; gap: 10px; }
-  .story-lang-switch { order: 3; width: 100%; max-width: none; }
-  .story-lang-switch .lang-option { padding: 5px 8px; }
+  outline-offset: 3px;
+  border-radius: 3px;
 }
