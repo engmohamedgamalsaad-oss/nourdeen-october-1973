@@ -46,10 +46,22 @@
         });
       }
 
+      var transitionTimer = null;
+
       function show(nextIndex) {
         nextIndex = (nextIndex + slides.length) % slides.length;
         var oldIndex = index;
         if (nextIndex === oldIndex) return;
+
+        /* Cancel any previous cleanup and clear stale transition classes first.
+           This prevents multiple old cards from remaining visible during rapid navigation. */
+        if (transitionTimer !== null) {
+          window.clearTimeout(transitionTimer);
+          transitionTimer = null;
+        }
+        slides.forEach(function (slide) {
+          slide.classList.remove('is-leaving');
+        });
 
         slides[oldIndex].classList.remove('is-active');
         slides[oldIndex].classList.add('is-leaving');
@@ -58,8 +70,13 @@
         slides[index].classList.add('is-active');
         syncDots();
         syncHidden();
-        window.setTimeout(function () {
-          slides[oldIndex].classList.remove('is-leaving');
+
+        var leavingSlide = slides[oldIndex];
+        transitionTimer = window.setTimeout(function () {
+          if (!leavingSlide.classList.contains('is-active')) {
+            leavingSlide.classList.remove('is-leaving');
+          }
+          transitionTimer = null;
         }, 760);
       }
 
