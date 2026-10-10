@@ -53,7 +53,7 @@
       likeButton.classList.toggle("is-selected", liked);
       likeButton.setAttribute("aria-pressed", liked ? "true" : "false");
       likeButton.disabled = liked;
-      likeButton.querySelector(".reaction-label").textContent = liked ? "تم تسجيل إعجابك" : "❤️ أعجبتني";
+      likeButton.querySelector(".reaction-label").textContent = liked ? (window.I18N ? window.I18N.t("s_liked") : "تم تسجيل إعجابك") : (window.I18N ? window.I18N.t("s_like") : "❤️ أعجبتني");
     }
     choiceButtons.forEach(button => {
       const selected = button.dataset.reactionChoice === feedback;
