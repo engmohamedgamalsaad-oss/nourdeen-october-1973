@@ -181,15 +181,43 @@ Object.assign(translations,{
 "النصر لا يصنعه بطل واحد، بل يصنعه جيش كامل، وكل فرد فيه يؤدي مهمته بإخلاص وشجاعة وانضباط.":{en:"Victory is not made by one hero alone, but by an entire army in which everyone does their duty with dedication, courage, and discipline.",fr:"La victoire n’est pas l’œuvre d’un seul héros, mais celle d’une armée entière où chacun accomplit sa mission avec dévouement, courage et discipline.",it:"La vittoria non è opera di un solo eroe, ma di un intero esercito in cui ognuno svolge il proprio compito con dedizione, coraggio e disciplina."}
 });
 
+
+Object.assign(translations,{
+"← الصفحة الرئيسية":{en:"← Home",fr:"← Accueil",it:"← Home"},
+"← العودة إلى حكايات أكتوبر":{en:"← Back to October Stories",fr:"← Retour aux récits d’octobre",it:"← Torna ai racconti di ottobre"},
+"صورة أرشيفية مشابهة على Wikimedia Commons":{en:"A similar archival image on Wikimedia Commons",fr:"Une image d’archives similaire sur Wikimedia Commons",it:"Una foto d’archivio simile su Wikimedia Commons"},
+"خريطة باب المندب على Wikimedia Commons":{en:"Map of Bab el-Mandeb on Wikimedia Commons",fr:"Carte de Bab el-Mandeb sur Wikimedia Commons",it:"Mappa di Bab el-Mandeb su Wikimedia Commons"},
+"الهيئة العامة للاستعلامات المصرية — انتصارات أكتوبر وبيانات القيادة العامة":{en:"Egyptian State Information Service — October victories and General Command statements",fr:"Service d’information de l’État égyptien — victoires d’octobre et communiqués du commandement général",it:"Servizio informazioni dello Stato egiziano — vittorie d’ottobre e comunicati del comando generale"},
+"وزارة الدفاع المصرية — وثائق حرب أكتوبر 1973":{en:"Egyptian Ministry of Defence — documents on the 1973 October War",fr:"Ministère égyptien de la Défense — documents sur la guerre d’octobre 1973",it:"Ministero della Difesa egiziano — documenti sulla guerra d’ottobre 1973"},
+"وزارة الدفاع المصرية — المتحف الحربي / حرب أكتوبر وبعض أعمال القوات البحرية":{en:"Egyptian Ministry of Defence — Military Museum, October War, and selected naval operations",fr:"Ministère égyptien de la Défense — musée militaire, guerre d’octobre et opérations navales",it:"Ministero della Difesa egiziano — Museo militare, guerra d’ottobre e operazioni navali"},
+"الأهرام اليومي — القوات البحرية المصرية: ملوك البحر، 7 أكتوبر 2024":{en:"Al-Ahram Daily — The Egyptian Navy: Kings of the Sea, 7 October 2024",fr:"Al-Ahram — La marine égyptienne : les maîtres de la mer, 7 octobre 2024",it:"Al-Ahram — La Marina egiziana: i signori del mare, 7 ottobre 2024"},
+"بوابة الأهرام — الربان نبيل عبد الوهاب وبطولات الضفادع البشرية، 6 أكتوبر 2023":{en:"Al-Ahram Gate — Captain Nabil Abdel Wahab and the combat divers’ exploits, 6 October 2023",fr:"Al-Ahram Gate — Le capitaine Nabil Abdel Wahab et les exploits des nageurs de combat, 6 octobre 2023",it:"Al-Ahram Gate — Il capitano Nabil Abdel Wahab e le imprese dei sommozzatori, 6 ottobre 2023"},
+"بوابة الأهرام — لقاء مع اللواء بحري نبيل عبد الوهاب، 25 أكتوبر 2024":{en:"Al-Ahram Gate — Interview with Rear Admiral Nabil Abdel Wahab, 25 October 2024",fr:"Al-Ahram Gate — Entretien avec le contre-amiral Nabil Abdel Wahab, 25 octobre 2024",it:"Al-Ahram Gate — Intervista al contrammiraglio Nabil Abdel Wahab, 25 ottobre 2024"},
+"Wikipedia — Bar Lev Line (للاطلاع العام ومقارنة المعلومات)":{en:"Wikipedia — Bar Lev Line (general background and comparison)",fr:"Wikipédia — Ligne Bar-Lev (informations générales et comparaison)",it:"Wikipedia — Linea Bar-Lev (informazioni generali e confronto)"},
+"الأهرام — تقرير عن باقي زكي يوسف واستخدام مضخات المياه":{en:"Al-Ahram — Report on Baqi Zaki Youssef and the use of water pumps",fr:"Al-Ahram — Article sur Baqi Zaki Youssef et l’utilisation des pompes à eau",it:"Al-Ahram — Articolo su Baqi Zaki Youssef e l’uso delle pompe ad acqua"},
+"Wikimedia Commons — صورة أرشيفية لاقتحام خط بارليف، مرجع بصري منفصل عن الرسم أعلاه.":{en:"Wikimedia Commons — Archival photograph of the Bar Lev Line crossing, separate from the illustration above",fr:"Wikimedia Commons — Photo d’archives du franchissement de la ligne Bar-Lev, distincte de l’illustration ci-dessus",it:"Wikimedia Commons — Foto d’archivio dell’attraversamento della linea Bar-Lev, distinta dall’illustrazione sopra"},
+"Wikimedia Commons — صورة عبور خط بارليف، أكتوبر 1973.":{en:"Wikimedia Commons — Photograph of the Bar Lev Line crossing, October 1973",fr:"Wikimedia Commons — Photo du franchissement de la ligne Bar-Lev, octobre 1973",it:"Wikimedia Commons — Foto dell’attraversamento della linea Bar-Lev, ottobre 1973"},
+"الأهرام اليومي — اللغة النوبية وانتصار حرب أكتوبر 1973؛ تفاصيل الألفاظ والروايات المختلفة":{en:"Al-Ahram Daily — The Nubian language and the 1973 October War; terminology and differing accounts",fr:"Al-Ahram — La langue nubienne et la guerre d’octobre 1973 ; termes et récits divergents",it:"Al-Ahram — La lingua nubiana e la guerra d’ottobre 1973; termini e resoconti differenti"},
+"تمت إعادة صياغة المعلومات بأسلوب مناسب للصف الأول الإعدادي، مع الاعتماد على المصادر المذكورة.":{en:"The information has been retold for a first-year preparatory student, using the sources listed above.",fr:"Les informations ont été reformulées pour une élève de première année préparatoire à partir des sources citées.",it:"Le informazioni sono state rielaborate per una studentessa del primo anno della scuola media usando le fonti elencate."},
+"إعداد وتقديم:":{en:"Prepared and presented by:",fr:"Préparé et présenté par :",it:"Preparato e presentato da:"},
+"الصف الأول الإعدادي • Class 1B":{en:"1st Year Preparatory • Class 1B",fr:"1re année préparatoire • Classe 1B",it:"1º anno scuola media • Classe 1B"},
+"مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls",fr:"École nationale de langues Al-Manar pour filles",it:"Scuola nazionale linguistica femminile Al-Manar"},
+"أكتوبر 1973":{en:"October 1973",fr:"Octobre 1973",it:"Ottobre 1973"},
+"الصف الثالث الابتدائي • Class 3 E":{en:"3rd Grade Primary • Class 3 E",fr:"3e année primaire • Classe 3 E",it:"3ª primaria • Classe 3 E"},
+"الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"}
+});
+
 var original=new WeakMap();
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
- document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4').forEach(function(el){
+ document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,footer strong,footer').forEach(function(el){
    if(!original.has(el)) original.set(el,el.textContent);
    var ar=original.get(el);
    if(el.querySelector && el.querySelector('a')) return;
+   if(el.children && el.children.length && !el.matches('a,footer strong')) return;
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
-   var item=translations[ar];
+   var normalized=ar.replace(/\\s+/g,' ').trim();
+   var item=translations[normalized]||translations[ar];
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
 }
