@@ -223,7 +223,7 @@ Object.assign(translations,{
 "الأهرام اليومي — اللغة النوبية وانتصار حرب أكتوبر 1973؛ تفاصيل الألفاظ والروايات المختلفة":{en:"Al-Ahram Daily — The Nubian language and the 1973 October War; terminology and differing accounts",fr:"Al-Ahram — La langue nubienne et la guerre d’octobre 1973 ; termes et récits divergents",it:"Al-Ahram — La lingua nubiana e la guerra d’ottobre 1973; termini e resoconti differenti"},
 "تمت إعادة صياغة المعلومات بأسلوب مناسب للصف الأول الإعدادي، مع الاعتماد على المصادر المذكورة.":{en:"The information has been retold for a first-year preparatory student, using the sources listed above.",fr:"Les informations ont été reformulées pour une élève de première année préparatoire à partir des sources citées.",it:"Le informazioni sono state rielaborate per una studentessa del primo anno della scuola media usando le fonti elencate."},
 "إعداد وتقديم:":{en:"Prepared and presented by:",fr:"Préparé et présenté par :",it:"Preparato e presentato da:"},
-"الصف الأول الإعدادي • Class 1B":{en:"1st Year of Preparatory School • Class 1B",fr:"1re année du collège • Classe 1B",it:"1º anno scuola media • Classe 1B"},
+"الصف الأول الإعدادي • Class 1B":{en:"1st Year of Preparatory School • Class 1B",fr:"1re année du collège • Classe 1B",it:"1ª media • Classe 1B"},
 "مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls",fr:"École nationale de langues Al-Manar pour filles",it:"Scuola nazionale linguistica femminile Al-Manar"},
 "أكتوبر 1973":{en:"October 1973",fr:"Octobre 1973",it:"Ottobre 1973"},
 "الصف الثالث الابتدائي • Class 3 E":{en:"3rd Grade (Primary) • Class 3 E",fr:"3e année du primaire • Classe 3 E",it:"3ª primaria • Classe 3 E"},
