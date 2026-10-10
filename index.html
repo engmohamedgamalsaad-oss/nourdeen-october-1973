@@ -44,6 +44,27 @@ body {
   background: #041018;
   color: #edf3f3;
   font-family: "Cairo", sans-serif;
+  position:relative;
+  isolation:isolate;
+}
+
+/* صورة الغلاف كخلفية هادئة ممتدة خلف الصفحة كلها */
+body::before{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  pointer-events:none;
+  inset:-18vh -4vw;
+  background-image:
+    linear-gradient(rgba(2,8,12,.90),rgba(2,8,12,.90)),
+    url("assets/homepage/main-cover.jpg");
+  background-position:center center;
+  background-size:cover;
+  background-repeat:no-repeat;
+  opacity:.22;
+  filter:saturate(.72);
+  will-change:transform;
+  transform:translate3d(0,var(--cover-backdrop-shift,0px),0);
 }
 
 .container {
@@ -1022,6 +1043,19 @@ footer {
       requestAnimationFrame(updateHero);
     }
   }
+
+  /* تحريك خلفية الغلاف ببطء مع التمرير */
+  var pageBackdrop = document.body;
+  function movePageBackdrop() {
+    if (!pageBackdrop) return;
+    var y = window.scrollY || window.pageYOffset || 0;
+    pageBackdrop.style.setProperty('--cover-backdrop-shift', (y * -0.08) + 'px');
+    var layer = document.querySelector('body::before');
+  }
+  window.addEventListener('scroll', function () {
+    var y = window.scrollY || window.pageYOffset || 0;
+    document.documentElement.style.setProperty('--cover-backdrop-shift', (y * -0.08) + 'px');
+  }, {passive:true});
 
   window.addEventListener('scroll', requestHeroUpdate, {
     passive: true
