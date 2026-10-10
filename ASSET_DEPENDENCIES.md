@@ -23,7 +23,7 @@ No existing image was compressed, renamed, converted, or deleted during this aud
 | Story 004 | `https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg` | `stories/004/Atef_El_Sadat.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Atef_El_Sadat.jpg |
 | Story 004 | `https://www.vetogate.com/UploadCache/libfiles/596/9/800x450o/141.jpg` | None yet | Redistribution rights not verified. Keep its current URL and source link until permission/licensing is established. |
 
-**Current status:** The two Wikimedia images have not yet been copied into the repository. A manual GitHub Actions workflow has now been added at `.github/workflows/import-wikimedia-photos.yml`. It downloads only the two Wikimedia images listed above, checks that both are JPEGs, and commits only those two image files to `main`. It does not edit any HTML, compress or convert images, delete files, or touch reactions. It must be run manually from the repository's Actions tab before the images will exist locally.
+**Status: completed.** The manual workflow `.github/workflows/import-wikimedia-photos.yml` succeeded. Both original JPEGs are now stored locally at the paths above, and the image `src` attributes in stories 002 and 004 now point to those local files. The original file bytes were added without resizing or recompression. No files were deleted, and the reactions code was not changed.
 
 ## External font dependency
 
@@ -41,11 +41,9 @@ Proposed destination: `assets/fonts/` with a local CSS file and the required fon
 
 ## Safe completion sequence
 
-1. Run the manual `Import licensed Wikimedia photos` workflow from the repository's Actions tab and confirm it succeeds.
-2. Verify the two added JPEGs and their sizes.
-3. Update only the two matching image `src` attributes after verifying the files are present.
-4. Obtain the Cairo and Marhey font files plus license notices; add them locally, then update font declarations consistently on the homepage and stories 001–004.
-5. Keep the VetoGate photograph remote unless redistribution rights are verified.
-6. Verify the published pages, image loading, language switching, and reactions.
+1. Completed: downloaded the two Wikimedia JPEGs with file-type checks, committed them, and changed only their matching image `src` attributes.
+2. Next: obtain the Cairo and Marhey font files plus license notices; add them locally, then update font declarations consistently on the homepage and stories 001–004.
+3. Keep the VetoGate photograph remote unless redistribution rights are verified.
+4. Verify the published pages, image loading, language switching, and reactions.
 
 This file records the current dependency audit. It does not claim that external assets have already been localized.
