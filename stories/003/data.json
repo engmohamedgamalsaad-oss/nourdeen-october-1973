@@ -6,5 +6,25 @@
   "subtitle": "حكاية الشفرة النوبية",
   "color": "#2fa7a0",
   "order": 3,
-  "published": true
+  "published": true,
+  "i18n": {
+    "en": {
+      "name": "Malika Mohamed Gamal",
+      "grade": "1st Grade (Primary)",
+      "title": "A Language the Enemy Could Not Understand",
+      "subtitle": "The story of the Nubian code"
+    },
+    "fr": {
+      "name": "Malika Mohamed Gamal",
+      "grade": "1re année du primaire",
+      "title": "Une langue que l'ennemi ne comprenait pas",
+      "subtitle": "L'histoire du code nubien"
+    },
+    "it": {
+      "name": "Malika Mohamed Gamal",
+      "grade": "1ª elementare",
+      "title": "Una lingua che il nemico non capiva",
+      "subtitle": "La storia del codice nubiano"
+    }
+  }
 }
