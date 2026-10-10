@@ -312,7 +312,7 @@ function apply(){
    var source=el[prop];
    var normalized=source.replace(/\\s+/g,' ').trim();
    var item=translations[normalized]||translations[source];
-   if(lang==='ar'){el.setAttribute(attr,source);return;}
+   if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
    if(item&&item[lang])el.setAttribute(attr,item[lang]);
   });
  });
