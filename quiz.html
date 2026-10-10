@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اختبر معلوماتك في حرب أكتوبر | حكايات أكتوبر 1973</title>
+<meta name="description" content="اختبار تفاعلي من 12 سؤالًا عن حكايات حرب أكتوبر 1973 التي كتبتها طالبات مدرسة المنار القومية للغات للبنات.">
+<link rel="icon" type="image/jpeg" href="assets/homepage/main-cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/shared/i18n.css">
+<style>
+:root{--gold:#e3bd78;--bg:#041018;--card:#0a1f29;--ok:#2fa56b;--bad:#d4575a}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#edf3f3;font-family:"Cairo",sans-serif;line-height:1.9;min-height:100vh}
+.skip{position:absolute;inset-inline-start:8px;top:-60px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;z-index:10}
+.skip:focus{top:8px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px clamp(14px,3vw,28px);background:rgba(3,13,19,.98);border-bottom:1px solid rgba(184,135,75,.38)}
+header a.back{color:#f4e5c8;text-decoration:none;font-weight:800;min-height:44px;display:inline-flex;align-items:center}
+header a.back:hover,header a.back:focus-visible{color:var(--gold);outline:none;text-decoration:underline}
+.lang-switch{display:flex;gap:10px;direction:ltr}
+.lang-option{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:#cbd5d7;font:600 .85rem "Cairo",sans-serif;cursor:pointer;padding:8px 2px;min-height:44px}
+.lang-option.is-active{color:var(--gold);border-bottom-color:var(--gold)}
+.lang-option:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+main{width:min(760px,94%);margin:28px auto 60px}
+h1{font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:clamp(1.7rem,5vw,2.6rem);line-height:1.6;margin:0 0 6px;text-align:center}
+.lead{text-align:center;color:#c3d1d3;margin:0 0 22px}
+.panel{background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.94));border:1px solid rgba(184,135,75,.35);border-radius:12px;padding:clamp(18px,4vw,30px)}
+.progress{display:flex;align-items:center;gap:12px;margin-bottom:18px;color:#cbd5d7;font-size:.95rem}
+.bar{flex:1;height:8px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e3bd78,#a8753d);transition:width .4s ease}
+.tag{display:inline-block;margin-bottom:8px;padding:2px 12px;border-radius:99px;background:rgba(227,189,120,.12);border:1px solid rgba(227,189,120,.3);color:#f3d7a0;font-size:.85rem}
+.q{font-size:clamp(1.15rem,3.4vw,1.45rem);font-weight:800;margin:0 0 18px;line-height:1.8;color:#fff}
+.opts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.opt{width:100%;text-align:start;font:600 1rem "Cairo",sans-serif;color:#edf3f3;background:rgba(7,47,58,.7);border:1px solid rgba(227,189,120,.4);border-radius:10px;padding:12px 16px;min-height:48px;cursor:pointer;transition:background .15s,border-color .15s}
+.opt:hover:not(:disabled){background:rgba(16,70,83,.9);border-color:var(--gold)}
+.opt:focus-visible,.btn:focus-visible,.link:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.opt:disabled{cursor:default}
+.opt.correct{background:rgba(47,165,107,.28);border-color:var(--ok)}
+.opt.wrong{background:rgba(212,87,90,.25);border-color:var(--bad)}
+.opt .mark{margin-inline-start:8px;font-weight:800}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:10px;background:rgba(255,255,255,.06);border-inline-start:4px solid var(--gold)}
+.feedback strong{display:block;margin-bottom:2px}
+.feedback.ok strong{color:#7fe0ad}.feedback.no strong{color:#ff9a9d}
+.feedback p{margin:0 0 6px;color:#d8e1e2}
+.link{color:var(--gold);font-weight:700}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+.btn{font:800 1rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:10px;padding:12px 24px;min-height:46px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006;text-decoration:none;display:inline-flex;align-items:center}
+.btn.alt{background:transparent;color:#f4e5c8;border:1px solid rgba(227,189,120,.6)}
+.result{text-align:center}
+.score{font-family:"Marhey","Cairo",sans-serif;font-size:clamp(2.6rem,10vw,4.2rem);color:var(--gold);line-height:1.3;margin:6px 0}
+.result .actions{justify-content:center}
+.result p{color:#d8e1e2;margin:6px 0}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+@media print{.lang-switch,.actions,header{display:none!important}body{background:#fff;color:#000}.panel{border:1px solid #999;background:#fff}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main" id="skipLink">تخطّي إلى المحتوى</a>
+<header>
+  <a class="back" href="index.html" id="backLink">← الصفحة الرئيسية</a>
+  <div class="lang-switch" data-lang-switch aria-label="اختيار اللغة"></div>
+</header>
+<main id="main" tabindex="-1">
+  <h1 id="title">اختبر معلوماتك في حرب أكتوبر</h1>
+  <p class="lead" id="lead"></p>
+  <section class="panel" id="quizPanel" aria-live="polite"></section>
+  <section class="panel result" id="resultPanel" hidden></section>
+</main>
+
+<script src="assets/shared/i18n.js"></script>
+<script>
+(function(){
+  'use strict';
+  var lang = (window.I18N && window.I18N.lang()) || 'ar';
+  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it};}
+  function N(x){return {ar:x,en:x,fr:x,it:x};}
+
+  var UI = {
+    title: L('اختبر معلوماتك في حرب أكتوبر','Test your knowledge of the October War','Testez vos connaissances sur la guerre d’octobre','Metti alla prova ciò che sai sulla guerra d’ottobre'),
+    lead: L('١٢ سؤالًا من الحكايات الأربع. اختر إجابة واحدة لكل سؤال.','12 questions from the four stories. Pick one answer for each.','12 questions tirées des quatre récits. Choisissez une réponse par question.','12 domande tratte dai quattro racconti. Scegli una risposta per ogni domanda.'),
+    skip: L('تخطّي إلى المحتوى','Skip to content','Aller au contenu','Vai al contenuto'),
+    back: L('← الصفحة الرئيسية','← Home','← Accueil','← Home'),
+    langAria: L('اختيار اللغة','Choose language','Choisir la langue','Seleziona la lingua'),
+    qOf: L('السؤال {n} من {t}','Question {n} of {t}','Question {n} sur {t}','Domanda {n} di {t}'),
+    right: L('إجابة صحيحة ✅','Correct ✅','Bonne réponse ✅','Risposta corretta ✅'),
+    wrong: L('إجابة غير صحيحة','Not quite','Pas tout à fait','Non proprio'),
+    correctWas: L('الإجابة الصحيحة: {a}','Correct answer: {a}','Bonne réponse : {a}','Risposta corretta: {a}'),
+    read: L('اقرأ الحكاية','Read the story','Lire le récit','Leggi il racconto'),
+    next: L('السؤال التالي','Next question','Question suivante','Domanda successiva'),
+    finish: L('اعرض النتيجة','See my score','Voir mon score','Vedi il punteggio'),
+    scoreOf: L('{s} من {t}','{s} out of {t}','{s} sur {t}','{s} su {t}'),
+    thanks: L('شكرًا لك على قراءة حكايات أكتوبر وتجربة الاختبار. ذكرى الأبطال تعيش بمعرفتنا بقصصهم.','Thank you for reading the October stories and trying the quiz. The heroes live on when we know their stories.','Merci d’avoir lu les récits d’octobre et essayé le quiz. Les héros vivent à travers leurs histoires.','Grazie per aver letto i racconti d’ottobre e provato il quiz. Gli eroi vivono nel ricordo delle loro storie.'),
+    again: L('أعد الاختبار','Try again','Recommencer','Riprova'),
+    stories: L('اقرأ الحكايات','Read the stories','Lire les récits','Leggi i racconti'),
+    print: L('اطبع النتيجة','Print my result','Imprimer mon résultat','Stampa il risultato'),
+    t1: L('ممتاز! عندك معرفة قوية بحكايات أكتوبر.','Excellent! You know the October stories very well.','Excellent ! Vous connaissez très bien les récits d’octobre.','Eccellente! Conosci molto bene i racconti d’ottobre.'),
+    t2: L('جيد جدًا! راجع الحكايات لتكمل ما فاتك.','Very good! Review the stories to catch what you missed.','Très bien ! Relisez les récits pour compléter ce qui vous a échappé.','Molto bene! Rileggi i racconti per recuperare ciò che ti è sfuggito.'),
+    t3: L('بداية جيدة. اقرأ الحكايات وجرّب مرة ثانية.','A good start. Read the stories and try again.','Un bon début. Lisez les récits et réessayez.','Un buon inizio. Leggi i racconti e riprova.')
+  };
+  function u(k,v){var s=(UI[k][lang]||UI[k].ar);if(v)Object.keys(v).forEach(function(x){s=s.replace('{'+x+'}',v[x]);});return s;}
+
+  var STORY = {
+    '001': L('رجال البحر في أكتوبر','Men of the Sea in October','Les hommes de la mer en octobre','Gli uomini del mare in ottobre'),
+    '002': L('العقل قبل السلاح','Brains Before Weapons','L’intelligence avant les armes','L’ingegno prima delle armi'),
+    '003': L('لغة لا يفهمها العدو','A Language the Enemy Could Not Understand','Une langue que l’ennemi ne comprenait pas','Una lingua che il nemico non capiva'),
+    '004': L('سماء أكتوبر','Skies of October','Le ciel d’octobre','I cieli d’ottobre')
+  };
+
+  var Q = [
+    {s:'001',a:0,
+     q:L('في أي عام أغرقت زوارق الصواريخ المصرية المدمرة الإسرائيلية «إيلات»؟','In which year did Egyptian missile boats sink the Israeli destroyer Eilat?','En quelle année les vedettes lance-missiles égyptiennes ont-elles coulé le destroyer israélien « Eilat » ?','In che anno le motovedette lanciamissili egiziane affondarono il cacciatorpediniere israeliano «Eilat»?'),
+     o:[N('1967'),N('1956'),N('1970'),N('1973')],
+     e:L('حدث ذلك في 21 أكتوبر 1967، وكان حدثًا بارزًا في تاريخ الحرب البحرية الحديثة.','It happened on 21 October 1967 and was a landmark in modern naval warfare.','Cela s’est produit le 21 octobre 1967 et a marqué l’histoire de la guerre navale moderne.','Accadde il 21 ottobre 1967 e fu un evento importante nella storia della guerra navale moderna.')},
+    {s:'001',a:0,
+     q:L('أي مضيق في جنوب البحر الأحمر فرضت القوة البحرية المصرية سيطرتها عليه؟','Which strait in the southern Red Sea did the Egyptian naval force take control of?','Quel détroit du sud de la mer Rouge la force navale égyptienne a-t-elle contrôlé ?','Quale stretto del Mar Rosso meridionale fu controllato dalla forza navale egiziana?'),
+     o:[L('باب المندب','Bab el-Mandeb','Bab-el-Mandeb','Bab el-Mandeb'),L('مضيق هرمز','Strait of Hormuz','Détroit d’Ormuz','Stretto di Hormuz'),L('مضيق جبل طارق','Strait of Gibraltar','Détroit de Gibraltar','Stretto di Gibilterra'),L('مضيق البوسفور','Bosphorus','Bosphore','Bosforo')],
+     e:L('قيّدت القوة حركة السفن التي تحمل العلم الإسرائيلي، فكانت معركة بعيدة عن القناة.','The force restricted ships flying the Israeli flag, a battle far from the Canal.','La force a restreint la circulation des navires battant pavillon israélien, une bataille loin du canal.','La forza limitò il passaggio delle navi con bandiera israeliana: una battaglia lontana dal Canale.')},
+    {s:'001',a:0,
+     q:L('إلى أي وحدة ينتمي الربان نبيل عبد الوهاب؟','Which unit did Captain Nabil Abdel Wahab belong to?','À quelle unité appartenait le capitaine Nabil Abdel Wahab ?','A quale unità apparteneva il capitano Nabil Abdel Wahab?'),
+     o:[L('الضفادع البشرية','The frogmen','Les hommes-grenouilles','Gli uomini rana'),L('الطيران','The air force','L’armée de l’air','L’aeronautica'),L('المدفعية','The artillery','L’artillerie','L’artiglieria'),L('المهندسون العسكريون','Military engineers','Les ingénieurs militaires','Il genio militare')],
+     e:L('هو من الأسماء البارزة في تاريخ الضفادع البشرية المصرية، وشارك في عمليتين في ميناء إيلات.','He is a prominent name in the history of Egypt’s frogmen and took part in two operations at Eilat port.','Il est une figure marquante des hommes-grenouilles égyptiens et a participé à deux opérations dans le port d’Eilat.','È un nome di rilievo tra gli uomini rana egiziani e partecipò a due operazioni nel porto di Eilat.')},
+    {s:'002',a:0,
+     q:L('ماذا كان هدف «خط بارليف»؟','What was the purpose of the “Bar-Lev Line”?','Quel était le but de la « ligne Bar-Lev » ?','Qual era lo scopo della «Linea Bar-Lev»?'),
+     o:[L('منع القوات المصرية من العبور','Preventing Egyptian forces from crossing','Empêcher les forces égyptiennes de traverser','Impedire alle forze egiziane di attraversare'),L('حماية السد العالي','Protecting the High Dam','Protéger le haut barrage','Proteggere la Grande Diga'),L('بناء ميناء جديد','Building a new port','Construire un nouveau port','Costruire un nuovo porto'),L('تجفيف قناة السويس','Draining the Suez Canal','Assécher le canal de Suez','Prosciugare il Canale di Suez')],
+     e:L('أقامت إسرائيل بعد 1967 ساترًا ترابيًا ضخمًا على الضفة الشرقية للقناة وخلفه نقاط حصينة.','After 1967 Israel built a huge earth barrier on the Canal’s east bank, with fortified positions behind it.','Après 1967, Israël a bâti un immense talus de terre sur la rive est du canal, avec des positions fortifiées derrière.','Dopo il 1967 Israele costruì un enorme terrapieno sulla sponda orientale del Canale, con postazioni fortificate dietro.')},
+    {s:'002',a:1,
+     q:L('ما الذي استخدمه المهندسون المصريون لفتح ثغرات في الساتر الترابي؟','What did Egyptian engineers use to open gaps in the sand barrier?','Que les ingénieurs égyptiens ont-ils utilisé pour ouvrir des brèches dans le talus de sable ?','Che cosa usarono gli ingegneri egiziani per aprire varchi nel terrapieno di sabbia?'),
+     o:[L('الحفر باليد','Digging by hand','Creuser à la main','Scavare a mano'),L('مضخات قوية تدفع مياه القناة','Powerful pumps driving Canal water','De puissantes pompes projetant l’eau du canal','Potenti pompe che spingevano l’acqua del Canale'),L('طائرات تلقي القنابل فقط','Bomber aircraft only','Uniquement des bombardiers','Solo aerei bombardieri'),L('أنابيب تحت الأرض','Underground pipes','Des canalisations souterraines','Tubature sotterranee')],
+     e:L('ضخّت المضخات مياه القناة بضغط عالٍ فجرفت الرمال وتكوّن ممر للعبور.','The pumps sent Canal water at high pressure, washing away sand and forming a passage.','Les pompes ont projeté l’eau du canal sous haute pression, emportant le sable et ouvrant un passage.','Le pompe spinsero l’acqua del Canale ad alta pressione, portando via la sabbia e aprendo un passaggio.')},
+    {s:'002',a:2,
+     q:L('في أي مشروع شاهد المهندس باقي زكي يوسف قوة المياه في تحريك الرمال؟','On which project did engineer Baki Zaki Youssef see water’s power to move sand?','Sur quel projet l’ingénieur Baki Zaki Youssef a-t-il vu la force de l’eau déplacer le sable ?','Su quale progetto l’ingegnere Baki Zaki Youssef vide la forza dell’acqua spostare la sabbia?'),
+     o:[L('مترو القاهرة','Cairo Metro','Métro du Caire','Metropolitana del Cairo'),L('ميناء الإسكندرية','Alexandria port','Port d’Alexandrie','Porto di Alessandria'),L('السد العالي','The High Dam','Le haut barrage','La Grande Diga'),L('قناة السويس الجديدة','The New Suez Canal','Le nouveau canal de Suez','Il Nuovo Canale di Suez')],
+     e:L('عمل في مشروع السد العالي بين 1964 و1967، وهناك رأى كيف تحرّك نفاثات المياه كميات هائلة من الرمال.','He worked on the High Dam between 1964 and 1967, where he saw water jets move huge amounts of sand.','Il a travaillé sur le haut barrage entre 1964 et 1967 et y a vu des jets d’eau déplacer d’énormes quantités de sable.','Lavorò alla Grande Diga tra il 1964 e il 1967 e lì vide i getti d’acqua spostare enormi quantità di sabbia.')},
+    {s:'003',a:0,
+     q:L('أي لغة استُخدمت كشفرة سرية في الاتصالات خلال الحرب؟','Which language was used as a secret code in communications during the war?','Quelle langue a servi de code secret dans les communications pendant la guerre ?','Quale lingua fu usata come codice segreto nelle comunicazioni durante la guerra?'),
+     o:[L('اللغة النوبية','The Nubian language','La langue nubienne','La lingua nubiana'),L('اللاتينية','Latin','Le latin','Il latino'),L('الفرنسية','French','Le français','Il francese'),L('الإسبانية','Spanish','L’espagnol','Lo spagnolo')],
+     e:L('اللغة النوبية يفهمها من يتحدثها فقط، فصعب على العدو فهم الرسائل.','Only Nubian speakers understood it, making the messages hard for the enemy to read.','Seuls les locuteurs nubiens la comprenaient, ce qui rendait les messages difficiles à lire pour l’ennemi.','Solo chi parlava nubiano la capiva, rendendo i messaggi difficili da comprendere per il nemico.')},
+    {s:'003',a:1,
+     q:L('إلى من تنسب المصادر فكرة استخدام اللغة النوبية؟','To whom do sources attribute the idea of using the Nubian language?','À qui les sources attribuent-elles l’idée d’utiliser la langue nubienne ?','A chi attribuiscono le fonti l’idea di usare la lingua nubiana?'),
+     o:[L('المهندس باقي زكي يوسف','Engineer Baki Zaki Youssef','L’ingénieur Baki Zaki Youssef','L’ingegnere Baki Zaki Youssef'),L('الجندي أحمد إدريس','Soldier Ahmed Idris','Le soldat Ahmed Idris','Il soldato Ahmed Idris'),L('الربان نبيل عبد الوهاب','Captain Nabil Abdel Wahab','Le capitaine Nabil Abdel Wahab','Il capitano Nabil Abdel Wahab'),L('الطيار عاطف السادات','Pilot Atef El-Sadat','Le pilote Atef El-Sadat','Il pilota Atef El-Sadat')],
+     e:L('هو الجندي النوبي أحمد إدريس من أسوان، اقترح استخدام لغة أهله.','He was the Nubian soldier Ahmed Idris from Aswan, who proposed using his people’s language.','C’est le soldat nubien Ahmed Idris, d’Assouan, qui a proposé d’utiliser la langue de son peuple.','Fu il soldato nubiano Ahmed Idris di Assuan, che propose di usare la lingua del suo popolo.')},
+    {s:'003',a:2,
+     q:L('أي لغة استخدمها الأمريكيون في الحرب العالمية الثانية بطريقة مشابهة؟','Which language did the Americans use in a similar way in World War II?','Quelle langue les Américains ont-ils utilisée de façon similaire pendant la Seconde Guerre mondiale ?','Quale lingua usarono gli americani in modo simile nella Seconda guerra mondiale?'),
+     o:[L('اللاتينية','Latin','Le latin','Il latino'),L('الإسبانية','Spanish','L’espagnol','Lo spagnolo'),L('لغة قبيلة نافاهو','The Navajo language','La langue navajo','La lingua navajo'),L('الفرنسية','French','Le français','Il francese')],
+     e:L('عُرف جنود نافاهو باسم «حاملي الشفرة»، وقارنت بعض المقالات بين الحكايتين.','Navajo soldiers were known as “code talkers”, and some articles compare the two stories.','Les soldats navajos étaient connus comme « code talkers », et certains articles comparent les deux histoires.','I soldati navajo furono noti come «code talkers» e alcuni articoli confrontano le due storie.')},
+    {s:'004',a:0,
+     q:L('في أي يوم بدأت حرب أكتوبر 1973؟','On which day did the October 1973 war begin?','Quel jour la guerre d’octobre 1973 a-t-elle commencé ?','In quale giorno iniziò la guerra dell’ottobre 1973?'),
+     o:[L('6 أكتوبر 1973','6 October 1973','6 octobre 1973','6 ottobre 1973'),L('1 أكتوبر 1973','1 October 1973','1er octobre 1973','1 ottobre 1973'),L('10 أكتوبر 1973','10 October 1973','10 octobre 1973','10 ottobre 1973'),L('25 أكتوبر 1973','25 October 1973','25 octobre 1973','25 ottobre 1973')],
+     e:L('بدأت يوم السبت 6 أكتوبر 1973، الموافق 10 رمضان 1393 هـ.','It began on Saturday 6 October 1973, the 10th of Ramadan 1393 AH.','Elle a commencé le samedi 6 octobre 1973, soit le 10 ramadan 1393 de l’Hégire.','Iniziò sabato 6 ottobre 1973, il 10 di Ramadan 1393 dell’Egira.')},
+    {s:'004',a:3,
+     q:L('من الطيار الذي كان شقيق الرئيس أنور السادات؟','Which pilot was the brother of President Anwar Sadat?','Quel pilote était le frère du président Anouar el-Sadate ?','Quale pilota era il fratello del presidente Anwar Sadat?'),
+     o:[L('أحمد إدريس','Ahmed Idris','Ahmed Idris','Ahmed Idris'),L('باقي زكي يوسف','Baki Zaki Youssef','Baki Zaki Youssef','Baki Zaki Youssef'),L('نبيل عبد الوهاب','Nabil Abdel Wahab','Nabil Abdel Wahab','Nabil Abdel Wahab'),L('عاطف السادات','Atef El-Sadat','Atef El-Sadat','Atef El-Sadat')],
+     e:L('كان النقيب طيار عاطف السادات من شهداء الضربة الجوية الأولى.','Captain Atef El-Sadat, a pilot, was among the martyrs of the first air strike.','Le capitaine pilote Atef El-Sadat compte parmi les martyrs de la première frappe aérienne.','Il capitano pilota Atef El-Sadat fu tra i martiri del primo attacco aereo.')},
+    {s:'004',a:1,
+     q:L('لماذا لا تعرض الحكاية رقمًا واحدًا نهائيًا لخسائر الضربة الأولى؟','Why does the story avoid giving one final number for the first strike’s losses?','Pourquoi le récit ne donne-t-il pas un seul chiffre définitif pour les pertes de la première frappe ?','Perché il racconto non indica un unico numero definitivo per le perdite del primo attacco?'),
+     o:[L('لأن الأرقام ممنوع ذكرها','Because numbers may not be mentioned','Parce qu’il est interdit de citer des chiffres','Perché non si possono citare i numeri'),L('لأن المصادر تختلف في الأعداد والتفاصيل','Because sources differ on numbers and details','Parce que les sources diffèrent sur les chiffres et les détails','Perché le fonti differiscono su numeri e dettagli'),L('لأن الحكاية لا تهتم بالتاريخ','Because the story does not care about history','Parce que le récit ne s’intéresse pas à l’histoire','Perché il racconto non si interessa alla storia'),L('لأن الأعداد لم تتغير أبدًا','Because the numbers never changed','Parce que les chiffres n’ont jamais changé','Perché i numeri non sono mai cambiati')],
+     e:L('بعض المصادر تتحدث عن خسائر الضربة الأولى وحدها وأخرى عن خسائر القتال الجوي في اليوم الأول كله، فنتحرّى الدقة ولا نجزم.','Some sources count only the first strike, others the whole first day of air fighting, so we stay careful and do not claim a single figure.','Certaines sources ne comptent que la première frappe, d’autres toute la première journée de combat aérien ; nous restons prudents.','Alcune fonti contano solo il primo attacco, altre l’intera prima giornata di combattimenti aerei; restiamo prudenti.')}
+  ];
+
+  var order = [], idx = 0, score = 0, locked = false;
+  var quizPanel = document.getElementById('quizPanel');
+  var resultPanel = document.getElementById('resultPanel');
+
+  function el(tag, cls, text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+  function pick(o){return o[lang]||o.ar;}
+
+  /* Shuffle options per question so the right answer is not always first. */
+  function shuffle(arr){for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=arr[i];arr[i]=arr[j];arr[j]=t;}return arr;}
+
+  function start(){
+    order = Q.map(function(q){return {q:q, opts:shuffle(q.o.map(function(o,i){return {i:i,o:o};}))};});
+    idx = 0; score = 0; locked = false;
+    resultPanel.hidden = true; quizPanel.hidden = false;
+    render();
+  }
+
+  function render(){
+    var item = order[idx], q = item.q, total = order.length;
+    quizPanel.innerHTML = '';
+    var prog = el('div','progress');
+    prog.appendChild(el('span','',u('qOf',{n:idx+1,t:total})));
+    var bar = el('div','bar'); var fill = el('i'); fill.style.width = (idx/total*100)+'%'; bar.appendChild(fill); prog.appendChild(bar);
+    quizPanel.appendChild(prog);
+    quizPanel.appendChild(el('span','tag',pick(STORY[q.s])));
+    var h = el('h2','q',pick(q.q)); h.id='qtext'; quizPanel.appendChild(h);
+    var list = el('ul','opts'); list.setAttribute('aria-labelledby','qtext');
+    item.opts.forEach(function(x){
+      var li = document.createElement('li');
+      var b = el('button','opt',pick(x.o)); b.type='button';
+      b.addEventListener('click',function(){answer(x.i===q.a,b,list,item);});
+      li.appendChild(b); list.appendChild(li);
+    });
+    quizPanel.appendChild(list);
+    locked = false;
+    var heading = document.getElementById('qtext'); if(heading){heading.setAttribute('tabindex','-1');}
+  }
+
+  function answer(ok, btn, list, item){
+    if(locked) return; locked = true;
+    var q = item.q;
+    if(ok) score++;
+    var buttons = list.querySelectorAll('button');
+    item.opts.forEach(function(x,k){
+      var b = buttons[k]; b.disabled = true;
+      var mark = el('span','mark');
+      if(x.i===q.a){b.classList.add('correct');mark.textContent='✔';}
+      else if(b===btn){b.classList.add('wrong');mark.textContent='✘';}
+      b.appendChild(mark);
+    });
+    var fb = el('div','feedback '+(ok?'ok':'no')); fb.setAttribute('role','status');
+    fb.appendChild(el('strong','',ok?u('right'):u('wrong')));
+    if(!ok){
+      var right = pick(q.o[q.a]);
+      fb.appendChild(el('p','',u('correctWas',{a:right})));
+    }
+    fb.appendChild(el('p','',pick(q.e)));
+    var a = el('a','link',u('read')+' « '+pick(STORY[q.s])+' »'); a.href='stories/'+q.s+'/'; a.target='_blank'; a.rel='noopener';
+    fb.appendChild(a);
+    quizPanel.appendChild(fb);
+    var actions = el('div','actions');
+    var last = idx===order.length-1;
+    var nb = el('button','btn',last?u('finish'):u('next')); nb.type='button';
+    nb.addEventListener('click',function(){ if(last) showResult(); else {idx++;render();window.scrollTo({top:0,behavior:'smooth'});document.getElementById('qtext').focus({preventScroll:true});} });
+    actions.appendChild(nb); quizPanel.appendChild(actions);
+    nb.focus();
+  }
+
+  function showResult(){
+    var total = order.length;
+    quizPanel.hidden = true; resultPanel.hidden = false; resultPanel.innerHTML='';
+    var pct = score/total;
+    resultPanel.appendChild(el('div','score',u('scoreOf',{s:score,t:total})));
+    resultPanel.appendChild(el('p','',pct>=0.85?u('t1'):pct>=0.6?u('t2'):u('t3')));
+    resultPanel.appendChild(el('p','',u('thanks')));
+    var actions = el('div','actions');
+    var again = el('button','btn',u('again')); again.type='button'; again.addEventListener('click',function(){start();window.scrollTo({top:0});});
+    var read = el('a','btn alt',u('stories')); read.href='index.html';
+    var pr = el('button','btn alt',u('print')); pr.type='button'; pr.addEventListener('click',function(){window.print();});
+    actions.appendChild(again); actions.appendChild(read); actions.appendChild(pr);
+    resultPanel.appendChild(actions);
+    resultPanel.setAttribute('tabindex','-1'); resultPanel.focus();
+  }
+
+  document.getElementById('title').textContent = u('title');
+  document.getElementById('lead').textContent = u('lead');
+  document.getElementById('skipLink').textContent = u('skip');
+  document.getElementById('backLink').textContent = u('back');
+  var sw = document.querySelector('[data-lang-switch]'); if(sw) sw.setAttribute('aria-label',u('langAria'));
+  document.title = u('title') + ' | 1973';
+  start();
+})();
+</script>
+</body>
+</html>
