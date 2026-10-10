@@ -207,6 +207,41 @@ Object.assign(translations,{
 "الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"}
 });
 
+
+var pageMeta = {
+ '001': {
+  ar:['رجال البحر في أكتوبر | نوردين محمد جمال','حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال'],
+  en:['Men of the Sea in October | Nourdeen Mohamed Gamal','The story of Egyptian Navy heroes in the 1973 October War — prepared and presented by Nourdeen Mohamed Gamal'],
+  fr:['Les hommes de la mer en octobre | Nourdeen Mohamed Gamal','L’histoire des héros de la marine égyptienne pendant la guerre d’octobre 1973 — préparée et présentée par Nourdeen Mohamed Gamal'],
+  it:['Gli uomini del mare in ottobre | Nourdeen Mohamed Gamal','La storia degli eroi della Marina egiziana nella guerra dell’ottobre 1973 — a cura di Nourdeen Mohamed Gamal']
+ },
+ '002': {
+  ar:['العقل قبل السلاح | كارما محمد جمال','حكاية باقي زكي يوسف وفكرة المياه لفتح ثغرات في الساتر الترابي في حرب أكتوبر 1973 — إعداد وتقديم كارما محمد جمال'],
+  en:['Brains Before Weapons | Karma Mohamed Gamal','The story of Baqi Zaki Youssef and the use of water pumps to breach the sand embankment in the 1973 October War — by Karma Mohamed Gamal'],
+  fr:['L’intelligence avant les armes | Karma Mohamed Gamal','L’histoire de Baqi Zaki Youssef et des pompes à eau utilisées pour ouvrir une brèche dans le remblai pendant la guerre d’octobre 1973 — par Karma Mohamed Gamal'],
+  it:['L’ingegno prima delle armi | Karma Mohamed Gamal','La storia di Baqi Zaki Youssef e delle pompe ad acqua usate per aprire un varco nel terrapieno durante la guerra d’ottobre 1973 — di Karma Mohamed Gamal']
+ },
+ '003': {
+  ar:['لغة لا يفهمها العدو | مليكة محمد جمال','حكاية اللغة النوبية كشفرة سرية في حرب أكتوبر 1973 — إعداد وتقديم مليكة محمد جمال'],
+  en:['A Language the Enemy Could Not Understand | Malika Mohamed Gamal','The story of the Nubian language used as a secret code in the 1973 October War — by Malika Mohamed Gamal'],
+  fr:['Une langue que l’ennemi ne comprenait pas | Malika Mohamed Gamal','L’histoire de la langue nubienne utilisée comme code secret pendant la guerre d’octobre 1973 — par Malika Mohamed Gamal'],
+  it:['Una lingua che il nemico non capiva | Malika Mohamed Gamal','La storia della lingua nubiana usata come codice segreto nella guerra d’ottobre 1973 — di Malika Mohamed Gamal']
+ }
+};
+function applyPageMeta(){
+ var slug=document.body.getAttribute('data-story-slug');
+ var lang=(window.I18N&&window.I18N.lang())||'ar';
+ var meta=pageMeta[slug]&&pageMeta[slug][lang];
+ if(!meta)return;
+ document.title=meta[0];
+ [['meta[name="description"]',meta[1]],['meta[property="og:title"]',meta[0]],['meta[property="og:description"]',meta[1]]].forEach(function(pair){
+  var node=document.querySelector(pair[0]);if(node)node.setAttribute('content',pair[1]);
+ });
+}
+document.addEventListener('DOMContentLoaded',applyPageMeta);
+document.addEventListener('site-language-change',applyPageMeta);
+if(document.readyState!=='loading')applyPageMeta();
+
 var original=new WeakMap();
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
