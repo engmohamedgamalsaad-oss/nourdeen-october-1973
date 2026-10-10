@@ -51,10 +51,10 @@ body {
   margin-inline: auto;
 }
 
-.lang-switch{display:flex;gap:5px;flex-wrap:wrap;align-items:center;justify-content:center;max-width:320px}
-.lang-option{font:600 .75rem "Cairo",sans-serif;color:#f4e5c8;background:#10232b;border:1px solid rgba(227,189,120,.35);border-radius:999px;padding:5px 9px;cursor:pointer}
-.lang-option.is-active{background:#e3bd78;color:#171006;border-color:#e3bd78}
-.lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.lang-switch{display:flex;align-items:center;justify-content:center;gap:clamp(7px,1.2vw,14px);flex:0 1 auto;min-width:0;white-space:nowrap}
+.lang-option{font:600 .72rem "Cairo",sans-serif;color:#d9e3e4;background:transparent;border:0;border-radius:0;padding:4px 0;cursor:pointer;white-space:nowrap;text-decoration:none;text-underline-offset:5px}
+.lang-option:hover,.lang-option.is-active{color:#e3bd78;text-decoration:underline;text-decoration-thickness:2px}
+.lang-option:focus-visible{outline:2px solid #fff;outline-offset:3px;border-radius:3px}
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -604,7 +604,20 @@ footer {
     min-height: 82px;
     padding: 9px 12px;
     gap: 8px;
+    flex-wrap: wrap;
   }
+
+  .topbar > .home-link { order: 1; }
+  .topbar > .school-brand { order: 2; }
+  .topbar > .lang-switch {
+    order: 3;
+    flex: 1 0 100%;
+    max-width: none;
+    gap: clamp(16px, 5vw, 28px);
+    padding: 1px 0 3px;
+  }
+
+  .lang-option { font-size: .68rem; padding: 2px 0; }
 
   .school-brand {
     gap: 9px;
