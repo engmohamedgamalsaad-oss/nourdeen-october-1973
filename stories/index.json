@@ -91,5 +91,36 @@
       }
     },
     "id": "003"
+  },
+  {
+    "name": "نوردين محمد جمال",
+    "grade": "الصف الأول الإعدادي",
+    "className": "Class 1B",
+    "title": "سماء أكتوبر: شهداء الضربة الجوية الأولى",
+    "subtitle": "حكاية الطيارين الذين فتحوا الطريق للعبور",
+    "color": "#d7a85e",
+    "order": 4,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1st Year Preparatory",
+        "title": "October Skies: The Martyrs of the First Air Strike",
+        "subtitle": "The pilots who helped open the way for the crossing"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1re année préparatoire",
+        "title": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
+        "subtitle": "L’histoire des pilotes qui ont ouvert la voie au franchissement"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1ª classe della scuola media",
+        "title": "I cieli di ottobre: i martiri del primo attacco aereo",
+        "subtitle": "La storia dei piloti che aprirono la strada all’attraversamento"
+      }
+    },
+    "id": "004"
   }
 ]
