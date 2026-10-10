@@ -23,6 +23,7 @@
   const likeButton = document.getElementById("reaction-like");
   const choiceButtons = Array.from(document.querySelectorAll("[data-reaction-choice]"));
   const setStatus = message => { if (status) status.textContent = message; };
+  const tr = (key, fallback) => window.I18N ? window.I18N.t(key) : fallback;
   const countNodes = {};
   document.querySelectorAll("[data-reaction-count]").forEach(node => {
     countNodes[node.dataset.reactionCount] = node;
@@ -64,17 +65,17 @@
   }
   async function submitReaction(type) {
     if (type !== "like" && savedFeedback()) {
-      setStatus("سجّلت رد فعل لهذه الحكاية بالفعل من هذا المتصفح.");
+      setStatus(tr("r_feedback_exists", "سجّلت رد فعل لهذه الحكاية بالفعل من هذا المتصفح."));
       return;
     }
     if (type === "like" && savedLike()) {
-      setStatus("سجّلت إعجابك بهذه الحكاية بالفعل.");
+      setStatus(tr("r_like_exists", "سجّلت إعجابك بهذه الحكاية بالفعل."));
       paintSavedState();
       return;
     }
     const buttons = [likeButton, ...choiceButtons].filter(Boolean);
     buttons.forEach(button => { button.disabled = true; });
-    setStatus("جارٍ تسجيل اختيارك…");
+    setStatus(tr("r_saving", "جارٍ تسجيل اختيارك…"));
     try {
       const response = await fetch(API_URL + "/rest/v1/rpc/record_story_reaction", {
         method: "POST",
@@ -88,24 +89,24 @@
       const inserted = await response.json();
       if (inserted === true) {
         localStorage.setItem(stateKey(type), type);
-        setStatus("شكرًا لك! تم تسجيل اختيارك.");
+        setStatus(tr("r_saved", "شكرًا لك! تم تسجيل اختيارك."));
       } else {
         if (type === "like") {
           localStorage.setItem(stateKey("like"), "__already_liked__");
-          setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
+          setStatus(tr("r_already_saved", "الاختيار مسجّل بالفعل لهذه الحكاية."));
         } else {
           localStorage.setItem(stateKey("feedback"), "__already_recorded__");
-          setStatus("الاختيار مسجّل بالفعل لهذه الحكاية.");
+          setStatus(tr("r_already_saved", "الاختيار مسجّل بالفعل لهذه الحكاية."));
         }
       }
       paintSavedState();
       try {
         await loadCounts();
       } catch (countError) {
-        setStatus("اختيارك اتسجل، لكن تعذر تحديث العدادات الآن. حدّث الصفحة لاحقًا.");
+        setStatus(tr("r_saved_count_error", "اختيارك اتسجل، لكن تعذر تحديث العدادات الآن. حدّث الصفحة لاحقًا."));
       }
     } catch (error) {
-      setStatus("ماقدرناش نسجل الاختيار الآن. جرّب تاني بعد قليل.");
+      setStatus(tr("r_save_error", "ماقدرناش نسجل الاختيار الآن. جرّب تاني بعد قليل."));
       buttons.forEach(button => { button.disabled = false; });
       paintSavedState();
     }
@@ -113,5 +114,5 @@
   if (likeButton) likeButton.addEventListener("click", () => submitReaction("like"));
   choiceButtons.forEach(button => button.addEventListener("click", () => submitReaction(button.dataset.reactionChoice)));
   paintSavedState();
-  loadCounts().catch(() => setStatus("عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة."));
+  loadCounts().catch(() => setStatus(tr("r_counts_error", "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.")));
 })();
