@@ -205,6 +205,7 @@ Object.assign(translations,{
 "أكتوبر 1973":{en:"October 1973",fr:"Octobre 1973",it:"Ottobre 1973"},
 "الصف الثالث الابتدائي • Class 3 E":{en:"3rd Grade Primary • Class 3 E",fr:"3e année primaire • Classe 3 E",it:"3ª primaria • Classe 3 E"},
 "الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"},
+"إعداد وتقديم":{en:"Prepared and presented by",fr:"Préparé et présenté par",it:"Preparato e presentato da"},
 "نوردين تحكي":{en:"Nourdeen tells the story",fr:"Nourdeen raconte",it:"Nourdeen racconta"},
 "كارما تحكي":{en:"Karma tells the story",fr:"Karma raconte",it:"Karma racconta"},
 "مليكة تحكي":{en:"Malika tells the story",fr:"Malika raconte",it:"Malika racconta"},
@@ -253,7 +254,7 @@ if(document.readyState!=='loading')applyPageMeta();
 
 var original=new WeakMap();
 function applyFooterText(lang){
- var footer=document.querySelector('footer');if(!footer)return;
+ document.querySelectorAll('.author,footer').forEach(function(footer){
  Array.prototype.forEach.call(footer.childNodes,function(node){
   if(node.nodeType!==3)return;
   if(!node.__storyI18nOriginal)node.__storyI18nOriginal=node.nodeValue;
@@ -265,6 +266,7 @@ function applyFooterText(lang){
   var leading=(originalText.match(/^\s*/)||[''])[0];
   var trailing=(originalText.match(/\s*$/)||[''])[0];
   node.nodeValue=leading+item[lang]+trailing;
+ });
  });
 }
 function apply(){
