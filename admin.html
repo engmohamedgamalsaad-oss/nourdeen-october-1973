@@ -63,6 +63,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
 .empty{text-align:center;color:var(--muted);padding:42px 20px;border:1px dashed var(--line);border-radius:18px;background:#ffffff04}
 #app>.row{padding:16px 18px;background:rgba(10,29,40,.68);border:1px solid var(--line);border-radius:18px;margin-bottom:18px!important}
 #newBtn{background:linear-gradient(135deg,#82e6ca,#3ea88e);color:#03251f;box-shadow:0 8px 20px #3ea88e20}
+.stats-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 18px}
+.stat{position:relative;overflow:hidden;padding:17px 18px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(14,43,55,.88),rgba(7,22,31,.92))}
+.stat:after{content:"";position:absolute;inset:auto -15px -28px auto;width:90px;height:90px;border-radius:50%;background:var(--stat-glow,rgba(112,223,192,.09));filter:blur(3px)}
+.stat-label{color:var(--muted);font-size:.84rem;font-weight:700}
+.stat-number{display:block;font-size:1.8rem;font-weight:800;line-height:1.35;color:#fff;margin-top:4px;font-variant-numeric:tabular-nums}
+.stat.pending{--stat-glow:rgba(227,189,120,.15)}.stat.pending .stat-number{color:#f3d7a0}
+.stat.published{--stat-glow:rgba(47,165,107,.15)}.stat.published .stat-number{color:#7fe0ad}
+.stat.rejected{--stat-glow:rgba(212,87,90,.13)}.stat.rejected .stat-number{color:#ff9a9d}
+.tools-row{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:14px}
+.search-wrap{min-width:180px;max-width:330px;width:100%}
+.search-wrap input{min-height:44px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:24px 2px 12px}
+.section-title h3{font-size:1rem;margin:0;color:#f4e5c8}
+.section-title span{font-size:.82rem;color:var(--muted)}
+@media(max-width:700px){.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tools-row{grid-template-columns:1fr}.search-wrap{max-width:none}.section-title{margin-top:20px}}
+@media(max-width:380px){.stats-grid{gap:8px}.stat{padding:13px}.stat-number{font-size:1.5rem}}
 [hidden]{display:none!important}
 </style>
 </head>
@@ -85,10 +101,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
 
   <section id="app" hidden>
     <div style="margin:0 0 18px;padding:8px 4px"><div style="color:#70dfc0;font-size:.8rem;font-weight:800">مساحة المراجعة</div><h2 style="margin:3px 0;color:#f7e4bd;font-size:1.45rem">حكايات الطالبات</h2><p style="margin:0;color:#a8bdc6">راجِع النص أولًا، ثم احفظه أو انشره بعد التأكد من مضمونه.</p></div>
-    <div class="row" style="justify-content:space-between;margin-bottom:14px">
-      <div class="tabs" id="tabs" role="group" aria-label="تصفية الحكايات"></div>
-      <div class="row"><button class="btn alt" id="refreshBtn" type="button">تحديث</button><button class="btn" id="newBtn" type="button">+ حكاية جديدة</button></div>
+    <div class="stats-grid" id="stats" aria-label="ملخص الحكايات"></div>
+    <div class="tools-row" style="padding:16px 18px;background:rgba(10,29,40,.68);border:1px solid var(--line);border-radius:18px;margin-bottom:14px">
+      <div class="search-wrap"><input type="search" id="searchStories" placeholder="ابحث باسم الطالبة أو عنوان الحكاية…" aria-label="ابحث في الحكايات"></div>
+      <div class="row"><button class="btn alt" id="refreshBtn" type="button">↻ تحديث</button><button class="btn" id="newBtn" type="button">＋ حكاية جديدة</button></div>
     </div>
+    <div class="section-title"><h3 id="listHeading">كل الحكايات</h3><span id="resultCount"></span></div>
+    <div class="tabs" id="tabs" role="group" aria-label="تصفية الحكايات" style="margin-bottom:16px"></div>
     <div id="list"></div>
   </section>
 </main>
@@ -97,7 +116,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
   'use strict';
   var API='https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-  var session=null, items=[], filter='all', draftNew=false;
+  var session=null, items=[], filter='all', draftNew=false, searchTerm='';
   var STATUS={pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'};
   function $(id){return document.getElementById(id);}
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
@@ -147,6 +166,22 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
     render();
   }
 
+  function renderStats(){
+    var box=$('stats'); box.textContent='';
+    var stats=[
+      {key:'all',label:'إجمالي الحكايات',value:items.length},
+      {key:'pending',label:'بانتظار المراجعة',value:items.filter(function(i){return i.status==='pending';}).length},
+      {key:'published',label:'حكايات منشورة',value:items.filter(function(i){return i.status==='published';}).length},
+      {key:'rejected',label:'مرفوضة',value:items.filter(function(i){return i.status==='rejected';}).length}
+    ];
+    stats.forEach(function(s){
+      var card=el('div','stat '+s.key);
+      card.appendChild(el('div','stat-label',s.label));
+      card.appendChild(el('strong','stat-number',String(s.value)));
+      box.appendChild(card);
+    });
+  }
+
   function renderTabs(){
     var box=$('tabs'); box.textContent='';
     [['all','الكل'],['pending','قيد المراجعة'],['published','منشورة'],['rejected','مرفوضة']].forEach(function(t){
@@ -155,6 +190,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
       b.addEventListener('click',function(){filter=t[0];render();});
       box.appendChild(b);
     });
+    var names={all:'كل الحكايات',pending:'الحكايات قيد المراجعة',published:'الحكايات المنشورة',rejected:'الحكايات المرفوضة'};
+    $('listHeading').textContent=names[filter]||'الحكايات';
   }
 
   function fld(label,node){var w=el('label','f');w.appendChild(el('span','',label));w.appendChild(node);return w;}
@@ -241,11 +278,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
   }
 
   function render(){
+    renderStats();
     renderTabs();
     var list=$('list'); list.textContent='';
+    var term=searchTerm.trim().toLocaleLowerCase();
+    var shown=items.filter(function(i){
+      var statusOK=filter==='all'||i.status===filter;
+      var searchOK=!term||[i.title,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(term)!==-1;});
+      return statusOK&&searchOK;
+    });
+    $('resultCount').textContent='عدد النتائج: '+shown.length;
     if(draftNew) list.appendChild(card({status:'pending',color:'#b8874b'}));
-    var shown=items.filter(function(i){return filter==='all'||i.status===filter;});
-    if(!shown.length&&!draftNew) list.appendChild(el('div','empty','لا توجد حكايات في هذا القسم.'));
+    if(!shown.length&&!draftNew) list.appendChild(el('div','empty',term?'ملقيناش حكايات مطابقة للبحث.':'لا توجد حكايات في هذا القسم.'));
     shown.forEach(function(i){list.appendChild(card(i));});
   }
 
@@ -259,6 +303,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
   });
   $('logoutBtn').addEventListener('click',function(){clearSession();items=[];showLogin();say('ok','تم تسجيل الخروج.');});
   $('refreshBtn').addEventListener('click',function(){loadList().catch(function(e){say('err',e.message);});});
+  $('searchStories').addEventListener('input',function(){searchTerm=this.value;render();});
   $('newBtn').addEventListener('click',function(){draftNew=true;filter='all';render();window.scrollTo({top:0,behavior:'smooth'});});
 
   loadSession();
