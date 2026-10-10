@@ -1106,6 +1106,7 @@ footer {
           '003': 'assets/students/malika-avatar.jpg'
         }[story.id] || '';
         var safePhoto = esc(studentPhoto);
+        var photoAltPrefix = { ar: 'صورة ', en: 'Photo of ', fr: 'Photo de ', it: 'Foto di ' }[window.I18N ? window.I18N.lang() : 'ar'] || 'Photo of ';
 
         var delayClass = index % 3 === 1
           ? 'float-delay-1'
@@ -1127,7 +1128,7 @@ footer {
           +     '<div class="card-student-row">'
           +       '<span class="student-avatar-wrap">'
           +         '<span class="student-avatar-fallback">' + first + '</span>'
-          +         '<img class="student-avatar" src="' + safePhoto + '" alt="صورة ' + name + '" loading="lazy" onerror="this.style.display=\'none\'">'
+          +         '<img class="student-avatar" src="' + safePhoto + '" alt="' + esc(photoAltPrefix) + name + '" loading="lazy" onerror="this.style.display=\'none\'">'
           +       '</span>'
           +       '<div class="card-name">' + name + '</div>'
           +     '</div>'
