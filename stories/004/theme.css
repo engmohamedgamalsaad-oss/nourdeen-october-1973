@@ -51,8 +51,6 @@ footer strong{color:var(--gold)}
 .lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media(max-width:650px){.fact-grid{grid-template-columns:1fr}.lesson-list{grid-template-columns:1fr}.story{padding:50px 18px}.hero{min-height:90svh}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-.language-strip{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:#06101b;border-bottom:1px solid rgba(227,189,120,.18);color:#dce6eb;font-size:.84rem}
-.language-strip [data-lang-switch]{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
 
 .memorial-gallery{padding:64px 20px;background:radial-gradient(ellipse at 50% 0%,#17364a 0%,#091725 65%,#050d16 100%)}
 .memorial-gallery h2{font-family:"Marhey","Cairo",sans-serif;font-size:clamp(1.6rem,5vw,2.35rem);line-height:1.65;color:#f2d8a5;margin:0 0 18px}
@@ -71,14 +69,3 @@ footer strong{color:var(--gold)}
 @media(max-width:650px){.memorial-grid{grid-template-columns:1fr}.memorial-photo{height:270px}.memorial-gallery{padding:50px 18px}}
 
 
-/* شريط اللغات داخل الهيدر بدل الشريط القديم أسفل الهيدر */
-.story-language-switch{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:nowrap;min-width:0}
-.story-language-switch .lang-option{font-size:.68rem;padding:4px 7px;white-space:nowrap}
-@media(max-width:650px){
-  .topbar{gap:7px;padding-inline:8px}
-  .topbar .home-link{font-size:.72rem;white-space:normal;max-width:100px;line-height:1.4}
-  .topbar .school-brand{gap:4px;min-width:0}
-  .topbar .school-brand img{width:30px;height:30px}
-  .story-language-switch{gap:3px}
-  .story-language-switch .lang-option{font-size:.57rem;padding:3px 4px}
-}
