@@ -51,3 +51,5 @@ footer strong{color:var(--gold)}
 .lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}
 @media(max-width:650px){.fact-grid{grid-template-columns:1fr}.lesson-list{grid-template-columns:1fr}.story{padding:50px 18px}.hero{min-height:90svh}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+.language-strip{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:12px 16px;background:#06101b;border-bottom:1px solid rgba(227,189,120,.18);color:#dce6eb;font-size:.84rem}
+.language-strip [data-lang-switch]{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
