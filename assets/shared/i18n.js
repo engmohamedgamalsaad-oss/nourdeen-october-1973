@@ -2,7 +2,7 @@
   'use strict';
   var allowed=['ar','en','fr','it'];
   var dict={};
-  var current='ar';
+  var current=readLang();
   function readLang(){
     var params=new URLSearchParams(location.search);
     var query=params.get('lang');
