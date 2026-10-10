@@ -11,7 +11,7 @@ var translations={
 "العقل قبل السلاح":{en:"Brains Before Weapons",fr:"L’intelligence avant les armes",it:"L’ingegno prima delle armi"},
 "لغة لا يفهمها العدو":{en:"A Language the Enemy Could Not Understand",fr:"Une langue que l’ennemi ne comprenait pas",it:"Una lingua che il nemico non capiva"},
 
-"شعار مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls logo",fr:"Logo de l’école de langues Al-Manar pour filles",it:"Logo della Scuola nazionale di lingue Al-Manar per ragazze"},
+"شعار مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls logo",fr:"Logo de l’École nationale de langues Al-Manar pour filles",it:"Logo della Scuola nazionale di lingue Al-Manar per ragazze"},
 "جنود مصريون يرفعون العلم المصري":{en:"Egyptian soldiers raising the Egyptian flag",fr:"Des soldats égyptiens hissant le drapeau égyptien",it:"Soldati egiziani che issano la bandiera egiziana"},
 "خريطة باب المندب والبحر الأحمر":{en:"Map of Bab el-Mandeb and the Red Sea",fr:"Carte de Bab el-Mandeb et de la mer Rouge",it:"Mappa di Bab el-Mandeb e del Mar Rosso"},
 "صورة فضائية لمنطقة مضيق باب المندب":{en:"Satellite image of the Bab el-Mandeb Strait area",fr:"Image satellite de la zone du détroit de Bab el-Mandeb",it:"Immagine satellitare dell’area dello stretto di Bab el-Mandeb"},
