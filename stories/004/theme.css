@@ -79,4 +79,34 @@ footer strong{color:var(--gold)}
 .memorial-caption a{color:#e6c88e;font-size:.86rem;line-height:1.8;overflow-wrap:anywhere}
 @media(max-width:650px){.memorial-grid{grid-template-columns:1fr}.memorial-photo{height:270px}.memorial-gallery{padding:50px 18px}}
 
-
+/* ظهور النصوص والعناصر تدريجيًا أثناء النزول مثل بقية الحكايات */
+.scroll-reveal{
+  opacity:0;
+  transform:translate3d(0,28px,0);
+  transition:opacity .78s ease,transform .78s cubic-bezier(.2,.7,.2,1);
+  will-change:opacity,transform;
+}
+.scroll-reveal.is-visible{
+  opacity:1;
+  transform:translate3d(0,0,0);
+}
+.story-share-bar--below-hero{
+  position:relative;
+  z-index:4;
+  box-sizing:border-box;
+  padding:18px 16px 22px;
+  margin:0 auto!important;
+  background:linear-gradient(180deg,rgba(13,34,50,.98),rgba(5,13,22,.98));
+  border-top:1px solid rgba(227,189,120,.18);
+  border-bottom:1px solid rgba(227,189,120,.2);
+}
+.story-share-bar--below-hero a{
+  min-width:132px;
+}
+@media(max-width:480px){
+  .story-share-bar--below-hero{padding:16px 10px 19px}
+  .story-share-bar--below-hero a{min-width:118px;padding:9px 13px!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .scroll-reveal,.scroll-reveal.is-visible{opacity:1!important;transform:none!important;transition:none!important}
+}
