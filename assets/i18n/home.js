@@ -1,6 +1,7 @@
 (function(){
   if(!window.I18N)return;
   window.I18N.register('ar',{
+    submit_story_cta:'اكتب حكايتك',
     k1:'رجال خالدون عبر التاريخ',k2:'مدرسة المنار القومية للغات للبنات',k3:'أرشيف حكايات الطالبات',
     k4:'EGYPT • 6 OCTOBER 1973',k5:'حكايات أكتوبر 1973',
     k6:'أرشيف رقمي لحكايات طالبات مدرسة المنار القومية للغات للبنات، نستعيد من خلاله بطولات حرب أكتوبر وقصص الأبطال الذين شاركوا في صنع النصر.',
@@ -19,6 +20,7 @@
     media_flag_alt:'جنود مصريون يرفعون العلم المصري',media_crossing_alt:'صورة تاريخية لعبور خط بارليف في حرب أكتوبر',media_map_alt:'خريطة توضيحية لمضيق باب المندب والبحر الأحمر',media_hero_alt:'صورة أرشيفية للطيار المصري عاطف السادات',media_stamp_alt:'تصميم فني تخيلي لطابع تذكاري عن حرب أكتوبر'
   });
   window.I18N.register('en',{
+    submit_story_cta:'Submit your story',
     k1:'Immortal Heroes Through History',k2:'Al-Manar National Language School for Girls',k3:'Students’ Story Archive',
     k4:'EGYPT • 6 OCTOBER 1973',k5:'Stories of October 1973',
     k6:'A digital archive of stories by students of Al-Manar National Language School for Girls, revisiting the heroism of the October War and the people who helped achieve victory.',
@@ -37,6 +39,7 @@
     media_flag_alt:'Egyptian soldiers raising the Egyptian flag',media_crossing_alt:'Historical photograph of the crossing of the Bar-Lev Line during the October War',media_map_alt:'Illustrative map of the Bab el-Mandeb Strait and the Red Sea',media_hero_alt:'Archival photograph of Egyptian pilot Atef El-Sadat',media_stamp_alt:'Artistic concept of a commemorative stamp for the October War'
   });
   window.I18N.register('fr',{
+    submit_story_cta:'Proposer votre récit',
     k1:'Héros immortels à travers l’histoire',k2:'École nationale de langues Al-Manar pour filles',k3:'Archives des récits des élèves',
     k4:'ÉGYPTE • 6 OCTOBRE 1973',k5:'Récits d’octobre 1973',
     k6:'Une archive numérique des récits des élèves de l’école Al-Manar, qui revient sur les exploits de la guerre d’Octobre et sur ceux qui ont contribué à la victoire.',
@@ -55,6 +58,7 @@
     media_flag_alt:'Des soldats égyptiens hissant le drapeau égyptien',media_crossing_alt:'Photographie historique du franchissement de la ligne Bar-Lev pendant la guerre d’octobre',media_map_alt:'Carte illustrative du détroit de Bab el-Mandeb et de la mer Rouge',media_hero_alt:'Photographie d’archive du pilote égyptien Atef El-Sadat',media_stamp_alt:'Création artistique représentant un timbre commémoratif de la guerre d’octobre'
   });
   window.I18N.register('it',{
+    submit_story_cta:'Invia il tuo racconto',
     k1:'Eroi immortali nella storia',k2:'Scuola nazionale di lingue Al-Manar per ragazze',k3:'Archivio dei racconti delle studentesse',
     k4:'EGITTO • 6 OTTOBRE 1973',k5:'Racconti dell’ottobre 1973',
     k6:'Un archivio digitale dei racconti delle studentesse della scuola Al-Manar, per ricordare le imprese della guerra d’Ottobre e le persone che contribuirono alla vittoria.',
