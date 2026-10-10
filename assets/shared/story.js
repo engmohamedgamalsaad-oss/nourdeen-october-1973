@@ -284,7 +284,18 @@
   lightbox.className = 'lightbox';
   lightbox.setAttribute('role', 'dialog');
   lightbox.setAttribute('aria-modal', 'true');
-  lightbox.setAttribute('aria-label', 'عرض الصورة بحجم كبير');
+  var lightboxLabels = {
+    ar: 'عرض الصورة بحجم كبير',
+    en: 'View image enlarged',
+    fr: 'Afficher l’image en grand',
+    it: 'Visualizza l’immagine ingrandita'
+  };
+  function syncLightboxLabel() {
+    var lang = window.I18N ? window.I18N.lang() : 'ar';
+    lightbox.setAttribute('aria-label', lightboxLabels[lang] || lightboxLabels.ar);
+  }
+  syncLightboxLabel();
+  document.addEventListener('site-language-change', syncLightboxLabel);
 
   var bigImage = document.createElement('img');
   bigImage.alt = '';
