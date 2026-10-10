@@ -55,7 +55,7 @@
     media_flag_alt:'Des soldats égyptiens hissant le drapeau égyptien',media_crossing_alt:'Photographie historique du franchissement de la ligne Bar-Lev pendant la guerre d’octobre',media_map_alt:'Carte illustrative du détroit de Bab el-Mandeb et de la mer Rouge',media_hero_alt:'Photographie d’archive du pilote égyptien Atef El-Sadat',media_stamp_alt:'Création artistique représentant un timbre commémoratif de la guerre d’octobre'
   });
   window.I18N.register('it',{
-    k1:'Eroi immortali nella storia',k2:'Scuola nazionale linguistica Al-Manar per ragazze',k3:'Archivio dei racconti delle studentesse',
+    k1:'Eroi immortali nella storia',k2:'Scuola nazionale di lingue Al-Manar per ragazze',k3:'Archivio dei racconti delle studentesse',
     k4:'EGITTO • 6 OTTOBRE 1973',k5:'Racconti dell’ottobre 1973',
     k6:'Un archivio digitale dei racconti delle studentesse della scuola Al-Manar, per ricordare le imprese della guerra d’Ottobre e le persone che contribuirono alla vittoria.',
     k7:'Scopri i racconti ↓',k8:'Introduzione',k9:'6 ottobre 1973',
@@ -64,12 +64,12 @@
     k12:'La storia non è fatta soltanto di numeri e date, ma anche di persone che hanno compiuto missioni reali e atti di coraggio.',
     k13:'I racconti delle studentesse',k14:'Scegli un racconto',k15:'Ogni racconto apre una finestra su un diverso aspetto delle imprese d’ottobre.',
     k16:'Caricamento dei racconti…',k17:'Sotto la supervisione di',k18:'Vicepreside della sezione preparatoria: prof.ssa Dina El-Feki',
-    k19:'Dirigente scolastica: prof.ssa Noha Jaafar',k20:'Scuola nazionale linguistica Al-Manar per ragazze',
+    k19:'Dirigente scolastica: prof.ssa Noha Jaafar',k20:'Scuola nazionale di lingue Al-Manar per ragazze',
     k21:'Avvertenza: le informazioni nei racconti provengono dalle fonti indicate. La direzione scolastica e la preside non sono responsabili dei contenuti.',
     js_new_story:'Nuovo racconto',js_photo_of:'Foto di',js_likes_label:'Numero di Mi piace',js_likes:'Mi piace',js_no_stories:'Ancora nessun racconto.',
     js_open_story:'Leggi il racconto',js_likes_err:'Impossibile caricare il numero di Mi piace',
     js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.',
-    js_language_label:'Seleziona la lingua',js_school_logo_alt:'Logo della Scuola linguistica Al-Manar per ragazze',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973',
+    js_language_label:'Seleziona la lingua',js_school_logo_alt:'Logo della Scuola nazionale di lingue Al-Manar per ragazze',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973',
     media_flag_alt:'Soldati egiziani che issano la bandiera egiziana',media_crossing_alt:'Fotografia storica dell’attraversamento della linea Bar-Lev durante la guerra d’ottobre',media_map_alt:'Mappa illustrativa dello stretto di Bab el-Mandeb e del Mar Rosso',media_hero_alt:'Fotografia d’archivio del pilota egiziano Atef El-Sadat',media_stamp_alt:'Concept artistico di un francobollo commemorativo della guerra d’ottobre'
   });
   window.I18N.apply();
@@ -78,7 +78,7 @@
     ar:['رجال خالدون عبر التاريخ | مدرسة المنار القومية للغات للبنات','أرشيف رقمي لحكايات طالبات مدرسة المنار عن بطولات حرب أكتوبر 1973'],
     en:['Immortal Heroes Through History | Al-Manar National Language School for Girls','A digital archive of Al-Manar students’ stories about the heroes of the 1973 October War.'],
     fr:['Des héros immortels à travers l’histoire | École de langues Al-Manar pour filles','Archives numériques des récits des élèves d’Al-Manar sur les héros de la guerre d’octobre 1973.'],
-    it:['Eroi immortali nella storia | Scuola nazionale linguistica Al-Manar per ragazze','Archivio digitale dei racconti delle studentesse Al-Manar sugli eroi della guerra dell’ottobre 1973.']
+    it:['Eroi immortali nella storia | Scuola nazionale di lingue Al-Manar per ragazze','Archivio digitale dei racconti delle studentesse Al-Manar sugli eroi della guerra dell’ottobre 1973.']
   };
   function applyHomeMeta(){
     var lang=window.I18N.lang();
