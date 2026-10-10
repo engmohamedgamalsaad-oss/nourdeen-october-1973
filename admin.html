@@ -162,8 +162,8 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
     if(!isNew && it.status==='pending'){
       var copyReview=el('button','btn alt','نسخ لإرساله للمراجعة هنا'); copyReview.type='button';
       copyReview.addEventListener('click',function(){
-        var reviewText='أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع رجال خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، ثم اقترح صياغة مناسبة لطالبات المدرسة. لا تنشرها قبل موافقتي.\\n\\n'
-          +'اسم الطالبة: '+(it.student_name||'')+'\\nالصف: '+(it.grade||'')+'\\nالعنوان: '+(it.title||'')+'\\nالعنوان الفرعي: '+(it.subtitle||'')+'\\n\\nنص الحكاية:\\n'+(it.body||'')+'\\n\\nالمصادر الحالية:\\n'+(it.sources||'لا توجد مصادر مرفقة');
+        var reviewText='أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع رجال خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، ثم اقترح صياغة مناسبة لطالبات المدرسة. لا تنشرها قبل موافقتي.\n\n'
+          +'اسم الطالبة: '+(it.student_name||'')+'\nالصف: '+(it.grade||'')+'\nالعنوان: '+(it.title||'')+'\nالعنوان الفرعي: '+(it.subtitle||'')+'\n\nنص الحكاية:\n'+(it.body||'')+'\n\nالمصادر الحالية:\n'+(it.sources||'لا توجد مصادر مرفقة');
         function copied(ok){if(ok)say('ok','تم نسخ الحكاية. افتح الشات والصقها هنا للمراجعة.');else say('err','تعذر النسخ تلقائيًا؛ افتح الحكاية وانسخ النص يدويًا.');}
         if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(reviewText).then(function(){copied(true);}).catch(function(){fallbackCopy(reviewText,copied);});}
         else fallbackCopy(reviewText,copied);
