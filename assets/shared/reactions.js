@@ -116,3 +116,13 @@
   paintSavedState();
   loadCounts().catch(() => setStatus(tr("r_counts_error", "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.")));
 })();
+
+/* Loads the print / quiz block (kept in its own file next to this one). */
+(function () {
+  var current = document.currentScript;
+  var base = current && current.src ? current.src.replace(/reactions\.js(\?.*)?$/, '') : '../../assets/shared/';
+  var s = document.createElement('script');
+  s.src = base + 'story-extras.js?v=20261010-1';
+  s.defer = true;
+  document.body.appendChild(s);
+})();
