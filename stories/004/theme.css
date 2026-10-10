@@ -138,3 +138,24 @@ footer strong{color:var(--gold)}
 @media(prefers-reduced-motion:reduce){
   .scroll-reveal,.scroll-reveal.is-visible{opacity:1!important;transform:none!important;transition:none!important}
 }
+
+
+/* إبقاء أزرار المشاركة داخل صورة الافتتاحية ورفع تعليمات النزول */
+.story-share-bar--below-hero{
+  position:absolute!important;
+  left:50%;
+  bottom:22px;
+  transform:translateX(-50%);
+  width:min(800px,calc(100% - 24px));
+  margin:0!important;
+  padding:10px 12px 6px!important;
+  background:linear-gradient(180deg,rgba(5,13,22,.08),rgba(5,13,22,.58))!important;
+  border:0!important;
+  box-sizing:border-box;
+}
+.hero .scroll{bottom:104px;z-index:3}
+@media(max-width:650px){
+  .story-share-bar--below-hero{bottom:15px;padding:8px 6px 4px!important;gap:7px}
+  .story-share-bar--below-hero a{min-width:112px!important;min-height:38px!important;padding:7px 11px!important;font-size:.82rem!important}
+  .hero .scroll{bottom:95px;font-size:.8rem}
+}
