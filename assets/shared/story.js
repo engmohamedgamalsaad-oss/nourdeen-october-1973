@@ -13,6 +13,31 @@
      1) شاشة البداية (اختيارية)
      تُفعّل بوضع data-splash في وسم body
   ========================================= */
+
+  var activeLang = window.I18N ? window.I18N.lang() : 'ar';
+  var splashCopies = {
+    '001': {
+      ar: {title:'رجال البحر في أكتوبر', subtitle:'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973', start:'ابدأ الحكاية ←'},
+      en: {title:'Men of the Sea in October', subtitle:'The story of Egyptian Navy heroes in the 1973 October War', start:'Start the story →'},
+      fr: {title:'Les hommes de la mer en octobre', subtitle:'L’histoire des héros de la marine égyptienne pendant la guerre d’octobre 1973', start:'Commencer le récit →'},
+      it: {title:'Gli uomini del mare in ottobre', subtitle:'La storia degli eroi della Marina egiziana nella guerra dell’ottobre 1973', start:'Inizia il racconto →'}
+    },
+    '002': {
+      ar: {title:'العقل قبل السلاح', subtitle:'حكاية كارما محمد جمال — كيف فتحت المياه طريق العبور', start:'ابدأ الحكاية ←'},
+      en: {title:'Brains Before Weapons', subtitle:'Karma Mohamed Gamal tells how water opened the way across the canal', start:'Start the story →'},
+      fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert la voie à travers le canal', start:'Commencer le récit →'},
+      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua aprì la via attraverso il canale', start:'Inizia il racconto →'}
+    },
+    '003': {
+      ar: {title:'لغة لا يفهمها العدو', subtitle:'حكاية مليكة محمد جمال — الشفرة النوبية في حرب أكتوبر', start:'ابدأ الحكاية ←'},
+      en: {title:'A Language the Enemy Could Not Understand', subtitle:'Malika Mohamed Gamal tells the story of the Nubian code in the October War', start:'Start the story →'},
+      fr: {title:'Une langue que l’ennemi ne comprenait pas', subtitle:'Malika Mohamed Gamal raconte le code nubien pendant la guerre d’octobre', start:'Commencer le récit →'},
+      it: {title:'Una lingua che il nemico non capiva', subtitle:'Malika Mohamed Gamal racconta il codice nubiano nella guerra d’ottobre', start:'Inizia il racconto →'}
+    }
+  };
+  var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
+    (splashCopies[body.getAttribute('data-story-slug')] || {}).ar;
+
   var splashImage = body.getAttribute('data-splash');
 
   if (splashImage) {
@@ -20,7 +45,7 @@
     splash.className = 'story-splash';
     splash.setAttribute('role', 'dialog');
     splash.setAttribute('aria-modal', 'true');
-    splash.setAttribute('aria-label', body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
+    splash.setAttribute('aria-label', (splashCopy && splashCopy.title) || body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
 
     Object.assign(splash.style, {
       position: 'fixed',
@@ -41,7 +66,7 @@
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       textAlign: 'center',
-      direction: 'rtl',
+      direction: activeLang === 'ar' ? 'rtl' : 'ltr',
       transition: reduceMotion ? 'none' : 'opacity .35s ease'
     });
 
@@ -55,7 +80,7 @@
     });
 
     var splashTitle = document.createElement('h1');
-    splashTitle.textContent =
+    splashTitle.textContent = (splashCopy && splashCopy.title) ||
       body.getAttribute('data-splash-title') || 'رجال البحر في أكتوبر';
 
     Object.assign(splashTitle.style, {
@@ -67,7 +92,7 @@
     });
 
     var splashSubtitle = document.createElement('p');
-    splashSubtitle.textContent =
+    splashSubtitle.textContent = (splashCopy && splashCopy.subtitle) ||
       body.getAttribute('data-splash-subtitle') ||
       'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
 
@@ -80,7 +105,7 @@
 
     var startButton = document.createElement('button');
     startButton.type = 'button';
-    startButton.textContent = 'ابدأ الحكاية ←';
+    startButton.textContent = (splashCopy && splashCopy.start) || 'ابدأ الحكاية ←';
 
     Object.assign(startButton.style, {
       fontFamily: '"Cairo", Tahoma, sans-serif',
@@ -259,7 +284,18 @@
   lightbox.className = 'lightbox';
   lightbox.setAttribute('role', 'dialog');
   lightbox.setAttribute('aria-modal', 'true');
-  lightbox.setAttribute('aria-label', 'عرض الصورة بحجم كبير');
+  var lightboxLabels = {
+    ar: 'عرض الصورة بحجم كبير',
+    en: 'View image enlarged',
+    fr: 'Afficher l’image en grand',
+    it: 'Visualizza l’immagine ingrandita'
+  };
+  function syncLightboxLabel() {
+    var lang = window.I18N ? window.I18N.lang() : 'ar';
+    lightbox.setAttribute('aria-label', lightboxLabels[lang] || lightboxLabels.ar);
+  }
+  syncLightboxLabel();
+  document.addEventListener('site-language-change', syncLightboxLabel);
 
   var bigImage = document.createElement('img');
   bigImage.alt = '';

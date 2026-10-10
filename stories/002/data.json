@@ -6,5 +6,25 @@
   "subtitle": "كيف فتحت المياه طريق العبور",
   "color": "#f0a44a",
   "order": 2,
-  "published": true
+  "published": true,
+  "i18n": {
+    "en": {
+      "name": "Karma Mohamed Gamal",
+      "grade": "3rd Grade (Primary)",
+      "title": "Brains Before Weapons",
+      "subtitle": "How water opened the road for the crossing"
+    },
+    "fr": {
+      "name": "Karma Mohamed Gamal",
+      "grade": "3e année du primaire",
+      "title": "L'intelligence avant les armes",
+      "subtitle": "Comment l'eau a ouvert la voie à la traversée"
+    },
+    "it": {
+      "name": "Karma Mohamed Gamal",
+      "grade": "3ª elementare",
+      "title": "L'ingegno prima delle armi",
+      "subtitle": "Come l'acqua aprì la strada all'attraversamento"
+    }
+  }
 }

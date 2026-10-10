@@ -34,7 +34,7 @@
 .note p{margin:0}
 .lesson{border-color:rgba(47,167,160,.35)}
 .event:before{background:var(--turq)}
-.timeline{border-right-color:rgba(47,167,160,.5)}
+.timeline{border-inline-start-color:rgba(47,167,160,.5)}
 
 /* حركات الظهور أثناء التمرير — متوافقة مع صفحة نوردين */
 .scroll-reveal {

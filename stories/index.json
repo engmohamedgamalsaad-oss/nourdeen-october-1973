@@ -8,6 +8,26 @@
     "color": "#b8874b",
     "order": 1,
     "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1st Year Preparatory",
+        "title": "Men of the Sea in October",
+        "subtitle": "The battle most people never saw"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1re année préparatoire",
+        "title": "Les hommes de la mer en octobre",
+        "subtitle": "La bataille que la plupart des gens n'ont pas vue"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1ª classe della scuola media",
+        "title": "Gli uomini del mare in ottobre",
+        "subtitle": "La battaglia che la maggior parte delle persone non ha visto"
+      }
+    },
     "id": "001"
   },
   {
@@ -19,6 +39,26 @@
     "color": "#f0a44a",
     "order": 2,
     "published": true,
+    "i18n": {
+      "en": {
+        "name": "Karma Mohamed Gamal",
+        "grade": "3rd Grade (Primary)",
+        "title": "Brains Before Weapons",
+        "subtitle": "How water opened the road for the crossing"
+      },
+      "fr": {
+        "name": "Karma Mohamed Gamal",
+        "grade": "3e année du primaire",
+        "title": "L'intelligence avant les armes",
+        "subtitle": "Comment l'eau a ouvert la voie à la traversée"
+      },
+      "it": {
+        "name": "Karma Mohamed Gamal",
+        "grade": "3ª elementare",
+        "title": "L'ingegno prima delle armi",
+        "subtitle": "Come l'acqua aprì la strada all'attraversamento"
+      }
+    },
     "id": "002"
   },
   {
@@ -30,6 +70,26 @@
     "color": "#2fa7a0",
     "order": 3,
     "published": true,
+    "i18n": {
+      "en": {
+        "name": "Malika Mohamed Gamal",
+        "grade": "1st Grade (Primary)",
+        "title": "A Language the Enemy Could Not Understand",
+        "subtitle": "The story of the Nubian code"
+      },
+      "fr": {
+        "name": "Malika Mohamed Gamal",
+        "grade": "1re année du primaire",
+        "title": "Une langue que l'ennemi ne comprenait pas",
+        "subtitle": "L'histoire du code nubien"
+      },
+      "it": {
+        "name": "Malika Mohamed Gamal",
+        "grade": "1ª elementare",
+        "title": "Una lingua che il nemico non capiva",
+        "subtitle": "La storia del codice nubiano"
+      }
+    },
     "id": "003"
   }
 ]

@@ -1,0 +1,33 @@
+/* Shared language-switcher styles for the October stories site */
+.lang-switch {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  max-width: 320px;
+}
+.lang-option {
+  font: 600 .75rem "Cairo", sans-serif;
+  color: #f4e5c8;
+  background: #10232b;
+  border: 1px solid rgba(227,189,120,.35);
+  border-radius: 999px;
+  padding: 5px 9px;
+  cursor: pointer;
+}
+.lang-option.is-active {
+  background: #e3bd78;
+  color: #171006;
+  border-color: #e3bd78;
+}
+.lang-option:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+.story-lang-switch { margin-inline: 12px; }
+@media (max-width: 700px) {
+  .topbar { flex-wrap: wrap; gap: 10px; }
+  .story-lang-switch { order: 3; width: 100%; max-width: none; }
+  .story-lang-switch .lang-option { padding: 5px 8px; }
+}
