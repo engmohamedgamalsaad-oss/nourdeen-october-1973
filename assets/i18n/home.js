@@ -125,6 +125,8 @@
     });
   }
   document.addEventListener('site-language-change',refreshLocalizedAttributes);
+  document.addEventListener('DOMContentLoaded',refreshLocalizedAttributes);
+  window.addEventListener('load',refreshLocalizedAttributes);
   refreshLocalizedAttributes();
 
 })();
