@@ -456,6 +456,12 @@ body::before{
 
 
 /* ===== كروت الحكايات ===== */
+.submit-story-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:18px;padding:10px 22px;border:1px solid rgba(227,189,120,.65);border-radius:8px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006;text-decoration:none;font-weight:800;transition:transform .25s ease,box-shadow .25s ease}
+.submit-story-link:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.submit-story-link:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.submitted-story-card .card-photo-letter{font-size:3.4rem}
+.submitted-story-tag{display:inline-block;margin-top:10px;padding:3px 10px;border:1px solid rgba(227,189,120,.35);border-radius:999px;color:var(--gold);font-size:.78rem;font-weight:800}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -949,6 +955,7 @@ footer {
       <div class="kicker" data-i18n="k13">حكايات الطالبات</div>
       <h2 data-i18n="k14">اختر حكاية</h2>
       <p data-i18n="k15">كل حكاية نافذة على جانب من بطولات أكتوبر.</p>
+    <a class="submit-story-link float-up" href="submit.html" data-i18n="submit_story_cta">اكتب حكايتك</a>
     </div>
 
     <div class="cards" id="cards">
@@ -1123,6 +1130,83 @@ footer {
     });
   }
 
+  /* ===== الحكايات الجديدة المنشورة من قاعدة البيانات ===== */
+  function loadPublishedStories() {
+    var api = 'https://ypwprddkscnfblhftkeb.supabase.co';
+    var key = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+    fetch(api + '/rest/v1/submitted_stories?select=id,student_name,grade,title,subtitle,color,created_at&status=eq.published&order=created_at.desc&limit=100', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    })
+    .then(function (response) {
+      if (!response.ok) throw new Error('تعذر تحميل الحكايات المنشورة');
+      return response.json();
+    })
+    .then(function (items) {
+      if (!Array.isArray(items) || !items.length) return;
+      var lang = window.I18N ? window.I18N.lang() : 'ar';
+      var labels = {
+        ar: { tag: 'حكاية منشورة حديثًا', grade: 'الصف الدراسي غير محدد', open: 'اقرأ الحكاية' },
+        en: { tag: 'Recently published story', grade: 'Grade not specified', open: 'Read story' },
+        fr: { tag: 'Récit récemment publié', grade: 'Classe non précisée', open: 'Lire le récit' },
+        it: { tag: 'Racconto pubblicato di recente', grade: 'Classe non specificata', open: 'Leggi il racconto' }
+      };
+      var t = labels[lang] || labels.ar;
+      items.forEach(function (item) {
+        if (!item || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(item.id || ''))) return;
+        var card = document.createElement('a');
+        card.className = 'card float-up submitted-story-card';
+        card.href = siteBase + 'read.html?id=' + encodeURIComponent(item.id);
+        var color = /^#[0-9a-f]{6}$/i.test(String(item.color || '')) ? item.color : '#b8874b';
+        card.style.setProperty('--c', color);
+        var photo = document.createElement('div');
+        photo.className = 'card-photo';
+        var letter = document.createElement('span');
+        letter.className = 'card-photo-letter';
+        letter.textContent = String(item.student_name || 'ح').trim().charAt(0) || 'ح';
+        photo.appendChild(letter);
+        var body = document.createElement('div');
+        body.className = 'card-body';
+        var name = document.createElement('div');
+        name.className = 'card-name';
+        name.textContent = item.student_name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة');
+        var grade = document.createElement('div');
+        grade.className = 'card-grade';
+        grade.textContent = item.grade || t.grade;
+        var title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = item.title || '';
+        body.appendChild(name);
+        body.appendChild(grade);
+        body.appendChild(title);
+        if (item.subtitle) {
+          var subtitle = document.createElement('p');
+          subtitle.className = 'card-grade';
+          subtitle.textContent = item.subtitle;
+          body.appendChild(subtitle);
+        }
+        var tag = document.createElement('span');
+        tag.className = 'submitted-story-tag';
+        tag.textContent = t.tag;
+        body.appendChild(tag);
+        var bottom = document.createElement('div');
+        bottom.className = 'card-bottom-row';
+        var open = document.createElement('span');
+        open.className = 'card-btn';
+        open.textContent = t.open;
+        bottom.appendChild(open);
+        body.appendChild(bottom);
+        card.appendChild(photo);
+        card.appendChild(body);
+        box.appendChild(card);
+      });
+      observeFloatElements(box);
+    })
+    .catch(function (error) {
+      /* تعذّر الاتصال بقاعدة البيانات لا يخفي الحكايات المحلية ولا يعطل الصفحة الرئيسية. */
+      console.warn('Published student stories could not be loaded.', error);
+    });
+  }
+
   fetch(siteBase + 'stories/index.json?v=20261010-1')
     .then(function (response) {
       if (!response.ok) {
@@ -1134,6 +1218,7 @@ footer {
       if (!Array.isArray(list) || !list.length) {
         box.innerHTML =
           '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_no_stories') : 'لا توجد حكايات بعد.') + '</div>';
+        loadPublishedStories();
         return;
       }
 
@@ -1224,10 +1309,12 @@ footer {
 
       /* تشغيل حركة ظهور الكروت بعد تحميلها */
       observeFloatElements(box);
+      loadPublishedStories();
     })
     .catch(function () {
       box.innerHTML =
         '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_stories_err') : 'تعذّر تحميل الحكايات.') + '</div>';
+      loadPublishedStories();
     });
 
 })();
