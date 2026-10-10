@@ -1045,13 +1045,6 @@ footer {
   }
 
   /* تحريك خلفية الغلاف ببطء مع التمرير */
-  var pageBackdrop = document.body;
-  function movePageBackdrop() {
-    if (!pageBackdrop) return;
-    var y = window.scrollY || window.pageYOffset || 0;
-    pageBackdrop.style.setProperty('--cover-backdrop-shift', (y * -0.08) + 'px');
-    var layer = document.querySelector('body::before');
-  }
   window.addEventListener('scroll', function () {
     var y = window.scrollY || window.pageYOffset || 0;
     document.documentElement.style.setProperty('--cover-backdrop-shift', (y * -0.08) + 'px');
