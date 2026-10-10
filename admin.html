@@ -147,11 +147,11 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
     var h=el('h3','',isNew?'حكاية جديدة':(it.title||'')); head.appendChild(h);
     if(!isNew) head.appendChild(el('span','badge '+it.status,STATUS[it.status]||it.status));
     box.appendChild(head);
-    if(!isNew) box.appendChild(el('div','meta','أُرسلت في '+new Date(it.created_at).toLocaleString('ar-EG')));
+    if(!isNew) box.appendChild(el('div','meta','أُرسلت في '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم النشر: '+String(it.story_number).padStart(3,'0'):'')));
     var name=inp('text',it.student_name,80), grade=inp('text',it.grade,60), title=inp('text',it.title,140), sub=inp('text',it.subtitle,200);
     var color=inp('color',it.color||'#b8874b'), body=area(it.body,10,12000), src=area(it.sources,3,2000);
     var st=document.createElement('select');
-    Object.keys(STATUS).forEach(function(k){var o=el('option','',STATUS[k]);o.value=k;if(k===(it.status||'published'))o.selected=true;st.appendChild(o);});
+    Object.keys(STATUS).forEach(function(k){var o=el('option','',STATUS[k]);o.value=k;if(k===(it.status||'pending'))o.selected=true;st.appendChild(o);});
     var g=el('div','grid2'); g.appendChild(fld('اسم الطالبة',name)); g.appendChild(fld('الصف والفصل',grade)); g.appendChild(fld('العنوان',title)); g.appendChild(fld('العنوان الفرعي',sub));
     box.appendChild(g);
     box.appendChild(fld('نص الحكاية (افصل الفقرات بسطر فارغ)',body));
@@ -159,6 +159,17 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
     var g2=el('div','grid2'); g2.appendChild(fld('لون الحكاية',color)); g2.appendChild(fld('الحالة',st)); box.appendChild(g2);
 
     var actions=el('div','row');
+    if(!isNew && it.status==='pending'){
+      var copyReview=el('button','btn alt','نسخ لإرساله للمراجعة هنا'); copyReview.type='button';
+      copyReview.addEventListener('click',function(){
+        var reviewText='أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع رجال خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، ثم اقترح صياغة مناسبة لطالبات المدرسة. لا تنشرها قبل موافقتي.\\n\\n'
+          +'اسم الطالبة: '+(it.student_name||'')+'\\nالصف: '+(it.grade||'')+'\\nالعنوان: '+(it.title||'')+'\\nالعنوان الفرعي: '+(it.subtitle||'')+'\\n\\nنص الحكاية:\\n'+(it.body||'')+'\\n\\nالمصادر الحالية:\\n'+(it.sources||'لا توجد مصادر مرفقة');
+        function copied(ok){if(ok)say('ok','تم نسخ الحكاية. افتح الشات والصقها هنا للمراجعة.');else say('err','تعذر النسخ تلقائيًا؛ افتح الحكاية وانسخ النص يدويًا.');}
+        if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(reviewText).then(function(){copied(true);}).catch(function(){fallbackCopy(reviewText,copied);});}
+        else fallbackCopy(reviewText,copied);
+      });
+      actions.appendChild(copyReview);
+    }
     var save=el('button','btn','حفظ'); save.type='button';
     var pub=el('button','btn alt','نشر وحفظ'); pub.type='button';
     actions.appendChild(save); if(st.value!=='published') actions.appendChild(pub);
@@ -193,6 +204,11 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
     return box;
   }
 
+  function fallbackCopy(text,done){
+    var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+    var ok=false;try{ok=document.execCommand('copy');}catch(e){}ta.remove();done(ok);
+  }
+
   async function remove(it,btn){
     btn.disabled=true;
     try{
@@ -206,7 +222,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
   function render(){
     renderTabs();
     var list=$('list'); list.textContent='';
-    if(draftNew) list.appendChild(card({status:'published',color:'#b8874b'}));
+    if(draftNew) list.appendChild(card({status:'pending',color:'#b8874b'}));
     var shown=items.filter(function(i){return filter==='all'||i.status===filter;});
     if(!shown.length&&!draftNew) list.appendChild(el('div','empty','لا توجد حكايات في هذا القسم.'));
     shown.forEach(function(i){list.appendChild(card(i));});
