@@ -12,19 +12,22 @@
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1st Year Preparatory",
       "title": "October Skies: The Martyrs of the First Air Strike",
-      "subtitle": "The pilots who helped open the way for the crossing"
+      "subtitle": "The pilots who helped open a way across the canal",
+      "className": "Class 1B"
     },
     "fr": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1re année préparatoire",
       "title": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
-      "subtitle": "L’histoire des pilotes qui ont ouvert la voie au franchissement"
+      "subtitle": "Les pilotes qui ont contribué à ouvrir la voie à travers le canal",
+      "className": "Classe 1B"
     },
     "it": {
       "name": "Nourdeen Mohamed Gamal",
-      "grade": "1ª classe della scuola media",
+      "grade": "1ª media",
       "title": "I cieli di ottobre: i martiri del primo attacco aereo",
-      "subtitle": "La storia dei piloti che aprirono la strada all’attraversamento"
+      "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
+      "className": "Classe 1B"
     }
   }
 }
