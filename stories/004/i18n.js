@@ -22,4 +22,18 @@ window.I18N.register('en',{"r_feedback_exists":"You have already submitted a rea
 window.I18N.register('fr',{"r_feedback_exists":"Vous avez déjà réagi à cette histoire depuis ce navigateur.","r_like_exists":"Vous avez déjà aimé cette histoire.","r_saving":"Enregistrement de votre choix…","r_saved":"Merci ! Votre choix a été enregistré.","r_already_saved":"Votre choix a déjà été enregistré.","r_saved_count_error":"Votre choix a été enregistré, mais les compteurs n’ont pas pu être actualisés.","r_save_error":"Impossible d’enregistrer votre choix pour le moment.","r_counts_error":"Les réactions sont temporairement indisponibles. Actualisez la page."});
 window.I18N.register('it',{"r_feedback_exists":"Hai già inviato una reazione a questa storia da questo browser.","r_like_exists":"Hai già messo Mi piace a questa storia.","r_saving":"Salvataggio della scelta…","r_saved":"Grazie! La tua scelta è stata registrata.","r_already_saved":"La tua scelta è già stata registrata.","r_saved_count_error":"La scelta è stata salvata, ma non è stato possibile aggiornare i conteggi.","r_save_error":"Non è stato possibile registrare la scelta. Riprova.","r_counts_error":"Le reazioni non sono temporaneamente disponibili. Aggiorna la pagina."});
 window.I18N.apply();
+
+function refreshLocalizedAttributes(){
+ document.querySelectorAll('[data-i18n-attr]').forEach(function(el){
+  el.getAttribute('data-i18n-attr').split(',').forEach(function(pair){
+   var parts=pair.split(':');
+   if(parts.length!==2)return;
+   var translated=window.I18N.t(parts[1]);
+   if(translated && translated!==parts[1])el.setAttribute(parts[0],translated);
+  });
+ });
+}
+document.addEventListener('site-language-change',refreshLocalizedAttributes);
+refreshLocalizedAttributes();
+
 })();
