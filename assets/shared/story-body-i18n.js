@@ -435,6 +435,32 @@ Object.assign(translations,{
 "رسم توضيحي — ليس صورة تاريخية لأحمد إدريس":{en:"Illustration — not a historical photograph of Ahmed Idris",fr:"Illustration — pas une photographie historique d’Ahmed Idris",it:"Illustrazione — non è una fotografia storica di Ahmed Idris"},
 "رسم توضيحي لفكرة نقل الرسائل عبر الاتصال اللاسلكي؛ لا يمثل صورة شخصية لأحمد إدريس.":{en:"Illustration of transmitting messages by radio; it is not a portrait of Ahmed Idris.",fr:"Illustration de la transmission de messages par radio ; ce n’est pas un portrait d’Ahmed Idris.",it:"Illustrazione della trasmissione di messaggi via radio; non è un ritratto di Ahmed Idris."}
 });
+Object.assign(translations,{
+"رجال البحر في أكتوبر | نوردين محمد جمال":{en:"Men of the Sea in October | Nourdeen Mohamed Gamal",fr:"Les hommes de la mer en octobre | Nourdeen Mohamed Gamal",it:"Gli uomini del mare in ottobre | Nourdeen Mohamed Gamal"},
+"العقل قبل السلاح | كارما محمد جمال":{en:"Brains Before Weapons | Karma Mohamed Gamal",fr:"L’intelligence avant les armes | Karma Mohamed Gamal",it:"L’ingegno prima delle armi | Karma Mohamed Gamal"},
+"لغة لا يفهمها العدو | مليكة محمد جمال":{en:"A Language the Enemy Could Not Understand | Malika Mohamed Gamal",fr:"Une langue que l’ennemi ne pouvait pas comprendre | Malika Mohamed Gamal",it:"Una lingua che il nemico non poteva capire | Malika Mohamed Gamal"},
+"غلاف قصة الشفرة النوبية في حرب أكتوبر":{en:"Cover of the Nubian code story from the October War",fr:"Couverture du récit du code nubien pendant la guerre d’octobre",it:"Copertina del racconto del codice nubiano nella guerra d’ottobre"},
+"رسم توضيحي لكيفية استخدام مضخات المياه لفتح ممر في ساتر رملي":{en:"Illustration showing how water pumps opened a passage through a sand embankment",fr:"Illustration montrant comment des pompes à eau ont ouvert un passage dans un remblai de sable",it:"Illustrazione che mostra come le pompe ad acqua aprirono un passaggio nel terrapieno di sabbia"},
+"رسم توضيحي لقرية نوبية على ضفاف النيل":{en:"Illustration of a Nubian village on the Nile",fr:"Illustration d’un village nubien au bord du Nil",it:"Illustrazione di un villaggio nubiano sulle rive del Nilo"},
+"رسم توضيحي لجهاز اتصال لاسلكي وموجات صوت":{en:"Illustration of a radio communication device and sound waves",fr:"Illustration d’un appareil radio et d’ondes sonores",it:"Illustrazione di una radio ricetrasmittente e onde sonore"},
+"مضخة مياه":{en:"Water pump",fr:"Pompe à eau",it:"Pompa dell’acqua"},
+"الساتر الرملي":{en:"Sand embankment",fr:"Remblai de sable",it:"Terrapieno di sabbia"},
+"مياه القناة":{en:"Canal water",fr:"Eau du canal",it:"Acqua del canale"},
+"حفر أو تفجير في كتلة كبيرة من الرمال، وهذا يحتاج وقتًا ومجهودًا كبيرًا.":{en:"Digging or blasting a huge mass of sand would take considerable time and effort.",fr:"Creuser ou faire exploser une énorme masse de sable demanderait beaucoup de temps et d’efforts.",it:"Scavare o far esplodere un’enorme massa di sabbia richiederebbe molto tempo e fatica."},
+"قوة البحرية المصرية في حرب أكتوبر":{en:"The strength of the Egyptian Navy in the October War",fr:"La force de la marine égyptienne pendant la guerre d’octobre",it:"La forza della Marina egiziana nella guerra d’ottobre"},
+"صورة أرشيفية لجنود مصريين أثناء عبور خط بارليف في حرب أكتوبر 1973.":{en:"Archival photograph of Egyptian soldiers crossing the Bar Lev Line during the 1973 October War.",fr:"Photo d’archives de soldats égyptiens franchissant la ligne Bar-Lev pendant la guerre d’octobre 1973.",it:"Foto d’archivio di soldati egiziani che attraversano la linea Bar-Lev durante la guerra d’ottobre 1973."},
+"صورة أرشيفية مشابهة على Wikimedia Commons":{en:"Similar archival photograph on Wikimedia Commons",fr:"Photo d’archives similaire sur Wikimedia Commons",it:"Foto d’archivio simile su Wikimedia Commons"},
+"خريطة باب المندب على Wikimedia Commons":{en:"Map of Bab el-Mandeb on Wikimedia Commons",fr:"Carte de Bab el-Mandeb sur Wikimedia Commons",it:"Mappa di Bab el-Mandeb su Wikimedia Commons"},
+"خريطة توضيحية للموقع الجغرافي. للمقارنة:":{en:"Map showing the geographic location. For comparison:",fr:"Carte indiquant la situation géographique. Pour comparaison :",it:"Mappa della posizione geografica. Per confronto:"},
+"صورة توضيحية لطبيعة الممر البحري.":{en:"Illustration of the nature of the sea passage.",fr:"Illustration de la nature du passage maritime.",it:"Illustrazione del passaggio marittimo."},
+"من تاريخ الضفادع البشرية":{en:"From the History of Egypt’s Combat Divers",fr:"Dans l’histoire des nageurs de combat égyptiens",it:"Dalla storia dei sommozzatori da combattimento egiziani"},
+"من تاريخ القوات البحرية":{en:"From the History of the Navy",fr:"Dans l’histoire de la marine",it:"Dalla storia della Marina"},
+"ذكريات من تاريخ البحرية المصرية":{en:"Memories from the History of the Egyptian Navy",fr:"Souvenirs de l’histoire de la marine égyptienne",it:"Ricordi dalla storia della Marina egiziana"},
+"المعلومات الواردة في الحكايات جُمعت من المصادر المرفقة، ولا تتحمل إدارة المدرسة أو مديرة المدرسة مسؤولية محتواها.":{en:"Information in these stories was gathered from the listed sources. The school administration and principal are not responsible for the content.",fr:"Les informations de ces récits proviennent des sources citées. L’administration de l’école et sa directrice ne sont pas responsables du contenu.",it:"Le informazioni di questi racconti provengono dalle fonti indicate. L’amministrazione scolastica e la preside non sono responsabili dei contenuti."},
+"تمت إعادة صياغة المعلومات بأسلوب مناسب للصف الأول الإعدادي، مع الاعتماد على المصادر المذكورة.":{en:"The information has been rewritten for first-year preparatory students, based on the listed sources.",fr:"Les informations ont été reformulées pour des élèves de première année préparatoire à partir des sources citées.",it:"Le informazioni sono state rielaborate per studenti del primo anno della scuola media sulla base delle fonti indicate."},
+"الصف الثالث الابتدائي • Class 3 E":{en:"3rd Grade Primary • Class 3 E",fr:"3e année primaire • Classe 3 E",it:"3ª primaria • Classe 3 E"},
+"الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"}
+});
 function applyPageMeta(){
  var slug=document.body.getAttribute('data-story-slug');
  var lang=(window.I18N&&window.I18N.lang())||'ar';
