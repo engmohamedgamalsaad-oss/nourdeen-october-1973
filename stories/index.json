@@ -13,19 +13,22 @@
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1st Year Preparatory",
         "title": "Men of the Sea in October",
-        "subtitle": "The battle most people never saw"
+        "subtitle": "The battle most people never saw",
+        "className": "Class 1B"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1re année préparatoire",
         "title": "Les hommes de la mer en octobre",
-        "subtitle": "La bataille que la plupart des gens n'ont pas vue"
+        "subtitle": "La bataille que la plupart des gens n’ont pas vue",
+        "className": "Classe 1B"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
-        "grade": "1ª classe della scuola media",
+        "grade": "1ª media",
         "title": "Gli uomini del mare in ottobre",
-        "subtitle": "La battaglia che la maggior parte delle persone non ha visto"
+        "subtitle": "La battaglia che la maggior parte delle persone non ha visto",
+        "className": "Classe 1B"
       }
     },
     "id": "001"
@@ -44,26 +47,29 @@
         "name": "Karma Mohamed Gamal",
         "grade": "3rd Grade (Primary)",
         "title": "Brains Before Weapons",
-        "subtitle": "How water opened the road for the crossing"
+        "subtitle": "How water opened a way across the canal",
+        "className": "Class 3 E"
       },
       "fr": {
         "name": "Karma Mohamed Gamal",
         "grade": "3e année du primaire",
-        "title": "L'intelligence avant les armes",
-        "subtitle": "Comment l'eau a ouvert la voie à la traversée"
+        "title": "L’intelligence avant les armes",
+        "subtitle": "Comment l’eau a ouvert une voie à travers le canal",
+        "className": "Classe 3 E"
       },
       "it": {
         "name": "Karma Mohamed Gamal",
         "grade": "3ª elementare",
         "title": "L'ingegno prima delle armi",
-        "subtitle": "Come l'acqua aprì la strada all'attraversamento"
+        "subtitle": "Come l’acqua ha aperto una via attraverso il canale",
+        "className": "Classe 3 E"
       }
     },
     "id": "002"
   },
   {
     "name": "مليكة محمد جمال",
-    "grade": "الصف الاول الابتدائي",
+    "grade": "الصف الأول الابتدائي",
     "className": "1 A",
     "title": "لغة لا يفهمها العدو",
     "subtitle": "حكاية الشفرة النوبية",
@@ -75,19 +81,22 @@
         "name": "Malika Mohamed Gamal",
         "grade": "1st Grade (Primary)",
         "title": "A Language the Enemy Could Not Understand",
-        "subtitle": "The story of the Nubian code"
+        "subtitle": "The story of the Nubian code",
+        "className": "Class 1 A"
       },
       "fr": {
         "name": "Malika Mohamed Gamal",
         "grade": "1re année du primaire",
-        "title": "Une langue que l'ennemi ne comprenait pas",
-        "subtitle": "L'histoire du code nubien"
+        "title": "Une langue que l’ennemi ne comprenait pas",
+        "subtitle": "L’histoire du code nubien",
+        "className": "Classe 1 A"
       },
       "it": {
         "name": "Malika Mohamed Gamal",
         "grade": "1ª elementare",
         "title": "Una lingua che il nemico non capiva",
-        "subtitle": "La storia del codice nubiano"
+        "subtitle": "La storia del codice nubiano",
+        "className": "Classe 1 A"
       }
     },
     "id": "003"
@@ -106,19 +115,22 @@
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1st Year Preparatory",
         "title": "October Skies: The Martyrs of the First Air Strike",
-        "subtitle": "The pilots who helped open the way for the crossing"
+        "subtitle": "The pilots who helped open a way across the canal",
+        "className": "Class 1B"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1re année préparatoire",
         "title": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
-        "subtitle": "L’histoire des pilotes qui ont ouvert la voie au franchissement"
+        "subtitle": "Les pilotes qui ont contribué à ouvrir la voie à travers le canal",
+        "className": "Classe 1B"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
-        "grade": "1ª classe della scuola media",
+        "grade": "1ª media",
         "title": "I cieli di ottobre: i martiri del primo attacco aereo",
-        "subtitle": "La storia dei piloti che aprirono la strada all’attraversamento"
+        "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
+        "className": "Classe 1B"
       }
     },
     "id": "004"
