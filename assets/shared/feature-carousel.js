@@ -17,10 +17,10 @@
       var timer = null;
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var labels = {
-        ar: { previous: 'الشريحة السابقة', next: 'الشريحة التالية', slide: 'الشريحة' },
-        en: { previous: 'Previous slide', next: 'Next slide', slide: 'Slide' },
-        fr: { previous: 'Diapositive précédente', next: 'Diapositive suivante', slide: 'Diapositive' },
-        it: { previous: 'Diapositiva precedente', next: 'Diapositiva successiva', slide: 'Diapositiva' }
+        ar: { previous: 'الشريحة السابقة', next: 'الشريحة التالية', slide: 'الشريحة', media: 'معرض الوسائط', facts: 'هل تعلم' },
+        en: { previous: 'Previous slide', next: 'Next slide', slide: 'Slide', media: 'Media gallery', facts: 'Did you know?' },
+        fr: { previous: 'Diapositive précédente', next: 'Diapositive suivante', slide: 'Diapositive', media: 'Galerie multimédia', facts: 'Le saviez-vous ?' },
+        it: { previous: 'Diapositiva precedente', next: 'Diapositiva successiva', slide: 'Diapositiva', media: 'Galleria multimediale', facts: 'Lo sapevi?' }
       };
 
       function language() {
@@ -32,6 +32,8 @@
         prev.setAttribute('aria-label', words.previous);
         next.setAttribute('aria-label', words.next);
         dots.setAttribute('aria-label', words.slide);
+        var kind = carousel.getAttribute('data-feature-carousel');
+        if (words[kind]) carousel.setAttribute('aria-label', words[kind]);
       }
 
       function syncDots() {
@@ -151,4 +153,12 @@
   } else {
     initFeatureCarousels();
   }
+})();
+
+/* Loads the homepage quiz call-to-action (kept in its own file). */
+(function () {
+  var s = document.createElement('script');
+  s.src = 'assets/shared/home-extras.js?v=20261010-1';
+  s.defer = true;
+  document.head.appendChild(s);
 })();
