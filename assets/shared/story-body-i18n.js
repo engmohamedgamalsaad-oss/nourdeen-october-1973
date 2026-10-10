@@ -258,12 +258,12 @@ function applyFooterText(lang){
   if(node.nodeType!==3)return;
   if(!node.__storyI18nOriginal)node.__storyI18nOriginal=node.nodeValue;
   var originalText=node.__storyI18nOriginal;
-  var normalized=originalText.replace(/\\s+/g,' ').trim();
+  var normalized=originalText.replace(/\s+/g,' ').trim();
   var item=translations[normalized]||translations[originalText];
   if(lang==='ar'){node.nodeValue=originalText;return;}
   if(!item||!item[lang])return;
-  var leading=(originalText.match(/^\\s*/)||[''])[0];
-  var trailing=(originalText.match(/\\s*$/)||[''])[0];
+  var leading=(originalText.match(/^\s*/)||[''])[0];
+  var trailing=(originalText.match(/\s*$/)||[''])[0];
   node.nodeValue=leading+item[lang]+trailing;
  });
 }
@@ -275,7 +275,7 @@ function apply(){
    if(el.querySelector && el.querySelector('a')) return;
    if(el.children && el.children.length && !el.matches('a,footer strong')) return;
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
-   var normalized=ar.replace(/\\s+/g,' ').trim();
+   var normalized=ar.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[ar];
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
