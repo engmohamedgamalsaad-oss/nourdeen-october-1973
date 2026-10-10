@@ -252,6 +252,21 @@ document.addEventListener('site-language-change',applyPageMeta);
 if(document.readyState!=='loading')applyPageMeta();
 
 var original=new WeakMap();
+function applyFooterText(lang){
+ var footer=document.querySelector('footer');if(!footer)return;
+ Array.prototype.forEach.call(footer.childNodes,function(node){
+  if(node.nodeType!==3)return;
+  if(!node.__storyI18nOriginal)node.__storyI18nOriginal=node.nodeValue;
+  var originalText=node.__storyI18nOriginal;
+  var normalized=originalText.replace(/\\s+/g,' ').trim();
+  var item=translations[normalized]||translations[originalText];
+  if(lang==='ar'){node.nodeValue=originalText;return;}
+  if(!item||!item[lang])return;
+  var leading=(originalText.match(/^\\s*/)||[''])[0];
+  var trailing=(originalText.match(/\\s*$/)||[''])[0];
+  node.nodeValue=leading+item[lang]+trailing;
+ });
+}
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
  document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,.kicker,.reaction-count-line,footer strong').forEach(function(el){
@@ -264,6 +279,7 @@ function apply(){
    var item=translations[normalized]||translations[ar];
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
+ applyFooterText(lang);
 }
 document.addEventListener('DOMContentLoaded',apply);
 document.addEventListener('site-language-change',apply);
