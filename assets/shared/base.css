@@ -69,3 +69,5 @@ footer strong{color:var(--gold)}
   *,*:before,*:after{animation:none!important;transition:none!important}
   .reveal{opacity:1;transform:none}
 }
+.scroll-reveal{will-change:opacity,transform}
+@media (prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;transition:none!important}}
