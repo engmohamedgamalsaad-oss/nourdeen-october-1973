@@ -733,13 +733,13 @@ footer {
   }
 }
 
-/* الهيدر: اللوجو يمين، عنوان الموقع شماله بعيدًا عنه، واللغات أسفل ناحية اليمين */
+/* هيدر عربي باتجاه صحيح: الشعار يمين، والاسم بجواره؛ أسفلها اللغات يمين والعنوان يسار */
 .topbar{
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) auto!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
   grid-template-rows:auto auto!important;
   align-items:center!important;
-  column-gap:clamp(18px,4vw,54px)!important;
+  column-gap:clamp(14px,3vw,38px)!important;
   row-gap:10px!important;
   min-height:0!important;
   padding:12px clamp(12px,2.4vw,30px)!important;
@@ -748,20 +748,20 @@ footer {
 }
 .topbar .school-brand{display:contents!important}
 .topbar .school-brand img{
-  grid-column:2!important;grid-row:1!important;
+  grid-column:1!important;grid-row:1!important;
   width:clamp(68px,7.5vw,100px)!important;height:clamp(68px,7.5vw,100px)!important;
   justify-self:end!important;align-self:center!important;object-fit:contain!important;
 }
 .topbar .school-info{display:contents!important}
 .topbar .school-name{
-  grid-column:2!important;grid-row:2!important;
-  justify-self:end!important;align-self:center!important;
-  font-size:clamp(.85rem,1.35vw,1.15rem)!important;line-height:1.45!important;
-  font-weight:700!important;text-align:right!important;overflow-wrap:anywhere!important;
+  grid-column:2!important;grid-row:1!important;
+  justify-self:start!important;align-self:center!important;
+  font-size:clamp(.95rem,1.65vw,1.35rem)!important;line-height:1.5!important;
+  font-weight:800!important;text-align:right!important;overflow-wrap:anywhere!important;
 }
 .topbar .page-name{display:none!important}
 .topbar .home-link{
-  grid-column:1!important;grid-row:1!important;
+  grid-column:2!important;grid-row:2!important;
   justify-self:start!important;align-self:center!important;
   width:100%!important;max-width:none!important;margin:0!important;
   padding:0!important;font-size:clamp(1.25rem,2.8vw,2.15rem)!important;
@@ -776,10 +776,10 @@ footer {
 }
 .topbar .lang-option{font-size:clamp(.68rem,.95vw,.86rem)!important;padding:4px 0!important}
 @media(max-width:520px){
-  .topbar{grid-template-columns:minmax(0,1fr) 56px!important;column-gap:12px!important;row-gap:8px!important;padding:10px 9px!important}
+  .topbar{grid-template-columns:56px minmax(0,1fr)!important;column-gap:10px!important;row-gap:8px!important;padding:10px 9px!important}
   .topbar .school-brand img{width:54px!important;height:54px!important}
-  .topbar .home-link{font-size:clamp(1.05rem,4.7vw,1.4rem)!important;line-height:1.35!important}
-  .topbar .school-name{font-size:clamp(.68rem,2.8vw,.85rem)!important;line-height:1.4!important;max-width:calc(100vw - 90px)!important}
+  .topbar .school-name{font-size:clamp(.78rem,3.5vw,1rem)!important;line-height:1.4!important}
+  .topbar .home-link{font-size:clamp(1.02rem,4.5vw,1.35rem)!important;line-height:1.35!important}
   .topbar .lang-switch{gap:5px!important}
   .topbar .lang-option{font-size:.62rem!important}
 }
