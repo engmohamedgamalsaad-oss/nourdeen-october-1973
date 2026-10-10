@@ -3,6 +3,34 @@
 .hero:before{content:"";position:absolute;inset:0;z-index:-2;background:repeating-linear-gradient(0deg,transparent 0 43px,rgba(227,189,120,.06) 44px,transparent 45px 86px),linear-gradient(155deg,transparent 40%,rgba(184,52,54,.15) 40.2%,transparent 41%)}
 .hero:after{content:"";position:absolute;z-index:-1;width:min(78vw,620px);aspect-ratio:1;border:1px solid rgba(227,189,120,.28);border-radius:50%;box-shadow:0 0 0 35px rgba(227,189,120,.035),0 0 0 80px rgba(227,189,120,.025),inset 0 0 70px rgba(227,189,120,.06)}
 .hero-content{width:min(850px,100%);position:relative}
+/* تشكيل طائرات متحرك مع أثر ضبابي خلفه في افتتاحية الحكاية */
+.airstrike-animation{position:absolute;inset:0;overflow:hidden;z-index:0;pointer-events:none;color:rgba(226,237,244,.76);contain:paint}
+.hero-content{z-index:2}
+.aircraft-flight{position:absolute;left:0;top:26%;width:clamp(42px,7vw,76px);height:clamp(42px,7vw,76px);display:flex;align-items:center;justify-content:center;opacity:0;animation:aircraftCrossSky 16s linear infinite;will-change:transform,opacity}
+.aircraft-silhouette{position:relative;z-index:2;width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 2px 8px rgba(0,0,0,.5))}
+.aircraft-smoke{position:absolute;right:62%;top:50%;width:clamp(100px,25vw,300px);height:15px;transform:translateY(-50%);border-radius:50%;background:linear-gradient(90deg,transparent,rgba(207,222,232,.04) 16%,rgba(207,222,232,.28) 60%,rgba(227,236,242,.58) 100%);filter:blur(7px);opacity:.72}
+.aircraft-flight--lead{top:27%;animation-delay:.8s}
+.aircraft-flight--wing-one{top:39%;width:clamp(30px,4.8vw,52px);height:clamp(30px,4.8vw,52px);animation-delay:3.1s;animation-duration:17s;opacity:.8}
+.aircraft-flight--wing-one .aircraft-smoke{width:clamp(80px,18vw,210px);opacity:.72}
+.aircraft-flight--wing-two{top:18%;width:clamp(28px,4.3vw,46px);height:clamp(28px,4.3vw,46px);animation-delay:5.2s;animation-duration:18s;opacity:.68}
+.aircraft-flight--wing-two .aircraft-smoke{width:clamp(75px,16vw,190px);opacity:.62}
+@keyframes aircraftCrossSky{
+  0%{transform:translate3d(112vw,0,0);opacity:0}
+  8%{opacity:.82}
+  78%{opacity:.72}
+  100%{transform:translate3d(-125vw,0,0);opacity:0}
+}
+@media(max-width:650px){
+  .aircraft-flight{top:23%}
+  .aircraft-flight--lead{top:26%}
+  .aircraft-flight--wing-one{top:36%}
+  .aircraft-flight--wing-two{top:17%}
+  .aircraft-smoke{height:11px;filter:blur(5px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .aircraft-flight{animation:none!important;display:none!important}
+}
+
 .eyebrow{color:var(--gold);letter-spacing:2px;font-size:.82rem;font-weight:800}
 .hero h1{color:#f5d99f;font-family:"Marhey","Cairo",sans-serif;font-size:clamp(2.35rem,8vw,5.3rem);line-height:1.45;margin:22px 0;text-shadow:0 5px 25px #000}
 .hero-subtitle{font-size:clamp(1rem,3vw,1.35rem);color:#f0f4f6;line-height:2}
