@@ -75,7 +75,7 @@
         if (!reduced && !document.hidden) {
           timer = window.setInterval(function () {
             show(index + 1);
-          }, 7200);
+          }, 9000);
         }
       }
 
@@ -83,6 +83,8 @@
         start();
       }
 
+      /* لا نفعّل تراكب الشرائح إلا بعد تجهيز أدوات التنقل؛ في حالة تعطل JavaScript تظل البطاقات مقروءة. */
+      track.classList.add('carousel-ready');
       slides.forEach(function (slide, i) {
         slide.classList.remove('is-active', 'is-leaving');
         slide.classList.toggle('is-active', i === 0);
