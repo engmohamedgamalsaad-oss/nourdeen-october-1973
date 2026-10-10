@@ -34,14 +34,15 @@ returns boolean
 language sql
 stable
 security definer
-set search_path = public
+set search_path = pg_catalog, public
 as $$
   select exists (
     select 1 from public.admins a
     where lower(a.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
   );
 $$;
-grant execute on function public.is_admin() to anon, authenticated;
+revoke all on function public.is_admin() from public, anon;
+grant execute on function public.is_admin() to authenticated;
 
 -- 4) سياسات الأمان (RLS)
 drop policy if exists "visitors submit pending"   on public.submitted_stories;
