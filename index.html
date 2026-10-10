@@ -1059,6 +1059,7 @@ footer {
 
   /* ===== تحميل الحكايات من ملف الفهرس ===== */
   var box = document.getElementById('cards');
+  var siteBase = '/nourdeen-october-1973/';
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -1072,7 +1073,7 @@ footer {
     });
   }
 
-  fetch('stories/index.json')
+  fetch(siteBase + 'stories/index.json?v=20261010-1')
     .then(function (response) {
       if (!response.ok) {
         throw new Error('تعذر تحميل الفهرس');
@@ -1100,10 +1101,10 @@ footer {
         var color = esc(story.color || '#b8874b');
         var first = esc((source.name || story.name || 'ح').charAt(0));
         var studentPhoto = {
-          '001': 'assets/students/nourdeen-avatar.jpg',
-          '002': 'assets/students/karma-avatar.jpg',
-          '003': 'assets/students/malika-avatar.jpg',
-          '004': 'assets/students/nourdeen-avatar.jpg'
+          '001': siteBase + 'assets/students/nourdeen-avatar.jpg',
+          '002': siteBase + 'assets/students/karma-avatar.jpg',
+          '003': siteBase + 'assets/students/malika-avatar.jpg',
+          '004': siteBase + 'assets/students/nourdeen-avatar.jpg'
         }[story.id] || '';
         var safePhoto = esc(studentPhoto);
         var photoAltPrefix = { ar: 'صورة ', en: 'Photo of ', fr: 'Photo de ', it: 'Foto di ' }[window.I18N ? window.I18N.lang() : 'ar'] || 'Photo of ';
@@ -1116,11 +1117,11 @@ footer {
 
         return ''
           + '<a class="card float-up ' + delayClass + '"'
-          + ' href="stories/' + id + '/"'
+          + ' href="' + siteBase + 'stories/' + id + '/"'
           + ' style="--c:' + color + '">'
           +   '<div class="card-photo">'
           +     '<span class="card-photo-letter">' + first + '</span>'
-          +     '<img loading="lazy" decoding="async" src="stories/' + id + '/cover.jpg"'
+          +     '<img loading="lazy" decoding="async" src="' + siteBase + 'stories/' + id + '/cover.jpg"'
           +       ' alt="' + name + '"'
            +       ' onerror="this.style.display=\'none\';">'
           +   '</div>'
