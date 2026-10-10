@@ -25,8 +25,8 @@
     '002': {
       ar: {title:'العقل قبل السلاح', subtitle:'حكاية كارما محمد جمال — كيف فتحت المياه طريق العبور', start:'ابدأ الحكاية ←'},
       en: {title:'Brains Before Weapons', subtitle:'Karma Mohamed Gamal tells how water opened the way across the canal', start:'Start the story →'},
-      fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert la voie à travers le canal', start:'Commencer le récit →'},
-      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua aprì la via attraverso il canale', start:'Inizia il racconto →'}
+      fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert une voie à travers le canal', start:'Commencer le récit →'},
+      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua aprì una via attraverso il canale', start:'Inizia il racconto →'}
     },
     '003': {
       ar: {title:'لغة لا يفهمها العدو', subtitle:'حكاية مليكة محمد جمال — الشفرة النوبية في حرب أكتوبر', start:'ابدأ الحكاية ←'},
@@ -36,9 +36,9 @@
     },
     '004': {
       ar: {title:'سماء أكتوبر: شهداء الضربة الجوية الأولى', subtitle:'حكاية الطيارين الذين فتحوا الطريق للعبور', start:'ابدأ الحكاية ←'},
-      en: {title:'October Skies: The Martyrs of the First Air Strike', subtitle:'The pilots who helped open the way for the crossing', start:'Start the story →'},
-      fr: {title:'Le ciel d’octobre : les martyrs de la première frappe aérienne', subtitle:'Les pilotes qui ont contribué à ouvrir la voie au franchissement', start:'Commencer le récit →'},
-      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire la strada all’attraversamento', start:'Inizia il racconto →'}
+      en: {title:'October Skies: The Martyrs of the First Air Strike', subtitle:'The pilots who helped open a way across the canal', start:'Start the story →'},
+      fr: {title:'Le ciel d’octobre : les martyrs de la première frappe aérienne', subtitle:'Les pilotes qui ont contribué à ouvrir une voie à travers le canal', start:'Commencer le récit →'},
+      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire una via attraverso il canale', start:'Inizia il racconto →'}
     }
   };
   var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
