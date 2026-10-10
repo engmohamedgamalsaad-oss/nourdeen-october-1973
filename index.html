@@ -441,6 +441,9 @@ body::before{
 .feature-track .media-caption p,.feature-track .fact-card p{font-size:clamp(.88rem,2vw,1rem);line-height:2}
 .feature-track .fact-card{padding:clamp(18px,3vw,28px)}
 .feature-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px auto 0;direction:ltr}
+.feature-control{appearance:none;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid rgba(227,189,120,.5);border-radius:50%;background:rgba(7,25,33,.94);color:#f0d59c;font:800 1.25rem "Cairo",sans-serif;cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}
+.feature-control:hover,.feature-control:focus-visible{background:#e3bd78;color:#171006;transform:scale(1.04);outline:2px solid rgba(227,189,120,.35);outline-offset:2px}
+.feature-control:focus-visible{outline-offset:3px}
 .feature-control{appearance:none;border:1px solid rgba(227,189,120,.55);border-radius:999px;width:42px;height:42px;background:rgba(7,25,34,.9);color:#f0d59c;font-size:1.45rem;line-height:1;cursor:pointer}
 .feature-control:hover,.feature-control:focus-visible{background:#e3bd78;color:#171006;outline:2px solid rgba(227,189,120,.4);outline-offset:3px}
 .feature-dots{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
