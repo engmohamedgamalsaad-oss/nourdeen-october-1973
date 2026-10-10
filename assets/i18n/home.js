@@ -65,4 +65,21 @@
     js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.'
   });
   window.I18N.apply();
+
+  var homeMeta = {
+    ar:['رجال خالدون عبر التاريخ | مدرسة المنار القومية للغات للبنات','أرشيف رقمي لحكايات طالبات مدرسة المنار عن بطولات حرب أكتوبر 1973'],
+    en:['Immortal Heroes Through History | Al-Manar National Language School for Girls','A digital archive of Al-Manar students’ stories about the heroes of the 1973 October War.'],
+    fr:['Des héros immortels à travers l’histoire | École de langues Al-Manar pour filles','Archives numériques des récits des élèves d’Al-Manar sur les héros de la guerre d’octobre 1973.'],
+    it:['Eroi immortali nella storia | Scuola nazionale linguistica Al-Manar per ragazze','Archivio digitale dei racconti delle studentesse Al-Manar sugli eroi della guerra dell’ottobre 1973.']
+  };
+  function applyHomeMeta(){
+    var lang=window.I18N.lang();
+    var meta=homeMeta[lang]||homeMeta.ar;
+    document.title=meta[0];
+    [['meta[name="description"]',meta[1]],['meta[property="og:title"]',meta[0]],['meta[property="og:description"]',meta[1]]].forEach(function(pair){
+      var node=document.querySelector(pair[0]);if(node)node.setAttribute('content',pair[1]);
+    });
+  }
+  document.addEventListener('site-language-change',applyHomeMeta);
+  applyHomeMeta();
 })();
