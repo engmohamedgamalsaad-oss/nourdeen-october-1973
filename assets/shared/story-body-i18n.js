@@ -283,6 +283,48 @@ document.addEventListener('DOMContentLoaded',applyPageMeta);
 document.addEventListener('site-language-change',applyPageMeta);
 if(document.readyState!=='loading')applyPageMeta();
 
+function applyTranslationNotice(lang){
+ var existing=document.getElementById('ai-translation-notice');
+ if(lang==='ar'){
+  if(existing)existing.remove();
+  return;
+ }
+ var copy={
+  en:{
+   title:'Translation notice',
+   body:'This page was translated from Arabic with the assistance of artificial intelligence (AI). The translation is provided for general information and accessibility; it may contain errors or omissions. The original Arabic text is the reference version. Please consult the cited sources when checking historical details.'
+  },
+  fr:{
+   title:'Avis de traduction',
+   body:'Cette page a été traduite de l’arabe avec l’aide de l’intelligence artificielle (IA). Cette traduction est fournie à titre informatif et pour faciliter l’accès au contenu ; elle peut comporter des erreurs ou des omissions. Le texte arabe original fait foi. Veuillez consulter les sources citées pour vérifier les détails historiques.'
+  },
+  it:{
+   title:'Avviso sulla traduzione',
+   body:'Questa pagina è stata tradotta dall’arabo con l’aiuto dell’intelligenza artificiale (IA). La traduzione è fornita a scopo informativo e per facilitare l’accesso ai contenuti; potrebbe contenere errori o omissioni. Il testo originale in arabo è la versione di riferimento. Per verificare i dettagli storici, consulta le fonti citate.'
+  }
+ };
+ var text=copy[lang];
+ if(!text)return;
+ if(!existing){
+  existing=document.createElement('aside');
+  existing.id='ai-translation-notice';
+  existing.setAttribute('role','note');
+  existing.style.cssText='box-sizing:border-box;width:calc(100% - 32px);max-width:900px;margin:22px auto 26px;padding:14px 18px;border:1px solid #d8c9a9;border-left:4px solid #b58b45;border-radius:8px;background:#f7f3e9;color:#403a30;font:400 .9rem/1.65 Arial,sans-serif;direction:ltr;text-align:left;';
+  var heading=document.createElement('strong');
+  heading.style.cssText='display:block;margin-bottom:4px;font-weight:700;';
+  heading.setAttribute('data-notice-title','');
+  var paragraph=document.createElement('p');
+  paragraph.style.cssText='margin:0;';
+  paragraph.setAttribute('data-notice-body','');
+  existing.appendChild(heading);
+  existing.appendChild(paragraph);
+  var footer=document.querySelector('footer');
+  if(footer&&footer.parentNode)footer.parentNode.insertBefore(existing,footer.nextSibling);
+  else document.body.appendChild(existing);
+ }
+ existing.querySelector('[data-notice-title]').textContent=text.title;
+ existing.querySelector('[data-notice-body]').textContent=text.body;
+}
 var original=new WeakMap();
 function applyFooterText(lang){
  document.querySelectorAll('.author,footer').forEach(function(footer){
@@ -313,6 +355,7 @@ function apply(){
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
  applyFooterText(lang);
+ applyTranslationNotice(lang);
  document.querySelectorAll('[alt],[aria-label],[title]').forEach(function(el){
   ['alt','aria-label','title'].forEach(function(attr){
    if(!el.hasAttribute(attr))return;
