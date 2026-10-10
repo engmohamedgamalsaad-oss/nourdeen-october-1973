@@ -12,7 +12,7 @@
     k16:'جارٍ تحميل الحكايات...',k17:'تحت إشراف',k18:'وكيل القسم الإعدادي الأستاذة/ دينا الفقى',
     k19:'مديرة المدرسة الأستاذة / نهى جعفر',k20:'مدرسة المنار القومية للغات للبنات',
     k21:'إخلاء مسؤولية: المعلومات الواردة في الحكايات جُمعت من المصادر المرفقة، ولا تتحمل إدارة المدرسة أو مديرة المدرسة مسؤولية محتواها.',
-    js_new_story:'حكاية جديدة',js_photo_of:'صورة',js_likes_label:'عدد الإعجابات',js_likes:'الإعجابات',
+    js_new_story:'حكاية جديدة',js_photo_of:'صورة',js_likes_label:'عدد الإعجابات',js_likes:'الإعجابات',js_no_stories:'لا توجد حكايات بعد.',
     js_open_story:'افتح الحكاية',js_likes_err:'تعذر تحميل عدد الإعجابات الآن',
     js_stories_err:'تعذّر تحميل الحكايات. تأكد من فتح الموقع من رابط GitHub Pages وأن ملف stories/index.json موجود.'
   });
@@ -28,7 +28,7 @@
     k16:'Loading stories…',k17:'Under the supervision of',k18:'Preparatory Section Deputy: Ms Dina El-Feki',
     k19:'School Principal: Ms Noha Jaafar',k20:'Al-Manar National Language School for Girls',
     k21:'Disclaimer: Information in these stories was gathered from the listed sources. The school administration and principal are not responsible for the content.',
-    js_new_story:'New story',js_photo_of:'Photo of',js_likes_label:'Like count',js_likes:'Likes',
+    js_new_story:'New story',js_photo_of:'Photo of',js_likes_label:'Like count',js_likes:'Likes',js_no_stories:'No stories yet.',
     js_open_story:'Read story',js_likes_err:'Could not load the like count right now',
     js_stories_err:'Could not load stories. Open the site through GitHub Pages and check that stories/index.json exists.'
   });
@@ -44,7 +44,7 @@
     k16:'Chargement des récits…',k17:'Sous la supervision de',k18:'Adjointe de la section préparatoire : Mme Dina El-Feki',
     k19:'Directrice de l’école : Mme Noha Jaafar',k20:'École nationale de langues Al-Manar pour filles',
     k21:'Avis : les informations présentées proviennent des sources citées. L’administration de l’école et sa directrice ne sont pas responsables du contenu.',
-    js_new_story:'Nouveau récit',js_photo_of:'Photo de',js_likes_label:'Nombre de mentions J’aime',js_likes:'J’aime',
+    js_new_story:'Nouveau récit',js_photo_of:'Photo de',js_likes_label:'Nombre de mentions J’aime',js_likes:'J’aime',js_no_stories:'Aucun récit pour le moment.',
     js_open_story:'Lire le récit',js_likes_err:'Impossible de charger le nombre de mentions J’aime',
     js_stories_err:'Impossible de charger les récits. Ouvrez le site via GitHub Pages et vérifiez stories/index.json.'
   });
@@ -60,7 +60,7 @@
     k16:'Caricamento dei racconti…',k17:'Sotto la supervisione di',k18:'Vicepreside della sezione preparatoria: prof.ssa Dina El-Feki',
     k19:'Dirigente scolastica: prof.ssa Noha Jaafar',k20:'Scuola nazionale linguistica Al-Manar per ragazze',
     k21:'Avvertenza: le informazioni nei racconti provengono dalle fonti indicate. La direzione scolastica e la preside non sono responsabili dei contenuti.',
-    js_new_story:'Nuovo racconto',js_photo_of:'Foto di',js_likes_label:'Numero di Mi piace',js_likes:'Mi piace',
+    js_new_story:'Nuovo racconto',js_photo_of:'Foto di',js_likes_label:'Numero di Mi piace',js_likes:'Mi piace',js_no_stories:'Ancora nessun racconto.',
     js_open_story:'Leggi il racconto',js_likes_err:'Impossibile caricare il numero di Mi piace',
     js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.'
   });
