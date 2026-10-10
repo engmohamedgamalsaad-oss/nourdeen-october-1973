@@ -69,3 +69,16 @@ footer strong{color:var(--gold)}
 .memorial-caption p{color:#dce6eb;font-size:.94rem;line-height:2;margin:0 0 12px}
 .memorial-caption a{color:#e6c88e;font-size:.86rem;line-height:1.8;overflow-wrap:anywhere}
 @media(max-width:650px){.memorial-grid{grid-template-columns:1fr}.memorial-photo{height:270px}.memorial-gallery{padding:50px 18px}}
+
+
+/* شريط اللغات داخل الهيدر بدل الشريط القديم أسفل الهيدر */
+.story-language-switch{display:flex;align-items:center;justify-content:flex-end;gap:5px;flex-wrap:nowrap;min-width:0}
+.story-language-switch .lang-option{font-size:.68rem;padding:4px 7px;white-space:nowrap}
+@media(max-width:650px){
+  .topbar{gap:7px;padding-inline:8px}
+  .topbar .home-link{font-size:.72rem;white-space:normal;max-width:100px;line-height:1.4}
+  .topbar .school-brand{gap:4px;min-width:0}
+  .topbar .school-brand img{width:30px;height:30px}
+  .story-language-switch{gap:3px}
+  .story-language-switch .lang-option{font-size:.57rem;padding:3px 4px}
+}
