@@ -383,7 +383,7 @@
     var heroSection = document.querySelector('.hero');
     if (storySlug === '004' && heroSection) {
       bar.classList.add('story-share-bar--below-hero');
-      heroSection.insertAdjacentElement('afterend', bar);
+      heroSection.appendChild(bar);
     } else {
       var subtitle = heroContent.querySelector('.hero-subtitle');
       if (subtitle && subtitle.parentNode === heroContent) {
