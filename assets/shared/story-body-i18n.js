@@ -292,6 +292,32 @@ Object.assign(translations,{
 "Peaceful Societies — Nubian man given Egyptian military award":{fr:"Peaceful Societies — un Nubien reçoit une distinction militaire égyptienne",it:"Peaceful Societies — un nubiano riceve un’onorificenza militare egiziana"},
 "الأهرام اليومي — اللغة النوبية وانتصار حرب أكتوبر 1973؛ تفاصيل الألفاظ والروايات المختلفة":{en:"Al-Ahram Daily — The Nubian language and the 1973 October War: terms and differing accounts",fr:"Al-Ahram — la langue nubienne et la guerre d’octobre 1973 : termes et récits divergents",it:"Al-Ahram — la lingua nubiana e la guerra d’ottobre 1973: termini e resoconti differenti"}
 });
+Object.assign(translations,{
+"جنود مصريون يرفعون العلم في سيناء.":{en:"Egyptian soldiers raise the flag in Sinai.",fr:"Des soldats égyptiens hissent le drapeau dans le Sinaï.",it:"Soldati egiziani issano la bandiera nel Sinai."},
+"الصورة توضح سياق النصر البري، وليست صورة للقوات البحرية. للمقارنة التاريخية:":{en:"This image shows the land campaign, not the Navy. For historical comparison:",fr:"Cette image illustre la victoire terrestre, et non la marine. Pour une comparaison historique :",it:"Questa immagine mostra la vittoria terrestre, non la Marina. Per un confronto storico:"},
+"خريطة توضيحية للموقع الجغرافي. للمقارنة:":{en:"Map showing the geographic location. For comparison:",fr:"Carte indiquant la situation géographique. Pour comparaison :",it:"Mappa della posizione geografica. Per confronto:"},
+"وفي البحر الأحمر كان باب المندب جبهة استراتيجية بعيدة، بينما كانت في البحر المتوسط وخليج السويس أهداف أخرى تحت ضغط القوات البحرية.":{en:"In the Red Sea, Bab el-Mandeb was a distant strategic front, while other targets in the Mediterranean and Gulf of Suez faced pressure from Egyptian naval forces.",fr:"En mer Rouge, Bab el-Mandeb constituait un front stratégique éloigné, tandis que d’autres objectifs en Méditerranée et dans le golfe de Suez étaient soumis à la pression des forces navales égyptiennes.",it:"Nel Mar Rosso, Bab el-Mandeb era un fronte strategico lontano, mentre altri obiettivi nel Mediterraneo e nel Golfo di Suez erano sotto pressione delle forze navali egiziane."},
+"المصدر:":{en:"Source:",fr:"Source :",it:"Fonte:"},
+"؛ صفحة الملف تذكر أن الصورة من أكتوبر 1973 وتصنفها ضمن الملكية العامة في مصر.":{en:"; the file page states that the photograph is from October 1973 and classifies it as public domain in Egypt.",fr:" ; la page du fichier indique que la photo date d’octobre 1973 et la classe dans le domaine public en Égypte.",it:"; la pagina del file indica che la foto è dell’ottobre 1973 e la classifica come di pubblico dominio in Egitto."},
+"وفي ستينيات القرن العشرين شارك في بناء السد العالي في أسوان. هناك رأى كيف تُستخدم نفاثات المياه القوية لتحريك كميات هائلة من الرمال. وتذكر روايات منشورة عنه أن خبرته في مشروع السد العالي ساعدته على التفكير في استخدام الماء لفتح ثغرات في ساتر من الرمال.":{en:"In the 1960s, he helped build the Aswan High Dam, where he saw how powerful water jets could move huge amounts of sand. Published accounts say this experience helped him consider using water to breach a sand embankment.",fr:"Dans les années 1960, il participa à la construction du haut barrage d’Assouan, où il observa comment de puissants jets d’eau pouvaient déplacer d’énormes quantités de sable. Selon des récits publiés, cette expérience lui donna l’idée d’utiliser l’eau pour ouvrir des brèches dans un remblai de sable.",it:"Negli anni Sessanta partecipò alla costruzione della diga di Assuan, dove vide come potenti getti d’acqua potessero spostare enormi quantità di sabbia. Secondo resoconti pubblicati, questa esperienza gli suggerì di usare l’acqua per aprire varchi in un terrapieno."},
+"قبل الحرب":{en:"Before the War",fr:"Avant la guerre",it:"Prima della guerra"},
+"6 أكتوبر 1973":{en:"6 October 1973",fr:"6 octobre 1973",it:"6 ottobre 1973"},
+"الملاحظة":{en:"Observation",fr:"Observation",it:"Osservazione"},
+"فكرة كبيرة قد تبدأ من شيء رآه شخص في عمله اليومي.":{en:"A major idea can begin with something someone notices in everyday work.",fr:"Une grande idée peut naître d’une observation faite dans le travail quotidien.",it:"Una grande idea può nascere da qualcosa osservato nel lavoro quotidiano."},
+"البساطة":{en:"Simplicity",fr:"Simplicité",it:"Semplicità"},
+"أحيانًا يكون الحل الأبسط هو الأذكى.":{en:"Sometimes the simplest solution is the smartest.",fr:"Parfois, la solution la plus simple est la plus ingénieuse.",it:"A volte la soluzione più semplice è la più intelligente."},
+"التجربة":{en:"Testing",fr:"Expérimentation",it:"Sperimentazione"},
+"لا تُنفَّذ الفكرة إلا بعد اختبارها والتدريب عليها.":{en:"An idea is put into practice only after testing and training.",fr:"Une idée n’est mise en pratique qu’après des essais et un entraînement.",it:"Un’idea viene messa in pratica solo dopo prove e addestramento."},
+"الفكرة تحتاج مهندسين وجنودًا وتخطيطًا حتى تنجح.":{en:"An idea needs engineers, soldiers, and planning to succeed.",fr:"Pour réussir, une idée a besoin d’ingénieurs, de soldats et de planification.",it:"Per riuscire, un’idea ha bisogno di ingegneri, soldati e pianificazione."},
+"أحمد إدريس":{en:"Ahmed Idris",fr:"Ahmed Idris",it:"Ahmed Idris"},
+"أوشريا":{en:"Ousharia",fr:"Ousharia",it:"Ousharia"},
+"كلمة وردت في روايات الشفرة بمعنى «اضرب»، وكانت من أشهر كلماتها":{en:"A word described in accounts of the code as meaning “strike”; it was among its best-known words.",fr:"Un mot présenté dans les récits du code comme signifiant « frappe » ; c’était l’un de ses mots les plus connus.",it:"Una parola descritta nei resoconti del codice con il significato di «colpisci», tra le sue espressioni più note."},
+"6 أكتوبر 1973":{en:"6 October 1973",fr:"6 octobre 1973",it:"6 ottobre 1973"},
+"التنوع قوة":{en:"Diversity Is Strength",fr:"La diversité est une force",it:"La diversità è forza"},
+"فكرة بسيطة":{en:"A Simple Idea",fr:"Une idée simple",it:"Un’idea semplice"},
+"الكتمان":{en:"Secrecy",fr:"La discrétion",it:"La segretezza"},
+"التحقق":{en:"Verification",fr:"Vérification",it:"Verifica"}
+});
 function applyPageMeta(){
  var slug=document.body.getAttribute('data-story-slug');
  var lang=(window.I18N&&window.I18N.lang())||'ar';
