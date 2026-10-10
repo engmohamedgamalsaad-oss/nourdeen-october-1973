@@ -1,6 +1,6 @@
 {
   "name": "مليكة محمد جمال",
-  "grade": "الصف الاول الابتدائي",
+  "grade": "الصف الأول الابتدائي",
   "className": "1 A",
   "title": "لغة لا يفهمها العدو",
   "subtitle": "حكاية الشفرة النوبية",
@@ -12,19 +12,22 @@
       "name": "Malika Mohamed Gamal",
       "grade": "1st Grade (Primary)",
       "title": "A Language the Enemy Could Not Understand",
-      "subtitle": "The story of the Nubian code"
+      "subtitle": "The story of the Nubian code",
+      "className": "Class 1 A"
     },
     "fr": {
       "name": "Malika Mohamed Gamal",
       "grade": "1re année du primaire",
-      "title": "Une langue que l'ennemi ne comprenait pas",
-      "subtitle": "L'histoire du code nubien"
+      "title": "Une langue que l’ennemi ne comprenait pas",
+      "subtitle": "L’histoire du code nubien",
+      "className": "Classe 1 A"
     },
     "it": {
       "name": "Malika Mohamed Gamal",
       "grade": "1ª elementare",
       "title": "Una lingua che il nemico non capiva",
-      "subtitle": "La storia del codice nubiano"
+      "subtitle": "La storia del codice nubiano",
+      "className": "Classe 1 A"
     }
   }
 }
