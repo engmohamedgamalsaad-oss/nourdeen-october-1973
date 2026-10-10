@@ -11,37 +11,47 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/shared/i18n.css">
 <style>
-:root{--gold:#e3bd78;--bg:#041018}
+:root{color-scheme:dark;--gold:#f2ca82;--gold2:#c38a48;--bg:#06121c;--line:rgba(226,190,128,.2);--muted:#a8bdc6;--mint:#70dfc0}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#edf3f3;font-family:"Cairo",sans-serif;line-height:1.9}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 80% 0%,rgba(19,100,111,.25),transparent 34rem),radial-gradient(ellipse at 0% 45%,rgba(163,115,54,.11),transparent 32rem),var(--bg);color:#edf5f6;font-family:"Cairo",sans-serif;line-height:1.9}
 .skip{position:absolute;inset-inline-start:8px;top:-60px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;z-index:10}
 .skip:focus{top:8px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px clamp(14px,3vw,28px);background:rgba(3,13,19,.98);border-bottom:1px solid rgba(184,135,75,.38)}
-header a.back{color:#f4e5c8;text-decoration:none;font-weight:800;min-height:44px;display:inline-flex;align-items:center}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:15px clamp(16px,4vw,48px);background:rgba(4,15,23,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+header a.back{color:#f4e5c8;text-decoration:none;font-weight:800;min-height:44px;display:inline-flex;align-items:center;padding:0 12px;border-radius:10px}
+header a.back:hover{background:#ffffff0c}
 header a.back:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .lang-switch{display:flex;gap:10px;direction:ltr}
-.lang-option{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:#cbd5d7;font:600 .85rem "Cairo",sans-serif;cursor:pointer;padding:8px 2px;min-height:44px}
+.lang-option{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:#cbd5d7;font:600 .85rem "Cairo",sans-serif;cursor:pointer;padding:8px 4px;min-height:44px}
 .lang-option.is-active{color:var(--gold);border-bottom-color:var(--gold)}
 .lang-option:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-main{width:min(720px,94%);margin:28px auto 60px}
-h1{font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:clamp(1.7rem,5vw,2.5rem);line-height:1.6;margin:0 0 6px;text-align:center}
-.lead{text-align:center;color:#c3d1d3;margin:0 0 22px}
-form{background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.94));border:1px solid rgba(184,135,75,.35);border-radius:12px;padding:clamp(18px,4vw,30px);display:grid;gap:16px}
-label.f{display:grid;gap:6px;font-weight:700;color:#f4e5c8}
-label.f small{font-weight:400;color:#b7c9cc}
-input[type=text],textarea{width:100%;font:500 1rem "Cairo",sans-serif;color:#fff;background:#0a1f29;border:1px solid rgba(227,189,120,.45);border-radius:10px;padding:11px 14px;min-height:46px}
+main{width:min(800px,94%);margin:clamp(24px,5vw,52px) auto 72px}
+.hero{text-align:center;margin-bottom:24px}
+.hero-mark{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(112,223,192,.25);background:rgba(112,223,192,.07);color:var(--mint);padding:6px 14px;border-radius:99px;font-size:.82rem;font-weight:800;margin-bottom:12px}
+.hero-mark:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--mint);box-shadow:0 0 12px #70dfc0}
+h1{font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:clamp(1.8rem,6vw,2.8rem);line-height:1.5;margin:0 0 8px;text-align:center}
+.lead{text-align:center;color:#c3d1d3;margin:0 auto;max-width:600px}
+form{position:relative;background:linear-gradient(145deg,rgba(16,49,62,.94),rgba(7,23,33,.97));border:1px solid var(--line);border-radius:24px;padding:clamp(20px,5vw,38px);display:grid;gap:18px;box-shadow:0 24px 65px rgba(0,0,0,.2);overflow:hidden}
+form:before{content:"";position:absolute;inset:0 0 auto;height:3px;background:linear-gradient(90deg,transparent,var(--mint),var(--gold),transparent)}
+label.f{display:grid;gap:7px;font-weight:700;color:#f4e5c8}
+label.f small{font-weight:400;color:var(--muted);font-size:.88rem;line-height:1.7}
+input[type=text],textarea{width:100%;font:500 1rem "Cairo",sans-serif;color:#fff;background:rgba(3,15,23,.7);border:1px solid rgba(181,207,211,.2);border-radius:13px;padding:12px 14px;min-height:49px;transition:border-color .18s,box-shadow .18s}
 textarea{resize:vertical;line-height:1.9}
-input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,input[type=checkbox]:focus-visible{outline:3px solid #fff;outline-offset:2px}
+input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,input[type=checkbox]:focus-visible{outline:3px solid #fff;outline-offset:3px}
+input:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(112,223,192,.1)}
 .hp{position:absolute;inset-inline-start:-9999px;width:1px;height:1px;overflow:hidden}
-.check{display:flex;gap:10px;align-items:flex-start;font-weight:600}
+.check{display:flex;gap:11px;align-items:flex-start;font-weight:600;color:#dbe8e8;background:#ffffff05;border:1px solid rgba(181,207,211,.12);border-radius:14px;padding:13px}
 .check input{width:22px;height:22px;margin-top:6px;flex:0 0 22px;accent-color:#e3bd78}
-button.send{font:800 1.05rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:10px;padding:13px 26px;min-height:48px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006}
-button.send:disabled{opacity:.6;cursor:wait}
-.msg{padding:12px 16px;border-radius:10px;font-weight:700}
-.msg.ok{background:rgba(47,165,107,.2);border:1px solid #2fa56b}
-.msg.err{background:rgba(212,87,90,.2);border:1px solid #d4575a}
-.count{font-size:.85rem;color:#b7c9cc;text-align:end}
+button.send{font:800 1.05rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:13px;padding:14px 26px;min-height:52px;background:linear-gradient(135deg,#f4d18e,#bf8747);color:#171006;box-shadow:0 9px 24px rgba(195,138,72,.16);transition:transform .16s,filter .16s}
+button.send:hover{filter:brightness(1.07);transform:translateY(-1px)}
+button.send:disabled{opacity:.6;cursor:wait;transform:none}
+.msg{padding:13px 16px;border-radius:13px;font-weight:700}
+.msg.ok{background:rgba(47,165,107,.15);border:1px solid rgba(47,165,107,.55);color:#a6f0c6}
+.msg.err{background:rgba(212,87,90,.15);border:1px solid rgba(212,87,90,.55);color:#ffb6b7}
+.count{font-size:.85rem;color:var(--muted);text-align:end}
+#msg:empty{display:none}
 [hidden]{display:none!important}
+@media(max-width:560px){main{width:min(100% - 24px,800px);margin-top:22px}form{border-radius:18px;padding:20px 16px;gap:16px}.hero-mark{font-size:.77rem}header{padding:12px 14px}}
 </style>
 </head>
 <body>
@@ -51,8 +61,8 @@ button.send:disabled{opacity:.6;cursor:wait}
   <div class="lang-switch" data-lang-switch aria-label="اختيار اللغة"></div>
 </header>
 <main id="main">
-  <h1 id="title">اكتب حكايتك</h1>
-  <p class="lead" id="lead"></p>
+  <div class="hero"><div class="hero-mark">مساحة إبداع الطالبات</div><h1 id="title">اكتب حكايتك</h1>
+  <p class="lead" id="lead"></p></div>
   <form id="f" novalidate>
     <label class="f"><span id="l_name"></span><input type="text" id="name" maxlength="80" autocomplete="name" required></label>
     <label class="f"><span id="l_grade"></span><input type="text" id="grade" maxlength="60"></label>
