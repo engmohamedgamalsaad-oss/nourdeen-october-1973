@@ -204,7 +204,16 @@ Object.assign(translations,{
 "مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls",fr:"École nationale de langues Al-Manar pour filles",it:"Scuola nazionale linguistica femminile Al-Manar"},
 "أكتوبر 1973":{en:"October 1973",fr:"Octobre 1973",it:"Ottobre 1973"},
 "الصف الثالث الابتدائي • Class 3 E":{en:"3rd Grade Primary • Class 3 E",fr:"3e année primaire • Classe 3 E",it:"3ª primaria • Classe 3 E"},
-"الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"}
+"الصف الاول الابتدائي • Class 1 A":{en:"1st Grade Primary • Class 1 A",fr:"1re année primaire • Classe 1 A",it:"1ª primaria • Classe 1 A"},
+"نوردين تحكي":{en:"Nourdeen tells the story",fr:"Nourdeen raconte",it:"Nourdeen racconta"},
+"كارما تحكي":{en:"Karma tells the story",fr:"Karma raconte",it:"Karma racconta"},
+"مليكة تحكي":{en:"Malika tells the story",fr:"Malika raconte",it:"Malika racconta"},
+"رأيك يهمنا":{en:"Your opinion matters",fr:"Votre avis compte",it:"La tua opinione conta"},
+"المصادر":{en:"Sources",fr:"Sources",it:"Fonti"},
+"يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.":{en:"You can submit one like and one reaction per story from the same browser.",fr:"Vous pouvez envoyer un J’aime et une réaction par récit depuis le même navigateur.",it:"Puoi inviare un Mi piace e una reazione per racconto dallo stesso browser."},
+"نوردين محمد جمال":{en:"Nourdeen Mohamed Gamal",fr:"Nourdeen Mohamed Gamal",it:"Nourdeen Mohamed Gamal"},
+"كارما محمد جمال":{en:"Karma Mohamed Gamal",fr:"Karma Mohamed Gamal",it:"Karma Mohamed Gamal"},
+"مليكة محمد جمال":{en:"Malika Mohamed Gamal",fr:"Malika Mohamed Gamal",it:"Malika Mohamed Gamal"}
 });
 
 
@@ -245,7 +254,7 @@ if(document.readyState!=='loading')applyPageMeta();
 var original=new WeakMap();
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
- document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,footer strong,footer').forEach(function(el){
+ document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,.kicker,.reaction-count-line,footer strong').forEach(function(el){
    if(!original.has(el)) original.set(el,el.textContent);
    var ar=original.get(el);
    if(el.querySelector && el.querySelector('a')) return;
