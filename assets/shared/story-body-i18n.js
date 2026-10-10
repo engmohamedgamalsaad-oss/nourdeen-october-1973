@@ -536,6 +536,37 @@ function applyFooterText(lang){
 }
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
+ var digitMap={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
+ function normalizeLocalizedText(){
+  if(lang==='ar')return;
+  var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false),node;
+  while((node=walker.nextNode())){
+   if(!node.nodeValue||!/[٠-٩۰-۹]/.test(node.nodeValue))continue;
+   var parent=node.parentElement;
+   if(parent&&/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(parent.tagName))continue;
+   node.nodeValue=node.nodeValue.replace(/[٠-٩۰-۹]/g,function(d){return digitMap[d]||d;});
+  }
+  document.querySelectorAll('[alt],[aria-label],[title]').forEach(function(el){
+   ['alt','aria-label','title'].forEach(function(attr){
+    if(el.hasAttribute(attr))el.setAttribute(attr,el.getAttribute(attr).replace(/[٠-٩۰-۹]/g,function(d){return digitMap[d]||d;}));
+   });
+  });
+ }
+ function translateRemainingTextNodes(){
+  if(lang==='ar')return;
+  var walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false),node;
+  while((node=walker.nextNode())){
+   var parent=node.parentElement;
+   if(!parent||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(parent.tagName))continue;
+   if(!/[\u0600-\u06FF]/.test(node.nodeValue))continue;
+   var source=node.nodeValue,normalized=source.replace(/\s+/g,' ').trim();
+   var item=translations[normalized]||translations[source.trim()];
+   if(item&&item[lang]){
+    var leading=(source.match(/^\s*/)||[''])[0],trailing=(source.match(/\s*$/)||[''])[0];
+    node.nodeValue=leading+item[lang]+trailing;
+   }
+  }
+ }
  document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story a,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4,.story svg text,.kicker,.reaction-count-line,.author strong,footer strong').forEach(function(el){
    if(!original.has(el)) original.set(el,el.textContent);
    var ar=original.get(el);
@@ -554,12 +585,14 @@ function apply(){
    var prop='__storyI18nOriginal_'+attr;
    if(!el[prop])el[prop]=el.getAttribute(attr);
    var source=el[prop];
-   var normalized=source.replace(/\\s+/g,' ').trim();
+   var normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source];
    if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
    if(item&&item[lang])el.setAttribute(attr,item[lang]);
   });
  });
+ translateRemainingTextNodes();
+ normalizeLocalizedText();
 }
 document.addEventListener('DOMContentLoaded',apply);
 document.addEventListener('site-language-change',apply);
