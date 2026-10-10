@@ -943,7 +943,7 @@ footer {
     .then(function (list) {
       if (!Array.isArray(list) || !list.length) {
         box.innerHTML =
-          '<div class="empty">لا توجد حكايات بعد.</div>';
+          '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_no_stories') : 'لا توجد حكايات بعد.') + '</div>';
         return;
       }
 
@@ -959,7 +959,7 @@ footer {
         var grade = esc(gradeText);
         var title = esc(source.title || story.title || '');
         var color = esc(story.color || '#b8874b');
-        var first = esc((story.name || 'ح').charAt(0));
+        var first = esc((source.name || story.name || 'ح').charAt(0));
         var studentPhoto = {
           '001': 'assets/students/nourdeen-avatar.jpg',
           '002': 'assets/students/karma-avatar.jpg',
@@ -994,7 +994,7 @@ footer {
           +     '<div class="card-grade">' + grade + '</div>'
           +     '<div class="card-title">' + title + '</div>'
           +     '<div class="card-bottom-row">'
-          +       '<span class="card-like-count" aria-label="عدد الإعجابات">❤️ الإعجابات <span class="like-number" data-home-like-count="' + id + '">…</span></span>'
+          +       '<span class="card-like-count" aria-label="' + esc(window.I18N ? window.I18N.t("js_likes_label") : "عدد الإعجابات") + '">❤️ ' + esc(window.I18N ? window.I18N.t("js_likes") : "الإعجابات") + ' <span class="like-number" data-home-like-count="' + id + '">…</span></span>'
           +       '<span class="card-btn">' + esc(window.I18N ? window.I18N.t('js_open_story') : 'افتح الحكاية') + '</span>'
           +     '</div>'
           +   '</div>'
