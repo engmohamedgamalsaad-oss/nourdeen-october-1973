@@ -2,6 +2,15 @@
 'use strict';
 var translations={
 "Language":{ar:"اختيار اللغة",en:"Language",fr:"Choisir la langue",it:"Seleziona la lingua"},
+"تصميم فني: جندي وامرأة مصرية أمام الأهرامات والعلم ودبابة ومراكب شراعية":{en:"Artwork: an Egyptian soldier and woman before the pyramids, flag, tank, and sailboats",fr:"Illustration : un soldat et une Égyptienne devant les pyramides, le drapeau, un char et des voiliers",it:"Illustrazione: un soldato e una donna egiziani davanti alle piramidi, alla bandiera, a un carro armato e a barche a vela"},
+"غلاف حكايات أكتوبر 1973":{en:"Cover of the October 1973 stories",fr:"Couverture des récits d’octobre 1973",it:"Copertina dei racconti dell’ottobre 1973"},
+"غلاف قصة العقل قبل السلاح عن عبور أكتوبر":{en:"Cover of Brains Before Weapons, about the October crossing",fr:"Couverture de L’intelligence avant les armes, sur le franchissement du canal en octobre",it:"Copertina di L’ingegno prima delle armi, sull’attraversamento del canale in ottobre"},
+"غلاف قصة الشفرة النوبية في حرب أكتوبر":{en:"Cover of the story about the Nubian code in the October War",fr:"Couverture du récit du code nubien pendant la guerre d’octobre",it:"Copertina del racconto sul codice nubiano nella guerra d’ottobre"},
+"جنود مصريون يعبرون خط بارليف في حرب أكتوبر 1973":{en:"Egyptian soldiers crossing the Bar Lev Line during the 1973 October War",fr:"Des soldats égyptiens franchissant la ligne Bar-Lev pendant la guerre d’octobre 1973",it:"Soldati egiziani attraversano la linea Bar-Lev durante la guerra dell’ottobre 1973"},
+"اختار رد فعلك على الحكاية":{en:"Choose your reaction to the story",fr:"Choisissez votre réaction à ce récit",it:"Scegli la tua reazione al racconto"},
+"العقل قبل السلاح":{en:"Brains Before Weapons",fr:"L’intelligence avant les armes",it:"L’ingegno prima delle armi"},
+"لغة لا يفهمها العدو":{en:"A Language the Enemy Could Not Understand",fr:"Une langue que l’ennemi ne comprenait pas",it:"Una lingua che il nemico non capiva"},
+
 "شعار مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls logo",fr:"Logo de l’école de langues Al-Manar pour filles",it:"Logo della Scuola linguistica Al-Manar per ragazze"},
 "جنود مصريون يرفعون العلم المصري":{en:"Egyptian soldiers raising the Egyptian flag",fr:"Des soldats égyptiens hissant le drapeau égyptien",it:"Soldati egiziani che issano la bandiera egiziana"},
 "خريطة باب المندب والبحر الأحمر":{en:"Map of Bab el-Mandeb and the Red Sea",fr:"Carte de Bab el-Mandeb et de la mer Rouge",it:"Mappa di Bab el-Mandeb e del Mar Rosso"},
@@ -304,8 +313,8 @@ function apply(){
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
  applyFooterText(lang);
- document.querySelectorAll('[alt],[aria-label]').forEach(function(el){
-  ['alt','aria-label'].forEach(function(attr){
+ document.querySelectorAll('[alt],[aria-label],[title]').forEach(function(el){
+  ['alt','aria-label','title'].forEach(function(attr){
    if(!el.hasAttribute(attr))return;
    var prop='__storyI18nOriginal_'+attr;
    if(!el[prop])el[prop]=el.getAttribute(attr);
