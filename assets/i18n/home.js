@@ -14,7 +14,8 @@
     k21:'إخلاء مسؤولية: المعلومات الواردة في الحكايات جُمعت من المصادر المرفقة، ولا تتحمل إدارة المدرسة أو مديرة المدرسة مسؤولية محتواها.',
     js_new_story:'حكاية جديدة',js_photo_of:'صورة',js_likes_label:'عدد الإعجابات',js_likes:'الإعجابات',js_no_stories:'لا توجد حكايات بعد.',
     js_open_story:'افتح الحكاية',js_likes_err:'تعذر تحميل عدد الإعجابات الآن',
-    js_stories_err:'تعذّر تحميل الحكايات. تأكد من فتح الموقع من رابط GitHub Pages وأن ملف stories/index.json موجود.'
+    js_stories_err:'تعذّر تحميل الحكايات. تأكد من فتح الموقع من رابط GitHub Pages وأن ملف stories/index.json موجود.',
+    js_language_label:'اختيار اللغة',js_school_logo_alt:'شعار مدرسة المنار القومية للغات للبنات',js_home_cover_alt:'غلاف حكايات أكتوبر 1973'
   });
   window.I18N.register('en',{
     k1:'Immortal Heroes Through History',k2:'Al-Manar National Language School for Girls',k3:'Students’ Story Archive',
@@ -30,7 +31,8 @@
     k21:'Disclaimer: Information in these stories was gathered from the listed sources. The school administration and principal are not responsible for the content.',
     js_new_story:'New story',js_photo_of:'Photo of',js_likes_label:'Like count',js_likes:'Likes',js_no_stories:'No stories yet.',
     js_open_story:'Read story',js_likes_err:'Could not load the like count right now',
-    js_stories_err:'Could not load stories. Open the site through GitHub Pages and check that stories/index.json exists.'
+    js_stories_err:'Could not load stories. Open the site through GitHub Pages and check that stories/index.json exists.',
+    js_language_label:'Choose language',js_school_logo_alt:'Al-Manar National Language School for Girls logo',js_home_cover_alt:'Cover of the October 1973 stories'
   });
   window.I18N.register('fr',{
     k1:'Héros immortels à travers l’histoire',k2:'École nationale de langues Al-Manar pour filles',k3:'Archives des récits des élèves',
@@ -46,7 +48,8 @@
     k21:'Avis : les informations présentées proviennent des sources citées. L’administration de l’école et sa directrice ne sont pas responsables du contenu.',
     js_new_story:'Nouveau récit',js_photo_of:'Photo de',js_likes_label:'Nombre de mentions J’aime',js_likes:'J’aime',js_no_stories:'Aucun récit pour le moment.',
     js_open_story:'Lire le récit',js_likes_err:'Impossible de charger le nombre de mentions J’aime',
-    js_stories_err:'Impossible de charger les récits. Ouvrez le site via GitHub Pages et vérifiez stories/index.json.'
+    js_stories_err:'Impossible de charger les récits. Ouvrez le site via GitHub Pages et vérifiez stories/index.json.',
+    js_language_label:'Choisir la langue',js_school_logo_alt:'Logo de l’école de langues Al-Manar pour filles',js_home_cover_alt:'Couverture des récits d’octobre 1973'
   });
   window.I18N.register('it',{
     k1:'Eroi immortali nella storia',k2:'Scuola nazionale linguistica Al-Manar per ragazze',k3:'Archivio dei racconti delle studentesse',
@@ -62,7 +65,8 @@
     k21:'Avvertenza: le informazioni nei racconti provengono dalle fonti indicate. La direzione scolastica e la preside non sono responsabili dei contenuti.',
     js_new_story:'Nuovo racconto',js_photo_of:'Foto di',js_likes_label:'Numero di Mi piace',js_likes:'Mi piace',js_no_stories:'Ancora nessun racconto.',
     js_open_story:'Leggi il racconto',js_likes_err:'Impossibile caricare il numero di Mi piace',
-    js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.'
+    js_stories_err:'Impossibile caricare i racconti. Apri il sito tramite GitHub Pages e verifica stories/index.json.',
+    js_language_label:'Seleziona la lingua',js_school_logo_alt:'Logo della Scuola linguistica Al-Manar per ragazze',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973'
   });
   window.I18N.apply();
 
