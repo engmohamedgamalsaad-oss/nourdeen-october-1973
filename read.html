@@ -59,7 +59,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
 <main id="main">
   <div class="state" id="state" role="status">…</div>
   <article id="story" hidden>
-    <div class="eyebrow">EGYPT • 6 OCTOBER 1973</div>
+    <div class="eyebrow" id="sEyebrow">EGYPT • 6 OCTOBER 1973</div>
     <h1 id="sTitle"></h1>
     <p class="sub" id="sSub"></p>
     <p class="by" id="sBy"></p>
@@ -108,12 +108,13 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var id=new URLSearchParams(location.search).get('id')||'';
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){ $('state').textContent=t('notFound'); return; }
 
-  fetch(API+'/rest/v1/submitted_stories?id=eq.'+encodeURIComponent(id)+'&status=eq.published&select=student_name,grade,title,subtitle,body,sources,color',{
+  fetch(API+'/rest/v1/submitted_stories?id=eq.'+encodeURIComponent(id)+'&status=eq.published&select=student_name,grade,title,subtitle,body,sources,color,story_number',{
     headers:{apikey:KEY,Authorization:'Bearer '+KEY,Accept:'application/json'}
   }).then(function(r){ if(!r.ok) throw new Error(String(r.status)); return r.json(); })
   .then(function(rows){
     if(!rows.length){ $('state').textContent=t('notFound'); return; }
     var s=rows[0];
+    if(s.story_number) $('sEyebrow').textContent='EGYPT • 6 OCTOBER 1973 • '+({ar:'الحكاية ',en:'STORY ',fr:'RÉCIT ',it:'RACCONTO '}[lang]||'STORY ')+String(s.story_number).padStart(3,'0');
     if(/^#[0-9a-fA-F]{6}$/.test(s.color||'')) document.documentElement.style.setProperty('--c',s.color);
     document.title=s.title+' | '+s.student_name;
     $('sTitle').textContent=s.title;
