@@ -1134,7 +1134,7 @@ footer {
   function loadPublishedStories() {
     var api = 'https://ypwprddkscnfblhftkeb.supabase.co';
     var key = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-    fetch(api + '/rest/v1/submitted_stories?select=id,student_name,grade,title,subtitle,color,created_at&status=eq.published&order=created_at.desc&limit=100', {
+    fetch(api + '/rest/v1/submitted_stories?select=id,story_number,student_name,grade,title,subtitle,color,created_at&status=eq.published&order=created_at.desc&limit=100', {
       headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
     })
     .then(function (response) {
@@ -1147,10 +1147,10 @@ footer {
       if (emptyState) emptyState.remove();
       var lang = window.I18N ? window.I18N.lang() : 'ar';
       var labels = {
-        ar: { tag: 'حكاية منشورة حديثًا', grade: 'الصف الدراسي غير محدد', open: 'اقرأ الحكاية' },
-        en: { tag: 'Recently published story', grade: 'Grade not specified', open: 'Read story' },
-        fr: { tag: 'Récit récemment publié', grade: 'Classe non précisée', open: 'Lire le récit' },
-        it: { tag: 'Racconto pubblicato di recente', grade: 'Classe non specificata', open: 'Leggi il racconto' }
+        ar: { tag: 'حكاية منشورة حديثًا', number: 'الحكاية', grade: 'الصف الدراسي غير محدد', open: 'اقرأ الحكاية' },
+        en: { tag: 'Recently published story', number: 'Story', grade: 'Grade not specified', open: 'Read story' },
+        fr: { tag: 'Récit récemment publié', number: 'Récit', grade: 'Classe non précisée', open: 'Lire le récit' },
+        it: { tag: 'Racconto pubblicato di recente', number: 'Racconto', grade: 'Classe non specificata', open: 'Leggi il racconto' }
       };
       var t = labels[lang] || labels.ar;
       items.forEach(function (item) {
@@ -1188,7 +1188,7 @@ footer {
         }
         var tag = document.createElement('span');
         tag.className = 'submitted-story-tag';
-        tag.textContent = t.tag;
+        tag.textContent = item.story_number ? (t.number+' '+String(item.story_number).padStart(3,'0')) : t.tag;
         body.appendChild(tag);
         var bottom = document.createElement('div');
         bottom.className = 'card-bottom-row';
