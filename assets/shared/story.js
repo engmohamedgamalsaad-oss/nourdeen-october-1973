@@ -372,11 +372,18 @@
       'f'
     );
 
-    var subtitle = heroContent.querySelector('.hero-subtitle');
-    if (subtitle && subtitle.parentNode === heroContent) {
-      subtitle.insertAdjacentElement('afterend', bar);
+    var storySlug = body.getAttribute('data-story-slug');
+    var heroSection = document.querySelector('.hero');
+    if (storySlug === '004' && heroSection) {
+      bar.classList.add('story-share-bar--below-hero');
+      heroSection.insertAdjacentElement('afterend', bar);
     } else {
-      heroContent.appendChild(bar);
+      var subtitle = heroContent.querySelector('.hero-subtitle');
+      if (subtitle && subtitle.parentNode === heroContent) {
+        subtitle.insertAdjacentElement('afterend', bar);
+      } else {
+        heroContent.appendChild(bar);
+      }
     }
   })();
 
