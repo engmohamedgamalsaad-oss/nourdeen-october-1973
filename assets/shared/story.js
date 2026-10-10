@@ -431,3 +431,64 @@
     if (event.key === 'Escape') { closeLightbox(); }
   });
 })();
+
+/* ===== Wording corrections for EN / FR / IT =====
+   Runs after story-body-i18n.js and replaces a few translated phrases with corrected ones.
+   Each pair is [old text, corrected text]. Arabic pages are never touched. */
+(function () {
+  'use strict';
+
+  if (!window.I18N || window.I18N.lang() === 'ar') { return; }
+
+  var fixes = [
+    ['pulled him to Jordan’s Port of Aqaba', 'pulled him to the Jordanian port of Aqaba'],
+    ['Illustration of the nature of the sea passage.', 'Illustrative image of the sea passage.'],
+    ['3rd Grade Primary', '3rd Grade (Primary)'],
+    ['3e année primaire', '3e année du primaire'],
+    ['1re année primaire', '1re année du primaire'],
+    ['Logo de l’école de langues Al-Manar pour filles', 'Logo de l’École nationale de langues Al-Manar pour filles'],
+    ['Scuola nazionale linguistica femminile Al-Manar', 'Scuola nazionale linguistica Al-Manar per ragazze'],
+    ['Logo della Scuola linguistica Al-Manar per ragazze', 'Logo della Scuola nazionale linguistica Al-Manar per ragazze'],
+    ['Prima classe della scuola preparatoria', '1ª media'],
+    ['3ª primaria', '3ª elementare'],
+    ['1ª primaria', '1ª elementare'],
+    ['La battaglia che molti non videro', 'La battaglia che la maggior parte delle persone non ha visto']
+  ];
+
+  function fixText(value) {
+    var out = value;
+    for (var i = 0; i < fixes.length; i++) {
+      if (out.indexOf(fixes[i][0]) !== -1) {
+        out = out.split(fixes[i][0]).join(fixes[i][1]);
+      }
+    }
+    return out;
+  }
+
+  function run() {
+    try {
+      var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+      var nodes = [];
+      while (walker.nextNode()) { nodes.push(walker.currentNode); }
+      nodes.forEach(function (node) {
+        if (/^(SCRIPT|STYLE|NOSCRIPT)$/.test(node.parentNode.nodeName)) { return; }
+        var next = fixText(node.nodeValue);
+        if (next !== node.nodeValue) { node.nodeValue = next; }
+      });
+      Array.prototype.forEach.call(document.body.querySelectorAll('[alt],[aria-label],[title]'), function (el) {
+        ['alt', 'aria-label', 'title'].forEach(function (attr) {
+          var current = el.getAttribute(attr);
+          if (!current) { return; }
+          var next = fixText(current);
+          if (next !== current) { el.setAttribute(attr, next); }
+        });
+      });
+    } catch (error) { /* never block the page */ }
+  }
+
+  document.addEventListener('DOMContentLoaded', run);
+  document.addEventListener('site-language-change', run);
+  window.addEventListener('load', run);
+  setTimeout(run, 0);
+  setTimeout(run, 400);
+})();
