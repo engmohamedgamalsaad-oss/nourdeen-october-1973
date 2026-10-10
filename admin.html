@@ -10,52 +10,72 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--gold:#e3bd78;--bg:#041018}
+:root{color-scheme:dark;--gold:#f2ca82;--gold2:#c38a48;--bg:#06121c;--panel:#0d202c;--line:rgba(226,190,128,.2);--muted:#a8bdc6;--mint:#70dfc0}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:#edf3f3;font-family:"Cairo",sans-serif;line-height:1.8}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px clamp(14px,3vw,28px);background:rgba(3,13,19,.98);border-bottom:1px solid rgba(184,135,75,.38)}
-header h1{margin:0;font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:1.3rem}
-header a{color:#f4e5c8;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center}
-main{width:min(900px,94%);margin:24px auto 60px}
-.panel{background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.94));border:1px solid rgba(184,135,75,.35);border-radius:12px;padding:clamp(16px,3.5vw,26px);margin-bottom:18px}
-label.f{display:grid;gap:5px;font-weight:700;color:#f4e5c8;margin-bottom:12px}
-input[type=text],input[type=email],input[type=password],select,textarea{width:100%;font:500 1rem "Cairo",sans-serif;color:#fff;background:#0a1f29;border:1px solid rgba(227,189,120,.45);border-radius:10px;padding:10px 12px;min-height:44px}
-input[type=color]{width:70px;height:44px;padding:2px;background:#0a1f29;border:1px solid rgba(227,189,120,.45);border-radius:10px}
-textarea{resize:vertical;line-height:1.8}
-input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.btn{font:800 .95rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:10px;padding:10px 20px;min-height:44px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006}
-.btn.alt{background:transparent;color:#f4e5c8;border:1px solid rgba(227,189,120,.6)}
-.btn.del{background:transparent;color:#ff9a9d;border:1px solid #d4575a}
-.btn:disabled{opacity:.6;cursor:wait}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 85% 0%,rgba(19,100,111,.23),transparent 34rem),radial-gradient(ellipse at 0% 40%,rgba(163,115,54,.1),transparent 32rem),var(--bg);color:#edf5f6;font-family:"Cairo",sans-serif;line-height:1.8}
+header{position:relative;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:17px clamp(16px,4vw,48px);background:rgba(4,15,23,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:grid;gap:0}
+.brand-kicker{font-size:.72rem;letter-spacing:.12em;color:var(--mint);font-weight:800}
+header h1{margin:0;font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:clamp(1.1rem,3vw,1.55rem);line-height:1.55}
+header a{color:#f4e5c8;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center;padding:0 10px;border-radius:10px}
+header a:hover{background:rgba(255,255,255,.06)}
+main{width:min(1080px,94%);margin:32px auto 72px}
+#msg{position:sticky;top:10px;z-index:5;box-shadow:0 12px 34px #0005}
+.panel{background:linear-gradient(145deg,rgba(16,49,62,.94),rgba(7,23,33,.96));border:1px solid var(--line);border-radius:22px;padding:clamp(18px,3.5vw,30px);margin-bottom:18px;box-shadow:0 18px 48px rgba(0,0,0,.14)}
+#loginBox{width:min(520px,100%);margin:clamp(28px,8vh,76px) auto;padding:clamp(22px,5vw,40px);position:relative;overflow:hidden}
+#loginBox:before{content:"";position:absolute;inset:0 0 auto;height:4px;background:linear-gradient(90deg,var(--mint),var(--gold),transparent)}
+#loginBox h2{font-size:1.55rem;margin:0 0 8px!important;color:#ffe2a0!important}
+#loginBox h2:after{content:"";display:block;width:54px;height:3px;border-radius:9px;background:var(--mint);margin-top:10px}
+#loginBox form{margin-top:22px}
+label.f{display:grid;gap:7px;font-weight:700;color:#f4e5c8;margin-bottom:14px}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;font:500 1rem "Cairo",sans-serif;color:#fff;background:rgba(3,15,23,.7);border:1px solid rgba(181,207,211,.2);border-radius:13px;padding:12px 14px;min-height:48px;transition:border-color .18s,box-shadow .18s}
+input[type=color]{width:70px;height:48px;padding:3px;background:#0a1f29;border:1px solid var(--line);border-radius:12px}
+textarea{resize:vertical;line-height:1.9}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(112,223,192,.1)}
+.btn{font:800 .95rem "Cairo",sans-serif;cursor:pointer;border:1px solid transparent;border-radius:12px;padding:11px 19px;min-height:46px;background:linear-gradient(135deg,#f4d18e,#bf8747);color:#171006;box-shadow:0 7px 18px rgba(195,138,72,.12);transition:transform .16s,filter .16s}
+.btn:hover{filter:brightness(1.07);transform:translateY(-1px)}
+.btn.alt{background:rgba(255,255,255,.035);color:#f4e5c8;border-color:rgba(227,189,120,.32);box-shadow:none}
+.btn.del{background:rgba(212,87,90,.08);color:#ffb1b2;border-color:rgba(212,87,90,.55);box-shadow:none}
+.btn:disabled{opacity:.6;cursor:wait;transform:none}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
-@media(max-width:620px){.grid2{grid-template-columns:1fr}}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
-.tab{font:700 .9rem "Cairo",sans-serif;cursor:pointer;border:1px solid rgba(227,189,120,.45);background:transparent;color:#f4e5c8;border-radius:99px;padding:8px 16px;min-height:44px}
-.tab[aria-pressed="true"]{background:var(--gold);color:#171006}
-.badge{display:inline-block;padding:2px 12px;border-radius:99px;font-size:.85rem;font-weight:800}
-.badge.pending{background:rgba(227,189,120,.18);color:#f3d7a0}
-.badge.published{background:rgba(47,165,107,.25);color:#7fe0ad}
-.badge.rejected{background:rgba(212,87,90,.25);color:#ff9a9d}
-.item h3{margin:0 0 4px;color:var(--gold)}
-.meta{color:#b7c9cc;font-size:.88rem;margin-bottom:12px}
-.msg{padding:10px 14px;border-radius:10px;font-weight:700;margin-bottom:14px}
-.msg.ok{background:rgba(47,165,107,.2);border:1px solid #2fa56b}
-.msg.err{background:rgba(212,87,90,.2);border:1px solid #d4575a}
-.empty{text-align:center;color:#b7c9cc;padding:30px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}main{margin-top:20px}.row>.btn{flex:1}}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0}
+.tab{font:700 .9rem "Cairo",sans-serif;cursor:pointer;border:1px solid rgba(227,189,120,.24);background:rgba(255,255,255,.025);color:#d7e5e7;border-radius:99px;padding:8px 15px;min-height:44px;transition:all .18s}
+.tab:hover{border-color:var(--gold)}
+.tab[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#171006;box-shadow:0 5px 18px #e3bd7820}
+.badge{display:inline-block;padding:3px 12px;border-radius:99px;font-size:.82rem;font-weight:800;border:1px solid transparent}
+.badge.pending{background:rgba(227,189,120,.12);color:#f3d7a0;border-color:rgba(227,189,120,.2)}
+.badge.published{background:rgba(47,165,107,.13);color:#7fe0ad;border-color:rgba(47,165,107,.25)}
+.badge.rejected{background:rgba(212,87,90,.12);color:#ff9a9d;border-color:rgba(212,87,90,.25)}
+.item h3{margin:0 0 4px;color:var(--gold);font-size:1.2rem;overflow-wrap:anywhere}
+.item{position:relative;overflow:hidden}
+.item:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);opacity:.65}
+.item .meta{color:var(--muted);font-size:.85rem;margin:3px 0 18px}
+.item .grid2{margin-top:8px}
+.item textarea{min-height:100px}
+.item .row{margin-top:8px}
+.msg{padding:12px 16px;border-radius:13px;font-weight:700;margin-bottom:14px}
+.msg.ok{background:rgba(47,165,107,.15);border:1px solid rgba(47,165,107,.55);color:#a6f0c6}
+.msg.err{background:rgba(212,87,90,.15);border:1px solid rgba(212,87,90,.55);color:#ffb6b7}
+.empty{text-align:center;color:var(--muted);padding:42px 20px;border:1px dashed var(--line);border-radius:18px;background:#ffffff04}
+#app>.row{padding:16px 18px;background:rgba(10,29,40,.68);border:1px solid var(--line);border-radius:18px;margin-bottom:18px!important}
+#newBtn{background:linear-gradient(135deg,#82e6ca,#3ea88e);color:#03251f;box-shadow:0 8px 20px #3ea88e20}
 [hidden]{display:none!important}
 </style>
 </head>
 <body>
 <header>
-  <h1>لوحة إدارة الحكايات</h1>
+  <div class="brand"><span class="brand-kicker">رجال خالدون عبر التاريخ</span><h1>لوحة إدارة الحكايات</h1></div>
   <div class="row"><a href="index.html">← الموقع</a><button class="btn alt" id="logoutBtn" type="button" hidden>تسجيل الخروج</button></div>
 </header>
 <main>
   <div id="msg" role="status" aria-live="polite" hidden></div>
 
   <section class="panel" id="loginBox">
-    <h2 style="margin-top:0;color:#ffe2a0">تسجيل الدخول</h2>
+    <h2>أهلًا بعودتك</h2><p style="color:#a8bdc6;margin:0">سجّل الدخول لمراجعة الحكايات وإدارة ما يُنشر على الموقع.</p>
     <form id="loginForm">
       <label class="f">البريد الإلكتروني<input type="email" id="email" autocomplete="username" required></label>
       <label class="f">كلمة المرور<input type="password" id="password" autocomplete="current-password" required></label>
@@ -64,6 +84,7 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
   </section>
 
   <section id="app" hidden>
+    <div style="margin:0 0 18px;padding:8px 4px"><div style="color:#70dfc0;font-size:.8rem;font-weight:800">مساحة المراجعة</div><h2 style="margin:3px 0;color:#f7e4bd;font-size:1.45rem">حكايات الطالبات</h2><p style="margin:0;color:#a8bdc6">راجِع النص أولًا، ثم احفظه أو انشره بعد التأكد من مضمونه.</p></div>
     <div class="row" style="justify-content:space-between;margin-bottom:14px">
       <div class="tabs" id="tabs" role="group" aria-label="تصفية الحكايات"></div>
       <div class="row"><button class="btn alt" id="refreshBtn" type="button">تحديث</button><button class="btn" id="newBtn" type="button">+ حكاية جديدة</button></div>
