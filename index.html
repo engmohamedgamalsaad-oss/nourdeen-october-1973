@@ -706,7 +706,8 @@ footer {
 
 <!-- ===== الهيدر ===== -->
 <header class="topbar">
-  <span class="home-link">رجال خالدون عبر التاريخ</span>
+  <span class="home-link" data-i18n="k1">رجال خالدون عبر التاريخ</span>
+  <div class="lang-switch" data-lang-switch aria-label="اختيار اللغة"></div>
 
   <div class="school-brand">
     <img
@@ -742,9 +743,8 @@ footer {
 
     <h1 class="float-up float-delay-1" data-i18n="k5">حكايات أكتوبر 1973</h1>
 
-    <p class="float-up float-delay-2">
-      أرشيف رقمي لحكايات طالبات مدرسة المنار القومية للغات للبنات،
-      نستعيد من خلاله بطولات حرب أكتوبر وقصص الأبطال الذين شاركوا في صنع النصر.
+    <p class="float-up float-delay-2" data-i18n="k6">
+      أرشيف رقمي لحكايات طالبات مدرسة المنار القومية للغات للبنات، نستعيد من خلاله بطولات حرب أكتوبر وقصص الأبطال الذين شاركوا في صنع النصر.
     </p>
   </div>
 
@@ -760,15 +760,12 @@ footer {
       <h2 data-i18n="k9">السادس من أكتوبر 1973</h2>
     </div>
 
-    <p class="float-up">
-      في السادس من أكتوبر 1973 بدأت مصر حرب أكتوبر لتحرير سيناء،
-      بعد سنوات من الاستعداد والتدريب والتخطيط. شاركت فيها قوات برية
-      وجوية وبحرية ودفاع جوي، ولكل منها دوره.
+    <p class="float-up" data-i18n="k10">
+      في السادس من أكتوبر 1973 بدأت مصر حرب أكتوبر لتحرير سيناء، بعد سنوات من الاستعداد والتدريب والتخطيط. شاركت فيها قوات برية وجوية وبحرية ودفاع جوي، ولكل منها دوره.
     </p>
 
-    <p class="float-up">
-      لكن الحرب لم تكن أرقامًا وتواريخ فقط، بل كانت أشخاصًا قاموا
-      بمهام حقيقية، بعضها معروف وبعضها لم يسمع عنه كثيرون.
+    <p class="float-up" data-i18n="k11">
+      لكن الحرب لم تكن أرقامًا وتواريخ فقط، بل كانت أشخاصًا قاموا بمهام حقيقية، بعضها معروف وبعضها لم يسمع عنه كثيرون.
     </p>
 
     <div class="big-quote float-up">
@@ -805,7 +802,7 @@ footer {
 </section>
 
 <footer>
-  مدرسة المنار القومية للغات للبنات
+  <span data-i18n="k20">مدرسة المنار القومية للغات للبنات</span>
   <br><br>
   <strong>رجال خالدون عبر التاريخ</strong>
   <p class="footer-disclaimer" style="max-width:850px;margin:18px auto 0;padding:0 16px;font-size:13px;line-height:1.8;opacity:.85">
@@ -813,6 +810,9 @@ footer {
   </p>
 </footer>
 
+<script src="assets/shared/i18n.js"></script>
+<script src="assets/i18n/common.js"></script>
+<script src="assets/i18n/home.js"></script>
 <script>
 (function () {
   var reduceMotion = window.matchMedia &&
