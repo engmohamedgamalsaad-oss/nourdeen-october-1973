@@ -1004,7 +1004,7 @@ footer {
 
 <script src="assets/shared/i18n.js"></script>
 <script src="assets/i18n/common.js"></script>
-<script src="assets/i18n/home.js"></script>
+<script src="assets/i18n/home.js?v=20261011-submissions1"></script>
 <script>
 (function () {
   var reduceMotion = window.matchMedia &&
@@ -1143,6 +1143,8 @@ footer {
     })
     .then(function (items) {
       if (!Array.isArray(items) || !items.length) return;
+      var emptyState = box.querySelector('.empty');
+      if (emptyState) emptyState.remove();
       var lang = window.I18N ? window.I18N.lang() : 'ar';
       var labels = {
         ar: { tag: 'حكاية منشورة حديثًا', grade: 'الصف الدراسي غير محدد', open: 'اقرأ الحكاية' },
