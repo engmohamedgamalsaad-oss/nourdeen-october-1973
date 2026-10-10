@@ -269,6 +269,29 @@ var pageMeta = {
   it:['Una lingua che il nemico non capiva | Malika Mohamed Gamal','La storia della lingua nubiana usata come codice segreto nella guerra d’ottobre 1973 — di Malika Mohamed Gamal']
  }
 };
+Object.assign(translations,{
+"الهيئة العامة للاستعلامات المصرية — انتصارات أكتوبر وبيانات القيادة العامة":{en:"Egyptian State Information Service — October Victories and General Command Statements",fr:"Service d’information de l’État égyptien — victoires d’octobre et communiqués du commandement général",it:"Servizio d’informazione dello Stato egiziano — vittorie d’ottobre e comunicati del comando generale"},
+"وزارة الدفاع المصرية — وثائق حرب أكتوبر 1973":{en:"Egyptian Ministry of Defence — Documents on the 1973 October War",fr:"Ministère égyptien de la Défense — documents sur la guerre d’octobre 1973",it:"Ministero della Difesa egiziano — documenti sulla guerra d’ottobre 1973"},
+"وزارة الدفاع المصرية — المتحف الحربي / حرب أكتوبر وبعض أعمال القوات البحرية":{en:"Egyptian Ministry of Defence — Military Museum, October War, and selected naval operations",fr:"Ministère égyptien de la Défense — musée militaire, guerre d’octobre et opérations navales",it:"Ministero della Difesa egiziano — Museo militare, guerra d’ottobre e operazioni navali"},
+"الأهرام اليومي — القوات البحرية المصرية: ملوك البحر، 7 أكتوبر 2024":{en:"Al-Ahram Daily — The Egyptian Navy: Kings of the Sea, 7 October 2024",fr:"Al-Ahram — La marine égyptienne : les maîtres de la mer, 7 octobre 2024",it:"Al-Ahram — La Marina egiziana: i signori del mare, 7 ottobre 2024"},
+"بوابة الأهرام — الربان نبيل عبد الوهاب وبطولات الضفادع البشرية، 6 أكتوبر 2023":{en:"Al-Ahram Gate — Captain Nabil Abdel Wahab and the combat divers’ exploits, 6 October 2023",fr:"Al-Ahram Gate — le capitaine Nabil Abdel Wahab et les exploits des nageurs de combat, 6 octobre 2023",it:"Al-Ahram Gate — il capitano Nabil Abdel Wahab e le imprese dei sommozzatori, 6 ottobre 2023"},
+"بوابة الأهرام — لقاء مع اللواء بحري نبيل عبد الوهاب، 25 أكتوبر 2024":{en:"Al-Ahram Gate — Interview with Rear Admiral Nabil Abdel Wahab, 25 October 2024",fr:"Al-Ahram Gate — entretien avec le contre-amiral Nabil Abdel Wahab, 25 octobre 2024",it:"Al-Ahram Gate — intervista al contrammiraglio Nabil Abdel Wahab, 25 ottobre 2024"},
+"Ahram Online — Baki Zaki Youssef, the Egyptian military engineer behind destruction of Israel's Bar Lev line":{fr:"Ahram Online — Baqi Zaki Youssef, l’ingénieur militaire égyptien à l’origine de la percée de la ligne Bar-Lev",it:"Ahram Online — Baqi Zaki Youssef, l’ingegnere militare egiziano dietro la breccia nella linea Bar-Lev"},
+"Egyptian Streets — Baki Zaki Youssef":{fr:"Egyptian Streets — Baqi Zaki Youssef",it:"Egyptian Streets — Baqi Zaki Youssef"},
+"The National — Baki Zaki Youssef: Egyptian military engineer who became a hero":{fr:"The National — Baqi Zaki Youssef : l’ingénieur militaire égyptien devenu un héros",it:"The National — Baqi Zaki Youssef: l’ingegnere militare egiziano diventato un eroe"},
+"Gulf News — Commander who stuck to his guns":{fr:"Gulf News — Le commandant qui est resté fidèle à ses convictions",it:"Gulf News — Il comandante che non rinunciò alle proprie convinzioni"},
+"Wikipedia — Bar Lev Line (للاطلاع العام ومقارنة المعلومات)":{en:"Wikipedia — Bar Lev Line (general background and comparison)",fr:"Wikipédia — ligne Bar-Lev (informations générales et comparaison)",it:"Wikipedia — linea Bar-Lev (informazioni generali e confronto)"},
+"الأهرام — تقرير عن باقي زكي يوسف واستخدام مضخات المياه":{en:"Al-Ahram — Report on Baqi Zaki Youssef and the use of water pumps",fr:"Al-Ahram — article sur Baqi Zaki Youssef et l’utilisation des pompes à eau",it:"Al-Ahram — articolo su Baqi Zaki Youssef e l’uso delle pompe ad acqua"},
+"Wikimedia Commons — صورة أرشيفية لاقتحام خط بارليف، مرجع بصري منفصل عن الرسم أعلاه.":{en:"Wikimedia Commons — Archival photograph of the Bar Lev Line crossing, separate from the illustration above",fr:"Wikimedia Commons — photo d’archives du franchissement de la ligne Bar-Lev, distincte de l’illustration ci-dessus",it:"Wikimedia Commons — foto d’archivio dell’attraversamento della linea Bar-Lev, distinta dall’illustrazione sopra"},
+"Wikimedia Commons — صورة عبور خط بارليف، أكتوبر 1973.":{en:"Wikimedia Commons — Photograph of the Bar Lev Line crossing, October 1973",fr:"Wikimedia Commons — photo du franchissement de la ligne Bar-Lev, octobre 1973",it:"Wikimedia Commons — foto dell’attraversamento della linea Bar-Lev, ottobre 1973"},
+"Egyptian Streets — Remembering Ahmed Idris":{fr:"Egyptian Streets — En mémoire d’Ahmed Idris",it:"Egyptian Streets — Ricordando Ahmed Idris"},
+"Al Arabiya English — The Nubian military code that helped Egypt win 1973 war":{fr:"Al Arabiya English — le code militaire nubien qui a aidé l’Égypte à gagner la guerre de 1973",it:"Al Arabiya English — il codice militare nubiano che aiutò l’Egitto a vincere la guerra del 1973"},
+"Egypt Today — Nubian Language Code":{fr:"Egypt Today — le code de la langue nubienne",it:"Egypt Today — il codice della lingua nubiana"},
+"Egypt Today — Egypt's Nubian Code soldier dies aged 84":{fr:"Egypt Today — décès à 84 ans du soldat du code nubien égyptien",it:"Egypt Today — morto a 84 anni il soldato egiziano del codice nubiano"},
+"The New Arab — Egypt's Nubian war code inventor dies at 84":{fr:"The New Arab — décès à 84 ans de l’inventeur du code de guerre nubien égyptien",it:"The New Arab — morto a 84 anni l’inventore del codice di guerra nubiano egiziano"},
+"Peaceful Societies — Nubian man given Egyptian military award":{fr:"Peaceful Societies — un Nubien reçoit une distinction militaire égyptienne",it:"Peaceful Societies — un nubiano riceve un’onorificenza militare egiziana"},
+"الأهرام اليومي — اللغة النوبية وانتصار حرب أكتوبر 1973؛ تفاصيل الألفاظ والروايات المختلفة":{en:"Al-Ahram Daily — The Nubian language and the 1973 October War: terms and differing accounts",fr:"Al-Ahram — la langue nubienne et la guerre d’octobre 1973 : termes et récits divergents",it:"Al-Ahram — la lingua nubiana e la guerra d’ottobre 1973: termini e resoconti differenti"}
+});
 function applyPageMeta(){
  var slug=document.body.getAttribute('data-story-slug');
  var lang=(window.I18N&&window.I18N.lang())||'ar';
@@ -309,12 +332,12 @@ function applyTranslationNotice(lang){
   existing=document.createElement('aside');
   existing.id='ai-translation-notice';
   existing.setAttribute('role','note');
-  existing.style.cssText='box-sizing:border-box;width:calc(100% - 32px);max-width:900px;margin:22px auto 26px;padding:14px 18px;border:1px solid #d8c9a9;border-left:4px solid #b58b45;border-radius:8px;background:#f7f3e9;color:#403a30;font:400 .9rem/1.65 Arial,sans-serif;direction:ltr;text-align:left;';
+  existing.style.cssText='box-sizing:border-box;width:calc(100% - 32px);max-width:900px;margin:24px auto 30px;padding:16px 20px;border:1px solid rgba(227,189,120,.42);border-left:4px solid #e3bd78;border-radius:12px;background:linear-gradient(135deg,rgba(12,35,45,.96),rgba(3,13,19,.98));color:#d9e3e4;font:400 .88rem/1.8 Arial,sans-serif;direction:ltr;text-align:left;box-shadow:0 10px 28px rgba(0,0,0,.22);';
   var heading=document.createElement('strong');
-  heading.style.cssText='display:block;margin-bottom:4px;font-weight:700;';
+  heading.style.cssText='display:block;margin-bottom:7px;font-weight:700;color:#e3bd78;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;';
   heading.setAttribute('data-notice-title','');
   var paragraph=document.createElement('p');
-  paragraph.style.cssText='margin:0;';
+  paragraph.style.cssText='margin:0;color:#d9e3e4;';
   paragraph.setAttribute('data-notice-body','');
   existing.appendChild(heading);
   existing.appendChild(paragraph);
