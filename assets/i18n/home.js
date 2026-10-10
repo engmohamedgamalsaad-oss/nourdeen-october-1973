@@ -112,4 +112,19 @@
     facts_kicker:'Un minuto di storia',facts_title:'Lo sapevi?',facts_intro:'Brevi schede sulla pianificazione e sulle tattiche della guerra d’ottobre. Apri “Scopri di più” per il contesto e la fonte.',fact1_title:'Operazione Badr',fact1_short:'“Badr” era il nome in codice dell’operazione egiziana per attraversare il Canale di Suez e iniziare l’attacco il 6 ottobre 1973.',fact_more:'Scopri di più +',fact1_detail:'L’operazione fu preceduta da anni di addestramento e pianificazione e iniziò insieme a un attacco siriano sul Golan.',fact_source:'Fonte didattica',fact2_title:'Acqua invece di esplosivi',fact2_short:'Gli ingegneri usarono pompe e getti d’acqua potenti per aprire varchi nel terrapieno della linea Bar-Lev.',fact2_detail:'Il metodo aiutò a rimuovere la sabbia e ad aprire passaggi per soldati e attrezzature.',fact3_title:'Nessuna forza agì da sola',fact3_short:'Forze terrestri, aeree, navali e di difesa aerea svolsero ruoli diversi durante la guerra.',fact3_detail:'Il Panorama d’Ottobre illustra le fasi della guerra, l’attraversamento e i ruoli delle forze armate.',fact_museum_source:'Fonte del Ministero della Difesa'
   });
   window.I18N.apply();
+
+  // Re-apply translated accessibility labels after all homepage dictionaries load.
+  function refreshLocalizedAttributes(){
+    document.querySelectorAll('[data-i18n-attr]').forEach(function(el){
+      el.getAttribute('data-i18n-attr').split(',').forEach(function(pair){
+        var parts=pair.split(':');
+        if(parts.length!==2)return;
+        var translated=window.I18N.t(parts[1]);
+        if(translated && translated!==parts[1])el.setAttribute(parts[0],translated);
+      });
+    });
+  }
+  document.addEventListener('site-language-change',refreshLocalizedAttributes);
+  refreshLocalizedAttributes();
+
 })();
