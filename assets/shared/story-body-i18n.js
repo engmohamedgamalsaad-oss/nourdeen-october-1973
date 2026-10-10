@@ -418,7 +418,7 @@ Object.assign(translations,{
 "العقل قبل السلاح":{en:"Brains Before Weapons",fr:"L’intelligence avant les armes",it:"L’ingegno prima delle armi"},
 "لغة لا يفهمها العدو":{en:"A Language the Enemy Could Not Understand",fr:"Une langue que l’ennemi ne comprenait pas",it:"Una lingua che il nemico non capiva"},
 "حكاية الشفرة النوبية":{en:"The Story of the Nubian Code",fr:"L’histoire du code nubien",it:"La storia del codice nubiano"},
-"كيف فتحت المياه طريق العبور":{en:"How water opened a passage across the canal",fr:"Comment l’eau a ouvert un passage à travers le canal",it:"Come l’acqua ha aperto un varco attraverso il canale"},
+"كيف فتحت المياه طريق العبور":{en:"How water opened a passage across the canal",fr:"Comment l’eau a ouvert un passage à travers le canal",it:"Come l’acqua ha aperto un passaggio attraverso il canale"},
 "انزل لتبدأ الحكاية ↓":{en:"Scroll to begin the story ↓",fr:"Faites défiler pour commencer ↓",it:"Scorri per iniziare il racconto ↓"},
 "إيه رأيك في الحكاية؟":{en:"What do you think of this story?",fr:"Que pensez-vous de ce récit ?",it:"Cosa ne pensi di questo racconto?"},
 "اختار إعجابك، وكمان رد فعل واحد يعبّر عن رأيك. من غير أسماء أو تعليقات مكتوبة.":{en:"Leave a like and choose one reaction that reflects your opinion. No names or written comments.",fr:"Laissez un J’aime et choisissez une réaction qui reflète votre avis. Sans nom ni commentaire écrit.",it:"Metti Mi piace e scegli una reazione che esprima la tua opinione. Senza nomi o commenti scritti."},
