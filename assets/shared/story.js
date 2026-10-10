@@ -33,6 +33,12 @@
       en: {title:'A Language the Enemy Could Not Understand', subtitle:'Malika Mohamed Gamal tells the story of the Nubian code in the October War', start:'Start the story →'},
       fr: {title:'Une langue que l’ennemi ne comprenait pas', subtitle:'Malika Mohamed Gamal raconte le code nubien pendant la guerre d’octobre', start:'Commencer le récit →'},
       it: {title:'Una lingua che il nemico non capiva', subtitle:'Malika Mohamed Gamal racconta il codice nubiano nella guerra d’ottobre', start:'Inizia il racconto →'}
+    },
+    '004': {
+      ar: {title:'سماء أكتوبر: شهداء الضربة الجوية الأولى', subtitle:'حكاية الطيارين الذين فتحوا الطريق للعبور', start:'ابدأ الحكاية ←'},
+      en: {title:'October Skies: The Martyrs of the First Air Strike', subtitle:'The pilots who helped open the way for the crossing', start:'Start the story →'},
+      fr: {title:'Le ciel d’octobre : les martyrs de la première frappe aérienne', subtitle:'Les pilotes qui ont contribué à ouvrir la voie au franchissement', start:'Commencer le récit →'},
+      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire la strada all’attraversamento', start:'Inizia il racconto →'}
     }
   };
   var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
