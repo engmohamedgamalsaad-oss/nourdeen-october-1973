@@ -28,17 +28,17 @@
   data-splash-alt="تصميم فني: جندي وامرأة مصرية أمام الأهرامات والعلم ودبابة ومراكب شراعية"
   data-splash-top="#705d4b"
   data-splash-bottom="#564132"
->
+ data-i18n-attr="data-splash-title:s_title,data-splash-subtitle:s_subtitle">
 
-<header class="topbar">
-  <a class="home-link" href="../../index.html">← الصفحة الرئيسية</a>
+<header class="topbar">\n  <div class="lang-switch story-lang-switch" data-lang-switch aria-label="Language"></div>
+  <a class="home-link" data-i18n="s_back" href="../../index.html">← الصفحة الرئيسية</a>
 
   <div class="school-brand">
     <img src="../../assets/logo/school-logo.png"
          alt="شعار مدرسة المنار القومية للغات للبنات">
     <div class="school-info">
-      <div class="school-name">مدرسة المنار القومية للغات للبنات</div>
-      <div class="page-name">حكايات أكتوبر</div>
+      <div class="school-name" data-i18n="s_school">مدرسة المنار القومية للغات للبنات</div>
+      <div class="page-name" data-i18n="s_page">حكايات أكتوبر</div>
     </div>
   </div>
 </header>
@@ -64,8 +64,8 @@
   <div class="hero-content reveal">
     <div class="eyebrow">EGYPT • 6 OCTOBER 1973</div>
     <div class="red-line"></div>
-    <h1>رجال البحر في أكتوبر</h1>
-    <div class="hero-subtitle">المعركة التي لم يرها معظم الناس</div>
+    <h1 data-i18n="s_title">رجال البحر في أكتوبر</h1>
+    <div class="hero-subtitle" data-i18n="s_subtitle">المعركة التي لم يرها معظم الناس</div>
 
     <div class="author">
       إعداد وتقديم<br>
@@ -74,7 +74,7 @@
     </div>
   </div>
 
-  <div class="scroll">انزل لتبدأ الحكاية ↓</div>
+  <div class="scroll" data-i18n="s_scroll">انزل لتبدأ الحكاية ↓</div>
 </section>
 
 <section class="story">
@@ -406,8 +406,8 @@
 <section class="reactions-section" aria-labelledby="reactions-title">
   <div class="reactions-wrap">
     <div class="kicker" style="text-align:center">رأيك يهمنا</div>
-    <h2 class="reactions-title" id="reactions-title">إيه رأيك في الحكاية؟</h2>
-    <p class="reactions-intro">اختار إعجابك، وكمان رد فعل واحد يعبّر عن رأيك. من غير أسماء أو تعليقات مكتوبة.</p>
+    <h2 class="reactions-title" id="reactions-title" data-i18n="s_reaction_title">إيه رأيك في الحكاية؟</h2>
+    <p class="reactions-intro" data-i18n="s_reaction_help">اختار إعجابك، وكمان رد فعل واحد يعبّر عن رأيك. من غير أسماء أو تعليقات مكتوبة.</p>
     <div class="reaction-like-row">
       <button class="reaction-btn reaction-like" id="reaction-like" type="button" aria-pressed="false">
         <span class="reaction-label">❤️ أعجبتني</span>
@@ -436,7 +436,7 @@
 <section class="sources">
   <div class="container">
     <div class="kicker">المصادر</div>
-    <h2>المصادر والمراجع</h2>
+    <h2 data-i18n="s_sources">المصادر والمراجع</h2>
 
     <ol>
       <li>
@@ -497,7 +497,7 @@
   أكتوبر 1973
 </footer>
 
-<script src="../../assets/shared/story.js"></script>
+<script src="../../assets/shared/i18n.js"></script>\n<script src="../../assets/i18n/common.js"></script>\n<script src="./i18n.js"></script>\n<script src="../../assets/shared/story.js"></script>
 <script src="../../assets/shared/reactions.js"></script>
 </body>
 </html>
