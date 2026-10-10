@@ -48,23 +48,21 @@ body {
   isolation:isolate;
 }
 
-/* صورة الغلاف كخلفية هادئة ممتدة خلف الصفحة كلها */
+/* صورة الغلاف كخلفية ممتدة، أوضح قليلًا وتتحرك ببطء مع التمرير */
 body::before{
   content:"";
   position:fixed;
   z-index:-1;
   pointer-events:none;
-  inset:-18vh -4vw;
+  inset:0;
   background-image:
-    linear-gradient(rgba(2,8,12,.90),rgba(2,8,12,.90)),
+    linear-gradient(rgba(2,8,12,.78),rgba(2,8,12,.78)),
     url("assets/homepage/main-cover.jpg");
-  background-position:center center;
+  background-position:center calc(50% + var(--cover-backdrop-shift,0px));
   background-size:cover;
   background-repeat:no-repeat;
-  opacity:.22;
-  filter:saturate(.72);
-  will-change:transform;
-  transform:translate3d(0,var(--cover-backdrop-shift,0px),0);
+  opacity:.38;
+  filter:saturate(.82);
 }
 
 .container {
@@ -1044,11 +1042,13 @@ footer {
     }
   }
 
-  /* تحريك خلفية الغلاف ببطء مع التمرير */
-  window.addEventListener('scroll', function () {
+  /* تحريك موضع صورة الخلفية بنسبة صغيرة لتجنب القفز أو خروج الصورة من مكانها */
+  function updateBackdropPosition() {
     var y = window.scrollY || window.pageYOffset || 0;
-    document.documentElement.style.setProperty('--cover-backdrop-shift', (y * -0.08) + 'px');
-  }, {passive:true});
+    document.documentElement.style.setProperty('--cover-backdrop-shift', (y * 0.035) + 'px');
+  }
+  window.addEventListener('scroll', updateBackdropPosition, {passive:true});
+  updateBackdropPosition();
 
   window.addEventListener('scroll', requestHeroUpdate, {
     passive: true
