@@ -1,6 +1,20 @@
 (function(){
 'use strict';
 var translations={
+"Language":{ar:"اختيار اللغة",en:"Language",fr:"Choisir la langue",it:"Seleziona la lingua"},
+"شعار مدرسة المنار القومية للغات للبنات":{en:"Al-Manar National Language School for Girls logo",fr:"Logo de l’école de langues Al-Manar pour filles",it:"Logo della Scuola linguistica Al-Manar per ragazze"},
+"جنود مصريون يرفعون العلم المصري":{en:"Egyptian soldiers raising the Egyptian flag",fr:"Des soldats égyptiens hissant le drapeau égyptien",it:"Soldati egiziani che issano la bandiera egiziana"},
+"خريطة باب المندب والبحر الأحمر":{en:"Map of Bab el-Mandeb and the Red Sea",fr:"Carte de Bab el-Mandeb et de la mer Rouge",it:"Mappa di Bab el-Mandeb e del Mar Rosso"},
+"صورة فضائية لمنطقة مضيق باب المندب":{en:"Satellite image of the Bab el-Mandeb Strait area",fr:"Image satellite de la zone du détroit de Bab el-Mandeb",it:"Immagine satellitare dell’area dello stretto di Bab el-Mandeb"},
+"صورة تاريخية للربان نبيل عبد الوهاب":{en:"Historical photograph of Captain Nabil Abdel Wahab",fr:"Photographie historique du capitaine Nabil Abdel Wahab",it:"Fotografia storica del capitano Nabil Abdel Wahab"},
+"صورة تاريخية مرتبطة بالربان نبيل عبد الوهاب":{en:"Historical photograph related to Captain Nabil Abdel Wahab",fr:"Photographie historique liée au capitaine Nabil Abdel Wahab",it:"Fotografia storica relativa al capitano Nabil Abdel Wahab"},
+"صورة إضافية مرتبطة بالربان نبيل عبد الوهاب":{en:"Additional image related to Captain Nabil Abdel Wahab",fr:"Image supplémentaire liée au capitaine Nabil Abdel Wahab",it:"Immagine aggiuntiva relativa al capitano Nabil Abdel Wahab"},
+"صورة إضافية من حكاية نبيل عبد الوهاب":{en:"Additional image from the story of Nabil Abdel Wahab",fr:"Image supplémentaire du récit de Nabil Abdel Wahab",it:"Immagine aggiuntiva dal racconto di Nabil Abdel Wahab"},
+"رسم متحرك يوضح مضخة تضخ الماء لتفتح ثغرة في الساتر الترابي":{en:"Animated illustration of a pump spraying water to breach the earthen embankment",fr:"Illustration animée d’une pompe projetant de l’eau pour ouvrir une brèche dans le remblai",it:"Illustrazione animata di una pompa che spruzza acqua per aprire un varco nel terrapieno"},
+"رسم توضيحي لكيفية استخدام مضخات المياه لفتح ممر في ساتر رملي":{en:"Illustration showing how water pumps opened a passage through a sand embankment",fr:"Illustration montrant comment des pompes à eau ont ouvert un passage dans un remblai de sable",it:"Illustrazione che mostra come le pompe ad acqua aprirono un passaggio nel terrapieno di sabbia"},
+"رسم توضيحي لقرية نوبية على ضفاف النيل":{en:"Illustration of a Nubian village on the banks of the Nile",fr:"Illustration d’un village nubien sur les rives du Nil",it:"Illustrazione di un villaggio nubiano sulle rive del Nilo"},
+"رسم توضيحي لجهاز اتصال لاسلكي وموجات صوت":{en:"Illustration of a radio communication device and sound waves",fr:"Illustration d’un appareil radio et d’ondes sonores",it:"Illustrazione di una radio ricetrasmittente e onde sonore"},
+"عرض الصورة بحجم كبير":{en:"View image enlarged",fr:"Afficher l’image en grand",it:"Visualizza l’immagine ingrandita"},
 "الحكاية التي لم تبدأ في السادس من أكتوبر":{en:"The Story That Began Beyond October 6",fr:"L’histoire qui ne commença pas le 6 octobre",it:"La storia che non iniziò il 6 ottobre"},
 "عندما نتحدث عن حرب أكتوبر 1973، نتذكر عبور قناة السويس وتحطيم خط بارليف وتقدم الجنود المصريين شرقًا. لكن في الوقت نفسه كانت هناك معركة أخرى تجري بعيدًا عن عيون معظم الناس.":{en:"When we talk about the 1973 October War, we remember the crossing of the Suez Canal, the breaching of the Bar Lev Line, and Egyptian soldiers advancing east. At the same time, another battle was unfolding far from most people's eyes.",fr:"Quand on parle de la guerre d’octobre 1973, on se souvient du franchissement du canal de Suez, de la percée de la ligne Bar-Lev et de l’avancée des soldats égyptiens vers l’est. Mais une autre bataille se déroulait loin des regards.",it:"Quando parliamo della guerra dell’ottobre 1973, ricordiamo l’attraversamento del Canale di Suez, la breccia nella linea Bar-Lev e l’avanzata dei soldati egiziani verso est. Ma un’altra battaglia si svolgeva lontano dagli occhi di molti."},
 "كانت القوات البحرية المصرية تؤدي مهامها في البحر المتوسط والبحر الأحمر، وتؤمّن الأجناب البحرية للقوات المصرية، وتضرب أهدافًا للعدو، وتنفذ عمليات خاصة.":{en:"The Egyptian Navy operated in the Mediterranean and Red Seas, protected the coastal flanks of Egyptian forces, struck enemy targets, and carried out special missions.",fr:"La marine égyptienne opérait en Méditerranée et en mer Rouge, protégeait les flancs maritimes des forces égyptiennes, frappait des objectifs ennemis et menait des opérations spéciales.",it:"La Marina egiziana operava nel Mediterraneo e nel Mar Rosso, proteggeva i fianchi marittimi delle forze egiziane, colpiva obiettivi nemici e svolgeva missioni speciali."},
@@ -290,6 +304,18 @@ function apply(){
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
  applyFooterText(lang);
+ document.querySelectorAll('[alt],[aria-label]').forEach(function(el){
+  ['alt','aria-label'].forEach(function(attr){
+   if(!el.hasAttribute(attr))return;
+   var prop='__storyI18nOriginal_'+attr;
+   if(!el[prop])el[prop]=el.getAttribute(attr);
+   var source=el[prop];
+   var normalized=source.replace(/\\s+/g,' ').trim();
+   var item=translations[normalized]||translations[source];
+   if(lang==='ar'){el.setAttribute(attr,source);return;}
+   if(item&&item[lang])el.setAttribute(attr,item[lang]);
+  });
+ });
 }
 document.addEventListener('DOMContentLoaded',apply);
 document.addEventListener('site-language-change',apply);
