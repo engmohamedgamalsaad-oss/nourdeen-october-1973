@@ -3,41 +3,49 @@
 Audit date: 2026-10-10  
 Scope: homepage and stories 001–004, their story stylesheets, and shared story/reaction scripts.
 
-## Current local assets verified in the repository
+## Verified local assets
 
-- Homepage cover: `assets/homepage/main-cover.jpg` (used by the hero image and CSS background).
+- Homepage cover: `assets/homepage/main-cover.jpg` (used as both hero image and CSS background; browser caching may reuse the same resource).
 - School logo: `assets/logo/school-logo.png`.
-- Story 001 images and covers are stored in `stories/001/`.
-- Story 002 covers are stored in `stories/002/`; the in-story historical photograph is still remote.
-- Story 003 covers are stored in `stories/003/`.
-- Story 004 cover is stored in `stories/004/`; two in-story photographs are remote.
-- Student portraits and avatars are stored under `assets/students/`.
+- Story 001 images and covers: `stories/001/`.
+- Story 002 covers: `stories/002/`; its in-story historical photograph is still remote.
+- Story 003 covers: `stories/003/`.
+- Story 004 cover: `stories/004/`; two in-story photographs are still remote.
+- Student portraits and avatars: `assets/students/`.
 
-No existing image was compressed, renamed, converted, or deleted during this audit.
+No existing image was compressed, renamed, converted, or deleted during this audit. No page or reaction code was changed.
 
-## External image dependencies
+## External image dependencies to localize
 
-| Used by | Remote asset | Local target if licensed and copied unchanged | Status |
+| Used by | Current remote asset | Proposed local path | Rights / next step |
 |---|---|---|---|
-| Story 002 | `https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg?width=1200` | `stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg` | Wikimedia Commons identifies this historical image as public domain in Egypt and the United States. Keep its source/credit link in the story if mirrored. |
-| Story 004 | `https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg` | `stories/004/Atef_El_Sadat.jpg` | Wikimedia Commons identifies this image as public domain in Egypt and the United States. Keep its source/credit link in the story if mirrored. |
-| Story 004 | `https://www.vetogate.com/UploadCache/libfiles/596/9/800x450o/141.jpg` | No local copy created | Reuse/redistribution permission was not verified. Keep the existing image and source link unchanged until permission/licensing is established. |
+| Story 002 | `https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg?width=1200` | `stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Crossing_the_Bar_Lev_Line,_October_War.jpg |
+| Story 004 | `https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg` | `stories/004/Atef_El_Sadat.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Atef_El_Sadat.jpg |
+| Story 004 | `https://www.vetogate.com/UploadCache/libfiles/596/9/800x450o/141.jpg` | None yet | Redistribution rights not verified. Keep its current URL and source link until permission/licensing is established. |
 
-## Other external dependencies
+**Important:** The two Wikimedia images have not yet been copied into the repository. The available GitHub file tools accept text or base64 input, but the original binary image bytes were not available through the current download path. Therefore, the HTML references were deliberately left unchanged rather than pointing to files that do not exist.
 
-- Google Fonts is referenced by the homepage and all four story pages:
-  `https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap`
-  - Candidate local destination: `assets/fonts/` plus a local stylesheet.
-  - No font binaries have been copied yet; font files must be retrieved with their license/attribution preserved before changing the pages.
-- Supabase is used by the existing reactions/likes code. It remains unchanged intentionally; likes and reactions must keep working.
-- External source/reference links in story text are citations for readers, not rendering assets. They should remain external links.
+## External font dependency
 
-## Safe next steps
+The homepage and all four story pages load Cairo and Marhey from Google Fonts:
 
-1. Copy the two public-domain Wikimedia images into the listed local destinations without resizing or recompressing them.
-2. Update only the two corresponding image `src` values after the files are present and verified.
-3. Self-host Cairo and Marhey only after the font files and license notices are available; then update the five pages consistently.
-4. Leave the VetoGate photograph remote unless redistribution rights are verified.
-5. Recheck the published pages and reactions after each focused change.
+`https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap`
 
-This audit does not change the live site's behavior. It records dependencies so asset localization can be completed without breaking the existing pages.
+Proposed destination: `assets/fonts/` with a local CSS file and the required font binaries/license notices. The font binaries have not been downloaded and no font references have been changed.
+
+## Dependencies intentionally left alone
+
+- Supabase is used by the existing reactions/likes implementation. Its configuration and code were not changed.
+- External links in story text are reader-facing historical sources, not required display assets; keep them as links.
+- The local `data-splash` cover files already exist in their story folders.
+
+## Safe completion sequence
+
+1. Obtain the original Wikimedia image files and verify their sizes/checksums.
+2. Add the files to the proposed story folders without resizing or recompressing.
+3. Update only the two matching image `src` attributes after verifying the files are present.
+4. Obtain the Cairo and Marhey font files plus license notices; add them locally, then update font declarations consistently on the homepage and stories 001–004.
+5. Keep the VetoGate photograph remote unless redistribution rights are verified.
+6. Verify the published pages, image loading, language switching, and reactions.
+
+This file records the current dependency audit. It does not claim that external assets have already been localized.
