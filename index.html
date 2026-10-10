@@ -732,6 +732,28 @@ footer {
     transform: none;
   }
 }
+
+/* تثبيت عناصر الهيدر في الشريط الأسود نفسه على الكمبيوتر والموبايل */
+.topbar{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto!important;grid-template-rows:1fr!important;align-items:center!important;gap:clamp(5px,1.2vw,16px)!important;min-height:88px!important;padding:8px clamp(8px,2vw,24px)!important;direction:ltr!important;overflow:hidden}
+.topbar .lang-switch{grid-column:1!important;grid-row:1!important;justify-self:start!important;align-self:center!important;display:flex!important;flex-wrap:nowrap!important;gap:clamp(4px,.8vw,10px)!important;white-space:nowrap!important;min-width:0!important}
+.topbar .home-link{grid-column:2!important;grid-row:1!important;justify-self:center!important;align-self:center!important;width:100%!important;max-width:none!important;margin:0!important;padding:0 3px!important;font-size:clamp(.78rem,1.8vw,1.45rem)!important;line-height:1.35!important;white-space:normal!important;text-align:center!important}
+.topbar .school-brand{grid-column:3!important;grid-row:1!important;justify-self:end!important;align-self:center!important;display:flex!important;flex-direction:row!important;gap:clamp(4px,.8vw,12px)!important;min-width:0!important;max-width:none!important;direction:rtl!important}
+.topbar .school-brand img{width:clamp(38px,5.2vw,68px)!important;height:clamp(38px,5.2vw,68px)!important;flex:0 0 auto!important;object-fit:contain!important}
+.topbar .school-info{min-width:0!important;max-width:clamp(78px,16vw,210px)!important}
+.topbar .school-name{font-size:clamp(.56rem,1.05vw,.92rem)!important;line-height:1.45!important;overflow-wrap:anywhere}
+.topbar .page-name{display:none!important}
+.topbar .lang-option{font-size:clamp(.55rem,.8vw,.7rem)!important;padding:3px 0!important}
+@media(max-width:520px){
+.topbar{grid-template-columns:auto minmax(0,1fr) auto!important;gap:5px!important;min-height:66px!important;padding:6px 7px!important}
+.topbar .school-brand{gap:4px!important}
+.topbar .school-brand img{width:36px!important;height:36px!important}
+.topbar .school-info{max-width:78px!important}
+.topbar .school-name{font-size:.52rem!important;line-height:1.35!important}
+.topbar .home-link{font-size:clamp(.68rem,2.6vw,.9rem)!important;padding:0!important}
+.topbar .lang-switch{gap:4px!important}
+.topbar .lang-option{font-size:.52rem!important}
+}
+
 </style>
 </head>
 
