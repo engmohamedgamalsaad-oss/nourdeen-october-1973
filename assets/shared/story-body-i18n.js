@@ -141,9 +141,10 @@ Object.assign(translations,{
 var original=new WeakMap();
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
- document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li').forEach(function(el){
+ document.querySelectorAll('.story h1,.story h2,.story h3,.story p,.story figcaption,.story li,.story .kicker,.story .quote,.story .panel h4,.story .lesson h4,.story .event h4').forEach(function(el){
    if(!original.has(el)) original.set(el,el.textContent);
    var ar=original.get(el);
+   if(el.querySelector && el.querySelector('a')) return;
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
    var item=translations[ar];
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
