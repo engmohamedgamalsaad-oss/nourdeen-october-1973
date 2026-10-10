@@ -50,7 +50,11 @@ body {
   margin-inline: auto;
 }
 
-.lang-switch{display:flex;gap:5px;flex-wrap:wrap;align-items:center;justify-content:center;max-width:320px}\n.lang-option{font:600 .75rem "Cairo",sans-serif;color:#f4e5c8;background:#10232b;border:1px solid rgba(227,189,120,.35);border-radius:999px;padding:5px 9px;cursor:pointer}\n.lang-option.is-active{background:#e3bd78;color:#171006;border-color:#e3bd78}\n.lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}\n.visually-hidden {
+.lang-switch{display:flex;gap:5px;flex-wrap:wrap;align-items:center;justify-content:center;max-width:320px}
+.lang-option{font:600 .75rem "Cairo",sans-serif;color:#f4e5c8;background:#10232b;border:1px solid rgba(227,189,120,.35);border-radius:999px;padding:5px 9px;cursor:pointer}
+.lang-option.is-active{background:#e3bd78;color:#171006;border-color:#e3bd78}
+.lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.visually-hidden {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -944,7 +948,9 @@ footer {
 
       box.innerHTML = list.map(function (story, index) {
         var id = esc(story.id);
-        var localized = story.i18n && story.i18n[window.I18N ? window.I18N.lang() : 'ar'];\n        var source = localized || story;\n        var name = esc(source.name || story.name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة'));
+        var localized = story.i18n && story.i18n[window.I18N ? window.I18N.lang() : 'ar'];
+        var source = localized || story;
+        var name = esc(source.name || story.name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة'));
 
         var gradeText = (source.grade || story.grade || '') +
           (story.className ? ' • ' + story.className : '');
