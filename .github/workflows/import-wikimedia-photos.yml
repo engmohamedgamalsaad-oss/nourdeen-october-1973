@@ -1,0 +1,48 @@
+name: Import licensed Wikimedia photos
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import-photos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Download the two Wikimedia source files without resizing
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p stories/002 stories/004
+          curl --fail --location --silent --show-error \
+            'https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg' \
+            --output stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg
+          curl --fail --location --silent --show-error \
+            'https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg' \
+            --output stories/004/Atef_El_Sadat.jpg
+          file stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg stories/004/Atef_El_Sadat.jpg
+          grep -aq 'JFIF\|Exif' stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg || true
+          test "$(od -An -tx1 -N2 stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg | tr -d ' \n')" = 'ffd8'
+          test "$(od -An -tx1 -N2 stories/004/Atef_El_Sadat.jpg | tr -d ' \n')" = 'ffd8'
+          test "$(wc -c < stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg)" -gt 1000
+          test "$(wc -c < stories/004/Atef_El_Sadat.jpg)" -gt 1000
+
+      - name: Commit imported images only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg stories/004/Atef_El_Sadat.jpg
+          if git diff --cached --quiet; then
+            echo 'No image changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Add licensed Wikimedia photos locally'
+          git push origin HEAD:main
