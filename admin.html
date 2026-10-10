@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة الإدارة | حكايات أكتوبر 1973</title>
+<link rel="icon" type="image/jpeg" href="assets/homepage/main-cover.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--gold:#e3bd78;--bg:#041018}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#edf3f3;font-family:"Cairo",sans-serif;line-height:1.8}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px clamp(14px,3vw,28px);background:rgba(3,13,19,.98);border-bottom:1px solid rgba(184,135,75,.38)}
+header h1{margin:0;font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:1.3rem}
+header a{color:#f4e5c8;text-decoration:none;font-weight:700;min-height:44px;display:inline-flex;align-items:center}
+main{width:min(900px,94%);margin:24px auto 60px}
+.panel{background:linear-gradient(145deg,rgba(8,62,76,.5),rgba(2,12,18,.94));border:1px solid rgba(184,135,75,.35);border-radius:12px;padding:clamp(16px,3.5vw,26px);margin-bottom:18px}
+label.f{display:grid;gap:5px;font-weight:700;color:#f4e5c8;margin-bottom:12px}
+input[type=text],input[type=email],input[type=password],select,textarea{width:100%;font:500 1rem "Cairo",sans-serif;color:#fff;background:#0a1f29;border:1px solid rgba(227,189,120,.45);border-radius:10px;padding:10px 12px;min-height:44px}
+input[type=color]{width:70px;height:44px;padding:2px;background:#0a1f29;border:1px solid rgba(227,189,120,.45);border-radius:10px}
+textarea{resize:vertical;line-height:1.8}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:2px}
+.btn{font:800 .95rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:10px;padding:10px 20px;min-height:44px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006}
+.btn.alt{background:transparent;color:#f4e5c8;border:1px solid rgba(227,189,120,.6)}
+.btn.del{background:transparent;color:#ff9a9d;border:1px solid #d4575a}
+.btn:disabled{opacity:.6;cursor:wait}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+@media(max-width:620px){.grid2{grid-template-columns:1fr}}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tab{font:700 .9rem "Cairo",sans-serif;cursor:pointer;border:1px solid rgba(227,189,120,.45);background:transparent;color:#f4e5c8;border-radius:99px;padding:8px 16px;min-height:44px}
+.tab[aria-pressed="true"]{background:var(--gold);color:#171006}
+.badge{display:inline-block;padding:2px 12px;border-radius:99px;font-size:.85rem;font-weight:800}
+.badge.pending{background:rgba(227,189,120,.18);color:#f3d7a0}
+.badge.published{background:rgba(47,165,107,.25);color:#7fe0ad}
+.badge.rejected{background:rgba(212,87,90,.25);color:#ff9a9d}
+.item h3{margin:0 0 4px;color:var(--gold)}
+.meta{color:#b7c9cc;font-size:.88rem;margin-bottom:12px}
+.msg{padding:10px 14px;border-radius:10px;font-weight:700;margin-bottom:14px}
+.msg.ok{background:rgba(47,165,107,.2);border:1px solid #2fa56b}
+.msg.err{background:rgba(212,87,90,.2);border:1px solid #d4575a}
+.empty{text-align:center;color:#b7c9cc;padding:30px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <h1>لوحة إدارة الحكايات</h1>
+  <div class="row"><a href="index.html">← الموقع</a><button class="btn alt" id="logoutBtn" type="button" hidden>تسجيل الخروج</button></div>
+</header>
+<main>
+  <div id="msg" role="status" aria-live="polite" hidden></div>
+
+  <section class="panel" id="loginBox">
+    <h2 style="margin-top:0;color:#ffe2a0">تسجيل الدخول</h2>
+    <form id="loginForm">
+      <label class="f">البريد الإلكتروني<input type="email" id="email" autocomplete="username" required></label>
+      <label class="f">كلمة المرور<input type="password" id="password" autocomplete="current-password" required></label>
+      <button class="btn" type="submit" id="loginBtn">دخول</button>
+    </form>
+  </section>
+
+  <section id="app" hidden>
+    <div class="row" style="justify-content:space-between;margin-bottom:14px">
+      <div class="tabs" id="tabs" role="group" aria-label="تصفية الحكايات"></div>
+      <div class="row"><button class="btn alt" id="refreshBtn" type="button">تحديث</button><button class="btn" id="newBtn" type="button">+ حكاية جديدة</button></div>
+    </div>
+    <div id="list"></div>
+  </section>
+</main>
+<script>
+(function(){
+  'use strict';
+  var API='https://ypwprddkscnfblhftkeb.supabase.co';
+  var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+  var session=null, items=[], filter='all', draftNew=false;
+  var STATUS={pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'};
+  function $(id){return document.getElementById(id);}
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+  function say(kind,text){var m=$('msg');m.className='msg '+kind;m.textContent=text;m.hidden=false;if(kind==='ok')setTimeout(function(){m.hidden=true;},4000);}
+
+  function saveSession(s){session=s;try{sessionStorage.setItem('adm_session',JSON.stringify(s));}catch(e){}}
+  function loadSession(){try{var s=JSON.parse(sessionStorage.getItem('adm_session')||'null');if(s&&s.access_token)session=s;}catch(e){}}
+  function clearSession(){session=null;try{sessionStorage.removeItem('adm_session');}catch(e){}}
+  function showLogin(){ $('loginBox').hidden=false; $('app').hidden=true; $('logoutBtn').hidden=true; }
+  function showApp(){ $('loginBox').hidden=true; $('app').hidden=false; $('logoutBtn').hidden=false; }
+
+  function hdr(extra){
+    var h={apikey:KEY,'Content-Type':'application/json',Authorization:'Bearer '+(session?session.access_token:KEY)};
+    if(extra)Object.keys(extra).forEach(function(k){h[k]=extra[k];});
+    return h;
+  }
+  async function refreshIfNeeded(){
+    if(!session||!session.refresh_token) return;
+    if(session.expires_at-Date.now()/1000>60) return;
+    var r=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+    if(!r.ok){clearSession();showLogin();throw new Error('expired');}
+    var d=await r.json();
+    saveSession({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+  }
+  async function rest(path,opts){
+    await refreshIfNeeded();
+    opts=opts||{}; opts.headers=hdr(opts.headers);
+    var r=await fetch(API+'/rest/v1/'+path,opts);
+    if(r.status===401){clearSession();showLogin();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى.');}
+    return r;
+  }
+
+  async function login(email,password){
+    var r=await fetch(API+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:password})});
+    if(!r.ok) throw new Error('بيانات الدخول غير صحيحة.');
+    var d=await r.json();
+    saveSession({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+    var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
+    var ok=a.ok&&(await a.json())===true;
+    if(!ok){clearSession();throw new Error('هذا الحساب ليس مسجّلًا كأدمن. أضف بريده في جدول admins.');}
+  }
+
+  async function loadList(){
+    var r=await rest('submitted_stories?select=*&order=created_at.desc');
+    if(!r.ok) throw new Error('تعذر تحميل الحكايات ('+r.status+').');
+    items=await r.json();
+    render();
+  }
+
+  function renderTabs(){
+    var box=$('tabs'); box.textContent='';
+    [['all','الكل'],['pending','قيد المراجعة'],['published','منشورة'],['rejected','مرفوضة']].forEach(function(t){
+      var n=t[0]==='all'?items.length:items.filter(function(i){return i.status===t[0];}).length;
+      var b=el('button','tab',t[1]+' ('+n+')'); b.type='button'; b.setAttribute('aria-pressed',filter===t[0]?'true':'false');
+      b.addEventListener('click',function(){filter=t[0];render();});
+      box.appendChild(b);
+    });
+  }
+
+  function fld(label,node){var w=el('label','f');w.appendChild(el('span','',label));w.appendChild(node);return w;}
+  function inp(type,val,max){var i=document.createElement('input');i.type=type;i.value=val||'';if(max)i.maxLength=max;return i;}
+  function area(val,rows,max){var t=document.createElement('textarea');t.rows=rows;t.value=val||'';if(max)t.maxLength=max;return t;}
+
+  function card(it){
+    var isNew=!it.id;
+    var box=el('article','panel item');
+    var head=el('div','row'); head.style.justifyContent='space-between';
+    var h=el('h3','',isNew?'حكاية جديدة':(it.title||'')); head.appendChild(h);
+    if(!isNew) head.appendChild(el('span','badge '+it.status,STATUS[it.status]||it.status));
+    box.appendChild(head);
+    if(!isNew) box.appendChild(el('div','meta','أُرسلت في '+new Date(it.created_at).toLocaleString('ar-EG')));
+    var name=inp('text',it.student_name,80), grade=inp('text',it.grade,60), title=inp('text',it.title,140), sub=inp('text',it.subtitle,200);
+    var color=inp('color',it.color||'#b8874b'), body=area(it.body,10,12000), src=area(it.sources,3,2000);
+    var st=document.createElement('select');
+    Object.keys(STATUS).forEach(function(k){var o=el('option','',STATUS[k]);o.value=k;if(k===(it.status||'published'))o.selected=true;st.appendChild(o);});
+    var g=el('div','grid2'); g.appendChild(fld('اسم الطالبة',name)); g.appendChild(fld('الصف والفصل',grade)); g.appendChild(fld('العنوان',title)); g.appendChild(fld('العنوان الفرعي',sub));
+    box.appendChild(g);
+    box.appendChild(fld('نص الحكاية (افصل الفقرات بسطر فارغ)',body));
+    box.appendChild(fld('المصادر (سطر لكل مصدر)',src));
+    var g2=el('div','grid2'); g2.appendChild(fld('لون الحكاية',color)); g2.appendChild(fld('الحالة',st)); box.appendChild(g2);
+
+    var actions=el('div','row');
+    var save=el('button','btn','حفظ'); save.type='button';
+    var pub=el('button','btn alt','نشر وحفظ'); pub.type='button';
+    actions.appendChild(save); if(st.value!=='published') actions.appendChild(pub);
+    if(!isNew && it.status==='published'){ var v=el('a','btn alt','عرض'); v.href='read.html?id='+encodeURIComponent(it.id); v.target='_blank'; v.rel='noopener'; v.style.textDecoration='none'; v.style.display='inline-flex'; v.style.alignItems='center'; actions.appendChild(v); }
+    if(isNew){ var cancel=el('button','btn alt','إلغاء'); cancel.type='button'; cancel.addEventListener('click',function(){draftNew=false;render();}); actions.appendChild(cancel); }
+    else { var del=el('button','btn del','حذف'); del.type='button'; del.addEventListener('click',function(){ if(confirm('حذف هذه الحكاية نهائيًا؟')) remove(it,del); }); actions.appendChild(del); }
+    box.appendChild(actions);
+
+    function collect(status){
+      return {student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),sources:src.value.trim()||null,color:color.value,status:status};
+    }
+    function valid(d){
+      if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','اسم الطالبة والعنوان مطلوبان، ونص الحكاية 50 حرفًا على الأقل.');return false;}
+      return true;
+    }
+    async function persist(status,btn){
+      var d=collect(status); if(!valid(d))return;
+      btn.disabled=true;
+      try{
+        var r;
+        if(isNew) r=await rest('submitted_stories',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+        else r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+        if(!r.ok) throw new Error('تعذر الحفظ ('+r.status+'). راجع الحقول.');
+        var rows=await r.json();
+        if(!rows.length) throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
+        draftNew=false; say('ok','تم الحفظ.'); await loadList();
+      }catch(e){ say('err',e.message||'حدث خطأ.'); }
+      btn.disabled=false;
+    }
+    save.addEventListener('click',function(){persist(st.value,save);});
+    pub.addEventListener('click',function(){persist('published',pub);});
+    return box;
+  }
+
+  async function remove(it,btn){
+    btn.disabled=true;
+    try{
+      var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+      if(!r.ok) throw new Error('تعذر الحذف ('+r.status+').');
+      var rows=await r.json(); if(!rows.length) throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
+      say('ok','تم الحذف.'); await loadList();
+    }catch(e){ say('err',e.message||'حدث خطأ.'); btn.disabled=false; }
+  }
+
+  function render(){
+    renderTabs();
+    var list=$('list'); list.textContent='';
+    if(draftNew) list.appendChild(card({status:'published',color:'#b8874b'}));
+    var shown=items.filter(function(i){return filter==='all'||i.status===filter;});
+    if(!shown.length&&!draftNew) list.appendChild(el('div','empty','لا توجد حكايات في هذا القسم.'));
+    shown.forEach(function(i){list.appendChild(card(i));});
+  }
+
+  $('loginForm').addEventListener('submit',async function(e){
+    e.preventDefault(); var b=$('loginBtn'); b.disabled=true;
+    try{
+      await login($('email').value.trim(),$('password').value);
+      $('password').value=''; showApp(); await loadList();
+    }catch(err){ say('err',err.message||'تعذر الدخول.'); }
+    b.disabled=false;
+  });
+  $('logoutBtn').addEventListener('click',function(){clearSession();items=[];showLogin();say('ok','تم تسجيل الخروج.');});
+  $('refreshBtn').addEventListener('click',function(){loadList().catch(function(e){say('err',e.message);});});
+  $('newBtn').addEventListener('click',function(){draftNew=true;filter='all';render();window.scrollTo({top:0,behavior:'smooth'});});
+
+  loadSession();
+  if(session){ showApp(); loadList().catch(function(){ clearSession(); showLogin(); }); } else showLogin();
+})();
+</script>
+</body>
+</html>
