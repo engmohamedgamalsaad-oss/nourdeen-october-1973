@@ -46,9 +46,8 @@
     if(allowed.indexOf(lang)<0)return;
     current=lang;
     try{localStorage.setItem('lang',lang);}catch(e){}
-    apply();
     var url=new URL(location.href);url.searchParams.set('lang',lang);
-    history.replaceState(null,'',url.pathname+url.search+url.hash);
+    location.href=url.pathname+url.search+url.hash;
   }
   window.I18N={
     register:function(locale,entries){dict[locale]=Object.assign(dict[locale]||{},entries||{});},
