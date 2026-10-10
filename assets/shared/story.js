@@ -284,7 +284,104 @@
   }
 
   /* =========================================
-     5) تكبير الصور عند الضغط عليها
+     5) أزرار المشاركة السريعة للحكاية
+  ========================================= */
+  (function addStoryShareButtons() {
+    var heroContent = document.querySelector('.hero-content');
+    if (!heroContent || heroContent.querySelector('.story-share-bar')) { return; }
+
+    var labels = {
+      ar: { heading: 'شارك الحكاية:', whatsapp: 'واتساب', facebook: 'فيسبوك' },
+      en: { heading: 'Share this story:', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      fr: { heading: 'Partager ce récit :', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      it: { heading: 'Condividi il racconto:', whatsapp: 'WhatsApp', facebook: 'Facebook' }
+    };
+    var copy = labels[activeLang] || labels.ar;
+    var pageUrl = window.location.href.split('#')[0];
+    var shareText = (document.title || copy.heading) + ' — ' + pageUrl;
+
+    var bar = document.createElement('div');
+    bar.className = 'story-share-bar';
+    bar.setAttribute('aria-label', copy.heading);
+    Object.assign(bar.style, {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '10px',
+      margin: '18px auto 0',
+      width: '100%'
+    });
+
+    var heading = document.createElement('span');
+    heading.textContent = copy.heading;
+    Object.assign(heading.style, {
+      color: '#f1d18d',
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: '.88rem',
+      fontWeight: '700',
+      width: '100%',
+      textAlign: 'center',
+      marginBottom: '2px'
+    });
+    bar.appendChild(heading);
+
+    function makeShareLink(label, href, background, foreground, iconText) {
+      var link = document.createElement('a');
+      link.href = href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = iconText + ' ' + label;
+      link.setAttribute('aria-label', copy.heading + ' ' + label);
+      Object.assign(link.style, {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '7px',
+        minHeight: '42px',
+        padding: '9px 18px',
+        borderRadius: '999px',
+        border: '1px solid rgba(255,255,255,.24)',
+        background: background,
+        color: foreground,
+        textDecoration: 'none',
+        fontFamily: '"Cairo", Tahoma, sans-serif',
+        fontSize: '.9rem',
+        fontWeight: '800',
+        lineHeight: '1.4',
+        boxShadow: '0 5px 18px rgba(0,0,0,.2)',
+        transition: 'transform .2s ease, filter .2s ease'
+      });
+      link.addEventListener('mouseenter', function () { link.style.filter = 'brightness(1.08)'; });
+      link.addEventListener('mouseleave', function () { link.style.filter = 'none'; });
+      bar.appendChild(link);
+    }
+
+    makeShareLink(
+      copy.whatsapp,
+      'https://wa.me/?text=' + encodeURIComponent(shareText),
+      '#168b55',
+      '#ffffff',
+      '☏'
+    );
+    makeShareLink(
+      copy.facebook,
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl),
+      '#1877f2',
+      '#ffffff',
+      'f'
+    );
+
+    var subtitle = heroContent.querySelector('.hero-subtitle');
+    if (subtitle && subtitle.parentNode === heroContent) {
+      subtitle.insertAdjacentElement('afterend', bar);
+    } else {
+      heroContent.appendChild(bar);
+    }
+  })();
+
+  /* =========================================
+     6) تكبير الصور عند الضغط عليها
   ========================================= */
   var lightbox = document.createElement('div');
   lightbox.className = 'lightbox';
