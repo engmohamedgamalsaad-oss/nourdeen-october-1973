@@ -432,9 +432,9 @@ body::before{
 /* Horizontal slide transitions: enter from right, pause for reading, leave left. */
 .feature-carousel{position:relative;width:100%;max-width:900px;margin:0 auto}
 .feature-track{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important;direction:ltr}
-.feature-track>.media-card,.feature-track>.fact-card{grid-area:1/1;width:100%;min-width:0;opacity:0;visibility:hidden;transform:translateX(110%);transition:transform .72s cubic-bezier(.22,.72,.25,1),opacity .72s ease;pointer-events:none}
-.feature-track>.media-card.is-active,.feature-track>.fact-card.is-active{opacity:1;visibility:visible;transform:translateX(0);z-index:2;pointer-events:auto}
-.feature-track>.media-card.is-leaving,.feature-track>.fact-card.is-leaving{opacity:0;visibility:visible;transform:translateX(-110%);z-index:1}
+.feature-track.carousel-ready>.media-card,.feature-track.carousel-ready>.fact-card{grid-area:1/1;width:100%;min-width:0;opacity:0;visibility:hidden;transform:translateX(110%);transition:transform .72s cubic-bezier(.22,.72,.25,1),opacity .72s ease;pointer-events:none}
+.feature-track.carousel-ready>.media-card.is-active,.feature-track.carousel-ready>.fact-card.is-active{opacity:1;visibility:visible;transform:translateX(0);z-index:2;pointer-events:auto}
+.feature-track.carousel-ready>.media-card.is-leaving,.feature-track.carousel-ready>.fact-card.is-leaving{opacity:0;visibility:visible;transform:translateX(-110%);z-index:1}
 .feature-track .media-card>a:first-child,.feature-track .stamp-art{height:clamp(190px,34vw,320px)}
 .feature-track .media-caption{padding:18px 20px 20px}
 .feature-track .media-caption h3,.feature-track .fact-card h3{font-size:clamp(1.05rem,2.6vw,1.3rem)}
@@ -1246,7 +1246,7 @@ footer {
 
 })();
 </script>
-<script src="assets/shared/feature-carousel.js" defer></script>
+<script src="assets/shared/feature-carousel.js?v=20261010-2" defer></script>
 
 </body>
 </html>
