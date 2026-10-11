@@ -1,66 +1,67 @@
--- حكايات أكتوبر 1973 — إعداد قاعدة بيانات الحكايات المرسلة.
--- قبل التشغيل: استبدل engmohamedgamalsaad@gmail.com ببريد حساب الأدمن نفسه.
-create table if not exists public.admins (email text primary key);
-alter table public.admins enable row level security;
-insert into public.admins(email) values ('engmohamedgamalsaad@gmail.com') on conflict do nothing;
+-- خالدون عبر التاريخ — جدول مقترحات الحكايات (منفصل تمامًا عن submitted_stories).
+-- يعتمد على جدول admins ودالة is_admin() الموجودين من docs/supabase-setup.sql (نفس حساب الأدمن).
+-- شغّله من Supabase > SQL Editor بعد مراجعته. لا يغيّر أي جدول أو سياسة موجودة.
 
-create table if not exists public.submitted_stories (
+create table if not exists public.khaledoon_submissions (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
-  student_name text not null check (char_length(student_name) between 2 and 80),
-  grade text check (char_length(grade) <= 60),
+  section text not null check (section in ('science','learning','fame','history','curriculum','readers')),
+  stage text check (stage in ('primary','preparatory','secondary')),
+  school_grade smallint check (school_grade between 1 and 6),
+  subject text check (char_length(subject) <= 80),
+  figure_name text not null check (char_length(figure_name) between 2 and 120),
+  narrator_name text not null check (char_length(narrator_name) between 2 and 40),
+  narrator_grade text check (char_length(narrator_grade) <= 60),
   title text not null check (char_length(title) between 3 and 140),
   subtitle text check (char_length(subtitle) <= 200),
   body text not null check (char_length(body) between 50 and 12000),
-  sources text check (char_length(sources) <= 2000),
-  color text not null default '#b8874b' check (color ~ '^#[0-9a-fA-F]{6}$'),
-  status text not null default 'pending' check (status in ('pending','published','rejected')),
-  story_number integer
+  original_body text,
+  history_note text check (char_length(history_note) <= 12000),
+  sources text check (char_length(sources) <= 3000),
+  images_note text check (char_length(images_note) <= 1500),
+  admin_notes text check (char_length(admin_notes) <= 3000),
+  consent boolean not null default false,
+  status text not null default 'pending' check (status in ('pending','review','published','rejected')),
+  constraint kh_curriculum_fields check (section <> 'curriculum' or (stage is not null and school_grade is not null)),
+  constraint kh_grade_range check (stage is null or school_grade is null
+    or (stage = 'primary' and school_grade between 1 and 6)
+    or (stage <> 'primary' and school_grade between 1 and 3)),
+  constraint kh_publish_needs_consent check (status <> 'published' or consent = true)
 );
-alter table public.submitted_stories enable row level security;
-create unique index if not exists submitted_stories_story_number_uidx
-  on public.submitted_stories(story_number) where story_number is not null;
-create sequence if not exists public.submitted_story_number_seq start with 5;
 
-create or replace function public.assign_submitted_story_number()
-returns trigger language plpgsql security definer set search_path = pg_catalog, public
-as $$
+-- يحتفظ بالنص الأصلي كما وصل ولا يسمح بتعديله لاحقًا
+create or replace function public.kh_keep_original()
+returns trigger language plpgsql as $$
 begin
-  if new.status = 'published' and new.story_number is null then
-    new.story_number := nextval('public.submitted_story_number_seq');
+  if tg_op = 'INSERT' then new.original_body := new.body;
+  else new.original_body := old.original_body;
   end if;
   return new;
 end;
 $$;
-revoke all on function public.assign_submitted_story_number() from public, anon, authenticated;
-drop trigger if exists submitted_story_assign_number on public.submitted_stories;
-create trigger submitted_story_assign_number before insert or update of status, story_number
-on public.submitted_stories for each row execute function public.assign_submitted_story_number();
+drop trigger if exists kh_keep_original on public.khaledoon_submissions;
+create trigger kh_keep_original before insert or update on public.khaledoon_submissions
+for each row execute function public.kh_keep_original();
 
-create or replace function public.is_admin()
-returns boolean language sql stable security definer set search_path = pg_catalog, public
-as $$
-  select auth.uid() is not null and exists (
-    select 1 from public.admins a
-    where lower(a.email) = lower(coalesce(auth.jwt() ->> 'email', ''))
-  );
-$$;
-revoke all on function public.is_admin() from public, anon;
-grant execute on function public.is_admin() to authenticated;
+alter table public.khaledoon_submissions enable row level security;
+drop policy if exists "kh visitors submit pending" on public.khaledoon_submissions;
+drop policy if exists "kh admin reads" on public.khaledoon_submissions;
+drop policy if exists "kh admin inserts" on public.khaledoon_submissions;
+drop policy if exists "kh admin updates" on public.khaledoon_submissions;
+drop policy if exists "kh admin deletes" on public.khaledoon_submissions;
+-- الزائر: إرسال فقط بحالة pending وبموافقة، ولا قراءة ولا تعديل
+create policy "kh visitors submit pending" on public.khaledoon_submissions for insert to anon, authenticated
+  with check (status = 'pending' and consent = true and admin_notes is null and history_note is null);
+create policy "kh admin reads" on public.khaledoon_submissions for select to authenticated using (public.is_admin());
+create policy "kh admin inserts" on public.khaledoon_submissions for insert to authenticated with check (public.is_admin());
+create policy "kh admin updates" on public.khaledoon_submissions for update to authenticated using (public.is_admin()) with check (public.is_admin());
+create policy "kh admin deletes" on public.khaledoon_submissions for delete to authenticated using (public.is_admin());
+grant insert on public.khaledoon_submissions to anon, authenticated;
+grant select, update, delete on public.khaledoon_submissions to authenticated;
 
-drop policy if exists "visitors submit pending" on public.submitted_stories;
-drop policy if exists "everyone reads published" on public.submitted_stories;
-drop policy if exists "admin reads all" on public.submitted_stories;
-drop policy if exists "admin inserts" on public.submitted_stories;
-drop policy if exists "admin updates" on public.submitted_stories;
-drop policy if exists "admin deletes" on public.submitted_stories;
-create policy "visitors submit pending" on public.submitted_stories for insert to anon, authenticated
-  with check (status = 'pending' and story_number is null);
-create policy "everyone reads published" on public.submitted_stories for select to anon, authenticated
-  using (status = 'published');
-create policy "admin reads all" on public.submitted_stories for select to authenticated using (public.is_admin());
-create policy "admin inserts" on public.submitted_stories for insert to authenticated with check (public.is_admin());
-create policy "admin updates" on public.submitted_stories for update to authenticated using (public.is_admin()) with check (public.is_admin());
-create policy "admin deletes" on public.submitted_stories for delete to authenticated using (public.is_admin());
-grant select, insert on public.submitted_stories to anon, authenticated;
-grant update, delete on public.submitted_stories to authenticated;
+-- اختياري لاحقًا (عند بناء صفحة عرض الحكايات): عرض آمن للحكايات المنشورة فقط وبأعمدة عامة
+-- create or replace view public.khaledoon_published as
+--   select id, created_at, section, stage, school_grade, subject, figure_name, narrator_name, narrator_grade,
+--          title, subtitle, body, history_note, sources, images_note
+--   from public.khaledoon_submissions where status = 'published';
+-- grant select on public.khaledoon_published to anon, authenticated;
