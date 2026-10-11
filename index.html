@@ -442,7 +442,7 @@ body::before{
 .feature-track.carousel-ready>.media-card,.feature-track.carousel-ready>.fact-card{grid-area:1/1;width:100%;min-width:0;opacity:0;visibility:hidden;transform:translateX(110%);transition:transform .72s cubic-bezier(.22,.72,.25,1),opacity .72s ease;pointer-events:none}
 .feature-track.carousel-ready>.media-card.is-active,.feature-track.carousel-ready>.fact-card.is-active{opacity:1;visibility:visible;transform:translateX(0);z-index:2;pointer-events:auto}
 .feature-track.carousel-ready>.media-card.is-leaving,.feature-track.carousel-ready>.fact-card.is-leaving{opacity:0;visibility:visible;transform:translateX(-110%);z-index:1}
-.feature-track .media-card>a:first-child,.feature-track .stamp-art{height:clamp(190px,34vw,320px)}
+.feature-track .media-card>a:first-child,.feature-track .media-card>.media-image,.feature-track .stamp-art{height:clamp(190px,34vw,320px)}
 .feature-track .media-caption{padding:18px 20px 20px}
 .feature-track .media-caption h3,.feature-track .fact-card h3{font-size:clamp(1.05rem,2.6vw,1.3rem)}
 .feature-track .media-caption p,.feature-track .fact-card p{font-size:clamp(.88rem,2vw,1rem);line-height:2}
@@ -457,7 +457,7 @@ body::before{
 .feature-dot{appearance:none;width:8px;height:8px;border:0;border-radius:50%;padding:0;background:#70858a;cursor:pointer}
 .feature-dot[aria-current=true]{width:22px;border-radius:999px;background:#e3bd78}
 @media(max-width:900px){.media-grid,.facts-grid{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:560px){.feature-section{padding:52px 15px}.feature-track .media-card>a:first-child,.feature-track .stamp-art{height:210px}.stamp-frame{max-width:210px}.feature-control{width:38px;height:38px}}
+@media(max-width:560px){.feature-section{padding:52px 15px}.feature-track .media-card>a:first-child,.feature-track .media-card>.media-image,.feature-track .stamp-art{height:210px}.stamp-frame{max-width:210px}.feature-control{width:38px;height:38px}}
 
 
 /* ===== كروت الحكايات ===== */
