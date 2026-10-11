@@ -59,7 +59,13 @@
   }
 
   function makeCard(s) {
-    var first = Array.from(String(s.student_name || '؟'))[0];
+    /* في اللغات غير العربية نستخدم الترجمة إن وُجدت، وإلا يبقى النص العربي */
+    var tr = (lang !== 'ar' && s.translations && typeof s.translations === 'object') ? s.translations[lang] : null;
+    function pick(k) {
+      return (tr && typeof tr[k] === 'string' && tr[k].trim()) ? tr[k] : (s[k] || '');
+    }
+    var nameText = pick('student_name');
+    var first = Array.from(String(nameText || '؟'))[0];
     var color = /^#[0-9a-fA-F]{6}$/.test(s.color || '') ? s.color : '#b8874b';
 
     var a = document.createElement('a');
@@ -87,16 +93,16 @@
     wrap.appendChild(fb);
     var nm = document.createElement('div');
     nm.className = 'card-name';
-    nm.textContent = s.student_name || '';
+    nm.textContent = nameText;
     rowEl.appendChild(wrap);
     rowEl.appendChild(nm);
 
     var gr = document.createElement('div');
     gr.className = 'card-grade';
-    gr.textContent = s.grade || '';
+    gr.textContent = pick('grade');
     var ti = document.createElement('div');
     ti.className = 'card-title';
-    ti.textContent = s.title || '';
+    ti.textContent = pick('title');
     var bottom = document.createElement('div');
     bottom.className = 'card-bottom-row';
     var btn = document.createElement('span');
@@ -113,13 +119,21 @@
     return a;
   }
 
+  function fetchStories(withTr) {
+    var fields = 'id,student_name,grade,title,color' + (withTr ? ',translations' : '');
+    return fetch(API + '/rest/v1/submitted_stories?status=eq.published&select=' + fields + '&order=created_at.asc', {
+      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, Accept: 'application/json' }
+    }).then(function (r) {
+      /* إن لم يكن عمود الترجمات موجودًا بعد نعيد المحاولة بدونه */
+      if (!r.ok) { if (withTr) return fetchStories(false); throw new Error(String(r.status)); }
+      return r.json();
+    });
+  }
+
   function addDbStories() {
     var cards = document.getElementById('cards');
     if (!cards) return;
-    fetch(API + '/rest/v1/submitted_stories?status=eq.published&select=id,student_name,grade,title,color&order=created_at.asc', {
-      headers: { apikey: KEY, Authorization: 'Bearer ' + KEY, Accept: 'application/json' }
-    })
-      .then(function (r) { if (!r.ok) throw new Error(String(r.status)); return r.json(); })
+    fetchStories(true)
       .then(function (rows) {
         if (!Array.isArray(rows) || !rows.length) return;
         var tries = 0;
@@ -134,7 +148,7 @@
           });
         })();
       })
-      .catch(function () { /* table not set up yet or offline: the file-based stories still show */ });
+      .catch(function () { /* الجدول غير مجهز بعد أو لا يوجد اتصال: تبقى الحكايات الأساسية ظاهرة */ });
   }
 
   function init() {
