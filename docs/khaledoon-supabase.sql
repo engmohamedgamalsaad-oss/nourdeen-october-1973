@@ -40,6 +40,9 @@ create index if not exists kh_submit_rate_limits_fingerprint_time_idx
   on private.khaledoon_submit_rate_limits (fingerprint, created_at desc);
 alter table private.khaledoon_submit_rate_limits enable row level security;
 revoke all on private.khaledoon_submit_rate_limits from public, anon, authenticated;
+drop policy if exists "kh rate limits inaccessible" on private.khaledoon_submit_rate_limits;
+create policy "kh rate limits inaccessible" on private.khaledoon_submit_rate_limits
+  for all to anon, authenticated using (false) with check (false);
 
 create or replace function public.kh_limit_submission_rate()
 returns trigger
