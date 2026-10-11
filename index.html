@@ -209,11 +209,12 @@ body::before{
   will-change: transform;
 }
 
-/* ===== حركة سينمائية للغلاف الرئيسي ===== */
-/* حركة هادئة للصورة نفسها؛ لا تغيّر ملف الصورة أو مساراته */
+/* ===== الغلاف ثابت أثناء التمرير لتجنب أي انزلاق جانبي ===== */
 .hero-home-image {
-  animation: hero-scene-drift 22s ease-in-out infinite alternate;
+  animation: none;
+  transform: none;
   filter: saturate(1.04) contrast(1.025);
+  will-change: auto;
 }
 
 /* وهج ضوئي متحرك وغبار خفيف لإعطاء المشهد إحساسًا بالحياة */
@@ -1067,11 +1068,8 @@ footer {
       Math.min(1, -rect.top / hero.offsetHeight)
     );
 
-    /* الصورة تتحرك حركة خفيفة وتظل ظاهرة */
-    img.style.transform =
-      'translateY(' + (distance * -2.5) + 'vh) scale(' +
-      (1 + distance * 0.025) + ')';
-
+    /* ثبّت صورة الغلاف أثناء التمرير؛ الحركة هنا للنص فقط */
+    img.style.transform = 'none';
     img.style.opacity = '1';
 
     /* الكلام ينزل ويختفي تدريجيًا */
@@ -1097,15 +1095,6 @@ footer {
       requestAnimationFrame(updateHero);
     }
   }
-
-  /* تحريك الخلفية داخل إطار ثابت وبمدى محدود؛ بدون تحريك أو تكبير طبقة الصورة نفسها */
-  function updateBackdropPosition() {
-    var y = window.scrollY || window.pageYOffset || 0;
-    var shift = Math.max(-48, Math.min(48, y * 0.018));
-    document.documentElement.style.setProperty('--cover-backdrop-shift', shift + 'px');
-  }
-  window.addEventListener('scroll', updateBackdropPosition, {passive:true});
-  updateBackdropPosition();
 
   window.addEventListener('scroll', requestHeroUpdate, {
     passive: true
