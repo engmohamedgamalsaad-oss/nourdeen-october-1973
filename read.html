@@ -34,10 +34,11 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
 .src ol{padding-inline-start:22px;color:#cbd5d7}
 .src a{color:var(--gold);word-break:break-all}
 .note{margin-top:20px;color:#b7c9cc;font-size:.9rem}
+.note a{color:var(--gold)}
 .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:28px}
 .btn{font:800 1rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:10px;padding:12px 24px;min-height:46px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006;text-decoration:none;display:inline-flex;align-items:center}
 .btn.alt{background:transparent;color:#f4e5c8;border:1px solid rgba(227,189,120,.6)}
-.btn:focus-visible,.src a:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.btn:focus-visible,.src a:focus-visible,.note a:focus-visible{outline:3px solid #fff;outline-offset:3px}
 .state{text-align:center;color:#c3d1d3;padding:60px 0}
 [hidden]{display:none!important}
 @media print{
@@ -92,7 +93,10 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
     error:L('تعذر تحميل الحكاية الآن. جرّب مرة أخرى بعد قليل.','Could not load the story right now. Please try again shortly.','Impossible de charger le récit pour le moment. Réessayez dans un instant.','Impossibile caricare il racconto ora. Riprova tra poco.'),
     by:L('إعداد وتقديم','Written by','Écrit par','A cura di'),
     sources:L('المصادر','Sources','Sources','Fonti'),
-    note:L('هذه حكاية كتبتها إحدى الطالبات وتمت مراجعتها قبل النشر. نُشرت بلغتها الأصلية.','This story was written by a student and reviewed before publication. It is shown in its original language.','Ce récit a été écrit par une élève et relu avant publication. Il est présenté dans sa langue d’origine.','Questo racconto è stato scritto da una studentessa e rivisto prima della pubblicazione. Appare nella lingua originale.'),
+    note:L('هذه حكاية كتبتها إحدى الطالبات وتمت مراجعتها قبل النشر.','This story was written by a student and reviewed before publication.','Ce récit a été écrit par une élève et relu avant publication.','Questo racconto è stato scritto da una studentessa e rivisto prima della pubblicazione.'),
+    aiNote:L('ترجمة بالذكاء الاصطناعي عن النص العربي الأصلي، والنص العربي هو المرجع.','Translated from the Arabic original with AI. The Arabic text is the reference.','Traduit de l’arabe original avec l’IA. Le texte arabe fait foi.','Tradotto dall’arabo originale con l’IA. Il testo arabo è quello di riferimento.'),
+    arOnly:L('','This story is available in Arabic only.','Ce récit n’est disponible qu’en arabe.','Questo racconto è disponibile solo in arabo.'),
+    readAr:L('اقرأ النص العربي','Read the Arabic original','Lire l’original en arabe','Leggi l’originale in arabo'),
     print:L('اطبع الحكاية أو احفظها PDF','Print or save as PDF','Imprimer ou enregistrer en PDF','Stampa o salva in PDF'),
     quiz:L('اختبر معلوماتك','Take the quiz','Faire le quiz','Fai il quiz'),
     home:L('كل الحكايات','All stories','Tous les récits','Tutti i racconti')
@@ -108,23 +112,37 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var id=new URLSearchParams(location.search).get('id')||'';
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){ $('state').textContent=t('notFound'); return; }
 
-  fetch(API+'/rest/v1/submitted_stories?id=eq.'+encodeURIComponent(id)+'&status=eq.published&select=student_name,grade,title,subtitle,body,sources,color,story_number',{
-    headers:{apikey:KEY,Authorization:'Bearer '+KEY,Accept:'application/json'}
-  }).then(function(r){ if(!r.ok) throw new Error(String(r.status)); return r.json(); })
-  .then(function(rows){
+  var FIELDS='student_name,grade,title,subtitle,body,sources,color,story_number';
+  function load(withTr){
+    return fetch(API+'/rest/v1/submitted_stories?id=eq.'+encodeURIComponent(id)+'&status=eq.published&select='+FIELDS+(withTr?',translations':''),{
+      headers:{apikey:KEY,Authorization:'Bearer '+KEY,Accept:'application/json'}
+    }).then(function(r){
+      /* إن لم يكن عمود الترجمات موجودًا بعد، نحمّل الحكاية بدونه */
+      if(!r.ok){ if(withTr) return load(false); throw new Error(String(r.status)); }
+      return r.json();
+    });
+  }
+
+  load(true).then(function(rows){
     if(!rows.length){ $('state').textContent=t('notFound'); return; }
     var s=rows[0];
+    var tr=(lang!=='ar'&&s.translations&&typeof s.translations==='object')?s.translations[lang]:null;
+    var translated=!!(tr&&typeof tr.title==='string'&&tr.title.trim()&&typeof tr.body==='string'&&tr.body.trim());
+    function pick(k){ return translated&&typeof tr[k]==='string'&&tr[k].trim()?tr[k]:(s[k]||''); }
+
+    if(!translated&&lang!=='ar'){ var st=$('story'); st.setAttribute('dir','rtl'); st.setAttribute('lang','ar'); }
     if(s.story_number) $('sEyebrow').textContent='EGYPT • 6 OCTOBER 1973 • '+({ar:'الحكاية ',en:'STORY ',fr:'RÉCIT ',it:'RACCONTO '}[lang]||'STORY ')+String(s.story_number).padStart(3,'0');
     if(/^#[0-9a-fA-F]{6}$/.test(s.color||'')) document.documentElement.style.setProperty('--c',s.color);
-    document.title=s.title+' | '+s.student_name;
-    $('sTitle').textContent=s.title;
-    $('sSub').textContent=s.subtitle||''; $('sSub').hidden=!s.subtitle;
+    var title=pick('title'), subtitle=pick('subtitle');
+    document.title=title+' | '+pick('student_name');
+    $('sTitle').textContent=title;
+    $('sSub').textContent=subtitle; $('sSub').hidden=!subtitle;
     $('sBy').textContent='';
-    var strong=document.createElement('strong'); strong.textContent=s.student_name;
+    var strong=document.createElement('strong'); strong.textContent=pick('student_name');
     $('sBy').appendChild(document.createTextNode(t('by')+': ')); $('sBy').appendChild(strong);
-    if(s.grade) $('sBy').appendChild(document.createTextNode(' • '+s.grade));
+    if(pick('grade')) $('sBy').appendChild(document.createTextNode(' • '+pick('grade')));
     var body=$('sBody'); body.textContent='';
-    String(s.body||'').split(/\n\s*\n/).forEach(function(par){
+    String(pick('body')).split(/\n\s*\n/).forEach(function(par){
       par=par.trim(); if(!par) return;
       var p=document.createElement('p'); p.className='para'; p.textContent=par; body.appendChild(p);
     });
@@ -138,6 +156,13 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
         ol.appendChild(li);
       });
       $('sSrcBox').hidden=false;
+    }
+    var note=$('sNote'); note.textContent=t('note');
+    if(translated) note.textContent+=' '+t('aiNote');
+    else if(lang!=='ar') note.textContent+=' '+t('arOnly');
+    if(translated){
+      var link=document.createElement('a'); link.href='read.html?id='+encodeURIComponent(id)+'&lang=ar'; link.textContent=t('readAr');
+      note.appendChild(document.createTextNode(' ')); note.appendChild(link);
     }
     $('state').hidden=true; $('story').hidden=false;
   }).catch(function(){ $('state').textContent=t('error'); });
