@@ -3,13 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>اكتب حكايتك | حكايات أكتوبر 1973</title>
+<title>اكتبي حكايتك | حكايات أكتوبر 1973</title>
 <meta name="description" content="نموذج لإرسال حكاية جديدة عن حرب أكتوبر 1973 لتظهر في الموقع بعد مراجعة المدرسة.">
 <link rel="icon" type="image/jpeg" href="assets/homepage/main-cover.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/shared/i18n.css">
 <style>
 :root{color-scheme:dark;--gold:#f2ca82;--gold2:#c38a48;--bg:#06121c;--line:rgba(226,190,128,.2);--muted:#a8bdc6;--mint:#70dfc0}
 *{box-sizing:border-box}
@@ -21,10 +20,6 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;fl
 header a.back{color:#f4e5c8;text-decoration:none;font-weight:800;min-height:44px;display:inline-flex;align-items:center;padding:0 12px;border-radius:10px}
 header a.back:hover{background:#ffffff0c}
 header a.back:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-.lang-switch{display:flex;gap:10px;direction:ltr}
-.lang-option{appearance:none;border:0;border-bottom:2px solid transparent;background:transparent;color:#cbd5d7;font:600 .85rem "Cairo",sans-serif;cursor:pointer;padding:8px 4px;min-height:44px}
-.lang-option.is-active{color:var(--gold);border-bottom-color:var(--gold)}
-.lang-option:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 main{width:min(800px,94%);margin:clamp(24px,5vw,52px) auto 72px}
 .hero{text-align:center;margin-bottom:24px}
 .hero-mark{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(112,223,192,.25);background:rgba(112,223,192,.07);color:var(--mint);padding:6px 14px;border-radius:99px;font-size:.82rem;font-weight:800;margin-bottom:12px}
@@ -40,6 +35,7 @@ textarea{resize:vertical;line-height:1.9}
 input:focus-visible,textarea:focus-visible,button:focus-visible,a:focus-visible,input[type=checkbox]:focus-visible{outline:3px solid #fff;outline-offset:3px}
 input:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 0 3px rgba(112,223,192,.1)}
 .hp{position:absolute;inset-inline-start:-9999px;width:1px;height:1px;overflow:hidden}
+.tip{background:rgba(112,223,192,.07);border:1px solid rgba(112,223,192,.22);border-radius:14px;padding:12px 14px;color:#cfe9e2;font-size:.95rem}
 .check{display:flex;gap:11px;align-items:flex-start;font-weight:600;color:#dbe8e8;background:#ffffff05;border:1px solid rgba(181,207,211,.12);border-radius:14px;padding:13px}
 .check input{width:22px;height:22px;margin-top:6px;flex:0 0 22px;accent-color:#e3bd78}
 button.send{font:800 1.05rem "Cairo",sans-serif;cursor:pointer;border:0;border-radius:13px;padding:14px 26px;min-height:52px;background:linear-gradient(135deg,#f4d18e,#bf8747);color:#171006;box-shadow:0 9px 24px rgba(195,138,72,.16);transition:transform .16s,filter .16s}
@@ -55,74 +51,40 @@ button.send:disabled{opacity:.6;cursor:wait;transform:none}
 </style>
 </head>
 <body>
-<a class="skip" href="#main" id="skipLink">تخطّي إلى المحتوى</a>
+<a class="skip" href="#main">تخطّي إلى المحتوى</a>
 <header>
-  <a class="back" href="index.html" id="backLink">← الصفحة الرئيسية</a>
-  <div class="lang-switch" data-lang-switch aria-label="اختيار اللغة"></div>
+  <a class="back" href="index.html">← الصفحة الرئيسية</a>
 </header>
 <main id="main">
-  <div class="hero"><div class="hero-mark">مساحة إبداع الطالبات</div><h1 id="title">اكتب حكايتك</h1>
-  <p class="lead" id="lead"></p></div>
+  <div class="hero"><div class="hero-mark">مساحة إبداع الطالبات</div><h1>اكتبي حكايتك</h1>
+  <p class="lead">شاركي بحكاية عن حرب أكتوبر 1973. اكتبيها بالعربية فقط، وبعد مراجعة المدرسة تُترجم تلقائيًا إلى الإنجليزية والفرنسية والإيطالية.</p></div>
   <form id="f" novalidate>
-    <label class="f"><span id="l_name"></span><input type="text" id="name" maxlength="80" autocomplete="name" required></label>
-    <label class="f"><span id="l_grade"></span><input type="text" id="grade" maxlength="60"></label>
-    <label class="f"><span id="l_title"></span><input type="text" id="storyTitle" maxlength="140" required></label>
-    <label class="f"><span id="l_sub"></span><input type="text" id="subtitle" maxlength="200"></label>
-    <label class="f"><span id="l_body"></span><small id="h_body"></small><textarea id="body" rows="12" maxlength="12000" required></textarea><span class="count" id="count" aria-live="off"></span></label>
-    <label class="f"><span id="l_src"></span><small id="h_src"></small><textarea id="sources" rows="4" maxlength="2000"></textarea></label>
+    <label class="f">اسم الطالبة *<input type="text" id="name" maxlength="80" autocomplete="name" required></label>
+    <label class="f">الصف والفصل (اختياري)<input type="text" id="grade" maxlength="60" placeholder="مثال: الصف الأول الإعدادي • 1B"></label>
+    <label class="f">عنوان الحكاية *<input type="text" id="storyTitle" maxlength="140" required></label>
+    <label class="f">عنوان فرعي (اختياري)<input type="text" id="subtitle" maxlength="200"></label>
+    <label class="f">نص الحكاية *<small>اكتبي بأسلوبك. افصلي بين الفقرات بسطر فارغ. الحد الأدنى 50 حرفًا.</small><textarea id="body" rows="12" maxlength="12000" required></textarea><span class="count" id="count" aria-live="off"></span></label>
+    <label class="f">المصادر (اختياري)<small>سطر لكل مصدر، ويمكن لصق الروابط.</small><textarea id="sources" rows="4" maxlength="2000"></textarea></label>
+    <div class="tip">لا تحتاجين لكتابة أي ترجمة؛ تتم الترجمة بالذكاء الاصطناعي وتراجعها المدرسة قبل النشر.</div>
     <div class="hp" aria-hidden="true"><label>Website <input type="text" id="website" tabindex="-1" autocomplete="off"></label></div>
-    <label class="check"><input type="checkbox" id="own"><span id="l_own"></span></label>
+    <label class="check"><input type="checkbox" id="own"><span>كتبت هذه الحكاية بنفسي بأسلوبي، وراجعت معلوماتها مع مصادر موثوقة.</span></label>
     <div id="msg" role="status" aria-live="polite"></div>
-    <button class="send" type="submit" id="send"></button>
+    <button class="send" type="submit" id="send">أرسلي الحكاية</button>
   </form>
 </main>
-<script src="assets/shared/i18n.js"></script>
 <script>
 (function(){
   'use strict';
   var API='https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-  var lang=(window.I18N&&window.I18N.lang())||'ar';
-  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it};}
-  var T={
-    title:L('اكتب حكايتك','Write your story','Écrivez votre récit','Scrivi il tuo racconto'),
-    lead:L('شاركي بحكاية عن حرب أكتوبر 1973. ستظهر في الموقع بعد مراجعة المدرسة.','Share a story about the October 1973 war. It will appear on the site after the school reviews it.','Partagez un récit sur la guerre d’octobre 1973. Il apparaîtra sur le site après relecture par l’école.','Condividi un racconto sulla guerra dell’ottobre 1973. Apparirà sul sito dopo la revisione della scuola.'),
-    skip:L('تخطّي إلى المحتوى','Skip to content','Aller au contenu','Vai al contenuto'),
-    back:L('← الصفحة الرئيسية','← Home','← Accueil','← Home'),
-    name:L('اسم الطالبة *','Student name *','Nom de l’élève *','Nome della studentessa *'),
-    grade:L('الصف والفصل (اختياري)','Grade and class (optional)','Classe (facultatif)','Classe (facoltativo)'),
-    stitle:L('عنوان الحكاية *','Story title *','Titre du récit *','Titolo del racconto *'),
-    sub:L('عنوان فرعي (اختياري)','Subtitle (optional)','Sous-titre (facultatif)','Sottotitolo (facoltativo)'),
-    body:L('نص الحكاية *','Story text *','Texte du récit *','Testo del racconto *'),
-    hbody:L('اكتبي بأسلوبك. افصلي بين الفقرات بسطر فارغ. الحد الأدنى 50 حرفًا.','Write in your own words. Separate paragraphs with a blank line. Minimum 50 characters.','Écrivez avec vos mots. Séparez les paragraphes par une ligne vide. Minimum 50 caractères.','Scrivi con parole tue. Separa i paragrafi con una riga vuota. Minimo 50 caratteri.'),
-    src:L('المصادر (اختياري)','Sources (optional)','Sources (facultatif)','Fonti (facoltativo)'),
-    hsrc:L('سطر لكل مصدر، ويمكن لصق الروابط.','One source per line; you can paste links.','Une source par ligne ; vous pouvez coller des liens.','Una fonte per riga; puoi incollare i link.'),
-    own:L('كتبت هذه الحكاية بنفسي بأسلوبي، وراجعت معلوماتها مع مصادر موثوقة.','I wrote this story myself in my own words and checked its facts against reliable sources.','J’ai écrit ce récit moi-même avec mes mots et vérifié ses informations auprès de sources fiables.','Ho scritto io questo racconto con parole mie e ne ho verificato le informazioni su fonti affidabili.'),
-    send:L('أرسل الحكاية','Submit story','Envoyer le récit','Invia il racconto'),
-    sending:L('جارٍ الإرسال…','Sending…','Envoi…','Invio…'),
-    chars:L('{n} حرفًا','{n} characters','{n} caractères','{n} caratteri'),
-    ok:L('تم الإرسال بنجاح! ستظهر حكايتك بعد مراجعة المدرسة. شكرًا لك.','Sent! Your story will appear after the school reviews it. Thank you.','Envoyé ! Votre récit apparaîtra après relecture par l’école. Merci.','Inviato! Il tuo racconto apparirà dopo la revisione della scuola. Grazie.'),
-    errFields:L('راجعي الحقول: الاسم والعنوان مطلوبان، ونص الحكاية 50 حرفًا على الأقل، وأكّدي الإقرار.','Please check: name and title are required, the story needs at least 50 characters, and the confirmation must be ticked.','Vérifiez : nom et titre obligatoires, 50 caractères minimum pour le récit, et cochez la confirmation.','Controlla: nome e titolo sono obbligatori, il racconto richiede almeno 50 caratteri e la conferma va spuntata.'),
-    errSend:L('تعذر الإرسال الآن. جرّبي مرة أخرى بعد قليل.','Could not send right now. Please try again shortly.','Envoi impossible pour le moment. Réessayez dans un instant.','Impossibile inviare ora. Riprova tra poco.'),
-    wait:L('انتظري قليلًا قبل إرسال حكاية أخرى.','Please wait a moment before sending another story.','Patientez un instant avant d’envoyer un autre récit.','Attendi un momento prima di inviare un altro racconto.')
-  };
-  function t(k,v){var s=(T[k][lang]||T[k].ar);if(v)Object.keys(v).forEach(function(x){s=s.replace('{'+x+'}',v[x]);});return s;}
   function $(id){return document.getElementById(id);}
-
-  $('title').textContent=t('title'); document.title=t('title')+' | 1973';
-  $('lead').textContent=t('lead'); $('skipLink').textContent=t('skip'); $('backLink').textContent=t('back');
-  $('l_name').textContent=t('name'); $('l_grade').textContent=t('grade'); $('l_title').textContent=t('stitle'); $('l_sub').textContent=t('sub');
-  $('l_body').textContent=t('body'); $('h_body').textContent=t('hbody'); $('l_src').textContent=t('src'); $('h_src').textContent=t('hsrc');
-  $('l_own').textContent=t('own'); $('send').textContent=t('send');
-  var sw=document.querySelector('[data-lang-switch]'); if(sw) sw.setAttribute('aria-label',{ar:'اختيار اللغة',en:'Choose language',fr:'Choisir la langue',it:'Seleziona la lingua'}[lang]);
-  function updateCount(){ $('count').textContent=t('chars',{n:$('body').value.length}); }
+  function updateCount(){ $('count').textContent=$('body').value.length+' حرفًا'; }
   $('body').addEventListener('input',updateCount); updateCount();
-
-  function show(kind,text){var m=$('msg');m.className='msg '+kind;m.textContent=text;m.hidden=false;}
+  function show(kind,text){var m=$('msg');m.className='msg '+kind;m.textContent=text;}
 
   $('f').addEventListener('submit',function(e){
     e.preventDefault();
-    if($('website').value) return; /* honeypot: bots fill this hidden field */
+    if($('website').value) return; /* خانة مخفية: الروبوتات فقط تملؤها */
     var d={
       student_name:$('name').value.trim(),
       grade:$('grade').value.trim()||null,
@@ -132,10 +94,12 @@ button.send:disabled{opacity:.6;cursor:wait;transform:none}
       sources:$('sources').value.trim()||null,
       status:'pending'
     };
-    if(d.student_name.length<2||d.title.length<3||d.body.length<50||!$('own').checked){show('err',t('errFields'));return;}
+    if(d.student_name.length<2||d.title.length<3||d.body.length<50||!$('own').checked){
+      show('err','راجعي الحقول: الاسم والعنوان مطلوبان، ونص الحكاية 50 حرفًا على الأقل، وأكّدي الإقرار.'); return;
+    }
     var last=0; try{last=Number(localStorage.getItem('story-submit-last')||0);}catch(x){}
-    if(Date.now()-last<60000){show('err',t('wait'));return;}
-    var btn=$('send'); btn.disabled=true; btn.textContent=t('sending');
+    if(Date.now()-last<60000){show('err','انتظري قليلًا قبل إرسال حكاية أخرى.');return;}
+    var btn=$('send'); btn.disabled=true; btn.textContent='جارٍ الإرسال…';
     fetch(API+'/rest/v1/submitted_stories',{
       method:'POST',
       headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},
@@ -143,10 +107,10 @@ button.send:disabled{opacity:.6;cursor:wait;transform:none}
     }).then(function(r){
       if(!r.ok) throw new Error(String(r.status));
       try{localStorage.setItem('story-submit-last',String(Date.now()));}catch(x){}
-      $('f').reset(); updateCount(); show('ok',t('ok'));
+      $('f').reset(); updateCount(); show('ok','تم الإرسال بنجاح! ستظهر حكايتك بعد مراجعة المدرسة. شكرًا لك.');
     }).catch(function(){
-      show('err',t('errSend'));
-    }).then(function(){ btn.disabled=false; btn.textContent=t('send'); });
+      show('err','تعذر الإرسال الآن. جرّبي مرة أخرى بعد قليل.');
+    }).then(function(){ btn.disabled=false; btn.textContent='أرسلي الحكاية'; });
   });
 })();
 </script>
