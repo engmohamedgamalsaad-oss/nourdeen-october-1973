@@ -1,0 +1,35 @@
+(function(){
+  if(!window.I18N)return;
+  window.I18N.register('ar',{
+    k1:'خالدون عبر التاريخ',k5:'حكايات التاريخ الموثقة',k6:'منصة تعليمية تستكشف حكايات الشخصيات والأحداث التاريخية، وتربط القصص بالمصادر الموثوقة والمحتوى المناسب لكل مرحلة دراسية.',
+    k8:'عن المنصة',k9:'التاريخ حكايات نفهم بها العالم',k10:'نبدأ بحكايات أكتوبر 1973، ثم نتوسع تدريجيًا إلى شخصيات وأحداث من تاريخ مصر والعالم، مع توضيح ما نعرفه من مصادر وما يحتاج إلى مزيد من التحقق.',
+    k11:'لكل حكاية سياقها وأدلتها ومصادرها، ونقدمها بلغة تناسب عمر القارئ من غير أن نخلط بين الحقيقة التاريخية والتصميم التوضيحي.',k12:'نقرأ الحكاية، نتحقق من مصدرها، ثم نفهم لماذا بقي أثرها في التاريخ.',
+    k13:'المجموعة الأولى: أكتوبر 1973',k14:'حكايات أكتوبر',k15:'حكايات موثقة نبدأ بها، مع الحفاظ على صفحاتها وتفاعلاتها الحالية.',
+    curriculum_kicker:'التعلم عبر المراحل الدراسية',curriculum_title:'المناهج لجميع الصفوف',curriculum_intro:'هيكل منظم للصفوف من الابتدائي إلى الثانوي. ستُضاف المواد والشروح بعد مراجعة المصادر واعتماد المحتوى.',curr_primary:'المرحلة الابتدائية',curr_prep:'المرحلة الإعدادية',curr_secondary:'المرحلة الثانوية',curriculum_pending:'المحتوى الموثق قيد الإعداد',curriculum_note:'هذه معاينة للهيكل فقط؛ لم تُضف بعد دروس أو ملخصات غير مراجعة.',
+    grade_1:'الصف الأول الابتدائي',grade_2:'الصف الثاني الابتدائي',grade_3:'الصف الثالث الابتدائي',grade_4:'الصف الرابع الابتدائي',grade_5:'الصف الخامس الابتدائي',grade_6:'الصف السادس الابتدائي',grade_7:'الصف الأول الإعدادي',grade_8:'الصف الثاني الإعدادي',grade_9:'الصف الثالث الإعدادي',grade_10:'الصف الأول الثانوي',grade_11:'الصف الثاني الثانوي',grade_12:'الصف الثالث الثانوي'
+  });
+  window.I18N.register('en',{
+    k1:'Immortal Figures Through History',k5:'Documented Stories from History',k6:'An educational platform exploring historical people and events, connecting stories to reliable sources and content suited to each school stage.',
+    k8:'About the platform',k9:'History is made of stories that help us understand the world',k10:'We begin with the October 1973 stories, then gradually expand to people and events from Egyptian and world history, distinguishing sourced facts from points that need further verification.',
+    k11:'Each story has a context, evidence, and sources. We present it in age-appropriate language without confusing historical records with illustrative artwork.',k12:'Read the story, check its sources, and understand why its impact endured.',
+    k13:'Collection One: October 1973',k14:'October Stories',k15:'Documented stories to begin with, while preserving their current pages and reactions.',
+    curriculum_kicker:'Learning across school stages',curriculum_title:'Curriculum for Every Grade',curriculum_intro:'A structured framework from primary through secondary school. Materials and explanations will be added after sources are reviewed and content is approved.',curr_primary:'Primary School',curr_prep:'Preparatory School',curr_secondary:'Secondary School',curriculum_pending:'Verified content in preparation',curriculum_note:'This is a structural preview only; unreviewed lessons or summaries have not been added.',
+    grade_1:'Grade 1 Primary',grade_2:'Grade 2 Primary',grade_3:'Grade 3 Primary',grade_4:'Grade 4 Primary',grade_5:'Grade 5 Primary',grade_6:'Grade 6 Primary',grade_7:'Grade 1 Preparatory',grade_8:'Grade 2 Preparatory',grade_9:'Grade 3 Preparatory',grade_10:'Grade 1 Secondary',grade_11:'Grade 2 Secondary',grade_12:'Grade 3 Secondary'
+  });
+  window.I18N.register('fr',{
+    k1:'Figures immortelles à travers l’histoire',k5:'Récits historiques documentés',k6:'Une plateforme éducative qui explore des personnages et des événements historiques, en reliant les récits à des sources fiables et à des contenus adaptés à chaque niveau scolaire.',
+    k8:'À propos de la plateforme',k9:'L’histoire racontée pour mieux comprendre le monde',k10:'Nous commençons par les récits d’octobre 1973, puis nous élargirons progressivement aux personnages et événements de l’histoire égyptienne et mondiale, en distinguant les faits sourcés des points à vérifier davantage.',
+    k11:'Chaque récit présente son contexte, ses preuves et ses sources, dans un langage adapté à l’âge du lecteur, sans confondre documents historiques et illustrations.',k12:'Lire le récit, vérifier les sources et comprendre pourquoi son impact a perduré.',
+    k13:'Première collection : octobre 1973',k14:'Récits d’octobre',k15:'Des récits documentés pour commencer, en conservant leurs pages et réactions actuelles.',
+    curriculum_kicker:'Apprendre à chaque étape scolaire',curriculum_title:'Programmes pour toutes les classes',curriculum_intro:'Une structure organisée du primaire au secondaire. Les contenus seront ajoutés après vérification des sources et validation.',curr_primary:'École primaire',curr_prep:'Collège',curr_secondary:'Lycée',curriculum_pending:'Contenu vérifié en préparation',curriculum_note:'Il s’agit uniquement d’un aperçu de la structure ; aucune leçon non vérifiée n’a été ajoutée.',
+    grade_1:'1re année primaire',grade_2:'2e année primaire',grade_3:'3e année primaire',grade_4:'4e année primaire',grade_5:'5e année primaire',grade_6:'6e année primaire',grade_7:'1re année préparatoire',grade_8:'2e année préparatoire',grade_9:'3e année préparatoire',grade_10:'1re année secondaire',grade_11:'2e année secondaire',grade_12:'3e année secondaire'
+  });
+  window.I18N.register('it',{
+    k1:'Figure immortali attraverso la storia',k5:'Storie documentate della storia',k6:'Una piattaforma educativa che esplora persone ed eventi storici, collegando i racconti a fonti affidabili e a contenuti adatti a ogni ciclo scolastico.',
+    k8:'La piattaforma',k9:'La storia raccontata per capire il mondo',k10:'Iniziamo dai racconti dell’ottobre 1973 e poi allargheremo gradualmente lo sguardo a persone ed eventi della storia egiziana e mondiale, distinguendo i fatti documentati da quelli da verificare meglio.',
+    k11:'Ogni racconto presenta contesto, prove e fonti con un linguaggio adatto all’età, senza confondere i documenti storici con le illustrazioni.',k12:'Leggere il racconto, verificare le fonti e capire perché il suo impatto è durato nel tempo.',
+    k13:'Prima raccolta: ottobre 1973',k14:'Racconti di ottobre',k15:'Storie documentate da cui iniziare, mantenendo le pagine e le reazioni attuali.',
+    curriculum_kicker:'Apprendimento per ogni ciclo scolastico',curriculum_title:'Programmi per tutte le classi',curriculum_intro:'Una struttura organizzata dalla primaria alla secondaria. I contenuti saranno aggiunti dopo la verifica delle fonti e l’approvazione.',curr_primary:'Scuola primaria',curr_prep:'Scuola preparatoria',curr_secondary:'Scuola secondaria',curriculum_pending:'Contenuto verificato in preparazione',curriculum_note:'Questa è solo un’anteprima della struttura; non sono state aggiunte lezioni o sintesi non verificate.',
+    grade_1:'1ª primaria',grade_2:'2ª primaria',grade_3:'3ª primaria',grade_4:'4ª primaria',grade_5:'5ª primaria',grade_6:'6ª primaria',grade_7:'1ª preparatoria',grade_8:'2ª preparatoria',grade_9:'3ª preparatoria',grade_10:'1ª secondaria',grade_11:'2ª secondaria',grade_12:'3ª secondaria'
+  });
+})();
