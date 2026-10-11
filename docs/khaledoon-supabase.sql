@@ -29,6 +29,68 @@ create table if not exists public.khaledoon_submissions (
   constraint kh_publish_needs_consent check (status <> 'published' or consent = true)
 );
 
+-- حدّ للإرسال على مستوى قاعدة البيانات، فلا يمكن تجاوزه بمسح localStorage أو باستدعاء REST مباشرة.
+-- نخزن بصمة IP لا عنوان IP الخام. الحد: 5 مقترحات لكل بصمة خلال 10 دقائق.
+create schema if not exists private;
+create table if not exists private.khaledoon_submit_rate_limits (
+  fingerprint text not null,
+  created_at timestamptz not null default now()
+);
+create index if not exists kh_submit_rate_limits_fingerprint_time_idx
+  on private.khaledoon_submit_rate_limits (fingerprint, created_at desc);
+alter table private.khaledoon_submit_rate_limits enable row level security;
+revoke all on private.khaledoon_submit_rate_limits from public, anon, authenticated;
+
+create or replace function public.kh_limit_submission_rate()
+returns trigger
+language plpgsql
+security definer
+set search_path = pg_catalog, public, private
+as $
+declare
+  req_headers json;
+  req_ip text;
+  ip_fingerprint text;
+  recent_count integer;
+begin
+  -- لا نقيّد إضافة مسؤول للمقترحات من لوحة الإدارة.
+  if auth.uid() is not null and public.is_admin() then
+    return new;
+  end if;
+
+  req_headers := coalesce(current_setting('request.headers', true), '{}')::json;
+  req_ip := split_part(coalesce(req_headers ->> 'x-forwarded-for', ''), ',', 1);
+  if req_ip = '' then
+    req_ip := coalesce(req_headers ->> 'x-real-ip', '');
+  end if;
+  if req_ip = '' then
+    raise exception 'Submission temporarily unavailable';
+  end if;
+
+  ip_fingerprint := md5(req_ip);
+  perform pg_advisory_xact_lock(hashtext(ip_fingerprint));
+
+  select count(*) into recent_count
+  from private.khaledoon_submit_rate_limits
+  where fingerprint = ip_fingerprint
+    and created_at > now() - interval '10 minutes';
+
+  if recent_count >= 5 then
+    raise exception 'Too many submissions. Try again later.';
+  end if;
+
+  insert into private.khaledoon_submit_rate_limits (fingerprint) values (ip_fingerprint);
+  delete from private.khaledoon_submit_rate_limits
+    where created_at < now() - interval '1 day';
+  return new;
+end;
+$;
+revoke all on function public.kh_limit_submission_rate() from public, anon, authenticated;
+drop trigger if exists kh_limit_submission_rate on public.khaledoon_submissions;
+create trigger kh_limit_submission_rate
+before insert on public.khaledoon_submissions
+for each row execute function public.kh_limit_submission_rate();
+
 -- يحتفظ بالنص الأصلي كما وصل ولا يسمح بتعديله لاحقًا
 create or replace function public.kh_keep_original()
 returns trigger language plpgsql set search_path = pg_catalog as $
