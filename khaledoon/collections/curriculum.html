@@ -51,12 +51,58 @@
 <footer><div class="wrap"><div class="frow"><b style="color:var(--cream)">خالدون عبر التاريخ</b><span>حكاية التاريخ بعيون جيل جديد</span><a href="#top">العودة إلى الأعلى ↑</a></div><p style="margin-top:10px">نسخة معاينة مستقلة — لا تغيّر الموقع المنشور. الحكايات والمسارات الجديدة تُراجع قبل اعتمادها.</p></div></footer>
 <script>
 (function(){
-var ST=[["المرحلة الابتدائية",["الأول","الثاني","الثالث","الرابع","الخامس","السادس"]],["المرحلة الإعدادية",["الأول","الثاني","الثالث"]],["المرحلة الثانوية",["الأول","الثاني","الثالث"]]];
-var box=document.getElementById("stages"),pn=document.getElementById("panel");
-box.innerHTML=ST.map(function(s){return '<div class="stage reveal">'+s[0]+'</div><div class="chips reveal">'+s[1].map(function(n){return '<button class="chip" type="button" data-s="'+s[0]+'" data-n="'+n+'" aria-pressed="false">الصف '+n+'</button>'}).join("")+'</div>'}).join("");
-box.addEventListener("click",function(e){var b=e.target.closest("button");if(!b)return;
- Array.prototype.forEach.call(box.querySelectorAll(".chip"),function(c){c.setAttribute("aria-pressed",c===b)});
- pn.innerHTML='<b>'+b.dataset.s+' — الصف '+b.dataset.n+'</b><div class="flow"><span>المرحلة</span><span>الصف</span><span>المادة</span><span>الحكاية والمصادر</span></div><span class="badge">لا توجد حكايات منشورة في هذا الصف بعد</span><p class="note">الحكايات تُضاف تدريجيًا وتُصنَّف حسب المادة (مثل اللغة العربية والدراسات الاجتماعية والعلوم) بحسب ورود الشخصية فعلًا في الكتاب.</p>';pn.classList.remove('pop');void pn.offsetWidth;pn.classList.add('pop')});
+'use strict';
+var API='https://ypwprddkscnfblhftkeb.supabase.co';
+var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+var ST=[
+ {label:'المرحلة الابتدائية',key:'primary',grades:['الأول','الثاني','الثالث','الرابع','الخامس','السادس']},
+ {label:'المرحلة الإعدادية',key:'preparatory',grades:['الأول','الثاني','الثالث']},
+ {label:'المرحلة الثانوية',key:'secondary',grades:['الأول','الثاني','الثالث']}
+];
+var box=document.getElementById('stages'),panel=document.getElementById('panel');
+function node(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
+function line(parent,label,value){if(!value)return;var p=node('p','story-meta');var b=node('strong','',label+'：');p.appendChild(b);p.appendChild(document.createTextNode(value));parent.appendChild(p)}
+function drawStories(stage,grade){
+ panel.textContent='';
+ var heading=node('h3','',stage.label+' — الصف '+stage.grades[grade-1]);panel.appendChild(heading);
+ var wait=node('p','note','بنحمّل الحكايات المنشورة لهذا الصف…');panel.appendChild(wait);
+ var url=API+'/rest/v1/khaledoon_published?select=id,section,stage,school_grade,subject,figure_name,title,subtitle,body,history_note,sources,images_note&section=eq.curriculum&stage=eq.'+encodeURIComponent(stage.key)+'&school_grade=eq.'+grade+'&order=created_at.desc';
+ fetch(url,{headers:{apikey:KEY,Authorization:'Bearer '+KEY,Accept:'application/json'}}).then(function(r){
+  if(!r.ok)throw new Error('HTTP '+r.status);
+  return r.json();
+ }).then(function(rows){
+  panel.textContent='';panel.appendChild(heading);
+  if(!rows.length){panel.appendChild(node('span','badge','لا توجد حكايات منشورة في هذا الصف بعد'));panel.appendChild(node('p','note','الحكايات التي يوافق عليها المسؤول تظهر هنا تلقائيًا. يمكنك اقتراح حكاية باستخدام الزر أدناه.'))}
+  rows.forEach(function(s){
+   var article=node('article','info story-card');
+   article.appendChild(node('div','kicker',s.subject||'شخصيات المناهج المصرية'));
+   article.appendChild(node('h3','',s.title||s.figure_name||'حكاية منشورة'));
+   if(s.subtitle)article.appendChild(node('p','story-subtitle',s.subtitle));
+   line(article,'الشخصية',s.figure_name);
+   article.appendChild(node('div','story-body',s.body||''));
+   if(s.history_note){article.appendChild(node('h4','','في ضوء التاريخ'));article.appendChild(node('div','story-body',s.history_note))}
+   line(article,'المصادر',s.sources);
+   line(article,'الصور وحقوقها',s.images_note);
+   panel.appendChild(article);
+  });
+  var a=node('a','btn primary','اقترح حكاية في هذا الصف');a.href='../submit.html?section=curriculum&stage='+encodeURIComponent(stage.key)+'&grade='+grade;panel.appendChild(a);
+ }).catch(function(){
+  panel.textContent='تعذر تحميل الحكايات الآن. قد تحتاج قاعدة البيانات إلى تحديث ملف إعداد خالدون. حاول لاحقًا.';
+ });
+}
+ST.forEach(function(stage){
+ var h=node('div','stage reveal',stage.label);box.appendChild(h);
+ var chips=node('div','chips reveal');
+ stage.grades.forEach(function(label,i){
+  var b=node('button','chip','الصف '+label);b.type='button';b.dataset.stage=stage.key;b.dataset.grade=String(i+1);b.setAttribute('aria-pressed','false');
+  b.addEventListener('click',function(){
+   Array.prototype.forEach.call(box.querySelectorAll('.chip'),function(c){c.setAttribute('aria-pressed',c===b?'true':'false')});
+   panel.classList.remove('pop');drawStories(stage,i+1);void panel.offsetWidth;panel.classList.add('pop');
+  });
+  chips.appendChild(b);
+ });
+ box.appendChild(chips);
+});
 })();
 </script>
 <script src="../assets/khaledoon.js" defer></script>
