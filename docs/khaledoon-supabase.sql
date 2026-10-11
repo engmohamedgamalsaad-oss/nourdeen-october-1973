@@ -63,7 +63,7 @@ grant select, update, delete on public.khaledoon_submissions to authenticated;
 -- تمنع الوصول المباشر إلى اسم الراوي والصف الأصلي والنص الأصلي والملاحظات الداخلية.
 drop policy if exists "kh public reads published" on public.khaledoon_submissions;
 create policy "kh public reads published" on public.khaledoon_submissions
-  for select to anon, authenticated
+  for select to anon
   using (status = 'published' and consent is true);
 
 grant select (id, created_at, section, stage, school_grade, subject, figure_name,
