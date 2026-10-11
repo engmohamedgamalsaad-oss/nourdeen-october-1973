@@ -906,6 +906,42 @@ footer {
  .topbar .lang-option{font-size:clamp(.5rem,2vw,.62rem)!important;padding:2px 0!important}
  .hero-home{height:calc(100svh - 110px)!important;min-height:500px}
 }
+
+/* ===== واجهة «رجال خالدون عبر التاريخ» المستقلة ===== */
+.hero-home-content h1{max-width:1000px;margin-inline:auto}
+.hero-home-content .history-slogan{margin:0 auto 14px;color:#fff0d0;font-size:clamp(.9rem,2vw,1.1rem);font-weight:800;letter-spacing:.02em}
+.collections-section{position:relative;padding:64px 20px 70px;background:linear-gradient(180deg,rgba(4,16,24,.97),rgba(5,24,31,.96));border-bottom:1px solid rgba(227,189,120,.2)}
+.collections-heading{max-width:780px;text-align:center;margin:0 auto 30px}
+.collections-heading .kicker{color:#e3bd78;font-weight:800;letter-spacing:.04em}
+.collections-heading h2{font-family:"Marhey","Cairo",sans-serif;color:#ffe2a0;font-size:clamp(1.7rem,4vw,2.6rem);line-height:1.6;margin:8px 0}
+.collections-heading p{color:#c8d5d7;line-height:2;margin:0}
+.collections-grid{width:min(1160px,100%);margin:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:17px}
+.collection-card{position:relative;display:flex;flex-direction:column;min-height:320px;overflow:hidden;border:1px solid rgba(227,189,120,.28);border-radius:16px;background:linear-gradient(155deg,rgba(14,50,58,.92),rgba(3,13,20,.98));box-shadow:0 16px 35px rgba(0,0,0,.22);color:#edf3f3;text-decoration:none;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease}
+.collection-card[href]:hover{transform:translateY(-5px);border-color:#e3bd78;box-shadow:0 22px 42px rgba(0,0,0,.34)}
+.collection-card:focus-visible{outline:3px solid #e3bd78;outline-offset:4px}
+.collection-art{height:180px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#081d26;border-bottom:1px solid rgba(227,189,120,.18)}
+.collection-art:before,.collection-art:after{content:"";position:absolute;pointer-events:none}
+.collection-art:before{inset:12px;border:1px solid rgba(240,214,156,.28);border-radius:10px}
+.collection-art .art-symbol{position:relative;z-index:1;font-size:clamp(3.6rem,6vw,5.6rem);line-height:1;color:#f0d69c;text-shadow:0 5px 24px rgba(0,0,0,.65);filter:drop-shadow(0 0 14px rgba(227,189,120,.16))}
+.collection-art .art-caption{position:absolute;bottom:20px;z-index:1;color:#f7e7c4;font-size:.68rem;letter-spacing:.18em;font-weight:800}
+.collection-art.october{background:linear-gradient(180deg,rgba(3,12,17,.05),rgba(3,12,17,.6)),url("assets/homepage/main-cover.jpg") center 42%/cover}
+.collection-art.october .art-symbol{display:none}
+.collection-art.science{background:radial-gradient(circle at 50% 40%,rgba(44,117,125,.55),transparent 36%),linear-gradient(145deg,#123943,#06151f 70%)}
+.collection-art.science:after{width:140px;height:140px;border:1px solid rgba(227,189,120,.25);border-radius:50%;box-shadow:0 0 0 17px rgba(227,189,120,.035),0 0 0 34px rgba(227,189,120,.025)}
+.collection-art.islamic{background:radial-gradient(ellipse at 50% 34%,rgba(42,113,98,.45),transparent 43%),linear-gradient(145deg,#0d3c39,#071820 76%)}
+.collection-art.islamic:after{width:130px;height:130px;border:1px solid rgba(227,189,120,.36);transform:rotate(45deg);box-shadow:inset 0 0 0 12px rgba(227,189,120,.035),0 0 0 15px rgba(227,189,120,.045)}
+.collection-art.makers{background:radial-gradient(ellipse at 50% 30%,rgba(154,100,48,.35),transparent 46%),linear-gradient(145deg,#3b2a20,#0b1820 78%)}
+.collection-art.makers:after{width:120px;height:115px;border:1px solid rgba(227,189,120,.32);border-bottom:0;border-radius:70px 70px 0 0;box-shadow:inset 0 0 0 12px rgba(227,189,120,.04)}
+.collection-copy{padding:16px 17px 18px;display:flex;flex-direction:column;align-items:flex-start;gap:7px;flex:1}
+.collection-copy h3{margin:0;color:#ffe2a0;font-family:"Marhey","Cairo",sans-serif;font-size:1.08rem;line-height:1.65}
+.collection-copy p{margin:0;color:#c6d3d5;font-size:.82rem;line-height:1.85}
+.collection-cta{margin-top:auto;padding-top:12px;color:#e3bd78;font-size:.8rem;font-weight:800}
+.collection-badge{display:inline-block;margin-top:3px;border:1px solid rgba(227,189,120,.3);border-radius:99px;padding:3px 9px;color:#e8d4a9;font-size:.7rem}
+.collections-note{margin:22px auto 0;max-width:820px;text-align:center;color:#aebfc2;font-size:.8rem;line-height:1.9}
+@media(max-width:900px){.collections-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.collection-card{min-height:300px}.collection-art{height:170px}}
+@media(max-width:520px){.collections-section{padding:46px 14px 50px}.collections-grid{gap:11px}.collection-card{min-height:270px;border-radius:12px}.collection-art{height:138px}.collection-art:before{inset:8px}.collection-art .art-symbol{font-size:3.4rem}.collection-copy{padding:12px}.collection-copy h3{font-size:.93rem}.collection-copy p{font-size:.76rem;line-height:1.75}.collection-cta{font-size:.74rem}}
+@media(prefers-reduced-motion:reduce){.collection-card{transition:none}.collection-card[href]:hover{transform:none}}
+
 </style>
 </head>
 
@@ -936,17 +972,45 @@ footer {
   </div>
 
   <div class="hero-home-content" id="heroHomeContent">
-    <div class="eyebrow float-up" data-i18n="k4">EGYPT • 6 OCTOBER 1973</div>
+    <div class="eyebrow float-up" data-i18n="hero_slogan">حكايات صنعت التاريخ... وسِيَر ألهمت الأجيال</div>
     <div class="hero-home-rule float-up float-delay-1"></div>
 
-    <h1 class="float-up float-delay-1" data-i18n="k5">حكايات أكتوبر 1973</h1>
+    <h1 class="float-up float-delay-1" data-i18n="k5">رجال خالدون عبر التاريخ</h1>
 
     <p class="float-up float-delay-2" data-i18n="k6">
-      أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973، نستعيد من خلاله قصص الشجاعة والتخطيط والتضحيات التي شاركت في صنع النصر.
+      نكتشف حكايات الشخصيات والأحداث التي صنعت التاريخ، بصوت قريب من الطلاب وبالاستناد إلى مصادر موثوقة.
     </p>
   </div>
 
   <div class="hero-home-scroll" data-i18n="k7">اكتشف الحكايات ↓</div>
+</section>
+
+<!-- ===== مجموعات المنصة كما في التصور المرئي ===== -->
+<section class="collections-section" id="collections" aria-labelledby="collectionsTitle">
+  <div class="collections-heading float-up">
+    <div class="kicker" data-i18n="collections_kicker">اكتشف حكايات صنعت التاريخ</div>
+    <h2 id="collectionsTitle" data-i18n="collections_title">من هنا تبدأ الرحلة</h2>
+    <p data-i18n="collections_intro">اختر مجموعة لقراءة حكايات موثقة بلغة مناسبة للطلاب، مع الفصل الواضح بين الرواية التاريخية والتصميم التوضيحي.</p>
+  </div>
+  <div class="collections-grid">
+    <a class="collection-card float-up" href="#october-stories">
+      <div class="collection-art october" role="img" aria-label="غلاف مجموعة حكايات أكتوبر"><span class="art-caption">EGYPT • 1973</span></div>
+      <div class="collection-copy"><h3 data-i18n="collection_oct_title">حكايات من نصر أكتوبر</h3><p data-i18n="collection_oct_text">البداية من حكايات أبطال أكتوبر 1973، مع الحفاظ على صفحات الحكايات المنشورة وتفاعلاتها.</p><span class="collection-cta" data-i18n="collection_oct_cta">استكشف الحكايات ←</span></div>
+    </a>
+    <article class="collection-card float-up">
+      <div class="collection-art science" role="img" aria-label="رسم رمزي للمعرفة"><span class="art-symbol" aria-hidden="true">✦</span><span class="art-caption">KNOWLEDGE</span></div>
+      <div class="collection-copy"><h3 data-i18n="collection_science_title">حكايات علماء غيّروا العالم</h3><p data-i18n="collection_science_text">حكايات اكتشافات وأفكار أثرت في حياة البشر، تُضاف بعد مراجعة المصادر.</p><span class="collection-badge" data-i18n="collection_soon">قريبًا بعد التوثيق</span></div>
+    </article>
+    <article class="collection-card float-up">
+      <div class="collection-art islamic" role="img" aria-label="زخرفة هندسية رمزية"><span class="art-symbol" aria-hidden="true">☾</span><span class="art-caption">CIVILIZATION</span></div>
+      <div class="collection-copy"><h3 data-i18n="collection_islamic_title">حكايات من التاريخ الإسلامي</h3><p data-i18n="collection_islamic_text">شخصيات وأحداث تُقرأ في سياقها التاريخي، مع توثيق الروايات والمصادر.</p><span class="collection-badge" data-i18n="collection_soon">قريبًا بعد التوثيق</span></div>
+    </article>
+    <article class="collection-card float-up">
+      <div class="collection-art makers" role="img" aria-label="رسم معماري رمزي"><span class="art-symbol" aria-hidden="true">⌂</span><span class="art-caption">LEGACY</span></div>
+      <div class="collection-copy"><h3 data-i18n="collection_makers_title">حكايات صُنّاع التاريخ</h3><p data-i18n="collection_makers_text">قادة ومصلحون وأصحاب أثر تركوا بصمة في مجتمعاتهم والعالم.</p><span class="collection-badge" data-i18n="collection_soon">قريبًا بعد التوثيق</span></div>
+    </article>
+  </div>
+  <p class="collections-note" data-i18n="collections_note">الصور الرمزية في المجموعات قيد الإعداد ليست صورًا تاريخية أصلية؛ ستُضاف مواد موثقة ومحتويات جديدة تدريجيًا.</p>
 </section>
 
 <!-- ===== المقدمة ===== -->
@@ -1007,7 +1071,7 @@ footer {
 </section>
 
 <!-- ===== حكايات أكتوبر: أول مجموعة في المنصة ===== -->
-<section class="intro">
+<section class="intro" id="october-stories">
   <div class="container">
 
     <div class="intro-heading float-up">
@@ -1060,6 +1124,8 @@ footer {
     k13:'المجموعة الأولى: أكتوبر 1973',k14:'حكايات أكتوبر',k15:'حكايات موثقة نبدأ بها، مع الحفاظ على صفحاتها وتفاعلاتها الحالية.',
     curriculum_kicker:'التعلم عبر المراحل الدراسية',curriculum_title:'المناهج لجميع الصفوف',curriculum_intro:'هيكل منظم للصفوف من الابتدائي إلى الثانوي. ستُضاف المواد والشروح بعد مراجعة المصادر واعتماد المحتوى.',curr_primary:'المرحلة الابتدائية',curr_prep:'المرحلة الإعدادية',curr_secondary:'المرحلة الثانوية',curriculum_pending:'المحتوى الموثق قيد الإعداد',curriculum_note:'هذه معاينة للهيكل فقط؛ لم تُضف بعد دروس أو ملخصات غير مراجعة.',
     grade_1:'الصف الأول الابتدائي',grade_2:'الصف الثاني الابتدائي',grade_3:'الصف الثالث الابتدائي',grade_4:'الصف الرابع الابتدائي',grade_5:'الصف الخامس الابتدائي',grade_6:'الصف السادس الابتدائي',grade_7:'الصف الأول الإعدادي',grade_8:'الصف الثاني الإعدادي',grade_9:'الصف الثالث الإعدادي',grade_10:'الصف الأول الثانوي',grade_11:'الصف الثاني الثانوي',grade_12:'الصف الثالث الثانوي'
+     hero_slogan:'حكايات صنعت التاريخ... وسِيَر ألهمت الأجيال',collections_kicker:'اكتشف حكايات صنعت التاريخ',collections_title:'من هنا تبدأ الرحلة',collections_intro:'اختر مجموعة لقراءة حكايات موثقة بلغة مناسبة للطلاب، مع الفصل الواضح بين الرواية التاريخية والتصميم التوضيحي.',collection_oct_title:'حكايات من نصر أكتوبر',collection_oct_text:'البداية من حكايات أبطال أكتوبر 1973، مع الحفاظ على صفحات الحكايات المنشورة وتفاعلاتها.',collection_oct_cta:'استكشف الحكايات ←',collection_science_title:'حكايات علماء غيّروا العالم',collection_science_text:'حكايات اكتشافات وأفكار أثرت في حياة البشر، تُضاف بعد مراجعة المصادر.',collection_islamic_title:'حكايات من التاريخ الإسلامي',collection_islamic_text:'شخصيات وأحداث تُقرأ في سياقها التاريخي، مع توثيق الروايات والمصادر.',collection_makers_title:'حكايات صُنّاع التاريخ',collection_makers_text:'قادة ومصلحون وأصحاب أثر تركوا بصمة في مجتمعاتهم والعالم.',collection_soon:'قريبًا بعد التوثيق',collections_note:'الصور الرمزية في المجموعات قيد الإعداد ليست صورًا تاريخية أصلية؛ ستُضاف مواد موثقة ومحتويات جديدة تدريجيًا.',
+   
   });
   window.I18N.register('en',{
     k1:'Immortal Figures Through History',k5:'Documented Stories from History',k6:'An educational platform exploring historical people and events, connecting stories to reliable sources and content suited to each school stage.',
@@ -1068,6 +1134,8 @@ footer {
     k13:'Collection One: October 1973',k14:'October Stories',k15:'Documented stories to begin with, while preserving their current pages and reactions.',
     curriculum_kicker:'Learning across school stages',curriculum_title:'Curriculum for Every Grade',curriculum_intro:'A structured framework from primary through secondary school. Materials and explanations will be added after sources are reviewed and content is approved.',curr_primary:'Primary School',curr_prep:'Preparatory School',curr_secondary:'Secondary School',curriculum_pending:'Verified content in preparation',curriculum_note:'This is a structural preview only; unreviewed lessons or summaries have not been added.',
     grade_1:'Grade 1 Primary',grade_2:'Grade 2 Primary',grade_3:'Grade 3 Primary',grade_4:'Grade 4 Primary',grade_5:'Grade 5 Primary',grade_6:'Grade 6 Primary',grade_7:'Grade 1 Preparatory',grade_8:'Grade 2 Preparatory',grade_9:'Grade 3 Preparatory',grade_10:'Grade 1 Secondary',grade_11:'Grade 2 Secondary',grade_12:'Grade 3 Secondary'
+     hero_slogan:'Stories that shaped history; lives that inspire generations',collections_kicker:'Discover stories that shaped history',collections_title:'Your journey starts here',collections_intro:'Choose a collection of documented stories written for students, distinguishing historical accounts from illustrative design.',collection_oct_title:'Stories of the October Victory',collection_oct_text:'Begin with the heroes of October 1973, while preserving all published story pages and reactions.',collection_oct_cta:'Explore the stories ←',collection_science_title:'Scientists Who Changed the World',collection_science_text:'Discoveries and ideas that changed human life, added after source review.',collection_islamic_title:'Stories from Islamic History',collection_islamic_text:'People and events explored in historical context with documented sources.',collection_makers_title:'People Who Shaped History',collection_makers_text:'Leaders, reformers, and influential people who left a lasting mark.',collection_soon:'Coming after verification',collections_note:'The symbolic collection artwork is not original historical photography. Verified materials and new stories will be added gradually.',
+   
   });
   window.I18N.register('fr',{
     k1:'Figures immortelles à travers l’histoire',k5:'Récits historiques documentés',k6:'Une plateforme éducative qui explore des personnages et des événements historiques, en reliant les récits à des sources fiables et à des contenus adaptés à chaque niveau scolaire.',
@@ -1076,6 +1144,8 @@ footer {
     k13:'Première collection : octobre 1973',k14:'Récits d’octobre',k15:'Des récits documentés pour commencer, en conservant leurs pages et réactions actuelles.',
     curriculum_kicker:'Apprendre à chaque étape scolaire',curriculum_title:'Programmes pour toutes les classes',curriculum_intro:'Une structure organisée du primaire au secondaire. Les contenus seront ajoutés après vérification des sources et validation.',curr_primary:'École primaire',curr_prep:'Collège',curr_secondary:'Lycée',curriculum_pending:'Contenu vérifié en préparation',curriculum_note:'Il s’agit uniquement d’un aperçu de la structure ; aucune leçon non vérifiée n’a été ajoutée.',
     grade_1:'1re année primaire',grade_2:'2e année primaire',grade_3:'3e année primaire',grade_4:'4e année primaire',grade_5:'5e année primaire',grade_6:'6e année primaire',grade_7:'1re année préparatoire',grade_8:'2e année préparatoire',grade_9:'3e année préparatoire',grade_10:'1re année secondaire',grade_11:'2e année secondaire',grade_12:'3e année secondaire'
+     hero_slogan:'Des récits qui ont façonné l’histoire, des vies qui inspirent',collections_kicker:'Découvrez les récits qui ont marqué l’histoire',collections_title:'Le voyage commence ici',collections_intro:'Choisissez une collection de récits documentés, adaptés aux élèves et distinguant les faits historiques des illustrations.',collection_oct_title:'Récits de la victoire d’octobre',collection_oct_text:'Commençons par les héros d’octobre 1973, sans modifier les pages publiées ni leurs réactions.',collection_oct_cta:'Découvrir les récits ←',collection_science_title:'Les scientifiques qui ont changé le monde',collection_science_text:'Des découvertes et des idées qui ont transformé la vie humaine, après vérification des sources.',collection_islamic_title:'Récits de l’histoire islamique',collection_islamic_text:'Des personnages et événements replacés dans leur contexte historique et documentés.',collection_makers_title:'Les artisans de l’histoire',collection_makers_text:'Des dirigeants, réformateurs et personnalités qui ont marqué leur société.',collection_soon:'Bientôt, après vérification',collections_note:'Les motifs symboliques ne sont pas des photographies historiques originales. Des documents vérifiés et de nouveaux récits seront ajoutés progressivement.',
+   
   });
   window.I18N.register('it',{
     k1:'Figure immortali attraverso la storia',k5:'Storie documentate della storia',k6:'Una piattaforma educativa che esplora persone ed eventi storici, collegando i racconti a fonti affidabili e a contenuti adatti a ogni ciclo scolastico.',
@@ -1084,6 +1154,8 @@ footer {
     k13:'Prima raccolta: ottobre 1973',k14:'Racconti di ottobre',k15:'Storie documentate da cui iniziare, mantenendo le pagine e le reazioni attuali.',
     curriculum_kicker:'Apprendimento per ogni ciclo scolastico',curriculum_title:'Programmi per tutte le classi',curriculum_intro:'Una struttura organizzata dalla primaria alla secondaria. I contenuti saranno aggiunti dopo la verifica delle fonti e l’approvazione.',curr_primary:'Scuola primaria',curr_prep:'Scuola preparatoria',curr_secondary:'Scuola secondaria',curriculum_pending:'Contenuto verificato in preparazione',curriculum_note:'Questa è solo un’anteprima della struttura; non sono state aggiunte lezioni o sintesi non verificate.',
     grade_1:'1ª primaria',grade_2:'2ª primaria',grade_3:'3ª primaria',grade_4:'4ª primaria',grade_5:'5ª primaria',grade_6:'6ª primaria',grade_7:'1ª preparatoria',grade_8:'2ª preparatoria',grade_9:'3ª preparatoria',grade_10:'1ª secondaria',grade_11:'2ª secondaria',grade_12:'3ª secondaria'
+     hero_slogan:'Storie che hanno fatto la storia, vite che ispirano',collections_kicker:'Scopri le storie che hanno segnato la storia',collections_title:'Il viaggio comincia qui',collections_intro:'Scegli una raccolta di storie documentate per gli studenti, distinguendo i fatti storici dalle illustrazioni.',collection_oct_title:'Storie della vittoria di ottobre',collection_oct_text:'Partiamo dagli eroi dell’ottobre 1973, preservando le pagine pubblicate e le loro reazioni.',collection_oct_cta:'Esplora le storie ←',collection_science_title:'Scienziati che hanno cambiato il mondo',collection_science_text:'Scoperte e idee che hanno cambiato la vita umana, dopo la verifica delle fonti.',collection_islamic_title:'Storie della storia islamica',collection_islamic_text:'Persone ed eventi nel loro contesto storico, con fonti documentate.',collection_makers_title:'Protagonisti della storia',collection_makers_text:'Leader, riformatori e persone influenti che hanno lasciato un segno duraturo.',collection_soon:'In arrivo dopo la verifica',collections_note:'I motivi simbolici non sono fotografie storiche originali. Materiali verificati e nuove storie saranno aggiunti gradualmente.',
+   
   });
 
 </script>
