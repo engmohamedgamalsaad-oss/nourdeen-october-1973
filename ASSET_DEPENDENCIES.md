@@ -6,7 +6,6 @@ Scope: homepage and stories 001–004, their story stylesheets, and shared story
 ## Verified local assets
 
 - Homepage cover: `assets/homepage/main-cover.jpg` (used as both hero image and CSS background; browser caching may reuse the same resource).
-- School logo: `assets/logo/school-logo.png`.
 - Story 001 images and covers: `stories/001/`.
 - Story 002 covers: `stories/002/`; its in-story historical photograph is still remote.
 - Story 003 covers: `stories/003/`.
