@@ -1,8 +1,8 @@
 -- حكايات أكتوبر 1973 — إعداد قاعدة بيانات الحكايات المرسلة.
--- قبل التشغيل: استبدل PUT-YOUR-ADMIN-EMAIL-HERE@example.com ببريد حساب الأدمن نفسه.
+-- قبل التشغيل: استبدل engmohamedgamalsaad@gmail.com ببريد حساب الأدمن نفسه.
 create table if not exists public.admins (email text primary key);
 alter table public.admins enable row level security;
-insert into public.admins(email) values ('PUT-YOUR-ADMIN-EMAIL-HERE@example.com') on conflict do nothing;
+insert into public.admins(email) values ('engmohamedgamalsaad@gmail.com') on conflict do nothing;
 
 create table if not exists public.submitted_stories (
   id uuid primary key default gen_random_uuid(),
