@@ -33,9 +33,24 @@ create table if not exists public.khaledoon_submissions (
 -- نخزن بصمة IP لا عنوان IP الخام. الحد: 5 مقترحات لكل بصمة خلال 10 دقائق.
 create schema if not exists private;
 create table if not exists private.khaledoon_submit_rate_limits (
+  id bigint generated always as identity,
   fingerprint text not null,
   created_at timestamptz not null default now()
 );
+alter table private.khaledoon_submit_rate_limits
+  add column if not exists id bigint generated always as identity;
+do $rate_pk$
+begin
+  if not exists (
+    select 1 from pg_constraint
+    where conrelid = 'private.khaledoon_submit_rate_limits'::regclass
+      and contype = 'p'
+  ) then
+    alter table private.khaledoon_submit_rate_limits
+      add constraint khaledoon_submit_rate_limits_pkey primary key (id);
+  end if;
+end
+$rate_pk$;
 create index if not exists kh_submit_rate_limits_fingerprint_time_idx
   on private.khaledoon_submit_rate_limits (fingerprint, created_at desc);
 alter table private.khaledoon_submit_rate_limits enable row level security;
@@ -115,7 +130,7 @@ drop policy if exists "kh admin inserts" on public.khaledoon_submissions;
 drop policy if exists "kh admin updates" on public.khaledoon_submissions;
 drop policy if exists "kh admin deletes" on public.khaledoon_submissions;
 -- الزائر: إرسال فقط بحالة pending وبموافقة، ولا قراءة ولا تعديل
-create policy "kh visitors submit pending" on public.khaledoon_submissions for insert to anon, authenticated
+create policy "kh visitors submit pending" on public.khaledoon_submissions for insert to anon
   with check (status = 'pending' and consent = true and admin_notes is null and history_note is null);
 create policy "kh admin reads" on public.khaledoon_submissions for select to authenticated using (public.is_admin());
 create policy "kh admin inserts" on public.khaledoon_submissions for insert to authenticated with check (public.is_admin());
