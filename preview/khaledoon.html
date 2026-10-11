@@ -59,13 +59,6 @@ h1{margin:7px 0 15px}
 @media(max-width:780px){.gateways-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{min-height:530px}}
 @media(max-width:480px){.gateways-grid{grid-template-columns:1fr}.gateway{min-height:180px}.search-row{flex-direction:column}.hero{min-height:540px}.section{padding:48px 0}}
 @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.gateway,.story{transition:none!important}}
-
-/* Compact language selector, placed beneath the hero introduction */
-.language-row{display:flex;justify-content:center;align-items:center;gap:clamp(7px,1.6vw,14px);margin:18px auto 0;direction:ltr;flex-wrap:wrap}
-.language-row button{appearance:none;border:0;border-bottom:1px solid transparent;border-radius:0;padding:3px 0;background:transparent;color:#cbd5d7;font:600 .68rem "Cairo",sans-serif;cursor:pointer;line-height:1.5;white-space:nowrap}
-.language-row button[aria-pressed="true"]{color:var(--gold);border-bottom-color:var(--gold)}
-.language-row button:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
-@media(max-width:480px){.language-row{gap:9px;margin-top:14px}.language-row button{font-size:.61rem}}
 </style>
 </head>
 <body>
@@ -80,12 +73,6 @@ h1{margin:7px 0 15px}
 <p class="tagline">حكاية التاريخ بعيون جيل جديد</p>
 <h1>خالدون<br>عبر التاريخ</h1>
 <p>كل شخصية وراها حكاية، وكل إنجاز بدأ بفكرة أو موقف. هنا نكتشف الحكايات بأسلوب بسيط وممتع، ونحوّل الفضول إلى معرفة، مع مراجعة المعلومات والرجوع إلى مصادر موثوقة.</p>
-<div class="language-row" role="group" aria-label="اختيار اللغة">
-<button type="button" data-lang="ar" aria-pressed="true">العربية</button>
-<button type="button" data-lang="en" aria-pressed="false">English</button>
-<button type="button" data-lang="fr" aria-pressed="false">Français</button>
-<button type="button" data-lang="it" aria-pressed="false">Italiano</button>
-</div>
 <div class="actions"><a class="btn btn-ghost" href="#gateways">اختار بوابتك للمعرفة</a></div>
 </div></div></section>
 
@@ -123,22 +110,6 @@ h1{margin:7px 0 15px}
 </main>
 <footer><div class="wrap"><div class="footer-row"><div class="footer-brand">خالدون عبر التاريخ</div><div>حكاية التاريخ بعيون جيل جديد</div><a href="#top">العودة إلى الأعلى ↑</a></div><p class="footnote">نسخة معاينة مستقلة — لا تغيّر الموقع المنشور. الحكايات والمسارات الجديدة تُراجع قبل اعتمادها.</p></div></footer>
 <script>
-(function(){
-  var buttons=document.querySelectorAll('.language-row [data-lang]');
-  var allowed=['ar','en','fr','it'];
-  var lang='ar';
-  try{var saved=localStorage.getItem('kh-lang');if(allowed.indexOf(saved)>=0)lang=saved;}catch(e){}
-  function applyLang(next){
-    if(allowed.indexOf(next)<0)return;
-    lang=next;
-    document.documentElement.lang=lang;
-    document.documentElement.dir=lang==='ar'?'rtl':'ltr';
-    buttons.forEach(function(button){button.setAttribute('aria-pressed',String(button.getAttribute('data-lang')===lang));});
-    try{localStorage.setItem('kh-lang',lang);}catch(e){}
-  }
-  buttons.forEach(function(button){button.addEventListener('click',function(){applyLang(button.getAttribute('data-lang'));});});
-  applyLang(lang);
-})();
 (function(){
   var targets=document.querySelectorAll('.section-head,.gateway');
   targets.forEach(function(el){el.classList.add('reveal');});
