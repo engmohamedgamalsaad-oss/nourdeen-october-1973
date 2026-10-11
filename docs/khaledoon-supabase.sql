@@ -59,9 +59,15 @@ create policy "kh admin deletes" on public.khaledoon_submissions for delete to a
 grant insert on public.khaledoon_submissions to anon, authenticated;
 grant select, update, delete on public.khaledoon_submissions to authenticated;
 
--- اختياري لاحقًا (عند بناء صفحة عرض الحكايات): عرض آمن للحكايات المنشورة فقط وبأعمدة عامة
--- create or replace view public.khaledoon_published as
---   select id, created_at, section, stage, school_grade, subject, figure_name, narrator_name, narrator_grade,
---          title, subtitle, body, history_note, sources, images_note
---   from public.khaledoon_submissions where status = 'published';
--- grant select on public.khaledoon_published to anon, authenticated;
+-- واجهة عامة للقراءة: تعرض الحكايات المعتمدة فقط ولا تكشف الاسم/الصف الخاص بالراوي،
+-- النص الأصلي، الموافقة، الملاحظات الداخلية أو الحالة. لا تمنح الزوار قراءة الجدول الأساسي.
+create or replace view public.khaledoon_published
+with (security_barrier = true)
+as
+select id, created_at, section, stage, school_grade, subject, figure_name,
+       title, subtitle, body, history_note, sources, images_note
+from public.khaledoon_submissions
+where status = 'published' and consent is true;
+
+revoke all on public.khaledoon_published from public;
+grant select on public.khaledoon_published to anon, authenticated;
