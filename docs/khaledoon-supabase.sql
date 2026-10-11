@@ -31,7 +31,7 @@ create table if not exists public.khaledoon_submissions (
 
 -- يحتفظ بالنص الأصلي كما وصل ولا يسمح بتعديله لاحقًا
 create or replace function public.kh_keep_original()
-returns trigger language plpgsql as $$
+returns trigger language plpgsql set search_path = pg_catalog as $
 begin
   if tg_op = 'INSERT' then new.original_body := new.body;
   else new.original_body := old.original_body;
