@@ -48,8 +48,8 @@ create or replace function public.kh_limit_submission_rate()
 returns trigger
 language plpgsql
 security definer
-set search_path = pg_catalog, public, private
-as $
+set search_path = pg_catalog
+as $rate_limit$
 declare
   req_headers json;
   req_ip text;
@@ -87,7 +87,7 @@ begin
     where created_at < now() - interval '1 day';
   return new;
 end;
-$;
+$rate_limit$;
 revoke all on function public.kh_limit_submission_rate() from public, anon, authenticated;
 drop trigger if exists kh_limit_submission_rate on public.khaledoon_submissions;
 create trigger kh_limit_submission_rate
@@ -96,14 +96,14 @@ for each row execute function public.kh_limit_submission_rate();
 
 -- يحتفظ بالنص الأصلي كما وصل ولا يسمح بتعديله لاحقًا
 create or replace function public.kh_keep_original()
-returns trigger language plpgsql set search_path = pg_catalog as $
+returns trigger language plpgsql set search_path = pg_catalog as $keep_original$
 begin
   if tg_op = 'INSERT' then new.original_body := new.body;
   else new.original_body := old.original_body;
   end if;
   return new;
 end;
-$$;
+$keep_original$;
 drop trigger if exists kh_keep_original on public.khaledoon_submissions;
 create trigger kh_keep_original before insert or update on public.khaledoon_submissions
 for each row execute function public.kh_keep_original();
