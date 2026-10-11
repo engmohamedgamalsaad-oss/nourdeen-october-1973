@@ -36,7 +36,7 @@
   {
     "name": "كارما محمد جمال",
     "grade": "الصف الثالث الابتدائي",
-    "className": "3 E",
+    "className": "Class 3 E",
     "title": "العقل قبل السلاح",
     "subtitle": "كيف فتحت المياه طريق العبور",
     "color": "#f0a44a",
@@ -61,7 +61,7 @@
         "name": "Karma Mohamed Gamal",
         "grade": "3ª classe della scuola primaria",
         "title": "L’ingegno prima delle armi",
-        "subtitle": "Come l’acqua ha aperto un varco attraverso il canale",
+        "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
         "className": "Classe 3 E"
       }
     },
@@ -127,7 +127,7 @@
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
-        "grade": "1ª classe della scuola secondaria di primo grado",
+        "grade": "1ª media",
         "title": "I cieli di ottobre: i martiri del primo attacco aereo",
         "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
         "className": "Classe 1B"
