@@ -174,20 +174,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 
     render();
   }
 
-  /* ترجمة تلقائية عبر دالة Supabase (تحتاج نشر الدالة ومفتاح Anthropic) */
-  async function translateAuto(story){
-    await refreshIfNeeded();
-    var r=await fetch(API+'/functions/v1/translate-story',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json'},body:JSON.stringify(story)});
-    if(r.status===404) throw new Error('دالة الترجمة غير منشورة بعد. انشرها من Supabase، أو استخدم زر "نسخ طلب الترجمة للشات".');
-    if(r.status===401||r.status===403) throw new Error('دالة الترجمة رفضت الطلب: تأكد أن حسابك أدمن.');
-    var d={}; try{d=await r.json();}catch(e){}
-    if(!r.ok){
-      if(d.error==='missing_api_key') throw new Error('مفتاح Anthropic غير مضاف في أسرار Supabase (ANTHROPIC_API_KEY).');
-      throw new Error('فشلت الترجمة التلقائية ('+r.status+'). جرّب مرة أخرى أو استخدم الترجمة عبر الشات.');
-    }
-    if(!d.translations) throw new Error('رد غير متوقع من دالة الترجمة.');
-    return d.translations;
-  }
+  /* الترجمة تُجهّز يدويًا عبر ChatGPT بعد اعتماد النص العربي؛ لا يستدعي هذا المسار خدمة ترجمة مدفوعة. */
 
   function renderStats(){
     var box=$('stats'); box.textContent='';
