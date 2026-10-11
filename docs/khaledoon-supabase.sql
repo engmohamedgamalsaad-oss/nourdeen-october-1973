@@ -139,20 +139,104 @@ create policy "kh admin deletes" on public.khaledoon_submissions for delete to a
 grant insert on public.khaledoon_submissions to anon, authenticated;
 grant select, update, delete on public.khaledoon_submissions to authenticated;
 
--- الواجهة العامة تعرض أعمدة الحكاية المسموح بها فقط؛ لا تمنح الزوار قراءة الجدول الأساسي.
--- view بصلاحيات مالكه، لكن الاستعلام ثابت ويحدد الحكايات المنشورة والموافق عليها فقط.
-drop policy if exists "kh public reads published" on public.khaledoon_submissions;
-revoke select (id, created_at, section, stage, school_grade, subject, figure_name,
-               title, subtitle, body, history_note, sources, images_note)
-on public.khaledoon_submissions from anon;
+-- جدول عرض منفصل يحتوي على الحقول العامة فقط؛ لا يحتوي أسماء الرواة أو الملاحظات الخاصة.
+create table if not exists public.khaledoon_public_stories (
+  id uuid primary key,
+  created_at timestamptz not null,
+  section text not null,
+  stage text,
+  school_grade smallint,
+  subject text,
+  figure_name text not null,
+  title text not null,
+  subtitle text,
+  body text not null,
+  history_note text,
+  sources text,
+  images_note text
+);
+alter table public.khaledoon_public_stories enable row level security;
+drop policy if exists "kh public stories visible" on public.khaledoon_public_stories;
+create policy "kh public stories visible" on public.khaledoon_public_stories
+  for select to anon, authenticated using (true);
+revoke all on public.khaledoon_public_stories from public, anon, authenticated;
+grant select on public.khaledoon_public_stories to anon, authenticated;
 
-create or replace view public.khaledoon_published
-with (security_invoker = false, security_barrier = true)
+-- المزامنة تتم داخل قاعدة البيانات: النشر ينسخ الحقول العامة فقط، والسحب أو الرفض يحذفها.
+create or replace function public.kh_sync_public_story()
+returns trigger
+language plpgsql
+security definer
+set search_path = pg_catalog
+as $sync_public$
+begin
+  if tg_op = 'DELETE' then
+    delete from public.khaledoon_public_stories where id = old.id;
+    return old;
+  end if;
+
+  if new.status = 'published' and new.consent is true then
+    insert into public.khaledoon_public_stories
+      (id, created_at, section, stage, school_grade, subject, figure_name,
+       title, subtitle, body, history_note, sources, images_note)
+    values
+      (new.id, new.created_at, new.section, new.stage, new.school_grade, new.subject,
+       new.figure_name, new.title, new.subtitle, new.body, new.history_note,
+       new.sources, new.images_note)
+    on conflict (id) do update set
+      created_at = excluded.created_at,
+      section = excluded.section,
+      stage = excluded.stage,
+      school_grade = excluded.school_grade,
+      subject = excluded.subject,
+      figure_name = excluded.figure_name,
+      title = excluded.title,
+      subtitle = excluded.subtitle,
+      body = excluded.body,
+      history_note = excluded.history_note,
+      sources = excluded.sources,
+      images_note = excluded.images_note;
+  else
+    delete from public.khaledoon_public_stories where id = new.id;
+  end if;
+  return new;
+end;
+$sync_public$;
+revoke all on function public.kh_sync_public_story() from public, anon, authenticated;
+drop trigger if exists kh_sync_public_story on public.khaledoon_submissions;
+create trigger kh_sync_public_story
+after insert or update or delete on public.khaledoon_submissions
+for each row execute function public.kh_sync_public_story();
+
+-- إعادة بناء العرض الآمن فوق الجدول العام المنفصل، مع إبقاء RLS فعّالًا.
+drop view if exists public.khaledoon_published;
+create view public.khaledoon_published
+with (security_invoker = true, security_barrier = true)
 as
 select id, created_at, section, stage, school_grade, subject, figure_name,
        title, subtitle, body, history_note, sources, images_note
-from public.khaledoon_submissions
-where status = 'published' and consent is true;
-
+from public.khaledoon_public_stories;
 revoke all on public.khaledoon_published from public;
 grant select on public.khaledoon_published to anon, authenticated;
+
+-- تعبئة آمنة عند إعادة تشغيل ملف الإعداد على قاعدة تحتوي حكايات منشورة بالفعل.
+insert into public.khaledoon_public_stories
+  (id, created_at, section, stage, school_grade, subject, figure_name,
+   title, subtitle, body, history_note, sources, images_note)
+select id, created_at, section, stage, school_grade, subject, figure_name,
+       title, subtitle, body, history_note, sources, images_note
+from public.khaledoon_submissions
+where status = 'published' and consent is true
+on conflict (id) do update set
+  created_at = excluded.created_at,
+  section = excluded.section,
+  stage = excluded.stage,
+  school_grade = excluded.school_grade,
+  subject = excluded.subject,
+  figure_name = excluded.figure_name,
+  title = excluded.title,
+  subtitle = excluded.subtitle,
+  body = excluded.body,
+  history_note = excluded.history_note,
+  sources = excluded.sources,
+  images_note = excluded.images_note;
