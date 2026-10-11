@@ -1,0 +1,1343 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="assets/shared/i18n.css">
+
+<title>خالدون عبر التاريخ | معاينة مستقلة</title>
+<meta name="description" content="معاينة مستقلة لمنصة خالدون عبر التاريخ، تجمع الحكايات التاريخية والمحتوى التعليمي الموثق لجميع الصفوف.">
+<link rel="icon" type="image/jpeg" href="assets/homepage/main-cover.jpg?v=20261010-1">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="خالدون عبر التاريخ">
+<meta property="og:description" content="حكايات تاريخية ومحتوى تعليمي موثق لجميع الصفوف">
+<meta property="og:url" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/nourdeen-home-preview.html">
+<meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/homepage/main-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="assets/shared/base.css">
+
+<style>
+:root {
+  --home-brown-top: #8e765b;
+  --home-brown-bottom: #80603e;
+  --home-gold: #e3bd78;
+  --gold: #e3bd78;
+  --muted: #aab9bd;
+}
+
+/* ===== إعدادات عامة ===== */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  background: #041018;
+  color: #edf3f3;
+  font-family: "Cairo", sans-serif;
+  position:relative;
+  isolation:isolate;
+}
+
+/* خلفية الغلاف ثابتة المقاس؛ نغيّر موضع القصّ فقط لتجنب قفزات التكبير */
+body::before{
+  content:"";
+  position:fixed;
+  z-index:-1;
+  pointer-events:none;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(2,8,12,.78),rgba(2,8,12,.78)),
+    url("assets/homepage/main-cover.jpg");
+  background-position:center calc(50% + var(--cover-backdrop-shift,0px));
+  background-size:cover;
+  background-repeat:no-repeat;
+  /* Keep the dark overlay in the gradient; don't fade the entire photo layer again. */
+  opacity:1;
+  filter:saturate(.82);
+}
+
+.container {
+  width: min(1150px, 94%);
+  margin-inline: auto;
+}
+
+.lang-switch{display:flex;gap:10px;flex-wrap:nowrap;align-items:center;justify-content:flex-start;max-width:100%;min-width:0;white-space:nowrap;direction:ltr}
+.lang-option{appearance:none;border:0;border-bottom:2px solid transparent;border-radius:0;padding:4px 0;background:transparent;color:#cbd5d7;font:600 .72rem "Cairo",sans-serif;cursor:pointer;line-height:1.5;white-space:nowrap}
+.lang-option.is-active{color:#e3bd78;border-bottom-color:#e3bd78;background:transparent}
+.lang-option:hover{color:#e3bd78}
+.lang-option:focus-visible{outline:2px solid #e3bd78;outline-offset:3px}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ===== الهيدر والشعار ===== */
+.topbar {
+  height: 94px;
+  padding: 0 24px;
+  display: block;
+  direction: ltr;
+  background: rgba(3, 13, 19, .98);
+  border-bottom: 1px solid rgba(184,135,75,.38);
+  position: relative;
+  z-index: 10;
+}
+.topbar .school-brand {
+  position: absolute;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  direction: rtl;
+  min-width: 0;
+}
+.topbar .home-link {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+}
+.topbar .lang-switch {
+  position: absolute;
+  left: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.school-brand {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.school-brand img {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.school-info {
+  min-width: 0;
+}
+
+.school-name {
+  font-size: 1.08rem;
+  line-height: 1.8;
+  color: #f4e5c8;
+  font-weight: 800;
+}
+
+.page-name {
+  font-size: .9rem;
+  color: #b7c5c8;
+}
+
+.home-link {
+  display: inline-block;
+  max-width: 420px;
+  margin-inline-start: clamp(14px, 3vw, 44px);
+  color: #f4e5c8;
+  font-family: "Cairo", sans-serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  text-decoration: none;
+  line-height: 1.7;
+  text-align: center;
+  white-space: normal;
+  flex-shrink: 0;
+}
+
+/* ===== الغلاف الرئيسي ===== */
+.hero-home {
+  height: calc(100svh - 94px);
+  min-height: 590px;
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(
+    180deg,
+    var(--home-brown-top) 0%,
+    var(--home-brown-bottom) 100%
+  );
+}
+
+/* الصورة تصل للحواف وتغطي المساحة */
+.hero-home-image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    var(--home-brown-top),
+    var(--home-brown-bottom)
+  );
+}
+
+.hero-home-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  background: transparent;
+  will-change: transform;
+}
+
+/* ===== الغلاف ثابت أثناء التمرير لتجنب أي انزلاق جانبي ===== */
+.hero-home-image {
+  animation: none;
+  transform: none;
+  filter: saturate(1.04) contrast(1.025);
+  will-change: auto;
+}
+
+/* وهج ضوئي متحرك وغبار خفيف لإعطاء المشهد إحساسًا بالحياة */
+.hero-home-image-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .22;
+  background:
+    radial-gradient(ellipse at 18% 70%, rgba(244, 190, 103, .22), transparent 28%),
+    radial-gradient(ellipse at 78% 38%, rgba(255, 226, 164, .15), transparent 24%),
+    linear-gradient(112deg, transparent 35%, rgba(255, 225, 165, .10) 48%, transparent 61%);
+  background-size: 100% 100%, 100% 100%, 220% 100%;
+  animation: hero-atmosphere 14s ease-in-out infinite alternate;
+}
+
+/* حركة الصورة بطيئة حتى لا تشتت القارئ */
+@keyframes hero-scene-drift {
+  0%   { scale: 1.02; translate: 0 0;        filter: saturate(1.02) contrast(1.02) brightness(.98); }
+  100% { scale: 1.09; translate: -1.2% -.8%; filter: saturate(1.08) contrast(1.04) brightness(1.04); }
+}
+
+@keyframes hero-atmosphere {
+  0%   { transform: translate3d(-1%, 1%, 0); background-position: 0 0, 0 0, 0% 0; opacity: .14; }
+  100% { transform: translate3d(1%, -1%, 0); background-position: 0 0, 0 0, 100% 0; opacity: .28; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-home-image,
+  .hero-home-image-wrap::after {
+    animation: none !important;
+  }
+}
+
+/* تظليل تدريجي حتى يبان الكلام بوضوح */
+.hero-home-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(8, 7, 5, .10) 0%,
+    rgba(8, 7, 5, .12) 32%,
+    rgba(3, 12, 17, .48) 62%,
+    rgba(3, 12, 17, .86) 100%
+  );
+  pointer-events: none;
+}
+
+/* الكلام فوق الغلاف */
+.hero-home-content {
+  position: relative;
+  z-index: 2;
+  width: min(950px, 94%);
+  padding: 35px 20px;
+  margin-top: auto;
+  margin-bottom: 38px;
+  text-shadow: 0 3px 15px rgba(0,0,0,.95);
+  will-change: transform, opacity;
+  transition: opacity .12s linear;
+}
+
+.hero-home-content .eyebrow {
+  color: #fff0d0;
+  font-size: clamp(.78rem, 2vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-shadow: 0 3px 10px #000;
+}
+
+.hero-home-content h1 {
+  margin: 10px 0 14px;
+  color: #ffe2a0;
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(2rem, 6vw, 4.2rem);
+  line-height: 1.5;
+  text-shadow:
+    0 2px 3px #211407,
+    0 5px 12px rgba(0,0,0,.98),
+    0 0 28px rgba(0,0,0,.9);
+}
+
+.hero-home-content p {
+  max-width: 800px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: clamp(.95rem, 2.4vw, 1.2rem);
+  line-height: 2.1;
+  font-weight: 600;
+  text-shadow:
+    0 2px 4px #000,
+    0 4px 12px rgba(0,0,0,.95);
+}
+
+.hero-home-rule {
+  width: 90px;
+  height: 3px;
+  margin: 15px auto;
+  background: var(--home-gold);
+  box-shadow: 0 2px 12px rgba(0,0,0,.8);
+}
+
+.hero-home-scroll {
+  position: absolute;
+  z-index: 3;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff0d0;
+  font-size: .85rem;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px #000;
+  animation: scroll-hint 2s ease-in-out infinite;
+}
+
+@keyframes scroll-hint {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 6px; }
+}
+
+/* ===== حركة ظهور المحتوى أثناء التمرير ===== */
+.float-up {
+  opacity: 0;
+  transform: translate3d(0, 38px, 0);
+  will-change: opacity, transform;
+  transition:
+    opacity .8s ease,
+    transform .8s cubic-bezier(.2,.7,.2,1);
+}
+
+.float-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.float-delay-1 { transition-delay: .10s; }
+.float-delay-2 { transition-delay: .20s; }
+.float-delay-3 { transition-delay: .30s; }
+
+/* ===== المقدمة ===== */
+.intro {
+  padding: 80px 20px;
+  position: relative;
+}
+
+.home-after {
+  background: linear-gradient(180deg, #07141c 0, #041018 100%);
+}
+
+.intro-heading {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.intro-heading h2 {
+  margin: 10px 0;
+  color: #f0d39b;
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.3rem);
+  line-height: 1.8;
+}
+
+.intro-heading p {
+  color: #bdccce;
+  line-height: 2;
+}
+
+.kicker {
+  color: #d5ad6a;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+/* المقدمة بالعرض: فقرتان جنب بعض */
+.intro-copy {
+  max-width: 1000px;
+  margin-inline: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 34px;
+  align-items: start;
+}
+
+.intro-copy .intro-heading,
+.intro-copy .big-quote {
+  grid-column: 1 / -1;
+}
+
+.intro-copy .intro-heading {
+  width: 100%;
+}
+
+.intro-copy p {
+  margin: 0;
+  color: #d8e1e2;
+  line-height: 2.15;
+  font-size: 1.02rem;
+}
+
+.big-quote {
+  margin: 25px 0 0;
+  padding: 22px 25px;
+  border-right: 5px solid var(--gold);
+  background: rgba(184,135,75,.08);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: clamp(1.15rem, 3.5vw, 1.8rem);
+  color: #e0d0b4;
+  line-height: 2;
+  text-shadow: 0 2px 10px rgba(0,0,0,.45);
+}
+
+/* ===== معرض الوسائط وركن هل تعلم ===== */
+.feature-section{padding:72px 20px;position:relative}.feature-section .container{width:min(1120px,100%);margin:0 auto}.feature-heading{text-align:center;max-width:760px;margin:0 auto 30px}.feature-heading h2{font-family:"Marhey","Cairo",sans-serif;color:var(--home-gold);font-size:clamp(1.7rem,4.5vw,2.7rem);margin:8px 0 12px}.feature-heading p{color:#c9d4d5;line-height:1.9;margin:0}
+.media-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}.media-grid.feature-track{display:grid;grid-template-columns:minmax(0,1fr);gap:0}.media-card{overflow:hidden;border:1px solid rgba(227,189,120,.28);border-radius:14px;background:linear-gradient(145deg,rgba(10,48,58,.88),rgba(3,16,22,.96));box-shadow:0 14px 35px rgba(0,0,0,.2);transition:transform .25s ease,border-color .25s ease}.media-card:hover,.fact-card:hover{border-color:rgba(227,189,120,.7);box-shadow:0 18px 42px rgba(0,0,0,.3)}.media-card>a:first-child{display:block;height:180px;background:#071b22;overflow:hidden}.media-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}.media-card:hover img{transform:scale(1.045)}.media-caption{padding:14px 15px 16px}.media-caption h3{margin:0 0 7px;color:#f0d59c;font-size:1rem}.media-caption p{margin:0;color:#b9c9ca;font-size:.83rem;line-height:1.8}.media-caption a{display:inline-block;margin-top:9px;color:var(--home-gold);font-size:.8rem;text-decoration:underline;text-underline-offset:3px}
+.stamp-art{height:180px;display:flex;align-items:center;justify-content:center;padding:15px;background:radial-gradient(circle at 20% 15%,#204c52,#061920 72%)}.stamp-frame{width:100%;max-width:190px;min-height:136px;padding:10px;border:3px dotted #e3bd78;outline:1px solid rgba(227,189,120,.5);outline-offset:-7px;text-align:center;color:#f3d99f;transform:rotate(-2deg);background:linear-gradient(145deg,rgba(184,135,75,.16),rgba(2,8,12,.65))}.stamp-date{font:800 .78rem/1.5 "Cairo",sans-serif;letter-spacing:1px}.stamp-flag{display:flex;width:74px;height:39px;margin:8px auto;flex-direction:column;overflow:hidden;border:1px solid rgba(255,255,255,.4)}.stamp-flag span{display:block;height:13px}.stamp-flag span:nth-child(1){background:#ce3030}.stamp-flag span:nth-child(2){background:#f5eee0}.stamp-flag span:nth-child(3){background:#1e6b45}.stamp-frame small{display:block;font-size:.65rem}.stamp-disclaimer{color:#aebfc1!important;font-size:.7rem!important;margin-top:7px!important}
+.facts-section{background:linear-gradient(180deg,rgba(9,43,52,.4),rgba(2,8,12,.15));border-top:1px solid rgba(227,189,120,.14);border-bottom:1px solid rgba(227,189,120,.14)}.facts-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}.facts-grid.feature-track{display:grid;grid-template-columns:minmax(0,1fr);gap:0}.fact-card{border:1px solid rgba(227,189,120,.3);border-radius:14px;padding:20px;background:linear-gradient(145deg,rgba(10,55,66,.8),rgba(3,17,23,.95));transition:transform .25s ease,box-shadow .25s ease}.fact-number{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;border-radius:50%;color:#20170b;background:linear-gradient(145deg,#f0d69c,#b8874b);font-weight:900;margin-bottom:12px}.fact-card h3{color:#f0d59c;margin:0 0 10px;font-family:"Marhey","Cairo",sans-serif;font-size:1.12rem}.fact-card p{color:#d0dcdd;line-height:1.9;font-size:.9rem;margin:0 0 10px}.fact-card details{border-top:1px solid rgba(227,189,120,.2);padding-top:10px}.fact-card summary{color:var(--home-gold);cursor:pointer;font-weight:800;font-size:.85rem}.fact-card details p{margin:10px 0 0;color:#b9c9ca;font-size:.82rem}.fact-source{display:inline-block;margin-top:10px;color:#f0d59c;font-size:.78rem}
+/* Horizontal slide transitions: enter from right, pause for reading, leave left. */
+.feature-carousel{position:relative;width:100%;max-width:900px;margin:0 auto;overflow:hidden;isolation:isolate}
+.feature-track{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:0!important;direction:ltr}
+.feature-track.carousel-ready>.media-card,.feature-track.carousel-ready>.fact-card{grid-area:1/1;width:100%;min-width:0;opacity:0;visibility:hidden;transform:translateX(110%);transition:transform .72s cubic-bezier(.22,.72,.25,1),opacity .72s ease;pointer-events:none}
+.feature-track.carousel-ready>.media-card.is-active,.feature-track.carousel-ready>.fact-card.is-active{opacity:1;visibility:visible;transform:translateX(0);z-index:2;pointer-events:auto}
+.feature-track.carousel-ready>.media-card.is-leaving,.feature-track.carousel-ready>.fact-card.is-leaving{opacity:0;visibility:visible;transform:translateX(-110%);z-index:1}
+.feature-track .media-card>a:first-child,.feature-track .stamp-art{height:clamp(190px,34vw,320px)}
+.feature-track .media-caption{padding:18px 20px 20px}
+.feature-track .media-caption h3,.feature-track .fact-card h3{font-size:clamp(1.05rem,2.6vw,1.3rem)}
+.feature-track .media-caption p,.feature-track .fact-card p{font-size:clamp(.88rem,2vw,1rem);line-height:2}
+.feature-track .fact-card{padding:clamp(18px,3vw,28px)}
+.feature-controls{display:flex;align-items:center;justify-content:center;gap:14px;margin:18px auto 0;direction:ltr}
+.feature-control{appearance:none;display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid rgba(227,189,120,.5);border-radius:50%;background:rgba(7,25,33,.94);color:#f0d59c;font:800 1.25rem "Cairo",sans-serif;cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease}
+.feature-control:hover,.feature-control:focus-visible{background:#e3bd78;color:#171006;transform:scale(1.04);outline:2px solid rgba(227,189,120,.35);outline-offset:2px}
+.feature-control:focus-visible{outline-offset:3px}
+.feature-control{appearance:none;border:1px solid rgba(227,189,120,.55);border-radius:999px;width:42px;height:42px;background:rgba(7,25,34,.9);color:#f0d59c;font-size:1.45rem;line-height:1;cursor:pointer}
+.feature-control:hover,.feature-control:focus-visible{background:#e3bd78;color:#171006;outline:2px solid rgba(227,189,120,.4);outline-offset:3px}
+.feature-dots{display:flex;gap:8px;align-items:center;justify-content:center;flex-wrap:wrap}
+.feature-dot{appearance:none;width:8px;height:8px;border:0;border-radius:50%;padding:0;background:#70858a;cursor:pointer}
+.feature-dot[aria-current=true]{width:22px;border-radius:999px;background:#e3bd78}
+@media(max-width:900px){.media-grid,.facts-grid{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:560px){.feature-section{padding:52px 15px}.feature-track .media-card>a:first-child,.feature-track .stamp-art{height:210px}.stamp-frame{max-width:210px}.feature-control{width:38px;height:38px}}
+
+
+/* ===== كروت الحكايات ===== */
+.submit-story-link{display:inline-flex;align-items:center;justify-content:center;min-height:46px;margin-top:18px;padding:10px 22px;border:1px solid rgba(227,189,120,.65);border-radius:8px;background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006;text-decoration:none;font-weight:800;transition:transform .25s ease,box-shadow .25s ease}
+.submit-story-link:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(0,0,0,.25)}
+.submit-story-link:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.submitted-story-card .card-photo-letter{font-size:3.4rem}
+.submitted-story-tag{display:inline-block;margin-top:10px;padding:3px 10px;border:1px solid rgba(227,189,120,.35);border-radius:999px;color:var(--gold);font-size:.78rem;font-weight:800}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 22px;
+  margin-top: 35px;
+  perspective: 1000px;
+}
+
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid rgba(184,135,75,.3);
+  background: linear-gradient(
+    145deg,
+    rgba(8,62,76,.5),
+    rgba(2,12,18,.92)
+  );
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  transition:
+    transform .35s ease,
+    border-color .35s ease,
+    box-shadow .35s ease;
+  transform-origin: center bottom;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.012);
+  border-color: var(--gold);
+  box-shadow: 0 16px 35px rgba(0,0,0,.28);
+}
+
+.card-photo {
+  height: 220px;
+  background: radial-gradient(circle, #104653, #04141c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--gold);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: 3rem;
+  overflow: hidden;
+}
+
+.card-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .65s ease;
+}
+
+.card:hover .card-photo img {
+  transform: scale(1.06);
+}
+
+.card-photo-letter {
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.card-body {
+  padding: 20px;
+  border-top: 3px solid var(--c, #b8874b);
+}
+
+.card-name {
+  font-family: "Marhey", "Cairo", sans-serif;
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.card-student-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  margin-bottom: 4px;
+}
+
+.student-avatar-wrap {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 50px;
+  position: relative;
+}
+
+.student-avatar-fallback {
+  position: absolute;
+  inset: 0;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffe2a0;
+  background: linear-gradient(135deg, #174653, #07151d);
+  border: 2px solid var(--c, #b8874b);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.student-avatar {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--c, #b8874b);
+  box-shadow: 0 0 0 3px rgba(227,189,120,.10);
+  background: #10232b;
+}
+
+.card-name {
+  min-width: 0;
+}
+
+.card-bottom-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.card-like-count {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: #f3d7a0;
+  background: rgba(227,189,120,.09);
+  border: 1px solid rgba(227,189,120,.25);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: .86rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.card-like-count .like-number {
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.card-grade {
+  color: var(--muted);
+  font-size: .85rem;
+  margin: 4px 0 10px;
+}
+
+.card-title {
+  color: #e6eeee;
+  line-height: 1.9;
+}
+
+.card-btn {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 8px 18px;
+  color: #171006;
+  background: linear-gradient(145deg, #e3bd78, #a8753d);
+  font-weight: 800;
+  border-radius: 5px;
+  font-size: .9rem;
+}
+
+.empty {
+  color: var(--muted);
+  text-align: center;
+  padding: 40px 0;
+  grid-column: 1 / -1;
+}
+
+/* ===== الإشراف ===== */
+.supervision {
+  padding: 35px 20px 20px;
+  text-align: center;
+  background: #02080c;
+  border-top: 1px solid rgba(184,135,75,.22);
+}
+
+.supervision-title {
+  color: var(--gold);
+  font-family: "Marhey", "Cairo", sans-serif;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.supervision-line {
+  color: #d8e1e2;
+  line-height: 2.1;
+  font-size: .98rem;
+}
+
+footer {
+  text-align: center;
+  padding: 28px 16px;
+  line-height: 2;
+  background: #02080c;
+  color: #bdccce;
+}
+
+/* ===== الموبايل ===== */
+@media (max-width: 820px) {
+  .topbar {
+    height: 82px;
+    min-height: 82px;
+    padding: 0 10px;
+  }
+  .topbar .school-brand {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    gap: 0;
+  }
+  .topbar .school-brand img {
+    width: 48px;
+    height: 48px;
+  }
+  .topbar .school-info {
+    display: none;
+  }
+  .topbar .home-link {
+    left: 50%;
+    top: 9px;
+    transform: translateX(-50%);
+    width: calc(100% - 132px);
+    max-width: none;
+    margin: 0;
+    font-size: clamp(.82rem, 3.5vw, 1.15rem);
+    line-height: 1.4;
+    text-align: center;
+  }
+  .topbar .lang-switch {
+    left: 10px;
+    top: auto;
+    bottom: 8px;
+    transform: none;
+    gap: 7px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+  }
+  .lang-option { font-size: .62rem; padding: 2px 0; }
+
+  .hero-home {
+    height: calc(100svh - 82px);
+    min-height: 520px;
+  }
+
+  .hero-home-image {
+    object-position: center center;
+  }
+
+  .hero-home-content {
+    width: 100%;
+    padding: 24px 15px 42px;
+    margin-bottom: 20px;
+  }
+
+  .hero-home-content h1 {
+    font-size: clamp(1.9rem, 8vw, 3rem);
+  }
+
+  .hero-home-content p {
+    font-size: .92rem;
+    line-height: 2;
+  }
+
+  .hero-home-scroll {
+    bottom: 8px;
+  }
+
+  .intro {
+    padding: 58px 17px;
+  }
+
+  .intro-copy {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .intro-copy .intro-heading,
+  .intro-copy .big-quote {
+    grid-column: 1;
+  }
+
+  .big-quote {
+    margin-top: 8px;
+    padding: 18px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .card-photo {
+    height: 225px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+
+  .float-up {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* هيدر متوازن: الشعار واسم المدرسة يمين، العنوان في المنتصف، واللغات يسار */
+.topbar{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  grid-template-rows:1fr!important;
+  align-items:center!important;
+  column-gap:clamp(10px,2vw,28px)!important;
+  min-height:100px!important;
+  height:auto!important;
+  padding:10px clamp(10px,2vw,24px)!important;
+  direction:rtl!important;
+  overflow:visible!important;
+}
+.topbar .school-brand{
+  grid-column:1!important;grid-row:1!important;
+  position:static!important;transform:none!important;
+  display:flex!important;direction:rtl!important;
+  align-items:center!important;justify-self:start!important;
+  gap:clamp(8px,1.2vw,15px)!important;min-width:0!important;
+}
+.topbar .school-brand img{
+  width:clamp(58px,7vw,84px)!important;
+  height:clamp(58px,7vw,84px)!important;
+  flex-shrink:0!important;object-fit:contain!important;
+}
+.topbar .school-info{display:block!important;min-width:0!important}
+.topbar .school-name{
+  font-size:clamp(.78rem,1.25vw,1.08rem)!important;
+  line-height:1.5!important;font-weight:800!important;
+  text-align:right!important;overflow-wrap:anywhere!important;
+}
+.topbar .page-name{display:none!important}
+.topbar .home-link{
+  grid-column:2!important;grid-row:1!important;
+  position:static!important;transform:none!important;
+  justify-self:center!important;align-self:center!important;
+  display:block!important;width:100%!important;max-width:100%!important;
+  margin:0!important;padding:0 8px!important;
+  font-size:clamp(1.12rem,2.5vw,2rem)!important;
+  line-height:1.4!important;font-weight:800!important;
+  white-space:normal!important;text-align:center!important;
+}
+.topbar .lang-switch{
+  grid-column:3!important;grid-row:1!important;
+  position:static!important;transform:translateY(35px)!important;
+  justify-self:end!important;align-self:center!important;
+  display:flex!important;flex-wrap:nowrap!important;
+  gap:clamp(5px,.9vw,10px)!important;
+  white-space:nowrap!important;min-width:0!important;
+}
+.topbar .lang-option{
+  font-size:clamp(.6rem,.8vw,.72rem)!important;
+  padding:4px 0 6px!important;
+  border-bottom:1px solid transparent!important;
+}
+.topbar .lang-option.is-active{
+  color:#ffe2a0!important;
+  border-bottom-color:#ffe2a0!important;
+  box-shadow:none!important;
+}
+@media(max-width:820px){
+  .topbar{
+    grid-template-columns:54px minmax(0,1fr) auto!important;
+    column-gap:7px!important;min-height:76px!important;
+    padding:8px 8px!important;
+  }
+  .topbar .school-brand{gap:0!important}
+  .topbar .school-brand img{width:54px!important;height:54px!important}
+  .topbar .school-info{display:none!important}
+  .topbar .home-link{
+    font-size:clamp(.94rem,3.6vw,1.3rem)!important;
+    line-height:1.35!important;padding:0 3px!important;
+  }
+  .topbar .lang-switch{gap:5px!important;transform:translateY(28px)!important}
+  .topbar .lang-option{font-size:clamp(.52rem,1.8vw,.62rem)!important;padding:2px 0!important}
+}
+@media(max-width:360px){
+  .topbar{grid-template-columns:46px minmax(0,1fr) auto!important;column-gap:4px!important;padding-inline:5px!important}
+  .topbar .school-brand img{width:46px!important;height:46px!important}
+  .topbar .home-link{font-size:.86rem!important}
+  .topbar .lang-switch{gap:4px!important;transform:translateY(23px)!important}
+  .topbar .lang-option{font-size:.5rem!important}
+}
+
+/* ===== معاينة قسم المناهج ===== */
+.curriculum-section{background:linear-gradient(180deg,rgba(8,36,45,.72),rgba(2,8,12,.45));border-top:1px solid rgba(227,189,120,.16);border-bottom:1px solid rgba(227,189,120,.16)}
+.curriculum-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:start}
+.curriculum-card{border:1px solid rgba(227,189,120,.3);border-radius:14px;padding:18px;background:linear-gradient(145deg,rgba(10,48,58,.82),rgba(3,16,22,.96))}
+.curriculum-card h3{margin:0 0 14px;color:#f0d59c;font-family:"Marhey","Cairo",sans-serif;font-size:1.12rem}
+.curriculum-grades{display:grid;gap:8px}
+.curriculum-grades>div{padding:10px 11px;border-radius:8px;background:rgba(255,255,255,.035);border:1px solid rgba(227,189,120,.12);display:grid;gap:4px}
+.curriculum-grades strong{font-size:.9rem;color:#edf3f3}
+.curriculum-grades span,.curriculum-note{font-size:.76rem;color:#b9c9ca;line-height:1.7}
+.curriculum-note{text-align:center;margin:20px auto 0}
+.media-image{display:block;height:180px;background:#071b22;overflow:hidden}
+@media(max-width:800px){.curriculum-grid{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<!-- ===== الهيدر ===== -->
+<header class="topbar">
+  <span class="home-link" data-i18n="k1">رجال خالدون عبر التاريخ</span>
+  <div class="lang-switch" data-lang-switch aria-label="اختيار اللغة" data-i18n-attr="aria-label:js_language_label"></div>
+
+</header>
+
+<!-- ===== الغلاف الرئيسي ===== -->
+<section class="hero-home" id="homeHero">
+
+  <h1 class="visually-hidden" data-i18n="k5">حكايات أكتوبر 1973</h1>
+
+  <div class="hero-home-image-wrap" id="heroHomeWrap">
+    <img
+      class="hero-home-image"
+      id="heroHomeImage"
+      src="assets/homepage/main-cover.jpg"
+      alt="غلاف حكايات أكتوبر 1973" data-i18n-attr="alt:js_home_cover_alt"
+      loading="eager">
+
+    <div class="hero-home-shade"></div>
+  </div>
+
+  <div class="hero-home-content" id="heroHomeContent">
+    <div class="eyebrow float-up" data-i18n="k4">EGYPT • 6 OCTOBER 1973</div>
+    <div class="hero-home-rule float-up float-delay-1"></div>
+
+    <h1 class="float-up float-delay-1" data-i18n="k5">حكايات أكتوبر 1973</h1>
+
+    <p class="float-up float-delay-2" data-i18n="k6">
+      أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973، نستعيد من خلاله قصص الشجاعة والتخطيط والتضحيات التي شاركت في صنع النصر.
+    </p>
+  </div>
+
+  <div class="hero-home-scroll" data-i18n="k7">اكتشف الحكايات ↓</div>
+</section>
+
+<!-- ===== المقدمة ===== -->
+<section class="intro home-after">
+  <div class="container intro-copy">
+
+    <div class="intro-heading float-up">
+      <div class="kicker" data-i18n="k8">مقدمة</div>
+      <h2 data-i18n="k9">السادس من أكتوبر 1973</h2>
+    </div>
+
+    <p class="float-up" data-i18n="k10">
+      في السادس من أكتوبر 1973 بدأت مصر حرب أكتوبر لتحرير سيناء، بعد سنوات من الاستعداد والتدريب والتخطيط. شاركت فيها قوات برية وجوية وبحرية ودفاع جوي، ولكل منها دوره.
+    </p>
+
+    <p class="float-up" data-i18n="k11">
+      لكن الحرب لم تكن أرقامًا وتواريخ فقط، بل كانت أشخاصًا قاموا بمهام حقيقية، بعضها معروف وبعضها لم يسمع عنه كثيرون.
+    </p>
+
+    <div class="big-quote float-up">
+      <span data-i18n="k12">التاريخ ليس مجرد أرقام وتواريخ، بل قصص لأشخاص قاموا بمهام وبطولات حقيقية.</span>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ===== قسم المناهج: هيكل أولي لجميع الصفوف ===== -->
+<section class="feature-section curriculum-section" id="curriculum" aria-labelledby="curriculumTitle">
+  <div class="container">
+    <div class="feature-heading float-up">
+      <div class="kicker" data-i18n="curriculum_kicker">التعلم عبر المراحل الدراسية</div>
+      <h2 id="curriculumTitle" data-i18n="curriculum_title">المناهج لجميع الصفوف</h2>
+      <p data-i18n="curriculum_intro">هيكل منظم للصفوف من الابتدائي إلى الثانوي. ستُضاف المواد والشروح بعد مراجعة المصادر واعتماد المحتوى.</p>
+    </div>
+    <div class="curriculum-grid">
+      <article class="curriculum-card"><h3 data-i18n="curr_primary">المرحلة الابتدائية</h3><div class="curriculum-grades">
+        <div><strong data-i18n="grade_1">الصف الأول الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_2">الصف الثاني الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_3">الصف الثالث الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_4">الصف الرابع الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_5">الصف الخامس الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_6">الصف السادس الابتدائي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+      </div></article>
+      <article class="curriculum-card"><h3 data-i18n="curr_prep">المرحلة الإعدادية</h3><div class="curriculum-grades">
+        <div><strong data-i18n="grade_7">الصف الأول الإعدادي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_8">الصف الثاني الإعدادي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_9">الصف الثالث الإعدادي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+      </div></article>
+      <article class="curriculum-card"><h3 data-i18n="curr_secondary">المرحلة الثانوية</h3><div class="curriculum-grades">
+        <div><strong data-i18n="grade_10">الصف الأول الثانوي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_11">الصف الثاني الثانوي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+        <div><strong data-i18n="grade_12">الصف الثالث الثانوي</strong><span data-i18n="curriculum_pending">المحتوى الموثق قيد الإعداد</span></div>
+      </div></article>
+    </div>
+    <p class="curriculum-note" data-i18n="curriculum_note">هذه معاينة للهيكل فقط؛ لم تُضف بعد دروس أو ملخصات غير مراجعة.</p>
+  </div>
+</section>
+
+<!-- ===== حكايات أكتوبر: أول مجموعة في المنصة ===== -->
+<section class="intro">
+  <div class="container">
+
+    <div class="intro-heading float-up">
+      <div class="kicker" data-i18n="k13">حكايات الطالبات</div>
+      <h2 data-i18n="k14">اختر حكاية</h2>
+      <p data-i18n="k15">كل حكاية نافذة على جانب من بطولات أكتوبر.</p>
+    <a class="submit-story-link float-up" href="submit.html" data-i18n="submit_story_cta">اكتب حكايتك</a>
+    </div>
+
+    <div class="cards" id="cards">
+      <div class="empty" data-i18n="k16">جارٍ تحميل الحكايات...</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===== معرض الوسائط المتعددة ===== -->
+<section class="feature-section" id="mediaGallery" aria-labelledby="mediaGalleryTitle"><div class="container">
+<div class="feature-heading float-up"><div class="kicker" data-i18n="media_kicker">من ذاكرة أكتوبر</div><h2 id="mediaGalleryTitle" data-i18n="media_title">معرض الوسائط المتعددة</h2><p data-i18n="media_intro">صور وخرائط ومواد بصرية تساعدنا على قراءة أحداث أكتوبر، مع توضيح ما هو توثيق تاريخي وما هو تصميم فني.</p></div>
+<div class="feature-carousel" data-feature-carousel="media" aria-label="معرض الوسائط"><div class="media-grid feature-track">
+<article class="media-card float-up"><div class="media-image"><img src="stories/001/Egyptian_soldiers_raising_flag.webp" alt="جنود مصريون يرفعون العلم المصري" data-i18n-attr="alt:media_flag_alt" loading="lazy" decoding="async"></div><div class="media-caption"><h3 data-i18n="media_flag_title">العلم المصري في سيناء</h3><p data-i18n="media_flag_text">مشهد بصري يرمز إلى استعادة الأرض ورفع العلم بعد العبور.</p><a href="stories/001/" data-i18n="media_story_link">اقرأ حكاية مرتبطة</a></div></article>
+<article class="media-card float-up"><div class="media-image"><img src="stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg" alt="صورة تاريخية لعبور خط بارليف في حرب أكتوبر" data-i18n-attr="alt:media_crossing_alt" loading="lazy" decoding="async"></div><div class="media-caption"><h3 data-i18n="media_crossing_title">عبور خط بارليف</h3><p data-i18n="media_crossing_text">صورة مرتبطة بمرحلة العبور وتجاوز التحصينات على الضفة الشرقية.</p><a href="stories/002/" data-i18n="media_story_link">اقرأ حكاية مرتبطة</a></div></article>
+<article class="media-card float-up"><div class="media-image"><img src="stories/001/bab-el-mandeb-map.webp" alt="خريطة توضيحية لمضيق باب المندب والبحر الأحمر" data-i18n-attr="alt:media_map_alt" loading="lazy" decoding="async"></div><div class="media-caption"><h3 data-i18n="media_map_title">خريطة باب المندب</h3><p data-i18n="media_map_text">خريطة تساعد على فهم أهمية الممرات البحرية في أحداث الحرب.</p><a href="stories/001/" data-i18n="media_story_link">اقرأ حكاية مرتبطة</a></div></article>
+<article class="media-card float-up"><div class="media-image"><img src="stories/004/Atef_El_Sadat.jpg" alt="صورة أرشيفية للطيار المصري عاطف السادات" data-i18n-attr="alt:media_hero_alt" loading="lazy" decoding="async"></div><div class="media-caption"><h3 data-i18n="media_hero_title">من ذاكرة أبطال الجو</h3><p data-i18n="media_hero_text">صورة منشورة للطيار المصري عاطف السادات ضمن حكاية الضربة الجوية الأولى.</p><a href="stories/004/" data-i18n="media_story_link">اقرأ حكاية مرتبطة</a></div></article>
+<article class="media-card float-up"><div class="stamp-art" role="img" aria-label="تصميم فني تخيلي لطابع تذكاري عن حرب أكتوبر" data-i18n-attr="aria-label:media_stamp_alt"><div class="stamp-frame"><div class="stamp-date">EGYPT • 6 OCTOBER 1973</div><div class="stamp-flag" aria-hidden="true"><span></span><span></span><span></span></div><small data-i18n="media_stamp_art">تصميم فني تذكاري</small></div></div><div class="media-caption"><h3 data-i18n="media_stamp_title">طابع تذكاري — تصميم فني</h3><p data-i18n="media_stamp_text">تصور بصري مستوحى من الطوابع التذكارية، وليس صورة لطابع بريدي أصلي.</p><p class="stamp-disclaimer" data-i18n="media_stamp_note">يمكن استبداله لاحقًا بصورة طابع موثّق من أرشيف بريدي.</p></div></article>
+</div><div class="feature-controls"><button class="feature-control feature-prev" type="button" aria-label="السابق">‹</button><div class="feature-dots" aria-label="اختيار الشريحة"></div><button class="feature-control feature-next" type="button" aria-label="التالي">›</button></div></div></div></section>
+<!-- ===== ركن هل تعلم ===== -->
+<section class="feature-section facts-section" id="quickFacts" aria-labelledby="quickFactsTitle"><div class="container">
+<div class="feature-heading float-up"><div class="kicker" data-i18n="facts_kicker">معلومة في دقيقة</div><h2 id="quickFactsTitle" data-i18n="facts_title">هل تعلم؟</h2><p data-i18n="facts_intro">بطاقات قصيرة عن التخطيط والتكتيكات في حرب أكتوبر. افتح «اعرف أكثر» لقراءة شرح إضافي ومصدر للمعلومة.</p></div>
+<div class="feature-carousel" data-feature-carousel="facts" aria-label="هل تعلم"><div class="facts-grid feature-track">
+<article class="fact-card float-up"><span class="fact-number" aria-hidden="true">01</span><h3 data-i18n="fact1_title">عملية بدر</h3><p data-i18n="fact1_short">كان «بدر» الاسم الرمزي للعملية المصرية لعبور قناة السويس وبدء الهجوم يوم 6 أكتوبر 1973.</p><details><summary data-i18n="fact_more">اعرف أكثر +</summary><p data-i18n="fact1_detail">سبقت العملية سنوات من التدريب والتخطيط، وبدأت بالتزامن مع هجوم سوري على الجولان.</p><a class="fact-source" href="https://mtrl.azhar.gov.eg/education/books-2025/english_al/G6-SB-Term2.pdf" target="_blank" rel="noopener" data-i18n="fact_source">المصدر التعليمي</a></details></article>
+<article class="fact-card float-up"><span class="fact-number" aria-hidden="true">02</span><h3 data-i18n="fact2_title">الماء بدلًا من المتفجرات</h3><p data-i18n="fact2_short">استخدم المهندسون خراطيم ومضخات مياه قوية لفتح ثغرات في الساتر الترابي لخط بارليف.</p><details><summary data-i18n="fact_more">اعرف أكثر +</summary><p data-i18n="fact2_detail">ساعدت هذه الطريقة على إزالة الرمال وفتح ممرات لعبور الجنود والمعدات، بدل الاعتماد على وسائل أبطأ في هذه المهمة.</p><a class="fact-source" href="https://mtrl.azhar.gov.eg/education/books-2025/english_al/G6-SB-Term2.pdf" target="_blank" rel="noopener" data-i18n="fact_source">المصدر التعليمي</a></details></article>
+<article class="fact-card float-up"><span class="fact-number" aria-hidden="true">03</span><h3 data-i18n="fact3_title">النصر لم تصنعه قوة واحدة</h3><p data-i18n="fact3_short">شاركت القوات البرية والجوية والبحرية والدفاع الجوي في أدوار مختلفة خلال الحرب.</p><details><summary data-i18n="fact_more">اعرف أكثر +</summary><p data-i18n="fact3_detail">تُظهر قاعات بانوراما حرب أكتوبر عرضًا لمراحل الحرب، والعبور، وفروع القوات المسلحة وأدوارها.</p><a class="fact-source" href="https://www.mod.gov.eg/ModWebSite/MuseumDetails.aspx?id=2" target="_blank" rel="noopener" data-i18n="fact_museum_source">مصدر من وزارة الدفاع</a></details></article>
+</div><div class="feature-controls"><button class="feature-control feature-prev" type="button" aria-label="السابق">‹</button><div class="feature-dots" aria-label="اختيار الشريحة"></div><button class="feature-control feature-next" type="button" aria-label="التالي">›</button></div></div></div></section>
+
+
+<footer>
+  <strong data-i18n="k1">رجال خالدون عبر التاريخ</strong>
+</footer>
+
+<script src="assets/shared/i18n.js"></script>
+<script src="assets/i18n/common.js"></script>
+<script src="assets/i18n/home.js?v=20261011-submissions1"></script>
+<script>
+(function () {
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ===== ظهور العناصر والكروت عند الوصول إليها ===== */
+  var observed = new WeakSet();
+
+  function observeFloatElements(root) {
+    root = root || document;
+    var elements = root.querySelectorAll('.float-up');
+
+    if (reduceMotion || !('IntersectionObserver' in window)) {
+      elements.forEach(function (el) {
+        el.classList.add('is-visible');
+      });
+      return;
+    }
+
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+        } else if (entry.boundingClientRect.top > 0) {
+          /* أصبح أسفل الشاشة (المستخدم صعد): يختفي ليظهر بسلاسة عند النزول مجددًا */
+          entry.target.classList.remove('is-visible');
+        }
+      });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -35px 0px'
+    });
+
+    elements.forEach(function (el) {
+      if (!observed.has(el)) {
+        observed.add(el);
+        observer.observe(el);
+      }
+    });
+  }
+
+  observeFloatElements();
+
+  /* ===== نزول كلام الغلاف واختفاؤه أثناء التمرير ===== */
+  var hero = document.getElementById('homeHero');
+  var img = document.getElementById('heroHomeImage');
+  var wrap = document.getElementById('heroHomeWrap');
+  var content = document.getElementById('heroHomeContent');
+  var scrollHint = document.querySelector('.hero-home-scroll');
+  var ticking = false;
+
+  function updateHero() {
+    ticking = false;
+
+    if (!hero || !img || !wrap || reduceMotion) return;
+
+    var rect = hero.getBoundingClientRect();
+    var distance = Math.max(
+      0,
+      Math.min(1, -rect.top / hero.offsetHeight)
+    );
+
+    /* ثبّت صورة الغلاف أثناء التمرير؛ الحركة هنا للنص فقط */
+    img.style.transform = 'none';
+    img.style.opacity = '1';
+
+    /* الكلام ينزل ويختفي تدريجيًا */
+    if (content) {
+      content.style.transform =
+        'translateY(' + (distance * 125) + 'px)';
+
+      content.style.opacity = String(
+        Math.max(0, 1 - distance * 1.8)
+      );
+    }
+
+    if (scrollHint) {
+      scrollHint.style.opacity = String(
+        Math.max(0, 1 - distance * 3)
+      );
+    }
+  }
+
+  function requestHeroUpdate() {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateHero);
+    }
+  }
+
+  window.addEventListener('scroll', requestHeroUpdate, {
+    passive: true
+  });
+
+  window.addEventListener('resize', requestHeroUpdate);
+  updateHero();
+
+  /* ===== تحميل الحكايات من ملف الفهرس ===== */
+  var box = document.getElementById('cards');
+  var siteBase = '/nourdeen-october-1973/';
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[c];
+    });
+  }
+
+  /* ===== الحكايات الجديدة المنشورة من قاعدة البيانات ===== */
+  function loadPublishedStories() {
+    var api = 'https://ypwprddkscnfblhftkeb.supabase.co';
+    var key = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+    fetch(api + '/rest/v1/submitted_stories?select=id,story_number,student_name,grade,title,subtitle,color,created_at&status=eq.published&order=created_at.desc&limit=100', {
+      headers: { 'apikey': key, 'Authorization': 'Bearer ' + key }
+    })
+    .then(function (response) {
+      if (!response.ok) throw new Error('تعذر تحميل الحكايات المنشورة');
+      return response.json();
+    })
+    .then(function (items) {
+      if (!Array.isArray(items) || !items.length) return;
+      var emptyState = box.querySelector('.empty');
+      if (emptyState) emptyState.remove();
+      var lang = window.I18N ? window.I18N.lang() : 'ar';
+      var labels = {
+        ar: { tag: 'حكاية منشورة حديثًا', number: 'الحكاية', grade: 'الصف الدراسي غير محدد', open: 'اقرأ الحكاية' },
+        en: { tag: 'Recently published story', number: 'Story', grade: 'Grade not specified', open: 'Read story' },
+        fr: { tag: 'Récit récemment publié', number: 'Récit', grade: 'Classe non précisée', open: 'Lire le récit' },
+        it: { tag: 'Racconto pubblicato di recente', number: 'Racconto', grade: 'Classe non specificata', open: 'Leggi il racconto' }
+      };
+      var t = labels[lang] || labels.ar;
+      items.forEach(function (item) {
+        if (!item || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(String(item.id || ''))) return;
+        var card = document.createElement('a');
+        card.className = 'card float-up submitted-story-card';
+        card.href = siteBase + 'read.html?id=' + encodeURIComponent(item.id);
+        var color = /^#[0-9a-f]{6}$/i.test(String(item.color || '')) ? item.color : '#b8874b';
+        card.style.setProperty('--c', color);
+        var photo = document.createElement('div');
+        photo.className = 'card-photo';
+        var letter = document.createElement('span');
+        letter.className = 'card-photo-letter';
+        letter.textContent = String(item.student_name || 'ح').trim().charAt(0) || 'ح';
+        photo.appendChild(letter);
+        var body = document.createElement('div');
+        body.className = 'card-body';
+        var name = document.createElement('div');
+        name.className = 'card-name';
+        name.textContent = item.student_name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة');
+        var grade = document.createElement('div');
+        grade.className = 'card-grade';
+        grade.textContent = item.grade || t.grade;
+        var title = document.createElement('div');
+        title.className = 'card-title';
+        title.textContent = item.title || '';
+        body.appendChild(name);
+        body.appendChild(grade);
+        body.appendChild(title);
+        if (item.subtitle) {
+          var subtitle = document.createElement('p');
+          subtitle.className = 'card-grade';
+          subtitle.textContent = item.subtitle;
+          body.appendChild(subtitle);
+        }
+        var tag = document.createElement('span');
+        tag.className = 'submitted-story-tag';
+        tag.textContent = item.story_number ? (t.number+' '+String(item.story_number).padStart(3,'0')) : t.tag;
+        body.appendChild(tag);
+        var bottom = document.createElement('div');
+        bottom.className = 'card-bottom-row';
+        var open = document.createElement('span');
+        open.className = 'card-btn';
+        open.textContent = t.open;
+        bottom.appendChild(open);
+        body.appendChild(bottom);
+        card.appendChild(photo);
+        card.appendChild(body);
+        box.appendChild(card);
+      });
+      observeFloatElements(box);
+    })
+    .catch(function (error) {
+      /* تعذّر الاتصال بقاعدة البيانات لا يخفي الحكايات المحلية ولا يعطل الصفحة الرئيسية. */
+      console.warn('Published student stories could not be loaded.', error);
+    });
+  }
+
+  fetch(siteBase + 'stories/index.json?v=20261010-1')
+    .then(function (response) {
+      if (!response.ok) {
+        throw new Error('تعذر تحميل الفهرس');
+      }
+      return response.json();
+    })
+    .then(function (list) {
+      if (!Array.isArray(list) || !list.length) {
+        box.innerHTML =
+          '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_no_stories') : 'لا توجد حكايات بعد.') + '</div>';
+        loadPublishedStories();
+        return;
+      }
+
+      box.innerHTML = list.map(function (story, index) {
+        var id = esc(story.id);
+        var localized = story.i18n && story.i18n[window.I18N ? window.I18N.lang() : 'ar'];
+        var source = localized || story;
+        var name = esc(source.name || story.name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة'));
+
+        var gradeText = source.grade || story.grade || '';
+
+        var grade = esc(gradeText);
+        var title = esc(source.title || story.title || '');
+        var color = esc(story.color || '#b8874b');
+        var first = esc((source.name || story.name || 'ح').charAt(0));
+        var studentPhoto = {
+          '001': siteBase + 'assets/students/nourdeen-avatar.jpg',
+          '002': siteBase + 'assets/students/karma-avatar.jpg',
+          '003': siteBase + 'assets/students/malika-avatar.jpg',
+          '004': siteBase + 'assets/students/nourdeen-avatar.jpg'
+        }[story.id] || '';
+        var safePhoto = esc(studentPhoto);
+        var photoAltPrefix = { ar: 'صورة ', en: 'Photo of ', fr: 'Photo de ', it: 'Foto di ' }[window.I18N ? window.I18N.lang() : 'ar'] || 'Photo of ';
+
+        var delayClass = index % 3 === 1
+          ? 'float-delay-1'
+          : index % 3 === 2
+            ? 'float-delay-2'
+            : '';
+
+        return ''
+          + '<a class="card float-up ' + delayClass + '"'
+          + ' href="' + siteBase + 'stories/' + id + '/"'
+          + ' style="--c:' + color + '">'
+          +   '<div class="card-photo">'
+          +     '<span class="card-photo-letter">' + first + '</span>'
+          +     '<img loading="lazy" decoding="async" src="' + siteBase + 'stories/' + id + '/cover.jpg"'
+          +       ' alt="' + name + '"'
+           +       ' onerror="this.style.display=\'none\';">'
+          +   '</div>'
+          +   '<div class="card-body">'
+          +     '<div class="card-student-row">'
+          +       '<span class="student-avatar-wrap">'
+          +         '<span class="student-avatar-fallback">' + first + '</span>'
+          +         '<img class="student-avatar" src="' + safePhoto + '" alt="' + esc(photoAltPrefix) + name + '" loading="lazy" onerror="this.style.display=\'none\'">'
+          +       '</span>'
+          +       '<div class="card-name">' + name + '</div>'
+          +     '</div>'
+          +     '<div class="card-grade">' + grade + '</div>'
+          +     '<div class="card-title">' + title + '</div>'
+          +     '<div class="card-bottom-row">'
+          +       '<span class="card-like-count" aria-label="' + esc(window.I18N ? window.I18N.t("js_likes_label") : "عدد الإعجابات") + '">❤️ ' + esc(window.I18N ? window.I18N.t("js_likes") : "الإعجابات") + ' <span class="like-number" data-home-like-count="' + id + '">…</span></span>'
+          +       '<span class="card-btn">' + esc(window.I18N ? window.I18N.t('js_open_story') : 'افتح الحكاية') + '</span>'
+          +     '</div>'
+          +   '</div>'
+          + '</a>';
+      }).join('');
+
+      /* تحميل عدد الإعجابات لكل حكاية من قاعدة البيانات */
+      var reactionsApi = 'https://ypwprddkscnfblhftkeb.supabase.co';
+      var reactionsKey = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+      list.forEach(function (story) {
+        var counter = box.querySelector('[data-home-like-count="' + story.id + '"]');
+        if (!counter) return;
+        fetch(reactionsApi + '/rest/v1/rpc/get_story_reaction_counts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': reactionsKey,
+            'Authorization': 'Bearer ' + reactionsKey
+          },
+          body: JSON.stringify({ p_story_slug: String(story.id) })
+        })
+        .then(function (response) {
+          if (!response.ok) throw new Error('تعذر تحميل العداد');
+          return response.json();
+        })
+        .then(function (rows) {
+          var likeRow = rows.find(function (row) { return row.reaction_type === 'like'; });
+          counter.textContent = likeRow ? String(likeRow.total) : '0';
+        })
+        .catch(function () {
+          counter.textContent = '—';
+          counter.title = window.I18N ? window.I18N.t('js_likes_err') : 'تعذر تحميل عدد الإعجابات الآن';
+        });
+      });
+
+      /* تشغيل حركة ظهور الكروت بعد تحميلها */
+      observeFloatElements(box);
+      loadPublishedStories();
+    })
+    .catch(function () {
+      box.innerHTML =
+        '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_stories_err') : 'تعذّر تحميل الحكايات.') + '</div>';
+      loadPublishedStories();
+    });
+
+})();
+</script>
+<script src="assets/shared/feature-carousel.js?v=20261010-3" defer></script>
+
+
+</body>
+</html>
