@@ -46,7 +46,7 @@ form.addEventListener('submit',async function(e){
  try{var last=Number(sessionStorage.getItem('kh_submit_time')||0);if(Date.now()-last<30000){message('err','انتظر قليلًا قبل إرسال مقترح آخر.');return}}catch(e){}
  send.disabled=true;send.textContent='جارٍ الإرسال…';
  try{var res=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});
- if(!res.ok)throw new Error(res.status===404?'قاعدة بيانات خالدون لم تُجهّز بعد.':'تعذر الإرسال ('+res.status+').');
+ if(!res.ok){var problem={};try{problem=await res.json()}catch(e){}var detail=String(problem.message||'');if(detail.indexOf('Too many submissions')!==-1)throw new Error('وصلت للحد المؤقت للإرسال. انتظر 10 دقائق ثم حاول مرة أخرى.');throw new Error(res.status===404?'قاعدة بيانات خالدون لم تُجهّز بعد.':'تعذر الإرسال الآن. راجع الحقول وحاول لاحقًا.');}
  try{sessionStorage.setItem('kh_submit_time',String(Date.now()))}catch(e){}
  form.hidden=true;message('ok','وصل مقترحك. سيُراجع قبل النشر، ولن يظهر اسمك أو صفك للعامة.');
  }catch(err){message('err',err.message||'تعذر الاتصال. حاول مرة أخرى.')}finally{send.disabled=false;send.textContent='إرسال للمراجعة'}
