@@ -59,10 +59,20 @@ create policy "kh admin deletes" on public.khaledoon_submissions for delete to a
 grant insert on public.khaledoon_submissions to anon, authenticated;
 grant select, update, delete on public.khaledoon_submissions to authenticated;
 
--- واجهة عامة للقراءة: تعرض الحكايات المعتمدة فقط ولا تكشف الاسم/الصف الخاص بالراوي،
--- النص الأصلي، الموافقة، الملاحظات الداخلية أو الحالة. لا تمنح الزوار قراءة الجدول الأساسي.
+-- تسمح سياسة القراءة العامة بصفوف منشورة فقط. الصلاحيات على الأعمدة أدناه
+-- تمنع الوصول المباشر إلى اسم الراوي والصف الأصلي والنص الأصلي والملاحظات الداخلية.
+drop policy if exists "kh public reads published" on public.khaledoon_submissions;
+create policy "kh public reads published" on public.khaledoon_submissions
+  for select to anon, authenticated
+  using (status = 'published' and consent is true);
+
+grant select (id, created_at, section, stage, school_grade, subject, figure_name,
+              title, subtitle, body, history_note, sources, images_note)
+on public.khaledoon_submissions to anon;
+
+-- واجهة عامة آمنة؛ security_invoker يجعل RLS وصلاحيات القارئ نافذة على الجدول الأساسي.
 create or replace view public.khaledoon_published
-with (security_barrier = true)
+with (security_invoker = true, security_barrier = true)
 as
 select id, created_at, section, stage, school_grade, subject, figure_name,
        title, subtitle, body, history_note, sources, images_note
