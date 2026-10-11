@@ -1,7 +1,6 @@
 {
   "name": "نوردين محمد جمال",
   "grade": "الصف الأول الإعدادي",
-  "className": "Class 1B",
   "title": "رجال البحر في أكتوبر",
   "subtitle": "المعركة التي لم يرها معظم الناس",
   "color": "#b8874b",
@@ -12,22 +11,19 @@
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1st Year of Preparatory School",
       "title": "Men of the Sea in October",
-      "subtitle": "The battle most people never saw",
-      "className": "Class 1B"
+      "subtitle": "The battle most people never saw"
     },
     "fr": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1re année du collège",
       "title": "Les hommes de la mer en octobre",
-      "subtitle": "La bataille que la plupart des gens n’ont pas vue",
-      "className": "Classe 1B"
+      "subtitle": "La bataille que la plupart des gens n’ont pas vue"
     },
     "it": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1ª media",
       "title": "Gli uomini del mare in ottobre",
-      "subtitle": "La battaglia che la maggior parte delle persone non ha visto",
-      "className": "Classe 1B"
+      "subtitle": "La battaglia che la maggior parte delle persone non ha visto"
     }
   }
 }
