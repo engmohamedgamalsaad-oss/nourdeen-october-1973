@@ -1,7 +1,6 @@
 {
   "name": "كارما محمد جمال",
   "grade": "الصف الثالث الابتدائي",
-  "className": "Class 3 E",
   "title": "العقل قبل السلاح",
   "subtitle": "كيف فتحت المياه طريق العبور",
   "color": "#f0a44a",
@@ -12,22 +11,19 @@
       "name": "Karma Mohamed Gamal",
       "grade": "3rd Grade (Primary)",
       "title": "Brains Before Weapons",
-      "subtitle": "How water opened a passage across the canal",
-      "className": "Class 3 E"
+      "subtitle": "How water opened a passage across the canal"
     },
     "fr": {
       "name": "Karma Mohamed Gamal",
       "grade": "3e année du primaire",
       "title": "L’intelligence avant les armes",
-      "subtitle": "Comment l’eau a ouvert un passage à travers le canal",
-      "className": "Classe 3 E"
+      "subtitle": "Comment l’eau a ouvert un passage à travers le canal"
     },
     "it": {
       "name": "Karma Mohamed Gamal",
       "grade": "3ª classe della scuola primaria",
       "title": "L’ingegno prima delle armi",
-      "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
-      "className": "Classe 3 E"
+      "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale"
     }
   }
 }
