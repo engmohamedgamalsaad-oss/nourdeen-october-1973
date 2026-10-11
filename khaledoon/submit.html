@@ -18,7 +18,8 @@
 <label class="field">المصادر (اختياري)<textarea id="sources" maxlength="3000" placeholder="مصدر في كل سطر"></textarea></label><label class="field">ملاحظات عن الصور وحقوقها (اختياري)<textarea id="images" maxlength="1500"></textarea></label>
 <div class="row2"><label class="field">اسم أول أو لقب فقط *<input id="narrator" maxlength="40" required autocomplete="off"></label><label class="field">الصف الدراسي (اختياري)<input id="narratorGrade" maxlength="60"></label></div>
 <div class="hp" aria-hidden="true"><label>اترك هذا الحقل فارغًا<input id="website" tabindex="-1" autocomplete="off"></label></div>
-<div class="hp" aria-hidden="true"><label>اترك هذا الحقل فارغًا<input id="website" tabindex="-1" autocomplete="off"></label></div>\n<label class="privacy"><input id="consent" type="checkbox" required><span>أوافق أنا أو ولي أمري إذا كنت دون 18 سنة على إرسال الحكاية للمراجعة. أفهم أن اسمي وصفّي لن يظهرا للعامة، وأن الإرسال لا يعني النشر.</span></label>
+<div class="hp" aria-hidden="true"><label>اترك هذا الحقل فارغًا<input id="website" tabindex="-1" autocomplete="off"></label></div>
+<label class="privacy"><input id="consent" type="checkbox" required><span>أوافق أنا أو ولي أمري إذا كنت دون 18 سنة على إرسال الحكاية للمراجعة. أفهم أن اسمي وصفّي لن يظهرا للعامة، وأن الإرسال لا يعني النشر.</span></label>
 <div class="fbar"><button id="send" class="btn primary" type="submit">إرسال للمراجعة</button><a class="btn ghost" href="index.html">إلغاء</a></div>
 </form></main>
 <script>
@@ -38,7 +39,8 @@ form.addEventListener('submit',async function(e){
  e.preventDefault();msg.hidden=true;
  if($('website').value){form.reset();message('ok','تم استلام الطلب.');return}
  var cur=section.value==='curriculum';
- if(!form.reportValidity())return;\n if($('website').value){form.reset();form.hidden=true;message('ok','وصل مقترحك.');return;}
+ if(!form.reportValidity())return;
+ if($('website').value){form.reset();form.hidden=true;message('ok','وصل مقترحك.');return;}
  if(val('body').length<50){message('err','اكتب 50 حرفًا على الأقل في نص الحكاية.');return}
  var d={section:section.value,stage:cur?stage.value:null,school_grade:cur?Number(grade.value):null,subject:cur?nullable(val('subject')):null,figure_name:val('figure'),narrator_name:val('narrator'),narrator_grade:nullable(val('narratorGrade')),title:val('title'),subtitle:nullable(val('subtitle')),body:val('body'),sources:nullable(val('sources')),images_note:nullable(val('images')),consent:true,status:'pending'};
  try{var last=Number(sessionStorage.getItem('kh_submit_time')||0);if(Date.now()-last<30000){message('err','انتظر قليلًا قبل إرسال مقترح آخر.');return}}catch(e){}
