@@ -65,17 +65,17 @@ body{
 
 
 
-/* COVER-BASED STORY THEME v3 — visible cover art, tuned for readable content */
-:root{--story-cover-accent:rgba(240,164,74,.34)}
+/* COVER-BASED STORY THEME v2 — restored story treatment */
+:root{--story-cover-accent:rgba(240,164,74,.30)}
 html{background:#030b12}
 body{
   position:relative;
   isolation:isolate;
   background-color:#030b12!important;
   background-image:
-    linear-gradient(180deg,rgba(7,25,42,.34) 0%,rgba(3,10,18,.76) 100%),
+    linear-gradient(180deg,rgba(7,25,42,.80) 0%,rgba(3,10,18,.94) 100%),
     url("cover.jpg")!important;
-  background-position:center top,center center;
+  background-position:center top,center 8%;
   background-size:cover,cover;
   background-repeat:no-repeat,no-repeat;
   background-attachment:fixed,fixed;
@@ -86,15 +86,15 @@ body::before{
   inset:0;
   z-index:-1;
   pointer-events:none;
-  background:linear-gradient(145deg,rgba(20,78,115,.22),transparent 48%,rgba(0,0,0,.06));
+  background:linear-gradient(145deg,rgba(20,78,115,.28),transparent 42%,rgba(0,0,0,.12));
 }
 .hero{background-color:transparent!important}
 .story{
-  background:linear-gradient(180deg,rgba(3,12,20,.12),rgba(3,12,20,.32))!important;
-  border-top:1px solid rgba(240,164,74,.34);
+  background:linear-gradient(180deg,rgba(3,12,20,.24),rgba(3,12,20,.50))!important;
+  border-top:1px solid rgba(240,164,74,.30);
 }
 .end,.sources,.memorial-gallery{
-  background:linear-gradient(180deg,rgba(3,11,19,.52),rgba(2,8,14,.74))!important;
+  background:linear-gradient(180deg,rgba(3,11,19,.70),rgba(2,8,14,.88))!important;
 }
 .panel,.lesson,.step,.word,.note,.quote,.image-frame,.memorial-card{backdrop-filter:blur(5px)}
 .panel,.lesson,.step,.word,.memorial-card{box-shadow:0 12px 34px rgba(0,0,0,.20)}
