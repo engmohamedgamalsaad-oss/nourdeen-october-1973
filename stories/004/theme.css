@@ -172,3 +172,9 @@ body::before{
 .end{background:radial-gradient(ellipse at top,rgba(23,54,74,.85),rgba(7,18,31,.92) 70%)}
 .sources{background:rgba(5,13,22,.9)}
 .memorial-gallery{background:radial-gradient(ellipse at 50% 0%,rgba(23,54,74,.85) 0%,rgba(9,23,37,.9) 65%,rgba(5,13,22,.92) 100%)}
+
+
+/* خلفية الكتب الداكنة للحكاية 004 */
+body{position:relative;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat;opacity:.13;filter:saturate(.68) blur(1px)}
+.story,.sources,.end,footer{position:relative}
