@@ -28,6 +28,7 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .mvbox p{margin:0 0 10px;color:var(--muted);font-size:.9rem}
 @media(prefers-reduced-motion:reduce){.fcard,details.pubrow,details.pubrow>summary::after{transition:none}}
 .btn.copied{background:#1f9d62;border-color:#1f9d62;color:#fff;font-weight:800}
+.pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
 </style>
 </head>
@@ -204,7 +205,7 @@ function card(it){
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
-var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var copyN=0;
+var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
@@ -271,7 +272,7 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
   var t=L.join('\n');
-  function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
+  function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
  bar.appendChild(bCopy);
@@ -340,6 +341,10 @@ async function remove(it,btn){
   say('ok','تم الحذف.');await loadList();
  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
 }
+function copyKey(it){return 'kh_copied:'+(it._t||'k')+':'+it.id}
+function getCopies(key){try{return Math.max(0,parseInt(localStorage.getItem(key),10)||0)}catch(e){return 0}}
+function setCopies(key,n){try{localStorage.setItem(key,String(n))}catch(e){}}
+function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?'✓ '+copyLabel(n):'';e.hidden=!n}
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
 function pubRow(it){
@@ -347,6 +352,7 @@ function pubRow(it){
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  w.appendChild(el('small','pd',(dt||'')+(SEC[it.section]?' • '+SEC[it.section]:'')));
+ var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
  s.appendChild(w);d.appendChild(s);
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
