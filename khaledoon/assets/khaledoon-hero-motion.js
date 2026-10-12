@@ -1,5 +1,5 @@
 /* حركة غلاف خالدون على الموبايل:
-   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، وتبقى بنفس الشفافية خلف بقية الصفحة. */
+   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، ثم تبقى شبه ثابتة الشفافية (تخف 15% فقط) خلف بقية الصفحة. */
 (function(){
   var hero=document.querySelector('.hero:not(.sub)');
   if(!hero)return;
@@ -7,6 +7,7 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
   var busy=false;
+  var BG_FADE=0.15; // مقدار خفوت الصورة الكلي أثناء التمرير: 0.15 = 15%
   function update(){
     busy=false;
     var header=document.querySelector(".topbar");
@@ -15,8 +16,7 @@
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
     root.style.setProperty('--hero-bg-scale',(1+passed*.72).toFixed(4));
-    /* الصورة تكبر فقط وتبقى بنفس الشفافية؛ التلاشي الوحيد في آخر 5% من أسفلها (khaledoon-mobile.css) */
-    root.style.setProperty('--hero-bg-opacity','1');
+    root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
   addEventListener('scroll',req,{passive:true});
