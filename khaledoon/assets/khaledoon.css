@@ -250,3 +250,7 @@ html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.
 /* تصحيح التوزيع: الكتب لقسم المناهج، وليس اقتراحات القراء */
 .g6:before{opacity:.65;background:radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
 .g7:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
+
+/* خلفية كتب خفيفة لقسم المناهج داخل خالدون فقط */
+.curriculum-page .hero.sub{background:linear-gradient(90deg,rgba(3,12,17,.82),rgba(3,12,17,.42) 55%,rgba(3,12,17,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat !important}
+.curriculum-page .info{background:linear-gradient(145deg,rgba(8,23,32,.88),rgba(8,23,32,.82)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
