@@ -1,0 +1,43 @@
+/* khaledoon/assets/khaledoon-mobile.css
+   ضبط صورة غلاف الصفحة الرئيسية (main-cover.jpg) على الموبايل بالطول وبالعرض.
+   الصفحة الرئيسية فقط (.hero بدون .sub) ولا يؤثر على باقي الصفحات أو الكمبيوتر. */
+
+/* ===== موبايل بالطول: الصورة كاملة وبحجم أصغر أعلى الصفحة، والنص تحتها ===== */
+@media (max-width:780px) and (orientation:portrait){
+  html[data-theme] .hero:not(.sub){
+    background:var(--night)!important;
+    min-height:0!important;
+    align-items:flex-start;
+  }
+  html[data-theme] .hero:not(.sub)::before{
+    inset:0 0 auto 0!important;
+    height:auto!important;
+    aspect-ratio:16/9;
+    transform:none!important;
+    will-change:auto!important;
+    background:
+      linear-gradient(180deg,transparent 58%,var(--night) 100%),
+      url("main-cover.jpg") center/100% 100% no-repeat!important;
+  }
+  html[data-theme] .hero:not(.sub) .hero-in{
+    padding:calc(56.25vw - 8px) 0 44px;
+  }
+}
+
+/* ===== موبايل بالعرض: الصورة تتظبط على ارتفاع الشاشة بدون تكبير زيادة ===== */
+@media (orientation:landscape) and (max-height:520px){
+  html[data-theme] .hero:not(.sub){
+    background:var(--night)!important;
+    min-height:0!important;
+  }
+  html[data-theme] .hero:not(.sub)::before{
+    inset:0!important;
+    transform:none!important;
+    will-change:auto!important;
+    background-size:cover!important;
+    background-position:center 35%!important;
+  }
+  html[data-theme] .hero:not(.sub) .hero-in{
+    padding:36px 0 44px;
+  }
+}
