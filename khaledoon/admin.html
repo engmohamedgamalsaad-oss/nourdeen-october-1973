@@ -16,7 +16,7 @@
 <body>
 <header class="topbar"><div class="wrap nav">
 <a class="brand" href="index.html"><span class="mark">خ</span><span>خالدون عبر التاريخ<small>لوحة إدارة الحكايات</small></span></a>
-<div class="ctl"><a class="btn ghost" href="collections/october.html">قسم أكتوبر المنشور</a><a class="btn ghost" href="../admin-all.html">إدارة كل الحكايات</a><a class="btn ghost" href="submit.html">صفحة إرسال الحكايات</a><a class="btn ghost" href="index.html">← الموقع</a><button class="btn ghost" id="logoutBtn" type="button" hidden>تسجيل الخروج</button><button class="thm" id="th" type="button">☀️ فاتح</button></div>
+<div class="ctl"><a class="btn ghost" href="collections/october.html">قسم أكتوبر المنشور</a><a class="btn ghost" href="submit.html">صفحة إرسال الحكايات</a><a class="btn ghost" href="index.html">← الموقع</a><button class="btn ghost" id="logoutBtn" type="button" hidden>تسجيل الخروج</button><button class="thm" id="th" type="button">☀️ فاتح</button></div>
 </div></header>
 <main class="fmain" style="width:min(1040px,calc(100% - 28px))">
 <div id="msg" class="fmsg" role="status" aria-live="polite" hidden></div>
@@ -42,7 +42,7 @@
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
 var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='';
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
-var SEC={science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
+var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
 function $(i){return document.getElementById(i)}
