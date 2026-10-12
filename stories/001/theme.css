@@ -530,3 +530,9 @@ body::before {
 @media (prefers-color-scheme: dark) {
   body::before { opacity: .14; }
 }
+
+
+/* خلفية هادئة للحكاية 001: كرة أرضية وخرائط */
+body{position:relative;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("../../assets/backgrounds/story-001-bg.webp") center / cover no-repeat;opacity:.13;filter:saturate(.72) blur(1px)}
+.story,.sources,.end,footer{position:relative}
