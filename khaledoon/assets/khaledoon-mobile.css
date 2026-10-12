@@ -64,6 +64,13 @@
   html[data-theme] .hero:not(.sub) .hero-in{padding:36px 0 44px}
 }
 
+/* ===== إخفاء ظل التدرّج الداكن تحت المقدمة على الموبايل (طولي وأفقي) =====
+   الظل ده (.hero:after في khaledoon.css) كان بيظهر تحت جملة «حكاية التاريخ بعيون جيل جديد»
+   في الوضع الأفقي لأن الكلاس hm بيتلغي هناك. */
+@media (max-width:780px),(orientation:landscape) and (max-height:520px){
+  .hero:not(.sub):after{display:none!important}
+}
+
 @media(prefers-reduced-motion:reduce){
   .hero-background-layer{transform:none!important;opacity:.32!important;will-change:auto!important}
   html[data-theme] .hero:not(.sub)::before{display:none!important}

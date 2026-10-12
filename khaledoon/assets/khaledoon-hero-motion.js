@@ -95,29 +95,60 @@
   update();
 })();
 
-/* نقاط صغيرة موزّعة على كل مساحة الصورة: كل نقطة تنوّر بهدوء وتطفأ بهدوء في مكانها،
-   ولونها يتحوّل بين الأبيض والذهبي (الموبايل فقط).
-   N = عدد النقاط. الحركة نفسها في khaledoon-mobile.css (khTwinkle). */
+/* نقاط صغيرة على الصورة (الموبايل فقط):
+   - كل نقطة تنوّر وتطفأ بهدوء، وفي كل مرة تعيد الظهور تظهر في مكان عشوائي جديد.
+   - الأماكن العشوائية مائلة نحو الحواف: النقاط في المنتصف قليلة، وعند الحواف أكثر.
+   - لونها يتحوّل بين الأبيض والذهبي. الحركة نفسها في khaledoon-mobile.css (khTwinkle).
+   الضبط:
+   N           = عدد النقاط (قلّله لتقليل النجوم).
+   CENTER_KEEP = احتمال الظهور في قلب الصورة مقارنة بالحواف (0 = لا شيء في المنتصف، 1 = توزيع متساوٍ).
+   EDGE_POWER  = قوة الميل للحواف (أكبر = تتركز النقاط عند الحواف أكثر). */
 (function(){
   var layer=document.querySelector('.hero-background-layer');
   if(!layer)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   if(innerWidth>780)return;
-  var N=28;
-  var SIZE_MIN=1.2;   // أصغر قطر للنقطة بالبكسل
-  var SIZE_STEP=0.5;  // الزيادة بين الأحجام (3 أحجام مختلفة)
+  var N=24;
+  var SIZE_MIN=1.2;     // أصغر قطر للنقطة بالبكسل
+  var SIZE_STEP=0.5;    // الزيادة بين الأحجام (3 أحجام مختلفة)
+  var CENTER_KEEP=0.10;
+  var EDGE_POWER=1.6;
+  var DUR_MIN=3.5, DUR_MAX=7.5; // مدة الدورة الواحدة بالثواني (عشوائية لكل نقطة)
+
+  function rnd(a,b){return a+Math.random()*(b-a)}
+
+  // يختار مكانًا عشوائيًا مع تفضيل الحواف (طريقة القبول بالاحتمال)
+  function pickPos(){
+    for(var t=0;t<30;t++){
+      var x=Math.random(),y=Math.random();
+      var d=Math.max(Math.abs(x-.5),Math.abs(y-.5))*2; // 0 في المنتصف ... 1 عند الحافة
+      if(Math.random()<CENTER_KEEP+(1-CENTER_KEEP)*Math.pow(d,EDGE_POWER))return [x,y];
+    }
+    return [Math.random()<.5?rnd(0,.15):rnd(.85,1),Math.random()];
+  }
+
+  // يضع النقطة في مكان جديد بحجم وإضاءة جديدين
+  function place(el){
+    var p=pickPos();
+    el.style.left=(p[0]*100).toFixed(1)+'%';
+    el.style.top=(p[1]*100).toFixed(1)+'%';
+    el.style.setProperty('--sz',(SIZE_MIN+Math.floor(Math.random()*3)*SIZE_STEP).toFixed(1)+'px');
+    el.style.setProperty('--op',(0.6+Math.floor(Math.random()*4)*0.1).toFixed(1));
+  }
+
   var box=document.createElement('div');
   box.className='hero-stars';
   box.setAttribute('aria-hidden','true');
   for(var i=0;i<N;i++){
     var d=document.createElement('i');
-    d.style.left=(((i+1)*0.618034)%1*100).toFixed(1)+'%';
-    d.style.top=(((i+1)*0.754877)%1*100).toFixed(1)+'%';
-    d.style.setProperty('--sz',(SIZE_MIN+((i*5)%3)*SIZE_STEP).toFixed(1)+'px');
-    d.style.setProperty('--op',(0.6+((i*3)%4)*0.1).toFixed(1));
-    d.style.setProperty('--dur',(4+(((i*7)%30)/10)).toFixed(1)+'s');
-    d.style.setProperty('--dl','-'+(((i*0.83)%6.5)).toFixed(2)+'s');
+    place(d);
+    d.style.setProperty('--dur',rnd(DUR_MIN,DUR_MAX).toFixed(1)+'s');
+    d.style.setProperty('--dl','-'+rnd(0,DUR_MAX).toFixed(2)+'s');
     box.appendChild(d);
   }
+  // مع بداية كل دورة جديدة تكون النقطة مطفأة تمامًا، فننقلها لمكان جديد دون أن يلاحظ أحد
+  box.addEventListener('animationiteration',function(e){
+    if(e.target&&e.target.tagName==='I')place(e.target);
+  });
   layer.appendChild(box);
 })();
