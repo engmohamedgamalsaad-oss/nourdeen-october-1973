@@ -246,3 +246,7 @@ html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255
 .g5:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat}
 .g6:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
 html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),url("../../assets/backgrounds/header-banner.webp") center 40% / cover no-repeat !important}
+
+/* تصحيح التوزيع: الكتب لقسم المناهج، وليس اقتراحات القراء */
+.g6:before{opacity:.65;background:radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.g7:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
