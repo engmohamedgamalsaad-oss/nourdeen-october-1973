@@ -237,3 +237,7 @@ html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255
 .hero:not(.sub):after{display:block;content:'';position:absolute;inset:auto 0 0;height:140px;background:linear-gradient(transparent,var(--night));z-index:-1}
 .g6:after{width:120px;height:120px;opacity:.09}
 @media(max-width:780px){body:before,body:after{filter:blur(45px)}}
+
+
+/* Homepage source and accuracy disclaimer */
+.disclaimer{max-width:1000px;margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line);font-size:12px;line-height:1.9;color:var(--muted)}
