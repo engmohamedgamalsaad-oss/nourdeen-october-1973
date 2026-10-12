@@ -38,7 +38,8 @@
   var FAST=0.9;        // سرعة إضافية للنصوص: 0.9 تعني أنها تصعد بنحو 1.9 ضعف سرعة التمرير
   var FADE_START=0.02; // بداية التلاشي (نسبة من ارتفاع الشاشة)
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
-  var ZONE=0.15;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
+  var ZONE=0.07;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
+  var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));
   var hits=[].slice.call(document.querySelectorAll('main .section a,main .section button,footer a'));
   var maskCache=new Array(targets.length),hitCache=new Array(hits.length);
@@ -67,7 +68,7 @@
     hi.style.filter=p>0?'opacity('+(1-p).toFixed(3)+')':'';
     hi.style.pointerEvents=p>.85?'none':'';
     var edge=layer.getBoundingClientRect().bottom;
-    var zone=Math.max(96,ZONE*vh);
+    var zone=Math.max(ZONE_MIN,ZONE*vh);
     var rects=targets.map(function(el){return el.getBoundingClientRect()});
     var hrects=hits.map(function(el){return el.getBoundingClientRect()});
     targets.forEach(function(el,i){

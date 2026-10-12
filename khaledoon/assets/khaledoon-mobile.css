@@ -68,3 +68,18 @@
   .hero-background-layer{transform:none!important;opacity:.32!important;will-change:auto!important}
   html[data-theme] .hero:not(.sub)::before{display:none!important}
 }
+
+/* ===== هيدر مضغوط على الموبايل: أزرار لغات أصغر ومساحة أقل لتظهر الأقسام أكثر =====
+   ارتفاع الهيدر يُقاس تلقائيًا (--khaledoon-header-height) فتتبعه الصورة والمحتوى. */
+@media (max-width:780px){
+  .topbar{line-height:1.35}
+  .topbar .nav{min-height:44px;padding:3px 0;gap:8px;flex-wrap:nowrap}
+  .topbar .mark{width:32px;height:32px;font-size:16px}
+  .topbar .brand{gap:8px;font-size:14px}
+  .topbar .brand small{font-size:9.5px}
+  .topbar .thm{min-height:26px;padding:0 9px;font-size:10px}
+  .topbar .langrow{padding:0 0 3px}
+  .topbar .langrow .langs{gap:3px}
+  .topbar .langrow .langs button{min-height:20px;padding:0 6px;font-size:8.5px;line-height:1}
+  html{scroll-padding-top:calc(var(--khaledoon-header-height,70px) + 8px + env(safe-area-inset-top,0px))}
+}
