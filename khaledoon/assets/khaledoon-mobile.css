@@ -1,9 +1,7 @@
 /* khaledoon/assets/khaledoon-mobile.css
-   ضبط صورة غلاف الصفحة الرئيسية (main-cover.jpg) على الموبايل بالطول وبالعرض.
-   الصفحة الرئيسية فقط (.hero بدون .sub) ولا يؤثر على باقي الصفحات أو الكمبيوتر.
-   حركة الصورة من ملف khaledoon-hero-motion.js عبر المتغيرات --hm-y (إزاحة بالبكسل) و --hm-p (نسبة من 0 إلى 1). */
+   تكبير غلاف خالدون تدريجيًا أثناء التمرير مع تثبيت موضع الصورة وتخفيفها.
+   الصفحة الرئيسية فقط؛ لا يؤثر على صفحات حكايات أكتوبر. */
 
-/* ===== موبايل بالطول: الصورة كاملة وبحجم أصغر أعلى الصفحة، والنص تحتها ===== */
 @media (max-width:780px) and (orientation:portrait){
   html[data-theme] .hero:not(.sub){
     background:var(--night)!important;
@@ -15,19 +13,18 @@
     height:auto!important;
     aspect-ratio:16/9;
     transform-origin:50% 45%;
-    transform:translate3d(0,var(--hm-y,0px),0) scale(calc(1 + var(--hm-p,0) * .4))!important;
-    opacity:calc(1 - var(--hm-p,0) * .55);
+    transform:scale(calc(1 + var(--hm-p,0) * .75))!important;
+    opacity:calc(1 - var(--hm-p,0) * .72);
     will-change:transform,opacity!important;
     background:
-      linear-gradient(180deg,transparent 58%,var(--night) 100%),
-      url("main-cover.jpg") center/100% 100% no-repeat!important;
+      linear-gradient(180deg,rgba(7,21,29,.05) 45%,var(--night) 100%),
+      url("main-cover.jpg") center/cover no-repeat!important;
   }
   html[data-theme] .hero:not(.sub) .hero-in{
     padding:calc(56.25vw - 8px) 0 44px;
   }
 }
 
-/* ===== موبايل بالعرض: الصورة تتظبط على ارتفاع الشاشة بدون تكبير زيادة ===== */
 @media (orientation:landscape) and (max-height:520px){
   html[data-theme] .hero:not(.sub){
     background:var(--night)!important;
@@ -36,13 +33,22 @@
   html[data-theme] .hero:not(.sub)::before{
     inset:0!important;
     transform-origin:50% 45%;
-    transform:translate3d(0,var(--hm-y,0px),0) scale(calc(1 + var(--hm-p,0) * .4))!important;
-    opacity:calc(1 - var(--hm-p,0) * .55);
+    transform:scale(calc(1 + var(--hm-p,0) * .75))!important;
+    opacity:calc(1 - var(--hm-p,0) * .72);
     will-change:transform,opacity!important;
-    background-size:cover!important;
-    background-position:center 35%!important;
+    background:
+      linear-gradient(180deg,rgba(7,21,29,.05) 45%,var(--night) 100%),
+      url("main-cover.jpg") center 35%/cover no-repeat!important;
   }
   html[data-theme] .hero:not(.sub) .hero-in{
     padding:36px 0 44px;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] .hero:not(.sub)::before{
+    transform:none!important;
+    opacity:1!important;
+    will-change:auto!important;
   }
 }
