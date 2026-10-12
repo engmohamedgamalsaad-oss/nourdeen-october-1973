@@ -1,5 +1,5 @@
 /* خالدون عبر التاريخ — نظام اللغات للصفحات الفرعية (الأقسام + نموذج الإرسال)
-   يقرأ نفس مفتاح اللغة المشترك (kh-lang) ويحفظ اللغة أيضًا في lang للتوافق مع صفحات الحكايات. */
+   لا يعرض شريط لغة: الشريط في الصفحة الرئيسية فقط، وهذه الصفحات تقرأ اختياره من المفتاح المشترك (kh-lang). */
 (function(){
 'use strict';
 var LG=['ar','en','fr','it'],de=document.documentElement,l=0;
@@ -94,7 +94,6 @@ function tr(s,i){
  m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i-1].replace('{c}',m[1]);
  return s}
 function get(){var s='ar';try{s=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}var i=LG.indexOf(s);return i<0?0:i}
-function put(i){try{localStorage.setItem('kh-lang',LG[i]);localStorage.setItem('lang',LG[i])}catch(e){}}
 function one(n){
  if(n.__o===undefined)n.__o=n.data;
  var t=n.__o.trim();if(!t)return;
@@ -114,24 +113,14 @@ function attrs(r){
   var tt=el[k].trim(),t=l?tr(tt,l):tt;
   el.setAttribute(a,(l&&t!==tt)?t:el[k])})})}
 var T0=document.title,md=document.querySelector('meta[name=description]'),M0=md?md.content:'';
-function mark(){[].forEach.call(document.querySelectorAll('.khl button,.langs button'),function(b){b.setAttribute('aria-pressed',String(+b.dataset.l===l))})}
 function sl(i){
- l=i;put(i);de.lang=LG[i];de.dir=i?'ltr':'rtl';
+ l=i;de.lang=LG[i];de.dir=i?'ltr':'rtl';
  ap(document.body);attrs(document.body);
  document.title=i?T0.split(' | ').map(function(p){return tr(p,i)}).join(' | '):T0;
- if(md)md.content=i?tr(M0,i):M0;
- mark()}
-function build(){
- if(document.querySelector('.langs,.khl'))return;
- var h=document.querySelector('header');if(!h)return;
- var st=document.createElement('style');
- st.textContent='.khl-row{padding:0 0 8px}.khl{display:flex;gap:6px;flex-wrap:wrap}.khl button{appearance:none;font:700 12px/1.4 Cairo,Tahoma,sans-serif;padding:3px 10px;border-radius:999px;border:1px solid var(--line,rgba(227,189,120,.4));background:transparent;color:var(--muted,#c3d1d2);cursor:pointer}.khl button[aria-pressed=true]{color:var(--gold,#e3bd78);border-color:var(--gold,#e3bd78)}html:not([lang=ar]) .hero:after{content:none!important}@media print{.khl-row{display:none}}';
- document.head.appendChild(st);
- var d=document.createElement('div');d.className='khl';d.setAttribute('role','group');d.setAttribute('aria-label','Language');
- ['🇪🇬 العربية','🇬🇧 EN','🇫🇷 FR','🇮🇹 IT'].forEach(function(t,i){var b=document.createElement('button');b.type='button';b.dataset.l=i;b.textContent=t;b.setAttribute('aria-pressed','false');d.appendChild(b)});
- var w=document.createElement('div');w.className='wrap khl-row';w.appendChild(d);h.appendChild(w)}
-build();
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.khl button');if(b)sl(+b.dataset.l)});
+ if(md)md.content=i?tr(M0,i):M0}
+var st=document.createElement('style');
+st.textContent='html:not([lang=ar]) .hero:after{content:none!important}';
+document.head.appendChild(st);
 new MutationObserver(function(ms){if(!l)return;ms.forEach(function(m){[].forEach.call(m.addedNodes,function(n){ap(n);attrs(n)})})}).observe(document.body,{childList:true,subtree:true});
-var si=get();if(si>0)sl(si);else mark();
+var si=get();if(si>0)sl(si);
 })();
