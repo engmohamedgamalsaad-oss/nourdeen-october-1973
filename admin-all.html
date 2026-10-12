@@ -3,56 +3,219 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="robots" content="noindex, nofollow">
-<title>لوحة الإدارة الموحّدة</title>
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة الإدارة | كل الحكايات</title>
 <style>
-:root{--bg:#0b1920;--bar:#112530;--fg:#f4ecd8;--mut:#9fb3bd;--gold:#d9a441;--line:#24404d}
-@media (prefers-color-scheme:light){:root{--bg:#f6f1e4;--bar:#ffffff;--fg:#1c2a31;--mut:#5b6b73;--gold:#a8741a;--line:#d9d0b8}}
+:root{--bg:#0b1920;--card:#112530;--fg:#f4ecd8;--mut:#9fb3bd;--gold:#d9a441;--line:#24404d;--inp:#0b1920;--ok:#3fa56b;--err:#d9605a}
+@media (prefers-color-scheme:light){:root{--bg:#f6f1e4;--card:#fff;--fg:#1c2a31;--mut:#5b6b73;--gold:#a8741a;--line:#d9d0b8;--inp:#fbf8ef;--ok:#237a47;--err:#b3403a}}
 *{box-sizing:border-box}
-html,body{height:100%;margin:0}
-body{display:flex;flex-direction:column;background:var(--bg);color:var(--fg);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding-top:env(safe-area-inset-top,0px)}
-.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--bar);border-bottom:1px solid var(--line)}
-.bar h1{font-size:1rem;margin:0;font-weight:800;margin-inline-end:auto}
-.tabs{display:flex;gap:8px}
-.tab{font:inherit;font-weight:700;font-size:.9rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer}
-.tab[aria-selected="true"]{background:var(--gold);color:#101820;border-color:var(--gold)}
-.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.hint{width:100%;margin:0;font-size:.78rem;color:var(--mut)}
-.stage{flex:1;min-height:0;position:relative}
-iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
-iframe[hidden]{display:none}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;line-height:1.7;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+header{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+header h1{margin:0;font-size:1.05rem;font-weight:800;margin-inline-end:auto}
+main{width:min(980px,calc(100% - 24px));margin:16px auto 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+label.f{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 0}
+input[type=text],input[type=email],input[type=password],input[type=search],textarea,select{width:100%;font:inherit;color:var(--fg);background:var(--inp);border:1px solid var(--line);border-radius:10px;padding:9px 11px;margin-top:4px}
+textarea{resize:vertical}
+button,.btn{font:inherit;font-weight:700;font-size:.88rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+button:disabled{opacity:.5;cursor:default}
+.primary{background:var(--gold);border-color:var(--gold);color:#101820}
+.del{color:var(--err);border-color:var(--err)}
+.chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#101820}
+.badge{font-size:.75rem;padding:2px 10px;border-radius:999px;border:1px solid var(--line);color:var(--mut)}
+.badge.published{color:var(--ok);border-color:var(--ok)}
+.badge.rejected{color:var(--err);border-color:var(--err)}
+.meta{font-size:.78rem;color:var(--mut)}
+#msg{position:sticky;top:8px;z-index:5;padding:10px 14px;border-radius:10px;margin-bottom:12px;font-weight:700;background:var(--card);border:1px solid var(--line)}
+#msg.ok{border-color:var(--ok);color:var(--ok)}
+#msg.err{border-color:var(--err);color:var(--err)}
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
-<div class="bar">
-  <h1>لوحة الإدارة الموحّدة</h1>
-  <div class="tabs" role="tablist" aria-label="أقسام الإدارة">
-    <button class="tab" id="t-oct" role="tab" aria-selected="true" aria-controls="f-oct" type="button">حكايات أكتوبر 1973</button>
-    <button class="tab" id="t-kh" role="tab" aria-selected="false" aria-controls="f-kh" type="button">خالدون عبر التاريخ</button>
-  </div>
-  <p class="hint">كل قسم له تسجيل دخول مستقل بنفس حساب الأدمن، وبيتطلب مرة واحدة لكل قسم في كل جلسة.</p>
-</div>
-<div class="stage">
-  <iframe id="f-oct" title="إدارة حكايات أكتوبر 1973" src="admin.html"></iframe>
-  <iframe id="f-kh" title="إدارة خالدون عبر التاريخ" data-src="khaledoon/admin.html" hidden></iframe>
-</div>
+<header><h1>لوحة الإدارة | كل الحكايات</h1><button id="logoutBtn" type="button" hidden>تسجيل الخروج</button></header>
+<main>
+<div id="msg" role="status" aria-live="polite" hidden></div>
+<section class="card" id="loginBox" style="max-width:480px;margin:40px auto">
+<h2 style="margin:0 0 8px">تسجيل الدخول</h2>
+<form id="loginForm">
+<label class="f">البريد الإلكتروني<input type="email" id="email" autocomplete="username" required></label>
+<label class="f">كلمة المرور<input type="password" id="password" autocomplete="current-password" required></label>
+<p><button class="primary" type="submit" id="loginBtn">دخول</button></p>
+</form></section>
+<section id="app" hidden>
+<div class="card row"><input type="search" id="search" placeholder="ابحث بالعنوان أو الاسم…" aria-label="بحث" style="flex:1;min-width:200px;margin:0"><button id="refreshBtn" type="button">↻ تحديث</button><button id="copyAllBtn" class="primary" type="button">نسخ كل الحكايات المعروضة</button></div>
+<div class="row" id="chips" role="group" aria-label="الحالة" style="margin-bottom:12px"></div>
+<p class="meta" id="count"></p>
+<div id="list"></div>
+</section>
+</main>
 <script>
 (function(){
-  var tabs={oct:document.getElementById('t-oct'),kh:document.getElementById('t-kh')};
-  var frames={oct:document.getElementById('f-oct'),kh:document.getElementById('f-kh')};
-  function show(k){
-    if(!tabs[k])k='oct';
-    ['oct','kh'].forEach(function(n){
-      var on=n===k;
-      tabs[n].setAttribute('aria-selected',on?'true':'false');
-      frames[n].hidden=!on;
-    });
-    if(k==='kh'&&!frames.kh.getAttribute('src'))frames.kh.setAttribute('src',frames.kh.getAttribute('data-src'));
-    try{history.replaceState(null,'','#'+k)}catch(e){}
-  }
-  tabs.oct.onclick=function(){show('oct')};
-  tabs.kh.onclick=function(){show('kh')};
-  show((location.hash||'').replace('#','')||'oct');
+'use strict';
+var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_all';
+var session=null,items=[],fStatus='all',term='';
+var ST={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
+var SEC={science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
+var T={o:{tbl:'submitted_stories',name:'student_name',grade:'grade',states:['pending','published','rejected']},k:{tbl:'khaledoon_submissions',name:'narrator_name',grade:'narrator_grade',states:['pending','review','published','rejected']}};
+function $(i){return document.getElementById(i)}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function say(k,t){var m=$('msg');m.className=k;m.textContent=t;m.hidden=false;if(k==='ok')setTimeout(function(){m.hidden=true},4000)}
+function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+function load(){try{var s=JSON.parse(sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
+function clear(){session=null;try{sessionStorage.removeItem(SK)}catch(e){}}
+function showLogin(){$('loginBox').hidden=false;$('app').hidden=true;$('logoutBtn').hidden=true}
+function showApp(){$('loginBox').hidden=true;$('app').hidden=false;$('logoutBtn').hidden=false}
+function hdr(x){var h={apikey:KEY,'Content-Type':'application/json',Authorization:'Bearer '+(session?session.access_token:KEY)};if(x)Object.keys(x).forEach(function(k){h[k]=x[k]});return h}
+async function refreshIfNeeded(){
+ if(!session||!session.refresh_token)return;
+ if(session.expires_at-Date.now()/1000>60)return;
+ var r=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+ if(!r.ok){clear();showLogin();throw new Error('انتهت الجلسة.')}
+ var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+}
+async function rest(path,o){
+ await refreshIfNeeded();o=o||{};o.headers=hdr(o.headers);
+ var r=await fetch(API+'/rest/v1/'+path,o);
+ if(r.status===401){clear();showLogin();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى.')}
+ return r;
+}
+async function login(email,pw){
+ var r=await fetch(API+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pw})});
+ if(!r.ok)throw new Error('بيانات الدخول غير صحيحة.');
+ var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+ var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
+ if(!(a.ok&&(await a.json())===true)){clear();throw new Error('هذا الحساب ليس مسجّلًا كأدمن.')}
+}
+async function loadAll(){
+ var rs=await Promise.all([rest('submitted_stories?select=*&order=created_at.desc'),rest('khaledoon_submissions?select=*&order=created_at.desc')]);
+ if(!rs[0].ok)throw new Error('تعذر تحميل الحكايات ('+rs[0].status+').');
+ var a=await rs[0].json();a.forEach(function(x){x._t='o'});
+ var b=[];
+ if(rs[1].ok){b=await rs[1].json();b.forEach(function(x){x._t='k'})}
+ else if(rs[1].status!==404)say('err','تعذر تحميل جزء من الحكايات ('+rs[1].status+').');
+ items=a.concat(b).sort(function(x,y){return x.created_at<y.created_at?1:-1});
+ render();
+}
+function copyText(d){
+ var L=['أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، واقترح صياغة مناسبة مع توضيح أي معلومة غير مؤكدة. لا تنشرها قبل موافقتي.',''];
+ if(d.sec)L.push('القسم: '+d.sec);
+ if(d.fig)L.push('الشخصية أو الموضوع: '+d.fig);
+ L.push('الاسم: '+d.name);
+ L.push('الصف: '+(d.grade||'غير مذكور'));
+ L.push('العنوان: '+d.title);
+ L.push('العنوان الفرعي: '+(d.sub||'لا يوجد'));
+ L.push('','نص الحكاية:',d.body);
+ if(d.hist)L.push('','في ضوء التاريخ (الحالي):',d.hist);
+ L.push('','المصادر المرفقة:',d.src||'لا توجد');
+ if(d.img)L.push('','ملاحظة الصور:',d.img);
+ return L.join('\n');
+}
+function storedVals(it){
+ var t=T[it._t];
+ return {sec:SEC[it.section]||'',fig:it.figure_name||'',name:it[t.name]||'',grade:it[t.grade]||'',title:it.title||'',sub:it.subtitle||'',body:it.body||'',hist:it.history_note||'',src:it.sources||'',img:it.images_note||''};
+}
+function doCopy(text){
+ function done(ok){say(ok?'ok':'err',ok?'تم النسخ. الصقه في الشات.':'تعذر النسخ تلقائيًا.')}
+ function fb(){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(fb);else fb();
+}
+function fld(l,n){var w=el('label','f',l);w.appendChild(n);return w}
+function inp(v,max){var i=document.createElement('input');i.type='text';i.value=v||'';if(max)i.maxLength=max;return i}
+function area(v,rows,max){var t=document.createElement('textarea');t.rows=rows;t.value=v||'';if(max)t.maxLength=max;return t}
+function card(it){
+ var t=T[it._t],k=it._t==='k',box=el('article','card');
+ var head=el('div','row');head.style.justifyContent='space-between';
+ head.appendChild(el('h3','',it.title||''));head.lastChild.style.margin='0';
+ head.appendChild(el('span','badge '+it.status,ST[it.status]||it.status));
+ box.appendChild(head);
+ box.appendChild(el('div','meta','أُرسلت في '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم النشر: '+String(it.story_number).padStart(3,'0'):'')));
+ var name=inp(it[t.name],k?40:80),grade=inp(it[t.grade],60),title=inp(it.title,140),sub=inp(it.subtitle,200),body=area(it.body,10,12000),src=area(it.sources,3,k?3000:2000);
+ var st=document.createElement('select');
+ t.states.forEach(function(s){var o=el('option','',ST[s]);o.value=s;if(s===it.status)o.selected=true;st.appendChild(o)});
+ var g=el('div','grid');g.appendChild(fld('الاسم',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',sub));
+ box.appendChild(g);box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('المصادر',src));
+ var cons=null;
+ if(k){cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;var cl=el('label','f','موافقة الراوي أو ولي الأمر على عرض الاسم الأول والصف مسجّلة ');cl.appendChild(cons);box.appendChild(cl)}
+ box.appendChild(fld('الحالة',st));
+ var bar=el('div','row');bar.style.marginTop='12px';
+ var bSave=el('button','primary','حفظ'),bPub=el('button','','نشر وحفظ'),bCopy=el('button','','نسخ كل بيانات الحكاية'),bRej=el('button','del','رفض'),bDel=el('button','del','حذف');
+ [bSave,bPub,bCopy,bRej,bDel].forEach(function(b){b.type='button'});
+ bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);bar.appendChild(bCopy);
+ if(it.status==='pending'||it.status==='review')bar.appendChild(bRej);
+ bar.appendChild(bDel);box.appendChild(bar);
+ function vals(){var v=storedVals(it);v.name=name.value.trim();v.grade=grade.value.trim();v.title=title.value.trim();v.sub=sub.value.trim();v.body=body.value.trim();v.src=src.value.trim();return v}
+ function collect(status){
+  var d={title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),sources:src.value.trim()||null,status:status};
+  d[t.name]=name.value.trim();d[t.grade]=grade.value.trim()||null;
+  if(k)d.consent=cons.checked;
+  return d;
+ }
+ async function persist(status,btn){
+  var d=collect(status);
+  if(d[t.name].length<2||d.title.length<3||d.body.length<50){say('err','الاسم والعنوان مطلوبان، ونص الحكاية 50 حرفًا على الأقل.');return}
+  if(k&&status==='published'&&!d.consent){say('err','لا يمكن نشر هذه الحكاية دون تسجيل موافقة الراوي أو ولي الأمر.');return}
+  btn.disabled=true;
+  try{
+   var r=await rest(t.tbl+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+   if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). راجع الحقول.');
+   var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
+   say('ok','تم الحفظ.');await loadAll();
+  }catch(e){say('err',e.message||'حدث خطأ.')}
+  btn.disabled=false;
+ }
+ async function remove(){
+  bDel.disabled=true;
+  try{
+   var r=await rest(t.tbl+'?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
+   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
+   say('ok','تم الحذف.');await loadAll();
+  }catch(e){say('err',e.message||'حدث خطأ.');bDel.disabled=false}
+ }
+ bSave.addEventListener('click',function(){persist(st.value,bSave)});
+ bPub.addEventListener('click',function(){persist('published',bPub)});
+ bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
+ bDel.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟'))remove()});
+ bCopy.addEventListener('click',function(){doCopy(copyText(vals()))});
+ return box;
+}
+function shown(){
+ var q=term.trim().toLocaleLowerCase();
+ return items.filter(function(i){
+  var t=T[i._t];
+  return (fStatus==='all'||i.status===fStatus)&&(!q||[i.title,i[t.name],i[t.grade],i.subtitle,i.figure_name].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(q)!==-1}));
+ });
+}
+function render(){
+ var c=$('chips');c.textContent='';
+ [['all','الكل']].concat(Object.keys(ST).map(function(s){return [s,ST[s]]})).forEach(function(p){
+  var n=p[0]==='all'?items.length:items.filter(function(i){return i.status===p[0]}).length;
+  var b=el('button','chip',p[1]+' ('+n+')');b.type='button';b.setAttribute('aria-pressed',fStatus===p[0]?'true':'false');
+  b.addEventListener('click',function(){fStatus=p[0];render()});c.appendChild(b);
+ });
+ var list=$('list');list.textContent='';
+ var s=shown();
+ $('count').textContent='عدد النتائج: '+s.length;
+ if(!s.length)list.appendChild(el('div','card','لا توجد حكايات هنا.'));
+ s.forEach(function(i){list.appendChild(card(i))});
+}
+$('loginForm').addEventListener('submit',async function(e){
+ e.preventDefault();var b=$('loginBtn');b.disabled=true;
+ try{await login($('email').value.trim(),$('password').value);$('password').value='';showApp();await loadAll()}catch(err){say('err',err.message||'تعذر الدخول.')}
+ b.disabled=false;
+});
+$('logoutBtn').addEventListener('click',function(){clear();items=[];showLogin();say('ok','تم تسجيل الخروج.')});
+$('refreshBtn').addEventListener('click',function(){loadAll().catch(function(e){say('err',e.message)})});
+$('search').addEventListener('input',function(){term=this.value;render()});
+$('copyAllBtn').addEventListener('click',function(){
+ var s=shown();if(!s.length){say('err','لا توجد حكايات للنسخ.');return}
+ doCopy(s.map(function(i){return copyText(storedVals(i))}).join('\n\n==========\n\n'));
+});
+load();
+if(session){showApp();loadAll().catch(function(e){if(!session){showLogin()}else{say('err',e.message)}})}else showLogin();
 })();
 </script>
 </body>
