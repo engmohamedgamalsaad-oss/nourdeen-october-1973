@@ -34,8 +34,22 @@
   }
   html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
-    padding:calc(56.25vw - 8px) 0 44px;
+    padding:calc(56.25vw + 4px) 0 44px;
   }
+}
+
+/* ===== حركة التمرير على الموبايل (تُفعَّل بالكلاس hm من JavaScript) =====
+   1) الصورة الرئيسية في طبقة أمامية فوق أقسام الصفحة، وتحتها نصوص الواجهة.
+   2) نصوص الواجهة تصعد أسرع من التمرير وتتلاشى (khaledoon-hero-motion.js).
+   3) بقية الصفحة تمر من خلف الصورة وتتلاشى تدريجيًا كلما اقتربت منها. */
+@media (max-width:780px){
+  html.hm body .view{animation:none}
+  html.hm main{position:static;z-index:auto}
+  html.hm .hero-background-layer{z-index:2}
+  html.hm .section,html.hm footer{position:relative;z-index:1}
+  html.hm .hero:not(.sub){position:relative;z-index:3;overflow:visible}
+  html.hm .hero:not(.sub):after{display:none}
+  html.hm .hero-in{will-change:translate,filter}
 }
 
 @media (max-width:780px) and (orientation:landscape) and (max-height:520px){
