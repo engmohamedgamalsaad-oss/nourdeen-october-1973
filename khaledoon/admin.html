@@ -256,6 +256,7 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
+ bar.appendChild(bCopy);
  if(!isNew&&(it.status==='pending'||it.status==='review')){
   var bRej=el('button','btn del','رفض');bRej.type='button';
   bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
