@@ -27,6 +27,8 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .mvbox{margin-top:14px;padding:14px;border:1px dashed var(--c,var(--gold));border-radius:14px}
 .mvbox p{margin:0 0 10px;color:var(--muted);font-size:.9rem}
 @media(prefers-reduced-motion:reduce){.fcard,details.pubrow,details.pubrow>summary::after{transition:none}}
+.btn.copied{background:#1f9d62;border-color:#1f9d62;color:#fff;font-weight:800}
+.btn.copied:hover{background:#188653}
 </style>
 </head>
 <body>
@@ -202,7 +204,7 @@ function card(it){
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
-var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';
+var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var copyN=0;
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
@@ -269,7 +271,7 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
   var t=L.join('\n');
-  function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
+  function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
  bar.appendChild(bCopy);
@@ -338,6 +340,7 @@ async function remove(it,btn){
   say('ok','تم الحذف.');await loadList();
  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
 }
+function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
 function pubRow(it){
  var d=el('details','pubrow sec-'+(it.section||'october')),s=el('summary',''),w=el('div','');
