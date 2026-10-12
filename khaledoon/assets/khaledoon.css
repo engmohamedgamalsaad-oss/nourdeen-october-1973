@@ -260,3 +260,32 @@ html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.
 @media (prefers-reduced-motion: no-preference){
   .hero:not(.sub){background-attachment:fixed!important}
 }
+
+
+/* ضبط حركة صورة علم مصر: الخلفية تتحرك لأعلى أبطأ من النص، بدون fixed attachment */
+.hero:not(.sub){
+  position:relative;
+  overflow:hidden;
+  background-image:none!important;
+  background-color:#07151d!important;
+}
+.hero:not(.sub)::before{
+  content:"";
+  position:absolute;
+  inset:-18% 0;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),
+    url("../../assets/homepage/khaledoon_logo.jpg") center 40%/cover no-repeat;
+  transform:translate3d(0,var(--hero-parallax,0px),0);
+  will-change:transform;
+}
+html[data-theme="light"] .hero:not(.sub)::before{
+  background:
+    linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),
+    url("../../assets/homepage/khaledoon_logo.jpg") center 40%/cover no-repeat;
+}
+@media(prefers-reduced-motion:reduce){
+  .hero:not(.sub)::before{transform:none!important;will-change:auto}
+}
