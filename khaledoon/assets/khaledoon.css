@@ -228,9 +228,9 @@ html[data-theme=light] .hero h1{background:linear-gradient(100deg,#0f2150 20%,#2
 .langrow .langs{gap:4px}
 .langrow .langs button{font-size:9.5px;min-height:24px;padding:0 8px}
 
-/* real-site hero cover (repo root assets/homepage/main-cover.jpg) */
-.hero:not(.sub){background:linear-gradient(90deg,rgba(3,15,21,.8),rgba(4,22,29,.45) 55%,rgba(4,18,25,.68)),url('../../assets/homepage/khaledoon_logo.jpg') center 42%/cover no-repeat!important}
-html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255,250,236,.93),rgba(255,250,236,.72) 55%,rgba(255,250,236,.88)),url('../../assets/homepage/khaledoon_logo.jpg') center 42%/cover no-repeat!important}
+/* Khaledoon-only hero cover: khaledoon/assets/main-cover.jpg */
+.hero:not(.sub){background:linear-gradient(90deg,rgba(3,15,21,.8),rgba(4,22,29,.45) 55%,rgba(4,18,25,.68)),url('main-cover.jpg') center 42%/cover no-repeat!important}
+html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255,250,236,.93),rgba(255,250,236,.72) 55%,rgba(255,250,236,.88)),url('main-cover.jpg') center 42%/cover no-repeat!important}
 
 /* review fixes */
 .topbar .btn{width:auto;min-height:38px;padding:7px 14px;font-size:13px}
@@ -240,12 +240,12 @@ html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255
 
 
 /* ===== خلفيات مخصصة لخالدون فقط: لا تؤثر على صفحة أكتوبر الأصلية ===== */
-.hero{background:linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),url("../../assets/homepage/khaledoon_logo.jpg") center 40% / cover no-repeat !important}
+.hero{background:linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),url("main-cover.jpg") center 40% / cover no-repeat !important}
 .g2:before{opacity:.28;background:linear-gradient(145deg,rgba(5,19,25,.42),rgba(5,19,25,.68)),url("../../assets/backgrounds/story-001-bg.webp") center / cover no-repeat}
 .g3:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-003-bg.webp") center / cover no-repeat}
 .g5:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat}
 .g6:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
-html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),url("../../assets/homepage/khaledoon_logo.jpg") center 40% / cover no-repeat !important}
+html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),url("main-cover.jpg") center 40% / cover no-repeat !important}
 
 /* تصحيح التوزيع: الكتب لقسم المناهج، وليس اقتراحات القراء */
 .g6:before{opacity:.65;background:radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
@@ -277,15 +277,50 @@ html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.
   pointer-events:none;
   background:
     linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),
-    url("../../assets/homepage/khaledoon_logo.jpg") center 40%/cover no-repeat;
+    url("main-cover.jpg") center 40%/cover no-repeat;
   transform:translate3d(0,var(--hero-parallax,0px),0);
   will-change:transform;
 }
 html[data-theme="light"] .hero:not(.sub)::before{
   background:
     linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),
-    url("../../assets/homepage/khaledoon_logo.jpg") center 40%/cover no-repeat;
+    url("main-cover.jpg") center 40%/cover no-repeat;
 }
 @media(prefers-reduced-motion:reduce){
   .hero:not(.sub)::before{transform:none!important;will-change:auto}
+}
+
+
+/* هوية مستقلة لكل قسم: ألوان الصفحات مشتقة من طابع غلاف القسم */
+.curriculum-page{
+  --night:#111e2c;
+  --panel:rgba(25,43,61,.88);
+  --gold:#d9b66e;
+  --bronze:#a98247;
+  --line:rgba(217,182,110,.30);
+  --field:#0b1723;
+  background:
+    radial-gradient(ellipse at 82% 7%,rgba(90,126,157,.24),transparent 38%),
+    linear-gradient(180deg,#111e2c,#172638 52%,#0b1520);
+}
+.curriculum-page .hero.sub{
+  background:
+    linear-gradient(90deg,rgba(7,17,29,.90),rgba(16,32,49,.70) 56%,rgba(7,17,29,.88)),
+    repeating-linear-gradient(0deg,transparent 0 34px,rgba(217,182,110,.045) 35px,transparent 36px 68px),
+    radial-gradient(ellipse at 75% 20%,#354c62,#111e2c 72%) !important;
+  border-bottom:1px solid rgba(217,182,110,.30);
+}
+.curriculum-page .info,
+.curriculum-page .card,
+.curriculum-page .panel{
+  background-color:rgba(20,37,54,.84);
+  border-color:rgba(217,182,110,.28);
+}
+.curriculum-page .hero.sub h1,
+.curriculum-page .hero.sub .tag{color:#f0d49a}
+.curriculum-page .hero.sub .tag{background:linear-gradient(90deg,transparent,rgba(217,182,110,.14))}
+
+/* احترام إعداد تقليل الحركة، مع إبقاء صور الحكايات ثابتة أو بحركة شبه غير ملحوظة */
+@media(prefers-reduced-motion:reduce){
+  .curriculum-page *, .history-page *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
 }

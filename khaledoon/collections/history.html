@@ -14,8 +14,40 @@
 /* خلفية هادئة خاصة بقسم history داخل خالدون */
 .hero{background:linear-gradient(90deg,rgba(3,13,19,.84),rgba(3,13,19,.48) 55%,rgba(3,13,19,.72)),url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat}
 .card{background:linear-gradient(145deg,rgba(7,24,32,.90),rgba(7,24,32,.82)),url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat}
+
+/* التاريخ والحضارات: هوية حجرية برونزية مستقلة عن قسم المناهج */
+.history-page{
+  --bg:#171a1d;
+  --panel:#252a2d;
+  --gold:#d6ad69;
+  --line:rgba(214,173,105,.30);
+  --muted:#c1c4c1;
+  background:
+    radial-gradient(ellipse at 78% 8%,rgba(133,105,67,.22),transparent 38%),
+    linear-gradient(180deg,#171a1d,#202528 56%,#111416);
+}
+.history-page .hero{
+  background:
+    linear-gradient(90deg,rgba(12,15,17,.80),rgba(25,29,31,.50) 55%,rgba(12,15,17,.82)),
+    radial-gradient(ellipse at 68% 30%,#4a4031,#25292b 48%,#121517 82%);
+  border-bottom:1px solid rgba(214,173,105,.28);
+}
+.history-page .hero:after{
+  content:"حضارات";
+  color:rgba(214,173,105,.065);
+}
+.history-page .card,
+.history-page .qrpanel{
+  background:linear-gradient(145deg,rgba(47,46,40,.92),rgba(24,28,30,.96));
+  border-color:rgba(214,173,105,.28);
+}
+.history-page .num{
+  background:linear-gradient(145deg,#80613b,#d6ad69);
+}
+.history-page .heading h2,
+.history-page .card h3{color:#e5c58b}
 </style></head>
-<body><header><div class="wrap"><nav><a class="brand" href="../index.html">خالدون عبر التاريخ<small>حكاية التاريخ بعيون جيل جديد</small></a><a class="back" href="../index.html#gateways">← كل البوابات</a></nav></div></header>
+<body class="history-page"><header><div class="wrap"><nav><a class="brand" href="../index.html">خالدون عبر التاريخ<small>حكاية التاريخ بعيون جيل جديد</small></a><a class="back" href="../index.html#gateways">← كل البوابات</a></nav></div></header>
 <section class="hero"><div class="wrap"><div class="intro"><div class="eyebrow">من حكايات المعرفة والإنسان</div><h1>التاريخ والحضارات</h1><p class="lead">اقترب من التاريخ عبر حكايات تربط الشخصيات والأحداث بعصرها، وتفصل بين الوقائع والتفسيرات.</p></div></div></section>
 <main><se<main><section class="section"><div class="wrap"><div class="heading"><h2>حكايات هذا القسم</h2><p>كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.</p></div><div class="cards" style="grid-template-columns:1fr"><div class="card" style="align-items:flex-start"><div class="num">✦</div><div><h3>الحكايات قيد الإعداد</h3><p style="margin-bottom:0">لم تُضف حكايات إلى هذا القسم بعد. ستظهر هنا الحكايات المعتمدة، باستخدام نفس أسلوب العرض والتنظيم المستخدم في قسم أكتوبر 1973.</p></div></div></div></div></section></main>div class="wrap">قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.</div></footer>
 <script>(function(){var els=document.querySelectorAll('.card');if('IntersectionObserver'in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('reveal')});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});els.forEach(function(e){io.observe(e)})}})();</script>
