@@ -1,6 +1,7 @@
 /* khaledoon/assets/khaledoon-mobile.css
    ضبط صورة غلاف الصفحة الرئيسية (main-cover.jpg) على الموبايل بالطول وبالعرض.
-   الصفحة الرئيسية فقط (.hero بدون .sub) ولا يؤثر على باقي الصفحات أو الكمبيوتر. */
+   الصفحة الرئيسية فقط (.hero بدون .sub) ولا يؤثر على باقي الصفحات أو الكمبيوتر.
+   حركة الصورة من ملف khaledoon-hero-motion.js عبر المتغيرات --hm-y (إزاحة بالبكسل) و --hm-p (نسبة من 0 إلى 1). */
 
 /* ===== موبايل بالطول: الصورة كاملة وبحجم أصغر أعلى الصفحة، والنص تحتها ===== */
 @media (max-width:780px) and (orientation:portrait){
@@ -13,8 +14,10 @@
     inset:0 0 auto 0!important;
     height:auto!important;
     aspect-ratio:16/9;
-    transform:none!important;
-    will-change:auto!important;
+    transform-origin:50% 45%;
+    transform:translate3d(0,var(--hm-y,0px),0) scale(calc(1 + var(--hm-p,0) * .4))!important;
+    opacity:calc(1 - var(--hm-p,0) * .55);
+    will-change:transform,opacity!important;
     background:
       linear-gradient(180deg,transparent 58%,var(--night) 100%),
       url("main-cover.jpg") center/100% 100% no-repeat!important;
@@ -32,8 +35,10 @@
   }
   html[data-theme] .hero:not(.sub)::before{
     inset:0!important;
-    transform:none!important;
-    will-change:auto!important;
+    transform-origin:50% 45%;
+    transform:translate3d(0,var(--hm-y,0px),0) scale(calc(1 + var(--hm-p,0) * .4))!important;
+    opacity:calc(1 - var(--hm-p,0) * .55);
+    will-change:transform,opacity!important;
     background-size:cover!important;
     background-position:center 35%!important;
   }
