@@ -184,3 +184,21 @@ addEventListener('resize',function(){rs();if(r)fr()});
 document.getElementById('th').addEventListener('click',function(){if(r)fr()});
 rs();fr()
 })();
+
+
+/* Parallax خفيف لغلاف الصفحة الرئيسية فقط: النص يصعد طبيعيًا والصورة تتحرك بمعدل 65% تقريبًا */
+(function(){
+  var hero=document.querySelector('.hero:not(.sub)');
+  if(!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var busy=false;
+  function update(){
+    var top=hero.getBoundingClientRect().top;
+    var shift=Math.max(0,Math.min(260,-top*0.35));
+    hero.style.setProperty('--hero-parallax',shift.toFixed(1)+'px');
+    busy=false;
+  }
+  function requestUpdate(){if(!busy){busy=true;requestAnimationFrame(update)}}
+  addEventListener('scroll',requestUpdate,{passive:true});
+  addEventListener('resize',requestUpdate,{passive:true});
+  update();
+})();
