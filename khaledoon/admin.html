@@ -28,12 +28,13 @@
 <button class="btn primary" type="submit" id="loginBtn">دخول</button>
 </form></section>
 <section id="app" hidden>
-<div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره.</p></div>
-<div class="stats" id="stats"></div>
+<div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره.</p><button class="btn ghost" id="legacyToggle" type="button">إدارة حكايات أكتوبر القديمة</button></div>
+<div id="primaryAdmin"><div class="stats" id="stats"></div>
 <div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
 <div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
 <div class="chips" id="secs" role="group" aria-label="القسم"></div>
-<div id="list"></div>
+<div id="list"></div></div>
+<section id="legacyBox" hidden><div class="fhead"><h2>حكايات أكتوبر — السجل القديم</h2><p>إدارة مباشرة لسجلات submitted_stories القديمة. لا يتم نقل البيانات أو تغيير بنية قاعدة البيانات.</p><div class="fbar"><button class="btn ghost" id="legacyBack" type="button">العودة لإدارة خالدون</button><button class="btn ghost" id="legacyRefresh" type="button">↻ تحديث</button></div></div><div class="tools"><input type="search" id="legacySearch" placeholder="ابحث بالعنوان أو اسم الطالب…" aria-label="بحث في الحكايات القديمة"></div><div class="chips" id="legacyTabs" role="group" aria-label="حالة الحكاية القديمة"></div><div id="legacyList"></div></section>
 </section>
 </main>
 <script>
@@ -77,6 +78,71 @@ async function login(email,pw){
  var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
  var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
  if(!(a.ok&&(await a.json())===true)){clear();throw new Error('هذا الحساب ليس مسجّلًا كأدمن.')}
+}
+
+// إدارة السجل القديم submitted_stories دون تعديل مخطط قاعدة البيانات.
+var legacyItems=[],legacyStatus='all',legacyTerm='';
+function legacySay(text){say('ok',text)}
+async function loadLegacyList(){
+ var r=await rest('submitted_stories?select=id,created_at,student_name,grade,title,subtitle,body,sources,color,status,story_number&order=created_at.desc');
+ if(!r.ok)throw new Error('تعذر تحميل سجل أكتوبر القديم ('+r.status+'). لم يتم تغيير قاعدة البيانات.');
+ legacyItems=await r.json();renderLegacy();
+}
+function legacyChip(box,label,on,fn){
+ var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b);
+}
+function renderLegacy(){
+ var tabs=$('legacyTabs');tabs.textContent='';
+ var states=[['all','الكل'],['pending','قيد المراجعة'],['published','منشورة'],['rejected','مرفوضة']];
+ states.forEach(function(pair){legacyChip(tabs,pair[1]+' ('+(pair[0]==='all'?legacyItems.length:legacyItems.filter(function(x){return x.status===pair[0]}).length)+')',legacyStatus===pair[0],function(){legacyStatus=pair[0];renderLegacy()})});
+ var list=$('legacyList');list.textContent='';
+ var term=legacyTerm.trim().toLocaleLowerCase();
+ var shown=legacyItems.filter(function(x){return (legacyStatus==='all'||x.status===legacyStatus)&&(!term||[x.title,x.student_name,x.grade,x.subtitle,x.body].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(term)!==-1}))});
+ if(!shown.length){list.appendChild(el('div','fcard','لا توجد حكايات مطابقة في السجل القديم.'));return}
+ shown.forEach(function(it){
+  var box=el('article','fcard'),head=el('div','fbar');
+  head.style.justifyContent='space-between';
+  head.appendChild(el('h3','',it.title||'حكاية بلا عنوان'));
+  head.appendChild(el('span','badge2 '+it.status,(it.status==='published'?'منشورة':it.status==='rejected'?'مرفوضة':'قيد المراجعة')));
+  box.appendChild(head);
+  box.appendChild(el('div','meta2','الاسم: '+(it.student_name||'غير مسجل')+' • الصف: '+(it.grade||'غير مسجل')+' • '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم الحكاية: '+String(it.story_number).padStart(3,'0'):'')));
+  var name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(it.sources,4,2000),status=sel({pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'},it.status||'pending');
+  var g=el('div','fgrid');g.appendChild(fld('اسم الطالب',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',subtitle));box.appendChild(g);
+  box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('المصادر',sources));box.appendChild(fld('الحالة',status));
+  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),publishBtn=el('button','btn ghost','نشر وحفظ'),rejectBtn=el('button','btn ghost','رفض'),deleteBtn=el('button','btn del','حذف');
+  [saveBtn,publishBtn,rejectBtn,deleteBtn].forEach(function(b){b.type='button';bar.appendChild(b)});
+  box.appendChild(bar);
+  async function saveLegacy(nextStatus,btn){
+   var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:nextStatus||status.value};
+   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return}
+   if(d.body.length>12000||d.sources&&d.sources.length>2000){say('err','تجاوز النص أو المصادر الحد المسموح.');return}
+   if(d.status==='published'&&!confirm('تأكيد نشر الحكاية؟ ستصبح متاحة عبر read.html إذا كان رابطها ومعرّفها صالحين.'))return;
+   btn.disabled=true;
+   try{
+    var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+    if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+').');
+    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ شيء. تحقق من صلاحيات الأدمن.');
+    say('ok',d.status==='published'?'تم النشر والحفظ.':'تم حفظ الحكاية القديمة.');await loadLegacyList();
+   }catch(e){say('err',e.message||'تعذر الحفظ.')}finally{btn.disabled=false}
+  }
+  saveBtn.addEventListener('click',function(){saveLegacy(null,saveBtn)});
+  publishBtn.addEventListener('click',function(){status.value='published';saveLegacy('published',publishBtn)});
+  rejectBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستبقى محفوظة.'))saveLegacy('rejected',rejectBtn)});
+  deleteBtn.addEventListener('click',async function(){
+   if(!confirm('حذف الحكاية نهائيًا من submitted_stories؟ هذا الإجراء لا يمكن التراجع عنه.'))return;
+   deleteBtn.disabled=true;
+   try{var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
+    say('ok','تم حذف الحكاية القديمة.');await loadLegacyList();
+   }catch(e){say('err',e.message||'تعذر الحذف.');deleteBtn.disabled=false}
+  });
+  list.appendChild(box);
+ });
+}
+function toggleLegacy(show){
+ $('primaryAdmin').hidden=show;$('legacyBox').hidden=!show;
+ $('legacyToggle').textContent=show?'العودة لإدارة خالدون':'إدارة حكايات أكتوبر القديمة';
+ if(show)loadLegacyList().catch(function(e){say('err',e.message||'تعذر تحميل السجل القديم.')});
 }
 async function loadList(){
  var r=await rest('khaledoon_submissions?select=*&order=created_at.desc');
@@ -262,6 +328,10 @@ function render(){
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
  shown.forEach(function(i){list.appendChild(card(i))});
 }
+$('legacyToggle').addEventListener('click',function(){toggleLegacy($('legacyBox').hidden)});
+$('legacyBack').addEventListener('click',function(){toggleLegacy(false)});
+$('legacyRefresh').addEventListener('click',function(){loadLegacyList().catch(function(e){say('err',e.message)})});
+$('legacySearch').addEventListener('input',function(){legacyTerm=this.value;renderLegacy()});
 $('loginForm').addEventListener('submit',async function(e){
  e.preventDefault();var b=$('loginBtn');b.disabled=true;
  try{await login($('email').value.trim(),$('password').value);$('password').value='';showApp();await loadList()}catch(err){say('err',err.message||'تعذر الدخول.')}
