@@ -55,12 +55,3 @@
   .event.scroll-reveal { opacity: 1; transform: none; transition: none; }
   .jet { animation: none !important; }
 }
-
-/* ===== خلفية خفيفة وشفافة لصفحة الحكاية (صورة ثابتة خلف المحتوى) ===== */
-body::before{
-  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
-  background:url("../../assets/backgrounds/story-003-bg.webp") center / cover no-repeat;
-  opacity:.12;filter:grayscale(.3) blur(1px);
-}
-/* قسم الخاتمة شبه شفاف ليظهر ما تحته من الصورة */
-.end{background:radial-gradient(ellipse at center,rgba(11,70,85,.82),rgba(2,8,12,.9) 70%)}
