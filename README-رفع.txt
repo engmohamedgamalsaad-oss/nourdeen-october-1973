@@ -11,6 +11,7 @@
 - khaledoon/collections/curriculum.html: حكايات شخصيات المناهج المصرية.
 - khaledoon/admin.html: لوحة واحدة وقائمة واحدة لإدارة حكايات خالدون وحكايات أكتوبر القديمة.
 - khaledoon/assets/khaledoon.css وkhaledoon/assets/khaledoon.js: التصميم والسلوك المشترك.
+- khaledoon/assets/main-cover.jpg: غلاف خالدون المستقل؛ صورة غلاف أكتوبر الأصلية assets/homepage/main-cover.jpg لم تتغير.
 - assets/shared/story.js: سلوك صفحات الحكايات المشتركة؛ يجب مراجعة أثر أي تعديل على كل القصص التي تستخدمه.
 - read.html: صفحة القراءة القديمة للحكايات المنشورة من submitted_stories.
 
