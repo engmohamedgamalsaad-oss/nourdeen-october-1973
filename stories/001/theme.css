@@ -509,3 +509,24 @@ footer strong { color: var(--gold); }
 
   .image-frame img { transition: none; }
 }
+
+/* ===== خلفية خفيفة وشفافة لصفحة الحكاية (صورة ثابتة خلف المحتوى) ===== */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: url("bab-el-mandeb-map.webp") center / cover no-repeat;
+  opacity: .16;
+  filter: grayscale(.3) blur(1px);
+}
+
+/* أقسام المحتوى شبه شفافة ليظهر ما تحتها من الصورة */
+.story { background: linear-gradient(180deg, rgba(7,25,35,.84), rgba(4,16,24,.88)); }
+.end,
+.sources { background: rgba(3,13,19,.88); }
+
+@media (prefers-color-scheme: dark) {
+  body::before { opacity: .14; }
+}
