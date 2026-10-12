@@ -12,6 +12,22 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/khaledoon.css">
 <link rel="stylesheet" href="assets/khaledoon-forms.css">
+<style>
+.sec-october{--c:#f0c878}.sec-science{--c:#8ad9e8}.sec-learning{--c:#a9d9a6}.sec-fame{--c:#f1a7c5}.sec-history{--c:#d4b7ff}.sec-readers{--c:#f5b37e}.sec-curriculum{--c:#9bb7ff}
+html[data-theme=light] .sec-october{--c:#b8771a}html[data-theme=light] .sec-science{--c:#1f58b8}html[data-theme=light] .sec-learning{--c:#2f7d4f}html[data-theme=light] .sec-fame{--c:#b0366a}html[data-theme=light] .sec-history{--c:#6b46c1}html[data-theme=light] .sec-readers{--c:#c2642a}html[data-theme=light] .sec-curriculum{--c:#1f4fa3}
+.fcard[class*="sec-"],details.pubrow{border-inline-start:5px solid var(--c,var(--line));background-image:linear-gradient(90deg,color-mix(in srgb,var(--c,transparent) 9%,transparent),transparent 60%);transition:border-color .35s ease}
+details.pubrow{border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-inline-end:1px solid var(--line);border-radius:14px;background-color:var(--panel);margin-bottom:10px}
+details.pubrow>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px}
+details.pubrow>summary::-webkit-details-marker{display:none}
+details.pubrow>summary::after{content:"▾";margin-inline-start:auto;color:var(--c,var(--gold));transition:transform .2s}
+details.pubrow[open]>summary::after{transform:rotate(180deg)}
+.pubrow .pt{display:block;color:var(--gold);font-weight:800;font-size:1.05rem;line-height:1.6}
+.pubrow .pd{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
+.pubrow .pbody{padding:0 10px 10px}.pubrow .pbody .fcard{margin-bottom:0}
+.mvbox{margin-top:14px;padding:14px;border:1px dashed var(--c,var(--gold));border-radius:14px}
+.mvbox p{margin:0 0 10px;color:var(--muted);font-size:.9rem}
+@media(prefers-reduced-motion:reduce){.fcard,details.pubrow,details.pubrow>summary::after{transition:none}}
+</style>
 </head>
 <body>
 <header class="topbar"><div class="wrap nav">
@@ -113,7 +129,7 @@ function sel(map,v,empty){var s=document.createElement('select');if(empty){var o
 function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
 
 function legacyCard(it){
- var box=el('article','fcard'),head=el('div','fbar');head.style.justifyContent='space-between';
+ var box=el('article','fcard sec-october'),head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',it.title||'حكاية أكتوبر بلا عنوان'));
  head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status||'غير محددة'));
  box.appendChild(head);
@@ -152,7 +168,7 @@ function legacyCard(it){
 }
 function card(it){
  if(it._t==='o')return legacyCard(it);
- var isNew=!it.id,box=el('article','fcard');
+ var isNew=!it.id,box=el('article','fcard sec-'+(it.section||'curriculum'));
  var head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',isNew?'حكاية جديدة':(it.title||'')));
  if(!isNew)head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status));
@@ -167,7 +183,7 @@ function card(it){
  function fillGr(){var n=stgS.value==='primary'?6:3,keep=grS.value||String(it.school_grade||'');grS.textContent='';var o=el('option','','اختر الصف');o.value='';grS.appendChild(o);for(var i=0;i<n;i++){var p=el('option','','الصف '+ORD[i]);p.value=String(i+1);grS.appendChild(p)}if(keep&&+keep<=n)grS.value=keep}
  fillGr();stgS.addEventListener('change',fillGr);
  var curBox=el('div','');curBox.appendChild((function(){var g=el('div','fgrid');g.appendChild(fld('المرحلة',stgS));g.appendChild(fld('الصف',grS));return g})());curBox.appendChild(fld('المادة أو الكتاب',subj));
- function tog(){curBox.hidden=secS.value!=='curriculum'}tog();secS.addEventListener('change',tog);
+ function tog(){curBox.hidden=secS.value!=='curriculum';box.className='fcard sec-'+(secS.value||'curriculum')}tog();secS.addEventListener('change',tog);
  var fig=inp(it.figure_name,120),nar=inp(it.narrator_name,40),ng=inp(it.narrator_grade,60),title=inp(it.title,140),sub=inp(it.subtitle,200);
  var body=area(it.body,10,12000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(it.admin_notes,3,3000);
  var cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;
@@ -264,7 +280,28 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
  }
  if(isNew){var bc=el('button','btn ghost','إلغاء');bc.type='button';bc.addEventListener('click',function(){draftNew=false;render()});bar.appendChild(bc)}
  else{var bd=el('button','btn del','حذف');bd.type='button';bd.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟'))remove(it,bd)});bar.appendChild(bd)}
- box.appendChild(bar);
+if(!isNew){
+  var bMove=el('button','btn ghost','نقل إلى قسم آخر');bMove.type='button';
+  bar.insertBefore(bMove,bCopy.nextSibling);
+  var mv=el('div','mvbox');mv.hidden=true;
+  var from=it.section,ms=document.createElement('select');
+  Object.keys(SEC).forEach(function(k){if(k!==from){var o=el('option','',SEC[k]);o.value=k;ms.appendChild(o)}});
+  mv.appendChild(el('p','','اختر القسم الجديد. يُحفظ النقل مع أي تعديلات كتبتها في الحقول أعلاه، ويتغير لون وثيم البطاقة ليتبع القسم. عند اختيار «شخصيات المناهج المصرية» حدّد المرحلة والصف أولًا.'));
+  mv.appendChild(fld('القسم الجديد',ms));
+  var mb=el('div','fbar'),mGo=el('button','btn primary','نقل وحفظ'),mNo=el('button','btn ghost','إلغاء');mGo.type=mNo.type='button';mb.appendChild(mGo);mb.appendChild(mNo);mv.appendChild(mb);
+  function setSec(v){secS.value=v;secS.dispatchEvent(new Event('change'))}
+  bMove.addEventListener('click',function(){mv.hidden=!mv.hidden});
+  mNo.addEventListener('click',function(){mv.hidden=true;setSec(from)});
+  ms.addEventListener('change',function(){setSec(ms.value)});
+  mGo.addEventListener('click',async function(){
+   setSec(ms.value);
+   if(ms.value==='curriculum'&&(!stgS.value||!grS.value)){say('err','حدّد المرحلة والصف في الحقول أعلاه ثم اضغط «نقل وحفظ» مرة أخرى.');curBox.scrollIntoView({behavior:'smooth',block:'center'});return}
+   if(!confirm('نقل «'+(title.value.trim()||'الحكاية')+'» من «'+SEC[from]+'» إلى «'+SEC[ms.value]+'» وحفظ كل التعديلات؟'))return;
+   var ok=await persist(st.value,mGo);
+   if(!ok)setSec(from);
+  });
+  box.appendChild(bar);box.appendChild(mv);
+ }else box.appendChild(bar);
  function collect(status){
   var cur=secS.value==='curriculum';
   return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,consent:cons.checked,status:status};
@@ -277,16 +314,16 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   return true;
  }
  async function persist(status,btn){
-  var d=collect(status);if(!valid(d))return;
-  btn.disabled=true;
+  var d=collect(status);if(!valid(d))return false;
+  var ok=false;btn.disabled=true;
   try{
    var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)})
               :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
    if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). راجع الحقول.');
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
-   draftNew=false;say('ok','تم الحفظ.');await loadList();
+   ok=true;draftNew=false;say('ok','تم الحفظ.');await loadList();
   }catch(e){say('err',e.message||'حدث خطأ.')}
-  btn.disabled=false;
+  btn.disabled=false;return ok;
  }
  bSave.addEventListener('click',function(){persist(st.value,bSave)});
  bPub.addEventListener('click',function(){persist('published',bPub)});
@@ -301,6 +338,19 @@ async function remove(it,btn){
   say('ok','تم الحذف.');await loadList();
  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
 }
+var openIds={};
+function pubRow(it){
+ var d=el('details','pubrow sec-'+(it.section||'october')),s=el('summary',''),w=el('div','');
+ w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
+ var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
+ w.appendChild(el('small','pd',(dt||'')+(SEC[it.section]?' • '+SEC[it.section]:'')));
+ s.appendChild(w);d.appendChild(s);
+ var key=(it._t||'k')+':'+it.id,built=false;
+ function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
+ d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
+ if(openIds[key]){d.open=true;build()}
+ return d;
+}
 function render(){
  renderStats();renderTabs();
  var list=$('list');list.textContent='';
@@ -310,7 +360,7 @@ function render(){
  });
  if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
- shown.forEach(function(i){list.appendChild(card(i))});
+ shown.forEach(function(i){list.appendChild(i.status==='published'?pubRow(i):card(i))});
 }
 $('loginForm').addEventListener('submit',async function(e){
  e.preventDefault();var b=$('loginBtn');b.disabled=true;
