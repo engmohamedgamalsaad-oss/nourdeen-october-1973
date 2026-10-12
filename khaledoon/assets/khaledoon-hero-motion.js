@@ -104,6 +104,8 @@
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   if(innerWidth>780)return;
   var N=28;
+  var SIZE_MIN=1.2;   // أصغر قطر للنقطة بالبكسل
+  var SIZE_STEP=0.5;  // الزيادة بين الأحجام (3 أحجام مختلفة)
   var box=document.createElement('div');
   box.className='hero-stars';
   box.setAttribute('aria-hidden','true');
@@ -111,7 +113,7 @@
     var d=document.createElement('i');
     d.style.left=(((i+1)*0.618034)%1*100).toFixed(1)+'%';
     d.style.top=(((i+1)*0.754877)%1*100).toFixed(1)+'%';
-    d.style.setProperty('--sz',(2+((i*5)%3))+'px');
+    d.style.setProperty('--sz',(SIZE_MIN+((i*5)%3)*SIZE_STEP).toFixed(1)+'px');
     d.style.setProperty('--op',(0.6+((i*3)%4)*0.1).toFixed(1));
     d.style.setProperty('--dur',(4+(((i*7)%30)/10)).toFixed(1)+'s');
     d.style.setProperty('--dl','-'+(((i*0.83)%6.5)).toFixed(2)+'s');
