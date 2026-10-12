@@ -1,5 +1,6 @@
 /* khaledoon/assets/khaledoon-mobile.css
-   غلاف ثابت على الموبايل: يبدأ كبانر، ثم يكبر ويتلاشى تدريجيًا ويبقى خلف المحتوى.
+   غلاف ثابت على الموبايل: يبدأ كبانر، ثم يكبر ويبقى بنفس الشفافية تقريبًا خلف المحتوى،
+   مع تلاشٍ خفيف فقط في آخر 5% من أسفل الصورة.
    نطاق التأثير هو الرئيسية فقط، ولا يغيّر صفحات الحكايات القديمة. */
 
 @media (max-width:780px){
@@ -16,6 +17,8 @@
     transform:translateZ(0) scale(var(--hero-bg-scale,1));
     transform-origin:50% 45%;
     opacity:var(--hero-bg-opacity,1);
+    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 95%,transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0,#000 95%,transparent 100%);
     will-change:transform,opacity;
     background:
       linear-gradient(180deg,rgba(3,12,17,.12),rgba(3,12,17,.38) 65%,rgba(3,12,17,.72)),
@@ -34,7 +37,7 @@
   }
   html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
-    padding:calc(56.25vw + 4px) 0 44px;
+    padding:calc(min(56.25vw,58vh) + 8px) 0 44px;
   }
 }
 
@@ -64,4 +67,59 @@
 @media(prefers-reduced-motion:reduce){
   .hero-background-layer{transform:none!important;opacity:.32!important;will-change:auto!important}
   html[data-theme] .hero:not(.sub)::before{display:none!important}
+  .hero-stars{display:none!important}
+}
+
+/* ===== هيدر مضغوط على الموبايل: أزرار لغات أصغر ومساحة أقل لتظهر الأقسام أكثر =====
+   ارتفاع الهيدر يُقاس تلقائيًا (--khaledoon-header-height) فتتبعه الصورة والمحتوى. */
+@media (max-width:780px){
+  .topbar{line-height:1.35}
+  .topbar .nav{min-height:44px;padding:3px 0;gap:8px;flex-wrap:nowrap}
+  .topbar .mark{width:32px;height:32px;font-size:16px}
+  .topbar .brand{gap:8px;font-size:14px}
+  .topbar .brand small{font-size:9.5px}
+  .topbar .thm{min-height:26px;padding:0 9px;font-size:10px}
+  .topbar .langrow{padding:0 0 3px}
+  .topbar .langrow .langs{gap:3px}
+  .topbar .langrow .langs button{min-height:20px;padding:0 6px;font-size:8.5px;line-height:1}
+  html{scroll-padding-top:calc(var(--khaledoon-header-height,70px) + 8px + env(safe-area-inset-top,0px))}
+}
+
+/* ===== نصوص المقدمة ثابتة عند فتح الصفحة (بدون حركة ظهور) + ترتيب أضبط تحت الصورة =====
+   زر «اختار بوابتك للمعرفة» أعلى قليلًا بفضل تصغير العنوان والفقرة والمسافات. */
+@media (max-width:780px){
+  .hero:not(.sub) .hero-in>*{opacity:1;animation:none}
+  .hero:not(.sub) .hero-in>h1{animation:shimmer 8s linear infinite}
+  .hero:not(.sub) .eyebrow{font-size:11px;margin:4px 0 0}
+  .hero:not(.sub) h1{font-size:2.1rem;line-height:1.3;margin:2px 0 8px}
+  .hero:not(.sub) p.lead{font-size:14px;line-height:1.7;margin:0 0 12px}
+  .hero:not(.sub) .tag{margin-top:10px}
+}
+
+/* ===== نقاط صغيرة على الصورة: تنوّر وتطفأ بهدوء في مكانها، ولونها يتحوّل بين الأبيض والذهبي ===== */
+@media (max-width:780px){
+  .hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .hero-stars i{
+    position:absolute;
+    width:var(--sz,3px);height:var(--sz,3px);
+    margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
+    border-radius:50%;
+    background-color:#fff;
+    opacity:0;
+    animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
+    will-change:opacity;
+  }
+  html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
+}
+@keyframes khTwinkle{
+  0%{opacity:0;background-color:#ffffff}
+  35%{opacity:var(--op,.8);background-color:#ffffff}
+  65%{opacity:var(--op,.8);background-color:#f5c451}
+  100%{opacity:0;background-color:#f5c451}
+}
+@keyframes khTwinkleLight{
+  0%{opacity:0;background-color:#e8a92e}
+  35%{opacity:var(--op,.8);background-color:#e8a92e}
+  65%{opacity:var(--op,.8);background-color:#b9770e}
+  100%{opacity:0;background-color:#b9770e}
 }

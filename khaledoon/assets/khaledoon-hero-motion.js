@@ -1,5 +1,5 @@
 /* حركة غلاف خالدون على الموبايل:
-   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، ثم تبقى خافتة خلف بقية الصفحة. */
+   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، ثم تبقى شبه ثابتة الشفافية (تخف 15% فقط) خلف بقية الصفحة. */
 (function(){
   var hero=document.querySelector('.hero:not(.sub)');
   if(!hero)return;
@@ -7,6 +7,7 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
   var busy=false;
+  var BG_FADE=0.15; // مقدار خفوت الصورة الكلي أثناء التمرير: 0.15 = 15%
   function update(){
     busy=false;
     var header=document.querySelector(".topbar");
@@ -15,12 +16,16 @@
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
     root.style.setProperty('--hero-bg-scale',(1+passed*.72).toFixed(4));
-    root.style.setProperty('--hero-bg-opacity',(1-passed*.78).toFixed(4));
+    root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
   addEventListener('scroll',req,{passive:true});
   addEventListener('resize',req,{passive:true});
   addEventListener('orientationchange',req);
+  addEventListener('load',req);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(req);
+  var tb=document.querySelector('.topbar');
+  if(tb&&window.ResizeObserver)new ResizeObserver(req).observe(tb);
   update();
 })();
 
@@ -37,7 +42,8 @@
   var FAST=0.9;        // سرعة إضافية للنصوص: 0.9 تعني أنها تصعد بنحو 1.9 ضعف سرعة التمرير
   var FADE_START=0.02; // بداية التلاشي (نسبة من ارتفاع الشاشة)
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
-  var ZONE=0.15;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
+  var ZONE=0.07;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
+  var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));
   var hits=[].slice.call(document.querySelectorAll('main .section a,main .section button,footer a'));
   var maskCache=new Array(targets.length),hitCache=new Array(hits.length);
@@ -66,7 +72,7 @@
     hi.style.filter=p>0?'opacity('+(1-p).toFixed(3)+')':'';
     hi.style.pointerEvents=p>.85?'none':'';
     var edge=layer.getBoundingClientRect().bottom;
-    var zone=Math.max(96,ZONE*vh);
+    var zone=Math.max(ZONE_MIN,ZONE*vh);
     var rects=targets.map(function(el){return el.getBoundingClientRect()});
     var hrects=hits.map(function(el){return el.getBoundingClientRect()});
     targets.forEach(function(el,i){
@@ -87,4 +93,31 @@
   addEventListener('orientationchange',req);
   isOn=root.classList.contains('hm');
   update();
+})();
+
+/* نقاط صغيرة موزّعة على كل مساحة الصورة: كل نقطة تنوّر بهدوء وتطفأ بهدوء في مكانها،
+   ولونها يتحوّل بين الأبيض والذهبي (الموبايل فقط).
+   N = عدد النقاط. الحركة نفسها في khaledoon-mobile.css (khTwinkle). */
+(function(){
+  var layer=document.querySelector('.hero-background-layer');
+  if(!layer)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(innerWidth>780)return;
+  var N=28;
+  var SIZE_MIN=1.2;   // أصغر قطر للنقطة بالبكسل
+  var SIZE_STEP=0.5;  // الزيادة بين الأحجام (3 أحجام مختلفة)
+  var box=document.createElement('div');
+  box.className='hero-stars';
+  box.setAttribute('aria-hidden','true');
+  for(var i=0;i<N;i++){
+    var d=document.createElement('i');
+    d.style.left=(((i+1)*0.618034)%1*100).toFixed(1)+'%';
+    d.style.top=(((i+1)*0.754877)%1*100).toFixed(1)+'%';
+    d.style.setProperty('--sz',(SIZE_MIN+((i*5)%3)*SIZE_STEP).toFixed(1)+'px');
+    d.style.setProperty('--op',(0.6+((i*3)%4)*0.1).toFixed(1));
+    d.style.setProperty('--dur',(4+(((i*7)%30)/10)).toFixed(1)+'s');
+    d.style.setProperty('--dl','-'+(((i*0.83)%6.5)).toFixed(2)+'s');
+    box.appendChild(d);
+  }
+  layer.appendChild(box);
 })();
