@@ -254,3 +254,9 @@ html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.
 /* خلفية كتب خفيفة لقسم المناهج داخل خالدون فقط */
 .curriculum-page .hero.sub{background:linear-gradient(90deg,rgba(3,12,17,.82),rgba(3,12,17,.42) 55%,rgba(3,12,17,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat !important}
 .curriculum-page .info{background:linear-gradient(145deg,rgba(8,23,32,.88),rgba(8,23,32,.82)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
+
+
+/* حركة بارالاكس هادئة لغلاف خالدون: النص يتحرك مع التمرير والخلفية أبطأ لتظهر الصورة بوضوح */
+@media (prefers-reduced-motion: no-preference){
+  .hero:not(.sub){background-attachment:fixed!important}
+}
