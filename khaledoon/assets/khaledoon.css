@@ -237,3 +237,12 @@ html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255
 .hero:not(.sub):after{display:block;content:'';position:absolute;inset:auto 0 0;height:140px;background:linear-gradient(transparent,var(--night));z-index:-1}
 .g6:after{width:120px;height:120px;opacity:.09}
 @media(max-width:780px){body:before,body:after{filter:blur(45px)}}
+
+
+/* ===== خلفيات مخصصة لخالدون فقط: لا تؤثر على صفحة أكتوبر الأصلية ===== */
+.hero{background:linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),url("../../assets/backgrounds/header-banner.webp") center 40% / cover no-repeat !important}
+.g2:before{opacity:.28;background:linear-gradient(145deg,rgba(5,19,25,.42),rgba(5,19,25,.68)),url("../../assets/backgrounds/story-001-bg.webp") center / cover no-repeat}
+.g3:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-003-bg.webp") center / cover no-repeat}
+.g5:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat}
+.g6:before{opacity:.25;background:linear-gradient(145deg,rgba(5,19,25,.45),rgba(5,19,25,.7)),url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat}
+html[data-theme=light] .hero{background:linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),url("../../assets/backgrounds/header-banner.webp") center 40% / cover no-repeat !important}
