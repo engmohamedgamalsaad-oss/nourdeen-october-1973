@@ -1,11 +1,11 @@
--- خالدون عبر التاريخ — جدول مقترحات الحكايات (منفصل تمامًا عن submitted_stories).
+-- خالدون عبر التاريخ — جدول موحد لاستقبال حكايات جميع الأقسام، ومنها أكتوبر 1973.
 -- يعتمد على جدول admins ودالة is_admin() الموجودين من docs/supabase-setup.sql (نفس حساب الأدمن).
 -- شغّله من Supabase > SQL Editor بعد مراجعته. لا يغيّر أي جدول أو سياسة موجودة.
 
 create table if not exists public.khaledoon_submissions (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
-  section text not null check (section in ('science','learning','fame','history','curriculum','readers')),
+  section text not null check (section in ('october','science','learning','fame','history','curriculum','readers')),
   stage text check (stage in ('primary','preparatory','secondary')),
   school_grade smallint check (school_grade between 1 and 6),
   subject text check (char_length(subject) <= 80),
