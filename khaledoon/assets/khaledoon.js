@@ -186,14 +186,14 @@ rs();fr()
 })();
 
 
-/* Parallax خفيف لغلاف الصفحة الرئيسية فقط: النص يصعد طبيعيًا والصورة تتحرك بمعدل 65% تقريبًا */
+/* Parallax بطيء لغلاف الصفحة الرئيسية فقط: النص يصعد طبيعيًا والصورة تتحرك بمعدل 8% */
 (function(){
   var hero=document.querySelector('.hero:not(.sub)');
   if(!hero || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var busy=false;
   function update(){
     var top=hero.getBoundingClientRect().top;
-    var shift=Math.max(0,Math.min(260,-top*0.35));
+    var shift=Math.max(0,Math.min(260,-top*0.08));
     hero.style.setProperty('--hero-parallax',shift.toFixed(1)+'px');
     busy=false;
   }
