@@ -1,8 +1,7 @@
-# سجل التحقق والمصادر — ابن سينا
-
-- الاسم والحقبة: أبو علي الحسين بن عبد الله بن سينا، نحو 980–1037م. مكتبة الكونغرس: https://www.loc.gov/item/2021667332/
-- اللقب «الشيخ الرئيس»، وكتاب القانون في الطب وانتقاله إلى أوروبا: المصدر نفسه.
-- مرجع ثانوي أكاديمي: https://pmc.ncbi.nlm.nih.gov/articles/PMC3343704/
-- لم تثبت النسخة المنشورة عمرًا محددًا لحفظ القرآن، ولم تكرر الادعاءات غير المسندة عن أساتذته أو حفظه جميع الأمراض وعلاجاتها.
-- الصور: cover.svg وcover-popup.svg رسوم توضيحية أصلية بصيغة SVG، وليست صورًا تاريخية أو بورتريه لابن سينا.
-- النص الأصلي محفوظ دون تعديل في original-ar.txt.
+# Ibn Sina story — visual and translation fixes
+- Original SVG illustrations: cover.svg, cover-popup.svg, folio.svg. These are illustrations, not archival photos or portraits.
+- Historical source: Library of Congress, The Canon of Medicine: https://www.loc.gov/item/2021667332/
+- Academic context: https://pmc.ncbi.nlm.nih.gov/articles/PMC3343704/
+- Page text, sources, reactions, author line, footer, and intro popup now have English, French, and Italian translations.
+- The intro popup includes a Start the Story button; page text reveals on scroll and respects reduced-motion settings.
+- The submitted Arabic original remains unchanged in original-ar.txt.
