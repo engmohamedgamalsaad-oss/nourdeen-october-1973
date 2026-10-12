@@ -9,6 +9,8 @@
   var busy=false;
   function update(){
     busy=false;
+    var header=document.querySelector(".topbar");
+    if(header){root.style.setProperty("--khaledoon-header-height",Math.ceil(header.getBoundingClientRect().height)+"px");}
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
