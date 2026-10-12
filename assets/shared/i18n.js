@@ -54,16 +54,9 @@
         if(parts.length===2){var text=value(parts[1]);if(text!==parts[1])el.setAttribute(parts[0],text);}
       });
     });
+    /* شريط اختيار اللغة يظهر في الصفحة الرئيسية فقط؛ هنا يُخفى ولا يُبنى */
     document.querySelectorAll('[data-lang-switch]').forEach(function(host){
-      host.innerHTML='';
-      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano'};
-      allowed.forEach(function(lang){
-        var button=document.createElement('button');
-        button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
-        button.textContent=labels[lang];button.setAttribute('aria-pressed',String(lang===current));
-        button.addEventListener('click',function(){setLang(lang);});
-        host.appendChild(button);
-      });
+      host.innerHTML='';host.hidden=true;host.style.display='none';
     });
     document.querySelectorAll('[data-lang-label]').forEach(function(el){el.textContent=value(el.getAttribute('data-lang-label'));});
     extras();
