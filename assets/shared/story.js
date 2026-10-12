@@ -266,7 +266,7 @@
       if (y > h) { return; }
 
       photo.style.transform =
-        'translate3d(0,' + (y * 0.25).toFixed(1) + 'px,0) scale(1.05)';
+        'translate3d(0,' + (y * 0.045).toFixed(1) + 'px,0) scale(1.05)';
 
       if (content) {
         content.style.transform =
