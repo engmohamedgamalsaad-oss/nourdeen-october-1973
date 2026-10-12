@@ -95,27 +95,26 @@
   update();
 })();
 
-/* نجوم ذهبية تظهر وتختفي باستمرار فوق الصورة وتتحرك من المنتصف إلى الخارج (الموبايل فقط).
-   N = عدد النجوم. الحركة نفسها في khaledoon-mobile.css (khStar). */
+/* نقاط ضوئية ذهبية خفيفة وشفافة موزّعة على كل مساحة الصورة، كل نقطة تظهر وتنوّر وتختفي في مكانها (الموبايل فقط).
+   N = عدد النقاط. الحركة نفسها في khaledoon-mobile.css (khTwinkle). */
 (function(){
   var layer=document.querySelector('.hero-background-layer');
   if(!layer)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   if(innerWidth>780)return;
-  var N=14;
+  var N=28;
   var box=document.createElement('div');
   box.className='hero-stars';
   box.setAttribute('aria-hidden','true');
   for(var i=0;i<N;i++){
-    var a=(i*137.5)*Math.PI/180;
-    var r=22+((i*53)%28);
-    var st=document.createElement('i');
-    st.style.setProperty('--dx',(Math.cos(a)*r).toFixed(1)+'vw');
-    st.style.setProperty('--dy',(Math.sin(a)*r*0.55).toFixed(1)+'vw');
-    st.style.setProperty('--sz',(7+((i*5)%7))+'px');
-    st.style.setProperty('--dur',(3.2+(((i*7)%20)/10)).toFixed(1)+'s');
-    st.style.setProperty('--dl','-'+(((i*0.43)%4)).toFixed(2)+'s');
-    box.appendChild(st);
+    var d=document.createElement('i');
+    d.style.left=(((i+1)*0.618034)%1*100).toFixed(1)+'%';
+    d.style.top=(((i+1)*0.754877)%1*100).toFixed(1)+'%';
+    d.style.setProperty('--sz',(4+((i*5)%5))+'px');
+    d.style.setProperty('--op',(0.5+((i*3)%4)*0.1).toFixed(1));
+    d.style.setProperty('--dur',(2.4+(((i*7)%26)/10)).toFixed(1)+'s');
+    d.style.setProperty('--dl','-'+(((i*0.61)%5)).toFixed(2)+'s');
+    box.appendChild(d);
   }
   layer.appendChild(box);
 })();

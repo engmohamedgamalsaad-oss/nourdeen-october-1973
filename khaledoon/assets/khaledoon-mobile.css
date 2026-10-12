@@ -96,24 +96,24 @@
   .hero:not(.sub) .tag{margin-top:10px}
 }
 
-/* ===== نجوم ذهبية تظهر وتختفي باستمرار على الصورة، من الداخل إلى الخارج ===== */
+/* ===== نقاط ضوئية ذهبية خفيفة وشفافة: موزّعة على الصورة كلها، تظهر وتنوّر وتختفي في مكانها ===== */
 @media (max-width:780px){
   .hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
   .hero-stars i{
-    position:absolute;left:50%;top:45%;
-    width:var(--sz,9px);height:var(--sz,9px);
-    margin:calc(var(--sz,9px)/-2) 0 0 calc(var(--sz,9px)/-2);
-    background:#ffd978;
-    clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);
+    position:absolute;
+    width:var(--sz,5px);height:var(--sz,5px);
+    margin:calc(var(--sz,5px)/-2) 0 0 calc(var(--sz,5px)/-2);
+    border-radius:50%;
+    background:radial-gradient(circle,rgba(255,228,150,.95) 0,rgba(255,212,110,.55) 45%,rgba(255,212,110,0) 72%);
     opacity:0;
-    animation:khStar var(--dur,4s) var(--dl,0s) ease-out infinite;
+    animation:khTwinkle var(--dur,3.5s) var(--dl,0s) ease-in-out infinite;
     will-change:transform,opacity;
   }
-  html[data-theme="light"] .hero-stars i{background:#e8b13c}
+  html[data-theme="light"] .hero-stars i{
+    background:radial-gradient(circle,rgba(240,185,60,.95) 0,rgba(232,170,50,.55) 45%,rgba(232,170,50,0) 72%);
+  }
 }
-@keyframes khStar{
-  0%{opacity:0;transform:translate(0,0) scale(.3) rotate(0deg)}
-  18%{opacity:1}
-  65%{opacity:.85}
-  100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(1.15) rotate(120deg)}
+@keyframes khTwinkle{
+  0%,100%{opacity:0;transform:scale(.4)}
+  50%{opacity:var(--op,.75);transform:scale(1.6)}
 }
