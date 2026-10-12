@@ -22,6 +22,10 @@
   addEventListener('scroll',req,{passive:true});
   addEventListener('resize',req,{passive:true});
   addEventListener('orientationchange',req);
+  addEventListener('load',req);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(req);
+  var tb=document.querySelector('.topbar');
+  if(tb&&window.ResizeObserver)new ResizeObserver(req).observe(tb);
   update();
 })();
 
@@ -89,4 +93,29 @@
   addEventListener('orientationchange',req);
   isOn=root.classList.contains('hm');
   update();
+})();
+
+/* نجوم ذهبية تظهر وتختفي باستمرار فوق الصورة وتتحرك من المنتصف إلى الخارج (الموبايل فقط).
+   N = عدد النجوم. الحركة نفسها في khaledoon-mobile.css (khStar). */
+(function(){
+  var layer=document.querySelector('.hero-background-layer');
+  if(!layer)return;
+  if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(innerWidth>780)return;
+  var N=14;
+  var box=document.createElement('div');
+  box.className='hero-stars';
+  box.setAttribute('aria-hidden','true');
+  for(var i=0;i<N;i++){
+    var a=(i*137.5)*Math.PI/180;
+    var r=22+((i*53)%28);
+    var st=document.createElement('i');
+    st.style.setProperty('--dx',(Math.cos(a)*r).toFixed(1)+'vw');
+    st.style.setProperty('--dy',(Math.sin(a)*r*0.55).toFixed(1)+'vw');
+    st.style.setProperty('--sz',(7+((i*5)%7))+'px');
+    st.style.setProperty('--dur',(3.2+(((i*7)%20)/10)).toFixed(1)+'s');
+    st.style.setProperty('--dl','-'+(((i*0.43)%4)).toFixed(2)+'s');
+    box.appendChild(st);
+  }
+  layer.appendChild(box);
 })();
