@@ -1,3 +1,8 @@
+-- LEGACY COMPATIBILITY ONLY (October 2026):
+-- The live website now routes all NEW submissions from every section, including October 1973,
+-- through public.khaledoon_submissions and the unified Khaledoon admin panel.
+-- Keep this old submitted_stories schema/table intact for compatibility; do not reconnect the
+-- retired root submit/admin pages to it. No rows were present in this table at unification time.
 -- حكايات أكتوبر 1973 — إعداد قاعدة بيانات الحكايات المرسلة.
 -- قبل التشغيل: استبدل engmohamedgamalsaad@gmail.com ببريد حساب الأدمن نفسه.
 create table if not exists public.admins (email text primary key);
