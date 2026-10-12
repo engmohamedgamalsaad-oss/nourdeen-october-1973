@@ -133,34 +133,56 @@ function card(it){
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
-var bCopy=el('button','btn ghost','نسخ كل بيانات الحكاية للشات');bCopy.type='button';
+var bCopy=el('button','btn ghost','نسخ الحكاية كاملة لإرسالها إلى ChatGPT');bCopy.type='button';
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
-  L.push('أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، واقترح «في ضوء التاريخ» بمصادر موثوقة مع توضيح أي معلومة غير مؤكدة. لا تنشرها قبل موافقتي.');
+  L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
+  L.push('المطلوب: أكمل دورة تجهيز الحكاية من المراجعة إلى المعاينة، مع عدم نشرها أو دمجها في الموقع قبل موافقتي الصريحة.');
+  L.push('احتفظ بالنص العربي الأصلي كما وصل دون تغيير، وافصل بين الأصل والتحرير. دقّق الوقائع والأسماء والتواريخ بالاعتماد على مصادر موثوقة قابلة للفتح، ولا تخترع مصدرًا أو معلومة. وضّح نقاط الخلاف وعدم اليقين. بعد مراجعة النسخة العربية، جهّز ترجمات الإنجليزية والفرنسية والإيطالية وراجع المعنى والعناوين. اقترح صورًا مناسبة مع مصدر كل صورة وترخيصها/شروط الإسناد، وميّز الصور التاريخية الحقيقية عن التوضيحية المولدة. جهّز ملفات الحكاية على قالب الموقع الحالي مع الروابط والمسارات والوظائف الموجودة، ثم اعرض معاينة واختبارات وما لم يتم التحقق منه. لا تنشر قبل موافقتي.');
   L.push('');
-  L.push('القسم: '+(SEC[secS.value]||''));
-  if(cur){L.push('المرحلة: '+(STG[stgS.value]||''));L.push('الصف: '+(grS.value?(ORD[+grS.value-1]||''):''));if(subj.value.trim())L.push('المادة أو الكتاب: '+subj.value.trim())}
-  L.push('الشخصية أو الموضوع: '+fig.value.trim());
-  L.push('اسم الراوي: '+nar.value.trim());
-  L.push('الصف الدراسي للراوي: '+(ng.value.trim()||'غير مذكور'));
-  L.push('العنوان: '+title.value.trim());
+  L.push('=== بيانات الحكاية ===');
+  L.push('معرّف سجل الإدارة: '+(it.id==null?'مسودة جديدة':String(it.id)));
+  L.push('القسم: '+(SEC[secS.value]||secS.value||'غير محدد'));
+  if(cur){L.push('المرحلة التعليمية: '+(STG[stgS.value]||'غير محددة'));L.push('الصف في المنهج: '+(grS.value?(ORD[+grS.value-1]||grS.value):'غير محدد'));L.push('المادة أو الكتاب: '+(subj.value.trim()||'غير مذكور'))}
+  L.push('الشخصية أو الموضوع: '+(fig.value.trim()||'غير مذكور'));
+  L.push('العنوان: '+(title.value.trim()||'غير مذكور'));
   L.push('العنوان الفرعي: '+(sub.value.trim()||'لا يوجد'));
+  L.push('اسم الراوي (كما في السجل): '+(nar.value.trim()||'غير مذكور'));
+  L.push('الصف الدراسي للراوي: '+(ng.value.trim()||'غير مذكور'));
+  L.push('حالة الحكاية في الإدارة: '+(STATUS[st.value]||st.value||'غير محددة'));
+  L.push('موافقة الراوي/ولي الأمر مسجلة: '+(cons.checked?'نعم':'لا'));
+  L.push('تاريخ الإرسال: '+(it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'مسودة جديدة'));
   L.push('');
-  L.push('نص الحكاية (بصوت الراوي):');
-  L.push(body.value.trim());
-  if(it.original_body&&it.original_body.trim()!==body.value.trim()){L.push('');L.push('النص الأصلي كما وصل:');L.push(it.original_body)}
-  if(hist.value.trim()){L.push('');L.push('في ضوء التاريخ (الحالي):');L.push(hist.value.trim())}
+  L.push('=== النص الأصلي كما وصل (لا تعدّله) ===');
+  L.push(it.original_body&&it.original_body.trim()?it.original_body:'لا يوجد نص أصلي محفوظ منفصلًا.');
   L.push('');
-  L.push('المصادر المرفقة:');
-  L.push(src.value.trim()||'لا توجد');
+  L.push('=== نص الحكاية المحرر الحالي ===');
+  L.push(body.value.trim()||'لا يوجد نص حالي.');
   L.push('');
-  L.push('ملاحظة الصور:');
-  L.push(img.value.trim()||'لا توجد');
-  var t=L.join('\n');
-  function done(ok){say(ok?'ok':'err',ok?'تم نسخ كل بيانات الحكاية. الصقها في الشات.':'تعذر النسخ تلقائيًا.')}
+  L.push('=== «في ضوء التاريخ» الحالي ===');
+  L.push(hist.value.trim()||'لم يُكتب بعد.');
+  L.push('');
+  L.push('=== المصادر المرفقة ===');
+  L.push(src.value.trim()||'لا توجد مصادر مرفقة.');
+  L.push('');
+  L.push('=== ملاحظات الصور وحقوقها ===');
+  L.push(img.value.trim()||'لا توجد ملاحظات صور.');
+  L.push('');
+  L.push('=== ملاحظات الإدارة الخاصة — للمراجعة فقط، لا تنشر كما هي ===');
+  L.push(notes.value.trim()||'لا توجد ملاحظات إدارية.');
+  L.push('');
+  L.push('=== المطلوب في الرد ===');
+  L.push('1) ملخص مراجعة الحقائق وما يحتاج إلى تصحيح أو توثيق.');
+  L.push('2) نسخة عربية محررة مع الاحتفاظ بالنص الأصلي منفصلًا.');
+  L.push('3) قائمة مصادر موثوقة وروابطها، مع ربط كل معلومة أساسية بمصدرها.');
+  L.push('4) الترجمات EN / FR / IT بعد اعتماد العربية.');
+  L.push('5) خطة الصور وحقوق الاستخدام والإسناد، دون افتراض أن نتائج البحث تمنح حق الاستخدام.');
+  L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
+  L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
+  var t=L.join('\\n');
+  function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
- bar.appendChild(bCopy);
  if(!isNew&&(it.status==='pending'||it.status==='review')){
   var bRej=el('button','btn del','رفض');bRej.type='button';
   bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
