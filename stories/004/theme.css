@@ -1,4 +1,4 @@
- :root{--sky:#07121f;--sky2:#10283b;--gold:#e3bd78;--red:#b83436;--mist:#c8d6de;--wave-h:70px}
+:root{--sky:#07121f;--sky2:#10283b;--gold:#e3bd78;--red:#b83436;--mist:#c8d6de;--wave-h:70px}
 .hero{min-height:94svh;position:relative;display:grid;place-items:center;overflow:hidden;isolation:isolate;text-align:center;padding:105px 22px 120px;background:radial-gradient(ellipse at 50% 20%,#244b65 0%,#10283b 38%,#07121f 78%)}
 .hero:before{content:"";position:absolute;inset:0;z-index:-2;background:repeating-linear-gradient(0deg,transparent 0 43px,rgba(227,189,120,.06) 44px,transparent 45px 86px),linear-gradient(155deg,transparent 40%,rgba(184,52,54,.15) 40.2%,transparent 41%)}
 .hero:after{content:"";position:absolute;z-index:-1;width:min(78vw,620px);aspect-ratio:1;border:1px solid rgba(227,189,120,.28);border-radius:50%;box-shadow:0 0 0 35px rgba(227,189,120,.035),0 0 0 80px rgba(227,189,120,.025),inset 0 0 70px rgba(227,189,120,.06)}
@@ -159,3 +159,22 @@ footer strong{color:var(--gold)}
   .story-share-bar--below-hero a{min-width:112px!important;min-height:38px!important;padding:7px 11px!important;font-size:.82rem!important}
   .hero .scroll{bottom:95px;font-size:.8rem}
 }
+
+/* ===== خلفية خفيفة وشفافة لصفحة الحكاية (صورة ثابتة خلف المحتوى) ===== */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:url("Atef_El_Sadat.jpg") center 20% / cover no-repeat;
+  opacity:.13;filter:grayscale(.4) blur(1px);
+}
+/* أقسام المحتوى شبه شفافة ليظهر ما تحتها من الصورة */
+.story{background:linear-gradient(180deg,rgba(10,25,39,.86),rgba(7,18,31,.9))}
+.story:nth-of-type(even){background:linear-gradient(180deg,rgba(13,34,50,.86),rgba(8,21,34,.9))}
+.end{background:radial-gradient(ellipse at top,rgba(23,54,74,.85),rgba(7,18,31,.92) 70%)}
+.sources{background:rgba(5,13,22,.9)}
+.memorial-gallery{background:radial-gradient(ellipse at 50% 0%,rgba(23,54,74,.85) 0%,rgba(9,23,37,.9) 65%,rgba(5,13,22,.92) 100%)}
+
+
+/* خلفية الكتب الداكنة للحكاية 004 */
+body{position:relative;isolation:isolate}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("../../assets/backgrounds/story-004-bg.webp") center / cover no-repeat;opacity:.13;filter:saturate(.68) blur(1px)}
+.story,.sources,.end,footer{position:relative}

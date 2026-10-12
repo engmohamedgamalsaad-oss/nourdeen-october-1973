@@ -71,3 +71,10 @@ footer strong{color:var(--gold)}
 }
 .scroll-reveal{will-change:opacity,transform}
 @media (prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* ===== خلفية هيدر الصفحة الرئيسية (تُطبَّق فقط على الصفحة التي تحتوي #homeHero) ===== */
+body:has(#homeHero) .topbar{
+  background:
+    linear-gradient(90deg,rgba(3,13,19,.90),rgba(3,13,19,.78) 50%,rgba(3,13,19,.90)),
+    url("../backgrounds/header-banner.webp") center 40% / cover no-repeat !important;
+}
