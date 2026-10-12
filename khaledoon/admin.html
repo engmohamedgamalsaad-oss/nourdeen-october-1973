@@ -133,14 +133,35 @@ function card(it){
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
+var bCopy=el('button','btn ghost','نسخ كل بيانات الحكاية للشات');bCopy.type='button';
+ bCopy.addEventListener('click',function(){
+  var cur=secS.value==='curriculum',L=[];
+  L.push('أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، واقترح «في ضوء التاريخ» بمصادر موثوقة مع توضيح أي معلومة غير مؤكدة. لا تنشرها قبل موافقتي.');
+  L.push('');
+  L.push('القسم: '+(SEC[secS.value]||''));
+  if(cur){L.push('المرحلة: '+(STG[stgS.value]||''));L.push('الصف: '+(grS.value?(ORD[+grS.value-1]||''):''));if(subj.value.trim())L.push('المادة أو الكتاب: '+subj.value.trim())}
+  L.push('الشخصية أو الموضوع: '+fig.value.trim());
+  L.push('اسم الراوي: '+nar.value.trim());
+  L.push('الصف الدراسي للراوي: '+(ng.value.trim()||'غير مذكور'));
+  L.push('العنوان: '+title.value.trim());
+  L.push('العنوان الفرعي: '+(sub.value.trim()||'لا يوجد'));
+  L.push('');
+  L.push('نص الحكاية (بصوت الراوي):');
+  L.push(body.value.trim());
+  if(it.original_body&&it.original_body.trim()!==body.value.trim()){L.push('');L.push('النص الأصلي كما وصل:');L.push(it.original_body)}
+  if(hist.value.trim()){L.push('');L.push('في ضوء التاريخ (الحالي):');L.push(hist.value.trim())}
+  L.push('');
+  L.push('المصادر المرفقة:');
+  L.push(src.value.trim()||'لا توجد');
+  L.push('');
+  L.push('ملاحظة الصور:');
+  L.push(img.value.trim()||'لا توجد');
+  var t=L.join('\n');
+  function done(ok){say(ok?'ok':'err',ok?'تم نسخ كل بيانات الحكاية. الصقها في الشات.':'تعذر النسخ تلقائيًا.')}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
+ });
+ bar.appendChild(bCopy);
  if(!isNew&&(it.status==='pending'||it.status==='review')){
-  var bCopy=el('button','btn ghost','نسخ للمراجعة في الشات');bCopy.type='button';
-  bCopy.addEventListener('click',function(){
-   var t='أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، واقترح «في ضوء التاريخ» بمصادر موثوقة مع توضيح أي معلومة غير مؤكدة. لا تنشرها قبل موافقتي.\n\nالقسم: '+(SEC[it.section]||'')+'\nالشخصية: '+(it.figure_name||'')+'\nالراوي: '+(it.narrator_name||'')+' — '+(it.narrator_grade||'')+'\nالعنوان: '+(it.title||'')+'\nالعنوان الفرعي: '+(it.subtitle||'')+'\n\nالنص الأصلي:\n'+(it.original_body||it.body||'')+'\n\nالمصادر المرفقة:\n'+(it.sources||'لا توجد')+'\n\nملاحظة الصور:\n'+(it.images_note||'لا توجد');
-   function done(ok){say(ok?'ok':'err',ok?'تم النسخ. الصقه في الشات للمراجعة.':'تعذر النسخ تلقائيًا.')}
-   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
-  });
-  bar.appendChild(bCopy);
   var bRej=el('button','btn del','رفض');bRej.type='button';
   bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
   bar.appendChild(bRej);
