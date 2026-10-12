@@ -1,5 +1,5 @@
 /* حركة غلاف خالدون على الموبايل:
-   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، ثم تبقى خافتة خلف بقية الصفحة. */
+   طبقة خلفية ثابتة تكبر أثناء مغادرة قسم المقدمة، وتبقى بنفس الشفافية خلف بقية الصفحة. */
 (function(){
   var hero=document.querySelector('.hero:not(.sub)');
   if(!hero)return;
@@ -15,7 +15,8 @@
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
     root.style.setProperty('--hero-bg-scale',(1+passed*.72).toFixed(4));
-    root.style.setProperty('--hero-bg-opacity',(1-passed*.78).toFixed(4));
+    /* الصورة تكبر فقط وتبقى بنفس الشفافية؛ التلاشي الوحيد في آخر 5% من أسفلها (khaledoon-mobile.css) */
+    root.style.setProperty('--hero-bg-opacity','1');
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
   addEventListener('scroll',req,{passive:true});
