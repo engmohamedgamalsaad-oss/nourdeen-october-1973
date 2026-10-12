@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>لوحة الإدارة الموحّدة</title>
+<style>
+:root{--bg:#0b1920;--bar:#112530;--fg:#f4ecd8;--mut:#9fb3bd;--gold:#d9a441;--line:#24404d}
+@media (prefers-color-scheme:light){:root{--bg:#f6f1e4;--bar:#ffffff;--fg:#1c2a31;--mut:#5b6b73;--gold:#a8741a;--line:#d9d0b8}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{display:flex;flex-direction:column;background:var(--bg);color:var(--fg);font-family:"Cairo",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;padding-top:env(safe-area-inset-top,0px)}
+.bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 14px;background:var(--bar);border-bottom:1px solid var(--line)}
+.bar h1{font-size:1rem;margin:0;font-weight:800;margin-inline-end:auto}
+.tabs{display:flex;gap:8px}
+.tab{font:inherit;font-weight:700;font-size:.9rem;padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--mut);cursor:pointer}
+.tab[aria-selected="true"]{background:var(--gold);color:#101820;border-color:var(--gold)}
+.tab:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hint{width:100%;margin:0;font-size:.78rem;color:var(--mut)}
+.stage{flex:1;min-height:0;position:relative}
+iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent}
+iframe[hidden]{display:none}
+</style>
+</head>
+<body>
+<div class="bar">
+  <h1>لوحة الإدارة الموحّدة</h1>
+  <div class="tabs" role="tablist" aria-label="أقسام الإدارة">
+    <button class="tab" id="t-oct" role="tab" aria-selected="true" aria-controls="f-oct" type="button">حكايات أكتوبر 1973</button>
+    <button class="tab" id="t-kh" role="tab" aria-selected="false" aria-controls="f-kh" type="button">خالدون عبر التاريخ</button>
+  </div>
+  <p class="hint">كل قسم له تسجيل دخول مستقل بنفس حساب الأدمن، وبيتطلب مرة واحدة لكل قسم في كل جلسة.</p>
+</div>
+<div class="stage">
+  <iframe id="f-oct" title="إدارة حكايات أكتوبر 1973" src="admin.html"></iframe>
+  <iframe id="f-kh" title="إدارة خالدون عبر التاريخ" data-src="khaledoon/admin.html" hidden></iframe>
+</div>
+<script>
+(function(){
+  var tabs={oct:document.getElementById('t-oct'),kh:document.getElementById('t-kh')};
+  var frames={oct:document.getElementById('f-oct'),kh:document.getElementById('f-kh')};
+  function show(k){
+    if(!tabs[k])k='oct';
+    ['oct','kh'].forEach(function(n){
+      var on=n===k;
+      tabs[n].setAttribute('aria-selected',on?'true':'false');
+      frames[n].hidden=!on;
+    });
+    if(k==='kh'&&!frames.kh.getAttribute('src'))frames.kh.setAttribute('src',frames.kh.getAttribute('data-src'));
+    try{history.replaceState(null,'','#'+k)}catch(e){}
+  }
+  tabs.oct.onclick=function(){show('oct')};
+  tabs.kh.onclick=function(){show('kh')};
+  show((location.hash||'').replace('#','')||'oct');
+})();
+</script>
+</body>
+</html>
