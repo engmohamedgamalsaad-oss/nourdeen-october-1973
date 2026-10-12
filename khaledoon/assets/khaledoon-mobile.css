@@ -7,7 +7,7 @@
     display:block;
     position:fixed;
     z-index:1;
-    top:0;
+    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px));
     left:0;
     width:100vw;
     height:56.25vw;
@@ -19,12 +19,12 @@
     will-change:transform,opacity;
     background:
       linear-gradient(180deg,rgba(3,12,17,.12),rgba(3,12,17,.38) 65%,rgba(3,12,17,.72)),
-      url("main-cover.jpg") center/100% 100% no-repeat;
+      url("main-cover.jpg") center/cover no-repeat;
   }
   html[data-theme="light"] .hero-background-layer{
     background:
       linear-gradient(180deg,rgba(255,249,232,.08),rgba(255,249,232,.30) 65%,rgba(255,249,232,.62)),
-      url("main-cover.jpg") center/100% 100% no-repeat;
+      url("main-cover.jpg") center/cover no-repeat;
   }
   main,footer{position:relative;z-index:2}
   html[data-theme] .hero:not(.sub){
