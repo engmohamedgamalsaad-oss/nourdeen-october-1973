@@ -1,54 +1,53 @@
 /* khaledoon/assets/khaledoon-mobile.css
-   تكبير غلاف خالدون تدريجيًا أثناء التمرير مع تثبيت موضع الصورة وتخفيفها.
-   الصفحة الرئيسية فقط؛ لا يؤثر على صفحات حكايات أكتوبر. */
+   غلاف ثابت على الموبايل: يبدأ كبانر، ثم يكبر ويتلاشى تدريجيًا ويبقى خلف المحتوى.
+   نطاق التأثير هو الرئيسية فقط، ولا يغيّر صفحات الحكايات القديمة. */
 
-@media (max-width:780px) and (orientation:portrait){
+@media (max-width:780px){
+  .hero-background-layer{
+    display:block;
+    position:fixed;
+    z-index:1;
+    top:0;
+    left:0;
+    width:100vw;
+    height:56.25vw;
+    max-height:58vh;
+    pointer-events:none;
+    transform:translateZ(0) scale(var(--hero-bg-scale,1));
+    transform-origin:50% 45%;
+    opacity:var(--hero-bg-opacity,1);
+    will-change:transform,opacity;
+    background:
+      linear-gradient(180deg,rgba(3,12,17,.12),rgba(3,12,17,.38) 65%,rgba(3,12,17,.72)),
+      url("main-cover.jpg") center/100% 100% no-repeat;
+  }
+  html[data-theme="light"] .hero-background-layer{
+    background:
+      linear-gradient(180deg,rgba(255,249,232,.08),rgba(255,249,232,.30) 65%,rgba(255,249,232,.62)),
+      url("main-cover.jpg") center/100% 100% no-repeat;
+  }
+  main,footer{position:relative;z-index:2}
   html[data-theme] .hero:not(.sub){
-    background:var(--night)!important;
+    background:transparent!important;
     min-height:0!important;
     align-items:flex-start;
   }
-  html[data-theme] .hero:not(.sub)::before{
-    inset:0 0 auto 0!important;
-    height:auto!important;
-    aspect-ratio:16/9;
-    transform-origin:50% 45%;
-    transform:scale(calc(1 + var(--hm-p,0) * .75))!important;
-    opacity:calc(1 - var(--hm-p,0) * .72);
-    will-change:transform,opacity!important;
-    background:
-      linear-gradient(180deg,rgba(7,21,29,.05) 45%,var(--night) 100%),
-      url("main-cover.jpg") center/cover no-repeat!important;
-  }
+  html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
     padding:calc(56.25vw - 8px) 0 44px;
   }
 }
 
-@media (orientation:landscape) and (max-height:520px){
-  html[data-theme] .hero:not(.sub){
-    background:var(--night)!important;
-    min-height:0!important;
+@media (max-width:780px) and (orientation:landscape) and (max-height:520px){
+  .hero-background-layer{
+    width:100vw;height:100vh;max-height:none;
+    background-size:cover;
+    background-position:center 40%;
   }
-  html[data-theme] .hero:not(.sub)::before{
-    inset:0!important;
-    transform-origin:50% 45%;
-    transform:scale(calc(1 + var(--hm-p,0) * .75))!important;
-    opacity:calc(1 - var(--hm-p,0) * .72);
-    will-change:transform,opacity!important;
-    background:
-      linear-gradient(180deg,rgba(7,21,29,.05) 45%,var(--night) 100%),
-      url("main-cover.jpg") center 35%/cover no-repeat!important;
-  }
-  html[data-theme] .hero:not(.sub) .hero-in{
-    padding:36px 0 44px;
-  }
+  html[data-theme] .hero:not(.sub) .hero-in{padding:36px 0 44px}
 }
 
 @media(prefers-reduced-motion:reduce){
-  html[data-theme] .hero:not(.sub)::before{
-    transform:none!important;
-    opacity:1!important;
-    will-change:auto!important;
-  }
+  .hero-background-layer{transform:none!important;opacity:.32!important;will-change:auto!important}
+  html[data-theme] .hero:not(.sub)::before{display:none!important}
 }
