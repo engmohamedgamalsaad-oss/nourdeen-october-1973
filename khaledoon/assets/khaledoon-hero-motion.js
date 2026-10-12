@@ -95,7 +95,8 @@
   update();
 })();
 
-/* نقاط ضوئية ذهبية خفيفة وشفافة موزّعة على كل مساحة الصورة، كل نقطة تظهر وتنوّر وتختفي في مكانها (الموبايل فقط).
+/* نقاط صغيرة موزّعة على كل مساحة الصورة: كل نقطة تنوّر بهدوء وتطفأ بهدوء في مكانها،
+   ولونها يتحوّل بين الأبيض والذهبي (الموبايل فقط).
    N = عدد النقاط. الحركة نفسها في khaledoon-mobile.css (khTwinkle). */
 (function(){
   var layer=document.querySelector('.hero-background-layer');
@@ -110,10 +111,10 @@
     var d=document.createElement('i');
     d.style.left=(((i+1)*0.618034)%1*100).toFixed(1)+'%';
     d.style.top=(((i+1)*0.754877)%1*100).toFixed(1)+'%';
-    d.style.setProperty('--sz',(4+((i*5)%5))+'px');
-    d.style.setProperty('--op',(0.5+((i*3)%4)*0.1).toFixed(1));
-    d.style.setProperty('--dur',(2.4+(((i*7)%26)/10)).toFixed(1)+'s');
-    d.style.setProperty('--dl','-'+(((i*0.61)%5)).toFixed(2)+'s');
+    d.style.setProperty('--sz',(2+((i*5)%3))+'px');
+    d.style.setProperty('--op',(0.6+((i*3)%4)*0.1).toFixed(1));
+    d.style.setProperty('--dur',(4+(((i*7)%30)/10)).toFixed(1)+'s');
+    d.style.setProperty('--dl','-'+(((i*0.83)%6.5)).toFixed(2)+'s');
     box.appendChild(d);
   }
   layer.appendChild(box);

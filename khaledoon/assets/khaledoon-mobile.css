@@ -96,24 +96,30 @@
   .hero:not(.sub) .tag{margin-top:10px}
 }
 
-/* ===== نقاط ضوئية ذهبية خفيفة وشفافة: موزّعة على الصورة كلها، تظهر وتنوّر وتختفي في مكانها ===== */
+/* ===== نقاط صغيرة على الصورة: تنوّر وتطفأ بهدوء في مكانها، ولونها يتحوّل بين الأبيض والذهبي ===== */
 @media (max-width:780px){
   .hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
   .hero-stars i{
     position:absolute;
-    width:var(--sz,5px);height:var(--sz,5px);
-    margin:calc(var(--sz,5px)/-2) 0 0 calc(var(--sz,5px)/-2);
+    width:var(--sz,3px);height:var(--sz,3px);
+    margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
     border-radius:50%;
-    background:radial-gradient(circle,rgba(255,228,150,.95) 0,rgba(255,212,110,.55) 45%,rgba(255,212,110,0) 72%);
+    background-color:#fff;
     opacity:0;
-    animation:khTwinkle var(--dur,3.5s) var(--dl,0s) ease-in-out infinite;
-    will-change:transform,opacity;
+    animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
+    will-change:opacity;
   }
-  html[data-theme="light"] .hero-stars i{
-    background:radial-gradient(circle,rgba(240,185,60,.95) 0,rgba(232,170,50,.55) 45%,rgba(232,170,50,0) 72%);
-  }
+  html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
 }
 @keyframes khTwinkle{
-  0%,100%{opacity:0;transform:scale(.4)}
-  50%{opacity:var(--op,.75);transform:scale(1.6)}
+  0%{opacity:0;background-color:#ffffff}
+  35%{opacity:var(--op,.8);background-color:#ffffff}
+  65%{opacity:var(--op,.8);background-color:#f5c451}
+  100%{opacity:0;background-color:#f5c451}
+}
+@keyframes khTwinkleLight{
+  0%{opacity:0;background-color:#e8a92e}
+  35%{opacity:var(--op,.8);background-color:#e8a92e}
+  65%{opacity:var(--op,.8);background-color:#b9770e}
+  100%{opacity:0;background-color:#b9770e}
 }
