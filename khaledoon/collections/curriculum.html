@@ -15,6 +15,33 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/khaledoon.css">
+<style>
+/* ألوان قسم المناهج متناسقة مع غلاف بوابته الرئيسية: أزرق ملكي وفضي */
+.curriculum-page{
+  background:
+    radial-gradient(ellipse at 82% 8%,rgba(91,126,213,.24),transparent 38%),
+    linear-gradient(180deg,#101a35,#111d38 58%,#0b1428);
+}
+.curriculum-page .hero.sub{
+  background:
+    linear-gradient(90deg,rgba(12,23,50,.84),rgba(25,43,83,.50) 55%,rgba(12,22,45,.82)),
+    url("../assets/backgrounds/story-004-bg.webp") center / cover no-repeat !important;
+  border-bottom:1px solid rgba(155,183,255,.30);
+}
+.curriculum-page .section.alt{
+  background:linear-gradient(180deg,rgba(31,53,96,.30),rgba(12,22,45,.16));
+  border-block-color:rgba(155,183,255,.18);
+}
+.curriculum-page .info,
+.curriculum-page .panel{
+  border-color:rgba(155,183,255,.25);
+}
+.curriculum-page .info h3,
+.curriculum-page .head h2{color:#c9d7ff}
+.curriculum-page .kicker,
+.curriculum-page .badge{color:#b9cbff}
+@media(max-width:700px){.curriculum-page{background-attachment:scroll}}
+</style>
 </head>
 <body class="curriculum-page">
 <canvas id='bg' aria-hidden='true'></canvas>
