@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#060d1f">
+<script>try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");d.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+<title>لوحة الإدارة | خالدون عبر التاريخ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/khaledoon.css">
+<link rel="stylesheet" href="assets/khaledoon-forms.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap nav">
+<a class="brand" href="index.html"><span class="mark">خ</span><span>خالدون عبر التاريخ<small>لوحة إدارة الحكايات</small></span></a>
+<div class="ctl"><a class="btn ghost" href="submit.html">صفحة إرسال الحكايات</a><a class="btn ghost" href="index.html">← الموقع</a><button class="btn ghost" id="logoutBtn" type="button" hidden>تسجيل الخروج</button><button class="thm" id="th" type="button">☀️ فاتح</button></div>
+</div></header>
+<main class="fmain" style="width:min(1040px,calc(100% - 28px))">
+<div id="msg" class="fmsg" role="status" aria-live="polite" hidden></div>
+<section class="fcard" id="loginBox" style="max-width:520px;margin:40px auto">
+<h2>أهلًا بعودتك</h2><p class="fnote" style="margin:0 0 16px">سجّل الدخول بحساب الأدمن لمراجعة الحكايات المرسلة.</p>
+<form id="loginForm">
+<label class="fl">البريد الإلكتروني<input type="email" id="email" autocomplete="username" required></label>
+<label class="fl">كلمة المرور<input type="password" id="password" autocomplete="current-password" required></label>
+<button class="btn primary" type="submit" id="loginBtn">دخول</button>
+</form></section>
+<section id="app" hidden>
+<div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره.</p></div>
+<div class="stats" id="stats"></div>
+<div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
+<div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
+<div class="chips" id="secs" role="group" aria-label="القسم"></div>
+<div id="list"></div>
+</section>
+</main>
+<script>
+(function(){
+'use strict';
+var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
+var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='';
+var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
+var SEC={science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
+var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
+var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
+function $(i){return document.getElementById(i)}
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function say(k,t){var m=$('msg');m.className='fmsg '+k;m.textContent=t;m.hidden=false;if(k==='ok')setTimeout(function(){m.hidden=true},4000)}
+function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+function load(){try{var s=JSON.parse(sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
+function clear(){session=null;try{sessionStorage.removeItem(SK)}catch(e){}}
+function showLogin(){$('loginBox').hidden=false;$('app').hidden=true;$('logoutBtn').hidden=true}
+function showApp(){$('loginBox').hidden=true;$('app').hidden=false;$('logoutBtn').hidden=false}
+function hdr(x){var h={apikey:KEY,'Content-Type':'application/json',Authorization:'Bearer '+(session?session.access_token:KEY)};if(x)Object.keys(x).forEach(function(k){h[k]=x[k]});return h}
+async function refreshIfNeeded(){
+ if(!session||!session.refresh_token)return;
+ if(session.expires_at-Date.now()/1000>60)return;
+ var r=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+ if(!r.ok){clear();showLogin();throw new Error('انتهت الجلسة.')}
+ var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+}
+async function rest(path,o){
+ await refreshIfNeeded();o=o||{};o.headers=hdr(o.headers);
+ var r=await fetch(API+'/rest/v1/'+path,o);
+ if(r.status===401){clear();showLogin();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى.')}
+ return r;
+}
+async function login(email,pw){
+ var r=await fetch(API+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pw})});
+ if(!r.ok)throw new Error('بيانات الدخول غير صحيحة.');
+ var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+ var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
+ if(!(a.ok&&(await a.json())===true)){clear();throw new Error('هذا الحساب ليس مسجّلًا كأدمن.')}
+}
+async function loadList(){
+ var r=await rest('khaledoon_submissions?select=*&order=created_at.desc');
+ if(r.status===404)throw new Error('الجدول غير موجود بعد. شغّل docs/khaledoon-supabase.sql في Supabase أولًا.');
+ if(!r.ok)throw new Error('تعذر تحميل الحكايات ('+r.status+').');
+ items=await r.json();render();
+}
+function count(fn){return items.filter(fn).length}
+function renderStats(){
+ var b=$('stats');b.textContent='';
+ [['إجمالي',items.length],['بانتظار المراجعة',count(function(i){return i.status==='pending'})],['تحت التحرير',count(function(i){return i.status==='review'})],['منشورة',count(function(i){return i.status==='published'})]].forEach(function(s){var c=el('div','stat');c.appendChild(el('span','',s[0]));c.appendChild(el('strong','',String(s[1])));b.appendChild(c)});
+}
+function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
+function renderTabs(){
+ var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
+ chip(t,'كل الحالات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
+ Object.keys(STATUS).forEach(function(k){chip(t,STATUS[k]+' ('+count(function(i){return i.status===k})+')',fStatus===k,function(){fStatus=k;render()})});
+ chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
+ Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
+}
+function fld(l,n,sm){var w=el('label','fl');w.appendChild(document.createTextNode(l));if(sm)w.appendChild(el('small','',sm));w.appendChild(n);return w}
+function inp(v,max){var i=document.createElement('input');i.type='text';i.value=v||'';if(max)i.maxLength=max;return i}
+function area(v,rows,max){var t=document.createElement('textarea');t.rows=rows;t.value=v||'';if(max)t.maxLength=max;return t}
+function sel(map,v,empty){var s=document.createElement('select');if(empty){var o=el('option','',empty);o.value='';s.appendChild(o)}Object.keys(map).forEach(function(k){var o=el('option','',map[k]);o.value=k;if(k===v)o.selected=true;s.appendChild(o)});return s}
+function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
+function card(it){
+ var isNew=!it.id,box=el('article','fcard');
+ var head=el('div','fbar');head.style.justifyContent='space-between';
+ head.appendChild(el('h3','',isNew?'حكاية جديدة':(it.title||'')));
+ if(!isNew)head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status));
+ box.appendChild(head);
+ if(!isNew){
+  var path=SEC[it.section]||it.section;
+  if(it.section==='curriculum')path+=' — '+(STG[it.stage]||'')+' — الصف '+(ORD[(it.school_grade||1)-1]||'')+(it.subject?' — '+it.subject:'');
+  box.appendChild(el('div','meta2',path+' • أُرسلت في '+new Date(it.created_at).toLocaleString('ar-EG')+(it.consent?' • الموافقة مسجّلة':' • بلا موافقة مسجّلة')));
+  if(it.original_body){var dt=el('details','orig');dt.appendChild(el('summary','','النص الأصلي كما وصل (للقراءة فقط)'));dt.appendChild(el('pre','',it.original_body));box.appendChild(dt)}
+ }
+ var secS=sel(SEC,it.section||'curriculum'),stgS=sel(STG,it.stage||'','اختر المرحلة'),grS=document.createElement('select'),subj=inp(it.subject,80);
+ function fillGr(){var n=stgS.value==='primary'?6:3,keep=grS.value||String(it.school_grade||'');grS.textContent='';var o=el('option','','اختر الصف');o.value='';grS.appendChild(o);for(var i=0;i<n;i++){var p=el('option','','الصف '+ORD[i]);p.value=String(i+1);grS.appendChild(p)}if(keep&&+keep<=n)grS.value=keep}
+ fillGr();stgS.addEventListener('change',fillGr);
+ var curBox=el('div','');curBox.appendChild((function(){var g=el('div','fgrid');g.appendChild(fld('المرحلة',stgS));g.appendChild(fld('الصف',grS));return g})());curBox.appendChild(fld('المادة أو الكتاب',subj));
+ function tog(){curBox.hidden=secS.value!=='curriculum'}tog();secS.addEventListener('change',tog);
+ var fig=inp(it.figure_name,120),nar=inp(it.narrator_name,40),ng=inp(it.narrator_grade,60),title=inp(it.title,140),sub=inp(it.subtitle,200);
+ var body=area(it.body,10,12000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(it.admin_notes,3,3000);
+ var cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;
+ var st=sel(STATUS,it.status||'pending');
+ var g1=el('div','fgrid');g1.appendChild(fld('القسم',secS));g1.appendChild(fld('الشخصية أو الموضوع',fig));box.appendChild(g1);
+ box.appendChild(curBox);
+ var g2=el('div','fgrid');g2.appendChild(fld('اسم الراوي (الاسم الأول فقط)',nar));g2.appendChild(fld('الصف الدراسي للراوي',ng));g2.appendChild(fld('العنوان',title));g2.appendChild(fld('العنوان الفرعي',sub));box.appendChild(g2);
+ box.appendChild(fld('بصوت الراوي',body,'النص المحرَّر؛ الأصل محفوظ بالأعلى'));
+ box.appendChild(fld('في ضوء التاريخ',hist,'السياق والتصحيحات والمراجع، يكتبها المحرر بعد التحقق'));
+ box.appendChild(fld('المصادر',src,'سطر لكل مصدر، ووضّح أي معلومة غير مؤكدة'));
+ box.appendChild(fld('الصور وحقوقها',img));
+ box.appendChild(fld('ملاحظات الأدمن (خاصة)',notes));
+ var cl=el('label','fchk');cl.appendChild(cons);cl.appendChild(el('span','','موافقة الراوي أو ولي الأمر على عرض الاسم الأول والصف مسجّلة'));box.appendChild(cl);
+ var g3=el('div','fgrid');g3.appendChild(fld('الحالة',st));box.appendChild(g3);
+ var bar=el('div','fbar');
+ var bSave=el('button','btn primary','حفظ');bSave.type='button';
+ var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
+ bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
+ if(!isNew&&(it.status==='pending'||it.status==='review')){
+  var bCopy=el('button','btn ghost','نسخ للمراجعة في الشات');bCopy.type='button';
+  bCopy.addEventListener('click',function(){
+   var t='أريد مراجعة هذه الحكاية وتجهيزها للنشر في موقع خالدون عبر التاريخ. دقّق اللغة والمعلومات التاريخية، وراجع المصادر دون اختراع حقائق أو مراجع، واقترح «في ضوء التاريخ» بمصادر موثوقة مع توضيح أي معلومة غير مؤكدة. لا تنشرها قبل موافقتي.\n\nالقسم: '+(SEC[it.section]||'')+'\nالشخصية: '+(it.figure_name||'')+'\nالراوي: '+(it.narrator_name||'')+' — '+(it.narrator_grade||'')+'\nالعنوان: '+(it.title||'')+'\nالعنوان الفرعي: '+(it.subtitle||'')+'\n\nالنص الأصلي:\n'+(it.original_body||it.body||'')+'\n\nالمصادر المرفقة:\n'+(it.sources||'لا توجد')+'\n\nملاحظة الصور:\n'+(it.images_note||'لا توجد');
+   function done(ok){say(ok?'ok':'err',ok?'تم النسخ. الصقه في الشات للمراجعة.':'تعذر النسخ تلقائيًا.')}
+   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
+  });
+  bar.appendChild(bCopy);
+  var bRej=el('button','btn del','رفض');bRej.type='button';
+  bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
+  bar.appendChild(bRej);
+ }
+ if(isNew){var bc=el('button','btn ghost','إلغاء');bc.type='button';bc.addEventListener('click',function(){draftNew=false;render()});bar.appendChild(bc)}
+ else{var bd=el('button','btn del','حذف');bd.type='button';bd.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟'))remove(it,bd)});bar.appendChild(bd)}
+ box.appendChild(bar);
+ function collect(status){
+  var cur=secS.value==='curriculum';
+  return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,consent:cons.checked,status:status};
+ }
+ function valid(d){
+  if(d.figure_name.length<2||d.narrator_name.length<2||d.title.length<3||d.body.length<50){say('err','الشخصية واسم الراوي والعنوان مطلوبة، ونص الحكاية 50 حرفًا على الأقل.');return false}
+  if(d.section==='curriculum'&&(!d.stage||!d.school_grade)){say('err','اختر المرحلة والصف لشخصيات المناهج.');return false}
+  if(d.stage&&d.stage!=='primary'&&d.school_grade>3){say('err','الصف خارج نطاق المرحلة المختارة.');return false}
+  if(d.status==='published'&&!d.consent){say('err','لا يمكن النشر دون تسجيل موافقة الراوي أو ولي الأمر.');return false}
+  return true;
+ }
+ async function persist(status,btn){
+  var d=collect(status);if(!valid(d))return;
+  btn.disabled=true;
+  try{
+   var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)})
+              :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+   if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). راجع الحقول.');
+   var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
+   draftNew=false;say('ok','تم الحفظ.');await loadList();
+  }catch(e){say('err',e.message||'حدث خطأ.')}
+  btn.disabled=false;
+ }
+ bSave.addEventListener('click',function(){persist(st.value,bSave)});
+ bPub.addEventListener('click',function(){persist('published',bPub)});
+ return box;
+}
+async function remove(it,btn){
+ btn.disabled=true;
+ try{
+  var r=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
+  var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
+  say('ok','تم الحذف.');await loadList();
+ }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
+}
+function render(){
+ renderStats();renderTabs();
+ var list=$('list');list.textContent='';
+ var k=term.trim().toLocaleLowerCase();
+ var shown=items.filter(function(i){
+  return (fStatus==='all'||i.status===fStatus)&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+ });
+ if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
+ if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
+ shown.forEach(function(i){list.appendChild(card(i))});
+}
+$('loginForm').addEventListener('submit',async function(e){
+ e.preventDefault();var b=$('loginBtn');b.disabled=true;
+ try{await login($('email').value.trim(),$('password').value);$('password').value='';showApp();await loadList()}catch(err){say('err',err.message||'تعذر الدخول.')}
+ b.disabled=false;
+});
+$('logoutBtn').addEventListener('click',function(){clear();items=[];showLogin();say('ok','تم تسجيل الخروج.')});
+$('refreshBtn').addEventListener('click',function(){loadList().catch(function(e){say('err',e.message)})});
+$('search').addEventListener('input',function(){term=this.value;render()});
+$('newBtn').addEventListener('click',function(){draftNew=true;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
+(function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
+load();
+if(session){showApp();loadList().catch(function(e){if(!session){showLogin()}else{say('err',e.message)}})}else showLogin();
+})();
+</script>
+</body>
+</html>

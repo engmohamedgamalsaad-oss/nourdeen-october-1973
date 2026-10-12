@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#060d1f">
+<script>try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");d.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+<title>اكتب حكايتك | خالدون عبر التاريخ</title>
+<meta name="description" content="اقترح حكاية عن شخصية أثّرت في التاريخ أو وردت في المناهج المصرية. الإرسال لا يعني النشر؛ كل حكاية تُراجع أولًا.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/khaledoon.css">
+<link rel="stylesheet" href="assets/khaledoon-forms.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap nav">
+<a class="brand" href="index.html" aria-label="خالدون عبر التاريخ"><span class="mark">خ</span><span>خالدون عبر التاريخ<small>حكاياتٌ تُروى… وأثرٌ يبقى</small></span></a>
+<div class="ctl"><a class="btn ghost" href="index.html">→ الرئيسية</a><button class="thm" id="th" type="button">☀️ فاتح</button></div>
+</div></header>
+<main class="fmain">
+<div class="fhead"><div class="kicker">شاركنا حكاية</div><h1>اكتب حكايتك</h1><p>اختر شخصية وحكِ قصتها بصوتك. الإرسال لا يعني النشر: تُراجع الحقائق والمصادر أولًا، ويُعرض النص عليك قبل أي ترجمة، ولا تُنشر حكاية دون موافقة.</p></div>
+<div id="msg" class="fmsg" role="status" aria-live="polite" hidden></div>
+<form id="f" class="fcard" novalidate>
+<h2>عن الحكاية</h2>
+<div class="fgrid">
+<label class="fl">القسم *<select id="section" required><option value="">اختر القسم</option><option value="science">العلم والعلماء</option><option value="learning">التعليم والمعرفة</option><option value="fame">المشاهير والرياضة والفنون</option><option value="history">التاريخ والحضارات</option><option value="curriculum">شخصيات المناهج المصرية</option><option value="readers">اقتراح آخر</option></select></label>
+<label class="fl">الشخصية أو الموضوع *<input id="figure" maxlength="120" placeholder="مثال: أحمد زويل" required></label>
+</div>
+<div id="curBox" hidden>
+<div class="fgrid">
+<label class="fl">المرحلة *<select id="stage"><option value="">اختر المرحلة</option><option value="primary">الابتدائية</option><option value="preparatory">الإعدادية</option><option value="secondary">الثانوية</option></select></label>
+<label class="fl">الصف *<select id="grade"><option value="">اختر الصف</option></select></label>
+</div>
+<label class="fl">المادة أو الكتاب <small>اختياري، حسب ورود الشخصية فعلًا في الكتاب</small><input id="subject" maxlength="80" placeholder="مثال: الدراسات الاجتماعية"></label>
+</div>
+<label class="fl">عنوان الحكاية *<input id="title" maxlength="140" required></label>
+<label class="fl">عنوان فرعي <small>اختياري</small><input id="subtitle" maxlength="200"></label>
+<label class="fl">الحكاية بصوتك * <small>اكتبها بأسلوبك وكلماتك، 50 حرفًا على الأقل. افصل الفقرات بسطر فارغ.</small><textarea id="body" rows="10" maxlength="12000" required></textarea><span class="cnt" id="cnt">0 / 12000</span></label>
+<label class="fl">المصادر <small>اختياري لكنه مهم: كتب أو مواقع اعتمدت عليها، سطر لكل مصدر</small><textarea id="sources" rows="3" maxlength="3000"></textarea></label>
+<label class="fl">الصور <small>اختياري: هل عندك صورة مناسبة؟ اذكر مصدرها وحقوق استخدامها (لا ترسل صورًا هنا)</small><textarea id="images" rows="2" maxlength="1500"></textarea></label>
+<h2 style="margin-top:8px">عن الراوي</h2>
+<div class="fgrid">
+<label class="fl">اسم الراوي *<small>الاسم الأول أو لقب فقط، دون اسم العائلة أو المدرسة</small><input id="narrator" maxlength="40" required autocomplete="off"></label>
+<label class="fl">الصف الدراسي للراوي <small>اختياري</small><input id="ngrade" maxlength="60" placeholder="مثال: الصف الأول الإعدادي"></label>
+</div>
+<div class="hp" aria-hidden="true"><label>لا تملأ هذا الحقل<input id="website" tabindex="-1" autocomplete="off"></label></div>
+<label class="fchk"><input type="checkbox" id="consent"><span>أوافق أنا (أو ولي الأمر إن كنت دون 18 سنة) على عرض الاسم الأول فقط والصف بعد المراجعة، وأفهم أن الإرسال لا يعني النشر. *</span></label>
+<div class="fbar"><button class="btn primary" type="submit" id="go">إرسال الحكاية</button><span class="fnote">الإرسال بالعربية. لا تكتب بيانات تواصل أو أسماء كاملة.</span></div>
+</form>
+<section id="done" class="fcard" hidden><h2>وصلت حكايتك 🎉</h2><p>شكرًا لك. ستُراجع الحقائق والمصادر أولًا، ولن تُنشر قبل الموافقة.</p><div class="fbar"><a class="btn primary" href="submit.html">اكتب حكاية أخرى</a><a class="btn ghost" href="index.html">→ العودة إلى الرئيسية</a></div></section>
+</main>
+<script>
+(function(){
+'use strict';
+var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+function $(i){return document.getElementById(i)}
+var f=$('f'),sec=$('section'),stage=$('stage'),grade=$('grade'),msg=$('msg'),btn=$('go');
+var W=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
+function say(k,t){msg.className='fmsg '+k;msg.textContent=t;msg.hidden=false;msg.scrollIntoView({behavior:'smooth',block:'center'})}
+function grades(){var n=stage.value==='primary'?6:3,o=['<option value="">اختر الصف</option>'],keep=grade.value;for(var i=0;i<n;i++)o.push('<option value="'+(i+1)+'">الصف '+W[i]+'</option>');grade.innerHTML=o.join('');if(keep&&+keep<=n)grade.value=keep}
+function toggle(){$('curBox').hidden=sec.value!=='curriculum'}
+sec.addEventListener('change',toggle);stage.addEventListener('change',grades);
+$('body').addEventListener('input',function(){$('cnt').textContent=this.value.length+' / 12000'});
+try{var q=new URLSearchParams(location.search);
+ if(q.get('section')&&sec.querySelector('option[value="'+q.get('section')+'"]'))sec.value=q.get('section');
+ if(q.get('stage')&&stage.querySelector('option[value="'+q.get('stage')+'"]')){stage.value=q.get('stage');grades()}
+ if(q.get('grade'))grade.value=q.get('grade')}catch(e){}
+toggle();
+function v(id){return $(id).value.trim()}
+function nul(x){return x?x:null}
+f.addEventListener('submit',async function(e){
+ e.preventDefault();msg.hidden=true;
+ if($('website').value){f.hidden=true;$('done').hidden=false;return}
+ var cur=sec.value==='curriculum';
+ if(!sec.value||v('figure').length<2||v('title').length<3||v('narrator').length<2){say('err','أكمل الحقول المطلوبة: القسم والشخصية والعنوان واسم الراوي.');return}
+ if(cur&&(!stage.value||!grade.value)){say('err','اختر المرحلة والصف لشخصيات المناهج.');return}
+ if(v('body').length<50){say('err','الحكاية قصيرة؛ اكتب 50 حرفًا على الأقل.');return}
+ if(!$('consent').checked){say('err','لا بد من الموافقة على عرض الاسم الأول والصف بعد المراجعة.');return}
+ try{var last=+localStorage.getItem('kh_last_submit')||0;if(Date.now()-last<60000){say('err','انتظر دقيقة قبل إرسال حكاية أخرى.');return}}catch(x){}
+ var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending'};
+ btn.disabled=true;
+ try{
+  var r=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});
+  if(!r.ok){say('err',r.status===404?'خدمة الإرسال لم تُفعّل بعد. حاول لاحقًا.':'تعذر الإرسال الآن ('+r.status+'). راجع الحقول وحاول مرة أخرى.');btn.disabled=false;return}
+  try{localStorage.setItem('kh_last_submit',String(Date.now()))}catch(x){}
+  f.hidden=true;$('done').hidden=false;window.scrollTo({top:0,behavior:'smooth'});
+ }catch(err){say('err','تعذر الاتصال. تأكد من الإنترنت وحاول مرة أخرى.');btn.disabled=false}
+});
+(function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
+})();
+</script>
+</body>
+</html>
