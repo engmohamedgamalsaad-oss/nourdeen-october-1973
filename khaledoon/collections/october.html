@@ -53,6 +53,7 @@ body {
   isolation:isolate;
 }
 
+/* ألوان قسم أكتوبر تتبع بوابته الرئيسية: أزرق بحري وذهبي دافئ */
 /* خلفية الغلاف ثابتة المقاس؛ نغيّر موضع القصّ فقط لتجنب قفزات التكبير */
 body::before{
   content:"";
@@ -61,7 +62,8 @@ body::before{
   pointer-events:none;
   inset:0;
   background-image:
-    linear-gradient(rgba(2,8,12,.78),rgba(2,8,12,.78)),
+    linear-gradient(180deg,rgba(5,31,39,.80),rgba(3,13,20,.90)),
+    radial-gradient(ellipse at 82% 10%,rgba(240,200,120,.22),transparent 38%),
     url("../../assets/homepage/main-cover.jpg");
   background-position:center calc(50% + var(--cover-backdrop-shift,0px));
   background-size:cover;
