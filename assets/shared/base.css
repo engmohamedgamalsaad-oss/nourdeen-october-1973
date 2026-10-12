@@ -75,6 +75,6 @@ footer strong{color:var(--gold)}
 /* ===== خلفية هيدر الصفحة الرئيسية (تُطبَّق فقط على الصفحة التي تحتوي #homeHero) ===== */
 body:has(#homeHero) .topbar{
   background:
-    linear-gradient(90deg,rgba(3,13,19,.92),rgba(3,13,19,.70) 50%,rgba(3,13,19,.92)),
-    url("../../stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg") center 40% / cover no-repeat !important;
+    linear-gradient(90deg,rgba(3,13,19,.90),rgba(3,13,19,.78) 50%,rgba(3,13,19,.90)),
+    url("../backgrounds/header-banner.webp") center 40% / cover no-repeat !important;
 }
