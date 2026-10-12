@@ -55,3 +55,12 @@
   .hero { padding-bottom: 88px; }
   .scroll { bottom: 14px; font-size: .82rem; }
 }
+
+/* ===== خلفية خفيفة وشفافة لصفحة الحكاية (صورة ثابتة خلف المحتوى) ===== */
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:url("Crossing_the_Bar_Lev_Line,_October_War.jpg") center / cover no-repeat;
+  opacity:.14;filter:grayscale(.35) blur(1px);
+}
+/* قسم الخاتمة شبه شفاف ليظهر ما تحته من الصورة */
+.end{background:radial-gradient(ellipse at center,rgba(11,70,85,.82),rgba(2,8,12,.9) 70%)}
