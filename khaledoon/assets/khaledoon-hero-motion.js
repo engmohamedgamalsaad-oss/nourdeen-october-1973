@@ -44,6 +44,7 @@
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
   var ZONE=0.07;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
   var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
+  var langrow=document.querySelector('.topbar .langrow');
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));
   var hits=[].slice.call(document.querySelectorAll('main .section a,main .section button,footer a'));
   var maskCache=new Array(targets.length),hitCache=new Array(hits.length);
@@ -56,6 +57,7 @@
   }
   function reset(){
     hi.style.translate='';hi.style.filter='';hi.style.pointerEvents='';
+    if(langrow){langrow.style.opacity='';langrow.style.visibility=''}
     targets.forEach(function(el,i){el.style.webkitMaskImage='';el.style.maskImage='';maskCache[i]=''});
     hits.forEach(function(el,i){el.style.pointerEvents='';hitCache[i]=false});
   }
@@ -70,6 +72,7 @@
     hi.style.translate='0 '+(-s*FAST).toFixed(1)+'px';
     hi.style.filter=p>0?'opacity('+(1-p).toFixed(3)+')':'';
     hi.style.pointerEvents=p>.85?'none':'';
+    if(langrow){langrow.style.opacity=p>0?(1-p).toFixed(3):'';langrow.style.visibility=p>=1?'hidden':''}
     var edge=layer.getBoundingClientRect().bottom;
     var zone=Math.max(ZONE_MIN,ZONE*vh);
     var rects=targets.map(function(el){return el.getBoundingClientRect()});
