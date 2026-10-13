@@ -5,8 +5,7 @@
   if(!hero)return;
   var root=document.documentElement;
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
-  var busy=false;
+    var busy=false;
   function update(){
     busy=false;
     var header=document.querySelector(".topbar");
@@ -14,7 +13,7 @@
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
-    root.style.setProperty('--hero-bg-scale',(1+passed*.72).toFixed(4));
+    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.26:.72)).toFixed(4));
     root.style.setProperty('--hero-bg-opacity',(1-passed*.78).toFixed(4));
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
@@ -24,7 +23,7 @@
   update();
 })();
 
-/* حركة التمرير الجديدة (الموبايل فقط، وتُعطَّل مع تقليل الحركة):
+/* حركة التمرير الجديدة (موبايل وكمبيوتر، وتُعطَّل مع تقليل الحركة):
    - نصوص الواجهة تصعد أسرع من التمرير ثم تتلاشى.
    - أقسام الصفحة تمر من خلف الصورة وتتلاشى تدريجيًا قرب حافتها السفلى.
    تعتمد على الكلاس hm على <html> (يُضاف مبكرًا من index.html ويُحدَّث هنا). */
@@ -45,9 +44,8 @@
   function clamp(v){return v<0?0:v>1?1:v}
   function active(){
     var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var narrow=innerWidth<=780;
-    var landscapeShort=innerWidth>innerHeight&&innerHeight<=520;
-    return narrow&&!reduce&&!landscapeShort;
+    var landscapeShort=innerWidth<=780&&innerWidth>innerHeight&&innerHeight<=520;
+    return !reduce&&!landscapeShort;
   }
   function reset(){
     hi.style.translate='';hi.style.filter='';hi.style.pointerEvents='';
