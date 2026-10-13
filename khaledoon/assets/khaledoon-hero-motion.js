@@ -110,9 +110,9 @@
   if(!layer)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   var wide=innerWidth>780;      // الكمبيوتر: عدد وأحجام أكبر قليلًا لأن الصورة أكبر
-  var N=wide?40:24;
-  var SIZE_MIN=wide?1.8:1.2;    // أصغر قطر للنقطة بالبكسل
-  var SIZE_STEP=wide?0.7:0.5;   // الزيادة بين الأحجام (3 أحجام مختلفة)
+  var N=wide?56:30;
+  var SIZE_MIN=wide?2.6:1.6;    // أصغر قطر للنقطة بالبكسل
+  var SIZE_STEP=wide?1.0:0.6;   // الزيادة بين الأحجام (3 أحجام مختلفة)
   var CENTER_KEEP=0.10;
   var EDGE_POWER=1.6;
   var DUR_MIN=3.5, DUR_MAX=7.5; // مدة الدورة الواحدة بالثواني (عشوائية لكل نقطة)
@@ -135,7 +135,7 @@
     el.style.left=(p[0]*100).toFixed(1)+'%';
     el.style.top=(p[1]*100).toFixed(1)+'%';
     el.style.setProperty('--sz',(SIZE_MIN+Math.floor(Math.random()*3)*SIZE_STEP).toFixed(1)+'px');
-    el.style.setProperty('--op',(0.6+Math.floor(Math.random()*4)*0.1).toFixed(1));
+    el.style.setProperty('--op',(0.75+Math.floor(Math.random()*3)*0.1).toFixed(2));
   }
 
   var box=document.createElement('div');
