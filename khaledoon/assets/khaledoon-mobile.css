@@ -3,22 +3,29 @@
    مع تلاشٍ خفيف فقط في آخر 5% من أسفل الصورة.
    نطاق التأثير هو الرئيسية فقط، ولا يغيّر صفحات الحكايات القديمة. */
 
+/* رفع الصورة: تدخل جزءًا صغيرًا من أعلاها تحت الهيدر (الجزء الفاضي من الخشب).
+   غيّر القيمتين لرفع أكثر أو أقل: --hero-lift-m للموبايل و--hero-lift-d للكمبيوتر. */
+:root{--hero-lift-m:min(3.9vw,4.5vh);--hero-lift-d:4vh}
+/* التلاشي من أسفل الصورة (نسبة من ارتفاعها) ونقطة ارتكاز الزووم:
+   90% يعني أن الصورة تكبر لأعلى (تأكل من فوق تحت الهيدر) وحافتها السفلى تتحرك قليلًا فقط. */
+:root{--hero-bottom-fade:28%;--hero-zoom-origin-y:90%}
+
 @media (max-width:780px){
   .hero-background-layer{
     display:block;
     position:fixed;
     z-index:1;
-    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px));
+    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px) - var(--hero-lift-m));
     left:0;
     width:100vw;
     height:56.25vw;
     max-height:58vh;
     pointer-events:none;
     transform:translateZ(0) scale(var(--hero-bg-scale,1));
-    transform-origin:50% 45%;
+    transform-origin:50% var(--hero-zoom-origin-y);
     opacity:var(--hero-bg-opacity,1);
-    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 95%,transparent 100%);
-    mask-image:linear-gradient(180deg,#000 0,#000 95%,transparent 100%);
+    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
     will-change:transform,opacity;
     background:
       linear-gradient(180deg,rgba(3,12,17,.12),rgba(3,12,17,.38) 65%,rgba(3,12,17,.72)),
@@ -37,22 +44,47 @@
   }
   html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
-    padding:calc(min(56.25vw,58vh) + 8px) 0 44px;
+    padding:calc(min(56.25vw,58vh) + 8px - var(--hero-lift-m)) 0 44px;
   }
 }
 
-/* ===== حركة التمرير على الموبايل (تُفعَّل بالكلاس hm من JavaScript) =====
+/* ===== حركة التمرير (تُفعَّل بالكلاس hm من JavaScript) =====
    1) الصورة الرئيسية في طبقة أمامية فوق أقسام الصفحة، وتحتها نصوص الواجهة.
    2) نصوص الواجهة تصعد أسرع من التمرير وتتلاشى (khaledoon-hero-motion.js).
    3) بقية الصفحة تمر من خلف الصورة وتتلاشى تدريجيًا كلما اقتربت منها. */
-@media (max-width:780px){
-  html.hm body .view{animation:none}
-  html.hm main{position:static;z-index:auto}
-  html.hm .hero-background-layer{z-index:2}
-  html.hm .section,html.hm footer{position:relative;z-index:1}
-  html.hm .hero:not(.sub){position:relative;z-index:3;overflow:visible}
-  html.hm .hero:not(.sub):after{display:none}
-  html.hm .hero-in{will-change:translate,filter}
+html.hm body .view{animation:none}
+html.hm main{position:static;z-index:auto}
+html.hm .hero-background-layer{z-index:2}
+html.hm .section,html.hm footer{position:relative;z-index:1}
+html.hm .hero:not(.sub){position:relative;z-index:3;overflow:visible}
+html.hm .hero:not(.sub):after{display:none}
+html.hm .hero-in{will-change:translate,filter}
+
+/* ===== الكمبيوتر: نفس الفكرة، والصورة بارتفاع 60% من الشاشة بدون قص من أسفلها =====
+   الصورة تُعرض بارتفاع الطبقة كاملًا (فتظهر «عبر التاريخ» في أسفلها)،
+   وأطرافها الجانبية وآخر جزء من أسفلها تتلاشى بنعومة (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
+@media (min-width:781px){
+  html.hm .hero-background-layer{
+    display:block;
+    position:fixed;
+    left:max(0px,calc((100vw - 120vh)/2));
+    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px) - var(--hero-lift-d));
+    width:min(100vw,120vh);
+    height:60vh;
+    pointer-events:none;
+    transform:translateZ(0) scale(var(--hero-bg-scale,1));
+    transform-origin:50% var(--hero-zoom-origin-y);
+    opacity:var(--hero-bg-opacity,1);
+    will-change:transform,opacity;
+    background:url("main-cover.jpg") center bottom/auto 100% no-repeat;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-composite:intersect;
+  }
+  html.hm .hero:not(.sub){background:transparent!important;min-height:0!important;align-items:flex-start}
+  html.hm .hero:not(.sub)::before{display:none!important}
+  html.hm .hero:not(.sub) .hero-in{padding:calc(60vh + 4px - var(--hero-lift-d)) 0 56px}
 }
 
 @media (max-width:780px) and (orientation:landscape) and (max-height:520px){
@@ -104,20 +136,19 @@
 }
 
 /* ===== نقاط صغيرة على الصورة: تنوّر وتطفأ بهدوء في مكانها، ولونها يتحوّل بين الأبيض والذهبي ===== */
-@media (max-width:780px){
-  .hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-  .hero-stars i{
-    position:absolute;
-    width:var(--sz,3px);height:var(--sz,3px);
-    margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
-    border-radius:50%;
-    background-color:#fff;
-    opacity:0;
-    animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
-    will-change:opacity;
-  }
-  html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
+.hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-stars i{
+  position:absolute;
+  width:var(--sz,3px);height:var(--sz,3px);
+  margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
+  border-radius:50%;
+  background-color:#fff;
+  box-shadow:0 0 calc(var(--sz,3px)*2.2) rgba(255,236,190,.9);
+  opacity:0;
+  animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
+  will-change:opacity;
 }
+html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
 @keyframes khTwinkle{
   0%{opacity:0;background-color:#ffffff}
   35%{opacity:var(--op,.8);background-color:#ffffff}
@@ -129,4 +160,32 @@
   35%{opacity:var(--op,.8);background-color:#e8a92e}
   65%{opacity:var(--op,.8);background-color:#b9770e}
   100%{opacity:0;background-color:#b9770e}
+}
+
+/* ===== شريط اللغات يطفو أعلى الصورة بدل الهيدر (حين تكون حركة التمرير مفعّلة) =====
+   - الهيدر يقصر فتطلع الصورة لفوق (ارتفاع الهيدر يُقاس تلقائيًا).
+   - الأزرار على زجاج داكن شفاف بنص فاتح وحد ذهبي، فتظهر فوق الصورة في الثيمين.
+   - يتلاشى مع السكرول مع نصوص المقدمة (khaledoon-hero-motion.js). */
+html.hm .topbar .langrow{
+  position:absolute;top:100%;left:0;right:0;
+  padding:8px 0 0;pointer-events:none;z-index:1;
+}
+html.hm .topbar .langrow .langs{pointer-events:auto;gap:4px}
+html.hm .topbar .langrow .langs button,
+html[data-theme] .topbar .langrow .langs button{
+  background:rgba(5,14,20,.62);
+  color:#fbe8bd;
+  border-color:rgba(240,200,120,.75);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  text-shadow:0 1px 2px rgba(0,0,0,.6);
+  box-shadow:0 1px 6px rgba(0,0,0,.35);
+}
+html.hm .topbar .langrow .langs button[aria-pressed="true"],
+html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
+  background:#f0c878;color:#14232b;border-color:#f0c878;text-shadow:none;
+}
+
+/* على الكمبيوتر: شريط اللغات داخل عرض الصورة نفسها (أعلى يسارها) فلا يخرج على خلفية الصفحة */
+@media (min-width:781px){
+  html.hm .topbar .langrow{max-width:min(100vw,120vh);margin-inline:auto;padding:10px 7% 0;box-sizing:border-box}
 }

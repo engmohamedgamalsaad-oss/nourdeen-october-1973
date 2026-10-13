@@ -7,7 +7,7 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
   var busy=false;
-  var BG_FADE=0.15; // مقدار خفوت الصورة الكلي أثناء التمرير: 0.15 = 15%
+  var BG_FADE=0.10; // مقدار خفوت الصورة الكلي أثناء التمرير: 0.10 = 10% (تبقى ظاهرة 90%)
   function update(){
     busy=false;
     var header=document.querySelector(".topbar");
@@ -15,7 +15,7 @@
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
-    root.style.setProperty('--hero-bg-scale',(1+passed*.72).toFixed(4));
+    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.26:.72)).toFixed(4));
     root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
@@ -29,7 +29,7 @@
   update();
 })();
 
-/* حركة التمرير الجديدة (الموبايل فقط، وتُعطَّل مع تقليل الحركة):
+/* حركة التمرير الجديدة (موبايل وكمبيوتر، وتُعطَّل مع تقليل الحركة):
    - نصوص الواجهة تصعد أسرع من التمرير ثم تتلاشى.
    - أقسام الصفحة تمر من خلف الصورة وتتلاشى تدريجيًا قرب حافتها السفلى.
    تعتمد على الكلاس hm على <html> (يُضاف مبكرًا من index.html ويُحدَّث هنا). */
@@ -44,6 +44,7 @@
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
   var ZONE=0.07;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
   var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
+  var langrow=document.querySelector('.topbar .langrow');
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));
   var hits=[].slice.call(document.querySelectorAll('main .section a,main .section button,footer a'));
   var maskCache=new Array(targets.length),hitCache=new Array(hits.length);
@@ -51,12 +52,12 @@
   function clamp(v){return v<0?0:v>1?1:v}
   function active(){
     var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var narrow=innerWidth<=780;
-    var landscapeShort=innerWidth>innerHeight&&innerHeight<=520;
-    return narrow&&!reduce&&!landscapeShort;
+    var landscapeShort=innerWidth<=780&&innerWidth>innerHeight&&innerHeight<=520;
+    return !reduce&&!landscapeShort;
   }
   function reset(){
     hi.style.translate='';hi.style.filter='';hi.style.pointerEvents='';
+    if(langrow){langrow.style.opacity='';langrow.style.visibility=''}
     targets.forEach(function(el,i){el.style.webkitMaskImage='';el.style.maskImage='';maskCache[i]=''});
     hits.forEach(function(el,i){el.style.pointerEvents='';hitCache[i]=false});
   }
@@ -71,6 +72,7 @@
     hi.style.translate='0 '+(-s*FAST).toFixed(1)+'px';
     hi.style.filter=p>0?'opacity('+(1-p).toFixed(3)+')':'';
     hi.style.pointerEvents=p>.85?'none':'';
+    if(langrow){langrow.style.opacity=p>0?(1-p).toFixed(3):'';langrow.style.visibility=p>=1?'hidden':''}
     var edge=layer.getBoundingClientRect().bottom;
     var zone=Math.max(ZONE_MIN,ZONE*vh);
     var rects=targets.map(function(el){return el.getBoundingClientRect()});
@@ -95,7 +97,7 @@
   update();
 })();
 
-/* نقاط صغيرة على الصورة (الموبايل فقط):
+/* نقاط صغيرة على الصورة (موبايل وكمبيوتر):
    - كل نقطة تنوّر وتطفأ بهدوء، وفي كل مرة تعيد الظهور تظهر في مكان عشوائي جديد.
    - الأماكن العشوائية مائلة نحو الحواف: النقاط في المنتصف قليلة، وعند الحواف أكثر.
    - لونها يتحوّل بين الأبيض والذهبي. الحركة نفسها في khaledoon-mobile.css (khTwinkle).
@@ -107,10 +109,10 @@
   var layer=document.querySelector('.hero-background-layer');
   if(!layer)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  if(innerWidth>780)return;
-  var N=24;
-  var SIZE_MIN=1.2;     // أصغر قطر للنقطة بالبكسل
-  var SIZE_STEP=0.5;    // الزيادة بين الأحجام (3 أحجام مختلفة)
+  var wide=innerWidth>780;      // الكمبيوتر: عدد وأحجام أكبر قليلًا لأن الصورة أكبر
+  var N=wide?56:30;
+  var SIZE_MIN=wide?2.6:1.6;    // أصغر قطر للنقطة بالبكسل
+  var SIZE_STEP=wide?1.0:0.6;   // الزيادة بين الأحجام (3 أحجام مختلفة)
   var CENTER_KEEP=0.10;
   var EDGE_POWER=1.6;
   var DUR_MIN=3.5, DUR_MAX=7.5; // مدة الدورة الواحدة بالثواني (عشوائية لكل نقطة)
@@ -133,7 +135,7 @@
     el.style.left=(p[0]*100).toFixed(1)+'%';
     el.style.top=(p[1]*100).toFixed(1)+'%';
     el.style.setProperty('--sz',(SIZE_MIN+Math.floor(Math.random()*3)*SIZE_STEP).toFixed(1)+'px');
-    el.style.setProperty('--op',(0.6+Math.floor(Math.random()*4)*0.1).toFixed(1));
+    el.style.setProperty('--op',(0.75+Math.floor(Math.random()*3)*0.1).toFixed(2));
   }
 
   var box=document.createElement('div');
