@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 640" role="img" aria-label="رسم توضيحي لنبضة ليزر وجزيء">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#124a5a"/><stop offset="1" stop-color="#071218"/></linearGradient>
+<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8ad9e8" stop-opacity=".55"/><stop offset="1" stop-color="#8ad9e8" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="800" height="640" fill="url(#bg)"/>
+<circle cx="470" cy="320" r="250" fill="url(#glow)"/>
+<rect x="0" y="312" width="300" height="14" rx="7" fill="#cfeff5" opacity=".85"/>
+<rect x="90" y="298" width="22" height="42" rx="11" fill="#ffffff"/><rect x="190" y="298" width="22" height="42" rx="11" fill="#ffffff"/>
+<g opacity=".3"><circle cx="380" cy="260" r="30" fill="#f0c878"/><circle cx="450" cy="320" r="22" fill="#8ad9e8"/></g>
+<g opacity=".6"><circle cx="460" cy="230" r="30" fill="#f0c878"/><circle cx="550" cy="320" r="22" fill="#8ad9e8"/></g>
+<g><circle cx="550" cy="205" r="30" fill="#f0c878"/><circle cx="650" cy="320" r="22" fill="#8ad9e8"/><circle cx="620" cy="420" r="26" fill="#bfe9f1"/></g>
+</svg>

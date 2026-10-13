@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-label="رسم توضيحي لأربع لقطات متتابعة لذرات تتحرك">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f3f4e"/><stop offset="1" stop-color="#071218"/></linearGradient></defs>
+<rect width="1000" height="520" fill="url(#bg)"/>
+<g fill="none" stroke="#8ad9e8" stroke-opacity=".45" stroke-width="2"><rect x="30" y="60" width="215" height="400" rx="16"/><rect x="270" y="60" width="215" height="400" rx="16"/><rect x="515" y="60" width="215" height="400" rx="16"/><rect x="755" y="60" width="215" height="400" rx="16"/></g>
+<g><circle cx="110" cy="210" r="28" fill="#f0c878"/><circle cx="165" cy="270" r="20" fill="#8ad9e8"/><path d="M128 230 L152 252" stroke="#cfeff5" stroke-width="8"/><circle cx="130" cy="380" r="22" fill="#bfe9f1"/></g>
+<g><circle cx="350" cy="195" r="28" fill="#f0c878"/><circle cx="420" cy="270" r="20" fill="#8ad9e8"/><path d="M370 215 L405 252" stroke="#cfeff5" stroke-width="6"/><circle cx="380" cy="350" r="22" fill="#bfe9f1"/></g>
+<g><circle cx="590" cy="180" r="28" fill="#f0c878"/><circle cx="668" cy="270" r="20" fill="#8ad9e8"/><path d="M610 200 L650 250" stroke="#cfeff5" stroke-width="4" stroke-dasharray="4 10"/><circle cx="630" cy="330" r="22" fill="#bfe9f1"/></g>
+<g><circle cx="830" cy="165" r="28" fill="#f0c878"/><circle cx="930" cy="270" r="20" fill="#8ad9e8"/><circle cx="870" cy="310" r="22" fill="#bfe9f1"/></g>
+<g stroke="#8ad9e8" stroke-opacity=".7" stroke-width="4" fill="#8ad9e8"><path d="M40 30 H960" fill="none"/><path d="M960 30 l-18 -10 v20 z"/></g>
+</svg>
