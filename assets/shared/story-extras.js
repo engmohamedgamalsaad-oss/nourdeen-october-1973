@@ -76,3 +76,15 @@
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(section, anchor);
   else document.body.appendChild(section);
 })();
+
+/* Khaledoon unified theme: loads the light/dark toggle + saved-choice sync (additive; does not touch the code above). */
+(function (src) {
+  try {
+    if (window.__khTheme || document.querySelector('script[data-kh-theme]')) return;
+    var s = document.createElement('script');
+    s.src = src ? new URL('../../khaledoon/assets/khaledoon-theme.js?v=1', src).href : '../../khaledoon/assets/khaledoon-theme.js?v=1';
+    s.defer = true;
+    s.setAttribute('data-kh-theme', '');
+    document.head.appendChild(s);
+  } catch (e) {}
+})(document.currentScript && document.currentScript.src);

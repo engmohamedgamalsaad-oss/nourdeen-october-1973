@@ -1,9 +1,10 @@
 <!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#123d4a">
 <script>try{var kl=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";if(["en","fr","it"].indexOf(kl)>=0){document.documentElement.lang=kl;document.documentElement.dir="ltr"}}catch(e){}</script>
+<script>try{var kt=localStorage.getItem("kh-theme");if(kt==="light"||kt==="dark")document.documentElement.setAttribute("data-theme",kt)}catch(e){}</script>
 <title>العلم والعلماء | خالدون عبر التاريخ</title>
 <meta name="description" content="حكايات عن العلماء والأفكار والاكتشافات التي غيّرت فهمنا للعالم.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +19,9 @@
 
 /* بطاقة حكاية أحمد زويل */
 .zw-card{align-items:center!important}.zw-cover{flex:0 0 155px;width:155px;height:112px;object-fit:cover;border-radius:10px;border:1px solid #3d8aa0;box-shadow:0 8px 24px #0005}.zw-card>div:last-child{min-width:0}@media(max-width:620px){.zw-card{flex-wrap:wrap}.zw-cover{flex-basis:100%;width:100%;height:auto;max-height:230px;object-fit:cover}.zw-card .num{flex-basis:42px;height:44px}}
-</style></head>
+</style>
+<link rel="stylesheet" href="../assets/khaledoon-theme.css?v=1">
+</head>
 <body><header><div class="wrap"><nav><a class="brand" href="../index.html">خالدون عبر التاريخ<small>حكاية التاريخ بعيون جيل جديد</small></a><a class="back" href="../index.html#gateways">← كل البوابات</a></nav></div></header>
 <section class="hero"><div class="wrap"><div class="intro"><div class="eyebrow">من حكايات المعرفة والإنسان</div><h1>العلم والعلماء</h1><p class="lead">اكتشف حكايات العلماء وأسئلتهم وتجاربهم، وكيف تحولت الأفكار إلى معرفة وإنجازات.</p></div></div></section>
 <main><section class="section"><div class="wrap"><div class="heading"><h2>حكايات هذا القسم</h2><p>كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.</p></div><div class="cards" style="grid-template-columns:1fr">
@@ -37,6 +40,7 @@ fr:{h:'L’histoire du savant Ahmed Zewail',p:'L’histoire du savant égyptien,
 it:{h:'La storia dello scienziato Ahmed Zewail',p:'La storia dello scienziato egiziano, premio Nobel per la Chimica nel 1999, e di come impulsi laser brevissimi permettono di osservare gli atomi durante una reazione chimica.',s:'Leggi la storia →',a:'Illustrazione di atomi in movimento e impulsi laser legata alla storia di Ahmed Zewail'}};
 var d=D[l];if(!d)return;var c=document.querySelector('.zw-card');if(!c)return;
 c.querySelector('h3').textContent=d.h;c.querySelector('p').textContent=d.p;c.querySelector('span').textContent=d.s;c.querySelector('img').setAttribute('alt',d.a)})();</script>
+<script src="../assets/khaledoon-theme.js?v=1" defer></script>
 <script src="../assets/khaledoon-pages-i18n.js" defer></script>
 </body>
 </html>
