@@ -3,12 +3,16 @@
    مع تلاشٍ خفيف فقط في آخر 5% من أسفل الصورة.
    نطاق التأثير هو الرئيسية فقط، ولا يغيّر صفحات الحكايات القديمة. */
 
+/* رفع الصورة: تدخل جزءًا صغيرًا من أعلاها تحت الهيدر (الجزء الفاضي من الخشب).
+   غيّر القيمتين لرفع أكثر أو أقل: --hero-lift-m للموبايل و--hero-lift-d للكمبيوتر. */
+:root{--hero-lift-m:min(3.9vw,4.5vh);--hero-lift-d:4vh}
+
 @media (max-width:780px){
   .hero-background-layer{
     display:block;
     position:fixed;
     z-index:1;
-    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px));
+    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px) - var(--hero-lift-m));
     left:0;
     width:100vw;
     height:56.25vw;
@@ -37,22 +41,45 @@
   }
   html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
-    padding:calc(min(56.25vw,58vh) + 8px) 0 44px;
+    padding:calc(min(56.25vw,58vh) + 8px - var(--hero-lift-m)) 0 44px;
   }
 }
 
-/* ===== حركة التمرير على الموبايل (تُفعَّل بالكلاس hm من JavaScript) =====
+/* ===== حركة التمرير (تُفعَّل بالكلاس hm من JavaScript) =====
    1) الصورة الرئيسية في طبقة أمامية فوق أقسام الصفحة، وتحتها نصوص الواجهة.
    2) نصوص الواجهة تصعد أسرع من التمرير وتتلاشى (khaledoon-hero-motion.js).
    3) بقية الصفحة تمر من خلف الصورة وتتلاشى تدريجيًا كلما اقتربت منها. */
-@media (max-width:780px){
-  html.hm body .view{animation:none}
-  html.hm main{position:static;z-index:auto}
-  html.hm .hero-background-layer{z-index:2}
-  html.hm .section,html.hm footer{position:relative;z-index:1}
-  html.hm .hero:not(.sub){position:relative;z-index:3;overflow:visible}
-  html.hm .hero:not(.sub):after{display:none}
-  html.hm .hero-in{will-change:translate,filter}
+html.hm body .view{animation:none}
+html.hm main{position:static;z-index:auto}
+html.hm .hero-background-layer{z-index:2}
+html.hm .section,html.hm footer{position:relative;z-index:1}
+html.hm .hero:not(.sub){position:relative;z-index:3;overflow:visible}
+html.hm .hero:not(.sub):after{display:none}
+html.hm .hero-in{will-change:translate,filter}
+
+/* ===== الكمبيوتر: نفس الفكرة، والصورة بارتفاع 60% من الشاشة بدون قص من أسفلها =====
+   الصورة تُعرض بارتفاع الطبقة كاملًا (فتظهر «عبر التاريخ» في أسفلها)،
+   وأطرافها الجانبية تتلاشى بنعومة (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
+@media (min-width:781px){
+  html.hm .hero-background-layer{
+    display:block;
+    position:fixed;
+    left:max(0px,calc((100vw - 120vh)/2));
+    top:calc(var(--khaledoon-header-height, 120px) + env(safe-area-inset-top,0px) - var(--hero-lift-d));
+    width:min(100vw,120vh);
+    height:60vh;
+    pointer-events:none;
+    transform:translateZ(0) scale(var(--hero-bg-scale,1));
+    transform-origin:50% 45%;
+    opacity:var(--hero-bg-opacity,1);
+    will-change:transform,opacity;
+    background:url("main-cover.jpg") center bottom/auto 100% no-repeat;
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent);
+  }
+  html.hm .hero:not(.sub){background:transparent!important;min-height:0!important;align-items:flex-start}
+  html.hm .hero:not(.sub)::before{display:none!important}
+  html.hm .hero:not(.sub) .hero-in{padding:calc(60vh + 4px - var(--hero-lift-d)) 0 56px}
 }
 
 @media (max-width:780px) and (orientation:landscape) and (max-height:520px){
