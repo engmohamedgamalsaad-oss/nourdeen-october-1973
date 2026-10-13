@@ -6,6 +6,9 @@
 /* رفع الصورة: تدخل جزءًا صغيرًا من أعلاها تحت الهيدر (الجزء الفاضي من الخشب).
    غيّر القيمتين لرفع أكثر أو أقل: --hero-lift-m للموبايل و--hero-lift-d للكمبيوتر. */
 :root{--hero-lift-m:min(3.9vw,4.5vh);--hero-lift-d:4vh}
+/* التلاشي من أسفل الصورة (نسبة من ارتفاعها) ونقطة ارتكاز الزووم:
+   90% يعني أن الصورة تكبر لأعلى (تأكل من فوق تحت الهيدر) وحافتها السفلى تتحرك قليلًا فقط. */
+:root{--hero-bottom-fade:15%;--hero-zoom-origin-y:90%}
 
 @media (max-width:780px){
   .hero-background-layer{
@@ -19,10 +22,10 @@
     max-height:58vh;
     pointer-events:none;
     transform:translateZ(0) scale(var(--hero-bg-scale,1));
-    transform-origin:50% 45%;
+    transform-origin:50% var(--hero-zoom-origin-y);
     opacity:var(--hero-bg-opacity,1);
-    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 90%,transparent 100%);
-    mask-image:linear-gradient(180deg,#000 0,#000 90%,transparent 100%);
+    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),transparent 100%);
     will-change:transform,opacity;
     background:
       linear-gradient(180deg,rgba(3,12,17,.12),rgba(3,12,17,.38) 65%,rgba(3,12,17,.72)),
@@ -59,7 +62,7 @@ html.hm .hero-in{will-change:translate,filter}
 
 /* ===== الكمبيوتر: نفس الفكرة، والصورة بارتفاع 60% من الشاشة بدون قص من أسفلها =====
    الصورة تُعرض بارتفاع الطبقة كاملًا (فتظهر «عبر التاريخ» في أسفلها)،
-   وأطرافها الجانبية وآخر 10% من أسفلها تتلاشى بنعومة (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
+   وأطرافها الجانبية وآخر جزء من أسفلها تتلاشى بنعومة (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
 @media (min-width:781px){
   html.hm .hero-background-layer{
     display:block;
@@ -70,12 +73,12 @@ html.hm .hero-in{will-change:translate,filter}
     height:60vh;
     pointer-events:none;
     transform:translateZ(0) scale(var(--hero-bg-scale,1));
-    transform-origin:50% 45%;
+    transform-origin:50% var(--hero-zoom-origin-y);
     opacity:var(--hero-bg-opacity,1);
     will-change:transform,opacity;
     background:url("main-cover.jpg") center bottom/auto 100% no-repeat;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 90%,transparent 100%);
-    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 90%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),transparent 100%);
+    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),transparent 100%);
     -webkit-mask-composite:source-in;
     mask-composite:intersect;
   }
