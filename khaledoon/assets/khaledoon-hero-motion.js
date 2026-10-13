@@ -7,7 +7,7 @@
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
   var busy=false;
-  var BG_FADE=0.10; // مقدار خفوت الصورة الكلي أثناء التمرير: 0.10 = 10% (تبقى ظاهرة 90%)
+  var BG_FADE=0.08; // خفوت عام بسيط للصورة أثناء التمرير
   function update(){
     busy=false;
     var header=document.querySelector(".topbar");
@@ -15,7 +15,8 @@
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
-    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.26:.72)).toFixed(4));
+    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.12:.22)).toFixed(4));
+    root.style.setProperty('--hero-bottom-fade',(38+passed*16)+'%');
     root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
   function req(){if(!busy){busy=true;requestAnimationFrame(update)}}
@@ -42,7 +43,7 @@
   var FAST=0.9;        // سرعة إضافية للنصوص: 0.9 تعني أنها تصعد بنحو 1.9 ضعف سرعة التمرير
   var FADE_START=0.02; // بداية التلاشي (نسبة من ارتفاع الشاشة)
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
-  var ZONE=0.07;       // ارتفاع منطقة التلاشي تحت الصورة (نسبة من ارتفاع الشاشة)
+  var ZONE=0.035;      // تقليل منطقة إخفاء المحتوى أسفل الصورة لإبقاء الحكايات أوضح
   var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
   var langrow=document.querySelector('.topbar .langrow');
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));

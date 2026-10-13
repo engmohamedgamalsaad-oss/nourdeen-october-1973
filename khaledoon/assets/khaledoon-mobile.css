@@ -187,3 +187,26 @@ html.hm .topbar .langrow .langs button[aria-pressed="true"],
 html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   background:#f0c878;color:#14232b;border-color:#f0c878;text-shadow:none;
 }
+
+
+/* ===== تحسين غلاف الصفحة الرئيسية: مساحة أوضح للحكايات =====
+   الغلاف يبدأ من أعلى منطقة المحتوى، والزوم من المنتصف مع تلاشي أقوى لأسفله. */
+:root{
+  --hero-d-h:min(44.48vw,48vh);
+  --hero-bottom-fade:38%;
+  --hero-zoom-origin-y:50%;
+  --hero-text-overlap:.18;
+  --hero-lift-d:1.5vh;
+  --hero-lift-m:min(2vw,2vh);
+}
+@media(max-width:780px){
+  .hero-background-layer{
+    height:52vw;
+    max-height:42vh;
+    background-position:center top;
+  }
+  html[data-theme="light"] .hero-background-layer{background-position:center top}
+}
+@media(min-width:781px){
+  html.hm .hero-background-layer{background-position:center center}
+}
