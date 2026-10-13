@@ -55,7 +55,16 @@
       });
     });
     document.querySelectorAll('[data-lang-switch]').forEach(function(host){
-      host.innerHTML='';host.hidden=true;host.style.display='none';
+      host.innerHTML='';
+      host.hidden=false;host.style.display='';
+      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano'};
+      allowed.forEach(function(lang){
+        var button=document.createElement('button');
+        button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
+        button.textContent=labels[lang];button.setAttribute('aria-pressed',String(lang===current));
+        button.addEventListener('click',function(){setLang(lang);});
+        host.appendChild(button);
+      });
     });
     document.querySelectorAll('[data-lang-label]').forEach(function(el){el.textContent=value(el.getAttribute('data-lang-label'));});
     extras();
