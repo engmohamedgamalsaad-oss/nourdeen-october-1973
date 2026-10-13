@@ -62,7 +62,7 @@ html.hm .hero-in{will-change:translate,filter}
 
 /* ===== الكمبيوتر: نفس الفكرة، والصورة بارتفاع 60% من الشاشة بدون قص من أسفلها =====
    الصورة تُعرض بارتفاع الطبقة كاملًا (فتظهر «عبر التاريخ» في أسفلها)،
-   وأطرافها الجانبية وآخر جزء من أسفلها تتلاشى بنعومة (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
+   وأطرافها الجانبية حادة بدون تلاشي (التلاشي من الأسفل فقط) (نسبة عرض الصورة 120vh = 60vh × 1774/887). */
 @media (min-width:781px){
   html.hm .hero-background-layer{
     display:block;
@@ -77,10 +77,8 @@ html.hm .hero-in{will-change:translate,filter}
     opacity:var(--hero-bg-opacity,1);
     will-change:transform,opacity;
     background:url("main-cover.jpg") center bottom/auto 100% no-repeat;
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
-    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
-    -webkit-mask-composite:source-in;
-    mask-composite:intersect;
+    -webkit-mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
+    mask-image:linear-gradient(180deg,#000 0,#000 calc(100% - var(--hero-bottom-fade)),rgba(0,0,0,.5) calc(100% - var(--hero-bottom-fade)/2),transparent 100%);
   }
   html.hm .hero:not(.sub){background:transparent!important;min-height:0!important;align-items:flex-start}
   html.hm .hero:not(.sub)::before{display:none!important}
