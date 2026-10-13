@@ -287,8 +287,8 @@ html[data-theme="light"] .hero:not(.sub)::before{
     url("main-cover.jpg") center 40%/cover no-repeat;
 }
 /* ضغط الغلاف رأسيًا قليلًا لإظهار الكلمة كاملة دون تعديل ملف الصورة الأصلي */
-.hero:not(.sub)::before{background-size:auto,100% 92%;background-position:center,center 40%;background-repeat:no-repeat,no-repeat}
-html[data-theme="light"] .hero:not(.sub)::before{background-size:auto,100% 92%;background-position:center,center 40%;background-repeat:no-repeat,no-repeat}
+.hero:not(.sub)::before{background-size:auto,100% 92%;background-position:center,center top;background-repeat:no-repeat,no-repeat}
+html[data-theme="light"] .hero:not(.sub)::before{background-size:auto,100% 92%;background-position:center,center top;background-repeat:no-repeat,no-repeat}
 @media(prefers-reduced-motion:reduce){
   .hero:not(.sub)::before{transform:none!important;will-change:auto}
 }
