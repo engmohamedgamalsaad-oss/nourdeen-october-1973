@@ -9,6 +9,9 @@
 /* التلاشي من أسفل الصورة (نسبة من ارتفاعها) ونقطة ارتكاز الزووم:
    90% يعني أن الصورة تكبر لأعلى (تأكل من فوق تحت الهيدر) وحافتها السفلى تتحرك قليلًا فقط. */
 :root{--hero-bottom-fade:28%;--hero-zoom-origin-y:90%}
+/* المسافة بين الصورة والنصوص: النصوص تبدأ داخل آخر 7% من ارتفاع الصورة (الجزء المتلاشي تحت «عبر التاريخ»).
+   زوّد القيمة لتقريب النصوص أكتر، لكن فوق 0.09 تلمس عبارة «عبر التاريخ». */
+:root{--hero-text-overlap:0.07}
 
 @media (max-width:780px){
   .hero-background-layer{
@@ -44,7 +47,7 @@
   }
   html[data-theme] .hero:not(.sub)::before{display:none!important}
   html[data-theme] .hero:not(.sub) .hero-in{
-    padding:calc(min(56.25vw,58vh) + 8px - var(--hero-lift-m)) 0 44px;
+    padding:calc(min(56.25vw,58vh)*(1 - var(--hero-text-overlap)) + 8px - var(--hero-lift-m)) 0 44px;
   }
 }
 
@@ -82,7 +85,7 @@ html.hm .hero-in{will-change:translate,filter}
   }
   html.hm .hero:not(.sub){background:transparent!important;min-height:0!important;align-items:flex-start}
   html.hm .hero:not(.sub)::before{display:none!important}
-  html.hm .hero:not(.sub) .hero-in{padding:calc(60vh + 4px - var(--hero-lift-d)) 0 56px}
+  html.hm .hero:not(.sub) .hero-in{padding:calc(60vh*(1 - var(--hero-text-overlap)) + 4px - var(--hero-lift-d)) 0 56px}
 }
 
 @media (max-width:780px) and (orientation:landscape) and (max-height:520px){
