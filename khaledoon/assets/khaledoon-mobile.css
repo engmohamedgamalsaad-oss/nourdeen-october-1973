@@ -192,11 +192,11 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
 /* ===== تحسين غلاف الصفحة الرئيسية: مساحة أوضح للحكايات =====
    الغلاف يبدأ من أعلى منطقة المحتوى، والزوم من المنتصف مع تلاشي أقوى لأسفله. */
 :root{
-  --hero-d-h:min(44.48vw,32vh);
+  --hero-d-h:min(44.48vw,48vh);
   --hero-bottom-fade:38%;
   --hero-zoom-origin-y:50%;
-  --hero-text-overlap:.22;
-  --hero-lift-d:8vh;
+  --hero-text-overlap:.18;
+  --hero-lift-d:1.5vh;
   --hero-lift-m:min(2vw,2vh);
 }
 @media(max-width:780px){
