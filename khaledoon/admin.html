@@ -61,7 +61,7 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
 var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='';
-var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
+var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',hidden:'مخفاة من القسم',rejected:'مرفوضة'};
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
@@ -112,7 +112,7 @@ async function loadList(){
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- [['إجمالي',items.length],['بانتظار المراجعة',count(function(i){return i.status==='pending'})],['تحت التحرير',count(function(i){return i.status==='review'})],['منشورة',count(function(i){return i.status==='published'})]].forEach(function(s){var c=el('div','stat');c.appendChild(el('span','',s[0]));c.appendChild(el('strong','',String(s[1])));b.appendChild(c)});
+ [['إجمالي',items.length],['بانتظار المراجعة',count(function(i){return i.status==='pending'})],['تحت التحرير',count(function(i){return i.status==='review'})],['منشورة',count(function(i){return i.status==='published'})],['مخفاة',count(function(i){return i.status==='hidden'})]].forEach(function(s){var c=el('div','stat');c.appendChild(el('span','',s[0]));c.appendChild(el('strong','',String(s[1])));b.appendChild(c)});
 }
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
@@ -134,11 +134,12 @@ function legacyCard(it){
  head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status||'غير محددة'));
  box.appendChild(head);
  box.appendChild(el('div','meta2','حكايات أكتوبر 1973 • '+(it.student_name||'اسم غير مسجل')+' • '+(it.grade||'الصف غير مسجل')+' • '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم الحكاية: '+String(it.story_number).padStart(3,'0'):'')));
- var name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(it.sources,4,2000),status=sel({pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'},it.status||'pending');
+ var name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(it.sources,4,2000),status=sel({pending:'قيد المراجعة',published:'منشورة',hidden:'مخفاة من القسم',rejected:'مرفوضة'},it.status||'pending');
  var g=el('div','fgrid');g.appendChild(fld('اسم الطالب',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',subtitle));box.appendChild(g);
  box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('المصادر',sources));box.appendChild(fld('الحالة',status));
  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),pubBtn=el('button','btn ghost','نشر وحفظ'),rejBtn=el('button','btn ghost','رفض'),delBtn=el('button','btn del','حذف');
- [saveBtn,pubBtn,rejBtn,delBtn].forEach(function(b){b.type='button';bar.appendChild(b)});box.appendChild(bar);
+ var visBtn=it.status==='hidden'?el('button','btn primary','إعادة إظهار بالقسم'):it.status==='published'?el('button','btn ghost','إخفاء من القسم'):null;
+ [saveBtn,pubBtn,rejBtn].forEach(function(b){b.type='button';bar.appendChild(b)});if(visBtn){visBtn.type='button';bar.appendChild(visBtn)}else{delBtn.type='button';bar.appendChild(delBtn)}box.appendChild(bar);
  async function persistLegacy(nextStatus,btn){
   var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:nextStatus||status.value};
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return}
@@ -154,6 +155,7 @@ function legacyCard(it){
  }
  saveBtn.addEventListener('click',function(){persistLegacy(null,saveBtn)});
  pubBtn.addEventListener('click',function(){persistLegacy('published',pubBtn)});
+ if(visBtn)visBtn.addEventListener('click',function(){var next=it.status==='hidden'?'published':'hidden';if(confirm(next==='hidden'?'إخفاء الحكاية من القسم مع الاحتفاظ بالسجل والملفات؟':'إعادة إظهار الحكاية في القسم؟'))persistLegacy(next,visBtn)});
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
@@ -279,7 +281,10 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   bar.appendChild(bRej);
  }
  if(isNew){var bc=el('button','btn ghost','إلغاء');bc.type='button';bc.addEventListener('click',function(){draftNew=false;render()});bar.appendChild(bc)}
- else{var bd=el('button','btn del','حذف');bd.type='button';bd.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟'))remove(it,bd)});bar.appendChild(bd)}
+ else if(it.status==='published'||it.status==='hidden'){
+  var bd=el('button',it.status==='hidden'?'btn primary':'btn ghost',it.status==='hidden'?'إعادة إظهار بالقسم':'إخفاء من القسم');bd.type='button';
+  bd.addEventListener('click',function(){var next=it.status==='hidden'?'published':'hidden';if(confirm(next==='hidden'?'إخفاء الحكاية من القسم مع الاحتفاظ بسجلها؟':'إعادة إظهار الحكاية في القسم؟'))persist(next,bd)});bar.appendChild(bd)
+ }else{var bd=el('button','btn del','حذف نهائي');bd.type='button';bd.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟ هذا لا يمكن التراجع عنه.'))remove(it,bd)});bar.appendChild(bd)}
 if(!isNew){
   var bMove=el('button','btn ghost','نقل إلى قسم آخر');bMove.type='button';
   bar.insertBefore(bMove,bCopy.nextSibling);
