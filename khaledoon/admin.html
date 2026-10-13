@@ -64,7 +64,7 @@ var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='';
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',hidden:'مخفاة من القسم',rejected:'مرفوضة'};
 var HIDE_MARK='[[KH_HIDDEN_FROM_SECTION]]';
 function isHidden(it){return !!(it&&((it._t==='o'&&Number(it.story_number)<0)||(it._t!=='o'&&String(it.admin_notes||'').indexOf(HIDE_MARK)!==-1)))}
-function hiddenNotes(value,hide){var v=String(value||'').replace(HIDE_MARK,'').trim();return hide?(v?(v+'\\n'+HIDE_MARK):HIDE_MARK):(v||null)}
+function hiddenNotes(value,hide){var v=String(value||'').replace(HIDE_MARK,'').trim();return hide?(v?(v+'\n'+HIDE_MARK):HIDE_MARK):(v||null)}
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
