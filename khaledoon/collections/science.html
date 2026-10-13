@@ -15,11 +15,28 @@
 /* هوية قسم العلم: تدرجات تركوازية متناسقة مع بوابة القسم في الرئيسية */
 .hero{background:radial-gradient(ellipse at 78% 22%,rgba(138,217,232,.20),transparent 46%),linear-gradient(135deg,#123d4a,#102631 76%)}
 .card{background:linear-gradient(145deg,rgba(18,61,74,.92),rgba(10,32,42,.96))}
+
+/* بطاقة حكاية أحمد زويل */
+.zw-card{align-items:center!important}.zw-cover{flex:0 0 155px;width:155px;height:112px;object-fit:cover;border-radius:10px;border:1px solid #3d8aa0;box-shadow:0 8px 24px #0005}.zw-card>div:last-child{min-width:0}@media(max-width:620px){.zw-card{flex-wrap:wrap}.zw-cover{flex-basis:100%;width:100%;height:auto;max-height:230px;object-fit:cover}.zw-card .num{flex-basis:42px;height:44px}}
 </style></head>
 <body><header><div class="wrap"><nav><a class="brand" href="../index.html">خالدون عبر التاريخ<small>حكاية التاريخ بعيون جيل جديد</small></a><a class="back" href="../index.html#gateways">← كل البوابات</a></nav></div></header>
 <section class="hero"><div class="wrap"><div class="intro"><div class="eyebrow">من حكايات المعرفة والإنسان</div><h1>العلم والعلماء</h1><p class="lead">اكتشف حكايات العلماء وأسئلتهم وتجاربهم، وكيف تحولت الأفكار إلى معرفة وإنجازات.</p></div></div></section>
-<main><section class="section"><div class="wrap"><div class="heading"><h2>حكايات هذا القسم</h2><p>كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.</p></div><div class="cards" style="grid-template-columns:1fr"><div class="card" style="align-items:flex-start"><div class="num">✦</div><div><h3>الحكايات قيد الإعداد</h3><p style="margin-bottom:0">لم تُضف حكايات إلى هذا القسم بعد. ستظهر هنا الحكايات المعتمدة، باستخدام نفس أسلوب العرض والتنظيم المستخدم في قسم أكتوبر 1973.</p></div></div></div></div></section></main>
+<main><section class="section"><div class="wrap"><div class="heading"><h2>حكايات هذا القسم</h2><p>كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.</p></div><div class="cards" style="grid-template-columns:1fr">
+<a class="card zw-card" href="../../stories/007/" style="align-items:flex-start">
+<img class="zw-cover" src="../../stories/007/cover.svg" alt="رسم توضيحي لذرات تتحرك ونبضات ليزر مرتبط بحكاية أحمد زويل">
+<div class="num">007</div>
+<div><h3>حكاية العالم أحمد زويل</h3><p>حكاية العالم المصري الحائز على جائزة نوبل في الكيمياء سنة 1999، وكيف ساعدت نبضات الليزر القصيرة جدًا العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.</p><span>اقرأ الحكاية ←</span></div>
+</a></div></div></section></main>
 <footer><div class="wrap">قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.</div></footer>
 <script>(function(){var els=document.querySelectorAll('.card');if('IntersectionObserver'in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('reveal')});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});els.forEach(function(e){io.observe(e)})}})();</script>
+<script>/* ترجمة بطاقة حكاية زويل (يقرأ اللغة المختارة من kh-lang كباقي الصفحات الفرعية) */
+(function(){var l='ar';try{l=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}
+var D={
+en:{h:'The Story of the Scientist Ahmed Zewail',p:'The story of the Egyptian scientist who won the 1999 Nobel Prize in Chemistry, and how extremely short laser pulses let scientists watch atoms during a chemical reaction.',s:'Read the story →',a:'Illustration of moving atoms and laser pulses linked to the story of Ahmed Zewail'},
+fr:{h:'L’histoire du savant Ahmed Zewail',p:'L’histoire du savant égyptien, prix Nobel de chimie en 1999, et de la façon dont des impulsions laser extrêmement brèves permettent d’observer les atomes pendant une réaction chimique.',s:'Lire l’histoire →',a:'Illustration d’atomes en mouvement et d’impulsions laser liée à l’histoire d’Ahmed Zewail'},
+it:{h:'La storia dello scienziato Ahmed Zewail',p:'La storia dello scienziato egiziano, premio Nobel per la Chimica nel 1999, e di come impulsi laser brevissimi permettono di osservare gli atomi durante una reazione chimica.',s:'Leggi la storia →',a:'Illustrazione di atomi in movimento e impulsi laser legata alla storia di Ahmed Zewail'}};
+var d=D[l];if(!d)return;var c=document.querySelector('.zw-card');if(!c)return;
+c.querySelector('h3').textContent=d.h;c.querySelector('p').textContent=d.p;c.querySelector('span').textContent=d.s;c.querySelector('img').setAttribute('alt',d.a)})();</script>
 <script src="../assets/khaledoon-pages-i18n.js" defer></script>
-</body></html>
+</body>
+</html>
