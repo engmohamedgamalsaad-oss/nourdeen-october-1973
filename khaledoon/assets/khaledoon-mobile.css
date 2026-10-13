@@ -136,20 +136,18 @@ html.hm .hero-in{will-change:translate,filter}
 }
 
 /* ===== نقاط صغيرة على الصورة: تنوّر وتطفأ بهدوء في مكانها، ولونها يتحوّل بين الأبيض والذهبي ===== */
-@media (max-width:780px){
-  .hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-  .hero-stars i{
-    position:absolute;
-    width:var(--sz,3px);height:var(--sz,3px);
-    margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
-    border-radius:50%;
-    background-color:#fff;
-    opacity:0;
-    animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
-    will-change:opacity;
-  }
-  html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
+.hero-stars{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.hero-stars i{
+  position:absolute;
+  width:var(--sz,3px);height:var(--sz,3px);
+  margin:calc(var(--sz,3px)/-2) 0 0 calc(var(--sz,3px)/-2);
+  border-radius:50%;
+  background-color:#fff;
+  opacity:0;
+  animation:khTwinkle var(--dur,5s) var(--dl,0s) ease-in-out infinite;
+  will-change:opacity;
 }
+html[data-theme="light"] .hero-stars i{animation-name:khTwinkleLight}
 @keyframes khTwinkle{
   0%{opacity:0;background-color:#ffffff}
   35%{opacity:var(--op,.8);background-color:#ffffff}
