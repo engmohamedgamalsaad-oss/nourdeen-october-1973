@@ -1,0 +1,25 @@
+/* khaledoon-theme-stories.css — إصلاحات الوضع الفاتح لصفحات الحكايات فقط.
+   السبب: بعض تنسيقات الحكايات تضع خلفية داكنة بـ !important، فكان نص الوضع الفاتح يظهر داكنًا فوق خلفية داكنة.
+   هذه القواعد تعمل في الوضع الفاتح فقط (لا تمس الوضع الداكن)، وتستثني الرئيسية وصفحة أكتوبر. المقدمة تبقى داكنة. */
+@media (prefers-color-scheme:light){
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))){
+    background:linear-gradient(180deg,#fcf8ee,#f2e9d3)!important;
+    background-attachment:scroll!important;
+    &::before{display:none!important}
+    :is(.story,.end,.sources,.memorial-gallery){background:transparent!important}
+    .hero{background-color:#061820!important}
+    .school-name{color:#14224a!important}
+    .page-name{color:#4d5a82!important}
+    footer{background:#f2e9d3!important;color:#4d5a82!important}
+  }
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))){
+  background:linear-gradient(180deg,#fcf8ee,#f2e9d3)!important;
+  background-attachment:scroll!important;
+  &::before{display:none!important}
+  :is(.story,.end,.sources,.memorial-gallery){background:transparent!important}
+  .hero{background-color:#061820!important}
+  .school-name{color:#14224a!important}
+  .page-name{color:#4d5a82!important}
+  footer{background:#f2e9d3!important;color:#4d5a82!important}
+}
