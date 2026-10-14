@@ -142,5 +142,33 @@
     "id": "004",
     "section": "october",
     "path": "stories/october/004/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "أحمد عرابي — حين رفع صوته بالمطالب",
+    "subtitle": "رحلة إلى مصر في القرن التاسع عشر، حين تحولت مطالب ضباط وجنود إلى حركة سياسية.",
+    "color": "#b8874b",
+    "order": 6,
+    "published": true,
+    "i18n": {},
+    "id": "006",
+    "section": "history",
+    "path": "stories/history/006/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "حكاية العالم أحمد زويل",
+    "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
+    "color": "#b8874b",
+    "order": 7,
+    "published": true,
+    "i18n": {},
+    "id": "007",
+    "section": "science",
+    "path": "stories/science/007/"
   }
 ]
