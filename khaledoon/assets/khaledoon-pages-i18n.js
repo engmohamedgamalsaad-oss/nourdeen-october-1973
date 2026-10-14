@@ -96,7 +96,7 @@ var O={'الأول':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخ
 var ER=['Could not send right now ({c}). Check the fields and try again.','Envoi impossible pour le moment ({c}). Vérifiez les champs et réessayez.','Impossibile inviare ora ({c}). Controlla i campi e riprova.'];
 function tr(s,i){
  var d=D[s],m;if(i===4)return d?d[0]:s;if(d)return d[i-1];
- m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return ['Grade ','Classe ','Classe '][i-1]+O[m[1]];
+ m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return ['Grade ','Classe ','Classe '][i===4?0:i-1]+O[m[1]];
  m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i===4?0:i-1].replace('{c}',m[1]);
  return s}
 function get(){var s='ar';try{s=new URLSearchParams(location.search).get('lang')||localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}var i=LG.indexOf(s);return i<0?0:i}
