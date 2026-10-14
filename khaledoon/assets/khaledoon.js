@@ -167,7 +167,7 @@ var mt=document.querySelector("meta[name=theme-color]");if(mt)mt.content=t==="da
 new MutationObserver(function(ms){if(!l)return;ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)})}).observe(B,{childList:true,subtree:true});
 document.querySelector(".langs").addEventListener("click",function(e){var b=e.target.closest("button");if(b)sl(+b.dataset.l)});
 th.addEventListener("click",function(){sth(de.getAttribute("data-theme")==="dark"?"light":"dark")});
-var sg="ar";try{sg=localStorage.getItem("kh-lang")||"ar"}catch(e){}
+var sg="ar";try{sg=new URLSearchParams(location.search).get("lang")||localStorage.getItem("kh-lang")||"ar"}catch(e){}
 var si=LG.indexOf(sg);l=Math.max(si,0);
 sth(de.getAttribute("data-theme")||"dark");
 if(si>0)sl(si)
