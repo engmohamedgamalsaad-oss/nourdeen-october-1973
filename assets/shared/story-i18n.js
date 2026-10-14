@@ -7,7 +7,7 @@ var pageMeta=reg.meta;
 function applyPageMeta(){
  var slug=document.body.getAttribute('data-story-slug');
  var lang=(window.I18N&&window.I18N.lang())||'ar';
- var meta=pageMeta[slug]&&pageMeta[slug][lang];
+ var meta=pageMeta[slug]&&pageMeta[slug][lang];if(!meta&&lang==='de')meta=pageMeta[slug]&&pageMeta[slug].en;
  if(!meta)return;
  document.title=meta[0];
  [['meta[name="description"]',meta[1]],['meta[property="og:title"]',meta[0]],['meta[property="og:description"]',meta[1]]].forEach(function(pair){
@@ -32,6 +32,10 @@ function applyTranslationNotice(lang){
   fr:{
    title:'Avis de traduction',
    body:'Cette page a été traduite de l’arabe avec l’aide de l’intelligence artificielle (IA). Cette traduction est fournie à titre informatif et pour faciliter l’accès au contenu ; elle peut comporter des erreurs ou des omissions. Le texte arabe original fait foi. Veuillez consulter les sources citées pour vérifier les détails historiques.'
+  },
+  de:{
+   title:'Hinweis zur Übersetzung',
+   body:'Eine geprüfte deutsche Übersetzung ist noch nicht verfügbar. Vorläufig wird, sofern vorhanden, die englische Fassung angezeigt. Der arabische Originaltext ist die maßgebliche Fassung; bitte prüfen Sie historische Angaben anhand der angegebenen Quellen.'
   },
   it:{
    title:'Avviso sulla traduzione',
@@ -70,10 +74,10 @@ function applyFooterText(lang){
   var normalized=originalText.replace(/\s+/g,' ').trim();
   var item=translations[normalized]||translations[originalText];
   if(lang==='ar'){node.nodeValue=originalText;return;}
-  if(!item||!item[lang])return;
+  if(!item||!(item[lang]||(lang==='de'&&item.en)))return;
   var leading=(originalText.match(/^\s*/)||[''])[0];
   var trailing=(originalText.match(/\s*$/)||[''])[0];
-  node.nodeValue=leading+item[lang]+trailing;
+  node.nodeValue=leading+(item[lang]||(lang==='de'&&item.en))+trailing;
  });
  });
 }
@@ -104,9 +108,9 @@ function apply(){
    if(!/[\u0600-\u06FF]/.test(node.nodeValue))continue;
    var source=node.nodeValue,normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source.trim()];
-   if(item&&item[lang]){
+   if(item&&(item[lang]||(lang==='de'&&item.en))){
     var leading=(source.match(/^\s*/)||[''])[0],trailing=(source.match(/\s*$/)||[''])[0];
-    node.nodeValue=leading+item[lang]+trailing;
+    node.nodeValue=leading+(item[lang]||(lang==='de'&&item.en))+trailing;
    }
   }
  }
@@ -118,7 +122,7 @@ function apply(){
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
    var normalized=ar.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[ar];
-   if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
+   if(item&&(item[lang]||(lang==='de'&&item.en))){var translated=item[lang]||(lang==='de'&&item.en);if(el.textContent!==translated)el.textContent=translated;}
  });
  applyFooterText(lang);
  applyTranslationNotice(lang);
@@ -131,7 +135,7 @@ function apply(){
    var normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source];
    if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
-   if(item&&item[lang])el.setAttribute(attr,item[lang]);
+   if(item&&(item[lang]||(lang==='de'&&item.en)))el.setAttribute(attr,item[lang]||(lang==='de'&&item.en));
   });
  });
  translateRemainingTextNodes();
