@@ -8,7 +8,6 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
-  pull-requests: write
 concurrency:
   group: story-index-${{ github.ref }}
   cancel-in-progress: true
@@ -27,9 +26,7 @@ jobs:
             section="$(basename "$(dirname "$d")")"
             jq --arg id "$id" --arg section "$section" '. + {id:$id, section:$section, path:("stories/"+$section+"/"+$id+"/")}' "$d/data.json"
           done | jq -s 'map(select(.published != false)) | sort_by(.order // 9999)' > stories/index.json
-      - name: Propose index update
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Publish generated branch for review
         shell: bash
         run: |
           set -euo pipefail
@@ -44,6 +41,12 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Update generated story index'
           git push origin "HEAD:$branch"
-          gh pr create --base main --head "$branch" \
-            --title 'Update generated story index' \
-            --body 'Automated index refresh from section story data files. Review the generated routes and publication flags before merging.'
+          compare_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+          {
+            echo '## Story index update ready for review'
+            echo
+            echo "The generated index was pushed to `$branch`."
+            echo "Open a pull request: $compare_url"
+            echo
+            echo 'The repository does not grant GitHub Actions permission to create pull requests, so review and merge the branch manually.'
+          } >> "$GITHUB_STEP_SUMMARY"
