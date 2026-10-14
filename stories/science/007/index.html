@@ -73,7 +73,7 @@ function updateShare(){var u=location.href.split("#")[0],t=(document.title||"")+
 function reloadExtras(){var o=document.querySelector(".story-extras");if(!o)return;o.remove();var sc=document.createElement("script");sc.src="../../../assets/shared/story-extras.js?"+Date.now();document.body.appendChild(sc)}
 document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{setLanguage(b.dataset.lang);updateShare();reloadExtras()}));
 setLanguage((function(){try{var l=new URLSearchParams(location.search).get("lang")||localStorage.getItem("kh-lang");if(l==="en"||l==="fr"||l==="it"||l==="de")return l}catch(e){}return"ar"})());updateShare();
-</script><script src="../../../assets/shared/reactions.js"></script><script src="../../../assets/shared/story-extras.js"></script>
+</script><script src="../../../assets/shared/reactions.js"></script><script src="../../../assets/shared/story-extras.js?v=20261014-de2"></script>
 <script>
 (()=>{const modal=document.getElementById("story-intro-modal"),start=document.getElementById("start-story"),close=document.getElementById("intro-close");
 const dismiss=()=>{modal.classList.add("is-closing");document.body.classList.remove("modal-open");window.setTimeout(()=>{modal.hidden=true;document.querySelector(".hero").scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});},350)};
