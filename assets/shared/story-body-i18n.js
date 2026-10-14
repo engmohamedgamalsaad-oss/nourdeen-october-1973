@@ -593,6 +593,10 @@ function apply(){
  });
  translateRemainingTextNodes();
  normalizeLocalizedText();
+ var notice=document.getElementById('ai-translation-notice');
+ if(lang==='de'){
+  if(!notice){notice=document.createElement('aside');notice.id='ai-translation-notice';notice.setAttribute('role','note');notice.style.cssText='box-sizing:border-box;width:calc(100% - 32px);max-width:900px;margin:24px auto 30px;padding:16px 20px;border:1px solid rgba(227,189,120,.42);border-left:4px solid #e3bd78;border-radius:12px;background:#0c232d;color:#d9e3e4;font:400 .88rem/1.8 Arial,sans-serif;direction:ltr;text-align:left';notice.textContent='Eine geprüfte deutsche Übersetzung ist noch nicht verfügbar. Vorläufig wird, sofern vorhanden, die englische Fassung angezeigt. Der arabische Originaltext ist die maßgebliche Fassung.';var footer=document.querySelector('footer');if(footer&&footer.parentNode)footer.parentNode.insertBefore(notice,footer);else document.body.appendChild(notice);}
+ }else if(notice)notice.remove();
 }
 document.addEventListener('DOMContentLoaded',apply);
 document.addEventListener('site-language-change',apply);
