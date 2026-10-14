@@ -5,26 +5,6 @@
    - اختيار الألمانية يُحفظ في المفتاح kh-de (ويبقى kh-lang = ar حتى لا تنقلب الصفحات التي لا تدعم الألمانية بعد إلى LTR). */
 (function(){
 var D={
-
-"رجال البحر في أكتوبر":"Männer der Marine im Oktober",
-"المعركة التي لم يرها معظم الناس":"Die Schlacht, die die meisten Menschen nie gesehen haben",
-"العقل قبل السلاح":"Verstand vor Waffen",
-"كيف فتحت المياه طريق العبور":"Wie das Wasser den Weg für die Überquerung öffnete",
-"لغة لا يفهمها العدو":"Eine Sprache, die der Feind nicht versteht",
-"حكاية الشفرة النوبية":"Die Geschichte des nubischen Codes",
-"سماء أكتوبر: شهداء الضربة الجوية الأولى":"Der Himmel im Oktober: Gefallene des ersten Luftangriffs",
-"حكاية الطيارين الذين فتحوا الطريق للعبور":"Die Geschichte der Piloten, die den Weg für die Überquerung öffneten",
-"ابن سينا — الشيخ الرئيس":"Ibn Sina – der Fürst der Ärzte",
-"عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن":"Ein Gelehrter, der Medizin und Philosophie verband und dessen Einfluss Jahrhunderte überdauerte",
-"أحمد عرابي — حين رفع صوته بالمطالب":"Ahmed Urabi – als er seine Forderungen erhob",
-"حكاية العالم أحمد زويل":"Die Geschichte des Wissenschaftlers Ahmed Zewail",
-"حكاية بصوت جيل جديد":"Eine Geschichte aus der Stimme einer neuen Generation",
-"نوردين محمد جمال":"Nourdeen Mohamed Gamal",
-"كارما محمد جمال":"Karma Mohamed Gamal",
-"مليكة محمد جمال":"Malika Mohamed Gamal",
-"الصف الأول الإعدادي":"1. Klasse der Vorbereitungsschule",
-"الصف الثالث الابتدائي":"3. Klasse der Grundschule",
-"الصف الأول الابتدائي":"1. Klasse der Grundschule",
 "خالدون عبر التاريخ":"Unsterbliche der Geschichte",
 "حكاياتٌ تُروى… وأثرٌ يبقى":"Erzählte Geschichten … und eine Spur, die bleibt",
 "بوابات المعرفة":"Tore des Wissens",
@@ -124,19 +104,11 @@ function labels(){
  }
 }
 function setDe(){
- /* The overlay keys are Arabic source text. Reload in Arabic first instead of clicking the
-    normal language button, which would navigate away before the overlay can be applied. */
- if(!active && get('kh-lang') && get('kh-lang')!=='ar'){
-  put(KEY,'1');put('kh-lang','ar');
-  try{var u=new URL(location.href);u.searchParams.set('lang','de');location.replace(u.href)}catch(e){}
-  return;
- }
  active=true;
  put(KEY,'1');put('kh-lang','ar');
  root.lang='de';root.dir='ltr';
  ap(B);labels();
  document.title=D[AR_TITLE];
- try{var u2=new URL(location.href);if(u2.searchParams.get('lang')!=='de'){u2.searchParams.set('lang','de');history.replaceState(null,'',u2.href)}}catch(e){}
  Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
 }
 /* زر DE */
@@ -156,11 +128,8 @@ new MutationObserver(function(ms){
  if(!active)return;
  ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)});
 }).observe(B,{childList:true,subtree:true});
-/* lang=de is an explicit request; stored English/French/Italian must not override it. */
-var requestedDe=false;
-try{requestedDe=new URLSearchParams(location.search).get('lang')==='de'}catch(e){}
-if(requestedDe){setDe()}
-else if(get(KEY)==='1'){
+/* عند فتح الصفحة: تُطبَّق الألمانية فقط إذا لم تُختَر لغة أخرى بعدها */
+if(get(KEY)==='1'){
  if((get('kh-lang')||'ar')==='ar')setDe();else put(KEY,null);
 }
 })();
