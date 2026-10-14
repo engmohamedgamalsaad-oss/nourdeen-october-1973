@@ -142,5 +142,95 @@
     "id": "004",
     "section": "october",
     "path": "stories/october/004/"
+  },
+  {
+    "name": "نوردين محمد جمال",
+    "grade": "الصف الأول الإعدادي",
+    "className": "Class 1B",
+    "title": "ابن سينا — الشيخ الرئيس",
+    "subtitle": "عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن",
+    "color": "#d5b7ff",
+    "order": 5,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "First year of preparatory school",
+        "title": "Ibn Sina — al-Shaykh al-Ra’is",
+        "subtitle": "A scholar of medicine and philosophy whose influence crossed centuries",
+        "className": "Class 1B"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "Première année du collège",
+        "title": "Ibn Sina — al-Shaykh al-Ra’is",
+        "subtitle": "Un savant en médecine et en philosophie dont l’influence a traversé les siècles",
+        "className": "Class 1B"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "Primo anno della scuola preparatoria",
+        "title": "Ibn Sina — al-Shaykh al-Ra’is",
+        "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli",
+        "className": "Class 1B"
+      }
+    },
+    "id": "005",
+    "section": "history",
+    "path": "stories/history/005/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "أحمد عرابي — حين رفع صوته بالمطالب",
+    "subtitle": "رحلة إلى مصر في القرن التاسع عشر، حين تحولت مطالب ضباط وجنود إلى حركة سياسية.",
+    "color": "#b8874b",
+    "order": 6,
+    "published": true,
+    "i18n": {
+      "en": {
+        "title": "Ahmed Urabi — When He Raised His Voice",
+        "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement."
+      },
+      "fr": {
+        "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
+        "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique."
+      },
+      "it": {
+        "title": "Ahmed Urabi — Quando fece sentire la sua voce",
+        "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico."
+      }
+    },
+    "id": "006",
+    "section": "history",
+    "path": "stories/history/006/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "حكاية العالم أحمد زويل",
+    "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
+    "color": "#b8874b",
+    "order": 7,
+    "published": true,
+    "i18n": {
+      "en": {
+        "title": "The Story of Scientist Ahmed Zewail",
+        "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions."
+      },
+      "fr": {
+        "title": "L’histoire du scientifique Ahmed Zewail",
+        "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques."
+      },
+      "it": {
+        "title": "La storia dello scienziato Ahmed Zewail",
+        "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche."
+      }
+    },
+    "id": "007",
+    "section": "science",
+    "path": "stories/science/007/"
   }
 ]

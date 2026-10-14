@@ -6,7 +6,7 @@
   "subtitle": "عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن",
   "color": "#d5b7ff",
   "order": 5,
-  "published": false,
+  "published": true,
   "i18n": {
     "en": {
       "name": "Nourdeen Mohamed Gamal",
@@ -29,6 +29,5 @@
       "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli",
       "className": "Class 1B"
     }
-  },
-  "id": "005"
+  }
 }

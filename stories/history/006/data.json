@@ -7,5 +7,18 @@
   "color": "#b8874b",
   "order": 6,
   "published": true,
-  "i18n": {}
+  "i18n": {
+    "en": {
+      "title": "Ahmed Urabi — When He Raised His Voice",
+      "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement."
+    },
+    "fr": {
+      "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
+      "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique."
+    },
+    "it": {
+      "title": "Ahmed Urabi — Quando fece sentire la sua voce",
+      "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico."
+    }
+  }
 }

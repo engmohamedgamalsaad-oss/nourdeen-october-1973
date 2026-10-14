@@ -7,5 +7,18 @@
   "color": "#b8874b",
   "order": 7,
   "published": true,
-  "i18n": {}
+  "i18n": {
+    "en": {
+      "title": "The Story of Scientist Ahmed Zewail",
+      "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions."
+    },
+    "fr": {
+      "title": "L’histoire du scientifique Ahmed Zewail",
+      "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques."
+    },
+    "it": {
+      "title": "La storia dello scienziato Ahmed Zewail",
+      "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche."
+    }
+  }
 }
