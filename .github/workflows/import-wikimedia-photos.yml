@@ -5,7 +5,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 jobs:
   import-photos:
@@ -32,9 +31,7 @@ jobs:
           test "$(wc -c < stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg)" -gt 1000
           test "$(wc -c < stories/october/004/Atef_El_Sadat.jpg)" -gt 1000
 
-      - name: Propose imported photos
-        env:
-          GH_TOKEN: ${{ github.token }}
+      - name: Publish image branch for review
         shell: bash
         run: |
           set -euo pipefail
@@ -43,10 +40,18 @@ jobs:
             echo 'No image changes to propose.'
             exit 0
           fi
-          branch="codex/import-wikimedia-photos-\${GITHUB_RUN_ID}"
+          branch="codex/import-wikimedia-photos-${GITHUB_RUN_ID}"
           git switch --create "$branch"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Add licensed Wikimedia photos locally'
           git push origin "HEAD:$branch"
-          gh pr create --base main --head "$branch" --title 'Import licensed Wikimedia photos' --body 'Review the imported image files and their source licenses before merging.'
+          compare_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/compare/main...${branch}?expand=1"
+          {
+            echo '## Licensed image import ready for review'
+            echo
+            echo "The downloaded source files were pushed to `$branch`."
+            echo "Open a pull request: $compare_url"
+            echo
+            echo 'Review source attribution and license details before merging.'
+          } >> "$GITHUB_STEP_SUMMARY"
