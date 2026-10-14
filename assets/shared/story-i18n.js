@@ -35,7 +35,7 @@ function applyTranslationNotice(lang){
   },
   de:{
    title:'Hinweis zur Übersetzung',
-   body:'Eine geprüfte deutsche Übersetzung ist noch nicht verfügbar. Vorläufig wird, sofern vorhanden, die englische Fassung angezeigt. Der arabische Originaltext ist die maßgebliche Fassung; bitte prüfen Sie historische Angaben anhand der angegebenen Quellen.'
+   body:'Eine geprüfte deutsche Übersetzung ist noch nicht verfügbar. Wo vorhanden, wird vorläufig die englische Fassung angezeigt; übrige Abschnitte bleiben auf Arabisch. Der arabische Originaltext ist die maßgebliche Fassung.'
   },
   it:{
    title:'Avviso sulla traduzione',
