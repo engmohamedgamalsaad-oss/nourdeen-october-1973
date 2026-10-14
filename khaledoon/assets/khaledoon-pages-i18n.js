@@ -99,7 +99,7 @@ function tr(s,i){
  m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return ['Grade ','Classe ','Classe '][i-1]+O[m[1]];
  m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i===4?0:i-1].replace('{c}',m[1]);
  return s}
-function get(){var s='ar';try{s=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}var i=LG.indexOf(s);return i<0?0:i}
+function get(){var s='ar';try{s=new URLSearchParams(location.search).get('lang')||localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}var i=LG.indexOf(s);return i<0?0:i}
 function one(n){
  if(n.__o===undefined)n.__o=n.data;
  var t=n.__o.trim();if(!t)return;
