@@ -119,6 +119,7 @@
 
 /* Loads the print / quiz block (kept in its own file next to this one). */
 (function () {
+  if (document.body.hasAttribute("data-disable-story-extras")) return;
   var current = document.currentScript;
   var base = current && current.src ? current.src.replace(/reactions\.js(\?.*)?$/, '') : '../../assets/shared/';
   var s = document.createElement('script');
