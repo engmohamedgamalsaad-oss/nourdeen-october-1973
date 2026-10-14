@@ -158,7 +158,7 @@ function sl(i){
 l=i;sv("kh-lang",LG[i]);de.lang=LG[i];de.dir=i?"ltr":"rtl";
 ap(B);
 document.title=i?T0.split(" | ").map(function(p){return tr(p,i)}).join(" | "):T0;
-if(q)q.placeholder=i?tr(PH,i):PH;
+if(q)q.placeholder=i?tr(PH,i):PH;var deNote=document.getElementById('de-home-fallback');if(deNote)deNote.hidden=i!==4;
 Array.prototype.forEach.call(document.querySelectorAll(".langs button"),function(b){b.setAttribute("aria-pressed",String(+b.dataset.l===i))})}
 function sth(t){
 de.setAttribute("data-theme",t);sv("kh-theme",t);
