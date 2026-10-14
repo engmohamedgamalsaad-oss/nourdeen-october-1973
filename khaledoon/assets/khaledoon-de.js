@@ -5,6 +5,26 @@
    - اختيار الألمانية يُحفظ في المفتاح kh-de (ويبقى kh-lang = ar حتى لا تنقلب الصفحات التي لا تدعم الألمانية بعد إلى LTR). */
 (function(){
 var D={
+
+"رجال البحر في أكتوبر":"Männer der Marine im Oktober",
+"المعركة التي لم يرها معظم الناس":"Die Schlacht, die die meisten Menschen nie gesehen haben",
+"العقل قبل السلاح":"Verstand vor Waffen",
+"كيف فتحت المياه طريق العبور":"Wie das Wasser den Weg für die Überquerung öffnete",
+"لغة لا يفهمها العدو":"Eine Sprache, die der Feind nicht versteht",
+"حكاية الشفرة النوبية":"Die Geschichte des nubischen Codes",
+"سماء أكتوبر: شهداء الضربة الجوية الأولى":"Der Himmel im Oktober: Gefallene des ersten Luftangriffs",
+"حكاية الطيارين الذين فتحوا الطريق للعبور":"Die Geschichte der Piloten, die den Weg für die Überquerung öffneten",
+"ابن سينا — الشيخ الرئيس":"Ibn Sina – der Fürst der Ärzte",
+"عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن":"Ein Gelehrter, der Medizin und Philosophie verband und dessen Einfluss Jahrhunderte überdauerte",
+"أحمد عرابي — حين رفع صوته بالمطالب":"Ahmed Urabi – als er seine Forderungen erhob",
+"حكاية العالم أحمد زويل":"Die Geschichte des Wissenschaftlers Ahmed Zewail",
+"حكاية بصوت جيل جديد":"Eine Geschichte aus der Stimme einer neuen Generation",
+"نوردين محمد جمال":"Nourdeen Mohamed Gamal",
+"كارما محمد جمال":"Karma Mohamed Gamal",
+"مليكة محمد جمال":"Malika Mohamed Gamal",
+"الصف الأول الإعدادي":"1. Klasse der Vorbereitungsschule",
+"الصف الثالث الابتدائي":"3. Klasse der Grundschule",
+"الصف الأول الابتدائي":"1. Klasse der Grundschule",
 "خالدون عبر التاريخ":"Unsterbliche der Geschichte",
 "حكاياتٌ تُروى… وأثرٌ يبقى":"Erzählte Geschichten … und eine Spur, die bleibt",
 "بوابات المعرفة":"Tore des Wissens",
