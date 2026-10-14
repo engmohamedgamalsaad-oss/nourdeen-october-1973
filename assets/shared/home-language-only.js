@@ -9,7 +9,7 @@
   document.documentElement.dir=lang==='ar'?'rtl':'ltr';
   var style=document.createElement('style');
   style.setAttribute('data-home-language-only','true');
-  style.textContent='.lang-switch,.language-switch,.langs,[data-lang-switch],.language-selector,.lang-selector{display:none!important;visibility:hidden!important}';
+  style.textContent='html body .lang-switch,html body .topbar .lang-switch,html body .language-switch,html body .langs,html body [data-lang-switch],html body .language-selector,html body .lang-selector{display:none!important;visibility:hidden!important;pointer-events:none!important}';
   (document.head||document.documentElement).appendChild(style);
   try {
     var url=new URL(location.href);
