@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#123d4a">
-<script>try{var kl=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";if(["en","fr","it"].indexOf(kl)>=0){document.documentElement.lang=kl;document.documentElement.dir="ltr"}}catch(e){}</script>
+<script>try{var kl=new URLSearchParams(location.search).get("lang")||localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";if(["en","fr","it","de"].indexOf(kl)>=0){document.documentElement.lang=kl;document.documentElement.dir="ltr"}}catch(e){}</script>
 <script>try{var kt=localStorage.getItem("kh-theme");if(kt==="light"||kt==="dark")document.documentElement.setAttribute("data-theme",kt)}catch(e){}</script>
 <title>العلم والعلماء | خالدون عبر التاريخ</title>
 <meta name="description" content="حكايات عن العلماء والأفكار والاكتشافات التي غيّرت فهمنا للعالم.">
@@ -33,12 +33,12 @@
 <footer><div class="wrap">قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.</div></footer>
 <script>(function(){var els=document.querySelectorAll('.card');if('IntersectionObserver'in window&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){els.forEach(function(e){e.classList.add('reveal')});var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.1});els.forEach(function(e){io.observe(e)})}})();</script>
 <script>/* ترجمة بطاقة حكاية زويل (يقرأ اللغة المختارة من kh-lang كباقي الصفحات الفرعية) */
-(function(){var l='ar';try{l=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}
+(function(){var l='ar';try{l=new URLSearchParams(location.search).get('lang')||localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}
 var D={
 en:{h:'The Story of the Scientist Ahmed Zewail',p:'The story of the Egyptian scientist who won the 1999 Nobel Prize in Chemistry, and how extremely short laser pulses let scientists watch atoms during a chemical reaction.',s:'Read the story →',a:'Illustration of moving atoms and laser pulses linked to the story of Ahmed Zewail'},
 fr:{h:'L’histoire du savant Ahmed Zewail',p:'L’histoire du savant égyptien, prix Nobel de chimie en 1999, et de la façon dont des impulsions laser extrêmement brèves permettent d’observer les atomes pendant une réaction chimique.',s:'Lire l’histoire →',a:'Illustration d’atomes en mouvement et d’impulsions laser liée à l’histoire d’Ahmed Zewail'},
 it:{h:'La storia dello scienziato Ahmed Zewail',p:'La storia dello scienziato egiziano, premio Nobel per la Chimica nel 1999, e di come impulsi laser brevissimi permettono di osservare gli atomi durante una reazione chimica.',s:'Leggi la storia →',a:'Illustrazione di atomi in movimento e impulsi laser legata alla storia di Ahmed Zewail'}};
-var d=D[l];if(!d)return;var c=document.querySelector('.zw-card');if(!c)return;
+var d=D[l]||(l==='de'?D.en:null);if(!d)return;var c=document.querySelector('.zw-card');if(!c)return;
 c.querySelector('h3').textContent=d.h;c.querySelector('p').textContent=d.p;c.querySelector('span').textContent=d.s;c.querySelector('img').setAttribute('alt',d.a)})();</script>
 <script src="../assets/khaledoon-theme.js?v=1" defer></script>
 <script src="../assets/khaledoon-pages-i18n.js?v=20261014-cards" defer></script>
