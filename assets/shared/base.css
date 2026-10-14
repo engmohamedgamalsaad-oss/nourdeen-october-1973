@@ -1,4 +1,5 @@
 @import url("../../khaledoon/assets/khaledoon-theme.css?v=1");
+@import url("../../khaledoon/assets/khaledoon-theme-stories.css?v=1");
 :root{
   --black:#02080c; --deep:#03151e; --sea:#063442; --sea2:#0b4d5c;
   --bronze:#b8874b; --gold:#e3bd78; --light:#e4eeee; --muted:#9eb7bb;
