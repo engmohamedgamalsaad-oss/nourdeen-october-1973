@@ -10,7 +10,7 @@
     fr: { heading: 'Emportez ce récit', print: 'Imprimer ou enregistrer en PDF', quiz: 'Testez vos connaissances sur la guerre d’octobre', hint: 'Dans la fenêtre d’impression, choisissez « Enregistrer en PDF ».' },
     it: { heading: 'Porta con te questo racconto', print: 'Stampa o salva in PDF', quiz: 'Metti alla prova ciò che sai sulla guerra d’ottobre', hint: 'Nella finestra di stampa scegli «Salva come PDF».' }
   };
-  var t = copy[lang] || copy.ar;
+  var t = copy[lang] || (lang === 'de' ? copy.en : null) || copy.ar;
 
   var style = document.createElement('style');
   style.textContent = [
