@@ -138,10 +138,10 @@ var N={"نوردين":"Nourdeen","كارما":"Karma","مليكة":"Malika"};
 var LG=["ar","en","fr","it","de"],l=0,de=document.documentElement,B=document.body,q=document.getElementById("q"),th=document.getElementById("th");
 var T0=document.title,BR="خالدون عبر التاريخ",PV="معاينة مستقلة",PH=q?q.placeholder:"";
 function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-function gr(w,i){return ["Grade ","Classe ","Classe "][i-1]+O[w]}
+function gr(w,i){return ["Grade ","Classe ","Classe "][i===4?0:i-1]+O[w]}
 function tr(s,i){
 var d=D[s],m;if(i===4)return d?d[0]:s;if(d)return d[i-1];
-if(m=s.match(/^بصوت (\S+) • (.+)$/))return ["By ","Par ","Di "][i-1]+(N[m[1]]||m[1])+" • "+tr(m[2],i);
+if(m=s.match(/^بصوت (\S+) • (.+)$/))return ["By ","Par ","Di "][i===4?0:i-1]+(N[m[1]]||m[1])+" • "+tr(m[2],i);
 if(m=s.match(/^(المرحلة \S+) — الصف (\S+)$/))return tr(m[1],i)+" — "+gr(m[2],i);
 m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return gr(m[1],i);
 return s}
