@@ -104,6 +104,11 @@ function labels(){
  }
 }
 function setDe(){
+ /* German overlay uses the Arabic source strings as keys; restore that source before translating. */
+ if(!active && get('kh-lang') && get('kh-lang')!=='ar'){
+  var arButton=langs.querySelector('button[data-l="0"]');
+  if(arButton)arButton.click();
+ }
  active=true;
  put(KEY,'1');put('kh-lang','ar');
  root.lang='de';root.dir='ltr';
@@ -128,8 +133,11 @@ new MutationObserver(function(ms){
  if(!active)return;
  ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)});
 }).observe(B,{childList:true,subtree:true});
-/* عند فتح الصفحة: تُطبَّق الألمانية فقط إذا لم تُختَر لغة أخرى بعدها */
-if(get(KEY)==='1'){
+/* lang=de is an explicit request; stored English/French/Italian must not override it. */
+var requestedDe=false;
+try{requestedDe=new URLSearchParams(location.search).get('lang')==='de'}catch(e){}
+if(requestedDe){setDe()}
+else if(get(KEY)==='1'){
  if((get('kh-lang')||'ar')==='ar')setDe();else put(KEY,null);
 }
 })();
