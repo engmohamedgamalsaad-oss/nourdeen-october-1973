@@ -35,6 +35,7 @@
     /* kh-lang هو المفتاح المشترك مع صفحات خالدون؛ lang للتوافق مع النظام القديم */
     try{saved=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'';}catch(e){}
     var value=(query||saved||document.documentElement.lang||'ar').toLowerCase();
+    if(query&&allowed.indexOf(value)>=0){try{localStorage.setItem('kh-lang',value);localStorage.setItem('lang',value)}catch(e){}}
     return allowed.indexOf(value)>=0?value:'ar';
   }
   function value(key){
