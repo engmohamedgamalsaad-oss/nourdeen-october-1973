@@ -1,6 +1,6 @@
 (function(){
   'use strict';
-  var allowed=['ar','en','fr','it'];
+  var allowed=['ar','en','fr','it','de'];
   var dict={};
   var current=readLang();
   /* ترجمات لعناصر ثابتة في صفحة أكتوبر (نص عربي أصلي → اللغات الأخرى) */
@@ -38,7 +38,7 @@
     return allowed.indexOf(value)>=0?value:'ar';
   }
   function value(key){
-    return (dict[current]&&dict[current][key]) || (dict.ar&&dict.ar[key]) || key;
+    return (dict[current]&&dict[current][key]) || (current==='de'&&dict.en&&dict.en[key]) || (dict.ar&&dict.ar[key]) || key;
   }
   function apply(){
     document.documentElement.lang=current;
@@ -57,7 +57,7 @@
     document.querySelectorAll('[data-lang-switch]').forEach(function(host){
       host.innerHTML='';
       host.hidden=false;host.style.display='';
-      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano'};
+      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
       allowed.forEach(function(lang){
         var button=document.createElement('button');
         button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
