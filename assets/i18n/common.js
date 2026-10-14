@@ -4,15 +4,16 @@
   window.I18N.register('en',{c1:'Home',c2:'October Stories'});
   window.I18N.register('fr',{c1:'Accueil',c2:'Récits d’octobre'});
   window.I18N.register('it',{c1:'Home',c2:'Racconti d’ottobre'});
+  window.I18N.register('de',{c1:'Startseite',c2:'Oktober-Geschichten'});
   (function(){
-    var IDX={en:0,fr:1,it:2};
+    var IDX={en:0,fr:1,it:2,de:3};
     var AR_TITLE='رجال خالدون عبر التاريخ | حكايات أكتوبر 1973';
     var ARIA={
-      'معرض الوسائط':['Media gallery','Galerie multimédia','Galleria multimediale'],
-      'هل تعلم':['Did you know?','Le saviez-vous ?','Lo sapevi?'],
-      'السابق':['Previous','Précédent','Precedente'],
-      'التالي':['Next','Suivant','Successivo'],
-      'اختيار الشريحة':['Choose a slide','Choisir une diapositive','Scegli una diapositiva']
+      'معرض الوسائط':['Media gallery','Galerie multimédia','Galleria multimediale','Mediengalerie'],
+      'هل تعلم':['Did you know?','Le saviez-vous ?','Lo sapevi?','Schon gewusst?'],
+      'السابق':['Previous','Précédent','Precedente','Zurück'],
+      'التالي':['Next','Suivant','Successivo','Weiter'],
+      'اختيار الشريحة':['Choose a slide','Choisir une diapositive','Scegli una diapositiva','Folie auswählen']
     };
     function patch(){
       var I=window.I18N,i=I&&IDX[I.lang()];

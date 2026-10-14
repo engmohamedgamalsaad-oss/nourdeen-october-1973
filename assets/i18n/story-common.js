@@ -49,4 +49,22 @@ Object.assign(S.text,{
 "قوة البحرية المصرية في حرب أكتوبر":{"en":"The strength of the Egyptian Navy in the October War","fr":"La force de la marine égyptienne pendant la guerre d’octobre","it":"La forza della Marina egiziana nella guerra d’ottobre"},
 "المعلومات الواردة في الحكايات جُمعت من المصادر المرفقة، ولا تتحمل إدارة المدرسة أو مديرة المدرسة مسؤولية محتواها.":{"en":"Information in these stories was gathered from the listed sources. The school administration and principal are not responsible for the content.","fr":"Les informations de ces récits proviennent des sources citées. L’administration de l’école et sa directrice ne sont pas responsables du contenu.","it":"Le informazioni di questi racconti provengono dalle fonti indicate. L’amministrazione scolastica e la preside non sono responsabili dei contenuti."}
 });
+Object.assign(S.text,{
+"غلاف حكايات أكتوبر 1973":{de:"Titelbild der Geschichten zum Oktober 1973"},
+"اختار رد فعلك على الحكاية":{de:"Wähle deine Reaktion auf die Geschichte"},
+"شعار مدرسة المنار القومية للغات للبنات":{de:"Logo der Al-Manar-Sprachschule für Mädchen"},
+"عرض الصورة بحجم كبير":{de:"Bild vergrößert anzeigen"},
+"إيه رأيك في الحكاية؟":{de:"Was hältst du von dieser Geschichte?"},
+"اختار إعجابك، وكمان رد فعل واحد يعبّر عن رأيك. من غير أسماء أو تعليقات مكتوبة.":{de:"Vergib ein Like und wähle eine Reaktion, die deine Meinung ausdrückt. Ohne Namen oder schriftliche Kommentare."},
+"المصادر والمراجع":{de:"Quellen und Literatur"},
+"مصادر ومراجع":{de:"Quellen und Literatur"},
+"عودة إلى الصفحة الرئيسية":{de:"Zurück zur Startseite"},
+"الصفحة الرئيسية":{de:"Startseite"},
+"حكايات أكتوبر":{de:"Oktober-Geschichten"},
+"السابق":{de:"Zurück"},
+"التالي":{de:"Weiter"},
+"معرض الوسائط":{de:"Mediengalerie"},
+"هل تعلم":{de:"Schon gewusst?"}
+});
+
 })();
