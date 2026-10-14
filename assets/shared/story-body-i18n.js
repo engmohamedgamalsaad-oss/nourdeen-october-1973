@@ -527,10 +527,10 @@ function applyFooterText(lang){
   var normalized=originalText.replace(/\s+/g,' ').trim();
   var item=translations[normalized]||translations[originalText];
   if(lang==='ar'){node.nodeValue=originalText;return;}
-  if(!item||!item[lang])return;
+  if(!item||!(item[lang]||(lang==='de'&&item.en)))return;
   var leading=(originalText.match(/^\s*/)||[''])[0];
   var trailing=(originalText.match(/\s*$/)||[''])[0];
-  node.nodeValue=leading+item[lang]+trailing;
+  node.nodeValue=leading+(item[lang]||(lang==='de'&&item.en))+trailing;
  });
  });
 }
@@ -561,9 +561,9 @@ function apply(){
    if(!/[\u0600-\u06FF]/.test(node.nodeValue))continue;
    var source=node.nodeValue,normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source.trim()];
-   if(item&&item[lang]){
+   if(item&&(item[lang]||(lang==='de'&&item.en))){
     var leading=(source.match(/^\s*/)||[''])[0],trailing=(source.match(/\s*$/)||[''])[0];
-    node.nodeValue=leading+item[lang]+trailing;
+    node.nodeValue=leading+(item[lang]||(lang==='de'&&item.en))+trailing;
    }
   }
  }
@@ -575,7 +575,7 @@ function apply(){
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
    var normalized=ar.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[ar];
-   if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
+   if(item&&(item[lang]||(lang==='de'&&item.en))){var translated=item[lang]||(lang==='de'&&item.en);if(el.textContent!==translated)el.textContent=translated;}
  });
  applyFooterText(lang);
  applyTranslationNotice(lang);
@@ -588,7 +588,7 @@ function apply(){
    var normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source];
    if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
-   if(item&&item[lang])el.setAttribute(attr,item[lang]);
+   if(item&&(item[lang]||(lang==='de'&&item.en)))el.setAttribute(attr,item[lang]||(lang==='de'&&item.en));
   });
  });
  translateRemainingTextNodes();
