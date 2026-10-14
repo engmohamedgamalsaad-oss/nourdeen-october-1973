@@ -124,16 +124,19 @@ function labels(){
  }
 }
 function setDe(){
- /* German overlay uses the Arabic source strings as keys; restore that source before translating. */
+ /* The overlay keys are Arabic source text. Reload in Arabic first instead of clicking the
+    normal language button, which would navigate away before the overlay can be applied. */
  if(!active && get('kh-lang') && get('kh-lang')!=='ar'){
-  var arButton=langs.querySelector('button[data-l="0"]');
-  if(arButton)arButton.click();
+  put(KEY,'1');put('kh-lang','ar');
+  try{var u=new URL(location.href);u.searchParams.set('lang','de');location.replace(u.href)}catch(e){}
+  return;
  }
  active=true;
  put(KEY,'1');put('kh-lang','ar');
  root.lang='de';root.dir='ltr';
  ap(B);labels();
  document.title=D[AR_TITLE];
+ try{var u2=new URL(location.href);if(u2.searchParams.get('lang')!=='de'){u2.searchParams.set('lang','de');history.replaceState(null,'',u2.href)}}catch(e){}
  Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
 }
 /* زر DE */
