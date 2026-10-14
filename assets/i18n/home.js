@@ -76,6 +76,25 @@
     js_language_label:'Seleziona la lingua',js_school_logo_alt:'Titolo dei racconti dell’ottobre 1973',js_home_cover_alt:'Copertina dei racconti dell’ottobre 1973',
     media_flag_alt:'Soldati egiziani che issano la bandiera egiziana',media_crossing_alt:'Fotografia storica dell’attraversamento della linea Bar-Lev durante la guerra d’ottobre',media_map_alt:'Mappa illustrativa dello stretto di Bab el-Mandeb e del Mar Rosso',media_hero_alt:'Fotografia d’archivio del pilota egiziano Atef El-Sadat',media_stamp_alt:'Concept artistico di un francobollo commemorativo della guerra d’ottobre'
   });
+  window.I18N.register('de',{
+    submit_story_cta:'Deine Geschichte einreichen',
+    k1:'Unsterbliche Helden der Geschichte',k2:'Geschichten zum Oktober 1973',k3:'Geschichtenarchiv',
+    k4:'ÄGYPTEN • 6. OKTOBER 1973',k5:'Geschichten vom Oktober 1973',
+    k6:'Ein digitales Archiv über die Helden des Oktoberkriegs von 1973, das an Mut, Planung und Opfer erinnert, die zum Sieg beitrugen.',
+    k7:'Geschichten entdecken ↓',k8:'Einführung',k9:'6. Oktober 1973',
+    k10:'Am 6. Oktober 1973 begann Ägypten nach jahrelanger Vorbereitung, Ausbildung und Planung den Oktoberkrieg zur Befreiung des Sinai. Landstreitkräfte, Luftwaffe, Marine und Luftverteidigung leisteten jeweils ihren Beitrag.',
+    k11:'Der Krieg bestand nicht nur aus Zahlen und Daten. Er handelte auch von Menschen, die echte Aufgaben erfüllten – manche bekannt, andere kaum erwähnt.',
+    k12:'Geschichte besteht nicht nur aus Zahlen und Daten, sondern auch aus den Geschichten von Menschen, die echte Aufgaben erfüllten und Mut bewiesen.',
+    k13:'Geschichten der Schülerinnen und Schüler',k14:'Eine Geschichte auswählen',k15:'Jede Geschichte eröffnet einen anderen Blick auf die Heldentaten im Oktober.',
+    k16:'Geschichten werden geladen …',k17:'Unter der Aufsicht von',k18:'Historische Geschichten auf Grundlage veröffentlichter Quellen',
+    k19:'Ein leicht verständlicher historischer Überblick',k20:'Geschichten zum Oktober 1973',
+    k21:'Die historischen Informationen stützen sich auf die Quellen, die in jeder Geschichte angegeben sind.',
+    js_new_story:'Neue Geschichte',js_photo_of:'Foto von',js_likes_label:'Anzahl der Likes',js_likes:'Likes',js_no_stories:'Noch keine Geschichten.',
+    js_open_story:'Geschichte lesen',js_likes_err:'Die Anzahl der Likes konnte gerade nicht geladen werden',
+    js_stories_err:'Die Geschichten konnten nicht geladen werden. Öffne die Website über GitHub Pages und prüfe, ob stories/index.json vorhanden ist.',
+    js_language_label:'Sprache auswählen',js_school_logo_alt:'Titelbild des Archivs der Geschichten zum Oktober 1973',js_home_cover_alt:'Titelbild der Geschichten zum Oktober 1973',
+    media_flag_alt:'Ägyptische Soldaten hissen die ägyptische Flagge',media_crossing_alt:'Historische Aufnahme der Überquerung der Bar-Lev-Linie während des Oktoberkriegs',media_map_alt:'Illustrative Karte der Straße von Bab al-Mandab und des Roten Meeres',media_hero_alt:'Archivfoto des ägyptischen Piloten Atef El-Sadat',media_stamp_alt:'Künstlerischer Entwurf einer Gedenkbriefmarke zum Oktoberkrieg'
+  });
   window.I18N.apply();
 
   var homeMeta = {
