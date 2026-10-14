@@ -2,7 +2,7 @@
    لا يعرض شريط لغة: الشريط في الصفحة الرئيسية فقط، وهذه الصفحات تقرأ اختياره من المفتاح المشترك (kh-lang). */
 (function(){
 'use strict';
-var LG=['ar','en','fr','it'],de=document.documentElement,l=0;
+var LG=['ar','en','fr','it','de'],de=document.documentElement,l=0;
 var R=[
 ['خالدون عبر التاريخ','Immortals Through History','Immortels à travers l’histoire','Immortali attraverso la storia'],
 ['حكاية التاريخ بعيون جيل جديد','History through the eyes of a new generation','L’histoire vue par une nouvelle génération','La storia vista da una nuova generazione'],
@@ -95,9 +95,9 @@ var D={};R.forEach(function(r){D[r[0]]=r.slice(1)});
 var O={'الأول':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخامس':5,'السادس':6};
 var ER=['Could not send right now ({c}). Check the fields and try again.','Envoi impossible pour le moment ({c}). Vérifiez les champs et réessayez.','Impossibile inviare ora ({c}). Controlla i campi e riprova.'];
 function tr(s,i){
- var d=D[s],m;if(d)return d[i-1];
+ var d=D[s],m;if(i===4)return d?d[0]:s;if(d)return d[i-1];
  m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return ['Grade ','Classe ','Classe '][i-1]+O[m[1]];
- m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i-1].replace('{c}',m[1]);
+ m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i===4?0:i-1].replace('{c}',m[1]);
  return s}
 function get(){var s='ar';try{s=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar'}catch(e){}var i=LG.indexOf(s);return i<0?0:i}
 function one(n){
