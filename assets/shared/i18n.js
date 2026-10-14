@@ -2,6 +2,13 @@
   'use strict';
   var allowed=['ar','en','fr','it','de'];
   var dict={};
+  var sharedLabels={
+    ar:{s_like:'❤️ أعجبتني',s_liked:'تم تسجيل إعجابك',r_feedback_exists:'سجّلت رد فعل لهذه الحكاية بالفعل من هذا المتصفح.',r_like_exists:'سجّلت إعجابك بهذه الحكاية بالفعل.',r_saving:'جارٍ تسجيل اختيارك…',r_saved:'شكرًا لك! تم تسجيل اختيارك.',r_already_saved:'الاختيار مسجّل بالفعل لهذه الحكاية.',r_saved_count_error:'تعذر تسجيل رد الفعل.',r_save_error:'تعذر الاتصال. حاول مرة أخرى.',r_counts_error:'تعذر تحميل أعداد التفاعل.'},
+    en:{s_like:'❤️ I liked this story',s_liked:'Your like has been recorded',r_feedback_exists:'You have already responded to this story from this browser.',r_like_exists:'You have already liked this story.',r_saving:'Saving your response…',r_saved:'Thank you! Your response has been recorded.',r_already_saved:'This response has already been recorded.',r_saved_count_error:'Could not record your response.',r_save_error:'Connection failed. Please try again.',r_counts_error:'Could not load reaction counts.'},
+    fr:{s_like:'❤️ J’ai aimé ce récit',s_liked:'Votre appréciation a été enregistrée',r_feedback_exists:'Vous avez déjà réagi à ce récit depuis ce navigateur.',r_like_exists:'Vous avez déjà aimé ce récit.',r_saving:'Enregistrement de votre réaction…',r_saved:'Merci ! Votre réaction a été enregistrée.',r_already_saved:'Cette réaction a déjà été enregistrée.',r_saved_count_error:'Impossible d’enregistrer votre réaction.',r_save_error:'Connexion impossible. Veuillez réessayer.',r_counts_error:'Impossible de charger les nombres de réactions.'},
+    it:{s_like:'❤️ Mi è piaciuta',s_liked:'Il tuo apprezzamento è stato registrato',r_feedback_exists:'Hai già reagito a questa storia da questo browser.',r_like_exists:'Hai già apprezzato questa storia.',r_saving:'Registrazione della tua reazione…',r_saved:'Grazie! La tua reazione è stata registrata.',r_already_saved:'Questa reazione è già stata registrata.',r_saved_count_error:'Impossibile registrare la tua reazione.',r_save_error:'Connessione non riuscita. Riprova.',r_counts_error:'Impossibile caricare i conteggi delle reazioni.'},
+    de:{s_like:'❤️ I liked this story',s_liked:'Your like has been recorded',r_feedback_exists:'You have already responded to this story from this browser.',r_like_exists:'You have already liked this story.',r_saving:'Saving your response…',r_saved:'Thank you! Your response has been recorded.',r_already_saved:'This response has already been recorded.',r_saved_count_error:'Could not record your response.',r_save_error:'Connection failed. Please try again.',r_counts_error:'Could not load reaction counts.'}
+  };
   var current=readLang();
   /* ترجمات لعناصر ثابتة في صفحة أكتوبر (نص عربي أصلي → اللغات الأخرى) */
   var XT={
@@ -39,7 +46,7 @@
     return allowed.indexOf(value)>=0?value:'ar';
   }
   function value(key){
-    return (dict[current]&&dict[current][key]) || (current==='de'&&dict.en&&dict.en[key]) || (dict.ar&&dict.ar[key]) || key;
+    return (dict[current]&&dict[current][key]) || (sharedLabels[current]&&sharedLabels[current][key]) || (current==='de'&&dict.en&&dict.en[key]) || (dict.ar&&dict.ar[key]) || key;
   }
   function apply(){
     document.documentElement.lang=current;
