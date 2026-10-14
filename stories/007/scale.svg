@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" role="img" aria-label="رسم توضيحي لأشرطة تقصر تدريجيا من الثانية إلى الفيمتو ثانية">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f3f4e"/><stop offset="1" stop-color="#071218"/></linearGradient>
+<linearGradient id="bar" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3d91a5"/><stop offset="1" stop-color="#8ad9e8"/></linearGradient></defs>
+<rect width="1000" height="520" fill="url(#bg)"/>
+<g font-family="Arial,Helvetica,sans-serif" font-size="26" fill="#cfeff5" text-anchor="start">
+<text x="40" y="82">1 s</text><text x="40" y="162">10<tspan dy="-10" font-size="17">-3</tspan><tspan dy="10"> s</tspan></text><text x="40" y="242">10<tspan dy="-10" font-size="17">-6</tspan><tspan dy="10"> s</tspan></text><text x="40" y="322">10<tspan dy="-10" font-size="17">-9</tspan><tspan dy="10"> s</tspan></text><text x="40" y="402">10<tspan dy="-10" font-size="17">-12</tspan><tspan dy="10"> s</tspan></text><text x="40" y="482" fill="#f0c878" font-weight="700">10<tspan dy="-10" font-size="17">-15</tspan><tspan dy="10"> s</tspan></text>
+</g>
+<g fill="url(#bar)">
+<rect x="190" y="56" width="770" height="34" rx="17"/>
+<rect x="190" y="136" width="440" height="34" rx="17" opacity=".95"/>
+<rect x="190" y="216" width="250" height="34" rx="17" opacity=".9"/>
+<rect x="190" y="296" width="140" height="34" rx="17" opacity=".85"/>
+<rect x="190" y="376" width="76" height="34" rx="17" opacity=".8"/>
+</g>
+<rect x="190" y="456" width="26" height="34" rx="13" fill="#f0c878"/>
+<circle cx="230" cy="473" r="9" fill="#f0c878" opacity=".5"/><circle cx="246" cy="473" r="6" fill="#f0c878" opacity=".3"/>
+</svg>
