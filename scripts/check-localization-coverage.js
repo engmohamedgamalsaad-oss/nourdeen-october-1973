@@ -49,7 +49,7 @@ for (const file of storyFiles) {
 for (const file of translationMaps) {
   const source = read(file);
   // These source maps store Arabic as the key and translations in flat locale objects.
-  const objects = source.match(/\{[^{}]*['\"]?en['\"]?\s*:/gs) || [];
+  const objects = (source.match(/\{[^{}]*\}/gs) || []).filter(object => /['\"]?en['\"]?\s*:/.test(object));
   let missing = 0;
   for (const object of objects) {
     for (const lang of ['en', 'fr', 'it', 'de']) {
