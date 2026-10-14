@@ -1149,7 +1149,7 @@ footer {
     });
   }
 
-  fetch(siteBase + 'stories/index.json?v=20261010-1')
+  fetch(siteBase + 'stories/index.json?v=20261014-sections')
     .then(function (response) {
       if (!response.ok) {
         throw new Error('تعذر تحميل الفهرس');
@@ -1157,6 +1157,7 @@ footer {
       return response.json();
     })
     .then(function (list) {
+      if (Array.isArray(list)) list = list.filter(function (story) { return (story.section || 'october') === 'october'; });
       if (!Array.isArray(list) || !list.length) {
         box.innerHTML =
           '<div class="empty">' + esc(window.I18N ? window.I18N.t('js_no_stories') : 'لا توجد حكايات بعد.') + '</div>';
@@ -1166,6 +1167,7 @@ footer {
 
       box.innerHTML = list.map(function (story, index) {
         var id = esc(story.id);
+        var storyPath = esc(story.path || ('stories/' + id + '/'));
         var localized = story.i18n && story.i18n[window.I18N ? window.I18N.lang() : 'ar'];
         var source = localized || story;
         var name = esc(source.name || story.name || (window.I18N ? window.I18N.t('js_new_story') : 'حكاية جديدة'));
@@ -1194,11 +1196,11 @@ footer {
 
         return ''
           + '<a class="card float-up ' + delayClass + '"'
-          + ' href="' + siteBase + 'stories/' + id + '/"'
+          + ' href="' + siteBase + storyPath + '"'
           + ' style="--c:' + color + '">'
           +   '<div class="card-photo">'
           +     '<span class="card-photo-letter">' + first + '</span>'
-          +     '<img loading="lazy" decoding="async" src="' + siteBase + 'stories/' + id + '/cover.jpg"'
+          +     '<img loading="lazy" decoding="async" src="' + siteBase + storyPath + 'cover.jpg"'
           +       ' alt="' + name + '"'
            +       ' onerror="this.style.display=\'none\';">'
           +   '</div>'

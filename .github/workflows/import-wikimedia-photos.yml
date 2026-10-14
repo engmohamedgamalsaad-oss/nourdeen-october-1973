@@ -5,21 +5,20 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   import-photos:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out main
-        uses: actions/checkout@v4
-        with:
-          ref: main
+      - name: Check out selected branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
 
       - name: Download the two Wikimedia source files without resizing
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p stories/002 stories/004
+          mkdir -p stories/october/002 stories/october/004
           curl --fail --location --silent --show-error \
             'https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg' \
             --output stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg
@@ -33,16 +32,21 @@ jobs:
           test "$(wc -c < stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg)" -gt 1000
           test "$(wc -c < stories/october/004/Atef_El_Sadat.jpg)" -gt 1000
 
-      - name: Commit imported images only
+      - name: Propose imported photos
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -- stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg stories/october/004/Atef_El_Sadat.jpg
           if git diff --cached --quiet; then
-            echo 'No image changes to commit.'
+            echo 'No image changes to propose.'
             exit 0
           fi
+          branch="codex/import-wikimedia-photos-\${GITHUB_RUN_ID}"
+          git switch --create "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Add licensed Wikimedia photos locally'
-          git push origin HEAD:main
+          git push origin "HEAD:$branch"
+          gh pr create --base main --head "$branch" --title 'Import licensed Wikimedia photos' --body 'Review the imported image files and their source licenses before merging.'

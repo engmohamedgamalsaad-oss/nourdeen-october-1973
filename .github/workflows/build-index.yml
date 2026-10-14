@@ -8,19 +8,42 @@ on:
   workflow_dispatch:
 permissions:
   contents: write
+  pull-requests: write
+concurrency:
+  group: story-index-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - name: Build stories/index.json
+        shell: bash
         run: |
+          set -euo pipefail
           for d in stories/*/[0-9][0-9][0-9]; do
-            [ -f "$d/data.json" ] && jq --arg id "$(basename "$d")" --arg section "$(basename "$(dirname "$d")")" '. + {id:$id, section:$section, path:("stories/"+$section+"/"+$id+"/")}' "$d/data.json"
+            [ -f "$d/data.json" ] || continue
+            id="$(basename "$d")"
+            section="$(basename "$(dirname "$d")")"
+            jq --arg id "$id" --arg section "$section" '. + {id:$id, section:$section, path:("stories/"+$section+"/"+$id+"/")}' "$d/data.json"
           done | jq -s 'map(select(.published != false)) | sort_by(.order // 9999)' > stories/index.json
-      - name: Commit
+      - name: Propose index update
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
+          set -euo pipefail
           git add stories/index.json
-          git diff --cached --quiet || (git commit -m "Update stories index" && git push)
+          if git diff --cached --quiet; then
+            echo 'Story index is already current.'
+            exit 0
+          fi
+          branch="codex/update-story-index-${GITHUB_RUN_ID}"
+          git switch --create "$branch"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Update generated story index'
+          git push origin "HEAD:$branch"
+          gh pr create --base main --head "$branch" \
+            --title 'Update generated story index' \
+            --body 'Automated index refresh from section story data files. Review the generated routes and publication flags before merging.'
