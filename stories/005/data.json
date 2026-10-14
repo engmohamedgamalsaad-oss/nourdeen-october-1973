@@ -1,0 +1,34 @@
+{
+  "name": "نوردين محمد جمال",
+  "grade": "الصف الأول الإعدادي",
+  "className": "Class 1B",
+  "title": "ابن سينا — الشيخ الرئيس",
+  "subtitle": "عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن",
+  "color": "#d5b7ff",
+  "order": 5,
+  "published": false,
+  "i18n": {
+    "en": {
+      "name": "Nourdeen Mohamed Gamal",
+      "grade": "First year of preparatory school",
+      "title": "Ibn Sina — al-Shaykh al-Ra’is",
+      "subtitle": "A scholar of medicine and philosophy whose influence crossed centuries",
+      "className": "Class 1B"
+    },
+    "fr": {
+      "name": "Nourdeen Mohamed Gamal",
+      "grade": "Première année du collège",
+      "title": "Ibn Sina — al-Shaykh al-Ra’is",
+      "subtitle": "Un savant en médecine et en philosophie dont l’influence a traversé les siècles",
+      "className": "Class 1B"
+    },
+    "it": {
+      "name": "Nourdeen Mohamed Gamal",
+      "grade": "Primo anno della scuola preparatoria",
+      "title": "Ibn Sina — al-Shaykh al-Ra’is",
+      "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli",
+      "className": "Class 1B"
+    }
+  },
+  "id": "005"
+}
