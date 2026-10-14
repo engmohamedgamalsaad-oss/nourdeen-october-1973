@@ -44,6 +44,10 @@
   var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
     (splashCopies[body.getAttribute('data-story-slug')] || {}).ar;
 
+  if (!splashCopy && window.I18N && window.I18N.t('s_start') !== 's_start') {
+    splashCopy = {title: window.I18N.t('s_title'), subtitle: window.I18N.t('s_subtitle'), start: window.I18N.t('s_start')};
+  }
+
   var splashImage = body.getAttribute('data-splash');
 
   if (splashImage) {
