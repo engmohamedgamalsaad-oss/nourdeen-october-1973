@@ -123,7 +123,7 @@
   var current = document.currentScript;
   var base = current && current.src ? current.src.replace(/reactions\.js(\?.*)?$/, '') : '../../assets/shared/';
   var s = document.createElement('script');
-  s.src = base + 'story-extras.js?v=20261010-1';
+  s.src = base + 'story-extras.js?v=20261014-de2';
   s.defer = true;
   document.body.appendChild(s);
 })();
