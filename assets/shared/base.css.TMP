@@ -1,8 +1,0 @@
-@import url("../../khaledoon/assets/khaledoon-theme.css?v=1");
-@import url("../../khaledoon/assets/khaledoon-theme-stories.css?v=1");
-:root{
-  --black:#02080c; --deep:#03151e; --sea:#0b4d5c; --sea2:#0b4d5c;
-  --bronze:#b8874b; --gold:#e3bd78; --light:#e4eeee; --muted:#9eb7bb;
-  --red:#a93232; --accent:#e3bd78;
-  --bg:radial-gradient(ellipse at 50% 0%,#0b4554 0%,#03151e 38%,#02080c 100%);
-}
