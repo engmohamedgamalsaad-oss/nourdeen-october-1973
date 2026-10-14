@@ -30,6 +30,7 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .btn.copied{background:#1f9d62;border-color:#1f9d62;color:#fff;font-weight:800}
 .pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
+.translation-panel{margin:18px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.translation-panel>summary{cursor:pointer;font-weight:900;color:var(--gold)}.translation-panel>.fnote{margin:8px 0 14px}.translation-lang{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px}.translation-lang h4{margin:0 0 10px;color:var(--gold)}.translation-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.translation-compare textarea[readonly]{opacity:.8}@media(max-width:680px){.translation-compare{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -192,6 +193,29 @@ function card(it){
  box.appendChild(curBox);
  var g2=el('div','fgrid');g2.appendChild(fld('اسم الراوي (الاسم الأول فقط)',nar));g2.appendChild(fld('الصف الدراسي للراوي',ng));g2.appendChild(fld('العنوان',title));g2.appendChild(fld('العنوان الفرعي',sub));box.appendChild(g2);
  box.appendChild(fld('بصوت الراوي',body,'النص المحرَّر؛ الأصل محفوظ بالأعلى'));
+var translationDetails=el('details','translation-panel');
+ translationDetails.appendChild(el('summary','','الترجمات ومراجعتها'));
+ translationDetails.appendChild(el('p','fnote','أدخل كل لغة على حدة، قارنها بالنص العربي، وحدد حالتها. لا تظهر الترجمة للزوار حتى تفعيلها واعتمادها.'));
+ var translationStates={not_started:'لم تبدأ',draft:'مسودة',review:'قيد المراجعة',approved:'معتمدة'};
+ var translationInputs={};
+ [['en','English'],['fr','Français'],['it','Italiano']].forEach(function(pair){
+  var lang=pair[0],saved=it.translations&&it.translations[lang]&&typeof it.translations[lang]==='object'?it.translations[lang]:{};
+  var group=el('section','translation-lang'),heading=el('h4','',pair[1]+' · '+lang.toUpperCase());
+  group.appendChild(heading);
+  var enabled=document.createElement('input');enabled.type='checkbox';enabled.checked=saved.enabled===true;
+  var enableLabel=el('label','fchk');enableLabel.appendChild(enabled);enableLabel.appendChild(el('span','','مفعّلة للنشر بعد الاعتماد'));group.appendChild(enableLabel);
+  var state=sel(translationStates,saved.status||'not_started');group.appendChild(fld('حالة الترجمة',state));
+  var student=inp(saved.student_name,120),grade=inp(saved.grade,120),trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trBody=area(saved.body,8,24000);
+  var fields=el('div','fgrid');
+  fields.appendChild(fld('اسم الراوي',student));fields.appendChild(fld('الصف',grade));fields.appendChild(fld('العنوان',trTitle));fields.appendChild(fld('العنوان الفرعي',trSubtitle));
+  group.appendChild(fields);
+  var comparison=el('div','translation-compare'),source=area(body.value,8,12000);source.readOnly=true;source.setAttribute('aria-label','النص العربي للمقارنة');
+  comparison.appendChild(fld('النص العربي للمقارنة',source));comparison.appendChild(fld('نص الترجمة',trBody));group.appendChild(comparison);
+  translationDetails.appendChild(group);
+  translationInputs[lang]={enabled:enabled,status:state,student_name:student,grade:grade,title:trTitle,subtitle:trSubtitle,body:trBody,source:source};
+ });
+ body.addEventListener('input',function(){Object.keys(translationInputs).forEach(function(lang){translationInputs[lang].source.value=body.value})});
+ box.appendChild(translationDetails);
  box.appendChild(fld('في ضوء التاريخ',hist,'السياق والتصحيحات والمراجع، يكتبها المحرر بعد التحقق'));
  box.appendChild(fld('المصادر',src,'سطر لكل مصدر، ووضّح أي معلومة غير مؤكدة'));
  box.appendChild(fld('الصور وحقوقها',img));
@@ -307,7 +331,7 @@ if(!isNew){
  }else box.appendChild(bar);
  function collect(status){
   var cur=secS.value==='curriculum';
-  return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,consent:cons.checked,status:status};
+  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status};
  }
  function valid(d){
   if(d.figure_name.length<2||d.narrator_name.length<2||d.title.length<3||d.body.length<50){say('err','الشخصية واسم الراوي والعنوان مطلوبة، ونص الحكاية 50 حرفًا على الأقل.');return false}
