@@ -1,7 +1,8 @@
 /* khaledoon-theme.css — طبقة موحّدة للألوان (فاتح/داكن) والبطاقات والحركة والاستجابة.
    تُحمَّل بعد باقي ملفات التنسيق. تعتمد على light-dark() وCSS nesting؛ المتصفح القديم الذي لا يدعمهما
    يتجاهل الملف بالكامل فيبقى التصميم القديم كما هو (تدهور آمن).
-   الوضع التلقائي يتبع النظام، واختيار الزائر يُحفظ في المفتاح المشترك kh-theme. */
+   الوضع التلقائي يتبع النظام، واختيار الزائر يُحفظ في المفتاح المشترك kh-theme.
+   صفحة حكايات أكتوبر (تحتوي .hero-home) مستثناة من هذه الطبقة: تصميمها داكن بصورة غلاف ثابتة ويحتاج معالجة خاصة. */
 :root{color-scheme:light dark;--kh-ease:cubic-bezier(.2,.7,.2,1)}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
@@ -10,12 +11,12 @@
 
 /* شبكة أمان لنصوص أقسام الحكاية في الوضع الفاتح فقط (لا تمس الوضع الداكن الحالي) */
 @media (prefers-color-scheme:light){
-  :root:not([data-theme=dark]) body:not(:has(:where(#bg))) :where(.story,.sources,.end,.reactions-section) *{color:var(--kh-body)}
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :where(.story,.sources,.end,.reactions-section) *{color:var(--kh-body)}
 }
-:root[data-theme=light] body:not(:has(:where(#bg))) :where(.story,.sources,.end,.reactions-section) *{color:var(--kh-body)}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :where(.story,.sources,.end,.reactions-section) *{color:var(--kh-body)}
 
-/* ========== (1) صفحات الأقسام القديمة + صفحات الحكايات (بدون #bg) ========== */
-:root body:not(:has(:where(#bg))){
+/* ========== (1) صفحات الأقسام القديمة + صفحات الحكايات (بدون #bg وبدون .hero-home) ========== */
+:root body:not(:has(:where(#bg,.hero-home))){
   --kh-base:var(--accent,var(--gold,#f3cf85));
   --kh-acc:light-dark(color-mix(in srgb,var(--kh-base) 36%,#1c1408),var(--kh-base));
   --kh-ink:light-dark(#14224a,#f6f3ea);
@@ -128,19 +129,19 @@
 
 /* حركة الدخول لمقدمات صفحات الأقسام: هادئة، تخدم القراءة */
 @media (prefers-reduced-motion:no-preference){
-  :root body:not(:has(:where(#bg))) .intro>*{animation:kh-rise .8s var(--kh-ease) both}
-  :root body:not(:has(:where(#bg))) .intro>:nth-child(2){animation-delay:.1s}
-  :root body:not(:has(:where(#bg))) .intro>:nth-child(3){animation-delay:.2s}
+  :root body:not(:has(:where(#bg,.hero-home))) .intro>*{animation:kh-rise .8s var(--kh-ease) both}
+  :root body:not(:has(:where(#bg,.hero-home))) .intro>:nth-child(2){animation-delay:.1s}
+  :root body:not(:has(:where(#bg,.hero-home))) .intro>:nth-child(3){animation-delay:.2s}
 }
 
 /* استجابة: هواتف أفقية قصيرة الارتفاع + حواف الشاشات المقوّسة */
 @media (max-height:520px) and (orientation:landscape){
-  :root body:not(:has(:where(#bg))) .hero{min-height:0!important;padding-top:84px!important;padding-bottom:36px!important}
-  :root body:not(:has(:where(#bg))) .intro{padding-block:26px}
-  :root body:not(:has(:where(#bg))) header:not(.topbar) nav{min-height:52px}
-  :root body:not(:has(:where(#bg))) .story{padding-block:40px}
+  :root body:not(:has(:where(#bg,.hero-home))) .hero{min-height:0!important;padding-top:84px!important;padding-bottom:36px!important}
+  :root body:not(:has(:where(#bg,.hero-home))) .intro{padding-block:26px}
+  :root body:not(:has(:where(#bg,.hero-home))) header:not(.topbar) nav{min-height:52px}
+  :root body:not(:has(:where(#bg,.hero-home))) .story{padding-block:40px}
 }
-:root body:not(:has(:where(#bg))) .wrap{width:min(1050px,calc(100% - 30px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)))}
+:root body:not(:has(:where(#bg,.hero-home))) .wrap{width:min(1050px,calc(100% - 30px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px)))}
 
 /* ========== (2) الرئيسية وصفحة المناهج (خاصية #bg): لمسات بطاقات فقط، بدون المساس بالغلاف ========== */
 :root body:has(:where(#bg)){
