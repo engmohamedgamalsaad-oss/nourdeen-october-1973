@@ -123,7 +123,7 @@ function sl(i){
  l=i;de.lang=LG[i];de.dir=i?'ltr':'rtl';
  ap(document.body);attrs(document.body);
  document.title=i?T0.split(' | ').map(function(p){return tr(p,i)}).join(' | '):T0;
- if(md)md.content=i?tr(M0,i):M0}
+ if(md)md.content=i?tr(M0,i):M0;var note=document.getElementById('de-section-fallback');if(i===4&&!note){note=document.createElement('aside');note.id='de-section-fallback';note.lang='de';note.textContent='Eine geprüfte deutsche Übersetzung ist noch nicht verfügbar. Vorläufig wird die englische Fassung angezeigt.';note.style.cssText='max-width:900px;margin:12px auto;padding:12px 16px;border:1px solid #b8874b;border-radius:10px;color:#f1d8a3;direction:ltr;text-align:left';document.body.insertBefore(note,document.body.firstChild)}else if(i!==4&&note)note.remove()}
 var st=document.createElement('style');
 st.textContent='html:not([lang=ar]) .hero:after{content:none!important}';
 document.head.appendChild(st);
