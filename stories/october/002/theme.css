@@ -58,7 +58,7 @@
 
 /* خلفية الحكاية مستوحاة من غلافها: صورة خافتة تحت طبقة ألوان القسم */
 body{
-  background:linear-gradient(180deg,rgba(7,18,27,.82),rgba(5,13,20,.94)),url("../../assets/backgrounds/story-002-bg.webp") center top / cover fixed !important;
+  background:linear-gradient(180deg,rgba(7,18,27,.82),rgba(5,13,20,.94)),url("../../../assets/backgrounds/story-002-bg.webp") center top / cover fixed !important;
   background-color:#07121b;
 }
 @media(max-width:700px){body{background-attachment:scroll,fixed!important}}

@@ -6,7 +6,7 @@
 // خطوات النشر (من لوحة Supabase، بدون أي برامج):
 //  1) Edge Functions > Deploy a new function > Via Editor
 //  2) الاسم: translate-story  — الصق هذا الملف كاملًا ثم Deploy
-//  3) من إعدادات الدالة (Details): أوقف خيار "Verify JWT"  (الدالة تتحقق بنفسها أن المستخدم أدمن)
+//  3) اترك خيار "Verify JWT" مفعّلًا، ثم انشر الدالة بعد إضافة السرّ من إعدادات Supabase
 //  4) Edge Functions > Secrets > أضف:  ANTHROPIC_API_KEY = مفتاحك من console.anthropic.com
 //     (اختياري) CLAUDE_MODEL = اسم النموذج إذا أردت تغييره
 

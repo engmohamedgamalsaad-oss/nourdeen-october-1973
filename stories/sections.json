@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "main": "../index.html",
+  "sections": [
+    {
+      "id": "october",
+      "title": "حكايات أكتوبر 1973",
+      "stories": [
+        "001",
+        "002",
+        "003",
+        "004"
+      ]
+    },
+    {
+      "id": "history",
+      "title": "التاريخ والحضارات",
+      "stories": [
+        "005",
+        "006"
+      ]
+    },
+    {
+      "id": "science",
+      "title": "العلم والعلماء",
+      "stories": [
+        "007"
+      ]
+    }
+  ]
+}
