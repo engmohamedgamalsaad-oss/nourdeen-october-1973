@@ -31,7 +31,9 @@
         "className": "Classe 1B"
       }
     },
-    "id": "001"
+    "id": "001",
+    "section": "october",
+    "path": "stories/october/001/"
   },
   {
     "name": "كارما محمد جمال",
@@ -65,7 +67,9 @@
         "className": "Classe 3 E"
       }
     },
-    "id": "002"
+    "id": "002",
+    "section": "october",
+    "path": "stories/october/002/"
   },
   {
     "name": "مليكة محمد جمال",
@@ -99,7 +103,9 @@
         "className": "Classe 1 A"
       }
     },
-    "id": "003"
+    "id": "003",
+    "section": "october",
+    "path": "stories/october/003/"
   },
   {
     "name": "نوردين محمد جمال",
@@ -133,6 +139,8 @@
         "className": "Classe 1B"
       }
     },
-    "id": "004"
+    "id": "004",
+    "section": "october",
+    "path": "stories/october/004/"
   }
 ]

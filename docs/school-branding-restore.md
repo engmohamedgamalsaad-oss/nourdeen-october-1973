@@ -28,7 +28,7 @@
 **الاسترجاع الكامل لشكل ما قبل الإزالة** (يلغي أي تعديل لاحق على هذه الملفات، فراجع أولًا):
 
 ```
-git checkout ab6ac5761c3204d2e4819a5ee1ac505eeb52448a -- index.html assets/i18n/home.js stories/001/index.html stories/002/index.html stories/003/index.html stories/004/index.html
+git checkout ab6ac5761c3204d2e4819a5ee1ac505eeb52448a -- index.html assets/i18n/home.js stories/october/001/index.html stories/october/002/index.html stories/october/003/index.html stories/october/004/index.html
 ```
 
 **استرجاع وصف الصفحتين فقط:**

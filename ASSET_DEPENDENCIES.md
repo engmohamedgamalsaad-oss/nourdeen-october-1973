@@ -7,10 +7,10 @@ Scope: homepage and stories 001–004, their story stylesheets, and shared story
 
 - Homepage cover: `assets/homepage/main-cover.jpg` (used as both hero image and CSS background; browser caching may reuse the same resource).
 - School logo: `assets/logo/school-logo.png`.
-- Story 001 images and covers: `stories/001/`.
-- Story 002 covers: `stories/002/`; its in-story historical photograph is still remote.
-- Story 003 covers: `stories/003/`.
-- Story 004 cover: `stories/004/`; two in-story photographs are still remote.
+- Story 001 images and covers: `stories/october/001/`.
+- Story 002 covers: `stories/october/002/`; its in-story historical photograph is still remote.
+- Story 003 covers: `stories/october/003/`.
+- Story 004 cover: `stories/october/004/`; two in-story photographs are still remote.
 - Student portraits and avatars: `assets/students/`.
 
 No existing image was compressed, renamed, converted, or deleted during this audit. No page or reaction code was changed.
@@ -19,8 +19,8 @@ No existing image was compressed, renamed, converted, or deleted during this aud
 
 | Used by | Current remote asset | Proposed local path | Rights / next step |
 |---|---|---|---|
-| Story 002 | `https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg?width=1200` | `stories/002/Crossing_the_Bar_Lev_Line,_October_War.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Crossing_the_Bar_Lev_Line,_October_War.jpg |
-| Story 004 | `https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg` | `stories/004/Atef_El_Sadat.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Atef_El_Sadat.jpg |
+| Story 002 | `https://commons.wikimedia.org/wiki/Special:FilePath/Crossing_the_Bar_Lev_Line,_October_War.jpg?width=1200` | `stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Crossing_the_Bar_Lev_Line,_October_War.jpg |
+| Story 004 | `https://upload.wikimedia.org/wikipedia/commons/1/1d/Atef_El_Sadat.jpg` | `stories/october/004/Atef_El_Sadat.jpg` | Wikimedia Commons file page identifies it as public domain in Egypt and the US: https://commons.wikimedia.org/wiki/File:Atef_El_Sadat.jpg |
 | Story 004 | `https://www.vetogate.com/UploadCache/libfiles/596/9/800x450o/141.jpg` | None yet | Redistribution rights not verified. Keep its current URL and source link until permission/licensing is established. |
 
 **Status: completed.** The manual workflow `.github/workflows/import-wikimedia-photos.yml` succeeded. Both original JPEGs are now stored locally at the paths above, and the image `src` attributes in stories 002 and 004 now point to those local files. The original file bytes were added without resizing or recompression. No files were deleted, and the reactions code was not changed.
