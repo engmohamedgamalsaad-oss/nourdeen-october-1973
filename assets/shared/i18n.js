@@ -37,8 +37,31 @@
     var value=(query||saved||document.documentElement.lang||'ar').toLowerCase();
     return allowed.indexOf(value)>=0?value:'ar';
   }
+  var missingKeys={};
   function value(key){
-    return (dict[current]&&dict[current][key]) || (dict.ar&&dict.ar[key]) || key;
+    var localized=dict[current]&&dict[current][key];
+    if(localized!==undefined&&localized!==null&&localized!=='')return localized;
+    if(current!=='ar'&&dict.ar&&dict.ar[key]!==undefined){
+      missingKeys[current]=missingKeys[current]||{};
+      missingKeys[current][key]=true;
+      return dict.ar[key];
+    }
+    return key;
+  }
+  function auditTranslations(){
+    var report={supported:allowed.slice(),missing:{},counts:{}};
+    allowed.forEach(function(locale){
+      var base=dict.ar||{}, translated=dict[locale]||{}, keys=Object.keys(base);
+      report.missing[locale]=keys.filter(function(key){
+        return translated[key]===undefined||translated[key]===null||translated[key]==='';
+      });
+      report.counts[locale]={total:keys.length,translated:keys.length-report.missing[locale].length,missing:report.missing[locale].length};
+    });
+    report.fallbacks={};
+    Object.keys(missingKeys).forEach(function(locale){
+      report.fallbacks[locale]=Object.keys(missingKeys[locale]);
+    });
+    return report;
   }
   function apply(){
     document.documentElement.lang=current;
@@ -82,7 +105,8 @@
     apply:function(){current=readLang();apply();},
     setLang:setLang,
     lang:function(){return current;},
-    t:value
+    t:value,
+    audit:auditTranslations
   };
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',function(){current=readLang();apply();});
   else {current=readLang();apply();}
