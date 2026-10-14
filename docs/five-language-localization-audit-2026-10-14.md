@@ -29,11 +29,12 @@ For each published route and each locale (`ar`, `en`, `fr`, `it`, `de`), record 
 
 1. Work only on a dedicated audit/preview branch.
 2. Add or correct locale data and unify the translation entry point without deleting existing translation keys.
-3. Run static checks for missing locale keys and untranslated Arabic fallbacks in non-Arabic locales.
-4. Test every published route in all five locales on a preview deployment.
-5. Compare route paths, QR targets, and reaction controls before/after.
-6. Request owner review. Do not merge to `main` or publish before approval.
+3. Run `node scripts/check-localization-coverage.js` from the repository root. This is a release gate and intentionally fails while required German coverage is incomplete.
+4. Add browser-level checks for missing locale keys and untranslated Arabic fallbacks in non-Arabic locales.
+5. Test every published route in all five locales on a preview deployment.
+6. Compare route paths, QR targets, and reaction controls before/after.
+7. Request owner review. Do not merge to `main` or publish before approval.
 
 ## Current status
 
-**NOT COMPLETE — NOT APPROVED FOR RELEASE.** Source inspection found a four-language shared selector and distributed translation systems. Full content coverage and five-locale browser testing have not yet been demonstrated. This file is an audit gate, not evidence that the site has passed.
+**NOT COMPLETE — NOT APPROVED FOR RELEASE.** Source inspection found a four-language shared selector and distributed translation systems. A static coverage gate has been added at `scripts/check-localization-coverage.js`, but full translation coverage and five-locale browser testing have not yet been demonstrated. Do not add German to the live selector until the full translation corpus is ready, because missing entries currently fall back to Arabic.
