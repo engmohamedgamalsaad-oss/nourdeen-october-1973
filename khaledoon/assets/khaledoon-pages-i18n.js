@@ -2,7 +2,7 @@
    لا يعرض شريط لغة: الشريط في الصفحة الرئيسية فقط، وهذه الصفحات تقرأ اختياره من المفتاح المشترك (kh-lang). */
 (function(){
 'use strict';
-var LG=['ar','en','fr','it'],de=document.documentElement,l=0;
+var LG=(window.KH_LANG&&window.KH_LANG.supported?window.KH_LANG.supported.slice():['ar','en','fr','it']),de=document.documentElement,l=0;
 var R=[
 ['خالدون عبر التاريخ','Immortals Through History','Immortels à travers l’histoire','Immortali attraverso la storia'],
 ['حكاية التاريخ بعيون جيل جديد','History through the eyes of a new generation','L’histoire vue par une nouvelle génération','La storia vista da una nuova generazione'],

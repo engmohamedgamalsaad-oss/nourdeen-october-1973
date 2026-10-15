@@ -72,7 +72,7 @@ function setLanguage(lang){const d={...(T[lang]||T.ar),...(EXTRA[lang]||EXTRA.ar
 function updateShare(){var u=location.href.split("#")[0],t=(document.title||"")+" — "+u,w=document.getElementById("share-wa"),f=document.getElementById("share-fb");if(w)w.href="https://wa.me/?text="+encodeURIComponent(t);if(f)f.href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(u)}
 function reloadExtras(){var o=document.querySelector(".story-extras");if(!o)return;o.remove();var sc=document.createElement("script");sc.src="../../../assets/shared/story-extras.js?"+Date.now();document.body.appendChild(sc)}
 document.querySelectorAll("[data-lang]").forEach(b=>b.addEventListener("click",()=>{setLanguage(b.dataset.lang);updateShare();reloadExtras()}));
-setLanguage((function(){try{var l=localStorage.getItem("kh-lang");if(l==="en"||l==="fr"||l==="it")return l}catch(e){}return"ar"})());updateShare();
+setLanguage((function(){if(window.KH_LANG&&window.KH_LANG.current)return window.KH_LANG.current;try{var l=localStorage.getItem("kh-lang");if(l==="en"||l==="fr"||l==="it")return l}catch(e){}return"ar"})());updateShare();
 </script><script src="../../../assets/shared/reactions.js"></script><script src="../../../assets/shared/story-extras.js"></script>
 <script>
 (()=>{const modal=document.getElementById("story-intro-modal"),start=document.getElementById("start-story"),close=document.getElementById("intro-close");
