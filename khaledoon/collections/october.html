@@ -1057,7 +1057,7 @@ footer {
 
   /* ===== تحميل الحكايات من ملف الفهرس ===== */
   var box = document.getElementById('cards');
-  var siteBase = '/nourdeen-october-1973/';
+  var siteBase = new URL('../../', window.location.href).pathname;
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
