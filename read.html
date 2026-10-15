@@ -50,6 +50,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   .src a::after{content:" (" attr(href) ")";font-size:8pt}
 }
 </style>
+<script src="assets/shared/home-language-only.js"></script>
 </head>
 <body>
 <a class="skip" href="#main" id="skipLink">تخطّي إلى المحتوى</a>
@@ -96,7 +97,6 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
     note:L('هذه حكاية كتبتها إحدى الطالبات وتمت مراجعتها قبل النشر.','This story was written by a student and reviewed before publication.','Ce récit a été écrit par une élève et relu avant publication.','Questo racconto è stato scritto da una studentessa e rivisto prima della pubblicazione.'),
     aiNote:L('ترجمة بالذكاء الاصطناعي عن النص العربي الأصلي، والنص العربي هو المرجع.','Translated from the Arabic original with AI. The Arabic text is the reference.','Traduit de l’arabe original avec l’IA. Le texte arabe fait foi.','Tradotto dall’arabo originale con l’IA. Il testo arabo è quello di riferimento.'),
     arOnly:L('','This story is available in Arabic only.','Ce récit n’est disponible qu’en arabe.','Questo racconto è disponibile solo in arabo.'),
-    readAr:L('اقرأ النص العربي','Read the Arabic original','Lire l’original en arabe','Leggi l’originale in arabo'),
     print:L('اطبع الحكاية أو احفظها PDF','Print or save as PDF','Imprimer ou enregistrer en PDF','Stampa o salva in PDF'),
     quiz:L('اختبر معلوماتك','Take the quiz','Faire le quiz','Fai il quiz'),
     home:L('كل الحكايات','All stories','Tous les récits','Tutti i racconti')
@@ -160,10 +160,6 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
     var note=$('sNote'); note.textContent=t('note');
     if(translated) note.textContent+=' '+t('aiNote');
     else if(lang!=='ar') note.textContent+=' '+t('arOnly');
-    if(translated){
-      var link=document.createElement('a'); link.href='read.html?id='+encodeURIComponent(id)+'&lang=ar'; link.textContent=t('readAr');
-      note.appendChild(document.createTextNode(' ')); note.appendChild(link);
-    }
     $('state').hidden=true; $('story').hidden=false;
   }).catch(function(){ $('state').textContent=t('error'); });
 })();
