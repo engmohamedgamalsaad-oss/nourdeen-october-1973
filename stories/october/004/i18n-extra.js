@@ -9,5 +9,25 @@ window.I18N.register('en',{g_kicker:'Faces remembered in October',g_title:'Pilot
 window.I18N.register('fr',{g_kicker:'Des visages dans la mémoire d’Octobre',g_title:'Des pilotes dont les noms demeurent',g_intro:'Des sources publiées conservent les portraits et les récits de certains pilotes. Voici deux portraits sourcés, sans prétendre présenter la liste complète des morts de la frappe.',g_label:'Parmi les morts du premier jour',g_atef_name:'Lieutenant pilote Mohamed Atef Anwar El-Sadat',g_atef_text:'Il a participé à la première frappe aérienne le 6 octobre 1973 et n’est pas revenu après sa mission.',g_zakaria_name:'Le pilote Zakaria Kamal',g_zakaria_text:'Chef d’une formation de Sukhoi-7 ; des articles de presse rapportent sa mort pendant la mission près de l’aérodrome d’El-Meliz.',g_photo_source1:'Source et licence de la photo',g_photo_source2:'Source de la photo et du récit',g_note:'Note historique : les sources divergent sur le grade, certains détails et l’identité du premier mort. Les noms sont présentés sans ordre définitif ; ces portraits ne constituent pas une liste complète des victimes.'});
 window.I18N.register('it',{g_kicker:'Volti ricordati nell’Ottobre',g_title:'Piloti i cui nomi restano',g_intro:'Le fonti pubblicate conservano fotografie e racconti di alcuni piloti. Qui presentiamo due ritratti con fonti, senza affermare che siano l’elenco completo dei caduti nell’attacco.',g_label:'Tra i caduti del primo giorno',g_atef_name:'Tenente pilota Mohamed Atef Anwar El-Sadat',g_atef_text:'Partecipò al primo attacco aereo il 6 ottobre 1973 e non fece ritorno dopo aver compiuto la missione.',g_zakaria_name:'Il pilota Zakaria Kamal',g_zakaria_text:'Comandante di una formazione di Sukhoi-7; resoconti giornalistici riferiscono che morì durante la missione vicino all’aeroporto di El-Meliz.',g_photo_source1:'Fonte e licenza della foto',g_photo_source2:'Fonte della foto e del resoconto',g_note:'Nota storica: le fonti differiscono sul grado, sui dettagli e su chi sia stato il primo a morire. I nomi sono riportati senza stabilire un ordine definitivo; questi ritratti non sono un elenco completo delle vittime.'});
 
+/* بيانات الصفحة الوصفية (عنوان التبويب + description + og) حسب اللغة */
+window.I18N.register('ar',{m_title:'سماء أكتوبر: شهداء الضربة الجوية الأولى | نوردين محمد جمال',m_desc:'حكاية تعليمية عن شهداء الضربة الجوية الأولى في حرب أكتوبر 1973، إعداد وتقديم نوردين محمد جمال.',m_og_desc:'حكاية الطيارين الذين فتحوا الطريق للعبور — نوردين محمد جمال'});
+window.I18N.register('en',{m_title:'October Skies: The Martyrs of the First Air Strike | Nourdeen Mohamed Gamal',m_desc:'An educational story about the martyrs of the first air strike in the October 1973 war, prepared and presented by Nourdeen Mohamed Gamal.',m_og_desc:'The story of the pilots who helped open the way for the crossing — Nourdeen Mohamed Gamal'});
+window.I18N.register('fr',{m_title:'Le ciel d’octobre : les martyrs de la première frappe aérienne | Nourdeen Mohamed Gamal',m_desc:'Un récit éducatif sur les martyrs de la première frappe aérienne de la guerre d’octobre 1973, préparé et présenté par Nourdeen Mohamed Gamal.',m_og_desc:'Le récit des pilotes qui ont contribué à ouvrir la voie au franchissement — Nourdeen Mohamed Gamal'});
+window.I18N.register('it',{m_title:'I cieli di ottobre: i martiri del primo attacco aereo | Nourdeen Mohamed Gamal',m_desc:'Un racconto educativo sui martiri del primo attacco aereo della guerra dell’ottobre 1973, preparato e presentato da Nourdeen Mohamed Gamal.',m_og_desc:'La storia dei piloti che contribuirono ad aprire la strada all’attraversamento — Nourdeen Mohamed Gamal'});
+
+function updatePageMeta(){
+  var I=window.I18N;
+  if(!I)return;
+  var title=I.t('m_title');
+  if(title&&title!=='m_title')document.title=title;
+  [['meta[name="description"]','m_desc'],['meta[property="og:title"]','s_title'],['meta[property="og:description"]','m_og_desc']].forEach(function(pair){
+    var el=document.querySelector(pair[0]);
+    var text=I.t(pair[1]);
+    if(el&&text&&text!==pair[1])el.setAttribute('content',text);
+  });
+}
+document.addEventListener('site-language-change',updatePageMeta);
+
 window.I18N.apply();
+updatePageMeta();
 })();

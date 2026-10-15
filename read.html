@@ -89,6 +89,8 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var T={
     skip:L('تخطّي إلى المحتوى','Skip to content','Aller au contenu','Vai al contenuto'),
     back:L('← الصفحة الرئيسية','← Home','← Accueil','← Home'),
+    pageTitle:L('حكاية | حكايات أكتوبر 1973','Story | October 1973 Stories','Récit | Récits d’octobre 1973','Racconto | Racconti dell’ottobre 1973'),
+    pageDesc:L('حكاية من حكايات أكتوبر 1973 كتبتها إحدى الطالبات.','A story from the October 1973 stories, written by a student.','Un récit des récits d’octobre 1973, écrit par une élève.','Un racconto dai racconti dell’ottobre 1973, scritto da una studentessa.'),
     loading:L('جارٍ تحميل الحكاية…','Loading the story…','Chargement du récit…','Caricamento del racconto…'),
     notFound:L('لم نجد هذه الحكاية، أو لم تُنشر بعد.','We could not find this story, or it has not been published yet.','Ce récit est introuvable ou n’a pas encore été publié.','Racconto non trovato o non ancora pubblicato.'),
     error:L('تعذر تحميل الحكاية الآن. جرّب مرة أخرى بعد قليل.','Could not load the story right now. Please try again shortly.','Impossible de charger le récit pour le moment. Réessayez dans un instant.','Impossibile caricare il racconto ora. Riprova tra poco.'),
@@ -103,6 +105,9 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   };
   function t(k){return T[k][lang]||T[k].ar;}
   function $(id){return document.getElementById(id);}
+  /* عنوان التبويب والوصف حسب اللغة من البداية (قبل تحميل الحكاية أو إن لم يوجد معرّف) */
+  document.title=t('pageTitle');
+  var metaDesc=document.querySelector('meta[name="description"]'); if(metaDesc) metaDesc.setAttribute('content',t('pageDesc'));
   $('skipLink').textContent=t('skip'); $('backLink').textContent=t('back'); $('state').textContent=t('loading');
   $('sSrcTitle').textContent=t('sources'); $('sNote').textContent=t('note');
   $('printBtn').textContent='🖨️ '+t('print'); $('quizBtn').textContent='📝 '+t('quiz'); $('homeBtn').textContent=t('home');
