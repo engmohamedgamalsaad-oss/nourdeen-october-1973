@@ -155,10 +155,20 @@
   }
 })();
 
-/* Loads the homepage quiz call-to-action (kept in its own file). */
+/* Loads the homepage quiz call-to-action (kept in its own file).
+   The path below is relative to the page, so it is only valid when it points at the
+   file next to this script. On inner pages (e.g. khaledoon/collections/) it resolved to a
+   missing file and returned 404, so it is skipped there; pages where it worked are unchanged. */
 (function () {
+  var rel = 'assets/shared/home-extras.js';
+  var cur = document.currentScript;
+  if (cur && cur.src) {
+    try {
+      if (new URL('home-extras.js', cur.src).href !== new URL(rel, document.baseURI).href) return;
+    } catch (e) {}
+  }
   var s = document.createElement('script');
-  s.src = 'assets/shared/home-extras.js?v=20261010-1';
+  s.src = rel + '?v=20261010-1';
   s.defer = true;
   document.head.appendChild(s);
 })();
