@@ -15,4 +15,27 @@ window.I18N.register('de',{s_start:'Geschichte beginnen →',s_title:'Eine Sprac
 window.I18N.apply();
 function syncSplash(){var lang=window.I18N.lang();var splash=document.querySelector('.story-splash');if(!splash)return;var h=splash.querySelector('h1'),p=splash.querySelector('p'),b=splash.querySelector('button');if(h)h.textContent=window.I18N.t('s_title');if(p)p.textContent=window.I18N.t('s_subtitle');if(b)b.textContent=window.I18N.t('s_start');splash.style.direction=lang==='ar'?'rtl':'ltr';}
 document.addEventListener('site-language-change',syncSplash);document.addEventListener('DOMContentLoaded',syncSplash);setTimeout(syncSplash,0);
+
+/* فقرة مصدر/حقوق صورة أحمد إدريس: تحتوي رابطًا داخلها فلا يترجمها محرك النصوص العام، لذلك تُترجم هنا (نص قبل الرابط + نص الرابط + نص بعده) */
+var CREDIT_NOTE={
+ en:['To see photographs of the hero Ahmed Idris: ','General Authority for Cultural Palaces — the originator of the Nubian code','. No photo was copied to this site because the licence for reusing it is not clear.'],
+ fr:['Pour voir des photos du héros Ahmed Idris : ','Organisation générale des palais de la culture — l’inventeur du code nubien','. Aucune photo n’a été copiée sur ce site, car la licence de réutilisation n’est pas précisée.'],
+ it:['Per vedere le fotografie dell’eroe Ahmed Idris: ','Autorità generale dei palazzi della cultura — l’ideatore del codice nubiano','. Nessuna foto è stata copiata nel sito perché la licenza di riutilizzo non è chiarita.']
+};
+function translateCreditNote(){
+ var lang=window.I18N.lang();var tr=CREDIT_NOTE[lang];
+ if(!tr)return;
+ document.querySelectorAll('.image-credit-note').forEach(function(p){
+  var a=p.querySelector('a');
+  if(!a||p.getAttribute('data-credit-lang')===lang)return;
+  var before=a.previousSibling,after=a.nextSibling;
+  if(before&&before.nodeType===3)before.nodeValue=tr[0];
+  a.textContent=tr[1];
+  if(after&&after.nodeType===3)after.nodeValue=tr[2];
+  p.setAttribute('data-credit-lang',lang);
+ });
+}
+translateCreditNote();
+document.addEventListener('site-language-change',translateCreditNote);
+document.addEventListener('DOMContentLoaded',translateCreditNote);
 })();
