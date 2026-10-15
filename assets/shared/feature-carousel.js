@@ -155,10 +155,3 @@
   }
 })();
 
-/* Loads the homepage quiz call-to-action (kept in its own file). */
-(function () {
-  var s = document.createElement('script');
-  s.src = 'assets/shared/home-extras.js?v=20261010-1';
-  s.defer = true;
-  document.head.appendChild(s);
-})();
