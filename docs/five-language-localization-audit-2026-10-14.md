@@ -37,4 +37,15 @@ For each published route and each locale (`ar`, `en`, `fr`, `it`, `de`), record 
 
 ## Current status
 
-**IN PROGRESS — NOT APPROVED FOR RELEASE.** The review branch now includes a static translation audit API in the shared engine, German homepage/interface translations, German common navigation/accessibility labels, German story UI and reaction strings for stories 001–003, German shared story labels, and a German translation notice. The language selector intentionally remains limited to Arabic, English, French, and Italian. The main story-body translation corpus (hundreds of entries), story 004, all metadata/source/caption coverage, and browser navigation tests still need completion. Do not enable German in the selector until the entire corpus is translated and verified, because missing entries can otherwise fall back to Arabic.
+**Updated 2026-10-15.** This document describes the five-language release gate (Arabic, English, French, Italian, German). That gate is **still not satisfied**: German is intentionally disabled and `node scripts/check-localization-coverage.js` still fails by design until German coverage is complete.
+
+PR #45 ("Centralize language selection on the homepage") was merged into `main` on 2026-10-15 with the owner's explicit approval. It covers the four-language scope only:
+
+- A single language source of truth (`KH_LANG` in `assets/shared/home-language-only.js`); inner pages read the language chosen on the homepage.
+- German stays unavailable in the selector, so a missing German entry cannot fall back to Arabic for visitors.
+- Verified: the static check (`static-language-flow`) passed in GitHub Actions, and the curriculum page and its grade panel were checked by hand on the branch preview in English, French and Italian.
+- Not verified after the last commits: `scripts/e2e-language-flow.cjs` (last recorded 128/128 on `642cb4b`), and the live-site rollout.
+
+Still open for the five-language gate: the German story-body corpus (hundreds of entries), stories 004–006 in German, German metadata/source/caption coverage, and a full route × locale test on a preview deployment. Do not enable German in the selector until that work is complete and verified.
+
+See `docs/language-unification-report-2026-10-15.md` for the detailed findings and remaining issues.
