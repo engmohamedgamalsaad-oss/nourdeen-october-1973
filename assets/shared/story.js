@@ -20,25 +20,29 @@
       ar: {title:'رجال البحر في أكتوبر', subtitle:'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973', start:'ابدأ الحكاية ←'},
       en: {title:'Men of the Sea in October', subtitle:'The story of Egyptian Navy heroes in the 1973 October War', start:'Start the story →'},
       fr: {title:'Les hommes de la mer en octobre', subtitle:'L’histoire des héros de la marine égyptienne pendant la guerre d’octobre 1973', start:'Commencer le récit →'},
-      it: {title:'Gli uomini del mare in ottobre', subtitle:'La storia degli eroi della Marina egiziana nella guerra dell’ottobre 1973', start:'Inizia il racconto →'}
+      it: {title:'Gli uomini del mare in ottobre', subtitle:'La storia degli eroi della Marina egiziana nella guerra dell’ottobre 1973', start:'Inizia il racconto →'},
+      de: {title:'Männer der See im Oktober', subtitle:'Die Geschichte der Helden der ägyptischen Marine im Oktoberkrieg 1973', start:'Die Geschichte beginnen →'}
     },
     '002': {
       ar: {title:'العقل قبل السلاح', subtitle:'حكاية كارما محمد جمال — كيف فتحت المياه طريق العبور', start:'ابدأ الحكاية ←'},
       en: {title:'Brains Before Weapons', subtitle:'Karma Mohamed Gamal tells how water opened a passage across the canal', start:'Start the story →'},
       fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert un passage à travers le canal', start:'Commencer le récit →'},
-      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua ha aperto un passaggio attraverso il canale', start:'Inizia il racconto →'}
+      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua ha aperto un passaggio attraverso il canale', start:'Inizia il racconto →'},
+      de: {title:'Verstand vor Waffen', subtitle:'Karma Mohamed Gamal erzählt, wie Wasser einen Weg über den Kanal öffnete', start:'Die Geschichte beginnen →'}
     },
     '003': {
       ar: {title:'لغة لا يفهمها العدو', subtitle:'حكاية مليكة محمد جمال — الشفرة النوبية في حرب أكتوبر', start:'ابدأ الحكاية ←'},
       en: {title:'A Language the Enemy Could Not Understand', subtitle:'Malika Mohamed Gamal tells the story of the Nubian code in the October War', start:'Start the story →'},
       fr: {title:'Une langue que l’ennemi ne comprenait pas', subtitle:'Malika Mohamed Gamal raconte le code nubien pendant la guerre d’octobre', start:'Commencer le récit →'},
-      it: {title:'Una lingua che il nemico non capiva', subtitle:'Malika Mohamed Gamal racconta il codice nubiano nella guerra d’ottobre', start:'Inizia il racconto →'}
+      it: {title:'Una lingua che il nemico non capiva', subtitle:'Malika Mohamed Gamal racconta il codice nubiano nella guerra d’ottobre', start:'Inizia il racconto →'},
+      de: {title:'Eine Sprache, die der Feind nicht verstand', subtitle:'Malika Mohamed Gamal erzählt die Geschichte des nubischen Codes im Oktoberkrieg', start:'Die Geschichte beginnen →'}
     },
     '004': {
       ar: {title:'سماء أكتوبر: شهداء الضربة الجوية الأولى', subtitle:'حكاية الطيارين الذين فتحوا الطريق للعبور', start:'ابدأ الحكاية ←'},
       en: {title:'October Skies: The Martyrs of the First Air Strike', subtitle:'The pilots who helped open a way across the canal', start:'Start the story →'},
       fr: {title:'Le ciel d’octobre : les martyrs de la première frappe aérienne', subtitle:'Les pilotes qui ont contribué à ouvrir une voie à travers le canal', start:'Commencer le récit →'},
-      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire una via attraverso il canale', start:'Inizia il racconto →'}
+      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire una via attraverso il canale', start:'Inizia il racconto →'},
+      de: {title:'Oktoberhimmel: Die Gefallenen des ersten Luftschlags', subtitle:'Die Piloten, die den Weg über den Kanal öffnen halfen', start:'Die Geschichte beginnen →'}
     }
   };
   var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
@@ -305,7 +309,8 @@
       ar: { heading: 'شارك الحكاية:', whatsapp: 'واتساب', facebook: 'فيسبوك' },
       en: { heading: 'Share this story:', whatsapp: 'WhatsApp', facebook: 'Facebook' },
       fr: { heading: 'Partager ce récit :', whatsapp: 'WhatsApp', facebook: 'Facebook' },
-      it: { heading: 'Condividi il racconto:', whatsapp: 'WhatsApp', facebook: 'Facebook' }
+      it: { heading: 'Condividi il racconto:', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      de: { heading: 'Diese Geschichte teilen:', whatsapp: 'WhatsApp', facebook: 'Facebook' }
     };
     var copy = labels[activeLang] || labels.ar;
     var pageUrl = window.location.href.split('#')[0];
@@ -409,7 +414,8 @@
     ar: 'عرض الصورة بحجم كبير',
     en: 'View image enlarged',
     fr: 'Afficher l’image en grand',
-    it: 'Visualizza l’immagine ingrandita'
+    it: 'Visualizza l’immagine ingrandita',
+    de: 'Bild vergrößert anzeigen'
   };
   function syncLightboxLabel() {
     var lang = window.I18N ? window.I18N.lang() : 'ar';
