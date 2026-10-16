@@ -9,7 +9,8 @@
     ar: { title: 'اختبر معلوماتك في حرب أكتوبر', text: '١٢ سؤالًا من الحكايات الأربع، والنتيجة تظهر فورًا.', btn: 'ابدأ الاختبار', write: 'اكتب حكايتك', open: 'افتح الحكاية' },
     en: { title: 'Test your knowledge of the October War', text: '12 questions from the four stories, with an instant score.', btn: 'Start the quiz', write: 'Write your story', open: 'Open the story' },
     fr: { title: 'Testez vos connaissances sur la guerre d’octobre', text: '12 questions tirées des quatre récits, avec un score immédiat.', btn: 'Commencer le quiz', write: 'Écrivez votre récit', open: 'Ouvrir le récit' },
-    it: { title: 'Metti alla prova ciò che sai sulla guerra d’ottobre', text: '12 domande tratte dai quattro racconti, con punteggio immediato.', btn: 'Inizia il quiz', write: 'Scrivi il tuo racconto', open: 'Apri il racconto' }
+    it: { title: 'Metti alla prova ciò che sai sulla guerra d’ottobre', text: '12 domande tratte dai quattro racconti, con punteggio immediato.', btn: 'Inizia il quiz', write: 'Scrivi il tuo racconto', open: 'Apri il racconto' },
+    de: { title: 'Teste dein Wissen über den Oktoberkrieg', text: '12 Fragen zu den vier Geschichten, mit sofortigem Ergebnis.', btn: 'Quiz starten', write: 'Deine Geschichte schreiben', open: 'Geschichte öffnen' }
   };
   var t = copy[lang] || copy.ar;
 
