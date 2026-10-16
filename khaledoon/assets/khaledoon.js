@@ -140,6 +140,7 @@ var T0=document.title,BR="خالدون عبر التاريخ",PV="معاينة �
 function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function gr(w,i){return ["Grade ","Classe ","Classe "][i-1]+O[w]}
 function tr(s,i){
+if(i===4)return s; /* لا تستخدم جداول الترجمة القديمة ذات الأربع لغات للألمانية */
 var d=D[s],m;if(d)return d[i-1];
 if(m=s.match(/^بصوت (\S+) • (.+)$/))return ["By ","Par ","Di "][i-1]+(N[m[1]]||m[1])+" • "+tr(m[2],i);
 if(m=s.match(/^(المرحلة \S+) — الصف (\S+)$/))return tr(m[1],i)+" — "+gr(m[2],i);
