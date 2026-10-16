@@ -4,4 +4,5 @@
   window.I18N.register('en', { s_grade_only: '1st Year of Preparatory School' });
   window.I18N.register('fr', { s_grade_only: '1re année du collège' });
   window.I18N.register('it', { s_grade_only: '1ª media' });
+  window.I18N.register('de',{"s_grade_only":"1. Klasse der Sekundarstufe I"});
 })();
