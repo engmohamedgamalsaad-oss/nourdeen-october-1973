@@ -17,7 +17,8 @@
     ar: ['التبديل إلى الوضع الفاتح', 'التبديل إلى الوضع الداكن'],
     en: ['Switch to light mode', 'Switch to dark mode'],
     fr: ['Passer en mode clair', 'Passer en mode sombre'],
-    it: ['Passa alla modalità chiara', 'Passa alla modalità scura']
+    it: ['Passa alla modalità chiara', 'Passa alla modalità scura'],
+    de: ['Zum hellen Modus wechseln', 'Zum dunklen Modus wechseln']
   };
   function label(t) {
     var l = (root.lang || 'ar').slice(0, 2);

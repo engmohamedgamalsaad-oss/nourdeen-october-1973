@@ -20,7 +20,8 @@ document.addEventListener('site-language-change',syncSplash);document.addEventLi
 var CREDIT_NOTE={
  en:['To see photographs of the hero Ahmed Idris: ','General Authority for Cultural Palaces — the originator of the Nubian code','. No photo was copied to this site because the licence for reusing it is not clear.'],
  fr:['Pour voir des photos du héros Ahmed Idris : ','Organisation générale des palais de la culture — l’inventeur du code nubien','. Aucune photo n’a été copiée sur ce site, car la licence de réutilisation n’est pas précisée.'],
- it:['Per vedere le fotografie dell’eroe Ahmed Idris: ','Autorità generale dei palazzi della cultura — l’ideatore del codice nubiano','. Nessuna foto è stata copiata nel sito perché la licenza di riutilizzo non è chiarita.']
+ it:['Per vedere le fotografie dell’eroe Ahmed Idris: ','Autorità generale dei palazzi della cultura — l’ideatore del codice nubiano','. Nessuna foto è stata copiata nel sito perché la licenza di riutilizzo non è chiarita.'],
+ de:['Fotos des Helden Ahmed Idris ansehen: ','Generalbehörde für Kulturpaläste — der Urheber des nubischen Codes','. Auf dieser Website wurde kein Foto kopiert, weil die Lizenz zur Wiederverwendung nicht geklärt ist.']
 };
 function translateCreditNote(){
  var lang=window.I18N.lang();var tr=CREDIT_NOTE[lang];

@@ -20,7 +20,8 @@
         ar: { previous: 'الشريحة السابقة', next: 'الشريحة التالية', slide: 'الشريحة', media: 'معرض الوسائط', facts: 'هل تعلم' },
         en: { previous: 'Previous slide', next: 'Next slide', slide: 'Slide', media: 'Media gallery', facts: 'Did you know?' },
         fr: { previous: 'Diapositive précédente', next: 'Diapositive suivante', slide: 'Diapositive', media: 'Galerie multimédia', facts: 'Le saviez-vous ?' },
-        it: { previous: 'Diapositiva precedente', next: 'Diapositiva successiva', slide: 'Diapositiva', media: 'Galleria multimediale', facts: 'Lo sapevi?' }
+        it: { previous: 'Diapositiva precedente', next: 'Diapositiva successiva', slide: 'Diapositiva', media: 'Galleria multimediale', facts: 'Lo sapevi?' },
+        de: { previous: 'Vorherige Folie', next: 'Nächste Folie', slide: 'Folie', media: 'Mediengalerie', facts: 'Schon gewusst?' }
       };
 
       function language() {

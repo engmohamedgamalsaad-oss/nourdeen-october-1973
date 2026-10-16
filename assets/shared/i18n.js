@@ -1,21 +1,21 @@
 (function(){
   'use strict';
   /* القائمة المدعومة تأتي من assets/shared/home-language-only.js (KH_LANG)؛ النسخة هنا احتياطية فقط للصفحات التي لا تحمّله */
-  var allowed=(window.KH_LANG&&window.KH_LANG.supported)?window.KH_LANG.supported.slice():['ar','en','fr','it'];
+  var allowed=(window.KH_LANG&&window.KH_LANG.supported)?window.KH_LANG.supported.slice():['ar','en','fr','it','de'];
   var dict={};
   var current=readLang();
   /* ترجمات لعناصر ثابتة في صفحة أكتوبر (نص عربي أصلي → اللغات الأخرى) */
   var XT={
-    '← خالدون عبر التاريخ':{en:'← Immortals Through History',fr:'← Immortels à travers l’histoire',it:'← Immortali attraverso la storia'},
-    'رابط مباشر لحكايات أكتوبر':{en:'Direct link to the October stories',fr:'Lien direct vers les récits d’octobre',it:'Link diretto alle storie di ottobre'},
-    'رمز QR مستقل للوصول إلى هذا القسم ومشاركته أو طباعته، مع بقاء الحكايات جزءًا من خالدون عبر التاريخ.':{en:'A standalone QR code to reach this section, share it or print it, while the stories remain part of Immortals Through History.',fr:'Un code QR indépendant pour accéder à cette rubrique, la partager ou l’imprimer, les histoires restant une partie d’Immortels à travers l’histoire.',it:'Un codice QR indipendente per accedere a questa sezione, condividerla o stamparla, mentre le storie restano parte di Immortali attraverso la storia.'},
-    'رمز QR للوصول المباشر إلى حكايات أكتوبر 1973':{en:'QR code for direct access to the October 1973 stories',fr:'Code QR pour accéder directement aux récits d’octobre 1973',it:'Codice QR per accedere direttamente alle storie di ottobre 1973'},
-    'رمز QR المستقل لحكايات أكتوبر':{en:'Standalone QR code for the October stories',fr:'Code QR indépendant pour les récits d’octobre',it:'Codice QR indipendente per le storie di ottobre'},
-    'السابق':{en:'Previous',fr:'Précédent',it:'Precedente'},
-    'التالي':{en:'Next',fr:'Suivant',it:'Successivo'},
-    'اختيار الشريحة':{en:'Choose slide',fr:'Choisir la diapositive',it:'Scegli la diapositiva'},
-    'معرض الوسائط':{en:'Media gallery',fr:'Galerie multimédia',it:'Galleria multimediale'},
-    'هل تعلم':{en:'Did you know',fr:'Le saviez-vous',it:'Lo sapevi'}
+    '← خالدون عبر التاريخ':{en:'← Immortals Through History',fr:'← Immortels à travers l’histoire',it:'← Immortali attraverso la storia',de:'← Unsterbliche durch die Geschichte'},
+    'رابط مباشر لحكايات أكتوبر':{en:'Direct link to the October stories',fr:'Lien direct vers les récits d’octobre',it:'Link diretto alle storie di ottobre',de:'Direkter Link zu den Oktober-Geschichten'},
+    'رمز QR مستقل للوصول إلى هذا القسم ومشاركته أو طباعته، مع بقاء الحكايات جزءًا من خالدون عبر التاريخ.':{en:'A standalone QR code to reach this section, share it or print it, while the stories remain part of Immortals Through History.',fr:'Un code QR indépendant pour accéder à cette rubrique, la partager ou l’imprimer, les histoires restant une partie d’Immortels à travers l’histoire.',it:'Un codice QR indipendente per accedere a questa sezione, condividerla o stamparla, mentre le storie restano parte di Immortali attraverso la storia.',de:'Ein eigenständiger QR-Code, um diesen Bereich zu erreichen, zu teilen oder auszudrucken, während die Geschichten Teil von „Unsterbliche durch die Geschichte“ bleiben.'},
+    'رمز QR للوصول المباشر إلى حكايات أكتوبر 1973':{en:'QR code for direct access to the October 1973 stories',fr:'Code QR pour accéder directement aux récits d’octobre 1973',it:'Codice QR per accedere direttamente alle storie di ottobre 1973',de:'QR-Code für den direkten Zugang zu den Oktober-Geschichten 1973'},
+    'رمز QR المستقل لحكايات أكتوبر':{en:'Standalone QR code for the October stories',fr:'Code QR indépendant pour les récits d’octobre',it:'Codice QR indipendente per le storie di ottobre',de:'Eigenständiger QR-Code für die Oktober-Geschichten'},
+    'السابق':{en:'Previous',fr:'Précédent',it:'Precedente',de:'Zurück'},
+    'التالي':{en:'Next',fr:'Suivant',it:'Successivo',de:'Weiter'},
+    'اختيار الشريحة':{en:'Choose slide',fr:'Choisir la diapositive',it:'Scegli la diapositiva',de:'Folie auswählen'},
+    'معرض الوسائط':{en:'Media gallery',fr:'Galerie multimédia',it:'Galleria multimediale',de:'Mediengalerie'},
+    'هل تعلم':{en:'Did you know',fr:'Le saviez-vous',it:'Lo sapevi',de:'Schon gewusst?'}
   };
   function extras(){
     if(current==='ar')return;
