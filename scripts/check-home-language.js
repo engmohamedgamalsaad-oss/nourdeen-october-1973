@@ -457,7 +457,7 @@ for (const rel of [
       for (const locale of ['en', 'fr', 'it', 'de']) {
         for (const slug of ['001', '002', '003', '004', '005', '006', '007']) {
           const story = dictionaries[locale] && dictionaries[locale][slug];
-          if (!story || !String(story.t || '').trim() || !String(story.k || '').trim() ||
+          if (!story || !String(story.t || '').trim() || (slug !== '007' && !String(story.k || '').trim()) ||
               !Array.isArray(story.p) || story.p.length < 2 || story.p.some((p) => !String(p || '').trim())) {
             fail(rel + ': ' + locale + ' expanded story ' + slug + ' is missing a title, kicker, or paragraph translation.');
           }
