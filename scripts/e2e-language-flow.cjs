@@ -106,10 +106,9 @@ async function inspect(page) {
   return page.evaluate(INSPECT);
 }
 
-/* Pre-existing, not language-related, deliberately left unchanged (reported as warnings). */
-const KNOWN_RESOURCE_ISSUES = [
-  { re: /^(?:\/nourdeen-october-1973)?\/khaledoon\/collections\/assets\/shared\/home-extras\.js/, note: 'feature-carousel.js loads the homepage-only home-extras.js with a page-relative path, so the October section page requests a non-existent file (benign 404; fixing the path would add the homepage quiz CTA to that page, an owner decision).' }
-];
+/* No known same-origin resource failures are currently waived. Keep this list empty
+   unless a reproducible failure is verified and explicitly documented. */
+const KNOWN_RESOURCE_ISSUES = [];
 function watch(page, origin, sink) {
   const rel = (u) => u.replace(origin, '');
   page.on('pageerror', (e) => sink.push({ kind: 'pageerror', msg: String(e.message || e).slice(0, 160), url: page.url() }));
