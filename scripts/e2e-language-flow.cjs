@@ -203,9 +203,24 @@ async function flow(browser, base, origin, lang, viewport) {
     if (sectionOptions === LANGS.length) {
       const currentIndex = LANGS.indexOf(lang);
       const alternate = LANGS[(currentIndex + 1) % LANGS.length];
+      let clickDiagnostics = 'not collected';
       try {
         const alternateButton = page.locator('.lang-option').nth(LANGS.indexOf(alternate));
         await alternateButton.scrollIntoViewIfNeeded({ timeout: 5000 });
+        clickDiagnostics = JSON.stringify(await alternateButton.evaluate((el) => {
+          const r = el.getBoundingClientRect();
+          const x = r.left + r.width / 2, y = r.top + r.height / 2;
+          const hit = document.elementFromPoint(x, y);
+          const cs = getComputedStyle(el);
+          return {
+            viewport: { width: innerWidth, height: innerHeight },
+            buttonRect: { x: Math.round(r.x), y: Math.round(r.y), width: Math.round(r.width), height: Math.round(r.height) },
+            hitTarget: hit ? { tag: hit.tagName, id: hit.id, className: String(hit.className || '') } : null,
+            hitIsButton: !!hit && (hit === el || el.contains(hit)),
+            buttonPosition: cs.position, buttonZIndex: cs.zIndex, pointerEvents: cs.pointerEvents,
+            scrollY, scrollBehavior: getComputedStyle(document.documentElement).scrollBehavior
+          };
+        }));
         await alternateButton.click({ timeout: 8000 });
         await page.waitForFunction((expected) => document.documentElement.lang === expected, alternate, { timeout: 8000 }).catch(() => {});
         await page.waitForTimeout(250);
@@ -219,7 +234,7 @@ async function flow(browser, base, origin, lang, viewport) {
         s = await inspect(page);
         step('section language can be restored without losing navigation', s.lang === lang && !/[?&]lang=/.test(s.url), `lang=${s.lang}`);
       } catch (e) {
-        step('section language switcher interaction completes', false, String(e.message || e).split('\\n')[0].slice(0, 220));
+        step('section language switcher interaction completes', false, (String(e.message || e).split('\\n')[0] + ' | hit-test=' + clickDiagnostics).slice(0, 900));
         try { await page.evaluate((value) => { localStorage.setItem('kh-lang', value); localStorage.setItem('lang', value); }, lang); await page.reload({ waitUntil: 'load' }); } catch (_) {}
       }
     }
