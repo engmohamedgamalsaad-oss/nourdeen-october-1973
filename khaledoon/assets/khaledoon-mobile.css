@@ -15,7 +15,7 @@
    زوّد القيمة لتقريب النصوص أكتر، لكن فوق 0.09 تلمس عبارة «عبر التاريخ». */
 :root{--hero-text-overlap:0.07}
 
-@media (max-width:780px){
+@media (max-width:1024px){
   .hero-background-layer{
     display:block;
     position:fixed;
@@ -68,7 +68,7 @@ html.hm .hero-in{will-change:translate,filter}
 /* ===== الكمبيوتر: نفس الفكرة، والصورة من أقصى اليمين لأقصى الشمال =====
    الصورة بعرض الشاشة كله بدون تلاشٍ على الجانبين، وبارتفاع --hero-d-h.
    إن كانت الشاشة أقصر من نسبة الصورة يُقصّ الفائض من أعلاها فقط (يظهر العنوان وعبارة «عبر التاريخ» في أسفلها). */
-@media (min-width:781px){
+@media (min-width:1025px){
   html.hm .hero-background-layer{
     display:block;
     position:fixed;
@@ -90,7 +90,7 @@ html.hm .hero-in{will-change:translate,filter}
   html.hm .hero:not(.sub) .hero-in{padding:calc(var(--hero-d-h)*(1 - var(--hero-text-overlap)) + 4px - var(--hero-lift-d)) 0 56px}
 }
 
-@media (max-width:780px) and (orientation:landscape) and (max-height:520px){
+@media (max-width:1024px) and (orientation:landscape) and (max-height:520px){
   .hero-background-layer{
     width:100vw;height:100vh;max-height:none;
     background-size:cover;
@@ -102,7 +102,7 @@ html.hm .hero-in{will-change:translate,filter}
 /* ===== إخفاء ظل التدرّج الداكن تحت المقدمة على الموبايل (طولي وأفقي) =====
    الظل ده (.hero:after في khaledoon.css) كان بيظهر تحت جملة «حكاية التاريخ بعيون جيل جديد»
    في الوضع الأفقي لأن الكلاس hm بيتلغي هناك. */
-@media (max-width:780px),(orientation:landscape) and (max-height:520px){
+@media (max-width:1024px),(orientation:landscape) and (max-height:520px){
   .hero:not(.sub):after{display:none!important}
 }
 
@@ -114,7 +114,7 @@ html.hm .hero-in{will-change:translate,filter}
 
 /* ===== هيدر مضغوط على الموبايل: أزرار لغات أصغر ومساحة أقل لتظهر الأقسام أكثر =====
    ارتفاع الهيدر يُقاس تلقائيًا (--khaledoon-header-height) فتتبعه الصورة والمحتوى. */
-@media (max-width:780px){
+@media (max-width:1024px){
   .topbar{line-height:1.35}
   .topbar .nav{min-height:44px;padding:3px 0;gap:8px;flex-wrap:nowrap}
   .topbar .mark{width:32px;height:32px;font-size:16px}
@@ -129,7 +129,7 @@ html.hm .hero-in{will-change:translate,filter}
 
 /* ===== نصوص المقدمة ثابتة عند فتح الصفحة (بدون حركة ظهور) + ترتيب أضبط تحت الصورة =====
    زر «اختار بوابتك للمعرفة» أعلى قليلًا بفضل تصغير العنوان والفقرة والمسافات. */
-@media (max-width:780px){
+@media (max-width:1024px){
   .hero:not(.sub) .hero-in>*{opacity:1;animation:none}
   .hero:not(.sub) .hero-in>h1{animation:shimmer 8s linear infinite}
   .hero:not(.sub) .eyebrow{font-size:11px;margin:4px 0 0}
@@ -199,7 +199,7 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   --hero-lift-d:1.5vh;
   --hero-lift-m:min(2vw,2vh);
 }
-@media(max-width:780px){
+@media(max-width:1024px){
   .hero-background-layer{
     height:52vw;
     max-height:42vh;
@@ -207,7 +207,7 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   }
   html[data-theme="light"] .hero-background-layer{background-position:center top}
 }
-@media(min-width:781px){
+@media(min-width:1025px){
   html.hm .hero-background-layer{background-position:center center}
 }
 
@@ -215,7 +215,7 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
 /* ===== Restore the original mobile-first hierarchy while preserving German/i18n =====
    Keep the current cover motion and desktop layout. Only override the overly compact
    mobile intro typography introduced during later visual tuning. */
-@media (max-width:780px){
+@media (max-width:1024px){
   .hero:not(.sub) .hero-in{max-width:100%;}
   .hero:not(.sub) .eyebrow{font-size:clamp(13px,3.4vw,16px);line-height:1.7;margin:8px 0 5px;}
   .hero:not(.sub) h1{font-size:clamp(2.6rem,10vw,3.5rem);line-height:1.32;margin:4px 0 12px;}
