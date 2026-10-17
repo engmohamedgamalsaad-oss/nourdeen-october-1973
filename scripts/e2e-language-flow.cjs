@@ -174,7 +174,7 @@ async function flow(browser, base, origin, lang, viewport) {
     step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
     /* 2. section */
-    const sectionLink = page.locator('a[href="khaledoon/collections/october.html"]').first();
+    const sectionLink = page.locator('.gate[href="khaledoon/collections/october.html"]').first();
     try { await sectionLink.scrollIntoViewIfNeeded(); await Promise.all([page.waitForURL(/collections\/october\.html/, { timeout: 8000 }), sectionLink.click({ timeout: 5000 })]); }
     catch (e) { await page.goto(base + '/khaledoon/collections/october.html', { waitUntil: 'load' }); warn.push(`${label}: section link not clickable from the homepage, opened directly`); }
     await page.waitForTimeout(300);
