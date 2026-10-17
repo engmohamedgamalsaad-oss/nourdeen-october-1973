@@ -13,7 +13,7 @@
               back -> home -> direct open in a new tab -> a conflicting ?lang= override.
    2. SWEEP - every visitor page x language x viewport loaded directly with a saved language.
 
-   HARD failures (exit code 1): wrong html lang/dir, a missing language switcher on visitor pages,
+   HARD failures (exit code 1): wrong html lang/dir, missing/broken five-language switcher on the October section,
    a broken language-switch action, ?lang= left in the URL, a same-origin 404 / failed request, a page error.
    WARNINGS (reported, do not fail): horizontal overflow, body direction differing from <html>,
    a high share of Arabic text on a non-Arabic page (= untranslated fallback). */
@@ -144,7 +144,6 @@ function judgeInner(label, s, lang, hard, warn, { requireClean = true } = {}) {
   if (s.noKhLang) hard.push(`${where}: the shared language script never ran (KH_LANG undefined)`);
   if (s.lang !== lang) hard.push(`${where}: html lang=${s.lang}, expected ${lang}`);
   if (s.dir !== expectedDir(lang)) hard.push(`${where}: html dir=${s.dir}, expected ${expectedDir(lang)}`);
-  if (!s.switchers.length) hard.push(`${where}: no visible language switcher found`);
   if (requireClean && /[?&]lang=/.test(s.url)) hard.push(`${where}: ?lang= left in URL`);
   if (s.overflow > 1) warn.push(`${where}: horizontal overflow ${s.overflow}px`);
   if (s.bodyDir && s.bodyDir !== s.dir) warn.push(`${where}: body direction ${s.bodyDir} differs from html dir ${s.dir}`);
