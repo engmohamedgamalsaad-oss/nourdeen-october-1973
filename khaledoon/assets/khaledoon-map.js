@@ -25,6 +25,7 @@
     title:  { ar: 'من أين جاءت الحكايات؟', en: 'Where do the stories come from?', fr: 'D’où viennent les histoires ?', it: 'Da dove vengono le storie?', de: 'Woher kommen die Geschichten?' },
     lead:   { ar: 'كل نقطة ملوّنة شخصية من الحكايات، ولونها لون قسمها. اضغط على النقطة لتتعرّف عليها.', en: 'Each colored dot is a figure from the stories, colored by section. Tap a dot to meet them.', fr: 'Chaque point coloré est un personnage des histoires, selon sa rubrique. Touchez-le pour le découvrir.', it: 'Ogni punto colorato è un personaggio delle storie, colorato per sezione. Tocca un punto per conoscerlo.', de: 'Jeder farbige Punkt ist eine Persönlichkeit aus den Geschichten, gefärbt nach Rubrik. Tippe auf einen Punkt.' },
     born:   { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
+    approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
     err:    { ar: 'تعذّر تحميل الخريطة الآن. هذه قائمة بالأماكن:', en: 'The map could not be loaded right now. Here is the list of places:', fr: 'La carte n’a pas pu être chargée. Voici la liste des lieux :', it: 'Non è stato possibile caricare la mappa. Ecco l’elenco dei luoghi:', de: 'Die Karte konnte nicht geladen werden. Hier die Liste der Orte:' },
     credit: { ar: 'مصدر الصورة: ', en: 'Photo: ', fr: 'Photo : ', it: 'Foto: ', de: 'Foto: ' },
@@ -123,6 +124,7 @@
     c.appendChild(el('div', 'khm-name', pick(s, 'person', l)));
     var pl = (p.place && (p.place[l] || p.place.ar)) || '';
     if (pl) c.appendChild(el('div', 'khm-place', T('born') + pl));
+    if (p.approximate === true) c.appendChild(el('div', 'khm-approx', T('approx')));
     c.appendChild(el('div', 'khm-story', pick(s, 'title', l)));
     if (p.credit && validPhoto(p.photo)) c.appendChild(el('div', 'khm-credit', T('credit') + p.credit));
     var a = el('a', 'khm-go', T('read'));
