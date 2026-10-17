@@ -186,17 +186,17 @@ async function flow(browser, base, origin, lang, viewport) {
     step('section exposes all five language options', sectionOptions === LANGS.length, `count=${sectionOptions}`);
     if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `october-${viewport}.png`), animations: 'disabled' });
     if (sectionOptions === LANGS.length) {
-      const labels = { ar: 'العربية', en: 'English', fr: 'Français', it: 'Italiano', de: 'Deutsch' };
-      const alternate = LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length];
+      const currentIndex = LANGS.indexOf(lang);
+      const alternate = LANGS[(currentIndex + 1) % LANGS.length];
       try {
-        const alternateButton = page.locator('.lang-option').filter({ hasText: labels[alternate] }).first();
+        const alternateButton = page.locator('.lang-option').nth(LANGS.indexOf(alternate));
         await alternateButton.scrollIntoViewIfNeeded({ timeout: 5000 });
         await alternateButton.click({ timeout: 8000 });
         await page.waitForFunction((expected) => document.documentElement.lang === expected, alternate, { timeout: 8000 }).catch(() => {});
         await page.waitForTimeout(250);
         let switched = await inspect(page);
         step('section language switcher changes language and saves it', switched.lang === alternate && switched.stored === alternate && !/[?&]lang=/.test(switched.url), `lang=${switched.lang} stored=${switched.stored}`);
-        const originalButton = page.locator('.lang-option').filter({ hasText: labels[lang] }).first();
+        const originalButton = page.locator('.lang-option').nth(currentIndex);
         await originalButton.scrollIntoViewIfNeeded({ timeout: 5000 });
         await originalButton.click({ timeout: 8000 });
         await page.waitForFunction((expected) => document.documentElement.lang === expected, lang, { timeout: 8000 }).catch(() => {});
