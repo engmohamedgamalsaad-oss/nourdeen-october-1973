@@ -17,7 +17,7 @@
     { id: 'knowledge', href: 'khaledoon/collections/knowledge.html', t: { ar: 'التعليم والمعرفة', en: 'Education and Knowledge', fr: 'Éducation et savoir', it: 'Istruzione e conoscenza', de: 'Bildung und Wissen' } },
     { id: 'people', href: 'khaledoon/collections/people.html', t: { ar: 'المشاهير والرياضة والفنون', en: 'Celebrities, Sports and Arts', fr: 'Célébrités, sport et arts', it: 'Celebrità, sport e arti', de: 'Prominente, Sport und Kunst' } },
     { id: 'history', href: 'khaledoon/collections/history.html', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
-    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
+    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmes égyptiens', de: 'Figuren der ägyptischen Lehrpläne' } }
   ];
   var SEC = {};
   SECTIONS.forEach(function (s) { SEC[s.id] = s; });
@@ -41,18 +41,19 @@
   }
   function T(key) { var o = STR[key]; return o[lang()] || o.ar; }
 
-  /* توحيد النص للمقارنة: حذف التشكيل والتطويل وتوحيد الهمزات والياء/الألف المقصورة والتاء المربوطة،
-     وحذف علامات اللاتينية، وتحويل الأرقام الهندية إلى عربية غربية. */
+  /* توحيد النص للمقارنة: تحويل الأرقام الهندية إلى غربية أولًا (قبل حذف التشكيل لأن نطاق
+     التشكيل \u064B-\u0670 يتداخل مع \u0660-\u0669)، ثم حذف التشكيل والتطويل وتوحيد الهمزات
+     والياء/الألف المقصورة والتاء المربوطة، وحذف علامات اللاتينية. */
   function norm(s) {
     s = String(s == null ? '' : s).toLowerCase();
     try { s = s.normalize('NFKD'); } catch (e) {}
     return s
-      .replace(/ß/g, 'ss')
-      .replace(/[\u064B-\u0670\u0640]/g, '')
-      .replace(/[\u0300-\u036F]/g, '')
-      .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
       .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x660); })
       .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x6F0); })
+      .replace(/ß/g, 'ss')
+      .replace(/[\u064B-\u065F\u0670\u0640]/g, '')
+      .replace(/[\u0300-\u036F]/g, '')
+      .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
       .replace(/[^a-z0-9\u0600-\u06FF\s]+/g, ' ')
       .replace(/\s+/g, ' ').trim();
   }
