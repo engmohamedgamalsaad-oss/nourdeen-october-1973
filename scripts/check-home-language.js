@@ -215,6 +215,82 @@ for (const rel of htmlFiles) {
   if (tr >= 0 && tag.index > tr) fail(`${rel}: shared language script must precede the translation scripts.`);
 }
 
+/* ---------- 3b) تغطية مفاتيح data-i18n في كل لغة ---------- */
+function matchingObjectEnd(source, openAt) {
+  let depth = 0, quote = '', escaped = false, lineComment = false, blockComment = false;
+  for (let i = openAt; i < source.length; i++) {
+    const ch = source[i], next = source[i + 1];
+    if (lineComment) { if (ch === '\n') lineComment = false; continue; }
+    if (blockComment) { if (ch === '*' && next === '/') { blockComment = false; i++; } continue; }
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === quote) quote = '';
+      continue;
+    }
+    if (ch === '/' && next === '/') { lineComment = true; i++; continue; }
+    if (ch === '/' && next === '*') { blockComment = true; i++; continue; }
+    if (ch === '"' || ch === "'" || ch === '`') { quote = ch; continue; }
+    if (ch === '{') depth++;
+    else if (ch === '}' && --depth === 0) return i;
+  }
+  return -1;
+}
+function collectRegisteredLocales(source, maps) {
+  const re = /window\.I18N\.register\(\s*(['"])(ar|en|fr|it|de)\1\s*,\s*\{/g;
+  let match;
+  while ((match = re.exec(source))) {
+    const openAt = match.index + match[0].lastIndexOf('{');
+    const closeAt = matchingObjectEnd(source, openAt);
+    if (closeAt < 0) { fail('Could not parse an I18N registration object.'); continue; }
+    try {
+      const entries = vm.runInNewContext('(' + source.slice(openAt, closeAt + 1) + ')');
+      Object.assign(maps[match[2]], entries);
+    } catch (e) {
+      fail(`Could not parse ${match[2]} I18N entries: ${e.message}`);
+    }
+    re.lastIndex = closeAt + 1;
+  }
+}
+{
+  const locales = ['ar', 'en', 'fr', 'it', 'de'];
+  for (const rel of htmlFiles) {
+    const html = read(rel);
+    const required = new Set();
+    for (const m of html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)) required.add(m[1].trim());
+    for (const m of html.matchAll(/\bdata-i18n-(?:attr|content)=["']([^"']+)["']/gi)) {
+      m[1].split(',').forEach((pair) => {
+        const parts = pair.split(':');
+        const key = parts.length > 1 ? parts[1].trim() : parts[0].trim();
+        if (key) required.add(key);
+      });
+    }
+    if (!required.size) continue;
+    const maps = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
+    let sawRegister = false;
+    const scriptRefs = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
+    for (const src of scriptRefs) {
+      if (isExternalRef(src)) continue;
+      const target = resolveRef(rel, src);
+      if (!exists(target)) continue;
+      const code = read(target);
+      if (!code.includes('window.I18N.register(')) continue;
+      sawRegister = true;
+      collectRegisteredLocales(code, maps);
+    }
+    /* Some small pages register translations inline. */
+    if (html.includes('window.I18N.register(')) {
+      sawRegister = true;
+      collectRegisteredLocales(html, maps);
+    }
+    if (!sawRegister) continue; /* text-key dictionaries and the custom T object are audited separately */
+    for (const locale of locales) {
+      const missing = [...required].filter((key) => maps[locale][key] === undefined || maps[locale][key] === null || maps[locale][key] === '');
+      if (missing.length) fail(`${rel}: ${locale} is missing ${missing.length} data-i18n key(s): ${missing.slice(0, 8).join(', ')}.`);
+    }
+  }
+}
+
 /* ---------- 4) المحرك المشترك يلتزم بالقفل ---------- */
 const engine = read('assets/shared/i18n.js');
 if (!/function readLang\(\)\{\s*[^]*?KH_LANG\.locked\)return window\.KH_LANG\.current/.test(engine)) fail('assets/shared/i18n.js: readLang() must ignore ?lang= when KH_LANG.locked.');
