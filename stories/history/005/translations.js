@@ -266,7 +266,7 @@ window.I18N.register("it",{
  "s_start":"Inizia la storia →"
 });
 window.I18N.register("de",{
- "eyebrow": "Unsterbliche durch die Geschichte • Geschichte und Zivilisationen",
+ "eyebrow": "Unsterbliche Persönlichkeiten der Geschichte • Geschichte und Zivilisationen",
  "title": "Ibn Sina — al-Scheich al-Ra’is",
  "subtitle": "Ein Gelehrter der Medizin und der Philosophie, dessen Einfluss Jahrhunderte überdauerte",
  "authorLabel": "Eine Geschichte, erzählt von einer neuen Generation",
@@ -307,14 +307,14 @@ window.I18N.register("de",{
  "reactionInspiring": "Eine inspirierende Geschichte",
  "reactionMore": "Ich möchte weitere Geschichten lesen",
  "reactionLimit": "Pro Geschichte können von diesem Browser aus ein Like und eine Antwort erfasst werden.",
- "footerBrand": "Unsterbliche durch die Geschichte",
+ "footerBrand": "Unsterbliche Persönlichkeiten der Geschichte",
  "footerText": "Geschichte, erzählt mit den Augen einer neuen Generation",
- "introKicker": "Unsterbliche durch die Geschichte • Geschichte 005",
+ "introKicker": "Unsterbliche Persönlichkeiten der Geschichte • Geschichte 005",
  "introTitle": "Ibn Sina — al-Scheich al-Ra’is",
  "introText": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde.",
  "startStory": "Die Geschichte beginnen",
  "closeIntro": "Einführung schließen",
- "pageTitle": "Ibn Sina — al-Scheich al-Ra’is | Unsterbliche durch die Geschichte",
+ "pageTitle": "Ibn Sina — al-Scheich al-Ra’is | Unsterbliche Persönlichkeiten der Geschichte",
  "metaDescription": "Die Geschichte von Ibn Sina, dem Arzt und Philosophen, der den Kanon der Medizin verfasste.",
  "heroAlt": "Illustration von Büchern und Handschriften, kein historisches Porträt von Ibn Sina",
  "folioAlt": "Illustration einer medizinischen Manuskriptseite; kein Archivoriginal",
