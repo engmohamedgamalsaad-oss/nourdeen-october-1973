@@ -15,7 +15,9 @@ const storyFiles = [
   'stories/october/001/i18n.js',
   'stories/october/002/i18n.js',
   'stories/october/003/i18n.js',
-  'stories/october/004/i18n.js'
+  'stories/october/004/i18n.js',
+  'stories/history/005/translations.js',
+  'stories/history/006/translations.js'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
