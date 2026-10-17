@@ -202,6 +202,8 @@ async function flow(browser, base, origin, lang, viewport) {
           direction: document.querySelector('#khMap .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-list')).direction : ''
         }));
         step('homepage map loads story locations and preserves the fallback list', !!mapState.title && mapState.items >= 5 && mapState.approximate.includes('الموقع تقريبي'), JSON.stringify(mapState));
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForTimeout(100);
         await page.locator('.langs button[data-l="4"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'de', null, { timeout: 5000 });
         await page.waitForTimeout(150);
@@ -211,6 +213,8 @@ async function flow(browser, base, origin, lang, viewport) {
           direction: document.querySelector('#khMap .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-list')).direction : ''
         }));
         step('map fallback and approximate location follow German', mapState.title === 'Woher kommen die Geschichten?' && mapState.approximate.includes('Ungefähre Lage') && mapState.direction === 'ltr', JSON.stringify(mapState));
+        await page.evaluate(() => window.scrollTo(0, 0));
+        await page.waitForTimeout(100);
         await page.locator('.langs button[data-l="0"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'ar', null, { timeout: 5000 });
         await page.waitForTimeout(150);
