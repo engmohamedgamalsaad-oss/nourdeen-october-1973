@@ -34,3 +34,10 @@ jobs:
           name: language-e2e-report
           path: language-e2e-report.json
           if-no-files-found: ignore
+      - name: Upload mobile and desktop audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-audit-screenshots
+          path: language-audit-screenshots/*.png
+          if-no-files-found: ignore
