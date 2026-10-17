@@ -421,6 +421,63 @@ for (const rel of [
   }
 }
 
+/* ---------- 6) Regression checks: homepage map + expanded story translations ---------- */
+{
+  const home = read('index.html');
+  const mapScriptPath = 'khaledoon/assets/khaledoon-map.js';
+  const mapStylePath = 'khaledoon/assets/khaledoon-map.css';
+  if (!home.includes(mapScriptPath)) fail('Homepage interactive map is not wired into index.html.');
+  if (!home.includes(mapStylePath)) fail('Homepage interactive map stylesheet is not wired into index.html.');
+  if (!exists(mapScriptPath) || !exists(mapStylePath)) fail('Interactive map script or stylesheet is missing.');
+  const map = read(mapScriptPath);
+  if (!/var LANGS = \['ar', 'en', 'fr', 'it', 'de'\]/.test(map)) fail('Interactive map must support ar/en/fr/it/de.');
+  for (const locale of ['ar', 'en', 'fr', 'it', 'de']) {
+    if (!new RegExp('\\b' + locale + ':').test(map)) fail('Interactive map is missing locale data for ' + locale + '.');
+  }
+  if (!map.includes("get('stories/index.json')") || !map.includes("get('stories/places.json')")) {
+    fail('Interactive map must read the current story index and place data.');
+  }
+  const placeData = read('stories/places.json');
+  try {
+    const places = JSON.parse(placeData);
+    if (!places['003'] || places['003'].approximate !== true) fail('Story 003 map coordinates must be marked approximate until verified.');
+    if (places['002']) fail('Story 002 must stay off the map until its disputed birthplace is verified.');
+    if (!map.includes("p.approximate === true") || !map.includes("e.p.approximate === true") || !map.includes("T('approx')")) fail('Interactive map must visibly label approximate locations in both popup and fallback list.');
+  } catch (e) { fail('stories/places.json: invalid JSON or map-location review metadata failed: ' + e.message); }
+  if (map.includes('map.scrollWheelZoom.enable()')) fail('Interactive map must not capture page scrolling after a click.');
+  if (!map.includes('if (usingFallback) fallbackList()')) fail('Interactive map fallback list must refresh after language changes.');
+}
+{
+  const rel = 'assets/shared/expanded-story-translations.js';
+  const source = read(rel);
+  if (source.includes('Object.values(D).some(z=>z[slug]?.t===h.textContent.trim())')) {
+    fail(rel + ': translated heading lookup still references h inside its own initializer.');
+  }
+  if (!source.includes('Object.values(D).some(z=>z[slug]?.t===x.textContent.trim())')) {
+    fail(rel + ': translated heading lookup must compare the candidate heading element.');
+  }
+  const match = source.match(/const D=(\{[\s\S]*?\n\});\nconst H=/);
+  if (!match) fail(rel + ': could not read the story translation dictionary for coverage checks.');
+  else {
+    try {
+      const dictionaries = vm.runInNewContext('(' + match[1] + ')');
+      for (const locale of ['en', 'fr', 'it', 'de']) {
+        for (const slug of ['001', '002', '003', '004', '005', '006', '007']) {
+          const story = dictionaries[locale] && dictionaries[locale][slug];
+          if (!story || !String(story.t || '').trim() || (slug !== '007' && !String(story.k || '').trim()) ||
+              !Array.isArray(story.p) || story.p.length < 2 || story.p.some((p) => !String(p || '').trim())) {
+            fail(rel + ': ' + locale + ' expanded story ' + slug + ' is missing a title, kicker, or paragraph translation.');
+          }
+          if (story && story.c !== undefined && !String(story.c || '').trim()) {
+            fail(rel + ': ' + locale + ' expanded story ' + slug + ' has an empty caption translation.');
+          }
+        }
+      }
+      notes.push('expanded stories 001–007 checked in EN/FR/IT/DE');
+    } catch (e) { fail(rel + ': translation dictionary audit failed: ' + e.message); }
+  }
+}
+
 if (failures.length) {
   console.error('Homepage language-flow checks FAILED:\n- ' + failures.join('\n- '));
   process.exitCode = 1;

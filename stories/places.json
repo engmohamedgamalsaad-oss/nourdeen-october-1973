@@ -14,6 +14,7 @@
   "003": {
     "lat": 22.75,
     "lng": 32.0,
+    "approximate": true,
     "place": {
       "ar": "قرية توماس وعافية، النوبة، أسوان",
       "en": "Tomas and Afia village, Nubia, Aswan",
