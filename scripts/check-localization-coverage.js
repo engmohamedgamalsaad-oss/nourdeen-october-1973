@@ -19,6 +19,11 @@ const storyFiles = [
   'stories/history/005/translations.js',
   'stories/history/006/translations.js'
 ];
+/* Stories whose text lives inside index.html (007): each language must appear in all
+   three of the page's translation tables (T, EXTRA, REACTION_TEXT). */
+const inlineStoryFiles = [
+  'stories/science/007/index.html'
+];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
   'assets/i18n/story-common.js'
@@ -56,6 +61,17 @@ for (const file of storyFiles) {
   for (const lang of required) {
     if (!new RegExp("register\\(['\\\"]" + lang + "['\\\"]").test(source)) {
       problems.push(file + ': missing I18N.register(' + lang + ', ...).');
+    }
+  }
+}
+
+for (const file of inlineStoryFiles) {
+  const source = read(file);
+  for (const lang of required) {
+    const pattern = new RegExp("(^|[^A-Za-z0-9_])['\"]?" + lang + "['\"]?\\s*:\\s*\\{", 'g');
+    const found = (source.match(pattern) || []).length;
+    if (found < 3) {
+      problems.push(file + ': locale "' + lang + '" appears in ' + found + ' of the 3 translation tables (T, EXTRA, REACTION_TEXT).');
     }
   }
 }
