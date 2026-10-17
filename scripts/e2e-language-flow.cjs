@@ -2,8 +2,8 @@
 /* Real-browser regression for the homepage-only language flow (Playwright + Chromium).
    Run from the repository root:   node scripts/e2e-language-flow.cjs [--out report.json]
 
-   Needs Playwright with a Chromium build. It is intentionally NOT wired into CI (CI would have to
-   download a browser); run it locally / in a preview-verification step.
+   Needs Playwright with a Chromium build. CI installs Playwright and Chromium on pull requests; local runs can use an existing
+   Playwright installation.
 
    External requests (fonts, Supabase, CDNs) are blocked on purpose, so this test cannot say anything
    about reactions/likes (Supabase), web fonts, or the live deployment.
@@ -74,7 +74,7 @@ function visitorPages() {
 }
 
 const expectedDir = (l) => (l === 'ar' ? 'rtl' : 'ltr');
-const PRINT_RE = /طباع|اطبع|print|imprim|stamp/i;
+const PRINT_RE = /طباع|اطبع|print|imprim|stamp|druck/i;
 
 const INSPECT = () => {
   const root = document.documentElement;
@@ -205,7 +205,7 @@ async function flow(browser, base, origin, lang, viewport) {
       const re = new RegExp(src, 'i');
       return [...document.querySelectorAll('button,a')].filter((e) => re.test(e.textContent || '') && e.getClientRects().length).length;
     }, PRINT_RE.source);
-    steps.push({ name: 'print control present on story001 (info)', ok: true, detail: String(printCount) });
+    step('print control present on story001', printCount > 0, `count=${printCount}`);
 
     /* 4. reload */
     await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(400);
