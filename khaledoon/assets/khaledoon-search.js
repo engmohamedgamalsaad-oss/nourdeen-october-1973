@@ -313,3 +313,21 @@
     document.head.appendChild(s);
   } catch (e) {}
 })();
+
+/* تحميل خريطة الشخصيات (khaledoon-map.js + khaledoon-map.css) من نفس المجلد على الصفحة الرئيسية. */
+(function () {
+  try {
+    if (window.__khMap || document.querySelector('script[data-khm-loader]')) return;
+    var cs = document.currentScript;
+    if (!cs || !cs.src) return;
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = new URL('khaledoon-map.css?v=1', cs.src).href;
+    document.head.appendChild(l);
+    var s = document.createElement('script');
+    s.src = new URL('khaledoon-map.js?v=1', cs.src).href;
+    s.async = true;
+    s.setAttribute('data-khm-loader', '1');
+    document.head.appendChild(s);
+  } catch (e) {}
+})();
