@@ -35,3 +35,84 @@
 :root[data-theme="light"] :is(.intro p,.home-after p,.feature-section p,.facts-section p,.media-caption p,.fact-card p,.card-grade,.supervision-line,footer) { color: #4b5c65 !important; }
 :root[data-theme="light"] :is(.fact-source,.media-caption a,.card-btn,.submit-story-link) { color: #80551d !important; }
 :root[data-theme="light"] :is(.feature-control,.feature-dot) { background: #fffdf8 !important; color: #203744 !important; border-color: #c8b58e !important; }
+
+
+/* Readability pass: light mode uses dark ink for every heading and body label.
+   Keep the photographic hero dark; only the page content switches to light surfaces. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) :is(.intro-heading h2,.intro-heading h3,.intro h2,.intro h3,.home-after h2,.home-after h3,.feature-heading h2,.feature-heading h3,.facts-section h2,.facts-section h3,.supervision-title,.card-name,.card-title,.media-caption h3,.fact-card h3,.submitted-story-card h3,.submitted-story-card h4) {
+    color: #173746 !important;
+  }
+  :root:not([data-theme="dark"]) :is(.intro p,.intro-copy p,.big-quote,.home-after p,.feature-heading p,.media-caption p,.fact-card p,.fact-card details p,.card-grade,.card-title,.empty,.supervision-line,.stamp-disclaimer,footer) {
+    color: #354d59 !important;
+  }
+  :root:not([data-theme="dark"]) :is(.kicker,.fact-source,.media-caption a,.card-bottom-row a,.submitted-story-tag,.fact-card summary) {
+    color: #79501c !important;
+  }
+  :root:not([data-theme="dark"]) :is(.card,.media-card,.fact-card,.intro-copy,.feature-heading,.media-caption,.supervision .container,.submitted-story-card) {
+    background: #fffdf8 !important;
+    color: #243744 !important;
+    border-color: #d5c3a0 !important;
+  }
+  :root:not([data-theme="dark"]) .big-quote {
+    background: #f0e5ce !important;
+    border-right-color: #8c6126 !important;
+  }
+  :root:not([data-theme="dark"]) .card-like-count {
+    color: #354d59 !important;
+    background: #f5ecd9 !important;
+    border-color: #d8c7a2 !important;
+  }
+  :root:not([data-theme="dark"]) .card-like-count .like-number {
+    color: #173746 !important;
+  }
+  :root:not([data-theme="dark"]) .lang-option {
+    color: #243d4a !important;
+    border-color: #c8b58e !important;
+  }
+  :root:not([data-theme="dark"]) .lang-option.is-active {
+    color: #fffdf8 !important;
+    background: #234957 !important;
+    border-bottom-color: #234957 !important;
+  }
+  :root:not([data-theme="dark"]) .card-btn,
+  :root:not([data-theme="dark"]) .submit-story-link {
+    color: #20170b !important;
+    background: linear-gradient(145deg,#e3bd78,#c08a43) !important;
+  }
+}
+:root[data-theme="light"] :is(.intro-heading h2,.intro-heading h3,.intro h2,.intro h3,.home-after h2,.home-after h3,.feature-heading h2,.feature-heading h3,.facts-section h2,.facts-section h3,.supervision-title,.card-name,.card-title,.media-caption h3,.fact-card h3,.submitted-story-card h3,.submitted-story-card h4) {
+  color: #173746 !important;
+}
+:root[data-theme="light"] :is(.intro p,.intro-copy p,.big-quote,.home-after p,.feature-heading p,.media-caption p,.fact-card p,.fact-card details p,.card-grade,.card-title,.empty,.supervision-line,.stamp-disclaimer,footer) {
+  color: #354d59 !important;
+}
+:root[data-theme="light"] :is(.kicker,.fact-source,.media-caption a,.card-bottom-row a,.submitted-story-tag,.fact-card summary) {
+  color: #79501c !important;
+}
+:root[data-theme="light"] :is(.card,.media-card,.fact-card,.intro-copy,.feature-heading,.media-caption,.supervision .container,.submitted-story-card) {
+  background: #fffdf8 !important;
+  color: #243744 !important;
+  border-color: #d5c3a0 !important;
+}
+:root[data-theme="light"] .big-quote {
+  background: #f0e5ce !important;
+  border-right-color: #8c6126 !important;
+}
+:root[data-theme="light"] .card-like-count {
+  color: #354d59 !important;
+  background: #f5ecd9 !important;
+  border-color: #d8c7a2 !important;
+}
+:root[data-theme="light"] .card-like-count .like-number { color: #173746 !important; }
+:root[data-theme="light"] .lang-option { color: #243d4a !important; border-color: #c8b58e !important; }
+:root[data-theme="light"] .lang-option.is-active {
+  color: #fffdf8 !important;
+  background: #234957 !important;
+  border-bottom-color: #234957 !important;
+}
+:root[data-theme="light"] .card-btn,
+:root[data-theme="light"] .submit-story-link {
+  color: #20170b !important;
+  background: linear-gradient(145deg,#e3bd78,#c08a43) !important;
+}
