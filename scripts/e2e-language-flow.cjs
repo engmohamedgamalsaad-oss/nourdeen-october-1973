@@ -1,5 +1,5 @@
 'use strict';
-/* Real-browser regression for the homepage-only language flow (Playwright + Chromium).
+/* Real-browser regression for the shared five-language flow across all pages (Playwright + Chromium).
    Run from the repository root:   node scripts/e2e-language-flow.cjs [--out report.json]
 
    Needs Playwright with a Chromium build. CI installs Playwright and Chromium on pull requests; local runs can use an existing
@@ -13,8 +13,8 @@
               back -> home -> direct open in a new tab -> a conflicting ?lang= override.
    2. SWEEP - every visitor page x language x viewport loaded directly with a saved language.
 
-   HARD failures (exit code 1): wrong html lang/dir, a visible language switcher on an inner page,
-   ?lang= left in the URL, a broken flow step, a same-origin 404 / failed request, a page error.
+   HARD failures (exit code 1): wrong html lang/dir, a missing language switcher on visitor pages,
+   a broken language-switch action, ?lang= left in the URL, a same-origin 404 / failed request, a page error.
    WARNINGS (reported, do not fail): horizontal overflow, body direction differing from <html>,
    a high share of Arabic text on a non-Arabic page (= untranslated fallback). */
 const http = require('node:http');
@@ -144,7 +144,7 @@ function judgeInner(label, s, lang, hard, warn, { requireClean = true } = {}) {
   if (s.noKhLang) hard.push(`${where}: the shared language script never ran (KH_LANG undefined)`);
   if (s.lang !== lang) hard.push(`${where}: html lang=${s.lang}, expected ${lang}`);
   if (s.dir !== expectedDir(lang)) hard.push(`${where}: html dir=${s.dir}, expected ${expectedDir(lang)}`);
-  if (s.switchers.length) hard.push(`${where}: visible language switcher(s): ${[...new Set(s.switchers)].join(', ')}`);
+  if (!s.switchers.length) hard.push(`${where}: no visible language switcher found`);
   if (requireClean && /[?&]lang=/.test(s.url)) hard.push(`${where}: ?lang= left in URL`);
   if (s.overflow > 1) warn.push(`${where}: horizontal overflow ${s.overflow}px`);
   if (s.bodyDir && s.bodyDir !== s.dir) warn.push(`${where}: body direction ${s.bodyDir} differs from html dir ${s.dir}`);
@@ -183,6 +183,22 @@ async function flow(browser, base, origin, lang, viewport) {
     await page.waitForTimeout(300);
     s = await inspect(page); judgeInner(label + ' section', s, lang, hard, warn);
     step('section keeps language', s.lang === lang, `lang=${s.lang}`);
+    const sectionOptions = await page.locator('.lang-option').count();
+    step('section exposes all five language options', sectionOptions === LANGS.length, `count=${sectionOptions}`);
+    if (sectionOptions === LANGS.length) {
+      const labels = { ar: 'العربية', en: 'English', fr: 'Français', it: 'Italiano', de: 'Deutsch' };
+      const alternate = LANGS[(LANGS.indexOf(lang) + 1) % LANGS.length];
+      await page.locator('.lang-option').filter({ hasText: labels[alternate] }).click();
+      await page.waitForFunction((expected) => document.documentElement.lang === expected, alternate, { timeout: 8000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      let switched = await inspect(page);
+      step('section language switcher changes language and saves it', switched.lang === alternate && switched.stored === alternate && !/[?&]lang=/.test(switched.url), `lang=${switched.lang} stored=${switched.stored}`);
+      await page.locator('.lang-option').filter({ hasText: labels[lang] }).click();
+      await page.waitForFunction((expected) => document.documentElement.lang === expected, lang, { timeout: 8000 }).catch(() => {});
+      await page.waitForTimeout(250);
+      s = await inspect(page);
+      step('section language can be restored without losing navigation', s.lang === lang && !/[?&]lang=/.test(s.url), `lang=${s.lang}`);
+    }
     if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `october-${viewport}.png`), animations: 'disabled' });
 
     /* 3. story from the section */
