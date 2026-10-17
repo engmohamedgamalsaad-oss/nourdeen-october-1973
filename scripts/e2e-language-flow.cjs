@@ -206,6 +206,12 @@ async function flow(browser, base, origin, lang, viewport) {
       return [...document.querySelectorAll('button,a')].filter((e) => re.test(e.textContent || '') && e.getClientRects().length).length;
     }, PRINT_RE.source);
     step('print control present on story001', printCount > 0, `count=${printCount}`);
+    const reactionUi = await page.evaluate(() => ({
+      like: !!document.querySelector('#reaction-like'),
+      choices: document.querySelectorAll('[data-reaction-choice]').length,
+      counts: document.querySelectorAll('[data-reaction-count]').length
+    }));
+    step('story has like and reaction controls', reactionUi.like && reactionUi.choices > 0 && reactionUi.counts > 0, JSON.stringify(reactionUi));
 
     /* 4. reload */
     await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(400);
