@@ -320,6 +320,17 @@ for (const rel of [
   if (!t || !/\bar:\{/.test(t[1]) || !/\ben:\{/.test(t[1]) || !/\bfr:\{/.test(t[1]) ||
       !/\bit:\{/.test(t[1]) || !/\bde:\{/.test(t[1])) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must define all five language dictionaries.');
+  } else {
+    try {
+      const dictionaries = vm.runInNewContext('({' + t[1] + '})');
+      const keys = Object.keys(dictionaries.ar || {});
+      for (const locale of ['en', 'fr', 'it', 'de']) {
+        const translated = Object.keys(dictionaries[locale] || {});
+        const missing = keys.filter((key) => !translated.includes(key));
+        if (missing.length) fail(`stories/science/007/index.html: ${locale} is missing ${missing.length} translation key(s): ${missing.slice(0, 5).join(', ')}.`);
+      }
+      notes.push(`Ahmed Zewail story: ${keys.length} fields in all five languages`);
+    } catch (e) { fail(`stories/science/007/index.html: could not audit the language dictionaries: ${e.message}`); }
   }
 }
 {
