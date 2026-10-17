@@ -20,6 +20,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="khaledoon/assets/khaledoon.css">
 <link rel="stylesheet" href="khaledoon/assets/khaledoon-mobile.css?v=23">
+<link rel="stylesheet" href="khaledoon/assets/khaledoon-search.css?v=1">
 </head>
 <body>
 <link rel="stylesheet" href="khaledoon/assets/khaledoon-theme.css?v=1">
@@ -30,7 +31,7 @@
 <a class="brand" href="index.html" aria-label="خالدون عبر التاريخ"><span class="mark">خ</span><span>خالدون عبر التاريخ<small>حكاياتٌ تُروى… وأثرٌ يبقى</small></span></a>
 <nav class="links" aria-label="التنقل"><a href="#gateways">بوابات المعرفة</a><a href="khaledoon/collections/october.html">حكايات أكتوبر 1973</a><a href="khaledoon/collections/curriculum.html">شخصيات المناهج</a><a href='#how'>من الفكرة إلى الحكاية</a></nav>
 <div class="ctl"><button class="thm" id="th" type="button">☀️ فاتح</button></div>
-</div><div class="wrap langrow"><div class="langs" role="group" aria-label="Language"><button type="button" data-l="0" aria-pressed="true">🇪🇬 العربية</button><button type="button" data-l="1" aria-pressed="false">🇬🇧 EN</button><button type="button" data-l="2" aria-pressed="false">🇫🇷 FR</button><button type="button" data-l="3" aria-pressed="false">🇮🇹 IT</button><button type="button" data-l="4" aria-pressed="false">🇩🇪 DE</button></div></div></header>
+</div><div class="wrap langrow"><div class="langs" role="group" aria-label="Language"><button type="button" data-l="0" aria-pressed="true">🇪🇬 العربية</button><button type="button" data-l="1" aria-pressed="false">🇬🇧 EN</button><button type="button" data-l="2" aria-pressed="false">🇫🇷 FR</button><button type="button" data-l="3" aria-pressed="false">🇮🇹 IT</button><button type="button" data-l="4" aria-pressed="false">🇩🇪 DE</button></div></div><div class="wrap searchrow" id="khSearchRow"></div></header>
 <main id="top">
 <div class="view">
 <section class="hero"><div class="wrap"><div class="hero-in reveal">
@@ -77,10 +78,11 @@
 
 </div>
 </main>
-<footer><div class="wrap"><div class="frow"><b style="color:var(--cream)">خالدون عبر التاريخ</b><span>حكاية التاريخ بعيون جيل جديد</span><a href="#top">العودة إلى الأعلى ↑</a></div><p class="disclaimer" style="max-width:900px;margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.9">تُعدّ الحكايات بالاستناد إلى مصادر ومراجع يُشار إليها داخل كل حكاية، وتُراجع المعلومات قبل النشر قدر الإمكان. ويُقدَّم المحتوى لأغراض معرفية وتعليمية؛ ولا يعني نشره تبنّي الموقع لكل رأي أو تفسير وارد فيه. وتظل مسؤولية الآراء والمساهمات الشخصية المنسوبة إلى أصحابها، ويُرجى الرجوع إلى المصادر الأصلية للتحقق من التفاصيل.</p></div></footer>
+<footer><div class="wrap"><div class="frow"><b style="color:var(--cream)">خالدون عبر التاريخ</b><span>حكاية التاريخ بعيون جيل جديد</span><a href="#top">العودة إلى الأعلى ↑</a></div><p class="disclaimer" style="max-width:900px;margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.9">تُعدّ الحكايات بالاستناد إلى مصادر ومراجع يُشار إليها داخل كل حكاية، وتُراجع المعلومات قبل النشر قدر الإمكان. ويُقدَّم المحتوى لأغراض معرفية وتعليمية؛ ولا يعني نشره تبنّي الموقع لكل رأي أو تفسير وارد فيه. وتظل مسؤولية الآراء والمساهمات الشخصية المنسوبة إلى أصحابها، ويُرجى الرجوع إلى المصادر الأصلية للتحقق من التفاصيل.</p></div></footer>
 <script src="khaledoon/assets/khaledoon-de.js?v=20261017" defer></script>
 <script src="khaledoon/assets/khaledoon.js" defer></script>
 <script src="khaledoon/assets/khaledoon-i18n-extra.js" defer></script>
+<script src="khaledoon/assets/khaledoon-search.js?v=1" defer></script>
 <!-- German: khaledoon-de.js (window.KH_DE dictionary) loads before khaledoon.js and khaledoon-i18n-extra.js; text without a German entry stays Arabic, never "undefined". -->
 <script src="khaledoon/assets/khaledoon-hero-motion.js?v=12" defer></script>
 </body>
