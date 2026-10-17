@@ -4,6 +4,8 @@
   "className": "Class 1B",
   "title": "ابن سينا — الشيخ الرئيس",
   "subtitle": "رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
+  "person": "ابن سينا",
+  "personAliases": ["Avicenna", "Avicenne"],
   "color": "#d5b7ff",
   "order": 5,
   "published": true,
@@ -13,6 +15,7 @@
       "grade": "First year of preparatory school",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
       "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
+      "person": "Ibn Sina",
       "className": "Class 1B"
     },
     "fr": {
@@ -20,6 +23,7 @@
       "grade": "Première année du collège",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
       "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
+      "person": "Ibn Sina",
       "className": "Class 1B"
     },
     "it": {
@@ -27,6 +31,7 @@
       "grade": "Primo anno della scuola preparatoria",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
       "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
+      "person": "Ibn Sina",
       "className": "Class 1B"
     },
     "de": {
@@ -34,7 +39,8 @@
       "grade": "1. Klasse der Sekundarstufe I",
       "className": "Klasse 1B",
       "title": "Ibn Sina — al-Scheich al-Ra’is",
-      "subtitle": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde."
+      "subtitle": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde.",
+      "person": "Ibn Sina"
     }
   }
 }

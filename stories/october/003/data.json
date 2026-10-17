@@ -4,6 +4,7 @@
   "className": "1 A",
   "title": "لغة لا يفهمها العدو",
   "subtitle": "حكاية الشفرة النوبية",
+  "person": "أحمد إدريس",
   "color": "#2fa7a0",
   "order": 3,
   "published": true,
@@ -13,6 +14,7 @@
       "grade": "1st Grade (Primary)",
       "title": "A Language the Enemy Could Not Understand",
       "subtitle": "The story of the Nubian code",
+      "person": "Ahmed Idris",
       "className": "Class 1 A"
     },
     "fr": {
@@ -20,6 +22,7 @@
       "grade": "1re année du primaire",
       "title": "Une langue que l’ennemi ne comprenait pas",
       "subtitle": "L’histoire du code nubien",
+      "person": "Ahmed Idris",
       "className": "Classe 1 A"
     },
     "it": {
@@ -27,7 +30,16 @@
       "grade": "1ª classe della scuola primaria",
       "title": "Una lingua che il nemico non capiva",
       "subtitle": "La storia del codice nubiano",
+      "person": "Ahmed Idris",
       "className": "Classe 1 A"
+    },
+    "de": {
+      "name": "Malika Mohamed Gamal",
+      "grade": "1. Klasse der Grundschule",
+      "className": "Klasse 1A",
+      "title": "Eine Sprache, die der Feind nicht verstand",
+      "subtitle": "Die Geschichte des nubischen Codes",
+      "person": "Ahmed Idris"
     }
   }
 }

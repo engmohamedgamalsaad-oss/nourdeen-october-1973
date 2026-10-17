@@ -28,6 +28,13 @@
       "title": "L’ingegno prima delle armi",
       "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
       "className": "Classe 3 E"
+    },
+    "de": {
+      "name": "Karma Mohamed Gamal",
+      "grade": "3. Klasse der Grundschule",
+      "className": "Klasse 3E",
+      "title": "Verstand vor Waffen",
+      "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete"
     }
   }
 }

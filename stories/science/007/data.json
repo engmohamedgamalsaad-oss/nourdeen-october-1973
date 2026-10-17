@@ -4,28 +4,33 @@
   "className": "",
   "title": "حكاية العالم أحمد زويل",
   "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
+  "person": "أحمد زويل",
   "color": "#b8874b",
   "order": 7,
   "published": true,
   "i18n": {
     "en": {
       "title": "The Story of the Scientist Ahmed Zewail",
-      "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions."
+      "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions.",
+      "person": "Ahmed Zewail"
     },
     "fr": {
       "title": "L’histoire du scientifique Ahmed Zewail",
-      "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques."
+      "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques.",
+      "person": "Ahmed Zewail"
     },
     "it": {
       "title": "La storia dello scienziato Ahmed Zewail",
-      "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche."
+      "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche.",
+      "person": "Ahmed Zewail"
     },
     "de": {
       "name": "",
       "grade": "",
       "className": "",
       "title": "Die Geschichte des Wissenschaftlers Ahmed Zewail",
-      "subtitle": "Eine Reise mit einem ägyptischen Wissenschaftler, der Forschern half, Atome während chemischer Reaktionen zu beobachten."
+      "subtitle": "Eine Reise mit einem ägyptischen Wissenschaftler, der Forschern half, Atome während chemischer Reaktionen zu beobachten.",
+      "person": "Ahmed Zewail"
     }
   }
 }

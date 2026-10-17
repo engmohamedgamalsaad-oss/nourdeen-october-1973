@@ -1,0 +1,51 @@
+/* خالدون عبر التاريخ — تنسيق بحث الصفحة الرئيسية (زر + لوحة نتائج).
+   يعتمد على متغيرات الصفحة (--night, --ink, --muted, --gold, --line, --field) في الوضعين الفاتح والداكن،
+   وعلى خصائص منطقية (inline) فيعمل مع العربية RTL ومع باقي اللغات LTR دون تعديل. */
+.searchrow{position:relative;display:flex;justify-content:flex-end;padding:0 0 8px}
+.searchrow:empty{display:none}
+
+.khs-btn{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12px;font-weight:800;min-height:34px;padding:2px 15px;border-radius:99px;border:1px solid rgba(240,200,120,.5);background:transparent;color:#f6d9a2;cursor:pointer;transition:background .2s,color .2s,transform .2s}
+.khs-btn:hover{background:rgba(240,200,120,.12);transform:translateY(-1px)}
+.khs-btn[aria-expanded=true]{background:#f0c878;color:#14232b;border-color:#f0c878}
+html[data-theme=light] .khs-btn{color:#1b3f94;border-color:#1b3f94}
+html[data-theme=light] .khs-btn:hover{background:rgba(27,63,148,.08)}
+html[data-theme=light] .khs-btn[aria-expanded=true]{background:#1b3f94;color:#fff}
+
+.khs-panel{position:absolute;inset-inline-end:0;top:calc(100% + 4px);z-index:60;box-sizing:border-box;width:min(560px,100%);max-height:min(72vh,520px);display:flex;flex-direction:column;border:1px solid var(--line,rgba(240,200,120,.38));border-radius:16px;background:var(--night,#060d1f);color:var(--ink,#f5f4ee);box-shadow:0 22px 50px -16px rgba(0,0,0,.6);overflow:hidden;animation:khs-in .22s cubic-bezier(.2,.7,.2,1) both}
+.khs-panel[hidden]{display:none}
+html[data-theme=light] .khs-panel{box-shadow:0 22px 46px -18px rgba(66,46,12,.4)}
+@keyframes khs-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+.khs-head{display:flex;align-items:center;gap:8px;padding:12px 12px 8px}
+.khs-input{flex:1 1 auto;min-width:0;box-sizing:border-box;font:inherit;font-size:16px;min-height:46px;padding:8px 14px;border-radius:10px;border:1px solid var(--line,rgba(240,200,120,.38));background:var(--field,#050b1b);color:var(--ink,#f5f4ee)}
+.khs-input::placeholder{color:var(--muted,#b8c3de);opacity:.85}
+.khs-input::-webkit-search-cancel-button,.khs-input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.khs-input:focus,.khs-btn:focus-visible,.khs-close:focus-visible,.khs-chip:focus-visible,.khs-item:focus-visible{outline:3px solid var(--gold,#f3cf85);outline-offset:2px}
+.khs-close{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid var(--line,rgba(240,200,120,.38));background:transparent;color:var(--ink,#f5f4ee);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.khs-close:hover{border-color:var(--gold,#f3cf85)}
+
+.khs-status{padding:2px 16px 8px;font-size:12.5px;color:var(--muted,#b8c3de)}
+.khs-list{overflow-y:auto;overscroll-behavior:contain;padding:0 10px 12px;display:grid;gap:6px;align-content:start}
+
+.khs-chips{display:flex;flex-wrap:wrap;gap:8px;padding:2px 6px 4px}
+.khs-chip{font:inherit;font-size:13px;min-height:40px;padding:5px 14px;border-radius:99px;border:1px solid var(--line,rgba(240,200,120,.38));background:transparent;color:var(--ink,#f5f4ee);cursor:pointer;transition:border-color .2s,background .2s}
+.khs-chip:hover{border-color:var(--gold,#f3cf85);background:color-mix(in srgb,var(--gold,#f3cf85) 12%,transparent)}
+
+.khs-item{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1px solid transparent;border-radius:12px;color:inherit;text-decoration:none;min-height:56px;transition:background .18s,border-color .18s}
+.khs-item:hover,.khs-item:focus-visible{background:color-mix(in srgb,var(--gold,#f3cf85) 13%,transparent);border-color:var(--line,rgba(240,200,120,.38))}
+.khs-dot{flex:0 0 12px;width:12px;height:12px;border-radius:50%;background:var(--gold,#f3cf85);box-shadow:0 0 0 3px color-mix(in srgb,currentColor 12%,transparent)}
+.khs-body{display:grid;gap:1px;min-width:0}
+.khs-title{font-weight:800;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.khs-meta{font-size:12px;color:var(--muted,#b8c3de)}
+.khs-tag{color:var(--gold,#f3cf85);font-weight:800}
+
+@media (max-width:480px){
+  .searchrow{padding-bottom:6px}
+  .khs-panel{max-height:min(66vh,480px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .khs-panel{animation:none}
+  .khs-btn,.khs-item,.khs-chip{transition:none}
+  .khs-btn:hover{transform:none}
+}
+@media print{.searchrow{display:none!important}}
