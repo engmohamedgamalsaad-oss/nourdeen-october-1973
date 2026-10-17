@@ -171,7 +171,7 @@
   function initMap() {
     var L = window.L;
     map = L.map(canvas, { worldCopyJump: true, minZoom: 2, scrollWheelZoom: false });
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© OpenStreetMap' }).addTo(map);
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>' }).addTo(map);
     group = L.markerClusterGroup({ showCoverageOnHover: false, maxClusterRadius: 40 });
     points.forEach(function (e) {
       var dot = el('span', 'khm-dot');

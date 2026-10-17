@@ -322,10 +322,10 @@
     if (!cs || !cs.src) return;
     var l = document.createElement('link');
     l.rel = 'stylesheet';
-    l.href = new URL('khaledoon-map.css?v=1', cs.src).href;
+    l.href = new URL('khaledoon-map.css?v=2', cs.src).href;
     document.head.appendChild(l);
     var s = document.createElement('script');
-    s.src = new URL('khaledoon-map.js?v=1', cs.src).href;
+    s.src = new URL('khaledoon-map.js?v=2', cs.src).href;
     s.async = true;
     s.setAttribute('data-khm-loader', '1');
     document.head.appendChild(s);

@@ -4,6 +4,11 @@
   "className": "Class 3 E",
   "title": "العقل قبل السلاح",
   "subtitle": "كيف فتحت المياه طريق العبور",
+  "person": "باقي زكي يوسف",
+  "personAliases": [
+    "Baki Zaki",
+    "Baki Youssef"
+  ],
   "color": "#f0a44a",
   "order": 2,
   "published": true,
@@ -13,28 +18,32 @@
       "grade": "3rd Grade (Primary)",
       "title": "Brains Before Weapons",
       "subtitle": "How water opened a passage across the canal",
-      "className": "Class 3 E"
+      "className": "Class 3 E",
+      "person": "Baki Zaki Youssef"
     },
     "fr": {
       "name": "Karma Mohamed Gamal",
       "grade": "3e année du primaire",
       "title": "L’intelligence avant les armes",
       "subtitle": "Comment l’eau a ouvert un passage à travers le canal",
-      "className": "Classe 3 E"
+      "className": "Classe 3 E",
+      "person": "Baki Zaki Youssef"
     },
     "it": {
       "name": "Karma Mohamed Gamal",
       "grade": "3ª classe della scuola primaria",
       "title": "L’ingegno prima delle armi",
       "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
-      "className": "Classe 3 E"
+      "className": "Classe 3 E",
+      "person": "Baki Zaki Youssef"
     },
     "de": {
       "name": "Karma Mohamed Gamal",
       "grade": "3. Klasse der Grundschule",
       "className": "Klasse 3E",
       "title": "Verstand vor Waffen",
-      "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete"
+      "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete",
+      "person": "Baki Zaki Youssef"
     }
   }
 }
