@@ -184,23 +184,30 @@
       "en": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "First year of preparatory school",
+        "className": "Class 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "A scholar of medicine and philosophy whose influence crossed centuries",
-        "className": "Class 1B"
+        "subtitle": "A scholar of medicine and philosophy whose influence crossed centuries"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Première année du collège",
+        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "Un savant en médecine et en philosophie dont l’influence a traversé les siècles",
-        "className": "Class 1B"
+        "subtitle": "Un savant en médecine et en philosophie dont l’influence a traversé les siècles"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Primo anno della scuola preparatoria",
+        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli",
-        "className": "Class 1B"
+        "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli"
+      },
+      "de": {
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1. Klasse der Sekundarstufe I",
+        "className": "Klasse 1B",
+        "title": "Ibn Sina — al-Shaykh al-Ra’is",
+        "subtitle": "Ein Gelehrter der Medizin und Philosophie, dessen Einfluss Jahrhunderte überdauerte"
       }
     },
     "id": "005",
@@ -218,16 +225,32 @@
     "published": true,
     "i18n": {
       "en": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "Ahmed Urabi — When He Raised His Voice",
         "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement."
       },
       "fr": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
         "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique."
       },
       "it": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "Ahmed Urabi — Quando fece sentire la sua voce",
         "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico."
+      },
+      "de": {
+        "name": "",
+        "grade": "",
+        "className": "",
+        "title": "Ahmed Urabi — Als er seine Stimme erhob",
+        "subtitle": "Eine Reise ins Ägypten des 19. Jahrhunderts, als die Forderungen von Offizieren und Soldaten zu einer politischen Bewegung wurden."
       }
     },
     "id": "006",
@@ -245,16 +268,32 @@
     "published": true,
     "i18n": {
       "en": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "The Story of Scientist Ahmed Zewail",
         "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions."
       },
       "fr": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "L’histoire du scientifique Ahmed Zewail",
         "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques."
       },
       "it": {
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "La storia dello scienziato Ahmed Zewail",
         "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche."
+      },
+      "de": {
+        "name": "",
+        "grade": "",
+        "className": "",
+        "title": "Die Geschichte des Wissenschaftlers Ahmed Zewail",
+        "subtitle": "Eine Reise mit einem ägyptischen Wissenschaftler, der Forschern half, Atome während chemischer Reaktionen zu beobachten."
       }
     },
     "id": "007",
