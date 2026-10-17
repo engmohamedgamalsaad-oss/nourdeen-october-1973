@@ -183,7 +183,10 @@
     "title": "ابن سينا — الشيخ الرئيس",
     "subtitle": "رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
     "person": "ابن سينا",
-    "personAliases": ["Avicenna", "Avicenne"],
+    "personAliases": [
+      "Avicenna",
+      "Avicenne"
+    ],
     "color": "#d5b7ff",
     "order": 5,
     "published": true,
@@ -191,26 +194,26 @@
       "en": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "First year of preparatory school",
-        "className": "Class 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Première année du collège",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Primo anno della scuola preparatoria",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "de": {
         "name": "Nourdeen Mohamed Gamal",
@@ -232,31 +235,26 @@
     "title": "أحمد عرابي — حين رفع صوته بالمطالب",
     "subtitle": "رحلة إلى مصر في القرن التاسع عشر، حين تحولت مطالب ضباط وجنود إلى حركة سياسية.",
     "person": "أحمد عرابي",
-    "personAliases": ["Orabi", "Arabi", "Ahmed Orabi"],
+    "personAliases": [
+      "Orabi",
+      "Arabi",
+      "Ahmed Orabi"
+    ],
     "color": "#b8874b",
     "order": 6,
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — When He Raised His Voice",
         "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement.",
         "person": "Ahmed Urabi"
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
         "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique.",
         "person": "Ahmed Urabi"
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quando fece sentire la sua voce",
         "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico.",
         "person": "Ahmed Urabi"
@@ -286,25 +284,16 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "The Story of the Scientist Ahmed Zewail",
         "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions.",
         "person": "Ahmed Zewail"
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "L’histoire du scientifique Ahmed Zewail",
         "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques.",
         "person": "Ahmed Zewail"
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "La storia dello scienziato Ahmed Zewail",
         "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche.",
         "person": "Ahmed Zewail"
