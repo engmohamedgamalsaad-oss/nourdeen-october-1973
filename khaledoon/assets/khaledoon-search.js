@@ -17,7 +17,7 @@
     { id: 'knowledge', href: 'khaledoon/collections/knowledge.html', t: { ar: 'التعليم والمعرفة', en: 'Education and Knowledge', fr: 'Éducation et savoir', it: 'Istruzione e conoscenza', de: 'Bildung und Wissen' } },
     { id: 'people', href: 'khaledoon/collections/people.html', t: { ar: 'المشاهير والرياضة والفنون', en: 'Celebrities, Sports and Arts', fr: 'Célébrités, sport et arts', it: 'Celebrità, sport e arti', de: 'Prominente, Sport und Kunst' } },
     { id: 'history', href: 'khaledoon/collections/history.html', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
-    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmes égyptiens', de: 'Figuren der ägyptischen Lehrpläne' } }
+    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
   ];
   var SEC = {};
   SECTIONS.forEach(function (s) { SEC[s.id] = s; });
