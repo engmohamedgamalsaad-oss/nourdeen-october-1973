@@ -31,7 +31,11 @@
         "className": "Classe 1B"
       },
       "de": {
-        "name": "Nourdeen Mohamed Gamal"
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1. Klasse der Sekundarstufe I",
+        "className": "Klasse 1B",
+        "title": "Die Männer des Meeres im Oktober",
+        "subtitle": "Die Schlacht, die die meisten Menschen nie sahen"
       }
     },
     "id": "001",
@@ -70,7 +74,11 @@
         "className": "Classe 3 E"
       },
       "de": {
-        "name": "Karma Mohamed Gamal"
+        "name": "Karma Mohamed Gamal",
+        "grade": "3. Klasse der Grundschule",
+        "className": "Klasse 3E",
+        "title": "Verstand vor Waffen",
+        "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete"
       }
     },
     "id": "002",
@@ -109,7 +117,11 @@
         "className": "Classe 1 A"
       },
       "de": {
-        "name": "Malika Mohamed Gamal"
+        "name": "Malika Mohamed Gamal",
+        "grade": "1. Klasse der Grundschule",
+        "className": "Klasse 1A",
+        "title": "Eine Sprache, die der Feind nicht verstand",
+        "subtitle": "Die Geschichte des nubischen Codes"
       }
     },
     "id": "003",
@@ -148,7 +160,11 @@
         "className": "Classe 1B"
       },
       "de": {
-        "name": "Nourdeen Mohamed Gamal"
+        "name": "Nourdeen Mohamed Gamal",
+        "grade": "1. Klasse der Sekundarstufe I",
+        "className": "Klasse 1B",
+        "title": "Oktoberhimmel: Die Gefallenen des ersten Luftangriffs",
+        "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten"
       }
     },
     "id": "004",
