@@ -26,6 +26,8 @@ const LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3, de: 4 };
 const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html']);
 const out = (() => { const i = process.argv.indexOf('--out'); return i > 0 ? process.argv[i + 1] : ''; })();
+const screenshotDir = path.join(ROOT, 'language-audit-screenshots');
+fs.mkdirSync(screenshotDir, { recursive: true });
 
 function loadPlaywright() {
   const tries = [process.env.PLAYWRIGHT_MODULE_PATH, '/opt/npm-tools/node_modules', '/home/claude/.npm-global/lib/node_modules', path.join(ROOT, 'node_modules')].filter(Boolean);
@@ -170,6 +172,7 @@ async function flow(browser, base, origin, lang, viewport) {
     step('homepage applies chosen language', s.lang === lang && s.dir === expectedDir(lang) && (lang === 'ar' ? true : s.stored === lang), `lang=${s.lang} dir=${s.dir} stored=${s.stored}`);
     const pressed = await page.locator(`.langs button[data-l="${HOME_BUTTON[lang]}"]`).getAttribute('aria-pressed').catch(() => null);
     step('homepage marks chosen button pressed', pressed === 'true', `aria-pressed=${pressed}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `home-${viewport}.png`), animations: 'disabled' });
     const homeOptions = await page.locator('.langs button[data-l]').count();
     step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
@@ -180,6 +183,7 @@ async function flow(browser, base, origin, lang, viewport) {
     await page.waitForTimeout(300);
     s = await inspect(page); judgeInner(label + ' section', s, lang, hard, warn);
     step('section keeps language', s.lang === lang, `lang=${s.lang}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `october-${viewport}.png`), animations: 'disabled' });
 
     /* 3. story from the section */
     const storyLink = page.locator('a[href*="stories/october/001/"]').first();
@@ -188,6 +192,7 @@ async function flow(browser, base, origin, lang, viewport) {
     await page.waitForLoadState('load'); await page.waitForTimeout(500);
     s = await inspect(page); judgeInner(label + ' story001', s, lang, hard, warn);
     step('story opened from section keeps language', s.lang === lang, `lang=${s.lang}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `story001-${viewport}.png`), animations: 'disabled' });
 
     /* share + print controls */
     const share = await page.evaluate(() => {
