@@ -53,7 +53,7 @@
   function clamp(v){return v<0?0:v>1?1:v}
   function active(){
     var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var landscapeShort=innerWidth<=780&&innerWidth>innerHeight&&innerHeight<=520;
+    var landscapeShort=innerWidth<=1024&&innerWidth>innerHeight&&innerHeight<=520;
     return !reduce&&!landscapeShort;
   }
   function reset(){
