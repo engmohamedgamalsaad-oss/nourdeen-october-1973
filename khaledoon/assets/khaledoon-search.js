@@ -1,6 +1,7 @@
 /* خالدون عبر التاريخ — بحث الصفحة الرئيسية.
-   زر "بحث" تحت زر الفاتح/الداكن، يفتح لوحة تبحث في: اسم الحكاية، الشخصية المحكي عنها، واسم القسم.
-   البيانات تُقرأ من stories/index.json (يُولَّد تلقائيًا)، فأي حكاية جديدة تظهر في البحث دون تعديل هذا الملف.
+   زر "بحث" تحت زر الفاتح/الداكن، يفتح لوحة تبحث في: اسم الحكاية، الشخصية التي تدور عنها الحكاية، واسم القسم.
+   البيانات تُقرأ من stories/index.json (يُولَّد من data.json لكل حكاية)، فأي حكاية جديدة تظهر في البحث دون تعديل هذا الملف.
+   اسم الشخصية يُقرأ من حقل person في data.json (وi18n.<lang>.person لكل لغة)، واختياريًا personAliases لأسماء وتهجئات بديلة.
    الترجمة ذاتية (ar/en/fr/it/de) حتى لا تعتمد على قواميس الصفحة. لا يستخدم innerHTML مع أي بيانات. */
 (function () {
   'use strict';
@@ -9,14 +10,6 @@
 
   var DATA_URL = 'stories/index.json';
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-
-  /* أسماء مستعارة / تهجئات للشخصية المحكي عنها، حين لا تكون في العنوان نفسه.
-     المفتاح = رقم الحكاية. أضف هنا اسم الشخصية لأي حكاية جديدة إن لم يرد في عنوانها. */
-  var SUBJECTS = {
-    '003': ['أحمد إدريس', 'Ahmed Idris'],
-    '005': ['Avicenna'],
-    '006': ['Orabi', 'Arabi']
-  };
 
   var SECTIONS = [
     { id: 'october', href: 'khaledoon/collections/october.html', t: { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' } },
@@ -55,12 +48,12 @@
     try { s = s.normalize('NFKD'); } catch (e) {}
     return s
       .replace(/ß/g, 'ss')
-      .replace(/[ً-ٰٟـ]/g, '')
-      .replace(/[̀-ͯ]/g, '')
+      .replace(/[\u064B-\u0670\u0640]/g, '')
+      .replace(/[\u0300-\u036F]/g, '')
       .replace(/[أإآٱ]/g, 'ا').replace(/ى/g, 'ي').replace(/ة/g, 'ه').replace(/ؤ/g, 'و').replace(/ئ/g, 'ي')
-      .replace(/[٠-٩]/g, function (d) { return String(d.charCodeAt(0) - 0x660); })
-      .replace(/[۰-۹]/g, function (d) { return String(d.charCodeAt(0) - 0x6F0); })
-      .replace(/[^a-z0-9؀-ۿ\s]+/g, ' ')
+      .replace(/[\u0660-\u0669]/g, function (d) { return String(d.charCodeAt(0) - 0x660); })
+      .replace(/[\u06F0-\u06F9]/g, function (d) { return String(d.charCodeAt(0) - 0x6F0); })
+      .replace(/[^a-z0-9\u0600-\u06FF\s]+/g, ' ')
       .replace(/\s+/g, ' ').trim();
   }
 
@@ -72,20 +65,21 @@
   function secName(id, l) { var s = SEC[id]; return s ? (s.t[l] || s.t.ar) : (id || ''); }
   function allLangs(fn) { return LANGS.map(fn).join(' '); }
 
-  var stories = null;      /* null = لم تُحمَّل بعد، [] = فشل أو فارغ */
+  var stories = null;      /* null = لم تُحمَّل بعد، [] = فشل أو فارغ */
   var loadFailed = false;
   var loading = null;
 
   function prepare(list) {
     return list.filter(function (s) { return s && s.published !== false && s.title; }).map(function (s) {
       var id = String(s.id || '');
+      var aliases = Array.isArray(s.personAliases) ? s.personAliases.join(' ') : '';
       return {
         raw: s,
         id: id,
         order: s.order || 0,
         title: norm(allLangs(function (l) { return pick(s, 'title', l); })),
         subtitle: norm(allLangs(function (l) { return pick(s, 'subtitle', l); })),
-        subject: norm((SUBJECTS[id] || []).join(' ')),
+        subject: norm(allLangs(function (l) { return pick(s, 'person', l); }) + ' ' + aliases),
         section: norm(allLangs(function (l) { return secName(s.section, l); }) + ' ' + (s.section || ''))
       };
     });
@@ -245,9 +239,10 @@
         frag.appendChild(itemLink(r.sec.href, '', T('sect'), r.sec.t[l] || r.sec.t.ar, ''));
       } else {
         var s = r.e.raw;
-        var person = pick(s, 'subtitle', l);
-        frag.appendChild(itemLink(s.path || ('stories/' + (s.section || '') + '/' + r.e.id + '/'), s.color, T('story'), pick(s, 'title', l), secName(s.section, l)));
-        if (person) frag.lastChild.title = person;
+        var person = pick(s, 'person', l);
+        var meta = secName(s.section, l);
+        if (person) meta = person + ' · ' + meta;
+        frag.appendChild(itemLink(s.path || ('stories/' + (s.section || '') + '/' + r.e.id + '/'), s.color, T('story'), pick(s, 'title', l), meta));
       }
     });
     list.appendChild(frag);
