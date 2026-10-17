@@ -93,7 +93,7 @@ footer{padding:28px 0 36px;border-top:1px solid var(--line);color:var(--muted);f
 .js .reveal{opacity:0;transform:translateY(14px);transition:opacity .6s,transform .6s}
 .rf .reveal{opacity:1!important;transform:none!important}
 .reveal.in{opacity:1;transform:none}
-@media(max-width:1024px){.links{display:none}.gates{grid-template-columns:repeat(2,minmax(0,1fr))}.stories,.split{grid-template-columns:1fr}.head{display:block}.head p{margin-top:6px}.hero{min-height:480px}}
+@media(max-width:780px){.links{display:none}.gates{grid-template-columns:repeat(2,minmax(0,1fr))}.stories,.split{grid-template-columns:1fr}.head{display:block}.head p{margin-top:6px}.hero{min-height:480px}}
 @media(max-width:480px){.gates{grid-template-columns:1fr}.gate{min-height:170px}.btn{width:100%}.langs{display:none}.section{padding:46px 0}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal{opacity:1;transform:none}*{transition:none!important}}
 .ctl{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
@@ -236,7 +236,7 @@ html[data-theme=light] .hero:not(.sub){background:linear-gradient(90deg,rgba(255
 .topbar .btn{width:auto;min-height:38px;padding:7px 14px;font-size:13px}
 .hero:not(.sub):after{display:block;content:'';position:absolute;inset:auto 0 0;height:140px;background:linear-gradient(transparent,var(--night));z-index:-1}
 .g6:after{width:120px;height:120px;opacity:.09}
-@media(max-width:1024px){body:before,body:after{filter:blur(45px)}}
+@media(max-width:780px){body:before,body:after{filter:blur(45px)}}
 
 
 /* ===== خلفيات مخصصة لخالدون فقط: لا تؤثر على صفحة أكتوبر الأصلية ===== */
