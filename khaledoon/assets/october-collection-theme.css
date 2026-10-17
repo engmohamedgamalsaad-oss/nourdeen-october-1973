@@ -1,0 +1,37 @@
+/* Shared light-mode layer for the October collection page.
+   The photographic hero remains dark for contrast; the rest of the page follows the saved/system theme. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body {
+    background: #f6f0e4 !important;
+    color: #1b2e3b !important;
+  }
+  :root:not([data-theme="dark"]) body::before {
+    background-image: linear-gradient(180deg,rgba(246,240,228,.78),rgba(246,240,228,.92)),radial-gradient(ellipse at 82% 10%,rgba(240,200,120,.12),transparent 38%),url("../../assets/homepage/main-cover.jpg") !important;
+    opacity: .42 !important;
+  }
+  :root:not([data-theme="dark"]) .topbar { background: rgba(255,252,245,.97) !important; border-color: #d8c7a2 !important; }
+  :root:not([data-theme="dark"]) .school-name,
+  :root:not([data-theme="dark"]) .page-name,
+  :root:not([data-theme="dark"]) .home-link { color: #243d4a !important; }
+  :root:not([data-theme="dark"]) :is(.intro,.home-after,.feature-section,.facts-section,.supervision,footer) { background: rgba(255,252,245,.88) !important; color: #243744 !important; }
+  :root:not([data-theme="dark"]) :is(.intro-copy,.feature-heading,.media-caption,.fact-card,.card,.empty,.supervision .container) { background-color: #fffdf8 !important; color: #243744 !important; border-color: #d8c9ad !important; }
+  :root:not([data-theme="dark"]) :is(.intro h2,.intro h3,.home-after h2,.home-after h3,.feature-section h2,.feature-section h3,.facts-section h2,.facts-section h3,.supervision-title,.card-name,.card-title,.media-caption h3,.fact-card h3) { color: #203744 !important; }
+  :root:not([data-theme="dark"]) :is(.intro p,.home-after p,.feature-section p,.facts-section p,.media-caption p,.fact-card p,.card-grade,.supervision-line,footer) { color: #4b5c65 !important; }
+  :root:not([data-theme="dark"]) :is(.fact-source,.media-caption a,.card-btn,.submit-story-link) { color: #80551d !important; }
+  :root:not([data-theme="dark"]) :is(.feature-control,.feature-dot) { background: #fffdf8 !important; color: #203744 !important; border-color: #c8b58e !important; }
+}
+:root[data-theme="light"] body { background: #f6f0e4 !important; color: #1b2e3b !important; }
+:root[data-theme="light"] body::before {
+  background-image: linear-gradient(180deg,rgba(246,240,228,.78),rgba(246,240,228,.92)),radial-gradient(ellipse at 82% 10%,rgba(240,200,120,.12),transparent 38%),url("../../assets/homepage/main-cover.jpg") !important;
+  opacity: .42 !important;
+}
+:root[data-theme="light"] .topbar { background: rgba(255,252,245,.97) !important; border-color: #d8c7a2 !important; }
+:root[data-theme="light"] .school-name,
+:root[data-theme="light"] .page-name,
+:root[data-theme="light"] .home-link { color: #243d4a !important; }
+:root[data-theme="light"] :is(.intro,.home-after,.feature-section,.facts-section,.supervision,footer) { background: rgba(255,252,245,.88) !important; color: #243744 !important; }
+:root[data-theme="light"] :is(.intro-copy,.feature-heading,.media-caption,.fact-card,.card,.empty,.supervision .container) { background-color: #fffdf8 !important; color: #243744 !important; border-color: #d8c9ad !important; }
+:root[data-theme="light"] :is(.intro h2,.intro h3,.home-after h2,.home-after h3,.feature-section h2,.feature-section h3,.facts-section h2,.facts-section h3,.supervision-title,.card-name,.card-title,.media-caption h3,.fact-card h3) { color: #203744 !important; }
+:root[data-theme="light"] :is(.intro p,.home-after p,.feature-section p,.facts-section p,.media-caption p,.fact-card p,.card-grade,.supervision-line,footer) { color: #4b5c65 !important; }
+:root[data-theme="light"] :is(.fact-source,.media-caption a,.card-btn,.submit-story-link) { color: #80551d !important; }
+:root[data-theme="light"] :is(.feature-control,.feature-dot) { background: #fffdf8 !important; color: #203744 !important; border-color: #c8b58e !important; }
