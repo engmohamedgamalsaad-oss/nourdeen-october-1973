@@ -1151,7 +1151,7 @@ footer {
     });
   }
 
-  fetch(siteBase + 'stories/index.json?v=20261014-sections')
+  fetch(siteBase + 'stories/index.json?v=20261017-i18n-names')
     .then(function (response) {
       if (!response.ok) {
         throw new Error('تعذر تحميل الفهرس');
@@ -1188,7 +1188,7 @@ footer {
           '004': siteBase + 'assets/students/nourdeen-avatar.jpg'
         }[story.id] || '';
         var safePhoto = esc(studentPhoto);
-        var photoAltPrefix = { ar: 'صورة ', en: 'Photo of ', fr: 'Photo de ', it: 'Foto di ' }[window.I18N ? window.I18N.lang() : 'ar'] || 'Photo of ';
+        var photoAltPrefix = { ar: 'صورة ', en: 'Photo of ', fr: 'Photo de ', it: 'Foto di ', de: 'Foto von ' }[window.I18N ? window.I18N.lang() : 'ar'] || 'Photo of ';
 
         var delayClass = index % 3 === 1
           ? 'float-delay-1'
