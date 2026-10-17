@@ -1,0 +1,26 @@
+/* خالدون عبر التاريخ — خريطة الشخصيات (الصفحة الرئيسية). تعتمد على متغيرات الصفحة في الوضعين الفاتح والداكن. */
+#khMap .khm-box{border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--panel)}
+.khm-canvas{height:430px;direction:ltr;background:var(--field);position:relative;z-index:0}
+:root[data-theme="dark"] .khm-canvas .leaflet-tile-pane{filter:invert(1) hue-rotate(180deg) brightness(.92) contrast(.9)}
+.khm-legend{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;border-top:1px solid var(--line)}
+.khm-chip{display:inline-flex;align-items:center;gap:7px;font:inherit;font-size:12px;font-weight:800;min-height:34px;padding:2px 13px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.khm-chip i{width:12px;height:12px;border-radius:50%;background:var(--c);display:inline-block}
+.khm-chip[aria-pressed="false"]{opacity:.45}
+.khm-chip:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.khm-dot{display:block;width:22px;height:22px;border-radius:50%;border:3px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.55);box-sizing:border-box}
+.khm-pin{background:transparent;border:0}
+.khm-popup .leaflet-popup-content-wrapper,.khm-popup .leaflet-popup-tip{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.khm-popup .leaflet-popup-content{margin:14px 16px;min-width:190px}
+.khm-card{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;font-family:inherit}
+.khm-ph{width:88px;height:88px;border-radius:50%;border:3px solid var(--c);background:var(--field);color:var(--muted);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.khm-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.khm-ph svg{width:100%;height:100%;display:block}
+.khm-name{font-size:16px;font-weight:900;line-height:1.5}
+.khm-place{font-size:12px;color:var(--muted);line-height:1.6}
+.khm-story{font-size:13px;font-weight:700;line-height:1.6}
+.khm-credit{font-size:10px;color:var(--muted)}
+.khm-go{display:inline-block;margin-top:4px;padding:6px 16px;border-radius:99px;background:var(--gold);color:var(--night);font-weight:900;font-size:12px;text-decoration:none}
+.khm-list{list-style:none;margin:0;padding:14px;display:grid;gap:8px}
+.khm-list a{color:var(--gold);font-weight:800}
+.khm-note{padding:10px 14px;font-size:12px;color:var(--muted)}
+@media (max-width:640px){.khm-canvas{height:340px}}
