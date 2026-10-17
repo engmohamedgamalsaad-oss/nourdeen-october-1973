@@ -1,0 +1,15 @@
+{
+  "_readme": "أماكن ميلاد الشخصيات لخريطة الصفحة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة.",
+  "005": {
+    "lat": 39.7747, "lng": 64.4286,
+    "place": { "ar": "منطقة بخارى، أوزبكستان", "en": "Bukhara region, Uzbekistan", "fr": "Région de Boukhara, Ouzbékistan", "it": "Regione di Bukhara, Uzbekistan", "de": "Region Buchara, Usbekistan" }
+  },
+  "006": {
+    "lat": 30.5877, "lng": 31.502,
+    "place": { "ar": "قرية هرية رزنة، الشرقية", "en": "Hariyat Razna village, Sharqia", "fr": "Village de Hariyat Razna, Charqiya", "it": "Villaggio di Hariyat Razna, Sharqia", "de": "Dorf Hariyat Razna, Scharkia" }
+  },
+  "007": {
+    "lat": 31.0341, "lng": 30.4682,
+    "place": { "ar": "دمنهور، البحيرة", "en": "Damanhur, Beheira", "fr": "Damanhour, Béhéra", "it": "Damanhur, Beheira", "de": "Damanhur, Buheira" }
+  }
+}
