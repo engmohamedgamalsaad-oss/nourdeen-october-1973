@@ -73,3 +73,6 @@ footer strong{color:var(--gold)}
 }
 .scroll-reveal{will-change:opacity,transform}
 @media (prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+/* منع الإزاحة الأفقية على الموبايل: أحداث الخط الزمني تبدأ مزاحة (translate) قبل الظهور فكانت توسّع الصفحة 5–7px في اللغات LTR */
+section.story{overflow-x:clip}
