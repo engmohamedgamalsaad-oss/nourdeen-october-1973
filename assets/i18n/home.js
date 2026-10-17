@@ -78,7 +78,7 @@
   });
   window.I18N.register('de',{
     submit_story_cta:'Deine Geschichte einreichen',
-    k1:'Unsterbliche durch die Geschichte',k2:'Geschichten zum Oktober 1973',k3:'Geschichtenarchiv',
+    k1:'Unsterbliche Persönlichkeiten der Geschichte',k2:'Geschichten zum Oktober 1973',k3:'Geschichtenarchiv',
     k4:'ÄGYPTEN • 6. OKTOBER 1973',k5:'Geschichten vom Oktober 1973',
     k6:'Ein digitales Archiv über die Helden des Oktoberkriegs von 1973, das an Mut, Planung und Opfer erinnert, die zum Sieg beitrugen.',
     k7:'Geschichten entdecken ↓',k8:'Einführung',k9:'6. Oktober 1973',
@@ -102,7 +102,7 @@
     en:['Immortals Through History | October 1973 Stories','A digital archive of stories about the heroes of the 1973 October War.'],
     fr:['Immortels à travers l’histoire | Récits d’octobre 1973','Archives numériques de récits sur les héros de la guerre d’octobre 1973.'],
     it:['Immortali attraverso la storia | Racconti dell’ottobre 1973','Archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973.'],
-    de:['Unsterbliche durch die Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
+    de:['Unsterbliche Persönlichkeiten der Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
   };
   function applyHomeMeta(){
     var lang=window.I18N.lang();
