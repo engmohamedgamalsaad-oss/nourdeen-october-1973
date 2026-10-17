@@ -268,6 +268,7 @@ else {
       const baseName = String(story.name || '').trim();
       const baseTitle = String(story.title || '').trim();
       const baseSubtitle = String(story.subtitle || '').trim();
+      let localizedName = null;
       for (const locale of locales) {
         const t = story.i18n && story.i18n[locale];
         if (!t) { fail(`stories/index.json story ${story.id}: missing ${locale} metadata.`); continue; }
@@ -275,8 +276,11 @@ else {
         if (baseSubtitle && !String(t.subtitle || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} subtitle.`);
         if (String(story.grade || '').trim() && !String(t.grade || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} grade.`);
         if (String(story.className || '').trim() && !String(t.className || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} className.`);
-        /* Proper names are names, not translatable labels: preserve the same spelling in every language. */
-        if (baseName && String(t.name || '').trim() !== baseName) fail(`stories/index.json story ${story.id}: student name differs in ${locale}.`);
+        /* Proper names use Latin-script transliteration here, but must be identical across all translated versions. */
+        const candidateName = String(t.name || '').trim();
+        if (baseName && !candidateName) fail(`stories/index.json story ${story.id}: missing ${locale} student name.`);
+        if (localizedName === null) localizedName = candidateName;
+        else if (candidateName !== localizedName) fail(`stories/index.json story ${story.id}: student name spelling differs in ${locale}.`);
       }
       if (!baseTitle) fail(`stories/index.json story ${story.id}: missing source title.`);
     }
