@@ -59,3 +59,18 @@
     matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (!saved()) paint(cur()); });
   } catch (e) {}
 })();
+
+/* تحميل نجمة المفضلة (khaledoon-favorites.js) من نفس المجلد على كل صفحة تحمّل هذا الملف.
+   الملف نفسه يتجاهل الصفحات التي ليس فيها كروت حكايات. */
+(function () {
+  try {
+    if (window.__khFavs || document.querySelector('script[data-khf-loader]')) return;
+    var cs = document.currentScript;
+    if (!cs || !cs.src) return;
+    var s = document.createElement('script');
+    s.src = new URL('khaledoon-favorites.js?v=1', cs.src).href;
+    s.async = true;
+    s.setAttribute('data-khf-loader', '1');
+    document.head.appendChild(s);
+  } catch (e) {}
+})();
