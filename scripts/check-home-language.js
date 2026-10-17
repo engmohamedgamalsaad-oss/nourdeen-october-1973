@@ -315,6 +315,14 @@ for (const rel of [
   if (!exists('assets/shared/read-theme.css')) fail('Reader theme stylesheet is missing.');
 }
 {
+  const zewail = read('stories/science/007/index.html');
+  const t = zewail.match(/const T=\{([\s\S]*?)\n\};/);
+  if (!t || !/\bar:\{/.test(t[1]) || !/\ben:\{/.test(t[1]) || !/\bfr:\{/.test(t[1]) ||
+      !/\bit:\{/.test(t[1]) || !/\bde:\{/.test(t[1])) {
+    fail('stories/science/007/index.html: the Ahmed Zewail story must define all five language dictionaries.');
+  }
+}
+{
   const homeI18n = read('assets/i18n/home.js');
   const commonI18n = read('assets/i18n/common.js');
   if (homeI18n.includes('رجال خالدون عبر التاريخ') || homeI18n.includes('Immortal Heroes Through History') ||
