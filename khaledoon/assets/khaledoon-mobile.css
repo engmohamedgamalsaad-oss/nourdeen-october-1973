@@ -227,3 +227,36 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   .hero:not(.sub) h1{font-size:2.45rem;}
   .hero:not(.sub) p.lead{font-size:16px;}
 }
+
+
+/* إصلاح مخصص للموبايل الأفقي الذي يبلغ عرضه CSS أكثر من 780px.
+   لا نغيّر تخطيط الكمبيوتر؛ نثبت غلاف الصورة عندما يكون الارتفاع قصيرًا. */
+@media (orientation:landscape) and (max-height:520px) and (max-width:1024px){
+  .hero-background-layer{
+    display:block;
+    position:fixed;
+    z-index:1;
+    top:calc(var(--khaledoon-header-height,70px) + env(safe-area-inset-top,0px));
+    left:0;
+    width:100vw;
+    height:100vh;
+    max-height:none;
+    pointer-events:none;
+    transform:none;
+    opacity:1;
+    background:
+      linear-gradient(180deg,rgba(3,12,17,.10),rgba(3,12,17,.35) 65%,rgba(3,12,17,.68)),
+      url("main-cover.jpg") center 40%/cover no-repeat;
+    -webkit-mask-image:none;
+    mask-image:none;
+  }
+  html[data-theme="light"] .hero-background-layer{
+    background:
+      linear-gradient(180deg,rgba(255,249,232,.06),rgba(255,249,232,.25) 65%,rgba(255,249,232,.55)),
+      url("main-cover.jpg") center 40%/cover no-repeat;
+  }
+  main,footer{position:relative;z-index:2}
+  .hero:not(.sub){background:transparent!important;min-height:0!important;align-items:flex-start}
+  .hero:not(.sub)::before,.hero:not(.sub)::after{display:none!important}
+  .hero:not(.sub) .hero-in{padding:36px 0 44px}
+}
