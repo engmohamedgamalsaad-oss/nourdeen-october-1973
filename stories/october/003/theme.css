@@ -48,7 +48,7 @@
 
 @media (max-width: 600px) {
   .scroll-reveal { transform: translate3d(0, 26px, 0); }
-  .event.scroll-reveal { transform: translate3d(18px, 0, 0); }
+  .event.scroll-reveal { transform: translate3d(0, 26px, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
   .scroll-reveal,
