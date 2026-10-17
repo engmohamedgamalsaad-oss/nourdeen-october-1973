@@ -49,6 +49,10 @@ What changed in this pass (branch `fix/german-language-complete-2026-10-17`):
 
 Verification on this branch: static check passes; real-browser run (Chromium, desktop + mobile) 160/160 flow steps, 0 hard failures; every page rendered in all five languages compared with `main` — Arabic, English, French and Italian unchanged, apart from the quiz description and the `science.html` script error being fixed.
 
-Known remaining items (not German-specific): the two `aria-label` values on the curriculum page are Arabic in every language, and a few story pages overflow horizontally by 2–7 px on mobile in every language.
+Items that were listed as remaining at that point (not German-specific) are addressed on branch `fix/five-langs-docs-aria-mobile-overflow` (commit `afb45dd`), pending review and merge:
+
+- The curriculum page's `aria-label` values and page description are now translated by `khaledoon/assets/khaledoon-curriculum-a11y.js`.
+- The 2–7 px horizontal overflow on stories 001–003 is clipped with `section.story{overflow-x:clip}` in `assets/shared/base.css`.
+- In the Chromium run that produced those changes (Pixel 5 emulation, 393 px), the overflow was 0 px in all five languages after the change, and the `aria-label` fix was tested on load in all five languages and when switching between ar/en/fr/it. Switching to German at runtime on the curriculum page was not tested, because the hidden language bar on that page has no German button. These results have not been re-measured on the live site.
 
 Not verified: the live site, Supabase reactions, and a native-speaker review of the German wording.
