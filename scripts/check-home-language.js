@@ -257,6 +257,52 @@ else {
   else notes.push(`${expected.files.length} expected story files present`);
 }
 
+/* ---------- 5b) بيانات بطاقات الحكايات: اكتمال اللغات والأسماء الثابتة ---------- */
+{
+  const indexPath = 'stories/index.json';
+  try {
+    const stories = JSON.parse(read(indexPath));
+    const locales = ['en', 'fr', 'it', 'de'];
+    for (const story of stories) {
+      if (!story || !story.id) { fail('stories/index.json: found a story without an id.'); continue; }
+      const baseName = String(story.name || '').trim();
+      const baseTitle = String(story.title || '').trim();
+      const baseSubtitle = String(story.subtitle || '').trim();
+      for (const locale of locales) {
+        const t = story.i18n && story.i18n[locale];
+        if (!t) { fail(`stories/index.json story ${story.id}: missing ${locale} metadata.`); continue; }
+        if (!String(t.title || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} title.`);
+        if (baseSubtitle && !String(t.subtitle || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} subtitle.`);
+        if (String(story.grade || '').trim() && !String(t.grade || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} grade.`);
+        if (String(story.className || '').trim() && !String(t.className || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} className.`);
+        /* Proper names are names, not translatable labels: preserve the same spelling in every language. */
+        if (baseName && String(t.name || '').trim() !== baseName) fail(`stories/index.json story ${story.id}: student name differs in ${locale}.`);
+      }
+      if (!baseTitle) fail(`stories/index.json story ${story.id}: missing source title.`);
+    }
+    notes.push(`${stories.length} story metadata records checked across five languages`);
+  } catch (e) { fail(`stories/index.json: invalid JSON or metadata check failed: ${e.message}`); }
+}
+
+/* ---------- 5c) Theme parity for story pages and October collection ---------- */
+for (const rel of [
+  'stories/october/001/index.html','stories/october/002/index.html',
+  'stories/october/003/index.html','stories/october/004/index.html',
+  'stories/history/005/index.html','stories/history/006/index.html',
+  'stories/science/007/index.html'
+]) {
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+}
+{
+  const rel = 'khaledoon/collections/october.html';
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/october-collection-theme\.css/.test(html)) fail(`${rel}: missing October collection light-mode stylesheet.`);
+  if (!exists('khaledoon/assets/october-collection-theme.css')) fail('October collection theme stylesheet is missing.');
+}
+
 if (failures.length) {
   console.error('Homepage language-flow checks FAILED:\n- ' + failures.join('\n- '));
   process.exitCode = 1;
