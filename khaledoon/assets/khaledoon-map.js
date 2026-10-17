@@ -206,6 +206,7 @@
       li.appendChild(a);
       var pl = (e.p.place && (e.p.place[l] || e.p.place.ar)) || '';
       if (pl) li.appendChild(document.createTextNode(' — ' + pl));
+      if (e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
       ul.appendChild(li);
     });
     canvas.appendChild(ul);
