@@ -314,7 +314,6 @@
     };
     var copy = labels[activeLang] || labels.ar;
     var pageUrl = window.location.href.split('#')[0];
-    var shareText = (document.title || copy.heading) + ' — ' + pageUrl;
 
     var bar = document.createElement('div');
     bar.className = 'story-share-bar';
@@ -371,22 +370,40 @@
       link.addEventListener('mouseenter', function () { link.style.filter = 'brightness(1.08)'; });
       link.addEventListener('mouseleave', function () { link.style.filter = 'none'; });
       bar.appendChild(link);
+      return link;
     }
 
-    makeShareLink(
+    var whatsappLink = makeShareLink(
       copy.whatsapp,
       'https://wa.me/?text=' + encodeURIComponent(shareText),
       '#168b55',
       '#ffffff',
       '☏'
     );
-    makeShareLink(
+    var facebookLink = makeShareLink(
       copy.facebook,
       'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl),
       '#1877f2',
       '#ffffff',
       'f'
     );
+
+    function syncShareBar() {
+      var lang = window.I18N ? window.I18N.lang() : 'ar';
+      var currentCopy = labels[lang] || labels.ar;
+      var shareText = (document.title || currentCopy.heading) + ' — ' + pageUrl;
+
+      bar.setAttribute('aria-label', currentCopy.heading);
+      heading.textContent = currentCopy.heading;
+      whatsappLink.href = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+      whatsappLink.textContent = '☏ ' + currentCopy.whatsapp;
+      whatsappLink.setAttribute('aria-label', currentCopy.heading + ' ' + currentCopy.whatsapp);
+      facebookLink.textContent = 'f ' + currentCopy.facebook;
+      facebookLink.setAttribute('aria-label', currentCopy.heading + ' ' + currentCopy.facebook);
+    }
+
+    document.addEventListener('site-language-change', syncShareBar);
+    syncShareBar();
 
     var storySlug = body.getAttribute('data-story-slug');
     var heroSection = document.querySelector('.hero');
