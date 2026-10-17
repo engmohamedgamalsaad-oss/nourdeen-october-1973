@@ -19,3 +19,5 @@ jobs:
           node-version: 20
       - name: Verify homepage-only language flow
         run: node scripts/check-home-language.js
+      - name: Verify five-language translation coverage
+        run: node scripts/check-localization-coverage.js
