@@ -135,6 +135,13 @@ function classify(res, hard, warn, label, base) {
 
 async function newContext(browser, origin, viewport) {
   const ctx = await browser.newContext(viewport === 'mobile' ? { ...devices['Pixel 5'] } : { viewport: { width: 1366, height: 768 } });
+  /* The site intentionally uses smooth scrolling. Disable it only in automated tests so
+     Playwright does not race an in-progress scroll when clicking language buttons. */
+  await ctx.addInitScript(() => {
+    const style = document.createElement('style');
+    style.textContent = 'html { scroll-behavior: auto !important; }';
+    (document.head || document.documentElement).appendChild(style);
+  });
   await ctx.route((u) => !String(u).startsWith(origin), (r) => r.abort());
   return ctx;
 }
