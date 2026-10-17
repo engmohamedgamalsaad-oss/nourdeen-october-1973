@@ -85,7 +85,25 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var API='https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
   var lang=(window.I18N&&window.I18N.lang())||'ar';
-  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it};}
+  /* الألمانية: تُفتَح بالنص الإنجليزي كمفتاح؛ وإن غاب مفتاح تظهر الإنجليزية بدل العربية */
+  var DE={
+   "Skip to content": "Zum Inhalt springen",
+   "← Home": "← Startseite",
+   "Story | October 1973 Stories": "Geschichte | Oktober-Geschichten 1973",
+   "A story from the October 1973 stories, written by a student.": "Eine Geschichte aus den Oktober-Geschichten 1973, geschrieben von einer Schülerin.",
+   "Loading the story…": "Die Geschichte wird geladen …",
+   "We could not find this story, or it has not been published yet.": "Wir konnten diese Geschichte nicht finden, oder sie wurde noch nicht veröffentlicht.",
+   "Could not load the story right now. Please try again shortly.": "Die Geschichte konnte gerade nicht geladen werden. Bitte versuche es gleich noch einmal.",
+   "Written by": "Erstellt von",
+   "Sources": "Quellen",
+   "This story was written by a student and reviewed before publication.": "Diese Geschichte wurde von einer Schülerin geschrieben und vor der Veröffentlichung geprüft.",
+   "Translated from the Arabic original with AI. The Arabic text is the reference.": "Mit KI aus dem arabischen Original übersetzt. Maßgeblich ist der arabische Text.",
+   "This story is available in Arabic only.": "Diese Geschichte ist nur auf Arabisch verfügbar.",
+   "Print or save as PDF": "Drucken oder als PDF speichern",
+   "Take the quiz": "Das Quiz machen",
+   "All stories": "Alle Geschichten"
+  };
+  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it,de:DE[en]||en};}
   var T={
     skip:L('تخطّي إلى المحتوى','Skip to content','Aller au contenu','Vai al contenuto'),
     back:L('← الصفحة الرئيسية','← Home','← Accueil','← Home'),
@@ -112,7 +130,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   $('sSrcTitle').textContent=t('sources'); $('sNote').textContent=t('note');
   $('printBtn').textContent='🖨️ '+t('print'); $('quizBtn').textContent='📝 '+t('quiz'); $('homeBtn').textContent=t('home');
   $('printBtn').addEventListener('click',function(){window.print();});
-  var sw=document.querySelector('[data-lang-switch]'); if(sw) sw.setAttribute('aria-label',{ar:'اختيار اللغة',en:'Choose language',fr:'Choisir la langue',it:'Seleziona la lingua'}[lang]);
+  var sw=document.querySelector('[data-lang-switch]'); if(sw) sw.setAttribute('aria-label',{ar:'اختيار اللغة',en:'Choose language',fr:'Choisir la langue',it:'Seleziona la lingua',de:'Sprache wählen'}[lang]);
 
   var id=new URLSearchParams(location.search).get('id')||'';
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){ $('state').textContent=t('notFound'); return; }

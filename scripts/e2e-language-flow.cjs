@@ -22,8 +22,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = process.cwd();
-const LANGS = ['ar', 'en', 'fr', 'it'];
-const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3 };
+const LANGS = ['ar', 'en', 'fr', 'it', 'de'];
+const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3, de: 4 };
 const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html']);
 const out = (() => { const i = process.argv.indexOf('--out'); return i > 0 ? process.argv[i + 1] : ''; })();
 
@@ -172,7 +172,7 @@ async function flow(browser, base, origin, lang, viewport) {
     const pressed = await page.locator(`.langs button[data-l="${HOME_BUTTON[lang]}"]`).getAttribute('aria-pressed').catch(() => null);
     step('homepage marks chosen button pressed', pressed === 'true', `aria-pressed=${pressed}`);
     const homeOptions = await page.locator('.langs button[data-l]').count();
-    step('homepage offers only the 4 supported languages', homeOptions === 4, `count=${homeOptions}`);
+    step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
     /* 2. section */
     const sectionLink = page.locator('a[href="khaledoon/collections/october.html"]').first();
@@ -234,9 +234,9 @@ async function flow(browser, base, origin, lang, viewport) {
     await tab.goto(`${base}/stories/october/003/?lang=${other}&x=1#top`, { waitUntil: 'load' }); await tab.waitForTimeout(400);
     s = await inspect(tab);
     step(`?lang=${other} override ignored and removed (x=1 and #top kept)`, s.lang === lang && !/[?&]lang=/.test(s.url) && /x=1/.test(s.url) && /#top$/.test(s.url), `lang=${s.lang} url=${s.url.replace(base, '')}`);
-    await tab.goto(`${base}/stories/october/003/?lang=de`, { waitUntil: 'load' }); await tab.waitForTimeout(300);
+    await tab.goto(`${base}/stories/october/003/?lang=es`, { waitUntil: 'load' }); await tab.waitForTimeout(300);
     s = await inspect(tab);
-    step('?lang=de (German) is ignored', s.lang === lang && !/[?&]lang=/.test(s.url), `lang=${s.lang}`);
+    step('?lang=es (unsupported) is ignored and removed', s.lang === lang && !/[?&]lang=/.test(s.url), `lang=${s.lang}`);
   } catch (e) { hard.push(`${label}: crashed - ${String(e.message).split('\n')[0]}`); }
   finally { await ctx.close(); }
   classify(res, hard, warn, label, base);

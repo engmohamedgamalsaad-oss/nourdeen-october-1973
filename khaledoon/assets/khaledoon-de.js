@@ -1,11 +1,9 @@
-/* خالدون عبر التاريخ — اللغة الألمانية (DE) كطبقة إضافية فوق khaledoon.js
-   - لا تعدّل ترجمات AR/EN/FR/IT الحالية.
-   - المفاتيح = النص العربي الأصلي كما هو في الصفحة؛ أي نص بلا ترجمة ألمانية يبقى بالعربية.
-   - تُحمَّل بعد khaledoon.js و khaledoon-i18n-extra.js.
-   - اختيار الألمانية يُحفظ في المفتاح kh-de (ويبقى kh-lang = ar حتى لا تنقلب الصفحات التي لا تدعم الألمانية بعد إلى LTR). */
-(function(){
-var D={
-"خالدون عبر التاريخ":"Unsterbliche der Geschichte",
+/* خالدون عبر التاريخ — قاموس اللغة الألمانية (DE).
+   المفاتيح = النص العربي الأصلي كما يظهر في الصفحة (بعد إزالة الفراغات من الطرفين)، والقيم = الترجمة الألمانية.
+   يُحمَّل قبل khaledoon.js و khaledoon-pages-i18n.js و khaledoon-i18n-extra.js، وهذه السكربتات تقرأ window.KH_DE
+   عند اختيار الألمانية من الصفحة الرئيسية (المفتاح الموحد kh-lang = de). أي نص غير موجود هنا يبقى بالعربية ولا يظهر "undefined". */
+window.KH_DE={
+"خالدون عبر التاريخ":"Unsterbliche durch die Geschichte",
 "حكاياتٌ تُروى… وأثرٌ يبقى":"Erzählte Geschichten … und eine Spur, die bleibt",
 "بوابات المعرفة":"Tore des Wissens",
 "حكايات أكتوبر 1973":"Geschichten vom Oktober 1973",
@@ -16,14 +14,14 @@ var D={
 "🌙 داكن":"🌙 Dunkel",
 "مساحة للحكايات والمعرفة والاكتشاف":"Ein Raum für Geschichten, Wissen und Entdeckungen",
 "خالدون":"Unsterbliche",
-"عبر التاريخ":"der Geschichte",
+"عبر التاريخ":"durch die Geschichte",
 "كل شخصية وراها حكاية، وكل إنجاز بدأ بفكرة أو موقف. هنا نكتشف الحكايات بأسلوب بسيط وممتع، ونحوّل الفضول إلى معرفة، مع مراجعة المعلومات والرجوع إلى مصادر موثوقة.":"Hinter jeder Persönlichkeit steckt eine Geschichte, und jede Leistung begann mit einer Idee oder einem besonderen Moment. Hier entdecken wir Geschichten auf einfache und unterhaltsame Weise und verwandeln Neugier in Wissen – mit geprüften Informationen und verlässlichen Quellen.",
 "اختار بوابتك للمعرفة":"Wähle dein Tor zum Wissen",
 "حكاية التاريخ بعيون جيل جديد":"Geschichte mit den Augen einer neuen Generation",
 "اختار اللي يشدّ فضولك":"Wähle, was deine Neugier weckt",
 "كل باب له حكاية مختلفة":"Jede Tür hat eine andere Geschichte",
 "بوابات تقودك إلى عوالم متنوعة، ولكل مجموعة حكاياتها وطابعها الخاص.":"Tore zu ganz unterschiedlichen Welten – jede Sammlung hat ihre eigenen Geschichten und ihren eigenen Charakter.",
-"قسم من خالدون عبر التاريخ، يضم حكايات أكتوبر المنشورة مع الحفاظ على روابطها ورمز QR المستقل.":"Ein Bereich von „Unsterbliche der Geschichte“ mit den veröffentlichten Oktober-Geschichten – ihre Links und der eigenständige QR-Code bleiben erhalten.",
+"قسم من خالدون عبر التاريخ، يضم حكايات أكتوبر المنشورة مع الحفاظ على روابطها ورمز QR المستقل.":"Ein Bereich von „Unsterbliche durch die Geschichte“ mit den veröffentlichten Oktober-Geschichten – ihre Links und der eigenständige QR-Code bleiben erhalten.",
 "اقرأ الحكايات الأربع ←":"Die vier Geschichten lesen →",
 "العلم والعلماء":"Wissenschaft und Wissenschaftler",
 "اكتشافات وأسئلة وأفكار غيّرت فهمنا للعالم.":"Entdeckungen, Fragen und Ideen, die unser Verständnis der Welt verändert haben.",
@@ -70,66 +68,180 @@ var D={
 "دقة تاريخية، حكاية مفهومة ومشوقة، احترام الأشخاص والأحداث، مصادر يمكن الرجوع إليها، وصور نعرف مصدرها وحقوق استخدامها. الاقتراح لا يعني النشر التلقائي؛ كل مادة تمر بالمراجعة والموافقة أولًا.":"Historische Genauigkeit, eine verständliche und spannende Geschichte, Respekt vor Menschen und Ereignissen, nachprüfbare Quellen sowie Bilder, deren Quelle und Nutzungsrechte wir kennen. Ein Vorschlag bedeutet keine automatische Veröffentlichung; jeder Beitrag durchläuft zuerst Prüfung und Freigabe.",
 "كل حكاية من جزأين: حكاية بصوت الراوي، ثم سرد موثق بمصادر محددة مع فصل الحقائق عن التفسيرات.":"Jede Geschichte besteht aus zwei Teilen: einer Geschichte in der Stimme des Erzählers und anschließend einem belegten Bericht mit konkreten Quellen, der Fakten von Deutungen trennt.",
 "اكتب حكايتك":"Schreibe deine Geschichte",
-"من أقسام خالدون:":"Aus den Bereichen von „Unsterbliche der Geschichte“:",
+"من أقسام خالدون:":"Aus den Bereichen von „Unsterbliche durch die Geschichte“:",
 "افتح قسم حكايات أكتوبر 1973 ←":"Den Bereich „Geschichten vom Oktober 1973“ öffnen →",
 "العودة إلى الأعلى ↑":"Nach oben ↑",
-"تُعدّ الحكايات بالاستناد إلى مصادر ومراجع يُشار إليها داخل كل حكاية، وتُراجع المعلومات قبل النشر قدر الإمكان. ويُقدَّم المحتوى لأغراض معرفية وتعليمية؛ ولا يعني نشره تبنّي الموقع لكل رأي أو تفسير وارد فيه. وتظل مسؤولية الآراء والمساهمات الشخصية المنسوبة إلى أصحابها، ويُرجى الرجوع إلى المصادر الأصلية للتحقق من التفاصيل.":"Die Geschichten werden auf der Grundlage von Quellen und Referenzen erstellt, die innerhalb jeder Geschichte genannt sind, und die Informationen werden vor der Veröffentlichung nach Möglichkeit geprüft. Die Inhalte dienen Wissens- und Bildungszwecken; ihre Veröffentlichung bedeutet nicht, dass sich die Website jede darin enthaltene Meinung oder Deutung zu eigen macht. Die Verantwortung für persönliche Meinungen und Beiträge liegt bei ihren jeweiligen Autoren; bitte konsultiere die Originalquellen, um die Details zu überprüfen."
+"تُعدّ الحكايات بالاستناد إلى مصادر ومراجع يُشار إليها داخل كل حكاية، وتُراجع المعلومات قبل النشر قدر الإمكان. ويُقدَّم المحتوى لأغراض معرفية وتعليمية؛ ولا يعني نشره تبنّي الموقع لكل رأي أو تفسير وارد فيه. وتظل مسؤولية الآراء والمساهمات الشخصية المنسوبة إلى أصحابها، ويُرجى الرجوع إلى المصادر الأصلية للتحقق من التفاصيل.":"Die Geschichten werden auf der Grundlage von Quellen und Referenzen erstellt, die innerhalb jeder Geschichte genannt sind, und die Informationen werden vor der Veröffentlichung nach Möglichkeit geprüft. Die Inhalte dienen Wissens- und Bildungszwecken; ihre Veröffentlichung bedeutet nicht, dass sich die Website jede darin enthaltene Meinung oder Deutung zu eigen macht. Die Verantwortung für persönliche Meinungen und Beiträge liegt bei ihren jeweiligen Autoren; bitte konsultiere die Originalquellen, um die Details zu überprüfen.",
+"الحكايات":"Geschichten",
+"كيف تُكتب الحكاية":"Wie eine Geschichte entsteht",
+"ابدأ الحكاية ←":"Die Geschichte beginnen →",
+"الحكايات المنشورة متاحة الآن، وباقي المسارات تُجهّز على مراحل. المسار الذي لم يُنشر فيه شيء يظهر بحالته الحقيقية.":"Die veröffentlichten Geschichten sind jetzt verfügbar, die übrigen Bereiche werden schrittweise vorbereitet. Ein Bereich, in dem noch nichts veröffentlicht wurde, zeigt seinen tatsächlichen Stand.",
+"حكايات أكتوبر":"Oktober-Geschichten",
+"شجاعة وابتكار وقرارات صنعت لحظات فارقة.":"Mut, Einfallsreichtum und Entscheidungen, die Wendepunkte geprägt haben.",
+"4 حكايات منشورة ←":"4 veröffentlichte Geschichten →",
+"مسار قيد الإعداد":"Bereich in Vorbereitung",
+"الشخصيات الواردة في كتب المدرسة، مرتبة حسب المرحلة والصف والمادة والفصل الدراسي.":"Persönlichkeiten aus den Schulbüchern, geordnet nach Stufe, Klasse, Fach und Halbjahr.",
+"اقرأ واكتشف":"Lesen und entdecken",
+"الحكايات المنشورة":"Veröffentlichte Geschichten",
+"دي الحكايات المتاحة حاليًا. ابحث، أو صفّي حسب القسم والصف الدراسي للراوي.":"Das sind die derzeit verfügbaren Geschichten. Suche oder filtere nach Bereich und Klasse der Erzählerin bzw. des Erzählers.",
+"ابحث عن حكاية":"Nach einer Geschichte suchen",
+"اكتب اسم الحكاية أو كلمة منها…":"Gib den Titel der Geschichte oder ein Wort daraus ein …",
+"كل الصفوف":"Alle Klassen",
+"كل الأقسام":"Alle Bereiche",
+"مش لاقي حكاية بالكلمة دي. جرّب كلمة تانية.":"Zu diesem Wort wurde keine Geschichte gefunden. Probiere ein anderes.",
+"الروابط تفتح صفحات الحكايات في الموقع الحالي؛ لم تتغير الصفحات المنشورة أو رموز QR. الصف المعروض هو صف الطالب الراوي وليس صف المنهج.":"Die Links öffnen Geschichtsseiten auf der aktuellen Website; die veröffentlichten Seiten und QR-Codes haben sich nicht geändert. Die angezeigte Klasse ist die Klasse der erzählenden Schülerin bzw. des erzählenden Schülers, nicht die Klasse im Lehrplan.",
+"رجال البحر في أكتوبر":"Männer der See im Oktober",
+"المعركة التي لم يرها معظم الناس.":"Die Schlacht, die die meisten Menschen nie gesehen haben.",
+"العقل قبل السلاح":"Verstand vor Waffen",
+"كيف فتحت المياه طريق العبور.":"Wie Wasser einen Weg über den Kanal öffnete.",
+"لغة لا يفهمها العدو":"Eine Sprache, die der Feind nicht verstand",
+"حكاية الشفرة النوبية.":"Die Geschichte des nubischen Codes.",
+"سماء أكتوبر: شهداء الضربة الجوية الأولى":"Oktoberhimmel: Die Gefallenen des ersten Luftschlags",
+"حكاية الطيارين الذين فتحوا الطريق للعبور.":"Die Piloten, die den Weg über den Kanal öffnen halfen.",
+"الصف الأول الإعدادي":"1. Klasse der Sekundarstufe I",
+"الصف الثالث الابتدائي":"3. Klasse (Grundschule)",
+"الصف الأول الابتدائي":"1. Klasse (Grundschule)",
+"اقرأ الحكاية ←":"Die Geschichte lesen →",
+"من الكتاب المدرسي إلى الحكاية":"Vom Schulbuch zur Geschichte",
+"المناهج المصرية فقط في البداية، والهيكل جاهز لكل الصفوف. لا تُدرج شخصية إلا من الكتاب نفسه مع الطبعة والعام الدراسي ورقم الصفحة.":"Zunächst nur ägyptische Lehrpläne, die Struktur ist aber für jede Klasse vorbereitet. Eine Persönlichkeit wird nur aufgenommen, wenn sie im Buch selbst vorkommt – mit Auflage, Schuljahr und Seitenzahl.",
+"اختر صفًا لتعرف حالة التوثيق فيه.":"Wähle eine Klasse, um den Stand der Dokumentation zu sehen.",
+"المرحلة الابتدائية":"Grundschulstufe",
+"المرحلة الإعدادية":"Mittelstufe (Sekundarstufe I)",
+"المرحلة الثانوية":"Oberstufe (Sekundarstufe II)",
+"المادة":"Fach",
+"الفصل الدراسي":"Halbjahr",
+"الشخصيات الواردة في الكتاب":"Persönlichkeiten im Buch",
+"الحكاية والمصادر":"Geschichte und Quellen",
+"لم يبدأ التوثيق بعد":"Die Dokumentation hat noch nicht begonnen",
+"الهيكل جاهز. نسجّل لكل كتاب الطبعة والعام الدراسي والصفحة، ولا تظهر قائمة قبل التحقق منها من الكتاب نفسه.":"Die Struktur steht. Für jedes Buch erfassen wir Auflage, Schuljahr und Seite, und eine Liste erscheint erst, wenn sie am Buch selbst überprüft wurde.",
+"كيف نكتب الحكاية":"Wie wir die Geschichte schreiben",
+"صوت الراوي… ثم التوثيق":"Die Stimme der Erzählerin … dann die Dokumentation",
+"كل حكاية من جزأين واضحين، ولا نخلط بينهما.":"Jede Geschichte besteht aus zwei klaren Teilen, die wir nie vermischen.",
+"١ — حكاية بصوت الراوي":"1 — Eine Geschichte in der Stimme der Erzählerin",
+"الطالب أو الراوي يحكي بأسلوبه، وتحريرنا خفيف دون تغيير صوته.":"Die Schülerin oder der Erzähler berichtet im eigenen Stil; wir bearbeiten nur leicht und lassen die Stimme unverändert.",
+"صوت الطالب":"Stimme der Schülerin",
+"«كتبتها بكلماتي، وبحثت عن مصدر كل معلومة.»":"„Ich habe sie mit meinen eigenen Worten geschrieben und für jede Information die Quelle gesucht.“",
+"٢ — سرد موثق":"2 — Ein dokumentierter Bericht",
+"معلومات محققة بمصادر محددة، مع فصل الحقائق عن التفسيرات، وإعلان دور الذكاء الاصطناعي إن كان كبيرًا.":"Geprüfte Informationen mit genauen Quellen, Fakten getrennt von Deutungen, und die Rolle von KI wird offengelegt, wenn sie wesentlich ist.",
+"مشاركة الطلاب والمدارس والأفراد":"Beiträge von Schülerinnen und Schülern, Schulen und Einzelpersonen",
+"الإرسال لا يعني النشر.":"Einsenden bedeutet nicht Veröffentlichen.",
+"تُرسل الفكرة أو الحكاية بالعربية.":"Die Idee oder Geschichte wird auf Arabisch eingereicht.",
+"تُراجع الحقائق والمصادر.":"Fakten und Quellen werden geprüft.",
+"يُعرض النص العربي للاعتماد قبل أي ترجمة.":"Der arabische Text wird vor jeder Übersetzung zur Freigabe vorgelegt.",
+"تُنشر بعد الموافقة فقط.":"Die Veröffentlichung erfolgt erst nach der Freigabe.",
+"لا نعرض الاسم الكامل أو الصورة أو اسم المدرسة أو بيانات التواصل لأي طفل دون موافقة.":"Wir zeigen ohne Einwilligung weder den vollständigen Namen noch das Foto, den Schulnamen oder Kontaktdaten eines Kindes.",
+"للانتقال إلى الموقع الحالي:":"Zur aktuellen Website:",
+"حكايات أكتوبر 1973 ←":"Geschichten vom Oktober 1973 →",
+"نسخة معاينة مستقلة — لا تغيّر الموقع المنشور. الحكايات والمسارات الجديدة تُراجع قبل اعتمادها.":"Eigenständige Vorschau – sie verändert die veröffentlichte Website nicht. Neue Geschichten und Bereiche werden vor der Freigabe geprüft.",
+"معاينة مستقلة":"Eigenständige Vorschau",
+"لوحة الألوان":"Farbpalette",
+"للمراجعة فقط وتُحذف قبل النشر.":"Nur zur Prüfung; wird vor der Veröffentlichung entfernt.",
+"ادخل بوابة أكتوبر ←":"Das Oktober-Tor betreten →",
+"حكايات من الكتاب المدرسي":"Geschichten aus dem Schulbuch",
+"حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة. لا ندّعي أننا نغطي المنهج كله، والمجموعة تكبر تدريجيًا.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach. Wir behaupten nicht, den gesamten Lehrplan abzudecken; die Sammlung wächst schrittweise.",
+"اختر صفًا لتعرف الحكايات المتاحة فيه.":"Wähle eine Klasse, um die dort verfügbaren Geschichten zu sehen.",
+"كيف تُروى حكاية الشخصية؟":"Wie wird die Geschichte einer Persönlichkeit erzählt?",
+"بصوت الراوي":"In der Stimme der Erzählerin",
+"في ضوء التاريخ":"Im Licht der Geschichte",
+"المصادر":"Quellen",
+"أسئلة تفاعلية عند الملاءمة":"Interaktive Fragen, wo es passt",
+"الصور والترجمة":"Bilder und Übersetzung",
+"«بصوت الراوي» حكاية بسيطة تحافظ على صوت الطالب، ثم «في ضوء التاريخ» يشرح السياق ويصحح المعلومات ويستند إلى مراجع موثوقة، مع توضيح أي معلومة غير مؤكدة. العربية لغة أساسية، ثم تُجهّز الإنجليزية والفرنسية والإيطالية تدريجيًا.":"„In der Stimme der Erzählerin“ ist eine einfache Geschichte, die die Stimme der Schülerin bewahrt; „Im Licht der Geschichte“ erklärt dann den Zusammenhang, korrigiert Informationen und stützt sich auf verlässliche Quellen, wobei Unsicheres gekennzeichnet wird. Arabisch ist die Hauptsprache, Englisch, Französisch, Italienisch und Deutsch werden schrittweise vorbereitet.",
+"المرحلة":"Stufe",
+"الصف":"Klasse",
+"لا توجد حكايات منشورة في هذا الصف بعد":"Für diese Klasse wurden noch keine Geschichten veröffentlicht",
+"الحكايات تُضاف تدريجيًا وتُصنَّف حسب المادة (مثل اللغة العربية والدراسات الاجتماعية والعلوم) بحسب ورود الشخصية فعلًا في الكتاب.":"Geschichten werden schrittweise ergänzt und nach Fach geordnet (etwa Arabisch, Sozialkunde und Naturwissenschaften), je nachdem, wo die Persönlichkeit tatsächlich im Buch vorkommt.",
+"هنا نقابل شخصيات مرّت علينا في كتب المدرسة، ونكتشف وراءها حكاية ممتعة وموثقة: مين هو؟ وإيه اللي عمله؟ وليه لسه بنتكلم عنه؟":"Hier begegnen wir Persönlichkeiten aus unseren Schulbüchern und entdecken dahinter eine unterhaltsame, dokumentierte Geschichte: Wer war das? Was hat die Person getan? Und warum sprechen wir bis heute darüber?",
+"→ العودة إلى الرئيسية":"← Zurück zur Startseite",
+"إيه هو القسم ده؟":"Was ist dieser Bereich?",
+"قسم حكايات، مش شرح للمنهج. مش بنشرح الدروس ولا بنعيد كتابة الكتب؛ بنختار شخصيات وردت في المناهج المصرية ونحكي قصتها بشكل ممتع وموثق. وهو مش مكتبة مدرسية بتجمع كل شخصيات الكتب، لكنه مجموعة مختارة بتكبر تدريجيًا.":"Ein Bereich mit Geschichten, keine Lehrplanerklärung. Wir erklären keine Unterrichtsstunden und schreiben keine Bücher um; wir wählen Persönlichkeiten aus den ägyptischen Lehrplänen aus und erzählen ihre Geschichte unterhaltsam und dokumentiert. Es ist keine Schulbibliothek, die alle Persönlichkeiten der Bücher sammelt, sondern eine ausgewählte Sammlung, die schrittweise wächst.",
+"بنصنّف الحكايات إزاي؟":"Wie ordnen wir die Geschichten ein?",
+"المرحلة التعليمية":"Bildungsstufe",
+"ابتدائي، إعدادي، ثانوي.":"Grundschule, Mittelstufe, Oberstufe.",
+"الصف الدراسي":"Klasse",
+"من أول صف في المرحلة إلى آخر صف فيها.":"Von der ersten bis zur letzten Klasse der Stufe.",
+"المادة أو الكتاب":"Fach oder Buch",
+"مثل اللغة العربية والدراسات الاجتماعية والعلوم، حسب ورود الشخصية فعلًا.":"Zum Beispiel Arabisch, Sozialkunde und Naturwissenschaften – je nachdem, wo die Persönlichkeit tatsächlich vorkommt.",
+"اختر صفك":"Wähle deine Klasse",
+"اختر المرحلة والصف لتعرف الحكايات المتاحة فيهما.":"Wähle Stufe und Klasse, um die verfügbaren Geschichten zu sehen.",
+"كيف نضمن الدقة؟":"Wie sichern wir Genauigkeit?",
+"بنرجع لمصادر موثوقة وبنوضح أي معلومة غير مؤكدة، ونختار صورًا موثقة قدر الإمكان، ولا تُنشر أي حكاية قبل المراجعة والموافقة.":"Wir stützen uns auf verlässliche Quellen, kennzeichnen Unsicheres, wählen nach Möglichkeit dokumentierte Bilder aus, und keine Geschichte wird vor Prüfung und Freigabe veröffentlicht.",
+"اقترح حكاية":"Eine Geschichte vorschlagen",
+"اقترح حكاية في هذا الصف":"Eine Geschichte für diese Klasse vorschlagen",
+"٥":"5",
+"٦":"6",
+"← كل البوابات":"← Alle Tore",
+"من حكايات المعرفة والإنسان":"Aus den Geschichten von Wissen und Menschen",
+"حكايات هذا القسم":"Geschichten in diesem Bereich",
+"كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.":"Jede Geschichte hat ihre eigene Seite und wird hier ergänzt, nachdem Inhalt und Quellen geprüft wurden.",
+"الحكايات قيد الإعداد":"Geschichten in Vorbereitung",
+"لم تُضف حكايات إلى هذا القسم بعد. ستظهر هنا الحكايات المعتمدة، باستخدام نفس أسلوب العرض والتنظيم المستخدم في قسم أكتوبر 1973.":"In diesem Bereich wurden noch keine Geschichten ergänzt. Hier erscheinen die freigegebenen Geschichten, in derselben Darstellung und Gliederung wie im Bereich Oktober 1973.",
+"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche durch die Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden.",
+"اكتشف حكايات العلماء وأسئلتهم وتجاربهم، وكيف تحولت الأفكار إلى معرفة وإنجازات.":"Entdecke die Geschichten von Wissenschaftlern, ihre Fragen und Experimente und wie aus Ideen Wissen und Leistungen wurden.",
+"حكايات عن العلماء والأفكار والاكتشافات التي غيّرت فهمنا للعالم.":"Geschichten über Wissenschaftler, Ideen und Entdeckungen, die unser Verständnis der Welt verändert haben.",
+"وراء كل إنجاز رحلة من المحاولات والاختيارات والتحديات؛ هنا نرويها في سياقها وبالاستناد إلى المصادر.":"Hinter jeder Leistung steht ein Weg aus Versuchen, Entscheidungen und Herausforderungen; hier erzählen wir ihn im Zusammenhang und gestützt auf Quellen.",
+"حكايات عن أصحاب المواهب والإنجازات في الرياضة والفنون والحياة العامة.":"Geschichten über begabte Menschen und ihre Leistungen in Sport, Kunst und öffentlichem Leben.",
+"مساحة لحكايات التعلّم والأفكار والتجارب التي تساعدنا على الفهم وطرح الأسئلة.":"Ein Raum für Geschichten über Lernen, Ideen und Erfahrungen, die uns helfen zu verstehen und Fragen zu stellen.",
+"حكايات تشرح كيف نتعلّم ونفكّر ونصل إلى الإجابة.":"Geschichten, die erklären, wie wir lernen, denken und zu Antworten gelangen.",
+"اقترب من التاريخ عبر حكايات تربط الشخصيات والأحداث بعصرها، وتفصل بين الوقائع والتفسيرات.":"Komm der Geschichte näher durch Geschichten, die Persönlichkeiten und Ereignisse mit ihrer Zeit verbinden und Tatsachen von Deutungen trennen.",
+"حكايات عن شخصيات وأماكن وأحداث نفهمها من خلال سياقها ومصادرها.":"Geschichten über Persönlichkeiten, Orte und Ereignisse, die wir durch ihren Zusammenhang und ihre Quellen verstehen.",
+"ابن سينا — الشيخ الرئيس":"Ibn Sina — al-Scheich al-Ra’is",
+"حكاية عالم جمع بين الطب والفلسفة، وترك كتابه «القانون في الطب» أثرًا طويلًا في التعليم الطبي.":"Die Geschichte eines Gelehrten, der Medizin und Philosophie verband und dessen Buch „Der Kanon der Medizin“ die medizinische Ausbildung lange prägte.",
+"رسم توضيحي لكتاب طبي قديم مرتبط بحكاية ابن سينا":"Illustration eines alten medizinischen Buches zur Geschichte von Ibn Sina",
+"أحمد عرابي — حين رفع صوته بالمطالب":"Ahmed Urabi — Als er seine Stimme erhob",
+"حكاية عن مطالب الجيش والثورة العرابية والتحولات التي سبقت الاحتلال البريطاني لمصر سنة 1882.":"Eine Geschichte über die Forderungen der Armee, die Urabi-Revolte und die Entwicklungen, die der britischen Besetzung Ägyptens im Jahr 1882 vorausgingen.",
+"رسم توضيحي لحكاية أحمد عرابي والثورة العرابية":"Illustration zur Geschichte von Ahmed Urabi und der Urabi-Revolte",
+"حكاية العالم أحمد زويل":"Die Geschichte des Wissenschaftlers Ahmed Zewail",
+"حكاية العالم المصري الحائز على جائزة نوبل في الكيمياء سنة 1999، وكيف ساعدت نبضات الليزر القصيرة جدًا العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.":"Die Geschichte des ägyptischen Nobelpreisträgers für Chemie von 1999 und wie extrem kurze Laserpulse es Wissenschaftlern ermöglichten, Atome während einer chemischen Reaktion zu beobachten.",
+"رسم توضيحي لذرات تتحرك ونبضات ليزر مرتبط بحكاية أحمد زويل":"Illustration sich bewegender Atome und Laserpulse zur Geschichte von Ahmed Zewail",
+"→ الرئيسية":"← Startseite",
+"شاركنا حكاية":"Teile eine Geschichte mit uns",
+"اقترح حكاية عن شخصية أثّرت في التاريخ أو وردت في المناهج المصرية. الإرسال لا يعني النشر؛ كل حكاية تُراجع أولًا.":"Schlage eine Geschichte über eine Persönlichkeit vor, die die Geschichte beeinflusst hat oder in den ägyptischen Lehrplänen vorkommt. Einsenden bedeutet nicht Veröffentlichen; jede Geschichte wird zuerst geprüft.",
+"اختر شخصية وحكِ قصتها بصوتك. الإرسال لا يعني النشر: تُراجع الحقائق والمصادر أولًا، ويُعرض النص عليك قبل أي ترجمة، ولا تُنشر حكاية دون موافقة.":"Wähle eine Persönlichkeit und erzähle ihre Geschichte mit deiner eigenen Stimme. Einsenden bedeutet nicht Veröffentlichen: Fakten und Quellen werden zuerst geprüft, der Text wird dir vor jeder Übersetzung gezeigt, und keine Geschichte wird ohne Freigabe veröffentlicht.",
+"عن الحكاية":"Zur Geschichte",
+"القسم *":"Bereich *",
+"اختر القسم":"Bereich wählen",
+"اقتراح آخر":"Anderer Vorschlag",
+"الشخصية أو الموضوع *":"Persönlichkeit oder Thema *",
+"مثال: أحمد زويل":"Beispiel: Ahmed Zewail",
+"المرحلة *":"Stufe *",
+"اختر المرحلة":"Stufe wählen",
+"الابتدائية":"Grundschule",
+"الإعدادية":"Mittelstufe",
+"الثانوية":"Oberstufe",
+"الصف *":"Klasse *",
+"اختر الصف":"Klasse wählen",
+"اختياري، حسب ورود الشخصية فعلًا في الكتاب":"Optional, je nachdem, wo die Persönlichkeit tatsächlich im Buch vorkommt",
+"مثال: الدراسات الاجتماعية":"Beispiel: Sozialkunde",
+"عنوان الحكاية *":"Titel der Geschichte *",
+"عنوان فرعي":"Untertitel",
+"اختياري":"Optional",
+"الحكاية بصوتك *":"Deine Geschichte in deiner Stimme *",
+"اكتبها بأسلوبك وكلماتك، 50 حرفًا على الأقل. افصل الفقرات بسطر فارغ.":"Schreibe sie in deinem eigenen Stil und mit deinen Worten, mindestens 50 Zeichen. Trenne Absätze durch eine Leerzeile.",
+"اختياري لكنه مهم: كتب أو مواقع اعتمدت عليها، سطر لكل مصدر":"Optional, aber wichtig: Bücher oder Websites, auf die du dich gestützt hast, eine Zeile pro Quelle",
+"الصور":"Bilder",
+"اختياري: هل عندك صورة مناسبة؟ اذكر مصدرها وحقوق استخدامها (لا ترسل صورًا هنا)":"Optional: Hast du ein passendes Bild? Nenne Quelle und Nutzungsrechte (sende hier keine Bilder)",
+"عن الراوي":"Zur Erzählerin bzw. zum Erzähler",
+"اسم الراوي *":"Name der Erzählerin bzw. des Erzählers *",
+"الاسم الأول أو لقب فقط، دون اسم العائلة أو المدرسة":"Nur Vorname oder Spitzname, ohne Familienname oder Schule",
+"الصف الدراسي للراوي":"Klasse der Erzählerin bzw. des Erzählers",
+"مثال: الصف الأول الإعدادي":"Beispiel: 1. Klasse der Sekundarstufe I",
+"لا تملأ هذا الحقل":"Dieses Feld nicht ausfüllen",
+"أوافق أنا (أو ولي الأمر إن كنت دون 18 سنة) على عرض الاسم الأول فقط والصف بعد المراجعة، وأفهم أن الإرسال لا يعني النشر. *":"Ich (oder meine Eltern bzw. mein Erziehungsberechtigter, falls ich unter 18 bin) bin damit einverstanden, nach der Prüfung nur den Vornamen und die Klasse anzuzeigen, und ich verstehe, dass Einsenden nicht Veröffentlichen bedeutet. *",
+"إرسال الحكاية":"Geschichte einsenden",
+"الإرسال بالعربية. لا تكتب بيانات تواصل أو أسماء كاملة.":"Das Einsenden erfolgt auf Arabisch. Schreibe keine Kontaktdaten oder vollständigen Namen.",
+"وصلت حكايتك 🎉":"Deine Geschichte ist angekommen 🎉",
+"شكرًا لك. ستُراجع الحقائق والمصادر أولًا، ولن تُنشر قبل الموافقة.":"Vielen Dank. Fakten und Quellen werden zuerst geprüft, und die Geschichte wird nicht vor der Freigabe veröffentlicht.",
+"اكتب حكاية أخرى":"Eine weitere Geschichte schreiben",
+"أكمل الحقول المطلوبة: القسم والشخصية والعنوان واسم الراوي.":"Fülle die Pflichtfelder aus: Bereich, Persönlichkeit, Titel und Name der Erzählerin bzw. des Erzählers.",
+"اختر المرحلة والصف لشخصيات المناهج.":"Wähle Stufe und Klasse für Persönlichkeiten aus den Lehrplänen.",
+"الحكاية قصيرة؛ اكتب 50 حرفًا على الأقل.":"Die Geschichte ist zu kurz; schreibe mindestens 50 Zeichen.",
+"لا بد من الموافقة على عرض الاسم الأول والصف بعد المراجعة.":"Du musst zustimmen, dass nach der Prüfung Vorname und Klasse angezeigt werden.",
+"انتظر دقيقة قبل إرسال حكاية أخرى.":"Warte eine Minute, bevor du eine weitere Geschichte sendest.",
+"خدمة الإرسال لم تُفعّل بعد. حاول لاحقًا.":"Der Einsendedienst ist noch nicht aktiv. Bitte versuche es später noch einmal.",
+"تعذر الاتصال. تأكد من الإنترنت وحاول مرة أخرى.":"Verbindung fehlgeschlagen. Prüfe deine Internetverbindung und versuche es erneut.",
+"حكايات أبطال أكتوبر الأربع في الصفحة الأصلية، بنفس تصميمها وتنسيقها المعتمد.":"Die Geschichten der vier Oktober-Helden auf der Originalseite, mit ihrem bewährten Design und Layout.",
+"افتح حكايات أكتوبر 1973 ←":"Oktober-Geschichten 1973 öffnen →",
+"خالدون عبر التاريخ: حكايات شخصيات تبدأ بصوت الطالب أو الراوي، وتُستكمل بسرد موثق بمصادر موثوقة.":"Unsterbliche durch die Geschichte: Geschichten über Persönlichkeiten, die mit der Stimme einer Schülerin oder eines Erzählers beginnen und mit einem dokumentierten Bericht auf verlässlichen Quellen fortgesetzt werden.",
+"حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach."
 };
-/* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
-var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
-var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',active=false;
-var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
-if(!langs)return;
-function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
-function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
-function one(n){
- if(n.__o===undefined)n.__o=n.data;
- var t=n.__o.trim();if(!t)return;
- var d=D[t];
- n.data=d?n.__o.replace(t,d):n.__o;
-}
-function ap(r){
- if(r.nodeType===3){one(r);return}
- if(r.nodeType!==1)return;
- var w=document.createTreeWalker(r,4,{acceptNode:function(n){var p=n.parentNode.nodeName;return p==='SCRIPT'||p==='STYLE'?2:1}}),n;
- while(n=w.nextNode())one(n);
-}
-function labels(){
- var as=document.querySelectorAll('[aria-label]');
- for(var k=0;k<as.length;k++){
-  var el=as[k];
-  if(el.__al===undefined)el.__al=el.getAttribute('aria-label');
-  var key=el.__al.trim();
-  if(AL[key]&&D[key])el.setAttribute('aria-label',D[key]);
- }
-}
-function setDe(){
- active=true;
- put(KEY,'1');put('kh-lang','ar');
- root.lang='de';root.dir='ltr';
- ap(B);labels();
- document.title=D[AR_TITLE];
- Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
-}
-/* زر DE */
-if(!langs.querySelector('[data-l="4"]')){
- var btn=document.createElement('button');
- btn.type='button';btn.setAttribute('data-l','4');btn.setAttribute('aria-pressed','false');btn.textContent='🇩🇪 DE';
- langs.appendChild(btn);
-}
-/* التقاط النقر قبل khaledoon.js: DE نعالجها هنا، وأي لغة أخرى تُلغي وضع الألمانية ثم يكمل khaledoon.js عمله */
-langs.addEventListener('click',function(e){
- var b=e.target.closest&&e.target.closest('button');if(!b)return;
- if(b.getAttribute('data-l')==='4'){e.preventDefault();e.stopImmediatePropagation();setDe()}
- else if(active){active=false;put(KEY,null)}
-},true);
-/* عناصر تُضاف ديناميكيًا (مثل نص زر الثيم) */
-new MutationObserver(function(ms){
- if(!active)return;
- ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)});
-}).observe(B,{childList:true,subtree:true});
-/* عند فتح الصفحة: تُطبَّق الألمانية فقط إذا لم تُختَر لغة أخرى بعدها */
-if(get(KEY)==='1'){
- if((get('kh-lang')||'ar')==='ar')setDe();else put(KEY,null);
-}
-})();
