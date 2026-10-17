@@ -5,7 +5,7 @@
   if(!hero)return;
   var root=document.documentElement;
   var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var mobile=window.matchMedia&&matchMedia('(max-width: 1024px)').matches;
+  var mobile=window.matchMedia&&matchMedia('(max-width: 780px)').matches;
   var busy=false;
   var BG_FADE=0.08; // خفوت عام بسيط للصورة أثناء التمرير
   function update(){
@@ -15,7 +15,7 @@
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
-    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>1024?.12:.22)).toFixed(4));
+    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.12:.22)).toFixed(4));
     root.style.setProperty('--hero-bottom-fade',(38+passed*16)+'%');
     root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
@@ -53,7 +53,7 @@
   function clamp(v){return v<0?0:v>1?1:v}
   function active(){
     var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var landscapeShort=innerWidth<=1024&&innerWidth>innerHeight&&innerHeight<=520;
+    var landscapeShort=innerWidth<=780&&innerWidth>innerHeight&&innerHeight<=520;
     return !reduce&&!landscapeShort;
   }
   function reset(){
@@ -110,7 +110,7 @@
   var layer=document.querySelector('.hero-background-layer');
   if(!layer)return;
   if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  var wide=innerWidth>1024;      // الكمبيوتر: عدد وأحجام أكبر قليلًا لأن الصورة أكبر
+  var wide=innerWidth>780;      // الكمبيوتر: عدد وأحجام أكبر قليلًا لأن الصورة أكبر
   var N=wide?56:30;
   var SIZE_MIN=wide?2.6:1.6;    // أصغر قطر للنقطة بالبكسل
   var SIZE_STEP=wide?1.0:0.6;   // الزيادة بين الأحجام (3 أحجام مختلفة)
