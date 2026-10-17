@@ -186,11 +186,11 @@
     });
     map.addLayer(group);
     refresh(true);
-    map.on('click', function () { map.scrollWheelZoom.enable(); });
     setTimeout(function () { map.invalidateSize(); }, 200);
   }
 
   function fallbackList() {
+    usingFallback = true;
     canvas.style.height = 'auto';
     var l = lang();
     canvas.replaceChildren();
@@ -218,10 +218,11 @@
     });
   }
   var started = false;
+  var usingFallback = false;
   function start() {
     if (started) return; started = true;
     loadData().then(function () {
-      if (!points.length) { sec.hidden = true; return; }
+      if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
       css(CDN + 'leaflet.markercluster/1.5.3/MarkerCluster.css');
@@ -230,11 +231,11 @@
         .then(function () { return js(CDN + 'leaflet.markercluster/1.5.3/leaflet.markercluster.js'); })
         .then(initMap)
         .catch(fallbackList);
-    }).catch(function () { sec.hidden = true; });
+    }).catch(function () { fallbackList(); });
   }
 
   labels();
-  new MutationObserver(function () { labels(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) {
       if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
