@@ -314,6 +314,7 @@
     };
     var copy = labels[activeLang] || labels.ar;
     var pageUrl = window.location.href.split('#')[0];
+    var shareText = (document.title || copy.heading) + ' — ' + pageUrl;
 
     var bar = document.createElement('div');
     bar.className = 'story-share-bar';
