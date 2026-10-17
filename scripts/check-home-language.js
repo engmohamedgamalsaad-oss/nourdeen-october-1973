@@ -307,6 +307,26 @@ for (const rel of [
   if (!exists('khaledoon/assets/october-collection-theme.css')) fail('October collection theme stylesheet is missing.');
 }
 
+{
+  const rel = 'read.html';
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/read-theme\.css/.test(html)) fail(`${rel}: missing reader theme stylesheet.`);
+  if (!exists('assets/shared/read-theme.css')) fail('Reader theme stylesheet is missing.');
+}
+{
+  const homeI18n = read('assets/i18n/home.js');
+  const commonI18n = read('assets/i18n/common.js');
+  if (homeI18n.includes('رجال خالدون عبر التاريخ') || homeI18n.includes('Immortal Heroes Through History') ||
+      homeI18n.includes('Héros immortels à travers l’histoire') || homeI18n.includes('Eroi immortali nella storia') ||
+      homeI18n.includes('Unsterbliche Helden der Geschichte')) {
+    fail('assets/i18n/home.js: project name is inconsistent with “Immortals Through History”.');
+  }
+  if (commonI18n.includes("var AR_TITLE='رجال خالدون عبر التاريخ")) {
+    fail('assets/i18n/common.js: stale Arabic document title uses the old project name.');
+  }
+}
+
 if (failures.length) {
   console.error('Homepage language-flow checks FAILED:\n- ' + failures.join('\n- '));
   process.exitCode = 1;
