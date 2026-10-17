@@ -4,6 +4,11 @@
   "className": "Class 1B",
   "title": "سماء أكتوبر: شهداء الضربة الجوية الأولى",
   "subtitle": "حكاية الطيارين الذين فتحوا الطريق للعبور",
+  "person": "عاطف السادات",
+  "personAliases": [
+    "Atef El Sadat",
+    "Atef el-Sadate"
+  ],
   "color": "#d7a85e",
   "order": 4,
   "published": true,
@@ -13,28 +18,32 @@
       "grade": "1st Year of Preparatory School",
       "title": "October Skies: The Martyrs of the First Air Strike",
       "subtitle": "The pilots who helped open a way across the canal",
-      "className": "Class 1B"
+      "className": "Class 1B",
+      "person": "Atef Sadat"
     },
     "fr": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1re année du collège",
       "title": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
       "subtitle": "Les pilotes qui ont contribué à ouvrir la voie à travers le canal",
-      "className": "Classe 1B"
+      "className": "Classe 1B",
+      "person": "Atef Sadat"
     },
     "it": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1ª media",
       "title": "I cieli di ottobre: i martiri del primo attacco aereo",
       "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
-      "className": "Classe 1B"
+      "className": "Classe 1B",
+      "person": "Atef Sadat"
     },
     "de": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "1. Klasse der Sekundarstufe I",
       "className": "Klasse 1B",
       "title": "Oktoberhimmel: Die Gefallenen des ersten Luftangriffs",
-      "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten"
+      "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten",
+      "person": "Atef Sadat"
     }
   }
 }

@@ -1,15 +1,69 @@
 {
-  "_readme": "أماكن ميلاد الشخصيات لخريطة الصفحة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة.",
+  "_readme": "أماكن ميلاد الشخصيات لخريطة الصفحة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة. الحكاية 002 (باقي زكي يوسف) بلا مكان لأن المصادر تختلف في مكان ميلاده؛ تُضاف بعد التأكد. توماس وعافية (003): الإحداثيات تقريبية لمنطقة النوبة جنوب أسوان وتحتاج مراجعة.",
+  "001": {
+    "lat": 31.2001,
+    "lng": 29.9187,
+    "place": {
+      "ar": "الإسكندرية",
+      "en": "Alexandria",
+      "fr": "Alexandrie",
+      "it": "Alessandria",
+      "de": "Alexandria"
+    }
+  },
+  "003": {
+    "lat": 22.75,
+    "lng": 32.0,
+    "place": {
+      "ar": "قرية توماس وعافية، النوبة، أسوان",
+      "en": "Tomas and Afia village, Nubia, Aswan",
+      "fr": "Village de Tomas et Afia, Nubie, Assouan",
+      "it": "Villaggio di Tomas e Afia, Nubia, Assuan",
+      "de": "Dorf Tomas und Afia, Nubien, Assuan"
+    }
+  },
+  "004": {
+    "lat": 30.63667,
+    "lng": 30.91389,
+    "place": {
+      "ar": "ميت أبو الكوم، تلا، المنوفية",
+      "en": "Mit Abu El Kom, Tala, Monufia",
+      "fr": "Mit Abou el-Kom, Tala, Menoufia",
+      "it": "Mit Abu El Kom, Tala, Monufia",
+      "de": "Mit Abu El Kom, Tala, Menufia"
+    }
+  },
   "005": {
-    "lat": 39.7747, "lng": 64.4286,
-    "place": { "ar": "منطقة بخارى، أوزبكستان", "en": "Bukhara region, Uzbekistan", "fr": "Région de Boukhara, Ouzbékistan", "it": "Regione di Bukhara, Uzbekistan", "de": "Region Buchara, Usbekistan" }
+    "lat": 39.7747,
+    "lng": 64.4286,
+    "place": {
+      "ar": "منطقة بخارى، أوزبكستان",
+      "en": "Bukhara region, Uzbekistan",
+      "fr": "Région de Boukhara, Ouzbékistan",
+      "it": "Regione di Bukhara, Uzbekistan",
+      "de": "Region Buchara, Usbekistan"
+    }
   },
   "006": {
-    "lat": 30.5877, "lng": 31.502,
-    "place": { "ar": "قرية هرية رزنة، الشرقية", "en": "Hariyat Razna village, Sharqia", "fr": "Village de Hariyat Razna, Charqiya", "it": "Villaggio di Hariyat Razna, Sharqia", "de": "Dorf Hariyat Razna, Scharkia" }
+    "lat": 30.5877,
+    "lng": 31.502,
+    "place": {
+      "ar": "قرية هرية رزنة، الشرقية",
+      "en": "Hariyat Razna village, Sharqia",
+      "fr": "Village de Hariyat Razna, Charqiya",
+      "it": "Villaggio di Hariyat Razna, Sharqia",
+      "de": "Dorf Hariyat Razna, Scharkia"
+    }
   },
   "007": {
-    "lat": 31.0341, "lng": 30.4682,
-    "place": { "ar": "دمنهور، البحيرة", "en": "Damanhur, Beheira", "fr": "Damanhour, Béhéra", "it": "Damanhur, Beheira", "de": "Damanhur, Buheira" }
+    "lat": 31.0341,
+    "lng": 30.4682,
+    "place": {
+      "ar": "دمنهور، البحيرة",
+      "en": "Damanhur, Beheira",
+      "fr": "Damanhour, Béhéra",
+      "it": "Damanhur, Beheira",
+      "de": "Damanhur, Buheira"
+    }
   }
 }

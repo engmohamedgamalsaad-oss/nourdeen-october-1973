@@ -5,6 +5,11 @@
     "className": "Class 1B",
     "title": "رجال البحر في أكتوبر",
     "subtitle": "المعركة التي لم يرها معظم الناس",
+    "person": "نبيل عبد الوهاب",
+    "personAliases": [
+      "Nabil Abdelwahab",
+      "Nabil Abd El Wahab"
+    ],
     "color": "#b8874b",
     "order": 1,
     "published": true,
@@ -14,28 +19,32 @@
         "grade": "1st Year of Preparatory School",
         "title": "Men of the Sea in October",
         "subtitle": "The battle most people never saw",
-        "className": "Class 1B"
+        "className": "Class 1B",
+        "person": "Nabil Abdel Wahab"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1re année du collège",
         "title": "Les hommes de la mer en octobre",
         "subtitle": "La bataille que la plupart des gens n’ont pas vue",
-        "className": "Classe 1B"
+        "className": "Classe 1B",
+        "person": "Nabil Abdel Wahab"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1ª media",
         "title": "Gli uomini del mare in ottobre",
         "subtitle": "La battaglia che la maggior parte delle persone non ha visto",
-        "className": "Classe 1B"
+        "className": "Classe 1B",
+        "person": "Nabil Abdel Wahab"
       },
       "de": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1. Klasse der Sekundarstufe I",
         "className": "Klasse 1B",
         "title": "Die Männer des Meeres im Oktober",
-        "subtitle": "Die Schlacht, die die meisten Menschen nie sahen"
+        "subtitle": "Die Schlacht, die die meisten Menschen nie sahen",
+        "person": "Nabil Abdel Wahab"
       }
     },
     "id": "001",
@@ -48,6 +57,11 @@
     "className": "Class 3 E",
     "title": "العقل قبل السلاح",
     "subtitle": "كيف فتحت المياه طريق العبور",
+    "person": "باقي زكي يوسف",
+    "personAliases": [
+      "Baki Zaki",
+      "Baki Youssef"
+    ],
     "color": "#f0a44a",
     "order": 2,
     "published": true,
@@ -57,28 +71,32 @@
         "grade": "3rd Grade (Primary)",
         "title": "Brains Before Weapons",
         "subtitle": "How water opened a passage across the canal",
-        "className": "Class 3 E"
+        "className": "Class 3 E",
+        "person": "Baki Zaki Youssef"
       },
       "fr": {
         "name": "Karma Mohamed Gamal",
         "grade": "3e année du primaire",
         "title": "L’intelligence avant les armes",
         "subtitle": "Comment l’eau a ouvert un passage à travers le canal",
-        "className": "Classe 3 E"
+        "className": "Classe 3 E",
+        "person": "Baki Zaki Youssef"
       },
       "it": {
         "name": "Karma Mohamed Gamal",
         "grade": "3ª classe della scuola primaria",
         "title": "L’ingegno prima delle armi",
         "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
-        "className": "Classe 3 E"
+        "className": "Classe 3 E",
+        "person": "Baki Zaki Youssef"
       },
       "de": {
         "name": "Karma Mohamed Gamal",
         "grade": "3. Klasse der Grundschule",
         "className": "Klasse 3E",
         "title": "Verstand vor Waffen",
-        "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete"
+        "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete",
+        "person": "Baki Zaki Youssef"
       }
     },
     "id": "002",
@@ -139,6 +157,11 @@
     "className": "Class 1B",
     "title": "سماء أكتوبر: شهداء الضربة الجوية الأولى",
     "subtitle": "حكاية الطيارين الذين فتحوا الطريق للعبور",
+    "person": "عاطف السادات",
+    "personAliases": [
+      "Atef El Sadat",
+      "Atef el-Sadate"
+    ],
     "color": "#d7a85e",
     "order": 4,
     "published": true,
@@ -148,28 +171,32 @@
         "grade": "1st Year of Preparatory School",
         "title": "October Skies: The Martyrs of the First Air Strike",
         "subtitle": "The pilots who helped open a way across the canal",
-        "className": "Class 1B"
+        "className": "Class 1B",
+        "person": "Atef Sadat"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1re année du collège",
         "title": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
         "subtitle": "Les pilotes qui ont contribué à ouvrir la voie à travers le canal",
-        "className": "Classe 1B"
+        "className": "Classe 1B",
+        "person": "Atef Sadat"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1ª media",
         "title": "I cieli di ottobre: i martiri del primo attacco aereo",
         "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
-        "className": "Classe 1B"
+        "className": "Classe 1B",
+        "person": "Atef Sadat"
       },
       "de": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "1. Klasse der Sekundarstufe I",
         "className": "Klasse 1B",
         "title": "Oktoberhimmel: Die Gefallenen des ersten Luftangriffs",
-        "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten"
+        "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten",
+        "person": "Atef Sadat"
       }
     },
     "id": "004",
@@ -183,7 +210,10 @@
     "title": "ابن سينا — الشيخ الرئيس",
     "subtitle": "رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
     "person": "ابن سينا",
-    "personAliases": ["Avicenna", "Avicenne"],
+    "personAliases": [
+      "Avicenna",
+      "Avicenne"
+    ],
     "color": "#d5b7ff",
     "order": 5,
     "published": true,
@@ -191,26 +221,26 @@
       "en": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "First year of preparatory school",
-        "className": "Class 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Première année du collège",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Primo anno della scuola preparatoria",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
         "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
-        "person": "Ibn Sina"
+        "person": "Ibn Sina",
+        "className": "Class 1B"
       },
       "de": {
         "name": "Nourdeen Mohamed Gamal",
@@ -232,31 +262,26 @@
     "title": "أحمد عرابي — حين رفع صوته بالمطالب",
     "subtitle": "رحلة إلى مصر في القرن التاسع عشر، حين تحولت مطالب ضباط وجنود إلى حركة سياسية.",
     "person": "أحمد عرابي",
-    "personAliases": ["Orabi", "Arabi", "Ahmed Orabi"],
+    "personAliases": [
+      "Orabi",
+      "Arabi",
+      "Ahmed Orabi"
+    ],
     "color": "#b8874b",
     "order": 6,
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — When He Raised His Voice",
         "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement.",
         "person": "Ahmed Urabi"
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
         "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique.",
         "person": "Ahmed Urabi"
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quando fece sentire la sua voce",
         "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico.",
         "person": "Ahmed Urabi"
@@ -286,25 +311,16 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "The Story of the Scientist Ahmed Zewail",
         "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions.",
         "person": "Ahmed Zewail"
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "L’histoire du scientifique Ahmed Zewail",
         "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques.",
         "person": "Ahmed Zewail"
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "La storia dello scienziato Ahmed Zewail",
         "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche.",
         "person": "Ahmed Zewail"
