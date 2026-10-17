@@ -98,11 +98,11 @@
   window.I18N.apply();
 
   var homeMeta = {
-    ar:['رجال خالدون عبر التاريخ | حكايات أكتوبر 1973','أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973.'],
-    en:['Immortal Heroes Through History | October 1973 Stories','A digital archive of stories about the heroes of the 1973 October War.'],
-    fr:['Des héros immortels à travers l’histoire | Récits d’octobre 1973','Archives numériques de récits sur les héros de la guerre d’octobre 1973.'],
-    it:['Eroi immortali nella storia | Racconti dell’ottobre 1973','Archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973.'],
-    de:['Unsterbliche Helden durch die Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
+    ar:['خالدون عبر التاريخ | حكايات أكتوبر 1973','أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973.'],
+    en:['Immortals Through History | October 1973 Stories','A digital archive of stories about the heroes of the 1973 October War.'],
+    fr:['Immortels à travers l’histoire | Récits d’octobre 1973','Archives numériques de récits sur les héros de la guerre d’octobre 1973.'],
+    it:['Immortali attraverso la storia | Racconti dell’ottobre 1973','Archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973.'],
+    de:['Unsterbliche durch die Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
   };
   function applyHomeMeta(){
     var lang=window.I18N.lang();
