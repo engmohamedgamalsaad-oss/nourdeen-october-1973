@@ -3,7 +3,7 @@
   "grade": "الصف الأول الإعدادي",
   "className": "Class 1B",
   "title": "ابن سينا — الشيخ الرئيس",
-  "subtitle": "عالم جمع بين الطب والفلسفة، وعبر أثره قرونًا من الزمن",
+  "subtitle": "رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
   "color": "#d5b7ff",
   "order": 5,
   "published": true,
@@ -12,22 +12,29 @@
       "name": "Nourdeen Mohamed Gamal",
       "grade": "First year of preparatory school",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
-      "subtitle": "A scholar of medicine and philosophy whose influence crossed centuries",
+      "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
       "className": "Class 1B"
     },
     "fr": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "Première année du collège",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
-      "subtitle": "Un savant en médecine et en philosophie dont l’influence a traversé les siècles",
+      "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
       "className": "Class 1B"
     },
     "it": {
       "name": "Nourdeen Mohamed Gamal",
       "grade": "Primo anno della scuola preparatoria",
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
-      "subtitle": "Uno studioso di medicina e filosofia la cui influenza attraversò i secoli",
+      "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
       "className": "Class 1B"
+    },
+    "de": {
+      "name": "Nourdeen Mohamed Gamal",
+      "grade": "1. Klasse der Sekundarstufe I",
+      "className": "Klasse 1B",
+      "title": "Ibn Sina — al-Scheich al-Ra’is",
+      "subtitle": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde."
     }
   }
 }

@@ -2,7 +2,7 @@
   if(!window.I18N)return;
   window.I18N.register('ar',{
     submit_story_cta:'اكتب حكايتك',
-    k1:'رجال خالدون عبر التاريخ',k2:'حكايات أكتوبر 1973',k3:'أرشيف الحكايات',
+    k1:'خالدون عبر التاريخ',k2:'حكايات أكتوبر 1973',k3:'أرشيف الحكايات',
     k4:'EGYPT • 6 OCTOBER 1973',k5:'حكايات أكتوبر 1973',
     k6:'أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973، نستعيد من خلاله قصص الشجاعة والتخطيط والتضحيات التي شاركت في صنع النصر.',
     k7:'اكتشف الحكايات ↓',k8:'مقدمة',k9:'السادس من أكتوبر 1973',
@@ -21,7 +21,7 @@
   });
   window.I18N.register('en',{
     submit_story_cta:'Submit your story',
-    k1:'Immortal Heroes Through History',k2:'October 1973 Stories',k3:'Story Archive',
+    k1:'Immortals Through History',k2:'October 1973 Stories',k3:'Story Archive',
     k4:'EGYPT • 6 OCTOBER 1973',k5:'Stories of October 1973',
     k6:'A digital archive of stories about the heroes of the 1973 October War, remembering the courage, planning, and sacrifice behind the victory.',
     k7:'Explore the stories ↓',k8:'Introduction',k9:'6 October 1973',
@@ -40,7 +40,7 @@
   });
   window.I18N.register('fr',{
     submit_story_cta:'Proposer votre récit',
-    k1:'Héros immortels à travers l’histoire',k2:'Récits d’octobre 1973',k3:'Archives des récits',
+    k1:'Immortels à travers l’histoire',k2:'Récits d’octobre 1973',k3:'Archives des récits',
     k4:'ÉGYPTE • 6 OCTOBRE 1973',k5:'Récits d’octobre 1973',
     k6:'Une archive numérique de récits sur les héros de la guerre d’octobre 1973, rappelant le courage, la préparation et les sacrifices qui ont contribué à la victoire.',
     k7:'Découvrir les récits ↓',k8:'Introduction',k9:'6 octobre 1973',
@@ -59,7 +59,7 @@
   });
   window.I18N.register('it',{
     submit_story_cta:'Invia il tuo racconto',
-    k1:'Eroi immortali nella storia',k2:'Racconti dell’ottobre 1973',k3:'Archivio dei racconti',
+    k1:'Immortali attraverso la storia',k2:'Racconti dell’ottobre 1973',k3:'Archivio dei racconti',
     k4:'EGITTO • 6 OTTOBRE 1973',k5:'Racconti dell’ottobre 1973',
     k6:'Un archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973, per ricordare il coraggio, la preparazione e i sacrifici che contribuirono alla vittoria.',
     k7:'Scopri i racconti ↓',k8:'Introduzione',k9:'6 ottobre 1973',
@@ -78,7 +78,7 @@
   });
   window.I18N.register('de',{
     submit_story_cta:'Deine Geschichte einreichen',
-    k1:'Unsterbliche Helden der Geschichte',k2:'Geschichten zum Oktober 1973',k3:'Geschichtenarchiv',
+    k1:'Unsterbliche durch die Geschichte',k2:'Geschichten zum Oktober 1973',k3:'Geschichtenarchiv',
     k4:'ÄGYPTEN • 6. OKTOBER 1973',k5:'Geschichten vom Oktober 1973',
     k6:'Ein digitales Archiv über die Helden des Oktoberkriegs von 1973, das an Mut, Planung und Opfer erinnert, die zum Sieg beitrugen.',
     k7:'Geschichten entdecken ↓',k8:'Einführung',k9:'6. Oktober 1973',
@@ -98,11 +98,11 @@
   window.I18N.apply();
 
   var homeMeta = {
-    ar:['رجال خالدون عبر التاريخ | حكايات أكتوبر 1973','أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973.'],
-    en:['Immortal Heroes Through History | October 1973 Stories','A digital archive of stories about the heroes of the 1973 October War.'],
-    fr:['Des héros immortels à travers l’histoire | Récits d’octobre 1973','Archives numériques de récits sur les héros de la guerre d’octobre 1973.'],
-    it:['Eroi immortali nella storia | Racconti dell’ottobre 1973','Archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973.'],
-    de:['Unsterbliche Helden durch die Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
+    ar:['خالدون عبر التاريخ | حكايات أكتوبر 1973','أرشيف رقمي لحكايات أبطال حرب أكتوبر 1973.'],
+    en:['Immortals Through History | October 1973 Stories','A digital archive of stories about the heroes of the 1973 October War.'],
+    fr:['Immortels à travers l’histoire | Récits d’octobre 1973','Archives numériques de récits sur les héros de la guerre d’octobre 1973.'],
+    it:['Immortali attraverso la storia | Racconti dell’ottobre 1973','Archivio digitale di racconti sugli eroi della guerra dell’ottobre 1973.'],
+    de:['Unsterbliche durch die Geschichte | Oktober-Geschichten 1973','Ein digitales Archiv der Geschichten über die Helden des Oktoberkriegs 1973.']
   };
   function applyHomeMeta(){
     var lang=window.I18N.lang();

@@ -1,0 +1,27 @@
+/* Theme support for the standalone submitted-story reader. */
+.kh-fab{position:fixed;right:16px;bottom:16px;z-index:1000;width:48px;height:48px;border-radius:50%;border:1px solid rgba(184,135,75,.55);background:#10232b;color:#f4e5c8;box-shadow:0 8px 24px rgba(0,0,0,.22);font:700 20px Cairo,Tahoma,sans-serif;cursor:pointer}
+.kh-fab:focus-visible{outline:3px solid #e3bd78;outline-offset:3px}
+@media(prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) body{background:#f7f1e6;color:#203744}
+  :root:not([data-theme="dark"]) header{background:rgba(255,252,246,.97);border-color:#d8c7a2}
+  :root:not([data-theme="dark"]) header a.back{color:#79521e}
+  :root:not([data-theme="dark"]) h1{color:#694b1e}
+  :root:not([data-theme="dark"]) .sub,:root:not([data-theme="dark"]) .by,:root:not([data-theme="dark"]) article p.para{color:#344954}
+  :root:not([data-theme="dark"]) .src{border-color:#d7c8ad}
+  :root:not([data-theme="dark"]) .src h2{color:#80551d}
+  :root:not([data-theme="dark"]) .src ol,:root:not([data-theme="dark"]) .note{color:#4b5c65}
+  :root:not([data-theme="dark"]) .src a,:root:not([data-theme="dark"]) .note a{color:#80551d}
+  :root:not([data-theme="dark"]) .btn.alt{color:#344954;border-color:#bba16e}
+  :root:not([data-theme="dark"]) .kh-fab{background:#fffdf8;color:#60451d}
+}
+:root[data-theme="light"] body{background:#f7f1e6;color:#203744}
+:root[data-theme="light"] header{background:rgba(255,252,246,.97);border-color:#d8c7a2}
+:root[data-theme="light"] header a.back{color:#79521e}
+:root[data-theme="light"] h1{color:#694b1e}
+:root[data-theme="light"] .sub,:root[data-theme="light"] .by,:root[data-theme="light"] article p.para{color:#344954}
+:root[data-theme="light"] .src{border-color:#d7c8ad}
+:root[data-theme="light"] .src h2{color:#80551d}
+:root[data-theme="light"] .src ol,:root[data-theme="light"] .note{color:#4b5c65}
+:root[data-theme="light"] .src a,:root[data-theme="light"] .note a{color:#80551d}
+:root[data-theme="light"] .btn.alt{color:#344954;border-color:#bba16e}
+:root[data-theme="light"] .kh-fab{background:#fffdf8;color:#60451d}

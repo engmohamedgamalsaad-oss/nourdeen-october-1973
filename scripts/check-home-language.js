@@ -215,6 +215,82 @@ for (const rel of htmlFiles) {
   if (tr >= 0 && tag.index > tr) fail(`${rel}: shared language script must precede the translation scripts.`);
 }
 
+/* ---------- 3b) تغطية مفاتيح data-i18n في كل لغة ---------- */
+function matchingObjectEnd(source, openAt) {
+  let depth = 0, quote = '', escaped = false, lineComment = false, blockComment = false;
+  for (let i = openAt; i < source.length; i++) {
+    const ch = source[i], next = source[i + 1];
+    if (lineComment) { if (ch === '\n') lineComment = false; continue; }
+    if (blockComment) { if (ch === '*' && next === '/') { blockComment = false; i++; } continue; }
+    if (quote) {
+      if (escaped) escaped = false;
+      else if (ch === '\\') escaped = true;
+      else if (ch === quote) quote = '';
+      continue;
+    }
+    if (ch === '/' && next === '/') { lineComment = true; i++; continue; }
+    if (ch === '/' && next === '*') { blockComment = true; i++; continue; }
+    if (ch === '"' || ch === "'" || ch === '`') { quote = ch; continue; }
+    if (ch === '{') depth++;
+    else if (ch === '}' && --depth === 0) return i;
+  }
+  return -1;
+}
+function collectRegisteredLocales(source, maps) {
+  const re = /window\.I18N\.register\(\s*(['"])(ar|en|fr|it|de)\1\s*,\s*\{/g;
+  let match;
+  while ((match = re.exec(source))) {
+    const openAt = match.index + match[0].lastIndexOf('{');
+    const closeAt = matchingObjectEnd(source, openAt);
+    if (closeAt < 0) { fail('Could not parse an I18N registration object.'); continue; }
+    try {
+      const entries = vm.runInNewContext('(' + source.slice(openAt, closeAt + 1) + ')');
+      Object.assign(maps[match[2]], entries);
+    } catch (e) {
+      fail(`Could not parse ${match[2]} I18N entries: ${e.message}`);
+    }
+    re.lastIndex = closeAt + 1;
+  }
+}
+{
+  const locales = ['ar', 'en', 'fr', 'it', 'de'];
+  for (const rel of htmlFiles) {
+    const html = read(rel);
+    const required = new Set();
+    for (const m of html.matchAll(/\bdata-i18n=["']([^"']+)["']/gi)) required.add(m[1].trim());
+    for (const m of html.matchAll(/\bdata-i18n-(?:attr|content)=["']([^"']+)["']/gi)) {
+      m[1].split(',').forEach((pair) => {
+        const parts = pair.split(':');
+        const key = parts.length > 1 ? parts[1].trim() : parts[0].trim();
+        if (key) required.add(key);
+      });
+    }
+    if (!required.size) continue;
+    const maps = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
+    let sawRegister = false;
+    const scriptRefs = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
+    for (const src of scriptRefs) {
+      if (isExternalRef(src)) continue;
+      const target = resolveRef(rel, src);
+      if (!exists(target)) continue;
+      const code = read(target);
+      if (!code.includes('window.I18N.register(')) continue;
+      sawRegister = true;
+      collectRegisteredLocales(code, maps);
+    }
+    /* Some small pages register translations inline. */
+    if (html.includes('window.I18N.register(')) {
+      sawRegister = true;
+      collectRegisteredLocales(html, maps);
+    }
+    if (!sawRegister) continue; /* text-key dictionaries and the custom T object are audited separately */
+    for (const locale of locales) {
+      const missing = [...required].filter((key) => maps[locale][key] === undefined || maps[locale][key] === null || maps[locale][key] === '');
+      if (missing.length) fail(`${rel}: ${locale} is missing ${missing.length} data-i18n key(s): ${missing.slice(0, 8).join(', ')}.`);
+    }
+  }
+}
+
 /* ---------- 4) المحرك المشترك يلتزم بالقفل ---------- */
 const engine = read('assets/shared/i18n.js');
 if (!/function readLang\(\)\{\s*[^]*?KH_LANG\.locked\)return window\.KH_LANG\.current/.test(engine)) fail('assets/shared/i18n.js: readLang() must ignore ?lang= when KH_LANG.locked.');
@@ -255,6 +331,95 @@ else {
   const missing = expected.files.filter((f) => !exists(f));
   if (missing.length) fail(`Deleted/missing expected story files (${missing.length}): ${missing.slice(0, 8).join(', ')}${missing.length > 8 ? ', ...' : ''}`);
   else notes.push(`${expected.files.length} expected story files present`);
+}
+
+/* ---------- 5b) بيانات بطاقات الحكايات: اكتمال اللغات والأسماء الثابتة ---------- */
+{
+  const indexPath = 'stories/index.json';
+  try {
+    const stories = JSON.parse(read(indexPath));
+    const locales = ['en', 'fr', 'it', 'de'];
+    for (const story of stories) {
+      if (!story || !story.id) { fail('stories/index.json: found a story without an id.'); continue; }
+      const baseName = String(story.name || '').trim();
+      const baseTitle = String(story.title || '').trim();
+      const baseSubtitle = String(story.subtitle || '').trim();
+      let localizedName = null;
+      for (const locale of locales) {
+        const t = story.i18n && story.i18n[locale];
+        if (!t) { fail(`stories/index.json story ${story.id}: missing ${locale} metadata.`); continue; }
+        if (!String(t.title || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} title.`);
+        if (baseSubtitle && !String(t.subtitle || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} subtitle.`);
+        if (String(story.grade || '').trim() && !String(t.grade || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} grade.`);
+        if (String(story.className || '').trim() && !String(t.className || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} className.`);
+        /* Proper names use Latin-script transliteration here, but must be identical across all translated versions. */
+        const candidateName = String(t.name || '').trim();
+        if (baseName && !candidateName) fail(`stories/index.json story ${story.id}: missing ${locale} student name.`);
+        if (localizedName === null) localizedName = candidateName;
+        else if (candidateName !== localizedName) fail(`stories/index.json story ${story.id}: student name spelling differs in ${locale}.`);
+      }
+      if (!baseTitle) fail(`stories/index.json story ${story.id}: missing source title.`);
+    }
+    notes.push(`${stories.length} story metadata records checked across five languages`);
+  } catch (e) { fail(`stories/index.json: invalid JSON or metadata check failed: ${e.message}`); }
+}
+
+/* ---------- 5c) Theme parity for story pages and October collection ---------- */
+for (const rel of [
+  'stories/october/001/index.html','stories/october/002/index.html',
+  'stories/october/003/index.html','stories/october/004/index.html',
+  'stories/history/005/index.html','stories/history/006/index.html',
+  'stories/science/007/index.html'
+]) {
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+}
+{
+  const rel = 'khaledoon/collections/october.html';
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/october-collection-theme\.css/.test(html)) fail(`${rel}: missing October collection light-mode stylesheet.`);
+  if (!exists('khaledoon/assets/october-collection-theme.css')) fail('October collection theme stylesheet is missing.');
+}
+
+{
+  const rel = 'read.html';
+  const html = read(rel);
+  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+  if (!/read-theme\.css/.test(html)) fail(`${rel}: missing reader theme stylesheet.`);
+  if (!exists('assets/shared/read-theme.css')) fail('Reader theme stylesheet is missing.');
+}
+{
+  const zewail = read('stories/science/007/index.html');
+  const t = zewail.match(/const T=\{([\s\S]*?)\n\};/);
+  if (!t || !/\bar:\{/.test(t[1]) || !/\ben:\{/.test(t[1]) || !/\bfr:\{/.test(t[1]) ||
+      !/\bit:\{/.test(t[1]) || !/\bde:\{/.test(t[1])) {
+    fail('stories/science/007/index.html: the Ahmed Zewail story must define all five language dictionaries.');
+  } else {
+    try {
+      const dictionaries = vm.runInNewContext('({' + t[1] + '})');
+      const keys = Object.keys(dictionaries.ar || {});
+      for (const locale of ['en', 'fr', 'it', 'de']) {
+        const translated = Object.keys(dictionaries[locale] || {});
+        const missing = keys.filter((key) => !translated.includes(key));
+        if (missing.length) fail(`stories/science/007/index.html: ${locale} is missing ${missing.length} translation key(s): ${missing.slice(0, 5).join(', ')}.`);
+      }
+      notes.push(`Ahmed Zewail story: ${keys.length} fields in all five languages`);
+    } catch (e) { fail(`stories/science/007/index.html: could not audit the language dictionaries: ${e.message}`); }
+  }
+}
+{
+  const homeI18n = read('assets/i18n/home.js');
+  const commonI18n = read('assets/i18n/common.js');
+  if (homeI18n.includes('رجال خالدون عبر التاريخ') || homeI18n.includes('Immortal Heroes Through History') ||
+      homeI18n.includes('Héros immortels à travers l’histoire') || homeI18n.includes('Eroi immortali nella storia') ||
+      homeI18n.includes('Unsterbliche Helden der Geschichte')) {
+    fail('assets/i18n/home.js: project name is inconsistent with “Immortals Through History”.');
+  }
+  if (commonI18n.includes("var AR_TITLE='رجال خالدون عبر التاريخ")) {
+    fail('assets/i18n/common.js: stale Arabic document title uses the old project name.');
+  }
 }
 
 if (failures.length) {
