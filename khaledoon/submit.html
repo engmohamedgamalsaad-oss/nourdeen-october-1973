@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#060d1f">
-<script>try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t);if(l==="en"||l==="fr"||l==="it"){d.lang=l;d.dir="ltr"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
+<script>try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t);if(l==="en"||l==="fr"||l==="it"||l==="de"){d.lang=l;d.dir="ltr"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
 <title>اكتب حكايتك | خالدون عبر التاريخ</title>
 <meta name="description" content="اقترح حكاية عن شخصية أثّرت في التاريخ أو وردت في المناهج المصرية. الإرسال لا يعني النشر؛ كل حكاية تُراجع أولًا.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -91,6 +91,7 @@ f.addEventListener('submit',async function(e){
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
 })();
 </script>
+<script src="assets/khaledoon-de.js?v=20261017" defer></script>
 <script src="assets/khaledoon-pages-i18n.js" defer></script>
 </body>
 </html>

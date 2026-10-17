@@ -28,10 +28,22 @@ const read = p => {
 };
 
 const engine = read('assets/shared/i18n.js');
-const allowedMatch = engine.match(/var\s+allowed\s*=\s*\[([^\]]+)\]/);
+/* The engine now reads the list from KH_LANG and keeps a fallback array:
+   var allowed=(window.KH_LANG&&...)?...:['ar','en','fr','it','de'];
+   Both the fallback array and the shared KH_LANG list must contain exactly the required languages. */
+const allowedMatch = engine.match(/var\s+allowed\s*=[^;]*?:\s*\[([^\]]+)\]/);
 const allowed = allowedMatch
   ? [...allowedMatch[1].matchAll(/['"]([a-z]{2})['"]/g)].map(m => m[1])
   : [];
+const sharedLang = read('assets/shared/home-language-only.js');
+const sharedMatch = sharedLang.match(/var\s+SUPPORTED\s*=\s*\[([^\]]+)\]/);
+const sharedAllowed = sharedMatch
+  ? [...sharedMatch[1].matchAll(/['"]([a-z]{2})['"]/g)].map(m => m[1])
+  : [];
+if (required.some(lang => !sharedAllowed.includes(lang)) ||
+    sharedAllowed.some(lang => !required.includes(lang))) {
+  problems.push('assets/shared/home-language-only.js SUPPORTED must be exactly: ' + required.join(', '));
+}
 if (required.some(lang => !allowed.includes(lang)) ||
     allowed.some(lang => !required.includes(lang))) {
   problems.push('Language engine must explicitly allow exactly: ' + required.join(', '));
