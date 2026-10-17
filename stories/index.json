@@ -29,13 +29,6 @@
         "title": "Gli uomini del mare in ottobre",
         "subtitle": "La battaglia che la maggior parte delle persone non ha visto",
         "className": "Classe 1B"
-      },
-      "de": {
-        "name": "Nourdeen Mohamed Gamal",
-        "grade": "1. Klasse der Sekundarstufe I",
-        "className": "Klasse 1B",
-        "title": "Die Männer des Meeres im Oktober",
-        "subtitle": "Die Schlacht, die die meisten Menschen nie sahen"
       }
     },
     "id": "001",
@@ -72,13 +65,6 @@
         "title": "L’ingegno prima delle armi",
         "subtitle": "Come l’acqua ha aperto un passaggio attraverso il canale",
         "className": "Classe 3 E"
-      },
-      "de": {
-        "name": "Karma Mohamed Gamal",
-        "grade": "3. Klasse der Grundschule",
-        "className": "Klasse 3E",
-        "title": "Verstand vor Waffen",
-        "subtitle": "Wie das Wasser einen Weg über den Kanal öffnete"
       }
     },
     "id": "002",
@@ -115,13 +101,6 @@
         "title": "Una lingua che il nemico non capiva",
         "subtitle": "La storia del codice nubiano",
         "className": "Classe 1 A"
-      },
-      "de": {
-        "name": "Malika Mohamed Gamal",
-        "grade": "1. Klasse der Grundschule",
-        "className": "Klasse 1A",
-        "title": "Eine Sprache, die der Feind nicht verstand",
-        "subtitle": "Die Geschichte des nubischen Codes"
       }
     },
     "id": "003",
@@ -158,13 +137,6 @@
         "title": "I cieli di ottobre: i martiri del primo attacco aereo",
         "subtitle": "I piloti che contribuirono ad aprire una via attraverso il canale",
         "className": "Classe 1B"
-      },
-      "de": {
-        "name": "Nourdeen Mohamed Gamal",
-        "grade": "1. Klasse der Sekundarstufe I",
-        "className": "Klasse 1B",
-        "title": "Oktoberhimmel: Die Gefallenen des ersten Luftangriffs",
-        "subtitle": "Die Geschichte der Piloten, die den Weg für die Überquerung ebneten"
       }
     },
     "id": "004",
@@ -184,23 +156,23 @@
       "en": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "First year of preparatory school",
-        "className": "Class 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries."
+        "subtitle": "A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
+        "className": "Class 1B"
       },
       "fr": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Première année du collège",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles."
+        "subtitle": "Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
+        "className": "Class 1B"
       },
       "it": {
         "name": "Nourdeen Mohamed Gamal",
         "grade": "Primo anno della scuola preparatoria",
-        "className": "Classe 1B",
         "title": "Ibn Sina — al-Shaykh al-Ra’is",
-        "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli."
+        "subtitle": "Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
+        "className": "Class 1B"
       },
       "de": {
         "name": "Nourdeen Mohamed Gamal",
@@ -225,23 +197,14 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — When He Raised His Voice",
         "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement."
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
         "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique."
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "Ahmed Urabi — Quando fece sentire la sua voce",
         "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico."
       },
@@ -268,23 +231,14 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "The Story of the Scientist Ahmed Zewail",
         "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions."
       },
       "fr": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "L’histoire du scientifique Ahmed Zewail",
         "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques."
       },
       "it": {
-        "name": "",
-        "grade": "",
-        "className": "",
         "title": "La storia dello scienziato Ahmed Zewail",
         "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche."
       },
