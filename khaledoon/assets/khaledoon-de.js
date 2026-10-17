@@ -3,7 +3,7 @@
    يُحمَّل قبل khaledoon.js و khaledoon-pages-i18n.js و khaledoon-i18n-extra.js، وهذه السكربتات تقرأ window.KH_DE
    عند اختيار الألمانية من الصفحة الرئيسية (المفتاح الموحد kh-lang = de). أي نص غير موجود هنا يبقى بالعربية ولا يظهر "undefined". */
 window.KH_DE={
-"خالدون عبر التاريخ":"Unsterbliche durch die Geschichte",
+"خالدون عبر التاريخ":"Unsterbliche Persönlichkeiten der Geschichte",
 "حكاياتٌ تُروى… وأثرٌ يبقى":"Erzählte Geschichten … und eine Spur, die bleibt",
 "بوابات المعرفة":"Tore des Wissens",
 "حكايات أكتوبر 1973":"Geschichten vom Oktober 1973",
@@ -21,7 +21,7 @@ window.KH_DE={
 "اختار اللي يشدّ فضولك":"Wähle, was deine Neugier weckt",
 "كل باب له حكاية مختلفة":"Jede Tür hat eine andere Geschichte",
 "بوابات تقودك إلى عوالم متنوعة، ولكل مجموعة حكاياتها وطابعها الخاص.":"Tore zu ganz unterschiedlichen Welten – jede Sammlung hat ihre eigenen Geschichten und ihren eigenen Charakter.",
-"قسم من خالدون عبر التاريخ، يضم حكايات أكتوبر المنشورة مع الحفاظ على روابطها ورمز QR المستقل.":"Ein Bereich von „Unsterbliche durch die Geschichte“ mit den veröffentlichten Oktober-Geschichten – ihre Links und der eigenständige QR-Code bleiben erhalten.",
+"قسم من خالدون عبر التاريخ، يضم حكايات أكتوبر المنشورة مع الحفاظ على روابطها ورمز QR المستقل.":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“ mit den veröffentlichten Oktober-Geschichten – ihre Links und der eigenständige QR-Code bleiben erhalten.",
 "اقرأ الحكايات الأربع ←":"Die vier Geschichten lesen →",
 "العلم والعلماء":"Wissenschaft und Wissenschaftler",
 "اكتشافات وأسئلة وأفكار غيّرت فهمنا للعالم.":"Entdeckungen, Fragen und Ideen, die unser Verständnis der Welt verändert haben.",
@@ -68,7 +68,7 @@ window.KH_DE={
 "دقة تاريخية، حكاية مفهومة ومشوقة، احترام الأشخاص والأحداث، مصادر يمكن الرجوع إليها، وصور نعرف مصدرها وحقوق استخدامها. الاقتراح لا يعني النشر التلقائي؛ كل مادة تمر بالمراجعة والموافقة أولًا.":"Historische Genauigkeit, eine verständliche und spannende Geschichte, Respekt vor Menschen und Ereignissen, nachprüfbare Quellen sowie Bilder, deren Quelle und Nutzungsrechte wir kennen. Ein Vorschlag bedeutet keine automatische Veröffentlichung; jeder Beitrag durchläuft zuerst Prüfung und Freigabe.",
 "كل حكاية من جزأين: حكاية بصوت الراوي، ثم سرد موثق بمصادر محددة مع فصل الحقائق عن التفسيرات.":"Jede Geschichte besteht aus zwei Teilen: einer Geschichte in der Stimme des Erzählers und anschließend einem belegten Bericht mit konkreten Quellen, der Fakten von Deutungen trennt.",
 "اكتب حكايتك":"Schreibe deine Geschichte",
-"من أقسام خالدون:":"Aus den Bereichen von „Unsterbliche durch die Geschichte“:",
+"من أقسام خالدون:":"Aus den Bereichen von „Unsterbliche Persönlichkeiten der Geschichte“:",
 "افتح قسم حكايات أكتوبر 1973 ←":"Den Bereich „Geschichten vom Oktober 1973“ öffnen →",
 "العودة إلى الأعلى ↑":"Nach oben ↑",
 "تُعدّ الحكايات بالاستناد إلى مصادر ومراجع يُشار إليها داخل كل حكاية، وتُراجع المعلومات قبل النشر قدر الإمكان. ويُقدَّم المحتوى لأغراض معرفية وتعليمية؛ ولا يعني نشره تبنّي الموقع لكل رأي أو تفسير وارد فيه. وتظل مسؤولية الآراء والمساهمات الشخصية المنسوبة إلى أصحابها، ويُرجى الرجوع إلى المصادر الأصلية للتحقق من التفاصيل.":"Die Geschichten werden auf der Grundlage von Quellen und Referenzen erstellt, die innerhalb jeder Geschichte genannt sind, und die Informationen werden vor der Veröffentlichung nach Möglichkeit geprüft. Die Inhalte dienen Wissens- und Bildungszwecken; ihre Veröffentlichung bedeutet nicht, dass sich die Website jede darin enthaltene Meinung oder Deutung zu eigen macht. Die Verantwortung für persönliche Meinungen und Beiträge liegt bei ihren jeweiligen Autoren; bitte konsultiere die Originalquellen, um die Details zu überprüfen.",
@@ -176,7 +176,7 @@ window.KH_DE={
 "كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.":"Jede Geschichte hat ihre eigene Seite und wird hier ergänzt, nachdem Inhalt und Quellen geprüft wurden.",
 "الحكايات قيد الإعداد":"Geschichten in Vorbereitung",
 "لم تُضف حكايات إلى هذا القسم بعد. ستظهر هنا الحكايات المعتمدة، باستخدام نفس أسلوب العرض والتنظيم المستخدم في قسم أكتوبر 1973.":"In diesem Bereich wurden noch keine Geschichten ergänzt. Hier erscheinen die freigegebenen Geschichten, in derselben Darstellung und Gliederung wie im Bereich Oktober 1973.",
-"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche durch die Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden.",
+"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden.",
 "اكتشف حكايات العلماء وأسئلتهم وتجاربهم، وكيف تحولت الأفكار إلى معرفة وإنجازات.":"Entdecke die Geschichten von Wissenschaftlern, ihre Fragen und Experimente und wie aus Ideen Wissen und Leistungen wurden.",
 "حكايات عن العلماء والأفكار والاكتشافات التي غيّرت فهمنا للعالم.":"Geschichten über Wissenschaftler, Ideen und Entdeckungen, die unser Verständnis der Welt verändert haben.",
 "وراء كل إنجاز رحلة من المحاولات والاختيارات والتحديات؛ هنا نرويها في سياقها وبالاستناد إلى المصادر.":"Hinter jeder Leistung steht ein Weg aus Versuchen, Entscheidungen und Herausforderungen; hier erzählen wir ihn im Zusammenhang und gestützt auf Quellen.",
@@ -242,6 +242,6 @@ window.KH_DE={
 "تعذر الاتصال. تأكد من الإنترنت وحاول مرة أخرى.":"Verbindung fehlgeschlagen. Prüfe deine Internetverbindung und versuche es erneut.",
 "حكايات أبطال أكتوبر الأربع في الصفحة الأصلية، بنفس تصميمها وتنسيقها المعتمد.":"Die Geschichten der vier Oktober-Helden auf der Originalseite, mit ihrem bewährten Design und Layout.",
 "افتح حكايات أكتوبر 1973 ←":"Oktober-Geschichten 1973 öffnen →",
-"خالدون عبر التاريخ: حكايات شخصيات تبدأ بصوت الطالب أو الراوي، وتُستكمل بسرد موثق بمصادر موثوقة.":"Unsterbliche durch die Geschichte: Geschichten über Persönlichkeiten, die mit der Stimme einer Schülerin oder eines Erzählers beginnen und mit einem dokumentierten Bericht auf verlässlichen Quellen fortgesetzt werden.",
+"خالدون عبر التاريخ: حكايات شخصيات تبدأ بصوت الطالب أو الراوي، وتُستكمل بسرد موثق بمصادر موثوقة.":"Unsterbliche Persönlichkeiten der Geschichte: Geschichten über Persönlichkeiten, die mit der Stimme einer Schülerin oder eines Erzählers beginnen und mit einem dokumentierten Bericht auf verlässlichen Quellen fortgesetzt werden.",
 "حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach."
 };
