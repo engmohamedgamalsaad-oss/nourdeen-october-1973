@@ -60,6 +60,8 @@
     Object.defineProperty(window, 'KH_LANG', { value: Object.freeze(api), writable: false, configurable: false });
   } catch (e) { window.KH_LANG = api; }
 
+  if (isHome) return;   /* الرئيسية تحتفظ بالرابط كما هو؛ مبدّل اللغة يظل ظاهرًا */
+
   /* إزالة ?lang= فقط من الرابط بعد قراءة اللغة وحفظها، مع بقاء باقي المعاملات والـ hash كما هي */
   try {
     var url = new URL(location.href);
