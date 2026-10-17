@@ -442,7 +442,7 @@ for (const rel of [
     const places = JSON.parse(placeData);
     if (!places['003'] || places['003'].approximate !== true) fail('Story 003 map coordinates must be marked approximate until verified.');
     if (places['002']) fail('Story 002 must stay off the map until its disputed birthplace is verified.');
-    if (!map.includes("p.approximate === true") || !map.includes("T('approx')")) fail('Interactive map must visibly label approximate locations.');
+    if (!map.includes("p.approximate === true") || !map.includes("e.p.approximate === true") || !map.includes("T('approx')")) fail('Interactive map must visibly label approximate locations in both popup and fallback list.');
   } catch (e) { fail('stories/places.json: invalid JSON or map-location review metadata failed: ' + e.message); }
   if (map.includes('map.scrollWheelZoom.enable()')) fail('Interactive map must not capture page scrolling after a click.');
   if (!map.includes('if (usingFallback) fallbackList()')) fail('Interactive map fallback list must refresh after language changes.');
