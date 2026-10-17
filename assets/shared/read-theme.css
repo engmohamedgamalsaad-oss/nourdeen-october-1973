@@ -6,7 +6,7 @@
   :root:not([data-theme="dark"]) header{background:rgba(255,252,246,.97);border-color:#d8c7a2}
   :root:not([data-theme="dark"]) header a.back{color:#79521e}
   :root:not([data-theme="dark"]) h1{color:#694b1e}
-  :root:not([data-theme="dark"]) .sub,:root:not([data-theme="dark"]) .by,:root:not([data-theme="light"]) article p.para{color:#344954}
+  :root:not([data-theme="dark"]) .sub,:root:not([data-theme="dark"]) .by,:root:not([data-theme="dark"]) article p.para{color:#344954}
   :root:not([data-theme="dark"]) .src{border-color:#d7c8ad}
   :root:not([data-theme="dark"]) .src h2{color:#80551d}
   :root:not([data-theme="dark"]) .src ol,:root:not([data-theme="dark"]) .note{color:#4b5c65}
