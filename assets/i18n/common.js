@@ -7,7 +7,7 @@
   window.I18N.register('de',{c1:'Startseite',c2:'Oktober-Geschichten'});
   (function(){
     var IDX={en:0,fr:1,it:2,de:3};
-    var AR_TITLE='رجال خالدون عبر التاريخ | حكايات أكتوبر 1973';
+    var AR_TITLE='خالدون عبر التاريخ | حكايات أكتوبر 1973';
     var ARIA={
       'معرض الوسائط':['Media gallery','Galerie multimédia','Galleria multimediale','Mediengalerie'],
       'هل تعلم':['Did you know?','Le saviez-vous ?','Lo sapevi?','Schon gewusst?'],
