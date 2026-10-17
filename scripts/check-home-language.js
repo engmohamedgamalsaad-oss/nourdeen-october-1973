@@ -437,6 +437,13 @@ for (const rel of [
   if (!map.includes("get('stories/index.json')") || !map.includes("get('stories/places.json')")) {
     fail('Interactive map must read the current story index and place data.');
   }
+  const placeData = read('stories/places.json');
+  try {
+    const places = JSON.parse(placeData);
+    if (!places['003'] || places['003'].approximate !== true) fail('Story 003 map coordinates must be marked approximate until verified.');
+    if (places['002']) fail('Story 002 must stay off the map until its disputed birthplace is verified.');
+    if (!map.includes("p.approximate === true") || !map.includes("T('approx')")) fail('Interactive map must visibly label approximate locations.');
+  } catch (e) { fail('stories/places.json: invalid JSON or map-location review metadata failed: ' + e.message); }
   if (map.includes('map.scrollWheelZoom.enable()')) fail('Interactive map must not capture page scrolling after a click.');
   if (!map.includes('if (usingFallback) fallbackList()')) fail('Interactive map fallback list must refresh after language changes.');
 }
