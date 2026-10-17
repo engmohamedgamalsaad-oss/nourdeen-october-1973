@@ -19,3 +19,25 @@ jobs:
           node-version: 20
       - name: Verify homepage-only language flow
         run: node scripts/check-home-language.js
+      - name: Verify five-language translation coverage
+        run: node scripts/check-localization-coverage.js
+      - name: Install Chromium for real-browser checks
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run real-browser language and responsive sweep
+        run: node scripts/e2e-language-flow.cjs --out language-e2e-report.json
+      - name: Upload browser audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-e2e-report
+          path: language-e2e-report.json
+          if-no-files-found: ignore
+      - name: Upload mobile and desktop audit screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: language-audit-screenshots
+          path: language-audit-screenshots/*.png
+          if-no-files-found: ignore

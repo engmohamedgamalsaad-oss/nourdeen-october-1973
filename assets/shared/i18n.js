@@ -30,8 +30,6 @@
     });
   }
   function readLang(){
-    /* الصفحات المقفولة: اللغة هي اختيار الصفحة الرئيسية فقط، ولا يتجاوزها ?lang= */
-    if(window.KH_LANG&&window.KH_LANG.locked)return window.KH_LANG.current;
     var params=new URLSearchParams(location.search);
     var query=params.get('lang');
     var saved='';
@@ -83,7 +81,7 @@
     document.querySelectorAll('[data-lang-switch]').forEach(function(host){
       host.innerHTML='';
       host.hidden=false;host.style.display='';
-      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano'};
+      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
       allowed.forEach(function(lang){
         var button=document.createElement('button');
         button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
@@ -97,7 +95,6 @@
     document.dispatchEvent(new CustomEvent('site-language-change',{detail:{lang:current}}));
   }
   function setLang(lang){
-    if(window.KH_LANG&&window.KH_LANG.locked)return; /* تغيير اللغة من الصفحة الرئيسية فقط */
     if(allowed.indexOf(lang)<0)return;
     current=lang;
     try{localStorage.setItem('lang',lang);localStorage.setItem('kh-lang',lang);}catch(e){}

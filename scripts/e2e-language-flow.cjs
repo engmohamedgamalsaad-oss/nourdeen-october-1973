@@ -1,9 +1,9 @@
 'use strict';
-/* Real-browser regression for the homepage-only language flow (Playwright + Chromium).
+/* Real-browser regression for the shared five-language flow across all pages (Playwright + Chromium).
    Run from the repository root:   node scripts/e2e-language-flow.cjs [--out report.json]
 
-   Needs Playwright with a Chromium build. It is intentionally NOT wired into CI (CI would have to
-   download a browser); run it locally / in a preview-verification step.
+   Needs Playwright with a Chromium build. CI installs Playwright and Chromium on pull requests; local runs can use an existing
+   Playwright installation.
 
    External requests (fonts, Supabase, CDNs) are blocked on purpose, so this test cannot say anything
    about reactions/likes (Supabase), web fonts, or the live deployment.
@@ -13,8 +13,8 @@
               back -> home -> direct open in a new tab -> a conflicting ?lang= override.
    2. SWEEP - every visitor page x language x viewport loaded directly with a saved language.
 
-   HARD failures (exit code 1): wrong html lang/dir, a visible language switcher on an inner page,
-   ?lang= left in the URL, a broken flow step, a same-origin 404 / failed request, a page error.
+   HARD failures (exit code 1): wrong html lang/dir, missing/broken five-language switcher on the October section,
+   a broken language-switch action, ?lang= left in the URL, a same-origin 404 / failed request, a page error.
    WARNINGS (reported, do not fail): horizontal overflow, body direction differing from <html>,
    a high share of Arabic text on a non-Arabic page (= untranslated fallback). */
 const http = require('node:http');
@@ -26,6 +26,8 @@ const LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3, de: 4 };
 const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html']);
 const out = (() => { const i = process.argv.indexOf('--out'); return i > 0 ? process.argv[i + 1] : ''; })();
+const screenshotDir = path.join(ROOT, 'language-audit-screenshots');
+fs.mkdirSync(screenshotDir, { recursive: true });
 
 function loadPlaywright() {
   const tries = [process.env.PLAYWRIGHT_MODULE_PATH, '/opt/npm-tools/node_modules', '/home/claude/.npm-global/lib/node_modules', path.join(ROOT, 'node_modules')].filter(Boolean);
@@ -72,7 +74,7 @@ function visitorPages() {
 }
 
 const expectedDir = (l) => (l === 'ar' ? 'rtl' : 'ltr');
-const PRINT_RE = /طباع|اطبع|print|imprim|stamp/i;
+const PRINT_RE = /طباع|اطبع|print|imprim|stamp|druck/i;
 
 const INSPECT = () => {
   const root = document.documentElement;
@@ -106,10 +108,9 @@ async function inspect(page) {
   return page.evaluate(INSPECT);
 }
 
-/* Pre-existing, not language-related, deliberately left unchanged (reported as warnings). */
-const KNOWN_RESOURCE_ISSUES = [
-  { re: /^(?:\/nourdeen-october-1973)?\/khaledoon\/collections\/assets\/shared\/home-extras\.js/, note: 'feature-carousel.js loads the homepage-only home-extras.js with a page-relative path, so the October section page requests a non-existent file (benign 404; fixing the path would add the homepage quiz CTA to that page, an owner decision).' }
-];
+/* No known same-origin resource failures are currently waived. Keep this list empty
+   unless a reproducible failure is verified and explicitly documented. */
+const KNOWN_RESOURCE_ISSUES = [];
 function watch(page, origin, sink) {
   const rel = (u) => u.replace(origin, '');
   page.on('pageerror', (e) => sink.push({ kind: 'pageerror', msg: String(e.message || e).slice(0, 160), url: page.url() }));
@@ -134,6 +135,21 @@ function classify(res, hard, warn, label, base) {
 
 async function newContext(browser, origin, viewport) {
   const ctx = await browser.newContext(viewport === 'mobile' ? { ...devices['Pixel 5'] } : { viewport: { width: 1366, height: 768 } });
+  /* The site intentionally uses smooth scrolling. Disable it only in automated tests so
+     Playwright does not race an in-progress scroll when clicking language buttons.
+     Init scripts can run before <head> exists, so wait until DOMContentLoaded. */
+  await ctx.addInitScript(() => {
+    const disableSmoothScroll = () => {
+      if (document.documentElement) {
+        document.documentElement.style.setProperty('scroll-behavior', 'auto', 'important');
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', disableSmoothScroll, { once: true });
+    } else {
+      disableSmoothScroll();
+    }
+  });
   await ctx.route((u) => !String(u).startsWith(origin), (r) => r.abort());
   return ctx;
 }
@@ -143,7 +159,6 @@ function judgeInner(label, s, lang, hard, warn, { requireClean = true } = {}) {
   if (s.noKhLang) hard.push(`${where}: the shared language script never ran (KH_LANG undefined)`);
   if (s.lang !== lang) hard.push(`${where}: html lang=${s.lang}, expected ${lang}`);
   if (s.dir !== expectedDir(lang)) hard.push(`${where}: html dir=${s.dir}, expected ${expectedDir(lang)}`);
-  if (s.switchers.length) hard.push(`${where}: visible language switcher(s): ${[...new Set(s.switchers)].join(', ')}`);
   if (requireClean && /[?&]lang=/.test(s.url)) hard.push(`${where}: ?lang= left in URL`);
   if (s.overflow > 1) warn.push(`${where}: horizontal overflow ${s.overflow}px`);
   if (s.bodyDir && s.bodyDir !== s.dir) warn.push(`${where}: body direction ${s.bodyDir} differs from html dir ${s.dir}`);
@@ -171,16 +186,43 @@ async function flow(browser, base, origin, lang, viewport) {
     step('homepage applies chosen language', s.lang === lang && s.dir === expectedDir(lang) && (lang === 'ar' ? true : s.stored === lang), `lang=${s.lang} dir=${s.dir} stored=${s.stored}`);
     const pressed = await page.locator(`.langs button[data-l="${HOME_BUTTON[lang]}"]`).getAttribute('aria-pressed').catch(() => null);
     step('homepage marks chosen button pressed', pressed === 'true', `aria-pressed=${pressed}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `home-${viewport}.png`), animations: 'disabled' });
     const homeOptions = await page.locator('.langs button[data-l]').count();
     step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
     /* 2. section */
-    const sectionLink = page.locator('a[href="khaledoon/collections/october.html"]').first();
+    const sectionLink = page.locator('.gate[href="khaledoon/collections/october.html"]').first();
     try { await sectionLink.scrollIntoViewIfNeeded(); await Promise.all([page.waitForURL(/collections\/october\.html/, { timeout: 8000 }), sectionLink.click({ timeout: 5000 })]); }
     catch (e) { await page.goto(base + '/khaledoon/collections/october.html', { waitUntil: 'load' }); warn.push(`${label}: section link not clickable from the homepage, opened directly`); }
     await page.waitForTimeout(300);
     s = await inspect(page); judgeInner(label + ' section', s, lang, hard, warn);
     step('section keeps language', s.lang === lang, `lang=${s.lang}`);
+    const sectionOptions = await page.locator('.lang-option').count();
+    step('section exposes all five language options', sectionOptions === LANGS.length, `count=${sectionOptions}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `october-${viewport}.png`), animations: 'disabled' });
+    if (sectionOptions === LANGS.length) {
+      const currentIndex = LANGS.indexOf(lang);
+      const alternate = LANGS[(currentIndex + 1) % LANGS.length];
+      try {
+        const alternateButton = page.locator('.lang-option').nth(LANGS.indexOf(alternate));
+        await alternateButton.scrollIntoViewIfNeeded({ timeout: 5000 });
+        await alternateButton.click({ timeout: 8000 });
+        await page.waitForFunction((expected) => document.documentElement.lang === expected, alternate, { timeout: 8000 }).catch(() => {});
+        await page.waitForTimeout(250);
+        let switched = await inspect(page);
+        step('section language switcher changes language and saves it', switched.lang === alternate && switched.stored === alternate && !/[?&]lang=/.test(switched.url), `lang=${switched.lang} stored=${switched.stored}`);
+        const originalButton = page.locator('.lang-option').nth(currentIndex);
+        await originalButton.scrollIntoViewIfNeeded({ timeout: 5000 });
+        await originalButton.click({ timeout: 8000 });
+        await page.waitForFunction((expected) => document.documentElement.lang === expected, lang, { timeout: 8000 }).catch(() => {});
+        await page.waitForTimeout(250);
+        s = await inspect(page);
+        step('section language can be restored without losing navigation', s.lang === lang && !/[?&]lang=/.test(s.url), `lang=${s.lang}`);
+      } catch (e) {
+        step('section language switcher interaction completes', false, String(e.message || e).split('\\n')[0].slice(0, 220));
+        try { await page.evaluate((value) => { localStorage.setItem('kh-lang', value); localStorage.setItem('lang', value); }, lang); await page.reload({ waitUntil: 'load' }); } catch (_) {}
+      }
+    }
 
     /* 3. story from the section */
     const storyLink = page.locator('a[href*="stories/october/001/"]').first();
@@ -189,6 +231,7 @@ async function flow(browser, base, origin, lang, viewport) {
     await page.waitForLoadState('load'); await page.waitForTimeout(500);
     s = await inspect(page); judgeInner(label + ' story001', s, lang, hard, warn);
     step('story opened from section keeps language', s.lang === lang, `lang=${s.lang}`);
+    if (lang === 'ar') await page.screenshot({ path: path.join(screenshotDir, `story001-${viewport}.png`), animations: 'disabled' });
 
     /* share + print controls */
     const share = await page.evaluate(() => {
@@ -201,7 +244,13 @@ async function flow(browser, base, origin, lang, viewport) {
       const re = new RegExp(src, 'i');
       return [...document.querySelectorAll('button,a')].filter((e) => re.test(e.textContent || '') && e.getClientRects().length).length;
     }, PRINT_RE.source);
-    steps.push({ name: 'print control present on story001 (info)', ok: true, detail: String(printCount) });
+    step('print control present on story001', printCount > 0, `count=${printCount}`);
+    const reactionUi = await page.evaluate(() => ({
+      like: !!document.querySelector('#reaction-like'),
+      choices: document.querySelectorAll('[data-reaction-choice]').length,
+      counts: document.querySelectorAll('[data-reaction-count]').length
+    }));
+    step('story has like and reaction controls', reactionUi.like && reactionUi.choices > 0 && reactionUi.counts > 0, JSON.stringify(reactionUi));
 
     /* 4. reload */
     await page.reload({ waitUntil: 'load' }); await page.waitForTimeout(400);

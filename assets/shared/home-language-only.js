@@ -1,15 +1,11 @@
 /* خالدون عبر التاريخ — المصدر الموحد للغة.
 
-   اللغة تُختار من الصفحة الرئيسية فقط، وباقي الصفحات (الأقسام والحكايات والصفحات
-   الداخلية) تلتزم بها. هذا الملف هو المكان الوحيد الذي تُعرَّف فيه اللغات المدعومة
+   اختيار اللغة موحّد بين الصفحة الرئيسية والأقسام والحكايات والصفحات الداخلية؛
+   أي اختيار يُحفظ ويُطبّق على بقية الصفحات. هذا الملف يعرّف اللغات المدعومة
    ومفتاح التخزين، ويجب أن يُحمَّل أول سكربت في <head> قبل أي سكربت ترجمة.
 
-   وضعان للتشغيل:
-   - الصفحة الرئيسية:  <script src="assets/shared/home-language-only.js" data-role="home">
-     يطبّق اللغة المحفوظة (lang/dir) ويرحّل المفتاح القديم فقط، ولا يخفي مبدّل اللغة.
-   - أي صفحة أخرى (الافتراضي): يطبّق اللغة المحفوظة، ويخفي مبدّلات اللغة الداخلية،
-     وينظّف ?lang= من الرابط، ويقفل تغيير اللغة (KH_LANG.locked) حتى لا يتجاوزها
-     أي سكربت ترجمة قديم.
+   يطبّق اللغة المحفوظة (lang/dir) ويرحّل المفتاح القديم فقط. تبقى مبدّلات اللغة
+   ظاهرة وقابلة للاستخدام في كل صفحة، ويُزال ?lang= من الرابط بعد حفظ الاختيار.
 
    لإضافة لغة جديدة لاحقًا: أضفها إلى SUPPORTED هنا (وإلى rtl إن كانت RTL)، ثم أضف
    ترجمتها واستكمل تغطيتها قبل تفعيلها. */
@@ -56,7 +52,7 @@
     key: KEY,
     legacyKeys: Object.freeze(LEGACY_KEYS.slice()),
     current: lang,
-    locked: !isHome,
+    locked: false,
     isSupported: isSupported,
     dir: function (value) { return RTL.indexOf(value) >= 0 ? 'rtl' : 'ltr'; }
   };
@@ -64,18 +60,9 @@
     Object.defineProperty(window, 'KH_LANG', { value: Object.freeze(api), writable: false, configurable: false });
   } catch (e) { window.KH_LANG = api; }
 
-  if (isHome) return;   /* الرئيسية: تبقى قائمة اللغات ظاهرة، ولا يُنظَّف الرابط */
+  if (isHome) return;   /* الرئيسية تحتفظ بالرابط كما هو؛ مبدّل اللغة يظل ظاهرًا */
 
-  /* الصفحات الداخلية: إخفاء مبدّلات اللغة (محددات خاصة بمبدّلات اللغة فقط) */
-  var style = document.createElement('style');
-  style.setAttribute('data-home-language-only', 'true');
-  style.textContent =
-    'html body .lang-switch,html body .topbar .lang-switch,html body .language-switch,' +
-    'html body .langs,html body [data-lang-switch],html body .language-selector,' +
-    'html body .lang-selector{display:none!important;visibility:hidden!important;pointer-events:none!important}';
-  (document.head || root).appendChild(style);
-
-  /* إزالة ?lang= فقط من الرابط، مع بقاء باقي المعاملات والـ hash كما هي */
+  /* إزالة ?lang= فقط من الرابط بعد قراءة اللغة وحفظها، مع بقاء باقي المعاملات والـ hash كما هي */
   try {
     var url = new URL(location.href);
     if (url.searchParams.has('lang')) {

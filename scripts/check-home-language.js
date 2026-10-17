@@ -1,5 +1,5 @@
 'use strict';
-/* Static + unit regression checks for the homepage-only language flow.
+/* Static + unit regression checks for the shared five-language flow.
    Node built-ins only (no install step). Run from the repository root:  node scripts/check-home-language.js
 
    What this proves (and what it does NOT):
@@ -58,11 +58,10 @@ if (!/LEGACY_KEYS = \['lang'\];/.test(shared)) fail("Shared script: legacy key '
 if (!shared.includes('localStorage.setItem(KEY, lang)')) fail('Shared script: legacy -> unified key migration is missing.');
 if (!shared.includes("searchParams.delete('lang')") || !shared.includes('history.replaceState')) fail('Shared script: stale ?lang= removal is missing.');
 if (!shared.includes('KH_LANG')) fail('Shared script: KH_LANG central config is missing.');
-{
-  const home = shared.indexOf('if (isHome) return;');
-  const hide = shared.indexOf("createElement('style')");
-  if (home < 0 || hide < 0 || home > hide) fail('Shared script: home mode must return before the switcher-hiding style is injected.');
+if (/locked:\s*!isHome/.test(shared) || /createElement\(['"]style['"]\)/.test(shared) || /lang-selector\{display:none!important/.test(shared)) {
+  fail('Shared script: language selectors must remain visible and usable on every page.');
 }
+if (!/locked:\s*false/.test(shared)) fail('Shared script: language changes must not be locked to the homepage.');
 
 /* ---------- 2) اختبار سلوكي للملف المشترك (sandbox) ---------- */
 function runShared({ store = {}, url = 'https://x.test/p/', role = '', preload = false }) {
@@ -116,13 +115,13 @@ if (shared) {
     r = runShared({ store: { lang: 'de' } });
     expect('legacy lang=de migrated', [r.lang, r.store['kh-lang']], ['de', 'de']);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?lang=en&id=5#sec' });
-    expect('inner page strips only lang and keeps id/hash', [r.calls.replaced, r.lang, r.api.locked, r.calls.styles], ['/p/?id=5#sec', 'fr', true, 1]);
+    expect('inner page strips only lang and keeps id/hash', [r.calls.replaced, r.lang, r.api.locked, r.calls.styles], ['/p/?id=5#sec', 'fr', false, 0]);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?id=5' });
     expect('no lang param -> URL untouched', r.calls.replaced, null);
     r = runShared({ store: { 'kh-lang': 'en' }, role: 'home', url: 'https://x.test/?lang=fr' });
     expect('home mode: not locked, no hiding style, URL untouched', [r.api.locked, r.calls.styles, r.calls.replaced, r.lang], [false, 0, null, 'en']);
     r = runShared({ store: { 'kh-lang': 'it' }, preload: true });
-    expect('double load is harmless', [r.lang, r.calls.styles], ['it', 1]);
+    expect('double load is harmless', [r.lang, r.calls.styles], ['it', 0]);
     r = runShared({});
     try { r.api.supported.push('es'); } catch (e) { /* frozen: expected */ }
     expect('supported list is frozen', r.api.supported.length, 5);
@@ -177,7 +176,7 @@ for (const rel of htmlFiles) {
 
   /* ?lang= links */
   const langLinks = (html.match(/[?&]lang=/g) || []).length;
-  if (langLinks && !KNOWN_LANG_PARAM_LINKS[rel]) fail(`${rel} contains ${langLinks} hard-coded ?lang= link(s); inner pages must follow the homepage language.`);
+  if (langLinks && !KNOWN_LANG_PARAM_LINKS[rel]) fail(`${rel} contains ${langLinks} hard-coded ?lang= link(s); all pages share the saved language.`);
 
   if (isAdmin) continue;
 
@@ -291,10 +290,10 @@ function collectRegisteredLocales(source, maps) {
   }
 }
 
-/* ---------- 4) المحرك المشترك يلتزم بالقفل ---------- */
+/* ---------- 4) المحرك المشترك يسمح بالتبديل من أي صفحة ---------- */
 const engine = read('assets/shared/i18n.js');
-if (!/function readLang\(\)\{\s*[^]*?KH_LANG\.locked\)return window\.KH_LANG\.current/.test(engine)) fail('assets/shared/i18n.js: readLang() must ignore ?lang= when KH_LANG.locked.');
-if (!/function setLang\(lang\)\{\s*if\(window\.KH_LANG&&window\.KH_LANG\.locked\)return/.test(engine)) fail('assets/shared/i18n.js: setLang() must be a no-op when KH_LANG.locked.');
+if (/KH_LANG&&window\.KH_LANG\.locked/.test(engine)) fail('assets/shared/i18n.js: language switching must not be blocked on inner pages.');
+if (!/function setLang\(lang\)/.test(engine)) fail('assets/shared/i18n.js: language switch handler is missing.');
 if (!engine.includes('window.KH_LANG.supported')) fail('assets/shared/i18n.js: language list must come from KH_LANG.');
 
 /* ---------- 4b) كل ملفات JS تُترجَم بلا أخطاء + قاموس الألمانية سليم ---------- */
