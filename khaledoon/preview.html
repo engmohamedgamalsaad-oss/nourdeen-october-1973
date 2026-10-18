@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>معاينة خالدون عبر التاريخ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#07141b;--panel:#10242c;--line:#31505a;--gold:#d7ad66;--text:#f5f0e6;--muted:#b9c8c8;--outer:#b8874b;--inner:#102b35}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17323a,var(--bg) 65%);color:var(--text);font-family:Cairo,Arial,sans-serif;line-height:1.8}button,a,input,textarea{font:inherit}button,a{cursor:pointer}.wrap{width:min(1180px,calc(100% - 28px));margin:auto}.top{padding:20px 0;border-bottom:1px solid var(--line);background:#07141be8}.brand{color:var(--gold);font:700 1.4rem Marhey,Cairo,sans-serif}.sub{color:var(--muted);font-size:.9rem}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:9px 15px;background:#142a33;color:var(--text);text-decoration:none}.btn.active,.btn.primary{background:var(--gold);color:#17232a;border-color:var(--gold);font-weight:800}.note{padding:12px 15px;border:1px solid #725b38;background:#2b251a;border-radius:12px;color:#f0d8aa;margin:14px 0}.panel{border:1px solid var(--line);border-radius:18px;background:#0d2028;padding:18px;margin:18px 0}.panel h1,.panel h2{color:var(--gold);margin-top:0}.framebox{height:min(72vh,780px);min-height:420px;background:#fff;border-radius:12px;overflow:hidden}.framebox iframe{width:100%;height:100%;border:0;background:white}.story{overflow:hidden;border-radius:18px;border:2px solid var(--outer);background:var(--inner);box-shadow:0 16px 40px #0005}.cover{padding:30px 24px;background:linear-gradient(135deg,#0a1c25,#1d3d43);border-bottom:4px solid var(--outer);text-align:center}.eyebrow{color:var(--gold);font-weight:800}.story h1{font:700 clamp(1.7rem,4vw,2.7rem) Marhey,Cairo,sans-serif;margin:8px 0}.subtitle{color:#e1d4b7;font-size:1.1rem}.storybody{padding:24px;max-width:900px;margin:auto}.speaker{padding:14px 16px;margin:12px 0;border-right:4px solid var(--outer);background:#ffffff0b;border-radius:10px}.speaker b{color:var(--gold)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field input,.field textarea,.field select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#07171d;color:var(--text)}.field textarea{min-height:120px;resize:vertical}.field.full{grid-column:1/-1}.colors{display:flex;gap:14px;flex-wrap:wrap}.colors label{display:flex;gap:8px;align-items:center}.colors input{width:42px;height:34px;padding:2px}.footer{color:var(--muted);text-align:center;padding:25px 0;font-size:.85rem}@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}}
+</style></head>
+<body>
+<header class="top"><div class="wrap"><div class="brand">خالدون عبر التاريخ</div><div class="sub">مساحة معاينة مرئية قبل اعتماد التعديلات</div></div></header>
+<main class="wrap">
+<div class="note">هذه صفحة HTML للمعاينة وليست صفحة نشر. عرض الموقع في الإطار يعرض النسخة المنشورة الحالية؛ أما «معاينة حكاية» فتتيح رؤية شكل صفحة الحكاية وتعديل نموذجها محليًا قبل اعتمادها. لا تحفظ هذه الصفحة أي تغييرات في الموقع.</div>
+<nav class="tabs" aria-label="اختيار المعاينة">
+<button class="btn active" data-view="site">معاينة الموقع</button>
+<button class="btn" data-view="story">معاينة شكل حكاية</button>
+<a class="btn" href="../index.html" target="_blank" rel="noopener">فتح الرئيسية في نافذة مستقلة ↗</a>
+<a class="btn" href="admin.html">العودة إلى الأدمن</a>
+</nav>
+<section id="siteView" class="panel">
+<h1>تصفّح صفحات الموقع</h1>
+<div class="tabs">
+<button class="btn active" data-page="../index.html">الرئيسية</button>
+<button class="btn" data-page="collections/history.html">التاريخ والحضارات</button>
+<button class="btn" data-page="collections/science.html">العلم والعلماء</button>
+<button class="btn" data-page="collections/curriculum.html">شخصيات المناهج</button>
+<button class="btn" data-page="collections/october.html">أكتوبر 1973</button>
+</div>
+<div class="framebox"><iframe id="siteFrame" title="معاينة صفحة من الموقع" src="../index.html"></iframe></div>
+</section>
+<section id="storyView" class="panel" hidden>
+<h1>معاينة شكل حكاية جديدة</h1><p class="sub">غيّر البيانات هنا لتشاهد شكلها مباشرة. هذا نموذج مرئي مستقل ولا ينشر الحكاية ولا يحفظها في ملفات الموقع.</p>
+<div class="fields">
+<label class="field">عنوان الحكاية<input id="storyTitle" value="عنوان الحكاية الجديدة"></label>
+<label class="field">نبذة قصيرة<input id="storySubtitle" value="حكاية نكتشف من خلالها التاريخ بالدليل"></label>
+<label class="field full">مقطع كارما<textarea id="karmaText">كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟</textarea></label>
+<label class="field full">مقطع الراوي<textarea id="narratorText">الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.</textarea></label>
+<label class="field full">المصادر<textarea id="sourceText">المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.</textarea></label>
+</div>
+<div class="colors" style="margin:14px 0">
+<label>اللون الخارجي <input id="outerColor" type="color" value="#b8874b"></label>
+<label>اللون الداخلي <input id="innerColor" type="color" value="#102b35"></label>
+</div>
+<article class="story" id="storyPreview">
+<div class="cover"><div class="eyebrow">خالدون عبر التاريخ · معاينة غير منشورة</div><h1 id="outTitle">عنوان الحكاية الجديدة</h1><div class="subtitle" id="outSubtitle">حكاية نكتشف من خلالها التاريخ بالدليل</div></div>
+<div class="storybody"><div class="speaker"><b>كارما</b><p id="outKarma"></p></div><div class="speaker"><b>الراوي</b><p id="outNarrator"></p></div><hr style="border-color:var(--outer);opacity:.5"><h2 style="color:var(--gold)">المصادر</h2><p id="outSources"></p></div>
+</article>
+<div class="tabs"><button class="btn primary" id="printBtn">طباعة المعاينة</button><button class="btn" id="resetBtn">إعادة النموذج الافتراضي</button></div>
+</section>
+</main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
+<script>
+(function(){
+var views={site:document.getElementById('siteView'),story:document.getElementById('storyView')};
+document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){Object.keys(views).forEach(function(k){views[k].hidden=k!==b.dataset.view});document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)});})});
+document.querySelectorAll('[data-page]').forEach(function(b){b.addEventListener('click',function(){document.getElementById('siteFrame').src=b.dataset.page;document.querySelectorAll('[data-page]').forEach(function(x){x.classList.toggle('active',x===b)})})});
+var pairs=[['storyTitle','outTitle'],['storySubtitle','outSubtitle'],['karmaText','outKarma'],['narratorText','outNarrator'],['sourceText','outSources']];
+function paint(){pairs.forEach(function(p){document.getElementById(p[1]).textContent=document.getElementById(p[0]).value});var a=document.getElementById('outerColor').value,b=document.getElementById('innerColor').value;var s=document.getElementById('storyPreview');s.style.setProperty('--outer',a);s.style.setProperty('--inner',b);s.style.borderColor=a;s.style.background=b}
+pairs.forEach(function(p){document.getElementById(p[0]).addEventListener('input',paint)});
+['outerColor','innerColor'].forEach(function(id){document.getElementById(id).addEventListener('input',paint)});
+var defaults={storyTitle:'عنوان الحكاية الجديدة',storySubtitle:'حكاية نكتشف من خلالها التاريخ بالدليل',karmaText:'كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟',narratorText:'الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.',sourceText:'المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.',outerColor:'#b8874b',innerColor:'#102b35'};
+document.getElementById('resetBtn').addEventListener('click',function(){Object.keys(defaults).forEach(function(k){document.getElementById(k).value=defaults[k]});paint()});
+document.getElementById('printBtn').addEventListener('click',function(){var was=views.story.hidden;views.site.hidden=true;views.story.hidden=false;window.print();views.site.hidden=was});
+paint();
+})();
+</script></body></html>
