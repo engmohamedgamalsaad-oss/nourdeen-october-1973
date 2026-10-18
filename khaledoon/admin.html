@@ -34,7 +34,8 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
 details.pubrow>summary .hidebtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
-details.pubrow>summary .hidebtn:disabled{opacity:.5;cursor:not-allowed}
+details.pubrow>summary .hidebtn:disabled,details.pubrow>summary .delbtn:disabled{opacity:.5;cursor:not-allowed}
+details.pubrow>summary .delbtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
 details.pubrow.hid{--c:#e07a7a;opacity:.78;border-top-style:dashed;border-bottom-style:dashed;border-inline-end-style:dashed;background-color:color-mix(in srgb,#e07a7a 14%,var(--panel))}
 details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoration-thickness:1px}
 .pubrow .ph{display:block;color:#e07a7a;font-weight:800;font-size:.78rem;margin-top:2px}
@@ -400,6 +401,24 @@ if(!isNew){
  bPub.addEventListener('click',function(){persist('published',bPub)});
  return box;
 }
+/* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
+function confirmDelete(it){
+ var name=it.title||'حكاية بلا عنوان',sv=storyFor(it);
+ var msg='حذف «'+name+'» نهائيًا من لوحة الإدارة؟\n\nلا يمكن التراجع عن الحذف.';
+ if(it.status==='published'||sv)msg+='\n\nتنبيه: الحكاية منشورة أو لها صفحة على الموقع؛ الحذف يزيل سجلها من الإدارة فقط ولا يحذف صفحتها. لإخفائها من الزوار استخدم زر «إخفاء».';
+ return confirm(msg);
+}
+async function removeItem(it,btn){
+ var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
+ btn.disabled=true;
+ try{
+  var r=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
+  var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
+  delete openIds[(it._t||'k')+':'+it.id];
+  say('ok','تم حذف «'+(it.title||'الحكاية')+'».');await loadList();
+ }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
+}
 async function remove(it,btn){
  btn.disabled=true;
  try{
@@ -440,7 +459,14 @@ function pubRow(it){
   if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
   setHidden(sv,!hid,hb);
  });
- s.appendChild(hb);d.appendChild(s);
+ s.appendChild(hb);
+ var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل الحكاية نهائيًا (بعد تأكيد)';
+ db.addEventListener('click',function(e){
+  e.preventDefault();e.stopPropagation();
+  if(!confirmDelete(it))return;
+  removeItem(it,db);
+ });
+ s.appendChild(db);d.appendChild(s);
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
  d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
