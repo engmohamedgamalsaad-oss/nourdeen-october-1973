@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   var match = location.pathname.match(/\/(\d{3})\/?$/);
-  var id = match && match[1];
+  var id = document.body.dataset.storyQuiz || (match && match[1]);
   if (!id) return;
 
   var lang = (document.documentElement.lang || "ar").slice(0, 2);
