@@ -273,3 +273,67 @@
     color: #72508c !important;
   }
 }
+
+
+/* Explicit dark-theme consistency pass for every story page.
+   This shared stylesheet is imported by assets/shared/base.css, so these
+   guarded rules cover existing stories without editing their content. */
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) {
+  color: #e5eaf2;
+  background: linear-gradient(180deg,#071923 0%,#020a11 100%);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.story,.sources,.end,.reactions,.reactions-section,.memorial-gallery,.story-quiz-section) {
+  color: #e5eaf2;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.story h2,.end h2,.sources h2,.reactions-title,.story-quiz-card h2,.story-quiz-intro,.story-quiz-language-note) {
+  color: #f2e6c9;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.story p,.end p,.sources p,.sources li,.sources figcaption,.image-frame figcaption,.reactions-wrap p,.reaction-status,.reaction-count-line,.story-quiz-card p,.story-quiz-card label,.gallery-intro) {
+  color: #c4d0dc;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.quote,.glass,.fact,.panel,.lesson,.note,.step,.word,.image-frame,.manuscript-frame,.story-quiz-card,.story-extras,.modal-card,.memorial-card,.moment,.story-extras .panel) {
+  background: linear-gradient(145deg,rgba(12,43,55,.96),rgba(4,17,27,.98));
+  color: #e5eaf2;
+  border-color: rgba(227,189,120,.30);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.quote p,.glass p,.fact span,.fact p,.panel p,.lesson p,.note p,.step p,.word span,.story-extras p,.modal-copy p,.memorial-card p,.memorial-card figcaption,.moment p) {
+  color: #c4d0dc;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.fact strong,.moment h3,.story .year,.story .lesson-number,.sources a,.source-note a,.story-quiz-kicker) {
+  color: #e3bd78;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.source-note,.story-quiz-feedback,.story-quiz-result,.story-quiz-review details) {
+  background: rgba(227,189,120,.09);
+  color: #d8e1eb;
+  border-color: rgba(227,189,120,.28);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button,.reaction-actions button,.reaction-btn,.print-btn,.story-quiz-start,.story-quiz-option,.modal-close) {
+  background: #102b38;
+  color: #e5eaf2;
+  border-color: rgba(227,189,120,.35);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button:hover,.reaction-actions button:hover,.reaction-btn:hover,.story-quiz-option:hover) {
+  background: #194252;
+  color: #fff8e8;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button.is-selected,.reaction-actions button.is-selected,.reaction-btn.is-selected,.reaction-btn[aria-pressed=true],.story-quiz-start,.story-quiz-option[aria-pressed=true]) {
+  background: #9b7138;
+  color: #fff;
+  border-color: #e3bd78;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(header,footer) {
+  background: rgba(3,15,23,.96);
+  color: #b9c9d8;
+  border-color: rgba(227,189,120,.25);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) header a {
+  color: #e3bd78;
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) .intro-card {
+  background: linear-gradient(135deg,#102b38,#071923);
+  color: #e5eaf2;
+  border-color: rgba(227,189,120,.3);
+}
+:root[data-theme=dark] body:not(:has(:where(#bg,.hero-home))) :is(.intro-copy h2,.intro-copy p,.intro-close) {
+  color: #e5eaf2;
+}
