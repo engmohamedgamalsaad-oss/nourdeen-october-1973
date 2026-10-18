@@ -162,7 +162,7 @@ if (!extraMap) {
 
 /* German UI coverage: shared homepage, collection pages, October archive, reader and quiz. */
 const germanUiSource = read('khaledoon/assets/khaledoon-de.js');
-const germanUiKeys = new Set([...germanUiSource.matchAll(/^"((?:\\\\.|[^"\\\\])*)"\\s*:/gm)].map(match => {
+const germanUiKeys = new Set([...germanUiSource.matchAll(/^"((?:\\.|[^"\\])*)"\s*:/gm)].map(match => {
   try { return JSON.parse('"' + match[1] + '"'); } catch (e) { return match[1]; }
 }));
 function requireGermanKey(key, sourceName) {
@@ -170,33 +170,33 @@ function requireGermanKey(key, sourceName) {
 }
 const homeJs = read('khaledoon/assets/khaledoon.js');
 const homeRows = homeJs.slice(homeJs.indexOf('var R=['), homeJs.indexOf('var D={};R.forEach'));
-for (const match of homeRows.matchAll(/\\[\\s*(['"])((?:\\\\.|(?!\\1)[\\s\\S])*?)\\1\\s*,/g)) {
+for (const match of homeRows.matchAll(/\[\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,/g)) {
   let key = match[2];
   if (match[1] === '"') { try { key = JSON.parse('"' + key + '"'); } catch (e) {} }
   requireGermanKey(key, 'khaledoon/assets/khaledoon.js');
 }
 const homeExtra = read('khaledoon/assets/khaledoon-i18n-extra.js');
-for (const match of homeExtra.matchAll(/\\[\\s*(['"])((?:\\\\.|(?!\\1)[\\s\\S])*?)\\1\\s*,/g)) {
+for (const match of homeExtra.matchAll(/\[\s*(['"])((?:\\.|(?!\1)[\s\S])*?)\1\s*,/g)) {
   let key = match[2];
   if (match[1] === '"') { try { key = JSON.parse('"' + key + '"'); } catch (e) {} }
   requireGermanKey(key, 'khaledoon/assets/khaledoon-i18n-extra.js');
 }
 const pageI18n = read('khaledoon/assets/khaledoon-pages-i18n.js');
-const pageRows = pageI18n.slice(pageI18n.indexOf('var R=['), pageI18n.indexOf('];\\nvar D='));
-for (const line of pageRows.split('\\n').filter(line => line.trim().startsWith("['"))) {
-  const match = line.match(/^\\s*\\['((?:\\\\.|[^'\\\\])*)'/);
-  if (match) requireGermanKey(match[1].replace(/\\\\'/g, "'"), 'khaledoon/assets/khaledoon-pages-i18n.js');
+const pageRows = pageI18n.slice(pageI18n.indexOf('var R=['), pageI18n.indexOf('];\nvar D='));
+for (const line of pageRows.split('\n').filter(line => line.trim().startsWith("['"))) {
+  const match = line.match(/^\s*\['((?:\\.|[^'\\])*)'/);
+  if (match) requireGermanKey(match[1].replace(/\\'/g, "'"), 'khaledoon/assets/khaledoon-pages-i18n.js');
 }
 for (const file of ['read.html', 'quiz.html']) {
   const source = read(file);
-  for (const match of source.matchAll(/\\bL\\(\\s*'((?:\\\\.|[^'\\\\])*)'/g)) {
-    requireGermanKey(match[1].replace(/\\\\'/g, "'"), file);
+  for (const match of source.matchAll(/\bL\(\s*'((?:\\.|[^'\\])*)'/g)) {
+    requireGermanKey(match[1].replace(/\\'/g, "'"), file);
   }
 }
 const octoberHome = read('assets/i18n/home.js');
 const arabicHome = octoberHome.slice(octoberHome.indexOf("window.I18N.register('ar'"), octoberHome.indexOf("window.I18N.register('en'"));
-for (const match of arabicHome.matchAll(/\\b[A-Za-z0-9_]+\\s*:\\s*'((?:\\\\.|[^'\\\\])*)'/g)) {
-  requireGermanKey(match[1].replace(/\\\\'/g, "'"), 'assets/i18n/home.js');
+for (const match of arabicHome.matchAll(/\b[A-Za-z0-9_]+\s*:\s*'((?:\\.|[^'\\])*)'/g)) {
+  requireGermanKey(match[1].replace(/\\'/g, "'"), 'assets/i18n/home.js');
 }
 for (const file of [
   'index.html', 'read.html', 'quiz.html', 'khaledoon/submit.html',
