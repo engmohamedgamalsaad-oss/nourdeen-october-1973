@@ -1,5 +1,5 @@
 {
-  "id": "011",
+  "id": "draft-khalid-ibn-al-walid",
   "title": "خالد بن الوليد",
   "questions": [
     {
@@ -287,5 +287,11 @@
         }
       }
     }
-  ]
+  ],
+  "title_i18n": {
+    "en": "Khalid ibn al-Walid",
+    "fr": "Khalid ibn al-Walid",
+    "it": "Khalid ibn al-Walid",
+    "de": "Chalid ibn al-Walid"
+  }
 }
