@@ -92,7 +92,7 @@ if (!(urabi.includes('"de":') || urabi.includes("'de':"))) {
       const ch = source[i];
       if (quote) {
         if (escaped) escaped = false;
-        else if (ch === '\\\\') escaped = true;
+        else if (ch === '\\') escaped = true;
         else if (ch === quote) quote = '';
         continue;
       }
