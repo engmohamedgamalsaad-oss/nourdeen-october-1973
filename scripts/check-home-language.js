@@ -129,8 +129,9 @@ for (const rel of htmlFiles) {
   const isAdmin = ADMIN_PAGES.has(rel);
   const isStub = /<meta[^>]+http-equiv=["']refresh["']/i.test(html);
 
-  /* German overlay must not be wired anywhere */
-  if (html.includes('khaledoon-de.js')) fail(`German-only overlay is referenced by ${rel}; it must stay disabled until full German coverage.`);
+  /* German dictionary is loaded only on pages that use its shared text map. */
+  const germanAllowed = new Set(['index.html','khaledoon/collections/history.html','khaledoon/collections/science.html','khaledoon/collections/curriculum.html','khaledoon/collections/people.html','khaledoon/submit.html']);
+  if (html.includes('khaledoon-de.js') && !germanAllowed.has(rel)) fail(`German dictionary is unexpectedly referenced by ${rel}.`);
 
   /* local script/css paths must resolve to real files */
   for (const m of html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/gi)) {
