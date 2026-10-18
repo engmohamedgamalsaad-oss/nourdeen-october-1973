@@ -250,7 +250,6 @@ var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر
 window.KH_DE_TRANSLATIONS=D;
 var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',active=false;
 var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
-if(!langs)return;
 function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
 function one(n){
@@ -276,20 +275,20 @@ function labels(){
 }
 function setDe(){
  active=true;
- put(KEY,'1');put('kh-lang','ar');
+ put(KEY,null);put('kh-lang','de');
  root.lang='de';root.dir='ltr';
  ap(B);labels();
  document.title=D[AR_TITLE];
  Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
 }
-/* زر DE */
-if(!langs.querySelector('[data-l="4"]')){
+/* زر DE: يظهر على الصفحة الرئيسية فقط */
+if(langs&&!langs.querySelector('[data-l="4"]')){
  var btn=document.createElement('button');
  btn.type='button';btn.setAttribute('data-l','4');btn.setAttribute('aria-pressed','false');btn.textContent='🇩🇪 DE';
  langs.appendChild(btn);
 }
 /* التقاط النقر قبل khaledoon.js: DE نعالجها هنا، وأي لغة أخرى تُلغي وضع الألمانية ثم يكمل khaledoon.js عمله */
-langs.addEventListener('click',function(e){
+if(langs)langs.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('button');if(!b)return;
  if(b.getAttribute('data-l')==='4'){e.preventDefault();e.stopImmediatePropagation();setDe()}
  else if(active){active=false;put(KEY,null)}
@@ -300,7 +299,5 @@ new MutationObserver(function(ms){
  ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)});
 }).observe(B,{childList:true,subtree:true});
 /* عند فتح الصفحة: تُطبَّق الألمانية فقط إذا لم تُختَر لغة أخرى بعدها */
-if(get(KEY)==='1'){
- if((get('kh-lang')||'ar')==='ar')setDe();else put(KEY,null);
-}
+if(get('kh-lang')==='de'||get(KEY)==='1')setDe();
 })();
