@@ -83,7 +83,7 @@
   function isHidden(id) { return hiddenIds.indexOf(id) >= 0; }
   function loadHidden() {
     if (!window.__khHiddenP) {
-      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON } })
+      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (a) { return Array.isArray(a) ? a.map(function (x) { return String(x.story_id); }) : []; })
         .catch(function () { return []; });
