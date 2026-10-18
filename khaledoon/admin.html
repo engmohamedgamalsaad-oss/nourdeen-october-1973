@@ -20,8 +20,9 @@ html[data-theme=light] .sec-october{--c:#b8771a}html[data-theme=light] .sec-scie
 .fcard[class*="sec-"],details.pubrow{border-inline-start:5px solid var(--c,var(--line));background-image:linear-gradient(90deg,color-mix(in srgb,var(--c,transparent) 9%,transparent),transparent 60%);transition:border-color .35s ease}
 details.pubrow{border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-inline-end:1px solid var(--line);border-radius:14px;background-color:var(--panel);margin-bottom:10px}
 details.pubrow>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px}
+details.pubrow>summary>div{flex:1;min-width:0}
 details.pubrow>summary::-webkit-details-marker{display:none}
-details.pubrow>summary::after{content:"▾";margin-inline-start:auto;color:var(--c,var(--gold));transition:transform .2s}
+details.pubrow>summary::after{content:"▾";margin-inline-start:4px;color:var(--c,var(--gold));transition:transform .2s}
 details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .pubrow .pt{display:block;color:var(--gold);font-weight:800;font-size:1.05rem;line-height:1.6}
 .pubrow .pd{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
@@ -32,6 +33,11 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .btn.copied{background:#1f9d62;border-color:#1f9d62;color:#fff;font-weight:800}
 .pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
+details.pubrow>summary .hidebtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
+details.pubrow>summary .hidebtn:disabled{opacity:.5;cursor:not-allowed}
+details.pubrow.hid{--c:#e07a7a;opacity:.78;border-top-style:dashed;border-bottom-style:dashed;border-inline-end-style:dashed;background-color:color-mix(in srgb,#e07a7a 14%,var(--panel))}
+details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoration-thickness:1px}
+.pubrow .ph{display:block;color:#e07a7a;font-weight:800;font-size:.78rem;margin-top:2px}
 .translation-panel{margin:18px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.translation-panel>summary{cursor:pointer;font-weight:900;color:var(--gold)}.translation-panel>.fnote{margin:8px 0 14px}.translation-lang{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px}.translation-lang h4{margin:0 0 10px;color:var(--gold)}.translation-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.translation-compare textarea[readonly]{opacity:.8}@media(max-width:680px){.translation-compare{grid-template-columns:1fr}}
 .vrow{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:10px;flex-wrap:wrap}
 .vrow.off{opacity:.7;border-style:dashed}
@@ -59,7 +65,7 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 <section id="app" hidden>
 <div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
 <div id="viewSubs">
-<div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره.</p></div>
+<div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره. زر «إخفاء» بجانب كل حكاية يخفيها من صفحة الزوار، والضغط عليه مرة ثانية يعيد إظهارها.</p></div>
 <div class="stats" id="stats"></div>
 <div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
 <div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
@@ -409,13 +415,32 @@ function setCopies(key,n){try{localStorage.setItem(key,String(n))}catch(e){}}
 function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?'✓ '+copyLabel(n):'';e.hidden=!n}
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
+/* ربط حكاية الإدارة بحكاية الموقع في stories/index.json: برقم الحكاية (حكايات أكتوبر القديمة) أو بالعنوان المطابق. */
+function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
+function storyFor(it){
+ var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
+ for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
+ return null;
+}
 function pubRow(it){
- var d=el('details','pubrow sec-'+(it.section||'october')),s=el('summary',''),w=el('div','');
+ var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
+ var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var meta=[STATUS[it.status]||'',dt,SEC[it.section]||''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
- s.appendChild(w);d.appendChild(s);
+ s.appendChild(w);
+ var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
+ if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان في قائمة الموقع (stories/index.json) لإخفائها':'جارٍ تحميل قائمة حكايات الموقع…'}
+ else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
+ hb.addEventListener('click',function(e){
+  e.preventDefault();e.stopPropagation();
+  if(!sv)return;
+  if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
+  setHidden(sv,!hid,hb);
+ });
+ s.appendChild(hb);d.appendChild(s);
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
  d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
@@ -454,7 +479,7 @@ async function loadVis(){
  var j=await rs[0].json();
  vStories=(Array.isArray(j)?j:[]).filter(function(s){return s&&s.id!=null&&s.title}).sort(function(a,b){return (a.order||0)-(b.order||0)});
  vHidden={};(await rs[1].json()).forEach(function(x){vHidden[String(x.story_id)]=true});
- vLoaded=true;renderVis();
+ vLoaded=true;renderVis();render();
 }
 function setHidden(s,on,btn){
  return (async function(){
@@ -462,12 +487,12 @@ function setHidden(s,on,btn){
   try{
    var r=on?await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})})
            :await rest('story_visibility?story_id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=representation'}});
-   if(r.status===403)throw new Error('مرفوض: حسابك ليس ضمن قائمة الأدمن المعتمدة.');
+   if(r.status===403)throw new Error('مرفوض: حسابك ليس ضمن قائمة الأدمن المعتمة.'.replace('المعتمة','المعتمدة'));
    if(!r.ok)throw new Error('تعذّر التحديث ('+r.status+').');
    if(!on){var rows=await r.json();if(!rows.length)throw new Error('لم يتغيّر شيء. تأكد أن حسابك ضمن قائمة الأدمن المعتمدة.')}
    if(on)vHidden[id]=true;else delete vHidden[id];
    say('ok',on?'تم إخفاء الحكاية من الموقع.':'تم إظهار الحكاية من جديد.');
-   renderVis();
+   renderVis();render();
   }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
  })();
 }
@@ -504,6 +529,7 @@ function renderVis(){
 async function enterApp(){
  showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;renderViews();
  if(location.hash==='#visibility')setView('vis');
+ loadVis().catch(function(e){say('err',e.message)});
  await loadList();
 }
 $('loginForm').addEventListener('submit',async function(e){
@@ -512,7 +538,7 @@ $('loginForm').addEventListener('submit',async function(e){
  b.disabled=false;
 });
 $('logoutBtn').addEventListener('click',function(){logout(false)});
-$('refreshBtn').addEventListener('click',function(){loadList().catch(function(e){say('err',e.message)})});
+$('refreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)});loadList().catch(function(e){say('err',e.message)})});
 $('vrefreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)})});
 $('search').addEventListener('input',function(){term=this.value;render()});
 $('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
