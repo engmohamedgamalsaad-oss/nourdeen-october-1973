@@ -1,31 +1,114 @@
 {
-  "version": 1,
+  "version": 2,
   "main": "../index.html",
   "sections": [
     {
       "id": "october",
       "title": "حكايات أكتوبر 1973",
-      "stories": [
-        "001",
-        "002",
-        "003",
-        "004"
-      ]
+      "i18n": {
+        "en": {
+          "title": "October 1973 Stories"
+        },
+        "fr": {
+          "title": "Récits d’octobre 1973"
+        },
+        "it": {
+          "title": "Storie dell’ottobre 1973"
+        },
+        "de": {
+          "title": "Geschichten zum Oktober 1973"
+        }
+      }
     },
     {
       "id": "history",
       "title": "التاريخ والحضارات",
-      "stories": [
-        "005",
-        "006"
-      ]
+      "i18n": {
+        "en": {
+          "title": "History and Civilizations"
+        },
+        "fr": {
+          "title": "Histoire et civilisations"
+        },
+        "it": {
+          "title": "Storia e civiltà"
+        },
+        "de": {
+          "title": "Geschichte und Zivilisationen"
+        }
+      }
     },
     {
       "id": "science",
       "title": "العلم والعلماء",
-      "stories": [
-        "007"
-      ]
+      "i18n": {
+        "en": {
+          "title": "Science and Scientists"
+        },
+        "fr": {
+          "title": "Sciences et scientifiques"
+        },
+        "it": {
+          "title": "Scienza e scienziati"
+        },
+        "de": {
+          "title": "Wissenschaft und Forschende"
+        }
+      }
+    },
+    {
+      "id": "women",
+      "title": "نساء خالدات",
+      "i18n": {
+        "en": {
+          "title": "Women Who Made History"
+        },
+        "fr": {
+          "title": "Femmes qui ont marqué l’histoire"
+        },
+        "it": {
+          "title": "Donne che hanno fatto la storia"
+        },
+        "de": {
+          "title": "Frauen, die Geschichte schrieben"
+        }
+      }
+    },
+    {
+      "id": "people",
+      "title": "أعلام الأدب والفنون والرياضة",
+      "i18n": {
+        "en": {
+          "title": "Literature, Arts and Sports"
+        },
+        "fr": {
+          "title": "Littérature, arts et sport"
+        },
+        "it": {
+          "title": "Letteratura, arti e sport"
+        },
+        "de": {
+          "title": "Literatur, Kunst und Sport"
+        }
+      }
+    },
+    {
+      "id": "curriculum",
+      "title": "شخصيات المناهج المصرية",
+      "i18n": {
+        "en": {
+          "title": "Egyptian Curriculum Figures"
+        },
+        "fr": {
+          "title": "Personnalités des programmes égyptiens"
+        },
+        "it": {
+          "title": "Personaggi dei programmi scolastici egiziani"
+        },
+        "de": {
+          "title": "Persönlichkeiten im ägyptischen Lehrplan"
+        }
+      }
     }
   ]
 }

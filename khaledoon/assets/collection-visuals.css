@@ -261,3 +261,13 @@ body.collection-women .card .num,
 body.collection-culture .card .num,
 body.collection-history .card .num,
 body.collection-curriculum .card .num{display:none!important}
+
+/* Collection cards are generated from stories/index.json, not copied into each HTML page. */
+.story-index-card{align-items:center!important;gap:16px}
+.story-index-card .story-index-cover{display:block;flex:0 0 155px;width:155px;height:112px;object-fit:cover;border-radius:10px;border:1px solid var(--line);box-shadow:0 8px 24px #0005;background:rgba(0,0,0,.12)}
+.story-index-card .story-index-copy{flex:1;min-width:0}
+.story-index-card .story-index-copy h3{margin:0 0 6px}
+.story-index-card .story-index-copy p{margin:0 0 8px}
+.story-index-card .story-index-copy span{font-size:12px;color:var(--gold);font-weight:800}
+.story-index-empty{grid-column:1/-1}
+@media(max-width:620px){.story-index-card{flex-wrap:wrap}.story-index-card .story-index-cover{flex-basis:100%;width:100%;height:auto;max-height:230px;object-fit:contain}.story-index-card .num{display:none!important}}
