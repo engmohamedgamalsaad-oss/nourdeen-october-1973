@@ -26,7 +26,7 @@
   var STR = {
     kicker: { ar: 'خريطة الشخصيات', en: 'Story map', fr: 'Carte des histoires', it: 'Mappa delle storie', de: 'Geschichtenkarte' },
     title:  { ar: 'كل الحكايات على الخريطة', en: 'All stories connected', fr: 'Toutes les histoires reliées', it: 'Tutte le storie collegate', de: 'Alle Geschichten verknüpft' },
-    lead:   { ar: 'كل الحكايات المنشورة تظهر في القائمة المرتبطة بالخريطة. تظهر نقطة جغرافية عندما تكون إحداثيات المكان مسجلة؛ لا نضع مواقع تخمينية.', en: 'Every published story appears in the linked list. A map pin appears when verified coordinates are recorded; locations are never guessed.', fr: 'Toutes les histoires publiées figurent dans la liste liée. Un point apparaît lorsque les coordonnées sont enregistrées ; aucun lieu n’est deviné.', it: 'Tutte le storie pubblicate compaiono nell’elenco collegato. Il segnaposto appare quando le coordinate sono registrate; nessuna posizione viene inventata.', de: 'Alle veröffentlichten Geschichten erscheinen in der verknüpften Liste. Eine Kartenmarkierung erscheint, wenn Koordinaten hinterlegt sind; Standorte werden nicht geraten.' },
+    lead:   { ar: 'تظهر الشخصيات على الخريطة عند توفر إحداثيات موثقة؛ لا نضع مواقع تخمينية.', en: 'Characters appear on the map when verified coordinates are available; locations are never guessed.', fr: 'Les personnages apparaissent sur la carte lorsque des coordonnées vérifiées sont disponibles ; aucun lieu n’est deviné.', it: 'I personaggi appaiono sulla mappa quando sono disponibili coordinate verificate; nessuna posizione viene inventata.', de: 'Figuren erscheinen auf der Karte, wenn verifizierte Koordinaten vorliegen; Standorte werden nicht geraten.' },
     noPlace: { ar: 'الموقع غير مسجل بعد', en: 'Location not recorded yet', fr: 'Lieu pas encore enregistré', it: 'Luogo non ancora registrato', de: 'Standort noch nicht eingetragen' },
     born:   { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
     approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
@@ -249,7 +249,6 @@
   function start() {
     if (started) return; started = true;
     loadData().then(function () {
-      renderDirectory();
       if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
@@ -263,7 +262,7 @@
   }
 
   labels();
-  new MutationObserver(function () { labels(); renderDirectory(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) {
       if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
