@@ -4,7 +4,6 @@
 // Enforce the minimum publishing bundle for each newly added canonical story page.
 // Legacy redirect stubs at stories/001/index.html are intentionally excluded.
 const fs = require("node:fs");
-const path = require("node:path");
 const { execFileSync } = require("node:child_process");
 
 const base = process.env.STORY_CHECK_BASE || process.env.GITHUB_BASE_REF || "main";
@@ -51,7 +50,7 @@ for (const pagePath of pages) {
 
   requireCheck(new RegExp(`data-story-slug=["']${id}["']`).test(html), story, `page uses its own data-story-slug ${id}`);
   requireCheck(html.includes("assets/shared/reactions.css") && html.includes("assets/shared/reactions.js"), story, "shared reaction styles and behavior are connected");
-  requireCheck(html.includes('id="reaction-like"') && html.includes('class="reactions-section"') && (html.match(/data-reaction-choice=/g) || []).length >= 2, story, "like button and at least two preset response choices are present");
+  requireCheck(html.includes('id="reaction-like"') && html.includes('class="reactions-section"') && (html.match(/data-reaction-choice=/g) || []).length >= 4 && (html.match(/data-reaction-count=/g) || []).length >= 5, story, "like button, four preset response choices, and reaction counters are present");
   requireCheck(html.includes("assets/shared/story-quiz.js") && html.includes('id="story-quiz-start"') && html.includes('id="story-quiz-app"'), story, "shared interactive quiz is connected to the page");
 
   let quiz = null;
@@ -66,6 +65,14 @@ for (const pagePath of pages) {
         Number.isInteger(q.a) && q.a >= 0 && q.a < q.o.length &&
         typeof q.e === "string" && q.e.trim();
       requireCheck(Boolean(valid), story, `question ${index + 1} has a prompt, options, a valid answer, and explanation`);
+      for (const lang of ["en", "fr", "it", "de"]) {
+        const translated = q && q.i18n && q.i18n[lang];
+        const translationValid = translated && typeof translated.q === "string" && translated.q.trim() &&
+          Array.isArray(translated.o) && translated.o.length === q.o.length &&
+          translated.o.every(option => typeof option === "string" && option.trim()) &&
+          typeof translated.e === "string" && translated.e.trim();
+        requireCheck(Boolean(translationValid), story, `question ${index + 1} has complete ${lang} translation`);
+      }
     });
   }
 
@@ -76,6 +83,6 @@ for (const pagePath of pages) {
 
   let data = null;
   try { data = dataText ? JSON.parse(dataText) : null; } catch {}
-  requireCheck(Boolean(data && data.published !== false && data.title && data.section === undefined || data && data.published !== false && data.title), story, "story data.json exists with a title and is not explicitly unpublished");
+  requireCheck(Boolean(data && data.published !== false && typeof data.title === "string" && data.title.trim()), story, "story data.json exists with a title and is not explicitly unpublished");
 }
 process.exit(failed ? 1 : 0);
