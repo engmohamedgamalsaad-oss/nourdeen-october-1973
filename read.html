@@ -137,7 +137,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var id=new URLSearchParams(location.search).get('id')||'';
   if(!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)){ $('state').textContent=t('notFound'); return; }
 
-  var FIELDS='student_name,grade,title,subtitle,body,sources,color,story_number';
+  var FIELDS='student_name,grade,title,subtitle,body,sources,color';
   function load(withTr){
     return fetch(API+'/rest/v1/submitted_stories?id=eq.'+encodeURIComponent(id)+'&status=eq.published&select='+FIELDS+(withTr?',translations':''),{
       headers:{apikey:KEY,Authorization:'Bearer '+KEY,Accept:'application/json'}
@@ -156,7 +156,6 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
     function pick(k){ return translated&&typeof tr[k]==='string'&&tr[k].trim()?tr[k]:(s[k]||''); }
 
     if(!translated&&lang!=='ar'){ var st=$('story'); st.setAttribute('dir','rtl'); st.setAttribute('lang','ar'); }
-    if(s.story_number) $('sEyebrow').textContent='EGYPT • 6 OCTOBER 1973 • '+({ar:'الحكاية ',en:'STORY ',fr:'RÉCIT ',it:'RACCONTO '}[lang]||'STORY ')+String(s.story_number).padStart(3,'0');
     if(/^#[0-9a-fA-F]{6}$/.test(s.color||'')) document.documentElement.style.setProperty('--c',s.color);
     var title=pick('title'), subtitle=pick('subtitle');
     document.title=title+' | '+pick('student_name');
