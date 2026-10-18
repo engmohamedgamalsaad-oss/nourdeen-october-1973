@@ -74,7 +74,7 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 <div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
 <div id="viewSubs">
 <div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره. زر «إخفاء» بجانب كل حكاية يخفيها من صفحة الزوار، والضغط عليه مرة ثانية يعيد إظهارها.</p></div>
-<div class="stats" id="stats"></div>
+<div class="stats" id="stats"></div><p class="fnote">الأرقام تجمع سجلات الإرسال من Supabase والقصص المنشورة كملفات على الموقع؛ قد يظهر سجل إرسال وصفحة موقع لنفس الشخصية كسجلين منفصلين.</p>
 <div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
 <div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
 <div class="chips" id="secs" role="group" aria-label="القسم"></div>
@@ -159,14 +159,15 @@ async function loadList(){
  var legacy=[];
  if(rs[1].ok){legacy=await rs[1].json();legacy.forEach(function(x){x._t='o';x.section='october';x.figure_name=x.title;x.narrator_name=x.student_name})}
  else if(rs[1].status!==404){say('err','تعذر تحميل حكايات أكتوبر القديمة ('+rs[1].status+').')}
- items=current.concat(legacy).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
+ var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null}});
+ items=current.concat(legacy,siteItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  render();
 }
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
  [
-  ['إجمالي',items.length,'all'],
+  ['إجمالي السجلات',items.length,'all'],
   ['بانتظار المراجعة',count(function(i){return i.status==='pending'}),'pending'],
   ['تحت التحرير',count(function(i){return i.status==='review'}),'review'],
   ['منشورة',count(function(i){return i.status==='published'}),'published']
@@ -456,7 +457,7 @@ function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
 /* ربط حكاية الإدارة بحكاية الموقع في stories/index.json: برقم الحكاية (حكايات أكتوبر القديمة) أو بالعنوان المطابق. */
-function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
+function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().replace(/[.,،؛;:!?؟]+$/g,'').trim().toLocaleLowerCase()}
 function storyFor(it){
  var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
  for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
@@ -465,14 +466,24 @@ function storyFor(it){
  if(f)vStories.forEach(function(s){if(norm(s.person)===f||(s.personAliases||[]).some(function(a){return norm(a)===f}))m.push(s)});
  return m.length===1?m[0]:null;
 }
+function siteCard(it){
+ var box=el('article','fcard sec-'+(it.section||'october')),head=el('div','fbar');head.style.justifyContent='space-between';
+ head.appendChild(el('h3','',''+(it.title||'حكاية بلا عنوان')));
+ head.appendChild(el('span','badge2 published','منشورة في ملفات الموقع'));
+ box.appendChild(head);
+ box.appendChild(el('div','meta2',[SEC[it.section]||it.section,it.person,'رقم '+it.id].filter(Boolean).join(' • ')));
+ box.appendChild(el('p','fnote','هذه الحكاية منشورة كملف على الموقع. زر الإخفاء أعلاه يخفيها من قوائم الزوار دون حذف صفحتها.'));
+ var link=el('a','btn ghost','فتح صفحة الحكاية');link.href='../'+String(it.path||'');link.target='_blank';link.rel='noopener';box.appendChild(link);
+ return box;
+}
 function pubRow(it){
  var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
  var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
- var meta=[STATUS[it.status]||'',dt,SEC[it.section]||''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ var meta=[STATUS[it.status]||'',dt,SEC[it.section]||'',it._t==='site'?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
- var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
+ if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
@@ -484,15 +495,18 @@ function pubRow(it){
   setHidden(sv,!hid,hb);
  });
  s.appendChild(hb);
- var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل الحكاية نهائيًا (بعد تأكيد)';
- db.addEventListener('click',function(e){
-  e.preventDefault();e.stopPropagation();
-  if(!confirmDelete(it))return;
-  removeItem(it,db);
- });
- s.appendChild(db);d.appendChild(s);
+ if(it._t!=='site'){
+  var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل الحكاية نهائيًا (بعد تأكيد)';
+  db.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   if(!confirmDelete(it))return;
+   removeItem(it,db);
+  });
+  s.appendChild(db);
+ }
+ d.appendChild(s);
  var key=(it._t||'k')+':'+it.id,built=false;
- function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
+ function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(it._t==='site'?siteCard(it):card(it));d.appendChild(b)}
  d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
  if(openIds[key]){d.open=true;build()}
  return d;
@@ -582,7 +596,7 @@ function renderVis(){
 async function enterApp(){
  showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;renderViews();
  if(location.hash==='#visibility')setView('vis');
- loadVis().catch(function(e){say('err',e.message)});
+ await loadVis().catch(function(e){say('err',e.message)});
  await loadList();
 }
 $('loginForm').addEventListener('submit',async function(e){
@@ -591,7 +605,7 @@ $('loginForm').addEventListener('submit',async function(e){
  b.disabled=false;
 });
 $('logoutBtn').addEventListener('click',function(){logout(false)});
-$('refreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)});loadList().catch(function(e){say('err',e.message)})});
+$('refreshBtn').addEventListener('click',async function(){await loadVis().catch(function(e){say('err',e.message)});await loadList().catch(function(e){say('err',e.message)})});
 $('vrefreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)})});
 $('search').addEventListener('input',function(){term=this.value;render()});
 $('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
