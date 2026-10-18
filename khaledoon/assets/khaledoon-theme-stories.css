@@ -23,3 +23,89 @@
   .page-name{color:#4d5a82!important}
   footer{background:#f2e9d3!important;color:#4d5a82!important}
 }
+
+/* Light mode contrast repair for story pages.
+   Keep the illustrated hero dark; make reading sections, cards, captions and controls
+   use light surfaces and dark text. Scoped away from the homepage and October collection. */
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) {
+  background: linear-gradient(180deg,#fcf8ee 0%,#f2e9d3 100%) !important;
+  background-attachment: scroll !important;
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home)))::before {
+  display: none !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story,.sources,.end,.reactions,.reactions-section,.memorial-gallery,.story-quiz-section) {
+  background: transparent !important;
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story h2,.end h2,.sources h2,.reactions-title,.story-quiz-card h2,.story-quiz-kicker,.story-quiz-intro,.story-quiz-language-note) {
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story p,.end p,.sources p,.sources li,.sources figcaption,.image-frame figcaption,.reactions-wrap p,.reaction-status,.reaction-count-line,.story-quiz-card p,.story-quiz-card label) {
+  color: #3f4d61 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story .kicker,.sources .kicker,.reactions-section .kicker,.story-quiz-kicker) {
+  color: #72508c !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.quote,.glass,.fact,.panel,.lesson,.note,.step,.word,.image-frame,.manuscript-frame,.story-quiz-card,.story-extras) {
+  background: #fffdf7 !important;
+  color: #26364b !important;
+  border-color: #d8c7a2 !important;
+  box-shadow: 0 10px 28px rgba(66,46,12,.10) !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.quote p,.glass p,.fact span,.fact p,.panel p,.lesson p,.note p,.step p,.word span,.story-extras p) {
+  color: #3f4d61 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.fact strong,.moment h3,.story .year,.story .lesson-number,.sources a,.source-note a) {
+  color: #72508c !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.source-note,.note) {
+  background: #f8f0dc !important;
+  color: #3f4d61 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button,.reaction-actions button,.reaction-btn,.print-btn,.story-quiz-start,.story-quiz-option) {
+  background: #fffdf7 !important;
+  color: #26364b !important;
+  border-color: #cbb98e !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button:hover,.reaction-actions button:hover,.reaction-btn:hover,.story-quiz-start:hover,.story-quiz-option:hover) {
+  background: #f4e8c9 !important;
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.quiz button.is-selected,.reaction-actions button.is-selected,.reaction-btn.is-selected,.reaction-btn[aria-pressed=true],.story-quiz-start) {
+  background: #72508c !important;
+  color: #ffffff !important;
+  border-color: #72508c !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) .hero {
+  background-color: #061820 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.hero h1,.hero .hero-subtitle,.hero p,.hero .author,.hero .author strong) {
+  color: #f7f0df !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) .hero .eyebrow {
+  color: #e3bd78 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(header,footer) {
+  background: #f2e9d3 !important;
+  color: #3f4d61 !important;
+  border-color: #d8c7a2 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) header a {
+  color: #72508c !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) .intro-card {
+  background: linear-gradient(135deg,#fffdf7,#f7f0de) !important;
+  color: #26364b !important;
+  border-color: #d8c7a2 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.intro-copy h2,.intro-copy p,.intro-close) {
+  color: #26364b !important;
+}
+@media (prefers-color-scheme:light) {
+  :root:not([data-theme=dark]):not([data-theme=light]) body:not(:has(:where(#bg,.hero-home))) {
+    background: linear-gradient(180deg,#fcf8ee 0%,#f2e9d3 100%) !important;
+    color: #26364b !important;
+  }
+}
