@@ -3,6 +3,9 @@
    يُحمَّل قبل khaledoon.js و khaledoon-pages-i18n.js و khaledoon-i18n-extra.js، وهذه السكربتات تقرأ window.KH_DE
    عند اختيار الألمانية من الصفحة الرئيسية (المفتاح الموحد kh-lang = de). أي نص غير موجود هنا يبقى بالعربية ولا يظهر "undefined". */
 window.KH_DE={
+"من سير شخصيات تركت أثرًا":"Lebensgeschichten prägender Persönlichkeiten",
+"لم تُضف حكايات إلى هذا القسم بعد.":"Zu diesem Bereich wurden noch keine Geschichten hinzugefügt.",
+"اقترح حكاية عن شخصية إسلامية ←":"Eine Geschichte über eine islamische Persönlichkeit vorschlagen →",
 "شخصيات إسلامية":"Persönlichkeiten des Islam",
 "حكايات موثقة عن شخصيات إسلامية أسهمت في التاريخ والعلم والفكر، مع عرض سياقها ومصادرها.":"Dokumentierte Geschichten über Persönlichkeiten des Islam, die Geschichte, Wissenschaft und Denken geprägt haben, mit Kontext und Quellen.",
 "خالدون عبر التاريخ":"Unsterbliche Persönlichkeiten der Geschichte",
