@@ -10,6 +10,21 @@
   if (!ROW) return;
 
   var DATA_URL = 'stories/index.json';
+  var VISIBILITY_API = 'https://ypwprddkscnfblhftkeb.supabase.co/rest/v1/story_visibility?select=story_id';
+  var VISIBILITY_KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+  function loadHiddenIds() {
+    if (!window.__khHiddenP) {
+      window.__khHiddenP = fetch(VISIBILITY_API, {
+        headers: { apikey: VISIBILITY_KEY, Authorization: 'Bearer ' + VISIBILITY_KEY },
+        cache: 'no-store'
+      }).then(function (r) {
+        return r.ok ? r.json() : [];
+      }).then(function (rows) {
+        return Array.isArray(rows) ? rows.map(function (x) { return String(x.story_id); }) : [];
+      }).catch(function () { return []; });
+    }
+    return window.__khHiddenP;
+  }
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 
   var SECTIONS = [
@@ -74,8 +89,9 @@
   var loadFailed = false;
   var loading = null;
 
-  function prepare(list) {
-    return list.filter(function (s) { return s && s.published !== false && s.title; }).map(function (s) {
+  function prepare(list, hiddenIds) {
+    hiddenIds = hiddenIds || [];
+    return list.filter(function (s) { return s && s.published !== false && s.title && hiddenIds.indexOf(String(s.id || '')) < 0; }).map(function (s) {
       var id = String(s.id || '');
       var aliases = Array.isArray(s.personAliases) ? s.personAliases.join(' ') : '';
       return {
@@ -92,10 +108,12 @@
 
   function load() {
     if (loading) return loading;
-    loading = fetch(DATA_URL, { cache: 'no-cache' })
-      .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
-      .then(function (j) { stories = prepare(Array.isArray(j) ? j : []); })
-      .catch(function () { stories = []; loadFailed = true; });
+    loading = Promise.all([
+      fetch(DATA_URL, { cache: 'no-cache' }).then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); }),
+      loadHiddenIds()
+    ]).then(function (data) {
+      stories = prepare(Array.isArray(data[0]) ? data[0] : [], data[1] || []);
+    }).catch(function () { stories = []; loadFailed = true; });
     return loading;
   }
 
