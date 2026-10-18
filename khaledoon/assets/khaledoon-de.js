@@ -3,6 +3,8 @@
    يُحمَّل قبل khaledoon.js و khaledoon-pages-i18n.js و khaledoon-i18n-extra.js، وهذه السكربتات تقرأ window.KH_DE
    عند اختيار الألمانية من الصفحة الرئيسية (المفتاح الموحد kh-lang = de). أي نص غير موجود هنا يبقى بالعربية ولا يظهر "undefined". */
 window.KH_DE={
+"شخصيات إسلامية":"Persönlichkeiten des Islam",
+"حكايات موثقة عن شخصيات إسلامية أسهمت في التاريخ والعلم والفكر، مع عرض سياقها ومصادرها.":"Dokumentierte Geschichten über Persönlichkeiten des Islam, die Geschichte, Wissenschaft und Denken geprägt haben, mit Kontext und Quellen.",
 "خالدون عبر التاريخ":"Unsterbliche Persönlichkeiten der Geschichte",
 "حكاياتٌ تُروى… وأثرٌ يبقى":"Erzählte Geschichten … und eine Spur, die bleibt",
 "بوابات المعرفة":"Tore des Wissens",
