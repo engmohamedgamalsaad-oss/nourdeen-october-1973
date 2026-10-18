@@ -21,7 +21,8 @@
     women:      { c: '#d78bb2', t: { ar: 'نساء خالدات', en: 'Women Who Made History', fr: 'Femmes qui ont marqué l’histoire', it: 'Donne che hanno fatto la storia', de: 'Frauen, die Geschichte schrieben' } },
     people:     { c: '#e2b36d', t: { ar: 'أعلام الأدب والفنون والرياضة', en: 'Figures in Literature, Arts and Sport', fr: 'Figures de la littérature, des arts et du sport', it: 'Protagonisti della letteratura, delle arti e dello sport', de: 'Persönlichkeiten aus Literatur, Kunst und Sport' } },
     history:    { c: '#d4b7ff', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
-    curriculum: { c: '#f5b37e', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
+    curriculum: { c: '#f5b37e', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } },
+    islamic:    { c: '#78c59a', t: { ar: 'شخصيات إسلامية', en: 'Islamic Figures', fr: 'Figures de l’islam', it: 'Figure islamiche', de: 'Persönlichkeiten des Islam' } }
   };
   var STR = {
     kicker: { ar: 'خريطة الشخصيات', en: 'Map of figures', fr: 'Carte des personnages', it: 'Mappa dei personaggi', de: 'Karte der Persönlichkeiten' },
