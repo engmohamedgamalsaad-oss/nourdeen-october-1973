@@ -64,6 +64,43 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 .reaction-count-item strong{font-size:1.1rem;color:var(--gold)}
 .reaction-count-item.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
 .reaction-review-empty{padding:18px;text-align:center;color:var(--muted)}
+
+/* لوحة الإدارة فقط: استعادة الهوية الحمراء دون تغيير ألوان الموقع أو الحكايات. */
+:root{
+  --night:#19090d;
+  --panel:rgba(48,17,24,.9);
+  --ink:#fff1f2;
+  --muted:#e2bfc4;
+  --gold:#ff5968;
+  --bronze:#c83245;
+  --cream:#fff1f2;
+  --line:rgba(255,89,104,.32);
+  --field:#230b11;
+}
+html[data-theme="light"]{
+  --night:#fff5f5;
+  --panel:#fffafa;
+  --ink:#321218;
+  --muted:#75464d;
+  --gold:#bd2337;
+  --bronze:#962033;
+  --cream:#321218;
+  --line:rgba(189,35,55,.3);
+  --field:#fff;
+}
+body{
+  background:radial-gradient(ellipse at 15% 8%,rgba(190,35,55,.22),transparent 38%),var(--night);
+}
+.topbar{background:rgba(35,7,13,.95);border-bottom-color:var(--line)}
+html[data-theme="light"] .topbar{background:rgba(255,245,245,.96);color:var(--ink)}
+.mark{border-color:var(--gold);color:var(--gold);box-shadow:inset 0 0 0 4px rgba(255,89,104,.1)}
+.links a:hover{color:var(--gold)}
+.primary,.btn.primary{background:linear-gradient(135deg,#ff7b86,#c83245);color:#fff}
+html[data-theme="light"] .primary,html[data-theme="light"] .btn.primary{background:linear-gradient(135deg,#e94a5d,#a91d32);color:#fff}
+input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(--gold)}
+.stat-button:hover{border-color:var(--gold)}
+.stat-button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.translation-panel>summary,.translation-lang h4{color:var(--gold)}
 </style>
 </head>
 <body>
