@@ -18,8 +18,8 @@
   var SEC = {
     october:    { c: '#f0c878', t: { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' } },
     science:    { c: '#8ad9e8', t: { ar: 'العلم والعلماء', en: 'Science and Scientists', fr: 'Science et scientifiques', it: 'Scienza e scienziati', de: 'Wissenschaft und Wissenschaftler' } },
-    knowledge:  { c: '#a9d9a6', t: { ar: 'التعليم والمعرفة', en: 'Education and Knowledge', fr: 'Éducation et savoir', it: 'Istruzione e conoscenza', de: 'Bildung und Wissen' } },
-    people:     { c: '#f1a7c5', t: { ar: 'المشاهير والرياضة والفنون', en: 'Celebrities, Sports and Arts', fr: 'Célébrités, sport et arts', it: 'Celebrità, sport e arti', de: 'Prominente, Sport und Kunst' } },
+    women:      { c: '#d78bb2', t: { ar: 'نساء خالدات', en: 'Women Who Made History', fr: 'Femmes qui ont marqué l’histoire', it: 'Donne che hanno fatto la storia', de: 'Frauen, die Geschichte schrieben' } },
+    people:     { c: '#e2b36d', t: { ar: 'أعلام الأدب والفنون والرياضة', en: 'Figures in Literature, Arts and Sport', fr: 'Figures de la littérature, des arts et du sport', it: 'Protagonisti della letteratura, delle arti e dello sport', de: 'Persönlichkeiten aus Literatur, Kunst und Sport' } },
     history:    { c: '#d4b7ff', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
     curriculum: { c: '#f5b37e', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
   };
@@ -101,8 +101,11 @@
         if (!s || s.published === false || !s.person) return;
         if (off.indexOf(String(s.id)) >= 0) return;
         var p = places[String(s.id)];
-        if (!p || !validNum(p.lat, 90) || !validNum(p.lng, 180) || !SEC[s.section]) return;
-        points.push({ s: s, p: p, sec: s.section });
+        var section = s.section;
+        if (section === 'knowledge' || section === 'learning') section = 'women';
+        if (section === 'fame') section = 'people';
+        if (!p || !validNum(p.lat, 90) || !validNum(p.lng, 180) || !SEC[section]) return;
+        points.push({ s: s, p: p, sec: section });
       });
     });
   }
