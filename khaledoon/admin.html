@@ -143,12 +143,12 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </div>
 </section>
 </main>
-<script src="assets/khaledoon-admin-texts.js?v=20261018-3"></script>
+<script src="assets/khaledoon-admin-texts.js?v=20261018-5"></script>
 <script>
 (function(){
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
-var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null;
+var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null,newStoryGate=false,newStoryPromptCopied=false;
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
@@ -587,9 +587,33 @@ function pubRow(it){
  if(openIds[key]){d.open=true;build()}
  return d;
 }
+function buildNewStoryPrompt(){
+ var prompt=String(STORY_WORKFLOW||'').trim();
+ if(!prompt){throw new Error('تعذر تحميل البرومبت الرئيسي الكامل من تعليمات المشروع.');}
+ return prompt;
+}
+function renderNewStoryGate(list){
+ var box=el('article','fcard');
+ box.appendChild(el('h2','','قبل إنشاء أي حكاية جديدة'));
+ box.appendChild(el('p','','الخطوة الأولى إلزامية: انسخ برومبت المشروع الكامل والصقه في المحادثة التي ستعمل فيها على الحكاية. البرومبت يتضمن التعليمات الأساسية، وطريقة كارما والراوي، واللغات الخمس، والتوثيق والصور، وقواعد المعاينة وعدم النشر دون موافقة.'));
+ box.appendChild(el('p','fnote','لن يفتح نموذج الحكاية الجديدة قبل تنفيذ النسخ من هنا. بعد النسخ، انتقل إلى المحادثة المخصصة للحكاية والصق النص كاملًا.'));
+ var bar=el('div','fbar');
+ var copy=el('button','btn primary','١. نسخ برومبت إنشاء الحكاية الكامل');copy.type='button';
+ var start=el('button','btn ghost','٢. تم النسخ — ابدأ الحكاية');start.type='button';start.disabled=!newStoryPromptCopied;
+ var cancel=el('button','btn ghost','إلغاء');cancel.type='button';
+ copy.addEventListener('click',function(){
+  var t=buildNewStoryPrompt();
+  function done(ok){if(ok){newStoryPromptCopied=true;start.disabled=false;say('ok','تم نسخ البرومبت الكامل. الصقه في محادثة الحكاية أولًا، ثم ارجع واضغط «تم النسخ — ابدأ الحكاية».')}else say('err','تعذر نسخ البرومبت. اسمح بالنسخ في المتصفح ثم حاول مرة أخرى.')}
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
+ });
+ start.addEventListener('click',function(){if(!newStoryPromptCopied)return;newStoryGate=false;draftNew=true;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
+ cancel.addEventListener('click',function(){newStoryGate=false;newStoryPromptCopied=false;render()});
+ bar.appendChild(copy);bar.appendChild(start);bar.appendChild(cancel);box.appendChild(bar);list.appendChild(box);
+}
 function render(){
  renderStats();renderTabs();
  var list=$('list');list.textContent='';
+ if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
   return (fStatus==='all'||i.status===fStatus)&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
@@ -721,7 +745,7 @@ $('rrefreshBtn').addEventListener('click',function(){loadReactions().catch(funct
 $('search').addEventListener('input',function(){term=this.value;render()});
 $('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
 $('rsearch').addEventListener('input',function(){reactionTerm=this.value;renderReactions()});
-$('newBtn').addEventListener('click',function(){draftNew=true;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
+$('newBtn').addEventListener('click',function(){draftNew=false;newStoryGate=true;newStoryPromptCopied=false;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
 $('promptBtn').addEventListener('click',function(){var t=STORY_PAGE_PROMPT;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){say('ok','تم نسخ البرومبت الرئيسي المحدّث كاملًا. الصقه في المكان الذي تستخدمه لإنشاء الحكاية.')}).catch(function(){fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})})}else{fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})}});
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
 load();
