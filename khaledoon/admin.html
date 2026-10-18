@@ -54,6 +54,15 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 .vrow .vt small{color:var(--muted)}
 .vrow .vs{font-size:.78rem;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid var(--line)}
 .vrow.off .vs{color:#e07a7a;border-color:#e07a7a}
+.reaction-review-card{margin-bottom:12px}
+.reaction-review-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.reaction-review-head h3{margin:0;color:var(--gold)}
+.reaction-review-meta{color:var(--muted);font-size:.85rem}
+.reaction-count-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:14px}
+.reaction-count-item{padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--panel);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.reaction-count-item strong{font-size:1.1rem;color:var(--gold)}
+.reaction-count-item.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.reaction-review-empty{padding:18px;text-align:center;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -87,6 +96,13 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 <div class="chips" id="vtabs" role="group" aria-label="العرض"></div>
 <div id="vlist"></div>
 </div>
+<div id="viewReactions" hidden>
+<div class="fhead"><div class="kicker">صوت القرّاء</div><h1>تفاعلات الحكايات</h1><p>تابع أعداد الإعجاب والردود الجاهزة لكل حكاية. المعروض مجاميع فقط؛ لا تظهر بيانات الزوار أو تعليقات مكتوبة.</p></div>
+<div class="stats" id="rstats"></div>
+<div class="tools"><input type="search" id="rsearch" placeholder="ابحث بعنوان الحكاية أو الشخصية…" aria-label="بحث في التفاعلات"><div class="fbar"><button class="btn ghost" id="rrefreshBtn" type="button">↻ تحديث التفاعلات</button></div></div>
+<div class="chips" id="rtabs" role="group" aria-label="تصفية حسب نوع التفاعل"></div>
+<div id="rlist"></div>
+</div>
 </section>
 </main>
 <script src="assets/khaledoon-admin-texts.js"></script>
@@ -96,6 +112,7 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
 var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null;
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
+var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
 var VSEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية'};
@@ -271,7 +288,7 @@ var translationDetails=el('details','translation-panel');
  translationDetails.appendChild(el('p','fnote','أدخل كل لغة على حدة، قارنها بالنص العربي، وحدد حالتها. لا تظهر الترجمة للزوار حتى تفعيلها واعتمادها.'));
  var translationStates={not_started:'لم تبدأ',draft:'مسودة',review:'قيد المراجعة',approved:'معتمدة'};
  var translationInputs={};
- [['en','English'],['fr','Français'],['it','Italiano']].forEach(function(pair){
+ [['en','English'],['fr','Français'],['it','Italiano'],['de','Deutsch']].forEach(function(pair){
   var lang=pair[0],saved=it.translations&&it.translations[lang]&&typeof it.translations[lang]==='object'?it.translations[lang]:{};
   var group=el('section','translation-lang'),heading=el('h4','',pair[1]+' · '+lang.toUpperCase());
   group.appendChild(heading);
@@ -544,17 +561,51 @@ function render(){
  shown.forEach(function(i){list.appendChild(pubRow(i))});
 }
 
+var REACTION_TYPES={like:'أعجبني',loved:'حكاية ومجهود مميز',unknown_before:'حكاية لم أكن أعرفها من قبل',inspiring:'حكاية ملهمة',more_stories:'أحب أقرأ حكايات تانية'};
+async function loadReactions(){
+ var r=await rest('story_reaction_counts?select=story_slug,reaction_type,total&order=story_slug.asc,reaction_type.asc');
+ if(!r.ok)throw new Error('تعذّر تحميل تفاعلات القراء ('+r.status+').');
+ reactionRows=await r.json();reactionLoaded=true;renderReactions();
+}
+function renderReactions(){
+ var bySlug={};
+ reactionRows.forEach(function(row){var slug=String(row.story_slug),type=String(row.reaction_type);if(!bySlug[slug])bySlug[slug]={};bySlug[slug][type]=Number(row.total)||0});
+ var stories={};
+ vStories.filter(function(s){return s&&s.id!=null&&s.published!==false}).forEach(function(s){stories[String(s.id)]=s});
+ Object.keys(bySlug).forEach(function(slug){if(!stories[slug])stories[slug]={id:slug,title:'حكاية '+slug,section:''}});
+ var slugs=Object.keys(stories).sort(function(a,b){return (stories[a].order||9999)-(stories[b].order||9999)||a.localeCompare(b,'ar')});
+ var total=0,likes=0,feedback=0,active=0;
+ Object.keys(bySlug).forEach(function(slug){Object.keys(REACTION_TYPES).forEach(function(type){var n=bySlug[slug][type]||0;total+=n;if(type==='like')likes+=n;else feedback+=n});if(Object.keys(REACTION_TYPES).some(function(type){return (bySlug[slug][type]||0)>0}))active++});
+ var stats=$('rstats');stats.textContent='';
+ [['إجمالي التفاعلات',total],['إعجابات',likes],['الردود الجاهزة',feedback],['حكايات عليها تفاعل',active]].forEach(function(x){var c=el('div','stat');c.appendChild(el('span','',x[0]));c.appendChild(el('strong','',String(x[1])));stats.appendChild(c)});
+ var tabs=$('rtabs');tabs.textContent='';
+ chip(tabs,'كل التفاعلات',reactionFilter==='all',function(){reactionFilter='all';renderReactions()});
+ Object.keys(REACTION_TYPES).forEach(function(type){chip(tabs,REACTION_TYPES[type],reactionFilter===type,function(){reactionFilter=type;renderReactions()})});
+ var list=$('rlist');list.textContent='';var q=reactionTerm.trim().toLocaleLowerCase();
+ var shown=slugs.filter(function(slug){var s=stories[slug],counts=bySlug[slug]||{};if(reactionFilter!=='all'&&!(counts[reactionFilter]>0))return false;return !q||[s.title,s.person,slug].some(function(x){return String(x||'').toLocaleLowerCase().indexOf(q)!==-1})});
+ if(!shown.length){list.appendChild(el('div','fcard reaction-review-empty',reactionRows.length?'لا توجد حكايات تطابق عوامل التصفية.':'لا توجد تفاعلات مسجلة حتى الآن.'));return}
+ shown.forEach(function(slug){
+  var s=stories[slug],counts=bySlug[slug]||{},box=el('article','fcard reaction-review-card');
+  var head=el('div','reaction-review-head'),title=el('h3','',s.title||('حكاية '+slug));head.appendChild(title);
+  head.appendChild(el('span','reaction-review-meta',[s.person,VSEC[s.section]||s.section,'رقم '+slug].filter(Boolean).join(' • ')));box.appendChild(head);
+  var grid=el('div','reaction-count-grid');
+  Object.keys(REACTION_TYPES).forEach(function(type){var item=el('div','reaction-count-item'+(reactionFilter===type?' active':''));item.appendChild(el('span','',REACTION_TYPES[type]));item.appendChild(el('strong','',String(counts[type]||0)));grid.appendChild(item)});
+  box.appendChild(grid);list.appendChild(box);
+ });
+}
 /* ======== تبويب إظهار وإخفاء الحكايات على الموقع (جدول story_visibility) ========
    نفس الجلسة ونفس rest() ونفس is_admin() في اللوحة، ولا مسار إدارة منفصل. الفرض الحقيقي في RLS. */
 function renderViews(){
  var b=$('views');b.textContent='';
  chip(b,'الحكايات المرسلة',view==='subs',function(){setView('subs')});
  chip(b,'ظهور الحكايات على الموقع',view==='vis',function(){setView('vis')});
+ chip(b,'تفاعلات الحكايات',view==='reactions',function(){setView('reactions')});
 }
 function setView(v){
- view=v;$('viewSubs').hidden=v!=='subs';$('viewVis').hidden=v!=='vis';renderViews();
- try{history.replaceState(null,'',v==='vis'?'#visibility':location.pathname+location.search)}catch(e){}
+ view=v;$('viewSubs').hidden=v!=='subs';$('viewVis').hidden=v!=='vis';$('viewReactions').hidden=v!=='reactions';renderViews();
+ try{history.replaceState(null,'',v==='vis'?'#visibility':v==='reactions'?'#reactions':location.pathname+location.search)}catch(e){}
  if(v==='vis'&&!vLoaded)loadVis().catch(function(e){say('err',e.message)});
+ if(v==='reactions'&&!reactionLoaded)loadReactions().catch(function(e){say('err',e.message)});
 }
 async function loadVis(){
  try{return await loadVisInner()}catch(e){vErr=e.message||'تعذّر تحميل قائمة حكايات الموقع.';render();throw e}
@@ -615,8 +666,8 @@ function renderVis(){
  });
 }
 async function enterApp(){
- showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;renderViews();
- if(location.hash==='#visibility')setView('vis');
+ showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;$('viewReactions').hidden=true;renderViews();
+ if(location.hash==='#visibility')setView('vis');else if(location.hash==='#reactions')setView('reactions');
  await loadVis().catch(function(e){say('err',e.message)});
  await loadList();
 }
@@ -628,8 +679,10 @@ $('loginForm').addEventListener('submit',async function(e){
 $('logoutBtn').addEventListener('click',function(){logout(false)});
 $('refreshBtn').addEventListener('click',async function(){await loadVis().catch(function(e){say('err',e.message)});await loadList().catch(function(e){say('err',e.message)})});
 $('vrefreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)})});
+$('rrefreshBtn').addEventListener('click',function(){loadReactions().catch(function(e){say('err',e.message)})});
 $('search').addEventListener('input',function(){term=this.value;render()});
 $('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
+$('rsearch').addEventListener('input',function(){reactionTerm=this.value;renderReactions()});
 $('newBtn').addEventListener('click',function(){draftNew=true;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
 load();
