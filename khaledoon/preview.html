@@ -7,9 +7,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/shared/base.css">
 <style>
+.actual-page-preview{margin:18px 0 24px;border:1px solid #725b38;border-radius:16px;overflow:hidden;background:#08141b}.actual-preview-label{padding:10px 14px;background:#2b251a;color:#f0d8aa;font-size:.9rem}.actual-page-preview iframe{display:block;width:100%;height:min(82vh,1100px);min-height:650px;border:0;background:#07141b}@media(max-width:650px){.actual-page-preview iframe{height:78vh;min-height:520px}}
 :root{color-scheme:dark;--bg:#07141b;--panel:#10242c;--line:#31505a;--gold:#d7ad66;--text:#f5f0e6;--muted:#b9c8c8;--outer:#b8874b;--inner:#102b35}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17323a,var(--bg) 65%);color:var(--text);font-family:Cairo,Arial,sans-serif;line-height:1.8}button,a,input,textarea{font:inherit}button,a{cursor:pointer}.wrap{width:min(1180px,calc(100% - 28px));margin:auto}.top{padding:20px 0;border-bottom:1px solid var(--line);background:#07141be8}.brand{color:var(--gold);font:700 1.4rem Marhey,Cairo,sans-serif}.sub{color:var(--muted);font-size:.9rem}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:9px 15px;background:#142a33;color:var(--text);text-decoration:none}.btn.active,.btn.primary{background:var(--gold);color:#17232a;border-color:var(--gold);font-weight:800}.note{padding:12px 15px;border:1px solid #725b38;background:#2b251a;border-radius:12px;color:#f0d8aa;margin:14px 0}.panel{border:1px solid var(--line);border-radius:18px;background:#0d2028;padding:18px;margin:18px 0}.panel h1,.panel h2{color:var(--gold);margin-top:0}.framebox{height:min(72vh,780px);min-height:420px;background:#fff;border-radius:12px;overflow:hidden}.framebox iframe{width:100%;height:100%;border:0;background:white}.story{overflow:hidden;border-radius:18px;border:2px solid var(--outer);background:var(--inner);box-shadow:0 16px 40px #0005}.cover{padding:30px 24px;background:linear-gradient(135deg,#0a1c25,#1d3d43);border-bottom:4px solid var(--outer);text-align:center}.eyebrow{color:var(--gold);font-weight:800}.story h1{font:700 clamp(1.7rem,4vw,2.7rem) Marhey,Cairo,sans-serif;margin:8px 0}.subtitle{color:#e1d4b7;font-size:1.1rem}.storybody{padding:24px;max-width:900px;margin:auto}.speaker{padding:14px 16px;margin:12px 0;border-right:4px solid var(--outer);background:#ffffff0b;border-radius:10px}.speaker b{color:var(--gold)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field input,.field textarea,.field select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#07171d;color:var(--text)}.field textarea{min-height:120px;resize:vertical}.field.full{grid-column:1/-1}.colors{display:flex;gap:14px;flex-wrap:wrap}.colors label{display:flex;gap:8px;align-items:center}.colors input{width:42px;height:34px;padding:2px}.footer{color:var(--muted);text-align:center;padding:25px 0;font-size:.85rem}@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}}
+.publish-preview{margin:0 -14px 22px;overflow:hidden;border:1px solid rgba(213,183,120,.24);background:#080f19;color:#f3eee5}.publish-preview .pub-hero{position:relative;display:flex;align-items:center;min-height:440px;padding:clamp(28px,6vw,76px);background:linear-gradient(115deg,#09131e,#1b2340 68%,#101824);border-bottom:1px solid #55466e}.publish-preview .pub-hero-content{max-width:800px}.publish-preview .pub-kicker{color:#d5b7ff;font-weight:800}.publish-preview .pub-hero h1{font:700 clamp(2.3rem,6vw,4.8rem)/1.4 Marhey,Cairo,serif;color:#fff0d7;margin:14px 0}.publish-preview .pub-subtitle{color:#d7d8e8;font-size:clamp(1rem,2vw,1.25rem)}.publish-preview .pub-author{margin-top:22px;color:#b8c6d5;line-height:2}.publish-preview .pub-author strong{color:#f1d8a3}.publish-preview .pub-section{padding:clamp(32px,5vw,64px) clamp(20px,5vw,68px);border-bottom:1px solid rgba(213,183,255,.12)}.publish-preview .pub-section:nth-child(even){background:rgba(10,15,28,.55)}.publish-preview .pub-section h2{color:#f3e7ff;font:700 clamp(1.5rem,3vw,2.2rem)/1.5 Marhey,Cairo,serif;margin:0 0 18px}.publish-preview .pub-section p{max-width:900px;font-size:1rem;line-height:2.1;white-space:pre-wrap;overflow-wrap:anywhere}.publish-preview .pub-translation{direction:ltr;text-align:left;border:1px solid #55466e;border-radius:12px;padding:16px;margin:12px 0;background:#101824}.publish-preview .pub-translation h3{color:#e3bd78;margin-top:0}.publish-preview .pub-actions{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0}.publish-preview .pub-actions button{min-height:46px;border-radius:8px;padding:10px 18px;font-weight:800}.publish-preview .pub-actions #approveStoryBtn{background:linear-gradient(135deg,#f2d59a,#c59aee);color:#171321;border:0}.publish-preview .pub-actions #rejectStoryBtn,.publish-preview .pub-actions #printReviewBtn{background:#111d29;color:#f4e8ff;border:1px solid #55466e}@media(max-width:650px){.publish-preview{margin-inline:-13px}.publish-preview .pub-hero{min-height:390px;padding:28px 20px}.publish-preview .pub-section{padding:30px 20px}.publish-preview .pub-actions{flex-direction:column}.publish-preview .pub-actions button{width:100%}}
 </style></head>
 <body>
 <header class="top"><div class="wrap"><div class="brand">خالدون عبر التاريخ</div><div class="sub">مساحة معاينة مرئية قبل اعتماد التعديلات</div></div></header>
@@ -51,6 +54,26 @@
 </article>
 <div class="tabs"><button class="btn primary" id="printBtn">طباعة المعاينة</button><button class="btn" id="resetBtn">إعادة النموذج الافتراضي</button></div>
 </section>
+
+<section id="reviewView" class="wrap" hidden>
+ <section id="actualPagePreviewWrap" class="actual-page-preview">
+  <div class="actual-preview-label">عرض من قالب الحكاية الفعلي — معاينة خاصة بهذه الجلسة</div>
+  <iframe id="actualPagePreview" title="معاينة الحكاية داخل قالب الموقع" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="eager"></iframe>
+ </section>
+
+ <div class="publish-preview">
+  <p class="note" id="reviewMeta" style="margin:0;padding:12px 18px;border-radius:0">معاينة الحكاية الحالية — لم تُنشر.</p>
+  <header class="pub-hero"><div class="pub-hero-content"><div class="pub-kicker" id="reviewSection">خالدون عبر التاريخ • معاينة قبل النشر</div><h1 id="reviewTitle"></h1><p class="pub-subtitle" id="reviewSubtitle"></p><div class="pub-author"><span>حكاية قيد المراجعة</span><br><strong id="reviewFigure"></strong></div></div></header>
+  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">بداية الحكاية</div><h2>الحكاية</h2><div id="reviewBody"></div></section>
+  <section class="pub-section" id="reviewHistoryWrap"><div class="pub-kicker">في ضوء التاريخ</div><h2>السياق والتحقق التاريخي</h2><div id="reviewHistory"></div></section>
+  <section class="pub-section" id="reviewSourcesWrap"><div class="pub-kicker">المصادر والتحقق</div><h2>من أين عرفنا هذه المعلومات؟</h2><div id="reviewSources"></div></section>
+  <section class="pub-section" id="reviewImagesWrap"><div class="pub-kicker">الصور</div><h2>الصور وحقوق الاستخدام</h2><div id="reviewImages"></div></section>
+  <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre></section>
+  <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
+ </div>
+ <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. الموافقة تغيّر حالة السجل في لوحة الإدارة فقط؛ إنشاء صفحة الحكاية النهائية ونشرها يحتاجان إلى خطوة منفصلة.</div>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">موافق — اعتماد الحالة</button><button class="btn" id="rejectStoryBtn" type="button">غير موافق — رجوع للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+</section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
 <script>
 (function(){
@@ -64,6 +87,78 @@ pairs.forEach(function(p){document.getElementById(p[0]).addEventListener('input'
 var defaults={storyTitle:'عنوان الحكاية الجديدة',storySubtitle:'حكاية نكتشف من خلالها التاريخ بالدليل',karmaText:'كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟',narratorText:'الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.',sourceText:'المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.',outerColor:'#b8874b',innerColor:'#102b35'};
 document.getElementById('resetBtn').addEventListener('click',function(){Object.keys(defaults).forEach(function(k){document.getElementById(k).value=defaults[k]});paint()});
 document.getElementById('printBtn').addEventListener('click',function(){var was=views.story.hidden;views.site.hidden=true;views.story.hidden=false;window.print();views.site.hidden=was});
+
 paint();
+var params=new URLSearchParams(location.search);
+if(params.get('story')==='1'){
+ var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
+ siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
+ document.querySelectorAll('[data-view]').forEach(function(x){x.classList.remove('active')});
+ var draft=null;
+ try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
+ if(!draft){document.getElementById('reviewMeta').textContent='لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.';document.getElementById('approveStoryBtn').disabled=true}
+ else{
+  localStorage.removeItem('kh-story-preview-draft');
+  function put(id,value){document.getElementById(id).textContent=value||''}
+  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
+  put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
+  document.getElementById('reviewHistoryWrap').hidden=!draft.history_note;
+  document.getElementById('reviewSourcesWrap').hidden=!draft.sources;
+  document.getElementById('reviewImagesWrap').hidden=!draft.images_note;
+  document.getElementById('reviewOriginalWrap').hidden=!draft.original_body;
+  var langs={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
+  var list=document.getElementById('reviewTranslations');list.textContent='';
+  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
+  document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
+  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
+  (function renderInRealTemplate(d){
+   var frame=document.getElementById('actualPagePreview');
+   var section=(d.section_label||'').toLowerCase();
+   var path=section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
+            section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+            '../stories/history/005/index.html';
+   frame.src=path+'?previewMode=1';
+   frame.addEventListener('load',function(){
+    try{
+     var doc=frame.contentDocument;
+     if(!doc||!doc.body)return;
+     var style=doc.createElement('style');
+     style.textContent='.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
+     doc.head.appendChild(style);
+     doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
+     var title=doc.querySelector('.hero h1,[data-i18n="title"]');
+     if(title)title.textContent=d.title||'حكاية بلا عنوان';
+     var subtitle=doc.querySelector('.hero-subtitle');
+     if(subtitle)subtitle.textContent=d.subtitle||'';
+     var eyebrow=doc.querySelector('.hero .eyebrow');
+     if(eyebrow)eyebrow.textContent=(d.section_label||'خالدون عبر التاريخ')+' • معاينة غير منشورة';
+     var author=doc.querySelector('.author strong');
+     if(author)author.textContent=d.figure_name||'';
+     var storySections=Array.prototype.slice.call(doc.querySelectorAll('main .story'));
+     if(storySections.length){
+      var first=storySections[0].querySelector('.container')||storySections[0];
+      first.innerHTML='';
+      var kicker=doc.createElement('div');kicker.className='kicker';kicker.textContent='الحكاية';first.appendChild(kicker);
+      var h=doc.createElement('h2');h.textContent=d.title||'الحكاية';first.appendChild(h);
+      String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var para=doc.createElement('p');para.textContent=part.trim();first.appendChild(para)});
+      storySections.slice(1).forEach(function(s){s.hidden=true});
+      if(d.history_note){
+       var hist=doc.createElement('section');hist.className='story';var c=doc.createElement('div');c.className='container';var k=doc.createElement('div');k.className='kicker';k.textContent='في ضوء التاريخ';var hh=doc.createElement('h2');hh.textContent='السياق التاريخي والتحقق';var hp=doc.createElement('p');hp.textContent=d.history_note;c.appendChild(k);c.appendChild(hh);c.appendChild(hp);hist.appendChild(c);var src=doc.querySelector('.sources');if(src)src.parentNode.insertBefore(hist,src);else doc.querySelector('main').appendChild(hist);
+      }
+     }
+     var sources=doc.querySelector('.sources');
+     if(sources){var container=sources.querySelector('.container')||sources;container.innerHTML='';var k2=doc.createElement('div');k2.className='kicker';k2.textContent='المصادر والتحقق';var h2=doc.createElement('h2');h2.textContent='مصادر الحكاية';var sp=doc.createElement('p');sp.style.whiteSpace='pre-wrap';sp.textContent=d.sources||'لم تُضف مصادر بعد.';container.appendChild(k2);container.appendChild(h2);container.appendChild(sp);}
+     var end=doc.querySelector('.end');if(end)end.hidden=true;
+     var foot=doc.querySelector('footer');if(foot)foot.textContent='خالدون عبر التاريخ — معاينة غير منشورة';
+     doc.querySelectorAll('a[href*="collections/"]').forEach(function(link){link.addEventListener('click',function(e){e.preventDefault()})});
+    }catch(e){document.getElementById('reviewMeta').textContent='تعذر إظهار قالب الحكاية الفعلي في هذه الجلسة؛ استخدم تفاصيل المعاينة أدناه.'}
+   },{once:true});
+  })(draft);
+ }
+ function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action},location.origin);if(action==='reject')window.close();else document.getElementById('reviewMeta').textContent='تم إرسال موافقتك إلى لوحة الإدارة. راجع رسالة التأكيد هناك.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها واتخذ القرار من بطاقة الحكاية.'}}
+ document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
+ document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
+ document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
+}
 })();
 </script></body></html>

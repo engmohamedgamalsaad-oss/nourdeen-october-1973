@@ -299,7 +299,28 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
+
  bar.appendChild(bCopy);
+ var bPreview=el('button','btn primary','👁 معاينة قبل النشر');bPreview.type='button';
+ bar.insertBefore(bPreview,bCopy);
+ var previewWin=null;
+ bPreview.addEventListener('click',function(){
+  var d=collect(st.value);
+  var payload={title:d.title,subtitle:d.subtitle,figure_name:d.figure_name,section_label:SEC[d.section]||d.section,body:d.body,history_note:d.history_note,sources:d.sources,images_note:d.images_note,translations:d.translations,consent:d.consent,status_label:STATUS[d.status]||d.status,created_at:it.created_at||null,original_body:it.original_body||'',is_new:isNew};
+  try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(payload));}
+  catch(e){say('err','تعذر تجهيز المعاينة على هذا الجهاز.');return}
+  previewWin=window.open('preview.html?story=1','khStoryPreview');
+  if(!previewWin){say('err','المتصفح منع فتح المعاينة. اسمح بفتح النافذة ثم اضغط المعاينة مرة أخرى.');return}
+ });
+ window.addEventListener('message',function(e){
+  if(e.origin!==location.origin||!previewWin||e.source!==previewWin||!e.data||e.data.type!=='kh-story-preview-decision')return;
+  if(e.data.action==='approve'){
+   if(!confirm('تأكيد اعتماد المعاينة فقط؟ لن تتغير حالة الحكاية إلى «منشورة»، ولن يظهر شيء على الموقع الحي.'))return;
+   say('ok','تم تأكيد المعاينة للمراجعة فقط. لم يتم النشر ولم تتغير حالة الحكاية.');
+  }else if(e.data.action==='reject'){
+   say('ok','لم يتم النشر. يمكنك تعديل الحكاية من نفس بطاقة الإدارة ثم معاينتها مرة أخرى.');
+  }
+ });
  if(!isNew&&(it.status==='pending'||it.status==='review')){
   var bRej=el('button','btn del','رفض');bRej.type='button';
   bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
