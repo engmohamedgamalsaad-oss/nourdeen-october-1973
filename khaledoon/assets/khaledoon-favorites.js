@@ -1,6 +1,7 @@
-/* خالدون عبر التاريخ — المفضّلة: نجمة على كل كارت حكاية + قسم "حكاياتي المفضلة" في الصفحة الرئيسية.
+/* خالدون عبر التاريخ — المفضّلة: نجمة على كل كارت حكاية + زر داخل صفحة الحكاية + قسم "حكاياتي المفضلة" في الرئيسية.
    - المفضلة تُحفظ في متصفح الزائر (localStorage، المفتاح kh-favs) دون تسجيل دخول.
    - النجمة تُضاف تلقائيًا لأي كارت <a class="card"> يربط بصفحة حكاية (stories/<قسم>/<رقم>/)، حتى لو أُنشئ لاحقًا بالجافاسكربت.
+   - في صفحة الحكاية نفسها يُضاف زر بالنجمة والنص في شريط المشاركة (.story-share-bar)، أو في .hero-content إن لم يوجد الشريط.
    - قسم المفضلة يقرأ stories/index.json، فأي حكاية جديدة تدخله دون تعديل هذا الملف.
    - يُحمّل من khaledoon-theme.js (الأقسام والحكايات) ومن khaledoon-search.js (الرئيسية).
    - لا يستخدم innerHTML مع أي بيانات. */
@@ -15,10 +16,12 @@
   var KEY = 'kh-favs';
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var STORY_RE = /\/stories\/[a-z0-9_-]+\/(\d{3,})(?:[\/?#]|$)/i;
+  var PAGE_RE = /\/stories\/[a-z0-9_-]+\/(\d{3,})\/?(?:index\.html)?$/i;
 
   var STR = {
     add:    { ar: 'أضف إلى المفضلة', en: 'Add to favorites', fr: 'Ajouter aux favoris', it: 'Aggiungi ai preferiti', de: 'Zu Favoriten hinzufügen' },
     remove: { ar: 'إزالة من المفضلة', en: 'Remove from favorites', fr: 'Retirer des favoris', it: 'Rimuovi dai preferiti', de: 'Aus Favoriten entfernen' },
+    saved:  { ar: 'في المفضلة', en: 'In favorites', fr: 'Dans les favoris', it: 'Nei preferiti', de: 'In den Favoriten' },
     title:  { ar: 'حكاياتي المفضلة', en: 'My favorite stories', fr: 'Mes histoires favorites', it: 'Le mie storie preferite', de: 'Meine Lieblingsgeschichten' },
     kicker: { ar: 'اللي اخترتها بنجمة', en: 'The ones you starred', fr: 'Celles que vous avez étoilées', it: 'Quelle che hai contrassegnato', de: 'Die, die du mit einem Stern markiert hast' }
   };
@@ -71,7 +74,7 @@
   if (!document.querySelector('link[data-khf-css]')) {
     var css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = U('khaledoon-favorites.css?v=1');
+    css.href = U('khaledoon-favorites.css?v=2');
     css.setAttribute('data-khf-css', '1');
     document.head.appendChild(css);
   }
@@ -93,9 +96,11 @@
     b.setAttribute('aria-pressed', on ? 'true' : 'false');
     b.setAttribute('aria-label', t);
     b.title = t;
+    var txt = b.querySelector('.khf-pill-text');
+    if (txt) txt.textContent = T(on ? 'saved' : 'add');
   }
   function paintAll() {
-    var all = document.querySelectorAll('.khf-star');
+    var all = document.querySelectorAll('.khf-star, .khf-pill');
     for (var i = 0; i < all.length; i++) paintOne(all[i]);
   }
   function makeStar(id) {
@@ -104,6 +109,16 @@
     b.setAttribute('data-id', id);
     b.appendChild(icon());
     b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); toggle(id); });
+    paintOne(b);
+    return b;
+  }
+  function makePill(id) {
+    var b = el('button', 'khf-pill');
+    b.type = 'button';
+    b.setAttribute('data-id', id);
+    b.appendChild(icon());
+    b.appendChild(el('span', 'khf-pill-text'));
+    b.addEventListener('click', function (e) { e.preventDefault(); toggle(id); });
     paintOne(b);
     return b;
   }
@@ -120,6 +135,16 @@
       a.classList.add('kh-fav-host');
       a.appendChild(makeStar(m[1]));
     }
+  }
+
+  /* صفحة الحكاية نفسها: زر بالنجمة والنص في شريط المشاركة. */
+  function processStoryPage() {
+    if (document.querySelector('.khf-pill')) return;
+    var m = PAGE_RE.exec(location.pathname);
+    if (!m) return;
+    var host = document.querySelector('.story-share-bar') || document.querySelector('.hero-content');
+    if (!host) return;
+    host.appendChild(makePill(m[1]));
   }
 
   /* ---------- قسم "حكاياتي المفضلة" في الرئيسية ---------- */
@@ -192,12 +217,13 @@
 
   function init() {
     processCards();
+    processStoryPage();
     buildHome();
     renderHome();
     var raf = 0;
     new MutationObserver(function () {
       if (raf) return;
-      raf = requestAnimationFrame(function () { raf = 0; processCards(); });
+      raf = requestAnimationFrame(function () { raf = 0; processCards(); processStoryPage(); });
     }).observe(document.body, { childList: true, subtree: true });
     new MutationObserver(refresh)
       .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
