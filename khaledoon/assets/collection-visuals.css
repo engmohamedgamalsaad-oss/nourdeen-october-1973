@@ -1,0 +1,107 @@
+/* Khaledoon section visual identity — matching home gateways to their interior pages.
+   The illustrations are original transparent SVG line art, not historical photographs. */
+:root{
+  --kh-october:#f0c878;--kh-science:#8ad9e8;--kh-women:#a9d9a6;
+  --kh-culture:#f1a7c5;--kh-history:#d4b7ff;--kh-curriculum:#9bb7ff;
+}
+
+/* Homepage gateway cards: retain the established layout and add subtle, thematic art. */
+.gate.g1{--c:var(--kh-october);background:linear-gradient(145deg,#163e49,#10232c)}
+.gate.g2{--c:var(--kh-science);background:linear-gradient(145deg,#123d4a,#102631)}
+.gate.g3{--c:var(--kh-women);background:linear-gradient(145deg,#214638,#142c29)}
+.gate.g4{--c:var(--kh-culture);background:linear-gradient(145deg,#4b2944,#251d31)}
+.gate.g5{--c:var(--kh-history);background:linear-gradient(145deg,#342b56,#1d2038)}
+.gate.g7{--c:var(--kh-curriculum);background:linear-gradient(145deg,#1f3560,#121d38)}
+.gate.g1::before,.gate.g2::before,.gate.g3::before,.gate.g4::before,.gate.g5::before,.gate.g7::before{
+  background-image:
+    linear-gradient(100deg,rgba(3,12,20,.76),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),
+    url("section-october.svg"),
+    radial-gradient(circle at 95% 5%,var(--c),transparent 55%);
+  background-size:cover,min(78%,350px) auto,cover;
+  background-position:center,right 4% center,center;
+  background-repeat:no-repeat;
+  opacity:.66;
+}
+.gate.g2::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-science.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.gate.g3::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-women.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.gate.g4::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-culture.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.gate.g5::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-history.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.gate.g7::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-curriculum.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+html[data-theme="light"] .gate.g1::before,html[data-theme="light"] .gate.g2::before,html[data-theme="light"] .gate.g3::before,html[data-theme="light"] .gate.g4::before,html[data-theme="light"] .gate.g5::before,html[data-theme="light"] .gate.g7::before{opacity:.28}
+.gate .sym,.gate h3,.gate p,.gate .go{position:relative;z-index:1}
+
+/* Transparent line-art watermark on collection interiors; never blocks reading or clicks. */
+body.collection-science,body.collection-women,body.collection-culture,
+body.collection-history,body.collection-curriculum,body.collection-october{
+  position:relative;
+  isolation:isolate;
+}
+body.collection-science::before,body.collection-women::before,body.collection-culture::before,
+body.collection-history::before,body.collection-curriculum::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  pointer-events:none;
+  background-repeat:no-repeat;
+  background-position:right 3% top 105px;
+  background-size:min(48vw,560px) auto;
+  opacity:.13;
+  filter:saturate(.85);
+}
+body.collection-science{--bg:#102631;--panel:#123d4a;--gold:#8ad9e8;--line:rgba(138,217,232,.3);--muted:#c3dce2;background:radial-gradient(ellipse at 90% 4%,rgba(138,217,232,.16),transparent 38%),linear-gradient(180deg,#123d4a 0%,#102631 55%,#0a1b23 100%)}
+body.collection-science::before{background-image:url("section-science.svg")}
+body.collection-science .hero{background:linear-gradient(100deg,rgba(18,61,74,.94),rgba(16,38,49,.74)),radial-gradient(ellipse at 78% 22%,rgba(138,217,232,.18),transparent 46%)}
+body.collection-science .card,body.collection-science .qrpanel{background:linear-gradient(145deg,rgba(18,61,74,.94),rgba(10,32,42,.96));border-color:rgba(138,217,232,.3)}
+body.collection-science .num{background:linear-gradient(145deg,#247b91,#8ad9e8);color:#09232b}
+
+body.collection-women{--bg:#142c29;--panel:#214638;--gold:#a9d9a6;--line:rgba(169,217,166,.3);--muted:#c9dfce;background:radial-gradient(ellipse at 90% 4%,rgba(169,217,166,.17),transparent 38%),linear-gradient(145deg,#214638,#142c29 72%)}
+body.collection-women::before{background-image:url("section-women.svg")}
+body.collection-women header{background:rgba(20,44,41,.94)}
+body.collection-women .hero{background:linear-gradient(110deg,rgba(33,70,56,.94),rgba(20,44,41,.78)),radial-gradient(ellipse at 78% 22%,rgba(169,217,166,.18),transparent 46%)}
+body.collection-women .card,body.collection-women .qrpanel{background:linear-gradient(145deg,rgba(33,70,56,.94),rgba(16,39,35,.96));border-color:rgba(169,217,166,.3)}
+body.collection-women .num{background:linear-gradient(145deg,#5a936e,#a9d9a6);color:#10291d}
+
+body.collection-culture::before{background-image:url("section-culture.svg")}
+body.collection-culture{background:radial-gradient(ellipse at 90% 4%,rgba(241,167,197,.16),transparent 38%),linear-gradient(145deg,#4b2944,#251d31 72%)}
+body.collection-culture .hero{background:linear-gradient(110deg,rgba(75,41,68,.94),rgba(37,29,49,.76)),radial-gradient(ellipse at 78% 22%,rgba(241,167,197,.18),transparent 46%)}
+body.collection-culture .card,body.collection-culture .qrpanel{background:linear-gradient(145deg,rgba(75,41,68,.94),rgba(37,29,49,.96));border-color:rgba(241,167,197,.3)}
+
+body.collection-history::before{background-image:url("section-history.svg")}
+body.collection-history{background-color:#111322}
+body.collection-history .hero{background:linear-gradient(100deg,rgba(20,17,43,.88),rgba(34,29,66,.55) 55%,rgba(17,19,38,.82)),url("../../assets/backgrounds/story-002-bg.webp") center/cover no-repeat}
+body.collection-history .card,body.collection-history .qrpanel{background:linear-gradient(145deg,rgba(43,37,70,.92),rgba(20,23,43,.96));border-color:rgba(212,183,255,.3)}
+
+body.collection-curriculum::before{background-image:url("section-curriculum.svg")}
+body.collection-curriculum{background:radial-gradient(ellipse at 90% 4%,rgba(155,183,255,.16),transparent 38%),linear-gradient(180deg,#1f3560,#121d38 76%)}
+body.collection-curriculum .hero{background:linear-gradient(100deg,rgba(31,53,96,.94),rgba(18,29,56,.78)),radial-gradient(ellipse at 78% 22%,rgba(155,183,255,.18),transparent 46%)}
+body.collection-curriculum :is(.info,.stage,.step,.panel,.flow){border-color:rgba(155,183,255,.28)}
+body.collection-curriculum .btn.primary{background:linear-gradient(135deg,#9bb7ff,#5174c7);color:#111d38}
+
+body.collection-october .hero-home-image-wrap::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  background:url("section-october.svg") no-repeat right 5% center / min(46vw,560px) auto;
+  opacity:.18;
+}
+body.collection-october .hero-home-shade{z-index:2}
+@media(max-width:700px){
+  body.collection-science::before,body.collection-women::before,body.collection-culture::before,
+  body.collection-history::before,body.collection-curriculum::before{
+    background-position:right -55px top 120px;
+    background-size:min(78vw,360px) auto;
+    opacity:.09;
+  }
+  .gate.g1::before,.gate.g2::before,.gate.g3::before,.gate.g4::before,.gate.g5::before,.gate.g7::before{
+    background-size:cover,min(72%,260px) auto,cover;
+    background-position:center,right -8% center,center;
+  }
+  body.collection-october .hero-home-image-wrap::before{background-size:min(78vw,340px) auto;background-position:right -25px center;opacity:.12}
+}
+@media(prefers-reduced-motion:reduce){
+  body.collection-science::before,body.collection-women::before,body.collection-culture::before,
+  body.collection-history::before,body.collection-curriculum::before{filter:none}
+}
