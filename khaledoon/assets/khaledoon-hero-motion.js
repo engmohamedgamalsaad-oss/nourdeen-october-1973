@@ -45,8 +45,9 @@
   var FADE_LEN=0.32;   // مسافة التمرير حتى يختفي النص تمامًا
   var ZONE=0.035;      // تقليل منطقة إخفاء المحتوى أسفل الصورة لإبقاء الحكايات أوضح
   var ZONE_MIN=48;     // أقل ارتفاع لمنطقة التلاشي بالبكسل
-  var LIFT=0.06;       // رفع خط اختفاء الكلام والحكايات إلى أعلى (نسبة من ارتفاع الشاشة؛ 0 = كما كان، الأكبر = أعلى)
+  var LIFT=0.06;       // رفع خط اختفاء الكلام والحكايات إلى أعلى على الكمبيوتر فقط (نسبة من ارتفاع الشاشة؛ 0 = كما كان، الأكبر = أعلى)
   var LIFT_MIN=36;     // أقل رفع بالبكسل
+  var DESKTOP_MIN=781; // عرض الشاشة (بالبكسل) الذي يبدأ منه تطبيق الرفع؛ الموبايل (780 وأقل) يبقى كما كان
   var langrow=document.querySelector('.topbar .langrow');
   var targets=[].slice.call(document.querySelectorAll('main .section,footer'));
   var hits=[].slice.call(document.querySelectorAll('main .section a,main .section button,footer a'));
@@ -76,7 +77,8 @@
     hi.style.filter=p>0?'opacity('+(1-p).toFixed(3)+')':'';
     hi.style.pointerEvents=p>.85?'none':'';
     if(langrow){langrow.style.opacity=p>0?(1-p).toFixed(3):'';langrow.style.visibility=p>=1?'hidden':''}
-    var edge=layer.getBoundingClientRect().bottom-Math.max(LIFT_MIN,LIFT*vh);
+    var lift=innerWidth>=DESKTOP_MIN?Math.max(LIFT_MIN,LIFT*vh):0;
+    var edge=layer.getBoundingClientRect().bottom-lift;
     var zone=Math.max(ZONE_MIN,ZONE*vh);
     var rects=targets.map(function(el){return el.getBoundingClientRect()});
     var hrects=hits.map(function(el){return el.getBoundingClientRect()});
