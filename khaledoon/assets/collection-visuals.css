@@ -252,3 +252,12 @@ html[data-theme="light"] body.collection-history .hero{
 /* Reader-submitted stories gateway also needs its own light palette. */
 html[data-theme="light"] .gate.g6{--c:#a65a26;background:linear-gradient(145deg,#fff1e5,#f4dfcd);color:#30251e;border-color:rgba(166,90,38,.32)}
 html[data-theme="light"] .gate.g6::before{opacity:.12}
+
+
+/* Hide the decorative story-number badges on all collection story cards; story IDs and links remain unchanged. */
+body.collection-october .card .num,
+body.collection-science .card .num,
+body.collection-women .card .num,
+body.collection-culture .card .num,
+body.collection-history .card .num,
+body.collection-curriculum .card .num{display:none!important}
