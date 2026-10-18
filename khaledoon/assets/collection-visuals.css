@@ -231,3 +231,19 @@ html[data-theme="light"] body.collection-curriculum footer{color:var(--muted);bo
 .section-visual-gallery figcaption strong{display:block;color:var(--gold);font-size:15px}
 .section-visual-gallery figcaption a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
 @media(max-width:700px){.section-visual-gallery{grid-template-columns:1fr}.section-visual-gallery img{height:auto;max-height:320px;object-fit:contain}}
+
+
+/* Preserve the existing historical photograph in the history section in light mode. */
+html[data-theme="light"] body.collection-history{
+  background:
+    linear-gradient(180deg,rgba(250,248,255,.88),rgba(238,235,248,.93)),
+    url("../../assets/backgrounds/story-002-bg.webp") center / cover fixed no-repeat;
+}
+html[data-theme="light"] body.collection-history .hero{
+  background:
+    linear-gradient(100deg,rgba(250,248,255,.88),rgba(250,248,255,.62) 55%,rgba(250,248,255,.86)),
+    url("../../assets/backgrounds/story-002-bg.webp") center / cover no-repeat;
+}
+@media(max-width:700px){
+  html[data-theme="light"] body.collection-history{background-attachment:scroll}
+}
