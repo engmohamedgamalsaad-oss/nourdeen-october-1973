@@ -137,6 +137,7 @@ var O={"الأول":1,"الثاني":2,"الثالث":3,"الرابع":4,"الخ
 var N={"نوردين":"Nourdeen","كارما":"Karma","مليكة":"Malika"};
 var LG=(window.KH_LANG&&window.KH_LANG.supported?window.KH_LANG.supported.slice():["ar","en","fr","it"]),l=0,de=document.documentElement,B=document.body,q=document.getElementById("q"),th=document.getElementById("th");
 var T0=document.title,BR="خالدون عبر التاريخ",PV="معاينة مستقلة",PH=q?q.placeholder:"";
+window.KH_AR_TITLE=T0;
 function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function gr(w,i){return ["Grade ","Classe ","Classe "][i-1]+O[w]}
 function tr(s,i){
