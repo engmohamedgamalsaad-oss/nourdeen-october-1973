@@ -381,8 +381,10 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
         try {
           const splashTitle = await page.locator('.story-splash h1').innerText({ timeout: 5000 });
           if (splashTitle !== expectedTitle) hard.push(`${label} ${rel}: start overlay title mismatch for ${lang}: ${splashTitle}`);
+          if (lang === 'ar' || lang === 'de') await page.screenshot({ path: path.join(screenshotDir, `khalid-draft-start-${lang}-${viewport}.png`), animations: 'disabled' });
           await page.locator('.story-splash-start').click({ timeout: 5000 });
           await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 });
+          if (lang === 'ar' || lang === 'de') await page.screenshot({ path: path.join(screenshotDir, `khalid-draft-story-${lang}-${viewport}.png`), animations: 'disabled' });
           await page.locator('#story-quiz-start').click({ timeout: 5000 });
           await page.waitForSelector('#story-quiz-app button[data-option="0"]', { timeout: 8000 });
           const quizText = await page.locator('#story-quiz-app').innerText();
