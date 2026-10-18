@@ -249,7 +249,6 @@
   function start() {
     if (started) return; started = true;
     loadData().then(function () {
-      renderDirectory();
       if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
@@ -263,7 +262,7 @@
   }
 
   labels();
-  new MutationObserver(function () { labels(); renderDirectory(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) {
       if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
