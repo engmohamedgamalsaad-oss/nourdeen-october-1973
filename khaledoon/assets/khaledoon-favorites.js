@@ -4,6 +4,8 @@
    - في صفحة الحكاية نفسها يُضاف زر بالنجمة والنص في شريط المشاركة (.story-share-bar)، أو في .hero-content إن لم يوجد الشريط.
    - قسم المفضلة يقرأ stories/index.json، فأي حكاية جديدة تدخله دون تعديل هذا الملف.
    - يُحمّل من khaledoon-theme.js (الأقسام والحكايات) ومن khaledoon-search.js (الرئيسية).
+   - إخفاء الحكايات: زر عين على كل كارت يخفي الحكاية من القوائم والمفضلة والخريطة (المفتاح kh-hidden في localStorage)،
+     وزر عائم "إظهار الحكايات المخفية" يعيدها كلها. الخريطة تقرأ نفس المفتاح وتسمع حدث kh-hidden-change.
    - لا يستخدم innerHTML مع أي بيانات. */
 (function () {
   'use strict';
@@ -14,6 +16,7 @@
   function U(rel) { try { return new URL(rel, SRC || location.href).href; } catch (e) { return rel; } }
 
   var KEY = 'kh-favs';
+  var HKEY = 'kh-hidden';
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var STORY_RE = /\/stories\/[a-z0-9_-]+\/(\d{3,})(?:[\/?#]|$)/i;
   var PAGE_RE = /\/stories\/[a-z0-9_-]+\/(\d{3,})\/?(?:index\.html)?$/i;
@@ -23,7 +26,9 @@
     remove: { ar: 'إزالة من المفضلة', en: 'Remove from favorites', fr: 'Retirer des favoris', it: 'Rimuovi dai preferiti', de: 'Aus Favoriten entfernen' },
     saved:  { ar: 'في المفضلة', en: 'In favorites', fr: 'Dans les favoris', it: 'Nei preferiti', de: 'In den Favoriten' },
     title:  { ar: 'حكاياتي المفضلة', en: 'My favorite stories', fr: 'Mes histoires favorites', it: 'Le mie storie preferite', de: 'Meine Lieblingsgeschichten' },
-    kicker: { ar: 'اللي اخترتها بنجمة', en: 'The ones you starred', fr: 'Celles que vous avez étoilées', it: 'Quelle che hai contrassegnato', de: 'Die, die du mit einem Stern markiert hast' }
+    kicker: { ar: 'اللي اخترتها بنجمة', en: 'The ones you starred', fr: 'Celles que vous avez étoilées', it: 'Quelle che hai contrassegnato', de: 'Die, die du mit einem Stern markiert hast' },
+    hide:   { ar: 'إخفاء الحكاية', en: 'Hide story', fr: 'Masquer l’histoire', it: 'Nascondi la storia', de: 'Geschichte ausblenden' },
+    restore:{ ar: 'إظهار الحكايات المخفية', en: 'Show hidden stories', fr: 'Afficher les histoires masquées', it: 'Mostra le storie nascoste', de: 'Ausgeblendete Geschichten anzeigen' }
   };
 
   var SEC = {
@@ -70,11 +75,35 @@
     refresh();
   }
 
+  /* ---------- الحكايات المخفية ---------- */
+  function readHidden() {
+    try {
+      var a = JSON.parse(localStorage.getItem(HKEY) || '[]');
+      return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string' && /^\d{3,}$/.test(x); }) : [];
+    } catch (e) { return []; }
+  }
+  var hiddenIds = readHidden();
+  function writeHidden() {
+    try { localStorage.setItem(HKEY, JSON.stringify(hiddenIds)); } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent('kh-hidden-change')); } catch (e) {}
+  }
+  function isHidden(id) { return hiddenIds.indexOf(id) >= 0; }
+  function hideStory(id) {
+    if (!isHidden(id)) hiddenIds.push(id);
+    writeHidden();
+    refresh();
+  }
+  function showAllHidden() {
+    hiddenIds = [];
+    writeHidden();
+    refresh();
+  }
+
   /* ---------- التنسيق ---------- */
   if (!document.querySelector('link[data-khf-css]')) {
     var css = document.createElement('link');
     css.rel = 'stylesheet';
-    css.href = U('khaledoon-favorites.css?v=2');
+    css.href = U('khaledoon-favorites.css?v=3');
     css.setAttribute('data-khf-css', '1');
     document.head.appendChild(css);
   }
@@ -90,6 +119,20 @@
     svg.appendChild(p);
     return svg;
   }
+  function eyeOffIcon() {
+    var ns = 'http://www.w3.org/2000/svg';
+    var svg = document.createElementNS(ns, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('aria-hidden', 'true');
+    var a = document.createElementNS(ns, 'path');
+    a.setAttribute('d', 'M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z');
+    var c = document.createElementNS(ns, 'circle');
+    c.setAttribute('cx', '12'); c.setAttribute('cy', '12'); c.setAttribute('r', '3');
+    var s = document.createElementNS(ns, 'path');
+    s.setAttribute('d', 'M4 4l16 16');
+    svg.appendChild(a); svg.appendChild(c); svg.appendChild(s);
+    return svg;
+  }
   function paintOne(b) {
     var on = isFav(b.getAttribute('data-id'));
     var t = T(on ? 'remove' : 'add');
@@ -102,6 +145,8 @@
   function paintAll() {
     var all = document.querySelectorAll('.khf-star, .khf-pill');
     for (var i = 0; i < all.length; i++) paintOne(all[i]);
+    var hs = document.querySelectorAll('.khf-hide');
+    for (var j = 0; j < hs.length; j++) { hs[j].setAttribute('aria-label', T('hide')); hs[j].title = T('hide'); }
   }
   function makeStar(id) {
     var b = el('button', 'khf-star');
@@ -122,8 +167,18 @@
     paintOne(b);
     return b;
   }
+  function makeHide(id) {
+    var b = el('button', 'khf-hide');
+    b.type = 'button';
+    b.setAttribute('data-id', id);
+    b.setAttribute('aria-label', T('hide'));
+    b.title = T('hide');
+    b.appendChild(eyeOffIcon());
+    b.addEventListener('click', function (e) { e.preventDefault(); e.stopPropagation(); hideStory(id); });
+    return b;
+  }
 
-  /* كل كارت حكاية (رابط بصفحة stories/…/NNN/) يأخذ نجمة، حتى الكروت التي تُبنى لاحقًا بالجافاسكربت. */
+  /* كل كارت حكاية (رابط بصفحة stories/…/NNN/) يأخذ نجمة وزر إخفاء، حتى الكروت التي تُبنى لاحقًا بالجافاسكربت. */
   function processCards() {
     var cards = document.querySelectorAll('a.card[href]');
     for (var i = 0; i < cards.length; i++) {
@@ -132,9 +187,34 @@
       var m = STORY_RE.exec(a.getAttribute('href') || '');
       if (!m) continue;
       a.setAttribute('data-khf', '1');
+      a.setAttribute('data-khf-id', m[1]);
       a.classList.add('kh-fav-host');
       a.appendChild(makeStar(m[1]));
+      a.appendChild(makeHide(m[1]));
+      if (isHidden(m[1])) a.setAttribute('data-khf-hidden', '1');
     }
+  }
+
+  /* إخفاء/إظهار الكروت حسب القائمة، والزر العائم لإظهار المخفية. */
+  var restoreBtn = null;
+  function paintHidden() {
+    var cards = document.querySelectorAll('a.card[data-khf-id]');
+    for (var i = 0; i < cards.length; i++) {
+      if (isHidden(cards[i].getAttribute('data-khf-id'))) cards[i].setAttribute('data-khf-hidden', '1');
+      else cards[i].removeAttribute('data-khf-hidden');
+    }
+    if (PAGE_RE.test(location.pathname) || !hiddenIds.length) {
+      if (restoreBtn) restoreBtn.hidden = true;
+      return;
+    }
+    if (!restoreBtn) {
+      restoreBtn = el('button', 'khf-restore');
+      restoreBtn.type = 'button';
+      restoreBtn.addEventListener('click', showAllHidden);
+      document.body.appendChild(restoreBtn);
+    }
+    restoreBtn.textContent = T('restore') + ' (' + hiddenIds.length + ')';
+    restoreBtn.hidden = false;
   }
 
   /* صفحة الحكاية نفسها: زر بالنجمة والنص في شريط المشاركة. */
@@ -189,7 +269,7 @@
     if (!favs.length) { sec.hidden = true; grid.replaceChildren(); return; }
     if (stories === null) { loadStories(); return; }
     var l = lang();
-    var items = stories.filter(function (s) { return isFav(String(s.id)); })
+    var items = stories.filter(function (s) { return isFav(String(s.id)) && !isHidden(String(s.id)); })
       .sort(function (a, b) { return (a.order || 0) - (b.order || 0); });
     grid.replaceChildren();
     if (!items.length) { sec.hidden = true; return; }
@@ -213,12 +293,13 @@
     sec.hidden = false;
   }
 
-  function refresh() { paintAll(); renderHome(); }
+  function refresh() { paintAll(); paintHidden(); renderHome(); }
 
   function init() {
     processCards();
     processStoryPage();
     buildHome();
+    paintHidden();
     renderHome();
     var raf = 0;
     new MutationObserver(function () {
@@ -229,7 +310,9 @@
       .observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
     window.addEventListener('storage', function (e) {
       if (e.key === KEY) { favs = readFavs(); refresh(); }
+      if (e.key === HKEY) { hiddenIds = readHidden(); refresh(); }
     });
+    window.addEventListener('kh-hidden-change', function () { hiddenIds = readHidden(); refresh(); });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
