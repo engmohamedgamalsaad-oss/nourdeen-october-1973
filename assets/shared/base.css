@@ -73,3 +73,67 @@ footer strong{color:var(--gold)}
 }
 .scroll-reveal{will-change:opacity,transform}
 @media (prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;transition:none!important}}
+
+
+/* LIGHT THEME: consistent, readable opening screens across every story */
+html[data-theme="light"] .story-intro-modal,
+html[data-theme="light"] .modal#intro {
+  background: rgba(251,247,236,.94) !important;
+  color: #0f2150 !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-card,
+html[data-theme="light"] #intro .modal-card {
+  background: linear-gradient(145deg,#fffefa,#f4eedf 78%) !important;
+  color: #0f2150 !important;
+  border-color: rgba(138,90,18,.42) !important;
+  box-shadow: 0 24px 70px rgba(15,33,80,.20) !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-copy,
+html[data-theme="light"] #intro .modal-copy {
+  color: #0f2150 !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-kicker,
+html[data-theme="light"] #intro .eyebrow {
+  color: #8a5a12 !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-copy h2,
+html[data-theme="light"] #intro .modal-copy h2 {
+  color: #1b3f94 !important;
+  text-shadow: none !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-copy p,
+html[data-theme="light"] #intro .modal-copy p {
+  color: #263b5d !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-close,
+html[data-theme="light"] #intro .modal-close {
+  background: #fffefa !important;
+  color: #1b3f94 !important;
+  border-color: #8a5a12 !important;
+}
+html[data-theme="light"] .story-intro-modal .start-story-btn,
+html[data-theme="light"] #intro .btn {
+  background: linear-gradient(145deg,#2a5bd7,#1b3f94) !important;
+  color: #fffefa !important;
+  border-color: #1b3f94 !important;
+  box-shadow: 0 8px 22px rgba(27,63,148,.22) !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-art,
+html[data-theme="light"] #intro .modal-art {
+  background: #f1ead8 !important;
+}
+html[data-theme="light"] .story-intro-modal .intro-art img,
+html[data-theme="light"] #intro .modal-art img {
+  filter: drop-shadow(0 10px 18px rgba(15,33,80,.16));
+}
+@media (max-width: 650px) {
+  html[data-theme="light"] .story-intro-modal,
+  html[data-theme="light"] .modal#intro { padding: 12px !important; }
+  html[data-theme="light"] .story-intro-modal .intro-card,
+  html[data-theme="light"] #intro .modal-card {
+    max-height: 94dvh !important;
+    border-radius: 18px !important;
+  }
+}

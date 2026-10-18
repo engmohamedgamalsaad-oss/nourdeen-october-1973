@@ -15,6 +15,8 @@
   ========================================= */
 
   var activeLang = window.I18N ? window.I18N.lang() : 'ar';
+  var lightTheme = document.documentElement.getAttribute('data-theme') === 'light';
+  try { lightTheme = lightTheme || window.localStorage.getItem('kh-theme') === 'light'; } catch (e) {}
   var splashCopies = {
     '001': {
       ar: {title:'رجال البحر في أكتوبر', subtitle:'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973', start:'ابدأ الحكاية ←'},
@@ -71,9 +73,11 @@
       padding: '24px',
       boxSizing: 'border-box',
       overflow: 'auto',
-      backgroundColor: body.getAttribute('data-splash-bottom') || '#071c25',
+      backgroundColor: lightTheme ? '#fbf7ec' : (body.getAttribute('data-splash-bottom') || '#071c25'),
       backgroundImage:
-        'linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.72)), url("' +
+        (lightTheme
+          ? 'linear-gradient(180deg, rgba(251,247,236,.76), rgba(255,254,250,.94)), url("'
+          : 'linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.72)), url("') +
         splashImage.replace(/"/g, '') +
         '")',
       backgroundPosition: 'center',
@@ -89,8 +93,8 @@
     Object.assign(splashContent.style, {
       width: 'min(600px, 100%)',
       margin: 'auto',
-      color: '#fff',
-      textShadow: '0 2px 12px rgba(0,0,0,.8)'
+      color: lightTheme ? '#0f2150' : '#fff',
+      textShadow: lightTheme ? 'none' : '0 2px 12px rgba(0,0,0,.8)'
     });
 
     var splashTitle = document.createElement('h1');
@@ -101,7 +105,7 @@
       fontFamily: '"Marhey", "Cairo", Tahoma, sans-serif',
       fontSize: 'clamp(2rem, 8vw, 4rem)',
       lineHeight: '1.5',
-      color: '#f1d18d',
+      color: lightTheme ? '#1b3f94' : '#f1d18d',
       margin: '0 0 18px'
     });
 
@@ -119,6 +123,7 @@
 
     var startButton = document.createElement('button');
     startButton.type = 'button';
+    startButton.className = 'story-splash-start';
     startButton.textContent = (splashCopy && splashCopy.start) || 'ابدأ الحكاية ←';
 
     Object.assign(startButton.style, {
@@ -128,8 +133,8 @@
       padding: '13px 30px',
       border: '1px solid rgba(255,255,255,.4)',
       borderRadius: '5px',
-      background: 'linear-gradient(145deg, #e3bd78, #a8753d)',
-      color: '#171006',
+      background: lightTheme ? 'linear-gradient(145deg, #2a5bd7, #1b3f94)' : 'linear-gradient(145deg, #e3bd78, #a8753d)',
+      color: lightTheme ? '#fffefa' : '#171006',
       cursor: 'pointer',
       boxShadow: '0 8px 24px rgba(0,0,0,.3)'
     });
