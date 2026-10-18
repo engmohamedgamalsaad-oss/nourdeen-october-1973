@@ -1,6 +1,8 @@
 /* خالدون عبر التاريخ — ترجمات إضافية للصفحة الرئيسية (تُحمَّل بعد khaledoon.js) */
 (function(){
 var X=[
+["شخصيات إسلامية","Islamic Figures","Figures de l’islam","Figure islamiche"],
+["حكايات موثقة عن شخصيات إسلامية أسهمت في التاريخ والعلم والفكر، مع عرض سياقها ومصادرها.","Documented stories of Islamic figures who contributed to history, scholarship and thought, with context and sources.","Récits documentés de figures de l’islam qui ont contribué à l’histoire, au savoir et à la pensée, avec leur contexte et leurs sources.","Storie documentate di figure islamiche che hanno contribuito alla storia, al sapere e al pensiero, con contesto e fonti."],
 ["حكايات أكتوبر 1973", "October 1973 Stories", "Récits d’octobre 1973", "Storie di ottobre 1973"],
 ["حكايات أبطال أكتوبر الأربع في الصفحة الأصلية، بنفس تصميمها وتنسيقها المعتمد.", "The four October heroes’ stories on the original page, with its approved design and layout.", "Les quatre histoires des héros d’octobre sur la page d’origine, avec son design et sa mise en page validés.", "Le quattro storie degli eroi di ottobre nella pagina originale, con il suo design e la sua impaginazione approvati."],
 ["قسم من خالدون عبر التاريخ، يضم حكايات أكتوبر المنشورة مع الحفاظ على روابطها الحالية.", "A section of Immortals Through History featuring the published October stories while preserving their existing links.", "Une rubrique d’Immortels à travers l’histoire réunissant les récits d’octobre publiés tout en préservant leurs liens actuels.", "Una sezione di Immortali attraverso la storia con le storie di ottobre pubblicate, mantenendo i link esistenti."],
