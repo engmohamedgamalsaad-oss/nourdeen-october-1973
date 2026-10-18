@@ -118,6 +118,8 @@
       fontFamily: '"Cairo", Tahoma, sans-serif',
       fontSize: 'clamp(1rem, 3.5vw, 1.3rem)',
       lineHeight: '2',
+      fontWeight: '600',
+      color: lightTheme ? '#24354d' : '#ffffff',
       margin: '0 0 28px'
     });
 
