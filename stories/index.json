@@ -348,7 +348,24 @@
     "order": 10,
     "published": true,
     "section": "women",
-    "i18n": {},
+    "i18n": {
+      "en": {
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
+      },
+      "fr": {
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
+      },
+      "it": {
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
+      },
+      "de": {
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
+      }
+    },
     "id": "010",
     "path": "stories/women/010/"
   }
