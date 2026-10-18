@@ -2,7 +2,8 @@
    نقطة لكل شخصية لها مكان في stories/places.json (مفتاحه رقم الحكاية)، ولونها لون قسم الحكاية.
    الاسم والعنوان والقسم تُقرأ من stories/index.json، فأي حكاية جديدة لها person ومكان تظهر دون تعديل هذا الملف.
    بدون صورة (photo) يظهر ظل شخص موحّد بنفس الإطار. الصور تُقبل كمسار نسبي فقط. لا يستخدم innerHTML مع أي بيانات.
-   Leaflet يُحمَّل عند الاقتراب من القسم فقط. لو تعذّر التحميل تظهر قائمة نصية بالأماكن. */
+   الحكايات التي أخفاها الزائر (localStorage، المفتاح kh-hidden، يكتبه أيضًا khaledoon-favorites.js) تُستثنى من الخريطة.
+   Leaflet يُحمّل عند الاقتراب من القسم فقط. لو تعذّر التحميل تظهر قائمة نصية بالأماكن. */
 (function () {
   'use strict';
   if (window.__khMap) return;
@@ -12,6 +13,7 @@
 
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var CDN = 'https://cdnjs.cloudflare.com/ajax/libs/';
+  var HKEY = 'kh-hidden';
   var SEC = {
     october:    { c: '#f0c878', t: { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' } },
     science:    { c: '#8ad9e8', t: { ar: 'العلم والعلماء', en: 'Science and Scientists', fr: 'Science et scientifiques', it: 'Scienza e scienziati', de: 'Wissenschaft und Wissenschaftler' } },
@@ -29,7 +31,8 @@
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
     err:    { ar: 'تعذّر تحميل الخريطة الآن. هذه قائمة بالأماكن:', en: 'The map could not be loaded right now. Here is the list of places:', fr: 'La carte n’a pas pu être chargée. Voici la liste des lieux :', it: 'Non è stato possibile caricare la mappa. Ecco l’elenco dei luoghi:', de: 'Die Karte konnte nicht geladen werden. Hier die Liste der Orte:' },
     credit: { ar: 'مصدر الصورة: ', en: 'Photo: ', fr: 'Photo : ', it: 'Foto: ', de: 'Foto: ' },
-    legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' }
+    legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' },
+    hide:   { ar: 'إخفاء هذه الحكاية', en: 'Hide this story', fr: 'Masquer cette histoire', it: 'Nascondi questa storia', de: 'Diese Geschichte ausblenden' }
   };
   function lang() {
     var l = (document.documentElement.lang || 'ar').slice(0, 2).toLowerCase();
@@ -46,6 +49,22 @@
     if (cls) n.className = cls;
     if (text != null) n.textContent = text;
     return n;
+  }
+
+  /* ---------- الحكايات المخفية (نفس مفتاح khaledoon-favorites.js) ---------- */
+  function readHidden() {
+    try {
+      var a = JSON.parse(localStorage.getItem(HKEY) || '[]');
+      return Array.isArray(a) ? a.filter(function (x) { return typeof x === 'string' && /^\d{3,}$/.test(x); }) : [];
+    } catch (e) { return []; }
+  }
+  function hideStory(id) {
+    var a = readHidden();
+    if (a.indexOf(id) < 0) a.push(id);
+    try { localStorage.setItem(HKEY, JSON.stringify(a)); } catch (e) {}
+    try { window.dispatchEvent(new CustomEvent('kh-hidden-change')); } catch (e) {}
+    if (map) map.closePopup();
+    refresh(false);
   }
 
   /* ---------- هيكل القسم (يُدرج قبل قسم "كيف تشارك" إن وُجد) ---------- */
@@ -130,6 +149,11 @@
     var a = el('a', 'khm-go', T('read'));
     a.href = s.path || ('stories/' + s.section + '/' + s.id + '/');
     c.appendChild(a);
+    var hb = el('button', 'khm-hide', T('hide'));
+    hb.type = 'button';
+    hb.style.cssText = 'display:block;margin:6px auto 0;padding:6px 8px;background:none;border:0;color:inherit;font:inherit;font-size:12px;text-decoration:underline;cursor:pointer;opacity:.8';
+    hb.addEventListener('click', function () { hideStory(String(s.id)); });
+    c.appendChild(hb);
     return c;
   }
   function labels() {
@@ -163,7 +187,8 @@
   function refresh(fit) {
     if (!map || !group) return;
     group.clearLayers();
-    var vis = markers.filter(function (m) { return !hidden[m._sec]; });
+    var hid = readHidden();
+    var vis = markers.filter(function (m) { return !hidden[m._sec] && hid.indexOf(m._id) < 0; });
     group.addLayers(vis);
     if (fit && vis.length) {
       if (vis.length === 1) map.setView(vis[0].getLatLng(), 6);
@@ -183,6 +208,7 @@
         title: pick(e.s, 'person', lang()), keyboard: true
       });
       m._sec = e.sec;
+      m._id = String(e.s.id);
       m.bindPopup(function () { return card(e); }, { className: 'khm-popup', maxWidth: 260 });
       markers.push(m);
     });
@@ -195,11 +221,12 @@
     usingFallback = true;
     canvas.style.height = 'auto';
     var l = lang();
+    var hid = readHidden();
     canvas.replaceChildren();
     canvas.dir = document.documentElement.dir || 'rtl';
     canvas.appendChild(el('div', 'khm-note', T('err')));
     var ul = el('ul', 'khm-list');
-    points.forEach(function (e) {
+    points.filter(function (e) { return hid.indexOf(String(e.s.id)) < 0; }).forEach(function (e) {
       var li = el('li');
       var a = el('a', null, pick(e.s, 'person', l));
       a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
@@ -239,6 +266,8 @@
 
   labels();
   new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  window.addEventListener('kh-hidden-change', function () { if (usingFallback) fallbackList(); else refresh(false); });
+  window.addEventListener('storage', function (e) { if (e.key === HKEY) { if (usingFallback) fallbackList(); else refresh(false); } });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) {
       if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
