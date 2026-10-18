@@ -106,14 +106,28 @@ function localeKeyCounts(block) {
   }
   return result;
 }
-for (const [name, block] of [['T', zewailT], ['EXTRA', zewailExtra]]) {
-  const counts = localeKeyCounts(block);
-  const expectedCount = counts.ar;
+const tCounts = localeKeyCounts(zewailT);
+const tExpected = tCounts.ar;
+for (const lang of required) {
+  if (tCounts[lang] === undefined) problems.push('stories/science/007/index.html: T dictionary missing ' + lang + '.');
+  else if (tCounts[lang] !== tExpected) problems.push('stories/science/007/index.html: T dictionary key count differs for ' + lang + ' (' + tCounts[lang] + ' vs ' + tExpected + ').');
+}
+console.log('stories/science/007/index.html: T locale key counts ' + JSON.stringify(tCounts));
+
+const extraMatch = zewail.match(/const EXTRA=(\{[\s\S]*?\});/);
+let extraMap = null;
+try { if (extraMatch) extraMap = JSON.parse(extraMatch[1]); } catch (e) {}
+if (!extraMap) {
+  problems.push('stories/science/007/index.html: EXTRA dictionary is not valid JSON-like locale data.');
+} else {
+  const expectedCount = extraMap.ar ? Object.keys(extraMap.ar).length : 0;
+  const counts = {};
   for (const lang of required) {
-    if (counts[lang] === undefined) problems.push('stories/science/007/index.html: ' + name + ' dictionary missing ' + lang + '.');
-    else if (counts[lang] !== expectedCount) problems.push('stories/science/007/index.html: ' + name + ' dictionary key count differs for ' + lang + ' (' + counts[lang] + ' vs ' + expectedCount + ').');
+    counts[lang] = extraMap[lang] ? Object.keys(extraMap[lang]).length : undefined;
+    if (counts[lang] === undefined) problems.push('stories/science/007/index.html: EXTRA dictionary missing ' + lang + '.');
+    else if (counts[lang] !== expectedCount) problems.push('stories/science/007/index.html: EXTRA dictionary key count differs for ' + lang + ' (' + counts[lang] + ' vs ' + expectedCount + ').');
   }
-  console.log('stories/science/007/index.html: ' + name + ' locale key counts ' + JSON.stringify(counts));
+  console.log('stories/science/007/index.html: EXTRA locale key counts ' + JSON.stringify(counts));
 }
 
 if (problems.length) {
