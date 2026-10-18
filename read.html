@@ -85,7 +85,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   var API='https://ypwprddkscnfblhftkeb.supabase.co';
   var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
   var lang=(window.I18N&&window.I18N.lang())||'ar';
-  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it};}
+  function L(ar,en,fr,it){return {ar:ar,en:en,fr:fr,it:it,get de(){return (window.KH_DE_TRANSLATIONS&&window.KH_DE_TRANSLATIONS[ar])||ar;}};}
   var T={
     skip:L('تخطّي إلى المحتوى','Skip to content','Aller au contenu','Vai al contenuto'),
     back:L('← الصفحة الرئيسية','← Home','← Accueil','← Home'),
@@ -169,5 +169,6 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
   }).catch(function(){ $('state').textContent=t('error'); });
 })();
 </script>
+<script src="khaledoon/assets/khaledoon-de.js?v=20261018-de" defer></script>
 </body>
 </html>
