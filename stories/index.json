@@ -337,5 +337,19 @@
     "id": "007",
     "section": "science",
     "path": "stories/science/007/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
+    "published": true,
+    "section": "women",
+    "i18n": {},
+    "id": "010",
+    "path": "stories/women/010/"
   }
 ]
