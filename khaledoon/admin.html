@@ -88,7 +88,7 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
 var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null;
-var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false;
+var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
 var VSEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية'};
@@ -439,7 +439,10 @@ function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').repla
 function storyFor(it){
  var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
  for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
- return null;
+ /* احتياطي: مطابقة اسم الشخصية مع person أو personAliases، ولا تُعتمد إلا إذا طابقت حكاية واحدة فقط. */
+ var f=norm(it.figure_name),m=[];
+ if(f)vStories.forEach(function(s){if(norm(s.person)===f||(s.personAliases||[]).some(function(a){return norm(a)===f}))m.push(s)});
+ return m.length===1?m[0]:null;
 }
 function pubRow(it){
  var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
@@ -451,7 +454,7 @@ function pubRow(it){
  var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
  s.appendChild(w);
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
- if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان في قائمة الموقع (stories/index.json) لإخفائها':'جارٍ تحميل قائمة حكايات الموقع…'}
+ if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
  else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
  hb.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();
@@ -498,6 +501,9 @@ function setView(v){
  if(v==='vis'&&!vLoaded)loadVis().catch(function(e){say('err',e.message)});
 }
 async function loadVis(){
+ try{return await loadVisInner()}catch(e){vErr=e.message||'تعذّر تحميل قائمة حكايات الموقع.';render();throw e}
+}
+async function loadVisInner(){
  var rs=await Promise.all([fetch('../stories/index.json',{cache:'no-cache'}),rest('story_visibility?select=story_id')]);
  if(!rs[0].ok)throw new Error('تعذّر تحميل stories/index.json ('+rs[0].status+').');
  if(rs[1].status===404)throw new Error('جدول story_visibility غير موجود. شغّل ملف supabase/migrations/20261018120000_story_visibility.sql من SQL Editor أولًا.');
@@ -505,7 +511,7 @@ async function loadVis(){
  var j=await rs[0].json();
  vStories=(Array.isArray(j)?j:[]).filter(function(s){return s&&s.id!=null&&s.title}).sort(function(a,b){return (a.order||0)-(b.order||0)});
  vHidden={};(await rs[1].json()).forEach(function(x){vHidden[String(x.story_id)]=true});
- vLoaded=true;renderVis();render();
+ vLoaded=true;vErr='';renderVis();render();
 }
 function setHidden(s,on,btn){
  return (async function(){
