@@ -53,8 +53,13 @@ h2{color:#e8d29a;margin-top:1.7em}.dialogue{padding:14px 18px;margin:16px 0;bord
 <div class="dialogue"><strong>كارما:</strong> <span data-i18n="p10">يبقى أهم حاجة إننا نفهم القصة من مصادرها، ونفكر في اللي حصل بدل ما نحفظ أسماء المعارك بس.</span></div>
 <div class="sources"><h2 data-i18n="sourcesTitle">المصادر</h2><ol><li><a href="https://islam.museum/en/person/khalid-ibn-al-walid/" target="_blank" rel="noopener">Khalid ibn al-Walid — Islam Museum</a></li><li><a href="https://www.encyclopedia.com/reference/encyclopedias-almanacs-transcripts-and-maps/khalid" target="_blank" rel="noopener">Khalid — The Columbia Encyclopedia, Encyclopedia.com</a></li><li><a href="https://en.wikisource.org/wiki/1911_Encyclop%C3%A6dia_Britannica/Mahomet" target="_blank" rel="noopener">1911 Encyclopaedia Britannica — Mahomet (historical reference)</a></li></ol><p data-i18n="sourceNote">تختلف بعض التفاصيل في المصادر التاريخية؛ استخدمنا التواريخ التقريبية عند وجود اختلاف.</p></div>
 </article>
-<section class="quiz-section" id="quiz"><h2 data-i18n="quizTitle">اختبر فهمك</h2><div id="quiz-items"></div><p id="quiz-feedback" aria-live="polite"></p></section>
-<section class="reactions-section"><h2 data-i18n="reactionTitle">ما رأيك في الحكاية؟</h2><button id="reaction-like" type="button" data-i18n="like">أعجبتني</button><div class="reaction-count-line" id="reaction-count-line"></div></section>
+<section class="quiz-section" id="quiz"><h2 data-i18n="quizTitle">اختبر فهمك</h2><p id="story-quiz-language-note" hidden>تتوفر الأسئلة بلغات متعددة.</p><button id="story-quiz-start" class="story-quiz-action" type="button">ابدأ الاختبار</button><div id="story-quiz-app" hidden></div></section>
+<section class="reactions-section"><h2 data-i18n="reactionTitle">ما رأيك في الحكاية؟</h2><button id="reaction-like" type="button"><span class="reaction-label">❤️ أعجبتني</span> <span data-reaction-count="like">0</span></button>
+<div class="reaction-choices">
+<button type="button" data-reaction-choice="love">😍 <span class="reaction-label">أحببتها</span> <span data-reaction-count="love">0</span></button>
+<button type="button" data-reaction-choice="learned">💡 <span class="reaction-label">تعلمت شيئًا</span> <span data-reaction-count="learned">0</span></button>
+<button type="button" data-reaction-choice="surprised">😮 <span class="reaction-label">أدهشتني</span> <span data-reaction-count="surprised">0</span></button>
+<button type="button" data-reaction-choice="inspiring">🌟 <span class="reaction-label">ملهمة</span> <span data-reaction-count="inspiring">0</span></button></div><p id="reaction-status" aria-live="polite"></p></section>
 </main>
 <script src="../../../assets/shared/reactions.js"></script>
 <script src="../../../assets/shared/story-quiz.js"></script>
