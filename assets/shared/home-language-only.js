@@ -11,6 +11,20 @@
    ترجمتها واستكمل تغطيتها قبل تفعيلها. */
 (function () {
   'use strict';
+
+  /* توحيد أيقونة المتصفح مع شعار الصفحة الرئيسية في كل صفحة تحمّل هذا الملف. */
+  (function setSiteFavicon() {
+    var iconUrl = '/nourdeen-october-1973/khaledoon/assets/main-cover.jpg';
+    function setLink(rel, type) {
+      var link = document.querySelector('link[rel="' + rel + '"]');
+      if (!link) { link = document.createElement('link'); link.rel = rel; document.head.appendChild(link); }
+      link.href = iconUrl;
+      if (type) link.type = type;
+    }
+    setLink('icon', 'image/jpeg');
+    setLink('shortcut icon', 'image/jpeg');
+    setLink('apple-touch-icon', 'image/jpeg');
+  })();
   if (window.KH_LANG) return;   /* لو حُمّل الملف مرتين، يعمل مرة واحدة فقط */
 
   var SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
