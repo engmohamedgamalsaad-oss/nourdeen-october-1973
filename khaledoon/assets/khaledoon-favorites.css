@@ -1,4 +1,4 @@
-/* خالدون عبر التاريخ — تنسيق المفضّلة (النجمة + زر صفحة الحكاية + قسم "حكاياتي المفضلة") وزر إخفاء الحكاية.
+/* خالدون عبر التاريخ — تنسيق المفضّلة (النجمة + زر صفحة الحكاية + قسم "حكاياتي المفضلة").
    نفس متغيرات الصفحة (--ink, --muted, --gold, --line, --night) مع قيم احتياطية، وخصائص منطقية (inline) للعربية RTL ولباقي اللغات. */
 .kh-fav-host{position:relative}
 .kh-fav-host.card:not(.float-up){padding-inline-end:58px}
@@ -22,18 +22,8 @@ html[data-theme=light] .khf-pill{color:#1b3f94;border-color:#1b3f94}
 html[data-theme=light] .khf-pill:hover{background:rgba(27,63,148,.08)}
 html[data-theme=light] .khf-pill[aria-pressed=true]{background:#1b3f94;color:#fff;border-color:#1b3f94}
 
-/* زر إخفاء الحكاية (تحت النجمة) + الكارت المخفي + الزر العائم لإظهار المخفية */
-.khf-hide{position:absolute;top:56px;inset-inline-end:10px;z-index:3;box-sizing:border-box;width:40px;height:40px;display:grid;place-items:center;padding:0;border-radius:50%;border:1px solid rgba(240,200,120,.35);background:rgba(8,20,28,.72);color:#f6d9a2;cursor:pointer;transition:transform .15s,background .2s,color .2s}
-.khf-hide svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
-.khf-hide:hover{transform:scale(1.08);background:rgba(240,200,120,.18)}
-.khf-hide:focus-visible{outline:3px solid var(--gold,#f3cf85);outline-offset:2px}
-html[data-theme=light] .khf-hide{background:rgba(255,255,255,.88);color:#1b3f94;border-color:#1b3f94}
+/* كارت حكاية أخفاها الأدمن (صفحة admin-visibility.html) */
 .card[data-khf-hidden]{display:none!important}
-.khf-restore{position:fixed;inset-block-end:16px;inset-inline-start:16px;z-index:60;box-sizing:border-box;min-height:44px;padding:6px 18px;border-radius:99px;border:1px solid rgba(240,200,120,.6);background:rgba(8,20,28,.92);color:#f6d9a2;font:inherit;font-size:13px;font-weight:800;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.35)}
-.khf-restore:hover{background:rgba(240,200,120,.2)}
-.khf-restore:focus-visible{outline:3px solid var(--gold,#f3cf85);outline-offset:2px}
-.khf-restore[hidden]{display:none}
-html[data-theme=light] .khf-restore{background:rgba(255,255,255,.96);color:#1b3f94;border-color:#1b3f94}
 
 .khf-section[hidden]{display:none}
 .khf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
@@ -45,5 +35,5 @@ html[data-theme=light] .khf-restore{background:rgba(255,255,255,.96);color:#1b3f
 .khf-title{font-weight:800;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
 .khf-meta{font-size:12px;color:var(--muted,#b8c3de)}
 
-@media (prefers-reduced-motion:reduce){.khf-star,.khf-pill,.khf-hide,.khf-card{transition:none}.khf-star:hover,.khf-hide:hover,.khf-card:hover{transform:none}}
-@media print{.khf-star,.khf-pill,.khf-hide,.khf-restore,.khf-section{display:none!important}}
+@media (prefers-reduced-motion:reduce){.khf-star,.khf-pill,.khf-card{transition:none}.khf-star:hover,.khf-card:hover{transform:none}}
+@media print{.khf-star,.khf-pill,.khf-section{display:none!important}}
