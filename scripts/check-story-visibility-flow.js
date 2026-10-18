@@ -39,6 +39,21 @@ const checks = [
     test: (s) => s.includes('/rest/v1/story_visibility?select=story_id') &&
       s.includes('cache: \'no-store\'') &&
       s.includes("off.indexOf(String(s.id)) >= 0")
+  },
+  {
+    name: 'admin offers the Islamic Figures section',
+    file: 'khaledoon/admin.html',
+    test: (s) => s.includes("islamic:'شخصيات إسلامية'") &&
+      s.includes('khaledoon_submissions')
+  },
+  {
+    name: 'database migration allows Islamic submissions without replacing other sections',
+    file: 'supabase/migrations/20261018150000_allow_islamic_submission_section.sql',
+    test: (s) => s.includes('khaledoon_submissions_section_check') &&
+      s.includes("'islamic'::text") &&
+      s.includes("'october'::text") &&
+      s.includes("'readers'::text") &&
+      s.includes('Rollback only if needed')
   }
 ];
 let failed = false;
