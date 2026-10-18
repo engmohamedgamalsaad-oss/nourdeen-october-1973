@@ -76,7 +76,7 @@ var T={
 function setLang(next){lang=next;document.documentElement.lang=next;document.documentElement.dir=next==='ar'?'rtl':'ltr';document.querySelectorAll('[data-i18n]').forEach(function(el){var k=el.getAttribute('data-i18n');if(T[next][k])el.textContent=T[next][k]});document.querySelectorAll('[data-i18n-alt]').forEach(function(el){var k=el.getAttribute('data-i18n-alt');if(T[next][k])el.alt=T[next][k]});var b=document.getElementById('lang');b.textContent=T[next].language;document.querySelectorAll('.dialogue').forEach(function(el){el.style.textAlign=next==='ar'?'right':'left'});}
 document.getElementById('lang').addEventListener('click',function(){setLang(langs[(langs.indexOf(lang)+1)%langs.length])});
 document.getElementById('share').addEventListener('click',function(){if(navigator.share){navigator.share({title:document.title,text:T[lang].subtitle,url:location.href}).catch(function(){});}else{var u='https://wa.me/?text='+encodeURIComponent(document.title+' '+location.href);window.open(u,'_blank','noopener');}});
-window.KhaledoonStoryLang={setLang:setLang};
+document.dispatchEvent(new CustomEvent('site-language-change',{detail:{lang:next}}));window.KhaledoonStoryLang={setLang:setLang};
 })();
 </script>
 </body></html>
