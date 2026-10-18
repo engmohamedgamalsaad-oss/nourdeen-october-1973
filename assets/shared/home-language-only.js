@@ -14,6 +14,8 @@
 
   /* توحيد أيقونة المتصفح مع شعار الصفحة الرئيسية في كل صفحة تحمّل هذا الملف. */
   (function setSiteFavicon() {
+    /* تستات اللغة تستخدم بيئة DOM مصغّرة؛ لا تؤثر الأيقونة على منطق اللغة. */
+    if (typeof document === 'undefined' || typeof document.querySelector !== 'function' || !document.head) return;
     var iconUrl = '/nourdeen-october-1973/khaledoon/assets/main-cover.jpg';
     function setLink(rel, type) {
       var link = document.querySelector('link[rel="' + rel + '"]');
