@@ -130,7 +130,7 @@ for (const rel of htmlFiles) {
   const isStub = /<meta[^>]+http-equiv=["']refresh["']/i.test(html);
 
   /* German dictionary is loaded only on pages that use its shared text map. */
-  const germanAllowed = new Set(['index.html','khaledoon/collections/history.html','khaledoon/collections/science.html','khaledoon/collections/curriculum.html','khaledoon/collections/people.html','khaledoon/collections/october.html','khaledoon/submit.html']);
+  const germanAllowed = new Set(['index.html','khaledoon/collections/history.html','khaledoon/collections/science.html','khaledoon/collections/curriculum.html','khaledoon/collections/people.html','khaledoon/collections/knowledge.html','khaledoon/collections/october.html','khaledoon/submit.html']);
   if (html.includes('khaledoon-de.js') && !germanAllowed.has(rel)) fail(`German dictionary is unexpectedly referenced by ${rel}.`);
 
   /* local script/css paths must resolve to real files */
