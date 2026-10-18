@@ -5,11 +5,11 @@
 
   var lang = (window.I18N && window.I18N.lang && window.I18N.lang()) || document.documentElement.lang || 'ar';
   var copy = {
-    ar: { heading: 'خد الحكاية معاك', print: 'اطبع الحكاية أو احفظها PDF', quiz: 'اختبر معلوماتك في حرب أكتوبر', hint: 'من نافذة الطباعة اختر «حفظ كملف PDF».' },
-    en: { heading: 'Take this story with you', print: 'Print or save as PDF', quiz: 'Test your knowledge of the October War', hint: 'In the print window, choose “Save as PDF”.' },
-    fr: { heading: 'Emportez ce récit', print: 'Imprimer ou enregistrer en PDF', quiz: 'Testez vos connaissances sur la guerre d’octobre', hint: 'Dans la fenêtre d’impression, choisissez « Enregistrer en PDF ».' },
-    it: { heading: 'Porta con te questo racconto', print: 'Stampa o salva in PDF', quiz: 'Metti alla prova ciò che sai sulla guerra d’ottobre', hint: 'Nella finestra di stampa scegli «Salva come PDF».' },
-    de: { heading: 'Nimm diese Geschichte mit', print: 'Drucken oder als PDF speichern', quiz: 'Teste dein Wissen über den Oktoberkrieg', hint: 'Wähle im Druckfenster „Als PDF speichern“.' }
+    ar: { heading: 'خد الحكاية معاك', print: 'اطبع الحكاية أو احفظها PDF', quiz: 'اختبر معلوماتك عن الحكاية', hint: 'من نافذة الطباعة اختر «حفظ كملف PDF».' },
+    en: { heading: 'Take this story with you', print: 'Print or save as PDF', quiz: 'Test your knowledge of this story', hint: 'In the print window, choose “Save as PDF”.' },
+    fr: { heading: 'Emportez ce récit', print: 'Imprimer ou enregistrer en PDF', quiz: 'Testez vos connaissances sur ce récit', hint: 'Dans la fenêtre d’impression, choisissez « Enregistrer en PDF ».' },
+    it: { heading: 'Porta con te questo racconto', print: 'Stampa o salva in PDF', quiz: 'Metti alla prova ciò che sai su questo racconto', hint: 'Nella finestra di stampa scegli «Salva come PDF».' },
+    de: { heading: 'Nimm diese Geschichte mit', print: 'Drucken oder als PDF speichern', quiz: 'Teste dein Wissen über diese Geschichte', hint: 'Wähle im Druckfenster „Als PDF speichern“.' }
   };
   var t = copy[lang] || copy.ar;
 
@@ -61,7 +61,8 @@
 
   var quiz = document.createElement('a');
   quiz.className = 'se-quiz';
-  quiz.href = '../../quiz.html';
+  quiz.href = '#story-quiz-heading';
+  quiz.addEventListener('click', function (event) { var target = document.getElementById('story-quiz-heading'); if (target) { event.preventDefault(); target.scrollIntoView({behavior: 'smooth', block: 'center'}); var start = document.getElementById('story-quiz-start'); if (start) start.focus({preventScroll: true}); } });
   quiz.textContent = '📝 ' + t.quiz;
 
   var hint = document.createElement('p');
