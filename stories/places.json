@@ -78,5 +78,17 @@
       "it": "Sinbu al-Kubra, Zefta, Gharbia",
       "de": "Sinbu al-Kubra, Zefta, Gharbia"
     }
+  },
+  "011": {
+    "lat": 21.3891,
+    "lng": 39.8579,
+    "approximate": true,
+    "place": {
+      "ar": "مكة المكرمة (مكان الميلاد وفق المرجع؛ الإحداثيات تقريبية)",
+      "en": "Mecca (reported birthplace; approximate coordinates)",
+      "fr": "La Mecque (lieu de naissance rapporté ; coordonnées approximatives)",
+      "it": "La Mecca (luogo di nascita riportato; coordinate approssimative)",
+      "de": "Mekka (überlieferter Geburtsort; ungefähre Koordinaten)"
+    }
   }
 }
