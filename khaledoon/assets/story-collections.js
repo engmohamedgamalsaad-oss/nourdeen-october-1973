@@ -20,6 +20,21 @@
   };
   var ui = labels[lang] || labels.ar;
   var root = '../../';
+  var API = 'https://ypwprddkscnfblhftkeb.supabase.co';
+  var ANON = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+  function loadHiddenIds() {
+    if (!window.__khHiddenP) {
+      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', {
+        headers: { apikey: ANON, Authorization: 'Bearer ' + ANON },
+        cache: 'no-store'
+      }).then(function (r) {
+        return r.ok ? r.json() : [];
+      }).then(function (rows) {
+        return Array.isArray(rows) ? rows.map(function (x) { return String(x.story_id); }) : [];
+      }).catch(function () { return []; });
+    }
+    return window.__khHiddenP;
+  }
 
   function node(tag, className, value) {
     var el = document.createElement(tag);
@@ -79,11 +94,13 @@
       var sections = Array.isArray(config.sections) ? config.sections : [];
       setSectionTitle(sections.find(function (item) { return item.id === sectionId; }));
       if (!box) return null;
-      return fetch(root + 'stories/index.json', { cache: 'no-cache' })
-        .then(function (response) { if (!response.ok) throw new Error('index'); return response.json(); })
-        .then(function (stories) {
+      return Promise.all([
+        fetch(root + 'stories/index.json', { cache: 'no-cache' }).then(function (response) { if (!response.ok) throw new Error('index'); return response.json(); }),
+        loadHiddenIds()
+      ]).then(function (data) {
+          var stories = data[0], hiddenIds = data[1] || [];
           var list = (Array.isArray(stories) ? stories : [])
-            .filter(function (story) { return story && story.published !== false && story.section === sectionId; })
+            .filter(function (story) { return story && story.published !== false && story.section === sectionId && hiddenIds.indexOf(String(story.id)) < 0; })
             .sort(function (a, b) { return (Number(a.order) || 9999) - (Number(b.order) || 9999); });
           box.replaceChildren();
           if (!list.length) {

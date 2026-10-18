@@ -4,6 +4,11 @@
 'use strict';
 var LG=(window.KH_LANG&&window.KH_LANG.supported?window.KH_LANG.supported.slice():['ar','en','fr','it','de']),de=document.documentElement,l=0;
 var R=[
+['شخصيات إسلامية','Islamic Figures','Figures de l’islam','Figure islamiche'],
+['من سير شخصيات تركت أثرًا','Lives of figures who left a lasting mark','La vie de figures qui ont marqué leur époque','Le vite di figure che hanno lasciato il segno'],
+['حكايات موثقة عن شخصيات إسلامية أسهمت في التاريخ والعلم والفكر، مع عرض سياقها ومصادرها.','Documented stories of Islamic figures who contributed to history, scholarship and thought, with context and sources.','Récits documentés de figures de l’islam qui ont contribué à l’histoire, au savoir et à la pensée, avec leur contexte et leurs sources.','Storie documentate di figure islamiche che hanno contribuito alla storia, al sapere e al pensiero, con contesto e fonti.'],
+['لم تُضف حكايات إلى هذا القسم بعد.','No stories have been added to this section yet.','Aucune histoire n’a encore été ajoutée à cette rubrique.','Nessuna storia è ancora stata aggiunta a questa sezione.'],
+['اقترح حكاية عن شخصية إسلامية ←','Suggest a story about an Islamic figure →','Proposez une histoire sur une figure de l’islam →','Proponi una storia su una figura islamica →'],
 ['خالدون عبر التاريخ','Immortals Through History','Immortels à travers l’histoire','Immortali attraverso la storia'],
 ['حكاية التاريخ بعيون جيل جديد','History through the eyes of a new generation','L’histoire vue par une nouvelle génération','La storia vista da una nuova generazione'],
 ['حكاياتٌ تُروى… وأثرٌ يبقى','Stories told… a legacy that lasts','Des récits racontés… une trace qui reste','Storie raccontate… un segno che resta'],
@@ -97,7 +102,7 @@ var O={'الأول':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخ
 var ER=['Could not send right now ({c}). Check the fields and try again.','Envoi impossible pour le moment ({c}). Vérifiez les champs et réessayez.','Impossibile inviare ora ({c}). Controlla i campi e riprova.','Senden ist gerade nicht möglich ({c}). Prüfe die Felder und versuche es erneut.'];
 function tr(s,i){
  var z=i===4&&window.KH_DE&&window.KH_DE[s];if(z)return z;
- var d=D[s],m;if(d)return d[i-1]||s;
+ var d=D[s],m;if(d)return d[i-1]||(i===4?d[0]:s);
  m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return ['Grade ','Classe ','Classe ','Klasse '][i-1]+O[m[1]];
  m=s.match(/^تعذر الإرسال الآن \((\d+)\)\. راجع الحقول وحاول مرة أخرى\.$/);if(m)return ER[i-1].replace('{c}',m[1]);
  return s}

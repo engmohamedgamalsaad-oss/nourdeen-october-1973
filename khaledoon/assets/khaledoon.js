@@ -140,10 +140,11 @@ var T0=document.title,BR="خالدون عبر التاريخ",PV="معاينة �
 function sv(k,v){try{localStorage.setItem(k,v)}catch(e){}}
 function gr(w,i){return ["Grade ","Classe ","Classe ","Klasse "][i-1]+O[w]}
 function tr(s,i){
-if(i===4){var z=window.KH_DE&&window.KH_DE[s],m;if(z)return z; /* الألمانية: قاموس KH_DE في khaledoon-de.js؛ الجداول القديمة ذات الأربع لغات لا تُستخدم */
+if(i===4){var z=window.KH_DE&&window.KH_DE[s],m;if(z)return z; /* Deutsch nutzt zuerst das Wörterbuch; bei fehlendem Eintrag folgt Englisch als einheitlicher Fallback. */
  if(m=s.match(/^بصوت (\S+) • (.+)$/))return "Von "+(N[m[1]]||m[1])+" • "+tr(m[2],i);
  if(m=s.match(/^(المرحلة \S+) — الصف (\S+)$/))return tr(m[1],i)+" — "+gr(m[2],i);
  m=s.match(/^الصف (\S+)$/);if(m&&O[m[1]])return gr(m[1],i);
+ var fallback=D[s];if(fallback&&fallback[0])return fallback[0];
  return s}
 var d=D[s],m;if(d)return d[i-1];
 if(m=s.match(/^بصوت (\S+) • (.+)$/))return ["By ","Par ","Di "][i-1]+(N[m[1]]||m[1])+" • "+tr(m[2],i);

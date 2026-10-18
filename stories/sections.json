@@ -109,6 +109,24 @@
           "title": "Persönlichkeiten im ägyptischen Lehrplan"
         }
       }
+    },
+    {
+      "id": "islamic",
+      "title": "شخصيات إسلامية",
+      "i18n": {
+        "en": {
+          "title": "Islamic Figures"
+        },
+        "fr": {
+          "title": "Figures de l’islam"
+        },
+        "it": {
+          "title": "Figure islamiche"
+        },
+        "de": {
+          "title": "Persönlichkeiten des Islam"
+        }
+      }
     }
   ]
 }

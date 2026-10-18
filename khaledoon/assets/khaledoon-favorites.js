@@ -3,7 +3,7 @@
    - النجمة تُضاف تلقائيًا لأي كارت <a class="card"> يربط بصفحة حكاية (stories/<قسم>/<رقم>/)، حتى لو أُنشئ لاحقًا بالجافاسكربت.
    - في صفحة الحكاية نفسها يُضاف زر بالنجمة والنص في شريط المشاركة (.story-share-bar)، أو في .hero-content إن لم يوجد الشريط.
    - قسم المفضلة يقرأ stories/index.json، فأي حكاية جديدة تدخله دون تعديل هذا الملف.
-   - الحكايات التي أخفاها الأدمن (صفحة khaledoon/admin-visibility.html، جدول story_visibility في Supabase) تختفي من الكروت ومن المفضلة،
+   - الحكايات التي أخفاها الأدمن (تبويب الإظهار والإخفاء داخل khaledoon/admin.html، جدول story_visibility في Supabase) تختفي من الكروت ومن المفضلة،
      والزائر لا يملك أي زر لذلك. لو فشل الطلب تظهر كل الحكايات كالمعتاد.
    - يُحمّل من khaledoon-theme.js (الأقسام والحكايات) ومن khaledoon-search.js (الرئيسية).
    - لا يستخدم innerHTML مع أي بيانات. */
@@ -31,6 +31,7 @@
   };
 
   var SEC = {
+    islamic:    { ar: 'شخصيات إسلامية', en: 'Islamic Figures', fr: 'Figures de l’islam', it: 'Figure islamiche', de: 'Persönlichkeiten des Islam' },
     october:    { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' },
     science:    { ar: 'العلم والعلماء', en: 'Science and Scientists', fr: 'Science et scientifiques', it: 'Scienza e scienziati', de: 'Wissenschaft und Wissenschaftler' },
     women:      { ar: 'نساء خالدات', en: 'Women Who Made History', fr: 'Femmes qui ont marqué l’histoire', it: 'Donne che hanno fatto la storia', de: 'Frauen, die Geschichte schrieben' },
@@ -82,7 +83,7 @@
   function isHidden(id) { return hiddenIds.indexOf(id) >= 0; }
   function loadHidden() {
     if (!window.__khHiddenP) {
-      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON } })
+      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (a) { return Array.isArray(a) ? a.map(function (x) { return String(x.story_id); }) : []; })
         .catch(function () { return []; });

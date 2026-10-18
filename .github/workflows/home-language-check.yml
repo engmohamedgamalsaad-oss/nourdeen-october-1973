@@ -29,6 +29,8 @@ jobs:
         run: node scripts/check-home-language.js
       - name: Verify five-language translation coverage
         run: node scripts/check-localization-coverage.js
+      - name: Verify admin story visibility integration
+        run: node scripts/check-story-visibility-flow.js
       - name: Install Chromium for real-browser checks
         run: |
           npm install --no-save playwright
