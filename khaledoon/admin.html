@@ -288,7 +288,7 @@ var translationDetails=el('details','translation-panel');
  translationDetails.appendChild(el('p','fnote','أدخل كل لغة على حدة، قارنها بالنص العربي، وحدد حالتها. لا تظهر الترجمة للزوار حتى تفعيلها واعتمادها.'));
  var translationStates={not_started:'لم تبدأ',draft:'مسودة',review:'قيد المراجعة',approved:'معتمدة'};
  var translationInputs={};
- [['en','English'],['fr','Français'],['it','Italiano']].forEach(function(pair){
+ [['en','English'],['fr','Français'],['it','Italiano'],['de','Deutsch']].forEach(function(pair){
   var lang=pair[0],saved=it.translations&&it.translations[lang]&&typeof it.translations[lang]==='object'?it.translations[lang]:{};
   var group=el('section','translation-lang'),heading=el('h4','',pair[1]+' · '+lang.toUpperCase());
   group.appendChild(heading);
