@@ -13,6 +13,7 @@
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 
   var SECTIONS = [
+    { id: 'islamic', href: 'khaledoon/collections/islamic.html', t: { ar: 'شخصيات إسلامية', en: 'Islamic Figures', fr: 'Figures de l’islam', it: 'Figure islamiche', de: 'Persönlichkeiten des Islam' } },
     { id: 'october', href: 'khaledoon/collections/october.html', t: { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' } },
     { id: 'science', href: 'khaledoon/collections/science.html', t: { ar: 'العلم والعلماء', en: 'Science and Scientists', fr: 'Science et scientifiques', it: 'Scienza e scienziati', de: 'Wissenschaft und Wissenschaftler' } },
     { id: 'women', href: 'khaledoon/collections/women.html', t: { ar: 'نساء خالدات', en: 'Women Who Made History', fr: 'Femmes qui ont marqué l’histoire', it: 'Donne che hanno fatto la storia', de: 'Frauen, die Geschichte schrieben' } },
