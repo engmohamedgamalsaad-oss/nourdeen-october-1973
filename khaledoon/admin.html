@@ -35,6 +35,9 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .btn.copied:hover{background:#188653}
 details.pubrow>summary .hidebtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
 details.pubrow>summary .hidebtn:disabled{opacity:.5;cursor:not-allowed}
+.hidebtn-wrap{display:inline-flex;align-items:center;flex:none;max-width:100%}
+.hidebtn-wrap[title]{cursor:help}
+.hidebtn-wrap .hidebtn{max-width:100%}
 details.pubrow.hid{--c:#e07a7a;opacity:.78;border-top-style:dashed;border-bottom-style:dashed;border-inline-end-style:dashed;background-color:color-mix(in srgb,#e07a7a 14%,var(--panel))}
 details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoration-thickness:1px}
 .pubrow .ph{display:block;color:#e07a7a;font-weight:800;font-size:.78rem;margin-top:2px}
@@ -419,7 +422,9 @@ var openIds={};
 function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
 function storyFor(it){
  var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
- for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
+ /* الرقم الصريح له الأولوية دائمًا؛ لا نسمح لعنوان متشابه بأن يربط السجل بحكاية أخرى. */
+ if(n){for(var i=0;i<vStories.length;i++){if(String(vStories[i].id)===n)return vStories[i]}}
+ if(t){for(var j=0;j<vStories.length;j++){if(norm(vStories[j].title)===t)return vStories[j]}}
  return null;
 }
 function pubRow(it){
@@ -432,15 +437,23 @@ function pubRow(it){
  var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
  s.appendChild(w);
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
- if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان في قائمة الموقع (stories/index.json) لإخفائها':'جارٍ تحميل قائمة حكايات الموقع…'}
- else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
+ var hw=el('span','hidebtn-wrap');
+ if(!sv){
+  var reason=vLoaded?'لا يوجد تطابق آمن مع عنوان حكاية في قائمة الموقع (stories/index.json). طابق العنوان أو أضف رقم الحكاية الصحيح.':'جارٍ تحميل قائمة حكايات الموقع…';
+  hb.disabled=true;hb.setAttribute('aria-label',reason);
+  /* وضع التلميح على الغلاف لأن المتصفحات غالبًا لا تعرض title على زر معطّل. */
+  hw.title=reason;hw.setAttribute('aria-label',reason);
+ }else{
+  hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
+  hw.title=hb.title;
+ }
  hb.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();
   if(!sv)return;
   if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
   setHidden(sv,!hid,hb);
  });
- s.appendChild(hb);d.appendChild(s);
+ hw.appendChild(hb);s.appendChild(hw);d.appendChild(s);
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){if(built)return;built=true;var b=el('div','pbody');b.appendChild(card(it));d.appendChild(b)}
  d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
