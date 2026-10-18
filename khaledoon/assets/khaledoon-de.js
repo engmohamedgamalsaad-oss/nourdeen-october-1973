@@ -27,6 +27,7 @@ window.KH_DE={
 "اكتشافات وأسئلة وأفكار غيّرت فهمنا للعالم.":"Entdeckungen, Fragen und Ideen, die unser Verständnis der Welt verändert haben.",
 "اكتشف الحكايات ←":"Geschichten entdecken →",
 "نساء خالدات":"Frauen, die Geschichte schrieben",
+"حكايات نساء تركن أثرًا":"Geschichten von Frauen, die etwas bewegt haben",
 "حكايات نساء تركن أثرًا بارزًا في التاريخ والعلم والأدب والفن والعمل الوطني والإنساني، وألهمت إنجازاتهن أجيالًا من بعدهن.":"Geschichten von Frauen, die in Geschichte, Wissenschaft, Literatur, Kunst, nationalem Engagement und humanitärer Arbeit bleibende Spuren hinterließen und Generationen inspirierten.",
 
 "أعلام الأدب والفنون والرياضة":"Persönlichkeiten aus Literatur, Kunst und Sport",

@@ -9,6 +9,7 @@ var R=[
 ['حكاياتٌ تُروى… وأثرٌ يبقى','Stories told… a legacy that lasts','Des récits racontés… une trace qui reste','Storie raccontate… un segno che resta'],
 ['← كل البوابات','← All gateways','← Toutes les portes','← Tutte le porte'],
 ['من حكايات المعرفة والإنسان','From the stories of knowledge and people','Parmi les histoires du savoir et de l’humain','Dalle storie della conoscenza e dell’uomo'],
+['حكايات نساء تركن أثرًا','Stories of women who made a difference','Histoires de femmes qui ont marqué leur époque','Storie di donne che hanno lasciato il segno'],
 ['حكايات هذا القسم','Stories in this section','Histoires de cette rubrique','Storie di questa sezione'],
 ['كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.','Each story has its own page and is added here after its content and sources are reviewed.','Chaque histoire a sa propre page et est ajoutée ici après relecture du contenu et des sources.','Ogni storia ha la sua pagina e viene aggiunta qui dopo la revisione di contenuti e fonti.'],
 ['الحكايات قيد الإعداد','Stories in preparation','Histoires en préparation','Storie in preparazione'],
