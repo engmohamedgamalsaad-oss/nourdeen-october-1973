@@ -24,9 +24,11 @@
     curriculum: { c: '#f5b37e', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
   };
   var STR = {
-    kicker: { ar: 'خريطة الشخصيات', en: 'Map of figures', fr: 'Carte des personnages', it: 'Mappa dei personaggi', de: 'Karte der Persönlichkeiten' },
-    title:  { ar: 'من أين جاءت الحكايات؟', en: 'Where do the stories come from?', fr: 'D’où viennent les histoires ?', it: 'Da dove vengono le storie?', de: 'Woher kommen die Geschichten?' },
-    lead:   { ar: 'كل نقطة ملوّنة شخصية من الحكايات، ولونها لون قسمها. اضغط على النقطة لتتعرّف عليها.', en: 'Each colored dot is a figure from the stories, colored by section. Tap a dot to meet them.', fr: 'Chaque point coloré est un personnage des histoires, selon sa rubrique. Touchez-le pour le découvrir.', it: 'Ogni punto colorato è un personaggio delle storie, colorato per sezione. Tocca un punto per conoscerlo.', de: 'Jeder farbige Punkt ist eine Persönlichkeit aus den Geschichten, gefärbt nach Rubrik. Tippe auf einen Punkt.' },
+    kicker: { ar: 'خريطة الشخصيات', en: 'Story map', fr: 'Carte des histoires', it: 'Mappa delle storie', de: 'Geschichtenkarte' },
+    title:  { ar: 'كل الحكايات على الخريطة', en: 'All stories connected', fr: 'Toutes les histoires reliées', it: 'Tutte le storie collegate', de: 'Alle Geschichten verknüpft' },
+    lead:   { ar: 'كل الحكايات المنشورة تظهر في القائمة المرتبطة بالخريطة. تظهر نقطة جغرافية عندما تكون إحداثيات المكان مسجلة؛ لا نضع مواقع تخمينية.', en: 'Every published story appears in the linked list. A map pin appears when verified coordinates are recorded; locations are never guessed.', fr: 'Toutes les histoires publiées figurent dans la liste liée. Un point apparaît lorsque les coordonnées sont enregistrées ; aucun lieu n’est deviné.', it: 'Tutte le storie pubblicate compaiono nell’elenco collegato. Il segnaposto appare quando le coordinate sono registrate; nessuna posizione viene inventata.', de: 'Alle veröffentlichten Geschichten erscheinen in der verknüpften Liste. Eine Kartenmarkierung erscheint, wenn Koordinaten hinterlegt sind; Standorte werden nicht geraten.' },
+    directory: { ar: 'الحكايات المنشورة', en: 'Published stories', fr: 'Histoires publiées', it: 'Storie pubblicate', de: 'Veröffentlichte Geschichten' },
+    noPlace: { ar: 'الموقع غير مسجل بعد', en: 'Location not recorded yet', fr: 'Lieu pas encore enregistré', it: 'Luogo non ancora registrato', de: 'Standort noch nicht eingetragen' },
     born:   { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
     approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
@@ -68,7 +70,11 @@
   var legend = el('div', 'khm-legend');
   legend.setAttribute('role', 'group');
   box.appendChild(canvas); box.appendChild(legend);
-  wrap.appendChild(head); wrap.appendChild(box);
+  var directory = el('div', 'khm-directory');
+  var directoryTitle = el('h3', 'khm-directory-title');
+  var directoryList = el('ul', 'khm-list khm-directory-list');
+  directory.appendChild(directoryTitle); directory.appendChild(directoryList);
+  wrap.appendChild(head); wrap.appendChild(box); wrap.appendChild(directory);
   sec.appendChild(wrap);
   var anchor = document.getElementById('how');
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor);
@@ -76,6 +82,7 @@
 
   /* ---------- البيانات ---------- */
   var points = [];
+  var storiesAll = [];
   var hidden = {};
   var map = null, group = null, markers = [];
 
@@ -98,15 +105,17 @@
     return Promise.all([get('stories/index.json'), get('stories/places.json'), loadHidden()]).then(function (r) {
       var stories = Array.isArray(r[0]) ? r[0] : [], places = r[1] || {}, off = r[2] || [];
       stories.forEach(function (s) {
-        if (!s || s.published === false || !s.person) return;
-        if (off.indexOf(String(s.id)) >= 0) return;
-        var p = places[String(s.id)];
+        if (!s || s.published === false || !s.title || off.indexOf(String(s.id)) >= 0) return;
         var section = s.section;
         if (section === 'knowledge' || section === 'learning') section = 'women';
         if (section === 'fame') section = 'people';
-        if (!p || !validNum(p.lat, 90) || !validNum(p.lng, 180) || !SEC[section]) return;
-        points.push({ s: s, p: p, sec: section });
+        if (!SEC[section]) return;
+        var entry = { s: s, p: places[String(s.id)] || null, sec: section };
+        storiesAll.push(entry);
+        var p = entry.p;
+        if (p && validNum(p.lat, 90) && validNum(p.lng, 180)) points.push(entry);
       });
+      renderDirectory();
     });
   }
 
@@ -153,12 +162,35 @@
   function labels() {
     var l = lang();
     kick.textContent = T('kicker'); h2.textContent = T('title'); lead.textContent = T('lead');
+    directoryTitle.textContent = T('directory');
     canvas.setAttribute('aria-label', T('title'));
     legend.setAttribute('aria-label', T('legend'));
     legend.querySelectorAll('.khm-chip').forEach(function (b) {
       var t = b.querySelector('span'); if (t) t.textContent = SEC[b.getAttribute('data-sec')].t[l];
     });
   }
+  function renderDirectory() {
+    var l = lang();
+    directoryTitle.textContent = T('directory');
+    directoryList.replaceChildren();
+    storiesAll.forEach(function (e) {
+      var li = el('li', 'khm-directory-item');
+      var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
+      a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
+      li.appendChild(a);
+      var person = pick(e.s, 'person', l);
+      if (person && person !== a.textContent) li.appendChild(el('span', 'khm-directory-person', person));
+      if (!e.p || !validNum(e.p.lat, 90) || !validNum(e.p.lng, 180)) {
+        li.appendChild(el('span', 'khm-directory-missing', T('noPlace')));
+      } else {
+        var place = e.p.place && (e.p.place[l] || e.p.place.ar);
+        if (place) li.appendChild(el('span', 'khm-directory-place', place));
+      }
+      directoryList.appendChild(li);
+    });
+    directory.hidden = storiesAll.length === 0;
+  }
+
   function buildLegend() {
     var seen = {};
     points.forEach(function (e) { seen[e.sec] = 1; });
@@ -217,14 +249,17 @@
     canvas.dir = document.documentElement.dir || 'rtl';
     canvas.appendChild(el('div', 'khm-note', T('err')));
     var ul = el('ul', 'khm-list');
-    points.forEach(function (e) {
+    storiesAll.forEach(function (e) {
       var li = el('li');
-      var a = el('a', null, pick(e.s, 'person', l));
+      var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
       a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
       li.appendChild(a);
-      var pl = (e.p.place && (e.p.place[l] || e.p.place.ar)) || '';
+      var person = pick(e.s, 'person', l);
+      if (person && person !== a.textContent) li.appendChild(document.createTextNode(' — ' + person));
+      var pl = e.p && e.p.place && (e.p.place[l] || e.p.place.ar);
       if (pl) li.appendChild(document.createTextNode(' — ' + pl));
-      if (e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
+      else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
+      if (e.p && e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
       ul.appendChild(li);
     });
     canvas.appendChild(ul);
@@ -243,6 +278,7 @@
   function start() {
     if (started) return; started = true;
     loadData().then(function () {
+      renderDirectory();
       if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
@@ -256,7 +292,7 @@
   }
 
   labels();
-  new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+  new MutationObserver(function () { labels(); renderDirectory(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function (en) {
       if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
