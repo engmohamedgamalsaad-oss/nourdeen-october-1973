@@ -27,7 +27,6 @@
     kicker: { ar: 'خريطة الشخصيات', en: 'Story map', fr: 'Carte des histoires', it: 'Mappa delle storie', de: 'Geschichtenkarte' },
     title:  { ar: 'كل الحكايات على الخريطة', en: 'All stories connected', fr: 'Toutes les histoires reliées', it: 'Tutte le storie collegate', de: 'Alle Geschichten verknüpft' },
     lead:   { ar: 'كل الحكايات المنشورة تظهر في القائمة المرتبطة بالخريطة. تظهر نقطة جغرافية عندما تكون إحداثيات المكان مسجلة؛ لا نضع مواقع تخمينية.', en: 'Every published story appears in the linked list. A map pin appears when verified coordinates are recorded; locations are never guessed.', fr: 'Toutes les histoires publiées figurent dans la liste liée. Un point apparaît lorsque les coordonnées sont enregistrées ; aucun lieu n’est deviné.', it: 'Tutte le storie pubblicate compaiono nell’elenco collegato. Il segnaposto appare quando le coordinate sono registrate; nessuna posizione viene inventata.', de: 'Alle veröffentlichten Geschichten erscheinen in der verknüpften Liste. Eine Kartenmarkierung erscheint, wenn Koordinaten hinterlegt sind; Standorte werden nicht geraten.' },
-    directory: { ar: 'الحكايات المنشورة', en: 'Published stories', fr: 'Histoires publiées', it: 'Storie pubblicate', de: 'Veröffentlichte Geschichten' },
     noPlace: { ar: 'الموقع غير مسجل بعد', en: 'Location not recorded yet', fr: 'Lieu pas encore enregistré', it: 'Luogo non ancora registrato', de: 'Standort noch nicht eingetragen' },
     born:   { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
     approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
@@ -70,11 +69,7 @@
   var legend = el('div', 'khm-legend');
   legend.setAttribute('role', 'group');
   box.appendChild(canvas); box.appendChild(legend);
-  var directory = el('div', 'khm-directory');
-  var directoryTitle = el('h3', 'khm-directory-title');
-  var directoryList = el('ul', 'khm-list khm-directory-list');
-  directory.appendChild(directoryTitle); directory.appendChild(directoryList);
-  wrap.appendChild(head); wrap.appendChild(box); wrap.appendChild(directory);
+  wrap.appendChild(head); wrap.appendChild(box);
   sec.appendChild(wrap);
   var anchor = document.getElementById('how');
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor);
@@ -115,7 +110,6 @@
         var p = entry.p;
         if (p && validNum(p.lat, 90) && validNum(p.lng, 180)) points.push(entry);
       });
-      renderDirectory();
     });
   }
 
@@ -162,35 +156,12 @@
   function labels() {
     var l = lang();
     kick.textContent = T('kicker'); h2.textContent = T('title'); lead.textContent = T('lead');
-    directoryTitle.textContent = T('directory');
     canvas.setAttribute('aria-label', T('title'));
     legend.setAttribute('aria-label', T('legend'));
     legend.querySelectorAll('.khm-chip').forEach(function (b) {
       var t = b.querySelector('span'); if (t) t.textContent = SEC[b.getAttribute('data-sec')].t[l];
     });
   }
-  function renderDirectory() {
-    var l = lang();
-    directoryTitle.textContent = T('directory');
-    directoryList.replaceChildren();
-    storiesAll.forEach(function (e) {
-      var li = el('li', 'khm-directory-item');
-      var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
-      a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
-      li.appendChild(a);
-      var person = pick(e.s, 'person', l);
-      if (person && person !== a.textContent) li.appendChild(el('span', 'khm-directory-person', person));
-      if (!e.p || !validNum(e.p.lat, 90) || !validNum(e.p.lng, 180)) {
-        li.appendChild(el('span', 'khm-directory-missing', T('noPlace')));
-      } else {
-        var place = e.p.place && (e.p.place[l] || e.p.place.ar);
-        if (place) li.appendChild(el('span', 'khm-directory-place', place));
-      }
-      directoryList.appendChild(li);
-    });
-    directory.hidden = storiesAll.length === 0;
-  }
-
   function buildLegend() {
     var seen = {};
     points.forEach(function (e) { seen[e.sec] = 1; });
