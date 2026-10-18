@@ -2,7 +2,7 @@
    - لا تعدّل ترجمات AR/EN/FR/IT الحالية.
    - المفاتيح = النص العربي الأصلي كما هو في الصفحة؛ أي نص بلا ترجمة ألمانية يبقى بالعربية.
    - تُحمَّل بعد khaledoon.js و khaledoon-i18n-extra.js.
-   - اختيار الألمانية يُحفظ في المفتاح kh-de (ويبقى kh-lang = ar حتى لا تنقلب الصفحات التي لا تدعم الألمانية بعد إلى LTR). */
+   - تستخدم الألمانية مفتاح اللغة الموحد kh-lang مثل بقية اللغات. */
 (function(){
 var D={
 "خالدون عبر التاريخ":"Unsterbliche der Geschichte",
@@ -77,7 +77,7 @@ var D={
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
-var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',active=false;
+var AR_TITLE='خالدون عبر التاريخ',active=false;
 var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
 if(!langs)return;
 function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
@@ -105,7 +105,7 @@ function labels(){
 }
 function setDe(){
  active=true;
- put(KEY,'1');put('kh-lang','ar');
+ put('kh-lang','de');window.KH_DE_ACTIVE=true;
  root.lang='de';root.dir='ltr';
  ap(B);labels();
  document.title=D[AR_TITLE];
@@ -121,7 +121,7 @@ if(!langs.querySelector('[data-l="4"]')){
 langs.addEventListener('click',function(e){
  var b=e.target.closest&&e.target.closest('button');if(!b)return;
  if(b.getAttribute('data-l')==='4'){e.preventDefault();e.stopImmediatePropagation();setDe()}
- else if(active){active=false;put(KEY,null)}
+ else if(active){active=false;window.KH_DE_ACTIVE=false;}
 },true);
 /* عناصر تُضاف ديناميكيًا (مثل نص زر الثيم) */
 new MutationObserver(function(ms){
@@ -129,7 +129,5 @@ new MutationObserver(function(ms){
  ms.forEach(function(m){Array.prototype.forEach.call(m.addedNodes,ap)});
 }).observe(B,{childList:true,subtree:true});
 /* عند فتح الصفحة: تُطبَّق الألمانية فقط إذا لم تُختَر لغة أخرى بعدها */
-if(get(KEY)==='1'){
- if((get('kh-lang')||'ar')==='ar')setDe();else put(KEY,null);
-}
+if(get('kh-lang')==='de')setDe();
 })();
