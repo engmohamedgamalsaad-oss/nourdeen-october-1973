@@ -87,10 +87,15 @@
   /* الحكايات التي أخفاها الأدمن: طلب واحد مشترك مع khaledoon-favorites.js، وعند الفشل لا يُخفى شيء. */
   function loadHidden() {
     if (!window.__khHiddenP) {
-      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON } })
+      var hiddenRequest = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON } })
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (a) { return Array.isArray(a) ? a.map(function (x) { return String(x.story_id); }) : []; })
         .catch(function () { return []; });
+      /* لا نسمح بطلب إخفاء القصص أن يمنع ظهور الخريطة إذا تأخر الاتصال. */
+      window.__khHiddenP = Promise.race([
+        hiddenRequest,
+        new Promise(function (resolve) { setTimeout(function () { resolve([]); }, 1800); })
+      ]);
     }
     return window.__khHiddenP;
   }
@@ -263,10 +268,6 @@
 
   labels();
   new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (en) {
-      if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
-    }, { rootMargin: '400px' });
-    io.observe(sec);
-  } else { start(); }
+  /* شغّل الخريطة فورًا؛ لا تربط إنشاءها بوصول المستخدم إلى موضعها في الصفحة. */
+  start();
 })();
