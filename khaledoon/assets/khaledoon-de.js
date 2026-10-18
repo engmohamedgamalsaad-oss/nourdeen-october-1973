@@ -289,7 +289,16 @@ function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.s
 function one(n){
  if(n.__o===undefined)n.__o=n.data;
  var t=n.__o.trim();if(!t)return;
- var d=D[t];
+ var d=D[t],m;
+ if(!d&&(m=t.match(/^المرحلة (الابتدائية|الإعدادية|الثانوية)\s*[—-]\s*الصف (الأول|الثاني|الثالث|الرابع|الخامس|السادس|[1-6])$/))){
+  var stage={'الابتدائية':'Grundschulstufe','الإعدادية':'Mittelschulstufe','الثانوية':'Oberstufe'}[m[1]];
+  var grade={'الأول':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخامس':5,'السادس':6}[m[2]]||m[2];
+  d=stage+' — Klasse '+grade;
+ }
+ if(!d&&(m=t.match(/^الصف (الأول|الثاني|الثالث|الرابع|الخامس|السادس|[1-6])$/))){
+  var gradeOnly={'الأول':1,'الثاني':2,'الثالث':3,'الرابع':4,'الخامس':5,'السادس':6}[m[1]]||m[1];
+  d='Klasse '+gradeOnly;
+ }
  n.data=d?n.__o.replace(t,d):n.__o;
 }
 function ap(r){
