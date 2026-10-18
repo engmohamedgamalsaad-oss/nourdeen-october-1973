@@ -315,9 +315,8 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
  window.addEventListener('message',function(e){
   if(e.origin!==location.origin||!previewWin||e.source!==previewWin||!e.data||e.data.type!=='kh-story-preview-decision')return;
   if(e.data.action==='approve'){
-   if(!confirm('وافقت على الحكاية. سيتم الآن تغيير حالتها إلى «منشورة» في لوحة الإدارة. ملاحظة: هذا الإجراء لا ينشئ صفحة HTML جديدة تلقائيًا. هل تريد المتابعة؟'))return;
-   if(!cons.checked){say('err','لا يمكن اعتماد النشر دون تسجيل موافقة الراوي أو ولي الأمر.');return}
-   persist('published',bPub);
+   if(!confirm('تأكيد اعتماد المعاينة فقط؟ لن تتغير حالة الحكاية إلى «منشورة»، ولن يظهر شيء على الموقع الحي.'))return;
+   say('ok','تم تأكيد المعاينة للمراجعة فقط. لم يتم النشر ولم تتغير حالة الحكاية.');
   }else if(e.data.action==='reject'){
    say('ok','لم يتم النشر. يمكنك تعديل الحكاية من نفس بطاقة الإدارة ثم معاينتها مرة أخرى.');
   }
