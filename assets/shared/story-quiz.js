@@ -52,7 +52,7 @@
       review: "Antworten überprüfen", again: "Noch einmal versuchen", unavailable: "Das Quiz ist vorübergehend nicht verfügbar"
     }
   };
-  function t(key) { return (TEXT[lang] || TEXT.ar)[key] || TEXT.ar[key] || key; }
+  function t(key) { var locale = lang; if (lang !== "ar" && all.length && !all.every(function (q) { var tr = q.i18n && q.i18n[lang]; return tr && typeof tr.q === "string" && Array.isArray(tr.o) && tr.o.length === q.o.length && typeof tr.e === "string"; })) locale = "ar"; return (TEXT[locale] || TEXT.ar)[key] || TEXT.ar[key] || key; }
   document.addEventListener("site-language-change", function (event) {
     lang = ((event.detail && event.detail.lang) || document.documentElement.lang || "ar").slice(0, 2);
   });
