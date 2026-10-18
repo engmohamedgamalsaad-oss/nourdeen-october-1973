@@ -299,12 +299,15 @@ function ap(r){
  while(n=w.nextNode())one(n);
 }
 function labels(){
- var as=document.querySelectorAll('[aria-label]');
- for(var k=0;k<as.length;k++){
-  var el=as[k];
-  if(el.__al===undefined)el.__al=el.getAttribute('aria-label');
-  var key=el.__al.trim();
-  if(AL[key]&&D[key])el.setAttribute('aria-label',D[key]);
+ var attrs=['aria-label','alt','placeholder','title'];
+ var els=document.querySelectorAll('[aria-label],[alt],[placeholder],[title]');
+ for(var k=0;k<els.length;k++){
+  var el=els[k];
+  for(var j=0;j<attrs.length;j++){
+   var a=attrs[j];if(!el.hasAttribute(a))continue;
+   var prop='__de_'+a;if(el[prop]===undefined)el[prop]=el.getAttribute(a);
+   var key=el[prop].trim();if(D[key])el.setAttribute(a,D[key]);
+  }
  }
 }
 function setDe(){
