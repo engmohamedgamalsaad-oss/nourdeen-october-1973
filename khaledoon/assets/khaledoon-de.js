@@ -316,7 +316,9 @@ var D={
 "معرض الوسائط":"Mediengalerie",
 "السابق":"Zurück",
 "اختيار الشريحة":"Folie auswählen",
-"التالي":"Weiter"
+"التالي":"Weiter",
+"هل تعلم":"Schon gewusst",
+"🇪🇬 العربية":"🇪🇬 Arabisch"
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
