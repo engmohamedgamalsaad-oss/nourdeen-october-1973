@@ -15,13 +15,15 @@
   var SECTIONS = [
     { id: 'october', href: 'khaledoon/collections/october.html', t: { ar: 'حكايات أكتوبر 1973', en: 'October 1973 Stories', fr: 'Récits d’octobre 1973', it: 'Storie di ottobre 1973', de: 'Geschichten vom Oktober 1973' } },
     { id: 'science', href: 'khaledoon/collections/science.html', t: { ar: 'العلم والعلماء', en: 'Science and Scientists', fr: 'Science et scientifiques', it: 'Scienza e scienziati', de: 'Wissenschaft und Wissenschaftler' } },
-    { id: 'knowledge', href: 'khaledoon/collections/knowledge.html', t: { ar: 'التعليم والمعرفة', en: 'Education and Knowledge', fr: 'Éducation et savoir', it: 'Istruzione e conoscenza', de: 'Bildung und Wissen' } },
-    { id: 'people', href: 'khaledoon/collections/people.html', t: { ar: 'المشاهير والرياضة والفنون', en: 'Celebrities, Sports and Arts', fr: 'Célébrités, sport et arts', it: 'Celebrità, sport e arti', de: 'Prominente, Sport und Kunst' } },
+    { id: 'women', href: 'khaledoon/collections/women.html', t: { ar: 'نساء خالدات', en: 'Women Who Made History', fr: 'Femmes qui ont marqué l’histoire', it: 'Donne che hanno fatto la storia', de: 'Frauen, die Geschichte schrieben' } },
+    { id: 'people', href: 'khaledoon/collections/people.html', t: { ar: 'أعلام الأدب والفنون والرياضة', en: 'Figures in Literature, Arts and Sport', fr: 'Figures de la littérature, des arts et du sport', it: 'Protagonisti della letteratura, delle arti e dello sport', de: 'Persönlichkeiten aus Literatur, Kunst und Sport' } },
     { id: 'history', href: 'khaledoon/collections/history.html', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
     { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
   ];
   var SEC = {};
   SECTIONS.forEach(function (s) { SEC[s.id] = s; });
+  /* Legacy stored IDs display the current collection names. */
+  SEC.knowledge = SEC.women; SEC.learning = SEC.women; SEC.fame = SEC.people;
 
   var STR = {
     btn:   { ar: 'بحث', en: 'Search', fr: 'Rechercher', it: 'Cerca', de: 'Suchen' },
@@ -318,7 +320,7 @@
     var cs = document.currentScript;
     if (!cs || !cs.src) return;
     var s = document.createElement('script');
-    s.src = new URL('khaledoon-favorites.js?v=1', cs.src).href;
+    s.src = new URL('khaledoon-favorites.js?v=20261018-collections', cs.src).href;
     s.async = true;
     s.setAttribute('data-khf-loader', '1');
     document.head.appendChild(s);
@@ -333,10 +335,10 @@
     if (!cs || !cs.src) return;
     var l = document.createElement('link');
     l.rel = 'stylesheet';
-    l.href = new URL('khaledoon-map.css?v=2', cs.src).href;
+    l.href = new URL('khaledoon-map.css?v=20261018-collections', cs.src).href;
     document.head.appendChild(l);
     var s = document.createElement('script');
-    s.src = new URL('khaledoon-map.js?v=2', cs.src).href;
+    s.src = new URL('khaledoon-map.js?v=20261018-collections', cs.src).href;
     s.async = true;
     s.setAttribute('data-khm-loader', '1');
     document.head.appendChild(s);
