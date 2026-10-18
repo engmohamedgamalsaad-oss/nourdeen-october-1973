@@ -1,0 +1,35 @@
+{
+  "name": "",
+  "grade": "",
+  "className": "",
+  "title": "حتشبسوت: الملكة التي اختارت أن تُخلَّد بالحجر والسفن",
+  "subtitle": "حوار بين كارما والراوي عن ملكة حكمت مصر وأرسلت أسطولًا إلى أرض بونت.",
+  "person": "حتشبسوت",
+  "personAliases": ["Hatshepsut", "Hatchepsout", "Hatschepsut"],
+  "color": "#d7b878",
+  "order": 11,
+  "published": true,
+  "section": "history",
+  "i18n": {
+    "en": {
+      "title": "Hatshepsut: The Queen Who Chose to Be Remembered Through Stone and Ships",
+      "subtitle": "A dialogue between Karma and the Narrator about a queen who ruled Egypt and sent a fleet to the Land of Punt.",
+      "person": "Hatshepsut"
+    },
+    "fr": {
+      "title": "Hatshepsout : la reine qui a choisi d’être immortalisée par la pierre et les navires",
+      "subtitle": "Un dialogue entre Karma et le narrateur sur une reine qui a gouverné l’Égypte et envoyé une flotte au pays de Pount.",
+      "person": "Hatshepsout"
+    },
+    "it": {
+      "title": "Hatshepsut: la regina che scelse di essere ricordata attraverso la pietra e le navi",
+      "subtitle": "Un dialogo tra Karma e il narratore su una regina che governò l’Egitto e inviò una flotta nella Terra di Punt.",
+      "person": "Hatshepsut"
+    },
+    "de": {
+      "title": "Hatschepsut: Die Königin, die sich durch Stein und Schiffe verewigen wollte",
+      "subtitle": "Ein Dialog zwischen Karma und dem Erzähler über eine Königin, die Ägypten regierte und eine Flotte ins Land Punt schickte.",
+      "person": "Hatschepsut"
+    }
+  }
+}

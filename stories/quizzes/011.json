@@ -1,0 +1,102 @@
+{
+  "id": "011",
+  "title": "حتشبسوت: الملكة التي اختارت أن تُخلَّد بالحجر والسفن",
+  "questions": [
+    {
+      "q": "في أي سنة من حكمها خرجت بعثة بونت؟",
+      "o": ["السنة التاسعة", "السنة الأولى", "السنة الأربعون", "السنة الستون"],
+      "a": 0,
+      "e": "تؤرّخ نقوش الدير البحري رحلة بونت بالسنة التاسعة من حكمها.",
+      "i18n": {
+        "en": {"q": "In which year of her reign did the expedition to Punt take place?", "o": ["The ninth year", "The first year", "The fortieth year", "The sixtieth year"], "e": "The reliefs at Deir el-Bahri date the Punt voyage to the ninth year of her reign."},
+        "fr": {"q": "En quelle année de son règne l’expédition au Pount a-t-elle eu lieu ?", "o": ["La neuvième année", "La première année", "La quarantième année", "La soixantième année"], "e": "Les reliefs de Deir el-Bahari datent le voyage au Pount de la neuvième année de son règne."},
+        "it": {"q": "In quale anno del suo regno ebbe luogo la spedizione a Punt?", "o": ["Il nono anno", "Il primo anno", "Il quarantesimo anno", "Il sessantesimo anno"], "e": "I rilievi di Deir el-Bahari datano il viaggio a Punt al nono anno del suo regno."},
+        "de": {"q": "In welchem Regierungsjahr fand die Punt-Expedition statt?", "o": ["Im neunten Jahr", "Im ersten Jahr", "Im vierzigsten Jahr", "Im sechzigsten Jahr"], "e": "Die Reliefs von Deir el-Bahari datieren die Punt-Reise in das neunte Jahr ihrer Herrschaft."}
+      }
+    },
+    {
+      "q": "أي مما يلي ذُكر بين ما جُلب من بونت؟",
+      "o": ["البخور والذهب والأبنوس", "الأسلحة الحديدية", "الحرير الصيني", "الأدوات الإلكترونية"],
+      "a": 0,
+      "e": "تذكر النقوش البخور والمر والذهب والعاج والأبنوس وحيوانات وأشجارًا.",
+      "i18n": {
+        "en": {"q": "Which of these was among the goods brought back from Punt?", "o": ["Incense, gold and ebony", "Iron weapons", "Chinese silk", "Electronic tools"], "e": "The reliefs mention incense, myrrh, gold, ivory, ebony, animals and trees."},
+        "fr": {"q": "Lequel de ces éléments figure parmi les biens rapportés du Pount ?", "o": ["L’encens, l’or et l’ébène", "Des armes en fer", "De la soie chinoise", "Des outils électroniques"], "e": "Les reliefs mentionnent l’encens, la myrrhe, l’or, l’ivoire, l’ébène, des animaux et des arbres."},
+        "it": {"q": "Quale di questi elementi era tra le merci portate da Punt?", "o": ["Incenso, oro ed ebano", "Armi di ferro", "Seta cinese", "Strumenti elettronici"], "e": "I rilievi menzionano incenso, mirra, oro, avorio, ebano, animali e alberi."},
+        "de": {"q": "Was gehörte zu den Waren, die aus Punt mitgebracht wurden?", "o": ["Weihrauch, Gold und Ebenholz", "Eisenwaffen", "Chinesische Seide", "Elektronische Geräte"], "e": "Die Reliefs nennen Weihrauch, Myrrhe, Gold, Elfenbein, Ebenholz, Tiere und Bäume."}
+      }
+    },
+    {
+      "q": "من الذي ورث العرش طفلًا وتولّت حتشبسوت الوصاية عليه؟",
+      "o": ["تحتمس الثالث", "تحتمس الأول", "رمسيس الثاني", "توت عنخ آمون"],
+      "a": 0,
+      "e": "ورث تحتمس الثالث العرش صغيرًا، فتولّت حتشبسوت الوصاية عليه ثم حكمت شريكةً أكبر له.",
+      "i18n": {
+        "en": {"q": "Which child inherited the throne, with Hatshepsut serving as his regent?", "o": ["Thutmose III", "Thutmose I", "Ramesses II", "Tutankhamun"], "e": "Thutmose III inherited the throne as a child; Hatshepsut served as his regent and later ruled as senior co-ruler."},
+        "fr": {"q": "Quel enfant a hérité du trône, Hatshepsout assurant la régence ?", "o": ["Thoutmosis III", "Thoutmosis Ier", "Ramsès II", "Toutânkhamon"], "e": "Thoutmosis III a hérité du trône enfant ; Hatshepsout a assuré la régence puis a gouverné comme co-souveraine principale."},
+        "it": {"q": "Quale bambino ereditò il trono, con Hatshepsut come reggente?", "o": ["Thutmosi III", "Thutmosi I", "Ramses II", "Tutankhamon"], "e": "Thutmosi III ereditò il trono da bambino; Hatshepsut fu sua reggente e poi governò come co-reggente anziana."},
+        "de": {"q": "Welches Kind erbte den Thron, während Hatschepsut seine Regentin war?", "o": ["Thutmosis III.", "Thutmosis I.", "Ramses II.", "Tutanchamun"], "e": "Thutmosis III. erbte als Kind den Thron; Hatschepsut war seine Regentin und regierte später als ältere Mitregentin."}
+      }
+    },
+    {
+      "q": "لماذا نقول «يُنسب تصميم المعبد إلى سننموت» وليس «صمّمه سننموت»؟",
+      "o": ["لأنه لا يوجد دليل قاطع على أنه صمّمه بنفسه", "لأن المعبد لم يُبنَ أصلًا", "لأن سننموت لم يوجد", "لأن الأمر محسوم تمامًا"],
+      "a": 0,
+      "e": "المصادر تنسب إليه العمارة، لكن بعضها ينبّه إلى غياب الدليل القاطع، فنستخدم صيغة الاحتمال.",
+      "i18n": {
+        "en": {"q": "Why do we say the temple’s design is “attributed to” Senenmut rather than “designed by” him?", "o": ["Because there is no firm proof he designed it himself", "Because the temple was never built", "Because Senenmut never existed", "Because the matter is completely settled"], "e": "Sources credit him with the architecture, but some note the lack of firm proof, so we use cautious wording."},
+        "fr": {"q": "Pourquoi dit-on que la conception du temple est « attribuée » à Sénènmout et non « conçue par » lui ?", "o": ["Parce qu’il n’existe pas de preuve certaine qu’il l’ait conçu lui-même", "Parce que le temple n’a jamais été construit", "Parce que Sénènmout n’a jamais existé", "Parce que la question est entièrement tranchée"], "e": "Les sources lui attribuent l’architecture, mais certaines soulignent l’absence de preuve certaine ; on emploie donc une formulation prudente."},
+        "it": {"q": "Perché si dice che il progetto del tempio è «attribuito» a Senenmut e non «progettato da» lui?", "o": ["Perché non esiste una prova certa che l’abbia progettato lui stesso", "Perché il tempio non fu mai costruito", "Perché Senenmut non è mai esistito", "Perché la questione è del tutto risolta"], "e": "Le fonti gli attribuiscono l’architettura, ma alcune notano la mancanza di una prova certa; usiamo quindi una formula prudente."},
+        "de": {"q": "Warum sagen wir, der Entwurf des Tempels werde Senenmut „zugeschrieben“, statt er habe ihn „entworfen“?", "o": ["Weil es keinen sicheren Beleg gibt, dass er ihn selbst entwarf", "Weil der Tempel nie gebaut wurde", "Weil Senenmut nie existierte", "Weil die Frage völlig geklärt ist"], "e": "Quellen schreiben ihm die Architektur zu, manche weisen aber auf fehlende sichere Belege hin; deshalb wählen wir eine vorsichtige Formulierung."}
+      }
+    },
+    {
+      "q": "لماذا لم تكتمل المسلة الموجودة في محجر أسوان؟",
+      "o": ["ظهرت شقوق في الحجر فتوقف العمل", "لأن النيل جفّ", "لأن الحجر لم يعجب المصريين", "لأنها سُرقت"],
+      "a": 0,
+      "e": "توقف العمل في المسلة غير المكتملة بسبب شقوق ظهرت في الحجر.",
+      "i18n": {
+        "en": {"q": "Why was the obelisk in the Aswan quarry never finished?", "o": ["Cracks appeared in the stone and work stopped", "Because the Nile dried up", "Because the Egyptians disliked the stone", "Because it was stolen"], "e": "Work on the unfinished obelisk stopped because cracks appeared in the stone."},
+        "fr": {"q": "Pourquoi l’obélisque de la carrière d’Assouan n’a-t-il jamais été achevé ?", "o": ["Des fissures sont apparues dans la pierre et le travail s’est arrêté", "Parce que le Nil s’est asséché", "Parce que les Égyptiens n’aimaient pas la pierre", "Parce qu’il a été volé"], "e": "Le chantier de l’obélisque inachevé s’est arrêté à cause de fissures apparues dans la pierre."},
+        "it": {"q": "Perché l’obelisco della cava di Assuan non fu mai finito?", "o": ["Comparvero crepe nella pietra e i lavori si fermarono", "Perché il Nilo si prosciugò", "Perché agli Egizi non piaceva la pietra", "Perché fu rubato"], "e": "I lavori sull’obelisco incompiuto si fermarono perché comparvero crepe nella pietra."},
+        "de": {"q": "Warum wurde der Obelisk im Steinbruch von Assuan nie fertiggestellt?", "o": ["Im Stein zeigten sich Risse und die Arbeit wurde eingestellt", "Weil der Nil austrocknete", "Weil den Ägyptern der Stein nicht gefiel", "Weil er gestohlen wurde"], "e": "Die Arbeit am unvollendeten Obelisken wurde eingestellt, weil sich Risse im Stein zeigten."}
+      }
+    },
+    {
+      "q": "كيف نفرّق بين الحقيقة والتفسير في حكاية بونت؟",
+      "o": ["الرحلة وما جُلب فيها تُظهرهما النقوش، أما سببها فتفسير يناقشه الباحثون", "كل ما قيل عن الرحلة حقيقة مؤكدة", "كل ما قيل عن الرحلة خيال", "لا فرق بينهما"],
+      "a": 0,
+      "e": "النقوش تثبت وقوع الرحلة والبضائع، أما معناها وسببها فيناقشه الباحثون.",
+      "i18n": {
+        "en": {"q": "How do we tell fact from interpretation in the Punt story?", "o": ["The voyage and its goods are shown in the reliefs; why it was made is an interpretation scholars debate", "Everything said about the voyage is confirmed fact", "Everything said about the voyage is fiction", "There is no difference"], "e": "The reliefs show that the voyage took place and what it brought back; its meaning and purpose are debated by scholars."},
+        "fr": {"q": "Comment distinguer le fait de l’interprétation dans l’histoire du Pount ?", "o": ["Le voyage et ses biens sont représentés sur les reliefs ; la raison du voyage est une interprétation débattue", "Tout ce qui est dit du voyage est un fait confirmé", "Tout ce qui est dit du voyage est fictif", "Il n’y a aucune différence"], "e": "Les reliefs montrent que le voyage a eu lieu et ce qu’il a rapporté ; son sens et son but sont débattus par les chercheurs."},
+        "it": {"q": "Come distinguiamo il fatto dall’interpretazione nella storia di Punt?", "o": ["Il viaggio e le merci sono raffigurati nei rilievi; il perché del viaggio è un’interpretazione discussa", "Tutto ciò che si dice sul viaggio è un fatto confermato", "Tutto ciò che si dice sul viaggio è finzione", "Non c’è differenza"], "e": "I rilievi mostrano che il viaggio avvenne e che cosa portò; il suo significato e scopo sono discussi dagli studiosi."},
+        "de": {"q": "Wie unterscheiden wir in der Punt-Geschichte Tatsache und Deutung?", "o": ["Reise und Waren sind auf den Reliefs dargestellt; der Grund der Reise ist eine umstrittene Deutung", "Alles, was über die Reise gesagt wird, ist gesicherte Tatsache", "Alles, was über die Reise gesagt wird, ist Fiktion", "Es gibt keinen Unterschied"], "e": "Die Reliefs zeigen, dass die Reise stattfand und was sie einbrachte; Bedeutung und Zweck werden von Forschenden diskutiert."}
+      }
+    },
+    {
+      "q": "ماذا نعرف عن سبب إزالة صور حتشبسوت من المعبد؟",
+      "o": ["الأدلة تدل على أن الإزالة حدثت، لكن السبب غير محسوم", "نعرف السبب بالتأكيد", "لم تُزَل أي صورة", "أزالها زوّار العصر الحديث"],
+      "a": 0,
+      "e": "أُزيلت صور وألقاب لها بعد وفاتها بنحو عشرين عامًا، ولا يعرف الباحثون السبب بالتأكيد.",
+      "i18n": {
+        "en": {"q": "What do we know about why Hatshepsut’s images were removed from the temple?", "o": ["The evidence shows the removal happened, but the reason is not settled", "We know the reason for certain", "No image was removed", "Modern visitors removed them"], "e": "Images and titles of hers were removed about twenty years after her death, and scholars do not know the reason for certain."},
+        "fr": {"q": "Que sait-on de la raison du retrait des images d’Hatshepsout du temple ?", "o": ["Les preuves montrent que le retrait a eu lieu, mais la raison n’est pas tranchée", "On connaît la raison avec certitude", "Aucune image n’a été retirée", "Des visiteurs modernes les ont retirées"], "e": "Des images et des titres ont été retirés une vingtaine d’années après sa mort, et les chercheurs n’en connaissent pas la raison avec certitude."},
+        "it": {"q": "Che cosa sappiamo sul motivo della rimozione delle immagini di Hatshepsut dal tempio?", "o": ["Le prove mostrano che la rimozione avvenne, ma il motivo non è chiarito", "Conosciamo il motivo con certezza", "Nessuna immagine fu rimossa", "I visitatori moderni le hanno rimosse"], "e": "Immagini e titoli furono rimossi circa vent’anni dopo la sua morte e gli studiosi non conoscono il motivo con certezza."},
+        "de": {"q": "Was wissen wir über den Grund, warum Hatschepsuts Bilder aus dem Tempel entfernt wurden?", "o": ["Die Belege zeigen, dass die Entfernung stattfand, doch der Grund ist ungeklärt", "Wir kennen den Grund sicher", "Es wurde kein Bild entfernt", "Moderne Besucher haben sie entfernt"], "e": "Bilder und Titel wurden etwa zwanzig Jahre nach ihrem Tod entfernt; den Grund kennen die Forschenden nicht sicher."}
+      }
+    },
+    {
+      "q": "ما الذي بقي بجانب ممر المعبد ويتفق مع ما نُقش عن أشجار بونت؟",
+      "o": ["آثار حفر وجذوع أشجار", "تماثيل من الذهب", "سفن كاملة", "مكتبة من ورق البردي"],
+      "a": 0,
+      "e": "بقيت آثار حفر وجذوع أشجار بجانب ممر المعبد، وهي تتفق مع ما نُقش عن الأشجار.",
+      "i18n": {
+        "en": {"q": "What survives beside the temple causeway and fits the carvings about Punt’s trees?", "o": ["Traces of holes and tree stumps", "Golden statues", "Complete ships", "A papyrus library"], "e": "Traces of holes and tree stumps remain beside the temple causeway, consistent with what the reliefs show about the trees."},
+        "fr": {"q": "Qu’est-ce qui subsiste le long de la chaussée du temple et correspond aux reliefs sur les arbres du Pount ?", "o": ["Des traces de fosses et des souches d’arbres", "Des statues en or", "Des navires complets", "Une bibliothèque de papyrus"], "e": "Des traces de fosses et des souches subsistent le long de la chaussée du temple, en accord avec ce que montrent les reliefs."},
+        "it": {"q": "Che cosa resta lungo la strada processionale del tempio e coincide con i rilievi sugli alberi di Punt?", "o": ["Tracce di buche e ceppi d’albero", "Statue d’oro", "Navi intere", "Una biblioteca di papiri"], "e": "Restano tracce di buche e ceppi lungo la strada processionale del tempio, coerenti con ciò che mostrano i rilievi."},
+        "de": {"q": "Was ist neben dem Tempelweg erhalten und passt zu den Reliefs über die Punt-Bäume?", "o": ["Spuren von Gruben und Baumstümpfe", "Goldstatuen", "Vollständige Schiffe", "Eine Papyrusbibliothek"], "e": "Neben dem Tempelweg sind Spuren von Gruben und Baumstümpfen erhalten, die zu den Reliefs passen."}
+      }
+    }
+  ]
+}
