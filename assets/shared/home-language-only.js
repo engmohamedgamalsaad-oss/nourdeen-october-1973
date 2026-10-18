@@ -17,7 +17,10 @@
   'use strict';
   if (window.KH_LANG) return;   /* لو حُمّل الملف مرتين، يعمل مرة واحدة فقط */
 
-  var SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
+  var script = document.currentScript;
+  var isHome = !!(script && script.getAttribute('data-role') === 'home');
+  /* الألمانية مفعّلة في الرئيسية فقط حتى تكتمل قواميس صفحات الحكايات والأقسام. */
+  var SUPPORTED = isHome ? ['ar', 'en', 'fr', 'it', 'de'] : ['ar', 'en', 'fr', 'it'];
   var RTL = ['ar'];
   var FALLBACK = 'ar';
   var KEY = 'kh-lang';                        /* المفتاح الموحد */
