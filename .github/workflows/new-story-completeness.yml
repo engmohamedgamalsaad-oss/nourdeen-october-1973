@@ -1,0 +1,21 @@
+name: New story completeness
+on:
+  pull_request:
+    paths:
+      - 'stories/**'
+      - 'scripts/validate-new-stories.cjs'
+      - '.github/workflows/new-story-completeness.yml'
+permissions:
+  contents: read
+jobs:
+  completeness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - name: Check completeness of newly added story pages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: node scripts/validate-new-stories.cjs
