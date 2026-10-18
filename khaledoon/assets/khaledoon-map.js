@@ -2,7 +2,7 @@
    نقطة لكل شخصية لها مكان في stories/places.json (مفتاحه رقم الحكاية)، ولونها لون قسم الحكاية.
    الاسم والعنوان والقسم تُقرأ من stories/index.json، فأي حكاية جديدة لها person ومكان تظهر دون تعديل هذا الملف.
    بدون صورة (photo) يظهر ظل شخص موحّد بنفس الإطار. الصور تُقبل كمسار نسبي فقط. لا يستخدم innerHTML مع أي بيانات.
-   الحكايات التي أخفاها الأدمن (جدول story_visibility في Supabase، من تبويب الإظهار والإخفاء داخل khaledoon/admin.html) تُستثنى من الخريطة. لو فشل الطلب تظهر كل النقاط.
+   الحكايات التي أخفاها الأدمن (جدول story_visibility في Supabase، من صفحة khaledoon/admin-visibility.html) تُستثنى من الخريطة. لو فشل الطلب تظهر كل النقاط.
    Leaflet يُحمّل عند الاقتراب من القسم فقط. لو تعذّر التحميل تظهر قائمة نصية بالأماكن. */
 (function () {
   'use strict';
@@ -25,9 +25,10 @@
     curriculum: { c: '#f5b37e', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
   };
   var STR = {
-    kicker: { ar: 'خريطة الشخصيات', en: 'Map of figures', fr: 'Carte des personnages', it: 'Mappa dei personaggi', de: 'Karte der Persönlichkeiten' },
-    title:  { ar: 'من أين جاءت الحكايات؟', en: 'Where do the stories come from?', fr: 'D’où viennent les histoires ?', it: 'Da dove vengono le storie?', de: 'Woher kommen die Geschichten?' },
-    lead:   { ar: 'كل نقطة ملوّنة شخصية من الحكايات، ولونها لون قسمها. اضغط على النقطة لتتعرّف عليها.', en: 'Each colored dot is a figure from the stories, colored by section. Tap a dot to meet them.', fr: 'Chaque point coloré est un personnage des histoires, selon sa rubrique. Touchez-le pour le découvrir.', it: 'Ogni punto colorato è un personaggio delle storie, colorato per sezione. Tocca un punto per conoscerlo.', de: 'Jeder farbige Punkt ist eine Persönlichkeit aus den Geschichten, gefärbt nach Rubrik. Tippe auf einen Punkt.' },
+    kicker: { ar: 'خريطة الشخصيات', en: 'Story map', fr: 'Carte des histoires', it: 'Mappa delle storie', de: 'Geschichtenkarte' },
+    title:  { ar: 'كل الحكايات على الخريطة', en: 'All stories connected', fr: 'Toutes les histoires reliées', it: 'Tutte le storie collegate', de: 'Alle Geschichten verknüpft' },
+    lead:   { ar: 'تظهر الشخصيات على الخريطة عند توفر إحداثيات موثقة؛ لا نضع مواقع تخمينية.', en: 'Characters appear on the map when verified coordinates are available; locations are never guessed.', fr: 'Les personnages apparaissent sur la carte lorsque des coordonnées vérifiées sont disponibles ; aucun lieu n’est deviné.', it: 'I personaggi appaiono sulla mappa quando sono disponibili coordinate verificate; nessuna posizione viene inventata.', de: 'Figuren erscheinen auf der Karte, wenn verifizierte Koordinaten vorliegen; Standorte werden nicht geraten.' },
+    noPlace: { ar: 'الموقع غير مسجل بعد', en: 'Location not recorded yet', fr: 'Lieu pas encore enregistré', it: 'Luogo non ancora registrato', de: 'Standort noch nicht eingetragen' },
     born:   { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
     approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
@@ -77,6 +78,7 @@
 
   /* ---------- البيانات ---------- */
   var points = [];
+  var storiesAll = [];
   var hidden = {};
   var map = null, group = null, markers = [];
 
@@ -86,10 +88,15 @@
   /* الحكايات التي أخفاها الأدمن: طلب واحد مشترك مع khaledoon-favorites.js، وعند الفشل لا يُخفى شيء. */
   function loadHidden() {
     if (!window.__khHiddenP) {
-      window.__khHiddenP = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store' })
+      var hiddenRequest = fetch(API + '/rest/v1/story_visibility?select=story_id', { headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store' })
         .then(function (r) { return r.ok ? r.json() : []; })
         .then(function (a) { return Array.isArray(a) ? a.map(function (x) { return String(x.story_id); }) : []; })
         .catch(function () { return []; });
+      /* لا نسمح بطلب إخفاء القصص أن يمنع ظهور الخريطة إذا تأخر الاتصال. */
+      window.__khHiddenP = Promise.race([
+        hiddenRequest,
+        new Promise(function (resolve) { setTimeout(function () { resolve([]); }, 1800); })
+      ]);
     }
     return window.__khHiddenP;
   }
@@ -99,14 +106,15 @@
     return Promise.all([get('stories/index.json'), get('stories/places.json'), loadHidden()]).then(function (r) {
       var stories = Array.isArray(r[0]) ? r[0] : [], places = r[1] || {}, off = r[2] || [];
       stories.forEach(function (s) {
-        if (!s || s.published === false || !s.person) return;
-        if (off.indexOf(String(s.id)) >= 0) return;
-        var p = places[String(s.id)];
+        if (!s || s.published === false || !s.title || off.indexOf(String(s.id)) >= 0) return;
         var section = s.section;
         if (section === 'knowledge' || section === 'learning') section = 'women';
         if (section === 'fame') section = 'people';
-        if (!p || !validNum(p.lat, 90) || !validNum(p.lng, 180) || !SEC[section]) return;
-        points.push({ s: s, p: p, sec: section });
+        if (!SEC[section]) return;
+        var entry = { s: s, p: places[String(s.id)] || null, sec: section };
+        storiesAll.push(entry);
+        var p = entry.p;
+        if (p && validNum(p.lat, 90) && validNum(p.lng, 180)) points.push(entry);
       });
     });
   }
@@ -218,14 +226,17 @@
     canvas.dir = document.documentElement.dir || 'rtl';
     canvas.appendChild(el('div', 'khm-note', T('err')));
     var ul = el('ul', 'khm-list');
-    points.forEach(function (e) {
+    storiesAll.forEach(function (e) {
       var li = el('li');
-      var a = el('a', null, pick(e.s, 'person', l));
+      var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
       a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
       li.appendChild(a);
-      var pl = (e.p.place && (e.p.place[l] || e.p.place.ar)) || '';
+      var person = pick(e.s, 'person', l);
+      if (person && person !== a.textContent) li.appendChild(document.createTextNode(' — ' + person));
+      var pl = e.p && e.p.place && (e.p.place[l] || e.p.place.ar);
       if (pl) li.appendChild(document.createTextNode(' — ' + pl));
-      if (e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
+      else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
+      if (e.p && e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
       ul.appendChild(li);
     });
     canvas.appendChild(ul);
@@ -258,10 +269,6 @@
 
   labels();
   new MutationObserver(function () { labels(); if (usingFallback) fallbackList(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-  if ('IntersectionObserver' in window) {
-    var io = new IntersectionObserver(function (en) {
-      if (en.some(function (x) { return x.isIntersecting; })) { io.disconnect(); start(); }
-    }, { rootMargin: '400px' });
-    io.observe(sec);
-  } else { start(); }
+  /* شغّل الخريطة فورًا؛ لا تربط إنشاءها بوصول المستخدم إلى موضعها في الصفحة. */
+  start();
 })();
