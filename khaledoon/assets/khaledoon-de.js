@@ -242,10 +242,12 @@ var D={
 "٥":"5",
 "٦":"6",
 "حكايات أبطال أكتوبر الأربع في الصفحة الأصلية، بنفس تصميمها وتنسيقها المعتمد.":"Die vier Geschichten der Oktober-Helden auf der ursprünglichen Seite, mit dem bestätigten Design und Layout.",
-"افتح حكايات أكتوبر 1973 ←":"Geschichten vom Oktober 1973 öffnen →"
+"افتح حكايات أكتوبر 1973 ←":"Geschichten vom Oktober 1973 öffnen →",
+"الصف الأول الإعدادي":"Erste Klasse der Mittelschule"
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
+window.KH_DE_TRANSLATIONS=D;
 var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',active=false;
 var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
 if(!langs)return;
