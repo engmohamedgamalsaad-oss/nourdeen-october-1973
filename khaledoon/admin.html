@@ -38,6 +38,7 @@ details.pubrow>summary .hidebtn:disabled{opacity:.5;cursor:not-allowed}
 details.pubrow.hid{--c:#e07a7a;opacity:.78;border-top-style:dashed;border-bottom-style:dashed;border-inline-end-style:dashed;background-color:color-mix(in srgb,#e07a7a 14%,var(--panel))}
 details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoration-thickness:1px}
 .pubrow .ph{display:block;color:#e07a7a;font-weight:800;font-size:.78rem;margin-top:2px}
+.pubrow .pn{display:block;color:var(--muted);font-size:.74rem;margin-top:2px}
 .translation-panel{margin:18px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.translation-panel>summary{cursor:pointer;font-weight:900;color:var(--gold)}.translation-panel>.fnote{margin:8px 0 14px}.translation-lang{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px}.translation-lang h4{margin:0 0 10px;color:var(--gold)}.translation-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.translation-compare textarea[readonly]{opacity:.8}@media(max-width:680px){.translation-compare{grid-template-columns:1fr}}
 .vrow{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:10px;flex-wrap:wrap}
 .vrow.off{opacity:.7;border-style:dashed}
@@ -415,11 +416,19 @@ function setCopies(key,n){try{localStorage.setItem(key,String(n))}catch(e){}}
 function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?'✓ '+copyLabel(n):'';e.hidden=!n}
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
-/* ربط حكاية الإدارة بحكاية الموقع في stories/index.json: برقم الحكاية (حكايات أكتوبر القديمة) أو بالعنوان المطابق. */
+/* ربط حكاية الإدارة بحكاية الموقع في stories/index.json بالترتيب:
+   1) رقم الحكاية (حكايات أكتوبر القديمة)  2) العنوان المطابق  3) الشخصية أو أحد أسمائها البديلة (إن كانت وحيدة)  4) احتواء العنوان (إن كان وحيدًا). */
 function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
+function sameFigure(f,s){
+ return [s.person].concat(s.personAliases||[]).some(function(a){var x=norm(a);return x&&(x===f||(f.length>=4&&x.indexOf(f)!==-1)||(x.length>=4&&f.indexOf(x)!==-1))});
+}
 function storyFor(it){
- var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
- for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
+ if(!vStories.length)return null;
+ var n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null,t=norm(it.title),f=it._t==='o'?'':norm(it.figure_name),i,s;
+ if(n){for(i=0;i<vStories.length;i++){if(String(vStories[i].id)===n)return vStories[i]}}
+ if(t){for(i=0;i<vStories.length;i++){if(norm(vStories[i].title)===t)return vStories[i]}}
+ if(f){var byFig=vStories.filter(function(x){return sameFigure(f,x)});if(byFig.length===1)return byFig[0]}
+ if(t.length>=8){var byTitle=vStories.filter(function(x){var y=norm(x.title);return y.indexOf(t)!==-1||t.indexOf(y)!==-1});if(byTitle.length===1)return byTitle[0]}
  return null;
 }
 function pubRow(it){
@@ -429,10 +438,11 @@ function pubRow(it){
  var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var meta=[STATUS[it.status]||'',dt,SEC[it.section]||''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
+ else if(vLoaded&&!sv)w.appendChild(el('small','pn','غير مرتبطة بحكاية منشورة على الموقع بعد، لذلك لا يوجد زر إخفاء'));
  var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
  s.appendChild(w);
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
- if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان في قائمة الموقع (stories/index.json) لإخفائها':'جارٍ تحميل قائمة حكايات الموقع…'}
+ if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية مطابقة في stories/index.json (بنفس العنوان أو الشخصية)':'جارٍ تحميل قائمة حكايات الموقع…'}
  else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
  hb.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();
@@ -474,7 +484,7 @@ function setView(v){
 async function loadVis(){
  var rs=await Promise.all([fetch('../stories/index.json',{cache:'no-cache'}),rest('story_visibility?select=story_id')]);
  if(!rs[0].ok)throw new Error('تعذّر تحميل stories/index.json ('+rs[0].status+').');
- if(rs[1].status===404)throw new Error('جدول story_visibility غير موجود. شغّل ملف supabase/migrations/20261018120000_story_visibility.sql من SQL Editor أولًا.');
+ if(rs[1].status===404)throw new Error('جدول story_visibility غير موجود في Supabase. شغّل ملف supabase/migrations/20261018120000_story_visibility.sql من SQL Editor أولًا.');
  if(!rs[1].ok)throw new Error('تعذّر قراءة الحكايات المخفية ('+rs[1].status+').');
  var j=await rs[0].json();
  vStories=(Array.isArray(j)?j:[]).filter(function(s){return s&&s.id!=null&&s.title}).sort(function(a,b){return (a.order||0)-(b.order||0)});
@@ -487,7 +497,7 @@ function setHidden(s,on,btn){
   try{
    var r=on?await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})})
            :await rest('story_visibility?story_id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=representation'}});
-   if(r.status===403)throw new Error('مرفوض: حسابك ليس ضمن قائمة الأدمن المعتمة.'.replace('المعتمة','المعتمدة'));
+   if(r.status===403)throw new Error('مرفوض: حسابك ليس ضمن قائمة الأدمن المعتمدة.');
    if(!r.ok)throw new Error('تعذّر التحديث ('+r.status+').');
    if(!on){var rows=await r.json();if(!rows.length)throw new Error('لم يتغيّر شيء. تأكد أن حسابك ضمن قائمة الأدمن المعتمدة.')}
    if(on)vHidden[id]=true;else delete vHidden[id];
