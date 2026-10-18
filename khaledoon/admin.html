@@ -457,7 +457,22 @@ function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النس
 var openIds={};
 /* ربط حكاية الإدارة بحكاية الموقع في stories/index.json: برقم الحكاية (حكايات أكتوبر القديمة) أو بالعنوان المطابق. */
 function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
+function linkKey(it){return 'kh_link:'+(it._t||'k')+':'+it.id}
+function getLink(it){try{return localStorage.getItem(linkKey(it))||''}catch(e){return ''}}
+function setLink(it,id){try{localStorage.setItem(linkKey(it),id)}catch(e){}}
+/* ربط يدوي: يختار الأدمن حكاية الموقع المقابلة عندما لا يتطابق العنوان أو الاسم، ويُحفظ الاختيار في هذا المتصفح فقط. */
+function pickSite(it){
+ var lines=vStories.map(function(x){return x.id+' — '+x.title}).join('\n');
+ var v=prompt('اكتب رقم حكاية الموقع المقابلة لـ «'+(it.title||'هذه الحكاية')+'»:\n\n'+lines,'');
+ if(v===null)return null;
+ v=v.trim();
+ var m=vStories.filter(function(x){return String(x.id)===v});
+ if(!m.length){say('err','رقم غير موجود في قائمة الموقع.');return null}
+ return m[0];
+}
 function storyFor(it){
+ var lk=getLink(it);
+ if(lk)for(var j=0;j<vStories.length;j++)if(String(vStories[j].id)===lk)return vStories[j];
  var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
  for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
  /* احتياطي: مطابقة اسم الشخصية مع person أو personAliases، ولا تُعتمد إلا إذا طابقت حكاية واحدة فقط. */
@@ -475,13 +490,19 @@ function pubRow(it){
  var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);
  s.appendChild(w);
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
- if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
+ if(!sv){
+  if(vLoaded&&vStories.length){hb.textContent='ربط وإخفاء';hb.title='لا توجد حكاية بهذا العنوان في قائمة الموقع؛ اضغط لاختيار الحكاية المقابلة وإخفائها'}
+  else{hb.disabled=true;hb.title=vErr||'جارٍ تحميل قائمة حكايات الموقع…'}
+ }
  else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
  hb.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();
-  if(!sv)return;
-  if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
-  setHidden(sv,!hid,hb);
+  var tgt=sv;
+  var fresh=!tgt;
+  if(fresh){tgt=pickSite(it);if(!tgt)return}
+  if(!hid&&!confirm('إخفاء «'+tgt.title+'» من الموقع لكل الزوار؟'))return;
+  if(fresh)setLink(it,String(tgt.id));
+  setHidden(tgt,!hid,hb);
  });
  s.appendChild(hb);
  var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل الحكاية نهائيًا (بعد تأكيد)';
