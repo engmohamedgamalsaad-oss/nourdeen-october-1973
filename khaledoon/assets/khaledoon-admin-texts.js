@@ -12,8 +12,8 @@ try {
   if (__khPromptDraft && typeof __khPromptDraft.main === 'string') {
     STORY_PAGE_PROMPT = __khPromptDraft.main;
     if (Array.isArray(__khPromptDraft.custom) && __khPromptDraft.custom.length) {
-      STORY_PAGE_PROMPT += '\\n\\n================ برومبتات إضافية محفوظة في هذه المسودة ================\\n' +
-        __khPromptDraft.custom.map(function(p){ return (p.name || 'برومبت إضافي') + '\\n' + (p.text || ''); }).join('\\n\\n');
+      STORY_PAGE_PROMPT += '\n\n================ برومبتات إضافية محفوظة في هذه المسودة ================\n' +
+        __khPromptDraft.custom.map(function(p){ return (p.name || 'برومبت إضافي') + '\n' + (p.text || ''); }).join('\n\n');
     }
   }
   if (__khPromptDraft && typeof __khPromptDraft.workflow === 'string') STORY_WORKFLOW = __khPromptDraft.workflow;
