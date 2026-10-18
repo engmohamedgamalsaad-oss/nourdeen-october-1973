@@ -187,3 +187,89 @@
 }
 
 }
+
+
+/* Coverage pass for page-specific story components found in the remaining stories.
+   Keep the modal backdrop, lightbox, and illustrated hero dark; repair only the
+   readable surfaces inside them. */
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.modal-card,.memorial-card,.moment,.story-extras .panel) {
+  background: #fffdf7 !important;
+  color: #26364b !important;
+  border-color: #d8c7a2 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.modal-copy h2,.modal-copy p,.modal-close,.memorial-card h3,.memorial-card p,.memorial-card figcaption,.moment h3,.moment p,.gallery-intro,.story-extras h3) {
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) .modal-close {
+  background: #f8f0dc !important;
+  border-color: #cbb98e !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-section,.story-quiz-app) {
+  background: transparent !important;
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-progress,.story-quiz-score,.story-quiz-question,.story-quiz-review summary,.story-quiz-review details,.story-quiz-muted) {
+  color: #3f4d61 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-feedback,.story-quiz-result,.story-quiz-review details) {
+  background: #f8f0dc !important;
+  color: #3f4d61 !important;
+  border-color: #d8c7a2 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) .story-quiz-option[aria-pressed=true] {
+  background: #72508c !important;
+  color: #ffffff !important;
+  border-color: #72508c !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-feedback.correct,.story-quiz-feedback.incorrect) {
+  color: #26364b !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.image-frame figcaption,.image-frame figcaption small) {
+  background: #fffdf7 !important;
+  color: #3f4d61 !important;
+}
+:root[data-theme=light] body:not(:has(:where(#bg,.hero-home))) :is(.year,.lesson-number,.story-quiz-kicker,.story-quiz-score) {
+  color: #72508c !important;
+}
+
+@media (prefers-color-scheme:light) {
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.modal-card,.memorial-card,.moment,.story-extras .panel) {
+    background: #fffdf7 !important;
+    color: #26364b !important;
+    border-color: #d8c7a2 !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.modal-copy h2,.modal-copy p,.modal-close,.memorial-card h3,.memorial-card p,.memorial-card figcaption,.moment h3,.moment p,.gallery-intro,.story-extras h3) {
+    color: #26364b !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) .modal-close {
+    background: #f8f0dc !important;
+    border-color: #cbb98e !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-section,.story-quiz-app) {
+    background: transparent !important;
+    color: #26364b !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-progress,.story-quiz-score,.story-quiz-question,.story-quiz-review summary,.story-quiz-review details,.story-quiz-muted) {
+    color: #3f4d61 !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-feedback,.story-quiz-result,.story-quiz-review details) {
+    background: #f8f0dc !important;
+    color: #3f4d61 !important;
+    border-color: #d8c7a2 !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) .story-quiz-option[aria-pressed=true] {
+    background: #72508c !important;
+    color: #ffffff !important;
+    border-color: #72508c !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.story-quiz-feedback.correct,.story-quiz-feedback.incorrect) {
+    color: #26364b !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.image-frame figcaption,.image-frame figcaption small) {
+    background: #fffdf7 !important;
+    color: #3f4d61 !important;
+  }
+  :root:not([data-theme=dark]) body:not(:has(:where(#bg,.hero-home))) :is(.year,.lesson-number,.story-quiz-kicker,.story-quiz-score) {
+    color: #72508c !important;
+  }
+}
