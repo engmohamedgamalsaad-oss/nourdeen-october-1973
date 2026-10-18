@@ -64,8 +64,19 @@ for (const story of pages) {
   if (!html.includes('id="story-quiz-start"') || !html.includes('id="story-quiz-app"') || !/assets\/shared\/story-quiz\.js/.test(html)) {
     fail(story.id, "missing quiz UI or shared story-quiz.js");
   }
-  if (!/<section[^>]*class=["'][^"']*sources[^"']*["'][^>]*>/i.test(html)) {
+  const sourceSection = (html.match(/<section[^>]*class=["'][^"']*sources[^"']*["'][^>]*>[\\s\\S]*?<\\/section>/i) || [])[0] || "";
+  if (!sourceSection) {
     fail(story.id, "missing a visible sources section in index.html");
+  }
+
+  const jsFiles = fs.readdirSync(dir).filter(name => /\\.js$/i.test(name));
+  const translationText = jsFiles.map(name => read(path.join(dir, name)) || "").join("\\n");
+  const visibleSourceUrls = new Set([
+    ...((sourceSection.match(/https?:\\/\\/[^\\s)"'<>]+/g)) || []),
+    ...((translationText.match(/https?:\\/\\/[^\\s)"'<>]+/g)) || [])
+  ]);
+  if (sourceSection && visibleSourceUrls.size < 2) {
+    fail(story.id, "the page source section must expose at least two reference URLs directly or through its story translation file");
   }
 
   if (!sources) fail(story.id, "missing sources.md beside the story");
