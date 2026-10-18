@@ -248,7 +248,7 @@ var D={
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
 window.KH_DE_TRANSLATIONS=D;
-var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',active=false;
+var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',T0=document.title,active=false;
 var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
 function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
@@ -278,8 +278,8 @@ function setDe(){
  put(KEY,null);put('kh-lang','de');
  root.lang='de';root.dir='ltr';
  ap(B);labels();
- document.title=D[AR_TITLE];
- Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
+ document.title=T0.split(' | ').map(function(p){return D[p]||p}).join(' | ');
+ if(langs)Array.prototype.forEach.call(langs.querySelectorAll('button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')==='4'))});
 }
 /* زر DE: يظهر على الصفحة الرئيسية فقط */
 if(langs&&!langs.querySelector('[data-l="4"]')){
