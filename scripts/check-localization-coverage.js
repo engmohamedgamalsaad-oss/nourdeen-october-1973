@@ -29,13 +29,17 @@ const read = p => {
 };
 
 const engine = read('assets/shared/i18n.js');
-const allowedMatch = engine.match(/var\s+allowed\s*=\s*\[([^\]]+)\]/);
-const allowed = allowedMatch
-  ? [...allowedMatch[1].matchAll(/['"]([a-z]{2})['"]/g)].map(m => m[1])
+const languageConfig = read('assets/shared/home-language-only.js');
+const supportedMatch = languageConfig.match(/var\s+SUPPORTED\s*=\s*\[([^\]]+)\]/);
+const supported = supportedMatch
+  ? [...supportedMatch[1].matchAll(/['"]([a-z]{2})['"]/g)].map(m => m[1])
   : [];
-if (required.some(lang => !allowed.includes(lang)) ||
-    allowed.some(lang => !required.includes(lang))) {
-  problems.push('Language engine must explicitly allow exactly: ' + required.join(', '));
+if (required.some(lang => !supported.includes(lang)) ||
+    supported.some(lang => !required.includes(lang))) {
+  problems.push('Shared language selector must support exactly: ' + required.join(', '));
+}
+if (!engine.includes('window.KH_LANG.supported')) {
+  problems.push('Translation engine must use the shared language registry.');
 }
 
 for (const file of storyFiles) {
@@ -82,12 +86,34 @@ if (!(urabi.includes('"de":') || urabi.includes("'de':"))) {
   console.log('stories/history/006/translations.js: German map declaration found (entry parity still needs review).');
 }
 
-// Ahmed Zewail's story uses its own T/EXTRA locale objects, not I18N.register.
+// Ahmed Zewail's story uses separate T and EXTRA dictionaries, not I18N.register.
 const zewail = read('stories/science/007/index.html');
-if (!/(?:["']de["']\s*:\s*\{)/.test(zewail)) {
-  problems.push('stories/science/007/index.html: missing German story dictionary.');
-} else {
-  console.log('stories/science/007/index.html: German dictionary declaration found (content parity still needs review).');
+const zewailT = zewail.slice(zewail.indexOf('const T='), zewail.indexOf('const EXTRA='));
+const zewailExtra = zewail.slice(zewail.indexOf('const EXTRA='));
+if (!/["']de["']\s*:\s*\{/.test(zewailT)) {
+  problems.push('stories/science/007/index.html: missing German story text dictionary.');
+}
+if (!/["']de["']\s*:\s*\{/.test(zewailExtra)) {
+  problems.push('stories/science/007/index.html: missing German sources/accessibility dictionary.');
+}
+function localeKeyCounts(block) {
+  const matches = [...block.matchAll(/(?:^|[,{])\s*["']?(ar|en|fr|it|de)["']?\s*:\s*\{/g)];
+  const result = {};
+  for (let i = 0; i < matches.length; i++) {
+    const start = matches[i].index + matches[i][0].length;
+    const end = i + 1 < matches.length ? matches[i + 1].index : block.length;
+    result[matches[i][1]] = [...block.slice(start, end).matchAll(/(?:^|,)\s*["']?[A-Za-z_$][\w$]*["']?\s*:/g)].length;
+  }
+  return result;
+}
+for (const [name, block] of [['T', zewailT], ['EXTRA', zewailExtra]]) {
+  const counts = localeKeyCounts(block);
+  const expectedCount = counts.ar;
+  for (const lang of required) {
+    if (counts[lang] === undefined) problems.push('stories/science/007/index.html: ' + name + ' dictionary missing ' + lang + '.');
+    else if (counts[lang] !== expectedCount) problems.push('stories/science/007/index.html: ' + name + ' dictionary key count differs for ' + lang + ' (' + counts[lang] + ' vs ' + expectedCount + ').');
+  }
+  console.log('stories/science/007/index.html: ' + name + ' locale key counts ' + JSON.stringify(counts));
 }
 
 if (problems.length) {
