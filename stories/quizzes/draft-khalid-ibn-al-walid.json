@@ -1,0 +1,291 @@
+{
+  "id": "011",
+  "title": "خالد بن الوليد",
+  "questions": [
+    {
+      "q": "في أي معركة قاد خالد فرسان قريش قبل إسلامه؟",
+      "o": [
+        "أُحد",
+        "اليرموك",
+        "حطين",
+        "عين جالوت"
+      ],
+      "a": 0,
+      "e": "قاد فرسان قريش في أُحد سنة 625م.",
+      "i18n": {
+        "en": {
+          "q": "Which battle did Khalid command Quraysh’s cavalry in before his conversion?",
+          "o": [
+            "Uhud",
+            "Yarmouk",
+            "Hattin",
+            "Ayn Jalut"
+          ],
+          "a": 0,
+          "e": "He commanded Quraysh’s cavalry at Uhud in 625 CE."
+        },
+        "fr": {
+          "q": "Lors de quelle bataille Khalid commandait-il la cavalerie quraychite avant sa conversion ?",
+          "o": [
+            "Uhud",
+            "Yarmouk",
+            "Hattin",
+            "Ayn Jalut"
+          ],
+          "a": 0,
+          "e": "Il commandait la cavalerie des Quraychites à Uhud en 625."
+        },
+        "it": {
+          "q": "In quale battaglia Khalid comandò la cavalleria dei Quraysh prima della conversione?",
+          "o": [
+            "Uhud",
+            "Yarmuk",
+            "Hattin",
+            "Ayn Jalut"
+          ],
+          "a": 0,
+          "e": "Nel 625 comandò la cavalleria dei Quraysh a Uhud."
+        },
+        "de": {
+          "q": "In welcher Schlacht führte Chalid vor seiner Konversion die Reiterei der Quraisch?",
+          "o": [
+            "Uhud",
+            "Jarmuk",
+            "Hattin",
+            "Ayn Dschalut"
+          ],
+          "a": 0,
+          "e": "Im Jahr 625 führte er bei Uhud die Reiterei der Quraisch."
+        }
+      }
+    },
+    {
+      "q": "ما الثغرة التي استغلها خالد في أُحد؟",
+      "o": [
+        "مغادرة بعض الرماة مواقعهم",
+        "تعطل السفن",
+        "انقطاع الطريق إلى الشام",
+        "غياب الخيول"
+      ],
+      "a": 0,
+      "e": "استغل ابتعاد بعض الرماة عن الموقع الذي كُلّفوا بحمايته.",
+      "i18n": {
+        "en": {
+          "q": "What opening did Khalid exploit at Uhud?",
+          "o": [
+            "Some archers leaving their assigned position",
+            "Ships breaking down",
+            "The road to Syria closing",
+            "The horses disappearing"
+          ],
+          "a": 0,
+          "e": "He took advantage when some archers left the position they had been ordered to protect."
+        },
+        "fr": {
+          "q": "Quelle faille Khalid a-t-il exploitée à Uhud ?",
+          "o": [
+            "Le départ de certains archers de leur position",
+            "Des navires en panne",
+            "La fermeture de la route de Syrie",
+            "La disparition des chevaux"
+          ],
+          "a": 0,
+          "e": "Il a profité du départ de certains archers de la position qu’ils devaient protéger."
+        },
+        "it": {
+          "q": "Quale apertura sfruttò Khalid a Uhud?",
+          "o": [
+            "L’allontanamento di alcuni arcieri dalla posizione assegnata",
+            "Navi guaste",
+            "La chiusura della strada per la Siria",
+            "La scomparsa dei cavalli"
+          ],
+          "a": 0,
+          "e": "Approfittò del fatto che alcuni arcieri lasciarono la posizione che dovevano proteggere."
+        },
+        "de": {
+          "q": "Welche Lücke nutzte Chalid bei Uhud aus?",
+          "o": [
+            "Dass einige Bogenschützen ihre zugewiesene Stellung verließen",
+            "Dass Schiffe ausfielen",
+            "Dass die Straße nach Syrien gesperrt war",
+            "Dass die Pferde verschwanden"
+          ],
+          "a": 0,
+          "e": "Er nutzte aus, dass einige Bogenschützen die zu schützende Stellung verließen."
+        }
+      }
+    },
+    {
+      "q": "متى يُؤرَّخ إسلام خالد عادةً؟",
+      "o": [
+        "نحو 629م مع اختلاف الروايات",
+        "عام 1000م",
+        "عام 1492م",
+        "عام 1914م"
+      ],
+      "a": 0,
+      "e": "تضعه مراجع كثيرة نحو 629م، لكن التفاصيل ليست متطابقة في جميع الروايات.",
+      "i18n": {
+        "en": {
+          "q": "When is Khalid’s conversion to Islam usually dated?",
+          "o": [
+            "Around 629 CE, though accounts differ",
+            "1000 CE",
+            "1492 CE",
+            "1914 CE"
+          ],
+          "a": 0,
+          "e": "Many references place it around 629 CE, but accounts do not agree on every detail."
+        },
+        "fr": {
+          "q": "À quelle date situe-t-on généralement la conversion de Khalid à l’islam ?",
+          "o": [
+            "Vers 629, même si les récits diffèrent",
+            "En 1000",
+            "En 1492",
+            "En 1914"
+          ],
+          "a": 0,
+          "e": "De nombreuses références la situent vers 629, mais certains détails varient."
+        },
+        "it": {
+          "q": "A quando viene generalmente datata la conversione di Khalid all’Islam?",
+          "o": [
+            "Intorno al 629, anche se le fonti differiscono",
+            "Al 1000",
+            "Al 1492",
+            "Al 1914"
+          ],
+          "a": 0,
+          "e": "Molte fonti la collocano intorno al 629, ma alcuni dettagli variano."
+        },
+        "de": {
+          "q": "Auf wann wird Chalids Annahme des Islam gewöhnlich datiert?",
+          "o": [
+            "Ungefähr auf 629, obwohl Berichte voneinander abweichen",
+            "Auf 1000",
+            "Auf 1492",
+            "Auf 1914"
+          ],
+          "a": 0,
+          "e": "Viele Nachschlagewerke nennen ungefähr 629, doch einige Einzelheiten unterscheiden sich."
+        }
+      }
+    },
+    {
+      "q": "ما الذي فعله خالد في مؤتة بحسب الروايات الإسلامية؟",
+      "o": [
+        "تولى القيادة بعد مقتل القادة السابقين وساعد في الانسحاب",
+        "أسس مدينة بغداد",
+        "قاد معركة حطين",
+        "كتب كتابًا في الطب"
+      ],
+      "a": 0,
+      "e": "تذكر الروايات أنه تولى القيادة بعد سقوط القادة الذين سبقوه.",
+      "i18n": {
+        "en": {
+          "q": "What is Khalid said to have done at Mu’tah?",
+          "o": [
+            "Taken command after earlier commanders were killed and helped organize the withdrawal",
+            "Founded Baghdad",
+            "Led the Battle of Hattin",
+            "Written a medical book"
+          ],
+          "a": 0,
+          "e": "Accounts say he took command after the earlier commanders fell."
+        },
+        "fr": {
+          "q": "Que rapporte la tradition au sujet de Khalid à Mu’ta ?",
+          "o": [
+            "Il prit le commandement après la mort des chefs précédents et contribua au retrait",
+            "Il fonda Bagdad",
+            "Il dirigea la bataille de Hattin",
+            "Il écrivit un livre de médecine"
+          ],
+          "a": 0,
+          "e": "Les récits disent qu’il prit le commandement après la mort des chefs précédents."
+        },
+        "it": {
+          "q": "Che cosa si racconta che Khalid fece a Mu’ta?",
+          "o": [
+            "Assunse il comando dopo la morte dei comandanti precedenti e contribuì a organizzare la ritirata",
+            "Fondò Baghdad",
+            "Guidò la battaglia di Hattin",
+            "Scrisse un libro di medicina"
+          ],
+          "a": 0,
+          "e": "I racconti riferiscono che assunse il comando dopo la caduta dei comandanti precedenti."
+        },
+        "de": {
+          "q": "Was soll Chalid bei Muʾta getan haben?",
+          "o": [
+            "Er übernahm nach dem Tod der vorherigen Befehlshaber das Kommando und half, den Rückzug zu organisieren",
+            "Er gründete Bagdad",
+            "Er führte die Schlacht von Hattin",
+            "Er schrieb ein medizinisches Buch"
+          ],
+          "a": 0,
+          "e": "Berichte besagen, dass er nach dem Tod der vorherigen Befehlshaber das Kommando übernahm."
+        }
+      }
+    },
+    {
+      "q": "ما الفكرة الأساسية في دراسة سيرته تاريخيًا؟",
+      "o": [
+        "التمييز بين الوقائع والتفاصيل المختلف عليها",
+        "قبول كل رقم متداول بلا مراجعة",
+        "حفظ الألقاب فقط",
+        "تجاهل المصادر"
+      ],
+      "a": 0,
+      "e": "المقارنة بين المصادر تساعد على معرفة ما هو ثابت وما يحتاج إلى حذر.",
+      "i18n": {
+        "en": {
+          "q": "What is an important principle when studying his life historically?",
+          "o": [
+            "Distinguish established events from disputed details",
+            "Accept every repeated number without checking",
+            "Memorize titles only",
+            "Ignore sources"
+          ],
+          "a": 0,
+          "e": "Comparing sources helps separate well-supported events from uncertain details."
+        },
+        "fr": {
+          "q": "Quel principe est important pour étudier sa vie historiquement ?",
+          "o": [
+            "Distinguer les faits établis des détails discutés",
+            "Accepter tous les chiffres répétés sans vérification",
+            "Mémoriser seulement les titres",
+            "Ignorer les sources"
+          ],
+          "a": 0,
+          "e": "Comparer les sources aide à distinguer les faits bien étayés des détails incertains."
+        },
+        "it": {
+          "q": "Qual è un principio importante nello studio storico della sua vita?",
+          "o": [
+            "Distinguere i fatti attestati dai dettagli controversi",
+            "Accettare ogni numero ripetuto senza controllarlo",
+            "Memorizzare solo i titoli",
+            "Ignorare le fonti"
+          ],
+          "a": 0,
+          "e": "Confrontare le fonti aiuta a distinguere gli eventi ben documentati dai dettagli incerti."
+        },
+        "de": {
+          "q": "Was ist ein wichtiger Grundsatz bei der historischen Untersuchung seines Lebens?",
+          "o": [
+            "Gesicherte Ereignisse von umstrittenen Einzelheiten unterscheiden",
+            "Jede oft wiederholte Zahl ungeprüft übernehmen",
+            "Nur Titel auswendig lernen",
+            "Quellen ignorieren"
+          ],
+          "a": 0,
+          "e": "Der Vergleich von Quellen hilft, gut belegte Ereignisse von unsicheren Einzelheiten zu unterscheiden."
+        }
+      }
+    }
+  ]
+}
