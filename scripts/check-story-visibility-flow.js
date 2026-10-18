@@ -28,7 +28,10 @@ const checks = [
     name: 'favorites filter hidden story IDs',
     file: 'khaledoon/assets/khaledoon-favorites.js',
     test: (s) => s.includes('/rest/v1/story_visibility?select=story_id') &&
-      s.includes('cache: \'no-store\'') && s.includes('hiddenIds')
+      s.includes('cache: \'no-store\'') &&
+      s.includes('function processCards()') &&
+      s.includes("setAttribute('data-khf-hidden', '1')") &&
+      s.includes("isFav(String(s.id)) && !isHidden(String(s.id))")
   },
   {
     name: 'interactive map filters hidden story IDs',
