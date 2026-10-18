@@ -91,6 +91,40 @@ var originalSourceHead=document.querySelector('.sources h2')?.textContent;
 var originalSourceKicker=document.querySelector('.sources .kicker')?.textContent;
 var originalSourceNote=document.querySelector('.sources .note')?.textContent;
 var originalSourceLis=Array.from(document.querySelectorAll('.sources ol li')).map(x=>x.innerHTML);
+var originalSourceHrefs=Array.from(document.querySelectorAll('.sources ol li a')).map(a=>a.href);
+var sourceI18n={
+en:[
+['Egyptian State Information Service — Sameera Moussa','Birth, education and academic degrees.'],
+['American Institute of Physics, Physics Today — Sameera Moussa','Her scientific career and interest in peaceful uses of radiation; gives 5 August 1952 as the date of death.'],
+['Al Jazeera — Sameera Moussa, the “Eastern Miss Curie”','A journalistic overview of her scientific career and ideas.'],
+['Al Jazeera — The story of Sameera Moussa’s alleged assassination: facts and myths','A review of popular accounts that remain unverified.']
+],
+fr:[
+['Service d’information de l’État égyptien — Sameera Moussa','Naissance, études et diplômes universitaires.'],
+['American Institute of Physics, Physics Today — Sameera Moussa','Parcours scientifique et intérêt pour les usages pacifiques des rayonnements ; indique le 5 août 1952 comme date du décès.'],
+['Al Jazeera — Sameera Moussa, la « Miss Curie de l’Orient »','Présentation journalistique de son parcours scientifique et de ses idées.'],
+['Al Jazeera — L’hypothèse de l’assassinat de Sameera Moussa : faits et mythes','Examen des récits populaires qui ne sont pas confirmés.']
+],
+it:[
+['Servizio statale d’informazione egiziano — Sameera Moussa','Nascita, istruzione e titoli accademici.'],
+['American Institute of Physics, Physics Today — Sameera Moussa','Carriera scientifica e interesse per gli usi pacifici delle radiazioni; indica il 5 agosto 1952 come data della morte.'],
+['Al Jazeera — Sameera Moussa, la « Miss Curie d’Oriente »','Panoramica giornalistica della sua carriera scientifica e delle sue idee.'],
+['Al Jazeera — La presunta uccisione di Sameera Moussa: fatti e miti','Esame dei racconti diffusi ma non verificati.']
+],
+de:[
+['Ägyptischer Staatlicher Informationsdienst — Sameera Moussa','Geburt, Ausbildung und akademische Abschlüsse.'],
+['American Institute of Physics, Physics Today — Sameera Moussa','Wissenschaftlicher Werdegang und Interesse an friedlichen Anwendungen der Strahlung; nennt den 5. August 1952 als Todestag.'],
+['Al Jazeera — Sameera Moussa, die „Miss Curie des Orients“','Journalistischer Überblick über ihren wissenschaftlichen Weg und ihre Ideen.'],
+['Al Jazeera — Die Erzählung von Sameera Moussas angeblicher Ermordung: Fakten und Mythen','Einordnung verbreiteter, aber nicht belegter Darstellungen.']
+]
+};
+var sourceNotes={
+ar:originalSourceNote,
+en:'Editorial note: The sources do not agree on every detail. The story avoids presenting the alleged assassination, a formula for making a bomb from copper, or claims about secret facilities as established facts. The cover and illustrations are original artwork, not historical photographs.',
+fr:'Note éditoriale : les sources ne concordent pas sur tous les détails. Le récit ne présente pas l’hypothèse d’un assassinat, une formule de fabrication d’une bombe à partir de cuivre ni les récits sur des installations secrètes comme des faits établis. La couverture et les illustrations sont originales, et non des photographies historiques.',
+it:'Nota editoriale: le fonti non concordano su tutti i dettagli. Il racconto non presenta come fatti accertati l’ipotesi di un assassinio, una formula per fabbricare una bomba usando rame o le storie su strutture segrete. La copertina e le illustrazioni sono originali, non fotografie storiche.',
+de:'Redaktioneller Hinweis: Die Quellen stimmen nicht in allen Einzelheiten überein. Die Geschichte stellt weder die behauptete Ermordung noch eine Formel für eine Bombe aus Kupfer oder Berichte über geheime Anlagen als erwiesene Tatsachen dar. Titelbild und Illustrationen sind eigens erstellte Zeichnungen, keine historischen Fotografien.'
+};
 var originalQuiz=[document.querySelector('.story-quiz-kicker')?.textContent,document.querySelector('#story-quiz-heading')?.textContent,document.querySelector('.story-quiz-intro')?.textContent,document.querySelector('#story-quiz-start')?.textContent];
 var originalReact=[document.querySelector('.reactions-section .kicker')?.textContent,document.querySelector('#reactions-title')?.textContent,document.querySelector('.reactions-intro')?.textContent];
 var originalReactionOptions=Array.from(document.querySelectorAll('.reaction-choice span:first-child')).map(x=>x.textContent);
@@ -111,6 +145,10 @@ setText(document.querySelector('.hero .eyebrow'),d.eyebrow);setText(document.que
 document.querySelectorAll('.story .kicker').forEach((x,i)=>setText(x,d.chapters[i]));document.querySelectorAll('.story h2').forEach((x,i)=>setText(x,d.heads[i]));
 var paras=collect();paras.forEach((p,i)=>setText(p,code==='ar'?originalParas[i]:(storyTexts[code]||[])[i]||originalParas[i]));
 setText(document.querySelector('.sources .kicker'),d.kickers[0]);setText(document.querySelector('.sources h2'),d.kickers[1]);
+var sourceLis=Array.from(document.querySelectorAll('.sources ol li'));
+if(code==='ar'){sourceLis.forEach((li,i)=>{if(originalSourceLis[i]!==undefined)li.innerHTML=originalSourceLis[i]});}
+else if(sourceI18n[code]){sourceLis.forEach((li,i)=>{var item=sourceI18n[code][i];if(!item)return;var a=document.createElement('a');a.href=originalSourceHrefs[i];a.target='_blank';a.rel='noopener';a.textContent=item[0];li.replaceChildren(a,document.createTextNode(': '+item[1]));});}
+setText(document.querySelector('.sources .note'),sourceNotes[code]||originalSourceNote);
 setText(document.querySelector('.story-quiz-kicker'),d.kickers[2]);setText(document.querySelector('#story-quiz-heading'),d.kickers[3]);setText(document.querySelector('#story-quiz-start'),d.kickers[4]);
 setText(document.querySelector('.reactions-section .kicker'),d.kickers[5]);setText(document.querySelector('#reactions-title'),d.kickers[6]);setText(document.querySelector('.reactions-intro'),d.kickers[7]);
 var optionTexts=code==='ar'?originalReactionOptions:(code==='en'?['A story and effort worth celebrating','A story I had not heard before','An inspiring story','I’d like to read more stories']:code==='fr'?['Un récit et un travail remarquables','Un récit que je ne connaissais pas','Un récit inspirant','J’aimerais lire d’autres récits']:code==='it'?['Una storia e un lavoro notevoli','Una storia che non conoscevo','Una storia ispiratrice','Vorrei leggere altre storie']:['Eine Geschichte und Leistung, die Anerkennung verdienen','Eine Geschichte, die ich noch nicht kannte','Eine inspirierende Geschichte','Ich möchte weitere Geschichten lesen']);
