@@ -1,5 +1,6 @@
 /* خالدون عبر التاريخ — بحث الصفحة الرئيسية.
-   زر "بحث" تحت زر الفاتح/الداكن، يفتح لوحة تبحث في: اسم الحكاية، الشخصية التي تدور عنها الحكاية، واسم القسم.
+   زر "بحث" بجوار زر الفاتح/الداكن داخل شريط الهيدر العلوي (لا صف مستقل تحته)، فيقصر الهيدر وتصعد الصورة الرئيسية معه.
+   يفتح لوحة تبحث في: اسم الحكاية، الشخصية التي تدور عنها الحكاية، واسم القسم.
    البيانات تُقرأ من stories/index.json (يُولَّد من data.json لكل حكاية)، فأي حكاية جديدة تظهر في البحث دون تعديل هذا الملف.
    اسم الشخصية يُقرأ من حقل person في data.json (وi18n.<lang>.person لكل لغة)، واختياريًا personAliases لأسماء وتهجئات بديلة.
    الترجمة ذاتية (ar/en/fr/it/de) حتى لا تعتمد على قواميس الصفحة. لا يستخدم innerHTML مع أي بيانات. */
@@ -17,7 +18,7 @@
     { id: 'knowledge', href: 'khaledoon/collections/knowledge.html', t: { ar: 'التعليم والمعرفة', en: 'Education and Knowledge', fr: 'Éducation et savoir', it: 'Istruzione e conoscenza', de: 'Bildung und Wissen' } },
     { id: 'people', href: 'khaledoon/collections/people.html', t: { ar: 'المشاهير والرياضة والفنون', en: 'Celebrities, Sports and Arts', fr: 'Célébrités, sport et arts', it: 'Celebrità, sport e arti', de: 'Prominente, Sport und Kunst' } },
     { id: 'history', href: 'khaledoon/collections/history.html', t: { ar: 'التاريخ والحضارات', en: 'History and Civilizations', fr: 'Histoire et civilisations', it: 'Storia e civiltà', de: 'Geschichte und Zivilisationen' } },
-    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmi egiziani', de: 'Figuren der ägyptischen Lehrpläne' } }
+    { id: 'curriculum', href: 'khaledoon/collections/curriculum.html', t: { ar: 'شخصيات المناهج المصرية', en: 'Egyptian Curriculum Figures', fr: 'Figures des programmes égyptiens', it: 'Personaggi dei programmes égyptiens'.replace('programmes égyptiens', 'programmi egiziani'), de: 'Figuren der ägyptischen Lehrpläne' } }
   ];
   var SEC = {};
   SECTIONS.forEach(function (s) { SEC[s.id] = s; });
@@ -162,7 +163,16 @@
   panel.appendChild(head);
   panel.appendChild(status);
   panel.appendChild(list);
-  ROW.appendChild(btn);
+
+  /* الزر يدخل صف أزرار الهيدر بجوار زر الفاتح/الداكن؛ واللوحة تبقى في الصف الصفري الارتفاع أسفل الهيدر. */
+  var ctl = document.querySelector('.topbar .ctl');
+  var thm = document.getElementById('th');
+  if (ctl) {
+    if (thm && thm.parentNode === ctl) thm.insertAdjacentElement('afterend', btn);
+    else ctl.appendChild(btn);
+  } else {
+    ROW.appendChild(btn);
+  }
   ROW.appendChild(panel);
 
   function icon() {
@@ -186,7 +196,7 @@
 
   /* نبني عقد النص من جديد في كل مرة (لا نعدّل data لعقدة قديمة) حتى لا يتعارض مع مترجم الصفحة. */
   function labelAll() {
-    btn.replaceChildren(icon(), document.createTextNode(T('btn')));
+    btn.replaceChildren(icon(), el('span', 'khs-lbl', T('btn')));
     btn.setAttribute('aria-label', T('btn'));
     input.placeholder = T('ph');
     input.setAttribute('aria-label', T('ph'));
@@ -289,8 +299,9 @@
     }
   });
 
+  /* الزر الآن خارج ROW، فنستثنيه حتى لا تُغلق اللوحة ثم تُفتح من جديد عند الضغط عليه. */
   document.addEventListener('pointerdown', function (e) {
-    if (!panel.hidden && !ROW.contains(e.target)) close(false);
+    if (!panel.hidden && !ROW.contains(e.target) && !btn.contains(e.target)) close(false);
   });
 
   /* تغيّر اللغة من الصفحة الرئيسية يغيّر document.documentElement.lang */
