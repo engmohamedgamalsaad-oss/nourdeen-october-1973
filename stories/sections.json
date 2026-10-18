@@ -73,6 +73,42 @@
           "title": "Frauen, die Geschichte schrieben"
         }
       }
+    },
+    {
+      "id": "people",
+      "title": "أعلام الأدب والفنون والرياضة",
+      "i18n": {
+        "en": {
+          "title": "Literature, Arts and Sports"
+        },
+        "fr": {
+          "title": "Littérature, arts et sport"
+        },
+        "it": {
+          "title": "Letteratura, arti e sport"
+        },
+        "de": {
+          "title": "Literatur, Kunst und Sport"
+        }
+      }
+    },
+    {
+      "id": "curriculum",
+      "title": "شخصيات المناهج المصرية",
+      "i18n": {
+        "en": {
+          "title": "Egyptian Curriculum Figures"
+        },
+        "fr": {
+          "title": "Personnalités des programmes égyptiens"
+        },
+        "it": {
+          "title": "Personaggi dei programmi scolastici egiziani"
+        },
+        "de": {
+          "title": "Persönlichkeiten im ägyptischen Lehrplan"
+        }
+      }
     }
   ]
 }
