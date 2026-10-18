@@ -15,7 +15,9 @@ const storyFiles = [
   'stories/october/001/i18n.js',
   'stories/october/002/i18n.js',
   'stories/october/003/i18n.js',
-  'stories/october/004/i18n.js'
+  'stories/october/004/i18n.js',
+  'stories/history/005/translations.js',
+  'stories/history/006/translations.js'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
@@ -48,22 +50,37 @@ for (const file of storyFiles) {
 
 for (const file of translationMaps) {
   const source = read(file);
-  // These source maps store Arabic as the key and translations in flat locale objects.
-  const objects = (source.match(/\{[^{}]*\}/gs) || []).filter(object => /['\"]?en['\"]?\s*:/.test(object));
+  /*
+   * Both shared maps put one locale object on each line. Match those entry
+   * objects directly instead of matching every brace pair in the whole file:
+   * the old nested-brace regex counted inner fragments as separate entries
+   * and reported false missing translations.
+   */
+  const entries = [...source.matchAll(/^\\s*(?:"(?:\\\\.|[^"\\\\])*"|[^\\s:]+)\\s*:\\s*\\{([^{}\\n]*)\\}/gm)]
+    .map(match => match[1])
+    .filter(value => /(?:^|[,\\s])(?:["']?en["']?)\\s*:/.test(value));
   let missing = 0;
-  for (const object of objects) {
-    for (const lang of ['en', 'fr', 'it', 'de']) {
-      if (!new RegExp("['\"]?" + lang + "['\"]?\\s*:").test(object)) {
-        missing++;
-        if (missing <= 8) {
-          problems.push(file + ': a translation entry is missing locale "' + lang + '".');
-        }
-        break;
+  for (const entry of entries) {
+    const absent = ['en', 'fr', 'it', 'de'].filter(lang =>
+      !new RegExp('(?:^|[,\\\\s])["\\\\']?' + lang + '["\\\\']?\\\\s*:').test(entry)
+    );
+    if (absent.length) {
+      missing++;
+      if (missing <= 8) {
+        problems.push(file + ': a translation entry is missing locale(s) ' + absent.join(', ') + '.');
       }
     }
   }
   if (missing > 8) problems.push(file + ': ' + (missing - 8) + ' additional incomplete entries (details truncated).');
-  console.log(file + ': inspected ' + objects.length + ' flat translation entries.');
+  console.log(file + ': inspected ' + entries.length + ' translation entries; ' + missing + ' incomplete.');
+}
+
+// Ahmed Zewail's story uses its own T/EXTRA locale objects, not I18N.register.
+const zewail = read('stories/science/007/index.html');
+if (!/(?:["']de["']\\s*:\\s*\\{)/.test(zewail)) {
+  problems.push('stories/science/007/index.html: missing German story dictionary.');
+} else {
+  console.log('stories/science/007/index.html: German dictionary declaration found (content parity still needs review).');
 }
 
 if (problems.length) {
