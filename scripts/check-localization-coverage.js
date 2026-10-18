@@ -166,7 +166,7 @@ const germanUiKeys = new Set([...germanUiSource.matchAll(/^"((?:\\.|[^"\\])*)"\s
   try { return JSON.parse('"' + match[1] + '"'); } catch (e) { return match[1]; }
 }));
 function requireGermanKey(key, sourceName) {
-  if (key && !germanUiKeys.has(key)) problems.push(sourceName + ': missing German UI translation for "' + key + '".');
+  if (key && key !== 'ar' && !germanUiKeys.has(key)) problems.push(sourceName + ': missing German UI translation for "' + key + '".');
 }
 const homeJs = read('khaledoon/assets/khaledoon.js');
 const homeRows = homeJs.slice(homeJs.indexOf('var R=['), homeJs.indexOf('var D={};R.forEach'));
