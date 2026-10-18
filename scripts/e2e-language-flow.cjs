@@ -360,6 +360,44 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
       const s = await inspect(page);
       judgeInner(`${label} ${rel}`, s, lang, hard, warn);
       rows.push({ rel, lang: s.lang, dir: s.dir, overflow: s.overflow, arabicShare: s.arabic + s.latin ? +(s.arabic / (s.arabic + s.latin)).toFixed(2) : 0 });
+      /* Targeted smoke test for the unnumbered Khalid draft: translated start overlay,
+         quiz loading, localized first question, and answer feedback. */
+      if (rel === 'stories/islamic/draft-khalid-ibn-al-walid/index.html') {
+        const expectedTitle = {
+          ar: 'خالد بن الوليد — من أُحد إلى سيف الله',
+          en: 'Khalid ibn al-Walid — From Uhud to the Sword of God',
+          fr: 'Khalid ibn al-Walid — d’Uhud à l’Épée d’Allah',
+          it: 'Khalid ibn al-Walid — da Uhud alla Spada di Allah',
+          de: 'Chalid ibn al-Walid – Von Uhud zum Schwert Gottes'
+        }[lang];
+        const expectedQuestion = {
+          ar: 'في أي معركة قاد خالد فرسان قريش قبل إسلامه؟',
+          en: 'Which battle did Khalid command Quraysh’s cavalry in before his conversion?',
+          fr: 'Lors de quelle bataille Khalid commandait-il la cavalerie quraychite avant sa conversion ?',
+          it: 'In quale battaglia Khalid comandò la cavalleria dei Quraysh prima della conversione?',
+          de: 'In welcher Schlacht führte Chalid vor seiner Konversion die Reiterei der Quraisch?'
+        }[lang];
+        try {
+          const splashTitle = await page.locator('.story-splash h1').innerText({ timeout: 5000 });
+          if (splashTitle !== expectedTitle) hard.push(`${label} ${rel}: start overlay title mismatch for ${lang}: ${splashTitle}`);
+          await page.locator('.story-splash-start').click({ timeout: 5000 });
+          await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 });
+          await page.locator('#story-quiz-start').click({ timeout: 5000 });
+          await page.waitForSelector('#story-quiz-app button[data-option="0"]', { timeout: 8000 });
+          const quizText = await page.locator('#story-quiz-app').innerText();
+          if (!quizText.includes(expectedQuestion)) hard.push(`${label} ${rel}: first quiz question is not translated into ${lang}`);
+          await page.locator('#story-quiz-app button[data-option="0"]').click();
+          await page.locator('#story-quiz-submit').click();
+          await page.waitForFunction(() => {
+            const feedback = document.querySelector('#story-quiz-feedback');
+            return !!feedback && !!feedback.innerText.trim();
+          }, null, { timeout: 5000 });
+          const feedback = await page.locator('#story-quiz-feedback').innerText();
+          if (!feedback) hard.push(`${label} ${rel}: quiz answer feedback is empty in ${lang}`);
+        } catch (e) {
+          hard.push(`${label} ${rel}: start overlay / quiz interaction failed in ${lang}: ${String(e.message || e).split('\\n')[0].slice(0, 300)}`);
+        }
+      }
     } catch (e) { hard.push(`${label} ${rel}: could not load - ${String(e.message).split('\n')[0]}`); }
     classify(res.slice(before), hard, warn, `${label} ${rel}`, base);
   }
