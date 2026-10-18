@@ -16,8 +16,8 @@
 <link rel="stylesheet" href="assets/khaledoon.css">
 <link rel="stylesheet" href="assets/khaledoon-forms.css">
 <style>
-.sec-october{--c:#f0c878}.sec-science{--c:#8ad9e8}.sec-learning{--c:#d78bb2}.sec-fame{--c:#e2b36d}.sec-history{--c:#d4b7ff}.sec-readers{--c:#f5b37e}.sec-curriculum{--c:#9bb7ff}
-html[data-theme=light] .sec-october{--c:#b8771a}html[data-theme=light] .sec-science{--c:#1f58b8}html[data-theme=light] .sec-learning{--c:#963e70}html[data-theme=light] .sec-fame{--c:#9a681d}html[data-theme=light] .sec-history{--c:#6b46c1}html[data-theme=light] .sec-readers{--c:#c2642a}html[data-theme=light] .sec-curriculum{--c:#1f4fa3}
+.sec-october{--c:#f0c878}.sec-science{--c:#8ad9e8}.sec-learning{--c:#d78bb2}.sec-fame{--c:#e2b36d}.sec-history{--c:#d4b7ff}.sec-readers{--c:#f5b37e}.sec-curriculum{--c:#9bb7ff}.sec-islamic{--c:#78c59a}
+html[data-theme=light] .sec-october{--c:#b8771a}html[data-theme=light] .sec-science{--c:#1f58b8}html[data-theme=light] .sec-learning{--c:#963e70}html[data-theme=light] .sec-fame{--c:#9a681d}html[data-theme=light] .sec-history{--c:#6b46c1}html[data-theme=light] .sec-readers{--c:#c2642a}html[data-theme=light] .sec-curriculum{--c:#1f4fa3}html[data-theme=light] .sec-islamic{--c:#26784d}
 .fcard[class*="sec-"],details.pubrow{border-inline-start:5px solid var(--c,var(--line));background-image:linear-gradient(90deg,color-mix(in srgb,var(--c,transparent) 9%,transparent),transparent 60%);transition:border-color .35s ease}
 details.pubrow{border-top:1px solid var(--line);border-bottom:1px solid var(--line);border-inline-end:1px solid var(--line);border-radius:14px;background-color:var(--panel);margin-bottom:10px}
 details.pubrow>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:12px 16px}
@@ -152,8 +152,8 @@ var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refres
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
-var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
-var VSEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية'};
+var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية',readers:'اقتراحات القرّاء'};
+var VSEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
 function $(i){return document.getElementById(i)}
