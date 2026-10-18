@@ -2,14 +2,14 @@
    The illustrations are original transparent SVG line art, not historical photographs. */
 :root{
   --kh-october:#f0c878;--kh-science:#8ad9e8;--kh-women:#a9d9a6;
-  --kh-culture:#f1a7c5;--kh-history:#d4b7ff;--kh-curriculum:#9bb7ff;
+  --kh-culture:#f3c17b;--kh-history:#d4b7ff;--kh-curriculum:#9bb7ff;
 }
 
 /* Homepage gateway cards: retain the established layout and add subtle, thematic art. */
 .gate.g1{--c:var(--kh-october);background:linear-gradient(145deg,#163e49,#10232c)}
 .gate.g2{--c:var(--kh-science);background:linear-gradient(145deg,#123d4a,#102631)}
 .gate.g3{--c:var(--kh-women);background:linear-gradient(145deg,#214638,#142c29)}
-.gate.g4{--c:var(--kh-culture);background:linear-gradient(145deg,#4b2944,#251d31)}
+.gate.g4{--c:var(--kh-culture);background:linear-gradient(145deg,#29415c,#17263b)}
 .gate.g5{--c:var(--kh-history);background:linear-gradient(145deg,#342b56,#1d2038)}
 .gate.g7{--c:var(--kh-curriculum);background:linear-gradient(145deg,#1f3560,#121d38)}
 .gate.g1::before,.gate.g2::before,.gate.g3::before,.gate.g4::before,.gate.g5::before,.gate.g7::before{
@@ -24,7 +24,7 @@
 }
 .gate.g2::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-science.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
 .gate.g3::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-women.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
-.gate.g4::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-culture.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
+.gate.g4::before{background-image:linear-gradient(100deg,rgba(8,18,31,.78),rgba(8,18,31,.32) 72%,rgba(8,18,31,.56)),url("section-culture.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%);filter:hue-rotate(125deg) saturate(.88)}
 .gate.g5::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-history.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
 .gate.g7::before{background-image:linear-gradient(100deg,rgba(3,12,20,.78),rgba(3,12,20,.32) 72%,rgba(3,12,20,.56)),url("section-curriculum.svg"),radial-gradient(circle at 95% 5%,var(--c),transparent 55%)}
 html[data-theme="light"] .gate.g1::before,html[data-theme="light"] .gate.g2::before,html[data-theme="light"] .gate.g3::before,html[data-theme="light"] .gate.g4::before,html[data-theme="light"] .gate.g5::before,html[data-theme="light"] .gate.g7::before{opacity:.28}
@@ -63,9 +63,10 @@ body.collection-women .card,body.collection-women .qrpanel{background:linear-gra
 body.collection-women .num{background:linear-gradient(145deg,#5a936e,#a9d9a6);color:#10291d}
 
 body.collection-culture::before{background-image:url("section-culture.svg")}
-body.collection-culture{background:radial-gradient(ellipse at 90% 4%,rgba(241,167,197,.16),transparent 38%),linear-gradient(145deg,#4b2944,#251d31 72%)}
-body.collection-culture .hero{background:linear-gradient(110deg,rgba(75,41,68,.94),rgba(37,29,49,.76)),radial-gradient(ellipse at 78% 22%,rgba(241,167,197,.18),transparent 46%)}
-body.collection-culture .card,body.collection-culture .qrpanel{background:linear-gradient(145deg,rgba(75,41,68,.94),rgba(37,29,49,.96));border-color:rgba(241,167,197,.3)}
+body.collection-culture{--bg:#17263b;--panel:#29415c;--gold:#f3c17b;--line:rgba(243,193,123,.32);--muted:#d2dce7;color:#f6f2e9;background:radial-gradient(ellipse at 90% 4%,rgba(243,193,123,.15),transparent 38%),linear-gradient(145deg,#29415c,#17263b 72%)}
+body.collection-culture .hero{background:radial-gradient(ellipse at 78% 22%,rgba(243,193,123,.17),transparent 46%),linear-gradient(135deg,#29415c,#17263b 76%)}
+body.collection-culture .hero:after{color:rgba(243,193,123,.08)}
+body.collection-culture .card,body.collection-culture .qrpanel{background:linear-gradient(145deg,rgba(41,65,92,.94),rgba(23,38,59,.97));border-color:rgba(243,193,123,.32)}
 
 body.collection-history::before{background-image:url("section-history.svg")}
 body.collection-history{background-color:#111322}
@@ -110,7 +111,7 @@ body.collection-october .hero-home-shade{z-index:2}
 /* ===== Contrast and theme consistency pass: all section pages ===== */
 :root{
   --kh-women:#e7a1c1;
-  --kh-culture:#f1a7c5;
+  --kh-culture:#f3c17b;
   --kh-science:#8ad9e8;
   --kh-history:#d4b7ff;
   --kh-curriculum:#9bb7ff;
@@ -137,7 +138,7 @@ body.collection-women .num{background:linear-gradient(145deg,#a35f8a,#e7a1c1);co
 html[data-theme="light"] .gate.g1{background:linear-gradient(145deg,#fff6df,#f4e6c7)}
 html[data-theme="light"] .gate.g2{background:linear-gradient(145deg,#e7f8fb,#d7edf1)}
 html[data-theme="light"] .gate.g3{background:linear-gradient(145deg,#fff0f6,#f0dce8)}
-html[data-theme="light"] .gate.g4{background:linear-gradient(145deg,#fff0f6,#f0dce8)}
+html[data-theme="light"] .gate.g4{--c:#9b641f;background:linear-gradient(145deg,#fff7e8,#ead9b7)}
 html[data-theme="light"] .gate.g5{background:linear-gradient(145deg,#f5efff,#e5ddf5)}
 html[data-theme="light"] .gate.g7{background:linear-gradient(145deg,#edf2ff,#dce5fa)}
 html[data-theme="light"] .gate.g1,html[data-theme="light"] .gate.g2,html[data-theme="light"] .gate.g3,
@@ -157,8 +158,8 @@ html[data-theme="light"] body.collection-women{
   color:#382636;background:radial-gradient(ellipse at 90% 4%,rgba(231,161,193,.28),transparent 38%),linear-gradient(145deg,#fff6fa,#f7eaf2 72%);
 }
 html[data-theme="light"] body.collection-culture{
-  --bg:#fff6fa;--panel:#fffdfd;--gold:#8a3f69;--line:rgba(138,63,105,.24);--muted:#694f60;
-  color:#382636;background:radial-gradient(ellipse at 90% 4%,rgba(241,167,197,.24),transparent 38%),linear-gradient(145deg,#fff6fa,#f7eaf2 72%);
+  --bg:#fff7e8;--panel:#fffdf8;--gold:#80521c;--line:rgba(128,82,28,.25);--muted:#65543e;
+  color:#2d3340;background:radial-gradient(ellipse at 90% 4%,rgba(243,193,123,.27),transparent 38%),linear-gradient(145deg,#fff7e8,#f0e2c8 72%);
 }
 html[data-theme="light"] body.collection-history{
   --bg:#f8f5ff;--panel:#fffefe;--gold:#60428f;--line:rgba(96,66,143,.25);--muted:#5b5870;
@@ -217,7 +218,8 @@ html[data-theme="light"] body.collection-science .card p,html[data-theme="light"
 html[data-theme="light"] body.collection-culture .card p,html[data-theme="light"] body.collection-history .card p,
 html[data-theme="light"] body.collection-curriculum .card p{color:var(--muted)}
 html[data-theme="light"] body.collection-science .num{background:linear-gradient(145deg,#bcecf2,#8ad9e8);color:#123d4a}
-html[data-theme="light"] body.collection-women .num,html[data-theme="light"] body.collection-culture .num{background:linear-gradient(145deg,#f6d3e3,#e7a1c1);color:#49243d}
+html[data-theme="light"] body.collection-women .num{background:linear-gradient(145deg,#f6d3e3,#e7a1c1);color:#49243d}
+html[data-theme="light"] body.collection-culture .num{background:linear-gradient(145deg,#f9e1a8,#e9b45f);color:#49300e}
 html[data-theme="light"] body.collection-history .num{background:linear-gradient(145deg,#e4d5ff,#c1a3ed);color:#30234c}
 html[data-theme="light"] body.collection-curriculum .num{background:linear-gradient(145deg,#dbe5ff,#9bb7ff);color:#1e2c46}
 html[data-theme="light"] body.collection-science footer,html[data-theme="light"] body.collection-women footer,
