@@ -1,4 +1,4 @@
-/* خالدون عبر التاريخ — shared script: reveal, progress bar, languages (AR/EN/FR/IT), theme, background */
+/* خالدون عبر التاريخ — shared script: reveal, progress bar, languages (AR/EN/FR/IT; DE via shared German dictionary), theme, background */
 (function(){
 document.documentElement.classList.add('ready');var tg=document.querySelectorAll(".reveal");
 if("IntersectionObserver" in window&&!matchMedia("(prefers-reduced-motion: reduce)").matches){
