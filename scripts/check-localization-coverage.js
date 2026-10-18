@@ -76,7 +76,7 @@ for (const file of translationMaps) {
 
 // Story 006 stores locale rows in StoryI18N rather than I18N.register.
 const urabi = read('stories/history/006/translations.js');
-if (!/["']de["']\\s*:/.test(urabi)) {
+if (!(urabi.includes('"de":') || urabi.includes("'de':"))) {
   problems.push('stories/history/006/translations.js: missing German translation map.');
 } else {
   console.log('stories/history/006/translations.js: German map declaration found (entry parity still needs review).');
@@ -84,7 +84,7 @@ if (!/["']de["']\\s*:/.test(urabi)) {
 
 // Ahmed Zewail's story uses its own T/EXTRA locale objects, not I18N.register.
 const zewail = read('stories/science/007/index.html');
-if (!/(?:["']de["']\\s*:\\s*\\{)/.test(zewail)) {
+if (!/(?:["']de["']\s*:\s*\{)/.test(zewail)) {
   problems.push('stories/science/007/index.html: missing German story dictionary.');
 } else {
   console.log('stories/science/007/index.html: German dictionary declaration found (content parity still needs review).');
