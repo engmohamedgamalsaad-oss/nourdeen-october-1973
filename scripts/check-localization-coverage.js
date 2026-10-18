@@ -83,7 +83,36 @@ const urabi = read('stories/history/006/translations.js');
 if (!(urabi.includes('"de":') || urabi.includes("'de':"))) {
   problems.push('stories/history/006/translations.js: missing German translation map.');
 } else {
-  console.log('stories/history/006/translations.js: German map declaration found (entry parity still needs review).');
+  function extractObjectAfter(source, marker) {
+    const at = source.indexOf(marker);
+    const start = at < 0 ? -1 : source.indexOf('{', at + marker.length);
+    if (start < 0) return '';
+    let depth = 0, quote = '', escaped = false;
+    for (let i = start; i < source.length; i++) {
+      const ch = source[i];
+      if (quote) {
+        if (escaped) escaped = false;
+        else if (ch === '\\\\') escaped = true;
+        else if (ch === quote) quote = '';
+        continue;
+      }
+      if (ch === '"' || ch === "'") { quote = ch; continue; }
+      if (ch === '{') depth++;
+      else if (ch === '}' && --depth === 0) return source.slice(start, i + 1);
+    }
+    return '';
+  }
+  let rows = null;
+  try { rows = JSON.parse(extractObjectAfter(urabi, 'var rows=')); } catch (e) {}
+  if (!rows) problems.push('stories/history/006/translations.js: German translation rows are not parseable.');
+  else {
+    const expectedCount = Object.keys(rows.en || {}).length;
+    for (const lang of required.slice(1)) {
+      const count = rows[lang] ? Object.keys(rows[lang]).length : -1;
+      if (count !== expectedCount) problems.push('stories/history/006/translations.js: ' + lang + ' has ' + count + ' entries; expected ' + expectedCount + '.');
+    }
+    console.log('stories/history/006/translations.js: locale key counts ' + JSON.stringify(Object.fromEntries(Object.entries(rows).map(([lang, map]) => [lang, Object.keys(map).length]))));
+  }
 }
 
 // Ahmed Zewail's story uses separate T and EXTRA dictionaries, not I18N.register.
