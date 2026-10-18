@@ -370,12 +370,13 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
           it: 'Khalid ibn al-Walid — da Uhud alla Spada di Allah',
           de: 'Chalid ibn al-Walid – Von Uhud zum Schwert Gottes'
         }[lang];
-        const expectedQuestion = {
-          ar: 'في أي معركة قاد خالد فرسان قريش قبل إسلامه؟',
-          en: 'Which battle did Khalid command Quraysh’s cavalry in before his conversion?',
-          fr: 'Lors de quelle bataille Khalid commandait-il la cavalerie quraychite avant sa conversion ?',
-          it: 'In quale battaglia Khalid comandò la cavalleria dei Quraysh prima della conversione?',
-          de: 'In welcher Schlacht führte Chalid vor seiner Konversion die Reiterei der Quraisch?'
+        /* The quiz randomizes question order, so accept any of its five localized prompts. */
+        const expectedQuestionPattern = {
+          ar: 'في أي معركة|ما الثغرة|متى يُؤرَّخ|ما الذي فعله خالد|ما الفكرة الأساسية',
+          en: 'Which battle|What opening|When is Khalid|What is Khalid said|What is an important principle',
+          fr: 'Lors de quelle bataille|Quelle faille|À quelle date|Que rapporte la tradition|Quel principe est important',
+          it: 'In quale battaglia|Quale apertura|A quando viene generalmente|Che cosa si racconta|Qual è un principio importante',
+          de: 'In welcher Schlacht|Welche Lücke|Auf wann wird|Was soll Chalid|Was ist ein wichtiger Grundsatz'
         }[lang];
         try {
           const splashTitle = await page.locator('.story-splash h1').innerText({ timeout: 5000 });
@@ -385,7 +386,7 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
           await page.locator('#story-quiz-start').click({ timeout: 5000 });
           await page.waitForSelector('#story-quiz-app button[data-option="0"]', { timeout: 8000 });
           const quizText = await page.locator('#story-quiz-app').innerText();
-          if (!quizText.includes(expectedQuestion)) hard.push(`${label} ${rel}: first quiz question is not translated into ${lang}`);
+          if (!new RegExp(expectedQuestionPattern).test(quizText)) hard.push(`${label} ${rel}: quiz prompts are not translated into ${lang}`);
           await page.locator('#story-quiz-app button[data-option="0"]').click();
           await page.locator('#story-quiz-submit').click();
           await page.waitForFunction(() => {
