@@ -31,6 +31,13 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
 .translation-panel{margin:18px 0;padding:14px;border:1px solid var(--line);border-radius:14px;background:var(--panel)}.translation-panel>summary{cursor:pointer;font-weight:900;color:var(--gold)}.translation-panel>.fnote{margin:8px 0 14px}.translation-lang{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:12px}.translation-lang h4{margin:0 0 10px;color:var(--gold)}.translation-compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.translation-compare textarea[readonly]{opacity:.8}@media(max-width:680px){.translation-compare{grid-template-columns:1fr}}
+.vrow{display:flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:10px;flex-wrap:wrap}
+.vrow.off{opacity:.7;border-style:dashed}
+.vrow .vt{flex:1;min-width:200px}
+.vrow .vt b{display:block;color:var(--gold);line-height:1.6}
+.vrow .vt small{color:var(--muted)}
+.vrow .vs{font-size:.78rem;font-weight:800;padding:2px 10px;border-radius:99px;border:1px solid var(--line)}
+.vrow.off .vs{color:#e07a7a;border-color:#e07a7a}
 </style>
 </head>
 <body>
@@ -48,12 +55,22 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 <button class="btn primary" type="submit" id="loginBtn">دخول</button>
 </form></section>
 <section id="app" hidden>
+<div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
+<div id="viewSubs">
 <div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره.</p></div>
 <div class="stats" id="stats"></div>
 <div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
 <div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
 <div class="chips" id="secs" role="group" aria-label="القسم"></div>
 <div id="list"></div>
+</div>
+<div id="viewVis" hidden>
+<div class="fhead"><div class="kicker">الحكايات على الموقع</div><h1>إظهار وإخفاء الحكايات</h1><p>الحكاية المخفية تختفي من قوائم الموقع والمفضلة وخريطة الشخصيات لكل الزوار. صفحتها نفسها تظل تعمل لمن معه الرابط، ويمكن إظهارها في أي وقت.</p></div>
+<div class="stats" id="vstats"></div>
+<div class="tools"><input type="search" id="vsearch" placeholder="ابحث بالعنوان أو الشخصية…" aria-label="بحث في الحكايات"><div class="fbar"><button class="btn ghost" id="vrefreshBtn" type="button">↻ تحديث</button></div></div>
+<div class="chips" id="vtabs" role="group" aria-label="العرض"></div>
+<div id="vlist"></div>
+</div>
 </section>
 </main>
 <script src="assets/khaledoon-admin-texts.js"></script>
@@ -61,9 +78,11 @@ details.pubrow[open]>summary::after{transform:rotate(180deg)}
 (function(){
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
-var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='';
+var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null;
+var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'التعليم والمعرفة',fame:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',readers:'اقتراحات القرّاء'};
+var VSEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',knowledge:'التعليم والمعرفة',people:'المشاهير والرياضة والفنون',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
 function $(i){return document.getElementById(i)}
@@ -71,16 +90,22 @@ function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==und
 function say(k,t){var m=$('msg');m.className='fmsg '+k;m.textContent=t;m.hidden=false;if(k==='ok')setTimeout(function(){m.hidden=true},4000)}
 function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
 function load(){try{var s=JSON.parse(sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
-function clear(){session=null;try{sessionStorage.removeItem(SK)}catch(e){}}
+function clear(){session=null;vStories=[];vHidden={};vLoaded=false;try{sessionStorage.removeItem(SK)}catch(e){}}
 function showLogin(){$('loginBox').hidden=false;$('app').hidden=true;$('logoutBtn').hidden=true}
 function showApp(){$('loginBox').hidden=true;$('app').hidden=false;$('logoutBtn').hidden=false}
 function hdr(x){var h={apikey:KEY,'Content-Type':'application/json',Authorization:'Bearer '+(session?session.access_token:KEY)};if(x)Object.keys(x).forEach(function(k){h[k]=x[k]});return h}
-async function refreshIfNeeded(){
- if(!session||!session.refresh_token)return;
- if(session.expires_at-Date.now()/1000>60)return;
- var r=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
- if(!r.ok){clear();showLogin();throw new Error('انتهت الجلسة.')}
- var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+/* تجديد الجلسة: وعد واحد مشترك حتى لا يُستهلك الـ refresh_token مرتين عند طلبات متزامنة. */
+function refreshIfNeeded(){
+ if(!session||!session.refresh_token)return Promise.resolve();
+ if(session.expires_at-Date.now()/1000>60)return Promise.resolve();
+ if(!refreshing){
+  refreshing=(async function(){
+   var r=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
+   if(!r.ok){clear();showLogin();throw new Error('انتهت الجلسة.')}
+   var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
+  })().finally(function(){refreshing=null});
+ }
+ return refreshing;
 }
 async function rest(path,o){
  await refreshIfNeeded();o=o||{};o.headers=hdr(o.headers);
@@ -88,12 +113,23 @@ async function rest(path,o){
  if(r.status===401){clear();showLogin();throw new Error('انتهت الجلسة، سجّل الدخول مرة أخرى.')}
  return r;
 }
+/* التحقق من الأدمن للواجهة فقط (إخفاء اللوحة عن غير الأدمن). الفرض الحقيقي في RLS وقت الكتابة. */
+async function checkAdmin(){
+ var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
+ return a.ok&&(await a.json())===true;
+}
 async function login(email,pw){
  var r=await fetch(API+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({email:email,password:pw})});
  if(!r.ok)throw new Error('بيانات الدخول غير صحيحة.');
  var d=await r.json();save({access_token:d.access_token,refresh_token:d.refresh_token,expires_at:Math.floor(Date.now()/1000)+d.expires_in});
- var a=await rest('rpc/is_admin',{method:'POST',body:'{}'});
- if(!(a.ok&&(await a.json())===true)){clear();throw new Error('هذا الحساب ليس مسجّلًا كأدمن.')}
+ if(!(await checkAdmin())){await logout(true);throw new Error('هذا الحساب ليس مسجّلًا كأدمن.')}
+}
+/* تسجيل الخروج يُبطل هذه الجلسة في الخادم، وليس مسحًا محليًا فقط. */
+async function logout(silent){
+ var tok=session&&session.access_token;
+ clear();items=[];showLogin();
+ if(tok){try{await fetch(API+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+tok}})}catch(e){}}
+ if(!silent)say('ok','تم تسجيل الخروج.');
 }
 
 async function loadList(){
@@ -395,22 +431,99 @@ function render(){
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
  shown.forEach(function(i){list.appendChild(pubRow(i))});
 }
+
+/* ======== تبويب إظهار وإخفاء الحكايات على الموقع (جدول story_visibility) ========
+   نفس الجلسة ونفس rest() ونفس is_admin() في اللوحة، ولا مسار إدارة منفصل. الفرض الحقيقي في RLS. */
+function renderViews(){
+ var b=$('views');b.textContent='';
+ chip(b,'الحكايات المرسلة',view==='subs',function(){setView('subs')});
+ chip(b,'ظهور الحكايات على الموقع',view==='vis',function(){setView('vis')});
+}
+function setView(v){
+ view=v;$('viewSubs').hidden=v!=='subs';$('viewVis').hidden=v!=='vis';renderViews();
+ try{history.replaceState(null,'',v==='vis'?'#visibility':location.pathname+location.search)}catch(e){}
+ if(v==='vis'&&!vLoaded)loadVis().catch(function(e){say('err',e.message)});
+}
+async function loadVis(){
+ var rs=await Promise.all([fetch('../stories/index.json',{cache:'no-cache'}),rest('story_visibility?select=story_id')]);
+ if(!rs[0].ok)throw new Error('تعذّر تحميل stories/index.json ('+rs[0].status+').');
+ if(rs[1].status===404)throw new Error('جدول story_visibility غير موجود. شغّل ملف supabase/migrations/20261018120000_story_visibility.sql من SQL Editor أولًا.');
+ if(!rs[1].ok)throw new Error('تعذّر قراءة الحكايات المخفية ('+rs[1].status+').');
+ var j=await rs[0].json();
+ vStories=(Array.isArray(j)?j:[]).filter(function(s){return s&&s.id!=null&&s.title}).sort(function(a,b){return (a.order||0)-(b.order||0)});
+ vHidden={};(await rs[1].json()).forEach(function(x){vHidden[String(x.story_id)]=true});
+ vLoaded=true;renderVis();
+}
+function setHidden(s,on,btn){
+ return (async function(){
+  var id=String(s.id);btn.disabled=true;
+  try{
+   var r=on?await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})})
+           :await rest('story_visibility?story_id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+   if(r.status===403)throw new Error('مرفوض: حسابك ليس ضمن قائمة الأدمن المعتمدة.');
+   if(!r.ok)throw new Error('تعذّر التحديث ('+r.status+').');
+   if(!on){var rows=await r.json();if(!rows.length)throw new Error('لم يتغيّر شيء. تأكد أن حسابك ضمن قائمة الأدمن المعتمدة.')}
+   if(on)vHidden[id]=true;else delete vHidden[id];
+   say('ok',on?'تم إخفاء الحكاية من الموقع.':'تم إظهار الحكاية من جديد.');
+   renderVis();
+  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
+ })();
+}
+function vcount(fn){return vStories.filter(fn).length}
+function renderVis(){
+ var b=$('vstats');b.textContent='';
+ [['إجمالي الحكايات',vStories.length],['ظاهرة',vcount(function(s){return !vHidden[String(s.id)]})],['مخفية',vcount(function(s){return vHidden[String(s.id)]})]].forEach(function(x){var c=el('div','stat');c.appendChild(el('span','',x[0]));c.appendChild(el('strong','',String(x[1])));b.appendChild(c)});
+ var t=$('vtabs');t.textContent='';
+ chip(t,'الكل',vFilter==='all',function(){vFilter='all';renderVis()});
+ chip(t,'ظاهرة',vFilter==='shown',function(){vFilter='shown';renderVis()});
+ chip(t,'مخفية',vFilter==='hidden',function(){vFilter='hidden';renderVis()});
+ var list=$('vlist');list.textContent='';
+ var k=vTerm.trim().toLocaleLowerCase();
+ var shown=vStories.filter(function(s){
+  var h=!!vHidden[String(s.id)];
+  if(vFilter==='shown'&&h)return false;if(vFilter==='hidden'&&!h)return false;
+  return !k||[s.title,s.person,s.id].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1});
+ });
+ if(!shown.length)list.appendChild(el('div','fcard','لا توجد حكايات مطابقة.'));
+ shown.forEach(function(s){
+  var h=!!vHidden[String(s.id)],row=el('div','vrow'+(h?' off':'')),tx=el('div','vt');
+  tx.appendChild(el('b','',s.title));
+  tx.appendChild(el('small','',[s.person,VSEC[s.section]||s.section,'رقم '+s.id].filter(Boolean).join(' • ')+(s.published===false?' • غير منشورة أصلًا':'')));
+  row.appendChild(tx);
+  row.appendChild(el('span','vs',h?'مخفية':'ظاهرة'));
+  var btn=el('button','btn '+(h?'primary':'ghost'),h?'إظهار في الموقع':'إخفاء من الموقع');btn.type='button';
+  btn.addEventListener('click',function(){
+   if(!h&&!confirm('إخفاء «'+s.title+'» من الموقع لكل الزوار؟'))return;
+   setHidden(s,!h,btn);
+  });
+  row.appendChild(btn);list.appendChild(row);
+ });
+}
+async function enterApp(){
+ showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;renderViews();
+ if(location.hash==='#visibility')setView('vis');
+ await loadList();
+}
 $('loginForm').addEventListener('submit',async function(e){
  e.preventDefault();var b=$('loginBtn');b.disabled=true;
- try{await login($('email').value.trim(),$('password').value);$('password').value='';showApp();await loadList()}catch(err){say('err',err.message||'تعذر الدخول.')}
+ try{await login($('email').value.trim(),$('password').value);$('password').value='';await enterApp()}catch(err){say('err',err.message||'تعذر الدخول.')}
  b.disabled=false;
 });
-$('logoutBtn').addEventListener('click',function(){clear();items=[];showLogin();say('ok','تم تسجيل الخروج.')});
+$('logoutBtn').addEventListener('click',function(){logout(false)});
 $('refreshBtn').addEventListener('click',function(){loadList().catch(function(e){say('err',e.message)})});
+$('vrefreshBtn').addEventListener('click',function(){loadVis().catch(function(e){say('err',e.message)})});
 $('search').addEventListener('input',function(){term=this.value;render()});
+$('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
 $('newBtn').addEventListener('click',function(){draftNew=true;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
 load();
-if(session){showApp();loadList().catch(function(e){if(!session){showLogin()}else{say('err',e.message)}})}else showLogin();
+/* جلسة مستعادة من sessionStorage لا تُعتبر أدمن حتى يتأكد الخادم من ذلك. */
+if(session){
+ checkAdmin().then(function(ok){if(!ok){return logout(true)}return enterApp()}).catch(function(e){if(!session){showLogin()}else{say('err',e.message)}});
+}else showLogin();
 })();
 </script>
 </body>
 </html>
 
-<!-- GitHub Pages redeploy trigger: 2026-10-12 -->
-
+<!-- GitHub Pages redeploy trigger: 2026-10-18 -->
