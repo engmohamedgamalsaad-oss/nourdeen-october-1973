@@ -83,7 +83,7 @@
     document.querySelectorAll('[data-lang-switch]').forEach(function(host){
       host.innerHTML='';
       host.hidden=false;host.style.display='';
-      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano'};
+      var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
       allowed.forEach(function(lang){
         var button=document.createElement('button');
         button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
