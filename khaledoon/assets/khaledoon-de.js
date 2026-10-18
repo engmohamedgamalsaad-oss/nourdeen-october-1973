@@ -410,7 +410,11 @@ var D={
 "لأن المصادر تختلف في الأعداد والتفاصيل":"Weil sich die Quellen bei Zahlen und Einzelheiten unterscheiden",
 "لأن الحكاية لا تهتم بالتاريخ":"Weil sich die Geschichte nicht für Geschichte interessiert",
 "لأن الأعداد لم تتغير أبدًا":"Weil sich die Zahlen nie geändert haben",
-"بعض المصادر تتحدث عن خسائر الضربة الأولى وحدها وأخرى عن خسائر القتال الجوي في اليوم الأول كله، فنتحرّى الدقة ولا نجزم.":"Einige Quellen behandeln nur die Verluste des ersten Luftangriffs, andere die Verluste aller Luftkämpfe des ersten Tages. Deshalb bleiben wir vorsichtig und behaupten nichts mit Sicherheit."
+"بعض المصادر تتحدث عن خسائر الضربة الأولى وحدها وأخرى عن خسائر القتال الجوي في اليوم الأول كله، فنتحرّى الدقة ولا نجزم.":"Einige Quellen behandeln nur die Verluste des ersten Luftangriffs, andere die Verluste aller Luftkämpfe des ersten Tages. Deshalb bleiben wir vorsichtig und behaupten nichts mit Sicherheit.",
+"أحمد إدريس":"Ahmed Idris",
+"باقي زكي يوسف":"Baki Zaki Youssef",
+"نبيل عبد الوهاب":"Nabil Abdel Wahab",
+"عاطف السادات":"Atef al-Sadat"
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
