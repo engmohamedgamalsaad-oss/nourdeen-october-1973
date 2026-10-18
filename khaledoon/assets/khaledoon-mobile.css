@@ -260,3 +260,11 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   .hero:not(.sub)::before,.hero:not(.sub)::after{display:none!important}
   .hero:not(.sub) .hero-in{padding:36px 0 44px}
 }
+
+
+/* Desktop fix (2026-10-18): keep the homepage language row and flag labels visible. */
+@media (min-width:781px){
+  .topbar .langrow{display:flex!important;visibility:visible!important;opacity:1!important;justify-content:flex-end;position:relative;z-index:25;}
+  .topbar .langrow .langs{display:flex!important;visibility:visible!important;opacity:1!important;flex-wrap:wrap;align-items:center;gap:6px;}
+  .topbar .langrow .langs button{display:inline-flex!important;visibility:visible!important;align-items:center;justify-content:center;min-height:30px;padding:2px 10px;font-size:12px;line-height:1.4;white-space:nowrap;}
+}
