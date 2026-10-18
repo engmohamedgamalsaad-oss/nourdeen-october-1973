@@ -282,7 +282,7 @@ var D={
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
 window.KH_DE_TRANSLATIONS=D;
-var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',T0=document.title,active=false;
+var KEY='kh-de',AR_TITLE='خالدون عبر التاريخ',T0=window.KH_AR_TITLE||document.title,active=false;
 var root=document.documentElement,B=document.body,langs=document.querySelector('.langs');
 function get(k){try{return localStorage.getItem(k)}catch(e){return null}}
 function put(k,v){try{if(v===null)localStorage.removeItem(k);else localStorage.setItem(k,v)}catch(e){}}
