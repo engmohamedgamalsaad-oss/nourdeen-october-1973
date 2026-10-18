@@ -17,7 +17,7 @@ const SHARED = 'assets/shared/home-language-only.js';
 const HOME = 'index.html';
 const SUPPORTED = ['ar', 'en', 'fr', 'it'];
 /* لوحات الإدارة: ليست صفحات زوار، ولا تحمّل سكربت اللغة. */
-const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html']);
+const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/sections-admin.html', 'khaledoon/prompts-admin.html']);
 /* تعارضات موثّقة تنتظر قرار صاحب المشروع (لا تُعدَّل بصمت). */
 const KNOWN_LANG_PARAM_LINKS = {
   'read.html': 'رابط «اقرأ بالعربية» داخل صفحة قراءة حكاية الطلاب يضيف ?lang=ar، والقفل الموحد يزيله (موثّق في التقرير).'
