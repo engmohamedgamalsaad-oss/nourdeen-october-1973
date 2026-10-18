@@ -13,10 +13,18 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Check story gate and admin prompt JavaScript syntax
+        run: node --check scripts/check-new-story-readiness.js && node --check khaledoon/assets/khaledoon-admin-texts.js
+      - name: Verify readiness of every newly added story
+        env:
+          STORY_CHECK_BASE: ${{ github.base_ref || 'main' }}
+        run: node scripts/check-new-story-readiness.js
       - name: Verify homepage-only language flow
         run: node scripts/check-home-language.js
       - name: Verify five-language translation coverage
