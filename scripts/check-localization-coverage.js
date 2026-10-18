@@ -58,7 +58,7 @@ for (const file of translationMaps) {
    */
   const entries = [...source.matchAll(/^\s*(?:"(?:\\.|[^"\\])*"|[^\s:]+)\s*:\s*\{([^{}\n]*)\}/gm)]
     .map(match => match[1])
-    .filter(value => /(?:^|[,\\s])(?:["']?en["']?)\\s*:/.test(value));
+    .filter(value => /\ben\s*:/.test(value));
   let missing = 0;
   for (const entry of entries) {
     const absent = ['en', 'fr', 'it', 'de'].filter(lang =>
