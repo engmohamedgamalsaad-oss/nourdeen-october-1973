@@ -414,7 +414,9 @@ var D={
 "أحمد إدريس":"Ahmed Idris",
 "باقي زكي يوسف":"Baki Zaki Youssef",
 "نبيل عبد الوهاب":"Nabil Abdel Wahab",
-"عاطف السادات":"Atef al-Sadat"
+"عاطف السادات":"Atef al-Sadat",
+"حكاية":"Geschichte",
+"اختبر معلوماتك في حرب أكتوبر | حكايات أكتوبر 1973":"Teste dein Wissen über den Oktoberkrieg | Geschichten vom Oktober 1973"
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
