@@ -92,9 +92,10 @@ fr:{s_like:'❤️ J’aime',s_liked:'Votre appréciation est enregistrée',r_fe
 it:{s_like:'❤️ Mi piace',s_liked:'Il tuo apprezzamento è registrato',r_feedback_exists:'Hai già lasciato una reazione a questa storia da questo browser.',r_like_exists:'Hai già messo Mi piace a questa storia.',r_saving:'Salvataggio della scelta…',r_saved:'Grazie! La tua scelta è stata registrata.',r_already_saved:'La tua scelta è già stata registrata.',r_saved_count_error:'La scelta è stata salvata, ma i contatori non si sono aggiornati.',r_save_error:'Impossibile salvare la scelta. Riprova tra poco.',r_counts_error:'I contatori sono temporaneamente non disponibili. Aggiorna la pagina.'},
 de:{s_like:'❤️ Gefällt mir',s_liked:'Deine Bewertung wurde gespeichert',r_feedback_exists:'Du hast diese Geschichte in diesem Browser bereits bewertet.',r_like_exists:'Du hast diese Geschichte bereits mit „Gefällt mir“ markiert.',r_saving:'Deine Auswahl wird gespeichert …',r_saved:'Danke! Deine Auswahl wurde gespeichert.',r_already_saved:'Deine Auswahl wurde bereits gespeichert.',r_saved_count_error:'Deine Auswahl wurde gespeichert, aber die Zähler konnten nicht aktualisiert werden.',r_save_error:'Deine Auswahl konnte nicht gespeichert werden. Versuche es gleich noch einmal.',r_counts_error:'Die Reaktionszahlen sind vorübergehend nicht verfügbar. Aktualisiere die Seite.'}
 };
-window.I18N={lang:function(){return lang},t:function(key){return(R[lang]&&R[lang][key])||(R.ar&&R.ar[key])||key}};window.KhaledoonStoryLang={setLang:setLang};setLang(lang);
+var splashStarts={ar:'ابدأ الحكاية ←',en:'Start the story →',fr:'Commencer le récit →',it:'Inizia il racconto →',de:'Geschichte beginnen →'};window.I18N={lang:function(){return lang},t:function(key){if(key==='s_title')return T[lang].title;if(key==='s_subtitle')return T[lang].subtitle;if(key==='s_start')return splashStarts[lang]||splashStarts.ar;return(R[lang]&&R[lang][key])||(R.ar&&R.ar[key])||key}};window.KhaledoonStoryLang={setLang:setLang};setLang(lang);
 })();
 </script>
+<script src="../../../assets/shared/story.js?v=20261018-khalid-draft"></script>
 <script src="../../../assets/shared/reactions.js"></script>
 <script src="../../../assets/shared/story-quiz.js"></script>
 </body></html>
