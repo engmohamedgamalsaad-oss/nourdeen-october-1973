@@ -4,7 +4,7 @@
 
    What this proves (and what it does NOT):
    - proves: the shared script is wired correctly on every visitor page, resolves, loads first,
-     German stays gated, files were not deleted, and the shared script behaves correctly across
+     German translations are wired through the shared language key, files were not deleted, and the shared script behaves correctly across
      storage states (run in a sandbox with a fake DOM).
    - does NOT prove: real rendering, RTL layout, wrapping, print/share, reactions. Those need a
      browser: see scripts/e2e-language-flow.mjs. */
@@ -15,7 +15,7 @@ const vm = require('node:vm');
 const root = process.cwd();
 const SHARED = 'assets/shared/home-language-only.js';
 const HOME = 'index.html';
-const SUPPORTED = ['ar', 'en', 'fr', 'it'];
+const SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
 /* لوحات الإدارة: ليست صفحات زوار، ولا تحمّل سكربت اللغة. */
 const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/sections-admin.html', 'khaledoon/prompts-admin.html']);
 /* تعارضات موثّقة تنتظر قرار صاحب المشروع (لا تُعدَّل بصمت). */
@@ -47,8 +47,7 @@ const isExternalRef = (ref) => /^(?:[a-z][a-z0-9+.-]*:|\/\/|#)/i.test(ref);
 
 /* ---------- 1) الملف المشترك: بنية ثابتة ---------- */
 const shared = read(SHARED);
-if (!/var SUPPORTED = \['ar', 'en', 'fr', 'it'\];/.test(shared)) fail('Shared script: SUPPORTED must be exactly [ar,en,fr,it].');
-if (/SUPPORTED\s*=\s*\[[^\]]*['"]de['"]/.test(shared)) fail('Shared script: German (de) must stay out of SUPPORTED until fully translated.');
+if (!/var SUPPORTED = \['ar', 'en', 'fr', 'it', 'de'\];/.test(shared)) fail('Shared script: SUPPORTED must be exactly [ar,en,fr,it,de].');
 if (!/var KEY = 'kh-lang';/.test(shared)) fail("Shared script: unified storage key must be 'kh-lang'.");
 if (!/LEGACY_KEYS = \['lang'\];/.test(shared)) fail("Shared script: legacy key 'lang' must still be honoured.");
 if (!shared.includes('localStorage.setItem(KEY, lang)')) fail('Shared script: legacy -> unified key migration is missing.');
@@ -95,7 +94,7 @@ if (shared) {
   try {
     let r = runShared({});
     expect('empty storage -> ar/rtl', [r.lang, r.dir, 'kh-lang' in r.store], ['ar', 'rtl', false]);
-    for (const l of ['en', 'fr', 'it']) {
+    for (const l of ['en', 'fr', 'it', 'de']) {
       r = runShared({ store: { 'kh-lang': l } });
       expect(`kh-lang=${l} -> ltr`, [r.lang, r.dir], [l, 'ltr']);
     }
@@ -104,9 +103,9 @@ if (shared) {
     r = runShared({ store: { lang: 'it' } });
     expect('legacy lang=it migrated', [r.lang, r.store['kh-lang'], r.store.lang], ['it', 'it', 'it']);
     r = runShared({ store: { 'kh-lang': 'de', lang: 'en' } });
-    expect('unsupported unified value falls through to valid legacy', [r.lang, r.store['kh-lang']], ['en', 'en']);
-    r = runShared({ store: { 'kh-lang': 'de' } });
-    expect('German alone is not applied and storage untouched', [r.lang, r.dir, r.store['kh-lang']], ['ar', 'rtl', 'de']);
+    expect('supported German unified value takes precedence', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
+    r = runShared({ store: { 'kh-lang': 'xx', lang: 'de' } });
+    expect('legacy German value is migrated', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?lang=en&id=5#sec' });
     expect('inner page strips only lang and keeps id/hash', [r.calls.replaced, r.lang, r.api.locked, r.calls.styles], ['/p/?id=5#sec', 'fr', true, 1]);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?id=5' });
@@ -117,7 +116,7 @@ if (shared) {
     expect('double load is harmless', [r.lang, r.calls.styles], ['it', 1]);
     r = runShared({});
     try { r.api.supported.push('de'); } catch (e) { /* frozen: expected */ }
-    expect('supported list is frozen', r.api.supported.length, 4);
+    expect('supported list is frozen', r.api.supported.length, 5);
   } catch (e) { fail(`Unit sandbox crashed: ${e.message}`); }
 }
 
@@ -161,7 +160,8 @@ for (const rel of htmlFiles) {
     if (resolveRef(rel, tags[0][1]) !== SHARED) fail(`Homepage shared-script path resolves to ${resolveRef(rel, tags[0][1])}`);
     if (html.search(/<script\b/i) !== tags[0].index) fail('Homepage: the shared language script must be the first <script>.');
     const chooser = (html.match(/<button[^>]*\sdata-l=["']\d["']/g) || []).length;
-    if (chooser !== SUPPORTED.length) fail(`Homepage chooser has ${chooser} language buttons; expected ${SUPPORTED.length} (German must stay hidden).`);
+    if (chooser !== SUPPORTED.length - 1) fail(`Homepage has ${chooser} static language buttons; expected ${SUPPORTED.length - 1} plus the German overlay button.`);
+      if (!html.includes('khaledoon/assets/khaledoon-de.js')) fail('Homepage must load the German translation overlay after its base dictionaries.');
     continue;
   }
   if (isStub && tags.length === 0) { stubs++; continue; } /* صفحة تحويل فقط */
@@ -207,5 +207,5 @@ if (failures.length) {
   console.error('Homepage language-flow checks FAILED:\n- ' + failures.join('\n- '));
   process.exitCode = 1;
 } else {
-  console.log(`Homepage language-flow checks passed: ${visitorPages} visitor pages + homepage, ${stubs} redirect stubs, ${ADMIN_PAGES.size} admin pages exempt; AR/EN/FR/IT; German gated; ${notes.join('; ')}.`);
+  console.log(`Homepage language-flow checks passed: ${visitorPages} visitor pages + homepage, ${stubs} redirect stubs, ${ADMIN_PAGES.size} admin pages exempt; AR/EN/FR/IT/DE; German uses shared key; ${notes.join('; ')}.`);
 }
