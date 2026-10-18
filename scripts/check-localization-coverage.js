@@ -16,8 +16,7 @@ const storyFiles = [
   'stories/october/002/i18n.js',
   'stories/october/003/i18n.js',
   'stories/october/004/i18n.js',
-  'stories/history/005/translations.js',
-  'stories/history/006/translations.js'
+  'stories/history/005/translations.js'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
@@ -73,6 +72,14 @@ for (const file of translationMaps) {
   }
   if (missing > 8) problems.push(file + ': ' + (missing - 8) + ' additional incomplete entries (details truncated).');
   console.log(file + ': inspected ' + entries.length + ' translation entries; ' + missing + ' incomplete.');
+}
+
+// Story 006 stores locale rows in StoryI18N rather than I18N.register.
+const urabi = read('stories/history/006/translations.js');
+if (!/["']de["']\\s*:/.test(urabi)) {
+  problems.push('stories/history/006/translations.js: missing German translation map.');
+} else {
+  console.log('stories/history/006/translations.js: German map declaration found (entry parity still needs review).');
 }
 
 // Ahmed Zewail's story uses its own T/EXTRA locale objects, not I18N.register.
