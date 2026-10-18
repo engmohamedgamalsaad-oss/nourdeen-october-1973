@@ -21,7 +21,7 @@ For any new story, also read `docs/khaledoon-story-production-workflow.md` compl
 - Keep the original submitted story text unchanged in a separate copy.
 - For stories, verify historical claims and sources; never invent quotations or present AI-generated illustrations as archival photographs.
 - Every new story must include a story cover, a title-related start-screen/cover-popup image, and contextual in-story images where useful, with sources and usage rights checked.
-- Preserve the Arabic RTL experience and check English, French, and Italian when applicable.
+- Preserve Arabic RTL and fully support Arabic (ar), English (en), French (fr), Italian (it), and German (de). Test German content and LTR direction; a language button alone is not complete support. For Karma stories, preserve her authentic child voice and reasoning, distinct from a wise narrator grounded in evidence and sources.
 - Ask only one focused question if essential information cannot be verified or safely inferred. Otherwise proceed without unnecessary questions.
 
 The owner is an engineer, not a specialist developer. Execute directly where tools permit; do not respond with a plan or theoretical code when the requested change can safely be performed.
