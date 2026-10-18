@@ -74,7 +74,7 @@ details.pubrow.hid .pt{color:#e07a7a;text-decoration:line-through;text-decoratio
 <div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
 <div id="viewSubs">
 <div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره. زر «إخفاء» بجانب كل حكاية يخفيها من صفحة الزوار، والضغط عليه مرة ثانية يعيد إظهارها.</p></div>
-<div class="stats" id="stats"></div>
+<div class="stats" id="stats"></div><p class="fnote">الأرقام تجمع سجلات الإرسال من Supabase والقصص المنشورة كملفات على الموقع؛ قد يظهر سجل إرسال وصفحة موقع لنفس الشخصية كسجلين منفصلين.</p>
 <div class="tools"><input type="search" id="search" placeholder="ابحث بالعنوان أو الشخصية أو الراوي…" aria-label="بحث"><div class="fbar"><button class="btn ghost" id="refreshBtn" type="button">↻ تحديث</button><button class="btn primary" id="newBtn" type="button">＋ حكاية جديدة</button></div></div>
 <div class="chips" id="tabs" role="group" aria-label="الحالة"></div>
 <div class="chips" id="secs" role="group" aria-label="القسم"></div>
@@ -167,7 +167,7 @@ function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
  [
-  ['إجمالي',items.length,'all'],
+  ['إجمالي السجلات',items.length,'all'],
   ['بانتظار المراجعة',count(function(i){return i.status==='pending'}),'pending'],
   ['تحت التحرير',count(function(i){return i.status==='review'}),'review'],
   ['منشورة',count(function(i){return i.status==='published'}),'published']
@@ -481,7 +481,7 @@ function pubRow(it){
  var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
- var meta=[STATUS[it.status]||'',dt,SEC[it.section]||''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ var meta=[STATUS[it.status]||'',dt,SEC[it.section]||'',it._t==='site'?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
