@@ -416,7 +416,8 @@ var D={
 "نبيل عبد الوهاب":"Nabil Abdel Wahab",
 "عاطف السادات":"Atef al-Sadat",
 "حكاية":"Geschichte",
-"اختبر معلوماتك في حرب أكتوبر | حكايات أكتوبر 1973":"Teste dein Wissen über den Oktoberkrieg | Geschichten vom Oktober 1973"
+"اختبر معلوماتك في حرب أكتوبر | حكايات أكتوبر 1973":"Teste dein Wissen über den Oktoberkrieg | Geschichten vom Oktober 1973",
+
 };
 /* aria-label: نترجم فقط ما يستعيده khaledoon-i18n-extra.js عند تغيير اللغة */
 var AL={"التنقل":1,"حكايات أكتوبر 1973":1,"خالدون عبر التاريخ":1};
@@ -447,8 +448,8 @@ function ap(r){
  while(n=w.nextNode())one(n);
 }
 function labels(){
- var attrs=['aria-label','alt','placeholder','title'];
- var els=document.querySelectorAll('[aria-label],[alt],[placeholder],[title]');
+ var attrs=['aria-label','alt','placeholder','title','content'];
+ var els=document.querySelectorAll('[aria-label],[alt],[placeholder],[title],meta[name="description"],meta[property="og:title"],meta[property="og:description"]);
  for(var k=0;k<els.length;k++){
   var el=els[k];
   for(var j=0;j<attrs.length;j++){
