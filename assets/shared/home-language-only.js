@@ -17,7 +17,7 @@
   'use strict';
   if (window.KH_LANG) return;   /* لو حُمّل الملف مرتين، يعمل مرة واحدة فقط */
 
-  var SUPPORTED = ['ar', 'en', 'fr', 'it'];   /* الألمانية (de) غير مفعّلة عمدًا */
+  var SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
   var RTL = ['ar'];
   var FALLBACK = 'ar';
   var KEY = 'kh-lang';                        /* المفتاح الموحد */
