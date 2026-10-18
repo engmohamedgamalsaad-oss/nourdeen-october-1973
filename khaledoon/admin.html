@@ -25,6 +25,13 @@ details.pubrow>summary::-webkit-details-marker{display:none}
 details.pubrow>summary::after{content:"▾";margin-inline-start:4px;color:var(--c,var(--gold));transition:transform .2s}
 details.pubrow[open]>summary::after{transform:rotate(180deg)}
 .pubrow .pt{display:block;color:var(--gold);font-weight:800;font-size:1.05rem;line-height:1.6}
+details.pubrow>summary{padding:8px 12px;gap:8px}
+.pubrow .pt{font-size:.98rem;line-height:1.4}
+.pubrow .pbody .fcard{padding:14px}
+.stat-button{width:100%;font:inherit;text-align:start;cursor:pointer;transition:border-color .2s,background-color .2s,transform .2s}
+.stat-button:hover{border-color:var(--gold);transform:translateY(-1px)}
+.stat-button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.stat-button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
 .pubrow .pd{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
 .pubrow .pbody{padding:0 10px 10px}.pubrow .pbody .fcard{margin-bottom:0}
 .mvbox{margin-top:14px;padding:14px;border:1px dashed var(--c,var(--gold));border-radius:14px}
@@ -157,7 +164,21 @@ async function loadList(){
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- [['إجمالي',items.length],['بانتظار المراجعة',count(function(i){return i.status==='pending'})],['تحت التحرير',count(function(i){return i.status==='review'})],['منشورة',count(function(i){return i.status==='published'})]].forEach(function(s){var c=el('div','stat');c.appendChild(el('span','',s[0]));c.appendChild(el('strong','',String(s[1])));b.appendChild(c)});
+ [
+  ['إجمالي',items.length,'all'],
+  ['بانتظار المراجعة',count(function(i){return i.status==='pending'}),'pending'],
+  ['تحت التحرير',count(function(i){return i.status==='review'}),'review'],
+  ['منشورة',count(function(i){return i.status==='published'}),'published']
+ ].forEach(function(s){
+  var c=el('button','stat stat-button'),label=el('span','',s[0]),value=el('strong','',String(s[1]));
+  c.type='button';c.setAttribute('aria-pressed',fStatus===s[2]?'true':'false');
+  c.addEventListener('click',function(){
+   fStatus=s[2];fSec='all';term='';draftNew=false;
+   $('search').value='';render();
+   $('list').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  c.appendChild(label);c.appendChild(value);b.appendChild(c);
+ });
 }
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
