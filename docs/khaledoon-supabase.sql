@@ -5,7 +5,7 @@
 create table if not exists public.khaledoon_submissions (
   id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
-  section text not null check (section in ('october','science','learning','fame','history','curriculum','readers')),
+  section text not null check (section in ('october','science','learning','fame','history','curriculum','readers','islamic')),
   stage text check (stage in ('primary','preparatory','secondary')),
   school_grade smallint check (school_grade between 1 and 6),
   subject text check (char_length(subject) <= 80),
