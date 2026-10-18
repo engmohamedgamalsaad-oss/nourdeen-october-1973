@@ -51,6 +51,28 @@
 </article>
 <div class="tabs"><button class="btn primary" id="printBtn">طباعة المعاينة</button><button class="btn" id="resetBtn">إعادة النموذج الافتراضي</button></div>
 </section>
+
+<section id="reviewView" class="panel wrap" hidden>
+ <h1>معاينة الحكاية قبل النشر</h1>
+ <p class="sub" id="reviewMeta">هذه معاينة من البيانات الحالية في بطاقة الإدارة.</p>
+ <article class="story" id="reviewStory">
+  <div class="cover"><div class="eyebrow" id="reviewSection">خالدون عبر التاريخ</div><h1 id="reviewTitle"></h1><div class="subtitle" id="reviewSubtitle"></div></div>
+  <div class="storybody">
+   <div class="speaker"><b>في الحكاية</b><p id="reviewBody"></p></div>
+   <section id="reviewHistoryWrap"><h2>في ضوء التاريخ</h2><p id="reviewHistory"></p></section>
+   <section id="reviewSourcesWrap"><h2>المصادر</h2><p id="reviewSources"></p></section>
+   <section id="reviewImagesWrap"><h2>الصور وحقوق الاستخدام</h2><p id="reviewImages"></p></section>
+   <details id="reviewOriginalWrap"><summary>النص الأصلي كما وصل (للمراجعة فقط)</summary><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details>
+   <section id="reviewTranslationsWrap"><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
+  </div>
+ </article>
+ <div class="note">الموافقة هنا ستغيّر حالة السجل في لوحة الإدارة إلى «منشورة». نظام الموقع الحالي لا ينشئ صفحة HTML للحكاية تلقائيًا بمجرد تغيير الحالة؛ لذلك لن أعتبر هذا وحده نشرًا حيًا على الموقع.</div>
+ <div class="tabs">
+  <button class="btn primary" id="approveStoryBtn" type="button">موافق — اعتماد الحالة</button>
+  <button class="btn" id="rejectStoryBtn" type="button">غير موافق — رجوع للتعديل</button>
+  <button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button>
+ </div>
+</section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
 <script>
 (function(){
@@ -64,6 +86,35 @@ pairs.forEach(function(p){document.getElementById(p[0]).addEventListener('input'
 var defaults={storyTitle:'عنوان الحكاية الجديدة',storySubtitle:'حكاية نكتشف من خلالها التاريخ بالدليل',karmaText:'كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟',narratorText:'الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.',sourceText:'المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.',outerColor:'#b8874b',innerColor:'#102b35'};
 document.getElementById('resetBtn').addEventListener('click',function(){Object.keys(defaults).forEach(function(k){document.getElementById(k).value=defaults[k]});paint()});
 document.getElementById('printBtn').addEventListener('click',function(){var was=views.story.hidden;views.site.hidden=true;views.story.hidden=false;window.print();views.site.hidden=was});
+
 paint();
+var params=new URLSearchParams(location.search);
+if(params.get('story')==='1'){
+ var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
+ siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
+ document.querySelectorAll('[data-view]').forEach(function(x){x.classList.remove('active')});
+ var draft=null;
+ try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
+ if(!draft){document.getElementById('reviewMeta').textContent='لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.';document.getElementById('approveStoryBtn').disabled=true}
+ else{
+  localStorage.removeItem('kh-story-preview-draft');
+  function put(id,value){document.getElementById(id).textContent=value||''}
+  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');
+  put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
+  document.getElementById('reviewHistoryWrap').hidden=!draft.history_note;
+  document.getElementById('reviewSourcesWrap').hidden=!draft.sources;
+  document.getElementById('reviewImagesWrap').hidden=!draft.images_note;
+  document.getElementById('reviewOriginalWrap').hidden=!draft.original_body;
+  var langs={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
+  var list=document.getElementById('reviewTranslations');list.textContent='';
+  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='speaker';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
+  document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
+  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
+ }
+ function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action},location.origin);if(action==='reject')window.close();else document.getElementById('reviewMeta').textContent='تم إرسال موافقتك إلى لوحة الإدارة. راجع رسالة التأكيد هناك.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها واتخذ القرار من بطاقة الحكاية.'}}
+ document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
+ document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
+ document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
+}
 })();
 </script></body></html>
