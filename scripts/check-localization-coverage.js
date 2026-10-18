@@ -19,10 +19,11 @@ const storyFiles = [
   'stories/history/005/translations.js',
   'stories/history/006/translations.js'
 ];
-/* Stories whose text lives inside index.html (007): each language must appear in all
-   three of the page's translation tables (T, EXTRA, REACTION_TEXT). */
+/* Stories whose text lives inside index.html: each language must appear in all
+   three inline translation tables (story text, UI labels, and reaction/status text). */
 const inlineStoryFiles = [
-  'stories/science/007/index.html'
+  'stories/science/007/index.html',
+  'stories/islamic/011/index.html'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
