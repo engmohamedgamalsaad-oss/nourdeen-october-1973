@@ -23,9 +23,6 @@
   var KEY = 'kh-lang';                        /* المفتاح الموحد */
   var LEGACY_KEYS = ['lang'];                 /* مفاتيح قديمة: تُقرأ وتُرحَّل ولا تُحذف */
 
-  var script = document.currentScript;
-  var isHome = !!(script && script.getAttribute('data-role') === 'home');
-
   function isSupported(value) { return SUPPORTED.indexOf(value) >= 0; }
   function normalize(value) { return String(value == null ? '' : value).toLowerCase(); }
   function read(key) { try { return normalize(localStorage.getItem(key)); } catch (e) { return ''; } }
