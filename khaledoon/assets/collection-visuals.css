@@ -247,3 +247,8 @@ html[data-theme="light"] body.collection-history .hero{
 @media(max-width:700px){
   html[data-theme="light"] body.collection-history{background-attachment:scroll}
 }
+
+
+/* Reader-submitted stories gateway also needs its own light palette. */
+html[data-theme="light"] .gate.g6{--c:#a65a26;background:linear-gradient(145deg,#fff1e5,#f4dfcd);color:#30251e;border-color:rgba(166,90,38,.32)}
+html[data-theme="light"] .gate.g6::before{opacity:.12}
