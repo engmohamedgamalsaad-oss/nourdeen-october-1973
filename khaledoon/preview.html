@@ -93,7 +93,7 @@ document.getElementById('printBtn').addEventListener('click',function(){var was=
 
 paint();
 var params=new URLSearchParams(location.search);
-if(params.get('story')==='1'||(function(){try{return !!localStorage.getItem('kh-story-preview-draft')}catch(e){return false}})()){
+if(params.get('story')==='1'){
  var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
  siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
  var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
