@@ -399,7 +399,7 @@ var translationDetails=el('details','translation-panel');
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
 function makePreviewDraft(statusForPreview){
   var d=collect(statusForPreview||'pending');
-  return {title:d.title,subtitle:d.subtitle,section_label:SEC[d.section]||d.section,section_key:d.section,figure_name:d.figure_name,body:d.body,history_note:d.history_note||'',sources:d.sources||'',images_note:d.images_note||'',original_body:d.original_body||'',translations:d.translations||{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id||null,submission_table:'khaledoon_submissions',record_type:'modern',record_data:d,story_meta:d.story_meta||{}};
+  return {title:d.title,subtitle:d.subtitle,section_label:SEC[d.section]||d.section,section_key:d.section,figure_name:d.figure_name,body:d.body,history_note:d.history_note||'',sources:d.sources||'',images_note:d.images_note||'',original_body:d.original_body||'',translations:d.translations||{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id||null,submission_table:'khaledoon_submissions',record_type:'modern',record_data:d,story_meta:d.story_meta||{},provider_key:providerSelect.value};
  }
  function openPreviewAfterSave(btn){
   var popup=window.open('about:blank','_blank');
@@ -889,14 +889,19 @@ async function handleStoryPreviewDecision(event){
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
  say('ok','جارٍ '+buttonLabel+'…');
  try{
-  var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(record)});
+  var updatePayload=record;
+  if(record.status==='published'){
+   meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;
+   updatePayload={story_meta:meta};
+  }
+  var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(updatePayload)});
   if(!response.ok){var body=await response.text();throw new Error('تعذر حفظ قرار المعاينة ('+response.status+'): '+body.slice(0,350))}
   var rows=await response.json();if(!rows.length)throw new Error('لم يُرجع الخادم سجلًا بعد قرار المعاينة. راجع صلاحيات الأدمن.');
   context.story_meta=meta;context.record_data=record;
   try{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}catch(e){}
   await loadList();
   if(action==='approve'){
-   var handoff={format:'khaledoon-story-handoff-v1',created_at:new Date().toISOString(),state:'approved_preview_waiting_for_github_upload',notice:'هذه الحزمة تحفظ بيانات الحكاية وقرار المعاينة فقط. لا تعني أن ملفات HTML أو بنك الأسئلة أو الصور رُفعت إلى GitHub أو أن الحكاية منشورة.',story:context,required_steps:['استخدم ملفات القالب الحالية للقسم المناسب.','استكمل ملفات HTML والترجمات الخمس وبنك الأسئلة والمصادر والصور المطلوبة.','ارفع الملفات إلى المسارات الصحيحة في GitHub بعد الموافقة.','تحقق من صفحة GitHub Pages الحية وروابطها ووظائفها قبل تغيير الحالة إلى منشورة.'],prompt:typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''};
+   var handoff={format:'khaledoon-story-handoff-v1',created_at:new Date().toISOString(),state:'approved_preview_waiting_for_github_upload',notice:'هذه الحزمة تحفظ بيانات الحكاية وقرار المعاينة فقط. لا تعني أن ملفات HTML أو بنك الأسئلة أو الصور رُفعت إلى GitHub أو أن الحكاية منشورة.',story:context,required_steps:['استخدم ملفات القالب الحالية للقسم المناسب.','استكمل ملفات HTML والترجمات الخمس وبنك الأسئلة والمصادر والصور المطلوبة.','ارفع الملفات إلى المسارات الصحيحة في GitHub بعد الموافقة.','تحقق من صفحة GitHub Pages الحية وروابطها ووظائفها قبل تغيير الحالة إلى منشورة.'],prompt:typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:'',provider_prompt:(promptProvidersCache&&promptProvidersCache[context.provider_key])||''};
    var blob=new Blob([JSON.stringify(handoff,null,2)+'\n'],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
    a.href=url;a.download='khaledoon-story-handoff-'+String(context.submission_id).slice(0,8)+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1200);
    say('ok','تم اعتماد المعاينة وحفظ القرار وتنزيل ملف تسليم البيانات. الحكاية لم تُنشر تلقائيًا: يلزم رفع ملفات الصفحة النهائية إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
