@@ -16,7 +16,8 @@ var langs=[['en','الإنجليزية'],['fr','الفرنسية'],['it','الإ
 var $=function(id){return document.getElementById(id)},say=function(t){$('status').textContent=t};
 function validId(s){return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s)}
 function clone(x){return JSON.parse(JSON.stringify(x))}
-function sectionHasPublishedStories(id){if(!Array.isArray(publishedStories))return null;var aliases={learning:'women',knowledge:'women',fame:'people'};var wanted=aliases[id]||id;return publishedStories.some(function(s){var sec=aliases[s.section]||s.section;return sec===wanted&&s.published!==false})}\nfunction render(){
+function sectionHasPublishedStories(id){if(!Array.isArray(publishedStories))return null;var aliases={learning:'women',knowledge:'women',fame:'people'};var wanted=aliases[id]||id;return publishedStories.some(function(s){var sec=aliases[s.section]||s.section;return sec===wanted&&s.published!==false})}
+function render(){
 var list=$('list');list.textContent='';
 (data.sections||[]).forEach(function(sec,index){
 var card=document.createElement('article');card.className='item';
