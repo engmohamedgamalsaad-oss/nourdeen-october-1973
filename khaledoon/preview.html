@@ -71,8 +71,8 @@
   <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre></section>
   <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
  </div>
- <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. الموافقة تغيّر حالة السجل في لوحة الإدارة فقط؛ إنشاء صفحة الحكاية النهائية ونشرها يحتاجان إلى خطوة منفصلة.</div>
- <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">موافق — اعتماد الحالة</button><button class="btn" id="rejectStoryBtn" type="button">غير موافق — رجوع للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+ <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. القبول يحفظ قرار المعاينة ويجهّز ملف تسليم بيانات الحكاية. لا تُعتبر الحكاية منشورة حتى تُرفع ملفاتها النهائية إلى GitHub ويُتحقق من ظهورها الحي.</div>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
 <script>
@@ -197,7 +197,7 @@ if(params.get('story')==='1'){
   }
   })(draft);
  }
- function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action},location.origin);if(action==='reject')window.close();else document.getElementById('reviewMeta').textContent='تم إرسال موافقتك إلى لوحة الإدارة. راجع رسالة التأكيد هناك.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها واتخذ القرار من بطاقة الحكاية.'}}
+ function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action,draft:draft},location.origin);if(action==='reject'){document.getElementById('reviewMeta').textContent='تم إرسال رفض المعاينة إلى لوحة الإدارة؛ ستعود الحكاية إلى مسودة.';setTimeout(function(){window.close()},500)}else document.getElementById('reviewMeta').textContent='تم إرسال قبول المعاينة إلى لوحة الإدارة. لن تُعتبر الحكاية منشورة قبل رفع ملفاتها النهائية إلى GitHub والتحقق من ظهورها.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها وافتح المعاينة من بطاقة الحكاية قبل اتخاذ القرار.'}}
  document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
  document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
  document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
