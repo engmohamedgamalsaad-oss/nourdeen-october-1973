@@ -265,6 +265,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
   var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
   var meta=Object.assign({},it.story_meta||{}),draft=meta.pending_draft;
   if(!draft){draft={};['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent','student_name','grade','color','story_number'].forEach(function(k){if(it[k]!==undefined)draft[k]=it[k]})}
+  if(table!=='submitted_stories'&&draft.consent!==true&&it.status!=='published')throw new Error('لا يمكن تأكيد النشر قبل تسجيل موافقة الراوي أو ولي الأمر.');
   var payload={};
   if(table==='submitted_stories'){
    ['student_name','grade','title','subtitle','body','sources','color','story_number'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
@@ -304,7 +305,7 @@ function legacyCard(it){
   if(d.status==='published')d.status='pending';
   var payload=d;
   if(it.status==='published'&&requestedStatus!=='rejected'){
-   var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);meta.pending_draft.status='pending';payload={story_meta:meta};d.status='published';
+   var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);delete meta.pending_draft.story_meta;meta.pending_draft.status='pending';payload={story_meta:meta};d.status='published';
   }else if(requestedStatus==='rejected'){payload=d;payload.status='rejected'}else{payload=d;payload.status='pending'}
   btn.disabled=true;
   try{
@@ -319,7 +320,7 @@ function legacyCard(it){
  pubBtn.title='لا ينشر مباشرة؛ يفتح معاينة خاصة بالحكاية أولًا.';
  pubBtn.addEventListener('click',function(){
   var popup=window.open('about:blank','_blank');if(!popup){say('err','اسمح بالنوافذ المنبثقة ثم حاول المعاينة مرة أخرى.');return}
-  var draft={title:title.value.trim(),subtitle:subtitle.value.trim(),section_label:'حكايات أكتوبر 1973',section_key:'october',figure_name:name.value.trim(),body:body.value.trim(),history_note:'',sources:sources.value.trim(),images_note:'',original_body:it.body||body.value.trim(),translations:{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id,submission_table:'submitted_stories',record_type:'legacy',record_data:{student_name:name.value.trim(),grade:grade.value.trim(),title:title.value.trim(),subtitle:subtitle.value.trim(),body:body.value.trim(),sources:sources.value.trim(),status:'pending',story_number:it.story_number||null,story_meta:it.story_meta||{}},story_meta:it.story_meta||{}};
+  var draft={title:title.value.trim(),subtitle:subtitle.value.trim(),section_label:'حكايات أكتوبر 1973',section_key:'october',figure_name:name.value.trim(),body:body.value.trim(),history_note:'',sources:sources.value.trim(),images_note:'',original_body:it.body||body.value.trim(),translations:{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id,submission_table:'submitted_stories',record_type:'legacy',record_data:{student_name:name.value.trim(),grade:grade.value.trim(),title:title.value.trim(),subtitle:subtitle.value.trim(),body:body.value.trim(),sources:sources.value.trim(),status:it.status==='published'?'published':'pending',story_number:it.story_number||null,story_meta:it.story_meta||{}},story_meta:it.story_meta||{}};
   try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ تجهيز معاينة الحكاية…</body></html>');popup.document.close();localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));popup.location.href='preview.html?story=1'}catch(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+e.message)}
  });
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
@@ -536,7 +537,7 @@ if(!isNew){
   if(d.figure_name.length<2||d.narrator_name.length<2||d.title.length<3||d.body.length<50){saveFeedback('err','الشخصية واسم الراوي والعنوان مطلوبة، ونص الحكاية 50 حرفًا على الأقل.');return false}
   if(d.section==='curriculum'&&(!d.stage||!d.school_grade)){saveFeedback('err','اختر المرحلة والصف لشخصيات المناهج.');return false}
   if(d.stage&&d.stage!=='primary'&&d.school_grade>3){saveFeedback('err','الصف خارج نطاق المرحلة المختارة.');return false}
-  if(d.status==='published'&&!d.consent){saveFeedback('err','لا يمكن النشر دون تسجيل موافقة الراوي أو ولي الأمر.');return false}
+  /* النشر الفعلي لا يتم من زر الحفظ؛ تُفحص الموافقة عند تأكيد النشر بعد رفع الملفات. */
   return true;
  }
  async function persist(status,btn){
@@ -547,7 +548,7 @@ if(!isNew){
   try{
    var payload=d;
    if(!isNew&&it.status==='published'){
-    var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);meta.pending_draft.status='pending';payload={story_meta:meta};
+    var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);delete meta.pending_draft.story_meta;meta.pending_draft.status='pending';payload={story_meta:meta};
    }
    var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)})
               :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
