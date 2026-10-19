@@ -293,7 +293,7 @@ function legacyCard(it){
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
   delBtn.disabled=true;
-  try{var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  try{await hideStaticStoryBeforeDelete(it);var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يتم حذف سجل؛ تحقق من صلاحية الأدمن.');
    say('ok','تم حذف حكاية أكتوبر.');await loadList();
@@ -454,7 +454,7 @@ function makePreviewDraft(statusForPreview){
   L.push('5) خطة الصور وحقوق الاستخدام والإسناد، دون افتراض أن نتائج البحث تمنح حق الاستخدام.');
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
-  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push((window.STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[providerSelect.value])||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
+  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push((promptProvidersCache&&promptProvidersCache[providerSelect.value])||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
   var t=L.join('\n');
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
@@ -550,10 +550,20 @@ function confirmDelete(it){
  if(it.status==='published'||sv)msg+='\n\nتنبيه: الحكاية منشورة أو لها صفحة على الموقع؛ الحذف يزيل سجلها من الإدارة فقط ولا يحذف صفحتها. لإخفائها من الزوار استخدم زر «إخفاء».';
  return confirm(msg);
 }
+async function hideStaticStoryBeforeDelete(it){
+ var story=storyFor(it);
+ if(!story||story.id==null)return;
+ var id=String(story.id);
+ if(vHidden[id])return;
+ var response=await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})});
+ if(!response.ok)throw new Error('تعذر إخفاء صفحة الموقع من قوائم الزوار ('+response.status+'). لم يُحذف سجل الإدارة.');
+ vHidden[id]=true;
+}
 async function removeItem(it,btn){
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
  btn.disabled=true;
  try{
+  await hideStaticStoryBeforeDelete(it);
   var r=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
@@ -564,6 +574,7 @@ async function removeItem(it,btn){
 async function remove(it,btn){
  btn.disabled=true;
  try{
+  await hideStaticStoryBeforeDelete(it);
   var r=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
@@ -646,10 +657,18 @@ function pubRow(it){
  if(openIds[key]){d.open=true;build()}
  return d;
 }
+var promptProvidersCache=window.STORY_PROVIDER_PROMPTS&&typeof window.STORY_PROVIDER_PROMPTS==='object'?window.STORY_PROVIDER_PROMPTS:{};
+async function loadPromptProviders(){
+ try{
+  var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');
+  if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&rows[0].config_value.providers&&typeof rows[0].config_value.providers==='object'){promptProvidersCache=Object.assign({},promptProvidersCache,rows[0].config_value.providers);return}}
+ }catch(e){}
+ try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||'null');if(local&&local.providers)promptProvidersCache=Object.assign({},promptProvidersCache,local.providers)}catch(e){}
+}
 function buildNewStoryPrompt(providerKey){
  var prompt=String(STORY_WORKFLOW||'').trim();
  if(!prompt){throw new Error('تعذر تحميل البرومبت الرئيسي الكامل من تعليمات المشروع.');}
- var provider=(window.STORY_PROVIDER_PROMPTS&&window.STORY_PROVIDER_PROMPTS[providerKey||'chatgpt'])||'';
+ var provider=promptProvidersCache[providerKey||'chatgpt']||'';
  return prompt+'\\n\\n================ تعليمات الأداة المختارة ================\\n'+provider;
 }
 function renderNewStoryGate(list){
@@ -792,6 +811,7 @@ async function enterApp(){
  showApp();view='subs';$('viewSubs').hidden=false;$('viewVis').hidden=true;$('viewReactions').hidden=true;renderViews();
  if(location.hash==='#visibility')setView('vis');else if(location.hash==='#reactions')setView('reactions');
  await loadVis().catch(function(e){say('err',e.message)});
+ await loadPromptProviders().catch(function(){});
  await loadList();
 }
 $('loginForm').addEventListener('submit',async function(e){
