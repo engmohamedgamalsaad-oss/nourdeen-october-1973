@@ -260,15 +260,15 @@ function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.va
 
 var STORY_META_MARKER='[[KHALEDOON_STORY_META_V1]]';
 function unpackStoryMeta(raw){
- var s=String(raw||''),i=s.lastIndexOf(STORY_META_MARKER),out={notes:s,karma_intro:'',quiz_json:'',history_note:'',translations:{}};
+ var s=String(raw||''),i=s.lastIndexOf(STORY_META_MARKER),out={notes:s,karma_intro:'',quiz_json:'',history_note:'',map_json:'',translations:{}};
  if(i<0)return out;
  out.notes=s.slice(0,i).trim();
- try{var m=JSON.parse(s.slice(i+STORY_META_MARKER.length).trim());out.karma_intro=String(m.karma_intro||'');out.quiz_json=String(m.quiz_json||'');out.history_note=String(m.history_note||'');out.translations=m.translations&&typeof m.translations==='object'?m.translations:{}}catch(e){}
+ try{var m=JSON.parse(s.slice(i+STORY_META_MARKER.length).trim());out.karma_intro=String(m.karma_intro||'');out.quiz_json=String(m.quiz_json||'');out.history_note=String(m.history_note||'');out.map_json=String(m.map_json||'');out.translations=m.translations&&typeof m.translations==='object'?m.translations:{}}catch(e){}
  return out;
 }
-function packStoryMeta(notes,karma,quiz,translations,history){
- var clean=String(notes||'').trim(),meta={karma_intro:String(karma||'').trim(),quiz_json:String(quiz||'').trim(),history_note:String(history||'').trim(),translations:translations&&typeof translations==='object'?translations:{}};
- if(!meta.karma_intro&&!meta.quiz_json&&!meta.history_note&&!Object.keys(meta.translations).length)return clean;
+function packStoryMeta(notes,karma,quiz,translations,history,mapJson){
+ var clean=String(notes||'').trim(),meta={karma_intro:String(karma||'').trim(),quiz_json:String(quiz||'').trim(),history_note:String(history||'').trim(),map_json:String(mapJson||'').trim(),translations:translations&&typeof translations==='object'?translations:{}};
+ if(!meta.karma_intro&&!meta.quiz_json&&!meta.history_note&&!meta.map_json&&!Object.keys(meta.translations).length)return clean;
  return (clean?clean+'\n\n':'')+STORY_META_MARKER+'\n'+JSON.stringify(meta);
 }
 function downloadTextFile(name,content,type){
