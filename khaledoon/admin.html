@@ -947,10 +947,12 @@ async function handleStoryPreviewDecision(event){
   try{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}catch(e){}
   await loadList();
   if(action==='approve'){
+   if(event.data.bundle_downloaded){say('ok','تم اعتماد المعاينة وحفظ القرار. حزمة ZIP للحكاية جاهزة للتنزيل؛ ارفع ملفاتها إلى GitHub مع الحفاظ على المسارات، ثم استخدم «تأكيد النشر بعد الرفع». لم تُنشر الحكاية بعد.')}else{
    var handoff={format:'khaledoon-story-handoff-v1',created_at:new Date().toISOString(),state:'approved_preview_waiting_for_github_upload',notice:'هذه الحزمة تحفظ بيانات الحكاية وقرار المعاينة فقط. لا تعني أن ملفات HTML أو بنك الأسئلة أو الصور رُفعت إلى GitHub أو أن الحكاية منشورة.',story:context,required_steps:['استخدم ملفات القالب الحالية للقسم المناسب.','استكمل ملفات HTML والترجمات الخمس وبنك الأسئلة والمصادر والصور المطلوبة.','ارفع الملفات إلى المسارات الصحيحة في GitHub بعد الموافقة.','تحقق من صفحة GitHub Pages الحية وروابطها ووظائفها قبل تغيير الحالة إلى منشورة.'],prompt:typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:'',provider_prompt:(promptProvidersCache&&promptProvidersCache[context.provider_key])||''};
    var blob=new Blob([JSON.stringify(handoff,null,2)+'\n'],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
    a.href=url;a.download='khaledoon-story-handoff-'+String(context.submission_id).slice(0,8)+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1200);
    say('ok','تم اعتماد المعاينة وحفظ القرار وتنزيل ملف تسليم البيانات. الحكاية لم تُنشر تلقائيًا: يلزم رفع ملفات الصفحة النهائية إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
+   }
   }else{
    say('ok','تم رفض المعاينة فقط، وأُعيدت الحكاية إلى مسودة غير منشورة للتعديل. لم تُرفض الحكاية الأصلية.');
   }
