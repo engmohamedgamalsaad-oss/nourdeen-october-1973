@@ -1,0 +1,148 @@
+/* لوحة إدارة خالدون — تحسينات الهاتف فقط، دون تغيير تنسيق بقية الموقع. */
+@media (max-width: 760px) {
+  html, body { max-width: 100%; overflow-x: clip; }
+  body { line-height: 1.7; }
+  .topbar { position: relative; top: auto; }
+  .topbar .wrap { width: calc(100% - 20px); }
+  .topbar .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px 0;
+  }
+  .topbar .brand { justify-content: center; min-width: 0; }
+  .topbar .ctl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    min-width: 0;
+  }
+  .topbar .ctl > a,
+  .topbar .ctl > button {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 8px 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+    font-size: .88rem;
+  }
+  .topbar .ctl #th { grid-column: 1 / -1; }
+  .fmain,
+  main.fmain[style] {
+    width: calc(100% - 20px) !important;
+    max-width: 100%;
+    margin: 14px auto 36px;
+    min-width: 0;
+  }
+  .fcard { min-width: 0; padding: 14px; border-radius: 14px; }
+  .fcard h2, .fcard h3 { overflow-wrap: anywhere; line-height: 1.5; }
+  .fhead h1 { font-size: clamp(1.55rem, 7vw, 2rem); line-height: 1.45; overflow-wrap: anywhere; }
+  .fhead p, .fnote { overflow-wrap: anywhere; }
+  .fgrid { grid-template-columns: minmax(0, 1fr) !important; gap: 0; }
+  .fl { min-width: 0; }
+  .fl input, .fl select, .fl textarea,
+  input, select, textarea {
+    min-width: 0;
+    max-width: 100%;
+    font-size: 16px;
+  }
+  .tools {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    min-width: 0;
+    width: 100%;
+  }
+  .tools > input,
+  .tools > select,
+  .tools > .fbar { width: 100%; min-width: 0; }
+  .fbar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    align-items: stretch;
+    min-width: 0;
+  }
+  .fbar > button, .fbar > a, .btn {
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+    padding: 9px 10px;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+    text-align: center;
+  }
+  #adminTools .ctl {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 100%;
+    min-width: 0;
+  }
+  #adminTools .ctl > a { min-width: 0; text-align: center; }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 7px;
+    width: 100%;
+    min-width: 0;
+    overflow: visible;
+  }
+  .chips > button, .chips > a, .chips > label {
+    flex: 1 1 125px;
+    min-width: 0;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    line-height: 1.45;
+  }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  .stat { min-width: 0; padding: 11px; overflow-wrap: anywhere; }
+  .stat strong { font-size: 1.35rem; }
+  #list, #vlist, #rlist, #viewSubs, #viewVis, #viewReactions { min-width: 0; }
+  #list *, #vlist *, #rlist *, #viewSubs *, #viewVis *, #viewReactions * {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  details.pubrow > summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px;
+  }
+  details.pubrow > summary > div { flex: 1 1 100%; }
+  details.pubrow > summary .hidebtn,
+  details.pubrow > summary .delbtn { flex: 1 1 120px; }
+  .vrow { align-items: stretch; gap: 8px; padding: 10px; }
+  .vrow .vt { flex: 1 1 100%; min-width: 0; }
+  .reaction-review-head { display: flex; flex-direction: column; gap: 8px; }
+  .reaction-count-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .translation-panel, .translation-lang { padding: 10px; }
+  .translation-compare { grid-template-columns: minmax(0, 1fr) !important; }
+  pre, code { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
+  table { display: block; width: 100%; max-width: 100%; overflow-x: auto; }
+}
+@media (max-width: 420px) {
+  .topbar .ctl, #adminTools .ctl { grid-template-columns: minmax(0, 1fr); }
+  .topbar .ctl #th { grid-column: auto; }
+  .fbar { grid-template-columns: minmax(0, 1fr); }
+  .stats { grid-template-columns: minmax(0, 1fr); }
+  .reaction-count-grid { grid-template-columns: minmax(0, 1fr); }
+  .chips > button, .chips > a, .chips > label { flex-basis: 100%; }
+  .fcard { padding: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topbar *, .fmain * { scroll-behavior: auto !important; transition-duration: 0.01ms !important; }
+}
