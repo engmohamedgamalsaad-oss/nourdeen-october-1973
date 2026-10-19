@@ -454,3 +454,8 @@
 تم فحص سياسات RLS قبل إضافة العمود، وأُبقيت سياسة الأدمن. تمت إضافة شرط يمنع الزائر من إرسال بيانات خاصة داخل `story_meta`. في الجدول القديم `submitted_stories`، لا تُعرض السجلات المنشورة للعامة إذا احتوت على بيانات خاصة، وتُفرغ البيانات الخاصة قبل إبقاء السجل منشورًا.
 
 إضافة العمود نُفذت على قاعدة البيانات الحية في 2026-10-19 وتحققنا من وجوده وقيود JSONB والسياسات. لم تُحذف أو تُعدّل أي حكاية موجودة. ملف SQL في المستودع للتوثيق/الإعداد فقط؛ لا يُعتبر وجوده دليلًا على تنفيذه في أي قاعدة أخرى.
+
+
+### Private draft metadata — version 2026-10-19.2
+
+Keep Karma's childlike opening, the narrator's historical explanation, the five-language question bank, verified map data, reactions, likes, sharing and print support. Save Karma text, quiz JSON and map metadata in the private `story_meta` JSONB field, not in `admin_notes` or `sources`. Public submission requests must leave `story_meta` empty. Do not publish from the submission list; prepare the story and route it to the admin-only preview. The preview acceptance creates the upload bundle; publication is not complete until the files are uploaded to GitHub and the live page is verified.
