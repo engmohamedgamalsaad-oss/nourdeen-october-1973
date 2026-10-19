@@ -46,7 +46,7 @@ async function nextId(){
 }
 function sourceRows(s){
  return String(s||'').split(/\r?\n/).map(function(line){return line.trim()}).filter(Boolean).map(function(line){
-  var urls=line.match(/https?:\/\/[^\s)\]>]+/g)||[],url=urls[0]||'',label=line.replace(url,'').replace(/[|—–:-]+$/,'').trim()||url;
+  var urls=line.match(/https?:\/\/[^\s)\]>]+/g)||[],url=(urls[0]||'').replace(/[.,;:]+$/,''),label=line.replace(url,'').replace(/[|—–:-]+$/,'').trim()||url;
   return {line:line,url:url,label:label}
  })
 }
@@ -54,7 +54,7 @@ function translatedRows(d,id){
  var rows={en:{},fr:{},it:{},de:{}},tr=d.translations||{};
  function add(lang,arabic,translated){if(arabic&&translated&&String(arabic).trim()!==String(translated).trim())rows[lang][String(arabic)]=String(translated)}
  function mapBlocks(arText,translatedText,lang){var a=paragraphs(arText),b=paragraphs(translatedText);a.forEach(function(x,i){if(b[i])add(lang,x,b[i])});if(a.length===1&&b.length===1)add(lang,arText,translatedText)}
- LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);add(lang,d.figure_name,t.student_name||d.figure_name);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang)});
+ LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang)});
  var labels={
   'كارما الطفلة':{en:'Karma, the curious child',fr:'Karma, l’enfant curieuse',it:'Karma, la bambina curiosa',de:'Karma, das neugierige Kind'},
   'الراوي المعرفي':{en:'The knowledgeable narrator',fr:'Le narrateur connaisseur',it:'Il narratore esperto',de:'Der sachkundige Erzähler'},
@@ -91,7 +91,7 @@ function storyHtml(d,id,section,accent,baseUrl){
 }
 function dataJson(d,id,section){
  var tr=d.translations||{},i18n={};
- LANGS.forEach(function(lang){var t=tr[lang]||{};i18n[lang]={name:t.student_name||d.narrator_name||'',grade:t.grade||d.narrator_grade||'',className:t.grade||d.narrator_grade||'',title:t.title||'',subtitle:t.subtitle||'',person:t.student_name||d.figure_name||''}});
+ LANGS.forEach(function(lang){var t=tr[lang]||{};i18n[lang]={name:t.student_name||d.narrator_name||'',grade:t.grade||d.narrator_grade||'',className:t.grade||d.narrator_grade||'',title:t.title||'',subtitle:t.subtitle||'',person:d.figure_name||''}});
  return {name:d.narrator_name||'غير مسجل',grade:d.narrator_grade||'',className:d.narrator_grade||'',title:d.title,subtitle:d.subtitle||'',person:d.figure_name||'',color:ACCENTS[section]||'#d5b7ff',order:parseInt(id,10),published:true,i18n:i18n};
 }
 function svgCover(d,id,accent,popup){
@@ -108,7 +108,7 @@ function zipFiles(files){
   var name=enc.encode(file.path),data=enc.encode(file.content),crc=crc32(data),flags=0x0800,time=0,date=0;
   var localHeader=[0x50,0x4b,0x03,0x04].concat(u16(20),u16(flags),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),Array.from(name),Array.from(data));
   local.push.apply(local,localHeader);
-  var centralHeader=[0x50,0x4b,0x01,0x02].concat(u16(20),u16(20),u16(flags),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),u16(0),u16(0),u16(0),u32(offset),Array.from(name));
+  var centralHeader=[0x50,0x4b,0x01,0x02].concat(u16(20),u16(20),u16(flags),u16(0),u16(time),u16(date),u32(crc),u32(data.length),u32(data.length),u16(name.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(offset),Array.from(name));
   central.push.apply(central,centralHeader);offset+=localHeader.length;
  });
  var centralOffset=offset,centralSize=central.length;
