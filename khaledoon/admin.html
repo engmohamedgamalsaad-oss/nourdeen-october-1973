@@ -890,7 +890,7 @@ async function handleStoryPreviewDecision(event){
  if(!context&&event.data.draft)context=event.data.draft;
  if(!context||!context.submission_id||!context.submission_table){say('err','وصل قرار المعاينة لكن لم نعثر على سجل الحكاية المرتبط. افتح المعاينة من بطاقة الحكاية مرة أخرى.');return}
  var table=context.submission_table,record=Object.assign({},context.record_data||{}),meta=Object.assign({},context.story_meta||{});
- meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'رُفضت المعاينة فقط؛ الحكاية الأصلية لم تُرفض.'};
+ meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'رُفضت المعاينة فقط؛ الحكاية الأصلية لم تُرفض.',static_story_id:event.data.static_story_id||null,static_story_path:event.data.static_story_path||null,bundle_downloaded:!!event.data.bundle_downloaded,prepared_page_url:event.data.prepared_page_url||''};
  record.story_meta=meta;
  if(action==='approve'){
   if(context.record_type==='modern'&&record.status!=='published')record.status='review';
