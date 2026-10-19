@@ -64,17 +64,20 @@
  <div class="publish-preview">
   <p class="note" id="reviewMeta" style="margin:0;padding:12px 18px;border-radius:0">معاينة الحكاية الحالية — لم تُنشر.</p>
   <header class="pub-hero"><div class="pub-hero-content"><div class="pub-kicker" id="reviewSection">خالدون عبر التاريخ • معاينة قبل النشر</div><h1 id="reviewTitle"></h1><p class="pub-subtitle" id="reviewSubtitle"></p><div class="pub-author"><span>حكاية قيد المراجعة</span><br><strong id="reviewFigure"></strong></div></div></header>
-  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">بداية الحكاية</div><h2>الحكاية</h2><div id="reviewBody"></div></section>
+  <section class="pub-section" id="reviewKarmaWrap"><div class="pub-kicker">صوت كارما</div><h2>فضول الطفلة وملاحظاتها</h2><div id="reviewKarma"></div></section>
+  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">صوت الراوي</div><h2>الحكاية والمعرفة التاريخية</h2><div id="reviewBody"></div></section>
   <section class="pub-section" id="reviewHistoryWrap"><div class="pub-kicker">في ضوء التاريخ</div><h2>السياق والتحقق التاريخي</h2><div id="reviewHistory"></div></section>
   <section class="pub-section" id="reviewSourcesWrap"><div class="pub-kicker">المصادر والتحقق</div><h2>من أين عرفنا هذه المعلومات؟</h2><div id="reviewSources"></div></section>
   <section class="pub-section" id="reviewImagesWrap"><div class="pub-kicker">الصور</div><h2>الصور وحقوق الاستخدام</h2><div id="reviewImages"></div></section>
   <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre></section>
   <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
+  <section class="pub-section" id="reviewQuizWrap"><div class="pub-kicker">التفاعل التعليمي</div><h2>بنك الأسئلة</h2><div id="reviewQuiz"></div></section>
  </div>
- <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. الموافقة تغيّر حالة السجل في لوحة الإدارة فقط؛ إنشاء صفحة الحكاية النهائية ونشرها يحتاجان إلى خطوة منفصلة.</div>
- <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">موافق — اعتماد الحالة</button><button class="btn" id="rejectStoryBtn" type="button">غير موافق — رجوع للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+ <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. القبول يحفظ قرار المعاينة ويجهّز ملف تسليم بيانات الحكاية. لا تُعتبر الحكاية منشورة حتى تُرفع ملفاتها النهائية إلى GitHub ويُتحقق من ظهورها الحي.</div>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
+<script src="assets/story-template-bundle.js"></script>
 <script>
 (function(){
 var views={site:document.getElementById('siteView'),story:document.getElementById('storyView')};
@@ -93,6 +96,7 @@ var params=new URLSearchParams(location.search);
 if(params.get('story')==='1'){
  var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
  siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
+ var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
  document.querySelectorAll('[data-view]').forEach(function(x){x.classList.remove('active')});
  var draft=null;
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
@@ -100,17 +104,18 @@ if(params.get('story')==='1'){
  else{
   localStorage.removeItem('kh-story-preview-draft');
   function put(id,value){document.getElementById(id).textContent=value||''}
-  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
+  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewKarmaWrap').hidden=!draft.karma_text;put('reviewKarma',draft.karma_text||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
   put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
   document.getElementById('reviewHistoryWrap').hidden=!draft.history_note;
   document.getElementById('reviewSourcesWrap').hidden=!draft.sources;
   document.getElementById('reviewImagesWrap').hidden=!draft.images_note;
   document.getElementById('reviewOriginalWrap').hidden=!draft.original_body;
+  var quizBox=document.getElementById('reviewQuiz');quizBox.textContent='';var quizData=null;try{quizData=typeof draft.question_bank_json==='string'?JSON.parse(draft.question_bank_json):draft.question_bank_json}catch(e){}var questions=quizData&&Array.isArray(quizData.questions)?quizData.questions:[];if(questions.length){questions.forEach(function(q,i){var item=document.createElement('div');item.className='pub-translation';var h=document.createElement('b');h.textContent='السؤال '+(i+1)+': '+(q.q||'سؤال بلا نص');item.appendChild(h);var p=document.createElement('p');p.textContent=(Array.isArray(q.o)?q.o.join(' | '):'لا توجد اختيارات')+'\nالإجابة: '+(Number.isInteger(q.a)&&Array.isArray(q.o)?(q.o[q.a]||'غير محددة'):'غير محددة')+'\nالتفسير: '+(q.e||'لا يوجد تفسير');item.appendChild(p);quizBox.appendChild(item)})}else{quizBox.textContent=draft.question_bank_json?'تعذر قراءة بنك الأسئلة؛ راجع صيغة JSON.':'لم يُرفق بنك أسئلة بعد؛ يلزم استكماله قبل اعتماد النشر النهائي.'}document.getElementById('reviewQuizWrap').hidden=false;
   var langs={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
   var list=document.getElementById('reviewTranslations');list.textContent='';
-  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
+  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\nكارما: '+(tr.karma_text||'لم تُدخل ترجمة كارما بعد.')+'\nالراوي: '+(tr.body||'لم تُدخل ترجمة بعد.')+'\nالسياق: '+(tr.history_note||'')+'\nالصور والحقوق: '+(tr.images_note||'');item.appendChild(p);list.appendChild(item)});
   document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
-  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
+  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار. أدوات التفاعل واللغة وبنك الأسئلة في القالب المرجعي مخفية هنا حتى لا تسجل تفاعلًا على حكاية أخرى؛ يجب ربطها بمعرّف الحكاية الجديدة قبل النشر.');
   (function(d){
    var frame=document.getElementById('actualPagePreview');
    function renderSourcePage(sourceUrl){
@@ -139,6 +144,9 @@ if(params.get('story')==='1'){
      notice.style.cssText='position:sticky;top:0;z-index:2147483647;padding:8px 14px;text-align:center;background:#f0d8aa;color:#17232a;font:700 14px Cairo,Tahoma,sans-serif;border-bottom:2px solid #9b783c';
      parsed.body.insertBefore(notice,parsed.body.firstChild);
      frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
+     var scriptSources=Array.prototype.map.call(parsed.querySelectorAll('script[src]'),function(x){return x.getAttribute('src')||''});
+     draft.source_preview_loaded=!!(parsed.body.getAttribute('data-story-slug')&&parsed.querySelector('.reactions-section')&&parsed.querySelector('#story-quiz-start')&&(parsed.querySelector('[data-lang-switch],.language-switch'))&&scriptSources.some(function(x){return /translations\.js/i.test(x)})&&scriptSources.some(function(x){return /story-quiz\.js/i.test(x)})&&scriptSources.some(function(x){return /reactions\.js/i.test(x)}));
+     if(!draft.source_preview_loaded)put('reviewMeta','الصفحة المرجعية لا تظهر جميع الوظائف المطلوبة؛ عند قبولها سيجهز النظام حزمة القالب الاحتياطي بدل اعتبارها صفحة نشر مكتملة.');
      frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
      put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
     });
@@ -154,9 +162,11 @@ if(params.get('story')==='1'){
    }
   function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
-   var section=(d.section_label||'').toLowerCase();
-   var path=section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
-            section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+   var section=(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
+   var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
+            key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+            key==='learning'||section.indexOf('نساء')>=0||section.indexOf('women')>=0?'../stories/women/010/index.html':
+            key==='fame'?'../stories/history/006/index.html':
             '../stories/history/005/index.html';
    frame.src=path+'?previewMode=1';
    frame.addEventListener('load',function(){
@@ -164,7 +174,8 @@ if(params.get('story')==='1'){
      var doc=frame.contentDocument;
      if(!doc||!doc.body)return;
      var style=doc.createElement('style');
-     style.textContent='.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
+     var accents={october:'#f0c878',science:'#8ad9e8',learning:'#d78bb2',fame:'#e2b36d',history:'#d4b7ff',curriculum:'#9bb7ff',readers:'#f5b37e',islamic:'#78c59a'};var accent=accents[key]||'#d7ad66';
+     style.textContent=':root{--gold:'+accent+'!important;--lav:'+accent+'!important}.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
      doc.head.appendChild(style);
      doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
      var title=doc.querySelector('.hero h1,[data-i18n="title"]');
@@ -181,6 +192,8 @@ if(params.get('story')==='1'){
       first.innerHTML='';
       var kicker=doc.createElement('div');kicker.className='kicker';kicker.textContent='الحكاية';first.appendChild(kicker);
       var h=doc.createElement('h2');h.textContent=d.title||'الحكاية';first.appendChild(h);
+      if(d.karma_text){var kl=doc.createElement('div');kl.className='kicker';kl.textContent='كارما الطفلة';first.appendChild(kl);String(d.karma_text).split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var kp=doc.createElement('p');kp.textContent=part.trim();first.appendChild(kp)})}
+      var nl=doc.createElement('div');nl.className='kicker';nl.textContent='الراوي المعرفي';first.appendChild(nl);
       String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var para=doc.createElement('p');para.textContent=part.trim();first.appendChild(para)});
       storySections.slice(1).forEach(function(s){s.hidden=true});
       if(d.history_note){
@@ -197,7 +210,21 @@ if(params.get('story')==='1'){
   }
   })(draft);
  }
- function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action},location.origin);if(action==='reject')window.close();else document.getElementById('reviewMeta').textContent='تم إرسال موافقتك إلى لوحة الإدارة. راجع رسالة التأكيد هناك.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها واتخذ القرار من بطاقة الحكاية.'}}
+ async function decide(action){
+ if(!window.opener||window.opener.closed){put('reviewMeta','لوحة الإدارة غير مفتوحة. ارجع إليها وافتح المعاينة من بطاقة الحكاية قبل اتخاذ القرار.');return}
+ var bundleInfo=null;
+ if(action==='approve'&&!draft.source_preview_loaded){
+  try{
+   if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')throw new Error('قالب التصدير الاحتياطي غير متاح.');
+   put('reviewMeta','جارٍ فحص الترجمات وبنك الأسئلة والمصادر وتجهيز ملفات الحكاية…');
+   bundleInfo=await window.KHStoryBundle.download(draft,{approved:true});
+  }catch(error){put('reviewMeta','لم تُقبل المعاينة ولم يتم تجهيز حزمة نشر؛ استكمل النواقص ثم حاول مرة أخرى. '+(error&&error.message?error.message:''));return}
+ }
+ window.opener.postMessage({type:'kh-story-preview-decision',action:action,draft:draft,static_story_id:bundleInfo?bundleInfo.id:null,static_story_path:bundleInfo?bundleInfo.path:null,bundle_downloaded:!!bundleInfo,prepared_page_url:draft.preview_source_url||''},location.origin);
+ if(action==='reject'){put('reviewMeta','تم إرسال رفض المعاينة إلى لوحة الإدارة؛ ستعود الحكاية إلى مسودة.');setTimeout(function(){window.close()},500)}
+ else if(bundleInfo)put('reviewMeta','تم قبول المعاينة وتجهيز حزمة ZIP: '+bundleInfo.filename+' . ارفع محتوياتها إلى GitHub مع الحفاظ على المسارات، ثم تحقق من الصفحة الحية.');
+ else put('reviewMeta','تم إرسال قبول المعاينة إلى لوحة الإدارة. اعتمدت المعاينة صفحة HTML المجهزة مسبقًا؛ يلزم رفع/دمج ملفاتها إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
+}
  document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
  document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
  document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
