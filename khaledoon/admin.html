@@ -260,15 +260,15 @@ function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.va
 
 var STORY_META_MARKER='[[KHALEDOON_STORY_META_V1]]';
 function unpackStoryMeta(raw){
- var s=String(raw||''),i=s.lastIndexOf(STORY_META_MARKER),out={notes:s,karma_intro:'',quiz_json:''};
+ var s=String(raw||''),i=s.lastIndexOf(STORY_META_MARKER),out={notes:s,karma_intro:'',quiz_json:'',history_note:'',translations:{}};
  if(i<0)return out;
  out.notes=s.slice(0,i).trim();
- try{var m=JSON.parse(s.slice(i+STORY_META_MARKER.length).trim());out.karma_intro=String(m.karma_intro||'');out.quiz_json=String(m.quiz_json||'')}catch(e){}
+ try{var m=JSON.parse(s.slice(i+STORY_META_MARKER.length).trim());out.karma_intro=String(m.karma_intro||'');out.quiz_json=String(m.quiz_json||'');out.history_note=String(m.history_note||'');out.translations=m.translations&&typeof m.translations==='object'?m.translations:{}}catch(e){}
  return out;
 }
-function packStoryMeta(notes,karma,quiz){
- var clean=String(notes||'').trim(),meta={karma_intro:String(karma||'').trim(),quiz_json:String(quiz||'').trim()};
- if(!meta.karma_intro&&!meta.quiz_json)return clean;
+function packStoryMeta(notes,karma,quiz,translations,history){
+ var clean=String(notes||'').trim(),meta={karma_intro:String(karma||'').trim(),quiz_json:String(quiz||'').trim(),history_note:String(history||'').trim(),translations:translations&&typeof translations==='object'?translations:{}};
+ if(!meta.karma_intro&&!meta.quiz_json&&!meta.history_note&&!Object.keys(meta.translations).length)return clean;
  return (clean?clean+'\n\n':'')+STORY_META_MARKER+'\n'+JSON.stringify(meta);
 }
 function downloadTextFile(name,content,type){
@@ -354,26 +354,39 @@ function legacyCard(it){
  head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status||'غير محددة'));
  box.appendChild(head);
  box.appendChild(el('div','meta2','حكايات أكتوبر 1973 • '+(it.student_name||'اسم غير مسجل')+' • '+(it.grade||'الصف غير مسجل')+' • '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم الحكاية: '+String(it.story_number).padStart(3,'0'):'')));
- var name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(it.sources,4,2000),status=sel({pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'},it.status||'pending');
+ var legacyMeta=unpackStoryMeta(it.sources||''),name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(legacyMeta.notes,4,2000),karmaIntro=area(legacyMeta.karma_intro,3,2500),quizText=area(legacyMeta.quiz_json,10,16000),history=area(legacyMeta.history_note,6,8000),status=sel({pending:'مسودة / قيد المراجعة',published:'منشورة',rejected:'مرفوضة'},it.status||'pending');
  var g=el('div','fgrid');g.appendChild(fld('اسم الطالب',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',subtitle));box.appendChild(g);
- box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('المصادر',sources));box.appendChild(fld('الحالة',status));
+ box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('مدخل كارما الطفولي',karmaIntro));box.appendChild(fld('في ضوء التاريخ',history));box.appendChild(fld('المصادر',sources));box.appendChild(fld('بنك الأسئلة (JSON)',quizText,'خمسة أسئلة على الأقل وترجمات en/fr/it/de لكل سؤال.'));
+ var legacyTranslations={},legacyTranslationDetails=el('details','translation-panel');legacyTranslationDetails.appendChild(el('summary','','ترجمات الحكاية الخمس — مطلوبة قبل تجهيز ملفات النشر'));
+ var translationStatesLegacy={not_started:'لم تبدأ',draft:'مسودة',review:'قيد المراجعة',approved:'معتمدة'};
+ [['en','English'],['fr','Français'],['it','Italiano'],['de','Deutsch']].forEach(function(pair){var lang=pair[0],saved=legacyMeta.translations&&legacyMeta.translations[lang]||{},group=el('section','translation-lang');group.appendChild(el('h4','',pair[1]+' · '+lang.toUpperCase()));var enabled=document.createElement('input');enabled.type='checkbox';enabled.checked=saved.enabled===true;var elabel=el('label','fchk');elabel.appendChild(enabled);elabel.appendChild(el('span','','مفعّلة للنشر بعد الاعتماد'));group.appendChild(elabel);var stx=sel(translationStatesLegacy,saved.status||'not_started'),tt=inp(saved.title,240),ts=inp(saved.subtitle,320),tb=area(saved.body,8,12000),tk=area(saved.karma_intro,3,2500),th=area(saved.history_note,5,5000),tso=area(saved.sources,4,2500);group.appendChild(fld('حالة الترجمة',stx));group.appendChild(fld('العنوان',tt));group.appendChild(fld('العنوان الفرعي',ts));group.appendChild(fld('مدخل كارما',tk));group.appendChild(fld('نص الراوي',tb));group.appendChild(fld('في ضوء التاريخ',th));group.appendChild(fld('المصادر',tso));legacyTranslationDetails.appendChild(group);legacyTranslations[lang]={enabled:enabled.checked,status:stx.value,title:tt.value,subtitle:ts.value,body:tb.value,karma_intro:tk.value,history_note:th.value,sources:tso.value,controls:{enabled:enabled,status:stx,title:tt,subtitle:ts,body:tb,karma_intro:tk,history_note:th,sources:tso}};});
+ box.appendChild(legacyTranslationDetails);box.appendChild(fld('الحالة',status));
  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),pubBtn=el('button','btn ghost','نشر وحفظ'),rejBtn=el('button','btn ghost','رفض'),delBtn=el('button','btn del','حذف');
  [saveBtn,pubBtn,rejBtn,delBtn].forEach(function(b){b.type='button';bar.appendChild(b)});box.appendChild(bar);
  async function persistLegacy(nextStatus,btn){
-  var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:nextStatus||status.value};
-  if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return}
-  if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return}
-  if(d.status==='published'&&!confirm('تأكيد نشر حكاية أكتوبر؟'))return;
+  var translations={};Object.keys(legacyTranslations).forEach(function(k){var t=legacyTranslations[k],x=t.controls;translations[k]={enabled:x.enabled.checked,status:x.status.value,title:x.title.value.trim(),subtitle:x.subtitle.value.trim(),body:x.body.value.trim(),karma_intro:x.karma_intro.value.trim(),history_note:x.history_note.value.trim(),sources:x.sources.value.trim()}});var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:packStoryMeta(sources.value,karmaIntro.value,quizText.value,translations,history.value)||null,status:nextStatus||status.value};
+  if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return false}
+  if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return false}
+  if(d.status==='published'&&!confirm('تأكيد تحديث حالة حكاية أكتوبر المنشورة؟'))return false;
   btn.disabled=true;
   try{
    var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
    if(!r.ok)throw new Error('تعذر حفظ حكاية أكتوبر ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ شيء؛ تحقق من صلاحية حساب الأدمن.');
-   say('ok',d.status==='published'?'تم نشر حكاية أكتوبر وحفظها.':'تم حفظ حكاية أكتوبر.');await loadList();
-  }catch(e){say('err',e.message||'تعذر الحفظ.')}finally{btn.disabled=false}
+   say('ok',d.status==='published'?'تم حفظ سجل حكاية أكتوبر المنشورة.':'تم حفظ الحكاية كمسودة غير منشورة.');await loadList();return true;
+  }catch(e){say('err',e.message||'تعذر الحفظ.');return false}finally{btn.disabled=false}
  }
- saveBtn.addEventListener('click',function(){persistLegacy(null,saveBtn)});
- pubBtn.addEventListener('click',function(){persistLegacy('published',pubBtn)});
+ saveBtn.addEventListener('click',function(){persistLegacy(it.status==='published'?'published':'pending',saveBtn)});
+ pubBtn.addEventListener('click',function(){
+  var translations={};Object.keys(legacyTranslations).forEach(function(k){var t=legacyTranslations[k],x=t.controls;translations[k]={enabled:x.enabled.checked,status:x.status.value,title:x.title.value.trim(),subtitle:x.subtitle.value.trim(),body:x.body.value.trim(),karma_intro:x.karma_intro.value.trim(),history_note:x.history_note.value.trim(),sources:x.sources.value.trim()}});
+  var draft={title:title.value.trim(),subtitle:subtitle.value.trim(),section:'october',section_label:SEC.october,figure_name:title.value.trim(),narrator_name:name.value.trim(),narrator_grade:grade.value.trim(),body:body.value.trim(),history_note:history.value.trim(),sources:sources.value.trim(),images_note:'الغلاف الافتراضي رسم توضيحي عام وليس صورة أرشيفية.',karma_intro:karmaIntro.value.trim(),quiz_json:quizText.value.trim(),original_body:it.body||'',translations:translations,consent:!!it.consent,status_label:'مسودة',source_table:'submitted_stories',source_id:it.id};
+  launchStoryPreview(draft,async function(action){
+   if(action==='reject'){var rj=await persistLegacy('pending',saveBtn);return {ok:rj,message:rj?'رجعت الحكاية إلى المسودة.':'تعذر حفظ المسودة.'}}
+   var check=validateStoryPackage(draft);if(!check.ok){var msg='لم يتم تجهيز ملفات النشر. أكمل: '+check.missing.slice(0,8).join('، ');say('err',msg);return {ok:false,message:msg}}
+   var saved=await persistLegacy('pending',pubBtn);if(!saved)return {ok:false,message:'تعذر حفظ الحكاية كمسودة.'};
+   try{return await exportStoryPackage(draft)}catch(e){return {ok:false,message:e.message||'تعذر تجهيز الملفات.'}}
+  });
+ });
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
