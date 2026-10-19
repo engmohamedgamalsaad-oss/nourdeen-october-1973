@@ -206,6 +206,14 @@ for (const file of [
 ]) {
   const source = read(file);
   if (!source.includes('khaledoon-de.js')) problems.push(file + ': missing shared German UI dictionary script.');
+  if (file === 'read.html' || file === 'quiz.html') {
+    const germanScript = source.indexOf('khaledoon/assets/khaledoon-de.js');
+    const sharedI18n = source.indexOf('assets/shared/i18n.js');
+    const inlineScript = source.indexOf('<script>', sharedI18n);
+    if (germanScript < 0 || sharedI18n < 0 || inlineScript < 0 || germanScript > inlineScript) {
+      problems.push(file + ': German dictionary must load before the inline renderer uses L(...).');
+    }
+  }
 }
 console.log('German UI dictionary: ' + germanUiKeys.size + ' keys inspected across homepage, sections, October archive, reader and quiz.');
 
