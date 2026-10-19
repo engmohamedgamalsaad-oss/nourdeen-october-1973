@@ -809,6 +809,44 @@ $('rsearch').addEventListener('input',function(){reactionTerm=this.value;renderR
 $('newBtn').addEventListener('click',function(){draftNew=false;newStoryGate=true;newStoryPromptCopied=false;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
 $('promptBtn').addEventListener('click',function(){var t=STORY_PAGE_PROMPT;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){say('ok','تم نسخ البرومبت الرئيسي المحدّث كاملًا. الصقه في المكان الذي تستخدمه لإنشاء الحكاية.')}).catch(function(){fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})})}else{fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})}});
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
+async function handleStoryPreviewDecision(event){
+ if(event.origin!==location.origin||!event.data||event.data.type!=='kh-story-preview-decision')return;
+ var action=event.data.action;
+ if(action!=='approve'&&action!=='reject')return;
+ var context=null;
+ try{context=JSON.parse(localStorage.getItem('kh-story-preview-context')||'null')}catch(e){}
+ if(!context&&event.data.draft)context=event.data.draft;
+ if(!context||!context.submission_id||!context.submission_table){say('err','وصل قرار المعاينة لكن لم نعثر على سجل الحكاية المرتبط. افتح المعاينة من بطاقة الحكاية مرة أخرى.');return}
+ var table=context.submission_table,record=Object.assign({},context.record_data||{}),meta=Object.assign({},context.story_meta||{});
+ meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'رُفضت المعاينة فقط؛ الحكاية الأصلية لم تُرفض.'};
+ record.story_meta=meta;
+ if(action==='approve'){
+  if(context.record_type==='modern'&&record.status!=='published')record.status='review';
+  if(context.record_type==='legacy'&&record.status!=='published')record.status='pending';
+ }else{
+  if(record.status!=='published')record.status='pending';
+ }
+ var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
+ say('ok','جارٍ '+buttonLabel+'…');
+ try{
+  var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(record)});
+  if(!response.ok){var body=await response.text();throw new Error('تعذر حفظ قرار المعاينة ('+response.status+'): '+body.slice(0,350))}
+  var rows=await response.json();if(!rows.length)throw new Error('لم يُرجع الخادم سجلًا بعد قرار المعاينة. راجع صلاحيات الأدمن.');
+  context.story_meta=meta;context.record_data=record;
+  try{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}catch(e){}
+  await loadList();
+  if(action==='approve'){
+   var handoff={format:'khaledoon-story-handoff-v1',created_at:new Date().toISOString(),state:'approved_preview_waiting_for_github_upload',notice:'هذه الحزمة تحفظ بيانات الحكاية وقرار المعاينة فقط. لا تعني أن ملفات HTML أو بنك الأسئلة أو الصور رُفعت إلى GitHub أو أن الحكاية منشورة.',story:context,required_steps:['استخدم ملفات القالب الحالية للقسم المناسب.','استكمل ملفات HTML والترجمات الخمس وبنك الأسئلة والمصادر والصور المطلوبة.','ارفع الملفات إلى المسارات الصحيحة في GitHub بعد الموافقة.','تحقق من صفحة GitHub Pages الحية وروابطها ووظائفها قبل تغيير الحالة إلى منشورة.'],prompt:typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''};
+   var blob=new Blob([JSON.stringify(handoff,null,2)+'\n'],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
+   a.href=url;a.download='khaledoon-story-handoff-'+String(context.submission_id).slice(0,8)+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1200);
+   say('ok','تم اعتماد المعاينة وحفظ القرار وتنزيل ملف تسليم البيانات. الحكاية لم تُنشر تلقائيًا: يلزم رفع ملفات الصفحة النهائية إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
+  }else{
+   say('ok','تم رفض المعاينة فقط، وأُعيدت الحكاية إلى مسودة غير منشورة للتعديل. لم تُرفض الحكاية الأصلية.');
+  }
+ }catch(error){say('err',error.message||'تعذر حفظ قرار المعاينة.')}
+}
+window.addEventListener('message',handleStoryPreviewDecision);
+
 load();
 /* جلسة مستعادة من sessionStorage لا تُعتبر أدمن حتى يتأكد الخادم من ذلك. */
 if(session){
