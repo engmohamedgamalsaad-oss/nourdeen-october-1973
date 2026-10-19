@@ -1,0 +1,2 @@
+Temporary GitHub connector write-access test.
+Created on a separate test branch, not main. This file is not part of the live site.
