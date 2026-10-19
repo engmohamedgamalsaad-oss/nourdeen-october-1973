@@ -490,18 +490,35 @@ if(!isNew){
   return true;
  }
  async function persist(status,btn){
-  var d=collect(status);if(!valid(d))return false;
-  var ok=false;btn.disabled=true;
+  var d=collect(status);
+  if(!valid(d)){var message=$('msg');if(message)message.scrollIntoView({behavior:'smooth',block:'center'});return false}
+  var ok=false,oldLabel=btn.textContent;btn.disabled=true;btn.textContent='جارٍ الحفظ…';
   try{
    var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)})
               :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
-   if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). راجع الحقول.');
+   if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). لم يتغير السجل؛ راجع رسالة الخطأ والحقول المطلوبة.');
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
-   ok=true;draftNew=false;say('ok','تم الحفظ.');await loadList();
-  }catch(e){say('err',e.message||'حدث خطأ.')}
-  btn.disabled=false;return ok;
+   ok=true;draftNew=false;
+   try{
+    await loadList();
+    say('ok',d.status==='published'?'تم حفظ التعديلات على الحكاية المنشورة.':'تم حفظ الحكاية كمسودة غير منشورة، وظهرت في قائمة الإدارة.');
+    $('list').scrollIntoView({behavior:'smooth',block:'start'});
+   }catch(refreshError){
+    say('err','تم حفظ الحكاية في قاعدة البيانات، لكن تعذّر تحديث القائمة. اضغط «تحديث» للتأكد؛ لم يُعد الحفظ مرة أخرى.');
+    $('msg').scrollIntoView({behavior:'smooth',block:'center'});
+   }
+  }catch(e){
+   say('err',e.message||'حدث خطأ أثناء الحفظ.');
+   $('msg').scrollIntoView({behavior:'smooth',block:'center'});
+  }finally{btn.disabled=false;btn.textContent=oldLabel}
+  return ok;
  }
- bSave.addEventListener('click',function(){persist(st.value,bSave)});
+ bSave.addEventListener('click',function(){
+  /* «حفظ» لا ينشر حكاية جديدة؛ يحفظها قيد المراجعة. وللحكاية المنشورة يحافظ على حالتها الحالية. */
+  var saveStatus=isNew?'pending':(it.status==='published'?'published':(st.value==='published'?'pending':st.value));
+  if(isNew||it.status!=='published'&&st.value==='published')st.value=saveStatus;
+  persist(saveStatus,bSave);
+ });
  bPub.addEventListener('click',function(){persist('published',bPub)});
  return box;
 }
