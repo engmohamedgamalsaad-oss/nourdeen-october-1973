@@ -65,7 +65,8 @@ function runShared({ store = {}, url = 'https://x.test/p/', role = '', preload =
   const storage = {
     data: { ...store },
     getItem(k) { return k in this.data ? this.data[k] : null; },
-    setItem(k, v) { this.data[k] = String(v); }
+    setItem(k, v) { this.data[k] = String(v); },
+    removeItem(k) { delete this.data[k]; }
   };
   const documentElement = { lang: 'ar', dir: 'rtl' };
   const document = {
@@ -104,6 +105,10 @@ if (shared) {
     expect('legacy lang=it migrated', [r.lang, r.store['kh-lang'], r.store.lang], ['it', 'it', 'it']);
     r = runShared({ store: { 'kh-lang': 'de', lang: 'en' } });
     expect('supported German unified value takes precedence', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
+    r = runShared({ store: { 'kh-lang': 'ar', 'kh-de': '1' } });
+    expect('legacy German flag migrates before Arabic fallback and is removed', [r.lang, r.dir, r.store['kh-lang'], 'kh-de' in r.store], ['de', 'ltr', 'de', false]);
+    r = runShared({ store: { 'kh-lang': 'en', 'kh-de': '1' } });
+    expect('newer unified non-Arabic choice wins and stale German flag is removed', [r.lang, r.store['kh-lang'], 'kh-de' in r.store], ['en', 'en', false]);
     r = runShared({ store: { 'kh-lang': 'xx', lang: 'de' } });
     expect('legacy German value is migrated', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?lang=en&id=5#sec' });
@@ -193,6 +198,7 @@ const engine = read('assets/shared/i18n.js');
 if (!/function readLang\(\)\{\s*[^]*?KH_LANG\.locked\)return window\.KH_LANG\.current/.test(engine)) fail('assets/shared/i18n.js: readLang() must ignore ?lang= when KH_LANG.locked.');
 if (!/function setLang\(lang\)\{\s*if\(window\.KH_LANG&&window\.KH_LANG\.locked\)return/.test(engine)) fail('assets/shared/i18n.js: setLang() must be a no-op when KH_LANG.locked.');
 if (!engine.includes('window.KH_LANG.supported')) fail('assets/shared/i18n.js: language list must come from KH_LANG.');
+if (!engine.includes("localStorage.removeItem('kh-de')")) fail('assets/shared/i18n.js: selecting a language must clear the legacy German flag.');
 
 /* ---------- 5) لا حذف: كل ملفات الحكايات المتوقعة موجودة ---------- */
 const manifestPath = 'scripts/expected-story-files.json';
