@@ -893,13 +893,13 @@ async function handleStoryPreviewDecision(event){
  }else{
   if(record.status!=='published')record.status='pending';
  }
- if(record.status!=='published'){meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;}
+ if(record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;meta.pending_draft.karma_text=rdMeta.karma_text||'';meta.pending_draft.question_bank_json=rdMeta.question_bank_json||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
  say('ok','جارٍ '+buttonLabel+'…');
  try{
   var updatePayload=record;
   if(record.status==='published'){
-   meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;
+   var pubMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;meta.pending_draft.karma_text=pubMeta.karma_text||meta.karma_text||'';meta.pending_draft.question_bank_json=pubMeta.question_bank_json||meta.question_bank_json||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;
    updatePayload={story_meta:meta};
   }
   var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(updatePayload)});
