@@ -327,7 +327,7 @@ function legacyCard(it){
  if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload'){var finish=el('button','btn primary','تأكيد النشر بعد الرفع');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
  var providerLegacy=document.createElement('select');providerLegacy.className='btn ghost';providerLegacy.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];providerLegacy.appendChild(o)});
  var copyLegacy=el('button','btn ghost','نسخ الحكاية كاملة');copyLegacy.type='button';
- copyLegacy.addEventListener('click',function(){var key=providerLegacy.value,lines=['ملف عمل حكاية — خالدون عبر التاريخ','استخدم البرومبت الكامل الآتي، واحتفظ بالنص الأصلي منفصلًا. لا تنشر قبل المعاينة والموافقة.','=== تعليمات المشروع ===',PROJECT_INSTRUCTIONS,'=== البرومبت الرئيسي ===',STORY_WORKFLOW,'=== تعليمات Claude ===',CLAUDE_INSTRUCTIONS,'=== تعليمات المساعدين ===',AGENT_INSTRUCTIONS,'=== برومبت الصفحة ===',STORY_PAGE_PROMPT,'=== تعليمات الأداة المختارة: '+providerLegacy.options[providerLegacy.selectedIndex].text+' ===',(promptProvidersCache&&promptProvidersCache[key])||'إذا تعذر الوصول إلى GitHub، أخرج الملفات كاملة مع المسارات وخطوات الرفع اليدوي.','=== بيانات الحكاية ===','القسم: حكايات أكتوبر 1973','اسم صاحب الحكاية: '+(name.value.trim()||'غير مذكور'),'الصف: '+(grade.value.trim()||'غير مذكور'),'العنوان: '+(title.value.trim()||'غير مذكور'),'العنوان الفرعي: '+(subtitle.value.trim()||'لا يوجد'),'=== النص الأصلي كما وصل — لا تعدّله ===',it.original_body||it.body||'غير محفوظ','=== النص الحالي للتعديل ===',body.value.trim(),'=== المصادر ===',sources.value.trim()||'لم تُرفق مصادر','=== المطلوب ===','راجع الوقائع والمصادر، اكتب العربية أولًا، جهّز EN/FR/IT/DE، وحافظ على كارما والراوي وبنك الأسئلة والإعجاب والتفاعلات والمشاركة والطباعة. استخدم قالب القسم، جهز ملفات كاملة، اعرض معاينة للحكاية وحدها، وانتظر الموافقة. لا تدّعِ رفعًا أو نشرًا لم يحدث.'];var text=lines.join('\\n');function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية الكامل مع تعليمات الأداة المختارة.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done)});
+ copyLegacy.addEventListener('click',function(){var key=providerLegacy.value,lines=['ملف عمل حكاية — خالدون عبر التاريخ','استخدم البرومبت الكامل الآتي، واحتفظ بالنص الأصلي منفصلًا. لا تنشر قبل المعاينة والموافقة.','=== تعليمات المشروع ===',PROJECT_INSTRUCTIONS,'=== البرومبتات المحفوظة الحالية ===',managedPromptSections(key),...(key==='claude'?['=== تعليمات Claude ===',CLAUDE_INSTRUCTIONS]:[]),'=== تعليمات المساعدين ===',AGENT_INSTRUCTIONS,'=== بيانات الحكاية ===','القسم: حكايات أكتوبر 1973','اسم صاحب الحكاية: '+(name.value.trim()||'غير مذكور'),'الصف: '+(grade.value.trim()||'غير مذكور'),'العنوان: '+(title.value.trim()||'غير مذكور'),'العنوان الفرعي: '+(subtitle.value.trim()||'لا يوجد'),'=== النص الأصلي كما وصل — لا تعدّله ===',it.original_body||it.body||'غير محفوظ','=== النص الحالي للتعديل ===',body.value.trim(),'=== المصادر ===',sources.value.trim()||'لم تُرفق مصادر','=== المطلوب ===','راجع الوقائع والمصادر، اكتب العربية أولًا، جهّز EN/FR/IT/DE، وحافظ على كارما والراوي وبنك الأسئلة والإعجاب والتفاعلات والمشاركة والطباعة. استخدم قالب القسم، جهز ملفات كاملة، اعرض معاينة للحكاية وحدها، وانتظر الموافقة. لا تدّعِ رفعًا أو نشرًا لم يحدث.'];var text=lines.join('\\n');function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية الكامل مع تعليمات الأداة المختارة.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done)});
  bar.appendChild(providerLegacy);bar.appendChild(copyLegacy);box.appendChild(bar);
  function collectLegacyTranslations(){var out={};Object.keys(legacyTranslationInputs).forEach(function(lang){var t=legacyTranslationInputs[lang];out[lang]={enabled:true,status:'draft',title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),student_name:name.value.trim(),grade:grade.value.trim(),karma_text:t.karma_text.value.trim(),body:t.body.value.trim(),history_note:t.history_note.value.trim(),images_note:t.images_note.value.trim()}});return out}
  async function persistLegacy(nextStatus,btn){
@@ -469,17 +469,16 @@ function makePreviewDraft(statusForPreview){
   L.push('================ تعليمات المشروع الأساسية كاملة ================');
   L.push(PROJECT_INSTRUCTIONS);
   L.push('');
-  L.push('================ آلية تجهيز الحكايات كاملة ================');
-  L.push(STORY_WORKFLOW);
+  L.push('================ آلية تجهيز الحكايات كاملة — النسخة المحفوظة ================');
+  L.push(promptManagerState.workflow||STORY_WORKFLOW);
   L.push('');
-  L.push('================ تعليمات Claude ================');
-  L.push(CLAUDE_INSTRUCTIONS);
-  L.push('');
+  if(providerSelect.value==='claude'){L.push('================ تعليمات Claude ================');L.push(CLAUDE_INSTRUCTIONS);L.push('')}
   L.push('================ تعليمات المساعدين الذكيين ================');
   L.push(AGENT_INSTRUCTIONS);
   L.push('');
-  L.push('================ البرومبت الكامل لتطوير صفحة الحكاية — إلزامي ================');
-  L.push(STORY_PAGE_PROMPT);
+  L.push('================ البرومبت الكامل لتطوير صفحة الحكاية — النسخة المحفوظة ================');
+  L.push(promptManagerState.main||STORY_PAGE_PROMPT);
+  var managedExtras=managedCustomPromptText();if(managedExtras){L.push('');L.push('================ البرومبتات الإضافية المحفوظة ================');L.push(managedExtras)}
   L.push('');
   L.push('================ تعليمات تنفيذ هذه الحكاية ================');
   L.push('ابدأ بفحص ملفات المشروع الفعلية والفرع الحالي، واقرأ القالب والحكايات المرجعية قبل أي تعديل. احتفظ بالنص الأصلي منفصلًا دون تغيير، ودقّق الأسماء والتواريخ والأحداث بمصادر موثوقة قابلة للفتح. وضّح المختلف عليه وما لم يمكن التحقق منه، ولا تخترع اقتباسات أو وقائع.');
@@ -534,7 +533,7 @@ function makePreviewDraft(statusForPreview){
   L.push('5) خطة الصور وحقوق الاستخدام والإسناد، دون افتراض أن نتائج البحث تمنح حق الاستخدام.');
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
-  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push((promptProvidersCache&&promptProvidersCache[providerSelect.value])||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
+  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push(promptProvidersCache[providerSelect.value]||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
   var t=L.join('\n');
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
@@ -742,19 +741,19 @@ function pubRow(it){
  if(openIds[key]){d.open=true;build()}
  return d;
 }
-var promptProvidersCache=window.STORY_PROVIDER_PROMPTS&&typeof window.STORY_PROVIDER_PROMPTS==='object'?window.STORY_PROVIDER_PROMPTS:{};
+var promptProvidersCache=window.STORY_PROVIDER_PROMPTS&&typeof window.STORY_PROVIDER_PROMPTS==='object'?Object.assign({},window.STORY_PROVIDER_PROMPTS):{};
+var promptManagerState={main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),custom:[],providers:Object.assign({},promptProvidersCache),versions:[]};
+function adoptPromptManagerState(raw){if(!raw||typeof raw!=='object')return;promptManagerState={main:typeof raw.main==='string'?raw.main:String(STORY_PAGE_PROMPT||''),workflow:typeof raw.workflow==='string'?raw.workflow:String(STORY_WORKFLOW||''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign({},promptProvidersCache,raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};promptProvidersCache=Object.assign({},promptManagerState.providers)}
+function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
+function managedPromptSections(providerKey){var lines=[];lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===');lines.push(promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== البرومبت الرئيسي لتطوير صفحة الحكاية — النسخة المحفوظة ===');lines.push(promptManagerState.main||STORY_PAGE_PROMPT||'');var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===');lines.push(extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===');lines.push(promptProvidersCache[providerKey||'chatgpt']||'إذا تعذر الوصول إلى GitHub، أخرج الملفات كاملة مع المسارات وخطوات الرفع اليدوي.');return lines.join('\n\n')}
 async function loadPromptProviders(){
- try{
-  var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');
-  if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&rows[0].config_value.providers&&typeof rows[0].config_value.providers==='object'){promptProvidersCache=Object.assign({},promptProvidersCache,rows[0].config_value.providers);return}}
- }catch(e){}
- try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||'null');if(local&&local.providers)promptProvidersCache=Object.assign({},promptProvidersCache,local.providers)}catch(e){}
+ try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
+ try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
 }
 function buildNewStoryPrompt(providerKey){
- var prompt=String(STORY_WORKFLOW||'').trim();
- if(!prompt){throw new Error('تعذر تحميل البرومبت الرئيسي الكامل من تعليمات المشروع.');}
- var provider=promptProvidersCache[providerKey||'chatgpt']||'';
- return prompt+'\\n\\n================ تعليمات الأداة المختارة ================\\n'+provider;
+ var selectedProvider=providerKey||'chatgpt';var prompt=[PROJECT_INSTRUCTIONS||'',managedPromptSections(selectedProvider),selectedProvider==='claude'?(CLAUDE_INSTRUCTIONS||''):'',AGENT_INSTRUCTIONS||''].filter(Boolean).join('\n\n');
+ if(!prompt.trim())throw new Error('تعذر تحميل البرومبت الكامل من تعليمات المشروع.');
+ return prompt;
 }
 function renderNewStoryGate(list){
  var box=el('article','fcard');
