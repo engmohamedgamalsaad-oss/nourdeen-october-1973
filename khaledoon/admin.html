@@ -291,6 +291,7 @@ function launchStoryPreview(draft,onDecision){
 function escapeStoryHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function validateStoryPackage(d){
  var missing=[];
+ if(!d.consent)missing.push('موافقة الراوي أو ولي الأمر على النشر');
  if(!d.title||d.title.trim().length<3)missing.push('العنوان');
  if(!d.body||d.body.trim().length<50)missing.push('نص الراوي (50 حرفًا على الأقل)');
  if(!d.karma_intro||d.karma_intro.trim().length<10)missing.push('مدخل كارما');
