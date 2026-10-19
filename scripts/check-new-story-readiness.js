@@ -83,6 +83,6 @@ for (const pagePath of pages) {
 
   let data = null;
   try { data = dataText ? JSON.parse(dataText) : null; } catch {}
-  requireCheck(Boolean(data && data.published !== false && typeof data.title === "string" && data.title.trim()), story, "story data.json exists with a title and is not explicitly unpublished");
+  requireCheck(Boolean(data && typeof data.published === "boolean" && typeof data.title === "string" && data.title.trim()), story, "story data.json exists with a title and an explicit publish state (drafts are allowed during review)");
 }
 process.exit(failed ? 1 : 0);
