@@ -93,7 +93,7 @@ document.getElementById('printBtn').addEventListener('click',function(){var was=
 
 paint();
 var params=new URLSearchParams(location.search);
-if(params.get('story')==='1'){
+if(params.get('story')==='1'||params.get('story')==='khalid-011'){
  var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
  siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
  var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
