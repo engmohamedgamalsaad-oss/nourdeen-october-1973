@@ -154,7 +154,7 @@ var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refres
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
-var SEC={science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية',readers:'اقتراحات القرّاء'};
+var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية',readers:'اقتراحات القرّاء'};
 var VSEC={science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
@@ -210,9 +210,9 @@ async function loadList(){
  if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
  if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
  var current=await response.json();
- current=current.filter(function(x){var m=x.story_meta||{};return x.section!=='october'&&m.section_key!=='october'&&m.section!=='october'&&m.section_label!=='حكايات أكتوبر 1973'&&!(m.pending_draft&&(m.pending_draft.section_key==='october'||m.pending_draft.section==='october'||m.pending_draft.section_label==='حكايات أكتوبر 1973'))});
+
  current.forEach(function(x){x._t='k'});
- var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false&&x.section!=='october'}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
+ var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
  var unmatchedRecords=[];
  current.forEach(function(record){var linked=storyFor(record),site=linked&&siteItems.find(function(x){return String(x.id)===String(linked.id)});if(site)site.submissions.push(record);else unmatchedRecords.push(record)});
  items=unmatchedRecords.concat(siteItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
@@ -244,7 +244,7 @@ function renderTabs(){
  chip(t,'كل الحالات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
  Object.keys(STATUS).forEach(function(k){chip(t,STATUS[k]+' ('+count(function(i){return i.status===k})+')',fStatus===k,function(){fStatus=k;render()})});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
- Object.keys(SEC).filter(function(k){return k!=='october'}).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
+ Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
 }
 function fld(l,n,sm){var w=el('label','fl');w.appendChild(document.createTextNode(l));if(sm)w.appendChild(el('small','',sm));w.appendChild(n);return w}
 function inp(v,max){var i=document.createElement('input');i.type='text';i.value=v||'';if(max)i.maxLength=max;return i}
