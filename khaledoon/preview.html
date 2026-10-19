@@ -167,7 +167,7 @@ if(params.get('story')==='1'){
      var doc=frame.contentDocument;
      if(!doc||!doc.body)return;
      var style=doc.createElement('style');
-     style.textContent='.story-intro-modal,[role="dialog"],.story-quiz-section{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
+     style.textContent='.story-intro-modal,[role="dialog"],.story-quiz-section{display:none!important}.reactions-section button,.language-switch button,.story-share-bar a{pointer-events:none!important;opacity:.8}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
      doc.head.appendChild(style);
      doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
      var title=doc.querySelector('.hero h1,[data-i18n="title"]');
