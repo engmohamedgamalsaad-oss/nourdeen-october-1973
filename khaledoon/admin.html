@@ -602,6 +602,15 @@ if(!isNew){
    }
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل: لم يُرجع الخادم سجلًا. تأكد أن حسابك مسجّل كأدمن وأن سياسة الصلاحيات تسمح بالكتابة.');
    if(rows[0])Object.assign(it,rows[0]);
+   /* احتفظ بآخر سجل محفوظ في مساحة المعاينة حتى يعمل رابط preview.html مباشرة. */
+   try{
+    var savedPreview=makePreviewDraft(saveStatus);
+    savedPreview.submission_id=it.id||rows[0].id||null;
+    savedPreview.record_data=Object.assign({},d,{id:savedPreview.submission_id});
+    savedPreview.story_meta=d.story_meta||{};
+    localStorage.setItem('kh-story-preview-draft',JSON.stringify(savedPreview));
+    localStorage.setItem('kh-story-preview-context',JSON.stringify(savedPreview));
+   }catch(previewStoreError){}
    ok=true;draftNew=false;
    try{
     await loadList();
