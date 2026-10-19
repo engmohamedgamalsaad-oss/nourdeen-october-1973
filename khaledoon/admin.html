@@ -350,7 +350,7 @@ function legacyCard(it){
    say('ok',requestedStatus==='rejected'?'تم رفض الحكاية الأصلية.':it.status==='published'?'تم حفظ التعديلات كمسودة؛ النسخة المنشورة لم تتغير.':'تم حفظ حكاية أكتوبر كمسودة غير منشورة.');await loadList();return true;
   }catch(e){say('err',e.message||'تعذر الحفظ.');return false}finally{btn.disabled=false}
  }
- saveBtn.addEventListener('click',function(){persistLegacy(null,saveBtn)});
+ saveBtn.addEventListener('click',function(){persistLegacy(it.status==='published'?'published':'pending',saveBtn)});
  pubBtn.title='لا ينشر مباشرة؛ يفتح معاينة خاصة بالحكاية أولًا.';
  pubBtn.addEventListener('click',async function(){
   var popup=window.open('about:blank','_blank');if(!popup){say('err','اسمح بالنوافذ المنبثقة ثم حاول المعاينة مرة أخرى.');return}
@@ -618,8 +618,8 @@ if(!isNew){
  }
  bSave.addEventListener('click',function(){
   /* «حفظ» لا ينشر حكاية جديدة؛ يحفظها قيد المراجعة. وللحكاية المنشورة يحافظ على حالتها الحالية. */
-  var saveStatus=isNew?'pending':(it.status==='published'?'published':(st.value==='published'?'pending':st.value));
-  if(isNew||it.status!=='published'&&st.value==='published')st.value=saveStatus;
+  var saveStatus=(!isNew&&it.status==='published')?'published':'pending';
+  if(isNew||it.status!=='published')st.value=saveStatus;
   persist(saveStatus,bSave);
  });
  bPub.title='لا ينشر مباشرة؛ يحفظ المسودة ثم يفتح المعاينة للموافقة قبل أي نشر.';
