@@ -100,7 +100,7 @@
     if(window.KH_LANG&&window.KH_LANG.locked)return; /* تغيير اللغة من الصفحة الرئيسية فقط */
     if(allowed.indexOf(lang)<0)return;
     current=lang;
-    try{localStorage.setItem('lang',lang);localStorage.setItem('kh-lang',lang);}catch(e){}
+    try{localStorage.setItem('lang',lang);localStorage.setItem('kh-lang',lang);localStorage.removeItem('kh-de');}catch(e){}
     var url=new URL(location.href);url.searchParams.set('lang',lang);
     location.href=url.pathname+url.search+url.hash;
   }
