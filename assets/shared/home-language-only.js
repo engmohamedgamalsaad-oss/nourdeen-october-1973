@@ -30,19 +30,29 @@
   function normalize(value) { return String(value == null ? '' : value).toLowerCase(); }
   function read(key) { try { return normalize(localStorage.getItem(key)); } catch (e) { return ''; } }
 
-  /* أول قيمة صالحة: المفتاح الموحد ثم القديمة. القيمة غير المدعومة تُتجاهل دون مسحها. */
+  /* ترحيل علامة الألمانية القديمة kh-de=1 قبل قراءة kh-lang:
+     النسخة القديمة كانت تترك kh-lang=ar وتخزن الألمانية في kh-de وحده. */
+  var legacyGerman = read('kh-de') === '1';
+  var unified = read(KEY);
   var lang = FALLBACK;
   var source = '';
-  var keys = [KEY].concat(LEGACY_KEYS);
-  for (var i = 0; i < keys.length; i++) {
-    var candidate = read(keys[i]);
-    if (isSupported(candidate)) { lang = candidate; source = keys[i]; break; }
+  if (legacyGerman && (!isSupported(unified) || unified === 'ar')) {
+    lang = 'de';
+    source = 'kh-de';
+  } else {
+    var keys = [KEY].concat(LEGACY_KEYS);
+    for (var i = 0; i < keys.length; i++) {
+      var candidate = read(keys[i]);
+      if (isSupported(candidate)) { lang = candidate; source = keys[i]; break; }
+    }
   }
 
-  /* ترحيل: إذا جاء الاختيار من مفتاح قديم فقط، انسخه إلى المفتاح الموحد
-     حتى يراه كل من يقرأ kh-lang وحده (ومنهم الصفحة الرئيسية). */
+  /* اكتب الاختيار الموحد وأزل علامة الألمانية القديمة كي لا تتعارض مع KH_LANG. */
   if (source && source !== KEY) {
     try { localStorage.setItem(KEY, lang); } catch (e) {}
+  }
+  if (legacyGerman) {
+    try { localStorage.removeItem('kh-de'); } catch (e) {}
   }
 
   var root = document.documentElement;
