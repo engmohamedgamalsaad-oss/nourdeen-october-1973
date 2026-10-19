@@ -150,8 +150,8 @@ if(params.get('story')==='1'){
    var source=(d.preview_source_url||'').trim();
    if(source){
     renderSourcePage(source).catch(function(error){
-     put('reviewMeta','تعذر تحميل ملف الصفحة المصممة: '+(error&&error.message?error.message:'خطأ غير معروف')+' — يتم عرض قالب المعاينة الاحتياطي.');
-     renderInRealTemplate(d);
+     put('reviewMeta','تعذر تحميل ملف الصفحة المصممة: '+(error&&error.message?error.message:'خطأ غير معروف')+' — يتم عرض القالب الجاهز المبني من بيانات الحكاية.');
+     if(d.fallback_preview_html){d.preview_html=d.fallback_preview_html;renderGeneratedPage(d)}else renderInRealTemplate(d);
     });
    }else{
     renderInRealTemplate(d);
