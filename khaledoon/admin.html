@@ -453,7 +453,7 @@ function makePreviewDraft(statusForPreview){
     var draft=makePreviewDraft(saveStatus);draft.submission_id=it.id||null;draft.story_meta=it.story_meta||{};draft.karma_text=draft.karma_text||'';draft.question_bank_json=draft.question_bank_json||'';
     localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
     localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));
-    popup.location.href='preview.html?story=1';
+    popup.location.href='preview.html?story=1&submission='+encodeURIComponent(it.id);
    }catch(e){try{popup.close()}catch(ignore){}say('err','حُفظت المسودة، لكن تعذر تجهيز بيانات المعاينة: '+e.message)}
   }).catch(function(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+(e.message||'حدث خطأ'))});
  }
