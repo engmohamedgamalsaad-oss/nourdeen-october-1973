@@ -145,7 +145,7 @@ if(params.get('story')==='1'){
      parsed.body.insertBefore(notice,parsed.body.firstChild);
      frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
      var scriptSources=Array.prototype.map.call(parsed.querySelectorAll('script[src]'),function(x){return x.getAttribute('src')||''});
-     draft.source_preview_loaded=!!(parsed.body.querySelector('[data-story-slug]')&&parsed.querySelector('.reactions-section')&&parsed.querySelector('#story-quiz-start')&&parsed.querySelector('.language-switch')&&scriptSources.some(function(x){return /translations\.js/i.test(x)})&&scriptSources.some(function(x){return /story-quiz\.js/i.test(x)})&&scriptSources.some(function(x){return /reactions\.js/i.test(x)}));
+     draft.source_preview_loaded=!!(parsed.body.getAttribute('data-story-slug')&&parsed.querySelector('.reactions-section')&&parsed.querySelector('#story-quiz-start')&&(parsed.querySelector('[data-lang-switch],.language-switch'))&&scriptSources.some(function(x){return /translations\.js/i.test(x)})&&scriptSources.some(function(x){return /story-quiz\.js/i.test(x)})&&scriptSources.some(function(x){return /reactions\.js/i.test(x)}));
      if(!draft.source_preview_loaded)put('reviewMeta','الصفحة المرجعية لا تظهر جميع الوظائف المطلوبة؛ عند قبولها سيجهز النظام حزمة القالب الاحتياطي بدل اعتبارها صفحة نشر مكتملة.');
      frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
      put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
