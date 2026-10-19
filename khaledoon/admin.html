@@ -376,7 +376,7 @@ function legacyCard(it){
  async function persistLegacy(nextStatus,btn){
   var translations={};Object.keys(legacyTranslations).forEach(function(k){var t=legacyTranslations[k],x=t.controls;translations[k]={enabled:x.enabled.checked,status:x.status.value,title:x.title.value.trim(),subtitle:x.subtitle.value.trim(),body:x.body.value.trim(),karma_intro:x.karma_intro.value.trim(),history_note:x.history_note.value.trim(),sources:x.sources.value.trim()}});var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:packStoryMeta(sources.value,karmaIntro.value,quizText.value,translations,history.value,mapJson.value,legacyConsent.checked)||null,status:nextStatus||status.value};
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return false}
-  if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return false}
+  if(d.body.length>12000||sources.value.trim().length>2000){say('err','تجاوز نص الحكاية أو نص المصادر الأصلي الحد المسموح.');return false}
   if(d.status==='published'&&!confirm('تأكيد تحديث حالة حكاية أكتوبر المنشورة؟'))return false;
   btn.disabled=true;
   try{
