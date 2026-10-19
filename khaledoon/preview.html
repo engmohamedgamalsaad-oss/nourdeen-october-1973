@@ -64,12 +64,14 @@
  <div class="publish-preview">
   <p class="note" id="reviewMeta" style="margin:0;padding:12px 18px;border-radius:0">معاينة الحكاية الحالية — لم تُنشر.</p>
   <header class="pub-hero"><div class="pub-hero-content"><div class="pub-kicker" id="reviewSection">خالدون عبر التاريخ • معاينة قبل النشر</div><h1 id="reviewTitle"></h1><p class="pub-subtitle" id="reviewSubtitle"></p><div class="pub-author"><span>حكاية قيد المراجعة</span><br><strong id="reviewFigure"></strong></div></div></header>
-  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">بداية الحكاية</div><h2>الحكاية</h2><div id="reviewBody"></div></section>
+  <section class="pub-section" id="reviewKarmaWrap"><div class="pub-kicker">صوت كارما</div><h2>فضول الطفلة وملاحظاتها</h2><div id="reviewKarma"></div></section>
+  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">صوت الراوي</div><h2>الحكاية والمعرفة التاريخية</h2><div id="reviewBody"></div></section>
   <section class="pub-section" id="reviewHistoryWrap"><div class="pub-kicker">في ضوء التاريخ</div><h2>السياق والتحقق التاريخي</h2><div id="reviewHistory"></div></section>
   <section class="pub-section" id="reviewSourcesWrap"><div class="pub-kicker">المصادر والتحقق</div><h2>من أين عرفنا هذه المعلومات؟</h2><div id="reviewSources"></div></section>
   <section class="pub-section" id="reviewImagesWrap"><div class="pub-kicker">الصور</div><h2>الصور وحقوق الاستخدام</h2><div id="reviewImages"></div></section>
   <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre></section>
   <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
+  <section class="pub-section" id="reviewQuizWrap"><div class="pub-kicker">التفاعل التعليمي</div><h2>بنك الأسئلة</h2><div id="reviewQuiz"></div></section>
  </div>
  <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. القبول يحفظ قرار المعاينة ويجهّز ملف تسليم بيانات الحكاية. لا تُعتبر الحكاية منشورة حتى تُرفع ملفاتها النهائية إلى GitHub ويُتحقق من ظهورها الحي.</div>
  <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
@@ -101,15 +103,16 @@ if(params.get('story')==='1'){
  else{
   localStorage.removeItem('kh-story-preview-draft');
   function put(id,value){document.getElementById(id).textContent=value||''}
-  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
+  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewKarmaWrap').hidden=!draft.karma_text;put('reviewKarma',draft.karma_text||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
   put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
   document.getElementById('reviewHistoryWrap').hidden=!draft.history_note;
   document.getElementById('reviewSourcesWrap').hidden=!draft.sources;
   document.getElementById('reviewImagesWrap').hidden=!draft.images_note;
   document.getElementById('reviewOriginalWrap').hidden=!draft.original_body;
+  var quizBox=document.getElementById('reviewQuiz');quizBox.textContent='';var quizData=null;try{quizData=typeof draft.question_bank_json==='string'?JSON.parse(draft.question_bank_json):draft.question_bank_json}catch(e){}var questions=quizData&&Array.isArray(quizData.questions)?quizData.questions:[];if(questions.length){questions.forEach(function(q,i){var item=document.createElement('div');item.className='pub-translation';var h=document.createElement('b');h.textContent='السؤال '+(i+1)+': '+(q.q||'سؤال بلا نص');item.appendChild(h);var p=document.createElement('p');p.textContent=(Array.isArray(q.o)?q.o.join(' | '):'لا توجد اختيارات')+'\nالإجابة: '+(Number.isInteger(q.a)&&Array.isArray(q.o)?(q.o[q.a]||'غير محددة'):'غير محددة')+'\nالتفسير: '+(q.e||'لا يوجد تفسير');item.appendChild(p);quizBox.appendChild(item)})}else{quizBox.textContent=draft.question_bank_json?'تعذر قراءة بنك الأسئلة؛ راجع صيغة JSON.':'لم يُرفق بنك أسئلة بعد؛ يلزم استكماله قبل اعتماد النشر النهائي.'}document.getElementById('reviewQuizWrap').hidden=false;
   var langs={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
   var list=document.getElementById('reviewTranslations');list.textContent='';
-  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
+  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\nكارما: '+(tr.karma_text||'لم تُدخل ترجمة كارما بعد.')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
   document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
   put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار. أدوات التفاعل واللغة وبنك الأسئلة في القالب المرجعي مخفية هنا حتى لا تسجل تفاعلًا على حكاية أخرى؛ يجب ربطها بمعرّف الحكاية الجديدة قبل النشر.');
   (function(d){
@@ -185,6 +188,8 @@ if(params.get('story')==='1'){
       first.innerHTML='';
       var kicker=doc.createElement('div');kicker.className='kicker';kicker.textContent='الحكاية';first.appendChild(kicker);
       var h=doc.createElement('h2');h.textContent=d.title||'الحكاية';first.appendChild(h);
+      if(d.karma_text){var kl=doc.createElement('div');kl.className='kicker';kl.textContent='كارما الطفلة';first.appendChild(kl);String(d.karma_text).split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var kp=doc.createElement('p');kp.textContent=part.trim();first.appendChild(kp)})}
+      var nl=doc.createElement('div');nl.className='kicker';nl.textContent='الراوي المعرفي';first.appendChild(nl);
       String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var para=doc.createElement('p');para.textContent=part.trim();first.appendChild(para)});
       storySections.slice(1).forEach(function(s){s.hidden=true});
       if(d.history_note){
