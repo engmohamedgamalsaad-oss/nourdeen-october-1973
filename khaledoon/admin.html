@@ -354,8 +354,25 @@ var translationDetails=el('details','translation-panel');
  var bar=el('div','fbar');
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
- bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
-var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
+ bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);bar.appendChild(bPreview);
+var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
+ bPreview.addEventListener('click',function(){
+  var translations={};
+  Object.keys(translationInputs).forEach(function(lang){
+   var t=translationInputs[lang];
+   translations[lang]={title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),enabled:t.enabled.checked,status:t.status.value};
+  });
+  var draft={title:title.value.trim(),subtitle:sub.value.trim(),section_label:SEC[secS.value]||secS.value,
+   figure_name:fig.value.trim(),body:body.value.trim(),history_note:hist.value.trim(),sources:src.value.trim(),
+   images_note:img.value.trim(),original_body:it.original_body||'',translations:translations,
+   status_label:STATUS[st.value]||st.value||'مسودة'};
+  try{
+   localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
+   var w=window.open('preview.html?story=1','_blank');
+   if(!w)say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة لهذه الصفحة ثم اضغط المعاينة مرة أخرى.');
+  }catch(e){say('err','تعذر تجهيز المعاينة في هذا المتصفح.');}
+ });
+ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
