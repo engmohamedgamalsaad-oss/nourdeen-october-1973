@@ -276,7 +276,7 @@ function downloadTextFile(name,content,type){
  a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},30000);
 }
 function launchStoryPreview(draft,onDecision){
- try{if(!draft.preview_source_url&&typeof buildStoryHtml==='function'){var previewFolder=storyFolder(draft.section);draft.preview_html=buildStoryHtml(draft,'000',storySectionKey(draft.section),previewFolder).html.replace('<head>','<head><base href="../stories/'+previewFolder+'/000/">')}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر تجهيز صفحة المعاينة: '+(e.message||'خطأ غير معروف'));return}
+ try{if(typeof buildStoryHtml==='function'){var previewFolder=storyFolder(draft.section),fallbackHtml=buildStoryHtml(draft,'000',storySectionKey(draft.section),previewFolder).html.replace('<head>','<head><base href="../stories/'+previewFolder+'/000/">');draft.fallback_preview_html=fallbackHtml;if(!draft.preview_source_url)draft.preview_html=fallbackHtml}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر تجهيز صفحة المعاينة: '+(e.message||'خطأ غير معروف'));return}
  var w=window.open('preview.html?story=1','_blank');
  if(!w){say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
  function receive(ev){
@@ -297,7 +297,7 @@ function validateStoryPackage(d){
  if(!d.karma_intro||d.karma_intro.trim().length<10)missing.push('مدخل كارما');
  if(!d.history_note||!d.history_note.trim())missing.push('في ضوء التاريخ');
  if(!d.sources||!d.sources.trim())missing.push('المصادر');
- if(d.map_json&&String(d.map_json).trim()){try{var mp=JSON.parse(d.map_json),pl=mp.place||{};if(!Number.isFinite(Number(mp.lat))||Number(mp.lat)<-90||Number(mp.lat)>90||!Number.isFinite(Number(mp.lng))||Number(mp.lng)<-180||Number(mp.lng)>180||!mp.source||!['ar','en','fr','it','de'].every(function(k){return String(pl[k]||'').trim()}))missing.push('بيانات الخريطة (إحداثيات ومكان باللغات الخمس ومصدر موثوق)')}catch(e){missing.push('صيغة JSON صحيحة لبيانات الخريطة')}}
+ if(d.map_json&&String(d.map_json).trim()){try{var mp=JSON.parse(d.map_json),pl=mp.place||{};if(mp.lat===undefined||mp.lat===null||String(mp.lat).trim()===''||!Number.isFinite(Number(mp.lat))||Number(mp.lat)<-90||Number(mp.lat)>90||mp.lng===undefined||mp.lng===null||String(mp.lng).trim()===''||!Number.isFinite(Number(mp.lng))||Number(mp.lng)<-180||Number(mp.lng)>180||!mp.source||!['ar','en','fr','it','de'].every(function(k){return String(pl[k]||'').trim()}))missing.push('بيانات الخريطة (إحداثيات ومكان باللغات الخمس ومصدر موثوق)')}catch(e){missing.push('صيغة JSON صحيحة لبيانات الخريطة')}}
  var langs=['en','fr','it','de'];
  langs.forEach(function(k){var t=d.translations&&d.translations[k];if(!t||t.enabled!==true||t.status!=='approved'||!t.title||!t.body||!t.karma_intro||!t.history_note||!t.sources)missing.push(({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'})[k]+' كاملة ومعتمدة (العنوان ومدخل كارما والمتن والسياق والمصادر)')});
  var q=null;try{q=JSON.parse(d.quiz_json||'')}catch(e){}
