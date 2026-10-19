@@ -15,7 +15,7 @@
     var h=hero.offsetHeight||1;
     var passed=reduce?0:Math.max(0,Math.min(1,-hero.getBoundingClientRect().top/h));
     root.style.setProperty('--hero-bg-progress',passed.toFixed(4));
-    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.12:.22)).toFixed(4));
+    root.style.setProperty('--hero-bg-scale',(1+passed*(innerWidth>780?.15:.25)).toFixed(4));
     root.style.setProperty('--hero-bottom-fade',(38+passed*16)+'%');
     root.style.setProperty('--hero-bg-opacity',(1-passed*BG_FADE).toFixed(4));
   }
