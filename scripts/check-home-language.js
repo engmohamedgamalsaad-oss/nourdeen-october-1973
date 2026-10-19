@@ -193,7 +193,16 @@ for (const rel of htmlFiles) {
   if (tr >= 0 && tag.index > tr) fail(`${rel}: shared language script must precede the translation scripts.`);
 }
 
-/* ---------- 4) المحرك المشترك يلتزم بالقفل ---------- */
+/* ---------- 4) مترجم الصفحة الرئيسية ذو الأعمدة الأربعة لا يستقبل فهرس الألمانية ---------- */
+const homeTranslator = read('khaledoon/assets/khaledoon.js');
+if (!/var LG=\["ar","en","fr","it"\],l=0,de=document\.documentElement/.test(homeTranslator)) {
+  fail('Homepage base translator must use only ar/en/fr/it; German is handled by khaledoon-de.js and index 4 would produce undefined translations.');
+}
+if (/var LG=\(window\.KH_LANG&&window\.KH_LANG\.supported\?window\.KH_LANG\.supported\.slice\(\)/.test(homeTranslator)) {
+  fail('Homepage base translator must not derive its four-column dictionary index from the five-language shared list.');
+}
+
+/* ---------- 5) المحرك المشترك يلتزم بالقفل ---------- */
 const engine = read('assets/shared/i18n.js');
 if (!/function readLang\(\)\{\s*[^]*?KH_LANG\.locked\)return window\.KH_LANG\.current/.test(engine)) fail('assets/shared/i18n.js: readLang() must ignore ?lang= when KH_LANG.locked.');
 if (!/function setLang\(lang\)\{\s*if\(window\.KH_LANG&&window\.KH_LANG\.locked\)return/.test(engine)) fail('assets/shared/i18n.js: setLang() must be a no-op when KH_LANG.locked.');
