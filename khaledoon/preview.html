@@ -121,8 +121,16 @@ if(params.get('story')==='1'){
    function renderSourcePage(sourceUrl){
     var url=String(sourceUrl||'').trim();
     if(!url)return Promise.reject(new Error('لم يُحدد رابط الصفحة المصممة'));
-    if(/^https:\/\/github\.com\//i.test(url))url=url.replace(/^https:\/\/github\.com\//i,'https://raw.githubusercontent.com/').replace('/blob/','/');
-    if(!/^https:\/\/raw\.githubusercontent\.com\//i.test(url))return Promise.reject(new Error('رابط المعاينة يجب أن يكون ملفًا من raw.githubusercontent.com أو رابط ملف GitHub'));
+    var repoRaw='https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/';
+    if(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i.test(url)){
+     url=url.replace(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i,repoRaw);
+    }else if(/^https:\/\/engmohamedgamalsaad-oss\.github\.io\/nourdeen-october-1973(?:\/|$)/i.test(url)){
+     var pageUrl=new URL(url),relative=pageUrl.pathname.replace(/^\/nourdeen-october-1973\/?/,'');
+     if(!relative)return Promise.reject(new Error('حدد رابط صفحة حكاية داخل الموقع، وليس الصفحة الرئيسية.'));
+     if(!/\.html?$/i.test(relative))relative=relative.replace(/\/?$/,'/')+'index.html';
+     url=repoRaw+'main/'+relative;
+    }
+    if(!url.startsWith(repoRaw))return Promise.reject(new Error('رابط المعاينة يجب أن يكون صفحة من موقع خالدون أو ملفًا من مستودع المشروع نفسه.'));
     return fetch(url,{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.text()}).then(function(sourceHtml){
      var parsed=new DOMParser().parseFromString(sourceHtml,'text/html');
      if(!parsed.body||!parsed.querySelector('html'))throw new Error('ملف HTML غير صالح');
