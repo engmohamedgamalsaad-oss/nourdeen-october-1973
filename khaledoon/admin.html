@@ -337,7 +337,7 @@ async function exportStoryPackage(d){
   {path:path+'original-ar.txt',name:'original-ar.txt',content:String(d.original_body||d.body||'')+'\n',type:'text/plain;charset=utf-8'},
   {path:'stories/index.json',name:'stories-index.json',content:JSON.stringify(index,null,2)+'\n',type:'application/json;charset=utf-8'},
   {path:'stories/index-entry-'+id+'.json',name:'index-entry-'+id+'.json',content:JSON.stringify(entry,null,2)+'\n',type:'application/json;charset=utf-8'},
-  {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n'__FILE_LIST__'\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
+  {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n__FILE_LIST__\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
  ];
  var fileLines=files.slice(0,9).map(function(x){return x.path}).join('\n');
  files[9].content=files[9].content.replace('__FILE_LIST__',fileLines);
@@ -406,13 +406,15 @@ function card(it){
  function tog(){curBox.hidden=secS.value!=='curriculum';box.className='fcard sec-'+(secS.value||'curriculum')}tog();secS.addEventListener('change',tog);
  var fig=inp(it.figure_name,120),nar=inp(it.narrator_name,40),ng=inp(it.narrator_grade,60),title=inp(it.title,140),sub=inp(it.subtitle,200);
  var previewSource=inp(it.preview_source_url||((String(it.figure_name||'').indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),1200);
- var body=area(it.body,10,12000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(it.admin_notes,3,3000);
+ var metaFields=unpackStoryMeta(it.admin_notes||''),body=area(it.body,10,12000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(metaFields.notes,3,3000),karmaIntro=area(metaFields.karma_intro,3,2500),quizText=area(metaFields.quiz_json,10,16000);
  var cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;
  var st=sel(STATUS,it.status||'pending');
  var g1=el('div','fgrid');g1.appendChild(fld('القسم',secS));g1.appendChild(fld('الشخصية أو الموضوع',fig));box.appendChild(g1);
  box.appendChild(curBox);
  var g2=el('div','fgrid');g2.appendChild(fld('اسم الراوي (الاسم الأول فقط)',nar));g2.appendChild(fld('الصف الدراسي للراوي',ng));g2.appendChild(fld('العنوان',title));g2.appendChild(fld('العنوان الفرعي',sub));box.appendChild(g2);
- box.appendChild(fld('بصوت الراوي',body,'النص المحرَّر؛ الأصل محفوظ بالأعلى'));
+ box.appendChild(fld('مدخل كارما الطفولي',karmaIntro,'مقطع قصير يفتح باب الفضول بصوت طفولي، دون اختلاق معلومة تاريخية.'));
+  box.appendChild(fld('بصوت الراوي',body,'النص المحرَّر؛ الأصل محفوظ بالأعلى'));
+  box.appendChild(fld('بنك الأسئلة (JSON)',quizText,'خمسة أسئلة على الأقل، لكل سؤال اختيارات وإجابة وتفسير، وترجمة i18n للغات en/fr/it/de. يُحفظ هذا الحقل داخل بيانات الإدارة الخاصة دون تغيير مخطط قاعدة البيانات.'));
 var translationDetails=el('details','translation-panel');
  translationDetails.appendChild(el('summary','','الترجمات ومراجعتها'));
  translationDetails.appendChild(el('p','fnote','أدخل كل لغة على حدة، قارنها بالنص العربي، وحدد حالتها. لا تظهر الترجمة للزوار حتى تفعيلها واعتمادها.'));
@@ -425,14 +427,15 @@ var translationDetails=el('details','translation-panel');
   var enabled=document.createElement('input');enabled.type='checkbox';enabled.checked=saved.enabled===true;
   var enableLabel=el('label','fchk');enableLabel.appendChild(enabled);enableLabel.appendChild(el('span','','مفعّلة للنشر بعد الاعتماد'));group.appendChild(enableLabel);
   var state=sel(translationStates,saved.status||'not_started');group.appendChild(fld('حالة الترجمة',state));
-  var student=inp(saved.student_name,120),grade=inp(saved.grade,120),trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trBody=area(saved.body,8,24000);
+  var student=inp(saved.student_name,120),grade=inp(saved.grade,120),trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trBody=area(saved.body,8,24000),trKarma=area(saved.karma_intro,3,2500),trHistory=area(saved.history_note,6,8000),trSources=area(saved.sources,4,3000);
   var fields=el('div','fgrid');
   fields.appendChild(fld('اسم الراوي',student));fields.appendChild(fld('الصف',grade));fields.appendChild(fld('العنوان',trTitle));fields.appendChild(fld('العنوان الفرعي',trSubtitle));
   group.appendChild(fields);
   var comparison=el('div','translation-compare'),source=area(body.value,8,12000);source.readOnly=true;source.setAttribute('aria-label','النص العربي للمقارنة');
   comparison.appendChild(fld('النص العربي للمقارنة',source));comparison.appendChild(fld('نص الترجمة',trBody));group.appendChild(comparison);
+  group.appendChild(fld('ترجمة مدخل كارما',trKarma));group.appendChild(fld('ترجمة «في ضوء التاريخ»',trHistory));group.appendChild(fld('ترجمة المصادر/بيانها',trSources));
   translationDetails.appendChild(group);
-  translationInputs[lang]={enabled:enabled,status:state,student_name:student,grade:grade,title:trTitle,subtitle:trSubtitle,body:trBody,source:source};
+  translationInputs[lang]={enabled:enabled,status:state,student_name:student,grade:grade,title:trTitle,subtitle:trSubtitle,body:trBody,karma_intro:trKarma,history_note:trHistory,sources:trSources,source:source};
  });
  body.addEventListener('input',function(){Object.keys(translationInputs).forEach(function(lang){translationInputs[lang].source.value=body.value})});
  box.appendChild(translationDetails);
@@ -452,10 +455,10 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   var translations={};
   Object.keys(translationInputs).forEach(function(lang){
    var t=translationInputs[lang];
-   translations[lang]={title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),enabled:t.enabled.checked,status:t.status.value};
+   translations[lang]={title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),karma_intro:t.karma_intro.value.trim(),history_note:t.history_note.value.trim(),sources:t.sources.value.trim(),enabled:t.enabled.checked,status:t.status.value};
   });
-  var draft={title:title.value.trim(),subtitle:sub.value.trim(),section_label:SEC[secS.value]||secS.value,
-   figure_name:fig.value.trim(),body:body.value.trim(),history_note:hist.value.trim(),sources:src.value.trim(),
+  var draft=collect('review');draft.section_label=SEC[secS.value]||secS.value;draft.karma_intro=karmaIntro.value.trim();draft.quiz_json=quizText.value.trim();draft.original_body=it.original_body||it.body||'';draft.source_table='khaledoon_submissions';draft.source_id=it.id||null;
+   draft.figure_name=fig.value.trim();draft.title=title.value.trim();draft.subtitle=sub.value.trim();draft.body=body.value.trim();draft.history_note=hist.value.trim();draft.sources=src.value.trim();
    images_note:img.value.trim(),original_body:it.original_body||'',preview_source_url:previewSource.value.trim()||((fig.value.trim().indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),translations:translations,
    status_label:STATUS[st.value]||st.value||'مسودة'};
   try{
@@ -570,7 +573,7 @@ if(!isNew){
  }else box.appendChild(bar);
  function collect(status){
   var cur=secS.value==='curriculum';
-  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status};
+  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),karma_intro:t.karma_intro.value.trim(),history_note:t.history_note.value.trim(),sources:t.sources.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:packStoryMeta(notes.value,karmaIntro.value,quizText.value)||null,translations:translations,consent:cons.checked,status:status};
  }
  var saveMsg=el('div','fmsg');saveMsg.hidden=true;saveMsg.setAttribute('role','status');saveMsg.setAttribute('aria-live','polite');box.appendChild(saveMsg);
  function saveFeedback(kind,message){
@@ -617,7 +620,7 @@ if(!isNew){
   if(isNew||it.status!=='published'&&st.value==='published')st.value=saveStatus;
   persist(saveStatus,bSave);
  });
- bPub.addEventListener('click',function(){persist('published',bPub)});
+ bPub.addEventListener('click',function(){openCardPreview(bPub)});
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
