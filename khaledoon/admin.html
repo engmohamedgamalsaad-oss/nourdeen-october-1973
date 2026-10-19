@@ -308,8 +308,32 @@ function downloadTextFile(name,content,type){
  var blob=new Blob([content],{type:type||'text/plain;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');
  a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},30000);
 }
+function prepareAiStoryHtml(raw,folder,id){
+ var html=String(raw||'').trim();
+ if(!/<html[\s>]/i.test(html)||!/<body[\s>]/i.test(html))throw new Error('ملف AI ليس صفحة HTML كاملة تحتوي على html وbody.');
+ html=html.replace(/<base\b[^>]*>/i,'');
+ html=html.replace(/\{\{STORY_ID\}\}|__STORY_ID__/g,String(id))
+  .replace(/\{\{STORY_FOLDER\}\}/g,String(folder))
+  .replace(/\{\{STORY_PATH\}\}/g,'stories/'+folder+'/'+id+'/')
+  .replace(/\{\{STORY_QUIZ_PATH\}\}/g,'stories/quizzes/'+id+'.json')
+  .replace(/data-story-slug=["'](?:draft|new-story|000)["']/ig,'data-story-slug="'+id+'"')
+  .replace(/<meta\s+name=["']robots["'][^>]*>/i,'<meta name="robots" content="index,follow">');
+ return html.replace(/<head([^>]*)>/i,'<head$1><base href="../stories/'+folder+'/'+id+'/">');
+}
+function finalizeAiStoryHtml(raw,id,folder){
+ var html=String(raw||'').trim();
+ html=html.replace(/<base\b[^>]*>/ig,'')
+  .replace(/\{\{STORY_ID\}\}|__STORY_ID__/g,String(id))
+  .replace(/\{\{STORY_FOLDER\}\}/g,String(folder))
+  .replace(/\{\{STORY_PATH\}\}/g,'stories/'+folder+'/'+id+'/')
+  .replace(/\{\{STORY_QUIZ_PATH\}\}/g,'stories/quizzes/'+id+'.json')
+  .replace(/data-story-slug=["'](?:draft|new-story|000)["']/ig,'data-story-slug="'+id+'"')
+  .replace(/<meta\s+name=["']robots["'][^>]*>/i,'<meta name="robots" content="index,follow">')
+  .replace(/<div[^>]*data-preview-only[^>]*>[\s\S]*?<\/div>/ig,'');
+ return html;
+}
 function launchStoryPreview(draft,onDecision){
- try{if(typeof buildStoryHtml==='function'){var previewFolder=storyFolder(draft.section),fallbackHtml=buildStoryHtml(draft,'000',storySectionKey(draft.section),previewFolder).html.replace('<head>','<head><base href="../stories/'+previewFolder+'/000/">');draft.fallback_preview_html=fallbackHtml;if(!draft.preview_source_url)draft.preview_html=fallbackHtml}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر تجهيز صفحة المعاينة: '+(e.message||'خطأ غير معروف'));return}
+ try{if(typeof buildStoryHtml==='function'){var previewFolder=storyFolder(draft.section),fallbackHtml=buildStoryHtml(draft,'000',storySectionKey(draft.section),previewFolder).html.replace('<head>','<head><base href="../stories/'+previewFolder+'/000/">');draft.fallback_preview_html=fallbackHtml;if(draft.ai_html&&String(draft.ai_html).trim()){try{draft.preview_html=prepareAiStoryHtml(draft.ai_html,previewFolder,'000')}catch(pe){draft.preview_html=fallbackHtml;draft.ai_html_error=pe.message||'ملف AI غير صالح'}}else if(!draft.preview_source_url)draft.preview_html=fallbackHtml}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر تجهيز صفحة المعاينة: '+(e.message||'خطأ غير معروف'));return}
  var w=window.open('preview.html?story=1','_blank');
  if(!w){say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
  function receive(ev){
