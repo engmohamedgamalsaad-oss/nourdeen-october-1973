@@ -337,7 +337,7 @@ async function exportStoryPackage(d){
   {path:path+'original-ar.txt',name:'original-ar.txt',content:String(d.original_body||d.body||'')+'\n',type:'text/plain;charset=utf-8'},
   {path:'stories/index.json',name:'stories-index.json',content:JSON.stringify(index,null,2)+'\n',type:'application/json;charset=utf-8'},
   {path:'stories/index-entry-'+id+'.json',name:'index-entry-'+id+'.json',content:JSON.stringify(entry,null,2)+'\n',type:'application/json;charset=utf-8'},
-  {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n'+filesPlaceholder+'\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
+  {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n'__FILE_LIST__'\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
  ];
  var fileLines=files.slice(0,9).map(function(x){return x.path}).join('\n');
  files[9].content=files[9].content.replace('__FILE_LIST__',fileLines);
