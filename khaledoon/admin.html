@@ -451,22 +451,28 @@ var translationDetails=el('details','translation-panel');
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
 var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
- bPreview.addEventListener('click',function(){
-  var translations={};
-  Object.keys(translationInputs).forEach(function(lang){
-   var t=translationInputs[lang];
-   translations[lang]={title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),karma_intro:t.karma_intro.value.trim(),history_note:t.history_note.value.trim(),sources:t.sources.value.trim(),enabled:t.enabled.checked,status:t.status.value};
+ function openCardPreview(btn){
+  var draft=collect('review');
+  draft.section_label=SEC[secS.value]||secS.value;
+  draft.karma_intro=karmaIntro.value.trim();draft.quiz_json=quizText.value.trim();
+  draft.original_body=it.original_body||it.body||'';draft.source_table='khaledoon_submissions';draft.source_id=it.id||null;
+  draft.preview_source_url=previewSource.value.trim();
+  launchStoryPreview(draft,async function(action){
+   if(action==='reject'){
+    var rejected=await persist('review',bSave);
+    return {ok:rejected,message:rejected?'رجعت الحكاية إلى المسودة غير المنشورة.':'تعذر حفظ المسودة بعد رفض المعاينة.'};
+   }
+   var latest=collect('review');
+   latest.section_label=SEC[secS.value]||secS.value;latest.karma_intro=karmaIntro.value.trim();latest.quiz_json=quizText.value.trim();
+   latest.original_body=it.original_body||it.body||'';latest.source_table='khaledoon_submissions';latest.source_id=it.id||null;
+   var check=validateStoryPackage(latest);
+   if(!check.ok){var msg='لم يتم اعتماد ملفات النشر؛ أكمل أولًا: '+check.missing.slice(0,8).join('، ')+(check.missing.length>8?'، وبنود أخرى':'');saveFeedback('err',msg);say('err',msg);return {ok:false,message:msg}}
+   var saved=await persist('review',btn);
+   if(!saved)return {ok:false,message:'لم يُحفظ سجل المسودة. راجع رسالة الخطأ في بطاقة الحكاية.'};
+   try{return await exportStoryPackage(latest)}catch(e){var em='تعذر تجهيز ملفات النشر: '+(e.message||'خطأ غير معروف');say('err',em);return {ok:false,message:em}}
   });
-  var draft=collect('review');draft.section_label=SEC[secS.value]||secS.value;draft.karma_intro=karmaIntro.value.trim();draft.quiz_json=quizText.value.trim();draft.original_body=it.original_body||it.body||'';draft.source_table='khaledoon_submissions';draft.source_id=it.id||null;
-   draft.figure_name=fig.value.trim();draft.title=title.value.trim();draft.subtitle=sub.value.trim();draft.body=body.value.trim();draft.history_note=hist.value.trim();draft.sources=src.value.trim();
-   images_note:img.value.trim(),original_body:it.original_body||'',preview_source_url:previewSource.value.trim()||((fig.value.trim().indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),translations:translations,
-   status_label:STATUS[st.value]||st.value||'مسودة'};
-  try{
-   localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
-   var w=window.open('preview.html?story=1','_blank');
-   if(!w)say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة لهذه الصفحة ثم اضغط المعاينة مرة أخرى.');
-  }catch(e){say('err','تعذر تجهيز المعاينة في هذا المتصفح.');}
- });
+ }
+ bPreview.addEventListener('click',function(){openCardPreview(bPreview)});
  bar.appendChild(bPreview);
  var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
@@ -616,7 +622,7 @@ if(!isNew){
  }
  bSave.addEventListener('click',function(){
   /* «حفظ» لا ينشر حكاية جديدة؛ يحفظها قيد المراجعة. وللحكاية المنشورة يحافظ على حالتها الحالية. */
-  var saveStatus=isNew?'pending':(it.status==='published'?'published':(st.value==='published'?'pending':st.value));
+  var saveStatus=isNew?'review':(it.status==='published'?'published':'review');
   if(isNew||it.status!=='published'&&st.value==='published')st.value=saveStatus;
   persist(saveStatus,bSave);
  });
