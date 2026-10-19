@@ -354,7 +354,7 @@ var translationDetails=el('details','translation-panel');
  var bar=el('div','fbar');
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
- bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);bar.appendChild(bPreview);
+ bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
 var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
  bPreview.addEventListener('click',function(){
   var translations={};
@@ -372,6 +372,7 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
    if(!w)say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة لهذه الصفحة ثم اضغط المعاينة مرة أخرى.');
   }catch(e){say('err','تعذر تجهيز المعاينة في هذا المتصفح.');}
  });
+ bar.appendChild(bPreview);
  var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
