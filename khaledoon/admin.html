@@ -285,7 +285,8 @@ async function confirmStoryPublishAfterUpload(it,btn){
   }else{throw new Error('لا يوجد رابط صفحة حية مسجل للمعاينة المقبولة؛ لن أغيّر الحالة إلى منشورة. أعد فتح المعاينة وسجّل رابط الصفحة الجاهزة أو أنشئ حزمة القالب.');}
   var payload={};
   if(table==='submitted_stories'){
-   ['student_name','grade','title','subtitle','body','sources','color','story_number'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
+   ['student_name','grade','title','subtitle','body','sources','color'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
+   payload.story_number=meta.preview_review&&meta.preview_review.static_story_id||draft.story_number||null;
    meta.karma_text=draft.karma_text||meta.karma_text||'';meta.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';meta.translations=draft.translations||meta.translations||{};meta.history_note=draft.history_note||meta.history_note||'';meta.images_note=draft.images_note||meta.images_note||'';meta.figure_name=draft.figure_name||meta.figure_name||draft.title;meta.section_key='october';meta.narrator_name=draft.narrator_name||draft.student_name||meta.narrator_name||'';meta.narrator_grade=draft.narrator_grade||draft.grade||meta.narrator_grade||'';
    payload.status='published';
   }else{
