@@ -94,6 +94,7 @@
 
 ### ما لم يُتحقق منه بعد
 
-- لم تُشغّل أوامر Node الفعلية `scripts/check-home-language.js` و`scripts/check-localization-coverage.js` على نسخة محلية من المستودع، ولم تُسجّل GitHub Actions أي حالة اختبار لهذا التعديل حتى الآن.
+- **تحديث 2026-10-19:** أُضيف تشغيل `node scripts/check-localization-coverage.js` إلى `.github/workflows/home-language-check.yml`. نجح فحصا `scripts/check-home-language.js` و`scripts/check-localization-coverage.js` في GitHub Actions على الرأس `a74adbb5d22635c196ca89f44c70bda476d23203` (run 404). هذا يثبت نجاح الفحوصات الساكنة فقط.
+- أُصلح ترتيب تحميل `khaledoon-de.js` في `read.html` و`quiz.html` ليكون قبل سكربت العرض المضمّن؛ وأُضيف فحص يمنع رجوع هذا الخلل.
 - لم يُجرَ اختبار متصفح حقيقي للهاتف والكمبيوتر، ولا اختبار طباعة فعلي أو مشاركة WhatsApp/Facebook أو تفاعلات Supabase.
-- لذلك يبقى PR #135 **مسودة للمراجعة**، ولا يُدمج أو يُنشر قبل اجتياز هذه الاختبارات ومراجعة جودة الترجمة الألمانية بصريًا ولغويًا.
+- لذلك يبقى PR #135 **مسودة للمراجعة**، ولا يُدمج أو يُنشر قبل الاختبارات البصرية والوظيفية ومراجعة جودة الترجمة الألمانية.
