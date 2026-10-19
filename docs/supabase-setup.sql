@@ -18,10 +18,12 @@ create table if not exists public.submitted_stories (
   subtitle text check (char_length(subtitle) <= 200),
   body text not null check (char_length(body) between 50 and 12000),
   sources text check (char_length(sources) <= 2000),
+  story_meta jsonb not null default '{}'::jsonb check (jsonb_typeof(story_meta) = 'object'),
   color text not null default '#b8874b' check (color ~ '^#[0-9a-fA-F]{6}$'),
   status text not null default 'pending' check (status in ('pending','published','rejected')),
   story_number integer
 );
+alter table public.submitted_stories add column if not exists story_meta jsonb not null default '{}'::jsonb;
 alter table public.submitted_stories enable row level security;
 create unique index if not exists submitted_stories_story_number_uidx
   on public.submitted_stories(story_number) where story_number is not null;
@@ -60,9 +62,9 @@ drop policy if exists "admin inserts" on public.submitted_stories;
 drop policy if exists "admin updates" on public.submitted_stories;
 drop policy if exists "admin deletes" on public.submitted_stories;
 create policy "visitors submit pending" on public.submitted_stories for insert to anon, authenticated
-  with check (status = 'pending' and story_number is null);
+  with check (status = 'pending' and story_number is null and story_meta = '{}'::jsonb);
 create policy "everyone reads published" on public.submitted_stories for select to anon, authenticated
-  using (status = 'published');
+  using (status = 'published' and story_meta = '{}'::jsonb);
 create policy "admin reads all" on public.submitted_stories for select to authenticated using (public.is_admin());
 create policy "admin inserts" on public.submitted_stories for insert to authenticated with check (public.is_admin());
 create policy "admin updates" on public.submitted_stories for update to authenticated using (public.is_admin()) with check (public.is_admin());
