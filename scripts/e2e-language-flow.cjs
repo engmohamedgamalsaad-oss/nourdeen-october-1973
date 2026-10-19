@@ -24,7 +24,7 @@ const path = require('node:path');
 const ROOT = process.cwd();
 const LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3, de: 4 };
-const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html']);
+const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html']);
 const out = (() => { const i = process.argv.indexOf('--out'); return i > 0 ? process.argv[i + 1] : ''; })();
 const screenshotDir = path.join(ROOT, 'language-audit-screenshots');
 fs.mkdirSync(screenshotDir, { recursive: true });

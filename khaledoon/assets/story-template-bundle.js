@@ -160,7 +160,9 @@ async function download(draft,opts){
   {path:root+'cover.svg',content:svgCover(draft,id,accent,false)},
   {path:root+'cover-popup.svg',content:svgCover(draft,id,accent,true)},
   {path:'stories/quizzes/'+id+'.json',content:JSON.stringify(quiz,null,2)+'\n'},
-  {path:root+'sources.md',content:sourceMd}
+  {path:root+'sources.md',content:sourceMd},
+  {path:root+'original.md',content:'# النص الأصلي كما وصل دون تعديل\n\n'+String(draft.original_body||'لم يُرفق النص الأصلي.')+'\n'},
+  {path:root+'editorial-notes.md',content:'# ملاحظات التحرير والتحقق\n\n## السياق التاريخي والتحقق\n\n'+String(draft.history_note||'لم تُضف ملاحظات تحقق.')+'\n\n## الصور وحقوق الاستخدام\n\n'+String(draft.images_note||'لم تُسجل معلومات الصور وحقوقها؛ يلزم استكمالها قبل النشر.')+'\n'}
  ];
  var readme='# حزمة حكاية خالدون — '+draft.title+'\n\n'+
   '- المعرّف المقترح: '+id+'\n- القسم: '+section+'\n- المسار: '+root+'\n- الحالة في data.json: published=true لأن هذه الحزمة أُنشئت بعد قبول المعاينة.\n\n'+

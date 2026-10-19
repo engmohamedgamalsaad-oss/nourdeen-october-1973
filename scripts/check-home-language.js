@@ -21,7 +21,7 @@ const GERMAN_DICT = 'khaledoon/assets/khaledoon-de.js';
 /* سكربتات الترجمة القديمة التي تقرأ window.KH_DE عند اختيار الألمانية. */
 const LEGACY_I18N_RE = /khaledoon(?:-pages-i18n|-i18n-extra)?\.js/;
 /* لوحات الإدارة: ليست صفحات زوار، ولا تحمّل سكربت اللغة. */
-const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html']);
+const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html']);
 /* تعارضات موثّقة تنتظر قرار صاحب المشروع (لا تُعدَّل بصمت). */
 const KNOWN_LANG_PARAM_LINKS = {
   'read.html': 'رابط «اقرأ بالعربية» داخل صفحة قراءة حكاية الطلاب يضيف ?lang=ar، والقفل الموحد يزيله (موثّق في التقرير).'
