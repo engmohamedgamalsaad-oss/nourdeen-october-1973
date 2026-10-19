@@ -132,14 +132,21 @@ async function download(draft,opts){
  if(!report.ok)throw new Error('لا يمكن إنشاء حزمة نشر مكتملة قبل استكمال التالي:\n• '+report.missing.join('\n• '));
  var section=SECTION_MAP[draft.section_key]||'';
  if(!section)throw new Error('القسم غير معروف؛ لم أنشئ حزمة بمسار غير صحيح.');
- var id=await nextId(),accent=ACCENTS[section]||'#d5b7ff';
- var root='stories/'+section+'/'+id+'/',baseUrl=location.origin+'/nourdeen-october-1973';
- var data=dataJson(draft,id,section),quiz=report.quiz;quiz.id=id;quiz.title=draft.figure_name||draft.title;
+ var priorMeta=draft.story_meta&&draft.story_meta.preview_review||{},priorPath=String(priorMeta.static_story_path||''),priorId=String(priorMeta.static_story_id||''),candidateId=String(draft.story_number||'').trim();
  var indexResponse=await fetch('../stories/index.json?bundle='+Date.now(),{cache:'no-store'});if(!indexResponse.ok)throw new Error('تعذر قراءة فهرس الحكايات الحالي؛ لم أنشئ حزمة قد تستبدل الفهرس ببيانات ناقصة.');
  var storyIndex=await indexResponse.json();if(!Array.isArray(storyIndex))throw new Error('صيغة فهرس الحكايات غير متوقعة؛ لم أنشئ الحزمة.');
- if(storyIndex.some(function(x){return String(x.id||'').padStart(3,'0')===id||String(x.path||'').split('/').filter(Boolean).join('/')===('stories/'+section+'/'+id)}))throw new Error('رقم الحكاية ظهر في الفهرس أثناء التجهيز؛ أعد فتح المعاينة لتحديد رقم جديد.');
- var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:'stories/'+section+'/'+id+'/'};
- storyIndex.push(indexEntry);
+ var id='',updatingExisting=false;
+ if(priorPath){var priorParts=priorPath.split('/').filter(Boolean);if(priorParts.length<3||priorParts[0]!=='stories'||priorParts[1]!==section)throw new Error('القسم المختار يختلف عن قسم الحكاية المنشورة. غيّر القسم في مسار مراجعة منفصل حتى لا تترك نسخة قديمة في القسم السابق.');id=String(priorId||priorParts[2]).padStart(3,'0');if(id!==priorParts[2])throw new Error('معرّف الصفحة المحفوظ لا يطابق مسارها؛ أوقفنا التجهيز لحماية الرابط الحالي.');updatingExisting=true}
+ else if(priorId){id=priorId.padStart(3,'0');updatingExisting=true}
+ else if(section==='october'&&candidateId){var candidate=String(parseInt(candidateId,10)).padStart(3,'0');if(storyIndex.some(function(x){return String(x.id||'').padStart(3,'0')===candidate&&x.section===section})){id=candidate;updatingExisting=true}}
+ if(!id)id=await nextId();
+ var existingIndexAt=storyIndex.findIndex(function(x){return String(x.id||'').padStart(3,'0')===id});
+ if(updatingExisting){if(existingIndexAt<0)throw new Error('الحكاية التي نحاول تعديلها غير موجودة في فهرس الموقع؛ لم أنشئ نسخة مكررة.');if(storyIndex[existingIndexAt].section!==section)throw new Error('رقم الحكاية مرتبط بقسم آخر؛ لم أغيّر الرابط أو أكرر الحكاية.')}
+ else if(existingIndexAt>=0||storyIndex.some(function(x){return String(x.path||'').split('/').filter(Boolean).join('/')===('stories/'+section+'/'+id)}))throw new Error('رقم الحكاية ظهر في الفهرس أثناء التجهيز؛ أعد فتح المعاينة لتحديد رقم جديد.');
+ var accent=ACCENTS[section]||'#d5b7ff',root='stories/'+section+'/'+id+'/',baseUrl=location.origin+'/nourdeen-october-1973';
+ var data=dataJson(draft,id,section),quiz=report.quiz;quiz.id=id;quiz.title=draft.figure_name||draft.title;
+ var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:root};
+ if(updatingExisting)storyIndex[existingIndexAt]=indexEntry;else storyIndex.push(indexEntry);
  var source=sourceRows(draft.sources),sourceMd='# مصادر الحكاية: '+draft.title+'\n\n'+source.map(function(x){return '- '+(x.url?'['+x.label+']('+x.url+')':x.line)}).join('\n')+'\n';
  var theme='';try{var tr=await fetch('../stories/history/005/theme.css',{cache:'no-store'});if(tr.ok)theme=await tr.text()}catch(e){}
  theme+='\n:root{--gold:'+accent+'!important;--accent:'+accent+'!important}\n.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}\n';
