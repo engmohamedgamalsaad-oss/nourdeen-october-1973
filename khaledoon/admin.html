@@ -283,7 +283,12 @@ function legacyCard(it){
   }catch(e){say('err',e.message||'تعذر الحفظ.')}finally{btn.disabled=false}
  }
  saveBtn.addEventListener('click',function(){persistLegacy(null,saveBtn)});
- pubBtn.addEventListener('click',function(){persistLegacy('published',pubBtn)});
+ pubBtn.title='لا ينشر مباشرة؛ يفتح معاينة خاصة بالحكاية أولًا.';
+ pubBtn.addEventListener('click',function(){
+  var popup=window.open('about:blank','_blank');if(!popup){say('err','اسمح بالنوافذ المنبثقة ثم حاول المعاينة مرة أخرى.');return}
+  var draft={title:title.value.trim(),subtitle:subtitle.value.trim(),section_label:'حكايات أكتوبر 1973',section_key:'october',figure_name:name.value.trim(),body:body.value.trim(),history_note:'',sources:sources.value.trim(),images_note:'',original_body:it.body||body.value.trim(),translations:{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id,submission_table:'submitted_stories',record_type:'legacy',record_data:{student_name:name.value.trim(),grade:grade.value.trim(),title:title.value.trim(),subtitle:subtitle.value.trim(),body:body.value.trim(),sources:sources.value.trim(),status:'pending',story_number:it.story_number||null,story_meta:it.story_meta||{}},story_meta:it.story_meta||{}};
+  try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ تجهيز معاينة الحكاية…</body></html>');popup.document.close();localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));popup.location.href='preview.html?story=1'}catch(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+e.message)}
+ });
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
@@ -357,24 +362,29 @@ var translationDetails=el('details','translation-panel');
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
-var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
- bPreview.addEventListener('click',function(){
-  var translations={};
-  Object.keys(translationInputs).forEach(function(lang){
-   var t=translationInputs[lang];
-   translations[lang]={title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim(),enabled:t.enabled.checked,status:t.status.value};
-  });
-  var draft={title:title.value.trim(),subtitle:sub.value.trim(),section_label:SEC[secS.value]||secS.value,
-   figure_name:fig.value.trim(),body:body.value.trim(),history_note:hist.value.trim(),sources:src.value.trim(),
-   images_note:img.value.trim(),original_body:it.original_body||'',preview_source_url:previewSource.value.trim()||((fig.value.trim().indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),translations:translations,
-   status_label:STATUS[st.value]||st.value||'مسودة'};
-  try{
-   localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
-   var w=window.open('preview.html?story=1','_blank');
-   if(!w)say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة لهذه الصفحة ثم اضغط المعاينة مرة أخرى.');
-  }catch(e){say('err','تعذر تجهيز المعاينة في هذا المتصفح.');}
- });
- bar.appendChild(bPreview);
+function makePreviewDraft(statusForPreview){
+  var d=collect(statusForPreview||'pending');
+  return {title:d.title,subtitle:d.subtitle,section_label:SEC[d.section]||d.section,section_key:d.section,figure_name:d.figure_name,body:d.body,history_note:d.history_note||'',sources:d.sources||'',images_note:d.images_note||'',original_body:d.original_body||'',translations:d.translations||{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id||null,submission_table:'khaledoon_submissions',record_type:'modern',record_data:d,story_meta:d.story_meta||{}};
+ }
+ function openPreviewAfterSave(btn){
+  var popup=window.open('about:blank','_blank');
+  if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
+  try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ حفظ المسودة وتجهيز معاينة الحكاية…</body></html>');popup.document.close()}catch(e){}
+  var saveStatus=(!isNew&&it.status==='published')?'published':'pending';
+  persist(saveStatus,btn).then(function(ok){
+   if(!ok){try{popup.close()}catch(e){}return}
+   try{
+    var draft=makePreviewDraft(saveStatus);draft.submission_id=it.id||null;draft.story_meta=it.story_meta||{};
+    localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
+    localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));
+    popup.location.href='preview.html?story=1';
+   }catch(e){try{popup.close()}catch(ignore){}say('err','حُفظت المسودة، لكن تعذر تجهيز بيانات المعاينة: '+e.message)}
+  }).catch(function(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+(e.message||'حدث خطأ'))});
+ }
+ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
+ bPreview.addEventListener('click',function(){openPreviewAfterSave(bPreview)});
+ 
+ var providerSelect=document.createElement('select');providerSelect.className='btn ghost';providerSelect.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي للبرومبت');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];providerSelect.appendChild(o)});providerSelect.title='اختر الأداة لتضمين تعليماتها الخاصة في النسخة المنسوخة';
  var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
   var cur=secS.value==='curriculum',L=[];
@@ -444,11 +454,12 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   L.push('5) خطة الصور وحقوق الاستخدام والإسناد، دون افتراض أن نتائج البحث تمنح حق الاستخدام.');
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
+  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push((window.STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[providerSelect.value])||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
   var t=L.join('\n');
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
- bar.appendChild(bCopy);
+ bar.appendChild(providerSelect);bar.appendChild(bCopy);
  if(!isNew&&(it.status==='pending'||it.status==='review')){
   var bRej=el('button','btn del','رفض');bRej.type='button';
   bRej.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ تبقى محفوظة.'))persist('rejected',bRej)});
@@ -480,7 +491,7 @@ if(!isNew){
  }else box.appendChild(bar);
  function collect(status){
   var cur=secS.value==='curriculum';
-  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status};
+  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),original_body:it.original_body||body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status,story_meta:it.story_meta||{}};
  }
  var saveMsg=el('div','fmsg');saveMsg.hidden=true;saveMsg.setAttribute('role','status');saveMsg.setAttribute('aria-live','polite');box.appendChild(saveMsg);
  function saveFeedback(kind,message){
@@ -507,6 +518,7 @@ if(!isNew){
     throw new Error('تعذر الحفظ ('+r.status+'). '+(reason?String(reason).slice(0,500):'لم يرسل الخادم تفاصيل إضافية.'));
    }
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل: لم يُرجع الخادم سجلًا. تأكد أن حسابك مسجّل كأدمن وأن سياسة الصلاحيات تسمح بالكتابة.');
+   if(rows[0])Object.assign(it,rows[0]);
    ok=true;draftNew=false;
    try{
     await loadList();
@@ -527,7 +539,8 @@ if(!isNew){
   if(isNew||it.status!=='published'&&st.value==='published')st.value=saveStatus;
   persist(saveStatus,bSave);
  });
- bPub.addEventListener('click',function(){persist('published',bPub)});
+ bPub.title='لا ينشر مباشرة؛ يحفظ المسودة ثم يفتح المعاينة للموافقة قبل أي نشر.';
+ bPub.addEventListener('click',function(){openPreviewAfterSave(bPub)});
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
@@ -633,22 +646,24 @@ function pubRow(it){
  if(openIds[key]){d.open=true;build()}
  return d;
 }
-function buildNewStoryPrompt(){
+function buildNewStoryPrompt(providerKey){
  var prompt=String(STORY_WORKFLOW||'').trim();
  if(!prompt){throw new Error('تعذر تحميل البرومبت الرئيسي الكامل من تعليمات المشروع.');}
- return prompt;
+ var provider=(window.STORY_PROVIDER_PROMPTS&&window.STORY_PROVIDER_PROMPTS[providerKey||'chatgpt'])||'';
+ return prompt+'\\n\\n================ تعليمات الأداة المختارة ================\\n'+provider;
 }
 function renderNewStoryGate(list){
  var box=el('article','fcard');
  box.appendChild(el('h2','','قبل إنشاء أي حكاية جديدة'));
  box.appendChild(el('p','','الخطوة الأولى إلزامية: انسخ برومبت المشروع الكامل والصقه في المحادثة التي ستعمل فيها على الحكاية. البرومبت يتضمن التعليمات الأساسية، وطريقة كارما والراوي، واللغات الخمس، والتوثيق والصور، وقواعد المعاينة وعدم النشر دون موافقة.'));
- box.appendChild(el('p','fnote','لن يفتح نموذج الحكاية الجديدة قبل تنفيذ النسخ من هنا. بعد النسخ، انتقل إلى المحادثة المخصصة للحكاية والصق النص كاملًا.'));
+ box.appendChild(el('p','fnote','لن يفتح نموذج الحكاية الجديدة قبل تنفيذ النسخ من هنا. اختر الأداة التي ستستخدمها؛ ستُضاف تعليماتها الخاصة إلى البرومبت. بعد النسخ، انتقل إلى المحادثة المخصصة للحكاية والصق النص كاملًا.'));
+ var gateProvider=document.createElement('select');gateProvider.className='btn ghost';gateProvider.setAttribute('aria-label','اختيار أداة البرومبت');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];gateProvider.appendChild(o)});box.appendChild(gateProvider);
  var bar=el('div','fbar');
  var copy=el('button','btn primary','١. نسخ برومبت إنشاء الحكاية الكامل');copy.type='button';
  var start=el('button','btn ghost','٢. تم النسخ — ابدأ الحكاية');start.type='button';start.disabled=!newStoryPromptCopied;
  var cancel=el('button','btn ghost','إلغاء');cancel.type='button';
  copy.addEventListener('click',function(){
-  var t=buildNewStoryPrompt();
+  var t=buildNewStoryPrompt(gateProvider.value);
   function done(ok){if(ok){newStoryPromptCopied=true;start.disabled=false;say('ok','تم نسخ البرومبت الكامل. الصقه في محادثة الحكاية أولًا، ثم ارجع واضغط «تم النسخ — ابدأ الحكاية».')}else say('err','تعذر نسخ البرومبت. اسمح بالنسخ في المتصفح ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
  });
