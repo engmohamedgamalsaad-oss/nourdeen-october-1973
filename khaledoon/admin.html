@@ -340,7 +340,7 @@ async function exportStoryPackage(d){
   {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n'+filesPlaceholder+'\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
  ];
  var fileLines=files.slice(0,9).map(function(x){return x.path}).join('\n');
- files[9].content=files[9].content.replace(filesPlaceholder,fileLines);
+ files[9].content=files[9].content.replace('__FILE_LIST__',fileLines);
  /* Download each artifact. The full index is separately named so it can be reviewed before replacing the live index. */
  files.forEach(function(f,i){setTimeout(function(){downloadTextFile(f.name,f.content,f.type)},i*450)});
  say('تم قبول المعاينة وتجهيز '+files.length+' ملفات للتنزيل. لم تُرفع إلى GitHub ولم تُنشر بعد. راجع ملف تعليمات الرفع.');
