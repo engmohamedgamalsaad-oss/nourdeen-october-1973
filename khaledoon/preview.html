@@ -112,6 +112,7 @@ if(params.get('story')==='1'){
   document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
   put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
   (function(d){
+   var frame=document.getElementById('actualPagePreview');
    function renderSourcePage(sourceUrl){
     var url=String(sourceUrl||'').trim();
     if(!url)return Promise.reject(new Error('لم يُحدد رابط الصفحة المصممة'));
