@@ -146,6 +146,7 @@ if(params.get('story')==='1'){
      put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
     });
    }
+   if(d.preview_html){renderGeneratedPage(d)}else{
    var source=(d.preview_source_url||'').trim();
    if(source){
     renderSourcePage(source).catch(function(error){
@@ -155,6 +156,14 @@ if(params.get('story')==='1'){
    }else{
     renderInRealTemplate(d);
    }
+   }
+  function renderGeneratedPage(d){
+   var frame=document.getElementById('actualPagePreview'),html=String(d.preview_html||'');
+   if(!html){renderInRealTemplate(d);return}
+   html=html.replace('</head>','<style>.reactions-section button,.story-share-bar a{pointer-events:none!important;opacity:.75}</style></head>');
+   frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');frame.removeAttribute('src');frame.srcdoc='<!doctype html>\\n'+html;
+   put('reviewMeta','تُعرض الآن نسخة القالب الجاهز المبنية من بيانات الحكاية الحالية، دون استعارة محتوى حكاية أخرى. يمكن تجربة تبديل اللغات؛ أزرار التفاعل معطلة داخل المعاينة حتى لا تسجّل تفاعلًا حيًا.');
+  }
   function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
    var section=(d.section_label||'').toLowerCase();
