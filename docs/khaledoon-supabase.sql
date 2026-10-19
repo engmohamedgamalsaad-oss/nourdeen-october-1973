@@ -20,6 +20,8 @@ create table if not exists public.khaledoon_submissions (
   sources text check (char_length(sources) <= 3000),
   images_note text check (char_length(images_note) <= 1500),
   admin_notes text check (char_length(admin_notes) <= 3000),
+  story_meta jsonb not null default '{}'::jsonb check (jsonb_typeof(story_meta) = 'object'),
+  translations jsonb not null default '{}'::jsonb check (jsonb_typeof(translations) = 'object'),
   consent boolean not null default false,
   status text not null default 'pending' check (status in ('pending','review','published','rejected')),
   constraint kh_curriculum_fields check (section <> 'curriculum' or (stage is not null and school_grade is not null)),
@@ -28,6 +30,10 @@ create table if not exists public.khaledoon_submissions (
     or (stage <> 'primary' and school_grade between 1 and 3)),
   constraint kh_publish_needs_consent check (status <> 'published' or consent = true)
 );
+
+-- ترحيل إضافي آمن للقاعدة الموجودة بالفعل؛ لا يفترض أن CREATE TABLE IF NOT EXISTS أضاف الأعمدة.
+alter table public.khaledoon_submissions add column if not exists story_meta jsonb not null default '{}'::jsonb;
+alter table public.khaledoon_submissions add column if not exists translations jsonb not null default '{}'::jsonb;
 
 -- يحتفظ بالنص الأصلي كما وصل ولا يسمح بتعديله لاحقًا
 create or replace function public.kh_keep_original()
@@ -45,13 +51,15 @@ for each row execute function public.kh_keep_original();
 
 alter table public.khaledoon_submissions enable row level security;
 drop policy if exists "kh visitors submit pending" on public.khaledoon_submissions;
+drop policy if exists "kh anon visitors submit pending" on public.khaledoon_submissions;
+drop policy if exists "kh authenticated visitors or admins insert" on public.khaledoon_submissions;
 drop policy if exists "kh admin reads" on public.khaledoon_submissions;
 drop policy if exists "kh admin inserts" on public.khaledoon_submissions;
 drop policy if exists "kh admin updates" on public.khaledoon_submissions;
 drop policy if exists "kh admin deletes" on public.khaledoon_submissions;
 -- الزائر: إرسال فقط بحالة pending وبموافقة، ولا قراءة ولا تعديل
 create policy "kh visitors submit pending" on public.khaledoon_submissions for insert to anon, authenticated
-  with check (status = 'pending' and consent = true and admin_notes is null and history_note is null);
+  with check (status = 'pending' and consent = true and admin_notes is null and history_note is null and translations = '{}'::jsonb and story_meta = '{}'::jsonb);
 create policy "kh admin reads" on public.khaledoon_submissions for select to authenticated using (public.is_admin());
 create policy "kh admin inserts" on public.khaledoon_submissions for insert to authenticated with check (public.is_admin());
 create policy "kh admin updates" on public.khaledoon_submissions for update to authenticated using (public.is_admin()) with check (public.is_admin());
