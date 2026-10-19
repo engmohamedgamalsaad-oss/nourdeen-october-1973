@@ -1,0 +1,26 @@
+/* Homepage category cards: consistent size and intentional order-friendly grid. */
+.gates {
+  align-items: stretch;
+  grid-auto-rows: 1fr;
+}
+.gates > .gate {
+  height: 100%;
+  min-height: 230px;
+}
+.gates > .gate.g7 {
+  grid-column: auto;
+  min-height: 230px;
+}
+@media (max-width: 780px) {
+  .gates {
+    grid-auto-rows: 1fr;
+  }
+  .gates > .gate {
+    min-height: 230px;
+  }
+}
+@media (max-width: 480px) {
+  .gates > .gate {
+    min-height: 230px;
+  }
+}
