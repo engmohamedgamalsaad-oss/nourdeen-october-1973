@@ -101,7 +101,8 @@ if(params.get('story')==='1'){
  var draft=null;
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
  var requestedSubmission=params.get('submission');
- if(requestedSubmission){
+ if(requestedSubmission&&params.get('dbloaded')==='1'&&(!draft||String(draft.submission_id||'')!==requestedSubmission))draft=null;
+ if(requestedSubmission&&params.get('dbloaded')!=='1'){
   draft=null;
   (async function(){
    try{
@@ -118,7 +119,7 @@ if(params.get('story')==='1'){
     var rows=await response.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية عرضه.');
     var r=rows[0],m=r.story_meta||{};if(r.status==='rejected')throw new Error('هذه الحكاية مرفوضة؛ افتحها من سجل الإدارة إذا أردت تعديلها.');
     var loaded={submission_id:r.id,submission_table:'khaledoon_submissions',record_type:'modern',record_data:r,story_meta:m,status:r.status,section_key:m.section_key||r.section,section_label:m.section_label||r.section,title:r.title||'',subtitle:r.subtitle||'',figure_name:r.figure_name||'',narrator_name:r.narrator_name||'',narrator_grade:r.narrator_grade||'',stage:r.stage||'',original_body:r.original_body||'',karma_text:m.karma_text||'',body:r.body||'',history_note:r.history_note||'',sources:r.sources||'',images_note:r.images_note||'',translations:r.translations||{},question_bank_json:m.question_bank_json||'',story_number:m.story_number||'',preview_source_url:m.preview_source_url||'',status_label:m.status_label||('الحالة: '+r.status)};
-    localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));location.reload();
+    localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));params.set('dbloaded','1');location.replace(location.pathname+'?'+params.toString());
    }catch(error){document.getElementById('reviewMeta').textContent='تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف');document.getElementById('approveStoryBtn').disabled=true;document.getElementById('rejectStoryBtn').disabled=true}
   })();
  }
