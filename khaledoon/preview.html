@@ -110,7 +110,7 @@ if(params.get('story')==='1'){
   var list=document.getElementById('reviewTranslations');list.textContent='';
   Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
   document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
-  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
+  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار. أدوات التفاعل واللغة وبنك الأسئلة في القالب المرجعي مخفية هنا حتى لا تسجل تفاعلًا على حكاية أخرى؛ يجب ربطها بمعرّف الحكاية الجديدة قبل النشر.');
   (function(d){
    var frame=document.getElementById('actualPagePreview');
    function renderSourcePage(sourceUrl){
@@ -154,9 +154,11 @@ if(params.get('story')==='1'){
    }
   function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
-   var section=(d.section_label||'').toLowerCase();
-   var path=section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
-            section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+   var section=(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
+   var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
+            key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+            key==='learning'||section.indexOf('نساء')>=0||section.indexOf('women')>=0?'../stories/women/010/index.html':
+            key==='fame'?'../stories/history/006/index.html':
             '../stories/history/005/index.html';
    frame.src=path+'?previewMode=1';
    frame.addEventListener('load',function(){
