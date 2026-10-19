@@ -1,6 +1,6 @@
 # ChatGPT — البرومبت الكامل لإعداد حكاية خالدون عبر التاريخ
 
-الإصدار: 2026-10-19.2
+الإصدار: 2026-10-19.3
 
 هذا ملف مستقل للاستخدام مع ChatGPT. يحتوي على مرجع المشروع ودورة إنتاج الحكاية كاملة، ثم تعليمات خاصة بطريقة العمل مع الأداة.
 
@@ -459,3 +459,8 @@
 ### Private draft metadata — version 2026-10-19.2
 
 Keep Karma's childlike opening, the narrator's historical explanation, the five-language question bank, verified map data, reactions, likes, sharing and print support. Save Karma text, quiz JSON and map metadata in the private `story_meta` JSONB field, not in `admin_notes` or `sources`. Public submission requests must leave `story_meta` empty. Do not publish from the submission list; prepare the story and route it to the admin-only preview. The preview acceptance creates the upload bundle; publication is not complete until the files are uploaded to GitHub and the live page is verified.
+
+
+### HTML handoff — version 2026-10-19.3
+
+If you cannot push to GitHub, return one complete HTML page using `{{STORY_ID}}`, `{{STORY_FOLDER}}`, `{{STORY_PATH}}`, and `{{STORY_QUIZ_PATH}}` placeholders. Include the five language controls, shared `assets/shared/reactions.js` and `assets/shared/story-quiz.js`, WhatsApp and Facebook sharing, print support, and no secrets or unverified image claims. The admin will paste the HTML into the story card; it must pass preview validation and is included in the ZIP package. A preview URL alone is not a publishable artifact. If no valid AI HTML is provided, use the prebuilt no-AI template. Never claim publication before the files are uploaded and the live page is verified.
