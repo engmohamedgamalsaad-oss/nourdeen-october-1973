@@ -267,7 +267,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
   if(!draft){draft={};['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent','student_name','grade','color','story_number'].forEach(function(k){if(it[k]!==undefined)draft[k]=it[k]})}
   if(table!=='submitted_stories'&&draft.consent!==true&&it.status!=='published')throw new Error('لا يمكن تأكيد النشر قبل تسجيل موافقة الراوي أو ولي الأمر.');
   if(meta.preview_review&&meta.preview_review.static_story_path){
-   var livePath='/nourdeen-october-1973/'+String(meta.preview_review.static_story_path).replace(/^\\/+|\\/+$/g,'')+'/';
+   var livePath='/nourdeen-october-1973/'+String(meta.preview_review.static_story_path).split('/').filter(Boolean).join('/')+'/';
    var liveResponse=await fetch(livePath+'?verify='+Date.now(),{cache:'no-store'});
    if(!liveResponse.ok)throw new Error('لم أجد صفحة الحكاية على GitHub Pages بعد ('+liveResponse.status+'). انتظر اكتمال النشر ثم أعد المحاولة؛ لم أغيّر حالة السجل.');
    var liveHtml=await liveResponse.text(),liveDoc=new DOMParser().parseFromString(liveHtml,'text/html'),expectedSlug=String(meta.preview_review.static_story_id||'');
