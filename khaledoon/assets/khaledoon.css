@@ -52,7 +52,7 @@ h1{font-family:Marhey,"Cairo",serif;font-size:clamp(2.4rem,6vw,4.8rem);line-heig
 .g4{--c:#f1a7c5;background:linear-gradient(145deg,#4b2944,#251d31)}
 .g5{--c:#d4b7ff;background:linear-gradient(145deg,#342b56,#1d2038)}
 .g6{--c:#f5b37e;background:linear-gradient(145deg,#573a2c,#2c2423)}
-.g7{--c:#9bb7ff;background:linear-gradient(145deg,#1f3560,#121d38);grid-column:1/-1;min-height:150px}
+.g7{--c:#9bb7ff;background:linear-gradient(145deg,#1f3560,#121d38)}
 .search{padding:20px;border:1px solid var(--line);border-radius:14px;background:var(--panel);margin-bottom:14px}
 .search label{display:block;font-weight:800;margin-bottom:8px}
 .row{display:flex;gap:10px;flex-wrap:wrap}
