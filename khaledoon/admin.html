@@ -297,6 +297,7 @@ function validateStoryPackage(d){
  if(!d.karma_intro||d.karma_intro.trim().length<10)missing.push('مدخل كارما');
  if(!d.history_note||!d.history_note.trim())missing.push('في ضوء التاريخ');
  if(!d.sources||!d.sources.trim())missing.push('المصادر');
+ if(d.map_json&&String(d.map_json).trim()){try{var mp=JSON.parse(d.map_json),pl=mp.place||{};if(!Number.isFinite(Number(mp.lat))||Number(mp.lat)<-90||Number(mp.lat)>90||!Number.isFinite(Number(mp.lng))||Number(mp.lng)<-180||Number(mp.lng)>180||!mp.source||!['ar','en','fr','it','de'].every(function(k){return String(pl[k]||'').trim()}))missing.push('بيانات الخريطة (إحداثيات ومكان باللغات الخمس ومصدر موثوق)')}catch(e){missing.push('صيغة JSON صحيحة لبيانات الخريطة')}}
  var langs=['en','fr','it','de'];
  langs.forEach(function(k){var t=d.translations&&d.translations[k];if(!t||t.enabled!==true||t.status!=='approved'||!t.title||!t.body||!t.karma_intro||!t.history_note||!t.sources)missing.push(({en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'})[k]+' كاملة ومعتمدة (العنوان ومدخل كارما والمتن والسياق والمصادر)')});
  var q=null;try{q=JSON.parse(d.quiz_json||'')}catch(e){}
@@ -341,8 +342,14 @@ async function exportStoryPackage(d){
   {path:'stories/index-entry-'+id+'.json',name:'index-entry-'+id+'.json',content:JSON.stringify(entry,null,2)+'\n',type:'application/json;charset=utf-8'},
   {path:'UPLOAD-README-'+id+'.txt',name:'UPLOAD-README-'+id+'.txt',content:'حزمة حكاية خالدون — رقم '+id+'\n\nارفع الملفات التالية إلى المستودع في المسارات المكتوبة داخل كل ملف/في اسم المسار:\n__FILE_LIST__\n\nمهم: ارفع stories-index.json إلى المسار stories/index.json (استبدل الملف بعد مراجعة الفرق، ولا ترفع الملف الجزئي index-entry-'+id+'.json بدلاً منه). ارفع '+id+'-quiz.json إلى stories/quizzes/'+id+'.json. لا تضع حالة «منشورة» في الإدارة قبل اكتمال الرفع وظهور الصفحة الحية. cover.svg رسم توضيحي عام وليس صورة تاريخية.\n',type:'text/plain;charset=utf-8'}
  ];
- var fileLines=files.slice(0,9).map(function(x){return x.path}).join('\n');
- files[9].content=files[9].content.replace('__FILE_LIST__',fileLines);
+ if(d.map_json&&String(d.map_json).trim()){
+   var mp=JSON.parse(d.map_json),placesResponse=await fetch('../stories/places.json',{cache:'no-store'});
+   if(!placesResponse.ok)throw new Error('تعذر قراءة stories/places.json ('+placesResponse.status+').');
+   var places=await placesResponse.json();places[id]={lat:Number(mp.lat),lng:Number(mp.lng),place:mp.place,approximate:!!mp.approximate,source:mp.source};
+   files.splice(files.length-1,0,{path:'stories/places.json',name:'stories-places.json',content:JSON.stringify(places,null,2)+'\n',type:'application/json;charset=utf-8'});
+  }
+  var fileLines=files.slice(0,-1).map(function(x){return x.path}).join('\n');
+  files[files.length-1].content=files[files.length-1].content.replace('__FILE_LIST__',fileLines);
  /* Download each artifact. The full index is separately named so it can be reviewed before replacing the live index. */
  files.forEach(function(f,i){setTimeout(function(){downloadTextFile(f.name,f.content,f.type)},i*450)});
  say('تم قبول المعاينة وتجهيز '+files.length+' ملفات للتنزيل. لم تُرفع إلى GitHub ولم تُنشر بعد. راجع ملف تعليمات الرفع.');
