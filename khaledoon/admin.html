@@ -327,7 +327,7 @@ function finalizeAiStoryHtml(raw,id,folder){
   .replace(/\{\{STORY_FOLDER\}\}/g,String(folder))
   .replace(/\{\{STORY_PATH\}\}/g,'stories/'+folder+'/'+id+'/')
   .replace(/\{\{STORY_QUIZ_PATH\}\}/g,'stories/quizzes/'+id+'.json')
-  .replace(/data-story-slug=["'](?:draft|new-story|000)["']/ig,'data-story-slug="'+id+'"')
+  .replace(/data-story-slug=["'][^"']*["']/i,'data-story-slug="'+id+'"')
   .replace(/<meta\s+name=["']robots["'][^>]*>/i,'<meta name="robots" content="index,follow">')
   .replace(/<div[^>]*data-preview-only[^>]*>[\s\S]*?<\/div>/ig,'');
  return html;
