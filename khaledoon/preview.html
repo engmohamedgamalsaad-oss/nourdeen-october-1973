@@ -192,7 +192,7 @@ if(params.get('story')==='1'||params.get('story')==='khalid-011'||(!params.has('
     });
    }
    /* اعرض نص السجل الجاري مراجعته داخل قالب القسم؛ لا تعرض نص حكاية أخرى من رابط مرجعي. */
-   renderInRealTemplate(d);
+   if(d.preview_source_url){renderSourcePage(d.preview_source_url).catch(function(){renderInRealTemplate(d);});}else{renderInRealTemplate(d);}
   function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
    var section=(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
