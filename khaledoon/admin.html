@@ -473,8 +473,13 @@ function makePreviewDraft(statusForPreview){
   L.push('=== النص الأصلي كما وصل (لا تعدّله) ===');
   L.push(it.original_body&&it.original_body.trim()?it.original_body:'لا يوجد نص أصلي محفوظ منفصلًا.');
   L.push('');
-  L.push('=== نص الحكاية المحرر الحالي ===');
+  L.push('=== نص كارما الطفولي الحالي ===');L.push(karma.value.trim()||'لم يُكتب نص مستقل لكارما بعد.');
+  L.push('=== نص الحكاية المحرر الحالي بصوت الراوي ===');
   L.push(body.value.trim()||'لا يوجد نص حالي.');
+  L.push('');
+  L.push('=== الترجمات الحالية بما فيها مقاطع كارما ===');Object.keys(translationInputs).forEach(function(lang){var tr=translationInputs[lang];L.push('--- '+lang.toUpperCase()+' / '+(tr.status.value||'')+' ---');L.push('العنوان: '+tr.title.value.trim());L.push('العنوان الفرعي: '+tr.subtitle.value.trim());L.push('كارما: '+tr.karma_text.value.trim());L.push('الراوي: '+tr.body.value.trim())});
+  L.push('');
+  L.push('=== بنك الأسئلة الحالي (JSON) ===');L.push(quizJson.value.trim()||'لم يُرفق بنك الأسئلة بعد؛ لا تخترع بنكًا عند تجهيز الحكاية.');
   L.push('');
   L.push('=== «في ضوء التاريخ» الحالي ===');
   L.push(hist.value.trim()||'لم يُكتب بعد.');
