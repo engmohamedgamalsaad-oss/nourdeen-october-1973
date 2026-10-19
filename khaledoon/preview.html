@@ -111,7 +111,48 @@ if(params.get('story')==='1'){
   Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\n'+(tr.body||'لم تُدخل ترجمة بعد.');item.appendChild(p);list.appendChild(item)});
   document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
   put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار.');
-  (function renderInRealTemplate(d){
+  (function(d){
+   var frame=document.getElementById('actualPagePreview');
+   function renderSourcePage(sourceUrl){
+    var url=String(sourceUrl||'').trim();
+    if(!url)return Promise.reject(new Error('لم يُحدد رابط الصفحة المصممة'));
+    if(/^https:\/\/github\.com\//i.test(url))url=url.replace(/^https:\/\/github\.com\//i,'https://raw.githubusercontent.com/').replace('/blob/','/');
+    if(!/^https:\/\/raw\.githubusercontent\.com\//i.test(url))return Promise.reject(new Error('رابط المعاينة يجب أن يكون ملفًا من raw.githubusercontent.com أو رابط ملف GitHub'));
+    return fetch(url,{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.text()}).then(function(sourceHtml){
+     var parsed=new DOMParser().parseFromString(sourceHtml,'text/html');
+     if(!parsed.body||!parsed.querySelector('html'))throw new Error('ملف HTML غير صالح');
+     var base=parsed.querySelector('base')||parsed.createElement('base');
+     base.href=url.slice(0,url.lastIndexOf('/')+1);
+     if(parsed.head.firstChild)parsed.head.insertBefore(base,parsed.head.firstChild);else parsed.head.appendChild(base);
+     if(d.title){
+      parsed.title=d.title+' — معاينة غير منشورة';
+      var title=parsed.querySelector('[data-i18n="title"], .hero h1, h1');
+      if(title)title.textContent=d.title;
+     }
+     if(d.subtitle){
+      var subtitle=parsed.querySelector('[data-i18n="subtitle"], .hero .subtitle, .hero-subtitle');
+      if(subtitle)subtitle.textContent=d.subtitle;
+     }
+     var notice=parsed.createElement('div');
+     notice.textContent='معاينة غير منشورة — لا تغيّر هذه الصفحة الموقع الحي';
+     notice.setAttribute('role','status');
+     notice.style.cssText='position:sticky;top:0;z-index:2147483647;padding:8px 14px;text-align:center;background:#f0d8aa;color:#17232a;font:700 14px Cairo,Tahoma,sans-serif;border-bottom:2px solid #9b783c';
+     parsed.body.insertBefore(notice,parsed.body.firstChild);
+     frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
+     frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
+     put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
+    });
+   }
+   var source=(d.preview_source_url||'').trim();
+   if(source){
+    renderSourcePage(source).catch(function(error){
+     put('reviewMeta','تعذر تحميل ملف الصفحة المصممة: '+(error&&error.message?error.message:'خطأ غير معروف')+' — يتم عرض قالب المعاينة الاحتياطي.');
+     renderInRealTemplate(d);
+    });
+   }else{
+    renderInRealTemplate(d);
+   }
+  function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
    var section=(d.section_label||'').toLowerCase();
    var path=section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
@@ -153,6 +194,7 @@ if(params.get('story')==='1'){
      doc.querySelectorAll('a[href*="collections/"]').forEach(function(link){link.addEventListener('click',function(e){e.preventDefault()})});
     }catch(e){document.getElementById('reviewMeta').textContent='تعذر إظهار قالب الحكاية الفعلي في هذه الجلسة؛ استخدم تفاصيل المعاينة أدناه.'}
    },{once:true});
+  }
   })(draft);
  }
  function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action},location.origin);if(action==='reject')window.close();else document.getElementById('reviewMeta').textContent='تم إرسال موافقتك إلى لوحة الإدارة. راجع رسالة التأكيد هناك.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها واتخذ القرار من بطاقة الحكاية.'}}

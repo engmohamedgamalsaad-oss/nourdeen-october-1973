@@ -315,6 +315,7 @@ function card(it){
  var curBox=el('div','');curBox.appendChild((function(){var g=el('div','fgrid');g.appendChild(fld('المرحلة',stgS));g.appendChild(fld('الصف',grS));return g})());curBox.appendChild(fld('المادة أو الكتاب',subj));
  function tog(){curBox.hidden=secS.value!=='curriculum';box.className='fcard sec-'+(secS.value||'curriculum')}tog();secS.addEventListener('change',tog);
  var fig=inp(it.figure_name,120),nar=inp(it.narrator_name,40),ng=inp(it.narrator_grade,60),title=inp(it.title,140),sub=inp(it.subtitle,200);
+ var previewSource=inp(it.preview_source_url||((String(it.figure_name||'').indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),1200);
  var body=area(it.body,10,12000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(it.admin_notes,3,3000);
  var cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;
  var st=sel(STATUS,it.status||'pending');
@@ -348,6 +349,7 @@ var translationDetails=el('details','translation-panel');
  box.appendChild(fld('في ضوء التاريخ',hist,'السياق والتصحيحات والمراجع، يكتبها المحرر بعد التحقق'));
  box.appendChild(fld('المصادر',src,'سطر لكل مصدر، ووضّح أي معلومة غير مؤكدة'));
  box.appendChild(fld('الصور وحقوقها',img));
+ box.appendChild(fld('رابط ملف الصفحة المصممة للمعاينة',previewSource,'اختياري: رابط ملف HTML في GitHub (يفضّل رابط raw). لحكاية خالد بن الوليد تم تجهيز الرابط تلقائيًا.'));
  box.appendChild(fld('ملاحظات الأدمن (خاصة)',notes));
  var cl=el('label','fchk');cl.appendChild(cons);cl.appendChild(el('span','','موافقة الراوي أو ولي الأمر على عرض الاسم الأول والصف مسجّلة'));box.appendChild(cl);
  var g3=el('div','fgrid');g3.appendChild(fld('الحالة',st));box.appendChild(g3);
@@ -364,7 +366,7 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   });
   var draft={title:title.value.trim(),subtitle:sub.value.trim(),section_label:SEC[secS.value]||secS.value,
    figure_name:fig.value.trim(),body:body.value.trim(),history_note:hist.value.trim(),sources:src.value.trim(),
-   images_note:img.value.trim(),original_body:it.original_body||'',translations:translations,
+   images_note:img.value.trim(),original_body:it.original_body||'',preview_source_url:previewSource.value.trim()||((fig.value.trim().indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),translations:translations,
    status_label:STATUS[st.value]||st.value||'مسودة'};
   try{
    localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
