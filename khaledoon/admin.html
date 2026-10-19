@@ -119,7 +119,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 <button class="btn primary" type="submit" id="loginBtn">دخول</button>
 </form></section>
 <section id="app" hidden>
-<section class="fcard" id="adminTools" style="margin:16px 0"><h2>أدوات تجهيز ومراجعة الموقع</h2><p class="fnote">إدارة الأقسام تحفظ العناوين والألوان مركزيًا وتنعكس على الصفحة الرئيسية وصفحات المجموعات والخريطة بعد تحديثها. القسم الجديد يستخدم صفحة مجموعة عامة؛ وظهوره على الخريطة يتطلب حكاية منشورة ذات مكان موثّق. إدارة البرومبتات تحفظ النسخة المركزية وتستخدمها لوحة تجهيز الحكاية، لكنها لا تعدّل ملفات GitHub تلقائيًا.</p><div class="ctl admin-tool-links" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="collections/october.html">حكايات أكتوبر 1973</a><a class="btn ghost" href="preview.html">المعاينة المرئية</a><a class="btn ghost" href="sections-admin.html">إدارة الأقسام</a><a class="btn ghost" href="prompts-admin.html">إدارة البرومبتات</a><a class="btn ghost" href="story-builder.html">إنشاء يدوي بدون AI</a><a class="btn ghost" href="../../docs/GITHUB-MERGE-GUIDE-AR.md" target="_blank" rel="noopener">شرح الدمج في GitHub</a></div></section>
+<section class="fcard" id="adminTools" style="margin:16px 0"><h2>أدوات تجهيز ومراجعة الموقع</h2><p class="fnote">إدارة الأقسام تحفظ العناوين والألوان مركزيًا وتنعكس على الصفحة الرئيسية وصفحات المجموعات والخريطة بعد تحديثها. القسم الجديد يستخدم صفحة مجموعة عامة؛ وظهوره على الخريطة يتطلب حكاية منشورة ذات مكان موثّق. إدارة البرومبتات تحفظ النسخة المركزية وتستخدمها لوحة تجهيز الحكاية، لكنها لا تعدّل ملفات GitHub تلقائيًا.</p><div class="ctl admin-tool-links" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="sections-admin.html">إدارة الأقسام</a><a class="btn ghost" href="prompts-admin.html">إدارة البرومبتات</a><a class="btn ghost" href="story-builder.html">إنشاء يدوي بدون AI</a><a class="btn ghost" href="../../docs/GITHUB-MERGE-GUIDE-AR.md" target="_blank" rel="noopener">شرح الدمج في GitHub</a></div></section>
 <div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
 <div id="viewSubs">
 <div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره. زر «إخفاء» بجانب كل حكاية يخفيها من صفحة الزوار، والضغط عليه مرة ثانية يعيد إظهارها.</p></div>
@@ -161,9 +161,9 @@ var ORD=['الأول','الثاني','الثالث','الرابع','الخامس
 function $(i){return document.getElementById(i)}
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
 function say(k,t){var m=$('msg');m.className='fmsg '+k;m.textContent=t;m.hidden=false;if(k==='ok')setTimeout(function(){m.hidden=true},4000)}
-function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
-function load(){try{var s=JSON.parse(sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
-function clear(){session=null;vStories=[];vHidden={};vLoaded=false;try{sessionStorage.removeItem(SK)}catch(e){}}
+function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s));localStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+function load(){try{var s=JSON.parse(localStorage.getItem(SK)||sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
+function clear(){session=null;vStories=[];vHidden={};vLoaded=false;try{sessionStorage.removeItem(SK);localStorage.removeItem(SK)}catch(e){}}
 function showLogin(){$('loginBox').hidden=false;$('app').hidden=true;$('logoutBtn').hidden=true}
 function showApp(){$('loginBox').hidden=true;$('app').hidden=false;$('logoutBtn').hidden=false}
 function hdr(x){var h={apikey:KEY,'Content-Type':'application/json',Authorization:'Bearer '+(session?session.access_token:KEY)};if(x)Object.keys(x).forEach(function(k){h[k]=x[k]});return h}
@@ -206,26 +206,19 @@ async function logout(silent){
 }
 
 async function loadList(){
- var rs=await Promise.all([
-  rest('khaledoon_submissions?select=*&order=created_at.desc'),
-  rest('submitted_stories?select=*&order=created_at.desc')
- ]);
- if(rs[0].status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
- if(!rs[0].ok)throw new Error('تعذر تحميل حكايات خالدون ('+rs[0].status+').');
- var current=await rs[0].json();current.forEach(function(x){x._t='k'});
- var legacy=[];
- if(rs[1].ok){legacy=await rs[1].json();legacy.forEach(function(x){x._t='o';x.section='october';x.figure_name=x.title;x.narrator_name=x.student_name})}
- else if(rs[1].status!==404){say('err','تعذر تحميل حكايات أكتوبر القديمة ('+rs[1].status+').')}
- var allRecords=current.concat(legacy);
- var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
+ var response=await rest('khaledoon_submissions?select=*&order=created_at.desc');
+ if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
+ if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
+ var current=await response.json();
+ current=current.filter(function(x){var m=x.story_meta||{};return x.section!=='october'&&m.section_key!=='october'&&m.section!=='october'&&!(m.pending_draft&&(m.pending_draft.section_key==='october'||m.pending_draft.section==='october'))});
+ current.forEach(function(x){x._t='k'});
+ var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false&&x.section!=='october'}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
  var unmatchedRecords=[];
- allRecords.forEach(function(record){
-  var linked=storyFor(record),site=linked&&siteItems.find(function(x){return String(x.id)===String(linked.id)});
-  if(site)site.submissions.push(record);else unmatchedRecords.push(record);
- });
+ current.forEach(function(record){var linked=storyFor(record),site=linked&&siteItems.find(function(x){return String(x.id)===String(linked.id)});if(site)site.submissions.push(record);else unmatchedRecords.push(record)});
  items=unmatchedRecords.concat(siteItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  render();
 }
+
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
@@ -251,7 +244,7 @@ function renderTabs(){
  chip(t,'كل الحالات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
  Object.keys(STATUS).forEach(function(k){chip(t,STATUS[k]+' ('+count(function(i){return i.status===k})+')',fStatus===k,function(){fStatus=k;render()})});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
- Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
+ Object.keys(SEC).filter(function(k){return k!=='october'}).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
 }
 function fld(l,n,sm){var w=el('label','fl');w.appendChild(document.createTextNode(l));if(sm)w.appendChild(el('small','',sm));w.appendChild(n);return w}
 function inp(v,max){var i=document.createElement('input');i.type='text';i.value=v||'';if(max)i.maxLength=max;return i}
@@ -744,8 +737,14 @@ function pubRow(it){
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
-  b.appendChild(it._t==='site'?siteCard(it):card(it));
-  if(it._t!=='site'&&it.status==='published'&&sv){var link=el('a','btn ghost','فتح صفحة الحكاية');link.href='../'+String(sv.path||'');link.target='_blank';link.rel='noopener';b.appendChild(link)}
+  if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
+  var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
+  var preview=el('a','btn primary','فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));preview.target='_blank';preview.rel='noopener';actions.appendChild(preview);
+  var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
+  var summary=el('summary','','بيانات القارئ والحكاية');summary.style.cssText='cursor:pointer;font-weight:800;min-height:38px';data.appendChild(summary);
+  var close=el('button','btn ghost','× إغلاق البيانات');close.type='button';close.style.margin='10px 0';close.addEventListener('click',function(){data.open=false});data.appendChild(close);
+  var editor=el('div','pbody');editor.appendChild(card(it));data.appendChild(editor);actions.appendChild(data);b.appendChild(actions);
+  if(it.status==='published'&&sv){var link=el('a','btn ghost','فتح الصفحة المنشورة');link.href='../'+String(sv.path||'');link.target='_blank';link.rel='noopener';b.appendChild(link)}
   d.appendChild(b);
  }
  d.addEventListener('toggle',function(){if(d.open){openIds[key]=true;build()}else delete openIds[key]});
