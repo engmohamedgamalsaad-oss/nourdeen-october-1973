@@ -944,7 +944,7 @@ async function handleStoryPreviewDecision(event){
   if(context.record_type==='modern'&&record.status!=='published')record.status='review';
   if(context.record_type==='legacy'&&record.status!=='published')record.status='pending';
  }else{
-  if(record.status!=='published')record.status='pending';
+  if(record.status!=='published')record.status='rejected';
  }
  if(record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||rdMeta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
