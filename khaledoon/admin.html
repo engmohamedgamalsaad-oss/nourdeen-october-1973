@@ -668,7 +668,7 @@ if(!isNew){
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
 
 async function hideStoryAndPrepareRemoval(it){
- var sv=storyFor(it);if(!sv)return null;
+ var canMatch=it.status==='published'||it._t==='site'||(it.story_number!=null&&it.story_number!==''),sv=canMatch?storyFor(it):null;if(!sv)return null;
  var id=String(sv.id);
  if(!vHidden[id]){
   var hide=await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})});
@@ -684,7 +684,7 @@ async function hideStoryAndPrepareRemoval(it){
  return sv;
 }
 function confirmDelete(it){
- var name=it.title||'حكاية بلا عنوان',sv=storyFor(it);
+ var name=it.title||'حكاية بلا عنوان',sv=(it.status==='published'||it._t==='site'||(it.story_number!=null&&it.story_number!==''))?storyFor(it):null;
  var msg='حذف «'+name+'» نهائيًا من لوحة الإدارة؟\n\nلا يمكن التراجع عن الحذف.';
  if(it.status==='published'||sv)msg+='\n\nتنبيه: سيتم إخفاؤها من قوائم الزوار وإزالة سجل الإدارة. وللحذف الكامل من GitHub، ستُنزل تعليمات ونسخة فهرس محدثة تحتاج إلى رفعها وحذف مجلد الصفحة يدويًا؛ ملفات GitHub لا تُحذف مباشرة من المتصفح.';
  return confirm(msg);
@@ -693,6 +693,7 @@ async function removeItem(it,btn){
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
  btn.disabled=true;
  try{
+  var removedSiteStory=await hideStoryAndPrepareRemoval(it);
   var r=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
@@ -703,6 +704,7 @@ async function removeItem(it,btn){
 async function remove(it,btn){
  btn.disabled=true;
  try{
+  var removedSiteStory=await hideStoryAndPrepareRemoval(it);
   var r=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
