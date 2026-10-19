@@ -946,7 +946,7 @@ async function handleStoryPreviewDecision(event){
  }else{
   if(record.status!=='published')record.status='rejected';
  }
- if(record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||rdMeta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}
+ if(action==='approve'&&record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||rdMeta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}else if(action==='reject'&&record.status==='published'){delete meta.pending_draft;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'تسجيل رفض المعاينة';
  say('ok','جارٍ '+buttonLabel+'…');
  try{
@@ -960,7 +960,7 @@ async function handleStoryPreviewDecision(event){
   var rows=await response.json();if(!rows.length)throw new Error('لم يُرجع الخادم سجلًا بعد قرار المعاينة. راجع صلاحيات الأدمن.');
   if(action==='reject'){try{localStorage.setItem('kh-story-preview-draft','')}catch(clearRejectedPreviewError){}}
   context.story_meta=meta;context.record_data=record;
-  try{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}catch(e){}
+  try{if(action==='reject'){var rejectedDraft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null');if(rejectedDraft&&String(rejectedDraft.submission_id||'')===String(context.submission_id)){localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}}else{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}}catch(e){}
   await loadList();
   if(action==='approve'){
    if(event.data.bundle_downloaded){say('ok','تم اعتماد المعاينة وحفظ القرار. حزمة ZIP للحكاية جاهزة للتنزيل؛ ارفع ملفاتها إلى GitHub مع الحفاظ على المسارات، ثم استخدم «تأكيد النشر بعد الرفع». لم تُنشر الحكاية بعد.')}else{

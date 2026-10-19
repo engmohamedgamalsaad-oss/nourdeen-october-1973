@@ -229,7 +229,7 @@ if(params.get('story')==='1'){
   }catch(error){put('reviewMeta','لم تُقبل المعاينة ولم يتم تجهيز حزمة نشر؛ استكمل النواقص ثم حاول مرة أخرى. '+(error&&error.message?error.message:''));return}
  }
  window.opener.postMessage({type:'kh-story-preview-decision',action:action,draft:draft,static_story_id:bundleInfo?bundleInfo.id:null,static_story_path:bundleInfo?bundleInfo.path:null,bundle_downloaded:!!bundleInfo,prepared_page_url:draft.preview_source_url||''},location.origin);
- if(action==='reject'){put('reviewMeta','تم إرسال رفض المعاينة إلى لوحة الإدارة؛ ستعود الحكاية إلى مسودة.');setTimeout(function(){window.close()},500)}
+ if(action==='reject'){put('reviewMeta','تم إرسال قرار الرفض إلى لوحة الإدارة؛ ستُزال الحكاية من المعاينة النشطة مع الاحتفاظ بسجلها الإداري.');try{var ctx=JSON.parse(localStorage.getItem('kh-story-preview-context')||'null');if(ctx&&draft&&String(ctx.submission_id||'')===String(draft.submission_id||'')){localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}}catch(ignore){}setTimeout(function(){window.close()},500)}
  else if(bundleInfo)put('reviewMeta','تم قبول المعاينة وتجهيز حزمة ZIP: '+bundleInfo.filename+' . ارفع محتوياتها إلى GitHub مع الحفاظ على المسارات، ثم تحقق من الصفحة الحية.');
  else put('reviewMeta','تم إرسال قبول المعاينة إلى لوحة الإدارة. اعتمدت المعاينة صفحة HTML المجهزة مسبقًا؛ يلزم رفع/دمج ملفاتها إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
 }
