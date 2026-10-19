@@ -191,15 +191,8 @@ if(params.get('story')==='1'||params.get('story')==='khalid-011'||(!params.has('
      put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
     });
    }
-   var source=(d.preview_source_url||'').trim();
-   if(source){
-    renderSourcePage(source).catch(function(error){
-     put('reviewMeta','تعذر تحميل ملف الصفحة المصممة: '+(error&&error.message?error.message:'خطأ غير معروف')+' — يتم عرض قالب المعاينة الاحتياطي.');
-     renderInRealTemplate(d);
-    });
-   }else{
-    renderInRealTemplate(d);
-   }
+   /* اعرض نص السجل الجاري مراجعته داخل قالب القسم؛ لا تعرض نص حكاية أخرى من رابط مرجعي. */
+   renderInRealTemplate(d);
   function renderInRealTemplate(d){
    var frame=document.getElementById('actualPagePreview');
    var section=(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
