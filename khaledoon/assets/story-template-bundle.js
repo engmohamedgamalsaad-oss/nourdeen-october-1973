@@ -57,7 +57,7 @@ function translatedRows(d,id){
  var rows={en:{},fr:{},it:{},de:{}},tr=d.translations||{};
  function add(lang,arabic,translated){if(arabic&&translated&&String(arabic).trim()!==String(translated).trim())rows[lang][String(arabic)]=String(translated)}
  function mapBlocks(arText,translatedText,lang){var a=paragraphs(arText),b=paragraphs(translatedText);a.forEach(function(x,i){if(b[i])add(lang,x,b[i])});if(a.length===1&&b.length===1)add(lang,arText,translatedText)}
- LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang);mapBlocks(d.images_note,t.images_note,lang)});
+ LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);add(lang,d.narrator_name||d.student_name,t.student_name);add(lang,d.narrator_grade||d.grade,t.grade);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang);mapBlocks(d.images_note,t.images_note,lang)});
  var labels={
   'كارما الطفلة':{en:'Karma, the curious child',fr:'Karma, l’enfant curieuse',it:'Karma, la bambina curiosa',de:'Karma, das neugierige Kind'},
   'حكاية بصوت جيل جديد':{en:'A story told by a new generation',fr:'Une histoire racontée par une nouvelle génération',it:'Una storia raccontata da una nuova generazione',de:'Eine Geschichte aus der Sicht einer neuen Generation'},
