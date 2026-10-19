@@ -266,7 +266,7 @@ if(params.get('story')==='1'||params.get('story')==='khalid-011'||(!params.has('
    if(record.status!=='published')payload.status=approve?(table==='submitted_stories'?'pending':'review'):'rejected';
    if(record.status==='published'){
     if(approve){meta.pending_draft=Object.assign({},draft);delete meta.pending_draft.record_data;delete meta.pending_draft.story_meta;delete meta.pending_draft.submission_table;delete meta.pending_draft.record_type}
-    else delete meta.pending_draft;
+    else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='rejected'}
    }
    payload.story_meta=meta;
    var save=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/rest/v1/'+table+'?id=eq.'+encodeURIComponent(draft.submission_id),{method:'PATCH',headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify(payload)});
