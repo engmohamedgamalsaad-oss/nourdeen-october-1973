@@ -42,9 +42,10 @@
     }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
       var value = rows && rows[0] && rows[0].config_value;
       if (!value || !value.data || !Array.isArray(value.data.sections)) return;
-      var colors = value.colors || {};
+      var colors = value.colors || {}, active = {};
       value.data.sections.forEach(function (section) {
         if (!section || !/^[a-z0-9-]{1,50}$/.test(section.id)) return;
+        active[section.id] = true;
         var old = SEC[section.id] || { c: '#b8874b', t: {} };
         var t = Object.assign({}, old.t || {});
         t.ar = section.title || t.ar || section.id;
@@ -54,6 +55,7 @@
         var color = colors[section.id] && colors[section.id].outer;
         SEC[section.id] = { c: /^#[0-9a-f]{6}$/i.test(color || '') ? color : old.c, t: t };
       });
+      Object.keys(SEC).forEach(function (id) { if (!active[id]) delete SEC[id]; });
     }).catch(function () {});
   }
 

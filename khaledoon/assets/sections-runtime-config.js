@@ -12,9 +12,10 @@ function apply(){
  if(!cache)return;
  fetchConfig().then(function(config){
   if(!config||!config.data||!Array.isArray(config.data.sections))return;
-  var sections=config.data.sections,colors=config.colors||{},lang=language(),grid=document.querySelector('.gates');
+  var sections=config.data.sections,colors=config.colors||{},lang=language(),grid=document.querySelector('.gates'),active={};
+  Array.prototype.forEach.call(document.querySelectorAll('.gate[href]'),function(card){var m=card.getAttribute('href').match(/khaledoon\/collections\/([a-z0-9-]+)\.html(?:[?#].*)?$/);if(m)card.setAttribute('data-kh-section',m[1])});
   sections.forEach(function(sec){
-   if(!sec||!sec.id||!/^[-a-z0-9]{1,50}$/.test(sec.id))return;
+   if(!sec||!sec.id||!/^[-a-z0-9]{1,50}$/.test(sec.id))return;active[sec.id]=true;
    var href='khaledoon/collections/'+sec.id+'.html';
    var card=Array.prototype.find.call(document.querySelectorAll('.gate[href]'),function(a){return a.getAttribute('href')===href||a.getAttribute('data-kh-section')===sec.id});
    if(!card&&grid){
@@ -30,6 +31,7 @@ function apply(){
    var color=colors[sec.id],valid=function(x){return typeof x==='string'&&/^#[0-9a-f]{6}$/i.test(x)};
    if(color&&valid(color.outer)&&valid(color.inner)){customStyle();card.dataset.khCustomColors='true';card.style.setProperty('--kh-section-outer',color.outer);card.style.setProperty('--kh-section-inner',color.inner)}
   });
+  if(grid){Array.prototype.forEach.call(grid.querySelectorAll('.gate[data-kh-section]'),function(card){if(!active[card.getAttribute('data-kh-section')])card.remove()})}
  });
 }
 fetchConfig().then(function(){apply()});
