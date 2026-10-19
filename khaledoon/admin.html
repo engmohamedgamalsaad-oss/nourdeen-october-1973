@@ -276,7 +276,7 @@ function downloadTextFile(name,content,type){
  a.href=url;a.download=name;a.style.display='none';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},30000);
 }
 function launchStoryPreview(draft,onDecision){
- try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر حفظ بيانات المعاينة في المتصفح.');return}
+ try{if(!draft.preview_source_url&&typeof buildStoryHtml==='function'){var previewFolder=storyFolder(draft.section);draft.preview_html=buildStoryHtml(draft,'000',storySectionKey(draft.section),previewFolder).html.replace('<head>','<head><base href="../stories/'+previewFolder+'/000/">')}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft))}catch(e){say('err','تعذر تجهيز صفحة المعاينة: '+(e.message||'خطأ غير معروف'));return}
  var w=window.open('preview.html?story=1','_blank');
  if(!w){say('err','المعاينة جاهزة لكن المتصفح منع فتح النافذة؛ اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
  function receive(ev){
