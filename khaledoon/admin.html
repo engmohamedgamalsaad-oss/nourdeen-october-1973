@@ -404,7 +404,7 @@ function legacyCard(it){
   try{await hideStoryAndPrepareRemoval(it);var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يتم حذف سجل؛ تحقق من صلاحية الأدمن.');
-   say('ok','تم حذف حكاية أكتوبر.');await loadList();
+   say('ok','تم حذف سجل حكاية أكتوبر من الإدارة. إذا كانت لها صفحة عامة، نزلت تعليمات إكمال حذف ملفات GitHub.');await loadList();
   }catch(e){say('err',e.message||'تعذر الحذف.');delBtn.disabled=false}
  });
  return box;
@@ -681,6 +681,8 @@ async function hideStoryAndPrepareRemoval(it){
   var response=await fetch('../stories/index.json',{cache:'no-store'});
   if(response.ok){var arr=await response.json();if(Array.isArray(arr)){arr=arr.filter(function(s){return String(s.id)!==id});downloadTextFile('stories-index-without-'+id+'.json',JSON.stringify(arr,null,2)+'\n','application/json;charset=utf-8')}}
  }catch(e){}
+ try{var placesResponse=await fetch('../stories/places.json',{cache:'no-store'});if(placesResponse.ok){var places=await placesResponse.json();delete places[id];downloadTextFile('stories-places-without-'+id+'.json',JSON.stringify(places,null,2)+'\n','application/json;charset=utf-8')}}catch(e){}
+ details+='\n5) ارفع أيضًا stories-places-without-'+id+'.json إلى stories/places.json لإزالة علامة الخريطة إن كانت موجودة.';
  downloadTextFile('DELETE-STORY-'+id+'.txt',details,'text/plain;charset=utf-8');
  return sv;
 }
