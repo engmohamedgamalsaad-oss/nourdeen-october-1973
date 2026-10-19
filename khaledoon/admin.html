@@ -495,6 +495,9 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   L.push('================ البرومبت الكامل لتطوير صفحة الحكاية — إلزامي ================');
   L.push(STORY_PAGE_PROMPT);
   L.push('');
+  L.push('================ تعليمات الأداة المختارة من مكتبة البرومبتات ================');
+  L.push((function(){try{var ps=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v1')||'null'),key=ps&&ps.selectedProfile||'chatgpt',p=ps&&ps.profiles&&ps.profiles[key]||STORY_PROMPT_PROFILES[key];return 'الأداة: '+((p&&p.name)||key)+'\n'+((p&&p.instruction)||'استخدم ملف البرومبت الكامل المناسب للأداة: '+((p&&p.file)||''))+'\nملف البرومبت الكامل: '+((p&&p.file)||'docs/prompts/'+key+'-story.md')}catch(e){return 'استخدم ملف البرومبت الكامل المناسب للأداة من docs/prompts/.'}})());
+  L.push('');
   L.push('================ تعليمات تنفيذ هذه الحكاية ================');
   L.push('ابدأ بفحص ملفات المشروع الفعلية والفرع الحالي، واقرأ القالب والحكايات المرجعية قبل أي تعديل. احتفظ بالنص الأصلي منفصلًا دون تغيير، ودقّق الأسماء والتواريخ والأحداث بمصادر موثوقة قابلة للفتح. وضّح المختلف عليه وما لم يمكن التحقق منه، ولا تخترع اقتباسات أو وقائع.');
   L.push('اكتب الحكاية بالعربية أولًا بأسلوب كارما والراوي: مقدمة قصيرة طبيعية من كارما الطفلة تفتح باب الفضول، ثم سرد معرفي مترابط يوسّع المعلومات ويدققها ويشرح السياق والأسباب والنتائج. لا تحوّل المتن إلى أسئلة وأجوبة. جهّز الترجمات الإنجليزية والفرنسية والإيطالية والألمانية بعد مراجعة العربية. جهّز غلاف الحكاية وصورة شاشة البداية/cover-popup المرتبطة بالعنوان وصورًا داخل السرد عند الحاجة.');
@@ -520,6 +523,12 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   L.push('=== النص الأصلي كما وصل (لا تعدّله) ===');
   L.push(it.original_body&&it.original_body.trim()?it.original_body:'لا يوجد نص أصلي محفوظ منفصلًا.');
   L.push('');
+  L.push('=== مدخل كارما الطفولي الحالي ===');
+  L.push(karmaIntro.value.trim()||'لم يُكتب بعد؛ جهّز مدخلًا طفوليًا قابلًا للتحرير دون اختلاق حقائق.');
+  L.push('');
+  L.push('=== بنك الأسئلة الحالي بصيغة JSON ===');
+  L.push(quizText.value.trim()||'لم يُجهز بعد؛ أعد خمسة أسئلة على الأقل مع الاختيارات والإجابة والتفسير والترجمات الخمس.');
+  L.push('');
   L.push('=== نص الحكاية المحرر الحالي ===');
   L.push(body.value.trim()||'لا يوجد نص حالي.');
   L.push('');
@@ -531,6 +540,9 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   L.push('');
   L.push('=== ملاحظات الصور وحقوقها ===');
   L.push(img.value.trim()||'لا توجد ملاحظات صور.');
+  L.push('');
+  L.push('=== الترجمات الحالية كاملة ===');
+  L.push(JSON.stringify(collect('review').translations,null,2));
   L.push('');
   L.push('=== ملاحظات الإدارة الخاصة — للمراجعة فقط، لا تنشر كما هي ===');
   L.push(notes.value.trim()||'لا توجد ملاحظات إدارية.');
@@ -891,7 +903,7 @@ $('search').addEventListener('input',function(){term=this.value;render()});
 $('vsearch').addEventListener('input',function(){vTerm=this.value;renderVis()});
 $('rsearch').addEventListener('input',function(){reactionTerm=this.value;renderReactions()});
 $('newBtn').addEventListener('click',function(){draftNew=false;newStoryGate=true;newStoryPromptCopied=false;fStatus='all';fSec='all';render();window.scrollTo({top:0,behavior:'smooth'})});
-$('promptBtn').addEventListener('click',function(){var t=STORY_PAGE_PROMPT;if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){say('ok','تم نسخ البرومبت الرئيسي المحدّث كاملًا. الصقه في المكان الذي تستخدمه لإنشاء الحكاية.')}).catch(function(){fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})})}else{fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})}});
+$('promptBtn').addEventListener('click',function(){var t=STORY_PAGE_PROMPT;try{var ps=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v1')||'null'),key=ps&&ps.selectedProfile||'chatgpt',p=ps&&ps.profiles&&ps.profiles[key]||STORY_PROMPT_PROFILES[key];if(p)t+='\n\n=== تعليمات الأداة المختارة: '+p.name+' ===\n'+p.instruction+'\nملف النسخة الكاملة: '+p.file}catch(e){}if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){say('ok','تم نسخ البرومبت الرئيسي المحدّث كاملًا. الصقه في المكان الذي تستخدمه لإنشاء الحكاية.')}).catch(function(){fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})})}else{fallbackCopy(t,function(ok){say(ok?'ok':'err',ok?'تم نسخ البرومبت الرئيسي المحدّث كاملًا.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')})}});
 (function(){var de=document.documentElement,th=$('th');function lab(){th.textContent=de.getAttribute('data-theme')==='dark'?'☀️ فاتح':'🌙 داكن'}lab();th.onclick=function(){var t=de.getAttribute('data-theme')==='dark'?'light':'dark';de.setAttribute('data-theme',t);try{localStorage.setItem('kh-theme',t)}catch(e){}lab()}})();
 load();
 /* جلسة مستعادة من sessionStorage لا تُعتبر أدمن حتى يتأكد الخادم من ذلك. */
