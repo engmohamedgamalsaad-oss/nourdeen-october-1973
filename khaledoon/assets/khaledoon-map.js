@@ -36,6 +36,27 @@
     credit: { ar: 'مصدر الصورة: ', en: 'Photo: ', fr: 'Photo : ', it: 'Foto: ', de: 'Foto: ' },
     legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' }
   };
+  function loadSectionConfig() {
+    return fetch(API + '/rest/v1/khaledoon_admin_config?config_key=eq.sections&select=config_value&limit=1', {
+      headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store'
+    }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      var value = rows && rows[0] && rows[0].config_value;
+      if (!value || !value.data || !Array.isArray(value.data.sections)) return;
+      var colors = value.colors || {};
+      value.data.sections.forEach(function (section) {
+        if (!section || !/^[a-z0-9-]{1,50}$/.test(section.id)) return;
+        var old = SEC[section.id] || { c: '#b8874b', t: {} };
+        var t = Object.assign({}, old.t || {});
+        t.ar = section.title || t.ar || section.id;
+        ['en','fr','it','de'].forEach(function (l) {
+          if (section.i18n && section.i18n[l] && section.i18n[l].title) t[l] = section.i18n[l].title;
+        });
+        var color = colors[section.id] && colors[section.id].outer;
+        SEC[section.id] = { c: /^#[0-9a-f]{6}$/i.test(color || '') ? color : old.c, t: t };
+      });
+    }).catch(function () {});
+  }
+
   function lang() {
     var l = (document.documentElement.lang || 'ar').slice(0, 2).toLowerCase();
     return LANGS.indexOf(l) >= 0 ? l : 'ar';
@@ -254,7 +275,7 @@
   var usingFallback = false;
   function start() {
     if (started) return; started = true;
-    loadData().then(function () {
+    loadSectionConfig().then(function () { return loadData(); }).then(function () {
       if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
