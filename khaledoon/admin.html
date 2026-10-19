@@ -228,7 +228,11 @@ var translationDetails=el('details','translation-panel');
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
 var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
  bCopy.addEventListener('click',function(){
-  var cur=secS.value==='curriculum',L=[];
+  var cur=secS.value==='curriculum',L=[],savedPromptState=null;
+  try{savedPromptState=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v1')||'null')}catch(e){}
+  var effectiveWorkflow=savedPromptState&&typeof savedPromptState.workflow==='string'&&savedPromptState.workflow.trim()?savedPromptState.workflow:STORY_WORKFLOW;
+  var effectiveMain=savedPromptState&&typeof savedPromptState.main==='string'&&savedPromptState.main.trim()?savedPromptState.main:STORY_PAGE_PROMPT;
+
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
   L.push('المطلوب: اقرأ التعليمات الكاملة أدناه والتزم بها، ثم أكمل دورة تجهيز الحكاية من المراجعة إلى المعاينة. لا تنشر ولا تدمج في الموقع الحي ولا تغيّر قاعدة البيانات دون موافقة صريحة من صاحب المشروع.');
   L.push('');
@@ -236,16 +240,21 @@ var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type
   L.push(PROJECT_INSTRUCTIONS);
   L.push('');
   L.push('================ آلية تجهيز الحكايات كاملة ================');
-  L.push(STORY_WORKFLOW);
+  L.push(effectiveWorkflow);
   L.push('');
   L.push('================ تعليمات Claude ================');
   L.push(CLAUDE_INSTRUCTIONS);
   L.push('');
   L.push('================ تعليمات المساعدين الذكيين ================');
   L.push(AGENT_INSTRUCTIONS);
+  if(savedPromptState&&Array.isArray(savedPromptState.custom)&&savedPromptState.custom.length){
+   L.push('');
+   L.push('================ البرومبتات الإضافية المحفوظة من صفحة إدارة البرومبتات (على هذا المتصفح) ================');
+   savedPromptState.custom.forEach(function(p){if(p&&typeof p.text==='string'&&p.text.trim()){L.push('--- '+String(p.name||'برومبت إضافي')+' ---');L.push(p.text);L.push('')}})
+  }
   L.push('');
   L.push('================ البرومبت الكامل لتطوير صفحة الحكاية — إلزامي ================');
-  L.push(STORY_PAGE_PROMPT);
+  L.push(effectiveMain);
   L.push('');
   L.push('================ تعليمات تنفيذ هذه الحكاية ================');
   L.push('ابدأ بفحص ملفات المشروع الفعلية والفرع الحالي، واقرأ القالب والحكايات المرجعية قبل أي تعديل. احتفظ بالنص الأصلي منفصلًا دون تغيير، ودقّق الأسماء والتواريخ والأحداث بمصادر موثوقة قابلة للفتح. وضّح المختلف عليه وما لم يمكن التحقق منه، ولا تخترع اقتباسات أو وقائع.');
