@@ -258,7 +258,32 @@ function area(v,rows,max){var t=document.createElement('textarea');t.rows=rows;t
 function sel(map,v,empty){var s=document.createElement('select');if(empty){var o=el('option','',empty);o.value='';s.appendChild(o)}Object.keys(map).forEach(function(k){var o=el('option','',map[k]);o.value=k;if(k===v)o.selected=true;s.appendChild(o)});return s}
 function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
 
+async function confirmStoryPublishAfterUpload(it,btn){
+ if(!confirm('هل رفعت ملفات الحكاية النهائية إلى GitHub وتحققت من ظهور الصفحة الحية؟ لا تؤكد النشر قبل إتمام الخطوتين.'))return;
+ btn.disabled=true;
+ try{
+  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
+  var meta=Object.assign({},it.story_meta||{}),draft=meta.pending_draft;
+  if(!draft){draft={};['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent','student_name','grade','color','story_number'].forEach(function(k){if(it[k]!==undefined)draft[k]=it[k]})}
+  var payload={};
+  if(table==='submitted_stories'){
+   ['student_name','grade','title','subtitle','body','sources','color','story_number'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
+   payload.status='published';
+  }else{
+   ['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
+   payload.status='published';
+  }
+  delete meta.pending_draft;
+  meta.preview_review=Object.assign({},meta.preview_review||{},{decision:'published',published_confirmed_at:new Date().toISOString(),note:'أكد الأدمن رفع الملفات والتحقق من الصفحة الحية.'});
+  payload.story_meta=meta;
+  var r=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
+  if(!r.ok)throw new Error('تعذر تأكيد النشر ('+r.status+'): '+(await r.text()).slice(0,300));
+  var rows=await r.json();if(!rows.length)throw new Error('لم يرجع الخادم سجلًا بعد تأكيد النشر.');
+  say('ok','تم تأكيد النشر في سجل الإدارة بعد إقرارك برفع الملفات والتحقق من الصفحة الحية.');await loadList();
+ }catch(e){say('err',e.message||'تعذر تأكيد النشر.')}finally{btn.disabled=false}
+}
 function legacyCard(it){
+ if(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft){var base=it;it=Object.assign({},it,it.story_meta.pending_draft,{id:base.id,status:base.status,created_at:base.created_at,story_number:base.story_number,story_meta:base.story_meta,_t:base._t})}
  var box=el('article','fcard sec-october'),head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',it.title||'حكاية أكتوبر بلا عنوان'));
  head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status||'غير محددة'));
@@ -268,18 +293,26 @@ function legacyCard(it){
  var g=el('div','fgrid');g.appendChild(fld('اسم الطالب',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',subtitle));box.appendChild(g);
  box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('المصادر',sources));box.appendChild(fld('الحالة',status));
  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),pubBtn=el('button','btn ghost','نشر وحفظ'),rejBtn=el('button','btn ghost','رفض'),delBtn=el('button','btn del','حذف');
- [saveBtn,pubBtn,rejBtn,delBtn].forEach(function(b){b.type='button';bar.appendChild(b)});box.appendChild(bar);
+ [saveBtn,pubBtn,rejBtn,delBtn].forEach(function(b){b.type='button';bar.appendChild(b)});
+ if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload'){var finish=el('button','btn primary','تأكيد النشر بعد الرفع');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
+ box.appendChild(bar);
  async function persistLegacy(nextStatus,btn){
-  var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:nextStatus||status.value};
+  var requestedStatus=nextStatus||status.value;
+  var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:requestedStatus,story_number:it.story_number||null};
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return}
   if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return}
-  if(d.status==='published'&&!confirm('تأكيد نشر حكاية أكتوبر؟'))return;
+  if(d.status==='published')d.status='pending';
+  var payload=d;
+  if(it.status==='published'&&requestedStatus!=='rejected'){
+   var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);meta.pending_draft.status='pending';payload={story_meta:meta};d.status='published';
+  }else if(requestedStatus==='rejected'){payload=d;payload.status='rejected'}else{payload=d;payload.status='pending'}
   btn.disabled=true;
   try{
-   var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+   var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
    if(!r.ok)throw new Error('تعذر حفظ حكاية أكتوبر ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ شيء؛ تحقق من صلاحية حساب الأدمن.');
-   say('ok',d.status==='published'?'تم نشر حكاية أكتوبر وحفظها.':'تم حفظ حكاية أكتوبر.');await loadList();
+   if(rows[0])Object.assign(it,rows[0]);
+   say('ok',requestedStatus==='rejected'?'تم رفض الحكاية الأصلية.':it.status==='published'?'تم حفظ التعديلات كمسودة؛ النسخة المنشورة لم تتغير.':'تم حفظ حكاية أكتوبر كمسودة غير منشورة.');await loadList();
   }catch(e){say('err',e.message||'تعذر الحفظ.')}finally{btn.disabled=false}
  }
  saveBtn.addEventListener('click',function(){persistLegacy(null,saveBtn)});
@@ -303,6 +336,7 @@ function legacyCard(it){
 }
 function card(it){
  if(it._t==='o')return legacyCard(it);
+ if(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft){var base=it;it=Object.assign({},it,it.story_meta.pending_draft,{id:base.id,status:base.status,created_at:base.created_at,story_meta:base.story_meta,_t:base._t,original_body:base.original_body})}
  var isNew=!it.id,box=el('article','fcard sec-'+(it.section||'curriculum'));
  var head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',isNew?'حكاية جديدة':(it.title||'')));
@@ -359,6 +393,7 @@ var translationDetails=el('details','translation-panel');
  var cl=el('label','fchk');cl.appendChild(cons);cl.appendChild(el('span','','موافقة الراوي أو ولي الأمر على عرض الاسم الأول والصف مسجّلة'));box.appendChild(cl);
  var g3=el('div','fgrid');g3.appendChild(fld('الحالة',st));box.appendChild(g3);
  var bar=el('div','fbar');
+ if(!isNew&&it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload'){var finish=el('button','btn primary','تأكيد النشر بعد الرفع');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
  var bSave=el('button','btn primary','حفظ');bSave.type='button';
  var bPub=el('button','btn ghost','نشر وحفظ');bPub.type='button';
  bar.appendChild(bSave);if(it.status!=='published')bar.appendChild(bPub);
@@ -510,8 +545,12 @@ if(!isNew){
   if(!valid(d))return false;
   var ok=false,oldLabel=btn.textContent;btn.disabled=true;btn.textContent='جارٍ الحفظ…';
   try{
-   var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)})
-              :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
+   var payload=d;
+   if(!isNew&&it.status==='published'){
+    var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);meta.pending_draft.status='pending';payload={story_meta:meta};
+   }
+   var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)})
+              :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
    if(!r.ok){
     var detail=await r.text(),reason='';
     try{var problem=JSON.parse(detail);reason=problem.message||problem.details||problem.hint||''}catch(ignore){reason=detail}
@@ -522,7 +561,7 @@ if(!isNew){
    ok=true;draftNew=false;
    try{
     await loadList();
-    say('ok',d.status==='published'?'تم حفظ التعديلات على الحكاية المنشورة.':'تم حفظ الحكاية كمسودة غير منشورة، وظهرت في قائمة الإدارة.');
+    say('ok',!isNew&&it.status==='published'?'تم حفظ التعديلات كمسودة؛ النسخة المنشورة لم تتغير.':'تم حفظ الحكاية كمسودة غير منشورة، وظهرت في قائمة الإدارة.');
    }catch(refreshError){
     saveFeedback('err','تم الحفظ في قاعدة البيانات، لكن تعذّر تحديث القائمة. اضغط «تحديث» للتأكد؛ لا تضغط حفظ مرة أخرى الآن.');
     say('err','تم الحفظ، لكن تحديث قائمة الإدارة تعذّر. اضغط «تحديث» للتأكد.');
@@ -846,6 +885,7 @@ async function handleStoryPreviewDecision(event){
  }else{
   if(record.status!=='published')record.status='pending';
  }
+ if(record.status!=='published'){meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
  say('ok','جارٍ '+buttonLabel+'…');
  try{
