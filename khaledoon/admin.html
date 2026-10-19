@@ -349,6 +349,7 @@ function escapeStoryHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').re
 function validateStoryPackage(d){
  var missing=[];
  if(!d.consent)missing.push('موافقة الراوي أو ولي الأمر على النشر');
+ var aiPage=String(d.ai_html||'').trim().toLowerCase();if(aiPage){if(!/<html[\\s>]/i.test(aiPage)||!/<body[\\s>]/i.test(aiPage))missing.push('صفحة HTML كاملة من AI');if(!aiPage.includes('data-lang=\"de\"')&&!aiPage.includes('lang=\"de\"'))missing.push('زر/دعم اللغة الألمانية في HTML الناتج من AI');if(!aiPage.includes('reactions.js'))missing.push('ربط التفاعلات المشتركة في HTML الناتج من AI');if(!aiPage.includes('story-quiz.js'))missing.push('ربط بنك الأسئلة المشترك في HTML الناتج من AI');if(!aiPage.includes('wa.me')||!aiPage.includes('facebook.com/sharer'))missing.push('مشاركة WhatsApp وFacebook في HTML الناتج من AI');if(!aiPage.includes('window.print')&&!aiPage.includes('print-story'))missing.push('زر الطباعة في HTML الناتج من AI')}
  if(!d.title||d.title.trim().length<3)missing.push('العنوان');
  if(!d.body||d.body.trim().length<50)missing.push('نص الراوي (50 حرفًا على الأقل)');
  if(!d.karma_intro||d.karma_intro.trim().length<10)missing.push('مدخل كارما');
@@ -387,9 +388,9 @@ async function exportStoryPackage(d){
  var tr=d.translations||{},quiz=check.quiz;quiz.id=id;quiz.title=d.title;
  var entry={name:d.narrator_name||'خالدون عبر التاريخ',grade:d.narrator_grade||'',className:'',title:d.title,subtitle:d.subtitle||'',person:d.figure_name||'',personAliases:[],color:({october:'#b8874b',science:'#4aa8a2',learning:'#b9789d',fame:'#c39a61',history:'#a98b66',curriculum:'#4d83c2',islamic:'#6f9c75'})[d.section]||'#b8874b',order:order+1,published:true,i18n:{en:{name:tr.en.student_name||'',grade:tr.en.grade||'',className:'',title:tr.en.title,subtitle:tr.en.subtitle||'',person:d.figure_name||''},fr:{name:tr.fr.student_name||'',grade:tr.fr.grade||'',className:'',title:tr.fr.title,subtitle:tr.fr.subtitle||'',person:d.figure_name||''},it:{name:tr.it.student_name||'',grade:tr.it.grade||'',className:'',title:tr.it.title,subtitle:tr.it.subtitle||'',person:d.figure_name||''},de:{name:tr.de.student_name||'',grade:tr.de.grade||'',className:'',title:tr.de.title,subtitle:tr.de.subtitle||'',person:d.figure_name||''}},id:id,section:siteSection,path:path};
  index.push(entry);
- var built=buildStoryHtml(Object.assign({},d,{translations:tr}),id,siteSection,folder);
+ var built=buildStoryHtml(Object.assign({},d,{translations:tr}),id,siteSection,folder),pageHtml=d.ai_html&&String(d.ai_html).trim()?finalizeAiStoryHtml(d.ai_html,id,folder):built.html;
  var files=[
-  {path:path+'index.html',name:'index.html',content:built.html,type:'text/html;charset=utf-8'},
+  {path:path+'index.html',name:'index.html',content:pageHtml,type:'text/html;charset=utf-8'},
   {path:path+'theme.css',name:'theme.css',content:built.theme,type:'text/css;charset=utf-8'},
   {path:path+'cover.svg',name:'cover.svg',content:built.cover,type:'image/svg+xml;charset=utf-8'},
   {path:path+'data.json',name:'data.json',content:JSON.stringify(built.data,null,2)+'\n',type:'application/json;charset=utf-8'},
