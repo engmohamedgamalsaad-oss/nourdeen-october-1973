@@ -20,7 +20,7 @@ window.KH_DE={
 "مساحة للحكايات والمعرفة والاكتشاف":"Ein Raum für Geschichten, Wissen und Entdeckungen",
 "خالدون":"Unsterbliche",
 "عبر التاريخ":"durch die Geschichte",
-"كل شخصية وراها حكاية، وكل إنجاز بدأ بفكرة أو موقف. هنا نكتشف الحكايات بأسلوب بسيط وممتع، ونحوّل الفضول إلى معرفة، مع مراجعة المعلومات والرجوع إلى مصادر موثوقة.":"Hinter jeder Persönlichkeit steckt eine Geschichte, und jede Leistung begann mit einer Idee oder einem besonderen Moment. Hier entdecken wir Geschichten auf einfache und unterhaltsame Weise und verwandeln Neugier in Wissen – mit geprüften Informationen und verlässlichen Quellen.",
+"كل شخصية وراها حكاية، وكل إنجاز بدأ بفكرة أو موقف. ومن خلال الحكايات دي، بنكتشف شخصيات صنعت إنجازات، وتركت أثرًا في حياة الناس، وأصبحت رموزًا وقدوات تلهم أجيالًا بسيرتها ومواقفها. هنا بنحكي قصص شخصيات من مختلف العصور والمجالات، بأسلوب بسيط وممتع يناسب الصغار والكبار، ونحوّل الفضول إلى معرفة، مع مراجعة المعلومات والرجوع إلى مصادر موثوقة.":"Jeder Mensch hat eine Geschichte, und jede Leistung begann mit einer Idee oder einem besonderen Moment. Durch diese Geschichten entdecken wir Menschen, die Großes geleistet, das Leben anderer geprägt und sich durch ihren Lebensweg und ihre Taten zu Vorbildern entwickelt haben, die Generationen inspirieren. Hier erzählen wir Geschichten von Persönlichkeiten aus verschiedenen Epochen und Bereichen – verständlich und spannend für Kinder und Erwachsene. So wird Neugier zu Wissen, während wir Informationen prüfen und zuverlässige Quellen heranziehen.",
 "اختار بوابتك للمعرفة":"Wähle dein Tor zum Wissen",
 "حكاية التاريخ بعيون جيل جديد":"Geschichte mit den Augen einer neuen Generation",
 "اختار اللي يشدّ فضولك":"Wähle, was deine Neugier weckt",
