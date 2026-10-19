@@ -938,7 +938,7 @@ async function handleStoryPreviewDecision(event){
    ['title','subtitle','body','sources','student_name','grade','section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','color','consent'].forEach(function(k){if(previewDraft[k]===undefined&&previewDraft.record_data[k]!==undefined)target[k]=previewDraft.record_data[k]});
   }
 }
- meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'تم رفض المعاينة؛ السجل محفوظ للمراجعة أو التعديل.',static_story_id:event.data.static_story_id||null,static_story_path:event.data.static_story_path||null,bundle_downloaded:!!event.data.bundle_downloaded,prepared_page_url:event.data.prepared_page_url||''};
+ meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'rejected',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'تم رفض المعاينة؛ السجل محفوظ للمراجعة أو التعديل.',static_story_id:event.data.static_story_id||null,static_story_path:event.data.static_story_path||null,bundle_downloaded:!!event.data.bundle_downloaded,prepared_page_url:event.data.prepared_page_url||''};
  record.story_meta=meta;
  if(action==='approve'){
   if(context.record_type==='modern'&&record.status!=='published')record.status='review';
