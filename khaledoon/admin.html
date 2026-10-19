@@ -391,7 +391,7 @@ function legacyCard(it){
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
   delBtn.disabled=true;
-  try{var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  try{await hideStoryAndPrepareRemoval(it);var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يتم حذف سجل؛ تحقق من صلاحية الأدمن.');
    say('ok','تم حذف حكاية أكتوبر.');await loadList();
@@ -655,10 +655,27 @@ if(!isNew){
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
+
+async function hideStoryAndPrepareRemoval(it){
+ var sv=storyFor(it);if(!sv)return null;
+ var id=String(sv.id);
+ if(!vHidden[id]){
+  var hide=await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})});
+  if(!hide.ok)throw new Error('تعذر إخفاء الحكاية من قوائم الزوار ('+hide.status+')؛ لم يُحذف سجل الإدارة.');
+  vHidden[id]=true;
+ }
+ var details='حذف حكاية خالدون رقم '+id+'\n\nمسار الصفحة: '+String(sv.path||'غير معروف')+'\n\nالخطوات لإكمال الحذف من GitHub:\n1) ارفع ملف stories-index.json الناتج من هذا الإجراء إلى المسار stories/index.json بعد مراجعة الفرق.\n2) احذف مجلد الصفحة من المسار '+String(sv.path||'stories/...')+' من المستودع.\n3) راجع روابط الخريطة والقوائم والروابط الداخلية وأزل أي مرجع يدوي متبقٍ.\n4) تحقق من أن الرابط لم يعد يعرض الحكاية بعد انتهاء نشر GitHub Pages.\n\nتم إخفاء الحكاية من القوائم العامة عبر لوحة الإدارة، لكن ملفات GitHub لا يمكن حذفها بأمان من المتصفح دون تكامل خادمي مصرح به.';
+ try{
+  var response=await fetch('../stories/index.json',{cache:'no-store'});
+  if(response.ok){var arr=await response.json();if(Array.isArray(arr)){arr=arr.filter(function(s){return String(s.id)!==id});downloadTextFile('stories-index-without-'+id+'.json',JSON.stringify(arr,null,2)+'\n','application/json;charset=utf-8')}}
+ }catch(e){}
+ downloadTextFile('DELETE-STORY-'+id+'.txt',details,'text/plain;charset=utf-8');
+ return sv;
+}
 function confirmDelete(it){
  var name=it.title||'حكاية بلا عنوان',sv=storyFor(it);
  var msg='حذف «'+name+'» نهائيًا من لوحة الإدارة؟\n\nلا يمكن التراجع عن الحذف.';
- if(it.status==='published'||sv)msg+='\n\nتنبيه: الحكاية منشورة أو لها صفحة على الموقع؛ الحذف يزيل سجلها من الإدارة فقط ولا يحذف صفحتها. لإخفائها من الزوار استخدم زر «إخفاء».';
+ if(it.status==='published'||sv)msg+='\n\nتنبيه: سيتم إخفاؤها من قوائم الزوار وإزالة سجل الإدارة. وللحذف الكامل من GitHub، ستُنزل تعليمات ونسخة فهرس محدثة تحتاج إلى رفعها وحذف مجلد الصفحة يدويًا؛ ملفات GitHub لا تُحذف مباشرة من المتصفح.';
  return confirm(msg);
 }
 async function removeItem(it,btn){
@@ -678,7 +695,7 @@ async function remove(it,btn){
   var r=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
-  say('ok','تم الحذف.');await loadList();
+  say('ok',removedSiteStory?'تم حذف سجل الإدارة وإخفاء الحكاية من قوائم الزوار. نزلت تعليمات لإكمال حذف ملفات GitHub والفهرس.':'تم حذف سجل الحكاية من الإدارة.');await loadList();
  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
 }
 function copyKey(it){return 'kh_copied:'+(it._t||'k')+':'+it.id}
