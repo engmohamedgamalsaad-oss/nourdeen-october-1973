@@ -74,7 +74,7 @@
   <section class="pub-section" id="reviewQuizWrap"><div class="pub-kicker">التفاعل التعليمي</div><h2>بنك الأسئلة</h2><div id="reviewQuiz"></div></section>
  </div>
  <div class="note">هذه معاينة بشكل صفحة حكاية وليست نشرًا حيًا. القبول يحفظ قرار المعاينة ويجهّز ملف تسليم بيانات الحكاية. لا تُعتبر الحكاية منشورة حتى تُرفع ملفاتها النهائية إلى GitHub ويُتحقق من ظهورها الحي.</div>
- <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
 <script src="assets/story-template-bundle.js"></script>
@@ -93,7 +93,7 @@ document.getElementById('printBtn').addEventListener('click',function(){var was=
 
 paint();
 var params=new URLSearchParams(location.search);
-if(params.get('story')==='1'){
+if(params.get('story')==='1'||(function(){try{return !!localStorage.getItem('kh-story-preview-draft')}catch(e){return false}})()){
  var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
  siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
  var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
@@ -102,7 +102,7 @@ if(params.get('story')==='1'){
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
  if(!draft){document.getElementById('reviewMeta').textContent='لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.';document.getElementById('approveStoryBtn').disabled=true}
  else{
-  localStorage.removeItem('kh-story-preview-draft');
+  /* احتفظ بآخر مسودة حتى يمكن فتح رابط المعاينة مرة أخرى في الجلسة نفسها. */
   function put(id,value){document.getElementById(id).textContent=value||''}
   put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewKarmaWrap').hidden=!draft.karma_text;put('reviewKarma',draft.karma_text||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
   put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
@@ -235,6 +235,7 @@ if(params.get('story')==='1'){
 }
  document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
  document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
+ document.getElementById('returnToEditBtn').addEventListener('click',function(){if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else{location.href='admin.html'}});
  document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
 }
 })();
