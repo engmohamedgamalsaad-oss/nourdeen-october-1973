@@ -380,15 +380,15 @@ var translationDetails=el('details','translation-panel');
   var enabled=document.createElement('input');enabled.type='checkbox';enabled.checked=saved.enabled===true;
   var enableLabel=el('label','fchk');enableLabel.appendChild(enabled);enableLabel.appendChild(el('span','','مفعّلة للنشر بعد الاعتماد'));group.appendChild(enableLabel);
   var state=sel(translationStates,saved.status||'not_started');group.appendChild(fld('حالة الترجمة',state));
-  var student=inp(saved.student_name,120),grade=inp(saved.grade,120),trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trKarma=area(saved.karma_text,5,8000),trBody=area(saved.body,8,24000),trHistory=area(saved.history_note,5,12000);
+  var student=inp(saved.student_name,120),grade=inp(saved.grade,120),trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trKarma=area(saved.karma_text,5,8000),trBody=area(saved.body,8,24000),trHistory=area(saved.history_note,5,12000),trImages=area(saved.images_note,4,5000);
   var fields=el('div','fgrid');
   fields.appendChild(fld('اسم الراوي',student));fields.appendChild(fld('الصف',grade));fields.appendChild(fld('العنوان',trTitle));fields.appendChild(fld('العنوان الفرعي',trSubtitle));
-  group.appendChild(fld('ترجمة صوت كارما',trKarma));group.appendChild(fld('ترجمة السياق التاريخي',trHistory));
+  group.appendChild(fld('ترجمة صوت كارما',trKarma));group.appendChild(fld('ترجمة السياق التاريخي',trHistory));group.appendChild(fld('ترجمة ملاحظات الصور وحقوقها',trImages));
   group.appendChild(fields);
   var comparison=el('div','translation-compare'),source=area(body.value,8,12000);source.readOnly=true;source.setAttribute('aria-label','النص العربي للمقارنة');
   comparison.appendChild(fld('النص العربي للمقارنة',source));comparison.appendChild(fld('نص الترجمة',trBody));group.appendChild(comparison);
   translationDetails.appendChild(group);
-  translationInputs[lang]={enabled:enabled,status:state,student_name:student,grade:grade,title:trTitle,subtitle:trSubtitle,karma_text:trKarma,body:trBody,history_note:trHistory,source:source};
+  translationInputs[lang]={enabled:enabled,status:state,student_name:student,grade:grade,title:trTitle,subtitle:trSubtitle,karma_text:trKarma,body:trBody,history_note:trHistory,images_note:trImages,source:source};
  });
  body.addEventListener('input',function(){Object.keys(translationInputs).forEach(function(lang){translationInputs[lang].source.value=body.value})});
  box.appendChild(translationDetails);
@@ -538,7 +538,7 @@ if(!isNew){
  }else box.appendChild(bar);
  function collect(status){
   var cur=secS.value==='curriculum';
-  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),karma_text:t.karma_text.value.trim(),body:t.body.value.trim(),history_note:t.history_note.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),original_body:it.original_body||body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status,story_meta:Object.assign({},it.story_meta||{},{karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),preview_source_url:previewSource.value.trim()})};
+  var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),karma_text:t.karma_text.value.trim(),body:t.body.value.trim(),history_note:t.history_note.value.trim(),images_note:t.images_note.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),original_body:it.original_body||body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status,story_meta:Object.assign({},it.story_meta||{},{karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),preview_source_url:previewSource.value.trim()})};
  }
  var saveMsg=el('div','fmsg');saveMsg.hidden=true;saveMsg.setAttribute('role','status');saveMsg.setAttribute('aria-live','polite');box.appendChild(saveMsg);
  function saveFeedback(kind,message){
