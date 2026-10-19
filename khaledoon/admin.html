@@ -922,7 +922,12 @@ async function handleStoryPreviewDecision(event){
  if(!context&&event.data.draft)context=event.data.draft;
  if(!context||!context.submission_id||!context.submission_table){say('err','وصل قرار المعاينة لكن لم نعثر على سجل الحكاية المرتبط. افتح المعاينة من بطاقة الحكاية مرة أخرى.');return}
  var table=context.submission_table,record=Object.assign({},context.record_data||{}),meta=Object.assign({},context.story_meta||{}),previewDraft=event.data.draft||{};
- function enrichPending(target){['figure_name','section_key','section_label','history_note','images_note','karma_text','question_bank_json','translations','preview_source_url','narrator_name','narrator_grade','original_body','admin_notes','consent','stage','subject','school_grade','section','color'].forEach(function(k){if(previewDraft[k]!==undefined)target[k]=previewDraft[k]})}
+ function enrichPending(target){
+  ['title','subtitle','body','sources','figure_name','section_key','section_label','history_note','images_note','karma_text','question_bank_json','translations','preview_source_url','narrator_name','narrator_grade','original_body','admin_notes','consent','stage','subject','school_grade','section','color','student_name','grade'].forEach(function(k){if(previewDraft[k]!==undefined)target[k]=previewDraft[k]});
+  if(previewDraft.record_data && typeof previewDraft.record_data==='object'){
+   ['title','subtitle','body','sources','student_name','grade','section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','color','consent'].forEach(function(k){if(previewDraft.record_data[k]!==undefined)target[k]=previewDraft.record_data[k]});
+  }
+}
  meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'رُفضت المعاينة فقط؛ الحكاية الأصلية لم تُرفض.',static_story_id:event.data.static_story_id||null,static_story_path:event.data.static_story_path||null,bundle_downloaded:!!event.data.bundle_downloaded,prepared_page_url:event.data.prepared_page_url||''};
  record.story_meta=meta;
  if(action==='approve'){
