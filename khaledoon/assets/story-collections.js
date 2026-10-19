@@ -80,6 +80,30 @@
     card.appendChild(content);
     return card;
   }
+  function applyCentralSectionConfig() {
+    fetch(API + '/rest/v1/khaledoon_admin_config?config_key=eq.sections&select=config_value&limit=1', {
+      headers: { apikey: ANON, Authorization: 'Bearer ' + ANON }, cache: 'no-store'
+    }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+      var value = rows && rows[0] && rows[0].config_value;
+      if (!value || !value.data || !Array.isArray(value.data.sections)) return;
+      var section = value.data.sections.find(function (item) { return item && item.id === sectionId; });
+      if (section) setSectionTitle(section);
+      var color = value.colors && value.colors[sectionId];
+      function validColor(v) { return typeof v === 'string' && /^#[0-9a-f]{6}$/i.test(v); }
+      if (color && validColor(color.outer) && validColor(color.inner)) {
+        document.documentElement.style.setProperty('--kh-section-outer', color.outer);
+        document.documentElement.style.setProperty('--kh-section-inner', color.inner);
+        var style = document.getElementById('khCentralSectionStyle');
+        if (!style) {
+          style = document.createElement('style');
+          style.id = 'khCentralSectionStyle';
+          style.textContent = '.story-index-card{border-color:var(--kh-section-outer)}.story-index-empty{border-color:var(--kh-section-outer)}.hero .eyebrow{color:var(--kh-section-outer)}';
+          document.head.appendChild(style);
+        }
+      }
+    }).catch(function () {});
+  }
+
   function setSectionTitle(section) {
     if (!section) return;
     var title = localized(section, 'title');
@@ -87,6 +111,8 @@
     if (h1 && title) h1.textContent = title;
     if (title) document.title = title + (lang === 'ar' ? ' | خالدون عبر التاريخ' : ' | Khaledoon Through History');
   }
+
+  applyCentralSectionConfig();
 
   fetch(root + 'stories/sections.json', { cache: 'no-cache' })
     .then(function (response) { if (!response.ok) throw new Error('sections'); return response.json(); })
