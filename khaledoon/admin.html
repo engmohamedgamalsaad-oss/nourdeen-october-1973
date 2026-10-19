@@ -210,7 +210,7 @@ async function loadList(){
  if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
  if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
  var current=await response.json();
- current=current.filter(function(x){var m=x.story_meta||{};return x.section!=='october'&&m.section_key!=='october'&&m.section!=='october'&&!(m.pending_draft&&(m.pending_draft.section_key==='october'||m.pending_draft.section==='october'))});
+ current=current.filter(function(x){var m=x.story_meta||{};return x.section!=='october'&&m.section_key!=='october'&&m.section!=='october'&&m.section_label!=='حكايات أكتوبر 1973'&&!(m.pending_draft&&(m.pending_draft.section_key==='october'||m.pending_draft.section==='october'||m.pending_draft.section_label==='حكايات أكتوبر 1973'))});
  current.forEach(function(x){x._t='k'});
  var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false&&x.section!=='october'}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
  var unmatchedRecords=[];
