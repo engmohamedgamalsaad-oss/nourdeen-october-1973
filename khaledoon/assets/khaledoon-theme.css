@@ -152,7 +152,7 @@
   .gate:hover{box-shadow:0 22px 42px -20px var(--kh-sh)}
   .gate:active{transform:translateY(-1px)}
   .gate:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
-  .g7{min-height:clamp(132px,15vw,160px)}
+  
   .info{border-radius:18px;box-shadow:0 14px 30px -20px var(--kh-sh);transition:box-shadow .3s,border-color .3s}
   .info:hover{border-color:var(--gold)}
   .search,.panel{border-radius:18px}
