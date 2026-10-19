@@ -5,9 +5,9 @@
 var API='https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var SK='kh_adm_session', refreshing=null;
-function readSession(){try{return JSON.parse(sessionStorage.getItem(SK)||'null')}catch(e){return null}}
-function writeSession(s){try{sessionStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
-function go(){try{sessionStorage.removeItem(SK)}catch(e){}location.replace('admin.html')}
+function readSession(){try{return JSON.parse(localStorage.getItem(SK)||sessionStorage.getItem(SK)||'null')}catch(e){return null}}
+function writeSession(s){try{sessionStorage.setItem(SK,JSON.stringify(s));localStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
+function go(){try{sessionStorage.removeItem(SK);localStorage.removeItem(SK)}catch(e){}location.replace('admin.html')}
 async function sessionToken(){
  var s=readSession();
  if(!s||!s.access_token||!s.refresh_token)throw new Error('جلسة الأدمن غير موجودة. سجّل الدخول من لوحة الإدارة.');
