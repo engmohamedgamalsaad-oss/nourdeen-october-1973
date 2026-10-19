@@ -94,7 +94,8 @@
 
 ### ما لم يُتحقق منه بعد
 
-- **تحديث 2026-10-19:** أُضيف تشغيل `node scripts/check-localization-coverage.js` إلى `.github/workflows/home-language-check.yml`. نجح فحصا `scripts/check-home-language.js` و`scripts/check-localization-coverage.js` في GitHub Actions على الرأس `a74adbb5d22635c196ca89f44c70bda476d23203` (run 404). هذا يثبت نجاح الفحوصات الساكنة فقط.
+- **تحديث 2026-10-19:** أُضيف تشغيل `node scripts/check-localization-coverage.js` إلى `.github/workflows/home-language-check.yml`. نجح فحصا `scripts/check-home-language.js` و`scripts/check-localization-coverage.js` في GitHub Actions على الرأس `6929f959a87081557a9cd3be06a777ee067515c5` (run 409).
+- كشف التدقيق الإضافي مشكلة توافق: النسخة الألمانية القديمة كانت تستخدم `kh-de=1` مع ترك `kh-lang=ar`، ما قد يجعل `KH_LANG.current` مختلفًا عن لغة الصفحة في أول زيارة بعد الترقية. عولج ذلك في `home-language-only.js` بترحيل العلامة القديمة إلى `kh-lang=de` قبل تهيئة السجل المشترك ثم إزالة `kh-de`. كما أصبح محرك الترجمة يمسح العلامة القديمة عند اختيار أي لغة، وأُضيفت اختبارات رجوع للحالتين: اختيار ألماني قديم مع `ar`، واختيار موحد أحدث مع علامة قديمة متبقية.
 - أُصلح ترتيب تحميل `khaledoon-de.js` في `read.html` و`quiz.html` ليكون قبل سكربت العرض المضمّن؛ وأُضيف فحص يمنع رجوع هذا الخلل.
 - لم يُجرَ اختبار متصفح حقيقي للهاتف والكمبيوتر، ولا اختبار طباعة فعلي أو مشاركة WhatsApp/Facebook أو تفاعلات Supabase.
 - لذلك يبقى PR #135 **مسودة للمراجعة**، ولا يُدمج أو يُنشر قبل الاختبارات البصرية والوظيفية ومراجعة جودة الترجمة الألمانية.
