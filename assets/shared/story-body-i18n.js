@@ -496,6 +496,10 @@ function applyTranslationNotice(lang){
   it:{
    title:'Avviso sulla traduzione',
    body:'Questa pagina è stata tradotta dall’arabo con l’aiuto dell’intelligenza artificiale (IA). La traduzione è fornita a scopo informativo e per facilitare l’accesso ai contenuti; potrebbe contenere errori o omissioni. Il testo originale in arabo è la versione di riferimento. Per verificare i dettagli storici, consulta le fonti citate.'
+  },
+  de:{
+   title:'Hinweis zur Übersetzung',
+   body:'Diese Seite wurde mit Unterstützung künstlicher Intelligenz (KI) aus dem Arabischen übersetzt. Die Übersetzung dient der allgemeinen Information und besseren Zugänglichkeit; sie kann Fehler oder Auslassungen enthalten. Maßgeblich ist der arabische Originaltext. Bitte prüfe historische Einzelheiten anhand der angegebenen Quellen.'
   }
  };
  var text=copy[lang];
