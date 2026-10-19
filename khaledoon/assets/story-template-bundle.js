@@ -20,6 +20,9 @@ function validate(d){
   var t=tr[lang]||{};
   ['title','subtitle','karma_text','body'].forEach(function(k){if(!String(t[k]||'').trim())missing.push(lang.toUpperCase()+': ناقص '+({title:'العنوان',subtitle:'النبذة',karma_text:'نص كارما',body:'نص الراوي'}[k]))});
   if(d.history_note&&!String(t.history_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة السياق التاريخي ناقصة');
+  if(paragraphs(d.body).length!==paragraphs(t.body).length)missing.push(lang.toUpperCase()+': عدد فقرات الراوي لا يطابق الأصل؛ لا يمكن ربط الترجمة فقرة بفقرة.');
+  if(paragraphs(d.karma_text).length!==paragraphs(t.karma_text).length)missing.push(lang.toUpperCase()+': عدد فقرات كارما لا يطابق الأصل.');
+  if(d.history_note&&paragraphs(d.history_note).length!==paragraphs(t.history_note).length)missing.push(lang.toUpperCase()+': عدد فقرات السياق التاريخي لا يطابق الأصل.');
  });
  var q=null;try{q=typeof d.question_bank_json==='string'?JSON.parse(d.question_bank_json):d.question_bank_json}catch(e){missing.push('صيغة بنك الأسئلة JSON غير صحيحة')}
  if(!q||!Array.isArray(q.questions)||q.questions.length<5)missing.push('بنك الأسئلة يحتاج خمسة أسئلة على الأقل');
@@ -36,7 +39,7 @@ async function nextId(){
  for(var tries=0;tries<30;tries++,id++){
   var name=String(id).padStart(3,'0');
   var exists=false;
-  try{var h=await fetch('../stories/history/'+name+'/index.html',{method:'HEAD',cache:'no-store'});exists=h.ok}catch(e){}
+  for(var section of ['october','history','science','women','people','curriculum','islamic']){try{var h=await fetch('../stories/'+section+'/'+name+'/index.html',{method:'HEAD',cache:'no-store'});if(h.ok){exists=true;break}}catch(e){}}
   if(!exists)return name;
  }
  throw new Error('تعذر اختيار رقم حكاية متاح؛ حدّث الفهرس وتحقق من المجلدات يدويًا.');
