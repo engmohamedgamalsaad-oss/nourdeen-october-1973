@@ -482,34 +482,42 @@ if(!isNew){
   var cur=secS.value==='curriculum';
   var translations={};Object.keys(translationInputs).forEach(function(lang){var t=translationInputs[lang];translations[lang]={enabled:t.enabled.checked,status:t.status.value,student_name:t.student_name.value.trim(),grade:t.grade.value.trim(),title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),body:t.body.value.trim()}});return {section:secS.value,stage:cur?(stgS.value||null):null,school_grade:cur&&grS.value?+grS.value:null,subject:cur?(subj.value.trim()||null):null,figure_name:fig.value.trim(),narrator_name:nar.value.trim(),narrator_grade:ng.value.trim()||null,title:title.value.trim(),subtitle:sub.value.trim()||null,body:body.value.trim(),history_note:hist.value.trim()||null,sources:src.value.trim()||null,images_note:img.value.trim()||null,admin_notes:notes.value.trim()||null,translations:translations,consent:cons.checked,status:status};
  }
+ var saveMsg=el('div','fmsg');saveMsg.hidden=true;saveMsg.setAttribute('role','status');saveMsg.setAttribute('aria-live','polite');box.appendChild(saveMsg);
+ function saveFeedback(kind,message){
+  saveMsg.className='fmsg '+kind;saveMsg.textContent=message;saveMsg.hidden=false;
+ }
  function valid(d){
-  if(d.figure_name.length<2||d.narrator_name.length<2||d.title.length<3||d.body.length<50){say('err','الشخصية واسم الراوي والعنوان مطلوبة، ونص الحكاية 50 حرفًا على الأقل.');return false}
-  if(d.section==='curriculum'&&(!d.stage||!d.school_grade)){say('err','اختر المرحلة والصف لشخصيات المناهج.');return false}
-  if(d.stage&&d.stage!=='primary'&&d.school_grade>3){say('err','الصف خارج نطاق المرحلة المختارة.');return false}
-  if(d.status==='published'&&!d.consent){say('err','لا يمكن النشر دون تسجيل موافقة الراوي أو ولي الأمر.');return false}
+  if(d.figure_name.length<2||d.narrator_name.length<2||d.title.length<3||d.body.length<50){saveFeedback('err','الشخصية واسم الراوي والعنوان مطلوبة، ونص الحكاية 50 حرفًا على الأقل.');return false}
+  if(d.section==='curriculum'&&(!d.stage||!d.school_grade)){saveFeedback('err','اختر المرحلة والصف لشخصيات المناهج.');return false}
+  if(d.stage&&d.stage!=='primary'&&d.school_grade>3){saveFeedback('err','الصف خارج نطاق المرحلة المختارة.');return false}
+  if(d.status==='published'&&!d.consent){saveFeedback('err','لا يمكن النشر دون تسجيل موافقة الراوي أو ولي الأمر.');return false}
   return true;
  }
  async function persist(status,btn){
   var d=collect(status);
-  if(!valid(d)){var message=$('msg');if(message)message.scrollIntoView({behavior:'smooth',block:'center'});return false}
+  saveMsg.hidden=true;
+  if(!valid(d))return false;
   var ok=false,oldLabel=btn.textContent;btn.disabled=true;btn.textContent='جارٍ الحفظ…';
   try{
    var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(d)})
               :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(d)});
-   if(!r.ok)throw new Error('تعذر الحفظ ('+r.status+'). لم يتغير السجل؛ راجع رسالة الخطأ والحقول المطلوبة.');
-   var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل. تأكد أن حسابك مسجّل كأدمن.');
+   if(!r.ok){
+    var detail=await r.text(),reason='';
+    try{var problem=JSON.parse(detail);reason=problem.message||problem.details||problem.hint||''}catch(ignore){reason=detail}
+    throw new Error('تعذر الحفظ ('+r.status+'). '+(reason?String(reason).slice(0,500):'لم يرسل الخادم تفاصيل إضافية.'));
+   }
+   var rows=await r.json();if(!rows.length)throw new Error('لم يُحفظ التعديل: لم يُرجع الخادم سجلًا. تأكد أن حسابك مسجّل كأدمن وأن سياسة الصلاحيات تسمح بالكتابة.');
    ok=true;draftNew=false;
    try{
     await loadList();
     say('ok',d.status==='published'?'تم حفظ التعديلات على الحكاية المنشورة.':'تم حفظ الحكاية كمسودة غير منشورة، وظهرت في قائمة الإدارة.');
-    $('list').scrollIntoView({behavior:'smooth',block:'start'});
    }catch(refreshError){
-    say('err','تم حفظ الحكاية في قاعدة البيانات، لكن تعذّر تحديث القائمة. اضغط «تحديث» للتأكد؛ لم يُعد الحفظ مرة أخرى.');
-    $('msg').scrollIntoView({behavior:'smooth',block:'center'});
+    saveFeedback('err','تم الحفظ في قاعدة البيانات، لكن تعذّر تحديث القائمة. اضغط «تحديث» للتأكد؛ لا تضغط حفظ مرة أخرى الآن.');
+    say('err','تم الحفظ، لكن تحديث قائمة الإدارة تعذّر. اضغط «تحديث» للتأكد.');
    }
   }catch(e){
-   say('err',e.message||'حدث خطأ أثناء الحفظ.');
-   $('msg').scrollIntoView({behavior:'smooth',block:'center'});
+   saveFeedback('err',e.message||'حدث خطأ أثناء الحفظ.');
+   say('err','تعذّر حفظ هذه الحكاية. تفاصيل الخطأ ظاهرة بجوار أزرار الحفظ داخل بطاقة الحكاية.');
   }finally{btn.disabled=false;btn.textContent=oldLabel}
   return ok;
  }
