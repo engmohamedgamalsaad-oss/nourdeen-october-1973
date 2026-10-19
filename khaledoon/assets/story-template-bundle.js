@@ -20,9 +20,11 @@ function validate(d){
   var t=tr[lang]||{};
   ['title','subtitle','karma_text','body'].forEach(function(k){if(!String(t[k]||'').trim())missing.push(lang.toUpperCase()+': ناقص '+({title:'العنوان',subtitle:'النبذة',karma_text:'نص كارما',body:'نص الراوي'}[k]))});
   if(d.history_note&&!String(t.history_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة السياق التاريخي ناقصة');
+  if(d.images_note&&!String(t.images_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة ملاحظات الصور وحقوقها ناقصة');
   if(paragraphs(d.body).length!==paragraphs(t.body).length)missing.push(lang.toUpperCase()+': عدد فقرات الراوي لا يطابق الأصل؛ لا يمكن ربط الترجمة فقرة بفقرة.');
   if(paragraphs(d.karma_text).length!==paragraphs(t.karma_text).length)missing.push(lang.toUpperCase()+': عدد فقرات كارما لا يطابق الأصل.');
   if(d.history_note&&paragraphs(d.history_note).length!==paragraphs(t.history_note).length)missing.push(lang.toUpperCase()+': عدد فقرات السياق التاريخي لا يطابق الأصل.');
+  if(d.images_note&&paragraphs(d.images_note).length!==paragraphs(t.images_note).length)missing.push(lang.toUpperCase()+': عدد فقرات ملاحظات الصور لا يطابق الأصل.');
  });
  var q=null;try{q=typeof d.question_bank_json==='string'?JSON.parse(d.question_bank_json):d.question_bank_json}catch(e){missing.push('صيغة بنك الأسئلة JSON غير صحيحة')}
  if(!q||!Array.isArray(q.questions)||q.questions.length<5)missing.push('بنك الأسئلة يحتاج خمسة أسئلة على الأقل');
@@ -55,9 +57,17 @@ function translatedRows(d,id){
  var rows={en:{},fr:{},it:{},de:{}},tr=d.translations||{};
  function add(lang,arabic,translated){if(arabic&&translated&&String(arabic).trim()!==String(translated).trim())rows[lang][String(arabic)]=String(translated)}
  function mapBlocks(arText,translatedText,lang){var a=paragraphs(arText),b=paragraphs(translatedText);a.forEach(function(x,i){if(b[i])add(lang,x,b[i])});if(a.length===1&&b.length===1)add(lang,arText,translatedText)}
- LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang)});
+ LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang);mapBlocks(d.images_note,t.images_note,lang)});
  var labels={
   'كارما الطفلة':{en:'Karma, the curious child',fr:'Karma, l’enfant curieuse',it:'Karma, la bambina curiosa',de:'Karma, das neugierige Kind'},
+  'إغلاق':{en:'Close',fr:'Fermer',it:'Chiudi',de:'Schließen'},
+  'ابدأ الحكاية ←':{en:'Start the story →',fr:'Commencer l’histoire →',it:'Inizia la storia →',de:'Geschichte starten →'},
+  'كارما: فضول وأسئلة وملاحظات':{en:'Karma: curiosity, questions and observations',fr:'Karma : curiosité, questions et observations',it:'Karma: curiosità, domande e osservazioni',de:'Karma: Neugier, Fragen und Beobachtungen'},
+  'الحكاية':{en:'The story',fr:'L’histoire',it:'La storia',de:'Die Geschichte'},
+  'السياق والتحقق التاريخي':{en:'Historical context and verification',fr:'Contexte historique et vérification',it:'Contesto storico e verifica',de:'Historischer Kontext und Überprüfung'},
+  'الصور وحقوق الاستخدام':{en:'Images and usage rights',fr:'Images et droits d’utilisation',it:'Immagini e diritti d’uso',de:'Bilder und Nutzungsrechte'},
+  'النص تعليمي مبسط؛ يجب مراجعة المصادر والتمييز بين الوقائع الثابتة والروايات المختلف عليها.':{en:'This is an educational adaptation; check the sources and distinguish established facts from disputed accounts.',fr:'Ce texte est une adaptation éducative ; consultez les sources et distinguez les faits établis des récits contestés.',it:'Questo è un adattamento didattico; controlla le fonti e distingui i fatti accertati dai racconti controversi.',de:'Dies ist eine vereinfachte Lernfassung; prüfe die Quellen und unterscheide gesicherte Fakten von umstrittenen Überlieferungen.'},
+  'العودة إلى خالدون عبر التاريخ':{en:'Back to Immortals Through History',fr:'Retour à Immortels à travers l’histoire',it:'Torna a Immortali attraverso la storia',de:'Zurück zu Unsterbliche durch die Geschichte'},
   'الراوي المعرفي':{en:'The knowledgeable narrator',fr:'Le narrateur connaisseur',it:'Il narratore esperto',de:'Der sachkundige Erzähler'},
   'في ضوء التاريخ':{en:'In historical context',fr:'Dans le contexte historique',it:'Nel contesto storico',de:'Im historischen Kontext'},
   'اختبر معلوماتك':{en:'Test your knowledge',fr:'Testez vos connaissances',it:'Verifica le tue conoscenze',de:'Teste dein Wissen'},
@@ -80,7 +90,8 @@ function translatedRows(d,id){
   'خالدون عبر التاريخ':{en:'Immortals Through History',fr:'Immortels à travers l’histoire',it:'Immortali attraverso la storia',de:'Unsterbliche durch die Geschichte'},
   'مصادر الحكاية':{en:'Story sources',fr:'Sources de l’histoire',it:'Fonti della storia',de:'Quellen der Geschichte'}
  };
- LANGS.forEach(function(lang){Object.keys(labels).forEach(function(k){add(lang,k,labels[k][lang])})});
+ var sectionLabels={october:{ar:'حكايات أكتوبر 1973',en:'October 1973 Stories',fr:'Récits d’octobre 1973',it:'Storie dell’ottobre 1973',de:'Geschichten zum Oktober 1973'},history:{ar:'التاريخ والحضارات',en:'History and Civilizations',fr:'Histoire et civilisations',it:'Storia e civiltà',de:'Geschichte und Zivilisationen'},science:{ar:'العلم والعلماء',en:'Science and Scientists',fr:'Sciences et scientifiques',it:'Scienza e scienziati',de:'Wissenschaft und Forschende'},women:{ar:'نساء خالدات',en:'Women Who Made History',fr:'Femmes qui ont marqué l’histoire',it:'Donne che hanno fatto la storia',de:'Frauen, die Geschichte schrieben'},people:{ar:'أعلام الأدب والفنون والرياضة',en:'Literature, Arts and Sports',fr:'Littérature, arts et sport',it:'Letteratura, arti e sport',de:'Literatur, Kunst und Sport'},curriculum:{ar:'شخصيات المناهج المصرية',en:'Egyptian Curriculum Figures',fr:'Personnages du programme égyptien',it:'Personaggi del programma egiziano',de:'Persönlichkeiten des ägyptischen Lehrplans'},islamic:{ar:'شخصيات إسلامية',en:'Islamic Figures',fr:'Personnalités islamiques',it:'Personaggi islamici',de:'Islamische Persönlichkeiten'}};
+ LANGS.forEach(function(lang){Object.keys(labels).forEach(function(k){add(lang,k,labels[k][lang])});var section=d.section_key==='learning'?'women':d.section_key==='fame'?'people':d.section_key;if(sectionLabels[section]){add(lang,sectionLabels[section].ar,sectionLabels[section][lang]);add(lang,'← '+sectionLabels[section].ar,'← '+sectionLabels[section][lang])}});
  var meta={ar:[d.title||'',d.subtitle||'']};LANGS.forEach(function(lang){var t=tr[lang]||{};meta[lang]=[t.title||d.title||'',t.subtitle||d.subtitle||'']});
  return '(function(){\n"use strict";var S=window.StoryI18N=window.StoryI18N||{text:{},meta:{}};var rows='+JSON.stringify(rows)+';Object.keys(rows).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],rows[lang])});S.meta['+JSON.stringify(id)+']='+JSON.stringify(meta)+';})();\n';
 }
