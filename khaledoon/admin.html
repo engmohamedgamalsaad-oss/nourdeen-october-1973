@@ -743,7 +743,13 @@ function pubRow(it){
   var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
   var summary=el('summary','','بيانات القارئ والحكاية');summary.style.cssText='cursor:pointer;font-weight:800;min-height:38px';data.appendChild(summary);
   var close=el('button','btn ghost','× إغلاق البيانات');close.type='button';close.style.margin='10px 0';close.addEventListener('click',function(){data.open=false});data.appendChild(close);
-  var editor=el('div','pbody');editor.appendChild(card(it));data.appendChild(editor);actions.appendChild(data);b.appendChild(actions);
+  var readerData=el('div','reader-submission-data');readerData.style.cssText='display:grid;gap:10px;margin-top:8px';
+  function dataLine(label,value,pre){var line=el('div','reader-data-line');line.style.cssText='border-top:1px solid var(--line,#31505a);padding:9px 0';line.appendChild(el('b','',label));var val=el(pre?'pre':'p','',String(value||'غير مسجل'));val.style.cssText=pre?'white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin:6px 0 0':'margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere';line.appendChild(val);readerData.appendChild(line)}
+  dataLine('عنوان الحكاية',it.title);dataLine('صاحب الاقتراح / الراوي',it.student_name||it.narrator_name);dataLine('الصف',it.grade||it.narrator_grade);dataLine('النص الذي وصل',it.original_body||it.body,true);dataLine('المصادر التي أرسلها القارئ',it.sources,true);dataLine('تاريخ الإرسال',it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'غير مسجل');dataLine('موافقة ولي الأمر',it.consent===true?'مسجلة':it.consent===false?'غير مسجلة':'غير محددة');
+  data.appendChild(readerData);
+  var editDetails=document.createElement('details');editDetails.style.cssText='border-top:1px solid var(--line,#31505a);margin-top:12px;padding-top:10px';
+  editDetails.appendChild(el('summary','','فتح أدوات المراجعة والتحرير'));var editor=el('div','pbody');editor.appendChild(card(it));editDetails.appendChild(editor);data.appendChild(editDetails);
+  actions.appendChild(data);b.appendChild(actions);
   if(it.status==='published'&&sv){var link=el('a','btn ghost','فتح الصفحة المنشورة');link.href='../'+String(sv.path||'');link.target='_blank';link.rel='noopener';b.appendChild(link)}
   d.appendChild(b);
  }
