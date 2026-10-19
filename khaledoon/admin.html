@@ -625,6 +625,12 @@ var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.
   L.push('=== ملاحظات الصور وحقوقها ===');
   L.push(img.value.trim()||'لا توجد ملاحظات صور.');
   L.push('');
+  L.push('=== بيانات موقع الخريطة (JSON) ===');
+  L.push(mapJson.value.trim()||'لا يوجد موقع موثق؛ لا تخترع إحداثيات. إذا أضيف موقع، أرفق مصدرًا موثوقًا وأسماء المكان باللغات الخمس.');
+  L.push('');
+  L.push('=== HTML كامل ناتج من AI إن وجد ===');
+  L.push(aiHtml.value.trim()||'لا يوجد HTML جاهز؛ أعد صفحة HTML كاملة للقالب المختار مع استخدام {{STORY_ID}} و{{STORY_FOLDER}} و{{STORY_PATH}} و{{STORY_QUIZ_PATH}} كعناصر نائبة، وضمّن اللغات الخمس والتفاعلات والإعجاب والمشاركة والطباعة وبنك الأسئلة المشترك.');
+  L.push('');
   L.push('=== الترجمات الحالية كاملة ===');
   L.push(JSON.stringify(collect('review').translations,null,2));
   L.push('');
