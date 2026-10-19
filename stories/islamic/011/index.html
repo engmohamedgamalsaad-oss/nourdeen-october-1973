@@ -14,64 +14,14 @@
 <link rel="stylesheet" href="../../../assets/shared/story-quiz.css"><script src="../../../assets/shared/home-language-only.js"></script>
 <script>try{var khTheme=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",khTheme)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>
 <script src="../../../khaledoon/assets/khaledoon-theme.js?v=2"></script>
-<style>
-:root{--kh-green:#d9a85f;--kh-deep:#111a32;--kh-gold:#e5c27a}
-body{margin:0;background:radial-gradient(ellipse at 85% 0%,#49304b 0,transparent 38%),linear-gradient(180deg,#111a32,#080d1b);color:#f8f4e9;font-family:Cairo,Tahoma,sans-serif;line-height:1.95}
-a{color:#f0bd77}.top{padding:18px max(20px,calc((100% - 1000px)/2));border-bottom:1px solid #d9a85f55;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.hero{min-height:330px;display:grid;grid-template-columns: minmax(0,1fr) minmax(240px,.7fr);align-items:center;gap:26px;max-width:1000px;margin:auto;padding:38px 22px}
-.hero img{width:100%;max-height:310px;object-fit:cover;border-radius:20px;border:1px solid #d9a85f66;box-shadow:0 18px 55px #0005}
-h1{font-size:clamp(2rem,5vw,3.6rem);line-height:1.45;color:#f2cf8c;margin:8px 0}
-.kicker{color:#f0bd77;font-weight:800}.subtitle{font-size:1.1rem;color:#d9deed}
-main{max-width:900px;margin:auto;padding:10px 22px 50px}
-article{background:#202642aa;border:1px solid #d9a85f44;border-radius:20px;padding:clamp(20px,4vw,42px);box-shadow:0 15px 40px #0002}
-h2{color:#f2cf8c;margin-top:1.7em}.dialogue{padding:14px 18px;margin:16px 0;border-right:4px solid #d9a85f;background:#ffffff09;border-radius:10px}
-.dialogue strong{color:#f0bd77}.narrator{border-right-color:#e5c27a}.sources{margin-top:24px;padding:20px;border:1px solid #d9a85f55;border-radius:14px}
-.sources li{margin:10px 0;overflow-wrap:anywhere}.tools{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}.tools button{border:1px solid #d9a85f66;border-radius:10px;padding:10px 14px;background:#202642;color:#fff;cursor:pointer}
-@media(max-width:650px){.hero{grid-template-columns:1fr;padding-top:25px}.hero img{max-height:230px;order:-1}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-@media print{.top,.tools,.reactions-section,.story-quiz-section,.story-extras,.story-splash,.kh-fab{display:none!important}body,article{background:white!important;color:#111!important;box-shadow:none!important}h1,h2,.dialogue strong{color:#111!important}.subtitle{color:#333!important}a{color:#111!important}}
-:root[data-theme="light"] body{background:linear-gradient(180deg,#f8f0df,#e9eaf0);color:#172c23}
-:root[data-theme="light"] article,:root[data-theme="light"] .dialogue,:root[data-theme="light"] .sources{background:#fffdf6;color:#172c23;border-color:#b27a4a66}
-:root[data-theme="light"] .subtitle{color:#385548}:root[dir="ltr"] .dialogue{border-right:0;border-left:4px solid #d9a85f}:root[dir="ltr"] .dialogue.narrator{border-left-color:#e5c27a}:root[data-theme="light"] h1,:root[data-theme="light"] h2{color:#6b3e32}
-:root[dir="ltr"] .reaction-choice{text-align:left}
-:root[data-theme="light"] .story-quiz-section{background:linear-gradient(145deg,#f4ead9,#f8f0df);color:#172c23}
-:root[data-theme="light"] .story-quiz-card{background:#fffdf6;border-color:#b27a4a88;box-shadow:0 18px 48px #263b2918}
-:root[data-theme="light"] .story-quiz-kicker,:root[data-theme="light"] .story-quiz-progress{color:#6b3e32}
-:root[data-theme="light"] .story-quiz-card h2,:root[data-theme="light"] .story-quiz-question,:root[data-theme="light"] .story-quiz-review h3{color:#6b3e32}
-:root[data-theme="light"] .story-quiz-intro,:root[data-theme="light"] .story-quiz-muted,:root[data-theme="light"] .story-quiz-review p{color:#385548}
-:root[data-theme="light"] .story-quiz-option{background:#fffefb;color:#172c23;border-color:#a8c6b0}
-:root[data-theme="light"] .story-quiz-option[aria-pressed=true]{background:#f0e4d5;border-color:#b27a4a}
-:root[data-theme="light"] .story-quiz-feedback{background:#f2f6ee;color:#172c23}
-:root[data-theme="light"] .story-quiz-review details{border-color:#a8c6b0;color:#172c23}
-:root[data-theme="light"] .reactions-section{background:linear-gradient(180deg,#eef5e9,#e9eaf0);border-color:#b27a4a55}
-:root[data-theme="light"] .reactions-title{color:#6b3e32}
-:root[data-theme="light"] .reactions-intro,:root[data-theme="light"] .reaction-count-line{color:#385548}
-:root[data-theme="light"] .reaction-btn{background:#fffdf6;color:#172c23;border-color:#b27a4a88}
-:root[data-theme="light"] .reaction-btn.is-selected{background:#f0e4d5;color:#1b5433;border-color:#b27a4a}
-:root[data-theme="light"] .reaction-count{background:#e6ece6;color:#172c23}
-:root[data-theme="light"] .reaction-status{color:#172c23}
-
-/* Khaledoon preview visual refresh: midnight blue, antique gold and copper */
-:root{--kh-green:#d9a85f;--kh-deep:#111a32;--kh-gold:#f1c778;--kh-copper:#c87855;--kh-ink:#080d1b}
-body{background:radial-gradient(ellipse at 88% 3%,#49304b 0,transparent 34%),radial-gradient(ellipse at 4% 22%,#243d60 0,transparent 34%),linear-gradient(180deg,#111a32 0%,#0b1021 72%,#080d1b 100%);background-attachment:fixed}
-.top{border-bottom-color:#d9a85f66}.top a{color:#f1c778;text-decoration:none;font-weight:700}.top a:hover{color:#fff0c9}
-.hero{position:relative;isolation:isolate;max-width:1080px;min-height:390px;padding-top:48px;padding-bottom:48px}.hero:before{content:"";position:absolute;z-index:-1;width:260px;height:260px;top:35px;left:6%;border:1px solid #d9a85f45;border-radius:50%;box-shadow:0 0 80px #c8785522;animation:haloDrift 9s ease-in-out infinite alternate}.hero img{border:1px solid #e2b96caa;box-shadow:0 24px 70px #0008,0 0 0 7px #d9a85f0d;animation:heroFloat 7s ease-in-out infinite;transition:transform .35s,box-shadow .35s}.hero img:hover{transform:translateY(-5px) scale(1.012);box-shadow:0 28px 80px #0009,0 0 0 7px #d9a85f18}
-h1{color:#f5d99c;text-shadow:0 6px 30px #0007}.kicker{color:#e7b86a}.subtitle{color:#d9deed}a{color:#f0c57e}
-article{background:linear-gradient(145deg,#202945ee,#171d34f5);border-color:#d9a85f45;box-shadow:0 24px 65px #0003}h2{color:#f2cf8c}.dialogue{border-right-color:#d9a85f;background:linear-gradient(115deg,#ffffff08,#c878550d);box-shadow:inset 0 0 0 1px #ffffff05}.dialogue strong{color:#f2c578}.dialogue.narrator{border-right-color:#c87855}.sources{border-color:#d9a85f55;background:#0b1123aa}.tools button{border-color:#d9a85f88;background:#252b45;color:#fff3d6;transition:transform .2s,background .2s,border-color .2s}.tools button:hover{transform:translateY(-2px);background:#34334b;border-color:#f1c778}
-.history-journey{margin:46px 0 20px}.section-heading{max-width:760px;margin:0 auto 24px;text-align:center}.section-heading h2{margin:.35em 0;font-size:clamp(1.7rem,4vw,2.45rem)}.section-heading p{color:#d5d9e7;margin:0 auto;max-width:680px}.timeline-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:stretch}.moment-card{overflow:hidden;padding:0!important;border:1px solid #d9a85f44!important;border-radius:18px!important;background:linear-gradient(155deg,#242d49,#141b32)!important;box-shadow:0 14px 38px #0003!important;animation:riseIn .8s both;transition:transform .3s,border-color .3s,box-shadow .3s}.moment-card:nth-child(2){animation-delay:.14s}.moment-card:nth-child(3){animation-delay:.28s}.moment-card:hover{transform:translateY(-7px);border-color:#e8bf77!important;box-shadow:0 24px 55px #0006,0 0 0 1px #e8bf7722!important}.moment-card img{display:block;width:100%;height:168px;max-height:none;object-fit:cover;border:0;border-bottom:1px solid #d9a85f55;border-radius:0;box-shadow:none;animation:none}.moment-content{padding:18px 18px 20px}.moment-date{display:inline-block;padding:4px 10px;border:1px solid #d9a85f66;border-radius:99px;background:#d9a85f12;color:#f3c878;font-size:.83rem;font-weight:800}.moment-content h3{font-size:1.15rem;line-height:1.6;color:#f5d99c;margin:12px 0 8px}.moment-content p{font-size:.95rem;color:#e0e3ee;line-height:1.9;margin:0}.historian-note{position:relative;overflow:hidden;margin:24px 0 8px;padding:25px clamp(20px,4vw,34px);border:1px solid #c8785577;border-radius:18px;background:linear-gradient(115deg,#38283b99,#202945dd);box-shadow:0 15px 40px #0002}.historian-note:after{content:"✦";position:absolute;left:22px;top:4px;font-size:5rem;color:#d9a85f18;line-height:1}.historian-note h3{color:#f5d99c;font-size:1.35rem;margin:4px 0 8px}.historian-note p{position:relative;z-index:1;color:#e5e6ef;margin:0;max-width:850px}
-:root[data-theme="light"] body{background:linear-gradient(180deg,#f8f0df,#e9eaf0);color:#242338}:root[data-theme="light"] article{background:#fffaf0eF;border-color:#b27a4a55}:root[data-theme="light"] .dialogue,:root[data-theme="light"] .sources{background:#fffaf0;color:#242338;border-color:#b27a4a66}:root[data-theme="light"] .subtitle,:root[data-theme="light"] .section-heading p,:root[data-theme="light"] .moment-content p,:root[data-theme="light"] .historian-note p{color:#3c3c50}:root[data-theme="light"] h1,:root[data-theme="light"] h2,:root[data-theme="light"] .moment-content h3,:root[data-theme="light"] .historian-note h3{color:#77472f}:root[data-theme="light"] .moment-card{background:linear-gradient(155deg,#fffaf0,#f0e8dc)!important;border-color:#b27a4a66!important}:root[data-theme="light"] .moment-date{color:#70452e;background:#d9a85f22}:root[data-theme="light"] .historian-note{background:linear-gradient(115deg,#f5e5d8,#e7e9f3)}:root[data-theme="light"] .dialogue strong{color:#86542d}:root[dir="ltr"] .dialogue{border-left-color:#d9a85f}:root[dir="ltr"] .dialogue.narrator{border-left-color:#c87855}
-@keyframes riseIn{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes heroFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}@keyframes haloDrift{from{transform:translate(0,0) scale(.96);opacity:.5}to{transform:translate(18px,10px) scale(1.04);opacity:1}}
-@media(max-width:760px){.timeline-grid{grid-template-columns:1fr}.moment-card{display:grid;grid-template-columns:minmax(110px,.38fr) minmax(0,1fr)}.moment-card img{height:100%;min-height:190px;border-bottom:0;border-left:1px solid #d9a85f55}.moment-content{padding:14px}.moment-content h3{font-size:1.03rem}.moment-content p{font-size:.91rem}.hero{min-height:0}.hero:before{width:170px;height:170px;top:15px;left:2%}}
-@media(max-width:430px){.moment-card{display:block}.moment-card img{height:180px;min-height:0;border-left:0;border-bottom:1px solid #d9a85f55}.moment-content{padding:16px}}
-@media(prefers-reduced-motion:reduce){.hero:before,.hero img,.moment-card{animation:none!important;transition:none!important}.moment-card:hover,.hero img:hover{transform:none}}
-
-
-@media print{.moment-card,.historian-note{background:#fff!important;color:#111!important;border-color:#aaa!important;box-shadow:none!important}.moment-card{break-inside:avoid;animation:none!important}.moment-content h3,.moment-content p,.historian-note h3,.historian-note p,.moment-date{color:#111!important}.moment-card img{max-height:110px}}
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css?v=20261020-visual-system-v1">
 </head>
 <body data-story-slug="011" data-disable-story-extras data-splash="cover-popup.svg" data-splash-alt="رسم توضيحي رمزي لخالد بن الوليد" data-splash-title="خالد بن الوليد — من أُحد إلى سيف الله" data-splash-subtitle="حكاية قائد تغيّر موقفه، ثم صار من أبرز قادة المسلمين" data-splash-top="#111a32" data-splash-bottom="#080d1b">
-<header class="top"><a href="../../../khaledoon/collections/islamic.html" data-i18n="backToSection">← شخصيات إسلامية</a><a href="../../../index.html" data-i18n="homeLink">خالدون عبر التاريخ</a></header>
-<section class="hero"><div><div class="kicker" data-i18n="section">شخصيات إسلامية · حكاية قيد المعاينة</div><h1 data-i18n="title">خالد بن الوليد — من أُحد إلى سيف الله</h1><p class="subtitle" data-i18n="subtitle">حكاية قائد تغيّر موقفه، ثم صار من أبرز قادة المسلمين</p><p data-i18n="coverNote">رسم توضيحي رمزي، وليس صورة تاريخية أصلية.</p></div><img src="cover.svg" alt="رسم توضيحي رمزي لخالد بن الوليد" data-i18n-alt="coverAlt"></section>
+<header class="topbar"><a href="../../../khaledoon/collections/islamic.html" data-i18n="backToSection">← شخصيات إسلامية</a><a href="../../../index.html" data-i18n="homeLink">خالدون عبر التاريخ</a></header>
+<section class="hero"><div class="hero-content"><div class="kicker eyebrow" data-i18n="section">شخصيات إسلامية · حكاية قيد المعاينة</div><h1 data-i18n="title">خالد بن الوليد — من أُحد إلى سيف الله</h1><p class="subtitle hero-subtitle" data-i18n="subtitle">حكاية قائد تغيّر موقفه، ثم صار من أبرز قادة المسلمين</p><p data-i18n="coverNote">رسم توضيحي رمزي، وليس صورة تاريخية أصلية.</p></div><div class="hero-art"><img src="cover.svg" alt="رسم توضيحي رمزي لخالد بن الوليد" data-i18n-alt="coverAlt"></div></section>
 <main><div class="tools"><button type="button" id="print-story" data-i18n="print">طباعة الحكاية</button><button type="button" id="share-wa" data-i18n="shareWhatsApp">مشاركة عبر واتساب</button><button type="button" id="share-fb" data-i18n="shareFacebook">مشاركة عبر فيسبوك</button><button type="button" id="lang" data-i18n="language">English</button></div>
 <article>
 <div class="dialogue"><strong data-i18n="karmaLabel">كارما:</strong> <span data-i18n="p1">إزاي يا ترى شخص كان بيحارب المسلمين، وبعد كده بقى من أشهر قادتهم؟ هو الإنسان ممكن يغيّر طريقه فعلًا؟</span></div>
