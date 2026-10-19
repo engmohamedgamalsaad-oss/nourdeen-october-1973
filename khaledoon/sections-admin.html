@@ -12,8 +12,8 @@
 <body><header class="top"><div class="wrap"><div class="brand">خالدون عبر التاريخ</div><div>إدارة الأقسام — مسودة قبل الاعتماد</div></div></header>
 <main class="wrap">
 <section class="panel"><h1>إدارة الأقسام</h1>
-<p class="note">تنبيه مهم: هذه الواجهة تنشئ مسودة قابلة للمعاينة والتنزيل فقط. لا تغيّر الموقع المنشور تلقائيًا؛ لأن الحفظ الفعلي يتطلب ربطًا آمنًا بملفات GitHub، كما أن القسم الجديد يحتاج صفحة مجموعة وروابط على الموقع قبل أن يظهر للزوار. لن أدّعي أن القسم اتنشر بمجرد حفظ المسودة هنا.</p>
-<div class="actions"><button class="btn" id="reload">إعادة تحميل ملف الأقسام</button><button class="btn" id="download">تنزيل ملف sections.json</button><a class="btn" href="preview.html">فتح المعاينة المرئية</a><a class="btn" href="admin.html">العودة إلى الأدمن</a></div>
+<p class="note">تنبيه مهم: هذه الواجهة تحفظ مسودة الأقسام تلقائيًا في هذا المتصفح لاستكمالها لاحقًا، وتسمح بتنزيل ملفها. لا تغيّر الموقع المنشور تلقائيًا؛ لأن الحفظ الفعلي يتطلب ربطًا آمنًا بملفات GitHub، كما أن القسم الجديد يحتاج صفحة مجموعة وروابط على الموقع قبل أن يظهر للزوار. لن أدّعي أن القسم اتنشر بمجرد حفظ المسودة هنا.</p>
+<div class="actions"><button class="btn" id="reload">إعادة تحميل ملف الأقسام</button><button class="btn" id="resetDraft">مسح المسودة المحفوظة</button><button class="btn" id="download">تنزيل ملف sections.json</button><a class="btn" href="preview.html">فتح المعاينة المرئية</a><a class="btn" href="admin.html">العودة إلى الأدمن</a></div>
 <div class="status" id="status" role="status">جارٍ تحميل تعريفات الأقسام…</div></section>
 <section class="panel"><h2>إضافة قسم جديد</h2>
 <div class="grid"><label class="field">اسم القسم بالعربية<input id="newTitle" maxlength="90" placeholder="مثال: الشخصيات الإسلامية"></label><label class="field">معرّف القسم بالإنجليزية<input id="newId" maxlength="40" dir="ltr" placeholder="islamic-figures"></label></div>
@@ -25,9 +25,10 @@
 <script>
 (function(){
 'use strict';
-var base={version:1,main:'../index.html',sections:[]},data=null,hidden=new Set(),colors={};
+var base={version:1,main:'../index.html',sections:[]},data=null,hidden=new Set(),colors={},baseSnapshot='',draftKey='kh_sections_manager_draft_v1';
 var $=function(id){return document.getElementById(id)};
 function say(t){$('status').textContent=t}
+function saveDraft(){if(!data||!baseSnapshot)return;try{localStorage.setItem(draftKey,JSON.stringify({baseSnapshot:baseSnapshot,data:data,hidden:Array.from(hidden),colors:colors,savedAt:new Date().toISOString()}))}catch(e){say('تعذر حفظ المسودة في المتصفح؛ نزّل ملف JSON للاحتفاظ بنسخة.')}}
 function validId(v){return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(v)}
 function safeText(v){return String(v||'').trim()}
 function render(){
@@ -41,23 +42,23 @@ var count=document.createElement('div');count.className='meta';count.textContent
 top.append(title,count);card.appendChild(top);
 var fields=document.createElement('div');fields.className='grid';fields.style.marginTop='10px';
 var label=document.createElement('label');label.className='field';label.textContent='اسم القسم';
-var input=document.createElement('input');input.value=sec.title||'';input.maxLength=90;input.addEventListener('input',function(){sec.title=input.value;title.textContent=input.value||sec.id});label.appendChild(input);fields.appendChild(label);
+var input=document.createElement('input');input.value=sec.title||'';input.maxLength=90;input.addEventListener('input',function(){sec.title=input.value;title.textContent=input.value||sec.id;saveDraft()});label.appendChild(input);fields.appendChild(label);
 var idLabel=document.createElement('label');idLabel.className='field';idLabel.textContent='معرّف القسم (لا تغيّره لقسم مرتبط بحكايات)';
 var idInput=document.createElement('input');idInput.value=sec.id||'';idInput.dir='ltr';idInput.readOnly=(sec.stories||[]).length>0;idInput.title=idInput.readOnly?'لا يمكن تغيير المعرّف مع وجود حكايات مرتبطة':'';idInput.addEventListener('change',function(){var v=safeText(idInput.value);if(!validId(v)||data.sections.some(function(s,j){return j!==i&&s.id===v})){idInput.value=sec.id;say('المعرّف غير صالح أو مستخدم بالفعل.');return}sec.id=v;render()});idLabel.appendChild(idInput);fields.appendChild(idLabel);card.appendChild(fields);
 var cs=document.createElement('div');cs.className='colors';
-[['اللون الخارجي','outer','#b8874b'],['اللون الداخلي','inner','#102b35']].forEach(function(x){var l=document.createElement('label');l.className='field';l.textContent=x[0];var c=document.createElement('input');c.type='color';var key=sec.id;c.value=(colors[key]&&colors[key][x[1]])||x[2];c.addEventListener('input',function(){colors[key]=colors[key]||{};colors[key][x[1]]=c.value;paint()});l.appendChild(c);cs.appendChild(l)});card.appendChild(cs);
+[['اللون الخارجي','outer','#b8874b'],['اللون الداخلي','inner','#102b35']].forEach(function(x){var l=document.createElement('label');l.className='field';l.textContent=x[0];var c=document.createElement('input');c.type='color';var key=sec.id;c.value=(colors[key]&&colors[key][x[1]])||x[2];c.addEventListener('input',function(){colors[key]=colors[key]||{};colors[key][x[1]]=c.value;paint();saveDraft()});l.appendChild(c);cs.appendChild(l)});card.appendChild(cs);
 var flag=document.createElement('div');flag.className='hiddenflag';flag.textContent=hidden.has(sec.id)?'مخفي في المسودة فقط':'ظاهر في المسودة';card.appendChild(flag);
 var prev=document.createElement('div');prev.className='preview';prev.textContent=sec.title||sec.id;prev.dataset.preview=sec.id;prev.style.setProperty('--outer',(colors[sec.id]||{}).outer||'#b8874b');prev.style.setProperty('--inner',(colors[sec.id]||{}).inner||'#102b35');card.appendChild(prev);
 var acts=document.createElement('div');acts.className='actions';
 var toggle=document.createElement('button');toggle.className='btn';toggle.textContent=hidden.has(sec.id)?'إظهار في المسودة':'إخفاء في المسودة';toggle.addEventListener('click',function(){if(hidden.has(sec.id))hidden.delete(sec.id);else hidden.add(sec.id);render()});acts.appendChild(toggle);
 var del=document.createElement('button');del.className='btn';del.textContent='حذف من المسودة';del.addEventListener('click',function(){var n=(sec.stories||[]).length;if(n){say('لا يمكن حذف «'+sec.title+'» لأن به '+n+' حكاية مرتبطة. انقل الحكايات أولًا.');return}if(!confirm('حذف القسم «'+sec.title+'» من المسودة فقط؟'))return;data.sections.splice(i,1);delete colors[sec.id];hidden.delete(sec.id);render();say('حُذف القسم من المسودة فقط؛ نزّل الملف إذا أردت متابعة المراجعة.')});acts.appendChild(del);card.appendChild(acts);list.appendChild(card)
 });
-say('تم تحميل '+data.sections.length+' أقسام. التعديلات الحالية مسودة في الصفحة فقط.');
+saveDraft();say('تم تحميل '+data.sections.length+' أقسام. المسودة محفوظة في هذا المتصفح فقط، ولم تتغير ملفات الموقع.');
 }
 function paint(){document.querySelectorAll('[data-preview]').forEach(function(p){var c=colors[p.dataset.preview]||{};p.style.setProperty('--outer',c.outer||'#b8874b');p.style.setProperty('--inner',c.inner||'#102b35')});$('newPreview').style.setProperty('--outer',$('newOuter').value);$('newPreview').style.setProperty('--inner',$('newInner').value)}
-async function load(){say('جارٍ تحميل ملف الأقسام…');try{var r=await fetch('../stories/sections.json',{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);var j=await r.json();if(!Array.isArray(j.sections))throw new Error('صيغة غير متوقعة');data=JSON.parse(JSON.stringify(j));hidden=new Set();colors={};render()}catch(e){say('تعذر قراءة stories/sections.json من هذا المسار. لم يتم تعديل أي ملف.');}}
+async function load(ignoreDraft){say('جارٍ تحميل ملف الأقسام…');try{var r=await fetch('../stories/sections.json',{cache:'no-store'});if(!r.ok)throw new Error('HTTP '+r.status);var j=await r.json();if(!Array.isArray(j.sections))throw new Error('صيغة غير متوقعة');baseSnapshot=JSON.stringify(j);data=JSON.parse(JSON.stringify(j));hidden=new Set();colors={};var note='';if(!ignoreDraft){try{var saved=JSON.parse(localStorage.getItem(draftKey)||'null');if(saved&&saved.baseSnapshot===baseSnapshot&&saved.data&&Array.isArray(saved.data.sections)){data=saved.data;hidden=new Set(Array.isArray(saved.hidden)?saved.hidden:[]);colors=saved.colors&&typeof saved.colors==='object'?saved.colors:{};note='استُعيدت المسودة المحفوظة من هذا المتصفح.'}else if(saved){localStorage.removeItem(draftKey);note='كانت هناك مسودة مبنية على نسخة أقدم؛ تم تجاهلها وبدأنا من ملف الأقسام الحالي.'}}catch(e){localStorage.removeItem(draftKey)}}render();if(note)say(note+' تظل التغييرات مسودة محلية ولا تغيّر الموقع المنشور.')}catch(e){say('تعذر قراءة stories/sections.json من هذا المسار. لم يتم تعديل أي ملف.');}}
 $('add').addEventListener('click',function(){var title=safeText($('newTitle').value),id=safeText($('newId').value);if(!title){say('اكتب اسم القسم أولًا.');return}if(!validId(id)){say('اكتب معرّفًا بالإنجليزية مثل islamic-figures.');return}if(data.sections.some(function(s){return s.id===id})){say('المعرّف مستخدم بالفعل.');return}data.sections.push({id:id,title:title,stories:[]});colors[id]={outer:$('newOuter').value,inner:$('newInner').value};$('newTitle').value='';$('newId').value='';render();paint();say('أُضيف القسم إلى المسودة فقط. يلزم إنشاء صفحة القسم وربطها بالموقع قبل النشر.')});
 $('download').addEventListener('click',function(){if(!data)return;var out=JSON.parse(JSON.stringify(data));out.sections.forEach(function(s){var c=colors[s.id]||{};if(c.outer||c.inner)s.design={outer:c.outer||'#b8874b',inner:c.inner||'#102b35'};s.draftOnlyHidden=hidden.has(s.id);});var blob=new Blob([JSON.stringify(out,null,2)+'\n'],{type:'application/json;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='sections.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000);say('تم تنزيل ملف المسودة. لم يتم رفعه إلى GitHub أو نشره تلقائيًا.')});
-$('reload').addEventListener('click',load);['newOuter','newInner'].forEach(function(id){$(id).addEventListener('input',paint)});load();
+$('reload').addEventListener('click',function(){load(false)});$('resetDraft').addEventListener('click',function(){if(!confirm('مسح المسودة المحفوظة في هذا المتصفح والرجوع لملف الأقسام الحالي؟'))return;try{localStorage.removeItem(draftKey)}catch(e){}load(true)});['newOuter','newInner'].forEach(function(id){$(id).addEventListener('input',paint)});load(false);
 })();
 </script></body></html>
