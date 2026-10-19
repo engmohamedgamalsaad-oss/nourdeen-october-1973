@@ -93,6 +93,7 @@ var params=new URLSearchParams(location.search);
 if(params.get('story')==='1'){
  var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
  siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
+ var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
  document.querySelectorAll('[data-view]').forEach(function(x){x.classList.remove('active')});
  var draft=null;
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
@@ -166,7 +167,8 @@ if(params.get('story')==='1'){
      var doc=frame.contentDocument;
      if(!doc||!doc.body)return;
      var style=doc.createElement('style');
-     style.textContent='.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
+     var accents={october:'#f0c878',science:'#8ad9e8',learning:'#d78bb2',fame:'#e2b36d',history:'#d4b7ff',curriculum:'#9bb7ff',readers:'#f5b37e',islamic:'#78c59a'};var accent=accents[key]||'#d7ad66';
+     style.textContent=':root{--gold:'+accent+'!important;--lav:'+accent+'!important}.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
      doc.head.appendChild(style);
      doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
      var title=doc.querySelector('.hero h1,[data-i18n="title"]');
