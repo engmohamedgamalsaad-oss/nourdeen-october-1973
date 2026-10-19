@@ -587,10 +587,11 @@ if(!isNew){
 function confirmDelete(it){
  var name=it.title||'حكاية بلا عنوان',sv=storyFor(it);
  var msg='حذف «'+name+'» نهائيًا من لوحة الإدارة؟\n\nلا يمكن التراجع عن الحذف.';
- if(it.status==='published'||sv)msg+='\n\nتنبيه: الحكاية منشورة أو لها صفحة على الموقع؛ الحذف يزيل سجلها من الإدارة فقط ولا يحذف صفحتها. لإخفائها من الزوار استخدم زر «إخفاء».';
+ if(it.status==='published'||sv)msg+='\n\nتنبيه: سيتم إخفاؤها من قوائم الزوار قبل حذف سجل الإدارة، لكن ملف HTML الثابت يظل متاحًا لمن يعرف رابطه؛ حذفه نهائيًا يتطلب إزالة الملف من GitHub.';
  return confirm(msg);
 }
 async function hideStaticStoryBeforeDelete(it){
+ if(!vLoaded)await loadVisInner();
  var story=storyFor(it);
  if(!story||story.id==null)return;
  var id=String(story.id);
