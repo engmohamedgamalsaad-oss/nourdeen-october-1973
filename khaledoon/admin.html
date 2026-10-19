@@ -279,6 +279,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
   var payload={};
   if(table==='submitted_stories'){
    ['student_name','grade','title','subtitle','body','sources','color','story_number'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
+   meta.karma_text=draft.karma_text||meta.karma_text||'';meta.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';meta.translations=draft.translations||meta.translations||{};meta.history_note=draft.history_note||meta.history_note||'';meta.images_note=draft.images_note||meta.images_note||'';meta.figure_name=draft.figure_name||meta.figure_name||draft.title;meta.section_key='october';meta.narrator_name=draft.narrator_name||draft.student_name||meta.narrator_name||'';meta.narrator_grade=draft.narrator_grade||draft.grade||meta.narrator_grade||'';
    payload.status='published';
   }else{
    ['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent'].forEach(function(k){if(draft[k]!==undefined)payload[k]=draft[k]});
@@ -302,7 +303,7 @@ function legacyCard(it){
  box.appendChild(el('div','meta2','حكايات أكتوبر 1973 • '+(it.student_name||'اسم غير مسجل')+' • '+(it.grade||'الصف غير مسجل')+' • '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم الحكاية: '+String(it.story_number).padStart(3,'0'):'')));
  var legacyMeta=Object.assign({},it.story_meta||{}),legacySaved=Object.assign({},legacyMeta.pending_draft||{},it);
  var name=inp(it.student_name,80),grade=inp(it.grade,60),title=inp(it.title,140),subtitle=inp(it.subtitle,200),body=area(it.body,10,12000),sources=area(it.sources,4,2000),status=sel({pending:'قيد المراجعة',published:'منشورة',rejected:'مرفوضة'},it.status||'pending');
- var karma=area(legacyMeta.karma_text||legacySaved.karma_text,5,8000),quizJson=area(legacyMeta.question_bank_json||legacySaved.question_bank_json,8,18000),hist=area(legacySaved.history_note||it.history_note,4,10000),imagesNote=area(legacySaved.images_note||it.images_note,4,5000);
+ var karma=area(legacyMeta.karma_text||legacySaved.karma_text,5,8000),quizJson=area(legacyMeta.question_bank_json||legacySaved.question_bank_json,8,18000),hist=area(legacyMeta.history_note||legacySaved.history_note||it.history_note,4,10000),imagesNote=area(legacyMeta.images_note||legacySaved.images_note||it.images_note,4,5000);
  var g=el('div','fgrid');g.appendChild(fld('اسم الطالب',name));g.appendChild(fld('الصف',grade));g.appendChild(fld('العنوان',title));g.appendChild(fld('العنوان الفرعي',subtitle));box.appendChild(g);
  box.appendChild(fld('نص الحكاية',body));box.appendChild(fld('صوت كارما الطفولي',karma,'مقاطع فضول وأسئلة وملاحظات؛ يجب أن يكون النص خاصًا بهذه الحكاية.'));
  box.appendChild(fld('في ضوء التاريخ',hist,'السياق والتحقق التاريخي والمعلومات المختلف عليها.'));
@@ -912,7 +913,8 @@ async function handleStoryPreviewDecision(event){
  try{context=JSON.parse(localStorage.getItem('kh-story-preview-context')||'null')}catch(e){}
  if(!context&&event.data.draft)context=event.data.draft;
  if(!context||!context.submission_id||!context.submission_table){say('err','وصل قرار المعاينة لكن لم نعثر على سجل الحكاية المرتبط. افتح المعاينة من بطاقة الحكاية مرة أخرى.');return}
- var table=context.submission_table,record=Object.assign({},context.record_data||{}),meta=Object.assign({},context.story_meta||{});
+ var table=context.submission_table,record=Object.assign({},context.record_data||{}),meta=Object.assign({},context.story_meta||{}),previewDraft=event.data.draft||{};
+ function enrichPending(target){['figure_name','section_key','section_label','history_note','images_note','karma_text','question_bank_json','translations','preview_source_url','narrator_name','narrator_grade','original_body','admin_notes','consent','stage','subject','school_grade','section','color'].forEach(function(k){if(previewDraft[k]!==undefined)target[k]=previewDraft[k]})}
  meta.preview_review={decision:action==='approve'?'approved_waiting_for_github_upload':'returned_to_draft',reviewed_at:new Date().toISOString(),note:action==='approve'?'المعاينة مقبولة؛ لم يتم النشر الحي بعد.':'رُفضت المعاينة فقط؛ الحكاية الأصلية لم تُرفض.',static_story_id:event.data.static_story_id||null,static_story_path:event.data.static_story_path||null,bundle_downloaded:!!event.data.bundle_downloaded,prepared_page_url:event.data.prepared_page_url||''};
  record.story_meta=meta;
  if(action==='approve'){
@@ -921,13 +923,13 @@ async function handleStoryPreviewDecision(event){
  }else{
   if(record.status!=='published')record.status='pending';
  }
- if(record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;meta.pending_draft.karma_text=rdMeta.karma_text||'';meta.pending_draft.question_bank_json=rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}
+ if(record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||rdMeta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'إرجاع الحكاية للمسودة';
  say('ok','جارٍ '+buttonLabel+'…');
  try{
   var updatePayload=record;
   if(record.status==='published'){
-   var pubMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;meta.pending_draft.karma_text=pubMeta.karma_text||meta.karma_text||'';meta.pending_draft.question_bank_json=pubMeta.question_bank_json||meta.question_bank_json||'';meta.pending_draft.preview_source_url=pubMeta.preview_source_url||meta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;
+   var pubMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||pubMeta.karma_text||meta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||pubMeta.question_bank_json||meta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||pubMeta.preview_source_url||meta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;
    updatePayload={story_meta:meta};
   }
   var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(updatePayload)});
