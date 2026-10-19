@@ -135,6 +135,11 @@ async function download(draft,opts){
  var id=await nextId(),accent=ACCENTS[section]||'#d5b7ff';
  var root='stories/'+section+'/'+id+'/',baseUrl=location.origin+'/nourdeen-october-1973';
  var data=dataJson(draft,id,section),quiz=report.quiz;quiz.id=id;quiz.title=draft.figure_name||draft.title;
+ var indexResponse=await fetch('../stories/index.json?bundle='+Date.now(),{cache:'no-store'});if(!indexResponse.ok)throw new Error('تعذر قراءة فهرس الحكايات الحالي؛ لم أنشئ حزمة قد تستبدل الفهرس ببيانات ناقصة.');
+ var storyIndex=await indexResponse.json();if(!Array.isArray(storyIndex))throw new Error('صيغة فهرس الحكايات غير متوقعة؛ لم أنشئ الحزمة.');
+ if(storyIndex.some(function(x){return String(x.id||'').padStart(3,'0')===id||String(x.path||'').split('/').filter(Boolean).join('/')===('stories/'+section+'/'+id)}))throw new Error('رقم الحكاية ظهر في الفهرس أثناء التجهيز؛ أعد فتح المعاينة لتحديد رقم جديد.');
+ var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:'stories/'+section+'/'+id+'/'};
+ storyIndex.push(indexEntry);
  var source=sourceRows(draft.sources),sourceMd='# مصادر الحكاية: '+draft.title+'\n\n'+source.map(function(x){return '- '+(x.url?'['+x.label+']('+x.url+')':x.line)}).join('\n')+'\n';
  var theme='';try{var tr=await fetch('../stories/history/005/theme.css',{cache:'no-store'});if(tr.ok)theme=await tr.text()}catch(e){}
  theme+='\n:root{--gold:'+accent+'!important;--accent:'+accent+'!important}\n.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}\n';
@@ -142,6 +147,7 @@ async function download(draft,opts){
   {path:root+'index.html',content:storyHtml(draft,id,section,accent,baseUrl)},
   {path:root+'theme.css',content:theme},
   {path:root+'data.json',content:JSON.stringify(data,null,2)+'\n'},
+  {path:'stories/index.json',content:JSON.stringify(storyIndex,null,2)+'\n'},
   {path:root+'translations.js',content:translatedRows(draft,id)},
   {path:root+'cover.svg',content:svgCover(draft,id,accent,false)},
   {path:root+'cover-popup.svg',content:svgCover(draft,id,accent,true)},
@@ -150,7 +156,7 @@ async function download(draft,opts){
  ];
  var readme='# حزمة حكاية خالدون — '+draft.title+'\n\n'+
   '- المعرّف المقترح: '+id+'\n- القسم: '+section+'\n- المسار: '+root+'\n- الحالة في data.json: published=true لأن هذه الحزمة أُنشئت بعد قبول المعاينة.\n\n'+
-  '## الرفع من GitHub\n1. افتح مستودع engmohamedgamalsaad-oss/nourdeen-october-1973.\n2. ارفع كل الملفات مع الحفاظ على المسارات داخل الحزمة؛ لا تضعها داخل مجلد ZIP إضافي.\n3. ارفع index.html وtheme.css وdata.json وtranslations.js وملفي الغلاف إلى '+root+'.\n4. ارفع بنك الأسئلة إلى stories/quizzes/'+id+'.json، والمصادر إلى '+root+'sources.md.\n5. انتظر GitHub Actions، وتحقق من صفحة الحكاية الحية. لا تغيّر حالة سجل الإدارة إلى منشور قبل نجاح التحقق.\n6. ارجع إلى لوحة الإدارة واضغط «تأكيد النشر بعد الرفع».\n\n## تنبيهات\n- الغلافان رسوم توضيحية برمجية وليسا صورًا تاريخية أرشيفية. استبدلهما بصور موثقة فقط بعد التحقق من الترخيص.\n- راجع المسار والرقم مقابل stories/index.json قبل الرفع إذا جرى اعتماد حكاية أخرى بالتزامن.\n- هذه الحزمة لا تعدّل قاعدة البيانات ولا تنشر بنفسها؛ الرفع إلى GitHub خطوة منفصلة.\n';
+  '## الرفع من GitHub\n1. افتح مستودع engmohamedgamalsaad-oss/nourdeen-october-1973.\n2. ارفع كل الملفات مع الحفاظ على المسارات داخل الحزمة؛ لا تضعها داخل مجلد ZIP إضافي.\n3. ارفع index.html وtheme.css وdata.json وtranslations.js وملفي الغلاف إلى '+root+'.\n4. ارفع ملف stories/index.json المرفق أيضًا حتى تظهر الحكاية في قسمها. هذا الملف مبني على الفهرس الذي قرأه النظام وقت إنشاء الحزمة؛ قبل استبداله افتح النسخة الحالية وتأكد أنها لم تتغير منذ ذلك الوقت، ولا تستبدل فهرسًا أحدث. إذا تغير، أضف فقط العنصر الجديد الذي يحمل id '+id+' إلى النسخة الحالية.\n5. ارفع بنك الأسئلة إلى stories/quizzes/'+id+'.json، والمصادر إلى '+root+'sources.md.\n6. انتظر GitHub Actions، وتحقق من صفحة الحكاية الحية وظهورها في القسم. لا تغيّر حالة سجل الإدارة إلى منشور قبل نجاح التحقق.\n7. ارجع إلى لوحة الإدارة واضغط «تأكيد النشر بعد الرفع».\n\n## تنبيهات\n- الغلافان رسوم توضيحية برمجية وليسا صورًا تاريخية أرشيفية. استبدلهما بصور موثقة فقط بعد التحقق من الترخيص.\n- راجع المسار والرقم مقابل stories/index.json قبل الرفع إذا جرى اعتماد حكاية أخرى بالتزامن.\n- هذه الحزمة لا تعدّل قاعدة البيانات ولا تنشر بنفسها؛ الرفع إلى GitHub خطوة منفصلة.\n';
  files.push({path:root+'README-upload.md',content:readme});
  var blob=zipFiles(files),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='khaledoon-story-'+section+'-'+id+'.zip';a.click();setTimeout(function(){URL.revokeObjectURL(url)},2000);
  return {id:id,section:section,path:root,filename:a.download,files:files.map(function(f){return f.path}),published:opts.approved===true};
