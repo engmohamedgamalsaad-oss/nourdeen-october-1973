@@ -77,6 +77,7 @@
  <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
+<script src="assets/story-template-bundle.js"></script>
 <script>
 (function(){
 var views={site:document.getElementById('siteView'),story:document.getElementById('storyView')};
@@ -143,7 +144,7 @@ if(params.get('story')==='1'){
      notice.style.cssText='position:sticky;top:0;z-index:2147483647;padding:8px 14px;text-align:center;background:#f0d8aa;color:#17232a;font:700 14px Cairo,Tahoma,sans-serif;border-bottom:2px solid #9b783c';
      parsed.body.insertBefore(notice,parsed.body.firstChild);
      frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
-     frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
+     draft.source_preview_loaded=true;frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
      put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
     });
    }
@@ -206,7 +207,21 @@ if(params.get('story')==='1'){
   }
   })(draft);
  }
- function decide(action){if(window.opener&&!window.opener.closed){window.opener.postMessage({type:'kh-story-preview-decision',action:action,draft:draft},location.origin);if(action==='reject'){document.getElementById('reviewMeta').textContent='تم إرسال رفض المعاينة إلى لوحة الإدارة؛ ستعود الحكاية إلى مسودة.';setTimeout(function(){window.close()},500)}else document.getElementById('reviewMeta').textContent='تم إرسال قبول المعاينة إلى لوحة الإدارة. لن تُعتبر الحكاية منشورة قبل رفع ملفاتها النهائية إلى GitHub والتحقق من ظهورها.'}else{document.getElementById('reviewMeta').textContent='لوحة الإدارة غير مفتوحة. ارجع إليها وافتح المعاينة من بطاقة الحكاية قبل اتخاذ القرار.'}}
+ async function decide(action){
+ if(!window.opener||window.opener.closed){put('reviewMeta','لوحة الإدارة غير مفتوحة. ارجع إليها وافتح المعاينة من بطاقة الحكاية قبل اتخاذ القرار.');return}
+ var bundleInfo=null;
+ if(action==='approve'&&!draft.source_preview_loaded){
+  try{
+   if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')throw new Error('قالب التصدير الاحتياطي غير متاح.');
+   put('reviewMeta','جارٍ فحص الترجمات وبنك الأسئلة والمصادر وتجهيز ملفات الحكاية…');
+   bundleInfo=await window.KHStoryBundle.download(draft,{approved:true});
+  }catch(error){put('reviewMeta','لم تُقبل المعاينة ولم يتم تجهيز حزمة نشر؛ استكمل النواقص ثم حاول مرة أخرى. '+(error&&error.message?error.message:''));return}
+ }
+ window.opener.postMessage({type:'kh-story-preview-decision',action:action,draft:draft,static_story_id:bundleInfo?bundleInfo.id:null,static_story_path:bundleInfo?bundleInfo.path:null,bundle_downloaded:!!bundleInfo,prepared_page_url:draft.preview_source_url||''},location.origin);
+ if(action==='reject'){put('reviewMeta','تم إرسال رفض المعاينة إلى لوحة الإدارة؛ ستعود الحكاية إلى مسودة.');setTimeout(function(){window.close()},500)}
+ else if(bundleInfo)put('reviewMeta','تم قبول المعاينة وتجهيز حزمة ZIP: '+bundleInfo.filename+' . ارفع محتوياتها إلى GitHub مع الحفاظ على المسارات، ثم تحقق من الصفحة الحية.');
+ else put('reviewMeta','تم إرسال قبول المعاينة إلى لوحة الإدارة. اعتمدت المعاينة صفحة HTML المجهزة مسبقًا؛ يلزم رفع/دمج ملفاتها إلى GitHub والتحقق من ظهورها قبل اعتبارها منشورة.');
+}
  document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
  document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
  document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
