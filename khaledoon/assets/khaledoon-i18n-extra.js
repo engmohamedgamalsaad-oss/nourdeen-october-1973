@@ -27,7 +27,7 @@ function apply(){
  var w=document.createTreeWalker(document.body,4),n;
  while(n=w.nextNode()){
   var p=n.parentNode.nodeName;if(p==='SCRIPT'||p==='STYLE')continue;
-  var o=n.__o!==undefined?n.__o:n.data,t=o.trim(),d=i===4?((window.KH_LANG&&window.KH_LANG.translate?window.KH_LANG.translate('de',t):(window.KH_DE&&window.KH_DE[t]))||(D[t]&&D[t][0])):(D[t]&&D[t][i-1]);
+  var o=n.__o!==undefined?n.__o:n.data,t=o.trim(),d=i===4?((window.KH_LANG&&window.KH_LANG.translate?window.KH_LANG.translate('de',t):'')||(D[t]&&D[t][0])):(D[t]&&D[t][i-1]);
   if(d){if(n.__o===undefined)n.__o=n.data;n.data=o.replace(t,d)}
  }
 }
