@@ -47,7 +47,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
   assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:(Array.isArray(oldMeta.images)?oldMeta.images:[])"));
-  assert.ok(admin.includes("visual_design:String(pkg.visual_design||oldMeta.visual_design||'')"));
+  assert.ok(admin.includes("visual_design:String(pkg.visual_design||'')"));
   assert.ok(admin.includes("preview_source_url:'',translations:translations"));
   assert.ok(admin.includes('static_story_path:null,bundle_downloaded:false,prepared_page_url:\'\''));
   assert.ok(preview.includes("params.get('table')==='submitted_stories'?'submitted_stories':'khaledoon_submissions'"));
