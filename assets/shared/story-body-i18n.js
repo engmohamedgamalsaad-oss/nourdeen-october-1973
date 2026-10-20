@@ -564,6 +564,61 @@ function applyTranslationNotice(lang){
  existing.querySelector('[data-notice-title]').textContent=text.title;
  existing.querySelector('[data-notice-body]').textContent=text.body;
 }
+/* Ergänzende deutsche Fassungen für nachträglich eingefügte Abschnitte in den Oktober-Geschichten 001–003. */
+var germanStoryText = {
+  "الصف الأول الإعدادي": "1. Klasse der Sekundarstufe I",
+  "صورة من المعركة البحرية": "Ein Bild aus dem Seekrieg",
+  "المدمرة «إيلات»: لماذا كانت واقعة مهمة؟": "Der Zerstörer „Eilat“: Warum war dieser Vorfall wichtig?",
+  "المدمرة «إيلات»؛ صورة للسفينة نفسها وليست صورة لحظة إغراقها.": "Der Zerstörer „Eilat“; das Bild zeigt das Schiff selbst, nicht den Moment seiner Versenkung.",
+  "المصدر والترخيص:": "Quelle und Lizenz:",
+  "، ترخيص CC BY-SA 3.0.": "; Lizenz: CC BY-SA 3.0.",
+  "في 21 أكتوبر 1967، بعد أشهر من حرب يونيو، هاجمت زوارق صواريخ مصرية المدمرة «إيلات» قبالة ساحل بورسعيد. وتُعد الواقعة من الأحداث البارزة في تاريخ استخدام الصواريخ سطح–سطح ضد سفينة حربية كبيرة؛ فقد أظهرت أن حجم السفينة وحده لا يحسم المواجهة، وأن التدريب والاستطلاع واختيار السلاح المناسب قد تغيّر ميزان القوة.": "Am 21. Oktober 1967, einige Monate nach dem Junikrieg, griffen ägyptische Raketenboote den Zerstörer „Eilat“ vor der Küste von Port Said an. Der Vorfall gilt als bedeutendes Beispiel für den Einsatz von Seezielflugkörpern gegen ein großes Kriegsschiff. Er zeigte, dass nicht allein die Größe eines Schiffes über eine Konfrontation entscheidet: Ausbildung, Aufklärung und die Wahl der passenden Waffe können das Kräfteverhältnis verändern.",
+  "من المهم ألا نخلط بين هذه الواقعة وحرب أكتوبر 1973: إغراق «إيلات» حدث قبل الحرب بست سنوات تقريبًا، لكنه جزء من الخبرة التي تراكمت لدى البحرية المصرية خلال مرحلة الصراع التي سبقت أكتوبر.": "Wichtig ist, diesen Vorfall nicht mit dem Oktoberkrieg von 1973 zu verwechseln: Die Versenkung der „Eilat“ ereignete sich etwa sechs Jahre zuvor. Sie gehört jedoch zu den Erfahrungen, die die ägyptische Marine in der Zeit vor Oktober sammelte.",
+  "كيف تُقرأ الخريطة البحرية؟": "Wie liest man eine Seekarte?",
+  "الممرات البحرية جزء من خطة الحرب": "Seewege sind Teil der Kriegsplanung",
+  "البحر ليس مساحة فارغة بين دولتين؛ فالمضائق والموانئ وخطوط الملاحة تؤثر في نقل الوقود والبضائع والإمدادات. ويقع باب المندب عند المدخل الجنوبي للبحر الأحمر، بينه وبين خليج عدن، ولذلك فإن التأثير في حركة السفن المتجهة إلى إيلات كان له معنى استراتيجي يتجاوز المسافة الجغرافية.": "Das Meer ist kein leerer Raum zwischen zwei Staaten. Meerengen, Häfen und Schifffahrtsrouten beeinflussen den Transport von Treibstoff, Waren und Nachschub. Die Meerenge Bab al-Mandab liegt am südlichen Eingang des Roten Meeres zwischen diesem und dem Golf von Aden. Deshalb hatte eine Beeinflussung des Schiffsverkehrs in Richtung Eilat eine strategische Bedeutung, die über die geografische Entfernung hinausging.",
+  "توضح هذه المهمة أن العمليات العسكرية لا تقتصر على خط الجبهة الذي تظهره الصور عادة. فقد تعمل قوة في مكان بعيد لتقييد حركة الخصم أو لحماية خطوط الإمداد، وتحتاج هذه المهمة إلى تخطيط مسبق واتصالات منضبطة وفهم دقيق للممرات البحرية.": "Dieser Einsatz zeigt, dass militärische Operationen nicht auf die Frontlinie beschränkt sind, die auf Bildern meist zu sehen ist. Eine Einheit kann weit entfernt eingesetzt werden, um die Bewegungsfreiheit des Gegners einzuschränken oder Nachschubwege zu schützen. Dafür braucht es vorausschauende Planung, zuverlässige Kommunikation und genaue Kenntnisse der Seewege.",
+  "وعند دراسة هذه الوقائع، ينبغي التمييز بين ما تؤكده الوثائق والروايات المتعددة وبين التفاصيل التي تختلف فيها المصادر، خصوصًا عند الحديث عن مدى السيطرة على الممرات أو نتائج العمليات.": "Bei der Untersuchung solcher Ereignisse sollte man zwischen Angaben unterscheiden, die durch Dokumente und mehrere Berichte gestützt werden, und Einzelheiten, bei denen sich die Quellen widersprechen – besonders bei Aussagen über die Kontrolle von Seewegen oder die Ergebnisse von Operationen.",
+  "تحدّي خالدون": "Die Khaledoon-Challenge",
+  "اختبر معلوماتك": "Teste dein Wissen",
+  "اختبر معلوماتك عن الشخصية وعصرها. كل اختبار يتضمن خمسة أسئلة، مع نتيجة ومراجعة للإجابات في النهاية.": "Teste dein Wissen über die Persönlichkeit und ihre Zeit. Jeder Test enthält fünf Fragen. Am Ende erhältst du ein Ergebnis und kannst die Antworten überprüfen.",
+  "الأسئلة متاحة بالعربية حاليًا.": "Die Fragen sind derzeit nur auf Arabisch verfügbar.",
+  "ابدأ الاختبار": "Test starten",
+  "❤️ أعجبتني": "❤️ Diese Geschichte gefällt mir",
+  "صورة أرشيفية": "Archivfoto",
+  "عبور خط بارليف": "Überquerung der Bar-Lev-Linie",
+  "جنود مصريون خلال اقتحام خط بارليف في أكتوبر 1973.": "Ägyptische Soldaten beim Durchbruch durch die Bar-Lev-Linie im Oktober 1973.",
+  "المصدر: الأهرام، عبر": "Quelle: Al-Ahram, über",
+  "؛ توضح صفحة الملف حالة حقوق الصورة في مصر.": "; die Dateiseite erläutert den urheberrechtlichen Status des Bildes in Ägypten.",
+  "لماذا كان الساتر صعبًا؟": "Warum war der Sandwall so schwer zu überwinden?",
+  "لم تكن المشكلة مجرد إزالة كمية من الرمال؛ فقد كان الساتر طويلًا ومرتفعًا، وكان فتح ممرات كثيرة في وقت قصير ضروريًا لعبور الأفراد والمركبات والمعدات. وأي تأخير في تجهيز الممرات كان سيؤثر في حركة القوات التي تنتظر العبور.": "Die Herausforderung bestand nicht nur darin, Sand zu entfernen: Der Wall war lang und hoch. In kurzer Zeit mussten zahlreiche Durchgänge geöffnet werden, damit Soldaten, Fahrzeuge und Ausrüstung passieren konnten. Jede Verzögerung bei der Vorbereitung hätte die Bewegung der wartenden Truppen beeinträchtigt.",
+  "تُنسب الفكرة الشهيرة إلى المهندس المصري باقي زكي يوسف، الذي اقترح الاستفادة من مضخات المياه ذات التدفق القوي لتجريف أجزاء من الساتر بدل الاعتماد على التفجير أو الحفر اليدوي وحدهما. وتكمن قيمة الفكرة في تحويل عائق ضخم إلى مشكلة هندسية يمكن التعامل معها على مراحل.": "Die bekannte Idee wird dem ägyptischen Ingenieur Baki Zaki Youssef zugeschrieben. Er schlug vor, leistungsstarke Wasserpumpen einzusetzen, um Teile des Walls wegzuspülen, statt sich allein auf Sprengungen oder manuelles Graben zu verlassen. Der Wert der Idee lag darin, ein großes Hindernis in eine technische Aufgabe zu verwandeln, die Schritt für Schritt gelöst werden konnte.",
+  "لكن نجاح الفكرة لم يكن عمل شخص واحد فقط: احتاج التطبيق إلى معدات مناسبة، وتجارب وتقدير للتربة والمياه، وتنظيم فرق العمل، وتحديد مواقع فتح الثغرات وتوقيت تجهيزها. هذه هي الصلة بين الابتكار الفردي والإنجاز الجماعي.": "Der Erfolg war jedoch nicht das Werk einer einzelnen Person. Die Umsetzung erforderte geeignete Geräte, Versuche und eine Einschätzung von Boden und Wasser, die Organisation der Teams sowie die Planung der Stellen und Zeitpunkte für die Durchgänge. Hier zeigt sich, wie eine individuelle Idee und gemeinschaftliche Arbeit zusammenwirken.",
+  "المبدأ": "Das Prinzip",
+  "تدفق الماء يزيل حبيبات التربة وينقلها بعيدًا عن موضع العمل، فتتكون ثغرة يمكن توسيعها وتجهيزها.": "Das strömende Wasser löst Bodenpartikel und trägt sie vom Arbeitsbereich fort. So entsteht eine Öffnung, die anschließend verbreitert und vorbereitet werden kann.",
+  "التحدي العملي": "Die praktische Herausforderung",
+  "لا يكفي وجود مضخة؛ يجب ضبط تدفق المياه ومكانها وتنظيم العمل حتى يصبح الممر مناسبًا لعبور القوات والمعدات.": "Eine Pumpe allein reicht nicht aus. Wasserstrom und Einsatzort müssen richtig eingestellt und die Arbeit gut organisiert werden, damit der Durchgang für Truppen und Ausrüstung geeignet ist.",
+  "ما وراء الحكاية": "Hinter der Geschichte",
+  "العلم ليس معادلة على الورق فقط": "Wissenschaft ist mehr als eine Gleichung auf Papier",
+  "تُظهر القصة كيف يمكن لمبدأ فيزيائي معروف أن يصبح حلًا مهمًا عندما يُستخدم في المكان والوقت المناسبين. فالماء الذي نراه عادة وسيلة للشرب أو الري أصبح هنا أداة هندسية لمعالجة عائق عسكري.": "Die Geschichte zeigt, wie ein bekanntes physikalisches Prinzip zu einer wichtigen Lösung werden kann, wenn es zur richtigen Zeit am richtigen Ort eingesetzt wird. Wasser, das wir gewöhnlich zum Trinken oder Bewässern nutzen, wurde hier zu einem technischen Mittel, um ein militärisches Hindernis zu überwinden.",
+  "ومن الإنصاف عند رواية الحدث أن نذكر الفكرة المنسوبة إلى باقي زكي يوسف ضمن منظومة أوسع من المهندسين والجنود والمشغلين. فالتاريخ لا ينتقص من صاحب الفكرة حين يوضح أيضًا أن تنفيذها احتاج إلى عمل جماعي.": "Es ist fair, die Baki Zaki Youssef zugeschriebene Idee als Teil eines größeren Zusammenspiels von Ingenieuren, Soldaten und Bedienmannschaften darzustellen. Die Leistung des Ideengebers wird nicht geschmälert, wenn zugleich deutlich wird, dass die Umsetzung Teamarbeit erforderte.",
+  "والدرس الذي يمكن نقله إلى حياتنا اليومية هو أن المشكلة الكبيرة قد تُحل عندما نفهم طبيعتها أولًا، ثم نقارن أكثر من حل، ونجرب الحل المناسب، وننظم تنفيذ العمل بدل الاعتماد على القوة وحدها.": "Eine Lehre für unseren Alltag lautet: Ein großes Problem lässt sich oft lösen, wenn wir zuerst seine Ursachen verstehen, mehrere Möglichkeiten vergleichen, eine passende Lösung erproben und die Umsetzung organisieren, statt uns allein auf Kraft zu verlassen.",
+  "للاطلاع على صور البطل أحمد إدريس:": "Fotos des Helden Ahmed Idris ansehen:",
+  "الهيئة العامة لقصور الثقافة — صاحب الشفرة النوبية": "General Authority of Cultural Palaces – Urheber des nubischen Codes",
+  ". لم تُنسخ صورة إلى الموقع لأن ترخيص إعادة استخدامها غير موضح.": ". Es wurde kein Foto auf die Website kopiert, da die Lizenz zur Wiederverwendung nicht eindeutig ist.",
+  "من يتحدث لغة لا يعرفها الخصم؟": "Wer spricht eine Sprache, die der Gegner nicht kennt?",
+  "مشهد من قرية نوبية على النيل، للتعريف بالبيئة الثقافية لا لتصوير أحمد إدريس أو أحداث الحرب.": "Ansicht eines nubischen Dorfes am Nil zur Darstellung des kulturellen Umfelds; sie zeigt weder Ahmed Idris noch Kriegsgeschehen.",
+  "الصورة: Abdelrahman Abdelazeem،": "Foto: Abdelrahman Abdelazeem,",
+  "، CC BY-SA 4.0.": ", CC BY-SA 4.0.",
+  "تُروى قصة أحمد إدريس، الجندي النوبي المصري، بوصفها مثالًا على استخدام المعرفة اللغوية في الاتصالات العسكرية. ووفق روايات صحفية وشهادات متداولة، اقترح إدريس الاستفادة من اللغة النوبية في نقل بعض الرسائل، لأن الخصم الذي لا يعرف اللغة سيواجه صعوبة أكبر في فهم مضمونها.": "Die Geschichte von Ahmed Idris, einem ägyptischen Soldaten nubischer Herkunft, gilt als Beispiel dafür, wie Sprachkenntnisse in der militärischen Kommunikation eingesetzt werden können. Presseberichten und verbreiteten Zeugenaussagen zufolge schlug Idris vor, für bestimmte Nachrichten die nubische Sprache zu verwenden, weil ein Gegner, der sie nicht versteht, den Inhalt schwerer erfassen könnte.",
+  "النوبية ليست لغة واحدة متطابقة في كل مكان؛ بل تضم تنوعات لغوية ومجتمعات لها تاريخ طويل في جنوب مصر وشمال السودان. ومعرفة اللغة في هذه القصة ليست تفصيلًا غريبًا، بل تذكير بأن مهارات الناس وخلفياتهم الثقافية يمكن أن تتحول إلى مورد عملي عند الحاجة.": "Nubisch ist keine überall identische Sprache. Es umfasst verschiedene Sprachformen und Gemeinschaften mit einer langen Geschichte im Süden Ägyptens und im Norden Sudans. Die Sprachkenntnisse in dieser Geschichte sind keine Kuriosität, sondern erinnern daran, dass Fähigkeiten und kulturelle Hintergründe von Menschen bei Bedarf zu einer praktischen Ressource werden können.",
+  "ومع ذلك، من المهم وصف القصة بدقة: لا ينبغي اعتبار اللغة وحدها نظام تشفير كاملًا أو ضمانًا للسرية المطلقة. أمن الاتصالات يعتمد على الانضباط وطرق الإرسال وحماية المعلومات، كما أن بعض التفاصيل التاريخية في الروايات الصحفية تحتاج إلى المقارنة بمصادر مستقلة قبل الجزم بها.": "Dennoch muss die Geschichte präzise beschrieben werden: Eine Sprache allein ist weder ein vollständiges Verschlüsselungssystem noch eine Garantie absoluter Geheimhaltung. Sichere Kommunikation hängt auch von Disziplin, Übertragungswegen und dem Schutz von Informationen ab. Einige historische Einzelheiten aus Presseberichten müssen zudem mit unabhängigen Quellen verglichen werden, bevor man sie als gesichert darstellt.",
+  "كيف نتحقق من الرواية؟": "Wie überprüfen wir den Bericht?",
+  "احترام صاحب القصة واحترام الدليل": "Die Person und die Belege respektieren",
+  "حين نقرأ عن أحمد إدريس، يمكننا تقدير قيمة مساهمته والاعتزاز بدور النوبيين المصريين، وفي الوقت نفسه نسأل: ما الذي تؤكده الشهادات؟ وما التفاصيل التي تختلف من مصدر إلى آخر؟ هذا السؤال لا يقلل من القصة؛ بل يجعل عرضها أكثر مسؤولية.": "Wenn wir über Ahmed Idris lesen, können wir seinen Beitrag würdigen und die Rolle der ägyptischen Nubier anerkennen. Gleichzeitig sollten wir fragen: Was bestätigen die Zeugnisse, und welche Einzelheiten unterscheiden sich je nach Quelle? Diese Fragen schmälern die Geschichte nicht, sondern machen ihre Darstellung verantwortungsvoller.",
+  "المقارنة بين روايات الصحف، والشهادات المباشرة إن توفرت، والمصادر التاريخية المستقلة تساعد على التمييز بين الفكرة العامة المدعومة وبين التفاصيل التي قد تحتاج إلى توثيق إضافي.": "Der Vergleich von Zeitungsberichten, direkten Zeugenaussagen – sofern verfügbar – und unabhängigen historischen Quellen hilft dabei, die gut belegte Kernaussage von Einzelheiten zu unterscheiden, die noch zusätzliche Belege benötigen.",
+  "وتعلّمنا الحكاية أيضًا أن حماية المعلومات لا تعتمد على جهاز أو كلمة سر فقط؛ بل قد تبدأ من المعرفة البشرية، ومن القدرة على التواصل بوضوح مع الفريق الصحيح، ومن إدراك أن التنوع اللغوي والثقافي جزء من قوة المجتمع.": "Die Geschichte lehrt uns außerdem, dass Informationsschutz nicht nur von Geräten oder Passwörtern abhängt. Er kann mit menschlichem Wissen, klarer Kommunikation mit dem richtigen Team und dem Verständnis beginnen, dass sprachliche und kulturelle Vielfalt zur Stärke einer Gesellschaft gehört."
+};
 var original=new WeakMap();
 function applyFooterText(lang){
  document.querySelectorAll('.author,footer').forEach(function(footer){
@@ -572,7 +627,7 @@ function applyFooterText(lang){
   if(!node.__storyI18nOriginal)node.__storyI18nOriginal=node.nodeValue;
   var originalText=node.__storyI18nOriginal;
   var normalized=originalText.replace(/\s+/g,' ').trim();
-  var item=translations[normalized]||translations[originalText];
+  var item=translations[normalized]||translations[originalText]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[originalText]));
   if(lang==='ar'){node.nodeValue=originalText;return;}
   if(!item||!item[lang])return;
   var leading=(originalText.match(/^\s*/)||[''])[0];
@@ -607,7 +662,7 @@ function apply(){
    if(!parent||/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(parent.tagName))continue;
    if(!/[\u0600-\u06FF]/.test(node.nodeValue))continue;
    var source=node.nodeValue,normalized=source.replace(/\s+/g,' ').trim();
-   var item=translations[normalized]||translations[source.trim()];
+   var item=translations[normalized]||translations[source.trim()]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[source.trim()]));
    if(item&&item[lang]){
     var leading=(source.match(/^\s*/)||[''])[0],trailing=(source.match(/\s*$/)||[''])[0];
     node.nodeValue=leading+item[lang]+trailing;
@@ -621,7 +676,7 @@ function apply(){
    if(el.children && el.children.length && !el.matches('a,footer strong')) return;
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
    var normalized=ar.replace(/\s+/g,' ').trim();
-   var item=translations[normalized]||translations[ar];
+   var item=translations[normalized]||translations[ar]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[ar]));
    if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
  });
  applyFooterText(lang);
@@ -633,7 +688,7 @@ function apply(){
    if(!el[prop])el[prop]=el.getAttribute(attr);
    var source=el[prop];
    var normalized=source.replace(/\s+/g,' ').trim();
-   var item=translations[normalized]||translations[source];
+   var item=translations[normalized]||translations[source]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[source]));
    if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
    if(item&&item[lang])el.setAttribute(attr,item[lang]);
   });
