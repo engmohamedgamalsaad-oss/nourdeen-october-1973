@@ -178,6 +178,7 @@ function renderPreviewHtml(d){
  var trScript=translatedRows(d,'preview').replace(/<\/script/gi,'<\\/script');
  html=html.replace('<script src="./translations.js"></script>','<script>'+trScript+'</script>');
  html=html.replace('<script src="../../../assets/shared/reactions.js"></script>','');
+ html=html.replace('<script src="../../../assets/shared/story-quiz.js"></script>','');
  html=html.replace('</head>','<style>.reactions-section button{pointer-events:none!important;opacity:.55!important;cursor:not-allowed!important}.reaction-status:after{content:"التفاعلات معطلة في المعاينة";display:block;color:#d6ad55;font-weight:700;margin-top:8px}</style></head>');
  var quiz={questions:[]};try{quiz=typeof d.question_bank_json==='string'?JSON.parse(d.question_bank_json):(d.question_bank_json||quiz)}catch(ignoreQuiz){}if(!quiz||!Array.isArray(quiz.questions))quiz={questions:[]};quiz.id='preview';quiz.title=d.figure_name||d.title||'حكاية المعاينة';
  var quizJson=JSON.stringify(quiz).replace(/</g,'\\u003c');
