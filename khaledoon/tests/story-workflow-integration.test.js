@@ -81,14 +81,14 @@ test('story pages support distinct visual designs and source-attributed image ga
   assert.ok(bundle.includes('story-visual-gallery'));
   assert.ok(bundle.includes('source_url'));
   assert.ok(bundle.includes('story-image-card'));
-  assert.ok(bundle.includes('معرض'));
+  assert.ok(bundle.includes('صور مرتبطة بالحكاية'));
   assert.ok(bundle.includes('صورة أرشيفية'));
 });
 test('AI story package validation requires a design profile and at least two documented images', function () {
   assert.ok(W.validateStoryPackage({
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
-    history_note:'سياق', sources:'مصدر', images_note:'حقوق الصور', original_body:'نص أصلي طويل كفاية',
+    history_note:'سياق', sources:'مصدر', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
     body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
     visual_design:'science-lab',
     images:[
