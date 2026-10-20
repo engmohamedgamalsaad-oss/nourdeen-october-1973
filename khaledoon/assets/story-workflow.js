@@ -118,8 +118,15 @@ function normText(x) {
     .replace(/\s+/g, ' ').trim().replace(/[.,،؛;:!?؟]+$/g, '').trim().toLocaleLowerCase();
 }
 function possibleSiteMatches(rec, siteStories) {
-  var t = normText(rec && rec.title); if (!t) return [];
-  return (siteStories || []).filter(function (s) { return s && normText(s.title) === t; });
+  var t = normText(rec && rec.title);
+  var figure = normText(rec && (rec.figure_name || rec.person));
+  if (!t && !figure) return [];
+  return (siteStories || []).filter(function (s) {
+    if (!s) return false;
+    var titleMatch = !!t && normText(s.title) === t;
+    var figureMatch = !!figure && normText(s.person || s.figure_name) === figure;
+    return titleMatch || figureMatch;
+  });
 }
 
 /* ===== كتابة الانتقالات: تُنتج story_meta جديدًا ولا تغيّر المُدخل. نفس الدوال يستخدمها الأدمن والمعاينة وباني الحكاية. ===== */
