@@ -94,6 +94,7 @@ const INSPECT = () => {
     switchers: [...document.querySelectorAll(sel)].filter(visible).map((e) => (e.className && String(e.className)) || e.tagName),
     overflow: Math.round(root.scrollWidth - innerWidth),
     arabic, latin,
+    arabicSamples: [...document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT)].filter((n) => /[\\u0600-\\u06FF]/.test(n.nodeValue || '') && n.parentElement && !/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(n.parentElement.tagName) && n.nodeValue.trim()).map((n) => n.nodeValue.replace(/\\s+/g, ' ').trim().slice(0, 150)).slice(0, 12),
     stored: (() => { try { return localStorage.getItem('kh-lang'); } catch (e) { return 'ERR'; } })()
   };
 };
@@ -164,7 +165,7 @@ function judgeInner(label, s, lang, hard, warn, { requireClean = true } = {}) {
   if (s.bodyDir && s.bodyDir !== s.dir) warn.push(`${where}: body direction ${s.bodyDir} differs from html dir ${s.dir}`);
   if (lang !== 'ar') {
     const total = s.arabic + s.latin;
-    if (total > 0 && s.arabic / total > 0.15) warn.push(`${where}: ${(100 * s.arabic / total).toFixed(0)}% of visible letters are Arabic on a ${lang} page (untranslated fallback)`);
+    if (total > 0 && s.arabic / total > 0.15) warn.push(`${where}: ${(100 * s.arabic / total).toFixed(0)}% of visible letters are Arabic on a ${lang} page (untranslated fallback); samples=${JSON.stringify(s.arabicSamples || [])}`);
   }
 }
 
