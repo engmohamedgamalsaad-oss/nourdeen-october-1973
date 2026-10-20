@@ -50,6 +50,11 @@ test('published stories cannot be deleted and deleting drafts never hides static
   assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
   assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
 });
+test('admin validates every translated field and every quiz translation before AI import', function () {
+  assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
+  assert.ok(admin.includes('packageCheck.errors.slice(0,8)'));
+});
 test('manual builder merges metadata and protects original body', function () {
   assert.ok(builder.includes('Object.assign({},currentMeta||{})'));
   assert.ok(builder.includes('(currentRecord&&currentRecord.original_body)||d.original_body'));
