@@ -223,8 +223,11 @@ async function loadList(){
  adminRecords=await response.json();
  adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
  sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null}});
- /* لا ندمج سجل قاعدة البيانات داخل بطاقة الموقع حتى لو تطابق العنوان أو الشخصية. */
- items=adminRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
+ /* الصفحة المنشورة هي السجل المعتمد. نخفي سجل Supabase المكرر من العرض فقط عند وجود ربط صريح بالرقم؛ لا نعتمد على تشابه الأسماء. */
+ var linkedPublished={};
+ adminRecords.forEach(function(record){if(record.status==='published'){var page=window.KHWorkflow.linkedSite(record,sitePageItems);if(page)linkedPublished[String(record.id)]=true}});
+ var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
+ items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  render();
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
@@ -232,7 +235,8 @@ function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemSta
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- var counts=window.KHWorkflow.counters(adminRecords,sitePageItems);
+ var visibleAdminRecords=adminRecords.filter(function(record){return !(record.status==='published'&&window.KHWorkflow.linkedSite(record,sitePageItems))});
+ var counts=window.KHWorkflow.counters(visibleAdminRecords,sitePageItems);
  [
   ['سجلات الأدمن',counts.records,'all'],
   ['تحت التحرير',counts.queues.editing,'editing'],
@@ -250,8 +254,8 @@ function renderStats(){
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
- chip(t,'كل السجلات ('+adminRecords.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=adminRecords.filter(function(i){return itemState(i)===k}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return itemState(i)===k&&(i._t!=='site'||k==='published')}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'ملفات الموقع المنشورة ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
@@ -332,7 +336,8 @@ function legacyCard(it){
  [['en','English'],['fr','Français'],['it','Italiano'],['de','Deutsch']].forEach(function(pair){var lang=pair[0],saved=legacyExisting[lang]||{};var group=el('section','translation-lang');group.appendChild(el('h4','',pair[1]+' · '+lang.toUpperCase()));var trTitle=inp(saved.title,240),trSubtitle=inp(saved.subtitle,320),trKarma=area(saved.karma_text,4,8000),trBody=area(saved.body,8,12000),trHistory=area(saved.history_note,4,10000),trImages=area(saved.images_note,4,5000);var fields=el('div','fgrid');fields.appendChild(fld('العنوان',trTitle));fields.appendChild(fld('العنوان الفرعي',trSubtitle));group.appendChild(fields);group.appendChild(fld('ترجمة صوت كارما',trKarma));var comparison=el('div','translation-compare'),sourceCopy=area(body.value,8,12000);sourceCopy.readOnly=true;sourceCopy.setAttribute('aria-label','النص العربي للمقارنة');comparison.appendChild(fld('النص العربي للمقارنة',sourceCopy));comparison.appendChild(fld('ترجمة نص الراوي',trBody));group.appendChild(comparison);group.appendChild(fld('ترجمة السياق التاريخي',trHistory));group.appendChild(fld('ترجمة ملاحظات الصور وحقوقها',trImages));legacyTranslationDetails.appendChild(group);legacyTranslationInputs[lang]={title:trTitle,subtitle:trSubtitle,karma_text:trKarma,body:trBody,history_note:trHistory,images_note:trImages,source:sourceCopy}});
  body.addEventListener('input',function(){Object.keys(legacyTranslationInputs).forEach(function(lang){legacyTranslationInputs[lang].source.value=body.value})});box.appendChild(legacyTranslationDetails);box.appendChild(fld('المصادر',sources));box.appendChild(fld('الحالة',status));
  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),pubBtn=el('button','btn ghost','نشر وحفظ'),rejBtn=el('button','btn ghost','رفض'),delBtn=el('button','btn del','حذف');
- [saveBtn,pubBtn,rejBtn,delBtn].forEach(function(b){b.type='button';bar.appendChild(b)});
+ [saveBtn,pubBtn,rejBtn].forEach(function(b){b.type='button';bar.appendChild(b)});
+ if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}
  if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload'){var finish=el('button','btn primary','تأكيد النشر بعد الرفع');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
  var providerLegacy=document.createElement('select');providerLegacy.className='btn ghost';providerLegacy.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];providerLegacy.appendChild(o)});
  var copyLegacy=el('button','btn ghost','نسخ الحكاية كاملة');copyLegacy.type='button';
@@ -652,10 +657,12 @@ if(!isNew){
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
 function confirmDelete(it){
- var name=it.title||'حكاية بلا عنوان',sv=storyFor(it);
- var msg='حذف «'+name+'» نهائيًا من لوحة الإدارة؟\n\nلا يمكن التراجع عن الحذف.';
- if(it.status==='published'||sv)msg+='\n\nتنبيه: سيتم إخفاؤها من قوائم الزوار قبل حذف سجل الإدارة، لكن ملف HTML الثابت يظل متاحًا لمن يعرف رابطه؛ حذفه نهائيًا يتطلب إزالة الملف من GitHub.';
- return confirm(msg);
+ if(it&&it.status==='published'){
+  say('err','الحكايات المنشورة محمية من الحذف داخل الأدمن. استخدم «إخفاء» فقط إذا أردت إخفاءها عن الزوار.');
+  return false;
+ }
+ var name=it.title||'حكاية بلا عنوان';
+ return confirm('حذف سجل «'+name+'» من لوحة الإدارة فقط؟\n\nلن يتم إخفاء صفحة الموقع أو حذف أي ملف من GitHub. لا يمكن التراجع عن حذف سجل قاعدة البيانات.');
 }
 async function hideStaticStoryBeforeDelete(it){
  if(!vLoaded)await loadVisInner();
@@ -668,10 +675,10 @@ async function hideStaticStoryBeforeDelete(it){
  vHidden[id]=true;
 }
 async function removeItem(it,btn){
+ if(it&&it.status==='published'){say('err','ممنوع حذف سجل حكاية منشورة من هذه القائمة؛ استخدم «إخفاء» فقط.');return}
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
  btn.disabled=true;
  try{
-  await hideStaticStoryBeforeDelete(it);
   var r=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
@@ -680,9 +687,9 @@ async function removeItem(it,btn){
  }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
 }
 async function remove(it,btn){
+ if(it&&it.status==='published'){say('err','ممنوع حذف سجل حكاية منشورة من هذه القائمة؛ استخدم «إخفاء» فقط.');return}
  btn.disabled=true;
  try{
-  await hideStaticStoryBeforeDelete(it);
   var r=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
   if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
   var rows=await r.json();if(!rows.length)throw new Error('لم يُحذف شيء. تأكد من صلاحية الأدمن.');
@@ -738,8 +745,8 @@ function pubRow(it){
   setHidden(sv,!hid,hb);
  });
  s.appendChild(hb);
- if(it._t!=='site'){
-  var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل الحكاية نهائيًا (بعد تأكيد)';
+ if(it._t!=='site'&&it.status!=='published'){
+  var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل المسودة من لوحة الإدارة فقط';
   db.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    if(!confirmDelete(it))return;

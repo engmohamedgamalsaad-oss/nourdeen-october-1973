@@ -27,7 +27,17 @@ test('admin imports the workflow module and derives status counters', function (
 test('admin links submissions to static pages by explicit identifier only', function () {
   assert.ok(admin.includes('window.KHWorkflow.linkedSite(it,vStories)'));
   assert.ok(!admin.includes('norm(s.title)===t'));
-  assert.ok(admin.includes('items=adminRecords.concat(sitePageItems)'));
+  assert.ok(admin.includes('items=visibleRecords.concat(sitePageItems)'));
+  assert.ok(admin.includes('window.KHWorkflow.linkedSite(record,sitePageItems)'));
+});
+test('published stories cannot be deleted and deleting drafts never hides static pages', function () {
+  assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
+  assert.ok(admin.includes("if(it&&it.status==='published'){say('err','ممنوع حذف سجل حكاية منشورة من هذه القائمة؛ استخدم «إخفاء» فقط.');return}"));
+  var removeItemBlock = admin.slice(admin.indexOf('async function removeItem'), admin.indexOf('async function remove(it,btn)'));
+  var removeBlock = admin.slice(admin.indexOf('async function remove(it,btn)'), admin.indexOf('function copyKey'));
+  assert.ok(!removeItemBlock.includes('await hideStaticStoryBeforeDelete(it)'));
+  assert.ok(!removeBlock.includes('await hideStaticStoryBeforeDelete(it)'));
+  assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
 });
 test('manual builder merges metadata and protects original body', function () {
   assert.ok(builder.includes('Object.assign({},currentMeta||{})'));
