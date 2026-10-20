@@ -145,7 +145,7 @@ for (const rel of htmlFiles) {
 
   /* German dictionary is embedded in the shared language source, not loaded from a separate legacy file. */
   {
-    const scripts = [...html.matchAll(/<script[^>]*\\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
+    const scripts = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
     const oldAt = scripts.findIndex((s) => s.split('?')[0].endsWith('khaledoon-de.js'));
     if (oldAt >= 0) fail(`${rel}: obsolete standalone German dictionary is still loaded; use the shared locale registry.`);
     const legacyAt = scripts.findIndex((s) => LEGACY_I18N_RE.test(s.split('?')[0].split('/').pop()));
