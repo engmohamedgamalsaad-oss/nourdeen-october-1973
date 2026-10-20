@@ -25,6 +25,12 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
 });
+test('published admin records and published site pages are separate filters', function () {
+  assert.ok(admin.includes("k==='published'?'سجلات الأدمن بحالة «منشورة»'"));
+  assert.ok(admin.includes("chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')'"));
+  assert.ok(admin.includes("fStatus==='published'?i._t!=='site'&&itemState(i)==='published'"));
+  assert.ok(admin.includes("return i._t!=='site'&&itemState(i)===k"));
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
