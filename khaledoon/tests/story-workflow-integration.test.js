@@ -208,4 +208,14 @@ test('admin project instructions and AI provider prompts require custom layouts 
     assert.equal(W.ORDER.reduce(function (n, s) { return n + W.group([record])[s].length; }, 0), totalBefore);
   });
 });
+test('AI import failures provide repair instructions and preview records the provider', function () {
+  assert.ok(admin.includes("id='aiRepairPanel'"));
+  assert.ok(admin.includes("showAiRepair(sourceRaw,packageCheck.errors)"));
+  assert.ok(admin.includes("ai_imported_provider_label"));
+  assert.ok(admin.includes("aiRepairPanel.hidden=true;aiRepairText.value=''"));
+  assert.ok(admin.includes("['gemini','Gemini']"));
+  assert.ok(preview.includes('id="aiVersionBadge"'));
+  assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
+  assert.ok(preview.includes('هذه معاينة غير منشورة'));
+});
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
