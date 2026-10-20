@@ -44,6 +44,15 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
+test('approved stories can reopen reader preview and AI image data is preserved', function () {
+  assert.ok(admin.includes('فتح معاينة القارئ'));
+  assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:(Array.isArray(oldMeta.images)?oldMeta.images:[])"));
+  assert.ok(admin.includes("visual_design:String(pkg.visual_design||oldMeta.visual_design||'')"));
+  assert.ok(preview.includes("params.get('table')==='submitted_stories'?'submitted_stories':'khaledoon_submissions'"));
+  assert.ok(preview.includes("record_type:legacy?'legacy':'modern'"));
+  assert.ok(preview.includes('if(!Array.isArray(d.images))d.images='));
+  assert.ok(preview.includes('d.visual_design=firstText'));
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
