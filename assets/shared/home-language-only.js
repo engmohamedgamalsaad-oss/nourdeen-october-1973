@@ -331,7 +331,16 @@
 "المصدر: Wikimedia Commons؛ الصورة CC BY 2.0 والعمل الفني الأصلي من الملكية العامة":"Quelle: Wikimedia Commons; Bild unter CC BY 2.0, das ursprüngliche Kunstwerk ist gemeinfrei.",
 "حكايات هذا القسم":"Geschichten in diesem Bereich",
 "كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.":"Jede Geschichte hat eine eigene Seite und wird hier erst nach Prüfung von Inhalt und Quellen hinzugefügt.",
-"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden."
+"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden.",
+"🇪🇬 العربية":"🇪🇬 Arabisch",
+"قسم من خالدون عبر التاريخ":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“",
+"حكايات موثقة تُضاف بعد مراجعة المحتوى والمصادر.":"Dokumentierte Geschichten werden nach Prüfung von Inhalt und Quellen ergänzt.",
+"أعلام الأدب والفنون والرياضة | خالدون عبر التاريخ":"Persönlichkeiten aus Literatur, Kunst und Sport | Unsterbliche Persönlichkeiten der Geschichte",
+"العلم والعلماء | خالدون عبر التاريخ":"Wissenschaft und Wissenschaftler | Unsterbliche Persönlichkeiten der Geschichte",
+"شخصيات المناهج المصرية | خالدون عبر التاريخ":"Persönlichkeiten aus den ägyptischen Lehrplänen | Unsterbliche Persönlichkeiten der Geschichte",
+"التاريخ والحضارات | خالدون عبر التاريخ":"Geschichte und Zivilisationen | Unsterbliche Persönlichkeiten der Geschichte",
+"شخصيات إسلامية | خالدون عبر التاريخ":"Persönlichkeiten des Islam | Unsterbliche Persönlichkeiten der Geschichte",
+"اكتب حكايتك | خالدون عبر التاريخ":"Schreibe deine Geschichte | Unsterbliche Persönlichkeiten der Geschichte"
 };
 
   var api = {
