@@ -203,6 +203,28 @@ function validateStoryPackage(pkg) {
   ].forEach(function (field) { textField(pkg, field[0], field[1], 1); });
   textField(pkg, 'original_body', 'النص الأصلي', 20);
   textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
+  var designOptions = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
+  if (designOptions.indexOf(String(pkg.visual_design || '')) < 0) errors.push('اختر تصميمًا بصريًا مخصصًا من قائمة visual_design.');
+  var images = Array.isArray(pkg.images) ? pkg.images : [];
+  var validImages = images.filter(function (im) {
+    if (!isObj(im)) return false;
+    var imageUrl = String(im.url || '').trim(), sourceUrl = String(im.source_url || '').trim();
+    var urlOk = /^https:\/\//i.test(imageUrl) || /^(?:\.\.\/|\.\/|images\/|assets\/images\/)[^\s"'<>]+$/i.test(imageUrl);
+    return urlOk && /^https:\/\//i.test(sourceUrl) && String(im.alt || '').trim() &&
+      String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
+      ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
+  });
+  if (validImages.length < 2) errors.push('أضف صورتين موثقتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights.');
+  images.forEach(function (im, index) {
+    if (!isObj(im)) return;
+    ['en','fr','it','de'].forEach(function (lang) {
+      var translated = im.i18n && im.i18n[lang];
+      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim()) {
+        errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق ناقصان في ' + lang.toUpperCase() + '.');
+      }
+    });
+  });
+
 
   if (!isObj(pkg.translations)) {
     errors.push('قسم الترجمات غير موجود.');
