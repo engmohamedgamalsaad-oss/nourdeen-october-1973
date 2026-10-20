@@ -243,7 +243,7 @@ function renderStats(){
   ['مرسلة للمعاينة',counts.queues.preview,'preview_sent'],
   ['معاينة مرفوضة',counts.byState.preview_rejected,'preview_rejected'],
   ['بانتظار النشر',counts.queues.review,'awaiting_publish'],
-  ['صفحات الموقع المنشورة',counts.sitePages,'site_pages']
+  ['صفحات الحكايات المنشورة فعليًا بالموقع',counts.sitePages,'site_pages']
  ].forEach(function(s){
   var c=el('button','stat stat-button'),label=el('span','',s[0]),value=el('strong','',String(s[1]));
   c.type='button';c.setAttribute('aria-pressed',fStatus===s[2]?'true':'false');
@@ -255,8 +255,8 @@ function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
  chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return itemState(i)===k&&(i._t!=='site'||k==='published')}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
- chip(t,'ملفات الموقع المنشورة ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
 }
@@ -856,7 +856,7 @@ function render(){
  if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
-  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':itemState(i)===fStatus))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus)))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
  });
  if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
