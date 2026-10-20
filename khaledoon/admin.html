@@ -297,7 +297,11 @@ async function confirmStoryPublishAfterUpload(it,btn){
   var rows=await r.json();if(!rows.length)throw new Error('لم يرجع الخادم سجلًا بعد تأكيد النشر.');
   try{var previewToClear=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null');if(previewToClear&&String(previewToClear.submission_id)===String(it.id)){localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}}catch(ignorePreviewClear){}
   say('ok','تم تأكيد النشر في سجل الإدارة بعد إقرارك برفع الملفات والتحقق من الصفحة الحية.');await loadList();
- }catch(e){say('err',e.message||'تعذر تأكيد النشر.')}finally{btn.disabled=false}
+ }catch(e){
+  var failure=e&&e.message?e.message:'تعذر تأكيد النشر.';
+  try{if(it&&it.id&&it._t!=='site'){var failureTable=it._t==='o'?'submitted_stories':'khaledoon_submissions',failureMeta=window.KHWorkflow.markPublishCheckFailed(it.story_meta||{},failure,new Date());var failureSave=await rest(failureTable+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:failureMeta})});if(failureSave.ok)await loadList()}}catch(ignoreFailureSave){}
+  say('err',failure+' — ستظل الحكاية بانتظار النشر إذا تعذر تأكيد نجاح الفحص.');
+ }finally{btn.disabled=false}
 }
 function legacyCard(it){
  if(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft){var base=it;it=Object.assign({},it,it.story_meta.pending_draft,{id:base.id,status:base.status,created_at:base.created_at,story_number:base.story_number,original_body:base.body,story_meta:base.story_meta,_t:base._t})}
@@ -391,7 +395,7 @@ function card(it){
  var previewSource=inp(it.preview_source_url||(it.story_meta&&it.story_meta.preview_source_url)||((String(it.figure_name||'').indexOf('خالد')>=0)?'https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/preview/khalid-ibn-al-walid-2026-10-18/stories/islamic/draft-khalid-ibn-al-walid/index.html':''),1200);
  var body=area(it.body,10,12000),karma=area(it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',5,8000),quizJson=area(it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||'',8,16000),hist=area(it.history_note,8,12000),src=area(it.sources,3,3000),img=area(it.images_note,2,1500),notes=area(it.admin_notes,3,3000);
  var cons=document.createElement('input');cons.type='checkbox';cons.checked=!!it.consent;
- var st=sel(STATUS,it.status||'pending');
+ var st=sel(STATUS,it.status||'pending');st.disabled=true;st.title='الحالة تُحدّث عبر قرارات المعاينة والنشر فقط.';
  var g1=el('div','fgrid');g1.appendChild(fld('القسم',secS));g1.appendChild(fld('الشخصية أو الموضوع',fig));box.appendChild(g1);
  box.appendChild(curBox);
  var g2=el('div','fgrid');g2.appendChild(fld('اسم الراوي (الاسم الأول فقط)',nar));g2.appendChild(fld('الصف الدراسي للراوي',ng));g2.appendChild(fld('العنوان',title));g2.appendChild(fld('العنوان الفرعي',sub));box.appendChild(g2);
@@ -711,6 +715,7 @@ function pubRow(it){
  var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','لا توجد صفحة جاهزة — يلزم تجهيز ملفات الحكاية ورفعها قبل تأكيد النشر.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
