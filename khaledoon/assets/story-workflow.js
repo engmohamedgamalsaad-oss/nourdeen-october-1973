@@ -215,6 +215,15 @@ function validateStoryPackage(pkg) {
       ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
   });
   if (validImages.length < 2) errors.push('أضف صورتين موثقتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights.');
+  images.forEach(function (im, index) {
+    if (!isObj(im)) return;
+    ['en','fr','it','de'].forEach(function (lang) {
+      var translated = im.i18n && im.i18n[lang];
+      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim()) {
+        errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق ناقصان في ' + lang.toUpperCase() + '.');
+      }
+    });
+  });
 
 
   if (!isObj(pkg.translations)) {
