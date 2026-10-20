@@ -722,10 +722,15 @@ function pubRow(it){
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
- var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','لا توجد صفحة جاهزة — يلزم تجهيز ملفات الحكاية ورفعها قبل تأكيد النشر.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
+ var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','المعاينة معتمدة، لكن ملفات الحكاية لم تُرفع إلى الموقع بعد. افتح المعاينة لمراجعة المحتوى وتجهيز الملفات.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
+ if(it._t!=='site'&&itemState(it)==='awaiting_publish'){
+  var openReview=el('button','btn primary','فتح معاينة القارئ');openReview.type='button';openReview.title='فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
+  openReview.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;var win=window.open(url,'_blank');if(!win)say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');});
+  s.appendChild(openReview);
+ }
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
  else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
@@ -761,9 +766,9 @@ function pubRow(it){
     var aiImport=el('button','btn primary','٣. استيراد الناتج وحفظه كمسودة');aiImport.type='button';aiPanel.appendChild(aiImport);
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',function(){
-     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider);
-     var inputData={section_key:it.section||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
-     var schema='أعد كائن JSON صالحًا واحدًا فقط، دون Markdown أو أسوار كود أو مقدمة أو خاتمة. يجب أن يكون format هو KH_STORY_PACKAGE_V1. المفاتيح المطلوبة: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, translations, question_bank. يجب أن يكون section_key واحدًا فقط من هذه القيم الحرفية: october, science, learning, fame, history, curriculum, islamic, readers؛ احتفظ بقيمة القسم الواردة في البيانات إن كانت صحيحة، ولا تستخدم أسماء الأقسام العربية بدل المفاتيح. املأ كل الحقول الأساسية ولا تتركها فارغة، واحفظ original_body حرفيًا دون تعديل. يجب أن تحتوي translations على en وfr وit وde، ولكل لغة student_name وgrade وtitle وsubtitle وkarma_text وbody وhistory_note وimages_note، وجميعها نصوص غير فارغة. question_bank كائن يحتوي questions وخمسة أسئلة على الأقل؛ لكل سؤال q نص غير فارغ، وo قائمة اختيارات نصية غير فارغة، وa رقم صحيح لفهرس الإجابة الصحيحة يبدأ من صفر، وe تفسير غير فارغ، وi18n. داخل i18n يجب أن توجد en وfr وit وde، ولكل لغة q وo وe مترجمة، مع نفس عدد الاختيارات في اللغات الأربع كما في السؤال العربي. اكتب المصادر وملاحظات حقوق الصور بوضوح. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.';
+     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
+     var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
+     var schema='أخرج JSON صالحًا واحدًا فقط بلا Markdown أو مقدمة أو خاتمة. format="KH_STORY_PACKAGE_V1". الحقول: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, visual_design, images, translations, question_bank. section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers. احفظ original_body حرفيًا. translations تحتوي en,fr,it,de؛ ولكل لغة student_name,grade,title,subtitle,karma_text,body,history_note,images_note بنصوص كاملة غير فارغة. visual_design واحدة من timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. images مصفوفة من صورتين على الأقل؛ كل صورة تحتوي url,alt,caption,kind,source_name,source_url,rights,i18n؛ kind واحدة من archival,illustration,diagram,map؛ وi18n.en/fr/it/de لكل منها alt وcaption مترجمان. لا تخترع روابط أو تراخيص، واذكر ما تعذر التحقق منه. question_bank.questions فيها خمسة أسئلة على الأقل؛ كل سؤال q وo (اختيارات نصية) وa (فهرس صحيح يبدأ من صفر) وe وi18n؛ وi18n.en/fr/it/de تحتوي q وo وe مترجمة مع العدد نفسه من الاختيارات. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.';
      var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية كاملة ===\n'+JSON.stringify(inputData,null,2);
      function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية والبرومبت. افتح الأداة المختارة والصقه هناك.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
@@ -781,9 +786,9 @@ function pubRow(it){
      try{
       var oldMeta=Object.assign({},it.story_meta||{}),oldOriginal=String(it.original_body||oldMeta.original_body||'');
       var translations={};langs.forEach(function(l){var t=pkg.translations[l]||{};translations[l]={enabled:false,status:'draft',student_name:t.student_name||it.student_name||'',grade:t.grade||it.grade||'',title:t.title||'',subtitle:t.subtitle||'',karma_text:t.karma_text||'',body:t.body||'',history_note:t.history_note||'',images_note:t.images_note||''}});
-      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
+      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:[],preview_source_url:'',translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
       nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
-      nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null});delete nextMeta.pending_draft;
+      nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null,static_story_id:null,static_story_path:null,bundle_downloaded:false,prepared_page_url:''});delete nextMeta.pending_draft;
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
       var payload={section:chosenSection,figure_name:String(pkg.figure_name||it.figure_name||it.person||'شخصية تاريخية').trim().slice(0,120),title:String(pkg.title).trim().slice(0,140),subtitle:String(pkg.subtitle||'').slice(0,200),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||'كارما').trim().slice(0,40),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||'').slice(0,60),body:String(pkg.body).trim().slice(0,12000),history_note:String(pkg.history_note||'').slice(0,12000),sources:String(pkg.sources||'').slice(0,3000),images_note:String(pkg.images_note||'').slice(0,1500),original_body:nextMeta.original_body,translations:translations,status:'pending',story_meta:nextMeta};
       say('info','جارٍ حفظ المسودة… لا تغلق الصفحة.');
@@ -826,10 +831,45 @@ async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
  try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
 }
-function buildNewStoryPrompt(providerKey){
- var selectedProvider=providerKey||'chatgpt';var prompt=[PROJECT_INSTRUCTIONS||'',managedPromptSections(selectedProvider),selectedProvider==='claude'?(CLAUDE_INSTRUCTIONS||''):'',AGENT_INSTRUCTIONS||''].filter(Boolean).join('\n\n');
- if(!prompt.trim())throw new Error('تعذر تحميل البرومبت الكامل من تعليمات المشروع.');
- return prompt;
+function buildNewStoryPrompt(providerKey,mode){
+ var selectedProvider=providerKey||'chatgpt';
+ var providerNames={chatgpt:'ChatGPT',claude:'Claude',deepseek:'DeepSeek'};
+ var providerNote={
+  chatgpt:mode==='package'?'أخرج الحزمة وفق المخطط فقط؛ لا تضف شرحًا خارج JSON. إذا احتجت إلى مصادر، استخدم روابط حقيقية ولا تخترعها.':'استخدم أدوات GitHub والملفات المتاحة فعلًا، وافحص التغييرات والاختبارات. إذا لم تتوفر، صرّح بذلك ولا تدّعِ التنفيذ.',
+  claude:mode==='package'?'تحقق من اكتمال كل حقل وترجمة وصورة وسؤال قبل إخراج JSON؛ لا تضف Markdown أو نصًا خارجه.':'افحص ملفات المشروع والقالب والاختبارات قبل التعديل، ونفّذ تغييرات محددة مع مراجعة الفروقات. إذا لم يتوفر الوصول، صرّح بذلك.',
+  deepseek:mode==='package'?'أخرج JSON صالحًا فقط بلا Markdown أو أسوار كود أو مقدمة أو خاتمة. التزم بالمخطط حرفيًا واستخدم نصوصًا موجزة دون إسقاط أي حقل مطلوب.':'اتبع الأقسام المرقمة فقط، ولا تكرر التعليمات، ولا تدّعِ الوصول إلى GitHub أو تنفيذ تغيير لم يحدث.'
+ }[selectedProvider]||'لا تدّعِ استخدام أدوات غير متاحة.';
+ if(mode==='package'){
+  return [
+   'خالدون عبر التاريخ — حزمة محتوى حكاية للاستيراد إلى لوحة الإدارة.',
+   'المطلوب هنا إنتاج بيانات الحكاية فقط، وليس كتابة ملفات الموقع أو الادعاء بالنشر. أخرج كائن JSON واحدًا يطابق مخطط الإخراج وبيانات الحكاية أدناه.',
+   'الجمهور أطفال وطلاب. احفظ original_body حرفيًا. اكتب body بصوت راوٍ تاريخي دافئ ومترابط، وkarma_text بصوت كارما الطفولي الفضولي. اجعل كارما حاضرة بملاحظات واستنتاجات، ولا تجعلها خبيرة بالغة أو تحوّل الحكاية إلى أسئلة وأجوبة متتابعة.',
+   'دقّق الوقائع والأسماء والتواريخ والسياق بمصادر حقيقية قابلة للفتح. لا تخترع وقائع أو اقتباسات أو روابط أو تراخيص. اذكر الشك والخلاف في history_note.',
+   'أكمل العربية والإنجليزية والفرنسية والإيطالية والألمانية لكل الحقول المطلوبة. ترجم المتن والعناوين والأسئلة والاختيارات والتفسيرات وتعليقات الصور والنصوص البديلة؛ لا تترك حقلًا مطلوبًا فارغًا.',
+   'أنتج خمسة أسئلة على الأقل، مع اختيارات وإجابة صحيحة بفهرس يبدأ من صفر وتفسير، وترجمات en/fr/it/de مطابقة وعدد اختيارات متساوٍ.',
+   'أرفق صورتين على الأقل مع رابط الصورة والمصدر وحقوق الاستخدام/الإسناد والوصف والتعليق وترجمتهما. لا تخترع روابط أو حقوقًا؛ ميّز الصورة الأرشيفية الحقيقية من الرسم التوضيحي.',
+   'اختر visual_design من: timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. section_key من: october, science, learning, fame, history, curriculum, islamic, readers.',
+   providerNote
+  ].join('\n\n');
+ }
+ return [
+  'تعليمات العمل — مشروع «خالدون عبر التاريخ».',
+  'المستودع: https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973',
+  'الموقع: https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/',
+  'الهدف: تجهيز حكاية تاريخية تعليمية كاملة حتى معاينة خاصة، لا الاكتفاء بالنص إذا كانت الأدوات تسمح بتنفيذ الملفات.',
+  '1. افحص الفرع والملفات الحالية وPROJECT_INSTRUCTIONS.md وCLAUDE.md وAGENTS.md وdocs/khaledoon-story-production-workflow.md والقالب والحكايات المرجعية. لا تفترض مسارات قديمة ولا تبدأ من الصفر. اعمل على فرع معاينة وافحص الفروقات.',
+  '2. احفظ النص الأصلي حرفيًا في original_body وافصل عنه النص المحرر. سجّل صاحب الاقتراح والسن/الصف والقسم والمصدر وحقوق الاستخدام المتاحة، ولا تخترع بيانات ناقصة.',
+  '3. دقّق الأسماء والتواريخ والأماكن وتسلسل الأحداث بمصادر أولية أو رسمية أو متاحف وجامعات ومراجع موثوقة. أرفق روابط حقيقية، وميّز الحقيقة من التفسير والخلاف وعدم اليقين. لا تختلق اقتباسات أو مصادر.',
+  '4. أسلوب الحكي: كارما طفلة فضولية تتكلم طبيعيًا وتلاحظ وتستنتج وتعود خلال الحكاية؛ والراوي صوت حكيم يشرح السياق والأسباب والنتائج والأدلة. اجعل السرد مترابطًا، لا مقالة جافة ولا أسئلة وأجوبة متتابعة.',
+  '5. اللغات الخمس كاملة: العربية والإنجليزية والفرنسية والإيطالية والألمانية. احفظ الأصل العربي ثم ترجم وراجع كل المحتوى، بما فيه الاختبار والصور والمصادر والبيانات الوصفية والواجهة والمشاركة والطباعة. اختبر de فعليًا ولا تكتفِ بحقل أو زر.',
+  '6. الصور: جهّز غلاف البطاقة وصورة شاشة البداية/cover-popup وصور السرد المناسبة. تحقق من رابط كل صورة ومصدرها وحقوق استخدامها وإسنادها. لا تعتبر نتائج البحث إذنًا، ولا تعرض صورة مولدة كأنها أرشيفية. تحقق من الملف والمسار قبل الربط.',
+  '7. استخدم القالب الحالي مع تصميم يناسب الشخصية، واختر visual_design معتمدًا، ومعرضًا فعليًا من صورتين موثقتين على الأقل. حافظ على RTL للعربية وLTR لباقي اللغات، والوضعين الفاتح والداكن، والخطوط والهوية والحركة الهادئة وتقليل الحركة.',
+  '8. أنشئ stories/quizzes/NNN.json بخمسة أسئلة على الأقل، لكل سؤال اختيارات وإجابة وتفسير وترجمات ar/en/fr/it/de. أنشئ stories/SECTION/NNN/sources.md وقسم «المصادر والتحقق» الظاهر بروابط حقيقية. اربط assets/shared/story-quiz.js وبنك السؤال بمعرّف data-story-slug الصحيح. أضف assets/shared/reactions.css وassets/shared/reactions.js وقسم الإعجاب وأربعة ردود فعل جاهزة على الأقل؛ لا تنشئ تعليقات حرة ولا تكرر منطق Supabase. اربط الصفحة بالفهرس والخريطة والبحث والتنقل والإدارة. حافظ على شاشة البداية وWhatsApp وFacebook والطباعة والإخفاء.',
+  '9. اختبر الروابط والصور واللغات والوظائف المتأثرة على الهاتف والكمبيوتر قدر الإمكان، وافحص أثر التغيير على الحكايات القديمة والملفات المشتركة. اذكر ما تم اختباره وما لم يمكن التحقق منه.',
+  '10. لا تحذف أو تستبدل ملفات دون ضرورة، ولا ترفع أسرارًا أو بيانات خاصة. لا تستخدم خدمة مدفوعة دون موافقة. لا تعدّل Supabase أو SQL أو RLS أو البيانات دون فحص وموافقة صريحة.',
+  '11. أنشئ معاينة خاصة، واعرض الملفات والمصادر والاختبارات والقيود، وانتظر الموافقة الصريحة. لا تدمج إلى الفرع المنشور ولا تنشر الحكاية قبل الموافقة. لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث.',
+  'تعليمات الأداة ('+providerNames[selectedProvider]+'): '+providerNote
+ ].join('\n\n');
 }
 function renderNewStoryGate(list){
  var box=el('article','fcard');
