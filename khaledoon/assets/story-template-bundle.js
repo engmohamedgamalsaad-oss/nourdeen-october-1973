@@ -60,17 +60,34 @@ function validate(d){
  return {ok:missing.length===0,missing:missing,quiz:q};
 }
 async function nextId(){
- var max=0;
- try{var r=await fetch('../stories/index.json?bundle='+Date.now(),{cache:'no-store'});if(r.ok){var j=await r.json();(Array.isArray(j)?j:[]).forEach(function(x){var n=parseInt(String(x.id||''),10);if(Number.isFinite(n)&&n>max)max=n})}}catch(e){}
- var id=max+1;
- for(var tries=0;tries<30;tries++,id++){
-  var name=String(id).padStart(3,'0');
+ var indexResponse;
+ try{indexResponse=await fetch('../stories/index.json?bundle='+Date.now(),{cache:'no-store'})}catch(e){throw new Error('تعذر الاتصال بفهرس الحكايات؛ لم نخصص رقمًا لتجنب التكرار. أعد المحاولة عند استقرار الاتصال.')}
+ if(!indexResponse||!indexResponse.ok)throw new Error('تعذر قراءة فهرس الحكايات الحالي؛ لم نخصص رقمًا لتجنب التكرار.');
+ var storyIndex;try{storyIndex=await indexResponse.json()}catch(e){throw new Error('فهرس الحكايات ليس JSON صالحًا؛ لم نخصص رقمًا لتجنب التكرار.')}
+ if(!Array.isArray(storyIndex))throw new Error('صيغة فهرس الحكايات غير متوقعة؛ لم نخصص رقمًا لتجنب التكرار.');
+ var indexed={};storyIndex.forEach(function(x){var n=parseInt(String(x&&x.id||''),10);if(Number.isInteger(n)&&n>0)indexed[String(n).padStart(3,'0')]=true});
+ var sections=['october','history','science','women','people','curriculum','islamic'];
+ for(var id=1;id<=9999;id++){
+  var name=String(id).padStart(3,'0');if(indexed[name])continue;
   var exists=false;
-  for(var section of ['october','history','science','women','people','curriculum','islamic']){try{var h=await fetch('../stories/'+section+'/'+name+'/index.html',{method:'HEAD',cache:'no-store'});if(h.ok){exists=true;break}}catch(e){}}
+  /* Legacy story pages live directly under stories/NNN; check them before category folders. */
+  var legacyResponse;
+  try{legacyResponse=await fetch('../stories/'+name+'/index.html',{method:'HEAD',cache:'no-store'})}
+  catch(e){throw new Error('تعذر التحقق من صفحة الحكاية القديمة '+name+' بسبب فشل الاتصال؛ أوقفنا التجهيز لتجنب تكرار صفحة موجودة.')}
+  if(legacyResponse&&legacyResponse.ok)continue;
+  if(!legacyResponse||legacyResponse.status!==404)throw new Error('لم نستطع التأكد هل الرقم '+name+' مستخدم في مجلد الحكايات القديم (HTTP '+(legacyResponse?legacyResponse.status:'بدون استجابة')+'). لم نخصص رقمًا لتجنب التكرار.');
+  for(var section of sections){
+   var response;
+   try{response=await fetch('../stories/'+section+'/'+name+'/index.html',{method:'HEAD',cache:'no-store'})}
+   catch(e){throw new Error('تعذر التحقق من رقم '+name+' داخل قسم '+section+' بسبب فشل الاتصال؛ أوقفنا التجهيز لتجنب تكرار صفحة موجودة.')}
+   if(response&&response.ok){exists=true;break}
+   if(!response||response.status!==404)throw new Error('لم نستطع التأكد هل الرقم '+name+' مستخدم في قسم '+section+' (HTTP '+(response?response.status:'بدون استجابة')+'). لم نخصص رقمًا لتجنب التكرار.');
+  }
   if(!exists)return name;
  }
- throw new Error('تعذر اختيار رقم حكاية متاح؛ حدّث الفهرس وتحقق من المجلدات يدويًا.');
+ throw new Error('لم نعثر على رقم متاح بين 001 و9999؛ راجع فهرس الحكايات والمجلدات يدويًا.');
 }
+
 function sourceRows(s){
  var rows=[];String(s||'').split(/\r?\n/).map(function(line){return line.trim()}).filter(Boolean).forEach(function(line){
   var urls=line.match(/https?:\/\/[^\s)\]>]+/g)||[];
@@ -222,5 +239,5 @@ function renderPreviewHtml(d){
  html=html.replace('</body>',script+'</body>');
  return html;
 }
-window.KHStoryBundle={validate:validate,download:download,renderPreviewHtml:renderPreviewHtml};
+window.KHStoryBundle={validate:validate,nextId:nextId,download:download,renderPreviewHtml:renderPreviewHtml};
 })();

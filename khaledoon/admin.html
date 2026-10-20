@@ -44,6 +44,9 @@ details.pubrow>summary{padding:8px 12px;gap:8px}
 .btn.copied{background:#1f9d62;border-color:#1f9d62;color:#fff;font-weight:800}
 .pubrow .pc{display:block;color:#1f9d62;font-weight:800;font-size:.78rem;margin-top:2px}
 .btn.copied:hover{background:#188653}
+.hidebtn-wrap{display:inline-flex;align-items:center;flex:none;max-width:100%}
+.hidebtn-wrap[title]{cursor:help}
+.hidebtn-wrap .hidebtn{max-width:100%}
 details.pubrow>summary .hidebtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
 details.pubrow>summary .hidebtn:disabled,details.pubrow>summary .delbtn:disabled{opacity:.5;cursor:not-allowed}
 details.pubrow>summary .delbtn{flex:none;white-space:nowrap;padding:6px 14px;font-size:.85rem}
@@ -737,15 +740,18 @@ function pubRow(it){
   s.appendChild(openReview);
  }
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
- if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
- else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
+ var hw=el('span','hidebtn-wrap');
+ if(!sv){
+  var reason=vLoaded?'لا يوجد تطابق آمن مع عنوان حكاية في قائمة الموقع (stories/index.json). طابق العنوان أو أضف رقم الحكاية الصحيح.':(vErr||'جارٍ تحميل قائمة حكايات الموقع…');
+  hb.disabled=true;hb.setAttribute('aria-label',reason);hw.title=reason;hw.setAttribute('aria-label',reason);
+ }else{hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';hw.title=hb.title}
  hb.addEventListener('click',function(e){
   e.preventDefault();e.stopPropagation();
   if(!sv)return;
   if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
   setHidden(sv,!hid,hb);
  });
- s.appendChild(hb);
+ hw.appendChild(hb);s.appendChild(hw);
  if(it._t!=='site'&&it.status!=='published'){
   var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل المسودة من لوحة الإدارة فقط';
   db.addEventListener('click',function(e){
