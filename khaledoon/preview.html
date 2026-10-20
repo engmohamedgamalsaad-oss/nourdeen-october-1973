@@ -375,11 +375,8 @@ function renderInTemplate(d){
 }
 
 function showPage(d){
- var url=String(d.preview_source_url||'').trim();
- if(!url){renderInTemplate(d);return}
- var job=url.indexOf(PAGES_ROOT)===0?loadSitePage(url,d).then(function(){say('تعرض الآن صفحة الحكاية المنشورة على الموقع نفسه، مع علامة واضحة أنها معاينة. بيانات المراجعة أسفل الإطار.')})
-        :loadRawPage(url,d).then(function(){say('تعرض الآن الصفحة المصممة من ملفات الفرع، مع علامة واضحة أنها معاينة غير منشورة. بيانات المراجعة أسفل الإطار.'+(d.source_preview_loaded?'':' تنبيه: الصفحة المرجعية لا تظهر جميع الوظائف المطلوبة (اللغات وبنك الأسئلة والتفاعلات)؛ لن تُعتبر صفحة نشر مكتملة.'))});
- job.catch(function(e){say('تعذر تحميل الصفحة المصممة ('+(e&&e.message?e.message:'سبب غير معروف')+')؛ نعرض النص داخل قالب القسم الاحتياطي.');renderInTemplate(d)});
+ /* لا نستخدم رابطًا خارجيًا/قديمًا للمعاينة: نفس مولّد HTML الذي ينشئ ملف النشر هو مصدر المعاينة، حتى لا يرى الأدمن شكلًا مختلفًا عن الصفحة التي سيرفعها. */
+ renderInTemplate(d);
 }
 
 /* ---------- القرار: قبول أو رفض ---------- */
