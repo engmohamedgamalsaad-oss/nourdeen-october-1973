@@ -464,9 +464,44 @@ function makePreviewDraft(statusForPreview){
   if(/^\x60\x60\x60/.test(text)){text=text.replace(/^\x60\x60\x60(?:json)?\s*/i,'').replace(/\s*\x60\x60\x60\s*$/,'')}
   var first=text.indexOf('{'),last=text.lastIndexOf('}');
   if(first<0||last<=first)throw new Error('الناتج ليس كائن JSON كاملًا. انسخ رد الـAI كاملًا.');
-  var pkg;try{pkg=JSON.parse(text.slice(first,last+1))}catch(e){throw new Error('صيغة JSON غير صحيحة؛ ارجع إلى أداة AI واطلب إخراج KH_STORY_PACKAGE_V1 صالحًا فقط.')}
+  var pkg;try{pkg=JSON.parse(text.slice(first,last+1))}catch(e){throw new Error('صيغة JSON غير صحيحة؛ انسخ الرد كاملًا إلى أداة AI واطلب إصلاح JSON وفق KH_STORY_PACKAGE_V1.')}
   if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1')throw new Error('الإصدار غير مطابق. اطلب من AI إخراج KH_STORY_PACKAGE_V1 حسب البرومبت الرئيسي.');
+  var missing=[];
+  function need(v,label){if(typeof v!=='string'||!v.trim())missing.push(label)}
+  need(pkg.figure_name,'اسم الشخصية');need(pkg.title,'العنوان العربي');need(pkg.body,'السرد العربي');need(pkg.karma_text,'نص كارما');need(pkg.history_note,'السياق التاريخي');need(pkg.sources,'المصادر');need(pkg.images_note,'ملاحظات الصور وحقوقها');
+  if(typeof pkg.original_body!=='string')missing.push('حفظ النص الأصلي في original_body (استخدم نصًا فارغًا إن لم يصل أصل)');
+  var translations=pkg.translations&&typeof pkg.translations==='object'?pkg.translations:{};
+  [['en','الإنجليزية'],['fr','الفرنسية'],['it','الإيطالية'],['de','الألمانية']].forEach(function(pair){
+   var tr=translations[pair[0]]||{};
+   ['title','subtitle','karma_text','body','history_note','images_note'].forEach(function(k){if(typeof tr[k]!=='string'||!tr[k].trim())missing.push(pair[1]+': '+k)});
+  });
+  var qb=pkg.question_bank&&typeof pkg.question_bank==='object'?pkg.question_bank:null;
+  var qs=qb&&Array.isArray(qb.questions)?qb.questions:[];
+  if(qs.length<5)missing.push('بنك أسئلة لا يقل عن 5 أسئلة');
+  qs.forEach(function(q,i){
+   var n=i+1;
+   if(!q||typeof q.q!=='string'||!q.q.trim())missing.push('السؤال '+n+': نص السؤال');
+   if(!q||!Array.isArray(q.o)||q.o.length<3||q.o.some(function(v){return typeof v!=='string'||!v.trim()}))missing.push('السؤال '+n+': ثلاثة اختيارات');
+   if(!q||!Number.isInteger(q.a)||q.a<0||!Array.isArray(q.o)||q.a>=q.o.length)missing.push('السؤال '+n+': رقم الإجابة الصحيحة a');
+   if(!q||typeof q.e!=='string'||!q.e.trim())missing.push('السؤال '+n+': تفسير الإجابة');
+   var i18n=q&&q.i18n&&typeof q.i18n==='object'?q.i18n:{};
+   [['en','EN'],['fr','FR'],['it','IT'],['de','DE']].forEach(function(pair){
+    var t=i18n[pair[0]]||{};
+    if(typeof t.q!=='string'||!t.q.trim()||typeof t.e!=='string'||!t.e.trim()||!Array.isArray(t.o)||t.o.length<3||t.o.some(function(v){return typeof v!=='string'||!v.trim()}))missing.push('السؤال '+n+': ترجمة كاملة '+pair[1]);
+   });
+  });
+  if(missing.length){var unique=missing.filter(function(v,i,a){return a.indexOf(v)===i});var err=new Error('الحكاية ناقصة ولا يمكن إرسالها للمعاينة بعد. الناقص:\n• '+unique.slice(0,35).join('\n• ')+(unique.length>35?'\n• وحقول أخرى':'')+'\nاستخدم صندوق «تعليمات إصلاح رد AI» أسفل خانة اللصق لنسخ طلب الإصلاح الجاهز.');err.aiMissing=unique;err.aiRaw=text;throw err}
   return pkg;
+ }
+ function showAiRepair(raw,missing){
+  var panel=document.getElementById('aiRepairPanel');
+  if(!panel){panel=el('div','ai-repair-panel');panel.id='aiRepairPanel';aiPastePanel.appendChild(panel)}
+  panel.replaceChildren();
+  panel.appendChild(el('h4','','تعليمات إصلاح رد AI — انسخها وأعد الرد إلى نفس الأداة'));
+  panel.appendChild(el('p','fnote','لم تُحفظ الحكاية ولم تُفتح المعاينة لأن الناتج ناقص. انسخ التعليمات التالية إلى الأداة المختارة مع الرد السابق.'));
+  var repair=area('',7,30000);repair.value='أصلح ردك السابق فقط وفق KH_STORY_PACKAGE_V1. أعد كائن JSON صالحًا كاملًا واحدًا، دون Markdown أو شرح. لا تحذف أي محتوى صحيح ولا تغيّر النص الأصلي. أكمل الحقول التالية الناقصة تحديدًا:\n- '+missing.join('\n- ')+'\n\nالرد السابق كاملًا:\n'+String(raw||'');panel.appendChild(repair);
+  var copy=el('button','btn ghost','نسخ تعليمات الإصلاح');copy.type='button';copy.addEventListener('click',function(){var value=repair.value;function done(ok){say(ok?'ok':'err',ok?'تم نسخ تعليمات الإصلاح مع الرد السابق.':'تعذر النسخ؛ حدّد النص وانسخه يدويًا.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(value).then(function(){done(true)}).catch(function(){fallbackCopy(value,done)});else fallbackCopy(value,done)});
+  panel.appendChild(copy);
  }
  function applyAiPackage(pkg,raw){
   function set(input,value){if(input&&typeof value==='string')input.value=value}
@@ -489,7 +524,7 @@ function makePreviewDraft(statusForPreview){
  bImport.addEventListener('click',function(){
   var old=bImport.textContent;bImport.disabled=true;bImport.textContent='جارٍ تجهيز المعاينة…';
   try{var raw=aiPaste.value,pkg=parseAiPackage(raw);applyAiPackage(pkg,raw);openPreviewAfterSave(bImport)}
-  catch(e){say('err',e.message||'تعذر قراءة ناتج AI.');bImport.disabled=false;bImport.textContent=old}
+  catch(e){if(e&&e.aiMissing)showAiRepair(e.aiRaw,e.aiMissing);say('err',e.message||'تعذر قراءة ناتج AI.');bImport.disabled=false;bImport.textContent=old}
  });
  function openPreviewAfterSave(btn){
   var popup=window.open('about:blank','_blank');
@@ -587,7 +622,9 @@ function makePreviewDraft(statusForPreview){
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
   L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push(promptProvidersCache[providerSelect.value]||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
-  L.push('');L.push('=== أولوية نهائية — صيغة إعادة الحكاية إلى خانة الاستقبال ===');L.push(typeof KH_AI_PASTE_CONTRACT==='string'?KH_AI_PASTE_CONTRACT:'أخرج JSON صالحًا فقط بالصيغة KH_STORY_PACKAGE_V1؛ لا HTML ولا Markdown ولا شرح خارج JSON.');
+  L.push('');var priorReview=(it.story_meta&&it.story_meta.preview_review)||(it.story_meta&&it.story_meta.pending_draft&&it.story_meta.pending_draft.preview_review)||{};
+  if(priorReview.decision==='rejected'&&priorReview.reason){L.push('=== سبب رفض المعاينة السابقة — يجب إصلاحه صراحة ===');L.push(String(priorReview.reason));L.push('لا تتجاهل سبب الرفض. أصلح هذه النقاط أولًا، ثم أعد إنتاج الحزمة كاملة بالصيغة المطلوبة.');L.push('=== النسخة السابقة التي رُفضت — للمقارنة والإصلاح فقط ===');L.push(String(it.story_meta.ai_response_raw||(it.story_meta.pending_draft&&it.story_meta.pending_draft.story_meta&&it.story_meta.pending_draft.story_meta.ai_response_raw)||body.value||''));L.push('')}
+  L.push('=== أولوية نهائية — صيغة إعادة الحكاية إلى خانة الاستقبال ===');L.push(typeof KH_AI_PASTE_CONTRACT==='string'?KH_AI_PASTE_CONTRACT:'أخرج JSON صالحًا فقط بالصيغة KH_STORY_PACKAGE_V1؛ لا HTML ولا Markdown ولا شرح خارج JSON.');
   var t=L.join('\n');
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
