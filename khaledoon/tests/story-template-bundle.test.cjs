@@ -12,7 +12,7 @@ function loadBundle(fetchMock) {
 }
 function loadAiParser() {
   const start = adminSource.indexOf('function parseAiPackage(raw){');
-  const end = adminSource.indexOf('  function showAiRepair(raw,missing){', start);
+  const end = adminSource.indexOf('function showAiRepair(raw,missing){', start);
   assert.ok(start >= 0 && end > start, 'AI package parser must exist in admin source');
   const fn = adminSource.slice(start, end).trim();
   return vm.runInNewContext('(' + fn + ')', {
