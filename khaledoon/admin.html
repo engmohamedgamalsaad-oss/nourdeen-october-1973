@@ -15,7 +15,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/khaledoon.css">
 <link rel="stylesheet" href="assets/khaledoon-forms.css">
-<link rel="stylesheet" href="assets/admin-mobile.css?v=20261019-1">
+<link rel="stylesheet" href="assets/admin-mobile.css?v=20261020-2">
 <style>
 .sec-october{--c:#f0c878}.sec-science{--c:#8ad9e8}.sec-learning{--c:#d78bb2}.sec-fame{--c:#e2b36d}.sec-history{--c:#d4b7ff}.sec-readers{--c:#f5b37e}.sec-curriculum{--c:#9bb7ff}.sec-islamic{--c:#78c59a}
 html[data-theme=light] .sec-october{--c:#b8771a}html[data-theme=light] .sec-science{--c:#1f58b8}html[data-theme=light] .sec-learning{--c:#963e70}html[data-theme=light] .sec-fame{--c:#9a681d}html[data-theme=light] .sec-history{--c:#6b46c1}html[data-theme=light] .sec-readers{--c:#c2642a}html[data-theme=light] .sec-curriculum{--c:#1f4fa3}html[data-theme=light] .sec-islamic{--c:#26784d}
@@ -34,6 +34,8 @@ details.pubrow>summary{padding:8px 12px;gap:8px}
 .stat-button:hover{border-color:var(--gold);transform:translateY(-1px)}
 .stat-button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .stat-button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+/* عدادات لوحة الإدارة: صفوف متوازنة على الكمبيوتر؛ وتحوّل CSS الهاتف إلى عمودين. */
+#viewSubs > .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
 .pubrow .pd{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
 .pubrow .pbody{padding:0 10px 10px}.pubrow .pbody .fcard{margin-bottom:0}
 .mvbox{margin-top:14px;padding:14px;border:1px dashed var(--c,var(--gold));border-radius:14px}
