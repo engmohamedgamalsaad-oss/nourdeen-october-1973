@@ -98,6 +98,9 @@ async function main() {
       const builder = await context.newPage();
       await builder.goto('http://127.0.0.1:' + PORT + '/khaledoon/story-builder.html', { waitUntil:'domcontentloaded' });
       await builder.locator('#title').waitFor({ state:'visible', timeout:10000 });
+      assert.equal(await builder.locator('details.lang').count(), 4, 'Builder must expose four collapsible translation panels');
+      assert.ok(await builder.locator('#tr_de_title').count(), 'German translation fields must remain in the form when collapsed');
+      assert.equal(await builder.locator('details.lang[open]').count(), 1, 'Only English should open by default to reduce initial scroll');
       await builder.screenshot({ path:path.join(OUT, 'builder-' + viewport.name + '.png'), fullPage:true });
       const builderOverflow = await builder.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(builderOverflow <= 2, 'Manual builder horizontal overflow on ' + viewport.name + ': ' + builderOverflow + 'px');
