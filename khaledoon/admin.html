@@ -119,7 +119,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 <button class="btn primary" type="submit" id="loginBtn">دخول</button>
 </form></section>
 <section id="app" hidden>
-<section class="fcard" id="adminTools" style="margin:16px 0"><h2>أدوات تجهيز ومراجعة الموقع</h2><p class="fnote">إدارة الأقسام تحفظ العناوين والألوان مركزيًا وتنعكس على الصفحة الرئيسية وصفحات المجموعات والخريطة بعد تحديثها. القسم الجديد يستخدم صفحة مجموعة عامة؛ وظهوره على الخريطة يتطلب حكاية منشورة ذات مكان موثّق. إدارة البرومبتات تحفظ النسخة المركزية وتستخدمها لوحة تجهيز الحكاية، لكنها لا تعدّل ملفات GitHub تلقائيًا.</p><div class="ctl admin-tool-links" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="sections-admin.html">إدارة الأقسام</a><a class="btn ghost" href="prompts-admin.html">إدارة البرومبتات</a><a class="btn ghost" href="story-builder.html">إنشاء يدوي بدون AI</a><a class="btn ghost" href="../../docs/GITHUB-MERGE-GUIDE-AR.md" target="_blank" rel="noopener">شرح الدمج في GitHub</a></div></section>
+<section class="fcard" id="adminTools" style="margin:16px 0"><h2>أدوات تجهيز ومراجعة الموقع</h2><p class="fnote">إدارة الأقسام تحفظ العناوين والألوان مركزيًا وتنعكس على الصفحة الرئيسية وصفحات المجموعات والخريطة بعد تحديثها. القسم الجديد يستخدم صفحة مجموعة عامة؛ وظهوره على الخريطة يتطلب حكاية منشورة ذات مكان موثّق. إدارة البرومبتات تحفظ النسخة المركزية وتستخدمها لوحة تجهيز الحكاية، لكنها لا تعدّل ملفات GitHub تلقائيًا.</p><div class="ctl admin-tool-links" style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn ghost" href="sections-admin.html">إدارة الأقسام</a><a class="btn ghost" href="prompts-admin.html">إدارة البرومبتات</a><a class="btn ghost" href="story-builder.html">إنشاء يدوي بدون AI</a><a class="btn ghost" href="https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/docs/GITHUB-MERGE-GUIDE-AR.md" target="_blank" rel="noopener">شرح الدمج في GitHub</a></div></section>
 <div class="chips" id="views" role="group" aria-label="أقسام الإدارة"></div>
 <div id="viewSubs">
 <div class="fhead"><div class="kicker">مساحة المراجعة</div><h1>الحكايات المرسلة</h1><p>راجع النص الأصلي والمصادر أولًا، ثم أكمل «في ضوء التاريخ»، ولا تنشر قبل التأكد من الحقائق وموافقة الراوي أو ولي أمره. زر «إخفاء» بجانب كل حكاية يخفيها من صفحة الزوار، والضغط عليه مرة ثانية يعيد إظهارها.</p></div>
@@ -157,10 +157,13 @@ var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',pub
 var SEC={october:'حكايات أكتوبر 1973',science:'العلم والعلماء',learning:'نساء خالدات',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية',readers:'اقتراحات القرّاء'};
 var VSEC={science:'العلم والعلماء',knowledge:'نساء خالدات',women:'نساء خالدات',learning:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',fame:'أعلام الأدب والفنون والرياضة',history:'التاريخ والحضارات',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية'};
 var STG={primary:'الابتدائية',preparatory:'الإعدادية',secondary:'الثانوية'};
+/* مفاتيح الأقسام في stories/index.json تختلف عن مفاتيح جدول الإرسال؛ نوحّدها حتى يعمل التصفية والألوان لكل الحكايات. */
+var SITEKEY={women:'learning',knowledge:'learning',people:'fame'};
 var ORD=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
 function $(i){return document.getElementById(i)}
 function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
-function say(k,t){var m=$('msg');m.className='fmsg '+k;m.textContent=t;m.hidden=false;if(k==='ok')setTimeout(function(){m.hidden=true},4000)}
+var sayTimer=null;
+function say(k,t){var m=$('msg');m.className='fmsg '+k;m.textContent=t;m.hidden=false;clearTimeout(sayTimer);if(k==='ok')sayTimer=setTimeout(function(){m.hidden=true},4000)}
 function save(s){session=s;try{sessionStorage.setItem(SK,JSON.stringify(s));localStorage.setItem(SK,JSON.stringify(s))}catch(e){}}
 function load(){try{var s=JSON.parse(localStorage.getItem(SK)||sessionStorage.getItem(SK)||'null');if(s&&s.access_token)session=s}catch(e){}}
 function clear(){session=null;vStories=[];vHidden={};vLoaded=false;try{sessionStorage.removeItem(SK);localStorage.removeItem(SK)}catch(e){}}
@@ -212,7 +215,7 @@ async function loadList(){
  var current=await response.json();
 
  current.forEach(function(x){x._t='k'});
- var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
+ var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
  var unmatchedRecords=[];
  current.forEach(function(record){var linked=storyFor(record),site=linked&&siteItems.find(function(x){return String(x.id)===String(linked.id)});if(site)site.submissions.push(record);else unmatchedRecords.push(record)});
  items=unmatchedRecords.concat(siteItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
@@ -274,7 +277,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
    var requiredText=[].concat(String(draft.body||'').split(/\n{2,}/),String(draft.karma_text||'').split(/\n{2,}/)).map(normalizeStoryText).filter(function(t){return t.length>=20});if(requiredText.some(function(t){return liveText.indexOf(t)<0}))throw new Error('نص الراوي أو مقاطع كارما في الصفحة الحية لا تطابق النسخة التي تمت معاينتها. لم أغيّر حالة السجل.');
    var quizResponse=await fetch('/nourdeen-october-1973/stories/quizzes/'+encodeURIComponent(liveSlug)+'.json?verify='+Date.now(),{cache:'no-store'});if(!quizResponse.ok)throw new Error('بنك الأسئلة غير موجود على الموقع الحي ('+quizResponse.status+'). لم أغيّر حالة السجل.');var quizData=await quizResponse.json();if(!Array.isArray(quizData.questions)||quizData.questions.length<5||quizData.questions.some(function(q){return !q.i18n||['en','fr','it','de'].some(function(lang){return !q.i18n[lang]||!q.i18n[lang].q||!Array.isArray(q.i18n[lang].o)||!q.i18n[lang].e})}))throw new Error('بنك الأسئلة الحي ناقص أو لا يحتوي الترجمات الأربع المطلوبة. لم أغيّر حالة السجل.');
    var indexResponse=await fetch('/nourdeen-october-1973/stories/index.json?verify='+Date.now(),{cache:'no-store'});if(!indexResponse.ok)throw new Error('تعذر قراءة فهرس الحكايات الحي. لم أغيّر حالة السجل.');var liveIndex=await indexResponse.json(),pathParts=canonicalLiveUrl.pathname.split('/').filter(Boolean),rootPart=pathParts.indexOf('nourdeen-october-1973'),relativeParts=pathParts.slice(rootPart>=0?rootPart+1:0);if(relativeParts[relativeParts.length-1]==='index.html')relativeParts.pop();var canonicalStoryPath=relativeParts.join('/');if(!Array.isArray(liveIndex)||!liveIndex.some(function(item){return String(item.id||'').padStart(3,'0')===liveSlug&&String(item.path||'').split('/').filter(Boolean).join('/')===canonicalStoryPath}))throw new Error('الحكاية غير موجودة في فهرس الموقع أو مسارها لا يطابق الصفحة الحية. لم أغيّر حالة السجل.');
-   var translationScript=Array.from(liveDoc.querySelectorAll('script[src]')).find(function(node){return /translations\\.js/i.test(node.getAttribute('src')||'')});if(!translationScript)throw new Error('ملف الترجمات غير مربوط بصفحة الحكاية. لم أغيّر حالة السجل.');var translationResponse=await fetch(new URL(translationScript.getAttribute('src'),canonicalLiveUrl).href,{cache:'no-store'});if(!translationResponse.ok)throw new Error('ملف ترجمات الحكاية غير موجود على الموقع الحي. لم أغيّر حالة السجل.');
+   var translationScript=Array.from(liveDoc.querySelectorAll('script[src]')).find(function(node){return /translations\.js/i.test(node.getAttribute('src')||'')});if(!translationScript)throw new Error('ملف الترجمات غير مربوط بصفحة الحكاية. لم أغيّر حالة السجل.');var translationResponse=await fetch(new URL(translationScript.getAttribute('src'),canonicalLiveUrl).href,{cache:'no-store'});if(!translationResponse.ok)throw new Error('ملف ترجمات الحكاية غير موجود على الموقع الحي. لم أغيّر حالة السجل.');
    var coverRefs=['cover.svg','cover-popup.svg'];for(var coverRef of coverRefs){var coverResponse=await fetch(new URL(coverRef,canonicalLiveUrl).href,{cache:'no-store'});if(!coverResponse.ok)throw new Error('ملف الغلاف '+coverRef+' غير موجود على الموقع الحي. لم أغيّر حالة السجل.');}
   }else{throw new Error('لا يوجد رابط صفحة حية مسجل للمعاينة المقبولة؛ لن أغيّر الحالة إلى منشورة. أعد فتح المعاينة وسجّل رابط الصفحة الجاهزة أو أنشئ حزمة القالب.');}
   var payload={};
@@ -322,7 +325,7 @@ function legacyCard(it){
  if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload'){var finish=el('button','btn primary','تأكيد النشر بعد الرفع');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
  var providerLegacy=document.createElement('select');providerLegacy.className='btn ghost';providerLegacy.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];providerLegacy.appendChild(o)});
  var copyLegacy=el('button','btn ghost','نسخ الحكاية كاملة');copyLegacy.type='button';
- copyLegacy.addEventListener('click',function(){var key=providerLegacy.value,lines=['ملف عمل حكاية — خالدون عبر التاريخ','استخدم البرومبت الكامل الآتي، واحتفظ بالنص الأصلي منفصلًا. لا تنشر قبل المعاينة والموافقة.','=== تعليمات المشروع ===',PROJECT_INSTRUCTIONS,'=== البرومبتات المحفوظة الحالية ===',managedPromptSections(key),...(key==='claude'?['=== تعليمات Claude ===',CLAUDE_INSTRUCTIONS]:[]),'=== تعليمات المساعدين ===',AGENT_INSTRUCTIONS,'=== بيانات الحكاية ===','القسم: حكايات أكتوبر 1973','اسم صاحب الحكاية: '+(name.value.trim()||'غير مذكور'),'الصف: '+(grade.value.trim()||'غير مذكور'),'العنوان: '+(title.value.trim()||'غير مذكور'),'العنوان الفرعي: '+(subtitle.value.trim()||'لا يوجد'),'=== النص الأصلي كما وصل — لا تعدّله ===',it.original_body||it.body||'غير محفوظ','=== النص الحالي للتعديل ===',body.value.trim(),'=== المصادر ===',sources.value.trim()||'لم تُرفق مصادر','=== المطلوب ===','راجع الوقائع والمصادر، اكتب العربية أولًا، جهّز EN/FR/IT/DE، وحافظ على كارما والراوي وبنك الأسئلة والإعجاب والتفاعلات والمشاركة والطباعة. استخدم قالب القسم، جهز ملفات كاملة، اعرض معاينة للحكاية وحدها، وانتظر الموافقة. لا تدّعِ رفعًا أو نشرًا لم يحدث.'];var text=lines.join('\\n');function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية الكامل مع تعليمات الأداة المختارة.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done)});
+ copyLegacy.addEventListener('click',function(){var key=providerLegacy.value,lines=['ملف عمل حكاية — خالدون عبر التاريخ','استخدم البرومبت الكامل الآتي، واحتفظ بالنص الأصلي منفصلًا. لا تنشر قبل المعاينة والموافقة.','=== تعليمات المشروع ===',PROJECT_INSTRUCTIONS,'=== البرومبتات المحفوظة الحالية ===',managedPromptSections(key),...(key==='claude'?['=== تعليمات Claude ===',CLAUDE_INSTRUCTIONS]:[]),'=== تعليمات المساعدين ===',AGENT_INSTRUCTIONS,'=== بيانات الحكاية ===','القسم: حكايات أكتوبر 1973','اسم صاحب الحكاية: '+(name.value.trim()||'غير مذكور'),'الصف: '+(grade.value.trim()||'غير مذكور'),'العنوان: '+(title.value.trim()||'غير مذكور'),'العنوان الفرعي: '+(subtitle.value.trim()||'لا يوجد'),'=== النص الأصلي كما وصل — لا تعدّله ===',it.original_body||it.body||'غير محفوظ','=== النص الحالي للتعديل ===',body.value.trim(),'=== المصادر ===',sources.value.trim()||'لم تُرفق مصادر','=== المطلوب ===','راجع الوقائع والمصادر، اكتب العربية أولًا، جهّز EN/FR/IT/DE، وحافظ على كارما والراوي وبنك الأسئلة والإعجاب والتفاعلات والمشاركة والطباعة. استخدم قالب القسم، جهز ملفات كاملة، اعرض معاينة للحكاية وحدها، وانتظر الموافقة. لا تدّعِ رفعًا أو نشرًا لم يحدث.'];var text=lines.join('\n');function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية الكامل مع تعليمات الأداة المختارة.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done)});
  bar.appendChild(providerLegacy);bar.appendChild(copyLegacy);box.appendChild(bar);
  function collectLegacyTranslations(){var out={};Object.keys(legacyTranslationInputs).forEach(function(lang){var t=legacyTranslationInputs[lang];out[lang]={enabled:true,status:'draft',title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),student_name:name.value.trim(),grade:grade.value.trim(),karma_text:t.karma_text.value.trim(),body:t.body.value.trim(),history_note:t.history_note.value.trim(),images_note:t.images_note.value.trim()}});return out}
  async function persistLegacy(nextStatus,btn){
@@ -453,6 +456,7 @@ function makePreviewDraft(statusForPreview){
  }
  var bPreview=el('button','btn ghost','معاينة قبل النشر');bPreview.type='button';
  bPreview.addEventListener('click',function(){openPreviewAfterSave(bPreview)});
+ if(it.status==='published')bar.appendChild(bPreview);
  
  var providerSelect=document.createElement('select');providerSelect.className='btn ghost';providerSelect.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي للبرومبت');[['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=document.createElement('option');o.value=p[0];o.textContent=p[1];providerSelect.appendChild(o)});providerSelect.title='اختر الأداة لتضمين تعليماتها الخاصة في النسخة المنسوخة';
  var bCopy=el('button','btn ghost','نسخ الحكاية كاملة');bCopy.type='button';var ckey=isNew?null:copyKey(it),copyN=ckey?getCopies(ckey):0;if(copyN){bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied')}
@@ -599,7 +603,7 @@ if(!isNew){
    if(rows[0])Object.assign(it,rows[0]);
    /* احتفظ بآخر سجل محفوظ في مساحة المعاينة حتى يعمل رابط preview.html مباشرة. */
    try{
-    var savedPreview=makePreviewDraft(saveStatus);
+    var savedPreview=makePreviewDraft(status);
     savedPreview.submission_id=it.id||rows[0].id||null;
     savedPreview.record_data=Object.assign({},d,{id:savedPreview.submission_id});
     savedPreview.story_meta=d.story_meta||{};
@@ -708,7 +712,7 @@ function pubRow(it){
  var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
  var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
- var dt='';try{dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
+ var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[STATUS[it.status]||'',dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
@@ -950,7 +954,7 @@ async function handleStoryPreviewDecision(event){
   if(context.record_type==='modern'&&record.status!=='published')record.status='review';
   if(context.record_type==='legacy'&&record.status!=='published')record.status='pending';
  }else{
-  if(record.status!=='published')record.status='rejected';
+  if(record.status!=='published')record.status='pending';
  }
  if(action==='approve'&&record.status!=='published'){var rdMeta=record.story_meta||{};meta.pending_draft=Object.assign({},record);delete meta.pending_draft.story_meta;enrichPending(meta.pending_draft);meta.pending_draft.karma_text=previewDraft.karma_text||rdMeta.karma_text||'';meta.pending_draft.question_bank_json=previewDraft.question_bank_json||rdMeta.question_bank_json||'';meta.pending_draft.preview_source_url=previewDraft.preview_source_url||rdMeta.preview_source_url||'';meta.karma_text=meta.pending_draft.karma_text;meta.question_bank_json=meta.pending_draft.question_bank_json;meta.preview_source_url=meta.pending_draft.preview_source_url;}else if(action==='reject'&&record.status==='published'){delete meta.pending_draft;}
  var buttonLabel=action==='approve'?'تثبيت اعتماد المعاينة':'تسجيل رفض المعاينة';
@@ -964,7 +968,6 @@ async function handleStoryPreviewDecision(event){
   var response=await rest(table+'?id=eq.'+encodeURIComponent(context.submission_id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(updatePayload)});
   if(!response.ok){var body=await response.text();throw new Error('تعذر حفظ قرار المعاينة ('+response.status+'): '+body.slice(0,350))}
   var rows=await response.json();if(!rows.length)throw new Error('لم يُرجع الخادم سجلًا بعد قرار المعاينة. راجع صلاحيات الأدمن.');
-  if(action==='reject'){try{localStorage.setItem('kh-story-preview-draft','')}catch(clearRejectedPreviewError){}}
   context.story_meta=meta;context.record_data=record;
   try{if(action==='reject'){var rejectedDraft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null');if(rejectedDraft&&String(rejectedDraft.submission_id||'')===String(context.submission_id)){localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}}else{localStorage.setItem('kh-story-preview-context',JSON.stringify(context))}}catch(e){}
   await loadList();
