@@ -51,12 +51,15 @@ t('العدادات تفصل سجلات الأدمن عن صفحات الموق�
   assert.equal(c.byState.published, 1);
 });
 
-t('لا ربط بالعنوان؛ ربط صريح فقط، والتطابق بالعنوان مجرد تنبيه', function () {
-  var rec = { id: 'x', status: 'pending', title: 'حكاية العالم أحمد زويل', story_meta: {} };
-  var site = [{ id: '007', title: 'حكاية العالم أحمد زويل' }];
-  assert.equal(W.linkedSite(rec, site), null);
-  assert.equal(W.possibleSiteMatches(rec, site).length, 1);
+t('الربط يحتاج معرّفًا صريحًا؛ العنوان أو الشخصية يعرضان تنبيهًا فقط', function () {
+  var site = [{ id: '007', title: 'حكاية العالم أحمد زويل', person: 'أحمد زويل' }];
+  var byTitle = { id: 'x', status: 'pending', title: 'حكاية العالم أحمد زويل', story_meta: {} };
+  assert.equal(W.linkedSite(byTitle, site), null);
+  assert.equal(W.possibleSiteMatches(byTitle, site).length, 1);
   assert.equal(W.possibleSiteMatches(rows.published, site).length, 1, 'علامتا ** لا تمنعان التنبيه');
+  var byFigure = { id: 'z', status: 'pending', title: 'عنوان مختلف', figure_name: 'أحمد زويل', story_meta: {} };
+  assert.equal(W.linkedSite(byFigure, site), null, 'اسم الشخصية لا ينشئ ربطًا تلقائيًا');
+  assert.equal(W.possibleSiteMatches(byFigure, site).length, 1, 'اسم الشخصية يعرض تنبيهًا استرشاديًا');
   var linked = { id: 'y', status: 'review', story_meta: { preview_review: { decision: W.DECISION.APPROVED, static_story_id: '7' } } };
   assert.equal(W.linkedSite(linked, site).id, '007');
 });
