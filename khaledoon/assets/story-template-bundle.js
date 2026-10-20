@@ -239,5 +239,5 @@ function renderPreviewHtml(d){
  html=html.replace('</body>',script+'</body>');
  return html;
 }
-window.KHStoryBundle={validate:validate,download:download,renderPreviewHtml:renderPreviewHtml};
+window.KHStoryBundle={validate:validate,nextId:nextId,download:download,renderPreviewHtml:renderPreviewHtml};
 })();
