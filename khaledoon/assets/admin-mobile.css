@@ -36,6 +36,7 @@
     font-size: .88rem;
   }
   .topbar .ctl #th { grid-column: 1 / -1; }
+  .topbar .ctl #logoutBtn { grid-column: 1 / -1; }
   .fmain,
   main.fmain[style] {
     width: calc(100% - 20px) !important;
@@ -108,6 +109,7 @@
     line-height: 1.45;
   }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  #viewSubs > .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat { min-width: 0; padding: 11px; overflow-wrap: anywhere; }
   .stat strong { font-size: 1.35rem; }
   #list, #vlist, #rlist, #viewSubs, #viewVis, #viewReactions { min-width: 0; }
@@ -135,12 +137,17 @@
   table { display: block; width: 100%; max-width: 100%; overflow-x: auto; }
 }
 @media (max-width: 420px) {
-  .topbar .ctl, #adminTools .ctl { grid-template-columns: minmax(0, 1fr); }
-  .topbar .ctl #th { grid-column: auto; }
+  .topbar .ctl, #adminTools .ctl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .topbar .ctl #th { grid-column: 1 / -1; }
   .fbar { grid-template-columns: minmax(0, 1fr); }
-  .stats { grid-template-columns: minmax(0, 1fr); }
-  .reaction-count-grid { grid-template-columns: minmax(0, 1fr); }
-  .chips > button, .chips > a, .chips > label { flex-basis: 100%; }
+  /* ستة عدادات في ثلاث صفوف بدل عمود طويل، مع إبقاء النص واضحًا على الهاتف. */
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #viewSubs > .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stat { padding: 10px; }
+  .stat strong { font-size: 1.25rem; }
+  .reaction-count-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* فلاتر الحالة والأقسام تبقى قابلة للمس في عمودين بدل زر لكل سطر. */
+  .chips > button, .chips > a, .chips > label { flex: 1 1 calc(50% - 4px); }
   .fcard { padding: 12px; }
 }
 @media (prefers-reduced-motion: reduce) {

@@ -1,0 +1,48 @@
+name: Story workflow mocked tests
+
+on:
+  pull_request:
+    paths:
+      - "khaledoon/admin.html"
+      - "khaledoon/preview.html"
+      - "khaledoon/story-builder.html"
+      - "khaledoon/assets/story-workflow.js"
+      - "khaledoon/assets/story-template-bundle.js"
+      - "khaledoon/tests/**"
+      - ".github/workflows/story-workflow-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  workflow-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run workflow unit tests
+        run: node khaledoon/tests/story-workflow.test.js
+      - name: Run mocked integration contract tests
+        run: node khaledoon/tests/story-workflow-integration.test.js
+      - name: Install Playwright
+        run: npm install --no-save playwright
+      - name: Install Chromium for headless tests
+        run: npx playwright install --with-deps chromium
+      - name: Run mocked headless preview tests
+        run: node khaledoon/tests/story-workflow-browser.test.cjs
+      - name: Run desktop/mobile admin visual audit with mock data
+        run: node khaledoon/tests/admin-visual-audit.test.cjs
+      - name: Upload admin and builder screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-visual-audit-screenshots
+          path: artifacts/admin-visual-audit/*.png
+          if-no-files-found: warn
+          retention-days: 14
