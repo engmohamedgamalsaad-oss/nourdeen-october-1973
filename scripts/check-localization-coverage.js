@@ -102,7 +102,7 @@ for (const file of translationMaps) {
 /* German-only additions for expanded text in October stories 001–003 must not fall back to Arabic. */
 {
   const source = read('assets/shared/story-body-i18n.js');
-  const match = source.match(/var germanStoryText = (\{[\s\S]*?\});\s*var original/);
+  const match = source.match(/var germanStoryText = (\{[\s\S]*?\});/);
   if (!match) {
     problems.push('assets/shared/story-body-i18n.js: missing germanStoryText map.');
   } else {
