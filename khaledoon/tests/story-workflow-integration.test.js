@@ -31,6 +31,19 @@ test('published admin records and published site pages are separate filters', fu
   assert.ok(admin.includes("fStatus==='published'?i._t!=='site'&&itemState(i)==='published'"));
   assert.ok(admin.includes("return i._t!=='site'&&itemState(i)===k"));
 });
+test('copied story prompts are compact, mode-specific, and include validated image fields', function () {
+  assert.ok(admin.includes("function buildNewStoryPrompt(providerKey,mode)"));
+  assert.ok(admin.includes("buildNewStoryPrompt(provider,'package')"));
+  assert.ok(admin.includes("buildNewStoryPrompt(gateProvider.value)"));
+  var fn = admin.slice(admin.indexOf('function buildNewStoryPrompt'), admin.indexOf('function renderNewStoryGate'));
+  assert.ok(fn.includes("if(mode==='package')"));
+  assert.ok(fn.includes('اللغات الخمس كاملة'));
+  assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
+  assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
+  assert.ok(admin.includes('visual_design, images, translations, question_bank'));
+  assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
+  assert.ok(admin.includes('source_name,source_url,rights,i18n'));
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
