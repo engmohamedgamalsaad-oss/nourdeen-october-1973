@@ -45,7 +45,12 @@ const records = [
     body:'نص معاينة وهمي آخر لاختبار عرض حالة انتظار النشر والأزرار في البطاقة.',
     sources:'مصدر تجريبي — https://example.invalid/another-source', consent:true,
     created_at:'2026-10-19T09:00:00Z', translations:{},
-    story_meta:{ preview_review:{ decision:'approved_waiting_for_github_upload', static_story_id:'099', static_story_path:'stories/history/099/' } } }
+    story_meta:{ preview_review:{ decision:'approved_waiting_for_github_upload', static_story_id:'099', static_story_path:'stories/history/099/' } } },
+  { id:'visual-match-003', status:'pending', section:'science', title:'اختبار تطابق استرشادي بالاسم فقط',
+    subtitle:'بيانات وهمية لاختبار التنبيه دون الربط التلقائي', figure_name:'أحمد زويل', narrator_name:'راوٍ تجريبي',
+    narrator_grade:'الصف الأول الإعدادي', original_body:'نص وهمي ثالث ثابت.',
+    body:'نص وهمي لاختبار التنبيه الاسترشادي عند تطابق اسم الشخصية مع صفحة موجودة.',
+    sources:'مصدر تجريبي', consent:true, created_at:'2026-10-18T09:00:00Z', translations:{}, story_meta:{} }
 ];
 
 async function main() {
@@ -90,6 +95,7 @@ async function main() {
       await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html', { waitUntil:'domcontentloaded' });
       await page.locator('#app').waitFor({ state:'visible', timeout:15000 });
       await page.getByText('اختبار بصري — حكاية مرسلة للمعاينة').waitFor({ state:'visible', timeout:15000 });
+      await page.getByText(/تنبيه: قد تطابق صفحة/).waitFor({ state:'visible', timeout:10000 });
       await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-dark.png'), fullPage:true });
       await page.locator('#th').click();
       await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');
