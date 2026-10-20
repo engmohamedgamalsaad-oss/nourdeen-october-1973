@@ -254,7 +254,7 @@
 استخدم البنية التالية بدقة:
 {
   "format": "KH_STORY_PACKAGE_V1",
-  "section_key": "october|history|science|women|people|curriculum|islamic",
+  "section_key": "october",
   "figure_name": "اسم الشخصية أو الموضوع",
   "title": "العنوان العربي",
   "subtitle": "نبذة عربية قصيرة",
