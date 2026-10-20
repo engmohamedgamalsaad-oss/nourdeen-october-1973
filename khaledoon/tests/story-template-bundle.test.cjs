@@ -19,6 +19,7 @@ async function main() {
     if (String(url).includes('/stories/002/index.html')) return { ok: true, status: 200 };
     return { ok: false, status: 404 };
   });
+  assert.equal(typeof bundle.nextId, 'function', 'public story bundle must expose nextId for the builder and tests');
   assert.equal(await bundle.nextId(), '004', 'must skip indexed IDs and an unindexed existing page');
   assert.ok(heads.some(url => url.includes('/stories/002/index.html')), 'must check legacy story folders, not trust index alone');
 
