@@ -70,6 +70,12 @@ async function nextId(){
  for(var id=1;id<=9999;id++){
   var name=String(id).padStart(3,'0');if(indexed[name])continue;
   var exists=false;
+  /* Legacy story pages live directly under stories/NNN; check them before category folders. */
+  var legacyResponse;
+  try{legacyResponse=await fetch('../stories/'+name+'/index.html',{method:'HEAD',cache:'no-store'})}
+  catch(e){throw new Error('تعذر التحقق من صفحة الحكاية القديمة '+name+' بسبب فشل الاتصال؛ أوقفنا التجهيز لتجنب تكرار صفحة موجودة.')}
+  if(legacyResponse&&legacyResponse.ok)continue;
+  if(!legacyResponse||legacyResponse.status!==404)throw new Error('لم نستطع التأكد هل الرقم '+name+' مستخدم في مجلد الحكايات القديم (HTTP '+(legacyResponse?legacyResponse.status:'بدون استجابة')+'). لم نخصص رقمًا لتجنب التكرار.');
   for(var section of sections){
    var response;
    try{response=await fetch('../stories/'+section+'/'+name+'/index.html',{method:'HEAD',cache:'no-store'})}
@@ -81,6 +87,7 @@ async function nextId(){
  }
  throw new Error('لم نعثر على رقم متاح بين 001 و9999؛ راجع فهرس الحكايات والمجلدات يدويًا.');
 }
+
 function sourceRows(s){
  var rows=[];String(s||'').split(/\r?\n/).map(function(line){return line.trim()}).filter(Boolean).forEach(function(line){
   var urls=line.match(/https?:\/\/[^\s)\]>]+/g)||[];
