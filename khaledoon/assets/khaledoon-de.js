@@ -1,4 +1,4 @@
-/* خالدون عبر التاريخ — قاموس اللغة الألمانية (DE).
+/* خالدون عبر التاريخ — قاموس اللغة الألمانية (DE)، مسجّل في سجل اللغات المشترك.
    المفاتيح = النص العربي الأصلي كما يظهر في الصفحة (بعد إزالة الفراغات من الطرفين)، والقيم = الترجمة الألمانية.
    يُحمَّل قبل khaledoon.js و khaledoon-pages-i18n.js و khaledoon-i18n-extra.js، وهذه السكربتات تقرأ window.KH_DE
    عند اختيار الألمانية من الصفحة الرئيسية (المفتاح الموحد kh-lang = de). أي نص غير موجود هنا يبقى بالعربية ولا يظهر "undefined". */
@@ -252,3 +252,8 @@ window.KH_DE={
 "خالدون عبر التاريخ: حكايات شخصيات تبدأ بصوت الطالب أو الراوي، وتُستكمل بسرد موثق بمصادر موثوقة.":"Unsterbliche Persönlichkeiten der Geschichte: Geschichten über Persönlichkeiten, die mit der Stimme einer Schülerin oder eines Erzählers beginnen und mit einem dokumentierten Bericht auf verlässlichen Quellen fortgesetzt werden.",
 "حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach."
 };
+
+/* تسجيل الألمانية في واجهة القواميس المشتركة، مع إبقاء الاسم القديم للتوافق مع الصفحات السابقة. */
+if (window.KH_LANG && typeof window.KH_LANG.registerDictionary === 'function') {
+  window.KH_LANG.registerDictionary('de', window.KH_DE);
+}
