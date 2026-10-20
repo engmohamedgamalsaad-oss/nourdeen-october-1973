@@ -16,11 +16,23 @@ async function main() {
       return { ok: true, status: 200, json: async () => [{ id: '001' }, { id: '003' }] };
     }
     heads.push(String(url));
-    if (String(url).includes('/history/002/index.html')) return { ok: true, status: 200 };
+    if (String(url).includes('/stories/002/index.html')) return { ok: true, status: 200 };
     return { ok: false, status: 404 };
   });
   assert.equal(await bundle.nextId(), '004', 'must skip indexed IDs and an unindexed existing page');
-  assert.ok(heads.some(url => url.includes('/history/002/index.html')), 'must check page folders, not trust index alone');
+  assert.ok(heads.some(url => url.includes('/stories/002/index.html')), 'must check legacy story folders, not trust index alone');
+
+  const sectionHeads = [];
+  const sectionCollision = loadBundle(async url => {
+    if (String(url).startsWith('../stories/index.json')) {
+      return { ok: true, status: 200, json: async () => [{ id: '001' }, { id: '003' }] };
+    }
+    sectionHeads.push(String(url));
+    if (String(url).includes('/stories/history/002/index.html')) return { ok: true, status: 200 };
+    return { ok: false, status: 404 };
+  });
+  assert.equal(await sectionCollision.nextId(), '004', 'must skip an existing category page');
+  assert.ok(sectionHeads.some(url => url.includes('/stories/history/002/index.html')), 'must check category folders too');
 
   const brokenNetwork = loadBundle(async url => {
     if (String(url).startsWith('../stories/index.json')) return { ok: true, status: 200, json: async () => [] };
