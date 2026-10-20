@@ -82,6 +82,9 @@ async function main() {
           if (req.url().includes('/auth/v1/user')) {
             return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ id:'mock-admin' }) });
           }
+          if (req.url().includes('/rest/v1/rpc/is_admin')) {
+            return route.fulfill({ status: 200, contentType: 'application/json', body: 'true' });
+          }
           return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' });
         });
 
