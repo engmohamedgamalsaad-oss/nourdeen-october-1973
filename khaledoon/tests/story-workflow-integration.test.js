@@ -213,6 +213,9 @@ test('AI import failures provide repair instructions and preview records the pro
   assert.ok(admin.includes("showAiRepair(sourceRaw,packageCheck.errors)"));
   assert.ok(admin.includes("ai_imported_provider_label"));
   assert.ok(admin.includes("aiRepairPanel.hidden=true;aiRepairText.value=''"));
+  assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
+  assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
+  assert.ok(admin.includes("aiPreviewPopup.location.href='preview.html?story=1&submission='"));
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
