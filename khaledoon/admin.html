@@ -694,7 +694,7 @@ function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
 /* الربط بالمعرّف الصريح فقط؛ العنوان المتطابق لا يدمج سجلًا في صفحة منشورة. */
-function storyFor(it){return window.KHWorkflow.linkedSite(it,vStories)}
+function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}
 function siteCard(it){
  var box=el('article','fcard sec-'+(it.section||'october')),head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',''+(it.title||'حكاية بلا عنوان')));
