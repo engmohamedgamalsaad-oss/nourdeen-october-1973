@@ -83,7 +83,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
 test('admin validates every translated field and every quiz translation before AI import', function () {
   assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
-  assert.ok(admin.includes('packageCheck.errors.slice(0,8)'));
+  assert.ok(admin.includes('showAiRepair(sourceRaw,packageCheck.errors)'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
 test('manual builder merges metadata and protects original body', function () {
