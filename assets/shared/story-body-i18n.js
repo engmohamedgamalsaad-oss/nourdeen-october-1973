@@ -619,6 +619,7 @@ var germanStoryText = {
   "المقارنة بين روايات الصحف، والشهادات المباشرة إن توفرت، والمصادر التاريخية المستقلة تساعد على التمييز بين الفكرة العامة المدعومة وبين التفاصيل التي قد تحتاج إلى توثيق إضافي.": "Der Vergleich von Zeitungsberichten, direkten Zeugenaussagen – sofern verfügbar – und unabhängigen historischen Quellen hilft dabei, die gut belegte Kernaussage von Einzelheiten zu unterscheiden, die noch zusätzliche Belege benötigen.",
   "وتعلّمنا الحكاية أيضًا أن حماية المعلومات لا تعتمد على جهاز أو كلمة سر فقط؛ بل قد تبدأ من المعرفة البشرية، ومن القدرة على التواصل بوضوح مع الفريق الصحيح، ومن إدراك أن التنوع اللغوي والثقافي جزء من قوة المجتمع.": "Die Geschichte lehrt uns außerdem, dass Informationsschutz nicht nur von Geräten oder Passwörtern abhängt. Er kann mit menschlichem Wissen, klarer Kommunikation mit dem richtigen Team und dem Verständnis beginnen, dass sprachliche und kulturelle Vielfalt zur Stärke einer Gesellschaft gehört."
 };
+function localized(item,lang){return typeof item==='string'?(lang==='de'?item:''):item&&item[lang];}
 var original=new WeakMap();
 function applyFooterText(lang){
  document.querySelectorAll('.author,footer').forEach(function(footer){
@@ -629,10 +630,11 @@ function applyFooterText(lang){
   var normalized=originalText.replace(/\s+/g,' ').trim();
   var item=translations[normalized]||translations[originalText]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[originalText]));
   if(lang==='ar'){node.nodeValue=originalText;return;}
-  if(!item||!item[lang])return;
+  var translated=localized(item,lang);
+  if(!translated)return;
   var leading=(originalText.match(/^\s*/)||[''])[0];
   var trailing=(originalText.match(/\s*$/)||[''])[0];
-  node.nodeValue=leading+item[lang]+trailing;
+  node.nodeValue=leading+translated+trailing;
  });
  });
 }
@@ -663,9 +665,10 @@ function apply(){
    if(!/[\u0600-\u06FF]/.test(node.nodeValue))continue;
    var source=node.nodeValue,normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source.trim()]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[source.trim()]));
-   if(item&&item[lang]){
+   var translated=localized(item,lang);
+   if(translated){
     var leading=(source.match(/^\s*/)||[''])[0],trailing=(source.match(/\s*$/)||[''])[0];
-    node.nodeValue=leading+item[lang]+trailing;
+    node.nodeValue=leading+translated+trailing;
    }
   }
  }
@@ -677,7 +680,8 @@ function apply(){
    if(lang==='ar'){if(el.textContent!==ar)el.textContent=ar;return;}
    var normalized=ar.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[ar]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[ar]));
-   if(item&&item[lang]){if(el.textContent!==item[lang])el.textContent=item[lang];}
+   var translated=localized(item,lang);
+   if(translated&&el.textContent!==translated)el.textContent=translated;
  });
  applyFooterText(lang);
  applyTranslationNotice(lang);
@@ -690,7 +694,8 @@ function apply(){
    var normalized=source.replace(/\s+/g,' ').trim();
    var item=translations[normalized]||translations[source]||(lang==='de'&&(germanStoryText[normalized]||germanStoryText[source]));
    if(lang==='ar'){el.setAttribute(attr,(item&&item.ar)||source);return;}
-   if(item&&item[lang])el.setAttribute(attr,item[lang]);
+   var translated=localized(item,lang);
+   if(translated)el.setAttribute(attr,translated);
   });
  });
  translateRemainingTextNodes();
