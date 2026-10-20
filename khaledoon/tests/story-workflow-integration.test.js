@@ -75,6 +75,38 @@ test('reader-template preview keeps translations and disables reaction writes', 
   assert.ok(bundle.includes('reactions.js'));
   assert.ok(bundle.includes('معاينة خاصة غير منشورة'));
 });
+test('story pages support distinct visual designs and source-attributed image galleries', function () {
+  assert.ok(bundle.includes('visualDesignKey(d,section)'));
+  assert.ok(bundle.includes('story-design-'+design));
+  assert.ok(bundle.includes('story-visual-gallery'));
+  assert.ok(bundle.includes('source_url'));
+  assert.ok(bundle.includes('story-image-card'));
+  assert.ok(bundle.includes('معرض'));
+  assert.ok(bundle.includes('صورة أرشيفية'));
+});
+test('AI story package validation requires a design profile and at least two documented images', function () {
+  assert.ok(W.validateStoryPackage({
+    section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
+    narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
+    history_note:'سياق', sources:'مصدر', images_note:'حقوق الصور', original_body:'نص أصلي طويل كفاية',
+    body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
+    visual_design:'science-lab',
+    images:[
+      {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح'},
+      {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح'}
+    ],
+    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:'Narrator',history_note:'History',images_note:'Images'}]})),
+    question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
+  }).ok);
+  assert.ok(bundle.includes('أضف صورتين على الأقل'));
+});
+test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
+  assert.ok(texts.includes('visual_design'));
+  assert.ok(texts.includes('source_url'));
+  assert.ok(texts.includes('لا تكرر التصميم البصري نفسه'));
+});
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
     var original = 'النص الأصلي الثابت الذي لا يجوز تغييره';
