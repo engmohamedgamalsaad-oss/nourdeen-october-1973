@@ -137,11 +137,12 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
   <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
   <section class="pub-section" id="reviewQuizWrap"><div class="pub-kicker">التفاعل التعليمي</div><h2>بنك الأسئلة</h2><div id="reviewQuiz"></div></section>
  </div>
- <div class="note">المعاينة لا تنشر الحكاية. القبول أو الرفض يُحفظ في قاعدة البيانات، والنشر خطوة منفصلة بعد موافقتك.</div>
- <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+ <div class="note">المعاينة لا تنشر الحكاية. الإعجابات والتفاعلات معطّلة هنا. قبول المعاينة لا يعني النشر؛ النشر خطوة منفصلة بعد رفع الملفات والتحقق من الصفحة الحية.</div>
+ <label class="field" style="display:block;margin:12px 0">سبب رفض المعاينة (مطلوب عند الرفض)<textarea id="rejectionReason" rows="3" maxlength="1000" placeholder="اكتب ما الذي يحتاج إلى تعديل"></textarea></label>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">تمت المعاينة بنجاح</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل ملفات الموقع من هذه الصفحة.</footer>
-<script src="assets/story-template-bundle.js"></script>
+<script src="assets/story-workflow.js"></script><script src="assets/story-template-bundle.js"></script>
 <script>
 (function(){
 'use strict';
@@ -359,6 +360,12 @@ function loadRawPage(url,d){
 
 /* لا يوجد رابط صفحة جاهزة: اعرض نص السجل داخل قالب القسم الفعلي. */
 function renderInTemplate(d){
+ if(window.KHStoryBundle&&typeof window.KHStoryBundle.renderPreviewHtml==='function'){
+  frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
+  frame.srcdoc=window.KHStoryBundle.renderPreviewHtml(d);
+  say('تعرض الآن الحكاية باستخدام قالب القارئ الفعلي. الإعجابات والتفاعلات معطلة في المعاينة، ولم يتم نشر أي شيء.');
+  return;
+ }
  var section=String(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
  var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
           key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
@@ -417,6 +424,8 @@ function showPage(d){
 async function decide(action){
  var approve=action==='approve',d=currentDraft;
  if(!d||!d.submission_id){say('لا يوجد رقم سجل محفوظ لهذه المعاينة. افتح الحكاية من قائمة المراجعة مرة أخرى.');return}
+ var rejectionReason=String($('rejectionReason').value||'').trim();
+ if(!approve&&!rejectionReason){say('اكتب سبب رفض المعاينة قبل تسجيل الرفض.');$('rejectionReason').focus();return}
  lockDecisions();
  try{
   var token=await adminToken();
@@ -436,7 +445,7 @@ async function decide(action){
     catch(e){bundleNote=e&&e.message?e.message:'تعذر إنشاء حزمة النشر.'}
    }
   }
-  meta.preview_review={decision:approve?'approved_waiting_for_github_upload':'rejected',reviewed_at:new Date().toISOString(),note:approve?'قُبلت المعاينة؛ الرفع والنشر الحي خطوة منفصلة تتطلب موافقة المسؤول.':'رُفضت المعاينة؛ أُعيدت الحكاية للمسودة للتعديل.',static_story_id:pageInfo?pageInfo.id:(prior.static_story_id||null),static_story_path:pageInfo?pageInfo.path:(prior.static_story_path||null),bundle_downloaded:!!(pageInfo&&pageInfo.bundle),prepared_page_url:(pageInfo&&!pageInfo.bundle)?String(d.preview_source_url||''):(prior.prepared_page_url||'')};
+  meta=approve?window.KHWorkflow.markApproved(meta,{static_story_id:pageInfo?pageInfo.id:(prior.static_story_id||null),static_story_path:pageInfo?pageInfo.path:(prior.static_story_path||null),bundle_downloaded:!!(pageInfo&&pageInfo.bundle),prepared_page_url:(pageInfo&&!pageInfo.bundle)?String(d.preview_source_url||''):(prior.prepared_page_url||'')},new Date()):window.KHWorkflow.markPreviewRejected(meta,rejectionReason,new Date());
   /* رفض المعاينة يعيد الحكاية إلى المسودة (قيد المراجعة) ولا يرفض الحكاية نفسها؛ زر «رفض» في الأدمن هو الذي يرفضها. */
   if(record.status!=='published')payload.status=approve?(table==='submitted_stories'?'pending':'review'):'pending';
   if(record.status==='published'){
@@ -452,7 +461,7 @@ async function decide(action){
   if(approve){
    say('تم قبول المعاينة وحفظ القرار. الحكاية لم تُنشر. '+(pageInfo&&pageInfo.bundle?'نُزّلت حزمة ZIP للحكاية؛ ارفع ملفاتها إلى GitHub بنفس المسارات ثم استخدم «تأكيد النشر بعد الرفع» في الأدمن.':pageInfo?'سُجّل مسار الصفحة الجاهزة ('+pageInfo.path+'). بعد دمجها في GitHub استخدم «تأكيد النشر بعد الرفع» في الأدمن.':'لم تُنشأ حزمة رفع: '+(bundleNote||'القالب غير متاح')+'\nأكمل الناقص من الأدمن ثم افتح المعاينة وأقبلها من جديد، أو جهّز ملفات الصفحة النهائية بأداة الذكاء الاصطناعي.'));
   }else{
-   say('تم رفض المعاينة وإرجاع الحكاية إلى المسودة وحفظ القرار.');
+   say('تم رفض المعاينة وإرجاع الحكاية للتحرير. سبب الرفض محفوظ: '+rejectionReason);
    setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},900);
   }
  }catch(error){say('لم يُحفظ القرار: '+(error&&error.message?error.message:'خطأ غير معروف'));['approveStoryBtn','rejectStoryBtn'].forEach(function(id){$(id).disabled=false})}
