@@ -1,6 +1,15 @@
 name: Story workflow mocked tests
 
 on:
+  push:
+    paths:
+      - "khaledoon/admin.html"
+      - "khaledoon/preview.html"
+      - "khaledoon/story-builder.html"
+      - "khaledoon/assets/story-workflow.js"
+      - "khaledoon/assets/story-template-bundle.js"
+      - "khaledoon/tests/**"
+      - ".github/workflows/story-workflow-tests.yml"
   pull_request:
     paths:
       - "khaledoon/admin.html"
