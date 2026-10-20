@@ -153,4 +153,37 @@ t('قيم غير متوقعة لا تكسر الحساب', function () {
   assert.ok(W.stateOf({ status: 'pending', story_meta: { preview_review: { decision: 'zzz' } } }).warnings.indexOf('unknown_decision') >= 0);
 });
 
+t('AI story package validator accepts a complete five-language package', function () {
+  var langs = ['en', 'fr', 'it', 'de'];
+  var translations = {};
+  langs.forEach(function (lang) {
+    translations[lang] = { student_name: 'Narrator', grade: 'Grade 7', title: 'Title',
+      subtitle: 'Subtitle', karma_text: 'Karma asks a question', body: 'A complete translated story',
+      history_note: 'Historical context', images_note: 'Image source and rights' };
+  });
+  var questions = [];
+  for (var i = 0; i < 5; i++) {
+    var i18n = {};
+    langs.forEach(function (lang) { i18n[lang] = { q: 'Question ' + i, o: ['Option A', 'Option B'], e: 'Explanation' }; });
+    questions.push({ q: 'Question ' + i, o: ['Option A', 'Option B'], a: 0, e: 'Explanation', i18n: i18n });
+  }
+  var pkg = { format: 'KH_STORY_PACKAGE_V1', section_key: 'history', figure_name: 'Test figure',
+    title: 'A complete story', subtitle: 'A full subtitle', narrator_name: 'Karma', narrator_grade: 'Grade 7',
+    original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
+    body: 'A complete narrator story with more than fifty characters for validation.',
+    history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source',
+    images_note: 'Historical image attribution and license notes.', translations: translations,
+    question_bank: { questions: questions } };
+  assert.equal(W.validateStoryPackage(pkg).ok, true);
+  delete pkg.translations.de.body;
+  var missingTranslation = W.validateStoryPackage(pkg);
+  assert.equal(missingTranslation.ok, false);
+  assert.ok(missingTranslation.errors.some(function (e) { return e.indexOf('DE: حقل نص الراوي') >= 0; }));
+  pkg.translations.de.body = 'A complete translated story';
+  delete pkg.question_bank.questions[0].i18n.it.o;
+  var missingQuizTranslation = W.validateStoryPackage(pkg);
+  assert.equal(missingQuizTranslation.ok, false);
+  assert.ok(missingQuizTranslation.errors.some(function (e) { return e.indexOf('ترجمة السؤال أو الاختيارات أو التفسير ناقصة في IT') >= 0; }));
+});
+
 console.log('\n' + passed + ' passed' + (process.exitCode ? ', with FAILURES' : ''));
