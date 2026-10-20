@@ -231,7 +231,7 @@ async function loadList(){
  adminRecords.forEach(function(record){if(record.status==='published'){var page=window.KHWorkflow.linkedSite(record,sitePageItems);if(page)linkedPublished[String(record.id)]=true}});
  var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
  items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
- var requestedCodeEdit=new URLSearchParams(location.search).get('editcode');if(requestedCodeEdit){openIds['k:'+requestedCodeEdit]=true;fStatus='all';fSec='all';}
+ var requestedParams=new URLSearchParams(location.search),requestedCodeEdit=requestedParams.get('editcode');if(requestedCodeEdit){var requestedTable=requestedParams.get('table')||'khaledoon_submissions',requestedPrefix=requestedTable==='submitted_stories'?'o:':'k:';openIds[requestedPrefix+requestedCodeEdit]=true;fStatus='all';fSec='all';}
  render();
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
@@ -789,8 +789,8 @@ function pubRow(it){
      aiRepairPanel.hidden=false;aiRepairPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
     }
     /* أعد فتح آخر كود AI محفوظ؛ للسجلات القديمة أعد بناء JSON قابل للتعديل من البيانات المخزنة. */
-    var savedAiPackage=it.story_meta&&it.story_meta.ai_package_raw;
-    if(savedAiPackage){aiPaste.value=String(savedAiPackage)}else{try{var oldMetaForPackage=it.story_meta||{},oldBank=it.question_bank_json||oldMetaForPackage.question_bank_json||'';try{oldBank=typeof oldBank==='string'?JSON.parse(oldBank):oldBank}catch(ignoreBank){}var oldTranslations=it.translations||oldMetaForPackage.translations||{};var rebuiltPackage={format:'KH_STORY_PACKAGE_V1',section_key:it.section||it.section_key||'october',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||oldMetaForPackage.original_body||it.body||'',karma_text:it.karma_text||oldMetaForPackage.karma_text||'',body:it.body||'',history_note:it.history_note||oldMetaForPackage.history_note||'',sources:it.sources||oldMetaForPackage.sources||'',images_note:it.images_note||oldMetaForPackage.images_note||'',visual_design:it.visual_design||oldMetaForPackage.visual_design||'',images:it.images||oldMetaForPackage.images||[],translations:oldTranslations,question_bank:oldBank};aiPaste.value=JSON.stringify(rebuiltPackage,null,2)}catch(rebuildError){}}
+    var savedAiPackage=it.story_meta&&it.story_meta.ai_package_raw,aiPasteStorageKey='kh-story-ai-paste:'+String(it.id||'new'),cachedAiPackage='';try{cachedAiPackage=localStorage.getItem(aiPasteStorageKey)||localStorage.getItem('kh-story-ai-paste-last')||''}catch(ignoreAiCache){}
+    if(savedAiPackage){aiPaste.value=String(savedAiPackage)}else if(cachedAiPackage){aiPaste.value=cachedAiPackage}else{try{var oldMetaForPackage=it.story_meta||{},oldBank=it.question_bank_json||oldMetaForPackage.question_bank_json||'';try{oldBank=typeof oldBank==='string'?JSON.parse(oldBank):oldBank}catch(ignoreBank){}var oldTranslations=it.translations||oldMetaForPackage.translations||{};var rebuiltPackage={format:'KH_STORY_PACKAGE_V1',section_key:it.section||it.section_key||'october',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||oldMetaForPackage.original_body||it.body||'',karma_text:it.karma_text||oldMetaForPackage.karma_text||'',body:it.body||'',history_note:it.history_note||oldMetaForPackage.history_note||'',sources:it.sources||oldMetaForPackage.sources||'',images_note:it.images_note||oldMetaForPackage.images_note||'',visual_design:it.visual_design||oldMetaForPackage.visual_design||'',images:it.images||oldMetaForPackage.images||[],translations:oldTranslations,question_bank:oldBank};aiPaste.value=JSON.stringify(rebuiltPackage,null,2)}catch(rebuildError){}}
     var aiImport=el('button','btn primary','٣. استيراد الناتج وحفظه كمسودة');aiImport.type='button';aiPanel.appendChild(aiImport);
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',function(){
@@ -801,6 +801,7 @@ function pubRow(it){
      function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية والبرومبت. افتح الأداة المختارة والصقه هناك.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
     });
+    aiPaste.addEventListener('input',function(){try{localStorage.setItem(aiPasteStorageKey,aiPaste.value);if(aiPaste.value.trim())localStorage.setItem('kh-story-ai-paste-last',aiPaste.value)}catch(ignoreAiCacheWrite){}});
     aiImport.addEventListener('click',async function(){
      var sourceRaw=aiPaste.value.trim(),pkg,raw=sourceRaw;if(!raw){say('err','الصق ناتج الذكاء الاصطناعي أولًا.');return}
      try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){showAiRepair(sourceRaw,['إصلاح صيغة JSON وإرجاع كائن كامل صالح']);say('err','الناتج ليس JSON صالحًا. ظهرت تعليمات إصلاح جاهزة أسفل خانة اللصق.');return}
@@ -824,11 +825,11 @@ function pubRow(it){
       var expectedAiTitle=payload.title,expectedAiBody=payload.body;
       if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload);delete nextMeta.pending_draft.story_meta;nextMeta.pending_draft.status='pending';payload={story_meta:nextMeta}}
       say('info','جارٍ حفظ المسودة… لا تغلق الصفحة.');
-      var saved=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(String(it.id)),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
+      var saved=it.id?await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(String(it.id)),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)}):await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       var savedDraft=it.status==='published'?(rows[0].story_meta&&rows[0].story_meta.pending_draft):rows[0];if(!savedDraft||String(savedDraft.title||'')!==expectedAiTitle||String(savedDraft.body||'')!==expectedAiBody)throw new Error('الخادم لم يُرجع المسودة المحفوظة مطابقة للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      aiPaste.value=raw;aiRepairPanel.hidden=true;aiRepairText.value='';if(aiPreviewPopup){aiPreviewPopup.location.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));say('ok','تم حفظ المسودة وفتح المعاينة في نافذة جديدة. لم يتم النشر.')}else say('ok','تم حفظ المسودة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
+      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.removeItem(aiPasteStorageKey);localStorage.removeItem('kh-story-ai-paste-last')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiRepairPanel.hidden=true;aiRepairText.value='';if(aiPreviewPopup){aiPreviewPopup.location.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));say('ok','تم حفظ المسودة وفتح المعاينة في نافذة جديدة. لم يتم النشر.')}else say('ok','تم حفظ المسودة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
      }catch(e){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignorePreviewClose){}}say('err',e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
