@@ -121,6 +121,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 
 <section id="reviewView" class="wrap" hidden>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
+ <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
  <section id="actualPagePreviewWrap" class="actual-page-preview">
   <iframe id="actualPagePreview" title="صفحة الحكاية — معاينة غير منشورة" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="eager"></iframe>
  </section>
@@ -258,6 +259,7 @@ function renderReview(d){
  put('reviewTitle',d.title||'حكاية بلا عنوان');put('reviewSubtitle',d.subtitle||'');put('reviewSection',(d.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',d.figure_name||'');
  put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');put('reviewImages',d.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',d.original_body||'');
  $('reviewOriginalWrap').hidden=!d.original_body;
+ var aiMeta=d.story_meta||(d.record_data&&d.record_data.story_meta)||{};var hasAi=!!aiMeta.ai_response_raw;$('aiVersionBadge').hidden=!hasAi;if(hasAi)$('aiVersionBadge').textContent='نسخة AI — تم استيراد الناتج من '+String(aiMeta.ai_response_provider||'أداة الذكاء الاصطناعي')+' وعرضه داخل قالب خالدون. المعاينة غير منشورة.';
  renderReadiness(d);renderQuiz(d);renderTranslations(d);
  say('الحالة الحالية: '+(d.status_label||'مسودة')+' · راجع الصفحة في الإطار أعلاه، ثم بيانات المراجعة تحتها (النص والمصادر والترجمات وبنك الأسئلة) قبل اتخاذ القرار.');
  showPage(d);
