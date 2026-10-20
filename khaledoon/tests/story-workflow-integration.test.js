@@ -37,6 +37,9 @@ test('published stories cannot be deleted and deleting drafts never hides static
   var removeBlock = admin.slice(admin.indexOf('async function remove(it,btn)'), admin.indexOf('function copyKey'));
   assert.ok(!removeItemBlock.includes('await hideStaticStoryBeforeDelete(it)'));
   assert.ok(!removeBlock.includes('await hideStaticStoryBeforeDelete(it)'));
+  assert.ok(!admin.includes('hideStaticStoryBeforeDelete'));
+  assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
+  assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
   assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
 });
 test('manual builder merges metadata and protects original body', function () {
