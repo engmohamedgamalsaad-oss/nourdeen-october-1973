@@ -36,6 +36,7 @@
     font-size: .88rem;
   }
   .topbar .ctl #th { grid-column: 1 / -1; }
+  .topbar .ctl #logoutBtn { grid-column: 1 / -1; }
   .fmain,
   main.fmain[style] {
     width: calc(100% - 20px) !important;
@@ -108,6 +109,7 @@
     line-height: 1.45;
   }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  #viewSubs > .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat { min-width: 0; padding: 11px; overflow-wrap: anywhere; }
   .stat strong { font-size: 1.35rem; }
   #list, #vlist, #rlist, #viewSubs, #viewVis, #viewReactions { min-width: 0; }
@@ -140,6 +142,7 @@
   .fbar { grid-template-columns: minmax(0, 1fr); }
   /* ستة عدادات في ثلاث صفوف بدل عمود طويل، مع إبقاء النص واضحًا على الهاتف. */
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #viewSubs > .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .stat { padding: 10px; }
   .stat strong { font-size: 1.25rem; }
   .reaction-count-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
