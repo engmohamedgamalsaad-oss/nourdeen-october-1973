@@ -17,8 +17,7 @@ const root = process.cwd();
 const SHARED = 'assets/shared/home-language-only.js';
 const HOME = 'index.html';
 const SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
-const GERMAN_DICT = 'khaledoon/assets/khaledoon-de.js';
-/* سكربتات الترجمة القديمة التي تقرأ window.KH_DE عند اختيار الألمانية. */
+/* الترجمة الألمانية مدمجة في مصدر اللغة المشترك؛ يمنع الرجوع إلى ملف منفصل قديم. */
 const LEGACY_I18N_RE = /khaledoon(?:-pages-i18n|-i18n-extra)?\.js/;
 /* لوحات الإدارة: ليست صفحات زوار، ولا تحمّل سكربت اللغة. */
 const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html']);
@@ -58,6 +57,8 @@ if (!/LEGACY_KEYS = \['lang'\];/.test(shared)) fail("Shared script: legacy key '
 if (!shared.includes('localStorage.setItem(KEY, lang)')) fail('Shared script: legacy -> unified key migration is missing.');
 if (!shared.includes("searchParams.delete('lang')") || !shared.includes('history.replaceState')) fail('Shared script: stale ?lang= removal is missing.');
 if (!shared.includes('KH_LANG')) fail('Shared script: KH_LANG central config is missing.');
+if (!shared.includes('registerDictionary: function')) fail('Shared script: locale dictionaries must register through KH_LANG.registerDictionary.');
+if (!shared.includes('translate: function')) fail('Shared script: KH_LANG.translate must be available to every translation engine.');
 if (/locked:\s*!isHome/.test(shared) || /createElement\(['"]style['"]\)/.test(shared) || /lang-selector\{display:none!important/.test(shared)) {
   fail('Shared script: language selectors must remain visible and usable on every page.');
 }
@@ -112,6 +113,11 @@ if (shared) {
     expect('unsupported language alone is not applied and storage untouched', [r.lang, r.dir, r.store['kh-lang']], ['ar', 'rtl', 'es']);
     r = runShared({ store: { 'kh-lang': 'de' } });
     expect('German is applied as LTR', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
+    const registered = r.api.registerDictionary('de', { 'Testschlüssel': 'Deutscher Text' });
+    expect('shared registry accepts a German dictionary', registered, true);
+    expect('shared registry returns German text', r.api.translate('de', 'Testschlüssel'), 'Deutscher Text');
+    expect('shared registry does not invent missing translations', r.api.translate('de', 'missing'), '');
+    expect('shared registry rejects unsupported locales', r.api.registerDictionary('es', { x: 'y' }), false);
     r = runShared({ store: { lang: 'de' } });
     expect('legacy lang=de migrated', [r.lang, r.store['kh-lang']], ['de', 'de']);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?lang=en&id=5#sec' });
@@ -137,15 +143,15 @@ for (const rel of htmlFiles) {
   const isAdmin = ADMIN_PAGES.has(rel);
   const isStub = /<meta[^>]+http-equiv=["']refresh["']/i.test(html);
 
-  /* German dictionary: every page that loads the legacy Khaledoon translation scripts must load
-     khaledoon-de.js first, otherwise German falls back to Arabic on that page. */
+  /* German dictionary is embedded in the shared language source, not loaded from a separate legacy file. */
   {
     const scripts = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
+    const oldAt = scripts.findIndex((s) => s.split('?')[0].endsWith('khaledoon-de.js'));
+    if (oldAt >= 0) fail(`${rel}: obsolete standalone German dictionary is still loaded; use the shared locale registry.`);
     const legacyAt = scripts.findIndex((s) => LEGACY_I18N_RE.test(s.split('?')[0].split('/').pop()));
-    const deAt = scripts.findIndex((s) => s.split('?')[0].endsWith('khaledoon-de.js'));
-    if (legacyAt >= 0 && deAt < 0) fail(`${rel}: loads the legacy Khaledoon translation script but not khaledoon-de.js (German would stay Arabic).`);
-    if (legacyAt >= 0 && deAt > legacyAt) fail(`${rel}: khaledoon-de.js must load BEFORE the legacy translation scripts.`);
-    if (deAt >= 0 && !isAdmin && resolveRef(rel, scripts[deAt]) !== GERMAN_DICT) fail(`${rel}: khaledoon-de.js path resolves to ${resolveRef(rel, scripts[deAt])}`);
+    const sharedAt = scripts.findIndex((s) => resolveRef(rel, s) === SHARED);
+    if (legacyAt >= 0 && sharedAt < 0) fail(`${rel}: legacy translation engine requires the shared language source.`);
+    if (legacyAt >= 0 && sharedAt > legacyAt) fail(`${rel}: shared language source must load before translation engines.`);
   }
   /* A language guard that lists en/fr/it without de (inline <head> scripts) leaves German pages RTL/untranslated. */
   if (/\[\s*["']en["']\s*,\s*["']fr["']\s*,\s*["']it["']\s*\]/.test(html)) fail(`${rel}: a language array lists en/fr/it without de.`);
@@ -302,24 +308,27 @@ for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
   catch (e) { fail(`${rel}: syntax error: ${e.message}`); }
 }
 {
-  const dictSrc = read(GERMAN_DICT);
-  const sandbox = { window: {} };
-  sandbox.window = sandbox;
-  try {
-    vm.createContext(sandbox);
-    vm.runInContext(dictSrc, sandbox);
-    const de = sandbox.KH_DE;
-    if (!de || typeof de !== 'object') fail(`${GERMAN_DICT}: must define window.KH_DE as an object.`);
-    else {
+  const match = shared.match(/var germanDictionary = (\{[\s\S]*?\});/);
+  if (!match) fail('Shared language source: embedded German dictionary is missing.');
+  else {
+    try {
+      const de = JSON.parse(match[1]);
       const entries = Object.entries(de);
-      if (entries.length < 200) fail(`${GERMAN_DICT}: only ${entries.length} entries; expected at least 200.`);
-      const bad = entries.filter(([k, v]) => typeof v !== 'string' || !v.trim() || /\bundefined\b/.test(v));
-      if (bad.length) fail(`${GERMAN_DICT}: ${bad.length} empty/invalid values, e.g. "${bad[0][0].slice(0, 40)}".`);
+      if (entries.length < 200) fail(`Shared language source: only ${entries.length} German entries; expected at least 200.`);
+      const bad = entries.filter(([k, v]) => typeof v !== 'string' || !v.trim() || /\\bundefined\\b/.test(v));
+      if (bad.length) fail(`Shared language source: ${bad.length} empty/invalid German values, e.g. "${bad[0][0].slice(0, 40)}".`);
       const arabicValues = entries.filter(([, v]) => /[؀-ۿ]/.test(v));
-      if (arabicValues.length) fail(`${GERMAN_DICT}: ${arabicValues.length} German values still contain Arabic text, e.g. "${arabicValues[0][0].slice(0, 40)}".`);
-      notes.push(`${entries.length} German dictionary entries`);
-    }
-  } catch (e) { fail(`${GERMAN_DICT}: cannot be evaluated: ${e.message}`); }
+      if (arabicValues.length) fail(`Shared language source: ${arabicValues.length} German values still contain Arabic text, e.g. "${arabicValues[0][0].slice(0, 40)}".`);
+      const r = runShared({ store: { 'kh-lang': 'de' } });
+      if (entries.length && r.api.translate('de', entries[0][0]) !== entries[0][1]) fail('Shared language source: embedded German dictionary was not registered in KH_LANG.');
+      notes.push(`${entries.length} German dictionary entries embedded and registered in KH_LANG`);
+    } catch (e) { fail(`Shared language source: embedded German dictionary is invalid: ${e.message}`); }
+  }
+}
+for (const rel of ['khaledoon/assets/khaledoon.js', 'khaledoon/assets/khaledoon-i18n-extra.js', 'khaledoon/assets/khaledoon-pages-i18n.js']) {
+  const source = read(rel);
+  if (!source.includes("KH_LANG.translate('de'")) fail(`${rel}: German must use the shared KH_LANG translation registry.`);
+  if (source.includes('window.KH_DE')) fail(`${rel}: legacy window.KH_DE references must be removed.`);
 }
 
 /* ---------- 5) لا حذف: كل ملفات الحكايات المتوقعة موجودة ---------- */
