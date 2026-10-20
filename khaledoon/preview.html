@@ -120,6 +120,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 </section>
 
 <section id="reviewView" class="wrap" hidden>
+ <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل أو استيراد نتيجة AI</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
  <section id="actualPagePreviewWrap" class="actual-page-preview">
@@ -459,8 +460,11 @@ async function decide(action){
 }
 $('approveStoryBtn').addEventListener('click',function(){decide('approve')});
 $('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
-$('returnToEditBtn').addEventListener('click',function(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');var target='admin.html'+(id?'?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table):'');if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;});
+function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');var target='admin.html'+(id?'?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table):'');if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
+$('returnToEditBtn').addEventListener('click',returnToAdminForEdit);
+$('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewBtn').addEventListener('click',function(){window.print()});
+$('printReviewTopBtn').addEventListener('click',function(){window.print()});
 if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>
