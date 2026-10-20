@@ -147,11 +147,11 @@ for (const rel of htmlFiles) {
   {
     const scripts = [...html.matchAll(/<script[^>]*\\ssrc=["']([^"']+)["']/gi)].map((m) => m[1]);
     const oldAt = scripts.findIndex((s) => s.split('?')[0].endsWith('khaledoon-de.js'));
-    if (oldAt >= 0) fail(`\${rel}: obsolete standalone German dictionary is still loaded; use the shared locale registry.`);
+    if (oldAt >= 0) fail(`${rel}: obsolete standalone German dictionary is still loaded; use the shared locale registry.`);
     const legacyAt = scripts.findIndex((s) => LEGACY_I18N_RE.test(s.split('?')[0].split('/').pop()));
     const sharedAt = scripts.findIndex((s) => resolveRef(rel, s) === SHARED);
-    if (legacyAt >= 0 && sharedAt < 0) fail(`\${rel}: legacy translation engine requires the shared language source.`);
-    if (legacyAt >= 0 && sharedAt > legacyAt) fail(`\${rel}: shared language source must load before translation engines.`);
+    if (legacyAt >= 0 && sharedAt < 0) fail(`${rel}: legacy translation engine requires the shared language source.`);
+    if (legacyAt >= 0 && sharedAt > legacyAt) fail(`${rel}: shared language source must load before translation engines.`);
   }
   /* A language guard that lists en/fr/it without de (inline <head> scripts) leaves German pages RTL/untranslated. */
   if (/\[\s*["']en["']\s*,\s*["']fr["']\s*,\s*["']it["']\s*\]/.test(html)) fail(`${rel}: a language array lists en/fr/it without de.`);
@@ -308,7 +308,7 @@ for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
   catch (e) { fail(`${rel}: syntax error: ${e.message}`); }
 }
 {
-  const match = shared.match(/var germanDictionary = (\\{[\\s\\S]*?\\});/);
+  const match = shared.match(/var germanDictionary = (\{[\s\S]*?\});/);
   if (!match) fail('Shared language source: embedded German dictionary is missing.');
   else {
     try {
