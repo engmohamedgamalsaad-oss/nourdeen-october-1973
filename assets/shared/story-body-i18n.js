@@ -564,6 +564,39 @@ function applyTranslationNotice(lang){
  existing.querySelector('[data-notice-title]').textContent=text.title;
  existing.querySelector('[data-notice-body]').textContent=text.body;
 }
+
+Object.assign(translations,{
+"الصف الأول الإعدادي":{en:"First year of preparatory school",fr:"Première année du collège",it:"Prima media",de:"Erstes Jahr der Sekundarstufe I"},
+"صورة من المعركة البحرية":{en:"A scene from the naval battle",fr:"Une scène de la bataille navale",it:"Una scena della battaglia navale",de:"Eine Szene aus der Seeschlacht"},
+"المدمرة «إيلات»: لماذا كانت واقعة مهمة؟":{en:"The destroyer Eilat: why did the incident matter?",fr:"Le destroyer Eilat : pourquoi cet événement était-il important ?",it:"Il cacciatorpediniere Eilat: perché fu importante?",de:"Der Zerstörer Eilat: Warum war der Vorfall bedeutsam?"},
+"المدمرة «إيلات»؛ صورة للسفينة نفسها وليست صورة لحظة إغراقها.":{en:"The destroyer Eilat; this is a photograph of the ship, not the moment it sank.",fr:"Le destroyer Eilat ; cette photo montre le navire, pas le moment de son naufrage.",it:"Il cacciatorpediniere Eilat; la foto mostra la nave, non il momento dell’affondamento.",de:"Der Zerstörer Eilat; das Bild zeigt das Schiff, nicht den Moment seines Untergangs."},
+"الممرات البحرية جزء من خطة الحرب":{en:"Sea routes are part of a war plan",fr:"Les voies maritimes font partie du plan de guerre",it:"Le rotte marittime fanno parte del piano di guerra",de:"Seewege sind Teil eines Kriegsplans"},
+"كيف تُقرأ الخريطة البحرية؟":{en:"How do we read a maritime map?",fr:"Comment lire une carte maritime ?",it:"Come si legge una carta nautica?",de:"Wie liest man eine Seekarte?"},
+"لماذا كان الساتر صعبًا؟":{en:"Why was the embankment difficult to breach?",fr:"Pourquoi le remblai était-il difficile à franchir ?",it:"Perché era difficile aprire un varco nel terrapieno?",de:"Warum war der Erdwall schwer zu durchbrechen?"},
+"المبدأ":{en:"The principle",fr:"Le principe",it:"Il principio",de:"Das Prinzip"},
+"التحدي العملي":{en:"The practical challenge",fr:"Le défi pratique",it:"La sfida pratica",de:"Die praktische Herausforderung"},
+"ما وراء الحكاية":{en:"Beyond the story",fr:"Au-delà du récit",it:"Oltre il racconto",de:"Hinter der Geschichte"},
+"العلم ليس معادلة على الورق فقط":{en:"Science is more than an equation on paper",fr:"La science ne se limite pas à une équation sur le papier",it:"La scienza non è solo un’equazione sulla carta",de:"Wissenschaft ist mehr als eine Gleichung auf Papier"},
+"من يتحدث لغة لا يعرفها الخصم؟":{en:"Who speaks a language the opponent does not know?",fr:"Qui parle une langue que l’adversaire ne connaît pas ?",it:"Chi parla una lingua che l’avversario non conosce?",de:"Wer spricht eine Sprache, die der Gegner nicht kennt?"},
+"كيف نتحقق من الرواية؟":{en:"How do we verify the account?",fr:"Comment vérifier le récit ?",it:"Come verifichiamo il racconto?",de:"Wie überprüfen wir den Bericht?"},
+"احترام صاحب القصة واحترام الدليل":{en:"Respecting the person and the evidence",fr:"Respecter la personne et les preuves",it:"Rispettare la persona e le prove",de:"Die Person und die Belege respektieren"},
+"تحدّي خالدون":{en:"The Immortals Challenge",fr:"Le défi des Immortels",it:"La sfida degli Immortali",de:"Die Unsterblichen-Challenge"},
+"اختبر معلوماتك":{en:"Test your knowledge",fr:"Testez vos connaissances",it:"Metti alla prova le tue conoscenze",de:"Teste dein Wissen"},
+"اختبر معلوماتك عن الشخصية وعصرها. كل اختبار يتضمن خمسة أسئلة، مع نتيجة ومراجعة للإجابات في النهاية.":{en:"Test your knowledge of the figure and their era. Each quiz has five questions, a score, and an answer review.",fr:"Testez vos connaissances sur cette personnalité et son époque. Chaque quiz comprend cinq questions, un résultat et une correction des réponses.",it:"Metti alla prova le tue conoscenze sul personaggio e la sua epoca. Ogni quiz include cinque domande, un risultato e la revisione delle risposte.",de:"Teste dein Wissen über die Persönlichkeit und ihre Zeit. Jedes Quiz umfasst fünf Fragen, ein Ergebnis und eine Besprechung der Antworten."},
+"الأسئلة متاحة بالعربية حاليًا.":{en:"The questions are currently available in Arabic only.",fr:"Les questions sont actuellement disponibles uniquement en arabe.",it:"Le domande sono attualmente disponibili solo in arabo.",de:"Die Fragen sind derzeit nur auf Arabisch verfügbar."},
+"ابدأ الاختبار":{en:"Start the quiz",fr:"Commencer le quiz",it:"Inizia il quiz",de:"Quiz starten"},
+"❤️ أعجبتني":{en:"❤️ I liked it",fr:"❤️ J’aime",it:"❤️ Mi è piaciuta",de:"❤️ Das hat mir gefallen"},
+"صورة أرشيفية":{en:"Archival photograph",fr:"Photographie d’archives",it:"Fotografia d’archivio",de:"Archivfoto"},
+"مصدر الصورة وترخيصها":{en:"Image source and licence",fr:"Source et licence de l’image",it:"Fonte e licenza dell’immagine",de:"Bildquelle und Lizenz"},
+"المصادر والمراجعة":{en:"Sources and review",fr:"Sources et vérification",it:"Fonti e verifica",de:"Quellen und Überprüfung"},
+"من أين عرفنا هذه المعلومات؟":{en:"Where did this information come from?",fr:"D’où viennent ces informations ?",it:"Da dove provengono queste informazioni?",de:"Woher stammen diese Informationen?"},
+"العودة إلى التاريخ والحضارات":{en:"Back to History and Civilizations",fr:"Retour à Histoire et civilisations",it:"Torna a Storia e civiltà",de:"Zurück zu Geschichte und Zivilisationen"},
+"شارك الحكاية":{en:"Share the story",fr:"Partager le récit",it:"Condividi il racconto",de:"Geschichte teilen"},
+"مشاركة الحكاية":{en:"Share the story",fr:"Partager le récit",it:"Condividi il racconto",de:"Geschichte teilen"},
+"لو عجبتك الحكاية، ابعتها لحد مهتم بالتاريخ المصري.":{en:"If you enjoyed this story, share it with someone interested in Egyptian history.",fr:"Si ce récit vous a plu, partagez-le avec une personne intéressée par l’histoire de l’Égypte.",it:"Se ti è piaciuto il racconto, condividilo con qualcuno interessato alla storia egiziana.",de:"Wenn dir die Geschichte gefallen hat, teile sie mit jemandem, der sich für ägyptische Geschichte interessiert."},
+"🖨️ اطبع الحكاية":{en:"🖨️ Print the story",fr:"🖨️ Imprimer le récit",it:"🖨️ Stampa il racconto",de:"🖨️ Geschichte drucken"},
+"في أي عام وقعت مظاهرة عابدين الشهيرة؟":{en:"In what year did the famous Abdeen demonstration take place?",fr:"En quelle année eut lieu la célèbre manifestation d’Abdine ?",it:"In quale anno si svolse la famosa manifestazione di Abdeen?",de:"In welchem Jahr fand die berühmte Abdeen-Demonstration statt?"}
+});
 var original=new WeakMap();
 function applyFooterText(lang){
  document.querySelectorAll('.author,footer').forEach(function(footer){
