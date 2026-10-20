@@ -158,7 +158,15 @@ test('AI story package validation requires a design profile and at least two doc
   }).ok);
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
-test('Gemini is available in every admin story prompt flow with full story requirements', function () {\n  var admin = fs.readFileSync('khaledoon/admin.html','utf8');\n  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');\n  assert.equal((admin.match(/\\['gemini','Gemini'\\]/g)||[]).length,4);\n  assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));\n  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"gemini":'));\n  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تعديلًا أو اختبارًا أو نشرًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});\n});\ntest('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
+test('Gemini is available in every admin story prompt flow with full story requirements', function () {
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.equal((admin.match(/\['gemini','Gemini'\]/g)||[]).length,4);
+  assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
+  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"gemini":'));
+  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تعديلًا أو اختبارًا أو نشرًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+});
+test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
   assert.ok(texts.includes('visual_design'));
