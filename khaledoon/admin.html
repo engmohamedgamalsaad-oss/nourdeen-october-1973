@@ -468,6 +468,7 @@ function makePreviewDraft(statusForPreview){
   if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){var badFormat=new Error('الإصدار غير مطابق. انسخ تعليمات الإصلاح الجاهزة أسفل خانة اللصق.');badFormat.aiMissing=['استخدام format بالقيمة KH_STORY_PACKAGE_V1 وبنية الحزمة كاملة'];badFormat.aiRaw=text;throw badFormat}
   var missing=[];
   function need(v,label){if(typeof v!=='string'||!v.trim())missing.push(label)}
+  if(!pkg.section_key||!Object.prototype.hasOwnProperty.call(SEC,pkg.section_key))missing.push('اختيار قسم صحيح في section_key');
   need(pkg.figure_name,'اسم الشخصية');need(pkg.title,'العنوان العربي');need(pkg.subtitle,'النبذة العربية');need(pkg.body,'السرد العربي');need(pkg.karma_text,'نص كارما');need(pkg.history_note,'السياق التاريخي');need(pkg.sources,'المصادر');need(pkg.images_note,'ملاحظات الصور وحقوقها');
   if(typeof pkg.original_body!=='string')missing.push('حفظ النص الأصلي في original_body (استخدم نصًا فارغًا إن لم يصل أصل)');
   var translations=pkg.translations&&typeof pkg.translations==='object'?pkg.translations:{};
