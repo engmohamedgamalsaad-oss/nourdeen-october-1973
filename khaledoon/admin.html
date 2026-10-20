@@ -463,12 +463,12 @@ function makePreviewDraft(statusForPreview){
   text=text.replace(/^\uFEFF/,'');
   if(/^\x60\x60\x60/.test(text)){text=text.replace(/^\x60\x60\x60(?:json)?\s*/i,'').replace(/\s*\x60\x60\x60\s*$/,'')}
   var first=text.indexOf('{'),last=text.lastIndexOf('}');
-  if(first<0||last<=first)throw new Error('الناتج ليس كائن JSON كاملًا. انسخ رد الـAI كاملًا.');
-  var pkg;try{pkg=JSON.parse(text.slice(first,last+1))}catch(e){throw new Error('صيغة JSON غير صحيحة؛ انسخ الرد كاملًا إلى أداة AI واطلب إصلاح JSON وفق KH_STORY_PACKAGE_V1.')}
-  if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1')throw new Error('الإصدار غير مطابق. اطلب من AI إخراج KH_STORY_PACKAGE_V1 حسب البرومبت الرئيسي.');
+  if(first<0||last<=first){var noJson=new Error('الناتج ليس كائن JSON كاملًا. انسخ رد الـAI كاملًا.');noJson.aiMissing=['إخراج كائن JSON كامل بالصيغة KH_STORY_PACKAGE_V1'];noJson.aiRaw=text;throw noJson}
+  var pkg;try{pkg=JSON.parse(text.slice(first,last+1))}catch(e){var badJson=new Error('صيغة JSON غير صحيحة؛ انسخ تعليمات الإصلاح الجاهزة أسفل خانة اللصق.');badJson.aiMissing=['إصلاح أخطاء JSON وإرجاع كائن كامل صالح'];badJson.aiRaw=text;throw badJson}
+  if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){var badFormat=new Error('الإصدار غير مطابق. انسخ تعليمات الإصلاح الجاهزة أسفل خانة اللصق.');badFormat.aiMissing=['استخدام format بالقيمة KH_STORY_PACKAGE_V1 وبنية الحزمة كاملة'];badFormat.aiRaw=text;throw badFormat}
   var missing=[];
   function need(v,label){if(typeof v!=='string'||!v.trim())missing.push(label)}
-  need(pkg.figure_name,'اسم الشخصية');need(pkg.title,'العنوان العربي');need(pkg.body,'السرد العربي');need(pkg.karma_text,'نص كارما');need(pkg.history_note,'السياق التاريخي');need(pkg.sources,'المصادر');need(pkg.images_note,'ملاحظات الصور وحقوقها');
+  need(pkg.figure_name,'اسم الشخصية');need(pkg.title,'العنوان العربي');need(pkg.subtitle,'النبذة العربية');need(pkg.body,'السرد العربي');need(pkg.karma_text,'نص كارما');need(pkg.history_note,'السياق التاريخي');need(pkg.sources,'المصادر');need(pkg.images_note,'ملاحظات الصور وحقوقها');
   if(typeof pkg.original_body!=='string')missing.push('حفظ النص الأصلي في original_body (استخدم نصًا فارغًا إن لم يصل أصل)');
   var translations=pkg.translations&&typeof pkg.translations==='object'?pkg.translations:{};
   [['en','الإنجليزية'],['fr','الفرنسية'],['it','الإيطالية'],['de','الألمانية']].forEach(function(pair){
