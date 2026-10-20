@@ -228,6 +228,7 @@ async function loadList(){
  adminRecords.forEach(function(record){if(record.status==='published'){var page=window.KHWorkflow.linkedSite(record,sitePageItems);if(page)linkedPublished[String(record.id)]=true}});
  var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
  items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
+ var requestedCodeEdit=new URLSearchParams(location.search).get('editcode');if(requestedCodeEdit){openIds['k:'+requestedCodeEdit]=true;fStatus='all';fSec='all';}
  render();
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
@@ -755,7 +756,8 @@ function pubRow(it){
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
-  if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'){
+  var forceCodeEdit=new URLSearchParams(location.search).get('editcode')===String(it.id);
+  if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'||forceCodeEdit){
     var aiPanel=el('section','review-data');aiPanel.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:14px;background:var(--panel,#10242c);display:grid;gap:10px';
     aiPanel.appendChild(el('h3','','تجهيز الحكاية بالذكاء الاصطناعي'));
     aiPanel.appendChild(el('p','fnote','اختَر الأداة وانسخ ملف الحكاية كاملًا مع البرومبت. بعد أن يعيد الذكاء الاصطناعي كائن JSON، الصقه في المربع بالأسفل واستورده كمسودة. الاستيراد لا ينشر الحكاية، ويعيدها للمراجعة والمعاينة.'));
@@ -763,6 +765,9 @@ function pubRow(it){
     [['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
     var aiPaste=area('',12,100000);aiPaste.placeholder='الصق هنا JSON الذي أعاده الذكاء الاصطناعي (KH_STORY_PACKAGE_V1)…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج كاملًا كما هو، بما في ذلك الأقواس الخارجية. لا تلصق HTML.'));
+    /* أعد فتح آخر كود AI محفوظ؛ للسجلات القديمة أعد بناء JSON قابل للتعديل من البيانات المخزنة. */
+    var savedAiPackage=it.story_meta&&it.story_meta.ai_package_raw;
+    if(savedAiPackage){aiPaste.value=String(savedAiPackage)}else{try{var oldMetaForPackage=it.story_meta||{},oldBank=it.question_bank_json||oldMetaForPackage.question_bank_json||'';try{oldBank=typeof oldBank==='string'?JSON.parse(oldBank):oldBank}catch(ignoreBank){}var oldTranslations=it.translations||oldMetaForPackage.translations||{};var rebuiltPackage={format:'KH_STORY_PACKAGE_V1',section_key:it.section||it.section_key||'october',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||oldMetaForPackage.original_body||it.body||'',karma_text:it.karma_text||oldMetaForPackage.karma_text||'',body:it.body||'',history_note:it.history_note||oldMetaForPackage.history_note||'',sources:it.sources||oldMetaForPackage.sources||'',images_note:it.images_note||oldMetaForPackage.images_note||'',visual_design:it.visual_design||oldMetaForPackage.visual_design||'',images:it.images||oldMetaForPackage.images||[],translations:oldTranslations,question_bank:oldBank};aiPaste.value=JSON.stringify(rebuiltPackage,null,2)}catch(rebuildError){}}
     var aiImport=el('button','btn primary','٣. استيراد الناتج وحفظه كمسودة');aiImport.type='button';aiPanel.appendChild(aiImport);
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',function(){
@@ -786,7 +791,7 @@ function pubRow(it){
      try{
       var oldMeta=Object.assign({},it.story_meta||{}),oldOriginal=String(it.original_body||oldMeta.original_body||'');
       var translations={};langs.forEach(function(l){var t=pkg.translations[l]||{};translations[l]={enabled:false,status:'draft',student_name:t.student_name||it.student_name||'',grade:t.grade||it.grade||'',title:t.title||'',subtitle:t.subtitle||'',karma_text:t.karma_text||'',body:t.body||'',history_note:t.history_note||'',images_note:t.images_note||''}});
-      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:[],preview_source_url:'',translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
+      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:[],preview_source_url:'',translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_package_raw:raw,ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
       nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
       nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null,static_story_id:null,static_story_path:null,bundle_downloaded:false,prepared_page_url:''});delete nextMeta.pending_draft;
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
@@ -796,7 +801,7 @@ function pubRow(it){
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       if(String(rows[0].title||'')!==payload.title||String(rows[0].body||'')!==payload.body)throw new Error('الخادم لم يُرجع النص المحفوظ مطابقًا للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      aiPaste.value='';say('ok','تم تأكيد حفظ المسودة في قاعدة البيانات. لم يتم النشر.');await loadList();
+      aiPaste.value=raw;say('ok','تم تأكيد حفظ المسودة في قاعدة البيانات، واحتفظت بنص JSON في مربع الكود للعودة إليه وتعديله لاحقًا. لم يتم النشر.');await loadList();
      }catch(e){say('err',e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);

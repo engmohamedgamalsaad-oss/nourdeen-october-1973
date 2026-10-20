@@ -457,7 +457,7 @@ async function decide(action){
 }
 $('approveStoryBtn').addEventListener('click',function(){decide('approve')});
 $('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
-$('returnToEditBtn').addEventListener('click',function(){if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else{location.href='admin.html'}});
+$('returnToEditBtn').addEventListener('click',function(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');var target='admin.html'+(id?'?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table):'');if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;});
 $('printReviewBtn').addEventListener('click',function(){window.print()});
 if(params.has('story')||params.has('submission'))startReview();
 })();
