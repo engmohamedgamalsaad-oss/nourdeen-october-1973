@@ -223,8 +223,11 @@ async function loadList(){
  adminRecords=await response.json();
  adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
  sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null}});
- /* لا ندمج سجل قاعدة البيانات داخل بطاقة الموقع حتى لو تطابق العنوان أو الشخصية. */
- items=adminRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
+ /* الصفحة المنشورة هي السجل المعتمد. نخفي سجل Supabase المكرر من العرض فقط عند وجود ربط صريح بالرقم؛ لا نعتمد على تشابه الأسماء. */
+ var linkedPublished={};
+ adminRecords.forEach(function(record){if(record.status==='published'){var page=window.KHWorkflow.linkedSite(record,sitePageItems);if(page)linkedPublished[String(record.id)]=true}});
+ var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
+ items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  render();
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
@@ -232,7 +235,8 @@ function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemSta
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- var counts=window.KHWorkflow.counters(adminRecords,sitePageItems);
+ var visibleAdminRecords=adminRecords.filter(function(record){return !(record.status==='published'&&window.KHWorkflow.linkedSite(record,sitePageItems))});
+ var counts=window.KHWorkflow.counters(visibleAdminRecords,sitePageItems);
  [
   ['سجلات الأدمن',counts.records,'all'],
   ['تحت التحرير',counts.queues.editing,'editing'],
@@ -250,8 +254,8 @@ function renderStats(){
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
- chip(t,'كل السجلات ('+adminRecords.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=adminRecords.filter(function(i){return itemState(i)===k}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return itemState(i)===k&&(i._t!=='site'||k==='published')}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'ملفات الموقع المنشورة ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
