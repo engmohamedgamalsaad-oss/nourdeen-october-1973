@@ -718,6 +718,7 @@ function pubRow(it){
  var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
  var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','لا توجد صفحة جاهزة — يلزم تجهيز ملفات الحكاية ورفعها قبل تأكيد النشر.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
