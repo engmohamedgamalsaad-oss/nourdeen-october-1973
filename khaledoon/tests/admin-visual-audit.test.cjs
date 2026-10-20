@@ -90,7 +90,14 @@ async function main() {
       await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html', { waitUntil:'domcontentloaded' });
       await page.locator('#app').waitFor({ state:'visible', timeout:15000 });
       await page.getByText('اختبار بصري — حكاية مرسلة للمعاينة').waitFor({ state:'visible', timeout:15000 });
-      await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '.png'), fullPage:true });
+      await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-dark.png'), fullPage:true });
+      await page.locator('#th').click();
+      await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'light');
+      await page.screenshot({ path:path.join(OUT, 'admin-' + viewport.name + '-light.png'), fullPage:true });
+      const lightOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      assert.ok(lightOverflow <= 2, 'Admin horizontal overflow in light theme on ' + viewport.name + ': ' + lightOverflow + 'px');
+      await page.locator('#th').click();
+      await page.waitForFunction(() => document.documentElement.getAttribute('data-theme') === 'dark');
       const adminOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(adminOverflow <= 2, 'Admin horizontal overflow on ' + viewport.name + ': ' + adminOverflow + 'px');
       console.log('ok - admin loaded and no horizontal overflow (' + viewport.name + ')');
