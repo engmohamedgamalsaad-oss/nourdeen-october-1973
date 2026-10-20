@@ -752,7 +752,48 @@ function pubRow(it){
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
-  var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
+  if(itemState(it)==='awaiting_publish'){
+    var aiPanel=el('section','review-data');aiPanel.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:14px;background:var(--panel,#10242c);display:grid;gap:10px';
+    aiPanel.appendChild(el('h3','','تجهيز الحكاية بالذكاء الاصطناعي'));
+    aiPanel.appendChild(el('p','fnote','اختَر الأداة وانسخ ملف الحكاية كاملًا مع البرومبت. بعد أن يعيد الذكاء الاصطناعي كائن JSON، الصقه في المربع بالأسفل واستورده كمسودة. الاستيراد لا ينشر الحكاية، ويعيدها للمراجعة والمعاينة.'));
+    var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
+    [['chatgpt','ChatGPT'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
+    var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
+    var aiPaste=area('',12,100000);aiPaste.placeholder='الصق هنا JSON الذي أعاده الذكاء الاصطناعي (KH_STORY_PACKAGE_V1)…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج كاملًا كما هو، بما في ذلك الأقواس الخارجية. لا تلصق HTML.'));
+    var aiImport=el('button','btn primary','٣. استيراد الناتج وحفظه كمسودة');aiImport.type='button';aiPanel.appendChild(aiImport);
+    aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
+    aiCopy.addEventListener('click',function(){
+     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider);
+     var inputData={section_key:it.section||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
+     var schema='أعد كائن JSON صالحًا واحدًا فقط، دون Markdown أو أسوار كود أو مقدمة أو خاتمة. يجب أن يكون format هو KH_STORY_PACKAGE_V1. المفاتيح: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, translations, question_bank. يجب أن تحتوي translations على en وfr وit وde، ولكل لغة student_name وgrade وtitle وsubtitle وkarma_text وbody وhistory_note وimages_note. question_bank كائن فيه questions وخمسة أسئلة على الأقل؛ لكل سؤال q وo وa وe وi18n مع ترجمة السؤال والاختيارات والتفسير للغات en/fr/it/de. احتفظ بـ original_body حرفيًا ولا تستبدله. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.';
+     var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية كاملة ===\n'+JSON.stringify(inputData,null,2);
+     function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية والبرومبت. افتح الأداة المختارة والصقه هناك.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
+     if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
+    });
+    aiImport.addEventListener('click',async function(){
+     var pkg,raw=aiPaste.value.trim();if(!raw){say('err','الصق ناتج الذكاء الاصطناعي أولًا.');return}
+     try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){say('err','الناتج ليس JSON صالحًا. انسخ الكائن كاملًا من أول { إلى آخر }.');return}
+     if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){say('err','صيغة الناتج غير صحيحة؛ يجب أن تحتوي format: KH_STORY_PACKAGE_V1.');return}
+     if(!String(pkg.title||'').trim()||String(pkg.body||'').trim().length<50){say('err','الناتج ناقص: تأكد من وجود عنوان ونص الراوي الكامل.');return}
+     var langs=['en','fr','it','de'];if(!pkg.translations||!langs.every(function(l){return pkg.translations[l]&&typeof pkg.translations[l]==='object'})){say('err','الترجمات الأربع مطلوبة: الإنجليزية والفرنسية والإيطالية والألمانية.');return}
+     var questions=pkg.question_bank&&Array.isArray(pkg.question_bank.questions)?pkg.question_bank.questions:[];if(questions.length<5){say('err','بنك الأسئلة يجب أن يحتوي على خمسة أسئلة على الأقل.');return}
+     if(!confirm('سيتم استيراد ناتج AI وحفظه كمسودة، مع الاحتفاظ بالنص الأصلي وإلغاء اعتماد المعاينة السابق. لن يتم النشر. هل تريد المتابعة؟'))return;
+     aiImport.disabled=true;
+     try{
+      var oldMeta=Object.assign({},it.story_meta||{}),oldOriginal=String(it.original_body||oldMeta.original_body||'');
+      var translations={};langs.forEach(function(l){var t=pkg.translations[l]||{};translations[l]={enabled:false,status:'draft',student_name:t.student_name||it.student_name||'',grade:t.grade||it.grade||'',title:t.title||'',subtitle:t.subtitle||'',karma_text:t.karma_text||'',body:t.body||'',history_note:t.history_note||'',images_note:t.images_note||''}});
+      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
+      nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
+      nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null});delete nextMeta.pending_draft;
+      var payload={section:SEC[pkg.section_key]?pkg.section_key:(pkg.section_key||it.section||'curriculum'),figure_name:String(pkg.figure_name||it.figure_name||''),title:String(pkg.title).trim(),subtitle:String(pkg.subtitle||''),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||''),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||''),body:String(pkg.body).trim(),history_note:String(pkg.history_note||''),sources:String(pkg.sources||''),images_note:String(pkg.images_note||''),original_body:nextMeta.original_body,karma_text:String(pkg.karma_text||''),question_bank_json:JSON.stringify(pkg.question_bank),translations:translations,status:'pending',story_meta:nextMeta};
+      var saved=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(String(it.id)),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
+      if(!saved.ok)throw new Error('تعذر حفظ المسودة ('+saved.status+').');var rows=await saved.json();if(!rows.length)throw new Error('لم يرجع الخادم سجلًا محفوظًا؛ تحقق من صلاحيات الأدمن.');
+      say('ok','تم استيراد الناتج وحفظه كمسودة غير منشورة. ستظهر الحكاية تحت التحرير لتراجعها وتفتح معاينتها من جديد.');await loadList();
+     }catch(e){say('err',e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
+    });
+    b.appendChild(aiPanel);
+   }else{
+var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
   var preview=el('a','btn primary','فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{var table=it._t==='o'?'submitted_stories':'khaledoon_submissions',meta=Object.assign({},it.story_meta||{});if(it.status==='published'){var pending=Object.assign({},meta.pending_draft||it);pending.story_meta=window.KHWorkflow.markPreviewSent(pending.story_meta||meta,new Date());pending.status='pending';delete pending._t;meta.pending_draft=pending}else meta=window.KHWorkflow.markPreviewSent(meta,new Date());var payload={story_meta:meta};if(it.status!=='published')payload.status=it.status==='rejected'?'pending':it.status;var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});if(!saved.ok)throw new Error('تعذر تسجيل إرسال المعاينة ('+saved.status+').');var rows=await saved.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد إرسال المعاينة.');popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
   var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
   var summary=el('summary','','بيانات القارئ والحكاية');summary.style.cssText='cursor:pointer;font-weight:800;min-height:38px';data.appendChild(summary);
@@ -764,6 +805,7 @@ function pubRow(it){
   var editDetails=document.createElement('details');editDetails.style.cssText='border-top:1px solid var(--line,#31505a);margin-top:12px;padding-top:10px';
   editDetails.appendChild(el('summary','','فتح أدوات المراجعة والتحرير'));var editor=el('div','pbody');editor.appendChild(card(it));editDetails.appendChild(editor);data.appendChild(editDetails);
   actions.appendChild(data);b.appendChild(actions);
+   }
   if(it.status==='published'&&sv){var link=el('a','btn ghost','فتح الصفحة المنشورة');link.href='../'+String(sv.path||'');link.target='_blank';link.rel='noopener';b.appendChild(link)}
   d.appendChild(b);
  }
