@@ -9,6 +9,7 @@ var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
 var builder = fs.readFileSync('khaledoon/story-builder.html', 'utf8');
 var preview = fs.readFileSync('khaledoon/preview.html', 'utf8');
 var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var passed = 0;
 function test(name, fn) {
   try { fn(); passed++; console.log('ok - ' + name); }
@@ -23,6 +24,12 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
+});
+test('admin uses its actual crimson book favicon asset', function () {
+  assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
+  assert.ok(favicon.includes('viewBox="0 0 64 64"'));
+  assert.ok(favicon.includes('fill="#8f1728"'));
+  assert.ok(favicon.includes('<path'));
 });
 test('admin links submissions to static pages by explicit identifier only', function () {
   assert.ok(admin.includes('window.KHWorkflow.linkedSite(it,vStories)'));
