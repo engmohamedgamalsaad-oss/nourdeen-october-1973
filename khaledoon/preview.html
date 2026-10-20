@@ -9,29 +9,93 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../assets/shared/base.css">
 <style>
-.actual-page-preview{margin:0 0 18px;overflow:visible;background:transparent}.actual-page-preview iframe{display:block;width:100%;height:1000px;min-height:1000px;border:0;background:#fff}@media(max-width:650px){.actual-page-preview iframe{height:1300px;min-height:1300px}}
 :root{color-scheme:dark;--bg:#07141b;--panel:#10242c;--line:#31505a;--gold:#d7ad66;--text:#f5f0e6;--muted:#b9c8c8;--outer:#b8874b;--inner:#102b35}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#17323a,var(--bg) 65%);color:var(--text);font-family:Cairo,Arial,sans-serif;line-height:1.8}#reviewView.wrap{width:100%;max-width:none;margin:0;padding:0}#reviewView>.note{margin:8px auto;max-width:1180px}button,a,input,textarea{font:inherit}button,a{cursor:pointer}.wrap{width:min(1180px,calc(100% - 28px));margin:auto}.top{padding:20px 0;border-bottom:1px solid var(--line);background:#07141be8}.brand{color:var(--gold);font:700 1.4rem Marhey,Cairo,sans-serif}.sub{color:var(--muted);font-size:.9rem}.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:9px 15px;background:#142a33;color:var(--text);text-decoration:none}.btn.active,.btn.primary{background:var(--gold);color:#17232a;border-color:var(--gold);font-weight:800}.note{padding:12px 15px;border:1px solid #725b38;background:#2b251a;border-radius:12px;color:#f0d8aa;margin:14px 0}.panel{border:1px solid var(--line);border-radius:18px;background:#0d2028;padding:18px;margin:18px 0}.panel h1,.panel h2{color:var(--gold);margin-top:0}.framebox{height:min(72vh,780px);min-height:420px;background:#fff;border-radius:12px;overflow:hidden}.framebox iframe{width:100%;height:100%;border:0;background:white}.story{overflow:hidden;border-radius:18px;border:2px solid var(--outer);background:var(--inner);box-shadow:0 16px 40px #0005}.cover{padding:30px 24px;background:linear-gradient(135deg,#0a1c25,#1d3d43);border-bottom:4px solid var(--outer);text-align:center}.eyebrow{color:var(--gold);font-weight:800}.story h1{font:700 clamp(1.7rem,4vw,2.7rem) Marhey,Cairo,sans-serif;margin:8px 0}.subtitle{color:#e1d4b7;font-size:1.1rem}.storybody{padding:24px;max-width:900px;margin:auto}.speaker{padding:14px 16px;margin:12px 0;border-right:4px solid var(--outer);background:#ffffff0b;border-radius:10px}.speaker b{color:var(--gold)}.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:5px}.field input,.field textarea,.field select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#07171d;color:var(--text)}.field textarea{min-height:120px;resize:vertical}.field.full{grid-column:1/-1}.colors{display:flex;gap:14px;flex-wrap:wrap}.colors label{display:flex;gap:8px;align-items:center}.colors input{width:42px;height:34px;padding:2px}.footer{color:var(--muted);text-align:center;padding:25px 0;font-size:.85rem}@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}}
-.publish-preview{margin:0 -14px 22px;overflow:hidden;border:1px solid rgba(213,183,120,.24);background:#080f19;color:#f3eee5}.publish-preview .pub-hero{position:relative;display:flex;align-items:center;min-height:440px;padding:clamp(28px,6vw,76px);background:linear-gradient(115deg,#09131e,#1b2340 68%,#101824);border-bottom:1px solid #55466e}.publish-preview .pub-hero-content{max-width:800px}.publish-preview .pub-kicker{color:#d5b7ff;font-weight:800}.publish-preview .pub-hero h1{font:700 clamp(2.3rem,6vw,4.8rem)/1.4 Marhey,Cairo,serif;color:#fff0d7;margin:14px 0}.publish-preview .pub-subtitle{color:#d7d8e8;font-size:clamp(1rem,2vw,1.25rem)}.publish-preview .pub-author{margin-top:22px;color:#b8c6d5;line-height:2}.publish-preview .pub-author strong{color:#f1d8a3}.publish-preview .pub-section{padding:clamp(32px,5vw,64px) clamp(20px,5vw,68px);border-bottom:1px solid rgba(213,183,255,.12)}.publish-preview .pub-section:nth-child(even){background:rgba(10,15,28,.55)}.publish-preview .pub-section h2{color:#f3e7ff;font:700 clamp(1.5rem,3vw,2.2rem)/1.5 Marhey,Cairo,serif;margin:0 0 18px}.publish-preview .pub-section p{max-width:900px;font-size:1rem;line-height:2.1;white-space:pre-wrap;overflow-wrap:anywhere}.publish-preview .pub-translation{direction:ltr;text-align:left;border:1px solid #55466e;border-radius:12px;padding:16px;margin:12px 0;background:#101824}.publish-preview .pub-translation h3{color:#e3bd78;margin-top:0}.publish-preview .pub-actions{display:flex;flex-wrap:wrap;gap:10px;padding:20px 0}.publish-preview .pub-actions button{min-height:46px;border-radius:8px;padding:10px 18px;font-weight:800}.publish-preview .pub-actions #approveStoryBtn{background:linear-gradient(135deg,#f2d59a,#c59aee);color:#171321;border:0}.publish-preview .pub-actions #rejectStoryBtn,.publish-preview .pub-actions #printReviewBtn{background:#111d29;color:#f4e8ff;border:1px solid #55466e}@media(max-width:650px){.publish-preview{margin-inline:-13px}.publish-preview .pub-hero{min-height:390px;padding:28px 20px}.publish-preview .pub-section{padding:30px 20px}.publish-preview .pub-actions{flex-direction:column}.publish-preview .pub-actions button{width:100%}}
-</style><style>html{visibility:hidden}</style><script src="assets/admin-tools-auth.js" defer></script></head>
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#17323a,var(--bg) 65%);color:var(--text);font-family:Cairo,Arial,sans-serif;line-height:1.8}
+button,a,input,textarea{font:inherit}button,a{cursor:pointer}
+.wrap{width:min(1180px,calc(100% - 28px));margin:auto}
+.top{padding:20px 0;border-bottom:1px solid var(--line);background:#07141be8}
+.brand{color:var(--gold);font:700 1.4rem Marhey,Cairo,sans-serif}.sub{color:var(--muted);font-size:.9rem}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:12px;padding:9px 15px;background:#142a33;color:var(--text);text-decoration:none}
+.btn.active,.btn.primary{background:var(--gold);color:#17232a;border-color:var(--gold);font-weight:800}
+.btn:disabled{opacity:.55;cursor:not-allowed}
+.note{padding:12px 15px;border:1px solid #725b38;background:#2b251a;border-radius:12px;color:#f0d8aa;margin:14px 0;overflow-wrap:anywhere}
+#reviewMeta{white-space:pre-line}
+.panel{border:1px solid var(--line);border-radius:18px;background:#0d2028;padding:18px;margin:18px 0}
+.panel h1,.panel h2{color:var(--gold);margin-top:0}
+.framebox{height:min(72vh,780px);min-height:420px;background:#fff;border-radius:12px;overflow:hidden}
+.framebox iframe{width:100%;height:100%;border:0;background:#fff}
+.story{overflow:hidden;border-radius:18px;border:2px solid var(--outer);background:var(--inner);box-shadow:0 16px 40px #0005}
+.cover{padding:30px 24px;background:linear-gradient(135deg,#0a1c25,#1d3d43);border-bottom:4px solid var(--outer);text-align:center}
+.eyebrow{color:var(--gold);font-weight:800}
+.story h1{font:700 clamp(1.7rem,4vw,2.7rem) Marhey,Cairo,sans-serif;margin:8px 0}
+.subtitle{color:#e1d4b7;font-size:1.1rem}
+.storybody{padding:24px;max-width:900px;margin:auto}
+.speaker{padding:14px 16px;margin:12px 0;border-inline-start:4px solid var(--outer);background:#ffffff0b;border-radius:10px}
+.speaker b{color:var(--gold)}.speaker p{white-space:pre-wrap;overflow-wrap:anywhere;margin:6px 0 0}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field input,.field textarea,.field select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);background:#07171d;color:var(--text)}
+.field textarea{min-height:120px;resize:vertical}.field.full{grid-column:1/-1}
+.colors{display:flex;gap:14px;flex-wrap:wrap}.colors label{display:flex;gap:8px;align-items:center}.colors input{width:42px;height:34px;padding:2px}
+.footer{color:var(--muted);text-align:center;padding:25px 0;font-size:.85rem}
+
+/* وضع مراجعة الحكاية */
+#reviewView.wrap{width:100%;max-width:none;margin:0;padding:0}
+#reviewView>.note{width:min(1180px,calc(100% - 28px));margin:10px auto}
+.actual-page-preview{margin:0 0 18px;overflow:visible;background:transparent}
+.actual-page-preview iframe{display:block;width:100%;height:1000px;min-height:600px;border:0;background:#fff}
+.publish-preview{margin:0 0 22px;overflow:hidden;border-top:1px solid rgba(213,183,120,.24);border-bottom:1px solid rgba(213,183,120,.24);background:#080f19;color:#f3eee5}
+.pub-hero{padding:clamp(22px,4vw,44px) clamp(18px,5vw,68px);background:linear-gradient(115deg,#09131e,#1b2340 68%,#101824);border-bottom:1px solid #55466e}
+.pub-hero-content{max-width:900px}
+.pub-kicker{color:#d5b7ff;font-weight:800}
+.pub-hero h1{font:700 clamp(1.8rem,4.5vw,3rem)/1.5 Marhey,Cairo,serif;color:#fff0d7;margin:10px 0;overflow-wrap:anywhere}
+.pub-subtitle{color:#d7d8e8;font-size:clamp(1rem,2vw,1.2rem);margin:0}
+.pub-author{margin-top:14px;color:#b8c6d5;line-height:2}.pub-author strong{color:#f1d8a3}
+.pub-section{padding:clamp(26px,4vw,52px) clamp(18px,5vw,68px);border-bottom:1px solid rgba(213,183,255,.12)}
+.pub-section:nth-of-type(even){background:rgba(10,15,28,.55)}
+.pub-section h2{color:#f3e7ff;font:700 clamp(1.4rem,3vw,2rem)/1.5 Marhey,Cairo,serif;margin:0 0 16px}
+.pub-text{max-width:900px;font-size:1rem;line-height:2.1;white-space:pre-wrap;overflow-wrap:anywhere}
+.pub-plain{unicode-bidi:plaintext;text-align:start}
+.pub-card{border:1px solid #55466e;border-radius:12px;padding:16px;margin:12px 0;background:#101824;max-width:900px}
+.pub-card h3,.pub-card b{color:#e3bd78;margin-top:0}
+.pub-translation{direction:ltr;text-align:left}
+.pub-card .pub-text{margin:6px 0 0}
+.pub-ready-ok{color:#7fe0ad}.pub-ready-bad{color:#ffb6b7}
+.pub-section ul{margin:8px 0;padding-inline-start:22px}
+.pub-actions{display:flex;flex-wrap:wrap;gap:10px;width:min(1180px,calc(100% - 28px));margin:0 auto;padding:14px 0 20px}
+.pub-actions .btn{min-height:46px;font-weight:800}
+#reviewView .pub-actions #approveStoryBtn{background:linear-gradient(135deg,#f2d59a,#c59aee);color:#171321;border:0}
+@media(min-width:651px){.pub-actions{position:sticky;bottom:0;z-index:5;background:#07141bf2;border-top:1px solid var(--line);padding:12px 0}}
+@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}.actual-page-preview iframe{height:1300px}.pub-actions{flex-direction:column}.pub-actions .btn{width:100%}}
+@media print{.top,.tabs,.note,.pub-actions,.footer,#siteView{display:none!important}body{background:#fff;color:#000}.actual-page-preview iframe{height:auto}}
+</style>
+<style>html{visibility:hidden}</style>
+<script src="assets/admin-tools-auth.js" defer></script>
+</head>
 <body>
 <header class="top"><div class="wrap"><div class="brand">خالدون عبر التاريخ</div><div class="sub">مساحة معاينة مرئية قبل اعتماد التعديلات</div></div></header>
 <main class="wrap">
-<div class="note">هذه صفحة HTML للمعاينة وليست صفحة نشر. عرض الموقع في الإطار يعرض النسخة المنشورة الحالية؛ أما «معاينة حكاية» فتتيح رؤية شكل صفحة الحكاية وتعديل نموذجها محليًا قبل اعتمادها. لا تحفظ هذه الصفحة أي تغييرات في الموقع.</div>
+<div class="note" id="introNote">هذه صفحة HTML للمعاينة وليست صفحة نشر. عرض الموقع في الإطار يعرض النسخة المنشورة الحالية؛ أما «معاينة شكل حكاية» فتتيح رؤية شكل صفحة الحكاية وتعديل نموذجها محليًا قبل اعتمادها. لا تحفظ هذه الصفحة أي تغييرات في الموقع.</div>
 <nav class="tabs" aria-label="اختيار المعاينة">
-<button class="btn active" data-view="site">معاينة الموقع</button>
-<button class="btn" data-view="story">معاينة شكل حكاية</button>
-<a class="btn" href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/" target="_blank" rel="noopener">فتح الرئيسية في نافذة مستقلة ↗</a>
+<button class="btn active" type="button" data-view="site">معاينة الموقع</button>
+<button class="btn" type="button" data-view="story">معاينة شكل حكاية</button>
+<a class="btn" href="../index.html" target="_blank" rel="noopener">فتح الرئيسية في نافذة مستقلة ↗</a>
 <a class="btn" href="admin.html">العودة إلى الأدمن</a>
 </nav>
 <section id="siteView" class="panel">
 <h1>تصفّح صفحات الموقع</h1>
 <div class="tabs">
-<button class="btn active" data-page="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/">الرئيسية</button>
-<button class="btn" data-page="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/khaledoon/collections/history.html">التاريخ والحضارات</button>
-<button class="btn" data-page="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/khaledoon/collections/science.html">العلم والعلماء</button>
-<button class="btn" data-page="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/khaledoon/collections/curriculum.html">شخصيات المناهج</button>
-<button class="btn" data-page="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/khaledoon/collections/october.html">أكتوبر 1973</button>
+<button class="btn active" type="button" data-page="../index.html">الرئيسية</button>
+<button class="btn" type="button" data-page="collections/october.html">أكتوبر 1973</button>
+<button class="btn" type="button" data-page="collections/history.html">التاريخ والحضارات</button>
+<button class="btn" type="button" data-page="collections/science.html">العلم والعلماء</button>
+<button class="btn" type="button" data-page="collections/women.html">نساء خالدات</button>
+<button class="btn" type="button" data-page="collections/people.html">أعلام الأدب والفنون والرياضة</button>
+<button class="btn" type="button" data-page="collections/curriculum.html">شخصيات المناهج</button>
+<button class="btn" type="button" data-page="collections/islamic.html">شخصيات إسلامية</button>
 </div>
 <div class="framebox"><iframe id="siteFrame" title="معاينة صفحة من الموقع" src="../index.html"></iframe></div>
 </section>
@@ -50,239 +114,353 @@
 </div>
 <article class="story" id="storyPreview">
 <div class="cover"><div class="eyebrow">خالدون عبر التاريخ · معاينة غير منشورة</div><h1 id="outTitle">عنوان الحكاية الجديدة</h1><div class="subtitle" id="outSubtitle">حكاية نكتشف من خلالها التاريخ بالدليل</div></div>
-<div class="storybody"><div class="speaker"><b>كارما</b><p id="outKarma"></p></div><div class="speaker"><b>الراوي</b><p id="outNarrator"></p></div><hr style="border-color:var(--outer);opacity:.5"><h2 style="color:var(--gold)">المصادر</h2><p id="outSources"></p></div>
+<div class="storybody"><div class="speaker"><b>كارما</b><p id="outKarma"></p></div><div class="speaker"><b>الراوي</b><p id="outNarrator"></p></div><hr style="border-color:var(--outer);opacity:.5"><h2 style="color:var(--gold)">المصادر</h2><p id="outSources" style="white-space:pre-wrap;overflow-wrap:anywhere"></p></div>
 </article>
-<div class="tabs"><button class="btn primary" id="printBtn">طباعة المعاينة</button><button class="btn" id="resetBtn">إعادة النموذج الافتراضي</button></div>
+<div class="tabs"><button class="btn primary" type="button" id="printBtn">طباعة المعاينة</button><button class="btn" type="button" id="resetBtn">إعادة النموذج الافتراضي</button></div>
 </section>
 
 <section id="reviewView" class="wrap" hidden>
- <div class="note" id="reviewMeta">تحميل المعاينة…</div>
+ <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <section id="actualPagePreviewWrap" class="actual-page-preview">
   <iframe id="actualPagePreview" title="صفحة الحكاية — معاينة غير منشورة" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="eager"></iframe>
  </section>
 
- <div class="publish-preview" hidden>
-  <header class="pub-hero"><div class="pub-hero-content"><div class="pub-kicker" id="reviewSection">خالدون عبر التاريخ • معاينة قبل النشر</div><h1 id="reviewTitle"></h1><p class="pub-subtitle" id="reviewSubtitle"></p><div class="pub-author"><span>حكاية قيد المراجعة</span><br><strong id="reviewFigure"></strong></div></div></header>
-  <section class="pub-section" id="reviewKarmaWrap"><div class="pub-kicker">صوت كارما</div><h2>فضول الطفلة وملاحظاتها</h2><div id="reviewKarma"></div></section>
-  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">صوت الراوي</div><h2>الحكاية والمعرفة التاريخية</h2><div id="reviewBody"></div></section>
-  <section class="pub-section" id="reviewHistoryWrap"><div class="pub-kicker">في ضوء التاريخ</div><h2>السياق والتحقق التاريخي</h2><div id="reviewHistory"></div></section>
-  <section class="pub-section" id="reviewSourcesWrap"><div class="pub-kicker">المصادر والتحقق</div><h2>من أين عرفنا هذه المعلومات؟</h2><div id="reviewSources"></div></section>
-  <section class="pub-section" id="reviewImagesWrap"><div class="pub-kicker">الصور</div><h2>الصور وحقوق الاستخدام</h2><div id="reviewImages"></div></section>
-  <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><pre id="reviewOriginal" style="white-space:pre-wrap;overflow-wrap:anywhere;font:inherit"></pre></section>
+ <div class="publish-preview">
+  <header class="pub-hero"><div class="pub-hero-content"><div class="pub-kicker" id="reviewSection">خالدون عبر التاريخ • معاينة قبل النشر</div><h1 id="reviewTitle"></h1><p class="pub-subtitle" id="reviewSubtitle"></p><div class="pub-author"><span>بيانات المراجعة — حكاية قيد المراجعة</span><br><strong id="reviewFigure"></strong></div></div></header>
+  <section class="pub-section" id="reviewReadyWrap"><div class="pub-kicker">جاهزية النشر</div><h2>فحص اكتمال حزمة الحكاية</h2><div id="reviewReady"></div></section>
+  <section class="pub-section" id="reviewKarmaWrap"><div class="pub-kicker">صوت كارما</div><h2>فضول الطفلة وملاحظاتها</h2><div class="pub-text" id="reviewKarma"></div></section>
+  <section class="pub-section" id="reviewBodyWrap"><div class="pub-kicker">صوت الراوي</div><h2>الحكاية والمعرفة التاريخية</h2><div class="pub-text" id="reviewBody"></div></section>
+  <section class="pub-section" id="reviewHistoryWrap"><div class="pub-kicker">في ضوء التاريخ</div><h2>السياق والتحقق التاريخي</h2><div class="pub-text" id="reviewHistory"></div></section>
+  <section class="pub-section" id="reviewSourcesWrap"><div class="pub-kicker">المصادر والتحقق</div><h2>من أين عرفنا هذه المعلومات؟</h2><div class="pub-text pub-plain" id="reviewSources"></div></section>
+  <section class="pub-section" id="reviewImagesWrap"><div class="pub-kicker">الصور</div><h2>الصور وحقوق الاستخدام</h2><div class="pub-text" id="reviewImages"></div></section>
+  <section class="pub-section" id="reviewOriginalWrap"><div class="pub-kicker">للمراجعة فقط</div><h2>النص الأصلي كما وصل</h2><div class="pub-text" id="reviewOriginal"></div></section>
   <section class="pub-section" id="reviewTranslationsWrap"><div class="pub-kicker">Languages</div><h2>الترجمات المسجلة</h2><div id="reviewTranslations"></div></section>
   <section class="pub-section" id="reviewQuizWrap"><div class="pub-kicker">التفاعل التعليمي</div><h2>بنك الأسئلة</h2><div id="reviewQuiz"></div></section>
  </div>
  <div class="note">المعاينة لا تنشر الحكاية. القبول أو الرفض يُحفظ في قاعدة البيانات، والنشر خطوة منفصلة بعد موافقتك.</div>
  <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">قبول المعاينة وتجهيز الرفع</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة وإرجاعها للمسودة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
-</main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل قاعدة البيانات من هذه الصفحة.</footer>
+</main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل ملفات الموقع من هذه الصفحة.</footer>
 <script src="assets/story-template-bundle.js"></script>
 <script>
 (function(){
-var views={site:document.getElementById('siteView'),story:document.getElementById('storyView')};
-document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){Object.keys(views).forEach(function(k){views[k].hidden=k!==b.dataset.view});document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)});})});
-document.querySelectorAll('[data-page]').forEach(function(b){b.addEventListener('click',function(){document.getElementById('siteFrame').src=b.dataset.page;document.querySelectorAll('[data-page]').forEach(function(x){x.classList.toggle('active',x===b)})})});
-var pairs=[['storyTitle','outTitle'],['storySubtitle','outSubtitle'],['karmaText','outKarma'],['narratorText','outNarrator'],['sourceText','outSources']];
-function paint(){pairs.forEach(function(p){document.getElementById(p[1]).textContent=document.getElementById(p[0]).value});var a=document.getElementById('outerColor').value,b=document.getElementById('innerColor').value;var s=document.getElementById('storyPreview');s.style.setProperty('--outer',a);s.style.setProperty('--inner',b);s.style.borderColor=a;s.style.background=b}
-pairs.forEach(function(p){document.getElementById(p[0]).addEventListener('input',paint)});
-['outerColor','innerColor'].forEach(function(id){document.getElementById(id).addEventListener('input',paint)});
-var defaults={storyTitle:'عنوان الحكاية الجديدة',storySubtitle:'حكاية نكتشف من خلالها التاريخ بالدليل',karmaText:'كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟',narratorText:'الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.',sourceText:'المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.',outerColor:'#b8874b',innerColor:'#102b35'};
-document.getElementById('resetBtn').addEventListener('click',function(){Object.keys(defaults).forEach(function(k){document.getElementById(k).value=defaults[k]});paint()});
-document.getElementById('printBtn').addEventListener('click',function(){var was=views.story.hidden;views.site.hidden=true;views.story.hidden=false;window.print();views.site.hidden=was});
+'use strict';
+var SUPA='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+var PAGES_ROOT='https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/';
+var REPO_RAW='https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/';
+var LANG_NAMES={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
+function $(id){return document.getElementById(id)}
+function put(id,v){var e=$(id);if(e)e.textContent=v==null?'':String(v)}
 
+/* ---------- معاينة الموقع ومعاينة شكل حكاية ---------- */
+var views={site:$('siteView'),story:$('storyView')};
+document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){Object.keys(views).forEach(function(k){views[k].hidden=k!==b.dataset.view});document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)})})});
+document.querySelectorAll('[data-page]').forEach(function(b){b.addEventListener('click',function(){$('siteFrame').src=b.dataset.page;document.querySelectorAll('[data-page]').forEach(function(x){x.classList.toggle('active',x===b)})})});
+var pairs=[['storyTitle','outTitle'],['storySubtitle','outSubtitle'],['karmaText','outKarma'],['narratorText','outNarrator'],['sourceText','outSources']];
+function paint(){pairs.forEach(function(p){$(p[1]).textContent=$(p[0]).value});var a=$('outerColor').value,b=$('innerColor').value,s=$('storyPreview');s.style.setProperty('--outer',a);s.style.setProperty('--inner',b);s.style.borderColor=a;s.style.background=b}
+pairs.forEach(function(p){$(p[0]).addEventListener('input',paint)});
+['outerColor','innerColor'].forEach(function(id){$(id).addEventListener('input',paint)});
+var defaults={storyTitle:'عنوان الحكاية الجديدة',storySubtitle:'حكاية نكتشف من خلالها التاريخ بالدليل',karmaText:'كارما: أنا مستغربة! إزاي نقدر نعرف اللي حصل زمان ونتأكد إن الحكاية حقيقية؟',narratorText:'الراوي: نبدأ بالأدلة والمصادر الموثوقة، ونرتب الأحداث في سياقها، ونوضح ما نعرفه وما لا يزال محل خلاف.',sourceText:'المصادر: أضف هنا أسماء المصادر الموثوقة وروابطها بعد التحقق منها.',outerColor:'#b8874b',innerColor:'#102b35'};
+$('resetBtn').addEventListener('click',function(){Object.keys(defaults).forEach(function(k){$(k).value=defaults[k]});paint()});
+$('printBtn').addEventListener('click',function(){var s=views.site.hidden,t=views.story.hidden;views.site.hidden=true;views.story.hidden=false;window.print();views.site.hidden=s;views.story.hidden=t});
 paint();
+
+/* ---------- وضع مراجعة الحكاية ---------- */
 var params=new URLSearchParams(location.search);
-if(params.get('story')==='1'||params.get('story')==='khalid-011'||(!params.has('story')&&!params.has('submission'))){
- var siteView=document.getElementById('siteView'),storyView=document.getElementById('storyView'),reviewView=document.getElementById('reviewView');
- siteView.hidden=true;storyView.hidden=true;reviewView.hidden=false;
- var nav=document.querySelector('nav.tabs');if(nav)nav.hidden=true;
- var topHeader=document.querySelector('header.top');if(topHeader)topHeader.hidden=true;var siteFooter=document.querySelector('footer.footer');if(siteFooter)siteFooter.hidden=true;
- document.querySelectorAll('[data-view]').forEach(function(x){x.classList.remove('active')});
- var draft=null;
- try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
- if(params.get('story')==='khalid-011'||!params.has('story')){
-  draft={"github_preview":true,"status":"draft","status_label":"مسودة من فرع المراجعة — غير منشورة","submission_id":null,"story_number":"011","section_key":"islamic","section_label":"شخصيات إسلامية","title":"خالد بن الوليد — من أُحد إلى سيف الله","subtitle":"حكاية قائد تغيّر موقفه، ثم صار من أبرز قادة المسلمين","figure_name":"خالد بن الوليد","narrator_name":"الراوي الحكيم","karma_text":"إزاي يا ترى شخص كان بيحارب المسلمين، وبعد كده بقى من أشهر قادتهم؟ هو الإنسان ممكن يغيّر طريقه فعلًا؟\n\nيعني مش كل معركة بتتحدد بالقوة بس؛ أحيانًا قرار واحد أو مكان فاضي يغيّر اللي بيحصل!\n\nطب لما أسلم، هل بقى قائدًا على طول؟\n\nفهمت. نقدر نقول إنه كان قائدًا بارعًا، بس لازم كمان نراجع الروايات وما نعتبرش كل تفصيلة مؤكدة.\n\nيبقى أهم حاجة إننا نفهم القصة من مصادرها، ونفكر في اللي حصل بدل ما نحفظ أسماء المعارك بس.","body":"خلّينا نرجع إلى القرن السابع الميلادي، إلى شبه الجزيرة العربية. كان خالد بن الوليد من قريش، وعُرف بمهارته في قيادة الفرسان. في غزوة أُحد سنة 625م، قاد فرسان قريش، وتذكر الروايات أن تحرك الفرسان بعد ابتعاد بعض الرماة المسلمين عن مواقعهم أثّر في سير المعركة. وتوضح هذه المحطة أهمية الموقع والتوقيت في فهم الأحداث.\n\nبعد سنوات، دخل خالد الإسلام، وتضع مراجع كثيرة ذلك نحو سنة 629م، مع اختلاف بعض الروايات في التفاصيل. وفي مؤتة، تذكر الروايات الإسلامية أنه تولّى القيادة بعد مقتل القادة الذين سبقوه وساعد في تنظيم الانسحاب. واشتهر في التراث الإسلامي بلقب «سيف الله»، لكن توقيت اللقب وسياقه يختلفان في الروايات.\n\nخلال خلافة أبي بكر، شارك خالد في حروب الردة، ثم قاد حملات في العراق وبلاد الشام. وترتبط سيرته بمعركة اليرموك سنة 636م، وهي مواجهة مهمة بين القوات الإسلامية والبيزنطية ساهمت نتائجها في تغيّر ميزان القوة في بلاد الشام. ومع ذلك، تختلف المصادر القديمة في أعداد الجيوش وبعض تفاصيل المعارك، لذلك لا نقدم الأرقام المتداولة باعتبارها حقائق مؤكدة.\n\nتساعدنا هذه السيرة على فهم أن مواقف الإنسان قد تتغير، وأن دراسة التاريخ ليست حفظ أسماء المعارك فقط. علينا أن نقرأ الوقائع في سياقها، ونقارن المصادر، ونميز بين الحدث الذي تتفق عليه المراجع والتفاصيل التي لا تزال محل اختلاف.","history_note":"محطات رئيسية: أُحد (625م)، إسلام خالد نحو 629م بحسب مراجع عديدة، مؤتة (نحو 629م)، ثم حملات في العراق وبلاد الشام، واليرموك (636م). بعض تفاصيل التسلسل والروايات العسكرية وأعداد الجيوش تختلف بين المصادر القديمة؛ لذلك تعرض الحكاية التواريخ على نحو تقريبي وتوضح مواضع عدم اليقين.","sources":"# مصادر حكاية خالد بن الوليد\n\nتاريخ الاطلاع على الروابط: 2026-10-18.\n\n1. **Khalid ibn al-Walid** — Islam Museum. ملخص سيرة يعرض أحداث أُحد، وإسلام خالد نحو 629م، ومشاركته في مؤتة واليرموك، ويعرض أيضًا أن بعض تفاصيل سيرته محل نقاش. يعتمد على مراجع تراثية محددة ويعرض وجهات نظر مختلفة.  \n   https://islam.museum/en/person/khalid-ibn-al-walid/\n\n2. **The Early Arab Historians’ Approaches to the Biography of Khalid Ibn Al-Walid: A Comparative Critical Study** — Fatima Ali Hamad Mohamed Aljneibi, Mohd Roslan Mohd Nor, and Faisal @ Ahmad Faisal Abdul Hamid, *Journal Al-Muqaddimah*, vol. 13, no. 2 (2025), pp. 125–162. دراسة أكاديمية تقارن مناهج مؤرخين عرب مبكرين، وتشرح اختلاف الروايات وضرورة نقدها. DOI: 10.22452/muqaddimah.vol13no2.7.  \n   https://mjs.um.edu.my/index.php/MUQADDIMAH/article/view/66223\n\n3. **1911 Encyclopaedia Britannica: Mahomet** — Wikisource. مرجع موسوعي قديم يذكر دور خالد في أُحد؛ يُستخدم للمقارنة فقط، وليس مرجعًا حديثًا وحيدًا.  \n   https://en.wikisource.org/wiki/1911_Encyclop%C3%A6dia_Britannica/Mahomet\n\n4. **Khalid ibn al-Walid al-Makhzumi — Narrators** — Sunnah.com. صفحة تعريفية بمرويات من كتب الحديث والتراجم؛ تُستخدم لعرض الرواية الإسلامية التقليدية، لا باعتبارها دراسة تاريخية نقدية مستقلة.  \n   https://sunnah.com/narrator/2630\n\n## ملاحظات تحريرية\n\n- تضع بعض المراجع إسلام خالد نحو سنة 629م، بينما تختلف بعض الروايات في ضبط السنة الهجرية والتفاصيل؛ لذلك صيغت العبارة على أنها تاريخ تقريبي.\n- لقب «سيف الله» مشهور في التراث الإسلامي. تختلف الروايات في توقيت نسبته إلى خالد وسياقه؛ لذلك لم نضعه بين علامتي اقتباس بوصفه قولًا حرفيًا موثقًا هنا.\n- أعداد الجيوش وبعض التفاصيل العسكرية في الروايات المبكرة ليست ثابتة بما يكفي لتقديمها كأرقام مؤكدة؛ لم ندرج أرقامًا من هذا النوع.\n- لا تُستخدم إجابة ذكاء اصطناعي بوصفها مصدرًا. ينبغي استكمال المراجعة العربية التاريخية قبل الاعتماد النهائي.\n\n\nرسوم المشاهد داخل الحكاية: scene-uhud.svg، scene-mutah.svg، scene-yarmouk.svg — رسوم توضيحية رمزية أصلية أُنشئت للمشروع وليست صورًا أرشيفية.","images_note":"تضم المعاينة خمسة رسوم توضيحية رمزية أصلية: الغلاف، صورة شاشة البداية، ومشاهد أُحد ومؤتة واليرموك. هذه الرسوم ليست صورًا تاريخية أو أرشيفية، ولا تُعرض بوصفها إعادة بناء موثقة.","original_body":"منذ زمن بعيد، عاش رجل اسمه خالد بن الوليد، عُرف بالشجاعة والذكاء في قيادة الجيوش، حتى أصبح واحدًا من أشهر القادة العسكريين في التاريخ الإسلامي.\nفي البداية، كان خالد يقاتل مع جيش قريش ضد المسلمين. وفي غزوة أُحد، استخدم مهارته في قيادة الفرسان، وكان لذلك دور مهم في أحداث المعركة.\nوبعد سنوات، قرر خالد أن يدخل الإسلام، فأصبح يقاتل في صفوف المسلمين، وشارك في معارك عديدة، وأظهر قدرة كبيرة على التخطيط وتنظيم الجنود.","translations":{},"question_bank_json":"{\"id\":\"011\",\"title\":\"خالد بن الوليد\",\"questions\":[{\"q\":\"في أي معركة قاد خالد فرسان قريش قبل إسلامه؟\",\"o\":[\"أُحد\",\"اليرموك\",\"حطين\",\"عين جالوت\"],\"a\":0,\"e\":\"قاد فرسان قريش في أُحد سنة 625م.\",\"i18n\":{\"en\":{\"q\":\"Which battle did Khalid command Quraysh’s cavalry in before his conversion?\",\"o\":[\"Uhud\",\"Yarmouk\",\"Hattin\",\"Ayn Jalut\"],\"a\":0,\"e\":\"He commanded Quraysh’s cavalry at Uhud in 625 CE.\"},\"fr\":{\"q\":\"Lors de quelle bataille Khalid commandait-il la cavalerie quraychite avant sa conversion ?\",\"o\":[\"Uhud\",\"Yarmouk\",\"Hattin\",\"Ayn Jalut\"],\"a\":0,\"e\":\"Il commandait la cavalerie des Quraychites à Uhud en 625.\"},\"it\":{\"q\":\"In quale battaglia Khalid comandò la cavalleria dei Quraysh prima della conversione?\",\"o\":[\"Uhud\",\"Yarmuk\",\"Hattin\",\"Ayn Jalut\"],\"a\":0,\"e\":\"Nel 625 comandò la cavalleria dei Quraysh a Uhud.\"},\"de\":{\"q\":\"In welcher Schlacht führte Chalid vor seiner Konversion die Reiterei der Quraisch?\",\"o\":[\"Uhud\",\"Jarmuk\",\"Hattin\",\"Ayn Dschalut\"],\"a\":0,\"e\":\"Im Jahr 625 führte er bei Uhud die Reiterei der Quraisch.\"}}},{\"q\":\"ما الثغرة التي استغلها خالد في أُحد؟\",\"o\":[\"مغادرة بعض الرماة مواقعهم\",\"تعطل السفن\",\"انقطاع الطريق إلى الشام\",\"غياب الخيول\"],\"a\":0,\"e\":\"استغل ابتعاد بعض الرماة عن الموقع الذي كُلّفوا بحمايته.\",\"i18n\":{\"en\":{\"q\":\"What opening did Khalid exploit at Uhud?\",\"o\":[\"Some archers leaving their assigned position\",\"Ships breaking down\",\"The road to Syria closing\",\"The horses disappearing\"],\"a\":0,\"e\":\"He took advantage when some archers left the position they had been ordered to protect.\"},\"fr\":{\"q\":\"Quelle faille Khalid a-t-il exploitée à Uhud ?\",\"o\":[\"Le départ de certains archers de leur position\",\"Des navires en panne\",\"La fermeture de la route de Syrie\",\"La disparition des chevaux\"],\"a\":0,\"e\":\"Il a profité du départ de certains archers de la position qu’ils devaient protéger.\"},\"it\":{\"q\":\"Quale apertura sfruttò Khalid a Uhud?\",\"o\":[\"L’allontanamento di alcuni arcieri dalla posizione assegnata\",\"Navi guaste\",\"La chiusura della strada per la Siria\",\"La scomparsa dei cavalli\"],\"a\":0,\"e\":\"Approfittò del fatto che alcuni arcieri lasciarono la posizione che dovevano proteggere.\"},\"de\":{\"q\":\"Welche Lücke nutzte Chalid bei Uhud aus?\",\"o\":[\"Dass einige Bogenschützen ihre zugewiesene Stellung verließen\",\"Dass Schiffe ausfielen\",\"Dass die Straße nach Syrien gesperrt war\",\"Dass die Pferde verschwanden\"],\"a\":0,\"e\":\"Er nutzte aus, dass einige Bogenschützen die zu schützende Stellung verließen.\"}}},{\"q\":\"متى يُؤرَّخ إسلام خالد عادةً؟\",\"o\":[\"نحو 629م مع اختلاف الروايات\",\"عام 1000م\",\"عام 1492م\",\"عام 1914م\"],\"a\":0,\"e\":\"تضعه مراجع كثيرة نحو 629م، لكن التفاصيل ليست متطابقة في جميع الروايات.\",\"i18n\":{\"en\":{\"q\":\"When is Khalid’s conversion to Islam usually dated?\",\"o\":[\"Around 629 CE, though accounts differ\",\"1000 CE\",\"1492 CE\",\"1914 CE\"],\"a\":0,\"e\":\"Many references place it around 629 CE, but accounts do not agree on every detail.\"},\"fr\":{\"q\":\"À quelle date situe-t-on généralement la conversion de Khalid à l’islam ?\",\"o\":[\"Vers 629, même si les récits diffèrent\",\"En 1000\",\"En 1492\",\"En 1914\"],\"a\":0,\"e\":\"De nombreuses références la situent vers 629, mais certains détails varient.\"},\"it\":{\"q\":\"A quando viene generalmente datata la conversione di Khalid all’Islam?\",\"o\":[\"Intorno al 629, anche se le fonti differiscono\",\"Al 1000\",\"Al 1492\",\"Al 1914\"],\"a\":0,\"e\":\"Molte fonti la collocano intorno al 629, ma alcuni dettagli variano.\"},\"de\":{\"q\":\"Auf wann wird Chalids Annahme des Islam gewöhnlich datiert?\",\"o\":[\"Ungefähr auf 629, obwohl Berichte voneinander abweichen\",\"Auf 1000\",\"Auf 1492\",\"Auf 1914\"],\"a\":0,\"e\":\"Viele Nachschlagewerke nennen ungefähr 629, doch einige Einzelheiten unterscheiden sich.\"}}},{\"q\":\"ما الذي فعله خالد في مؤتة بحسب الروايات الإسلامية؟\",\"o\":[\"تولى القيادة بعد مقتل القادة السابقين وساعد في الانسحاب\",\"أسس مدينة بغداد\",\"قاد معركة حطين\",\"كتب كتابًا في الطب\"],\"a\":0,\"e\":\"تذكر الروايات أنه تولى القيادة بعد سقوط القادة الذين سبقوه.\",\"i18n\":{\"en\":{\"q\":\"What is Khalid said to have done at Mu’tah?\",\"o\":[\"Taken command after earlier commanders were killed and helped organize the withdrawal\",\"Founded Baghdad\",\"Led the Battle of Hattin\",\"Written a medical book\"],\"a\":0,\"e\":\"Accounts say he took command after the earlier commanders fell.\"},\"fr\":{\"q\":\"Que rapporte la tradition au sujet de Khalid à Mu’ta ?\",\"o\":[\"Il prit le commandement après la mort des chefs précédents et contribua au retrait\",\"Il fonda Bagdad\",\"Il dirigea la bataille de Hattin\",\"Il écrivit un livre de médecine\"],\"a\":0,\"e\":\"Les récits disent qu’il prit le commandement après la mort des chefs précédents.\"},\"it\":{\"q\":\"Che cosa si racconta che Khalid fece a Mu’ta?\",\"o\":[\"Assunse il comando dopo la morte dei comandanti precedenti e contribuì a organizzare la ritirata\",\"Fondò Baghdad\",\"Guidò la battaglia di Hattin\",\"Scrisse un libro di medicina\"],\"a\":0,\"e\":\"I racconti riferiscono che assunse il comando dopo la caduta dei comandanti precedenti.\"},\"de\":{\"q\":\"Was soll Chalid bei Muʾta getan haben?\",\"o\":[\"Er übernahm nach dem Tod der vorherigen Befehlshaber das Kommando und half, den Rückzug zu organisieren\",\"Er gründete Bagdad\",\"Er führte die Schlacht von Hattin\",\"Er schrieb ein medizinisches Buch\"],\"a\":0,\"e\":\"Berichte besagen, dass er nach dem Tod der vorherigen Befehlshaber das Kommando übernahm.\"}}},{\"q\":\"ما الفكرة الأساسية في دراسة سيرته تاريخيًا؟\",\"o\":[\"التمييز بين الوقائع والتفاصيل المختلف عليها\",\"قبول كل رقم متداول بلا مراجعة\",\"حفظ الألقاب فقط\",\"تجاهل المصادر\"],\"a\":0,\"e\":\"المقارنة بين المصادر تساعد على معرفة ما هو ثابت وما يحتاج إلى حذر.\",\"i18n\":{\"en\":{\"q\":\"What is an important principle when studying his life historically?\",\"o\":[\"Distinguish established events from disputed details\",\"Accept every repeated number without checking\",\"Memorize titles only\",\"Ignore sources\"],\"a\":0,\"e\":\"Comparing sources helps separate well-supported events from uncertain details.\"},\"fr\":{\"q\":\"Quel principe est important pour étudier sa vie historiquement ?\",\"o\":[\"Distinguer les faits établis des détails discutés\",\"Accepter tous les chiffres répétés sans vérification\",\"Mémoriser seulement les titres\",\"Ignorer les sources\"],\"a\":0,\"e\":\"Comparer les sources aide à distinguer les faits bien étayés des détails incertains.\"},\"it\":{\"q\":\"Qual è un principio importante nello studio storico della sua vita?\",\"o\":[\"Distinguere i fatti attestati dai dettagli controversi\",\"Accettare ogni numero ripetuto senza controllarlo\",\"Memorizzare solo i titoli\",\"Ignorare le fonti\"],\"a\":0,\"e\":\"Confrontare le fonti aiuta a distinguere gli eventi ben documentati dai dettagli incerti.\"},\"de\":{\"q\":\"Was ist ein wichtiger Grundsatz bei der historischen Untersuchung seines Lebens?\",\"o\":[\"Gesicherte Ereignisse von umstrittenen Einzelheiten unterscheiden\",\"Jede oft wiederholte Zahl ungeprüft übernehmen\",\"Nur Titel auswendig lernen\",\"Quellen ignorieren\"],\"a\":0,\"e\":\"Der Vergleich von Quellen hilft, gut belegte Ereignisse von unsicheren Einzelheiten zu unterscheiden.\"}}}]}","preview_source_url":"https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/preview-khalid-ibn-al-walid-2026-10-18/stories/islamic/011/index.html"};
-  document.getElementById('approveStoryBtn').hidden=true;
-  document.getElementById('rejectStoryBtn').hidden=true;
-  document.getElementById('returnToEditBtn').hidden=true;
-  var githubPreviewNote=document.querySelector('#reviewView > .note');
-  if(githubPreviewNote)githubPreviewNote.textContent='معاينة حكاية خالد بن الوليد من فرع المراجعة فقط. لا يوجد زر اعتماد أو نشر في هذا العرض؛ الصفحة الرئيسية وفهرس الحكايات المنشورة لم يتغيرا.';
+var currentDraft=null;
+
+function lockDecisions(){['approveStoryBtn','rejectStoryBtn'].forEach(function(id){$(id).disabled=true})}
+function say(t){put('reviewMeta',t)}
+
+async function adminToken(){
+ var s=null;try{s=JSON.parse(localStorage.getItem('kh_adm_session')||sessionStorage.getItem('kh_adm_session')||'null')}catch(e){}
+ if(!s||!s.access_token)throw new Error('سجّل الدخول إلى لوحة الإدارة على هذا الجهاز، ثم افتح المعاينة من داخلها.');
+ if(s.expires_at&&s.expires_at-Date.now()/1000<60&&s.refresh_token){
+  var rr=await fetch(SUPA+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:KEY,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:s.refresh_token})});
+  if(!rr.ok)throw new Error('انتهت جلسة المسؤول. سجّل الدخول مرة أخرى.');
+  var rd=await rr.json();s={access_token:rd.access_token,refresh_token:rd.refresh_token,expires_at:Math.floor(Date.now()/1000)+rd.expires_in};
+  try{localStorage.setItem('kh_adm_session',JSON.stringify(s));sessionStorage.setItem('kh_adm_session',JSON.stringify(s))}catch(e){}
  }
- var requestedSubmission=params.get('submission');
- if(requestedSubmission&&params.get('dbloaded')==='1'&&(!draft||String(draft.submission_id||'')!==requestedSubmission))draft=null;
- if(requestedSubmission&&params.get('dbloaded')!=='1'){
-  draft=null;
-  (async function(){
-   try{
-    if(!/^[0-9a-f-]{36}$/i.test(requestedSubmission))throw new Error('رقم سجل المعاينة غير صالح.');
-    var session=null;try{session=JSON.parse(localStorage.getItem('kh_adm_session')||sessionStorage.getItem('kh_adm_session')||'null')}catch(e){}
-    if(!session||!session.access_token)throw new Error('للمعاينة من هذا الجهاز، سجّل الدخول إلى لوحة الإدارة وافتح المعاينة من داخلها.');
-    if(session.expires_at&&session.expires_at-Date.now()/1000<60&&session.refresh_token){
-     var rr=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn','Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
-     if(!rr.ok)throw new Error('انتهت جلسة المسؤول. سجّل الدخول مرة أخرى.');
-     var rd=await rr.json();session={access_token:rd.access_token,refresh_token:rd.refresh_token,expires_at:Math.floor(Date.now()/1000)+rd.expires_in};sessionStorage.setItem('kh_adm_session',JSON.stringify(session));localStorage.setItem('kh_adm_session',JSON.stringify(session));
-    }
-    var response=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/rest/v1/khaledoon_submissions?id=eq.'+encodeURIComponent(requestedSubmission)+'&select=*',{headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',Authorization:'Bearer '+session.access_token}});
-    if(!response.ok)throw new Error('تعذر جلب الحكاية من قاعدة البيانات ('+response.status+').');
-    var rows=await response.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية عرضه.');
-    var r=rows[0],m=r.story_meta||{};if(r.status==='rejected')throw new Error('هذه الحكاية مرفوضة؛ افتحها من سجل الإدارة إذا أردت تعديلها.');
-    /* اعرض نسخة العمل المحفوظة داخل pending_draft لكل الحالات، لا المنشورة فقط؛ وإلا ستعرض معاينة السجل الأصلي بدل نسخة الذكاء الاصطناعي. */
-    var source=m.pending_draft?m.pending_draft:r,sm=source.story_meta||m;
-    var loaded={submission_id:r.id,submission_table:'khaledoon_submissions',record_type:'modern',record_data:r,story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||r.section,section_label:source.section_label||sm.section_label||r.section,title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||'',narrator_name:source.narrator_name||r.narrator_name||'',narrator_grade:source.narrator_grade||r.narrator_grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||r.original_body||'',karma_text:source.karma_text||sm.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||r.history_note||'',sources:source.sources||r.sources||'',images_note:source.images_note||r.images_note||'',translations:source.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||'',story_number:source.story_number||sm.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
-    localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));params.set('dbloaded','1');location.replace(location.pathname+'?'+params.toString());
-   }catch(error){document.getElementById('reviewMeta').textContent='تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف');document.getElementById('approveStoryBtn').disabled=true;document.getElementById('rejectStoryBtn').disabled=true}
-  })();
- }
- if(!draft){document.getElementById('reviewMeta').textContent='لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.';document.getElementById('approveStoryBtn').disabled=true}
- else{
-  /* احتفظ بآخر مسودة حتى يمكن فتح رابط المعاينة مرة أخرى في الجلسة نفسها. */
-  function put(id,value){document.getElementById(id).textContent=value||''}
-  put('reviewTitle',draft.title||'حكاية بلا عنوان');put('reviewSubtitle',draft.subtitle||'');put('reviewSection',(draft.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',draft.figure_name||'');document.getElementById('reviewKarmaWrap').hidden=!draft.karma_text;put('reviewKarma',draft.karma_text||'');document.getElementById('reviewBodyWrap').hidden=!draft.body;
-  put('reviewBody',draft.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',draft.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',draft.sources||'لم تُضف مصادر بعد.');put('reviewImages',draft.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',draft.original_body||'لا يوجد نص أصلي منفصل محفوظ في السجل.');
-  document.getElementById('reviewHistoryWrap').hidden=!draft.history_note;
-  document.getElementById('reviewSourcesWrap').hidden=!draft.sources;
-  document.getElementById('reviewImagesWrap').hidden=!draft.images_note;
-  document.getElementById('reviewOriginalWrap').hidden=!draft.original_body;
-  var quizBox=document.getElementById('reviewQuiz');quizBox.textContent='';var quizData=null;try{quizData=typeof draft.question_bank_json==='string'?JSON.parse(draft.question_bank_json):draft.question_bank_json}catch(e){}var questions=quizData&&Array.isArray(quizData.questions)?quizData.questions:[];if(questions.length){questions.forEach(function(q,i){var item=document.createElement('div');item.className='pub-translation';var h=document.createElement('b');h.textContent='السؤال '+(i+1)+': '+(q.q||'سؤال بلا نص');item.appendChild(h);var p=document.createElement('p');p.textContent=(Array.isArray(q.o)?q.o.join(' | '):'لا توجد اختيارات')+'\nالإجابة: '+(Number.isInteger(q.a)&&Array.isArray(q.o)?(q.o[q.a]||'غير محددة'):'غير محددة')+'\nالتفسير: '+(q.e||'لا يوجد تفسير');item.appendChild(p);quizBox.appendChild(item)})}else{quizBox.textContent=draft.question_bank_json?'تعذر قراءة بنك الأسئلة؛ راجع صيغة JSON.':'لم يُرفق بنك أسئلة بعد؛ يلزم استكماله قبل اعتماد النشر النهائي.'}document.getElementById('reviewQuizWrap').hidden=false;
-  var langs={en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
-  var list=document.getElementById('reviewTranslations');list.textContent='';
-  Object.keys(langs).forEach(function(lang){var tr=draft.translations&&draft.translations[lang];if(!tr)return;var item=document.createElement('div');item.className='pub-translation';var head=document.createElement('b');head.textContent=langs[lang]+' ('+lang.toUpperCase()+')';item.appendChild(head);var p=document.createElement('p');p.textContent=(tr.title||'')+'\n'+(tr.subtitle||'')+'\nكارما: '+(tr.karma_text||'لم تُدخل ترجمة كارما بعد.')+'\nالراوي: '+(tr.body||'لم تُدخل ترجمة بعد.')+'\nالسياق: '+(tr.history_note||'')+'\nالصور والحقوق: '+(tr.images_note||'');item.appendChild(p);list.appendChild(item)});
-  document.getElementById('reviewTranslationsWrap').hidden=!list.children.length;
-  put('reviewMeta','الحالة الحالية: '+(draft.status_label||'مسودة')+' · راجع العنوان والنص والسياق والمصادر والصور قبل اتخاذ القرار. أدوات التفاعل واللغة وبنك الأسئلة في القالب المرجعي مخفية هنا حتى لا تسجل تفاعلًا على حكاية أخرى؛ يجب ربطها بمعرّف الحكاية الجديدة قبل النشر.');
-  (function(d){
-   var frame=document.getElementById('actualPagePreview');
-   function renderSourcePage(sourceUrl){
-    var url=String(sourceUrl||'').trim();
-    if(!url)return Promise.reject(new Error('لم يُحدد رابط الصفحة المصممة'));
-    var repoRaw='https://raw.githubusercontent.com/engmohamedgamalsaad-oss/nourdeen-october-1973/';
-    if(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i.test(url)){
-     url=url.replace(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i,repoRaw);
-    }else if(/^https:\/\/engmohamedgamalsaad-oss\.github\.io\/nourdeen-october-1973(?:\/|$)/i.test(url)){
-     var pageUrl=new URL(url),relative=pageUrl.pathname.replace(/^\/nourdeen-october-1973\/?/,'');
-     if(!relative)return Promise.reject(new Error('حدد رابط صفحة حكاية داخل الموقع، وليس الصفحة الرئيسية.'));
-     if(!/\.html?$/i.test(relative))relative=relative.replace(/\/?$/,'/')+'index.html';
-     url=repoRaw+'main/'+relative;
-    }
-    if(!url.startsWith(repoRaw))return Promise.reject(new Error('رابط المعاينة يجب أن يكون صفحة من موقع خالدون أو ملفًا من مستودع المشروع نفسه.'));
-    return fetch(url,{cache:'no-store'}).then(function(response){if(!response.ok)throw new Error('HTTP '+response.status);return response.text()}).then(function(sourceHtml){
-     var parsed=new DOMParser().parseFromString(sourceHtml,'text/html');
-     if(!parsed.body||!parsed.querySelector('html'))throw new Error('ملف HTML غير صالح');
-     var base=parsed.querySelector('base')||parsed.createElement('base');
-     base.href=url.slice(0,url.lastIndexOf('/')+1);
-     if(parsed.head.firstChild)parsed.head.insertBefore(base,parsed.head.firstChild);else parsed.head.appendChild(base);
-     if(d.title){
-      parsed.title=d.title+' — معاينة غير منشورة';
-      var title=parsed.querySelector('[data-i18n="title"], .hero h1, h1');
-      if(title)title.textContent=d.title;
-     }
-     if(d.subtitle){
-      var subtitle=parsed.querySelector('[data-i18n="subtitle"], .hero .subtitle, .hero-subtitle');
-      if(subtitle)subtitle.textContent=d.subtitle;
-     }
-     var notice=parsed.createElement('div');
-     notice.textContent='معاينة غير منشورة — لا تغيّر هذه الصفحة الموقع الحي';
-     notice.setAttribute('role','status');
-     notice.style.cssText='position:sticky;top:0;z-index:2147483647;padding:8px 14px;text-align:center;background:#f0d8aa;color:#17232a;font:700 14px Cairo,Tahoma,sans-serif;border-bottom:2px solid #9b783c';
-     parsed.body.insertBefore(notice,parsed.body.firstChild);
-     frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
-     var scriptSources=Array.prototype.map.call(parsed.querySelectorAll('script[src]'),function(x){return x.getAttribute('src')||''});
-     draft.source_preview_loaded=!!(parsed.body.getAttribute('data-story-slug')&&parsed.querySelector('.reactions-section')&&parsed.querySelector('#story-quiz-start')&&(parsed.querySelector('[data-lang-switch],.language-switch'))&&scriptSources.some(function(x){return /translations\.js/i.test(x)})&&scriptSources.some(function(x){return /story-quiz\.js/i.test(x)})&&scriptSources.some(function(x){return /reactions\.js/i.test(x)}));
-     if(!draft.source_preview_loaded)put('reviewMeta','الصفحة المرجعية لا تظهر جميع الوظائف المطلوبة؛ عند قبولها سيجهز النظام حزمة القالب الاحتياطي بدل اعتبارها صفحة نشر مكتملة.');
-     frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;frame.addEventListener('load',function(){try{var doc=frame.contentDocument;if(doc&&doc.documentElement){frame.style.height=(Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0)+40)+'px'}}catch(e){}},{once:true});
-     put('reviewMeta','تعرض الآن الصفحة المصممة نفسها من ملف HTML، مع علامة واضحة أنها معاينة غير منشورة. تفاصيل النص والمصادر والترجمات أدناه للمراجعة.');
-    });
-   }
-   /* اعرض نص السجل الجاري مراجعته داخل قالب القسم؛ لا تعرض نص حكاية أخرى من رابط مرجعي. */
-   if(d.preview_source_url){renderSourcePage(d.preview_source_url).catch(function(){renderInRealTemplate(d);});}else{renderInRealTemplate(d);}
-  function renderInRealTemplate(d){
-   var frame=document.getElementById('actualPagePreview');
-   var section=(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
-   var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
-            key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
-            key==='learning'||section.indexOf('نساء')>=0||section.indexOf('women')>=0?'../stories/women/010/index.html':
-            key==='fame'?'../stories/history/006/index.html':
-            '../stories/history/005/index.html';
-   frame.src=path+'?previewMode=1';
-   frame.addEventListener('load',function(){
-    try{
-     var doc=frame.contentDocument;
-     if(!doc||!doc.body)return;
-     var style=doc.createElement('style');
-     var accents={october:'#f0c878',science:'#8ad9e8',learning:'#d78bb2',fame:'#e2b36d',history:'#d4b7ff',curriculum:'#9bb7ff',readers:'#f5b37e',islamic:'#78c59a'};var accent=accents[key]||'#d7ad66';
-     style.textContent=':root{--gold:'+accent+'!important;--lav:'+accent+'!important}.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
-     doc.head.appendChild(style);
-     doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
-     var title=doc.querySelector('.hero h1,[data-i18n="title"]');
-     if(title)title.textContent=d.title||'حكاية بلا عنوان';
-     var subtitle=doc.querySelector('.hero-subtitle');
-     if(subtitle)subtitle.textContent=d.subtitle||'';
-     var eyebrow=doc.querySelector('.hero .eyebrow');
-     if(eyebrow)eyebrow.textContent=(d.section_label||'خالدون عبر التاريخ')+' • معاينة غير منشورة';
-     var author=doc.querySelector('.author strong');
-     if(author)author.textContent=d.figure_name||'';
-     var storySections=Array.prototype.slice.call(doc.querySelectorAll('main .story'));
-     if(storySections.length){
-      var first=storySections[0].querySelector('.container')||storySections[0];
-      first.innerHTML='';
-      var kicker=doc.createElement('div');kicker.className='kicker';kicker.textContent='الحكاية';first.appendChild(kicker);
-      var h=doc.createElement('h2');h.textContent=d.title||'الحكاية';first.appendChild(h);
-      if(d.karma_text){var kl=doc.createElement('div');kl.className='kicker';kl.textContent='كارما الطفلة';first.appendChild(kl);String(d.karma_text).split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var kp=doc.createElement('p');kp.textContent=part.trim();first.appendChild(kp)})}
-      var nl=doc.createElement('div');nl.className='kicker';nl.textContent='الراوي المعرفي';first.appendChild(nl);
-      String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(part){if(!part.trim())return;var para=doc.createElement('p');para.textContent=part.trim();first.appendChild(para)});
-      storySections.slice(1).forEach(function(s){s.hidden=true});
-      if(d.history_note){
-       var hist=doc.createElement('section');hist.className='story';var c=doc.createElement('div');c.className='container';var k=doc.createElement('div');k.className='kicker';k.textContent='في ضوء التاريخ';var hh=doc.createElement('h2');hh.textContent='السياق التاريخي والتحقق';var hp=doc.createElement('p');hp.textContent=d.history_note;c.appendChild(k);c.appendChild(hh);c.appendChild(hp);hist.appendChild(c);var src=doc.querySelector('.sources');if(src)src.parentNode.insertBefore(hist,src);else doc.querySelector('main').appendChild(hist);
-      }
-     }
-     var sources=doc.querySelector('.sources');
-     if(sources){var container=sources.querySelector('.container')||sources;container.innerHTML='';var k2=doc.createElement('div');k2.className='kicker';k2.textContent='المصادر والتحقق';var h2=doc.createElement('h2');h2.textContent='مصادر الحكاية';var sp=doc.createElement('p');sp.style.whiteSpace='pre-wrap';sp.textContent=d.sources||'لم تُضف مصادر بعد.';container.appendChild(k2);container.appendChild(h2);container.appendChild(sp);}
-     var end=doc.querySelector('.end');if(end)end.hidden=true;
-     var foot=doc.querySelector('footer');if(foot)foot.textContent='خالدون عبر التاريخ — معاينة غير منشورة';
-     doc.querySelectorAll('a[href*="collections/"]').forEach(function(link){link.addEventListener('click',function(e){e.preventDefault()})});try{frame.style.height=(Math.max(doc.documentElement.scrollHeight,doc.body.scrollHeight)+40)+'px'}catch(ignoreHeight){}
-    }catch(e){document.getElementById('reviewMeta').textContent='تعذر إظهار قالب الحكاية الفعلي في هذه الجلسة؛ استخدم تفاصيل المعاينة أدناه.'}
-   },{once:true});
-  }
-  })(draft);
- }
- async function decide(action){
-  var approve=action==='approve',btn=document.getElementById(approve?'approveStoryBtn':'rejectStoryBtn');
-  if(!draft||!draft.submission_id){put('reviewMeta','لا يوجد رقم سجل محفوظ لهذه المعاينة. افتح الحكاية من قائمة المراجعة مرة أخرى.');return}
-  if(btn)btn.disabled=true;
-  try{
-   var session=null;try{session=JSON.parse(localStorage.getItem('kh_adm_session')||sessionStorage.getItem('kh_adm_session')||'null')}catch(e){}
-   if(!session||!session.access_token)throw new Error('سجّل الدخول إلى لوحة الإدارة على هذا الجهاز، ثم افتح المعاينة من جديد.');
-   if(session.expires_at&&session.expires_at-Date.now()/1000<60&&session.refresh_token){
-    var rr=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn','Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
-    if(!rr.ok)throw new Error('انتهت جلسة المسؤول. سجّل الدخول مرة أخرى.');
-    var rd=await rr.json();session={access_token:rd.access_token,refresh_token:rd.refresh_token,expires_at:Math.floor(Date.now()/1000)+rd.expires_in};
-    localStorage.setItem('kh_adm_session',JSON.stringify(session));sessionStorage.setItem('kh_adm_session',JSON.stringify(session));
-   }
-   var table=draft.submission_table==='submitted_stories'?'submitted_stories':'khaledoon_submissions';
-   var url='https://ypwprddkscnfblhftkeb.supabase.co/rest/v1/'+table+'?id=eq.'+encodeURIComponent(draft.submission_id)+'&select=*';
-   var read=await fetch(url,{headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',Authorization:'Bearer '+session.access_token}});
-   if(!read.ok)throw new Error('تعذر إعادة قراءة سجل الحكاية ('+read.status+').');
-   var rows=await read.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية الوصول إليه.');
-   var record=rows[0],meta=Object.assign({},record.story_meta||draft.story_meta||{}),payload={};
-   meta.preview_review={decision:approve?'approved_waiting_for_github_upload':'rejected',reviewed_at:new Date().toISOString(),note:approve?'قُبلت المعاينة؛ الرفع والنشر الحي خطوة منفصلة تتطلب موافقة المسؤول.':'رُفضت المعاينة؛ السجل محفوظ للمراجعة أو التعديل.'};
-   if(record.status!=='published')payload.status=approve?(table==='submitted_stories'?'pending':'review'):'rejected';
-   if(record.status==='published'){
-    if(approve){meta.pending_draft=Object.assign({},draft);delete meta.pending_draft.record_data;delete meta.pending_draft.story_meta;delete meta.pending_draft.submission_table;delete meta.pending_draft.record_type}
-    else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='rejected'}
-   }
-   payload.story_meta=meta;
-   var save=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/rest/v1/'+table+'?id=eq.'+encodeURIComponent(draft.submission_id),{method:'PATCH',headers:{apikey:'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',Prefer:'return=representation'},body:JSON.stringify(payload)});
-   if(!save.ok)throw new Error('تعذر حفظ القرار في قاعدة البيانات ('+save.status+'): '+(await save.text()).slice(0,220));
-   var saved=await save.json();if(!saved.length)throw new Error('لم يرجع الخادم سجلًا بعد حفظ القرار.');
-   put('reviewMeta',approve?'تم قبول المعاينة وحفظ القرار. الحكاية لم تُنشر.':'تم رفض المعاينة وحفظ القرار.');
-   try{localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}catch(e){}
-   if(window.opener&&!window.opener.closed){try{window.opener.location.reload()}catch(e){}}
-   setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},650);
-  }catch(error){put('reviewMeta','لم يُحفظ القرار: '+(error&&error.message?error.message:'خطأ غير معروف'));if(btn)btn.disabled=false}
- }
- document.getElementById('approveStoryBtn').addEventListener('click',function(){decide('approve')});
- document.getElementById('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
- document.getElementById('returnToEditBtn').addEventListener('click',function(){if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else{location.href='admin.html'}});
- document.getElementById('printReviewBtn').addEventListener('click',function(){window.print()});
+ return s.access_token;
 }
+
+function startReview(){
+ views.site.hidden=true;views.story.hidden=true;$('reviewView').hidden=false;
+ ['nav.tabs','header.top','footer.footer','#introNote'].forEach(function(sel){var n=document.querySelector(sel);if(n)n.hidden=true});
+ var requested=params.get('submission'),draft=null;
+ try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
+ if(requested){
+  if(!/^[0-9a-f-]{36}$/i.test(requested)){say('رقم سجل المعاينة غير صالح.');lockDecisions();return}
+  if(params.get('dbloaded')!=='1'){say('جارٍ تحميل الحكاية من قاعدة البيانات…');lockDecisions();loadFromDb(requested);return}
+  if(!draft||String(draft.submission_id||'')!==requested)draft=null;
+ }
+ if(!draft){say('لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.');lockDecisions();return}
+ renderReview(draft);
+}
+
+async function loadFromDb(id){
+ try{
+  var token=await adminToken();
+  var response=await fetch(SUPA+'/rest/v1/khaledoon_submissions?id=eq.'+encodeURIComponent(id)+'&select=*',{headers:{apikey:KEY,Authorization:'Bearer '+token}});
+  if(!response.ok)throw new Error('تعذر جلب الحكاية من قاعدة البيانات ('+response.status+').');
+  var rows=await response.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية عرضه.');
+  var r=rows[0],m=r.story_meta||{};
+  if(r.status==='rejected')throw new Error('هذه الحكاية مرفوضة؛ افتحها من سجل الإدارة إذا أردت تعديلها.');
+  /* اعرض نسخة العمل المحفوظة داخل pending_draft لكل الحالات، لا السجل الأصلي فقط. */
+  var source=m.pending_draft?m.pending_draft:r,sm=source.story_meta||m;
+  var loaded={submission_id:r.id,submission_table:'khaledoon_submissions',record_type:'modern',record_data:r,story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||r.section,section_label:source.section_label||sm.section_label||r.section,title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||'',narrator_name:source.narrator_name||r.narrator_name||'',narrator_grade:source.narrator_grade||r.narrator_grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||r.original_body||'',karma_text:source.karma_text||sm.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||r.history_note||'',sources:source.sources||r.sources||'',images_note:source.images_note||r.images_note||'',translations:source.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||'',story_number:source.story_number||sm.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
+  localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));
+  params.set('dbloaded','1');location.replace(location.pathname+'?'+params.toString());
+ }catch(error){say('تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف'));lockDecisions()}
+}
+
+function textBlock(t,cls){var d=document.createElement('div');d.className=cls||'pub-text';d.textContent=t;return d}
+
+function renderReadiness(d){
+ var box=$('reviewReady');box.textContent='';
+ if(!window.KHStoryBundle){box.appendChild(textBlock('أداة فحص حزمة النشر غير محمّلة؛ تعذر الفحص.'));return}
+ var report;try{report=window.KHStoryBundle.validate(d)}catch(e){box.appendChild(textBlock('تعذر فحص الجاهزية: '+e.message));return}
+ if(report.ok){box.appendChild(textBlock('✓ البيانات مكتملة لإنشاء حزمة النشر: العربية والترجمات الأربع وبنك الأسئلة والمصادر.','pub-text pub-ready-ok'));return}
+ box.appendChild(textBlock('ينقص ما يلي قبل إنشاء حزمة الرفع (يمكنك قبول المعاينة وإكمال الناقص من الأدمن):','pub-text pub-ready-bad'));
+ var ul=document.createElement('ul');report.missing.forEach(function(m){var li=document.createElement('li');li.textContent=m;ul.appendChild(li)});box.appendChild(ul);
+}
+
+function renderQuiz(d){
+ var box=$('reviewQuiz');box.textContent='';var data=null;
+ try{data=typeof d.question_bank_json==='string'?JSON.parse(d.question_bank_json):d.question_bank_json}catch(e){}
+ var questions=data&&Array.isArray(data.questions)?data.questions:[];
+ if(!questions.length){box.appendChild(textBlock(d.question_bank_json?'تعذر قراءة بنك الأسئلة؛ راجع صيغة JSON.':'لم يُرفق بنك أسئلة بعد؛ يلزم استكماله قبل اعتماد النشر النهائي.'));return}
+ questions.forEach(function(q,i){
+  var item=document.createElement('div');item.className='pub-card';
+  var h=document.createElement('b');h.textContent='السؤال '+(i+1)+': '+(q.q||'سؤال بلا نص');item.appendChild(h);
+  var answer=Number.isInteger(q.a)&&Array.isArray(q.o)?(q.o[q.a]||'غير محددة'):'غير محددة';
+  var missing=Object.keys(LANG_NAMES).filter(function(l){var t=q.i18n&&q.i18n[l];return !(t&&t.q&&Array.isArray(t.o)&&Array.isArray(q.o)&&t.o.length===q.o.length&&t.e)});
+  item.appendChild(textBlock((Array.isArray(q.o)?q.o.join(' | '):'لا توجد اختيارات')+'\nالإجابة: '+answer+'\nالتفسير: '+(q.e||'لا يوجد تفسير')+'\nالترجمات: '+(missing.length?'ناقصة — '+missing.map(function(l){return l.toUpperCase()}).join('، '):'مكتملة (EN / FR / IT / DE)')));
+  box.appendChild(item);
+ });
+}
+
+function renderTranslations(d){
+ var list=$('reviewTranslations');list.textContent='';var any=false;
+ Object.keys(LANG_NAMES).forEach(function(lang){
+  var tr=d.translations&&d.translations[lang];if(!tr)return;any=true;
+  var item=document.createElement('div');item.className='pub-card pub-translation';
+  var head=document.createElement('b');head.textContent=LANG_NAMES[lang]+' ('+lang.toUpperCase()+')'+(tr.status?' · '+tr.status:'')+(tr.enabled===true?' · enabled':'');item.appendChild(head);
+  item.appendChild(textBlock((tr.title||'')+'\n'+(tr.subtitle||'')+'\nKarma: '+(tr.karma_text||'—')+'\nNarrator: '+(tr.body||'—')+'\nContext: '+(tr.history_note||'—')+'\nImages & rights: '+(tr.images_note||'—')));
+  list.appendChild(item);
+ });
+ if(!any)list.appendChild(textBlock('لا توجد ترجمات مسجلة بعد؛ الترجمات الأربع مطلوبة قبل النشر.'));
+}
+
+function renderReview(d){
+ currentDraft=d;
+ put('reviewTitle',d.title||'حكاية بلا عنوان');put('reviewSubtitle',d.subtitle||'');put('reviewSection',(d.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',d.figure_name||'');
+ put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');put('reviewImages',d.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',d.original_body||'');
+ $('reviewOriginalWrap').hidden=!d.original_body;
+ renderReadiness(d);renderQuiz(d);renderTranslations(d);
+ say('الحالة الحالية: '+(d.status_label||'مسودة')+' · راجع الصفحة في الإطار أعلاه، ثم بيانات المراجعة تحتها (النص والمصادر والترجمات وبنك الأسئلة) قبل اتخاذ القرار.');
+ showPage(d);
+}
+
+/* ---------- عرض صفحة الحكاية نفسها داخل الإطار ---------- */
+var frame=$('actualPagePreview');
+var SAME_ORIGIN_SANDBOX='allow-scripts allow-same-origin allow-forms allow-popups';
+function fitHeight(doc){try{frame.style.height=(Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0)+40)+'px'}catch(e){}}
+window.addEventListener('message',function(ev){if(ev.source!==frame.contentWindow||!ev.data||ev.data.kh!=='preview-height')return;var h=Number(ev.data.h);if(h>0)frame.style.height=Math.max(600,Math.min(h+30,30000))+'px'});
+function pageHasFeatures(doc){
+ var srcs=Array.prototype.map.call(doc.querySelectorAll('script[src]'),function(x){return x.getAttribute('src')||''});
+ return !!(doc.body&&doc.body.getAttribute('data-story-slug')&&doc.querySelector('.reactions-section')&&doc.querySelector('#story-quiz-start')&&doc.querySelector('[data-lang-switch],.language-switch')&&srcs.some(function(x){return /translations\.js/i.test(x)})&&srcs.some(function(x){return /story-quiz\.js/i.test(x)})&&srcs.some(function(x){return /reactions\.js/i.test(x)}));
+}
+function addNotice(doc){
+ var n=doc.createElement('div');n.textContent='معاينة غير منشورة — لا تغيّر هذه الصفحة الموقع الحي';n.setAttribute('role','status');
+ n.style.cssText='position:sticky;top:0;z-index:2147483647;padding:8px 14px;text-align:center;background:#f0d8aa;color:#17232a;font:700 14px Cairo,Tahoma,sans-serif;border-bottom:2px solid #9b783c';
+ doc.body.insertBefore(n,doc.body.firstChild);
+}
+function applyTitles(doc,d){
+ if(d.title){doc.title=d.title+' — معاينة غير منشورة';var t=doc.querySelector('[data-i18n="title"], .hero h1, h1');if(t)t.textContent=d.title}
+ if(d.subtitle){var s=doc.querySelector('[data-i18n="subtitle"], .hero .subtitle, .hero-subtitle');if(s)s.textContent=d.subtitle}
+}
+function derivePagePath(url){var m=String(url||'').match(/\/stories\/([a-z0-9-]+)\/(\d{3})(?:\/|$)/i);return m?{id:m[2],path:'stories/'+m[1]+'/'+m[2]+'/'}:null}
+
+/* صفحة منشورة على موقع GitHub Pages نفسه: تُعرض مباشرة من الموقع (نفس النطاق) بتنسيقها وسكربتاتها الصحيحة. */
+function loadSitePage(url,d){
+ var u;try{u=new URL(url)}catch(e){return Promise.reject(new Error('رابط الصفحة غير صالح.'))}
+ var rel=u.pathname.replace(/^\/nourdeen-october-1973\/?/,'');
+ if(!rel||/^index\.html?$/i.test(rel))return Promise.reject(new Error('حدد رابط صفحة حكاية داخل الموقع، وليس الصفحة الرئيسية.'));
+ u.searchParams.set('previewMode','1');
+ return new Promise(function(resolve,reject){
+  frame.setAttribute('sandbox',SAME_ORIGIN_SANDBOX);
+  frame.addEventListener('load',function(){
+   try{
+    var doc=frame.contentDocument;
+    if(!doc||!doc.body||/not found/i.test(doc.title||''))throw new Error('الصفحة غير موجودة على الموقع بعد.');
+    d.source_preview_loaded=pageHasFeatures(doc);applyTitles(doc,d);addNotice(doc);fitHeight(doc);resolve();
+   }catch(e){reject(e)}
+  },{once:true});
+  frame.src=u.href;
+ });
+}
+
+/* ملف من فرع في المستودع (raw/blob): GitHub يقدّم ملفات CSS وJS هناك بنوع text/plain فيرفضها المتصفح،
+   لذلك نقرأ الملفات ونضمّنها داخل الصفحة. الإطار يعمل بلا allow-same-origin حتى لا يصل سكربت الفرع إلى جلسة الأدمن. */
+function loadRawPage(url,d){
+ if(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i.test(url))url=url.replace(/^https:\/\/github\.com\/engmohamedgamalsaad-oss\/nourdeen-october-1973\/blob\//i,REPO_RAW);
+ if(url.indexOf(REPO_RAW)!==0)return Promise.reject(new Error('رابط المعاينة يجب أن يكون صفحة من موقع خالدون أو ملفًا من مستودع المشروع نفسه.'));
+ var cut=url.indexOf('/stories/'),root=cut>0?url.slice(0,cut+1):REPO_RAW+'main/';
+ function resolve(ref,from){
+  ref=String(ref||'').trim();if(!ref||/^(data:|blob:|#|javascript:|mailto:|tel:)/i.test(ref))return null;
+  if(ref.indexOf('/nourdeen-october-1973/')===0)return root+ref.slice('/nourdeen-october-1973/'.length);
+  try{return new URL(ref,from).href}catch(e){return null}
+ }
+ function inRepo(u){return !!u&&u.indexOf(REPO_RAW)===0}
+ function fetchText(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})}
+ function rewriteCss(css,cssUrl){return css.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g,function(m,q,ref){var abs=resolve(ref,cssUrl);return abs?'url("'+abs+'")':m})}
+ function inlineCss(css,cssUrl,depth){
+  var imports=[];
+  css=css.replace(/@import\s+(?:url\(\s*)?(['"]?)([^'")\s;]+)\1\s*\)?[^;]*;/g,function(m,q,ref){var abs=resolve(ref,cssUrl);if(inRepo(abs)){imports.push(abs);return '/*@@IMPORT'+(imports.length-1)+'@@*/'}return m});
+  css=rewriteCss(css,cssUrl);
+  if(!imports.length||depth>3)return Promise.resolve(css);
+  return Promise.all(imports.map(function(u){return fetchText(u).then(function(t){return inlineCss(t,u,depth+1)}).catch(function(){return ''})})).then(function(parts){return css.replace(/\/\*@@IMPORT(\d+)@@\*\//g,function(m,i){return parts[+i]})});
+ }
+ return fetchText(url).then(function(sourceHtml){
+  var parsed=new DOMParser().parseFromString(sourceHtml,'text/html');
+  if(!parsed.body||!parsed.querySelector('html'))throw new Error('ملف HTML غير صالح');
+  d.source_preview_loaded=pageHasFeatures(parsed);
+  var jobs=[],deferred=[];
+  parsed.querySelectorAll('link[rel~="stylesheet"][href]').forEach(function(link){
+   var abs=resolve(link.getAttribute('href'),url);if(!inRepo(abs))return;
+   jobs.push(fetchText(abs).then(function(css){return inlineCss(css,abs,0)}).then(function(css){var st=parsed.createElement('style');st.textContent=css;link.parentNode.replaceChild(st,link)}).catch(function(){}));
+  });
+  Array.prototype.forEach.call(parsed.querySelectorAll('script[src]'),function(sc,idx){
+   var abs=resolve(sc.getAttribute('src'),url);if(!inRepo(abs))return;
+   var isDefer=sc.hasAttribute('defer');
+   jobs.push(fetchText(abs).then(function(code){
+    var n=parsed.createElement('script');n.textContent=code.replace(/<\/script/gi,'<\\/script');
+    if(isDefer){sc.parentNode.removeChild(sc);deferred[idx]=n}else sc.parentNode.replaceChild(n,sc);
+   }).catch(function(){}));
+  });
+  /* مسارات الجذر /nourdeen-october-1973/ في الصور والروابط تتحول إلى مسارات الفرع نفسه. */
+  Array.prototype.forEach.call(parsed.querySelectorAll('[src],[poster],link[href]'),function(el){
+   ['src','poster','href'].forEach(function(a){var v=el.getAttribute(a);if(v&&v.indexOf('/nourdeen-october-1973/')===0&&el.tagName!=='SCRIPT'&&!(el.tagName==='LINK'&&/stylesheet/i.test(el.getAttribute('rel')||'')))el.setAttribute(a,resolve(v,url))});
+  });
+  return Promise.all(jobs).then(function(){
+   deferred.forEach(function(n){if(n)parsed.body.appendChild(n)});
+   var base=parsed.querySelector('base')||parsed.createElement('base');base.href=url.slice(0,url.lastIndexOf('/')+1);
+   if(parsed.head.firstChild)parsed.head.insertBefore(base,parsed.head.firstChild);else parsed.head.appendChild(base);
+   applyTitles(parsed,d);addNotice(parsed);
+   var helper=parsed.createElement('script');
+   helper.textContent="(function(){function h(){var b=document.body,e=document.documentElement;parent.postMessage({kh:'preview-height',h:Math.max(e.scrollHeight,b?b.scrollHeight:0)},'*')}addEventListener('load',function(){h();setTimeout(h,1200)});document.addEventListener('click',function(ev){var a=ev.target&&ev.target.closest?ev.target.closest('a[href]'):null;if(!a)return;var href=a.getAttribute('href')||'';if(href.charAt(0)==='#'){ev.preventDefault();var t=document.getElementById(decodeURIComponent(href.slice(1)));if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth'});return}if(a.target!=='_blank')ev.preventDefault()})})();";
+   parsed.body.appendChild(helper);
+   frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
+   frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
+  });
+ });
+}
+
+/* لا يوجد رابط صفحة جاهزة: اعرض نص السجل داخل قالب القسم الفعلي. */
+function renderInTemplate(d){
+ var section=String(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
+ var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
+          key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
+          key==='learning'||key==='women'||section.indexOf('نساء')>=0||section.indexOf('women')>=0?'../stories/women/010/index.html':
+          key==='fame'||key==='people'?'../stories/history/006/index.html':
+          '../stories/history/005/index.html';
+ frame.setAttribute('sandbox',SAME_ORIGIN_SANDBOX);
+ frame.addEventListener('load',function(){
+  try{
+   var doc=frame.contentDocument;if(!doc||!doc.body)return;
+   var accents={october:'#f0c878',science:'#8ad9e8',learning:'#d78bb2',women:'#d78bb2',fame:'#e2b36d',people:'#e2b36d',history:'#d4b7ff',curriculum:'#9bb7ff',readers:'#f5b37e',islamic:'#78c59a'},accent=accents[key]||'#d7ad66';
+   var style=doc.createElement('style');
+   style.textContent=':root{--gold:'+accent+'!important;--lav:'+accent+'!important}.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
+   doc.head.appendChild(style);
+   doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
+   var t=doc.querySelector('.hero h1,[data-i18n="title"]');if(t)t.textContent=d.title||'حكاية بلا عنوان';
+   var st=doc.querySelector('.hero-subtitle');if(st)st.textContent=d.subtitle||'';
+   var eb=doc.querySelector('.hero .eyebrow');if(eb)eb.textContent=(d.section_label||'خالدون عبر التاريخ')+' • معاينة غير منشورة';
+   var au=doc.querySelector('.author strong');if(au)au.textContent=d.figure_name||'';
+   var storySections=Array.prototype.slice.call(doc.querySelectorAll('main .story'));
+   if(storySections.length){
+    var first=storySections[0].querySelector('.container')||storySections[0];first.innerHTML='';
+    function add(cls,tag,text){var e=doc.createElement(tag);if(cls)e.className=cls;e.textContent=text;first.appendChild(e);return e}
+    add('kicker','div','الحكاية');add('','h2',d.title||'الحكاية');
+    if(d.karma_text){add('kicker','div','كارما الطفلة');String(d.karma_text).split(/\n{2,}/).forEach(function(p){if(p.trim())add('','p',p.trim())})}
+    add('kicker','div','الراوي المعرفي');
+    String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(p){if(p.trim())add('','p',p.trim())});
+    storySections.slice(1).forEach(function(s){s.hidden=true});
+    if(d.history_note){
+     var hist=doc.createElement('section');hist.className='story';var c=doc.createElement('div');c.className='container';
+     var k=doc.createElement('div');k.className='kicker';k.textContent='في ضوء التاريخ';var hh=doc.createElement('h2');hh.textContent='السياق التاريخي والتحقق';var hp=doc.createElement('p');hp.textContent=d.history_note;
+     c.appendChild(k);c.appendChild(hh);c.appendChild(hp);hist.appendChild(c);
+     var src=doc.querySelector('.sources');if(src)src.parentNode.insertBefore(hist,src);else doc.querySelector('main').appendChild(hist);
+    }
+   }
+   var sources=doc.querySelector('.sources');
+   if(sources){var cont=sources.querySelector('.container')||sources;cont.innerHTML='';var k2=doc.createElement('div');k2.className='kicker';k2.textContent='المصادر والتحقق';var h2=doc.createElement('h2');h2.textContent='مصادر الحكاية';var sp=doc.createElement('p');sp.style.whiteSpace='pre-wrap';sp.textContent=d.sources||'لم تُضف مصادر بعد.';cont.appendChild(k2);cont.appendChild(h2);cont.appendChild(sp)}
+   var end=doc.querySelector('.end');if(end)end.hidden=true;
+   var foot=doc.querySelector('footer');if(foot)foot.textContent='خالدون عبر التاريخ — معاينة غير منشورة';
+   doc.querySelectorAll('a[href*="collections/"]').forEach(function(link){link.addEventListener('click',function(e){e.preventDefault()})});
+   fitHeight(doc);
+  }catch(e){say('تعذر إظهار قالب الحكاية الفعلي في هذه الجلسة؛ استخدم بيانات المراجعة أسفل الإطار.')}
+ },{once:true});
+ frame.src=path+'?previewMode=1';
+}
+
+function showPage(d){
+ var url=String(d.preview_source_url||'').trim();
+ if(!url){renderInTemplate(d);return}
+ var job=url.indexOf(PAGES_ROOT)===0?loadSitePage(url,d).then(function(){say('تعرض الآن صفحة الحكاية المنشورة على الموقع نفسه، مع علامة واضحة أنها معاينة. بيانات المراجعة أسفل الإطار.')})
+        :loadRawPage(url,d).then(function(){say('تعرض الآن الصفحة المصممة من ملفات الفرع، مع علامة واضحة أنها معاينة غير منشورة. بيانات المراجعة أسفل الإطار.'+(d.source_preview_loaded?'':' تنبيه: الصفحة المرجعية لا تظهر جميع الوظائف المطلوبة (اللغات وبنك الأسئلة والتفاعلات)؛ لن تُعتبر صفحة نشر مكتملة.'))});
+ job.catch(function(e){say('تعذر تحميل الصفحة المصممة ('+(e&&e.message?e.message:'سبب غير معروف')+')؛ نعرض النص داخل قالب القسم الاحتياطي.');renderInTemplate(d)});
+}
+
+/* ---------- القرار: قبول أو رفض ---------- */
+async function decide(action){
+ var approve=action==='approve',d=currentDraft;
+ if(!d||!d.submission_id){say('لا يوجد رقم سجل محفوظ لهذه المعاينة. افتح الحكاية من قائمة المراجعة مرة أخرى.');return}
+ lockDecisions();
+ try{
+  var token=await adminToken();
+  var table=d.submission_table==='submitted_stories'?'submitted_stories':'khaledoon_submissions';
+  var rowUrl=SUPA+'/rest/v1/'+table+'?id=eq.'+encodeURIComponent(d.submission_id);
+  var hdr={apikey:KEY,Authorization:'Bearer '+token};
+  var read=await fetch(rowUrl+'&select=*',{headers:hdr});
+  if(!read.ok)throw new Error('تعذر إعادة قراءة سجل الحكاية ('+read.status+').');
+  var rows=await read.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية الوصول إليه.');
+  var record=rows[0],meta=Object.assign({},record.story_meta||d.story_meta||{}),prior=meta.preview_review||{},payload={};
+  var pageInfo=null,bundleNote='';
+  if(approve){
+   /* صفحة جاهزة في مسار stories/... تُسجَّل كما هي؛ وإلا تُجهَّز حزمة القالب (ZIP) إن اكتملت البيانات. */
+   pageInfo=derivePagePath(d.preview_source_url);
+   if(!pageInfo&&window.KHStoryBundle){
+    try{var info=await window.KHStoryBundle.download(Object.assign({},d,{story_meta:meta}),{approved:true});pageInfo={id:info.id,path:info.path,bundle:true}}
+    catch(e){bundleNote=e&&e.message?e.message:'تعذر إنشاء حزمة النشر.'}
+   }
+  }
+  meta.preview_review={decision:approve?'approved_waiting_for_github_upload':'rejected',reviewed_at:new Date().toISOString(),note:approve?'قُبلت المعاينة؛ الرفع والنشر الحي خطوة منفصلة تتطلب موافقة المسؤول.':'رُفضت المعاينة؛ أُعيدت الحكاية للمسودة للتعديل.',static_story_id:pageInfo?pageInfo.id:(prior.static_story_id||null),static_story_path:pageInfo?pageInfo.path:(prior.static_story_path||null),bundle_downloaded:!!(pageInfo&&pageInfo.bundle),prepared_page_url:(pageInfo&&!pageInfo.bundle)?String(d.preview_source_url||''):(prior.prepared_page_url||'')};
+  /* رفض المعاينة يعيد الحكاية إلى المسودة (قيد المراجعة) ولا يرفض الحكاية نفسها؛ زر «رفض» في الأدمن هو الذي يرفضها. */
+  if(record.status!=='published')payload.status=approve?(table==='submitted_stories'?'pending':'review'):'pending';
+  if(record.status==='published'){
+   if(approve){meta.pending_draft=Object.assign({},d);['record_data','story_meta','submission_table','record_type'].forEach(function(k){delete meta.pending_draft[k]})}
+   else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending'}
+  }
+  payload.story_meta=meta;
+  var save=await fetch(rowUrl,{method:'PATCH',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=representation'},hdr),body:JSON.stringify(payload)});
+  if(!save.ok)throw new Error('تعذر حفظ القرار في قاعدة البيانات ('+save.status+'): '+(await save.text()).slice(0,220));
+  var saved=await save.json();if(!saved.length)throw new Error('لم يرجع الخادم سجلًا بعد حفظ القرار.');
+  try{localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}catch(e){}
+  if(window.opener&&!window.opener.closed){try{window.opener.location.reload()}catch(e){}}
+  if(approve){
+   say('تم قبول المعاينة وحفظ القرار. الحكاية لم تُنشر. '+(pageInfo&&pageInfo.bundle?'نُزّلت حزمة ZIP للحكاية؛ ارفع ملفاتها إلى GitHub بنفس المسارات ثم استخدم «تأكيد النشر بعد الرفع» في الأدمن.':pageInfo?'سُجّل مسار الصفحة الجاهزة ('+pageInfo.path+'). بعد دمجها في GitHub استخدم «تأكيد النشر بعد الرفع» في الأدمن.':'لم تُنشأ حزمة رفع: '+(bundleNote||'القالب غير متاح')+'\nأكمل الناقص من الأدمن ثم افتح المعاينة وأقبلها من جديد، أو جهّز ملفات الصفحة النهائية بأداة الذكاء الاصطناعي.'));
+  }else{
+   say('تم رفض المعاينة وإرجاع الحكاية إلى المسودة وحفظ القرار.');
+   setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},900);
+  }
+ }catch(error){say('لم يُحفظ القرار: '+(error&&error.message?error.message:'خطأ غير معروف'));['approveStoryBtn','rejectStoryBtn'].forEach(function(id){$(id).disabled=false})}
+}
+$('approveStoryBtn').addEventListener('click',function(){decide('approve')});
+$('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
+$('returnToEditBtn').addEventListener('click',function(){if(window.opener&&!window.opener.closed){window.opener.focus();window.close()}else{location.href='admin.html'}});
+$('printReviewBtn').addEventListener('click',function(){window.print()});
+if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>
