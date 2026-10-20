@@ -186,13 +186,81 @@ function markPublished(meta, now) {
   return m;
 }
 
+/* فحص اكتمال حزمة AI قبل الاستيراد؛ يمنع مرور ترجمة أو بنك أسئلة ناقص إلى المعاينة. */
+function validateStoryPackage(pkg) {
+  var errors = [], langs = ['en', 'fr', 'it', 'de'];
+  if (!isObj(pkg)) return { ok: false, errors: ['ناتج الحكاية ليس كائن JSON.'] };
+  function textField(obj, key, label, min) {
+    var value = obj && obj[key];
+    if (typeof value !== 'string' || value.trim().length < (min || 1)) errors.push(label);
+  }
+  [
+    ['section_key', 'مفتاح القسم'], ['figure_name', 'اسم الشخصية'],
+    ['title', 'العنوان'], ['subtitle', 'العنوان الفرعي'],
+    ['narrator_name', 'اسم الراوي'], ['narrator_grade', 'صف الراوي'],
+    ['karma_text', 'صوت كارما'], ['history_note', 'السياق التاريخي'],
+    ['sources', 'المصادر'], ['images_note', 'ملاحظات الصور وحقوقها']
+  ].forEach(function (field) { textField(pkg, field[0], field[1], 1); });
+  textField(pkg, 'original_body', 'النص الأصلي', 20);
+  textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
+
+  if (!isObj(pkg.translations)) {
+    errors.push('قسم الترجمات غير موجود.');
+  } else {
+    var requiredTranslationFields = [
+      ['student_name', 'اسم الراوي'], ['grade', 'الصف'], ['title', 'العنوان'],
+      ['subtitle', 'العنوان الفرعي'], ['karma_text', 'صوت كارما'],
+      ['body', 'نص الراوي'], ['history_note', 'السياق التاريخي'],
+      ['images_note', 'ملاحظات الصور']
+    ];
+    langs.forEach(function (lang) {
+      var translation = pkg.translations[lang];
+      if (!isObj(translation)) {
+        errors.push('الترجمة ' + lang.toUpperCase() + ' غير موجودة.');
+        return;
+      }
+      requiredTranslationFields.forEach(function (field) {
+        if (typeof translation[field[0]] !== 'string' || !translation[field[0]].trim()) {
+          errors.push(lang.toUpperCase() + ': حقل ' + field[1] + ' فارغ.');
+        }
+      });
+    });
+  }
+
+  var questions = isObj(pkg.question_bank) && Array.isArray(pkg.question_bank.questions) ? pkg.question_bank.questions : [];
+  if (questions.length < 5) errors.push('بنك الأسئلة يحتاج خمسة أسئلة على الأقل.');
+  questions.forEach(function (question, index) {
+    var label = 'السؤال ' + (index + 1);
+    if (!isObj(question) || typeof question.q !== 'string' || !question.q.trim()) errors.push(label + ': نص السؤال فارغ.');
+    if (!isObj(question) || !Array.isArray(question.o) || question.o.length < 2 ||
+        question.o.some(function (option) { return typeof option !== 'string' || !option.trim(); })) {
+      errors.push(label + ': الاختيارات ناقصة.');
+    }
+    if (!isObj(question) || !Number.isInteger(question.a) || !Array.isArray(question.o) ||
+        question.a < 0 || question.a >= question.o.length) errors.push(label + ': رقم الإجابة الصحيحة غير صالح.');
+    if (!isObj(question) || typeof question.e !== 'string' || !question.e.trim()) errors.push(label + ': تفسير الإجابة فارغ.');
+    langs.forEach(function (lang) {
+      var translation = question && question.i18n && question.i18n[lang];
+      if (!translation || typeof translation.q !== 'string' || !translation.q.trim() ||
+          !Array.isArray(translation.o) || !Array.isArray(question.o) ||
+          translation.o.length !== question.o.length ||
+          translation.o.some(function (option) { return typeof option !== 'string' || !option.trim(); }) ||
+          typeof translation.e !== 'string' || !translation.e.trim()) {
+        errors.push(label + ': ترجمة السؤال أو الاختيارات أو التفسير ناقصة في ' + lang.toUpperCase() + '.');
+      }
+    });
+  });
+  return { ok: errors.length === 0, errors: errors };
+}
+
 var api = {
   STATE: STATE, LABEL: LABEL, ORDER: ORDER, DECISION: DECISION, QUEUE: QUEUE,
   stateOf: stateOf, dbStatusFor: dbStatusFor, group: group, counters: counters,
   linkedSite: linkedSite, possibleSiteMatches: possibleSiteMatches, normText: normText,
   markPreviewSent: markPreviewSent, markApproved: markApproved, markPreviewRejected: markPreviewRejected,
   markEdited: markEdited, markPublishCheckFailed: markPublishCheckFailed,
-  canMarkPublished: canMarkPublished, markPublished: markPublished
+  canMarkPublished: canMarkPublished, markPublished: markPublished,
+  validateStoryPackage: validateStoryPackage
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 root.KHWorkflow = api;

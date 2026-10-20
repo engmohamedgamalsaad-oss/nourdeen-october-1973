@@ -9,6 +9,7 @@ var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
 var builder = fs.readFileSync('khaledoon/story-builder.html', 'utf8');
 var preview = fs.readFileSync('khaledoon/preview.html', 'utf8');
 var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var passed = 0;
 function test(name, fn) {
   try { fn(); passed++; console.log('ok - ' + name); }
@@ -19,10 +20,16 @@ function mockPatch(record, patch) {
   return Object.assign({}, record, patch);
 }
 test('admin imports the workflow module and derives status counters', function () {
-  assert.ok(admin.includes('src="assets/story-workflow.js"'));
-  assert.ok(admin.includes('window.KHWorkflow.counters(adminRecords,sitePageItems)'));
+  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261020-4"'));
+  assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
+});
+test('admin uses its actual crimson book favicon asset', function () {
+  assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
+  assert.ok(favicon.includes('viewBox="0 0 64 64"'));
+  assert.ok(favicon.includes('fill="#8f1728"'));
+  assert.ok(favicon.includes('<path'));
 });
 test('admin links submissions to static pages by explicit identifier only', function () {
   assert.ok(admin.includes('window.KHWorkflow.linkedSite(it,vStories)'));
@@ -37,7 +44,17 @@ test('published stories cannot be deleted and deleting drafts never hides static
   var removeBlock = admin.slice(admin.indexOf('async function remove(it,btn)'), admin.indexOf('function copyKey'));
   assert.ok(!removeItemBlock.includes('await hideStaticStoryBeforeDelete(it)'));
   assert.ok(!removeBlock.includes('await hideStaticStoryBeforeDelete(it)'));
+  assert.ok(!admin.includes('hideStaticStoryBeforeDelete'));
+  assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
+  assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
   assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
+  assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
+});
+test('admin validates every translated field and every quiz translation before AI import', function () {
+  assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
+  assert.ok(admin.includes('packageCheck.errors.slice(0,8)'));
+  assert.ok(admin.includes('section_key واحدًا فقط من هذه القيم الحرفية: october, science, learning, fame, history, curriculum, islamic, readers'));
 });
 test('manual builder merges metadata and protects original body', function () {
   assert.ok(builder.includes('Object.assign({},currentMeta||{})'));
