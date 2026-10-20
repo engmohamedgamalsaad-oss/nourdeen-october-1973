@@ -77,7 +77,7 @@ test('reader-template preview keeps translations and disables reaction writes', 
 });
 test('story pages support distinct visual designs and source-attributed image galleries', function () {
   assert.ok(bundle.includes('visualDesignKey(d,section)'));
-  assert.ok(bundle.includes('story-design-'+design));
+  assert.ok(bundle.includes("story-design-'+design+'"));
   assert.ok(bundle.includes('story-visual-gallery'));
   assert.ok(bundle.includes('source_url'));
   assert.ok(bundle.includes('story-image-card'));
