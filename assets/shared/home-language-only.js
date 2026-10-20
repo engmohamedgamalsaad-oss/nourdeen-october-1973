@@ -69,6 +69,21 @@
     legacyKeys: Object.freeze(LEGACY_KEYS.slice()),
     current: lang,
     locked: false,
+    /* سجل موحّد لقواميس اللغات؛ كل ملف لغة يسجّل قاموسه هنا بدل إنشاء مسار ترجمة خاص به. */
+    dictionaries: Object.create(null),
+    registerDictionary: function (locale, dictionary) {
+      locale = normalize(locale);
+      if (!isSupported(locale) || !dictionary || typeof dictionary !== 'object' || Array.isArray(dictionary)) return false;
+      this.dictionaries[locale] = dictionary;
+      return true;
+    },
+    translate: function (locale, key) {
+      locale = normalize(locale);
+      var dictionary = this.dictionaries[locale];
+      if (!dictionary || !Object.prototype.hasOwnProperty.call(dictionary, key)) return '';
+      var value = dictionary[key];
+      return typeof value === 'string' ? value : '';
+    },
     isSupported: isSupported,
     dir: function (value) { return RTL.indexOf(value) >= 0 ? 'rtl' : 'ltr'; }
   };
