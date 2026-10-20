@@ -48,6 +48,28 @@ test('reader-template preview keeps translations and disables reaction writes', 
   assert.ok(bundle.includes('reactions.js'));
   assert.ok(bundle.includes('معاينة خاصة غير منشورة'));
 });
+test('AI paste validates before changing fields or opening/saving preview', function () {
+  assert.ok(admin.includes('function parseAiPackage(raw)'));
+  assert.ok(admin.includes('JSON.parse(text.slice(first,last+1))'));
+  assert.ok(admin.includes('صيغة JSON غير صحيحة؛ انسخ تعليمات الإصلاح الجاهزة'));
+  assert.ok(admin.includes('لم تُحفظ الحكاية ولم تُفتح المعاينة لأن الناتج ناقص'));
+  assert.ok(admin.includes('var raw=aiPaste.value,pkg=parseAiPackage(raw);applyAiPackage(pkg,raw);openPreviewAfterSave(bImport)'));
+});
+test('draft preview uses the same generated reader HTML as the publish bundle', function () {
+  var showStart = preview.indexOf('function showPage(d){');
+  var showEnd = preview.indexOf('\n}', showStart);
+  assert.ok(showStart >= 0 && showEnd > showStart);
+  var showBody = preview.slice(showStart, showEnd);
+  assert.ok(showBody.includes('renderInTemplate(d)'));
+  assert.ok(!showBody.includes('loadSitePage('));
+  assert.ok(bundle.includes('stories/history/005/theme.css'));
+  assert.ok(bundle.includes('data:image/svg+xml;charset=utf-8,'));
+});
+test('published cards use confirmed publish date rather than draft creation date', function () {
+  assert.ok(admin.includes('published_confirmed_at'));
+  assert.ok(admin.includes('تاريخ النشر غير مسجل'));
+  assert.ok(!admin.includes("if(it.created_at)dt=new Date(it.created_at)"));
+});
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
     var original = 'النص الأصلي الثابت الذي لا يجوز تغييره';
