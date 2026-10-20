@@ -395,7 +395,7 @@ for (const rel of [
   if (new Set(languageButtons).size !== 5 || !['ar', 'en', 'fr', 'it', 'de'].every((locale) => languageButtons.includes(locale))) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must expose all five language buttons (ar/en/fr/it/de).');
   }
-  const t = zewail.match(/const T=\\{([\\s\\S]*?)\\n\\};/);
+  const t = zewail.match(/const T=\{([\s\S]*?)\n\};/);
   if (!t || !/\bar:\{/.test(t[1]) || !/\ben:\{/.test(t[1]) || !/\bfr:\{/.test(t[1]) ||
       !/\bit:\{/.test(t[1]) || !/\bde:\{/.test(t[1])) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must define all five language dictionaries.');
