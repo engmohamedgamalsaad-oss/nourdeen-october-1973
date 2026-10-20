@@ -34,8 +34,8 @@ details.pubrow>summary{padding:8px 12px;gap:8px}
 .stat-button:hover{border-color:var(--gold);transform:translateY(-1px)}
 .stat-button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 .stat-button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
-/* عدادات لوحة الإدارة: صفوف متوازنة على الكمبيوتر؛ وتحوّل CSS الهاتف إلى عمودين. */
-#viewSubs > .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+/* عدادات لوحة الإدارة: ثلاثة أعمدة على الكمبيوتر؛ وتترك الهاتف لتنسيق العمودين في admin-mobile.css. */
+@media(min-width:761px){#viewSubs > .stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .pubrow .pd{display:block;color:var(--muted);font-size:.78rem;margin-top:1px}
 .pubrow .pbody{padding:0 10px 10px}.pubrow .pbody .fcard{margin-bottom:0}
 .mvbox{margin-top:14px;padding:14px;border:1px dashed var(--c,var(--gold));border-radius:14px}
