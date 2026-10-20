@@ -58,6 +58,8 @@ if (!/LEGACY_KEYS = \['lang'\];/.test(shared)) fail("Shared script: legacy key '
 if (!shared.includes('localStorage.setItem(KEY, lang)')) fail('Shared script: legacy -> unified key migration is missing.');
 if (!shared.includes("searchParams.delete('lang')") || !shared.includes('history.replaceState')) fail('Shared script: stale ?lang= removal is missing.');
 if (!shared.includes('KH_LANG')) fail('Shared script: KH_LANG central config is missing.');
+if (!shared.includes('registerDictionary: function')) fail('Shared script: locale dictionaries must register through KH_LANG.registerDictionary.');
+if (!shared.includes('translate: function')) fail('Shared script: KH_LANG.translate must be available to every translation engine.');
 if (/locked:\s*!isHome/.test(shared) || /createElement\(['"]style['"]\)/.test(shared) || /lang-selector\{display:none!important/.test(shared)) {
   fail('Shared script: language selectors must remain visible and usable on every page.');
 }
@@ -112,6 +114,11 @@ if (shared) {
     expect('unsupported language alone is not applied and storage untouched', [r.lang, r.dir, r.store['kh-lang']], ['ar', 'rtl', 'es']);
     r = runShared({ store: { 'kh-lang': 'de' } });
     expect('German is applied as LTR', [r.lang, r.dir, r.store['kh-lang']], ['de', 'ltr', 'de']);
+    const registered = r.api.registerDictionary('de', { 'Testschlüssel': 'Deutscher Text' });
+    expect('shared registry accepts a German dictionary', registered, true);
+    expect('shared registry returns German text', r.api.translate('de', 'Testschlüssel'), 'Deutscher Text');
+    expect('shared registry does not invent missing translations', r.api.translate('de', 'missing'), '');
+    expect('shared registry rejects unsupported locales', r.api.registerDictionary('es', { x: 'y' }), false);
     r = runShared({ store: { lang: 'de' } });
     expect('legacy lang=de migrated', [r.lang, r.store['kh-lang']], ['de', 'de']);
     r = runShared({ store: { 'kh-lang': 'fr' }, url: 'https://x.test/p/?lang=en&id=5#sec' });
@@ -303,7 +310,13 @@ for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
 }
 {
   const dictSrc = read(GERMAN_DICT);
-  const sandbox = { window: {} };
+  const registeredDictionaries = Object.create(null);
+  const sandbox = {
+    window: {},
+    KH_LANG: {
+      registerDictionary(locale, dictionary) { registeredDictionaries[locale] = dictionary; return true; }
+    }
+  };
   sandbox.window = sandbox;
   try {
     vm.createContext(sandbox);
@@ -311,15 +324,20 @@ for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
     const de = sandbox.KH_DE;
     if (!de || typeof de !== 'object') fail(`${GERMAN_DICT}: must define window.KH_DE as an object.`);
     else {
+      if (registeredDictionaries.de !== de) fail(`${GERMAN_DICT}: German dictionary is not registered in KH_LANG.`);
       const entries = Object.entries(de);
       if (entries.length < 200) fail(`${GERMAN_DICT}: only ${entries.length} entries; expected at least 200.`);
       const bad = entries.filter(([k, v]) => typeof v !== 'string' || !v.trim() || /\bundefined\b/.test(v));
       if (bad.length) fail(`${GERMAN_DICT}: ${bad.length} empty/invalid values, e.g. "${bad[0][0].slice(0, 40)}".`);
       const arabicValues = entries.filter(([, v]) => /[؀-ۿ]/.test(v));
       if (arabicValues.length) fail(`${GERMAN_DICT}: ${arabicValues.length} German values still contain Arabic text, e.g. "${arabicValues[0][0].slice(0, 40)}".`);
-      notes.push(`${entries.length} German dictionary entries`);
+      notes.push(`${entries.length} German dictionary entries registered in KH_LANG`);
     }
   } catch (e) { fail(`${GERMAN_DICT}: cannot be evaluated: ${e.message}`); }
+}
+for (const rel of ['khaledoon/assets/khaledoon.js', 'khaledoon/assets/khaledoon-i18n-extra.js', 'khaledoon/assets/khaledoon-pages-i18n.js']) {
+  const source = read(rel);
+  if (!source.includes("KH_LANG.translate('de'")) fail(`${rel}: German must use the shared KH_LANG translation registry.`);
 }
 
 /* ---------- 5) لا حذف: كل ملفات الحكايات المتوقعة موجودة ---------- */
