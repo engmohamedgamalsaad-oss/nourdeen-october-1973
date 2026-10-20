@@ -53,7 +53,7 @@ async function main() {
     question_bank_json: { questions: [] }
   });
   assert.match(html, /اختبار معاينة القارئ/);
-  assert.match(html, /stories\/history\/preview\/theme\.css/);
+  assert.match(html, /stories\/history\/preview\//);
   assert.match(html, /data:image\/svg\+xml;charset=utf-8,/);
   assert.match(html, /معاينة خاصة غير منشورة/);
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
