@@ -75,6 +75,66 @@ test('reader-template preview keeps translations and disables reaction writes', 
   assert.ok(bundle.includes('reactions.js'));
   assert.ok(bundle.includes('معاينة خاصة غير منشورة'));
 });
+test('story pages support distinct visual designs and source-attributed image galleries', function () {
+  assert.doesNotThrow(function () { new Function(bundle); }, 'story template bundle must parse as JavaScript');
+  assert.ok(bundle.includes('visualDesignKey(d,section)'));
+  assert.ok(bundle.includes("story-design-'+design+'"));
+  assert.ok(bundle.includes('story-visual-gallery'));
+  assert.ok(bundle.includes('source_url'));
+  assert.ok(bundle.includes('story-image-card'));
+  assert.ok(bundle.includes('صور مرتبطة بالحكاية'));
+  assert.ok(bundle.includes('صورة أرشيفية'));
+});
+test('rendered story preview applies all nine designs and includes attributed images', function () {
+  var vm = require('vm');
+  var sandbox = { window: {}, console: console, TextEncoder: TextEncoder, Blob: Blob, URL: URL };
+  vm.runInNewContext(bundle, sandbox, { filename: 'story-template-bundle.js' });
+  var api = sandbox.window.KHStoryBundle;
+  assert.ok(api && typeof api.renderPreviewHtml === 'function');
+  var designs = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
+  designs.forEach(function (design) {
+    var html = api.renderPreviewHtml({
+      section_key: 'history', visual_design: design, title: 'حكاية اختبار', subtitle: 'معاينة التصميم',
+      figure_name: 'شخصية اختبار', narrator_name: 'كارما', narrator_grade: 'الصف السادس',
+      karma_text: 'لماذا تختلف الحكايات؟', body: 'هذا نص تجريبي طويل بما يكفي لعرض معاينة التصميم المخصص لكل حكاية.',
+      sources: 'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.org/source-b',
+      images: [
+        {url:'https://images.example/a.jpg',alt:'وصف الصورة الأولى',caption:'الصورة الأولى',kind:'illustration',source_name:'المصدر أ',source_url:'https://example.org/image-a',rights:'ترخيص توضيحي'},
+        {url:'https://images.example/b.jpg',alt:'وصف الصورة الثانية',caption:'الصورة الثانية',kind:'diagram',source_name:'المصدر ب',source_url:'https://example.org/image-b',rights:'ترخيص توضيحي'}
+      ],
+      question_bank_json: {questions: []}
+    });
+    assert.ok(html.includes('class="story-design-' + design + '"'), 'missing design class: ' + design);
+    assert.ok(html.includes('story-visual-gallery'), 'missing image gallery: ' + design);
+    assert.ok(html.includes('https://images.example/a.jpg'), 'missing first image: ' + design);
+    assert.ok(html.includes('https://example.org/image-a'), 'missing image source link: ' + design);
+    assert.ok(html.includes('ترخيص توضيحي'), 'missing image rights: ' + design);
+    assert.ok(html.includes('معاينة خاصة غير منشورة'), 'preview safety banner missing: ' + design);
+  });
+});
+test('AI story package validation requires a design profile and at least two documented images', function () {
+  assert.ok(W.validateStoryPackage({
+    section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
+    narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
+    history_note:'سياق', sources:'مصدر', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
+    body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
+    visual_design:'science-lab',
+    images:[
+      {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A'}]}))},
+      {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image B',caption:'Caption B'}]}))}
+    ],
+    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:'Narrator',history_note:'History',images_note:'Images'}]})),
+    question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
+  }).ok);
+  assert.ok(bundle.includes('أضف صورتين على الأقل'));
+});
+test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
+  assert.ok(texts.includes('visual_design'));
+  assert.ok(texts.includes('source_url'));
+  assert.ok(texts.includes('لا تكرر التصميم البصري نفسه'));
+});
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
     var original = 'النص الأصلي الثابت الذي لا يجوز تغييره';
