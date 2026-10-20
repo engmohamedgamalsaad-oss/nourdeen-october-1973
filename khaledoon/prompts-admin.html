@@ -37,6 +37,7 @@ function normalize(raw){
   if(typeof STORY_PAGE_PROMPT==='string')d.main=STORY_PAGE_PROMPT;
   d.versions=d.versions.slice(-10);
  }
+ if(typeof KH_AI_PASTE_CONTRACT==='string'&&d.workflow.indexOf('KH_STORY_PACKAGE_V1')===-1)d.workflow+='\n\n'+KH_AI_PASTE_CONTRACT;
  return d;
 }
 function say(t){$('status').textContent=t}
