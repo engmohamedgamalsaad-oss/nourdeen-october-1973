@@ -250,7 +250,28 @@ window.KH_DE={
 "حكايات أبطال أكتوبر الأربع في الصفحة الأصلية، بنفس تصميمها وتنسيقها المعتمد.":"Die Geschichten der vier Oktober-Helden auf der Originalseite, mit ihrem bewährten Design und Layout.",
 "افتح حكايات أكتوبر 1973 ←":"Oktober-Geschichten 1973 öffnen →",
 "خالدون عبر التاريخ: حكايات شخصيات تبدأ بصوت الطالب أو الراوي، وتُستكمل بسرد موثق بمصادر موثوقة.":"Unsterbliche Persönlichkeiten der Geschichte: Geschichten über Persönlichkeiten, die mit der Stimme einer Schülerin oder eines Erzählers beginnen und mit einem dokumentierten Bericht auf verlässlichen Quellen fortgesetzt werden.",
-"حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach."
+"حكايات ممتعة وموثقة لشخصيات مختارة وردت في المناهج المصرية، مصنفة حسب المرحلة والصف والمادة.":"Unterhaltsame, dokumentierte Geschichten über ausgewählte Persönlichkeiten aus den ägyptischen Lehrplänen, geordnet nach Stufe, Klasse und Fach.",
+"نساء خالدات | خالدون عبر التاريخ":"Unvergessliche Frauen | Unsterbliche Persönlichkeiten der Geschichte",
+"خالدون عبر التاريخ":"Unsterbliche Persönlichkeiten der Geschichte",
+"حكاية التاريخ بعيون جيل جديد":"Geschichte aus der Sicht einer neuen Generation",
+"← كل البوابات":"← Alle Themenbereiche",
+"حكايات نساء تركن أثرًا":"Geschichten von Frauen, die Spuren hinterließen",
+"نساء خالدات":"Unvergessliche Frauen",
+"حكايات نساء تركن أثرًا بارزًا في التاريخ والعلم والأدب والفن والعمل الوطني والإنساني، وألهمت إنجازاتهن أجيالًا من بعدهن.":"Geschichten über Frauen, die Geschichte, Wissenschaft, Literatur, Kunst sowie nationales und humanitäres Engagement geprägt und mit ihren Leistungen kommende Generationen inspiriert haben.",
+"وجوه من التاريخ":"Gesichter der Geschichte",
+"صور تاريخية وقطع أثرية موثقة، تمهيدًا لإضافة الحكايات بعد مراجعتها واعتمادها.":"Belegte historische Bilder und Artefakte als Vorbereitung auf Geschichten, die nach Prüfung und Freigabe ergänzt werden.",
+"الملكة نفرتيتي":"Königin Nofretete",
+"رأس تمثال من مجموعة متحف برلين المصري ومجموعة البرديات.":"Büste aus der Sammlung des Ägyptischen Museums und der Papyrussammlung Berlin.",
+"الصورة: متاحف برلين / Sandra Steiß، عبر Wikimedia Commons — CC BY-SA 4.0":"Bild: Staatliche Museen zu Berlin / Sandra Steiß, über Wikimedia Commons – CC BY-SA 4.0",
+"الملكة حتشبسوت":"Königin Hatschepsut",
+"تمثال أثري لواحدة من أشهر حاكمات مصر القديمة.":"Antike Statue einer der bekanntesten Herrscherinnen des alten Ägypten.",
+"المصدر: متحف المتروبوليتان عبر Wikimedia Commons — CC0":"Quelle: Metropolitan Museum of Art über Wikimedia Commons – CC0",
+"كليوباترا السابعة":"Kleopatra VII.",
+"لوحة جدارية قديمة يُحتمل أنها تصور كليوباترا؛ ليست صورة مؤكدة لملامحها.":"Ein antikes Wandbild, das möglicherweise Kleopatra darstellt; ihre Gesichtszüge sind dadurch nicht zweifelsfrei belegt.",
+"المصدر: Wikimedia Commons؛ الصورة CC BY 2.0 والعمل الفني الأصلي من الملكية العامة":"Quelle: Wikimedia Commons; Bild unter CC BY 2.0, das ursprüngliche Kunstwerk ist gemeinfrei.",
+"حكايات هذا القسم":"Geschichten in diesem Bereich",
+"كل حكاية لها صفحتها الخاصة، وتُضاف هنا بعد مراجعة المحتوى والمصادر.":"Jede Geschichte hat eine eigene Seite und wird hier erst nach Prüfung von Inhalt und Quellen hinzugefügt.",
+"قسم من «خالدون عبر التاريخ» — حكايات موثقة تُضاف بعد المراجعة والاعتماد.":"Ein Bereich von „Unsterbliche Persönlichkeiten der Geschichte“ – dokumentierte Geschichten, die nach Prüfung und Freigabe ergänzt werden."
 };
 
 /* تسجيل الألمانية في واجهة القواميس المشتركة، مع إبقاء الاسم القديم للتوافق مع الصفحات السابقة. */
