@@ -772,9 +772,10 @@ function pubRow(it){
      var pkg,raw=aiPaste.value.trim();if(!raw){say('err','الصق ناتج الذكاء الاصطناعي أولًا.');return}
      try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){say('err','الناتج ليس JSON صالحًا. انسخ الكائن كاملًا من أول { إلى آخر }.');return}
      if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){say('err','صيغة الناتج غير صحيحة؛ يجب أن تحتوي format: KH_STORY_PACKAGE_V1.');return}
-     if(!String(pkg.title||'').trim()||String(pkg.body||'').trim().length<50){say('err','الناتج ناقص: تأكد من وجود عنوان ونص الراوي الكامل.');return}
-     var langs=['en','fr','it','de'];if(!pkg.translations||!langs.every(function(l){return pkg.translations[l]&&typeof pkg.translations[l]==='object'})){say('err','الترجمات الأربع مطلوبة: الإنجليزية والفرنسية والإيطالية والألمانية.');return}
-     var questions=pkg.question_bank&&Array.isArray(pkg.question_bank.questions)?pkg.question_bank.questions:[];if(questions.length<5){say('err','بنك الأسئلة يجب أن يحتوي على خمسة أسئلة على الأقل.');return}
+     var langs=['en','fr','it','de'];
+     var packageCheck=window.KHWorkflow.validateStoryPackage(pkg);
+     if(!packageCheck.ok){say('err','لم أستورد الحكاية لأن الحزمة غير مكتملة: '+packageCheck.errors.slice(0,8).join('؛ ')+(packageCheck.errors.length>8?'؛ توجد أخطاء أخرى.':''));return}
+     if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||''))){say('err','مفتاح القسم غير صحيح؛ اختر قسمًا موجودًا في الموقع ثم أعد توليد الحكاية.');return}
      if(!confirm('سيتم استيراد ناتج AI وحفظه كمسودة، مع الاحتفاظ بالنص الأصلي وإلغاء اعتماد المعاينة السابق. لن يتم النشر. هل تريد المتابعة؟'))return;
      aiImport.disabled=true;
      try{
