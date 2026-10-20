@@ -761,9 +761,9 @@ function pubRow(it){
     var aiImport=el('button','btn primary','٣. استيراد الناتج وحفظه كمسودة');aiImport.type='button';aiPanel.appendChild(aiImport);
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',function(){
-     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider);
-     var inputData={section_key:it.section||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
-     var schema='أعد كائن JSON صالحًا واحدًا فقط، دون Markdown أو أسوار كود أو مقدمة أو خاتمة. يجب أن يكون format هو KH_STORY_PACKAGE_V1. المفاتيح المطلوبة: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, translations, question_bank. يجب أن يكون section_key واحدًا فقط من هذه القيم الحرفية: october, science, learning, fame, history, curriculum, islamic, readers؛ احتفظ بقيمة القسم الواردة في البيانات إن كانت صحيحة، ولا تستخدم أسماء الأقسام العربية بدل المفاتيح. املأ كل الحقول الأساسية ولا تتركها فارغة، واحفظ original_body حرفيًا دون تعديل. يجب أن تحتوي translations على en وfr وit وde، ولكل لغة student_name وgrade وtitle وsubtitle وkarma_text وbody وhistory_note وimages_note، وجميعها نصوص غير فارغة. question_bank كائن يحتوي questions وخمسة أسئلة على الأقل؛ لكل سؤال q نص غير فارغ، وo قائمة اختيارات نصية غير فارغة، وa رقم صحيح لفهرس الإجابة الصحيحة يبدأ من صفر، وe تفسير غير فارغ، وi18n. داخل i18n يجب أن توجد en وfr وit وde، ولكل لغة q وo وe مترجمة، مع نفس عدد الاختيارات في اللغات الأربع كما في السؤال العربي. اكتب المصادر وملاحظات حقوق الصور بوضوح. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.';
+     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
+     var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
+     var schema='أخرج JSON صالحًا واحدًا فقط بلا Markdown أو مقدمة أو خاتمة. format="KH_STORY_PACKAGE_V1". الحقول: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, visual_design, images, translations, question_bank. section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers. احفظ original_body حرفيًا. translations تحتوي en,fr,it,de؛ ولكل لغة student_name,grade,title,subtitle,karma_text,body,history_note,images_note بنصوص كاملة غير فارغة. visual_design واحدة من timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. images مصفوفة من صورتين على الأقل؛ كل صورة تحتوي url,alt,caption,kind,source_name,source_url,rights,i18n؛ kind واحدة من archival,illustration,diagram,map؛ وi18n.en/fr/it/de لكل منها alt وcaption مترجمان. لا تخترع روابط أو تراخيص، واذكر ما تعذر التحقق منه. question_bank.questions فيها خمسة أسئلة على الأقل؛ كل سؤال q وo (اختيارات نصية) وa (فهرس صحيح يبدأ من صفر) وe وi18n؛ وi18n.en/fr/it/de تحتوي q وo وe مترجمة مع العدد نفسه من الاختيارات. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.';
      var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية كاملة ===\n'+JSON.stringify(inputData,null,2);
      function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية والبرومبت. افتح الأداة المختارة والصقه هناك.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
@@ -826,10 +826,45 @@ async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
  try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
 }
-function buildNewStoryPrompt(providerKey){
- var selectedProvider=providerKey||'chatgpt';var prompt=[PROJECT_INSTRUCTIONS||'',managedPromptSections(selectedProvider),selectedProvider==='claude'?(CLAUDE_INSTRUCTIONS||''):'',AGENT_INSTRUCTIONS||''].filter(Boolean).join('\n\n');
- if(!prompt.trim())throw new Error('تعذر تحميل البرومبت الكامل من تعليمات المشروع.');
- return prompt;
+function buildNewStoryPrompt(providerKey,mode){
+ var selectedProvider=providerKey||'chatgpt';
+ var providerNames={chatgpt:'ChatGPT',claude:'Claude',deepseek:'DeepSeek'};
+ var providerNote={
+  chatgpt:'استخدم الأدوات المتاحة فعلًا. إذا لم تتوفر إمكانية الوصول للملفات، صرّح بذلك وقدّم مخرجات كاملة قابلة للاستخدام.',
+  claude:'استخدم الأدوات المتاحة فعلًا. إذا لم تتوفر إمكانية الوصول للملفات، صرّح بذلك وقدّم مخرجات كاملة قابلة للاستخدام.',
+  deepseek:'في وضع الحزمة أخرج JSON صالحًا فقط، بلا Markdown أو أسوار كود أو مقدمة. لا تكرر التعليمات.'
+ }[selectedProvider]||'لا تدّعِ استخدام أدوات غير متاحة.';
+ if(mode==='package'){
+  return [
+   'خالدون عبر التاريخ — حزمة محتوى حكاية للاستيراد إلى لوحة الإدارة.',
+   'المطلوب هنا إنتاج بيانات الحكاية فقط، وليس كتابة ملفات الموقع أو الادعاء بالنشر. أخرج كائن JSON واحدًا يطابق مخطط الإخراج وبيانات الحكاية أدناه.',
+   'الجمهور أطفال وطلاب. احفظ original_body حرفيًا. اكتب body بصوت راوٍ تاريخي دافئ ومترابط، وkarma_text بصوت كارما الطفولي الفضولي. اجعل كارما حاضرة بملاحظات واستنتاجات، ولا تجعلها خبيرة بالغة أو تحوّل الحكاية إلى أسئلة وأجوبة متتابعة.',
+   'دقّق الوقائع والأسماء والتواريخ والسياق بمصادر حقيقية قابلة للفتح. لا تخترع وقائع أو اقتباسات أو روابط أو تراخيص. اذكر الشك والخلاف في history_note.',
+   'أكمل العربية والإنجليزية والفرنسية والإيطالية والألمانية لكل الحقول المطلوبة. ترجم المتن والعناوين والأسئلة والاختيارات والتفسيرات وتعليقات الصور والنصوص البديلة؛ لا تترك حقلًا مطلوبًا فارغًا.',
+   'أنتج خمسة أسئلة على الأقل، مع اختيارات وإجابة صحيحة بفهرس يبدأ من صفر وتفسير، وترجمات en/fr/it/de مطابقة وعدد اختيارات متساوٍ.',
+   'أرفق صورتين على الأقل مع رابط الصورة والمصدر وحقوق الاستخدام/الإسناد والوصف والتعليق وترجمتهما. لا تخترع روابط أو حقوقًا؛ ميّز الصورة الأرشيفية الحقيقية من الرسم التوضيحي.',
+   'اختر visual_design من: timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. section_key من: october, science, learning, fame, history, curriculum, islamic, readers.',
+   providerNote
+  ].join('\n\n');
+ }
+ return [
+  'تعليمات العمل — مشروع «خالدون عبر التاريخ».',
+  'المستودع: https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973',
+  'الموقع: https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/',
+  'الهدف: تجهيز حكاية تاريخية تعليمية كاملة حتى معاينة خاصة، لا الاكتفاء بالنص إذا كانت الأدوات تسمح بتنفيذ الملفات.',
+  '1. افحص الفرع والملفات الحالية وPROJECT_INSTRUCTIONS.md وCLAUDE.md وAGENTS.md وdocs/khaledoon-story-production-workflow.md والقالب والحكايات المرجعية. لا تفترض مسارات قديمة ولا تبدأ من الصفر. اعمل على فرع معاينة وافحص الفروقات.',
+  '2. احفظ النص الأصلي حرفيًا في original_body وافصل عنه النص المحرر. سجّل صاحب الاقتراح والسن/الصف والقسم والمصدر وحقوق الاستخدام المتاحة، ولا تخترع بيانات ناقصة.',
+  '3. دقّق الأسماء والتواريخ والأماكن وتسلسل الأحداث بمصادر أولية أو رسمية أو متاحف وجامعات ومراجع موثوقة. أرفق روابط حقيقية، وميّز الحقيقة من التفسير والخلاف وعدم اليقين. لا تختلق اقتباسات أو مصادر.',
+  '4. أسلوب الحكي: كارما طفلة فضولية تتكلم طبيعيًا وتلاحظ وتستنتج وتعود خلال الحكاية؛ والراوي صوت حكيم يشرح السياق والأسباب والنتائج والأدلة. اجعل السرد مترابطًا، لا مقالة جافة ولا أسئلة وأجوبة متتابعة.',
+  '5. اللغات الخمس كاملة: العربية والإنجليزية والفرنسية والإيطالية والألمانية. احفظ الأصل العربي ثم ترجم وراجع كل المحتوى، بما فيه الاختبار والصور والمصادر والبيانات الوصفية والواجهة والمشاركة والطباعة. اختبر de فعليًا ولا تكتفِ بحقل أو زر.',
+  '6. الصور: جهّز غلاف البطاقة وصورة شاشة البداية/cover-popup وصور السرد المناسبة. تحقق من رابط كل صورة ومصدرها وحقوق استخدامها وإسنادها. لا تعتبر نتائج البحث إذنًا، ولا تعرض صورة مولدة كأنها أرشيفية. تحقق من الملف والمسار قبل الربط.',
+  '7. استخدم القالب الحالي مع تصميم يناسب الشخصية، واختر visual_design معتمدًا، ومعرضًا فعليًا من صورتين موثقتين على الأقل. حافظ على RTL للعربية وLTR لباقي اللغات، والوضعين الفاتح والداكن، والخطوط والهوية والحركة الهادئة وتقليل الحركة.',
+  '8. أنشئ بنك اختبار من خمسة أسئلة على الأقل، مع الإجابة والتفسير وترجمات en/fr/it/de. اربط الصفحة ببنكها الصحيح وبالفهرس والخريطة والبحث والتنقل والإدارة. حافظ على شاشة البداية والإعجاب وردود الفعل الجاهزة وWhatsApp وFacebook والطباعة والإخفاء والمصادر.',
+  '9. اختبر الروابط والصور واللغات والوظائف المتأثرة على الهاتف والكمبيوتر قدر الإمكان، وافحص أثر التغيير على الحكايات القديمة والملفات المشتركة. اذكر ما تم اختباره وما لم يمكن التحقق منه.',
+  '10. لا تحذف أو تستبدل ملفات دون ضرورة، ولا ترفع أسرارًا أو بيانات خاصة. لا تستخدم خدمة مدفوعة دون موافقة. لا تعدّل Supabase أو SQL أو RLS أو البيانات دون فحص وموافقة صريحة.',
+  '11. أنشئ معاينة خاصة، واعرض الملفات والمصادر والاختبارات والقيود، وانتظر الموافقة الصريحة. لا تدمج إلى الفرع المنشور ولا تنشر الحكاية قبل الموافقة. لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث.',
+  'تعليمات الأداة ('+providerNames[selectedProvider]+'): '+providerNote
+ ].join('\n\n');
 }
 function renderNewStoryGate(list){
  var box=el('article','fcard');
