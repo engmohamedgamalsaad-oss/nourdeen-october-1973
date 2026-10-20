@@ -235,8 +235,8 @@ function renderQuiz(d){
   var item=document.createElement('div');item.className='pub-card';
   var h=document.createElement('b');h.textContent='السؤال '+(i+1)+': '+(q.q||'سؤال بلا نص');item.appendChild(h);
   var answer=Number.isInteger(q.a)&&Array.isArray(q.o)?(q.o[q.a]||'غير محددة'):'غير محددة';
-  item.appendChild(textBlock((Array.isArray(q.o)?q.o.map(function(o,j){return (j+1)+'. '+o}).join('\\n'):'لا توجد اختيارات')+'\\nالإجابة: '+answer+'\\nالتفسير: '+(q.e||'لا يوجد تفسير')));
-  Object.keys(LANG_NAMES).forEach(function(lang){var t=q.i18n&&q.i18n[lang];var tr=document.createElement('div');tr.className='pub-card pub-translation';var label=document.createElement('b');label.textContent=LANG_NAMES[lang]+' ('+lang.toUpperCase()+')';tr.appendChild(label);tr.appendChild(textBlock(t&&t.q?t.q+'\\n'+(Array.isArray(t.o)?t.o.map(function(o,j){return (j+1)+'. '+o}).join('\\n'):'لا توجد اختيارات')+'\\nالتفسير: '+(t.e||'غير مسجل'):'الترجمة ناقصة في هذه اللغة.'));item.appendChild(tr)});
+  item.appendChild(textBlock((Array.isArray(q.o)?q.o.map(function(o,j){return (j+1)+'. '+o}).join('\n'):'لا توجد اختيارات')+'\nالإجابة: '+answer+'\nالتفسير: '+(q.e||'لا يوجد تفسير')));
+  Object.keys(LANG_NAMES).forEach(function(lang){var t=q.i18n&&q.i18n[lang];var tr=document.createElement('div');tr.className='pub-card pub-translation';var label=document.createElement('b');label.textContent=LANG_NAMES[lang]+' ('+lang.toUpperCase()+')';tr.appendChild(label);tr.appendChild(textBlock(t&&t.q?t.q+'\n'+(Array.isArray(t.o)?t.o.map(function(o,j){return (j+1)+'. '+o}).join('\n'):'لا توجد اختيارات')+'\nالتفسير: '+(t.e||'غير مسجل'):'الترجمة ناقصة في هذه اللغة.'));item.appendChild(tr)});
   box.appendChild(item);
  });
 }
@@ -247,7 +247,7 @@ function renderTranslations(d){
   var tr=d.translations&&d.translations[lang];if(!tr)return;any=true;
   var item=document.createElement('div');item.className='pub-card pub-translation';
   var head=document.createElement('b');head.textContent=LANG_NAMES[lang]+' ('+lang.toUpperCase()+')'+(tr.status?' · '+tr.status:'')+(tr.enabled===true?' · enabled':'');item.appendChild(head);
-  item.appendChild(textBlock((tr.student_name?'Student/narrator: '+tr.student_name+'\\n':'')+(tr.grade?'Grade: '+tr.grade+'\\n':'')+(tr.title||'')+'\\n'+(tr.subtitle||'')+'\\nKarma: '+(tr.karma_text||'—')+'\\nNarrator/story: '+(tr.body||'—')+'\\nContext: '+(tr.history_note||'—')+'\\nImages & rights: '+(tr.images_note||'—')));
+  item.appendChild(textBlock((tr.student_name?'Student/narrator: '+tr.student_name+'\n':'')+(tr.grade?'Grade: '+tr.grade+'\n':'')+(tr.title||'')+'\n'+(tr.subtitle||'')+'\nKarma: '+(tr.karma_text||'—')+'\nNarrator/story: '+(tr.body||'—')+'\nContext: '+(tr.history_note||'—')+'\nImages & rights: '+(tr.images_note||'—')));
   list.appendChild(item);
  });
  if(!any)list.appendChild(textBlock('لا توجد ترجمات مسجلة بعد؛ الترجمات الأربع مطلوبة قبل النشر.'));
