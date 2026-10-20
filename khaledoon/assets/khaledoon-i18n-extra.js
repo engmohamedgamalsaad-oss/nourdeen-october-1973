@@ -22,7 +22,7 @@ function apply(){
  var i=idx();
  /* الخصائص (aria-label): تُترجم وتُستعاد عند العودة للعربية */
  var as=document.querySelectorAll('[aria-label]');
- for(var k=0;k<as.length;k++){var el=as[k];if(el.__al===undefined)el.__al=el.getAttribute('aria-label');var ak=el.__al.trim(),da=D[ak],dv=i===4?((window.KH_LANG&&window.KH_LANG.translate?window.KH_LANG.translate('de',ak):(window.KH_DE&&window.KH_DE[ak]))||(da&&da[0])):(da&&da[i-1]);if(da||dv)el.setAttribute('aria-label',(i&&dv)?dv:el.__al)}
+ for(var k=0;k<as.length;k++){var el=as[k];if(el.__al===undefined)el.__al=el.getAttribute('aria-label');var ak=el.__al.trim(),da=D[ak],dv=i===4?((window.KH_LANG&&window.KH_LANG.translate?window.KH_LANG.translate('de',ak):'')||(da&&da[0])):(da&&da[i-1]);if(da||dv)el.setAttribute('aria-label',(i&&dv)?dv:el.__al)}
  if(!i)return;
  var w=document.createTreeWalker(document.body,4),n;
  while(n=w.nextNode()){
