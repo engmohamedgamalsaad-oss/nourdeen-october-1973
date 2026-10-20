@@ -765,6 +765,19 @@ function pubRow(it){
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
     var aiPaste=area('',12,100000);aiPaste.placeholder='الصق هنا JSON الذي أعاده الذكاء الاصطناعي (KH_STORY_PACKAGE_V1)…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج كاملًا كما هو، بما في ذلك الأقواس الخارجية. لا تلصق HTML.'));
+    var aiRepairPanel=el('section','translation-lang');aiRepairPanel.id='aiRepairPanel';aiRepairPanel.hidden=true;
+    aiRepairPanel.appendChild(el('h3','','تعليمات إصلاح رد AI'));
+    aiRepairPanel.appendChild(el('p','fnote','إذا كان الرد ناقصًا أو غير صالح، انسخ التعليمات مع الرد السابق إلى نفس أداة الذكاء الاصطناعي. لن تُحفظ الحزمة الناقصة ولن تُفتح معاينتها.'));
+    var aiRepairText=area('',8,100000);aiRepairText.id='aiRepairText';aiRepairText.setAttribute('aria-label','تعليمات إصلاح رد الذكاء الاصطناعي');aiRepairPanel.appendChild(aiRepairText);
+    var aiRepairCopy=el('button','btn ghost','نسخ تعليمات الإصلاح');aiRepairCopy.type='button';
+    aiRepairCopy.addEventListener('click',function(){var value=aiRepairText.value;function done(ok){say(ok?'ok':'err',ok?'تم نسخ تعليمات الإصلاح مع الرد السابق.':'تعذر النسخ؛ حدّد النص وانسخه يدويًا.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(value).then(function(){done(true)}).catch(function(){fallbackCopy(value,done)});else fallbackCopy(value,done)});
+    aiRepairPanel.appendChild(aiRepairCopy);aiPanel.appendChild(aiRepairPanel);
+    function showAiRepair(raw,missing,reason){
+     var list=Array.isArray(missing)?missing.filter(Boolean):[];if(!list.length)list=[reason||'إرجاع حزمة مكتملة وصالحة'];
+     var selectedProvider=providerSelect.options[providerSelect.selectedIndex];var providerLabel=selectedProvider?selectedProvider.text:(providerSelect.value||'غير محددة');
+     aiRepairText.value='أصلح ردك السابق فقط وفق KH_STORY_PACKAGE_V1. أعد كائن JSON صالحًا كاملًا واحدًا، دون Markdown أو شرح. لا تحذف أي محتوى صحيح ولا تغيّر النص الأصلي. أكمل النواقص التالية تحديدًا:\n- '+list.join('\n- ')+'\n\nأداة الذكاء الاصطناعي المختارة: '+providerLabel+'\n\nالرد السابق كاملًا:\n'+String(raw||'');
+     aiRepairPanel.hidden=false;aiRepairPanel.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
     /* أعد فتح آخر كود AI محفوظ؛ للسجلات القديمة أعد بناء JSON قابل للتعديل من البيانات المخزنة. */
     var savedAiPackage=it.story_meta&&it.story_meta.ai_package_raw;
     if(savedAiPackage){aiPaste.value=String(savedAiPackage)}else{try{var oldMetaForPackage=it.story_meta||{},oldBank=it.question_bank_json||oldMetaForPackage.question_bank_json||'';try{oldBank=typeof oldBank==='string'?JSON.parse(oldBank):oldBank}catch(ignoreBank){}var oldTranslations=it.translations||oldMetaForPackage.translations||{};var rebuiltPackage={format:'KH_STORY_PACKAGE_V1',section_key:it.section||it.section_key||'october',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||oldMetaForPackage.original_body||it.body||'',karma_text:it.karma_text||oldMetaForPackage.karma_text||'',body:it.body||'',history_note:it.history_note||oldMetaForPackage.history_note||'',sources:it.sources||oldMetaForPackage.sources||'',images_note:it.images_note||oldMetaForPackage.images_note||'',visual_design:it.visual_design||oldMetaForPackage.visual_design||'',images:it.images||oldMetaForPackage.images||[],translations:oldTranslations,question_bank:oldBank};aiPaste.value=JSON.stringify(rebuiltPackage,null,2)}catch(rebuildError){}}
@@ -779,19 +792,19 @@ function pubRow(it){
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
     });
     aiImport.addEventListener('click',async function(){
-     var pkg,raw=aiPaste.value.trim();if(!raw){say('err','الصق ناتج الذكاء الاصطناعي أولًا.');return}
-     try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){say('err','الناتج ليس JSON صالحًا. انسخ الكائن كاملًا من أول { إلى آخر }.');return}
-     if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){say('err','صيغة الناتج غير صحيحة؛ يجب أن تحتوي format: KH_STORY_PACKAGE_V1.');return}
+     var sourceRaw=aiPaste.value.trim(),pkg,raw=sourceRaw;if(!raw){say('err','الصق ناتج الذكاء الاصطناعي أولًا.');return}
+     try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){showAiRepair(sourceRaw,['إصلاح صيغة JSON وإرجاع كائن كامل صالح']);say('err','الناتج ليس JSON صالحًا. ظهرت تعليمات إصلاح جاهزة أسفل خانة اللصق.');return}
+     if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){showAiRepair(sourceRaw,['استخدام format بالقيمة KH_STORY_PACKAGE_V1 وبنية الحزمة كاملة']);say('err','صيغة الناتج غير صحيحة؛ ظهرت تعليمات إصلاح جاهزة.');return}
      var langs=['en','fr','it','de'];
      var packageCheck=window.KHWorkflow.validateStoryPackage(pkg);
-     if(!packageCheck.ok){say('err','لم أستورد الحكاية لأن الحزمة غير مكتملة: '+packageCheck.errors.slice(0,8).join('؛ ')+(packageCheck.errors.length>8?'؛ توجد أخطاء أخرى.':''));return}
-     if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||''))){say('err','مفتاح القسم غير صحيح؛ اختر قسمًا موجودًا في الموقع ثم أعد توليد الحكاية.');return}
+     if(!packageCheck.ok){showAiRepair(sourceRaw,packageCheck.errors);say('err','لم أستورد الحكاية لأن الحزمة غير مكتملة. راجع تعليمات الإصلاح أسفل خانة اللصق.');return}
+     if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||''))){showAiRepair(sourceRaw,['اختيار section_key مطابقًا لأحد أقسام الموقع الموجودة']);say('err','مفتاح القسم غير صحيح؛ ظهرت تعليمات إصلاح جاهزة.');return}
      if(!confirm('سيتم استيراد ناتج AI وحفظه كمسودة، مع الاحتفاظ بالنص الأصلي وإلغاء اعتماد المعاينة السابق. لن يتم النشر. هل تريد المتابعة؟'))return;
      aiImport.disabled=true;
      try{
       var oldMeta=Object.assign({},it.story_meta||{}),oldOriginal=String(it.original_body||oldMeta.original_body||'');
       var translations={};langs.forEach(function(l){var t=pkg.translations[l]||{};translations[l]={enabled:false,status:'draft',student_name:t.student_name||it.student_name||'',grade:t.grade||it.grade||'',title:t.title||'',subtitle:t.subtitle||'',karma_text:t.karma_text||'',body:t.body||'',history_note:t.history_note||'',images_note:t.images_note||''}});
-      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:[],preview_source_url:'',translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_package_raw:raw,ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
+      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:[],preview_source_url:'',translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_package_raw:raw,ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1',ai_imported_provider:String(providerSelect.value||'chatgpt'),ai_imported_provider_label:String((providerSelect.options[providerSelect.selectedIndex]&&providerSelect.options[providerSelect.selectedIndex].text)||providerSelect.value||'ChatGPT')});
       nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
       nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null,static_story_id:null,static_story_path:null,bundle_downloaded:false,prepared_page_url:''});delete nextMeta.pending_draft;
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
@@ -801,7 +814,7 @@ function pubRow(it){
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       if(String(rows[0].title||'')!==payload.title||String(rows[0].body||'')!==payload.body)throw new Error('الخادم لم يُرجع النص المحفوظ مطابقًا للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      aiPaste.value=raw;say('ok','تم تأكيد حفظ المسودة في قاعدة البيانات، واحتفظت بنص JSON في مربع الكود للعودة إليه وتعديله لاحقًا. لم يتم النشر.');await loadList();
+      aiPaste.value=raw;aiRepairPanel.hidden=true;aiRepairText.value='';say('ok','تم تأكيد حفظ المسودة في قاعدة البيانات، واحتفظت بنص JSON في مربع الكود للعودة إليه وتعديله لاحقًا. لم يتم النشر.');await loadList();
      }catch(e){say('err',e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
