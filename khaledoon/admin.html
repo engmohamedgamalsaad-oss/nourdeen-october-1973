@@ -145,12 +145,13 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </div>
 </section>
 </main>
+<script src="assets/story-workflow.js"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261018-5"></script>
 <script>
 (function(){
 'use strict';
 var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',SK='kh_adm_session';
-var session=null,items=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null,newStoryGate=false,newStoryPromptCopied=false;
+var session=null,items=[],adminRecords=[],sitePageItems=[],fStatus='all',fSec='all',draftNew=false,term='',refreshing=null,newStoryGate=false,newStoryPromptCopied=false;
 var view='subs',vStories=[],vHidden={},vFilter='all',vTerm='',vLoaded=false,vErr='';
 var reactionRows=[],reactionFilter='all',reactionTerm='',reactionLoaded=false;
 var STATUS={pending:'قيد المراجعة',review:'تحت التحرير',published:'منشورة',rejected:'مرفوضة'};
@@ -212,40 +213,38 @@ async function loadList(){
  var response=await rest('khaledoon_submissions?select=*&order=created_at.desc');
  if(response.status===404)throw new Error('جدول حكايات خالدون غير موجود. راجع إعداد قاعدة البيانات.');
  if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
- var current=await response.json();
-
- current.forEach(function(x){x._t='k'});
- var siteItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
- var unmatchedRecords=[];
- current.forEach(function(record){var linked=storyFor(record),site=linked&&siteItems.find(function(x){return String(x.id)===String(linked.id)});if(site)site.submissions.push(record);else unmatchedRecords.push(record)});
- items=unmatchedRecords.concat(siteItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
+ adminRecords=await response.json();
+ adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
+ sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null}});
+ /* لا ندمج سجل قاعدة البيانات داخل بطاقة الموقع حتى لو تطابق العنوان أو الشخصية. */
+ items=adminRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  render();
 }
-
+function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
+function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemState(i)}
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
+ var counts=window.KHWorkflow.counters(adminRecords,sitePageItems);
  [
-  ['إجمالي السجلات',items.length,'all'],
-  ['بانتظار المراجعة',count(function(i){return i.status==='pending'}),'pending'],
-  ['تحت التحرير',count(function(i){return i.status==='review'}),'review'],
-  ['منشورة',count(function(i){return i.status==='published'}),'published']
+  ['سجلات الأدمن',counts.records,'all'],
+  ['تحت التحرير',counts.queues.editing,'editing'],
+  ['مرسلة للمعاينة',counts.queues.preview,'preview_sent'],
+  ['معاينة مرفوضة',counts.byState.preview_rejected,'preview_rejected'],
+  ['بانتظار النشر',counts.queues.review,'awaiting_publish'],
+  ['صفحات الموقع المنشورة',counts.sitePages,'published']
  ].forEach(function(s){
   var c=el('button','stat stat-button'),label=el('span','',s[0]),value=el('strong','',String(s[1]));
   c.type='button';c.setAttribute('aria-pressed',fStatus===s[2]?'true':'false');
-  c.addEventListener('click',function(){
-   fStatus=s[2];fSec='all';term='';draftNew=false;
-   $('search').value='';render();
-   $('list').scrollIntoView({behavior:'smooth',block:'start'});
-  });
+  c.addEventListener('click',function(){fStatus=s[2];fSec='all';term='';draftNew=false;$('search').value='';render();$('list').scrollIntoView({behavior:'smooth',block:'start'})});
   c.appendChild(label);c.appendChild(value);b.appendChild(c);
  });
 }
 function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b.setAttribute('aria-pressed',on?'true':'false');b.addEventListener('click',fn);box.appendChild(b)}
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
- chip(t,'كل الحالات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
- Object.keys(STATUS).forEach(function(k){chip(t,STATUS[k]+' ('+count(function(i){return i.status===k})+')',fStatus===k,function(){fStatus=k;render()})});
+ chip(t,'كل السجلات ('+adminRecords.length+')',fStatus==='all',function(){fStatus='all';render()});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=adminRecords.filter(function(i){return itemState(i)===k}).length;chip(t,window.KHWorkflow.LABEL[k]+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
 }
@@ -304,7 +303,7 @@ function legacyCard(it){
  if(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft){var base=it;it=Object.assign({},it,it.story_meta.pending_draft,{id:base.id,status:base.status,created_at:base.created_at,story_number:base.story_number,original_body:base.body,story_meta:base.story_meta,_t:base._t})}
  var box=el('article','fcard sec-october'),head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',it.title||'حكاية أكتوبر بلا عنوان'));
- head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status||'غير محددة'));
+ head.appendChild(el('span','badge2 '+itemState(it),itemStateLabel(it)));
  box.appendChild(head);
  box.appendChild(el('div','meta2','حكايات أكتوبر 1973 • '+(it.student_name||'اسم غير مسجل')+' • '+(it.grade||'الصف غير مسجل')+' • '+new Date(it.created_at).toLocaleString('ar-EG')+(it.story_number?' • رقم الحكاية: '+String(it.story_number).padStart(3,'0'):'')));
  var legacyMeta=Object.assign({},it.story_meta||{}),legacySaved=Object.assign({},it,legacyMeta.pending_draft||{});
@@ -375,7 +374,7 @@ function card(it){
  var isNew=!it.id,box=el('article','fcard sec-'+(it.section||'curriculum'));
  var head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',isNew?'حكاية جديدة':(it.title||'')));
- if(!isNew)head.appendChild(el('span','badge2 '+it.status,STATUS[it.status]||it.status));
+ if(!isNew)head.appendChild(el('span','badge2 '+itemState(it),itemStateLabel(it)));
  box.appendChild(head);
  if(!isNew){
   var path=SEC[it.section]||it.section;
@@ -679,16 +678,8 @@ function setCopies(key,n){try{localStorage.setItem(key,String(n))}catch(e){}}
 function paintTag(e){var n=getCopies(e.getAttribute('data-ck'));e.textContent=n?'✓ '+copyLabel(n):'';e.hidden=!n}
 function copyLabel(n){return n===1?'تم النسخ مرة':n===2?'تم النسخ مرتين':n<=10?'تم النسخ '+n+' مرات':'تم النسخ '+n+' مرة'}
 var openIds={};
-/* ربط حكاية الإدارة بحكاية الموقع في stories/index.json: برقم الحكاية (حكايات أكتوبر القديمة) أو بالعنوان المطابق. */
-function norm(x){return String(x||'').replace(/[\u064B-\u0652\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/\s+/g,' ').trim().replace(/[.,،؛;:!?؟]+$/g,'').trim().toLocaleLowerCase()}
-function storyFor(it){
- var t=norm(it.title),n=it.story_number!=null&&it.story_number!==''?String(it.story_number).padStart(3,'0'):null;
- for(var i=0;i<vStories.length;i++){var s=vStories[i];if((n&&String(s.id)===n)||(t&&norm(s.title)===t))return s}
- /* احتياطي: مطابقة اسم الشخصية مع person أو personAliases، ولا تُعتمد إلا إذا طابقت حكاية واحدة فقط. */
- var f=norm(it.figure_name),m=[];
- if(f)vStories.forEach(function(s){if(norm(s.person)===f||(s.personAliases||[]).some(function(a){return norm(a)===f}))m.push(s)});
- return m.length===1?m[0]:null;
-}
+/* الربط بالمعرّف الصريح فقط؛ العنوان المتطابق لا يدمج سجلًا في صفحة منشورة. */
+function storyFor(it){return window.KHWorkflow.linkedSite(it,vStories)}
 function siteCard(it){
  var box=el('article','fcard sec-'+(it.section||'october')),head=el('div','fbar');head.style.justifyContent='space-between';
  head.appendChild(el('h3','',''+(it.title||'حكاية بلا عنوان')));
@@ -701,7 +692,7 @@ function siteCard(it){
   box.appendChild(el('p','fnote','سجلات الإرسال المطابقة لهذه الصفحة محفوظة هنا وتُحسب معها مرة واحدة؛ حالة الصفحة المنشورة هي المعتمدة في العدادات.'));
   it.submissions.forEach(function(record){
    var details=document.createElement('details');details.className='fcard';details.style.marginTop='12px';
-   var label=[record.title||'سجل إرسال بلا عنوان',STATUS[record.status]||record.status].filter(Boolean).join(' • ');
+   var label=[record.title||'سجل إرسال بلا عنوان',itemStateLabel(record)].filter(Boolean).join(' • ');
    details.appendChild(el('summary','','سجل إرسال مرتبط: '+label));
    var body=el('div','pbody');body.appendChild(card(record));details.appendChild(body);box.appendChild(details);
   });
@@ -714,7 +705,7 @@ function pubRow(it){
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
- var meta=[STATUS[it.status]||'',dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
@@ -800,7 +791,7 @@ function render(){
  if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
-  return (fStatus==='all'||i.status===fStatus)&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+  return (fStatus==='all'||itemState(i)===fStatus)&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
  });
  if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
