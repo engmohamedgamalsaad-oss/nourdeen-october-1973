@@ -27,7 +27,8 @@ test('admin imports the workflow module and derives status counters', function (
 test('admin links submissions to static pages by explicit identifier only', function () {
   assert.ok(admin.includes('window.KHWorkflow.linkedSite(it,vStories)'));
   assert.ok(!admin.includes('norm(s.title)===t'));
-  assert.ok(admin.includes('items=adminRecords.concat(sitePageItems)'));
+  assert.ok(admin.includes('items=visibleRecords.concat(sitePageItems)'));
+  assert.ok(admin.includes('window.KHWorkflow.linkedSite(record,sitePageItems)'));
 });
 test('published stories cannot be deleted and deleting drafts never hides static pages', function () {
   assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
