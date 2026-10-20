@@ -186,9 +186,11 @@ function renderPreviewHtml(d){
  var base='<base href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/'+section+'/preview/">';
  html=html.replace('<head>','<head>\n'+base);
  /* Keep preview assets available while matching the generated publish template. */
- html=html.replace('<link rel="stylesheet" href="theme.css">','<link rel="stylesheet" href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/005/theme.css"><style>:root{--gold:'+accent+'!important;--accent:'+accent+'!important}.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}</style>');
+ html=html.replace('<link rel="stylesheet" href="theme.css">','<link rel="stylesheet" href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/005/theme.css">');
  var popupSvg=encodeURIComponent(svgCover(d,'preview',accent,true));
- html=html.replace('src="cover-popup.svg"','src="data:image/svg+xml;charset=utf-8,'+popupSvg+'"');
+ var coverData='data:image/svg+xml;charset=utf-8,'+popupSvg;
+ html=html.replace('src="cover-popup.svg"','src="'+coverData+'"');
+ html=html.replace('</head>','<style>:root{--gold:'+accent+'!important;--accent:'+accent+'!important}.hero{background-image:linear-gradient(110deg,rgba(10,13,28,.96),rgba(25,24,49,.72)),url("'+coverData+'")!important}.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}</style></head>');
  var trScript=translatedRows(d,'preview').replace(/<\/script/gi,'<\\/script');
  html=html.replace('<script src="./translations.js"></script>','<script>'+trScript+'</script>');
  html=html.replace('<script src="../../../assets/shared/reactions.js"></script>','');
