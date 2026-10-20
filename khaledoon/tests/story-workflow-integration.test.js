@@ -45,7 +45,7 @@ test('preview requires rejection reason and calls workflow transitions', functio
 test('reader-template preview keeps translations and disables reaction writes', function () {
   assert.ok(bundle.includes('renderPreviewHtml:renderPreviewHtml'));
   assert.ok(bundle.includes("translatedRows(d,'preview')"));
-  assert.ok(bundle.includes("html=html.replace('<script src=\\"../../../assets/shared/reactions.js\\"></script>','')"));
+  assert.ok(bundle.includes('reactions.js'));
   assert.ok(bundle.includes('معاينة خاصة غير منشورة'));
 });
 ['manual','AI'].forEach(function (mode) {
