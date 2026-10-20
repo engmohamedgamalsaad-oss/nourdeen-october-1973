@@ -185,6 +185,10 @@ function renderPreviewHtml(d){
  var key=String(d&&d.section_key||'history'),section=SECTION_MAP[key]||'history',accent=ACCENTS[section]||'#d5b7ff',html=storyHtml(d,'preview',section,accent,'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973');
  var base='<base href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/'+section+'/preview/">';
  html=html.replace('<head>','<head>\n'+base);
+ /* Keep preview assets available while matching the generated publish template. */
+ html=html.replace('<link rel="stylesheet" href="theme.css">','<link rel="stylesheet" href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/005/theme.css"><style>:root{--gold:'+accent+'!important;--accent:'+accent+'!important}.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}</style>');
+ var popupSvg=encodeURIComponent(svgCover(d,'preview',accent,true));
+ html=html.replace('src="cover-popup.svg"','src="data:image/svg+xml;charset=utf-8,'+popupSvg+'"');
  var trScript=translatedRows(d,'preview').replace(/<\/script/gi,'<\\/script');
  html=html.replace('<script src="./translations.js"></script>','<script>'+trScript+'</script>');
  html=html.replace('<script src="../../../assets/shared/reactions.js"></script>','');
