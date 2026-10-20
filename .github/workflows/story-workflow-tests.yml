@@ -30,6 +30,8 @@ jobs:
         run: node khaledoon/tests/story-workflow.test.js
       - name: Run mocked integration contract tests
         run: node khaledoon/tests/story-workflow-integration.test.js
+      - name: Test reader template and collision-safe story IDs
+        run: node khaledoon/tests/story-template-bundle.test.cjs
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium for headless tests
