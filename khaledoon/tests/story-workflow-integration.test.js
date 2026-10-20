@@ -83,7 +83,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
 test('admin validates every translated field and every quiz translation before AI import', function () {
   assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
-  assert.ok(admin.includes('packageCheck.errors.slice(0,8)'));
+  assert.ok(admin.includes('showAiRepair(sourceRaw,packageCheck.errors)'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
 test('manual builder merges metadata and protects original body', function () {
@@ -207,5 +207,18 @@ test('admin project instructions and AI provider prompts require custom layouts 
     assert.equal(W.group([record]).published.length, 1);
     assert.equal(W.ORDER.reduce(function (n, s) { return n + W.group([record])[s].length; }, 0), totalBefore);
   });
+});
+test('AI import failures provide repair instructions and preview records the provider', function () {
+  assert.ok(admin.includes("id='aiRepairPanel'"));
+  assert.ok(admin.includes("showAiRepair(sourceRaw,packageCheck.errors)"));
+  assert.ok(admin.includes("ai_imported_provider_label"));
+  assert.ok(admin.includes("aiRepairPanel.hidden=true;aiRepairText.value=''"));
+  assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
+  assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
+  assert.ok(admin.includes("aiPreviewPopup.location.href='preview.html?story=1&submission='"));
+  assert.ok(admin.includes("['gemini','Gemini']"));
+  assert.ok(preview.includes('id="aiVersionBadge"'));
+  assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
+  assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
