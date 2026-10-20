@@ -801,9 +801,16 @@ function pubRow(it){
  var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
  var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
- var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
- var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
+ var publishStamp='';
+ function findPublishedStamp(record){
+  var review=record&&record.story_meta&&record.story_meta.preview_review;
+  return review&&review.published_confirmed_at?review.published_confirmed_at:'';
+ }
+ publishStamp=findPublishedStamp(it);
+ if(!publishStamp&&Array.isArray(it.submissions)){for(var si=0;si<it.submissions.length&&!publishStamp;si++)publishStamp=findPublishedStamp(it.submissions[si]);}
+ var publishDate='';if(hasSitePage){if(publishStamp){try{var parsedPublishDate=new Date(publishStamp);if(!isNaN(parsedPublishDate.getTime()))publishDate='تاريخ النشر '+parsedPublishDate.toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}}if(!publishDate)publishDate='تاريخ النشر غير مسجل';}
+ var meta=[itemStateLabel(it),publishDate,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
  var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','لا توجد صفحة جاهزة — يلزم تجهيز ملفات الحكاية ورفعها قبل تأكيد النشر.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
