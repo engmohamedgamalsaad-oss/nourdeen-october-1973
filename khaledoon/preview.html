@@ -253,7 +253,33 @@ function renderTranslations(d){
  if(!any)list.appendChild(textBlock('لا توجد ترجمات مسجلة بعد؛ الترجمات الأربع مطلوبة قبل النشر.'));
 }
 
+function normalizeReviewData(d){
+ d=Object.assign({},d||{});
+ var meta=d.story_meta&&typeof d.story_meta==='object'?d.story_meta:{};
+ var record=d.record_data&&typeof d.record_data==='object'?d.record_data:{};
+ var pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:{};
+ function firstText(){for(var i=0;i<arguments.length;i++){var v=arguments[i];if(typeof v==='string'&&v.trim())return v}return ''}
+ d.title=firstText(d.title,pending.title,record.title);
+ d.subtitle=firstText(d.subtitle,pending.subtitle,record.subtitle);
+ d.figure_name=firstText(d.figure_name,pending.figure_name,record.figure_name,record.person);
+ d.body=firstText(d.body,pending.body,record.body);
+ d.original_body=firstText(d.original_body,pending.original_body,meta.original_body,record.original_body);
+ d.karma_text=firstText(d.karma_text,pending.karma_text,meta.karma_text,record.karma_text);
+ d.history_note=firstText(d.history_note,pending.history_note,meta.history_note,record.history_note);
+ d.sources=firstText(d.sources,pending.sources,record.sources,meta.sources);
+ d.images_note=firstText(d.images_note,pending.images_note,meta.images_note,record.images_note);
+ var tr=d.translations;
+ if(!tr||typeof tr!=='object'||!Object.keys(tr).length)tr=pending.translations;
+ if(!tr||typeof tr!=='object'||!Object.keys(tr).length)tr=meta.translations;
+ if(!tr||typeof tr!=='object'||!Object.keys(tr).length)tr=record.translations;
+ d.translations=tr&&typeof tr==='object'?tr:{};
+ d.question_bank_json=firstText(d.question_bank_json,pending.question_bank_json,meta.question_bank_json,record.question_bank_json);
+ if(!d.question_bank_json&&meta.quiz&&typeof meta.quiz==='object')d.question_bank_json=JSON.stringify(meta.quiz);
+ d.story_meta=meta;
+ return d;
+}
 function renderReview(d){
+ d=normalizeReviewData(d);
  currentDraft=d;
  put('reviewTitle',d.title||'حكاية بلا عنوان');put('reviewSubtitle',d.subtitle||'');put('reviewSection',(d.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',d.figure_name||'');
  put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');put('reviewImages',d.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',d.original_body||'');
