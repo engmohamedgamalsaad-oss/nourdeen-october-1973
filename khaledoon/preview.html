@@ -366,50 +366,10 @@ function renderInTemplate(d){
   say('تعرض الآن الحكاية باستخدام قالب القارئ الفعلي. الإعجابات والتفاعلات معطلة في المعاينة، ولم يتم نشر أي شيء.');
   return;
  }
- var section=String(d.section_label||'').toLowerCase(),key=String(d.section_key||'');
- var path=key==='october'||section.indexOf('أكتوبر')>=0||section.indexOf('october')>=0?'../stories/october/001/index.html':
-          key==='science'||section.indexOf('علم')>=0||section.indexOf('science')>=0?'../stories/science/007/index.html':
-          key==='learning'||key==='women'||section.indexOf('نساء')>=0||section.indexOf('women')>=0?'../stories/women/010/index.html':
-          key==='fame'||key==='people'?'../stories/history/006/index.html':
-          '../stories/history/005/index.html';
- frame.setAttribute('sandbox',SAME_ORIGIN_SANDBOX);
- frame.addEventListener('load',function(){
-  try{
-   var doc=frame.contentDocument;if(!doc||!doc.body)return;
-   var accents={october:'#f0c878',science:'#8ad9e8',learning:'#d78bb2',women:'#d78bb2',fame:'#e2b36d',people:'#e2b36d',history:'#d4b7ff',curriculum:'#9bb7ff',readers:'#f5b37e',islamic:'#78c59a'},accent=accents[key]||'#d7ad66';
-   var style=doc.createElement('style');
-   style.textContent=':root{--gold:'+accent+'!important;--lav:'+accent+'!important}.story-intro-modal,[role="dialog"],.reactions-section,.reaction-section,.language-switch{display:none!important}.hero-art{display:none!important}.hero{background:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;background-image:linear-gradient(110deg,rgba(7,13,26,.96),rgba(25,24,49,.88))!important;min-height:360px!important}.hero:after{content:"معاينة غير منشورة"!important}.story{animation:none!important}';
-   doc.head.appendChild(style);
-   doc.title=(d.title||'معاينة الحكاية')+' — معاينة غير منشورة';
-   var t=doc.querySelector('.hero h1,[data-i18n="title"]');if(t)t.textContent=d.title||'حكاية بلا عنوان';
-   var st=doc.querySelector('.hero-subtitle');if(st)st.textContent=d.subtitle||'';
-   var eb=doc.querySelector('.hero .eyebrow');if(eb)eb.textContent=(d.section_label||'خالدون عبر التاريخ')+' • معاينة غير منشورة';
-   var au=doc.querySelector('.author strong');if(au)au.textContent=d.figure_name||'';
-   var storySections=Array.prototype.slice.call(doc.querySelectorAll('main .story'));
-   if(storySections.length){
-    var first=storySections[0].querySelector('.container')||storySections[0];first.innerHTML='';
-    function add(cls,tag,text){var e=doc.createElement(tag);if(cls)e.className=cls;e.textContent=text;first.appendChild(e);return e}
-    add('kicker','div','الحكاية');add('','h2',d.title||'الحكاية');
-    if(d.karma_text){add('kicker','div','كارما الطفلة');String(d.karma_text).split(/\n{2,}/).forEach(function(p){if(p.trim())add('','p',p.trim())})}
-    add('kicker','div','الراوي المعرفي');
-    String(d.body||'لم يُكتب نص الحكاية بعد.').split(/\n{2,}/).forEach(function(p){if(p.trim())add('','p',p.trim())});
-    storySections.slice(1).forEach(function(s){s.hidden=true});
-    if(d.history_note){
-     var hist=doc.createElement('section');hist.className='story';var c=doc.createElement('div');c.className='container';
-     var k=doc.createElement('div');k.className='kicker';k.textContent='في ضوء التاريخ';var hh=doc.createElement('h2');hh.textContent='السياق التاريخي والتحقق';var hp=doc.createElement('p');hp.textContent=d.history_note;
-     c.appendChild(k);c.appendChild(hh);c.appendChild(hp);hist.appendChild(c);
-     var src=doc.querySelector('.sources');if(src)src.parentNode.insertBefore(hist,src);else doc.querySelector('main').appendChild(hist);
-    }
-   }
-   var sources=doc.querySelector('.sources');
-   if(sources){var cont=sources.querySelector('.container')||sources;cont.innerHTML='';var k2=doc.createElement('div');k2.className='kicker';k2.textContent='المصادر والتحقق';var h2=doc.createElement('h2');h2.textContent='مصادر الحكاية';var sp=doc.createElement('p');sp.style.whiteSpace='pre-wrap';sp.textContent=d.sources||'لم تُضف مصادر بعد.';cont.appendChild(k2);cont.appendChild(h2);cont.appendChild(sp)}
-   var end=doc.querySelector('.end');if(end)end.hidden=true;
-   var foot=doc.querySelector('footer');if(foot)foot.textContent='خالدون عبر التاريخ — معاينة غير منشورة';
-   doc.querySelectorAll('a[href*="collections/"]').forEach(function(link){link.addEventListener('click',function(e){e.preventDefault()})});
-   fitHeight(doc);
-  }catch(e){say('تعذر إظهار قالب الحكاية الفعلي في هذه الجلسة؛ استخدم بيانات المراجعة أسفل الإطار.')}
- },{once:true});
- frame.src=path+'?previewMode=1';
+ frame.removeAttribute('src');
+ frame.setAttribute('sandbox','allow-scripts');
+ frame.srcdoc='<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font:16px Arial;line-height:1.8;padding:24px;background:#101820;color:#f5f0e6"><h2>تعذر تحميل قالب القارئ</h2><p>لم يتم عرض حكاية قديمة بدلًا من الحكاية المطلوبة. أعد تحميل الصفحة أو أصلح ملف القالب قبل اعتماد المعاينة.</p></body></html>';
+ say('تعذر تحميل قالب القارئ الفعلي؛ لم يتم استخدام صفحة حكاية قديمة كبديل. لا تعتمد المعاينة حتى إصلاح القالب.');
 }
 
 function showPage(d){
