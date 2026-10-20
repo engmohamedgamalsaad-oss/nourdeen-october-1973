@@ -188,28 +188,29 @@ async function adminToken(){
 function startReview(){
  views.site.hidden=true;views.story.hidden=true;$('reviewView').hidden=false;
  ['nav.tabs','header.top','footer.footer','#introNote'].forEach(function(sel){var n=document.querySelector(sel);if(n)n.hidden=true});
- var requested=params.get('submission'),draft=null;
+ var requested=params.get('submission'),requestedTable=params.get('table')==='submitted_stories'?'submitted_stories':'khaledoon_submissions',draft=null;
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
  if(requested){
   if(!/^[0-9a-f-]{36}$/i.test(requested)){say('رقم سجل المعاينة غير صالح.');lockDecisions();return}
-  if(params.get('dbloaded')!=='1'){say('جارٍ تحميل الحكاية من قاعدة البيانات…');lockDecisions();loadFromDb(requested);return}
-  if(!draft||String(draft.submission_id||'')!==requested)draft=null;
+  if(params.get('dbloaded')!=='1'){say('جارٍ تحميل الحكاية من قاعدة البيانات…');lockDecisions();loadFromDb(requested,requestedTable);return}
+  if(!draft||String(draft.submission_id||'')!==requested||String(draft.submission_table||'khaledoon_submissions')!==requestedTable)draft=null;
  }
  if(!draft){say('لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.');lockDecisions();return}
  renderReview(draft);
 }
 
-async function loadFromDb(id){
+async function loadFromDb(id,requestedTable){
  try{
+  var table=requestedTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions';
   var token=await adminToken();
-  var response=await fetch(SUPA+'/rest/v1/khaledoon_submissions?id=eq.'+encodeURIComponent(id)+'&select=*',{headers:{apikey:KEY,Authorization:'Bearer '+token}});
+  var response=await fetch(SUPA+'/rest/v1/'+table+'?id=eq.'+encodeURIComponent(id)+'&select=*',{headers:{apikey:KEY,Authorization:'Bearer '+token}});
   if(!response.ok)throw new Error('تعذر جلب الحكاية من قاعدة البيانات ('+response.status+').');
   var rows=await response.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية عرضه.');
   var r=rows[0],m=r.story_meta||{};
   if(r.status==='rejected')throw new Error('هذه الحكاية مرفوضة؛ افتحها من سجل الإدارة إذا أردت تعديلها.');
-  /* اعرض نسخة العمل المحفوظة داخل pending_draft لكل الحالات، لا السجل الأصلي فقط. */
-  var source=m.pending_draft?m.pending_draft:r,sm=source.story_meta||m;
-  var loaded={submission_id:r.id,submission_table:'khaledoon_submissions',record_type:'modern',record_data:r,story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||r.section,section_label:source.section_label||sm.section_label||r.section,title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||'',narrator_name:source.narrator_name||r.narrator_name||'',narrator_grade:source.narrator_grade||r.narrator_grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||r.original_body||'',karma_text:source.karma_text||sm.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||r.history_note||'',sources:source.sources||r.sources||'',images_note:source.images_note||r.images_note||'',translations:source.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||'',story_number:source.story_number||sm.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
+  /* اعرض نسخة العمل المحفوظة داخل pending_draft لكل الحالات، مع دعم سجل إرسال القارئ القديم أيضًا. */
+  var source=m.pending_draft?m.pending_draft:r,sm=source.story_meta||m,legacy=table==='submitted_stories';
+  var loaded={submission_id:r.id,submission_table:table,record_type:legacy?'legacy':'modern',record_data:r,story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||(legacy?'october':r.section),section_label:source.section_label||sm.section_label||(legacy?'حكايات أكتوبر 1973':r.section),title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||source.person||'',narrator_name:source.narrator_name||source.student_name||r.narrator_name||r.student_name||'',narrator_grade:source.narrator_grade||source.grade||r.narrator_grade||r.grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||sm.original_body||r.original_body||r.body||'',karma_text:source.karma_text||sm.karma_text||r.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||sm.history_note||r.history_note||'',sources:source.sources||r.sources||sm.sources||'',images_note:source.images_note||sm.images_note||r.images_note||'',images:Array.isArray(source.images)?source.images:(Array.isArray(sm.images)?sm.images:[]),visual_design:source.visual_design||sm.visual_design||'',translations:source.translations||sm.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||r.question_bank_json||'',story_number:source.story_number||sm.story_number||r.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
   localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));
   params.set('dbloaded','1');location.replace(location.pathname+'?'+params.toString());
  }catch(error){say('تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف'));lockDecisions()}
@@ -275,6 +276,8 @@ function normalizeReviewData(d){
  d.translations=tr&&typeof tr==='object'?tr:{};
  d.question_bank_json=firstText(d.question_bank_json,pending.question_bank_json,meta.question_bank_json,record.question_bank_json);
  if(!d.question_bank_json&&meta.quiz&&typeof meta.quiz==='object')d.question_bank_json=JSON.stringify(meta.quiz);
+ if(!Array.isArray(d.images))d.images=Array.isArray(pending.images)?pending.images:(Array.isArray(meta.images)?meta.images:(Array.isArray(record.images)?record.images:[]));
+ d.visual_design=firstText(d.visual_design,pending.visual_design,meta.visual_design,record.visual_design);
  d.story_meta=meta;
  return d;
 }
