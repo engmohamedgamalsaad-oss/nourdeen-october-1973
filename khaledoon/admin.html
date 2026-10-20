@@ -722,10 +722,15 @@ function pubRow(it){
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
- var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','لا توجد صفحة جاهزة — يلزم تجهيز ملفات الحكاية ورفعها قبل تأكيد النشر.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
+ var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','المعاينة معتمدة، لكن ملفات الحكاية لم تُرفع إلى الموقع بعد. افتح المعاينة لمراجعة المحتوى وتجهيز الملفات.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
+ if(it._t!=='site'&&itemState(it)==='awaiting_publish'){
+  var openReview=el('button','btn primary','فتح معاينة القارئ');openReview.type='button';openReview.title='فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
+  openReview.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;var win=window.open(url,'_blank');if(!win)say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');});
+  s.appendChild(openReview);
+ }
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  if(!sv){hb.disabled=true;hb.title=vLoaded?'لا توجد حكاية بهذا العنوان أو باسم هذه الشخصية في قائمة الموقع (stories/index.json) لإخفائها':(vErr||'جارٍ تحميل قائمة حكايات الموقع…')}
  else hb.title=hid?'إظهار الحكاية للزوار من جديد':'إخفاء الحكاية من صفحة الزوار';
@@ -781,7 +786,7 @@ function pubRow(it){
      try{
       var oldMeta=Object.assign({},it.story_meta||{}),oldOriginal=String(it.original_body||oldMeta.original_body||'');
       var translations={};langs.forEach(function(l){var t=pkg.translations[l]||{};translations[l]={enabled:false,status:'draft',student_name:t.student_name||it.student_name||'',grade:t.grade||it.grade||'',title:t.title||'',subtitle:t.subtitle||'',karma_text:t.karma_text||'',body:t.body||'',history_note:t.history_note||'',images_note:t.images_note||''}});
-      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
+      var nextMeta=Object.assign({},oldMeta,{karma_text:String(pkg.karma_text||''),history_note:String(pkg.history_note||''),images_note:String(pkg.images_note||''),visual_design:String(pkg.visual_design||oldMeta.visual_design||''),images:Array.isArray(pkg.images)?pkg.images:(Array.isArray(oldMeta.images)?oldMeta.images:[]),translations:translations,question_bank_json:JSON.stringify(pkg.question_bank),ai_imported_at:new Date().toISOString(),ai_imported_format:'KH_STORY_PACKAGE_V1'});
       nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
       nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null});delete nextMeta.pending_draft;
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
