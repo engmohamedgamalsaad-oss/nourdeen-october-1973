@@ -48,6 +48,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
   assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
   assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
+  assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
 });
 test('manual builder merges metadata and protects original body', function () {
   assert.ok(builder.includes('Object.assign({},currentMeta||{})'));
