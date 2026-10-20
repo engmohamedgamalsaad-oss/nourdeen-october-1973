@@ -36,3 +36,13 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run mocked headless preview tests
         run: node khaledoon/tests/story-workflow-browser.test.cjs
+      - name: Run desktop/mobile admin visual audit with mock data
+        run: node khaledoon/tests/admin-visual-audit.test.cjs
+      - name: Upload admin and builder screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: admin-visual-audit-screenshots
+          path: artifacts/admin-visual-audit/*.png
+          if-no-files-found: warn
+          retention-days: 14
