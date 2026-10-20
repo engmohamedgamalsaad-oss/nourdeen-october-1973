@@ -375,7 +375,8 @@ function legacyCard(it){
  });
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
  delBtn.addEventListener('click',async function(){
-  if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
+  if(it&&it.status==='published'){say('err','الحكايات المنشورة محمية من الحذف؛ استخدم «إخفاء» فقط إذا أردت إخفاءها عن الزوار.');return}
+  if(!confirm('حذف سجل الحكاية من لوحة الإدارة فقط؟ لن تُخفى صفحة الموقع ولن يُحذف أي ملف من GitHub.'))return;
   delBtn.disabled=true;
   try{var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
