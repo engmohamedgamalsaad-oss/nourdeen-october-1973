@@ -91,6 +91,11 @@ html[data-theme="light"]{
   --line:rgba(189,35,55,.3);
   --field:#fff;
 }
+html[data-theme="light"] .stat-button{background:#fffafa;color:#321218}
+html[data-theme="light"] .stat-button span{color:#75464d}
+html[data-theme="light"] .stat-button strong{color:#bd2337}
+html[data-theme="light"] .stat-button[aria-pressed="true"]{background:#bd2337;border-color:#bd2337;color:#fff}
+html[data-theme="light"] .stat-button[aria-pressed="true"] span,html[data-theme="light"] .stat-button[aria-pressed="true"] strong{color:#fff}
 body{
   background:radial-gradient(ellipse at 15% 8%,rgba(190,35,55,.22),transparent 38%),var(--night);
 }
