@@ -1,1 +1,24 @@
 :root{--gold:#d7b878;--ink:#0d222a;--muted:#c9d4d3}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#27434a,#101a21 58%,#080f14);color:#f7f2e7;font-family:Cairo,Tahoma,sans-serif;line-height:2}a{color:var(--gold)}header{position:sticky;top:0;z-index:5;padding:13px clamp(16px,4vw,48px);background:#09171def;border-bottom:1px solid #d7b87844;backdrop-filter:blur(12px)}header a{text-decoration:none;font-weight:800}.hero{min-height:78vh;display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.9fr);align-items:center;gap:30px;padding:clamp(30px,6vw,80px);background:linear-gradient(125deg,#102a33,#101a21 72%)}.hero img{width:100%;max-height:510px;object-fit:contain;border-radius:20px}.eyebrow,.kicker{color:var(--gold);font-weight:900}.hero h1{font:700 clamp(2.2rem,5vw,4.3rem)/1.5 Marhey,Cairo,serif;margin:10px 0;color:#f3dfb0}.hero p{font-size:clamp(1rem,2vw,1.2rem);color:#d7e0df}.story,.sources{padding:clamp(38px,6vw,78px) 20px}.container{width:min(850px,100%);margin:auto}.story h2,.sources h2{font:700 clamp(1.5rem,3.5vw,2.4rem)/1.5 Marhey,Cairo,serif;color:#f3dfb0}.story p{font-size:1.05rem;color:#e0e5e2}.illustration{margin:28px 0;padding:18px;border:1px solid #d7b87855;border-radius:18px;background:#ffffff08}.illustration img{display:block;width:min(100%,720px);max-height:390px;object-fit:contain;margin:auto}.illustration figcaption,.note{font-size:.88rem;color:#c9d4d3}.quote{padding:20px;border-right:4px solid var(--gold);background:#d7b87812;border-radius:12px;color:#f5e6c7}.sources ol{padding-right:24px}.sources li{margin:12px 0}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.actions button{border:1px solid #d7b87888;border-radius:999px;background:#142b33;color:#f7f2e7;padding:10px 18px;font:700 1rem Cairo;cursor:pointer}.actions button:hover{background:#263f45}@media(max-width:720px){.hero{grid-template-columns:1fr;min-height:auto}.hero img{max-height:330px;order:-1}.hero h1{font-size:2.2rem}}@media print{header,.actions{display:none!important}body{background:#fff;color:#111}.hero,.story,.sources{background:#fff;color:#111;padding:20px}.story p,.hero p{color:#222}.hero h1,.story h2,.sources h2{color:#111}}@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Theme toggle and complete light-mode palette for Story 010 */
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.theme-toggle{border:1px solid #d7b87888;border-radius:999px;background:#142b33;color:#f7f2e7;padding:8px 15px;font:700 .92rem Cairo,Tahoma,sans-serif;cursor:pointer}
+.theme-toggle:focus-visible{outline:3px solid #d7b878;outline-offset:3px}
+html[data-theme="light"] body{background:radial-gradient(ellipse at 80% 0%,#fff9e9,#f4efe5 58%,#e9e2d5);color:#203744}
+html[data-theme="light"] header{background:rgba(255,252,246,.97);border-bottom-color:#d8c7a2}
+html[data-theme="light"] header a{color:#79521e}
+html[data-theme="light"] .hero{background:linear-gradient(125deg,#fff4d9,#f4efe5 72%)}
+html[data-theme="light"] .hero h1,html[data-theme="light"] .story h2,html[data-theme="light"] .sources h2{color:#694b1e}
+html[data-theme="light"] .hero p,html[data-theme="light"] .story p{color:#344954}
+html[data-theme="light"] .eyebrow,html[data-theme="light"] .kicker{color:#80551d}
+html[data-theme="light"] a{color:#80551d}
+html[data-theme="light"] .illustration{background:#fffaf0;border-color:#d7c8ad}
+html[data-theme="light"] .illustration figcaption,html[data-theme="light"] .note{color:#4b5c65}
+html[data-theme="light"] .quote{background:#f2e5c9;border-right-color:#a87525;color:#563d1b}
+html[data-theme="light"] .sources{background:rgba(255,255,255,.28)}
+html[data-theme="light"] .theme-toggle{background:#fffdf8;color:#60451d;border-color:#bba16e}
+html[data-theme="light"] .actions button{background:#fffaf0;color:#60451d;border-color:#bba16e}
+html[data-theme="light"] .actions button:hover{background:#f3e5c8}
+html[data-theme="light"] .story-quiz-card,html[data-theme="light"] .story-quiz-section .story-quiz-card{color:#203744}
+html[data-theme="light"] .reactions-wrap{color:#203744}
+@media print{.theme-toggle{display:none!important}}
