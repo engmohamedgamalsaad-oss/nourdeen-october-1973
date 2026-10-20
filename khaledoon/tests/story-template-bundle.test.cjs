@@ -54,7 +54,7 @@ async function main() {
   });
   assert.match(html, /اختبار معاينة القارئ/);
   assert.match(html, /stories\/history\/preview\//);
-  assert.match(html, /data:image\/svg\+xml;charset=utf-8,/);
+  assert.match(html, /cover\.svg/);
   assert.match(html, /معاينة خاصة غير منشورة/);
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
