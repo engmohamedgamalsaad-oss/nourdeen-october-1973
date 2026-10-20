@@ -78,7 +78,9 @@ for (const file of inlineStoryFiles) {
 }
 
 for (const file of translationMaps) {
-  const source = read(file);
+  let source = read(file);
+  // German-only additions are checked separately below; do not mistake prose containing "en:" for a locale field.
+  source = source.replace(/var germanStoryText = \{[\s\S]*?\};/, '');
   // These source maps store Arabic as the key and translations in flat locale objects.
   const objects = (source.match(/\{[^{}]*\}/gs) || []).filter(object => /['\"]?en['\"]?\s*:/.test(object));
   let missing = 0;
