@@ -752,7 +752,7 @@ function pubRow(it){
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
-  if(itemState(it)==='awaiting_publish'){
+  if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'){
     var aiPanel=el('section','review-data');aiPanel.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:14px;background:var(--panel,#10242c);display:grid;gap:10px';
     aiPanel.appendChild(el('h3','','تجهيز الحكاية بالذكاء الاصطناعي'));
     aiPanel.appendChild(el('p','fnote','اختَر الأداة وانسخ ملف الحكاية كاملًا مع البرومبت. بعد أن يعيد الذكاء الاصطناعي كائن JSON، الصقه في المربع بالأسفل واستورده كمسودة. الاستيراد لا ينشر الحكاية، ويعيدها للمراجعة والمعاينة.'));
@@ -792,7 +792,8 @@ function pubRow(it){
      }catch(e){say('err',e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
-   }else{
+   }
+   if(itemState(it)!=='awaiting_publish'){
 var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
   var preview=el('a','btn primary','فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{var table=it._t==='o'?'submitted_stories':'khaledoon_submissions',meta=Object.assign({},it.story_meta||{});if(it.status==='published'){var pending=Object.assign({},meta.pending_draft||it);pending.story_meta=window.KHWorkflow.markPreviewSent(pending.story_meta||meta,new Date());pending.status='pending';delete pending._t;meta.pending_draft=pending}else meta=window.KHWorkflow.markPreviewSent(meta,new Date());var payload={story_meta:meta};if(it.status!=='published')payload.status=it.status==='rejected'?'pending':it.status;var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});if(!saved.ok)throw new Error('تعذر تسجيل إرسال المعاينة ('+saved.status+').');var rows=await saved.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد إرسال المعاينة.');popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
   var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
