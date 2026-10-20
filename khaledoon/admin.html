@@ -377,7 +377,7 @@ function legacyCard(it){
  delBtn.addEventListener('click',async function(){
   if(!confirm('حذف الحكاية نهائيًا من السجل القديم؟'))return;
   delBtn.disabled=true;
-  try{await hideStaticStoryBeforeDelete(it);var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  try{var r=await rest('submitted_stories?id=eq.'+encodeURIComponent(it.id),{method:'DELETE',headers:{Prefer:'return=representation'}});
    if(!r.ok)throw new Error('تعذر الحذف ('+r.status+').');
    var rows=await r.json();if(!rows.length)throw new Error('لم يتم حذف سجل؛ تحقق من صلاحية الأدمن.');
    say('ok','تم حذف حكاية أكتوبر.');await loadList();
@@ -663,16 +663,6 @@ function confirmDelete(it){
  }
  var name=it.title||'حكاية بلا عنوان';
  return confirm('حذف سجل «'+name+'» من لوحة الإدارة فقط؟\n\nلن يتم إخفاء صفحة الموقع أو حذف أي ملف من GitHub. لا يمكن التراجع عن حذف سجل قاعدة البيانات.');
-}
-async function hideStaticStoryBeforeDelete(it){
- if(!vLoaded)await loadVisInner();
- var story=storyFor(it);
- if(!story||story.id==null)return;
- var id=String(story.id);
- if(vHidden[id])return;
- var response=await rest('story_visibility',{method:'POST',headers:{Prefer:'resolution=ignore-duplicates,return=minimal'},body:JSON.stringify({story_id:id})});
- if(!response.ok)throw new Error('تعذر إخفاء صفحة الموقع من قوائم الزوار ('+response.status+'). لم يُحذف سجل الإدارة.');
- vHidden[id]=true;
 }
 async function removeItem(it,btn){
  if(it&&it.status==='published'){say('err','ممنوع حذف سجل حكاية منشورة من هذه القائمة؛ استخدم «إخفاء» فقط.');return}
