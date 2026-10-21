@@ -45,8 +45,18 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 /* وضع مراجعة الحكاية */
 #reviewView.wrap{width:100%;max-width:none;margin:0;padding:0}
 #reviewView>.note{width:min(1180px,calc(100% - 28px));margin:10px auto}
-.actual-page-preview{margin:0 0 18px;overflow:visible;background:transparent}
-.actual-page-preview iframe{display:block;width:100%;height:1000px;min-height:600px;border:0;background:#fff}
+.actual-page-preview{margin:0 0 18px;background:#0b1117;border-bottom:1px solid #2a3540}
+.devbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center;padding:8px 12px;background:#101c26;border-bottom:1px solid #2a3540}
+.devbar .btn{padding:6px 12px;font-size:.9rem}.devbar .btn.on{border-color:#d7ad66;box-shadow:inset 0 -2px #d7ad66}.devbar .srcb{color:#b9c8c8;font-size:.85rem}
+.vstage{display:flex;justify-content:center;align-items:flex-start;background:#0b1117}
+.actual-page-preview iframe{display:block;width:100%;height:max(560px,calc(100vh - 150px));border:0;background:#fff;transition:width .25s ease}
+.actual-page-preview[data-device=tablet] .vstage,.actual-page-preview[data-device=phone] .vstage{padding:14px 0 18px}
+.actual-page-preview[data-device=tablet] iframe{width:820px;max-width:100%;border-radius:14px;box-shadow:0 0 0 8px #1b2a36}
+.actual-page-preview[data-device=phone] iframe{width:390px;max-width:100%;border-radius:22px;box-shadow:0 0 0 9px #1b2a36}
+body.immersive{overflow:hidden}
+body.immersive .actual-page-preview{position:fixed;inset:0;z-index:2000;margin:0;display:flex;flex-direction:column}
+body.immersive .actual-page-preview .vstage{flex:1;min-height:0;align-items:stretch}
+body.immersive .actual-page-preview iframe{height:100%}
 .publish-preview{margin:0 0 22px;overflow:hidden;border-top:1px solid rgba(213,183,120,.24);border-bottom:1px solid rgba(213,183,120,.24);background:#080f19;color:#f3eee5}
 .pub-hero{padding:clamp(22px,4vw,44px) clamp(18px,5vw,68px);background:linear-gradient(115deg,#09131e,#1b2340 68%,#101824);border-bottom:1px solid #55466e}
 .pub-hero-content{max-width:900px}
@@ -69,8 +79,8 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 .pub-actions .btn{min-height:46px;font-weight:800}
 #reviewView .pub-actions #approveStoryBtn{background:linear-gradient(135deg,#f2d59a,#c59aee);color:#171321;border:0}
 @media(min-width:651px){.pub-actions{position:sticky;bottom:0;z-index:5;background:#07141bf2;border-top:1px solid var(--line);padding:12px 0}}
-@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}.actual-page-preview iframe{height:1300px}.pub-actions{flex-direction:column}.pub-actions .btn{width:100%}}
-@media print{.top,.tabs,.note,.pub-actions,.footer,#siteView{display:none!important}body{background:#fff;color:#000}.actual-page-preview iframe{height:auto}}
+@media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}.pub-actions{flex-direction:column}.pub-actions .btn{width:100%}}
+@media print{.top,.tabs,.note,.pub-actions,.footer,#siteView{display:none!important}body{background:#fff;color:#000}}
 </style>
 <style>html{visibility:hidden}</style>
 <script src="assets/admin-tools-auth.js" defer></script>
@@ -120,11 +130,12 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 </section>
 
 <section id="reviewView" class="wrap" hidden>
- <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
+ <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn primary" type="button" id="visitorPreviewBtn" title="يتحقق من الصفحة المنشورة على الموقع، ثم يعرض الحكاية بملء الشاشة كما يراها الزائر">معاينة بشكل الزائر</button></div>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
- <section id="actualPagePreviewWrap" class="actual-page-preview">
-  <iframe id="actualPagePreview" title="صفحة الحكاية — معاينة غير منشورة" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="eager"></iframe>
+ <section id="actualPagePreviewWrap" class="actual-page-preview" data-device="desktop">
+  <div class="devbar" id="devBar"><button class="btn on" type="button" data-dev="desktop">كمبيوتر</button><button class="btn" type="button" data-dev="tablet">تابلت</button><button class="btn" type="button" data-dev="phone">هاتف</button><button class="btn primary" type="button" id="immersiveBtn">ملء الشاشة (Esc للخروج)</button><span class="srcb" id="srcBadge"></span></div>
+  <div class="vstage"><iframe id="actualPagePreview" title="صفحة الحكاية — معاينة غير منشورة" sandbox="allow-scripts allow-same-origin allow-forms allow-popups" loading="eager"></iframe></div>
  </section>
 
  <div class="publish-preview">
@@ -298,8 +309,18 @@ function renderReview(d){
 /* ---------- عرض صفحة الحكاية نفسها داخل الإطار ---------- */
 var frame=$('actualPagePreview');
 var SAME_ORIGIN_SANDBOX='allow-scripts allow-same-origin allow-forms allow-popups';
-function fitHeight(doc){try{frame.style.height=(Math.max(doc.documentElement.scrollHeight,doc.body?doc.body.scrollHeight:0)+40)+'px'}catch(e){}}
-window.addEventListener('message',function(ev){if(ev.source!==frame.contentWindow||!ev.data||ev.data.kh!=='preview-height')return;var h=Number(ev.data.h);if(h>0)frame.style.height=Math.max(600,Math.min(h+30,30000))+'px'});
+/* الإطار المعزول (بلا allow-same-origin) يمنع localStorage فتنهار سكربتات الحكاية؛ نعوّضه بتخزين مؤقت في الذاكرة دون لمس جلسة الأدمن. */
+var STORAGE_SHIM="(function(){function mk(){var m={};return{getItem:function(k){return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null},setItem:function(k,v){m[k]=String(v)},removeItem:function(k){delete m[k]},clear:function(){m={}},key:function(i){return Object.keys(m)[i]||null},get length(){return Object.keys(m).length}}}['localStorage','sessionStorage'].forEach(function(n){try{void window[n]}catch(e){try{Object.defineProperty(window,n,{value:mk(),configurable:true})}catch(e2){}}})})();";
+function badge(t){var e=$('srcBadge');if(e)e.textContent=t||''}
+var wrap=$('actualPagePreviewWrap');
+function setDevice(name){wrap.setAttribute('data-device',name);document.querySelectorAll('#devBar [data-dev]').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-dev')===name)});try{localStorage.setItem('kh-preview-device',name)}catch(e){}}
+function setImmersive(on){document.body.classList.toggle('immersive',!!on);var b=$('immersiveBtn');if(b)b.textContent=on?'خروج من ملء الشاشة (Esc)':'ملء الشاشة (Esc للخروج)'}
+document.querySelectorAll('#devBar [data-dev]').forEach(function(b){b.addEventListener('click',function(){setDevice(b.getAttribute('data-dev'))})});
+$('immersiveBtn').addEventListener('click',function(){setImmersive(!document.body.classList.contains('immersive'))});
+document.addEventListener('keydown',function(ev){if(ev.key==='Escape'&&document.body.classList.contains('immersive'))setImmersive(false)});
+try{var sd=localStorage.getItem('kh-preview-device');if(sd==='tablet'||sd==='phone'||sd==='desktop')setDevice(sd)}catch(e){}
+function fitHeight(){/* الإطار بارتفاع شاشة حقيقية؛ لا نمدّده لارتفاع المحتوى */}
+/* لا تغيير لارتفاع الإطار من رسائل الصفحة: الزائر يرى الصفحة بارتفاع نافذته. */
 function pageHasFeatures(doc){
  var srcs=Array.prototype.map.call(doc.querySelectorAll('script[src]'),function(x){return x.getAttribute('src')||''});
  return !!(doc.body&&doc.body.getAttribute('data-story-slug')&&doc.querySelector('.reactions-section')&&doc.querySelector('#story-quiz-start')&&doc.querySelector('[data-lang-switch],.language-switch')&&srcs.some(function(x){return /translations\.js/i.test(x)})&&srcs.some(function(x){return /story-quiz\.js/i.test(x)})&&srcs.some(function(x){return /reactions\.js/i.test(x)}));
@@ -323,11 +344,14 @@ function loadSitePage(url,d){
  u.searchParams.set('previewMode','1');
  return new Promise(function(resolve,reject){
   frame.setAttribute('sandbox',SAME_ORIGIN_SANDBOX);
+  frame.removeAttribute('srcdoc');/* srcdoc يتغلّب على src: بدون حذفه لا ينتقل الإطار أبدًا للصفحة المنشورة */
+  var loadTimer=setTimeout(function(){reject(new Error('انتهت مهلة تحميل الصفحة من الموقع.'))},20000);
   frame.addEventListener('load',function(){
+   clearTimeout(loadTimer);
    try{
     var doc=frame.contentDocument;
     if(!doc||!doc.body||/not found/i.test(doc.title||''))throw new Error('الصفحة غير موجودة على الموقع بعد.');
-    d.source_preview_loaded=pageHasFeatures(doc);applyTitles(doc,d);addNotice(doc);fitHeight(doc);resolve();
+    d.source_preview_loaded=pageHasFeatures(doc);applyTitles(doc,d);addNotice(doc);badge('المصدر: صفحة منشورة على الموقع');resolve();
    }catch(e){reject(e)}
   },{once:true});
   frame.src=u.href;
@@ -346,6 +370,23 @@ function loadRawPage(url,d){
   try{return new URL(ref,from).href}catch(e){return null}
  }
  function inRepo(u){return !!u&&u.indexOf(REPO_RAW)===0}
+ /* raw.githubusercontent.com يقدّم SVG والخطوط بنوع text/plain فيرفضها المتصفح؛ نقرأ الملف ونضمّنه بنوعه الصحيح داخل الصفحة. */
+ var MIMES={svg:'image/svg+xml',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',gif:'image/gif',webp:'image/webp',avif:'image/avif',ico:'image/x-icon',woff2:'font/woff2',woff:'font/woff',ttf:'font/ttf',otf:'font/otf'};
+ var assetCache={},assetBytes=0,ASSET_LIMIT=14*1024*1024;
+ function mimeOf(u){var m=String(u).split('?')[0].match(/\.([a-z0-9]+)$/i);return m?(MIMES[m[1].toLowerCase()]||null):null}
+ function dataUrl(u){
+  if(assetCache[u])return assetCache[u];var mt=mimeOf(u);if(!mt)return Promise.resolve(null);
+  assetCache[u]=fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.blob()}).then(function(bl){
+   if(bl.size>5*1024*1024||assetBytes+bl.size>ASSET_LIMIT)return null;assetBytes+=bl.size;
+   return new Promise(function(res){var fr=new FileReader();fr.onload=function(){res(String(fr.result).replace(/^data:[^;,]*/,'data:'+mt))};fr.onerror=function(){res(null)};fr.readAsDataURL(bl)});
+  }).catch(function(){return null});
+  return assetCache[u];
+ }
+ function inlineCssAssets(css){
+  var re=/url\("(https:\/\/raw\.githubusercontent\.com\/[^"]+)"\)/g,urls=[];css.replace(re,function(m,u){if(urls.indexOf(u)<0)urls.push(u);return m});
+  if(!urls.length)return Promise.resolve(css);
+  return Promise.all(urls.map(dataUrl)).then(function(res){var map={};urls.forEach(function(u,i){if(res[i])map[u]=res[i]});return css.replace(re,function(m,u){return map[u]?'url("'+map[u]+'")':m})});
+ }
  function fetchText(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text()})}
  function rewriteCss(css,cssUrl){return css.replace(/url\(\s*(['"]?)([^'")]+)\1\s*\)/g,function(m,q,ref){var abs=resolve(ref,cssUrl);return abs?'url("'+abs+'")':m})}
  function inlineCss(css,cssUrl,depth){
@@ -359,18 +400,42 @@ function loadRawPage(url,d){
   var parsed=new DOMParser().parseFromString(sourceHtml,'text/html');
   if(!parsed.body||!parsed.querySelector('html'))throw new Error('ملف HTML غير صالح');
   d.source_preview_loaded=pageHasFeatures(parsed);
-  var jobs=[],deferred=[];
+  var jobs=[],deferred=[],extras=[];
   parsed.querySelectorAll('link[rel~="stylesheet"][href]').forEach(function(link){
    var abs=resolve(link.getAttribute('href'),url);if(!inRepo(abs))return;
-   jobs.push(fetchText(abs).then(function(css){return inlineCss(css,abs,0)}).then(function(css){var st=parsed.createElement('style');st.textContent=css;link.parentNode.replaceChild(st,link)}).catch(function(){}));
+   jobs.push(fetchText(abs).then(function(css){return inlineCss(css,abs,0)}).then(inlineCssAssets).then(function(css){var st=parsed.createElement('style');st.textContent=css;link.parentNode.replaceChild(st,link)}).catch(function(){}));
   });
   Array.prototype.forEach.call(parsed.querySelectorAll('script[src]'),function(sc,idx){
    var abs=resolve(sc.getAttribute('src'),url);if(!inRepo(abs))return;
    var isDefer=sc.hasAttribute('defer');
+   /* reactions.js يحمّل story-extras.js ديناميكيًا من مسار يعتمد على document.currentScript.src (غير متاح للسكربت المضمَّن) ومن raw يُرفض لأنه text/plain؛ نضمّن الملف الشقيق ونعطّل التحميل الديناميكي. */
+   if(/\/reactions\.js(\?.*)?$/.test(abs)){
+    jobs.push(fetchText(abs.replace(/reactions\.js(\?.*)?$/,'story-extras.js')).then(function(code){
+     var x=parsed.createElement('script');x.textContent=code.replace(/<\/script/gi,'<\\/script');extras.push(x);parsed.body.setAttribute('data-disable-story-extras','');
+    }).catch(function(){}));
+   }
    jobs.push(fetchText(abs).then(function(code){
     var n=parsed.createElement('script');n.textContent=code.replace(/<\/script/gi,'<\\/script');
     if(isDefer){sc.parentNode.removeChild(sc);deferred[idx]=n}else sc.parentNode.replaceChild(n,sc);
    }).catch(function(){}));
+  });
+  /* كتل <style> داخل الصفحة وصور <img> وخلفيات style="" تُضمَّن كذلك. */
+  Array.prototype.forEach.call(parsed.querySelectorAll('style'),function(st){
+   var txt=st.textContent||'';if(!/url\(/i.test(txt))return;
+   jobs.push(inlineCssAssets(rewriteCss(txt,url)).then(function(c){st.textContent=c}).catch(function(){}));
+  });
+  Array.prototype.forEach.call(parsed.querySelectorAll('img[src],image[href],source[src]'),function(el){
+   var at=el.hasAttribute('src')?'src':'href',abs=resolve(el.getAttribute(at),url);if(!inRepo(abs))return;
+   jobs.push(dataUrl(abs).then(function(du){el.setAttribute(at,du||abs)}));
+  });
+  /* شاشة بداية الحكاية تُبنى بالـ JS من body[data-splash] كخلفية url(...)؛ المسار النسبي يفشل من raw فنضمّن الصورة. */
+  Array.prototype.forEach.call(parsed.querySelectorAll('[data-splash]'),function(el){
+   var abs=resolve(el.getAttribute('data-splash'),url);if(!inRepo(abs))return;
+   jobs.push(dataUrl(abs).then(function(du){el.setAttribute('data-splash',du||abs)}));
+  });
+  Array.prototype.forEach.call(parsed.querySelectorAll('[style*="url("]'),function(el){
+   var st=el.getAttribute('style')||'';
+   jobs.push(inlineCssAssets(rewriteCss(st,url)).then(function(c){el.setAttribute('style',c)}).catch(function(){}));
   });
   /* مسارات الجذر /nourdeen-october-1973/ في الصور والروابط تتحول إلى مسارات الفرع نفسه. */
   Array.prototype.forEach.call(parsed.querySelectorAll('[src],[poster],link[href]'),function(el){
@@ -378,28 +443,36 @@ function loadRawPage(url,d){
   });
   return Promise.all(jobs).then(function(){
    deferred.forEach(function(n){if(n)parsed.body.appendChild(n)});
+   extras.forEach(function(n){parsed.body.appendChild(n)});
    var base=parsed.querySelector('base')||parsed.createElement('base');base.href=url.slice(0,url.lastIndexOf('/')+1);
    if(parsed.head.firstChild)parsed.head.insertBefore(base,parsed.head.firstChild);else parsed.head.appendChild(base);
+   var shim=parsed.createElement('script');shim.textContent=STORAGE_SHIM;parsed.head.insertBefore(shim,parsed.head.firstChild);
    applyTitles(parsed,d);addNotice(parsed);
    var helper=parsed.createElement('script');
    helper.textContent="(function(){function h(){var b=document.body,e=document.documentElement;parent.postMessage({kh:'preview-height',h:Math.max(e.scrollHeight,b?b.scrollHeight:0)},'*')}addEventListener('load',function(){h();setTimeout(h,1200)});document.addEventListener('click',function(ev){var a=ev.target&&ev.target.closest?ev.target.closest('a[href]'):null;if(!a)return;var href=a.getAttribute('href')||'';if(href.charAt(0)==='#'){ev.preventDefault();var t=document.getElementById(decodeURIComponent(href.slice(1)));if(t&&t.scrollIntoView)t.scrollIntoView({behavior:'smooth'});return}if(a.target!=='_blank')ev.preventDefault()})})();";
    parsed.body.appendChild(helper);
    frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
+   badge('المصدر: صفحة مصممة من ملفات الفرع (غير منشورة)');
    frame.srcdoc='<!doctype html>\n'+parsed.documentElement.outerHTML;
   });
  });
 }
 
 /* لا يوجد رابط صفحة جاهزة: اعرض نص السجل داخل قالب القسم الفعلي. */
+function loadStoryThemeCss(){return fetch('../stories/history/005/theme.css',{cache:'no-store'}).then(function(r){return r.ok?r.text():''}).catch(function(){return ''})}
 function renderInTemplate(d){
  if(window.KHStoryBundle&&typeof window.KHStoryBundle.renderPreviewHtml==='function'){
   frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
-  var html=window.KHStoryBundle.renderPreviewHtml(d);
+  loadStoryThemeCss().then(function(themeCss){
+  var html=window.KHStoryBundle.renderPreviewHtml(d,{themeCss:themeCss});
+  html=html.replace('<head>',function(){return '<head><script>'+STORAGE_SHIM+'<\/script>'});
   /* الإطار بلا allow-same-origin فلا نقدر نقيس ارتفاعه من الخارج؛ الصفحة نفسها ترسل ارتفاعها حتى تظهر كاملة بدون تمرير داخلي. */
   var fit='<script>(function(){var last=0;function h(){var b=document.body,e=document.documentElement,v=Math.max(e.scrollHeight,b?b.scrollHeight:0);if(Math.abs(v-last)<4)return;last=v;parent.postMessage({kh:"preview-height",h:v},"*")}addEventListener("load",function(){h();setTimeout(h,600);setTimeout(h,1800);setTimeout(h,4000)});document.addEventListener("click",function(){setTimeout(h,200);setTimeout(h,900)});document.addEventListener("site-language-change",function(){setTimeout(h,200)})})();<\/script>';
   html=html.indexOf('</body>')>-1?html.replace('</body>',function(){return fit+'</body>'}):html+fit;
+  badge('المصدر: القالب المولَّد (نفس شكل حزمة النشر)');
   frame.srcdoc=html;
   say('تعرض الآن الحكاية باستخدام قالب القارئ الفعلي. الإعجابات والتفاعلات معطلة في المعاينة، ولم يتم نشر أي شيء.');
+  });
   return;
  }
  frame.removeAttribute('src');
@@ -468,7 +541,31 @@ function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submissio
 $('returnToEditBtn').addEventListener('click',returnToAdminForEdit);
 $('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewBtn').addEventListener('click',function(){window.print()});
-$('printReviewTopBtn').addEventListener('click',function(){window.print()});
+/* معاينة بشكل الزائر: يتحقق من الصفحة المنشورة (نفس عنوان الزائر)، وإلا يبقي صفحة الفرع/القالب، ثم يعرضها بملء الشاشة. */
+function visitorPageUrl(d){
+ var m=(d&&d.story_meta&&d.story_meta.preview_review)||{},cands=[d&&d.preview_source_url,m.prepared_page_url],i,c,info;
+ for(i=0;i<cands.length;i++){c=String(cands[i]||'').trim();if(!c)continue;if(c.indexOf(PAGES_ROOT)===0&&c.length>PAGES_ROOT.length)return c;info=derivePagePath(c);if(info)return PAGES_ROOT+info.path}
+ var sp=String(m.static_story_path||'').replace(/^\/+/,'').replace(/^nourdeen-october-1973\//,'').replace(/\/+$/,'');
+ return /^stories\/[a-z0-9-]+\/\d{3}$/i.test(sp)?PAGES_ROOT+sp+'/':'';
+}
+var visitorBusy=false;
+async function visitorPreview(){
+ if(visitorBusy)return;var d=currentDraft;if(!d){say('لا توجد بيانات معاينة محمّلة بعد.');return}
+ var btn=$('visitorPreviewBtn'),label=btn.textContent;visitorBusy=true;btn.disabled=true;btn.textContent='جارٍ التحقق من الصفحة…';
+ try{
+  var url=visitorPageUrl(d),note='';
+  if(url){
+   try{
+    var probe=new URL(url);probe.searchParams.set('previewcheck',String(Date.now()));
+    var r=await fetch(probe.href,{cache:'no-store'});
+    if(r.ok&&/data-story-slug=/.test(await r.text())){d.preview_source_url=url;d.source_preview_loaded=false;await loadSitePage(url,d);note='تعرض الآن الصفحة المنشورة فعلًا على الموقع، كما يراها الزائر.'}
+    else note='الصفحة غير منشورة على الموقع بعد ('+(r.ok?'ليست بالقالب المعتمد':r.status)+'): '+url+' — هذا هو الشكل المتوقع من ملفات الفرع أو القالب.';
+   }catch(e){note='تعذر التحقق من الصفحة المنشورة ('+(e&&e.message?e.message:'خطأ')+') — نعرض الشكل المتوقع من الفرع أو القالب.'}
+  }else note='لم يُسجَّل مسار منشور لهذه الحكاية بعد، فنعرض الشكل المتوقع من ملفات الفرع أو القالب.';
+  say(note);setImmersive(true);
+ }finally{visitorBusy=false;btn.disabled=false;btn.textContent=label}
+}
+$('visitorPreviewBtn').addEventListener('click',visitorPreview);
 if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>

@@ -225,10 +225,19 @@ async function download(draft,opts){
  var blob=zipFiles(files),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='khaledoon-story-'+section+'-'+id+'.zip';a.click();setTimeout(function(){URL.revokeObjectURL(url)},2000);
  return {id:id,section:section,path:root,filename:a.download,files:files.map(function(f){return f.path}),published:opts.approved===true};
 }
-function renderPreviewHtml(d){
+function renderPreviewHtml(d,opts){
+ opts=opts||{};
  var key=String(d&&d.section_key||'history'),section=SECTION_MAP[key]||'history',accent=ACCENTS[section]||'#d5b7ff',html=storyHtml(d,'preview',section,accent,'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973');
  var base='<base href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/'+section+'/preview/">';
  html=html.replace('<head>','<head>\n'+base);
+ /* المعاينة تطابق حزمة النشر: الغلاف والتصميم يُضمَّنان داخل الصفحة (المسار preview/ غير موجود على الموقع فكان theme.css والغلاف يعطيان 404). */
+ var coverUri='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgCover(d,'preview',accent,true));
+ html=html.replace('src="cover-popup.svg"',function(){return 'src="'+coverUri+'"'});
+ if(opts.themeCss){
+  var coverPortrait='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svgCover(d,'preview',accent,false));
+  var themed=String(opts.themeCss).split('url("cover-popup.svg")').join('url("'+coverUri+'")').split('url("cover.svg")').join('url("'+coverPortrait+'")')+'\n:root{--gold:'+accent+'!important;--accent:'+accent+'!important}\n.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}\n';
+  html=html.replace('<link rel="stylesheet" href="theme.css">',function(){return '<style>'+themed.replace(/<\/style/gi,'<\\/style')+'</style>'});
+ }
  var trScript=translatedRows(d,'preview').replace(/<\/script/gi,'<\\/script');
  html=html.replace('<script src="./translations.js"></script>','<script>'+trScript+'</script>');
  html=html.replace('<script src="../../../assets/shared/reactions.js"></script>','');
