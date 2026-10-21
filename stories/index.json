@@ -339,42 +339,6 @@
     "path": "stories/science/007/"
   },
   {
-    "name": "",
-    "grade": "",
-    "className": "",
-    "title": "سميرة موسى — حلم العلم للجميع",
-    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
-    "color": "#d7b878",
-    "order": 10,
-    "published": true,
-    "section": "women",
-    "i18n": {
-      "en": {
-        "title": "Sameera Moussa — Science for Everyone",
-        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity.",
-        "person": "Sameera Moussa"
-      },
-      "fr": {
-        "title": "Sameera Moussa — La science pour tous",
-        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
-        "person": "Sameera Moussa"
-      },
-      "it": {
-        "title": "Sameera Moussa — La scienza per tutti",
-        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità.",
-        "person": "Sameera Moussa"
-      },
-      "de": {
-        "title": "Sameera Moussa — Wissenschaft für alle",
-        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
-        "person": "Sameera Moussa"
-      }
-    },
-    "id": "010",
-    "path": "stories/women/010/",
-    "person": "سميرة موسى"
-  },
-  {
     "name": "مليكة محمد",
     "grade": "الصف الثالث الابتدائي",
     "className": "الصف الثالث الابتدائي",
@@ -471,6 +435,37 @@
     "path": "stories/people/009/"
   },
   {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
+    "published": true,
+    "section": "women",
+    "i18n": {
+      "en": {
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
+      },
+      "fr": {
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
+      },
+      "it": {
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
+      },
+      "de": {
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
+      }
+    },
+    "id": "010",
+    "path": "stories/women/010/"
+  },
+  {
     "name": "نور دين محمد",
     "grade": "الأول الإعدادي",
     "className": "الأول الإعدادي",
@@ -487,7 +482,7 @@
         "className": "First preparatory grade",
         "title": "Naguib Mahfouz: The Writer Who Helped the World Read Egypt",
         "subtitle": "From the old streets of Cairo to the Nobel Prize in Literature",
-        "person": "Naguib Mahfouz"
+        "person": "نجيب محفوظ"
       },
       "fr": {
         "name": "Nour Din Mohamed",
@@ -495,7 +490,7 @@
         "className": "Première année préparatoire",
         "title": "Naguib Mahfouz : l’écrivain qui a fait découvrir l’Égypte au monde",
         "subtitle": "Des vieilles ruelles du Caire au prix Nobel de littérature",
-        "person": "Naguib Mahfouz"
+        "person": "نجيب محفوظ"
       },
       "it": {
         "name": "Nour Din Mohamed",
@@ -503,7 +498,7 @@
         "className": "Primo anno della scuola preparatoria",
         "title": "Naguib Mahfouz: lo scrittore che ha fatto conoscere l’Egitto al mondo",
         "subtitle": "Dalle antiche strade del Cairo al Premio Nobel per la letteratura",
-        "person": "Naguib Mahfouz"
+        "person": "نجيب محفوظ"
       },
       "de": {
         "name": "Nour Din Mohamed",
@@ -511,7 +506,7 @@
         "className": "Erstes Vorbereitungsjahr",
         "title": "Naguib Mahfouz: Der Schriftsteller, der Ägypten der Welt näherbrachte",
         "subtitle": "Von den alten Gassen Kairos bis zum Nobelpreis für Literatur",
-        "person": "Naguib Mahfouz"
+        "person": "نجيب محفوظ"
       }
     },
     "id": "012",
