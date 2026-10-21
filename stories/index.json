@@ -339,42 +339,6 @@
     "path": "stories/science/007/"
   },
   {
-    "name": "",
-    "grade": "",
-    "className": "",
-    "title": "سميرة موسى — حلم العلم للجميع",
-    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
-    "color": "#d7b878",
-    "order": 10,
-    "published": true,
-    "section": "women",
-    "i18n": {
-      "en": {
-        "title": "Sameera Moussa — Science for Everyone",
-        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity.",
-        "person": "Sameera Moussa"
-      },
-      "fr": {
-        "title": "Sameera Moussa — La science pour tous",
-        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
-        "person": "Sameera Moussa"
-      },
-      "it": {
-        "title": "Sameera Moussa — La scienza per tutti",
-        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità.",
-        "person": "Sameera Moussa"
-      },
-      "de": {
-        "title": "Sameera Moussa — Wissenschaft für alle",
-        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
-        "person": "Sameera Moussa"
-      }
-    },
-    "id": "010",
-    "path": "stories/women/010/",
-    "person": "سميرة موسى"
-  },
-  {
     "name": "مليكة محمد",
     "grade": "الصف الثالث الابتدائي",
     "className": "الصف الثالث الابتدائي",
@@ -469,6 +433,37 @@
     "id": "009",
     "section": "people",
     "path": "stories/people/009/"
+  },
+  {
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
+    "published": true,
+    "section": "women",
+    "i18n": {
+      "en": {
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
+      },
+      "fr": {
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
+      },
+      "it": {
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
+      },
+      "de": {
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
+      }
+    },
+    "id": "010",
+    "path": "stories/women/010/"
   },
   {
     "name": "نور دين محمد",
