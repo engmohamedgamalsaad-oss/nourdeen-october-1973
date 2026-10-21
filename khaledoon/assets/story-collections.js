@@ -61,9 +61,12 @@
     cover.loading = 'lazy';
     cover.decoding = 'async';
     var isTawfiqHakimCard = String(story.id || '') === '008' && /^stories\/people\/008\/?$/.test(path);
+    var isNaguibMahfouzCard = ['009', '012'].indexOf(String(story.id || '')) >= 0 && /^stories\/people\/(009|012)\/?$/.test(path);
     var candidates = isTawfiqHakimCard
       ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
-      : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'];
+      : isNaguibMahfouzCard
+        ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_HR.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
+        : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'];
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
