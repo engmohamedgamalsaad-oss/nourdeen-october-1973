@@ -4,32 +4,35 @@ const assert = require('node:assert/strict');
 const parser = require('../assets/ai-json-repair.js');
 
 {
-  const raw = '{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص سليم"}';
+  const raw = String.raw\`{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص سليم"}\`;
   const result = parser.parse(raw);
   assert.equal(result.value.title, 'حكاية');
   assert.equal(result.repaired, false);
 }
 {
-  const raw = '{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"قال "العلم" مهم للناس"}';
+  const raw = String.raw\`{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"قال "العلم" مهم للناس"}\`;
   const result = parser.parse(raw);
   assert.equal(result.value.body, 'قال "العلم" مهم للناس');
   assert.equal(result.repaired, true);
 }
 {
-  const raw = '{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"سطر أول
-سطر ثان"}';
+  const raw = String.raw\`{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"سطر أول
+سطر ثان"}\`;
   const result = parser.parse(raw);
   assert.equal(result.value.body, 'سطر أول\nسطر ثان');
   assert.equal(result.repaired, true);
 }
 {
-  const raw = '```json\n{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص",}\n```';
+  const raw = String.raw\`\`\`json
+{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص",}
+\`\`\`;
   const result = parser.parse(raw);
   assert.equal(result.value.body, 'نص');
   assert.equal(result.repaired, true);
 }
 {
-  const raw = '{"format":"KH_STORY_PACKAGE_V1"\n"title":"حكاية","body":"نص"}';
+  const raw = String.raw\`{"format":"KH_STORY_PACKAGE_V1"
+"title":"حكاية","body":"نص"}\`;
   const result = parser.parse(raw);
   assert.equal(result.value.title, 'حكاية');
   assert.equal(result.repaired, true);
