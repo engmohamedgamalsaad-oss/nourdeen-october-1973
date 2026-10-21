@@ -81,3 +81,35 @@ header a{color:#dce9e4}
 .btn:hover,.print-btn:hover{transform:translateY(-3px);filter:brightness(1.05);box-shadow:0 12px 26px #0005}
 .modal-copy .person-name{margin:0 0 6px}
 @media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;filter:none!important}}
+
+
+/* Mahfouz-specific finish: midnight indigo and parchment, distinct from Tawfiq's teal/gold theme. */
+:root{--accent:#829bd6;--gold:#e7c58b;--mahfouz-cream:#f0edf8}
+body{background:radial-gradient(ellipse at 88% 0%,#303653 0%,#1c2030 42%,#10141d 84%);color:#f0edf8}
+header{background:rgba(18,22,34,.96);border-bottom-color:#829bd650}
+header a{color:#e6e5f1}
+.language-switch .lang-option{border-color:#829bd680;background:#20263a;color:#f5f1ff}
+.language-switch .lang-option.is-active{background:#e7c58b;color:#202338}
+.hero{background:radial-gradient(ellipse at 18% 48%,#46517d 0%,transparent 42%),linear-gradient(120deg,#191e31 0%,#2c3453 52%,#171b27 100%);border-bottom-color:#829bd660}
+.hero:before{opacity:.25;background:repeating-linear-gradient(135deg,transparent 0 42px,#e7c58b10 43px 44px)}
+.hero-art img{border-color:#e7c58b99;background:#171d2a}
+.hero .eyebrow,.story .kicker,.story-quiz-kicker,.person-name{color:#e7c58b}
+.hero h1,.story h2,.story-image-card figcaption strong,.end h2{color:#f0edf8}
+.hero-subtitle{color:#d9dcef}
+.author{color:#d5d8e9}.author strong{color:#e7c58b}
+.cover-label{border-color:#829bd688;color:#f0edf8;background:#151b2ac9}
+.story{border-color:#829bd640;background:linear-gradient(145deg,#262d46ed,#151b28f2)}
+.story:nth-of-type(odd){background:linear-gradient(145deg,#303754ed,#171d2a)}
+.story-visual-gallery{background:linear-gradient(130deg,#171d2d,#303957 55%,#171d29);border-block-color:#829bd650}
+.story-image-card{border-color:#829bd670;background:#dfe5ff08}
+.story-image-card figcaption span,.story-image-card figcaption small{color:#d0d5e8}
+.sources{border-top-color:#829bd650;background:#151925d9}.sources a{color:#e7c58b}
+.story-quiz-card{border-color:#829bd680!important;background:linear-gradient(145deg,#303754,#191f30)!important}
+.story-quiz-start{background:linear-gradient(135deg,#e7c58b,#829bd6)!important;color:#1b2032!important}
+.reactions-section{border-color:#829bd655;background:#20263bde}
+.reaction-btn{border-color:#829bd680!important}
+.reaction-btn.is-selected{background:#e7c58b!important;color:#202338!important}
+.end{background:radial-gradient(ellipse at center,#303957,#151a26 78%)}
+.scroll-reveal{opacity:0;transform:translateY(24px) scale(.992);filter:blur(2px);transition:opacity .72s ease,transform .72s cubic-bezier(.2,.8,.2,1),filter .72s ease}
+.scroll-reveal.is-visible{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+@media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;filter:none!important}}
