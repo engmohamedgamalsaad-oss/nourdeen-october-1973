@@ -1083,7 +1083,7 @@ function setHidden(s,on,btn){
 async function deleteHiddenStory(s,btn){
   if(!s||!vHidden[String(s.id)]){say('err','الحذف متاح للحكايات المخفية فقط. حدّث القائمة أولًا.');return}
   var name=s.title||('الحكاية رقم '+s.id);
-  if(!confirm('حذف «'+name+'» نهائيًا من ملفات الموقع وفهرس الحكايات؟\\n\\nسيُحذف مجلد الحكاية وبنك أسئلتها إن وُجد. لا يمكن التراجع عن هذا الحذف.'))return;
+  if(!confirm('حذف «'+name+'» نهائيًا من ملفات الموقع وفهرس الحكايات؟\n\nسيُحذف مجلد الحكاية وبنك أسئلتها إن وُجد. لا يمكن التراجع عن هذا الحذف.'))return;
   startButtonProgress(btn,'جارٍ الحذف…');
   try{
    await refreshIfNeeded();
