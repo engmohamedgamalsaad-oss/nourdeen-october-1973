@@ -114,6 +114,12 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 .stat-button:hover{border-color:var(--gold)}
 .stat-button[aria-pressed="true"]{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
 .translation-panel>summary,.translation-lang h4{color:var(--gold)}
+
+/* Progress feedback for real asynchronous actions; respects reduced-motion. */
+.kh-progress-active{position:relative!important;overflow:hidden!important;background-image:linear-gradient(90deg,rgba(215,173,102,.08),rgba(215,173,102,.62))!important;background-repeat:no-repeat!important;background-position:left center!important;background-size:0% 100%!important;animation:khProgressFill 1.45s ease-in-out infinite!important;cursor:progress!important}
+.kh-progress-active[aria-busy="true"]{opacity:1!important}
+@keyframes khProgressFill{0%{background-size:0% 100%}82%{background-size:100% 100%}100%{background-size:100% 100%}}
+@media(prefers-reduced-motion:reduce){.kh-progress-active{animation:khProgressFill 3s linear infinite!important}}
 </style>
 </head>
 <body>
@@ -272,6 +278,9 @@ function area(v,rows,max){var t=document.createElement('textarea');t.rows=rows;t
 function sel(map,v,empty){var s=document.createElement('select');if(empty){var o=el('option','',empty);o.value='';s.appendChild(o)}Object.keys(map).forEach(function(k){var o=el('option','',map[k]);o.value=k;if(k===v)o.selected=true;s.appendChild(o)});return s}
 function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}ta.remove();done(ok)}
 
+
+function startButtonProgress(btn,label){if(!btn)return;if(!btn.dataset.khOriginalHtml)btn.dataset.khOriginalHtml=btn.innerHTML;btn.classList.add('kh-progress-active');btn.setAttribute('aria-busy','true');btn.disabled=true;if(label)btn.textContent=label;}
+function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remove('kh-progress-active');btn.removeAttribute('aria-busy');btn.disabled=false;if(btn.dataset.khOriginalHtml){btn.innerHTML=btn.dataset.khOriginalHtml;delete btn.dataset.khOriginalHtml;}if(successLabel)btn.textContent=successLabel;}
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
@@ -279,7 +288,7 @@ async function submitStoryPublishPR(it,btn){
  if(review.publish_commit_sha||review.published_to_main_at){await confirmStoryPublishAfterUpload(it,btn);return}
  if(review.publish_pr_url){window.open(review.publish_pr_url,'_blank','noopener');say('info','هذا سجل قديم له طلب دمج سابق؛ فتحته دون إنشاء طلب جديد.');return}
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
- btn.disabled=true;try{await refreshIfNeeded();
+ startButtonProgress(btn,'جارٍ تجهيز الملفات ورفع الحكاية…');try{await refreshIfNeeded();
  var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
  draft.translations=draft.translations||meta.translations||{};draft.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';
@@ -295,7 +304,7 @@ async function submitStoryPublishPR(it,btn){
  it.story_meta=meta;
  say('info','تم رفع الملفات إلى main. جاري التحقق تلقائيًا من الصفحة والفهرس والصور والترجمات والتفاعلات وبنك الأسئلة…');
  await confirmStoryPublishAfterUpload(it,btn);
- }catch(e){say('err',(e&&e.message?e.message:'تعذر نشر الحكاية')+' — لم أسجلها «تم النشر» دون تحقق.')}finally{btn.disabled=false}
+ }catch(e){say('err',(e&&e.message?e.message:'تعذر نشر الحكاية')+' — لم أسجلها «تم النشر» دون تحقق.')}finally{stopButtonProgress(btn)}
 }
 async function confirmStoryPublishAfterUpload(it,btn){
  btn.disabled=true;
