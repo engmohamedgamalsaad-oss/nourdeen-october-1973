@@ -739,6 +739,12 @@ function pubRow(it){
   openReview.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;var win=window.open(url,'_blank');if(!win)say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');});
   s.appendChild(openReview);
  }
+ /* إظهار خطوة تأكيد النشر مباشرة في سجل الحكاية بعد اعتماد المعاينة، بدل حصرها داخل محرر الحكاية. */
+ if(it._t!=='site'&&pr.decision==='approved_waiting_for_github_upload'){
+  var publishConfirm=el('button','btn primary','تأكيد النشر بعد الرفع');publishConfirm.type='button';publishConfirm.title='يتحقق من الصفحة الحية أولًا، ولا يغيّر الحالة إلى منشورة إذا فشل التحقق.';
+  publishConfirm.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();confirmStoryPublishAfterUpload(it,publishConfirm)});
+  s.appendChild(publishConfirm);
+ }
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  var hw=el('span','hidebtn-wrap');
  if(!sv){
