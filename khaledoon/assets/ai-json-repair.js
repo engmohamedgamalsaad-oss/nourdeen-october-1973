@@ -10,6 +10,8 @@
    - code fences, text before/after the JSON object, BOM, non-breaking / zero-width spaces
    - typographic quotes used around property names
    - truncated output (reply cut by the tool's length limit) is detected and reported clearly
+   - several JSON objects in one paste (the AI repeated its answer, with stray tags such as </escape> or
+     doubled code fences between them): each balanced object is tried and the most complete valid one is used
 
    Prompt side (see the "code-block prompt" section at the end): the copied story prompt asks the AI tool to
    put the JSON inside ONE code block. Copying from a code block keeps the text raw, so Markdown rendering
@@ -194,7 +196,7 @@
     return { value: cleaned, repaired: syntaxRepaired || flag.changed, text: text, notes: notes };
   }
 
-  function parse(input) {
+  function parseSingle(input) {
     var source = stripWrappers(input);
     try {
       return finish(JSON.parse(source), false, source, []);
@@ -225,6 +227,51 @@
         error.truncated = !!hint;
         throw error;
       }
+    }
+  }
+
+  // Every balanced top-level {...} object in the pasted text (string-aware), in order.
+  function topLevelObjects(input) {
+    var text = String(input == null ? '' : input), found = [];
+    var depth = 0, start = -1, inString = false, escaped = false;
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i];
+      if (depth > 0 && inString) {
+        if (escaped) escaped = false;
+        else if (ch === '\\') escaped = true;
+        else if (ch === '"') inString = false;
+        continue;
+      }
+      if (depth > 0 && ch === '"') { inString = true; continue; }
+      if (ch === '{') { if (depth === 0) start = i; depth++; }
+      else if (ch === '}' && depth > 0) {
+        depth--;
+        if (depth === 0 && start >= 0) { found.push(text.slice(start, i + 1)); start = -1; }
+      }
+    }
+    return found;
+  }
+
+  function parse(input) {
+    try {
+      return parseSingle(input);
+    } catch (firstError) {
+      /* The paste may hold the answer twice (the AI repeated it, with stray tags or doubled fences between
+         the copies) or text around it. Try each balanced object; prefer the story package, then the longest. */
+      var candidates = topLevelObjects(input).filter(function (c) { return c.length > 200; });
+      var valid = [];
+      candidates.forEach(function (c) {
+        try { valid.push(parseSingle(c)); } catch (ignore) { /* try the next object */ }
+      });
+      if (!valid.length) throw firstError;
+      var packages = valid.filter(function (r) { return r.value && r.value.format === 'KH_STORY_PACKAGE_V1'; });
+      var pool = packages.length ? packages : valid;
+      var chosen = pool.reduce(function (a, b) { return b.text.length > a.text.length ? b : a; });
+      var notes = chosen.notes.slice();
+      notes.push(candidates.length > 1
+        ? 'وُجد أكثر من كائن JSON في اللصق (نسخة مكررة أو نص زائد بينها)؛ اعتُمد أكبر كائن مكتمل وصالح.'
+        : 'حُذف نص زائد حول كائن JSON.');
+      return { value: chosen.value, repaired: true, text: chosen.text, notes: notes };
     }
   }
 
@@ -264,7 +311,8 @@
     '5. images: صورتان على الأقل؛ url وsource_url يبدأ كل منهما بـ https://، وkind واحدة من archival وillustration وdiagram وmap.\n' +
     '6. question_bank: خمسة أسئلة على الأقل؛ a رقم صحيح بلا علامات اقتباس، وعدد اختيارات كل ترجمة يساوي عدد اختيارات الأصل.\n' +
     '7. داخل قيم النصوص لا تستخدم علامة الاقتباس المزدوجة " (استعمل « ») ولا تضع أسطرًا خامًا؛ استخدم \\n.\n' +
-    '8. افحص الناتج قبل الإرسال: كائن JSON واحد، كل الحقول المطلوبة موجودة، لا فواصل زائدة، والرد غير مقطوع.';
+    '8. لا تكرر الإجابة ولا تضع أي وسوم أو نص (مثل </escape>) داخل الكتلة أو حولها: كتلة json واحدة تحتوي كائنًا واحدًا فقط.\n' +
+    '9. افحص الناتج قبل الإرسال: كائن JSON واحد، كل الحقول المطلوبة موجودة، لا فواصل زائدة، والرد غير مقطوع.';
 
   function toCodeBlockPrompt(text) {
     try {
