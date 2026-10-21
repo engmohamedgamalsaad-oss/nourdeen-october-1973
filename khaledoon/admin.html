@@ -247,7 +247,7 @@ function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemSta
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- var visibleAdminRecords=adminRecords.filter(function(record){return !(record.status==='published'&&window.KHWorkflow.linkedSite(record,sitePageItems))});
+ var visibleAdminRecords=adminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&(record.status==='published'||itemState(record)==='awaiting_publish'))});
  var counts=window.KHWorkflow.counters(visibleAdminRecords,sitePageItems);
  [
   ['سجلات الأدمن',counts.records,'all'],
@@ -267,7 +267,7 @@ function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
  chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k&&!(k==='awaiting_publish'&&window.KHWorkflow.linkedSite(i,sitePageItems))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
@@ -999,7 +999,7 @@ function render(){
  if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
-  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus)))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus&&!(fStatus==='awaiting_publish'&&window.KHWorkflow.linkedSite(i,sitePageItems)))))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
  });
  if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
@@ -1080,7 +1080,23 @@ function setHidden(s,on,btn){
   }catch(e){say('err',e.message||'حدث خطأ.');btn.disabled=false}
  })();
 }
-function vcount(fn){return vStories.filter(fn).length}
+async function deleteHiddenStory(s,btn){
+  if(!s||!vHidden[String(s.id)]){say('err','الحذف متاح للحكايات المخفية فقط. حدّث القائمة أولًا.');return}
+  var name=s.title||('الحكاية رقم '+s.id);
+  if(!confirm('حذف «'+name+'» نهائيًا من ملفات الموقع وفهرس الحكايات؟\\n\\nسيُحذف مجلد الحكاية وبنك أسئلتها إن وُجد. لا يمكن التراجع عن هذا الحذف.'))return;
+  startButtonProgress(btn,'جارٍ الحذف…');
+  try{
+   await refreshIfNeeded();
+   var response=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({story_id:String(s.id).padStart(3,'0')})});
+   var result=await response.json().catch(function(){return {}});
+   if(!response.ok||!result.success)throw new Error(result.detail||result.error||('تعذر الحذف ('+response.status+').'));
+   say('ok',result.message||'تم حذف الحكاية من ملفات الموقع وفهرسها.');
+   if(result.warning)say('err',result.warning);
+   vLoaded=false;await loadVis();await loadList();
+  }catch(e){say('err',e.message||'تعذر حذف الحكاية.');}
+  finally{stopButtonProgress(btn)}
+ }
+ function vcount(fn){return vStories.filter(fn).length}
 function renderVis(){
  var b=$('vstats');b.textContent='';
  [['إجمالي الحكايات',vStories.length],['ظاهرة',vcount(function(s){return !vHidden[String(s.id)]})],['مخفية',vcount(function(s){return vHidden[String(s.id)]})]].forEach(function(x){var c=el('div','stat');c.appendChild(el('span','',x[0]));c.appendChild(el('strong','',String(x[1])));b.appendChild(c)});
@@ -1107,7 +1123,13 @@ function renderVis(){
    if(!h&&!confirm('إخفاء «'+s.title+'» من الموقع لكل الزوار؟'))return;
    setHidden(s,!h,btn);
   });
-  row.appendChild(btn);list.appendChild(row);
+  row.appendChild(btn);
+   if(h){
+    var del=el('button','btn del delbtn','حذف نهائي');del.type='button';del.title='حذف ملفات الحكاية المخفية من الموقع وفهرس الحكايات';
+    del.addEventListener('click',function(){deleteHiddenStory(s,del)});
+    row.appendChild(del);
+   }
+   list.appendChild(row);
  });
 }
 async function enterApp(){
