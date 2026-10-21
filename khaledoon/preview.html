@@ -120,7 +120,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 </section>
 
 <section id="reviewView" class="wrap" hidden>
- <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل أو استيراد نتيجة AI</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
+ <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
  <section id="actualPagePreviewWrap" class="actual-page-preview">
@@ -141,7 +141,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
  </div>
  <div class="note">المعاينة لا تنشر الحكاية. الإعجابات والتفاعلات معطّلة هنا. قبول المعاينة لا يعني النشر؛ النشر خطوة منفصلة بعد رفع الملفات والتحقق من الصفحة الحية.</div>
  <label class="field" style="display:block;margin:12px 0">سبب رفض المعاينة (مطلوب عند الرفض)<textarea id="rejectionReason" rows="3" maxlength="1000" placeholder="اكتب ما الذي يحتاج إلى تعديل"></textarea></label>
- <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">تمت المعاينة بنجاح</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
+ <div class="pub-actions"><button class="btn primary" id="approveStoryBtn" type="button">تمت المعاينة بنجاح</button><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة</button><button class="btn" id="returnToEditBtn" type="button">العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" id="printReviewBtn" type="button">طباعة المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل ملفات الموقع من هذه الصفحة.</footer>
 <script src="assets/story-workflow.js"></script><script src="assets/story-template-bundle.js"></script>
@@ -460,7 +460,7 @@ async function decide(action){
 }
 $('approveStoryBtn').addEventListener('click',function(){decide('approve')});
 $('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
-function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');var target='admin.html'+(id?'?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table):'');if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
+function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');if(table!=='submitted_stories')table='khaledoon_submissions';if(!id){say('لا يوجد رقم سجل مرتبط بهذه المعاينة. ارجع للأدمن وافتح المعاينة من سجل الحكاية حتى نرجع لنفس الحكاية.');return}try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(d));localStorage.setItem('kh-story-preview-context',JSON.stringify(d))}catch(e){}var target='admin.html?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table)+'&returnfrompreview=1';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 $('returnToEditBtn').addEventListener('click',returnToAdminForEdit);
 $('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewBtn').addEventListener('click',function(){window.print()});
