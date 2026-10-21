@@ -164,7 +164,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </section>
 </main>
 <script src="assets/story-workflow.js?v=20261020-4"></script><script src="assets/story-template-bundle.js?v=20261021-publish-pr"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
-<script src="assets/khaledoon-admin-texts.js?v=20261021-4"></script>
+<script src="assets/khaledoon-admin-texts.js?v=20261021-5"></script>
 <script>
 (function(){
 'use strict';
@@ -553,7 +553,7 @@ function makePreviewDraft(statusForPreview){
   L.push(selectedAIInstructions);
   L.push('');
   L.push('================ بوابة الجودة الإلزامية ================');
-  if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-ج')<0)L.push(STORY_QUALITY_GATE);
+  if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-د')<0)L.push(STORY_QUALITY_GATE);
   var managedExtras=(promptManagerState.custom||[]).filter(function(p){if(!p||!String(p.name||'').trim()||!String(p.text||'').trim())return false;var tx=String(p.text).trim();return workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n');
   if(managedExtras){L.push('');L.push('================ تعليمات إضافية محفوظة غير مكررة ================');L.push(managedExtras);}
   L.push('');
@@ -925,7 +925,7 @@ var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-
 }
 var promptProvidersCache=window.STORY_PROVIDER_PROMPTS&&typeof window.STORY_PROVIDER_PROMPTS==='object'?Object.assign({},window.STORY_PROVIDER_PROMPTS):{};
 var promptManagerState={main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),custom:[],providers:Object.assign({},promptProvidersCache),versions:[]};
-function adoptPromptManagerState(raw){if(!raw||typeof raw!=='object')return;var _mk="بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-ج";if(typeof raw.workflow==='string'&&raw.workflow.indexOf(_mk)<0){raw=Object.assign({},raw,{main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),providers:Object.assign({},window.STORY_PROVIDER_PROMPTS||{})})}promptManagerState={main:typeof raw.main==='string'?raw.main:String(STORY_PAGE_PROMPT||''),workflow:typeof raw.workflow==='string'?raw.workflow:String(STORY_WORKFLOW||''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign({},promptProvidersCache,raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};promptProvidersCache=Object.assign({},promptManagerState.providers)}
+function adoptPromptManagerState(raw){if(!raw||typeof raw!=='object')return;var _mk="بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-د";if(typeof raw.workflow==='string'&&raw.workflow.indexOf(_mk)<0){raw=Object.assign({},raw,{main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),providers:Object.assign({},window.STORY_PROVIDER_PROMPTS||{})})}promptManagerState={main:typeof raw.main==='string'?raw.main:String(STORY_PAGE_PROMPT||''),workflow:typeof raw.workflow==='string'?raw.workflow:String(STORY_WORKFLOW||''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign({},promptProvidersCache,raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};promptProvidersCache=Object.assign({},promptManagerState.providers)}
 function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
 function managedPromptSections(providerKey){var lines=[];lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===');lines.push(promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== البرومبت الرئيسي لتطوير صفحة الحكاية — النسخة المحفوظة ===');lines.push(promptManagerState.main||STORY_PAGE_PROMPT||'');var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===');lines.push(extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===');lines.push(promptProvidersCache[providerKey||'chatgpt']||'إذا تعذر الوصول إلى GitHub، أخرج الملفات كاملة مع المسارات وخطوات الرفع اليدوي.');return lines.join('\n\n')}
 async function loadPromptProviders(){
