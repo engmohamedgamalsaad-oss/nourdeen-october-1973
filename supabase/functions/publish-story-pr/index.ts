@@ -138,6 +138,6 @@ Deno.serve(async (req: Request) => {
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر إنشاء طلب الدمج على GitHub.", detail: detail.slice(0, 500) });
+    return reply(502, { error: "تعذر نشر الحكاية مباشرة على GitHub.", detail: detail.slice(0, 500) });
   }
 });
