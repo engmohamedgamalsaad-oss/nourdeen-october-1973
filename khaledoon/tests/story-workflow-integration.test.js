@@ -284,6 +284,9 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(edge.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(edge.includes('map_linked: mapMarkerAdded'));
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
+  assert.ok(admin.includes('map_linked:result.map_linked===true'));
+  assert.ok(admin.includes('map_message:String(result.map_message||\'\')'));
+  assert.ok(admin.includes('(result.map_message?String(result.map_message)+\' \':\'\')'));
 });
 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
