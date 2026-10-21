@@ -808,7 +808,7 @@ function pubRow(it){
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
     });
     /* حفظ النص محليًا لا يستورد الحكاية؛ الاستيراد لا يحدث إلا بزر «تعديل». */
-    aiPaste.addEventListener('input',function(){try{localStorage.setItem(aiPasteStorageKey,aiPaste.value);if(aiPaste.value.trim())localStorage.setItem('kh-story-ai-paste-last',aiPaste.value);else localStorage.removeItem(aiPasteStorageKey)}catch(ignoreAiCacheWrite){}});
+    aiPaste.addEventListener('input',function(){try{if(aiPaste.value.trim()){localStorage.setItem(aiPasteStorageKey,aiPaste.value);localStorage.setItem('kh-story-ai-paste-last',aiPaste.value)}else{localStorage.removeItem(aiPasteStorageKey);localStorage.removeItem('kh-story-ai-paste-last')}}catch(ignoreAiCacheWrite){}});
     aiImport.addEventListener('click',async function(){
      if(aiPasteLocked){aiPasteLocked=false;aiPaste.readOnly=false;aiPaste.focus();say('info','تم فتح خانة الناتج للتعديل أو الإضافة أو مسح الكود بالكامل. اضغط «تعديل» مرة أخرى لتطبيقه وقفل الخانة.');return}
      var sourceRaw=aiPaste.value.trim(),pkg,raw=sourceRaw;if(!raw){say('err','الخانة فارغة. الصق كودًا جديدًا قبل تطبيقه؛ لم يتم تنفيذ أو مسح أي بيانات داخلية.');return}
