@@ -45,3 +45,39 @@ header a{color:#f5dfb9}
 .scroll-reveal.is-visible{opacity:1;transform:none;filter:blur(0)}
 @media(max-width:700px){.hero{min-height:720px;padding:42px 0 285px}.hero .container{width:calc(100% - 30px);padding:0;text-align:center}.hero h1{max-width:none;font-size:clamp(2rem,8vw,3rem)}.hero-art{left:50%;right:auto;top:auto;bottom:18px;transform:translateX(-50%);width:min(62%,280px);height:250px}.hero-art img{width:100%;height:100%;object-fit:contain}.story{padding:36px 16px;margin:14px 10px;border-radius:18px}.story-image-grid{grid-template-columns:1fr}.story-image-card img{height:260px}.story-quiz-section,.reactions-section,.sources,.end{margin:16px 10px}.reactions-section{padding:20px 14px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition:none!important}.scroll-reveal{opacity:1!important;transform:none!important;filter:none!important}}
+
+
+/* Visual refinement: a calmer Cairo-at-night palette, distinct from the burgundy cover */
+:root{--accent:#5b9b9b;--gold:#e6bd78;--mahfouz-cream:#edf2eb}
+body{background:radial-gradient(ellipse at 88% 0%,#24464a 0%,#18272d 40%,#10161b 82%);color:#edf2eb}
+header{background:rgba(15,30,36,.96);border-bottom-color:#e6bd7845}
+header a{color:#dce9e4}
+.language-switch .lang-option{border-color:#5b9b9b80;background:#14272d;color:#eff7f3}
+.language-switch .lang-option.is-active{background:#e6bd78;color:#17272c}
+.hero{background:radial-gradient(ellipse at 18% 48%,#315c5b 0%,transparent 40%),linear-gradient(120deg,#14252c 0%,#233d42 52%,#151d24 100%);border-bottom-color:#5b9b9b55}
+.hero:before{opacity:.22;background:repeating-linear-gradient(135deg,transparent 0 42px,#e6bd780d 43px 44px)}
+.hero-art img{border-color:#e6bd78a0;background:#17252b;box-shadow:0 28px 65px #0009}
+.hero .eyebrow,.story .kicker,.story-quiz-kicker{color:#e6bd78}
+.person-name{color:#e6bd78}
+.hero h1{color:#edf2eb}
+.hero-subtitle{color:#d8e7e3}
+.author{color:#cfdfdb}.author strong{color:#e6bd78}
+.cover-label{border-color:#5b9b9b88;color:#e2eeea;background:#12262bbd}
+.story{border-color:#5b9b9b40;background:linear-gradient(145deg,#20373be8,#151f25ef);box-shadow:0 18px 42px #0003}
+.story:nth-of-type(odd){background:linear-gradient(145deg,#263e40e8,#172229)}
+.story h2{color:#eaf0e8}
+.story-visual-gallery{background:linear-gradient(130deg,#142329,#254044 55%,#151f25);border-block-color:#5b9b9b50}
+.story-image-card{border-color:#5b9b9b70;background:#d9eeea08}
+.story-image-card figcaption strong{color:#eaf0e8}
+.story-image-card figcaption span,.story-image-card figcaption small{color:#c4d9d5}
+.story-quiz-card{border-color:#5b9b9b80!important;background:linear-gradient(145deg,#263f42,#172329)!important}
+.story-quiz-start{background:linear-gradient(135deg,#e6bd78,#5b9b9b)!important;color:#15272c!important}
+.reactions-section{border-color:#5b9b9b55;background:#1b3035d9}
+.reaction-btn{border-color:#5b9b9b85!important}
+.reaction-btn.is-selected{background:#e6bd78!important;color:#17272c!important}
+.end{background:radial-gradient(ellipse at center,#2b4c4d,#131d23 78%)}
+.end h2{color:#edf2eb}
+.btn,.print-btn{transition:transform .25s ease,box-shadow .25s ease,filter .25s ease}
+.btn:hover,.print-btn:hover{transform:translateY(-3px);filter:brightness(1.05);box-shadow:0 12px 26px #0005}
+.modal-copy .person-name{margin:0 0 6px}
+@media(prefers-reduced-motion:reduce){.scroll-reveal{opacity:1!important;transform:none!important;filter:none!important}}

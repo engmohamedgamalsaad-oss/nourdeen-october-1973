@@ -79,6 +79,10 @@
     var number = node('div', 'num', story.id || '');
     card.appendChild(number);
     var content = node('div', 'story-index-copy');
+    if (['008', '009'].indexOf(String(story.id || '')) >= 0 && /^stories\/people\/(008|009)\/?$/.test(path)) {
+      var person = localized(story, 'person');
+      if (person) content.appendChild(node('span', 'story-index-person', person));
+    }
     content.appendChild(node('h3', '', localized(story, 'title') || ui.read));
     var subtitle = localized(story, 'subtitle');
     if (subtitle) content.appendChild(node('p', '', subtitle));
