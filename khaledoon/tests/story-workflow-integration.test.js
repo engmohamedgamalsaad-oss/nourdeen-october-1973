@@ -20,7 +20,7 @@ function mockPatch(record, patch) {
   return Object.assign({}, record, patch);
 }
 test('admin imports the workflow module and derives status counters', function () {
-  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261020-4"'));
+  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261021-map-auto-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
@@ -40,9 +40,38 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(fn.includes('اللغات الخمس كاملة'));
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
-  assert.ok(admin.includes('visual_design, images, translations, question_bank'));
+  assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
+  assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'), 'verified map metadata must survive AI package import');
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
+});
+test('strict story prompt gate is shared across providers and old AI output is not copied', function () {
+  assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
+  assert.ok(admin.includes("if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')<0)L.push(STORY_QUALITY_GATE)"));
+  assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
+  assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261021-6"));
+  var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  ['cover-popup','prefers-reduced-motion','الإيطالية والألمانية','الصورة التفاعلية','إحداثيات','الربط التلقائي بالخريطة التفاعلية','stories/places.json','دون تعديل يدوي لاحق','سجلات يتيمة'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing gate requirement: '+needle); });
+  var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
+  assert.ok(dataGate.includes('أرسل map_location دائمًا'));
+  assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
+  assert.ok(dataGate.includes('map_location'));
+  assert.ok(dataGate.includes('stories/places.json'));
+  ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
+  var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html', 'utf8');
+  assert.ok(promptAdmin.includes('<option value="gemini">Gemini</option>'));
+});
+test('story publishing safely links verified map locations without overwriting existing map entries', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('path === "stories/index.json" || path === "stories/places.json"'));
+  assert.ok(publisher.includes("file.path !== 'stories/places.json'"));
+  assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(publisher.includes("['ar','en','fr','it','de'].some"));
+  assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
+  var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  assert.ok(shared.includes('الربط التلقائي بالخريطة التفاعلية'));
+  assert.ok(shared.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
 });
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
@@ -149,7 +178,7 @@ test('AI story package validation requires a design profile and at least two doc
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
     history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
     body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
-    visual_design:'science-lab',
+    visual_design:'science-lab', map_location:null,
     images:[
       {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A'}]}))},
       {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image B',caption:'Caption B'}]}))}
@@ -226,4 +255,35 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
+test('story prompt requires automatic interactive-map linkage with no orphan or duplicate markers', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.ok(texts.includes('الربط التلقائي بالخريطة التفاعلية'));
+  assert.ok(texts.includes('دون طلب إضافة يدوية منفصلة'));
+  assert.ok(texts.includes('اربط العلامة مباشرة برابط صفحة الحكاية الصحيح'));
+  assert.ok(texts.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
+  assert.ok(texts.includes('لا تعتبر وجود الحكاية في فهرس القصص وحده دليلًا على الربط بالخريطة'));
+  assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو مصدرًا أو رابطًا'));
+  assert.ok(texts.includes('تلتقطها آلية الفهرسة والخريطة التفاعلية تلقائيًا'));
+  assert.ok(texts.includes('ولا تدّعِ اكتماله'));
+});
+
+test('verified map_location is carried from AI import into bundle and merged safely on publish', function () {
+  var workflow = fs.readFileSync('khaledoon/assets/story-workflow.js','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
+  var edge = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(workflow.includes("hasOwnProperty.call(pkg, 'map_location')"));
+  assert.ok(workflow.includes('اسم المكان في map_location مطلوب باللغات الخمس'));
+  assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'));
+  assert.ok(admin.includes('draft.map_location=meta.map_location'));
+  assert.ok(bundle.includes("files.push({path:'stories/places.json'"));
+  assert.ok(bundle.includes('hasMapMeta'));
+  assert.ok(bundle.includes('تعذر قراءة stories/places.json'));
+  assert.ok(edge.includes('stories/places.json is required so publishing can synchronize the interactive map automatically'));
+  assert.ok(edge.includes('delete currentPlaces[storyId]'));
+  assert.ok(edge.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(edge.includes('map_linked: mapMarkerAdded'));
+  assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));

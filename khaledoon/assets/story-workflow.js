@@ -210,6 +210,30 @@ function validateStoryPackage(pkg) {
   textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
   var designOptions = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
   if (designOptions.indexOf(String(pkg.visual_design || '')) < 0) errors.push('اختر تصميمًا بصريًا مخصصًا من قائمة visual_design.');
+  /* الخريطة التفاعلية: يجب أن يختار المولّد موقعًا موثقًا أو يصرّح صراحة بعدم توفره. */
+  if (!Object.prototype.hasOwnProperty.call(pkg, 'map_location')) {
+    errors.push('حقل map_location مطلوب: أرسل null عند عدم توفر موقع موثق، أو كائن موقع مكتمل.');
+  } else if (pkg.map_location !== null) {
+    var mapLoc = pkg.map_location;
+    if (!isObj(mapLoc)) {
+      errors.push('map_location يجب أن يكون null أو كائن موقع موثق.');
+    } else {
+      if (typeof mapLoc.lat !== 'number' || !Number.isFinite(mapLoc.lat) || mapLoc.lat < -90 || mapLoc.lat > 90 ||
+          typeof mapLoc.lng !== 'number' || !Number.isFinite(mapLoc.lng) || mapLoc.lng < -180 || mapLoc.lng > 180) {
+        errors.push('map_location يحتاج lat وlng رقميين ضمن حدود الإحداثيات الصحيحة.');
+      }
+      if (!isObj(mapLoc.place) || ['ar','en','fr','it','de'].some(function (l) {
+        return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim();
+      })) errors.push('اسم المكان في map_location مطلوب باللغات الخمس ar/en/fr/it/de.');
+      if (typeof mapLoc.source_name !== 'string' || !mapLoc.source_name.trim() ||
+          typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
+        errors.push('map_location يحتاج اسم مصدر ورابط مصدر موثوقًا قابلًا للفتح.');
+      }
+      if (mapLoc.approximate !== undefined && typeof mapLoc.approximate !== 'boolean') {
+        errors.push('map_location.approximate يجب أن تكون true أو false.');
+      }
+    }
+  }
   var images = Array.isArray(pkg.images) ? pkg.images : [];
   var validImages = images.filter(function (im) {
     if (!isObj(im)) return false;

@@ -228,6 +228,27 @@ async function download(draft,opts){
   {path:root+'original.md',content:'# النص الأصلي كما وصل دون تعديل\n\n'+String(draft.original_body||'لم يُرفق النص الأصلي.')+'\n'},
   {path:root+'editorial-notes.md',content:'# ملاحظات التحرير والتحقق\n\n## السياق التاريخي والتحقق\n\n'+String(draft.history_note||'لم تُضف ملاحظات تحقق.')+'\n\n## الصور وحقوق الاستخدام\n\n'+String(draft.images_note||'لم تُسجل معلومات الصور وحقوقها؛ يلزم استكمالها قبل النشر.')+'\n'}
  ];
+ // مزامنة ملف الخريطة الكامل، مع إبقاء المواقع الأخرى كما هي. خادم النشر يدمج سجل هذه الحكاية مع أحدث main.
+ var hasMapMeta=!!(draft.story_meta&&Object.prototype.hasOwnProperty.call(draft.story_meta,'map_location'))||Object.prototype.hasOwnProperty.call(draft,'map_location');
+ var mapLocation=Object.prototype.hasOwnProperty.call(draft,'map_location')?draft.map_location:(draft.story_meta&&draft.story_meta.map_location);
+ var mapResponse=await fetch('../stories/places.json?bundle='+Date.now(),{cache:'no-store'});
+ if(!mapResponse.ok)throw new Error('تعذر قراءة stories/places.json؛ أوقفنا إنشاء الحزمة لحماية علامات الخريطة الحالية.');
+ var mapData=await mapResponse.json();
+ if(!mapData||typeof mapData!=='object'||Array.isArray(mapData))throw new Error('ملف stories/places.json ليس كائن JSON صالحًا.');
+ if(hasMapMeta){
+  if(mapLocation===null){delete mapData[id];}
+  else{
+   if(!mapLocation||typeof mapLocation!=='object'||Array.isArray(mapLocation))throw new Error('map_location يجب أن يكون null أو كائن موقع موثق.');
+   var mapLat=mapLocation.lat,mapLng=mapLocation.lng;
+   if(typeof mapLat!=='number'||!Number.isFinite(mapLat)||mapLat < -90||mapLat > 90||typeof mapLng!=='number'||!Number.isFinite(mapLng)||mapLng < -180||mapLng > 180)throw new Error('إحداثيات الخريطة غير صالحة؛ لا تُخترع الإحداثيات.');
+   if(!mapLocation.place||['ar','en','fr','it','de'].some(function(l){return typeof mapLocation.place[l]!=='string'||!mapLocation.place[l].trim()}))throw new Error('اسم المكان مطلوب باللغات الخمس ar/en/fr/it/de.');
+   if(typeof mapLocation.source_name!=='string'||!mapLocation.source_name.trim()||typeof mapLocation.source_url!=='string'||!/^https:\/\//i.test(mapLocation.source_url.trim()))throw new Error('مصدر المكان ورابطه مطلوبان قبل إضافته للخريطة.');
+   if(mapLocation.approximate!==undefined&&typeof mapLocation.approximate!=='boolean')throw new Error('حقل approximate يجب أن يكون true أو false.');
+   mapData[id]={lat:mapLat,lng:mapLng,place:mapLocation.place,source_name:mapLocation.source_name.trim(),source_url:mapLocation.source_url.trim()};
+   if(mapLocation.approximate===true)mapData[id].approximate=true;
+  }
+ }
+ files.push({path:'stories/places.json',content:JSON.stringify(mapData,null,2)+'\n'});
  var readme='# حزمة حكاية خالدون — '+draft.title+'\n\n'+
   '- المعرّف المقترح: '+id+'\n- القسم: '+section+'\n- المسار: '+root+'\n- الحالة في data.json: published=true لأن هذه الحزمة أُنشئت بعد قبول المعاينة.\n\n'+
   '## الرفع من GitHub\n1. افتح مستودع engmohamedgamalsaad-oss/nourdeen-october-1973.\n2. ارفع كل الملفات مع الحفاظ على المسارات داخل الحزمة؛ لا تضعها داخل مجلد ZIP إضافي.\n3. ارفع index.html وtheme.css وdata.json وtranslations.js وملفي الغلاف إلى '+root+'.\n4. ارفع ملف stories/index.json المرفق أيضًا حتى تظهر الحكاية في قسمها. هذا الملف مبني على الفهرس الذي قرأه النظام وقت إنشاء الحزمة؛ قبل استبداله افتح النسخة الحالية وتأكد أنها لم تتغير منذ ذلك الوقت، ولا تستبدل فهرسًا أحدث. إذا تغير، أضف فقط العنصر الجديد الذي يحمل id '+id+' إلى النسخة الحالية.\n5. ارفع بنك الأسئلة إلى stories/quizzes/'+id+'.json، والمصادر إلى '+root+'sources.md.\n6. انتظر GitHub Actions، وتحقق من صفحة الحكاية الحية وظهورها في القسم. لا تغيّر حالة سجل الإدارة إلى منشور قبل نجاح التحقق.\n7. ارجع إلى لوحة الإدارة واضغط «تأكيد النشر بعد الرفع».\n\n## تنبيهات\n- الغلافان رسوم توضيحية برمجية وليسا صورًا تاريخية أرشيفية. استبدلهما بصور موثقة فقط بعد التحقق من الترخيص.\n- عند مراجعة حكاية منشورة، يحافظ المولّد على رقمها ومسارها إذا كانا محفوظين في سجل المعاينة؛ ارفع الملفات داخل المجلد نفسه ولا تنشئ مجلدًا جديدًا للحكاية ذاتها.\n- راجع المسار والرقم مقابل stories/index.json قبل الرفع إذا جرى اعتماد حكاية أخرى بالتزامن، ولا تستبدل فهرسًا أحدث من الفهرس المرفق.\n- هذه الحزمة لا تعدّل قاعدة البيانات ولا تنشر بنفسها؛ الرفع إلى GitHub خطوة منفصلة.\n';

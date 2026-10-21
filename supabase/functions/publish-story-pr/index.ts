@@ -18,7 +18,7 @@ const reply = (status: number, data: Record<string, unknown>) =>
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").includes("..")) return false;
-  if (path === "stories/index.json") return true;
+  if (path === "stories/index.json" || path === "stories/places.json") return true;
   if (/^stories\/quizzes\/[0-9]{3}\.json$/.test(path)) return true;
   if (!/^stories\/[a-z0-9-]+\/[0-9]{3}\/[A-Za-z0-9._/-]+$/.test(path)) return false;
   return ["html","json","css","js","svg","png","jpg","jpeg","webp","avif","woff2","md"].includes(path.split(".").pop()?.toLowerCase() ?? "");
@@ -93,7 +93,7 @@ Deno.serve(async (req: Request) => {
     const pathMatch = storyPage.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
     const storySection = pathMatch[1], storyId = pathMatch[2], storyRoot = 'stories/' + storySection + '/' + storyId + '/';
     for (const file of body.files) {
-      if (file.path !== 'stories/index.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
+      if (file.path !== 'stories/index.json' && file.path !== 'stories/places.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
         throw new Error('A file is outside the selected story folder; refusing to modify unrelated stories.');
       }
     }
@@ -122,7 +122,68 @@ Deno.serve(async (req: Request) => {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
     }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
-    const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' } : file);
+    // Keep the interactive map synchronized on every publish; merge into the latest main file.
+    const incomingPlacesFile = body.files.find((file: any) => file.path === 'stories/places.json');
+    if (!incomingPlacesFile) {
+      throw new Error('stories/places.json is required so publishing can synchronize the interactive map automatically.');
+    }
+    let incomingPlaces: any;
+    try { incomingPlaces = JSON.parse(incomingPlacesFile.content); }
+    catch { throw new Error('stories/places.json must contain valid JSON.'); }
+    if (!incomingPlaces || typeof incomingPlaces !== 'object' || Array.isArray(incomingPlaces)) {
+      throw new Error('stories/places.json must contain a JSON object keyed by story ID.');
+    }
+    const hasStoryPlace = Object.prototype.hasOwnProperty.call(incomingPlaces, storyId);
+    const place = hasStoryPlace ? incomingPlaces[storyId] : undefined;
+    const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
+    const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
+    const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
+    if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
+      throw new Error('Current stories/places.json must be an object.');
+    }
+    let mapMarkerAdded = false;
+    if (hasStoryPlace && place === null) {
+      // Explicit null means the story has no verified location; remove a stale marker.
+      delete currentPlaces[storyId];
+    } else if (hasStoryPlace) {
+      if (!place || typeof place !== 'object' || Array.isArray(place)) {
+        throw new Error('Map location must be a verified object or explicit null when no verified location exists.');
+      }
+      const lat = place.lat, lng = place.lng;
+      if (typeof lat !== 'number' || !Number.isFinite(lat) || lat < -90 || lat > 90 ||
+          typeof lng !== 'number' || !Number.isFinite(lng) || lng < -180 || lng > 180) {
+        throw new Error('Map coordinates must be numeric and within valid latitude/longitude ranges.');
+      }
+      if (!place.place || typeof place.place !== 'object' ||
+          ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim())) {
+        throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
+      }
+      const previousPlace = currentPlaces[storyId];
+      const unchangedLegacyPlace = !!previousPlace &&
+        Number(previousPlace.lat) === lat && Number(previousPlace.lng) === lng &&
+        JSON.stringify(previousPlace.place) === JSON.stringify(place.place) &&
+        Boolean(previousPlace.approximate) === Boolean(place.approximate) &&
+        !String(place.source_name || '').trim() && !String(place.source_url || '').trim();
+      if (!unchangedLegacyPlace &&
+          (typeof place.source_name !== 'string' || !place.source_name.trim() ||
+           typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim()))) {
+        throw new Error('Map location must include a source name and HTTPS source URL unless preserving an unchanged legacy map entry.');
+      }
+      if (place.approximate !== undefined && typeof place.approximate !== 'boolean') {
+        throw new Error('Map approximate flag must be boolean when provided.');
+      }
+      currentPlaces[storyId] = { ...place, lat, lng };
+      mapMarkerAdded = true;
+    } else {
+      // Older records without map metadata preserve any existing verified marker.
+      mapMarkerAdded = !!currentPlaces[storyId];
+    }
+    const mergedPlacesContent = JSON.stringify(currentPlaces, null, 2) + '\n';
+    const safeFiles = body.files.map((file: any) => {
+      if (file.path === 'stories/index.json') return { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' };
+      if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
+      return file;
+    });
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
@@ -144,6 +205,8 @@ Deno.serve(async (req: Request) => {
     return reply(201, {
       success: true, published_to_main: true, commit_sha: commit.sha,
       story_id: storyId, story_path: normalizedRoot, page_url: pageUrl,
+      map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded ? "تم تحديث علامة الحكاية في الخريطة التفاعلية." : "تم تحديث بيانات الخريطة؛ لم تُضف علامة جغرافية لأن الحكاية لا تحتوي على موقع موثق.",
       message: "تم رفع ملفات الحكاية مباشرة إلى main؛ جارٍ التحقق من ظهورها على الموقع."
     });
   } catch (error) {
