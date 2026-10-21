@@ -23,7 +23,7 @@ const parser = require('../assets/ai-json-repair.js');
 }
 {
   const fence = String.fromCharCode(96).repeat(3);
-  const raw = fence + 'json\\n{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص",}\\n' + fence;
+  const raw = fence + 'json' + String.fromCharCode(10) + '{"format":"KH_STORY_PACKAGE_V1","title":"حكاية","body":"نص",}' + String.fromCharCode(10) + fence;
   const result = parser.parse(raw);
   assert.equal(result.value.body, 'نص');
   assert.equal(result.repaired, true);
