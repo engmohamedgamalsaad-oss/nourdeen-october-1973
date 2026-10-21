@@ -9,7 +9,11 @@
    - unescaped double quotes inside prose, trailing commas, a missing comma between properties
    - code fences, text before/after the JSON object, BOM, non-breaking / zero-width spaces
    - typographic quotes used around property names
-   - truncated output (reply cut by the tool's length limit) is detected and reported clearly */
+   - truncated output (reply cut by the tool's length limit) is detected and reported clearly
+
+   Prompt side (see the "code-block prompt" section at the end): the copied story prompt asks the AI tool to
+   put the JSON inside ONE code block. Copying from a code block keeps the text raw, so Markdown rendering
+   cannot inject stray backslashes or asterisks into the JSON in the first place. */
 (function (root) {
   'use strict';
 
@@ -224,7 +228,68 @@
     }
   }
 
-  var api = { parse: parse };
+  /* ---- code-block prompt -------------------------------------------------------------------
+     The story-package prompt used to say "no Markdown, no code fences". Chat UIs render Markdown, so
+     copying the rendered reply re-introduced \* and \_ into the JSON. The prompt now asks for ONE code
+     block (copying from a code block is raw text). The sentences live inside admin.html's prompt
+     builder; each [old, new] pair below swaps one of them at copy time. A test asserts every `old`
+     sentence still exists in admin.html, so a future edit there cannot silently disable this. */
+  var FENCE = '\x60\x60\x60';
+  var PROMPT_MARKER = 'KH_STORY_PACKAGE_V1';
+  var PROMPT_RULES = [
+    ['أخرج JSON صالحًا واحدًا فقط بلا Markdown أو مقدمة أو خاتمة.',
+      'ضع الناتج كله داخل كتلة كود واحدة من نوع json (' + FENCE + 'json في البداية و ' + FENCE + ' في النهاية) تحتوي كائن JSON صالحًا واحدًا فقط، بلا أي نص قبلها أو بعدها، حتى لو طال الناتج. لا تستخدم علامات Markdown (مثل ** أو # أو _) داخل قيم النصوص، ولا تضع شرطة مائلة عكسية إلا حيث يتطلبها JSON.'],
+    ['أخرج الحزمة وفق المخطط فقط؛ لا تضف شرحًا خارج JSON.',
+      'أخرج الحزمة وفق المخطط داخل كتلة كود json واحدة فقط؛ لا تضف شرحًا خارج الكتلة.'],
+    ['أخرج كائن JSON واحدًا صالحًا للاستيراد فقط، بلا Markdown أو مقدمة أو خاتمة.',
+      'أخرج كائن JSON واحدًا صالحًا للاستيراد داخل كتلة كود json واحدة فقط، بلا مقدمة أو خاتمة خارجها.'],
+    ['قبل إخراج JSON؛ لا تضف Markdown أو نصًا خارجه.',
+      'قبل إخراج JSON داخل كتلة كود واحدة؛ لا تضف نصًا خارجها.'],
+    ['أخرج JSON صالحًا فقط بلا Markdown أو أسوار كود أو مقدمة أو خاتمة.',
+      'أخرج JSON صالحًا فقط داخل كتلة كود json واحدة، بلا مقدمة أو خاتمة خارجها.']
+  ];
+
+  function toCodeBlockPrompt(text) {
+    try {
+      if (typeof text !== 'string' || text.indexOf(PROMPT_MARKER) < 0) return text;
+      var out = text;
+      PROMPT_RULES.forEach(function (rule) { out = out.split(rule[0]).join(rule[1]); });
+      return out;
+    } catch (ignore) {
+      return text; // never block copying because of this helper
+    }
+  }
+
+  // Applies the rewrite at the two copy sinks admin.html uses (Clipboard API and the textarea fallback).
+  function installPromptPatch(win) {
+    try {
+      var nav = win && win.navigator, doc = win && win.document;
+      if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function' && !nav.clipboard.__khCodeBlock) {
+        var originalWrite = nav.clipboard.writeText.bind(nav.clipboard);
+        nav.clipboard.writeText = function (text) { return originalWrite(toCodeBlockPrompt(text)); };
+        nav.clipboard.__khCodeBlock = true;
+      }
+      if (doc && typeof doc.execCommand === 'function' && !doc.__khCodeBlock) {
+        var originalExec = doc.execCommand.bind(doc);
+        doc.execCommand = function (command, showUi, value) {
+          try {
+            if (String(command).toLowerCase() === 'copy') {
+              var field = doc.activeElement;
+              if (field && field.tagName === 'TEXTAREA') {
+                var next = toCodeBlockPrompt(field.value);
+                if (next !== field.value) { field.value = next; field.select(); }
+              }
+            }
+          } catch (ignore) { /* fall through to the normal copy */ }
+          return originalExec(command, showUi, value);
+        };
+        doc.__khCodeBlock = true;
+      }
+    } catch (ignore) { /* copy keeps working unpatched */ }
+  }
+
+  var api = { parse: parse, toCodeBlockPrompt: toCodeBlockPrompt, installPromptPatch: installPromptPatch, PROMPT_RULES: PROMPT_RULES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.KHAIJsonRepair = api;
+  if (typeof window !== 'undefined') installPromptPatch(window);
 })(typeof window !== 'undefined' ? window : (typeof globalThis !== 'undefined' ? globalThis : this));
