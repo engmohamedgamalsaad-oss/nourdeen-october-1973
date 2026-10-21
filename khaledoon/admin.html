@@ -26,6 +26,8 @@ details.pubrow>summary>div{flex:1;min-width:0}
 details.pubrow>summary::-webkit-details-marker{display:none}
 details.pubrow>summary::after{content:"▾";margin-inline-start:4px;color:var(--c,var(--gold));transition:transform .2s}
 details.pubrow[open]>summary::after{transform:rotate(180deg)}
+.pubrow .row-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:0 12px 10px}
+.pubrow .row-actions .btn{flex:none;white-space:nowrap}
 .pubrow .pt{display:block;color:var(--gold);font-weight:800;font-size:1.05rem;line-height:1.6}
 details.pubrow>summary{padding:8px 12px;gap:8px}
 .pubrow .pt{font-size:.98rem;line-height:1.4}
@@ -745,7 +747,7 @@ function siteCard(it){
 }
 function pubRow(it){
  var sv=storyFor(it),hid=!!(sv&&vHidden[String(sv.id)]);
- var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div','');
+ var d=el('details','pubrow sec-'+(it.section||'october')+(hid?' hid':'')),s=el('summary',''),w=el('div',''),actions=el('div','row-actions');
  w.appendChild(el('span','pt',it.title||'حكاية بلا عنوان'));
  var dt='';try{if(it.created_at)dt=new Date(it.created_at).toLocaleDateString('ar-EG',{year:'numeric',month:'long',day:'numeric'})}catch(e){}
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
@@ -758,13 +760,13 @@ function pubRow(it){
  if(it._t!=='site'&&itemState(it)==='awaiting_publish'){
   var openReview=el('button','btn primary','فتح معاينة القارئ');openReview.type='button';openReview.title='فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
   openReview.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;var win=window.open(url,'_blank');if(!win)say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');});
-  s.appendChild(openReview);
+  actions.appendChild(openReview);
  }
  /* إظهار خطوة تأكيد النشر مباشرة في سجل الحكاية بعد اعتماد المعاينة، بدل حصرها داخل محرر الحكاية. */
  if(it._t!=='site'){
   var publishConfirm=el('button','btn primary',pr.publish_pr_url?'فتح طلب الدمج':'نشر الحكاية');publishConfirm.type='button';publishConfirm.title='يظهر الزر دائمًا؛ يلزم اعتماد المعاينة قبل إرسال طلب النشر إلى GitHub.';
-  publishConfirm.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(pr.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم اضغط «نشر الحكاية».');return}submitStoryPublishPR(it,publishConfirm)});s.appendChild(publishConfirm);
-  if(pr.publish_pr_url){var verifyPublish=el('button','btn ghost','تأكيد النشر بعد الدمج');verifyPublish.type='button';verifyPublish.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();confirmStoryPublishAfterUpload(it,verifyPublish)});s.appendChild(verifyPublish)}
+  publishConfirm.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(pr.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم اضغط «نشر الحكاية».');return}submitStoryPublishPR(it,publishConfirm)});actions.appendChild(publishConfirm);
+  if(pr.publish_pr_url){var verifyPublish=el('button','btn ghost','تأكيد النشر بعد الدمج');verifyPublish.type='button';verifyPublish.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();confirmStoryPublishAfterUpload(it,verifyPublish)});actions.appendChild(verifyPublish)}
  }
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  var hw=el('span','hidebtn-wrap');
@@ -778,7 +780,7 @@ function pubRow(it){
   if(!hid&&!confirm('إخفاء «'+(it.title||sv.title)+'» من الموقع لكل الزوار؟'))return;
   setHidden(sv,!hid,hb);
  });
- hw.appendChild(hb);s.appendChild(hw);
+ hw.appendChild(hb);actions.appendChild(hw);
  if(it._t!=='site'&&it.status!=='published'){
   var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل المسودة من لوحة الإدارة فقط';
   db.addEventListener('click',function(e){
@@ -786,9 +788,10 @@ function pubRow(it){
    if(!confirmDelete(it))return;
    removeItem(it,db);
   });
-  s.appendChild(db);
+  actions.appendChild(db);
  }
  d.appendChild(s);
+ if(actions.childNodes.length)d.appendChild(actions);
  var key=(it._t||'k')+':'+it.id,built=false;
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
