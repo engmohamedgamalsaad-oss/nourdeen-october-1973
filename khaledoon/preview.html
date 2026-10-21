@@ -453,16 +453,9 @@ async function decide(action){
   if(!read.ok)throw new Error('تعذر إعادة قراءة سجل الحكاية ('+read.status+').');
   var rows=await read.json();if(!rows.length)throw new Error('لم يُعثر على سجل الحكاية أو ليست لديك صلاحية الوصول إليه.');
   var record=rows[0],meta=Object.assign({},record.story_meta||d.story_meta||{}),prior=meta.preview_review||{},payload={};
-  var pageInfo=null,bundleNote='';
-  if(approve){
-   /* صفحة جاهزة في مسار stories/... تُسجَّل كما هي؛ وإلا تُجهَّز حزمة القالب (ZIP) إن اكتملت البيانات. */
-   pageInfo=derivePagePath(d.preview_source_url);
-   if(!pageInfo&&window.KHStoryBundle){
-    try{var info=await window.KHStoryBundle.download(Object.assign({},d,{story_meta:meta}),{approved:true});pageInfo={id:info.id,path:info.path,bundle:true}}
-    catch(e){bundleNote=e&&e.message?e.message:'تعذر إنشاء حزمة النشر.'}
-   }
-  }
-  meta=approve?window.KHWorkflow.markApproved(meta,{static_story_id:pageInfo?pageInfo.id:(prior.static_story_id||null),static_story_path:pageInfo?pageInfo.path:(prior.static_story_path||null),bundle_downloaded:!!(pageInfo&&pageInfo.bundle),prepared_page_url:(pageInfo&&!pageInfo.bundle)?String(d.preview_source_url||''):(prior.prepared_page_url||'')},new Date()):window.KHWorkflow.markPreviewRejected(meta,rejectionReason,new Date());
+  /* اعتماد المعاينة يسجل القرار فقط. إنشاء/تنزيل ZIP خطوة منفصلة ولا يجوز ربطها بزر الاعتماد. */
+  var pageInfo=approve?derivePagePath(d.preview_source_url):null;
+  meta=approve?window.KHWorkflow.markApproved(meta,{static_story_id:pageInfo?pageInfo.id:(prior.static_story_id||null),static_story_path:pageInfo?pageInfo.path:(prior.static_story_path||null),bundle_downloaded:!!prior.bundle_downloaded,prepared_page_url:pageInfo?String(d.preview_source_url||''):(prior.prepared_page_url||'')},new Date()):window.KHWorkflow.markPreviewRejected(meta,rejectionReason,new Date());
   /* رفض المعاينة يعيد الحكاية إلى المسودة (قيد المراجعة) ولا يرفض الحكاية نفسها؛ زر «رفض» في الأدمن هو الذي يرفضها. */
   if(record.status!=='published')payload.status=approve?(table==='submitted_stories'?'pending':'review'):'pending';
   if(record.status==='published'){
@@ -485,7 +478,7 @@ async function decide(action){
   try{localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}catch(e){}
   if(window.opener&&!window.opener.closed){try{window.opener.location.href='admin.html?returnfrompreview=1&refresh='+Date.now();}catch(e){}}
   if(approve){
-   say('تم قبول المعاينة وحفظ القرار. الحكاية لم تُنشر. '+(pageInfo&&pageInfo.bundle?'نُزّلت حزمة ZIP للحكاية؛ ارفع ملفاتها إلى GitHub بنفس المسارات ثم استخدم «تأكيد النشر بعد الرفع» في الأدمن.':pageInfo?'سُجّل مسار الصفحة الجاهزة ('+pageInfo.path+'). بعد دمجها في GitHub استخدم «تأكيد النشر بعد الرفع» في الأدمن.':'لم تُنشأ حزمة رفع: '+(bundleNote||'القالب غير متاح')+'\nأكمل الناقص من الأدمن ثم افتح المعاينة وأقبلها من جديد، أو جهّز ملفات الصفحة النهائية بأداة الذكاء الاصطناعي.'));
+   say('تم اعتماد المعاينة وحفظ القرار والتحقق منه. الحكاية لم تُنشر ولم يبدأ تنزيل أي ملف. '+(pageInfo?'مسار الصفحة المسجل: '+pageInfo.path+'. انتقل إلى الأدمن لاستكمال خطوة تجهيز/نشر الملفات.':'انتقل إلى الأدمن لاستكمال تجهيز ملفات الحكاية ثم تأكيد النشر بعد رفعها.'));
   }else{
    say('تم رفض المعاينة وإرجاع الحكاية للتحرير. سبب الرفض محفوظ: '+rejectionReason);
    setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},900);
