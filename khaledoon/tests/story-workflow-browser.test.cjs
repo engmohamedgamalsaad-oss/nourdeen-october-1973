@@ -75,8 +75,9 @@ async function main() {
             }
             if (req.method() === 'PATCH') {
               patched = req.postDataJSON();
+              Object.assign(row, patched);
               return route.fulfill({ status: 200, contentType: 'application/json',
-                body: JSON.stringify([Object.assign({}, row, patched)]) });
+                body: JSON.stringify([Object.assign({}, row)]) });
             }
           }
           if (req.url().includes('/auth/v1/user')) {
