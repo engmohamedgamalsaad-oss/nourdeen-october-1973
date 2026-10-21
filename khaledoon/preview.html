@@ -394,7 +394,11 @@ function loadRawPage(url,d){
 function renderInTemplate(d){
  if(window.KHStoryBundle&&typeof window.KHStoryBundle.renderPreviewHtml==='function'){
   frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
-  frame.srcdoc=window.KHStoryBundle.renderPreviewHtml(d);
+  var html=window.KHStoryBundle.renderPreviewHtml(d);
+  /* الإطار بلا allow-same-origin فلا نقدر نقيس ارتفاعه من الخارج؛ الصفحة نفسها ترسل ارتفاعها حتى تظهر كاملة بدون تمرير داخلي. */
+  var fit='<script>(function(){var last=0;function h(){var b=document.body,e=document.documentElement,v=Math.max(e.scrollHeight,b?b.scrollHeight:0);if(Math.abs(v-last)<4)return;last=v;parent.postMessage({kh:"preview-height",h:v},"*")}addEventListener("load",function(){h();setTimeout(h,600);setTimeout(h,1800);setTimeout(h,4000)});document.addEventListener("click",function(){setTimeout(h,200);setTimeout(h,900)});document.addEventListener("site-language-change",function(){setTimeout(h,200)})})();<\/script>';
+  html=html.indexOf('</body>')>-1?html.replace('</body>',function(){return fit+'</body>'}):html+fit;
+  frame.srcdoc=html;
   say('تعرض الآن الحكاية باستخدام قالب القارئ الفعلي. الإعجابات والتفاعلات معطلة في المعاينة، ولم يتم نشر أي شيء.');
   return;
  }
@@ -468,3 +472,5 @@ $('printReviewTopBtn').addEventListener('click',function(){window.print()});
 if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>
+
+<!-- GitHub Pages redeploy trigger: 2026-10-18 -->
