@@ -20,7 +20,7 @@ function mockPatch(record, patch) {
   return Object.assign({}, record, patch);
 }
 test('admin imports the workflow module and derives status counters', function () {
-  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261020-4"'));
+  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261021-map-auto-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
