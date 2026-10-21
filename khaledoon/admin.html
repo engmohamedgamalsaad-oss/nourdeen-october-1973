@@ -155,7 +155,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </div>
 </section>
 </main>
-<script src="assets/story-workflow.js?v=20261020-4"></script><script src="assets/story-template-bundle.js?v=20261021-publish-pr"></script>
+<script src="assets/story-workflow.js?v=20261020-4"></script><script src="assets/story-template-bundle.js?v=20261021-publish-pr"></script><script src="assets/ai-json-repair.js?v=20261021-1"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261021-2"></script>
 <script>
 (function(){
@@ -834,7 +834,7 @@ function pubRow(it){
     aiImport.addEventListener('click',async function(){
      if(aiPasteLocked){aiPasteLocked=false;aiLockById[aiLockKey]=false;try{localStorage.setItem(aiLockStorageKey,'0')}catch(ignoreAiUnlockWrite){}aiPaint();aiPaste.focus();aiSay('info','تم فتح الخانة للإضافة أو التعديل أو مسح الكود بالكامل. اضغط «تعديل» مرة أخرى لتنفيذ الكود وقفل الخانة.');return}
      var sourceRaw=aiPaste.value.trim(),pkg,raw=sourceRaw;if(!raw){try{localStorage.setItem(aiPasteStorageKey,'')}catch(ignoreEmptyCache){}aiLockNow();aiSay('info','تم اعتماد الخانة فارغة وقُفلت. لم تُحذف بيانات الحكاية المحفوظة؛ اضغط «تعديل» لفتح الخانة مرة أخرى.');return}
-     try{raw=raw.replace(/^\`\`\`(?:json)?\s*/i,'').replace(/\s*\`\`\`$/,'');pkg=JSON.parse(raw)}catch(e){aiFail('الناتج ليس JSON صالحًا ('+String(e&&e.message||e).slice(0,120)+').');return}
+     var aiJsonWasRepaired=false;try{var parsedAi=window.KHAIJsonRepair.parse(sourceRaw);pkg=parsedAi.value;aiJsonWasRepaired=parsedAi.repaired;raw=sourceRaw}catch(e){aiFail('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا ('+String(e&&e.message||e).slice(0,260)+').');return}
      if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){aiFail('صيغة الناتج غير صحيحة؛ يجب أن يحتوي على format بالقيمة KH_STORY_PACKAGE_V1.');return}
      var langs=['en','fr','it','de'];
      var packageCheck=window.KHWorkflow.validateStoryPackage(pkg);
@@ -854,7 +854,7 @@ function pubRow(it){
       /* لا نغيّر حالة سجل منشور ولا نستبدل نص الصفحة الحية؛ نضع ناتج AI في مسودة معلّقة. */
       var expectedAiTitle=payload.title,expectedAiBody=payload.body;
       if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload);delete nextMeta.pending_draft.story_meta;nextMeta.pending_draft.status='pending';payload={story_meta:nextMeta}}
-      aiShow('info','⏳ جارٍ تنفيذ الكود وحفظ المسودة… لا تغلق الصفحة.',true);
+      aiShow('info',(aiJsonWasRepaired?'تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو. ':'')+'⏳ جارٍ تنفيذ الكود وحفظ المسودة… لا تغلق الصفحة.',true);
       var saved=it.id?await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(String(it.id)),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)}):await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
