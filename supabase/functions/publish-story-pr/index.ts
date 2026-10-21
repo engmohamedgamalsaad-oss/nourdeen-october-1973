@@ -19,6 +19,7 @@ function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").includes("..")) return false;
   if (path === "stories/index.json") return true;
+  if (/^stories\/quizzes\/[0-9]{3}\.json$/.test(path)) return true;
   if (!/^stories\/[a-z0-9-]+\/[0-9]{3}\/[A-Za-z0-9._/-]+$/.test(path)) return false;
   return ["html","json","css","js","svg","png","jpg","jpeg","webp","avif","woff2"].includes(path.split(".").pop()?.toLowerCase() ?? "");
 }
@@ -81,19 +82,42 @@ Deno.serve(async (req: Request) => {
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
-  const branch = "publish/story-" + new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14);
+  const branch = "publish/story-" + new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14) + "-" + crypto.randomUUID().slice(0, 8);
 
   try {
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
     const treeEntries = [];
+    const storyPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
+    if (!storyPage) throw new Error('Missing generated story page index.html.');
+    const pathMatch = storyPage.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
+    const storySection = pathMatch[1], storyId = pathMatch[2], storyRoot = 'stories/' + storySection + '/' + storyId + '/';
     for (const file of body.files) {
-      const blob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
-        method: "POST",
-        body: JSON.stringify({ content: file.content, encoding: file.encoding === "base64" ? "base64" : "utf-8" }),
+      if (file.path !== 'stories/index.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
+        throw new Error('A file is outside the selected story folder; refusing to modify unrelated stories.');
+      }
+    }
+    const incomingIndexFile = body.files.find((file: any) => file.path === 'stories/index.json');
+    if (!incomingIndexFile) throw new Error('Missing stories/index.json.');
+    const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + BASE, githubToken);
+    const currentIndexBytes = Uint8Array.from(atob(currentIndexResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
+    const currentIndex = JSON.parse(new TextDecoder().decode(currentIndexBytes));
+    const incomingIndex = JSON.parse(incomingIndexFile.content);
+    if (!Array.isArray(currentIndex) || !Array.isArray(incomingIndex)) throw new Error('Story index JSON must be arrays.');
+    const normalizedRoot = storyRoot.replace(/\/$/, '');
+    const incomingEntry = incomingIndex.find((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId && String(entry.path ?? '').split('/').filter(Boolean).join('/') === normalizedRoot);
+    if (!incomingEntry) throw new Error('Generated index does not contain the generated story path.');
+    const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
+    if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
+    if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
+    const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' } : file);
+    for (const file of safeFiles) {
+      const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
+        method: 'POST',
+        body: JSON.stringify({ content: file.content, encoding: file.encoding === 'base64' ? 'base64' : 'utf-8' }),
       });
-      treeEntries.push({ path: file.path, mode: "100644", type: "blob", sha: blob.sha });
+      treeEntries.push({ path: file.path, mode: '100644', type: 'blob', sha: blob.sha });
     }
     const tree = await github(`/repos/${OWNER}/${REPO}/git/trees`, githubToken, {
       method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: treeEntries }),
