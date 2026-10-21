@@ -158,9 +158,16 @@ Deno.serve(async (req: Request) => {
           ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim())) {
         throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
       }
-      if (typeof place.source_name !== 'string' || !place.source_name.trim() ||
-          typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim())) {
-        throw new Error('Map location must include a source name and HTTPS source URL.');
+      const previousPlace = currentPlaces[storyId];
+      const unchangedLegacyPlace = !!previousPlace &&
+        Number(previousPlace.lat) === lat && Number(previousPlace.lng) === lng &&
+        JSON.stringify(previousPlace.place) === JSON.stringify(place.place) &&
+        Boolean(previousPlace.approximate) === Boolean(place.approximate) &&
+        !String(place.source_name || '').trim() && !String(place.source_url || '').trim();
+      if (!unchangedLegacyPlace &&
+          (typeof place.source_name !== 'string' || !place.source_name.trim() ||
+           typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim()))) {
+        throw new Error('Map location must include a source name and HTTPS source URL unless preserving an unchanged legacy map entry.');
       }
       if (place.approximate !== undefined && typeof place.approximate !== 'boolean') {
         throw new Error('Map approximate flag must be boolean when provided.');
