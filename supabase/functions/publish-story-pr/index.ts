@@ -18,7 +18,7 @@ const reply = (status: number, data: Record<string, unknown>) =>
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").includes("..")) return false;
-  if (path === "stories/index.json") return true;
+  if (path === "stories/index.json" || path === "stories/places.json") return true;
   if (/^stories\/quizzes\/[0-9]{3}\.json$/.test(path)) return true;
   if (!/^stories\/[a-z0-9-]+\/[0-9]{3}\/[A-Za-z0-9._/-]+$/.test(path)) return false;
   return ["html","json","css","js","svg","png","jpg","jpeg","webp","avif","woff2","md"].includes(path.split(".").pop()?.toLowerCase() ?? "");
@@ -93,7 +93,7 @@ Deno.serve(async (req: Request) => {
     const pathMatch = storyPage.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
     const storySection = pathMatch[1], storyId = pathMatch[2], storyRoot = 'stories/' + storySection + '/' + storyId + '/';
     for (const file of body.files) {
-      if (file.path !== 'stories/index.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
+      if (file.path !== 'stories/index.json' && file.path !== 'stories/places.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
         throw new Error('A file is outside the selected story folder; refusing to modify unrelated stories.');
       }
     }
@@ -122,7 +122,45 @@ Deno.serve(async (req: Request) => {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
     }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
-    const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' } : file);
+    // Merge only this story's verified map entry into the latest main places file.
+    // This preserves all existing map locations and prevents AI output from replacing the file wholesale.
+    const incomingPlacesFile = body.files.find((file: any) => file.path === 'stories/places.json');
+    let mergedPlacesContent: string | null = null;
+    let mapMarkerAdded = false;
+    if (incomingPlacesFile) {
+      let incomingPlaces: any;
+      try { incomingPlaces = JSON.parse(incomingPlacesFile.content); }
+      catch { throw new Error('stories/places.json must contain valid JSON.'); }
+      const place = incomingPlaces && incomingPlaces[storyId];
+      if (!place || typeof place !== 'object' || Array.isArray(place)) {
+        throw new Error('stories/places.json must include a verified location entry keyed by this story ID, or omit the file when no verified location exists.');
+      }
+      const lat = Number(place.lat), lng = Number(place.lng);
+      if (!Number.isFinite(lat) || lat < -90 || lat > 90 || !Number.isFinite(lng) || lng < -180 || lng > 180) {
+        throw new Error('Map coordinates must be numeric and within valid latitude/longitude ranges.');
+      }
+      if (!place.place || typeof place.place !== 'object' ||
+          ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim())) {
+        throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
+      }
+      if (place.approximate !== undefined && typeof place.approximate !== 'boolean') {
+        throw new Error('Map approximate flag must be boolean when provided.');
+      }
+      const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
+      const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\\s/g, '')), (c) => c.charCodeAt(0));
+      const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
+      if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
+        throw new Error('Current stories/places.json must be an object.');
+      }
+      currentPlaces[storyId] = { ...place, lat, lng };
+      mergedPlacesContent = JSON.stringify(currentPlaces, null, 2) + '\n';
+      mapMarkerAdded = true;
+    }
+    const safeFiles = body.files.map((file: any) => {
+      if (file.path === 'stories/index.json') return { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' };
+      if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent ?? file.content };
+      return file;
+    });
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
@@ -144,6 +182,8 @@ Deno.serve(async (req: Request) => {
     return reply(201, {
       success: true, published_to_main: true, commit_sha: commit.sha,
       story_id: storyId, story_path: normalizedRoot, page_url: pageUrl,
+      map_linked: true, map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded ? "تم ربط الحكاية بالخريطة وإضافة موقعها الموثق." : "الحكاية مرتبطة بفهرس الخريطة وستظهر في قائمة الأماكن؛ لم تُضف علامة جغرافية لعدم إرسال موقع موثق.",
       message: "تم رفع ملفات الحكاية مباشرة إلى main؛ جارٍ التحقق من ظهورها على الموقع."
     });
   } catch (error) {
