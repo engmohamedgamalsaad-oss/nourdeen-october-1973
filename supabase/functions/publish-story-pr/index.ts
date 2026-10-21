@@ -93,6 +93,11 @@ Deno.serve(async (req: Request) => {
     if (!storyPage) throw new Error('Missing generated story page index.html.');
     const pathMatch = storyPage.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
     const storySection = pathMatch[1], storyId = pathMatch[2], storyRoot = 'stories/' + storySection + '/' + storyId + '/';
+    for (const file of body.files) {
+      if (file.path !== 'stories/index.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
+        throw new Error('A file is outside the selected story folder; refusing to modify unrelated stories.');
+      }
+    }
     const incomingIndexFile = body.files.find((file: any) => file.path === 'stories/index.json');
     if (!incomingIndexFile) throw new Error('Missing stories/index.json.');
     const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + BASE, githubToken);
