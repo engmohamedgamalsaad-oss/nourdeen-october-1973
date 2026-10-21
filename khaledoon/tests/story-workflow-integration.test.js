@@ -41,7 +41,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
-  assert.ok(admin.includes('draft.map_location=draft.map_location||meta.map_location||null'), 'verified map metadata must reach the story bundle automatically');
+  assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'), 'verified map metadata must survive AI package import');
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
