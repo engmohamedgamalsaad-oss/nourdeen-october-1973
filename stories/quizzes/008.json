@@ -1,0 +1,271 @@
+{
+  "questions": [
+    {
+      "q": "في أي مدينة وُلد توفيق الحكيم؟",
+      "o": [
+        "الإسكندرية",
+        "القاهرة",
+        "أسوان",
+        "المنصورة"
+      ],
+      "a": 0,
+      "e": "وُلد توفيق الحكيم في الإسكندرية يوم 9 أكتوبر عام 1898.",
+      "i18n": {
+        "en": {
+          "q": "In which city was Tawfiq al-Hakim born?",
+          "o": [
+            "Alexandria",
+            "Cairo",
+            "Aswan",
+            "Mansoura"
+          ],
+          "e": "Tawfiq al-Hakim was born in Alexandria on 9 October 1898."
+        },
+        "fr": {
+          "q": "Dans quelle ville Tawfiq al-Hakim est-il né ?",
+          "o": [
+            "Alexandrie",
+            "Le Caire",
+            "Assouan",
+            "Mansourah"
+          ],
+          "e": "Tawfiq al-Hakim est né à Alexandrie le 9 octobre 1898."
+        },
+        "it": {
+          "q": "In quale città nacque Tawfiq al-Hakim?",
+          "o": [
+            "Alessandria",
+            "Il Cairo",
+            "Assuan",
+            "Mansura"
+          ],
+          "e": "Tawfiq al-Hakim nacque ad Alessandria il 9 ottobre 1898."
+        },
+        "de": {
+          "q": "In welcher Stadt wurde Tawfiq al-Hakim geboren?",
+          "o": [
+            "Alexandria",
+            "Kairo",
+            "Assuan",
+            "Mansura"
+          ],
+          "e": "Tawfiq al-Hakim wurde am 9. Oktober 1898 in Alexandria geboren."
+        }
+      }
+    },
+    {
+      "q": "ما المجال الذي اشتهر به توفيق الحكيم إلى جانب الرواية والقصة؟",
+      "o": [
+        "الطب",
+        "المسرح",
+        "الهندسة",
+        "الفلك"
+      ],
+      "a": 1,
+      "e": "اشتهر توفيق الحكيم بكتاباته المسرحية، وكان من رواد المسرح العربي الحديث.",
+      "i18n": {
+        "en": {
+          "q": "In which field was Tawfiq al-Hakim especially known, alongside novels and short stories?",
+          "o": [
+            "Medicine",
+            "Theatre",
+            "Engineering",
+            "Astronomy"
+          ],
+          "e": "Tawfiq al-Hakim was especially known for his plays and was a pioneer of modern Arabic drama."
+        },
+        "fr": {
+          "q": "Dans quel domaine Tawfiq al-Hakim était-il particulièrement connu, en plus du roman et de la nouvelle ?",
+          "o": [
+            "La médecine",
+            "Le théâtre",
+            "L’ingénierie",
+            "L’astronomie"
+          ],
+          "e": "Tawfiq al-Hakim était particulièrement connu pour ses pièces et fut un pionnier du théâtre arabe moderne."
+        },
+        "it": {
+          "q": "In quale campo era particolarmente noto Tawfiq al-Hakim, oltre ai romanzi e ai racconti?",
+          "o": [
+            "Medicina",
+            "Teatro",
+            "Ingegneria",
+            "Astronomia"
+          ],
+          "e": "Tawfiq al-Hakim era noto soprattutto per le sue opere teatrali ed era un pioniere del teatro arabo moderno."
+        },
+        "de": {
+          "q": "In welchem Bereich war Tawfiq al-Hakim neben Romanen und Kurzgeschichten besonders bekannt?",
+          "o": [
+            "Medizin",
+            "Theater",
+            "Ingenieurwesen",
+            "Astronomie"
+          ],
+          "e": "Tawfiq al-Hakim war besonders für seine Theaterstücke bekannt und ein Wegbereiter des modernen arabischen Theaters."
+        }
+      }
+    },
+    {
+      "q": "في أي عام نُشرت مسرحية أهل الكهف؟",
+      "o": [
+        "1925",
+        "1933",
+        "1937",
+        "1952"
+      ],
+      "a": 1,
+      "e": "نُشرت مسرحية أهل الكهف عام 1933، وتُعد من الأعمال المهمة في تطور المسرح الذهني.",
+      "i18n": {
+        "en": {
+          "q": "In what year was The People of the Cave published?",
+          "o": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "e": "The People of the Cave was published in 1933 and is considered an important work in the development of intellectual drama."
+        },
+        "fr": {
+          "q": "En quelle année Les Gens de la caverne a-t-elle été publiée ?",
+          "o": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "e": "Les Gens de la caverne a été publiée en 1933 et constitue une œuvre importante dans le développement du théâtre d’idées."
+        },
+        "it": {
+          "q": "In quale anno fu pubblicata La gente della caverna?",
+          "o": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "e": "La gente della caverna fu pubblicata nel 1933 ed è considerata un’opera importante nello sviluppo del teatro delle idee."
+        },
+        "de": {
+          "q": "In welchem Jahr wurde Die Leute der Höhle veröffentlicht?",
+          "o": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "e": "Die Leute der Höhle erschien 1933 und gilt als wichtiges Werk für die Entwicklung des Ideentheaters."
+        }
+      }
+    },
+    {
+      "q": "ما المجال الذي درسه توفيق الحكيم قبل سفره إلى فرنسا؟",
+      "o": [
+        "الطب",
+        "القانون",
+        "الهندسة",
+        "الزراعة"
+      ],
+      "a": 1,
+      "e": "درس توفيق الحكيم القانون، ثم سافر إلى فرنسا في عشرينيات القرن العشرين، حيث اهتم بالمسرح والثقافة.",
+      "i18n": {
+        "en": {
+          "q": "What did Tawfiq al-Hakim study before travelling to France?",
+          "o": [
+            "Medicine",
+            "Law",
+            "Engineering",
+            "Agriculture"
+          ],
+          "e": "Tawfiq al-Hakim studied law and then travelled to France in the 1920s, where he became interested in theatre and culture."
+        },
+        "fr": {
+          "q": "Qu’a étudié Tawfiq al-Hakim avant de partir en France ?",
+          "o": [
+            "La médecine",
+            "Le droit",
+            "L’ingénierie",
+            "L’agriculture"
+          ],
+          "e": "Tawfiq al-Hakim a étudié le droit, puis est parti en France dans les années 1920, où il s’est intéressé au théâtre et à la culture."
+        },
+        "it": {
+          "q": "Che cosa studiò Tawfiq al-Hakim prima di recarsi in Francia?",
+          "o": [
+            "Medicina",
+            "Giurisprudenza",
+            "Ingegneria",
+            "Agricoltura"
+          ],
+          "e": "Tawfiq al-Hakim studiò giurisprudenza e poi si recò in Francia negli anni Venti, dove si interessò al teatro e alla cultura."
+        },
+        "de": {
+          "q": "Was studierte Tawfiq al-Hakim, bevor er nach Frankreich reiste?",
+          "o": [
+            "Medizin",
+            "Rechtswissenschaft",
+            "Ingenieurwesen",
+            "Landwirtschaft"
+          ],
+          "e": "Tawfiq al-Hakim studierte Jura und reiste anschließend in den 1920er-Jahren nach Frankreich, wo er sich für Theater und Kultur interessierte."
+        }
+      }
+    },
+    {
+      "q": "ما العمل الذي نشره توفيق الحكيم عام 1937 عن جوانب من الحياة الريفية؟",
+      "o": [
+        "شهرزاد",
+        "أهل الكهف",
+        "يوميات نائب في الأرياف",
+        "عودة الروح"
+      ],
+      "a": 2,
+      "e": "نُشرت رواية يوميات نائب في الأرياف عام 1937، وتعرض جوانب من الحياة الريفية وعلاقة الناس بالعدالة.",
+      "i18n": {
+        "en": {
+          "q": "Which work by Tawfiq al-Hakim was published in 1937 and portrayed aspects of rural life?",
+          "o": [
+            "Shahrazad",
+            "The People of the Cave",
+            "Diary of a Country Prosecutor",
+            "Return of the Spirit"
+          ],
+          "e": "Diary of a Country Prosecutor was published in 1937 and portrays aspects of rural life and people's encounters with justice."
+        },
+        "fr": {
+          "q": "Quelle œuvre de Tawfiq al-Hakim, publiée en 1937, décrit certains aspects de la vie rurale ?",
+          "o": [
+            "Schéhérazade",
+            "Les Gens de la caverne",
+            "Journal d’un substitut de campagne",
+            "Le Retour de l’esprit"
+          ],
+          "e": "Journal d’un substitut de campagne a été publié en 1937 et décrit certains aspects de la vie rurale et les relations des habitants avec la justice."
+        },
+        "it": {
+          "q": "Quale opera di Tawfiq al-Hakim fu pubblicata nel 1937 e descrive aspetti della vita rurale?",
+          "o": [
+            "Shahrazad",
+            "La gente della caverna",
+            "Diario di un procuratore di campagna",
+            "Il ritorno dello spirito"
+          ],
+          "e": "Diario di un procuratore di campagna fu pubblicato nel 1937 e descrive aspetti della vita rurale e il rapporto degli abitanti con la giustizia."
+        },
+        "de": {
+          "q": "Welches Werk von Tawfiq al-Hakim erschien 1937 und schildert Aspekte des ländlichen Lebens?",
+          "o": [
+            "Scheherazade",
+            "Die Leute der Höhle",
+            "Tagebuch eines Staatsanwalts auf dem Lande",
+            "Die Rückkehr des Geistes"
+          ],
+          "e": "Tagebuch eines Staatsanwalts auf dem Lande erschien 1937 und schildert Aspekte des ländlichen Lebens und die Begegnung der Menschen mit der Justiz."
+        }
+      }
+    }
+  ],
+  "id": "008",
+  "title": "توفيق الحكيم"
+}
