@@ -120,7 +120,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 </section>
 
 <section id="reviewView" class="wrap" hidden>
- <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
+ <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn primary" type="button" id="visitorPreviewBtn" title="يفتح صفحة الحكاية الحقيقية من الموقع كما سيراها الزائر، ويتأكد أنها منشورة أولًا">معاينة بشكل الزائر</button></div>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
  <section id="actualPagePreviewWrap" class="actual-page-preview">
@@ -468,7 +468,49 @@ function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submissio
 $('returnToEditBtn').addEventListener('click',returnToAdminForEdit);
 $('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewBtn').addEventListener('click',function(){window.print()});
-$('printReviewTopBtn').addEventListener('click',function(){window.print()});
+/* معاينة بشكل الزائر: يبني رابط الصفحة الحقيقية على GitHub Pages، يتأكد أنها منشورة، ثم يعرضها بدل قالب المعاينة. */
+function visitorPageUrl(d){
+ var m=(d&&d.story_meta&&d.story_meta.preview_review)||{},cands=[d&&d.preview_source_url,m.prepared_page_url],i,c,info;
+ for(i=0;i<cands.length;i++){
+  c=String(cands[i]||'').trim();if(!c)continue;
+  if(c.indexOf(PAGES_ROOT)===0&&c.length>PAGES_ROOT.length)return c;
+  info=derivePagePath(c);if(info)return PAGES_ROOT+info.path;
+ }
+ var sp=String(m.static_story_path||'').replace(/^\/+/,'').replace(/^nourdeen-october-1973\//,'').replace(/\/+$/,'');
+ if(/^stories\/[a-z0-9-]+\/\d{3}$/i.test(sp))return PAGES_ROOT+sp+'/';
+ return '';
+}
+function normalizeVisitorUrl(text){
+ var c=String(text||'').trim();if(!c)return '';
+ if(c.indexOf(PAGES_ROOT)===0&&c.length>PAGES_ROOT.length)return c;
+ var info=derivePagePath(c);return info?PAGES_ROOT+info.path:'';
+}
+var visitorBusy=false;
+async function visitorPreview(){
+ if(visitorBusy)return;
+ var d=currentDraft;if(!d){say('لا توجد بيانات معاينة محمّلة بعد.');return}
+ var btn=$('visitorPreviewBtn'),label=btn.textContent;visitorBusy=true;btn.disabled=true;btn.textContent='جارٍ التحقق من الصفحة…';
+ try{
+  var url=visitorPageUrl(d);
+  if(!url){
+   var typed=window.prompt('لم يُسجَّل مسار صفحة هذه الحكاية بعد. الصق رابط صفحتها على الموقع (مثل https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/islamic/005/):','');
+   if(typed===null){say('أُلغيت المعاينة بشكل الزائر. لم يتغير شيء.');return}
+   url=normalizeVisitorUrl(typed);
+   if(!url){say('الرابط غير صالح. يجب أن يكون رابط صفحة حكاية على موقع GitHub Pages الخاص بالمشروع، وليس رابط raw أو الصفحة الرئيسية.');return}
+  }
+  var probe=new URL(url);probe.searchParams.set('previewcheck',String(Date.now()));
+  var r;try{r=await fetch(probe.href,{cache:'no-store'})}catch(e){say('تعذر الاتصال بالموقع للتحقق من الصفحة ('+(e&&e.message?e.message:'خطأ شبكة')+'). المعاينة الحالية لم تتغير.');return}
+  if(!r.ok){say('صفحة الحكاية غير منشورة على الموقع بعد ('+r.status+'): '+url+' — ارفع ملفات الحكاية إلى main وانتظر اكتمال نشر GitHub Pages، ثم اضغط الزر مرة أخرى. المعاينة الحالية (قالب القارئ) لم تتغير.');return}
+  var html=await r.text();
+  if(!/data-story-slug=/.test(html)){say('الرابط يفتح لكنه ليس صفحة حكاية بالقالب المعتمد (لا يوجد data-story-slug): '+url+'. المعاينة الحالية لم تتغير.');return}
+  d.preview_source_url=url;d.source_preview_loaded=false;
+  await loadSitePage(url,d);
+  say('تعرض الآن صفحة الحكاية الحقيقية من الموقع بشكل الزائر، مع علامة «معاينة غير منشورة» في أعلاها.'+(d.source_preview_loaded?'':' تنبيه: الصفحة لا تتضمن كل الوظائف المطلوبة (اللغات وبنك الأسئلة والتفاعلات) ولن تُعتبر مكتملة.')+' بيانات المراجعة أسفل الإطار.');
+  try{frame.scrollIntoView({behavior:'smooth',block:'start'})}catch(e){}
+ }catch(e){say('تعذر عرض الصفحة بشكل الزائر ('+(e&&e.message?e.message:'سبب غير معروف')+'). أعدت عرض قالب القارئ.');try{renderInTemplate(d)}catch(ignore){}}
+ finally{visitorBusy=false;btn.disabled=false;btn.textContent=label}
+}
+$('visitorPreviewBtn').addEventListener('click',visitorPreview);
 if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>
