@@ -306,12 +306,12 @@ async function submitStoryPublishPR(it,btn){
  var pack=await window.KHStoryBundle.download(draft,{approved:true,returnFiles:true});if(!pack||!Array.isArray(pack.files)||!pack.files.length)throw new Error('لم تُجهز ملفات الحكاية؛ راجع اكتمال المحتوى والترجمات والصور والأسئلة.');
  var response=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({title:'نشر حكاية: '+String(draft.title||draft.figure_name||'خالدون').slice(0,100),body:'نشر مباشر بعد اعتماد المعاينة. رقم الحكاية: '+pack.id+'؛ المسار: '+pack.path+'.',files:pack.files})});
  var result=await response.json().catch(function(){return {}});if(!response.ok||!result.success||!result.published_to_main||!result.commit_sha||!result.story_path)throw new Error(result.error||result.detail||('تعذر رفع الحكاية مباشرة إلى main ('+response.status+').'));
- meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_commit_sha:result.commit_sha,published_to_main_at:new Date().toISOString(),publish_page_url:result.page_url||'',decision:'approved_waiting_for_github_upload',note:'رُفعت الملفات مباشرة إلى main؛ جارٍ التحقق من ظهور الحكاية على الموقع.'});
+ meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_commit_sha:result.commit_sha,published_to_main_at:new Date().toISOString(),publish_page_url:result.page_url||'',map_linked:result.map_linked===true,map_marker_added:result.map_marker_added===true,map_message:String(result.map_message||''),decision:'approved_waiting_for_github_upload',note:'رُفعت الملفات مباشرة إلى main؛ جارٍ التحقق من ظهور الحكاية على الموقع.'});
  var persistedDraft=Object.assign({},draft);delete persistedDraft.story_meta;delete persistedDraft._t;meta.pending_draft=persistedDraft;
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
  if(!saved.ok)throw new Error('رُفعت الملفات إلى GitHub لكن تعذر حفظ بيانات التحقق في سجل الإدارة ('+saved.status+'). راجع السجل قبل إعادة النشر.');
  it.story_meta=meta;
- say('info','تم رفع الملفات إلى main. جاري التحقق تلقائيًا من الصفحة والفهرس والصور والترجمات والتفاعلات وبنك الأسئلة…');
+ say('info',(result.map_message?String(result.map_message)+' ':'')+'تم رفع الملفات إلى main. جاري التحقق تلقائيًا من الصفحة والفهرس والصور والترجمات والتفاعلات وبنك الأسئلة…');
  await confirmStoryPublishAfterUpload(it,btn);
  }catch(e){
  var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
