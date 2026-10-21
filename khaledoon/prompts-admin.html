@@ -38,6 +38,8 @@ function normalize(raw){
   if(typeof STORY_PAGE_PROMPT==='string')d.main=STORY_PAGE_PROMPT;
   d.versions=d.versions.slice(-10);
  }
+ var qualityNote='التزام إلزامي: طبّق بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-ج. لا تعتبر أي عنصر مكتملًا لمجرد وصفه؛ افحصه واختبره، وصرّح بما لم يمكن اختباره.';
+ Object.keys(d.providers||{}).forEach(function(k){var value=String(d.providers[k]||'');if(value.indexOf(qualityNote)<0)d.providers[k]=value+'\n\n'+qualityNote;});
  return d;
 }
 function say(t){$('status').textContent=t}
