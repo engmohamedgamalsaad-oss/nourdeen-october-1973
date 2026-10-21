@@ -82,9 +82,8 @@ Deno.serve(async (req: Request) => {
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
-  const branch = "publish/story-" + new Date().toISOString().replace(/[-:.TZ]/g, "").slice(0, 14) + "-" + crypto.randomUUID().slice(0, 8);
-
   try {
+    // Read the latest main commit. The final non-force ref update protects against concurrent changes.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
@@ -109,7 +108,9 @@ Deno.serve(async (req: Request) => {
     const incomingEntry = incomingIndex.find((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId && String(entry.path ?? '').split('/').filter(Boolean).join('/') === normalizedRoot);
     if (!incomingEntry) throw new Error('Generated index does not contain the generated story path.');
     const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
-    if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
+    if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
+      throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
+    }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
     const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' } : file);
     for (const file of safeFiles) {
@@ -123,17 +124,20 @@ Deno.serve(async (req: Request) => {
       method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: treeEntries }),
     });
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
-      method: "POST", body: JSON.stringify({ message: `Prepare story publication: ${title}`, tree: tree.sha, parents: [baseSha] }),
+      method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
-    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
-      method: "POST", body: JSON.stringify({ ref: `refs/heads/${branch}`, sha: commit.sha }),
+    // Push straight to main, without a PR. force=false prevents overwriting concurrent main changes.
+    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
+      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
     });
-    const pr = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
-      method: "POST", body: JSON.stringify({ title, body: description, head: branch, base: BASE }),
+    const pageUrl = ALLOWED_ORIGIN + '/' + REPO + '/' + storyRoot;
+    return reply(201, {
+      success: true, published_to_main: true, commit_sha: commit.sha,
+      story_id: storyId, story_path: normalizedRoot, page_url: pageUrl,
+      message: "تم رفع ملفات الحكاية مباشرة إلى main؛ جارٍ التحقق من ظهورها على الموقع."
     });
-    return reply(201, { success: true, branch, pull_request_number: pr.number, pull_request_url: pr.html_url, message: "تم تجهيز فرع وفتح طلب دمج؛ لم يتم النشر على main." });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر إنشاء طلب الدمج على GitHub.", detail: detail.slice(0, 500) });
+    return reply(502, { error: "تعذر نشر الحكاية مباشرة على GitHub.", detail: detail.slice(0, 500) });
   }
 });
