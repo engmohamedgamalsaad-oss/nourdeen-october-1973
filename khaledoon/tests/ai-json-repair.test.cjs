@@ -103,4 +103,50 @@ const parser = require('../assets/ai-json-repair.js');
   assert.throws(() => parser.parse('{"title": }'), (error) => error.truncated === false);
 }
 
+
+{
+  // Duplicate AI answer with stray closing tag and six-backtick fence: select the complete story package.
+  const first = JSON.stringify({
+    format: 'KH_STORY_PACKAGE_V1',
+    title: 'النسخة الأولى',
+    body: 'نص الحكاية الأول '.repeat(25)
+  });
+  const second = JSON.stringify({
+    format: 'KH_STORY_PACKAGE_V1',
+    title: 'النسخة الكاملة',
+    body: 'نص الحكاية الكامل '.repeat(60)
+  });
+  const raw = first + '\\n</escape>\\n\\x60'.repeat(0) +
+    '\\n</escape>\\n' + String.fromCharCode(96).repeat(6) + 'json\\n' +
+    second + '\\n' + String.fromCharCode(96).repeat(6);
+  const result = parser.parse(raw);
+  assert.equal(result.value.title, 'النسخة الكاملة');
+  assert.equal(result.repaired, true);
+  assert.ok(result.notes.some((note) => /أكثر من كائن JSON/.test(note)));
+}
+{
+  // Prefer the story-package object over a longer unrelated JSON object in surrounding pasted text.
+  const unrelated = JSON.stringify({ note: 'x'.repeat(500), detail: 'not a story package' });
+  const story = JSON.stringify({
+    format: 'KH_STORY_PACKAGE_V1',
+    title: 'الحكاية الصحيحة',
+    body: 'محتوى مكتمل'
+  });
+  const result = parser.parse('شرح قبل النص\\n' + unrelated + '\\n</escape>\\n' + story);
+  assert.equal(result.value.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(result.value.title, 'الحكاية الصحيحة');
+}
+{
+  // A valid complete object remains recoverable when an incomplete duplicate follows it.
+  const story = JSON.stringify({
+    format: 'KH_STORY_PACKAGE_V1',
+    title: 'حكاية مكتملة',
+    body: 'نص مكتمل'
+  });
+  const raw = story + '\\n</escape>\\n' +
+    String.fromCharCode(96).repeat(6) + 'json\\n{"format":"KH_STORY_PACKAGE_V1","title":"نسخة مقطوعة"';
+  const result = parser.parse(raw);
+  assert.equal(result.value.title, 'حكاية مكتملة');
+}
+
 console.log('Passed AI JSON repair tests.');
