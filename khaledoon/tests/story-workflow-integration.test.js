@@ -44,6 +44,22 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
+test('story copy prompt uses one canonical workflow, drops old AI output, and enforces the shared quality gate', function () {
+  assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
+  assert.ok(admin.includes("var selectedAI=providerSelect.value||'chatgpt'"));
+  assert.ok(admin.includes("var selectedAIInstructions=(promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])"));
+  assert.ok(admin.includes('L.push(STORY_QUALITY_GATE||'));
+  assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
+  assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a new prompt');
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261021-3"));
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  ['cover-popup','prefers-reduced-motion','الإيطالية والألمانية','الصورة التفاعلية','الإحداثيات الموثوقة'].forEach(function (needle) {
+    assert.ok(promptTexts.includes(needle), 'missing shared quality requirement: ' + needle);
+  });
+  ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
+    assert.ok(promptTexts.includes('"'+provider+'"'), 'missing provider prompt: ' + provider);
+  });
+});
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
   assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:[]"));
