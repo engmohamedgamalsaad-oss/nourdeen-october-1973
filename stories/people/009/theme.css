@@ -10,7 +10,11 @@ header a{color:#f5dfb9}
 .hero:before{content:"";position:absolute;inset:0;z-index:0;opacity:.3;background:repeating-linear-gradient(135deg,transparent 0 38px,#f0c98210 39px 40px);pointer-events:none}
 .hero .container{position:relative;z-index:3;width:min(1120px,calc(100% - 36px));margin:auto;padding-left:min(38%,430px);padding-right:0}
 .hero-art{position:absolute;z-index:1;left:4%;right:auto;top:9%;bottom:8%;width:min(32%,390px);display:flex;align-items:center;justify-content:center;opacity:1}
-.hero-art img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:22px;border:1px solid #f0c98280;background:#1d1b1d;box-shadow:0 28px 65px #0009;filter:drop-shadow(0 12px 20px #0008)}
+.hero-art img{display:block;width:100%;height:100%;object-fit:contain;object-position:center;border-radius:22px;border:1px solid #f0c98280;background:#1d1b1d;box-shadow:0 28px 65px #0009;filter:drop-shadow(0 12px 20px #0008);animation:mahfouz-portrait-enter .95s cubic-bezier(.2,.8,.2,1) both}
+.hero .eyebrow,.hero .person-name,.hero h1,.hero .hero-subtitle,.hero .author,.hero .cover-label{animation:mahfouz-text-enter .72s cubic-bezier(.2,.8,.2,1) both}
+.hero .person-name{animation-delay:90ms}.hero h1{animation-delay:150ms}.hero .hero-subtitle{animation-delay:230ms}.hero .author{animation-delay:310ms}.hero .cover-label{animation-delay:380ms}
+@keyframes mahfouz-text-enter{from{opacity:0;transform:translateY(18px);filter:blur(3px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes mahfouz-portrait-enter{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .hero .eyebrow,.story .kicker,.story-quiz-kicker{color:var(--gold);font-weight:900;letter-spacing:.02em}
 .person-name{margin:4px 0 0;color:var(--gold);font-weight:900;font-size:clamp(1.15rem,2.4vw,1.65rem)}
 .hero h1{max-width:19ch;color:var(--mahfouz-cream);font:800 clamp(2.2rem,5.1vw,4.5rem)/1.35 Marhey,Cairo,serif;text-shadow:0 6px 24px #0008;margin:10px 0 16px}
