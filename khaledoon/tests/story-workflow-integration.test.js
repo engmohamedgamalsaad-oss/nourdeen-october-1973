@@ -265,4 +265,23 @@ test('story prompt requires automatic interactive-map linkage with no orphan or 
   assert.ok(texts.includes('ولا تدّعِ اكتماله'));
 });
 
+test('verified map_location is carried from AI import into bundle and merged safely on publish', function () {
+  var workflow = fs.readFileSync('khaledoon/assets/story-workflow.js','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
+  var edge = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(workflow.includes("hasOwnProperty.call(pkg, 'map_location')"));
+  assert.ok(workflow.includes('اسم المكان في map_location مطلوب باللغات الخمس'));
+  assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'));
+  assert.ok(admin.includes('draft.map_location=meta.map_location'));
+  assert.ok(bundle.includes("files.push({path:'stories/places.json'"));
+  assert.ok(bundle.includes('hasMapMeta'));
+  assert.ok(bundle.includes('تعذر قراءة stories/places.json'));
+  assert.ok(edge.includes('stories/places.json is required so publishing can synchronize the interactive map automatically'));
+  assert.ok(edge.includes('delete currentPlaces[storyId]'));
+  assert.ok(edge.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(edge.includes('map_linked: mapMarkerAdded'));
+  assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
