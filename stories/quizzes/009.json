@@ -1,0 +1,324 @@
+{
+  "questions": [
+    {
+      "q": "في أي مدينة وُلد نجيب محفوظ؟",
+      "o": [
+        "القاهرة",
+        "الإسكندرية",
+        "أسوان",
+        "طنطا"
+      ],
+      "a": 0,
+      "e": "وُلد نجيب محفوظ في حي الجمالية بالقاهرة يوم 11 ديسمبر 1911.",
+      "i18n": {
+        "en": {
+          "q": "In which city was Naguib Mahfouz born?",
+          "o": [
+            "Cairo",
+            "Alexandria",
+            "Aswan",
+            "Tanta"
+          ],
+          "e": "Naguib Mahfouz was born in the Gamaliya district of Cairo on 11 December 1911."
+        },
+        "fr": {
+          "q": "Dans quelle ville Naguib Mahfouz est-il né ?",
+          "o": [
+            "Le Caire",
+            "Alexandrie",
+            "Assouan",
+            "Tanta"
+          ],
+          "e": "Naguib Mahfouz est né dans le quartier de Gamaliya, au Caire, le 11 décembre 1911."
+        },
+        "it": {
+          "q": "In quale città nacque Naguib Mahfouz?",
+          "o": [
+            "Il Cairo",
+            "Alessandria",
+            "Assuan",
+            "Tanta"
+          ],
+          "e": "Naguib Mahfouz nacque nel quartiere di Gamaliya, al Cairo, l’11 dicembre 1911."
+        },
+        "de": {
+          "q": "In welcher Stadt wurde Naguib Mahfouz geboren?",
+          "o": [
+            "Kairo",
+            "Alexandria",
+            "Assuan",
+            "Tanta"
+          ],
+          "e": "Naguib Mahfouz wurde am 11. Dezember 1911 im Stadtviertel Gamaliya in Kairo geboren."
+        }
+      }
+    },
+    {
+      "q": "في أي عام حصل نجيب محفوظ على جائزة نوبل في الأدب؟",
+      "o": [
+        "1978",
+        "1988",
+        "1998",
+        "2006"
+      ],
+      "a": 1,
+      "e": "حصل نجيب محفوظ على جائزة نوبل في الأدب عام 1988.",
+      "i18n": {
+        "en": {
+          "q": "In what year did Naguib Mahfouz receive the Nobel Prize in Literature?",
+          "o": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "e": "Naguib Mahfouz received the Nobel Prize in Literature in 1988."
+        },
+        "fr": {
+          "q": "En quelle année Naguib Mahfouz a-t-il reçu le prix Nobel de littérature ?",
+          "o": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "e": "Naguib Mahfouz a reçu le prix Nobel de littérature en 1988."
+        },
+        "it": {
+          "q": "In quale anno Naguib Mahfouz ricevette il Premio Nobel per la letteratura?",
+          "o": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "e": "Naguib Mahfouz ricevette il Premio Nobel per la letteratura nel 1988."
+        },
+        "de": {
+          "q": "In welchem Jahr erhielt Naguib Mahfouz den Nobelpreis für Literatur?",
+          "o": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "e": "Naguib Mahfouz erhielt 1988 den Nobelpreis für Literatur."
+        }
+      }
+    },
+    {
+      "q": "ما المجال الذي درسه نجيب محفوظ في جامعة القاهرة؟",
+      "o": [
+        "الطب",
+        "الهندسة",
+        "الفلسفة",
+        "الزراعة"
+      ],
+      "a": 2,
+      "e": "درس نجيب محفوظ الفلسفة في جامعة القاهرة وتخرج عام 1934.",
+      "i18n": {
+        "en": {
+          "q": "What subject did Naguib Mahfouz study at Cairo University?",
+          "o": [
+            "Medicine",
+            "Engineering",
+            "Philosophy",
+            "Agriculture"
+          ],
+          "e": "Naguib Mahfouz studied philosophy at Cairo University and graduated in 1934."
+        },
+        "fr": {
+          "q": "Quelle discipline Naguib Mahfouz a-t-il étudiée à l’Université du Caire ?",
+          "o": [
+            "La médecine",
+            "L’ingénierie",
+            "La philosophie",
+            "L’agriculture"
+          ],
+          "e": "Naguib Mahfouz a étudié la philosophie à l’Université du Caire et a obtenu son diplôme en 1934."
+        },
+        "it": {
+          "q": "Quale materia studiò Naguib Mahfouz all’Università del Cairo?",
+          "o": [
+            "Medicina",
+            "Ingegneria",
+            "Filosofia",
+            "Agraria"
+          ],
+          "e": "Naguib Mahfouz studiò filosofia all’Università del Cairo e si laureò nel 1934."
+        },
+        "de": {
+          "q": "Welches Fach studierte Naguib Mahfouz an der Universität Kairo?",
+          "o": [
+            "Medizin",
+            "Ingenieurwesen",
+            "Philosophie",
+            "Landwirtschaft"
+          ],
+          "e": "Naguib Mahfouz studierte Philosophie an der Universität Kairo und schloss sein Studium 1934 ab."
+        }
+      }
+    },
+    {
+      "q": "أي مجموعة من الروايات تكوّن ثلاثية القاهرة؟",
+      "o": [
+        "بين القصرين، قصر الشوق، السكرية",
+        "زقاق المدق، رادوبيس، كفاح طيبة",
+        "أولاد حارتنا، ميرامار، اللص والكلاب",
+        "عبث الأقدار، خان الخليلي، القاهرة الجديدة"
+      ],
+      "a": 0,
+      "e": "تتكون ثلاثية القاهرة من بين القصرين وقصر الشوق والسكرية.",
+      "i18n": {
+        "en": {
+          "q": "Which novels make up the Cairo Trilogy?",
+          "o": [
+            "Palace Walk, Palace of Desire, Sugar Street",
+            "Midaq Alley, Rhadopis, Thebes at War",
+            "Children of Gebelawi, Miramar, The Thief and the Dogs",
+            "Khufu’s Wisdom, Khan al-Khalili, Cairo Modern"
+          ],
+          "e": "The Cairo Trilogy consists of Palace Walk, Palace of Desire, and Sugar Street."
+        },
+        "fr": {
+          "q": "Quels romans composent la trilogie du Caire ?",
+          "o": [
+            "Bayn al-Qasrayn, Qasr al-Shawq, al-Sukkariyya",
+            "L’Impasse des deux palais, Rhadopis, La Lutte de Thèbes",
+            "Les Fils de la médina, Miramar, Le Voleur et les chiens",
+            "La Sagesse de Khéops, Khan al-Khalili, Le Caire moderne"
+          ],
+          "e": "La trilogie du Caire se compose de Bayn al-Qasrayn, Qasr al-Shawq et al-Sukkariyya."
+        },
+        "it": {
+          "q": "Quali romanzi compongono la Trilogia del Cairo?",
+          "o": [
+            "Tra i due palazzi, Il palazzo del desiderio, Il giardino del passato",
+            "Il vicolo del mortaio, Rhadopis, La battaglia di Tebe",
+            "I figli della medina, Miramar, Il ladro e i cani",
+            "La saggezza di Cheope, Khan al-Khalili, Il Cairo moderno"
+          ],
+          "e": "La Trilogia del Cairo è composta da Tra i due palazzi, Il palazzo del desiderio e Il giardino del passato."
+        },
+        "de": {
+          "q": "Welche Romane bilden die Kairo-Trilogie?",
+          "o": [
+            "Zwischen den Palästen, Palast der Sehnsucht, Die Zuckerstraße",
+            "Die Midaq-Gasse, Rhadopis, Theben im Kampf",
+            "Die Kinder unseres Viertels, Miramar, Der Dieb und die Hunde",
+            "Chufu-Weisheit, Khan al-Khalili, Modernes Kairo"
+          ],
+          "e": "Die Kairo-Trilogie besteht aus Zwischen den Palästen, Palast der Sehnsucht und Die Zuckerstraße."
+        }
+      }
+    },
+    {
+      "q": "ما الذي استلهمه محفوظ من حي الجمالية؟",
+      "o": [
+        "الشخصيات وتفاصيل الحياة اليومية",
+        "قواعد بناء الطائرات",
+        "طرق زراعة القطن فقط",
+        "خرائط الكواكب"
+      ],
+      "a": 0,
+      "e": "ساعدته مشاهد الحياة اليومية في الجمالية على رسم شخصيات وأماكن وأحداث في رواياته.",
+      "i18n": {
+        "en": {
+          "q": "What did Mahfouz draw from the Gamaliya neighbourhood?",
+          "o": [
+            "Characters and details of everyday life",
+            "Aircraft construction rules",
+            "Cotton-growing methods only",
+            "Maps of planets"
+          ],
+          "e": "Everyday life in Gamaliya helped inspire characters, places, and events in his novels."
+        },
+        "fr": {
+          "q": "Qu’est-ce que Mahfouz a tiré de son quartier de Gamaliya ?",
+          "o": [
+            "Des personnages et des détails de la vie quotidienne",
+            "Des règles de construction aéronautique",
+            "Uniquement des méthodes de culture du coton",
+            "Des cartes des planètes"
+          ],
+          "e": "La vie quotidienne à Gamaliya a inspiré des personnages, des lieux et des événements de ses romans."
+        },
+        "it": {
+          "q": "Che cosa trasse Mahfouz dal quartiere di Gamaliya?",
+          "o": [
+            "Personaggi e dettagli della vita quotidiana",
+            "Regole per costruire aeroplani",
+            "Soltanto tecniche di coltivazione del cotone",
+            "Mappe dei pianeti"
+          ],
+          "e": "La vita quotidiana a Gamaliya contribuì a ispirare personaggi, luoghi ed eventi dei suoi romanzi."
+        },
+        "de": {
+          "q": "Was nahm Mahfouz aus dem Viertel Gamaliya als Inspiration mit?",
+          "o": [
+            "Figuren und Einzelheiten des Alltags",
+            "Regeln für den Flugzeugbau",
+            "Nur Methoden des Baumwollanbaus",
+            "Karten der Planeten"
+          ],
+          "e": "Der Alltag in Gamaliya inspirierte Figuren, Orte und Ereignisse in seinen Romanen."
+        }
+      }
+    },
+    {
+      "q": "في أي عام توفي نجيب محفوظ؟",
+      "o": [
+        "1988",
+        "1999",
+        "2006",
+        "2011"
+      ],
+      "a": 2,
+      "e": "توفي نجيب محفوظ في 30 أغسطس عام 2006.",
+      "i18n": {
+        "en": {
+          "q": "In what year did Naguib Mahfouz die?",
+          "o": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "e": "Naguib Mahfouz died on 30 August 2006."
+        },
+        "fr": {
+          "q": "En quelle année Naguib Mahfouz est-il mort ?",
+          "o": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "e": "Naguib Mahfouz est mort le 30 août 2006."
+        },
+        "it": {
+          "q": "In quale anno morì Naguib Mahfouz?",
+          "o": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "e": "Naguib Mahfouz morì il 30 agosto 2006."
+        },
+        "de": {
+          "q": "In welchem Jahr starb Naguib Mahfouz?",
+          "o": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "e": "Naguib Mahfouz starb am 30. August 2006."
+        }
+      }
+    }
+  ],
+  "id": "009",
+  "title": "نجيب محفوظ"
+}
