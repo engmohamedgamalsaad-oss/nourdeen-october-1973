@@ -124,7 +124,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 </section>
 
 <section id="reviewView" class="wrap" hidden>
- <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.94);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
+ <div class="pub-actions preview-top-actions" style="position:sticky;top:8px;z-index:50;justify-content:flex-start;background:rgba(7,20,27,.96);backdrop-filter:blur(10px);padding:10px;border:1px solid var(--line);border-radius:14px"><button class="btn primary" type="button" id="approveStoryTopBtn">اعتماد المعاينة</button><button class="btn" type="button" id="returnToEditTopBtn">← العودة للأدمن للتعديل وإعادة المعاينة</button><button class="btn" type="button" id="printReviewTopBtn">طباعة المعاينة</button></div>
  <div class="note" id="reviewMeta" role="status">تحميل المعاينة…</div>
  <div class="note" id="aiVersionBadge" hidden>نسخة AI — ناتج الذكاء الاصطناعي محفوظ كما وصل، وتُعرض الحكاية داخل قالب خالدون للمراجعة فقط.</div>
  <div class="visitor-bar" id="visitorBar"><button class="btn primary" type="button" id="openVisitorTabBtn" title="يفتح الصفحة في تبويب كامل بنفس شاشة الزائر تمامًا، بدون أي علامات أدمن">🔎 فتح كما يراها الزائر (تبويب كامل)</button><button class="btn on" type="button" data-dev="desktop">سطح المكتب</button><button class="btn" type="button" data-dev="tablet">لوحي</button><button class="btn" type="button" data-dev="mobile">جوال</button></div>
@@ -177,7 +177,8 @@ paint();
 var params=new URLSearchParams(location.search);
 var currentDraft=null;
 
-function lockDecisions(){['approveStoryBtn','rejectStoryBtn'].forEach(function(id){$(id).disabled=true})}
+function lockDecisions(){['approveStoryBtn','approveStoryTopBtn','rejectStoryBtn'].forEach(function(id){var b=$(id);if(b){b.disabled=true;b.setAttribute('aria-busy','true')}})}
+function unlockDecisions(){['approveStoryBtn','approveStoryTopBtn','rejectStoryBtn'].forEach(function(id){var b=$(id);if(b){b.disabled=false;b.removeAttribute('aria-busy')}})}
 function say(t){put('reviewMeta',t)}
 
 async function adminToken(){
@@ -296,6 +297,7 @@ function renderReview(d){
  $('reviewOriginalWrap').hidden=!d.original_body;
  var aiMeta=d.story_meta&&typeof d.story_meta==='object'?d.story_meta:{};var aiProvider=String(aiMeta.ai_imported_provider_label||aiMeta.ai_imported_provider||d.provider_key||'أداة الذكاء الاصطناعي');var aiBadge=$('aiVersionBadge');if(aiBadge){aiBadge.hidden=!(aiMeta.ai_package_raw||aiMeta.ai_imported_at||aiMeta.ai_imported_provider);if(!aiBadge.hidden)aiBadge.textContent='نسخة AI — مصدرها '+aiProvider+'؛ الناتج محفوظ للمراجعة داخل قالب خالدون. هذه معاينة غير منشورة.'}
  renderReadiness(d);renderQuiz(d);renderTranslations(d);
+ unlockDecisions();
  say('الحالة الحالية: '+(d.status_label||'مسودة')+' · راجع الصفحة في الإطار أعلاه، ثم بيانات المراجعة تحتها (النص والمصادر والترجمات وبنك الأسئلة) قبل اتخاذ القرار.');
  showPage(d);
 }
@@ -471,17 +473,27 @@ async function decide(action){
   var save=await fetch(rowUrl,{method:'PATCH',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=representation'},hdr),body:JSON.stringify(payload)});
   if(!save.ok)throw new Error('تعذر حفظ القرار في قاعدة البيانات ('+save.status+'): '+(await save.text()).slice(0,220));
   var saved=await save.json();if(!saved.length)throw new Error('لم يرجع الخادم سجلًا بعد حفظ القرار.');
+  var savedRecord=saved[0],savedReview=savedRecord.story_meta&&savedRecord.story_meta.preview_review;
+  if(approve&&(!savedReview||savedReview.decision!==window.KHWorkflow.DECISION.APPROVED))throw new Error('استجاب الخادم للحفظ لكن لم يتأكد تسجيل اعتماد المعاينة. لم تُمسح بيانات المعاينة؛ أعد المحاولة أو ارجع للأدمن وافحص السجل.');
+  if(!approve&&(!savedReview||savedReview.decision!==window.KHWorkflow.DECISION.REJECTED))throw new Error('لم يتأكد تسجيل رفض المعاينة. لم تُمسح بيانات المعاينة.');
+  /* تحقق مستقل من القراءة بعد الحفظ قبل إظهار نجاح الاعتماد. */
+  var verify=await fetch(rowUrl+'&select=id,status,story_meta',{headers:hdr,cache:'no-store'});
+  if(!verify.ok)throw new Error('حُفظ الطلب لكن تعذّر التحقق النهائي من قاعدة البيانات ('+verify.status+'). لم تُمسح بيانات المعاينة.');
+  var verifiedRows=await verify.json(),verified=verifiedRows[0],verifiedReview=verified&&verified.story_meta&&verified.story_meta.preview_review;
+  var expectedDecision=approve?window.KHWorkflow.DECISION.APPROVED:window.KHWorkflow.DECISION.REJECTED;
+  if(!verified||!verifiedReview||verifiedReview.decision!==expectedDecision)throw new Error('لم يؤكد فحص ما بعد الحفظ تسجيل القرار في قاعدة البيانات. لم تُمسح بيانات المعاينة.');
   try{localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}catch(e){}
-  if(window.opener&&!window.opener.closed){try{window.opener.location.reload()}catch(e){}}
+  if(window.opener&&!window.opener.closed){try{window.opener.location.href='admin.html?returnfrompreview=1&refresh='+Date.now();}catch(e){}}
   if(approve){
    say('تم قبول المعاينة وحفظ القرار. الحكاية لم تُنشر. '+(pageInfo&&pageInfo.bundle?'نُزّلت حزمة ZIP للحكاية؛ ارفع ملفاتها إلى GitHub بنفس المسارات ثم استخدم «تأكيد النشر بعد الرفع» في الأدمن.':pageInfo?'سُجّل مسار الصفحة الجاهزة ('+pageInfo.path+'). بعد دمجها في GitHub استخدم «تأكيد النشر بعد الرفع» في الأدمن.':'لم تُنشأ حزمة رفع: '+(bundleNote||'القالب غير متاح')+'\nأكمل الناقص من الأدمن ثم افتح المعاينة وأقبلها من جديد، أو جهّز ملفات الصفحة النهائية بأداة الذكاء الاصطناعي.'));
   }else{
    say('تم رفض المعاينة وإرجاع الحكاية للتحرير. سبب الرفض محفوظ: '+rejectionReason);
    setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},900);
   }
- }catch(error){say('لم يُحفظ القرار: '+(error&&error.message?error.message:'خطأ غير معروف'));['approveStoryBtn','rejectStoryBtn'].forEach(function(id){$(id).disabled=false})}
+ }catch(error){say('لم يتم تأكيد القرار: '+(error&&error.message?error.message:'خطأ غير معروف')+' إذا لم تظهر رسالة نجاح واضحة، فلا تعتبر المعاينة معتمدة.');unlockDecisions();}
 }
 $('approveStoryBtn').addEventListener('click',function(){decide('approve')});
+$('approveStoryTopBtn').addEventListener('click',function(){decide('approve')});
 $('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
 function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');if(table!=='submitted_stories')table='khaledoon_submissions';if(!id){say('لا يوجد رقم سجل مرتبط بهذه المعاينة. ارجع للأدمن وافتح المعاينة من سجل الحكاية حتى نرجع لنفس الحكاية.');return}try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(d));localStorage.setItem('kh-story-preview-context',JSON.stringify(d))}catch(e){}var target='admin.html?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table)+'&returnfrompreview=1';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 $('returnToEditBtn').addEventListener('click',returnToAdminForEdit);
