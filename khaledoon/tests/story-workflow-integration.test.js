@@ -59,6 +59,17 @@ test('strict story prompt gate is shared across providers and old AI output is n
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html', 'utf8');
   assert.ok(promptAdmin.includes('<option value="gemini">Gemini</option>'));
 });
+test('story publishing safely links verified map locations without overwriting existing map entries', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('path === "stories/index.json" || path === "stories/places.json"'));
+  assert.ok(publisher.includes("file.path !== 'stories/places.json'"));
+  assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(publisher.includes("['ar','en','fr','it','de'].some"));
+  assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
+  var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  assert.ok(shared.includes('الربط التلقائي بالخريطة التفاعلية'));
+  assert.ok(shared.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
+});
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
   assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:[]"));
