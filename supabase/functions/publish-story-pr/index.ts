@@ -21,7 +21,7 @@ function allowedPath(path: unknown): path is string {
   if (path === "stories/index.json") return true;
   if (/^stories\/quizzes\/[0-9]{3}\.json$/.test(path)) return true;
   if (!/^stories\/[a-z0-9-]+\/[0-9]{3}\/[A-Za-z0-9._/-]+$/.test(path)) return false;
-  return ["html","json","css","js","svg","png","jpg","jpeg","webp","avif","woff2"].includes(path.split(".").pop()?.toLowerCase() ?? "");
+  return ["html","json","css","js","svg","png","jpg","jpeg","webp","avif","woff2","md"].includes(path.split(".").pop()?.toLowerCase() ?? "");
 }
 
 async function github(path: string, token: string, init: RequestInit = {}) {
