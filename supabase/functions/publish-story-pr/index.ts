@@ -150,7 +150,7 @@ Deno.serve(async (req: Request) => {
         throw new Error('Map location requires a source name and an HTTPS source URL.');
       }
       const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
-      const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\\s/g, '')), (c) => c.charCodeAt(0));
+      const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
       const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
       if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
         throw new Error('Current stories/places.json must be an object.');
