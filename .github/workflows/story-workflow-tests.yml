@@ -8,6 +8,7 @@ on:
       - "khaledoon/story-builder.html"
       - "khaledoon/assets/story-workflow.js"
       - "khaledoon/assets/story-template-bundle.js"
+      - "khaledoon/assets/ai-json-repair.js"
       - "khaledoon/tests/**"
       - ".github/workflows/story-workflow-tests.yml"
   workflow_dispatch:
@@ -26,6 +27,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Run AI JSON repair tests
+        run: node khaledoon/tests/ai-json-repair.test.cjs
       - name: Run workflow unit tests
         run: node khaledoon/tests/story-workflow.test.js
       - name: Run mocked integration contract tests
