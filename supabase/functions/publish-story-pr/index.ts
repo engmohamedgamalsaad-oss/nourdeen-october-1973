@@ -146,6 +146,9 @@ Deno.serve(async (req: Request) => {
       if (place.approximate !== undefined && typeof place.approximate !== 'boolean') {
         throw new Error('Map approximate flag must be boolean when provided.');
       }
+      if (typeof place.source_name !== 'string' || !place.source_name.trim() || typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url)) {
+        throw new Error('Map location requires a source name and an HTTPS source URL.');
+      }
       const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
       const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\\s/g, '')), (c) => c.charCodeAt(0));
       const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
