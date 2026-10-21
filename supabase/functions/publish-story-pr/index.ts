@@ -136,7 +136,7 @@ Deno.serve(async (req: Request) => {
     const hasStoryPlace = Object.prototype.hasOwnProperty.call(incomingPlaces, storyId);
     const place = hasStoryPlace ? incomingPlaces[storyId] : undefined;
     const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
-    const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\\s/g, '')), (c) => c.charCodeAt(0));
+    const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
     if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
       throw new Error('Current stories/places.json must be an object.');
@@ -171,7 +171,7 @@ Deno.serve(async (req: Request) => {
       // Older records without map metadata preserve any existing verified marker.
       mapMarkerAdded = !!currentPlaces[storyId];
     }
-    const mergedPlacesContent = JSON.stringify(currentPlaces, null, 2) + '\\n';
+    const mergedPlacesContent = JSON.stringify(currentPlaces, null, 2) + '\n';
     const safeFiles = body.files.map((file: any) => {
       if (file.path === 'stories/index.json') return { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' };
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
