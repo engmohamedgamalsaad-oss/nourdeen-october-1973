@@ -46,7 +46,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
 });
 test('strict story prompt gate is shared across providers and old AI output is not copied', function () {
   assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
-  assert.ok(admin.includes("if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-د')<0)L.push(STORY_QUALITY_GATE)"));
+  assert.ok(admin.includes("if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')<0)L.push(STORY_QUALITY_GATE)"));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
   assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261021-5"));
