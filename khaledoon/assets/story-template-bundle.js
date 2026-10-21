@@ -236,7 +236,7 @@ async function download(draft,opts){
  var mapData=await mapResponse.json();
  if(!mapData||typeof mapData!=='object'||Array.isArray(mapData))throw new Error('ملف stories/places.json ليس كائن JSON صالحًا.');
  if(hasMapMeta){
-  if(mapLocation===null){delete mapData[id];}
+  if(mapLocation===null){mapData[id]=null;}
   else{
    if(!mapLocation||typeof mapLocation!=='object'||Array.isArray(mapLocation))throw new Error('map_location يجب أن يكون null أو كائن موقع موثق.');
    var mapLat=mapLocation.lat,mapLng=mapLocation.lng;
