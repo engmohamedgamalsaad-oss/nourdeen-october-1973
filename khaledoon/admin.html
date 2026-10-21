@@ -553,7 +553,7 @@ function makePreviewDraft(statusForPreview){
   L.push(selectedAIInstructions);
   L.push('');
   L.push('================ بوابة الجودة الإلزامية ================');
-  L.push(STORY_QUALITY_GATE);
+  if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-ج')<0)L.push(STORY_QUALITY_GATE);
   var managedExtras=(promptManagerState.custom||[]).filter(function(p){if(!p||!String(p.name||'').trim()||!String(p.text||'').trim())return false;var tx=String(p.text).trim();return workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n');
   if(managedExtras){L.push('');L.push('================ تعليمات إضافية محفوظة غير مكررة ================');L.push(managedExtras);}
   L.push('');
