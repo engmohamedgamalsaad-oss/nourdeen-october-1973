@@ -6,6 +6,87 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* =========================================
+     0) تهيئة صفحات القالب المولّد من لوحة الإدارة (body.story-design-*)
+     هذه الصفحات تُبنى بقالب يختلف عن الحكايات المرجعية: نافذة #intro ثابتة، وغلاف hero بلا
+     .hero-content، وفقرات داخل .story-body، وأزرار مشاركة بلا ربط. نكيّفها هنا حتى تحصل على
+     شاشة البداية والحركة والمشاركة والهوامش نفسها، دون المساس بالحكايات القديمة.
+  ========================================= */
+  var generatedStory = /(^|\s)story-design-/.test(body.className || '');
+
+  function adaptGeneratedStory() {
+    var intro = document.getElementById('intro');
+    if (intro) {
+      if (!body.getAttribute('data-splash')) {
+        var introTitle = intro.querySelector('#intro-title');
+        var introDesc = intro.querySelector('#intro-desc');
+        var introImg = intro.querySelector('.modal-art img');
+        if (introImg && introImg.getAttribute('src')) {
+          body.setAttribute('data-splash', introImg.getAttribute('src'));
+          body.setAttribute('data-splash-alt', introImg.getAttribute('alt') || '');
+          body.setAttribute('data-splash-title', introTitle ? introTitle.textContent.trim() : (document.title || ''));
+          body.setAttribute('data-splash-subtitle', introDesc ? introDesc.textContent.trim() : '');
+          body.setAttribute('data-splash-top', '#0b1920');
+          body.setAttribute('data-splash-bottom', '#050d14');
+        }
+      }
+      /* النافذة القديمة لا يفتحها ولا يغلقها أي كود مشترك؛ تُستبدل بشاشة البداية القياسية. */
+      intro.remove();
+    }
+
+    var heroBox = document.querySelector('.hero > .container');
+    if (heroBox && !document.querySelector('.hero-content')) {
+      heroBox.classList.add('hero-content');
+    }
+
+    var fix = document.createElement('style');
+    fix.setAttribute('data-generated-story-fixes', '1');
+    fix.textContent = [
+      /* هوامش جانبية ثابتة على الموبايل (بعض التصاميم كانت تصفّرها) وعمود قراءة أضيق */
+      'body[class*="story-design-"] .story{padding-left:clamp(18px,5vw,32px)!important;padding-right:clamp(18px,5vw,32px)!important}',
+      'body[class*="story-design-"] .story .container{width:min(720px,100%)}',
+      'body[class*="story-design-"] .story-body p{margin:0 0 1.1rem;line-height:2.1}',
+      /* أزرار المشاركة */
+      '.share-actions .btn,.share-actions .print-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 18px;border-radius:999px;text-decoration:none;font:800 .9rem "Cairo",Tahoma,sans-serif;cursor:pointer}',
+      '#share-whatsapp{background:#168b55!important;color:#fff!important;border:1px solid rgba(255,255,255,.24)}',
+      '#share-facebook{background:#1877f2!important;color:#fff!important;border:1px solid rgba(255,255,255,.24)}',
+      /* الطباعة: العنوان والمتن والصور والمصادر فقط */
+      '@media print{body[class*="story-design-"]{background:#fff!important;color:#000!important}',
+      'body[class*="story-design-"] header,.topbar,.language-switch,.share-actions,.story-share-bar,.reactions-section,.story-quiz-section,.story-splash,.lightbox,.story-visual-gallery .container>.kicker{display:none!important}',
+      'body[class*="story-design-"] p,body[class*="story-design-"] h1,body[class*="story-design-"] h2,body[class*="story-design-"] h3,body[class*="story-design-"] li{color:#000!important}',
+      'body[class*="story-design-"] .story,body[class*="story-design-"] .hero{background:#fff!important;border:0!important;transform:none!important}}'
+    ].join('');
+    document.head.appendChild(fix);
+
+    /* ربط أزرار المشاركة والطباعة الموجودة في القالب (كانت href="#" بلا كود). */
+    var pageUrl = window.location.href.split('#')[0];
+    var pageTitle = document.title || '';
+    var whatsapp = document.getElementById('share-whatsapp');
+    var facebook = document.getElementById('share-facebook');
+    var nativeShare = document.getElementById('share');
+    var printButton = document.getElementById('print-story');
+    if (whatsapp) {
+      whatsapp.href = 'https://wa.me/?text=' + encodeURIComponent(pageTitle + ' — ' + pageUrl);
+    }
+    if (facebook) {
+      facebook.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl);
+    }
+    if (nativeShare) {
+      nativeShare.addEventListener('click', function () {
+        if (navigator.share) {
+          navigator.share({ title: pageTitle, url: pageUrl }).catch(function () {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(pageUrl).catch(function () {});
+        }
+      });
+    }
+    if (printButton) {
+      printButton.addEventListener('click', function () { window.print(); });
+    }
+  }
+
+  if (generatedStory) { adaptGeneratedStory(); }
+
   /* القصص التي تستخدم الغلاف الافتتاحي تحصل أيضًا على حركات الظهور أثناء التمرير. */
   var richStory = !!document.querySelector('.hero-photo') || !!body.getAttribute('data-splash');
 
@@ -212,6 +293,8 @@
       '.container > ul',
       '.container > .timeline',
       '.container > .note',
+      '.story-body > p',
+      '.story-image-card',
       '.word',
       '.panel',
       '.event',
