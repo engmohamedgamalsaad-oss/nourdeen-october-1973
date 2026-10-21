@@ -304,7 +304,18 @@ async function submitStoryPublishPR(it,btn){
  it.story_meta=meta;
  say('info','تم رفع الملفات إلى main. جاري التحقق تلقائيًا من الصفحة والفهرس والصور والترجمات والتفاعلات وبنك الأسئلة…');
  await confirmStoryPublishAfterUpload(it,btn);
- }catch(e){say('err',(e&&e.message?e.message:'تعذر نشر الحكاية')+' — لم أسجلها «تم النشر» دون تحقق.')}finally{stopButtonProgress(btn)}
+ }catch(e){
+ var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
+ try{
+  var failureMeta=Object.assign({},meta),failureReview=Object.assign({},failureMeta.preview_review||review,{publish_error:{reason:String(publishFailure).slice(0,700),at:new Date().toISOString()}});
+  failureMeta.preview_review=failureReview;
+  var failureTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';
+  var failureSave=await rest(failureTable+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:failureMeta})});
+  if(failureSave.ok){it.story_meta=failureMeta;await loadList()}
+  else publishFailure+=' (تعذر حفظ تفاصيل الخطأ في سجل الإدارة: '+failureSave.status+')';
+ }catch(saveError){publishFailure+=' (تعذر حفظ تفاصيل الخطأ في سجل الإدارة)'}
+ say('err',publishFailure+' — لم أسجلها «تم النشر» دون تحقق.');
+ }finally{stopButtonProgress(btn)}
 }
 async function confirmStoryPublishAfterUpload(it,btn){
  btn.disabled=true;
@@ -765,7 +776,7 @@ function pubRow(it){
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
- var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url)w.appendChild(el('small','ph','المعاينة معتمدة، لكن ملفات الحكاية لم تُرفع إلى الموقع بعد. افتح المعاينة لمراجعة المحتوى وتجهيز الملفات.'));if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
+ var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url){if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','تعذر إكمال آخر محاولة نشر: '+pr.publish_error.reason));else w.appendChild(el('small','ph','المعاينة معتمدة، لكن لم يُسجل مسار ملفات الحكاية على الموقع بعد. اضغط «نشر الحكاية» لمعرفة نتيجة التجهيز والرفع.'));}if(pr.publish_error&&pr.publish_error.reason&&(pr.static_story_path||pr.prepared_page_url))w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
