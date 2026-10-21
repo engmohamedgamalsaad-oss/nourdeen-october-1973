@@ -60,7 +60,10 @@
     cover.alt = localized(story, 'title') || ui.read;
     cover.loading = 'lazy';
     cover.decoding = 'async';
-    var candidates = [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'];
+    var isTawfiqHakimCard = String(story.id || '') === '008' && /^stories\/people\/008\/?$/.test(path);
+    var candidates = isTawfiqHakimCard
+      ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
+      : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'];
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
