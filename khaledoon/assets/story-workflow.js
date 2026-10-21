@@ -210,6 +210,17 @@ function validateStoryPackage(pkg) {
   textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
   var designOptions = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
   if (designOptions.indexOf(String(pkg.visual_design || '')) < 0) errors.push('اختر تصميمًا بصريًا مخصصًا من قائمة visual_design.');
+  if (pkg.map_location !== undefined && pkg.map_location !== null) {
+    var ml = pkg.map_location;
+    if (!isObj(ml)) errors.push('map_location يجب أن يكون كائنًا منظمًا أو يُحذف إذا لم يتوفر مكان موثوق.');
+    else {
+      var lat = Number(ml.lat), lng = Number(ml.lng);
+      if (!Number.isFinite(lat) || lat < -90 || lat > 90 || !Number.isFinite(lng) || lng < -180 || lng > 180) errors.push('map_location: إحداثيات غير صالحة.');
+      if (!ml.place || !['ar','en','fr','it','de'].every(function (lang) { return typeof ml.place[lang] === 'string' && ml.place[lang].trim(); })) errors.push('map_location.place يجب أن يحتوي اسم المكان باللغات ar/en/fr/it/de.');
+      if (!/^https:\/\//i.test(String(ml.source_url || '')) || !String(ml.source_name || '').trim()) errors.push('map_location يحتاج source_name وsource_url موثقين.');
+      if (ml.approximate !== undefined && typeof ml.approximate !== 'boolean') errors.push('map_location.approximate يجب أن يكون true/false.');
+    }
+  }
   /* الخريطة التفاعلية: يجب أن يختار المولّد موقعًا موثقًا أو يصرّح صراحة بعدم توفره. */
   if (!Object.prototype.hasOwnProperty.call(pkg, 'map_location')) {
     errors.push('حقل map_location مطلوب: أرسل null عند عدم توفر موقع موثق، أو كائن موقع مكتمل.');
