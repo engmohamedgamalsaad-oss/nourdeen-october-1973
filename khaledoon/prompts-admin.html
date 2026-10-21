@@ -30,7 +30,7 @@ function clone(v){return JSON.parse(JSON.stringify(v))}
 function normalize(raw){
  raw=raw&&typeof raw==='object'?raw:{};
  var d={main:typeof raw.main==='string'?raw.main:(typeof STORY_PAGE_PROMPT==='string'?STORY_PAGE_PROMPT:''),workflow:typeof raw.workflow==='string'?raw.workflow:(typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign(defaults(),raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};
- var marker='تحديث إلزامي — بناء الحكاية كاملة من جزء قصير (2026-10-21-ب)';
+ var marker='بوابة الجودة الإلزامية للحكاية — الإصدار 2026-10-21';
  if(d.workflow&&!d.workflow.includes(marker)&&typeof STORY_WORKFLOW==='string'){
   d.versions.push({saved_at:new Date().toISOString(),note:'نسخة تلقائية قبل تحديث التصميم والإثراء والصور 2026-10-21',main:d.main,workflow:d.workflow,custom:clone(d.custom),providers:clone(d.providers)});
   d.workflow=STORY_WORKFLOW;
