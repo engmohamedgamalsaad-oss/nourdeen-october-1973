@@ -119,7 +119,7 @@ async function main() {
           assert.equal(patched.story_meta.preview_review.decision, 'rejected');
           assert.equal(patched.story_meta.preview_review.reason, 'سبب تجريبي للرفض');
         } else {
-          await page.locator('#approveStoryBtn').click();
+          await page.locator('#approveStoryTopBtn').click();
           await page.waitForFunction(() => document.getElementById('reviewMeta').innerText.includes('لم تُنشر'));
           assert.equal(patched.status, 'review');
           assert.equal(patched.story_meta.preview_review.decision, 'approved_waiting_for_github_upload');

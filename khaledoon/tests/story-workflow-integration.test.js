@@ -97,7 +97,7 @@ test('preview requires rejection reason and calls workflow transitions', functio
   assert.ok(preview.includes('id="rejectionReason"'));
   assert.ok(preview.includes('window.KHWorkflow.markPreviewRejected(meta,rejectionReason,new Date())'));
   assert.ok(preview.includes('window.KHWorkflow.markApproved(meta'));
-  assert.ok(preview.includes('تمت المعاينة بنجاح'));
+  assert.ok(preview.includes('تم اعتماد المعاينة وحفظ القرار والتحقق منه.'));
   assert.ok(preview.includes('رفض المعاينة'));
 });
 test('reader-template preview keeps translations and disables reaction writes', function () {
@@ -147,7 +147,7 @@ test('AI story package validation requires a design profile and at least two doc
   assert.ok(W.validateStoryPackage({
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
-    history_note:'سياق', sources:'مصدر', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
+    history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
     body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
     visual_design:'science-lab',
     images:[

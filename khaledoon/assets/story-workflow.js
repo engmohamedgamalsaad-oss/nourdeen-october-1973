@@ -186,6 +186,11 @@ function markPublished(meta, now) {
   return m;
 }
 
+/* عدد الفقرات بالطريقة نفسها التي يقسّم بها مولّد الصفحة (سطر فارغ واحد على الأقل بين فقرتين). */
+function paragraphCount(s) {
+  return String(s == null ? '' : s).split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean).length;
+}
+
 /* فحص اكتمال حزمة AI قبل الاستيراد؛ يمنع مرور ترجمة أو بنك أسئلة ناقص إلى المعاينة. */
 function validateStoryPackage(pkg) {
   var errors = [], langs = ['en', 'fr', 'it', 'de'];
@@ -225,6 +230,22 @@ function validateStoryPackage(pkg) {
     });
   });
 
+  /* حدود الأطوال التي يقصّ عندها الاستيراد النص بصمت؛ القص يكسر تطابق الفقرات مع الترجمات. */
+  [
+    ['title', 140, 'العنوان'], ['subtitle', 200, 'العنوان الفرعي'], ['body', 12000, 'نص الراوي'],
+    ['history_note', 12000, 'السياق التاريخي'], ['sources', 3000, 'المصادر'], ['images_note', 1500, 'ملاحظات الصور']
+  ].forEach(function (limit) {
+    var value = pkg[limit[0]];
+    if (typeof value === 'string' && value.length > limit[1]) {
+      errors.push(limit[2] + ' أطول من الحد المسموح (' + limit[1] + ' حرفًا)؛ اختصره حتى لا يُقصّ عند الحفظ.');
+    }
+  });
+
+  /* مصدران مختلفان على الأقل بروابط فعلية، وهو شرط تحضير النشر نفسه. */
+  var sourceUrls = String(pkg.sources || '').match(/https?:\/\/[^\s)\]>]+/g) || [];
+  var uniqueSourceUrls = {};
+  sourceUrls.forEach(function (u) { uniqueSourceUrls[u.replace(/[.,;:]+$/, '')] = true; });
+  if (Object.keys(uniqueSourceUrls).length < 2) errors.push('المصادر تحتاج رابطين مختلفين على الأقل، كل مصدر في سطر مستقل.');
 
   if (!isObj(pkg.translations)) {
     errors.push('قسم الترجمات غير موجود.');
@@ -235,6 +256,10 @@ function validateStoryPackage(pkg) {
       ['body', 'نص الراوي'], ['history_note', 'السياق التاريخي'],
       ['images_note', 'ملاحظات الصور']
     ];
+    var parityFields = [
+      ['karma_text', 'صوت كارما'], ['body', 'نص الراوي'],
+      ['history_note', 'السياق التاريخي'], ['images_note', 'ملاحظات الصور']
+    ];
     langs.forEach(function (lang) {
       var translation = pkg.translations[lang];
       if (!isObj(translation)) {
@@ -244,6 +269,14 @@ function validateStoryPackage(pkg) {
       requiredTranslationFields.forEach(function (field) {
         if (typeof translation[field[0]] !== 'string' || !translation[field[0]].trim()) {
           errors.push(lang.toUpperCase() + ': حقل ' + field[1] + ' فارغ.');
+        }
+      });
+      /* المولّد يربط الترجمة بالأصل فقرة بفقرة؛ اختلاف العدد يوقف التحضير لاحقًا. */
+      parityFields.forEach(function (field) {
+        var original = pkg[field[0]], translated = translation[field[0]];
+        if (typeof original !== 'string' || typeof translated !== 'string' || !translated.trim()) return;
+        if (paragraphCount(original) !== paragraphCount(translated)) {
+          errors.push(lang.toUpperCase() + ': عدد فقرات ' + field[1] + ' (' + paragraphCount(translated) + ') لا يطابق العربية (' + paragraphCount(original) + '). افصل الفقرات بسطر فارغ وبالعدد نفسه.');
         }
       });
     });
