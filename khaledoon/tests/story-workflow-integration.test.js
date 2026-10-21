@@ -259,9 +259,9 @@ test('story prompt requires automatic interactive-map linkage with no orphan or 
   assert.ok(texts.includes('اربط العلامة مباشرة برابط صفحة الحكاية الصحيح'));
   assert.ok(texts.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
   assert.ok(texts.includes('لا تعتبر وجود الحكاية في فهرس القصص وحده دليلًا على الربط بالخريطة'));
-  assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو رابطًا'));
+  assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو مصدرًا أو رابطًا'));
   assert.ok(texts.includes('تلتقطها آلية الفهرسة والخريطة التفاعلية تلقائيًا'));
-  assert.ok(texts.includes('لا تدّعِ أن الربط التلقائي تم'));
+  assert.ok(texts.includes('ولا تدّعِ اكتماله'));
 });
 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
