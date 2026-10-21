@@ -75,6 +75,12 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 @media(min-width:651px){.pub-actions{position:sticky;bottom:0;z-index:5;background:#07141bf2;border-top:1px solid var(--line);padding:12px 0}}
 @media(max-width:650px){.fields{grid-template-columns:1fr}.field.full{grid-column:auto}.framebox{min-height:360px;height:65vh}.panel{padding:13px}.cover{padding:22px 14px}.actual-page-preview iframe{height:78vh;height:78svh}.pub-actions{flex-direction:column}.pub-actions .btn{width:100%}}
 @media print{.top,.tabs,.note,.pub-actions,.visitor-bar,.footer,#siteView{display:none!important}body{background:#fff;color:#000}.actual-page-preview iframe{height:auto}}
+
+/* Progress feedback for real asynchronous actions; respects reduced-motion. */
+.kh-progress-active{position:relative!important;overflow:hidden!important;background-image:linear-gradient(90deg,rgba(215,173,102,.08),rgba(215,173,102,.62))!important;background-repeat:no-repeat!important;background-position:left center!important;background-size:0% 100%!important;animation:khProgressFill 1.45s ease-in-out infinite!important;cursor:progress!important}
+.kh-progress-active[aria-busy="true"]{opacity:1!important}
+@keyframes khProgressFill{0%{background-size:0% 100%}82%{background-size:100% 100%}100%{background-size:100% 100%}}
+@media(prefers-reduced-motion:reduce){.kh-progress-active{animation:khProgressFill 3s linear infinite!important}}
 </style>
 <style>html{visibility:hidden}</style>
 <script src="assets/admin-tools-auth.js" defer></script>
@@ -177,6 +183,9 @@ paint();
 var params=new URLSearchParams(location.search);
 var currentDraft=null;
 
+
+function startButtonProgress(btn,label){if(!btn)return;if(!btn.dataset.khOriginalHtml)btn.dataset.khOriginalHtml=btn.innerHTML;btn.classList.add('kh-progress-active');btn.setAttribute('aria-busy','true');btn.disabled=true;if(label)btn.textContent=label;}
+function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remove('kh-progress-active');btn.removeAttribute('aria-busy');btn.disabled=false;if(btn.dataset.khOriginalHtml){btn.innerHTML=btn.dataset.khOriginalHtml;delete btn.dataset.khOriginalHtml;}if(successLabel)btn.textContent=successLabel;}
 function lockDecisions(){['approveStoryBtn','approveStoryTopBtn','rejectStoryBtn'].forEach(function(id){var b=$(id);if(b){b.disabled=true;b.setAttribute('aria-busy','true')}})}
 function unlockDecisions(){['approveStoryBtn','approveStoryTopBtn','rejectStoryBtn'].forEach(function(id){var b=$(id);if(b){b.disabled=false;b.removeAttribute('aria-busy')}})}
 function say(t){put('reviewMeta',t)}
@@ -200,7 +209,7 @@ function startReview(){
  try{draft=JSON.parse(localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){}
  if(requested){
   if(!/^[0-9a-f-]{36}$/i.test(requested)){say('رقم سجل المعاينة غير صالح.');lockDecisions();return}
-  if(params.get('dbloaded')!=='1'){say('جارٍ تحميل الحكاية من قاعدة البيانات…');lockDecisions();loadFromDb(requested,requestedTable);return}
+  if(params.get('dbloaded')!=='1'){say('جارٍ تحميل الحكاية من قاعدة البيانات…');var loadingNote=$('reviewMeta');if(loadingNote){loadingNote.classList.add('kh-progress-active');loadingNote.setAttribute('aria-busy','true')}lockDecisions();loadFromDb(requested,requestedTable);return}
   if(!draft||String(draft.submission_id||'')!==requested||String(draft.submission_table||'khaledoon_submissions')!==requestedTable)draft=null;
  }
  if(!draft){say('لم يتم العثور على بيانات المعاينة. ارجع إلى لوحة الإدارة واضغط «معاينة قبل النشر» مرة أخرى.');lockDecisions();return}
@@ -218,10 +227,11 @@ async function loadFromDb(id,requestedTable){
   if(r.status==='rejected')throw new Error('هذه الحكاية مرفوضة؛ افتحها من سجل الإدارة إذا أردت تعديلها.');
   /* اعرض نسخة العمل المحفوظة داخل pending_draft لكل الحالات، مع دعم سجل إرسال القارئ القديم أيضًا. */
   var source=m.pending_draft?m.pending_draft:r,sm=source.story_meta||m,legacy=table==='submitted_stories';
-  var loaded={submission_id:r.id,submission_table:table,record_type:legacy?'legacy':'modern',record_data:r,story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||(legacy?'october':r.section),section_label:source.section_label||sm.section_label||(legacy?'حكايات أكتوبر 1973':r.section),title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||source.person||'',narrator_name:source.narrator_name||source.student_name||r.narrator_name||r.student_name||'',narrator_grade:source.narrator_grade||source.grade||r.narrator_grade||r.grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||sm.original_body||r.original_body||r.body||'',karma_text:source.karma_text||sm.karma_text||r.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||sm.history_note||r.history_note||'',sources:source.sources||r.sources||sm.sources||'',images_note:source.images_note||sm.images_note||r.images_note||'',images:Array.isArray(source.images)?source.images:(Array.isArray(sm.images)?sm.images:[]),visual_design:source.visual_design||sm.visual_design||'',translations:source.translations||sm.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||r.question_bank_json||'',story_number:source.story_number||sm.story_number||r.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
+  var loaded={submission_id:r.id,submission_table:table,record_type:legacy?'legacy':'modern',record_data:Object.assign({},r,{story_meta:undefined}),story_meta:m,status:r.status,section_key:source.section_key||sm.section_key||(legacy?'october':r.section),section_label:source.section_label||sm.section_label||(legacy?'حكايات أكتوبر 1973':r.section),title:source.title||r.title||'',subtitle:source.subtitle||r.subtitle||'',figure_name:source.figure_name||r.figure_name||source.person||'',narrator_name:source.narrator_name||source.student_name||r.narrator_name||r.student_name||'',narrator_grade:source.narrator_grade||source.grade||r.narrator_grade||r.grade||'',stage:source.stage||r.stage||'',original_body:source.original_body||sm.original_body||r.original_body||r.body||'',karma_text:source.karma_text||sm.karma_text||r.karma_text||'',body:source.body||r.body||'',history_note:source.history_note||sm.history_note||r.history_note||'',sources:source.sources||r.sources||sm.sources||'',images_note:source.images_note||sm.images_note||r.images_note||'',images:Array.isArray(source.images)?source.images:(Array.isArray(sm.images)?sm.images:[]),visual_design:source.visual_design||sm.visual_design||'',translations:source.translations||sm.translations||r.translations||{},question_bank_json:source.question_bank_json||sm.question_bank_json||r.question_bank_json||'',story_number:source.story_number||sm.story_number||r.story_number||'',preview_source_url:source.preview_source_url||sm.preview_source_url||'',status_label:source.status_label||sm.status_label||('الحالة: '+r.status)};
   localStorage.setItem('kh-story-preview-draft',JSON.stringify(loaded));localStorage.setItem('kh-story-preview-context',JSON.stringify(loaded));
+  var loadingNote=$('reviewMeta');if(loadingNote){loadingNote.classList.remove('kh-progress-active');loadingNote.removeAttribute('aria-busy')}
   params.set('dbloaded','1');location.replace(location.pathname+'?'+params.toString());
- }catch(error){say('تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف'));lockDecisions()}
+ }catch(error){var loadingNote=$('reviewMeta');if(loadingNote){loadingNote.classList.remove('kh-progress-active');loadingNote.removeAttribute('aria-busy')}say('تعذر تحميل المعاينة من قاعدة البيانات: '+(error&&error.message?error.message:'خطأ غير معروف'));lockDecisions()}
 }
 
 function textBlock(t,cls){var d=document.createElement('div');d.className=cls||'pub-text';d.textContent=t;return d}
@@ -438,12 +448,12 @@ function showPage(d){
 }
 
 /* ---------- القرار: قبول أو رفض ---------- */
-async function decide(action){
+async function decide(action,clickedButton){
  var approve=action==='approve',d=currentDraft;
  if(!d||!d.submission_id){say('لا يوجد رقم سجل محفوظ لهذه المعاينة. افتح الحكاية من قائمة المراجعة مرة أخرى.');return}
  var rejectionReason=String($('rejectionReason').value||'').trim();
  if(!approve&&!rejectionReason){say('اكتب سبب رفض المعاينة قبل تسجيل الرفض.');$('rejectionReason').focus();return}
- lockDecisions();
+ startButtonProgress(clickedButton,approve?'جارٍ حفظ الاعتماد والتحقق…':'جارٍ حفظ قرار الرفض…');lockDecisions();
  try{
   var token=await adminToken();
   var table=d.submission_table==='submitted_stories'?'submitted_stories':'khaledoon_submissions';
@@ -478,19 +488,19 @@ async function decide(action){
   try{localStorage.removeItem('kh-story-preview-draft');localStorage.removeItem('kh-story-preview-context')}catch(e){}
   if(window.opener&&!window.opener.closed){try{window.opener.location.href='admin.html?returnfrompreview=1&refresh='+Date.now();}catch(e){}}
   if(approve){
-   say('تم اعتماد المعاينة وحفظ القرار والتحقق منه. الحكاية لم تُنشر ولم يبدأ تنزيل أي ملف. '+(pageInfo?'مسار الصفحة المسجل: '+pageInfo.path+'. انتقل إلى الأدمن لاستكمال خطوة تجهيز/نشر الملفات.':'انتقل إلى الأدمن لاستكمال تجهيز ملفات الحكاية ثم تأكيد النشر بعد رفعها.'));
+   stopButtonProgress(clickedButton,'تم اعتماد المعاينة ✓');say('تم اعتماد المعاينة وحفظ القرار والتحقق منه. الحكاية لم تُنشر ولم يبدأ تنزيل أي ملف. '+(pageInfo?'مسار الصفحة المسجل: '+pageInfo.path+'. انتقل إلى الأدمن لاستكمال خطوة تجهيز/نشر الملفات.':'انتقل إلى الأدمن لاستكمال تجهيز ملفات الحكاية ثم تأكيد النشر بعد رفعها.'));
   }else{
-   say('تم رفض المعاينة وإرجاع الحكاية للتحرير. سبب الرفض محفوظ: '+rejectionReason);
+   stopButtonProgress(clickedButton,'تم رفض المعاينة ✓');say('تم رفض المعاينة وإرجاع الحكاية للتحرير. سبب الرفض محفوظ: '+rejectionReason);
    setTimeout(function(){try{window.close()}catch(e){}if(!window.closed)location.replace('admin.html')},900);
   }
- }catch(error){say('لم يتم تأكيد القرار: '+(error&&error.message?error.message:'خطأ غير معروف')+' إذا لم تظهر رسالة نجاح واضحة، فلا تعتبر المعاينة معتمدة.');unlockDecisions();}
+ }catch(error){stopButtonProgress(clickedButton);say('لم يتم تأكيد القرار: '+(error&&error.message?error.message:'خطأ غير معروف')+' إذا لم تظهر رسالة نجاح واضحة، فلا تعتبر المعاينة معتمدة.');unlockDecisions();}
 }
 var approveBottomButton=$('approveStoryBtn');
-if(approveBottomButton)approveBottomButton.addEventListener('click',function(){decide('approve')});
+if(approveBottomButton)approveBottomButton.addEventListener('click',function(){decide('approve',this)});
 var approveTopButton=$('approveStoryTopBtn');
-if(approveTopButton)approveTopButton.addEventListener('click',function(){decide('approve')});
+if(approveTopButton)approveTopButton.addEventListener('click',function(){decide('approve',this)});
 var rejectButton=$('rejectStoryBtn');
-if(rejectButton)rejectButton.addEventListener('click',function(){decide('reject')});
+if(rejectButton)rejectButton.addEventListener('click',function(){decide('reject',this)});
 function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');if(table!=='submitted_stories')table='khaledoon_submissions';if(!id){say('لا يوجد رقم سجل مرتبط بهذه المعاينة. ارجع للأدمن وافتح المعاينة من سجل الحكاية حتى نرجع لنفس الحكاية.');return}try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(d));localStorage.setItem('kh-story-preview-context',JSON.stringify(d))}catch(e){}var target='admin.html?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table)+'&returnfrompreview=1';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 function returnToAdminDashboard(){var target='admin.html';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 $('returnToAdminTopBtn').addEventListener('click',returnToAdminDashboard);
