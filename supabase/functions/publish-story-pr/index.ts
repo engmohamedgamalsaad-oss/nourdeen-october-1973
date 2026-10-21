@@ -88,9 +88,9 @@ Deno.serve(async (req: Request) => {
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
     const treeEntries = [];
-    const storyPage = body.files.find((file: any) => /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/index\\.html$/.test(file.path));
+    const storyPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
     if (!storyPage) throw new Error('Missing generated story page index.html.');
-    const pathMatch = storyPage.path.match(/^stories\\/([a-z0-9-]+)\\/([0-9]{3})\\/index\\.html$/);
+    const pathMatch = storyPage.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
     const storySection = pathMatch[1], storyId = pathMatch[2], storyRoot = 'stories/' + storySection + '/' + storyId + '/';
     for (const file of body.files) {
       if (file.path !== 'stories/index.json' && file.path !== ('stories/quizzes/' + storyId + '.json') && !file.path.startsWith(storyRoot)) {
@@ -100,11 +100,11 @@ Deno.serve(async (req: Request) => {
     const incomingIndexFile = body.files.find((file: any) => file.path === 'stories/index.json');
     if (!incomingIndexFile) throw new Error('Missing stories/index.json.');
     const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + BASE, githubToken);
-    const currentIndexBytes = Uint8Array.from(atob(currentIndexResponse.content.replace(/\\s/g, '')), (c) => c.charCodeAt(0));
+    const currentIndexBytes = Uint8Array.from(atob(currentIndexResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentIndex = JSON.parse(new TextDecoder().decode(currentIndexBytes));
     const incomingIndex = JSON.parse(incomingIndexFile.content);
     if (!Array.isArray(currentIndex) || !Array.isArray(incomingIndex)) throw new Error('Story index JSON must be arrays.');
-    const normalizedRoot = storyRoot.replace(/\\/$/, '');
+    const normalizedRoot = storyRoot.replace(/\/$/, '');
     const incomingEntry = incomingIndex.find((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId && String(entry.path ?? '').split('/').filter(Boolean).join('/') === normalizedRoot);
     if (!incomingEntry) throw new Error('Generated index does not contain the generated story path.');
     const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
@@ -112,7 +112,7 @@ Deno.serve(async (req: Request) => {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
     }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
-    const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\\n' } : file);
+    const safeFiles = body.files.map((file: any) => file.path === 'stories/index.json' ? { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' } : file);
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
