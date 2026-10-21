@@ -177,7 +177,8 @@ t('AI story package validator accepts a complete five-language package', functio
       {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang}]}))},
       {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang}]}))}
     ], translations: translations, question_bank: { questions: questions } };
-  assert.equal(W.validateStoryPackage(pkg).ok, true);
+  var completeValidation = W.validateStoryPackage(pkg);
+  assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
   delete pkg.translations.de.body;
   var missingTranslation = W.validateStoryPackage(pkg);
   assert.equal(missingTranslation.ok, false);
