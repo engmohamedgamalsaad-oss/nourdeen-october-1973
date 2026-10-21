@@ -485,9 +485,12 @@ async function decide(action){
   }
  }catch(error){say('لم يتم تأكيد القرار: '+(error&&error.message?error.message:'خطأ غير معروف')+' إذا لم تظهر رسالة نجاح واضحة، فلا تعتبر المعاينة معتمدة.');unlockDecisions();}
 }
-$('approveStoryBtn').addEventListener('click',function(){decide('approve')});
-$('approveStoryTopBtn').addEventListener('click',function(){decide('approve')});
-$('rejectStoryBtn').addEventListener('click',function(){decide('reject')});
+var approveBottomButton=$('approveStoryBtn');
+if(approveBottomButton)approveBottomButton.addEventListener('click',function(){decide('approve')});
+var approveTopButton=$('approveStoryTopBtn');
+if(approveTopButton)approveTopButton.addEventListener('click',function(){decide('approve')});
+var rejectButton=$('rejectStoryBtn');
+if(rejectButton)rejectButton.addEventListener('click',function(){decide('reject')});
 function returnToAdminForEdit(){var d=currentDraft||{};var id=String(d.submission_id||params.get('submission')||'');var table=String(d.submission_table||params.get('table')||'khaledoon_submissions');if(table!=='submitted_stories')table='khaledoon_submissions';if(!id){say('لا يوجد رقم سجل مرتبط بهذه المعاينة. ارجع للأدمن وافتح المعاينة من سجل الحكاية حتى نرجع لنفس الحكاية.');return}try{localStorage.setItem('kh-story-preview-draft',JSON.stringify(d));localStorage.setItem('kh-story-preview-context',JSON.stringify(d))}catch(e){}var target='admin.html?editcode='+encodeURIComponent(id)+'&table='+encodeURIComponent(table)+'&returnfrompreview=1';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 function returnToAdminDashboard(){var target='admin.html';if(window.opener&&!window.opener.closed){try{window.opener.location.href=target;window.opener.focus();window.close();return}catch(e){}}location.href=target;}
 $('returnToAdminTopBtn').addEventListener('click',returnToAdminDashboard);
