@@ -544,12 +544,10 @@ function makePreviewDraft(statusForPreview){
   L.push('');
   // Build one clean prompt: do not paste the same master instructions twice.
   var selectedAI=providerSelect.value||'chatgpt';
-  var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||'').trim();
-  var pagePrompt=String(promptManagerState.main||STORY_PAGE_PROMPT||'').trim();
-  function normalizePromptForCopy(s){return String(s||'').replace(/\r\n/g,'\n').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();}
+  // دليل تجهيز الحكايات هو المرجع الموحد؛ لا نضيف حقل main القديم مرة ثانية.
+  var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim();
   L.push('================ البرومبت الرئيسي الموحد — نسخة واحدة فقط ================');
   if(workflowPrompt)L.push(workflowPrompt);
-  if(pagePrompt&&normalizePromptForCopy(pagePrompt)!==normalizePromptForCopy(workflowPrompt)&&workflowPrompt.indexOf(pagePrompt)<0&&pagePrompt.indexOf(workflowPrompt)<0){L.push('================ تعليمات الصفحة الإضافية (فقط إذا كانت مختلفة) ================');L.push(pagePrompt);}
   L.push('');
   L.push('================ تعليمات الأداة المختارة: '+selectedAI.toUpperCase()+' ================');
   var selectedAIInstructions=(promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'استخدم الأدوات المتاحة فعلًا، ولا تدّعِ فحصًا أو تعديلًا لم يحدث.';
