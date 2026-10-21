@@ -214,7 +214,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('var pastedRaw=aiPaste.value,sourceRaw=pastedRaw.trim(),pkg,raw=pastedRaw'));
   assert.ok(admin.includes('aiJsonWasRepaired'));
-  assert.ok(admin.includes('assets/ai-json-repair.js?v=20261021-2'));
+  assert.ok(admin.includes('assets/ai-json-repair.js?v=20261021-3'));
   assert.ok(admin.includes("ai_imported_provider_label"));
   assert.ok(admin.includes("var hw=el('span','hidebtn-wrap')"));
   assert.ok(admin.includes('hw.title=reason'));
