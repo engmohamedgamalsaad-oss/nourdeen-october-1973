@@ -172,7 +172,7 @@ t('AI story package validator accepts a complete five-language package', functio
     original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
     body: 'A complete narrator story with more than fifty characters for validation.',
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
-    images_note: 'Historical image attribution and license notes.', visual_design: 'ancient-civilization',
+    images_note: 'Historical image attribution and license notes.', visual_design: 'ancient-civilization', map_location: null,
     images: [
       {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang}]}))},
       {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang}]}))}
