@@ -542,29 +542,24 @@ function makePreviewDraft(statusForPreview){
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
   L.push('المطلوب: اقرأ التعليمات الكاملة أدناه والتزم بها، ثم أكمل دورة تجهيز الحكاية من المراجعة إلى المعاينة. لا تنشر ولا تدمج في الموقع الحي ولا تغيّر قاعدة البيانات دون موافقة صريحة من صاحب المشروع.');
   L.push('');
-  L.push('================ تعليمات المشروع الأساسية كاملة ================');
-  L.push(PROJECT_INSTRUCTIONS);
+  // Build one clean prompt: do not paste the same master instructions twice.
+  var selectedAI=providerSelect.value||'chatgpt';
+  var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||'').trim();
+  var pagePrompt=String(promptManagerState.main||STORY_PAGE_PROMPT||'').trim();
+  function normalizePromptForCopy(s){return String(s||'').replace(/\r\n/g,'\n').replace(/[ \t]+/g,' ').replace(/\n{3,}/g,'\n\n').trim();}
+  L.push('================ البرومبت الرئيسي الموحد — نسخة واحدة فقط ================');
+  if(workflowPrompt)L.push(workflowPrompt);
+  if(pagePrompt&&normalizePromptForCopy(pagePrompt)!==normalizePromptForCopy(workflowPrompt)){L.push('================ تعليمات الصفحة الإضافية (فقط إذا كانت مختلفة) ================');L.push(pagePrompt);}
   L.push('');
-  L.push('================ آلية تجهيز الحكايات كاملة — النسخة المحفوظة ================');
-  L.push(promptManagerState.workflow||STORY_WORKFLOW);
+  L.push('================ تعليمات الأداة المختارة: '+selectedAI.toUpperCase()+' ================');
+  var selectedAIInstructions=(promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'استخدم الأدوات المتاحة فعلًا، ولا تدّعِ فحصًا أو تعديلًا لم يحدث.';
+  L.push(selectedAIInstructions);
   L.push('');
-  if(providerSelect.value==='claude'){L.push('================ تعليمات Claude ================');L.push(CLAUDE_INSTRUCTIONS);L.push('')}
-  L.push('================ تعليمات المساعدين الذكيين ================');
-  L.push(AGENT_INSTRUCTIONS);
+  L.push('================ بوابة الجودة الإلزامية — لا تعتبر الحكاية مكتملة قبل اجتيازها ================');
+  L.push(STORY_QUALITY_GATE||'افحص الخلفية وشاشة البداية والترجمات والحركة والخريطة والصور التفاعلية واختبرها فعليًا قبل إعلان الاكتمال.');
   L.push('');
-  L.push('================ البرومبت الكامل لتطوير صفحة الحكاية — النسخة المحفوظة ================');
-  L.push(promptManagerState.main||STORY_PAGE_PROMPT);
-  var managedExtras=managedCustomPromptText();if(managedExtras){L.push('');L.push('================ البرومبتات الإضافية المحفوظة ================');L.push(managedExtras)}
-  L.push('');
-  L.push('================ تعليمات تنفيذ هذه الحكاية ================');
-  L.push('ابدأ بفحص ملفات المشروع الفعلية والفرع الحالي، واقرأ القالب والحكايات المرجعية قبل أي تعديل. احتفظ بالنص الأصلي منفصلًا دون تغيير، ودقّق الأسماء والتواريخ والأحداث بمصادر موثوقة قابلة للفتح. وضّح المختلف عليه وما لم يمكن التحقق منه، ولا تخترع اقتباسات أو وقائع.');
-  L.push('اكتب الحكاية بالعربية أولًا بأسلوب كارما والراوي: مقدمة قصيرة طبيعية من كارما الطفلة تفتح باب الفضول، ثم سرد معرفي مترابط يوسّع المعلومات ويدققها ويشرح السياق والأسباب والنتائج. لا تحوّل المتن إلى أسئلة وأجوبة. جهّز الترجمات الإنجليزية والفرنسية والإيطالية والألمانية بعد مراجعة العربية. جهّز غلاف الحكاية وصورة شاشة البداية/cover-popup المرتبطة بالعنوان وصورًا داخل السرد عند الحاجة.');
-  L.push('تحقق من مصدر كل صورة وحقوق الاستخدام والإسناد، ولا تقدّم صورة مولّدة على أنها صورة أرشيفية. تحقق من وجود الملفات وصحة المسارات. حافظ على تصميم ووظائف المشروع والصفحات القديمة وروابطها ورموز QR والتفاعلات والطباعة والمشاركة.');
-  L.push('اختبر الصفحة على الهاتف والكمبيوتر والروابط والصور واللغات الخمس والوظائف المتأثرة قدر الإمكان، بما فيها الفهرس والتنقل والبحث والخريطة وبنك الأسئلة والطباعة والمشاركة والإعجاب والإخفاء والإدارة. سلّم المعاينة والملفات المتغيرة والاختبارات وما لم يتم التحقق منه. لا تمنح رقمًا نهائيًا قبل الاعتماد، ولا تنشر أو تدمج إلى الفرع المنشور دون موافقة صريحة.');
-  L.push('مرجع المشروع: https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973');
-  L.push('PROJECT_INSTRUCTIONS.md وCLAUDE.md وAGENTS.md وdocs/khaledoon-story-production-workflow.md مرفقة كاملة داخل هذه الرسالة.');
-  L.push('احتفظ بالنص العربي الأصلي كما وصل دون تغيير، وافصل بين الأصل والتحرير. دقّق الوقائع والأسماء والتواريخ بالاعتماد على مصادر موثوقة قابلة للفتح، ولا تخترع مصدرًا أو معلومة. وضّح نقاط الخلاف وعدم اليقين. بعد مراجعة النسخة العربية، جهّز ترجمات الإنجليزية والفرنسية والإيطالية والألمانية كاملة، وراجع المعنى والعناوين والأسماء والتواريخ وتسميات الصور وبنك الأسئلة ورسائل المشاركة والطباعة. اقترح صورًا مناسبة مع مصدر كل صورة وترخيصها/شروط الإسناد، وميّز الصور التاريخية الحقيقية عن التوضيحية المولدة. جهّز ملفات الحكاية على قالب الموقع الحالي مع الروابط والمسارات والوظائف الموجودة، ثم اعرض معاينة واختبارات وما لم يتم التحقق منه. لا تنشر قبل موافقتي.');
-  L.push('');
+  L.push('================ تعليمات هذه الحكاية ================');
+  L.push('افحص الملفات والقالب والحكايات المرجعية الحالية قبل التعديل. احتفظ بالنص الأصلي حرفيًا في original_body وافصل عنه التحرير. دقّق الحقائق بمصادر حقيقية. جهّز الترجمات الخمس كاملة. نفّذ التغييرات على فرع معاينة، ولا تنشر ولا تدمج إلى الفرع المنشور دون موافقة صريحة. اختبر ما أمكن وسجّل بوضوح ما لم يتم التحقق منه.');
   L.push('=== بيانات الحكاية ===');
   L.push('معرّف سجل الإدارة: '+(it.id==null?'مسودة جديدة':String(it.id)));
   L.push('القسم: '+(SEC[secS.value]||secS.value||'غير محدد'));
@@ -603,7 +598,7 @@ function makePreviewDraft(statusForPreview){
   L.push('');
   var copyMeta=it.story_meta&&typeof it.story_meta==='object'?it.story_meta:{},lastReview=copyMeta.preview_review&&typeof copyMeta.preview_review==='object'?copyMeta.preview_review:{};
   if(lastReview.decision==='rejected'&&lastReview.reason){L.push('=== سبب رفض المعاينة السابق — يجب معالجة كل نقطة ===');L.push(lastReview.reason);L.push('');}
-  if(copyMeta.ai_package_raw){L.push('=== آخر ناتج AI محفوظ كاملًا — مرجع للنسخة السابقة، لا تستبدل النص الأصلي ===');L.push(String(copyMeta.ai_package_raw));L.push('');}
+  // لا نلصق ناتج الذكاء الاصطناعي القديم داخل البرومبت الجديد حتى لا تتكرر الشيفرة أو تتضخم الرسالة.
   if(Array.isArray(copyMeta.preview_review_history)&&copyMeta.preview_review_history.length){L.push('=== سجل قرارات المعاينة السابقة ===');copyMeta.preview_review_history.forEach(function(entry){L.push((entry.decision||'قرار')+' | '+(entry.at||'')+' | '+(entry.reason||entry.note||''))});L.push('');}
   L.push('=== المطلوب في الرد ===');
   L.push('1) ملخص مراجعة الحقائق وما يحتاج إلى تصحيح أو توثيق.');
@@ -959,6 +954,7 @@ function buildNewStoryPrompt(providerKey,mode){
     'أثرِ المحتوى: أضف إلى body المحرر خمس معلومات موثقة على الأقل لا توجد في original_body، وثلاث بطاقات «هل تعلم؟» إن كان المخطط يتسع لها، وسجّل مصدر كل إضافة في sources. لا تغيّر original_body ولا تنسب لصاحب الحكاية ما لم يقله.',
     'التصميم: لكل قسم لونه وطابعه. اختر visual_design الأنسب للحكاية بحجة واضحة ولا تكرر نفس التصميم لحكايات القسم المتتالية، واذكر سبب الاختيار في ملاحظات التحرير.',
    'اختر visual_design من: timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. section_key من: october, science, learning, fame, history, curriculum, islamic, readers.',
+   STORY_DATA_QUALITY_GATE,
    providerNote
   ].join('\n\n');
  }
@@ -980,7 +976,8 @@ function buildNewStoryPrompt(providerKey,mode){
   '9. اختبر الروابط والصور واللغات والوظائف المتأثرة على الهاتف والكمبيوتر قدر الإمكان، وافحص أثر التغيير على الحكايات القديمة والملفات المشتركة. اذكر ما تم اختباره وما لم يمكن التحقق منه.',
   '10. لا تحذف أو تستبدل ملفات دون ضرورة، ولا ترفع أسرارًا أو بيانات خاصة. لا تستخدم خدمة مدفوعة دون موافقة. لا تعدّل Supabase أو SQL أو RLS أو البيانات دون فحص وموافقة صريحة.',
   '11. أنشئ معاينة خاصة، واعرض الملفات والمصادر والاختبارات والقيود، وانتظر الموافقة الصريحة. لا تدمج إلى الفرع المنشور ولا تنشر الحكاية قبل الموافقة. لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث.',
-  'تعليمات الأداة ('+providerNames[selectedProvider]+'): '+providerNote
+  'تعليمات الأداة ('+providerNames[selectedProvider]+'): '+STORY_QUALITY_GATE,
+  providerNote
  ].join('\n\n');
 }
 function renderNewStoryGate(list){
