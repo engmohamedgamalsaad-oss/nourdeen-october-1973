@@ -249,11 +249,32 @@
       'أخرج JSON صالحًا فقط داخل كتلة كود json واحدة، بلا مقدمة أو خاتمة خارجها.']
   ];
 
+  /* ---- import-acceptance rules -------------------------------------------------------------
+     Rules the admin import and the publish bundle enforce but the prompt never stated. Without them the AI
+     returns valid JSON that is still rejected (paragraph counts differ between languages, a field is cut at the
+     import length limit, fewer than two source links) or renders as one big block (single newlines). The block is
+     inserted before the story data at copy time, and only once. */
+  var EXTRA_RULES_TITLE = '=== قواعد إلزامية لقبول الاستيراد ===';
+  var STORY_DATA_TITLE = '=== بيانات الحكاية كاملة ===';
+  var EXTRA_RULES = EXTRA_RULES_TITLE + '\n' +
+    '1. الفقرات: افصل الفقرات في karma_text وbody وhistory_note وimages_note بسطر فارغ واحد، أي \\n\\n داخل قيمة JSON. لا تستخدم سطرًا واحدًا بين فقرتين.\n' +
+    '2. تطابق الفقرات: عدد فقرات كل ترجمة (en وfr وit وde) في karma_text وbody وhistory_note وimages_note يساوي عدد فقرات النص العربي تمامًا؛ لا تدمج فقرتين ولا تقسّم فقرة.\n' +
+    '3. الأطوال القصوى بالحروف: title 140، subtitle 200، body 12000، history_note 12000، sources 3000، images_note 1500. اختصر ولا تتجاوز؛ ما زاد يُقصّ عند الحفظ ويكسر تطابق الفقرات.\n' +
+    '4. sources: كل مصدر في سطر مستقل بصيغة «اسم المصدر — https://الرابط»، ورابطان مختلفان وصالحان على الأقل. لا تختلق روابط.\n' +
+    '5. images: صورتان على الأقل؛ url وsource_url يبدأ كل منهما بـ https://، وkind واحدة من archival وillustration وdiagram وmap.\n' +
+    '6. question_bank: خمسة أسئلة على الأقل؛ a رقم صحيح بلا علامات اقتباس، وعدد اختيارات كل ترجمة يساوي عدد اختيارات الأصل.\n' +
+    '7. داخل قيم النصوص لا تستخدم علامة الاقتباس المزدوجة " (استعمل « ») ولا تضع أسطرًا خامًا؛ استخدم \\n.\n' +
+    '8. افحص الناتج قبل الإرسال: كائن JSON واحد، كل الحقول المطلوبة موجودة، لا فواصل زائدة، والرد غير مقطوع.';
+
   function toCodeBlockPrompt(text) {
     try {
       if (typeof text !== 'string' || text.indexOf(PROMPT_MARKER) < 0) return text;
       var out = text;
       PROMPT_RULES.forEach(function (rule) { out = out.split(rule[0]).join(rule[1]); });
+      if (out.indexOf(EXTRA_RULES_TITLE) < 0) {
+        var at = out.indexOf(STORY_DATA_TITLE);
+        if (at >= 0) out = out.slice(0, at).replace(/\s+$/, '') + '\n\n' + EXTRA_RULES + '\n\n' + out.slice(at);
+      }
       return out;
     } catch (ignore) {
       return text; // never block copying because of this helper
@@ -288,7 +309,7 @@
     } catch (ignore) { /* copy keeps working unpatched */ }
   }
 
-  var api = { parse: parse, toCodeBlockPrompt: toCodeBlockPrompt, installPromptPatch: installPromptPatch, PROMPT_RULES: PROMPT_RULES };
+  var api = { parse: parse, toCodeBlockPrompt: toCodeBlockPrompt, installPromptPatch: installPromptPatch, PROMPT_RULES: PROMPT_RULES, EXTRA_RULES: EXTRA_RULES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.KHAIJsonRepair = api;
   if (typeof window !== 'undefined') installPromptPatch(window);
