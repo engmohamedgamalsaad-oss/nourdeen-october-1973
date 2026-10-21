@@ -55,7 +55,9 @@ test('strict story prompt gate is shared across providers and old AI output is n
   ['cover-popup','prefers-reduced-motion','الإيطالية والألمانية','الصورة التفاعلية','إحداثيات','الربط التلقائي بالخريطة التفاعلية','stories/places.json','دون تعديل يدوي لاحق','سجلات يتيمة'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing gate requirement: '+needle); });
   var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
   assert.ok(dataGate.includes('أرسل map_location دائمًا'));
-  assert.ok(dataGate.includes('لا تضف حقولًا عشوائية'));
+  assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
+  assert.ok(dataGate.includes('map_location'));
+  assert.ok(dataGate.includes('stories/places.json'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html', 'utf8');
   assert.ok(promptAdmin.includes('<option value="gemini">Gemini</option>'));
