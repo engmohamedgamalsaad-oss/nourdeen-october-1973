@@ -107,6 +107,16 @@ Deno.serve(async (req: Request) => {
     const normalizedRoot = storyRoot.replace(/\/$/, '');
     const incomingEntry = incomingIndex.find((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId && String(entry.path ?? '').split('/').filter(Boolean).join('/') === normalizedRoot);
     if (!incomingEntry) throw new Error('Generated index does not contain the generated story path.');
+    const norm = (value: unknown) => String(value ?? '').normalize('NFKC').replace(/\\s+/g, ' ').trim().toLocaleLowerCase();
+    const duplicate = currentIndex.find((entry: any) =>
+      String(entry.id ?? '').padStart(3, '0') !== storyId &&
+      norm(entry.title) !== '' && norm(entry.person) !== '' &&
+      norm(entry.title) === norm(incomingEntry.title) &&
+      norm(entry.person) === norm(incomingEntry.person)
+    );
+    if (duplicate) {
+      throw new Error(`A published story with the same title and person already exists (ID ${String(duplicate.id).padStart(3, '0')}); refusing to publish a duplicate.`);
+    }
     const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
     if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
