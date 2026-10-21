@@ -228,6 +228,13 @@ async function download(draft,opts){
   {path:root+'original.md',content:'# النص الأصلي كما وصل دون تعديل\n\n'+String(draft.original_body||'لم يُرفق النص الأصلي.')+'\n'},
   {path:root+'editorial-notes.md',content:'# ملاحظات التحرير والتحقق\n\n## السياق التاريخي والتحقق\n\n'+String(draft.history_note||'لم تُضف ملاحظات تحقق.')+'\n\n## الصور وحقوق الاستخدام\n\n'+String(draft.images_note||'لم تُسجل معلومات الصور وحقوقها؛ يلزم استكمالها قبل النشر.')+'\n'}
  ];
+ var mapLocation=draft.map_location;
+ if(mapLocation){
+  var mapRecord={lat:Number(mapLocation.lat),lng:Number(mapLocation.lng),place:mapLocation.place,source_name:String(mapLocation.source_name||''),source_url:String(mapLocation.source_url||'')};
+  if(mapLocation.approximate===true)mapRecord.approximate=true;
+  var mapData={};mapData[id]=mapRecord;
+  files.push({path:'stories/places.json',content:JSON.stringify(mapData,null,2)+'\n'});
+ }
  var readme='# حزمة حكاية خالدون — '+draft.title+'\n\n'+
   '- المعرّف المقترح: '+id+'\n- القسم: '+section+'\n- المسار: '+root+'\n- الحالة في data.json: published=true لأن هذه الحزمة أُنشئت بعد قبول المعاينة.\n\n'+
   '## الرفع من GitHub\n1. افتح مستودع engmohamedgamalsaad-oss/nourdeen-october-1973.\n2. ارفع كل الملفات مع الحفاظ على المسارات داخل الحزمة؛ لا تضعها داخل مجلد ZIP إضافي.\n3. ارفع index.html وtheme.css وdata.json وtranslations.js وملفي الغلاف إلى '+root+'.\n4. ارفع ملف stories/index.json المرفق أيضًا حتى تظهر الحكاية في قسمها. هذا الملف مبني على الفهرس الذي قرأه النظام وقت إنشاء الحزمة؛ قبل استبداله افتح النسخة الحالية وتأكد أنها لم تتغير منذ ذلك الوقت، ولا تستبدل فهرسًا أحدث. إذا تغير، أضف فقط العنصر الجديد الذي يحمل id '+id+' إلى النسخة الحالية.\n5. ارفع بنك الأسئلة إلى stories/quizzes/'+id+'.json، والمصادر إلى '+root+'sources.md.\n6. انتظر GitHub Actions، وتحقق من صفحة الحكاية الحية وظهورها في القسم. لا تغيّر حالة سجل الإدارة إلى منشور قبل نجاح التحقق.\n7. ارجع إلى لوحة الإدارة واضغط «تأكيد النشر بعد الرفع».\n\n## تنبيهات\n- الغلافان رسوم توضيحية برمجية وليسا صورًا تاريخية أرشيفية. استبدلهما بصور موثقة فقط بعد التحقق من الترخيص.\n- عند مراجعة حكاية منشورة، يحافظ المولّد على رقمها ومسارها إذا كانا محفوظين في سجل المعاينة؛ ارفع الملفات داخل المجلد نفسه ولا تنشئ مجلدًا جديدًا للحكاية ذاتها.\n- راجع المسار والرقم مقابل stories/index.json قبل الرفع إذا جرى اعتماد حكاية أخرى بالتزامن، ولا تستبدل فهرسًا أحدث من الفهرس المرفق.\n- هذه الحزمة لا تعدّل قاعدة البيانات ولا تنشر بنفسها؛ الرفع إلى GitHub خطوة منفصلة.\n';
