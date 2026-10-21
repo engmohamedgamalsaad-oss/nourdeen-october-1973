@@ -16,9 +16,9 @@
 <div id="mainTab"><h2>البرومبت الرئيسي</h2><label class="field">النص الكامل<textarea id="mainPrompt" spellcheck="false"></textarea></label></div>
 <div id="workflowTab" class="hidden"><h2>دليل تجهيز الحكايات</h2><label class="field">النص الكامل<textarea id="workflowPrompt" spellcheck="false"></textarea></label></div>
 <div id="customTab" class="hidden"><h2>إضافة برومبت آخر</h2><label class="field">اسم البرومبت<input id="customName" maxlength="120" placeholder="مثال: برومبت مراجعة الترجمة الألمانية"></label><label class="field">النص<textarea id="customText" spellcheck="false" placeholder="اكتب البرومبت الإضافي هنا"></textarea></label><div class="actions"><button class="btn primary" id="addCustom">＋ إضافة إلى القائمة</button></div><div id="customList"></div></div>
-<div id="providersTab" class="hidden"><h2>نسخ مخصصة لكل أداة</h2><p class="note">النص المشترك للحكاية محفوظ في «البرومبت الرئيسي» و«دليل تجهيز الحكايات». هنا تحفظ تعليمات التشغيل الخاصة بكل أداة. كل حفظ ينشئ إصدارًا قابلًا للاسترجاع؛ هذا المخزن مركزي في إعدادات المشروع ولا يكتب إلى GitHub تلقائيًا.</p><label class="field">اختر الأداة<select id="providerSelect"><option value="chatgpt">ChatGPT</option><option value="claude">Claude</option><option value="deepseek">DeepSeek</option></select></label><label class="field">تعليمات الأداة<textarea id="providerPrompt" spellcheck="false" rows="12"></textarea></label><div class="actions"><button class="btn primary" id="saveProviderVersion">حفظ نسخة جديدة</button><button class="btn" id="restoreProviderDefault">استعادة النص الافتراضي لهذه الأداة</button></div><h3>سجل الإصدارات المحفوظة</h3><div id="versionList"></div></div>
+<div id="providersTab" class="hidden"><h2>نسخ مخصصة لكل أداة</h2><p class="note">النص المشترك للحكاية محفوظ في «البرومبت الرئيسي» و«دليل تجهيز الحكايات». هنا تحفظ تعليمات التشغيل الخاصة بكل أداة. كل حفظ ينشئ إصدارًا قابلًا للاسترجاع؛ هذا المخزن مركزي في إعدادات المشروع ولا يكتب إلى GitHub تلقائيًا.</p><label class="field">اختر الأداة<select id="providerSelect"><option value="chatgpt">ChatGPT</option><option value="gemini">Gemini</option><option value="claude">Claude</option><option value="deepseek">DeepSeek</option></select></label><label class="field">تعليمات الأداة<textarea id="providerPrompt" spellcheck="false" rows="12"></textarea></label><div class="actions"><button class="btn primary" id="saveProviderVersion">حفظ نسخة جديدة</button><button class="btn" id="restoreProviderDefault">استعادة النص الافتراضي لهذه الأداة</button></div><h3>سجل الإصدارات المحفوظة</h3><div id="versionList"></div></div>
 </section></main>
-<script src="assets/khaledoon-admin-texts.js?v=20261021-2"></script>
+<script src="assets/khaledoon-admin-texts.js?v=20261021-4"></script>
 <script>
 (function(){
 'use strict';
@@ -30,7 +30,7 @@ function clone(v){return JSON.parse(JSON.stringify(v))}
 function normalize(raw){
  raw=raw&&typeof raw==='object'?raw:{};
  var d={main:typeof raw.main==='string'?raw.main:(typeof STORY_PAGE_PROMPT==='string'?STORY_PAGE_PROMPT:''),workflow:typeof raw.workflow==='string'?raw.workflow:(typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign(defaults(),raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};
- var marker='تحديث إلزامي — بناء الحكاية كاملة من جزء قصير (2026-10-21-ب)';
+ var marker="بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-ج";
  if(d.workflow&&!d.workflow.includes(marker)&&typeof STORY_WORKFLOW==='string'){
   d.versions.push({saved_at:new Date().toISOString(),note:'نسخة تلقائية قبل تحديث التصميم والإثراء والصور 2026-10-21',main:d.main,workflow:d.workflow,custom:clone(d.custom),providers:clone(d.providers)});
   d.workflow=STORY_WORKFLOW;
