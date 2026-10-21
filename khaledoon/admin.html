@@ -244,10 +244,19 @@ async function loadList(){
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
 function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemState(i)}
+function hasPublishedTitlePersonMatch(record){
+ function norm(v){return String(v||'').normalize('NFKC').replace(/\s+/g,' ').trim().toLocaleLowerCase()}
+ var title=norm(record&&record.title),person=norm(record&&(record.figure_name||record.person));
+ if(!title||!person)return false;
+ return sitePageItems.some(function(page){return norm(page.title)===title&&norm(page.person||page.figure_name)===person});
+}
+function isAlreadyOnSite(record){
+ return !!window.KHWorkflow.linkedSite(record,sitePageItems)||(itemState(record)==='awaiting_publish'&&hasPublishedTitlePersonMatch(record));
+}
 function count(fn){return items.filter(fn).length}
 function renderStats(){
  var b=$('stats');b.textContent='';
- var visibleAdminRecords=adminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&(record.status==='published'||itemState(record)==='awaiting_publish'))});
+ var visibleAdminRecords=adminRecords.filter(function(record){var linked=window.KHWorkflow.linkedSite(record,sitePageItems);return !(linked&&record.status==='published'||itemState(record)==='awaiting_publish'&&isAlreadyOnSite(record))});
  var counts=window.KHWorkflow.counters(visibleAdminRecords,sitePageItems);
  [
   ['سجلات الأدمن',counts.records,'all'],
@@ -267,7 +276,7 @@ function chip(box,label,on,fn){var b=el('button','chip',label);b.type='button';b
 function renderTabs(){
  var t=$('tabs'),s=$('secs');t.textContent='';s.textContent='';
  chip(t,'كل السجلات ('+items.length+')',fStatus==='all',function(){fStatus='all';render()});
- ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k&&!(k==='awaiting_publish'&&window.KHWorkflow.linkedSite(i,sitePageItems))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
+ ['editing','preview_sent','preview_rejected','awaiting_publish','published','rejected'].forEach(function(k){var n=items.filter(function(i){return i._t!=='site'&&itemState(i)===k&&!(k==='awaiting_publish'&&isAlreadyOnSite(i))}).length;var label=k==='published'?'سجلات الأدمن بحالة «منشورة»':window.KHWorkflow.LABEL[k];chip(t,label+' ('+n+')',fStatus===k,function(){fStatus=k;render()})});
  chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')',fStatus==='site_pages',function(){fStatus='site_pages';render()});
  chip(s,'كل الأقسام',fSec==='all',function(){fSec='all';render()});
  Object.keys(SEC).forEach(function(k){chip(s,SEC[k],fSec===k,function(){fSec=k;render()})});
@@ -999,7 +1008,7 @@ function render(){
  if(newStoryGate){renderNewStoryGate(list);return}
  var k=term.trim().toLocaleLowerCase();
  var shown=items.filter(function(i){
-  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus&&!(fStatus==='awaiting_publish'&&window.KHWorkflow.linkedSite(i,sitePageItems)))))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
+  return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(i)))))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
  });
  if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
