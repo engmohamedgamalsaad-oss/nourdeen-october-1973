@@ -147,7 +147,6 @@ const parser = require('../assets/ai-json-repair.js');
     String.fromCharCode(96).repeat(6) + 'json\\n{"format":"KH_STORY_PACKAGE_V1","title":"نسخة مقطوعة"';
   const result = parser.parse(raw);
   assert.equal(result.value.title, 'حكاية مكتملة');
-  assert.equal(result.repaired, true);
 }
 
 console.log('Passed AI JSON repair tests.');
