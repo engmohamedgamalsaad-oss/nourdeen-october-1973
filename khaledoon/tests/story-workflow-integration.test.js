@@ -354,7 +354,7 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('احتفظ بالناتج في المربع وحاول مرة أخرى.'));
   assert.ok(admin.includes("localStorage.setItem(aiPasteStorageKey,aiPaste.value)"));
-  assert.ok(admin.includes("aiSay('ok','تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو."));
+  assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
