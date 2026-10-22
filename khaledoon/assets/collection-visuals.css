@@ -276,3 +276,105 @@ body.collection-curriculum .card .num{display:none!important}
 
 /* Consistent character-name eyebrow on the Tawfiq al-Hakim and Naguib Mahfouz cards */
 .story-index-card .story-index-person{display:block;margin:0 0 3px;color:var(--story-color,var(--gold));font-size:12px;font-weight:900;letter-spacing:.015em;line-height:1.5}
+
+
+/* ===== Story-card visual refresh for every collection except October 1973 =====
+   Keep October's established cards untouched; use richer layered backgrounds elsewhere. */
+body.collection-science .story-index-card,
+body.collection-women .story-index-card,
+body.collection-culture .story-index-card,
+body.collection-history .story-index-card,
+body.collection-curriculum .story-index-card,
+body.collection-islamic .story-index-card{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden;
+  min-height:154px;
+  padding:18px;
+  border-width:1px;
+  border-radius:20px;
+  box-shadow:0 14px 32px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.09);
+  transition:transform .28s ease,box-shadow .28s ease,border-color .28s ease;
+}
+body.collection-science .story-index-card::before,
+body.collection-women .story-index-card::before,
+body.collection-culture .story-index-card::before,
+body.collection-history .story-index-card::before,
+body.collection-curriculum .story-index-card::before,
+body.collection-islamic .story-index-card::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  inset:0;
+  pointer-events:none;
+  opacity:.9;
+  background:
+    radial-gradient(circle at 96% 8%,var(--story-color,#d4b7ff) 0,transparent 33%),
+    repeating-linear-gradient(135deg,transparent 0 17px,rgba(255,255,255,.025) 17px 18px,transparent 18px 35px);
+}
+body.collection-science .story-index-card{background:linear-gradient(125deg,#123d4a,#0b202b 76%);border-color:rgba(138,217,232,.42)}
+body.collection-women .story-index-card{background:linear-gradient(125deg,#482a43,#201b30 78%);border-color:rgba(231,161,193,.42)}
+body.collection-culture .story-index-card{background:linear-gradient(125deg,#3d3040,#19263a 78%);border-color:rgba(243,193,123,.42)}
+body.collection-history .story-index-card{background:linear-gradient(125deg,#33294d,#171b32 78%);border-color:rgba(212,183,255,.42)}
+body.collection-curriculum .story-index-card{background:linear-gradient(125deg,#253c68,#111e39 78%);border-color:rgba(155,183,255,.42)}
+body.collection-islamic{
+  --bg:#10271f;--panel:#183c2e;--gold:#e4c27a;--line:rgba(228,194,122,.32);--muted:#d1dfd3;
+  color:#f8f4e8;
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(228,194,122,.13),transparent 34%),
+    radial-gradient(ellipse at 92% 44%,rgba(75,160,115,.18),transparent 36%),
+    repeating-linear-gradient(45deg,rgba(255,255,255,.012) 0 2px,transparent 2px 24px),
+    linear-gradient(160deg,#173b2c,#0b201a 78%);
+}
+body.collection-islamic::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.10;
+  background:
+    repeating-linear-gradient(45deg,transparent 0 28px,rgba(228,194,122,.45) 28px 29px,transparent 29px 57px),
+    repeating-linear-gradient(-45deg,transparent 0 28px,rgba(120,197,154,.38) 28px 29px,transparent 29px 57px);
+  mask-image:linear-gradient(to bottom,black,transparent 85%);
+}
+body.collection-islamic header{background:rgba(8,29,22,.93);border-color:rgba(228,194,122,.28)}
+body.collection-islamic .hero{
+  background:
+    radial-gradient(ellipse at 78% 22%,rgba(228,194,122,.18),transparent 42%),
+    linear-gradient(110deg,rgba(11,32,25,.95),rgba(20,66,45,.78)),
+    url("../../assets/backgrounds/story-002-bg.webp") center/cover no-repeat;
+  border-color:rgba(228,194,122,.30);
+}
+body.collection-islamic .hero:after{content:"حكايات";color:rgba(228,194,122,.08)}
+body.collection-islamic .hero .eyebrow,
+body.collection-islamic .heading h2{color:#f0d48f}
+body.collection-islamic .lead,
+body.collection-islamic .heading p{color:#d1dfd3}
+body.collection-islamic .story-index-card{background:linear-gradient(125deg,rgba(28,72,51,.96),rgba(9,32,24,.98));border-color:rgba(228,194,122,.40)}
+body.collection-islamic .story-index-card::before{background:radial-gradient(circle at 96% 8%,var(--story-color,#78c59a) 0,transparent 38%),repeating-linear-gradient(135deg,transparent 0 17px,rgba(228,194,122,.04) 17px 18px,transparent 18px 35px)}
+.story-index-card:hover{transform:translateY(-5px);box-shadow:0 20px 40px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.14)}
+.story-index-card .story-index-cover{position:relative;z-index:1;flex-basis:170px;width:170px;height:120px;border-radius:13px;border:1px solid rgba(255,255,255,.26);box-shadow:0 10px 24px rgba(0,0,0,.28)}
+.story-index-card .story-index-copy{position:relative;z-index:1}
+.story-index-card .story-index-copy h3{font-size:clamp(1rem,2vw,1.18rem);line-height:1.7}
+.story-index-card .story-index-copy>span:last-child{display:inline-flex;align-items:center;gap:7px;margin-top:5px;padding:5px 12px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid currentColor}
+html[data-theme="light"] body.collection-science .story-index-card{background:linear-gradient(125deg,#f0fbff,#fff 78%);border-color:rgba(31,112,130,.30)}
+html[data-theme="light"] body.collection-women .story-index-card{background:linear-gradient(125deg,#fff0f7,#fff 78%);border-color:rgba(166,75,120,.28)}
+html[data-theme="light"] body.collection-culture .story-index-card{background:linear-gradient(125deg,#fff7e9,#fff 78%);border-color:rgba(145,91,35,.28)}
+html[data-theme="light"] body.collection-history .story-index-card{background:linear-gradient(125deg,#f4edff,#fff 78%);border-color:rgba(105,76,151,.28)}
+html[data-theme="light"] body.collection-curriculum .story-index-card{background:linear-gradient(125deg,#edf3ff,#fff 78%);border-color:rgba(49,86,156,.28)}
+html[data-theme="light"] body.collection-islamic{color:#20392b;background:radial-gradient(ellipse at 12% 18%,rgba(228,194,122,.18),transparent 34%),linear-gradient(160deg,#f7f5e9,#e8f0e8 78%)}
+html[data-theme="light"] body.collection-islamic header{background:rgba(255,253,245,.94);color:#20392b}
+html[data-theme="light"] body.collection-islamic .hero{background:linear-gradient(110deg,rgba(248,246,231,.88),rgba(223,239,224,.74)),url("../../assets/backgrounds/story-002-bg.webp") center/cover no-repeat;color:#20392b}
+html[data-theme="light"] body.collection-islamic .hero h1,
+html[data-theme="light"] body.collection-islamic .heading h2{color:#20392b}
+html[data-theme="light"] body.collection-islamic .lead,
+html[data-theme="light"] body.collection-islamic .heading p{color:#506858}
+html[data-theme="light"] body.collection-islamic .story-index-card{background:linear-gradient(125deg,#fffdf4,#edf5eb 78%);border-color:rgba(80,125,91,.32)}
+html[data-theme="light"] body.collection-science .story-index-card .story-index-copy h3,
+html[data-theme="light"] body.collection-women .story-index-card .story-index-copy h3,
+html[data-theme="light"] body.collection-culture .story-index-card .story-index-copy h3,
+html[data-theme="light"] body.collection-history .story-index-card .story-index-copy h3,
+html[data-theme="light"] body.collection-curriculum .story-index-card .story-index-copy h3,
+html[data-theme="light"] body.collection-islamic .story-index-card .story-index-copy h3{color:#24333e}
+@media(max-width:620px){
+ body.collection-science .story-index-card,body.collection-women .story-index-card,body.collection-culture .story-index-card,
+ body.collection-history .story-index-card,body.collection-curriculum .story-index-card,body.collection-islamic .story-index-card{padding:14px;border-radius:17px;gap:12px}
+ .story-index-card .story-index-cover{flex-basis:100%;width:100%;height:190px;object-fit:cover}
+}
+@media(prefers-reduced-motion:reduce){.story-index-card{transition:none!important}}
