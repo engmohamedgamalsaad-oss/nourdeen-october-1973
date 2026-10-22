@@ -1,0 +1,45 @@
+{
+  "name": "نوردين محمد",
+  "grade": "راوي الحكاية",
+  "className": "راوي الحكاية",
+  "title": "فاروق الباز",
+  "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
+  "person": "فاروق الباز",
+  "color": "#8ad9e8",
+  "order": 12,
+  "published": true,
+  "i18n": {
+    "en": {
+      "name": "Nourdeen Mohamed",
+      "grade": "Story narrator",
+      "className": "Story narrator",
+      "title": "Farouk El-Baz",
+      "subtitle": "The scientist who helped astronauts read the Moon and the desert",
+      "person": "فاروق الباز"
+    },
+    "fr": {
+      "name": "Nourdeen Mohamed",
+      "grade": "Narrateur de l'histoire",
+      "className": "Narrateur de l'histoire",
+      "title": "Farouk El-Baz",
+      "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
+      "person": "فاروق الباز"
+    },
+    "it": {
+      "name": "Nourdeen Mohamed",
+      "grade": "Narratore della storia",
+      "className": "Narratore della storia",
+      "title": "Farouk El-Baz",
+      "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
+      "person": "فاروق الباز"
+    },
+    "de": {
+      "name": "Nourdeen Mohamed",
+      "grade": "Erzähler der Geschichte",
+      "className": "Erzähler der Geschichte",
+      "title": "Farouk El-Baz",
+      "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
+      "person": "فاروق الباز"
+    }
+  }
+}

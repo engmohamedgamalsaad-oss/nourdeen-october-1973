@@ -1,0 +1,271 @@
+{
+  "questions": [
+    {
+      "q": "في أي عام وُلد فاروق الباز؟",
+      "o": [
+        "1936",
+        "1938",
+        "1940",
+        "1945"
+      ],
+      "a": 1,
+      "e": "وُلد فاروق الباز في الثاني من يناير سنة 1938 في الزقازيق بدلتا النيل.",
+      "i18n": {
+        "en": {
+          "q": "In which year was Farouk El-Baz born?",
+          "o": [
+            "1936",
+            "1938",
+            "1940",
+            "1945"
+          ],
+          "e": "Farouk El-Baz was born on 2 January 1938 in Zagazig, in the Nile Delta."
+        },
+        "fr": {
+          "q": "En quelle année Farouk El-Baz est-il né ?",
+          "o": [
+            "1936",
+            "1938",
+            "1940",
+            "1945"
+          ],
+          "e": "Farouk El-Baz est né le 2 janvier 1938 à Zagazig, dans le delta du Nil."
+        },
+        "it": {
+          "q": "In quale anno nacque Farouk El-Baz?",
+          "o": [
+            "1936",
+            "1938",
+            "1940",
+            "1945"
+          ],
+          "e": "Farouk El-Baz nacque il 2 gennaio 1938 a Zagazig, nel delta del Nilo."
+        },
+        "de": {
+          "q": "In welchem Jahr wurde Farouk El-Baz geboren?",
+          "o": [
+            "1936",
+            "1938",
+            "1940",
+            "1945"
+          ],
+          "e": "Farouk El-Baz wurde am 2. Januar 1938 in Zagazig im Nildelta geboren."
+        }
+      }
+    },
+    {
+      "q": "ما الدور الذي قام به الباز في برنامج أبولو؟",
+      "o": [
+        "صمّم الصاروخ الذي حمل الرواد",
+        "ساعد في اختيار مواقع الهبوط ودرّب الرواد على الملاحظة والتصوير",
+        "قاد المركبة وهبط على سطح القمر",
+        "صنع السيارة القمرية"
+      ],
+      "a": 1,
+      "e": "ساعد الباز ضمن فريق في اختيار مواقع الهبوط على القمر، وعلّم الرواد كيف يلاحظون القمر ويصوّرونه.",
+      "i18n": {
+        "en": {
+          "q": "What role did El-Baz play in the Apollo program?",
+          "o": [
+            "He designed the rocket that carried the astronauts",
+            "He helped choose the landing sites and trained astronauts in observation and photography",
+            "He piloted the spacecraft and landed on the Moon",
+            "He built the lunar rover"
+          ],
+          "e": "El-Baz, as part of a team, helped choose the landing sites on the Moon and taught astronauts how to observe and photograph it."
+        },
+        "fr": {
+          "q": "Quel rôle El-Baz a-t-il joué dans le programme Apollo ?",
+          "o": [
+            "Il a conçu la fusée qui transportait les astronautes",
+            "Il a aidé à choisir les sites d'alunissage et a formé les astronautes à l'observation et à la photographie",
+            "Il a piloté le vaisseau et s'est posé sur la Lune",
+            "Il a construit le véhicule lunaire"
+          ],
+          "e": "Au sein d'une équipe, El-Baz a aidé à choisir les sites d'alunissage et a appris aux astronautes à observer et à photographier la Lune."
+        },
+        "it": {
+          "q": "Quale ruolo ebbe El-Baz nel programma Apollo?",
+          "o": [
+            "Progettò il razzo che portava gli astronauti",
+            "Aiutò a scegliere i siti di allunaggio e addestrò gli astronauti all'osservazione e alla fotografia",
+            "Pilotò il veicolo spaziale e atterrò sulla Luna",
+            "Costruì il rover lunare"
+          ],
+          "e": "El-Baz, insieme a una squadra, aiutò a scegliere i siti di allunaggio e insegnò agli astronauti a osservare e fotografare la Luna."
+        },
+        "de": {
+          "q": "Welche Rolle spielte El-Baz im Apollo-Programm?",
+          "o": [
+            "Er entwarf die Rakete, die die Astronauten trug",
+            "Er half bei der Auswahl der Landeplätze und schulte die Astronauten in Beobachtung und Fotografie",
+            "Er steuerte das Raumschiff und landete auf dem Mond",
+            "Er baute das Mondauto"
+          ],
+          "e": "El-Baz half als Teil eines Teams, die Landeplätze auf dem Mond auszuwählen, und brachte den Astronauten bei, den Mond zu beobachten und zu fotografieren."
+        }
+      }
+    },
+    {
+      "q": "ماذا أظهرت صور الأقمار الصناعية والرادار تحت رمال الصحراء؟",
+      "o": [
+        "مجاري أنهار قديمة",
+        "مدينة كاملة تحت الرمال",
+        "براكين نشطة",
+        "بحرًا حديثًا"
+      ],
+      "a": 0,
+      "e": "أظهرت الصور والرادار مجاري أنهار قديمة مدفونة تحت رمال الصحراء الكبرى.",
+      "i18n": {
+        "en": {
+          "q": "What did satellite images and radar reveal beneath the desert sands?",
+          "o": [
+            "Ancient river channels",
+            "A whole city under the sand",
+            "Active volcanoes",
+            "A new sea"
+          ],
+          "e": "The images and radar revealed ancient river channels buried under the sands of the Sahara."
+        },
+        "fr": {
+          "q": "Que les images satellites et le radar ont-ils révélé sous les sables du désert ?",
+          "o": [
+            "D'anciens lits de rivières",
+            "Une ville entière sous le sable",
+            "Des volcans actifs",
+            "Une mer récente"
+          ],
+          "e": "Les images et le radar ont révélé d'anciens lits de rivières enfouis sous les sables du Sahara."
+        },
+        "it": {
+          "q": "Che cosa rivelarono le immagini satellitari e il radar sotto le sabbie del deserto?",
+          "o": [
+            "Antichi letti di fiumi",
+            "Un'intera città sotto la sabbia",
+            "Vulcani attivi",
+            "Un mare recente"
+          ],
+          "e": "Le immagini e il radar rivelarono antichi letti di fiumi sepolti sotto le sabbie del Sahara."
+        },
+        "de": {
+          "q": "Was zeigten Satellitenbilder und Radar unter dem Wüstensand?",
+          "o": [
+            "Uralte Flussläufe",
+            "Eine ganze Stadt unter dem Sand",
+            "Aktive Vulkane",
+            "Ein neues Meer"
+          ],
+          "e": "Die Bilder und das Radar zeigten uralte Flussläufe, die unter dem Sand der Sahara begraben liegen."
+        }
+      }
+    },
+    {
+      "q": "لماذا تفيد معرفة مجاري الأنهار القديمة المدفونة؟",
+      "o": [
+        "لأنها ترفع حرارة الصحراء",
+        "لأنها قد تدل على أماكن المياه الجوفية",
+        "لأنها تغيّر شكل القمر",
+        "لأنها توقف الرياح"
+      ],
+      "a": 1,
+      "e": "قد تدل المجاري القديمة على أماكن المياه الجوفية، وقد ساعد هذا العمل في البحث عن المياه في صحارى مصر وعُمان والإمارات.",
+      "i18n": {
+        "en": {
+          "q": "Why is it useful to know about buried ancient river channels?",
+          "o": [
+            "Because they make the desert hotter",
+            "Because they may point to places with groundwater",
+            "Because they change the shape of the Moon",
+            "Because they stop the wind"
+          ],
+          "e": "Ancient channels may point to groundwater, and this work helped the search for water in the deserts of Egypt, Oman and the UAE."
+        },
+        "fr": {
+          "q": "Pourquoi est-il utile de connaître les anciens lits de rivières enfouis ?",
+          "o": [
+            "Parce qu'ils rendent le désert plus chaud",
+            "Parce qu'ils peuvent indiquer où se trouvent des eaux souterraines",
+            "Parce qu'ils changent la forme de la Lune",
+            "Parce qu'ils arrêtent le vent"
+          ],
+          "e": "Les anciens lits peuvent indiquer des eaux souterraines, et ce travail a aidé la recherche d'eau dans les déserts d'Égypte, d'Oman et des Émirats."
+        },
+        "it": {
+          "q": "Perché è utile conoscere gli antichi letti di fiumi sepolti?",
+          "o": [
+            "Perché rendono il deserto più caldo",
+            "Perché possono indicare dove si trovano acque sotterranee",
+            "Perché cambiano la forma della Luna",
+            "Perché fermano il vento"
+          ],
+          "e": "Gli antichi letti possono indicare acque sotterranee, e questo lavoro ha aiutato la ricerca d'acqua nei deserti di Egitto, Oman ed Emirati."
+        },
+        "de": {
+          "q": "Warum ist es nützlich, begrabene uralte Flussläufe zu kennen?",
+          "o": [
+            "Weil sie die Wüste heißer machen",
+            "Weil sie auf Orte mit Grundwasser hinweisen können",
+            "Weil sie die Form des Mondes verändern",
+            "Weil sie den Wind aufhalten"
+          ],
+          "e": "Uralte Flussläufe können auf Grundwasser hinweisen, und diese Arbeit half bei der Wassersuche in den Wüsten Ägyptens, des Omans und der Emirate."
+        }
+      }
+    },
+    {
+      "q": "ما اللقب الذي أطلقه عليه رواد الفضاء؟",
+      "o": [
+        "النسر",
+        "الملك",
+        "الصقر",
+        "الأستاذ الصغير"
+      ],
+      "a": 1,
+      "e": "لقّبه الرواد بالملك تيمنًا بالملك فاروق، مع أن معنى اسم الباز في العربية هو الصقر.",
+      "i18n": {
+        "en": {
+          "q": "What nickname did the astronauts give him?",
+          "o": [
+            "The Eagle",
+            "The King",
+            "The Falcon",
+            "The Little Professor"
+          ],
+          "e": "The astronauts nicknamed him the King, after King Farouk, even though the Arabic name El-Baz means the hawk."
+        },
+        "fr": {
+          "q": "Quel surnom les astronautes lui ont-ils donné ?",
+          "o": [
+            "L'Aigle",
+            "Le Roi",
+            "Le Faucon",
+            "Le Petit Professeur"
+          ],
+          "e": "Les astronautes l'ont surnommé le Roi, en référence au roi Farouk, alors que le nom arabe El-Baz signifie le faucon."
+        },
+        "it": {
+          "q": "Quale soprannome gli diedero gli astronauti?",
+          "o": [
+            "L'Aquila",
+            "Il Re",
+            "Il Falco",
+            "Il Piccolo Professore"
+          ],
+          "e": "Gli astronauti lo soprannominarono il Re, in riferimento al re Farouk, anche se il nome arabo El-Baz significa il falco."
+        },
+        "de": {
+          "q": "Welchen Spitznamen gaben ihm die Astronauten?",
+          "o": [
+            "Der Adler",
+            "Der König",
+            "Der Falke",
+            "Der kleine Professor"
+          ],
+          "e": "Die Astronauten nannten ihn den König, nach König Farouk, obwohl der arabische Name El-Baz der Falke bedeutet."
+        }
+      }
+    }
+  ],
+  "id": "012",
+  "title": "فاروق الباز"
+}
