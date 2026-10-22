@@ -78,9 +78,9 @@ $('saveDraft').addEventListener('click',function(){saveCentral('حفظ البر�
 $('download').addEventListener('click',function(){currentFromInputs();var blob=new Blob([JSON.stringify({format:'khaledoon-prompt-bundle-v2',exportedAt:new Date().toISOString(),prompts:state},null,2)+'\n'],{type:'application/json;charset=utf-8'});var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='khaledoon-prompts-bundle.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000);say('تم تنزيل حزمة البرومبتات مع نسخ الأدوات وسجل الإصدارات الحالي.')});
 function downloadPromptFile(filename,content){currentFromInputs();var blob=new Blob([String(content||'')+'\n'],{type:'text/markdown;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000);say('تم تنزيل '+filename+' من النص الحالي في لوحة الإدارة.')}
 $('downloadMaster').addEventListener('click',function(){downloadPromptFile('MASTER-STORY-PROMPT.md',state.main)});
-$('downloadChatGPT').addEventListener('click',function(){downloadPromptFile('CHATGPT.md','# نسخة ChatGPT — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات ChatGPT\n\n'+(state.providers.chatgpt||''))});
-$('downloadClaude').addEventListener('click',function(){downloadPromptFile('CLAUDE.md','# نسخة Claude — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات Claude\n\n'+(state.providers.claude||''))});
-$('downloadDeepSeek').addEventListener('click',function(){downloadPromptFile('DEEPSEEK.md','# نسخة DeepSeek — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات DeepSeek\n\n'+(state.providers.deepseek||''))});
+$('downloadChatGPT').addEventListener('click',function(){downloadPromptFile('CHATGPT.md','# نسخة ChatGPT — خالدون عبر التاريخ v3\n\n'+state.main+'\n\n## تعليمات ChatGPT\n\n'+(state.providers.chatgpt||''))});
+$('downloadClaude').addEventListener('click',function(){downloadPromptFile('CLAUDE.md','# نسخة Claude — خالدون عبر التاريخ v3\n\n'+state.main+'\n\n## تعليمات Claude\n\n'+(state.providers.claude||''))});
+$('downloadDeepSeek').addEventListener('click',function(){downloadPromptFile('DEEPSEEK.md','# نسخة DeepSeek — خالدون عبر التاريخ v3\n\n'+state.main+'\n\n## تعليمات DeepSeek\n\n'+(state.providers.deepseek||''))});
 $('migratePrompts').addEventListener('click',migrateExplicitly);
 $('loadCurrent').addEventListener('click',loadCurrent);
 loadCurrent();window.addEventListener('kh-admin-tools-ready',loadCurrent);
