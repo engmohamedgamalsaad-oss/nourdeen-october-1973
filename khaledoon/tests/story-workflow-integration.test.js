@@ -336,7 +336,7 @@ test('AI JSON import repair handles common copy/paste formatting damage without 
   var parsed = repair.parse(raw);
   assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
   assert.equal(parsed.value.title, 'T*itle');
-  assert.equal(parsed.value.body, 'line one\\nline two');
+  assert.equal(parsed.value.body, 'line one\nline two');
   assert.equal(parsed.repaired, true);
   assert.ok(raw.includes('T\\\\*itle'), 'the pasted source remains unchanged');
 });
