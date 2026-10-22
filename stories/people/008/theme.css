@@ -115,3 +115,57 @@ html body.story-design-portrait-biography .tawfiq-reveal.is-visible{transform:tr
 .hero h1{margin-bottom:4px!important}
 .hero .hero-role{margin-top:0!important;font-size:clamp(1.05rem,2vw,1.4rem)!important;font-weight:700!important;line-height:1.8!important;color:#e2b36d!important}
 #intro .popup-role{margin:0!important;color:#e2b36d!important;font-size:clamp(1rem,2vw,1.3rem)!important;font-weight:800!important;line-height:1.8!important}
+
+/* CANONICAL INTRO POPUP IMAGE RULES — single final source of truth */
+html body #intro.modal .modal-art{
+  box-sizing:border-box!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  min-width:0!important;
+  min-height:0!important;
+  height:380px!important;
+  padding:12px!important;
+  overflow:hidden!important;
+}
+html body #intro.modal .modal-art:after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+}
+html body #intro.modal .modal-art img{
+  display:block!important;
+  flex:0 1 auto!important;
+  width:auto!important;
+  height:auto!important;
+  min-width:0!important;
+  min-height:0!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  aspect-ratio:auto!important;
+  border:1px solid rgba(226,179,109,.55)!important;
+  border-radius:12px!important;
+  background:#111c25!important;
+  filter:none!important;
+  transform:none!important;
+  animation:none!important;
+}
+@media(max-width:680px){
+  html body #intro.modal .modal-card{grid-template-columns:minmax(0,1fr)!important}
+  html body #intro.modal .modal-art{
+    height:clamp(170px,27vh,220px)!important;
+    min-height:0!important;
+    padding:8px!important;
+    border-inline-end:0!important;
+  }
+  html body #intro.modal .modal-art img{
+    width:auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-width:100%!important;
+    max-height:100%!important;
+    object-fit:contain!important;
+  }
+}
