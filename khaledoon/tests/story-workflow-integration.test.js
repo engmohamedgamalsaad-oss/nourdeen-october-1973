@@ -38,8 +38,8 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   var fn = admin.slice(admin.indexOf('function buildNewStoryPrompt'), admin.indexOf('function renderNewStoryGate'));
   assert.ok(fn.includes("if(mode==='package')"));
   assert.ok(fn.includes('اللغات الخمس كاملة'));
-  assert.ok(fn.includes('JSON خامًا واحدًا كاملًا وصالحًا للاستيراد') || fn.includes('أخرج كائن JSON واحدًا كاملًا وصالحًا للاستيراد'), 'package prompt must forbid markdown/fences and require complete JSON');
-  assert.ok(fn.includes('لا تكتب أي محارف هروب قبل أسماء المفاتيح أو قبل الأقواس المربعة'), 'package prompt must prevent escaped structural characters');
+  assert.ok(admin.includes('أخرج كائن JSON واحدًا كاملًا وصالحًا للاستيراد') && admin.includes('دون أسوار كود أو Markdown'), 'package prompt must forbid markdown/fences and require complete JSON');
+  assert.ok(admin.includes('لا تكتب أي محارف هروب قبل أسماء المفاتيح أو قبل الأقواس المربعة'), 'package prompt must prevent escaped structural characters');
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
@@ -126,7 +126,7 @@ test('admin validates every translated field and every quiz translation before A
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
-  assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
+  assert.ok(admin.includes('أول مفتاح حرفيًا هو') && admin.includes('KH_STORY_PACKAGE_V1'));
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
