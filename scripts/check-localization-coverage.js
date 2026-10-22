@@ -22,8 +22,10 @@ const storyFiles = [
 /* Stories whose text lives inside index.html: each language must appear in all
    three inline translation tables (story text, UI labels, and reaction/status text). */
 const inlineStoryFiles = [
-  'stories/science/007/index.html',
-  'stories/islamic/011/index.html'
+  // This page keeps its own T / EXTRA / REACTION_TEXT tables.
+  'stories/science/007/index.html'
+  // Other current story pages use the shared story template and are checked
+  // by check-home-language.js; the former stories/islamic/011 page no longer exists.
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
