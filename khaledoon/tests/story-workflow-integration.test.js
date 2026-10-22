@@ -201,8 +201,8 @@ test('Gemini is available in every admin story prompt flow with full story requi
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
-  assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
-  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"gemini":'));
+  assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا فقط"));
+  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"chatgpt":') && texts.includes('"gemini":'));
   ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تعديلًا أو اختبارًا أو نشرًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
