@@ -23,7 +23,22 @@
   const likeButton = document.getElementById("reaction-like");
   const choiceButtons = Array.from(document.querySelectorAll("[data-reaction-choice]"));
   const setStatus = message => { if (status) status.textContent = message; };
-  const tr = (key, fallback) => window.I18N ? window.I18N.t(key) : fallback;
+  /* I18N.t يرجّع اسم المفتاح نفسه (مثل s_liked) لو الترجمة ناقصة؛ نعتبر ده "غير موجود" ونستخدم النص الاحتياطي. */
+  const tr = (key, fallback) => {
+    const value = window.I18N ? window.I18N.t(key) : key;
+    return value && value !== key ? value : fallback;
+  };
+  const LIKE_TEXT = {
+    ar: { like: "❤️ أعجبتني", liked: "تم تسجيل إعجابك" },
+    en: { like: "❤️ I like it", liked: "Your like is saved" },
+    fr: { like: "❤️ J’aime", liked: "Votre « J’aime » est enregistré" },
+    it: { like: "❤️ Mi piace", liked: "Il tuo « Mi piace » è registrato" },
+    de: { like: "❤️ Gefällt mir", liked: "Dein „Gefällt mir“ ist gespeichert" }
+  };
+  const likeText = name => {
+    const lang = window.I18N && typeof window.I18N.lang === "function" ? window.I18N.lang() : "ar";
+    return (LIKE_TEXT[lang] || LIKE_TEXT.ar)[name];
+  };
   const countNodes = {};
   document.querySelectorAll("[data-reaction-count]").forEach(node => {
     countNodes[node.dataset.reactionCount] = node;
@@ -54,7 +69,8 @@
       likeButton.classList.toggle("is-selected", liked);
       likeButton.setAttribute("aria-pressed", liked ? "true" : "false");
       likeButton.disabled = liked;
-      likeButton.querySelector(".reaction-label").textContent = liked ? (window.I18N ? window.I18N.t("s_liked") : "تم تسجيل إعجابك") : (window.I18N ? window.I18N.t("s_like") : "❤️ أعجبتني");
+      const likeLabel = likeButton.querySelector(".reaction-label");
+      if (likeLabel) likeLabel.textContent = liked ? tr("s_liked", likeText("liked")) : tr("s_like", likeText("like"));
     }
     choiceButtons.forEach(button => {
       const selected = button.dataset.reactionChoice === feedback;
@@ -113,6 +129,7 @@
   }
   if (likeButton) likeButton.addEventListener("click", () => submitReaction("like"));
   choiceButtons.forEach(button => button.addEventListener("click", () => submitReaction(button.dataset.reactionChoice)));
+  document.addEventListener("site-language-change", paintSavedState);
   paintSavedState();
   loadCounts().catch(() => setStatus(tr("r_counts_error", "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.")));
 })();
