@@ -614,7 +614,7 @@ function makePreviewDraft(statusForPreview){
   L.push('5) خطة الصور وحقوق الاستخدام والإسناد، دون افتراض أن نتائج البحث تمنح حق الاستخدام.');
   L.push('6) الملفات والتعديلات اللازمة وفق قالب خالدون الحالي، ثم معاينة واختبارات وتقرير بالناقص.');
   L.push('7) انتظر موافقتي الصريحة قبل النشر أو دمج الحكاية في النسخة المنشورة.');
-  L.push('');L.push('=== تعليمات خاصة بالأداة المختارة: '+providerSelect.options[providerSelect.selectedIndex].text+' ===');L.push(promptProvidersCache[providerSelect.value]||'افحص الملفات الفعلية، ولا تدّعِ وصولًا أو رفعًا لم يحدث. إذا تعذر GitHub، جهز الملفات كاملة مع مساراتها وخطوات الرفع اليدوي.');
+  // تعليمات الأداة أُدرجت بالفعل أعلاه؛ لا تضفها مرة ثانية في نهاية ملف النسخ.
   var t=L.join('\n');
   function done(ok){if(ok){copyN++;bCopy.textContent=copyLabel(copyN);bCopy.classList.add('copied');if(ckey){setCopies(ckey,copyN);document.querySelectorAll('.pc[data-ck="'+ckey+'"]').forEach(paintTag)}}say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية كاملًا، بما فيه الاسم والعنوان والنصوص والمصادر والملاحظات. الصقه في الشات لاستكمال المراجعة.':'تعذر النسخ تلقائيًا؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){done(true)}).catch(function(){fallbackCopy(t,done)});else fallbackCopy(t,done);
