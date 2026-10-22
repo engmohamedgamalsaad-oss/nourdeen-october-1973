@@ -28,12 +28,14 @@
 (function(){
   'use strict';
   document.querySelectorAll('.story-image-card img').forEach(function(img){
-    img.addEventListener('error',function(){
+    function useLocalFallback(){
       if(img.dataset.localFallback==='1')return;
       img.dataset.localFallback='1';
       img.src='cover-popup.svg';
       img.alt='رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية';
-    });
+    }
+    img.addEventListener('error',useLocalFallback);
+    if(img.complete&&img.naturalWidth===0)useLocalFallback();
   });
 })();
 </script>
