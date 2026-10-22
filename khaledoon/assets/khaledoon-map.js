@@ -34,7 +34,8 @@
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
     err:    { ar: 'تعذّر تحميل الخريطة الآن. هذه قائمة بالأماكن:', en: 'The map could not be loaded right now. Here is the list of places:', fr: 'La carte n’a pas pu être chargée. Voici la liste des lieux :', it: 'Non è stato possibile caricare la mappa. Ecco l’elenco dei luoghi:', de: 'Die Karte konnte nicht geladen werden. Hier die Liste der Orte:' },
     credit: { ar: 'مصدر الصورة: ', en: 'Photo: ', fr: 'Photo : ', it: 'Foto: ', de: 'Foto: ' },
-    legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' }
+    legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' },
+    directory: { ar: 'كل الحكايات المنشورة', en: 'All published stories', fr: 'Toutes les histoires publiées', it: 'Tutte le storie pubblicate', de: 'Alle veröffentlichten Geschichten' }
   };
   function loadSectionConfig() {
     return fetch(API + '/rest/v1/khaledoon_admin_config?config_key=eq.sections&select=config_value&limit=1', {
@@ -93,7 +94,11 @@
   var legend = el('div', 'khm-legend');
   legend.setAttribute('role', 'group');
   box.appendChild(canvas); box.appendChild(legend);
-  wrap.appendChild(head); wrap.appendChild(box);
+  var directory = el('section', 'khm-directory');
+  var directoryTitle = el('h3', 'khm-directory-title');
+  var directoryList = el('ul', 'khm-list khm-directory-list');
+  directory.appendChild(directoryTitle); directory.appendChild(directoryList);
+  wrap.appendChild(head); wrap.appendChild(box); wrap.appendChild(directory);
   sec.appendChild(wrap);
   var anchor = document.getElementById('how');
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor);
@@ -133,9 +138,9 @@
         var section = s.section;
         if (section === 'knowledge' || section === 'learning') section = 'women';
         if (section === 'fame') section = 'people';
-        if (!SEC[section]) return;
         var entry = { s: s, p: places[String(s.id)] || null, sec: section };
         storiesAll.push(entry);
+        if (!SEC[section]) return;
         var p = entry.p;
         if (p && validNum(p.lat, 90) && validNum(p.lng, 180)) points.push(entry);
       });
@@ -156,6 +161,33 @@
     svg.appendChild(c); svg.appendChild(b);
     return svg;
   }
+  function storyHref(s) {
+    var path = String(s && s.path || '');
+    if (/^stories\/[a-z0-9-]+\/[0-9]{3}\/$/.test(path)) return path;
+    var section = String(s && s.section || ''), id = String(s && s.id || '').padStart(3, '0');
+    if (/^[a-z0-9-]+$/.test(section) && /^[0-9]{3}$/.test(id)) return 'stories/' + section + '/' + id + '/';
+    return 'stories/';
+  }
+
+  function buildDirectory() {
+    directoryTitle.textContent = T('directory');
+    directoryList.replaceChildren();
+    storiesAll.forEach(function (e) {
+      var l = lang(), s = e.s, p = e.p;
+      var li = el('li', 'khm-directory-item');
+      var a = el('a', null, pick(s, 'title', l) || pick(s, 'person', l) || String(s.id));
+      a.href = storyHref(s);
+      li.appendChild(a);
+      var person = pick(s, 'person', l);
+      if (person && person !== a.textContent) li.appendChild(el('div', 'khm-directory-person', person));
+      var place = p && p.place && (p.place[l] || p.place.ar);
+      if (place) li.appendChild(el('div', 'khm-directory-place', T('born') + place));
+      else li.appendChild(el('div', 'khm-directory-missing', T('noPlace')));
+      if (p && p.approximate === true) li.appendChild(el('div', 'khm-directory-missing', T('approx')));
+      directoryList.appendChild(li);
+    });
+  }
+
   function card(e) {
     var l = lang(), s = e.s, p = e.p;
     var c = el('div', 'khm-card');
@@ -178,13 +210,15 @@
     c.appendChild(el('div', 'khm-story', pick(s, 'title', l)));
     if (p.credit && validPhoto(p.photo)) c.appendChild(el('div', 'khm-credit', T('credit') + p.credit));
     var a = el('a', 'khm-go', T('read'));
-    a.href = s.path || ('stories/' + s.section + '/' + s.id + '/');
+    a.href = storyHref(s);
     c.appendChild(a);
     return c;
   }
   function labels() {
     var l = lang();
     kick.textContent = T('kicker'); h2.textContent = T('title'); lead.textContent = T('lead');
+    directoryTitle.textContent = T('directory');
+    if (storiesAll.length) buildDirectory();
     canvas.setAttribute('aria-label', T('title'));
     legend.setAttribute('aria-label', T('legend'));
     legend.querySelectorAll('.khm-chip').forEach(function (b) {
@@ -243,6 +277,7 @@
 
   function fallbackList() {
     usingFallback = true;
+    directory.hidden = true;
     canvas.style.height = 'auto';
     var l = lang();
     canvas.replaceChildren();
@@ -252,7 +287,7 @@
     storiesAll.forEach(function (e) {
       var li = el('li');
       var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
-      a.href = e.s.path || ('stories/' + e.s.section + '/' + e.s.id + '/');
+      a.href = storyHref(e.s);
       li.appendChild(a);
       var person = pick(e.s, 'person', l);
       if (person && person !== a.textContent) li.appendChild(document.createTextNode(' — ' + person));
@@ -278,6 +313,7 @@
   function start() {
     if (started) return; started = true;
     loadSectionConfig().then(function () { return loadData(); }).then(function () {
+      buildDirectory();
       if (!points.length) { fallbackList(); return; }
       buildLegend();
       css(CDN + 'leaflet/1.9.4/leaflet.min.css');
