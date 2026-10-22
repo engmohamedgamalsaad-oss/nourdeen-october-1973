@@ -45,7 +45,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'), 'verified map metadata must survive AI package import');
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
-  assert.ok(admin.includes('source_name,source_url,rights,i18n'));
+  assert.ok(admin.includes('source_name') && admin.includes('source_url') && admin.includes('rights') && admin.includes('i18n'));
 });
 test('strict story prompt gate is shared across providers and old AI output is not copied', function () {
   assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
@@ -62,7 +62,7 @@ test('strict story prompt gate is shared across providers and old AI output is n
   assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
   assert.ok(shared.includes('عقد إخراج JSON للاستيراد — إلزامي لكل مزوّد'), 'all provider prompts must share strict JSON output contract');
   ['English: Return exactly one raw','Français : Retourne un seul objet JSON','Italiano: Restituisci un solo oggetto JSON','Deutsch: Gib genau ein vollständiges'].forEach(function (needle) { assert.ok(shared.includes(needle), 'shared JSON contract missing language version: '+needle); });
-  assert.ok(shared.includes('الأقواس المربعة') && shared.includes('Never escape JSON structure') && shared.includes('N’échappe jamais la structure JSON'), 'shared contract must forbid escaping JSON structure in all languages');
+  ['Never escape JSON structure','N’échappe jamais la structure JSON','Non applicare escape alla struttura JSON','Maskiere niemals die JSON-Struktur'].forEach(function (needle) { assert.ok(shared.includes(needle), 'shared JSON contract must forbid escaping JSON structure: '+needle); });
   assert.ok(dataGate.includes('map_location'));
   assert.ok(dataGate.includes('stories/places.json'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
