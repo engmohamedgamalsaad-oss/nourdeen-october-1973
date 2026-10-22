@@ -7,8 +7,8 @@ var pageMeta=reg.meta;
 /* Supports both shared dictionaries {Arabic: {en,fr,it,de}} and story-local
    language-first dictionaries {en: {Arabic: translation}, ...}. */
 function findTranslation(source, lang){
- var normalized=String(source==null?'':source).replace(/\\s+/g,' ').trim();
- var direct=findTranslation(source,lang);
+ var normalized=String(source==null?'':source).replace(/\s+/g,' ').trim();
+ var direct=translations[normalized]||translations[source];
  if(direct&&typeof direct==='object'&&direct[lang])return direct;
  var byLanguage={};
  Object.keys(translations).forEach(function(language){
