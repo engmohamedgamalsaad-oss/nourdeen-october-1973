@@ -151,7 +151,7 @@
 (function () {
   if (document.body.hasAttribute("data-disable-section-bg")) return;
   var current = document.currentScript;
-  var base = current && current.src ? current.src.replace(/reactions\\.js(\\?.*)?$/, '') : '../../assets/shared/';
+  var base = current && current.src ? current.src.replace(/reactions[.]js([?].*)?$/, '') : '../../assets/shared/';
   var s = document.createElement('script');
   s.src = base + 'story-section-bg.js?v=20261022-2';
   s.defer = true;
