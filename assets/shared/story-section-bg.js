@@ -74,13 +74,33 @@
       '<g fill="none" stroke-width="1.1" stroke-opacity="' + opacity + '" fill-opacity="' + opacity + '">' + motif(section, outer) + '</g></svg>';
     var tile = 'data:image/svg+xml,' + encodeURIComponent(svg);
 
-    var css = 'html body{' +
+    var lightTop = hsl(hue, Math.min(sat * 0.42, 32), 97);
+    var lightMid = hsl(hue, Math.min(sat * 0.38, 30), 93);
+    var lightBot = hsl(hue, Math.min(sat * 0.34, 28), 88);
+    var lightTileSvg = svg.replace(/stroke-opacity="[0-9.]+"/, 'stroke-opacity="0.17"').replace(/fill-opacity="[0-9.]+"/, 'fill-opacity="0.17"');
+    var lightTile = 'data:image/svg+xml,' + encodeURIComponent(lightTileSvg);
+    var darkRule = 'html body:not(:has(:where(#bg,.hero-home))){' +
       '--kh-section-accent:' + outer + ';' +
       'background-color:' + mid + '!important;' +
       'background-image:url("' + tile + '"),radial-gradient(ellipse at 50% 0%,' + top + ' 0%,' + mid + ' 52%,' + bot + ' 100%)!important;' +
       'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
       'background-repeat:repeat,no-repeat!important;' +
       'background-attachment:scroll!important}';
+    var lightRule = ':root[data-theme="light"] body:not(:has(:where(#bg,.hero-home))){' +
+      '--kh-section-accent:' + outer + ';' +
+      'background-color:' + lightMid + '!important;' +
+      'background-image:url("' + lightTile + '"),radial-gradient(ellipse at 50% 0%,' + lightTop + ' 0%,' + lightMid + ' 52%,' + lightBot + ' 100%)!important;' +
+      'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
+      'background-repeat:repeat,no-repeat!important;' +
+      'background-attachment:scroll!important}';
+    var systemLightRule = ':root:not([data-theme="dark"]) body:not(:has(:where(#bg,.hero-home))){' +
+      '--kh-section-accent:' + outer + ';' +
+      'background-color:' + lightMid + '!important;' +
+      'background-image:url("' + lightTile + '"),radial-gradient(ellipse at 50% 0%,' + lightTop + ' 0%,' + lightMid + ' 52%,' + lightBot + ' 100%)!important;' +
+      'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
+      'background-repeat:repeat,no-repeat!important;' +
+      'background-attachment:scroll!important}';
+    var css = darkRule + lightRule + '@media(prefers-color-scheme:light){' + systemLightRule + '}';
     var el = document.getElementById('kh-story-section-bg');
     if (!el) { el = document.createElement('style'); el.id = 'kh-story-section-bg'; document.head.appendChild(el); }
     el.textContent = css;
