@@ -61,6 +61,7 @@ test('strict story prompt gate is shared across providers and old AI output is n
   assert.ok(dataGate.includes('أرسل map_location دائمًا'));
   assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
   assert.ok(shared.includes('عقد إخراج JSON للاستيراد — إلزامي لكل مزوّد'), 'all provider prompts must share strict JSON output contract');
+  ['English: Return exactly one raw','Français : Retourne un seul objet JSON','Italiano: Restituisci un solo oggetto JSON','Deutsch: Gib genau ein vollständiges'].forEach(function (needle) { assert.ok(shared.includes(needle), 'shared JSON contract missing language version: '+needle); });
   assert.ok(shared.includes('لا تضع \\ قبل الأقواس المربعة'), 'shared contract must prevent escaped brackets');
   assert.ok(dataGate.includes('map_location'));
   assert.ok(dataGate.includes('stories/places.json'));
