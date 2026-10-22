@@ -43,11 +43,7 @@ function migrateExplicitly(){
  archiveVersion('نسخة احتياطية قبل الترحيل الصريح 2026-10-22');
  if(typeof STORY_PAGE_PROMPT==='string'&&STORY_PAGE_PROMPT)state.main=STORY_PAGE_PROMPT;
  if(typeof STORY_WORKFLOW==='string'&&STORY_WORKFLOW)state.workflow=STORY_WORKFLOW;
- var qualityNote='التزام إلزامي: طبّق بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ. لا تعتبر أي عنصر مكتملًا لمجرد وصفه؛ افحصه واختبره، وصرّح بما لم يمكن اختباره.';
- Object.keys(state.providers||{}).forEach(function(k){
-  var value=String(state.providers[k]||'');
-  if(value.indexOf(qualityNote)<0)state.providers[k]=value?value+'\n\n'+qualityNote:qualityNote;
- });
+ // استبدال كامل للنسخ القديمة بدل إلحاق تعليمات جديدة بها؛ النسخة السابقة محفوظة في سجل الإصدارات.\n state.providers=defaults();
  fill();
  say('تم تجهيز الترحيل في المحرر مع حفظ نسخة سابقة. راجع المحتوى ثم اضغط «حفظ مركزي + نسخة محلية» لتأكيد الحفظ.');
 }
