@@ -68,7 +68,7 @@ async function main() {
   assert.match(html, /Shared story design contract/, 'all new stories should include the shared design contract');
   assert.match(html, /html\[data-theme="light"\] \.story/, 'generated pages should include dedicated light-theme story-card styles');
   assert.match(html, /prefers-reduced-motion:reduce/, 'all story motion must respect reduced-motion preferences');
-  assert.match(html, /#intro \\.modal-card/, 'generated pages should include a responsive opening modal');
+  assert.match(html, /#intro \.modal-card/, 'generated pages should include a responsive opening modal');
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
   console.log('Passed collision-safe ID allocation and generated preview checks.');
