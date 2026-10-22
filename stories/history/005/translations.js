@@ -65,8 +65,26 @@ window.I18N.register("ar",{
  "r_already_saved":"الاختيار مسجّل بالفعل لهذه الحكاية.",
  "s_title":"ابن سينا — الشيخ الرئيس",
  "s_subtitle":"رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
- "s_start":"ابدأ الحكاية ←"
-});
+ "s_start":"ابدأ الحكاية ←",
+ "historyImageKicker": "صورة من التاريخ",
+ "historyImageHeading": "كيف نتخيّل عالمًا عاش قبل ألف سنة؟",
+ "historicalPortraitAlt": "رسم لابن سينا نُشر في كتاب مصوّر عام 1584، وليس صورة معاصرة له",
+ "historicalImageCaption": "رسم لابن سينا نُشر في كتاب عام 1584، بعد وفاته بقرون؛ لذلك فهو تمثيل تاريخي وليس صورة معاصرة له.",
+ "historicalImageSource": "المصدر: أندريه تيفيه عبر مكتبات مؤسسة سميثسونيان،",
+ "historicalImageRights": "، ضمن الملكية العامة.",
+ "historicalImageParagraph1": "لا توجد صورة فوتوغرافية لابن سينا؛ فقد عاش في القرن العاشر الميلادي، قبل اختراع التصوير بقرون طويلة. لذلك ينبغي التعامل مع الصور المتداولة له باعتبارها رسومًا أو صورًا فنية أُنتجت في عصور لاحقة، لا ملامح مؤكدة لوجهه.",
+ "historicalImageParagraph2": "عاش ابن سينا في عالم كانت فيه الكتب والنسخ اليدوي ومجالس العلماء وطرق السفر بين المدن وسائل أساسية لانتقال المعرفة. وكانت حياة العالم تعتمد على القراءة والمناقشة والملاحظة، وعلى الوصول إلى الكتب والمعلمين والرعاية التي تتيح له متابعة البحث.",
+ "medicineKicker": "الطب في زمنه",
+ "medicineHeading": "ماذا كان يعني أن تكون طبيبًا قبل ألف سنة؟",
+ "medicineParagraph1": "جمع كتاب «القانون في الطب» معارف طبية كانت معروفة في عصر ابن سينا، ونظمها في أبواب تساعد على دراستها والرجوع إليها. وتناول الكتاب موضوعات مثل وصف الأمراض، وملاحظة الأعراض، والأدوية، وأجزاء الجسم، وطرق التفكير في التشخيص والعلاج وفق المعرفة المتاحة آنذاك.",
+ "medicineParagraph2": "لكن أهمية الكتاب التاريخية لا تعني أن كل وصفة أو نظرية وردت فيه تصلح للطب الحديث. فالعلم يتغير عندما تظهر أدوات قياس وتجارب وأدلة جديدة؛ لذلك ندرس كتب الطب القديمة لفهم تاريخ المعرفة، ولا نستخدمها بديلًا عن النصيحة الطبية الحديثة المبنية على الأدلة.",
+ "medicineParagraph3": "كما أن ابن سينا لم يكن طبيبًا فقط؛ فقد كتب في المنطق والفلسفة والطبيعة، وهو ما يعكس اتساع اهتمام بعض العلماء في عصره بمجالات متعددة. ومع ذلك، من الأفضل أن ننسب إليه الأعمال والأفكار الموثقة بدل إطلاق أوصاف مطلقة لا يمكن اختبارها.",
+ "quizKicker": "تحدّي خالدون",
+ "quizHeading": "اختبر معلوماتك",
+ "quizIntro": "اختبر معلوماتك عن الشخصية وعصرها. كل اختبار يتضمن خمسة أسئلة، مع نتيجة ومراجعة للإجابات في النهاية.",
+ "quizLanguageNote": "الاختبار متاح بالعربية والإنجليزية والفرنسية والإيطالية والألمانية.",
+ "quizStart": "ابدأ الاختبار"
+ });
 window.I18N.register("en",{
  "eyebrow":"Immortals Through History • History & Civilizations",
  "title":"Ibn Sina — al-Shaykh al-Ra’is",
@@ -131,8 +149,26 @@ window.I18N.register("en",{
  "r_already_saved":"This response has already been recorded.",
  "s_title":"Ibn Sina — al-Shaykh al-Ra’is",
  "s_subtitle":"A short journey with a scholar of medicine and philosophy whose book was studied for centuries.",
- "s_start":"Start the story →"
-});
+ "s_start":"Start the story →",
+ "historyImageKicker": "A Portrait from History",
+ "historyImageHeading": "How can we picture a scholar who lived a thousand years ago?",
+ "historicalPortraitAlt": "A depiction of Ibn Sina published in an illustrated book in 1584, not a contemporary portrait",
+ "historicalImageCaption": "This depiction of Ibn Sina appeared in a book published in 1584, centuries after his death; it is a later historical representation, not a contemporary portrait.",
+ "historicalImageSource": "Source: André Thevet via Smithsonian Libraries,",
+ "historicalImageRights": ", in the public domain.",
+ "historicalImageParagraph1": "No photograph of Ibn Sina exists: he lived in the tenth century, many centuries before photography was invented. Images of him should therefore be understood as drawings or artistic representations made later, not as confirmed likenesses of his face.",
+ "historicalImageParagraph2": "Ibn Sina lived in a world where books, handwritten copying, scholarly gatherings, and travel between cities were essential ways of sharing knowledge. A scholar’s work depended on reading, discussion, observation, and access to books, teachers, and support for continued study.",
+ "medicineKicker": "Medicine in His Time",
+ "medicineHeading": "What did it mean to be a physician a thousand years ago?",
+ "medicineParagraph1": "The Canon of Medicine organized medical knowledge known in Ibn Sina’s time into sections that could be studied and consulted. It covered topics such as describing illnesses, observing symptoms, medicines, parts of the body, and approaches to diagnosis and treatment based on the knowledge then available.",
+ "medicineParagraph2": "The book’s historical importance does not mean that every remedy or theory in it is suitable for modern medicine. Science changes as new measurement tools, experiments, and evidence emerge. We study old medical books to understand the history of knowledge, not as substitutes for evidence-based medical advice today.",
+ "medicineParagraph3": "Ibn Sina was not only a physician: he also wrote about logic, philosophy, and the natural world, reflecting the wide-ranging interests of some scholars of his era. Still, it is best to credit him with documented works and ideas rather than make absolute claims that cannot be verified.",
+ "quizKicker": "Khaledoon Challenge",
+ "quizHeading": "Test Your Knowledge",
+ "quizIntro": "Check what you know about this historical figure and his era. Each quiz has five questions, followed by a score and answer review.",
+ "quizLanguageNote": "The quiz is available in Arabic, English, French, Italian, and German.",
+ "quizStart": "Start the Quiz"
+ });
 window.I18N.register("fr",{
  "eyebrow":"Immortels à travers l’histoire • Histoire et civilisations",
  "title":"Ibn Sina — al-Shaykh al-Ra’is",
@@ -197,8 +233,26 @@ window.I18N.register("fr",{
  "r_already_saved":"Cette réaction a déjà été enregistrée.",
  "s_title":"Ibn Sina — al-Shaykh al-Ra’is",
  "s_subtitle":"Un court voyage auprès d’un savant en médecine et en philosophie dont le livre fut étudié pendant des siècles.",
- "s_start":"Commencer le récit →"
-});
+ "s_start":"Commencer le récit →",
+ "historyImageKicker": "Une image venue de l’histoire",
+ "historyImageHeading": "Comment imaginer un savant qui a vécu il y a mille ans ?",
+ "historicalPortraitAlt": "Représentation d’Ibn Sina publiée dans un livre illustré en 1584, et non un portrait contemporain",
+ "historicalImageCaption": "Cette représentation d’Ibn Sina a été publiée dans un livre en 1584, des siècles après sa mort ; il s’agit d’une représentation historique tardive, et non d’un portrait contemporain.",
+ "historicalImageSource": "Source : André Thevet, via les bibliothèques de la Smithsonian Institution,",
+ "historicalImageRights": ", dans le domaine public.",
+ "historicalImageParagraph1": "Il n’existe aucune photographie d’Ibn Sina : il a vécu au Xe siècle, plusieurs siècles avant l’invention de la photographie. Les images diffusées aujourd’hui doivent donc être considérées comme des dessins ou des représentations artistiques réalisées plus tard, et non comme des portraits fidèles et confirmés de son visage.",
+ "historicalImageParagraph2": "Ibn Sina vivait dans un monde où les livres, la copie manuscrite, les réunions de savants et les voyages entre les villes étaient essentiels à la circulation du savoir. Le travail d’un savant dépendait de la lecture, des échanges, de l’observation et de l’accès aux livres, aux enseignants et au soutien nécessaire à la recherche.",
+ "medicineKicker": "La médecine à son époque",
+ "medicineHeading": "Que signifiait être médecin il y a mille ans ?",
+ "medicineParagraph1": "Le Canon de la médecine organisait les connaissances médicales de l’époque d’Ibn Sina en chapitres que l’on pouvait étudier et consulter. Il abordait notamment la description des maladies, l’observation des symptômes, les médicaments, le corps humain et les méthodes de diagnostic et de traitement fondées sur les connaissances alors disponibles.",
+ "medicineParagraph2": "L’importance historique de cet ouvrage ne signifie pas que chaque remède ou théorie qu’il contient convient à la médecine moderne. La science évolue grâce aux nouveaux instruments de mesure, aux expériences et aux preuves. Nous étudions les anciens livres médicaux pour comprendre l’histoire du savoir, et non pour remplacer les conseils médicaux actuels fondés sur des preuves.",
+ "medicineParagraph3": "Ibn Sina n’était pas seulement médecin : il a aussi écrit sur la logique, la philosophie et la nature, ce qui illustre la diversité des intérêts de certains savants de son époque. Il vaut toutefois mieux lui attribuer des œuvres et des idées documentées que formuler des affirmations absolues impossibles à vérifier.",
+ "quizKicker": "Le défi Khaledoon",
+ "quizHeading": "Teste tes connaissances",
+ "quizIntro": "Vérifie ce que tu sais sur ce personnage historique et son époque. Chaque quiz comprend cinq questions, puis un score et une correction des réponses.",
+ "quizLanguageNote": "Le quiz est disponible en arabe, en anglais, en français, en italien et en allemand.",
+ "quizStart": "Commencer le quiz"
+ });
 window.I18N.register("it",{
  "eyebrow":"Immortali attraverso la storia • Storia e civiltà",
  "title":"Ibn Sina — al-Shaykh al-Ra’is",
@@ -263,8 +317,26 @@ window.I18N.register("it",{
  "r_already_saved":"Questa reazione è già stata registrata.",
  "s_title":"Ibn Sina — al-Shaykh al-Ra’is",
  "s_subtitle":"Un breve viaggio con uno studioso di medicina e filosofia, il cui libro fu studiato per secoli.",
- "s_start":"Inizia la storia →"
-});
+ "s_start":"Inizia la storia →",
+ "historyImageKicker": "Un’immagine dalla storia",
+ "historyImageHeading": "Come possiamo immaginare uno studioso vissuto mille anni fa?",
+ "historicalPortraitAlt": "Raffigurazione di Ibn Sina pubblicata in un libro illustrato nel 1584, non un ritratto contemporaneo",
+ "historicalImageCaption": "Questa raffigurazione di Ibn Sina apparve in un libro pubblicato nel 1584, secoli dopo la sua morte; è una rappresentazione storica successiva, non un ritratto contemporaneo.",
+ "historicalImageSource": "Fonte: André Thevet tramite le biblioteche dello Smithsonian,",
+ "historicalImageRights": ", di pubblico dominio.",
+ "historicalImageParagraph1": "Non esistono fotografie di Ibn Sina: visse nel X secolo, molti secoli prima dell’invenzione della fotografia. Le immagini che circolano oggi vanno quindi considerate disegni o rappresentazioni artistiche realizzate in epoche successive, non raffigurazioni certe del suo volto.",
+ "historicalImageParagraph2": "Ibn Sina visse in un mondo in cui libri, copie manoscritte, incontri tra studiosi e viaggi fra città erano strumenti essenziali per trasmettere il sapere. Il lavoro di uno studioso dipendeva dalla lettura, dal confronto, dall’osservazione e dall’accesso a libri, insegnanti e sostegno per continuare la ricerca.",
+ "medicineKicker": "La medicina ai suoi tempi",
+ "medicineHeading": "Che cosa significava essere medico mille anni fa?",
+ "medicineParagraph1": "Il Canone della medicina organizzava le conoscenze mediche note ai tempi di Ibn Sina in sezioni da studiare e consultare. Trattava temi come la descrizione delle malattie, l’osservazione dei sintomi, i medicinali, le parti del corpo e i metodi di diagnosi e cura secondo le conoscenze allora disponibili.",
+ "medicineParagraph2": "L’importanza storica del libro non significa che ogni rimedio o teoria contenuti sia adatto alla medicina moderna. La scienza cambia grazie a nuovi strumenti di misurazione, esperimenti e prove. Studiamo gli antichi testi medici per capire la storia del sapere, non per sostituire i consigli medici moderni basati su prove scientifiche.",
+ "medicineParagraph3": "Ibn Sina non fu soltanto un medico: scrisse anche di logica, filosofia e natura, mostrando l’ampiezza degli interessi di alcuni studiosi del suo tempo. È comunque preferibile attribuirgli opere e idee documentate, evitando affermazioni assolute che non possono essere verificate.",
+ "quizKicker": "La sfida Khaledoon",
+ "quizHeading": "Metti alla prova le tue conoscenze",
+ "quizIntro": "Scopri quanto conosci questo personaggio storico e la sua epoca. Ogni quiz contiene cinque domande, con punteggio finale e revisione delle risposte.",
+ "quizLanguageNote": "Il quiz è disponibile in arabo, inglese, francese, italiano e tedesco.",
+ "quizStart": "Inizia il quiz"
+ });
 window.I18N.register("de",{
  "eyebrow": "Unsterbliche Persönlichkeiten der Geschichte • Geschichte und Zivilisationen",
  "title": "Ibn Sina — al-Scheich al-Ra’is",
@@ -329,6 +401,24 @@ window.I18N.register("de",{
  "r_already_saved": "Diese Antwort wurde bereits erfasst.",
  "s_title": "Ibn Sina — al-Scheich al-Ra’is",
  "s_subtitle": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde.",
- "s_start": "Die Geschichte beginnen →"
+ "s_start": "Die Geschichte beginnen →",
+ "historyImageKicker": "Ein Bild aus der Geschichte",
+ "historyImageHeading": "Wie können wir uns einen Gelehrten vorstellen, der vor tausend Jahren lebte?",
+ "historicalPortraitAlt": "Darstellung von Ibn Sina aus einem illustrierten Buch von 1584, kein zeitgenössisches Porträt",
+ "historicalImageCaption": "Diese Darstellung von Ibn Sina erschien 1584 in einem Buch, Jahrhunderte nach seinem Tod; sie ist eine spätere historische Darstellung und kein zeitgenössisches Porträt.",
+ "historicalImageSource": "Quelle: André Thevet über die Smithsonian Libraries,",
+ "historicalImageRights": ", gemeinfrei.",
+ "historicalImageParagraph1": "Es gibt keine Fotografie von Ibn Sina: Er lebte im 10. Jahrhundert, viele Jahrhunderte vor der Erfindung der Fotografie. Die heute verbreiteten Bilder sind daher als spätere Zeichnungen oder künstlerische Darstellungen zu verstehen, nicht als gesicherte Abbildungen seines Gesichts.",
+ "historicalImageParagraph2": "Ibn Sina lebte in einer Welt, in der Bücher, handschriftliche Abschriften, Gelehrtenkreise und Reisen zwischen Städten wichtige Wege zur Weitergabe von Wissen waren. Die Arbeit eines Gelehrten beruhte auf Lesen, Austausch, Beobachtung und dem Zugang zu Büchern, Lehrern und Unterstützung für weitere Forschung.",
+ "medicineKicker": "Medizin zu seiner Zeit",
+ "medicineHeading": "Was bedeutete es, vor tausend Jahren Arzt zu sein?",
+ "medicineParagraph1": "Der Kanon der Medizin ordnete das medizinische Wissen aus Ibn Sinas Zeit in Abschnitte, die studiert und nachgeschlagen werden konnten. Das Werk behandelte unter anderem die Beschreibung von Krankheiten, die Beobachtung von Symptomen, Arzneimittel, Körperteile sowie Diagnose- und Behandlungsansätze auf Grundlage des damaligen Wissens.",
+ "medicineParagraph2": "Die historische Bedeutung des Buches bedeutet nicht, dass jedes darin beschriebene Heilmittel oder jede Theorie für die moderne Medizin geeignet ist. Wissenschaft verändert sich durch neue Messinstrumente, Experimente und Belege. Wir lesen alte medizinische Bücher, um die Geschichte des Wissens zu verstehen, nicht als Ersatz für heutige evidenzbasierte medizinische Beratung.",
+ "medicineParagraph3": "Ibn Sina war nicht nur Arzt: Er schrieb auch über Logik, Philosophie und Natur und zeigte damit die breite Interessenvielfalt mancher Gelehrter seiner Zeit. Dennoch sollten wir ihm dokumentierte Werke und Ideen zuschreiben, statt absolute Behauptungen aufzustellen, die sich nicht überprüfen lassen.",
+ "quizKicker": "Die Khaledoon-Herausforderung",
+ "quizHeading": "Teste dein Wissen",
+ "quizIntro": "Prüfe dein Wissen über diese historische Persönlichkeit und ihre Zeit. Jedes Quiz enthält fünf Fragen sowie eine Punktzahl und eine Antwortauswertung.",
+ "quizLanguageNote": "Das Quiz ist auf Arabisch, Englisch, Französisch, Italienisch und Deutsch verfügbar.",
+ "quizStart": "Quiz starten"
  });
 })();
