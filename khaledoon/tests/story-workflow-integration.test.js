@@ -77,7 +77,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261021-map-auto-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الربط التلقائي بالخريطة التفاعلية'));
+  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(shared.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
 });
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
@@ -202,7 +202,7 @@ test('Gemini is available in every admin story prompt flow with full story requi
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
-  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"gemini":'));
+  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));\n  assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
   ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تعديلًا أو اختبارًا أو نشرًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
@@ -210,7 +210,7 @@ test('admin project instructions and AI provider prompts require custom layouts 
   assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
   assert.ok(texts.includes('visual_design'));
   assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تكرر التصميم البصري نفسه'));
+  assert.ok(texts.includes('لا تستخدم قالبًا بصريًا واحدًا متكررًا لكل الحكايات.'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
@@ -269,7 +269,7 @@ test('story prompt requires automatic interactive-map linkage with no orphan or 
   assert.ok(texts.includes('الربط التلقائي بالخريطة التفاعلية'));
   assert.ok(texts.includes('دون طلب إضافة يدوية منفصلة'));
   assert.ok(texts.includes('اربط العلامة مباشرة برابط صفحة الحكاية الصحيح'));
-  assert.ok(texts.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
+  assert.ok(texts.includes('لا تخترع إحداثيات أو روابط، ولا تغيّر سجلات قديمة أو بيانات التفاعلات.'));
   assert.ok(texts.includes('لا تعتبر وجود الحكاية في فهرس القصص وحده دليلًا على الربط بالخريطة'));
   assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو مصدرًا أو رابطًا'));
   assert.ok(texts.includes('تلتقطها آلية الفهرسة والخريطة التفاعلية تلقائيًا'));
