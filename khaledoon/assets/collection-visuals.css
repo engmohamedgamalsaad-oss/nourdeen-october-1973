@@ -378,3 +378,7 @@ html[data-theme="light"] body.collection-islamic .story-index-card .story-index-
  .story-index-card .story-index-cover{flex-basis:100%;width:100%;height:190px;object-fit:cover}
 }
 @media(prefers-reduced-motion:reduce){.story-index-card{transition:none!important}}
+
+.story-index-card .story-index-cover-fallback{display:grid;place-items:center;padding:12px;background:linear-gradient(135deg,rgba(120,197,154,.28),rgba(228,194,122,.16));color:#f8f4e8;font-weight:900;text-align:center;line-height:1.7}
+body.collection-islamic{position:relative;isolation:isolate}
+html[data-theme="light"] .story-index-card .story-index-cover-fallback{color:#20392b;background:linear-gradient(135deg,#e0efdf,#f8edcf)}
