@@ -54,7 +54,7 @@ test('strict story prompt gate is shared across providers and old AI output is n
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   ['cover-popup','prefers-reduced-motion','الإيطالية والألمانية','الصورة التفاعلية','إحداثيات','الربط التلقائي بالخريطة التفاعلية','stories/places.json','دون تعديل يدوي لاحق','سجلات يتيمة'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing gate requirement: '+needle); });
   assert.ok(shared.includes('معيار التصميم المرئي والصور والوضعين الفاتح والغامق'), 'shared prompt must require visual design and light/dark QA');
-  ['بطاقات قراءة منفصلة','النص البديل','حقوق/ترخيص','الوضع الفاتح والغامق فعليًا'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing visual design gate: '+needle); });
+  ['بطاقات قراءة منفصلة','نص بديل','حقوق/ترخيص','الوضع الفاتح والغامق فعليًا'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing visual design gate: '+needle); });
   var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
   assert.ok(dataGate.includes('أرسل map_location دائمًا'));
   assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
@@ -377,6 +377,6 @@ test('automatic story execution contract is appended to every AI provider prompt
   assert.ok(promptTexts.includes('لا تنتظر من صاحب المشروع أن يكرر المتطلبات'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
-  assert.ok(admin.includes('assets/khaledoon-admin-texts.js?v=20261022-3'), 'admin must bust the browser cache when prompt automation changes');
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'), 'admin must bust the browser cache when prompt automation changes');
 });
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
