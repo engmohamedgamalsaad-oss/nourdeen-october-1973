@@ -1,0 +1,45 @@
+/* story-layout.css — تنسيق الهيدر والـ hero المشترك لكل صفحات الحكايات.
+   يُطبَّق على أي صفحة وسمها body[data-story-slug] وفيها <header> مباشرة داخل body (الهيدر)، والـ hero فقط حين يحتوي .hero-art.
+   يتحمّل من assets/shared/base.css، ولا تحتاج الحكاية الجديدة لأي CSS خاص بالهيدر أو الـ hero. */
+body[data-story-slug]>header{
+  position:sticky;top:0;z-index:90;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px 18px;min-height:72px;padding:12px clamp(14px,4vw,56px);
+  font-family:"Cairo",Tahoma,sans-serif;font-size:clamp(1rem,1.4vw,1.15rem);font-weight:800;line-height:1.5;
+  background:rgba(3,15,23,.96);border-bottom:1px solid rgba(227,189,120,.3);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+}
+body[data-story-slug]>header>a{
+  display:inline-flex;align-items:center;min-height:44px;padding:8px 16px;border-radius:999px;
+  border:1px solid color-mix(in srgb,currentColor 38%,transparent);text-decoration:none;font-weight:800;white-space:nowrap;
+  transition:background .2s,transform .2s;
+}
+body[data-story-slug]>header>a:hover{background:color-mix(in srgb,currentColor 12%,transparent);transform:translateY(-1px)}
+body[data-story-slug]>header .language-switch{margin-inline-start:auto}
+@media(max-width:600px){
+  body[data-story-slug]>header{position:static;padding:10px 12px;min-height:64px;gap:8px 10px;justify-content:center}
+  body[data-story-slug]>header>a{font-size:.95rem;padding:7px 13px;white-space:normal;text-align:center}
+  body[data-story-slug]>header .language-switch{margin-inline-start:0;justify-content:center;width:100%}
+}
+
+body[data-story-slug]:has(>header) .hero:has(.hero-art){
+  display:grid!important;grid-template-columns:minmax(0,600px) minmax(0,420px);justify-content:center;
+  align-items:center;gap:clamp(24px,5vw,72px);min-height:0!important;
+  padding:clamp(40px,7vw,88px) clamp(16px,5vw,64px)!important;
+}
+body[data-story-slug]:has(>header) .hero:has(.hero-art) .container,
+body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-content{
+  order:1;width:100%!important;max-width:none!important;margin:0!important;text-align:start;position:relative;z-index:3;
+}
+body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-art{
+  order:2;position:relative!important;inset:auto!important;right:auto!important;left:auto!important;bottom:auto!important;top:auto!important;
+  transform:none!important;width:100%!important;max-width:420px;height:auto!important;aspect-ratio:4/5;
+  justify-self:center;display:block;opacity:1!important;padding:0;z-index:1;
+}
+body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-art img{width:100%!important;height:100%!important;object-fit:cover;object-position:center top}
+@media(max-width:860px){
+  body[data-story-slug]:has(>header) .hero:has(.hero-art){grid-template-columns:minmax(0,1fr);padding:36px 16px 40px!important}
+  body[data-story-slug]:has(>header) .hero:has(.hero-art) .container,
+  body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-content{text-align:center}
+  body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-subtitle{margin-inline:auto}
+  body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-art{max-width:300px;aspect-ratio:4/5}
+}
