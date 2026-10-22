@@ -28,3 +28,32 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 
 :root{--gold:#e2b36d!important;--accent:#e2b36d!important}
 .hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}
+
+
+/* Lively modal and editorial motion — Tawfiq al-Hakim */
+#intro.modal{padding:clamp(12px,3vw,28px);background:rgba(5,10,22,.84);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+#intro .modal-card{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);width:min(940px,100%);max-height:min(88vh,760px);overflow:auto;border:1px solid #e2b36d88;border-radius:28px;background:linear-gradient(135deg,#151b32 0%,#202344 58%,#101a25 100%);box-shadow:0 34px 100px #000a;animation:tawfiq-modal-arrive .72s cubic-bezier(.16,1,.3,1) both}
+#intro .modal-card:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:.3;background-image:radial-gradient(#e2b36d55 1px,transparent 1px),linear-gradient(135deg,transparent 0 48%,#8ed4d00d 48% 52%,transparent 52%);background-size:18px 18px,100% 100%;mask-image:linear-gradient(110deg,#000,transparent 82%)}
+#intro .modal-art{position:relative;isolation:isolate;min-height:360px;overflow:hidden;background:linear-gradient(145deg,#253b4b,#141c2e);border-inline-end:1px solid #e2b36d55}
+#intro .modal-art:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,#11182be8 0%,transparent 44%),linear-gradient(135deg,#d9ae6730,transparent 60%)}
+#intro .modal-art img{display:block;width:100%;height:100%;min-height:360px;object-fit:cover!important;object-position:center;filter:saturate(.88) contrast(1.04);animation:tawfiq-image-arrive 1s cubic-bezier(.2,.8,.2,1) both}
+#intro .modal-copy{position:relative;align-self:center;padding:clamp(24px,4.2vw,52px);text-align:start;animation:tawfiq-copy-arrive .72s .12s both}
+#intro .modal-copy .eyebrow{display:inline-flex;margin-bottom:12px;padding:6px 11px;border:1px solid #e2b36d66;border-radius:999px;background:#101a2bbf;color:#e2b36d;font-size:.78rem;font-weight:900;letter-spacing:.035em}
+#intro .modal-copy .person-name{font-size:clamp(1.1rem,2vw,1.45rem);margin:0 0 8px;color:#e2b36d}
+#intro .modal-copy h2{margin:0 0 14px;color:#fff2d8;font:900 clamp(1.65rem,3.2vw,2.65rem)/1.55 Marhey,Cairo,serif;text-wrap:balance}
+#intro .modal-copy #intro-desc{margin:0;color:#d6dfef;font-size:1rem;line-height:2}
+#intro #start{margin-top:24px;border:0;border-radius:999px;padding:13px 24px;background:linear-gradient(120deg,#e2b36d,#b9a5f5);color:#16182b;font-weight:900;box-shadow:0 10px 30px #0004;transition:transform .25s,box-shadow .25s}
+#intro #start:hover{transform:translateY(-3px);box-shadow:0 16px 34px #0006}
+#intro .modal-close{top:12px;inset-inline-end:12px;z-index:5;width:42px;height:42px;border:1px solid #e2b36d88;border-radius:50%;background:#11192be8;color:#fff4df;box-shadow:0 6px 20px #0005;transition:transform .25s,background .25s}
+#intro .modal-close:hover{transform:rotate(90deg);background:#493e61}
+@keyframes tawfiq-modal-arrive{from{opacity:0;transform:translateY(24px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes tawfiq-image-arrive{from{opacity:0;transform:scale(1.045)}to{opacity:1;transform:scale(1)}}
+@keyframes tawfiq-copy-arrive{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+.story .container{position:relative}
+.story{background-image:radial-gradient(circle at 96% 10%,#e2b36d0c 0 2px,transparent 3px),linear-gradient(145deg,#252744ef,#111b28f2)!important;background-size:22px 22px,auto}
+.story:nth-of-type(odd){background-image:radial-gradient(circle at 5% 15%,#8ed4d00d 0 2px,transparent 3px),linear-gradient(145deg,#302c4aef,#131d29f2)!important;background-size:24px 24px,auto}
+.story h2{position:relative}
+.story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,#e2b36d,#8ed4d0);transform-origin:right;animation:tawfiq-underline .75s .2s both}
+@keyframes tawfiq-underline{from{transform:scaleX(0);opacity:.2}to{transform:scaleX(1);opacity:1}}
+@media(max-width:680px){#intro.modal{padding:10px}#intro .modal-card{grid-template-columns:1fr;max-height:92vh;border-radius:22px}#intro .modal-art{min-height:190px;height:220px;border-inline-end:0;border-bottom:1px solid #e2b36d55}#intro .modal-art img{min-height:220px;height:220px;object-fit:cover!important;object-position:center 28%}#intro .modal-art:after{background:linear-gradient(0deg,#151b32d9,transparent 75%)}#intro .modal-copy{padding:22px 22px 26px;text-align:center}#intro .modal-copy h2{font-size:1.7rem}#intro #start{width:100%;justify-content:center}.story h2:after{margin-inline:auto}}
+@media(prefers-reduced-motion:reduce){#intro .modal-card,#intro .modal-art img,#intro .modal-copy,#intro #start,.story h2:after{animation:none!important;transition:none!important}}
