@@ -100,6 +100,26 @@ html body[data-story-slug="009"]:has(>header) .hero:has(.hero-art) .hero-art img
  html body[data-story-slug="009"] .hero .hero-art img{animation:none!important;transform:none!important}
 }
 </style>
+<style id="intro-popup-portrait-frame-20261022">
+/* شاشة «ابدأ الحكاية»: إطار مستقل عن صورة الغلاف داخل الصفحة */
+html body #intro.modal .modal-card{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr)!important}
+html body #intro.modal .modal-art{
+  box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;
+  min-width:0!important;min-height:360px!important;height:380px!important;padding:12px!important;
+  overflow:hidden!important;background:linear-gradient(145deg,#213039,#0c171f)!important;
+}
+html body #intro.modal .modal-art img{
+  display:block!important;flex:0 1 auto!important;width:100%!important;height:100%!important;
+  min-height:0!important;max-height:100%!important;object-fit:contain!important;object-position:center!important;
+  border:1px solid rgba(226,179,109,.55)!important;border-radius:12px!important;background:#111c25!important;
+  filter:none!important;transform:none!important;animation:none!important;
+}
+@media(max-width:680px){
+ html body #intro.modal .modal-art{height:clamp(170px,27vh,220px)!important;min-height:170px!important;padding:8px!important}
+ html body #intro.modal .modal-art img{width:100%!important;height:100%!important;min-height:0!important;object-fit:contain!important;object-position:center!important}
+}
+@media(prefers-reduced-motion:reduce){html body #intro.modal .modal-art img{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body class="story-design-portrait-biography" data-story-slug="009">
 <header><a href="../../../khaledoon/collections/people.html">← أعلام الأدب والفنون والرياضة</a><a href="../../../index.html">خالدون عبر التاريخ</a><div class="language-switch" data-lang-switch role="group" aria-label="Language"></div></header>
