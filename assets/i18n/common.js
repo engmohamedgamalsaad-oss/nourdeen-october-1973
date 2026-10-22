@@ -5,6 +5,13 @@
   window.I18N.register('fr',{c1:'Accueil',c2:'Récits d’octobre'});
   window.I18N.register('it',{c1:'Home',c2:'Racconti d’ottobre'});
   window.I18N.register('de',{c1:'Startseite',c2:'Oktober-Geschichten'});
+
+  /* Used by the Naguib Mahfouz story's data-i18n name label. */
+  window.I18N.register('ar',{'نجيب محفوظ':'نجيب محفوظ'});
+  window.I18N.register('en',{'نجيب محفوظ':'Naguib Mahfouz'});
+  window.I18N.register('fr',{'نجيب محفوظ':'Naguib Mahfouz'});
+  window.I18N.register('it',{'نجيب محفوظ':'Naguib Mahfouz'});
+  window.I18N.register('de',{'نجيب محفوظ':'Naguib Mahfouz'});
   (function(){
     var IDX={en:0,fr:1,it:2,de:3};
     var AR_TITLE='خالدون عبر التاريخ | حكايات أكتوبر 1973';
