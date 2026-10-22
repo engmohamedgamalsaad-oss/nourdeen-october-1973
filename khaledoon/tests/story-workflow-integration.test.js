@@ -38,12 +38,14 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   var fn = admin.slice(admin.indexOf('function buildNewStoryPrompt'), admin.indexOf('function renderNewStoryGate'));
   assert.ok(fn.includes("if(mode==='package')"));
   assert.ok(fn.includes('اللغات الخمس كاملة'));
+  assert.ok(admin.includes('أخرج كائن JSON واحدًا كاملًا وصالحًا للاستيراد') && admin.includes('دون أسوار كود أو Markdown'), 'package prompt must forbid markdown/fences and require complete JSON');
+  assert.ok(admin.includes('لا تكتب أي محارف هروب قبل أسماء المفاتيح أو قبل الأقواس المربعة'), 'package prompt must prevent escaped structural characters');
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'), 'verified map metadata must survive AI package import');
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
-  assert.ok(admin.includes('source_name,source_url,rights,i18n'));
+  assert.ok(admin.includes('source_name') && admin.includes('source_url') && admin.includes('rights') && admin.includes('i18n'));
 });
 test('strict story prompt gate is shared across providers and old AI output is not copied', function () {
   assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
@@ -58,6 +60,9 @@ test('strict story prompt gate is shared across providers and old AI output is n
   var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
   assert.ok(dataGate.includes('أرسل map_location دائمًا'));
   assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
+  assert.ok(shared.includes('عقد إخراج JSON للاستيراد — إلزامي لكل مزوّد'), 'all provider prompts must share strict JSON output contract');
+  ['English: Return exactly one raw','Français : Retourne un seul objet JSON','Italiano: Restituisci un solo oggetto JSON','Deutsch: Gib genau ein vollständiges'].forEach(function (needle) { assert.ok(shared.includes(needle), 'shared JSON contract missing language version: '+needle); });
+  ['Never escape JSON structure','N’échappe jamais la structure JSON','Non applicare escape alla struttura JSON','Maskiere niemals die JSON-Struktur'].forEach(function (needle) { assert.ok(shared.includes(needle), 'shared JSON contract must forbid escaping JSON structure: '+needle); });
   assert.ok(dataGate.includes('map_location'));
   assert.ok(dataGate.includes('stories/places.json'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
@@ -121,7 +126,7 @@ test('admin validates every translated field and every quiz translation before A
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
-  assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
+  assert.ok(admin.includes('أول مفتاح حرفيًا هو') && admin.includes('KH_STORY_PACKAGE_V1'));
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
