@@ -80,12 +80,18 @@ if (!homepage.includes("khaledoon/assets/khaledoon-map.css") ||
     !homepage.includes("khaledoon/assets/khaledoon-map.js")) {
   fail("Homepage must load the interactive map CSS and JavaScript.");
 }
-if (!mapScript.includes("function buildDirectory()") ||
-    !mapScript.includes("storiesAll.forEach") ||
-    !mapScript.includes("function storyHref(s)") ||
+if (mapScript.includes("كل الحكايات المنشورة") ||
+    mapScript.includes("All published stories") ||
+    mapScript.includes("function buildDirectory()") ||
+    mapScript.includes("khm-directory")) {
+  fail("Homepage must not render the removed all-published-stories directory.");
+}
+if (!mapScript.includes("function storyHref(s)") ||
     !mapScript.includes("a.href = storyHref(s)") ||
-    !mapScript.includes("T('noPlace')")) {
-  fail("Map must render a direct-link directory for all published indexed stories, including stories without verified coordinates.");
+    !mapScript.includes("function card(e)") ||
+    !mapScript.includes("points.forEach(function (e)") ||
+    !mapScript.includes("a.href = storyHref(e.s)")) {
+  fail("Interactive map marker cards and the map-load fallback must retain direct story links.");
 }
 if (!mapScript.includes("s.published === false")) fail("Map must exclude unpublished drafts.");
 
@@ -93,7 +99,7 @@ if (errors.length) {
   errors.forEach((e) => console.error("FAIL — " + e));
   process.exit(1);
 }
-console.log(`PASS — ${index.length} published stories have valid direct links in the map directory.`);
+console.log(`PASS — ${index.length} published stories have valid index paths; map markers retain direct story links.`);
 console.log("PASS — all published story data files are indexed; drafts are excluded.");
 console.log("PASS — map coordinates are validated when present; missing locations are labeled instead of guessed.");
-console.log("PASS — homepage map assets and story-link directory are connected.");
+console.log("PASS — homepage map assets and story links are connected without the extra story directory.");
