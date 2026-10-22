@@ -28,3 +28,45 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 
 :root{--gold:#78c59a!important;--accent:#78c59a!important}
 .hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}
+
+
+/* Shared gentle entrance motion for the latest story pages (011–013). */
+.story-design-portrait-biography .hero .hero-art img,
+.story-design-discovery .hero .hero-art img,
+.story-design-women-leadership .hero .hero-art img{
+  animation: kh-story-hero-art-in .9s cubic-bezier(.2,.8,.2,1) both;
+}
+.story-design-portrait-biography .hero .container > *,
+.story-design-discovery .hero .container > *,
+.story-design-women-leadership .hero .container > *{
+  animation: kh-story-hero-copy-in .7s cubic-bezier(.2,.8,.2,1) both;
+}
+.story-design-portrait-biography .hero .container > *:nth-child(2),
+.story-design-discovery .hero .container > *:nth-child(2),
+.story-design-women-leadership .hero .container > *:nth-child(2){animation-delay:.1s}
+.story-design-portrait-biography .hero .container > *:nth-child(3),
+.story-design-discovery .hero .container > *:nth-child(3),
+.story-design-women-leadership .hero .container > *:nth-child(3){animation-delay:.18s}
+body.motion-ready .write-in{
+  opacity:0;transform:translateY(22px);filter:blur(2px);
+  transition:opacity .68s ease,transform .68s cubic-bezier(.2,.8,.2,1),filter .68s ease;
+  transition-delay:var(--write-delay,0ms);
+}
+body.motion-ready .write-in.write-visible{opacity:1;transform:translateY(0);filter:blur(0)}
+@keyframes kh-story-hero-art-in{
+  from{opacity:0;transform:translateY(18px) scale(.975)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+@keyframes kh-story-hero-copy-in{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@media(prefers-reduced-motion:reduce){
+  .story-design-portrait-biography .hero .hero-art img,
+  .story-design-discovery .hero .hero-art img,
+  .story-design-women-leadership .hero .hero-art img,
+  .story-design-portrait-biography .hero .container > *,
+  .story-design-discovery .hero .container > *,
+  .story-design-women-leadership .hero .container > *,
+  body.motion-ready .write-in{animation:none!important;transition:none!important;transform:none!important;filter:none!important;opacity:1!important}
+}
