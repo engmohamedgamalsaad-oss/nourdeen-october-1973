@@ -87,3 +87,26 @@ html body #intro.modal .modal-art img{position:relative;z-index:0;animation:tawf
 @keyframes tawfiq-image-arrive{from{opacity:0;transform:scale(1.045)}to{opacity:1;transform:scale(1)}}
 html body #intro.modal .modal-copy{animation:tawfiq-copy-arrive .72s .12s both!important}
 @media(prefers-reduced-motion:reduce){html body #intro.modal .modal-card,html body #intro.modal .modal-art img,html body #intro.modal .modal-copy{animation:none!important}}
+
+
+/* Final correction: center the intro copy and keep all story reveals vertical */
+html body #intro.modal .modal-card{direction:rtl!important}
+html body #intro.modal .modal-copy{align-items:center!important;text-align:center!important}
+html body #intro.modal .modal-copy .eyebrow{align-self:center!important}
+html body #intro.modal #start{align-self:center!important}
+html body.story-design-portrait-biography main .story{width:min(1020px,calc(100% - 32px))!important;max-width:1020px!important;margin-inline:auto!important;box-sizing:border-box!important}
+html body.story-design-portrait-biography main .story .container{width:min(820px,100%)!important;max-width:100%!important;margin-inline:auto!important;box-sizing:border-box!important}
+html body.story-design-portrait-biography main .story .story-body{width:100%!important;max-width:760px!important;margin-inline:auto!important;text-align:right!important;direction:rtl!important;overflow-wrap:anywhere}
+html body.story-design-portrait-biography main .story .kicker,
+html body.story-design-portrait-biography main .story h2{text-align:center!important}
+html body.story-design-portrait-biography .tawfiq-reveal{transform:translate3d(0,24px,0)!important}
+html body.story-design-portrait-biography .tawfiq-reveal.is-visible{transform:translate3d(0,0,0)!important}
+@media(max-width:680px){
+ html body #intro.modal .modal-copy{align-items:center!important;text-align:center!important}
+ html body #intro.modal #start{align-self:stretch!important;width:100%!important}
+ html body.story-design-portrait-biography main .story{width:calc(100% - 24px)!important;margin-inline:auto!important}
+}
+@media(prefers-reduced-motion:reduce){
+ html body.story-design-portrait-biography .tawfiq-reveal,
+ html body.story-design-portrait-biography .tawfiq-reveal.is-visible{transform:none!important}
+}
