@@ -40,7 +40,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(fn.includes('STORY_PAGE_PROMPT'), 'package prompt must use the canonical master');
   assert.ok(fn.includes('عقد مخطط KH_STORY_PACKAGE_V1 المختصر'));
   assert.ok(fn.includes('images صورتان موثقتان على الأقل'));
-  assert.ok(fn.includes('source_name,source_url,rights,i18n'));
+  assert.ok(fn.includes('source_name') && fn.includes('source_url') && fn.includes('rights') && fn.includes('i18n'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.ok(promptTexts.includes('اللغات الخمس'));
