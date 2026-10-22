@@ -110,3 +110,8 @@ html body.story-design-portrait-biography .tawfiq-reveal.is-visible{transform:tr
  html body.story-design-portrait-biography .tawfiq-reveal,
  html body.story-design-portrait-biography .tawfiq-reveal.is-visible{transform:none!important}
 }
+
+/* Requested title hierarchy: person's name first, role directly below */
+.hero h1{margin-bottom:4px!important}
+.hero .hero-role{margin-top:0!important;font-size:clamp(1.05rem,2vw,1.4rem)!important;font-weight:700!important;line-height:1.8!important;color:#e2b36d!important}
+#intro .popup-role{margin:0!important;color:#e2b36d!important;font-size:clamp(1rem,2vw,1.3rem)!important;font-weight:800!important;line-height:1.8!important}
