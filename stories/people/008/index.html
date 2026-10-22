@@ -102,6 +102,78 @@ html body[data-story-slug="009"]:has(>header) .hero:has(.hero-art) .hero-art img
  html body[data-story-slug="008"] .hero .hero-art img,
  html body[data-story-slug="009"] .hero .hero-art img{animation:none!important;transform:none!important}
 }
+
+/* 2026-10-22: explicit light theme for the four biography pages, including the first screen and image captions */
+:root[data-theme="light"] body[data-story-slug] .hero,
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body[data-story-slug] .hero {
+    background:linear-gradient(135deg,#fffdf7 0%,#f3ead8 100%)!important;
+    color:#26364b!important;
+    border-bottom:1px solid #dfd2b8!important;
+  }
+}
+:root[data-theme="light"] body[data-story-slug] .hero {
+  background:linear-gradient(135deg,#fffdf7 0%,#f3ead8 100%)!important;
+  color:#26364b!important;
+  border-bottom:1px solid #dfd2b8!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero :is(h1,.eyebrow,.hero-subtitle,.person-name,.author,.author span,.author strong,.cover-label) {
+  color:#26364b!important;
+  text-shadow:none!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero .person-name {color:#8a5b19!important}
+:root[data-theme="light"] body[data-story-slug] .hero .cover-label {opacity:1!important}
+:root[data-theme="light"] body[data-story-slug] .hero .hero-art {
+  background:linear-gradient(145deg,#fff,#f0e5d0)!important;
+  border-color:#c6a86c!important;
+  box-shadow:0 12px 30px rgba(61,48,25,.12)!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero .hero-art img {background:#fff!important}
+:root[data-theme="light"] body[data-story-slug] .story-visual-gallery {
+  background:linear-gradient(180deg,#fbf7ee 0%,#f1e7d3 100%)!important;
+  color:#26364b!important;
+  border-block:1px solid #e0d2b8;
+}
+:root[data-theme="light"] body[data-story-slug] .story-visual-gallery :is(.kicker,h2) {color:#26364b!important}
+:root[data-theme="light"] body[data-story-slug] .story-image-card {
+  background:#fffdf8!important;
+  border:1px solid #dfd2bb!important;
+  box-shadow:0 8px 24px rgba(57,45,25,.09)!important;
+  color:#26364b!important;
+}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption,
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a) {
+  color:#26364b!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption small {font-size:.84rem!important;line-height:1.85!important}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption a {color:#175b8d!important;text-decoration:underline;text-underline-offset:2px}
+:root[data-theme="light"] body[data-story-slug] .language-switch .lang-option {
+  background:#fffdf8!important;color:#26364b!important;border-color:#c9b993!important
+}
+:root[data-theme="light"] body[data-story-slug] .language-switch .lang-option.is-active {
+  background:#e7d3a7!important;color:#26364b!important;border-color:#b38b43!important
+}
+:root[data-theme="light"] body[data-story-slug] #ai-translation-notice {
+  background:#fffdf8!important;color:#26364b!important;border-color:#d8c69f!important;box-shadow:0 8px 24px rgba(57,45,25,.08)!important
+}
+:root[data-theme="light"] body[data-story-slug] #ai-translation-notice :is(strong,p) {color:#26364b!important}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-visual-gallery {
+    background:linear-gradient(180deg,#fbf7ee 0%,#f1e7d3 100%)!important;color:#26364b!important
+  }
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card {background:#fffdf8!important;color:#26364b!important;border-color:#dfd2bb!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption,
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a) {color:#26364b!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption a {color:#175b8d!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .language-switch .lang-option {background:#fffdf8!important;color:#26364b!important}
+}
+@media(max-width:600px){
+  body[data-story-slug] .story-image-card figcaption {padding:12px!important;line-height:1.85!important}
+  body[data-story-slug] .story-image-card figcaption small {font-size:.8rem!important}
+}
+
 </style>
 </head>
 <body class="story-design-portrait-biography" data-story-slug="008" data-keep-intro-modal>
