@@ -188,6 +188,18 @@ t('AI story package validator accepts a complete five-language package', functio
   var missingQuizTranslation = W.validateStoryPackage(pkg);
   assert.equal(missingQuizTranslation.ok, false);
   assert.ok(missingQuizTranslation.errors.some(function (e) { return e.indexOf('ترجمة السؤال أو الاختيارات أو التفسير ناقصة في IT') >= 0; }));
+
+  /* النصوص القصيرة المشتركة لا تُرفض، لكن نسخ نص طويل كامل بين لغتين يُوقف الاستيراد. */
+  pkg.question_bank.questions[0].i18n.it.o = ['Option A', 'Option B'];
+  var longCopiedTranslation = 'This is a long translated narrator paragraph copied without translation. '.repeat(3);
+  pkg.translations.en.body = longCopiedTranslation;
+  pkg.translations.fr.body = longCopiedTranslation;
+  pkg.translations.it.body = 'Une traduction italienne différente qui conserve le sens historique et la structure du récit.';
+  var duplicateTranslation = W.validateStoryPackage(pkg);
+  assert.equal(duplicateTranslation.ok, false);
+  assert.ok(duplicateTranslation.errors.some(function (e) {
+    return e.indexOf('FR: نص الراوي مطابق بالكامل لترجمة EN') >= 0;
+  }));
 });
 
 console.log('\n' + passed + ' passed' + (process.exitCode ? ', with FAILURES' : ''));
