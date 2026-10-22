@@ -86,15 +86,21 @@
       'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
       'background-repeat:repeat,no-repeat!important;' +
       'background-attachment:scroll!important}';
-    var lightRule = ':root[data-theme="light"] body:not(:has(:where(#bg,.hero-home))),' +
-      ':root:not([data-theme="dark"]) body:not(:has(:where(#bg,.hero-home))){' +
+    var lightRule = ':root[data-theme="light"] body:not(:has(:where(#bg,.hero-home))){' +
       '--kh-section-accent:' + outer + ';' +
       'background-color:' + lightMid + '!important;' +
       'background-image:url("' + lightTile + '"),radial-gradient(ellipse at 50% 0%,' + lightTop + ' 0%,' + lightMid + ' 52%,' + lightBot + ' 100%)!important;' +
       'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
       'background-repeat:repeat,no-repeat!important;' +
       'background-attachment:scroll!important}';
-    var css = darkRule + '@media(prefers-color-scheme:light){' + lightRule + '}';
+    var systemLightRule = ':root:not([data-theme="dark"]) body:not(:has(:where(#bg,.hero-home))){' +
+      '--kh-section-accent:' + outer + ';' +
+      'background-color:' + lightMid + '!important;' +
+      'background-image:url("' + lightTile + '"),radial-gradient(ellipse at 50% 0%,' + lightTop + ' 0%,' + lightMid + ' 52%,' + lightBot + ' 100%)!important;' +
+      'background-size:' + size + 'px ' + size + 'px,100% 100%!important;' +
+      'background-repeat:repeat,no-repeat!important;' +
+      'background-attachment:scroll!important}';
+    var css = darkRule + lightRule + '@media(prefers-color-scheme:light){' + systemLightRule + '}';
     var el = document.getElementById('kh-story-section-bg');
     if (!el) { el = document.createElement('style'); el.id = 'kh-story-section-bg'; document.head.appendChild(el); }
     el.textContent = css;
