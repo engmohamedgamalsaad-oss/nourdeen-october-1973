@@ -265,16 +265,14 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('story prompt requires automatic interactive-map linkage with no orphan or duplicate markers', function () {
+test('unified v3 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('الربط التلقائي بالخريطة التفاعلية'));
-  assert.ok(texts.includes('دون طلب إضافة يدوية منفصلة'));
-  assert.ok(texts.includes('اربط العلامة مباشرة برابط صفحة الحكاية الصحيح'));
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(texts.includes('لا تخترع إحداثيات أو روابط، ولا تغيّر سجلات قديمة أو بيانات التفاعلات.'));
-  assert.ok(texts.includes('لا تعتبر وجود الحكاية في فهرس القصص وحده دليلًا على الربط بالخريطة'));
-  assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو مصدرًا أو رابطًا'));
-  assert.ok(texts.includes('تلتقطها آلية الفهرسة والخريطة التفاعلية تلقائيًا'));
-  assert.ok(texts.includes('ولا تدّعِ اكتماله'));
+  assert.ok(publisher.includes("file.path === \"stories/index.json\" || path === \"stories/places.json\""));
+  assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(publisher.includes('delete currentPlaces[storyId]'));
 });
 
 test('verified map_location is carried from AI import into bundle and merged safely on publish', function () {
