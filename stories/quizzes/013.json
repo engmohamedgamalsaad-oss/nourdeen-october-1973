@@ -1,0 +1,271 @@
+{
+  "questions": [
+    {
+      "q": "في أي عصر من تاريخ مصر القديمة حكمت الملكة حتشبسوت؟",
+      "o": [
+        "عصر الدولة القديمة",
+        "عصر الدولة الحديثة",
+        "عصر الدولة الوسطى",
+        "العصر المتأخر"
+      ],
+      "a": 1,
+      "e": "حكمت الملكة حتشبسوت خلال الأسرة الثامنة عشرة في عصر الدولة الحديثة، وهو عصر المجد الحربي والتجاري لمصر.",
+      "i18n": {
+        "en": {
+          "q": "In which era of ancient Egyptian history did Queen Hatshepsut rule?",
+          "o": [
+            "Old Kingdom",
+            "New Kingdom",
+            "Middle Kingdom",
+            "Late Period"
+          ],
+          "e": "Queen Hatshepsut ruled during the Eighteenth Dynasty in the New Kingdom era."
+        },
+        "fr": {
+          "q": "À quelle époque de l'histoire de l'Égypte ancienne la reine Hatshepsout a-t-elle régné ?",
+          "o": [
+            "L'Ancien Empire",
+            "Le Nouvel Empire",
+            "Moyen Empire",
+            "Basse Époque"
+          ],
+          "e": "La reine Hatshepsout a régné sous la XVIIIe dynastie pendant le Nouvel Empire."
+        },
+        "it": {
+          "q": "In quale epoca della storia dell'antico Egitto ha regnato la regina Hatshepsut?",
+          "o": [
+            "Antico Regno",
+            "Nuovo Regno",
+            "Medio Regno",
+            "Tardo Periodo"
+          ],
+          "e": "La regina Hatshepsut ha regnato durante la Diciottesima Dinastia nel Nuovo Regno."
+        },
+        "de": {
+          "q": "In welcher Epoche der altägyptischen Geschichte regierte Königin Hatschepsut?",
+          "o": [
+            "Altes Reich",
+            "Neues Reich",
+            "Mittleres Reich",
+            "Spätzeit"
+          ],
+          "e": "Königin Hatschepsut regierte während der 18. Dynastie im Neuen Reich."
+        }
+      }
+    },
+    {
+      "q": "ما هي البلاد التي أرسلت إليها حتشبسوت بعثتها التجارية الشهيرة؟",
+      "o": [
+        "بلاد بونت",
+        "بلاد بابل",
+        "بلاد اليونان",
+        "بلاد فارس"
+      ],
+      "a": 0,
+      "e": "أرسلت حتشبسوت أسطولًا تجاريًا شهيرًا إلى بلاد بونت لجلب البخور والسلع الثمينة والأشجار العطرية.",
+      "i18n": {
+        "en": {
+          "q": "To which land did Hatshepsut send her famous commercial expedition?",
+          "o": [
+            "Land of Punt",
+            "Babylon",
+            "Greece",
+            "Persia"
+          ],
+          "e": "Hatshepsut dispatched a famous naval trade expedition to the Land of Punt."
+        },
+        "fr": {
+          "q": "Vers quel pays Hatshepsout a-t-elle envoyé sa célèbre expédition commerciale ?",
+          "o": [
+            "Le pays de Pount",
+            "Babylone",
+            "La Grèce",
+            "La Perse"
+          ],
+          "e": "Hatshepsout a envoyé une expédition maritime vers le pays de Pount pour rapporter de l'encens et des marchandises précieuses."
+        },
+        "it": {
+          "q": "Verso quale terra Hatshepsut inviò la sua famosa spedizione commerciale?",
+          "o": [
+            "Terra di Punt",
+            "Babilonia",
+            "Grecia",
+            "Persia"
+          ],
+          "e": "Hatshepsut inviò una famosa spedizione commerciale nella terra di Punt."
+        },
+        "de": {
+          "q": "In welches Land schickte Hatschepsut ihre berühmte Handelsexpedition?",
+          "o": [
+            "Land Punt",
+            "Babylon",
+            "Griechenland",
+            "Persien"
+          ],
+          "e": "Hatschepsut entsandte eine berühmte Handelsexpedition in das Land Punt."
+        }
+      }
+    },
+    {
+      "q": "أين يقع معبد حتشبسوت الجنائزي الشهير؟",
+      "o": [
+        "في الجيزة",
+        "في الدير البحري بالأقصر",
+        "في أسوان",
+        "في الإسكندرية"
+      ],
+      "a": 1,
+      "e": "يقع معبد حتشبسوت الجنائزي الفريد في منطقة الدير البحري بالبر الغربي للأقصر.",
+      "i18n": {
+        "en": {
+          "q": "Where is Hatshepsut's famous mortuary temple located?",
+          "o": [
+            "In Giza",
+            "At Deir el-Bahari in Luxor",
+            "In Aswan",
+            "In Alexandria"
+          ],
+          "e": "Hatshepsut's mortuary temple is located at Deir el-Bahari on the West Bank of Luxor."
+        },
+        "fr": {
+          "q": "Où se situe le célèbre temple funéraire de Hatshepsout ?",
+          "o": [
+            "À Gizeh",
+            "À Deir el-Bahari à Louxor",
+            "À Assouan",
+            "À Alexandrie"
+          ],
+          "e": "Le temple funéraire d'Hatshepsout se trouve à Deir el-Bahari sur la rive ouest de Louxor."
+        },
+        "it": {
+          "q": "Dove si trova il famoso tempio funerario di Hatshepsut?",
+          "o": [
+            "A Giza",
+            "A Deir el-Bahari a Luxor",
+            "Ad Assuan",
+            "Ad Alessandria"
+          ],
+          "e": "Il tempio funerario di Hatshepsut si trova a Deir el-Bahari, sulla riva ovest di Luxor."
+        },
+        "de": {
+          "q": "Wo befindet sich der berühmte Totentempel der Hatschepsut?",
+          "o": [
+            "In Gizeh",
+            "In Deir el-Bahari in Luxor",
+            "In Assuan",
+            "In Alexandria"
+          ],
+          "e": "Der Totentempel der Hatschepsut befindet sich in Deir el-Bahari am Westufer von Luxor."
+        }
+      }
+    },
+    {
+      "q": "من هو المهندس المعماري الذي صمم معبد حتشبسوت بالدير البحري؟",
+      "o": [
+        "إمهوتب",
+        "سننموت",
+        "أمنحتب بن حابو",
+        "بتاح حتب"
+      ],
+      "a": 1,
+      "e": "المهندس سننموت هو الذي أشرف على تصميم وبناء معبد حتشبسوت المدرج بالدير البحري.",
+      "i18n": {
+        "en": {
+          "q": "Who was the architect that designed Hatshepsut's temple at Deir el-Bahari?",
+          "o": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep son of Hapu",
+            "Ptahhotep"
+          ],
+          "e": "Senenmut was the royal architect who designed and supervised the building of Deir el-Bahari."
+        },
+        "fr": {
+          "q": "Quel architecte a conçu le temple de Hatshepsout à Deir el-Bahari ?",
+          "o": [
+            "Imhotep",
+            "Sénenmout",
+            "Amenhotep fils de Hapon",
+            "Ptahhotep"
+          ],
+          "e": "Sénenmout est l'architecte qui a conçu le temple à terrasses de Deir el-Bahari."
+        },
+        "it": {
+          "q": "Chi fu l'architetto che progettò il tempio di Hatshepsut a Deir el-Bahari?",
+          "o": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep figlio di Hapu",
+            "Ptahhotep"
+          ],
+          "e": "Senenmut fu l'architetto che progettò e diresse i lavori a Deir el-Bahari."
+        },
+        "de": {
+          "q": "Wer war der Architekt, der Hatschepsuts Tempel in Deir el-Bahari entwarf?",
+          "o": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep Sohn des Hapu",
+            "Ptahhotep"
+          ],
+          "e": "Senenmut war der Architekt, der den Terrassentempel in Deir el-Bahari entwarf."
+        }
+      }
+    },
+    {
+      "q": "ما هي الشجرة النادرة التي جلبتها بعثة حتشبسوت بجذورها لزراعتها في مصر؟",
+      "o": [
+        "شجرة الزيتون",
+        "شجرة المر",
+        "شجرة الأرز",
+        "شجرة النخيل"
+      ],
+      "a": 1,
+      "e": "جلبت البعثة أشجار المر الحية بجذورها لزراعتها في ساحات المعبد بمصر.",
+      "i18n": {
+        "en": {
+          "q": "Which rare tree did Hatshepsut's expedition bring back with its roots to plant in Egypt?",
+          "o": [
+            "Olive tree",
+            "Myrrh tree",
+            "Cedar tree",
+            "Palm tree"
+          ],
+          "e": "The expedition brought back live myrrh trees with roots to plant them near the temple."
+        },
+        "fr": {
+          "q": "Quel arbre rare l'expédition d'Hatshepsout a-t-elle rapporté avec ses racines ?",
+          "o": [
+            "L'olivier",
+            "Le myrrhier",
+            "Le cèdre",
+            "Le palrmier"
+          ],
+          "e": "L'expédition a rapporté des myrrhiers vivants avec leurs racines pour les planter en Égypte."
+        },
+        "it": {
+          "q": "Quale albero raro la spedizione di Hatshepsut portò con le radici per piantarlo in Egitto?",
+          "o": [
+            "Olivo",
+            "Albero di mirra",
+            "Cedro",
+            "Palma"
+          ],
+          "e": "La spedizione portò alberi di mirra vivi con le radici per piantarli in Egitto."
+        },
+        "de": {
+          "q": "Welchen seltenen Baum brachte Hatschepsuts Expedition mit Wurzeln nach Ägypten?",
+          "o": [
+            "Olivenbaum",
+            "Myrrhebaum",
+            "Zedernbaum",
+            "Palme"
+          ],
+          "e": "Die Expedition brachte lebende Myrrhebäume mit Wurzeln mit, um sie in Ägypten anzupflanzen."
+        }
+      }
+    }
+  ],
+  "id": "013",
+  "title": "الملكة حتشبسوت"
+}

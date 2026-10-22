@@ -127,5 +127,18 @@
       "it": "Zagazig, Sharqia",
       "de": "Zagazig, Scharkia"
     }
+  },
+  "013": {
+    "lat": 25.7383,
+    "lng": 32.6065,
+    "place": {
+      "ar": "معبد حتشبسوت بالدير البحري - الأقصر، مصر",
+      "de": "Totentempel der Hatschepsut in Deir el-Bahari - Luxor, Ägypten",
+      "en": "Mortuary Temple of Hatshepsut at Deir el-Bahari - Luxor, Egypt",
+      "fr": "Temple funéraire de Hatshepsout à Deir el-Bahari - Louxor, Égypte",
+      "it": "Tempio funerario di Hatshepsut a Deir el-Bahari - Luxor, Egitto"
+    },
+    "source_name": "UNESCO World Heritage Centre",
+    "source_url": "https://whc.unesco.org/en/list/87"
   }
 }
