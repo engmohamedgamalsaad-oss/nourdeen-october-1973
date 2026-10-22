@@ -367,6 +367,10 @@ test('automatic story execution contract is appended to every AI provider prompt
   assert.ok(promptTexts.includes('STORY_PAGE_PROMPT = khAppendPromptOnce(STORY_PAGE_PROMPT'));
   assert.ok(promptTexts.includes('STORY_DATA_QUALITY_GATE = khAppendPromptOnce(STORY_DATA_QUALITY_GATE'));
   assert.ok(promptTexts.includes('Object.keys(STORY_PROVIDER_PROMPTS || {}).forEach'));
+  ['chatgpt','gemini','claude','deepseek'].forEach(function(provider){ assert.ok(promptTexts.includes('"'+provider+'":"# نسخة '+({chatgpt:'ChatGPT',gemini:'Gemini',claude:'Claude',deepseek:'DeepSeek'}[provider])+' — تجهيز حكاية خالدون'), 'missing provider-specific prompt: '+provider); });
+  assert.ok(promptTexts.includes('Object.keys(STORY_PROVIDER_PROMPTS || {}).forEach(function (provider) { STORY_PROVIDER_PROMPTS[provider] = khAppendPromptOnce(STORY_PROVIDER_PROMPTS[provider], STORY_AUTOMATION_ALL_AI_GATE'), 'automation gate must be appended to every provider prompt');
+  var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261022-2'), 'prompt manager must load the current shared prompt file');
   assert.ok(promptTexts.includes('ChatGPT وGemini وClaude وDeepSeek'));
   assert.ok(promptTexts.includes('لا تنتظر من صاحب المشروع أن يكرر المتطلبات'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
