@@ -357,4 +357,19 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
+test('automatic story execution contract is appended to every AI provider prompt and future story workflow', function () {
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(promptTexts.includes('STORY_AUTOMATION_ALL_AI_GATE'));
+  assert.ok(promptTexts.includes('PROJECT_INSTRUCTIONS = khAppendPromptOnce(PROJECT_INSTRUCTIONS'));
+  assert.ok(promptTexts.includes('STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW'));
+  assert.ok(promptTexts.includes('STORY_PAGE_PROMPT = khAppendPromptOnce(STORY_PAGE_PROMPT'));
+  assert.ok(promptTexts.includes('STORY_DATA_QUALITY_GATE = khAppendPromptOnce(STORY_DATA_QUALITY_GATE'));
+  assert.ok(promptTexts.includes('Object.keys(STORY_PROVIDER_PROMPTS || {}).forEach'));
+  assert.ok(promptTexts.includes('ChatGPT وGemini وClaude وDeepSeek'));
+  assert.ok(promptTexts.includes('لا تنتظر من صاحب المشروع أن يكرر المتطلبات'));
+  assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
+  assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
+});
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
