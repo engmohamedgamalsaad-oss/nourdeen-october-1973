@@ -193,7 +193,7 @@ t('AI story package validator accepts a complete five-language package', functio
   pkg.question_bank.questions[0].i18n.it.o = ['Option A', 'Option B'];
   var longCopiedTranslation = 'This is a long translated narrator paragraph copied without translation. '.repeat(3);
   pkg.translations.en.body = longCopiedTranslation;
-  pkg.translations.fr.body = longCopiedTranslation;
+  pkg.translations.fr.body = longCopiedTranslation.replace(/ paragraph/g, '\n   paragraph');
   pkg.translations.it.body = 'Une traduction italienne différente qui conserve le sens historique et la structure du récit.';
   var duplicateTranslation = W.validateStoryPackage(pkg);
   assert.equal(duplicateTranslation.ok, false);
