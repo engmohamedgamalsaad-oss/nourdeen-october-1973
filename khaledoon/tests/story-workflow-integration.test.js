@@ -329,4 +329,32 @@ test('copied prompt requires images to render in the final website, not merely l
   assert.ok(bundle.includes("'+gallery+'"));
 });
 
+
+test('AI JSON import repair handles common copy/paste formatting damage without changing source text', function () {
+  var repair = require('../assets/ai-json-repair.js');
+  var raw = 'Introductory text\\n```json\\n{"format":"KH_STORY_PACKAGE_V1","title":"T\\\\*itle","body":"line one\\nline two","items":[1,2,],}\\n```';
+  var parsed = repair.parse(raw);
+  assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(parsed.value.title, 'T*itle');
+  assert.equal(parsed.value.body, 'line one\\nline two');
+  assert.equal(parsed.repaired, true);
+  assert.ok(raw.includes('T\\\\*itle'), 'the pasted source remains unchanged');
+});
+test('AI JSON import selects the complete story package when pasted text contains duplicate objects or stray tags', function () {
+  var repair = require('../assets/ai-json-repair.js');
+  var raw = '{"format":"OTHER","title":"short"}\\n</escape>\\n{"format":"KH_STORY_PACKAGE_V1","title":"complete package","body":"longer valid body"}';
+  var parsed = repair.parse(raw);
+  assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(parsed.value.title, 'complete package');
+  assert.equal(parsed.repaired, true);
+  assert.ok(parsed.notes.some(function (note) { return note.indexOf('أكبر كائن مكتمل وصالح') >= 0; }));
+});
+test('AI import validates the package before saving and preserves pasted content on parse failure', function () {
+  assert.ok(admin.indexOf('window.KHAIJsonRepair.parse(sourceRaw)') < admin.indexOf('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
+  assert.ok(admin.includes('احتفظ بالناتج في المربع وحاول مرة أخرى.'));
+  assert.ok(admin.includes("localStorage.setItem(aiPasteStorageKey,aiPaste.value)"));
+  assert.ok(admin.includes("aiSay('ok','تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو."));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
