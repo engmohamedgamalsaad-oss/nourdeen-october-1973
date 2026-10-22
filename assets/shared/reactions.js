@@ -153,7 +153,7 @@
   var current = document.currentScript;
   var base = current && current.src ? current.src.replace(/reactions[.]js([?].*)?$/, '') : '../../assets/shared/';
   var s = document.createElement('script');
-  s.src = base + 'story-section-bg.js?v=20261022-2';
+  s.src = base + 'story-section-bg.js?v=20261022-3';
   s.defer = true;
   document.body.appendChild(s);
 })();
