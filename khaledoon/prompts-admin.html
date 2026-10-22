@@ -43,7 +43,7 @@ function migrateExplicitly(){
  archiveVersion('نسخة احتياطية قبل الترحيل الصريح 2026-10-22');
  if(typeof STORY_PAGE_PROMPT==='string'&&STORY_PAGE_PROMPT)state.main=STORY_PAGE_PROMPT;
  if(typeof STORY_WORKFLOW==='string'&&STORY_WORKFLOW)state.workflow=STORY_WORKFLOW;
- // استبدال كامل للنسخ القديمة بدل إلحاق تعليمات جديدة بها؛ النسخة السابقة محفوظة في سجل الإصدارات.\n state.providers=defaults();
+ state.providers=defaults(); // استبدال كامل للنسخ القديمة؛ النسخة السابقة محفوظة في سجل الإصدارات.
  fill();
  say('تم تجهيز الترحيل في المحرر مع حفظ نسخة سابقة. راجع المحتوى ثم اضغط «حفظ مركزي + نسخة محلية» لتأكيد الحفظ.');
 }
