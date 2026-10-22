@@ -368,6 +368,63 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
   return { label, rows, hard, warn };
 }
 
+
+async function introPopupRegression(browser, base, origin) {
+  const hard = [];
+  const checks = [];
+  for (const viewport of ['desktop', 'mobile']) {
+    const ctx = await newContext(browser, origin, viewport);
+    const page = await ctx.newPage();
+    try {
+      for (const slug of ['008', '009']) {
+        const rel = `stories/people/${slug}/`;
+        await page.goto(`${base}/${rel}`, { waitUntil: 'load', timeout: 20000 });
+        await page.waitForTimeout(1200);
+        const state = await page.evaluate(() => {
+          const modal = document.getElementById('intro');
+          const image = modal && modal.querySelector('.modal-art img');
+          const rect = image ? image.getBoundingClientRect() : { width: 0, height: 0 };
+          return {
+            modalConnected: !!modal && modal.isConnected,
+            imageConnected: !!image && image.isConnected,
+            splashCount: document.querySelectorAll('.story-splash').length,
+            modalDisplay: modal ? getComputedStyle(modal).display : 'missing',
+            imageFit: image ? getComputedStyle(image).objectFit : 'missing',
+            imageWidth: Math.round(rect.width),
+            imageHeight: Math.round(rect.height),
+            keepFlag: document.body.hasAttribute('data-keep-intro-modal')
+          };
+        });
+        const ok = state.modalConnected && state.imageConnected && state.splashCount === 0 &&
+          state.modalDisplay !== 'none' && state.imageFit === 'contain' &&
+          state.imageWidth > 0 && state.imageHeight > 0 && state.keepFlag;
+        checks.push({ viewport, slug, stage: 'after-delay', ok, state });
+        if (!ok) hard.push(`Intro popup ${slug}/${viewport} changed or disappeared after load: ${JSON.stringify(state)}`);
+
+        await page.locator('#start').click({ timeout: 5000 });
+        await page.waitForFunction(() => {
+          const modal = document.getElementById('intro');
+          return !!modal && getComputedStyle(modal).display === 'none';
+        }, null, { timeout: 5000 }).catch(() => {});
+        const startClosed = await page.evaluate(() => getComputedStyle(document.getElementById('intro')).display === 'none');
+        checks.push({ viewport, slug, stage: 'start-button-closes-modal', ok: startClosed });
+        if (!startClosed) hard.push(`Intro popup ${slug}/${viewport}: start button did not close the popup`);
+
+        await page.reload({ waitUntil: 'load', timeout: 20000 });
+        await page.locator('#close').click({ timeout: 5000 });
+        const closeClosed = await page.evaluate(() => getComputedStyle(document.getElementById('intro')).display === 'none');
+        checks.push({ viewport, slug, stage: 'close-button-closes-modal', ok: closeClosed });
+        if (!closeClosed) hard.push(`Intro popup ${slug}/${viewport}: close button did not close the popup`);
+      }
+    } catch (e) {
+      hard.push(`Intro popup regression ${viewport}: ${String(e.message || e).split('\\n')[0]}`);
+    } finally {
+      await ctx.close();
+    }
+  }
+  return { checks, hard };
+}
+
 (async () => {
   const { server, origin, base } = await serve();
   const browser = await chromium.launch({ headless: true });
@@ -378,10 +435,11 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
       results.flow.push(...await Promise.all(LANGS.map((l) => flow(browser, base, origin, l, viewport))));
       results.sweep.push(...await Promise.all(LANGS.map((l) => sweep(browser, base, origin, l, viewport, pages))));
     }
+    results.introPopup = await introPopupRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -391,6 +449,7 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
   const stepOk = results.flow.reduce((n, r) => n + r.steps.filter((s) => s.ok).length, 0);
   console.log(`FLOW: ${stepOk}/${stepCount} steps passed across ${results.flow.length} language/viewport runs.`);
   console.log(`SWEEP: ${pages.length} visitor pages x ${LANGS.length} languages x 2 viewports = ${pages.length * LANGS.length * 2} loads.`);
+  console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);
