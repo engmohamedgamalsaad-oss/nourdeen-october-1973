@@ -318,4 +318,15 @@ test('copied story prompt always includes strict five-language verification gate
   assert.ok(promptTexts.includes('بوابة تنفيذ صارمة للذكاء الاصطناعي'));
 });
 
+test('copied prompt requires images to render in the final website, not merely list URLs', function () {
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
+  assert.ok(admin.includes('الصور يجب أن تظهر فعلًا داخل صفحة الويب'));
+  assert.ok(admin.includes('معرض صور مرئيًا داخل HTML النهائي'));
+  assert.ok(promptTexts.includes('الصور يجب أن تظهر فعلًا داخل صفحة الموقع'));
+  assert.ok(bundle.includes('function imageGalleryHtml(d)'));
+  assert.ok(bundle.includes("'+gallery+'"));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
