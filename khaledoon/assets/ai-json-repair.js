@@ -205,12 +205,12 @@
       if (inString) {
         out += ch;
         if (escaped) escaped = false;
-        else if (ch === '\\\\') escaped = true;
+        else if (ch === '\\') escaped = true;
         else if (ch === '"') inString = false;
         continue;
       }
       if (ch === '"') { inString = true; out += ch; continue; }
-      if (ch === '\\\\' && i + 1 < source.length && '[]{}'.indexOf(source[i + 1]) >= 0) {
+      if (ch === '\\' && i + 1 < source.length && '[]{}'.indexOf(source[i + 1]) >= 0) {
         stats.structural = (stats.structural || 0) + 1;
         continue;
       }
