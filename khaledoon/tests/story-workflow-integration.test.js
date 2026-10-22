@@ -293,4 +293,68 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
+test('story i18n lookup supports source-first and language-first dictionaries', function () {
+  var vm = require('vm');
+  var engine = fs.readFileSync('assets/shared/story-i18n.js','utf8');
+  var match = engine.match(/function findTranslation\(source, lang\)\{[\s\S]*?\n\}/);
+  assert.ok(match, 'translation lookup helper must exist');
+  var sourceFirst = { 'مرحبا': { en: 'Hello', fr: 'Bonjour' } };
+  var languageFirst = { en: { 'مرحبا': 'Hello' }, fr: { 'مرحبا': 'Bonjour' }, de: { 'مرحبا': 'Hallo' } };
+  function lookup(dictionary, lang) {
+    var context = { translations: dictionary };
+    return vm.runInNewContext(match[0] + '; findTranslation("مرحبا", "' + lang + '")', context);
+  }
+  assert.equal(lookup(sourceFirst, 'en').en, 'Hello');
+  assert.equal(lookup(languageFirst, 'fr').fr, 'Bonjour');
+  assert.equal(lookup(languageFirst, 'de').de, 'Hallo');
+  assert.equal(lookup(languageFirst, 'en').en, 'Hello');
+});
+
+test('copied story prompt always includes strict five-language verification gate', function () {
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.ok(admin.includes('بوابة الترجمة والتحقق الصارمة'));
+  assert.ok(admin.includes('اختبر ar وen وfr وit وde فعليًا'));
+  assert.ok(promptTexts.includes('بوابة تنفيذ صارمة للذكاء الاصطناعي'));
+});
+
+test('copied prompt requires images to render in the final website, not merely list URLs', function () {
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
+  assert.ok(admin.includes('الصور يجب أن تظهر فعلًا داخل صفحة الويب'));
+  assert.ok(admin.includes('معرض صور مرئيًا داخل HTML النهائي'));
+  assert.ok(promptTexts.includes('الصور يجب أن تظهر فعلًا داخل صفحة الموقع'));
+  assert.ok(bundle.includes('function imageGalleryHtml(d)'));
+  assert.ok(bundle.includes("'+gallery+'"));
+});
+
+
+test('AI JSON import repair handles common copy/paste formatting damage without changing source text', function () {
+  var repair = require('../assets/ai-json-repair.js');
+  var raw = 'Introductory text\\n```json\\n{"format":"KH_STORY_PACKAGE_V1","title":"T\\\\*itle","body":"line one\\nline two","items":[1,2,],}\\n```';
+  var parsed = repair.parse(raw);
+  assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(parsed.value.title, 'T*itle');
+  assert.equal(parsed.value.body, 'line one\nline two');
+  assert.equal(parsed.repaired, true);
+  assert.ok(raw.includes('T\\\\*itle'), 'the pasted source remains unchanged');
+});
+test('AI JSON import selects the complete story package when pasted text contains duplicate objects or stray tags', function () {
+  var repair = require('../assets/ai-json-repair.js');
+  var raw = '{"format":"OTHER","title":"short"}\\n</escape>\\n{"format":"KH_STORY_PACKAGE_V1","title":"complete package","body":"longer valid body"}';
+  var parsed = repair.parse(raw);
+  assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(parsed.value.title, 'complete package');
+  assert.equal(parsed.repaired, true);
+  assert.ok(parsed.notes.some(function (note) { return note.indexOf('أكبر كائن مكتمل وصالح') >= 0; }));
+});
+test('AI import validates the package before saving and preserves pasted content on parse failure', function () {
+  assert.ok(admin.indexOf('window.KHAIJsonRepair.parse(sourceRaw)') < admin.indexOf('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
+  assert.ok(admin.includes('احتفظ بالناتج في المربع وحاول مرة أخرى.'));
+  assert.ok(admin.includes("localStorage.setItem(aiPasteStorageKey,aiPaste.value)"));
+  assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
