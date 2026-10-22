@@ -9,7 +9,7 @@
 <main class="wrap">
 <section class="panel"><h1>إدارة البرومبتات المعتمدة</h1>
 <p class="note">يمكنك تعديل البرومبتات وحفظها مركزيًا في قاعدة المشروع بصلاحية الأدمن، مع نسخة محلية احتياطية. الحفظ المركزي يحدّث مخزن إعدادات خالدون، لكنه لا يغيّر ملفات GitHub نفسها تلقائيًا. لا تُدخل أسرارًا أو بيانات شخصية في البرومبتات.</p>
-<div class="actions"><button class="btn" id="loadCurrent">تحميل النسخة المركزية / الافتراضية</button><button class="btn primary" id="saveDraft">حفظ مركزي + نسخة محلية</button><button class="btn" id="download">تنزيل حزمة البرومبتات</button><a class="btn" href="admin.html">العودة إلى الأدمن</a></div>
+<div class="actions"><button class="btn" id="loadCurrent">تحميل النسخة المركزية / الافتراضية</button><button class="btn" id="migratePrompts">ترحيل البرومبتات صراحةً</button><button class="btn primary" id="saveDraft">حفظ مركزي + نسخة محلية</button><button class="btn" id="download">تنزيل حزمة البرومبتات</button><a class="btn" href="admin.html">العودة إلى الأدمن</a></div><p class="note">لن تُستبدل البرومبتات المحفوظة عند فتح الصفحة أو تحميلها. الترحيل إلى متطلبات الجودة الجديدة لا يحدث إلا بعد الضغط على زر «ترحيل البرومبتات صراحةً» وتأكيد العملية.</p>
 <div class="status" id="status" role="status">جارٍ تحميل البرومبتات…</div></section>
 <section class="panel"><h2>ملفات البرومبتات المحفوظة في GitHub</h2><p class="note">هذه نسخ مرجعية ثابتة من الإصدار الحالي 2026-10-19-v2. استخدم أزرار التنزيل أدناه للحصول على الملفات من أحدث نص محفوظ في لوحة الإدارة، لأن التعديلات المركزية لا تكتب ملفات GitHub تلقائيًا.</p><div class="actions"><a class="btn" href="prompts/2026-10-19-v2/MASTER-STORY-WORKFLOW.md" target="_blank" rel="noopener">البرومبت الرئيسي المحفوظ — v2</a><a class="btn" href="prompts/2026-10-19-v2/CHATGPT.md" target="_blank" rel="noopener">نسخة ChatGPT المحفوظة — v2</a><a class="btn" href="prompts/2026-10-19-v2/CLAUDE.md" target="_blank" rel="noopener">نسخة Claude المحفوظة — v2</a><a class="btn" href="prompts/2026-10-19-v2/DEEPSEEK.md" target="_blank" rel="noopener">نسخة DeepSeek المحفوظة — v2</a></div><div class="actions"><button class="btn" id="downloadMaster">تنزيل أحدث البرومبت الرئيسي</button><button class="btn" id="downloadChatGPT">تنزيل أحدث نسخة ChatGPT</button><button class="btn" id="downloadClaude">تنزيل أحدث نسخة Claude</button><button class="btn" id="downloadDeepSeek">تنزيل أحدث نسخة DeepSeek</button></div></section>
 <section class="panel"><div class="tabs"><button class="btn active" data-tab="main">البرومبت الرئيسي</button><button class="btn" data-tab="workflow">دليل تجهيز الحكايات</button><button class="btn" data-tab="custom">برومبتات إضافية</button><button class="btn" data-tab="providers">نسخ الأدوات والإصدارات</button></div>
@@ -29,18 +29,27 @@ function defaults(){return JSON.parse(JSON.stringify(typeof STORY_PROVIDER_PROMP
 function clone(v){return JSON.parse(JSON.stringify(v))}
 function normalize(raw){
  raw=raw&&typeof raw==='object'?raw:{};
- var d={main:typeof raw.main==='string'?raw.main:(typeof STORY_PAGE_PROMPT==='string'?STORY_PAGE_PROMPT:''),workflow:typeof raw.workflow==='string'?raw.workflow:(typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign(defaults(),raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};
- var marker="بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ";
- if(d.workflow&&!d.workflow.includes(marker)&&typeof STORY_WORKFLOW==='string'){
-  d.versions.push({saved_at:new Date().toISOString(),note:'نسخة تلقائية قبل تحديث التصميم والإثراء والصور 2026-10-21',main:d.main,workflow:d.workflow,custom:clone(d.custom),providers:clone(d.providers)});
-  d.workflow=STORY_WORKFLOW;
-  d.providers=defaults();
-  if(typeof STORY_PAGE_PROMPT==='string')d.main=STORY_PAGE_PROMPT;
-  d.versions=d.versions.slice(-10);
- }
+ return {
+  main:typeof raw.main==='string'?raw.main:(typeof STORY_PAGE_PROMPT==='string'?STORY_PAGE_PROMPT:''),
+  workflow:typeof raw.workflow==='string'?raw.workflow:(typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:''),
+  custom:Array.isArray(raw.custom)?raw.custom:[],
+  providers:Object.assign(defaults(),raw.providers&&typeof raw.providers==='object'?raw.providers:{}),
+  versions:Array.isArray(raw.versions)?raw.versions:[]
+ };
+}
+function migrateExplicitly(){
+ if(!confirm('سيتم إنشاء نسخة استرجاع أولًا، ثم تطبيق البرومبت الرئيسي ودليل الحكايات الحاليين وإضافة متطلبات الجودة إلى تعليمات الأدوات. لن يُحفظ شيء مركزيًا إلا عند ضغط زر الحفظ بعد ذلك. هل تريد المتابعة؟'))return;
+ currentFromInputs();
+ archiveVersion('نسخة احتياطية قبل الترحيل الصريح 2026-10-22');
+ if(typeof STORY_PAGE_PROMPT==='string'&&STORY_PAGE_PROMPT)state.main=STORY_PAGE_PROMPT;
+ if(typeof STORY_WORKFLOW==='string'&&STORY_WORKFLOW)state.workflow=STORY_WORKFLOW;
  var qualityNote='التزام إلزامي: طبّق بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ. لا تعتبر أي عنصر مكتملًا لمجرد وصفه؛ افحصه واختبره، وصرّح بما لم يمكن اختباره.';
- Object.keys(d.providers||{}).forEach(function(k){var value=String(d.providers[k]||'');if(value.indexOf(qualityNote)<0)d.providers[k]=value+'\n\n'+qualityNote;});
- return d;
+ Object.keys(state.providers||{}).forEach(function(k){
+  var value=String(state.providers[k]||'');
+  if(value.indexOf(qualityNote)<0)state.providers[k]=value?value+'\n\n'+qualityNote:qualityNote;
+ });
+ fill();
+ say('تم تجهيز الترحيل في المحرر مع حفظ نسخة سابقة. راجع المحتوى ثم اضغط «حفظ مركزي + نسخة محلية» لتأكيد الحفظ.');
 }
 function say(t){$('status').textContent=t}
 function readCurrent(){return normalize({main:typeof STORY_PAGE_PROMPT==='string'?STORY_PAGE_PROMPT:'',workflow:typeof STORY_WORKFLOW==='string'?STORY_WORKFLOW:'',custom:[],providers:defaults(),versions:[]})}
@@ -72,6 +81,7 @@ $('downloadMaster').addEventListener('click',function(){downloadPromptFile('MAST
 $('downloadChatGPT').addEventListener('click',function(){downloadPromptFile('CHATGPT.md','# نسخة ChatGPT — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات ChatGPT\n\n'+(state.providers.chatgpt||''))});
 $('downloadClaude').addEventListener('click',function(){downloadPromptFile('CLAUDE.md','# نسخة Claude — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات Claude\n\n'+(state.providers.claude||''))});
 $('downloadDeepSeek').addEventListener('click',function(){downloadPromptFile('DEEPSEEK.md','# نسخة DeepSeek — خالدون عبر التاريخ\n\n'+state.workflow+'\n\n## تعليمات DeepSeek\n\n'+(state.providers.deepseek||''))});
+$('migratePrompts').addEventListener('click',migrateExplicitly);
 $('loadCurrent').addEventListener('click',loadCurrent);
 loadCurrent();window.addEventListener('kh-admin-tools-ready',loadCurrent);
 })();
