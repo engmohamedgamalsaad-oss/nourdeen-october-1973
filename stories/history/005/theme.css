@@ -25,3 +25,19 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 .story .container figure.image-frame.ibn-sina-portrait{display:block;width:min(320px,100%);max-width:320px!important;margin-inline:auto!important;box-sizing:border-box}
 .story .container figure.image-frame.ibn-sina-portrait img{display:block;width:100%!important;max-width:100%!important;height:auto!important;max-height:none;object-fit:contain}
 @media(min-width:701px){.story .container figure.image-frame.ibn-sina-portrait{width:320px;max-width:calc(100% - 24px)!important}}
+
+
+/* Ibn Sina: restrained entrance motion, coordinated with the shared story pages. */
+.hero .hero-content{animation:ibn-sina-copy-in .75s cubic-bezier(.2,.8,.2,1) both}
+.hero .hero-art img{animation:ibn-sina-art-in 1s cubic-bezier(.2,.8,.2,1) .08s both;transform-origin:center}
+.story .container .kicker{letter-spacing:.01em}
+.story .container h2{ text-wrap:balance }
+.story .container p{line-height:2;max-width:78ch}
+.story .image-frame{margin:28px auto}
+.story .image-frame img{max-height:620px;object-fit:contain}
+.story .image-frame figcaption{line-height:1.9}
+@keyframes ibn-sina-copy-in{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ibn-sina-art-in{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){
+ .hero .hero-content,.hero .hero-art img{animation:none!important;transform:none!important;opacity:1!important}
+}
