@@ -51,11 +51,19 @@ async function main() {
     karma_text: 'كارما تسأل سؤالًا تجريبيًا.',
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
     translations: { en: { title: 'Preview test' }, fr: {}, it: {}, de: {} },
+    images: [
+      { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY' },
+      { url: 'https://images.example.org/related.jpg', alt: 'Related image', caption: 'Related image' }
+    ],
     question_bank_json: { questions: [] }
   });
   assert.match(html, /اختبار معاينة القارئ/);
   assert.match(html, /stories\/history\/preview\//);
-  assert.match(html, /cover\.svg/);
+  assert.match(html, /class="hero-art"/, 'preview should show the lead story image in the hero');
+  assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
+  assert.match(html, /https:\/\/images\.example\.org\/portrait\.jpg/, 'the lead image URL should be present in preview HTML');
+  assert.match(html, /بيانات الحقوق غير مكتملة/, 'images with missing rights should remain visible with a clear warning');
+  assert.doesNotMatch(html, /src="cover-popup\.svg"/, 'preview must not depend on a cover asset that is absent from the srcdoc');
   assert.match(html, /معاينة خاصة غير منشورة/);
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
