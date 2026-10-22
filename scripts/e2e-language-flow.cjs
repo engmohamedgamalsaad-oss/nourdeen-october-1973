@@ -375,7 +375,7 @@ async function introPopupRegression(browser, base, origin) {
   for (const viewport of ['desktop', 'mobile']) {
     const ctx = await newContext(browser, origin, viewport);
     /* Use a deterministic local test image: external requests are blocked by this suite. */
-    await ctx.route(/https:\/\/commons\\.wikimedia\\.org\//, (route) => route.fulfill({
+    await ctx.route((url) => String(url).includes('commons.wikimedia.org'), (route) => route.fulfill({
       status: 200,
       contentType: 'image/svg+xml',
       body: '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800"><rect width="600" height="800" fill="#d8c6a4"/></svg>'
