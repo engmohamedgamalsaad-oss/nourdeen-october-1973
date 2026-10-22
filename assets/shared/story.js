@@ -12,7 +12,8 @@
      .hero-content، وفقرات داخل .story-body، وأزرار مشاركة بلا ربط. نكيّفها هنا حتى تحصل على
      شاشة البداية والحركة والمشاركة والهوامش نفسها، دون المساس بالحكايات القديمة.
   ========================================= */
-  var generatedStory = /(^|\s)story-design-/.test(body.className || '');
+  var keepIntroModal = body.hasAttribute('data-keep-intro-modal');
+  var generatedStory = !keepIntroModal && /(^|\\s)story-design-/.test(body.className || '');
 
   function adaptGeneratedStory() {
     var intro = document.getElementById('intro');
@@ -86,6 +87,36 @@
   }
 
   if (generatedStory) { adaptGeneratedStory(); }
+
+  /* Preserve hand-authored intro popups on the two portrait biographies.
+     The generated-story adapter normally removes #intro and replaces it with a
+     background-image splash, which bypasses the popup image's responsive CSS. */
+  if (keepIntroModal) {
+    var preservedIntro = document.getElementById('intro');
+    if (preservedIntro) {
+      var preservedClose = preservedIntro.querySelector('#close');
+      var preservedStart = preservedIntro.querySelector('#start');
+      var hidePreservedIntro = function () {
+        preservedIntro.style.setProperty('display', 'none', 'important');
+        preservedIntro.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+      preservedIntro.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (preservedClose) preservedClose.addEventListener('click', hidePreservedIntro);
+      if (preservedStart) preservedStart.addEventListener('click', function () {
+        hidePreservedIntro();
+        var storyStart = document.getElementById('begin');
+        if (storyStart) storyStart.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+      preservedIntro.addEventListener('click', function (event) {
+        if (event.target === preservedIntro) hidePreservedIntro();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && preservedIntro.getAttribute('aria-hidden') !== 'true') hidePreservedIntro();
+      });
+    }
+  }
 
   /* القصص التي تستخدم الغلاف الافتتاحي تحصل أيضًا على حركات الظهور أثناء التمرير. */
   var richStory = !!document.querySelector('.hero-photo') || !!body.getAttribute('data-splash');
