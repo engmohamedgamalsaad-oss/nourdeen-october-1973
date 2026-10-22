@@ -46,7 +46,7 @@
   'use strict';
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(reduce||!('IntersectionObserver' in window))return;
-  var targets=document.querySelectorAll('.story .container > .kicker, .story .container > h2, .story .container > p, .story-image-card, .story-image-grid > *, .story-visual-gallery, .sources, .sources ol li, .story-quiz-section, .reactions-section, .end');
+  var targets=document.querySelectorAll('.story .kicker, .story .container > h2, .story .container > .story-body, .story .story-body > p, .story .container > p, .story-image-card, .story-image-grid > *, .story-visual-gallery .container > *, .sources, .sources h2, .sources ol li, .story-quiz-section, .reactions-section, .end');
   if(!targets.length)return;
   document.body.classList.add('motion-ready');
   targets.forEach(function(el,index){
