@@ -218,6 +218,7 @@
     var l = lang();
     kick.textContent = T('kicker'); h2.textContent = T('title'); lead.textContent = T('lead');
     directoryTitle.textContent = T('directory');
+    if (storiesAll.length) buildDirectory();
     canvas.setAttribute('aria-label', T('title'));
     legend.setAttribute('aria-label', T('legend'));
     legend.querySelectorAll('.khm-chip').forEach(function (b) {
