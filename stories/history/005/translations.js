@@ -82,7 +82,7 @@ window.I18N.register("ar",{
  "quizKicker": "تحدّي خالدون",
  "quizHeading": "اختبر معلوماتك",
  "quizIntro": "اختبر معلوماتك عن الشخصية وعصرها. كل اختبار يتضمن خمسة أسئلة، مع نتيجة ومراجعة للإجابات في النهاية.",
- "quizLanguageNote": "الاختبار متاح بالعربية والإنجليزية والفرنسية والإيطالية والألمانية.",
+ "quizLanguageNote": "الاختبار متاح بخمس لغات؛ وتضم النسخ غير العربية 10 أسئلة مترجمة.",
  "quizStart": "ابدأ الاختبار"
  });
 window.I18N.register("en",{
@@ -166,7 +166,7 @@ window.I18N.register("en",{
  "quizKicker": "Khaledoon Challenge",
  "quizHeading": "Test Your Knowledge",
  "quizIntro": "Check what you know about this historical figure and his era. Each quiz has five questions, followed by a score and answer review.",
- "quizLanguageNote": "The quiz is available in Arabic, English, French, Italian, and German.",
+ "quizLanguageNote": "The quiz is available in five languages; non-Arabic versions include 10 translated questions.",
  "quizStart": "Start the Quiz"
  });
 window.I18N.register("fr",{
@@ -250,7 +250,7 @@ window.I18N.register("fr",{
  "quizKicker": "Le défi Khaledoon",
  "quizHeading": "Teste tes connaissances",
  "quizIntro": "Vérifie ce que tu sais sur ce personnage historique et son époque. Chaque quiz comprend cinq questions, puis un score et une correction des réponses.",
- "quizLanguageNote": "Le quiz est disponible en arabe, en anglais, en français, en italien et en allemand.",
+ "quizLanguageNote": "Le quiz est disponible en cinq langues ; les versions non arabes comprennent 10 questions traduites.",
  "quizStart": "Commencer le quiz"
  });
 window.I18N.register("it",{
@@ -334,7 +334,7 @@ window.I18N.register("it",{
  "quizKicker": "La sfida Khaledoon",
  "quizHeading": "Metti alla prova le tue conoscenze",
  "quizIntro": "Scopri quanto conosci questo personaggio storico e la sua epoca. Ogni quiz contiene cinque domande, con punteggio finale e revisione delle risposte.",
- "quizLanguageNote": "Il quiz è disponibile in arabo, inglese, francese, italiano e tedesco.",
+ "quizLanguageNote": "Il quiz è disponibile in cinque lingue; le versioni non arabe includono 10 domande tradotte.",
  "quizStart": "Inizia il quiz"
  });
 window.I18N.register("de",{
@@ -418,7 +418,7 @@ window.I18N.register("de",{
  "quizKicker": "Die Khaledoon-Herausforderung",
  "quizHeading": "Teste dein Wissen",
  "quizIntro": "Prüfe dein Wissen über diese historische Persönlichkeit und ihre Zeit. Jedes Quiz enthält fünf Fragen sowie eine Punktzahl und eine Antwortauswertung.",
- "quizLanguageNote": "Das Quiz ist auf Arabisch, Englisch, Französisch, Italienisch und Deutsch verfügbar.",
+ "quizLanguageNote": "Das Quiz ist in fünf Sprachen verfügbar; die nichtarabischen Versionen enthalten 10 übersetzte Fragen.",
  "quizStart": "Quiz starten"
  });
 })();
