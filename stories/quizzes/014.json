@@ -1,0 +1,271 @@
+{
+  "questions": [
+    {
+      "q": "بماذا اشتهر أبو بكر الخوارزمي؟",
+      "o": [
+        "بالشعر والكتابة واللغة",
+        "بصناعة السفن",
+        "برسم الخرائط فقط",
+        "بقيادة الجيوش"
+      ],
+      "a": 0,
+      "e": "اشتهر أبو بكر الخوارزمي شاعرًا وكاتبًا وصاحب معرفة واسعة باللغة العربية.",
+      "i18n": {
+        "en": {
+          "q": "What was Abu Bakr al-Khwarizmi known for?",
+          "o": [
+            "Poetry, writing, and language",
+            "Shipbuilding",
+            "Mapmaking only",
+            "Leading armies"
+          ],
+          "e": "Abu Bakr al-Khwarizmi was known as a poet and writer with extensive knowledge of Arabic."
+        },
+        "fr": {
+          "q": "Pour quoi Abou Bakr al-Khwarizmi était-il connu ?",
+          "o": [
+            "La poésie, l'écriture et la langue",
+            "La construction de navires",
+            "La cartographie uniquement",
+            "Le commandement des armées"
+          ],
+          "e": "Abou Bakr al-Khwarizmi était connu comme poète et écrivain maîtrisant largement l'arabe."
+        },
+        "it": {
+          "q": "Per che cosa era famoso Abu Bakr al-Khwarizmi?",
+          "o": [
+            "Poesia, scrittura e lingua",
+            "Costruzione di navi",
+            "Solo cartografia",
+            "Comando degli eserciti"
+          ],
+          "e": "Abu Bakr al-Khwarizmi era noto come poeta e scrittore con una vasta conoscenza dell'arabo."
+        },
+        "de": {
+          "q": "Wofür war Abu Bakr al-Chwarizmi bekannt?",
+          "o": [
+            "Dichtkunst, Schreiben und Sprache",
+            "Schiffbau",
+            "Nur Kartografie",
+            "Führung von Armeen"
+          ],
+          "e": "Abu Bakr al-Chwarizmi war als Dichter und Schriftsteller mit umfassenden Arabischkenntnissen bekannt."
+        }
+      }
+    },
+    {
+      "q": "في أي مدينة أو منطقة نشأ أبو بكر الخوارزمي؟",
+      "o": [
+        "نيسابور",
+        "خوارزم",
+        "دمشق",
+        "أصفهان"
+      ],
+      "a": 1,
+      "e": "تذكر المصادر أنه نشأ في خوارزم قبل أن يتنقل بين مدن أخرى.",
+      "i18n": {
+        "en": {
+          "q": "In which city or region did Abu Bakr al-Khwarizmi grow up?",
+          "o": [
+            "Nishapur",
+            "Khwarazm",
+            "Damascus",
+            "Isfahan"
+          ],
+          "e": "Sources state that he grew up in Khwarazm before traveling to other cities."
+        },
+        "fr": {
+          "q": "Dans quelle ville ou région Abou Bakr al-Khwarizmi a-t-il grandi ?",
+          "o": [
+            "Nichapour",
+            "Khwarazm",
+            "Damas",
+            "Ispahan"
+          ],
+          "e": "Les sources indiquent qu'il a grandi au Khwarazm avant de voyager vers d'autres villes."
+        },
+        "it": {
+          "q": "In quale città o regione crebbe Abu Bakr al-Khwarizmi?",
+          "o": [
+            "Nishapur",
+            "Khwarazm",
+            "Damasco",
+            "Isfahan"
+          ],
+          "e": "Le fonti affermano che crebbe nel Khwarazm prima di viaggiare verso altre città."
+        },
+        "de": {
+          "q": "In welcher Stadt oder Region wuchs Abu Bakr al-Chwarizmi auf?",
+          "o": [
+            "Nischapur",
+            "Chwarazm",
+            "Damaskus",
+            "Isfahan"
+          ],
+          "e": "Quellen geben an, dass er in Chwarazm aufwuchs, bevor er in andere Städte reiste."
+        }
+      }
+    },
+    {
+      "q": "ما المدينة التي استقر فيها أبو بكر في نهاية رحلته؟",
+      "o": [
+        "بخارى",
+        "حلب",
+        "نيسابور",
+        "دمشق"
+      ],
+      "a": 2,
+      "e": "تذكر مصادر التراجم أنه استقر في نيسابور.",
+      "i18n": {
+        "en": {
+          "q": "In which city did Abu Bakr eventually settle?",
+          "o": [
+            "Bukhara",
+            "Aleppo",
+            "Nishapur",
+            "Damascus"
+          ],
+          "e": "Biographical sources state that he settled in Nishapur."
+        },
+        "fr": {
+          "q": "Dans quelle ville Abou Bakr finit-il par s'installer ?",
+          "o": [
+            "Boukhara",
+            "Alep",
+            "Nichapour",
+            "Damas"
+          ],
+          "e": "Les sources biographiques indiquent qu'il s'installa à Nichapour."
+        },
+        "it": {
+          "q": "In quale città si stabilì infine Abu Bakr?",
+          "o": [
+            "Bukhara",
+            "Aleppo",
+            "Nishapur",
+            "Damasco"
+          ],
+          "e": "Le fonti biografiche affermano che si stabilì a Nishapur."
+        },
+        "de": {
+          "q": "In welcher Stadt ließ sich Abu Bakr schließlich nieder?",
+          "o": [
+            "Buchara",
+            "Aleppo",
+            "Nischapur",
+            "Damaskus"
+          ],
+          "e": "Biografische Quellen geben an, dass er sich in Nischapur niederließ."
+        }
+      }
+    },
+    {
+      "q": "لماذا كانت الرسائل مهمة للكتّاب في العصر العباسي؟",
+      "o": [
+        "للتعبير عن الأفكار والمدح والعتاب وطلب المساعدة",
+        "للاستغناء عن تعلم اللغة",
+        "لإيقاف السفر بين المدن",
+        "لصناعة الأدوات"
+      ],
+      "a": 0,
+      "e": "كانت الرسائل وسيلة للتواصل والتعبير عن الأفكار وبناء العلاقات وطلب المساعدة.",
+      "i18n": {
+        "en": {
+          "q": "Why were letters important to writers in the Abbasid era?",
+          "o": [
+            "To express ideas, praise, criticism, and requests for help",
+            "To avoid learning languages",
+            "To stop travel between cities",
+            "To manufacture tools"
+          ],
+          "e": "Letters were a means of communication, expressing ideas, building relationships, and asking for help."
+        },
+        "fr": {
+          "q": "Pourquoi les lettres étaient-elles importantes pour les écrivains à l'époque abbasside ?",
+          "o": [
+            "Pour exprimer des idées, des éloges, des reproches et des demandes d'aide",
+            "Pour éviter d'apprendre les langues",
+            "Pour arrêter les voyages entre les villes",
+            "Pour fabriquer des outils"
+          ],
+          "e": "Les lettres permettaient de communiquer, d'exprimer des idées, de nouer des relations et de demander de l'aide."
+        },
+        "it": {
+          "q": "Perché le lettere erano importanti per gli scrittori nell'epoca abbaside?",
+          "o": [
+            "Per esprimere idee, elogi, critiche e richieste di aiuto",
+            "Per evitare di imparare le lingue",
+            "Per fermare i viaggi tra le città",
+            "Per fabbricare strumenti"
+          ],
+          "e": "Le lettere erano uno strumento di comunicazione, espressione delle idee, costruzione di relazioni e richiesta di aiuto."
+        },
+        "de": {
+          "q": "Warum waren Briefe für Schriftsteller in der Abbasidenzeit wichtig?",
+          "o": [
+            "Um Gedanken, Lob, Kritik und Bitten um Hilfe auszudrücken",
+            "Um das Erlernen von Sprachen zu vermeiden",
+            "Um Reisen zwischen Städten zu verhindern",
+            "Um Werkzeuge herzustellen"
+          ],
+          "e": "Briefe dienten der Kommunikation, dem Ausdruck von Gedanken, dem Aufbau von Beziehungen und der Bitte um Hilfe."
+        }
+      }
+    },
+    {
+      "q": "هل أبو بكر الخوارزمي هو نفسه عالم الرياضيات محمد بن موسى الخوارزمي؟",
+      "o": [
+        "نعم، هما الشخص نفسه",
+        "لا، هما شخصان مختلفان",
+        "لا توجد مصادر تذكر أيًّا منهما",
+        "كانا ملكين"
+      ],
+      "a": 1,
+      "e": "أبو بكر الخوارزمي شاعر وكاتب، أما محمد بن موسى الخوارزمي فهو عالم رياضيات آخر.",
+      "i18n": {
+        "en": {
+          "q": "Was Abu Bakr al-Khwarizmi the same person as the mathematician Muhammad ibn Musa al-Khwarizmi?",
+          "o": [
+            "Yes, they were the same person",
+            "No, they were two different people",
+            "No sources mention either person",
+            "They were both kings"
+          ],
+          "e": "Abu Bakr al-Khwarizmi was a poet and writer, while Muhammad ibn Musa al-Khwarizmi was a different mathematician."
+        },
+        "fr": {
+          "q": "Abou Bakr al-Khwarizmi était-il la même personne que le mathématicien Muhammad ibn Musa al-Khwarizmi ?",
+          "o": [
+            "Oui, c'était la même personne",
+            "Non, c'étaient deux personnes différentes",
+            "Aucune source ne mentionne l'un ou l'autre",
+            "Ils étaient tous deux rois"
+          ],
+          "e": "Abou Bakr al-Khwarizmi était poète et écrivain, tandis que Muhammad ibn Musa al-Khwarizmi était un autre mathématicien."
+        },
+        "it": {
+          "q": "Abu Bakr al-Khwarizmi era la stessa persona del matematico Muhammad ibn Musa al-Khwarizmi?",
+          "o": [
+            "Sì, erano la stessa persona",
+            "No, erano due persone diverse",
+            "Nessuna fonte menziona nessuno dei due",
+            "Erano entrambi re"
+          ],
+          "e": "Abu Bakr al-Khwarizmi era poeta e scrittore, mentre Muhammad ibn Musa al-Khwarizmi era un altro matematico."
+        },
+        "de": {
+          "q": "War Abu Bakr al-Chwarizmi dieselbe Person wie der Mathematiker Muhammad ibn Musa al-Chwarizmi?",
+          "o": [
+            "Ja, sie waren dieselbe Person",
+            "Nein, sie waren zwei verschiedene Personen",
+            "Keine Quelle erwähnt eine der beiden Personen",
+            "Sie waren beide Könige"
+          ],
+          "e": "Abu Bakr al-Chwarizmi war Dichter und Schriftsteller, während Muhammad ibn Musa al-Chwarizmi ein anderer Mathematiker war."
+        }
+      }
+    }
+  ],
+  "id": "014",
+  "title": "أبو بكر محمد بن العباس الخوارزمي"
+}

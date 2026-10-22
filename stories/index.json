@@ -613,5 +613,53 @@
     "id": "013",
     "section": "women",
     "path": "stories/women/013/"
+  },
+  {
+    "name": "كارما محمد",
+    "grade": "الصف الثالث الابتدائي",
+    "className": "الصف الثالث الابتدائي",
+    "title": "أبو بكر الخوارزمي: حكاية شاعر رحّالة",
+    "subtitle": "رحلة أديب عباسي حمل كلماته بين المدن، واشتهر بقوة لغته وذاكرته.",
+    "person": "أبو بكر محمد بن العباس الخوارزمي",
+    "color": "#8ad9e8",
+    "order": 14,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Karma Mohamed",
+        "grade": "Third grade",
+        "className": "Third grade",
+        "title": "Abu Bakr al-Khwarizmi: The Journey of a Poet",
+        "subtitle": "The story of an Abbasid writer who traveled between cities and became known for his language and memory.",
+        "person": "أبو بكر محمد بن العباس الخوارزمي"
+      },
+      "fr": {
+        "name": "Karma Mohamed",
+        "grade": "Troisième année du primaire",
+        "className": "Troisième année du primaire",
+        "title": "Abou Bakr al-Khwarizmi : le voyage d'un poète",
+        "subtitle": "L'histoire d'un écrivain abbasside qui voyageait entre les villes et était connu pour sa maîtrise de la langue et sa mémoire.",
+        "person": "أبو بكر محمد بن العباس الخوارزمي"
+      },
+      "it": {
+        "name": "Karma Mohamed",
+        "grade": "Terza classe della scuola primaria",
+        "className": "Terza classe della scuola primaria",
+        "title": "Abu Bakr al-Khwarizmi: il viaggio di un poeta",
+        "subtitle": "La storia di uno scrittore dell'epoca abbaside che viaggiò tra le città e divenne famoso per la sua lingua e la sua memoria.",
+        "person": "أبو بكر محمد بن العباس الخوارزمي"
+      },
+      "de": {
+        "name": "Karma Mohamed",
+        "grade": "Dritte Grundschulklasse",
+        "className": "Dritte Grundschulklasse",
+        "title": "Abu Bakr al-Chwarizmi: Die Reise eines Dichters",
+        "subtitle": "Die Geschichte eines Schriftstellers aus der Abbasidenzeit, der zwischen Städten reiste und für seine Sprachkenntnisse und sein Gedächtnis bekannt war.",
+        "person": "أبو بكر محمد بن العباس الخوارزمي"
+      }
+    },
+    "id": "014",
+    "section": "science",
+    "path": "stories/science/014/"
   }
 ]
