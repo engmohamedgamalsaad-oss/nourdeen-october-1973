@@ -45,22 +45,23 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
-test('strict story prompt gate is shared across providers and old AI output is not copied', function () {
-  assert.ok(admin.includes("var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim()"));
-  assert.ok(admin.includes("if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')<0)L.push(STORY_QUALITY_GATE)"));
+test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+  assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
   assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261022-3"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  ['cover-popup','prefers-reduced-motion','الإيطالية والألمانية','الصورة التفاعلية','إحداثيات','الربط التلقائي بالخريطة التفاعلية','stories/places.json','دون تعديل يدوي لاحق','سجلات يتيمة'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing gate requirement: '+needle); });
-  assert.ok(shared.includes('معيار التصميم المرئي والصور والوضعين الفاتح والغامق'), 'shared prompt must require visual design and light/dark QA');
-  ['بطاقات قراءة منفصلة','نص بديل','حقوق/ترخيص','الوضع الفاتح والغامق فعليًا'].forEach(function (needle) { assert.ok(shared.includes(needle), 'missing visual design gate: '+needle); });
-  var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
-  assert.ok(dataGate.includes('أرسل map_location دائمًا'));
-  assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
-  assert.ok(dataGate.includes('map_location'));
-  assert.ok(dataGate.includes('stories/places.json'));
-  ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
+  assert.ok(shared.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
+  assert.ok(shared.includes('لا تلصق البرومبت القديم فوقه'));
+  assert.ok(shared.includes('ar/en/fr/it/de'));
+  assert.ok(shared.includes('cover-popup'));
+  assert.ok(shared.includes('prefers-reduced-motion'));
+  assert.ok(shared.includes('source_name وsource_url وrights'));
+  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
+    assert.ok(shared.includes('"'+provider+'"'), 'missing provider instruction: '+provider);
+  });
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html', 'utf8');
   assert.ok(promptAdmin.includes('<option value="gemini">Gemini</option>'));
 });
@@ -77,8 +78,8 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261021-map-auto-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الربط التلقائي بالخريطة التفاعلية'));
-  assert.ok(shared.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
+  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
 });
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
@@ -202,15 +203,16 @@ test('Gemini is available in every admin story prompt flow with full story requi
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
-  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS = {"gemini":'));
-  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تعديلًا أو اختبارًا أو نشرًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
+  assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
+  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ بحثًا أو تنزيلًا أو اختبارًا لم يحدث فعلًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
   assert.ok(texts.includes('visual_design'));
   assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تكرر التصميم البصري نفسه'));
+  assert.ok(texts.includes('لا تستخدم قالبًا بصريًا واحدًا متكررًا لكل الحكايات.'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
@@ -264,16 +266,14 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('story prompt requires automatic interactive-map linkage with no orphan or duplicate markers', function () {
+test('unified v3 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('الربط التلقائي بالخريطة التفاعلية'));
-  assert.ok(texts.includes('دون طلب إضافة يدوية منفصلة'));
-  assert.ok(texts.includes('اربط العلامة مباشرة برابط صفحة الحكاية الصحيح'));
-  assert.ok(texts.includes('لا تنتج علامات مكررة أو سجلات يتيمة'));
-  assert.ok(texts.includes('لا تعتبر وجود الحكاية في فهرس القصص وحده دليلًا على الربط بالخريطة'));
-  assert.ok(texts.includes('لا تخترع موقعًا أو إحداثيات أو مصدرًا أو رابطًا'));
-  assert.ok(texts.includes('تلتقطها آلية الفهرسة والخريطة التفاعلية تلقائيًا'));
-  assert.ok(texts.includes('ولا تدّعِ اكتماله'));
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  assert.ok(texts.includes('لا تخترع إحداثيات أو روابط، ولا تغيّر سجلات قديمة أو بيانات التفاعلات.'));
+  assert.ok(publisher.includes("path === \"stories/index.json\" || path === \"stories/places.json\""));
+  assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
+  assert.ok(publisher.includes('delete currentPlaces[storyId]'));
 });
 
 test('verified map_location is carried from AI import into bundle and merged safely on publish', function () {
@@ -312,23 +312,26 @@ test('story i18n lookup supports source-first and language-first dictionaries', 
   assert.equal(lookup(languageFirst, 'en').en, 'Hello');
 });
 
-test('copied story prompt always includes strict five-language verification gate', function () {
+test('unified v3 story prompt requires complete five-language verification', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(admin.includes('بوابة الترجمة والتحقق الصارمة'));
-  assert.ok(admin.includes('اختبر ar وen وfr وit وde فعليًا'));
-  assert.ok(promptTexts.includes('بوابة تنفيذ صارمة للذكاء الاصطناعي'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('## 6) اللغات الخمس — اكتمال حقيقي'));
+  assert.ok(promptTexts.includes('ar/en/fr/it/de'));
+  assert.ok(promptTexts.includes('اختبر التبديل بين اللغات ثم الرجوع إلى لغة أخرى'));
+  assert.ok(admin.includes('STORY_PAGE_PROMPT'));
 });
 
-test('copied prompt requires images to render in the final website, not merely list URLs', function () {
+test('unified v3 prompt requires sourced images and a rendered image gallery', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
-  assert.ok(admin.includes('الصور يجب أن تظهر فعلًا داخل صفحة الويب'));
-  assert.ok(admin.includes('معرض صور مرئيًا داخل HTML النهائي'));
-  assert.ok(promptTexts.includes('الصور يجب أن تظهر فعلًا داخل صفحة الموقع'));
+  assert.ok(promptTexts.includes('## 4) الغلاف والصور — من البداية حتى آخر مشهد'));
+  assert.ok(promptTexts.includes('source_name وsource_url وrights'));
+  assert.ok(promptTexts.includes('ظهور الصورة في نتائج البحث ليس إذنًا باستخدامها.'));
   assert.ok(bundle.includes('function imageGalleryHtml(d)'));
   assert.ok(bundle.includes("'+gallery+'"));
+  assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
 });
 
 
@@ -359,24 +362,24 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
-test('automatic story execution contract is appended to every AI provider prompt and future story workflow', function () {
+test('v3 prompt architecture uses one master prompt and concise provider instructions', function () {
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
-  assert.ok(promptTexts.includes('STORY_AUTOMATION_ALL_AI_GATE'));
-  assert.ok(promptTexts.includes('PROJECT_INSTRUCTIONS = khAppendPromptOnce(PROJECT_INSTRUCTIONS'));
-  assert.ok(promptTexts.includes('STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW'));
-  assert.ok(promptTexts.includes('STORY_PAGE_PROMPT = khAppendPromptOnce(STORY_PAGE_PROMPT'));
-  assert.ok(promptTexts.includes('STORY_DATA_QUALITY_GATE = khAppendPromptOnce(STORY_DATA_QUALITY_GATE'));
-  assert.ok(promptTexts.includes('Object.keys(STORY_PROVIDER_PROMPTS || {}).forEach'));
-  ['chatgpt','gemini','claude','deepseek'].forEach(function(provider){ assert.ok(promptTexts.includes('"'+provider+'":"# نسخة '+({chatgpt:'ChatGPT',gemini:'Gemini',claude:'Claude',deepseek:'DeepSeek'}[provider])+' — تجهيز حكاية خالدون'), 'missing provider-specific prompt: '+provider); });
-  assert.ok(promptTexts.includes('Object.keys(STORY_PROVIDER_PROMPTS || {}).forEach(function (provider) { STORY_PROVIDER_PROMPTS[provider] = khAppendPromptOnce(STORY_PROVIDER_PROMPTS[provider], STORY_AUTOMATION_ALL_AI_GATE'), 'automation gate must be appended to every provider prompt');
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261022-3'), 'prompt manager must load the current shared prompt file');
-  assert.ok(promptTexts.includes('ChatGPT وGemini وClaude وDeepSeek'));
-  assert.ok(promptTexts.includes('لا تنتظر من صاحب المشروع أن يكرر المتطلبات'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
+  assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
+  ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
+    assert.ok(promptTexts.includes('## تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
+  });
+  assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
+  assert.ok(admin.includes('تعليمات الأداة المختارة'));
+  assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261022-prompts-v3'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'), 'admin must bust the browser cache when prompt automation changes');
 });
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
