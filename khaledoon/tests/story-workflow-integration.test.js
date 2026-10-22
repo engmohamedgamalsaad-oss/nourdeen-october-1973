@@ -38,6 +38,8 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   var fn = admin.slice(admin.indexOf('function buildNewStoryPrompt'), admin.indexOf('function renderNewStoryGate'));
   assert.ok(fn.includes("if(mode==='package')"));
   assert.ok(fn.includes('اللغات الخمس كاملة'));
+  assert.ok(fn.includes('JSON خامًا واحدًا كاملًا وصالحًا للاستيراد') || fn.includes('أخرج كائن JSON واحدًا كاملًا وصالحًا للاستيراد'), 'package prompt must forbid markdown/fences and require complete JSON');
+  assert.ok(fn.includes('لا تكتب أي محارف هروب قبل أسماء المفاتيح أو قبل الأقواس المربعة'), 'package prompt must prevent escaped structural characters');
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
@@ -58,6 +60,8 @@ test('strict story prompt gate is shared across providers and old AI output is n
   var dataGate = shared.slice(shared.indexOf('var STORY_DATA_QUALITY_GATE'), shared.indexOf('function khAppendPromptOnce'));
   assert.ok(dataGate.includes('أرسل map_location دائمًا'));
   assert.ok(dataGate.includes('لا تضف حقولًا غير مدعومة'));
+  assert.ok(shared.includes('عقد إخراج JSON للاستيراد — إلزامي لكل مزوّد'), 'all provider prompts must share strict JSON output contract');
+  assert.ok(shared.includes('لا تضع \\ قبل الأقواس المربعة'), 'shared contract must prevent escaped brackets');
   assert.ok(dataGate.includes('map_location'));
   assert.ok(dataGate.includes('stories/places.json'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) { assert.ok(shared.includes('"'+provider+'"'), 'missing provider prompt: '+provider); });
