@@ -4,7 +4,7 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#102b35">
 <title>توفيق الحكيم | رائد المسرح الذهني</title><meta name="description" content="حكاية الكاتب المصري الذي جعل المسرح مساحة للتفكير واكتشاف الإنسان"><meta property="og:title" content="توفيق الحكيم | رائد المسرح الذهني"><meta property="og:description" content="حكاية الكاتب المصري الذي جعل المسرح مساحة للتفكير واكتشاف الإنسان"><meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/people/008/cover.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../assets/shared/base.css"><link rel="stylesheet" href="theme.css?v=20261022-popup-canonical4"><link rel="stylesheet" href="../../../assets/shared/reactions.css"><link rel="stylesheet" href="../../../assets/shared/story-quiz.css">
+<link rel="stylesheet" href="../../../assets/shared/base.css"><link rel="stylesheet" href="theme.css?v=20261022-light-captions-2"><link rel="stylesheet" href="../../../assets/shared/reactions.css"><link rel="stylesheet" href="../../../assets/shared/story-quiz.css">
 <script src="../../../assets/shared/home-language-only.js"></script>
 <style>.hero{isolation:isolate}.hero .container{position:relative;z-index:3;width:min(1100px,100%)}.hero-art{z-index:1;right:4%;left:auto;width:min(37%,420px);height:78%;opacity:.94!important;mix-blend-mode:normal}.hero-art img{object-fit:contain;object-position:center;filter:drop-shadow(0 18px 36px rgba(0,0,0,.6));border-radius:18px;border:1px solid #e2b36d66;background:#101824}.hero .person-name{position:relative;z-index:3}.hero .cover-label{position:relative;z-index:3;margin-top:10px;color:#d8dce8}
 @media(max-width:650px){.hero{padding-bottom:255px!important;min-height:720px!important}.hero-art{right:50%;transform:translateX(50%);width:min(68%,290px);height:245px;bottom:8px;top:auto}.hero-art img{width:100%;height:100%;object-fit:contain}.hero .container{z-index:3}}
@@ -102,6 +102,77 @@ html body[data-story-slug="009"]:has(>header) .hero:has(.hero-art) .hero-art img
  html body[data-story-slug="008"] .hero .hero-art img,
  html body[data-story-slug="009"] .hero .hero-art img{animation:none!important;transform:none!important}
 }
+
+/* 2026-10-22: explicit light theme for the four biography pages, including the first screen and image captions */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body[data-story-slug] .hero {
+    background:linear-gradient(135deg,#fffdf7 0%,#f3ead8 100%)!important;
+    color:#26364b!important;
+    border-bottom:1px solid #dfd2b8!important;
+  }
+}
+:root[data-theme="light"] body[data-story-slug] .hero {
+  background:linear-gradient(135deg,#fffdf7 0%,#f3ead8 100%)!important;
+  color:#26364b!important;
+  border-bottom:1px solid #dfd2b8!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero :is(h1,.eyebrow,.hero-subtitle,.person-name,.author,.author span,.author strong,.cover-label) {
+  color:#26364b!important;
+  text-shadow:none!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero .person-name {color:#8a5b19!important}
+:root[data-theme="light"] body[data-story-slug] .hero .cover-label {opacity:1!important}
+:root[data-theme="light"] body[data-story-slug] .hero .hero-art {
+  background:linear-gradient(145deg,#fff,#f0e5d0)!important;
+  border-color:#c6a86c!important;
+  box-shadow:0 12px 30px rgba(61,48,25,.12)!important;
+}
+:root[data-theme="light"] body[data-story-slug] .hero .hero-art img {background:#fff!important}
+:root[data-theme="light"] body[data-story-slug] .story-visual-gallery {
+  background:linear-gradient(180deg,#fbf7ee 0%,#f1e7d3 100%)!important;
+  color:#26364b!important;
+  border-block:1px solid #e0d2b8;
+}
+:root[data-theme="light"] body[data-story-slug] .story-visual-gallery :is(.kicker,h2) {color:#26364b!important}
+:root[data-theme="light"] body[data-story-slug] .story-image-card {
+  background:#fffdf8!important;
+  border:1px solid #dfd2bb!important;
+  box-shadow:0 8px 24px rgba(57,45,25,.09)!important;
+  color:#26364b!important;
+}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption,
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a) {
+  color:#26364b!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption small {font-size:.84rem!important;line-height:1.85!important}
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption a {color:#175b8d!important;text-decoration:underline;text-underline-offset:2px}
+:root[data-theme="light"] body[data-story-slug] .language-switch .lang-option {
+  background:#fffdf8!important;color:#26364b!important;border-color:#c9b993!important
+}
+:root[data-theme="light"] body[data-story-slug] .language-switch .lang-option.is-active {
+  background:#e7d3a7!important;color:#26364b!important;border-color:#b38b43!important
+}
+:root[data-theme="light"] body[data-story-slug] #ai-translation-notice {
+  background:#fffdf8!important;color:#26364b!important;border-color:#d8c69f!important;box-shadow:0 8px 24px rgba(57,45,25,.08)!important
+}
+:root[data-theme="light"] body[data-story-slug] #ai-translation-notice :is(strong,p) {color:#26364b!important}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-visual-gallery {
+    background:linear-gradient(180deg,#fbf7ee 0%,#f1e7d3 100%)!important;color:#26364b!important
+  }
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card {background:#fffdf8!important;color:#26364b!important;border-color:#dfd2bb!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption,
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a) {color:#26364b!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .story-image-card figcaption a {color:#175b8d!important}
+  :root:not([data-theme="dark"]) body[data-story-slug] .language-switch .lang-option {background:#fffdf8!important;color:#26364b!important}
+}
+@media(max-width:600px){
+  body[data-story-slug] .story-image-card figcaption {padding:12px!important;line-height:1.85!important}
+  body[data-story-slug] .story-image-card figcaption small {font-size:.8rem!important}
+}
+
 </style>
 </head>
 <body class="story-design-portrait-biography" data-story-slug="008" data-keep-intro-modal>
@@ -118,7 +189,7 @@ html body[data-story-slug="009"]:has(>header) .hero:has(.hero-art) .hero-art img
 <section class="reactions-section"><div class="reactions-wrap"><div class="kicker" style="text-align:center">رأيك يهمنا</div><h2 class="reactions-title" id="reactions-title">ما رأيك في الحكاية؟</h2><p class="reactions-intro">اختَر الانطباع الذي يناسبك بعد القراءة.</p><div class="reaction-like-row"><button class="reaction-btn reaction-like" id="reaction-like" type="button" aria-pressed="false"><span class="reaction-label">❤️ أعجبتني</span><span class="reaction-count" data-reaction-count="like">0</span></button></div><div class="reaction-options" role="group" aria-label="اختَر رد فعلك على الحكاية"><button class="reaction-btn reaction-choice" type="button" data-reaction-choice="loved" aria-pressed="false"><span>حكاية ومجهود مميز</span><span class="reaction-count" data-reaction-count="loved">0</span></button><button class="reaction-btn reaction-choice" type="button" data-reaction-choice="unknown_before" aria-pressed="false"><span>حكاية لم أكن أعرفها من قبل</span><span class="reaction-count" data-reaction-count="unknown_before">0</span></button><button class="reaction-btn reaction-choice" type="button" data-reaction-choice="inspiring" aria-pressed="false"><span>حكاية ملهمة</span><span class="reaction-count" data-reaction-count="inspiring">0</span></button><button class="reaction-btn reaction-choice" type="button" data-reaction-choice="more_stories" aria-pressed="false"><span>أحب أقرأ حكايات تانية</span><span class="reaction-count" data-reaction-count="more_stories">0</span></button></div><p class="reaction-status" id="reaction-status" role="status" aria-live="polite"></p><span class="reaction-count-line">يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.</span></div></section>
 <section class="sources" id="sources"><div class="container"><div class="kicker">المصادر والمراجعة</div><h2>مصادر الحكاية</h2><ol><li><a href="https://sis.gov.eg/en/egypt/egyptian-figures/tawfiq-al-hakim/" target="_blank" rel="noopener noreferrer">1. الهيئة العامة للاستعلامات المصرية، توفيق الحكيم، بيانات السيرة والأعمال:</a></li><li><a href="https://www.aljazeera.net/encyclopedia/2015/3/14/توفيق-الحكيم" target="_blank" rel="noopener noreferrer">2. الجزيرة نت، توفيق الحكيم، سيرة ومعلومات عن أهل الكهف والمسرح الذهني:</a></li><li><a href="https://www.larousse.fr/encyclopedie/litterature/Tawfiq_al-_Hakim/173803" target="_blank" rel="noopener noreferrer">3. Encyclopaedia Larousse، Tawfiq al-Hakim، سيرة وأعمال ومعلومات عن المسرح الذهني:</a></li><li><a href="https://www.treccani.it/enciclopedia/tawfiq-al-hakim/" target="_blank" rel="noopener noreferrer">4. Treccani، Al-Hakim, Tawfiq، سيرة وأعمال وتواريخ بعض المسرحيات والروايات:</a></li><li><a href="https://www.encyclopedia.com/international/encyclopedias-almanacs-transcripts-and-maps/hakim-tawfiq-al-1898-1987" target="_blank" rel="noopener noreferrer">5. Encyclopedia.com، Hakim, Tawfiq al- (1898–1987)، سيرة ودراسة القانون ورحلته إلى باريس وعمله القضائي ورواية يوميات نائب في الأرياف:</a></li><li><a href="https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg" target="_blank" rel="noopener noreferrer">6. Wikimedia Commons، Tawfiq al-Hakim.jpg، صفحة الملف ومصدر الصورة وبيانات الملكية العامة:</a></li><li><a href="https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg" target="_blank" rel="noopener noreferrer">7. Wikimedia Commons، توفيق الحكيم.jpg، صفحة الملف وترخيص CC BY-SA 4.0:</a></li></ol><p class="source-note">النص تعليمي مبسط؛ يجب مراجعة المصادر والتمييز بين الوقائع الثابتة والروايات المختلف عليها.</p></div></section>
 <section class="end"><h2>كل حكاية تفتح بابًا جديدًا لفهم التاريخ</h2><p>خالدون عبر التاريخ — حكاية التاريخ بعيون جيل جديد.</p><a class="btn" href="../../../index.html">العودة إلى خالدون عبر التاريخ</a></section></main>
-<script src="../../../assets/shared/i18n.js"></script><script src="../../../assets/i18n/common.js"></script><script src="../../../assets/i18n/story-common.js"></script><script src="./translations.js?v=20261021-i18n-shape-fix"></script><script src="../../../assets/shared/story-i18n.js"></script><script src="../../../assets/shared/story.js?v=20261022-preserve-intro"></script><script src="../../../assets/shared/reactions.js?v=20261022-restore-bg"></script><script src="../../../assets/shared/story-quiz.js"></script><script src="../../../assets/shared/story-body-i18n.js"></script>
+<script src="../../../assets/shared/i18n.js"></script><script src="../../../assets/i18n/common.js"></script><script src="../../../assets/i18n/story-common.js"></script><script src="./translations.js?v=20261022-caption-fix-2"></script><script src="../../../assets/shared/story-i18n.js"></script><script src="../../../assets/shared/story.js?v=20261022-preserve-intro"></script><script src="../../../assets/shared/reactions.js?v=20261022-restore-bg"></script><script src="../../../assets/shared/story-quiz.js"></script><script src="../../../assets/shared/story-body-i18n.js"></script>
 
 <script>
 (function(){
