@@ -304,6 +304,27 @@ function validateStoryPackage(pkg) {
         }
       });
     });
+
+    /* لا نعدّ العبارات القصيرة المتشابهة خطأً؛ نفحص النصوص الطويلة فقط بحثًا عن نسخ ترجمة كاملة بين لغتين. */
+    function duplicateComparableText(value) {
+      return String(value || '').replace(/\\s+/g, ' ').trim().toLocaleLowerCase();
+    }
+    [['body', 'نص الراوي'], ['history_note', 'السياق التاريخي']].forEach(function (field) {
+      var seenLongTranslations = [];
+      langs.forEach(function (lang) {
+        var translation = pkg.translations[lang];
+        var value = translation && translation[field[0]];
+        if (typeof value !== 'string') return;
+        var normalized = duplicateComparableText(value);
+        if (normalized.length < 100) return;
+        var previous = seenLongTranslations.find(function (entry) { return entry.normalized === normalized; });
+        if (previous) {
+          errors.push(lang.toUpperCase() + ': ' + field[1] + ' مطابق بالكامل لترجمة ' + previous.lang.toUpperCase() + ' في نص طويل (100 حرف فأكثر). راجع الترجمتين بدل نسخ النص نفسه.');
+        } else {
+          seenLongTranslations.push({ lang: lang, normalized: normalized });
+        }
+      });
+    });
   }
 
   var questions = isObj(pkg.question_bank) && Array.isArray(pkg.question_bank.questions) ? pkg.question_bank.questions : [];
