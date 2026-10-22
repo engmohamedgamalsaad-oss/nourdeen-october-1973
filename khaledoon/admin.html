@@ -542,34 +542,30 @@ function makePreviewDraft(statusForPreview){
   L.push('ملف عمل حكاية — مشروع خالدون عبر التاريخ');
   L.push('المطلوب: اقرأ التعليمات الكاملة أدناه والتزم بها، ثم أكمل دورة تجهيز الحكاية من المراجعة إلى المعاينة. لا تنشر ولا تدمج في الموقع الحي ولا تغيّر قاعدة البيانات دون موافقة صريحة من صاحب المشروع.');
   L.push('');
-  // البرومبت المنسوخ يبني على دليل واحد، ولا يضم كود ناتج AI سابقًا.
+  // استخدم المصدر الموحد مرة واحدة. لا نكدّس workflow قديمًا وبوابات وصورًا مترجمة مكررة فوقه.
   var selectedAI=providerSelect.value||'chatgpt';
-  var workflowPrompt=String(promptManagerState.workflow||STORY_WORKFLOW||promptManagerState.main||STORY_PAGE_PROMPT||'').trim();
-  L.push('================ دليل الحكاية الموحد — مرة واحدة فقط ================');
+  var savedMain=String(promptManagerState.main||'').trim();
+  var isCurrentMaster=savedMain.indexOf('الإصدار: 2026-10-22-v3')>=0;
+  var workflowPrompt=(isCurrentMaster?savedMain:String(STORY_PAGE_PROMPT||'')).trim();
+  L.push('================ البرومبت الموحد المعتمد — مرة واحدة فقط ================');
   if(workflowPrompt)L.push(workflowPrompt);
   L.push('');
   L.push('================ تعليمات الأداة المختارة: '+selectedAI.toUpperCase()+' ================');
-  var selectedAIInstructions=(promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'استخدم الأدوات المتاحة فعلًا ولا تدّعِ تنفيذًا لم يحدث.';
-  L.push(selectedAIInstructions);
+  var providerCandidate=String((promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'').trim();
+  var providerIsLegacy=providerCandidate.length>1800||providerCandidate.indexOf('البرومبت الرئيسي النهائي')>=0||providerCandidate.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||providerCandidate.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
+  var selectedAIInstructions=providerIsLegacy?String((STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'').trim():providerCandidate;
+  if(selectedAIInstructions)L.push(selectedAIInstructions);
   L.push('');
-  L.push('================ بوابة الجودة الإلزامية ================');
-  if(workflowPrompt.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')<0)L.push(STORY_QUALITY_GATE);
+  L.push('================ شرط تنفيذ مختصر ================');
+  L.push('طبّق كل شروط البرومبت الموحد مرة واحدة فقط. افحص الصفحة والقالب الفعليين، وراجع الغلاف وشاشة البداية وبطاقات القراءة والصور وتعليقاتها والخلفية في الوضعين الفاتح والغامق، واللغات الخمس، والأسئلة والمصادر والخريطة والتفاعلات والطباعة والمشاركة. لا تكرر تعليمات قديمة أو تلحق إصدارًا سابقًا. سجّل كل اختبار: ناجح / فاشل / لم يُختبر مع دليل، ولا تدّعِ نجاحًا غير متحقق.');
+  var managedExtras=(promptManagerState.custom||[]).filter(function(p){
+    if(!p||!String(p.name||'').trim()||!String(p.text||'').trim())return false;
+    var tx=String(p.text).trim();
+    var legacy=tx.length>2500||tx.indexOf('البرومبت الرئيسي النهائي')>=0||tx.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||tx.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
+    return !legacy&&workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;
+  }).map(function(p){return '--- '+String(p.name).trim()+' ---\\n'+String(p.text).trim()}).join('\\n\\n');
+  if(managedExtras){L.push('');L.push('================ إضافات قصيرة غير مكررة ================');L.push(managedExtras);}
   L.push('');
-  L.push('================ بوابة الترجمة والتحقق الصارمة — إلزامية لكل مزوّد ================');
-  L.push('لا تعتبر الحكاية مكتملة بمجرد وجود مفاتيح ترجمة أو زر لغة أو تغيير cache. افحص محرك الترجمة وملف الحكاية وبنك الأسئلة والقالب والبرومبتات الفعلية.');
-  L.push('اختبر ar وen وfr وit وde فعليًا: العنوان والوصف والمتن والعناوين والتعليقات وalt/title/aria-label والمصادر والأسئلة والاختيارات والإجابات والتفسيرات والأزرار ورسائل الحالة والبيانات الوصفية. تحقق من RTL للعربية وLTR لبقية اللغات.');
-  L.push('افحص توافق شكل قاموس كل حكاية مع محرك الترجمة، واصلح السبب الجذري مع الحفاظ على القواميس القديمة. اختبر تبديل اللغة إلى كل لغة ثم لغة أخرى ثم العودة للعربية، وافحص بنك الأسئلة مستقلًا.');
-  L.push('احصر أي نص غير مترجم داخل صفحة غير عربية، واستثنِ فقط الأعلام والاقتباسات الأصلية والمصطلحات المبررة. لا تعلن نجاحًا إذا بقي نص غير مترجم أو إذا لم يُنفذ الاختبار.');
-  L.push('شغّل الاختبارات وسجّل نتائجها. افصل بوضوح بين تم واختُبر ولم يُختبر. لا تدّعِ فحص متصفح أو نشرًا لم يحدث. اعمل على فرع مراجعة، ولا تدمج أو تنشر أو تغيّر قاعدة البيانات دون موافقة صريحة.');
-  L.push('الصور يجب أن تظهر فعلًا داخل صفحة الويب، لا أن تبقى روابط أو بيانات JSON فقط. ابنِ معرض صور مرئيًا داخل HTML النهائي مستخدمًا img src، وتأكد أن story-template-bundle.js يدرجه في الصفحة.');
-  L.push('أضف صورتين فعليتين على الأقل (والأفضل 3–5) برابط مباشر للصورة نفسها، وalt وcaption وsource_name وsource_url وrights وترجمات i18n للغات الخمس. لا تستخدم رابط صفحة ويب عاديًا كـ img src ولا روابط تخمينية.');
-  L.push('فضّل حفظ الصور المسموح بها محليًا داخل مجلد الحكاية وربطها بمسارات نسبية وتضمينها في الحزمة المنشورة. إن تعذر ذلك، اختبر تحميل الرابط الخارجي فعليًا. تحقق من حقوق الاستخدام، ومن ظهور الصور في الكمبيوتر والهاتف، وعدم وجود صور مكسورة بعد النشر.');
-  L.push('وجود رابط أو سجل صورة لا يثبت ظهورها. لا تعلن اكتمال الصور إلا بعد التحقق من المعرض في HTML النهائي وتحميل الصور، وصرّح بوضوح بما لم تستطع اختباره.');
-  var managedExtras=(promptManagerState.custom||[]).filter(function(p){if(!p||!String(p.name||'').trim()||!String(p.text||'').trim())return false;var tx=String(p.text).trim();return workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n');
-  if(managedExtras){L.push('');L.push('================ تعليمات إضافية محفوظة غير مكررة ================');L.push(managedExtras);}
-  L.push('');
-  L.push('================ تعليمات هذه الحكاية ================');
-  L.push('افحص الملفات الفعلية والقالب والحكايات المرجعية. احفظ النص الأصلي حرفيًا في original_body وافصل عنه التحرير. دقّق الوقائع والمصادر وحقوق الصور. أنجز الترجمات الخمس كاملة. افحص الخلفية ونافذة البداية cover-popup والحركة والخريطة والصورة التفاعلية، واختبرها بدل الاكتفاء بوصفها. اعرض جدول نجاح/فشل/لم يُختبر بدليل. لا تنشر ولا تدمج إلى main دون موافقة صريحة.');
   L.push('=== بيانات الحكاية ===');
   L.push('معرّف سجل الإدارة: '+(it.id==null?'مسودة جديدة':String(it.id)));
   L.push('القسم: '+(SEC[secS.value]||secS.value||'غير محدد'));
