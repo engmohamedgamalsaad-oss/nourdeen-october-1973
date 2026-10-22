@@ -307,7 +307,7 @@ function validateStoryPackage(pkg) {
 
     /* لا نعدّ العبارات القصيرة المتشابهة خطأً؛ نفحص النصوص الطويلة فقط بحثًا عن نسخ ترجمة كاملة بين لغتين. */
     function duplicateComparableText(value) {
-      return String(value || '').replace(/\\s+/g, ' ').trim().toLocaleLowerCase();
+      return String(value || '').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
     }
     [['body', 'نص الراوي'], ['history_note', 'السياق التاريخي']].forEach(function (field) {
       var seenLongTranslations = [];
