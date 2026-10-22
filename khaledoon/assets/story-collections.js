@@ -66,12 +66,12 @@
       ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
       : isNaguibMahfouzCard
         ? (String(story.id || '') === '009' ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_HR.jpg', 'https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_in_cafe.jpg'] : ['https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_in_cafe.jpg', 'https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_HR.jpg']).concat([root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'])
-        : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'];
+        : [root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'];
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
       if (candidateIndex < candidates.length) cover.src = candidates[candidateIndex];
-      else cover.remove();
+      else { cover.onerror = null; var fallback = node('div', 'story-index-cover story-index-cover-fallback', localized(story, 'title') || ui.read); cover.replaceWith(fallback); }
     };
     cover.src = candidates[candidateIndex];
     card.appendChild(cover);
