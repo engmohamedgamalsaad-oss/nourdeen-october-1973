@@ -293,4 +293,29 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
+test('story i18n lookup supports source-first and language-first dictionaries', function () {
+  var vm = require('vm');
+  var engine = fs.readFileSync('assets/shared/story-i18n.js','utf8');
+  var match = engine.match(/function findTranslation\(source, lang\)\{[\s\S]*?\n\}/);
+  assert.ok(match, 'translation lookup helper must exist');
+  var sourceFirst = { 'مرحبا': { en: 'Hello', fr: 'Bonjour' } };
+  var languageFirst = { en: { 'مرحبا': 'Hello' }, fr: { 'مرحبا': 'Bonjour' }, de: { 'مرحبا': 'Hallo' } };
+  function lookup(dictionary, lang) {
+    var context = { translations: dictionary };
+    return vm.runInNewContext(match[0] + '; findTranslation("مرحبا", "' + lang + '")', context);
+  }
+  assert.equal(lookup(sourceFirst, 'en').en, 'Hello');
+  assert.equal(lookup(languageFirst, 'fr').fr, 'Bonjour');
+  assert.equal(lookup(languageFirst, 'de').de, 'Hallo');
+  assert.equal(lookup(languageFirst, 'en').en, 'Hello');
+});
+
+test('copied story prompt always includes strict five-language verification gate', function () {
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
+  assert.ok(admin.includes('بوابة الترجمة والتحقق الصارمة'));
+  assert.ok(admin.includes('اختبر ar وen وfr وit وde فعليًا'));
+  assert.ok(promptTexts.includes('بوابة تنفيذ صارمة للذكاء الاصطناعي'));
+});
+
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
