@@ -196,16 +196,42 @@
     return { value: cleaned, repaired: syntaxRepaired || flag.changed, text: text, notes: notes };
   }
 
+  // Remove Markdown-style backslashes before structural JSON tokens only when outside strings.
+  // Example: \\[ { ... } -> [ { ... }, while preserving literal backslashes inside prose and URLs.
+  function repairStructuralEscapes(source, stats) {
+    var out = '', inString = false, escaped = false;
+    for (var i = 0; i < source.length; i++) {
+      var ch = source[i];
+      if (inString) {
+        out += ch;
+        if (escaped) escaped = false;
+        else if (ch === '\\') escaped = true;
+        else if (ch === '"') inString = false;
+        continue;
+      }
+      if (ch === '"') { inString = true; out += ch; continue; }
+      if (ch === '\\' && i + 1 < source.length && '[]{}'.indexOf(source[i + 1]) >= 0) {
+        stats.structural = (stats.structural || 0) + 1;
+        continue;
+      }
+      out += ch;
+    }
+    return out;
+  }
+
   function parseSingle(input) {
     var source = stripWrappers(input);
+    var structuralStats = { structural: 0 };
+    source = repairStructuralEscapes(source, structuralStats);
     try {
       return finish(JSON.parse(source), false, source, []);
     } catch (originalError) {
-      var stats = { escapes: 0, controls: 0, quotes: 0, commas: 0, curly: 0 };
+      var stats = { escapes: 0, controls: 0, quotes: 0, commas: 0, curly: 0, structural: structuralStats.structural };
       var repaired = removeTrailingCommas(repairQuotedStrings(fixCurlyKeys(source, stats), stats), stats);
       try {
         var notes = [];
         if (stats.escapes) notes.push('أُزيلت ' + stats.escapes + ' علامة \\ غير صالحة داخل النصوص.');
+        if (stats.structural) notes.push('أُزيلت ' + stats.structural + ' شرطة مائلة زائدة قبل أقواس JSON خارج النصوص.');
         if (stats.controls) notes.push('حُوّلت أسطر/مسافات جدولة خام داخل النصوص إلى صيغة JSON صحيحة.');
         if (stats.quotes) notes.push('هُرّبت ' + stats.quotes + ' علامة اقتباس داخل النصوص.');
         if (stats.commas) notes.push('أُزيلت ' + stats.commas + ' فاصلة زائدة.');
