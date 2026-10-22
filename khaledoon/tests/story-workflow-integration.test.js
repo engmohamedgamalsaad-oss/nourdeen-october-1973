@@ -371,5 +371,6 @@ test('automatic story execution contract is appended to every AI provider prompt
   assert.ok(promptTexts.includes('لا تنتظر من صاحب المشروع أن يكرر المتطلبات'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
+  assert.ok(admin.includes('assets/khaledoon-admin-texts.js?v=20261022-1'), 'admin must bust the browser cache when prompt automation changes');
 });
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
