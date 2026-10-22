@@ -66,7 +66,7 @@
       ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
       : isNaguibMahfouzCard
         ? (String(story.id || '') === '009' ? ['https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_HR.jpg', 'https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_in_cafe.jpg'] : ['https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_in_cafe.jpg', 'https://commons.wikimedia.org/wiki/Special:FilePath/Naguib_Mahfouz_HR.jpg']).concat([root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'])
-        : [root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'];
+        : (['011', '012', '013'].indexOf(String(story.id || '')) >= 0 ? [root + path + 'cover-popup.svg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'] : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']);
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
