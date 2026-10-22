@@ -25,8 +25,8 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 #reviewMeta{white-space:pre-line}
 .panel{border:1px solid var(--line);border-radius:18px;background:#0d2028;padding:18px;margin:18px 0}
 .panel h1,.panel h2{color:var(--gold);margin-top:0}
-.framebox{height:min(72vh,780px);min-height:420px;background:#fff;border-radius:12px;overflow:hidden}
-.framebox iframe{width:100%;height:100%;border:0;background:#fff}
+.framebox{height:auto;min-height:420px;background:#fff;border-radius:12px;overflow:visible}
+.framebox iframe{display:block;width:100%;height:420px;min-height:420px;border:0;background:#fff}
 .story{overflow:hidden;border-radius:18px;border:2px solid var(--outer);background:var(--inner);box-shadow:0 16px 40px #0005}
 .cover{padding:30px 24px;background:linear-gradient(135deg,#0a1c25,#1d3d43);border-bottom:4px solid var(--outer);text-align:center}
 .eyebrow{color:var(--gold);font-weight:800}
@@ -168,6 +168,16 @@ function put(id,v){var e=$(id);if(e)e.textContent=v==null?'':String(v)}
 
 /* ---------- معاينة الموقع ومعاينة شكل حكاية ---------- */
 var views={site:$('siteView'),story:$('storyView')};
+/* لا نقبل رسائل تغيير الارتفاع إلا من إطار المعاينة الحالي، ولا نسمح بتغيير أي شيء آخر. */
+window.addEventListener('message',function(event){
+ if(event.source!==frame.contentWindow)return;
+ var data=event.data;
+ if(!data||data.type!=='kh-preview-height')return;
+ var height=Math.max(420,Math.min(12000,Number(data.height)||420));
+ frame.style.height=height+'px';
+ var box=frame.closest('.framebox');
+ if(box){box.style.height='auto';box.style.minHeight='420px';}
+});
 document.querySelectorAll('[data-view]').forEach(function(b){b.addEventListener('click',function(){Object.keys(views).forEach(function(k){views[k].hidden=k!==b.dataset.view});document.querySelectorAll('[data-view]').forEach(function(x){x.classList.toggle('active',x===b)})})});
 document.querySelectorAll('[data-page]').forEach(function(b){b.addEventListener('click',function(){$('siteFrame').src=b.dataset.page;document.querySelectorAll('[data-page]').forEach(function(x){x.classList.toggle('active',x===b)})})});
 var pairs=[['storyTitle','outTitle'],['storySubtitle','outSubtitle'],['karmaText','outKarma'],['narratorText','outNarrator'],['sourceText','outSources']];
@@ -426,8 +436,8 @@ function renderInTemplate(d){
  if(window.KHStoryBundle&&typeof window.KHStoryBundle.renderPreviewHtml==='function'){
   frame.setAttribute('sandbox','allow-scripts allow-forms allow-popups');
   var html=window.KHStoryBundle.renderPreviewHtml(d);
-  /* الإطار بلا allow-same-origin فلا نقدر نقيس ارتفاعه من الخارج؛ الصفحة نفسها ترسل ارتفاعها حتى تظهر كاملة بدون تمرير داخلي. */
-  var fit='';
+  /* الإطار معزول بلا allow-same-origin؛ نضبط ارتفاعه برسالة محدودة من مستند المعاينة بدل تمرير داخلي يخفي الصور أسفل الغلاف. */
+  var fit='<script>(function(){function report(){var h=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);parent.postMessage({type:"kh-preview-height",height:h},"*")}window.addEventListener("load",report);if("ResizeObserver"in window)new ResizeObserver(report).observe(document.documentElement);report()})();<\/script>';
   html=html.indexOf('</body>')>-1?html.replace('</body>',function(){return fit+'</body>'}):html+fit;
   visitorTabUrl='';visitorTabHtml=html;frame.srcdoc=html;
   say('تعرض الآن الحكاية باستخدام قالب القارئ الفعلي. الإعجابات والتفاعلات معطلة في المعاينة، ولم يتم نشر أي شيء.');
