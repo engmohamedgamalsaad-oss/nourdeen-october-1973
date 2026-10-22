@@ -38,7 +38,11 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   var fn = admin.slice(admin.indexOf('function buildNewStoryPrompt'), admin.indexOf('function renderNewStoryGate'));
   assert.ok(fn.includes("if(mode==='package')"));
   assert.ok(fn.includes('اللغات الخمس كاملة'));
-  assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));\n  assert.ok(fn.includes('بوابة الصور إلزامية ولا يجوز تخطيها'));\n  assert.ok(fn.includes('لا تُخرج حزمة JSON للاستيراد ولا تدّعِ اكتمالها'));\n  assert.ok(fn.includes('images مصفوفة لا تقل عن صورتين موثقتين وصالحتين'));\n  assert.ok(!fn.includes('إن تعذر البحث فاترك images فارغة'), 'prompt must not instruct AI to return an importable package with missing images');
+  assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
+  assert.ok(fn.includes('بوابة الصور إلزامية ولا يجوز تخطيها'));
+  assert.ok(fn.includes('لا تُخرج حزمة JSON للاستيراد ولا تدّعِ اكتمالها'));
+  assert.ok(fn.includes('images مصفوفة لا تقل عن صورتين موثقتين وصالحتين'));
+  assert.ok(!fn.includes('إن تعذر البحث فاترك images فارغة'), 'prompt must not instruct AI to return an importable package with missing images');
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'), 'verified map metadata must survive AI package import');
