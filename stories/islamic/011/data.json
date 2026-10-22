@@ -1,0 +1,45 @@
+{
+  "name": "نوردين محمد",
+  "grade": "الصف الاول الاعدادى",
+  "className": "الصف الاول الاعدادى",
+  "title": "عمرو بن العاص",
+  "subtitle": "فتح مصر",
+  "person": "عمرو بن العاص",
+  "color": "#78c59a",
+  "order": 11,
+  "published": true,
+  "i18n": {
+    "en": {
+      "name": "Nourdin Mohamed",
+      "grade": "First Year Preparatory",
+      "className": "First Year Preparatory",
+      "title": "Amr ibn al-As",
+      "subtitle": "The Conquest of Egypt",
+      "person": "عمرو بن العاص"
+    },
+    "fr": {
+      "name": "Nourdin Mohamed",
+      "grade": "Première année préparatoire",
+      "className": "Première année préparatoire",
+      "title": "Amr ibn al-As",
+      "subtitle": "La conquête de l'Égypte",
+      "person": "عمرو بن العاص"
+    },
+    "it": {
+      "name": "Nourdin Mohamed",
+      "grade": "Primo anno preparatorio",
+      "className": "Primo anno preparatorio",
+      "title": "Amr ibn al-As",
+      "subtitle": "La conquista dell'Egitto",
+      "person": "عمرو بن العاص"
+    },
+    "de": {
+      "name": "Nourdin Mohamed",
+      "grade": "Erste Vorbereitungsklasse",
+      "className": "Erste Vorbereitungsklasse",
+      "title": "Amr ibn al-As",
+      "subtitle": "Die Eroberung Ägyptens",
+      "person": "عمرو بن العاص"
+    }
+  }
+}

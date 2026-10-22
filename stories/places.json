@@ -104,16 +104,17 @@
     }
   },
   "011": {
-    "lat": 21.3891,
-    "lng": 39.8579,
-    "approximate": true,
+    "lat": 30.0106,
+    "lng": 31.2315,
     "place": {
-      "ar": "مكة المكرمة (مكان الميلاد وفق المرجع؛ الإحداثيات تقريبية)",
-      "en": "Mecca (reported birthplace; approximate coordinates)",
-      "fr": "La Mecque (lieu de naissance rapporté ; coordonnées approximatives)",
-      "it": "La Mecca (luogo di nascita riportato; coordinate approssimative)",
-      "de": "Mekka (überlieferter Geburtsort; ungefähre Koordinaten)"
-    }
+      "ar": "جامع عمرو بن العاص، الفسطاط، القاهرة القديمة، مصر",
+      "de": "Moschee des Amr ibn al-As, Fustat, Alt-Kairo, Ägypten",
+      "en": "Mosque of Amr ibn al-As, Fustat, Old Cairo, Egypt",
+      "fr": "Mosquée d'Amr ibn al-As, Fustat, Vieux Caire, Égypte",
+      "it": "Moschea di Amr ibn al-As, Fustat, Cairo Vecchia, Egitto"
+    },
+    "source_name": "Ministry of Tourism and Antiquities (Egypt)",
+    "source_url": "https://egymonuments.gov.eg/ar/monuments/the-mosque-of-amr-ibn-al-as/"
   },
   "012": {
     "lat": 30.5877,
