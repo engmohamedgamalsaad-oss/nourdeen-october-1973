@@ -277,10 +277,27 @@
 
   function fallbackList() {
     usingFallback = true;
+    directory.hidden = true;
     canvas.style.height = 'auto';
+    var l = lang();
     canvas.replaceChildren();
     canvas.dir = document.documentElement.dir || 'rtl';
     canvas.appendChild(el('div', 'khm-note', T('err')));
+    var ul = el('ul', 'khm-list');
+    storiesAll.forEach(function (e) {
+      var li = el('li');
+      var a = el('a', null, pick(e.s, 'title', l) || pick(e.s, 'person', l) || String(e.s.id));
+      a.href = storyHref(e.s);
+      li.appendChild(a);
+      var person = pick(e.s, 'person', l);
+      if (person && person !== a.textContent) li.appendChild(document.createTextNode(' — ' + person));
+      var pl = e.p && e.p.place && (e.p.place[l] || e.p.place.ar);
+      if (pl) li.appendChild(document.createTextNode(' — ' + pl));
+      else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
+      if (e.p && e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
+      ul.appendChild(li);
+    });
+    canvas.appendChild(ul);
   }
 
   function css(href) { var k = document.createElement('link'); k.rel = 'stylesheet'; k.href = href; document.head.appendChild(k); }
