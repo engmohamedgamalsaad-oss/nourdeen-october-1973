@@ -144,3 +144,14 @@
   s.defer = true;
   document.body.appendChild(s);
 })();
+
+/* Loads the section-aware story background. October stories are skipped inside that file;
+   opt out per page with <body data-disable-section-bg>. */
+(function () {
+  if (document.body.hasAttribute("data-disable-section-bg")) return;
+  var current = document.currentScript;
+  var base = current && current.src ? current.src.replace(/reactions\.js(\?.*)?$/, '') : '../../assets/shared/';
+  var s = document.createElement('script');
+  s.src = base + 'story-section-bg.js?v=20261022-1';
+  document.body.appendChild(s);
+})();
