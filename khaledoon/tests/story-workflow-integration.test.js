@@ -19,7 +19,14 @@ function mockPatch(record, patch) {
   /* In-memory replacement for a Supabase PATCH; never calls fetch or a server. */
   return Object.assign({}, record, patch);
 }
-test('story preview reuses the approved visual language and shows documented images', function () {\n  assert.ok(bundle.includes('heroImageUrl=heroImage?esc(heroImage.url)'), 'the first documented image should be used in the cover and intro popup');\n  assert.ok(bundle.includes('story-design-portrait-biography .hero-art img'), 'portrait biography profile must include a framed hero portrait');\n  assert.ok(bundle.includes('kh-profile-modal-enter'), 'intro popup should receive the reusable animated profile style');\n  assert.ok(preview.includes('function renderReviewImages(d)'), 'review details should show image thumbnails and source links');\n  assert.ok(preview.includes('renderReviewImages(d);'), 'review should render attached images, not only the note');\n});\ntest('admin imports the workflow module and derives status counters', function () {
+test('story preview reuses the approved visual language and shows documented images', function () {
+  assert.ok(bundle.includes('heroImageUrl=heroImage?esc(heroImage.url)'), 'the first documented image should be used in the cover and intro popup');
+  assert.ok(bundle.includes('story-design-portrait-biography .hero-art img'), 'portrait biography profile must include a framed hero portrait');
+  assert.ok(bundle.includes('kh-profile-modal-enter'), 'intro popup should receive the reusable animated profile style');
+  assert.ok(preview.includes('function renderReviewImages(d)'), 'review details should show image thumbnails and source links');
+  assert.ok(preview.includes('renderReviewImages(d);'), 'review should render attached images, not only the note');
+});
+test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261021-map-auto-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
