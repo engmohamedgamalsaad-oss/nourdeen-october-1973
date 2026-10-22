@@ -13,7 +13,7 @@
      شاشة البداية والحركة والمشاركة والهوامش نفسها، دون المساس بالحكايات القديمة.
   ========================================= */
   var keepIntroModal = body.hasAttribute('data-keep-intro-modal');
-  var generatedStory = !keepIntroModal && /(^|\\s)story-design-/.test(body.className || '');
+  var generatedStory = !keepIntroModal && /(^|\s)story-design-/.test(body.className || '');
 
   function adaptGeneratedStory() {
     var intro = document.getElementById('intro');
