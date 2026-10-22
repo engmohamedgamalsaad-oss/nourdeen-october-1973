@@ -11,7 +11,49 @@
         "الحسن بن الهيثم"
       ],
       "a": 2,
-      "e": "اسمه أبو علي الحسين بن عبد الله بن سينا."
+      "e": "اسمه أبو علي الحسين بن عبد الله بن سينا.",
+      "i18n": {
+        "en": {
+          "q": "What was Ibn Sina’s full name in the story?",
+          "o": [
+            "Abu Bakr Muhammad ibn Zakariya al-Razi",
+            "Ahmad ibn Tulun",
+            "Abu Ali al-Husayn ibn Abd Allah ibn Sina",
+            "Al-Hasan ibn al-Haytham"
+          ],
+          "e": "His full name was Abu Ali al-Husayn ibn Abd Allah ibn Sina."
+        },
+        "fr": {
+          "q": "Quel était le nom complet d’Ibn Sina dans le récit ?",
+          "o": [
+            "Abou Bakr Muhammad ibn Zakariya al-Razi",
+            "Ahmad ibn Touloun",
+            "Abou Ali al-Husayn ibn Abd Allah ibn Sina",
+            "Al-Hasan ibn al-Haytham"
+          ],
+          "e": "Son nom complet était Abou Ali al-Husayn ibn Abd Allah ibn Sina."
+        },
+        "it": {
+          "q": "Qual era il nome completo di Ibn Sina secondo il racconto?",
+          "o": [
+            "Abu Bakr Muhammad ibn Zakariya al-Razi",
+            "Ahmad ibn Tulun",
+            "Abu Ali al-Husayn ibn Abd Allah ibn Sina",
+            "Al-Hasan ibn al-Haytham"
+          ],
+          "e": "Il suo nome completo era Abu Ali al-Husayn ibn Abd Allah ibn Sina."
+        },
+        "de": {
+          "q": "Wie lautete Ibn Sinas vollständiger Name in der Geschichte?",
+          "o": [
+            "Abu Bakr Muhammad ibn Zakariya al-Razi",
+            "Ahmad ibn Tulun",
+            "Abu Ali al-Husain ibn Abd Allah ibn Sina",
+            "Al-Hasan ibn al-Haytham"
+          ],
+          "e": "Sein vollständiger Name lautete Abu Ali al-Husain ibn Abd Allah ibn Sina."
+        }
+      }
     },
     {
       "q": "في أي عام وُلد ابن سينا تقريبًا؟",
@@ -22,7 +64,49 @@
         "نحو 600م"
       ],
       "a": 0,
-      "e": "وُلد ابن سينا نحو عام 980 ميلاديًا."
+      "e": "وُلد ابن سينا نحو عام 980 ميلاديًا.",
+      "i18n": {
+        "en": {
+          "q": "Around what year was Ibn Sina born?",
+          "o": [
+            "Around 980 CE",
+            "Around 1500 CE",
+            "Around 1800 CE",
+            "Around 600 CE"
+          ],
+          "e": "Ibn Sina was born around 980 CE."
+        },
+        "fr": {
+          "q": "Vers quelle année Ibn Sina est-il né ?",
+          "o": [
+            "Vers 980 apr. J.-C.",
+            "Vers 1500 apr. J.-C.",
+            "Vers 1800 apr. J.-C.",
+            "Vers 600 apr. J.-C."
+          ],
+          "e": "Ibn Sina est né vers l’an 980."
+        },
+        "it": {
+          "q": "Intorno a quale anno nacque Ibn Sina?",
+          "o": [
+            "Intorno al 980 d.C.",
+            "Intorno al 1500 d.C.",
+            "Intorno al 1800 d.C.",
+            "Intorno al 600 d.C."
+          ],
+          "e": "Ibn Sina nacque intorno al 980 d.C."
+        },
+        "de": {
+          "q": "Um welches Jahr wurde Ibn Sina geboren?",
+          "o": [
+            "Um 980 n. Chr.",
+            "Um 1500 n. Chr.",
+            "Um 1800 n. Chr.",
+            "Um 600 n. Chr."
+          ],
+          "e": "Ibn Sina wurde ungefähr im Jahr 980 geboren."
+        }
+      }
     },
     {
       "q": "أين تقع بخارى اليوم، وهي المنطقة المرتبطة بميلاد ابن سينا؟",
@@ -33,7 +117,49 @@
         "في أوزبكستان"
       ],
       "a": 3,
-      "e": "تقع بخارى في أوزبكستان حاليًا."
+      "e": "تقع بخارى في أوزبكستان حاليًا.",
+      "i18n": {
+        "en": {
+          "q": "Where is Bukhara, the region associated with Ibn Sina’s birth, located today?",
+          "o": [
+            "Egypt",
+            "Italy",
+            "Japan",
+            "Uzbekistan"
+          ],
+          "e": "Bukhara is in present-day Uzbekistan."
+        },
+        "fr": {
+          "q": "Où se trouve aujourd’hui Boukhara, la région associée à la naissance d’Ibn Sina ?",
+          "o": [
+            "En Égypte",
+            "En Italie",
+            "Au Japon",
+            "En Ouzbékistan"
+          ],
+          "e": "Boukhara se trouve aujourd’hui en Ouzbékistan."
+        },
+        "it": {
+          "q": "Dove si trova oggi Bukhara, la regione legata alla nascita di Ibn Sina?",
+          "o": [
+            "In Egitto",
+            "In Italia",
+            "In Giappone",
+            "In Uzbekistan"
+          ],
+          "e": "Bukhara si trova nell’attuale Uzbekistan."
+        },
+        "de": {
+          "q": "Wo liegt Buchara heute, die mit Ibn Sinas Geburt verbundene Region?",
+          "o": [
+            "In Ägypten",
+            "In Italien",
+            "In Japan",
+            "In Usbekistan"
+          ],
+          "e": "Buchara liegt im heutigen Usbekistan."
+        }
+      }
     },
     {
       "q": "بأي لقب عُرف ابن سينا؟",
@@ -44,7 +170,49 @@
         "شاعر النيل"
       ],
       "a": 1,
-      "e": "من ألقاب ابن سينا المشهورة «الشيخ الرئيس»."
+      "e": "من ألقاب ابن سينا المشهورة «الشيخ الرئيس».",
+      "i18n": {
+        "en": {
+          "q": "What title was Ibn Sina known by?",
+          "o": [
+            "Prince of the Seas",
+            "Al-Shaykh al-Ra’is (the Chief Sheikh)",
+            "Father of Geometry",
+            "Poet of the Nile"
+          ],
+          "e": "One of Ibn Sina’s well-known titles was al-Shaykh al-Ra’is."
+        },
+        "fr": {
+          "q": "Quel titre était associé à Ibn Sina ?",
+          "o": [
+            "Prince des mers",
+            "Al-Shaykh al-Ra’is, le maître éminent",
+            "Père de la géométrie",
+            "Poète du Nil"
+          ],
+          "e": "L’un des titres connus d’Ibn Sina était al-Shaykh al-Ra’is."
+        },
+        "it": {
+          "q": "Con quale titolo era conosciuto Ibn Sina?",
+          "o": [
+            "Principe dei mari",
+            "Al-Shaykh al-Ra’is, il maestro eminente",
+            "Padre della geometria",
+            "Poeta del Nilo"
+          ],
+          "e": "Uno dei titoli noti di Ibn Sina era al-Shaykh al-Ra’is."
+        },
+        "de": {
+          "q": "Unter welchem Titel war Ibn Sina bekannt?",
+          "o": [
+            "Fürst der Meere",
+            "Al-Scheich al-Ra’is, der herausragende Gelehrte",
+            "Vater der Geometrie",
+            "Dichter des Nils"
+          ],
+          "e": "Einer der bekannten Titel Ibn Sinas war al-Scheich al-Ra’is."
+        }
+      }
     },
     {
       "q": "ما أشهر مؤلفات ابن سينا الطبية؟",
@@ -55,7 +223,49 @@
         "كليلة ودمنة"
       ],
       "a": 2,
-      "e": "يُعد كتاب «القانون في الطب» من أشهر مؤلفاته."
+      "e": "يُعد كتاب «القانون في الطب» من أشهر مؤلفاته.",
+      "i18n": {
+        "en": {
+          "q": "What is Ibn Sina’s most famous medical work?",
+          "o": [
+            "Al-Muqaddimah",
+            "The Book of Songs",
+            "The Canon of Medicine",
+            "Kalila wa Dimna"
+          ],
+          "e": "The Canon of Medicine is one of his best-known works."
+        },
+        "fr": {
+          "q": "Quel est l’ouvrage médical le plus célèbre d’Ibn Sina ?",
+          "o": [
+            "Al-Muqaddima",
+            "Le Livre des chansons",
+            "Le Canon de la médecine",
+            "Kalila wa Dimna"
+          ],
+          "e": "Le Canon de la médecine est l’un de ses ouvrages les plus connus."
+        },
+        "it": {
+          "q": "Qual è la più famosa opera medica di Ibn Sina?",
+          "o": [
+            "Al-Muqaddima",
+            "Il libro dei canti",
+            "Il Canone della medicina",
+            "Kalila wa Dimna"
+          ],
+          "e": "Il Canone della medicina è una delle sue opere più note."
+        },
+        "de": {
+          "q": "Wie lautet Ibn Sinas bekanntestes medizinisches Werk?",
+          "o": [
+            "Al-Muqaddima",
+            "Das Buch der Lieder",
+            "Der Kanon der Medizin",
+            "Kalila wa Dimna"
+          ],
+          "e": "Der Kanon der Medizin gehört zu seinen bekanntesten Werken."
+        }
+      }
     },
     {
       "q": "إلى جانب الطب، في أي مجالات كتب ابن سينا؟",
@@ -66,7 +276,49 @@
         "البرمجة الحديثة"
       ],
       "a": 0,
-      "e": "امتدت كتاباته إلى الفلسفة والمنطق وموضوعات أخرى."
+      "e": "امتدت كتاباته إلى الفلسفة والمنطق وموضوعات أخرى.",
+      "i18n": {
+        "en": {
+          "q": "Besides medicine, which fields did Ibn Sina write about?",
+          "o": [
+            "Philosophy and logic",
+            "Space navigation",
+            "Photography",
+            "Modern programming"
+          ],
+          "e": "His writings also covered philosophy, logic, and other subjects."
+        },
+        "fr": {
+          "q": "En plus de la médecine, dans quels domaines Ibn Sina a-t-il écrit ?",
+          "o": [
+            "La philosophie et la logique",
+            "La navigation spatiale",
+            "La photographie",
+            "La programmation moderne"
+          ],
+          "e": "Ses écrits portaient aussi sur la philosophie, la logique et d’autres sujets."
+        },
+        "it": {
+          "q": "Oltre alla medicina, di quali campi scrisse Ibn Sina?",
+          "o": [
+            "Filosofia e logica",
+            "Navigazione spaziale",
+            "Fotografia",
+            "Programmazione moderna"
+          ],
+          "e": "I suoi scritti comprendevano anche filosofia, logica e altri argomenti."
+        },
+        "de": {
+          "q": "Über welche Gebiete schrieb Ibn Sina außer Medizin?",
+          "o": [
+            "Philosophie und Logik",
+            "Raumfahrt",
+            "Fotografie",
+            "Moderne Programmierung"
+          ],
+          "e": "Seine Schriften behandelten auch Philosophie, Logik und weitere Themen."
+        }
+      }
     },
     {
       "q": "ما الذي فعله ابن سينا في كتاب «القانون في الطب»؟",
@@ -77,7 +329,49 @@
         "نظّم معارف طبية من عصره وأضاف إليها من دراسته وخبرته"
       ],
       "a": 3,
-      "e": "نظّم الكتاب معارف الطب في عصره وضم ما توصل إليه من دراسة وخبرة."
+      "e": "نظّم الكتاب معارف الطب في عصره وضم ما توصل إليه من دراسة وخبرة.",
+      "i18n": {
+        "en": {
+          "q": "What did Ibn Sina do in The Canon of Medicine?",
+          "o": [
+            "Explained how to build aircraft",
+            "Wrote a history of the October War",
+            "Described the invention of the internet",
+            "Organized medical knowledge of his time and added insights from study and experience"
+          ],
+          "e": "The book organized medical knowledge of his era and included his learning and experience."
+        },
+        "fr": {
+          "q": "Qu’a fait Ibn Sina dans le Canon de la médecine ?",
+          "o": [
+            "Il a expliqué comment construire des avions",
+            "Il a écrit l’histoire de la guerre d’octobre",
+            "Il a décrit l’invention d’Internet",
+            "Il a organisé les connaissances médicales de son époque et y a ajouté le fruit de ses études et de son expérience"
+          ],
+          "e": "L’ouvrage a organisé les connaissances médicales de son époque et intégré ses études et son expérience."
+        },
+        "it": {
+          "q": "Che cosa fece Ibn Sina nel Canone della medicina?",
+          "o": [
+            "Spiegò come costruire aerei",
+            "Scrisse la storia della guerra d’ottobre",
+            "Descrisse l’invenzione di Internet",
+            "Organizzò le conoscenze mediche del suo tempo e vi aggiunse ciò che apprese con lo studio e l’esperienza"
+          ],
+          "e": "Il libro organizzava le conoscenze mediche dell’epoca e comprendeva studi ed esperienza."
+        },
+        "de": {
+          "q": "Was tat Ibn Sina im Kanon der Medizin?",
+          "o": [
+            "Er erklärte den Bau von Flugzeugen",
+            "Er schrieb eine Geschichte des Oktoberkriegs",
+            "Er beschrieb die Erfindung des Internets",
+            "Er ordnete das medizinische Wissen seiner Zeit und ergänzte es durch Studium und Erfahrung"
+          ],
+          "e": "Das Buch ordnete das medizinische Wissen seiner Zeit und bezog seine Studien und Erfahrungen ein."
+        }
+      }
     },
     {
       "q": "متى تُرجم «القانون في الطب» إلى اللاتينية بحسب الحكاية؟",
@@ -88,7 +382,49 @@
         "في القرن الحادي والعشرين"
       ],
       "a": 1,
-      "e": "وصل تأثير الكتاب إلى أوروبا بعد ترجمته إلى اللاتينية في القرن الثاني عشر."
+      "e": "وصل تأثير الكتاب إلى أوروبا بعد ترجمته إلى اللاتينية في القرن الثاني عشر.",
+      "i18n": {
+        "en": {
+          "q": "When was The Canon of Medicine translated into Latin, according to the story?",
+          "o": [
+            "In the twentieth century",
+            "In the twelfth century",
+            "In the fifth century BCE",
+            "In the twenty-first century"
+          ],
+          "e": "The book’s influence reached Europe after its Latin translation in the twelfth century."
+        },
+        "fr": {
+          "q": "À quel siècle le Canon de la médecine a-t-il été traduit en latin, selon le récit ?",
+          "o": [
+            "Au XXe siècle",
+            "Au XIIe siècle",
+            "Au Ve siècle av. J.-C.",
+            "Au XXIe siècle"
+          ],
+          "e": "L’influence du livre a atteint l’Europe après sa traduction latine au XIIe siècle."
+        },
+        "it": {
+          "q": "In quale secolo fu tradotto in latino il Canone della medicina, secondo il racconto?",
+          "o": [
+            "Nel XX secolo",
+            "Nel XII secolo",
+            "Nel V secolo a.C.",
+            "Nel XXI secolo"
+          ],
+          "e": "L’influenza del libro raggiunse l’Europa dopo la traduzione latina nel XII secolo."
+        },
+        "de": {
+          "q": "In welchem Jahrhundert wurde der Kanon der Medizin laut der Geschichte ins Lateinische übersetzt?",
+          "o": [
+            "Im 20. Jahrhundert",
+            "Im 12. Jahrhundert",
+            "Im 5. Jahrhundert v. Chr.",
+            "Im 21. Jahrhundert"
+          ],
+          "e": "Der Einfluss des Buches erreichte Europa nach der lateinischen Übersetzung im 12. Jahrhundert."
+        }
+      }
     },
     {
       "q": "لماذا أصبح «القانون في الطب» مؤثرًا في أوروبا؟",
@@ -99,7 +435,49 @@
         "لأنه كُتب بعد اختراع الحاسوب"
       ],
       "a": 0,
-      "e": "أصبح الكتاب مرجعًا مهمًا في التعليم الطبي لفترة طويلة."
+      "e": "أصبح الكتاب مرجعًا مهمًا في التعليم الطبي لفترة طويلة.",
+      "i18n": {
+        "en": {
+          "q": "Why did The Canon of Medicine become influential in Europe?",
+          "o": [
+            "It was used as a medical teaching reference for centuries",
+            "It was a book about sea trade",
+            "It contained photographs",
+            "It was written after the computer was invented"
+          ],
+          "e": "It became an important reference in medical education for a long period."
+        },
+        "fr": {
+          "q": "Pourquoi le Canon de la médecine a-t-il eu une influence en Europe ?",
+          "o": [
+            "Il a servi de référence à l’enseignement médical pendant des siècles",
+            "C’était un livre sur le commerce maritime",
+            "Il contenait des photographies",
+            "Il a été écrit après l’invention de l’ordinateur"
+          ],
+          "e": "Il est devenu une référence importante pour l’enseignement médical pendant longtemps."
+        },
+        "it": {
+          "q": "Perché il Canone della medicina ebbe influenza in Europa?",
+          "o": [
+            "Fu usato come riferimento per l’insegnamento medico per secoli",
+            "Era un libro sul commercio marittimo",
+            "Conteneva fotografie",
+            "Fu scritto dopo l’invenzione del computer"
+          ],
+          "e": "Divenne un importante riferimento per la formazione medica per molto tempo."
+        },
+        "de": {
+          "q": "Warum wurde der Kanon der Medizin in Europa einflussreich?",
+          "o": [
+            "Er diente jahrhundertelang als Lehrbuch in der medizinischen Ausbildung",
+            "Er handelte vom Seehandel",
+            "Er enthielt Fotografien",
+            "Er wurde nach der Erfindung des Computers geschrieben"
+          ],
+          "e": "Er wurde lange Zeit zu einer wichtigen Referenz für die medizinische Ausbildung."
+        }
+      }
     },
     {
       "q": "في أي عام توفي ابن سينا؟",
@@ -110,7 +488,49 @@
         "2020م"
       ],
       "a": 2,
-      "e": "توفي ابن سينا عام 1037 ميلاديًا."
+      "e": "توفي ابن سينا عام 1037 ميلاديًا.",
+      "i18n": {
+        "en": {
+          "q": "In what year did Ibn Sina die?",
+          "o": [
+            "980 CE",
+            "1973 CE",
+            "1037 CE",
+            "2020 CE"
+          ],
+          "e": "Ibn Sina died in 1037 CE."
+        },
+        "fr": {
+          "q": "En quelle année Ibn Sina est-il mort ?",
+          "o": [
+            "980",
+            "1973",
+            "1037",
+            "2020"
+          ],
+          "e": "Ibn Sina est mort en 1037."
+        },
+        "it": {
+          "q": "In quale anno morì Ibn Sina?",
+          "o": [
+            "980 d.C.",
+            "1973 d.C.",
+            "1037 d.C.",
+            "2020 d.C."
+          ],
+          "e": "Ibn Sina morì nel 1037."
+        },
+        "de": {
+          "q": "In welchem Jahr starb Ibn Sina?",
+          "o": [
+            "980 n. Chr.",
+            "1973 n. Chr.",
+            "1037 n. Chr.",
+            "2020 n. Chr."
+          ],
+          "e": "Ibn Sina starb im Jahr 1037."
+        }
+      }
     },
     {
       "q": "لماذا لا نملك صورة فوتوغرافية معاصرة لابن سينا؟",

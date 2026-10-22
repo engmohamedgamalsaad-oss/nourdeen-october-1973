@@ -52,7 +52,23 @@
       review: "Antworten überprüfen", again: "Noch einmal versuchen", unavailable: "Das Quiz ist vorübergehend nicht verfügbar"
     }
   };
-  function t(key) { var locale = lang; if (lang !== "ar" && all.length && !all.every(function (q) { var tr = q.i18n && q.i18n[lang]; return tr && typeof tr.q === "string" && Array.isArray(tr.o) && tr.o.length === q.o.length && typeof tr.e === "string"; })) locale = "ar"; return (TEXT[locale] || TEXT.ar)[key] || TEXT.ar[key] || key; }
+  function hasTranslation(q, locale) {
+    var tr = q.i18n && q.i18n[locale];
+    return !!(tr && typeof tr.q === "string" && Array.isArray(tr.o) && tr.o.length === q.o.length && typeof tr.e === "string");
+  }
+  function questionPool(locale) {
+    if (locale === "ar") return all;
+    var translated = all.filter(function (q) { return hasTranslation(q, locale); });
+    return translated.length >= Math.min(5, all.length) ? translated : all;
+  }
+  function t(key) {
+    var locale = lang;
+    if (lang !== "ar") {
+      var pool = questionPool(lang);
+      if (!pool.length || !pool.every(function (q) { return hasTranslation(q, lang); })) locale = "ar";
+    }
+    return (TEXT[locale] || TEXT.ar)[key] || TEXT.ar[key] || key;
+  }
   document.addEventListener("site-language-change", function (event) {
     lang = ((event.detail && event.detail.lang) || document.documentElement.lang || "ar").slice(0, 2);
   });
@@ -75,7 +91,7 @@
     return result;
   }
   function begin() {
-    run = shuffle(all).slice(0, Math.min(5, all.length));
+    run = shuffle(questionPool(lang)).slice(0, Math.min(5, questionPool(lang).length));
     answers = []; current = 0; chosen = null; submitted = false;
     start.hidden = true; app.hidden = false; question();
   }
