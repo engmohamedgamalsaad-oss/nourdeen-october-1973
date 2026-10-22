@@ -46,7 +46,7 @@ function migrateExplicitly(){
  var qualityNote='التزام إلزامي: طبّق بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ. لا تعتبر أي عنصر مكتملًا لمجرد وصفه؛ افحصه واختبره، وصرّح بما لم يمكن اختباره.';
  Object.keys(state.providers||{}).forEach(function(k){
   var value=String(state.providers[k]||'');
-  if(value.indexOf(qualityNote)<0)state.providers[k]=value?value+'\\n\\n'+qualityNote:qualityNote;
+  if(value.indexOf(qualityNote)<0)state.providers[k]=value?value+'\n\n'+qualityNote:qualityNote;
  });
  fill();
  say('تم تجهيز الترحيل في المحرر مع حفظ نسخة سابقة. راجع المحتوى ثم اضغط «حفظ مركزي + نسخة محلية» لتأكيد الحفظ.');
