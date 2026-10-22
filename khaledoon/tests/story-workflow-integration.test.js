@@ -127,6 +127,12 @@ test('admin validates every translated field and every quiz translation before A
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
   assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
+  var jsonRepair = fs.readFileSync('khaledoon/assets/ai-json-repair.js', 'utf8');
+  assert.ok(jsonRepair.includes('repairStructuralEscapes'), 'stray backslashes before JSON brackets outside strings should be repaired');
+  assert.ok(jsonRepair.includes("'[]{}'.indexOf(source[i + 1]) >= 0"), 'repair must target structural brackets only');
+  assert.ok(admin.includes('ai-json-repair.js?v=20261022-4'), 'JSON repair script cache must be busted');
+  assert.ok(admin.includes('لا تكتب شرطة مائلة عكسية قبل الأقواس أو المصفوفات'), 'prompt must forbid escaped JSON structure');
+  assert.ok(admin.includes('body لا يتجاوز 4500 حرف'), 'prompt must limit output size to reduce truncation');
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
 test('manual builder merges metadata and protects original body', function () {
