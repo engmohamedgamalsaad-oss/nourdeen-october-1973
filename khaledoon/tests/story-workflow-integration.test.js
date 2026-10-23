@@ -162,6 +162,13 @@ test('reader-template preview keeps translations and disables reaction writes', 
   assert.ok(bundle.includes('reactions.js'));
   assert.ok(bundle.includes('معاينة خاصة غير منشورة'));
 });
+test('preview review panel displays image thumbnails and attribution from the saved package', function () {
+  assert.ok(preview.includes('function renderReviewImages(d)'));
+  assert.ok(preview.includes('className=\'review-image-grid\''));
+  assert.ok(preview.includes('تعذر تحميل الصورة من الرابط الحالي'));
+  assert.ok(preview.includes('renderReviewImages(d);'));
+  assert.ok(preview.includes('review-image-card'));
+});
 test('story pages support distinct visual designs and source-attributed image galleries', function () {
   assert.doesNotThrow(function () { new Function(bundle); }, 'story template bundle must parse as JavaScript');
   assert.ok(bundle.includes('visualDesignKey(d,section)'));
@@ -171,6 +178,9 @@ test('story pages support distinct visual designs and source-attributed image ga
   assert.ok(bundle.includes('story-image-card'));
   assert.ok(bundle.includes('صور مرتبطة بالحكاية'));
   assert.ok(bundle.includes('صورة أرشيفية'));
+  assert.ok(bundle.includes('Preview design profiles'));
+  assert.ok(bundle.includes('.story-design-portrait-biography{background:radial-gradient'));
+  assert.ok(bundle.includes('.story-design-arts-culture{background:radial-gradient'));
 });
 test('rendered story preview applies all nine designs and includes attributed images', function () {
   var vm = require('vm');
