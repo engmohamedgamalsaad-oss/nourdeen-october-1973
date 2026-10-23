@@ -155,7 +155,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
  <div class="pub-actions"><button class="btn" id="rejectStoryBtn" type="button">رفض المعاينة</button></div>
 </section>
 </main><footer class="footer wrap">معاينة فقط — لا يتم النشر أو تعديل ملفات الموقع من هذه الصفحة.</footer>
-<script src="assets/story-workflow.js"></script><script src="assets/story-template-bundle.js"></script>
+<script src="assets/story-workflow.js?v=20261023-1"></script><script src="assets/story-template-bundle.js?v=20261023-1"></script>
 <script>
 (function(){
 'use strict';
@@ -309,11 +309,34 @@ function normalizeReviewData(d){
  d.story_meta=meta;
  return d;
 }
+function renderReviewImages(d){
+ var box=$('reviewImages');if(!box)return;
+ box.textContent='';
+ var note=String(d.images_note||'').trim();
+ if(note){var noteEl=document.createElement('p');noteEl.className='pub-plain';noteEl.textContent=note;noteEl.style.whiteSpace='pre-wrap';box.appendChild(noteEl)}
+ var images=Array.isArray(d.images)?d.images:[];
+ var usable=images.filter(function(im){return im&&/^https:\/\//i.test(String(im.url||''))});
+ if(!usable.length){var empty=document.createElement('p');empty.textContent='لم تُرفق صور قابلة للعرض في سجل الحكاية. راجع حقل images في الحزمة قبل اعتماد المعاينة.';box.appendChild(empty);return}
+ var grid=document.createElement('div');grid.className='review-image-grid';grid.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:14px;margin-top:12px;align-items:start';
+ usable.forEach(function(im){
+  var card=document.createElement('figure');card.className='review-image-card';card.style.cssText='margin:0;min-width:0;overflow:hidden;border:1px solid #d6ad5566;border-radius:14px;background:rgba(16,35,43,.55);padding:10px';
+  var image=document.createElement('img');image.src=String(im.url);image.alt=String(im.alt||im.caption||'صورة مرتبطة بالحكاية');image.loading='eager';image.decoding='async';image.style.cssText='display:block;width:100%;height:170px;object-fit:contain;background:#101820;border-radius:8px';
+  image.addEventListener('error',function(){image.alt='تعذر تحميل الصورة من المصدر؛ تحقق من الرابط أو إتاحة المصدر الخارجي';image.style.display='none';var err=document.createElement('p');err.textContent='تعذر تحميل الصورة من الرابط الخارجي';err.style.cssText='color:#b45309;font-weight:700';card.insertBefore(err,caption)});
+  var caption=document.createElement('figcaption');caption.style.cssText='display:grid;gap:5px;line-height:1.7;padding-top:8px;overflow-wrap:anywhere';
+  var title=document.createElement('strong');title.textContent=String(im.caption||im.alt||'صورة من الحكاية');caption.appendChild(title);
+  var source=document.createElement('span');source.textContent=String(im.source_name||'المصدر غير مسجل')+' · '+(String(im.kind||'illustration')==='archival'?'صورة أرشيفية':'صورة توضيحية');caption.appendChild(source);
+  var rights=document.createElement('small');rights.textContent=String(im.rights||'بيانات حقوق الاستخدام غير مكتملة');caption.appendChild(rights);
+  if(/^https:\/\//i.test(String(im.source_url||''))){var link=document.createElement('a');link.href=String(im.source_url);link.target='_blank';link.rel='noopener noreferrer';link.textContent='فتح صفحة المصدر';link.style.color='#d6ad55';caption.appendChild(link)}
+  card.appendChild(image);card.appendChild(caption);grid.appendChild(card);
+ });
+ box.appendChild(grid);
+}
+
 function renderReview(d){
  d=normalizeReviewData(d);
  currentDraft=d;
  put('reviewTitle',d.title||'حكاية بلا عنوان');put('reviewSubtitle',d.subtitle||'');put('reviewSection',(d.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',[d.figure_name,d.narrator_name?'الراوي/الطفلة: '+d.narrator_name:'',d.narrator_grade?'الصف: '+d.narrator_grade:''].filter(Boolean).join(' · '));
- put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');put('reviewImages',d.images_note||'لم تُسجل معلومات الصور وحقوقها بعد.');put('reviewOriginal',d.original_body||'');
+ put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');renderReviewImages(d);put('reviewOriginal',d.original_body||'');
  $('reviewOriginalWrap').hidden=!d.original_body;
  var aiMeta=d.story_meta&&typeof d.story_meta==='object'?d.story_meta:{};var aiProvider=String(aiMeta.ai_imported_provider_label||aiMeta.ai_imported_provider||d.provider_key||'أداة الذكاء الاصطناعي');var aiBadge=$('aiVersionBadge');if(aiBadge){aiBadge.hidden=!(aiMeta.ai_package_raw||aiMeta.ai_imported_at||aiMeta.ai_imported_provider);if(!aiBadge.hidden)aiBadge.textContent='نسخة AI — مصدرها '+aiProvider+'؛ الناتج محفوظ للمراجعة داخل قالب خالدون. هذه معاينة غير منشورة.'}
  renderReadiness(d);renderQuiz(d);renderTranslations(d);
