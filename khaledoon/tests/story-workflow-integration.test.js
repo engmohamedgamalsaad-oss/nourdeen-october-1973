@@ -41,7 +41,7 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(fn.includes('لا تدمج إلى الفرع المنشور'));
   assert.ok(fn.includes('بوابة الصور إلزامية ولا يجوز تخطيها'));
   assert.ok(fn.includes('لا تُخرج حزمة JSON للاستيراد ولا تدّعِ اكتمالها'));
-  assert.ok(fn.includes('images مصفوفة لا تقل عن صورتين موثقتين وصالحتين'));
+  assert.ok(admin.includes('images مصفوفة لا تقل عن صورتين موثقتين وصالحتين'), 'shared quality gate must require two documented images');
   assert.ok(!fn.includes('إن تعذر البحث فاترك images فارغة'), 'prompt must not instruct AI to return an importable package with missing images');
   assert.ok(!fn.includes('managedPromptSections(selectedProvider)'), 'copied prompt must not concatenate old long prompt libraries');
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
@@ -262,7 +262,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('var pastedRaw=aiPaste.value,sourceRaw=pastedRaw.trim(),pkg,raw=pastedRaw'));
   assert.ok(admin.includes('aiJsonWasRepaired'));
-  assert.ok(admin.includes('assets/ai-json-repair.js?v=20261021-3'));
+  assert.ok(admin.includes('assets/ai-json-repair.js?v=20261022-4'));
   assert.ok(admin.includes("ai_imported_provider_label"));
   assert.ok(admin.includes("var hw=el('span','hidebtn-wrap')"));
   assert.ok(admin.includes('hw.title=reason'));
