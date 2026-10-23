@@ -61,6 +61,10 @@ async function main() {
   assert.match(html, /stories\/history\/preview\//);
   assert.match(html, /class="hero-art"/, 'preview should show the lead story image in the hero');
   assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
+  assert.match(html, /Preview design profiles/, 'generated previews should carry the approved story design profiles');
+  assert.match(html, /\.story-design-portrait-biography\{background:radial-gradient/, 'portrait biographies should use the approved warm literary visual identity');
+  assert.match(html, /\.story-design-arts-culture\{background:radial-gradient/, 'arts stories should use their dedicated visual identity');
+  assert.match(html, /loading="eager"/, 'preview images should load immediately inside the sandboxed frame');
   assert.match(html, /https:\/\/images\.example\.org\/portrait\.jpg/, 'the lead image URL should be present in preview HTML');
   assert.match(html, /بيانات الحقوق غير مكتملة/, 'images with missing rights should remain visible with a clear warning');
   assert.doesNotMatch(html, /src="cover-popup\.svg"/, 'preview must not depend on a cover asset that is absent from the srcdoc');
