@@ -165,3 +165,15 @@ html:not([lang="ar"]) body:is([data-story-slug="013"],[data-story-slug="008"],[d
 @media(prefers-reduced-motion:reduce){
   body:is([data-story-slug="013"],[data-story-slug="008"],[data-story-slug="009"],[data-story-slug="011"]) .story-image-card img{transition:none!important}
 }
+
+
+/* Islamic-history green palette and resilient visibility for the image gallery */
+:root{--accent:#78c59a;--gold:#e3bd78}
+body[data-story-slug="011"]{background:radial-gradient(ellipse at 50% 0%,#173e35 0%,#122720 48%,#0b1415 100%);color:#f0f8f1}
+body[data-story-slug="011"] header{background:rgba(10,31,25,.96)!important;border-bottom-color:#78c59a66!important}
+body[data-story-slug="011"] .hero{background:linear-gradient(115deg,rgba(8,29,23,.94),rgba(27,68,48,.7)),url("cover-popup.svg") center/cover no-repeat!important;border-bottom-color:#78c59a66!important}
+body[data-story-slug="011"] .hero .eyebrow,body[data-story-slug="011"] .story .kicker{color:#91d9ae!important}
+body[data-story-slug="011"] .story-visual-gallery .story-image-card{display:block!important;visibility:visible!important;opacity:1!important;transform:none!important;filter:none!important}
+body[data-story-slug="011"] .story-visual-gallery .story-image-card img{display:block!important;visibility:visible!important;opacity:1!important}
+body[data-story-slug="011"] #intro .modal-card{border-color:#78c59a!important;background:linear-gradient(135deg,#12372c,#1d4737)!important}
+@media(prefers-reduced-motion:reduce){body[data-story-slug="011"] .story-visual-gallery *{animation:none!important;transition:none!important}}
