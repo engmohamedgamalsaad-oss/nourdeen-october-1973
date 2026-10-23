@@ -1,0 +1,136 @@
+/* Shared portrait-biography template for the latest Khaledoon stories.
+   Keep structure consistent; each story supplies its own section accent in theme.css. */
+body.story-design-portrait-biography{
+  --story-accent:var(--accent,#8ad9e8);
+  --story-gold:var(--gold,#e3bd78);
+  color:#f4f7fb;
+  background:radial-gradient(ellipse at 88% 0%,var(--section-glow,rgba(138,217,232,.20)) 0%,#101824 42%,#060b12 100%)!important;
+  font-family:Cairo,Tahoma,sans-serif;
+  line-height:2;
+}
+body.story-design-portrait-biography[data-story-slug="013"]{--story-accent:#a9d9a6;--section-glow:rgba(169,217,166,.20)}
+body.story-design-portrait-biography[data-story-slug="014"]{--story-accent:#d4b7ff;--section-glow:rgba(212,183,255,.20)}
+body.story-design-portrait-biography[data-story-slug="015"]{--story-accent:#8ad9e8;--section-glow:rgba(138,217,232,.20)}
+body.story-design-portrait-biography header{
+  position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:12px clamp(14px,4vw,48px);background:rgba(10,20,31,.94)!important;
+  border-bottom:1px solid color-mix(in srgb,var(--story-accent) 55%,transparent)!important;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+}
+body.story-design-portrait-biography header>a{color:#f3f6fa;text-decoration:none;font-weight:800}
+body.story-design-portrait-biography .language-switch{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto}
+body.story-design-portrait-biography .language-switch .lang-option,
+body.story-design-portrait-biography .language-switch button{
+  border:1px solid color-mix(in srgb,var(--story-accent) 70%,transparent);
+  background:#111e2a;color:#f4f7fb;border-radius:999px;padding:6px 11px;
+  font:700 .78rem Cairo,Tahoma,sans-serif;cursor:pointer;transition:background .2s ease,color .2s ease,transform .2s ease
+}
+body.story-design-portrait-biography .language-switch .lang-option.is-active,
+body.story-design-portrait-biography .language-switch button.active{
+  background:var(--story-accent)!important;color:#14202b!important;border-color:var(--story-accent)!important
+}
+body.story-design-portrait-biography .modal#intro{
+  position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:clamp(12px,3vw,28px);
+  background:rgba(3,8,16,.88)!important;backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px)
+}
+body.story-design-portrait-biography .modal#intro[hidden]{display:none!important}
+body.story-design-portrait-biography #intro .modal-card{
+  position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  width:min(960px,100%);max-height:min(90dvh,780px);overflow:auto;border:1px solid var(--story-accent)!important;
+  border-radius:24px;background:linear-gradient(135deg,#182633,#101824 75%)!important;
+  color:#f4f7fb;box-shadow:0 32px 90px rgba(0,0,0,.58);animation:kh-story-intro-rise .65s cubic-bezier(.2,.8,.2,1) both
+}
+body.story-design-portrait-biography #intro .modal-art{position:relative;min-height:330px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:#101c28}
+body.story-design-portrait-biography #intro .modal-art img{display:block;width:100%;height:100%;min-height:330px;max-height:560px;object-fit:cover;object-position:center}
+body.story-design-portrait-biography #intro .modal-copy{align-self:center;padding:clamp(24px,4.5vw,52px)}
+body.story-design-portrait-biography #intro .modal-copy .eyebrow{color:var(--story-accent)!important;font-weight:900}
+body.story-design-portrait-biography #intro .modal-copy h2{color:#fff0d7;font:700 clamp(1.8rem,4vw,3rem)/1.55 Marhey,Cairo,serif}
+body.story-design-portrait-biography #intro .modal-copy p{color:#dce5ed;line-height:2}
+body.story-design-portrait-biography #intro .modal-close{
+  position:absolute;top:12px;inset-inline-end:12px;z-index:4;width:40px;height:40px;border:1px solid var(--story-accent);
+  border-radius:50%;background:#101824;color:#fff;font-size:1.6rem;cursor:pointer
+}
+body.story-design-portrait-biography .hero{
+  position:relative;isolation:isolate;display:flex;align-items:center;overflow:hidden;min-height:610px;
+  padding:clamp(52px,7vw,92px) clamp(18px,6vw,80px);
+  background:linear-gradient(112deg,rgba(8,15,26,.96),rgba(17,30,43,.78))!important;
+  border-bottom:1px solid color-mix(in srgb,var(--story-accent) 60%,transparent)!important
+}
+body.story-design-portrait-biography .hero:after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 85% 20%,var(--section-glow,rgba(138,217,232,.18)),transparent 56%);pointer-events:none}
+body.story-design-portrait-biography .hero .container{position:relative;z-index:3;width:min(1180px,100%);margin-inline:auto}
+body.story-design-portrait-biography .hero .eyebrow,
+body.story-design-portrait-biography .story .kicker,
+body.story-design-portrait-biography .story-visual-gallery .kicker{color:var(--story-accent)!important;font-weight:900}
+body.story-design-portrait-biography .hero h1{max-width:950px;color:#fff0d7;font:700 clamp(2.3rem,6vw,4.7rem)/1.5 Marhey,Cairo,serif;text-wrap:balance}
+body.story-design-portrait-biography .hero-subtitle{max-width:780px;color:#dce5ed;font-size:clamp(1rem,2vw,1.22rem);line-height:2}
+body.story-design-portrait-biography .author{margin-top:22px;color:#d4dfe9;line-height:2}
+body.story-design-portrait-biography .author strong{color:var(--story-gold)}
+body.story-design-portrait-biography .cover-label{display:inline-flex;max-width:100%;margin-top:16px;padding:5px 10px;border:1px solid color-mix(in srgb,var(--story-accent) 40%,transparent);border-radius:999px;background:rgba(4,12,22,.68);color:#e5edf5;font-size:.78rem}
+body.story-design-portrait-biography .hero-art{position:absolute;inset:auto 3% 4% auto;z-index:2;width:min(42%,520px);height:78%;display:flex;align-items:center;justify-content:center;opacity:1;padding:0;pointer-events:none}
+body.story-design-portrait-biography .hero-art img{width:100%;height:100%;max-height:none;object-fit:contain;filter:drop-shadow(0 22px 34px rgba(0,0,0,.5))}
+body.story-design-portrait-biography .story,
+body.story-design-portrait-biography .story-visual-gallery,
+body.story-design-portrait-biography .sources,
+body.story-design-portrait-biography .reactions{padding:clamp(38px,6vw,76px) clamp(16px,4vw,32px);border-color:color-mix(in srgb,var(--story-accent) 30%,transparent)}
+body.story-design-portrait-biography .story h2,
+body.story-design-portrait-biography .story-visual-gallery h2{color:#f4f7fb;font:700 clamp(1.55rem,3vw,2.35rem)/1.5 Marhey,Cairo,serif}
+body.story-design-portrait-biography .story-image-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,270px),1fr));gap:clamp(14px,2vw,24px);align-items:stretch}
+body.story-design-portrait-biography .story-image-card{height:100%;overflow:hidden;border:1px solid color-mix(in srgb,var(--story-accent) 42%,transparent);border-radius:18px;background:rgba(13,25,37,.82);box-shadow:0 14px 36px rgba(0,0,0,.2);transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease}
+body.story-design-portrait-biography .story-image-card:hover{transform:translateY(-4px);border-color:var(--story-accent);box-shadow:0 20px 44px rgba(0,0,0,.3)}
+body.story-design-portrait-biography .story-image-card img{display:block;width:100%;max-height:360px;min-height:210px;object-fit:cover}
+body.story-design-portrait-biography .story-image-card figcaption{padding:14px 16px;color:#e0e8ef;line-height:1.9}
+body.story-design-portrait-biography .story-image-card figcaption strong{display:block;color:#fff0d7;margin-bottom:6px}
+body.story-design-portrait-biography .story-image-card figcaption small{display:block;margin-top:8px;color:#c4d1dd}
+body.story-design-portrait-biography .story-image-card a,
+body.story-design-portrait-biography .sources a,
+body.story-design-portrait-biography .story a{color:var(--story-accent);text-underline-offset:3px}
+body.story-design-portrait-biography .btn,
+body.story-design-portrait-biography .reaction-actions button{
+  border:1px solid var(--story-accent);border-radius:999px;padding:11px 20px;
+  background:var(--story-accent);color:#14202b;font:800 .92rem Cairo,Tahoma,sans-serif;
+  transition:transform .2s ease,filter .2s ease,box-shadow .2s ease
+}
+body.story-design-portrait-biography .btn:hover,
+body.story-design-portrait-biography .reaction-actions button:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 8px 22px rgba(0,0,0,.2)}
+body.story-design-portrait-biography .quote{border-inline-start:4px solid var(--story-accent);background:color-mix(in srgb,var(--story-accent) 9%,transparent)}
+body.story-design-portrait-biography .end{background:radial-gradient(ellipse at center,var(--section-glow,rgba(138,217,232,.18)),#060b12 76%)}
+@keyframes kh-story-intro-rise{from{opacity:0;transform:translateY(18px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+body.story-design-portrait-biography .reveal-item,
+body.story-design-portrait-biography .story-image-card{animation:kh-story-soft-enter .7s both}
+@keyframes kh-story-soft-enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+html[data-theme="light"] body.story-design-portrait-biography{
+  background:radial-gradient(ellipse at 88% 0%,var(--section-glow,rgba(138,217,232,.18)) 0%,#f4f7fa 42%,#e9eef3 100%)!important;color:#263746!important
+}
+html[data-theme="light"] body.story-design-portrait-biography header{background:rgba(255,253,248,.96)!important}
+html[data-theme="light"] body.story-design-portrait-biography header>a{color:#263746!important}
+html[data-theme="light"] body.story-design-portrait-biography .hero{background:linear-gradient(110deg,rgba(247,249,251,.94),rgba(236,242,246,.80))!important}
+html[data-theme="light"] body.story-design-portrait-biography .hero h1,
+html[data-theme="light"] body.story-design-portrait-biography .story h2,
+html[data-theme="light"] body.story-design-portrait-biography .story-visual-gallery h2{color:#243746!important}
+html[data-theme="light"] body.story-design-portrait-biography .hero-subtitle,
+html[data-theme="light"] body.story-design-portrait-biography .author{color:#415668!important}
+html[data-theme="light"] body.story-design-portrait-biography .cover-label{background:rgba(255,253,248,.92);color:#334155}
+html[data-theme="light"] body.story-design-portrait-biography #intro .modal-card{background:#fffdf8!important;color:#263746!important}
+html[data-theme="light"] body.story-design-portrait-biography #intro .modal-copy h2,
+html[data-theme="light"] body.story-design-portrait-biography #intro .modal-copy p{color:#263746!important}
+html[data-theme="light"] body.story-design-portrait-biography #intro .modal-close{background:#fffdf8;color:#263746}
+html[data-theme="light"] body.story-design-portrait-biography .story-image-card{background:#fffdf8;color:#334155}
+html[data-theme="light"] body.story-design-portrait-biography .story-image-card figcaption,
+html[data-theme="light"] body.story-design-portrait-biography .story-image-card figcaption strong,
+html[data-theme="light"] body.story-design-portrait-biography .story-image-card figcaption small{color:#334155!important}
+html[data-theme="light"] body.story-design-portrait-biography .story a,
+html[data-theme="light"] body.story-design-portrait-biography .sources a{color:#175b8d!important}
+@media(max-width:700px){
+  body.story-design-portrait-biography header{align-items:flex-start;gap:8px}
+  body.story-design-portrait-biography .language-switch{width:100%;margin-inline-start:0}
+  body.story-design-portrait-biography .hero{min-height:590px;padding:118px 18px 46px}
+  body.story-design-portrait-biography .hero-art{inset:78px 0 auto 0;width:100%;height:240px;opacity:.35!important}
+  body.story-design-portrait-biography .hero-art img{width:100%;height:100%;object-fit:contain}
+  body.story-design-portrait-biography #intro .modal-card{grid-template-columns:1fr;max-height:92dvh}
+  body.story-design-portrait-biography #intro .modal-art{min-height:220px;max-height:32dvh}
+  body.story-design-portrait-biography #intro .modal-art img{min-height:220px;max-height:32dvh}
+  body.story-design-portrait-biography .story-image-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  body.story-design-portrait-biography *,body.story-design-portrait-biography *::before,body.story-design-portrait-biography *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+}
