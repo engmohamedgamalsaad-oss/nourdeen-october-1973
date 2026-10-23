@@ -24,3 +24,15 @@ header a,.sources a{color:light-dark(#8a5a12,#e9c982)}
 .kh-fab:hover{transform:translateY(-2px) rotate(12deg)}
 @media print{.kh-fab{display:none!important}}
 html.kh-theme-anim body,html.kh-theme-anim body *{transition:background-color .35s ease,color .35s ease,border-color .35s ease!important}
+
+/* ===== حكاية 006 — القالب المعتمد (نمط نجيب محفوظ) بألوان قسم التاريخ — 2026-10-23 =====
+   كل قسم بطاقة، وكل فقرة في صندوق مستقل، ونافذة البداية بصورة داخل إطار. */
+.story{width:min(1000px,calc(100% - 28px));margin:20px auto;padding:44px 20px;border:1px solid light-dark(#8a5a1233,#d5b7ff40);border-radius:24px;background:linear-gradient(145deg,light-dark(#fffefb,#2a2142e8),light-dark(#f7f0de,#121827ef));box-shadow:0 18px 42px light-dark(#4a340c14,#0003)}
+.story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,var(--gold),light-dark(#5b3fa0,#d5b7ff))}
+.story .container>p{margin:0 0 14px;padding:clamp(16px,2.2vw,24px);border:1px solid light-dark(#8a5a1233,#d5b7ff40);border-inline-start:4px solid light-dark(#5b3fa0,#d5b7ff);border-radius:16px;background:linear-gradient(135deg,light-dark(#ffffff,rgba(255,255,255,.075)),light-dark(#fbf7ec,rgba(255,255,255,.025)));box-shadow:0 8px 22px light-dark(#4a340c12,#00000024);line-height:2.05;overflow-wrap:anywhere}
+.modal-card{border-color:#d5b7ff;border-radius:26px;background-color:#16132a;background-image:radial-gradient(ellipse at 12% 8%,rgba(213,183,255,.19),transparent 38%),radial-gradient(ellipse at 90% 92%,rgba(227,189,120,.14),transparent 34%),repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 12px),linear-gradient(135deg,#27213e,#101724)}
+.modal-art{box-sizing:border-box;padding:12px;height:380px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.modal-art img{width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;border:1px solid rgba(213,183,255,.55);border-radius:12px;background:#16132a}
+.modal-copy .eyebrow{display:inline-flex;margin-bottom:10px;padding:6px 11px;border:1px solid rgba(213,183,255,.5);border-radius:999px;background:rgba(16,19,36,.8);font-size:.78rem;letter-spacing:.03em}
+@media(max-width:650px){.story{width:calc(100% - 20px);margin:14px 10px;padding:30px 14px;border-radius:18px}.modal-art{height:clamp(170px,27vh,220px);padding:8px}}
+@media print{.story{width:auto;margin:0;border:0;border-radius:0;box-shadow:none}.story h2:after{display:none}.story .container>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none}}
