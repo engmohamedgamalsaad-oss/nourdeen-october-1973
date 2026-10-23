@@ -177,3 +177,6 @@ body[data-story-slug="011"] .story-visual-gallery .story-image-card{display:bloc
 body[data-story-slug="011"] .story-visual-gallery .story-image-card img{display:block!important;visibility:visible!important;opacity:1!important}
 body[data-story-slug="011"] #intro .modal-card{border-color:#78c59a!important;background:linear-gradient(135deg,#12372c,#1d4737)!important}
 @media(prefers-reduced-motion:reduce){body[data-story-slug="011"] .story-visual-gallery *{animation:none!important;transition:none!important}}
+
+/* Amr ibn al-As: broken remote photos must not be replaced by misleading generic cover art. */
+body[data-story-slug="011"] .story-visual-gallery .story-image-card img.image-unavailable{display:none!important}
