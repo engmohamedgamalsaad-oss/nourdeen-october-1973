@@ -164,10 +164,10 @@ test('reader-template preview keeps translations and disables reaction writes', 
 });
 test('preview review panel displays image thumbnails and attribution from the saved package', function () {
   assert.ok(preview.includes('function renderReviewImages(d)'));
-  assert.ok(preview.includes('className=\'review-image-grid\''));
-  assert.ok(preview.includes('تعذر تحميل الصورة من الرابط الحالي'));
+  assert.ok(preview.includes('className=\'pub-image-grid\''));
+  assert.ok(preview.includes('تعذر تحميل ملف الصورة من الرابط'));
   assert.ok(preview.includes('renderReviewImages(d);'));
-  assert.ok(preview.includes('review-image-card'));
+  assert.ok(preview.includes('pub-image-card'));
 });
 test('story pages support distinct visual designs and source-attributed image galleries', function () {
   assert.doesNotThrow(function () { new Function(bundle); }, 'story template bundle must parse as JavaScript');
