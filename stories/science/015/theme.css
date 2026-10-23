@@ -477,3 +477,10 @@ body[data-story-slug="015"] .hero .hero-art img{
 }
 
 /* biography layout alignment follow-up */
+
+body[data-story-slug="015"] .hero{
+  min-height:610px!important;
+  padding:58px 0 52px!important;
+  background:linear-gradient(120deg,#14252c 0%,#233d42 52%,#151d24 100%)!important;
+  border-bottom:1px solid rgba(138,217,232,.35)!important;
+}
