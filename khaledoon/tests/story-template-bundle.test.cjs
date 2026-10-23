@@ -70,9 +70,9 @@ async function main() {
   assert.doesNotMatch(html, /src="cover-popup\.svg"/, 'preview must not depend on a cover asset that is absent from the srcdoc');
   assert.match(html, /معاينة خاصة غير منشورة/);
   assert.match(html, /Shared story design contract/, 'generated pages must include the shared design contract');
-  assert.match(html, /html\\[data-theme=\\"light\\"\\] \\.story/, 'generated pages must include light-theme story card rules');
+  assert.match(html, /html\[data-theme="light"\] \.story/, 'generated pages must include light-theme story card rules');
   assert.match(html, /prefers-reduced-motion:reduce/, 'motion must respect reduced-motion preferences');
-  assert.match(html, /#intro \\.modal-card/, 'generated pages must include responsive intro modal rules');
+  assert.match(html, /#intro \.modal-card/, 'generated pages must include responsive intro modal rules');
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
   console.log('Passed collision-safe ID allocation and generated preview checks.');
