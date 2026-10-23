@@ -475,3 +475,5 @@ body[data-story-slug="015"] .hero .hero-art img{
 @media(prefers-reduced-motion:reduce){
   body[data-story-slug="015"] .hero .hero-art img{animation:none!important;transform:none!important}
 }
+
+/* biography layout alignment follow-up */
