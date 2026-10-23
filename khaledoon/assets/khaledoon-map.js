@@ -106,7 +106,7 @@
   var hidden = {};
   var map = null, group = null, markers = [];
 
-  function validPhoto(p) { return typeof p === 'string' && /^[\w\-.\/]+\.(jpe?g|png|webp)$/i.test(p) && p.indexOf('..') < 0 && p.charAt(0) !== '/'; }
+  function validPhoto(p) { return typeof p === 'string' && /^[\w\-.\/]+\.(jpe?g|png|webp|svg)$/i.test(p) && p.indexOf('..') < 0 && p.charAt(0) !== '/'; }
   function validNum(n, lim) { return typeof n === 'number' && isFinite(n) && Math.abs(n) <= lim; }
 
   /* الحكايات التي أخفاها الأدمن: طلب واحد مشترك مع khaledoon-favorites.js، وعند الفشل لا يُخفى شيء. */
