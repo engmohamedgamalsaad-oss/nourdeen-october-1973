@@ -188,12 +188,9 @@ html[data-theme="light"] body[data-story-slug="015"] .language-switch .lang-opti
 /* 2026-10-23 repair: consistent readable light palette for all published story sections.
    Keep these rules last so legacy per-story declarations cannot override the light theme. */
 html[data-theme="light"] body[data-story-slug],
-:root[data-theme="light"] body[data-story-slug],
-@media (prefers-color-scheme: light) {
-  html:not([data-theme="dark"]) body[data-story-slug] {
-    background:#f7f5ee !important;
-    color:#263746 !important;
-  }
+:root[data-theme="light"] body[data-story-slug] {
+  background:#f7f5ee !important;
+  color:#263746 !important;
 }
 html[data-theme="light"] body[data-story-slug] header,
 html[data-theme="light"] body[data-story-slug] .story,
