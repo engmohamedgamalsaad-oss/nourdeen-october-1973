@@ -381,3 +381,20 @@ body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .
 :root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy :is(h2,p),:root:not([data-theme="dark"]) body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy :is(h2,p){color:#203b45!important}
 @media(max-width:700px){body.story-design-portrait-biography[data-story-slug="015"] .hero{min-height:720px;padding:42px 0 285px}body.story-design-portrait-biography[data-story-slug="015"] .hero .container{width:calc(100% - 30px);padding:0;text-align:center}body.story-design-portrait-biography[data-story-slug="015"] .hero-art{left:50%;right:auto;top:auto;bottom:18px;transform:translateX(-50%);width:min(62%,280px);height:250px}body.story-design-portrait-biography[data-story-slug="015"] .hero-art img{width:100%;height:100%;object-fit:contain}}
 @media(prefers-reduced-motion:reduce){body.story-design-portrait-biography[data-story-slug="015"] *{animation:none!important;transition:none!important}}
+
+
+/* Final verified science-section palette + robust opening cover/gallery visibility */
+:root{--accent:#8ad9e8;--gold:#e3bd78;--magdi-cream:#d8f6ff}
+body.story-design-portrait-biography[data-story-slug="015"]{background:radial-gradient(ellipse at 88% 0%,#164451 0%,#101824 38%,#060b12 82%)!important;color:#eefbfc!important}
+body.story-design-portrait-biography[data-story-slug="015"] header{background:rgba(7,24,32,.96)!important;border-bottom:1px solid #8ad9e855!important}
+body.story-design-portrait-biography[data-story-slug="015"] .hero{background:radial-gradient(ellipse at 16% 48%,#1d5661 0%,transparent 40%),linear-gradient(120deg,#071923 0%,#123742 52%,#101a22 100%)!important}
+body.story-design-portrait-biography[data-story-slug="015"] .hero-art{display:flex!important;visibility:visible!important;opacity:1!important;z-index:2!important}
+body.story-design-portrait-biography[data-story-slug="015"] .hero-art img{display:block!important;visibility:visible!important;opacity:1!important;width:100%;height:100%;object-fit:contain!important}
+body.story-design-portrait-biography[data-story-slug="015"] .story-visual-gallery .story-image-card{display:block!important;visibility:visible!important;opacity:1!important;transform:none!important;filter:none!important}
+body.story-design-portrait-biography[data-story-slug="015"] .story-visual-gallery .story-image-card img{display:block!important;visibility:visible!important;opacity:1!important;min-height:220px;object-fit:cover}
+body.story-design-portrait-biography[data-story-slug="015"] #intro.modal{background:rgba(3,13,20,.88)!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-card{border-color:#8ad9e8!important;background:linear-gradient(135deg,#0d2932,#183e47 62%,#10252e)!important;color:#eafaff!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art{background:#102b35!important;border-inline-end-color:#8ad9e870!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art img{display:block!important;width:100%;height:100%;min-height:360px;object-fit:cover!important;object-position:center!important;opacity:1!important;filter:none!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy h2{color:#eafaff!important}
+@media(max-width:700px){body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-card{grid-template-columns:1fr!important;max-height:92dvh!important}body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art{min-height:220px;max-height:34dvh}body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art img{min-height:220px!important}}
