@@ -1,5 +1,5 @@
 {
-  "name": "مليكة محمد",
+  "name": "مليكة محمد جمال",
   "grade": "الصف الأول الابتدائي",
   "className": "الصف الأول الابتدائي",
   "title": "مجدي يعقوب",
@@ -10,7 +10,7 @@
   "published": true,
   "i18n": {
     "en": {
-      "name": "Malika Mohamed",
+      "name": "Malika Mohamed Gamal",
       "grade": "First grade",
       "className": "First grade",
       "title": "Magdi Yacoub",
@@ -18,7 +18,7 @@
       "person": "مجدي يعقوب"
     },
     "fr": {
-      "name": "Malika Mohamed",
+      "name": "Malika Mohamed Gamal",
       "grade": "Première année de l’école primaire",
       "className": "Première année de l’école primaire",
       "title": "Magdi Yacoub",
@@ -26,7 +26,7 @@
       "person": "مجدي يعقوب"
     },
     "it": {
-      "name": "Malika Mohamed",
+      "name": "Malika Mohamed Gamal",
       "grade": "Prima classe della scuola primaria",
       "className": "Prima classe della scuola primaria",
       "title": "Magdi Yacoub",
@@ -34,7 +34,7 @@
       "person": "مجدي يعقوب"
     },
     "de": {
-      "name": "Malika Mohamed",
+      "name": "Malika Mohamed Gamal",
       "grade": "Erste Klasse der Grundschule",
       "className": "Erste Klasse der Grundschule",
       "title": "Magdi Yacoub",
