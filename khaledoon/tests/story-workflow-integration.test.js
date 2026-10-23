@@ -76,7 +76,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
-  assert.ok(admin.includes('story-template-bundle.js?v=20261021-map-auto-2'));
+  assert.ok(admin.includes('story-template-bundle.js?v=20261023-4'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
@@ -91,6 +91,8 @@ test('approved stories can reopen reader preview and AI image data is preserved'
   assert.ok(preview.includes("record_type:legacy?'legacy':'modern'"));
   assert.ok(preview.includes('if(!Array.isArray(d.images))d.images='));
   assert.ok(preview.includes('d.visual_design=firstText'));
+  assert.ok(preview.includes('images:(Array.isArray(source.images)&&source.images.length?source.images:'), 'empty top-level image arrays must not hide the saved story_meta gallery');
+  assert.ok(preview.includes('translations:(source.translations&&Object.keys(source.translations).length?source.translations:'), 'empty translation objects must not mask complete saved translations');
 });
 test('review preview displays submitted images and portrait design styling', function () {
   assert.ok(preview.includes('function renderReviewImages(d)'));
