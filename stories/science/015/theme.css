@@ -401,3 +401,25 @@ body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy h
 
 /* Exact section-cover accent for the shared biography template. */
 :root{--accent:#8ad9e8;--gold:#e3bd78;--section-glow:rgba(138,217,232,.22)}
+
+
+/* Magdi Yacoub: teal/surgical-blue identity for the intro, cover, story cards and map link. */
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-card{background:radial-gradient(circle at 12% 15%,rgba(138,217,232,.22),transparent 42%),linear-gradient(135deg,#0a2934 0%,#124653 55%,#0b202b 100%)!important;border:1px solid rgba(138,217,232,.72)!important;box-shadow:0 28px 90px rgba(0,0,0,.55),0 0 34px rgba(138,217,232,.14)!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art{background:linear-gradient(145deg,#0b2630,#1b5260)!important;border-inline-end:1px solid rgba(138,217,232,.45)!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .eyebrow{color:#8ad9e8!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy h2{color:#eafaff!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy p{color:#d0e9ee!important}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .btn{background:linear-gradient(120deg,#8ad9e8,#4da9bd)!important;color:#09232d!important;border:1px solid #8ad9e8!important;box-shadow:0 8px 24px rgba(45,164,187,.22)!important}
+body.story-design-portrait-biography[data-story-slug="015"] .story-map-link{background:radial-gradient(ellipse at 85% 0%,rgba(138,217,232,.20),transparent 55%),linear-gradient(145deg,#0d2a34,#123e49 60%,#0b202a)!important;border:1px solid rgba(138,217,232,.5)!important;border-radius:24px!important;box-shadow:0 18px 42px rgba(0,0,0,.22)!important}
+body.story-design-portrait-biography[data-story-slug="015"] .story-map-link .btn{background:linear-gradient(120deg,#8ad9e8,#4da9bd)!important;color:#09232d!important;border-color:#8ad9e8!important}
+body.story-design-portrait-biography[data-story-slug="015"] .story-map-link .interactive-map-link{display:inline-flex;align-items:center;gap:8px;margin:0 0 12px;padding:11px 16px;border-radius:999px;border:1px solid #8ad9e8;background:#102b35;color:#eafaff;text-decoration:none;font-weight:800;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+body.story-design-portrait-biography[data-story-slug="015"] .story-map-link .interactive-map-link:hover{background:#174653;transform:translateY(-2px)}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-card{background:radial-gradient(circle at 12% 15%,#d8f6ff,transparent 45%),linear-gradient(135deg,#f8feff,#e2f3f5 58%,#d9ecef)!important;border-color:#8acbd4!important;box-shadow:0 20px 55px rgba(32,59,69,.18)!important}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-art{background:linear-gradient(145deg,#d9f1f4,#a9dce3)!important}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy h2,:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy p{color:#203b45!important}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] .story-map-link{background:radial-gradient(ellipse at 85% 0%,#d8f6ff,transparent 55%),linear-gradient(145deg,#f8feff,#e4f4f5)!important;border-color:#a8d8dd!important;color:#203b45!important}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] .story-map-link .interactive-map-link{background:#e3f7fa;color:#174653;border-color:#8acbd4}
+
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .interactive-map-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin:12px 0 0;padding:10px 15px;border:1px solid rgba(138,217,232,.8);border-radius:999px;background:rgba(16,43,53,.88);color:#eafaff!important;text-decoration:none;font-weight:800;line-height:1.6;box-shadow:0 8px 22px rgba(0,0,0,.18)}
+body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .interactive-map-link:hover{background:#174653;transform:translateY(-2px)}
+:root[data-theme="light"] body.story-design-portrait-biography[data-story-slug="015"] #intro .modal-copy .interactive-map-link{background:#e3f7fa;color:#174653!important;border-color:#8acbd4;box-shadow:0 8px 20px rgba(32,59,69,.1)}
