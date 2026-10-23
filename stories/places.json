@@ -108,11 +108,11 @@
     "lng": 39.82563,
     "approximate": true,
     "place": {
-      "ar": "مكة المكرمة، موطن ميلاد عمرو بن العاص",
-      "en": "Mecca, reported birthplace of Amr ibn al-As",
-      "fr": "La Mecque, lieu de naissance rapporté d’Amr ibn al-As",
-      "it": "La Mecca, luogo di nascita riportato di Amr ibn al-As",
-      "de": "Mekka, überlieferter Geburtsort von Amr ibn al-As"
+      "ar": "مكة المكرمة",
+      "en": "Mecca",
+      "fr": "La Mecque",
+      "it": "La Mecca",
+      "de": "Mekka"
     },
     "source_name": "متحف الإسلام — عمرو بن العاص",
     "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/"
