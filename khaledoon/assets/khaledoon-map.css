@@ -20,6 +20,7 @@
 .khm-approx{font-size:10px;color:var(--muted);line-height:1.5;border:1px dashed var(--line);border-radius:7px;padding:2px 7px}
 .khm-story{font-size:13px;font-weight:700;line-height:1.6}
 .khm-credit{font-size:10px;color:var(--muted)}
+.khm-source{font-size:10px;line-height:1.5;color:var(--gold);overflow-wrap:anywhere;text-decoration:underline;text-underline-offset:2px}
 .khm-go{display:inline-block;margin-top:4px;padding:6px 16px;border-radius:99px;background:var(--gold);color:var(--night);font-weight:900;font-size:12px;text-decoration:none}
 .khm-list{list-style:none;margin:0;padding:14px;display:grid;gap:8px}
 .khm-list a{color:var(--gold);font-weight:800}
