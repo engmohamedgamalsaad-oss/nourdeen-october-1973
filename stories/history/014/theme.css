@@ -42,7 +42,6 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
  .hero .hero-content,.hero .hero-art img{animation:none!important;transform:none!important;opacity:1!important}
 }
 
-:root{--gold:#8ad9e8!important;--accent:#8ad9e8!important}
 .hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}
 
 
@@ -429,3 +428,4 @@ body[data-story-slug="014"] .end{background:radial-gradient(ellipse at center,#2
 
 /* Exact section-cover accent for the shared biography template. */
 :root{--accent:#d4b7ff;--gold:#e3bd78;--section-glow:rgba(212,183,255,.22)}
+
