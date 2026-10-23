@@ -1,0 +1,324 @@
+{
+  "questions": [
+    {
+      "q": "في أي مدينة وُلد مجدي يعقوب؟",
+      "o": [
+        "أسوان",
+        "بلبيس",
+        "الإسكندرية",
+        "الأقصر"
+      ],
+      "a": 1,
+      "e": "وُلد مجدي يعقوب في بلبيس بمحافظة الشرقية في مصر.",
+      "i18n": {
+        "en": {
+          "q": "In which city was Magdi Yacoub born?",
+          "o": [
+            "Aswan",
+            "Belbeis",
+            "Alexandria",
+            "Luxor"
+          ],
+          "e": "Magdi Yacoub was born in Belbeis in Egypt’s Sharqia Governorate."
+        },
+        "fr": {
+          "q": "Dans quelle ville Magdi Yacoub est-il né ?",
+          "o": [
+            "Assouan",
+            "Belbeis",
+            "Alexandrie",
+            "Louxor"
+          ],
+          "e": "Magdi Yacoub est né à Belbeis, dans le gouvernorat égyptien de Charkia."
+        },
+        "it": {
+          "q": "In quale città è nato Magdi Yacoub?",
+          "o": [
+            "Assuan",
+            "Belbeis",
+            "Alessandria",
+            "Luxor"
+          ],
+          "e": "Magdi Yacoub è nato a Belbeis, nel governatorato egiziano di Sharqia."
+        },
+        "de": {
+          "q": "In welcher Stadt wurde Magdi Yacoub geboren?",
+          "o": [
+            "Assuan",
+            "Belbeis",
+            "Alexandria",
+            "Luxor"
+          ],
+          "e": "Magdi Yacoub wurde in Belbeis im ägyptischen Gouvernement Sharqia geboren."
+        }
+      }
+    },
+    {
+      "q": "في أي جامعة درس مجدي يعقوب الطب؟",
+      "o": [
+        "جامعة القاهرة",
+        "جامعة أسوان",
+        "جامعة أكسفورد",
+        "جامعة الإسكندرية"
+      ],
+      "a": 0,
+      "e": "درس الطب في جامعة القاهرة وتخرج عام 1957.",
+      "i18n": {
+        "en": {
+          "q": "At which university did Magdi Yacoub study medicine?",
+          "o": [
+            "Cairo University",
+            "Aswan University",
+            "Oxford University",
+            "Alexandria University"
+          ],
+          "e": "He studied medicine at Cairo University and graduated in 1957."
+        },
+        "fr": {
+          "q": "Dans quelle université Magdi Yacoub a-t-il étudié la médecine ?",
+          "o": [
+            "Université du Caire",
+            "Université d’Assouan",
+            "Université d’Oxford",
+            "Université d’Alexandrie"
+          ],
+          "e": "Il a étudié la médecine à l’Université du Caire et a obtenu son diplôme en 1957."
+        },
+        "it": {
+          "q": "In quale università Magdi Yacoub ha studiato medicina?",
+          "o": [
+            "Università del Cairo",
+            "Università di Assuan",
+            "Università di Oxford",
+            "Università di Alessandria"
+          ],
+          "e": "Ha studiato medicina all’Università del Cairo e si è laureato nel 1957."
+        },
+        "de": {
+          "q": "An welcher Universität studierte Magdi Yacoub Medizin?",
+          "o": [
+            "Universität Kairo",
+            "Universität Assuan",
+            "Universität Oxford",
+            "Universität Alexandria"
+          ],
+          "e": "Er studierte Medizin an der Universität Kairo und schloss sein Studium 1957 ab."
+        }
+      }
+    },
+    {
+      "q": "إلى أي دولة سافر مجدي يعقوب عام 1962 لمواصلة التدريب والعمل؟",
+      "o": [
+        "فرنسا",
+        "إيطاليا",
+        "بريطانيا",
+        "ألمانيا"
+      ],
+      "a": 2,
+      "e": "سافر إلى بريطانيا عام 1962 لمواصلة تدريبه ومسيرته الطبية.",
+      "i18n": {
+        "en": {
+          "q": "Which country did Magdi Yacoub travel to in 1962 to continue his training and work?",
+          "o": [
+            "France",
+            "Italy",
+            "Britain",
+            "Germany"
+          ],
+          "e": "He travelled to Britain in 1962 to continue his training and medical career."
+        },
+        "fr": {
+          "q": "Dans quel pays Magdi Yacoub est-il parti en 1962 pour poursuivre sa formation et son travail ?",
+          "o": [
+            "France",
+            "Italie",
+            "Grande-Bretagne",
+            "Allemagne"
+          ],
+          "e": "Il est parti en Grande-Bretagne en 1962 pour poursuivre sa formation et sa carrière médicale."
+        },
+        "it": {
+          "q": "In quale paese si recò Magdi Yacoub nel 1962 per continuare la sua formazione e il suo lavoro?",
+          "o": [
+            "Francia",
+            "Italia",
+            "Gran Bretagna",
+            "Germania"
+          ],
+          "e": "Nel 1962 si recò in Gran Bretagna per continuare la formazione e la carriera medica."
+        },
+        "de": {
+          "q": "In welches Land reiste Magdi Yacoub 1962, um seine Ausbildung und Arbeit fortzusetzen?",
+          "o": [
+            "Frankreich",
+            "Italien",
+            "Großbritannien",
+            "Deutschland"
+          ],
+          "e": "Er reiste 1962 nach Großbritannien, um seine Ausbildung und medizinische Laufbahn fortzusetzen."
+        }
+      }
+    },
+    {
+      "q": "ما التخصص الطبي الذي اشتهر به مجدي يعقوب؟",
+      "o": [
+        "طب العيون",
+        "جراحة القلب والصدر",
+        "طب الأسنان",
+        "طب الأطفال العام"
+      ],
+      "a": 1,
+      "e": "اشتهر بجراحة القلب والصدر، وعمل على علاج أمراض القلب المعقدة.",
+      "i18n": {
+        "en": {
+          "q": "Which medical specialty made Magdi Yacoub famous?",
+          "o": [
+            "Ophthalmology",
+            "Cardiothoracic surgery",
+            "Dentistry",
+            "General paediatrics"
+          ],
+          "e": "He became famous for cardiothoracic surgery and treating complex heart conditions."
+        },
+        "fr": {
+          "q": "Quelle spécialité médicale a rendu Magdi Yacoub célèbre ?",
+          "o": [
+            "Ophtalmologie",
+            "Chirurgie cardiothoracique",
+            "Dentisterie",
+            "Pédiatrie générale"
+          ],
+          "e": "Il est devenu célèbre pour la chirurgie cardiothoracique et le traitement de maladies cardiaques complexes."
+        },
+        "it": {
+          "q": "Quale specialità medica ha reso famoso Magdi Yacoub?",
+          "o": [
+            "Oftalmologia",
+            "Cardiochirurgia e chirurgia toracica",
+            "Odontoiatria",
+            "Pediatria generale"
+          ],
+          "e": "È diventato famoso per la cardiochirurgia e per il trattamento di malattie cardiache complesse."
+        },
+        "de": {
+          "q": "Durch welches medizinische Fachgebiet wurde Magdi Yacoub bekannt?",
+          "o": [
+            "Augenheilkunde",
+            "Herz- und Thoraxchirurgie",
+            "Zahnmedizin",
+            "Allgemeine Kinderheilkunde"
+          ],
+          "e": "Er wurde durch die Herz- und Thoraxchirurgie und die Behandlung komplexer Herzerkrankungen bekannt."
+        }
+      }
+    },
+    {
+      "q": "متى تأسست مؤسسة مجدي يعقوب للقلب في مصر؟",
+      "o": [
+        "1995",
+        "2001",
+        "2008",
+        "2014"
+      ],
+      "a": 2,
+      "e": "تأسست المؤسسة عام 2008 لدعم الرعاية الطبية والتدريب والبحث.",
+      "i18n": {
+        "en": {
+          "q": "When was the Magdi Yacoub Heart Foundation established in Egypt?",
+          "o": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "e": "The foundation was established in 2008 to support medical care, training and research."
+        },
+        "fr": {
+          "q": "Quand la Fondation Magdi Yacoub pour le cœur a-t-elle été créée en Égypte ?",
+          "o": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "e": "La fondation a été créée en 2008 pour soutenir les soins médicaux, la formation et la recherche."
+        },
+        "it": {
+          "q": "Quando è stata fondata in Egitto la Fondazione Cuore Magdi Yacoub?",
+          "o": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "e": "La fondazione è stata istituita nel 2008 per sostenere le cure mediche, la formazione e la ricerca."
+        },
+        "de": {
+          "q": "Wann wurde die Magdi-Yacoub-Herzstiftung in Ägypten gegründet?",
+          "o": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "e": "Die Stiftung wurde 2008 gegründet, um medizinische Versorgung, Ausbildung und Forschung zu unterstützen."
+        }
+      }
+    },
+    {
+      "q": "في أي عام بدأ مركز أسوان للقلب استقبال المرضى؟",
+      "o": [
+        "2005",
+        "2008",
+        "2009",
+        "2015"
+      ],
+      "a": 2,
+      "e": "بدأ مركز أسوان للقلب استقبال المرضى عام 2009.",
+      "i18n": {
+        "en": {
+          "q": "In which year did the Aswan Heart Centre begin receiving patients?",
+          "o": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "e": "The Aswan Heart Centre began receiving patients in 2009."
+        },
+        "fr": {
+          "q": "En quelle année le Centre cardiaque d’Assouan a-t-il commencé à accueillir des patients ?",
+          "o": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "e": "Le Centre cardiaque d’Assouan a commencé à accueillir des patients en 2009."
+        },
+        "it": {
+          "q": "In quale anno il Centro Cardiaco di Assuan ha iniziato ad accogliere i pazienti?",
+          "o": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "e": "Il Centro Cardiaco di Assuan ha iniziato ad accogliere i pazienti nel 2009."
+        },
+        "de": {
+          "q": "In welchem Jahr begann das Herzzentrum in Assuan, Patienten aufzunehmen?",
+          "o": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "e": "Das Herzzentrum in Assuan begann 2009, Patienten aufzunehmen."
+        }
+      }
+    }
+  ],
+  "id": "015",
+  "title": "مجدي يعقوب"
+}

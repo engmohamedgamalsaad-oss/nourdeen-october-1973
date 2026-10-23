@@ -1,0 +1,45 @@
+{
+  "name": "مليكة محمد",
+  "grade": "الصف الأول الابتدائي",
+  "className": "الصف الأول الابتدائي",
+  "title": "مجدي يعقوب",
+  "subtitle": "قلب ينبض بالحياة",
+  "person": "مجدي يعقوب",
+  "color": "#8ad9e8",
+  "order": 15,
+  "published": true,
+  "i18n": {
+    "en": {
+      "name": "Malika Mohamed",
+      "grade": "First grade",
+      "className": "First grade",
+      "title": "Magdi Yacoub",
+      "subtitle": "A Heart That Brings Hope",
+      "person": "مجدي يعقوب"
+    },
+    "fr": {
+      "name": "Malika Mohamed",
+      "grade": "Première année de l’école primaire",
+      "className": "Première année de l’école primaire",
+      "title": "Magdi Yacoub",
+      "subtitle": "Un cœur qui fait naître l’espoir",
+      "person": "مجدي يعقوب"
+    },
+    "it": {
+      "name": "Malika Mohamed",
+      "grade": "Prima classe della scuola primaria",
+      "className": "Prima classe della scuola primaria",
+      "title": "Magdi Yacoub",
+      "subtitle": "Un cuore che fa nascere la speranza",
+      "person": "مجدي يعقوب"
+    },
+    "de": {
+      "name": "Malika Mohamed",
+      "grade": "Erste Klasse der Grundschule",
+      "className": "Erste Klasse der Grundschule",
+      "title": "Magdi Yacoub",
+      "subtitle": "Ein Herz, das Hoffnung schenkt",
+      "person": "مجدي يعقوب"
+    }
+  }
+}
