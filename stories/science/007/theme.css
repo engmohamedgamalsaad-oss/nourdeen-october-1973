@@ -17,3 +17,83 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 .story-extras .se-quiz{display:none!important}
 @media(max-width:700px){.hero{padding-bottom:230px!important;min-height:690px!important;background-position:58% center!important}.hero-art{inset:auto 0 0 0;width:100%;height:265px;opacity:.98!important}.hero-art img{object-fit:contain;object-position:center bottom}.hero-content{max-width:100%}.intro-card{grid-template-columns:1fr;max-height:92vh}.intro-art{min-height:220px;max-height:250px}.intro-art img{min-height:220px;max-height:250px;object-fit:cover}.intro-copy{padding:24px}.intro-copy h2{font-size:1.7rem}.intro-copy p{font-size:.95rem}.start-story-btn{width:100%}}
 @media(prefers-reduced-motion:reduce){.story-intro-modal,.intro-card,.start-story-btn,body.motion-ready .write-in{animation:none!important;transition:none!important;filter:none!important;transform:none!important;opacity:1!important}}
+
+/* ===== Story 007 — القالب المعتمد (نمط نجيب محفوظ) بألوان قسم العلوم — 2026-10-23 =====
+   غلاف بصورة جانبية، نافذة بداية بصورة داخل إطار، وكل فقرة في صندوق مستقل.
+   الألوان كلها متغيرات على body، وتتبدل تلقائيًا في الوضع الفاتح. */
+body[data-story-slug="007"]{
+  --sec:#8ad9e8;--sec-line:rgba(138,217,232,.32);--gold2:#e3bd78;
+  --pg-bg:radial-gradient(ellipse at 88% 0%,#14495a 0%,#0e2a35 40%,#071016 84%);
+  --pg-text:#eaf4f6;--pg-head:#e6f9fd;--pg-title:#fff0d7;--pg-muted:#c3d3d8;
+  --pg-hero:radial-gradient(ellipse at 16% 48%,#1f6a7c 0%,transparent 40%),linear-gradient(120deg,#0b1d25 0%,#123d4a 52%,#08141a 100%);
+  --pg-card:linear-gradient(145deg,#12353fe8,#0a1a22ef);
+  --pg-box:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+  --pg-box-text:#eaf4f6;
+  background:var(--pg-bg)!important;color:var(--pg-text);
+}
+:root[data-theme="light"] body[data-story-slug="007"]{
+  --sec:#0f7f95;--sec-line:rgba(15,127,149,.38);--gold2:#79572b;
+  --pg-bg:linear-gradient(180deg,#f7fcfd 0%,#e6f3f6 50%,#d9ebef 100%);
+  --pg-text:#24384a;--pg-head:#14323f;--pg-title:#14323f;--pg-muted:#3f5666;
+  --pg-hero:linear-gradient(125deg,#f7fcfd 0%,#dff0f4 58%,#e8f4ef 100%);
+  --pg-card:linear-gradient(145deg,#ffffff,#eef7f9);
+  --pg-box:#ffffff;--pg-box-text:#24384a;
+}
+@media (prefers-color-scheme:light){
+  :root:not([data-theme="dark"]) body[data-story-slug="007"]{
+    --sec:#0f7f95;--sec-line:rgba(15,127,149,.38);--gold2:#79572b;
+    --pg-bg:linear-gradient(180deg,#f7fcfd 0%,#e6f3f6 50%,#d9ebef 100%);
+    --pg-text:#24384a;--pg-head:#14323f;--pg-title:#14323f;--pg-muted:#3f5666;
+    --pg-hero:linear-gradient(125deg,#f7fcfd 0%,#dff0f4 58%,#e8f4ef 100%);
+    --pg-card:linear-gradient(145deg,#ffffff,#eef7f9);
+    --pg-box:#ffffff;--pg-box-text:#24384a;
+  }
+}
+
+/* الغلاف */
+body[data-story-slug="007"] .hero{min-height:610px;padding:58px 6vw 52px;isolation:isolate;background:var(--pg-hero)!important;border-bottom:1px solid var(--sec-line)}
+body[data-story-slug="007"] .hero:before{content:"";position:absolute;inset:0;z-index:0;opacity:.25;background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(138,217,232,.09) 43px 44px);pointer-events:none}
+body[data-story-slug="007"] .hero-content{width:min(1120px,100%);max-width:none;margin:0 auto;padding-inline-end:min(38%,430px);text-shadow:none}
+body[data-story-slug="007"] .hero h1{color:var(--pg-title)!important;max-width:19ch}
+body[data-story-slug="007"] .hero .eyebrow{color:var(--sec)}
+body[data-story-slug="007"] .author{color:var(--pg-muted)}
+body[data-story-slug="007"] .author strong{color:var(--gold2)}
+body[data-story-slug="007"] .story-share-bar>span{color:var(--gold2)}
+body[data-story-slug="007"] .hero-art{top:9%;bottom:8%;width:min(32%,390px);height:auto;padding:0;display:flex;align-items:center;justify-content:center;opacity:1!important}
+html[dir="rtl"] body[data-story-slug="007"] .hero-art{left:4%;right:auto}
+html[dir="ltr"] body[data-story-slug="007"] .hero-art{right:4%;left:auto}
+body[data-story-slug="007"] .hero-art img{width:100%;height:100%;max-height:none;object-fit:contain;border-radius:22px;border:1px solid rgba(138,217,232,.55);background:#0b1d25;box-shadow:0 28px 65px rgba(0,0,0,.45);filter:none;opacity:1}
+
+/* أقسام الحكاية: كل قسم بطاقة، وكل فقرة في صندوق */
+body[data-story-slug="007"] .story{width:min(1000px,calc(100% - 28px));margin:20px auto;padding:44px 20px;border:1px solid var(--sec-line);border-radius:24px;background:var(--pg-card);box-shadow:0 18px 42px rgba(0,0,0,.14)}
+body[data-story-slug="007"] .story h2{color:var(--pg-head)}
+body[data-story-slug="007"] .story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,var(--gold2),var(--sec))}
+body[data-story-slug="007"] .story .kicker{color:var(--sec)}
+body[data-story-slug="007"] .story .container>p{margin:0 0 14px;padding:clamp(16px,2.2vw,24px);border:1px solid var(--sec-line);border-inline-start:4px solid var(--sec);border-radius:16px;background:var(--pg-box);color:var(--pg-box-text);line-height:2.05;box-shadow:0 8px 22px rgba(0,0,0,.12);overflow-wrap:anywhere}
+body[data-story-slug="007"] .quote{border-color:var(--sec);border-radius:16px}
+body[data-story-slug="007"] .quote p{color:var(--gold2)}
+body[data-story-slug="007"] .sources{width:min(1000px,calc(100% - 28px));margin:20px auto;padding:36px 20px;border:1px solid var(--sec-line);border-radius:22px;background:var(--pg-card);color:var(--pg-text)}
+body[data-story-slug="007"] .sources :is(li,p,h2){color:var(--pg-text)}
+body[data-story-slug="007"] .sources a{color:var(--sec)}
+body[data-story-slug="007"] .end{width:min(1000px,calc(100% - 28px));margin:20px auto;border-radius:24px;background:var(--pg-card);border:1px solid var(--sec-line)}
+body[data-story-slug="007"] .end h2{color:var(--pg-head)}
+
+/* نافذة "ابدأ الحكاية" (تبقى داكنة في الوضعين) */
+body[data-story-slug="007"] .story-intro-modal{background:rgba(5,10,22,.88)}
+body[data-story-slug="007"] .intro-card{border:1px solid #8ad9e8;border-radius:26px;background-color:#0b1d25;background-image:radial-gradient(ellipse at 12% 8%,rgba(138,217,232,.19),transparent 38%),radial-gradient(ellipse at 90% 92%,rgba(227,189,120,.14),transparent 34%),repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 12px),linear-gradient(135deg,#0b1d25 0%,#123d4a 58%,#08141a 100%)}
+body[data-story-slug="007"] .intro-art{box-sizing:border-box;padding:12px;height:380px;min-height:0;overflow:hidden}
+body[data-story-slug="007"] .intro-art img{width:auto;height:auto;min-width:0;min-height:0;max-width:100%;max-height:100%;object-fit:contain;border:1px solid rgba(138,217,232,.55);border-radius:12px;background:#0b1d25}
+body[data-story-slug="007"] .intro-kicker{display:inline-flex;padding:6px 11px;border:1px solid rgba(138,217,232,.5);border-radius:999px;background:rgba(11,29,37,.8)}
+body[data-story-slug="007"] .intro-copy,body[data-story-slug="007"] .intro-copy p{color:#d6e6ec}
+body[data-story-slug="007"] .intro-copy h2{color:#f3dfb6}
+
+@media(max-width:700px){
+  body[data-story-slug="007"] .hero{min-height:720px!important;padding:42px 16px 285px!important}
+  body[data-story-slug="007"] .hero-content{padding-inline-end:0;text-align:center}
+  body[data-story-slug="007"] .hero h1{max-width:none}
+  html[dir] body[data-story-slug="007"] .hero-art{left:50%;right:auto;top:auto;bottom:18px;transform:translateX(-50%);width:min(62%,280px);height:250px}
+  body[data-story-slug="007"] .story{width:calc(100% - 20px);margin:14px 10px;padding:30px 14px;border-radius:18px}
+  body[data-story-slug="007"] .sources,body[data-story-slug="007"] .end{width:calc(100% - 20px)}
+  body[data-story-slug="007"] .intro-art{height:clamp(170px,27vh,220px);padding:8px}
+  body[data-story-slug="007"] .intro-art img{min-height:0;max-height:100%;object-fit:contain}
+}
