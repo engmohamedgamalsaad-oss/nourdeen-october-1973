@@ -115,7 +115,8 @@
       "de": "Mekka"
     },
     "source_name": "متحف الإسلام — عمرو بن العاص",
-    "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/"
+    "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/",
+    "photo": "stories/islamic/011/cover.svg"
   },
   "012": {
     "lat": 30.5877,
@@ -129,7 +130,8 @@
       "de": "Zagazig, Scharkia"
     },
     "source_name": "جامعة عين شمس — فاروق الباز",
-    "source_url": "https://www.asu.edu.eg/ar/148/page"
+    "source_url": "https://www.asu.edu.eg/ar/148/page",
+    "photo": "stories/science/012/cover.svg"
   },
   "013": {
     "lat": 25.7383,
@@ -150,7 +152,8 @@
       "de": "Mit der Geschichte verbundener Ort: "
     },
     "source_name": "وزارة السياحة والآثار المصرية — معبد حتشبسوت",
-    "source_url": "https://egymonuments.gov.eg/en/monuments/hatshepsut-temple/"
+    "source_url": "https://egymonuments.gov.eg/en/monuments/hatshepsut-temple/",
+    "photo": "stories/women/013/cover.svg"
   },
   "014": {
     "lat": 39.7747,
@@ -171,7 +174,8 @@
       "de": "Mit seinem Leben verbundene Stadt: "
     },
     "source_name": "Sunnah.com — محمد بن العباس الخوارزمي",
-    "source_url": "https://sunnah.com/narrator/69208"
+    "source_url": "https://sunnah.com/narrator/69208",
+    "photo": "stories/science/014/cover.svg"
   },
   "015": {
     "lat": 30.420387,
@@ -185,6 +189,7 @@
       "de": "Belbeis, Gouvernement Scharkia"
     },
     "source_name": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
-    "source_url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/"
+    "source_url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/",
+    "photo": "stories/science/015/cover.svg"
   }
 }
