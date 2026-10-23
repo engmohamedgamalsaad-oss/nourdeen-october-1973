@@ -620,3 +620,15 @@ html[data-theme="light"] body[data-story-slug="013"] select {
   color: #263746 !important;
   border-color: #cdbb9d !important;
 }
+
+
+/* Women's-history palette and resilient visibility for the historical image gallery */
+:root{--accent:#d78bb2;--gold:#e3bd78}
+body[data-story-slug="013"]{background:radial-gradient(ellipse at 50% 0%,#45243d 0%,#211a2b 48%,#101824 100%);color:#fff2f7}
+body[data-story-slug="013"] header{background:rgba(36,20,34,.95)!important;border-bottom-color:#d78bb266!important}
+body[data-story-slug="013"] .hero{background:linear-gradient(115deg,rgba(30,15,29,.94),rgba(79,38,67,.68)),url("cover-popup.svg") center/cover no-repeat!important;border-bottom-color:#d78bb266!important}
+body[data-story-slug="013"] .hero .eyebrow,body[data-story-slug="013"] .story .kicker{color:#f0aeca!important}
+body[data-story-slug="013"] .story-visual-gallery .story-image-card{display:block!important;visibility:visible!important;opacity:1!important;transform:none!important;filter:none!important}
+body[data-story-slug="013"] .story-visual-gallery .story-image-card img{display:block!important;visibility:visible!important;opacity:1!important}
+body[data-story-slug="013"] #intro .modal-card{border-color:#d78bb2!important;background:linear-gradient(135deg,#2b1b30,#47253d)!important}
+@media(prefers-reduced-motion:reduce){body[data-story-slug="013"] .story-visual-gallery *{animation:none!important;transition:none!important}}
