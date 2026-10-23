@@ -95,6 +95,9 @@ test('approved stories can reopen reader preview and AI image data is preserved'
 test('review preview displays submitted images and portrait design styling', function () {
   assert.ok(preview.includes('function renderReviewImages(d)'));
   assert.ok(preview.includes('renderReviewImages(d);'));
+  assert.ok(preview.includes('images:(Array.isArray(source.images)&&source.images.length?source.images:'), 'an empty top-level images array must not mask story_meta images');
+  assert.ok(preview.includes('translations:(source.translations&&Object.keys(source.translations).length?source.translations:'), 'an empty translations object must not mask saved translations');
+  assert.ok(bundle.includes('Shared preview polish inspired by the approved Mahfouz and Tawfiq story pages'));
   assert.ok(preview.includes('pub-image-grid'));
   assert.ok(preview.includes('تعذر تحميل ملف الصورة من الرابط'));
   assert.ok(bundle.includes('story-design-portrait-biography .hero h1'));
