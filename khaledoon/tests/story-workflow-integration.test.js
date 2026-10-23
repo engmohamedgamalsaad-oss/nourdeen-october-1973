@@ -141,8 +141,13 @@ test('admin validates every translated field and every quiz translation before A
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
   assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
   assert.ok(admin.includes('يُسمح بسياج الكود الخارجي وحده'));
-  assert.ok(admin.includes('من صفر إلى خمس صور موثقة'));
-  assert.ok(admin.includes('لا تجعل الصور غير المتاحة سببًا لاختلاق معلومات أو روابط'));
+  assert.ok(admin.includes('من صورتين إلى خمس صور موثقة وصالحة على الأقل'));
+  assert.ok(!admin.includes('إن تعذر البحث فاترك images فارغة'));
+  assert.ok(admin.includes('لا تُخرج حزمة JSON للاستيراد إذا تعذر التحقق من صورتين على الأقل'));
+  var sharedQuality = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  assert.ok(sharedQuality.includes('صورتين موثقتين وصالحتين على الأقل'));
+  assert.ok(!sharedQuality.includes('إن تعذر البحث فاترك images فارغة'));
+  assert.ok(sharedQuality.includes('بدل اختلاق روابط أو حقوق'), 'shared quality gate must prohibit invented image sources and rights');
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
