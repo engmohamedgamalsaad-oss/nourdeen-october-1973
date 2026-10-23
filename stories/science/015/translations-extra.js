@@ -1,0 +1,11 @@
+(function(){
+"use strict";
+var S=window.StoryI18N=window.StoryI18N||{text:{},meta:{}};
+var extra={
+"en":{"قلب ينبض بالحياة: حكاية صانع الأمل":"A Heart That Brings Hope: The Story of a Hope Maker","خالدون عبر التاريخ · 015":"Immortals Through History · 015","المصدر والرخصة":"Source and licence","مجدي يعقوب في صورة فوتوغرافية أخرى من عام 2008.":"Magdi Yacoub in another photograph from 2008.","صورة فوتوغرافية لمجدي يعقوب عام 2008.":"A photograph of Magdi Yacoub in 2008."},
+"fr":{"قلب ينبض بالحياة: حكاية صانع الأمل":"Un cœur qui fait naître l’espoir : l’histoire d’un faiseur d’espoir","خالدون عبر التاريخ · 015":"Immortels à travers l’histoire · 015","المصدر والرخصة":"Source et licence","مجدي يعقوب في صورة فوتوغرافية أخرى من عام 2008.":"Magdi Yacoub sur une autre photographie de 2008.","صورة فوتوغرافية لمجدي يعقوب عام 2008.":"Photographie de Magdi Yacoub en 2008."},
+"it":{"قلب ينبض بالحياة: حكاية صانع الأمل":"Un cuore che fa nascere la speranza: la storia di chi dona speranza","خالدون عبر التاريخ · 015":"Immortali attraverso la storia · 015","المصدر والرخصة":"Fonte e licenza","مجدي يعقوب في صورة فوتوغرافية أخرى من عام 2008.":"Magdi Yacoub in un’altra fotografia del 2008.","صورة فوتوغرافية لمجدي يعقوب عام 2008.":"Fotografia di Magdi Yacoub nel 2008."},
+"de":{"قلب ينبض بالحياة: حكاية صانع الأمل":"Ein Herz, das Hoffnung schenkt: Die Geschichte eines Hoffnungsstifters","خالدون عبر التاريخ · 015":"Unsterbliche durch die Geschichte · 015","المصدر والرخصة":"Quelle und Lizenz","مجدي يعقوب في صورة فوتوغرافية أخرى من عام 2008.":"Magdi Yacoub auf einer weiteren Fotografie aus dem Jahr 2008.","صورة فوتوغرافية لمجدي يعقوب عام 2008.":"Fotografie von Magdi Yacoub aus dem Jahr 2008."}
+};
+Object.keys(extra).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],extra[lang]);});
+})();
