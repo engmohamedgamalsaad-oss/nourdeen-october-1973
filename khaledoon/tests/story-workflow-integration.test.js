@@ -101,6 +101,11 @@ test('review preview displays submitted images and portrait design styling', fun
   assert.ok(bundle.includes('story-design-portrait-biography .story-visual-gallery'));
   assert.ok(bundle.includes('prefers-reduced-motion'));
 });
+test('shared reader template supports explicit and system light themes', function () {
+  assert.ok(bundle.includes(':root[data-theme="light"] body[data-story-slug] .story'));
+  assert.ok(bundle.includes('@media(prefers-color-scheme:light)'));
+  assert.ok(bundle.includes(':root:not([data-theme="dark"]) body[data-story-slug]'));
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
