@@ -20,11 +20,12 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 
 /* ===== Story 007 — القالب المعتمد (نمط نجيب محفوظ) بألوان قسم العلوم — 2026-10-23 =====
    غلاف بصورة جانبية، نافذة بداية بصورة داخل إطار، وكل فقرة في صندوق مستقل.
-   الألوان كلها متغيرات على body، وتتبدل تلقائيًا في الوضع الفاتح. */
+   الغلاف يبقى داكنًا في الوضعين (الملف المشترك khaledoon-theme-stories.css يفرض نصًا فاتحًا فوق الغلاف).
+   باقي الألوان متغيرات على body وتتبدل في الوضع الفاتح. */
 body[data-story-slug="007"]{
   --sec:#8ad9e8;--sec-line:rgba(138,217,232,.32);--gold2:#e3bd78;
   --pg-bg:radial-gradient(ellipse at 88% 0%,#14495a 0%,#0e2a35 40%,#071016 84%);
-  --pg-text:#eaf4f6;--pg-head:#e6f9fd;--pg-title:#fff0d7;--pg-muted:#c3d3d8;
+  --pg-text:#eaf4f6;--pg-head:#e6f9fd;--pg-title:#f7f0df;--pg-muted:#d3e3e8;
   --pg-hero:radial-gradient(ellipse at 16% 48%,#1f6a7c 0%,transparent 40%),linear-gradient(120deg,#0b1d25 0%,#123d4a 52%,#08141a 100%);
   --pg-card:linear-gradient(145deg,#12353fe8,#0a1a22ef);
   --pg-box:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
@@ -34,8 +35,7 @@ body[data-story-slug="007"]{
 :root[data-theme="light"] body[data-story-slug="007"]{
   --sec:#0f7f95;--sec-line:rgba(15,127,149,.38);--gold2:#79572b;
   --pg-bg:linear-gradient(180deg,#f7fcfd 0%,#e6f3f6 50%,#d9ebef 100%);
-  --pg-text:#24384a;--pg-head:#14323f;--pg-title:#14323f;--pg-muted:#3f5666;
-  --pg-hero:linear-gradient(125deg,#f7fcfd 0%,#dff0f4 58%,#e8f4ef 100%);
+  --pg-text:#24384a;--pg-head:#14323f;
   --pg-card:linear-gradient(145deg,#ffffff,#eef7f9);
   --pg-box:#ffffff;--pg-box-text:#24384a;
 }
@@ -43,22 +43,21 @@ body[data-story-slug="007"]{
   :root:not([data-theme="dark"]) body[data-story-slug="007"]{
     --sec:#0f7f95;--sec-line:rgba(15,127,149,.38);--gold2:#79572b;
     --pg-bg:linear-gradient(180deg,#f7fcfd 0%,#e6f3f6 50%,#d9ebef 100%);
-    --pg-text:#24384a;--pg-head:#14323f;--pg-title:#14323f;--pg-muted:#3f5666;
-    --pg-hero:linear-gradient(125deg,#f7fcfd 0%,#dff0f4 58%,#e8f4ef 100%);
+    --pg-text:#24384a;--pg-head:#14323f;
     --pg-card:linear-gradient(145deg,#ffffff,#eef7f9);
     --pg-box:#ffffff;--pg-box-text:#24384a;
   }
 }
 
-/* الغلاف */
+/* الغلاف (داكن دائمًا) */
 body[data-story-slug="007"] .hero{min-height:610px;padding:58px 6vw 52px;isolation:isolate;background:var(--pg-hero)!important;border-bottom:1px solid var(--sec-line)}
 body[data-story-slug="007"] .hero:before{content:"";position:absolute;inset:0;z-index:0;opacity:.25;background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(138,217,232,.09) 43px 44px);pointer-events:none}
 body[data-story-slug="007"] .hero-content{width:min(1120px,100%);max-width:none;margin:0 auto;padding-inline-end:min(38%,430px);text-shadow:none}
 body[data-story-slug="007"] .hero h1{color:var(--pg-title)!important;max-width:19ch}
-body[data-story-slug="007"] .hero .eyebrow{color:var(--sec)}
+body[data-story-slug="007"] .hero .eyebrow{color:#8ad9e8}
 body[data-story-slug="007"] .author{color:var(--pg-muted)}
-body[data-story-slug="007"] .author strong{color:var(--gold2)}
-body[data-story-slug="007"] .story-share-bar>span{color:var(--gold2)}
+body[data-story-slug="007"] .author strong{color:#e3bd78}
+body[data-story-slug="007"] .story-share-bar>span{color:#e3bd78}
 body[data-story-slug="007"] .hero-art{top:9%;bottom:8%;width:min(32%,390px);height:auto;padding:0;display:flex;align-items:center;justify-content:center;opacity:1!important}
 html[dir="rtl"] body[data-story-slug="007"] .hero-art{left:4%;right:auto}
 html[dir="ltr"] body[data-story-slug="007"] .hero-art{right:4%;left:auto}
@@ -78,7 +77,13 @@ body[data-story-slug="007"] .sources a{color:var(--sec)}
 body[data-story-slug="007"] .end{width:min(1000px,calc(100% - 28px));margin:20px auto;border-radius:24px;background:var(--pg-card);border:1px solid var(--sec-line)}
 body[data-story-slug="007"] .end h2{color:var(--pg-head)}
 
-/* نافذة "ابدأ الحكاية" (تبقى داكنة في الوضعين) */
+/* الوضع الفاتح: الملف المشترك يجعل البطاقات شفافة ويلوّن العناوين الفرعية بالبنفسجي، فنعيد لون القسم */
+:root[data-theme="light"] body[data-story-slug="007"] :is(.story,.sources,.end),
+:root:not([data-theme="dark"]) body[data-story-slug="007"] :is(.story,.sources,.end){background:var(--pg-card)!important}
+:root[data-theme="light"] body[data-story-slug="007"] :is(.story .kicker,.sources .kicker,.sources a),
+:root:not([data-theme="dark"]) body[data-story-slug="007"] :is(.story .kicker,.sources .kicker,.sources a){color:var(--sec)!important}
+
+/* نافذة "ابدأ الحكاية" (الملف المشترك يجعلها فاتحة في الوضع الفاتح) */
 body[data-story-slug="007"] .story-intro-modal{background:rgba(5,10,22,.88)}
 body[data-story-slug="007"] .intro-card{border:1px solid #8ad9e8;border-radius:26px;background-color:#0b1d25;background-image:radial-gradient(ellipse at 12% 8%,rgba(138,217,232,.19),transparent 38%),radial-gradient(ellipse at 90% 92%,rgba(227,189,120,.14),transparent 34%),repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 12px),linear-gradient(135deg,#0b1d25 0%,#123d4a 58%,#08141a 100%)}
 body[data-story-slug="007"] .intro-art{box-sizing:border-box;padding:12px;height:380px;min-height:0;overflow:hidden}
