@@ -360,11 +360,13 @@ else {
         if (baseSubtitle && !String(t.subtitle || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} subtitle.`);
         if (String(story.grade || '').trim() && !String(t.grade || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} grade.`);
         if (String(story.className || '').trim() && !String(t.className || '').trim()) fail(`stories/index.json story ${story.id}: missing ${locale} className.`);
-        /* Proper names use Latin-script transliteration here, but must be identical across all translated versions. */
+        /* Proper names must match across locales, but the translated “not specified” label
+           is ordinary UI text and should remain localized (e.g. Non précisé / Nicht angegeben). */
         const candidateName = String(t.name || '').trim();
+        const unspecifiedName = /^(?:غير محدد|غير معروف|not specified|unspecified|non précisé|non precise|non specificato|non specificata|nicht angegeben)$/i.test(baseName);
         if (baseName && !candidateName) fail(`stories/index.json story ${story.id}: missing ${locale} student name.`);
         if (localizedName === null) localizedName = candidateName;
-        else if (candidateName !== localizedName) fail(`stories/index.json story ${story.id}: student name spelling differs in ${locale}.`);
+        else if (!unspecifiedName && candidateName !== localizedName) fail(`stories/index.json story ${story.id}: student name spelling differs in ${locale}.`);
       }
       if (!baseTitle) fail(`stories/index.json story ${story.id}: missing source title.`);
     }
