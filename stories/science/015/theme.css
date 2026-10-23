@@ -510,3 +510,10 @@ body[data-story-slug="015"] .hero .hero-art img{
  border-color:#8ad9e8;border-radius:22px;background:#17252b;
  box-shadow:0 28px 65px rgba(0,0,0,.55);
 }
+
+body[data-story-slug="015"] .story{
+ position:relative;padding:52px 20px;margin:20px auto;
+ border:1px solid rgba(138,217,232,.25);border-radius:24px;
+ background:linear-gradient(145deg,rgba(32,55,59,.92),rgba(21,31,37,.94));
+ box-shadow:0 18px 42px rgba(0,0,0,.3);
+}
