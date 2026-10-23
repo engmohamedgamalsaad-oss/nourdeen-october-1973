@@ -19,5 +19,21 @@ Object.assign(supplementalTranslations.de,{
 "تعرض هذه الحكاية دور فاروق الباز في دراسة سطح القمر والصحارى باستخدام الصور والخرائط. كان اختيار مواقع الهبوط على القمر عملًا جماعيًا شارك فيه علماء متعددون، وأسهم الباز بخبرته في تحليل الصور وتدريب رواد الفضاء على الملاحظة العلمية.":"Diese Geschichte erläutert Farouk El-Baz’ Beitrag zur Erforschung der Mondoberfläche und von Wüsten mithilfe von Fotos und Karten. Die Auswahl der Mondlandestellen war Teamarbeit vieler Wissenschaftler. El-Baz brachte seine Erfahrung in der Bildanalyse ein und schulte Astronauten darin, wissenschaftlich zu beobachten.",
 "الصورتان من ناسا، وقد فتحت صفحة المصدر لكل منهما وتحققت من رابط الملف المباشر. الأولى أرشيفية (S76-20263، يوليو 1975) وتُظهر الباز مع طاقم أبولو سويوز كما يصفها تعليق ناسا. والثانية رسم توضيحي فوق صورة قمرية التقطتها أبولو 10، وليست صورة للحدث نفسه، وتبيّن موقع الهبوط الثاني الذي هبطت عليه أبولو 11. تُنسب الصور إلى ناسا وفق بيانات المصدر، ويُنصح بالرجوع إلى صفحة المصدر وإرشادات ناسا الرسمية قبل إعادة الاستخدام.":"Beide Bilder stammen von der NASA; für jedes wurden die Quellseite und der direkte Dateilink geprüft. Das erste ist eine Archivaufnahme (S76-20263, Juli 1975) und zeigt El-Baz mit der Apollo-Soyuz-Besatzung, wie in der NASA-Bildunterschrift beschrieben. Das zweite ist eine Illustration über einem Mondfoto von Apollo 10; es ist keine Aufnahme des Ereignisses selbst und zeigt die zweite Landestelle, an der Apollo 11 landete. Die Bilder sind gemäß den Quellen der NASA zuzuschreiben. Vor einer Wiederverwendung sollten die Quellseiten und die offiziellen NASA-Hinweise geprüft werden."
 });
+supplementalTranslations.en["ويكيبيديا: فاروق الباز —"]="Wikipedia: Farouk El-Baz —";
+supplementalTranslations.fr["ويكيبيديا: فاروق الباز —"]="Wikipédia : Farouk El-Baz —";
+supplementalTranslations.it["ويكيبيديا: فاروق الباز —"]="Wikipedia: Farouk El-Baz —";
+supplementalTranslations.de["ويكيبيديا: فاروق الباز —"]="Wikipedia: Farouk El-Baz —";
+supplementalTranslations.en["المرصد المدرسي: فاروق الباز —"]="School Observatory: Farouk El-Baz —";
+supplementalTranslations.fr["المرصد المدرسي: فاروق الباز —"]="Observatoire scolaire : Farouk El-Baz —";
+supplementalTranslations.it["المرصد المدرسي: فاروق الباز —"]="Osservatorio scolastico: Farouk El-Baz —";
+supplementalTranslations.de["المرصد المدرسي: فاروق الباز —"]="Schulobservatorium: Farouk El-Baz —";
+supplementalTranslations.en["ecotechnics: د. فاروق الباز —"]="Ecotechnics: Dr Farouk El-Baz —";
+supplementalTranslations.fr["ecotechnics: د. فاروق الباز —"]="Ecotechnics : Dr Farouk El-Baz —";
+supplementalTranslations.it["ecotechnics: د. فاروق الباز —"]="Ecotechnics: Dr Farouk El-Baz —";
+supplementalTranslations.de["ecotechnics: د. فاروق الباز —"]="Ecotechnics: Dr Farouk El-Baz —";
+supplementalTranslations.en["رابط المصدر"]="Source link";
+supplementalTranslations.fr["رابط المصدر"]="Lien vers la source";
+supplementalTranslations.it["رابط المصدر"]="Link alla fonte";
+supplementalTranslations.de["رابط المصدر"]="Quellenlink";
 Object.keys(supplementalTranslations).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],supplementalTranslations[lang]);});
 })();
