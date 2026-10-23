@@ -4,7 +4,11 @@
   var id = match && match[1];
   if (!id) return;
 
-  var lang = (document.documentElement.lang || "ar").slice(0, 2);
+  var lang = ((window.I18N && window.I18N.lang && window.I18N.lang()) || document.documentElement.lang || "ar").slice(0, 2);
+  /* Keep the quiz in sync when the reader changes the story language before starting it. */
+  document.addEventListener("site-language-change", function () {
+    lang = ((window.I18N && window.I18N.lang && window.I18N.lang()) || document.documentElement.lang || "ar").slice(0, 2);
+  });
   var TEXT = {
     ar: {
       progress: function (n, total) { return "السؤال " + n + " من " + total; },
@@ -170,7 +174,7 @@
   }
   start.addEventListener("click", begin);
   var root = location.pathname.split("/stories/")[0] + "/";
-  fetch(root + "stories/quizzes/" + id + ".json").then(function (response) {
+  fetch(root + "stories/quizzes/" + id + ".json", { cache: "no-store" }).then(function (response) {
     if (!response.ok) throw new Error("HTTP " + response.status);
     return response.json();
   }).then(function (data) {
