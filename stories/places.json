@@ -1,5 +1,5 @@
 {
-  "_readme": "أماكن ميلاد الشخصيات لخريطة الصفحة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة. الحكاية 002 (باقي زكي يوسف) بلا مكان لأن المصادر تختلف في مكان ميلاده؛ تُضاف بعد التأكد. توماس وعافية (003): الإحداثيات تقريبية لمنطقة النوبة جنوب أسوان وتحتاج مراجعة. الحكاية 010 (سميرة موسى): موقع الميلاد في سنبو الكبرى؛ الإحداثيات تقريبية ومخصصة لتمثيل القرية على الخريطة وليست عنوانًا دقيقًا. الحكايات 008 (توفيق الحكيم) و009 (نجيب محفوظ) و012 (فاروق الباز): إحداثيات تمثّل المدينة أو الحي وليست عنوانًا دقيقًا.",
+  "_readme": "أماكن مرتبطة بالحكايات في الخريطة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de)، وplace_label اختياري لتوضيح نوع العلاقة بالمكان، وapproximate للمواقع التقريبية، وsource_name وsource_url للمصدر. لا تُعرض المواقع المرتبطة بالشخصية على أنها أماكن ميلاد إلا إذا كان ذلك موثقًا. الحكاية 002 بلا مكان لأن المصادر تختلف في مكان ميلاد باقي زكي يوسف؛ الحكاية 003 موقع تقريبي لمنطقة توماس وعافية بالنوبة. الإحداثيات تمثل المدينة أو المعلم المذكور لا عنوانًا دقيقًا.",
   "001": {
     "lat": 31.2001,
     "lng": 29.9187,
@@ -104,17 +104,19 @@
     }
   },
   "011": {
-    "lat": 30.0106,
-    "lng": 31.2315,
+    "lat": 21.42664,
+    "lng": 39.82563,
+    "approximate": true,
     "place": {
-      "ar": "جامع عمرو بن العاص، الفسطاط، القاهرة القديمة، مصر",
-      "de": "Moschee des Amr ibn al-As, Fustat, Alt-Kairo, Ägypten",
-      "en": "Mosque of Amr ibn al-As, Fustat, Old Cairo, Egypt",
-      "fr": "Mosquée d'Amr ibn al-As, Fustat, Vieux Caire, Égypte",
-      "it": "Moschea di Amr ibn al-As, Fustat, Cairo Vecchia, Egitto"
+      "ar": "مكة المكرمة",
+      "en": "Mecca",
+      "fr": "La Mecque",
+      "it": "La Mecca",
+      "de": "Mekka"
     },
-    "source_name": "Ministry of Tourism and Antiquities (Egypt)",
-    "source_url": "https://egymonuments.gov.eg/ar/monuments/the-mosque-of-amr-ibn-al-as/"
+    "source_name": "متحف الإسلام — عمرو بن العاص",
+    "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/",
+    "photo": "stories/islamic/011/cover.svg"
   },
   "012": {
     "lat": 30.5877,
@@ -126,19 +128,68 @@
       "fr": "Zagazig, Charqiya",
       "it": "Zagazig, Sharqia",
       "de": "Zagazig, Scharkia"
-    }
+    },
+    "source_name": "جامعة عين شمس — فاروق الباز",
+    "source_url": "https://www.asu.edu.eg/ar/148/page",
+    "photo": "stories/science/012/cover.svg"
   },
   "013": {
     "lat": 25.7383,
     "lng": 32.6065,
+    "approximate": true,
     "place": {
-      "ar": "معبد حتشبسوت بالدير البحري - الأقصر، مصر",
-      "de": "Totentempel der Hatschepsut in Deir el-Bahari - Luxor, Ägypten",
-      "en": "Mortuary Temple of Hatshepsut at Deir el-Bahari - Luxor, Egypt",
-      "fr": "Temple funéraire de Hatshepsout à Deir el-Bahari - Louxor, Égypte",
-      "it": "Tempio funerario di Hatshepsut a Deir el-Bahari - Luxor, Egitto"
+      "ar": "معبد حتشبسوت بالدير البحري، الأقصر",
+      "en": "Hatshepsut’s temple at Deir el-Bahari, Luxor",
+      "fr": "Temple d’Hatchepsout à Deir el-Bahari, Louxor",
+      "it": "Tempio di Hatshepsut a Deir el-Bahari, Luxor",
+      "de": "Tempel der Hatschepsut in Deir el-Bahari, Luxor"
     },
-    "source_name": "UNESCO World Heritage Centre",
-    "source_url": "https://whc.unesco.org/en/list/87"
+    "place_label": {
+      "ar": "موقع مرتبط بالحكاية: ",
+      "en": "Story-related site: ",
+      "fr": "Lieu lié à l’histoire : ",
+      "it": "Luogo legato alla storia: ",
+      "de": "Mit der Geschichte verbundener Ort: "
+    },
+    "source_name": "وزارة السياحة والآثار المصرية — معبد حتشبسوت",
+    "source_url": "https://egymonuments.gov.eg/en/monuments/hatshepsut-temple/",
+    "photo": "stories/women/013/cover.svg"
+  },
+  "014": {
+    "lat": 39.7747,
+    "lng": 64.4286,
+    "approximate": true,
+    "place": {
+      "ar": "بخارى، إحدى المدن المذكورة في مصادر سيرته",
+      "en": "Bukhara, one of the cities associated in biographical sources",
+      "fr": "Boukhara, l’une des villes mentionnées dans les sources biographiques",
+      "it": "Bukhara, una delle città citate nelle fonti biografiche",
+      "de": "Buchara, eine der in biografischen Quellen genannten Städte"
+    },
+    "place_label": {
+      "ar": "مدينة مرتبطة بسيرته: ",
+      "en": "City associated with his life: ",
+      "fr": "Ville liée à sa vie : ",
+      "it": "Città legata alla sua vita: ",
+      "de": "Mit seinem Leben verbundene Stadt: "
+    },
+    "source_name": "Sunnah.com — محمد بن العباس الخوارزمي",
+    "source_url": "https://sunnah.com/narrator/69208",
+    "photo": "stories/science/014/cover.svg"
+  },
+  "015": {
+    "lat": 30.420387,
+    "lng": 31.562232,
+    "approximate": true,
+    "place": {
+      "ar": "بلبيس، الشرقية",
+      "en": "Belbeis, Sharqia",
+      "fr": "Belbeis, gouvernorat de Charqiya",
+      "it": "Belbeis, governatorato di Sharqia",
+      "de": "Belbeis, Gouvernement Scharkia"
+    },
+    "source_name": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
+    "source_url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/",
+    "photo": "stories/science/015/cover.svg"
   }
 }

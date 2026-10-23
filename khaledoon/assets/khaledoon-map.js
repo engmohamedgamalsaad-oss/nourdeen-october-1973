@@ -34,6 +34,7 @@
     read:   { ar: 'اقرأ الحكاية', en: 'Read the story', fr: 'Lire l’histoire', it: 'Leggi la storia', de: 'Geschichte lesen' },
     err:    { ar: 'تعذّر تحميل الخريطة الآن. هذه قائمة بالأماكن:', en: 'The map could not be loaded right now. Here is the list of places:', fr: 'La carte n’a pas pu être chargée. Voici la liste des lieux :', it: 'Non è stato possibile caricare la mappa. Ecco l’elenco dei luoghi:', de: 'Die Karte konnte nicht geladen werden. Hier die Liste der Orte:' },
     credit: { ar: 'مصدر الصورة: ', en: 'Photo: ', fr: 'Photo : ', it: 'Foto: ', de: 'Foto: ' },
+    source: { ar: 'المصدر: ', en: 'Source: ', fr: 'Source : ', it: 'Fonte: ', de: 'Quelle: ' },
     legend: { ar: 'الأقسام', en: 'Sections', fr: 'Rubriques', it: 'Sezioni', de: 'Rubriken' },
   };
   function loadSectionConfig() {
@@ -105,7 +106,7 @@
   var hidden = {};
   var map = null, group = null, markers = [];
 
-  function validPhoto(p) { return typeof p === 'string' && /^[\w\-.\/]+\.(jpe?g|png|webp)$/i.test(p) && p.indexOf('..') < 0 && p.charAt(0) !== '/'; }
+  function validPhoto(p) { return typeof p === 'string' && /^[\w\-.\/]+\.(jpe?g|png|webp|svg)$/i.test(p) && p.indexOf('..') < 0 && p.charAt(0) !== '/'; }
   function validNum(n, lim) { return typeof n === 'number' && isFinite(n) && Math.abs(n) <= lim; }
 
   /* الحكايات التي أخفاها الأدمن: طلب واحد مشترك مع khaledoon-favorites.js، وعند الفشل لا يُخفى شيء. */
@@ -181,7 +182,12 @@
     c.appendChild(ph);
     c.appendChild(el('div', 'khm-name', pick(s, 'person', l)));
     var pl = (p.place && (p.place[l] || p.place.ar)) || '';
-    if (pl) c.appendChild(el('div', 'khm-place', T('born') + pl));
+    if (pl) c.appendChild(el('div', 'khm-place', ((p.place_label && (p.place_label[l] || p.place_label.ar)) || T('born')) + pl));
+    if (p.source_url && /^https:\/\//i.test(p.source_url)) {
+      var source = el('a', 'khm-source', T('source') + (p.source_name || p.source_url));
+      source.href = p.source_url; source.target = '_blank'; source.rel = 'noopener noreferrer';
+      c.appendChild(source);
+    }
     if (p.approximate === true) c.appendChild(el('div', 'khm-approx', T('approx')));
     c.appendChild(el('div', 'khm-story', pick(s, 'title', l)));
     if (p.credit && validPhoto(p.photo)) c.appendChild(el('div', 'khm-credit', T('credit') + p.credit));
@@ -265,8 +271,13 @@
       var person = pick(e.s, 'person', l);
       if (person && person !== a.textContent) li.appendChild(document.createTextNode(' — ' + person));
       var pl = e.p && e.p.place && (e.p.place[l] || e.p.place.ar);
-      if (pl) li.appendChild(document.createTextNode(' — ' + pl));
+      if (pl) li.appendChild(document.createTextNode(' — ' + ((e.p.place_label && (e.p.place_label[l] || e.p.place_label.ar)) || T('born')) + pl));
       else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
+      if (e.p && e.p.source_url && /^https:\/\//i.test(e.p.source_url)) {
+        var sourceLink = el('a', null, T('source') + (e.p.source_name || e.p.source_url));
+        sourceLink.href = e.p.source_url; sourceLink.target = '_blank'; sourceLink.rel = 'noopener noreferrer';
+        li.appendChild(document.createTextNode(' — ')); li.appendChild(sourceLink);
+      }
       if (e.p && e.p.approximate === true) li.appendChild(document.createTextNode(' — ' + T('approx')));
       ul.appendChild(li);
     });

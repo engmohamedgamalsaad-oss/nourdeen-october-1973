@@ -15,6 +15,19 @@ supplementalTranslations.en["رابط المصدر"]="Source link";
 supplementalTranslations.fr["رابط المصدر"]="Lien vers la source";
 supplementalTranslations.it["رابط المصدر"]="Link alla fonte";
 supplementalTranslations.de["رابط المصدر"]="Quellenlink";
+supplementalTranslations.en["رابط الرخصة"]="License link";
+supplementalTranslations.fr["رابط الرخصة"]="Lien vers la licence";
+supplementalTranslations.it["رابط الرخصة"]="Link alla licenza";
+supplementalTranslations.de["رابط الرخصة"]="Lizenzlink";
+supplementalTranslations.en["رابط الرخصة CC BY-SA 3.0"]="CC BY-SA 3.0 license";
+supplementalTranslations.fr["رابط الرخصة CC BY-SA 3.0"]="Licence CC BY-SA 3.0";
+supplementalTranslations.it["رابط الرخصة CC BY-SA 3.0"]="Licenza CC BY-SA 3.0";
+supplementalTranslations.de["رابط الرخصة CC BY-SA 3.0"]="Lizenz CC BY-SA 3.0";
+supplementalTranslations.en["تصوير Raafat عبر Wikimedia Commons ·"]="Photograph by Raafat via Wikimedia Commons ·";
+supplementalTranslations.fr["تصوير Raafat عبر Wikimedia Commons ·"]="Photographie de Raafat via Wikimedia Commons ·";
+supplementalTranslations.it["تصوير Raafat عبر Wikimedia Commons ·"]="Fotografia di Raafat tramite Wikimedia Commons ·";
+supplementalTranslations.de["تصوير Raafat عبر Wikimedia Commons ·"]="Foto von Raafat über Wikimedia Commons ·";
+
 
 /* 2026-10-23: complete common visible labels for the five-language story UI */
 Object.assign(supplementalTranslations.en, {"❤️ أعجبتني":"❤️ I liked it","حكاية ومجهود مميز":"A remarkable story and effort","حكاية لم أكن أعرفها من قبل":"A story I had never heard before","حكاية ملهمة":"An inspiring story","أحب أقرأ حكايات تانية":"I’d like to read more stories","صورة أرشيفية":"Archival photograph","صورة توضيحية":"Illustration","صورة تاريخية":"Historical photograph","وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام.":"According to the archive record. Check the original source before reuse.","يجب ذكر المصور وربط الرخصة والإشارة إلى أي تعديل.":"Credit the photographer, link the license, and note any edits.","يُذكر اسم ناسا مصدرًا.":"NASA must be credited as the source."});
