@@ -8,6 +8,9 @@ body.story-design-portrait-biography{
   font-family:Cairo,Tahoma,sans-serif;
   line-height:2;
 }
+body.story-design-portrait-biography[data-story-slug="013"]{--story-accent:#a9d9a6;--section-glow:rgba(169,217,166,.20)}
+body.story-design-portrait-biography[data-story-slug="014"]{--story-accent:#d4b7ff;--section-glow:rgba(212,183,255,.20)}
+body.story-design-portrait-biography[data-story-slug="015"]{--story-accent:#8ad9e8;--section-glow:rgba(138,217,232,.20)}
 body.story-design-portrait-biography header{
   position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
   padding:12px clamp(14px,4vw,48px);background:rgba(10,20,31,.94)!important;
@@ -50,7 +53,7 @@ body.story-design-portrait-biography #intro .modal-close{
 body.story-design-portrait-biography .hero{
   position:relative;isolation:isolate;display:flex;align-items:center;overflow:hidden;min-height:610px;
   padding:clamp(52px,7vw,92px) clamp(18px,6vw,80px);
-  background:linear-gradient(112deg,rgba(8,15,26,.96),rgba(17,30,43,.78)),url("cover-popup.svg") center/cover no-repeat!important;
+  background:linear-gradient(112deg,rgba(8,15,26,.96),rgba(17,30,43,.78))!important;
   border-bottom:1px solid color-mix(in srgb,var(--story-accent) 60%,transparent)!important
 }
 body.story-design-portrait-biography .hero:after{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse at 85% 20%,var(--section-glow,rgba(138,217,232,.18)),transparent 56%);pointer-events:none}
@@ -100,7 +103,7 @@ html[data-theme="light"] body.story-design-portrait-biography{
 }
 html[data-theme="light"] body.story-design-portrait-biography header{background:rgba(255,253,248,.96)!important}
 html[data-theme="light"] body.story-design-portrait-biography header>a{color:#263746!important}
-html[data-theme="light"] body.story-design-portrait-biography .hero{background:linear-gradient(110deg,rgba(247,249,251,.94),rgba(236,242,246,.80)),url("cover-popup.svg") center/cover no-repeat!important}
+html[data-theme="light"] body.story-design-portrait-biography .hero{background:linear-gradient(110deg,rgba(247,249,251,.94),rgba(236,242,246,.80))!important}
 html[data-theme="light"] body.story-design-portrait-biography .hero h1,
 html[data-theme="light"] body.story-design-portrait-biography .story h2,
 html[data-theme="light"] body.story-design-portrait-biography .story-visual-gallery h2{color:#243746!important}
