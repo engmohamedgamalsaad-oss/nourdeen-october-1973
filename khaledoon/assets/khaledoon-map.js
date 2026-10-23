@@ -181,7 +181,7 @@
     c.appendChild(ph);
     c.appendChild(el('div', 'khm-name', pick(s, 'person', l)));
     var pl = (p.place && (p.place[l] || p.place.ar)) || '';
-    if (pl) c.appendChild(el('div', 'khm-place', T('born') + pl));
+    var placeLabel = p.place_label && (p.place_label[l] || p.place_label.ar);\n    if (pl) c.appendChild(el('div', 'khm-place', (placeLabel || T('born')) + pl));
     if (p.approximate === true) c.appendChild(el('div', 'khm-approx', T('approx')));
     c.appendChild(el('div', 'khm-story', pick(s, 'title', l)));
     if (p.credit && validPhoto(p.photo)) c.appendChild(el('div', 'khm-credit', T('credit') + p.credit));
