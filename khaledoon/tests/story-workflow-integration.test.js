@@ -92,6 +92,15 @@ test('approved stories can reopen reader preview and AI image data is preserved'
   assert.ok(preview.includes('if(!Array.isArray(d.images))d.images='));
   assert.ok(preview.includes('d.visual_design=firstText'));
 });
+test('review preview displays submitted images and portrait design styling', function () {
+  assert.ok(preview.includes('function renderReviewImages(d)'));
+  assert.ok(preview.includes('renderReviewImages(d);'));
+  assert.ok(preview.includes('pub-image-grid'));
+  assert.ok(preview.includes('تعذر تحميل ملف الصورة من الرابط'));
+  assert.ok(bundle.includes('story-design-portrait-biography .hero h1'));
+  assert.ok(bundle.includes('story-design-portrait-biography .story-visual-gallery'));
+  assert.ok(bundle.includes('prefers-reduced-motion'));
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
