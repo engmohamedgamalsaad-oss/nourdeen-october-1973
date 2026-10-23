@@ -243,7 +243,7 @@ function validateStoryPackage(pkg) {
       String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
       ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
   });
-  if (validImages.length < 2) errors.push('أضف صورتين موثقتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights.');
+  if (validImages.length < 2 && images.length > 0) errors.push('إذا أُرفقت صور، فأكمل توثيق صورتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights. اترك images فارغة فقط إذا تعذر التحقق من الصور واشرح السبب في images_note.');
   images.forEach(function (im, index) {
     if (!isObj(im)) return;
     ['en','fr','it','de'].forEach(function (lang) {
