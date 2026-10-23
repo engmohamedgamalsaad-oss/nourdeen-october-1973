@@ -388,3 +388,14 @@ html[data-theme="light"] body[data-story-slug] #intro #intro-desc,
 html[data-theme="light"] body[data-story-slug] #intro #start,
 :root[data-theme="light"] body[data-story-slug] #intro #start{background:linear-gradient(120deg,#d8b66b,#7faeaa)!important;color:#20363b!important;border-color:#b29a57!important}
 html[data-theme="light"] body[data-story-slug] a{ text-underline-offset:3px }
+
+/* Light mode readability override */
+html[data-theme="light"] body[data-story-slug="013"]{background:#fbf8f0!important;color:#263746!important}
+html[data-theme="light"] body[data-story-slug="013"] .hero{background:linear-gradient(125deg,#fffdf7,#f3ead8 60%,#e6f0ec)!important;color:#263746!important}
+html[data-theme="light"] body[data-story-slug="013"] .hero h1,html[data-theme="light"] body[data-story-slug="013"] .hero .hero-subtitle,html[data-theme="light"] body[data-story-slug="013"] .hero .author{color:#354b58!important;text-shadow:none!important}
+html[data-theme="light"] body[data-story-slug="013"] .story,html[data-theme="light"] body[data-story-slug="013"] .sources,html[data-theme="light"] body[data-story-slug="013"] .end,html[data-theme="light"] body[data-story-slug="013"] .story-quiz-section,html[data-theme="light"] body[data-story-slug="013"] .reactions-section{background:#fffdf8!important;color:#354b58!important;border-color:#dfd2b8!important}
+html[data-theme="light"] body[data-story-slug="013"] .story h2,html[data-theme="light"] body[data-story-slug="013"] .story p,html[data-theme="light"] body[data-story-slug="013"] .story li,html[data-theme="light"] body[data-story-slug="013"] .sources a{color:#354b58!important;text-shadow:none!important}
+html[data-theme="light"] body[data-story-slug="013"] .glass,html[data-theme="light"] body[data-story-slug="013"] .story-quiz-card,html[data-theme="light"] body[data-story-slug="013"] .reactions-wrap,html[data-theme="light"] body[data-story-slug="013"] .story-image-card{background:#fffdf8!important;color:#293b4b!important;border-color:#dfd2b8!important}
+html[data-theme="light"] body[data-story-slug="013"] .story-visual-gallery{background:linear-gradient(135deg,#f4eee1,#eaf2ef)!important;color:#293b4b!important}
+html[data-theme="light"] body[data-story-slug="013"] .language-switch .lang-option{background:#fffdf8!important;color:#294453!important;border-color:#cfc09e!important}
+html[data-theme="light"] body[data-story-slug="013"] .language-switch .lang-option.is-active{background:#2b6a70!important;color:#fff!important;border-color:#2b6a70!important}
