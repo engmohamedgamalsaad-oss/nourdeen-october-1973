@@ -439,4 +439,37 @@ body[data-story-slug="015"] .hero .container{
 }
 body[data-story-slug="015"] .hero .eyebrow,
 body[data-story-slug="015"] .hero .person-name,
-body[d
+body[data-story-slug="015"] .story .kicker,
+body[data-story-slug="015"] .story-quiz-kicker{color:#8ad9e8!important}
+body[data-story-slug="015"] .hero h1{color:#eafaff!important}
+body[data-story-slug="015"] .hero-subtitle{color:#d8e7e9!important}
+body[data-story-slug="015"] .hero .author{color:#cfdfdf!important}
+body[data-story-slug="015"] .hero .author strong{color:#e3bd78!important}
+body[data-story-slug="015"] .hero .cover-label{
+  border-color:rgba(138,217,232,.55)!important;
+  color:#e2eeef!important;
+  background:rgba(18,38,43,.74)!important;
+}
+body[data-story-slug="015"] .hero .hero-art img{
+  border-color:#8ad9e8!important;
+  background:#17252b!important;
+}
+@media(max-width:860px){
+  body[data-story-slug="015"] .hero .container{
+    width:calc(100% - 30px);
+    padding:0;
+    text-align:center;
+  }
+}
+@media(max-width:700px){
+  body[data-story-slug="015"] .hero{
+    min-height:720px!important;
+    padding:42px 0 285px!important;
+  }
+  body[data-story-slug="015"] .hero .container{
+    width:calc(100% - 30px);
+    padding:0;
+    text-align:center;
+  }
+}
+@media(prefers-reduced-motion:red
