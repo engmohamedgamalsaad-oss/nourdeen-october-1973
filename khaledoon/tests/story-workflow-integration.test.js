@@ -147,7 +147,7 @@ test('admin validates every translated field and every quiz translation before A
   var sharedQuality = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(sharedQuality.includes('صورتين موثقتين وصالحتين على الأقل'));
   assert.ok(!sharedQuality.includes('إن تعذر البحث فاترك images فارغة'));
-  assert.ok(admin.includes('لا تجعل الصور غير المتاحة سببًا لاختلاق معلومات أو روابط'));
+  assert.ok(sharedQuality.includes('بدل اختلاق روابط أو حقوق'), 'shared quality gate must prohibit invented image sources and rights');
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers'));
 });
