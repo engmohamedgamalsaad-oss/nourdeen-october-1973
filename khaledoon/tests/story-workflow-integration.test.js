@@ -142,6 +142,12 @@ test('preview requires rejection reason and calls workflow transitions', functio
   assert.ok(preview.includes('تم اعتماد المعاينة وحفظ القرار والتحقق منه.'));
   assert.ok(preview.includes('رفض المعاينة'));
 });
+test('review preview renders attached image thumbnails and refreshes generated template assets', function () {
+  assert.ok(preview.includes('function renderReviewImages(d)'));
+  assert.ok(preview.includes('image.loading=\'eager\''));
+  assert.ok(preview.includes('renderReviewImages(d);put(\'reviewOriginal\''));
+  assert.ok(preview.includes('story-template-bundle.js?v=20261023-1'));
+});
 test('reader-template preview keeps translations and disables reaction writes', function () {
   assert.ok(bundle.includes('renderPreviewHtml:renderPreviewHtml'));
   assert.ok(bundle.includes("translatedRows(d,'preview')"));
