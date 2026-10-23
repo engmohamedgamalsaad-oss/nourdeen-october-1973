@@ -89,7 +89,7 @@ test('approved stories can reopen reader preview and AI image data is preserved'
   assert.ok(admin.includes('static_story_path:null,bundle_downloaded:false,prepared_page_url:\'\''));
   assert.ok(preview.includes("params.get('table')==='submitted_stories'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(preview.includes("record_type:legacy?'legacy':'modern'"));
-  assert.ok(preview.includes('if(!Array.isArray(d.images))d.images='));
+  assert.ok(preview.includes('if(!Array.isArray(d.images)||!d.images.length)d.images='), 'empty image arrays should fall back to saved draft or metadata images');
   assert.ok(preview.includes('d.visual_design=firstText'));
 });
 test('review preview displays submitted images and portrait design styling', function () {
