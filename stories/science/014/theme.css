@@ -404,3 +404,25 @@ html[data-theme="light"] body[data-story-slug="014"] select {
   color: #263746 !important;
   border-color: #cdbb9d !important;
 }
+
+
+/* Historical section palette — aligned with the History & Civilizations collection */
+:root{--accent:#d5b7ff;--gold:#e3bd78}
+body[data-story-slug="014"]{background:radial-gradient(ellipse at 50% 0%,#2b274b 0%,#101824 50%,#060b12 100%);color:#f4efff}
+body[data-story-slug="014"] header{border-bottom-color:#55466e}
+body[data-story-slug="014"] .language-switch button,
+body[data-story-slug="014"] .reaction-actions button{border-color:#6b5a8a}
+body[data-story-slug="014"] .language-switch button.active,
+body[data-story-slug="014"] .reaction-actions button.is-selected{background:#d5b7ff;color:#171321;border-color:#d5b7ff}
+body[data-story-slug="014"] .hero{background:linear-gradient(110deg,rgba(10,13,28,.96),rgba(25,24,49,.72)),url("cover-popup.svg") center/cover no-repeat;border-bottom-color:#55466e}
+body[data-story-slug="014"] .hero .eyebrow,
+body[data-story-slug="014"] .story .kicker{color:#d5b7ff}
+body[data-story-slug="014"] .hero h1,
+body[data-story-slug="014"] .story h2{color:#f3e7ff}
+body[data-story-slug="014"] .story{border-color:#55466e}
+body[data-story-slug="014"] .quote{border-color:#d5b7ff;background:rgba(213,183,255,.08)}
+body[data-story-slug="014"] .sources,
+body[data-story-slug="014"] .reactions{border-top-color:#3a334e;background:rgba(10,15,28,.55)}
+body[data-story-slug="014"] .sources a{color:#e3bd78}
+body[data-story-slug="014"] .end{background:radial-gradient(ellipse at center,#29264a,#060b12 75%)}
+@media(prefers-reduced-motion:reduce){body[data-story-slug="014"] *,body[data-story-slug="014"] *::before,body[data-story-slug="014"] *::after{animation:none!important;transition:none!important}}
