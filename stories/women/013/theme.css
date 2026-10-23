@@ -399,3 +399,121 @@ html[data-theme="light"] body[data-story-slug="013"] .glass,html[data-theme="lig
 html[data-theme="light"] body[data-story-slug="013"] .story-visual-gallery{background:linear-gradient(135deg,#f4eee1,#eaf2ef)!important;color:#293b4b!important}
 html[data-theme="light"] body[data-story-slug="013"] .language-switch .lang-option{background:#fffdf8!important;color:#294453!important;border-color:#cfc09e!important}
 html[data-theme="light"] body[data-story-slug="013"] .language-switch .lang-option.is-active{background:#2b6a70!important;color:#fff!important;border-color:#2b6a70!important}
+
+
+/* 2026-10-23 repair: consistent readable light palette for all published story sections.
+   Keep these rules last so legacy per-story declarations cannot override the light theme. */
+html[data-theme="light"] body[data-story-slug],
+:root[data-theme="light"] body[data-story-slug] {
+  background:#f7f5ee !important;
+  color:#263746 !important;
+}
+html[data-theme="light"] body[data-story-slug] header,
+html[data-theme="light"] body[data-story-slug] .story,
+html[data-theme="light"] body[data-story-slug] .story-quiz-section,
+html[data-theme="light"] body[data-story-slug] .reactions-section,
+html[data-theme="light"] body[data-story-slug] .sources,
+html[data-theme="light"] body[data-story-slug] .end,
+:root[data-theme="light"] body[data-story-slug] header,
+:root[data-theme="light"] body[data-story-slug] .story,
+:root[data-theme="light"] body[data-story-slug] .story-quiz-section,
+:root[data-theme="light"] body[data-story-slug] .reactions-section,
+:root[data-theme="light"] body[data-story-slug] .sources,
+:root[data-theme="light"] body[data-story-slug] .end {
+  background:#fffdf8 !important;
+  color:#263746 !important;
+  border-color:#ded4bf !important;
+}
+html[data-theme="light"] body[data-story-slug] .hero,
+:root[data-theme="light"] body[data-story-slug] .hero {
+  background:linear-gradient(125deg,#fffdf7 0%,#f1eadb 58%,#e5efeb 100%) !important;
+  color:#263746 !important;
+  border-bottom:1px solid #d8c9a8 !important;
+  text-shadow:none !important;
+}
+html[data-theme="light"] body[data-story-slug] .hero :is(h1,h2,.eyebrow,.hero-subtitle,.person-name,.author,.author span,.author strong,.cover-label),
+:root[data-theme="light"] body[data-story-slug] .hero :is(h1,h2,.eyebrow,.hero-subtitle,.person-name,.author,.author span,.author strong,.cover-label) {
+  color:#2d4653 !important;
+  text-shadow:none !important;
+}
+html[data-theme="light"] body[data-story-slug] .story :is(h2,h3,.kicker,p,li,blockquote),
+html[data-theme="light"] body[data-story-slug] .sources :is(h2,h3,p,li,a),
+html[data-theme="light"] body[data-story-slug] .end :is(h2,p),
+html[data-theme="light"] body[data-story-slug] .story-quiz-section :is(h2,h3,p,label),
+html[data-theme="light"] body[data-story-slug] .reactions-section :is(h2,h3,p),
+:root[data-theme="light"] body[data-story-slug] .story :is(h2,h3,.kicker,p,li,blockquote),
+:root[data-theme="light"] body[data-story-slug] .sources :is(h2,h3,p,li,a),
+:root[data-theme="light"] body[data-story-slug] .end :is(h2,p),
+:root[data-theme="light"] body[data-story-slug] .story-quiz-section :is(h2,h3,p,label),
+:root[data-theme="light"] body[data-story-slug] .reactions-section :is(h2,h3,p) {
+  color:#344b58 !important;
+  text-shadow:none !important;
+}
+html[data-theme="light"] body[data-story-slug] :is(.glass,.story-quiz-card,.story-quiz-option,.reactions-wrap,.story-image-card,.image-frame,.modal-card),
+:root[data-theme="light"] body[data-story-slug] :is(.glass,.story-quiz-card,.story-quiz-option,.reactions-wrap,.story-image-card,.image-frame,.modal-card) {
+  background:#fffdf8 !important;
+  color:#263746 !important;
+  border-color:#ded4bf !important;
+  box-shadow:0 8px 24px rgba(55,45,25,.09) !important;
+}
+html[data-theme="light"] body[data-story-slug] .story-image-card figcaption,
+html[data-theme="light"] body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a),
+html[data-theme="light"] body[data-story-slug] .image-frame figcaption,
+html[data-theme="light"] body[data-story-slug] .source-note,
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption,
+:root[data-theme="light"] body[data-story-slug] .story-image-card figcaption :is(strong,span,small,a),
+:root[data-theme="light"] body[data-story-slug] .image-frame figcaption,
+:root[data-theme="light"] body[data-story-slug] .source-note {
+  color:#3d505c !important;
+}
+html[data-theme="light"] body[data-story-slug] .story-visual-gallery,
+:root[data-theme="light"] body[data-story-slug] .story-visual-gallery {
+  background:linear-gradient(135deg,#f4eee2,#eaf2ef) !important;
+  color:#263746 !important;
+  border-color:#ded4bf !important;
+}
+html[data-theme="light"] body[data-story-slug] .language-switch :is(button,.lang-option),
+:root[data-theme="light"] body[data-story-slug] .language-switch :is(button,.lang-option) {
+  background:#fffdf8 !important;
+  color:#294453 !important;
+  border-color:#cfc09e !important;
+}
+html[data-theme="light"] body[data-story-slug] .language-switch :is(button.active,.lang-option.is-active),
+:root[data-theme="light"] body[data-story-slug] .language-switch :is(button.active,.lang-option.is-active) {
+  background:#2b6a70 !important;
+  color:#fff !important;
+  border-color:#2b6a70 !important;
+}
+html[data-theme="light"] body[data-story-slug] #intro.modal,
+:root[data-theme="light"] body[data-story-slug] #intro.modal { background:rgba(35,48,48,.48) !important; }
+html[data-theme="light"] body[data-story-slug] #intro .modal-card,
+html[data-theme="light"] body[data-story-slug] #intro .modal-copy :is(h2,p),
+html[data-theme="light"] body[data-story-slug] #intro #intro-desc,
+:root[data-theme="light"] body[data-story-slug] #intro .modal-card,
+:root[data-theme="light"] body[data-story-slug] #intro .modal-copy :is(h2,p),
+:root[data-theme="light"] body[data-story-slug] #intro #intro-desc {
+  background:#fffdf7 !important;
+  color:#263746 !important;
+  border-color:#d4c59e !important;
+  text-shadow:none !important;
+}
+html[data-theme="light"] body[data-story-slug] button,
+html[data-theme="light"] body[data-story-slug] .btn,
+:root[data-theme="light"] body[data-story-slug] button,
+:root[data-theme="light"] body[data-story-slug] .btn { text-shadow:none !important; }
+@media (prefers-color-scheme: light) {
+  html:not([data-theme="dark"]) body[data-story-slug] { background:#f7f5ee !important; color:#263746 !important; }
+  html:not([data-theme="dark"]) body[data-story-slug] header,
+  html:not([data-theme="dark"]) body[data-story-slug] .story,
+  html:not([data-theme="dark"]) body[data-story-slug] .story-quiz-section,
+  html:not([data-theme="dark"]) body[data-story-slug] .reactions-section,
+  html:not([data-theme="dark"]) body[data-story-slug] .sources,
+  html:not([data-theme="dark"]) body[data-story-slug] .end { background:#fffdf8 !important; color:#263746 !important; border-color:#ded4bf !important; }
+  html:not([data-theme="dark"]) body[data-story-slug] .hero { background:linear-gradient(125deg,#fffdf7 0%,#f1eadb 58%,#e5efeb 100%) !important; color:#263746 !important; }
+  html:not([data-theme="dark"]) body[data-story-slug] .hero :is(h1,h2,.eyebrow,.hero-subtitle,.person-name,.author,.author span,.author strong,.cover-label),
+  html:not([data-theme="dark"]) body[data-story-slug] .story :is(h2,h3,.kicker,p,li,blockquote),
+  html:not([data-theme="dark"]) body[data-story-slug] .sources :is(h2,h3,p,li,a),
+  html:not([data-theme="dark"]) body[data-story-slug] .end :is(h2,p) { color:#344b58 !important; text-shadow:none !important; }
+  html:not([data-theme="dark"]) body[data-story-slug] :is(.glass,.story-quiz-card,.story-quiz-option,.reactions-wrap,.story-image-card,.image-frame,.modal-card) { background:#fffdf8 !important; color:#263746 !important; border-color:#ded4bf !important; }
+}
+

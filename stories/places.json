@@ -1,5 +1,5 @@
 {
-  "_readme": "أماكن ميلاد الشخصيات لخريطة الصفحة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة. الحكاية 002 (باقي زكي يوسف) بلا مكان لأن المصادر تختلف في مكان ميلاده؛ تُضاف بعد التأكد. توماس وعافية (003): الإحداثيات تقريبية لمنطقة النوبة جنوب أسوان وتحتاج مراجعة. الحكاية 010 (سميرة موسى): موقع الميلاد في سنبو الكبرى؛ الإحداثيات تقريبية ومخصصة لتمثيل القرية على الخريطة وليست عنوانًا دقيقًا. الحكايات 008 (توفيق الحكيم) و009 (نجيب محفوظ) و012 (فاروق الباز): إحداثيات تمثّل المدينة أو الحي وليست عنوانًا دقيقًا.",
+  "_readme": "أماكن مرتبطة بالشخصيات لخريطة الصفحة الرئيسية (مكان الميلاد أو موقع موثق مرتبط بالسيرة). المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de), photo (مسار نسبي اختياري لصورة موثّقة), credit (مصدر الصورة). بدون photo يظهر ظل شخص موحّد. الإحداثيات تقريبية للمراجعة. الحكاية 002 (باقي زكي يوسف) بلا مكان لأن المصادر تختلف في مكان ميلاده؛ تُضاف بعد التأكد. توماس وعافية (003): الإحداثيات تقريبية لمنطقة النوبة جنوب أسوان وتحتاج مراجعة. الحكاية 010 (سميرة موسى): موقع الميلاد في سنبو الكبرى؛ الإحداثيات تقريبية ومخصصة لتمثيل القرية على الخريطة وليست عنوانًا دقيقًا. الحكايات 008 (توفيق الحكيم) و009 (نجيب محفوظ) و012 (فاروق الباز): إحداثيات تمثّل المدينة أو الحي وليست عنوانًا دقيقًا. الحكاية 014 تستخدم إحداثيات تقريبية لمدينة نيسابور بوصفها مدينة مرتبطة برحلة أبي بكر الخوارزمي، لا عنوانًا دقيقًا. الحكاية 015 تستخدم مركز مدينة أسوان كموقع تقريبي مرتبط بعمل مؤسسة مجدي يعقوب للقلب، وليس إحداثيات دقيقة للمبنى.",
   "001": {
     "lat": 31.2001,
     "lng": 29.9187,
@@ -139,6 +139,56 @@
       "it": "Tempio funerario di Hatshepsut a Deir el-Bahari - Luxor, Egitto"
     },
     "source_name": "UNESCO World Heritage Centre",
-    "source_url": "https://whc.unesco.org/en/list/87"
+    "source_url": "https://whc.unesco.org/en/list/87",
+    "place_label": {
+      "ar": "موقع معبدها الجنائزي: ",
+      "en": "Mortuary temple location: ",
+      "fr": "Emplacement de son temple funéraire : ",
+      "it": "Luogo del suo tempio funerario: ",
+      "de": "Standort ihres Totentempels: "
+    }
+  },
+  "014": {
+    "lat": 36.2106,
+    "lng": 58.7922,
+    "approximate": true,
+    "place": {
+      "ar": "نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي",
+      "en": "Nishapur, Iran — a city associated with Abu Bakr al-Khwarizmi’s journey",
+      "fr": "Nichapour, Iran — une ville associée au parcours d’Abou Bakr al-Khwarizmi",
+      "it": "Nishapur, Iran — una città legata al viaggio di Abu Bakr al-Khwarizmi",
+      "de": "Nischapur, Iran — eine Stadt, die mit der Reise Abu Bakr al-Chwarizmis verbunden ist"
+    },
+    "source_name": "Mapcarta / OpenStreetMap city coordinates",
+    "source_url": "https://mapcarta.com/Nishapur",
+    "place_label": {
+      "ar": "مدينة مرتبطة برحلته: ",
+      "en": "City associated with his journey: ",
+      "fr": "Ville associée à son parcours : ",
+      "it": "Città legata al suo viaggio: ",
+      "de": "Mit seiner Reise verbundene Stadt: "
+    }
+  },
+  "015": {
+    "lat": 24.0911,
+    "lng": 32.8973,
+    "approximate": true,
+    "place": {
+      "ar": "أسوان، مصر — موقع تقريبي مرتبط بمركز أسوان للقلب",
+      "en": "Aswan, Egypt — approximate location associated with the Aswan Heart Centre",
+      "fr": "Assouan, Égypte — emplacement approximatif associé au Centre cardiaque d’Assouan",
+      "it": "Assuan, Egitto — posizione approssimativa associata all’Aswan Heart Centre",
+      "de": "Assuan, Ägypten — ungefährer Standort des Aswan Heart Centre"
+    },
+    "source_name": "Mapcarta / OpenStreetMap city coordinates; Magdi Yacoub Heart Foundation for centre context",
+    "source_url": "https://mapcarta.com/Aswan",
+    "context_source_url": "https://myfegypt.org/centres/aswan-heart-centre/",
+    "place_label": {
+      "ar": "مكان مرتبط بعمله: ",
+      "en": "Place associated with his work: ",
+      "fr": "Lieu associé à son travail : ",
+      "it": "Luogo associato al suo lavoro: ",
+      "de": "Mit seiner Arbeit verbundener Ort: "
+    }
   }
 }

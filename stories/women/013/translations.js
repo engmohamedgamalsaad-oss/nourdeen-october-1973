@@ -18,5 +18,24 @@ Object.keys(extraPageLabels).forEach(function(lang){S.text[lang]=S.text[lang]||{
 
 /* Additional localized copy for complete visible-page language coverage. */
 var supplementalTranslations={"en":{"غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية":"Computer-generated illustrative cover — not a historical archival image","خالدون عبر التاريخ — حكاية التاريخ بعيون جيل جديد.":"Immortals Through History — history told through the eyes of a new generation."},"fr":{"غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية":"Couverture illustrative générée par ordinateur — pas une image d’archive historique","خالدون عبر التاريخ — حكاية التاريخ بعيون جيل جديد.":"Les immortels à travers l’histoire — l’histoire racontée par une nouvelle génération."},"it":{"غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية":"Copertina illustrativa generata al computer — non è un’immagine storica d’archivio","خالدون عبر التاريخ — حكاية التاريخ بعيون جيل جديد.":"Immortali attraverso la storia — la storia raccontata attraverso gli occhi di una nuova generazione."},"de":{"غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية":"Computergeneriertes Illustrationscover – kein historisches Archivbild","خالدون عبر التاريخ — حكاية التاريخ بعيون جيل جديد.":"Unsterbliche durch die Geschichte – Geschichte aus der Sicht einer neuen Generation."}};
+
+/* Map-section translations added during the published-story repair. */
+supplementalTranslations.en["مكان مرتبط بالحكاية"]="A place connected to the story";
+supplementalTranslations.fr["مكان مرتبط بالحكاية"]="Un lieu lié à l’histoire";
+supplementalTranslations.it["مكان مرتبط بالحكاية"]="Un luogo legato alla storia";
+supplementalTranslations.de["مكان مرتبط بالحكاية"]="Ein Ort, der mit der Geschichte verbunden ist";
+supplementalTranslations.en["على الخريطة"]="On the map";
+supplementalTranslations.fr["على الخريطة"]="Sur la carte";
+supplementalTranslations.it["على الخريطة"]="Sulla mappa";
+supplementalTranslations.de["على الخريطة"]="Auf der Karte";
+supplementalTranslations.en["اكتشف معبد حتشبسوت الجنائزي في الدير البحري بالأقصر."]="Explore Hatshepsut’s mortuary temple at Deir el-Bahari in Luxor.";
+supplementalTranslations.fr["اكتشف معبد حتشبسوت الجنائزي في الدير البحري بالأقصر."]="Découvrez le temple funéraire d’Hatchepsout à Deir el-Bahari, à Louxor.";
+supplementalTranslations.it["اكتشف معبد حتشبسوت الجنائزي في الدير البحري بالأقصر."]="Scopri il tempio funerario di Hatshepsut a Deir el-Bahari, a Luxor.";
+supplementalTranslations.de["اكتشف معبد حتشبسوت الجنائزي في الدير البحري بالأقصر."]="Entdecke Hatschepsuts Totentempel in Deir el-Bahari bei Luxor.";
+supplementalTranslations.en["افتح المكان على خرائط Google ←"]="Open this place in Google Maps →";
+supplementalTranslations.fr["افتح المكان على خرائط Google ←"]="Ouvrir ce lieu dans Google Maps →";
+supplementalTranslations.it["افتح المكان على خرائط Google ←"]="Apri questo luogo in Google Maps →";
+supplementalTranslations.de["افتح المكان على خرائط Google ←"]="Diesen Ort in Google Maps öffnen →";
+
 Object.keys(supplementalTranslations).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],supplementalTranslations[lang]);});
 })();
