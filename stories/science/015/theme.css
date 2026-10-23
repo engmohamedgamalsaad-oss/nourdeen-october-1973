@@ -44,3 +44,131 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 
 :root{--gold:#8ad9e8!important;--accent:#8ad9e8!important}
 .hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}
+
+
+/* 2026-10-23: consistent light theme for the four latest published stories.
+   Keep this scoped to this story and after legacy rules so stale dark-only CSS
+   cannot make the light theme unreadable. */
+:root:not([data-theme="dark"]) body[data-story-slug="015"]{
+  background:#fbf7ee!important;color:#26364b!important;color-scheme:light;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] header,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .topbar{
+  background:rgba(255,253,247,.97)!important;color:#26364b!important;
+  border-color:#dfd2b8!important;box-shadow:0 5px 20px rgba(65,48,20,.07)!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] header a,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .topbar a{
+  color:#175b8d!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero{
+  background:linear-gradient(125deg,#f8f4e9 0%,#e8f0ed 58%,#f5efe4 100%)!important;
+  color:#26364b!important;border-bottom:1px solid #dfd2b8!important;
+  text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero h1,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero h2,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero .hero-title{
+  color:#183c53!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero p,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero .hero-subtitle,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero .hero-content{
+  color:#405466!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .hero .eyebrow,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .kicker,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-quiz-kicker{
+  color:#805a21!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story .container,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-body{
+  color:#26364b!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story .container{
+  background:transparent!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-body p,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story blockquote,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story .quote,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story .fact-card,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story .timeline-item{
+  background:#fffdf8!important;color:#334155!important;border-color:#dfd2b8!important;
+  box-shadow:0 7px 20px rgba(65,48,20,.07)!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story h2,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story h3{
+  color:#76531d!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story a,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .sources a{
+  color:#175b8d!important;text-decoration:underline;text-underline-offset:2px;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-visual-gallery{
+  background:linear-gradient(135deg,#f8f1e4,#fffdf7)!important;color:#26364b!important;
+  border-color:#dfd2b8!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-image-card{
+  background:#fff!important;color:#334155!important;border-color:#dfd2b8!important;
+  box-shadow:0 8px 24px rgba(65,48,20,.08)!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-image-card figcaption,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-image-card figcaption strong{
+  color:#334155!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-image-card figcaption span,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-image-card figcaption small{
+  color:#56616c!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .language-switch button,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .language-switch .lang-option{
+  background:#fffdf8!important;color:#26364b!important;border-color:#d8c6a2!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .language-switch button.is-active,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .language-switch .lang-option.is-active{
+  background:#72508c!important;color:#fff!important;border-color:#72508c!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] #intro{
+  background:rgba(251,247,236,.96)!important;color:#26364b!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal-card,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] #intro .modal-card{
+  background:linear-gradient(145deg,#fffefa,#f4eedf 78%)!important;color:#26364b!important;
+  border:1px solid rgba(138,90,18,.42)!important;box-shadow:0 24px 70px rgba(15,33,80,.2)!important;
+  text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal-copy,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal-copy p,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] #intro p{
+  color:#334155!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal-copy h2,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] #intro h2{
+  color:#1b3f94!important;text-shadow:none!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .modal .btn,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] #intro .btn,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .start-story-btn{
+  background:linear-gradient(145deg,#2a5bd7,#1b3f94)!important;color:#fffefa!important;
+  border-color:#1b3f94!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-quiz-section,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .reactions-section,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .sources,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .end{
+  color:#26364b!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .story-quiz-section > *,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .reactions-section > *,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .sources .container,
+:root:not([data-theme="dark"]) body[data-story-slug="015"] .end{
+  background-color:#fffdf8!important;color:#334155!important;border-color:#dfd2b8!important;
+}
+:root:not([data-theme="dark"]) body[data-story-slug="015"] button{
+  text-shadow:none!important;
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-story-slug="015"] *{scroll-behavior:auto!important;animation:none!important;transition:none!important}
+}
