@@ -273,7 +273,6 @@
       var pl = e.p && e.p.place && (e.p.place[l] || e.p.place.ar);
       if (pl) li.appendChild(document.createTextNode(' — ' + ((e.p.place_label && (e.p.place_label[l] || e.p.place_label.ar)) || T('born')) + pl));
       else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
-      if (!pl) li.appendChild(document.createTextNode(' — ' + T('noPlace')));
       if (e.p && e.p.source_url && /^https:\/\//i.test(e.p.source_url)) {
         var sourceLink = el('a', null, T('source') + (e.p.source_name || e.p.source_url));
         sourceLink.href = e.p.source_url; sourceLink.target = '_blank'; sourceLink.rel = 'noopener noreferrer';
