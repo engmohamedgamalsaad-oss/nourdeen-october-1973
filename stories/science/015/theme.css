@@ -404,3 +404,74 @@ html[data-theme="light"] body[data-story-slug="015"] select {
   color: #263746 !important;
   border-color: #cdbb9d !important;
 }
+
+
+/* 2026-10-23: align Magdi Yacoub's hero composition with the approved Naguib Mahfouz biography template. */
+body[data-story-slug="015"] .hero{
+  isolation:isolate!important;
+  position:relative!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  min-height:610px!important;
+  padding:58px 0 52px!important;
+  background:
+    radial-gradient(ellipse at 16% 48%,#315c5b 0%,transparent 38%),
+    linear-gradient(120deg,#14252c 0%,#233d42 52%,#151d24 100%)!important;
+  border-bottom:1px solid rgba(138,217,232,.35)!important;
+}
+body[data-story-slug="015"] .hero:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  opacity:.22;
+  background:repeating-linear-gradient(135deg,transparent 0 42px,rgba(227,189,120,.09) 43px 44px);
+  pointer-events:none;
+}
+body[data-story-slug="015"] .hero .container{
+  position:relative;
+  z-index:3;
+  width:min(1120px,calc(100% - 36px));
+  margin:auto;
+  padding-left:min(38%,430px);
+  padding-right:0;
+}
+body[data-story-slug="015"] .hero .eyebrow,
+body[data-story-slug="015"] .hero .person-name,
+body[data-story-slug="015"] .story .kicker,
+body[data-story-slug="015"] .story-quiz-kicker{color:#8ad9e8!important}
+body[data-story-slug="015"] .hero h1{color:#eafaff!important}
+body[data-story-slug="015"] .hero-subtitle{color:#d8e7e9!important}
+body[data-story-slug="015"] .hero .author{color:#cfdfdf!important}
+body[data-story-slug="015"] .hero .author strong{color:#e3bd78!important}
+body[data-story-slug="015"] .hero .cover-label{
+  border-color:rgba(138,217,232,.55)!important;
+  color:#e2eeef!important;
+  background:rgba(18,38,43,.74)!important;
+}
+body[data-story-slug="015"] .hero .hero-art img{
+  border-color:#8ad9e8!important;
+  background:#17252b!important;
+}
+@media(max-width:860px){
+  body[data-story-slug="015"] .hero .container{
+    width:calc(100% - 30px);
+    padding:0;
+    text-align:center;
+  }
+}
+@media(max-width:700px){
+  body[data-story-slug="015"] .hero{
+    min-height:720px!important;
+    padding:42px 0 285px!important;
+  }
+  body[data-story-slug="015"] .hero .container{
+    width:calc(100% - 30px);
+    padding:0;
+    text-align:center;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-story-slug="015"] .hero .hero-art img{animation:none!important;transform:none!important}
+}
