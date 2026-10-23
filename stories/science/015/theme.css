@@ -541,3 +541,12 @@ body[data-story-slug="015"] #intro .modal-copy .eyebrow{display:inline-flex;marg
 body[data-story-slug="015"] #intro .modal-copy h2{margin:0 0 14px;color:#d8f6ff;font:900 clamp(1.65rem,3.2vw,2.65rem)/1.55 Marhey,Cairo,serif}
 body[data-story-slug="015"] #intro .modal-copy #intro-desc{margin:0;color:#d2e8ec;font-size:1rem;line-height:2}
 body[data-story-slug="015"] #intro #start{margin-top:24px;border:0;border-radius:999px;padding:13px 24px;background:linear-gradient(120deg,#8ad9e8,#e3bd78);color:#10252b;font-weight:900;box-shadow:0 10px 30px rgba(0,0,0,.4);transition:transform .25s,box-shadow .25s}
+
+body[data-story-slug="015"] #intro .modal-card:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.25;background-image:radial-gradient(rgba(138,217,232,.38) 1px,transparent 1px),repeating-linear-gradient(135deg,transparent 0 34px,rgba(138,217,232,.05) 35px 36px);background-size:17px 17px,auto}
+body[data-story-slug="015"] #intro .modal-copy{z-index:1}
+body[data-story-slug="015"] #intro .modal-art:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(7,25,33,.92) 0%,transparent 43%),linear-gradient(135deg,rgba(138,217,232,.14),transparent 62%)}
+body[data-story-slug="015"] #intro #start:hover{transform:translateY(-3px);box-shadow:0 16px 34px rgba(0,0,0,.48)}
+@keyframes magdi-modal-arrive{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(4px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+@keyframes magdi-image-arrive{from{opacity:0;transform:scale(1.035)}to{opacity:1;transform:scale(1)}}
+@media(max-width:700px){body[data-story-slug="015"] #intro .modal-card{grid-template-columns:1fr;max-height:92vh}body[data-story-slug="015"] #intro .modal-art,body[data-story-slug="015"] #intro .modal-art img{min-height:220px;max-height:250px}body[data-story-slug="015"] #intro .modal-copy{padding:24px}body[data-story-slug="015"] #intro .modal-copy h2{font-size:1.7rem}body[data-story-slug="015"] #intro #start{width:100%}}
+@media(prefers-reduced-motion:reduce){body[data-story-slug="015"] #intro .modal-card,body[data-story-slug="015"] #intro .modal-art img,body[data-story-slug="015"] #intro .modal-copy{animation:none!important;transition:none!important;filter:none!important;transform:none!important}}
