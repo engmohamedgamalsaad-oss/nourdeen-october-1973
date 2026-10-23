@@ -339,42 +339,6 @@
     "path": "stories/science/007/"
   },
   {
-    "name": "",
-    "grade": "",
-    "className": "",
-    "title": "سميرة موسى — حلم العلم للجميع",
-    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
-    "color": "#d7b878",
-    "order": 10,
-    "published": true,
-    "section": "women",
-    "i18n": {
-      "en": {
-        "title": "Sameera Moussa — Science for Everyone",
-        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity.",
-        "person": "Sameera Moussa"
-      },
-      "fr": {
-        "title": "Sameera Moussa — La science pour tous",
-        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
-        "person": "Sameera Moussa"
-      },
-      "it": {
-        "title": "Sameera Moussa — La scienza per tutti",
-        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità.",
-        "person": "Sameera Moussa"
-      },
-      "de": {
-        "title": "Sameera Moussa — Wissenschaft für alle",
-        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
-        "person": "Sameera Moussa"
-      }
-    },
-    "id": "010",
-    "path": "stories/women/010/",
-    "person": "سميرة موسى"
-  },
-  {
     "name": "مليكة محمد",
     "grade": "الصف الثالث الابتدائي",
     "className": "الصف الثالث الابتدائي",
@@ -471,52 +435,35 @@
     "path": "stories/people/009/"
   },
   {
-    "name": "نوردين محمد",
-    "grade": "راوي الحكاية",
-    "className": "راوي الحكاية",
-    "title": "فاروق الباز",
-    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
-    "person": "فاروق الباز",
-    "color": "#8ad9e8",
-    "order": 12,
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
     "published": true,
+    "section": "women",
     "i18n": {
       "en": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Story narrator",
-        "className": "Story narrator",
-        "title": "Farouk El-Baz",
-        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
       },
       "fr": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narrateur de l'histoire",
-        "className": "Narrateur de l'histoire",
-        "title": "Farouk El-Baz",
-        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
       },
       "it": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narratore della storia",
-        "className": "Narratore della storia",
-        "title": "Farouk El-Baz",
-        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
       },
       "de": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Erzähler der Geschichte",
-        "className": "Erzähler der Geschichte",
-        "title": "Farouk El-Baz",
-        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
       }
     },
-    "id": "012",
-    "section": "science",
-    "path": "stories/science/012/"
+    "id": "010",
+    "path": "stories/women/010/"
   },
   {
     "name": "نوردين محمد",
@@ -565,6 +512,54 @@
     "id": "011",
     "section": "islamic",
     "path": "stories/islamic/011/"
+  },
+  {
+    "name": "نوردين محمد",
+    "grade": "راوي الحكاية",
+    "className": "راوي الحكاية",
+    "title": "فاروق الباز",
+    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
+    "person": "فاروق الباز",
+    "color": "#8ad9e8",
+    "order": 12,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Story narrator",
+        "className": "Story narrator",
+        "title": "Farouk El-Baz",
+        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
+        "person": "فاروق الباز"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narrateur de l'histoire",
+        "className": "Narrateur de l'histoire",
+        "title": "Farouk El-Baz",
+        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
+        "person": "فاروق الباز"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narratore della storia",
+        "className": "Narratore della storia",
+        "title": "Farouk El-Baz",
+        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
+        "person": "فاروق الباز"
+      },
+      "de": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Erzähler der Geschichte",
+        "className": "Erzähler der Geschichte",
+        "title": "Farouk El-Baz",
+        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
+        "person": "فاروق الباز"
+      }
+    },
+    "id": "012",
+    "section": "science",
+    "path": "stories/science/012/"
   },
   {
     "name": "مليكة محمد جمال",
@@ -663,7 +658,7 @@
     "path": "stories/science/014/"
   },
   {
-    "name": "مليكة محمد",
+    "name": "مليكة محمد جمال",
     "grade": "الصف الأول الابتدائي",
     "className": "الصف الأول الابتدائي",
     "title": "مجدي يعقوب",
@@ -674,7 +669,7 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "First grade",
         "className": "First grade",
         "title": "Magdi Yacoub",
@@ -682,7 +677,7 @@
         "person": "مجدي يعقوب"
       },
       "fr": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Première année de l’école primaire",
         "className": "Première année de l’école primaire",
         "title": "Magdi Yacoub",
@@ -690,7 +685,7 @@
         "person": "مجدي يعقوب"
       },
       "it": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Prima classe della scuola primaria",
         "className": "Prima classe della scuola primaria",
         "title": "Magdi Yacoub",
@@ -698,7 +693,7 @@
         "person": "مجدي يعقوب"
       },
       "de": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Erste Klasse der Grundschule",
         "className": "Erste Klasse der Grundschule",
         "title": "Magdi Yacoub",
