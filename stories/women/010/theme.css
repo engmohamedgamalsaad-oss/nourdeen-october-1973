@@ -105,3 +105,16 @@ body.scroll-reveal-ready .story .container > p:nth-of-type(4){transition-delay:1
 @media(max-width:640px){.archive-photo{padding:8px;border-radius:17px;margin:28px auto}.archive-photo figcaption{font-size:.82rem;padding:10px 5px 3px}body.scroll-reveal-ready .reveal-item{transform:translateY(16px);transition-duration:.55s}}
 @media(prefers-reduced-motion:reduce){.archive-photo img,body.scroll-reveal-ready .reveal-item{transition:none!important;transform:none!important}body.scroll-reveal-ready .reveal-item{opacity:1!important}}
 
+/* ===== Story 010 — القالب المعتمد (نمط نجيب محفوظ) بألوان قسم نساء خالدات — 2026-10-24 =====
+   كل قسم بطاقة، وكل فقرة في صندوق مستقل بخط جانبي وردي. الغلاف ونافذة البداية كما هما. */
+body[data-story-slug="010"] .story{width:min(1000px,calc(100% - 28px));margin:20px auto;padding:44px 20px;border:1px solid rgba(210,125,159,.38);border-radius:24px;background:linear-gradient(145deg,#12353fe8,#0a1a22ef);box-shadow:0 18px 42px rgba(0,0,0,.14)}
+body[data-story-slug="010"] .story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,#f0b3cb,#d27d9f)}
+body[data-story-slug="010"] .story .container>p{margin:0 0 14px;padding:clamp(16px,2.2vw,24px);border:1px solid rgba(210,125,159,.34);border-inline-start:4px solid #d27d9f;border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 8px 22px rgba(0,0,0,.14);line-height:2.05;overflow-wrap:anywhere}
+:root[data-theme="light"] body[data-story-slug="010"] .story{border-color:#d8c7a2;box-shadow:0 14px 34px rgba(73,54,25,.10)}
+:root[data-theme="light"] body[data-story-slug="010"] .story .container>p{background:#fffdf8;border-color:#d8c7a2;border-inline-start-color:#953159;box-shadow:0 7px 20px rgba(65,48,20,.07)}
+@media(prefers-color-scheme:light){
+ :root:not([data-theme="dark"]) body[data-story-slug="010"] .story{border-color:#d8c7a2;box-shadow:0 14px 34px rgba(73,54,25,.10)}
+ :root:not([data-theme="dark"]) body[data-story-slug="010"] .story .container>p{background:#fffdf8;border-color:#d8c7a2;border-inline-start-color:#953159;box-shadow:0 7px 20px rgba(65,48,20,.07)}
+}
+@media(max-width:700px){body[data-story-slug="010"] .story{width:calc(100% - 20px);margin:14px 10px;padding:30px 14px;border-radius:18px}}
+@media print{body[data-story-slug="010"] .story{width:auto;margin:0;border:0;border-radius:0;box-shadow:none;background:none}body[data-story-slug="010"] .story h2:after{display:none}body[data-story-slug="010"] .story .container>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none}}
