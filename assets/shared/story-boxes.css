@@ -9,3 +9,19 @@ html[data-theme="light"] body[data-story-slug="012"] .story{border-color:#dfd4c0
 html[data-theme="light"] body[data-story-slug="012"] .story .story-body>p{border-inline-start-color:#2b6a70!important}
 @media(max-width:700px){body[data-story-slug="012"] .story{width:calc(100% - 20px);margin:14px 10px;border-radius:18px}body[data-story-slug="012"] .story .story-body{gap:11px}body[data-story-slug="012"] .story .story-body>p{padding:15px;border-radius:13px}}
 @media print{body[data-story-slug="012"] .story{width:auto;margin:0;border:0;border-radius:0;box-shadow:none;background:none}body[data-story-slug="012"] .story h2:after{display:none}body[data-story-slug="012"] .story .story-body>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none}}
+
+/* خلفية نافذة "ابدأ الحكاية": صورة غلاف الحكاية نفسها فوقها تدرج بلون قسمها.
+   مقيّدة بأرقام الحكايات من 005 إلى 015 فقط، فلا تمس حكايات أكتوبر (001–004) — 2026-10-24 */
+body[data-story-slug="005"]{--pop-cover:url("../../stories/history/005/cover.svg");--pop-tint:rgba(70,48,112,.66);--pop-light:rgba(240,232,255,.90)}
+body[data-story-slug="006"]{--pop-cover:url("../../stories/history/006/cover.svg");--pop-tint:rgba(70,48,112,.66);--pop-light:rgba(240,232,255,.90)}
+body[data-story-slug="014"]{--pop-cover:url("../../stories/history/014/cover.svg");--pop-tint:rgba(70,48,112,.66);--pop-light:rgba(240,232,255,.90)}
+body[data-story-slug="007"]{--pop-cover:url("../../stories/science/007/cover.svg");--pop-tint:rgba(16,78,94,.66);--pop-light:rgba(232,248,251,.90)}
+body[data-story-slug="012"]{--pop-cover:url("../../stories/science/012/cover.svg");--pop-tint:rgba(16,78,94,.66);--pop-light:rgba(232,248,251,.90)}
+body[data-story-slug="015"]{--pop-cover:url("../../stories/science/015/cover.svg");--pop-tint:rgba(16,78,94,.66);--pop-light:rgba(232,248,251,.90)}
+body[data-story-slug="010"]{--pop-cover:url("../../stories/women/010/cover.svg");--pop-tint:rgba(128,48,86,.62);--pop-light:rgba(253,236,244,.90)}
+body[data-story-slug="013"]{--pop-cover:url("../../stories/women/013/cover.svg");--pop-tint:rgba(128,48,86,.62);--pop-light:rgba(253,236,244,.90)}
+body[data-story-slug="008"]{--pop-cover:url("../../stories/people/008/cover.svg");--pop-tint:rgba(112,72,26,.64);--pop-light:rgba(253,243,226,.90)}
+body[data-story-slug="009"]{--pop-cover:url("../../stories/people/009/cover.svg");--pop-tint:rgba(112,72,26,.64);--pop-light:rgba(253,243,226,.90)}
+body[data-story-slug="011"]{--pop-cover:url("../../stories/islamic/011/cover.svg");--pop-tint:rgba(28,92,60,.62);--pop-light:rgba(233,246,238,.90)}
+html body:is([data-story-slug="005"],[data-story-slug="006"],[data-story-slug="007"],[data-story-slug="008"],[data-story-slug="009"],[data-story-slug="010"],[data-story-slug="011"],[data-story-slug="012"],[data-story-slug="013"],[data-story-slug="014"],[data-story-slug="015"]) :is(.story-intro-modal,.modal#intro){background:linear-gradient(180deg,var(--pop-tint) 0%,rgba(3,8,14,.86) 100%),var(--pop-cover) center/cover no-repeat!important}
+html[data-theme="light"] body:is([data-story-slug="005"],[data-story-slug="006"],[data-story-slug="007"],[data-story-slug="008"],[data-story-slug="009"],[data-story-slug="010"],[data-story-slug="011"],[data-story-slug="012"],[data-story-slug="013"],[data-story-slug="014"],[data-story-slug="015"]) :is(.story-intro-modal,.modal#intro){background:linear-gradient(var(--pop-light),var(--pop-light)),var(--pop-cover) center/cover no-repeat!important}
