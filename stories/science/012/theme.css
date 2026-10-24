@@ -452,3 +452,48 @@ html[data-theme="light"] body[data-story-slug="012"] select {
   color: #263746 !important;
   border-color: #cdbb9d !important;
 }
+
+
+/* 2026-10-25: Farouk El-Baz cover follows the section-color and shared-cover layout. */
+body[data-story-slug="012"] .hero{
+  background:radial-gradient(ellipse at 78% 18%,rgba(138,217,232,.22),transparent 42%),linear-gradient(115deg,#071923,#102c3a 58%,#142a36)!important;
+  padding:clamp(40px,7vw,86px) 20px!important;
+}
+body[data-story-slug="012"] .hero .container{
+  width:min(1160px,100%);margin-inline:auto;display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(260px,.85fr);
+  align-items:center;gap:clamp(22px,5vw,64px);
+}
+body[data-story-slug="012"] .hero-content{position:relative;z-index:2;max-width:720px;min-width:0}
+body[data-story-slug="012"] .hero-art{
+  position:relative;inset:auto;width:100%;height:auto;max-height:490px;
+  margin:0;padding:0;display:flex;align-items:center;justify-content:center;
+  opacity:1!important;pointer-events:none;
+}
+body[data-story-slug="012"] .hero-art img{
+  display:block;width:100%;height:auto;max-height:490px;object-fit:contain;
+  filter:drop-shadow(0 22px 38px rgba(0,0,0,.38));
+}
+body[data-story-slug="012"] .modal-copy .person-name{
+  margin:.9rem 0 .1rem;color:#8ad9e8;font-weight:800;font-size:1.05rem;
+}
+body[data-story-slug="012"] .modal-copy .popup-role{
+  margin:0 0 .75rem;color:#c6d3d7;font-size:.9rem;
+}
+html[data-theme="light"] body[data-story-slug="012"] .hero{
+  background:radial-gradient(ellipse at 78% 18%,rgba(138,217,232,.25),transparent 42%),linear-gradient(115deg,#fbf8f0,#e9f2f0 60%,#f5eee0)!important;
+}
+html[data-theme="light"] body[data-story-slug="012"] .hero .cover-label,
+html[data-theme="light"] body[data-story-slug="012"] .hero .author,
+html[data-theme="light"] body[data-story-slug="012"] .hero .author strong{color:#294453!important}
+html[data-theme="light"] body[data-story-slug="012"] .modal-copy .person-name{color:#17677b!important}
+html[data-theme="light"] body[data-story-slug="012"] .modal-copy .popup-role{color:#405969!important}
+@media(max-width:700px){
+  body[data-story-slug="012"] .hero .container{grid-template-columns:1fr;gap:18px}
+  body[data-story-slug="012"] .hero-content{order:1}
+  body[data-story-slug="012"] .hero-art{order:0;max-width:420px;margin:0 auto;width:min(100%,420px)}
+  body[data-story-slug="012"] .hero-art img{max-height:340px}
+}
+@media(prefers-reduced-motion:reduce){
+  body[data-story-slug="012"] .hero-art img{scroll-behavior:auto}
+}
