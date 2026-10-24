@@ -16,7 +16,7 @@ END = r'(?=[\s"\'<>)\\?]|$)'
 URL_RE = re.compile(
     r'https://(?:upload\.wikimedia\.org/[^\s"\'<>)\\]+?\.' + EXT + END + r'|thumb\.wikimedia\.org/[^\s"\'<>)\\]+?\.' + EXT + END +
     r'|commons\.wikimedia\.org/wiki/Special:FilePath/[^\s"\'<>)\\?]+|images\.metmuseum\.org/[^\s"\'<>)\\]+?\.' + EXT + END +
-    r'|collectionapi\.metmuseum\.org/api/collection/\d+/iiif/\d+/main-image|images-assets\.nasa\.gov/[^\s"\'<>)\\]+?\.' + EXT + END + r'|www\.nasa\.gov/wp-content/[^\s"\'<>)\\]+?\.' + EXT + END + r')(?:\?[^\s"\'<>)\\]*)?',
+    r'|collectionapi\.metmuseum\.org/api/collection/v\d+/iiif/\d+/\d+/main-image|images-assets\.nasa\.gov/[^\s"\'<>)\\]+?\.' + EXT + END + r'|www\.nasa\.gov/wp-content/[^\s"\'<>)\\]+?\.' + EXT + END + r')(?:\?[^\s"\'<>)\\]*)?',
     re.I)
 
 def targets():
