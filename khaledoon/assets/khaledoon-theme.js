@@ -74,3 +74,18 @@
     document.head.appendChild(s);
   } catch (e) {}
 })();
+
+/* تحميل رابط الحكاية بالخريطة التفاعلية (khaledoon-story-map-link.js) من نفس المجلد.
+   الملف نفسه يتجاهل أي صفحة ليست من الحكايات 005–015، فلا يمس أكتوبر ولا الصفحات الأخرى. */
+(function () {
+  try {
+    if (window.__khStoryMap || document.querySelector('script[data-khm-story-loader]')) return;
+    var cs = document.currentScript;
+    if (!cs || !cs.src) return;
+    var s = document.createElement('script');
+    s.src = new URL('khaledoon-story-map-link.js?v=1', cs.src).href;
+    s.async = true;
+    s.setAttribute('data-khm-story-loader', '1');
+    document.head.appendChild(s);
+  } catch (e) {}
+})();
