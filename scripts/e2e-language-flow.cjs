@@ -94,7 +94,7 @@ const INSPECT = () => {
     switchers: [...document.querySelectorAll(sel)].filter(visible).map((e) => (e.className && String(e.className)) || e.tagName),
     overflow: Math.round(root.scrollWidth - innerWidth),
     arabic, latin,
-    arabicSamples: (() => { const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode); return nodes.filter((n) => /[\\u0600-\\u06FF]/.test(n.nodeValue || '') && n.parentElement && !/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(n.parentElement.tagName) && n.nodeValue.trim()).map((n) => n.nodeValue.replace(/\\s+/g, ' ').trim().slice(0, 150)).slice(0, 12); })(),
+    arabicSamples: (() => { const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode); return nodes.filter((n) => /[\u0600-\u06FF]/.test(n.nodeValue || '') && n.parentElement && !/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(n.parentElement.tagName) && n.nodeValue.trim()).map((n) => n.nodeValue.replace(/\s+/g, ' ').trim().slice(0, 150)).slice(0, 12); })(),
     stored: (() => { try { return localStorage.getItem('kh-lang'); } catch (e) { return 'ERR'; } })()
   };
 };
