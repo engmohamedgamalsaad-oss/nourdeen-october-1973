@@ -6,6 +6,44 @@
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* ---- شاشة البداية الموحدة: التقاط بيانات #intro المكتوب يدويًا (إن وُجد) وترجمتها ---- */
+  function captureIntro() {
+    var intro = document.getElementById('intro');
+    if (!intro) { return; }
+    var img = intro.querySelector('.modal-art img');
+    if (!img || !img.getAttribute('src')) { return; }
+    var q = function (sel) { var e = intro.querySelector(sel); return e ? e.textContent.trim() : ''; };
+    window.__khStartData = {
+      name: q('.person-name'), role: q('.popup-role'), eyebrow: q('.eyebrow'),
+      title: q('#intro-title'), sub: q('#intro-desc'), start: q('#start')
+    };
+    if (!body.getAttribute('data-splash')) {
+      body.setAttribute('data-splash', img.getAttribute('src'));
+      body.setAttribute('data-splash-alt', img.getAttribute('alt') || '');
+      body.setAttribute('data-splash-title', window.__khStartData.title || document.title || '');
+      body.setAttribute('data-splash-subtitle', window.__khStartData.sub || '');
+    }
+  }
+
+  var SECTION_ACCENTS = {october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a'};
+  var secMatch = (window.location.pathname || '').match(/\/stories\/([a-z]+)\/[^\/]+/);
+  var sectionAccent = body.getAttribute('data-section-accent') ||
+    (secMatch && SECTION_ACCENTS[secMatch[1]]) || '#e2b36d';
+  /* لون القسم متاح لكل صفحة حكاية كمتغير CSS، ليأخذ الغلاف والعناصر لون قسمها لا لون حكاية بعينها. */
+  document.documentElement.style.setProperty('--section-accent', sectionAccent);
+
+  function translateAr(text, lang) {
+    if (!text || !lang || lang === 'ar') { return text; }
+    var reg = window.StoryI18N && window.StoryI18N.text;
+    if (!reg) { return text; }
+    var n = String(text).replace(/\s+/g, ' ').trim();
+    var d = reg[n];
+    if (d && typeof d === 'object' && typeof d[lang] === 'string') { return d[lang]; }
+    var l = reg[lang];
+    if (l && typeof l === 'object' && typeof l[n] === 'string') { return l[n]; }
+    return text;
+  }
+
   /* =========================================
      0) تهيئة صفحات القالب المولّد من لوحة الإدارة (body.story-design-*)
      هذه الصفحات تُبنى بقالب يختلف عن الحكايات المرجعية: نافذة #intro ثابتة، وغلاف hero بلا
@@ -18,19 +56,7 @@
   function adaptGeneratedStory() {
     var intro = document.getElementById('intro');
     if (intro) {
-      if (!body.getAttribute('data-splash')) {
-        var introTitle = intro.querySelector('#intro-title');
-        var introDesc = intro.querySelector('#intro-desc');
-        var introImg = intro.querySelector('.modal-art img');
-        if (introImg && introImg.getAttribute('src')) {
-          body.setAttribute('data-splash', introImg.getAttribute('src'));
-          body.setAttribute('data-splash-alt', introImg.getAttribute('alt') || '');
-          body.setAttribute('data-splash-title', introTitle ? introTitle.textContent.trim() : (document.title || ''));
-          body.setAttribute('data-splash-subtitle', introDesc ? introDesc.textContent.trim() : '');
-          body.setAttribute('data-splash-top', '#0b1920');
-          body.setAttribute('data-splash-bottom', '#050d14');
-        }
-      }
+      captureIntro();
       /* النافذة القديمة لا يفتحها ولا يغلقها أي كود مشترك؛ تُستبدل بشاشة البداية القياسية. */
       intro.remove();
     }
@@ -88,34 +114,12 @@
 
   if (generatedStory) { adaptGeneratedStory(); }
 
-  /* Preserve hand-authored intro popups on the two portrait biographies.
-     The generated-story adapter normally removes #intro and replaces it with a
-     background-image splash, which bypasses the popup image's responsive CSS. */
+  /* الحكايات ذات data-keep-intro-modal (008/009) صارت تستخدم شاشة البداية الموحدة نفسها:
+     نلتقط بيانات النافذة اليدوية ثم نزيلها، فيرسمها منشئ الشاشة أدناه. */
   if (keepIntroModal) {
-    var preservedIntro = document.getElementById('intro');
-    if (preservedIntro) {
-      var preservedClose = preservedIntro.querySelector('#close');
-      var preservedStart = preservedIntro.querySelector('#start');
-      var hidePreservedIntro = function () {
-        preservedIntro.style.setProperty('display', 'none', 'important');
-        preservedIntro.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-      };
-      preservedIntro.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-      if (preservedClose) preservedClose.addEventListener('click', hidePreservedIntro);
-      if (preservedStart) preservedStart.addEventListener('click', function () {
-        hidePreservedIntro();
-        var storyStart = document.getElementById('begin');
-        if (storyStart) storyStart.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
-      });
-      preservedIntro.addEventListener('click', function (event) {
-        if (event.target === preservedIntro) hidePreservedIntro();
-      });
-      document.addEventListener('keydown', function (event) {
-        if (event.key === 'Escape' && preservedIntro.getAttribute('aria-hidden') !== 'true') hidePreservedIntro();
-      });
-    }
+    captureIntro();
+    var handIntro = document.getElementById('intro');
+    if (handIntro) { handIntro.remove(); }
   }
 
   /* القصص التي تستخدم الغلاف الافتتاحي تحصل أيضًا على حركات الظهور أثناء التمرير. */
@@ -166,95 +170,94 @@
     splashCopy = {title: window.I18N.t('s_title'), subtitle: window.I18N.t('s_subtitle'), start: window.I18N.t('s_start')};
   }
 
+  var startOnly = body.hasAttribute('data-start-only');
+  if (startOnly) {
+    /* صفحات لها سلوكها الخاص (مثل 006): نستخدم شاشة البداية الموحدة فقط ثم نترك بقية الصفحة لسكربتها. */
+    captureIntro();
+    var legacyIntro = document.getElementById('intro');
+    if (legacyIntro) { legacyIntro.remove(); }
+  }
+
   var splashImage = body.getAttribute('data-splash');
 
   if (splashImage) {
+    var sd = window.__khStartData || {};
+    var slugCopies = splashCopies[body.getAttribute('data-story-slug')] || null;
+    var curLang = function () { return (window.I18N && window.I18N.lang && window.I18N.lang()) || 'ar'; };
+
+    if (!document.getElementById('story-start-style')) {
+      var st = document.createElement('style');
+      st.id = 'story-start-style';
+      st.textContent = [
+        '.story-splash{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:18px;box-sizing:border-box;overflow:auto;background:radial-gradient(ellipse at 70% 8%,color-mix(in srgb,var(--start-accent) 24%,#0c171f),#050d14 72%);transition:opacity .35s ease}',
+        '.story-start-card{position:relative;width:min(900px,100%);max-height:94dvh;overflow:auto;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);border:1px solid color-mix(in srgb,var(--start-accent) 65%,transparent);border-radius:24px;background:linear-gradient(135deg,#1b2d38,#0c171f);color:#fff;box-shadow:0 30px 90px rgba(0,0,0,.6)}',
+        '.story-start-art{margin:0;box-sizing:border-box;padding:14px;height:clamp(230px,52vh,420px);display:flex;align-items:center;justify-content:center;background:#0c171f}',
+        '.story-start-art img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:12px;border:1px solid color-mix(in srgb,var(--start-accent) 55%,transparent)}',
+        '.story-start-copy{padding:clamp(22px,4.5vw,46px);align-self:center;text-align:start}',
+        '.story-start-eyebrow{margin:0 0 4px;color:var(--start-accent);font-weight:900;font-size:.85rem}',
+        '.story-start-name{margin:0;color:var(--start-accent);font-weight:900;font-size:1.15rem}',
+        '.story-start-title{margin:6px 0 10px;font:700 clamp(1.5rem,4vw,2.4rem)/1.5 Marhey,Cairo,serif;color:#fff0d7}',
+        '.story-start-role,.story-start-sub{margin:0 0 12px;line-height:1.9;color:#dce5ed}',
+        '.story-start-role{font-weight:700}',
+        '.story-splash-start{margin-top:8px;padding:13px 30px;border:1px solid rgba(255,255,255,.4);border-radius:999px;background:linear-gradient(145deg,var(--start-accent),color-mix(in srgb,var(--start-accent) 60%,#000));color:#14202a;font:800 1rem Cairo,Tahoma,sans-serif;cursor:pointer;box-shadow:0 8px 24px rgba(0,0,0,.3)}',
+        '.story-start-close{position:absolute;top:10px;inset-inline-start:10px;z-index:2;width:40px;height:40px;border-radius:50%;border:1px solid var(--start-accent);background:#102b35;color:#fff;font-size:1.4rem;cursor:pointer}',
+        'html[data-theme="light"] .story-splash{background:#fbf7ec}',
+        'html[data-theme="light"] .story-start-card{background:#fffdf8;color:#263746;border-color:var(--start-accent);box-shadow:0 20px 60px rgba(61,48,25,.25)}',
+        'html[data-theme="light"] .story-start-art{background:color-mix(in srgb,var(--start-accent) 12%,#fffdf8)}',
+        'html[data-theme="light"] .story-start-title,html[data-theme="light"] .story-start-name,html[data-theme="light"] .story-start-eyebrow{color:color-mix(in srgb,var(--start-accent) 45%,#1d2a36)}',
+        'html[data-theme="light"] .story-start-role,html[data-theme="light"] .story-start-sub{color:#263746}',
+        'html[data-theme="light"] .story-start-close{background:#fffdf8;color:#263746}',
+        '@media(max-width:700px){.story-start-card{grid-template-columns:1fr}.story-start-art{height:clamp(180px,34dvh,260px);padding:10px}.story-start-copy{padding:20px}}',
+        '@media(prefers-reduced-motion:reduce){.story-splash{transition:none}}'
+      ].join('\n');
+      document.head.appendChild(st);
+    }
+
     var splash = document.createElement('div');
     splash.className = 'story-splash';
     splash.setAttribute('role', 'dialog');
     splash.setAttribute('aria-modal', 'true');
-    splash.setAttribute('aria-label', (splashCopy && splashCopy.title) || body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
+    splash.style.setProperty('--start-accent', sectionAccent);
 
-    Object.assign(splash.style, {
-      position: 'fixed',
-      inset: '0',
-      zIndex: '10000',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '24px',
-      boxSizing: 'border-box',
-      overflow: 'auto',
-      backgroundColor: lightTheme ? '#fbf7ec' : (body.getAttribute('data-splash-bottom') || '#071c25'),
-      backgroundImage:
-        (lightTheme
-          ? 'linear-gradient(180deg, rgba(251,247,236,.76), rgba(255,254,250,.94)), url("'
-          : 'linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.72)), url("') +
-        splashImage.replace(/"/g, '') +
-        '")',
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat',
-      textAlign: 'center',
-      direction: activeLang === 'ar' ? 'rtl' : 'ltr',
-      transition: reduceMotion ? 'none' : 'opacity .35s ease'
-    });
-
-    var splashContent = document.createElement('div');
-
-    Object.assign(splashContent.style, {
-      width: 'min(600px, 100%)',
-      margin: 'auto',
-      color: lightTheme ? '#0f2150' : '#fff',
-      textShadow: lightTheme ? 'none' : '0 2px 12px rgba(0,0,0,.8)'
-    });
-
-    var splashTitle = document.createElement('h1');
-    splashTitle.textContent = (splashCopy && splashCopy.title) ||
-      body.getAttribute('data-splash-title') || 'رجال البحر في أكتوبر';
-
-    Object.assign(splashTitle.style, {
-      fontFamily: '"Marhey", "Cairo", Tahoma, sans-serif',
-      fontSize: 'clamp(2rem, 8vw, 4rem)',
-      lineHeight: '1.5',
-      color: lightTheme ? '#1b3f94' : '#f1d18d',
-      margin: '0 0 18px'
-    });
-
-    var splashSubtitle = document.createElement('p');
-    splashSubtitle.textContent = (splashCopy && splashCopy.subtitle) ||
-      body.getAttribute('data-splash-subtitle') ||
-      'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
-
-    Object.assign(splashSubtitle.style, {
-      fontFamily: '"Cairo", Tahoma, sans-serif',
-      fontSize: 'clamp(1rem, 3.5vw, 1.3rem)',
-      lineHeight: '2',
-      margin: '0 0 28px'
-    });
-
+    var card = document.createElement('div'); card.className = 'story-start-card';
+    var closeBtn = document.createElement('button');
+    closeBtn.type = 'button'; closeBtn.className = 'story-start-close'; closeBtn.textContent = '\u00d7';
+    var art = document.createElement('figure'); art.className = 'story-start-art';
+    var img = document.createElement('img');
+    img.src = splashImage.replace(/"/g, ''); img.alt = body.getAttribute('data-splash-alt') || '';
+    img.decoding = 'async'; art.appendChild(img);
+    var copyBox = document.createElement('div'); copyBox.className = 'story-start-copy';
+    var elEyebrow = document.createElement('p'); elEyebrow.className = 'story-start-eyebrow';
+    var elName = document.createElement('p'); elName.className = 'story-start-name';
+    var splashTitle = document.createElement('h1'); splashTitle.className = 'story-start-title';
+    var elRole = document.createElement('p'); elRole.className = 'story-start-role';
+    var splashSubtitle = document.createElement('p'); splashSubtitle.className = 'story-start-sub';
     var startButton = document.createElement('button');
-    startButton.type = 'button';
-    startButton.className = 'story-splash-start';
-    startButton.textContent = (splashCopy && splashCopy.start) || 'ابدأ الحكاية ←';
+    startButton.type = 'button'; startButton.className = 'story-splash-start';
+    [elEyebrow, elName, splashTitle, elRole, splashSubtitle, startButton].forEach(function (e) { copyBox.appendChild(e); });
+    card.appendChild(closeBtn); card.appendChild(art); card.appendChild(copyBox); splash.appendChild(card);
 
-    Object.assign(startButton.style, {
-      fontFamily: '"Cairo", Tahoma, sans-serif',
-      fontSize: '1rem',
-      fontWeight: '800',
-      padding: '13px 30px',
-      border: '1px solid rgba(255,255,255,.4)',
-      borderRadius: '5px',
-      background: lightTheme ? 'linear-gradient(145deg, #2a5bd7, #1b3f94)' : 'linear-gradient(145deg, #e3bd78, #a8753d)',
-      color: lightTheme ? '#fffefa' : '#171006',
-      cursor: 'pointer',
-      boxShadow: '0 8px 24px rgba(0,0,0,.3)'
-    });
-
-    splashContent.appendChild(splashTitle);
-    splashContent.appendChild(splashSubtitle);
-    splashContent.appendChild(startButton);
-    splash.appendChild(splashContent);
+    var renderStart = function () {
+      var lang = curLang();
+      var c = (slugCopies && (slugCopies[lang] || slugCopies.ar)) || null;
+      if (!c && window.I18N && window.I18N.t && window.I18N.t('s_start') !== 's_start') {
+        c = {title: window.I18N.t('s_title'), subtitle: window.I18N.t('s_subtitle'), start: window.I18N.t('s_start')};
+      }
+      splash.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+      splash.style.direction = lang === 'ar' ? 'rtl' : 'ltr';
+      var title = (c && c.title) || translateAr(sd.title || body.getAttribute('data-splash-title') || '', lang);
+      splashTitle.textContent = title;
+      splashSubtitle.textContent = (c && c.subtitle) || translateAr(sd.sub || body.getAttribute('data-splash-subtitle') || '', lang);
+      startButton.textContent = (c && c.start) || translateAr(sd.start || '\u0627\u0628\u062f\u0623 \u0627\u0644\u062d\u0643\u0627\u064a\u0629 \u2190', lang);
+      elName.textContent = translateAr(sd.name || '', lang); elName.hidden = !sd.name;
+      elEyebrow.textContent = translateAr(sd.eyebrow || '', lang); elEyebrow.hidden = !sd.eyebrow;
+      elRole.textContent = translateAr(sd.role || '', lang); elRole.hidden = !sd.role;
+      splash.setAttribute('aria-label', title || body.getAttribute('data-splash-alt') || '');
+      closeBtn.setAttribute('aria-label', lang === 'ar' ? '\u0625\u063a\u0644\u0627\u0642' : 'Close');
+    };
+    renderStart();
+    var onLang = function () { if (splash.parentNode) { renderStart(); } };
+    document.addEventListener('site-language-change', onLang);
 
     var previousOverflow = body.style.overflow;
     body.appendChild(splash);
@@ -264,24 +267,30 @@
 
     var splashClosing = false;
 
-    var closeSplash = function () {
+    var closeSplash = function (andScroll) {
       if (splashClosing || !splash.parentNode) { return; }
       splashClosing = true;
-
+      document.removeEventListener('site-language-change', onLang);
+      document.removeEventListener('keydown', onKey);
       body.style.overflow = previousOverflow;
-
-      if (reduceMotion) {
-        splash.remove();
-        return;
+      if (andScroll === true && keepIntroModal) {
+        var begin = document.getElementById('begin');
+        if (begin && begin.scrollIntoView) { begin.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); }
       }
-
+      if (reduceMotion) { splash.remove(); return; }
       splash.style.opacity = '0';
       splash.style.pointerEvents = 'none';
       setTimeout(function () { splash.remove(); }, 380);
     };
+    var onKey = function (event) { if (event.key === 'Escape') { closeSplash(false); } };
+    document.addEventListener('keydown', onKey);
 
-    startButton.addEventListener('click', closeSplash);
+    startButton.addEventListener('click', function () { closeSplash(true); });
+    closeBtn.addEventListener('click', function () { closeSplash(false); });
+    splash.addEventListener('click', function (event) { if (event.target === splash) { closeSplash(false); } });
   }
+
+  if (startOnly) { return; }
 
   /* =========================================
      2) الحركة القديمة: الرئيسية وبقية القصص

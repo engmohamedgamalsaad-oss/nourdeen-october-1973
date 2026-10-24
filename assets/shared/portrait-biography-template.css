@@ -1,16 +1,14 @@
 /* Shared portrait-biography template for the latest Khaledoon stories.
    Keep structure consistent; each story supplies its own section accent in theme.css. */
 body.story-design-portrait-biography{
-  --story-accent:var(--accent,#8ad9e8);
+  --story-accent:var(--section-accent,var(--accent,#8ad9e8));
+  --section-glow:color-mix(in srgb,var(--story-accent) 20%,transparent);
   --story-gold:var(--gold,#e3bd78);
   color:#f4f7fb;
   background:radial-gradient(ellipse at 88% 0%,var(--section-glow,rgba(138,217,232,.20)) 0%,#101824 42%,#060b12 100%)!important;
   font-family:Cairo,Tahoma,sans-serif;
   line-height:2;
 }
-body.story-design-portrait-biography[data-story-slug="013"]{--story-accent:#e7a1c1;--section-glow:rgba(231,161,193,.20)}
-body.story-design-portrait-biography[data-story-slug="014"]{--story-accent:#d4b7ff;--section-glow:rgba(212,183,255,.20)}
-body.story-design-portrait-biography[data-story-slug="015"]{--story-accent:#8ad9e8;--section-glow:rgba(138,217,232,.20)}
 body.story-design-portrait-biography header{
   position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
   padding:12px clamp(14px,4vw,48px);background:rgba(10,20,31,.94)!important;
