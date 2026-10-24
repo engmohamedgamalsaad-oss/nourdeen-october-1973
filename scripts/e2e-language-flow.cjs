@@ -387,40 +387,41 @@ async function introPopupRegression(browser, base, origin) {
         await page.goto(`${base}/${rel}`, { waitUntil: 'load', timeout: 20000 });
         await page.waitForTimeout(1200);
         const state = await page.evaluate(() => {
-          const modal = document.getElementById('intro');
-          const image = modal && modal.querySelector('.modal-art img');
+          const splash = document.querySelector('.story-splash');
+          const image = splash && splash.querySelector('.story-start-art img');
           const rect = image ? image.getBoundingClientRect() : { width: 0, height: 0 };
           return {
-            modalConnected: !!modal && modal.isConnected,
+            splashConnected: !!splash && splash.isConnected,
             imageConnected: !!image && image.isConnected,
             splashCount: document.querySelectorAll('.story-splash').length,
-            modalDisplay: modal ? getComputedStyle(modal).display : 'missing',
+            splashDisplay: splash ? getComputedStyle(splash).display : 'missing',
             imageFit: image ? getComputedStyle(image).objectFit : 'missing',
             imageWidth: Math.round(rect.width),
             imageHeight: Math.round(rect.height),
-            keepFlag: document.body.hasAttribute('data-keep-intro-modal')
+            title: splash?.querySelector('.story-start-title')?.textContent?.trim() || '',
+            startButton: !!splash?.querySelector('.story-splash-start'),
+            closeButton: !!splash?.querySelector('.story-start-close')
           };
         });
-        const ok = state.modalConnected && state.imageConnected && state.splashCount === 0 &&
-          state.modalDisplay !== 'none' && state.imageFit === 'contain' &&
-          state.imageWidth > 0 && state.imageHeight > 0 && state.keepFlag;
-        checks.push({ viewport, slug, stage: 'after-delay', ok, state });
-        if (!ok) hard.push(`Intro popup ${slug}/${viewport} changed or disappeared after load: ${JSON.stringify(state)}`);
+        const ok = state.splashConnected && state.imageConnected && state.splashCount === 1 &&
+          state.splashDisplay !== 'none' && state.imageFit === 'contain' &&
+          state.imageWidth > 0 && state.imageHeight > 0 && state.title &&
+          state.startButton && state.closeButton;
+        checks.push({ viewport, slug, stage: 'unified-splash-after-delay', ok, state });
+        if (!ok) hard.push(`Unified intro splash ${slug}/${viewport} missing or invalid after load: ${JSON.stringify(state)}`);
 
-        await page.locator('#start').click({ timeout: 5000 });
-        await page.waitForFunction(() => {
-          const modal = document.getElementById('intro');
-          return !!modal && getComputedStyle(modal).display === 'none';
-        }, null, { timeout: 5000 }).catch(() => {});
-        const startClosed = await page.evaluate(() => getComputedStyle(document.getElementById('intro')).display === 'none');
-        checks.push({ viewport, slug, stage: 'start-button-closes-modal', ok: startClosed });
-        if (!startClosed) hard.push(`Intro popup ${slug}/${viewport}: start button did not close the popup`);
+        await page.locator('.story-splash-start').click({ timeout: 5000 });
+        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
+        const startClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        checks.push({ viewport, slug, stage: 'start-button-closes-splash', ok: startClosed });
+        if (!startClosed) hard.push(`Unified intro splash ${slug}/${viewport}: start button did not close it`);
 
         await page.reload({ waitUntil: 'load', timeout: 20000 });
-        await page.locator('#close').click({ timeout: 5000 });
-        const closeClosed = await page.evaluate(() => getComputedStyle(document.getElementById('intro')).display === 'none');
-        checks.push({ viewport, slug, stage: 'close-button-closes-modal', ok: closeClosed });
-        if (!closeClosed) hard.push(`Intro popup ${slug}/${viewport}: close button did not close the popup`);
+        await page.locator('.story-start-close').click({ timeout: 5000 });
+        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
+        const closeClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        checks.push({ viewport, slug, stage: 'close-button-closes-splash', ok: closeClosed });
+        if (!closeClosed) hard.push(`Unified intro splash ${slug}/${viewport}: close button did not close it`);
       }
     } catch (e) {
       hard.push(`Intro popup regression ${viewport}: ${String(e.message || e).split('\\n')[0]}`);
