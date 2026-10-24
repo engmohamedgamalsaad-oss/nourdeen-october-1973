@@ -256,9 +256,9 @@
     "path": "stories/history/005/"
   },
   {
-    "name": "غير محدد",
-    "grade": "غير محدد",
-    "className": "غير محدد",
+    "name": "",
+    "grade": "",
+    "className": "",
     "title": "أحمد عرابي — حين رفع صوته بالمطالب",
     "subtitle": "رحلة إلى مصر في القرن التاسع عشر، حين تحولت مطالب ضباط وجنود إلى حركة سياسية.",
     "person": "أحمد عرابي",
@@ -267,38 +267,29 @@
       "Arabi",
       "Ahmed Orabi"
     ],
-    "color": "#d5b7ff",
+    "color": "#b8874b",
     "order": 6,
     "published": true,
     "i18n": {
       "en": {
         "title": "Ahmed Urabi — When He Raised His Voice",
         "subtitle": "A journey to nineteenth-century Egypt, where soldiers’ demands grew into a political movement.",
-        "person": "Ahmed Urabi",
-        "name": "Not specified",
-        "grade": "Not specified",
-        "className": "Not specified"
+        "person": "Ahmed Urabi"
       },
       "fr": {
         "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
         "subtitle": "Un voyage dans l’Égypte du XIXe siècle, où les revendications des soldats sont devenues un mouvement politique.",
-        "person": "Ahmed Urabi",
-        "name": "Non précisé",
-        "grade": "Non précisé",
-        "className": "Non précisé"
+        "person": "Ahmed Urabi"
       },
       "it": {
         "title": "Ahmed Urabi — Quando fece sentire la sua voce",
         "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste dei soldati divennero un movimento politico.",
-        "person": "Ahmed Urabi",
-        "name": "Non specificato",
-        "grade": "Non specificato",
-        "className": "Non specificato"
+        "person": "Ahmed Urabi"
       },
       "de": {
-        "name": "Nicht angegeben",
-        "grade": "Nicht angegeben",
-        "className": "Nicht angegeben",
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "Ahmed Urabi — Als er seine Stimme erhob",
         "subtitle": "Eine Reise ins Ägypten des 19. Jahrhunderts, als die Forderungen von Offizieren und Soldaten zu einer politischen Bewegung wurden.",
         "person": "Ahmed Urabi"
@@ -309,44 +300,35 @@
     "path": "stories/history/006/"
   },
   {
-    "name": "مليكة محمد جمال",
-    "grade": "الصف الأول الابتدائي",
-    "className": "الصف الأول الابتدائي",
+    "name": "",
+    "grade": "",
+    "className": "",
     "title": "حكاية العالم أحمد زويل",
     "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
     "person": "أحمد زويل",
-    "color": "#8ad9e8",
+    "color": "#b8874b",
     "order": 7,
     "published": true,
     "i18n": {
       "en": {
         "title": "The Story of the Scientist Ahmed Zewail",
         "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions.",
-        "person": "Ahmed Zewail",
-        "name": "Malika Mohamed Gamal",
-        "grade": "1st Grade (Primary)",
-        "className": "1st Grade (Primary)"
+        "person": "Ahmed Zewail"
       },
       "fr": {
         "title": "L’histoire du scientifique Ahmed Zewail",
         "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques.",
-        "person": "Ahmed Zewail",
-        "name": "Malika Mohamed Gamal",
-        "grade": "1re année du primaire",
-        "className": "1re année du primaire"
+        "person": "Ahmed Zewail"
       },
       "it": {
         "title": "La storia dello scienziato Ahmed Zewail",
         "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche.",
-        "person": "Ahmed Zewail",
-        "name": "Malika Mohamed Gamal",
-        "grade": "1ª classe della scuola primaria",
-        "className": "1ª classe della scuola primaria"
+        "person": "Ahmed Zewail"
       },
       "de": {
-        "name": "Malika Mohamed Gamal",
-        "grade": "1. Klasse der Grundschule",
-        "className": "1. Klasse der Grundschule",
+        "name": "",
+        "grade": "",
+        "className": "",
         "title": "Die Geschichte des Wissenschaftlers Ahmed Zewail",
         "subtitle": "Eine Reise mit einem ägyptischen Wissenschaftler, der Forschern half, Atome während chemischer Reaktionen zu beobachten.",
         "person": "Ahmed Zewail"
@@ -355,54 +337,6 @@
     "id": "007",
     "section": "science",
     "path": "stories/science/007/"
-  },
-  {
-    "name": "غير محدد",
-    "grade": "غير محدد",
-    "className": "غير محدد",
-    "title": "سميرة موسى — حلم العلم للجميع",
-    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
-    "color": "#e7a1c1",
-    "order": 10,
-    "published": true,
-    "section": "women",
-    "i18n": {
-      "en": {
-        "title": "Sameera Moussa — Science for Everyone",
-        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity.",
-        "person": "Sameera Moussa",
-        "name": "Not specified",
-        "grade": "Not specified",
-        "className": "Not specified"
-      },
-      "fr": {
-        "title": "Sameera Moussa — La science pour tous",
-        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
-        "person": "Sameera Moussa",
-        "name": "Non précisé",
-        "grade": "Non précisé",
-        "className": "Non précisé"
-      },
-      "it": {
-        "title": "Sameera Moussa — La scienza per tutti",
-        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità.",
-        "person": "Sameera Moussa",
-        "name": "Non specificato",
-        "grade": "Non specificato",
-        "className": "Non specificato"
-      },
-      "de": {
-        "title": "Sameera Moussa — Wissenschaft für alle",
-        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
-        "person": "Sameera Moussa",
-        "name": "Nicht angegeben",
-        "grade": "Nicht angegeben",
-        "className": "Nicht angegeben"
-      }
-    },
-    "id": "010",
-    "path": "stories/women/010/",
-    "person": "سميرة موسى"
   },
   {
     "name": "مليكة محمد",
@@ -501,52 +435,35 @@
     "path": "stories/people/009/"
   },
   {
-    "name": "نوردين محمد",
-    "grade": "راوي الحكاية",
-    "className": "راوي الحكاية",
-    "title": "فاروق الباز",
-    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
-    "person": "فاروق الباز",
-    "color": "#8ad9e8",
-    "order": 12,
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
     "published": true,
+    "section": "women",
     "i18n": {
       "en": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Story narrator",
-        "className": "Story narrator",
-        "title": "Farouk El-Baz",
-        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
       },
       "fr": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narrateur de l'histoire",
-        "className": "Narrateur de l'histoire",
-        "title": "Farouk El-Baz",
-        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
       },
       "it": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narratore della storia",
-        "className": "Narratore della storia",
-        "title": "Farouk El-Baz",
-        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
       },
       "de": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Erzähler der Geschichte",
-        "className": "Erzähler der Geschichte",
-        "title": "Farouk El-Baz",
-        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
-        "person": "فاروق الباز"
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
       }
     },
-    "id": "012",
-    "section": "science",
-    "path": "stories/science/012/"
+    "id": "010",
+    "path": "stories/women/010/"
   },
   {
     "name": "نوردين محمد",
@@ -597,13 +514,61 @@
     "path": "stories/islamic/011/"
   },
   {
+    "name": "نوردين محمد",
+    "grade": "راوي الحكاية",
+    "className": "راوي الحكاية",
+    "title": "فاروق الباز",
+    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
+    "person": "فاروق الباز",
+    "color": "#8ad9e8",
+    "order": 12,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Story narrator",
+        "className": "Story narrator",
+        "title": "Farouk El-Baz",
+        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
+        "person": "فاروق الباز"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narrateur de l'histoire",
+        "className": "Narrateur de l'histoire",
+        "title": "Farouk El-Baz",
+        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
+        "person": "فاروق الباز"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narratore della storia",
+        "className": "Narratore della storia",
+        "title": "Farouk El-Baz",
+        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
+        "person": "فاروق الباز"
+      },
+      "de": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Erzähler der Geschichte",
+        "className": "Erzähler der Geschichte",
+        "title": "Farouk El-Baz",
+        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
+        "person": "فاروق الباز"
+      }
+    },
+    "id": "012",
+    "section": "science",
+    "path": "stories/science/012/"
+  },
+  {
     "name": "مليكة محمد جمال",
     "grade": "الصف الخامس الابتدائي",
     "className": "الصف الخامس الابتدائي",
     "title": "حتشبسوت: الفرعون الذهبي على عرش النيل",
     "subtitle": "قصة الملكة الدبلوماسية التي ملأت مصر بالمعالم والعمران ورائدات التجار",
     "person": "الملكة حتشبسوت",
-    "color": "#e7a1c1",
+    "color": "#a9d9a6",
     "order": 13,
     "published": true,
     "i18n": {
@@ -693,7 +658,7 @@
     "path": "stories/history/014/"
   },
   {
-    "name": "مليكة محمد",
+    "name": "مليكة محمد جمال",
     "grade": "الصف الأول الابتدائي",
     "className": "الصف الأول الابتدائي",
     "title": "مجدي يعقوب",
@@ -704,7 +669,7 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "First grade",
         "className": "First grade",
         "title": "Magdi Yacoub",
@@ -712,7 +677,7 @@
         "person": "مجدي يعقوب"
       },
       "fr": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Première année de l’école primaire",
         "className": "Première année de l’école primaire",
         "title": "Magdi Yacoub",
@@ -720,7 +685,7 @@
         "person": "مجدي يعقوب"
       },
       "it": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Prima classe della scuola primaria",
         "className": "Prima classe della scuola primaria",
         "title": "Magdi Yacoub",
@@ -728,7 +693,7 @@
         "person": "مجدي يعقوب"
       },
       "de": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Erste Klasse der Grundschule",
         "className": "Erste Klasse der Grundschule",
         "title": "Magdi Yacoub",
