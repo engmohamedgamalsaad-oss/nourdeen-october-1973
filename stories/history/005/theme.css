@@ -41,3 +41,31 @@ body.modal-open{overflow:hidden}body.motion-ready .write-in{opacity:0;transform:
 @media(prefers-reduced-motion:reduce){
  .hero .hero-content,.hero .hero-art img{animation:none!important;transform:none!important;opacity:1!important}
 }
+
+/* ===== Story 005 - card layout (Mahfouz pattern) in the History purple palette, 2026-10-24 =====
+   Cards for sections and a box per paragraph. Cover and start screen are NOT touched.
+   Light mode is forced with higher specificity because the shared stories theme makes cards transparent. */
+body[data-story-slug="005"]{--sec:#d5b7ff;--sec-line:rgba(213,183,255,.34);--gold2:#e3bd78;--pg-text:#efe9fa;--pg-head:#f3e7ff;--pg-card:linear-gradient(145deg,#2a2142e8,#121827ef);--pg-box:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));--pg-box-text:#efe9fa}
+:root[data-theme="light"] body[data-story-slug="005"]{--sec:#5b3fa0;--sec-line:rgba(91,63,160,.34);--gold2:#79572b;--pg-text:#2b2540;--pg-head:#3a2a66;--pg-card:linear-gradient(145deg,#ffffff,#f5f0fb);--pg-box:#ffffff;--pg-box-text:#2b2540}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) body[data-story-slug="005"]{--sec:#5b3fa0;--sec-line:rgba(91,63,160,.34);--gold2:#79572b;--pg-text:#2b2540;--pg-head:#3a2a66;--pg-card:linear-gradient(145deg,#ffffff,#f5f0fb);--pg-box:#ffffff;--pg-box-text:#2b2540}}
+body[data-story-slug="005"] .story{width:min(1000px,calc(100% - 28px));margin:20px auto;padding:44px 20px;border:1px solid var(--sec-line);border-radius:24px;background:var(--pg-card);box-shadow:0 18px 42px rgba(0,0,0,.14)}
+body[data-story-slug="005"] .story h2{color:var(--pg-head)}
+body[data-story-slug="005"] .story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,var(--gold2),var(--sec))}
+body[data-story-slug="005"] .story .kicker{color:var(--sec)}
+body[data-story-slug="005"] .story .container>p{margin:0 0 14px;padding:clamp(16px,2.2vw,24px);border:1px solid var(--sec-line);border-inline-start:4px solid var(--sec);border-radius:16px;background:var(--pg-box);color:var(--pg-box-text);line-height:2.05;box-shadow:0 8px 22px rgba(0,0,0,.12);overflow-wrap:anywhere}
+body[data-story-slug="005"] .quote{border-color:var(--sec);border-radius:16px}
+body[data-story-slug="005"] .quote p{color:var(--gold2)}
+body[data-story-slug="005"] .sources,body[data-story-slug="005"] .end{width:min(1000px,calc(100% - 28px));margin:20px auto;border:1px solid var(--sec-line);border-radius:22px;background:var(--pg-card);color:var(--pg-text)}
+body[data-story-slug="005"] .sources{padding:36px 20px}
+body[data-story-slug="005"] .sources :is(li,p,h2),body[data-story-slug="005"] .end h2{color:var(--pg-text)}
+body[data-story-slug="005"] .sources a{color:var(--sec)}
+:root[data-theme="light"] body[data-story-slug="005"] :is(.story,.sources,.end),
+:root:not([data-theme="dark"]) body[data-story-slug="005"] :is(.story,.sources,.end){background:var(--pg-card)!important}
+:root[data-theme="light"] body[data-story-slug="005"] .story .container>p,
+:root:not([data-theme="dark"]) body[data-story-slug="005"] .story .container>p{background:var(--pg-box)!important;color:var(--pg-box-text)!important;border-color:var(--sec-line)!important}
+:root[data-theme="light"] body[data-story-slug="005"] :is(.story h2,.sources h2,.end h2),
+:root:not([data-theme="dark"]) body[data-story-slug="005"] :is(.story h2,.sources h2,.end h2){color:var(--pg-head)!important}
+:root[data-theme="light"] body[data-story-slug="005"] :is(.story .kicker,.sources .kicker,.sources a),
+:root:not([data-theme="dark"]) body[data-story-slug="005"] :is(.story .kicker,.sources .kicker,.sources a){color:var(--sec)!important}
+@media(max-width:650px){body[data-story-slug="005"] .story{width:calc(100% - 20px);margin:14px 10px;padding:30px 14px;border-radius:18px}body[data-story-slug="005"] .sources,body[data-story-slug="005"] .end{width:calc(100% - 20px)}}
+@media print{body[data-story-slug="005"] .story,body[data-story-slug="005"] .sources,body[data-story-slug="005"] .end{width:auto;margin:0;border:0;border-radius:0;box-shadow:none;background:none!important}body[data-story-slug="005"] .story h2:after{display:none}body[data-story-slug="005"] .story .container>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none!important}}
