@@ -8,7 +8,7 @@ body.story-design-portrait-biography{
   font-family:Cairo,Tahoma,sans-serif;
   line-height:2;
 }
-body.story-design-portrait-biography[data-story-slug="013"]{--story-accent:#a9d9a6;--section-glow:rgba(169,217,166,.20)}
+body.story-design-portrait-biography[data-story-slug="013"]{--story-accent:#e7a1c1;--section-glow:rgba(231,161,193,.20)}
 body.story-design-portrait-biography[data-story-slug="014"]{--story-accent:#d4b7ff;--section-glow:rgba(212,183,255,.20)}
 body.story-design-portrait-biography[data-story-slug="015"]{--story-accent:#8ad9e8;--section-glow:rgba(138,217,232,.20)}
 body.story-design-portrait-biography header{
@@ -134,3 +134,14 @@ html[data-theme="light"] body.story-design-portrait-biography .sources a{color:#
 @media(prefers-reduced-motion:reduce){
   body.story-design-portrait-biography *,body.story-design-portrait-biography *::before,body.story-design-portrait-biography *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 }
+
+/* ===== القالب المعتمد: بطاقات للأقسام وكل فقرة في صندوق (013 و014 و015) — 2026-10-24 =====
+   اللون يأتي من --story-accent لكل حكاية (لون قسمها)، والملف مشترك فلا يمس حكايات أكتوبر. */
+body.story-design-portrait-biography .story{width:min(1000px,calc(100% - 28px));margin:20px auto;border:1px solid color-mix(in srgb,var(--story-accent) 32%,transparent);border-radius:24px;background:linear-gradient(145deg,rgba(18,32,48,.92),rgba(10,18,28,.95));box-shadow:0 18px 42px rgba(0,0,0,.14)}
+body.story-design-portrait-biography .story h2:after{content:"";display:block;width:74px;height:3px;margin-top:9px;border-radius:9px;background:linear-gradient(90deg,var(--story-gold),var(--story-accent))}
+body.story-design-portrait-biography .story .story-body{display:grid;gap:14px}
+body.story-design-portrait-biography .story .story-body>p{margin:0;max-width:none;padding:clamp(16px,2.2vw,24px);border:1px solid color-mix(in srgb,var(--story-accent) 32%,transparent);border-inline-start:4px solid var(--story-accent);border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.075),rgba(255,255,255,.025));box-shadow:0 8px 22px rgba(0,0,0,.14);line-height:2.05;overflow-wrap:anywhere}
+html[data-theme="light"] body.story-design-portrait-biography .story{border-color:#dfd4c0;box-shadow:0 14px 34px rgba(51,43,27,.08)}
+html[data-theme="light"] body.story-design-portrait-biography .story .story-body>p{background:#fffdf8;border-color:#dfd4c0;border-inline-start-color:color-mix(in srgb,var(--story-accent) 62%,#243746);box-shadow:0 7px 20px rgba(51,43,27,.07)}
+@media(max-width:700px){body.story-design-portrait-biography .story{width:calc(100% - 20px);margin:14px 10px;border-radius:18px}body.story-design-portrait-biography .story .story-body{gap:11px}body.story-design-portrait-biography .story .story-body>p{padding:15px;border-radius:13px}}
+@media print{body.story-design-portrait-biography .story{width:auto;margin:0;border:0;border-radius:0;box-shadow:none;background:none}body.story-design-portrait-biography .story h2:after{display:none}body.story-design-portrait-biography .story .story-body>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none}}
