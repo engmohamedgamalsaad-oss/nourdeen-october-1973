@@ -36,3 +36,11 @@ html.kh-theme-anim body,html.kh-theme-anim body *{transition:background-color .3
 .modal-copy .eyebrow{display:inline-flex;margin-bottom:10px;padding:6px 11px;border:1px solid rgba(213,183,255,.5);border-radius:999px;background:rgba(16,19,36,.8);font-size:.78rem;letter-spacing:.03em}
 @media(max-width:650px){.story{width:calc(100% - 20px);margin:14px 10px;padding:30px 14px;border-radius:18px}.modal-art{height:clamp(170px,27vh,220px);padding:8px}}
 @media print{.story{width:auto;margin:0;border:0;border-radius:0;box-shadow:none}.story h2:after{display:none}.story .container>p{padding:0;border:0;border-radius:0;box-shadow:none;background:none}}
+
+/* ===== حكاية 006 — صورة الغلاف الجانبية (صورة تاريخية، ملكية عامة) — 2026-10-24 ===== */
+.hero{gap:clamp(20px,4vw,56px);justify-content:space-between}
+.hero-portrait{position:relative;z-index:2;margin:0;flex:0 0 min(30%,300px)}
+.hero-portrait img{display:block;width:100%;height:auto;max-height:440px;object-fit:cover;object-position:top;border-radius:22px;border:1px solid rgba(213,183,255,.55);background:#16132a;box-shadow:0 28px 65px rgba(0,0,0,.45)}
+.hero-portrait figcaption{margin-top:9px;font-size:.78rem;line-height:1.7;color:#d9d2ea;text-align:center}
+@media(max-width:700px){.hero{flex-direction:column;justify-content:center;align-items:stretch;padding-bottom:50px}.hero-portrait{flex:0 0 auto;width:min(64%,250px);margin:26px auto 0}.hero-copy{max-width:100%}}
+@media print{.hero-portrait{display:none}}
