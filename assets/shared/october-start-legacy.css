@@ -1,0 +1,66 @@
+/* october-start-legacy.css — يرجّع شاشة البداية القديمة لحكايات أكتوبر (001–004) فقط.
+   السبب: محمد قرر أن قسم أكتوبر يبقى بتصميمه الفريد، بينما شاشة البداية الموحدة (story.js) بقت بطاقة بصورة جانبية.
+   الشكل القديم: صورة الغلاف ملء الشاشة + تدرج داكن + عنوان ذهبي في النص + زر ذهبي، وفي الوضع الفاتح عنوان أزرق وزر أزرق.
+   لا يلمس story.js ولا أي حكاية خارج 001–004. يتحمّل عبر story-layout.css (المستورد من base.css).
+   كل القواعد بتخصيص أعلى (html body:is(...)) علشان تغلب <style id="story-start-style"> اللي بيتحقن وقت التشغيل. */
+
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash{
+  padding:24px;background:#071c25;text-align:center;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-bg img{
+  inset:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center;
+  filter:none;opacity:1;animation:none;transform:none;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-bg:after{
+  background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.72));animation:none;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-card{
+  display:block;width:min(600px,100%);max-height:none;overflow:visible;margin:auto;
+  background:none;border:0;border-radius:0;box-shadow:none;
+  -webkit-backdrop-filter:none;backdrop-filter:none;color:#fff;text-align:center;animation:none;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-art,
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-close,
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-eyebrow,
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-name,
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-role{
+  display:none!important;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-copy{
+  padding:0;align-self:auto;text-align:center;
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-title{
+  margin:0 0 18px;font-family:"Marhey","Cairo",Tahoma,sans-serif;font-size:clamp(2rem,8vw,4rem);line-height:1.5;
+  color:#f1d18d;text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-sub{
+  margin:0 0 28px;font-family:"Cairo",Tahoma,sans-serif;font-size:clamp(1rem,3.5vw,1.3rem);line-height:2;
+  color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.8);
+}
+html body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-start{
+  margin:0;padding:13px 30px;font:800 1rem "Cairo",Tahoma,sans-serif;border:1px solid rgba(255,255,255,.4);border-radius:5px;
+  background:linear-gradient(145deg,#e3bd78,#a8753d);color:#171006;box-shadow:0 8px 24px rgba(0,0,0,.3);
+}
+
+/* الوضع الفاتح (نفس ألوان الشاشة القديمة) */
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash{
+  background:#fbf7ec;
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-bg img{
+  opacity:1;
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-bg:after{
+  background:linear-gradient(180deg,rgba(251,247,236,.76),rgba(255,254,250,.94));
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-card{
+  background:none;border:0;box-shadow:none;color:#0f2150;
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-title{
+  color:#1b3f94;text-shadow:none;
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-start-sub{
+  color:#0f2150;text-shadow:none;
+}
+html[data-theme="light"] body:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"]) .story-splash-start{
+  background:linear-gradient(145deg,#2a5bd7,#1b3f94);color:#fffefa;
+}
