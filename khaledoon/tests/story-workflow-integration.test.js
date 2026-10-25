@@ -60,6 +60,17 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
   assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
 });
+test('published story 012 and 014 headers have all four non-Arabic translations', function () {
+  var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
+  var history = fs.readFileSync('stories/history/014/translations.js', 'utf8');
+  ['en','fr','it','de'].forEach(function (lang) {
+    assert.ok(science.includes('supplementalTranslations.' + lang + '[\\"خالدون عبر التاريخ · 012\\"]'), 'story 012 missing localized header for ' + lang);
+    assert.ok(history.includes('supplementalTranslations.' + lang + '[\\"خالدون عبر التاريخ · 014\\"]'), 'story 014 missing localized header for ' + lang);
+  });
+  ['en','fr','it','de'].forEach(function (lang) {
+    assert.ok(history.includes('supplementalTranslations.' + lang + '[\\"← التاريخ والحضارات\\"]'), 'story 014 missing localized breadcrumb for ' + lang);
+  });
+});
 test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
