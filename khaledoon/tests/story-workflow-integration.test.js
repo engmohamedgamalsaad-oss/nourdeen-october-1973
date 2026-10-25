@@ -52,7 +52,7 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(start >= 0 && end > start, 'active story prompt must be a single embedded string');
   var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
-  assert.ok(prompt.includes('## عقد الغلاف الموحد — مصدر واحد لكل موضع'));
+  assert.ok(prompt.includes('### عقد الغلاف الموحد — مصدر واحد لكل موضع'));
   assert.ok(prompt.includes('cover.i18n'));
   assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
