@@ -58,6 +58,10 @@ async function main() {
     question_bank_json: { questions: [] }
   });
   assert.match(html, /اختبار معاينة القارئ/);
+  assert.match(html, /<body class="story-design-[^"]+" data-story-slug="preview" data-section-accent="/, 'generated story body must include data-story-slug for shared language support');
+  assert.match(html, /<header>[\s\S]*?<div class="language-switch" data-lang-switch role="group" aria-label="Language"><\/div><\/header>/, 'generated story must include the shared language switch in its static HTML header');
+  assert.equal((html.match(/data-lang-switch/g) || []).length, 1, 'generated preview must contain exactly one language switch');
+  assert.ok(html.indexOf('assets/shared/i18n.js') < html.indexOf('window.StoryI18N'), 'shared i18n script must load before the generated inline story translation dictionary');
   assert.match(html, /stories\/history\/preview\//);
   assert.match(html, /class="hero-art"/, 'preview should show the lead story image in the hero');
   assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
