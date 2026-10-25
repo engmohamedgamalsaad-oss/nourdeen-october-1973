@@ -7,16 +7,22 @@
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- شاشة البداية الموحدة: التقاط بيانات #intro المكتوب يدويًا (إن وُجد) وترجمتها ---- */
-  function captureIntro() {
-    var intro = document.getElementById('intro');
-    if (!intro) { return; }
-    var img = intro.querySelector('.modal-art img');
-    if (!img || !img.getAttribute('src')) { return; }
+  function readIntro(intro) {
     var q = function (sel) { var e = intro.querySelector(sel); return e ? e.textContent.trim() : ''; };
-    window.__khStartData = {
-      name: q('.person-name'), role: q('.popup-role'), eyebrow: q('.eyebrow'),
-      title: q('#intro-title'), sub: q('#intro-desc'), start: q('#start')
+    return {
+      name: q('.person-name'), role: q('.popup-role'), eyebrow: q('.eyebrow, .intro-kicker'),
+      title: q('#intro-title'), sub: q('#intro-desc, .intro-copy > p:not(.intro-kicker)'),
+      start: q('#start, #start-story')
     };
+  }
+
+  function captureIntro() {
+    var intro = document.getElementById('intro') || document.getElementById('story-intro-modal');
+    if (!intro) { return; }
+    var img = intro.querySelector('.modal-art img, .intro-art img');
+    if (!img || !img.getAttribute('src')) { return; }
+    window.__khIntroEl = intro;
+    window.__khStartData = readIntro(intro);
     if (!body.getAttribute('data-splash')) {
       body.setAttribute('data-splash', img.getAttribute('src'));
       body.setAttribute('data-splash-alt', img.getAttribute('alt') || '');
@@ -31,6 +37,21 @@
     (secMatch && SECTION_ACCENTS[secMatch[1]]) || '#e2b36d';
   /* لون القسم متاح لكل صفحة حكاية كمتغير CSS، ليأخذ الغلاف والعناصر لون قسمها لا لون حكاية بعينها. */
   document.documentElement.style.setProperty('--section-accent', sectionAccent);
+  /* كل حكاية تأخذ لون قسمها في الوضع الداكن: نستبدل --accent، وكذلك --gold حين تستخدمه الحكاية كلون إبراز
+     (أي حين يساوي --accent). الوضع الفاتح يحتفظ بألوانه المضبوطة للتباين. */
+  try {
+    var rootStyle = window.getComputedStyle(document.documentElement);
+    var themeAccent = (rootStyle.getPropertyValue('--accent') || '').trim().toLowerCase();
+    var themeGold = (rootStyle.getPropertyValue('--gold') || '').trim().toLowerCase();
+    var accentRule = 'html:not([data-theme="light"]) body[data-story-slug]{--accent:var(--section-accent)' +
+      ((themeAccent && themeAccent === themeGold) ? ';--gold:var(--section-accent)' : '') + '}';
+    if (!document.getElementById('story-section-accent-style')) {
+      var accentStyle = document.createElement('style');
+      accentStyle.id = 'story-section-accent-style';
+      accentStyle.textContent = accentRule;
+      document.head.appendChild(accentStyle);
+    }
+  } catch (e) {}
 
   function translateAr(text, lang) {
     if (!text || !lang || lang === 'ar') { return text; }
@@ -171,11 +192,15 @@
   }
 
   var startOnly = body.hasAttribute('data-start-only');
+  var startLive = body.hasAttribute('data-start-live');
   if (startOnly) {
-    /* صفحات لها سلوكها الخاص (مثل 006): نستخدم شاشة البداية الموحدة فقط ثم نترك بقية الصفحة لسكربتها. */
+    /* صفحات لها سلوكها الخاص (006 و007): نستخدم شاشة البداية الموحدة فقط ثم نترك بقية الصفحة لسكربتها.
+       مع data-start-live تبقى نافذة الصفحة مخفية كمصدر نصوص تترجمه الصفحة بنفسها، ونقرأ منها عند تغيير اللغة. */
     captureIntro();
-    var legacyIntro = document.getElementById('intro');
-    if (legacyIntro) { legacyIntro.remove(); }
+    var legacyIntro = window.__khIntroEl || document.getElementById('intro');
+    if (legacyIntro) {
+      if (startLive) { legacyIntro.hidden = true; } else { legacyIntro.remove(); }
+    }
   }
 
   var splashImage = body.getAttribute('data-splash');
@@ -183,7 +208,12 @@
   if (splashImage) {
     var sd = window.__khStartData || {};
     var slugCopies = splashCopies[body.getAttribute('data-story-slug')] || null;
-    var curLang = function () { return (window.I18N && window.I18N.lang && window.I18N.lang()) || 'ar'; };
+    var curLang = function () {
+      if (window.I18N && window.I18N.lang) { return window.I18N.lang() || 'ar'; }
+      var l = document.documentElement.getAttribute('lang');
+      if (!l) { try { l = window.localStorage.getItem('kh-lang'); } catch (e) {} }
+      return l || 'ar';
+    };
 
     if (!document.getElementById('story-start-style')) {
       var st = document.createElement('style');
@@ -208,7 +238,11 @@
         'html[data-theme="light"] .story-start-role,html[data-theme="light"] .story-start-sub{color:#263746}',
         'html[data-theme="light"] .story-start-close{background:#fffdf8;color:#263746}',
         '@media(max-width:700px){.story-start-card{grid-template-columns:1fr}.story-start-art{height:clamp(180px,34dvh,260px);padding:10px}.story-start-copy{padding:20px}}',
-        '@media(prefers-reduced-motion:reduce){.story-splash{transition:none}}'
+        '.story-start-card{animation:story-start-in .5s cubic-bezier(.2,.7,.2,1) both;transition:opacity .4s ease,transform .4s ease}',
+        '@keyframes story-start-in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}',
+        '.story-splash.is-closing{opacity:0;pointer-events:none}',
+        '.story-splash.is-closing .story-start-card{opacity:0;transform:translateY(-10px) scale(.97)}',
+        '@media(prefers-reduced-motion:reduce){.story-splash,.story-start-card{transition:none;animation:none}}'
       ].join('\n');
       document.head.appendChild(st);
     }
@@ -239,6 +273,7 @@
 
     var renderStart = function () {
       var lang = curLang();
+      if (startLive && window.__khIntroEl) { sd = readIntro(window.__khIntroEl); }
       var c = (slugCopies && (slugCopies[lang] || slugCopies.ar)) || null;
       if (!c && window.I18N && window.I18N.t && window.I18N.t('s_start') !== 's_start') {
         c = {title: window.I18N.t('s_title'), subtitle: window.I18N.t('s_subtitle'), start: window.I18N.t('s_start')};
@@ -248,7 +283,7 @@
       var title = (c && c.title) || translateAr(sd.title || body.getAttribute('data-splash-title') || '', lang);
       splashTitle.textContent = title;
       splashSubtitle.textContent = (c && c.subtitle) || translateAr(sd.sub || body.getAttribute('data-splash-subtitle') || '', lang);
-      startButton.textContent = (c && c.start) || translateAr(sd.start || '\u0627\u0628\u062f\u0623 \u0627\u0644\u062d\u0643\u0627\u064a\u0629 \u2190', lang);
+      startButton.textContent = ((c && c.start) || translateAr(sd.start || '\u0627\u0628\u062f\u0623 \u0627\u0644\u062d\u0643\u0627\u064a\u0629 \u2190', lang)).replace(/\s*[\u2190\u2192]\s*$/, lang === 'ar' ? ' \u2190' : ' \u2192');
       elName.textContent = translateAr(sd.name || '', lang); elName.hidden = !sd.name;
       elEyebrow.textContent = translateAr(sd.eyebrow || '', lang); elEyebrow.hidden = !sd.eyebrow;
       elRole.textContent = translateAr(sd.role || '', lang); elRole.hidden = !sd.role;
@@ -273,14 +308,22 @@
       document.removeEventListener('site-language-change', onLang);
       document.removeEventListener('keydown', onKey);
       body.style.overflow = previousOverflow;
-      if (andScroll === true && keepIntroModal) {
-        var begin = document.getElementById('begin');
-        if (begin && begin.scrollIntoView) { begin.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' }); }
-      }
-      if (reduceMotion) { splash.remove(); return; }
-      splash.style.opacity = '0';
-      splash.style.pointerEvents = 'none';
-      setTimeout(function () { splash.remove(); }, 380);
+      /* الانتقال: بعد زر «ابدأ» ننزل إلى بداية الحكاية (#begin) إن وُجدت، وإلا نبقى عند الغلاف. */
+      var target = document.getElementById('begin');
+      var finish = function () {
+        splash.remove();
+        if (andScroll === true && target && target.scrollIntoView) {
+          target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+        var focusEl = target || document.querySelector('h1');
+        if (focusEl) {
+          if (!focusEl.hasAttribute('tabindex')) { focusEl.setAttribute('tabindex', '-1'); }
+          try { focusEl.focus({ preventScroll: true }); } catch (e) {}
+        }
+      };
+      if (reduceMotion) { finish(); return; }
+      splash.classList.add('is-closing');
+      setTimeout(finish, 420);
     };
     var onKey = function (event) { if (event.key === 'Escape') { closeSplash(false); } };
     document.addEventListener('keydown', onKey);
