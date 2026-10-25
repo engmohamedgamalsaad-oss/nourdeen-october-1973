@@ -212,7 +212,7 @@ test('preview review panel displays image thumbnails and attribution from the sa
 test('Hatshepsut cover SVG has no embedded text that can leak across languages', function () {
   var svg = fs.readFileSync('stories/women/013/cover-popup.svg', 'utf8');
   assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to the localized HTML');
-  assert.ok(!/[\\u0600-\\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
+  assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
   assert.ok(svg.includes('aria-hidden=\"true\"'), 'HTML image alt text is the accessible label');
 });
 test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
