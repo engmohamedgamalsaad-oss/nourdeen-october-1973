@@ -396,7 +396,7 @@ async function targetArabicTextAudit(browser, base, origin) {
           /* SVG localization is asynchronous; wait for both cover assets before auditing their payloads. */
           await page.waitForFunction(() => {
             const images = Array.from(document.querySelectorAll('img[src]'));
-            const covers = images.filter((img) => /cover(?:-popup)?\\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
+            const covers = images.filter((img) => /cover(?:-popup)?\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
             const splash = document.querySelector('.story-start-art img');
             return covers.length > 0 &&
               covers.every((img) => (img.getAttribute('src') || '').startsWith('blob:')) &&
