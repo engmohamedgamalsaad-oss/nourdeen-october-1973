@@ -146,7 +146,7 @@ function translateSvgArtwork(lang){
  });
  var bgCandidates=Array.prototype.slice.call(document.querySelectorAll('body *'));
  bgCandidates.forEach(function(el){
-  var current=el.style.backgroundImage||'';
+  var current=el.style.backgroundImage||window.getComputedStyle(el).backgroundImage||'';
   var source=el.__storySvgOriginalBackground;
   if(source===undefined){
    if(!/\.svg(?:[?#]|\s*\))/i.test(current))return;
