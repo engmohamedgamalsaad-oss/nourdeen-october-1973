@@ -432,6 +432,60 @@ async function introPopupRegression(browser, base, origin) {
   return { checks, hard };
 }
 
+async function svgArtworkRegression(browser, base, origin) {
+  const hard = [];
+  const checks = [];
+  const cases = [
+    { slug: 'stories/science/015/', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
+    { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
+    { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
+    { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
+    { slug: 'stories/science/012/', expected: 'The Scientist Who Read the Moon and the Desert', arabic: 'العالم الذي قرأ القمر والصحراء' },
+    { slug: 'stories/women/010/', expected: 'A Dream of Science for Everyone', arabic: 'حلم العلم للجميع' }
+  ];
+  const ctx = await newContext(browser, origin, 'desktop');
+  const page = await ctx.newPage();
+  try {
+    await page.goto(base + '/assets/shared/home-language-only.js');
+    for (const item of cases) {
+      await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
+      await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
+      await page.waitForTimeout(900);
+      const en = await page.evaluate(async () => {
+        const img = document.querySelector('.story-start-art img');
+        if (!img) return { found: false, src: '', svg: '' };
+        const src = img.getAttribute('src') || '';
+        let svg = '';
+        try { svg = await (await fetch(src)).text(); } catch (_) {}
+        return { found: true, src, svg };
+      });
+      const enOk = en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic);
+      checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
+      if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
+
+      await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
+      await page.reload({ waitUntil: 'load', timeout: 20000 });
+      await page.waitForTimeout(250);
+      const ar = await page.evaluate(async () => {
+        const img = document.querySelector('.story-start-art img');
+        if (!img) return { found: false, src: '', svg: '' };
+        const src = img.getAttribute('src') || '';
+        let svg = '';
+        try { svg = await (await fetch(src)).text(); } catch (_) {}
+        return { found: true, src, svg };
+      });
+      const arOk = ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic);
+      checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
+      if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
+    }
+  } catch (e) {
+    hard.push('SVG artwork regression: ' + String(e.message || e).split('\\n')[0]);
+  } finally {
+    await ctx.close();
+  }
+  return { checks, hard };
+}
+
 (async () => {
   const { server, origin, base } = await serve();
   const browser = await chromium.launch({ headless: true });
@@ -442,11 +496,11 @@ async function introPopupRegression(browser, base, origin) {
       results.flow.push(...await Promise.all(LANGS.map((l) => flow(browser, base, origin, l, viewport))));
       results.sweep.push(...await Promise.all(LANGS.map((l) => sweep(browser, base, origin, l, viewport, pages))));
     }
-    results.introPopup = await introPopupRegression(browser, base, origin);
+    results.introPopup = await introPopupRegression(browser, base, origin);\n    results.svgArtwork = await svgArtworkRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -456,7 +510,7 @@ async function introPopupRegression(browser, base, origin) {
   const stepOk = results.flow.reduce((n, r) => n + r.steps.filter((s) => s.ok).length, 0);
   console.log(`FLOW: ${stepOk}/${stepCount} steps passed across ${results.flow.length} language/viewport runs.`);
   console.log(`SWEEP: ${pages.length} visitor pages x ${LANGS.length} languages x 2 viewports = ${pages.length * LANGS.length * 2} loads.`);
-  console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
+  console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);\n  console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);
