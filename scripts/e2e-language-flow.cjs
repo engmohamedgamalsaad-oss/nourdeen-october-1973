@@ -616,7 +616,8 @@ async function svgArtworkRegression(browser, base, origin) {
       };
     });
     const magdiOk = magdi.heroPhoto && magdi.introPhoto && magdi.frameApplied && magdi.decorativeOnly;
-    checks.push({ slug: 'stories/science/015/', language: 'ar', ok: magdiOk, expected: 'documented photo + decorative SVG frame' });
+    console.log('MAGDI COVER CHECK:', JSON.stringify(magdi));
+    checks.push({ slug: 'stories/science/015/', language: 'ar', ok: magdiOk, expected: 'documented photo + decorative SVG frame', detail: magdi });
     if (!magdiOk) hard.push('Magdi Yacoub 015 cover should use documented photos with decorative-only SVG frames');
   } catch (e) {
     hard.push('SVG artwork regression: ' + String(e.message || e).split('\\n')[0]);
