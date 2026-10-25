@@ -62,4 +62,23 @@ Object.assign(S.text,{
 "صفحتان إضافيتان من كتاب رسائل أبي بكر الخوارزمي في طبعة عام 1880.":{"en":"Two more pages from the 1880 edition of the book of letters of Abu Bakr al-Khwarizmi.","fr":"Deux autres pages du livre de lettres d’Abou Bakr al-Khwarizmi, édition de 1880.","it":"Altre due pagine del libro di lettere di Abu Bakr al-Khwarizmi, edizione del 1880.","de":"Zwei weitere Seiten aus dem Briefbuch von Abu Bakr al-Chwarizmi, Ausgabe von 1880."}
 });
 
+/* شبكة أمان لصور الأغلفة: ترجمة نص الـSVG غير متزامنة، وفي حالات نادرة (سباق توقيت أو فشل جلب مؤقت)
+   تبقى الصورة بنسختها العربية في لغة أخرى. إن بقي غلاف cover/cover-popup بمصدره الأصلي بعد التحميل،
+   نعيد تشغيل ترجمة الصفحة بعدد محدود من المحاولات. لا يحدث شيء إذا اكتملت الترجمة (الصور تصبح blob:). */
+var healTries=0;
+function pageLang(){return (document.documentElement.lang||'ar').toLowerCase();}
+function coverNeedsLocalizing(){
+ if(pageLang()==='ar')return false;
+ return Array.prototype.some.call(document.querySelectorAll('img[src]'),function(img){
+  return /cover(?:-popup)?\.svg(?:$|[?#])/i.test(img.getAttribute('src')||'');
+ });
+}
+function healCovers(){
+ if(!coverNeedsLocalizing()||healTries>=8)return;
+ healTries++;
+ try{document.dispatchEvent(new CustomEvent('site-language-change',{detail:{lang:pageLang()}}));}catch(e){}
+ setTimeout(healCovers,700);
+}
+document.addEventListener('DOMContentLoaded',function(){setTimeout(healCovers,900);});
+
 })();
