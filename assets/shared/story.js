@@ -205,7 +205,122 @@
 
   var splashImage = body.getAttribute('data-splash');
 
-  if (splashImage) {
+  /* أكتوبر يحتفظ بتصميم شاشة البداية السابق؛ لا نغيّر شكل 001–004 عند توحيد بقية الحكايات. */
+  var isOctoberIntro = ['001', '002', '003', '004'].indexOf(body.getAttribute('data-story-slug')) !== -1;
+  if (splashImage && isOctoberIntro) {
+    var splash = document.createElement('div');
+    splash.className = 'story-splash';
+    splash.setAttribute('role', 'dialog');
+    splash.setAttribute('aria-modal', 'true');
+    splash.setAttribute('aria-label', (splashCopy && splashCopy.title) || body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
+
+    Object.assign(splash.style, {
+      position: 'fixed',
+      inset: '0',
+      zIndex: '10000',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
+      boxSizing: 'border-box',
+      overflow: 'auto',
+      backgroundColor: lightTheme ? '#fbf7ec' : (body.getAttribute('data-splash-bottom') || '#071c25'),
+      backgroundImage:
+        (lightTheme
+          ? 'linear-gradient(180deg, rgba(251,247,236,.76), rgba(255,254,250,.94)), url("'
+          : 'linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.72)), url("') +
+        splashImage.replace(/"/g, '') +
+        '")',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      textAlign: 'center',
+      direction: activeLang === 'ar' ? 'rtl' : 'ltr',
+      transition: reduceMotion ? 'none' : 'opacity .35s ease'
+    });
+
+    var splashContent = document.createElement('div');
+
+    Object.assign(splashContent.style, {
+      width: 'min(600px, 100%)',
+      margin: 'auto',
+      color: lightTheme ? '#0f2150' : '#fff',
+      textShadow: lightTheme ? 'none' : '0 2px 12px rgba(0,0,0,.8)'
+    });
+
+    var splashTitle = document.createElement('h1');
+    splashTitle.textContent = (splashCopy && splashCopy.title) ||
+      body.getAttribute('data-splash-title') || 'رجال البحر في أكتوبر';
+
+    Object.assign(splashTitle.style, {
+      fontFamily: '"Marhey", "Cairo", Tahoma, sans-serif',
+      fontSize: 'clamp(2rem, 8vw, 4rem)',
+      lineHeight: '1.5',
+      color: lightTheme ? '#1b3f94' : '#f1d18d',
+      margin: '0 0 18px'
+    });
+
+    var splashSubtitle = document.createElement('p');
+    splashSubtitle.textContent = (splashCopy && splashCopy.subtitle) ||
+      body.getAttribute('data-splash-subtitle') ||
+      'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
+
+    Object.assign(splashSubtitle.style, {
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: 'clamp(1rem, 3.5vw, 1.3rem)',
+      lineHeight: '2',
+      margin: '0 0 28px'
+    });
+
+    var startButton = document.createElement('button');
+    startButton.type = 'button';
+    startButton.className = 'story-splash-start';
+    startButton.textContent = (splashCopy && splashCopy.start) || 'ابدأ الحكاية ←';
+
+    Object.assign(startButton.style, {
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: '1rem',
+      fontWeight: '800',
+      padding: '13px 30px',
+      border: '1px solid rgba(255,255,255,.4)',
+      borderRadius: '5px',
+      background: lightTheme ? 'linear-gradient(145deg, #2a5bd7, #1b3f94)' : 'linear-gradient(145deg, #e3bd78, #a8753d)',
+      color: lightTheme ? '#fffefa' : '#171006',
+      cursor: 'pointer',
+      boxShadow: '0 8px 24px rgba(0,0,0,.3)'
+    });
+
+    splashContent.appendChild(splashTitle);
+    splashContent.appendChild(splashSubtitle);
+    splashContent.appendChild(startButton);
+    splash.appendChild(splashContent);
+
+    var previousOverflow = body.style.overflow;
+    body.appendChild(splash);
+    body.style.overflow = 'hidden';
+
+    try { startButton.focus({ preventScroll: true }); } catch (e) {}
+
+    var splashClosing = false;
+
+    var closeSplash = function () {
+      if (splashClosing || !splash.parentNode) { return; }
+      splashClosing = true;
+
+      body.style.overflow = previousOverflow;
+
+      if (reduceMotion) {
+        splash.remove();
+        return;
+      }
+
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+      setTimeout(function () { splash.remove(); }, 380);
+    };
+
+    startButton.addEventListener('click', closeSplash);
+  } else if (splashImage) {
     var sd = window.__khStartData || {};
     var slugCopies = splashCopies[body.getAttribute('data-story-slug')] || null;
     var curLang = function () {
@@ -350,8 +465,6 @@
     closeBtn.addEventListener('click', function () { closeSplash(false); });
     splash.addEventListener('click', function (event) { if (event.target === splash) { closeSplash(false); } });
   }
-
-  if (startOnly) { return; }
 
   /* =========================================
      2) الحركة القديمة: الرئيسية وبقية القصص
