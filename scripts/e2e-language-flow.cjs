@@ -395,7 +395,7 @@ async function targetArabicTextAudit(browser, base, origin) {
           await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
           await page.waitForTimeout(450);
           await page.waitForFunction(() => !!window.KH_LANG, null, { timeout: 8000 });
-          /* SVG localization is asynchronous; wait for both cover assets before auditing their payloads. */
+          /* SVGs with translatable text become blob URLs; artwork without embedded text may remain at its source URL. In either case, wait until the payload contains no Arabic text. */
           await page.waitForFunction(async () => {
             const images = Array.from(document.querySelectorAll('img[src]'));
             const covers = images.filter((img) => /cover(?:-popup)?\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
@@ -404,9 +404,10 @@ async function targetArabicTextAudit(browser, base, origin) {
             if (!covers.length || !candidates.length) return false;
             for (const img of candidates) {
               const src = img.getAttribute('src') || '';
-              if (!src.startsWith('blob:')) return false;
+              if (!src) return false;
               try {
-                const svg = await (await fetch(src)).text();
+                const resolved = src.startsWith('blob:') ? src : new URL(src, document.baseURI).href;
+                const svg = await (await fetch(resolved)).text();
                 if (/[\u0600-\u06FF]/.test(svg)) return false;
               } catch (_) { return false; }
             }
