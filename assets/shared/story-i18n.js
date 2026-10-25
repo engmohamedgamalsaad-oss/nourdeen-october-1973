@@ -112,7 +112,7 @@ function applyFooterText(lang){
    Original URLs are retained so switching back to Arabic restores the exact source asset. */
 var localizedSvgUrls=Object.create(null);
 var localizedSvgOriginalUrls=Object.create(null);
-function currentStoryLanguage(){return (window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';}
+function currentStoryLanguage(){var htmlLang=(document.documentElement.lang||'').toLowerCase();if(['ar','en','fr','it','de'].indexOf(htmlLang)>=0)return htmlLang;return (window.I18N&&window.I18N.lang())||'ar';}
 function localizeSvgAsset(url,lang){
  if(lang==='ar')return Promise.resolve(url);
  var absolute;
