@@ -260,7 +260,15 @@ function apply(){
  normalizeLocalizedText();
  translateSvgArtwork(lang);
 }
-document.addEventListener('DOMContentLoaded',apply);
+document.addEventListener('DOMContentLoaded',function(){
+ apply();
+ /* Some story templates create their intro artwork from their own DOMContentLoaded handler.
+    Run one deferred pass after those handlers so late-added SVG images are localized too. */
+ setTimeout(apply,0);
+});
 document.addEventListener('site-language-change',apply);
-if(document.readyState!=='loading')apply();
+if(document.readyState!=='loading'){
+ apply();
+ setTimeout(apply,0);
+}
 })();
