@@ -177,6 +177,16 @@ test('preview review panel displays image thumbnails and attribution from the sa
   assert.ok(preview.includes('renderReviewImages(d);'));
   assert.ok(preview.includes('pub-image-card'));
 });
+test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
+  assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
+  assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
+  assert.ok(bundle.includes("ترجمة النص البديل وتعليق الغلاف مطلوبة"));
+  assert.ok(bundle.includes("heroImage&&/^https:\\/\\//i.test(String(heroImage.url))"), 'Open Graph image should use the same sourced cover when it is an HTTPS URL');
+  var svgStart = bundle.indexOf('function svgCover(d,id,accent,popup){');
+  var svgEnd = bundle.indexOf('function zipFiles(files){', svgStart);
+  assert.ok(svgStart >= 0 && svgEnd > svgStart);
+  assert.ok(!bundle.slice(svgStart, svgEnd).includes('<text '), 'generated SVG cover must not embed untranslated visible text');
+});
 test('story pages support distinct visual designs and source-attributed image galleries', function () {
   assert.doesNotThrow(function () { new Function(bundle); }, 'story template bundle must parse as JavaScript');
   assert.ok(bundle.includes('visualDesignKey(d,section)'));
@@ -200,6 +210,7 @@ test('rendered story preview applies all nine designs and includes attributed im
   designs.forEach(function (design) {
     var html = api.renderPreviewHtml({
       section_key: 'history', visual_design: design, title: 'حكاية اختبار', subtitle: 'معاينة التصميم',
+      cover: {url:'https://images.example/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',source_name:'مصدر الغلاف',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration',i18n:{en:{alt:'Test cover',caption:'Test cover caption'},fr:{alt:'Couverture test',caption:'Légende de couverture'},it:{alt:'Copertina di prova',caption:'Didascalia copertina'},de:{alt:'Test-Cover',caption:'Test-Cover-Beschriftung'}}},
       figure_name: 'شخصية اختبار', narrator_name: 'كارما', narrator_grade: 'الصف السادس',
       karma_text: 'لماذا تختلف الحكايات؟', body: 'هذا نص تجريبي طويل بما يكفي لعرض معاينة التصميم المخصص لكل حكاية.',
       sources: 'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.org/source-b',
@@ -209,6 +220,8 @@ test('rendered story preview applies all nine designs and includes attributed im
       ],
       question_bank_json: {questions: []}
     });
+    assert.ok(html.includes('https://images.example/cover.jpg'), 'missing single-source cover in hero/modal: ' + design);
+    assert.ok(html.includes('content="https://images.example/cover.jpg"'), 'Open Graph image should use the cover source: ' + design);
     assert.ok(html.includes('class="story-design-' + design + '"'), 'missing design class: ' + design);
     assert.ok(html.includes('story-visual-gallery'), 'missing image gallery: ' + design);
     assert.ok(html.includes('https://images.example/a.jpg'), 'missing first image: ' + design);
