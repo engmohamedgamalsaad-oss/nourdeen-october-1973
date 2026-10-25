@@ -612,7 +612,7 @@ async function svgArtworkRegression(browser, base, origin) {
     }
     const magdi = await page.evaluate(async () => {
       const heroPhoto = document.querySelector('.hero-art img');
-      const introPhoto = document.querySelector('#intro .modal-art img');
+      const splashPhoto = document.querySelector('.story-start-art img');
       const frameStyle = document.getElementById('magdi-photo-frame-preview');
       let svg = '';
       try {
@@ -622,14 +622,12 @@ async function svgArtworkRegression(browser, base, origin) {
       } catch (_) {}
       return {
         heroPhoto: !!heroPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(heroPhoto.getAttribute('src') || ''),
-        introFound: !!introPhoto,
-        introSrc: introPhoto ? (introPhoto.getAttribute('src') || '') : 'missing',
-        introPhoto: !!introPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(introPhoto.getAttribute('src') || ''),
+        splashPhoto: !!splashPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(splashPhoto.getAttribute('src') || ''),
         frameApplied: !!frameStyle && frameStyle.textContent.includes('cover-popup.svg'),
         decorativeOnly: !!svg && !/<(?:text|title|desc)\b/i.test(svg)
       };
     });
-    const magdiOk = magdi.heroPhoto && magdi.introPhoto && magdi.frameApplied && magdi.decorativeOnly;
+    const magdiOk = magdi.heroPhoto && magdi.splashPhoto && magdi.frameApplied && magdi.decorativeOnly;
     console.log('MAGDI COVER CHECK:', JSON.stringify(magdi));
     checks.push({ slug: 'stories/science/015/', language: 'ar', ok: magdiOk, expected: 'documented photo + decorative SVG frame', detail: magdi });
     if (!magdiOk) hard.push('Magdi Yacoub 015 cover should use documented photos with decorative-only SVG frames');
