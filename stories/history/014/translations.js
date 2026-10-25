@@ -39,4 +39,9 @@ supplementalTranslations.fr["نيسابور، إيران — مدينة مرتب
 supplementalTranslations.it["نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي"]="Nishapur, Iran — una città legata al viaggio di Abu Bakr al-Khwarizmi";
 supplementalTranslations.de["نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي"]="Nischapur, Iran — eine Stadt, die mit der Reise Abu Bakr al-Chwarizmis verbunden ist";
 Object.keys(supplementalTranslations).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],supplementalTranslations[lang]);});
+/* Caption-label translation coverage patch. */
+Object.assign(S.text.en=S.text.en||{},{"صورة أرشيفية":"Archival photograph","رابط المصدر":"Source link","رابط الرخصة":"Licence","Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام.":"Public domain according to the archive record. Check the original source before reuse."});
+Object.assign(S.text.fr=S.text.fr||{},{"صورة أرشيفية":"Photographie d’archives","رابط المصدر":"Lien vers la source","رابط الرخصة":"Licence","Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام.":"Domaine public selon la notice d’archive. Vérifiez la source originale avant réutilisation."});
+Object.assign(S.text.it=S.text.it||{},{"صورة أرشيفية":"Fotografia d’archivio","رابط المصدر":"Link alla fonte","رابط الرخصة":"Licenza","Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام.":"Pubblico dominio secondo la scheda d’archivio. Verificare la fonte originale prima del riutilizzo."});
+Object.assign(S.text.de=S.text.de||{},{"صورة أرشيفية":"Archivfoto","رابط المصدر":"Quellenlink","رابط الرخصة":"Lizenz","Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام.":"Gemeinfrei laut Archivdatensatz. Prüfen Sie vor der Wiederverwendung die Originalquelle."});
 })();
