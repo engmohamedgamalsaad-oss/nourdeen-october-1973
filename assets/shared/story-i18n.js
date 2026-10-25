@@ -141,7 +141,7 @@ function translateSvgArtwork(lang){
   if(!img.__storySvgOriginalSrc)img.__storySvgOriginalSrc=source;
   if(lang==='ar'){if(img.getAttribute('src')!==source)img.setAttribute('src',source);return;}
   localizeSvgAsset(source,lang).then(function(localized){
-   if(currentStoryLanguage()===lang&&img.isConnected&&localized!==source)img.setAttribute('src',localized);
+   if(currentStoryLanguage()===lang&&img.isConnected&&img.getAttribute('src')!==localized)img.setAttribute('src',localized);
   });
  });
  var bgCandidates=Array.prototype.slice.call(document.querySelectorAll('body *'));
