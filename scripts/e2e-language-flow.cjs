@@ -369,6 +369,94 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
 }
 
 
+
+/* Focused diagnostic: list every visible Arabic-containing text fragment on the three
+   stories that still showed 7–9% Arabic. This is diagnostic evidence, not an automatic
+   translation failure: names, historical terms, and quotations need human classification. */
+async function targetArabicTextAudit(browser, base, origin) {
+  const cases = [
+    { slug: 'stories/islamic/011/', person: 'Amr ibn al-As' },
+    { slug: 'stories/women/013/', person: 'Hatshepsut' },
+    { slug: 'stories/science/015/', person: 'Magdi Yacoub' }
+  ];
+  const languages = ['en', 'fr', 'it', 'de'];
+  const rows = [];
+  const hard = [];
+  const ctx = await newContext(browser, origin, 'desktop');
+  const page = await ctx.newPage();
+  try {
+    await page.goto(base + '/assets/shared/home-language-only.js', { waitUntil: 'load' });
+    for (const item of cases) {
+      for (const lang of languages) {
+        await page.evaluate((l) => localStorage.setItem('kh-lang', l), lang);
+        try {
+          await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
+          await page.waitForTimeout(450);
+          await page.waitForFunction(() => !!window.KH_LANG, null, { timeout: 8000 });
+          const found = await page.evaluate(async () => {
+            const isArabic = /[\u0600-\u06FF]/;
+            const excluded = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/;
+            const fragments = [];
+            const addText = (text, source, element) => {
+              const value = String(text || '').replace(/\s+/g, ' ').trim();
+              if (value && isArabic.test(value)) fragments.push({
+                source, tag: element && element.tagName ? element.tagName.toLowerCase() : '',
+                id: element && element.id || '',
+                className: element && typeof element.className === 'string' ? element.className : '',
+                text: value.slice(0, 400)
+              });
+            };
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+            while (walker.nextNode()) {
+              const node = walker.currentNode;
+              if (!node.parentElement || excluded.test(node.parentElement.tagName)) continue;
+              if (!node.nodeValue.trim()) continue;
+              const style = getComputedStyle(node.parentElement);
+              if (style.display === 'none' || style.visibility === 'hidden') continue;
+              addText(node.nodeValue, 'html-text', node.parentElement);
+            }
+            /* Inspect SVG payloads too, including localized blob URLs used by <img>. */
+            for (const img of document.querySelectorAll('img[src]')) {
+              const src = img.getAttribute('src') || '';
+              if (!/\.svg(?:$|[?#])|^blob:/i.test(src)) continue;
+              try {
+                const response = await fetch(src);
+                if (!response.ok) continue;
+                const xml = new DOMParser().parseFromString(await response.text(), 'image/svg+xml');
+                for (const el of xml.querySelectorAll('text,tspan,title,desc')) {
+                  addText(el.textContent, 'svg-image', img);
+                }
+              } catch (_) { /* report visible HTML fragments even if an SVG cannot be read */ }
+            }
+            for (const el of document.querySelectorAll('svg text,svg tspan,svg title,svg desc')) {
+              const style = getComputedStyle(el);
+              if (style.display !== 'none' && style.visibility !== 'hidden') addText(el.textContent, 'inline-svg', el);
+            }
+            return {
+              title: document.title,
+              htmlLang: document.documentElement.lang,
+              fragments,
+              uniqueFragments: [...new Set(fragments.map((x) => x.text))]
+            };
+          });
+          const row = { person: item.person, slug: item.slug, language: lang, ...found };
+          rows.push(row);
+          console.log('ARABIC TEXT AUDIT ' + JSON.stringify({
+            person: row.person, language: row.language, count: row.uniqueFragments.length,
+            fragments: row.uniqueFragments
+          }));
+          if (found.htmlLang !== lang) hard.push('Arabic text audit: ' + item.slug + ' expected html lang=' + lang + ', got ' + found.htmlLang);
+        } catch (e) {
+          hard.push('Arabic text audit failed for ' + item.slug + ' [' + lang + ']: ' + String(e.message || e).split('\n')[0]);
+        }
+      }
+    }
+  } finally {
+    await ctx.close();
+  }
+  return { rows, hard };
+}
+
 async function introPopupRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
@@ -498,10 +586,11 @@ async function svgArtworkRegression(browser, base, origin) {
     }
     results.introPopup = await introPopupRegression(browser, base, origin);
     results.svgArtwork = await svgArtworkRegression(browser, base, origin);
+    results.targetArabicAudit = await targetArabicTextAudit(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -513,6 +602,7 @@ async function svgArtworkRegression(browser, base, origin) {
   console.log(`SWEEP: ${pages.length} visitor pages x ${LANGS.length} languages x 2 viewports = ${pages.length * LANGS.length * 2} loads.`);
   console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
+  console.log(`TARGET ARABIC TEXT AUDIT: ${results.targetArabicAudit ? results.targetArabicAudit.rows.length : 0} page/language samples recorded; see report.targetArabicAudit for each Arabic fragment.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);
