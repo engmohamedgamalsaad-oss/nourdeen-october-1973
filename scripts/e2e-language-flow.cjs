@@ -394,15 +394,23 @@ async function targetArabicTextAudit(browser, base, origin) {
           await page.waitForTimeout(450);
           await page.waitForFunction(() => !!window.KH_LANG, null, { timeout: 8000 });
           /* SVG localization is asynchronous; wait for both cover assets before auditing their payloads. */
-          await page.waitForFunction(() => {
+          await page.waitForFunction(async () => {
             const images = Array.from(document.querySelectorAll('img[src]'));
             const covers = images.filter((img) => /cover(?:-popup)?\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
             const splash = document.querySelector('.story-start-art img');
-            return covers.length > 0 &&
-              covers.every((img) => (img.getAttribute('src') || '').startsWith('blob:')) &&
-              (!splash || (splash.getAttribute('src') || '').startsWith('blob:'));
-          }, null, { timeout: 8000 }).catch(() => {});
-          await page.waitForTimeout(200);
+            const candidates = Array.from(new Set(covers.concat(splash ? [splash] : [])));
+            if (!covers.length || !candidates.length) return false;
+            for (const img of candidates) {
+              const src = img.getAttribute('src') || '';
+              if (!src.startsWith('blob:')) return false;
+              try {
+                const svg = await (await fetch(src)).text();
+                if (/[\u0600-\u06FF]/.test(svg)) return false;
+              } catch (_) { return false; }
+            }
+            return true;
+          }, null, { timeout: 12000 }).catch(() => {});
+          await page.waitForTimeout(150);
           const found = await page.evaluate(async () => {
             const isArabic = /[\u0600-\u06FF]/;
             const excluded = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/;
