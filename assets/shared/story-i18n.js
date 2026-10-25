@@ -20,8 +20,8 @@ function findTranslation(source, lang){
   }
  });
  /* Story-specific and shared SVG artwork dictionaries are both valid translation sources. */
- var storyText=window.StoryI18N&&window.StoryI18N.text;
- [storyText,svgArtworkTranslations].forEach(function(source){
+ var svgDictionary=typeof svgArtworkTranslations==='object'?svgArtworkTranslations:null;
+ [translations,svgDictionary].forEach(function(source){
   if(!source||typeof source!=='object')return;
   Object.keys(source).forEach(function(language){
    var dictionary=source[language];
@@ -112,6 +112,7 @@ function applyFooterText(lang){
    Original URLs are retained so switching back to Arabic restores the exact source asset. */
 var localizedSvgUrls=Object.create(null);
 var localizedSvgOriginalUrls=Object.create(null);
+var localizedSvgPending=Object.create(null);
 function currentStoryLanguage(){var htmlLang=(document.documentElement.lang||'').toLowerCase();if(['ar','en','fr','it','de'].indexOf(htmlLang)>=0)return htmlLang;return (window.I18N&&window.I18N.lang())||'ar';}
 function localizeSvgAsset(url,lang){
  if(lang==='ar')return Promise.resolve(url);
@@ -120,7 +121,9 @@ function localizeSvgAsset(url,lang){
  if(!/^https?:$/.test(new URL(absolute).protocol)||new URL(absolute).origin!==window.location.origin||!/\.svg(?:[?#]|$)/i.test(absolute))return Promise.resolve(url);
  var cacheKey=lang+'|'+absolute;
  if(localizedSvgUrls[cacheKey])return Promise.resolve(localizedSvgUrls[cacheKey]);
- return fetch(absolute,{credentials:'same-origin'}).then(function(response){if(!response.ok)throw new Error('SVG fetch failed');return response.text();}).then(function(source){
+ /* Several passes can ask for the same asset at once; share one request so each asset gets one localized copy. */
+ if(localizedSvgPending[cacheKey])return localizedSvgPending[cacheKey];
+ var pending=fetch(absolute,{credentials:'same-origin'}).then(function(response){if(!response.ok)throw new Error('SVG fetch failed');return response.text();}).then(function(source){
   var parsed=new DOMParser().parseFromString(source,'image/svg+xml');
   if(parsed.querySelector('parsererror'))return url;
   var changed=false;
@@ -144,6 +147,30 @@ function localizeSvgAsset(url,lang){
   localizedSvgOriginalUrls[localizedUrl]=absolute;
   return localizedUrl;
  }).catch(function(){return url;});
+ localizedSvgPending[cacheKey]=pending;
+ var release=function(){delete localizedSvgPending[cacheKey];};
+ pending.then(release,release);
+ return pending;
+}
+/* <img> elements that show SVG artwork. Safe to run repeatedly: an image whose src was set by the page
+   (initial markup, an error fallback, lazy loading) is treated as the new original, so a late change is
+   localized too and an old remembered original never overwrites it. */
+function translateSvgImages(lang){
+ var imgs=Array.prototype.slice.call(document.querySelectorAll('img[src]'));
+ imgs.forEach(function(img){
+  var currentSrc=img.getAttribute('src');
+  var mapped=localizedSvgOriginalUrls[currentSrc];
+  var source;
+  if(mapped&&img.__storySvgOriginalSrc)source=img.__storySvgOriginalSrc;
+  else if(mapped)source=mapped;
+  else source=currentSrc;
+  if(!/\.svg(?:[?#]|$)/i.test(source)&&!mapped){delete img.__storySvgOriginalSrc;return;}
+  img.__storySvgOriginalSrc=source;
+  if(lang==='ar'){if(img.getAttribute('src')!==source)img.setAttribute('src',source);return;}
+  localizeSvgAsset(source,lang).then(function(localized){
+   if(currentStoryLanguage()===lang&&img.isConnected&&img.getAttribute('src')!==localized)img.setAttribute('src',localized);
+  });
+ });
 }
 function translateSvgArtwork(lang){
  var splashNodes=Array.prototype.slice.call(document.querySelectorAll('[data-splash]'));
@@ -165,17 +192,7 @@ function translateSvgArtwork(lang){
    if(splashImg&&splashImg.getAttribute('src')!==localized)splashImg.setAttribute('src',localized);
   });
  });
- var imgs=Array.prototype.slice.call(document.querySelectorAll('img[src]'));
- imgs.forEach(function(img){
-  var currentSrc=img.getAttribute('src');
-  var source=img.__storySvgOriginalSrc||(localizedSvgOriginalUrls[currentSrc]||currentSrc);
-  if(!/\.svg(?:[?#]|$)/i.test(source)&&!localizedSvgOriginalUrls[currentSrc])return;
-  if(!img.__storySvgOriginalSrc)img.__storySvgOriginalSrc=source;
-  if(lang==='ar'){if(img.getAttribute('src')!==source)img.setAttribute('src',source);return;}
-  localizeSvgAsset(source,lang).then(function(localized){
-   if(currentStoryLanguage()===lang&&img.isConnected&&img.getAttribute('src')!==localized)img.setAttribute('src',localized);
-  });
- });
+ translateSvgImages(lang);
  var bgCandidates=Array.prototype.slice.call(document.querySelectorAll('body *'));
  bgCandidates.forEach(function(el){
   var current=el.style.backgroundImage||window.getComputedStyle(el).backgroundImage||'';
@@ -260,6 +277,21 @@ function apply(){
  translateRemainingTextNodes();
  normalizeLocalizedText();
  translateSvgArtwork(lang);
+}
+/* Late changes: an image whose src is set after the language passes above (an error fallback, lazy loading,
+   a script that adds images) would otherwise keep its Arabic text until the next language change. */
+var lateImageTimer=0;
+function scheduleLateImagePass(){
+ if(lateImageTimer)return;
+ lateImageTimer=setTimeout(function(){lateImageTimer=0;translateSvgImages(currentStoryLanguage());},80);
+}
+if(typeof MutationObserver==='function'){
+ new MutationObserver(function(mutations){
+  for(var i=0;i<mutations.length;i++){
+   var m=mutations[i];
+   if(m.type==='attributes'?m.target.tagName==='IMG':m.addedNodes.length){scheduleLateImagePass();return;}
+  }
+ }).observe(document.documentElement,{subtree:true,childList:true,attributes:true,attributeFilter:['src']});
 }
 document.addEventListener('DOMContentLoaded',function(){
  apply();
