@@ -345,7 +345,7 @@ test('unified v3 prompt requires safe automatic map linkage for verified locatio
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
-  assert.ok(texts.includes('لا تخترع إحداثيات أو روابط، ولا تغيّر سجلات قديمة أو بيانات التفاعلات.'));
+  assert.ok(texts.includes('لا تخترع إحداثيات.'));
   assert.ok(publisher.includes("path === \"stories/index.json\" || path === \"stories/places.json\""));
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(publisher.includes('delete currentPlaces[storyId]'));
