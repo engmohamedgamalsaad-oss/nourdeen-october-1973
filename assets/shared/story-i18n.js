@@ -97,6 +97,76 @@ function applyFooterText(lang){
  });
  });
 }
+
+/* Localize text embedded in same-origin SVG artwork used by <img> and CSS backgrounds.
+   Original URLs are retained so switching back to Arabic restores the exact source asset. */
+var localizedSvgUrls=Object.create(null);
+function currentStoryLanguage(){return (window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';}
+function localizeSvgAsset(url,lang){
+ if(lang==='ar')return Promise.resolve(url);
+ var absolute;
+ try{absolute=new URL(url,document.baseURI).href;}catch(e){return Promise.resolve(url);}
+ if(!/^https?:$/.test(new URL(absolute).protocol)||new URL(absolute).origin!==window.location.origin||!/\.svg(?:[?#]|$)/i.test(absolute))return Promise.resolve(url);
+ var cacheKey=lang+'|'+absolute;
+ if(localizedSvgUrls[cacheKey])return Promise.resolve(localizedSvgUrls[cacheKey]);
+ return fetch(absolute,{credentials:'same-origin'}).then(function(response){if(!response.ok)throw new Error('SVG fetch failed');return response.text();}).then(function(source){
+  var parsed=new DOMParser().parseFromString(source,'image/svg+xml');
+  if(parsed.querySelector('parsererror'))return url;
+  var changed=false;
+  parsed.querySelectorAll('text,tspan,title,desc').forEach(function(el){
+   if(el.tagName.toLowerCase()==='text'&&el.querySelector('tspan'))return;
+   var original=el.textContent||'';
+   var item=findTranslation(original,lang);
+   if(item&&item[lang]&&item[lang]!==original){el.textContent=item[lang];changed=true;}
+  });
+  parsed.querySelectorAll('[aria-label],[title]').forEach(function(el){
+   ['aria-label','title'].forEach(function(attr){
+    if(!el.hasAttribute(attr))return;
+    var original=el.getAttribute(attr),item=findTranslation(original,lang);
+    if(item&&item[lang]&&item[lang]!==original){el.setAttribute(attr,item[lang]);changed=true;}
+   });
+  });
+  if(!changed)return url;
+  var blob=new Blob([new XMLSerializer().serializeToString(parsed)],{type:'image/svg+xml;charset=utf-8'});
+  var localizedUrl=URL.createObjectURL(blob);
+  localizedSvgUrls[cacheKey]=localizedUrl;
+  return localizedUrl;
+ }).catch(function(){return url;});
+}
+function translateSvgArtwork(lang){
+ var imgs=Array.prototype.slice.call(document.querySelectorAll('img[src]'));
+ imgs.forEach(function(img){
+  var source=img.__storySvgOriginalSrc||img.getAttribute('src');
+  if(!/\.svg(?:[?#]|$)/i.test(source))return;
+  if(!img.__storySvgOriginalSrc)img.__storySvgOriginalSrc=source;
+  if(lang==='ar'){if(img.getAttribute('src')!==source)img.setAttribute('src',source);return;}
+  localizeSvgAsset(source,lang).then(function(localized){
+   if(currentStoryLanguage()===lang&&img.isConnected&&localized!==source)img.setAttribute('src',localized);
+  });
+ });
+ var bgCandidates=Array.prototype.slice.call(document.querySelectorAll('body *'));
+ bgCandidates.forEach(function(el){
+  var current=el.style.backgroundImage||'';
+  var source=el.__storySvgOriginalBackground;
+  if(source===undefined){
+   if(!/\.svg(?:[?#]|\s*\))/i.test(current))return;
+   source=current;el.__storySvgOriginalBackground=source;
+  }
+  if(!/\.svg(?:[?#]|\s*\))/i.test(source))return;
+  if(lang==='ar'){if(el.style.backgroundImage!==source)el.style.backgroundImage=source;return;}
+  var urls=source.match(/url\((['"]?)(.*?)\1\)/g)||[];
+  if(!urls.length)return;
+  Promise.all(urls.map(function(entry){
+   var match=entry.match(/url\((['"]?)(.*?)\1\)/);if(!match)return Promise.resolve(entry);
+   return localizeSvgAsset(match[2],lang).then(function(localized){return 'url("'+localized.replace(/"/g,'%22')+'")';});
+  })).then(function(replacements){
+   if(currentStoryLanguage()!==lang||!el.isConnected)return;
+   var next=source;urls.forEach(function(old,i){next=next.replace(old,replacements[i]);});
+   el.style.backgroundImage=next;
+  });
+ });
+}
+
 function apply(){
  var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
  var digitMap={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
@@ -156,6 +226,7 @@ function apply(){
  });
  translateRemainingTextNodes();
  normalizeLocalizedText();
+ translateSvgArtwork(lang);
 }
 document.addEventListener('DOMContentLoaded',apply);
 document.addEventListener('site-language-change',apply);
