@@ -10,7 +10,7 @@ function paragraphs(s){return String(s||'').split(/\n{2,}/).map(function(x){retu
 function htmlParagraphs(s){return paragraphs(s).map(function(p){return '<p>'+esc(p).replace(/\n/g,'<br>')+'</p>'}).join('')}
 function validImageUrl(value){
  var u=String(value||'').trim();
- return /^https:\/\//i.test(u)||/^(?:\.\.\/|\.\/|images\/|assets\/images\/)[^\s"'<>]+$/i.test(u);
+ return /^https:\/\//i.test(u)||/^(?:\.\.\/|\.\/|images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(u);
 }
 function absoluteStoryImageUrl(value,baseUrl,section,id){
  var u=String(value||'').trim(),base=String(baseUrl||'').replace(/\/+$/,'');
