@@ -466,8 +466,8 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
-      const ar = await page.evaluate(async () => {
-        const img = document.querySelector('.story-start-art img');
+      const ar = await page.evaluate(async (selector) => {
+        const img = document.querySelector(selector || '.story-start-art img');
         if (!img) return { found: false, src: '', svg: '' };
         const src = img.getAttribute('src') || '';
         let svg = '';
