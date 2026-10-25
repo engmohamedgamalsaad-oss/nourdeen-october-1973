@@ -63,6 +63,7 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
   assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
+  assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
 });
 test('published story 012 and 014 headers have all four non-Arabic translations', function () {
   var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
