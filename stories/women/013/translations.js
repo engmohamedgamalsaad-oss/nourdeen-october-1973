@@ -32,5 +32,23 @@ supplementalTranslations.en["الدير البحري، الأقصر — موقع
 supplementalTranslations.fr["الدير البحري، الأقصر — موقع معبد حتشبسوت الجنائزي"]="Deir el-Bahari, Louxor — site du temple funéraire d’Hatchepsout";
 supplementalTranslations.it["الدير البحري، الأقصر — موقع معبد حتشبسوت الجنائزي"]="Deir el-Bahari, Luxor — sede del tempio funerario di Hatshepsut";
 supplementalTranslations.de["الدير البحري، الأقصر — موقع معبد حتشبسوت الجنائزي"]="Deir el-Bahari, Luxor — Standort von Hatschepsuts Totentempel";
+
+// Complete translations for image-caption text nodes.
+supplementalTranslations.en["تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون"]="Seated limestone statue of Hatshepsut at the Metropolitan Museum of Art";
+supplementalTranslations.fr["تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون"]="Statue assise d’Hatchepsout en calcaire au Metropolitan Museum of Art";
+supplementalTranslations.it["تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون"]="Statua seduta in calcare di Hatshepsut al Metropolitan Museum of Art";
+supplementalTranslations.de["تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون"]="Sitzende Kalksteinstatue der Hatschepsut im Metropolitan Museum of Art";
+supplementalTranslations.en["معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر"]="Hatshepsut’s terraced temple built into the cliffs at Deir el-Bahari, west of Luxor";
+supplementalTranslations.fr["معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر"]="Temple en terrasses d’Hatchepsout construit dans les falaises de Deir el-Bahari, à l’ouest de Louxor";
+supplementalTranslations.it["معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر"]="Tempio terrazzato di Hatshepsut costruito nelle pareti rocciose di Deir el-Bahari, a ovest di Luxor";
+supplementalTranslations.de["معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر"]="Der Terrassentempel der Hatschepsut in den Felsen von Deir el-Bahari westlich von Luxor";
+supplementalTranslations.en["تمثال آخر لحتشبسوت من عصر الدولة الحديثة. قطعة أثرية وصورة من مجموعة متحف المتروبوليتان للفنون"]="Another statue of Hatshepsut from the New Kingdom. The artifact and photograph are from the Metropolitan Museum of Art collection.";
+supplementalTranslations.fr["تمثال آخر لحتشبسوت من عصر الدولة الحديثة. قطعة أثرية وصورة من مجموعة متحف المتروبوليتان للفنون"]="Une autre statue d’Hatchepsout datant du Nouvel Empire. L’objet et la photographie proviennent de la collection du Metropolitan Museum of Art.";
+supplementalTranslations.it["تمثال آخر لحتشبسوت من عصر الدولة الحديثة. قطعة أثرية وصورة من مجموعة متحف المتروبوليتان للفنون"]="Un’altra statua di Hatshepsut del Nuovo Regno. Il reperto e la fotografia provengono dalla collezione del Metropolitan Museum of Art.";
+supplementalTranslations.de["تمثال آخر لحتشبسوت من عصر الدولة الحديثة. قطعة أثرية وصورة من مجموعة متحف المتروبوليتان للفنون"]="Eine weitere Hatschepsut-Statue aus dem Neuen Reich. Das Objekt und das Foto stammen aus der Sammlung des Metropolitan Museum of Art.";
+supplementalTranslations.en["تمثال حتشبسوت الجالس من الجرانيت. متحف المتروبوليتان للفنون · الأسرة الثامنة عشرة"]="Seated granite statue of Hatshepsut. Metropolitan Museum of Art · Eighteenth Dynasty";
+supplementalTranslations.fr["تمثال حتشبسوت الجالس من الجرانيت. متحف المتروبوليتان للفنون · الأسرة الثامنة عشرة"]="Statue assise en granit d’Hatchepsout. Metropolitan Museum of Art · XVIIIe dynastie";
+supplementalTranslations.it["تمثال حتشبسوت الجالس من الجرانيت. متحف المتروبوليتان للفنون · الأسرة الثامنة عشرة"]="Statua seduta in granito di Hatshepsut. Metropolitan Museum of Art · XVIII dinastia";
+supplementalTranslations.de["تمثال حتشبسوت الجالس من الجرانيت. متحف المتروبوليتان للفنون · الأسرة الثامنة عشرة"]="Sitzende Granitstatue der Hatschepsut. Metropolitan Museum of Art · 18. Dynastie";
 Object.keys(supplementalTranslations).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],supplementalTranslations[lang]);});
 })();
