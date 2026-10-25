@@ -1,0 +1,594 @@
+(function () {
+  'use strict';
+
+  var body = document.body;
+
+  var reduceMotion = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* =========================================
+     0) تهيئة صفحات القالب المولّد من لوحة الإدارة (body.story-design-*)
+     هذه الصفحات تُبنى بقالب يختلف عن الحكايات المرجعية: نافذة #intro ثابتة، وغلاف hero بلا
+     .hero-content، وفقرات داخل .story-body، وأزرار مشاركة بلا ربط. نكيّفها هنا حتى تحصل على
+     شاشة البداية والحركة والمشاركة والهوامش نفسها، دون المساس بالحكايات القديمة.
+  ========================================= */
+  var keepIntroModal = body.hasAttribute('data-keep-intro-modal');
+  var generatedStory = !keepIntroModal && /(^|\s)story-design-/.test(body.className || '');
+
+  function adaptGeneratedStory() {
+    var intro = document.getElementById('intro');
+    if (intro) {
+      if (!body.getAttribute('data-splash')) {
+        var introTitle = intro.querySelector('#intro-title');
+        var introDesc = intro.querySelector('#intro-desc');
+        var introImg = intro.querySelector('.modal-art img');
+        if (introImg && introImg.getAttribute('src')) {
+          body.setAttribute('data-splash', introImg.getAttribute('src'));
+          body.setAttribute('data-splash-alt', introImg.getAttribute('alt') || '');
+          body.setAttribute('data-splash-title', introTitle ? introTitle.textContent.trim() : (document.title || ''));
+          body.setAttribute('data-splash-subtitle', introDesc ? introDesc.textContent.trim() : '');
+          body.setAttribute('data-splash-top', '#0b1920');
+          body.setAttribute('data-splash-bottom', '#050d14');
+        }
+      }
+      /* النافذة القديمة لا يفتحها ولا يغلقها أي كود مشترك؛ تُستبدل بشاشة البداية القياسية. */
+      intro.remove();
+    }
+
+    var heroBox = document.querySelector('.hero > .container');
+    if (heroBox && !document.querySelector('.hero-content')) {
+      heroBox.classList.add('hero-content');
+    }
+
+    var fix = document.createElement('style');
+    fix.setAttribute('data-generated-story-fixes', '1');
+    fix.textContent = [
+      /* هوامش جانبية ثابتة على الموبايل (بعض التصاميم كانت تصفّرها) وعمود قراءة أضيق */
+      'body[class*="story-design-"] .story{padding-left:clamp(18px,5vw,32px)!important;padding-right:clamp(18px,5vw,32px)!important}',
+      'body[class*="story-design-"] .story .container{width:min(720px,100%)}',
+      'body[class*="story-design-"] .story-body p{margin:0 0 1.1rem;line-height:2.1}',
+      /* أزرار المشاركة */
+      '.share-actions .btn,.share-actions .print-btn{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:9px 18px;border-radius:999px;text-decoration:none;font:800 .9rem "Cairo",Tahoma,sans-serif;cursor:pointer}',
+      '#share-whatsapp{background:#168b55!important;color:#fff!important;border:1px solid rgba(255,255,255,.24)}',
+      '#share-facebook{background:#1877f2!important;color:#fff!important;border:1px solid rgba(255,255,255,.24)}',
+      /* الطباعة: العنوان والمتن والصور والمصادر فقط */
+      '@media print{body[class*="story-design-"]{background:#fff!important;color:#000!important}',
+      'body[class*="story-design-"] header,.topbar,.language-switch,.share-actions,.story-share-bar,.reactions-section,.story-quiz-section,.story-splash,.lightbox,.story-visual-gallery .container>.kicker{display:none!important}',
+      'body[class*="story-design-"] p,body[class*="story-design-"] h1,body[class*="story-design-"] h2,body[class*="story-design-"] h3,body[class*="story-design-"] li{color:#000!important}',
+      'body[class*="story-design-"] .story,body[class*="story-design-"] .hero{background:#fff!important;border:0!important;transform:none!important}}'
+    ].join('');
+    document.head.appendChild(fix);
+
+    /* ربط أزرار المشاركة والطباعة الموجودة في القالب (كانت href="#" بلا كود). */
+    var pageUrl = window.location.href.split('#')[0];
+    var pageTitle = document.title || '';
+    var whatsapp = document.getElementById('share-whatsapp');
+    var facebook = document.getElementById('share-facebook');
+    var nativeShare = document.getElementById('share');
+    var printButton = document.getElementById('print-story');
+    if (whatsapp) {
+      whatsapp.href = 'https://wa.me/?text=' + encodeURIComponent(pageTitle + ' — ' + pageUrl);
+    }
+    if (facebook) {
+      facebook.href = 'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl);
+    }
+    if (nativeShare) {
+      nativeShare.addEventListener('click', function () {
+        if (navigator.share) {
+          navigator.share({ title: pageTitle, url: pageUrl }).catch(function () {});
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(pageUrl).catch(function () {});
+        }
+      });
+    }
+    if (printButton) {
+      printButton.addEventListener('click', function () { window.print(); });
+    }
+  }
+
+  if (generatedStory) { adaptGeneratedStory(); }
+
+  /* Preserve hand-authored intro popups on the two portrait biographies.
+     The generated-story adapter normally removes #intro and replaces it with a
+     background-image splash, which bypasses the popup image's responsive CSS. */
+  if (keepIntroModal) {
+    var preservedIntro = document.getElementById('intro');
+    if (preservedIntro) {
+      var preservedClose = preservedIntro.querySelector('#close');
+      var preservedStart = preservedIntro.querySelector('#start');
+      var hidePreservedIntro = function () {
+        preservedIntro.style.setProperty('display', 'none', 'important');
+        preservedIntro.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      };
+      preservedIntro.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (preservedClose) preservedClose.addEventListener('click', hidePreservedIntro);
+      if (preservedStart) preservedStart.addEventListener('click', function () {
+        hidePreservedIntro();
+        var storyStart = document.getElementById('begin');
+        if (storyStart) storyStart.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+      });
+      preservedIntro.addEventListener('click', function (event) {
+        if (event.target === preservedIntro) hidePreservedIntro();
+      });
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && preservedIntro.getAttribute('aria-hidden') !== 'true') hidePreservedIntro();
+      });
+    }
+  }
+
+  /* القصص التي تستخدم الغلاف الافتتاحي تحصل أيضًا على حركات الظهور أثناء التمرير. */
+  var richStory = !!document.querySelector('.hero-photo') || !!body.getAttribute('data-splash');
+
+  /* =========================================
+     1) شاشة البداية (اختيارية)
+     تُفعّل بوضع data-splash في وسم body
+  ========================================= */
+
+  var activeLang = window.I18N ? window.I18N.lang() : 'ar';
+  var lightTheme = document.documentElement.getAttribute('data-theme') === 'light';
+  try { lightTheme = lightTheme || window.localStorage.getItem('kh-theme') === 'light'; } catch (e) {}
+  var splashCopies = {
+    '001': {
+      ar: {title:'رجال البحر في أكتوبر', subtitle:'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973', start:'ابدأ الحكاية ←'},
+      en: {title:'Men of the Sea in October', subtitle:'The story of Egyptian Navy heroes in the 1973 October War', start:'Start the story →'},
+      fr: {title:'Les hommes de la mer en octobre', subtitle:'L’histoire des héros de la marine égyptienne pendant la guerre d’octobre 1973', start:'Commencer le récit →'},
+      it: {title:'Gli uomini del mare in ottobre', subtitle:'La storia degli eroi della Marina egiziana nella guerra dell’ottobre 1973', start:'Inizia il racconto →'},
+      de: {title:'Männer der See im Oktober', subtitle:'Die Geschichte der Helden der ägyptischen Marine im Oktoberkrieg 1973', start:'Die Geschichte beginnen →'}
+    },
+    '002': {
+      ar: {title:'العقل قبل السلاح', subtitle:'حكاية كارما محمد جمال — كيف فتحت المياه طريق العبور', start:'ابدأ الحكاية ←'},
+      en: {title:'Brains Before Weapons', subtitle:'Karma Mohamed Gamal tells how water opened a passage across the canal', start:'Start the story →'},
+      fr: {title:'L’intelligence avant les armes', subtitle:'Karma Mohamed Gamal raconte comment l’eau a ouvert un passage à travers le canal', start:'Commencer le récit →'},
+      it: {title:'L’ingegno prima delle armi', subtitle:'Karma Mohamed Gamal racconta come l’acqua ha aperto un passaggio attraverso il canale', start:'Inizia il racconto →'},
+      de: {title:'Verstand vor Waffen', subtitle:'Karma Mohamed Gamal erzählt, wie Wasser einen Weg über den Kanal öffnete', start:'Die Geschichte beginnen →'}
+    },
+    '003': {
+      ar: {title:'لغة لا يفهمها العدو', subtitle:'حكاية مليكة محمد جمال — الشفرة النوبية في حرب أكتوبر', start:'ابدأ الحكاية ←'},
+      en: {title:'A Language the Enemy Could Not Understand', subtitle:'Malika Mohamed Gamal tells the story of the Nubian code in the October War', start:'Start the story →'},
+      fr: {title:'Une langue que l’ennemi ne comprenait pas', subtitle:'Malika Mohamed Gamal raconte le code nubien pendant la guerre d’octobre', start:'Commencer le récit →'},
+      it: {title:'Una lingua che il nemico non capiva', subtitle:'Malika Mohamed Gamal racconta il codice nubiano nella guerra d’ottobre', start:'Inizia il racconto →'},
+      de: {title:'Eine Sprache, die der Feind nicht verstand', subtitle:'Malika Mohamed Gamal erzählt die Geschichte des nubischen Codes im Oktoberkrieg', start:'Die Geschichte beginnen →'}
+    },
+    '004': {
+      ar: {title:'سماء أكتوبر: شهداء الضربة الجوية الأولى', subtitle:'حكاية الطيارين الذين فتحوا الطريق للعبور', start:'ابدأ الحكاية ←'},
+      en: {title:'October Skies: The Martyrs of the First Air Strike', subtitle:'The pilots who helped open a way across the canal', start:'Start the story →'},
+      fr: {title:'Le ciel d’octobre : les martyrs de la première frappe aérienne', subtitle:'Les pilotes qui ont contribué à ouvrir une voie à travers le canal', start:'Commencer le récit →'},
+      it: {title:'I cieli di ottobre: i martiri del primo attacco aereo', subtitle:'I piloti che contribuirono ad aprire una via attraverso il canale', start:'Inizia il racconto →'},
+      de: {title:'Oktoberhimmel: Die Gefallenen des ersten Luftschlags', subtitle:'Die Piloten, die den Weg über den Kanal öffnen halfen', start:'Die Geschichte beginnen →'}
+    }
+  };
+  var splashCopy = (splashCopies[body.getAttribute('data-story-slug')] || {})[activeLang] ||
+    (splashCopies[body.getAttribute('data-story-slug')] || {}).ar;
+
+  if (!splashCopy && window.I18N && window.I18N.t('s_start') !== 's_start') {
+    splashCopy = {title: window.I18N.t('s_title'), subtitle: window.I18N.t('s_subtitle'), start: window.I18N.t('s_start')};
+  }
+
+  var splashImage = body.getAttribute('data-splash');
+
+  if (splashImage) {
+    var splash = document.createElement('div');
+    splash.className = 'story-splash';
+    splash.setAttribute('role', 'dialog');
+    splash.setAttribute('aria-modal', 'true');
+    splash.setAttribute('aria-label', (splashCopy && splashCopy.title) || body.getAttribute('data-splash-alt') || 'شاشة بداية الحكاية');
+
+    Object.assign(splash.style, {
+      position: 'fixed',
+      inset: '0',
+      zIndex: '10000',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '24px',
+      boxSizing: 'border-box',
+      overflow: 'auto',
+      backgroundColor: lightTheme ? '#fbf7ec' : (body.getAttribute('data-splash-bottom') || '#071c25'),
+      backgroundImage:
+        (lightTheme
+          ? 'linear-gradient(180deg, rgba(251,247,236,.76), rgba(255,254,250,.94)), url("'
+          : 'linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.72)), url("') +
+        splashImage.replace(/"/g, '') +
+        '")',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat',
+      textAlign: 'center',
+      direction: activeLang === 'ar' ? 'rtl' : 'ltr',
+      transition: reduceMotion ? 'none' : 'opacity .35s ease'
+    });
+
+    var splashContent = document.createElement('div');
+
+    Object.assign(splashContent.style, {
+      width: 'min(600px, 100%)',
+      margin: 'auto',
+      color: lightTheme ? '#0f2150' : '#fff',
+      textShadow: lightTheme ? 'none' : '0 2px 12px rgba(0,0,0,.8)'
+    });
+
+    var splashTitle = document.createElement('h1');
+    splashTitle.textContent = (splashCopy && splashCopy.title) ||
+      body.getAttribute('data-splash-title') || 'رجال البحر في أكتوبر';
+
+    Object.assign(splashTitle.style, {
+      fontFamily: '"Marhey", "Cairo", Tahoma, sans-serif',
+      fontSize: 'clamp(2rem, 8vw, 4rem)',
+      lineHeight: '1.5',
+      color: lightTheme ? '#1b3f94' : '#f1d18d',
+      margin: '0 0 18px'
+    });
+
+    var splashSubtitle = document.createElement('p');
+    splashSubtitle.textContent = (splashCopy && splashCopy.subtitle) ||
+      body.getAttribute('data-splash-subtitle') ||
+      'حكاية أبطال البحرية المصرية في حرب أكتوبر 1973';
+
+    Object.assign(splashSubtitle.style, {
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: 'clamp(1rem, 3.5vw, 1.3rem)',
+      lineHeight: '2',
+      margin: '0 0 28px'
+    });
+
+    var startButton = document.createElement('button');
+    startButton.type = 'button';
+    startButton.className = 'story-splash-start';
+    startButton.textContent = (splashCopy && splashCopy.start) || 'ابدأ الحكاية ←';
+
+    Object.assign(startButton.style, {
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: '1rem',
+      fontWeight: '800',
+      padding: '13px 30px',
+      border: '1px solid rgba(255,255,255,.4)',
+      borderRadius: '5px',
+      background: lightTheme ? 'linear-gradient(145deg, #2a5bd7, #1b3f94)' : 'linear-gradient(145deg, #e3bd78, #a8753d)',
+      color: lightTheme ? '#fffefa' : '#171006',
+      cursor: 'pointer',
+      boxShadow: '0 8px 24px rgba(0,0,0,.3)'
+    });
+
+    splashContent.appendChild(splashTitle);
+    splashContent.appendChild(splashSubtitle);
+    splashContent.appendChild(startButton);
+    splash.appendChild(splashContent);
+
+    var previousOverflow = body.style.overflow;
+    body.appendChild(splash);
+    body.style.overflow = 'hidden';
+
+    try { startButton.focus({ preventScroll: true }); } catch (e) {}
+
+    var splashClosing = false;
+
+    var closeSplash = function () {
+      if (splashClosing || !splash.parentNode) { return; }
+      splashClosing = true;
+
+      body.style.overflow = previousOverflow;
+
+      if (reduceMotion) {
+        splash.remove();
+        return;
+      }
+
+      splash.style.opacity = '0';
+      splash.style.pointerEvents = 'none';
+      setTimeout(function () { splash.remove(); }, 380);
+    };
+
+    startButton.addEventListener('click', closeSplash);
+  }
+
+  /* =========================================
+     2) الحركة القديمة: الرئيسية وبقية القصص
+  ========================================= */
+  var legacy = document.querySelectorAll('.reveal');
+
+  function showAll(list) {
+    list.forEach(function (el) { el.classList.add('show'); });
+  }
+
+  if (richStory || reduceMotion || !('IntersectionObserver' in window)) {
+    showAll(legacy);
+  } else {
+    var legacyObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+          legacyObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    legacy.forEach(function (el) { legacyObserver.observe(el); });
+  }
+
+  /* =========================================
+     3) ظهور المحتوى في الاتجاهين (قصة نوردين)
+  ========================================= */
+  function initScrollReveal() {
+    if (!('IntersectionObserver' in window)) { return; }
+
+    var selectors = [
+      '.container > .kicker',
+      '.container > h2',
+      '.container > p',
+      '.container > figure',
+      '.container > .quote',
+      '.container > .home-button',
+      '.container > h3',
+      '.container > ul',
+      '.container > .timeline',
+      '.container > .note',
+      '.story-body > p',
+      '.story-image-card',
+      '.word',
+      '.panel',
+      '.event',
+      '.lesson',
+      '.sources li',
+      'footer'
+    ].join(',');
+
+    var targets = Array.prototype.slice.call(document.querySelectorAll(selectors));
+
+    /* الحكاية 004 فيها بطاقات معلومات ومعرض صور؛ أضف عناصرها لحركة الصعود أثناء التمرير. */
+    if (body.getAttribute('data-story-slug') === '004') {
+      document.querySelectorAll('.story .container > *, .memorial-gallery .container > *, .fact-grid > *, .memorial-card, .memorial-caption > *').forEach(function (el) {
+        if (targets.indexOf(el) === -1) targets.push(el);
+      });
+    }
+
+    targets.forEach(function (el) {
+      el.classList.add('scroll-reveal');
+    });
+
+    var observer = new IntersectionObserver(function (entries) {
+      var order = 0;
+
+      entries.forEach(function (entry) {
+        var el = entry.target;
+
+        if (entry.isIntersecting) {
+          el.style.transitionDelay = Math.min(order, 4) * 70 + 'ms';
+          order++;
+          el.classList.add('is-visible');
+        } else if (entry.boundingClientRect.top > 0) {
+          /* أصبح أسفل الشاشة (المستخدم صعد): يختفي ليظهر مجددًا عند النزول */
+          el.style.transitionDelay = '0ms';
+          el.classList.remove('is-visible');
+        }
+        /* لو خرج من أعلى الشاشة نتركه ظاهرًا لتفادي الرجفة */
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -4% 0px'
+    });
+
+    targets.forEach(function (el) { observer.observe(el); });
+  }
+
+  /* =========================================
+     4) Parallax لخلفية الغلاف
+  ========================================= */
+  function initHeroParallax() {
+    var hero = document.querySelector('.hero');
+    var photo = document.querySelector('.hero-photo');
+    var content = document.querySelector('.hero-content');
+
+    if (!hero || !photo) { return; }
+
+    var pending = false;
+
+    function update() {
+      pending = false;
+
+      var y = window.pageYOffset || 0;
+      var h = hero.offsetHeight || window.innerHeight;
+
+      if (y > h) { return; }
+
+      photo.style.transform =
+        'translate3d(0,' + (y * 0.045).toFixed(1) + 'px,0) scale(1.05)';
+
+      if (content) {
+        content.style.transform =
+          'translate3d(0,' + (y * -0.05).toFixed(1) + 'px,0)';
+      }
+    }
+
+    function request() {
+      if (pending) { return; }
+      pending = true;
+      window.requestAnimationFrame(update);
+    }
+
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    update();
+  }
+
+  if (richStory && !reduceMotion) {
+    initScrollReveal();
+    initHeroParallax();
+  }
+
+  /* =========================================
+     5) أزرار المشاركة السريعة للحكاية
+  ========================================= */
+  (function addStoryShareButtons() {
+    var heroContent = document.querySelector('.hero-content');
+    if (!heroContent || heroContent.querySelector('.story-share-bar')) { return; }
+
+    var labels = {
+      ar: { heading: 'شارك الحكاية:', whatsapp: 'واتساب', facebook: 'فيسبوك' },
+      en: { heading: 'Share this story:', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      fr: { heading: 'Partager ce récit :', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      it: { heading: 'Condividi il racconto:', whatsapp: 'WhatsApp', facebook: 'Facebook' },
+      de: { heading: 'Diese Geschichte teilen:', whatsapp: 'WhatsApp', facebook: 'Facebook' }
+    };
+    var copy = labels[activeLang] || labels.ar;
+    var pageUrl = window.location.href.split('#')[0];
+    var shareText = (document.title || copy.heading) + ' — ' + pageUrl;
+
+    var bar = document.createElement('div');
+    bar.className = 'story-share-bar';
+    bar.setAttribute('aria-label', copy.heading);
+    Object.assign(bar.style, {
+      display: 'flex',
+      flexWrap: 'wrap',
+      justifyContent: 'center',
+      alignItems: 'center',
+      gap: '10px',
+      margin: '18px auto 0',
+      width: '100%'
+    });
+
+    var heading = document.createElement('span');
+    heading.textContent = copy.heading;
+    Object.assign(heading.style, {
+      color: '#f1d18d',
+      fontFamily: '"Cairo", Tahoma, sans-serif',
+      fontSize: '.88rem',
+      fontWeight: '700',
+      width: '100%',
+      textAlign: 'center',
+      marginBottom: '2px'
+    });
+    bar.appendChild(heading);
+
+    function makeShareLink(label, href, background, foreground, iconText) {
+      var link = document.createElement('a');
+      link.href = href;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = iconText + ' ' + label;
+      link.setAttribute('aria-label', copy.heading + ' ' + label);
+      Object.assign(link.style, {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '7px',
+        minHeight: '42px',
+        padding: '9px 18px',
+        borderRadius: '999px',
+        border: '1px solid rgba(255,255,255,.24)',
+        background: background,
+        color: foreground,
+        textDecoration: 'none',
+        fontFamily: '"Cairo", Tahoma, sans-serif',
+        fontSize: '.9rem',
+        fontWeight: '800',
+        lineHeight: '1.4',
+        boxShadow: '0 5px 18px rgba(0,0,0,.2)',
+        transition: 'transform .2s ease, filter .2s ease'
+      });
+      link.addEventListener('mouseenter', function () { link.style.filter = 'brightness(1.08)'; });
+      link.addEventListener('mouseleave', function () { link.style.filter = 'none'; });
+      bar.appendChild(link);
+      return link;
+    }
+
+    var whatsappLink = makeShareLink(
+      copy.whatsapp,
+      'https://wa.me/?text=' + encodeURIComponent(shareText),
+      '#168b55',
+      '#ffffff',
+      '☏'
+    );
+    var facebookLink = makeShareLink(
+      copy.facebook,
+      'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(pageUrl),
+      '#1877f2',
+      '#ffffff',
+      'f'
+    );
+
+    function syncShareBar() {
+      var lang = window.I18N ? window.I18N.lang() : 'ar';
+      var currentCopy = labels[lang] || labels.ar;
+      var shareText = (document.title || currentCopy.heading) + ' — ' + pageUrl;
+
+      bar.setAttribute('aria-label', currentCopy.heading);
+      heading.textContent = currentCopy.heading;
+      whatsappLink.href = 'https://wa.me/?text=' + encodeURIComponent(shareText);
+      whatsappLink.textContent = '☏ ' + currentCopy.whatsapp;
+      whatsappLink.setAttribute('aria-label', currentCopy.heading + ' ' + currentCopy.whatsapp);
+      facebookLink.textContent = 'f ' + currentCopy.facebook;
+      facebookLink.setAttribute('aria-label', currentCopy.heading + ' ' + currentCopy.facebook);
+    }
+
+    document.addEventListener('site-language-change', syncShareBar);
+    syncShareBar();
+
+    var storySlug = body.getAttribute('data-story-slug');
+    var heroSection = document.querySelector('.hero');
+    if (storySlug === '004' && heroSection) {
+      bar.classList.add('story-share-bar--below-hero');
+      heroSection.appendChild(bar);
+    } else {
+      var subtitle = heroContent.querySelector('.hero-subtitle');
+      if (subtitle && subtitle.parentNode === heroContent) {
+        subtitle.insertAdjacentElement('afterend', bar);
+      } else {
+        heroContent.appendChild(bar);
+      }
+    }
+  })();
+
+  /* =========================================
+     6) تكبير الصور عند الضغط عليها
+  ========================================= */
+  var lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.setAttribute('role', 'dialog');
+  lightbox.setAttribute('aria-modal', 'true');
+  var lightboxLabels = {
+    ar: 'عرض الصورة بحجم كبير',
+    en: 'View image enlarged',
+    fr: 'Afficher l’image en grand',
+    it: 'Visualizza l’immagine ingrandita',
+    de: 'Bild vergrößert anzeigen'
+  };
+  function syncLightboxLabel() {
+    var lang = window.I18N ? window.I18N.lang() : 'ar';
+    lightbox.setAttribute('aria-label', lightboxLabels[lang] || lightboxLabels.ar);
+  }
+  syncLightboxLabel();
+  document.addEventListener('site-language-change', syncLightboxLabel);
+
+  var bigImage = document.createElement('img');
+  bigImage.alt = '';
+
+  lightbox.appendChild(bigImage);
+  body.appendChild(lightbox);
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    bigImage.removeAttribute('src');
+  }
+
+  document.addEventListener('click', function (event) {
+    var target = event.target;
+
+    if (!target || typeof target.closest !== 'function') { return; }
+
+    var image = target.closest('.image-frame img');
+
+    if (image) {
+      bigImage.src = image.src;
+      bigImage.alt = image.alt || '';
+      lightbox.classList.add('open');
+    } else if (lightbox.contains(target)) {
+      closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') { closeLightbox(); }
+  });
+})();
