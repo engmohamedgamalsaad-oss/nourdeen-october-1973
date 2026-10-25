@@ -151,9 +151,18 @@ function translateSvgArtwork(lang){
   var source=el.__storySvgOriginalSplash||el.getAttribute('data-splash');
   if(!/\.svg(?:[?#]|$)/i.test(source))return;
   if(!el.__storySvgOriginalSplash)el.__storySvgOriginalSplash=source;
-  if(lang==='ar'){if(el.getAttribute('data-splash')!==source)el.setAttribute('data-splash',source);return;}
+  if(lang==='ar'){
+   if(el.getAttribute('data-splash')!==source)el.setAttribute('data-splash',source);
+   var arabicSplashImg=document.querySelector('.story-start-art img');
+   if(arabicSplashImg&&arabicSplashImg.getAttribute('src')!==source)arabicSplashImg.setAttribute('src',source);
+   return;
+  }
   localizeSvgAsset(source,lang).then(function(localized){
-   if(currentStoryLanguage()===lang&&el.isConnected&&el.getAttribute('data-splash')!==localized)el.setAttribute('data-splash',localized);
+   if(currentStoryLanguage()!==lang||!el.isConnected)return;
+   if(el.getAttribute('data-splash')!==localized)el.setAttribute('data-splash',localized);
+   /* story.js snapshots data-splash when it creates the intro popup, so update the live image too. */
+   var splashImg=document.querySelector('.story-start-art img');
+   if(splashImg&&splashImg.getAttribute('src')!==localized)splashImg.setAttribute('src',localized);
   });
  });
  var imgs=Array.prototype.slice.call(document.querySelectorAll('img[src]'));
