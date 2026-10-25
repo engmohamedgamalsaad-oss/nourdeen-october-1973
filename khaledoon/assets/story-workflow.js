@@ -209,7 +209,9 @@ function validateStoryPackage(pkg) {
   textField(pkg, 'original_body', 'النص الأصلي', 20);
   textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
   var designOptions = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
-  if (designOptions.indexOf(String(pkg.visual_design || '')) < 0) errors.push('اختر تصميمًا بصريًا مخصصًا من قائمة visual_design.');
+  var requestedDesign = String(pkg.visual_design || '').trim();
+  /* التصميم اختياري: عند غيابه يختار القالب هوية القسم تلقائيًا؛ لا نغيّر اختيارًا صالحًا صراحةً. */
+  if (requestedDesign && designOptions.indexOf(requestedDesign) < 0) errors.push('قيمة visual_design غير معتمدة؛ اختر تصميمًا من القائمة أو اترك الحقل فارغًا ليرث تصميم القسم.');
   /* الخريطة التفاعلية: يجب أن يختار المولّد موقعًا موثقًا أو يصرّح صراحة بعدم توفره. */
   if (!Object.prototype.hasOwnProperty.call(pkg, 'map_location')) {
     errors.push('حقل map_location مطلوب: أرسل null عند عدم توفر موقع موثق، أو كائن موقع مكتمل.');
