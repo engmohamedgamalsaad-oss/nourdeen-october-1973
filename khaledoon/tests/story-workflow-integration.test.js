@@ -45,6 +45,17 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
+test('active admin prompt is synchronized with the unified v4 story contract', function () {
+  var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var match = shared.match(/var STORY_PAGE_PROMPT = ("(?:\\\\.|[^"\\\\])*");/);
+  assert.ok(match, 'active story prompt must be a single embedded string');
+  var prompt = JSON.parse(match[1]);
+  assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
+  assert.ok(prompt.includes('## عقد الغلاف الموحد — مصدر واحد لكل موضع'));
+  assert.ok(prompt.includes('cover.i18n'));
+  assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
+  assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
+});
 test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
