@@ -24,9 +24,27 @@
   const choiceButtons = Array.from(document.querySelectorAll("[data-reaction-choice]"));
   const setStatus = message => { if (status) status.textContent = message; };
   /* I18N.t يرجّع اسم المفتاح نفسه (مثل s_liked) لو الترجمة ناقصة؛ نعتبر ده "غير موجود" ونستخدم النص الاحتياطي. */
+  const REACTION_FALLBACKS = {
+    r_counts_error: {
+      ar: "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.",
+      en: "Reaction counts are temporarily unavailable. Please refresh the page.",
+      fr: "Les compteurs de réactions sont temporairement indisponibles. Veuillez actualiser la page.",
+      it: "I conteggi delle reazioni non sono temporaneamente disponibili. Aggiorna la pagina.",
+      de: "Die Reaktionszähler sind vorübergehend nicht verfügbar. Bitte aktualisiere die Seite."
+    },
+    r_save_error: {
+      ar: "ماقدرناش نسجل الاختيار الآن. جرّب تاني بعد قليل.",
+      en: "We couldn't save your reaction just now. Please try again shortly.",
+      fr: "Impossible d’enregistrer votre réaction pour le moment. Réessayez dans quelques instants.",
+      it: "Non è stato possibile registrare la tua reazione. Riprova tra poco.",
+      de: "Deine Reaktion konnte gerade nicht gespeichert werden. Bitte versuche es gleich noch einmal."
+    }
+  };
   const tr = (key, fallback) => {
     const value = window.I18N ? window.I18N.t(key) : key;
-    return value && value !== key ? value : fallback;
+    if (value && value !== key) return value;
+    const lang = window.I18N && typeof window.I18N.lang === "function" ? window.I18N.lang() : "ar";
+    return (REACTION_FALLBACKS[key] && REACTION_FALLBACKS[key][lang]) || fallback;
   };
   const LIKE_TEXT = {
     ar: { like: "❤️ أعجبتني", liked: "تم تسجيل إعجابك" },
