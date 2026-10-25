@@ -267,7 +267,11 @@ document.addEventListener('DOMContentLoaded',function(){
     Run one deferred pass after those handlers so late-added SVG images are localized too. */
  setTimeout(apply,0);
 });
-document.addEventListener('site-language-change',apply);
+document.addEventListener('site-language-change',function(){
+ apply();
+ /* Language state and story-created SVGs can settle in separate handlers. */
+ setTimeout(apply,0);
+});
 if(document.readyState!=='loading'){
  apply();
  setTimeout(apply,0);
