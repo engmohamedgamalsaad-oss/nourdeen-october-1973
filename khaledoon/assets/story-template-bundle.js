@@ -234,7 +234,7 @@ async function download(draft,opts){
  }else if(storyIndex.some(function(x){return String(x.path||'').split('/').filter(Boolean).join('/')===('stories/'+section+'/'+id)}))throw new Error('مسار الحكاية ظهر في الفهرس أثناء التجهيز؛ أعد فتح المعاينة لتحديد رقم جديد.');
  var accent=ACCENTS[section]||'#d5b7ff',root='stories/'+section+'/'+id+'/',baseUrl=location.origin+'/nourdeen-october-1973';
  var data=dataJson(draft,id,section),quiz=report.quiz;quiz.id=id;quiz.title=draft.figure_name||draft.title;
- var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:root};
+ var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,cover:data.cover,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:root};
  if(updatingExisting)storyIndex[existingIndexAt]=indexEntry;else storyIndex.push(indexEntry);
  var source=sourceRows(draft.sources),sourceMd='# مصادر الحكاية: '+draft.title+'\n\n'+source.map(function(x){return '- '+(x.url?'['+x.label+']('+x.url+')':x.line)}).join('\n')+'\n';
  var theme='';try{var tr=await fetch('../stories/history/005/theme.css',{cache:'no-store'});if(tr.ok)theme=await tr.text()}catch(e){}
