@@ -496,7 +496,8 @@ async function svgArtworkRegression(browser, base, origin) {
       results.flow.push(...await Promise.all(LANGS.map((l) => flow(browser, base, origin, l, viewport))));
       results.sweep.push(...await Promise.all(LANGS.map((l) => sweep(browser, base, origin, l, viewport, pages))));
     }
-    results.introPopup = await introPopupRegression(browser, base, origin);\n    results.svgArtwork = await svgArtworkRegression(browser, base, origin);
+    results.introPopup = await introPopupRegression(browser, base, origin);
+    results.svgArtwork = await svgArtworkRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
