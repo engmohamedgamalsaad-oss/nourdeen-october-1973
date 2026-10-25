@@ -127,8 +127,13 @@ function localizeSvgAsset(url,lang){
   parsed.querySelectorAll('text,tspan,title,desc').forEach(function(el){
    if(el.tagName.toLowerCase()==='text'&&el.querySelector('tspan'))return;
    var original=el.textContent||'';
+   var normalized=original.replace(/\\s+/g,' ').trim();
+   /* SVG cover text can be nested in its own artwork dictionary. Resolve that exact
+      language/key first, then fall back to the shared story translation registry. */
+   var artwork=svgArtworkTranslations[lang]&&svgArtworkTranslations[lang][normalized];
    var item=findTranslation(original,lang);
-   if(item&&item[lang]&&item[lang]!==original){el.textContent=item[lang];changed=true;}
+   var replacement=artwork||(item&&item[lang]);
+   if(replacement&&replacement!==original){el.textContent=replacement;changed=true;}
   });
   parsed.querySelectorAll('[aria-label],[title]').forEach(function(el){
    ['aria-label','title'].forEach(function(attr){
