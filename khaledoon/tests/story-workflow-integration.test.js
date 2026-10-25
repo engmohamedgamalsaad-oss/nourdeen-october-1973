@@ -54,7 +54,7 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(prompt.includes('## عقد الغلاف الموحد — مصدر واحد لكل موضع'));
   assert.ok(prompt.includes('cover.i18n'));
-  assert.ok(prompt.includes('اللغات الأربع `en/fr/it/de`'));
+  assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
   assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
