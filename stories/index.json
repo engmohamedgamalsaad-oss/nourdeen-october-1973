@@ -517,7 +517,7 @@
         "className": "Story narrator",
         "title": "Farouk El-Baz",
         "subtitle": "The scientist who helped astronauts read the Moon and the desert",
-        "person": "فاروق الباز"
+        "person": "Farouk El-Baz"
       },
       "fr": {
         "name": "Nourdeen Mohamed",
@@ -525,7 +525,7 @@
         "className": "Narrateur de l'histoire",
         "title": "Farouk El-Baz",
         "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
-        "person": "فاروق الباز"
+        "person": "Farouk El-Baz"
       },
       "it": {
         "name": "Nourdeen Mohamed",
@@ -533,7 +533,7 @@
         "className": "Narratore della storia",
         "title": "Farouk El-Baz",
         "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
-        "person": "فاروق الباز"
+        "person": "Farouk El-Baz"
       },
       "de": {
         "name": "Nourdeen Mohamed",
@@ -541,7 +541,7 @@
         "className": "Erzähler der Geschichte",
         "title": "Farouk El-Baz",
         "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
-        "person": "فاروق الباز"
+        "person": "Farouk El-Baz"
       }
     },
     "id": "012",
@@ -565,7 +565,7 @@
         "className": "First Year Preparatory",
         "title": "Amr ibn al-As",
         "subtitle": "The Conquest of Egypt",
-        "person": "عمرو بن العاص"
+        "person": "Amr ibn al-As"
       },
       "fr": {
         "name": "Nourdin Mohamed",
@@ -573,7 +573,7 @@
         "className": "Première année préparatoire",
         "title": "Amr ibn al-As",
         "subtitle": "La conquête de l'Égypte",
-        "person": "عمرو بن العاص"
+        "person": "Amr ibn al-As"
       },
       "it": {
         "name": "Nourdin Mohamed",
@@ -581,7 +581,7 @@
         "className": "Primo anno preparatorio",
         "title": "Amr ibn al-As",
         "subtitle": "La conquista dell'Egitto",
-        "person": "عمرو بن العاص"
+        "person": "Amr ibn al-As"
       },
       "de": {
         "name": "Nourdin Mohamed",
@@ -589,7 +589,7 @@
         "className": "Erste Vorbereitungsklasse",
         "title": "Amr ibn al-As",
         "subtitle": "Die Eroberung Ägyptens",
-        "person": "عمرو بن العاص"
+        "person": "Amr ibn al-As"
       }
     },
     "id": "011",
@@ -613,7 +613,7 @@
         "className": "5th Grade",
         "title": "Hatshepsut: The Golden Pharaoh on the Nile Throne",
         "subtitle": "The story of the diplomatic queen who filled Egypt with monuments and trade expeditions",
-        "person": "الملكة حتشبسوت"
+        "person": "Queen Hatshepsut"
       },
       "fr": {
         "name": "Malika Mohamed Gamal",
@@ -621,7 +621,7 @@
         "className": "5ème Année Primaire",
         "title": "Hatshepsout : Le Pharaon d'or sur le trône du Nil",
         "subtitle": "L'histoire de la reine diplomate qui a enrichi l'Égypte de monuments et d'expéditions commerciales",
-        "person": "الملكة حتشبسوت"
+        "person": "La reine Hatchepsout"
       },
       "it": {
         "name": "Malika Mohamed Gamal",
@@ -629,7 +629,7 @@
         "className": "Quinta Elementare",
         "title": "Hatshepsut: Il Faraone d'oro sul trono del Nilo",
         "subtitle": "La storia della regina diplomatica che riempì l'Egitto di monumenti e spedizioni commerciali",
-        "person": "الملكة حتشبسوت"
+        "person": "La regina Hatshepsut"
       },
       "de": {
         "name": "Malika Mohamed Gamal",
@@ -637,7 +637,7 @@
         "className": "5. Grundschulklasse",
         "title": "Hatschepsut: Der goldene Pharao auf dem Thron des Nils",
         "subtitle": "Die Geschichte der diplomatischen Königin, die Ägypten mit Bauwerken und Handelsreisen bereicherte",
-        "person": "الملكة حتشبسوت"
+        "person": "Königin Hatschepsut"
       }
     },
     "id": "013",
@@ -661,7 +661,7 @@
         "className": "Third grade",
         "title": "Abu Bakr al-Khwarizmi: The Journey of a Poet",
         "subtitle": "The story of an Abbasid writer who traveled between cities and became known for his language and memory.",
-        "person": "أبو بكر محمد بن العباس الخوارزمي"
+        "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi"
       },
       "fr": {
         "name": "Karma Mohamed",
@@ -669,7 +669,7 @@
         "className": "Troisième année du primaire",
         "title": "Abou Bakr al-Khwarizmi : le voyage d'un poète",
         "subtitle": "L'histoire d'un écrivain abbasside qui voyageait entre les villes et était connu pour sa maîtrise de la langue et sa mémoire.",
-        "person": "أبو بكر محمد بن العباس الخوارزمي"
+        "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi"
       },
       "it": {
         "name": "Karma Mohamed",
@@ -677,7 +677,7 @@
         "className": "Terza classe della scuola primaria",
         "title": "Abu Bakr al-Khwarizmi: il viaggio di un poeta",
         "subtitle": "La storia di uno scrittore dell'epoca abbaside che viaggiò tra le città e divenne famoso per la sua lingua e la sua memoria.",
-        "person": "أبو بكر محمد بن العباس الخوارزمي"
+        "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi"
       },
       "de": {
         "name": "Karma Mohamed",
@@ -685,7 +685,7 @@
         "className": "Dritte Grundschulklasse",
         "title": "Abu Bakr al-Chwarizmi: Die Reise eines Dichters",
         "subtitle": "Die Geschichte eines Schriftstellers aus der Abbasidenzeit, der zwischen Städten reiste und für seine Sprachkenntnisse und sein Gedächtnis bekannt war.",
-        "person": "أبو بكر محمد بن العباس الخوارزمي"
+        "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi"
       }
     },
     "id": "014",
@@ -709,7 +709,7 @@
         "className": "First grade",
         "title": "Magdi Yacoub",
         "subtitle": "A Heart That Brings Hope",
-        "person": "مجدي يعقوب"
+        "person": "Magdi Yacoub"
       },
       "fr": {
         "name": "Malika Mohamed",
@@ -717,7 +717,7 @@
         "className": "Première année de l’école primaire",
         "title": "Magdi Yacoub",
         "subtitle": "Un cœur qui fait naître l’espoir",
-        "person": "مجدي يعقوب"
+        "person": "Magdi Yacoub"
       },
       "it": {
         "name": "Malika Mohamed",
@@ -725,7 +725,7 @@
         "className": "Prima classe della scuola primaria",
         "title": "Magdi Yacoub",
         "subtitle": "Un cuore che fa nascere la speranza",
-        "person": "مجدي يعقوب"
+        "person": "Magdi Yacoub"
       },
       "de": {
         "name": "Malika Mohamed",
@@ -733,7 +733,7 @@
         "className": "Erste Klasse der Grundschule",
         "title": "Magdi Yacoub",
         "subtitle": "Ein Herz, das Hoffnung schenkt",
-        "person": "مجدي يعقوب"
+        "person": "Magdi Yacoub"
       }
     },
     "id": "015",
