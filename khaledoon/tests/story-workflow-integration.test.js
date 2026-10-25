@@ -352,7 +352,7 @@ test('story i18n lookup supports source-first and language-first dictionaries', 
   var sourceFirst = { 'مرحبا': { en: 'Hello', fr: 'Bonjour' } };
   var languageFirst = { en: { 'مرحبا': 'Hello' }, fr: { 'مرحبا': 'Bonjour' }, de: { 'مرحبا': 'Hallo' } };
   function lookup(dictionary, lang) {
-    var context = { translations: dictionary, window: { StoryI18N: { text: {} } } };
+    var context = { translations: dictionary, window: { StoryI18N: { text: {} } }, svgArtworkTranslations: {} };
     return vm.runInNewContext(match[0] + '; findTranslation("مرحبا", "' + lang + '")', context);
   }
   assert.equal(lookup(sourceFirst, 'en').en, 'Hello');
