@@ -51,7 +51,7 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   var markerIndex = shared.indexOf(marker);
   assert.ok(markerIndex >= 0, 'active story prompt declaration must exist');
   var start = markerIndex + marker.length;
-  var end = shared.indexOf('\\nvar STORY_PROVIDER_PROMPTS =', start);
+  var end = shared.indexOf('\nvar STORY_PROVIDER_PROMPTS =', start);
   assert.ok(end > start, 'active story prompt must be a single embedded string');
   var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
