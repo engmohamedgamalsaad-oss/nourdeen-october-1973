@@ -31,7 +31,11 @@ var sharedText={
   "رسم توضيحي محلي أُعد لصفحة الحكاية، وليس صورة أرشيفية.":"A local illustration prepared for the story page, not an archival image.",
   "للتفريق بين الرسم التوضيحي والصور الفوتوغرافية الموثقة، لا يُنسب هذا الرسم إلى مصدر تاريخي.":"To distinguish the illustration from documented photographs, it is not credited to a historical source.",
   "رسم توضيحي للحكاية، وليس صورة تاريخية أرشيفية":"Illustration for the story, not a historical archival image",
-  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Alternative illustration for the story; see the source link for historical details"
+  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Alternative illustration for the story; see the source link for historical details",
+  "رابط المصدر":"Source link",
+  "صورة أرشيفية":"Archival photograph",
+  "صورة توضيحية":"Illustration",
+  "Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام. ·":"Public Domain according to the archive record. Check the original source before reuse. ·"
  },
  fr:{
   "خالدون عبر التاريخ · رسم توضيحي":"Immortels à travers l’histoire · Illustration",
@@ -56,7 +60,11 @@ var sharedText={
   "رسم توضيحي محلي أُعد لصفحة الحكاية، وليس صورة أرشيفية.":"Illustration réalisée pour la page de l’histoire, et non une image d’archive.",
   "للتفريق بين الرسم التوضيحي والصور الفوتوغرافية الموثقة، لا يُنسب هذا الرسم إلى مصدر تاريخي.":"Pour distinguer l’illustration des photographies documentées, elle n’est attribuée à aucune source historique.",
   "رسم توضيحي للحكاية، وليس صورة تاريخية أرشيفية":"Illustration de l’histoire, et non une image d’archive historique",
-  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Illustration de remplacement pour l’histoire ; consultez le lien vers la source pour les détails historiques"
+  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Illustration de remplacement pour l’histoire ; consultez le lien vers la source pour les détails historiques",
+  "رابط المصدر":"Lien vers la source",
+  "صورة أرشيفية":"Photographie d’archives",
+  "صورة توضيحية":"Illustration",
+  "Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام. ·":"Domaine public selon la notice d’archive. Vérifiez la source originale avant toute réutilisation. ·"
  },
  it:{
   "خالدون عبر التاريخ · رسم توضيحي":"Immortali attraverso la storia · Illustrazione",
@@ -81,7 +89,11 @@ var sharedText={
   "رسم توضيحي محلي أُعد لصفحة الحكاية، وليس صورة أرشيفية.":"Illustrazione realizzata per la pagina della storia, non un’immagine d’archivio.",
   "للتفريق بين الرسم التوضيحي والصور الفوتوغرافية الموثقة، لا يُنسب هذا الرسم إلى مصدر تاريخي.":"Per distinguere l’illustrazione dalle fotografie documentate, non è attribuita a una fonte storica.",
   "رسم توضيحي للحكاية، وليس صورة تاريخية أرشيفية":"Illustrazione della storia, non un’immagine storica d’archivio",
-  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Illustrazione sostitutiva per la storia; consulta il link alla fonte per i dettagli storici"
+  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Illustrazione sostitutiva per la storia; consulta il link alla fonte per i dettagli storici",
+  "رابط المصدر":"Link alla fonte",
+  "صورة أرشيفية":"Fotografia d’archivio",
+  "صورة توضيحية":"Illustrazione",
+  "Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام. ·":"Pubblico dominio secondo la scheda archivistica. Verificare la fonte originale prima del riutilizzo. ·"
  },
  de:{
   "خالدون عبر التاريخ · رسم توضيحي":"Unsterbliche durch die Geschichte · Illustration",
@@ -106,7 +118,11 @@ var sharedText={
   "رسم توضيحي محلي أُعد لصفحة الحكاية، وليس صورة أرشيفية.":"Für die Geschichtsseite angefertigte Illustration, kein Archivbild.",
   "للتفريق بين الرسم التوضيحي والصور الفوتوغرافية الموثقة، لا يُنسب هذا الرسم إلى مصدر تاريخي.":"Zur Unterscheidung von dokumentierten Fotografien wird diese Illustration keiner historischen Quelle zugeschrieben.",
   "رسم توضيحي للحكاية، وليس صورة تاريخية أرشيفية":"Illustration zur Geschichte, kein historisches Archivbild",
-  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Ersatzillustration zur Geschichte; Details zur Geschichte siehe Quellenlink"
+  "رسم توضيحي بديل للحكاية؛ راجع رابط المصدر للتفاصيل التاريخية":"Ersatzillustration zur Geschichte; Details zur Geschichte siehe Quellenlink",
+  "رابط المصدر":"Quellenlink",
+  "صورة أرشيفية":"Archivfoto",
+  "صورة توضيحية":"Illustration",
+  "Public Domain وفق بيانات سجل الأرشيف. يُنصح بمراجعة المصدر الأصلي قبل إعادة الاستخدام. ·":"Gemeinfrei laut Archivdatensatz. Vor einer Wiederverwendung die Originalquelle prüfen. ·"
  }
 };
 
@@ -117,6 +133,32 @@ var storyExtraText={
   fr:{"· ناسا: Apollo 11 and Landing Site 2 in the Sea of Tranquility":"· NASA : Apollo 11 et le site d’alunissage 2 dans la mer de la Tranquillité"},
   it:{"· ناسا: Apollo 11 and Landing Site 2 in the Sea of Tranquility":"· NASA: Apollo 11 e il sito di allunaggio 2 nel Mare della Tranquillità"},
   de:{"· ناسا: Apollo 11 and Landing Site 2 in the Sea of Tranquility":"· NASA: Apollo 11 und Landeplatz 2 im Meer der Ruhe"}
+ },
+ "014":{
+  en:{
+   "صفحات من مجموعة رسائل أبي بكر الخوارزمي، في طبعة تاريخية تعود إلى عام 1880.":"Pages from the collected letters of Abu Bakr al-Khwarizmi, in a historical edition from 1880.",
+   "صفحتان مختلفتان من الطبعة التاريخية نفسها، تعرضان نص الرسائل الأدبية المنسوبة إلى أبي بكر الخوارزمي.":"Two different pages from the same historical edition, showing the text of the literary letters attributed to Abu Bakr al-Khwarizmi.",
+   "صفحتان متقابلتان من طبعة رسائل أبي بكر الخوارزمي الصادرة عام 1880.":"Two facing pages from the 1880 edition of the letters of Abu Bakr al-Khwarizmi.",
+   "صفحتان إضافيتان من كتاب رسائل أبي بكر الخوارزمي في طبعة عام 1880.":"Two more pages from the 1880 edition of the book of letters of Abu Bakr al-Khwarizmi."
+  },
+  fr:{
+   "صفحات من مجموعة رسائل أبي بكر الخوارزمي، في طبعة تاريخية تعود إلى عام 1880.":"Pages du recueil de lettres d’Abou Bakr al-Khwarizmi, dans une édition historique de 1880.",
+   "صفحتان مختلفتان من الطبعة التاريخية نفسها، تعرضان نص الرسائل الأدبية المنسوبة إلى أبي بكر الخوارزمي.":"Deux autres pages de la même édition historique, présentant le texte des lettres littéraires attribuées à Abou Bakr al-Khwarizmi.",
+   "صفحتان متقابلتان من طبعة رسائل أبي بكر الخوارزمي الصادرة عام 1880.":"Deux pages en regard de l’édition de 1880 des lettres d’Abou Bakr al-Khwarizmi.",
+   "صفحتان إضافيتان من كتاب رسائل أبي بكر الخوارزمي في طبعة عام 1880.":"Deux autres pages du livre de lettres d’Abou Bakr al-Khwarizmi, édition de 1880."
+  },
+  it:{
+   "صفحات من مجموعة رسائل أبي بكر الخوارزمي، في طبعة تاريخية تعود إلى عام 1880.":"Pagine della raccolta di lettere di Abu Bakr al-Khwarizmi, in un’edizione storica del 1880.",
+   "صفحتان مختلفتان من الطبعة التاريخية نفسها، تعرضان نص الرسائل الأدبية المنسوبة إلى أبي بكر الخوارزمي.":"Due pagine diverse della stessa edizione storica, con il testo delle lettere letterarie attribuite ad Abu Bakr al-Khwarizmi.",
+   "صفحتان متقابلتان من طبعة رسائل أبي بكر الخوارزمي الصادرة عام 1880.":"Due pagine affiancate dell’edizione del 1880 delle lettere di Abu Bakr al-Khwarizmi.",
+   "صفحتان إضافيتان من كتاب رسائل أبي بكر الخوارزمي في طبعة عام 1880.":"Altre due pagine del libro di lettere di Abu Bakr al-Khwarizmi, edizione del 1880."
+  },
+  de:{
+   "صفحات من مجموعة رسائل أبي بكر الخوارزمي، في طبعة تاريخية تعود إلى عام 1880.":"Seiten aus der Briefsammlung von Abu Bakr al-Chwarizmi in einer historischen Ausgabe von 1880.",
+   "صفحتان مختلفتان من الطبعة التاريخية نفسها، تعرضان نص الرسائل الأدبية المنسوبة إلى أبي بكر الخوارزمي.":"Zwei weitere Seiten derselben historischen Ausgabe mit dem Text der literarischen Briefe, die Abu Bakr al-Chwarizmi zugeschrieben werden.",
+   "صفحتان متقابلتان من طبعة رسائل أبي بكر الخوارزمي الصادرة عام 1880.":"Zwei gegenüberliegende Seiten der Ausgabe von 1880 der Briefe von Abu Bakr al-Chwarizmi.",
+   "صفحتان إضافيتان من كتاب رسائل أبي بكر الخوارزمي في طبعة عام 1880.":"Zwei weitere Seiten aus dem Briefbuch von Abu Bakr al-Chwarizmi, Ausgabe von 1880."
+  }
  },
  "015":{
   en:{
