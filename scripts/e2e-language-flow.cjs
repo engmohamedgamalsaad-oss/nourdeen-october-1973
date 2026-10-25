@@ -450,16 +450,15 @@ async function svgArtworkRegression(browser, base, origin) {
     for (const item of cases) {
       await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
-      await page.evaluate((selector) => { window.__svgArtworkSelector = selector || ''; }, item.selector || '');
       await page.waitForTimeout(900);
-      const en = await page.evaluate(async () => {
-        const img = document.querySelector(window.__svgArtworkSelector || '.story-start-art img');
+      const en = await page.evaluate(async (selector) => {
+        const img = document.querySelector(selector || '.story-start-art img');
         if (!img) return { found: false, src: '', svg: '' };
         const src = img.getAttribute('src') || '';
         let svg = '';
         try { svg = await (await fetch(src)).text(); } catch (_) {}
         return { found: true, src, svg };
-      });
+      }, item.selector || '');
       const enOk = en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic);
       checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
       if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
@@ -474,7 +473,7 @@ async function svgArtworkRegression(browser, base, origin) {
         let svg = '';
         try { svg = await (await fetch(src)).text(); } catch (_) {}
         return { found: true, src, svg };
-      });
+      }, item.selector || '');
       const arOk = ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic);
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
