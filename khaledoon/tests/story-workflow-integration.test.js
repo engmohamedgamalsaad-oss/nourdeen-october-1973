@@ -207,6 +207,8 @@ test('preview review panel displays image thumbnails and attribution from the sa
 test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
   assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
   assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
+  var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
+  assert.ok(collections.includes('if (coverPhoto && !coverUrl)'), 'legacy hardcoded covers must not override the unified cover object');
   assert.ok(bundle.includes("ترجمة النص البديل وتعليق الغلاف مطلوبة"));
   assert.ok(bundle.includes("heroImage&&/^https:\\/\\//i.test(String(heroImage.url))"), 'Open Graph image should use the same sourced cover when it is an HTTPS URL');
   var svgStart = bundle.indexOf('function svgCover(d,id,accent,popup){');
