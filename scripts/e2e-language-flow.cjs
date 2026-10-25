@@ -436,7 +436,7 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
+    { slug: 'stories/science/015/', selector: 'img[src$="cover-popup.svg"]', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
     { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
     { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
     { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
@@ -450,9 +450,10 @@ async function svgArtworkRegression(browser, base, origin) {
     for (const item of cases) {
       await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
+      await page.evaluate((selector) => { window.__svgArtworkSelector = selector || ''; }, item.selector || '');
       await page.waitForTimeout(900);
       const en = await page.evaluate(async () => {
-        const img = document.querySelector('.story-start-art img');
+        const img = document.querySelector(window.__svgArtworkSelector || '.story-start-art img');
         if (!img) return { found: false, src: '', svg: '' };
         const src = img.getAttribute('src') || '';
         let svg = '';
