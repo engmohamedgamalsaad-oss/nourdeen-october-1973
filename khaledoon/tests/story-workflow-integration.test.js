@@ -47,9 +47,12 @@ test('copied story prompts are compact, mode-specific, and include validated ima
 });
 test('active admin prompt is synchronized with the unified v4 story contract', function () {
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  var start = shared.indexOf('var STORY_PAGE_PROMPT = ') + 'var STORY_PAGE_PROMPT = '.length;
-  var end = shared.indexOf('\nvar STORY_PROVIDER_PROMPTS =', start);
-  assert.ok(start >= 0 && end > start, 'active story prompt must be a single embedded string');
+  var marker = 'var STORY_PAGE_PROMPT = ';
+  var markerIndex = shared.indexOf(marker);
+  assert.ok(markerIndex >= 0, 'active story prompt declaration must exist');
+  var start = markerIndex + marker.length;
+  var end = shared.indexOf('\\nvar STORY_PROVIDER_PROMPTS =', start);
+  assert.ok(end > start, 'active story prompt must be a single embedded string');
   var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(prompt.includes('### عقد الغلاف الموحد — مصدر واحد لكل موضع'));
