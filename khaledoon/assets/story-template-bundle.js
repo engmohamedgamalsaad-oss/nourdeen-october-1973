@@ -164,7 +164,7 @@ function storyHtml(d,id,section,accent,baseUrl){
 }
 function dataJson(d,id,section){
  var tr=d.translations||{},i18n={};
- LANGS.forEach(function(lang){var t=tr[lang]||{};i18n[lang]={name:t.student_name||d.narrator_name||'',grade:t.grade||d.narrator_grade||'',className:t.grade||d.narrator_grade||'',title:t.title||'',subtitle:t.subtitle||'',person:d.figure_name||''}});
+ LANGS.forEach(function(lang){var t=tr[lang]||{};i18n[lang]={name:t.student_name||d.narrator_name||'',grade:t.grade||d.narrator_grade||'',className:t.grade||d.narrator_grade||'',title:t.title||'',subtitle:t.subtitle||'',person:t.figure_name||t.person||d.figure_name||''}});
  return {name:d.narrator_name||'غير مسجل',grade:d.narrator_grade||'',className:d.narrator_grade||'',title:d.title,subtitle:d.subtitle||'',person:d.figure_name||'',color:ACCENTS[section]||'#d5b7ff',order:parseInt(id,10),published:true,i18n:i18n};
 }
 function svgCover(d,id,accent,popup){
