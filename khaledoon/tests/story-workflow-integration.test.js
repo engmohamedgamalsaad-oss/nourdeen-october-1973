@@ -57,6 +57,7 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(prompt.includes('### عقد الغلاف الموحد — مصدر واحد لكل موضع'));
   assert.ok(prompt.includes('cover.i18n'));
+  assert.ok(prompt.includes('ملفًا محليًا لم يُرفع'), 'prompt must forbid unpreviewable local cover files');
   assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
   assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
@@ -210,6 +211,8 @@ test('preview review panel displays image thumbnails and attribution from the sa
 });
 test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
   assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
+  assert.ok(bundle.includes('function absoluteStoryImageUrl(value,baseUrl,section,id)'), 'hero, modal and metadata need one resolved cover URL');
+  assert.ok(bundle.includes('مسار أصل موجود داخل المستودع'), 'unuploaded local cover paths must be rejected');
   assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
   var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
   assert.ok(collections.includes('if (coverPhoto && !coverUrl)'), 'legacy hardcoded covers must not override the unified cover object');
