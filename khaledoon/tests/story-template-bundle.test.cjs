@@ -59,7 +59,7 @@ async function main() {
   });
   assert.match(html, /اختبار معاينة القارئ/);
   assert.match(html, /<body class="story-design-[^"]+" data-story-slug="preview" data-section-accent="/, 'generated story body must include data-story-slug for shared language support');
-  assert.match(html, /<header>[\\s\\S]*?<div class="language-switch" data-lang-switch role="group" aria-label="Language"><\\/div><\\/header>/, 'generated story must include the shared language switch in its static HTML header');
+  assert.match(html, /<header>[\s\S]*?<div class="language-switch" data-lang-switch role="group" aria-label="Language"><\/div><\/header>/, 'generated story must include the shared language switch in its static HTML header');
   assert.equal((html.match(/data-lang-switch/g) || []).length, 1, 'generated preview must contain exactly one language switch');
   assert.ok(html.indexOf('assets/shared/i18n.js') < html.indexOf('./translations.js'), 'shared i18n script must load before story translations');
   assert.match(html, /stories\/history\/preview\//);
