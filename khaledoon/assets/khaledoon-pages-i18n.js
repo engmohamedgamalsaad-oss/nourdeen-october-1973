@@ -4,6 +4,9 @@
 'use strict';
 var LG=(window.KH_LANG&&window.KH_LANG.supported?window.KH_LANG.supported.slice():['ar','en','fr','it','de']),de=document.documentElement,l=0;
 var R=[
+['صورة لرأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري','Photograph of the bust of Queen Nefertiti from the Egyptian Museum of Berlin','Photographie du buste de la reine Néfertiti du musée égyptien de Berlin','Fotografia del busto della regina Nefertiti del Museo Egizio di Berlino','Foto der Büste von Königin Nofretete aus dem Ägyptischen Museum Berlin'],
+['تمثال حتشبسوت المحفوظ في متحف المتروبوليتان للفنون','Statue of Hatshepsut kept in the Metropolitan Museum of Art','Statue d’Hatchepsout conservée au Metropolitan Museum of Art','Statua di Hatshepsut conservata al Metropolitan Museum of Art','Statue der Hatschepsut im Metropolitan Museum of Art'],
+['لوحة جدارية رومانية يُحتمل أنها تمثل كليوباترا السابعة','Roman wall painting that probably depicts Cleopatra VII','Peinture murale romaine représentant probablement Cléopâtre VII','Affresco romano che probabilmente raffigura Cleopatra VII','Römisches Wandgemälde, das wahrscheinlich Kleopatra VII. darstellt'],
 ['شخصيات إسلامية','Islamic Figures','Figures de l’islam','Figure islamiche'],
 ['من سير شخصيات تركت أثرًا','Lives of figures who left a lasting mark','La vie de figures qui ont marqué leur époque','Le vite di figure che hanno lasciato il segno'],
 ['حكايات موثقة عن شخصيات إسلامية أسهمت في التاريخ والعلم والفكر، مع عرض سياقها ومصادرها.','Documented stories of Islamic figures who contributed to history, scholarship and thought, with context and sources.','Récits documentés de figures de l’islam qui ont contribué à l’histoire, au savoir et à la pensée, avec leur contexte et leurs sources.','Storie documentate di figure islamiche che hanno contribuito alla storia, al sapere e al pensiero, con contesto e fonti.'],
