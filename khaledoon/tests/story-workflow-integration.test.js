@@ -72,13 +72,13 @@ test('published story 012 and 014 headers have all four non-Arabic translations'
     assert.ok(history.includes('supplementalTranslations.' + lang + '["← التاريخ والحضارات"]'), 'story 014 missing localized breadcrumb for ' + lang);
   });
 });
-test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+test('unified v4 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
   assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261022-3"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(shared.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
   assert.ok(shared.includes('لا تلصق البرومبت القديم فوقه'));
   assert.ok(shared.includes('ar/en/fr/it/de'));
