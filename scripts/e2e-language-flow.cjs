@@ -598,6 +598,18 @@ async function svgArtworkRegression(browser, base, origin) {
     // so it must not be tested as if the frame itself contained translated artwork.
     await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
     await page.goto(base + '/stories/science/015/', { waitUntil: 'load', timeout: 20000 });
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: path.join(screenshotDir, 'story015-cover-desktop.png'), animations: 'disabled' });
+    const mobileCtx = await newContext(browser, origin, 'mobile');
+    try {
+      const mobilePage = await mobileCtx.newPage();
+      await mobilePage.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
+      await mobilePage.goto(base + '/stories/science/015/', { waitUntil: 'load', timeout: 20000 });
+      await mobilePage.waitForTimeout(300);
+      await mobilePage.screenshot({ path: path.join(screenshotDir, 'story015-cover-mobile.png'), animations: 'disabled' });
+    } finally {
+      await mobileCtx.close();
+    }
     const magdi = await page.evaluate(async () => {
       const heroPhoto = document.querySelector('.hero-art img');
       const introPhoto = document.querySelector('#intro .modal-art img');
