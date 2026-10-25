@@ -47,12 +47,13 @@ test('copied story prompts are compact, mode-specific, and include validated ima
 });
 test('active admin prompt is synchronized with the unified v4 story contract', function () {
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  var match = shared.match(/var STORY_PAGE_PROMPT = ("(?:\\\\.|[^"\\\\])*");/);
-  assert.ok(match, 'active story prompt must be a single embedded string');
-  var prompt = JSON.parse(match[1]);
+  var start = shared.indexOf('var STORY_PAGE_PROMPT = ') + 'var STORY_PAGE_PROMPT = '.length;
+  var end = shared.indexOf('\nvar STORY_PROVIDER_PROMPTS =', start);
+  assert.ok(start >= 0 && end > start, 'active story prompt must be a single embedded string');
+  var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
   assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(prompt.includes('## عقد الغلاف الموحد — مصدر واحد لكل موضع'));
-  assert.ok(prompt.includes('cover.i18n'));
+  assert.ok(prompt.includes('أضف `i18n` داخل `cover`'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
   assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
 });
