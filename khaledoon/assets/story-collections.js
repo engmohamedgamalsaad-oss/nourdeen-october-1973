@@ -20,6 +20,11 @@
   };
   var ui = labels[lang] || labels.ar;
   var root = '../../';
+  /* غلاف البطاقة = صورة حقيقية موثقة (مسارها من جذر الموقع، وكلها في assets/images/stories وموثقة في MANIFEST.md).
+     الصورة هي الأساس، والـSVG احتياطي لو فشل تحميلها. مكان مؤقت واحد؛ الجزء 7 ينقل الحقل إلى data.json لكل حكاية. */
+  var COVER_PHOTOS = {
+    'stories/science/015': 'assets/images/stories/M_Yacoub.jpg'
+  };
   var API = 'https://ypwprddkscnfblhftkeb.supabase.co';
   var ANON = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
   function loadHiddenIds() {
@@ -67,6 +72,8 @@
       : isNaguibMahfouzCard
         ? (String(story.id || '') === '009' ? [root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg', root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'] : [root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg', root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg']).concat([root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'])
         : (['011', '012', '013'].indexOf(String(story.id || '')) >= 0 ? [root + path + 'cover-popup.svg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'] : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']);
+    var coverPhoto = COVER_PHOTOS[path.replace(/\/+$/, '')];
+    if (coverPhoto) candidates = [root + coverPhoto].concat(candidates);
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
