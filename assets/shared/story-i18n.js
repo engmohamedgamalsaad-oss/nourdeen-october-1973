@@ -134,6 +134,16 @@ function localizeSvgAsset(url,lang){
  }).catch(function(){return url;});
 }
 function translateSvgArtwork(lang){
+ var splashNodes=Array.prototype.slice.call(document.querySelectorAll('[data-splash]'));
+ splashNodes.forEach(function(el){
+  var source=el.__storySvgOriginalSplash||el.getAttribute('data-splash');
+  if(!/\.svg(?:[?#]|$)/i.test(source))return;
+  if(!el.__storySvgOriginalSplash)el.__storySvgOriginalSplash=source;
+  if(lang==='ar'){if(el.getAttribute('data-splash')!==source)el.setAttribute('data-splash',source);return;}
+  localizeSvgAsset(source,lang).then(function(localized){
+   if(currentStoryLanguage()===lang&&el.isConnected&&el.getAttribute('data-splash')!==localized)el.setAttribute('data-splash',localized);
+  });
+ });
  var imgs=Array.prototype.slice.call(document.querySelectorAll('img[src]'));
  imgs.forEach(function(img){
   var source=img.__storySvgOriginalSrc||img.getAttribute('src');
