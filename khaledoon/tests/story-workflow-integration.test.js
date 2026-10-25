@@ -56,6 +56,9 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(prompt.includes('أضف `i18n` داخل `cover`'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
   assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
+  assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
 });
 test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
