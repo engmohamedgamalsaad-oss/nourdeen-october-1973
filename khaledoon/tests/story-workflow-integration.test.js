@@ -64,11 +64,11 @@ test('published story 012 and 014 headers have all four non-Arabic translations'
   var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
   var history = fs.readFileSync('stories/history/014/translations.js', 'utf8');
   ['en','fr','it','de'].forEach(function (lang) {
-    assert.ok(science.includes('supplementalTranslations.' + lang + '[\\"خالدون عبر التاريخ · 012\\"]'), 'story 012 missing localized header for ' + lang);
-    assert.ok(history.includes('supplementalTranslations.' + lang + '[\\"خالدون عبر التاريخ · 014\\"]'), 'story 014 missing localized header for ' + lang);
+    assert.ok(science.includes('supplementalTranslations.' + lang + '["خالدون عبر التاريخ · 012"]'), 'story 012 missing localized header for ' + lang);
+    assert.ok(history.includes('supplementalTranslations.' + lang + '["خالدون عبر التاريخ · 014"]'), 'story 014 missing localized header for ' + lang);
   });
   ['en','fr','it','de'].forEach(function (lang) {
-    assert.ok(history.includes('supplementalTranslations.' + lang + '[\\"← التاريخ والحضارات\\"]'), 'story 014 missing localized breadcrumb for ' + lang);
+    assert.ok(history.includes('supplementalTranslations.' + lang + '["← التاريخ والحضارات"]'), 'story 014 missing localized breadcrumb for ' + lang);
   });
 });
 test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
