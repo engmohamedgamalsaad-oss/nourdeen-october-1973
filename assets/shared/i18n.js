@@ -1,5 +1,7 @@
 (function(){
   'use strict';
+  /* مسار هذا الملف: نستخدمه لحساب مسار الصفحة الرئيسية وملف التنسيق من أي حكاية دون تعديل كل صفحة */
+  var scriptSrc=(document.currentScript&&document.currentScript.src)||'';
   /* القائمة المدعومة تأتي من assets/shared/home-language-only.js (KH_LANG)؛ النسخة هنا احتياطية فقط للصفحات التي لا تحمّله */
   var allowed=(window.KH_LANG&&window.KH_LANG.supported)?window.KH_LANG.supported.slice():['ar','en','fr','it','de'];
   var dict={};
@@ -64,9 +66,52 @@
     });
     return report;
   }
+  /* الهيدر الموحد لصفحات الحكايات (الجزء 3):
+     كل صفحة حكاية (body[data-story-slug]) ليس فيها شريط لغة تحصل هنا على رابط «خالدون عبر التاريخ»
+     وشريط اللغة المشترك داخل الهيدر الموجود. الصفحات التي فيها شريطها (المراجع 006/008/009 وغيرها،
+     و007 بنظامها الخاص data-start-live) لا تتأثر. وبما أن كل حكاية جديدة تحمّل هذا الملف، تحصل عليه تلقائيًا. */
+  function ensureStoryHeader(){
+    var body=document.body;
+    if(!body||!body.getAttribute('data-story-slug')||!scriptSrc)return;
+    if(body.hasAttribute('data-start-live'))return;
+    if(document.querySelector('[data-lang-switch],.language-switch'))return;
+    var header=document.querySelector('body > header');
+    if(!header)return;
+    var rootUrl='',rootPath='';
+    try{rootUrl=new URL('../../index.html',scriptSrc).href;rootPath=new URL(rootUrl).pathname;}catch(e){return;}
+    if(!document.getElementById('story-header-i18n-css')){
+      try{
+        var css=document.createElement('link');
+        css.id='story-header-i18n-css';css.rel='stylesheet';
+        css.href=new URL('i18n.css?v=20261025',scriptSrc).href;
+        document.head.appendChild(css);
+      }catch(e){}
+    }
+    var hasHome=Array.prototype.some.call(header.querySelectorAll('a[href]'),function(a){
+      try{
+        var p=new URL(a.getAttribute('href'),location.href).pathname;
+        return p===rootPath||p===rootPath.replace(/index\.html$/,'');
+      }catch(e){return false;}
+    });
+    if(!hasHome){
+      var home=document.createElement('a');
+      home.className='home-link khaledoon-return';
+      home.href=rootUrl;
+      home.textContent='← خالدون عبر التاريخ';
+      header.appendChild(home);
+    }
+    var host=document.createElement('div');
+    host.className='language-switch lang-switch story-lang-switch';
+    host.setAttribute('data-lang-switch','');
+    host.setAttribute('data-lang-compact','');
+    host.setAttribute('role','group');
+    host.setAttribute('aria-label','Language');
+    header.appendChild(host);
+  }
   function apply(){
     document.documentElement.lang=current;
     document.documentElement.dir=current==='ar'?'rtl':'ltr';
+    ensureStoryHeader();
     document.querySelectorAll('[data-i18n]').forEach(function(el){
       var key=el.getAttribute('data-i18n');
       var text=value(key);
@@ -82,10 +127,21 @@
       host.innerHTML='';
       host.hidden=false;host.style.display='';
       var labels={ar:'العربية',en:'English',fr:'Français',it:'Italiano',de:'Deutsch'};
+      var shortLabels={ar:'AR',en:'EN',fr:'FR',it:'IT',de:'DE'};
+      var compact=host.hasAttribute('data-lang-compact');
       allowed.forEach(function(lang){
         var button=document.createElement('button');
         button.type='button';button.className='lang-option'+(lang===current?' is-active':'');
-        button.textContent=labels[lang];button.setAttribute('aria-pressed',String(lang===current));
+        if(compact){
+          /* الاسم الكامل على الشاشات العريضة والرمز المختصر على الموبايل (يُبدَّلان بـCSS) */
+          var full=document.createElement('span');full.className='lang-full';full.textContent=labels[lang]||lang;
+          var abbr=document.createElement('span');abbr.className='lang-short';abbr.setAttribute('aria-hidden','true');abbr.textContent=shortLabels[lang]||lang.toUpperCase();
+          button.setAttribute('aria-label',labels[lang]||lang);
+          button.appendChild(full);button.appendChild(abbr);
+        }else{
+          button.textContent=labels[lang];
+        }
+        button.setAttribute('aria-pressed',String(lang===current));
         button.addEventListener('click',function(){setLang(lang);});
         host.appendChild(button);
       });
