@@ -1,7 +1,7 @@
 {
-  "name": "",
-  "grade": "",
-  "className": "",
+  "name": "مليكة محمد جمال",
+  "grade": "الصف الأول الابتدائي",
+  "className": "الصف الأول الابتدائي",
   "title": "حكاية العالم أحمد زويل",
   "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
   "person": "أحمد زويل",
@@ -12,22 +12,31 @@
     "en": {
       "title": "The Story of the Scientist Ahmed Zewail",
       "subtitle": "A journey with the Egyptian scientist who helped researchers observe atoms during chemical reactions.",
-      "person": "Ahmed Zewail"
+      "person": "Ahmed Zewail",
+      "name": "Malika Mohamed Gamal",
+      "grade": "1st Grade (Primary)",
+      "className": "1st Grade (Primary)"
     },
     "fr": {
       "title": "L’histoire du scientifique Ahmed Zewail",
       "subtitle": "À la découverte du scientifique égyptien qui a aidé les chercheurs à observer les atomes pendant les réactions chimiques.",
-      "person": "Ahmed Zewail"
+      "person": "Ahmed Zewail",
+      "name": "Malika Mohamed Gamal",
+      "grade": "1re année du primaire",
+      "className": "1re année du primaire"
     },
     "it": {
       "title": "La storia dello scienziato Ahmed Zewail",
       "subtitle": "Un viaggio con lo scienziato egiziano che aiutò i ricercatori a osservare gli atomi durante le reazioni chimiche.",
-      "person": "Ahmed Zewail"
+      "person": "Ahmed Zewail",
+      "name": "Malika Mohamed Gamal",
+      "grade": "1ª classe della scuola primaria",
+      "className": "1ª classe della scuola primaria"
     },
     "de": {
-      "name": "",
-      "grade": "",
-      "className": "",
+      "name": "Malika Mohamed Gamal",
+      "grade": "1. Klasse der Grundschule",
+      "className": "1. Klasse der Grundschule",
       "title": "Die Geschichte des Wissenschaftlers Ahmed Zewail",
       "subtitle": "Eine Reise mit einem ägyptischen Wissenschaftler, der Forschern half, Atome während chemischer Reaktionen zu beobachten.",
       "person": "Ahmed Zewail"
