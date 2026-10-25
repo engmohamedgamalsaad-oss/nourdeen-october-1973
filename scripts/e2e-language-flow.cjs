@@ -376,7 +376,9 @@ async function sweep(browser, base, origin, lang, viewport, pages) {
 async function targetArabicTextAudit(browser, base, origin) {
   const cases = [
     { slug: 'stories/islamic/011/', person: 'Amr ibn al-As' },
+    { slug: 'stories/science/012/', person: 'Farouk El-Baz' },
     { slug: 'stories/women/013/', person: 'Hatshepsut' },
+    { slug: 'stories/history/014/', person: 'Abu Bakr al-Khwarizmi' },
     { slug: 'stories/science/015/', person: 'Magdi Yacoub' }
   ];
   const languages = ['en', 'fr', 'it', 'de'];
