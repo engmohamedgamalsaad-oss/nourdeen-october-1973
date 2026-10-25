@@ -1,17 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-label="رسم توضيحي لذرات تتحرك ونبضات ليزر">
-<defs>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0f4150"/><stop offset="1" stop-color="#050e14"/></linearGradient>
-<radialGradient id="glow" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#8ad9e8" stop-opacity=".5"/><stop offset="1" stop-color="#8ad9e8" stop-opacity="0"/></radialGradient>
-<linearGradient id="beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8ad9e8" stop-opacity="0"/><stop offset="1" stop-color="#e8fbff" stop-opacity=".95"/></linearGradient>
-</defs>
-<rect width="1200" height="800" fill="url(#bg)"/>
-<circle cx="800" cy="400" r="360" fill="url(#glow)"/>
-<rect x="40" y="392" width="460" height="16" rx="8" fill="url(#beam)"/>
-<g fill="#e8fbff" opacity=".9"><rect x="150" y="380" width="26" height="40" rx="13"/><rect x="290" y="380" width="26" height="40" rx="13"/><rect x="430" y="380" width="26" height="40" rx="13"/></g>
-<g stroke="#8ad9e8" stroke-width="6" fill="none" opacity=".35"><path d="M560 400 H640"/></g>
-<g opacity=".25"><circle cx="640" cy="330" r="34" fill="#f0c878"/><circle cx="700" cy="400" r="26" fill="#8ad9e8"/><path d="M664 352 L690 380" stroke="#cfeff5" stroke-width="8"/></g>
-<g opacity=".5"><circle cx="740" cy="310" r="34" fill="#f0c878"/><circle cx="830" cy="400" r="26" fill="#8ad9e8"/><path d="M764 336 L812 380" stroke="#cfeff5" stroke-width="7" stroke-dasharray="10 8"/></g>
-<g opacity=".78"><circle cx="860" cy="280" r="34" fill="#f0c878"/><circle cx="960" cy="400" r="26" fill="#8ad9e8"/><path d="M884 304 L940 380" stroke="#cfeff5" stroke-width="5" stroke-dasharray="4 12"/></g>
-<g><circle cx="990" cy="250" r="34" fill="#f0c878"/><circle cx="1090" cy="400" r="26" fill="#8ad9e8"/><circle cx="1060" cy="520" r="30" fill="#bfe9f1"/></g>
-<g fill="#8ad9e8" opacity=".5"><circle cx="620" cy="560" r="4"/><circle cx="700" cy="600" r="3"/><circle cx="820" cy="580" r="5"/><circle cx="900" cy="640" r="3"/><circle cx="540" cy="250" r="3"/><circle cx="600" cy="180" r="5"/></g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="presentation" aria-hidden="true"><defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#122b47"/><stop offset=".58" stop-color="#167c88"/><stop offset="1" stop-color="#e7c16e"/></linearGradient><radialGradient id="glow"><stop stop-color="#e7c16e" stop-opacity=".5"/><stop offset="1" stop-color="#e7c16e" stop-opacity="0"/></radialGradient><pattern id="stars" width="88" height="72" patternUnits="userSpaceOnUse"><circle cx="13" cy="16" r="1.6" fill="#e7c16e" opacity=".4"/><path d="M48 8v10m-5-5h10" stroke="#e7c16e" opacity=".3"/></pattern></defs><rect width="1200" height="650" fill="url(#bg)"/><rect width="1200" height="650" fill="url(#stars)"/><circle cx="900" cy="160" r="240" fill="url(#glow)"/><g fill="none" stroke="#e7c16e" stroke-width="6"><ellipse cx="600" cy="315" rx="230" ry="90"/><ellipse cx="600" cy="315" rx="230" ry="90" transform="rotate(60 600 315)"/><ellipse cx="600" cy="315" rx="230" ry="90" transform="rotate(-60 600 315)"/></g><circle cx="600" cy="315" r="45" fill="#e7c16e"/><g fill="#50c5d0"><circle cx="370" cy="315" r="18"/><circle cx="715" cy="115" r="18"/><circle cx="710" cy="520" r="18"/></g><path d="M160 500L300 420M900 205L1030 120M870 480L1020 550" stroke="#50c5d0" stroke-width="5"/><rect x="32" y="32" width="1136" height="586" rx="18" fill="none" stroke="#e7c16e" stroke-width="3" opacity=".7"/><path d="M55 70H155M55 70V170M1145 70H1045M1145 70V170M55 580H155M55 580V480M1145 580H1045M1145 580V480" fill="none" stroke="#e7c16e" stroke-width="5" opacity=".8"/></svg>
