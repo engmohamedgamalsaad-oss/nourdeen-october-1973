@@ -214,6 +214,8 @@ test('Hatshepsut cover SVG has no embedded text that can leak across languages',
   assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to the localized HTML');
   assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
   assert.ok(svg.includes('aria-hidden=\"true\"'), 'HTML image alt text is the accessible label');
+  var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
+  assert.ok(story.includes('alt=\"رسم توضيحي، وليس صورة تاريخية\"'), 'cover image alt must use a shared localized translation key');
 });
 test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
   assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
