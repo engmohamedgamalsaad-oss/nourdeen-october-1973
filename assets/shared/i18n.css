@@ -4,3 +4,16 @@
 .lang-option.is-active{background:#e3bd78;color:#171006;border-color:#e3bd78}
 .lang-option:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .story-lang-switch{margin-inline:12px}
+
+/* Header injected by i18n.js on story pages that have no language switch (001-005 and any new story).
+   The short labels (AR / EN / FR / IT / DE) replace the full names on narrow screens so the
+   fixed 64px top bar never wraps. */
+.lang-short{display:none}
+.topbar .lang-switch{flex-wrap:nowrap;gap:4px;margin-inline:8px;min-width:0}
+.topbar .lang-option{padding:4px 9px;font-size:.72rem;white-space:nowrap;min-height:30px}
+@media(max-width:640px){
+  .lang-switch[data-lang-compact] .lang-full{display:none}
+  .lang-switch[data-lang-compact] .lang-short{display:inline}
+  .topbar .lang-option{padding:4px 7px}
+  .topbar .khaledoon-return{display:none}
+}
