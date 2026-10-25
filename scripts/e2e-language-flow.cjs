@@ -393,6 +393,16 @@ async function targetArabicTextAudit(browser, base, origin) {
           await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
           await page.waitForTimeout(450);
           await page.waitForFunction(() => !!window.KH_LANG, null, { timeout: 8000 });
+          /* SVG localization is asynchronous; wait for both cover assets before auditing their payloads. */
+          await page.waitForFunction(() => {
+            const images = Array.from(document.querySelectorAll('img[src]'));
+            const covers = images.filter((img) => /cover(?:-popup)?\\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
+            const splash = document.querySelector('.story-start-art img');
+            return covers.length > 0 &&
+              covers.every((img) => (img.getAttribute('src') || '').startsWith('blob:')) &&
+              (!splash || (splash.getAttribute('src') || '').startsWith('blob:'));
+          }, null, { timeout: 8000 }).catch(() => {});
+          await page.waitForTimeout(200);
           const found = await page.evaluate(async () => {
             const isArabic = /[\u0600-\u06FF]/;
             const excluded = /^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/;
@@ -403,6 +413,7 @@ async function targetArabicTextAudit(browser, base, origin) {
                 source, tag: element && element.tagName ? element.tagName.toLowerCase() : '',
                 id: element && element.id || '',
                 className: element && typeof element.className === 'string' ? element.className : '',
+                src: source === 'svg-image' && element && element.getAttribute ? (element.getAttribute('src') || '') : '',
                 text: value.slice(0, 400)
               });
             };
@@ -446,6 +457,13 @@ async function targetArabicTextAudit(browser, base, origin) {
             fragments: row.uniqueFragments
           }));
           if (found.htmlLang !== lang) hard.push('Arabic text audit: ' + item.slug + ' expected html lang=' + lang + ', got ' + found.htmlLang);
+          for (const fragment of found.fragments) {
+            if (fragment.source === 'svg-image') {
+              hard.push('Untranslated Arabic SVG text: ' + item.slug + ' [' + lang + '] ' + fragment.text + ' (' + fragment.src + ')');
+            } else if (fragment.source === 'html-text' && fragment.text !== 'العربية') {
+              hard.push('Untranslated Arabic HTML text: ' + item.slug + ' [' + lang + '] ' + fragment.text);
+            }
+          }
         } catch (e) {
           hard.push('Arabic text audit failed for ' + item.slug + ' [' + lang + ']: ' + String(e.message || e).split('\n')[0]);
         }
