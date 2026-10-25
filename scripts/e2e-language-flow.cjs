@@ -622,6 +622,8 @@ async function svgArtworkRegression(browser, base, origin) {
       } catch (_) {}
       return {
         heroPhoto: !!heroPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(heroPhoto.getAttribute('src') || ''),
+        introFound: !!introPhoto,
+        introSrc: introPhoto ? (introPhoto.getAttribute('src') || '') : 'missing',
         introPhoto: !!introPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(introPhoto.getAttribute('src') || ''),
         frameApplied: !!frameStyle && frameStyle.textContent.includes('cover-popup.svg'),
         decorativeOnly: !!svg && !/<(?:text|title|desc)\b/i.test(svg)
