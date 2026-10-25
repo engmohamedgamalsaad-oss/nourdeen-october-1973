@@ -18,6 +18,14 @@ function findTranslation(source, lang){
    if(typeof value==='string')byLanguage[language]=value;
   }
  });
+ /* Story-specific translation bundles are also a source of truth for SVG artwork. */
+ var storyText=window.StoryI18N&&window.StoryI18N.text;
+ if(storyText&&typeof storyText==='object'){
+  Object.keys(storyText).forEach(function(language){
+   var dictionary=storyText[language];
+   if(dictionary&&typeof dictionary[normalized]==='string')byLanguage[language]=dictionary[normalized];
+  });
+ }
  return Object.keys(byLanguage).length?byLanguage:null;
 }
 function applyPageMeta(){
