@@ -21,9 +21,14 @@
   var ui = labels[lang] || labels.ar;
   var root = '../../';
   /* غلاف البطاقة = صورة حقيقية موثقة (مسارها من جذر الموقع، وكلها في assets/images/stories وموثقة في MANIFEST.md).
-     الصورة هي الأساس، والـSVG احتياطي لو فشل تحميلها. مكان مؤقت واحد؛ الجزء 7 ينقل الحقل إلى data.json لكل حكاية. */
+     الصورة هي الأساس، والـSVG احتياطي لو فشل تحميلها. مكان مؤقت واحد؛ الجزء 7 ينقل الحقل إلى data.json لكل حكاية.
+     011 (عمرو بن العاص): لا توجد صورة موثقة للشخصية، فنستخدم صورة المكان (جامع عمرو بن العاص) حسب الاتفاق.
+     013 (حتشبسوت) و012 (فاروق الباز): لم تُضف بعد. */
   var COVER_PHOTOS = {
-    'stories/science/015': 'assets/images/stories/M_Yacoub.jpg'
+    'stories/science/015': 'assets/images/stories/M_Yacoub.jpg',
+    'stories/science/007': 'assets/images/stories/500px-Ahmed_Zewail__2010.jpg',
+    'stories/women/010': 'assets/images/stories/SameeraMoussa.jpg',
+    'stories/islamic/011': 'assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg'
   };
   var API = 'https://ypwprddkscnfblhftkeb.supabase.co';
   var ANON = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
