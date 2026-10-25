@@ -552,7 +552,6 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
     { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
     { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
     { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
@@ -594,6 +593,31 @@ async function svgArtworkRegression(browser, base, origin) {
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }
+
+    // Magdi Yacoub 015 now uses documented photographs with transparent SVG frames,
+    // so it must not be tested as if the frame itself contained translated artwork.
+    await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
+    await page.goto(base + '/stories/science/015/', { waitUntil: 'load', timeout: 20000 });
+    const magdi = await page.evaluate(async () => {
+      const heroPhoto = document.querySelector('.hero-art img');
+      const introPhoto = document.querySelector('#intro .modal-art img');
+      const frameStyle = document.getElementById('magdi-photo-frame-preview');
+      let svg = '';
+      try {
+        const wide = await (await fetch('cover.svg')).text();
+        const portrait = await (await fetch('cover-popup.svg')).text();
+        svg = wide + portrait;
+      } catch (_) {}
+      return {
+        heroPhoto: !!heroPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(heroPhoto.getAttribute('src') || ''),
+        introPhoto: !!introPhoto && /assets\/images\/stories\/M_Yacoub\.jpg/.test(introPhoto.getAttribute('src') || ''),
+        frameApplied: !!frameStyle && frameStyle.textContent.includes('cover-popup.svg'),
+        decorativeOnly: !!svg && !/<(?:text|title|desc)\b/i.test(svg)
+      };
+    });
+    const magdiOk = magdi.heroPhoto && magdi.introPhoto && magdi.frameApplied && magdi.decorativeOnly;
+    checks.push({ slug: 'stories/science/015/', language: 'ar', ok: magdiOk, expected: 'documented photo + decorative SVG frame' });
+    if (!magdiOk) hard.push('Magdi Yacoub 015 cover should use documented photos with decorative-only SVG frames');
   } catch (e) {
     hard.push('SVG artwork regression: ' + String(e.message || e).split('\\n')[0]);
   } finally {
