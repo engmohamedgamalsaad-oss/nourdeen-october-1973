@@ -61,8 +61,11 @@
     cover.loading = 'lazy';
     cover.decoding = 'async';
     var isTawfiqHakimCard = String(story.id || '') === '008' && /^stories\/people\/008\/?$/.test(path);
+    var isHatshepsutCard = String(story.id || '') === '013' && /^stories\/women\/013\/?$/.test(path);
     var isNaguibMahfouzCard = ['009', '012'].indexOf(String(story.id || '')) >= 0 && /^stories\/people\/(009|012)\/?$/.test(path);
-    var candidates = isTawfiqHakimCard
+    var candidates = isHatshepsutCard
+      ? [root + 'assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp']
+      : isTawfiqHakimCard
       ? [root + 'assets/images/stories/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
       : isNaguibMahfouzCard
         ? (String(story.id || '') === '009' ? [root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg', root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'] : [root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg', root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg']).concat([root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'])
