@@ -65,6 +65,7 @@
     return LANGS.indexOf(l) >= 0 ? l : 'ar';
   }
   function T(k) { var o = STR[k]; return o[lang()] || o.ar; }
+  function srcName(p) { var n = p && p.source_name; if (n && typeof n === 'object') { return n[lang()] || n.ar || p.source_url || ''; } return n || (p && p.source_url) || ''; }
   function pick(obj, field, l) {
     var v = '';
     if (l !== 'ar' && obj.i18n && obj.i18n[l] && obj.i18n[l][field]) v = obj.i18n[l][field];
@@ -184,7 +185,7 @@
     var pl = (p.place && (p.place[l] || p.place.ar)) || '';
     if (pl) c.appendChild(el('div', 'khm-place', ((p.place_label && (p.place_label[l] || p.place_label.ar)) || T('born')) + pl));
     if (p.source_url && /^https:\/\//i.test(p.source_url)) {
-      var source = el('a', 'khm-source', T('source') + (p.source_name || p.source_url));
+      var source = el('a', 'khm-source', T('source') + srcName(p));
       source.href = p.source_url; source.target = '_blank'; source.rel = 'noopener noreferrer';
       c.appendChild(source);
     }
@@ -274,7 +275,7 @@
       if (pl) li.appendChild(document.createTextNode(' — ' + ((e.p.place_label && (e.p.place_label[l] || e.p.place_label.ar)) || T('born')) + pl));
       else li.appendChild(document.createTextNode(' — ' + T('noPlace')));
       if (e.p && e.p.source_url && /^https:\/\//i.test(e.p.source_url)) {
-        var sourceLink = el('a', null, T('source') + (e.p.source_name || e.p.source_url));
+        var sourceLink = el('a', null, T('source') + srcName(e.p));
         sourceLink.href = e.p.source_url; sourceLink.target = '_blank'; sourceLink.rel = 'noopener noreferrer';
         li.appendChild(document.createTextNode(' — ')); li.appendChild(sourceLink);
       }

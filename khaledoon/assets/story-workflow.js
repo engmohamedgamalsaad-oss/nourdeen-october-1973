@@ -295,6 +295,10 @@ function validateStoryPackage(pkg) {
           errors.push(lang.toUpperCase() + ': حقل ' + field[1] + ' فارغ.');
         }
       });
+      /* اسم الشخصية المترجم (اختياري لكنه يظهر في البحث والخريطة): إن وُجد فيجب أن يكون بحروف غير عربية. */
+      if (typeof translation.figure_name === 'string' && /[\u0600-\u06FF]/.test(translation.figure_name)) {
+        errors.push(lang.toUpperCase() + ': اسم الشخصية المترجم (figure_name) يجب ألا يحتوي حروفًا عربية.');
+      }
       /* المولّد يربط الترجمة بالأصل فقرة بفقرة؛ اختلاف العدد يوقف التحضير لاحقًا. */
       parityFields.forEach(function (field) {
         var original = pkg[field[0]], translated = translation[field[0]];

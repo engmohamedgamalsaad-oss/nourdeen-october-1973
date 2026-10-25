@@ -1,5 +1,5 @@
 {
-  "_readme": "أماكن مرتبطة بالحكايات في الخريطة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de)، وplace_label اختياري لتوضيح نوع العلاقة بالمكان، وapproximate للمواقع التقريبية، وsource_name وsource_url للمصدر. لا تُعرض المواقع المرتبطة بالشخصية على أنها أماكن ميلاد إلا إذا كان ذلك موثقًا. الحكاية 002 بلا مكان لأن المصادر تختلف في مكان ميلاد باقي زكي يوسف؛ الحكاية 003 موقع تقريبي لمنطقة توماس وعافية بالنوبة. الإحداثيات تمثل المدينة أو المعلم المذكور لا عنوانًا دقيقًا.",
+  "_readme": "أماكن مرتبطة بالحكايات في الخريطة الرئيسية. المفتاح = رقم الحكاية. الحقول: lat, lng, place (ar/en/fr/it/de)، وplace_label اختياري لتوضيح نوع العلاقة بالمكان، وapproximate للمواقع التقريبية، وsource_name وsource_url للمصدر. لا تُعرض المواقع المرتبطة بالشخصية على أنها أماكن ميلاد إلا إذا كان ذلك موثقًا. الحكاية 002 بلا مكان لأن المصادر تختلف في مكان ميلاد باقي زكي يوسف؛ الحكاية 003 موقع تقريبي لمنطقة توماس وعافية بالنوبة. الإحداثيات تمثل المدينة أو المعلم المذكور لا عنوانًا دقيقًا. source_name يمكن أن يكون نصًا أو كائنًا بلغات ar/en/fr/it/de (يُفضَّل الكائن).",
   "001": {
     "lat": 31.2001,
     "lng": 29.9187,
@@ -114,7 +114,13 @@
       "it": "La Mecca",
       "de": "Mekka"
     },
-    "source_name": "متحف الإسلام — عمرو بن العاص",
+    "source_name": {
+      "ar": "متحف الإسلام — عمرو بن العاص",
+      "en": "Museum of Islam — Amr ibn al-As",
+      "fr": "Musée de l’Islam — Amr ibn al-As",
+      "it": "Museo dell’Islam — Amr ibn al-As",
+      "de": "Museum des Islam — Amr ibn al-As"
+    },
     "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/",
     "photo": "stories/islamic/011/cover.svg"
   },
@@ -129,7 +135,13 @@
       "it": "Zagazig, Sharqia",
       "de": "Zagazig, Scharkia"
     },
-    "source_name": "جامعة عين شمس — فاروق الباز",
+    "source_name": {
+      "ar": "جامعة عين شمس — فاروق الباز",
+      "en": "Ain Shams University — Farouk El-Baz",
+      "fr": "Université Aïn Chams — Farouk El-Baz",
+      "it": "Università Ain Shams — Farouk El-Baz",
+      "de": "Ain-Schams-Universität — Farouk El-Baz"
+    },
     "source_url": "https://www.asu.edu.eg/ar/148/page",
     "photo": "stories/science/012/cover.svg"
   },
@@ -151,7 +163,13 @@
       "it": "Luogo legato alla storia: ",
       "de": "Mit der Geschichte verbundener Ort: "
     },
-    "source_name": "وزارة السياحة والآثار المصرية — معبد حتشبسوت",
+    "source_name": {
+      "ar": "وزارة السياحة والآثار المصرية — معبد حتشبسوت",
+      "en": "Egyptian Ministry of Tourism and Antiquities — Temple of Hatshepsut",
+      "fr": "Ministère égyptien du Tourisme et des Antiquités — Temple d’Hatchepsout",
+      "it": "Ministero egiziano del Turismo e delle Antichità — Tempio di Hatshepsut",
+      "de": "Ägyptisches Ministerium für Tourismus und Altertümer — Hatschepsut-Tempel"
+    },
     "source_url": "https://egymonuments.gov.eg/en/monuments/hatshepsut-temple/",
     "photo": "stories/women/013/cover.svg"
   },
@@ -173,7 +191,13 @@
       "it": "Città legata alla sua vita: ",
       "de": "Mit seinem Leben verbundene Stadt: "
     },
-    "source_name": "Sunnah.com — محمد بن العباس الخوارزمي",
+    "source_name": {
+      "ar": "Sunnah.com — محمد بن العباس الخوارزمي",
+      "en": "Sunnah.com — Muhammad ibn al-Abbas al-Khwarizmi",
+      "fr": "Sunnah.com — Muhammad ibn al-Abbas al-Khwarizmi",
+      "it": "Sunnah.com — Muhammad ibn al-Abbas al-Khwarizmi",
+      "de": "Sunnah.com — Muhammad ibn al-Abbas al-Khwarizmi"
+    },
     "source_url": "https://sunnah.com/narrator/69208",
     "photo": "stories/history/014/cover.svg"
   },
@@ -188,7 +212,13 @@
       "it": "Belbeis, governatorato di Sharqia",
       "de": "Belbeis, Gouvernement Scharkia"
     },
-    "source_name": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
+    "source_name": {
+      "ar": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
+      "en": "Egypt State Information Service — Magdi Yacoub",
+      "fr": "Service d’information de l’État égyptien — Magdi Yacoub",
+      "it": "Servizio informazioni di Stato egiziano — Magdi Yacoub",
+      "de": "Staatlicher Informationsdienst Ägyptens — Magdi Yacoub"
+    },
     "source_url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/",
     "photo": "stories/science/015/cover.svg"
   }
