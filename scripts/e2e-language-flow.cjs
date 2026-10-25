@@ -603,6 +603,7 @@ async function svgArtworkRegression(browser, base, origin) {
     const mobileCtx = await newContext(browser, origin, 'mobile');
     try {
       const mobilePage = await mobileCtx.newPage();
+      await mobilePage.goto(base + '/', { waitUntil: 'load', timeout: 20000 });
       await mobilePage.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
       await mobilePage.goto(base + '/stories/science/015/', { waitUntil: 'load', timeout: 20000 });
       await mobilePage.waitForTimeout(300);
