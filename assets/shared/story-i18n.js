@@ -149,10 +149,10 @@ function translateSvgArtwork(lang){
   var current=el.style.backgroundImage||window.getComputedStyle(el).backgroundImage||'';
   var source=el.__storySvgOriginalBackground;
   if(source===undefined){
-   if(!/\.svg(?:[?#]|\s*\))/i.test(current))return;
+   if(!/\.svg(?:[?#][^)]*)?["']?\s*\)/i.test(current))return;
    source=current;el.__storySvgOriginalBackground=source;
   }
-  if(!/\.svg(?:[?#]|\s*\))/i.test(source))return;
+  if(!/\.svg(?:[?#][^)]*)?["']?\s*\)/i.test(source))return;
   if(lang==='ar'){if(el.style.backgroundImage!==source)el.style.backgroundImage=source;return;}
   var urls=source.match(/url\((['"]?)(.*?)\1\)/g)||[];
   if(!urls.length)return;
