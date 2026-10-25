@@ -40,6 +40,7 @@ function validate(d){
   var coverUrl=String(cover.url||cover.path||'').trim();
   if(!validImageUrl(coverUrl))missing.push('الغلاف cover.url أو cover.path غير صالح');
   if(!String(cover.alt||'').trim())missing.push('النص البديل للغلاف cover.alt مطلوب');
+  if(!String(cover.caption||'').trim())missing.push('تعليق الغلاف cover.caption مطلوب');
   if(!String(cover.source_name||'').trim())missing.push('اسم مصدر الغلاف cover.source_name مطلوب');
   if(!/^https:\/\//i.test(String(cover.source_url||'')))missing.push('رابط مصدر الغلاف cover.source_url يجب أن يكون HTTPS');
   if(!String(cover.rights||'').trim())missing.push('حقوق استخدام الغلاف cover.rights مطلوبة');
@@ -57,6 +58,8 @@ function validate(d){
  var tr=d.translations||{};
  LANGS.forEach(function(lang){
   var t=tr[lang]||{};
+  var coverTranslation=cover&&cover.i18n&&cover.i18n[lang];
+  if(!coverTranslation||!String(coverTranslation.alt||'').trim()||!String(coverTranslation.caption||'').trim())missing.push(lang.toUpperCase()+': ترجمة النص البديل وتعليق الغلاف مطلوبة');
   ['title','subtitle','karma_text','body'].forEach(function(k){if(!String(t[k]||'').trim())missing.push(lang.toUpperCase()+': ناقص '+({title:'العنوان',subtitle:'النبذة',karma_text:'نص كارما',body:'نص الراوي'}[k]))});
   if(d.history_note&&!String(t.history_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة السياق التاريخي ناقصة');
   if(d.images_note&&!String(t.images_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة ملاحظات الصور وحقوقها ناقصة');
@@ -114,6 +117,7 @@ function translatedRows(d,id){
  function add(lang,arabic,translated){if(arabic&&translated&&String(arabic).trim()!==String(translated).trim())rows[lang][String(arabic)]=String(translated)}
  function mapBlocks(arText,translatedText,lang){var a=paragraphs(arText),b=paragraphs(translatedText);a.forEach(function(x,i){if(b[i])add(lang,x,b[i])});if(a.length===1&&b.length===1)add(lang,arText,translatedText)}
  LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);
+  var coverTranslation=d.cover&&d.cover.i18n&&d.cover.i18n[lang];if(coverTranslation){add(lang,d.cover.alt,coverTranslation.alt);add(lang,d.cover.caption,coverTranslation.caption)}
   (Array.isArray(d.images)?d.images:[]).forEach(function(im){var it=im&&im.i18n&&im.i18n[lang];if(it){add(lang,im.caption,it.caption);add(lang,im.alt,it.alt)}});
  add(lang,d.narrator_name||d.student_name,t.student_name);add(lang,d.narrator_grade||d.grade,t.grade);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang);mapBlocks(d.images_note,t.images_note,lang)});
  var labels={
@@ -178,7 +182,7 @@ function storyHtml(d,id,section,accent,baseUrl){
 function dataJson(d,id,section){
  var tr=d.translations||{},i18n={};
  LANGS.forEach(function(lang){var t=tr[lang]||{};i18n[lang]={name:t.student_name||d.narrator_name||'',grade:t.grade||d.narrator_grade||'',className:t.grade||d.narrator_grade||'',title:t.title||'',subtitle:t.subtitle||'',person:t.figure_name||t.person||d.figure_name||''}});
- return {name:d.narrator_name||'غير مسجل',grade:d.narrator_grade||'',className:d.narrator_grade||'',title:d.title,subtitle:d.subtitle||'',person:d.figure_name||'',cover:d.cover?{url:d.cover.url||d.cover.path||'',alt:d.cover.alt||'',source_name:d.cover.source_name||'',source_url:d.cover.source_url||'',rights:d.cover.rights||'',kind:d.cover.kind||'illustration'}:null,color:ACCENTS[section]||'#d5b7ff',order:parseInt(id,10),published:true,i18n:i18n};
+ return {name:d.narrator_name||'غير مسجل',grade:d.narrator_grade||'',className:d.narrator_grade||'',title:d.title,subtitle:d.subtitle||'',person:d.figure_name||'',cover:d.cover?{url:d.cover.url||d.cover.path||'',alt:d.cover.alt||'',caption:d.cover.caption||'',source_name:d.cover.source_name||'',source_url:d.cover.source_url||'',rights:d.cover.rights||'',kind:d.cover.kind||'illustration',i18n:d.cover.i18n||{}}:null,color:ACCENTS[section]||'#d5b7ff',order:parseInt(id,10),published:true,i18n:i18n};
 }
 function svgCover(d,id,accent,popup){
  var w=popup?1200:900,h=popup?650:1100;
