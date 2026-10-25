@@ -200,7 +200,8 @@ function translateSvgArtwork(lang){
 }
 
 function apply(){
- var lang=(window.I18N&&window.I18N.lang())||document.documentElement.lang||'ar';
+ var lang=(document.documentElement.lang||'').toLowerCase();
+ if(['ar','en','fr','it','de'].indexOf(lang)<0)lang=(window.I18N&&window.I18N.lang())||'ar';
  var digitMap={'٠':'0','١':'1','٢':'2','٣':'3','٤':'4','٥':'5','٦':'6','٧':'7','٨':'8','٩':'9','۰':'0','۱':'1','۲':'2','۳':'3','۴':'4','۵':'5','۶':'6','۷':'7','۸':'8','۹':'9'};
  function normalizeLocalizedText(){
   if(lang==='ar')return;
