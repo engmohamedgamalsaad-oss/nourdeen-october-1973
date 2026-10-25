@@ -393,10 +393,10 @@ test('story i18n lookup supports source-first and language-first dictionaries', 
   assert.equal(lookup(languageFirst, 'en').en, 'Hello');
 });
 
-test('unified v3 story prompt requires complete five-language verification', function () {
+test('unified v4 story prompt requires complete five-language verification', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(promptTexts.includes('## 6) اللغات الخمس — اكتمال حقيقي'));
   assert.ok(promptTexts.includes('ar/en/fr/it/de'));
   assert.ok(promptTexts.includes('اختبر التبديل بين اللغات ثم الرجوع إلى لغة أخرى'));
@@ -443,12 +443,12 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
-test('v3 prompt architecture uses one master prompt and concise provider instructions', function () {
+test('v4 prompt architecture uses one master prompt and concise provider instructions', function () {
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
   assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
