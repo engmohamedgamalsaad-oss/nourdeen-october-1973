@@ -214,7 +214,7 @@ test('new story generator uses one sourced cover object and keeps SVG fallback f
   var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
   assert.ok(collections.includes('if (coverPhoto && !coverUrl)'), 'legacy hardcoded covers must not override the unified cover object');
   assert.ok(bundle.includes("ترجمة النص البديل وتعليق الغلاف مطلوبة"));
-  assert.ok(bundle.includes("heroImage&&/^https:\\/\\//i.test(String(heroImage.url))"), 'Open Graph image should use the same sourced cover when it is an HTTPS URL');
+  assert.ok(bundle.includes("heroImageAbsoluteUrl?esc(heroImageAbsoluteUrl):baseUrl+'/stories/'+section+'/'+id+'/cover.svg'"), 'Open Graph metadata must use the resolved unified cover URL');
   var svgStart = bundle.indexOf('function svgCover(d,id,accent,popup){');
   var svgEnd = bundle.indexOf('function zipFiles(files){', svgStart);
   assert.ok(svgStart >= 0 && svgEnd > svgStart);
