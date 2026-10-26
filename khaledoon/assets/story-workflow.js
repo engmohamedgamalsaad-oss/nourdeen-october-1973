@@ -285,10 +285,12 @@ function validateStoryPackage(pkg) {
     if (!isObj(im)) return;
     ['en','fr','it','de'].forEach(function (lang) {
       var translated = im.i18n && im.i18n[lang];
-      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim()) {
-        errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق ناقصان في ' + lang.toUpperCase() + '.');
-        } else if (hasArabic(translated.alt) || hasArabic(translated.caption)) {
-          errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق في ' + lang.toUpperCase() + ' لا يجوز أن يظلا بالعربية.');
+      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim() ||
+          !String(translated.source_name || '').trim() || !String(translated.rights || '').trim()) {
+        errors.push('الصورة ' + (index + 1) + ': الوصف البديل والتعليق واسم المصدر والحقوق ناقصة في ' + lang.toUpperCase() + '.');
+        } else if (hasArabic(translated.alt) || hasArabic(translated.caption) ||
+          hasArabic(translated.source_name) || hasArabic(translated.rights)) {
+          errors.push('الصورة ' + (index + 1) + ': الوصف والتعليق والمصدر والحقوق في ' + lang.toUpperCase() + ' يجب ألا تبقى بالعربية.');
         }
     });
   });
