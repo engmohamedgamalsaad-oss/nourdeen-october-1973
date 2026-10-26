@@ -113,7 +113,7 @@ async function main() {
       // Exercise the user's one-button AI import lock cycle with invalid content only.
       // This must never write to Supabase; only the fake read endpoints are available.
       await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?editcode=visual-preview-001', { waitUntil:'domcontentloaded' });
-      const targetCard = page.locator('details').filter({ hasText:'اختبار بصري — حكاية مرسلة للمعاينة' }).locator('summary');
+      const targetCard = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية مرسلة للمعاينة' }).first();
       await targetCard.click();
       const aiTextarea = page.getByRole('textbox', { name:'الصق ناتج الذكاء الاصطناعي JSON' });
       const aiApply = page.getByRole('button', { name:'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
