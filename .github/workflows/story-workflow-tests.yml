@@ -31,6 +31,8 @@ jobs:
         run: node khaledoon/tests/ai-json-repair.test.cjs
       - name: Run workflow unit tests
         run: node khaledoon/tests/story-workflow.test.js
+      - name: Run image resource validation tests
+        run: node khaledoon/tests/image-resource-validation.test.cjs
       - name: Run mocked integration contract tests
         run: node khaledoon/tests/story-workflow-integration.test.js
       - name: Run collision-safe story ID and template tests
