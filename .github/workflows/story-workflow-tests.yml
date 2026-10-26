@@ -38,7 +38,7 @@ jobs:
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium for headless tests
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
       - name: Run mocked headless preview tests
         run: node khaledoon/tests/story-workflow-browser.test.cjs
       - name: Run desktop/mobile admin visual audit with mock data
