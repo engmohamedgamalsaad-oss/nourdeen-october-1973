@@ -237,7 +237,8 @@ test('admin validates every translated field and every quiz translation before A
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
   assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
-  assert.ok(admin.includes('يُسمح بسياج الكود الخارجي وحده'));
+  assert.ok(admin.includes('بلا أسوار كود أو Markdown أو مقدمة أو خاتمة'));
+  assert.ok(!admin.includes('يُسمح بسياج الكود الخارجي وحده'), 'the admin JSON contract must not request code fences');
   assert.ok(admin.includes('من صورتين إلى خمس صور موثقة وصالحة على الأقل'));
   assert.ok(!admin.includes('إن تعذر البحث فاترك images فارغة'));
   assert.ok(admin.includes('لا تُخرج حزمة JSON للاستيراد إذا تعذر التحقق من صورتين على الأقل'));
