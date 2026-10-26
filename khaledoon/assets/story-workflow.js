@@ -226,9 +226,10 @@ function validateStoryPackage(pkg) {
       if (!isObj(mapLoc.place) || ['ar','en','fr','it','de'].some(function (l) {
         return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim();
       })) errors.push('اسم المكان في map_location مطلوب باللغات الخمس ar/en/fr/it/de.');
-      if (typeof mapLoc.source_name !== 'string' || !mapLoc.source_name.trim() ||
-          typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
-        errors.push('map_location يحتاج اسم مصدر ورابط مصدر موثوقًا قابلًا للفتح.');
+      if (!isObj(mapLoc.source_name) || ['ar','en','fr','it','de'].some(function (lang) {
+          return typeof mapLoc.source_name[lang] !== 'string' || !mapLoc.source_name[lang].trim() || (lang !== 'ar' && hasArabic(mapLoc.source_name[lang]));
+        }) || typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
+        errors.push('map_location يحتاج source_name مترجمًا إلى ar/en/fr/it/de ورابط source_url يبدأ بـ HTTPS.');
       }
       if (mapLoc.approximate !== undefined && typeof mapLoc.approximate !== 'boolean') {
         errors.push('map_location.approximate يجب أن تكون true أو false.');
