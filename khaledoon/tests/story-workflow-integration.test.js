@@ -419,6 +419,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
   assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
+  assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
   assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
   assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
   assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
