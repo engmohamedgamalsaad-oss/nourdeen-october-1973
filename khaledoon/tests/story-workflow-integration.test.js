@@ -307,6 +307,25 @@ test('Hatshepsut cover SVG has no embedded text that can leak across languages',
   var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
   assert.ok(story.includes('alt=\"رسم توضيحي، وليس صورة تاريخية\"'), 'cover image alt must use a shared localized translation key');
 });
+test('Hatshepsut title uses feminine wording in all localized story metadata', function () {
+  var translations = fs.readFileSync('stories/women/013/translations.js', 'utf8');
+  var storyIndex = JSON.parse(fs.readFileSync('stories/index.json', 'utf8'));
+  var entry = storyIndex.find(function (item) { return String(item.id).padStart(3, '0') === '013'; });
+  assert.ok(entry, 'Hatshepsut must remain in the story index');
+  var expected = {
+    en: 'Hatshepsut: The Golden Female Pharaoh on the Nile Throne',
+    fr: 'Hatchepsout : La pharaonne d’or sur le trône du Nil',
+    it: 'Hatshepsut: La faraona d’oro sul trono del Nilo',
+    de: 'Hatschepsut: Die goldene Pharaonin auf dem Thron des Nils'
+  };
+  Object.keys(expected).forEach(function (lang) {
+    assert.strictEqual(entry.i18n[lang].title, expected[lang], 'story index title must use feminine wording for ' + lang);
+    assert.ok(translations.includes(expected[lang]), 'story translation dictionary must contain the localized title for ' + lang);
+  });
+  assert.ok(!entry.i18n.fr.title.includes('Le Pharaon'), 'French title must not misgender Hatshepsut');
+  assert.ok(!entry.i18n.it.title.includes('Il Faraone'), 'Italian title must not misgender Hatshepsut');
+  assert.ok(!entry.i18n.de.title.includes('Der goldene Pharao'), 'German title must not misgender Hatshepsut');
+});
 test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
   assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
   assert.ok(bundle.includes('function absoluteStoryImageUrl(value,baseUrl,section,id)'), 'hero, modal and metadata need one resolved cover URL');
