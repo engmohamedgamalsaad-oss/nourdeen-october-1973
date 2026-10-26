@@ -404,7 +404,7 @@ test('publisher duplicate-story guard normalizes actual whitespace', function ()
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(publisher.includes("normalize('NFKC').replace(/\\s+/g, ' ').trim()"), 'duplicate-title normalization must collapse real whitespace');
   assert.ok(!publisher.includes("replace(/\\\\s+/g, ' ')"), 'duplicate-title normalization must not match a literal backslash-s');
-  var norm = function (value) { return String(value ?? '').normalize('NFKC').replace(/\\s+/g, ' ').trim().toLocaleLowerCase(); };
+  var norm = function (value) { return String(value ?? '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLocaleLowerCase(); };
   assert.equal(norm('  Naguib   Mahfouz  '), norm('Naguib Mahfouz'));
 });
 
