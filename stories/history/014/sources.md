@@ -1,6 +1,13 @@
 # مصادر الحكاية: أبو بكر الخوارزمي: حكاية شاعر رحّالة
 
-- [Yale University Library — Rasa'il Abi Bakr al-Khwarizmi، وصف الكتاب وتاريخه —](https://onlineexhibits.library.yale.edu/s/arabic-printing/item/2233)
-- [LOC's Public Domain Archive — Rasāʼil Abī Bakr al-Khuwārizmī، طبعة 1880 —](https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-05c5c1)
-- [LOC's Public Domain Archive — سجل آخر لطبعة رسائل أبي بكر الخوارزمي —](https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-1670d3)
-- [Arabic Collections Online، جامعة نيويورك والجامعة الأمريكية بالقاهرة — رسائل أبي بكر الخوارزمي، طبعة 1880 —](https://sites.dlib.nyu.edu/viewer/books/auc_aco001126/1?embed=1&lang=ar)
+## مراجع للكتاب والسيرة الأدبية
+- [Yale University Library — Rasa'il Abi Bakr al-Khwarizmi، وصف الكتاب وتاريخه](https://onlineexhibits.library.yale.edu/s/arabic-printing/item/2233)
+- [Arabic Collections Online، جامعة نيويورك والجامعة الأمريكية بالقاهرة — رسائل أبي بكر الخوارزمي، طبعة 1880](https://sites.dlib.nyu.edu/viewer/books/auc_aco001126/1?embed=1&lang=ar)
+- [GetArchive — سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 (سجل 1)](https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-05c5c1)
+- [GetArchive — سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 (سجل 2)](https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-1670d3)
+
+## الصور وحقوق الاستخدام
+- الصورتان المعروضتان في الصفحة مصدرهما رابطا GetArchive أعلاه، ويذكر سجل الصفحة أنهما من طبعة تعود إلى عام 1880.
+- **تنبيه تحقق:** رابط GetArchive ليس بحد ذاته رابطًا مباشرًا إلى موقع مكتبة الكونغرس الرسمي، لذلك لا نعتبر نسبة المجموعة إلى مكتبة الكونغرس أو حالة الملكية العامة مؤكدة نهائيًا من اسم الرابط وحده. قبل إعادة الاستخدام خارج المعاينة، طابق النسخة مع سجل مؤسسي أصلي وتحقق من حالة الحقوق.
+- النصوص والصور التاريخية القديمة قد تكون في الملكية العامة، لكن يلزم التحقق من النسخة الرقمية ومصدرها وشروطها، وعدم الاكتفاء بوسم عام في موقع وسيط.
+- `cover.svg` و`cover-popup.svg` رسومات توضيحية للمشروع وليستا صورة أصلية لأبي بكر الخوارزمي.
