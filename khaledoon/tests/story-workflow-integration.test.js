@@ -362,8 +362,8 @@ test('rendered story preview applies all nine designs and includes attributed im
     assert.ok(html.includes('معاينة خاصة غير منشورة'), 'preview safety banner missing: ' + design);
   });
 });
-test('AI story package validation requires a localized cover, design profile, and at least two documented images', function () {
-  assert.ok(W.validateStoryPackage({
+test('AI story package validation enforces one localized cover and two to five fully documented images', function () {
+  var validPackage = {
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
     history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
@@ -376,7 +376,17 @@ test('AI story package validation requires a localized cover, design profile, an
     ],
     translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){var marker={en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'}[lang];return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:[marker+' Fact one.',marker+' Fact two.',marker+' Fact three.'].join('\n\n'),history_note:'History',images_note:'Images'}]})),
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
-  }).ok);
+  };
+  assert.ok(W.validateStoryPackage(validPackage).ok);
+  var tooManyImages = Object.assign({}, validPackage, { images: validPackage.images.concat(validPackage.images.slice(0, 4)) });
+  var tooManyResult = W.validateStoryPackage(tooManyImages);
+  assert.ok(!tooManyResult.ok && tooManyResult.errors.some(function (error) { return /خمس صور/.test(error); }), 'gallery must reject more than five images');
+  var invalidExtraImage = Object.assign({}, validPackage, { images: validPackage.images.concat([Object.assign({}, validPackage.images[0], { url: 'javascript:alert(1)' })]) });
+  var invalidExtraResult = W.validateStoryPackage(invalidExtraImage);
+  assert.ok(!invalidExtraResult.ok && invalidExtraResult.errors.some(function (error) { return /الصورة 3: url/.test(error); }), 'every gallery entry must have a safe URL, even when two other images are valid');
+  var ambiguousCover = Object.assign({}, validPackage, { cover: Object.assign({}, validPackage.cover, { path: 'stories/history/preview/cover.jpg' }) });
+  var ambiguousCoverResult = W.validateStoryPackage(ambiguousCover);
+  assert.ok(!ambiguousCoverResult.ok && ambiguousCoverResult.errors.some(function (error) { return /مصدرًا واحدًا فقط/.test(error); }), 'cover must use either url or path, never both');
   var untranslatedCoverCredit = W.validateStoryPackage({cover:{url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',kind:'illustration',i18n:{en:{alt:'Cover',caption:'Caption',source_name:'Cover source',rights:'Illustration'},fr:{alt:'Couverture',caption:'Légende',source_name:'Source de couverture',rights:'Illustration'},it:{alt:'Copertina',caption:'Didascalia',source_name:'Fonte copertina',rights:'Illustrazione'},de:{alt:'Titelbild',caption:'Bildunterschrift',source_name:'مصدر الغلاف',rights:'Illustration'}}}});
   assert.ok(untranslatedCoverCredit.errors.some(function(error){return /الغلاف:.*DE/.test(error)}), 'AI import validator must reject Arabic source metadata on the cover');
   var missingCover = { section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة', narrator_name:'راوي', narrator_grade:'الصف السادس', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.', karma_text:'كارما', body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.', history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', visual_design:'science-lab', map_location:null, images:[], translations:{}, question_bank:{questions:[]} };
