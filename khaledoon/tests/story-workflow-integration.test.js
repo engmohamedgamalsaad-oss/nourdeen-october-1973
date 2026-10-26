@@ -606,7 +606,7 @@ test('embedded v4 provider prompts exactly match canonical provider files', func
   var source = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   var masterPrefix = 'var STORY_PAGE_PROMPT = ';
   var masterStart = source.indexOf(masterPrefix) + masterPrefix.length;
-  var masterEnd = source.indexOf(';\\nvar STORY_PROVIDER_PROMPTS', masterStart);
+  var masterEnd = source.indexOf(';\nvar STORY_PROVIDER_PROMPTS', masterStart);
   assert.ok(masterStart >= masterPrefix.length && masterEnd > masterStart, 'embedded master prompt must be readable');
   var embeddedMaster = JSON.parse(source.slice(masterStart, masterEnd));
   var canonicalMaster = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8').trim();
