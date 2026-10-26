@@ -606,7 +606,7 @@ test('embedded v4 provider prompts exactly match canonical provider files', func
   var source = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   var prefix = 'var STORY_PROVIDER_PROMPTS = ';
   var start = source.indexOf(prefix) + prefix.length;
-  var end = source.indexOf(';\\n\\nfunction khAppendPromptOnce', start);
+  var end = source.indexOf(';\n\nfunction khAppendPromptOnce', start);
   assert.ok(start >= prefix.length && end > start, 'embedded provider prompt object must be readable');
   var embedded = JSON.parse(source.slice(start, end));
   var root = 'khaledoon/prompts/2026-10-23-unified-v4/';
