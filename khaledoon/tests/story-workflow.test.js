@@ -156,9 +156,15 @@ t('قيم غير متوقعة لا تكسر الحساب', function () {
 t('AI story package validator accepts a complete five-language package', function () {
   var langs = ['en', 'fr', 'it', 'de'];
   var translations = {};
+  var translatedFactBodies = {
+    en: 'A complete translated story\\n\\nDid you know? First fact.\\n\\nDid you know? Second fact.\\n\\nDid you know? Third fact.',
+    fr: 'Un récit traduit complet\\n\\nLe saviez-vous ? Premier fait.\\n\\nLe saviez-vous ? Deuxième fait.\\n\\nLe saviez-vous ? Troisième fait.',
+    it: 'Una storia tradotta completa\\n\\nLo sapevi? Primo fatto.\\n\\nLo sapevi? Secondo fatto.\\n\\nLo sapevi? Terzo fatto.',
+    de: 'Eine vollständige übersetzte Geschichte\\n\\nWusstest du? Erste Tatsache.\\n\\nWusstest du? Zweite Tatsache.\\n\\nWusstest du? Dritte Tatsache.'
+  };
   langs.forEach(function (lang) {
     translations[lang] = { student_name: 'Narrator', grade: 'Grade 7', title: 'Title',
-      subtitle: 'Subtitle', karma_text: 'Karma asks a question', body: 'A complete translated story',
+      subtitle: 'Subtitle', karma_text: 'Karma asks a question', body: translatedFactBodies[lang],
       history_note: 'Historical context', images_note: 'Image source and rights' };
   });
   var questions = [];
@@ -170,7 +176,7 @@ t('AI story package validator accepts a complete five-language package', functio
   var pkg = { format: 'KH_STORY_PACKAGE_V1', section_key: 'history', figure_name: 'Test figure',
     title: 'A complete story', subtitle: 'A full subtitle', narrator_name: 'Karma', narrator_grade: 'Grade 7',
     original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
-    body: 'A complete narrator story with more than fifty characters for validation.',
+    body: 'A complete narrator story with more than fifty characters for validation.\\n\\nDid you know? First verified fact.\\n\\nDid you know? Second verified fact.\\n\\nDid you know? Third verified fact.',
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
     images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
     images: [
