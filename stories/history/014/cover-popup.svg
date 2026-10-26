@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
-<title id="title">أبو بكر الخوارزمي: حكاية شاعر رحّالة</title><desc id="desc">رسم توضيحي لمخطوطات وكتابة بالحبر وطريق سفر في العصر العباسي، وليس صورة أرشيفية.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" aria-hidden="true" focusable="false">
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#14222d"/><stop offset=".55" stop-color="#31495a"/><stop offset="1" stop-color="#8ad9e8"/></linearGradient><radialGradient id="glow"><stop stop-color="#8ad9e8" stop-opacity=".4"/><stop offset="1" stop-color="#8ad9e8" stop-opacity="0"/></radialGradient></defs>
 <rect width="1200" height="650" fill="url(#bg)"/><circle cx="930" cy="190" r="270" fill="url(#glow)"/>
 <path d="M0 640Q220 540 450 650T900 610V1100H0Z" fill="#152d3a"/><path d="M0 760Q230 660 450 770T900 730" stroke="#8ad9e8" stroke-width="4" fill="none" opacity=".55"/><g transform="translate(150 280)"><path d="M0 30Q160 -25 300 35V440Q150 385 0 430Z" fill="#e8d5a4" stroke="#c7a56e" stroke-width="10"/><path d="M300 35Q450 -20 600 30V430Q450 385 300 440Z" fill="#f6e8c3" stroke="#c7a56e" stroke-width="10"/><path d="M300 35V440" stroke="#9d794f" stroke-width="8"/><g stroke="#6c6a57" stroke-width="5" opacity=".8"><path d="M35 100H250M35 145H250M35 190H220M35 235H250M35 280H230M35 325H250M345 100H560M345 145H560M345 190H535M345 235H560M345 280H540M345 325H560"/></g></g><g transform="translate(690 230) rotate(18)"><path d="M0 0L70 240L35 295L0 240Z" fill="#c5a46b" stroke="#f2dca9" stroke-width="5"/><path d="M0 0L70 240" stroke="#f2dca9" stroke-width="4"/><path d="M20 60L55 48" stroke="#f2dca9" stroke-width="5"/></g><path d="M75 830Q250 780 360 850T650 835T840 860" stroke="#8ad9e8" stroke-width="5" fill="none" stroke-dasharray="8 16"/>
 <rect x="0" y="455" width="1200" height="195" fill="#14222d" opacity=".82"/>
 <path d="M60 470H1140" stroke="#e8d5a4" stroke-width="3" opacity=".8"/>
-<text x="50%" y="510" text-anchor="middle" fill="#fff7e6" font-family="Cairo,Arial,sans-serif" font-size="49" font-weight="800">أبو بكر الخوارزمي: حكاية شاعر رحّالة</text>
-<text x="50%" y="558" text-anchor="middle" fill="#e8d5a4" font-family="Cairo,Arial,sans-serif" font-size="25" font-weight="700">قصائد وكتب وطرق بين المدن</text>
-<text x="50%" y="610" text-anchor="middle" fill="#eaf1ee" opacity=".88" font-family="Cairo,Arial,sans-serif" font-size="17">خالدون عبر التاريخ · رسم توضيحي</text>
 </svg>

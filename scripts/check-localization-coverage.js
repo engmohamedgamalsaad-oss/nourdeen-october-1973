@@ -37,6 +37,25 @@ const read = p => {
   catch (e) { problems.push('Missing/unreadable file: ' + p); return ''; }
 };
 
+function findCoverSvgs(dir) {
+  return fs.readdirSync(path.join(process.cwd(), dir), { withFileTypes: true }).flatMap((entry) => {
+    const relative = dir + '/' + entry.name;
+    if (entry.isDirectory()) return findCoverSvgs(relative);
+    return /^cover.*\.svg$/i.test(entry.name) ? [relative] : [];
+  });
+}
+const svgCoverFiles = findCoverSvgs('stories').sort();
+if (!svgCoverFiles.length) problems.push('No story cover SVG files were found.');
+for (const file of svgCoverFiles) {
+  const source = read(file);
+  if (/<(?:text|tspan)\b/i.test(source)) {
+    problems.push(file + ': visible text must be HTML/localized content, not embedded in SVG artwork.');
+  }
+  if (/[\u0600-\u06FF]/.test(source)) {
+    problems.push(file + ': Arabic text must not be embedded in decorative SVG artwork.');
+  }
+}
+
 const engine = read('assets/shared/i18n.js');
 /* The engine now reads the list from KH_LANG and keeps a fallback array:
    var allowed=(window.KH_LANG&&...)?...:['ar','en','fr','it','de'];

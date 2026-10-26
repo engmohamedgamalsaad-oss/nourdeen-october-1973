@@ -94,7 +94,7 @@ const INSPECT = () => {
     switchers: [...document.querySelectorAll(sel)].filter(visible).map((e) => (e.className && String(e.className)) || e.tagName),
     overflow: Math.round(root.scrollWidth - innerWidth),
     arabic, latin,
-    arabicSamples: (() => { const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode); return nodes.filter((n) => /[\\u0600-\\u06FF]/.test(n.nodeValue || '') && n.parentElement && !/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(n.parentElement.tagName) && n.nodeValue.trim()).map((n) => n.nodeValue.replace(/\\s+/g, ' ').trim().slice(0, 150)).slice(0, 12); })(),
+    arabicSamples: (() => { const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode); return nodes.filter((n) => /[\u0600-\u06FF]/.test(n.nodeValue || '') && n.parentElement && !/^(SCRIPT|STYLE|NOSCRIPT|TEXTAREA|CODE|PRE)$/.test(n.parentElement.tagName) && n.nodeValue.trim()).map((n) => n.nodeValue.replace(/\\s+/g, ' ').trim().slice(0, 150)).slice(0, 12); })(),
     stored: (() => { try { return localStorage.getItem('kh-lang'); } catch (e) { return 'ERR'; } })()
   };
 };
@@ -552,47 +552,52 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
-    { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
-    { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
-    { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
-    { slug: 'stories/science/012/', expected: 'The Scientist Who Read the Moon and the Desert', arabic: 'العالم الذي قرأ القمر والصحراء' },
-    { slug: 'stories/women/010/', expected: 'A Dream of Science for Everyone', arabic: 'حلم العلم للجميع' }
+    'stories/science/015/',
+    'stories/women/013/',
+    'stories/islamic/011/',
+    'stories/history/014/',
+    'stories/science/012/',
+    'stories/women/010/',
+    'stories/science/007/'
   ];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
   try {
-    await page.goto(base + '/assets/shared/home-language-only.js');
-    for (const item of cases) {
-      await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
-      await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
-      await page.waitForTimeout(900);
-      const en = await page.evaluate(async (selector) => {
-        const img = document.querySelector(selector || '.story-start-art img');
-        if (!img) return { found: false, src: '', svg: '' };
-        const src = img.getAttribute('src') || '';
-        let svg = '';
-        try { svg = await (await fetch(src)).text(); } catch (_) {}
-        return { found: true, src, svg };
-      }, item.selector || '');
-      const enOk = en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic);
-      checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
-      if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
-
-      await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
-      await page.reload({ waitUntil: 'load', timeout: 20000 });
-      await page.waitForTimeout(250);
-      const ar = await page.evaluate(async (selector) => {
-        const img = document.querySelector(selector || '.story-start-art img');
-        if (!img) return { found: false, src: '', svg: '' };
-        const src = img.getAttribute('src') || '';
-        let svg = '';
-        try { svg = await (await fetch(src)).text(); } catch (_) {}
-        return { found: true, src, svg };
-      }, item.selector || '');
-      const arOk = ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic);
-      checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
-      if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
+    for (const slug of cases) {
+      for (const lang of ['en', 'ar']) {
+        await page.evaluate((value) => localStorage.setItem('kh-lang', value), lang);
+        await page.goto(base + '/' + slug, { waitUntil: 'load', timeout: 20000 });
+        await page.waitForTimeout(500);
+        const result = await page.evaluate(async () => {
+          const imgs = [...document.querySelectorAll('img[src]')].filter((img) =>
+            /cover.*\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || '')
+          );
+          const svgs = [];
+          for (const img of imgs) {
+            const src = img.getAttribute('src') || '';
+            try {
+              const response = await fetch(src);
+              if (!response.ok) { svgs.push({ src, error: 'HTTP ' + response.status }); continue; }
+              const xmlText = await response.text();
+              const xml = new DOMParser().parseFromString(xmlText, 'image/svg+xml');
+              svgs.push({
+                src,
+                loaded: img.complete && img.naturalWidth > 0,
+                textNodes: xml.querySelectorAll('text,tspan,title,desc').length,
+                hasArabic: /[\u0600-\u06FF]/.test(xmlText),
+                parseError: !!xml.querySelector('parsererror')
+              });
+            } catch (e) {
+              svgs.push({ src, error: String(e.message || e) });
+            }
+          }
+          return { lang: document.documentElement.lang, imageCount: imgs.length, svgs };
+        });
+        const valid = result.lang === lang && result.imageCount > 0 &&
+          result.svgs.every((svg) => svg.loaded && !svg.error && !svg.parseError && svg.textNodes === 0 && !svg.hasArabic);
+        checks.push({ slug, language: lang, ok: valid, result });
+        if (!valid) hard.push('Decorative SVG cover is missing, malformed, or contains embedded text: ' + slug + ' [' + lang + '] ' + JSON.stringify(result));
+      }
     }
   } catch (e) {
     hard.push('SVG artwork regression: ' + String(e.message || e).split('\\n')[0]);

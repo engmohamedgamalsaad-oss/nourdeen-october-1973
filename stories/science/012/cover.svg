@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img" aria-labelledby="title desc">
-<title id="title">فاروق الباز</title><desc id="desc">رسم توضيحي لسطح القمر والصحراء ومسارات الاستكشاف، وليس صورة أرشيفية.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" aria-hidden="true" focusable="false">
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071b2d"/><stop offset=".55" stop-color="#153e58"/><stop offset="1" stop-color="#8ad9e8"/></linearGradient><radialGradient id="glow"><stop stop-color="#8ad9e8" stop-opacity=".4"/><stop offset="1" stop-color="#8ad9e8" stop-opacity="0"/></radialGradient></defs>
 <rect width="900" height="1100" fill="url(#bg)"/><circle cx="670" cy="320" r="360" fill="url(#glow)"/>
 <g transform="translate(0 90) scale(1.0 1.0)"><circle cx="770" cy="300" r="170" fill="#d6eef2" opacity=".92"/><circle cx="720" cy="250" r="24" fill="#8eaeb8" opacity=".6"/><circle cx="825" cy="340" r="38" fill="#8eaeb8" opacity=".55"/><circle cx="690" cy="355" r="15" fill="#8eaeb8" opacity=".55"/><path d="M0 800L180 650 330 735 470 580 630 720 780 610 900 720V1100H0Z" fill="#c59a62"/><path d="M0 900Q180 820 360 900T720 890T900 900V1100H0Z" fill="#9a724d"/><g fill="none" stroke="#f0d9a0" stroke-width="5" opacity=".85"><path d="M120 720Q320 550 540 670T810 610"/><path d="M130 750Q320 580 540 700T810 640" stroke-dasharray="9 16"/></g><g transform="translate(355 635)" stroke="#dcecf0" stroke-width="9" stroke-linejoin="round"><rect x="-45" y="-40" width="95" height="65" rx="10" fill="#2e667e"/><rect x="-20" y="-90" width="42" height="48" fill="#b7d9e0"/><path d="M-60 28L-90 70M55 28L85 70" fill="none"/><circle cx="-70" cy="75" r="19" fill="#153e58"/><circle cx="70" cy="75" r="19" fill="#153e58"/><path d="M-4 -88V-125L50 -155" fill="none"/><circle cx="52" cy="-156" r="13" fill="#8ad9e8"/></g></g>
 <rect x="0" y="740" width="900" height="360" fill="#071b2d" opacity=".82"/>
 <path d="M55 770H845" stroke="#e9d6a1" stroke-width="3" opacity=".8"/>
-<text x="50%" y="850" text-anchor="middle" fill="#fff7e6" font-family="Cairo,Arial,sans-serif" font-size="46" font-weight="800">فاروق الباز</text>
-<text x="50%" y="910" text-anchor="middle" fill="#e9d6a1" font-family="Cairo,Arial,sans-serif" font-size="24" font-weight="700">العالم الذي قرأ القمر والصحراء</text>
-<text x="50%" y="1015" text-anchor="middle" fill="#eaf1ee" opacity=".88" font-family="Cairo,Arial,sans-serif" font-size="18">خالدون عبر التاريخ · رسم توضيحي</text>
 </svg>

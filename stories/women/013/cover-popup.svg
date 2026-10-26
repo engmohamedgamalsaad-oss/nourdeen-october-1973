@@ -1,11 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
-<title id="title">حتشبسوت: الفرعون الذهبي على عرش النيل</title><desc id="desc">رسم فني تخيلي مستوحى من معبد حتشبسوت والنقوش المصرية القديمة، وليس صورة أثرية.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" aria-hidden="true" focusable="false">
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#2d1d2b"/><stop offset=".55" stop-color="#9a5537"/><stop offset="1" stop-color="#f0c66e"/></linearGradient><radialGradient id="glow"><stop stop-color="#f0c66e" stop-opacity=".4"/><stop offset="1" stop-color="#f0c66e" stop-opacity="0"/></radialGradient></defs>
 <rect width="1200" height="650" fill="url(#bg)"/><circle cx="930" cy="190" r="270" fill="url(#glow)"/>
 <circle cx="690" cy="250" r="165" fill="#e8a94d" opacity=".2"/><path d="M90 720V390H810V720Z" fill="#c89b62" opacity=".65"/><g fill="#efd39a" stroke="#fff0c9" stroke-width="5"><path d="M120 720V430Q120 340 210 340Q300 340 300 430V720Z"/><path d="M320 720V390Q320 285 420 285Q520 285 520 390V720Z"/><path d="M540 720V430Q540 340 630 340Q720 340 720 430V720Z"/></g><g fill="#6d3c35"><path d="M145 720V440Q145 375 210 375Q275 375 275 440V720Z"/><path d="M350 720V400Q350 325 420 325Q490 325 490 400V720Z"/><path d="M565 720V440Q565 375 630 375Q695 375 695 440V720Z"/></g><path d="M50 740H850M80 770H820M120 800H780" stroke="#f6d78e" stroke-width="9"/><g transform="translate(445 330)"><path d="M-55 -30L-35 -95L0 -120L35 -95L55 -30Z" fill="#e6b85c" stroke="#f8e7b7" stroke-width="6"/><path d="M-42 -25L-35 45L0 70L35 45L42 -25Z" fill="#bc7140" stroke="#f8e7b7" stroke-width="6"/><path d="M-28 4H28M-20 25H20" stroke="#f8e7b7" stroke-width="5"/></g>
 <rect x="0" y="455" width="1200" height="195" fill="#2d1d2b" opacity=".82"/>
 <path d="M60 470H1140" stroke="#f8e7b7" stroke-width="3" opacity=".8"/>
-<text x="50%" y="510" text-anchor="middle" fill="#fff7e6" font-family="Cairo,Arial,sans-serif" font-size="43" font-weight="800">حتشبسوت: الفرعون الذهبي على عرش النيل</text>
-<text x="50%" y="558" text-anchor="middle" fill="#f8e7b7" font-family="Cairo,Arial,sans-serif" font-size="25" font-weight="700">ملكة صنعت أثرًا خالدًا</text>
-<text x="50%" y="610" text-anchor="middle" fill="#fff0d2" opacity=".88" font-family="Cairo,Arial,sans-serif" font-size="17">خالدون عبر التاريخ · رسم توضيحي</text>
 </svg>
