@@ -129,6 +129,15 @@ async function main() {
   };
   const goodDraft = validDraft();
   assert.equal(bundle.validate(goodDraft).ok, true, 'fully localized bundle data should pass');
+  const tooManyImages = JSON.parse(JSON.stringify(goodDraft));
+  tooManyImages.images = tooManyImages.images.concat(tooManyImages.images, tooManyImages.images, tooManyImages.images);
+  assert.ok(bundle.validate(tooManyImages).missing.some(function (m) { return m.includes('لا تتجاوز خمس صور'); }), 'template validator must reject more than five gallery images');
+  const invalidExtraImage = JSON.parse(JSON.stringify(goodDraft));
+  invalidExtraImage.images.push(Object.assign({}, invalidExtraImage.images[0], {url:'javascript:alert(1)'}));
+  assert.ok(bundle.validate(invalidExtraImage).missing.some(function (m) { return /الصورة 3: url/.test(m); }), 'every gallery image must have a safe URL, even if two other images are valid');
+  const ambiguousCover = JSON.parse(JSON.stringify(goodDraft));
+  ambiguousCover.cover.path = 'stories/history/preview/cover.jpg';
+  assert.ok(bundle.validate(ambiguousCover).missing.some(function (m) { return m.includes('مصدرًا واحدًا فقط'); }), 'template validator must reject simultaneous cover url and path');
   const missingFactCards = JSON.parse(JSON.stringify(goodDraft));
   missingFactCards.body = 'A narrator paragraph without the required knowledge cards.';
   assert.ok(bundle.validate(missingFactCards).missing.some(function (m) { return m.includes('ثلاث فقرات «هل تعلم؟»'); }), 'the template validator must reject stories without three fact-card paragraphs');
