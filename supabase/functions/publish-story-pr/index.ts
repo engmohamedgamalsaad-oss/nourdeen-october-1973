@@ -42,6 +42,18 @@ async function github(path: string, token: string, init: RequestInit = {}) {
   return result;
 }
 
+async function githubAllPages(path: string, token: string, maxPages = 20) {
+  const rows: any[] = [];
+  for (let page = 1; page <= maxPages; page++) {
+    const separator = path.includes("?") ? "&" : "?";
+    const batch = await github(`${path}${separator}per_page=100&page=${page}`, token);
+    if (!Array.isArray(batch)) throw new Error("GitHub list endpoint returned a non-array response.");
+    rows.push(...batch);
+    if (batch.length < 100) return rows;
+  }
+  throw new Error(`GitHub pagination exceeded ${maxPages} pages; refusing to continue with incomplete pull-request results.`);
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
   if (req.method !== "POST") return reply(405, { error: "Method not allowed" });
@@ -235,7 +247,7 @@ Deno.serve(async (req: Request) => {
       return file;
     });
     const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
-    const openPulls = await github(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}&per_page=100`, githubToken);
+    const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
     const existingPull = Array.isArray(openPulls)
       ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
       : null;
