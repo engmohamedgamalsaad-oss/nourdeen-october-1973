@@ -295,7 +295,23 @@ async function submitStoryPublishPR(it,btn){
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
  if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
  if(review.publish_commit_sha||review.published_to_main_at){await confirmStoryPublishAfterUpload(it,btn);return}
- if(review.publish_pr_url){window.open(review.publish_pr_url,'_blank','noopener');say('info','هذا سجل قديم له طلب دمج سابق؛ فتحته دون إنشاء طلب جديد.');return}
+ if(review.publish_pr_url){
+  startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
+  try{
+   var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'check_status',pull_request_number:review.publish_pr_number})});
+   var statusResult=await statusResponse.json().catch(function(){return {}});
+   if(!statusResponse.ok||!statusResult.success)throw new Error(statusResult.error||statusResult.detail||'تعذر التحقق من حالة طلب الدمج.');
+   if(!statusResult.merged){window.open(review.publish_pr_url,'_blank','noopener');say('info','طلب الدمج لم يُدمج بعد. فتحته للمراجعة؛ الموقع المنشور لم يتغير.');return}
+   meta.preview_review=Object.assign({},review,{publish_commit_sha:statusResult.merge_commit_sha||statusResult.head_sha,published_to_main_at:new Date().toISOString(),note:'تم دمج طلب المراجعة؛ يجري التحقق من الصفحة المنشورة الآن.'});
+   var statusTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';
+   var statusSaved=await rest(statusTable+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
+   if(!statusSaved.ok)throw new Error('طلب الدمج مدمج، لكن تعذر حفظ حالة المراجعة ('+statusSaved.status+'). أعد المحاولة دون إنشاء طلب جديد.');
+   it.story_meta=meta;
+   await confirmStoryPublishAfterUpload(it,btn);
+  }catch(statusError){say('err',(statusError&&statusError.message)||'تعذر التحقق من طلب الدمج.')}
+  finally{stopButtonProgress(btn)}
+  return
+ }
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  startButtonProgress(btn,'جارٍ تجهيز الملفات ورفع الحكاية…');try{await refreshIfNeeded();
  var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
@@ -304,15 +320,16 @@ async function submitStoryPublishPR(it,btn){
  draft.images=Array.isArray(draft.images)?draft.images:(Array.isArray(meta.images)?meta.images:[]);
  draft.karma_text=draft.karma_text||meta.karma_text||'';draft.history_note=draft.history_note||meta.history_note||'';draft.images_note=draft.images_note||meta.images_note||'';draft.visual_design=draft.visual_design||meta.visual_design||'';if(!Object.prototype.hasOwnProperty.call(draft,'map_location')&&Object.prototype.hasOwnProperty.call(meta,'map_location'))draft.map_location=meta.map_location;
  var pack=await window.KHStoryBundle.download(draft,{approved:true,returnFiles:true});if(!pack||!Array.isArray(pack.files)||!pack.files.length)throw new Error('لم تُجهز ملفات الحكاية؛ راجع اكتمال المحتوى والترجمات والصور والأسئلة.');
- var response=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({title:'نشر حكاية: '+String(draft.title||draft.figure_name||'خالدون').slice(0,100),body:'نشر مباشر بعد اعتماد المعاينة. رقم الحكاية: '+pack.id+'؛ المسار: '+pack.path+'.',files:pack.files})});
- var result=await response.json().catch(function(){return {}});if(!response.ok||!result.success||!result.published_to_main||!result.commit_sha||!result.story_path)throw new Error(result.error||result.detail||('تعذر رفع الحكاية مباشرة إلى main ('+response.status+').'));
- meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_commit_sha:result.commit_sha,published_to_main_at:new Date().toISOString(),publish_page_url:result.page_url||'',map_linked:result.map_linked===true,map_marker_added:result.map_marker_added===true,map_message:String(result.map_message||''),decision:'approved_waiting_for_github_upload',note:'رُفعت الملفات مباشرة إلى main؛ جارٍ التحقق من ظهور الحكاية على الموقع.'});
+ var response=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({title:'مراجعة حكاية: '+String(draft.title||draft.figure_name||'خالدون').slice(0,100),body:'مراجعة الحكاية بعد اعتماد المعاينة. رقم الحكاية: '+pack.id+'؛ المسار: '+pack.path+'.',files:pack.files})});
+ var result=await response.json().catch(function(){return {}});
+ if(!response.ok||!result.success||result.published_to_main!==false||!result.commit_sha||!result.pull_request_url||!result.pull_request_number||!result.story_path)throw new Error(result.error||result.detail||('تعذر إنشاء طلب مراجعة الحكاية في GitHub ('+response.status+').'));
+ meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_pr_url:result.pull_request_url,publish_pr_number:result.pull_request_number,publish_branch:result.branch_name||'',publish_head_sha:result.commit_sha,publish_page_url:'',map_linked:result.map_linked===true,map_marker_added:result.map_marker_added===true,map_message:String(result.map_message||''),decision:'approved_waiting_for_github_upload',note:'تم إنشاء طلب دمج للمراجعة. لم يتم النشر على الموقع حتى الدمج في main.'});
  var persistedDraft=Object.assign({},draft);delete persistedDraft.story_meta;delete persistedDraft._t;meta.pending_draft=persistedDraft;
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
- if(!saved.ok)throw new Error('رُفعت الملفات إلى GitHub لكن تعذر حفظ بيانات التحقق في سجل الإدارة ('+saved.status+'). راجع السجل قبل إعادة النشر.');
+ if(!saved.ok)throw new Error('تم إنشاء طلب الدمج في GitHub لكن تعذر حفظ بيانات المراجعة في سجل الإدارة ('+saved.status+'). افتح الطلب يدويًا وتحقق من السجل قبل إعادة المحاولة.');
  it.story_meta=meta;
- say('info',(result.map_message?String(result.map_message)+' ':'')+'تم رفع الملفات إلى main. جاري التحقق تلقائيًا من الصفحة والفهرس والصور والترجمات والتفاعلات وبنك الأسئلة…');
- await confirmStoryPublishAfterUpload(it,btn);
+ window.open(result.pull_request_url,'_blank','noopener');
+ say('info',(result.map_message?String(result.map_message)+' ':'')+'تم إنشاء طلب مراجعة في GitHub. لم يتم النشر على الموقع؛ راجع الطلب وادمجه يدويًا بعد اجتياز الاختبارات.');
  }catch(e){
  var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
  try{
@@ -397,7 +414,7 @@ function legacyCard(it){
  var bar=el('div','fbar'),saveBtn=el('button','btn primary','حفظ'),pubBtn=el('button','btn ghost','نشر وحفظ'),rejBtn=el('button','btn ghost','رفض'),delBtn=el('button','btn del','حذف');
  [saveBtn,pubBtn,rejBtn].forEach(function(b){b.type='button';bar.appendChild(b)});
  if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}
- var sendPR=el('button','btn primary',it.story_meta&&it.story_meta.preview_review&&(it.story_meta.preview_review.publish_commit_sha||it.story_meta.preview_review.published_to_main_at)?'التحقق من النشر':(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.publish_pr_url?'فتح طلب الدمج':'نشر الحكاية'));sendPR.type='button';sendPR.title='بعد اعتماد المعاينة، يرفع الملفات مباشرة إلى main ويتحقق تلقائيًا من الصفحة الحية.';sendPR.addEventListener('click',function(){if(!(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload')){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}submitStoryPublishPR(it,sendPR)});bar.appendChild(sendPR);if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.publish_pr_url){var finish=el('button','btn ghost','تأكيد النشر بعد الدمج');finish.type='button';finish.addEventListener('click',function(){confirmStoryPublishAfterUpload(it,finish)});bar.appendChild(finish)}
+ var sendPR=el('button','btn primary',it.story_meta&&it.story_meta.preview_review&&(it.story_meta.preview_review.publish_commit_sha||it.story_meta.preview_review.published_to_main_at)?'التحقق من النشر':(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.publish_pr_url?'فتح طلب الدمج':'نشر الحكاية'));sendPR.type='button';sendPR.title='بعد اعتماد المعاينة، ينشئ طلب دمج للمراجعة؛ لا يتغير الموقع المنشور حتى الدمج في main.';sendPR.addEventListener('click',function(){if(!(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.decision==='approved_waiting_for_github_upload')){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}submitStoryPublishPR(it,sendPR)});bar.appendChild(sendPR);if(it.story_meta&&it.story_meta.preview_review&&it.story_meta.preview_review.publish_pr_url){var finish=el('button','btn ghost','تأكيد النشر بعد الدمج');finish.type='button';finish.addEventListener('click',function(){submitStoryPublishPR(it,finish)});bar.appendChild(finish)}
  var providerLegacy=document.createElement('select');providerLegacy.className='btn ghost';providerLegacy.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');[['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];providerLegacy.appendChild(o)});
  var copyLegacy=el('button','btn ghost','نسخ الحكاية كاملة');copyLegacy.type='button';
  copyLegacy.addEventListener('click',function(){var key=providerLegacy.value,lines=['ملف عمل حكاية — خالدون عبر التاريخ','استخدم البرومبت الكامل الآتي، واحتفظ بالنص الأصلي منفصلًا. لا تنشر قبل المعاينة والموافقة.','=== البرومبت الموحد المعتمد — مرة واحدة فقط ===',String(STORY_PAGE_PROMPT||''),'=== تعليمات الأداة المختارة ===',String((promptProvidersCache&&promptProvidersCache[key])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[key])||''),'=== بيانات الحكاية ===','القسم: حكايات أكتوبر 1973','اسم صاحب الحكاية: '+(name.value.trim()||'غير مذكور'),'الصف: '+(grade.value.trim()||'غير مذكور'),'العنوان: '+(title.value.trim()||'غير مذكور'),'العنوان الفرعي: '+(subtitle.value.trim()||'لا يوجد'),'=== النص الأصلي كما وصل — لا تعدّله ===',it.original_body||it.body||'غير محفوظ','=== النص الحالي للتعديل ===',body.value.trim(),'=== المصادر ===',sources.value.trim()||'لم تُرفق مصادر','=== المطلوب ===','راجع الوقائع والمصادر، اكتب العربية أولًا، جهّز EN/FR/IT/DE، وحافظ على كارما والراوي وبنك الأسئلة والإعجاب والتفاعلات والمشاركة والطباعة. استخدم قالب القسم، جهز ملفات كاملة، اعرض معاينة للحكاية وحدها، وانتظر الموافقة. لا تدّعِ رفعًا أو نشرًا لم يحدث.'];var text=lines.join('\n');function done(ok){say(ok?'ok':'err',ok?'تم نسخ ملف الحكاية الكامل مع تعليمات الأداة المختارة.':'تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done)});
