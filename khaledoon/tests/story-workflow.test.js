@@ -172,7 +172,7 @@ t('AI story package validator accepts a complete five-language package', functio
     original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
     body: 'هل تعلم؟ حقيقة موثقة أولى لاختبار التحقق من حزمة الحكاية.\n\nهل تعلم؟ حقيقة موثقة ثانية لاختبار التحقق من الحزمة.\n\nهل تعلم؟ حقيقة موثقة ثالثة لاختبار التحقق من الحزمة.',
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
-    images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
+    images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang,source_name:'Cover source '+lang,rights:'Illustration '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
     images: [
       {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang,source_name:'Source A '+lang,rights:'License noted'}]}))},
       {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang,source_name:'Source B '+lang,rights:'License noted'}]}))}
@@ -209,8 +209,13 @@ t('AI story package validator accepts a complete five-language package', functio
   var originalFrenchCoverCaption = pkg.cover.i18n.fr.caption;
   pkg.cover.i18n.fr.caption = 'تعليق عربي';
   var untranslatedCover = W.validateStoryPackage(pkg);
-  assert.ok(!untranslatedCover.ok && untranslatedCover.errors.some(function(e){return e.indexOf('الغلاف: النص البديل والتعليق في FR') >= 0;}));
+  assert.ok(!untranslatedCover.ok && untranslatedCover.errors.some(function(e){return e.indexOf('الغلاف: النص البديل والتعليق واسم المصدر والحقوق في FR') >= 0;}));
   pkg.cover.i18n.fr.caption = originalFrenchCoverCaption;
+  var originalFrenchCoverRights = pkg.cover.i18n.fr.rights;
+  pkg.cover.i18n.fr.rights = 'حقوق الغلاف بالعربية';
+  var untranslatedCoverRights = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedCoverRights.ok && untranslatedCoverRights.errors.some(function(e){return e.indexOf('الغلاف: النص البديل والتعليق واسم المصدر والحقوق في FR') >= 0;}), 'cover rights must be translated before import');
+  pkg.cover.i18n.fr.rights = originalFrenchCoverRights;
   var originalFrenchBody = pkg.translations.fr.body;
   pkg.translations.fr.body = 'هذا نص عربي غير مترجم.';
   var untranslatedBody = W.validateStoryPackage(pkg);
