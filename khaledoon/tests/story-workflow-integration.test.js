@@ -755,7 +755,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
 test('Magdi Yacoub opening paragraph has exact five-language source-key coverage and no stale Aswan claim', function () {
   var translations = fs.readFileSync('stories/science/015/translations.js', 'utf8');
   var opening = 'وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى.';
-  assert.equal(translations.split('"' + opening + '":"').length - 1, 4, 'the actual opening text node must have one translation key in en/fr/it/de');
+  assert.equal(translations.split('"' + opening + '":"').length - 1, 8, 'the actual opening text node must be translated in both locale dictionaries for en/fr/it/de');
   assert.ok(translations.includes('Magdi Yacoub was born on 16 November 1935 in Belbeis'), 'English opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub est né le 16 novembre 1935 à Belbeis'), 'French opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub nacque il 16 novembre 1935 a Belbeis'), 'Italian opening must match the corrected fact');
