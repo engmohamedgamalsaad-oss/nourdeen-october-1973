@@ -351,7 +351,7 @@
     } catch (ignore) { /* copy keeps working unpatched */ }
   }
 
-  var api = { parse: parse, toCodeBlockPrompt: toCodeBlockPrompt, installPromptPatch: installPromptPatch, PROMPT_RULES: PROMPT_RULES, EXTRA_RULES: EXTRA_RULES };
+  var api = { parse: parse, toCodeBlockPrompt: toRawJsonPrompt, installPromptPatch: installPromptPatch, PROMPT_RULES: PROMPT_RULES, EXTRA_RULES: EXTRA_RULES };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.KHAIJsonRepair = api;
   if (typeof window !== 'undefined') installPromptPatch(window);
