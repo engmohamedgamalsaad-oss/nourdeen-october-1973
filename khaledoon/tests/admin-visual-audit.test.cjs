@@ -148,7 +148,16 @@ async function main() {
       await approvedSummary.click();
       const approvedCard = approvedSummary.locator('xpath=..');
       const writesBeforePublisherProbe = submissionWrites.length;
-      await approvedCard.getByRole('button', { name:'نشر الحكاية' }).click();
+      const publishButton = approvedCard.getByRole('button', { name:'نشر الحكاية' });
+      await publishButton.waitFor({ state:'visible' });
+      await publishButton.scrollIntoViewIfNeeded();
+      const capabilitiesRequest = page.waitForRequest(req =>
+        req.url().includes('/functions/v1/publish-story-pr') &&
+        (() => { try { return JSON.parse(req.postData() || '{}').action === 'capabilities'; } catch (_) { return false; } })(),
+        { timeout:10000 }
+      );
+      await publishButton.click();
+      await capabilitiesRequest;
       assert.equal(publisherCalls.length, 1, 'publish action must perform one capabilities handshake');
       assert.equal(publisherCalls[0].action, 'capabilities', 'admin must probe the function before sending story files');
       assert.equal(Object.prototype.hasOwnProperty.call(publisherCalls[0], 'files'), false, 'capabilities probe must not contain story files');
