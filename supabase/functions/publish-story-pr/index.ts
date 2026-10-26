@@ -200,6 +200,12 @@ Deno.serve(async (req: Request) => {
           ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim() || (locale !== 'ar' && /[\u0600-\u06FF]/.test(place.place[locale])))) {
         throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
       }
+      if (place.place_label !== undefined && place.place_label !== null &&
+          (!place.place_label || typeof place.place_label !== 'object' || Array.isArray(place.place_label) ||
+           ['ar','en','fr','it','de'].some((locale) => typeof place.place_label[locale] !== 'string' ||
+             !place.place_label[locale].trim() || (locale !== 'ar' && /[\\u0600-\\u06FF]/.test(place.place_label[locale]))))) {
+        throw new Error('Map place labels, when provided, must be translated into all five languages without Arabic leftovers.');
+      }
       const previousPlace = currentPlaces[storyId];
       const unchangedLegacyPlace = !!previousPlace &&
         Number(previousPlace.lat) === lat && Number(previousPlace.lng) === lng &&
