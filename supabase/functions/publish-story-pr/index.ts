@@ -148,6 +148,18 @@ Deno.serve(async (req: Request) => {
     if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
     }
+    if (existingIndex < 0) {
+      let existingStoryPage: any = null;
+      try {
+        existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${BASE}`, githubToken);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "";
+        if (!detail.startsWith("GitHub API 404:")) throw error;
+      }
+      if (existingStoryPage) {
+        throw new Error("Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
+      }
+    }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
     // Keep the interactive map synchronized on every publish; merge into the latest main file.
     const incomingPlacesFile = body.files.find((file: any) => file.path === 'stories/places.json');
