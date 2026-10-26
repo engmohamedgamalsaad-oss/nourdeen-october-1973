@@ -313,10 +313,10 @@ async function submitStoryPublishPR(it,btn){
   return
  }
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
- startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
+ var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
- if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false)throw new Error('وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة. توقّفنا قبل تجهيز أو إرسال ملفات الحكاية؛ لم يتم نشرها. راجع إصدار Supabase Edge Function قبل المحاولة.');
+ if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false){publisherCapabilityBlocked=true;throw new Error('وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة. توقّفنا قبل تجهيز أو إرسال ملفات الحكاية؛ لم يتم نشرها. راجع إصدار Supabase Edge Function قبل المحاولة.');}
  await refreshIfNeeded();
  var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
@@ -337,14 +337,14 @@ async function submitStoryPublishPR(it,btn){
  say('info',(result.map_message?String(result.map_message)+' ':'')+'تم إنشاء طلب مراجعة في GitHub. لم يتم النشر على الموقع؛ راجع الطلب وادمجه يدويًا بعد اجتياز الاختبارات.');
  }catch(e){
  var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
- try{
+ if(!publisherCapabilityBlocked){try{
   var failureMeta=Object.assign({},meta),failureReview=Object.assign({},failureMeta.preview_review||review,{publish_error:{reason:String(publishFailure).slice(0,700),at:new Date().toISOString()}});
   failureMeta.preview_review=failureReview;
   var failureTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';
   var failureSave=await rest(failureTable+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:failureMeta})});
   if(failureSave.ok){it.story_meta=failureMeta;await loadList()}
   else publishFailure+=' (تعذر حفظ تفاصيل الخطأ في سجل الإدارة: '+failureSave.status+')';
- }catch(saveError){publishFailure+=' (تعذر حفظ تفاصيل الخطأ في سجل الإدارة)'}
+ }catch(saveError){publishFailure+=' (تعذر حفظ تفاصيل الخطأ في سجل الإدارة)'}}
  say('err',publishFailure+' — لم أسجلها «تم النشر» دون تحقق.');
  }finally{stopButtonProgress(btn)}
 }
