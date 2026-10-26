@@ -181,6 +181,9 @@ t('AI story package validator accepts a complete five-language package', functio
   assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
   var localizedMapPackage = Object.assign({}, pkg, {map_location:{lat:31.2,lng:29.9,place:{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'},source_name:{ar:'مصدر موثوق',en:'Trusted source',fr:'Source fiable',it:'Fonte affidabile',de:'Verlässliche Quelle'},source_url:'https://example.org/map-source'}});
   assert.equal(W.validateStoryPackage(localizedMapPackage).ok, true, 'localized map source name should pass');
+  localizedMapPackage.map_location.place.de = 'الإسكندرية';
+  assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('اسم المكان في map_location مطلوب باللغات الخمس') >= 0;}), 'Arabic place names must not leak into non-Arabic map labels');
+  localizedMapPackage.map_location.place.de = 'Alexandria';
   localizedMapPackage.map_location.source_name.fr = 'مصدر عربي';
   assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('map_location يحتاج source_name مترجمًا') >= 0;}), 'Arabic map source names must not leak into other languages');
   var originalFrenchCoverCaption = pkg.cover.i18n.fr.caption;
