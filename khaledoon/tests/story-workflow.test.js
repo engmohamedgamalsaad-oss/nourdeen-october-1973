@@ -179,6 +179,8 @@ t('AI story package validator accepts a complete five-language package', functio
     ], translations: translations, question_bank: { questions: questions } };
   var completeValidation = W.validateStoryPackage(pkg);
   assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
+  var noKnowledgeCards = Object.assign({}, pkg, { body: 'A narrator paragraph without the required cards and their labels.' });
+  assert.ok(W.validateStoryPackage(noKnowledgeCards).errors.some(function (e) { return e.indexOf('ثلاث فقرات «هل تعلم؟»') >= 0; }), 'the import validator must require at least three separate knowledge-card paragraphs');
   var originalSourceName = pkg.images[0].i18n.fr.source_name;
   pkg.images[0].i18n.fr.source_name = 'اسم مصدر عربي';
   var untranslatedImageSource = W.validateStoryPackage(pkg);
