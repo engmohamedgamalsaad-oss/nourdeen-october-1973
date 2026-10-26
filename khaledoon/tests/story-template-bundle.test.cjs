@@ -69,6 +69,11 @@ async function main() {
   assert.equal(html.split(coverUrl).length - 1, 3, 'the same cover path must feed og:image, the hero, and the intro modal');
   assert.match(html, /Preview cover/, 'cover alt translation must be included in the generated language dictionary');
   assert.match(html, /Preview cover caption/, 'cover caption translation must be included in the generated language dictionary');
+  assert.match(html, /Source link/, 'the gallery source-link label must be translated in English');
+  assert.match(html, /Lien vers la source/, 'the gallery source-link label must be translated in French');
+  assert.match(html, /Link alla fonte/, 'the gallery source-link label must be translated in Italian');
+  assert.match(html, /Quellenlink/, 'the gallery source-link label must be translated in German');
+  assert.match(html, /Rights information is incomplete/, 'fallback rights warning must have a localized English form');
   assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
   assert.match(html, /Preview design profiles/, 'generated previews should carry approved visual design profiles');
   assert.match(html, /\.story-design-portrait-biography\{background:radial-gradient/, 'portrait biographies should use the approved literary design');
