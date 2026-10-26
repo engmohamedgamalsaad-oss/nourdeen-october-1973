@@ -295,6 +295,7 @@ async function submitStoryPublishPR(it,btn){
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
  if(review.publish_pr_url){
   if(!review.publish_pr_number||!review.publish_branch){window.open(review.publish_pr_url,'_blank','noopener');say('err','هذا سجل قديم لا يحتوي رقم طلب الدمج والفرع المسجلين؛ فتحنا الرابط للمراجعة فقط، ولم نؤكد النشر. أنشئ طلب مراجعة جديدًا بعد تحديث خدمة النشر الآمنة.');return}
+  if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
   try{
    var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch})});
