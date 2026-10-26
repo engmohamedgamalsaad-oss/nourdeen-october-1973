@@ -225,6 +225,21 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
     });
+    const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
+    const openPulls = await github(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}&per_page=100`, githubToken);
+    const existingPull = Array.isArray(openPulls)
+      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
+      : null;
+    if (existingPull) {
+      return reply(409, {
+        success: false,
+        error: "يوجد طلب دمج مفتوح لهذه الحكاية بالفعل؛ لم ننشئ نسخة ثانية.",
+        detail: "راجع طلب الدمج الحالي: " + existingPull.html_url,
+        pull_request_url: existingPull.html_url,
+        pull_request_number: existingPull.number,
+        branch: existingPull.head?.ref ?? null,
+      });
+    }
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
@@ -244,7 +259,7 @@ Deno.serve(async (req: Request) => {
       method: "POST",
       body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha }),
     });
-    const prBody = description +
+    const prBody = prMarker + "\n\n" + description +
       "\n\n## Automatic safety checks\n" +
       "- Generated files were validated by the admin workflow.\n" +
       "- The story index and interactive-map data are included in this pull request.\n" +
