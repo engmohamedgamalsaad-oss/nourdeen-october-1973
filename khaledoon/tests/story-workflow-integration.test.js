@@ -355,7 +355,7 @@ test('Gemini is available in every admin story prompt flow with full story requi
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
   assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
-  assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
+  assert.ok(texts.includes('"gemini":"# تعليمات تشغيل خاصة بـ Gemini'));
   ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
@@ -626,7 +626,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
   assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
-    assert.ok(promptTexts.includes('## تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
+    assert.ok(promptTexts.includes('# تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
   });
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
