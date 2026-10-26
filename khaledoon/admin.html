@@ -1157,7 +1157,7 @@ function renderVis(){
   });
   row.appendChild(btn);
    if(h){
-    var del=el('button','btn del delbtn','حذف نهائي');del.type='button';del.title='حذف ملفات الحكاية المخفية من الموقع وفهرس الحكايات';
+    var del=el('button','btn del delbtn','طلب حذف نهائي');del.type='button';del.title='ينشئ طلب دمج Draft؛ لا تُحذف الملفات أو علامة الخريطة من الموقع إلا بعد مراجعة الطلب ودمجه ثم تأكيد الحذف.';
     del.addEventListener('click',function(){deleteHiddenStory(s,del)});
     row.appendChild(del);
    }
