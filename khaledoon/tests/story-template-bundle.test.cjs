@@ -142,6 +142,13 @@ async function main() {
   missingFactCards.body = 'A narrator paragraph without the required knowledge cards.';
   assert.ok(bundle.validate(missingFactCards).missing.some(function (m) { return m.includes('ثلاث فقرات «هل تعلم؟»'); }), 'the template validator must reject stories without three fact-card paragraphs');
   const previewHtml = bundle.renderPreviewHtml(goodDraft);
+  const expectedCoverUrl = 'https://images.example.org/cover.jpg';
+  const savedCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, story_meta: { cover: goodDraft.cover } }));
+  assert.equal(savedCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved story_meta.cover must feed og:image, hero, and intro modal');
+  const pendingCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, story_meta: { pending_draft: { cover: goodDraft.cover } } }));
+  assert.equal(pendingCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved pending_draft.cover must feed og:image, hero, and intro modal');
+  const recordCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, record_data: { cover: goodDraft.cover } }));
+  assert.equal(recordCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved record_data.cover must feed og:image, hero, and intro modal');
   /* Execute the exact generated translation dictionary, then assert exact-key lookups
      used by the shared story i18n engine. This guards against merely embedding values
      without making the source text addressable for translation. */
