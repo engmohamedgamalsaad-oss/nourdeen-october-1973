@@ -69,11 +69,14 @@ Deno.serve(async (req: Request) => {
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
-    if (!Number.isSafeInteger(number) || number < 1) return reply(400, { error: "رقم طلب الدمج غير صالح." });
+    const expectedBranch = typeof body.branch === "string" ? body.branch.trim() : "";
+    if (!Number.isSafeInteger(number) || number < 1 || !expectedBranch || expectedBranch.length > 200) {
+      return reply(400, { error: "رقم طلب الدمج أو اسم فرعه غير صالح." });
+    }
     try {
       const pull = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
-      if (pull.base?.ref !== BASE || pull.head?.repo?.full_name !== OWNER + "/" + REPO) {
-        return reply(403, { error: "طلب الدمج لا يستهدف مستودع الحكايات وفرع main." });
+      if (pull.base?.ref !== BASE || pull.head?.repo?.full_name !== OWNER + "/" + REPO || pull.head?.ref !== expectedBranch) {
+        return reply(403, { error: "طلب الدمج لا يطابق الفرع المسجل لهذه الحكاية أو لا يستهدف main." });
       }
       return reply(200, {
         success: true,
