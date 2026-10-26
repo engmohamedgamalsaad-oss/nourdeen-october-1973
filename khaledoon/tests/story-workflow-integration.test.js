@@ -246,9 +246,11 @@ test('new story generator uses one sourced cover object and keeps SVG fallback f
   assert.ok(unsafeImages.missing.some(function(item){return item.includes('صورتين على الأقل بروابط قابلة للفتح')}), 'relative traversal image paths must not count as valid sourced images');
   var adminHtml = fs.readFileSync('khaledoon/admin.html','utf8');
   assert.ok(adminHtml.includes('localImageResponse=await fetch(localImageUrl'), 'AI import must verify local gallery image assets exist before saving');
-  assert.ok(adminHtml.includes('function verifyImageResource(url,label)'), 'AI import must verify HTTPS and local assets actually decode as images, not merely accept an HTTPS prefix');
+  assert.ok(adminHtml.includes('window.KHWorkflow.verifyImageResource('), 'AI import must use the shared image-resource verifier for HTTPS and local assets');
   assert.ok(adminHtml.includes('await Promise.all(imageProbeJobs)'), 'AI import must finish image-load verification before saving the draft');
-  assert.ok(adminHtml.includes('probe.naturalWidth>0&&probe.naturalHeight>0'), 'image verification must reject non-image/empty responses');
+  var workflow = fs.readFileSync('khaledoon/assets/story-workflow.js','utf8');
+  assert.ok(workflow.includes('function verifyImageResource(url, label, ImageCtor, timeoutMs)'), 'the image verifier must be shared and independently testable');
+  assert.ok(workflow.includes('probe.naturalWidth > 0 && probe.naturalHeight > 0'), 'image verification must reject non-image/empty responses');
   var invalidLocalCover = api.validate({cover:{path:'./cover.svg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
   assert.ok(invalidLocalCover.missing.some(function (item) { return item.includes('المسار النسبي لملف غير مرفوع'); }), 'package-local unuploaded cover must fail validation');
   assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
