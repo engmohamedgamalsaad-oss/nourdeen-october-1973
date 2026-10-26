@@ -307,6 +307,15 @@ test('Hatshepsut cover SVG has no embedded text that can leak across languages',
   var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
   assert.ok(story.includes('alt=\"رسم توضيحي، وليس صورة تاريخية\"'), 'cover image alt must use a shared localized translation key');
 });
+test('Hatshepsut page keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
+  var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
+  var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
+  assert.ok(story.includes('body.motion-ready .write-in.write-visible'), 'Hatshepsut story text must reveal when it enters view');
+  assert.ok(story.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
+  assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
+  assert.ok(collection.includes('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'women card must prefer the verified Hatshepsut museum photo');
+  assert.ok(fs.existsSync('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'preferred museum image must exist in the repository');
+});
 test('Hatshepsut title uses feminine wording in all localized story metadata', function () {
   var translations = fs.readFileSync('stories/women/013/translations.js', 'utf8');
   var storyIndex = JSON.parse(fs.readFileSync('stories/index.json', 'utf8'));
