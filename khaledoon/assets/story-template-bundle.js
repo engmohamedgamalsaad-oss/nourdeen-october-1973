@@ -286,7 +286,7 @@ async function download(draft,opts){
  var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,cover:data.cover,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:root};
  if(updatingExisting)storyIndex[existingIndexAt]=indexEntry;else storyIndex.push(indexEntry);
  var source=sourceRows(draft.sources),sourceMd='# مصادر الحكاية: '+draft.title+'\n\n'+source.map(function(x){return '- '+(x.url?'['+x.label+']('+x.url+')':x.line)}).join('\n')+'\n';
- var theme='';try{var tr=await fetch('../stories/history/005/theme.css',{cache:'no-store'});if(tr.ok)theme=await tr.text()}catch(e){}
+ var themeResponse=await fetch('../khaledoon/assets/story-theme-template.css',{cache:'no-store'});if(!themeResponse.ok)throw new Error('تعذر تحميل قالب التصميم المشترك؛ أوقفنا إنشاء الحزمة بدل إنتاج حكاية بلا تنسيق.');var theme=await themeResponse.text();
  theme+='\n:root{--gold:'+accent+'!important;--accent:'+accent+'!important}\n.hero .eyebrow,.kicker,.story-quiz-kicker{color:var(--gold)}\n';
  var files=[
   {path:root+'index.html',content:storyHtml(draft,id,section,accent,baseUrl)},
