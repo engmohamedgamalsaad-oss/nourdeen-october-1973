@@ -84,6 +84,20 @@ async function main() {
         const page = await context.newPage();
 
         await page.route('https://**/*', route => route.abort());
+        await page.route('https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/**', async route => {
+          const url = new URL(route.request().url());
+          const relative = url.pathname.replace(/^\/nourdeen-october-1973\//, '');
+          const file = path.resolve(ROOT, relative);
+          if (!relative || !file.startsWith(ROOT + path.sep)) return route.abort();
+          const types = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8',
+            '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8',
+            '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp',
+            '.woff2':'font/woff2', '.woff':'font/woff', '.ttf':'font/ttf' };
+          try {
+            const body = await fs.promises.readFile(file);
+            return route.fulfill({ status:200, contentType:types[path.extname(file)]||'application/octet-stream', body });
+          } catch (_) { return route.abort(); }
+        });
         await page.route('https://images.example.org/**', route => route.fulfill({
           status: 200, contentType: 'image/svg+xml',
           body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#8ad9e8"/></svg>'
@@ -137,6 +151,15 @@ async function main() {
         assert.equal(await reader.locator('.story-visual-gallery .story-image-card').count(), 2,
           'saved story_meta.images must render the gallery in the generated reader preview');
         assert.ok(await heroCover.evaluate(img => img.naturalWidth > 0), 'mock cover image must load in the reader preview');
+        if (mode === 'manual' && decision === 'reject') {
+          const screenshotDir = path.join(ROOT, 'artifacts', 'story-template-preview');
+          fs.mkdirSync(screenshotDir, { recursive: true });
+          await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'dark'));
+          await reader.locator('body').screenshot({ path:path.join(screenshotDir, 'generated-story-desktop-dark.png') });
+          await page.setViewportSize({ width:390, height:844 });
+          await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'light'));
+          await reader.locator('body').screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png') });
+        }
 
         // Avoid creating a real ZIP or consulting the public story index in a test.
         await page.evaluate(() => {
