@@ -70,8 +70,8 @@ function validate(d){
  LANGS.forEach(function(lang){
   var t=tr[lang]||{};
   var coverTranslation=cover&&cover.i18n&&cover.i18n[lang];
-  if(!coverTranslation||!String(coverTranslation.alt||'').trim()||!String(coverTranslation.caption||'').trim())missing.push(lang.toUpperCase()+': ترجمة النص البديل وتعليق الغلاف مطلوبة');
-  ['title','subtitle','karma_text','body'].forEach(function(k){if(!String(t[k]||'').trim())missing.push(lang.toUpperCase()+': ناقص '+({title:'العنوان',subtitle:'النبذة',karma_text:'نص كارما',body:'نص الراوي'}[k]))});
+  if(!coverTranslation||!String(coverTranslation.alt||'').trim()||!String(coverTranslation.caption||'').trim())missing.push(lang.toUpperCase()+': ترجمة النص البديل وتعليق الغلاف مطلوبة');else if(/[\\u0600-\\u06FF]/.test(String(coverTranslation.alt)+' '+String(coverTranslation.caption)))missing.push(lang.toUpperCase()+': ترجمة الغلاف ما زالت تحتوي نصًا عربيًا في الوصف أو التعليق.');
+  ['title','subtitle','karma_text','body'].forEach(function(k){if(!String(t[k]||'').trim())missing.push(lang.toUpperCase()+': ناقص '+({title:'العنوان',subtitle:'النبذة',karma_text:'نص كارما',body:'نص الراوي'}[k]))});['student_name','grade','title','subtitle','karma_text','body','history_note','images_note'].forEach(function(k){if(typeof t[k]==='string'&&/[\\u0600-\\u06FF]/.test(t[k]))missing.push(lang.toUpperCase()+': حقل '+k+' ما زال يحتوي نصًا عربيًا بدل الترجمة المطلوبة.')});
   if(d.history_note&&!String(t.history_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة السياق التاريخي ناقصة');
   if(d.images_note&&!String(t.images_note||'').trim())missing.push(lang.toUpperCase()+': ترجمة ملاحظات الصور وحقوقها ناقصة');
   if(paragraphs(d.body).length!==paragraphs(t.body).length)missing.push(lang.toUpperCase()+': عدد فقرات الراوي لا يطابق الأصل؛ لا يمكن ربط الترجمة فقرة بفقرة.');
@@ -83,7 +83,7 @@ function validate(d){
  if(!q||!Array.isArray(q.questions)||q.questions.length<5)missing.push('بنك الأسئلة يحتاج خمسة أسئلة على الأقل');
  if(q&&Array.isArray(q.questions))q.questions.forEach(function(item,i){
   if(!item||!String(item.q||'').trim()||!Array.isArray(item.o)||item.o.length<2||!Number.isInteger(item.a)||item.a<0||item.a>=item.o.length||!String(item.e||'').trim())missing.push('السؤال '+(i+1)+': النص والاختيارات والإجابة والتفسير مطلوبة');
-  LANGS.forEach(function(lang){var t=item&&item.i18n&&item.i18n[lang];if(!t||!String(t.q||'').trim()||!Array.isArray(t.o)||!item.o||t.o.length!==item.o.length||t.o.some(function(v){return !String(v||'').trim()})||!String(t.e||'').trim())missing.push('السؤال '+(i+1)+': ترجمة '+lang.toUpperCase()+' غير مكتملة')});
+  LANGS.forEach(function(lang){var t=item&&item.i18n&&item.i18n[lang];if(!t||!String(t.q||'').trim()||!Array.isArray(t.o)||!item.o||t.o.length!==item.o.length||t.o.some(function(v){return !String(v||'').trim()})||!String(t.e||'').trim())missing.push('السؤال '+(i+1)+': ترجمة '+lang.toUpperCase()+' غير مكتملة');else if(/[\\u0600-\\u06FF]/.test(String(t.q)+' '+String(t.e)+' '+t.o.join(' ')))missing.push('السؤال '+(i+1)+': ترجمة '+lang.toUpperCase()+' ما زالت تحتوي نصًا عربيًا في السؤال أو الاختيارات أو التفسير')});
  });
  return {ok:missing.length===0,missing:missing,quiz:q};
 }
