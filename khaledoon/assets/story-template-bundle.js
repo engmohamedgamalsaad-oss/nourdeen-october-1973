@@ -10,7 +10,7 @@ function paragraphs(s){return String(s||'').split(/\n{2,}/).map(function(x){retu
 function htmlParagraphs(s){return paragraphs(s).map(function(p){return '<p>'+esc(p).replace(/\n/g,'<br>')+'</p>'}).join('')}
 function validImageUrl(value){
  var u=String(value||'').trim();
- return /^https:\/\//i.test(u)||/^(?:\.\.\/|\.\/|images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(u);
+ return /^https:\/\//i.test(u)||(/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(u)&&!u.split('/').some(function(part){return part==='.'||part==='..'}));
 }
 function absoluteStoryImageUrl(value,baseUrl,section,id){
  var u=String(value||'').trim(),base=String(baseUrl||'').replace(/\/+$/,'');
@@ -25,16 +25,17 @@ function visualDesignKey(d,section){
  if(allowed.indexOf(raw)>=0)return raw;
  return ({science:'science-lab',history:'ancient-civilization',islamic:'journey-map',october:'military-history',women:'women-leadership',people:'arts-culture',curriculum:'timeline'})[section]||'portrait-biography';
 }
-function imageGalleryHtml(d){
+function imageGalleryHtml(d,baseUrl,section,id){
  var images=Array.isArray(d&&d.images)?d.images:[];
  /* لا نخفي الصورة لمجرد نقص بيانات المصدر؛ نظهرها مع تنبيه واضح بدل اختفاء الصور بصمت. */
  var cards=images.filter(function(im){return im&&validImageUrl(im.url)}).map(function(im){
+  var imageUrl=absoluteStoryImageUrl(im.url,baseUrl,section,id);
   var kind=String(im.kind||'illustration').toLowerCase()==='archival'?'صورة أرشيفية':'صورة توضيحية';
   var caption=String(im.caption||im.alt||'صورة من الحكاية');
   var source=String(im.source_name||'المصدر غير مسجل');
   var sourceUrl=/^https:\/\//i.test(String(im.source_url||''))?String(im.source_url):'';
   var rights=String(im.rights||'بيانات الحقوق غير مكتملة — لا تعتمد الصورة للنشر قبل التحقق');
-  return '<figure class="story-image-card"><a href="'+esc(im.url)+'" target="_blank" rel="noopener noreferrer"><img src="'+esc(im.url)+'" alt="'+esc(im.alt||caption)+'" loading="lazy" decoding="async"></a><figcaption><strong>'+esc(caption)+'</strong><span>'+kind+' · '+esc(source)+'</span><small>'+esc(rights)+(sourceUrl?' · <a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener noreferrer">رابط المصدر</a>':'')+'</small></figcaption></figure>';
+  return '<figure class="story-image-card"><a href="'+esc(imageUrl)+'" target="_blank" rel="noopener noreferrer"><img src="'+esc(imageUrl)+'" alt="'+esc(im.alt||caption)+'" loading="lazy" decoding="async"></a><figcaption><strong>'+esc(caption)+'</strong><span>'+kind+' · '+esc(source)+'</span><small>'+esc(rights)+(sourceUrl?' · <a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener noreferrer">رابط المصدر</a>':'')+'</small></figcaption></figure>';
  }).join('');
  if(!cards)return '';
  return '<section class="story-visual-gallery" aria-label="صور مرتبطة بالحكاية"><div class="container"><div class="kicker">صور مرتبطة بالحكاية</div><h2>شاهد واكتشف</h2><div class="story-image-grid">'+cards+'</div></div></section>';
@@ -178,7 +179,7 @@ function storyHtml(d,id,section,accent,baseUrl){
  var source=sourceRows(d.sources),sourceHtml=source.map(function(x){return '<li>'+(x.url?'<a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.label)+'</a>':esc(x.line))+'</li>'}).join('');
  var title=esc(d.title),subtitle=esc(d.subtitle||''),figure=esc(d.figure_name||''),narrator=esc(d.narrator_name||d.student_name||'راوي من الجيل الجديد'),narratorGrade=esc(d.narrator_grade||d.grade||''),sectionTitle=SECTION_NAMES[section]||'خالدون عبر التاريخ';
  var collection=section==='october'?'october':section==='science'?'science':section==='women'?'women':section==='people'?'people':section==='curriculum'?'curriculum':section==='islamic'?'islamic':'history';
- var design=visualDesignKey(d,section),gallery=imageGalleryHtml(d);
+ var design=visualDesignKey(d,section),gallery=imageGalleryHtml(d,baseUrl,section,id);
  var coverData=d.cover&&typeof d.cover==='object'?d.cover:null;
  var coverUrl=coverData?String(coverData.url||coverData.path||'').trim():'';
  var heroImage=coverData&&validImageUrl(coverUrl)?{url:coverUrl,alt:coverData.alt||figure,caption:coverData.caption||'',source_name:coverData.source_name||'',source_url:coverData.source_url||'',rights:coverData.rights||'',kind:coverData.kind||'illustration'}:(Array.isArray(d.images)?d.images:[]).filter(function(im){return im&&validImageUrl(im.url)&&/^https:\/\//i.test(String(im.url))}).sort(function(a,b){return (String(b.kind||'').toLowerCase()==='archival'?1:0)-(String(a.kind||'').toLowerCase()==='archival'?1:0)})[0];
