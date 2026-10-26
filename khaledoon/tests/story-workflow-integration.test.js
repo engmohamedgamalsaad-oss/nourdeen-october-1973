@@ -111,6 +111,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(publisher.includes("['ar','en','fr','it','de'].some"));
   assert.ok(publisher.includes('sourceNameIsLocalized'), 'publisher must preserve five-language map source names');
+  assert.ok(publisher.includes('Map place labels, when provided, must be translated into all five languages without Arabic leftovers.'), 'publisher must reject untranslated optional map labels');
   assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
   var mapBundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
