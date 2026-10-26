@@ -107,6 +107,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
   var mapBundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
+  assert.ok(mapBundle.includes('source_name:mapLocation.source_name'), 'bundle must preserve localized map source-name objects');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261026-cover-contract-1'));
