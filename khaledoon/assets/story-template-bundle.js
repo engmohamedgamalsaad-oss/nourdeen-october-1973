@@ -336,6 +336,8 @@ async function download(draft,opts){
  return {id:id,section:section,path:root,filename:a.download,files:files.map(function(f){return f.path}),published:opts.approved===true};
 }
 function renderPreviewHtml(d){
+ d=Object.assign({},d||{});
+ if(!d.cover){var savedMeta=d.story_meta&&typeof d.story_meta==='object'?d.story_meta:{};var pendingCover=savedMeta.pending_draft&&typeof savedMeta.pending_draft==='object'?savedMeta.pending_draft.cover:null;var recordCover=d.record_data&&typeof d.record_data==='object'?d.record_data.cover:null;d.cover=savedMeta.cover||pendingCover||recordCover||null;}
  var key=String(d&&d.section_key||'history'),section=SECTION_MAP[key]||'history',accent=ACCENTS[section]||'#d5b7ff',html=storyHtml(d,'preview',section,accent,'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973');
  html=html.replace('<link rel="stylesheet" href="theme.css">','');
  var base='<base href="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/'+section+'/preview/">';
