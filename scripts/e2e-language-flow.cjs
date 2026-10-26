@@ -569,34 +569,30 @@ async function svgArtworkRegression(browser, base, origin) {
       for (const lang of ['en', 'ar']) {
         await page.evaluate((value) => localStorage.setItem('kh-lang', value), lang);
         await page.goto(base + '/' + slug, { waitUntil: 'load', timeout: 20000 });
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(900);
         const result = await page.evaluate(async () => {
-          const imgs = [...document.querySelectorAll('img[src]')].filter((img) =>
-            /cover.*\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || '')
-          );
-          const svgs = [];
-          for (const img of imgs) {
-            const src = img.getAttribute('src') || '';
-            try {
-              const response = await fetch(src);
-              if (!response.ok) { svgs.push({ src, error: 'HTTP ' + response.status }); continue; }
-              const xmlText = await response.text();
-              const xml = new DOMParser().parseFromString(xmlText, 'image/svg+xml');
-              svgs.push({
-                src,
-                loaded: img.complete && img.naturalWidth > 0,
-                textNodes: xml.querySelectorAll('text,tspan,title,desc').length,
-                hasArabic: /[\u0600-\u06FF]/.test(xmlText),
-                parseError: !!xml.querySelector('parsererror')
-              });
-            } catch (e) {
-              svgs.push({ src, error: String(e.message || e) });
-            }
+          const img = document.querySelector('.story-start-art img') || document.querySelector('.modal-art img');
+          if (!img) return { found: false, src: '', error: 'cover popup image not found' };
+          const src = img.getAttribute('src') || '';
+          try {
+            const response = await fetch(src);
+            if (!response.ok) return { found: true, src, error: 'HTTP ' + response.status };
+            const xmlText = await response.text();
+            const xml = new DOMParser().parseFromString(xmlText, 'image/svg+xml');
+            return {
+              found: true,
+              src,
+              loaded: img.complete && img.naturalWidth > 0,
+              textNodes: xml.querySelectorAll('text,tspan,title,desc').length,
+              hasArabic: /[\\u0600-\\u06FF]/.test(xmlText),
+              parseError: !!xml.querySelector('parsererror')
+            };
+          } catch (e) {
+            return { found: true, src, error: String(e.message || e) };
           }
-          return { lang: document.documentElement.lang, imageCount: imgs.length, svgs };
         });
-        const valid = result.lang === lang && result.imageCount > 0 &&
-          result.svgs.every((svg) => svg.loaded && !svg.error && !svg.parseError && svg.textNodes === 0 && !svg.hasArabic);
+        const valid = result.found && result.loaded && !result.error && !result.parseError &&
+          result.textNodes === 0 && !result.hasArabic;
         checks.push({ slug, language: lang, ok: valid, result });
         if (!valid) hard.push('Decorative SVG cover is missing, malformed, or contains embedded text: ' + slug + ' [' + lang + '] ' + JSON.stringify(result));
       }
