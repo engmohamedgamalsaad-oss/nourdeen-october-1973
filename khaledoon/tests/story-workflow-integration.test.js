@@ -418,6 +418,8 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
   assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
+  assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
+  assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
   assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
   assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
