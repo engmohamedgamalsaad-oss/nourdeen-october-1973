@@ -1,4 +1,4 @@
-name: Khaledoon rebuild foundation checks
+name: Khaledoon rebuild foundation checks # contract-only CI
 on:
   push:
     branches: [rebuild/khaledoon-foundation-2026-10-26]
