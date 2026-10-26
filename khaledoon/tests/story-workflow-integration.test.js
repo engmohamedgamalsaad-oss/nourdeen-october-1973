@@ -413,6 +413,21 @@ test('publisher duplicate-story guard normalizes actual whitespace', function ()
   assert.equal(norm('  Naguib   Mahfouz  '), norm('Naguib Mahfouz'));
 });
 
+test('hidden-story deletion is review-only until a merged deletion PR is verified', function () {
+  var edge = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(edge.includes('body?.action === "capabilities"') && edge.includes('deletion_mode: "draft_pr"'), 'delete function must advertise safe PR mode');
+  assert.ok(edge.includes('head: branchName, base: BASE, body: description, draft: true'), 'hidden-story deletion must create a draft PR');
+  assert.ok(!edge.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'delete function must never update main directly');
+  assert.ok(!edge.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'delete function must not fast-forward main');
+  assert.ok(edge.includes('const mergedPull') && edge.includes('remainingStoryFiles || quizStillExists'), 'visibility cleanup must verify the merged PR removed story and quiz files');
+  assert.ok(edge.includes('delete places[id]'), 'deletion PR must remove the story map marker as well as the index entry');
+  assert.ok(edge.indexOf('const mergedPull') < edge.indexOf('supabase.from("story_visibility").delete()'), 'visibility row must remain until a merged deletion PR is verified');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.deletion_mode!=='draft_pr'"), 'admin must gate deletion on the deployed safe-mode capability');
+  assert.ok(admin.includes("JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})"), 'admin must request PR creation or post-merge verification');
+  assert.ok(admin.indexOf('if(result.pending===true)') < admin.indexOf('delete vHidden[String(s.id)]'), 'a pending deletion PR must not remove the hidden status from the admin view');
+});
+
 test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
