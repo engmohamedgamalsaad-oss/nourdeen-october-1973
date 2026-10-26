@@ -142,6 +142,26 @@ async function main() {
   missingFactCards.body = 'A narrator paragraph without the required knowledge cards.';
   assert.ok(bundle.validate(missingFactCards).missing.some(function (m) { return m.includes('ثلاث فقرات «هل تعلم؟»'); }), 'the template validator must reject stories without three fact-card paragraphs');
   const previewHtml = bundle.renderPreviewHtml(goodDraft);
+  /* Execute the exact generated translation dictionary, then assert exact-key lookups
+     used by the shared story i18n engine. This guards against merely embedding values
+     without making the source text addressable for translation. */
+  const translationScriptMatch = previewHtml.match(/<script>(\(function\(\)\{\n"use strict";var S=window\.StoryI18N[\s\S]*?\}\)\(\);\n)<\/script>/);
+  assert.ok(translationScriptMatch, 'generated preview must embed its story translation dictionary');
+  const translationContext = { window: {} };
+  vm.runInNewContext(translationScriptMatch[1], translationContext, { filename: 'generated-story-translations.js' });
+  const generatedText = translationContext.window.StoryI18N.text;
+  const expectedGalleryTranslations = {
+    en: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source en', 'ترخيص موضح': 'License en', 'وصف الصورة أ': 'Image A alt en', 'مصدر الغلاف': 'Cover source en', 'غلاف اختبار': 'Cover alt en' },
+    fr: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source fr', 'ترخيص موضح': 'License fr', 'وصف الصورة أ': 'Image A alt fr', 'مصدر الغلاف': 'Cover source fr', 'غلاف اختبار': 'Cover alt fr' },
+    it: { 'صورة توضيحية': 'Illustrazione', 'المصدر أ': 'Source it', 'ترخيص موضح': 'License it', 'وصف الصورة أ': 'Image A alt it', 'مصدر الغلاف': 'Cover source it', 'غلاف اختبار': 'Cover alt it' },
+    de: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source de', 'ترخيص موضح': 'License de', 'وصف الصورة أ': 'Image A alt de', 'مصدر الغلاف': 'Cover source de', 'غلاف اختبار': 'Cover alt de' }
+  };
+  for (const [lang, entries] of Object.entries(expectedGalleryTranslations)) {
+    for (const [sourceText, translatedText] of Object.entries(entries)) {
+      assert.equal(generatedText[lang][sourceText], translatedText,
+        lang + ' dictionary must map exact visible source key "' + sourceText + '" to its localized value');
+    }
+  }
   assert.equal((previewHtml.match(/class="story-fact-card"/g) || []).length, 3, 'the generated story should render three distinct knowledge cards');
   assert.match(previewHtml, /class="story-image-kind">صورة توضيحية<\/span>/, 'gallery image kind must be isolated as a translatable text node');
   assert.match(previewHtml, /class="story-image-source">المصدر أ<\/span>/, 'gallery source name must be isolated from the image-kind label so exact-key translation can apply');
