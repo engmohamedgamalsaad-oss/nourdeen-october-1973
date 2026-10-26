@@ -76,9 +76,18 @@
       ? [root + 'assets/images/stories/Tawfiq_al-Hakim.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']
       : isNaguibMahfouzCard
         ? (String(story.id || '') === '009' ? [root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg', root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'] : [root + 'assets/images/stories/Naguib_Mahfouz_in_cafe.jpg', root + 'assets/images/stories/Naguib_Mahfouz_HR.jpg']).concat([root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp'])
-        : (['011', '012', '013'].indexOf(String(story.id || '')) >= 0 ? [root + path + 'cover-popup.svg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'] : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']);
+        : (String(story.id || '') === '013' && /^stories\/women\/013\/?$/.test(path) ? [root + 'assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg', root + 'assets/images/stories/DT534.jpg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'] : (['011', '012'].indexOf(String(story.id || '')) >= 0 ? [root + path + 'cover-popup.svg', root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp'] : [root + path + 'cover.svg', root + path + 'cover.jpg', root + path + 'cover.webp', root + path + 'cover-popup.svg', root + path + 'cover-popup.jpg', root + path + 'cover-popup.webp']));
+    var coverData = story.cover && typeof story.cover === 'object' ? story.cover : null;
+    var coverUrl = coverData ? String(coverData.url || coverData.path || '').trim() : '';
+    if (coverUrl) {
+      var resolvedCoverUrl = /^https:\/\//i.test(coverUrl) ? coverUrl
+        : (/^(?:assets\/images\/|images\/|stories\/)/i.test(coverUrl) ? root + coverUrl.replace(/^\/+/, '') : root + path + coverUrl);
+      candidates = [resolvedCoverUrl].concat(candidates);
+      var coverI18n = coverData.i18n && coverData.i18n[lang];
+      cover.alt = (coverI18n && coverI18n.alt) || coverData.alt || localized(story, 'title') || ui.read;
+    }
     var coverPhoto = COVER_PHOTOS[path.replace(/\/+$/, '')];
-    if (coverPhoto) candidates = [root + coverPhoto].concat(candidates);
+    if (coverPhoto && !coverUrl) candidates = [root + coverPhoto].concat(candidates);
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;

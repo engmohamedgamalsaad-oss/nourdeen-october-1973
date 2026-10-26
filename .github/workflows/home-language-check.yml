@@ -9,6 +9,7 @@ on:
 
 jobs:
   static-language-flow:
+    timeout-minutes: 25
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -36,10 +37,14 @@ jobs:
       - name: Verify admin story visibility integration
         run: node scripts/check-story-visibility-flow.js
       - name: Install Chromium for real-browser checks
+        timeout-minutes: 8
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          # GitHub-hosted Ubuntu runners already provide Chromium's common system libraries.
+          # Avoid apt-based --with-deps here: slow package-mirror downloads can time out before browser tests start.
+          npx playwright install chromium
       - name: Run real-browser language and responsive sweep
+        timeout-minutes: 12
         run: node scripts/e2e-language-flow.cjs --out language-e2e-report.json
       - name: Upload browser audit report
         if: always()

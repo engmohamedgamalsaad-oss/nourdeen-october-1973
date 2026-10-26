@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" role="img" aria-labelledby="title desc">
-<title id="title">مجدي يعقوب</title><desc id="desc">رسم توضيحي لقلب بشري وخط نبض ورموز طبية، وليس صورة فوتوغرافية أو تصويرًا طبيًا حقيقيًا.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="650" viewBox="0 0 1200 650" aria-hidden="true">
+
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071e2a"/><stop offset=".55" stop-color="#154b59"/><stop offset="1" stop-color="#5dd2c0"/></linearGradient><radialGradient id="glow"><stop stop-color="#5dd2c0" stop-opacity=".4"/><stop offset="1" stop-color="#5dd2c0" stop-opacity="0"/></radialGradient></defs>
 <rect width="1200" height="650" fill="url(#bg)"/><circle cx="930" cy="190" r="270" fill="url(#glow)"/>
 <circle cx="690" cy="350" r="245" fill="#5dd2c0" opacity=".1"/><g transform="translate(560 170)"><path d="M110 75C65 0 0 25 0 95C0 180 110 255 150 300C190 255 300 180 300 95C300 25 235 0 190 75L150 115Z" fill="#cf6f73" stroke="#ffd6c8" stroke-width="8"/><path d="M150 115L125 175L165 205L145 250M110 75L95 35M190 75L215 35" stroke="#f6b2aa" stroke-width="13" fill="none" stroke-linecap="round"/><path d="M145 20V-25M205 20V-25" stroke="#5dd2c0" stroke-width="18" stroke-linecap="round"/></g><path d="M65 570H210L250 520L300 640L355 470L410 570H520L555 530L590 570H830" fill="none" stroke="#5dd2c0" stroke-width="9" stroke-linejoin="round"/><g fill="none" stroke="#e9d6a1" stroke-width="5" opacity=".8"><circle cx="700" cy="580" r="70"/><circle cx="700" cy="580" r="90"/><path d="M700 490V670M610 580H790"/></g>
 <rect x="0" y="455" width="1200" height="195" fill="#071e2a" opacity=".82"/>
 <path d="M60 470H1140" stroke="#e9d6a1" stroke-width="3" opacity=".8"/>
-<text x="50%" y="510" text-anchor="middle" fill="#fff7e6" font-family="Cairo,Arial,sans-serif" font-size="49" font-weight="800">مجدي يعقوب</text>
-<text x="50%" y="558" text-anchor="middle" fill="#e9d6a1" font-family="Cairo,Arial,sans-serif" font-size="25" font-weight="700">قلب يمنح الأمل</text>
-<text x="50%" y="610" text-anchor="middle" fill="#eaf1ee" opacity=".88" font-family="Cairo,Arial,sans-serif" font-size="17">خالدون عبر التاريخ · رسم توضيحي</text>
+
+
+
 </svg>

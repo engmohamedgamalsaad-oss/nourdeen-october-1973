@@ -71,10 +71,19 @@ async function main() {
         sessionStorage.setItem('kh_adm_session', localStorage.getItem('kh_adm_session'));
       });
       const page = await context.newPage();
+      const submissionWrites = [];
+      const publisherCalls = [];
       await page.route('https://**/*', route => route.abort());
       await page.route(SUPA + '/**', async route => {
         const req = route.request();
         const url = req.url();
+        if (url.includes('/functions/v1/publish-story-pr')) {
+          let payload = {};
+          try { payload = JSON.parse(req.postData() || '{}'); } catch (_) {}
+          publisherCalls.push(payload);
+          return route.fulfill({ status:400, contentType:'application/json', body:JSON.stringify({ error:'legacy function does not support capabilities' }) });
+        }
+        if (url.includes('/rest/v1/khaledoon_submissions') && !['GET','HEAD','OPTIONS'].includes(req.method())) submissionWrites.push(req.method() + ' ' + url);
         if (url.includes('/rest/v1/rpc/is_admin')) {
           return route.fulfill({ status:200, contentType:'application/json', body:'true' });
         }
@@ -107,6 +116,53 @@ async function main() {
       const adminOverflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       assert.ok(adminOverflow <= 2, 'Admin horizontal overflow on ' + viewport.name + ': ' + adminOverflow + 'px');
       console.log('ok - admin loaded and no horizontal overflow (' + viewport.name + ')');
+
+      // Exercise the user's one-button AI import lock cycle with invalid content only.
+      // This must never write to Supabase; only the fake read endpoints are available.
+      await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?editcode=visual-preview-001', { waitUntil:'domcontentloaded' });
+      const targetCard = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية مرسلة للمعاينة' }).first();
+      const targetDetails = targetCard.locator('xpath=..');
+      await page.waitForFunction(() => { const s=[...document.querySelectorAll('summary')].find(el=>el.textContent.includes('اختبار بصري — حكاية مرسلة للمعاينة')); return !!s && !!s.parentElement.open; });
+      const aiTextarea = page.getByRole('textbox', { name:'الصق ناتج الذكاء الاصطناعي JSON' });
+      const aiApply = page.getByRole('button', { name:'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
+      await aiTextarea.waitFor({ state:'visible', timeout:10000 });
+      assert.equal(await aiTextarea.evaluate(el => el.readOnly), false, 'AI textarea should begin unlocked');
+      const writesBeforePaste = submissionWrites.length;
+      await aiTextarea.fill('not JSON at all ###');
+      await page.waitForTimeout(150);
+      assert.equal(submissionWrites.length, writesBeforePaste, 'pasting alone must not write or import');
+      await aiApply.click();
+      await page.waitForFunction(() => { const el=document.querySelector('[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && el.readOnly; });
+      assert.equal(await aiTextarea.inputValue(), 'not JSON at all ###', 'failed import must preserve the pasted text');
+      await aiApply.click();
+      await page.waitForFunction(() => { const el=document.querySelector('[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; });
+      await aiTextarea.fill('still not JSON ###');
+      await aiApply.click();
+      await page.waitForFunction(() => { const el=document.querySelector('[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && el.readOnly; });
+      assert.equal(await aiTextarea.inputValue(), 'still not JSON ###', 'third click must execute again and relock without losing text');
+      assert.equal(submissionWrites.length, writesBeforePaste, 'invalid AI packages must never write to Supabase');
+      console.log('ok - AI textarea paste/execute/unlock/execute lock cycle (' + viewport.name + ')');
+
+      // A legacy deployed publisher must fail closed: only the capabilities probe may be sent.
+      const approvedSummary = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية بانتظار النشر' }).first();
+      await approvedSummary.click();
+      const approvedCard = approvedSummary.locator('xpath=..');
+      const writesBeforePublisherProbe = submissionWrites.length;
+      const publishButton = approvedCard.getByRole('button', { name:'نشر الحكاية' });
+      await publishButton.waitFor({ state:'visible' });
+      await publishButton.scrollIntoViewIfNeeded();
+      const capabilitiesRequest = page.waitForRequest(req =>
+        req.url().includes('/functions/v1/publish-story-pr') &&
+        (() => { try { return JSON.parse(req.postData() || '{}').action === 'capabilities'; } catch (_) { return false; } })(),
+        { timeout:10000 }
+      );
+      await publishButton.click();
+      await capabilitiesRequest;
+      assert.equal(publisherCalls.length, 1, 'publish action must perform one capabilities handshake');
+      assert.equal(publisherCalls[0].action, 'capabilities', 'admin must probe the function before sending story files');
+      assert.equal(Object.prototype.hasOwnProperty.call(publisherCalls[0], 'files'), false, 'capabilities probe must not contain story files');
+      assert.equal(submissionWrites.length, writesBeforePublisherProbe, 'unsupported legacy publisher must not cause a submission write');
+      console.log('ok - legacy publisher capability mismatch blocks before upload (' + viewport.name + ')');
 
       const builder = await context.newPage();
       await builder.goto('http://127.0.0.1:' + PORT + '/khaledoon/story-builder.html', { waitUntil:'domcontentloaded' });

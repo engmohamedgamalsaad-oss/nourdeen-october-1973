@@ -33,6 +33,18 @@ async function github(path: string, token: string, init: RequestInit = {}) {
   return result;
 }
 
+async function githubAllPages(path: string, token: string, maxPages = 20) {
+  const rows: any[] = [];
+  for (let page = 1; page <= maxPages; page++) {
+    const separator = path.includes("?") ? "&" : "?";
+    const batch = await github(`${path}${separator}per_page=100&page=${page}`, token);
+    if (!Array.isArray(batch)) throw new Error("GitHub list endpoint returned a non-array response.");
+    rows.push(...batch);
+    if (batch.length < 100) return rows;
+  }
+  throw new Error(`GitHub pagination exceeded ${maxPages} pages; refusing to continue with incomplete pull-request results.`);
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
   if (req.method !== "POST") return reply(405, { error: "Method not allowed" });
@@ -58,64 +70,139 @@ Deno.serve(async (req: Request) => {
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
+  if (body?.action === "capabilities") {
+    return reply(200, { success: true, deletion_mode: "draft_pr", version: "2026-10-26-delete-pr-v1", writes_main_directly: false });
+  }
   const id = String(body?.story_id ?? "");
-  if (!/^[0-9]{3}$/.test(id)) return reply(400, { error: "رقم الحكاية غير صالح." });
+  if (body?.action !== "delete_or_verify" || !/^[0-9]{3}$/.test(id)) {
+    return reply(400, { error: "طلب الحذف أو رقم الحكاية غير صالح." });
+  }
 
   const { data: hiddenRow, error: hiddenError } = await supabase
     .from("story_visibility").select("story_id").eq("story_id", id).maybeSingle();
   if (hiddenError) return reply(500, { error: "تعذر التأكد من أن الحكاية مخفية؛ لم يُحذف شيء." });
   if (!hiddenRow) return reply(409, { error: "يمكن حذف الحكايات المخفية فقط. أخفِ الحكاية أولًا." });
 
+  let branchNameForRecovery = "";
   try {
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
     const tree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
     if (tree.truncated) throw new Error("GitHub returned an incomplete file tree; refusing to delete anything.");
-    const contents = await github(`/repos/${OWNER}/${REPO}/contents/stories/index.json?ref=${BASE}`, githubToken);
+    const contents = await github(`/repos/${OWNER}/${REPO}/contents/stories/index.json?ref=${baseSha}`, githubToken);
     const indexBytes = Uint8Array.from(atob(String(contents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
     const index = JSON.parse(new TextDecoder().decode(indexBytes));
     if (!Array.isArray(index)) throw new Error("Story index is not an array.");
     const entryIndex = index.findIndex((entry: any) => String(entry?.id ?? "").padStart(3, "0") === id);
-    if (entryIndex < 0) return reply(404, { error: "الحكاية غير موجودة في فهرس الموقع؛ لم يُحذف شيء." });
+    const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
+
+    if (entryIndex < 0) {
+      const closedPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=closed&base=${BASE}`, githubToken);
+      const markerPrefix = `<!-- khaledoon-delete-story:${id}:`;
+      const mergedPull = Array.isArray(closedPulls)
+        ? closedPulls.find((pull: any) => String(pull.body ?? "").includes(markerPrefix) &&
+            pull.head?.repo?.full_name === OWNER + "/" + REPO &&
+            (pull.merged === true || Boolean(pull.merged_at)))
+        : null;
+      if (!mergedPull) return reply(404, { error: "الحكاية غير موجودة في الفهرس ولا يوجد طلب حذف مدموج يمكن التحقق منه؛ لم يُحذف سجل الإخفاء." });
+      const markerMatch = String(mergedPull.body ?? "").match(new RegExp("<!-- khaledoon-delete-story:" + id + ":(stories/[a-z0-9-]+/" + id + ") -->"));
+      if (!markerMatch) throw new Error("Merged deletion PR has no valid story-path marker; refusing to clean up visibility state.");
+      const deletedPath = markerMatch[1];
+      const remainingStoryFiles = tree.tree.some((item: any) => item.type === "blob" && item.path.startsWith(deletedPath + "/"));
+      const quizPath = `stories/quizzes/${id}.json`;
+      const quizStillExists = tree.tree.some((item: any) => item.type === "blob" && item.path === quizPath);
+      const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
+      const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
+      const places = JSON.parse(new TextDecoder().decode(placesBytes));
+      if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
+      if (remainingStoryFiles || quizStillExists || Object.prototype.hasOwnProperty.call(places, id)) {
+        throw new Error("The merged deletion PR did not remove the story folder, quiz, and map marker completely; visibility remains hidden.");
+      }
+      const { error: visibilityDeleteError } = await supabase.from("story_visibility").delete().eq("story_id", id);
+      return reply(200, {
+        success: true,
+        deleted: true,
+        story_id: id,
+        pull_request_url: mergedPull.html_url,
+        warning: visibilityDeleteError ? "تم التحقق من حذف الملفات من main، لكن تعذر تنظيف سجل الإخفاء؛ حدّث اللوحة وراجع سجل الإدارة." : undefined,
+        message: "تم التحقق من دمج طلب الحذف واختفاء صفحة الحكاية وبنك الأسئلة وعلامة الخريطة؛ أُزيل سجل الإخفاء."
+      });
+    }
+
     const entry = index[entryIndex];
-    const path = String(entry.path ?? "").replace(/\/$/, "");
-    if (!new RegExp(`^stories/[a-z0-9-]+/${id}$`).test(path) || entry.published === false) {
+    const storyPath = String(entry.path ?? "").replace(/\/$/, "");
+    if (!new RegExp(`^stories/[a-z0-9-]+/${id}$`).test(storyPath) || entry.published === false) {
       throw new Error("The indexed story path is not an eligible published story; refusing deletion.");
     }
-    const storyFiles = tree.tree.filter((item: any) => item.type === "blob" && item.path.startsWith(path + "/"));
+    const marker = `<!-- khaledoon-delete-story:${id}:${storyPath} -->`;
+    const existingPull = Array.isArray(openPulls)
+      ? openPulls.find((pull: any) => String(pull.body ?? "").includes(marker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
+      : null;
+    if (existingPull) {
+      return reply(200, {
+        success: true, pending: true, deleted: false, story_id: id,
+        pull_request_url: existingPull.html_url, pull_request_number: existingPull.number,
+        branch: existingPull.head?.ref ?? null, story_path: storyPath,
+        message: "يوجد طلب حذف Draft مفتوح بالفعل. لا تزال الحكاية مخفية ولم تتغير ملفات main؛ راجع الطلب وادمجه فقط بعد مراجعة الفحوصات."
+      });
+    }
+
+    const storyFiles = tree.tree.filter((item: any) => item.type === "blob" && item.path.startsWith(storyPath + "/"));
     const quizPath = `stories/quizzes/${id}.json`;
     const quizExists = tree.tree.some((item: any) => item.type === "blob" && item.path === quizPath);
-    if (!storyFiles.some((item: any) => item.path === path + "/index.html")) {
+    if (!storyFiles.some((item: any) => item.path === storyPath + "/index.html")) {
       throw new Error("The story page file is missing; refusing a partial deletion.");
     }
+    const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
+    const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
+    const places = JSON.parse(new TextDecoder().decode(placesBytes));
+    if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
     const deletions = storyFiles.map((item: any) => ({ path: item.path, mode: item.mode || "100644", type: "blob", sha: null }));
     if (quizExists) deletions.push({ path: quizPath, mode: "100644", type: "blob", sha: null });
     index.splice(entryIndex, 1);
+    delete places[id];
     const indexBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
       method: "POST",
       body: JSON.stringify({ content: JSON.stringify(index, null, 2) + "\n", encoding: "utf-8" }),
     });
+    const placesBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ content: JSON.stringify(places, null, 2) + "\n", encoding: "utf-8" }),
+    });
     deletions.push({ path: "stories/index.json", mode: "100644", type: "blob", sha: indexBlob.sha });
+    deletions.push({ path: "stories/places.json", mode: "100644", type: "blob", sha: placesBlob.sha });
     const newTree = await github(`/repos/${OWNER}/${REPO}/git/trees`, githubToken, {
       method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: deletions }),
     });
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ message: `Delete hidden story ${id}: ${String(entry.title ?? "").slice(0, 100)}`, tree: newTree.sha, parents: [baseSha] }),
+      body: JSON.stringify({ message: `Prepare hidden-story deletion for review: ${id}`, tree: newTree.sha, parents: [baseSha] }),
     });
-    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
-      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
+    const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
+    const branchName = `khaledoon/delete-story-${id}-${branchSuffix}`;
+    branchNameForRecovery = branchName;
+    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ ref: "refs/heads/" + branchName, sha: commit.sha }),
     });
-    const { error: visibilityDeleteError } = await supabase.from("story_visibility").delete().eq("story_id", id);
-    return reply(200, {
-      success: true, story_id: id, deleted_files: storyFiles.length + (quizExists ? 1 : 0),
-      commit_sha: commit.sha,
-      warning: visibilityDeleteError ? "تم حذف ملفات الموقع، لكن تعذر تنظيف سجل الإخفاء؛ حدّث اللوحة وأعد المحاولة بعد مراجعة الحالة." : undefined,
-      message: "تم حذف صفحة الحكاية وملفاتها من الموقع وإزالتها من الفهرس."
+    const description = `<!-- khaledoon-delete-story:${id}:${storyPath} -->\n\n` +
+      `Draft deletion request for hidden story ${id}: ${String(entry.title ?? "").slice(0, 100)}.\n\n` +
+      "- This request removes the story folder, quiz file, index entry, and map marker.\n" +
+      "- The story remains hidden while this draft is reviewed.\n" +
+      "- No files or database visibility rows are deleted until a human reviews and merges the PR, then confirms deletion in the admin.";
+    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ title: `حذف حكاية مخفية ${id}: ${String(entry.title ?? "").slice(0, 80)}`, head: branchName, base: BASE, body: description, draft: true }),
+    });
+    return reply(201, {
+      success: true, pending: true, deleted: false, story_id: id,
+      pull_request_url: pull.html_url, pull_request_number: pull.number,
+      branch: branchName, story_path: storyPath, deleted_files: storyFiles.length + (quizExists ? 1 : 0),
+      message: "تم إنشاء طلب حذف Draft. الحكاية ما زالت مخفية، ولم تتغير ملفات الموقع أو سجل الإخفاء؛ راجع الطلب وادمجه بعد نجاح الفحوصات."
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر حذف الحكاية من GitHub؛ لم نعرض العملية كنجاح.", detail: detail.slice(0, 400) });
+    return reply(502, { error: "تعذر إنشاء أو التحقق من طلب حذف الحكاية؛ لم تُكتب ملفات الحكاية إلى main.", detail: detail.slice(0, 500), branch: branchNameForRecovery || null });
   }
 });

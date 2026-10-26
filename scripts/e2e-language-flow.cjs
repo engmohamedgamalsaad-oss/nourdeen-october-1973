@@ -395,7 +395,7 @@ async function targetArabicTextAudit(browser, base, origin) {
           await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
           await page.waitForTimeout(450);
           await page.waitForFunction(() => !!window.KH_LANG, null, { timeout: 8000 });
-          /* SVG localization is asynchronous; wait for both cover assets before auditing their payloads. */
+          /* SVGs with translatable text become blob URLs; artwork without embedded text may remain at its source URL. In either case, wait until the payload contains no Arabic text. */
           await page.waitForFunction(async () => {
             const images = Array.from(document.querySelectorAll('img[src]'));
             const covers = images.filter((img) => /cover(?:-popup)?\.svg(?:$|[?#])/i.test(img.__storySvgOriginalSrc || img.getAttribute('src') || ''));
@@ -404,9 +404,10 @@ async function targetArabicTextAudit(browser, base, origin) {
             if (!covers.length || !candidates.length) return false;
             for (const img of candidates) {
               const src = img.getAttribute('src') || '';
-              if (!src.startsWith('blob:')) return false;
+              if (!src) return false;
               try {
-                const svg = await (await fetch(src)).text();
+                const resolved = src.startsWith('blob:') ? src : new URL(src, document.baseURI).href;
+                const svg = await (await fetch(resolved)).text();
                 if (/[\u0600-\u06FF]/.test(svg)) return false;
               } catch (_) { return false; }
             }
@@ -552,12 +553,20 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
-    { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
-    { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
-    { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
-    { slug: 'stories/science/012/', expected: 'The Scientist Who Read the Moon and the Desert', arabic: 'العالم الذي قرأ القمر والصحراء' },
-    { slug: 'stories/women/010/', expected: 'A Dream of Science for Everyone', arabic: 'حلم العلم للجميع' }
+    { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', decorative: true },
+    { slug: 'stories/science/007/', decorative: true },
+    { slug: 'stories/women/013/', decorative: true },
+    { slug: 'stories/islamic/011/', decorative: true },
+    { slug: 'stories/history/014/', decorative: true },
+    { slug: 'stories/science/012/', decorative: true },
+    { slug: 'stories/women/010/', decorative: true },
+    { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
+    { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
+    { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
+    { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
+    { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
+    { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
+    { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
   ];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
@@ -567,30 +576,30 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(900);
-      const en = await page.evaluate(async (selector) => {
-        const img = document.querySelector(selector || '.story-start-art img');
-        if (!img) return { found: false, src: '', svg: '' };
-        const src = img.getAttribute('src') || '';
+      const en = await page.evaluate(async ({ selector, asset, base }) => {
+        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        if (!asset && !img) return { found: false, src: '', svg: '' };
+        const src = asset || (img.getAttribute('src') || '');
         let svg = '';
-        try { svg = await (await fetch(src)).text(); } catch (_) {}
+        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
-      }, item.selector || '');
-      const enOk = en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic);
+      }, { selector: item.selector || '', asset: item.asset || '', base });
+      const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/<text\b/i.test(en.svg) && !/[؀-ۿ]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
       if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
 
       await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
-      const ar = await page.evaluate(async (selector) => {
-        const img = document.querySelector(selector || '.story-start-art img');
-        if (!img) return { found: false, src: '', svg: '' };
-        const src = img.getAttribute('src') || '';
+      const ar = await page.evaluate(async ({ selector, asset, base }) => {
+        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        if (!asset && !img) return { found: false, src: '', svg: '' };
+        const src = asset || (img.getAttribute('src') || '');
         let svg = '';
-        try { svg = await (await fetch(src)).text(); } catch (_) {}
+        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
-      }, item.selector || '');
-      const arOk = ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic);
+      }, { selector: item.selector || '', asset: item.asset || '', base });
+      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }

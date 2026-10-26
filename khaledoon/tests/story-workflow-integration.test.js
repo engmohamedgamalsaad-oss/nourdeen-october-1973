@@ -20,10 +20,29 @@ function mockPatch(record, patch) {
   return Object.assign({}, record, patch);
 }
 test('admin imports the workflow module and derives status counters', function () {
-  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261021-map-auto-1"'));
+  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
+});
+test('manual story builder inline JavaScript remains syntactically valid', function () {
+  var match = builder.match(/<script>([\s\S]*?)<\/script>/);
+  assert.ok(match && match[1], 'manual story builder inline script must be present');
+  new (require('vm').Script)(match[1], { filename: 'khaledoon/story-builder.html' });
+});
+test('manual story builder supports the unified cover, sourced-image, and map metadata contract', function () {
+  assert.ok(builder.includes('id="cover_json"'), 'manual builder must collect the required cover object');
+  assert.ok(builder.includes('id="images_json"'), 'manual builder must collect the required sourced image array');
+  assert.ok(builder.includes("cover:parseJsonField('cover_json',currentMeta.cover||null)"), 'draft must parse cover JSON and preserve saved metadata');
+  assert.ok(builder.includes("images:parseJsonField('images_json',currentMeta.images||[])"), 'draft must parse image JSON and preserve saved metadata');
+  assert.ok(builder.includes("meta.cover=d.cover||meta.cover||null;meta.images=Array.isArray(d.images)?d.images:(meta.images||[])"), 'manual save must persist cover and image metadata');
+  assert.ok(builder.includes('meta.cover_json=d.cover_json;meta.images_json=d.images_json;meta.map_location_json=d.map_location_json'), 'manual save must preserve in-progress JSON text, including incomplete drafts');
+  assert.ok(builder.includes("if(read('images_json')&&!Array.isArray(d.images))"), 'invalid image JSON must stop preview validation');
+  assert.ok(builder.includes("map_location_json:typeof m.map_location_json==='string'?m.map_location_json:(Object.prototype.hasOwnProperty.call(m,'map_location')?JSON.stringify(m.map_location,null,2):'')"), 'restoring a draft must preserve raw JSON and existing map location metadata');
+  assert.ok(builder.includes("if(Object.prototype.hasOwnProperty.call(d,'map_location')&&(!d.map_location_json||d.map_location_json==='null'||(d.map_location&&typeof d.map_location==='object'&&!Array.isArray(d.map_location))))"), 'invalid map JSON must not overwrite a saved map location');
+  assert.ok(builder.includes('function validateMapLocation(mapLoc,missing)'), 'manual builder must validate map coordinates, localized place/source names, and HTTPS source URL');
+  assert.ok(builder.includes('async function verifyManualAssets(d)'), 'manual preview must verify that the cover and gallery images actually load');
+  assert.ok(builder.includes('await verifyManualAssets(draft())'), 'manual preview must finish image checks before saving and opening the preview');
 });
 test('published admin records and published site pages are separate filters', function () {
   assert.ok(admin.includes("k==='published'?'سجلات الأدمن بحالة «منشورة»'"));
@@ -45,19 +64,94 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
-test('unified v3 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+test('active admin prompt is synchronized with the unified v4 story contract', function () {
+  var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var marker = 'var STORY_PAGE_PROMPT = ';
+  var markerIndex = shared.indexOf(marker);
+  assert.ok(markerIndex >= 0, 'active story prompt declaration must exist');
+  var start = markerIndex + marker.length;
+  var end = shared.indexOf('\nvar STORY_PROVIDER_PROMPTS =', start);
+  assert.ok(end > start, 'active story prompt must be a single embedded string');
+  var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
+  assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
+  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md','utf8').trim();
+  assert.equal(prompt.trim(), masterPrompt, 'saved v4 master must exactly match the active admin prompt');
+  assert.ok(prompt.includes('### عقد الغلاف الموحد — مصدر واحد لكل موضع'));
+  assert.ok(prompt.includes('cover.i18n'));
+  assert.ok(prompt.includes('ملفًا محليًا لم يُرفع'), 'prompt must forbid unpreviewable local cover files');
+  assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
+  assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
+  assert.ok(prompt.includes('source_name` كائنين مترجمين إلى `ar/en/fr/it/de`'), 'map source names must be localized in the active prompt');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(admin.includes('source_name كائنين مترجمين إلى ar/en/fr/it/de'), 'AI JSON schema must match the map source-name contract');
+  assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
+  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
+  assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
+  assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
+});
+test('active v4 master prompt exactly matches the canonical master file', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var canonical = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
+  var prefix = 'var STORY_PAGE_PROMPT = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\nvar STORY_PROVIDER_PROMPTS', start);
+  assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
+  assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
+});
+test('embedded v4 provider prompts exactly match canonical provider files', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var prefix = 'var STORY_PROVIDER_PROMPTS = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\n\nfunction khAppendPromptOnce', start);
+  assert.ok(start >= prefix.length && end > start, 'embedded provider prompt object must be isolated');
+  var embedded = JSON.parse(texts.slice(start, end));
+  var root = 'khaledoon/prompts/2026-10-23-unified-v4/';
+  var files = { chatgpt: 'CHATGPT.md', claude: 'CLAUDE.md', gemini: 'GEMINI.md', deepseek: 'DEEPSEEK.md' };
+  Object.keys(files).forEach(function (key) {
+    var canonical = fs.readFileSync(root + files[key], 'utf8');
+    assert.equal(String(embedded[key] || ''), canonical, key + ' embedded prompt must match the canonical v4 file');
+  });
+});
+test('embedded project instructions exactly match the canonical project file', function () {
+  var fs = require('node:fs');
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var canonical = fs.readFileSync('PROJECT_INSTRUCTIONS.md', 'utf8');
+  var prefix = 'var PROJECT_INSTRUCTIONS = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\nvar STORY_WORKFLOW', start);
+  assert.ok(start >= prefix.length && end > start, 'embedded PROJECT_INSTRUCTIONS string must be isolated');
+  assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'admin prompt must not drift from PROJECT_INSTRUCTIONS.md');
+});
+test('published story 012 and 014 headers have all four non-Arabic translations', function () {
+  var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
+  var history = fs.readFileSync('stories/history/014/translations.js', 'utf8');
+  ['en','fr','it','de'].forEach(function (lang) {
+    assert.ok(science.includes('supplementalTranslations.' + lang + '["خالدون عبر التاريخ · 012"]'), 'story 012 missing localized header for ' + lang);
+    assert.ok(history.includes('supplementalTranslations.' + lang + '["خالدون عبر التاريخ · 014"]'), 'story 014 missing localized header for ' + lang);
+  });
+  ['en','fr','it','de'].forEach(function (lang) {
+    assert.ok(history.includes('supplementalTranslations.' + lang + '["← التاريخ والحضارات"]'), 'story 014 missing localized breadcrumb for ' + lang);
+  });
+});
+test('unified v4 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+  var instructions = fs.readFileSync('PROJECT_INSTRUCTIONS.md','utf8');
+  assert.ok(instructions.includes('cover.url` رابط صورة مباشر HTTPS'));
+  assert.ok(instructions.includes('source_name` ككائن بالخمس لغات `{ar,en,fr,it,de}`'));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
-  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261022-3"));
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261023-4"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(shared.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
   assert.ok(shared.includes('لا تلصق البرومبت القديم فوقه'));
   assert.ok(shared.includes('ar/en/fr/it/de'));
   assert.ok(shared.includes('cover-popup'));
   assert.ok(shared.includes('prefers-reduced-motion'));
-  assert.ok(shared.includes('source_name وsource_url وrights'));
+  assert.ok(shared.includes('source_name') && shared.includes('source_url') && shared.includes('rights'), 'shared v4 prompt must retain source and rights fields');
+  assert.ok(shared.includes('معرض من صورتين إلى خمس صور موثقة وصالحة'), 'quality gate must enforce the same two-to-five image limit as the validator');
+  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md','utf8');
+  assert.ok(masterPrompt.includes('من صورتين إلى خمس صور موثقة وصالحة'), 'canonical master prompt must agree with the gallery validator limit');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
     assert.ok(shared.includes('"'+provider+'"'), 'missing provider instruction: '+provider);
@@ -71,16 +165,40 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(publisher.includes("file.path !== 'stories/places.json'"));
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(publisher.includes("['ar','en','fr','it','de'].some"));
+  assert.ok(publisher.includes('sourceNameIsLocalized'), 'publisher must preserve five-language map source names');
   assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
   var mapBundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
+  assert.ok(mapBundle.includes('source_name:mapLocation.source_name'), 'bundle must preserve localized map source-name objects');
+  assert.ok(mapBundle.includes('mapData[id].place_label=mapLocation.place_label'), 'bundle must preserve localized optional map labels');
+  assert.ok(mapBundle.includes('تسمية المكان الاختيارية يجب أن تكون مترجمة'), 'bundle must reject untranslated optional map labels');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
-  assert.ok(admin.includes('story-template-bundle.js?v=20261023-4'));
+  assert.ok(admin.includes('story-template-bundle.js?v=20261026-cover-contract-1'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
 });
+test('production publisher and deletion functions remain review-only until a PR is merged', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('publisher_mode: "draft_pr"'));
+  assert.ok(publisher.includes('published_to_main: false'));
+  assert.ok(publisher.includes('draft: true'));
+  assert.ok(publisher.includes('pull_request_url: pull.html_url'));
+  assert.ok(publisher.includes('refs/heads/" + branchNameForRecovery'));
+  assert.ok(publisher.includes('/pulls'));
+  assert.ok(!publisher.includes('git/refs/heads/${BASE}'), 'publisher must not update main directly');
+
+  var deletion = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts', 'utf8');
+  assert.ok(deletion.includes('deletion_mode: "draft_pr"'));
+  assert.ok(deletion.includes('pending: true, deleted: false'));
+  assert.ok(deletion.includes('draft: true'));
+  assert.ok(deletion.includes('<!-- khaledoon-delete-story:'));
+  assert.ok(!deletion.includes('git/refs/heads/${BASE}'), 'deletion function must not update main directly');
+  assert.ok(deletion.indexOf('if (!mergedPull) return reply(404') < deletion.indexOf('from("story_visibility").delete()'),
+    'visibility row cleanup must happen only after a merged deletion PR is verified');
+});
+
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
   assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:[]"));
@@ -109,6 +227,20 @@ test('shared reader template supports explicit and system light themes', functio
   assert.ok(bundle.includes('@media(prefers-color-scheme:light)'));
   assert.ok(bundle.includes(':root:not([data-theme="dark"]) body[data-story-slug]'));
 });
+test('section color contract keeps Hatshepsut pink/purple and Magdi Yacoub cyan/teal', function () {
+  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
+  var checklist = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', 'utf8');
+  var hatsTheme = fs.readFileSync('stories/women/013/theme.css', 'utf8');
+  var magdiTheme = fs.readFileSync('stories/science/015/theme.css', 'utf8');
+  assert.ok(masterPrompt.includes('حتشبسوت ترث لوحة نساء خالدات الوردية/البرقوقية ولا تُعرض باللون الأخضر'));
+  assert.ok(masterPrompt.includes('مجدي يعقوب يرث لوحة العلوم السماوية/التركوازية ولا تُعرض صفحته بخلفية بنية'));
+  assert.ok(checklist.includes('حتشبسوت ليست خضراء') && checklist.includes('مجدي يعقوب ليس بخلفية بنية'));
+  assert.ok(bundle.includes("women:'#d78bb2'") && bundle.includes("women:'women-leadership'"));
+  assert.ok(bundle.includes("science:'#8ad9e8'") && bundle.includes("science:'science-lab'"));
+  assert.ok(hatsTheme.includes('--accent:#e7a1c1') && hatsTheme.includes('#51284b'));
+  assert.ok(magdiTheme.includes('--accent:#8ad9e8') && magdiTheme.includes('#164451'));
+  assert.doesNotMatch(magdiTheme, /#50302b|#40262a/, 'Magdi Yacoub theme must not inherit the brown portrait palette');
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
@@ -136,16 +268,20 @@ test('published stories cannot be deleted and deleting drafts never hides static
 });
 test('admin validates every translated field and every quiz translation before AI import', function () {
   assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes('cover:pkg.cover||null'), 'AI import must preserve the validated cover object');
+  assert.ok(admin.includes('cover, map_location, images, translations, question_bank'), 'AI output schema must explicitly require the cover object');
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
   assert.ok(admin.includes('أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا'));
-  assert.ok(admin.includes('يُسمح بسياج الكود الخارجي وحده'));
-  assert.ok(admin.includes('من صورتين إلى خمس صور موثقة وصالحة على الأقل'));
+  assert.ok(admin.includes('بلا أسوار كود أو Markdown أو مقدمة أو خاتمة'));
+  assert.ok(!admin.includes('يُسمح بسياج الكود الخارجي وحده'), 'the admin JSON contract must not request code fences');
+  assert.ok(!admin.includes('ولا كتلة كود ثانية'), 'the admin JSON contract must not imply one code block is allowed');
+  assert.ok(admin.includes('images مصفوفة من صورتين إلى خمس صور موثقة وصالحة'));
   assert.ok(!admin.includes('إن تعذر البحث فاترك images فارغة'));
   assert.ok(admin.includes('لا تُخرج حزمة JSON للاستيراد إذا تعذر التحقق من صورتين على الأقل'));
   var sharedQuality = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(sharedQuality.includes('صورتين موثقتين وصالحتين على الأقل'));
+  assert.ok(sharedQuality.includes('معرض من صورتين إلى خمس صور موثقة وصالحة'));
   assert.ok(!sharedQuality.includes('إن تعذر البحث فاترك images فارغة'));
   assert.ok(sharedQuality.includes('بدل اختلاق روابط أو حقوق'), 'shared quality gate must prohibit invented image sources and rights');
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
@@ -177,6 +313,77 @@ test('preview review panel displays image thumbnails and attribution from the sa
   assert.ok(preview.includes('renderReviewImages(d);'));
   assert.ok(preview.includes('pub-image-card'));
 });
+test('Hatshepsut cover SVG has no embedded text that can leak across languages', function () {
+  var svg = fs.readFileSync('stories/women/013/cover-popup.svg', 'utf8');
+  assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to the localized HTML');
+  assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
+  assert.ok(svg.includes('aria-hidden=\"true\"'), 'HTML image alt text is the accessible label');
+  var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
+  assert.ok(story.includes('alt=\"رسم توضيحي، وليس صورة تاريخية\"'), 'cover image alt must use a shared localized translation key');
+});
+test('Hatshepsut page keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
+  var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
+  var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
+  assert.ok(story.includes('body.motion-ready .write-in.write-visible'), 'Hatshepsut story text must reveal when it enters view');
+  assert.ok(story.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
+  assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
+  assert.ok(collection.includes('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'women card must prefer the verified Hatshepsut museum photo');
+  assert.ok(fs.existsSync('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'preferred museum image must exist in the repository');
+});
+test('Hatshepsut title uses feminine wording in all localized story metadata', function () {
+  var translations = fs.readFileSync('stories/women/013/translations.js', 'utf8');
+  var storyIndex = JSON.parse(fs.readFileSync('stories/index.json', 'utf8'));
+  var entry = storyIndex.find(function (item) { return String(item.id).padStart(3, '0') === '013'; });
+  assert.ok(entry, 'Hatshepsut must remain in the story index');
+  var expected = {
+    en: 'Hatshepsut: The Golden Female Pharaoh on the Nile Throne',
+    fr: 'Hatchepsout : La pharaonne d’or sur le trône du Nil',
+    it: 'Hatshepsut: La faraona d’oro sul trono del Nilo',
+    de: 'Hatschepsut: Die goldene Pharaonin auf dem Thron des Nils'
+  };
+  Object.keys(expected).forEach(function (lang) {
+    assert.strictEqual(entry.i18n[lang].title, expected[lang], 'story index title must use feminine wording for ' + lang);
+    assert.ok(translations.includes(expected[lang]), 'story translation dictionary must contain the localized title for ' + lang);
+  });
+  assert.ok(!entry.i18n.fr.title.includes('Le Pharaon'), 'French title must not misgender Hatshepsut');
+  assert.ok(!entry.i18n.it.title.includes('Il Faraone'), 'Italian title must not misgender Hatshepsut');
+  assert.ok(!entry.i18n.de.title.includes('Der goldene Pharao'), 'German title must not misgender Hatshepsut');
+});
+test('new story generator uses one sourced cover object and keeps SVG fallback free of embedded text', function () {
+  assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
+  assert.ok(bundle.includes('function absoluteStoryImageUrl(value,baseUrl,section,id)'), 'hero, modal and metadata need one resolved cover URL');
+  assert.ok(bundle.includes('مسار أصل موجود داخل المستودع'), 'unuploaded local cover paths must be rejected');
+  assert.ok(bundle.includes('if(!localCoverResponse.ok)throw new Error'), 'local cover path must be confirmed to exist before generating a bundle');
+  var vm = require('vm');
+  var sandbox = { window: {}, console: console, TextEncoder: TextEncoder, Blob: Blob, URL: URL };
+  vm.runInNewContext(bundle, sandbox, { filename: 'story-template-bundle.js' });
+  var api = sandbox.window.KHStoryBundle;
+  var pathPreview = api.renderPreviewHtml({section_key:'history',title:'اختبار مسار الغلاف',cover:{path:'assets/images/stories/Naguib_Mahfouz_HR.jpg',alt:'غلاف اختبار',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
+  assert.ok(pathPreview.includes('src="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/stories/Naguib_Mahfouz_HR.jpg"'), 'repository cover path must resolve for hero and modal');
+  assert.ok(pathPreview.includes('content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/stories/Naguib_Mahfouz_HR.jpg"'), 'Open Graph image must resolve to the same repository cover path');
+  var localImagePreview = api.renderPreviewHtml({section_key:'history',title:'اختبار صورة محلية',cover:{url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص',kind:'illustration'},images:[{url:'assets/images/stories/21V_CAT096R3.jpg',alt:'صورة',caption:'صورة موثقة',kind:'archival',source_name:'Metropolitan Museum',source_url:'https://example.org/image',rights:'Public Domain'}]});
+  assert.ok(localImagePreview.includes('src="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/stories/21V_CAT096R3.jpg"'), 'repository-root local gallery images must resolve against the site root');
+  var unsafeImages = api.validate({images:[{url:'../assets/images/a.jpg',alt:'A',source_name:'Source A',source_url:'https://example.org/a',rights:'License'},{url:'https://images.example/b.jpg',alt:'B',source_name:'Source B',source_url:'https://example.org/b',rights:'License'}]});
+  assert.ok(unsafeImages.missing.some(function(item){return item.includes('صورتين على الأقل بروابط قابلة للفتح')}), 'relative traversal image paths must not count as valid sourced images');
+  var adminHtml = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(adminHtml.includes('localImageResponse=await fetch(localImageUrl'), 'AI import must verify local gallery image assets exist before saving');
+  assert.ok(adminHtml.includes('window.KHWorkflow.verifyImageResource('), 'AI import must use the shared image-resource verifier for HTTPS and local assets');
+  assert.ok(adminHtml.includes('await Promise.all(imageProbeJobs)'), 'AI import must finish image-load verification before saving the draft');
+  var workflow = fs.readFileSync('khaledoon/assets/story-workflow.js','utf8');
+  assert.ok(workflow.includes('function verifyImageResource(url, label, ImageCtor, timeoutMs)'), 'the image verifier must be shared and independently testable');
+  assert.ok(workflow.includes('probe.naturalWidth > 0 && probe.naturalHeight > 0'), 'image verification must reject non-image/empty responses');
+  var invalidLocalCover = api.validate({cover:{path:'./cover.svg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
+  assert.ok(invalidLocalCover.missing.some(function (item) { return item.includes('المسار النسبي لملف غير مرفوع'); }), 'package-local unuploaded cover must fail validation');
+  assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
+  var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
+  assert.ok(collections.includes('if (coverPhoto && !coverUrl)'), 'legacy hardcoded covers must not override the unified cover object');
+  assert.ok(bundle.includes("ترجمة الوصف والتعليق واسم المصدر وحقوق الغلاف مطلوبة"));
+  assert.ok(bundle.includes("heroImageAbsoluteUrl?esc(heroImageAbsoluteUrl):baseUrl+'/stories/'+section+'/'+id+'/cover.svg'"), 'Open Graph metadata must use the resolved unified cover URL');
+  var svgStart = bundle.indexOf('function svgCover(d,id,accent,popup){');
+  var svgEnd = bundle.indexOf('function zipFiles(files){', svgStart);
+  assert.ok(svgStart >= 0 && svgEnd > svgStart);
+  assert.ok(!bundle.slice(svgStart, svgEnd).includes('<text '), 'generated SVG cover must not embed untranslated visible text');
+});
 test('story pages support distinct visual designs and source-attributed image galleries', function () {
   assert.doesNotThrow(function () { new Function(bundle); }, 'story template bundle must parse as JavaScript');
   assert.ok(bundle.includes('visualDesignKey(d,section)'));
@@ -200,6 +407,7 @@ test('rendered story preview applies all nine designs and includes attributed im
   designs.forEach(function (design) {
     var html = api.renderPreviewHtml({
       section_key: 'history', visual_design: design, title: 'حكاية اختبار', subtitle: 'معاينة التصميم',
+      cover: {url:'https://images.example/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',source_name:'مصدر الغلاف',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration',i18n:{en:{alt:'Test cover',caption:'Test cover caption'},fr:{alt:'Couverture test',caption:'Légende de couverture'},it:{alt:'Copertina di prova',caption:'Didascalia copertina'},de:{alt:'Test-Cover',caption:'Test-Cover-Beschriftung'}}},
       figure_name: 'شخصية اختبار', narrator_name: 'كارما', narrator_grade: 'الصف السادس',
       karma_text: 'لماذا تختلف الحكايات؟', body: 'هذا نص تجريبي طويل بما يكفي لعرض معاينة التصميم المخصص لكل حكاية.',
       sources: 'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.org/source-b',
@@ -209,6 +417,8 @@ test('rendered story preview applies all nine designs and includes attributed im
       ],
       question_bank_json: {questions: []}
     });
+    assert.ok(html.includes('https://images.example/cover.jpg'), 'missing single-source cover in hero/modal: ' + design);
+    assert.ok(html.includes('content="https://images.example/cover.jpg"'), 'Open Graph image should use the cover source: ' + design);
     assert.ok(html.includes('class="story-design-' + design + '"'), 'missing design class: ' + design);
     assert.ok(html.includes('story-visual-gallery'), 'missing image gallery: ' + design);
     assert.ok(html.includes('https://images.example/a.jpg'), 'missing first image: ' + design);
@@ -217,20 +427,38 @@ test('rendered story preview applies all nine designs and includes attributed im
     assert.ok(html.includes('معاينة خاصة غير منشورة'), 'preview safety banner missing: ' + design);
   });
 });
-test('AI story package validation requires a design profile and at least two documented images', function () {
-  assert.ok(W.validateStoryPackage({
+test('AI story package validation enforces one localized cover and two to five fully documented images', function () {
+  var validPackage = {
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
     history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
-    body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
+    body:'هل تعلم؟ حقيقة موثقة أولى لاختبار الحزمة.\n\nهل تعلم؟ حقيقة موثقة ثانية لاختبار الحزمة.\n\nهل تعلم؟ حقيقة موثقة ثالثة لاختبار الحزمة.',
+    cover:{url:'https://images.example/cover.jpg',alt:'غلاف أ',caption:'غلاف تجريبي',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/cover',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang,source_name:'Cover source '+lang,rights:'Illustration '+lang}]}))},
     visual_design:'science-lab', map_location:null,
     images:[
-      {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A'}]}))},
-      {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image B',caption:'Caption B'}]}))}
+      {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A',source_name:'Source A',rights:'License noted'}]}))},
+      {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image B',caption:'Caption B',source_name:'Source B',rights:'License noted'}]}))}
     ],
-    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:'Narrator',history_note:'History',images_note:'Images'}]})),
+    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){var marker={en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'}[lang];return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:[marker+' Fact one.',marker+' Fact two.',marker+' Fact three.'].join('\n\n'),history_note:'History',images_note:'Images'}]})),
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
-  }).ok);
+  };
+  assert.ok(W.validateStoryPackage(validPackage).ok);
+  var tooManyImages = Object.assign({}, validPackage, { images: validPackage.images.concat(validPackage.images, validPackage.images) });
+  var tooManyResult = W.validateStoryPackage(tooManyImages);
+  assert.ok(!tooManyResult.ok && tooManyResult.errors.some(function (error) { return /خمس صور/.test(error); }), 'gallery must reject more than five images');
+  var invalidExtraImage = Object.assign({}, validPackage, { images: validPackage.images.concat([Object.assign({}, validPackage.images[0], { url: 'javascript:alert(1)' })]) });
+  var invalidExtraResult = W.validateStoryPackage(invalidExtraImage);
+  assert.ok(!invalidExtraResult.ok && invalidExtraResult.errors.some(function (error) { return /الصورة 3: url/.test(error); }), 'every gallery entry must have a safe URL, even when two other images are valid');
+  var ambiguousCover = Object.assign({}, validPackage, { cover: Object.assign({}, validPackage.cover, { path: 'stories/history/preview/cover.jpg' }) });
+  var ambiguousCoverResult = W.validateStoryPackage(ambiguousCover);
+  assert.ok(!ambiguousCoverResult.ok && ambiguousCoverResult.errors.some(function (error) { return /مصدرًا واحدًا فقط/.test(error); }), 'cover must use either url or path, never both');
+  var untranslatedCoverCredit = W.validateStoryPackage({cover:{url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',kind:'illustration',i18n:{en:{alt:'Cover',caption:'Caption',source_name:'Cover source',rights:'Illustration'},fr:{alt:'Couverture',caption:'Légende',source_name:'Source de couverture',rights:'Illustration'},it:{alt:'Copertina',caption:'Didascalia',source_name:'Fonte copertina',rights:'Illustrazione'},de:{alt:'Titelbild',caption:'Bildunterschrift',source_name:'مصدر الغلاف',rights:'Illustration'}}}});
+  assert.ok(untranslatedCoverCredit.errors.some(function(error){return /الغلاف:.*DE/.test(error)}), 'AI import validator must reject Arabic source metadata on the cover');
+  var missingCover = { section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة', narrator_name:'راوي', narrator_grade:'الصف السادس', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.', karma_text:'كارما', body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.', history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', visual_design:'science-lab', map_location:null, images:[], translations:{}, question_bank:{questions:[]} };
+  var missingCoverResult = W.validateStoryPackage(missingCover);
+  assert.ok(!missingCoverResult.ok && missingCoverResult.errors.some(function(error){return /cover/.test(error)}), 'a package without cover must be rejected for the missing cover contract');
+  var noImages = Object.assign({}, missingCover, {cover: {url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',kind:'illustration',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover',caption:'Caption',source_name:'Cover source',rights:'Illustration'}]}))}});
+  assert.ok(W.validateStoryPackage(noImages).errors.some(function(error){return /صورتين موثقتين/.test(error)}), 'an empty image gallery must be rejected');
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
 test('Gemini is available in every admin story prompt flow with full story requirements', function () {
@@ -239,15 +467,15 @@ test('Gemini is available in every admin story prompt flow with full story requi
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
   assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
-  assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
-  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ بحثًا أو تنزيلًا أو اختبارًا لم يحدث فعلًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+  assert.ok(texts.includes('"gemini":"# تعليمات تشغيل خاصة بـ Gemini'));
+  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
+  assert.ok(texts.includes('## 3) نظام التصميم الملزم — لا تكتفِ بوصفه للذكاء الاصطناعي'));
   assert.ok(texts.includes('visual_design'));
   assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تستخدم قالبًا بصريًا واحدًا متكررًا لكل الحكايات.'));
+  assert.ok(texts.includes('لا تجعل جميع الحكايات نسخة لونية واحدة.'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
@@ -288,6 +516,12 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('var pastedRaw=aiPaste.value,sourceRaw=pastedRaw.trim(),pkg,raw=pastedRaw'));
+  assert.ok(admin.includes("cover:it.cover||oldMetaForPackage.cover||null"), 'rebuilt AI JSON must preserve the existing cover metadata');
+  assert.ok(admin.includes('draft.cover=draft.cover||meta.cover||null'), 'publishing must restore the cover from story_meta before validating and building the bundle');
+  assert.ok(admin.includes("aiPasteStorageKey='kh-story-ai-paste:'+String(it._t||'k')+':'+String(it.id||'new')"), 'AI paste cache must be namespaced by record table and ID');
+  assert.ok(admin.includes("else if(it.id){var legacyAiPaste=localStorage.getItem('kh-story-ai-paste:'+String(it.id))"), 'existing records should migrate cached AI text without sharing cache across new unsaved records');
+  assert.ok(admin.includes('aiClear.disabled=aiPasteLocked'), 'clear action must remain disabled until the AI output field is unlocked');
+  assert.ok(admin.includes("if(aiPasteLocked){aiSay('info','افتح الخانة بزر «تعديل» قبل مسح ناتج الذكاء الاصطناعي.');return}"), 'clear handler must enforce the lock state');
   assert.ok(admin.includes('aiJsonWasRepaired'));
   assert.ok(admin.includes('assets/ai-json-repair.js?v=20261021-3'));
   assert.ok(admin.includes("ai_imported_provider_label"));
@@ -301,11 +535,78 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('unified v3 prompt requires safe automatic map linkage for verified locations', function () {
+test('prompt manager preserves valid v4 customizations and migrates stale appended gates', function () {
+  var vm = require('vm');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var start = admin.indexOf('function adoptPromptManagerState(raw)');
+  var end = admin.indexOf('\nfunction managedCustomPromptText()', start);
+  assert.ok(start >= 0 && end > start, 'prompt state migration helper must be isolatable');
+  var helper = admin.slice(start, end);
+  var legacyGate = 'بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ';
+  function adopt(raw) {
+    var context = {
+      STORY_PAGE_PROMPT: 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4',
+      STORY_WORKFLOW: 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4',
+      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER' } },
+      promptManagerState: {},
+      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER' },
+      raw: raw
+    };
+    return JSON.parse(vm.runInNewContext(helper + '; adoptPromptManagerState(raw); JSON.stringify(promptManagerState)', context));
+  }
+  var valid = adopt({
+    main: 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4',
+    workflow: 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4',
+    custom: [{ name: 'extra', text: 'keep me' }],
+    providers: { chatgpt: 'CUSTOM PROVIDER' },
+    versions: [{ version: 'saved' }]
+  });
+  assert.equal(valid.main, 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4', 'valid v4 master customizations must survive reload');
+  assert.equal(valid.workflow, 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4', 'valid v4 workflow customizations must survive reload');
+  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER', 'valid provider prompts must survive reload');
+  assert.equal(valid.custom.length, 1, 'custom prompt entries must survive migration checks');
+  var stale = adopt({
+    main: 'STALE MASTER\nالإصدار: 2026-10-23-v4\n' + legacyGate,
+    workflow: 'STALE GUIDE\nالإصدار: 2026-10-23-v4\n' + legacyGate,
+    custom: [{ name: 'extra', text: 'keep me' }],
+    providers: { chatgpt: 'STALE PROVIDER' }
+  });
+  assert.equal(stale.main, 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical master');
+  assert.equal(stale.workflow, 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical workflow guide');
+  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER', 'stale provider prompts must be refreshed');
+  assert.equal(stale.custom.length, 1, 'migration must preserve separately managed custom prompt entries');
+});
+
+test('prompt admin links to the canonical v4 files and avoids stale v3 links', function () {
+  var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
+  assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
+  assert.ok(promptAdmin.includes('ليست مستقلة'), 'prompt admin must explain that provider files accompany the master');
+  assert.ok(!promptAdmin.includes('prompts/2026-10-22-unified-v3/'));
+  ['MASTER-STORY-WORKFLOW.md','CHATGPT.md','CLAUDE.md','DEEPSEEK.md','GEMINI.md','WORKFLOW-CHECKLIST.md'].forEach(function(file){
+    assert.ok(fs.existsSync('khaledoon/prompts/2026-10-23-unified-v4/'+file), 'v4 prompt artifact must exist: '+file);
+  });
+});
+test('publisher duplicate-story guard normalizes actual whitespace', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(publisher.includes("normalize('NFKC').replace(/\\s+/g, ' ').trim()"), 'duplicate-title normalization must collapse real whitespace');
+  assert.ok(!publisher.includes("replace(/\\\\s+/g, ' ')"), 'duplicate-title normalization must not match a literal backslash-s');
+  var norm = function (value) { return String(value ?? '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLocaleLowerCase(); };
+  assert.equal(norm('  Naguib   Mahfouz  '), norm('Naguib Mahfouz'));
+});
+
+test('publisher rejects dot and empty path segments', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(publisher.includes('path.split("/").some((part) => part === "" || part === "." || part === "..")'),
+    'publisher must reject empty, dot, and parent path segments before creating a Git tree');
+  assert.ok(!publisher.includes('path.split("/").includes("..")'), 'parent-only rejection is insufficient');
+});
+
+test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
-  assert.ok(texts.includes('لا تخترع إحداثيات أو روابط، ولا تغيّر سجلات قديمة أو بيانات التفاعلات.'));
+  assert.ok(texts.includes('لا تخترع إحداثيات.'));
   assert.ok(publisher.includes("path === \"stories/index.json\" || path === \"stories/places.json\""));
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(publisher.includes('delete currentPlaces[storyId]'));
@@ -318,6 +619,7 @@ test('verified map_location is carried from AI import into bundle and merged saf
   var edge = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(workflow.includes("hasOwnProperty.call(pkg, 'map_location')"));
   assert.ok(workflow.includes('اسم المكان في map_location مطلوب باللغات الخمس'));
+  assert.ok(workflow.includes('map_location يحتاج source_name مترجمًا إلى ar/en/fr/it/de'), 'AI map source names must be localized');
   assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'));
   assert.ok(admin.includes('draft.map_location=meta.map_location'));
   assert.ok(bundle.includes("files.push({path:'stories/places.json'"));
@@ -330,41 +632,81 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
-test('story i18n lookup supports source-first and language-first dictionaries', function () {
+test('story publisher creates review PRs and never updates main directly', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(publisher.includes('body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha })'));
+  assert.ok(publisher.includes('/pulls'));
+  assert.ok(publisher.includes('published_to_main: false'));
+  assert.ok(publisher.includes('action === "verify_pr"'));
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'));
+  assert.ok(admin.includes("action:'verify_pr'"));
+  assert.ok(admin.includes('branch:review.publish_branch'));
+  assert.ok(admin.includes('publish_branch:result.branch||'));
+  assert.ok(admin.includes("body:JSON.stringify({action:'capabilities'})"));
+  assert.ok(admin.includes("capabilityResult.publisher_mode!=='draft_pr'"));
+  assert.ok(admin.includes("capabilityResult.writes_main_directly!==false"));
+  assert.ok(admin.includes('var publisherCapabilityBlocked=false'));
+  assert.ok(admin.includes('if(!publisherCapabilityBlocked)'));
+  assert.ok(admin.includes('publisherCapabilityBlocked=true'));
+  assert.ok(admin.indexOf("body:JSON.stringify({action:'capabilities'})") < admin.indexOf("body:JSON.stringify({title:'مراجعة حكاية:"));
+  assert.ok(publisher.includes('branch: branchNameForRecovery'));
+  assert.ok(publisher.includes('pull.head?.repo?.full_name'));
+  assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
+  
+  assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
+  assert.ok(admin.includes('طلب الدمج لم يُدمج بعد'));
+  assert.ok(admin.includes('الموقع المنشور لم يتغير'));
+  assert.ok(!admin.includes('!result.published_to_main'));
+});
+
+test('story i18n lookup supports both dictionary shapes and the real SVG artwork dictionary', function () {
   var vm = require('vm');
   var engine = fs.readFileSync('assets/shared/story-i18n.js','utf8');
   var match = engine.match(/function findTranslation\(source, lang\)\{[\s\S]*?\n\}/);
   assert.ok(match, 'translation lookup helper must exist');
+  var svgPrefix = 'var svgArtworkTranslations=';
+  var svgStart = engine.indexOf(svgPrefix) + svgPrefix.length;
+  var svgEnd = engine.indexOf(';\nfunction findTranslation', svgStart);
+  assert.ok(svgStart >= svgPrefix.length && svgEnd > svgStart, 'actual SVG artwork dictionary must be isolated');
+  var svgDictionary = JSON.parse(engine.slice(svgStart, svgEnd));
   var sourceFirst = { 'مرحبا': { en: 'Hello', fr: 'Bonjour' } };
   var languageFirst = { en: { 'مرحبا': 'Hello' }, fr: { 'مرحبا': 'Bonjour' }, de: { 'مرحبا': 'Hallo' } };
-  function lookup(dictionary, lang) {
-    var context = { translations: dictionary };
-    return vm.runInNewContext(match[0] + '; findTranslation("مرحبا", "' + lang + '")', context);
+  function lookup(dictionary, lang, source) {
+    var context = { translations: dictionary, window: { StoryI18N: { text: {} } }, svgArtworkTranslations: svgDictionary };
+    return vm.runInNewContext(match[0] + '; findTranslation(' + JSON.stringify(source || 'مرحبا') + ', ' + JSON.stringify(lang) + ')', context);
   }
   assert.equal(lookup(sourceFirst, 'en').en, 'Hello');
   assert.equal(lookup(languageFirst, 'fr').fr, 'Bonjour');
   assert.equal(lookup(languageFirst, 'de').de, 'Hallo');
   assert.equal(lookup(languageFirst, 'en').en, 'Hello');
+  assert.equal(lookup({}, 'en', 'حتشبسوت').en, 'Hatshepsut');
+  assert.equal(lookup({}, 'de', 'خالدون عبر التاريخ · رسم توضيحي').de, 'Unsterbliche der Geschichte · Illustration');
 });
 
-test('unified v3 story prompt requires complete five-language verification', function () {
+test('unified v4 story prompt requires complete five-language verification', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(promptTexts.includes('## 6) اللغات الخمس — اكتمال حقيقي'));
   assert.ok(promptTexts.includes('ar/en/fr/it/de'));
   assert.ok(promptTexts.includes('اختبر التبديل بين اللغات ثم الرجوع إلى لغة أخرى'));
   assert.ok(admin.includes('STORY_PAGE_PROMPT'));
 });
 
-test('unified v3 prompt requires sourced images and a rendered image gallery', function () {
+test('unified v4 prompt requires sourced images and a rendered image gallery', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
   assert.ok(promptTexts.includes('## 4) الغلاف والصور — من البداية حتى آخر مشهد'));
-  assert.ok(promptTexts.includes('source_name وsource_url وrights'));
+  assert.ok(promptTexts.includes('source_name') && promptTexts.includes('source_url') && promptTexts.includes('rights'), 'prompt artifacts must retain source and rights fields');
+  assert.ok(promptTexts.includes('أضف في `i18n` لكل لغة `en/fr/it/de` الحقول الأربعة مترجمة'), 'master prompt must require localized image source and rights metadata');
+  assert.ok(admin.includes('i18n.en/fr/it/de لكل من alt وcaption وsource_name وrights'), 'AI schema must require translated image metadata');
+  assert.ok(bundle.includes('add(lang,im.source_name,it.source_name);add(lang,im.rights,it.rights)'), 'generated translation dictionary must include image source and rights');
+
   assert.ok(promptTexts.includes('ظهور الصورة في نتائج البحث ليس إذنًا باستخدامها.'));
-  assert.ok(bundle.includes('function imageGalleryHtml(d)'));
+  assert.ok(bundle.includes('function imageGalleryHtml(d,baseUrl,section,id)'));
+  assert.ok(bundle.includes('absoluteStoryImageUrl(im.url,baseUrl,section,id)'), 'gallery links and images must use resolved repository-root URLs');
   assert.ok(bundle.includes("'+gallery+'"));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
 });
@@ -372,7 +714,7 @@ test('unified v3 prompt requires sourced images and a rendered image gallery', f
 
 test('AI JSON import repair handles common copy/paste formatting damage without changing source text', function () {
   var repair = require('../assets/ai-json-repair.js');
-  var raw = 'Introductory text\\n```json\\n{"format":"KH_STORY_PACKAGE_V1","title":"T\\\\*itle","body":"line one\\nline two","items":[1,2,],}\\n```';
+  var raw = 'Introductory text\n```json\n{"format":"KH_STORY_PACKAGE_V1","title":"T\\\\*itle","body":"line one\nline two","items":[1,2,],}\n```';
   var parsed = repair.parse(raw);
   assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
   assert.equal(parsed.value.title, 'T*itle');
@@ -382,7 +724,7 @@ test('AI JSON import repair handles common copy/paste formatting damage without 
 });
 test('AI JSON import selects the complete story package when pasted text contains duplicate objects or stray tags', function () {
   var repair = require('../assets/ai-json-repair.js');
-  var raw = '{"format":"OTHER","title":"short"}\\n</escape>\\n{"format":"KH_STORY_PACKAGE_V1","title":"complete package","body":"longer valid body"}';
+  var raw = '{"format":"OTHER","title":"short"}\n</escape>\n{"format":"KH_STORY_PACKAGE_V1","title":"complete package","body":"longer valid body"}';
   var parsed = repair.parse(raw);
   assert.equal(parsed.value.format, 'KH_STORY_PACKAGE_V1');
   assert.equal(parsed.value.title, 'complete package');
@@ -397,24 +739,150 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
-test('v3 prompt architecture uses one master prompt and concise provider instructions', function () {
+test('v4 prompt architecture uses one master prompt and concise provider instructions', function () {
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-22-v3'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
   assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
-    assert.ok(promptTexts.includes('## تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
+    assert.ok(promptTexts.includes('# تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
   });
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
   assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261022-prompts-v3'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261023-4'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
+  var providerPromptDir = 'khaledoon/prompts/2026-10-23-unified-v4/';
+  ['CHATGPT.md','CLAUDE.md','GEMINI.md','DEEPSEEK.md'].forEach(function (name) {
+    var providerPrompt = fs.readFileSync(providerPromptDir + name, 'utf8');
+    assert.ok(providerPrompt.length < 1800, name + ' should contain concise provider-specific guidance, not a duplicated master prompt');
+    assert.ok(providerPrompt.includes('MASTER-STORY-WORKFLOW.md'), name + ' must point to the canonical master prompt');
+    assert.ok(!providerPrompt.includes('# البرومبت الموحد المعتمد — خالدون عبر التاريخ'), name + ' must not duplicate the master prompt');
+  });
 });
 
+test('Magdi Yacoub opening paragraph has exact five-language source-key coverage and no stale Aswan claim', function () {
+  var translations = fs.readFileSync('stories/science/015/translations.js', 'utf8');
+  var opening = 'وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى.';
+  assert.equal(translations.split('"' + opening + '":"').length - 1, 8, 'the actual opening text node must be translated in both locale dictionaries for en/fr/it/de');
+  assert.ok(translations.includes('Magdi Yacoub was born on 16 November 1935 in Belbeis'), 'English opening must match the corrected fact');
+  assert.ok(translations.includes('Magdi Yacoub est né le 16 novembre 1935 à Belbeis'), 'French opening must match the corrected fact');
+  assert.ok(translations.includes('Magdi Yacoub nacque il 16 novembre 1935 a Belbeis'), 'Italian opening must match the corrected fact');
+  assert.ok(translations.includes('Magdi Yacoub wurde am 16. November 1935 in Belbeis'), 'German opening must match the corrected fact');
+  assert.ok(!translations.includes('خصوصاً في أسوان، ولد طفل صغير'), 'the stale contradictory Aswan opening must not return');
+  var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
+  var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
+  var photoRightsText = 'تحتوي هذه الصفحة على صورتين فوتوغرافيتين موثقتين للدكتور مجدي يعقوب: صورة من تصوير Raafat برخصة CC BY-SA 3.0، وصورة له أثناء تسلّم ميدالية ليستر عام 2015 من تصوير Carcharoth برخصة CC BY-SA 4.0. تظهر روابط المصدر والرخصة مع كل صورة. أما صورة نافذة البداية فهي رسم توضيحي أصلي وليست صورة أرشيفية.';
+  var listerAlt = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015 في الكلية الملكية للجراحين بإنجلترا.';
+  var listerCaption = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015.';
+  var listerSource = 'صورة أرشيفية · تصوير Carcharoth عبر Wikimedia Commons';
+  assert.ok(magdiPage.includes(photoRightsText), 'Magdi Yacoub page must accurately describe two sourced archival photos and one original illustration');
+  assert.ok(!magdiPage.includes('تتوفر ثلاث صور فوتوغرافية موثقة'), 'stale claim of three archival photos must not return');
+  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/Special:FilePath/Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal photograph must load from the sourced Commons file');
+  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal image must link to its source record');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"This page uses two sourced photographs'), 'the corrected rights paragraph must have an English translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Cette page utilise deux photographies'), 'the corrected rights paragraph must have a French translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Questa pagina usa due fotografie'), 'the corrected rights paragraph must have an Italian translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Diese Seite verwendet zwei belegte Fotografien'), 'the corrected rights paragraph must have a German translation');
+  assert.ok(magdiExtra.includes('"' + listerAlt + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image alt text must be translated into English');
+  assert.ok(magdiExtra.includes('"' + listerCaption + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image caption must be translated into English');
+  assert.ok(magdiExtra.includes('"' + listerSource + '":"Archival photograph'), 'the new image credit must be translated into English');
+});
+ 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
+
+
+test('hidden-story deletion is review-only until a merged deletion PR is verified', function () {
+  var edge = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(edge.includes('body?.action === "capabilities"') && edge.includes('deletion_mode: "draft_pr"'), 'delete function must advertise safe PR mode');
+  assert.ok(edge.includes('async function githubAllPages(') && edge.includes('page=${page}') && edge.includes('batch.length < 100'), 'deletion must paginate pull-request searches instead of scanning only the first 100 results');
+  assert.ok(edge.includes('refusing to continue with incomplete pull-request results'), 'deletion must fail closed if pagination exceeds its safety cap');
+  assert.ok(edge.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken)'), 'duplicate-deletion search must scan all open PR pages');
+  assert.ok(edge.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=closed&base=${BASE}`, githubToken)'), 'post-merge deletion recovery must scan all closed PR pages');
+  assert.ok(edge.includes('head: branchName, base: BASE, body: description, draft: true'), 'hidden-story deletion must create a draft PR');
+  assert.ok(!edge.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'delete function must never update main directly');
+  assert.ok(!edge.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'delete function must not fast-forward main');
+  assert.ok(edge.includes('const mergedPull') && edge.includes('remainingStoryFiles || quizStillExists'), 'visibility cleanup must verify the merged PR removed story and quiz files');
+  assert.ok(edge.includes('delete places[id]'), 'deletion PR must remove the story map marker as well as the index entry');
+  assert.ok(edge.includes('branchNameForRecovery = branchName') && edge.includes('branch: branchNameForRecovery || null'), 'a failed PR creation must return the branch name for recovery');
+  assert.ok(edge.indexOf('const mergedPull') < edge.indexOf('supabase.from("story_visibility").delete()'), 'visibility row must remain until a merged deletion PR is verified');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.deletion_mode!=='draft_pr'"), 'admin must gate deletion on the deployed safe-mode capability');
+  assert.ok(admin.includes("JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})"), 'admin must request PR creation or post-merge verification');
+  var deleteStart = admin.indexOf('async function deleteHiddenStory');
+  var deleteEnd = admin.indexOf('function vcount', deleteStart);
+  var deleteBlock = admin.slice(deleteStart, deleteEnd);
+  assert.ok(deleteBlock.indexOf("JSON.stringify({action:'capabilities'})") < deleteBlock.indexOf("JSON.stringify({action:'delete_or_verify'"), 'delete capability handshake must run before any destructive story ID request');
+  assert.ok(admin.indexOf('if(result.pending===true)') < admin.indexOf('delete vHidden[String(s.id)]'), 'a pending deletion PR must not remove the hidden status from the admin view');
+  assert.ok(edge.includes('replace(/\\s/g, "")'), 'GitHub base64 content must remove actual whitespace before decoding');
+  assert.ok(!edge.includes('replace(/\\\\s/g, "")'), 'base64 normalization must not match a literal backslash-s');
+  assert.ok(edge.includes('String(entry.path ?? "").replace(/\\/$/, "")'), 'story path normalization must remove a trailing forward slash');
+  assert.ok(edge.includes('JSON.stringify(index, null, 2) + "\\n"'), 'index JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('JSON.stringify(places, null, 2) + "\\n"'), 'map JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('`<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n`'), 'deletion PR marker must be followed by real line breaks');
+});
+
+
+
+test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
+  assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
+  assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
+  assert.ok(publisher.includes('async function githubAllPages(') && publisher.includes('page=${page}') && publisher.includes('batch.length < 100'), 'publisher must paginate pull-request searches instead of silently scanning only the first 100 results');
+  assert.ok(publisher.includes('refusing to continue with incomplete pull-request results'), 'publisher must fail closed if pagination exceeds its safety cap');
+  assert.ok(publisher.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken)'), 'duplicate-publication search must scan every page of open PRs');
+  assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
+  assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
+  assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
+  assert.ok(publisher.includes("'/contents/stories/index.json?ref=' + baseSha") && publisher.includes("'/contents/stories/places.json?ref=' + baseSha"), 'index and map reads must use the exact commit used as the PR base');
+  assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
+  assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
+  assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
+  assert.ok(!publisher.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'publisher must not patch the main ref');
+  assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
+  assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
+  assert.ok(admin.includes("action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
+  var publishStart = admin.indexOf('async function submitStoryPublishPR');
+  var publishEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', publishStart);
+  var publishBlock = admin.slice(publishStart, publishEnd);
+  assert.ok(publishBlock.includes('if(!statusResult.merged){window.open(review.publish_pr_url') && publishBlock.indexOf('if(!statusResult.merged)') < publishBlock.indexOf('published_to_main_at:new Date().toISOString()'), 'an open PR must not be marked as published');
+  assert.ok(admin.includes('if(!review.publish_pr_number||!review.publish_branch)') && admin.includes('لم نؤكد النشر'), 'legacy PR records without a verifiable number must not bypass merge verification');
+  assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
+  var submitStart = admin.indexOf('async function submitStoryPublishPR');
+  var submitEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', submitStart);
+  var submitBlock = admin.slice(submitStart, submitEnd);
+  assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
+  var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
+  var bundleIndex = admin.indexOf('var pack=await window.KHStoryBundle.download', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
+});
+
+
+
+test('story generation uses a stable shared theme asset and fails closed when it cannot load', function () {
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+  var theme = fs.readFileSync('khaledoon/assets/story-theme-template.css', 'utf8');
+  assert.ok(theme.length > 5000, 'canonical shared theme should contain the full approved story design');
+  assert.ok(bundle.includes("fetch('../khaledoon/assets/story-theme-template.css',{cache:'no-store'})"), 'new stories must use the stable shared theme asset rather than borrowing story 005 CSS');
+  assert.ok(bundle.includes('if(!themeResponse.ok)throw new Error('), 'theme load failure must stop bundle generation instead of silently emitting an unstyled page');
+  assert.ok(!bundle.includes("fetch('../stories/history/005/theme.css'"), 'future edits to story 005 must not silently alter every new story theme');
+});
+
+
+test('story builder derives the site base path from its current deployment instead of hard-coding the GitHub Pages repo path', function () {
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+  assert.ok(bundle.includes('function siteBaseUrl()'), 'builder must centralize deployment base URL detection');
+  assert.ok(bundle.includes("path.indexOf('/khaledoon/')"), 'builder must detect the repository prefix from its own admin/builder path');
+  assert.ok(bundle.includes("var liveUrl=siteBaseUrl()+'/stories/'"), 'legacy story existence checks must use the detected site base path');
+  assert.ok(bundle.includes("baseUrl=siteBaseUrl()"), 'generated og:image and local image URLs must use the detected site base path');
+  assert.ok(!bundle.includes("location.origin+'/nourdeen-october-1973"), 'builder must not generate incorrect repository URLs when run on localhost or a root-hosted staging site');
+});

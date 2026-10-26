@@ -47,12 +47,13 @@ async function main() {
   const html = bundle.renderPreviewHtml({
     section_key: 'history', title: 'اختبار معاينة القارئ', subtitle: 'نبذة اختبارية',
     figure_name: 'شخصية تجريبية', narrator_name: 'راوي تجريبي',
-    body: 'هذا نص اختباري طويل بما يكفي لعرض شكل الحكاية في القالب المنشور.',
+    body: 'هل تعلم؟ معلومة تجريبية أولى.\n\nهل تعلم؟ معلومة تجريبية ثانية.\n\nهل تعلم؟ معلومة تجريبية ثالثة.',
     karma_text: 'كارما تسأل سؤالًا تجريبيًا.',
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
+    cover: { path: 'stories/history/preview/cover.jpg', alt: 'غلاف تجريبي', caption: 'تعليق الغلاف التجريبي', kind: 'illustration', source_name: 'مصدر الغلاف', source_url: 'https://example.org/cover-source', rights: 'رسم توضيحي', i18n: { en: { alt: 'Preview cover', caption: 'Preview cover caption', source_name: 'Preview cover source', rights: 'Illustration' }, fr: { alt: 'Couverture test', caption: 'Légende de couverture', source_name: 'Source de couverture test', rights: 'Illustration' }, it: { alt: 'Copertina di prova', caption: 'Didascalia di copertina', source_name: 'Fonte della copertina di prova', rights: 'Illustrazione' }, de: { alt: 'Testtitelbild', caption: 'Bildunterschrift des Titelbilds', source_name: 'Quelle des Testtitelbilds', rights: 'Illustration' } } },
     translations: { en: { title: 'Preview test' }, fr: {}, it: {}, de: {} },
     images: [
-      { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY' },
+      { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY', i18n: { en: { alt: 'Portrait', caption: 'Portrait', source_name: 'Example Archive EN', rights: 'Public Domain' }, fr: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archive Exemple', rights: 'Domaine public' }, it: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archivio di esempio', rights: 'Pubblico dominio' }, de: { alt: 'Portrait', caption: 'Portrait', source_name: 'Beispielarchiv', rights: 'Gemeinfrei' } } },
       { url: 'https://images.example.org/related.jpg', alt: 'Related image', caption: 'Related image' }
     ],
     question_bank_json: { questions: [] }
@@ -64,12 +65,25 @@ async function main() {
   assert.ok(html.indexOf('assets/shared/i18n.js') < html.indexOf('window.StoryI18N'), 'shared i18n script must load before the generated inline story translation dictionary');
   assert.match(html, /stories\/history\/preview\//);
   assert.match(html, /class="hero-art"/, 'preview should show the lead story image in the hero');
+  const coverUrl = 'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/preview/cover.jpg';
+  assert.equal(html.split(coverUrl).length - 1, 3, 'the same cover path must feed og:image, the hero, and the intro modal');
+  assert.match(html, /Preview cover/, 'cover alt translation must be included in the generated language dictionary');
+  assert.match(html, /Preview cover caption/, 'cover caption translation must be included in the generated language dictionary');
+  assert.match(html, /Preview cover source/, 'cover source-name translation must be included in the generated language dictionary');
+  assert.match(html, /Illustration/, 'cover rights translation must be included in the generated language dictionary');
+  assert.match(html, /Source link/, 'the gallery source-link label must be translated in English');
+  assert.match(html, /Lien vers la source/, 'the gallery source-link label must be translated in French');
+  assert.match(html, /Link alla fonte/, 'the gallery source-link label must be translated in Italian');
+  assert.match(html, /Quellenlink/, 'the gallery source-link label must be translated in German');
+  assert.match(html, /Rights information is incomplete/, 'fallback rights warning must have a localized English form');
   assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
   assert.match(html, /Preview design profiles/, 'generated previews should carry approved visual design profiles');
   assert.match(html, /\.story-design-portrait-biography\{background:radial-gradient/, 'portrait biographies should use the approved literary design');
   assert.match(html, /\.story-design-arts-culture\{background:radial-gradient/, 'arts stories should use a dedicated visual identity');
   assert.match(html, /loading="eager"/, 'preview images should load immediately inside the sandboxed frame');
   assert.match(html, /https:\/\/images\.example\.org\/portrait\.jpg/, 'the lead image URL should be present in preview HTML');
+  assert.match(html, /Example Archive EN/, 'image source names should be translated in the generated dictionary');
+  assert.match(html, /Public Domain/, 'image usage rights should be translated in the generated dictionary');
   assert.match(html, /بيانات الحقوق غير مكتملة/, 'images with missing rights should remain visible with a clear warning');
   assert.doesNotMatch(html, /src="cover-popup\.svg"/, 'preview must not depend on a cover asset that is absent from the srcdoc');
   assert.match(html, /معاينة خاصة غير منشورة/);
@@ -79,6 +93,114 @@ async function main() {
   assert.match(html, /#intro \.modal-card/, 'generated pages must include responsive intro modal rules');
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
-  console.log('Passed collision-safe ID allocation and generated preview checks.');
+  const validDraft = function () {
+    const langs = ['en','fr','it','de'];
+    const translations = Object.fromEntries(langs.map(function (lang) {
+      return [lang, {
+        student_name:'Student '+lang, grade:'Grade '+lang, title:'Story '+lang,
+        subtitle:'Subtitle '+lang, karma_text:'Karma voice '+lang,
+        body:[({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact one with a verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact two with a second verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact three with a third verified detail.'].join('\n\n'),
+        history_note:'History note '+lang, images_note:'Image rights note '+lang
+      }];
+    }));
+    const imageI18n = function (label) {
+      return Object.fromEntries(langs.map(function (lang) {
+        return [lang,{alt:label+' alt '+lang,caption:label+' caption '+lang,source_name:'Source '+lang,rights:'License '+lang}];
+      }));
+    };
+    return {
+      section_key:'history', title:'عنوان اختبار', subtitle:'نبذة اختبارية',
+      figure_name:'شخصية اختبار', karma_text:'كارما تسأل سؤالًا تجريبيًا.',
+      body:'هل تعلم؟ هذه حقيقة موثقة أولى داخل بطاقة معرفة.\n\nهل تعلم؟ هذه حقيقة موثقة ثانية داخل بطاقة معرفة.\n\nهل تعلم؟ هذه حقيقة موثقة ثالثة داخل بطاقة معرفة.',
+      history_note:'معلومة تاريخية موثقة', images_note:'ملاحظات الصور وحقوقها',
+      sources:'Source A https://example.org/source-a\nSource B https://example.net/source-b',
+      cover:{url:'https://images.example.org/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',kind:'illustration',source_name:'مصدر الغلاف',source_url:'https://example.org/cover-source',rights:'ترخيص موضح',
+        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover alt '+lang,caption:'Cover caption '+lang,source_name:'Cover source '+lang,rights:'Illustration '+lang}]}))},
+      translations:translations,
+      images:[
+        {url:'https://images.example.org/a.jpg',alt:'وصف الصورة أ',caption:'الصورة أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://example.org/a',rights:'ترخيص موضح',i18n:imageI18n('Image A')},
+        {url:'https://images.example.org/b.jpg',alt:'وصف الصورة ب',caption:'الصورة ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://example.org/b',rights:'ترخيص موضح',i18n:imageI18n('Image B')}
+      ],
+      question_bank_json:{questions:Array.from({length:5},function(_,i){return {
+        q:'السؤال '+i,o:['أ','ب'],a:0,e:'تفسير الإجابة',
+        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{q:'Question '+i+' '+lang,o:['Option A','Option B'],e:'Explanation '+lang}]}))
+      }})}
+    };
+  };
+  const goodDraft = validDraft();
+  assert.equal(bundle.validate(goodDraft).ok, true, 'fully localized bundle data should pass');
+  const tooManyImages = JSON.parse(JSON.stringify(goodDraft));
+  tooManyImages.images = tooManyImages.images.concat(tooManyImages.images, tooManyImages.images, tooManyImages.images);
+  assert.ok(bundle.validate(tooManyImages).missing.some(function (m) { return m.includes('لا تتجاوز خمس صور'); }), 'template validator must reject more than five gallery images');
+  const invalidExtraImage = JSON.parse(JSON.stringify(goodDraft));
+  invalidExtraImage.images.push(Object.assign({}, invalidExtraImage.images[0], {url:'javascript:alert(1)'}));
+  assert.ok(bundle.validate(invalidExtraImage).missing.some(function (m) { return /الصورة 3: url/.test(m); }), 'every gallery image must have a safe URL, even if two other images are valid');
+  const ambiguousCover = JSON.parse(JSON.stringify(goodDraft));
+  ambiguousCover.cover.path = 'stories/history/preview/cover.jpg';
+  assert.ok(bundle.validate(ambiguousCover).missing.some(function (m) { return m.includes('مصدرًا واحدًا فقط'); }), 'template validator must reject simultaneous cover url and path');
+  const missingFactCards = JSON.parse(JSON.stringify(goodDraft));
+  missingFactCards.body = 'A narrator paragraph without the required knowledge cards.';
+  assert.ok(bundle.validate(missingFactCards).missing.some(function (m) { return m.includes('ثلاث فقرات «هل تعلم؟»'); }), 'the template validator must reject stories without three fact-card paragraphs');
+  const previewHtml = bundle.renderPreviewHtml(goodDraft);
+  const expectedCoverUrl = 'https://images.example.org/cover.jpg';
+  const savedCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, story_meta: { cover: goodDraft.cover } }));
+  assert.equal(savedCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved story_meta.cover must feed og:image, hero, and intro modal');
+  const pendingCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, story_meta: { pending_draft: { cover: goodDraft.cover } } }));
+  assert.equal(pendingCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved pending_draft.cover must feed og:image, hero, and intro modal');
+  const recordCoverPreview = bundle.renderPreviewHtml(Object.assign({}, goodDraft, { cover: undefined, record_data: { cover: goodDraft.cover } }));
+  assert.equal(recordCoverPreview.split(expectedCoverUrl).length - 1, 3, 'saved record_data.cover must feed og:image, hero, and intro modal');
+  /* Execute the exact generated translation dictionary, then assert exact-key lookups
+     used by the shared story i18n engine. This guards against merely embedding values
+     without making the source text addressable for translation. */
+  const translationScriptMatch = previewHtml.match(/<script>(\(function\(\)\{\n"use strict";var S=window\.StoryI18N[\s\S]*?\}\)\(\);\n)<\/script>/);
+  assert.ok(translationScriptMatch, 'generated preview must embed its story translation dictionary');
+  const translationContext = { window: {} };
+  vm.runInNewContext(translationScriptMatch[1], translationContext, { filename: 'generated-story-translations.js' });
+  const generatedText = translationContext.window.StoryI18N.text;
+  const expectedGalleryTranslations = {
+    en: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source en', 'ترخيص موضح': 'License en', 'وصف الصورة أ': 'Image A alt en', 'مصدر الغلاف': 'Cover source en', 'غلاف اختبار': 'Cover alt en' },
+    fr: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source fr', 'ترخيص موضح': 'License fr', 'وصف الصورة أ': 'Image A alt fr', 'مصدر الغلاف': 'Cover source fr', 'غلاف اختبار': 'Cover alt fr' },
+    it: { 'صورة توضيحية': 'Illustrazione', 'المصدر أ': 'Source it', 'ترخيص موضح': 'License it', 'وصف الصورة أ': 'Image A alt it', 'مصدر الغلاف': 'Cover source it', 'غلاف اختبار': 'Cover alt it' },
+    de: { 'صورة توضيحية': 'Illustration', 'المصدر أ': 'Source de', 'ترخيص موضح': 'License de', 'وصف الصورة أ': 'Image A alt de', 'مصدر الغلاف': 'Cover source de', 'غلاف اختبار': 'Cover alt de' }
+  };
+  for (const [lang, entries] of Object.entries(expectedGalleryTranslations)) {
+    for (const [sourceText, translatedText] of Object.entries(entries)) {
+      assert.equal(generatedText[lang][sourceText], translatedText,
+        lang + ' dictionary must map exact visible source key "' + sourceText + '" to its localized value');
+    }
+  }
+  assert.equal((previewHtml.match(/class="story-fact-card"/g) || []).length, 3, 'the generated story should render three distinct knowledge cards');
+  assert.match(previewHtml, /class="story-image-kind">صورة توضيحية<\/span>/, 'gallery image kind must be isolated as a translatable text node');
+  assert.match(previewHtml, /class="story-image-source">المصدر أ<\/span>/, 'gallery source name must be isolated from the image-kind label so exact-key translation can apply');
+  assert.match(previewHtml, /class="story-image-rights">ترخيص موضح<\/span>/, 'gallery rights must be isolated from the source-link separator so exact-key translation can apply');
+  assert.match(previewHtml, /Source en/, 'localized gallery source-name values must be present in the generated translation dictionary');
+  assert.match(previewHtml, /License en/, 'localized gallery rights values must be present in the generated translation dictionary');
+  assert.match(previewHtml, /Image A alt en/, 'localized gallery alt text must be present in the generated translation dictionary');
+  assert.match(previewHtml, /Source fr/, 'French gallery source-name translation must be included');
+  assert.match(previewHtml, /Source it/, 'Italian gallery source-name translation must be included');
+  assert.match(previewHtml, /Source de/, 'German gallery source-name translation must be included');
+  assert.match(previewHtml, /License fr/, 'French gallery rights translation must be included');
+  assert.match(previewHtml, /License it/, 'Italian gallery rights translation must be included');
+  assert.match(previewHtml, /License de/, 'German gallery rights translation must be included');
+  assert.match(previewHtml, /Image A alt fr/, 'French gallery alt translation must be included');
+  assert.match(previewHtml, /Image A alt it/, 'Italian gallery alt translation must be included');
+  assert.match(previewHtml, /Image A alt de/, 'German gallery alt translation must be included');
+  assert.match(previewHtml, /Cover alt en/, 'English cover alt translation must be included');
+  assert.match(previewHtml, /Cover alt fr/, 'French cover alt translation must be included');
+  assert.match(previewHtml, /Cover alt it/, 'Italian cover alt translation must be included');
+  assert.match(previewHtml, /Cover alt de/, 'German cover alt translation must be included');
+  const badCover = JSON.parse(JSON.stringify(goodDraft));
+  badCover.cover.i18n.de.alt = 'غلاف لم تتم ترجمته';
+  assert.ok(bundle.validate(badCover).missing.some(function (m) { return m.includes('بيانات الغلاف المترجمة'); }), 'Arabic cover alt must be rejected');
+  const badCoverCredit = JSON.parse(JSON.stringify(goodDraft));
+  badCoverCredit.cover.i18n.fr.rights = 'حقوق الغلاف بالعربية';
+  assert.ok(bundle.validate(badCoverCredit).missing.some(function (m) { return m.includes('بيانات الغلاف المترجمة'); }), 'Arabic cover rights must be rejected');
+  const badBody = JSON.parse(JSON.stringify(goodDraft));
+  badBody.translations.fr.body += ' نص عربي متروك';
+  assert.ok(bundle.validate(badBody).missing.some(function (m) { return m.includes('حقل body'); }), 'Arabic in a translated story body must be rejected');
+  const badQuiz = JSON.parse(JSON.stringify(goodDraft));
+  badQuiz.question_bank_json.questions[0].i18n.it.q = 'سؤال لم تتم ترجمته';
+  assert.ok(bundle.validate(badQuiz).missing.some(function (m) { return m.includes('ترجمة IT'); }), 'Arabic in translated quiz text must be rejected');
+  console.log('Passed collision-safe ID allocation, generated preview, and strict translation validation checks.');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

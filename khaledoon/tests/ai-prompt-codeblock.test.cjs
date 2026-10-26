@@ -1,4 +1,4 @@
-/* Tests for the "one code block" story prompt rewrite (assets/ai-json-repair.js). */
+/* Tests that copied story prompts request raw JSON, not Markdown fences. */
 'use strict';
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -8,26 +8,27 @@ const tool = require('../assets/ai-json-repair.js');
 const admin = fs.readFileSync(path.join(__dirname, '..', 'admin.html'), 'utf8');
 const FENCE = String.fromCharCode(96).repeat(3);
 
-// 1) Every sentence we replace must still exist exactly once in admin.html, otherwise the rewrite would silently stop working.
+// 1) Every legacy provider sentence we normalize must still exist exactly once in admin.html.
 tool.PROMPT_RULES.forEach(([oldText]) => {
   assert.equal(admin.split(oldText).length - 1, 1, 'prompt sentence missing or duplicated in admin.html: ' + oldText);
 });
 
-// 2) A package prompt containing all the old sentences comes out with none of them and with the code-block instruction.
+// 2) A package prompt containing all legacy sentences is normalized to raw JSON-only instructions.
 const prompt = 'KH_STORY_PACKAGE_V1\n' + tool.PROMPT_RULES.map((r) => r[0]).join('\n');
-const rewritten = tool.toCodeBlockPrompt(prompt);
+const rewritten = tool.toRawJsonPrompt(prompt);
 tool.PROMPT_RULES.forEach(([oldText, newText]) => {
   assert.ok(!rewritten.includes(oldText));
   assert.ok(rewritten.includes(newText));
 });
-assert.ok(!/بلا Markdown|أسوار كود/.test(rewritten));
-assert.ok(rewritten.includes(FENCE + 'json'));
-assert.equal(tool.toCodeBlockPrompt(rewritten), rewritten, 'rewrite is idempotent');
+assert.ok(/JSON خام|نص خام/.test(rewritten));
+assert.ok(/بلا Markdown أو أسوار كود/.test(rewritten));
+assert.ok(!rewritten.includes(FENCE + 'json'), 'the prompt must not request code fences');
+assert.equal(tool.toRawJsonPrompt(rewritten), rewritten, 'rewrite is idempotent');
 
 // 3) Text that is not the package prompt is untouched (e.g. the "new story" gate prompt).
 const other = 'تعليمات العمل — مشروع «خالدون عبر التاريخ».\n' + tool.PROMPT_RULES[0][0];
-assert.equal(tool.toCodeBlockPrompt(other), other);
-assert.equal(tool.toCodeBlockPrompt(undefined), undefined);
+assert.equal(tool.toRawJsonPrompt(other), other);
+assert.equal(tool.toRawJsonPrompt(undefined), undefined);
 
 // 4) The rewrite is wired into both copy sinks, once, and never blocks copying.
 {
@@ -51,7 +52,7 @@ assert.equal(tool.toCodeBlockPrompt(undefined), undefined);
   assert.equal(doc.copied, prompt, 'non-textarea copies are untouched');
 }
 
-// 5) The reply this prompt asks for (JSON inside one code block) imports cleanly.
+// 5) Legacy fenced replies remain accepted for recovery, though the prompt no longer requests them.
 {
   const body = { format: 'KH_STORY_PACKAGE_V1', title: 'ح', body: 'سطر أول\n\nسطر ثان' };
   const reply = 'ها هي الحزمة:\n' + FENCE + 'json\n' + JSON.stringify(body, null, 2) + '\n' + FENCE;
@@ -60,4 +61,4 @@ assert.equal(tool.toCodeBlockPrompt(undefined), undefined);
   assert.equal(result.repaired, false);
 }
 
-console.log('Passed AI prompt code-block tests.');
+console.log('Passed raw-JSON prompt normalization and legacy fenced-reply recovery tests.');
