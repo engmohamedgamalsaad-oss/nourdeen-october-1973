@@ -557,6 +557,10 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(admin.includes("action:'verify_pr'"));
   assert.ok(admin.includes('branch:review.publish_branch'));
   assert.ok(admin.includes('publish_branch:result.branch||'));
+  assert.ok(admin.includes("body:JSON.stringify({action:'capabilities'})"));
+  assert.ok(admin.includes("capabilityResult.publisher_mode!=='draft_pr'"));
+  assert.ok(admin.includes("capabilityResult.writes_main_directly!==false"));
+  assert.ok(admin.indexOf("body:JSON.stringify({action:'capabilities'})") < admin.indexOf("body:JSON.stringify({title:'مراجعة حكاية:"));
   assert.ok(publisher.includes('branch: branchNameForRecovery'));
   assert.ok(publisher.includes('pull.head?.repo?.full_name'));
   assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
