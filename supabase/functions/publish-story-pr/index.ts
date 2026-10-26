@@ -17,7 +17,7 @@ const reply = (status: number, data: Record<string, unknown>) =>
 
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
-      path.includes("\\") || path.split("/").includes("..")) return false;
+      path.includes("\\") || path.split("/").some((part) => part === "" || part === "." || part === "..")) return false;
   if (path === "stories/index.json" || path === "stories/places.json") return true;
   if (/^stories\/quizzes\/[0-9]{3}\.json$/.test(path)) return true;
   if (!/^stories\/[a-z0-9-]+\/[0-9]{3}\/[A-Za-z0-9._/-]+$/.test(path)) return false;
