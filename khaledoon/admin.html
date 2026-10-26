@@ -1115,7 +1115,7 @@ async function deleteHiddenStory(s,btn){
    await refreshIfNeeded();
    var response=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})});
    var result=await response.json().catch(function(){return {}});
-   if(!response.ok||!result.success)throw new Error(result.detail||result.error||('تعذر تجهيز طلب الحذف ('+response.status+').'));
+   if(!response.ok||!result.success){var deleteError=result.error||result.detail||('تعذر تجهيز طلب الحذف ('+response.status+').');if(result.detail&&deleteError!==result.detail)deleteError+=' '+result.detail;if(result.branch)deleteError+=' فرع الحذف الذي تم إنشاؤه دون طلب دمج: '+result.branch;throw new Error(deleteError)}
    if(result.pending===true){
     say('info',result.message||'تم إنشاء طلب حذف للمراجعة؛ الحكاية ما زالت مخفية ولم تتغير ملفات الموقع.');
     if(result.pull_request_url){var msg=$('msg'),link=el('a','btn ghost','فتح طلب الحذف');link.href=result.pull_request_url;link.target='_blank';link.rel='noopener noreferrer';msg.appendChild(document.createTextNode(' '));msg.appendChild(link)}
