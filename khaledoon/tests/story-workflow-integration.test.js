@@ -310,7 +310,7 @@ test('new story generator uses one sourced cover object and keeps SVG fallback f
   assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
   var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
   assert.ok(collections.includes('if (coverPhoto && !coverUrl)'), 'legacy hardcoded covers must not override the unified cover object');
-  assert.ok(bundle.includes("ترجمة النص البديل وتعليق الغلاف مطلوبة"));
+  assert.ok(bundle.includes("ترجمة الوصف والتعليق واسم المصدر وحقوق الغلاف مطلوبة"));
   assert.ok(bundle.includes("heroImageAbsoluteUrl?esc(heroImageAbsoluteUrl):baseUrl+'/stories/'+section+'/'+id+'/cover.svg'"), 'Open Graph metadata must use the resolved unified cover URL');
   var svgStart = bundle.indexOf('function svgCover(d,id,accent,popup){');
   var svgEnd = bundle.indexOf('function zipFiles(files){', svgStart);
@@ -366,7 +366,7 @@ test('AI story package validation requires a localized cover, design profile, an
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
     history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
     body:'هل تعلم؟ حقيقة موثقة أولى لاختبار الحزمة.\n\nهل تعلم؟ حقيقة موثقة ثانية لاختبار الحزمة.\n\nهل تعلم؟ حقيقة موثقة ثالثة لاختبار الحزمة.',
-    cover:{url:'https://images.example/cover.jpg',alt:'غلاف أ',caption:'غلاف تجريبي',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/cover',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))},
+    cover:{url:'https://images.example/cover.jpg',alt:'غلاف أ',caption:'غلاف تجريبي',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/cover',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang,source_name:'Cover source '+lang,rights:'Illustration '+lang}]}))},
     visual_design:'science-lab', map_location:null,
     images:[
       {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A',source_name:'Source A',rights:'License noted'}]}))},
@@ -375,10 +375,12 @@ test('AI story package validation requires a localized cover, design profile, an
     translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){var marker={en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'}[lang];return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:[marker+' Fact one.',marker+' Fact two.',marker+' Fact three.'].join('\n\n'),history_note:'History',images_note:'Images'}]})),
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
   }).ok);
+  var untranslatedCoverCredit = W.validateStoryPackage({cover:{url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',kind:'illustration',i18n:{en:{alt:'Cover',caption:'Caption',source_name:'Cover source',rights:'Illustration'},fr:{alt:'Couverture',caption:'Légende',source_name:'Source de couverture',rights:'Illustration'},it:{alt:'Copertina',caption:'Didascalia',source_name:'Fonte copertina',rights:'Illustrazione'},de:{alt:'Titelbild',caption:'Bildunterschrift',source_name:'مصدر الغلاف',rights:'Illustration'}}}});
+  assert.ok(untranslatedCoverCredit.errors.some(function(error){return /الغلاف:.*DE/.test(error)}), 'AI import validator must reject Arabic source metadata on the cover');
   var missingCover = { section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة', narrator_name:'راوي', narrator_grade:'الصف السادس', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.', karma_text:'كارما', body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.', history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', visual_design:'science-lab', map_location:null, images:[], translations:{}, question_bank:{questions:[]} };
   var missingCoverResult = W.validateStoryPackage(missingCover);
   assert.ok(!missingCoverResult.ok && missingCoverResult.errors.some(function(error){return /cover/.test(error)}), 'a package without cover must be rejected for the missing cover contract');
-  var noImages = Object.assign({}, missingCover, {cover: {url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',kind:'illustration',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover',caption:'Caption'}]}))}});
+  var noImages = Object.assign({}, missingCover, {cover: {url:'https://images.example/cover.jpg',alt:'غلاف',caption:'تعليق',kind:'illustration',source_name:'مصدر',source_url:'https://source.example/cover',rights:'ترخيص',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover',caption:'Caption',source_name:'Cover source',rights:'Illustration'}]}))}});
   assert.ok(W.validateStoryPackage(noImages).errors.some(function(error){return /صورتين موثقتين/.test(error)}), 'an empty image gallery must be rejected');
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
