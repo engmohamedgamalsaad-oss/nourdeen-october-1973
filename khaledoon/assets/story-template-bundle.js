@@ -6,6 +6,7 @@ var SECTION_NAMES={october:'حكايات أكتوبر 1973',history:'التار�
 var ACCENTS={october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a'};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function xml(s){return esc(s)}
+function siteBaseUrl(){var path=String((typeof location!=='undefined'&&location.pathname)||''),marker=path.indexOf('/khaledoon/'),prefix=marker>=0?path.slice(0,marker):'';return String((typeof location!=='undefined'&&location.origin)||'')+prefix}
 function paragraphs(s){return String(s||'').split(/\n{2,}/).map(function(x){return x.trim()}).filter(Boolean)}
 function isFactCardParagraph(p){return /^هل تعلم(?:[؟?]|:)/.test(String(p||'').trim())}
 function factCardIndexes(s){var out=[];paragraphs(s).forEach(function(p,i){if(isFactCardParagraph(p))out.push(i)});return out}
@@ -274,14 +275,14 @@ async function download(draft,opts){
   if(indexedPath&&indexedPath!==('stories/'+section+'/'+id))throw new Error('مسار الحكاية في الفهرس لا يطابق المسار المتوقع؛ أوقفنا التجهيز لحماية الرابط الحالي.');
   updatingExisting=true;
  }else if(hasPriorReview){
-  var liveUrl=location.origin+'/nourdeen-october-1973/stories/'+section+'/'+id+'/index.html';
+  var liveUrl=siteBaseUrl()+'/stories/'+section+'/'+id+'/index.html';
   var liveResponse;
   try{liveResponse=await fetch(liveUrl,{method:'HEAD',cache:'no-store'});}catch(e){throw new Error('تعذر التحقق من وجود صفحة الحكاية السابقة على الموقع؛ لم نغيّر الفهرس أو ننشئ نسخة قد تكون مكررة. حاول مرة أخرى بعد التأكد من اتصال الموقع.');}
   if(liveResponse.status===404){updatingExisting=false;}
   else if(liveResponse.ok){throw new Error('صفحة بهذا الرقم موجودة على الموقع لكنها غير موجودة في الفهرس؛ أوقفنا النشر لحماية الرابط ومنع إنشاء نسخة مكررة. راجع ملفات الموقع قبل المتابعة.');}
   else throw new Error('لم نتمكن من التأكد من حالة صفحة الحكاية السابقة (HTTP '+liveResponse.status+'); أوقفنا التجهيز حفاظًا على بيانات الموقع.');
  }else if(storyIndex.some(function(x){return String(x.path||'').split('/').filter(Boolean).join('/')===('stories/'+section+'/'+id)}))throw new Error('مسار الحكاية ظهر في الفهرس أثناء التجهيز؛ أعد فتح المعاينة لتحديد رقم جديد.');
- var accent=ACCENTS[section]||'#d5b7ff',root='stories/'+section+'/'+id+'/',baseUrl=location.origin+'/nourdeen-october-1973';
+ var accent=ACCENTS[section]||'#d5b7ff',root='stories/'+section+'/'+id+'/',baseUrl=siteBaseUrl();
  var data=dataJson(draft,id,section),quiz=report.quiz;quiz.id=id;quiz.title=draft.figure_name||draft.title;
  var indexEntry={name:data.name,grade:data.grade,className:data.className,title:data.title,subtitle:data.subtitle,person:data.person,cover:data.cover,color:data.color,order:parseInt(id,10),published:true,i18n:data.i18n,id:id,section:section,path:root};
  if(updatingExisting)storyIndex[existingIndexAt]=indexEntry;else storyIndex.push(indexEntry);
