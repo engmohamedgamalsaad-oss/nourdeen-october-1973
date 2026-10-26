@@ -554,7 +554,7 @@ async function svgArtworkRegression(browser, base, origin) {
   const checks = [];
   const cases = [
     { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
-    { slug: 'stories/women/013/', expected: 'A Queen Who Left a Lasting Legacy', arabic: 'ملكة صنعت أثرًا خالدًا' },
+    { slug: 'stories/women/013/', decorative: true },
     { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
     { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
     { slug: 'stories/science/012/', expected: 'The Scientist Who Read the Moon and the Desert', arabic: 'العالم الذي قرأ القمر والصحراء' },
@@ -576,7 +576,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, item.selector || '');
-      const enOk = en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic);
+      const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/[\\u0600-\\u06FF]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
       if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
 
@@ -591,7 +591,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, item.selector || '');
-      const arOk = ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic);
+      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/[\\u0600-\\u06FF]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }
