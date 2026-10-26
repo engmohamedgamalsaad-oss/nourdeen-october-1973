@@ -584,7 +584,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
-      const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/[؀-ۿ]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
+      const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/<text\\b/i.test(en.svg) && !/[؀-ۿ]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
       if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
 
@@ -599,7 +599,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
-      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
+      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/<text\\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }
