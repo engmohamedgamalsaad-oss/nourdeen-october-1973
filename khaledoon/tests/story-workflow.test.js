@@ -158,7 +158,7 @@ t('AI story package validator accepts a complete five-language package', functio
   var translations = {};
   langs.forEach(function (lang) {
     translations[lang] = { student_name: 'Narrator', grade: 'Grade 7', title: 'Title',
-      subtitle: 'Subtitle', karma_text: 'Karma asks a question', body: 'A complete translated story',
+      subtitle: 'Subtitle', karma_text: 'Karma asks a question', body: [({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' A verified fact one.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' A verified fact two.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' A verified fact three.'].join('\\n\\n'),
       history_note: 'Historical context', images_note: 'Image source and rights' };
   });
   var questions = [];
@@ -170,7 +170,7 @@ t('AI story package validator accepts a complete five-language package', functio
   var pkg = { format: 'KH_STORY_PACKAGE_V1', section_key: 'history', figure_name: 'Test figure',
     title: 'A complete story', subtitle: 'A full subtitle', narrator_name: 'Karma', narrator_grade: 'Grade 7',
     original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
-    body: 'A complete narrator story with more than fifty characters for validation.',
+    body: 'هل تعلم؟ حقيقة موثقة أولى لاختبار التحقق من حزمة الحكاية.\\n\\nهل تعلم؟ حقيقة موثقة ثانية لاختبار التحقق من الحزمة.\\n\\nهل تعلم؟ حقيقة موثقة ثالثة لاختبار التحقق من الحزمة.',
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
     images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
     images: [
@@ -223,7 +223,7 @@ t('AI story package validator accepts a complete five-language package', functio
   var missingTranslation = W.validateStoryPackage(pkg);
   assert.equal(missingTranslation.ok, false);
   assert.ok(missingTranslation.errors.some(function (e) { return e.indexOf('DE: حقل نص الراوي') >= 0; }));
-  pkg.translations.de.body = 'A complete translated story';
+  pkg.translations.de.body = [({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})['de']+' A verified fact one.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})['de']+' A verified fact two.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})['de']+' A verified fact three.'].join('\\n\\n');
   delete pkg.question_bank.questions[0].i18n.it.o;
   var missingQuizTranslation = W.validateStoryPackage(pkg);
   assert.equal(missingQuizTranslation.ok, false);
