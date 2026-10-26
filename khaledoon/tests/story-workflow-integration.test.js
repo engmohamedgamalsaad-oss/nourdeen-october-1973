@@ -26,7 +26,7 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
 });
 test('manual story builder inline JavaScript remains syntactically valid', function () {
-  var match = builder.match(/<script>([\\s\\S]*?)<\\/script>/);
+  var match = builder.match(/<script>([\s\S]*?)<\/script>/);
   assert.ok(match && match[1], 'manual story builder inline script must be present');
   new (require('vm').Script)(match[1], { filename: 'khaledoon/story-builder.html' });
 });
