@@ -50,7 +50,7 @@ function imageCheck(im, label, out, isCover = false) {
       if (!nonempty(t[key])) out.push(label + '.i18n.' + lang + '.' + key + ' required');
     }
   }
-  if (!isCover && Object.hasOwn(im, 'id') && !/^[a-z0-9-]+$/.test(im.id || '')) {
+  if (Object.hasOwn(im, 'id') && !/^[a-z0-9-]+$/.test(im.id || '')) {
     out.push(label + '.id must be a stable lowercase ID');
   }
 }
@@ -134,6 +134,7 @@ export async function validateLocalImagePaths(story, root) {
   try { base = await realpath(root); }
   catch { return ['story root does not exist']; }
   for (const [i, im] of all.entries()) if (im?.path) {
+    if (typeof im.path !== 'string') { out.push('image[' + i + '] path must be a string'); continue; }
     const target = path.resolve(base, im.path);
     if (!target.startsWith(base + path.sep)) { out.push('image[' + i + '] escapes story root'); continue; }
     try {
