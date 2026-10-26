@@ -729,7 +729,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
   assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
   assert.ok(admin.includes("action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
-  assert.ok(admin.includes('if(!prCheck.merged)throw new Error'), 'an open PR must not be marked as published');
+  assert.ok(admin.includes('if(!statusResult.merged){window.open(review.publish_pr_url') && admin.indexOf('if(!statusResult.merged)') < admin.indexOf('published_to_main_at:new Date().toISOString()'), 'an open PR must not be marked as published');
   assert.ok(admin.includes('publish_pr_url&&!meta.preview_review.publish_pr_number'), 'legacy PR records without a verifiable number must not bypass merge verification');
   assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
   var submitStart = admin.indexOf('async function submitStoryPublishPR');
