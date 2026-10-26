@@ -302,14 +302,14 @@ function validateStoryPackage(pkg) {
       errors.push('cover.kind يجب أن يكون archival أو illustration أو diagram أو map.');
     }
     if (!isObj(cover.i18n)) {
-      errors.push('cover.i18n مطلوب بترجمات en/fr/it/de للنص البديل والتعليق.');
+      errors.push('cover.i18n مطلوب بترجمات en/fr/it/de للنص البديل والتعليق واسم المصدر والحقوق.');
     } else {
       langs.forEach(function (lang) {
         var translatedCover = cover.i18n[lang];
-        if (!isObj(translatedCover) || !String(translatedCover.alt || '').trim() || !String(translatedCover.caption || '').trim()) {
-          errors.push('الغلاف: النص البديل والتعليق مترجمان ومطلوبان في ' + lang.toUpperCase() + '.');
-        } else if (hasArabic(translatedCover.alt) || hasArabic(translatedCover.caption)) {
-          errors.push('الغلاف: النص البديل والتعليق في ' + lang.toUpperCase() + ' لا يجوز أن يظلا بالعربية.');
+        if (!isObj(translatedCover) || !String(translatedCover.alt || '').trim() || !String(translatedCover.caption || '').trim() || !String(translatedCover.source_name || '').trim() || !String(translatedCover.rights || '').trim()) {
+          errors.push('الغلاف: النص البديل والتعليق واسم المصدر والحقوق مترجمة ومطلوبة في ' + lang.toUpperCase() + '.');
+        } else if (hasArabic(translatedCover.alt) || hasArabic(translatedCover.caption) || hasArabic(translatedCover.source_name) || hasArabic(translatedCover.rights)) {
+          errors.push('الغلاف: النص البديل والتعليق واسم المصدر والحقوق في ' + lang.toUpperCase() + ' لا يجوز أن تظل بالعربية.');
         }
       });
     }
