@@ -191,6 +191,42 @@ function paragraphCount(s) {
   return String(s == null ? '' : s).split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean).length;
 }
 
+/* يتحقق من أن رابط الغلاف/الصورة يُحمّل كصورة فعلية، وليس مجرد URL يبدأ بـ HTTPS. ImageCtor وtimeoutMs اختياريان للاختبار المعزول. */
+function verifyImageResource(url, label, ImageCtor, timeoutMs) {
+  var safeUrl = String(url || '').trim();
+  var name = String(label || 'الصورة');
+  if (!safeUrl) return Promise.reject(new Error(name + ' URL فارغ.'));
+  var ImageType = ImageCtor || (typeof Image !== 'undefined' ? Image : null);
+  if (!ImageType) return Promise.reject(new Error('المتصفح لا يتيح فحص تحميل الصور.'));
+  return new Promise(function (resolve, reject) {
+    var probe;
+    try { probe = new ImageType(); }
+    catch (error) { reject(new Error('تعذر إنشاء فاحص ' + name + '.')); return; }
+    var finished = false;
+    var wait = Number(timeoutMs);
+    if (!Number.isFinite(wait) || wait <= 0) wait = 12000;
+    var timer = setTimeout(function () {
+      finish(false, name + ' لم يتم تحميله كصورة فعلية خلال ' + Math.round(wait / 1000) + ' ثانية. استخدم رابط صورة مباشرًا قابلًا للفتح أو ارفع الملف إلى المستودع.');
+    }, wait);
+    function finish(ok, message) {
+      if (finished) return;
+      finished = true;
+      clearTimeout(timer);
+      probe.onload = null;
+      probe.onerror = null;
+      if (ok && probe.naturalWidth > 0 && probe.naturalHeight > 0) resolve(safeUrl);
+      else reject(new Error(message || (name + ' لا يحتوي بيانات صورة قابلة للعرض.')));
+    }
+    probe.onload = function () {
+      finish(probe.naturalWidth > 0 && probe.naturalHeight > 0, name + ' لا يحتوي بيانات صورة قابلة للعرض.');
+    };
+    probe.onerror = function () {
+      finish(false, name + ' فشل تحميله كصورة. تحقق من الرابط وحقوق الوصول، أو ارفع ملفًا محليًا صالحًا.');
+    };
+    probe.src = safeUrl;
+  });
+}
+
 /* فحص اكتمال حزمة AI قبل الاستيراد؛ يمنع مرور ترجمة أو بنك أسئلة ناقص إلى المعاينة. */
 function validateStoryPackage(pkg) {
   var errors = [], langs = ['en', 'fr', 'it', 'de'];
@@ -413,7 +449,7 @@ var api = {
   markPreviewSent: markPreviewSent, markApproved: markApproved, markPreviewRejected: markPreviewRejected,
   markEdited: markEdited, markPublishCheckFailed: markPublishCheckFailed,
   canMarkPublished: canMarkPublished, markPublished: markPublished,
-  validateStoryPackage: validateStoryPackage
+  validateStoryPackage: validateStoryPackage, verifyImageResource: verifyImageResource
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 root.KHWorkflow = api;
