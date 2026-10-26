@@ -60,7 +60,7 @@ Read-only comparison of deployed source and repository `main` found:
 - `publish-story-pr`: active, version 9; deployed `index.ts` matches the repository file byte-for-byte.
 - `delete-hidden-story`: active, version 1; deployed `index.ts` matches the repository file byte-for-byte.
 - Both functions authenticate the caller and check `is_admin()`, but their source writes commits directly to GitHub `main`; neither creates a pull request despite the publish function's name. **Do not invoke them as part of a test or deployment until the publishing workflow is deliberately reviewed.**
-- `translate-story` exists in the repository but was not present in the active Edge Function list during this audit. Its absence alone does not prove a user-facing failure; first verify whether any current UI calls it before considering deployment.
+- `translate-story` exists in the repository but was not present in the active Edge Function list during this audit. A repository-wide code search found no current caller outside the function's own source/comments, so it appears unused by the current UI; do not deploy it unless a verified current workflow needs it.
 
 ### 3. Database objects and policies
 
