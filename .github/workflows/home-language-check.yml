@@ -10,6 +10,7 @@ on:
 jobs:
   static-language-flow:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -38,7 +39,7 @@ jobs:
       - name: Install Chromium for real-browser checks
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Run real-browser language and responsive sweep
         run: node scripts/e2e-language-flow.cjs --out language-e2e-report.json
       - name: Upload browser audit report
