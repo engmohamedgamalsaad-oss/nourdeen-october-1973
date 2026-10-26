@@ -297,7 +297,7 @@ async function submitStoryPublishPR(it,btn){
  if(review.publish_pr_url){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحت طلب الدمج الحالي. لن تُنشر الحكاية على الموقع قبل دمجه.');return}
  if(review.publish_commit_sha||review.published_to_main_at){await confirmStoryPublishAfterUpload(it,btn);return}
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
- startButtonProgress(btn,'جارٍ تجهيز الملفات وإنشاء طلب الدمج…');try{await refreshIfNeeded();
+ startButtonProgress(btn,'جارٍ التحقق من وضع النشر الآمن…');var capabilityResponse,capability;try{capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});capability=await capabilityResponse.json().catch(function(){return {}})}catch(capabilityError){stopButtonProgress(btn);say('err','تعذر التحقق من وضع النشر الآمن؛ لم يتم إرسال ملفات الحكاية أو تعديل main.');return}if(!capabilityResponse.ok||!capability.success||capability.publisher_mode!=='draft_pr'||capability.writes_main_directly!==false){stopButtonProgress(btn);say('err','خدمة النشر الحية لم تؤكد وضع طلبات الدمج الآمن؛ لم يتم إرسال ملفات الحكاية أو تغيير main. حدّث Edge Function أولًا ثم أعد المحاولة.');return}startButtonProgress(btn,'جارٍ تجهيز الملفات وإنشاء طلب الدمج…');try{await refreshIfNeeded();
  var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
  draft.translations=draft.translations||meta.translations||{};draft.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';
