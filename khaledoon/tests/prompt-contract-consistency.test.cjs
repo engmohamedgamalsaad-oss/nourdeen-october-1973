@@ -8,13 +8,13 @@ const promptDir = 'khaledoon/prompts/2026-10-23-unified-v4/';
 const master = fs.readFileSync(root + '/' + promptDir + 'MASTER-STORY-WORKFLOW.md', 'utf8').trim();
 const activeSource = fs.readFileSync(root + '/khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
 const start = activeSource.indexOf('var STORY_PAGE_PROMPT = ');
-const end = activeSource.indexOf(';\\nvar STORY_PROVIDER_PROMPTS =', start);
+const end = activeSource.indexOf(';\nvar STORY_PROVIDER_PROMPTS =', start);
 assert.ok(start >= 0 && end > start, 'active prompt declaration must have stable boundaries');
 const activePrompt = JSON.parse(activeSource.slice(start + 'var STORY_PAGE_PROMPT = '.length, end)).trim();
 assert.equal(activePrompt, master, 'the active admin prompt must exactly match the canonical v4 master');
 
-const numberedHeadings = master.split('\\n')
-  .map(line => line.match(/^## (\\d+)\\)/))
+const numberedHeadings = master.split('\n')
+  .map(line => line.match(/^## (\d+)\)/))
   .filter(Boolean)
   .map(match => Number(match[1]));
 assert.deepEqual(numberedHeadings, [1, 2, 3, 4, 5, 6, 7, 8, 9],
