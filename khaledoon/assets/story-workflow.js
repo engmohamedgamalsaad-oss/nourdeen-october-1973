@@ -275,7 +275,7 @@ function validateStoryPackage(pkg) {
   var validImages = images.filter(function (im) {
     if (!isObj(im)) return false;
     var imageUrl = String(im.url || '').trim(), sourceUrl = String(im.source_url || '').trim();
-    var urlOk = /^https:\/\//i.test(imageUrl) || /^(?:\.\.\/|\.\/|images\/|assets\/images\/)[^\s"'<>]+$/i.test(imageUrl);
+    var urlOk = /^https:\/\//i.test(imageUrl) || (/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl) && !imageUrl.split('/').some(function (part) { return part === '.' || part === '..'; }));
     return urlOk && /^https:\/\//i.test(sourceUrl) && String(im.alt || '').trim() &&
       String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
       ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
