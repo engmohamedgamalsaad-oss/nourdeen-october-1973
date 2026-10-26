@@ -420,11 +420,12 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
   assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
   assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
   assert.ok(!publisher.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'publisher must not patch the main ref');
   assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
   assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
-  assert.ok(admin.includes("action:'verify_pr',pull_request_number:meta.preview_review.publish_pr_number"), 'admin must ask the server whether the PR is merged before confirming publication');
+  assert.ok(admin.includes("action:'verify_pr',pull_request_number:meta.preview_review.publish_pr_number,branch:meta.preview_review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
   assert.ok(admin.includes('if(!prCheck.merged)throw new Error'), 'an open PR must not be marked as published');
   assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
 });
