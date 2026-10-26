@@ -46,7 +46,7 @@ function validate(d){
  else{
   var coverUrl=String(cover.url||cover.path||'').trim();
   if(!validImageUrl(coverUrl))missing.push('الغلاف cover.url أو cover.path غير صالح');
-  else if(!/^https:\/\//i.test(coverUrl)&&(coverUrl.replace(/^\/+/, '').split('/').some(function(part){return part==='.'||part==='..'})||!/^(?:assets\/images\/|images\/|stories\/)/i.test(coverUrl.replace(/^\/+/,''))))missing.push('الغلاف المحلي يجب أن يكون مسار أصل موجود داخل المستودع (assets/images/ أو images/ أو stories/) بلا مسارات نسبية؛ الملف غير المرفوع لا يعمل في المعاينة');
+  else if(!/^https:\/\//i.test(coverUrl)&&(coverUrl.replace(/^\/+/, '').split('/').some(function(part){return part==='.'||part==='..'})||!/^(?:assets\/images\/|images\/|stories\/)/i.test(coverUrl.replace(/^\/+/,''))))missing.push('الغلاف المحلي يجب أن يكون مسار أصل موجود داخل المستودع (assets/images/ أو images/ أو stories/)؛ المسار النسبي لملف غير مرفوع لا يعمل في المعاينة، ولا يُسمح بمسارات . أو ..');
   if(!String(cover.alt||'').trim())missing.push('النص البديل للغلاف cover.alt مطلوب');
   if(!String(cover.caption||'').trim())missing.push('تعليق الغلاف cover.caption مطلوب');
   if(!String(cover.source_name||'').trim())missing.push('اسم مصدر الغلاف cover.source_name مطلوب');
