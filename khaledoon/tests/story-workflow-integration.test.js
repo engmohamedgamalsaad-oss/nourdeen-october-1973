@@ -681,3 +681,67 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
 });
 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
+
+
+test('hidden-story deletion is review-only until a merged deletion PR is verified', function () {
+  var edge = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(edge.includes('body?.action === "capabilities"') && edge.includes('deletion_mode: "draft_pr"'), 'delete function must advertise safe PR mode');
+  assert.ok(edge.includes('head: branchName, base: BASE, body: description, draft: true'), 'hidden-story deletion must create a draft PR');
+  assert.ok(!edge.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'delete function must never update main directly');
+  assert.ok(!edge.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'delete function must not fast-forward main');
+  assert.ok(edge.includes('const mergedPull') && edge.includes('remainingStoryFiles || quizStillExists'), 'visibility cleanup must verify the merged PR removed story and quiz files');
+  assert.ok(edge.includes('delete places[id]'), 'deletion PR must remove the story map marker as well as the index entry');
+  assert.ok(edge.includes('branchNameForRecovery = branchName') && edge.includes('branch: branchNameForRecovery || null'), 'a failed PR creation must return the branch name for recovery');
+  assert.ok(edge.indexOf('const mergedPull') < edge.indexOf('supabase.from("story_visibility").delete()'), 'visibility row must remain until a merged deletion PR is verified');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.deletion_mode!=='draft_pr'"), 'admin must gate deletion on the deployed safe-mode capability');
+  assert.ok(admin.includes("JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})"), 'admin must request PR creation or post-merge verification');
+  var deleteStart = admin.indexOf('async function deleteHiddenStory');
+  var deleteEnd = admin.indexOf('function vcount', deleteStart);
+  var deleteBlock = admin.slice(deleteStart, deleteEnd);
+  assert.ok(deleteBlock.indexOf("JSON.stringify({action:'capabilities'})") < deleteBlock.indexOf("JSON.stringify({action:'delete_or_verify'"), 'delete capability handshake must run before any destructive story ID request');
+  assert.ok(admin.indexOf('if(result.pending===true)') < admin.indexOf('delete vHidden[String(s.id)]'), 'a pending deletion PR must not remove the hidden status from the admin view');
+  assert.ok(edge.includes('replace(/\\s/g, "")'), 'GitHub base64 content must remove actual whitespace before decoding');
+  assert.ok(!edge.includes('replace(/\\\\s/g, "")'), 'base64 normalization must not match a literal backslash-s');
+  assert.ok(edge.includes('String(entry.path ?? "").replace(/\\/$/, "")'), 'story path normalization must remove a trailing forward slash');
+  assert.ok(edge.includes('JSON.stringify(index, null, 2) + "\\n"'), 'index JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('JSON.stringify(places, null, 2) + "\\n"'), 'map JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('`<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n`'), 'deletion PR marker must be followed by real line breaks');
+});
+
+
+
+test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
+  assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
+  assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
+  assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
+  assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
+  assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
+  assert.ok(publisher.includes("'/contents/stories/index.json?ref=' + baseSha") && publisher.includes("'/contents/stories/places.json?ref=' + baseSha"), 'index and map reads must use the exact commit used as the PR base');
+  assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
+  assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
+  assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
+  assert.ok(!publisher.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'publisher must not patch the main ref');
+  assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
+  assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
+  assert.ok(admin.includes("action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
+  var publishStart = admin.indexOf('async function submitStoryPublishPR');
+  var publishEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', publishStart);
+  var publishBlock = admin.slice(publishStart, publishEnd);
+  assert.ok(publishBlock.includes('if(!statusResult.merged){window.open(review.publish_pr_url') && publishBlock.indexOf('if(!statusResult.merged)') < publishBlock.indexOf('published_to_main_at:new Date().toISOString()'), 'an open PR must not be marked as published');
+  assert.ok(admin.includes('if(!review.publish_pr_number||!review.publish_branch)') && admin.includes('لم نؤكد النشر'), 'legacy PR records without a verifiable number must not bypass merge verification');
+  assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
+  var submitStart = admin.indexOf('async function submitStoryPublishPR');
+  var submitEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', submitStart);
+  var submitBlock = admin.slice(submitStart, submitEnd);
+  assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
+  var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
+  var bundleIndex = admin.indexOf('var pack=await window.KHStoryBundle.download', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
+});
+

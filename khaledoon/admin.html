@@ -293,9 +293,9 @@ function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remov
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
- if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
- if(review.publish_commit_sha||review.published_to_main_at){await confirmStoryPublishAfterUpload(it,btn);return}
  if(review.publish_pr_url){
+  if(!review.publish_pr_number||!review.publish_branch){window.open(review.publish_pr_url,'_blank','noopener');say('err','هذا سجل قديم لا يحتوي رقم طلب الدمج والفرع المسجلين؛ فتحنا الرابط للمراجعة فقط، ولم نؤكد النشر. أنشئ طلب مراجعة جديدًا بعد تحديث خدمة النشر الآمنة.');return}
+  if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
   try{
    var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch})});
@@ -312,6 +312,11 @@ async function submitStoryPublishPR(it,btn){
   finally{stopButtonProgress(btn)}
   return
  }
+ if(review.publish_commit_sha||review.published_to_main_at){
+  if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا قبل تأكيد حالة النشر.');return}
+  await confirmStoryPublishAfterUpload(it,btn);return
+ }
+ if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
