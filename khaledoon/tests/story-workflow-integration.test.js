@@ -769,3 +769,13 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
 });
 
+
+
+test('story generation uses a stable shared theme asset and fails closed when it cannot load', function () {
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+  var theme = fs.readFileSync('khaledoon/assets/story-theme-template.css', 'utf8');
+  assert.ok(theme.length > 5000, 'canonical shared theme should contain the full approved story design');
+  assert.ok(bundle.includes("fetch('../khaledoon/assets/story-theme-template.css',{cache:'no-store'})"), 'new stories must use the stable shared theme asset rather than borrowing story 005 CSS');
+  assert.ok(bundle.includes('if(!themeResponse.ok)throw new Error('), 'theme load failure must stop bundle generation instead of silently emitting an unstyled page');
+  assert.ok(!bundle.includes("fetch('../stories/history/005/theme.css'"), 'future edits to story 005 must not silently alter every new story theme');
+});
