@@ -70,6 +70,14 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
   assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
 });
+test('embedded project instructions exactly match the canonical project file', function () {
+  var fs = require('node:fs');
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var canonical = fs.readFileSync('PROJECT_INSTRUCTIONS.md', 'utf8');
+  var match = texts.match(/var PROJECT_INSTRUCTIONS = ("(?:\\\\.|[^"\\\\])*");\\nvar STORY_WORKFLOW/);
+  assert.ok(match, 'embedded PROJECT_INSTRUCTIONS string must be parseable');
+  assert.equal(JSON.parse(match[1]), canonical, 'admin prompt must not drift from PROJECT_INSTRUCTIONS.md');
+});
 test('published story 012 and 014 headers have all four non-Arabic translations', function () {
   var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
   var history = fs.readFileSync('stories/history/014/translations.js', 'utf8');
