@@ -48,9 +48,11 @@ function validate(d){
  if(!cover){missing.push('الغلاف الموحد cover غير موجود؛ أرفق url أو path وalt وsource_name وsource_url وrights وkind')}
  else{
   var coverUrl=String(cover.url||'').trim(),coverPath=String(cover.path||'').trim();
+  if(coverUrl&&coverPath)missing.push('الغلاف cover يجب أن يستخدم مصدرًا واحدًا فقط: url أو path، وليس الاثنين معًا.');
   if(coverUrl&&!/^https:\/\//i.test(coverUrl))missing.push('الغلاف cover.url يجب أن يكون رابط HTTPS مباشرًا؛ استخدم cover.path للملف المحلي.');
   if(!coverUrl&&!coverPath)missing.push('الغلاف يحتاج cover.url أو cover.path صالحًا');
   if(!coverUrl&&coverPath&&(!validImageUrl(coverPath)||coverPath.split('/').some(function(part){return part==='.'||part==='..'})||!/^(?:assets\/images\/|images\/|stories\/)/i.test(coverPath)))missing.push('الغلاف المحلي يجب أن يكون مسار أصل موجود داخل المستودع (assets/images/ أو images/ أو stories/)؛ المسار النسبي لملف غير مرفوع لا يعمل في المعاينة، ولا يُسمح بمسارات . أو ..');
+  if(['archival','illustration','diagram','map'].indexOf(String(cover.kind||''))<0)missing.push('نوع الغلاف cover.kind يجب أن يكون archival أو illustration أو diagram أو map.');
   if(!String(cover.alt||'').trim())missing.push('النص البديل للغلاف cover.alt مطلوب');
   if(!String(cover.caption||'').trim())missing.push('تعليق الغلاف cover.caption مطلوب');
   if(!String(cover.source_name||'').trim())missing.push('اسم مصدر الغلاف cover.source_name مطلوب');
@@ -63,9 +65,20 @@ function validate(d){
   if(factCardIndexes(d.body).length<3)missing.push('نص الراوي يحتاج ثلاث فقرات «هل تعلم؟» منفصلة على الأقل لتظهر كبطاقات معرفة.');
  if(!d.karma_text||!d.karma_text.trim())missing.push('مقاطع كارما غير موجودة');
  var imgs=Array.isArray(d.images)?d.images:[];
- var usableImages=imgs.filter(function(im){return im&&validImageUrl(im.url)&&String(im.alt||'').trim()&&String(im.caption||'').trim()&&String(im.kind||'').trim()&&String(im.source_name||'').trim()&&String(im.rights||'').trim()&&/^https:\/\//i.test(String(im.source_url||''))});
- if(usableImages.length<2)missing.push('أضف صورتين على الأقل بروابط قابلة للفتح، ووصف بديل، واسم مصدر، ورابط مصدر، وبيان حقوق الاستخدام لكل صورة');
-  imgs.forEach(function(im,index){LANGS.forEach(function(lang){var it=im&&im.i18n&&im.i18n[lang];if(!it||!String(it.alt||'').trim()||!String(it.caption||'').trim()||!String(it.source_name||'').trim()||!String(it.rights||'').trim())missing.push('الصورة '+(index+1)+': ترجمة الوصف والتعليق واسم المصدر والحقوق ناقصة في '+lang.toUpperCase());else if(/[؀-ۿ]/.test(String(it.alt)+' '+String(it.caption)+' '+String(it.source_name)+' '+String(it.rights)))missing.push('الصورة '+(index+1)+': ترجمة '+lang.toUpperCase()+' ما زالت تحتوي نصًا عربيًا في بيانات الصورة')})});
+ if(imgs.length<2)missing.push('أضف صورتين على الأقل بروابط قابلة للفتح، ووصف بديل، واسم مصدر، ورابط مصدر، وبيان حقوق الاستخدام لكل صورة');
+ if(imgs.length>5)missing.push('لا تتجاوز خمس صور موثقة في معرض الحكاية؛ احذف الصور الزائدة قبل المعاينة.');
+ imgs.forEach(function(im,index){
+  var number=index+1;
+  if(!im||typeof im!=='object'||Array.isArray(im)){missing.push('الصورة '+number+' يجب أن تكون كائنًا صالحًا.');return}
+  var imageUrl=String(im.url||'').trim(),sourceUrl=String(im.source_url||'').trim();
+  var safeUrl=/^https:\/\//i.test(imageUrl)||(/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl)&&!imageUrl.split('/').some(function(part){return part==='.'||part==='..'}));
+  if(!safeUrl)missing.push('الصورة '+number+': url يجب أن يكون رابط HTTPS مباشرًا أو مسارًا محليًا آمنًا موجودًا.');
+  if(!/^https:\/\//i.test(sourceUrl))missing.push('الصورة '+number+': source_url يجب أن يكون رابط HTTPS للمصدر.');
+  ['alt','caption','source_name','rights'].forEach(function(key){if(typeof im[key]!=='string'||!im[key].trim())missing.push('الصورة '+number+': '+key+' مطلوب.')});
+  if(['archival','illustration','diagram','map'].indexOf(String(im.kind||''))<0)missing.push('الصورة '+number+': kind يجب أن يكون archival أو illustration أو diagram أو map.');
+  LANGS.forEach(function(lang){var it=im.i18n&&im.i18n[lang];if(!it||!String(it.alt||'').trim()||!String(it.caption||'').trim()||!String(it.source_name||'').trim()||!String(it.rights||'').trim())missing.push('الصورة '+number+': ترجمة الوصف والتعليق واسم المصدر والحقوق ناقصة في '+lang.toUpperCase());else if(/[؀-ۿ]/.test(String(it.alt)+' '+String(it.caption)+' '+String(it.source_name)+' '+String(it.rights)))missing.push('الصورة '+number+': ترجمة '+lang.toUpperCase()+' ما زالت تحتوي نصًا عربيًا في بيانات الصورة')});
+ });
+
  if(d.visual_design&&!['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'].includes(String(d.visual_design)))missing.push('قيمة visual_design غير معتمدة؛ اختر تصميمًا من القائمة المحددة');
  var urls=String(d.sources||'').match(/https?:\/\/[^\s)\]>]+/g)||[];
  var uniqueUrls=Array.from(new Set(urls.map(function(u){return u.replace(/[.,;:]+$/,'')})));if(uniqueUrls.length<2)missing.push('أضف مصدرين موثوقين مختلفين على الأقل بروابط فعلية');
