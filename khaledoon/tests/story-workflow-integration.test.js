@@ -422,6 +422,7 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
   assert.ok(!edge.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'delete function must not fast-forward main');
   assert.ok(edge.includes('const mergedPull') && edge.includes('remainingStoryFiles || quizStillExists'), 'visibility cleanup must verify the merged PR removed story and quiz files');
   assert.ok(edge.includes('delete places[id]'), 'deletion PR must remove the story map marker as well as the index entry');
+  assert.ok(edge.includes('branchNameForRecovery = branchName') && edge.includes('branch: branchNameForRecovery || null'), 'a failed PR creation must return the branch name for recovery');
   assert.ok(edge.indexOf('const mergedPull') < edge.indexOf('supabase.from("story_visibility").delete()'), 'visibility row must remain until a merged deletion PR is verified');
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.deletion_mode!=='draft_pr'"), 'admin must gate deletion on the deployed safe-mode capability');
   assert.ok(admin.includes("JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})"), 'admin must request PR creation or post-merge verification');
