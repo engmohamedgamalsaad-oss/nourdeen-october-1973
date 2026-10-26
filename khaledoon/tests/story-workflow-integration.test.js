@@ -61,9 +61,9 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
   assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
   assert.ok(prompt.includes('source_name` كائنين مترجمين إلى `ar/en/fr/it/de`'), 'map source names must be localized in the active prompt');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes('source_name كائنين مترجمين إلى ar/en/fr/it/de'), 'AI JSON schema must match the map source-name contract');
   assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
-  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
   assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
   assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
