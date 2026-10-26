@@ -50,7 +50,7 @@ async function main() {
     body: 'هل تعلم؟ معلومة تجريبية أولى.\n\nهل تعلم؟ معلومة تجريبية ثانية.\n\nهل تعلم؟ معلومة تجريبية ثالثة.',
     karma_text: 'كارما تسأل سؤالًا تجريبيًا.',
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
-    cover: { path: 'stories/history/preview/cover.jpg', alt: 'غلاف تجريبي', caption: 'تعليق الغلاف التجريبي', kind: 'illustration', source_name: 'مصدر الغلاف', source_url: 'https://example.org/cover-source', rights: 'رسم توضيحي', i18n: { en: { alt: 'Preview cover', caption: 'Preview cover caption' }, fr: { alt: 'Couverture test', caption: 'Légende de couverture' }, it: { alt: 'Copertina di prova', caption: 'Didascalia di copertina' }, de: { alt: 'Testtitelbild', caption: 'Bildunterschrift des Titelbilds' } } },
+    cover: { path: 'stories/history/preview/cover.jpg', alt: 'غلاف تجريبي', caption: 'تعليق الغلاف التجريبي', kind: 'illustration', source_name: 'مصدر الغلاف', source_url: 'https://example.org/cover-source', rights: 'رسم توضيحي', i18n: { en: { alt: 'Preview cover', caption: 'Preview cover caption', source_name: 'Preview cover source', rights: 'Illustration' }, fr: { alt: 'Couverture test', caption: 'Légende de couverture', source_name: 'Source de couverture test', rights: 'Illustration' }, it: { alt: 'Copertina di prova', caption: 'Didascalia di copertina', source_name: 'Fonte della copertina di prova', rights: 'Illustrazione' }, de: { alt: 'Testtitelbild', caption: 'Bildunterschrift des Titelbilds', source_name: 'Quelle des Testtitelbilds', rights: 'Illustration' } } },
     translations: { en: { title: 'Preview test' }, fr: {}, it: {}, de: {} },
     images: [
       { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY', i18n: { en: { alt: 'Portrait', caption: 'Portrait', source_name: 'Example Archive EN', rights: 'Public Domain' }, fr: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archive Exemple', rights: 'Domaine public' }, it: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archivio di esempio', rights: 'Pubblico dominio' }, de: { alt: 'Portrait', caption: 'Portrait', source_name: 'Beispielarchiv', rights: 'Gemeinfrei' } } },
@@ -69,6 +69,8 @@ async function main() {
   assert.equal(html.split(coverUrl).length - 1, 3, 'the same cover path must feed og:image, the hero, and the intro modal');
   assert.match(html, /Preview cover/, 'cover alt translation must be included in the generated language dictionary');
   assert.match(html, /Preview cover caption/, 'cover caption translation must be included in the generated language dictionary');
+  assert.match(html, /Preview cover source/, 'cover source-name translation must be included in the generated language dictionary');
+  assert.match(html, /Illustration/, 'cover rights translation must be included in the generated language dictionary');
   assert.match(html, /Source link/, 'the gallery source-link label must be translated in English');
   assert.match(html, /Lien vers la source/, 'the gallery source-link label must be translated in French');
   assert.match(html, /Link alla fonte/, 'the gallery source-link label must be translated in Italian');
@@ -134,7 +136,10 @@ async function main() {
   assert.equal((previewHtml.match(/class="story-fact-card"/g) || []).length, 3, 'the generated story should render three distinct knowledge cards');
   const badCover = JSON.parse(JSON.stringify(goodDraft));
   badCover.cover.i18n.de.alt = 'غلاف لم تتم ترجمته';
-  assert.ok(bundle.validate(badCover).missing.some(function (m) { return m.includes('ترجمة الغلاف'); }), 'Arabic cover alt must be rejected');
+  assert.ok(bundle.validate(badCover).missing.some(function (m) { return m.includes('بيانات الغلاف المترجمة'); }), 'Arabic cover alt must be rejected');
+  const badCoverCredit = JSON.parse(JSON.stringify(goodDraft));
+  badCoverCredit.cover.i18n.fr.rights = 'حقوق الغلاف بالعربية';
+  assert.ok(bundle.validate(badCoverCredit).missing.some(function (m) { return m.includes('بيانات الغلاف المترجمة'); }), 'Arabic cover rights must be rejected');
   const badBody = JSON.parse(JSON.stringify(goodDraft));
   badBody.translations.fr.body += ' نص عربي متروك';
   assert.ok(bundle.validate(badBody).missing.some(function (m) { return m.includes('حقل body'); }), 'Arabic in a translated story body must be rejected');
