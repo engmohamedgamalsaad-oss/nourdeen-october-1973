@@ -47,7 +47,7 @@ async function main() {
   const html = bundle.renderPreviewHtml({
     section_key: 'history', title: 'اختبار معاينة القارئ', subtitle: 'نبذة اختبارية',
     figure_name: 'شخصية تجريبية', narrator_name: 'راوي تجريبي',
-    body: 'هل تعلم؟ معلومة تجريبية أولى.\\n\\nهل تعلم؟ معلومة تجريبية ثانية.\\n\\nهل تعلم؟ معلومة تجريبية ثالثة.',
+    body: 'هل تعلم؟ معلومة تجريبية أولى.\n\nهل تعلم؟ معلومة تجريبية ثانية.\n\nهل تعلم؟ معلومة تجريبية ثالثة.',
     karma_text: 'كارما تسأل سؤالًا تجريبيًا.',
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
     cover: { path: 'stories/history/preview/cover.jpg', alt: 'غلاف تجريبي', caption: 'تعليق الغلاف التجريبي', kind: 'illustration', source_name: 'مصدر الغلاف', source_url: 'https://example.org/cover-source', rights: 'رسم توضيحي', i18n: { en: { alt: 'Preview cover', caption: 'Preview cover caption' }, fr: { alt: 'Couverture test', caption: 'Légende de couverture' }, it: { alt: 'Copertina di prova', caption: 'Didascalia di copertina' }, de: { alt: 'Testtitelbild', caption: 'Bildunterschrift des Titelbilds' } } },
@@ -92,7 +92,7 @@ async function main() {
       return [lang, {
         student_name:'Student '+lang, grade:'Grade '+lang, title:'Story '+lang,
         subtitle:'Subtitle '+lang, karma_text:'Karma voice '+lang,
-        body:[({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact one with a verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact two with a second verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact three with a third verified detail.'].join('\\n\\n'),
+        body:[({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact one with a verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact two with a second verified detail.',({en:'Did you know?',fr:'Le saviez-vous ?',it:'Lo sapevi?',de:'Wusstest du?'})[lang]+' Fact three with a third verified detail.'].join('\n\n'),
         history_note:'History note '+lang, images_note:'Image rights note '+lang
       }];
     }));
@@ -104,9 +104,9 @@ async function main() {
     return {
       section_key:'history', title:'عنوان اختبار', subtitle:'نبذة اختبارية',
       figure_name:'شخصية اختبار', karma_text:'كارما تسأل سؤالًا تجريبيًا.',
-      body:'هل تعلم؟ هذه حقيقة موثقة أولى داخل بطاقة معرفة.\\n\\nهل تعلم؟ هذه حقيقة موثقة ثانية داخل بطاقة معرفة.\\n\\nهل تعلم؟ هذه حقيقة موثقة ثالثة داخل بطاقة معرفة.',
+      body:'هل تعلم؟ هذه حقيقة موثقة أولى داخل بطاقة معرفة.\n\nهل تعلم؟ هذه حقيقة موثقة ثانية داخل بطاقة معرفة.\n\nهل تعلم؟ هذه حقيقة موثقة ثالثة داخل بطاقة معرفة.',
       history_note:'معلومة تاريخية موثقة', images_note:'ملاحظات الصور وحقوقها',
-      sources:'Source A https://example.org/source-a\\nSource B https://example.net/source-b',
+      sources:'Source A https://example.org/source-a\nSource B https://example.net/source-b',
       cover:{url:'https://images.example.org/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',kind:'illustration',source_name:'مصدر الغلاف',source_url:'https://example.org/cover-source',rights:'ترخيص موضح',
         i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover alt '+lang,caption:'Cover caption '+lang}]}))},
       translations:translations,
