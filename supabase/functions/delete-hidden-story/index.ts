@@ -72,21 +72,21 @@ Deno.serve(async (req: Request) => {
   if (!hiddenRow) return reply(409, { error: "يمكن حذف الحكايات المخفية فقط. أخفِ الحكاية أولًا." });
 
   try {
-    const ref = await github(\`/repos/\${OWNER}/\${REPO}/git/ref/heads/\${BASE}\`, githubToken);
+    const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
-    const baseCommit = await github(\`/repos/\${OWNER}/\${REPO}/git/commits/\${baseSha}\`, githubToken);
-    const tree = await github(\`/repos/\${OWNER}/\${REPO}/git/trees/\${baseCommit.tree.sha}?recursive=1\`, githubToken);
+    const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
+    const tree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
     if (tree.truncated) throw new Error("GitHub returned an incomplete file tree; refusing to delete anything.");
-    const contents = await github(\`/repos/\${OWNER}/\${REPO}/contents/stories/index.json?ref=\${baseSha}\`, githubToken);
+    const contents = await github(`/repos/${OWNER}/${REPO}/contents/stories/index.json?ref=${baseSha}`, githubToken);
     const indexBytes = Uint8Array.from(atob(String(contents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
     const index = JSON.parse(new TextDecoder().decode(indexBytes));
     if (!Array.isArray(index)) throw new Error("Story index is not an array.");
     const entryIndex = index.findIndex((entry: any) => String(entry?.id ?? "").padStart(3, "0") === id);
-    const openPulls = await github(\`/repos/\${OWNER}/\${REPO}/pulls?state=open&base=\${BASE}&per_page=100\`, githubToken);
+    const openPulls = await github(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}&per_page=100`, githubToken);
 
     if (entryIndex < 0) {
-      const closedPulls = await github(\`/repos/\${OWNER}/\${REPO}/pulls?state=closed&base=\${BASE}&per_page=100\`, githubToken);
-      const markerPrefix = \`<!-- khaledoon-delete-story:\${id}:\`;
+      const closedPulls = await github(`/repos/${OWNER}/${REPO}/pulls?state=closed&base=${BASE}&per_page=100`, githubToken);
+      const markerPrefix = `<!-- khaledoon-delete-story:${id}:`;
       const mergedPull = Array.isArray(closedPulls)
         ? closedPulls.find((pull: any) => String(pull.body ?? "").includes(markerPrefix) &&
             pull.head?.repo?.full_name === OWNER + "/" + REPO &&
@@ -97,9 +97,9 @@ Deno.serve(async (req: Request) => {
       if (!markerMatch) throw new Error("Merged deletion PR has no valid story-path marker; refusing to clean up visibility state.");
       const deletedPath = markerMatch[1];
       const remainingStoryFiles = tree.tree.some((item: any) => item.type === "blob" && item.path.startsWith(deletedPath + "/"));
-      const quizPath = \`stories/quizzes/\${id}.json\`;
+      const quizPath = `stories/quizzes/${id}.json`;
       const quizStillExists = tree.tree.some((item: any) => item.type === "blob" && item.path === quizPath);
-      const placesContents = await github(\`/repos/\${OWNER}/\${REPO}/contents/stories/places.json?ref=\${baseSha}\`, githubToken);
+      const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
       const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
       const places = JSON.parse(new TextDecoder().decode(placesBytes));
       if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
@@ -119,10 +119,10 @@ Deno.serve(async (req: Request) => {
 
     const entry = index[entryIndex];
     const storyPath = String(entry.path ?? "").replace(/\\/$/, "");
-    if (!new RegExp(\`^stories/[a-z0-9-]+/\${id}$\`).test(storyPath) || entry.published === false) {
+    if (!new RegExp(`^stories/[a-z0-9-]+/${id}$`).test(storyPath) || entry.published === false) {
       throw new Error("The indexed story path is not an eligible published story; refusing deletion.");
     }
-    const marker = \`<!-- khaledoon-delete-story:\${id}:\${storyPath} -->\`;
+    const marker = `<!-- khaledoon-delete-story:${id}:${storyPath} -->`;
     const existingPull = Array.isArray(openPulls)
       ? openPulls.find((pull: any) => String(pull.body ?? "").includes(marker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
       : null;
@@ -136,12 +136,12 @@ Deno.serve(async (req: Request) => {
     }
 
     const storyFiles = tree.tree.filter((item: any) => item.type === "blob" && item.path.startsWith(storyPath + "/"));
-    const quizPath = \`stories/quizzes/\${id}.json\`;
+    const quizPath = `stories/quizzes/${id}.json`;
     const quizExists = tree.tree.some((item: any) => item.type === "blob" && item.path === quizPath);
     if (!storyFiles.some((item: any) => item.path === storyPath + "/index.html")) {
       throw new Error("The story page file is missing; refusing a partial deletion.");
     }
-    const placesContents = await github(\`/repos/\${OWNER}/\${REPO}/contents/stories/places.json?ref=\${baseSha}\`, githubToken);
+    const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
     const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
     const places = JSON.parse(new TextDecoder().decode(placesBytes));
     if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
@@ -149,37 +149,37 @@ Deno.serve(async (req: Request) => {
     if (quizExists) deletions.push({ path: quizPath, mode: "100644", type: "blob", sha: null });
     index.splice(entryIndex, 1);
     delete places[id];
-    const indexBlob = await github(\`/repos/\${OWNER}/\${REPO}/git/blobs\`, githubToken, {
+    const indexBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
       method: "POST",
       body: JSON.stringify({ content: JSON.stringify(index, null, 2) + "\\n", encoding: "utf-8" }),
     });
-    const placesBlob = await github(\`/repos/\${OWNER}/\${REPO}/git/blobs\`, githubToken, {
+    const placesBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
       method: "POST",
       body: JSON.stringify({ content: JSON.stringify(places, null, 2) + "\\n", encoding: "utf-8" }),
     });
     deletions.push({ path: "stories/index.json", mode: "100644", type: "blob", sha: indexBlob.sha });
     deletions.push({ path: "stories/places.json", mode: "100644", type: "blob", sha: placesBlob.sha });
-    const newTree = await github(\`/repos/\${OWNER}/\${REPO}/git/trees\`, githubToken, {
+    const newTree = await github(`/repos/${OWNER}/${REPO}/git/trees`, githubToken, {
       method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: deletions }),
     });
-    const commit = await github(\`/repos/\${OWNER}/\${REPO}/git/commits\`, githubToken, {
+    const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ message: \`Prepare hidden-story deletion for review: \${id}\`, tree: newTree.sha, parents: [baseSha] }),
+      body: JSON.stringify({ message: `Prepare hidden-story deletion for review: ${id}`, tree: newTree.sha, parents: [baseSha] }),
     });
     const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
-    const branchName = \`khaledoon/delete-story-\${id}-\${branchSuffix}\`;
-    await github(\`/repos/\${OWNER}/\${REPO}/git/refs\`, githubToken, {
+    const branchName = `khaledoon/delete-story-${id}-${branchSuffix}`;
+    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
       method: "POST",
       body: JSON.stringify({ ref: "refs/heads/" + branchName, sha: commit.sha }),
     });
-    const description = \`<!-- khaledoon-delete-story:\${id}:\${storyPath} -->\\n\\n\` +
-      \`Draft deletion request for hidden story \${id}: \${String(entry.title ?? "").slice(0, 100)}.\\n\\n\` +
+    const description = `<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n` +
+      `Draft deletion request for hidden story ${id}: ${String(entry.title ?? "").slice(0, 100)}.\\n\\n` +
       "- This request removes the story folder, quiz file, index entry, and map marker.\\n" +
       "- The story remains hidden while this draft is reviewed.\\n" +
       "- No files or database visibility rows are deleted until a human reviews and merges the PR, then confirms deletion in the admin.";
-    const pull = await github(\`/repos/\${OWNER}/\${REPO}/pulls\`, githubToken, {
+    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ title: \`حذف حكاية مخفية \${id}: \${String(entry.title ?? "").slice(0, 80)}\`, head: branchName, base: BASE, body: description, draft: true }),
+      body: JSON.stringify({ title: `حذف حكاية مخفية ${id}: ${String(entry.title ?? "").slice(0, 80)}`, head: branchName, base: BASE, body: description, draft: true }),
     });
     return reply(201, {
       success: true, pending: true, deleted: false, story_id: id,
