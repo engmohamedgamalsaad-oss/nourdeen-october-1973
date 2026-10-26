@@ -419,6 +419,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('تعذر قراءة JSON حتى بعد محاولة إصلاح التنسيق تلقائيًا'));
   assert.ok(admin.includes('var pastedRaw=aiPaste.value,sourceRaw=pastedRaw.trim(),pkg,raw=pastedRaw'));
   assert.ok(admin.includes("cover:it.cover||oldMetaForPackage.cover||null"), 'rebuilt AI JSON must preserve the existing cover metadata');
+  assert.ok(admin.includes('draft.cover=draft.cover||meta.cover||null'), 'publishing must restore the cover from story_meta before validating and building the bundle');
   assert.ok(admin.includes("aiPasteStorageKey='kh-story-ai-paste:'+String(it._t||'k')+':'+String(it.id||'new')"), 'AI paste cache must be namespaced by record table and ID');
   assert.ok(admin.includes("else if(it.id){var legacyAiPaste=localStorage.getItem('kh-story-ai-paste:'+String(it.id))"), 'existing records should migrate cached AI text without sharing cache across new unsaved records');
   assert.ok(admin.includes('aiClear.disabled=aiPasteLocked'), 'clear action must remain disabled until the AI output field is unlocked');
