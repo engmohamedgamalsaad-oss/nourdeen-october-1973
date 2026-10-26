@@ -67,6 +67,29 @@ Deno.serve(async (req: Request) => {
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
+  if (body?.action === "verify_pr") {
+    const number = Number(body.pull_request_number);
+    if (!Number.isSafeInteger(number) || number < 1) return reply(400, { error: "رقم طلب الدمج غير صالح." });
+    try {
+      const pull = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
+      if (pull.base?.ref !== BASE || pull.head?.repo?.full_name !== OWNER + "/" + REPO) {
+        return reply(403, { error: "طلب الدمج لا يستهدف مستودع الحكايات وفرع main." });
+      }
+      return reply(200, {
+        success: true,
+        pull_request_number: number,
+        pull_request_url: pull.html_url,
+        state: pull.state,
+        draft: pull.draft === true,
+        merged: pull.merged === true || Boolean(pull.merged_at),
+        merged_at: pull.merged_at ?? null,
+        merge_commit_sha: pull.merge_commit_sha ?? null,
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "Unknown error";
+      return reply(502, { error: "تعذر التحقق من حالة طلب الدمج.", detail: detail.slice(0, 500) });
+    }
+  }
   if (!Array.isArray(body?.files) || body.files.length < 1 || body.files.length > 50)
     return reply(400, { error: "أرسل من 1 إلى 50 ملفًا." });
   const seen = new Set<string>();
@@ -82,8 +105,9 @@ Deno.serve(async (req: Request) => {
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
+  let branchNameForRecovery = "";
   try {
-    // Read the latest main commit. The final non-force ref update protects against concurrent changes.
+    // Read latest main as the PR base. All generated writes stay on a dedicated branch.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
@@ -199,20 +223,46 @@ Deno.serve(async (req: Request) => {
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
-    // Push straight to main, without a PR. force=false prevents overwriting concurrent main changes.
-    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
-      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
+    const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
+    branchNameForRecovery = `khaledoon/story-${storyId}-${branchSuffix}`;
+    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha }),
     });
-    const pageUrl = ALLOWED_ORIGIN + '/' + REPO + '/' + storyRoot;
+    const prBody = description +
+      "\n\n## Automatic safety checks\n" +
+      "- Generated files were validated by the admin workflow.\n" +
+      "- The story index and interactive-map data are included in this pull request.\n" +
+      "- This is a draft pull request; it is not published until a human reviews and merges it.\n" +
+      "- No files were written to main by this function.";
+    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
+    });
     return reply(201, {
-      success: true, published_to_main: true, commit_sha: commit.sha,
-      story_id: storyId, story_path: normalizedRoot, page_url: pageUrl,
-      map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
-      map_message: mapMarkerAdded ? "تم تحديث علامة الحكاية في الخريطة التفاعلية." : "تم تحديث بيانات الخريطة؛ لم تُضف علامة جغرافية لأن الحكاية لا تحتوي على موقع موثق.",
-      message: "تم رفع ملفات الحكاية مباشرة إلى main؛ جارٍ التحقق من ظهورها على الموقع."
+      success: true,
+      published_to_main: false,
+      pull_request_url: pull.html_url,
+      pull_request_number: pull.number,
+      pull_request_state: pull.state,
+      pull_request_draft: pull.draft === true,
+      branch: branchNameForRecovery,
+      commit_sha: commit.sha,
+      story_id: storyId,
+      story_path: normalizedRoot,
+      map_linked: mapMarkerAdded,
+      map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded
+        ? "تم تضمين علامة الحكاية وبياناتها في الخريطة داخل طلب الدمج؛ لم تتغير الخريطة المنشورة."
+        : "تم تضمين بيانات الخريطة في طلب الدمج؛ لم تُضف علامة لأن الحكاية لا تحتوي على موقع موثق.",
+      message: "تم إنشاء طلب دمج للمراجعة. لم يتم تعديل main أو نشر الحكاية على الموقع."
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر نشر الحكاية مباشرة على GitHub.", detail: detail.slice(0, 500) });
+    return reply(502, {
+      error: "تعذر إنشاء طلب دمج للحكاية؛ لم تُكتب ملفات الحكاية إلى main.",
+      detail: detail.slice(0, 500),
+      branch: branchNameForRecovery || null,
+    });
   }
 });
