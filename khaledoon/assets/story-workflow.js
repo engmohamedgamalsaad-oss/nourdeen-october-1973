@@ -245,6 +245,8 @@ function validateStoryPackage(pkg) {
   ].forEach(function (field) { textField(pkg, field[0], field[1], 1); });
   textField(pkg, 'original_body', 'النص الأصلي', 20);
   textField(pkg, 'body', 'نص الراوي (50 حرفًا على الأقل)', 50);
+  var factParagraphs = String(pkg.body || '').split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(function (x) { return /^هل تعلم(?:[؟?]|:)/.test(x); });
+  if (factParagraphs.length < 3) errors.push('نص الراوي يحتاج ثلاث فقرات «هل تعلم؟» منفصلة على الأقل؛ كل فقرة ستظهر كبطاقة معرفة.');
   var designOptions = ['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'];
   if (designOptions.indexOf(String(pkg.visual_design || '')) < 0) errors.push('اختر تصميمًا بصريًا مخصصًا من قائمة visual_design.');
   /* الخريطة التفاعلية: يجب أن يختار المولّد موقعًا موثقًا أو يصرّح صراحة بعدم توفره. */
@@ -393,6 +395,12 @@ function validateStoryPackage(pkg) {
         if (typeof original !== 'string' || typeof translated !== 'string' || !translated.trim()) return;
         if (paragraphCount(original) !== paragraphCount(translated)) {
           errors.push(lang.toUpperCase() + ': عدد فقرات ' + field[1] + ' (' + paragraphCount(translated) + ') لا يطابق العربية (' + paragraphCount(original) + '). افصل الفقرات بسطر فارغ وبالعدد نفسه.');
+        }
+        if (field[0] === 'body') {
+          var sourceBlocks = String(original || '').split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean);
+          var translatedBlocks = String(translated || '').split(/\n{2,}/).map(function (x) { return x.trim(); }).filter(Boolean);
+          var marker = {en:/^did you know\?/i,fr:/^le saviez-vous\s*\?/i,it:/^lo sapevi\s*\?/i,de:/^wusstest du\s*\?/i}[lang];
+          sourceBlocks.forEach(function (block, index) { if (/^هل تعلم(?:[؟?]|:)/.test(block) && (!translatedBlocks[index] || !marker.test(translatedBlocks[index]))) errors.push(lang.toUpperCase() + ': كل بطاقة معرفة يجب أن تبدأ بعلامة مترجمة في موضع الفقرة نفسه.'); });
         }
       });
     });
