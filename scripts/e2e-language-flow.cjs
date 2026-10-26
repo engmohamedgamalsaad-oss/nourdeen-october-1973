@@ -554,12 +554,19 @@ async function svgArtworkRegression(browser, base, origin) {
   const checks = [];
   const cases = [
     { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', expected: 'A Heart That Gives Hope', arabic: 'قلب يمنح الأمل' },
+    { slug: 'stories/science/007/', decorative: true },
     { slug: 'stories/women/013/', decorative: true },
+    { slug: 'stories/islamic/011/', decorative: true },
+    { slug: 'stories/history/014/', decorative: true },
+    { slug: 'stories/science/012/', decorative: true },
+    { slug: 'stories/women/010/', decorative: true },
+    { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
+    { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
+    { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
+    { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
     { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
-    { slug: 'stories/islamic/011/', expected: 'The Conquest of Egypt', arabic: 'فتح مصر' },
-    { slug: 'stories/history/014/', expected: 'Poems, Books, and Roads Between Cities', arabic: 'قصائد وكتب وطرق بين المدن' },
-    { slug: 'stories/science/012/', expected: 'The Scientist Who Read the Moon and the Desert', arabic: 'العالم الذي قرأ القمر والصحراء' },
-    { slug: 'stories/women/010/', expected: 'A Dream of Science for Everyone', arabic: 'حلم العلم للجميع' }
+    { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
+    { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
   ];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
