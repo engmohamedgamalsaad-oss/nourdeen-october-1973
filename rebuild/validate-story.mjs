@@ -21,7 +21,7 @@ function keysCheck(value, required, allowed, label, out) {
 function languageObjectCheck(value, label, out) {
   keysCheck(value, LANGUAGES, LANGUAGES, label, out);
 }
-function imageCheck(im, label, out, isCover = false) {
+function imageCheck(im, label, out) {
   const allowed = ['url', 'path', 'kind', 'source_name', 'source_url', 'rights', 'i18n', 'id'];
   if (!keysCheck(im, ['kind', 'source_name', 'source_url', 'rights', 'i18n'], allowed, label, out)) return;
   const hasUrl = Object.hasOwn(im, 'url');
@@ -84,7 +84,7 @@ export function validateStory(s) {
     }
   } else out.push('i18n must be an object');
 
-  imageCheck(s.cover, 'cover', out, true);
+  imageCheck(s.cover, 'cover', out);
   if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
