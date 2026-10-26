@@ -884,6 +884,7 @@ function pubRow(it){
      var langs=['en','fr','it','de'];
      var packageCheck=window.KHWorkflow.validateStoryPackage(pkg);
      if(!packageCheck.ok){aiFail('الحزمة غير مكتملة:',packageCheck.errors);return}
+     if(pkg.cover&&!pkg.cover.url&&pkg.cover.path){var coverPath=String(pkg.cover.path).replace(/^\\/+/,''),coverAssetUrl=new URL('../'+coverPath,location.href).href,coverAssetResponse;try{coverAssetResponse=await fetch(coverAssetUrl,{method:'HEAD',cache:'no-store'})}catch(coverPathError){aiFail('تعذر التحقق من وجود ملف الغلاف المحلي؛ استخدم رابط HTTPS مباشرًا أو تأكد من رفع الملف إلى المستودع.');return}if(!coverAssetResponse.ok){aiFail('ملف الغلاف المحلي غير موجود أو غير قابل للوصول ('+coverAssetResponse.status+'): '+coverPath+'. ارفع الملف أولًا أو استخدم رابط HTTPS مباشرًا.');return}}
      if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||''))){aiFail('مفتاح القسم section_key غير صحيح؛ اختر واحدًا من أقسام الموقع.');return}
      /* لا نافذة تأكيد: «تعديل» يُنفّذ مباشرة كأنه Enter؛ نوافذ confirm تُحجب في متصفحات التطبيقات فتجعل الزر صامتًا. الحفظ مسودة فقط ولا نشر. */
      var aiPreviewPopup=window.open('about:blank','_blank');if(aiPreviewPopup){try{aiPreviewPopup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ حفظ المسودة وتجهيز المعاينة…</body></html>');aiPreviewPopup.document.close()}catch(ignorePreviewPopup){}}
