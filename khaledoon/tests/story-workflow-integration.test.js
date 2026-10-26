@@ -38,7 +38,7 @@ test('manual story builder supports the unified cover, sourced-image, and map me
   assert.ok(builder.includes("meta.cover=d.cover||meta.cover||null;meta.images=Array.isArray(d.images)?d.images:(meta.images||[])"), 'manual save must persist cover and image metadata');
   assert.ok(builder.includes('meta.cover_json=d.cover_json;meta.images_json=d.images_json;meta.map_location_json=d.map_location_json'), 'manual save must preserve in-progress JSON text, including incomplete drafts');
   assert.ok(builder.includes("if(read('images_json')&&!Array.isArray(d.images))"), 'invalid image JSON must stop preview validation');
-  assert.ok(builder.includes("map_location_json:Object.prototype.hasOwnProperty.call(m,'map_location')?JSON.stringify(m.map_location,null,2):''"), 'restoring a draft must preserve an existing map location');
+  assert.ok(builder.includes("map_location_json:typeof m.map_location_json==='string'?m.map_location_json:(Object.prototype.hasOwnProperty.call(m,'map_location')?JSON.stringify(m.map_location,null,2):'')"), 'restoring a draft must preserve raw JSON and existing map location metadata');
   assert.ok(builder.includes("if(Object.prototype.hasOwnProperty.call(d,'map_location')&&(!d.map_location_json||d.map_location_json==='null'||(d.map_location&&typeof d.map_location==='object'&&!Array.isArray(d.map_location))))"), 'invalid map JSON must not overwrite a saved map location');
 });
 test('published admin records and published site pages are separate filters', function () {
