@@ -422,6 +422,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
   assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
+  assert.ok(publisher.includes("'/contents/stories/index.json?ref=' + baseSha") && publisher.includes("'/contents/stories/places.json?ref=' + baseSha"), 'index and map reads must use the exact commit used as the PR base');
   assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
   assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
   assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
