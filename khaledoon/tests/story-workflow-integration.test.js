@@ -472,8 +472,8 @@ test('unified v4 prompt requires sourced images and a rendered image gallery', f
   assert.ok(promptTexts.includes('## 4) الغلاف والصور — من البداية حتى آخر مشهد'));
   assert.ok(promptTexts.includes('source_name') && promptTexts.includes('source_url') && promptTexts.includes('rights'), 'prompt artifacts must retain source and rights fields');
   assert.ok(promptTexts.includes('ظهور الصورة في نتائج البحث ليس إذنًا باستخدامها.'));
-  assert.ok(bundle.includes('function imageGalleryHtml(d,baseUrl,section,id)'))
-  assert.ok(bundle.includes('absoluteStoryImageUrl(im.url,baseUrl,section,id)'), 'gallery links and images must use resolved repository-root URLs');;
+  assert.ok(bundle.includes('function imageGalleryHtml(d,baseUrl,section,id)'));
+  assert.ok(bundle.includes('absoluteStoryImageUrl(im.url,baseUrl,section,id)'), 'gallery links and images must use resolved repository-root URLs');
   assert.ok(bundle.includes("'+gallery+'"));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
 });
