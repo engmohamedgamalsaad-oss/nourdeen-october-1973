@@ -604,6 +604,13 @@ test('AI import validates the package before saving and preserves pasted content
 
 test('embedded v4 provider prompts exactly match canonical provider files', function () {
   var source = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var masterPrefix = 'var STORY_PAGE_PROMPT = ';
+  var masterStart = source.indexOf(masterPrefix) + masterPrefix.length;
+  var masterEnd = source.indexOf(';\\nvar STORY_PROVIDER_PROMPTS', masterStart);
+  assert.ok(masterStart >= masterPrefix.length && masterEnd > masterStart, 'embedded master prompt must be readable');
+  var embeddedMaster = JSON.parse(source.slice(masterStart, masterEnd));
+  var canonicalMaster = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8').trim();
+  assert.equal(String(embeddedMaster).trim(), canonicalMaster, 'embedded master prompt must match the canonical v4 master file');
   var prefix = 'var STORY_PROVIDER_PROMPTS = ';
   var start = source.indexOf(prefix) + prefix.length;
   var end = source.indexOf(';\n\nfunction khAppendPromptOnce', start);
