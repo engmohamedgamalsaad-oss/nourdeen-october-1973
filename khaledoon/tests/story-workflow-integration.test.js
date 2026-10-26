@@ -80,6 +80,9 @@ test('published story 012 and 014 headers have all four non-Arabic translations'
   });
 });
 test('unified v4 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+  var instructions = fs.readFileSync('PROJECT_INSTRUCTIONS.md','utf8');
+  assert.ok(instructions.includes('cover.url` رابط صورة مباشر HTTPS'));
+  assert.ok(instructions.includes('source_name` ككائن بالخمس لغات `{ar,en,fr,it,de}`'));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
