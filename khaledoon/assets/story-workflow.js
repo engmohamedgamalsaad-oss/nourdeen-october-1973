@@ -287,8 +287,11 @@ function validateStoryPackage(pkg) {
   } else {
     var coverUrl = String(cover.url || '').trim();
     var coverPath = String(cover.path || '').trim();
+    if (coverUrl && coverPath) errors.push('cover يجب أن يستخدم مصدرًا واحدًا فقط: url أو path، وليس الاثنين معًا.');
     if (coverUrl) {
       if (!/^https:\/\//i.test(coverUrl)) errors.push('cover.url يجب أن يكون رابط صورة HTTPS مباشرًا.');
+    } else if (!coverPath) {
+      errors.push('cover يحتاج url HTTPS أو path إلى ملف موجود داخل المستودع تحت assets/images/ أو images/ أو stories/.');
     } else if (coverPath.split('/').some(function (part) { return part === '.' || part === '..'; }) || !/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(coverPath)) {
       errors.push('cover يحتاج url HTTPS أو path إلى ملف موجود داخل المستودع تحت assets/images/ أو images/ أو stories/.');
     }
@@ -316,26 +319,34 @@ function validateStoryPackage(pkg) {
   }
 
   var images = Array.isArray(pkg.images) ? pkg.images : [];
-  var validImages = images.filter(function (im) {
-    if (!isObj(im)) return false;
+  if (images.length < 2 || images.length > 5) {
+    errors.push('حزمة الاستيراد تحتاج من صورتين إلى خمس صور موثقة وصالحة في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n.en/fr/it/de. لا تُرسل حزمة بها أقل من صورتين أو أكثر من خمس صور.');
+  }
+  images.forEach(function (im, index) {
+    var number = index + 1;
+    if (!isObj(im)) {
+      errors.push('الصورة ' + number + ' يجب أن تكون كائنًا صالحًا.');
+      return;
+    }
     var imageUrl = String(im.url || '').trim(), sourceUrl = String(im.source_url || '').trim();
     var urlOk = /^https:\/\//i.test(imageUrl) || (/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl) && !imageUrl.split('/').some(function (part) { return part === '.' || part === '..'; }));
-    return urlOk && /^https:\/\//i.test(sourceUrl) && String(im.alt || '').trim() &&
-      String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
-      ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
-  });
-  if (validImages.length < 2) errors.push('حزمة الاستيراد تحتاج صورتين موثقتين وصالحتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n.en/fr/it/de لكل من alt وcaption وsource_name وrights. إذا تعذر التحقق من صورتين، لا تُرسل حزمة للاستيراد.');
-  images.forEach(function (im, index) {
-    if (!isObj(im)) return;
+    if (!urlOk) errors.push('الصورة ' + number + ': url يجب أن يكون رابط HTTPS مباشرًا أو مسارًا محليًا آمنًا موجودًا.');
+    if (!/^https:\/\//i.test(sourceUrl)) errors.push('الصورة ' + number + ': source_url يجب أن يكون رابط HTTPS للمصدر.');
+    ['alt','caption','source_name','rights'].forEach(function (key) {
+      if (typeof im[key] !== 'string' || !im[key].trim()) errors.push('الصورة ' + number + ': ' + key + ' مطلوب.');
+    });
+    if (['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) < 0) {
+      errors.push('الصورة ' + number + ': kind يجب أن يكون archival أو illustration أو diagram أو map.');
+    }
     ['en','fr','it','de'].forEach(function (lang) {
       var translated = im.i18n && im.i18n[lang];
       if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim() ||
           !String(translated.source_name || '').trim() || !String(translated.rights || '').trim()) {
-        errors.push('الصورة ' + (index + 1) + ': الوصف البديل والتعليق واسم المصدر والحقوق ناقصة في ' + lang.toUpperCase() + '.');
-        } else if (hasArabic(translated.alt) || hasArabic(translated.caption) ||
+        errors.push('الصورة ' + number + ': الوصف البديل والتعليق واسم المصدر والحقوق ناقصة في ' + lang.toUpperCase() + '.');
+      } else if (hasArabic(translated.alt) || hasArabic(translated.caption) ||
           hasArabic(translated.source_name) || hasArabic(translated.rights)) {
-          errors.push('الصورة ' + (index + 1) + ': الوصف والتعليق والمصدر والحقوق في ' + lang.toUpperCase() + ' يجب ألا تبقى بالعربية.');
-        }
+        errors.push('الصورة ' + number + ': الوصف والتعليق والمصدر والحقوق في ' + lang.toUpperCase() + ' يجب ألا تبقى بالعربية.');
+      }
     });
   });
 
