@@ -79,6 +79,20 @@ test('active v4 master prompt exactly matches the canonical master file', functi
   assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
   assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
 });
+test('embedded v4 provider prompts exactly match canonical provider files', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var prefix = 'var STORY_PROVIDER_PROMPTS = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\n\nfunction khAppendPromptOnce', start);
+  assert.ok(start >= prefix.length && end > start, 'embedded provider prompt object must be isolated');
+  var embedded = JSON.parse(texts.slice(start, end));
+  var root = 'khaledoon/prompts/2026-10-23-unified-v4/';
+  var files = { chatgpt: 'CHATGPT.md', claude: 'CLAUDE.md', gemini: 'GEMINI.md', deepseek: 'DEEPSEEK.md' };
+  Object.keys(files).forEach(function (key) {
+    var canonical = fs.readFileSync(root + files[key], 'utf8');
+    assert.equal(String(embedded[key] || ''), canonical, key + ' embedded prompt must match the canonical v4 file');
+  });
+});
 test('embedded project instructions exactly match the canonical project file', function () {
   var fs = require('node:fs');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
@@ -355,7 +369,7 @@ test('Gemini is available in every admin story prompt flow with full story requi
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
   assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
-  assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
+  assert.ok(texts.includes('"gemini":"# تعليمات تشغيل خاصة بـ Gemini'));
   ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
@@ -611,7 +625,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
   assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
-    assert.ok(promptTexts.includes('## تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
+    assert.ok(promptTexts.includes('# تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
   });
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
