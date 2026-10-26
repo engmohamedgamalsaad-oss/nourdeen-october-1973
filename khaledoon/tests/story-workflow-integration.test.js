@@ -704,6 +704,10 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
   var edge = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   assert.ok(edge.includes('body?.action === "capabilities"') && edge.includes('deletion_mode: "draft_pr"'), 'delete function must advertise safe PR mode');
+  assert.ok(edge.includes('async function githubAllPages(') && edge.includes('page=${page}') && edge.includes('batch.length < 100'), 'deletion must paginate pull-request searches instead of scanning only the first 100 results');
+  assert.ok(edge.includes('refusing to continue with incomplete pull-request results'), 'deletion must fail closed if pagination exceeds its safety cap');
+  assert.ok(edge.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken)'), 'duplicate-deletion search must scan all open PR pages');
+  assert.ok(edge.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=closed&base=${BASE}`, githubToken)'), 'post-merge deletion recovery must scan all closed PR pages');
   assert.ok(edge.includes('head: branchName, base: BASE, body: description, draft: true'), 'hidden-story deletion must create a draft PR');
   assert.ok(!edge.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'delete function must never update main directly');
   assert.ok(!edge.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'delete function must not fast-forward main');
@@ -734,6 +738,9 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
   assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
   assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
+  assert.ok(publisher.includes('async function githubAllPages(') && publisher.includes('page=${page}') && publisher.includes('batch.length < 100'), 'publisher must paginate pull-request searches instead of silently scanning only the first 100 results');
+  assert.ok(publisher.includes('refusing to continue with incomplete pull-request results'), 'publisher must fail closed if pagination exceeds its safety cap');
+  assert.ok(publisher.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken)'), 'duplicate-publication search must scan every page of open PRs');
   assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
   assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
