@@ -733,7 +733,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   var publishEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', publishStart);
   var publishBlock = admin.slice(publishStart, publishEnd);
   assert.ok(publishBlock.includes('if(!statusResult.merged){window.open(review.publish_pr_url') && publishBlock.indexOf('if(!statusResult.merged)') < publishBlock.indexOf('published_to_main_at:new Date().toISOString()'), 'an open PR must not be marked as published');
-  assert.ok(admin.includes('publish_pr_url&&!meta.preview_review.publish_pr_number'), 'legacy PR records without a verifiable number must not bypass merge verification');
+  assert.ok(admin.includes('if(!review.publish_pr_number||!review.publish_branch)') && admin.includes('لم نؤكد النشر'), 'legacy PR records without a verifiable number must not bypass merge verification');
   assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
   var submitStart = admin.indexOf('async function submitStoryPublishPR');
   var submitEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', submitStart);
