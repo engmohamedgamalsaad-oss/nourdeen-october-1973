@@ -197,6 +197,11 @@ t('AI story package validator accepts a complete five-language package', functio
   localizedMapPackage.map_location.place.de = 'الإسكندرية';
   assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('اسم المكان في map_location مطلوب باللغات الخمس') >= 0;}), 'Arabic place names must not leak into non-Arabic map labels');
   localizedMapPackage.map_location.place.de = 'Alexandria';
+  localizedMapPackage.map_location.place_label = {ar:'موقع مرتبط بالحكاية: ',en:'Story-related site: ',fr:'Lieu lié à l’histoire : ',it:'Luogo legato alla storia: ',de:'Mit der Geschichte verbundener Ort: '};
+  assert.equal(W.validateStoryPackage(localizedMapPackage).ok, true, 'fully localized optional map labels should pass');
+  localizedMapPackage.map_location.place_label.de = 'مكان مرتبط بالحكاية';
+  assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('map_location.place_label') >= 0;}), 'Arabic leftovers in optional map labels must be rejected');
+  delete localizedMapPackage.map_location.place_label;
   localizedMapPackage.map_location.source_name.fr = 'مصدر عربي';
   assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('map_location يحتاج source_name مترجمًا') >= 0;}), 'Arabic map source names must not leak into other languages');
   var originalFrenchCoverCaption = pkg.cover.i18n.fr.caption;
