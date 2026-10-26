@@ -25,6 +25,15 @@ test('admin imports the workflow module and derives status counters', function (
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
 });
+test('manual story builder supports the unified cover, sourced-image, and map metadata contract', function () {
+  assert.ok(builder.includes('id="cover_json"'), 'manual builder must collect the required cover object');
+  assert.ok(builder.includes('id="images_json"'), 'manual builder must collect the required sourced image array');
+  assert.ok(builder.includes("cover:parseJsonField('cover_json',currentMeta.cover||null)"), 'draft must parse cover JSON and preserve saved metadata');
+  assert.ok(builder.includes("images:parseJsonField('images_json',currentMeta.images||[])"), 'draft must parse image JSON and preserve saved metadata');
+  assert.ok(builder.includes("meta.cover=d.cover||meta.cover||null;meta.images=Array.isArray(d.images)?d.images:(meta.images||[])"), 'manual save must persist cover and image metadata');
+  assert.ok(builder.includes("if(read('images_json')&&!Array.isArray(d.images))"), 'invalid image JSON must stop preview validation');
+  assert.ok(builder.includes("map_location_json:Object.prototype.hasOwnProperty.call(m,'map_location')?JSON.stringify(m.map_location,null,2):''"), 'restoring a draft must preserve an existing map location');
+});
 test('published admin records and published site pages are separate filters', function () {
   assert.ok(admin.includes("k==='published'?'سجلات الأدمن بحالة «منشورة»'"));
   assert.ok(admin.includes("chip(t,'صفحات الحكايات المنشورة فعليًا بالموقع ('+sitePageItems.length+')'"));
