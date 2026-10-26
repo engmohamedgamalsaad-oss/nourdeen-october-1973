@@ -174,11 +174,17 @@ t('AI story package validator accepts a complete five-language package', functio
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
     images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
     images: [
-      {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang}]}))},
-      {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang}]}))}
+      {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang,source_name:'Source A '+lang,rights:'License noted'}]}))},
+      {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang,source_name:'Source B '+lang,rights:'License noted'}]}))}
     ], translations: translations, question_bank: { questions: questions } };
   var completeValidation = W.validateStoryPackage(pkg);
   assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
+  var originalSourceName = pkg.images[0].i18n.fr.source_name;
+  pkg.images[0].i18n.fr.source_name = 'اسم مصدر عربي';
+  var untranslatedImageSource = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedImageSource.ok && untranslatedImageSource.errors.some(function (e) { return e.indexOf('المصدر والحقوق') >= 0 || e.indexOf('بيانات الصورة') >= 0; }), 'image source metadata must be translated before import');
+  pkg.images[0].i18n.fr.source_name = originalSourceName;
+
   var originalImageUrl = pkg.images[0].url;
   pkg.images[0].url = '../assets/images/stories/Naguib_Mahfouz_HR.jpg';
   var traversalImage = W.validateStoryPackage(pkg);
