@@ -129,7 +129,7 @@ Deno.serve(async (req: Request) => {
     }
     const incomingIndexFile = body.files.find((file: any) => file.path === 'stories/index.json');
     if (!incomingIndexFile) throw new Error('Missing stories/index.json.');
-    const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + BASE, githubToken);
+    const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + baseSha, githubToken);
     const currentIndexBytes = Uint8Array.from(atob(currentIndexResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentIndex = JSON.parse(new TextDecoder().decode(currentIndexBytes));
     const incomingIndex = JSON.parse(incomingIndexFile.content);
@@ -154,7 +154,7 @@ Deno.serve(async (req: Request) => {
     if (existingIndex < 0) {
       let existingStoryPage: any = null;
       try {
-        existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${BASE}`, githubToken);
+        existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${baseSha}`, githubToken);
       } catch (error) {
         const detail = error instanceof Error ? error.message : "";
         if (!detail.startsWith("GitHub API 404:")) throw error;
@@ -177,7 +177,7 @@ Deno.serve(async (req: Request) => {
     }
     const hasStoryPlace = Object.prototype.hasOwnProperty.call(incomingPlaces, storyId);
     const place = hasStoryPlace ? incomingPlaces[storyId] : undefined;
-    const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
+    const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + baseSha, githubToken);
     const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
     if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
