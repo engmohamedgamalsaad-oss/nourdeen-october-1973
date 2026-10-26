@@ -79,7 +79,7 @@ Deno.serve(async (req: Request) => {
     const tree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
     if (tree.truncated) throw new Error("GitHub returned an incomplete file tree; refusing to delete anything.");
     const contents = await github(`/repos/${OWNER}/${REPO}/contents/stories/index.json?ref=${baseSha}`, githubToken);
-    const indexBytes = Uint8Array.from(atob(String(contents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
+    const indexBytes = Uint8Array.from(atob(String(contents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
     const index = JSON.parse(new TextDecoder().decode(indexBytes));
     if (!Array.isArray(index)) throw new Error("Story index is not an array.");
     const entryIndex = index.findIndex((entry: any) => String(entry?.id ?? "").padStart(3, "0") === id);
@@ -101,7 +101,7 @@ Deno.serve(async (req: Request) => {
       const quizPath = `stories/quizzes/${id}.json`;
       const quizStillExists = tree.tree.some((item: any) => item.type === "blob" && item.path === quizPath);
       const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
-      const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
+      const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
       const places = JSON.parse(new TextDecoder().decode(placesBytes));
       if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
       if (remainingStoryFiles || quizStillExists || Object.prototype.hasOwnProperty.call(places, id)) {
@@ -119,7 +119,7 @@ Deno.serve(async (req: Request) => {
     }
 
     const entry = index[entryIndex];
-    const storyPath = String(entry.path ?? "").replace(/\\/$/, "");
+    const storyPath = String(entry.path ?? "").replace(/\/$/, "");
     if (!new RegExp(`^stories/[a-z0-9-]+/${id}$`).test(storyPath) || entry.published === false) {
       throw new Error("The indexed story path is not an eligible published story; refusing deletion.");
     }
@@ -143,7 +143,7 @@ Deno.serve(async (req: Request) => {
       throw new Error("The story page file is missing; refusing a partial deletion.");
     }
     const placesContents = await github(`/repos/${OWNER}/${REPO}/contents/stories/places.json?ref=${baseSha}`, githubToken);
-    const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\\s/g, "")), (c) => c.charCodeAt(0));
+    const placesBytes = Uint8Array.from(atob(String(placesContents.content).replace(/\s/g, "")), (c) => c.charCodeAt(0));
     const places = JSON.parse(new TextDecoder().decode(placesBytes));
     if (!places || typeof places !== "object" || Array.isArray(places)) throw new Error("Current stories/places.json must be an object.");
     const deletions = storyFiles.map((item: any) => ({ path: item.path, mode: item.mode || "100644", type: "blob", sha: null }));
@@ -152,11 +152,11 @@ Deno.serve(async (req: Request) => {
     delete places[id];
     const indexBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ content: JSON.stringify(index, null, 2) + "\\n", encoding: "utf-8" }),
+      body: JSON.stringify({ content: JSON.stringify(index, null, 2) + "\n", encoding: "utf-8" }),
     });
     const placesBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ content: JSON.stringify(places, null, 2) + "\\n", encoding: "utf-8" }),
+      body: JSON.stringify({ content: JSON.stringify(places, null, 2) + "\n", encoding: "utf-8" }),
     });
     deletions.push({ path: "stories/index.json", mode: "100644", type: "blob", sha: indexBlob.sha });
     deletions.push({ path: "stories/places.json", mode: "100644", type: "blob", sha: placesBlob.sha });
@@ -174,10 +174,10 @@ Deno.serve(async (req: Request) => {
       method: "POST",
       body: JSON.stringify({ ref: "refs/heads/" + branchName, sha: commit.sha }),
     });
-    const description = `<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n` +
-      `Draft deletion request for hidden story ${id}: ${String(entry.title ?? "").slice(0, 100)}.\\n\\n` +
-      "- This request removes the story folder, quiz file, index entry, and map marker.\\n" +
-      "- The story remains hidden while this draft is reviewed.\\n" +
+    const description = `<!-- khaledoon-delete-story:${id}:${storyPath} -->\n\n` +
+      `Draft deletion request for hidden story ${id}: ${String(entry.title ?? "").slice(0, 100)}.\n\n` +
+      "- This request removes the story folder, quiz file, index entry, and map marker.\n" +
+      "- The story remains hidden while this draft is reviewed.\n" +
       "- No files or database visibility rows are deleted until a human reviews and merges the PR, then confirms deletion in the admin.";
     const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
       method: "POST",
