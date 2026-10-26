@@ -179,6 +179,26 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
 });
+test('production publisher and deletion functions remain review-only until a PR is merged', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('publisher_mode: "draft_pr"'));
+  assert.ok(publisher.includes('published_to_main: false'));
+  assert.ok(publisher.includes('draft: true'));
+  assert.ok(publisher.includes('pull_request_url: pull.html_url'));
+  assert.ok(publisher.includes('refs/heads/" + branchNameForRecovery'));
+  assert.ok(publisher.includes('/pulls'));
+  assert.ok(!publisher.includes('git/refs/heads/${BASE}'), 'publisher must not update main directly');
+
+  var deletion = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts', 'utf8');
+  assert.ok(deletion.includes('deletion_mode: "draft_pr"'));
+  assert.ok(deletion.includes('pending: true, deleted: false'));
+  assert.ok(deletion.includes('draft: true'));
+  assert.ok(deletion.includes('<!-- khaledoon-delete-story:'));
+  assert.ok(!deletion.includes('git/refs/heads/${BASE}'), 'deletion function must not update main directly');
+  assert.ok(deletion.indexOf('if (!mergedPull) return reply(404') < deletion.indexOf('from("story_visibility").delete()'),
+    'visibility row cleanup must happen only after a merged deletion PR is verified');
+});
+
 test('approved stories can reopen reader preview and AI image data is preserved', function () {
   assert.ok(admin.includes('فتح معاينة القارئ'));
   assert.ok(admin.includes("images:Array.isArray(pkg.images)?pkg.images:[]"));
