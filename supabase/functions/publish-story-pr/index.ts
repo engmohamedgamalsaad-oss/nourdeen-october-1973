@@ -67,19 +67,29 @@ Deno.serve(async (req: Request) => {
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
-  if (body?.action === "check_status") {
+  if (body?.action === "capabilities") {
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-26-pr-flow-v1", writes_main_directly: false });
+  }
+  if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
-    if (!Number.isSafeInteger(number) || number < 1) return reply(400, { error: "رقم طلب الدمج غير صالح." });
+    const expectedBranch = typeof body.branch === "string" ? body.branch.trim() : "";
+    if (!Number.isSafeInteger(number) || number < 1 || !expectedBranch || expectedBranch.length > 200) {
+      return reply(400, { error: "رقم طلب الدمج أو اسم فرعه غير صالح." });
+    }
     try {
-      const pr = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
-      if (pr.base?.ref !== BASE || pr.head?.repo?.full_name !== `${OWNER}/${REPO}` || typeof pr.head?.ref !== "string" || !pr.head.ref.startsWith("story-review/")) {
-        return reply(403, { error: "طلب الدمج لا يطابق مسار مراجعة الحكايات المسموح." });
+      const pull = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
+      if (pull.base?.ref !== BASE || pull.head?.repo?.full_name !== OWNER + "/" + REPO || pull.head?.ref !== expectedBranch) {
+        return reply(403, { error: "طلب الدمج لا يطابق الفرع المسجل لهذه الحكاية أو لا يستهدف main." });
       }
       return reply(200, {
-        success: true, merged: pr.merged === true, state: pr.state,
-        pull_request_url: pr.html_url, pull_request_number: pr.number,
-        head_sha: pr.head?.sha ?? null, merge_commit_sha: pr.merge_commit_sha ?? null,
-        base_branch: pr.base?.ref
+        success: true,
+        pull_request_number: number,
+        pull_request_url: pull.html_url,
+        state: pull.state,
+        draft: pull.draft === true,
+        merged: pull.merged === true || Boolean(pull.merged_at),
+        merged_at: pull.merged_at ?? null,
+        merge_commit_sha: pull.merge_commit_sha ?? null,
       });
     } catch (error) {
       const detail = error instanceof Error ? error.message : "Unknown error";
@@ -100,9 +110,10 @@ Deno.serve(async (req: Request) => {
   }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
-  const description = (typeof body.body === "string" ? body.body.slice(0, 4500) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.") + "\n\n---\n\nتم إنشاء هذا الطلب للمراجعة فقط. لن يظهر على الموقع المنشور حتى تتم مراجعة طلب الدمج ودمجه يدويًا في main.";
+  const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
+  let branchNameForRecovery = "";
   try {
-    // Build a review commit based on the current main. Only a review branch and PR are created; main is never updated here.
+    // Read latest main as the PR base. All generated writes stay on a dedicated branch.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
@@ -118,7 +129,7 @@ Deno.serve(async (req: Request) => {
     }
     const incomingIndexFile = body.files.find((file: any) => file.path === 'stories/index.json');
     if (!incomingIndexFile) throw new Error('Missing stories/index.json.');
-    const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + BASE, githubToken);
+    const currentIndexResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/index.json?ref=' + baseSha, githubToken);
     const currentIndexBytes = Uint8Array.from(atob(currentIndexResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentIndex = JSON.parse(new TextDecoder().decode(currentIndexBytes));
     const incomingIndex = JSON.parse(incomingIndexFile.content);
@@ -140,6 +151,18 @@ Deno.serve(async (req: Request) => {
     if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
       throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
     }
+    if (existingIndex < 0) {
+      let existingStoryPage: any = null;
+      try {
+        existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${baseSha}`, githubToken);
+      } catch (error) {
+        const detail = error instanceof Error ? error.message : "";
+        if (!detail.startsWith("GitHub API 404:")) throw error;
+      }
+      if (existingStoryPage) {
+        throw new Error("Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
+      }
+    }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
     // Keep the interactive map synchronized on every publish; merge into the latest main file.
     const incomingPlacesFile = body.files.find((file: any) => file.path === 'stories/places.json');
@@ -154,7 +177,7 @@ Deno.serve(async (req: Request) => {
     }
     const hasStoryPlace = Object.prototype.hasOwnProperty.call(incomingPlaces, storyId);
     const place = hasStoryPlace ? incomingPlaces[storyId] : undefined;
-    const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + BASE, githubToken);
+    const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + baseSha, githubToken);
     const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
     if (!currentPlaces || typeof currentPlaces !== 'object' || Array.isArray(currentPlaces)) {
@@ -176,6 +199,12 @@ Deno.serve(async (req: Request) => {
       if (!place.place || typeof place.place !== 'object' ||
           ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim() || (locale !== 'ar' && /[\u0600-\u06FF]/.test(place.place[locale])))) {
         throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
+      }
+      if (place.place_label !== undefined && place.place_label !== null &&
+          (!place.place_label || typeof place.place_label !== 'object' || Array.isArray(place.place_label) ||
+           ['ar','en','fr','it','de'].some((locale) => typeof place.place_label[locale] !== 'string' ||
+             !place.place_label[locale].trim() || (locale !== 'ar' && /[؀-ۿ]/.test(place.place_label[locale]))))) {
+        throw new Error('Map place labels, when provided, must be translated into all five languages without Arabic leftovers.');
       }
       const previousPlace = currentPlaces[storyId];
       const unchangedLegacyPlace = !!previousPlace &&
@@ -205,6 +234,21 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
     });
+    const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
+    const openPulls = await github(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}&per_page=100`, githubToken);
+    const existingPull = Array.isArray(openPulls)
+      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
+      : null;
+    if (existingPull) {
+      return reply(409, {
+        success: false,
+        error: "يوجد طلب دمج مفتوح لهذه الحكاية بالفعل؛ لم ننشئ نسخة ثانية.",
+        detail: "راجع طلب الدمج الحالي: " + existingPull.html_url,
+        pull_request_url: existingPull.html_url,
+        pull_request_number: existingPull.number,
+        branch: existingPull.head?.ref ?? null,
+      });
+    }
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
@@ -218,30 +262,46 @@ Deno.serve(async (req: Request) => {
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
-    const branchName = `story-review/${storyId}-${crypto.randomUUID().slice(0, 8)}`;
+    const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
+    branchNameForRecovery = `khaledoon/story-${storyId}-${branchSuffix}`;
     await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
       method: "POST",
-      body: JSON.stringify({ ref: `refs/heads/${branchName}`, sha: commit.sha }),
+      body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha }),
     });
-    const pullRequest = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
+    const prBody = prMarker + "\n\n" + description +
+      "\n\n## Automatic safety checks\n" +
+      "- Generated files were validated by the admin workflow.\n" +
+      "- The story index and interactive-map data are included in this pull request.\n" +
+      "- This is a draft pull request; it is not published until a human reviews and merges it.\n" +
+      "- No files were written to main by this function.";
+    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
       method: "POST",
-      body: JSON.stringify({
-        title,
-        head: branchName,
-        base: BASE,
-        body: description
-      }),
+      body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
     });
     return reply(201, {
-      success: true, published_to_main: false, commit_sha: commit.sha,
-      story_id: storyId, story_path: normalizedRoot,
-      pull_request_number: pullRequest.number, pull_request_url: pullRequest.html_url,
-      branch_name: branchName, map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
-      map_message: mapMarkerAdded ? "تم تجهيز بيانات علامة الحكاية في فرع المراجعة." : "تم تجهيز بيانات الخريطة؛ لم تُضف علامة جغرافية لأن الحكاية لا تحتوي على موقع موثق.",
-      message: "تم إنشاء طلب دمج للمراجعة. لم يتم النشر على الموقع؛ لن يظهر المحتوى إلا بعد الدمج في main."
+      success: true,
+      published_to_main: false,
+      pull_request_url: pull.html_url,
+      pull_request_number: pull.number,
+      pull_request_state: pull.state,
+      pull_request_draft: pull.draft === true,
+      branch: branchNameForRecovery,
+      commit_sha: commit.sha,
+      story_id: storyId,
+      story_path: normalizedRoot,
+      map_linked: mapMarkerAdded,
+      map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded
+        ? "تم تضمين علامة الحكاية وبياناتها في الخريطة داخل طلب الدمج؛ لم تتغير الخريطة المنشورة."
+        : "تم تضمين بيانات الخريطة في طلب الدمج؛ لم تُضف علامة لأن الحكاية لا تحتوي على موقع موثق.",
+      message: "تم إنشاء طلب دمج للمراجعة. لم يتم تعديل main أو نشر الحكاية على الموقع."
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر نشر الحكاية مباشرة على GitHub.", detail: detail.slice(0, 500) });
+    return reply(502, {
+      error: "تعذر إنشاء طلب دمج للحكاية؛ لم تُكتب ملفات الحكاية إلى main.",
+      detail: detail.slice(0, 500),
+      branch: branchNameForRecovery || null,
+    });
   }
 });
