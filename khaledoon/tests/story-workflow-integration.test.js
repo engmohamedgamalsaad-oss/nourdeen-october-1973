@@ -149,6 +149,9 @@ test('unified v4 prompt is shared and legacy AI output is not copied into fresh 
   assert.ok(shared.includes('cover-popup'));
   assert.ok(shared.includes('prefers-reduced-motion'));
   assert.ok(shared.includes('source_name') && shared.includes('source_url') && shared.includes('rights'), 'shared v4 prompt must retain source and rights fields');
+  assert.ok(shared.includes('معرض من صورتين إلى خمس صور موثقة وصالحة'), 'quality gate must enforce the same two-to-five image limit as the validator');
+  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md','utf8');
+  assert.ok(masterPrompt.includes('من صورتين إلى خمس صور موثقة وصالحة'), 'canonical master prompt must agree with the gallery validator limit');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
     assert.ok(shared.includes('"'+provider+'"'), 'missing provider instruction: '+provider);
