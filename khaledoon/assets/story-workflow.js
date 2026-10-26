@@ -319,9 +319,16 @@ function validateStoryPackage(pkg) {
   }
 
   var images = Array.isArray(pkg.images) ? pkg.images : [];
-  if (images.length < 2 || images.length > 5) {
-    errors.push('حزمة الاستيراد تحتاج من صورتين إلى خمس صور موثقة وصالحة في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n.en/fr/it/de. لا تُرسل حزمة بها أقل من صورتين أو أكثر من خمس صور.');
-  }
+  var validImages = images.filter(function (im) {
+    if (!isObj(im)) return false;
+    var imageUrl = String(im.url || '').trim(), sourceUrl = String(im.source_url || '').trim();
+    var urlOk = /^https:\/\//i.test(imageUrl) || (/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl) && !imageUrl.split('/').some(function (part) { return part === '.' || part === '..'; }));
+    return urlOk && /^https:\/\//i.test(sourceUrl) && String(im.alt || '').trim() &&
+      String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
+      ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
+  });
+  if (validImages.length < 2) errors.push('حزمة الاستيراد تحتاج صورتين موثقتين وصالحتين على الأقل؛ لكل صورة رابط صالح وبيانات مصدر وحقوق وترجمات كاملة.');
+  if (images.length > 5) errors.push('حزمة الاستيراد لا يجوز أن تتجاوز خمس صور موثقة في images.');
   images.forEach(function (im, index) {
     var number = index + 1;
     if (!isObj(im)) {
