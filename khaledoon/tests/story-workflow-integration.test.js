@@ -41,6 +41,8 @@ test('manual story builder supports the unified cover, sourced-image, and map me
   assert.ok(builder.includes("map_location_json:typeof m.map_location_json==='string'?m.map_location_json:(Object.prototype.hasOwnProperty.call(m,'map_location')?JSON.stringify(m.map_location,null,2):'')"), 'restoring a draft must preserve raw JSON and existing map location metadata');
   assert.ok(builder.includes("if(Object.prototype.hasOwnProperty.call(d,'map_location')&&(!d.map_location_json||d.map_location_json==='null'||(d.map_location&&typeof d.map_location==='object'&&!Array.isArray(d.map_location))))"), 'invalid map JSON must not overwrite a saved map location');
   assert.ok(builder.includes('function validateMapLocation(mapLoc,missing)'), 'manual builder must validate map coordinates, localized place/source names, and HTTPS source URL');
+  assert.ok(builder.includes('async function verifyManualAssets(d)'), 'manual preview must verify that the cover and gallery images actually load');
+  assert.ok(builder.includes('await verifyManualAssets(draft())'), 'manual preview must finish image checks before saving and opening the preview');
 });
 test('published admin records and published site pages are separate filters', function () {
   assert.ok(admin.includes("k==='published'?'سجلات الأدمن بحالة «منشورة»'"));
