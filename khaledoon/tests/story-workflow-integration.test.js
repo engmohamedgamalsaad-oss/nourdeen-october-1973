@@ -168,6 +168,8 @@ test('published stories cannot be deleted and deleting drafts never hides static
 });
 test('admin validates every translated field and every quiz translation before AI import', function () {
   assert.ok(admin.includes('window.KHWorkflow.validateStoryPackage(pkg)'));
+  assert.ok(admin.includes('cover:pkg.cover||null'), 'AI import must preserve the validated cover object');
+  assert.ok(admin.includes('cover, map_location, images, translations, question_bank'), 'AI output schema must explicitly require the cover object');
   assert.ok(admin.includes("if(!Object.prototype.hasOwnProperty.call(SEC,String(pkg.section_key||'')))"));
   assert.ok(admin.includes('window.KHAIJsonRepair.parse(sourceRaw)'));
   assert.ok(admin.includes('!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)'), 'recognizable complete packages without the format marker should be normalized safely');
@@ -283,7 +285,7 @@ test('rendered story preview applies all nine designs and includes attributed im
     assert.ok(html.includes('معاينة خاصة غير منشورة'), 'preview safety banner missing: ' + design);
   });
 });
-test('AI story package validation requires a design profile and at least two documented images', function () {
+test('AI story package validation requires a localized cover, design profile, and at least two documented images', function () {
   assert.ok(W.validateStoryPackage({
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
@@ -298,6 +300,8 @@ test('AI story package validation requires a design profile and at least two doc
     translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:'Narrator',history_note:'History',images_note:'Images'}]})),
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
   }).ok);
+  var missingCover = { section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة', narrator_name:'راوي', narrator_grade:'الصف السادس', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.', karma_text:'كارما', body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.', history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', visual_design:'science-lab', map_location:null, images:[], translations:{}, question_bank:{questions:[]} };
+  assert.ok(!W.validateStoryPackage(missingCover).ok, 'a package without cover must be rejected');
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
 test('Gemini is available in every admin story prompt flow with full story requirements', function () {
