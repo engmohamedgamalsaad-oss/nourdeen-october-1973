@@ -328,18 +328,25 @@ test('rendered story preview applies all nine designs and includes attributed im
   });
 });
 test('AI story package validation requires a localized cover, design profile, and at least two documented images', function () {
+  var sourceFactBody = 'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.\\n\\nهل تعلم؟ هذه أول معلومة موثقة.\\n\\nهل تعلم؟ هذه ثاني معلومة موثقة.\\n\\nهل تعلم؟ هذه ثالث معلومة موثقة.';
+  var translatedFactBodies = {
+    en: 'A narrator story for validation.\\n\\nDid you know? First verified fact.\\n\\nDid you know? Second verified fact.\\n\\nDid you know? Third verified fact.',
+    fr: 'Un récit narratif pour validation.\\n\\nLe saviez-vous ? Premier fait vérifié.\\n\\nLe saviez-vous ? Deuxième fait vérifié.\\n\\nLe saviez-vous ? Troisième fait vérifié.',
+    it: 'Un racconto narrativo per la verifica.\\n\\nLo sapevi? Primo fatto verificato.\\n\\nLo sapevi? Secondo fatto verificato.\\n\\nLo sapevi? Terzo fatto verificato.',
+    de: 'Eine Erzählung zur Überprüfung.\\n\\nWusstest du? Erste geprüfte Tatsache.\\n\\nWusstest du? Zweite geprüfte Tatsache.\\n\\nWusstest du? Dritte geprüfte Tatsache.'
+  };
   assert.ok(W.validateStoryPackage({
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
     narrator_name:'راوي', narrator_grade:'الصف السادس', karma_text:'كارما',
     history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.',
-    body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.',
+    body:sourceFactBody,
     cover:{url:'https://images.example/cover.jpg',alt:'غلاف أ',caption:'غلاف تجريبي',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/cover',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))},
     visual_design:'science-lab', map_location:null,
     images:[
       {url:'https://images.example/a.jpg',alt:'صورة أ',caption:'أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://source.example/a',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image A',caption:'Caption A',source_name:'Source A',rights:'License noted'}]}))},
       {url:'https://images.example/b.jpg',alt:'صورة ب',caption:'ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://source.example/b',rights:'ترخيص موضح',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{alt:'Image B',caption:'Caption B',source_name:'Source B',rights:'License noted'}]}))}
     ],
-    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:'Narrator',history_note:'History',images_note:'Images'}]})),
+    translations:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{student_name:'Name',grade:'Grade',title:'Title',subtitle:'Subtitle',karma_text:'Karma',body:translatedFactBodies[lang],history_note:'History',images_note:'Images'}]})),
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
   }).ok);
   var missingCover = { section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة', narrator_name:'راوي', narrator_grade:'الصف السادس', original_body:'هذا هو النص الأصلي الكامل الذي وصل من صاحب الحكاية دون أي تعديل أو حذف.', karma_text:'كارما', body:'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.', history_note:'سياق', sources:'المصدر الأول https://example.org/source-a\\nالمصدر الثاني https://example.net/source-b', images_note:'حقوق الصور', visual_design:'science-lab', map_location:null, images:[], translations:{}, question_bank:{questions:[]} };
