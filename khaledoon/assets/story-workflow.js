@@ -199,6 +199,7 @@ function validateStoryPackage(pkg) {
     var value = obj && obj[key];
     if (typeof value !== 'string' || value.trim().length < (min || 1)) errors.push(label);
   }
+  function hasArabic(value) { return /[\u0600-\u06FF]/.test(String(value || '')); }
   [
     ['section_key', 'مفتاح القسم'], ['figure_name', 'اسم الشخصية'],
     ['title', 'العنوان'], ['subtitle', 'العنوان الفرعي'],
@@ -223,34 +224,74 @@ function validateStoryPackage(pkg) {
         errors.push('map_location يحتاج lat وlng رقميين ضمن حدود الإحداثيات الصحيحة.');
       }
       if (!isObj(mapLoc.place) || ['ar','en','fr','it','de'].some(function (l) {
-        return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim();
+        return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim() || (l !== 'ar' && hasArabic(mapLoc.place[l]));
       })) errors.push('اسم المكان في map_location مطلوب باللغات الخمس ar/en/fr/it/de.');
-      if (typeof mapLoc.source_name !== 'string' || !mapLoc.source_name.trim() ||
-          typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
-        errors.push('map_location يحتاج اسم مصدر ورابط مصدر موثوقًا قابلًا للفتح.');
+      if (!isObj(mapLoc.source_name) || ['ar','en','fr','it','de'].some(function (lang) {
+          return typeof mapLoc.source_name[lang] !== 'string' || !mapLoc.source_name[lang].trim() || (lang !== 'ar' && hasArabic(mapLoc.source_name[lang]));
+        }) || typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
+        errors.push('map_location يحتاج source_name مترجمًا إلى ar/en/fr/it/de ورابط source_url يبدأ بـ HTTPS.');
       }
       if (mapLoc.approximate !== undefined && typeof mapLoc.approximate !== 'boolean') {
         errors.push('map_location.approximate يجب أن تكون true أو false.');
       }
     }
   }
+  /* الغلاف جزء من عقد الحزمة، ولا يجوز إسقاطه أثناء الاستيراد أو توليد الصفحة. */
+  var cover = pkg.cover;
+  if (!isObj(cover)) {
+    errors.push('كائن cover مطلوب ويجب أن يتضمن بيانات الغلاف ومصدره وحقوقه.');
+  } else {
+    var coverUrl = String(cover.url || '').trim();
+    var coverPath = String(cover.path || '').trim();
+    if (coverUrl) {
+      if (!/^https:\/\//i.test(coverUrl)) errors.push('cover.url يجب أن يكون رابط صورة HTTPS مباشرًا.');
+    } else if (coverPath.split('/').some(function (part) { return part === '.' || part === '..'; }) || !/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(coverPath)) {
+      errors.push('cover يحتاج url HTTPS أو path إلى ملف موجود داخل المستودع تحت assets/images/ أو images/ أو stories/.');
+    }
+    ['alt','caption','source_name','rights'].forEach(function (key) {
+      if (typeof cover[key] !== 'string' || !cover[key].trim()) errors.push('cover.' + key + ' مطلوب.');
+    });
+    if (typeof cover.source_url !== 'string' || !/^https:\/\//i.test(cover.source_url.trim())) {
+      errors.push('cover.source_url يجب أن يكون رابط HTTPS حقيقيًا للمصدر.');
+    }
+    if (['archival','illustration','diagram','map'].indexOf(String(cover.kind || '')) < 0) {
+      errors.push('cover.kind يجب أن يكون archival أو illustration أو diagram أو map.');
+    }
+    if (!isObj(cover.i18n)) {
+      errors.push('cover.i18n مطلوب بترجمات en/fr/it/de للنص البديل والتعليق.');
+    } else {
+      langs.forEach(function (lang) {
+        var translatedCover = cover.i18n[lang];
+        if (!isObj(translatedCover) || !String(translatedCover.alt || '').trim() || !String(translatedCover.caption || '').trim()) {
+          errors.push('الغلاف: النص البديل والتعليق مترجمان ومطلوبان في ' + lang.toUpperCase() + '.');
+        } else if (hasArabic(translatedCover.alt) || hasArabic(translatedCover.caption)) {
+          errors.push('الغلاف: النص البديل والتعليق في ' + lang.toUpperCase() + ' لا يجوز أن يظلا بالعربية.');
+        }
+      });
+    }
+  }
+
   var images = Array.isArray(pkg.images) ? pkg.images : [];
   var validImages = images.filter(function (im) {
     if (!isObj(im)) return false;
     var imageUrl = String(im.url || '').trim(), sourceUrl = String(im.source_url || '').trim();
-    var urlOk = /^https:\/\//i.test(imageUrl) || /^(?:\.\.\/|\.\/|images\/|assets\/images\/)[^\s"'<>]+$/i.test(imageUrl);
+    var urlOk = /^https:\/\//i.test(imageUrl) || (/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl) && !imageUrl.split('/').some(function (part) { return part === '.' || part === '..'; }));
     return urlOk && /^https:\/\//i.test(sourceUrl) && String(im.alt || '').trim() &&
       String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
       ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
   });
-  if (validImages.length < 2 && images.length > 0) errors.push('إذا أُرفقت صور، فأكمل توثيق صورتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights. اترك images فارغة فقط إذا تعذر التحقق من الصور واشرح السبب في images_note.');
+  if (validImages.length < 2) errors.push('حزمة الاستيراد تحتاج صورتين موثقتين وصالحتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n.en/fr/it/de لكل من alt وcaption وsource_name وrights. إذا تعذر التحقق من صورتين، لا تُرسل حزمة للاستيراد.');
   images.forEach(function (im, index) {
     if (!isObj(im)) return;
     ['en','fr','it','de'].forEach(function (lang) {
       var translated = im.i18n && im.i18n[lang];
-      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim()) {
-        errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق ناقصان في ' + lang.toUpperCase() + '.');
-      }
+      if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim() ||
+          !String(translated.source_name || '').trim() || !String(translated.rights || '').trim()) {
+        errors.push('الصورة ' + (index + 1) + ': الوصف البديل والتعليق واسم المصدر والحقوق ناقصة في ' + lang.toUpperCase() + '.');
+        } else if (hasArabic(translated.alt) || hasArabic(translated.caption) ||
+          hasArabic(translated.source_name) || hasArabic(translated.rights)) {
+          errors.push('الصورة ' + (index + 1) + ': الوصف والتعليق والمصدر والحقوق في ' + lang.toUpperCase() + ' يجب ألا تبقى بالعربية.');
+        }
     });
   });
 
@@ -293,6 +334,11 @@ function validateStoryPackage(pkg) {
       requiredTranslationFields.forEach(function (field) {
         if (typeof translation[field[0]] !== 'string' || !translation[field[0]].trim()) {
           errors.push(lang.toUpperCase() + ': حقل ' + field[1] + ' فارغ.');
+        }
+      });
+      ['title','subtitle','karma_text','body','history_note','images_note'].forEach(function (field) {
+        if (typeof translation[field] === 'string' && hasArabic(translation[field])) {
+          errors.push(lang.toUpperCase() + ': حقل ' + field + ' ما زال يحتوي نصًا عربيًا بدل الترجمة المطلوبة.');
         }
       });
       /* اسم الشخصية المترجم (اختياري لكنه يظهر في البحث والخريطة): إن وُجد فيجب أن يكون بحروف غير عربية. */
@@ -351,6 +397,9 @@ function validateStoryPackage(pkg) {
           translation.o.some(function (option) { return typeof option !== 'string' || !option.trim(); }) ||
           typeof translation.e !== 'string' || !translation.e.trim()) {
         errors.push(label + ': ترجمة السؤال أو الاختيارات أو التفسير ناقصة في ' + lang.toUpperCase() + '.');
+      }
+      else if (hasArabic(translation.q) || hasArabic(translation.e) || translation.o.some(hasArabic)) {
+        errors.push(label + ': ترجمة ' + lang.toUpperCase() + ' ما زالت تحتوي نصًا عربيًا في السؤال أو الاختيارات أو التفسير.');
       }
     });
   });

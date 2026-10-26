@@ -87,7 +87,7 @@
       cover.alt = (coverI18n && coverI18n.alt) || coverData.alt || localized(story, 'title') || ui.read;
     }
     var coverPhoto = COVER_PHOTOS[path.replace(/\/+$/, '')];
-    if (coverPhoto) candidates = [root + coverPhoto].concat(candidates);
+    if (coverPhoto && !coverUrl) candidates = [root + coverPhoto].concat(candidates);
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;

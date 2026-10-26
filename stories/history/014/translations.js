@@ -38,5 +38,13 @@ supplementalTranslations.en["نيسابور، إيران — مدينة مرتب
 supplementalTranslations.fr["نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي"]="Nichapour, Iran — une ville associée au parcours d’Abou Bakr al-Khwarizmi";
 supplementalTranslations.it["نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي"]="Nishapur, Iran — una città legata al viaggio di Abu Bakr al-Khwarizmi";
 supplementalTranslations.de["نيسابور، إيران — مدينة مرتبطة برحلة أبي بكر الخوارزمي"]="Nischapur, Iran — eine Stadt, die mit der Reise Abu Bakr al-Chwarizmis verbunden ist";
+supplementalTranslations.en["← التاريخ والحضارات"]="← History and Civilizations";
+supplementalTranslations.fr["← التاريخ والحضارات"]="← Histoire et civilisations";
+supplementalTranslations.it["← التاريخ والحضارات"]="← Storia e civiltà";
+supplementalTranslations.de["← التاريخ والحضارات"]="← Geschichte und Zivilisationen";
+supplementalTranslations.en["خالدون عبر التاريخ · 014"]="Immortals Through History · 014";
+supplementalTranslations.fr["خالدون عبر التاريخ · 014"]="Les immortels à travers l’histoire · 014";
+supplementalTranslations.it["خالدون عبر التاريخ · 014"]="Immortali attraverso la storia · 014";
+supplementalTranslations.de["خالدون عبر التاريخ · 014"]="Unsterbliche durch die Geschichte · 014";
 Object.keys(supplementalTranslations).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],supplementalTranslations[lang]);});
 })();

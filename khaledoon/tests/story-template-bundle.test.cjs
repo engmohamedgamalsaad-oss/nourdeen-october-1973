@@ -52,7 +52,7 @@ async function main() {
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
     translations: { en: { title: 'Preview test' }, fr: {}, it: {}, de: {} },
     images: [
-      { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY' },
+      { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY', i18n: { en: { alt: 'Portrait', caption: 'Portrait', source_name: 'Example Archive EN', rights: 'Public Domain' }, fr: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archive Exemple', rights: 'Domaine public' }, it: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archivio di esempio', rights: 'Pubblico dominio' }, de: { alt: 'Portrait', caption: 'Portrait', source_name: 'Beispielarchiv', rights: 'Gemeinfrei' } } },
       { url: 'https://images.example.org/related.jpg', alt: 'Related image', caption: 'Related image' }
     ],
     question_bank_json: { questions: [] }
@@ -70,6 +70,8 @@ async function main() {
   assert.match(html, /\.story-design-arts-culture\{background:radial-gradient/, 'arts stories should use a dedicated visual identity');
   assert.match(html, /loading="eager"/, 'preview images should load immediately inside the sandboxed frame');
   assert.match(html, /https:\/\/images\.example\.org\/portrait\.jpg/, 'the lead image URL should be present in preview HTML');
+  assert.match(html, /Example Archive EN/, 'image source names should be translated in the generated dictionary');
+  assert.match(html, /Public Domain/, 'image usage rights should be translated in the generated dictionary');
   assert.match(html, /بيانات الحقوق غير مكتملة/, 'images with missing rights should remain visible with a clear warning');
   assert.doesNotMatch(html, /src="cover-popup\.svg"/, 'preview must not depend on a cover asset that is absent from the srcdoc');
   assert.match(html, /معاينة خاصة غير منشورة/);

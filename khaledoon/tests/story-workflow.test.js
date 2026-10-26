@@ -172,13 +172,48 @@ t('AI story package validator accepts a complete five-language package', functio
     original_body: 'This is the preserved original story text.', karma_text: 'Karma asks why history matters.',
     body: 'A complete narrator story with more than fifty characters for validation.',
     history_note: 'Context and verification notes.', sources: 'A verified source URL https://example.org/source; second independent source https://example.net/reference',
-    images_note: 'Historical image attribution and license notes.', visual_design: 'ancient-civilization', map_location: null,
+    images_note: 'Historical image attribution and license notes.', cover: {url:'https://images.example/cover.jpg',alt:'غلاف توضيحي',caption:'غلاف الحكاية',kind:'illustration',source_name:'Cover source',source_url:'https://example.org/cover',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover '+lang,caption:'Cover caption '+lang}]}))}, visual_design: 'ancient-civilization', map_location: null,
     images: [
-      {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang}]}))},
-      {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang}]}))}
+      {url:'https://images.example/a.jpg',alt:'Image A',caption:'Caption A',kind:'illustration',source_name:'Source A',source_url:'https://example.org/a',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image A '+lang,caption:'Caption A '+lang,source_name:'Source A '+lang,rights:'License noted'}]}))},
+      {url:'https://images.example/b.jpg',alt:'Image B',caption:'Caption B',kind:'diagram',source_name:'Source B',source_url:'https://example.org/b',rights:'License noted',i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Image B '+lang,caption:'Caption B '+lang,source_name:'Source B '+lang,rights:'License noted'}]}))}
     ], translations: translations, question_bank: { questions: questions } };
   var completeValidation = W.validateStoryPackage(pkg);
   assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
+  var originalSourceName = pkg.images[0].i18n.fr.source_name;
+  pkg.images[0].i18n.fr.source_name = 'اسم مصدر عربي';
+  var untranslatedImageSource = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedImageSource.ok && untranslatedImageSource.errors.some(function (e) { return e.indexOf('المصدر والحقوق') >= 0 || e.indexOf('بيانات الصورة') >= 0; }), 'image source metadata must be translated before import');
+  pkg.images[0].i18n.fr.source_name = originalSourceName;
+
+  var originalImageUrl = pkg.images[0].url;
+  pkg.images[0].url = '../assets/images/stories/Naguib_Mahfouz_HR.jpg';
+  var traversalImage = W.validateStoryPackage(pkg);
+  assert.ok(!traversalImage.ok && traversalImage.errors.some(function (e) { return e.indexOf('صورتين موثقتين وصالحتين على الأقل') >= 0; }), 'relative traversal image paths must not count as valid images');
+  pkg.images[0].url = 'assets/images/stories/Naguib_Mahfouz_HR.jpg';
+  assert.equal(W.validateStoryPackage(pkg).ok, true, 'safe repository-root image paths should be accepted for existence checks during import');
+  pkg.images[0].url = originalImageUrl;
+  var localizedMapPackage = Object.assign({}, pkg, {map_location:{lat:31.2,lng:29.9,place:{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'},source_name:{ar:'مصدر موثوق',en:'Trusted source',fr:'Source fiable',it:'Fonte affidabile',de:'Verlässliche Quelle'},source_url:'https://example.org/map-source'}});
+  assert.equal(W.validateStoryPackage(localizedMapPackage).ok, true, 'localized map source name should pass');
+  localizedMapPackage.map_location.place.de = 'الإسكندرية';
+  assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('اسم المكان في map_location مطلوب باللغات الخمس') >= 0;}), 'Arabic place names must not leak into non-Arabic map labels');
+  localizedMapPackage.map_location.place.de = 'Alexandria';
+  localizedMapPackage.map_location.source_name.fr = 'مصدر عربي';
+  assert.ok(W.validateStoryPackage(localizedMapPackage).errors.some(function(e){return e.indexOf('map_location يحتاج source_name مترجمًا') >= 0;}), 'Arabic map source names must not leak into other languages');
+  var originalFrenchCoverCaption = pkg.cover.i18n.fr.caption;
+  pkg.cover.i18n.fr.caption = 'تعليق عربي';
+  var untranslatedCover = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedCover.ok && untranslatedCover.errors.some(function(e){return e.indexOf('الغلاف: النص البديل والتعليق في FR') >= 0;}));
+  pkg.cover.i18n.fr.caption = originalFrenchCoverCaption;
+  var originalFrenchBody = pkg.translations.fr.body;
+  pkg.translations.fr.body = 'هذا نص عربي غير مترجم.';
+  var untranslatedBody = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedBody.ok && untranslatedBody.errors.some(function(e){return e.indexOf('FR: حقل body ما زال يحتوي نصًا عربيًا') >= 0;}));
+  pkg.translations.fr.body = originalFrenchBody;
+  var originalGermanQuestion = pkg.question_bank.questions[0].i18n.de.q;
+  pkg.question_bank.questions[0].i18n.de.q = 'سؤال عربي';
+  var untranslatedQuestion = W.validateStoryPackage(pkg);
+  assert.ok(!untranslatedQuestion.ok && untranslatedQuestion.errors.some(function(e){return e.indexOf('ترجمة DE ما زالت تحتوي نصًا عربيًا') >= 0;}));
+  pkg.question_bank.questions[0].i18n.de.q = originalGermanQuestion;
   delete pkg.translations.de.body;
   var missingTranslation = W.validateStoryPackage(pkg);
   assert.equal(missingTranslation.ok, false);
