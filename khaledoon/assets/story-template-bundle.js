@@ -65,7 +65,13 @@ function validate(d){
   if(factCardIndexes(d.body).length<3)missing.push('نص الراوي يحتاج ثلاث فقرات «هل تعلم؟» منفصلة على الأقل لتظهر كبطاقات معرفة.');
  if(!d.karma_text||!d.karma_text.trim())missing.push('مقاطع كارما غير موجودة');
  var imgs=Array.isArray(d.images)?d.images:[];
- if(imgs.length<2)missing.push('أضف صورتين على الأقل بروابط قابلة للفتح، ووصف بديل، واسم مصدر، ورابط مصدر، وبيان حقوق الاستخدام لكل صورة');
+ var usableImages=imgs.filter(function(im){
+  if(!im||typeof im!=='object'||Array.isArray(im))return false;
+  var imageUrl=String(im.url||'').trim(),sourceUrl=String(im.source_url||'').trim();
+  var safeUrl=/^https:\/\//i.test(imageUrl)||(/^(?:images\/|assets\/images\/|stories\/)[^\s"'<>]+$/i.test(imageUrl)&&!imageUrl.split('/').some(function(part){return part==='.'||part==='..'}));
+  return safeUrl&&/^https:\/\//i.test(sourceUrl)&&String(im.alt||'').trim()&&String(im.caption||'').trim()&&String(im.source_name||'').trim()&&String(im.rights||'').trim()&&['archival','illustration','diagram','map'].indexOf(String(im.kind||''))>=0;
+ });
+ if(usableImages.length<2)missing.push('أضف صورتين على الأقل بروابط قابلة للفتح، ووصف بديل، واسم مصدر، ورابط مصدر، وبيان حقوق الاستخدام لكل صورة');
  if(imgs.length>5)missing.push('لا تتجاوز خمس صور موثقة في معرض الحكاية؛ احذف الصور الزائدة قبل المعاينة.');
  imgs.forEach(function(im,index){
   var number=index+1;
