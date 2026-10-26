@@ -38,7 +38,9 @@ function imageGalleryHtml(d,baseUrl,section,id){
   var source=String(im.source_name||'المصدر غير مسجل');
   var sourceUrl=/^https:\/\//i.test(String(im.source_url||''))?String(im.source_url):'';
   var rights=String(im.rights||'بيانات الحقوق غير مكتملة — لا تعتمد الصورة للنشر قبل التحقق');
-  return '<figure class="story-image-card"><a href="'+esc(imageUrl)+'" target="_blank" rel="noopener noreferrer"><img src="'+esc(imageUrl)+'" alt="'+esc(im.alt||caption)+'" loading="lazy" decoding="async"></a><figcaption><strong>'+esc(caption)+'</strong><span>'+kind+' · '+esc(source)+'</span><small>'+esc(rights)+(sourceUrl?' · <a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener noreferrer">رابط المصدر</a>':'')+'</small></figcaption></figure>';
+  /* Keep each translatable label in its own text node: the shared i18n engine
+     translates exact dictionary keys, not a combined "kind · source" string. */
+  return '<figure class="story-image-card"><a href="'+esc(imageUrl)+'" target="_blank" rel="noopener noreferrer"><img src="'+esc(imageUrl)+'" alt="'+esc(im.alt||caption)+'" loading="lazy" decoding="async"></a><figcaption><strong>'+esc(caption)+'</strong><span class="story-image-kind">'+kind+'</span><span aria-hidden="true"> · </span><span class="story-image-source">'+esc(source)+'</span><small>'+esc(rights)+(sourceUrl?' · <a href="'+esc(sourceUrl)+'" target="_blank" rel="noopener noreferrer">رابط المصدر</a>':'')+'</small></figcaption></figure>';
  }).join('');
  if(!cards)return '';
  return '<section class="story-visual-gallery" aria-label="صور مرتبطة بالحكاية"><div class="container"><div class="kicker">صور مرتبطة بالحكاية</div><h2>شاهد واكتشف</h2><div class="story-image-grid">'+cards+'</div></div></section>';
