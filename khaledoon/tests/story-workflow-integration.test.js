@@ -481,21 +481,28 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(!admin.includes('!result.published_to_main'));
 });
 
-test('story i18n lookup supports source-first and language-first dictionaries', function () {
+test('story i18n lookup supports both dictionary shapes and the real SVG artwork dictionary', function () {
   var vm = require('vm');
   var engine = fs.readFileSync('assets/shared/story-i18n.js','utf8');
   var match = engine.match(/function findTranslation\(source, lang\)\{[\s\S]*?\n\}/);
   assert.ok(match, 'translation lookup helper must exist');
+  var svgPrefix = 'var svgArtworkTranslations=';
+  var svgStart = engine.indexOf(svgPrefix) + svgPrefix.length;
+  var svgEnd = engine.indexOf(';\nfunction findTranslation', svgStart);
+  assert.ok(svgStart >= svgPrefix.length && svgEnd > svgStart, 'actual SVG artwork dictionary must be isolated');
+  var svgDictionary = JSON.parse(engine.slice(svgStart, svgEnd));
   var sourceFirst = { 'مرحبا': { en: 'Hello', fr: 'Bonjour' } };
   var languageFirst = { en: { 'مرحبا': 'Hello' }, fr: { 'مرحبا': 'Bonjour' }, de: { 'مرحبا': 'Hallo' } };
-  function lookup(dictionary, lang) {
-    var context = { translations: dictionary, window: { StoryI18N: { text: {} } }, svgArtworkTranslations: {} };
-    return vm.runInNewContext(match[0] + '; findTranslation("مرحبا", "' + lang + '")', context);
+  function lookup(dictionary, lang, source) {
+    var context = { translations: dictionary, window: { StoryI18N: { text: {} } }, svgArtworkTranslations: svgDictionary };
+    return vm.runInNewContext(match[0] + '; findTranslation(' + JSON.stringify(source || 'مرحبا') + ', ' + JSON.stringify(lang) + ')', context);
   }
   assert.equal(lookup(sourceFirst, 'en').en, 'Hello');
   assert.equal(lookup(languageFirst, 'fr').fr, 'Bonjour');
   assert.equal(lookup(languageFirst, 'de').de, 'Hallo');
   assert.equal(lookup(languageFirst, 'en').en, 'Hello');
+  assert.equal(lookup({}, 'en', 'حتشبسوت').en, 'Hatshepsut');
+  assert.equal(lookup({}, 'de', 'خالدون عبر التاريخ · رسم توضيحي').de, 'Unsterbliche der Geschichte · Illustration');
 });
 
 test('unified v4 story prompt requires complete five-language verification', function () {
