@@ -115,6 +115,8 @@ test('story publishing safely links verified map locations without overwriting e
   var mapBundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
   assert.ok(mapBundle.includes('source_name:mapLocation.source_name'), 'bundle must preserve localized map source-name objects');
+  assert.ok(mapBundle.includes('place_label:mapLocation.place_label'), 'bundle must preserve localized optional map labels');
+  assert.ok(mapBundle.includes('تسمية المكان الاختيارية يجب أن تكون مترجمة'), 'bundle must reject untranslated optional map labels');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261026-cover-contract-1'));
