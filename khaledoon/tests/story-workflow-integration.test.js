@@ -378,7 +378,7 @@ test('AI story package validation enforces one localized cover and two to five f
     question_bank:{questions:Array.from({length:5},function(_,i){return {q:'Q'+i,o:['A','B'],a:0,e:'Explain',i18n:Object.fromEntries(['en','fr','it','de'].map(function(lang){return [lang,{q:'Q'+i,o:['A','B'],e:'Explain'}]}))}})}
   };
   assert.ok(W.validateStoryPackage(validPackage).ok);
-  var tooManyImages = Object.assign({}, validPackage, { images: validPackage.images.concat(validPackage.images.slice(0, 4)) });
+  var tooManyImages = Object.assign({}, validPackage, { images: validPackage.images.concat(validPackage.images, validPackage.images) });
   var tooManyResult = W.validateStoryPackage(tooManyImages);
   assert.ok(!tooManyResult.ok && tooManyResult.errors.some(function (error) { return /خمس صور/.test(error); }), 'gallery must reject more than five images');
   var invalidExtraImage = Object.assign({}, validPackage, { images: validPackage.images.concat([Object.assign({}, validPackage.images[0], { url: 'javascript:alert(1)' })]) });
