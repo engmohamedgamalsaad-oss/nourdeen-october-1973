@@ -37,6 +37,29 @@ const read = p => {
   catch (e) { problems.push('Missing/unreadable file: ' + p); return ''; }
 };
 
+/* Story cover SVGs are decorative artwork only. Keep titles, captions, and all
+   language-specific UI text in HTML/translation data, never embedded in SVG. */
+function findStoryCoverSvgs(dir) {
+  const absolute = path.join(process.cwd(), dir);
+  let entries;
+  try { entries = fs.readdirSync(absolute, { withFileTypes: true }); }
+  catch (e) { problems.push('Cannot scan story assets directory: ' + dir); return []; }
+  return entries.flatMap(entry => {
+    const relative = path.posix.join(dir, entry.name);
+    if (entry.isDirectory()) return findStoryCoverSvgs(relative);
+    return entry.isFile() && /^(cover|cover-popup)\\.svg$/i.test(entry.name) ? [relative] : [];
+  });
+}
+for (const file of findStoryCoverSvgs('stories')) {
+  const svg = read(file);
+  if (/<text\\b/i.test(svg)) {
+    problems.push(file + ': cover SVG must not contain embedded <text> elements; keep headings in localized HTML.');
+  }
+  if (/[\\u0600-\\u06FF]/.test(svg)) {
+    problems.push(file + ': cover SVG contains Arabic text or attributes; keep localization in HTML/translation data.');
+  }
+}
+
 const engine = read('assets/shared/i18n.js');
 /* The engine now reads the list from KH_LANG and keeps a fallback array:
    var allowed=(window.KH_LANG&&...)?...:['ar','en','fr','it','de'];
