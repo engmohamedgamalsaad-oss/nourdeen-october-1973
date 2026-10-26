@@ -311,7 +311,7 @@ async function submitStoryPublishPR(it,btn){
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
  if(!saved.ok)throw new Error('تم إنشاء طلب الدمج رقم '+result.pull_request_number+' ('+result.pull_request_url+') لكن تعذر حفظ بياناته في سجل الإدارة ('+saved.status+'). لا تنشئ طلبًا جديدًا؛ افتح الرابط وراجع السجل يدويًا.');
  it.story_meta=meta;
- say('info',(result.map_message?String(result.map_message)+' ':'')+'تم إنشاء طلب دمج رقم '+result.pull_request_number+' للمراجعة. الموقع المنشور لم يتغير. راجع الفحوصات ثم ادمج الطلب عند الموافقة؛ بعد الدمج اضغط «تأكيد النشر بعد الدمج».');
+ say('info',(result.map_message?String(result.map_message)+' ':'')+'تم إنشاء طلب دمج رقم '+result.pull_request_number+' للمراجعة. الموقع المنشور لم يتغير. راجع الفحوصات، ثم حوّل الطلب من Draft إلى Ready for review وادمجه بعد الموافقة؛ بعد الدمج اضغط «تأكيد النشر بعد الدمج».');
  await loadList();
  }catch(e){
  var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
