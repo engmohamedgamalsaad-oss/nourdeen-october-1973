@@ -224,7 +224,7 @@ function validateStoryPackage(pkg) {
         errors.push('map_location يحتاج lat وlng رقميين ضمن حدود الإحداثيات الصحيحة.');
       }
       if (!isObj(mapLoc.place) || ['ar','en','fr','it','de'].some(function (l) {
-        return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim();
+        return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim() || (l !== 'ar' && hasArabic(mapLoc.place[l]));
       })) errors.push('اسم المكان في map_location مطلوب باللغات الخمس ar/en/fr/it/de.');
       if (!isObj(mapLoc.source_name) || ['ar','en','fr','it','de'].some(function (lang) {
           return typeof mapLoc.source_name[lang] !== 'string' || !mapLoc.source_name[lang].trim() || (lang !== 'ar' && hasArabic(mapLoc.source_name[lang]));
