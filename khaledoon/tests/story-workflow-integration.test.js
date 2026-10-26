@@ -417,6 +417,48 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
+test('prompt manager preserves valid v4 customizations and migrates stale appended gates', function () {
+  var vm = require('vm');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  var start = admin.indexOf('function adoptPromptManagerState(raw)');
+  var end = admin.indexOf('\nfunction managedCustomPromptText()', start);
+  assert.ok(start >= 0 && end > start, 'prompt state migration helper must be isolatable');
+  var helper = admin.slice(start, end);
+  var legacyGate = 'بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ';
+  function adopt(raw) {
+    var context = {
+      STORY_PAGE_PROMPT: 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4',
+      STORY_WORKFLOW: 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4',
+      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER' } },
+      promptManagerState: {},
+      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER' },
+      raw: raw
+    };
+    return JSON.parse(vm.runInNewContext(helper + '; adoptPromptManagerState(raw); JSON.stringify(promptManagerState)', context));
+  }
+  var valid = adopt({
+    main: 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4',
+    workflow: 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4',
+    custom: [{ name: 'extra', text: 'keep me' }],
+    providers: { chatgpt: 'CUSTOM PROVIDER' },
+    versions: [{ version: 'saved' }]
+  });
+  assert.equal(valid.main, 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4', 'valid v4 master customizations must survive reload');
+  assert.equal(valid.workflow, 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4', 'valid v4 workflow customizations must survive reload');
+  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER', 'valid provider prompts must survive reload');
+  assert.equal(valid.custom.length, 1, 'custom prompt entries must survive migration checks');
+  var stale = adopt({
+    main: 'STALE MASTER\nالإصدار: 2026-10-23-v4\n' + legacyGate,
+    workflow: 'STALE GUIDE\nالإصدار: 2026-10-23-v4\n' + legacyGate,
+    custom: [{ name: 'extra', text: 'keep me' }],
+    providers: { chatgpt: 'STALE PROVIDER' }
+  });
+  assert.equal(stale.main, 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical master');
+  assert.equal(stale.workflow, 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical workflow guide');
+  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER', 'stale provider prompts must be refreshed');
+  assert.equal(stale.custom.length, 1, 'migration must preserve separately managed custom prompt entries');
+});
+
 test('prompt admin links to the canonical v4 files and avoids stale v3 links', function () {
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
   assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
