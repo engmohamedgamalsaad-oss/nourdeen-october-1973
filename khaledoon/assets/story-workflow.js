@@ -243,7 +243,7 @@ function validateStoryPackage(pkg) {
     var coverPath = String(cover.path || '').trim();
     if (coverUrl) {
       if (!/^https:\/\//i.test(coverUrl)) errors.push('cover.url يجب أن يكون رابط صورة HTTPS مباشرًا.');
-    } else if (!/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(coverPath)) {
+    } else if (coverPath.split('/').some(function (part) { return part === '.' || part === '..'; }) || !/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(coverPath)) {
       errors.push('cover يحتاج url HTTPS أو path إلى ملف موجود داخل المستودع تحت assets/images/ أو images/ أو stories/.');
     }
     ['alt','caption','source_name','rights'].forEach(function (key) {
