@@ -298,7 +298,7 @@ async function submitStoryPublishPR(it,btn){
  if(review.publish_pr_url){
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
   try{
-   var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'check_status',pull_request_number:review.publish_pr_number})});
+   var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch})});
    var statusResult=await statusResponse.json().catch(function(){return {}});
    if(!statusResponse.ok||!statusResult.success)throw new Error(statusResult.error||statusResult.detail||'تعذر التحقق من حالة طلب الدمج.');
    if(!statusResult.merged){window.open(review.publish_pr_url,'_blank','noopener');say('info','طلب الدمج لم يُدمج بعد. فتحته للمراجعة؛ الموقع المنشور لم يتغير.');return}
