@@ -234,6 +234,39 @@ function validateStoryPackage(pkg) {
       }
     }
   }
+  /* الغلاف جزء من عقد الحزمة، ولا يجوز إسقاطه أثناء الاستيراد أو توليد الصفحة. */
+  var cover = pkg.cover;
+  if (!isObj(cover)) {
+    errors.push('كائن cover مطلوب ويجب أن يتضمن بيانات الغلاف ومصدره وحقوقه.');
+  } else {
+    var coverUrl = String(cover.url || '').trim();
+    var coverPath = String(cover.path || '').trim();
+    if (coverUrl) {
+      if (!/^https:\/\//i.test(coverUrl)) errors.push('cover.url يجب أن يكون رابط صورة HTTPS مباشرًا.');
+    } else if (!/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(coverPath)) {
+      errors.push('cover يحتاج url HTTPS أو path إلى ملف موجود داخل المستودع تحت assets/images/ أو images/ أو stories/.');
+    }
+    ['alt','caption','source_name','rights'].forEach(function (key) {
+      if (typeof cover[key] !== 'string' || !cover[key].trim()) errors.push('cover.' + key + ' مطلوب.');
+    });
+    if (typeof cover.source_url !== 'string' || !/^https:\/\//i.test(cover.source_url.trim())) {
+      errors.push('cover.source_url يجب أن يكون رابط HTTPS حقيقيًا للمصدر.');
+    }
+    if (['archival','illustration','diagram','map'].indexOf(String(cover.kind || '')) < 0) {
+      errors.push('cover.kind يجب أن يكون archival أو illustration أو diagram أو map.');
+    }
+    if (!isObj(cover.i18n)) {
+      errors.push('cover.i18n مطلوب بترجمات en/fr/it/de للنص البديل والتعليق.');
+    } else {
+      langs.forEach(function (lang) {
+        var translatedCover = cover.i18n[lang];
+        if (!isObj(translatedCover) || !String(translatedCover.alt || '').trim() || !String(translatedCover.caption || '').trim()) {
+          errors.push('الغلاف: النص البديل والتعليق مترجمان ومطلوبان في ' + lang.toUpperCase() + '.');
+        }
+      });
+    }
+  }
+
   var images = Array.isArray(pkg.images) ? pkg.images : [];
   var validImages = images.filter(function (im) {
     if (!isObj(im)) return false;
