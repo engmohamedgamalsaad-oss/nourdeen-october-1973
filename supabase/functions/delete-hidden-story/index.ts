@@ -71,6 +71,7 @@ Deno.serve(async (req: Request) => {
   if (hiddenError) return reply(500, { error: "تعذر التأكد من أن الحكاية مخفية؛ لم يُحذف شيء." });
   if (!hiddenRow) return reply(409, { error: "يمكن حذف الحكايات المخفية فقط. أخفِ الحكاية أولًا." });
 
+  let branchNameForRecovery = "";
   try {
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
@@ -168,6 +169,7 @@ Deno.serve(async (req: Request) => {
     });
     const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
     const branchName = `khaledoon/delete-story-${id}-${branchSuffix}`;
+    branchNameForRecovery = branchName;
     await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
       method: "POST",
       body: JSON.stringify({ ref: "refs/heads/" + branchName, sha: commit.sha }),
@@ -189,6 +191,6 @@ Deno.serve(async (req: Request) => {
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
-    return reply(502, { error: "تعذر إنشاء أو التحقق من طلب حذف الحكاية؛ لم تُكتب ملفات الحكاية إلى main.", detail: detail.slice(0, 500) });
+    return reply(502, { error: "تعذر إنشاء أو التحقق من طلب حذف الحكاية؛ لم تُكتب ملفات الحكاية إلى main.", detail: detail.slice(0, 500), branch: branchNameForRecovery || null });
   }
 });
