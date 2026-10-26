@@ -426,6 +426,10 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
   assert.ok(edge.indexOf('const mergedPull') < edge.indexOf('supabase.from("story_visibility").delete()'), 'visibility row must remain until a merged deletion PR is verified');
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.deletion_mode!=='draft_pr'"), 'admin must gate deletion on the deployed safe-mode capability');
   assert.ok(admin.includes("JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})"), 'admin must request PR creation or post-merge verification');
+  var deleteStart = admin.indexOf('async function deleteHiddenStory');
+  var deleteEnd = admin.indexOf('function vcount', deleteStart);
+  var deleteBlock = admin.slice(deleteStart, deleteEnd);
+  assert.ok(deleteBlock.indexOf("JSON.stringify({action:'capabilities'})") < deleteBlock.indexOf("JSON.stringify({action:'delete_or_verify'"), 'delete capability handshake must run before any destructive story ID request');
   assert.ok(admin.indexOf('if(result.pending===true)') < admin.indexOf('delete vHidden[String(s.id)]'), 'a pending deletion PR must not remove the hidden status from the admin view');
 });
 
