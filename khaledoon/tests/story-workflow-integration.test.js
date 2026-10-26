@@ -779,3 +779,13 @@ test('story generation uses a stable shared theme asset and fails closed when it
   assert.ok(bundle.includes('if(!themeResponse.ok)throw new Error('), 'theme load failure must stop bundle generation instead of silently emitting an unstyled page');
   assert.ok(!bundle.includes("fetch('../stories/history/005/theme.css'"), 'future edits to story 005 must not silently alter every new story theme');
 });
+
+
+test('story builder derives the site base path from its current deployment instead of hard-coding the GitHub Pages repo path', function () {
+  var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
+  assert.ok(bundle.includes('function siteBaseUrl()'), 'builder must centralize deployment base URL detection');
+  assert.ok(bundle.includes("path.indexOf('/khaledoon/')"), 'builder must detect the repository prefix from its own admin/builder path');
+  assert.ok(bundle.includes("var liveUrl=siteBaseUrl()+'/stories/'"), 'legacy story existence checks must use the detected site base path');
+  assert.ok(bundle.includes("baseUrl=siteBaseUrl()"), 'generated og:image and local image URLs must use the detected site base path');
+  assert.ok(!bundle.includes("location.origin+'/nourdeen-october-1973"), 'builder must not generate incorrect repository URLs when run on localhost or a root-hosted staging site');
+});
