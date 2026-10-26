@@ -86,6 +86,51 @@ async function main() {
   assert.match(html, /#intro \.modal-card/, 'generated pages must include responsive intro modal rules');
   assert.doesNotMatch(html, /assets\/shared\/reactions\.js/);
   assert.doesNotMatch(html, /assets\/shared\/story-quiz\.js/);
-  console.log('Passed collision-safe ID allocation and generated preview checks.');
+  const validDraft = function () {
+    const langs = ['en','fr','it','de'];
+    const translations = Object.fromEntries(langs.map(function (lang) {
+      return [lang, {
+        student_name:'Student '+lang, grade:'Grade '+lang, title:'Story '+lang,
+        subtitle:'Subtitle '+lang, karma_text:'Karma voice '+lang,
+        body:'Narrator paragraph translated into '+lang+' with sufficient readable content.',
+        history_note:'History note '+lang, images_note:'Image rights note '+lang
+      }];
+    }));
+    const imageI18n = function (label) {
+      return Object.fromEntries(langs.map(function (lang) {
+        return [lang,{alt:label+' alt '+lang,caption:label+' caption '+lang,source_name:'Source '+lang,rights:'License '+lang}];
+      }));
+    };
+    return {
+      section_key:'history', title:'عنوان اختبار', subtitle:'نبذة اختبارية',
+      figure_name:'شخصية اختبار', karma_text:'كارما تسأل سؤالًا تجريبيًا.',
+      body:'هذا نص عربي طويل بما يكفي لاختبار التحقق من ترجمة الراوي داخل الحزمة.',
+      history_note:'معلومة تاريخية موثقة', images_note:'ملاحظات الصور وحقوقها',
+      sources:'Source A https://example.org/source-a\\nSource B https://example.net/source-b',
+      cover:{url:'https://images.example.org/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',kind:'illustration',source_name:'مصدر الغلاف',source_url:'https://example.org/cover-source',rights:'ترخيص موضح',
+        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover alt '+lang,caption:'Cover caption '+lang}]}))},
+      translations:translations,
+      images:[
+        {url:'https://images.example.org/a.jpg',alt:'وصف الصورة أ',caption:'الصورة أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://example.org/a',rights:'ترخيص موضح',i18n:imageI18n('Image A')},
+        {url:'https://images.example.org/b.jpg',alt:'وصف الصورة ب',caption:'الصورة ب',kind:'diagram',source_name:'المصدر ب',source_url:'https://example.org/b',rights:'ترخيص موضح',i18n:imageI18n('Image B')}
+      ],
+      question_bank_json:{questions:Array.from({length:5},function(_,i){return {
+        q:'السؤال '+i,o:['أ','ب'],a:0,e:'تفسير الإجابة',
+        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{q:'Question '+i+' '+lang,o:['Option A','Option B'],e:'Explanation '+lang}]}))
+      }})}
+    };
+  };
+  const goodDraft = validDraft();
+  assert.equal(bundle.validate(goodDraft).ok, true, 'fully localized bundle data should pass');
+  const badCover = JSON.parse(JSON.stringify(goodDraft));
+  badCover.cover.i18n.de.alt = 'غلاف لم تتم ترجمته';
+  assert.ok(bundle.validate(badCover).missing.some(function (m) { return m.includes('ترجمة الغلاف'); }), 'Arabic cover alt must be rejected');
+  const badBody = JSON.parse(JSON.stringify(goodDraft));
+  badBody.translations.fr.body += ' نص عربي متروك';
+  assert.ok(bundle.validate(badBody).missing.some(function (m) { return m.includes('حقل body'); }), 'Arabic in a translated story body must be rejected');
+  const badQuiz = JSON.parse(JSON.stringify(goodDraft));
+  badQuiz.question_bank_json.questions[0].i18n.it.q = 'سؤال لم تتم ترجمته';
+  assert.ok(bundle.validate(badQuiz).missing.some(function (m) { return m.includes('ترجمة IT'); }), 'Arabic in translated quiz text must be rejected');
+  console.log('Passed collision-safe ID allocation, generated preview, and strict translation validation checks.');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
