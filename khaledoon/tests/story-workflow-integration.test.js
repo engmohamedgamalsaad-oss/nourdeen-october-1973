@@ -533,6 +533,13 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261023-4'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
+  var providerPromptDir = 'khaledoon/prompts/2026-10-23-unified-v4/';
+  ['CHATGPT.md','CLAUDE.md','GEMINI.md','DEEPSEEK.md'].forEach(function (name) {
+    var providerPrompt = fs.readFileSync(providerPromptDir + name, 'utf8');
+    assert.ok(providerPrompt.length < 1800, name + ' should contain concise provider-specific guidance, not a duplicated master prompt');
+    assert.ok(providerPrompt.includes('MASTER-STORY-WORKFLOW.md'), name + ' must point to the canonical master prompt');
+    assert.ok(!providerPrompt.includes('# البرومبت الموحد المعتمد — خالدون عبر التاريخ'), name + ' must not duplicate the master prompt');
+  });
 });
 
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
