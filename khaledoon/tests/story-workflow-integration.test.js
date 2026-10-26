@@ -20,7 +20,7 @@ function mockPatch(record, patch) {
   return Object.assign({}, record, patch);
 }
 test('admin imports the workflow module and derives status counters', function () {
-  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261021-map-auto-1"'));
+  assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
   assert.ok(admin.includes("itemState(i)===fStatus"));
   assert.ok(!admin.includes('handleStoryPreviewDecision'));
@@ -81,7 +81,7 @@ test('unified v4 prompt is shared and legacy AI output is not copied into fresh 
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
-  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261022-3"));
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261023-4"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
@@ -108,7 +108,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
-  assert.ok(admin.includes('story-template-bundle.js?v=20261023-4'));
+  assert.ok(admin.includes('story-template-bundle.js?v=20261026-cover-contract-1'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
@@ -485,7 +485,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
   assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261022-prompts-v3'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
   assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
