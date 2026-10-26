@@ -228,10 +228,10 @@ test('new story generator uses one sourced cover object and keeps SVG fallback f
   var sandbox = { window: {}, console: console, TextEncoder: TextEncoder, Blob: Blob, URL: URL };
   vm.runInNewContext(bundle, sandbox, { filename: 'story-template-bundle.js' });
   var api = sandbox.window.KHStoryBundle;
-  var pathPreview = api.renderPreviewHtml({section_key:'history',title:'اختبار مسار الغلاف',cover:{url:'assets/images/stories/Naguib_Mahfouz_HR.jpg',alt:'غلاف اختبار',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
+  var pathPreview = api.renderPreviewHtml({section_key:'history',title:'اختبار مسار الغلاف',cover:{path:'assets/images/stories/Naguib_Mahfouz_HR.jpg',alt:'غلاف اختبار',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
   assert.ok(pathPreview.includes('src="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/stories/Naguib_Mahfouz_HR.jpg"'), 'repository cover path must resolve for hero and modal');
   assert.ok(pathPreview.includes('content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/stories/Naguib_Mahfouz_HR.jpg"'), 'Open Graph image must resolve to the same repository cover path');
-  var invalidLocalCover = api.validate({cover:{url:'./cover.svg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
+  var invalidLocalCover = api.validate({cover:{path:'./cover.svg',alt:'غلاف',caption:'تعليق',source_name:'مصدر',source_url:'https://example.org/cover',rights:'ترخيص موضح',kind:'illustration'}});
   assert.ok(invalidLocalCover.missing.some(function (item) { return item.includes('المسار النسبي لملف غير مرفوع'); }), 'package-local unuploaded cover must fail validation');
   assert.ok(bundle.includes("cover:d.cover?{url:d.cover.url||d.cover.path||''"));
   var collections = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
