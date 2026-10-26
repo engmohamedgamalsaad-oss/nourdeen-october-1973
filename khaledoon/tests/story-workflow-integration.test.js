@@ -75,7 +75,7 @@ test('active v4 master prompt exactly matches the canonical master file', functi
   var canonical = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
   var prefix = 'var STORY_PAGE_PROMPT = ';
   var start = texts.indexOf(prefix) + prefix.length;
-  var end = texts.indexOf(';\\nvar STORY_PROVIDER_PROMPTS', start);
+  var end = texts.indexOf(';\nvar STORY_PROVIDER_PROMPTS', start);
   assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
   assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
 });
