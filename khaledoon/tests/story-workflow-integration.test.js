@@ -394,6 +394,14 @@ test('prompt admin links to the canonical v4 files and avoids stale v3 links', f
     assert.ok(fs.existsSync('khaledoon/prompts/2026-10-23-unified-v4/'+file), 'v4 prompt artifact must exist: '+file);
   });
 });
+test('publisher duplicate-story guard normalizes actual whitespace', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(publisher.includes("normalize('NFKC').replace(/\\s+/g, ' ').trim()"), 'duplicate-title normalization must collapse real whitespace');
+  assert.ok(!publisher.includes("replace(/\\\\s+/g, ' ')"), 'duplicate-title normalization must not match a literal backslash-s');
+  var norm = function (value) { return String(value ?? '').normalize('NFKC').replace(/\\s+/g, ' ').trim().toLocaleLowerCase(); };
+  assert.equal(norm('  Naguib   Mahfouz  '), norm('Naguib Mahfouz'));
+});
+
 test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
