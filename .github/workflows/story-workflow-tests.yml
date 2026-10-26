@@ -19,7 +19,7 @@ permissions:
 jobs:
   workflow-tests:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -40,10 +40,15 @@ jobs:
       - name: Install Playwright
         run: npm install --no-save playwright
       - name: Install Chromium for headless tests
-        run: npx playwright install --with-deps chromium
+        timeout-minutes: 6
+        run: |
+          # GitHub-hosted Ubuntu runners provide the common Chromium system libraries; avoid apt mirror delays.
+          npx playwright install chromium
       - name: Run mocked headless preview tests
+        timeout-minutes: 5
         run: node khaledoon/tests/story-workflow-browser.test.cjs
       - name: Run desktop/mobile admin visual audit with mock data
+        timeout-minutes: 5
         run: node khaledoon/tests/admin-visual-audit.test.cjs
       - name: Upload admin and builder screenshots
         if: always()
