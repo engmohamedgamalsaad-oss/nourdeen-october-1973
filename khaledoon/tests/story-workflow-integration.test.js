@@ -431,6 +431,12 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
   var deleteBlock = admin.slice(deleteStart, deleteEnd);
   assert.ok(deleteBlock.indexOf("JSON.stringify({action:'capabilities'})") < deleteBlock.indexOf("JSON.stringify({action:'delete_or_verify'"), 'delete capability handshake must run before any destructive story ID request');
   assert.ok(admin.indexOf('if(result.pending===true)') < admin.indexOf('delete vHidden[String(s.id)]'), 'a pending deletion PR must not remove the hidden status from the admin view');
+  assert.ok(edge.includes('replace(/\\s/g, "")'), 'GitHub base64 content must remove actual whitespace before decoding');
+  assert.ok(!edge.includes('replace(/\\\\s/g, "")'), 'base64 normalization must not match a literal backslash-s');
+  assert.ok(edge.includes('String(entry.path ?? "").replace(/\\/$/, "")'), 'story path normalization must remove a trailing forward slash');
+  assert.ok(edge.includes('JSON.stringify(index, null, 2) + "\\n"'), 'index JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('JSON.stringify(places, null, 2) + "\\n"'), 'map JSON must end with an actual newline escape, not a literal backslash-n');
+  assert.ok(edge.includes('`<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n`'), 'deletion PR marker must be followed by real line breaks');
 });
 
 test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
