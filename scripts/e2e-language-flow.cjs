@@ -563,6 +563,8 @@ async function svgArtworkRegression(browser, base, origin) {
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
   try {
+    /* Establish the local origin before accessing localStorage from the page. */
+    await page.goto(base + '/assets/shared/home-language-only.js', { waitUntil: 'load' });
     for (const slug of cases) {
       for (const lang of ['en', 'ar']) {
         await page.evaluate((value) => localStorage.setItem('kh-lang', value), lang);
