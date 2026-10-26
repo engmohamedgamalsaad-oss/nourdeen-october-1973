@@ -41,7 +41,16 @@ export function validateStory(s) {
   }
   imageCheck(s.cover,'cover',out);
   if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
-  for (const [i,im] of (Array.isArray(s.images) ? s.images : []).entries()) imageCheck(im,'images['+i+']',out);
+  const imageIds = new Set();
+  for (const [i,im] of (Array.isArray(s.images) ? s.images : []).entries()) {
+    imageCheck(im,'images['+i+']',out);
+    if (!/^[a-z0-9-]+$/.test(im?.id || '')) out.push(`images[${i}].id must be a stable lowercase ID`);
+    if (imageIds.has(im?.id)) out.push(`images[${i}].id duplicated`);
+    if (im?.id) imageIds.add(im.id);
+  }
+  for (const lang of LANGUAGES) for (const [i,b] of (Array.isArray(s.i18n?.[lang]?.blocks) ? s.i18n[lang].blocks : []).entries()) {
+    if (b?.image_after && !imageIds.has(b.image_after)) out.push(`i18n.${lang}.blocks[${i}].image_after references missing image '${b.image_after}'`);
+  }
   if (!Array.isArray(s.sources) || !s.sources.length) out.push('at least one source required');
   for (const [i,src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     for (const key of ['title','organization']) if (!nonempty(src?.[key])) out.push(`sources[${i}].${key} required`);
