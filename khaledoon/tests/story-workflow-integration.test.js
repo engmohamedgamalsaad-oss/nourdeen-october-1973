@@ -75,7 +75,7 @@ test('active v4 master prompt exactly matches the canonical master file', functi
   var canonical = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
   var prefix = 'var STORY_PAGE_PROMPT = ';
   var start = texts.indexOf(prefix) + prefix.length;
-  var end = texts.indexOf(';\nvar STORY_PROVIDER_PROMPTS', start);
+  var end = texts.indexOf(';\n\nvar STORY_PROVIDER_PROMPTS', start);
   assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
   assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
 });
@@ -356,14 +356,14 @@ test('Gemini is available in every admin story prompt flow with full story requi
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
   assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
   assert.ok(texts.includes('"gemini":"## تعليمات تشغيل خاصة بـ Gemini'));
-  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ بحثًا أو تنزيلًا أو اختبارًا لم يحدث فعلًا'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
 });
 test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('## التصميم المتخصص لكل حكاية والصور الفعلية'));
+  assert.ok(texts.includes('## 3) نظام التصميم الملزم — لا تكتفِ بوصفه للذكاء الاصطناعي'));
   assert.ok(texts.includes('visual_design'));
   assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تستخدم قالبًا بصريًا واحدًا متكررًا لكل الحكايات.'));
+  assert.ok(texts.includes('لا تجعل جميع الحكايات نسخة لونية واحدة.'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
