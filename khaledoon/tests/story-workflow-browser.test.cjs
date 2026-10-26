@@ -49,7 +49,24 @@ function fakeStory(id, mode) {
       it: { title:'Storia di prova', subtitle:'Simulazione', karma_text:'Karma chiede.', body:'Una storia fittizia.' },
       de: { title:'Testgeschichte', subtitle:'Nur Testdaten', karma_text:'Karma fragt.', body:'Eine erfundene Testgeschichte.' }
     },
-    story_meta: { source_mode: mode, preview_review: { decision: 'sent' }, section_key: 'history' }
+    story_meta: {
+      source_mode: mode, preview_review: { decision: 'sent' }, section_key: 'science',
+      cover: {
+        url: 'https://images.example.org/cover.svg', alt: 'غلاف تجريبي', caption: 'غلاف اختبار',
+        kind: 'illustration', source_name: 'مصدر تجريبي', source_url: 'https://example.invalid/cover',
+        rights: 'رسم تجريبي',
+        i18n: {
+          en:{alt:'Test cover',caption:'Test cover',source_name:'Test source',rights:'Illustration'},
+          fr:{alt:'Couverture test',caption:'Couverture test',source_name:'Source test',rights:'Illustration'},
+          it:{alt:'Copertina test',caption:'Copertina test',source_name:'Fonte test',rights:'Illustrazione'},
+          de:{alt:'Testtitelbild',caption:'Testtitelbild',source_name:'Testquelle',rights:'Illustration'}
+        }
+      },
+      images: [
+        {url:'https://images.example.org/gallery-a.svg',alt:'صورة أ',caption:'صورة أ',kind:'archival',source_name:'مصدر أ',source_url:'https://example.invalid/a',rights:'رسم تجريبي'},
+        {url:'https://images.example.org/gallery-b.svg',alt:'صورة ب',caption:'صورة ب',kind:'diagram',source_name:'مصدر ب',source_url:'https://example.invalid/b',rights:'رسم تجريبي'}
+      ]
+    }
   };
 }
 
@@ -67,6 +84,10 @@ async function main() {
         const page = await context.newPage();
 
         await page.route('https://**/*', route => route.abort());
+        await page.route('https://images.example.org/**', route => route.fulfill({
+          status: 200, contentType: 'image/svg+xml',
+          body: '<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#8ad9e8"/></svg>'
+        }));
         await page.route(SUPA + '/**', async route => {
           const req = route.request();
           if (req.url().includes('/rest/v1/khaledoon_submissions')) {
@@ -105,6 +126,17 @@ async function main() {
         const reader = page.frameLocator('#actualPagePreview');
         await reader.locator('h1').first().waitFor({ state:'visible', timeout:10000 });
         assert.match(await reader.locator('h1').first().innerText(), /اختبار متصفح/);
+        const heroCover = reader.locator('.hero-art img').first();
+        const modalCover = reader.locator('#intro .modal-art img').first();
+        await heroCover.waitFor({ state:'visible', timeout:10000 });
+        await modalCover.waitFor({ state:'visible', timeout:10000 });
+        assert.equal(await heroCover.getAttribute('src'), 'https://images.example.org/cover.svg',
+          'saved story_meta.cover must render the cover in the hero');
+        assert.equal(await modalCover.getAttribute('src'), 'https://images.example.org/cover.svg',
+          'the intro modal must reuse the same saved cover');
+        assert.equal(await reader.locator('.story-visual-gallery .story-image-card').count(), 2,
+          'saved story_meta.images must render the gallery in the generated reader preview');
+        assert.ok(await heroCover.evaluate(img => img.naturalWidth > 0), 'mock cover image must load in the reader preview');
 
         // Avoid creating a real ZIP or consulting the public story index in a test.
         await page.evaluate(() => {
