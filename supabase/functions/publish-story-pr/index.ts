@@ -107,7 +107,7 @@ Deno.serve(async (req: Request) => {
     const normalizedRoot = storyRoot.replace(/\/$/, '');
     const incomingEntry = incomingIndex.find((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId && String(entry.path ?? '').split('/').filter(Boolean).join('/') === normalizedRoot);
     if (!incomingEntry) throw new Error('Generated index does not contain the generated story path.');
-    const norm = (value: unknown) => String(value ?? '').normalize('NFKC').replace(/\\s+/g, ' ').trim().toLocaleLowerCase();
+    const norm = (value: unknown) => String(value ?? '').normalize('NFKC').replace(/\s+/g, ' ').trim().toLocaleLowerCase();
     const duplicate = currentIndex.find((entry: any) =>
       String(entry.id ?? '').padStart(3, '0') !== storyId &&
       norm(entry.title) !== '' && norm(entry.person) !== '' &&
