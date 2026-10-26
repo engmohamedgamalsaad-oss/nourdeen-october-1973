@@ -422,6 +422,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
   assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
   assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
+  assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
   assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
   assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
   assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
@@ -432,6 +433,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(admin.includes('if(!prCheck.merged)throw new Error'), 'an open PR must not be marked as published');
   assert.ok(admin.includes('publish_pr_url&&!meta.preview_review.publish_pr_number'), 'legacy PR records without a verifiable number must not bypass merge verification');
   assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
 });
 
 test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
