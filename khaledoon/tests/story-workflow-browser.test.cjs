@@ -155,10 +155,10 @@ async function main() {
           const screenshotDir = path.join(ROOT, 'artifacts', 'story-template-preview');
           fs.mkdirSync(screenshotDir, { recursive: true });
           await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'dark'));
-          await reader.locator('body').screenshot({ path:path.join(screenshotDir, 'generated-story-desktop-dark.png') });
+          await page.locator('#actualPagePreview').screenshot({ path:path.join(screenshotDir, 'generated-story-desktop-dark.png') });
           await page.setViewportSize({ width:390, height:844 });
           await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'light'));
-          await reader.locator('body').screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png') });
+          await page.locator('#actualPagePreview').screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png') });
         }
 
         // Avoid creating a real ZIP or consulting the public story index in a test.
