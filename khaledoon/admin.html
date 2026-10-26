@@ -1104,7 +1104,8 @@ async function deleteHiddenStory(s,btn){
   if(!confirm('إنشاء طلب حذف نهائي للحكاية «'+name+'»؟\n\nستظل الحكاية مخفية. لن تتغير ملفات الموقع أو الفهرس حتى مراجعة طلب الدمج ودمجه. بعد الدمج اضغط الزر نفسه لتأكيد اكتمال الحذف وتنظيف سجل الإخفاء.'))return;
   startButtonProgress(btn,'جارٍ التحقق من وضع الحذف الآمن…');
   try{
-   var capabilityResponse=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
+   await refreshIfNeeded();
+    var capabilityResponse=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
    var capability=await capabilityResponse.json().catch(function(){return {}});
    if(!capabilityResponse.ok||!capability.success||capability.deletion_mode!=='draft_pr'||capability.writes_main_directly!==false){
     say('err','خدمة الحذف الحية لم تؤكد وضع طلبات الدمج الآمن؛ لم يتم إرسال رقم الحكاية ولم يحدث أي حذف. حدّث Edge Function أولًا ثم أعد المحاولة.');
