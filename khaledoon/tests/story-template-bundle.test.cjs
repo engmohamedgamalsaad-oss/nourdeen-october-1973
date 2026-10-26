@@ -165,6 +165,7 @@ async function main() {
   assert.equal((previewHtml.match(/class="story-fact-card"/g) || []).length, 3, 'the generated story should render three distinct knowledge cards');
   assert.match(previewHtml, /class="story-image-kind">صورة توضيحية<\/span>/, 'gallery image kind must be isolated as a translatable text node');
   assert.match(previewHtml, /class="story-image-source">المصدر أ<\/span>/, 'gallery source name must be isolated from the image-kind label so exact-key translation can apply');
+  assert.match(previewHtml, /class="story-image-rights">ترخيص موضح<\/span>/, 'gallery rights must be isolated from the source-link separator so exact-key translation can apply');
   assert.match(previewHtml, /Source en/, 'localized gallery source-name values must be present in the generated translation dictionary');
   assert.match(previewHtml, /License en/, 'localized gallery rights values must be present in the generated translation dictionary');
   assert.match(previewHtml, /Image A alt en/, 'localized gallery alt text must be present in the generated translation dictionary');
