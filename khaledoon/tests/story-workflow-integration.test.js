@@ -549,7 +549,7 @@ test('verified map_location is carried from AI import into bundle and merged saf
 test('story publisher creates review PRs and never updates main directly', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
-  assert.ok(publisher.includes('refs/heads/\u0024{branchName}'));
+  assert.ok(publisher.includes('body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha })'));
   assert.ok(publisher.includes('/pulls'));
   assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(publisher.includes('action === "check_status"'));
