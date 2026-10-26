@@ -179,6 +179,13 @@ t('AI story package validator accepts a complete five-language package', functio
     ], translations: translations, question_bank: { questions: questions } };
   var completeValidation = W.validateStoryPackage(pkg);
   assert.equal(completeValidation.ok, true, completeValidation.errors.join('; '));
+  var originalImageUrl = pkg.images[0].url;
+  pkg.images[0].url = '../assets/images/stories/Naguib_Mahfouz_HR.jpg';
+  var traversalImage = W.validateStoryPackage(pkg);
+  assert.ok(!traversalImage.ok && traversalImage.errors.some(function (e) { return e.indexOf('صورتين موثقتين وصالحتين على الأقل') >= 0; }), 'relative traversal image paths must not count as valid images');
+  pkg.images[0].url = 'assets/images/stories/Naguib_Mahfouz_HR.jpg';
+  assert.equal(W.validateStoryPackage(pkg).ok, true, 'safe repository-root image paths should be accepted for existence checks during import');
+  pkg.images[0].url = originalImageUrl;
   var localizedMapPackage = Object.assign({}, pkg, {map_location:{lat:31.2,lng:29.9,place:{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'},source_name:{ar:'مصدر موثوق',en:'Trusted source',fr:'Source fiable',it:'Fonte affidabile',de:'Verlässliche Quelle'},source_url:'https://example.org/map-source'}});
   assert.equal(W.validateStoryPackage(localizedMapPackage).ok, true, 'localized map source name should pass');
   localizedMapPackage.map_location.place.de = 'الإسكندرية';
