@@ -581,6 +581,13 @@ test('publisher duplicate-story guard normalizes actual whitespace', function ()
   assert.equal(norm('  Naguib   Mahfouz  '), norm('Naguib Mahfouz'));
 });
 
+test('publisher rejects dot and empty path segments', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  assert.ok(publisher.includes('path.split("/").some((part) => part === "" || part === "." || part === "..")'),
+    'publisher must reject empty, dot, and parent path segments before creating a Git tree');
+  assert.ok(!publisher.includes('path.split("/").includes("..")'), 'parent-only rejection is insufficient');
+});
+
 test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
