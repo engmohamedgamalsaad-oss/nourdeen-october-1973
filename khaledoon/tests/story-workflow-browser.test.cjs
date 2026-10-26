@@ -5,11 +5,13 @@ const assert = require('node:assert/strict');
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const vm = require('node:vm');
 const { chromium } = require('playwright');
 
 const ROOT = process.cwd();
 const PORT = 4173;
 const SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
+let generatedStoryHtml = '';
 const IDS = {
   manual: '11111111-1111-4111-8111-111111111111',
   ai: '22222222-2222-4222-8222-222222222222'
@@ -23,6 +25,10 @@ function serve() {
     let pathname;
     try { pathname = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname); }
     catch (_) { res.writeHead(400); return res.end('Bad URL'); }
+    if (pathname === '/stories/science/preview/index.html' && generatedStoryHtml) {
+      res.writeHead(200, { 'Content-Type': types['.html'] });
+      return res.end(generatedStoryHtml);
+    }
     const file = path.resolve(ROOT, '.' + pathname);
     if (!file.startsWith(ROOT + path.sep)) { res.writeHead(403); return res.end('Forbidden'); }
     fs.readFile(file, (err, data) => {
@@ -70,7 +76,20 @@ function fakeStory(id, mode) {
   };
 }
 
+function buildGeneratedStoryHtml() {
+  const source = fs.readFileSync(path.join(ROOT, 'khaledoon/assets/story-template-bundle.js'), 'utf8');
+  const context = { window: {}, fetch: async () => ({ ok:true, status:200, json:async () => [] }) };
+  vm.runInNewContext(source, context, { filename:'story-template-bundle.js' });
+  const row = fakeStory(IDS.manual, 'manual');
+  const data = Object.assign({}, row, {
+    section_key:'science', visual_design:'science-lab',
+    cover:row.story_meta.cover, images:row.story_meta.images
+  });
+  return context.window.KHStoryBundle.renderPreviewHtml(data);
+}
+
 async function main() {
+  generatedStoryHtml = buildGeneratedStoryHtml();
   const server = await serve();
   const browser = await chromium.launch({ headless: true });
   let passed = 0;
@@ -151,15 +170,6 @@ async function main() {
         assert.equal(await reader.locator('.story-visual-gallery .story-image-card').count(), 2,
           'saved story_meta.images must render the gallery in the generated reader preview');
         assert.ok(await heroCover.evaluate(img => img.naturalWidth > 0), 'mock cover image must load in the reader preview');
-        if (mode === 'manual' && decision === 'reject') {
-          const screenshotDir = path.join(ROOT, 'artifacts', 'story-template-preview');
-          fs.mkdirSync(screenshotDir, { recursive: true });
-          await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'dark'));
-          await reader.locator('.story-splash .story-start-card').screenshot({ path:path.join(screenshotDir, 'generated-story-desktop-dark.png') });
-          await page.setViewportSize({ width:390, height:844 });
-          await reader.locator('html').evaluate(el => el.setAttribute('data-theme', 'light'));
-          await reader.locator('.story-splash .story-start-card').screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png') });
-        }
 
         // Avoid creating a real ZIP or consulting the public story index in a test.
         await page.evaluate(() => {
@@ -185,6 +195,46 @@ async function main() {
         await context.close();
       }
     }
+    const visualContext = await browser.newContext();
+    const visualPage = await visualContext.newPage();
+    await visualPage.route('https://**/*', route => route.abort());
+    await visualPage.route('https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/**', async route => {
+      const url = new URL(route.request().url());
+      const relative = url.pathname.replace(/^\/nourdeen-october-1973\//, '');
+      const file = path.resolve(ROOT, relative);
+      if (!relative || !file.startsWith(ROOT + path.sep)) return route.abort();
+      const types = { '.html':'text/html; charset=utf-8', '.js':'text/javascript; charset=utf-8',
+        '.css':'text/css; charset=utf-8', '.json':'application/json; charset=utf-8',
+        '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp',
+        '.woff2':'font/woff2', '.woff':'font/woff', '.ttf':'font/ttf' };
+      try {
+        const body = await fs.promises.readFile(file);
+        return route.fulfill({ status:200, contentType:types[path.extname(file)]||'application/octet-stream', body });
+      } catch (_) { return route.abort(); }
+    });
+    await visualPage.route('https://images.example.org/**', route => route.fulfill({
+      status:200, contentType:'image/svg+xml',
+      body:'<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect width="100%" height="100%" fill="#8ad9e8"/></svg>'
+    }));
+    await visualPage.addInitScript(() => localStorage.setItem('kh-theme', 'dark'));
+    await visualPage.goto('http://127.0.0.1:' + PORT + '/stories/science/preview/index.html', { waitUntil:'domcontentloaded' });
+    await visualPage.locator('.story-splash .story-start-card').waitFor({ state:'visible', timeout:10000 });
+    const directCover = visualPage.locator('.story-splash .story-start-art img').first();
+    await directCover.waitFor({ state:'visible', timeout:10000 });
+    assert.equal(await directCover.getAttribute('src'), 'https://images.example.org/cover.svg');
+    assert.equal(await visualPage.locator('.story-visual-gallery .story-image-card').count(), 2);
+    assert.ok(await directCover.evaluate(img => img.naturalWidth > 0));
+    const screenshotDir = path.join(ROOT, 'artifacts', 'story-template-preview');
+    fs.mkdirSync(screenshotDir, { recursive:true });
+    await visualPage.screenshot({ path:path.join(screenshotDir, 'generated-story-desktop-dark.png'), fullPage:false });
+    await visualPage.setViewportSize({ width:390, height:844 });
+    await visualPage.locator('html').evaluate(el => el.setAttribute('data-theme', 'light'));
+    await visualPage.screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png'), fullPage:false });
+    await visualPage.locator('.story-splash-start').click();
+    await visualPage.locator('.story-splash').waitFor({ state:'hidden', timeout:10000 });
+    await visualContext.close();
+    passed++;
+    console.log('ok - generated reader template desktop/mobile visual check');
     console.log('Passed ' + passed + ' headless browser scenarios using mock records only.');
   } finally {
     await browser.close();
