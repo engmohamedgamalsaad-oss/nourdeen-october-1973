@@ -60,8 +60,9 @@ function validate(d){
  if(!d.body||d.body.trim().length<50)missing.push('نص الراوي قصير أو غير موجود');
  if(!d.karma_text||!d.karma_text.trim())missing.push('مقاطع كارما غير موجودة');
  var imgs=Array.isArray(d.images)?d.images:[];
- var usableImages=imgs.filter(function(im){return im&&validImageUrl(im.url)&&String(im.alt||'').trim()&&String(im.source_name||'').trim()&&String(im.rights||'').trim()&&String(im.source_url||'').trim()});
+ var usableImages=imgs.filter(function(im){return im&&validImageUrl(im.url)&&String(im.alt||'').trim()&&String(im.caption||'').trim()&&String(im.kind||'').trim()&&String(im.source_name||'').trim()&&String(im.rights||'').trim()&&/^https:\/\//i.test(String(im.source_url||''))});
  if(usableImages.length<2)missing.push('أضف صورتين على الأقل بروابط قابلة للفتح، ووصف بديل، واسم مصدر، ورابط مصدر، وبيان حقوق الاستخدام لكل صورة');
+  imgs.forEach(function(im,index){LANGS.forEach(function(lang){var it=im&&im.i18n&&im.i18n[lang];if(!it||!String(it.alt||'').trim()||!String(it.caption||'').trim()||!String(it.source_name||'').trim()||!String(it.rights||'').trim())missing.push('الصورة '+(index+1)+': ترجمة الوصف والتعليق واسم المصدر والحقوق ناقصة في '+lang.toUpperCase());else if(/[؀-ۿ]/.test(String(it.alt)+' '+String(it.caption)+' '+String(it.source_name)+' '+String(it.rights)))missing.push('الصورة '+(index+1)+': ترجمة '+lang.toUpperCase()+' ما زالت تحتوي نصًا عربيًا في بيانات الصورة')})});
  if(d.visual_design&&!['timeline','science-lab','ancient-civilization','military-history','journey-map','portrait-biography','women-leadership','arts-culture','discovery'].includes(String(d.visual_design)))missing.push('قيمة visual_design غير معتمدة؛ اختر تصميمًا من القائمة المحددة');
  var urls=String(d.sources||'').match(/https?:\/\/[^\s)\]>]+/g)||[];
  var uniqueUrls=Array.from(new Set(urls.map(function(u){return u.replace(/[.,;:]+$/,'')})));if(uniqueUrls.length<2)missing.push('أضف مصدرين موثوقين مختلفين على الأقل بروابط فعلية');
@@ -128,7 +129,7 @@ function translatedRows(d,id){
  function mapBlocks(arText,translatedText,lang){var a=paragraphs(arText),b=paragraphs(translatedText);a.forEach(function(x,i){if(b[i])add(lang,x,b[i])});if(a.length===1&&b.length===1)add(lang,arText,translatedText)}
  LANGS.forEach(function(lang){var t=tr[lang]||{};add(lang,d.title,t.title);add(lang,d.subtitle,t.subtitle);
   var coverTranslation=d.cover&&d.cover.i18n&&d.cover.i18n[lang];if(coverTranslation){add(lang,d.cover.alt,coverTranslation.alt);add(lang,d.cover.caption,coverTranslation.caption)}
-  (Array.isArray(d.images)?d.images:[]).forEach(function(im){var it=im&&im.i18n&&im.i18n[lang];if(it){add(lang,im.caption,it.caption);add(lang,im.alt,it.alt)}});
+  (Array.isArray(d.images)?d.images:[]).forEach(function(im){var it=im&&im.i18n&&im.i18n[lang];if(it){add(lang,im.caption,it.caption);add(lang,im.alt,it.alt);add(lang,im.source_name,it.source_name);add(lang,im.rights,it.rights)}});
  add(lang,d.narrator_name||d.student_name,t.student_name);add(lang,d.narrator_grade||d.grade,t.grade);mapBlocks(d.karma_text,t.karma_text,lang);mapBlocks(d.body,t.body,lang);mapBlocks(d.history_note,t.history_note,lang);mapBlocks(d.images_note,t.images_note,lang)});
  var labels={
   'كارما الطفلة':{en:'Karma, the curious child',fr:'Karma, l’enfant curieuse',it:'Karma, la bambina curiosa',de:'Karma, das neugierige Kind'},
