@@ -141,9 +141,9 @@ async function main() {
         await reader.locator('h1').first().waitFor({ state:'visible', timeout:10000 });
         assert.match(await reader.locator('h1').first().innerText(), /اختبار متصفح/);
         const heroCover = reader.locator('.hero-art img').first();
-        const modalCover = reader.locator('#intro .modal-art img').first();
+        const modalCover = reader.locator('.story-splash .story-start-art img').first();
         await heroCover.waitFor({ state:'visible', timeout:10000 });
-        await modalCover.waitFor({ state:'attached', timeout:10000 });
+        await modalCover.waitFor({ state:'visible', timeout:10000 });
         assert.equal(await heroCover.getAttribute('src'), 'https://images.example.org/cover.svg',
           'saved story_meta.cover must render the cover in the hero');
         assert.equal(await modalCover.getAttribute('src'), 'https://images.example.org/cover.svg',
