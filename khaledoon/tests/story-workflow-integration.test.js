@@ -439,6 +439,9 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   var submitBlock = admin.slice(submitStart, submitEnd);
   assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
+  var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
+  var bundleIndex = admin.indexOf('window.KHStoryBundle.download', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
 });
 
 test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
