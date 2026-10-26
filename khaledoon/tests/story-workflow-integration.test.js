@@ -496,7 +496,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
   assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
   assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261022-3'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261023-4'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
 });
