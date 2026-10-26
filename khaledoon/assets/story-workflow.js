@@ -280,7 +280,7 @@ function validateStoryPackage(pkg) {
       String(im.caption || '').trim() && String(im.source_name || '').trim() && String(im.rights || '').trim() &&
       ['archival','illustration','diagram','map'].indexOf(String(im.kind || '')) >= 0;
   });
-  if (validImages.length < 2) errors.push('حزمة الاستيراد تحتاج صورتين موثقتين وصالحتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n. إذا تعذر التحقق من صورتين، لا تُرسل حزمة للاستيراد.');
+  if (validImages.length < 2) errors.push('حزمة الاستيراد تحتاج صورتين موثقتين وصالحتين على الأقل في images؛ لكل صورة url وalt وcaption وkind وsource_name وsource_url وrights وترجمات i18n.en/fr/it/de لكل من alt وcaption وsource_name وrights. إذا تعذر التحقق من صورتين، لا تُرسل حزمة للاستيراد.');
   images.forEach(function (im, index) {
     if (!isObj(im)) return;
     ['en','fr','it','de'].forEach(function (lang) {
