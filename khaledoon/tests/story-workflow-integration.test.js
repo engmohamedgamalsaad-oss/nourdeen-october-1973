@@ -223,6 +223,7 @@ test('new story generator uses one sourced cover object and keeps SVG fallback f
   assert.ok(bundle.includes("var coverData=d.cover&&typeof d.cover==='object'?d.cover:null"));
   assert.ok(bundle.includes('function absoluteStoryImageUrl(value,baseUrl,section,id)'), 'hero, modal and metadata need one resolved cover URL');
   assert.ok(bundle.includes('مسار أصل موجود داخل المستودع'), 'unuploaded local cover paths must be rejected');
+  assert.ok(bundle.includes('if(!localCoverResponse.ok)throw new Error'), 'local cover path must be confirmed to exist before generating a bundle');
   var vm = require('vm');
   var sandbox = { window: {}, console: console, TextEncoder: TextEncoder, Blob: Blob, URL: URL };
   vm.runInNewContext(bundle, sandbox, { filename: 'story-template-bundle.js' });
@@ -375,7 +376,16 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('unified v3 prompt requires safe automatic map linkage for verified locations', function () {
+test('prompt admin links to the canonical v4 files and avoids stale v3 links', function () {
+  var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
+  assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
+  assert.ok(!promptAdmin.includes('prompts/2026-10-22-unified-v3/'));
+  ['MASTER-STORY-WORKFLOW.md','CHATGPT.md','CLAUDE.md','DEEPSEEK.md','GEMINI.md','WORKFLOW-CHECKLIST.md'].forEach(function(file){
+    assert.ok(fs.existsSync('khaledoon/prompts/2026-10-23-unified-v4/'+file), 'v4 prompt artifact must exist: '+file);
+  });
+});
+test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
@@ -431,7 +441,7 @@ test('unified v4 story prompt requires complete five-language verification', fun
   assert.ok(admin.includes('STORY_PAGE_PROMPT'));
 });
 
-test('unified v3 prompt requires sourced images and a rendered image gallery', function () {
+test('unified v4 prompt requires sourced images and a rendered image gallery', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
