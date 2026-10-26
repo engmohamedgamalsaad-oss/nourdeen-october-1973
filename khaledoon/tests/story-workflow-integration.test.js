@@ -446,6 +446,22 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
+test('story publisher creates review PRs and never updates main directly', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(publisher.includes('refs/heads/\u0024{branchName}'));
+  assert.ok(publisher.includes('/pulls'));
+  assert.ok(publisher.includes('published_to_main: false'));
+  assert.ok(publisher.includes('action === "check_status"'));
+  assert.ok(publisher.includes('pr.head?.repo?.full_name'));
+  assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
+  assert.ok(admin.includes("action:'check_status'"));
+  assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
+  assert.ok(admin.includes('طلب الدمج لم يُدمج بعد'));
+  assert.ok(admin.includes('لا يتم النشر على الموقع؛ راجع الطلب'));
+  assert.ok(!admin.includes('!result.published_to_main'));
+});
+
 test('story i18n lookup supports source-first and language-first dictionaries', function () {
   var vm = require('vm');
   var engine = fs.readFileSync('assets/shared/story-i18n.js','utf8');
