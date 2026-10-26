@@ -313,7 +313,11 @@ async function submitStoryPublishPR(it,btn){
   return
  }
  if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
- startButtonProgress(btn,'جارٍ تجهيز طلب المراجعة…');try{await refreshIfNeeded();
+ startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
+ var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
+ var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
+ if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false)throw new Error('وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة. توقّفنا قبل تجهيز أو إرسال ملفات الحكاية؛ لم يتم نشرها. راجع إصدار Supabase Edge Function قبل المحاولة.');
+ await refreshIfNeeded();
  var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
  draft.translations=draft.translations||meta.translations||{};draft.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';
