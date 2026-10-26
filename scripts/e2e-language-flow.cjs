@@ -584,7 +584,7 @@ async function svgArtworkRegression(browser, base, origin) {
               src,
               loaded: img.complete && img.naturalWidth > 0,
               textNodes: xml.querySelectorAll('text,tspan,title,desc').length,
-              hasArabic: /[\\u0600-\\u06FF]/.test(xmlText),
+              hasArabic: /[\u0600-\u06FF]/.test(xmlText),
               parseError: !!xml.querySelector('parsererror')
             };
           } catch (e) {
