@@ -199,6 +199,7 @@ function validateStoryPackage(pkg) {
     var value = obj && obj[key];
     if (typeof value !== 'string' || value.trim().length < (min || 1)) errors.push(label);
   }
+  function hasArabic(value) { return /[\u0600-\u06FF]/.test(String(value || '')); }
   [
     ['section_key', 'مفتاح القسم'], ['figure_name', 'اسم الشخصية'],
     ['title', 'العنوان'], ['subtitle', 'العنوان الفرعي'],
@@ -262,6 +263,8 @@ function validateStoryPackage(pkg) {
         var translatedCover = cover.i18n[lang];
         if (!isObj(translatedCover) || !String(translatedCover.alt || '').trim() || !String(translatedCover.caption || '').trim()) {
           errors.push('الغلاف: النص البديل والتعليق مترجمان ومطلوبان في ' + lang.toUpperCase() + '.');
+        } else if (hasArabic(translatedCover.alt) || hasArabic(translatedCover.caption)) {
+          errors.push('الغلاف: النص البديل والتعليق في ' + lang.toUpperCase() + ' لا يجوز أن يظلا بالعربية.');
         }
       });
     }
@@ -283,7 +286,9 @@ function validateStoryPackage(pkg) {
       var translated = im.i18n && im.i18n[lang];
       if (!translated || !String(translated.alt || '').trim() || !String(translated.caption || '').trim()) {
         errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق ناقصان في ' + lang.toUpperCase() + '.');
-      }
+        } else if (hasArabic(translated.alt) || hasArabic(translated.caption)) {
+          errors.push('الصورة ' + (index + 1) + ': النص البديل والتعليق في ' + lang.toUpperCase() + ' لا يجوز أن يظلا بالعربية.');
+        }
     });
   });
 
@@ -326,6 +331,11 @@ function validateStoryPackage(pkg) {
       requiredTranslationFields.forEach(function (field) {
         if (typeof translation[field[0]] !== 'string' || !translation[field[0]].trim()) {
           errors.push(lang.toUpperCase() + ': حقل ' + field[1] + ' فارغ.');
+        }
+      });
+      ['title','subtitle','karma_text','body','history_note','images_note'].forEach(function (field) {
+        if (typeof translation[field] === 'string' && hasArabic(translation[field])) {
+          errors.push(lang.toUpperCase() + ': حقل ' + field + ' ما زال يحتوي نصًا عربيًا بدل الترجمة المطلوبة.');
         }
       });
       /* اسم الشخصية المترجم (اختياري لكنه يظهر في البحث والخريطة): إن وُجد فيجب أن يكون بحروف غير عربية. */
@@ -384,6 +394,9 @@ function validateStoryPackage(pkg) {
           translation.o.some(function (option) { return typeof option !== 'string' || !option.trim(); }) ||
           typeof translation.e !== 'string' || !translation.e.trim()) {
         errors.push(label + ': ترجمة السؤال أو الاختيارات أو التفسير ناقصة في ' + lang.toUpperCase() + '.');
+      }
+      else if (hasArabic(translation.q) || hasArabic(translation.e) || translation.o.some(hasArabic)) {
+        errors.push(label + ': ترجمة ' + lang.toUpperCase() + ' ما زالت تحتوي نصًا عربيًا في السؤال أو الاختيارات أو التفسير.');
       }
     });
   });
