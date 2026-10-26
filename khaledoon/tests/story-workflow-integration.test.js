@@ -458,7 +458,7 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(admin.includes("action:'check_status'"));
   assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
   assert.ok(admin.includes('طلب الدمج لم يُدمج بعد'));
-  assert.ok(admin.includes('لا يتم النشر على الموقع؛ راجع الطلب'));
+  assert.ok(admin.includes('الموقع المنشور لم يتغير'));
   assert.ok(!admin.includes('!result.published_to_main'));
 });
 
