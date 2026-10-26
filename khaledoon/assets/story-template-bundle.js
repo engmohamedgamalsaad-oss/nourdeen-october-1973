@@ -46,7 +46,7 @@ function validate(d){
  else{
   var coverUrl=String(cover.url||cover.path||'').trim();
   if(!validImageUrl(coverUrl))missing.push('الغلاف cover.url أو cover.path غير صالح');
-  else if(!/^https:\/\//i.test(coverUrl)&&!/^(?:assets\/images\/|images\/|stories\/)/i.test(coverUrl.replace(/^\/+/,'')))missing.push('الغلاف المحلي يجب أن يكون مسار أصل موجود داخل المستودع (assets/images/ أو images/ أو stories/)؛ المسار النسبي لملف غير مرفوع لا يعمل في المعاينة');
+  else if(!/^https:\/\//i.test(coverUrl)&&(coverUrl.replace(/^\/+/, '').split('/').some(function(part){return part==='.'||part==='..'})||!/^(?:assets\/images\/|images\/|stories\/)/i.test(coverUrl.replace(/^\/+/,''))))missing.push('الغلاف المحلي يجب أن يكون مسار أصل موجود داخل المستودع (assets/images/ أو images/ أو stories/) بلا مسارات نسبية؛ الملف غير المرفوع لا يعمل في المعاينة');
   if(!String(cover.alt||'').trim())missing.push('النص البديل للغلاف cover.alt مطلوب');
   if(!String(cover.caption||'').trim())missing.push('تعليق الغلاف cover.caption مطلوب');
   if(!String(cover.source_name||'').trim())missing.push('اسم مصدر الغلاف cover.source_name مطلوب');
@@ -217,6 +217,15 @@ function zipFiles(files){
 async function download(draft,opts){
  opts=opts||{};var report=validate(draft);
  if(!report.ok)throw new Error('لا يمكن إنشاء حزمة نشر مكتملة قبل استكمال التالي:\n• '+report.missing.join('\n• '));
+ var coverForBundle=draft.cover||{};
+  if(!coverForBundle.url&&coverForBundle.path){
+   var localCoverPath=String(coverForBundle.path);
+   while(localCoverPath.charAt(0)==='/')localCoverPath=localCoverPath.slice(1);
+   if(localCoverPath.split('/').some(function(part){return part==='.'||part==='..'})||!/^(?:assets\/images\/|images\/|stories\/)[^\s"'<>]+$/i.test(localCoverPath))throw new Error('مسار الغلاف المحلي غير مسموح؛ استخدم أصلًا موجودًا داخل assets/images/ أو images/ أو stories/.');
+   var localCoverResponse;
+   try{localCoverResponse=await fetch(new URL('../'+localCoverPath,location.href).href,{method:'HEAD',cache:'no-store'})}catch(localCoverError){throw new Error('تعذر التحقق من ملف الغلاف المحلي؛ استخدم رابط HTTPS مباشرًا أو تحقق من الاتصال.')}
+   if(!localCoverResponse.ok)throw new Error('ملف الغلاف المحلي غير موجود أو غير قابل للوصول ('+localCoverResponse.status+'): '+localCoverPath+'. لم تُنشأ الحزمة.');
+  }
  var section=SECTION_MAP[draft.section_key]||'';
  if(!section)throw new Error('القسم غير معروف؛ لم أنشئ حزمة بمسار غير صحيح.');
  var priorMeta=draft.story_meta&&draft.story_meta.preview_review||{},priorPath=String(priorMeta.static_story_path||''),priorId=String(priorMeta.static_story_id||''),candidateId=String(draft.story_number||'').trim();
