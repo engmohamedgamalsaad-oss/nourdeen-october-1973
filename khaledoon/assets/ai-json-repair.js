@@ -305,7 +305,7 @@
     '5. images: صورتان على الأقل؛ url وsource_url يبدأ كل منهما بـ https://، وkind واحدة من archival وillustration وdiagram وmap.\n' +
     '6. question_bank: خمسة أسئلة على الأقل؛ a رقم صحيح بلا علامات اقتباس، وعدد اختيارات كل ترجمة يساوي عدد اختيارات الأصل.\n' +
     '7. داخل قيم النصوص لا تستخدم علامة الاقتباس المزدوجة " (استعمل « ») ولا تضع أسطرًا خامًا؛ استخدم \\n.\n' +
-    '8. لا تكرر الإجابة ولا تضع أي وسوم أو نص (مثل </escape>) داخل الكتلة أو حولها: كتلة json واحدة تحتوي كائنًا واحدًا فقط.\n' +
+    '8. لا تكرر الإجابة ولا تضع أي وسوم أو نص (مثل </escape>) حول الكائن: JSON خام واحد فقط بلا أسوار كود.\\n' +
     '9. افحص الناتج قبل الإرسال: كائن JSON واحد، كل الحقول المطلوبة موجودة، لا فواصل زائدة، والرد غير مقطوع.';
 
   function toRawJsonPrompt(text) {
@@ -327,12 +327,12 @@
   function installPromptPatch(win) {
     try {
       var nav = win && win.navigator, doc = win && win.document;
-      if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function' && !nav.clipboard.__khCodeBlock) {
+      if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function' && !nav.clipboard.__khRawJson) {
         var originalWrite = nav.clipboard.writeText.bind(nav.clipboard);
         nav.clipboard.writeText = function (text) { return originalWrite(toRawJsonPrompt(text)); };
-        nav.clipboard.__khCodeBlock = true;
+        nav.clipboard.__khRawJson = true;
       }
-      if (doc && typeof doc.execCommand === 'function' && !doc.__khCodeBlock) {
+      if (doc && typeof doc.execCommand === 'function' && !doc.__khRawJson) {
         var originalExec = doc.execCommand.bind(doc);
         doc.execCommand = function (command, showUi, value) {
           try {
@@ -346,7 +346,7 @@
           } catch (ignore) { /* fall through to the normal copy */ }
           return originalExec(command, showUi, value);
         };
-        doc.__khCodeBlock = true;
+        doc.__khRawJson = true;
       }
     } catch (ignore) { /* copy keeps working unpatched */ }
   }
