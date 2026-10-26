@@ -560,6 +560,9 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(admin.includes("body:JSON.stringify({action:'capabilities'})"));
   assert.ok(admin.includes("capabilityResult.publisher_mode!=='draft_pr'"));
   assert.ok(admin.includes("capabilityResult.writes_main_directly!==false"));
+  assert.ok(admin.includes('var publisherCapabilityBlocked=false'));
+  assert.ok(admin.includes('if(!publisherCapabilityBlocked)'));
+  assert.ok(admin.includes('publisherCapabilityBlocked=true'));
   assert.ok(admin.indexOf("body:JSON.stringify({action:'capabilities'})") < admin.indexOf("body:JSON.stringify({title:'مراجعة حكاية:"));
   assert.ok(publisher.includes('branch: branchNameForRecovery'));
   assert.ok(publisher.includes('pull.head?.repo?.full_name'));
