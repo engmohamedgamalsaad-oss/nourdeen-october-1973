@@ -72,7 +72,7 @@ Deno.serve(async (req: Request) => {
     if (!Number.isSafeInteger(number) || number < 1) return reply(400, { error: "رقم طلب الدمج غير صالح." });
     try {
       const pr = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
-      if (pr.base?.ref !== BASE || typeof pr.head?.ref !== "string" || !pr.head.ref.startsWith("story-review/")) {
+      if (pr.base?.ref !== BASE || pr.head?.repo?.full_name !== `${OWNER}/${REPO}` || typeof pr.head?.ref !== "string" || !pr.head.ref.startsWith("story-review/")) {
         return reply(403, { error: "طلب الدمج لا يطابق مسار مراجعة الحكايات المسموح." });
       }
       return reply(200, {
