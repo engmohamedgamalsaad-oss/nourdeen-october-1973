@@ -64,7 +64,7 @@ Read-only comparison of deployed source and repository `main` found:
 
 ### 3. Database objects and policies
 
-Read-only checks confirmed the live database contains `get_story_reaction_counts`, `record_story_reaction`, and `is_admin()`, and that `is_admin()` consults `public.admins`. Their definitions are not represented by a complete, version-aligned migration history in the standard migration directory. The repository has some setup/reference SQL, but that is not sufficient to safely reconstruct the exact sequence that was applied.
+Read-only checks confirmed the live database contains `get_story_reaction_counts`, `record_story_reaction`, and `is_admin()`, and that `is_admin()` consults `public.admins`. Their definitions are not represented by a complete, version-aligned migration history in the standard migration directory. The repository has some setup/reference SQL, but that is not sufficient to safely reconstruct the exact sequence that was applied. A read-only scan of seven backup/maintenance branches found no older standard migration files; path-specific history queries for five representative missing migration paths also returned no commits. A complete scan of every repository branch has not been performed.
 
 RLS policy definitions were inspected read-only. This was not an anonymous runtime test or a complete security audit. A performance advisor also reported overlapping permissive SELECT policies on `public.khaledoon_admin_config`; that is a policy/performance warning, not proof of a data leak.
 
@@ -80,6 +80,6 @@ RLS policy definitions were inspected read-only. This was not an anonymous runti
 
 - Registry/file comparison: **completed**.
 - Read-only function source comparison: **completed**.
-- Historical migration reconstruction: **not completed** — exact source for 19 versions was not found in the current repository tree/history.
+- Historical migration reconstruction: **not completed** — exact source for 19 versions was not found in `main`, the seven checked backup/maintenance branches, or the five queried path histories; a complete all-branch scan remains outstanding.
 - Production migration changes: **not performed**.
 - Security runtime tests: **not performed**.
