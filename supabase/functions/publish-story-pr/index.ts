@@ -67,6 +67,25 @@ Deno.serve(async (req: Request) => {
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
+  if (body?.action === "check_status") {
+    const number = Number(body.pull_request_number);
+    if (!Number.isSafeInteger(number) || number < 1) return reply(400, { error: "رقم طلب الدمج غير صالح." });
+    try {
+      const pr = await github(`/repos/${OWNER}/${REPO}/pulls/${number}`, githubToken);
+      if (pr.base?.ref !== BASE || typeof pr.head?.ref !== "string" || !pr.head.ref.startsWith("story-review/")) {
+        return reply(403, { error: "طلب الدمج لا يطابق مسار مراجعة الحكايات المسموح." });
+      }
+      return reply(200, {
+        success: true, merged: pr.merged === true, state: pr.state,
+        pull_request_url: pr.html_url, pull_request_number: pr.number,
+        head_sha: pr.head?.sha ?? null, merge_commit_sha: pr.merge_commit_sha ?? null,
+        base_branch: pr.base?.ref
+      });
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : "Unknown error";
+      return reply(502, { error: "تعذر التحقق من حالة طلب الدمج.", detail: detail.slice(0, 500) });
+    }
+  }
   if (!Array.isArray(body?.files) || body.files.length < 1 || body.files.length > 50)
     return reply(400, { error: "أرسل من 1 إلى 50 ملفًا." });
   const seen = new Set<string>();
@@ -81,9 +100,9 @@ Deno.serve(async (req: Request) => {
   }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
-  const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
+  const description = (typeof body.body === "string" ? body.body.slice(0, 4500) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.") + "\n\n---\n\nتم إنشاء هذا الطلب للمراجعة فقط. لن يظهر على الموقع المنشور حتى تتم مراجعة طلب الدمج ودمجه يدويًا في main.";
   try {
-    // Read the latest main commit. The final non-force ref update protects against concurrent changes.
+    // Build a review commit based on the current main. Only a review branch and PR are created; main is never updated here.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
@@ -199,17 +218,27 @@ Deno.serve(async (req: Request) => {
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
-    // Push straight to main, without a PR. force=false prevents overwriting concurrent main changes.
-    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
-      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
+    const branchName = `story-review/${storyId}-${crypto.randomUUID().slice(0, 8)}`;
+    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({ ref: `refs/heads/${branchName}`, sha: commit.sha }),
     });
-    const pageUrl = ALLOWED_ORIGIN + '/' + REPO + '/' + storyRoot;
+    const pullRequest = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        head: branchName,
+        base: BASE,
+        body: description
+      }),
+    });
     return reply(201, {
-      success: true, published_to_main: true, commit_sha: commit.sha,
-      story_id: storyId, story_path: normalizedRoot, page_url: pageUrl,
-      map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
-      map_message: mapMarkerAdded ? "تم تحديث علامة الحكاية في الخريطة التفاعلية." : "تم تحديث بيانات الخريطة؛ لم تُضف علامة جغرافية لأن الحكاية لا تحتوي على موقع موثق.",
-      message: "تم رفع ملفات الحكاية مباشرة إلى main؛ جارٍ التحقق من ظهورها على الموقع."
+      success: true, published_to_main: false, commit_sha: commit.sha,
+      story_id: storyId, story_path: normalizedRoot,
+      pull_request_number: pullRequest.number, pull_request_url: pullRequest.html_url,
+      branch_name: branchName, map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded ? "تم تجهيز بيانات علامة الحكاية في فرع المراجعة." : "تم تجهيز بيانات الخريطة؛ لم تُضف علامة جغرافية لأن الحكاية لا تحتوي على موقع موثق.",
+      message: "تم إنشاء طلب دمج للمراجعة. لم يتم النشر على الموقع؛ لن يظهر المحتوى إلا بعد الدمج في main."
     });
   } catch (error) {
     const detail = error instanceof Error ? error.message : "Unknown error";
