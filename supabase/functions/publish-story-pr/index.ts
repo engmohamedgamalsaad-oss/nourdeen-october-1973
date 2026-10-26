@@ -164,10 +164,12 @@ Deno.serve(async (req: Request) => {
         JSON.stringify(previousPlace.place) === JSON.stringify(place.place) &&
         Boolean(previousPlace.approximate) === Boolean(place.approximate) &&
         !String(place.source_name || '').trim() && !String(place.source_url || '').trim();
+      const sourceNameIsLocalized = place.source_name && typeof place.source_name === 'object' &&
+        ['ar','en','fr','it','de'].every((locale) => typeof place.source_name[locale] === 'string' && place.source_name[locale].trim()) &&
+        ['en','fr','it','de'].every((locale) => !/[\\u0600-\\u06FF]/.test(place.source_name[locale]));
       if (!unchangedLegacyPlace &&
-          (typeof place.source_name !== 'string' || !place.source_name.trim() ||
-           typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim()))) {
-        throw new Error('Map location must include a source name and HTTPS source URL unless preserving an unchanged legacy map entry.');
+          (!sourceNameIsLocalized || typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim()))) {
+        throw new Error('Map location must include source_name translated to ar/en/fr/it/de and an HTTPS source URL unless preserving an unchanged legacy map entry.');
       }
       if (place.approximate !== undefined && typeof place.approximate !== 'boolean') {
         throw new Error('Map approximate flag must be boolean when provided.');
