@@ -287,9 +287,11 @@ async function download(draft,opts){
    var mapLat=mapLocation.lat,mapLng=mapLocation.lng;
    if(typeof mapLat!=='number'||!Number.isFinite(mapLat)||mapLat < -90||mapLat > 90||typeof mapLng!=='number'||!Number.isFinite(mapLng)||mapLng < -180||mapLng > 180)throw new Error('إحداثيات الخريطة غير صالحة؛ لا تُخترع الإحداثيات.');
     if(!mapLocation.place||['ar','en','fr','it','de'].some(function(l){return typeof mapLocation.place[l]!=='string'||!mapLocation.place[l].trim()||(l!=='ar'&&/[\u0600-\u06FF]/.test(mapLocation.place[l]))}))throw new Error('اسم المكان مطلوب باللغات الخمس، دون بقايا عربية في اللغات الأخرى.');
+     if(mapLocation.place_label!==undefined&&mapLocation.place_label!==null&&(!mapLocation.place_label||typeof mapLocation.place_label!=='object'||Array.isArray(mapLocation.place_label)||['ar','en','fr','it','de'].some(function(l){return typeof mapLocation.place_label[l]!=='string'||!mapLocation.place_label[l].trim()||(l!=='ar'&&/[؀-ۿ]/.test(mapLocation.place_label[l]))})))throw new Error('تسمية المكان الاختيارية يجب أن تكون مترجمة إلى اللغات الخمس دون بقايا عربية.');
     if(!mapLocation.source_name||typeof mapLocation.source_name!=='object'||Array.isArray(mapLocation.source_name)||['ar','en','fr','it','de'].some(function(l){return typeof mapLocation.source_name[l]!=='string'||!mapLocation.source_name[l].trim()||(l!=='ar'&&/[\u0600-\u06FF]/.test(mapLocation.source_name[l]))})||typeof mapLocation.source_url!=='string'||!/^https:\/\//i.test(mapLocation.source_url.trim()))throw new Error('مصدر المكان يجب أن يكون كائنًا مترجمًا إلى ar/en/fr/it/de مع رابط HTTPS.');
     if(mapLocation.approximate!==undefined&&typeof mapLocation.approximate!=='boolean')throw new Error('حقل approximate يجب أن يكون true أو false.');
     mapData[id]={lat:mapLat,lng:mapLng,place:mapLocation.place,source_name:mapLocation.source_name,source_url:mapLocation.source_url.trim()};
+     if(mapLocation.place_label!==undefined&&mapLocation.place_label!==null)mapData[id].place_label=mapLocation.place_label;
    if(mapLocation.approximate===true)mapData[id].approximate=true;
   }
  }
