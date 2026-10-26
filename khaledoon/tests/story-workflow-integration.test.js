@@ -76,7 +76,7 @@ test('embedded project instructions exactly match the canonical project file', f
   var canonical = fs.readFileSync('PROJECT_INSTRUCTIONS.md', 'utf8');
   var prefix = 'var PROJECT_INSTRUCTIONS = ';
   var start = texts.indexOf(prefix) + prefix.length;
-  var end = texts.indexOf(';\\nvar STORY_WORKFLOW', start);
+  var end = texts.indexOf(';\nvar STORY_WORKFLOW', start);
   assert.ok(start >= prefix.length && end > start, 'embedded PROJECT_INSTRUCTIONS string must be isolated');
   assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'admin prompt must not drift from PROJECT_INSTRUCTIONS.md');
 });
