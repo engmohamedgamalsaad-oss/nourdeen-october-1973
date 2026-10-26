@@ -72,10 +72,17 @@ async function main() {
       });
       const page = await context.newPage();
       const submissionWrites = [];
+      const publisherCalls = [];
       await page.route('https://**/*', route => route.abort());
       await page.route(SUPA + '/**', async route => {
         const req = route.request();
         const url = req.url();
+        if (url.includes('/functions/v1/publish-story-pr')) {
+          let payload = {};
+          try { payload = JSON.parse(req.postData() || '{}'); } catch (_) {}
+          publisherCalls.push(payload);
+          return route.fulfill({ status:400, contentType:'application/json', body:JSON.stringify({ error:'legacy function does not support capabilities' }) });
+        }
         if (url.includes('/rest/v1/khaledoon_submissions') && !['GET','HEAD','OPTIONS'].includes(req.method())) submissionWrites.push(req.method() + ' ' + url);
         if (url.includes('/rest/v1/rpc/is_admin')) {
           return route.fulfill({ status:200, contentType:'application/json', body:'true' });
@@ -134,6 +141,18 @@ async function main() {
       assert.equal(await aiTextarea.inputValue(), 'still not JSON ###', 'third click must execute again and relock without losing text');
       assert.equal(submissionWrites.length, writesBeforePaste, 'invalid AI packages must never write to Supabase');
       console.log('ok - AI textarea paste/execute/unlock/execute lock cycle (' + viewport.name + ')');
+
+      // A legacy deployed publisher must fail closed: only the capabilities probe may be sent.
+      const approvedSummary = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية بانتظار النشر' }).first();
+      await approvedSummary.click();
+      const approvedCard = approvedSummary.locator('xpath=..');
+      const writesBeforePublisherProbe = submissionWrites.length;
+      await approvedCard.getByRole('button', { name:'نشر الحكاية' }).click();
+      assert.equal(publisherCalls.length, 1, 'publish action must perform one capabilities handshake');
+      assert.equal(publisherCalls[0].action, 'capabilities', 'admin must probe the function before sending story files');
+      assert.equal(Object.prototype.hasOwnProperty.call(publisherCalls[0], 'files'), false, 'capabilities probe must not contain story files');
+      assert.equal(submissionWrites.length, writesBeforePublisherProbe, 'unsupported legacy publisher must not cause a submission write');
+      console.log('ok - legacy publisher capability mismatch blocks before upload (' + viewport.name + ')');
 
       const builder = await context.newPage();
       await builder.goto('http://127.0.0.1:' + PORT + '/khaledoon/story-builder.html', { waitUntil:'domcontentloaded' });
