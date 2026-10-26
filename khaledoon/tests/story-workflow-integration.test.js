@@ -709,3 +709,36 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
   assert.ok(edge.includes('`<!-- khaledoon-delete-story:${id}:${storyPath} -->\\n\\n`'), 'deletion PR marker must be followed by real line breaks');
 });
 
+
+
+test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html','utf8');
+  assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
+  assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
+  assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
+  assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
+  assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
+  assert.ok(publisher.includes('if (existingIndex < 0)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
+  assert.ok(publisher.includes("'/contents/stories/index.json?ref=' + baseSha") && publisher.includes("'/contents/stories/places.json?ref=' + baseSha"), 'index and map reads must use the exact commit used as the PR base');
+  assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
+  assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
+  assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
+  assert.ok(!publisher.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'publisher must not patch the main ref');
+  assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
+  assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
+  assert.ok(admin.includes("action:'verify_pr',pull_request_number:meta.preview_review.publish_pr_number,branch:meta.preview_review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
+  assert.ok(admin.includes('if(!prCheck.merged)throw new Error'), 'an open PR must not be marked as published');
+  assert.ok(admin.includes('publish_pr_url&&!meta.preview_review.publish_pr_number'), 'legacy PR records without a verifiable number must not bypass merge verification');
+  assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
+  var submitStart = admin.indexOf('async function submitStoryPublishPR');
+  var submitEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', submitStart);
+  var submitBlock = admin.slice(submitStart, submitEnd);
+  assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
+  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capability.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
+  var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
+  var bundleIndex = admin.indexOf('var pack=await window.KHStoryBundle.download', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
+});
+
