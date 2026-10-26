@@ -50,6 +50,7 @@ async function main() {
     body: 'هذا نص اختباري طويل بما يكفي لعرض شكل الحكاية في القالب المنشور.',
     karma_text: 'كارما تسأل سؤالًا تجريبيًا.',
     sources: 'مصدر أول https://example.org/a\nمصدر ثان https://example.org/b',
+    cover: { path: 'stories/history/preview/cover.jpg', alt: 'غلاف تجريبي', caption: 'تعليق الغلاف التجريبي', kind: 'illustration', source_name: 'مصدر الغلاف', source_url: 'https://example.org/cover-source', rights: 'رسم توضيحي', i18n: { en: { alt: 'Preview cover', caption: 'Preview cover caption' }, fr: { alt: 'Couverture test', caption: 'Légende de couverture' }, it: { alt: 'Copertina di prova', caption: 'Didascalia di copertina' }, de: { alt: 'Testtitelbild', caption: 'Bildunterschrift des Titelbilds' } } },
     translations: { en: { title: 'Preview test' }, fr: {}, it: {}, de: {} },
     images: [
       { url: 'https://images.example.org/portrait.jpg', alt: 'Portrait', caption: 'Portrait', kind: 'archival', source_name: 'Example Archive', source_url: 'https://example.org/source', rights: 'CC BY', i18n: { en: { alt: 'Portrait', caption: 'Portrait', source_name: 'Example Archive EN', rights: 'Public Domain' }, fr: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archive Exemple', rights: 'Domaine public' }, it: { alt: 'Portrait', caption: 'Portrait', source_name: 'Archivio di esempio', rights: 'Pubblico dominio' }, de: { alt: 'Portrait', caption: 'Portrait', source_name: 'Beispielarchiv', rights: 'Gemeinfrei' } } },
@@ -64,6 +65,10 @@ async function main() {
   assert.ok(html.indexOf('assets/shared/i18n.js') < html.indexOf('window.StoryI18N'), 'shared i18n script must load before the generated inline story translation dictionary');
   assert.match(html, /stories\/history\/preview\//);
   assert.match(html, /class="hero-art"/, 'preview should show the lead story image in the hero');
+  const coverUrl = 'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/preview/cover.jpg';
+  assert.equal(html.split(coverUrl).length - 1, 3, 'the same cover path must feed og:image, the hero, and the intro modal');
+  assert.match(html, /Preview cover/, 'cover alt translation must be included in the generated language dictionary');
+  assert.match(html, /Preview cover caption/, 'cover caption translation must be included in the generated language dictionary');
   assert.match(html, /story-visual-gallery/, 'preview should render a visible image gallery');
   assert.match(html, /Preview design profiles/, 'generated previews should carry approved visual design profiles');
   assert.match(html, /\.story-design-portrait-biography\{background:radial-gradient/, 'portrait biographies should use the approved literary design');
