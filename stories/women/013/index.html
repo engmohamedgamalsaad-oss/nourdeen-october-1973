@@ -79,6 +79,10 @@
   body[data-story-slug] .story-image-card figcaption small {font-size:.8rem!important}
 }
 
+/* Reveal story text without leaving it hidden when motion is reduced. */
+body.motion-ready .write-in{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.75,.25,1);transition-delay:var(--write-delay,0ms)}
+body.motion-ready .write-in.write-visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){body.motion-ready .write-in,body.motion-ready .write-in.write-visible{opacity:1;transform:none;transition:none}}
 </style></head>
 <body class="story-design-women-leadership story-design-portrait-biography" data-story-slug="013">
 <header><a href="../../../khaledoon/collections/women.html">← نساء خالدات</a><a href="../../../index.html">خالدون عبر التاريخ</a><div class="language-switch" data-lang-switch role="group" aria-label="Language"></div></header>
