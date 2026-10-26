@@ -103,6 +103,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(publisher.includes("file.path !== 'stories/places.json'"));
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
   assert.ok(publisher.includes("['ar','en','fr','it','de'].some"));
+  assert.ok(publisher.includes('sourceNameIsLocalized'), 'publisher must preserve five-language map source names');
   assert.ok(publisher.includes('map_marker_added: mapMarkerAdded'));
   var mapBundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
   assert.ok(mapBundle.includes('if(mapLocation===null){mapData[id]=null;}'), 'explicit no-location must reach the server so stale markers are removed');
@@ -402,6 +403,7 @@ test('verified map_location is carried from AI import into bundle and merged saf
   var edge = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   assert.ok(workflow.includes("hasOwnProperty.call(pkg, 'map_location')"));
   assert.ok(workflow.includes('اسم المكان في map_location مطلوب باللغات الخمس'));
+  assert.ok(workflow.includes('map_location يحتاج source_name مترجمًا إلى ar/en/fr/it/de'), 'AI map source names must be localized');
   assert.ok(admin.includes('map_location:pkg.map_location===null?null:pkg.map_location'));
   assert.ok(admin.includes('draft.map_location=meta.map_location'));
   assert.ok(bundle.includes("files.push({path:'stories/places.json'"));
