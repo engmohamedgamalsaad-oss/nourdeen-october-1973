@@ -232,6 +232,10 @@ async function main() {
     await visualPage.screenshot({ path:path.join(screenshotDir, 'generated-story-mobile-light.png'), fullPage:false });
     await visualPage.locator('.story-splash-start').click();
     await visualPage.locator('.story-splash').waitFor({ state:'hidden', timeout:10000 });
+    await visualPage.screenshot({ path:path.join(screenshotDir, 'generated-story-page-desktop-dark.png'), fullPage:false });
+    await visualPage.setViewportSize({ width:390, height:844 });
+    await visualPage.locator('html').evaluate(el => el.setAttribute('data-theme', 'light'));
+    await visualPage.screenshot({ path:path.join(screenshotDir, 'generated-story-page-mobile-light.png'), fullPage:false });
     await visualContext.close();
     passed++;
     console.log('ok - generated reader template desktop/mobile visual check');
