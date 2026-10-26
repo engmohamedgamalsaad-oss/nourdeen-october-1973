@@ -74,9 +74,11 @@ test('embedded project instructions exactly match the canonical project file', f
   var fs = require('node:fs');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   var canonical = fs.readFileSync('PROJECT_INSTRUCTIONS.md', 'utf8');
-  var match = texts.match(/var PROJECT_INSTRUCTIONS = ("(?:\\\\.|[^"\\\\])*");\\nvar STORY_WORKFLOW/);
-  assert.ok(match, 'embedded PROJECT_INSTRUCTIONS string must be parseable');
-  assert.equal(JSON.parse(match[1]), canonical, 'admin prompt must not drift from PROJECT_INSTRUCTIONS.md');
+  var prefix = 'var PROJECT_INSTRUCTIONS = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\\nvar STORY_WORKFLOW', start);
+  assert.ok(start >= prefix.length && end > start, 'embedded PROJECT_INSTRUCTIONS string must be isolated');
+  assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'admin prompt must not drift from PROJECT_INSTRUCTIONS.md');
 });
 test('published story 012 and 014 headers have all four non-Arabic translations', function () {
   var science = fs.readFileSync('stories/science/012/translations.js', 'utf8');
