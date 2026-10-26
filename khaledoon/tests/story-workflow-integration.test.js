@@ -556,7 +556,7 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'));
   assert.ok(admin.includes("action:'verify_pr'"));
   assert.ok(admin.includes('branch:review.publish_branch'));
-  assert.ok(publisher.includes('pr.head?.repo?.full_name'));
+  assert.ok(publisher.includes('pull.head?.repo?.full_name'));
   assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
   
   assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
