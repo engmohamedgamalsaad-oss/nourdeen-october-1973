@@ -70,6 +70,15 @@ test('active admin prompt is synchronized with the unified v4 story contract', f
   assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
   assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
 });
+test('active v4 master prompt exactly matches the canonical master file', function () {
+  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
+  var canonical = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
+  var prefix = 'var STORY_PAGE_PROMPT = ';
+  var start = texts.indexOf(prefix) + prefix.length;
+  var end = texts.indexOf(';\\nvar STORY_PROVIDER_PROMPTS', start);
+  assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
+  assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
+});
 test('embedded project instructions exactly match the canonical project file', function () {
   var fs = require('node:fs');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
