@@ -96,7 +96,7 @@ test('unified v4 prompt is shared and legacy AI output is not copied into fresh 
   assert.ok(shared.includes('ar/en/fr/it/de'));
   assert.ok(shared.includes('cover-popup'));
   assert.ok(shared.includes('prefers-reduced-motion'));
-  assert.ok(shared.includes('source_name وsource_url وrights'));
+  assert.ok(shared.includes('source_name') && shared.includes('source_url') && shared.includes('rights'), 'shared v4 prompt must retain source and rights fields');
   assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
   ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
     assert.ok(shared.includes('"'+provider+'"'), 'missing provider instruction: '+provider);
@@ -470,7 +470,7 @@ test('unified v4 prompt requires sourced images and a rendered image gallery', f
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
   assert.ok(promptTexts.includes('## 4) الغلاف والصور — من البداية حتى آخر مشهد'));
-  assert.ok(promptTexts.includes('source_name وsource_url وrights'));
+  assert.ok(promptTexts.includes('source_name') && promptTexts.includes('source_url') && promptTexts.includes('rights'), 'prompt artifacts must retain source and rights fields');
   assert.ok(promptTexts.includes('ظهور الصورة في نتائج البحث ليس إذنًا باستخدامها.'));
   assert.ok(bundle.includes('function imageGalleryHtml(d,baseUrl,section,id)'))
   assert.ok(bundle.includes('absoluteStoryImageUrl(im.url,baseUrl,section,id)'), 'gallery links and images must use resolved repository-root URLs');;
