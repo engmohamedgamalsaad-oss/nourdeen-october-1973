@@ -1101,17 +1101,30 @@ function setHidden(s,on,btn){
 async function deleteHiddenStory(s,btn){
   if(!s||!vHidden[String(s.id)]){say('err','الحذف متاح للحكايات المخفية فقط. حدّث القائمة أولًا.');return}
   var name=s.title||('الحكاية رقم '+s.id);
-  if(!confirm('حذف «'+name+'» نهائيًا من ملفات الموقع وفهرس الحكايات؟\n\nسيُحذف مجلد الحكاية وبنك أسئلتها إن وُجد. لا يمكن التراجع عن هذا الحذف.'))return;
-  startButtonProgress(btn,'جارٍ الحذف…');
+  if(!confirm('إنشاء طلب حذف نهائي للحكاية «'+name+'»؟\n\nستظل الحكاية مخفية. لن تتغير ملفات الموقع أو الفهرس حتى مراجعة طلب الدمج ودمجه. بعد الدمج اضغط الزر نفسه لتأكيد اكتمال الحذف وتنظيف سجل الإخفاء.'))return;
+  startButtonProgress(btn,'جارٍ التحقق من وضع الحذف الآمن…');
   try{
+   var capabilityResponse=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
+   var capability=await capabilityResponse.json().catch(function(){return {}});
+   if(!capabilityResponse.ok||!capability.success||capability.deletion_mode!=='draft_pr'||capability.writes_main_directly!==false){
+    say('err','خدمة الحذف الحية لم تؤكد وضع طلبات الدمج الآمن؛ لم يتم إرسال رقم الحكاية ولم يحدث أي حذف. حدّث Edge Function أولًا ثم أعد المحاولة.');
+    return;
+   }
+   startButtonProgress(btn,'جارٍ تجهيز طلب الحذف…');
    await refreshIfNeeded();
-   var response=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({story_id:String(s.id).padStart(3,'0')})});
+   var response=await fetch(API+'/functions/v1/delete-hidden-story',{method:'POST',headers:hdr(),body:JSON.stringify({action:'delete_or_verify',story_id:String(s.id).padStart(3,'0')})});
    var result=await response.json().catch(function(){return {}});
-   if(!response.ok||!result.success)throw new Error(result.detail||result.error||('تعذر الحذف ('+response.status+').'));
-   say('ok',result.message||'تم حذف الحكاية من ملفات الموقع وفهرسها.');
+   if(!response.ok||!result.success)throw new Error(result.detail||result.error||('تعذر تجهيز طلب الحذف ('+response.status+').'));
+   if(result.pending===true){
+    say('info',result.message||'تم إنشاء طلب حذف للمراجعة؛ الحكاية ما زالت مخفية ولم تتغير ملفات الموقع.');
+    if(result.pull_request_url){var msg=$('msg'),link=el('a','btn ghost','فتح طلب الحذف');link.href=result.pull_request_url;link.target='_blank';link.rel='noopener noreferrer';msg.appendChild(document.createTextNode(' '));msg.appendChild(link)}
+    return;
+   }
+   if(result.deleted!==true)throw new Error('لم يؤكد الخادم إنشاء طلب حذف أو اكتمال الحذف؛ لم أغيّر العرض المحلي.');
+   say('ok',result.message||'تم التحقق من دمج طلب الحذف وإزالة الملفات.');
    if(result.warning)say('err',result.warning);
-   vLoaded=false;await loadVis();await loadList();
-  }catch(e){say('err',e.message||'تعذر حذف الحكاية.');}
+   delete vHidden[String(s.id)];vLoaded=false;await loadVis();await loadList();
+  }catch(e){say('err',e.message||'تعذر تجهيز أو تأكيد طلب الحذف.');}
   finally{stopButtonProgress(btn)}
  }
  function vcount(fn){return vStories.filter(fn).length}
