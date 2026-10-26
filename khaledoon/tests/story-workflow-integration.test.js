@@ -227,6 +227,20 @@ test('shared reader template supports explicit and system light themes', functio
   assert.ok(bundle.includes('@media(prefers-color-scheme:light)'));
   assert.ok(bundle.includes(':root:not([data-theme="dark"]) body[data-story-slug]'));
 });
+test('section color contract keeps Hatshepsut pink/purple and Magdi Yacoub cyan/teal', function () {
+  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
+  var checklist = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', 'utf8');
+  var hatsTheme = fs.readFileSync('stories/women/013/theme.css', 'utf8');
+  var magdiTheme = fs.readFileSync('stories/science/015/theme.css', 'utf8');
+  assert.ok(masterPrompt.includes('حتشبسوت ترث لوحة نساء خالدات الوردية/البرقوقية ولا تُعرض باللون الأخضر'));
+  assert.ok(masterPrompt.includes('مجدي يعقوب يرث لوحة العلوم السماوية/التركوازية ولا تُعرض صفحته بخلفية بنية'));
+  assert.ok(checklist.includes('حتشبسوت ليست خضراء') && checklist.includes('مجدي يعقوب ليس بخلفية بنية'));
+  assert.ok(bundle.includes("women:'#d78bb2'") && bundle.includes("women:'women-leadership'"));
+  assert.ok(bundle.includes("science:'#8ad9e8'") && bundle.includes("science:'science-lab'"));
+  assert.ok(hatsTheme.includes('--accent:#e7a1c1') && hatsTheme.includes('#51284b'));
+  assert.ok(magdiTheme.includes('--accent:#8ad9e8') && magdiTheme.includes('#164451'));
+  assert.doesNotMatch(magdiTheme, /#50302b|#40262a/, 'Magdi Yacoub theme must not inherit the brown portrait palette');
+});
 test('admin uses its actual crimson book favicon asset', function () {
   assert.ok(admin.includes('type="image/svg+xml" href="/nourdeen-october-1973/khaledoon/assets/admin-favicon.svg"'));
   assert.ok(favicon.includes('viewBox="0 0 64 64"'));
