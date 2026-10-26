@@ -115,7 +115,7 @@ async function main() {
       history_note:'معلومة تاريخية موثقة', images_note:'ملاحظات الصور وحقوقها',
       sources:'Source A https://example.org/source-a\nSource B https://example.net/source-b',
       cover:{url:'https://images.example.org/cover.jpg',alt:'غلاف اختبار',caption:'تعليق الغلاف',kind:'illustration',source_name:'مصدر الغلاف',source_url:'https://example.org/cover-source',rights:'ترخيص موضح',
-        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover alt '+lang,caption:'Cover caption '+lang}]}))},
+        i18n:Object.fromEntries(langs.map(function(lang){return [lang,{alt:'Cover alt '+lang,caption:'Cover caption '+lang,source_name:'Cover source '+lang,rights:'Illustration '+lang}]}))},
       translations:translations,
       images:[
         {url:'https://images.example.org/a.jpg',alt:'وصف الصورة أ',caption:'الصورة أ',kind:'illustration',source_name:'المصدر أ',source_url:'https://example.org/a',rights:'ترخيص موضح',i18n:imageI18n('Image A')},
