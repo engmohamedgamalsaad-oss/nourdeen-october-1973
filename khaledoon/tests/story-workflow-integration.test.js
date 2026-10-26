@@ -328,12 +328,12 @@ test('rendered story preview applies all nine designs and includes attributed im
   });
 });
 test('AI story package validation requires a localized cover, design profile, and at least two documented images', function () {
-  var sourceFactBody = 'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.\\n\\nهل تعلم؟ هذه أول معلومة موثقة.\\n\\nهل تعلم؟ هذه ثاني معلومة موثقة.\\n\\nهل تعلم؟ هذه ثالث معلومة موثقة.';
+  var sourceFactBody = 'هذا نص الراوي الذي يتجاوز خمسين حرفًا لتلبية شرط التحقق في الاختبار.\n\nهل تعلم؟ هذه أول معلومة موثقة.\n\nهل تعلم؟ هذه ثاني معلومة موثقة.\n\nهل تعلم؟ هذه ثالث معلومة موثقة.';
   var translatedFactBodies = {
-    en: 'A narrator story for validation.\\n\\nDid you know? First verified fact.\\n\\nDid you know? Second verified fact.\\n\\nDid you know? Third verified fact.',
-    fr: 'Un récit narratif pour validation.\\n\\nLe saviez-vous ? Premier fait vérifié.\\n\\nLe saviez-vous ? Deuxième fait vérifié.\\n\\nLe saviez-vous ? Troisième fait vérifié.',
-    it: 'Un racconto narrativo per la verifica.\\n\\nLo sapevi? Primo fatto verificato.\\n\\nLo sapevi? Secondo fatto verificato.\\n\\nLo sapevi? Terzo fatto verificato.',
-    de: 'Eine Erzählung zur Überprüfung.\\n\\nWusstest du? Erste geprüfte Tatsache.\\n\\nWusstest du? Zweite geprüfte Tatsache.\\n\\nWusstest du? Dritte geprüfte Tatsache.'
+    en: 'A narrator story for validation.\n\nDid you know? First verified fact.\n\nDid you know? Second verified fact.\n\nDid you know? Third verified fact.',
+    fr: 'Un récit narratif pour validation.\n\nLe saviez-vous ? Premier fait vérifié.\n\nLe saviez-vous ? Deuxième fait vérifié.\n\nLe saviez-vous ? Troisième fait vérifié.',
+    it: 'Un racconto narrativo per la verifica.\n\nLo sapevi? Primo fatto verificato.\n\nLo sapevi? Secondo fatto verificato.\n\nLo sapevi? Terzo fatto verificato.',
+    de: 'Eine Erzählung zur Überprüfung.\n\nWusstest du? Erste geprüfte Tatsache.\n\nWusstest du? Zweite geprüfte Tatsache.\n\nWusstest du? Dritte geprüfte Tatsache.'
   };
   assert.ok(W.validateStoryPackage({
     section_key:'science', figure_name:'مثال', title:'عنوان', subtitle:'نبذة',
