@@ -400,6 +400,7 @@ test('prompt admin links to the canonical v4 files and avoids stale v3 links', f
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
   assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
   assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261023-prompts-v4'));
+  assert.ok(promptAdmin.includes('ليست مستقلة'), 'prompt admin must explain that provider files accompany the master');
   assert.ok(!promptAdmin.includes('prompts/2026-10-22-unified-v3/'));
   ['MASTER-STORY-WORKFLOW.md','CHATGPT.md','CLAUDE.md','DEEPSEEK.md','GEMINI.md','WORKFLOW-CHECKLIST.md'].forEach(function(file){
     assert.ok(fs.existsSync('khaledoon/prompts/2026-10-23-unified-v4/'+file), 'v4 prompt artifact must exist: '+file);
