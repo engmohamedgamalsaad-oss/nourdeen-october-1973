@@ -13,9 +13,8 @@
    - several JSON objects in one paste (the AI repeated its answer, with stray tags such as </escape> or
      doubled code fences between them): each balanced object is tried and the most complete valid one is used
 
-   Prompt side (see the "code-block prompt" section at the end): the copied story prompt asks the AI tool to
-   put the JSON inside ONE code block. Copying from a code block keeps the text raw, so Markdown rendering
-   cannot inject stray backslashes or asterisks into the JSON in the first place. */
+   Prompt side: ask for one raw JSON object without Markdown fences. The parser remains tolerant of legacy
+   fenced replies, but the copy helper must never encourage fences or rewrite the prompt to request them. */
 (function (root) {
   'use strict';
 
@@ -275,25 +274,20 @@
     }
   }
 
-  /* ---- code-block prompt -------------------------------------------------------------------
-     The story-package prompt used to say "no Markdown, no code fences". Chat UIs render Markdown, so
-     copying the rendered reply re-introduced \* and \_ into the JSON. The prompt now asks for ONE code
-     block (copying from a code block is raw text). The sentences live inside admin.html's prompt
-     builder; each [old, new] pair below swaps one of them at copy time. A test asserts every `old`
-     sentence still exists in admin.html, so a future edit there cannot silently disable this. */
-  var FENCE = '\x60\x60\x60';
+  /* ---- raw JSON prompt normalization -------------------------------------------------------
+     Legacy provider-specific prompt fragments may still ask for fenced JSON. Normalize those fragments
+     to one raw JSON object, matching the canonical v4 prompt and import contract. The old sentences below
+     are retained only where they still occur in admin.html; tests guard against drift. */
   var PROMPT_MARKER = 'KH_STORY_PACKAGE_V1';
   var PROMPT_RULES = [
-    ['أخرج JSON صالحًا واحدًا فقط بلا Markdown أو مقدمة أو خاتمة.',
-      'ضع الناتج كله داخل كتلة كود واحدة من نوع json (' + FENCE + 'json في البداية و ' + FENCE + ' في النهاية) تحتوي كائن JSON صالحًا واحدًا فقط، بلا أي نص قبلها أو بعدها، حتى لو طال الناتج. لا تستخدم علامات Markdown (مثل ** أو # أو _) داخل قيم النصوص، ولا تضع شرطة مائلة عكسية إلا حيث يتطلبها JSON.'],
     ['أخرج الحزمة وفق المخطط فقط؛ لا تضف شرحًا خارج JSON.',
-      'أخرج الحزمة وفق المخطط داخل كتلة كود json واحدة فقط؛ لا تضف شرحًا خارج الكتلة.'],
+      'أخرج الحزمة وفق المخطط ككائن JSON خام فقط؛ لا تضف شرحًا خارج الكائن أو أسوار كود.'],
     ['أخرج كائن JSON واحدًا صالحًا للاستيراد فقط، بلا Markdown أو مقدمة أو خاتمة.',
-      'أخرج كائن JSON واحدًا صالحًا للاستيراد داخل كتلة كود json واحدة فقط، بلا مقدمة أو خاتمة خارجها.'],
+      'أخرج كائن JSON واحدًا صالحًا للاستيراد كنص خام فقط، بلا Markdown أو أسوار كود أو مقدمة أو خاتمة.'],
     ['قبل إخراج JSON؛ لا تضف Markdown أو نصًا خارجه.',
-      'قبل إخراج JSON داخل كتلة كود واحدة؛ لا تضف نصًا خارجها.'],
+      'أخرج JSON خامًا بلا Markdown أو أسوار كود أو مقدمة أو خاتمة أو نص خارج الكائن.'],
     ['أخرج JSON صالحًا فقط بلا Markdown أو أسوار كود أو مقدمة أو خاتمة.',
-      'أخرج JSON صالحًا فقط داخل كتلة كود json واحدة، بلا مقدمة أو خاتمة خارجها.']
+      'أخرج كائن JSON واحدًا صالحًا فقط كنص خام، بلا Markdown أو أسوار كود أو مقدمة أو خاتمة.']
   ];
 
   /* ---- import-acceptance rules -------------------------------------------------------------
@@ -314,7 +308,7 @@
     '8. لا تكرر الإجابة ولا تضع أي وسوم أو نص (مثل </escape>) داخل الكتلة أو حولها: كتلة json واحدة تحتوي كائنًا واحدًا فقط.\n' +
     '9. افحص الناتج قبل الإرسال: كائن JSON واحد، كل الحقول المطلوبة موجودة، لا فواصل زائدة، والرد غير مقطوع.';
 
-  function toCodeBlockPrompt(text) {
+  function toRawJsonPrompt(text) {
     try {
       if (typeof text !== 'string' || text.indexOf(PROMPT_MARKER) < 0) return text;
       var out = text;
@@ -335,7 +329,7 @@
       var nav = win && win.navigator, doc = win && win.document;
       if (nav && nav.clipboard && typeof nav.clipboard.writeText === 'function' && !nav.clipboard.__khCodeBlock) {
         var originalWrite = nav.clipboard.writeText.bind(nav.clipboard);
-        nav.clipboard.writeText = function (text) { return originalWrite(toCodeBlockPrompt(text)); };
+        nav.clipboard.writeText = function (text) { return originalWrite(toRawJsonPrompt(text)); };
         nav.clipboard.__khCodeBlock = true;
       }
       if (doc && typeof doc.execCommand === 'function' && !doc.__khCodeBlock) {
@@ -345,7 +339,7 @@
             if (String(command).toLowerCase() === 'copy') {
               var field = doc.activeElement;
               if (field && field.tagName === 'TEXTAREA') {
-                var next = toCodeBlockPrompt(field.value);
+                var next = toRawJsonPrompt(field.value);
                 if (next !== field.value) { field.value = next; field.select(); }
               }
             }
