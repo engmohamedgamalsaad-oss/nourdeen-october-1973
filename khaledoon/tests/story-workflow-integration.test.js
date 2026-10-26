@@ -763,13 +763,21 @@ test('Magdi Yacoub opening paragraph has exact five-language source-key coverage
   assert.ok(!translations.includes('خصوصاً في أسوان، ولد طفل صغير'), 'the stale contradictory Aswan opening must not return');
   var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
   var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
-  var photoRightsText = 'تحتوي هذه الصفحة على صورة فوتوغرافية واحدة للدكتور مجدي يعقوب، من تصوير Raafat عبر Wikimedia Commons، برخصة CC BY-SA 3.0، مع رابط المصدر والرخصة. أما صورة نافذة البداية فهي رسم توضيحي أصلي وليست صورة أرشيفية.';
-  assert.ok(magdiPage.includes(photoRightsText), 'Magdi Yacoub page must accurately describe one archival photo and one original illustration');
+  var photoRightsText = 'تحتوي هذه الصفحة على صورتين فوتوغرافيتين موثقتين للدكتور مجدي يعقوب: صورة من تصوير Raafat برخصة CC BY-SA 3.0، وصورة له أثناء تسلّم ميدالية ليستر عام 2015 من تصوير Carcharoth برخصة CC BY-SA 4.0. تظهر روابط المصدر والرخصة مع كل صورة. أما صورة نافذة البداية فهي رسم توضيحي أصلي وليست صورة أرشيفية.';
+  var listerAlt = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015 في الكلية الملكية للجراحين بإنجلترا.';
+  var listerCaption = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015.';
+  var listerSource = 'صورة أرشيفية · تصوير Carcharoth عبر Wikimedia Commons';
+  assert.ok(magdiPage.includes(photoRightsText), 'Magdi Yacoub page must accurately describe two sourced archival photos and one original illustration');
   assert.ok(!magdiPage.includes('تتوفر ثلاث صور فوتوغرافية موثقة'), 'stale claim of three archival photos must not return');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"This page uses one archival photograph'), 'the corrected rights paragraph must have an English translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Cette page utilise une photographie'), 'the corrected rights paragraph must have a French translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Questa pagina usa una fotografia'), 'the corrected rights paragraph must have an Italian translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Diese Seite verwendet eine Archivfotografie'), 'the corrected rights paragraph must have a German translation');
+  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/Special:FilePath/Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal photograph must load from the sourced Commons file');
+  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal image must link to its source record');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"This page uses two sourced photographs'), 'the corrected rights paragraph must have an English translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Cette page utilise deux photographies'), 'the corrected rights paragraph must have a French translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Questa pagina usa due fotografie'), 'the corrected rights paragraph must have an Italian translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Diese Seite verwendet zwei belegte Fotografien'), 'the corrected rights paragraph must have a German translation');
+  assert.ok(magdiExtra.includes('"' + listerAlt + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image alt text must be translated into English');
+  assert.ok(magdiExtra.includes('"' + listerCaption + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image caption must be translated into English');
+  assert.ok(magdiExtra.includes('"' + listerSource + '":"Archival photograph'), 'the new image credit must be translated into English');
 });
  
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
