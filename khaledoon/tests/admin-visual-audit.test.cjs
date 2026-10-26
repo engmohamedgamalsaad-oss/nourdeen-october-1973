@@ -121,7 +121,8 @@ async function main() {
       // This must never write to Supabase; only the fake read endpoints are available.
       await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?editcode=visual-preview-001', { waitUntil:'domcontentloaded' });
       const targetCard = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية مرسلة للمعاينة' }).first();
-      await targetCard.click();
+      const targetDetails = targetCard.locator('xpath=..');
+      await page.waitForFunction(() => { const s=[...document.querySelectorAll('summary')].find(el=>el.textContent.includes('اختبار بصري — حكاية مرسلة للمعاينة')); return !!s && !!s.parentElement.open; });
       const aiTextarea = page.getByRole('textbox', { name:'الصق ناتج الذكاء الاصطناعي JSON' });
       const aiApply = page.getByRole('button', { name:'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
       await aiTextarea.waitFor({ state:'visible', timeout:10000 });
