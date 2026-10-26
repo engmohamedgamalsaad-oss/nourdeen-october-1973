@@ -262,6 +262,12 @@ function validateStoryPackage(pkg) {
       if (!isObj(mapLoc.place) || ['ar','en','fr','it','de'].some(function (l) {
         return typeof mapLoc.place[l] !== 'string' || !mapLoc.place[l].trim() || (l !== 'ar' && hasArabic(mapLoc.place[l]));
       })) errors.push('اسم المكان في map_location مطلوب باللغات الخمس ar/en/fr/it/de.');
+      if (mapLoc.place_label !== undefined && mapLoc.place_label !== null &&
+          (!isObj(mapLoc.place_label) || ['ar','en','fr','it','de'].some(function (lang) {
+            return typeof mapLoc.place_label[lang] !== 'string' || !mapLoc.place_label[lang].trim() || (lang !== 'ar' && hasArabic(mapLoc.place_label[lang]));
+          }))) {
+        errors.push('map_location.place_label إذا وُجد يجب أن يكون مترجمًا إلى ar/en/fr/it/de دون نص عربي متروك في اللغات الأخرى.');
+      }
       if (!isObj(mapLoc.source_name) || ['ar','en','fr','it','de'].some(function (lang) {
           return typeof mapLoc.source_name[lang] !== 'string' || !mapLoc.source_name[lang].trim() || (lang !== 'ar' && hasArabic(mapLoc.source_name[lang]));
         }) || typeof mapLoc.source_url !== 'string' || !/^https:\/\//i.test(mapLoc.source_url.trim())) {
