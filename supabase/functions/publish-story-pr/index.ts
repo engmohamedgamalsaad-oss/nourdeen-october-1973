@@ -155,7 +155,7 @@ Deno.serve(async (req: Request) => {
         throw new Error('Map coordinates must be numeric and within valid latitude/longitude ranges.');
       }
       if (!place.place || typeof place.place !== 'object' ||
-          ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim())) {
+          ['ar','en','fr','it','de'].some((locale) => typeof place.place[locale] !== 'string' || !place.place[locale].trim() || (locale !== 'ar' && /[\u0600-\u06FF]/.test(place.place[locale])))) {
         throw new Error('Map place names must be provided in all five languages: ar/en/fr/it/de.');
       }
       const previousPlace = currentPlaces[storyId];
@@ -166,7 +166,7 @@ Deno.serve(async (req: Request) => {
         !String(place.source_name || '').trim() && !String(place.source_url || '').trim();
       const sourceNameIsLocalized = place.source_name && typeof place.source_name === 'object' &&
         ['ar','en','fr','it','de'].every((locale) => typeof place.source_name[locale] === 'string' && place.source_name[locale].trim()) &&
-        ['en','fr','it','de'].every((locale) => !/[\\u0600-\\u06FF]/.test(place.source_name[locale]));
+        ['en','fr','it','de'].every((locale) => !/[\u0600-\u06FF]/.test(place.source_name[locale]));
       if (!unchangedLegacyPlace &&
           (!sourceNameIsLocalized || typeof place.source_url !== 'string' || !/^https:\/\//i.test(place.source_url.trim()))) {
         throw new Error('Map location must include source_name translated to ar/en/fr/it/de and an HTTPS source URL unless preserving an unchanged legacy map entry.');
