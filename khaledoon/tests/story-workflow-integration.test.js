@@ -761,6 +761,15 @@ test('Magdi Yacoub opening paragraph has exact five-language source-key coverage
   assert.ok(translations.includes('Magdi Yacoub nacque il 16 novembre 1935 a Belbeis'), 'Italian opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub wurde am 16. November 1935 in Belbeis'), 'German opening must match the corrected fact');
   assert.ok(!translations.includes('خصوصاً في أسوان، ولد طفل صغير'), 'the stale contradictory Aswan opening must not return');
+  var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
+  var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
+  var photoRightsText = 'تحتوي هذه الصفحة على صورة فوتوغرافية واحدة للدكتور مجدي يعقوب، من تصوير Raafat عبر Wikimedia Commons، برخصة CC BY-SA 3.0، مع رابط المصدر والرخصة. أما صورة نافذة البداية فهي رسم توضيحي أصلي وليست صورة أرشيفية.';
+  assert.ok(magdiPage.includes(photoRightsText), 'Magdi Yacoub page must accurately describe one archival photo and one original illustration');
+  assert.ok(!magdiPage.includes('تتوفر ثلاث صور فوتوغرافية موثقة'), 'stale claim of three archival photos must not return');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"This page uses one archival photograph'), 'the corrected rights paragraph must have an English translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Cette page utilise une photographie'), 'the corrected rights paragraph must have a French translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Questa pagina usa una fotografia'), 'the corrected rights paragraph must have an Italian translation');
+  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Diese Seite verwendet eine Archivfotografie'), 'the corrected rights paragraph must have a German translation');
 });
  
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
