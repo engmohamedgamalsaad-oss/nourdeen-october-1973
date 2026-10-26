@@ -552,10 +552,13 @@ test('story publisher creates review PRs and never updates main directly', funct
   assert.ok(publisher.includes('body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha })'));
   assert.ok(publisher.includes('/pulls'));
   assert.ok(publisher.includes('published_to_main: false'));
-  assert.ok(publisher.includes('action === "check_status"'));
+  assert.ok(publisher.includes('action === "verify_pr"'));
+  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'));
+  assert.ok(admin.includes("action:'verify_pr'"));
+  assert.ok(admin.includes('branch:review.publish_branch'));
   assert.ok(publisher.includes('pr.head?.repo?.full_name'));
   assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
-  assert.ok(admin.includes("action:'check_status'"));
+  
   assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
   assert.ok(admin.includes('طلب الدمج لم يُدمج بعد'));
   assert.ok(admin.includes('الموقع المنشور لم يتغير'));
