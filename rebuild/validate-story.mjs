@@ -178,6 +178,7 @@ export function validateForAdminBridge(s) {
   const out = [...validateStory(s)];
   if (!isObject(s)) return out;
   if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('bridge: V1 admin preview supports exactly 5 quiz questions');
+  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('bridge: V1 admin preview supports 2 to 5 images');
   for (const lang of LANGUAGES) {
     const t = s.i18n?.[lang];
     if (!isObject(t)) continue;
