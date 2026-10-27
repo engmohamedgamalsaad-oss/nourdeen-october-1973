@@ -1,0 +1,698 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "october-sea-men",
+  "section": "october",
+  "design": {
+    "variant": "military-history",
+    "accent": "#b8874b"
+  },
+  "original_body": "نص المصدر المحفوظ حرفيًا من الصفحة المنشورة (stories/october/001/index.html)، وليس ملفًا أصليًا مستقلاً من المؤلف: في السادس من أكتوبر 1973 بدأت مصر حربها لتحرير سيناء. وبينما كان الجنود المصريون يعبرون قناة السويس، كانت القوات البحرية المصرية تتحرك في البحر المتوسط والبحر الأحمر. حمت البحرية أجناب القوات المصرية، وضربت أهدافًا للعدو، ونفذت عمليات خاصة، وتحركت في جبهة بعيدة عند باب المندب لتقييد الملاحة الإسرائيلية. وكان وراء هذه العمليات رجال تدربوا لسنوات، عرفوا أن البحر قد يكون طريقًا للعدو، لكنه يمكن أن يكون أيضًا طريقًا للنصر.",
+  "i18n": {
+    "ar": {
+      "title": "رجال البحر في أكتوبر",
+      "subtitle": "المعركة التي لم يرها معظم الناس",
+      "summary": "لم تكن حرب أكتوبر على ضفاف القناة فقط؛ فقد كان للبحر والطرق البحرية دور في حماية المصالح المصرية والتأثير في حركة السفن.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في السادس من أكتوبر عام 1973 بدأت الحرب، واتجهت أنظار كثيرين إلى عبور قناة السويس. لكن جزءًا آخر من الأحداث جرى بعيدًا عن أعين الناس، في البحر المتوسط والبحر الأحمر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني يا ترى، هل كان الجنود في البحر بيعملوا نفس مهمة الجنود اللي بيعبروا القناة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لكل قوة مهمتها. شاركت البحرية في حماية السواحل والأجناب البحرية وتنفيذ مهام مرتبطة بالممرات البحرية. وفي جنوب البحر الأحمر، كانت منطقة باب المندب مهمة بسبب موقعها عند مدخل البحر الأحمر وخطوط مرور السفن."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وكانت خبرة السنوات السابقة جزءًا من الاستعداد. ففي أكتوبر 1967، قبل حرب أكتوبر بست سنوات، أغرقت زوارق صواريخ مصرية المدمرة الإسرائيلية إيلات. هذا حدث سابق للحرب، وليس معركة من معارك أكتوبر 1973، لكنه يوضح كيف تغيّرت أساليب القتال البحري."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يبقى الصورة أو الحكاية الواحدة مش كفاية علشان نفهم كل اللي حصل، صح؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بالضبط. لفهم التاريخ نحتاج إلى مقارنة المصادر، والتمييز بين الوقائع المؤرخة والتفسيرات، ومعرفة أن نجاح العمليات يعتمد على التدريب والتخطيط وتكامل الأدوار."
+        }
+      ],
+      "history_note": "تؤكد المصادر وجود عمليات بحرية مصرية في البحرين المتوسط والأحمر ومهمة عند باب المندب. وتختلف بعض الروايات في تفاصيل نطاق الاعتراض ونتائجه؛ لذلك لا تُعرض التفاصيل المختلف عليها كحقائق محسومة. إغراق المدمرة إيلات وقع في 21 أكتوبر 1967، وليس خلال حرب أكتوبر 1973.",
+      "student_name": "نوردين محمد جمال",
+      "narrator_name": "كارما",
+      "grade": "الصف الأول الإعدادي",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "البحرية المصرية"
+    },
+    "en": {
+      "title": "Men of the Sea in October",
+      "subtitle": "The battle most people never saw",
+      "summary": "The October War was not fought only along the canal. Maritime forces also had roles in protecting Egyptian interests and affecting ship movements.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "On 6 October 1973, the war began, and many eyes turned to the crossing of the Suez Canal. Yet other parts of the story unfolded away from public view, in the Mediterranean and Red Seas."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So, did the sailors at sea have exactly the same job as the soldiers crossing the canal?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Each force had its own tasks. The Egyptian Navy helped protect coastlines and maritime flanks and carried out missions connected with sea routes. In the southern Red Sea, Bab el-Mandeb mattered because of its position at the entrance to the Red Sea and along shipping routes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Experience from earlier years also shaped preparedness. In October 1967, six years before the October War, Egyptian missile boats sank the Israeli destroyer Eilat. That was an earlier event, not a battle of the 1973 war, but it illustrates changes in naval warfare."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So one picture or one story cannot tell us everything that happened, right?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Exactly. To understand history, we compare sources, distinguish dated events from interpretation, and remember that operations depend on training, planning, and coordinated roles."
+        }
+      ],
+      "history_note": "Sources confirm Egyptian naval operations in the Mediterranean and Red Seas and a mission near Bab el-Mandeb. Some accounts differ on the exact scope and outcomes of ship-interception activity, so disputed details are not presented as settled facts. The destroyer Eilat was sunk on 21 October 1967, not during the 1973 October War.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "narrator_name": "Karma",
+      "grade": "First Year of Preparatory School",
+      "narrator_grade": "Third Grade of Primary School",
+      "figure_name": "Egyptian Navy"
+    },
+    "fr": {
+      "title": "Les hommes de la mer en octobre",
+      "subtitle": "La bataille que la plupart des gens n’ont pas vue",
+      "summary": "La guerre d’Octobre ne s’est pas déroulée uniquement près du canal. Les forces navales ont aussi contribué à protéger les intérêts égyptiens et à agir sur la circulation maritime.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le 6 octobre 1973, la guerre commence et beaucoup de regards se tournent vers le franchissement du canal de Suez. Pourtant, d’autres événements se déroulent loin des regards, en Méditerranée et en mer Rouge."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Alors, les marins en mer avaient-ils exactement la même mission que les soldats qui traversaient le canal ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Chaque force avait ses propres tâches. La marine égyptienne a contribué à protéger les côtes et les flancs maritimes et à mener des missions liées aux routes maritimes. Au sud de la mer Rouge, Bab el-Mandeb était important par sa position à l’entrée de la mer Rouge et sur les routes commerciales."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’expérience des années précédentes a aussi compté. En octobre 1967, six ans avant la guerre d’Octobre, des vedettes lance-missiles égyptiennes ont coulé le destroyer israélien Eilat. Cet événement est antérieur à la guerre de 1973, mais il illustre l’évolution du combat naval."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Donc, une seule image ou un seul récit ne suffit pas pour comprendre tout ce qui s’est passé, n’est-ce pas ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Exactement. Pour comprendre l’histoire, il faut comparer les sources, distinguer les faits datés des interprétations et se rappeler que les opérations reposent sur l’entraînement, la planification et la coordination."
+        }
+      ],
+      "history_note": "Les sources confirment des opérations navales égyptiennes en Méditerranée et en mer Rouge ainsi qu’une mission près de Bab el-Mandeb. Certains récits diffèrent sur l’ampleur exacte et les résultats des interceptions maritimes ; les détails contestés ne sont donc pas présentés comme des faits établis. Le destroyer Eilat a été coulé le 21 octobre 1967, et non pendant la guerre d’Octobre 1973.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "narrator_name": "Karma",
+      "grade": "Première année du collège",
+      "narrator_grade": "Troisième année de l’école primaire",
+      "figure_name": "Marine égyptienne"
+    },
+    "it": {
+      "title": "Gli uomini del mare in ottobre",
+      "subtitle": "La battaglia che la maggior parte delle persone non ha visto",
+      "summary": "La guerra d’Ottobre non si combatté soltanto lungo il canale. Le forze navali ebbero anche compiti legati alla protezione degli interessi egiziani e alle rotte marittime.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il 6 ottobre 1973 iniziò la guerra e molti sguardi si rivolsero all’attraversamento del Canale di Suez. Altri eventi, però, si svolsero lontano dagli occhi del pubblico, nel Mediterraneo e nel Mar Rosso."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi, i marinai in mare avevano esattamente lo stesso compito dei soldati che attraversavano il canale?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ogni forza aveva compiti diversi. La Marina egiziana contribuì a proteggere le coste e i fianchi marittimi e svolse missioni legate alle rotte del mare. Nel sud del Mar Rosso, Bab el-Mandeb era importante per la sua posizione all’ingresso del Mar Rosso e lungo le rotte delle navi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Anche l’esperienza degli anni precedenti contribuì alla preparazione. Nell’ottobre 1967, sei anni prima della guerra d’Ottobre, motoscafi lanciamissili egiziani affondarono il cacciatorpediniere israeliano Eilat. Fu un evento precedente alla guerra del 1973, ma mostra l’evoluzione della guerra navale."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Allora una sola immagine o un solo racconto non bastano per capire tutto quello che è successo, vero?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Esatto. Per capire la storia bisogna confrontare le fonti, distinguere i fatti datati dalle interpretazioni e ricordare che le operazioni richiedono addestramento, pianificazione e coordinamento."
+        }
+      ],
+      "history_note": "Le fonti confermano operazioni navali egiziane nel Mediterraneo e nel Mar Rosso e una missione vicino a Bab el-Mandeb. Alcuni resoconti differiscono sull’estensione e sui risultati esatti delle intercettazioni marittime; i dettagli controversi non vengono quindi presentati come fatti certi. Il cacciatorpediniere Eilat fu affondato il 21 ottobre 1967, non durante la guerra d’Ottobre del 1973.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "narrator_name": "Karma",
+      "grade": "Primo anno della scuola preparatoria",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "Marina egiziana"
+    },
+    "de": {
+      "title": "Die Männer des Meeres im Oktober",
+      "subtitle": "Die Schlacht, die die meisten Menschen nie sahen",
+      "summary": "Der Oktoberkrieg fand nicht nur am Kanal statt. Auch die Seestreitkräfte hatten Aufgaben zum Schutz ägyptischer Interessen und im Zusammenhang mit den Schifffahrtswegen.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Am 6. Oktober 1973 begann der Krieg, und viele Menschen blickten auf die Überquerung des Suezkanals. Andere Teile der Geschichte spielten sich jedoch fern der Öffentlichkeit im Mittelmeer und im Roten Meer ab."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Hatten die Seeleute auf dem Meer also genau dieselbe Aufgabe wie die Soldaten, die den Kanal überquerten?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Jede Truppe hatte eigene Aufgaben. Die ägyptische Marine half, Küsten und maritime Flanken zu schützen, und führte Einsätze im Zusammenhang mit Seewegen durch. Im südlichen Roten Meer war Bab al-Mandab wegen seiner Lage am Eingang zum Roten Meer und an Schifffahrtsrouten wichtig."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Auch Erfahrungen aus den Jahren zuvor trugen zur Vorbereitung bei. Im Oktober 1967, sechs Jahre vor dem Oktoberkrieg, versenkten ägyptische Flugkörper-Schnellboote den israelischen Zerstörer Eilat. Dieses Ereignis lag vor dem Krieg von 1973, zeigt aber die Entwicklung der Seekriegsführung."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Dann reicht ein einzelnes Bild oder eine einzelne Geschichte nicht aus, um alles zu verstehen, was passiert ist, oder?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Genau. Um Geschichte zu verstehen, vergleichen wir Quellen, unterscheiden datierte Ereignisse von Deutungen und bedenken, dass Einsätze Ausbildung, Planung und Zusammenarbeit erfordern."
+        }
+      ],
+      "history_note": "Quellen bestätigen ägyptische Marineoperationen im Mittelmeer und Roten Meer sowie einen Einsatz nahe Bab al-Mandab. Berichte unterscheiden sich bei Umfang und Ergebnissen der Abfangaktionen; strittige Einzelheiten werden deshalb nicht als gesicherte Tatsachen dargestellt. Der Zerstörer Eilat wurde am 21. Oktober 1967 versenkt, nicht während des Oktoberkriegs 1973.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "narrator_name": "Karma",
+      "grade": "Erstes Jahr der Vorbereitungsschule",
+      "narrator_grade": "Dritte Grundschulklasse",
+      "figure_name": "Ägyptische Marine"
+    }
+  },
+  "cover": {
+    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/INSEilat.jpg/800px-INSEilat.jpg",
+    "kind": "photograph",
+    "source_name": "Wikimedia Commons; uploader קודקוד צהוב",
+    "source_url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg",
+    "rights": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0); credit the author, link the licence, and indicate changes.",
+    "i18n": {
+      "ar": {
+        "alt": "المدمرة الإسرائيلية إيلات قبل إغراقها عام 1967",
+        "caption": "غلاف مؤقت: المدمرة إيلات قبل إغراقها عام 1967؛ صورة سياقية وليست صورة من حرب أكتوبر 1973.",
+        "source_name": "ويكيميديا كومنز؛ المصوّر קודקוד צהוב",
+        "rights": "المشاع الإبداعي: النسب-المشاركة بالمثل 3.0؛ يجب ذكر صاحب الصورة ورابط الترخيص."
+      },
+      "en": {
+        "alt": "The Israeli destroyer Eilat before it was sunk in 1967",
+        "caption": "Temporary cover: destroyer Eilat before its sinking in 1967; contextual image, not a photograph from the 1973 October War.",
+        "source_name": "Wikimedia Commons; photographer קודקוד צהוב",
+        "rights": "CC BY-SA 3.0; credit the photographer and link the licence."
+      },
+      "fr": {
+        "alt": "Le destroyer israélien Eilat avant son naufrage en 1967",
+        "caption": "Couverture provisoire : le destroyer Eilat avant son naufrage en 1967 ; image de contexte, pas une photo de la guerre de 1973.",
+        "source_name": "Wikimedia Commons ; photographe קודקוד צהוב",
+        "rights": "CC BY-SA 3.0 ; créditer le photographe et créer un lien vers la licence."
+      },
+      "it": {
+        "alt": "Il cacciatorpediniere israeliano Eilat prima dell’affondamento nel 1967",
+        "caption": "Copertina provvisoria: il cacciatorpediniere Eilat prima dell’affondamento nel 1967; immagine di contesto, non della guerra del 1973.",
+        "source_name": "Wikimedia Commons; fotografo קודקוד צהוב",
+        "rights": "CC BY-SA 3.0; citare il fotografo e collegare la licenza."
+      },
+      "de": {
+        "alt": "Der israelische Zerstörer Eilat vor seiner Versenkung 1967",
+        "caption": "Vorläufiges Titelbild: Zerstörer Eilat vor der Versenkung 1967; Kontextbild, kein Foto aus dem Oktoberkrieg 1973.",
+        "source_name": "Wikimedia Commons; Fotograf קודקוד צהוב",
+        "rights": "CC BY-SA 3.0; Fotograf nennen und die Lizenz verlinken."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "eilat-1967",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/INSEilat.jpg/800px-INSEilat.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons; uploader קודקוד צהוב",
+      "source_url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg",
+      "rights": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0); credit the author, link the licence, and indicate changes.",
+      "i18n": {
+        "ar": {
+          "alt": "المدمرة الإسرائيلية إيلات قبل إغراقها عام 1967",
+          "caption": "صورة للمدمرة إيلات قبل إغراقها؛ الحدث وقع عام 1967 وليس خلال حرب أكتوبر 1973.",
+          "source_name": "ويكيميديا كومنز؛ المصوّر קודקוד צהוב",
+          "rights": "المشاع الإبداعي: النسب-المشاركة بالمثل 3.0؛ يجب ذكر صاحب الصورة ورابط الترخيص."
+        },
+        "en": {
+          "alt": "The Israeli destroyer Eilat before it was sunk in 1967",
+          "caption": "The destroyer Eilat before its sinking; the event occurred in 1967, not during the 1973 October War.",
+          "source_name": "Wikimedia Commons; photographer קודקוד צהוב",
+          "rights": "CC BY-SA 3.0; credit the photographer and link the licence."
+        },
+        "fr": {
+          "alt": "Le destroyer israélien Eilat avant son naufrage en 1967",
+          "caption": "Le destroyer Eilat avant son naufrage ; l’événement date de 1967, et non de la guerre d’Octobre 1973.",
+          "source_name": "Wikimedia Commons ; photographe קודקוד צהוב",
+          "rights": "CC BY-SA 3.0 ; créditer le photographe et créer un lien vers la licence."
+        },
+        "it": {
+          "alt": "Il cacciatorpediniere israeliano Eilat prima dell’affondamento nel 1967",
+          "caption": "Il cacciatorpediniere Eilat prima dell’affondamento; l’evento avvenne nel 1967, non durante la guerra d’Ottobre del 1973.",
+          "source_name": "Wikimedia Commons; fotografo קודקוד צהוב",
+          "rights": "CC BY-SA 3.0; citare il fotografo e collegare la licenza."
+        },
+        "de": {
+          "alt": "Der israelische Zerstörer Eilat vor seiner Versenkung 1967",
+          "caption": "Der Zerstörer Eilat vor seiner Versenkung; das Ereignis fand 1967 statt, nicht während des Oktoberkriegs 1973.",
+          "source_name": "Wikimedia Commons; Fotograf קודקוד צהוב",
+          "rights": "CC BY-SA 3.0; Fotograf nennen und die Lizenz verlinken."
+        }
+      }
+    },
+    {
+      "id": "bab-el-mandeb-map",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Map%20of%20Bab-el-Mandeb.png",
+      "kind": "map",
+      "source_name": "Wikimedia Commons; Archer90; map uses OpenStreetMap data",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Map_of_Bab-el-Mandeb.png",
+      "rights": "CC BY-SA 3.0 Unported; underlying OpenStreetMap data is under ODbL. Preserve attribution and applicable share-alike terms.",
+      "i18n": {
+        "ar": {
+          "alt": "خريطة توضح موقع مضيق باب المندب عند مدخل البحر الأحمر",
+          "caption": "موقع باب المندب مهم لفهم طرق الملاحة بين البحر الأحمر وخليج عدن.",
+          "source_name": "ويكيميديا كومنز؛ Archer90؛ بيانات الخريطة من OpenStreetMap",
+          "rights": "CC BY-SA 3.0؛ بيانات OpenStreetMap تخضع أيضًا لترخيص ODbL."
+        },
+        "en": {
+          "alt": "Map showing the location of the Bab el-Mandeb Strait at the entrance to the Red Sea",
+          "caption": "Bab el-Mandeb’s location helps explain shipping routes between the Red Sea and the Gulf of Aden.",
+          "source_name": "Wikimedia Commons; Archer90; OpenStreetMap data",
+          "rights": "CC BY-SA 3.0; OpenStreetMap data is also subject to ODbL."
+        },
+        "fr": {
+          "alt": "Carte montrant le détroit de Bab el-Mandeb à l’entrée de la mer Rouge",
+          "caption": "La position de Bab el-Mandeb aide à comprendre les routes maritimes entre la mer Rouge et le golfe d’Aden.",
+          "source_name": "Wikimedia Commons ; Archer90 ; données OpenStreetMap",
+          "rights": "CC BY-SA 3.0 ; les données OpenStreetMap relèvent aussi de l’ODbL."
+        },
+        "it": {
+          "alt": "Mappa dello stretto di Bab el-Mandeb all’ingresso del Mar Rosso",
+          "caption": "La posizione di Bab el-Mandeb aiuta a comprendere le rotte tra Mar Rosso e Golfo di Aden.",
+          "source_name": "Wikimedia Commons; Archer90; dati OpenStreetMap",
+          "rights": "CC BY-SA 3.0; i dati OpenStreetMap sono soggetti anche alla ODbL."
+        },
+        "de": {
+          "alt": "Karte der Bab-al-Mandab-Straße am Eingang zum Roten Meer",
+          "caption": "Die Lage von Bab al-Mandab hilft, die Schifffahrtswege zwischen Rotem Meer und Golf von Aden zu verstehen.",
+          "source_name": "Wikimedia Commons; Archer90; OpenStreetMap-Daten",
+          "rights": "CC BY-SA 3.0; OpenStreetMap-Daten unterliegen zusätzlich der ODbL."
+        }
+      }
+    },
+    {
+      "id": "suez-crossing-1973",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Bridge-October-war-1973.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons; original uploader credited on file page",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Bridge-October-war-1973.jpg",
+      "rights": "Marked public domain on Wikimedia Commons under Egyptian copyright expiry; retain the source credit and re-check jurisdiction before public use.",
+      "i18n": {
+        "ar": {
+          "alt": "القوات المصرية تعبر قناة السويس خلال حرب أكتوبر 1973",
+          "caption": "صورة أرشيفية لعبور قناة السويس؛ توضح سياق الحرب ولا تمثل عملية بحرية.",
+          "source_name": "ويكيميديا كومنز؛ بيانات المصوّر الأصلي في صفحة الملف",
+          "rights": "موسومة بالمشاع العام في صفحة ويكيميديا كومنز؛ يلزم التحقق من النطاق القانوني قبل الاستخدام."
+        },
+        "en": {
+          "alt": "Egyptian forces crossing the Suez Canal during the October War of 1973",
+          "caption": "Archival image of the Suez Canal crossing; it illustrates the war’s context, not a naval operation.",
+          "source_name": "Wikimedia Commons; original photographer details on file page",
+          "rights": "Marked public domain on Wikimedia Commons; verify applicable jurisdiction before use."
+        },
+        "fr": {
+          "alt": "Les forces égyptiennes franchissent le canal de Suez pendant la guerre d’Octobre 1973",
+          "caption": "Photo d’archive du franchissement du canal de Suez ; elle illustre le contexte de la guerre, pas une opération navale.",
+          "source_name": "Wikimedia Commons ; détails du photographe d’origine sur la page du fichier",
+          "rights": "Indiquée comme domaine public sur Wikimedia Commons ; vérifier la juridiction applicable avant usage."
+        },
+        "it": {
+          "alt": "Le forze egiziane attraversano il Canale di Suez durante la guerra d’Ottobre del 1973",
+          "caption": "Immagine d’archivio dell’attraversamento del Canale di Suez; mostra il contesto della guerra, non un’operazione navale.",
+          "source_name": "Wikimedia Commons; dati del fotografo originale nella pagina del file",
+          "rights": "Indicata come pubblico dominio su Wikimedia Commons; verificare la giurisdizione applicabile prima dell’uso."
+        },
+        "de": {
+          "alt": "Ägyptische Streitkräfte überqueren während des Oktoberkriegs 1973 den Suezkanal",
+          "caption": "Archivbild der Suezkanalüberquerung; es zeigt den Kriegskontext, keine Marineoperation.",
+          "source_name": "Wikimedia Commons; Angaben zum ursprünglichen Fotografen auf der Dateiseite",
+          "rights": "Auf Wikimedia Commons als gemeinfrei gekennzeichnet; vor Nutzung die geltende Rechtsordnung prüfen."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "بطولات القوات البحرية المصرية من إغراق المدمرة إيلات إلى نصر أكتوبر 1973",
+      "organization": "وزارة الأوقاف المصرية",
+      "url": "https://awkafonline.gov.eg/events-and-seasons-articles/175/12079/بطولات-القوات-البحرية-المصرية-من-إغراق-المدمرة-إيلات-إلى-نصر-أكتوبر-١٩٧٣"
+    },
+    {
+      "title": "دور القوات البحرية المصرية في حرب أكتوبر المجيدة: نبذة مختصرة",
+      "organization": "المركز المصري للفكر والدراسات الاستراتيجية",
+      "url": "https://ecss.com.eg/48429/"
+    },
+    {
+      "title": "File: INSEilat.jpg",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg"
+    },
+    {
+      "title": "File: Map of Bab-el-Mandeb.png",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Map_of_Bab-el-Mandeb.png"
+    },
+    {
+      "title": "File: Bridge-October-war-1973.jpg",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Bridge-October-war-1973.jpg"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "navy-role",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما الدور الذي أدّته البحرية المصرية خلال حرب أكتوبر؟",
+          "options": [
+            "حماية السواحل والأجناب البحرية وتنفيذ مهام بحرية",
+            "قيادة القوات البرية كلها",
+            "إدارة المطارات المدنية",
+            "حفر قناة السويس"
+          ],
+          "explanation": "كانت للبحرية مهام بحرية متخصصة ضمن الجهد العسكري الأوسع."
+        },
+        "en": {
+          "question": "What role did the Egyptian Navy play during the October War?",
+          "options": [
+            "Protecting coasts and maritime flanks and carrying out naval missions",
+            "Commanding all ground forces",
+            "Managing civilian airports",
+            "Digging the Suez Canal"
+          ],
+          "explanation": "The Navy had specialized maritime tasks within the wider military effort."
+        },
+        "fr": {
+          "question": "Quel rôle la marine égyptienne a-t-elle joué pendant la guerre d’Octobre ?",
+          "options": [
+            "Protéger les côtes et les flancs maritimes et mener des missions navales",
+            "Commander toutes les forces terrestres",
+            "Gérer les aéroports civils",
+            "Creuser le canal de Suez"
+          ],
+          "explanation": "La marine avait des missions maritimes spécifiques au sein de l’effort militaire général."
+        },
+        "it": {
+          "question": "Quale ruolo ebbe la Marina egiziana durante la guerra d’Ottobre?",
+          "options": [
+            "Proteggere coste e fianchi marittimi e svolgere missioni navali",
+            "Comandare tutte le forze terrestri",
+            "Gestire gli aeroporti civili",
+            "Scavare il Canale di Suez"
+          ],
+          "explanation": "La Marina svolgeva compiti marittimi specifici nell’ambito dello sforzo militare complessivo."
+        },
+        "de": {
+          "question": "Welche Rolle spielte die ägyptische Marine während des Oktoberkriegs?",
+          "options": [
+            "Küsten und maritime Flanken schützen und Marineeinsätze durchführen",
+            "Alle Landstreitkräfte befehligen",
+            "Zivilflughäfen verwalten",
+            "Den Suezkanal graben"
+          ],
+          "explanation": "Die Marine hatte besondere maritime Aufgaben innerhalb der gesamten militärischen Anstrengung."
+        }
+      }
+    },
+    {
+      "id": "eilat-date",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "متى أُغرقت المدمرة إيلات؟",
+          "options": [
+            "21 أكتوبر 1967",
+            "6 أكتوبر 1973",
+            "مارس 1974",
+            "يونيو 1967"
+          ],
+          "explanation": "وقع إغراق إيلات في أكتوبر 1967، قبل حرب أكتوبر 1973 بنحو ست سنوات."
+        },
+        "en": {
+          "question": "When was the destroyer Eilat sunk?",
+          "options": [
+            "21 October 1967",
+            "6 October 1973",
+            "March 1974",
+            "June 1967"
+          ],
+          "explanation": "Eilat was sunk in October 1967, about six years before the 1973 October War."
+        },
+        "fr": {
+          "question": "Quand le destroyer Eilat a-t-il été coulé ?",
+          "options": [
+            "21 octobre 1967",
+            "6 octobre 1973",
+            "mars 1974",
+            "juin 1967"
+          ],
+          "explanation": "Eilat a été coulé en octobre 1967, environ six ans avant la guerre de 1973."
+        },
+        "it": {
+          "question": "Quando fu affondato il cacciatorpediniere Eilat?",
+          "options": [
+            "21 ottobre 1967",
+            "6 ottobre 1973",
+            "marzo 1974",
+            "giugno 1967"
+          ],
+          "explanation": "Eilat fu affondato nell’ottobre 1967, circa sei anni prima della guerra del 1973."
+        },
+        "de": {
+          "question": "Wann wurde der Zerstörer Eilat versenkt?",
+          "options": [
+            "21. Oktober 1967",
+            "6. Oktober 1973",
+            "März 1974",
+            "Juni 1967"
+          ],
+          "explanation": "Eilat wurde im Oktober 1967 versenkt, etwa sechs Jahre vor dem Krieg von 1973."
+        }
+      }
+    },
+    {
+      "id": "strait-location",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "لماذا كان موقع باب المندب مهمًا للملاحة؟",
+          "options": [
+            "لأنه يقع عند مدخل البحر الأحمر ويربطه بخليج عدن",
+            "لأنه يقع في البحر المتوسط",
+            "لأنه ميناء على نهر النيل",
+            "لأنه قناة داخل سيناء"
+          ],
+          "explanation": "موقع المضيق يجعله جزءًا من الطريق البحري بين البحر الأحمر وخليج عدن."
+        },
+        "en": {
+          "question": "Why was Bab el-Mandeb important for shipping?",
+          "options": [
+            "It lies at the entrance to the Red Sea and connects it with the Gulf of Aden",
+            "It is in the Mediterranean Sea",
+            "It is a port on the Nile",
+            "It is a canal inside Sinai"
+          ],
+          "explanation": "The strait is part of the sea route between the Red Sea and the Gulf of Aden."
+        },
+        "fr": {
+          "question": "Pourquoi Bab el-Mandeb était-il important pour la navigation ?",
+          "options": [
+            "Il se trouve à l’entrée de la mer Rouge et la relie au golfe d’Aden",
+            "Il se trouve en Méditerranée",
+            "C’est un port sur le Nil",
+            "C’est un canal dans le Sinaï"
+          ],
+          "explanation": "Le détroit fait partie de la route maritime entre la mer Rouge et le golfe d’Aden."
+        },
+        "it": {
+          "question": "Perché Bab el-Mandeb era importante per la navigazione?",
+          "options": [
+            "Si trova all’ingresso del Mar Rosso e lo collega al Golfo di Aden",
+            "Si trova nel Mediterraneo",
+            "È un porto sul Nilo",
+            "È un canale nel Sinai"
+          ],
+          "explanation": "Lo stretto fa parte della rotta marittima tra il Mar Rosso e il Golfo di Aden."
+        },
+        "de": {
+          "question": "Warum war Bab al-Mandab für die Schifffahrt wichtig?",
+          "options": [
+            "Er liegt am Eingang zum Roten Meer und verbindet es mit dem Golf von Aden",
+            "Er liegt im Mittelmeer",
+            "Er ist ein Hafen am Nil",
+            "Er ist ein Kanal auf dem Sinai"
+          ],
+          "explanation": "Die Meerenge liegt auf der Seeroute zwischen Rotem Meer und Golf von Aden."
+        }
+      }
+    },
+    {
+      "id": "history-method",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "كيف نتحقق من ادعاء تاريخي؟",
+          "options": [
+            "بمقارنة مصادر موثوقة وفحص الأدلة",
+            "باختيار الرواية الأكثر إثارة",
+            "بالاعتماد على صورة واحدة",
+            "بتكرار ما يقوله الناس دون مصدر"
+          ],
+          "explanation": "مقارنة الأدلة تساعد على فصل الوقائع عن التفسيرات والروايات المختلف عليها."
+        },
+        "en": {
+          "question": "How should we check a historical claim?",
+          "options": [
+            "By comparing reliable sources and examining evidence",
+            "By choosing the most exciting account",
+            "By relying on one image",
+            "By repeating claims without sources"
+          ],
+          "explanation": "Comparing evidence helps distinguish facts from interpretations and disputed accounts."
+        },
+        "fr": {
+          "question": "Comment vérifier une affirmation historique ?",
+          "options": [
+            "En comparant des sources fiables et en examinant les preuves",
+            "En choisissant le récit le plus spectaculaire",
+            "En se fiant à une seule image",
+            "En répétant des propos sans source"
+          ],
+          "explanation": "Comparer les preuves aide à distinguer les faits des interprétations et des récits contestés."
+        },
+        "it": {
+          "question": "Come si verifica un’affermazione storica?",
+          "options": [
+            "Confrontando fonti affidabili ed esaminando le prove",
+            "Scegliendo il racconto più sensazionale",
+            "Affidandosi a una sola immagine",
+            "Ripetendo affermazioni senza fonti"
+          ],
+          "explanation": "Confrontare le prove aiuta a distinguere i fatti dalle interpretazioni e dai resoconti controversi."
+        },
+        "de": {
+          "question": "Wie überprüft man eine historische Behauptung?",
+          "options": [
+            "Durch den Vergleich verlässlicher Quellen und die Prüfung von Belegen",
+            "Indem man die spannendste Darstellung auswählt",
+            "Indem man sich auf ein Bild verlässt",
+            "Indem man unbelegte Behauptungen wiederholt"
+          ],
+          "explanation": "Der Vergleich von Belegen hilft, Tatsachen von Deutungen und umstrittenen Berichten zu unterscheiden."
+        }
+      }
+    },
+    {
+      "id": "teamwork",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما الدرس الذي توضحه الحكاية عن نجاح العمليات؟",
+          "options": [
+            "أهمية التدريب والتخطيط وتكامل الأدوار",
+            "أن المعدات وحدها تكفي",
+            "أن كل القوات تؤدي المهمة نفسها",
+            "أن التاريخ لا يحتاج إلى مصادر"
+          ],
+          "explanation": "العمليات المعقدة تحتاج إلى أفراد مدربين وخطة وتنسيق بين الأدوار."
+        },
+        "en": {
+          "question": "What lesson does the story offer about successful operations?",
+          "options": [
+            "The importance of training, planning, and coordinated roles",
+            "Equipment alone is enough",
+            "All forces perform the same task",
+            "History does not need sources"
+          ],
+          "explanation": "Complex operations require trained people, a plan, and coordination between roles."
+        },
+        "fr": {
+          "question": "Quelle leçon le récit donne-t-il sur la réussite des opérations ?",
+          "options": [
+            "L’importance de l’entraînement, de la planification et de la coordination",
+            "Le matériel suffit à lui seul",
+            "Toutes les forces ont la même mission",
+            "L’histoire n’a pas besoin de sources"
+          ],
+          "explanation": "Les opérations complexes nécessitent des personnes formées, un plan et une coordination des rôles."
+        },
+        "it": {
+          "question": "Quale lezione offre il racconto sul successo delle operazioni?",
+          "options": [
+            "L’importanza di addestramento, pianificazione e coordinamento",
+            "Bastano le attrezzature",
+            "Tutte le forze svolgono lo stesso compito",
+            "La storia non ha bisogno di fonti"
+          ],
+          "explanation": "Le operazioni complesse richiedono personale addestrato, un piano e coordinamento dei ruoli."
+        },
+        "de": {
+          "question": "Welche Lehre vermittelt die Geschichte über erfolgreiche Einsätze?",
+          "options": [
+            "Die Bedeutung von Ausbildung, Planung und abgestimmten Aufgaben",
+            "Ausrüstung allein reicht aus",
+            "Alle Truppen haben dieselbe Aufgabe",
+            "Geschichte braucht keine Quellen"
+          ],
+          "explanation": "Komplexe Einsätze benötigen ausgebildete Menschen, einen Plan und abgestimmte Aufgaben."
+        }
+      }
+    }
+  ],
+  "map_location": null
+}
