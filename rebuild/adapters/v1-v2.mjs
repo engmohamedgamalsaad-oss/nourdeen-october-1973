@@ -31,6 +31,9 @@ const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const clone = x => JSON.parse(JSON.stringify(x));
 function fail(message) { throw new Error('V1/V2 conversion stopped safely: ' + message); }
 function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an object'); }
+function isDidYouKnowText(text) {
+  return /^هل تعلم[؟?:]|^did you know\?|^le saviez-vous\s*\?|^lo sapevi\s*\?|^wusstest du\s*\?/i.test(text);
+}
 function paragraphs(value) {
   return String(value || '').split(/\n{2,}/).map(x => x.trim()).filter(Boolean);
 }
@@ -41,8 +44,7 @@ function toBlocks(karma, body) {
   const rows = [
     ...paragraphs(karma).map(text => ({ type: 'paragraph', speaker: 'karma', text })),
     ...paragraphs(body).map(text => ({
-      type: /^هل تعلم[؟?:]|^did you know\?|^le saviez-vous\s*\?|^lo sapevi\s*\?|^wusstest du\s*\?/i.test(text)
-        ? 'did_you_know' : 'paragraph',
+      type: isDidYouKnowText(text) ? 'did_you_know' : 'paragraph',
       speaker: 'narrator', text
     }))
   ];
@@ -178,6 +180,9 @@ function imageToV1(image) {
     fail('V2 image kind "' + image.kind + '" has no valid V1 representation');
   }
   const ar = image.i18n.ar;
+  if (ar.source_name !== image.source_name || ar.rights !== image.rights) {
+    fail('Arabic image attribution/rights must match the V1 top-level fields');
+  }
   const out = {
     ...('url' in image ? { url: image.url } : { path: image.path }),
     alt: ar.alt, caption: ar.caption, kind: image.kind,
@@ -198,7 +203,41 @@ export function v2ToV1(input) {
   const section_key = input.section === 'women' ? 'women' : input.section === 'people' ? 'people' : input.section;
   const visual_design = REVERSE_VARIANT[input.design?.variant];
   if (!visual_design) fail('V2 design variant has no V1 equivalent: ' + input.design?.variant);
+  if (input.design?.accent !== ACCENTS[input.section]) {
+    fail('custom V2 accent cannot be represented by the V1 story package');
+  }
+  for (const [i, source] of input.sources.entries()) {
+    if (!isObject(source) || !nonempty(source.title) || !nonempty(source.url) || !nonempty(source.organization)) {
+      fail('source ' + (i + 1) + ' is incomplete');
+    }
+    const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
+    const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
+    let hostname = '';
+    try { hostname = new URL(source.url).hostname; } catch {}
+    if (matches.length !== 1 || titleUrl !== source.url || hostname !== source.organization) {
+      fail('source ' + (i + 1) + ' cannot be represented losslessly in V1');
+    }
+  }
+  for (const [i, image] of input.images.entries()) {
+    if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in V1');
+  }
+  for (const [i, question] of input.quiz.entries()) {
+    if (question?.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in V1');
+  }
   const translations = {};
+  for (const lang of LANGUAGES) {
+    const src = input.i18n?.[lang];
+    if (!isObject(src)) fail('missing V2 locale ' + lang);
+    if (src.summary !== src.subtitle) fail(lang + ' summary differs from subtitle and cannot be preserved by V1');
+    for (const [i, block] of (src.blocks || []).entries()) {
+      if (Object.hasOwn(block, 'image_after')) fail(lang + ' block ' + (i + 1) + ' has inline image placement that V1 cannot preserve');
+      if (!nonempty(block.text) || block.text !== block.text.trim() || /\n{2,}/.test(block.text)) {
+        fail(lang + ' block ' + (i + 1) + ' has text whitespace that V1 cannot round-trip exactly');
+      }
+      const inferredType = isDidYouKnowText(block.text) ? 'did_you_know' : 'paragraph';
+      if (block.type !== inferredType) fail(lang + ' block ' + (i + 1) + ' type cannot be preserved by V1');
+    }
+  }
   for (const lang of LEGACY_LANGUAGES) {
     const src = input.i18n?.[lang];
     if (!isObject(src)) fail('missing V2 locale ' + lang);
