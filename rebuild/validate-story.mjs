@@ -73,10 +73,7 @@ export function validateStory(s) {
     const m = s.map_location;
     if (!isObject(m)) out.push('map_location must be null or an object');
     else {
-      for (const key of Object.keys(m)) if (!['lat', 'lng', 'place', 'source_name', 'source_url', 'approximate'].includes(key)) out.push('map_location: unexpected property "' + key + '"');
-      if (Object.hasOwn(m, 'source_name') && !nonempty(m.source_name)) out.push('map_location.source_name must be a non-empty string');
-      if (Object.hasOwn(m, 'source_url') && !https(m.source_url)) out.push('map_location.source_url must be HTTPS');
-      if (Object.hasOwn(m, 'approximate') && typeof m.approximate !== 'boolean') out.push('map_location.approximate must be boolean');
+      for (const key of Object.keys(m)) if (!['lat', 'lng', 'place'].includes(key)) out.push('map_location: unexpected property "' + key + '"');
       if (typeof m.lat !== 'number' || !Number.isFinite(m.lat) || m.lat < -90 || m.lat > 90) out.push('map_location.lat must be a valid latitude');
       if (typeof m.lng !== 'number' || !Number.isFinite(m.lng) || m.lng < -180 || m.lng > 180) out.push('map_location.lng must be a valid longitude');
       if (!isObject(m.place)) out.push('map_location.place must contain all five localized place names');
