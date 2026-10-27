@@ -144,7 +144,7 @@ function metadataForLocale(v1, lang) {
     });
     // Metadata is optional in V2. If the old package has it only in some
     // locales, omit the field consistently rather than inventing a translation.
-    if (values.every(value => nonempty(value))) out[key] = values[LANGUAGES.indexOf(lang)];
+    if (values.every(value => typeof value === 'string')) out[key] = values[LANGUAGES.indexOf(lang)];
   }
   return out;
 }
