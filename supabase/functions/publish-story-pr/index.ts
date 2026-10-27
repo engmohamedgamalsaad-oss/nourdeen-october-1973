@@ -334,6 +334,31 @@ Deno.serve(async (req: Request) => {
       method: "POST",
       body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
     });
+    // Reconcile simultaneous requests for the same story ID: the check above is not atomic, so
+    // after creating our PR re-scan the open PRs. The lowest-numbered one wins; a later duplicate
+    // closes itself and deletes its branch, so two review PRs can never both stay open.
+    const racingPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
+    const competingPulls = racingPulls.filter((candidate: any) =>
+      String(candidate.body ?? '').includes(prMarkerPrefix) && candidate.head?.repo?.full_name === OWNER + "/" + REPO
+    );
+    const winningPull = competingPulls.reduce((best: any, candidate: any) =>
+      (!best || candidate.number < best.number) ? candidate : best, null);
+    if (winningPull && winningPull.number !== pull.number) {
+      await github(`/repos/${OWNER}/${REPO}/pulls/${pull.number}`, githubToken, {
+        method: "PATCH", body: JSON.stringify({ state: "closed" }),
+      });
+      try {
+        await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${branchNameForRecovery}`, githubToken, { method: "DELETE" });
+      } catch { /* branch cleanup is best effort; the duplicate PR is already closed */ }
+      return reply(409, {
+        success: false,
+        error: "تم رصد طلب متزامن لنفس الحكاية؛ أُغلق الطلب المكرر وبقي الطلب الأقدم.",
+        detail: "راجع طلب الدمج الحالي: " + winningPull.html_url,
+        pull_request_url: winningPull.html_url,
+        pull_request_number: winningPull.number,
+        branch: winningPull.head?.ref ?? null,
+      });
+    }
     return reply(201, {
       success: true,
       published_to_main: false,
