@@ -176,7 +176,7 @@ test('rejects unexpected properties and malformed stable IDs', () => {
   assert(e.some(x => x.includes('i18n.en: unexpected property')));
   assert(e.some(x => x.includes('sources[0]: unexpected property')));
   assert(e.some(x => x.includes('quiz[0].id must be a stable lowercase ID')));
-  assert(e.some(x => x.includes('cover: id must be a stable lowercase ID')));
+  assert(e.some(x => x.includes('cover.id must be a lowercase stable ID')));
 });
 
 test('checks local image existence and rejects traversal and missing files', async () => {
