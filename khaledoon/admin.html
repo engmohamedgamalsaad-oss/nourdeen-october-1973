@@ -818,9 +818,12 @@ function pubRow(it){
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
  if(it._t!=='site'){
+  var forceEditOpen=false;
   var editBtn=el('button','btn ghost','تعديل');editBtn.type='button';editBtn.title='فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت';
   editBtn.addEventListener('click',function(e){
-   e.preventDefault();e.stopPropagation();d.open=true;build();
+   e.preventDefault();e.stopPropagation();forceEditOpen=true;
+   var oldBody=d.querySelector('.pbody');if(oldBody)oldBody.remove();built=false;
+   d.open=true;build();
    var bodyNode=d.querySelector('.pbody'),dataDetails=bodyNode&&bodyNode.querySelector('details'),editDetails=dataDetails&&dataDetails.querySelector('details');
    if(dataDetails)dataDetails.open=true;if(editDetails)editDetails.open=true;
    var editorNode=editDetails&&editDetails.querySelector('.fcard');if(editorNode&&editorNode.scrollIntoView)editorNode.scrollIntoView({behavior:'smooth',block:'start'});
@@ -908,7 +911,7 @@ function pubRow(it){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
   var forceCodeEdit=new URLSearchParams(location.search).get('editcode')===String(it.id);
-  if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'||forceCodeEdit){
+  if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'||forceCodeEdit||forceEditOpen){
     var aiPanel=el('section','review-data');aiPanel.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:14px;background:var(--panel,#10242c);display:grid;gap:10px';
     aiPanel.appendChild(el('h3','','تجهيز الحكاية بالذكاء الاصطناعي'));
     aiPanel.appendChild(el('p','fnote','اختَر الأداة وانسخ ملف الحكاية كاملًا مع البرومبت. بعد أن يعيد الذكاء الاصطناعي كائن JSON، الصقه في المربع بالأسفل واستورده كمسودة. الاستيراد لا ينشر الحكاية، ويعيدها للمراجعة والمعاينة.'));
