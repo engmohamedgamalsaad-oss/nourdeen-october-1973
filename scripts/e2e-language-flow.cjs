@@ -650,7 +650,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     format: 'KHALEDOON_STORY_V2',
     slug: 'e2e-v2-import-story',
     section: 'history',
-    design: { variant: 'portrait-biography', accent: '#d4b7ff' },
+    design: { variant: 'portrait-biography', accent: '#d5b7ff' },
     original_body: 'النص الأصلي الذي وصل من صاحب الاقتراح دون تغيير.',
     i18n: Object.fromEntries(langs.map((lang) => [lang, {
       title: 'V2 Import Test ' + lang,
