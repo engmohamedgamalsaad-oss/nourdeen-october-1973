@@ -139,9 +139,18 @@ export function validateStory(s) {
   const sourceUrls = new Set();
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
-    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
+    if (!keysCheck(src, ['title', 'organization', 'url', 'i18n'], ['title', 'organization', 'url', 'i18n', 'accessed_at'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
+    if (!isObject(src.i18n)) out.push(label + '.i18n must be an object with all five locales');
+    else {
+      languageObjectCheck(src.i18n, label + '.i18n', out);
+      for (const lang of LANGUAGES) {
+        const localized = src.i18n[lang], locLabel = label + '.i18n.' + lang;
+        if (!keysCheck(localized, ['title', 'organization'], ['title', 'organization'], locLabel, out)) continue;
+        for (const key of ['title', 'organization']) if (!nonempty(localized[key])) out.push(locLabel + '.' + key + ' required');
+      }
+    }
     if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
     if (https(src.url)) sourceUrls.add(src.url);
     if (Object.hasOwn(src, 'accessed_at') && !nonempty(src.accessed_at)) out.push(label + '.accessed_at must be a non-empty string when provided');
