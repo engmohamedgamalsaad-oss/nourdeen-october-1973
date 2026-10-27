@@ -330,7 +330,7 @@ async function submitStoryPublishPR(it,btn){
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
  var pendingDraft=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
- var priorStoryPath=String(review.static_story_path||'').replace(/^\\/+|\\/+$/g,'');
+ var priorStoryPath=String(review.static_story_path||'').split('/').filter(Boolean).join('/');
  var targetSectionKey=String((pendingDraft&&(pendingDraft.section_key||pendingDraft.section))||it.section_key||it.section||'');
  var previousPathSection=priorStoryPath.split('/')[1]||'';
  var isPublishedSectionMove=it.status==='published'&&!!pendingDraft&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
