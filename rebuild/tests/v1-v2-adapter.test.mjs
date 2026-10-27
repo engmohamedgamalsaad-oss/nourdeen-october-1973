@@ -47,6 +47,24 @@ function fixture() {
   };
 }
 
+test('maps the actual admin prompt section keys fame/learning through V2 and back', () => {
+  const fame = fixture();
+  fame.section_key = 'fame';
+  const fameV2 = v1ToV2(fame, { slug: 'fame-section-story' });
+  assert.equal(fameV2.section, 'people');
+  assert.equal(v2ToV1(fameV2).section_key, 'fame');
+
+  const learning = fixture();
+  learning.section_key = 'learning';
+  const learningV2 = v1ToV2(learning, { slug: 'learning-section-story' });
+  assert.equal(learningV2.section, 'women');
+  assert.equal(v2ToV1(learningV2).section_key, 'learning');
+
+  const knowledgeAlias = fixture();
+  knowledgeAlias.section_key = 'knowledge';
+  assert.equal(v1ToV2(knowledgeAlias, { slug: 'knowledge-section-story' }).section, 'women');
+});
+
 test('preserves the reader-suggestion section and legacy discovery design', () => {
   const v1 = fixture();
   v1.section_key = 'readers';
