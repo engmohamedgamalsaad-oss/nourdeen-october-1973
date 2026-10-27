@@ -174,7 +174,7 @@ test('normalizes recognizable legacy prompt output without inventing absent Arab
 
   const v2 = v1ToV2(v1, { slug: 'legacy-prompt-output' });
   assert.equal(v2.format, 'KHALEDOON_STORY_V2');
-  assert.equal(v2.i18n.ar.blocks.filter(b => b.speaker === 'narrator').map(b => b.text).join('\\n\\n'), originalBody);
+  assert.equal(v2.i18n.ar.blocks.filter(b => b.speaker === 'narrator').map(b => b.text).join('\n\n'), originalBody);
   assert.equal(v2.original_body, fixture().original_body);
   assert.equal(v2.quiz.length, 5);
   for (const lang of ['ar', ...langs]) {
