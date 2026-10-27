@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 22
       - name: Check V2 runtime and builder syntax
-        run: node --check rebuild/reader.js && node --check rebuild/build-story.mjs
+        run: node --check rebuild/reader.js && node --check rebuild/build-story.mjs && node --check rebuild/validate-package.mjs && node --check scripts/check-new-story-readiness.js
       - name: Run contract and V2 reader regression tests
         run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
