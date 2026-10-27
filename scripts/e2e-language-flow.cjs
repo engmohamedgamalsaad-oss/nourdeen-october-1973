@@ -632,6 +632,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     created_at: '2026-10-27T00:00:00Z'
   };
   let savedRecord = { ...seed };
+  const apiCalls = [];
   const langs = ['ar', 'en', 'fr', 'it', 'de'];
   const localizedImage = (name) => ({
     url: 'https://example.org/' + name + '.jpg',
@@ -694,6 +695,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     const url = new URL(request.url());
     const path = url.pathname;
     const method = request.method();
+    apiCalls.push({ method, path, search: url.search });
     const headers = {
       'access-control-allow-origin': '*',
       'access-control-allow-headers': 'apikey,authorization,content-type,prefer',
@@ -722,6 +724,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
   await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', body: validFixturePng }));
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
+  const failedRequests = [];
+  page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
     await page.waitForFunction(() => !!document.querySelector('details.pubrow'), null, { timeout: 15000 });
@@ -732,7 +736,11 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(packageV2));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     await importButton.click();
-    await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
+    try {
+      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
+    } catch (waitError) {
+      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+    }
     const importStatus = await page.locator('.ai-status[role="status"]').innerText();
     if (!/تم تنفيذ الكود وحُفظت المسودة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
