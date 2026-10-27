@@ -18,6 +18,8 @@
 | بيانات الغلاف والصور | حقول عربية أساسية مع ترجمات `en/fr/it/de` | بيانات صورة موحدة وترجمات مطلوبة للغات الخمس | يجب نسخ القيم العربية إلى `i18n.ar` دون اختراع بيانات، والتحقق من المصدر والحقوق |
 | نوع الصورة | V1 يقبل `archival/illustration/diagram/map` للغلاف | V2 يقبل `archival/photograph/illustration/map/document` | لا يجوز تحويل `diagram` إلى نوع آخر بصمت |
 | الاختبار | شكل الحزمة الحالي في القالب والبرومبت | 5 أسئلة، 4 اختيارات، وإجابة صحيحة ثابتة مع ترجمة كاملة | يجب اختبار توافق بنية السؤال وترتيب الخيارات قبل التحويل |
+| هوية الشخصية | `figure_name` و`translations[lang].figure_name/person` | أضيفت حقول `figure_name` و`person` اختيارية داخل `i18n[lang]` | يجب نقل الاسم المترجم دون الخلط بينه وبين عنوان الحكاية أو صاحب الاقتراح |
+| موقع الخريطة | `map_location` أو `story_meta.map_location`، وقد يكون `null` | أضيف `map_location` اختياريًا؛ يقبل `null` أو `lat/lng/place` بأسماء الأماكن باللغات الخمس | لا يجوز اختراع إحداثيات؛ يجب الاحتفاظ بـ `null` الصريح ومنع بقايا العربية في أسماء الأماكن المترجمة |
 
 ## قواعد التحويل الآمن
 
@@ -40,6 +42,6 @@
 
 ## Current status
 
-V2 now has optional localized fields for student_name, narrator_name, grade, narrator_grade, history_note, and images_note. The validator requires any used field to exist across all five locales, and regression tests cover missing localized values. This prevents these fields from being omitted by the future contract, but it does not yet prove a V1-to-V2 conversion or round-trip preservation.
+V2 now has optional localized fields for student_name, narrator_name, figure_name, person, grade, narrator_grade, history_note, and images_note. The validator requires any used field to exist across all five locales. The optional map_location field explicitly supports null or a validated lat/lng plus five localized place labels. Regression tests cover missing localized metadata, invalid coordinates, and Arabic fallback in non-Arabic place labels. These safeguards do not yet prove a V1-to-V2 conversion or round-trip preservation.
 
 Contract V2 and its validator are still only an initial foundation. Validator tests do not prove V1 compatibility, reader readiness, admin readiness, or publishing workflow readiness. Keep this branch as a draft; do not merge it as a replacement for the current system.
