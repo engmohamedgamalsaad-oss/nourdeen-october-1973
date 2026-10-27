@@ -160,8 +160,16 @@ Deno.serve(async (req: Request) => {
       throw new Error(`A published story with the same title and person already exists (ID ${String(duplicate.id).padStart(3, '0')}); refusing to publish a duplicate.`);
     }
     const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
-    if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
-      throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
+    let previousRoot = '';
+    if (existingIndex >= 0) {
+      const previousPath = String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/');
+      if (previousPath !== normalizedRoot) {
+        if (!/^stories\/[a-z0-9-]+\/[0-9]{3}$/.test(previousPath) ||
+            previousPath.split('/').pop() !== storyId) {
+          throw new Error('Existing story path is not a safe same-ID story folder; refusing to move it.');
+        }
+        previousRoot = previousPath + '/';
+      }
     }
     if (existingIndex < 0) {
       let existingStoryPage: any = null;
@@ -246,6 +254,33 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
     });
+    // A section move updates the index and removes the previous story assets in the same review PR.
+    // Keep the old index URL as a redirect so saved links/QR codes do not immediately break.
+    if (previousRoot) {
+      const oldTree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
+      if (oldTree.truncated) throw new Error('Repository tree is truncated; refusing an incomplete story move.');
+      const oldIndexPath = previousRoot + 'index.html';
+      const oldFiles = (oldTree.tree ?? []).filter((entry: any) =>
+        typeof entry.path === 'string' && entry.path.startsWith(previousRoot) && entry.type === 'blob'
+      );
+      if (!oldFiles.some((entry: any) => entry.path === oldIndexPath)) {
+        throw new Error('The previous story index.html was not found; refusing to move a story with an incomplete old path.');
+      }
+      for (const entry of oldFiles) {
+        if (entry.path !== oldIndexPath) treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null });
+      }
+      const relativeNewPath = normalizedRoot.replace(/^stories\//, '');
+      const redirectHtml = '<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../../' +
+        relativeNewPath +
+        '/"><link rel="canonical" href="../../' + relativeNewPath +
+        '/"><title>Story moved</title><body><p>This story has moved. <a href="../../' +
+        relativeNewPath + '/">Open the updated story</a>.</p><script>location.replace("../../' +
+        relativeNewPath + '/"+location.search+location.hash)</script></body></html>\n';
+      const redirectBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
+        method: 'POST', body: JSON.stringify({ content: redirectHtml, encoding: 'utf-8' }),
+      });
+      treeEntries.push({ path: oldIndexPath, mode: '100644', type: 'blob', sha: redirectBlob.sha });
+    }
     const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
     const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
     const existingPull = Array.isArray(openPulls)
