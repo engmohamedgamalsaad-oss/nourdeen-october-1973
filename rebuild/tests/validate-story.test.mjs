@@ -6,6 +6,15 @@ import path from 'node:path';
 import { validateStory, validateLocalImagePaths, validateForAdminBridge } from '../validate-story.mjs';
 
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
+const source = (name) => ({
+  title: 'Reference ' + name,
+  organization: 'Archive',
+  url: 'https://example.org/reference-' + name.toLowerCase(),
+  i18n: Object.fromEntries(langs.map(l => [l, {
+    title: 'Reference ' + name + ' ' + l,
+    organization: 'Archive ' + l
+  }]))
+});
 const image = () => ({
   url: 'https://example.org/image.jpg',
   kind: 'photograph',
@@ -56,7 +65,7 @@ function fixture() {
     i18n,
     cover: image(),
     images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
-    sources: [{ title: 'Reference A', organization: 'Archive', url: 'https://example.org/reference-a' }, { title: 'Reference B', organization: 'Archive', url: 'https://example.org/reference-b' }],
+    sources: [source('A'), source('B')],
     quiz,
     map_location: null
   };
