@@ -125,7 +125,7 @@ export function validateStory(s) {
   }
 
   imageCheck(s.cover, 'cover', out);
-  if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
+  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('images must contain between 2 and 5 images');
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
@@ -137,12 +137,15 @@ export function validateStory(s) {
     if (b?.image_after && !imageIds.has(b.image_after)) out.push('i18n.' + lang + '.blocks[' + i + '].image_after references missing image "' + b.image_after + '"');
   }
 
-  if (!Array.isArray(s.sources) || !s.sources.length) out.push('at least one source required');
+  if (!Array.isArray(s.sources) || s.sources.length < 2) out.push('at least two sources required');
+  const sourceUrls = new Set();
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
     if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
+    if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
+    if (https(src.url)) sourceUrls.add(src.url);
     if (Object.hasOwn(src, 'accessed_at') && typeof src.accessed_at !== 'string') out.push(label + '.accessed_at must be a string');
   }
 
