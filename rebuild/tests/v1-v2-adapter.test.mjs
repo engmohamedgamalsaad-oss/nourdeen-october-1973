@@ -263,7 +263,7 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   let v2 = makeV2();
   v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*accessed_at metadata has no V1 field/);
 
   v2 = makeV2();
   v2.i18n.ar.blocks[0].image_after = 'image-1';
