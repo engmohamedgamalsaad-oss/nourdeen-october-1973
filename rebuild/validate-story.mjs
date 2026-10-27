@@ -189,6 +189,11 @@ export function validateForAdminBridge(s) {
       out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by V1');
     }
   }
+  for (const [i, source] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
+    if (isObject(source) && Object.hasOwn(source, 'accessed_at')) {
+      out.push('bridge: sources[' + i + '].accessed_at metadata has no V1 field');
+    }
+  }
   for (const [i, question] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     if (question?.id !== 'question-' + (i + 1)) out.push('bridge: quiz[' + i + '].id must be question-' + (i + 1));
   }
