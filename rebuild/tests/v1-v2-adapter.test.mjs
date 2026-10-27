@@ -263,7 +263,7 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   let v2 = makeV2();
   v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*accessed_at metadata has no V1 field/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
 
   v2 = makeV2();
   v2.i18n.ar.blocks[0].image_after = 'image-1';
@@ -377,7 +377,7 @@ test('rejects missing figure identity instead of substituting the story title', 
 test('v2ToV1 enforces contract validation when called without the admin pre-validator', () => {
   const v2 = v1ToV2(fixture(), { slug: 'adapter-validation-boundary' });
   v2.i18n.en.summary = 'A distinct summary';
-  assert.throws(() => v2ToV1(v2), /V2 admin-bridge validation failed:.*summary differs from subtitle/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
 
   const invalidIds = v1ToV2(fixture(), { slug: 'adapter-invalid-ids' });
   invalidIds.images[0].id = 'photo-main';
