@@ -105,17 +105,13 @@ export function validateStory(s) {
     }
   } else out.push('i18n must be an object');
 
-  // V1 metadata is optional as a group, but if present it must survive in all five locales.
+  // Optional legacy metadata is preserved per locale. A missing translation is
+  // not a validation error and must never be invented just to fill the schema.
   const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'];
   for (const field of preservedFields) {
-    const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
-    if (!presentSomewhere) continue;
     for (const lang of LANGUAGES) {
       const locale = s.i18n?.[lang];
-      if (!isObject(locale) || !Object.hasOwn(locale, field)) {
-        out.push('i18n.' + lang + '.' + field + ' required in every locale when used');
-        continue;
-      }
+      if (!isObject(locale) || !Object.hasOwn(locale, field)) continue;
       if (['history_note', 'images_note'].includes(field)) {
         if (typeof locale[field] !== 'string') out.push('i18n.' + lang + '.' + field + ' must be a string when provided');
       } else if (!nonempty(locale[field])) {
