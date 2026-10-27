@@ -147,6 +147,24 @@ test('safely blocks legacy packages with a null cover or missing image rights/lo
     () => v1ToV2(missingCover, { slug: 'historical-figure' }),
     /cover must be an object/
   );
+  const verifiedCover = fixture().cover;
+  const convertedWithCover = v1ToV2(missingCover, {
+    slug: 'historical-figure',
+    coverOverride: verifiedCover
+  });
+  assert.equal(convertedWithCover.cover.url, verifiedCover.url);
+  assert.notEqual(convertedWithCover.cover.url, convertedWithCover.images[0].url);
+  assert.notEqual(convertedWithCover.cover.url, convertedWithCover.images[1].url);
+  assert.throws(() => v1ToV2(missingCover, {
+    slug: 'historical-figure',
+    coverOverride: missingCover.images[0]
+  }), /duplicates a gallery image/);
+
+  const existingCover = fixture();
+  assert.throws(() => v1ToV2(existingCover, {
+    slug: 'historical-figure',
+    coverOverride: verifiedCover
+  }), /only allowed when the legacy cover is missing or null/);
 
   const missingRights = fixture();
   delete missingRights.images[0].rights;
