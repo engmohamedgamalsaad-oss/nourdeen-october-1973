@@ -24,6 +24,8 @@ test('every admin submission row exposes edit and move actions, including closed
   assert.ok(admin.includes("var moveBtn=el('button','btn ghost','نقل الحكاية')"));
   assert.ok(admin.includes("if(it._t!=='site'){\nvar actions=el('div','review-actions');"), 'editor and review data must remain available for records awaiting publication');
   assert.ok(admin.includes("editDetails.open=true"), 'edit action must open the existing story editor');
+  assert.ok(admin.includes('forceEditOpen=true') && admin.includes('||forceEditOpen){'), 'edit must force-build the editor for already-published records');
+  assert.ok(admin.includes("querySelector('details.review-data')"), 'edit must target the review/editor panel rather than the original-body details');
   assert.ok(admin.includes("meta.pending_draft=pending;patch={story_meta:meta}"), 'published story moves must remain drafts until reviewed');
   assert.ok(admin.includes("moveSave.textContent='جارٍ حفظ النقل…'"));
 });
