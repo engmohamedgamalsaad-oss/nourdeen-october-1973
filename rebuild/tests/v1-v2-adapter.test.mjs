@@ -94,6 +94,19 @@ test('refuses unknown visual variants and invalid source text', () => {
   assert.throws(() => v2ToV1(v2), /interleaves Karma/);
 });
 
+
+test('round-trips every image kind supported by V1 and V2', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.cover.kind = 'photograph';
+  v2.images[0].kind = 'document';
+  const back = v2ToV1(v2);
+  assert.equal(back.cover.kind, 'photograph');
+  assert.equal(back.images[0].kind, 'document');
+  const again = v1ToV2(back, { slug: 'historical-figure' });
+  assert.equal(again.cover.kind, 'photograph');
+  assert.equal(again.images[0].kind, 'document');
+});
+
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
   assert.throws(() => v1ToV2(fixture()), /stable slug/);
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
