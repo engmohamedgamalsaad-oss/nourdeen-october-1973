@@ -68,10 +68,12 @@ Contract V2 and its validator are still only an initial foundation. Validator te
 
 ## Review update — 2026-10-27
 
-The refreshed comparison against production `main` (`1e67bd68657fe40255dd3f99d50f86933de68b97`) contains eight added foundation/workflow/test files only; it does not modify production reader/admin pages, story pages, story index/map data, or Supabase Edge Function source. An earlier review note describing 76 changed files referred to a stale pre-refresh diff and is superseded by this verified comparison.
+The current GitHub evidence is inconsistent about PR scope: a direct compare against the current `main` ref reported eight added foundation/workflow/test files, while the PR metadata still reports 76 changed files (3,578 additions / 352 deletions). Until the PR's actual diff and base/head comparison are reconciled, **treat the PR as potentially broad and do not merge it**. Do not assume the production pages, story index/map, or Supabase source are unaffected solely from the compact compare response.
 
-Current-head GitHub Actions runs passed:
+The previous current-head GitHub Actions runs passed:
 - Contract and V1↔V2 adapter regression tests: run 40450354649.
 - Homepage language and responsive browser sweep: run 40450354638.
 
-These results cover synthetic fixtures and static/browser checks. The adapter is still not connected to the reader, admin, or import workflow, and it has not been tested against real legacy packages such as the October story or Naguib Mahfouz. Keep V1 as the production import contract until representative real-package compatibility tests and integration review are complete. Do not run SQL or modify live Supabase as part of this foundation.
+A further adapter fix and regression test now cover photograph/document image kinds. Latest CI run 40451572018 was queued at the time of this update, so the newest change is not yet verified.
+
+The adapter remains unconnected to the reader, admin, and import workflow and has not been tested against real legacy packages such as the October story or Naguib Mahfouz. Keep V1 as the production import contract until the scope discrepancy is reconciled, latest CI passes, and representative real-package plus integration tests are complete. Do not run SQL or modify live Supabase as part of this foundation.
