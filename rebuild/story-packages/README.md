@@ -13,7 +13,7 @@ Before publication, a reviewer must:
 - Re-open every source and image page at review time and preserve attribution and applicable share-alike terms.
 - Run a human content review and a browser/mobile preview before proposing any publication PR.
 
-The package currently has seven localized quiz questions, three image records with source/licence notes, and seven source records with localized titles and organization names in all five languages. Passing automated validation means the package matches the technical contract; it does **not** certify historical accuracy, translation quality, legal clearance, or publication readiness.
+The package currently has seven localized quiz questions, three image records with source/licence notes, and seven source records with localized titles and organization names in all five languages. The existing V1 quiz bank contains **20 questions**, so these seven are a draft selection rather than a completed conversion of the full bank. Before publication, compare the current seven with all 20 legacy questions and either restore/translate the questions that should be retained or record an explicit editorial decision to omit them. Do not silently treat this draft as a full quiz-bank migration. Passing automated validation means the package matches the technical contract; it does **not** certify historical accuracy, translation quality, legal clearance, or publication readiness.
 
 The CI workflow validates this package and builds it only in an isolated temporary directory. It does not add a story to the published site or alter the live Supabase database.
 
