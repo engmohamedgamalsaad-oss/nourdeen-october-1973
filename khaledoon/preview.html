@@ -330,7 +330,7 @@ function normalizeReviewData(d){
  d.story_meta=meta;
  return d;
 }
-function cleanSourceMarkers(value){return String(value||'').replace(/\\s+—\\s+\\[org:([^\\]]+)\\]\\s+—\\s+/g,' — $1 — ')}
+function cleanSourceMarkers(value){return String(value||'').replace(/\s+—\s+\[org:([^\]]+)\]\s+—\s+/g,' — $1 — ')}
 function renderReview(d){
  d=normalizeReviewData(d);
  currentDraft=d;
