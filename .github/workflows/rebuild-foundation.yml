@@ -22,3 +22,14 @@ jobs:
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
       - name: Validate the real October sea story package
         run: node rebuild/validate-package.mjs rebuild/story-packages/october-sea-men.v2.json
+      - name: Build the real package in an isolated temporary directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          mkdir -p "$tmpdir/rebuild"
+          cp rebuild/reader.js "$tmpdir/rebuild/reader.js"
+          (cd "$tmpdir" && node "$GITHUB_WORKSPACE/rebuild/build-story.mjs" "$GITHUB_WORKSPACE/rebuild/story-packages/october-sea-men.v2.json" 016)
+          test -s "$tmpdir/stories/october/016/index.html"
+          node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$tmpdir/stories/october/016/data.v2.json"
