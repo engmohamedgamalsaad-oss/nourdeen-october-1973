@@ -59,6 +59,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     const page = await readFile(pagePath, 'utf8');
     const saved = JSON.parse(await readFile(dataPath, 'utf8'));
     assert.match(page, /data-story-slug="987"/);
+    assert.match(page, /data-design="arts-culture"/);
     assert.match(page, /data-story-path="data\.v2\.json"/);
     assert.match(page, /id="map-section"/);
     assert.match(page, /id="theme-toggle"/);
