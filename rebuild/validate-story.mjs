@@ -125,6 +125,8 @@ export function validateStory(s) {
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
+    // Gallery images must carry a stable ID (image_after refers to it); the cover has none.
+    if (!/^[a-z0-9-]+$/.test(im?.id || '')) out.push('images[' + i + '].id must be a stable lowercase ID');
     if (imageIds.has(im?.id)) out.push('images[' + i + '].id duplicated');
     if (im?.id) imageIds.add(im.id);
   }
