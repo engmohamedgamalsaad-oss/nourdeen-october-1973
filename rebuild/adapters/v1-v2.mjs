@@ -11,7 +11,7 @@ export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
   october: 'october', history: 'history', science: 'science',
-  women: 'women', learning: 'women', knowledge: 'women',
+  women: 'women', learning: 'women',
   people: 'people', fame: 'people', curriculum: 'curriculum', islamic: 'islamic', readers: 'readers'
 };
 const VARIANT_MAP = {
