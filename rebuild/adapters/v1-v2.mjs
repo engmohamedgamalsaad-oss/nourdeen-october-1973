@@ -1,4 +1,4 @@
-import { validateStory } from '../validate-story.mjs';
+import { validateForAdminBridge } from '../validate-story.mjs';
 
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
@@ -254,8 +254,8 @@ function imageToV1(image) {
 export function v2ToV1(input) {
   requireObject(input, 'V2 story');
   if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
-  const contractErrors = validateStory(input);
-  if (contractErrors.length) fail('V2 contract validation failed: ' + contractErrors.join('; '));
+  const contractErrors = validateForAdminBridge(input);
+  if (contractErrors.length) fail('V2 admin-bridge validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
