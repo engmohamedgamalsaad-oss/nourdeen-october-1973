@@ -642,8 +642,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     i18n: Object.fromEntries(langs.map((lang) => [lang, {
       alt: name + ' alt ' + lang,
       caption: name + ' caption ' + lang,
-      source_name: 'Source ' + lang,
-      rights: 'Rights ' + lang
+      source_name: lang === 'ar' ? 'المصدر الأصلي' : 'Source ' + lang,
+      rights: lang === 'ar' ? 'Illustration rights' : 'Rights ' + lang
     }]))
   });
   const packageV2 = {
