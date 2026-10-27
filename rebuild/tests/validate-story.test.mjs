@@ -79,7 +79,7 @@ test('rejects inline image placement and image kinds the current admin cannot pr
   s.images[0].kind = 'document';
   const e = validateStory(s);
   assert(e.some(x => x.includes('image_after')));
-  assert(e.some(x => x.includes('images[0].kind invalid')));
+  assert(e.some(x => x.includes('images[0]: invalid kind')));
 });
 
 test('preserves optional legacy metadata independently in each available locale', () => {
