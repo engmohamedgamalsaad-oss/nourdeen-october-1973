@@ -129,6 +129,12 @@ async function main() {
   };
   const goodDraft = validDraft();
   assert.equal(bundle.validate(goodDraft).ok, true, 'fully localized bundle data should pass');
+
+  const sourceMarkerDraft = validDraft();
+  sourceMarkerDraft.sources = 'Apollo 17 geology briefing — [org:NASA%20History%20Office] — https://history.nasa.gov/apollo17\\nBoston University biography — [org:Boston%20University] — https://www.bu.edu/earth/farouk-el-baz';
+  const sourceMarkerPreview = bundle.renderPreviewHtml(sourceMarkerDraft);
+  assert.match(sourceMarkerPreview, /Apollo 17 geology briefing/);
+  assert.doesNotMatch(sourceMarkerPreview, /\\[org:/, 'internal V1 bridge metadata must never appear in visitor-facing source labels');
   const tooManyImages = JSON.parse(JSON.stringify(goodDraft));
   tooManyImages.images = tooManyImages.images.concat(tooManyImages.images, tooManyImages.images, tooManyImages.images);
   assert.ok(bundle.validate(tooManyImages).missing.some(function (m) { return m.includes('لا تتجاوز خمس صور'); }), 'template validator must reject more than five gallery images');
