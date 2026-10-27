@@ -201,6 +201,13 @@ test('rejects unexpected properties and malformed stable IDs', () => {
   assert(e.some(x => x.includes('cover.id must be a stable lowercase ID')));
 });
 
+test('rejects malformed image IDs in the base V2 contract', () => {
+  const s = fixture();
+  s.images[0].id = 'Bad image ID';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('images[0].id must be a stable lowercase ID')));
+});
+
 test('checks local image existence and rejects traversal and missing files', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'khaledoon-story-'));
   try {
@@ -232,4 +239,5 @@ test('base V2 contract accepts non-sequential stable IDs and bridge validator sc
   assert(e.some(x => x.includes('images[0].id must be image-1')));
   assert(e.some(x => x.includes('images[1].id must be image-2')));
   assert(e.some(x => x.includes('quiz[0].id must be question-1')));
+  assert(e.some(x => x.includes('sources[0].accessed_at metadata has no V1 field')));
 });
