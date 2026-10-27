@@ -764,7 +764,7 @@ async function adminV2ModuleRegression(browser, base, origin) {
     await page.waitForFunction(() => {
       const a = window.KHStoryV2Adapter;
       return !!a && a.V2_FORMAT === 'KHALEDOON_STORY_V2' &&
-        typeof a.validateStory === 'function' && typeof a.v2ToV1 === 'function';
+        typeof a.validateForAdminBridge === 'function' && typeof a.v2ToV1 === 'function';
     }, null, { timeout: 10000 });
     return { checks: [{ ok: true, moduleLoaded: true }], hard };
   } catch (e) {
