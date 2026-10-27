@@ -3,24 +3,34 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
+const js = await readFile(new URL('../reader.js', import.meta.url), 'utf8');
+const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
 
-test('V2 reader exposes all five language choices and direction handling', () => {
+test('V2 reader exposes all five language choices and changes text direction', () => {
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('data-lang="' + lang + '"'));
-  assert.match(html, /current==='ar'\?'rtl':'ltr'/);
+  assert.match(js, /current==='ar'\?'rtl':'ltr'/);
 });
 
-test('V2 reader renders required story sections from one package', () => {
+test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
   for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources']) assert.match(html, new RegExp('id="' + id + '"'));
-  assert.match(html, /data\.format!=='KHALEDOON_STORY_V2'/);
+  assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
 });
 
 test('V2 reader refuses to silently fall back to a legacy package', () => {
-  assert.match(html, /لم يتم الرجوع تلقائيًا إلى أي صيغة قديمة/);
-  assert.match(html, /data\.i18n\[l\]/);
+  assert.match(js, /لم يتم الرجوع تلقائيًا إلى أي صيغة قديمة/);
+  assert.match(js, /data\.i18n\[l\]/);
 });
 
-test('story and source content are inserted as text, and source links are isolated', () => {
-  assert.match(html, /p\.textContent=b\.text/);
-  assert.match(html, /a\.rel='noopener noreferrer'/);
-  assert.match(html, /img\.alt=d\.alt/);
+test('story text is inserted as text and source links are isolated', () => {
+  assert.match(js, /p\.textContent=b\.text/);
+  assert.match(js, /a\.rel='noopener noreferrer'/);
+  assert.match(js, /img\.alt=d\.alt/);
+});
+
+test('static builder validates V2 packages and will not overwrite existing story pages', () => {
+  assert.match(builder, /validateStory/);
+  assert.match(builder, /validateLocalImagePaths/);
+  assert.match(builder, /KHALEDOON_STORY_V2/);
+  assert.match(builder, /Refusing to overwrite existing/);
+  assert.match(builder, /data\.v2\.json/);
 });
