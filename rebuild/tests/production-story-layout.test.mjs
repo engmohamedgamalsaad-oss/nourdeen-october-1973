@@ -33,6 +33,6 @@ for (const sample of [
     }
     const html = fs.readFileSync(htmlPath, 'utf8');
     assert.match(html, /<html[^>]*lang="ar"/i, 'reader page starts in Arabic');
-    assert.match(html, /translations\.js|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
+    assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
   });
 }
