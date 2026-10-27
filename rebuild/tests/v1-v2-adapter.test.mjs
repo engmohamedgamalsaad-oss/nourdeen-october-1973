@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { v1ToV2, v2ToV1 } from '../adapters/v1-v2.mjs';
+import { validateStory } from '../validate-story.mjs';
 import legacyWorkflow from '../../khaledoon/assets/story-workflow.js';
 
 const langs = ['en', 'fr', 'it', 'de'];
@@ -201,6 +202,34 @@ test('normalizes recognizable legacy prompt output without inventing absent Arab
     assert.equal(v2.i18n[lang].student_name, 'Student ' + lang,
       'preserve known localized student_name values even when Arabic is missing');
   }
+});
+
+test('preserves sparse proposer names and does not mislabel narrator role text as a school grade', () => {
+  const v1 = fixture();
+  delete v1.student_name;
+  v1.translations.en.student_name = 'Nourdeen Mohamed';
+  v1.translations.fr.student_name = 'Nourdeen Mohamed';
+  v1.translations.it.student_name = 'Nourdeen Mohamed';
+  v1.translations.de.student_name = 'Nourdeen Mohamed';
+  v1.grade = 'راوي الحكاية';
+  v1.narrator_grade = 'راوي الحكاية';
+  for (const lang of langs) {
+    v1.translations[lang].grade = ({
+      en: 'Story narrator',
+      fr: "Narrateur de l'histoire",
+      it: 'Narratore della storia',
+      de: 'Erzähler der Geschichte'
+    })[lang];
+  }
+
+  const v2 = v1ToV2(v1, { slug: 'metadata-safety-check' });
+  assert.equal(Object.hasOwn(v2.i18n.ar, 'student_name'), false);
+  for (const lang of langs) {
+    assert.equal(v2.i18n[lang].student_name, 'Nourdeen Mohamed');
+    assert.equal(Object.hasOwn(v2.i18n[lang], 'grade'), false);
+    assert.equal(Object.hasOwn(v2.i18n[lang], 'narrator_grade'), false);
+  }
+  assert.deepEqual(validateStory(v2), []);
 });
 
 test('rejects a missing V1 format when the package does not have a recognizable legacy signature', () => {
