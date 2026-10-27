@@ -1,0 +1,505 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Khaledoon Story Contract v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "slug",
+    "section",
+    "design",
+    "original_body",
+    "i18n",
+    "cover",
+    "images",
+    "sources",
+    "quiz"
+  ],
+  "properties": {
+    "format": {
+      "const": "KHALEDOON_STORY_V2"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "section": {
+      "enum": [
+        "october",
+        "history",
+        "science",
+        "women",
+        "people",
+        "curriculum",
+        "islamic",
+        "readers"
+      ]
+    },
+    "design": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant",
+        "accent"
+      ],
+      "properties": {
+        "variant": {
+          "enum": [
+            "military-history",
+            "ancient-civilization",
+            "science-lab",
+            "women-leadership",
+            "arts-culture",
+            "islamic-heritage",
+            "curriculum",
+            "reader-story",
+            "portrait-biography"
+          ]
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#[0-9a-fA-F]{6}$"
+        }
+      }
+    },
+    "original_body": {
+      "type": "string",
+      "minLength": 1
+    },
+    "i18n": {
+      "$ref": "#/$defs/languages"
+    },
+    "cover": {
+      "$ref": "#/$defs/image"
+    },
+    "images": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "$ref": "#/$defs/image"
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "organization",
+          "url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "organization": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "accessed_at": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "quiz": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "$ref": "#/$defs/question"
+      }
+    },
+    "map_location": {
+      "description": "Optional location for stories/places.json. Use null explicitly when the location is unknown or not appropriate; never invent coordinates.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lat",
+            "lng",
+            "place"
+          ],
+          "properties": {
+            "lat": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "lng": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "place": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ar",
+                "en",
+                "fr",
+                "it",
+                "de"
+              ],
+              "properties": {
+                "ar": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "it": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "de": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$defs": {
+    "languages": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ar",
+        "en",
+        "fr",
+        "it",
+        "de"
+      ],
+      "properties": {
+        "ar": {
+          "$ref": "#/$defs/storyText"
+        },
+        "en": {
+          "$ref": "#/$defs/storyText"
+        },
+        "fr": {
+          "$ref": "#/$defs/storyText"
+        },
+        "it": {
+          "$ref": "#/$defs/storyText"
+        },
+        "de": {
+          "$ref": "#/$defs/storyText"
+        }
+      }
+    },
+    "storyText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "subtitle",
+        "summary",
+        "blocks"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subtitle": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "blocks": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "type",
+              "speaker",
+              "text"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "paragraph",
+                  "did_you_know"
+                ]
+              },
+              "speaker": {
+                "enum": [
+                  "karma",
+                  "narrator"
+                ]
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              },
+              "image_after": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "student_name": {
+          "type": "string",
+          "description": "Optional localized story proposer/student name preserved from V1."
+        },
+        "narrator_name": {
+          "type": "string",
+          "description": "Optional localized narrator name preserved from V1."
+        },
+        "grade": {
+          "type": "string",
+          "description": "Optional localized target school grade preserved from V1."
+        },
+        "narrator_grade": {
+          "type": "string",
+          "description": "Optional localized narrator grade preserved from V1."
+        },
+        "history_note": {
+          "type": "string",
+          "description": "Optional historical verification/context note; preserve even when empty."
+        },
+        "images_note": {
+          "type": "string",
+          "description": "Optional image provenance/rights note; preserve even when empty."
+        },
+        "figure_name": {
+          "type": "string",
+          "description": "Optional localized historical figure name; preserve V1 figure_name/person."
+        },
+        "person": {
+          "type": "string",
+          "description": "Optional localized person label preserved from V1."
+        }
+      }
+    },
+    "image": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "source_name",
+        "source_url",
+        "rights",
+        "i18n"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(assets/images|images|stories)/[^.\\s][^\\s]*$"
+        },
+        "kind": {
+          "enum": [
+            "archival",
+            "photograph",
+            "illustration",
+            "map",
+            "document"
+          ]
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "rights": {
+          "type": "string",
+          "minLength": 1
+        },
+        "i18n": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ar",
+            "en",
+            "fr",
+            "it",
+            "de"
+          ],
+          "properties": {
+            "ar": {
+              "$ref": "#/$defs/imageText"
+            },
+            "en": {
+              "$ref": "#/$defs/imageText"
+            },
+            "fr": {
+              "$ref": "#/$defs/imageText"
+            },
+            "it": {
+              "$ref": "#/$defs/imageText"
+            },
+            "de": {
+              "$ref": "#/$defs/imageText"
+            }
+          }
+        },
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https://"
+            }
+          }
+        },
+        {
+          "required": [
+            "path"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(assets/images|images|stories)/[^.\\s][^\\s]*$"
+            }
+          }
+        }
+      ]
+    },
+    "imageText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alt",
+        "caption",
+        "source_name",
+        "rights"
+      ],
+      "properties": {
+        "alt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "caption": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rights": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "correct_option",
+        "i18n"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$"
+        },
+        "correct_option": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "i18n": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "ar",
+            "en",
+            "fr",
+            "it",
+            "de"
+          ],
+          "properties": {
+            "ar": {
+              "$ref": "#/$defs/questionText"
+            },
+            "en": {
+              "$ref": "#/$defs/questionText"
+            },
+            "fr": {
+              "$ref": "#/$defs/questionText"
+            },
+            "it": {
+              "$ref": "#/$defs/questionText"
+            },
+            "de": {
+              "$ref": "#/$defs/questionText"
+            }
+          }
+        }
+      }
+    },
+    "questionText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question",
+        "options",
+        "explanation"
+      ],
+      "properties": {
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "options": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}
