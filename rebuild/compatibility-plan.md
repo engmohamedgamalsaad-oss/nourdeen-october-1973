@@ -66,8 +66,12 @@ Contract V2 and its validator are still only an initial foundation. Validator te
 اختبارات المحوّل تغطي النص الأصلي، فصل صوت كارما والراوي، بطاقات المعرفة، بيانات الصور وترجماتها، المصادر، وإجابات الأسئلة، إضافة إلى حالات الرفض الآمن. لم يُربط المحوّل بالقارئ أو لوحة الإدارة أو الاستيراد، ولم يُجر تحويلًا جماعيًا على الحكايات المنشورة. يجب أن تنجح اختبارات CI أولًا، ثم تُختبر الحكايتان المرجعيتان «رجال البحر في أكتوبر» و«نجيب محفوظ» فعليًا قبل تقرير التوافق النهائي.
 
 
-## Release-blocking review finding — 2026-10-27
+## Review update — 2026-10-27
 
-PR #384 currently contains 76 changed files (3,554 additions / 352 deletions), including existing reader/admin files, story pages and index/map data, and Supabase Edge Function source. Its actual diff is therefore broader than the isolated rebuild foundation described by the title. **Do not merge this PR as a whole.** Before any release, the changes must be split or narrowed and independently reviewed; published story data, existing URLs, reactions, and live Supabase must remain protected.
+The refreshed comparison against production `main` (`1e67bd68657fe40255dd3f99d50f86933de68b97`) contains eight added foundation/workflow/test files only; it does not modify production reader/admin pages, story pages, story index/map data, or Supabase Edge Function source. An earlier review note describing 76 changed files referred to a stale pre-refresh diff and is superseded by this verified comparison.
 
-The adapter files and CI workflow were committed to this branch, but no workflow run tied to the latest commit was visible during this review, and direct local Node execution was unavailable because the environment could not resolve GitHub. Consequently the adapter tests are authored but not yet verified as passing. No claim of a successful round-trip test is made until a current-head CI result is available.
+Current-head GitHub Actions runs passed:
+- Contract and V1↔V2 adapter regression tests: run 40450354649.
+- Homepage language and responsive browser sweep: run 40450354638.
+
+These results cover synthetic fixtures and static/browser checks. The adapter is still not connected to the reader, admin, or import workflow, and it has not been tested against real legacy packages such as the October story or Naguib Mahfouz. Keep V1 as the production import contract until representative real-package compatibility tests and integration review are complete. Do not run SQL or modify live Supabase as part of this foundation.
