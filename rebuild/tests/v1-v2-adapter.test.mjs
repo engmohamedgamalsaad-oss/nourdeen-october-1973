@@ -95,16 +95,22 @@ test('refuses unknown visual variants and invalid source text', () => {
 });
 
 
-test('round-trips every image kind supported by V1 and V2', () => {
-  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.cover.kind = 'photograph';
-  v2.images[0].kind = 'document';
+test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by the V1 importer', () => {
+  const v1 = fixture();
+  v1.images[0].kind = 'diagram';
+  const v2 = v1ToV2(v1, { slug: 'historical-figure' });
+  assert.equal(v2.images[0].kind, 'diagram');
   const back = v2ToV1(v2);
-  assert.equal(back.cover.kind, 'photograph');
-  assert.equal(back.images[0].kind, 'document');
-  const again = v1ToV2(back, { slug: 'historical-figure' });
-  assert.equal(again.cover.kind, 'photograph');
-  assert.equal(again.images[0].kind, 'document');
+  assert.equal(back.images[0].kind, 'diagram');
+  assert.equal(v1ToV2(back, { slug: 'historical-figure' }).images[0].kind, 'diagram');
+
+  const photograph = v1ToV2(fixture(), { slug: 'historical-figure' });
+  photograph.cover.kind = 'photograph';
+  assert.throws(() => v2ToV1(photograph), /has no valid V1 representation/);
+
+  const document = v1ToV2(fixture(), { slug: 'historical-figure' });
+  document.images[0].kind = 'document';
+  assert.throws(() => v2ToV1(document), /has no valid V1 representation/);
 });
 
 
