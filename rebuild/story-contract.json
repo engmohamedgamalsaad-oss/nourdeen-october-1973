@@ -202,6 +202,30 @@
               }
             }
           }
+        },
+        "student_name": {
+          "type": "string",
+          "description": "Optional localized story proposer/student name preserved from V1."
+        },
+        "narrator_name": {
+          "type": "string",
+          "description": "Optional localized narrator name preserved from V1."
+        },
+        "grade": {
+          "type": "string",
+          "description": "Optional localized target school grade preserved from V1."
+        },
+        "narrator_grade": {
+          "type": "string",
+          "description": "Optional localized narrator grade preserved from V1."
+        },
+        "history_note": {
+          "type": "string",
+          "description": "Optional historical verification/context note; preserve even when empty."
+        },
+        "images_note": {
+          "type": "string",
+          "description": "Optional image provenance/rights note; preserve even when empty."
         }
       }
     },
