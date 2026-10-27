@@ -362,3 +362,24 @@ test('round-trips normal V2 source titles and organization names through the V1 
   const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
   assert.deepEqual(v2Again.sources, v2.sources);
 });
+
+
+test('rejects missing figure identity instead of substituting the story title', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'missing-figure-identity' });
+  delete v2.i18n.ar.figure_name;
+  delete v2.i18n.ar.person;
+  assert.throws(
+    () => v2ToV1(v2),
+    /figure_name or person is required.*title is not used as a substitute/
+  );
+});
+
+test('v2ToV1 enforces contract validation when called without the admin pre-validator', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'adapter-validation-boundary' });
+  v2.i18n.en.summary = 'A distinct summary';
+  assert.throws(() => v2ToV1(v2), /V2 contract validation failed:.*summary must equal subtitle/);
+
+  const invalidIds = v1ToV2(fixture(), { slug: 'adapter-invalid-ids' });
+  invalidIds.images[0].id = 'photo-main';
+  assert.throws(() => v2ToV1(invalidIds), /V2 contract validation failed:.*images\[0\]\.id must be image-1/);
+});
