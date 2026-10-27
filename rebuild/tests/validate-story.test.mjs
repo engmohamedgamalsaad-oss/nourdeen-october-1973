@@ -24,6 +24,12 @@ function fixture() {
     title: 'title ' + l,
     subtitle: 'subtitle ' + l,
     summary: 'summary ' + l,
+    student_name: 'student ' + l,
+    narrator_name: 'narrator ' + l,
+    grade: 'grade ' + l,
+    narrator_grade: 'narrator grade ' + l,
+    history_note: 'historical note ' + l,
+    images_note: 'image note ' + l,
     blocks: [
       { type: 'paragraph', speaker: 'karma', text: 'opening ' + l },
       { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one' },
@@ -54,6 +60,15 @@ function fixture() {
 }
 
 test('accepts complete five-language package', () => assert.deepEqual(validateStory(fixture()), []));
+
+test('preserves V1 metadata and requires every supplied metadata field in all locales', () => {
+  const s = fixture();
+  delete s.i18n.de.grade;
+  delete s.i18n.fr.images_note;
+  const e = validateStory(s);
+  assert(e.some(x => x.includes('i18n.de.grade required in every locale')));
+  assert(e.some(x => x.includes('i18n.fr.images_note required in every locale')));
+});
 
 test('rejects missing translations and image rights', () => {
   const s = fixture();
