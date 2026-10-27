@@ -250,7 +250,7 @@ test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by 
 
   const photograph = v1ToV2(fixture(), { slug: 'historical-figure' });
   photograph.cover.kind = 'photograph';
-  assert.throws(() => v2ToV1(photograph), /has no valid V1 representation/);
+  assert.throws(() => v2ToV1(photograph), /not supported by V1/);
 
   const document = v1ToV2(fixture(), { slug: 'historical-figure' });
   document.images[0].kind = 'document';
@@ -263,11 +263,11 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   let v2 = makeV2();
   v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
-  assert.throws(() => v2ToV1(v2), /summary differs from subtitle/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
 
   v2 = makeV2();
   v2.i18n.ar.blocks[0].image_after = 'image-1';
-  assert.throws(() => v2ToV1(v2), /inline image placement/);
+  assert.throws(() => v2ToV1(v2), /image_after cannot be represented/);
 
   v2 = makeV2();
   v2.design.accent = '#123456';
@@ -377,9 +377,9 @@ test('rejects missing figure identity instead of substituting the story title', 
 test('v2ToV1 enforces contract validation when called without the admin pre-validator', () => {
   const v2 = v1ToV2(fixture(), { slug: 'adapter-validation-boundary' });
   v2.i18n.en.summary = 'A distinct summary';
-  assert.throws(() => v2ToV1(v2), /V2 contract validation failed:.*summary must equal subtitle/);
+  assert.throws(() => v2ToV1(v2), /V2 admin-bridge validation failed:.*summary differs from subtitle/);
 
   const invalidIds = v1ToV2(fixture(), { slug: 'adapter-invalid-ids' });
   invalidIds.images[0].id = 'photo-main';
-  assert.throws(() => v2ToV1(invalidIds), /V2 contract validation failed:.*images\[0\]\.id must be image-1/);
+  assert.throws(() => v2ToV1(invalidIds), /V2 admin-bridge validation failed:.*images\[0\]\.id must be image-1/);
 });
