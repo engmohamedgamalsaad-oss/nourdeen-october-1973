@@ -364,9 +364,8 @@ Deno.serve(async (req: Request) => {
       method: "POST",
       body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
     });
-    // Reconcile simultaneous requests for the same story ID: the check above is not atomic, so
-    // after creating our PR re-scan the open PRs. The lowest-numbered one wins; a later duplicate
-    // closes itself and deletes its branch, so two review PRs can never both stay open.
+    // Defense in depth for a request that bypassed the ref lock (for example, an older
+    // function version still running during rollout): reconcile any visible same-story PRs.
     const racingPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
     const competingPulls = racingPulls.filter((candidate: any) =>
       String(candidate.body ?? '').includes(prMarkerPrefix) && candidate.head?.repo?.full_name === OWNER + "/" + REPO
