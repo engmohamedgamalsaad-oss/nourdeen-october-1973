@@ -48,6 +48,32 @@ for (const pagePath of pages) {
   requireCheck(Boolean(html), story, "story page exists");
   if (!html) continue;
 
+  // V2 is canonical: validate the package and skip every V1 quiz/data requirement.
+  const v2Page = html.includes('data-kh-v2-reader') &&
+    /data-story-path=["']data\.v2\.json["']/.test(html) &&
+    html.includes('rebuild/reader.js');
+  if (v2Page) {
+    const v2Path = `stories/${section}/${id}/data.v2.json`;
+    const v2Text = read(v2Path);
+    let v2 = null;
+    try { v2 = v2Text ? JSON.parse(v2Text) : null; } catch {}
+    requireCheck(Boolean(v2), story, `V2 package ${v2Path} exists and is valid JSON`);
+    requireCheck(Boolean(v2 && v2.format === "KHALEDOON_STORY_V2"), story, "V2 package is the canonical story format");
+    requireCheck(html.includes('name="robots" content="noindex,nofollow"'), story, "new V2 page remains unlisted until reviewed and approved");
+    let validationOutput = "";
+    let valid = false;
+    if (v2) {
+      try {
+        validationOutput = execFileSync(process.execPath, ["rebuild/validate-package.mjs", v2Path], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+        valid = true;
+      } catch (error) {
+        validationOutput = (error.stdout || "") + (error.stderr || "");
+      }
+    }
+    requireCheck(valid, story, "V2 contract, translations, quiz, source and image metadata validate" + (valid ? "" : ": " + validationOutput.trim().slice(0, 500)));
+    continue;
+  }
+
   requireCheck(new RegExp(`data-story-slug=["']${id}["']`).test(html), story, `page uses its own data-story-slug ${id}`);
   requireCheck(html.includes("assets/shared/reactions.css") && html.includes("assets/shared/reactions.js"), story, "shared reaction styles and behavior are connected");
   requireCheck(html.includes('id="reaction-like"') && html.includes('class="reactions-section"') && (html.match(/data-reaction-choice=/g) || []).length >= 4 && (html.match(/data-reaction-count=/g) || []).length >= 5, story, "like button, four preset response choices, and reaction counters are present");
