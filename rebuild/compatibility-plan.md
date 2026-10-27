@@ -118,3 +118,15 @@ The full user-provided Farouk El-Baz prompt/package was inspected as a private c
 
 The V2 prompt now explicitly handles these legacy variations, preserves `original_body`, keeps `map_location: null`, and requires a short blocker report if the missing cover or rights cannot be resolved honestly. The adapter now safely normalizes a recognizable legacy V1 package when its format marker is missing, maps Arabic `current_body` to `body` when `body` is absent, and parses a JSON-string `question_bank`. It omits optional metadata consistently if any locale is missing rather than inventing a translation, while preserving explicitly empty strings. It still rejects unresolved mandatory gaps such as a null cover or missing localized image source/rights; those require a researched/editorially verified V2 package, not a guessed adapter default. The user-provided package was not added to the repository and was not converted into a publishable story.
 
+### Cover research for the Farouk El-Baz test input
+
+A distinct, official NASA image candidate was found for a future private V2 conversion, without duplicating either of the two existing gallery images:
+
+- **Image:** Farouk El-Baz teaching Apollo 17 Command Module Pilot Ronald E. Evans about lunar orbital geology, with Robert F. Overmyer present.
+- **Official NASA article:** https://www.nasa.gov/history/50-years-ago-two-months-until-apollo-17/
+- **Direct image URL:** https://www.nasa.gov/wp-content/uploads/2022/10/apollo_17_l-2_months_1_as17-325-72pc-525-farouk_el_bazevans_and_overmyer-10.11.72.jpg
+- **Rights basis:** NASA's current media-use guidance says NASA content is generally available for educational/informational use with source credit, while requiring checks for marked third-party copyright and prohibiting implied NASA endorsement. See https://www.nasa.gov/nasa-brand-center/images-and-media/
+- **Credit/rights text suitable for editorial review:** “Photo credit: NASA. NASA content is generally available for educational and informational use under NASA's media usage guidelines, provided no third-party copyright notice applies; do not imply NASA endorsement.”
+
+This establishes a grounded candidate and a source for the general usage conditions, not a blanket guarantee about every image on NASA's website. The individual asset should still be checked for a third-party copyright notice before any story package is approved. The image has not been added to the repository or published.
+
