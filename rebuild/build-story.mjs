@@ -9,7 +9,7 @@ if (!inputFile || !storyId) {
   console.error('Usage: node rebuild/build-story.mjs <v2-story.json> <three-digit-story-id>');
   process.exit(2);
 }
-if (!/^\\d{3}$/.test(storyId)) {
+if (!/^\d{3}$/.test(storyId)) {
   console.error('Story ID must be exactly three digits, chosen after checking the current story index.');
   process.exit(2);
 }
