@@ -152,14 +152,14 @@ test('safely blocks legacy packages with a null cover or missing image rights/lo
   delete missingRights.images[0].rights;
   assert.throws(
     () => v1ToV2(missingRights, { slug: 'historical-figure' }),
-    /images\\[0\\]\\.ar\\.rights is required/
+    /images\[0\]\.ar\.rights is required/
   );
 
   const missingLocale = fixture();
   delete missingLocale.images[0].i18n.de;
   assert.throws(
     () => v1ToV2(missingLocale, { slug: 'historical-figure' }),
-    /images\\[0\\] is missing de image text/
+    /images\[0\] is missing de image text/
   );
 });
 
