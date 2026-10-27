@@ -611,6 +611,26 @@ async function svgArtworkRegression(browser, base, origin) {
   return { checks, hard };
 }
 
+async function adminV2ModuleRegression(browser, base, origin) {
+  const hard = [];
+  const ctx = await newContext(browser, origin, 'desktop');
+  const page = await ctx.newPage();
+  try {
+    await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
+    await page.waitForFunction(() => {
+      const a = window.KHStoryV2Adapter;
+      return !!a && a.V2_FORMAT === 'KHALEDOON_STORY_V2' &&
+        typeof a.validateStory === 'function' && typeof a.v2ToV1 === 'function';
+    }, null, { timeout: 10000 });
+    return { checks: [{ ok: true, moduleLoaded: true }], hard };
+  } catch (e) {
+    hard.push('Admin V2 import module did not load: ' + String(e.message || e).split('\\n')[0]);
+    return { checks: [{ ok: false, moduleLoaded: false }], hard };
+  } finally {
+    await ctx.close();
+  }
+}
+
 (async () => {
   const { server, origin, base } = await serve();
   const browser = await chromium.launch({ headless: true });
@@ -624,10 +644,11 @@ async function svgArtworkRegression(browser, base, origin) {
     results.introPopup = await introPopupRegression(browser, base, origin);
     results.svgArtwork = await svgArtworkRegression(browser, base, origin);
     results.targetArabicAudit = await targetArabicTextAudit(browser, base, origin);
+    results.adminV2Import = await adminV2ModuleRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminV2Import ? results.adminV2Import.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -640,6 +661,7 @@ async function svgArtworkRegression(browser, base, origin) {
   console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
   console.log(`TARGET ARABIC TEXT AUDIT: ${results.targetArabicAudit ? results.targetArabicAudit.rows.length : 0} page/language samples recorded; see report.targetArabicAudit for each Arabic fragment.`);
+  console.log(`ADMIN V2 IMPORT MODULE: ${results.adminV2Import ? results.adminV2Import.checks.filter((c) => c.ok).length : 0}/1 module checks passed.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);
