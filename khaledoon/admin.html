@@ -233,10 +233,18 @@ async function loadList(){
  if(!response.ok)throw new Error('تعذر تحميل حكايات خالدون ('+response.status+').');
  adminRecords=await response.json();
  adminRecords.forEach(function(x){x._t='k';x._workflow=window.KHWorkflow.stateOf(x).state});
- sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null}});
- /* الصفحة المنشورة هي السجل المعتمد. نخفي سجل Supabase المكرر من العرض فقط عند وجود ربط صريح بالرقم؛ لا نعتمد على تشابه الأسماء. */
+ sitePageItems=(vStories||[]).filter(function(x){return x&&x.published!==false}).map(function(x){return {_t:'site',id:String(x.id),section:SITEKEY[x.section]||x.section,title:x.title,figure_name:x.person||'',person:x.person||'',status:'published',path:x.path||'',created_at:null,submissions:[]}});
+ /* اربط سجل التحرير بالصفحة المنشورة باستخدام المعرّف الصريح فقط؛ لا نخفي السجل من الإدارة قبل عرضه داخل صفحة الموقع. */
  var linkedPublished={};
- adminRecords.forEach(function(record){if(record.status==='published'){var page=window.KHWorkflow.linkedSite(record,sitePageItems);if(page)linkedPublished[String(record.id)]=true}});
+ adminRecords.forEach(function(record){
+  if(record.status!=='published')return;
+  var page=window.KHWorkflow.linkedSite(record,sitePageItems);
+  if(page){
+   if(!Array.isArray(page.submissions))page.submissions=[];
+   page.submissions.push(record);
+   linkedPublished[String(record.id)]=true;
+  }
+ });
  var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
  items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  var requestedParams=new URLSearchParams(location.search),requestedCodeEdit=requestedParams.get('editcode'),returnFromPreview=requestedParams.get('returnfrompreview')==='1';if(requestedCodeEdit){var requestedTable=requestedParams.get('table')||'khaledoon_submissions',requestedPrefix=requestedTable==='submitted_stories'?'o:':'k:';openIds[requestedPrefix+requestedCodeEdit]=true;if(!requestedCodeEditInitialized){aiInitialUnlockById[requestedPrefix+requestedCodeEdit]=true;requestedCodeEditInitialized=true;}fStatus='all';fSec='all';}
