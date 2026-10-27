@@ -4,7 +4,7 @@ import path from 'node:path';
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const sections = new Set(['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers']);
 const variants = new Set(['military-history', 'ancient-civilization', 'science-lab', 'women-leadership', 'arts-culture', 'islamic-heritage', 'curriculum', 'reader-story', 'portrait-biography']);
-const kinds = new Set(['archival', 'photograph', 'illustration', 'map', 'document']);
+const kinds = new Set(['archival', 'photograph', 'illustration', 'map', 'document', 'diagram']);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const https = x => typeof x === 'string' && /^https:\/\//i.test(x);
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
