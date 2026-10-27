@@ -152,7 +152,7 @@ test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them'
 test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
   let v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.images = [];
-  assert.throws(() => v2ToV1(v2), /at least two images/);
+  assert.throws(() => v2ToV1(v2), /between two and five images/);
 
   v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   delete v2.quiz[0].i18n.de;
