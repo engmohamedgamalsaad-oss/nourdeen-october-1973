@@ -742,6 +742,118 @@
           "explanation": "Komplexe Einsätze benötigen ausgebildete Menschen, einen Plan und abgestimmte Aufgaben."
         }
       }
+    },
+    {
+      "id": "nabil-role",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "من هو الربان نبيل عبد الوهاب في سياق الحكاية؟",
+          "options": [
+            "أحد رجال الضفادع البشرية المصرية",
+            "قائد طائرة مقاتلة",
+            "مؤرخ مدني",
+            "قائد سفينة تجارية"
+          ],
+          "explanation": "تذكر المصادر المصرية مشاركته في عمليات للضفادع البشرية خلال حرب الاستنزاف."
+        },
+        "en": {
+          "question": "Who was Captain Nabil Abdel Wahab in this story?",
+          "options": [
+            "A member of Egypt’s combat divers",
+            "A fighter-pilot commander",
+            "A civilian historian",
+            "A commercial ship captain"
+          ],
+          "explanation": "Egyptian sources describe his participation in combat-diver operations during the War of Attrition."
+        },
+        "fr": {
+          "question": "Qui était le capitaine Nabil Abdel Wahab dans ce récit ?",
+          "options": [
+            "Un membre des nageurs de combat égyptiens",
+            "Un commandant pilote de chasse",
+            "Un historien civil",
+            "Un capitaine de navire marchand"
+          ],
+          "explanation": "Des sources égyptiennes mentionnent sa participation à des opérations de nageurs de combat pendant la guerre d’usure."
+        },
+        "it": {
+          "question": "Chi era il capitano Nabil Abdel Wahab in questo racconto?",
+          "options": [
+            "Un membro dei sommozzatori da combattimento egiziani",
+            "Un comandante pilota da caccia",
+            "Uno storico civile",
+            "Un capitano di nave mercantile"
+          ],
+          "explanation": "Fonti egiziane riferiscono della sua partecipazione a operazioni dei sommozzatori da combattimento durante la Guerra d’Attrito."
+        },
+        "de": {
+          "question": "Wer war Kapitän Nabil Abdel Wahab in dieser Geschichte?",
+          "options": [
+            "Ein Mitglied der ägyptischen Kampfschwimmer",
+            "Ein Jagdflieger-Kommandeur",
+            "Ein ziviler Historiker",
+            "Ein Kapitän eines Handelsschiffs"
+          ],
+          "explanation": "Ägyptische Quellen berichten von seiner Teilnahme an Kampfschwimmer-Einsätzen während des Abnutzungskrieges."
+        }
+      }
+    },
+    {
+      "id": "ketting-operation",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ماذا توضح عملية استهداف حفار «كيتينج» في أبيدجان؟",
+          "options": [
+            "أن بعض المهام البحرية امتدت إلى أماكن بعيدة",
+            "أن كل المعارك وقعت في قناة السويس",
+            "أن البحرية لم تعمل خارج البحر المتوسط",
+            "أن الحفار كان سفينة حربية مصرية"
+          ],
+          "explanation": "وقعت العملية في ساحل العاج قبل حرب أكتوبر بأيام، وهي مثال على امتداد بعض العمليات البحرية لمسافات بعيدة."
+        },
+        "en": {
+          "question": "What does the operation against the Ketting rig in Abidjan illustrate?",
+          "options": [
+            "Some naval missions reached distant locations",
+            "All battles took place in the Suez Canal",
+            "The Navy never operated beyond the Mediterranean",
+            "The rig was an Egyptian warship"
+          ],
+          "explanation": "The operation took place in Côte d’Ivoire days before the October War and illustrates the long reach of some naval missions."
+        },
+        "fr": {
+          "question": "Que montre l’opération contre la plateforme Ketting à Abidjan ?",
+          "options": [
+            "Certaines missions navales atteignaient des lieux éloignés",
+            "Toutes les batailles se déroulaient dans le canal de Suez",
+            "La marine n’opérait jamais hors de Méditerranée",
+            "La plateforme était un navire de guerre égyptien"
+          ],
+          "explanation": "L’opération eut lieu en Côte d’Ivoire quelques jours avant la guerre d’Octobre et illustre la portée lointaine de certaines missions navales."
+        },
+        "it": {
+          "question": "Che cosa illustra l’operazione contro la piattaforma Ketting ad Abidjan?",
+          "options": [
+            "Alcune missioni navali raggiungevano luoghi lontani",
+            "Tutte le battaglie si svolsero nel Canale di Suez",
+            "La Marina non operò mai fuori dal Mediterraneo",
+            "La piattaforma era una nave da guerra egiziana"
+          ],
+          "explanation": "L’operazione si svolse in Costa d’Avorio pochi giorni prima della guerra d’Ottobre e mostra la portata geografica di alcune missioni navali."
+        },
+        "de": {
+          "question": "Was zeigt der Einsatz gegen die Ketting-Plattform in Abidjan?",
+          "options": [
+            "Einige Marineeinsätze reichten bis weit entfernte Orte",
+            "Alle Schlachten fanden im Suezkanal statt",
+            "Die Marine operierte nie außerhalb des Mittelmeers",
+            "Die Plattform war ein ägyptisches Kriegsschiff"
+          ],
+          "explanation": "Der Einsatz fand wenige Tage vor dem Oktoberkrieg in der Elfenbeinküste statt und zeigt die große Reichweite mancher Marineeinsätze."
+        }
+      }
     }
   ],
   "map_location": null
