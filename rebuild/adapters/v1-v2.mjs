@@ -110,7 +110,7 @@ function sourcesToV2(value) {
       return { title, organization, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization }])) };
     }
     const title = line;
-    return { title, organization: hostname, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization }])) };
+    return { title, organization: hostname, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization: hostname }])) };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
     fail('V1 requires at least two distinct source URLs');
