@@ -27,10 +27,14 @@ test('every admin submission row exposes edit and move actions, including closed
   assert.ok(admin.includes('forceEditOpen=true') && admin.includes('||forceEditOpen){'), 'edit must force-build the editor for already-published records');
   assert.ok(admin.includes("querySelector('details.review-data')"), 'edit must target the review/editor panel rather than the original-body details');
   assert.ok(admin.includes("meta.pending_draft=pending;patch={story_meta:meta}"), 'published story moves must remain drafts until reviewed');
+  assert.ok(admin.includes('capabilityResult.supports_story_move!==true'), 'published moves must stop before packaging when the deployed publisher lacks move support');
+  assert.ok(admin.includes('لم تتغير النسخة المنشورة'), 'blocked published moves must explicitly preserve the live story');
   assert.ok(admin.includes("moveSave.textContent='جارٍ حفظ النقل…'"));
 });
 test('publisher moves a story in a review PR and preserves the previous story URL with a redirect', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
+  assert.ok(publisher.includes('2026-10-27-pr-move-v2'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
