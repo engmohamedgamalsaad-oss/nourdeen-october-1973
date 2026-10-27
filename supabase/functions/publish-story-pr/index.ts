@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-26-pr-flow-v1", writes_main_directly: false });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-27-pr-move-v2", writes_main_directly: false, supports_story_move: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -124,6 +124,15 @@ Deno.serve(async (req: Request) => {
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
   let branchNameForRecovery = "";
+  let storyLockBranchForCleanup = "";
+  async function releaseStoryLock() {
+    const lockBranch = storyLockBranchForCleanup;
+    if (!lockBranch || !githubToken) return;
+    storyLockBranchForCleanup = "";
+    try {
+      await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${lockBranch}`, githubToken, { method: "DELETE" });
+    } catch { /* lock cleanup is best effort; never hide the original publish result */ }
+  }
   try {
     // Read latest main as the PR base. All generated writes stay on a dedicated branch.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
@@ -159,11 +168,23 @@ Deno.serve(async (req: Request) => {
     if (duplicate) {
       throw new Error(`A published story with the same title and person already exists (ID ${String(duplicate.id).padStart(3, '0')}); refusing to publish a duplicate.`);
     }
-    const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
-    if (existingIndex >= 0 && String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/') !== normalizedRoot) {
-      throw new Error('Story ID is already assigned to a different path; refusing to overwrite it.');
+    const matchingIndices = currentIndex.map((entry: any, index: number) =>
+      String(entry.id ?? '').padStart(3, '0') === storyId ? index : -1
+    ).filter((index: number) => index >= 0);
+    if (matchingIndices.length > 1) throw new Error('Story ID appears more than once in the current index; refusing an ambiguous move.');
+    const existingIndex = matchingIndices[0] ?? -1;
+    let previousRoot = '';
+    if (existingIndex >= 0) {
+      const previousPath = String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/');
+      if (previousPath !== normalizedRoot) {
+        if (!/^stories\/[a-z0-9-]+\/[0-9]{3}$/.test(previousPath) ||
+            previousPath.split('/').pop() !== storyId) {
+          throw new Error('Existing story path is not a safe same-ID story folder; refusing to move it.');
+        }
+        previousRoot = previousPath + '/';
+      }
     }
-    if (existingIndex < 0) {
+    if (existingIndex < 0 || previousRoot) {
       let existingStoryPage: any = null;
       try {
         existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${baseSha}`, githubToken);
@@ -172,7 +193,9 @@ Deno.serve(async (req: Request) => {
         if (!detail.startsWith("GitHub API 404:")) throw error;
       }
       if (existingStoryPage) {
-        throw new Error("Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
+        throw new Error(previousRoot
+          ? "Destination story page already exists outside the index; refusing to overwrite it during a move."
+          : "Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
       }
     }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
@@ -246,10 +269,40 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
     });
+    // A section move updates the index and removes the previous story assets in the same review PR.
+    // Keep the old index URL as a redirect so saved links/QR codes do not immediately break.
+    if (previousRoot) {
+      const oldTree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
+      if (oldTree.truncated) throw new Error('Repository tree is truncated; refusing an incomplete story move.');
+      const oldIndexPath = previousRoot + 'index.html';
+      const oldFiles = (oldTree.tree ?? []).filter((entry: any) =>
+        typeof entry.path === 'string' && entry.path.startsWith(previousRoot) && entry.type === 'blob'
+      );
+      if (!oldFiles.some((entry: any) => entry.path === oldIndexPath)) {
+        throw new Error('The previous story index.html was not found; refusing to move a story with an incomplete old path.');
+      }
+      for (const entry of oldFiles) {
+        if (entry.path !== oldIndexPath) treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null });
+      }
+      const relativeNewPath = normalizedRoot.replace(/^stories\//, '');
+      const redirectHtml = '<!doctype html><html lang="en"><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=../../' +
+        relativeNewPath +
+        '/"><link rel="canonical" href="../../' + relativeNewPath +
+        '/"><title>Story moved</title><body><p>This story has moved. <a href="../../' +
+        relativeNewPath + '/">Open the updated story</a>.</p><script>location.replace("../../' +
+        relativeNewPath + '/"+location.search+location.hash)</script></body></html>\n';
+      const redirectBlob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
+        method: 'POST', body: JSON.stringify({ content: redirectHtml, encoding: 'utf-8' }),
+      });
+      treeEntries.push({ path: oldIndexPath, mode: '100644', type: 'blob', sha: redirectBlob.sha });
+    }
     const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
+    const prMarkerPrefix = `<!-- khaledoon-story:${storyId}:`;
     const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
+    // Block a second open PR for the same ID even if the requested destination path differs.
+    // Otherwise two review branches could race to move/update the same story.
     const existingPull = Array.isArray(openPulls)
-      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
+      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarkerPrefix) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
       : null;
     if (existingPull) {
       return reply(409, {
@@ -260,6 +313,27 @@ Deno.serve(async (req: Request) => {
         pull_request_number: existingPull.number,
         branch: existingPull.head?.ref ?? null,
       });
+    }
+    // GitHub rejects creation of an existing ref. A fixed per-story ref therefore acts as
+    // an atomic lock across concurrent invocations, unlike a check-then-scan alone.
+    const storyLockBranch = `khaledoon/publish-lock-${storyId}`;
+    try {
+      await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+        method: "POST",
+        body: JSON.stringify({ ref: "refs/heads/" + storyLockBranch, sha: baseSha }),
+      });
+      storyLockBranchForCleanup = storyLockBranch;
+    } catch (lockError) {
+      const lockDetail = lockError instanceof Error ? lockError.message : "";
+      if (lockDetail.includes("GitHub API 422") || lockDetail.includes("Reference already exists")) {
+        return reply(409, {
+          success: false,
+          error: "يوجد تجهيز نشر جارٍ لهذه الحكاية أو قفل قديم يحتاج مراجعة؛ لم ننشئ طلب دمج ثانيًا.",
+          detail: "إذا لم يوجد طلب دمج مفتوح لهذه الحكاية، راجع فرع القفل " + storyLockBranch + " قبل إعادة المحاولة.",
+          story_id: storyId,
+        });
+      }
+      throw lockError;
     }
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
@@ -290,6 +364,32 @@ Deno.serve(async (req: Request) => {
       method: "POST",
       body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
     });
+    // Defense in depth for a request that bypassed the ref lock (for example, an older
+    // function version still running during rollout): reconcile any visible same-story PRs.
+    const racingPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
+    const competingPulls = racingPulls.filter((candidate: any) =>
+      String(candidate.body ?? '').includes(prMarkerPrefix) && candidate.head?.repo?.full_name === OWNER + "/" + REPO
+    );
+    const winningPull = competingPulls.reduce((best: any, candidate: any) =>
+      (!best || candidate.number < best.number) ? candidate : best, null);
+    if (winningPull && winningPull.number !== pull.number) {
+      await github(`/repos/${OWNER}/${REPO}/pulls/${pull.number}`, githubToken, {
+        method: "PATCH", body: JSON.stringify({ state: "closed" }),
+      });
+      try {
+        await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${branchNameForRecovery}`, githubToken, { method: "DELETE" });
+      } catch { /* branch cleanup is best effort; the duplicate PR is already closed */ }
+      await releaseStoryLock();
+      return reply(409, {
+        success: false,
+        error: "تم رصد طلب متزامن لنفس الحكاية؛ أُغلق الطلب المكرر وبقي الطلب الأقدم.",
+        detail: "راجع طلب الدمج الحالي: " + winningPull.html_url,
+        pull_request_url: winningPull.html_url,
+        pull_request_number: winningPull.number,
+        branch: winningPull.head?.ref ?? null,
+      });
+    }
+    await releaseStoryLock();
     return reply(201, {
       success: true,
       published_to_main: false,
@@ -309,6 +409,7 @@ Deno.serve(async (req: Request) => {
       message: "تم إنشاء طلب دمج للمراجعة. لم يتم تعديل main أو نشر الحكاية على الموقع."
     });
   } catch (error) {
+    await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
       error: "تعذر إنشاء طلب دمج للحكاية؛ لم تُكتب ملفات الحكاية إلى main.",

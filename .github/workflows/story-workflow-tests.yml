@@ -10,6 +10,7 @@ on:
       - "khaledoon/assets/story-template-bundle.js"
       - "khaledoon/assets/ai-json-repair.js"
       - "khaledoon/tests/**"
+      - "supabase/functions/publish-story-pr/index.ts"
       - ".github/workflows/story-workflow-tests.yml"
   workflow_dispatch:
 
@@ -27,6 +28,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Type-check publish Edge Function
+        run: deno check supabase/functions/publish-story-pr/index.ts
       - name: Run AI JSON repair tests
         run: node khaledoon/tests/ai-json-repair.test.cjs
       - name: Run workflow unit tests
