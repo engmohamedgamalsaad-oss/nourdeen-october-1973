@@ -1,4 +1,4 @@
-import { validateForAdminBridge } from '../validate-story.mjs';
+import { validateForAdminBridge } from '../validate-story.mjs?v=20261027-v2-admin-4';
 
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
@@ -31,6 +31,7 @@ const ACCENTS = {
 const REVERSE_VARIANT = Object.fromEntries(Object.entries(VARIANT_MAP).map(([a,b]) => [b,a]));
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
+const encodeOrganizationMarker = value => String(value).replace(/[%\]\r\n]/g, ch => '%' + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
 const clone = x => JSON.parse(JSON.stringify(x));
 function fail(message) { throw new Error('V1/V2 conversion stopped safely: ' + message); }
 function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an object'); }
@@ -285,9 +286,6 @@ export function v2ToV1(input) {
     if (!isObject(source) || !nonempty(source.title) || !nonempty(source.url) || !nonempty(source.organization)) {
       fail('source ' + (i + 1) + ' is incomplete');
     }
-    if (Object.hasOwn(source, 'accessed_at')) {
-      fail('source ' + (i + 1) + ' accessed_at metadata has no lossless V1 field');
-    }
     let hostname = '';
     try { hostname = new URL(source.url).hostname; } catch {}
     if (!/^https:\/\//i.test(source.url) || !hostname) {
@@ -394,7 +392,7 @@ export function v2ToV1(input) {
       let hostname = '';
       try { hostname = new URL(s.url).hostname; } catch {}
       const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
-      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + encodeURIComponent(s.organization) + '] — ' + s.url);
+      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + encodeOrganizationMarker(s.organization) + '] — ' + s.url);
     }).join('\n'),
     cover: imageToV1(input.cover),
     images: input.images.map(imageToV1),
