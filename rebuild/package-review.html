@@ -55,6 +55,10 @@ function listIssues(s){
  if(!Array.isArray(s.images)||s.images.length<2)out.push('يلزم صورتان على الأقل.');
  for(const [i,im] of (Array.isArray(s.images)?s.images:[]).entries())if(!im.source_url||!im.source_name||!im.rights||!im.i18n)out.push('بيانات المصدر أو الحقوق ناقصة للصورة '+(i+1)+'.');
  if(!Array.isArray(s.sources)||s.sources.length<2)out.push('يلزم مصدران على الأقل.');
+ for(const [i,src] of (Array.isArray(s.sources)?s.sources:[]).entries()){
+  if(!src||!src.url||!src.title||!src.organization||!src.i18n){out.push('بيانات المصدر '+(i+1)+' أو ترجماته ناقصة.');continue}
+  for(const l of langs){const loc=src.i18n[l];if(!loc||!loc.title||!loc.organization)out.push('المصدر '+(i+1)+' غير مكتمل باللغة '+l+'.')}
+ }
  if(!Array.isArray(s.quiz)||s.quiz.length<5)out.push('يلزم خمسة أسئلة على الأقل.');
  for(const [i,q] of (Array.isArray(s.quiz)?s.quiz:[]).entries())for(const l of langs){const t=q.i18n&&q.i18n[l];if(!t||!t.question||!Array.isArray(t.options)||t.options.length!==4||!t.explanation)out.push('السؤال '+(i+1)+' ناقص أو غير مترجم بالكامل للغة '+l+'.')}
  return [...new Set(out)];
