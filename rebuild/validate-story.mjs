@@ -142,7 +142,7 @@ export function validateStory(s) {
     if (Object.hasOwn(src, 'accessed_at') && !nonempty(src.accessed_at)) out.push(label + '.accessed_at must be a non-empty string when provided');
   }
 
-  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('quiz must contain exactly 5 questions');
+  if (!Array.isArray(s.quiz) || s.quiz.length < 5) out.push('quiz must contain at least 5 questions');
   const ids = new Set();
   for (const [i, q] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     const label = 'quiz[' + i + ']';
@@ -172,6 +172,7 @@ export function validateStory(s) {
 export function validateForAdminBridge(s) {
   const out = [...validateStory(s)];
   if (!isObject(s)) return out;
+  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('bridge: V1 admin preview supports exactly 5 quiz questions');
   for (const lang of LANGUAGES) {
     const t = s.i18n?.[lang];
     if (!isObject(t)) continue;
