@@ -163,6 +163,24 @@ test('rejects structurally incomplete V2 images and quiz instead of emitting inv
   assert.throws(() => v2ToV1(v2), /at least three story blocks/);
 });
 
+test('rejects packages outside the actual V1 source and gallery limits', () => {
+  const oneSource = fixture();
+  oneSource.sources = 'Only source https://archive.example/a';
+  assert.throws(() => v1ToV2(oneSource, { slug: 'historical-figure' }), /at least two distinct source URLs/);
+
+  const duplicateSources = fixture();
+  duplicateSources.sources = 'Source A https://archive.example/a\nSource B https://archive.example/a';
+  assert.throws(() => v1ToV2(duplicateSources, { slug: 'historical-figure' }), /at least two distinct source URLs/);
+
+  const tooManyImages = fixture();
+  tooManyImages.images.push(image('three'), image('four'), image('five'), image('six'));
+  assert.throws(() => v1ToV2(tooManyImages, { slug: 'historical-figure' }), /between two and five gallery images/);
+
+  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.sources[1].url = v2.sources[0].url;
+  assert.throws(() => v2ToV1(v2), /at least two distinct sources/);
+});
+
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
   assert.throws(() => v1ToV2(fixture()), /stable slug/);
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
