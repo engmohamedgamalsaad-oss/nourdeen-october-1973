@@ -460,6 +460,11 @@
       "title": "File: Bridge-October-war-1973.jpg",
       "organization": "Wikimedia Commons",
       "url": "https://commons.wikimedia.org/wiki/File:Bridge-October-war-1973.jpg"
+    },
+    {
+      "title": "Bab al Mandab Strait — Marine Regions Gazetteer",
+      "organization": "Marine Regions",
+      "url": "https://www.marineregions.org/gazetteer.php?id=9080&p=details"
     }
   ],
   "quiz": [
@@ -856,5 +861,15 @@
       }
     }
   ],
-  "map_location": null
+  "map_location": {
+    "lat": 12.58333,
+    "lng": 43.35,
+    "place": {
+      "ar": "مضيق باب المندب",
+      "en": "Bab el-Mandeb Strait",
+      "fr": "Détroit de Bab el-Mandeb",
+      "it": "Stretto di Bab el-Mandeb",
+      "de": "Bab-al-Mandab-Straße"
+    }
+  }
 }
