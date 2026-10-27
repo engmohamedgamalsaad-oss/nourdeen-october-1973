@@ -77,3 +77,16 @@ The previous current-head GitHub Actions runs passed:
 A further adapter fix and regression test now cover photograph/document image kinds. Latest CI run 40451572018 was queued at the time of this update, so the newest change is not yet verified.
 
 The adapter remains unconnected to the reader, admin, and import workflow and has not been tested against real legacy packages such as the October story or Naguib Mahfouz. Keep V1 as the production import contract until the scope discrepancy is reconciled, latest CI passes, and representative real-package plus integration tests are complete. Do not run SQL or modify live Supabase as part of this foundation.
+
+
+## Production-layout inspection — 2026-10-27
+
+Inspected the actual published files on `main`:
+- `stories/october/001/data.json` + `stories/october/001/index.html` (رجال البحر في أكتوبر).
+- `stories/people/009/data.json` + `stories/people/009/index.html` (نجيب محفوظ).
+
+These published `data.json` files are metadata/index companions, not `KH_STORY_PACKAGE_V1` import objects: they do not carry a `format` marker, story body, source list, image bundle, or quiz bank. Reader text and language wiring live in the HTML and per-story i18n scripts; quiz and source assets use separate paths. There is no `story.json` package at either path. Therefore, the adapter cannot honestly be declared tested against these published stories simply by passing their `data.json` files to it. A proper real-package test needs a genuine V1 package captured from the admin/import workflow, or a carefully documented reconstruction from the original source assets.
+
+A new test file checks that both real published stories remain correctly indexed, published, and localized, without treating their metadata files as V1 AI packages. Its first CI run caught an overly narrow language-wiring assertion for story 001; that assertion was corrected to recognize the actual `i18n.js` / `data-i18n` pattern. **The corrected test has not yet been confirmed by a fresh CI run**, so this is a pending verification, not a pass.
+
+The homepage browser audit run 40451939419 completed successfully: 203/203 language/viewport flow steps, 12/12 intro-popup checks, 28/28 SVG checks, and zero hard failures or warnings. This is a site regression audit; it does not validate V1↔V2 adapter integration.
