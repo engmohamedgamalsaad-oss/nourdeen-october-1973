@@ -47,6 +47,18 @@ function fixture() {
   };
 }
 
+test('preserves the reader-suggestion section and legacy discovery design', () => {
+  const v1 = fixture();
+  v1.section_key = 'readers';
+  v1.visual_design = 'discovery';
+  const v2 = v1ToV2(v1, { slug: 'reader-submitted-story' });
+  assert.equal(v2.section, 'readers');
+  assert.equal(v2.design.variant, 'reader-story');
+  const back = v2ToV1(v2);
+  assert.equal(back.section_key, 'readers');
+  assert.equal(back.visual_design, 'discovery');
+});
+
 test('round-trip fixture passes the actual current V1 admin package validator before and after conversion', () => {
   const v1 = fixture();
   const before = legacyWorkflow.validateStoryPackage(v1);
