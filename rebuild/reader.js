@@ -6,7 +6,8 @@ en:{section:'Story',story:'The story',gallery:'Story images',quiz:'Check your un
 fr:{section:'Récit',story:'Le récit',gallery:'Images du récit',quiz:'Vérifiez votre compréhension',sources:'Sources et vérification',karma:'Karma',narrator:'Narrateur',student:'Préparé et présenté par',answer:'Vérifier la réponse',missing:'Le dossier est incomplet ou incompatible avec KHALEDOON_STORY_V2.'},
 it:{section:'Racconto',story:'Il racconto',gallery:'Immagini del racconto',quiz:'Verifica la comprensione',sources:'Fonti e verifica',karma:'Karma',narrator:'Narratore',student:'Preparato e presentato da',answer:'Verifica la risposta',missing:'Il pacchetto è incompleto o non corrisponde a KHALEDOON_STORY_V2.'},
 de:{section:'Geschichte',story:'Die Geschichte',gallery:'Bilder zur Geschichte',quiz:'Verständnis prüfen',sources:'Quellen und Überprüfung',karma:'Karma',narrator:'Erzähler',student:'Erstellt und vorgestellt von',answer:'Antwort prüfen',missing:'Das Paket ist unvollständig oder entspricht nicht KHALEDOON_STORY_V2.'}};
-var current='ar',story=null;\nvar ROOT=new URL('../',document.currentScript.src);
+var current='ar',story=null;
+var ROOT=new URL('../',document.currentScript.src);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
