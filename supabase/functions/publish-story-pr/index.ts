@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-26-pr-flow-v1", writes_main_directly: false });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-27-pr-move-v2", writes_main_directly: false, supports_story_move: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
