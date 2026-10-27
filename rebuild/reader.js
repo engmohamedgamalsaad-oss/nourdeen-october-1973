@@ -34,7 +34,7 @@ $('status').hidden=true;$('story').hidden=false;
 document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;show()})});
 var path=new URLSearchParams(location.search).get('story')||readerScript.dataset.storyPath;
 if(!path||path.startsWith('/')||path.split('/').some(function(p){return p==='..'||p==='.'})||!path.endsWith('.json')){$('status').textContent='حدد حزمة JSON صالحة عبر ?story=PATH.json داخل المستودع.';return}
-fetch(new URL(path,ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
+fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
 if(data.format!=='KHALEDOON_STORY_V2'||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
 story=data;document.documentElement.style.setProperty('--accent',data.design&&data.design.accent||'#d6ad55');show();
 }).catch(function(e){$('status').textContent='تعذّر تحميل حزمة V2: '+e.message+'\nلم يتم الرجوع تلقائيًا إلى أي صيغة قديمة.'});
