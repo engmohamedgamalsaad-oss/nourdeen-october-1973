@@ -126,6 +126,23 @@ function quizToV2(value) {
     return { id: 'question-' + (i + 1), correct_option: q.a, i18n };
   });
 }
+function isNarratorRoleLabel(value) {
+  if (typeof value !== 'string') return false;
+  const normalized = value.trim().toLocaleLowerCase()
+    .replace(/[’‘]/g, "'")
+    .replace(/\s+/g, ' ');
+  return new Set([
+    'راوي الحكاية',
+    'story narrator',
+    "narrateur de l'histoire",
+    "narratrice de l'histoire",
+    "narrateur de l’histoire",
+    'narratore della storia',
+    'narratrice della storia',
+    'erzähler der geschichte',
+    'erzählerin der geschichte'
+  ]).has(normalized);
+}
 function metadataForLocale(v1, lang) {
   const keys = ['student_name','narrator_name','grade','narrator_grade','history_note','images_note','figure_name','person'];
   const baseValues = {
@@ -140,6 +157,8 @@ function metadataForLocale(v1, lang) {
     const fallback = ['narrator_name','narrator_grade','figure_name','person'].includes(key)
       ? baseValues[key] : undefined;
     const value = source[key] ?? fallback;
+    // A role label is not a school grade; don't misfile it as grade metadata.
+    if ((key === 'grade' || key === 'narrator_grade') && isNarratorRoleLabel(value)) continue;
     // These fields are optional per locale. Preserve known translations even
     // when the source omitted another language; never synthesize the missing one.
     if (typeof value === 'string') out[key] = value;
