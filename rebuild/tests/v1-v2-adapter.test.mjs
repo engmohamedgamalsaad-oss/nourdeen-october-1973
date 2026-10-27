@@ -62,7 +62,10 @@ test('maps the actual admin prompt section keys fame/learning through V2 and bac
 
   const knowledgeAlias = fixture();
   knowledgeAlias.section_key = 'knowledge';
-  assert.equal(v1ToV2(knowledgeAlias, { slug: 'knowledge-section-story' }).section, 'women');
+  assert.throws(
+    () => v1ToV2(knowledgeAlias, { slug: 'knowledge-section-story' }),
+    /unsupported section_key: knowledge/
+  );
 });
 
 test('preserves the reader-suggestion section and legacy discovery design', () => {
