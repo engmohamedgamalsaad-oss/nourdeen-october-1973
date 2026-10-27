@@ -10,10 +10,13 @@ test('V2 reader exposes all five language choices and changes text direction', (
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('data-lang="' + lang + '"'));
   assert.match(js, /current==='ar'\?'rtl':'ltr'/);
   assert.match(js, /readerScript\.dataset\.storyPath\?document\.baseURI:ROOT/);
+  assert.match(js, /openstreetmap\.org/);
+  assert.match(js, /document\.body\.dataset\.design/);
 });
 
 test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
-  for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources']) assert.match(html, new RegExp('id="' + id + '"'));
+  for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link']) assert.match(html, new RegExp('id="' + id + '"'));
+  assert.match(html, /data-design=ancient-civilization/);
   assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
 });
 
