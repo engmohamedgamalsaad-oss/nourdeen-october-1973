@@ -16,3 +16,6 @@ Before publication, a reviewer must:
 The package currently has five localized quiz questions, three image records with source/licence notes, and five source records. Passing automated validation means the package matches the technical contract; it does **not** certify historical accuracy, translation quality, legal clearance, or publication readiness.
 
 The CI workflow validates this package and builds it only in an isolated temporary directory. It does not add a story to the published site or alter the live Supabase database.
+
+
+Source-text provenance: `original_body` now contains the complete Arabic text extracted from all eight story sections of the currently published `stories/october/001/index.html`, in displayed reading order. It is **not yet verified against the author's original submission file**; that remains a human review gate. The translated V2 `i18n` narrative is a separately rewritten, shortened reading version and must not be represented as a verbatim translation of `original_body`.
