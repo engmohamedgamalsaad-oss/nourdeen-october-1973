@@ -140,6 +140,29 @@ test('refuses unknown visual variants and invalid source text', () => {
 });
 
 
+test('safely blocks legacy packages with a null cover or missing image rights/locales', () => {
+  const missingCover = fixture();
+  missingCover.cover = null;
+  assert.throws(
+    () => v1ToV2(missingCover, { slug: 'historical-figure' }),
+    /cover must be an object/
+  );
+
+  const missingRights = fixture();
+  delete missingRights.images[0].rights;
+  assert.throws(
+    () => v1ToV2(missingRights, { slug: 'historical-figure' }),
+    /images\\[0\\]\\.ar\\.rights is required/
+  );
+
+  const missingLocale = fixture();
+  delete missingLocale.images[0].i18n.de;
+  assert.throws(
+    () => v1ToV2(missingLocale, { slug: 'historical-figure' }),
+    /images\\[0\\] is missing de image text/
+  );
+});
+
 test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by the V1 importer', () => {
   const v1 = fixture();
   v1.images[0].kind = 'diagram';
