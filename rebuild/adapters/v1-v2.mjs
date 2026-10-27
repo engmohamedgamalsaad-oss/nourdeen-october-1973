@@ -79,7 +79,7 @@ function imageToV2(image, label, id) {
     i18n[lang] = Object.fromEntries(['alt','caption','source_name','rights'].map(k => [k, locale[k]]));
   }
   const kind = image.kind;
-  if (!['archival','photograph','illustration','map','document'].includes(kind)) {
+  if (!['archival','photograph','illustration','map','document','diagram'].includes(kind)) {
     fail(label + '.kind "' + kind + '" is not representable in the current V2 contract');
   }
   if (!/^https:\/\//i.test(String(image.source_url || ''))) fail(label + '.source_url must be HTTPS');
@@ -181,7 +181,7 @@ export function v1ToV2(input, { slug } = {}) {
   };
 }
 function imageToV1(image) {
-  if (!['archival','photograph','illustration','map','document'].includes(image.kind)) {
+  if (!['archival','illustration','diagram','map'].includes(image.kind)) {
     fail('V2 image kind "' + image.kind + '" has no valid V1 representation');
   }
   const ar = image.i18n.ar;
