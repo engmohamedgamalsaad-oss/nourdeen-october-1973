@@ -16,5 +16,5 @@ test('V2 package readiness invokes the strict shared validator', () => {
   assert.match(gate, /rebuild\/validate-package\.mjs/);
   assert.match(cli, /validateStory/);
   assert.match(cli, /validateLocalImagePaths/);
-  assert.match(cli, /KHALEDOON_STORY_V2/);
+  assert.match(cli, /validateStory\(story\)/);
 });
