@@ -186,6 +186,16 @@ for (const rel of htmlFiles) {
 
   if (isAdmin) continue;
 
+  /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
+  if (rel === 'rebuild/reader.html' && html.includes('data-kh-v2-reader')) {
+    const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
+    for (const lang of v2Languages) {
+      if (!new RegExp('data-lang=["\\\\']' + lang + '["\\\\']').test(html)) fail('V2 reader is missing language button: ' + lang);
+    }
+    if (!html.includes('id="theme-toggle"')) fail('V2 reader must expose its light/dark theme toggle.');
+    continue;
+  }
+
   /* locate the shared-script tag(s) */
   const tags = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']*home-language-only\.js[^"']*)["'][^>]*>/gi)];
   if (isHome) {
