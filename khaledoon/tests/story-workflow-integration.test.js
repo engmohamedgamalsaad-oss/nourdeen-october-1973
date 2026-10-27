@@ -672,6 +672,18 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
+test('story publisher prevents concurrent same-story PR creation with a GitHub ref lock', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var lockIndex = publisher.indexOf('const storyLockBranch = `khaledoon/publish-lock-${storyId}`');
+  var blobLoopIndex = publisher.indexOf('for (const file of safeFiles)', lockIndex);
+  assert.ok(lockIndex >= 0 && blobLoopIndex > lockIndex, 'publisher must acquire the per-story lock before creating file blobs');
+  assert.ok(publisher.includes('ref: "refs/heads/" + storyLockBranch'), 'lock acquisition must use a fixed GitHub ref unique to the story ID');
+  assert.ok(publisher.includes('lockDetail.includes("GitHub API 422")'), 'an already-existing lock must fail closed with a conflict response');
+  assert.ok(publisher.includes('async function releaseStoryLock()'), 'publisher must have a lock cleanup path');
+  assert.ok(publisher.includes('await releaseStoryLock();'), 'publisher must release the lock on success, duplicate reconciliation, and caught failure');
+  assert.ok(publisher.includes('قفل قديم يحتاج مراجعة'), 'stale lock failures must explain the manual recovery condition');
+});
+
 test('story publisher attempts to reconcile same-story PRs created concurrently', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('const racingPulls = await githubAllPages'), 'after PR creation, publisher must re-scan open PRs for a concurrent duplicate');
