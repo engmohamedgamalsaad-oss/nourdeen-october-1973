@@ -1,7 +1,7 @@
 name: Khaledoon rebuild foundation checks # contract and V1-V2 adapter CI
 on:
   push:
-    branches: [rebuild/khaledoon-foundation-2026-10-26, rebuild/foundation-isolated-2026-10-27]
+    branches: [rebuild/khaledoon-foundation-2026-10-26]
   pull_request:
     paths: ['rebuild/**', '.github/workflows/rebuild-foundation.yml']
 permissions:
@@ -15,6 +15,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run contract and adapter regression tests
+      - name: Check V2 runtime and builder syntax
+        run: node --check rebuild/reader.js && node --check rebuild/build-story.mjs && node --check rebuild/validate-package.mjs && node --check scripts/check-new-story-readiness.js
+      - name: Run contract and V2 reader regression tests
         run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
+      - name: Validate the real October sea story package
+        run: node rebuild/validate-package.mjs rebuild/story-packages/october-sea-men.v2.json
+      - name: Build the real package in an isolated temporary directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          tmpdir="$(mktemp -d)"
+          trap 'rm -rf "$tmpdir"' EXIT
+          mkdir -p "$tmpdir/rebuild"
+          cp rebuild/reader.js "$tmpdir/rebuild/reader.js"
+          (cd "$tmpdir" && node "$GITHUB_WORKSPACE/rebuild/build-story.mjs" "$GITHUB_WORKSPACE/rebuild/story-packages/october-sea-men.v2.json" 016)
+          test -s "$tmpdir/stories/october/016/index.html"
+          node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$tmpdir/stories/october/016/data.v2.json"
