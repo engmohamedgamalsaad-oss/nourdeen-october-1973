@@ -439,37 +439,191 @@
     {
       "title": "بطولات القوات البحرية المصرية من إغراق المدمرة إيلات إلى نصر أكتوبر 1973",
       "organization": "وزارة الأوقاف المصرية",
-      "url": "https://awkafonline.gov.eg/events-and-seasons-articles/175/12079/بطولات-القوات-البحرية-المصرية-من-إغراق-المدمرة-إيلات-إلى-نصر-أكتوبر-١٩٧٣"
+      "url": "https://awkafonline.gov.eg/events-and-seasons-articles/175/12079/بطولات-القوات-البحرية-المصرية-من-إغراق-المدمرة-إيلات-إلى-نصر-أكتوبر-١٩٧٣",
+      "i18n": {
+        "ar": {
+          "title": "بطولات القوات البحرية المصرية من إغراق المدمرة إيلات إلى نصر أكتوبر 1973",
+          "organization": "وزارة الأوقاف المصرية"
+        },
+        "en": {
+          "title": "Egyptian Navy achievements, from the sinking of Eilat to the 1973 October victory",
+          "organization": "Egyptian Ministry of Awqaf"
+        },
+        "fr": {
+          "title": "Les exploits de la marine égyptienne, du naufrage d’Eilat à la victoire d’octobre 1973",
+          "organization": "Ministère égyptien des Awqaf"
+        },
+        "it": {
+          "title": "Le imprese della Marina egiziana, dall’affondamento di Eilat alla vittoria dell’ottobre 1973",
+          "organization": "Ministero egiziano degli Awqaf"
+        },
+        "de": {
+          "title": "Leistungen der ägyptischen Marine: von der Versenkung der Eilat bis zum Sieg im Oktober 1973",
+          "organization": "Ägyptisches Awqaf-Ministerium"
+        }
+      }
     },
     {
       "title": "دور القوات البحرية المصرية في حرب أكتوبر المجيدة: نبذة مختصرة",
       "organization": "المركز المصري للفكر والدراسات الاستراتيجية",
-      "url": "https://ecss.com.eg/48429/"
+      "url": "https://ecss.com.eg/48429/",
+      "i18n": {
+        "ar": {
+          "title": "دور القوات البحرية المصرية في حرب أكتوبر المجيدة: نبذة مختصرة",
+          "organization": "المركز المصري للفكر والدراسات الاستراتيجية"
+        },
+        "en": {
+          "title": "The Egyptian Navy’s role in the October War: a brief overview",
+          "organization": "Egyptian Center for Strategic Studies"
+        },
+        "fr": {
+          "title": "Le rôle de la marine égyptienne pendant la guerre d’Octobre : aperçu",
+          "organization": "Centre égyptien d’études stratégiques"
+        },
+        "it": {
+          "title": "Il ruolo della Marina egiziana nella guerra d’Ottobre: breve panoramica",
+          "organization": "Centro egiziano di studi strategici"
+        },
+        "de": {
+          "title": "Die Rolle der ägyptischen Marine im Oktoberkrieg: ein kurzer Überblick",
+          "organization": "Ägyptisches Zentrum für Strategische Studien"
+        }
+      }
     },
     {
       "title": "File: INSEilat.jpg",
       "organization": "Wikimedia Commons",
-      "url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg"
+      "url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg",
+      "i18n": {
+        "ar": {
+          "title": "ملف الصورة: المدمرة إيلات",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Image file: destroyer Eilat",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Fichier image : destroyer Eilat",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "File immagine: cacciatorpediniere Eilat",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Bilddatei: Zerstörer Eilat",
+          "organization": "Wikimedia Commons"
+        }
+      }
     },
     {
       "title": "File: Map of Bab-el-Mandeb.png",
       "organization": "Wikimedia Commons",
-      "url": "https://commons.wikimedia.org/wiki/File:Map_of_Bab-el-Mandeb.png"
+      "url": "https://commons.wikimedia.org/wiki/File:Map_of_Bab-el-Mandeb.png",
+      "i18n": {
+        "ar": {
+          "title": "ملف الخريطة: مضيق باب المندب",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Map file: Bab el-Mandeb Strait",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Fichier cartographique : détroit de Bab el-Mandeb",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "File mappa: stretto di Bab el-Mandeb",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Kartendatei: Bab-al-Mandab-Straße",
+          "organization": "Wikimedia Commons"
+        }
+      }
     },
     {
       "title": "File: Bridge-October-war-1973.jpg",
       "organization": "Wikimedia Commons",
-      "url": "https://commons.wikimedia.org/wiki/File:Bridge-October-war-1973.jpg"
+      "url": "https://commons.wikimedia.org/wiki/File:Bridge-October-war-1973.jpg",
+      "i18n": {
+        "ar": {
+          "title": "ملف الصورة: عبور قناة السويس في حرب أكتوبر 1973",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Image file: Suez Canal crossing during the 1973 October War",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Fichier image : franchissement du canal de Suez en 1973",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "File immagine: attraversamento del Canale di Suez nel 1973",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Bilddatei: Überquerung des Suezkanals im Oktoberkrieg 1973",
+          "organization": "Wikimedia Commons"
+        }
+      }
     },
     {
       "title": "Bab al Mandab Strait — Marine Regions Gazetteer",
       "organization": "Marine Regions",
-      "url": "https://www.marineregions.org/gazetteer.php?id=9080&p=details"
+      "url": "https://www.marineregions.org/gazetteer.php?id=9080&p=details",
+      "i18n": {
+        "ar": {
+          "title": "مضيق باب المندب — قاعدة بيانات المناطق البحرية",
+          "organization": "قاعدة بيانات Marine Regions"
+        },
+        "en": {
+          "title": "Bab al-Mandab Strait — Marine Regions Gazetteer",
+          "organization": "Marine Regions Gazetteer"
+        },
+        "fr": {
+          "title": "Détroit de Bab al-Mandab — gazetteer Marine Regions",
+          "organization": "Gazetteer Marine Regions"
+        },
+        "it": {
+          "title": "Stretto di Bab al-Mandab — repertorio Marine Regions",
+          "organization": "Repertorio Marine Regions"
+        },
+        "de": {
+          "title": "Bab-al-Mandab-Straße — Marine-Regions-Ortsverzeichnis",
+          "organization": "Marine-Regions-Gazetteer"
+        }
+      }
     },
     {
       "title": "The Egyptian Navy in the wars of attrition and October",
       "organization": "Ain Shams University",
-      "url": "https://www.asu.edu.eg/en/5123/news/the-egyptian-navy-in-the-wars-of-attrition-and-october-a-symposium-at-the-faculty-of-archeology"
+      "url": "https://www.asu.edu.eg/en/5123/news/the-egyptian-navy-in-the-wars-of-attrition-and-october-a-symposium-at-the-faculty-of-archeology",
+      "i18n": {
+        "ar": {
+          "title": "البحرية المصرية في حرب الاستنزاف وحرب أكتوبر",
+          "organization": "جامعة عين شمس"
+        },
+        "en": {
+          "title": "The Egyptian Navy in the War of Attrition and the October War",
+          "organization": "Ain Shams University"
+        },
+        "fr": {
+          "title": "La marine égyptienne pendant la guerre d’usure et la guerre d’Octobre",
+          "organization": "Université Ain Shams"
+        },
+        "it": {
+          "title": "La Marina egiziana nella Guerra d’Attrito e nella guerra d’Ottobre",
+          "organization": "Università Ain Shams"
+        },
+        "de": {
+          "title": "Die ägyptische Marine im Abnutzungskrieg und im Oktoberkrieg",
+          "organization": "Ain-Schams-Universität"
+        }
+      }
     }
   ],
   "quiz": [
