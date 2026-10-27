@@ -1,11 +1,11 @@
 (function(){
 'use strict';
 var langs=['ar','en','fr','it','de'],labels={ar:'الراوي',en:'Narrator',fr:'Narrateur',it:'Narratore',de:'Erzähler'};
-var ui={ar:{section:'الحكاية',story:'الحكاية',gallery:'صور الحكاية',quiz:'اختبر فهمك',sources:'المصادر والتحقق',karma:'كارما',narrator:'الراوي',student:'إعداد وتقديم',answer:'تحقق من الإجابة',missing:'الحزمة ناقصة أو غير متوافقة مع KHALEDOON_STORY_V2.'},
-en:{section:'Story',story:'The story',gallery:'Story images',quiz:'Check your understanding',sources:'Sources and verification',karma:'Karma',narrator:'Narrator',student:'Prepared and presented by',answer:'Check answer',missing:'Package is incomplete or does not match KHALEDOON_STORY_V2.'},
-fr:{section:'Récit',story:'Le récit',gallery:'Images du récit',quiz:'Vérifiez votre compréhension',sources:'Sources et vérification',karma:'Karma',narrator:'Narrateur',student:'Préparé et présenté par',answer:'Vérifier la réponse',missing:'Le dossier est incomplet ou incompatible avec KHALEDOON_STORY_V2.'},
-it:{section:'Racconto',story:'Il racconto',gallery:'Immagini del racconto',quiz:'Verifica la comprensione',sources:'Fonti e verifica',karma:'Karma',narrator:'Narratore',student:'Preparato e presentato da',answer:'Verifica la risposta',missing:'Il pacchetto è incompleto o non corrisponde a KHALEDOON_STORY_V2.'},
-de:{section:'Geschichte',story:'Die Geschichte',gallery:'Bilder zur Geschichte',quiz:'Verständnis prüfen',sources:'Quellen und Überprüfung',karma:'Karma',narrator:'Erzähler',student:'Erstellt und vorgestellt von',answer:'Antwort prüfen',missing:'Das Paket ist unvollständig oder entspricht nicht KHALEDOON_STORY_V2.'}};
+var ui={ar:{section:'الحكاية',story:'الحكاية',gallery:'صور الحكاية',quiz:'اختبر فهمك',sources:'المصادر والتحقق',map:'مكان الحكاية',mapOpen:'افتح الموقع على الخريطة',karma:'كارما',narrator:'الراوي',student:'إعداد وتقديم',answer:'تحقق من الإجابة',missing:'الحزمة ناقصة أو غير متوافقة مع KHALEDOON_STORY_V2.'},
+en:{section:'Story',story:'The story',gallery:'Story images',quiz:'Check your understanding',sources:'Sources and verification',map:'Story location',mapOpen:'Open map location',karma:'Karma',narrator:'Narrator',student:'Prepared and presented by',answer:'Check answer',missing:'Package is incomplete or does not match KHALEDOON_STORY_V2.'},
+fr:{section:'Récit',story:'Le récit',gallery:'Images du récit',quiz:'Vérifiez votre compréhension',sources:'Sources et vérification',map:'Lieu du récit',mapOpen:'Ouvrir la carte',karma:'Karma',narrator:'Narrateur',student:'Préparé et présenté par',answer:'Vérifier la réponse',missing:'Le dossier est incomplet ou incompatible avec KHALEDOON_STORY_V2.'},
+it:{section:'Racconto',story:'Il racconto',gallery:'Immagini del racconto',quiz:'Verifica la comprensione',sources:'Fonti e verifica',map:'Luogo del racconto',mapOpen:'Apri la mappa',karma:'Karma',narrator:'Narratore',student:'Preparato e presentato da',answer:'Verifica la risposta',missing:'Il pacchetto è incompleto o non corrisponde a KHALEDOON_STORY_V2.'},
+de:{section:'Geschichte',story:'Die Geschichte',gallery:'Bilder zur Geschichte',quiz:'Verständnis prüfen',sources:'Quellen und Überprüfung',map:'Ort der Geschichte',mapOpen:'Kartenstandort öffnen',karma:'Karma',narrator:'Erzähler',student:'Erstellt und vorgestellt von',answer:'Antwort prüfen',missing:'Das Paket ist unvollständig oder entspricht nicht KHALEDOON_STORY_V2.'}};
 var current='ar',story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
@@ -22,6 +22,9 @@ document.documentElement.lang=current;document.documentElement.dir=current==='ar
 document.querySelectorAll('[data-lang]').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.lang===current))});
 $('section-name').textContent=ui[current].section+' · '+story.section;$('title').textContent=t.title;$('subtitle').textContent=t.subtitle;$('summary').textContent=t.summary;
 $('story-heading').textContent=ui[current].story;$('gallery-heading').textContent=ui[current].gallery;$('quiz-heading').textContent=ui[current].quiz;$('sources-heading').textContent=ui[current].sources;
+$('map-heading').textContent=ui[current].map;$('map-link').textContent=ui[current].mapOpen;
+var map=story.map_location;$('map-section').hidden=!map;
+if(map){$('map-place').textContent=map.place[current];$('map-link').href='https://www.openstreetmap.org/?mlat='+encodeURIComponent(map.lat)+'&mlon='+encodeURIComponent(map.lng)+'#map=13/'+encodeURIComponent(map.lat)+'/'+encodeURIComponent(map.lng)}else{$('map-link').removeAttribute('href')}
 $('student').textContent=t.student_name?ui[current].student+': '+t.student_name+(t.grade?' · '+t.grade:''):'';
 $('cover').replaceChildren(makeImage(story.cover,false));$('blocks').replaceChildren();
 t.blocks.forEach(function(b){var box=document.createElement('div');box.className='block';box.dataset.speaker=b.speaker;var who=document.createElement('div');who.className='speaker';who.textContent=b.speaker==='karma'?ui[current].karma:ui[current].narrator;var p=document.createElement('p');p.textContent=b.text;box.append(who,p);$('blocks').appendChild(box);if(b.image_after){var im=story.images.find(function(x){return x.id===b.image_after});if(im)$('blocks').appendChild(makeImage(im,false))}});
@@ -36,6 +39,6 @@ var path=new URLSearchParams(location.search).get('story')||readerScript.dataset
 if(!path||path.startsWith('/')||path.split('/').some(function(p){return p==='..'||p==='.'})||!path.endsWith('.json')){$('status').textContent='حدد حزمة JSON صالحة عبر ?story=PATH.json داخل المستودع.';return}
 fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
 if(data.format!=='KHALEDOON_STORY_V2'||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
-story=data;document.documentElement.style.setProperty('--accent',data.design&&data.design.accent||'#d6ad55');show();
+story=data;document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'';document.documentElement.style.setProperty('--accent',data.design&&data.design.accent||'#d6ad55');show();
 }).catch(function(e){$('status').textContent='تعذّر تحميل حزمة V2: '+e.message+'\nلم يتم الرجوع تلقائيًا إلى أي صيغة قديمة.'});
 })();
