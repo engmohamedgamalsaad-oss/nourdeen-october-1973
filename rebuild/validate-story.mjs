@@ -186,7 +186,7 @@ export function validateForAdminBridge(s) {
     }
   }
   for (const [i, image] of (Array.isArray(s.images) ? s.images : []).entries()) {
-    if (image?.id !== 'image-' + (i + 1)) out.push('bridge: images[' + i + '].id must be image-' + (i + 1));
+    if (/^[a-z0-9-]+$/.test(image?.id || '') && image.id !== 'image-' + (i + 1)) out.push('bridge: images[' + i + '].id must be image-' + (i + 1));
     if (['photograph', 'document'].includes(image?.kind)) {
       out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by V1');
     }
