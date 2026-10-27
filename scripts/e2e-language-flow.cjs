@@ -667,7 +667,9 @@ async function adminV2ActualImportRegression(browser, base, origin) {
       blocks: [
         { type: 'paragraph', speaker: 'karma', text: 'Karma asks a question ' + lang + '.' },
         { type: 'paragraph', speaker: 'narrator', text: 'A verified historical fact ' + lang + '.' },
-        { type: 'did_you_know', speaker: 'narrator', text: 'Did you know? A second verified fact ' + lang + '.' }
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة أولى ', en: 'Did you know? First verified fact ', fr: 'Le saviez-vous ? Premier fait vérifié ', it: 'Lo sapevi? Primo fatto verificato ', de: 'Wusstest du? Erste geprüfte Tatsache ' }[lang]) + lang + '.' },
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة ثانية ', en: 'Did you know? Second verified fact ', fr: 'Le saviez-vous ? Deuxième fait vérifié ', it: 'Lo sapevi? Secondo fatto verificato ', de: 'Wusstest du? Zweite geprüfte Tatsache ' }[lang]) + lang + '.' },
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة ثالثة ', en: 'Did you know? Third verified fact ', fr: 'Le saviez-vous ? Troisième fait vérifié ', it: 'Lo sapevi? Terzo fatto verificato ', de: 'Wusstest du? Dritte geprüfte Tatsache ' }[lang]) + lang + '.' }
       ]
     }])),
     cover: localizedImage('cover'),
