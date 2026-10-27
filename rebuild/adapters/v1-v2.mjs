@@ -11,7 +11,8 @@ export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
   october: 'october', history: 'history', science: 'science',
-  women: 'women', people: 'people', curriculum: 'curriculum', islamic: 'islamic', readers: 'readers'
+  women: 'women', learning: 'women', knowledge: 'women',
+  people: 'people', fame: 'people', curriculum: 'curriculum', islamic: 'islamic', readers: 'readers'
 };
 const VARIANT_MAP = {
   timeline: 'curriculum', 'science-lab': 'science-lab',
@@ -217,7 +218,7 @@ export function v2ToV1(input) {
   requireObject(input.cover, 'V2 cover');
   if (Object.hasOwn(input.cover, 'id')) fail('V2 cover ID has no V1 representation');
 
-  const section_key = input.section === 'women' ? 'women' : input.section === 'people' ? 'people' : input.section;
+  const section_key = input.section === 'women' ? 'learning' : input.section === 'people' ? 'fame' : input.section;
   const visual_design = REVERSE_VARIANT[input.design?.variant];
   if (!visual_design) fail('V2 design variant has no V1 equivalent: ' + input.design?.variant);
   if (input.design?.accent !== ACCENTS[input.section]) {
