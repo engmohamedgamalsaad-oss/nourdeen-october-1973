@@ -3,12 +3,12 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { validateStory, validateLocalImagePaths } from '../validate-story.mjs';
+import { validateStory, validateForAdminBridge, validateLocalImagePaths } from '../validate-story.mjs';
 
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
 const image = () => ({
   url: 'https://example.org/image.jpg',
-  kind: 'photograph',
+  kind: 'archival',
   source_name: 'Archive',
   source_url: 'https://example.org/source',
   rights: 'CC BY 4.0',
@@ -23,7 +23,7 @@ function fixture() {
   const i18n = Object.fromEntries(langs.map(l => [l, {
     title: 'title ' + l,
     subtitle: 'subtitle ' + l,
-    summary: 'summary ' + l,
+    summary: 'subtitle ' + l,
     student_name: 'student ' + l,
     narrator_name: 'narrator ' + l,
     figure_name: 'figure ' + l,
@@ -34,7 +34,7 @@ function fixture() {
     images_note: 'image note ' + l,
     blocks: [
       { type: 'paragraph', speaker: 'karma', text: 'opening ' + l },
-      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one' },
+      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l },
       { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l }
     ]
   }]));
@@ -55,7 +55,7 @@ function fixture() {
     original_body: 'Submitted original',
     i18n,
     cover: image(),
-    images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
+    images: [{ ...image(), id: 'image-1' }, { ...image(), id: 'image-2' }],
     sources: [
       { title: 'Reference A', organization: 'Archive A', url: 'https://example.org/reference-a' },
       { title: 'Reference B', organization: 'Archive B', url: 'https://example.org/reference-b' }
@@ -66,6 +66,24 @@ function fixture() {
 }
 
 test('accepts complete five-language package', () => assert.deepEqual(validateStory(fixture()), []));
+
+test('V2 contract allows an independent summary while the V1 bridge rejects it', () => {
+  const s = fixture();
+  s.i18n.fr.summary = 'Résumé distinct';
+  assert.deepEqual(validateStory(s), []);
+  assert(validateForAdminBridge(s).some(x => x.includes('summary differs from subtitle')));
+});
+
+test('V2 contract preserves inline image placement and all supported semantic image kinds', () => {
+  const s = fixture();
+  s.i18n.en.blocks[1].image_after = 'image-1';
+  s.images[0].kind = 'document';
+  s.sources[0].accessed_at = '2026-10-27';
+  assert.deepEqual(validateStory(s), []);
+  const bridgeErrors = validateForAdminBridge(s);
+  assert(bridgeErrors.some(x => x.includes('image_after cannot be represented')));
+  assert(bridgeErrors.some(x => x.includes('kind "document" is not supported')));
+});
 
 test('preserves optional legacy metadata independently in each available locale', () => {
   const s = fixture();
@@ -162,9 +180,10 @@ test('rejects duplicate quiz IDs and malformed design color', () => {
 
 test('rejects duplicate image IDs and broken inline image references', () => {
   const s = fixture();
-  s.images[1].id = 'photo-one';
+  s.images[1].id = 'image-1';
   s.i18n.en.blocks[1].image_after = 'missing-image';
   const e = validateStory(s);
+  assert.deepEqual(validateForAdminBridge(s).filter(x => x.includes('images[1].id must be image-2')).length, 1);
   assert(e.some(x => x.includes('images[1].id duplicated')));
   assert(e.some(x => x.includes('references missing image')));
 });
@@ -178,8 +197,17 @@ test('rejects unexpected properties and malformed stable IDs', () => {
   const e = validateStory(s);
   assert(e.some(x => x.includes('i18n.en: unexpected property')));
   assert(e.some(x => x.includes('sources[0]: unexpected property')));
-  assert(e.some(x => x.includes('quiz[0].id must be a lowercase stable ID')));
+  assert(validateForAdminBridge(s).some(x => x.includes('quiz[0].id must be question-1')));
   assert(e.some(x => x.includes('cover.id must be a stable lowercase ID')));
+});
+
+test('rejects malformed image IDs in the base V2 contract', () => {
+  const s = fixture();
+  s.images[0].id = 'Bad image ID';
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('images[0].id must be a stable lowercase ID')));
+  const bridgeErrors = validateForAdminBridge(s);
+  assert.equal(bridgeErrors.filter(x => x.includes('images[0].id')).length, 1, 'malformed image ID should not produce a duplicate bridge error');
 });
 
 test('checks local image existence and rejects traversal and missing files', async () => {
@@ -199,4 +227,19 @@ test('checks local image existence and rejects traversal and missing files', asy
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+
+test('base V2 contract accepts non-sequential stable IDs and bridge validator scopes legacy restrictions', () => {
+  const s = fixture();
+  s.images[0].id = 'cover-photo';
+  s.images[1].id = 'moon-map';
+  s.quiz[0].id = 'apollo-question';
+  s.sources[0].accessed_at = '2026-10-27';
+  assert.deepEqual(validateStory(s), []);
+  const e = validateForAdminBridge(s);
+  assert(e.some(x => x.includes('images[0].id must be image-1')));
+  assert(e.some(x => x.includes('images[1].id must be image-2')));
+  assert(e.some(x => x.includes('quiz[0].id must be question-1')));
+  assert(e.some(x => x.includes('sources[0].accessed_at metadata has no V1 field')));
 });

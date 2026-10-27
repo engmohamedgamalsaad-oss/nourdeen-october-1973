@@ -250,11 +250,11 @@ test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by 
 
   const photograph = v1ToV2(fixture(), { slug: 'historical-figure' });
   photograph.cover.kind = 'photograph';
-  assert.throws(() => v2ToV1(photograph), /has no valid V1 representation/);
+  assert.throws(() => v2ToV1(photograph), /not supported by V1/);
 
   const document = v1ToV2(fixture(), { slug: 'historical-figure' });
   document.images[0].kind = 'document';
-  assert.throws(() => v2ToV1(document), /has no valid V1 representation/);
+  assert.throws(() => v2ToV1(document), /not supported by V1/);
 });
 
 
@@ -263,11 +263,11 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   let v2 = makeV2();
   v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
-  assert.throws(() => v2ToV1(v2), /summary differs from subtitle/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
 
   v2 = makeV2();
   v2.i18n.ar.blocks[0].image_after = 'image-1';
-  assert.throws(() => v2ToV1(v2), /inline image placement/);
+  assert.throws(() => v2ToV1(v2), /image_after cannot be represented/);
 
   v2 = makeV2();
   v2.design.accent = '#123456';
@@ -279,7 +279,7 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   v2 = makeV2();
   v2.sources[0].organization = 'Different organization';
-  assert.throws(() => v2ToV1(v2), /cannot be represented losslessly/);
+  assert.throws(() => v2ToV1(v2), /title already contains a URL that cannot be represented unambiguously/);
 });
 
 
@@ -290,21 +290,21 @@ test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them'
 
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.sources[0].accessed_at = '2026-10-27';
-  assert.throws(() => v2ToV1(v2), /accessed_at metadata has no lossless V1 field/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*accessed_at metadata has no V1 field/);
 });
 
 test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
   let v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.images = [];
-  assert.throws(() => v2ToV1(v2), /between two and five images/);
+  assert.throws(() => v2ToV1(v2), /images must contain between 2 and 5 images/);
 
   v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   delete v2.quiz[0].i18n.de;
-  assert.throws(() => v2ToV1(v2), /incomplete in de/);
+  assert.throws(() => v2ToV1(v2), /quiz\[0\]\.i18n\.de required/);
 
   v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.i18n.fr.blocks = [];
-  assert.throws(() => v2ToV1(v2), /at least three story blocks/);
+  assert.throws(() => v2ToV1(v2), /i18n\.fr\.blocks needs at least 3 blocks/);
 });
 
 test('rejects packages outside the actual V1 source and gallery limits', () => {
@@ -324,7 +324,7 @@ test('rejects packages outside the actual V1 source and gallery limits', () => {
   v2.sources[1].url = v2.sources[0].url;
   v2.sources[1].title = 'Reference B https://archive.example/a';
   v2.sources[1].organization = 'archive.example';
-  assert.throws(() => v2ToV1(v2), /at least two distinct sources/);
+  assert.throws(() => v2ToV1(v2), /sources\[1\]\.url must be distinct from other source URLs/);
 });
 
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
@@ -347,3 +347,46 @@ test('adapter output satisfies the independent V2 story validator in both direct
     'round-tripped V2 output must still satisfy the V2 validator');
 });
 
+test('round-trips normal V2 source titles and organization names through the V1 admin source field', () => {
+  const v1 = fixture();
+  const v2 = v1ToV2(v1, { slug: 'source-metadata-roundtrip' });
+  v2.sources = [
+    { title: 'Apollo 17 geology briefing', organization: 'NASA History Office] Research', url: 'https://history.nasa.gov/apollo17' },
+    { title: 'Farouk El-Baz biography', organization: 'Boston University', url: 'https://www.bu.edu/earth/farouk-el-baz' }
+  ];
+  assert.deepEqual(validateStory(v2), []);
+  const back = v2ToV1(v2);
+  const legacyCheck = legacyWorkflow.validateStoryPackage(back);
+  assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\n'));
+  assert.ok(back.sources.includes('Apollo 17 geology briefing — [org:NASA History Office%5D Research] — https://history.nasa.gov/apollo17'));
+  const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
+  assert.deepEqual(v2Again.sources, v2.sources);
+});
+
+
+test('rejects missing figure identity instead of substituting the story title', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'missing-figure-identity' });
+  delete v2.i18n.ar.figure_name;
+  delete v2.i18n.ar.person;
+  assert.throws(
+    () => v2ToV1(v2),
+    /figure_name or person is required.*title is not used as a substitute/
+  );
+});
+
+test('v2ToV1 enforces contract validation when called without the admin pre-validator', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'adapter-validation-boundary' });
+  v2.i18n.en.summary = 'A distinct summary';
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
+
+  const invalidIds = v1ToV2(fixture(), { slug: 'adapter-invalid-ids' });
+  invalidIds.images[0].id = 'photo-main';
+  assert.throws(() => v2ToV1(invalidIds), /V2 admin-bridge validation failed:.*images\[0\]\.id must be image-1/);
+});
+
+
+test('rejects source titles with line breaks that the V1 line-based field cannot preserve', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'multiline-source-title' });
+  v2.sources[0].title = 'First line\nSecond line';
+  assert.throws(() => v2ToV1(v2), /title cannot be represented safely in the single-line V1 source field/);
+});

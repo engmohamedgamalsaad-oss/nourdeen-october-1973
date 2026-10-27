@@ -36,7 +36,7 @@ function loadPlaywright() {
 }
 const { chromium, devices } = loadPlaywright();
 
-const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.txt': 'text/plain; charset=utf-8', '.md': 'text/plain; charset=utf-8' };
+const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.txt': 'text/plain; charset=utf-8', '.md': 'text/plain; charset=utf-8' };
 /* The site is published under /nourdeen-october-1973/ (GitHub Pages project path) and some pages
    hard-code that prefix, so the test serves the repository under the same prefix. */
 const PREFIX = '/nourdeen-october-1973';
@@ -611,6 +611,186 @@ async function svgArtworkRegression(browser, base, origin) {
   return { checks, hard };
 }
 
+
+async function adminV2ActualImportRegression(browser, base, origin) {
+  const hard = [];
+  const ctx = await newContext(browser, origin, 'desktop');
+  const seed = {
+    id: 'e2e00000-0000-4000-8000-000000000001',
+    status: 'pending',
+    section: 'history',
+    title: 'Existing E2E Draft',
+    subtitle: 'Existing subtitle',
+    figure_name: 'شخصية اختبار',
+    narrator_name: 'كارما',
+    narrator_grade: 'الصف الأول الإعدادي',
+    body: 'نص سابق للحكاية.',
+    original_body: 'نص أصلي سابق.',
+    sources: 'مصدر سابق https://example.org/old',
+    translations: {},
+    story_meta: {},
+    created_at: '2026-10-27T00:00:00Z'
+  };
+  let savedRecord = { ...seed };
+  const apiCalls = [];
+  const langs = ['ar', 'en', 'fr', 'it', 'de'];
+  const localizedImage = (name) => ({
+    url: 'https://example.org/' + name + '.jpg',
+    kind: 'illustration',
+    source_name: 'المصدر الأصلي',
+    source_url: 'https://example.org/archive/' + name,
+    rights: 'Illustration rights',
+    i18n: Object.fromEntries(langs.map((lang) => [lang, {
+      alt: name + ' alt ' + lang,
+      caption: name + ' caption ' + lang,
+      source_name: lang === 'ar' ? 'المصدر الأصلي' : 'Source ' + lang,
+      rights: lang === 'ar' ? 'Illustration rights' : 'Rights ' + lang
+    }]))
+  });
+  const packageV2 = {
+    format: 'KHALEDOON_STORY_V2',
+    slug: 'e2e-v2-import-story',
+    section: 'history',
+    design: { variant: 'portrait-biography', accent: '#d5b7ff' },
+    original_body: 'النص الأصلي الذي وصل من صاحب الاقتراح دون تغيير.',
+    i18n: Object.fromEntries(langs.map((lang) => [lang, {
+      title: 'V2 Import Test ' + lang,
+      subtitle: 'A test subtitle ' + lang,
+      summary: 'A test subtitle ' + lang,
+      student_name: 'Student ' + lang,
+      narrator_name: 'Karma ' + lang,
+      figure_name: 'Historical figure ' + lang,
+      person: 'Historical figure ' + lang,
+      grade: 'Grade 7',
+      narrator_grade: 'Grade 7',
+      history_note: 'Historical note ' + lang,
+      images_note: 'Image rights note ' + lang,
+      blocks: [
+        { type: 'paragraph', speaker: 'karma', text: 'Karma asks a question ' + lang + '.' },
+        { type: 'paragraph', speaker: 'narrator', text: 'A verified historical fact ' + lang + '.' },
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة أولى ', en: 'Did you know? First verified fact ', fr: 'Le saviez-vous ? Premier fait vérifié ', it: 'Lo sapevi? Primo fatto verificato ', de: 'Wusstest du? Erste geprüfte Tatsache ' }[lang]) + lang + '.' },
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة ثانية ', en: 'Did you know? Second verified fact ', fr: 'Le saviez-vous ? Deuxième fait vérifié ', it: 'Lo sapevi? Secondo fatto verificato ', de: 'Wusstest du? Zweite geprüfte Tatsache ' }[lang]) + lang + '.' },
+        { type: 'did_you_know', speaker: 'narrator', text: ({ ar: 'هل تعلم؟ معلومة موثقة ثالثة ', en: 'Did you know? Third verified fact ', fr: 'Le saviez-vous ? Troisième fait vérifié ', it: 'Lo sapevi? Terzo fatto verificato ', de: 'Wusstest du? Dritte geprüfte Tatsache ' }[lang]) + lang + '.' }
+      ]
+    }])),
+    cover: localizedImage('cover'),
+    images: [{ ...localizedImage('gallery-one'), id: 'image-1' }, { ...localizedImage('gallery-two'), id: 'image-2' }],
+    sources: [
+      { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ', url: 'https://example.org/archive/one' },
+      { title: 'Archive reference two', organization: 'جامعة القاهرة', url: 'https://example.org/archive/two' }
+    ],
+    quiz: Array.from({ length: 5 }, (_, i) => ({
+      id: 'question-' + (i + 1),
+      correct_option: 1,
+      i18n: Object.fromEntries(langs.map((lang) => [lang, {
+        question: 'Question ' + (i + 1) + ' ' + lang,
+        options: ['A ' + lang, 'B ' + lang, 'C ' + lang, 'D ' + lang],
+        explanation: 'Explanation ' + lang
+      }]))
+    })),
+    map_location: null
+  };
+  const routeApi = async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    const path = url.pathname;
+    const method = request.method();
+    apiCalls.push({ method, path, search: url.search });
+    const headers = {
+      'access-control-allow-origin': '*',
+      'access-control-allow-headers': 'apikey,authorization,content-type,prefer',
+      'access-control-allow-methods': 'GET,POST,PATCH,OPTIONS',
+      'content-type': 'application/json'
+    };
+    if (method === 'OPTIONS') return route.fulfill({ status: 204, headers });
+    if (path.endsWith('/rest/v1/rpc/is_admin')) return route.fulfill({ status: 200, headers, body: 'true' });
+    if (path.endsWith('/rest/v1/khaledoon_submissions')) {
+      if (method === 'PATCH' || method === 'POST') {
+        let payload = {};
+        try { payload = request.postDataJSON() || {}; } catch (_) {}
+        savedRecord = { ...savedRecord, ...payload, id: seed.id };
+        return route.fulfill({ status: 200, headers, body: JSON.stringify([savedRecord]) });
+      }
+      return route.fulfill({ status: 200, headers, body: JSON.stringify([savedRecord]) });
+    }
+    return route.fulfill({ status: 200, headers, body: '[]' });
+  };
+  await ctx.addInitScript(() => {
+    const session = { access_token: 'e2e-token', refresh_token: 'e2e-refresh', expires_at: Math.floor(Date.now() / 1000) + 3600 };
+    localStorage.setItem('kh_adm_session', JSON.stringify(session));
+    sessionStorage.setItem('kh_adm_session', JSON.stringify(session));
+  });
+  const validFixturePng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/k0cAAAAASUVORK5CYII=', 'base64');
+  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', body: validFixturePng }));
+  await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
+  const page = await ctx.newPage();
+  const failedRequests = [];
+  page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
+  try {
+    await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
+    await page.waitForFunction(() => !!document.querySelector('details.pubrow'), null, { timeout: 15000 });
+    const card = page.locator('details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
+    await card.locator('summary').click();
+    const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
+    await textarea.waitFor({ state: 'visible', timeout: 10000 });
+    await textarea.fill(JSON.stringify(packageV2));
+    const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
+    const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
+    await importButton.click();
+    try {
+      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
+    } catch (waitError) {
+      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+    }
+    const importStatus = await page.locator('.ai-status[role="status"]').innerText();
+    if (!/تم تنفيذ الكود وحُفظت المسودة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
+    if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
+      hard.push('V2 import did not preserve a readable Arabic source organization in the saved draft.');
+    }
+    if (String(savedRecord.sources || '').includes('%D8%')) {
+      hard.push('V2 source organization was percent-encoded in Arabic instead of remaining readable.');
+    }
+    if (savedRecord.status === 'published') hard.push('V2 import unexpectedly published the story instead of saving a draft.');
+    const popup = await popupPromise;
+    if (popup) await popup.waitForURL(/preview\.html/, { timeout: 15000 }).catch(() => {});
+    if (popup) {
+      await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
+      await popup.waitForFunction(() => document.readyState === 'complete' && document.body, null, { timeout: 10000 }).catch(() => {});
+      const visibleText = await popup.locator('body').innerText().catch(() => '');
+      if (visibleText.includes('[org:')) hard.push('Reader preview leaked the internal [org: source marker.');
+      if (!visibleText.includes('V2 Import Test')) hard.push('V2 draft preview did not render the imported title.');
+    } else {
+      hard.push('V2 import saved but did not open its expected preview popup.');
+    }
+    return { checks: [{ ok: hard.length === 0, savedAsDraft: savedRecord.status !== 'published', sourceMarkerReadable: !String(savedRecord.sources || '').includes('%D8%'), previewOpened: !!popup }], hard };
+  } catch (e) {
+    hard.push('Actual V2 paste/import browser flow failed: ' + String(e.message || e).slice(0,1800));
+    return { checks: [{ ok: false }], hard };
+  } finally {
+    await ctx.close();
+  }
+}
+
+async function adminV2ModuleRegression(browser, base, origin) {
+  const hard = [];
+  const ctx = await newContext(browser, origin, 'desktop');
+  const page = await ctx.newPage();
+  try {
+    await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
+    await page.waitForFunction(() => {
+      const a = window.KHStoryV2Adapter;
+      return !!a && a.V2_FORMAT === 'KHALEDOON_STORY_V2' &&
+        typeof a.validateForAdminBridge === 'function' && typeof a.v2ToV1 === 'function';
+    }, null, { timeout: 10000 });
+    return { checks: [{ ok: true, moduleLoaded: true }], hard };
+  } catch (e) {
+    hard.push('Admin V2 import module did not load: ' + String(e.message || e).split('\\n')[0]);
+    return { checks: [{ ok: false, moduleLoaded: false }], hard };
+  } finally {
+    await ctx.close();
+  }
+}
+
 (async () => {
   const { server, origin, base } = await serve();
   const browser = await chromium.launch({ headless: true });
@@ -624,10 +804,12 @@ async function svgArtworkRegression(browser, base, origin) {
     results.introPopup = await introPopupRegression(browser, base, origin);
     results.svgArtwork = await svgArtworkRegression(browser, base, origin);
     results.targetArabicAudit = await targetArabicTextAudit(browser, base, origin);
+    results.adminV2Import = await adminV2ModuleRegression(browser, base, origin);
+    results.adminV2ActualImport = await adminV2ActualImportRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminV2Import ? results.adminV2Import.hard : [], results.adminV2ActualImport ? results.adminV2ActualImport.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -640,6 +822,8 @@ async function svgArtworkRegression(browser, base, origin) {
   console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
   console.log(`TARGET ARABIC TEXT AUDIT: ${results.targetArabicAudit ? results.targetArabicAudit.rows.length : 0} page/language samples recorded; see report.targetArabicAudit for each Arabic fragment.`);
+  console.log(`ADMIN V2 IMPORT MODULE: ${results.adminV2Import ? results.adminV2Import.checks.filter((c) => c.ok).length : 0}/1 module checks passed.`);
+  console.log(`ADMIN V2 ACTUAL IMPORT: ${results.adminV2ActualImport ? results.adminV2ActualImport.checks.filter((c) => c.ok).length : 0}/1 real paste/save/preview checks passed.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);

@@ -1,3 +1,5 @@
+import { validateForAdminBridge } from '../validate-story.mjs?v=20261027-v2-admin-4';
+
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
  *
@@ -29,6 +31,7 @@ const ACCENTS = {
 const REVERSE_VARIANT = Object.fromEntries(Object.entries(VARIANT_MAP).map(([a,b]) => [b,a]));
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
+const encodeOrganizationMarker = value => String(value).replace(/[%\]\r\n]/g, ch => '%' + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
 const clone = x => JSON.parse(JSON.stringify(x));
 function fail(message) { throw new Error('V1/V2 conversion stopped safely: ' + message); }
 function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an object'); }
@@ -94,8 +97,18 @@ function sourcesToV2(value) {
     const matches = line.match(/https:\/\/[^\s)\]>]+/gi) || [];
     if (matches.length !== 1) fail('sources line ' + (i + 1) + ' must contain exactly one HTTPS URL for reversible conversion');
     const url = matches[0].replace(/[.,;:]+$/, '');
-    const organization = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
-    return { title: line, organization, url };
+    const hostname = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
+    // V2 sources round-trip through a readable organization marker in V1's
+    // plain-text source field. Ordinary legacy lines retain their original title.
+    const beforeUrl = line.slice(0, line.indexOf(matches[0])).trim();
+    const marker = beforeUrl.match(/^(.*?) — \[org:([^\]]+)\] —$/);
+    if (marker) {
+      let organization;
+      try { organization = decodeURIComponent(marker[2]); }
+      catch { fail('sources line ' + (i + 1) + ' has malformed encoded organization metadata'); }
+      return { title: marker[1], organization, url };
+    }
+    return { title: line, organization: hostname, url };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
     fail('V1 requires at least two distinct source URLs');
@@ -247,6 +260,8 @@ function imageToV1(image) {
 export function v2ToV1(input) {
   requireObject(input, 'V2 story');
   if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
+  const contractErrors = validateForAdminBridge(input);
+  if (contractErrors.length) fail('V2 admin-bridge validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
@@ -271,16 +286,19 @@ export function v2ToV1(input) {
     if (!isObject(source) || !nonempty(source.title) || !nonempty(source.url) || !nonempty(source.organization)) {
       fail('source ' + (i + 1) + ' is incomplete');
     }
-    if (Object.hasOwn(source, 'accessed_at')) {
-      fail('source ' + (i + 1) + ' accessed_at metadata has no lossless V1 field');
+    let hostname = '';
+    try { hostname = new URL(source.url).hostname; } catch {}
+    if (!/^https:\/\//i.test(source.url) || !hostname) {
+      fail('source ' + (i + 1) + ' URL must be valid HTTPS');
+    }
+    if (/[\r\n]/.test(source.title) || / — \[org:[^\]]+\] —/.test(source.title)) {
+      fail('source ' + (i + 1) + ' title cannot be represented safely in the single-line V1 source field');
     }
     const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
-    let hostname = '';
-    try { hostname = new URL(source.url).hostname; } catch {}
-    if (matches.length !== 1 || titleUrl !== source.url || hostname !== source.organization) {
-      fail('source ' + (i + 1) + ' cannot be represented losslessly in V1');
-    }
+    // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
+    if (matches.length === 1 && titleUrl === source.url && hostname === source.organization) continue;
+    if (matches.length) fail('source ' + (i + 1) + ' title already contains a URL that cannot be represented unambiguously');
   }
   for (const [i, image] of input.images.entries()) {
     if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in V1');
@@ -323,6 +341,9 @@ export function v2ToV1(input) {
   }
   const ar = input.i18n?.ar;
   if (!isObject(ar)) fail('missing V2 Arabic locale');
+  if (!nonempty(ar.figure_name) && !nonempty(ar.person)) {
+    fail('Arabic figure_name or person is required for the current V1 admin record; title is not used as a substitute');
+  }
   let sawNarrator = false;
   for (const [i, block] of (ar.blocks || []).entries()) {
     if (block.speaker === 'narrator') sawNarrator = true;
@@ -356,7 +377,7 @@ export function v2ToV1(input) {
     return { q: qAr.question, o: clone(qAr.options), a: q.correct_option, e: qAr.explanation, i18n };
   }) };
   return {
-    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person || '',
+    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || '',
     narrator_grade: ar.narrator_grade || ar.grade || '',
@@ -366,7 +387,13 @@ export function v2ToV1(input) {
     karma_text: textFromBlocks(ar.blocks, 'karma'),
     body: textFromBlocks(ar.blocks, 'narrator'),
     history_note: ar.history_note || '', images_note: ar.images_note || '',
-    sources: input.sources.map(s => s.title).join('\n'),
+    sources: input.sources.map(s => {
+      const matches = s.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
+      let hostname = '';
+      try { hostname = new URL(s.url).hostname; } catch {}
+      const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
+      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + encodeOrganizationMarker(s.organization) + '] — ' + s.url);
+    }).join('\n'),
     cover: imageToV1(input.cover),
     images: input.images.map(imageToV1),
     visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),

@@ -105,7 +105,9 @@
             "pattern": "^https://"
           },
           "accessed_at": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional date when the source was accessed."
           }
         }
       }
@@ -230,7 +232,8 @@
         },
         "summary": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "description": "A concise localized summary; it may differ from subtitle."
         },
         "blocks": {
           "type": "array",
@@ -261,7 +264,9 @@
                 "minLength": 1
               },
               "image_after": {
-                "type": "string"
+                "type": "string",
+                "minLength": 1,
+                "description": "Optional ID of an image to display after this story block."
               }
             }
           }
@@ -322,11 +327,11 @@
         "kind": {
           "enum": [
             "archival",
-            "photograph",
             "illustration",
             "map",
-            "document",
-            "diagram"
+            "diagram",
+            "photograph",
+            "document"
           ]
         },
         "source_name": {
