@@ -34,16 +34,21 @@ function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an o
 function isDidYouKnowText(text) {
   return /^هل تعلم[؟?:]|^did you know\?|^le saviez-vous\s*\?|^lo sapevi\s*\?|^wusstest du\s*\?/i.test(text);
 }
-function paragraphs(value) {
-  return String(value || '').split(/\n{2,}/).map(x => x.trim()).filter(Boolean);
+function paragraphs(value, label = 'story text') {
+  if (typeof value !== 'string' || !value.length) fail(label + ' must be non-empty text');
+  const rows = value.split('\n\n');
+  if (rows.some(x => !x.length || x !== x.trim()) || rows.join('\n\n') !== value) {
+    fail(label + ' has whitespace or paragraph separators that cannot be round-tripped exactly');
+  }
+  return rows;
 }
 function textFromBlocks(blocks, speaker) {
   return blocks.filter(b => b.speaker === speaker).map(b => b.text).join('\n\n');
 }
 function toBlocks(karma, body) {
   const rows = [
-    ...paragraphs(karma).map(text => ({ type: 'paragraph', speaker: 'karma', text })),
-    ...paragraphs(body).map(text => ({
+    ...paragraphs(karma, 'karma_text').map(text => ({ type: 'paragraph', speaker: 'karma', text })),
+    ...paragraphs(body, 'body').map(text => ({
       type: isDidYouKnowText(text) ? 'did_you_know' : 'paragraph',
       speaker: 'narrator', text
     }))
@@ -197,9 +202,16 @@ export function v2ToV1(input) {
   if (!['october','history','science','women','people','curriculum','islamic'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
-  if (!Array.isArray(input.sources) || !Array.isArray(input.quiz) || !Array.isArray(input.images)) {
-    fail('V2 sources, quiz, and images must be arrays');
+  if (!Array.isArray(input.sources) || input.sources.length < 1 ||
+      !Array.isArray(input.quiz) || input.quiz.length !== 5 ||
+      !Array.isArray(input.images) || input.images.length < 2) {
+    fail('V2 requires at least one source, exactly five quiz questions, and at least two images');
   }
+  if (!nonempty(input.original_body)) fail('V2 original_body must be non-empty and preserved');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug || '')) fail('V2 slug must be stable lowercase kebab-case');
+  requireObject(input.cover, 'V2 cover');
+  if (Object.hasOwn(input.cover, 'id')) fail('V2 cover ID has no V1 representation');
+
   const section_key = input.section === 'women' ? 'women' : input.section === 'people' ? 'people' : input.section;
   const visual_design = REVERSE_VARIANT[input.design?.variant];
   if (!visual_design) fail('V2 design variant has no V1 equivalent: ' + input.design?.variant);
@@ -209,6 +221,9 @@ export function v2ToV1(input) {
   for (const [i, source] of input.sources.entries()) {
     if (!isObject(source) || !nonempty(source.title) || !nonempty(source.url) || !nonempty(source.organization)) {
       fail('source ' + (i + 1) + ' is incomplete');
+    }
+    if (Object.hasOwn(source, 'accessed_at')) {
+      fail('source ' + (i + 1) + ' accessed_at metadata has no lossless V1 field');
     }
     const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
@@ -228,8 +243,16 @@ export function v2ToV1(input) {
   for (const lang of LANGUAGES) {
     const src = input.i18n?.[lang];
     if (!isObject(src)) fail('missing V2 locale ' + lang);
+    for (const key of ['title', 'subtitle', 'summary']) {
+      if (!nonempty(src[key])) fail(lang + '.' + key + ' is required');
+    }
     if (src.summary !== src.subtitle) fail(lang + ' summary differs from subtitle and cannot be preserved by V1');
-    for (const [i, block] of (src.blocks || []).entries()) {
+    if (!Array.isArray(src.blocks) || src.blocks.length < 3) fail(lang + ' needs at least three story blocks');
+    for (const [i, block] of src.blocks.entries()) {
+      if (!isObject(block) || !['karma', 'narrator'].includes(block.speaker) ||
+          !['paragraph', 'did_you_know'].includes(block.type) || !nonempty(block.text)) {
+        fail(lang + ' block ' + (i + 1) + ' is incomplete');
+      }
       if (Object.hasOwn(block, 'image_after')) fail(lang + ' block ' + (i + 1) + ' has inline image placement that V1 cannot preserve');
       if (!nonempty(block.text) || block.text !== block.text.trim() || /\n{2,}/.test(block.text)) {
         fail(lang + ' block ' + (i + 1) + ' has text whitespace that V1 cannot round-trip exactly');
@@ -263,7 +286,20 @@ export function v2ToV1(input) {
       if (block.speaker === 'karma' && narratorSeen) fail(lang + ' block order interleaves Karma after narrator text; V1 stores these streams separately');
     }
   }
-  const question_bank = { questions: input.quiz.map(q => {
+  const question_bank = { questions: input.quiz.map((q, i) => {
+    requireObject(q, 'quiz question ' + (i + 1));
+    if (q.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in V1');
+    if (!Number.isInteger(q.correct_option) || q.correct_option < 0 || q.correct_option > 3) {
+      fail('quiz question ' + (i + 1) + ' has an invalid answer index');
+    }
+    requireObject(q.i18n, 'quiz question ' + (i + 1) + ' translations');
+    for (const lang of LANGUAGES) {
+      const text = q.i18n[lang];
+      if (!isObject(text) || !nonempty(text.question) || !nonempty(text.explanation) ||
+          !Array.isArray(text.options) || text.options.length !== 4 || !text.options.every(nonempty)) {
+        fail('quiz question ' + (i + 1) + ' is incomplete in ' + lang);
+      }
+    }
     const qAr = q.i18n.ar;
     const i18n = Object.fromEntries(LEGACY_LANGUAGES.map(lang => [lang, {
       q: q.i18n[lang].question, o: clone(q.i18n[lang].options), e: q.i18n[lang].explanation
