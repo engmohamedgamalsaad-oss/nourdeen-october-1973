@@ -123,7 +123,7 @@ export function validateStory(s) {
   }
 
   imageCheck(s.cover, 'cover', out);
-  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('images must contain between 2 and 5 images');
+  if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
