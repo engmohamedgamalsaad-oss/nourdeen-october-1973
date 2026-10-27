@@ -315,6 +315,20 @@ test('manual builder merges metadata and protects original body', function () {
   assert.ok(builder.includes('window.KHWorkflow.markPreviewSent(meta,new Date())'));
   assert.ok(!builder.includes('kh-story-preview-decision'));
 });
+test('preview approval records review only and never publishes directly', function () {
+  var decideStart = preview.indexOf('async function decide(action,clickedButton)');
+  var decideEnd = preview.indexOf('var approveBottomButton=', decideStart);
+  assert.ok(decideStart >= 0 && decideEnd > decideStart, 'preview decision handler must exist');
+  var decideBody = preview.slice(decideStart, decideEnd);
+  assert.ok(decideBody.includes('window.KHWorkflow.markApproved(meta'));
+  assert.ok(decideBody.includes('payload.story_meta=meta'));
+  assert.ok(decideBody.includes('الحكاية لم تُنشر ولم يبدأ تنزيل أي ملف'));
+  assert.ok(!decideBody.includes('publish-story-pr'), 'preview approval must not invoke the publisher');
+  assert.ok(!decideBody.includes('window.open('), 'preview approval must not start a separate publish/download window');
+  assert.ok(decideBody.includes("if(record.status!=='published')payload.status=approve?"), 'new story approval must not skip the explicit later publish stage');
+  assert.ok(decideBody.includes("if(record.status==='published'){"), 'published story approval must be staged separately');
+  assert.ok(decideBody.includes('meta.pending_draft=Object.assign({},d)'), 'published edits must remain pending until publish PR review');
+});
 test('preview requires rejection reason and calls workflow transitions', function () {
   assert.ok(preview.includes('id="rejectionReason"'));
   assert.ok(preview.includes('window.KHWorkflow.markPreviewRejected(meta,rejectionReason,new Date())'));
