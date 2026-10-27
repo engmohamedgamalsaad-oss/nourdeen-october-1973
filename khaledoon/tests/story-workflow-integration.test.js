@@ -31,6 +31,8 @@ test('publisher moves a story in a review PR and preserves the previous story UR
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
+  assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
+  assert.ok(publisher.includes('Destination story page already exists outside the index'), 'an occupied destination must not be overwritten');
   assert.ok(publisher.includes("const oldIndexPath = previousRoot + 'index.html'"));
   assert.ok(publisher.includes("treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null })"));
   assert.ok(publisher.includes("This story has moved."));
