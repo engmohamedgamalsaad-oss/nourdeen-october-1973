@@ -11,19 +11,19 @@ export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
   october: 'october', history: 'history', science: 'science',
-  women: 'women', people: 'people', curriculum: 'curriculum', islamic: 'islamic'
+  women: 'women', people: 'people', curriculum: 'curriculum', islamic: 'islamic', readers: 'readers'
 };
 const VARIANT_MAP = {
   timeline: 'curriculum', 'science-lab': 'science-lab',
   'ancient-civilization': 'ancient-civilization',
   'military-history': 'military-history', 'journey-map': 'islamic-heritage',
   'portrait-biography': 'portrait-biography', 'women-leadership': 'women-leadership',
-  'arts-culture': 'arts-culture'
+  'arts-culture': 'arts-culture', discovery: 'reader-story'
 };
 const ACCENTS = {
   october: '#d6ad55', history: '#d5b7ff', science: '#8ad9e8',
   women: '#d78bb2', people: '#e2b36d', curriculum: '#9bb7ff',
-  islamic: '#78c59a'
+  islamic: '#78c59a', readers: '#d6ad55'
 };
 const REVERSE_VARIANT = Object.fromEntries(Object.entries(VARIANT_MAP).map(([a,b]) => [b,a]));
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -203,7 +203,7 @@ function imageToV1(image) {
 export function v2ToV1(input) {
   requireObject(input, 'V2 story');
   if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
-  if (!['october','history','science','women','people','curriculum','islamic'].includes(input.section)) {
+  if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
   if (!Array.isArray(input.sources) || input.sources.length < 2 ||
