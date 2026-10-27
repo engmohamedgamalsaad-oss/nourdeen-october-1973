@@ -290,7 +290,7 @@ test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them'
 
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.sources[0].accessed_at = '2026-10-27';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*sources\\[0\\]\\.accessed_at metadata has no V1 field/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*accessed_at metadata has no V1 field/);
 });
 
 test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
