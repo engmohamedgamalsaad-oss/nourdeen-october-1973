@@ -126,7 +126,7 @@ export function validateStory(s) {
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
-    if (!/^[a-z0-9-]+$/.test(im?.id || '')) out.push('images[' + i + '].id must be a stable lowercase ID');
+    if (im?.id !== 'image-' + (i + 1)) out.push('images[' + i + '].id must be image-' + (i + 1) + ' for lossless admin conversion');
     if (imageIds.has(im?.id)) out.push('images[' + i + '].id duplicated');
     if (im?.id) imageIds.add(im.id);
   }
@@ -151,7 +151,7 @@ export function validateStory(s) {
   for (const [i, q] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     const label = 'quiz[' + i + ']';
     if (!keysCheck(q, ['id', 'correct_option', 'i18n'], ['id', 'correct_option', 'i18n'], label, out)) continue;
-    if (typeof q.id !== 'string' || !/^[a-z0-9-]+$/.test(q.id)) out.push(label + '.id must be a lowercase stable ID');
+    if (q.id !== 'question-' + (i + 1)) out.push(label + '.id must be question-' + (i + 1) + ' for lossless admin conversion');
     if (ids.has(q.id)) out.push(label + '.id duplicated');
     if (q.id) ids.add(q.id);
     if (!Number.isInteger(q.correct_option) || q.correct_option < 0 || q.correct_option > 3) out.push(label + '.correct_option must be 0..3');
