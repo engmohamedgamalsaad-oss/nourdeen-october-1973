@@ -213,3 +213,17 @@ test('requires a caller-supplied stable slug and preserves explicit no-location'
   assert.equal(v2.map_location, null);
   assert.equal(v2ToV1(v2).map_location, null);
 });
+
+test('adapter output satisfies the independent V2 story validator in both directions', async () => {
+  const { validateStory } = await import('../validate-story.mjs');
+  const v1 = fixture();
+  const v2 = v1ToV2(v1, { slug: 'validator-compatibility-story' });
+  assert.deepEqual(validateStory(v2), [], 'V1 → V2 output must satisfy the V2 validator');
+
+  const back = v2ToV1(v2);
+  assert.equal(legacyWorkflow.validateStoryPackage(back).ok, true,
+    legacyWorkflow.validateStoryPackage(back).errors.join('\\n'));
+  assert.deepEqual(validateStory(v1ToV2(back, { slug: 'validator-compatibility-story' })), [],
+    'round-tripped V2 output must still satisfy the V2 validator');
+});
+
