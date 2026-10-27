@@ -29,6 +29,7 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 <section id="preview" class="hidden">
 <section class="panel"><div id="section" class="muted"></div><div id="title" class="story-title"></div><h2 id="subtitle"></h2><p id="summary"></p><div id="cover"></div></section>
 <section class="panel"><h2>٣. نص الحكاية</h2><div id="blocks"></div><p id="history-note"></p></section>
+<section id="map-section" class="panel hidden"><h2>خريطة الحكاية</h2><p id="map-place"></p><a id="map-link" target="_blank" rel="noopener noreferrer">فتح الموقع على OpenStreetMap</a></section>
 <section class="panel"><h2>٤. الصور وحقوق الاستخدام</h2><div id="images"></div></section>
 <section class="panel"><h2>٥. الاختبار</h2><div id="quiz"></div></section>
 <section class="panel"><h2>٦. المصادر</h2><ul id="sources"></ul></section>
@@ -65,6 +66,9 @@ function show(){
  $('cover').replaceChildren();renderImage($('cover'),story.cover,l,'الغلاف');
  $('blocks').replaceChildren();for(const b of t.blocks){const el=node('article',undefined,'block '+(b.speaker==='karma'?'karma':''));el.appendChild(node('strong',b.speaker==='karma'?'كارما':'الراوي'));el.appendChild(node('p',b.text));$('blocks').appendChild(el)}
  $('history-note').textContent=t.history_note||'لا توجد ملاحظة تاريخية مترجمة.';
+ const map=story.map_location;$('map-section').classList.toggle('hidden',!map);
+ if(map){$('map-place').textContent=map.place[l];$('map-link').href='https://www.openstreetmap.org/?mlat='+encodeURIComponent(map.lat)+'&mlon='+encodeURIComponent(map.lng)+'#map=13/'+encodeURIComponent(map.lat)+'/'+encodeURIComponent(map.lng)}
+ else $('map-link').removeAttribute('href');
  $('images').replaceChildren();story.images.forEach((im,i)=>renderImage($('images'),im,l,'الصورة '+(i+1)));
  $('quiz').replaceChildren();story.quiz.forEach((q,i)=>{const qt=q.i18n[l];const el=node('article',undefined,'block');el.appendChild(node('strong',(i+1)+'. '+qt.question));const ul=node('ul');qt.options.forEach((o,j)=>{const li=node('li',o+(j===q.correct_option?' ✓':''));ul.appendChild(li)});el.appendChild(ul);el.appendChild(node('p',qt.explanation));$('quiz').appendChild(el)});
  $('sources').replaceChildren();story.sources.forEach(s=>{const li=node('li');li.appendChild(link(s.url,s.title+' — '+s.organization));$('sources').appendChild(li)});
