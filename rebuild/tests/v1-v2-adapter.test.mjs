@@ -274,7 +274,7 @@ test('accepts legacy V1 packages without a separate cover or localized image att
   };
 
   const v2 = v1ToV2(v1, { slug: 'legacy-package-shape' });
-  assert.equal(v2.cover.caption, v1.images[0].caption);
+  assert.equal(v2.cover.i18n.ar.caption, v1.images[0].caption);
   assert.equal(v2.images[0].i18n.en.source_name, v1.images[0].source_name);
   assert.equal(v2.images[0].i18n.de.rights, v1.images[0].rights);
   assert.equal(v2.map_location.source_name, 'UNESCO World Heritage Centre');
