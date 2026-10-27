@@ -19,6 +19,23 @@ function mockPatch(record, patch) {
   /* In-memory replacement for a Supabase PATCH; never calls fetch or a server. */
   return Object.assign({}, record, patch);
 }
+test('every admin submission row exposes edit and move actions, including closed review states', function () {
+  assert.ok(admin.includes("var editBtn=el('button','btn ghost','تعديل')"));
+  assert.ok(admin.includes("var moveBtn=el('button','btn ghost','نقل الحكاية')"));
+  assert.ok(admin.includes("if(it._t!=='site'){\nvar actions=el('div','review-actions');"), 'editor and review data must remain available for records awaiting publication');
+  assert.ok(admin.includes("editDetails.open=true"), 'edit action must open the existing story editor');
+  assert.ok(admin.includes("meta.pending_draft=pending;patch={story_meta:meta}"), 'published story moves must remain drafts until reviewed');
+  assert.ok(admin.includes("moveSave.textContent='جارٍ حفظ النقل…'"));
+});
+test('publisher moves a story in a review PR and preserves the previous story URL with a redirect', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes("let previousRoot = ''"));
+  assert.ok(publisher.includes("refusing an incomplete story move"));
+  assert.ok(publisher.includes("const oldIndexPath = previousRoot + 'index.html'"));
+  assert.ok(publisher.includes("treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null })"));
+  assert.ok(publisher.includes("This story has moved."));
+  assert.ok(publisher.includes("published_to_main: false"), 'moving a story must remain a review PR, never a direct main write');
+});
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
