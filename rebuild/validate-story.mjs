@@ -1,6 +1,3 @@
-import { readFile, realpath, stat } from 'node:fs/promises';
-import path from 'node:path';
-
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const sections = new Set(['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers']);
 const variants = new Set(['military-history', 'ancient-civilization', 'science-lab', 'women-leadership', 'arts-culture', 'islamic-heritage', 'curriculum', 'reader-story', 'portrait-biography']);
@@ -168,6 +165,8 @@ export function validateStory(s) {
   return out;
 }
 export async function validateLocalImagePaths(story, root) {
+  const { realpath, stat } = await import('node:fs/promises');
+  const path = await import('node:path');
   const out = [];
   const all = [story?.cover, ...(Array.isArray(story?.images) ? story.images : [])];
   let base;
@@ -185,13 +184,17 @@ export async function validateLocalImagePaths(story, root) {
   }
   return out;
 }
-if (process.argv[1] && import.meta.url === new URL('file://' + path.resolve(process.argv[1])).href) {
-  const filename = process.argv[2];
-  if (!filename) { console.error('Usage: node rebuild/validate-story.mjs <story.json>'); process.exitCode = 2; }
-  else try {
-    const story = JSON.parse(await readFile(filename, 'utf8'));
-    const problems = [...validateStory(story), ...await validateLocalImagePaths(story, process.cwd())];
-    if (problems.length) { console.error('Rejected (' + problems.length + '):\n- ' + problems.join('\n- ')); process.exitCode = 1; }
-    else console.log('Story contract passed.');
-  } catch (e) { console.error('Unable to read/parse JSON: ' + e.message); process.exitCode = 2; }
+if (typeof process !== 'undefined' && process.argv?.[1]) {
+  const nodePath = await import('node:path');
+  if (import.meta.url === new URL('file://' + nodePath.default.resolve(process.argv[1])).href) {
+    const filename = process.argv[2];
+    if (!filename) { console.error('Usage: node rebuild/validate-story.mjs <story.json>'); process.exitCode = 2; }
+    else try {
+      const { readFile } = await import('node:fs/promises');
+      const story = JSON.parse(await readFile(filename, 'utf8'));
+      const problems = [...validateStory(story), ...await validateLocalImagePaths(story, process.cwd())];
+      if (problems.length) { console.error('Rejected (' + problems.length + '):\n- ' + problems.join('\n- ')); process.exitCode = 1; }
+      else console.log('Story contract passed.');
+    } catch (e) { console.error('Unable to read/parse JSON: ' + e.message); process.exitCode = 2; }
+  }
 }
