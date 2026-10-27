@@ -55,3 +55,12 @@
 V2 now has optional localized fields for student_name, narrator_name, figure_name, person, grade, narrator_grade, history_note, and images_note. The validator requires any used field to exist across all five locales. The optional map_location field explicitly supports null or a validated lat/lng plus five localized place labels. Regression tests cover missing localized metadata, invalid coordinates, and Arabic fallback in non-Arabic place labels. These safeguards do not yet prove a V1-to-V2 conversion or round-trip preservation.
 
 Contract V2 and its validator are still only an initial foundation. Validator tests do not prove V1 compatibility, reader readiness, admin readiness, or publishing workflow readiness. Keep this branch as a draft; do not merge it as a replacement for the current system.
+
+
+## تنفيذ المحوّل — 2026-10-27
+
+أضيف ملف تجريبي معزول `rebuild/adapters/v1-v2.mjs` واختبارات `rebuild/tests/v1-v2-adapter.test.mjs`. المحوّل لا يخصص أرقام حكايات ولا يغيّر حالة نشر أو بيانات تشغيل. ويشترط slug صريحًا من المستدعي، ويحفظ `original_body` كما وصل.
+
+المحوّل يرفض بدل التخمين أو الاختلاق في الحالات التالية: أقسام/تصميمات بلا تحويل عكسي صريح، سطر مصادر يحتوي أكثر من رابط أو لا يحتوي رابط HTTPS واحدًا، سؤال لا يملك أربعة اختيارات، أنواع صور لا يدعمها عقد V2، أو ترتيب كتل يتداخل فيه صوت كارما بعد صوت الراوي. هذه قيود محافظة وليست دليلًا على أن كل حكايات V1 الحالية قابلة للتحويل.
+
+اختبارات المحوّل تغطي النص الأصلي، فصل صوت كارما والراوي، بطاقات المعرفة، بيانات الصور وترجماتها، المصادر، وإجابات الأسئلة، إضافة إلى حالات الرفض الآمن. لم يُربط المحوّل بالقارئ أو لوحة الإدارة أو الاستيراد، ولم يُجر تحويلًا جماعيًا على الحكايات المنشورة. يجب أن تنجح اختبارات CI أولًا، ثم تُختبر الحكايتان المرجعيتان «رجال البحر في أكتوبر» و«نجيب محفوظ» فعليًا قبل تقرير التوافق النهائي.
