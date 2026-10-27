@@ -254,7 +254,7 @@ test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by 
 
   const document = v1ToV2(fixture(), { slug: 'historical-figure' });
   document.images[0].kind = 'document';
-  assert.throws(() => v2ToV1(document), /has no valid V1 representation/);
+  assert.throws(() => v2ToV1(document), /not supported by V1/);
 });
 
 
@@ -296,7 +296,7 @@ test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them'
 test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
   let v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.images = [];
-  assert.throws(() => v2ToV1(v2), /between two and five images/);
+  assert.throws(() => v2ToV1(v2), /images must contain between 2 and 5 images/);
 
   v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   delete v2.quiz[0].i18n.de;
@@ -324,7 +324,7 @@ test('rejects packages outside the actual V1 source and gallery limits', () => {
   v2.sources[1].url = v2.sources[0].url;
   v2.sources[1].title = 'Reference B https://archive.example/a';
   v2.sources[1].organization = 'archive.example';
-  assert.throws(() => v2ToV1(v2), /at least two distinct sources/);
+  assert.throws(() => v2ToV1(v2), /sources\[1\]\.url must be distinct from other source URLs/);
 });
 
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
