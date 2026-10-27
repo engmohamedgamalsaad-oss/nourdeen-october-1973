@@ -61,7 +61,7 @@ Contract V2 and its validator are still only an initial foundation. Validator te
 
 أضيف ملف تجريبي معزول `rebuild/adapters/v1-v2.mjs` واختبارات `rebuild/tests/v1-v2-adapter.test.mjs`. المحوّل لا يخصص أرقام حكايات ولا يغيّر حالة نشر أو بيانات تشغيل. ويشترط slug صريحًا من المستدعي، ويحفظ `original_body` كما وصل.
 
-المحوّل يرفض بدل التخمين أو الاختلاق في الحالات التالية: أقسام/تصميمات بلا تحويل عكسي صريح، سطر مصادر يحتوي أكثر من رابط أو لا يحتوي رابط HTTPS واحدًا، سؤال لا يملك أربعة اختيارات، أنواع صور لا يدعمها عقد V2، أو ترتيب كتل يتداخل فيه صوت كارما بعد صوت الراوي. هذه قيود محافظة وليست دليلًا على أن كل حكايات V1 الحالية قابلة للتحويل.
+المحوّل يرفض بدل التخمين أو الاختلاق في الحالات التالية: أقسام/تصميمات بلا تحويل عكسي صريح، مصادر أقل من رابطين HTTPS مختلفين أو لا يمكن تمثيل بياناتها دون فقد، سؤال لا يملك أربعة اختيارات، أنواع صور لا يدعمها عقد V2، أو ترتيب كتل يتداخل فيه صوت كارما بعد صوت الراوي. هذه قيود محافظة وليست دليلًا على أن كل حكايات V1 الحالية قابلة للتحويل.
 
 اختبارات المحوّل تغطي النص الأصلي، فصل صوت كارما والراوي، بطاقات المعرفة، بيانات الصور وترجماتها، المصادر، وإجابات الأسئلة، إضافة إلى حالات الرفض الآمن. لم يُربط المحوّل بالقارئ أو لوحة الإدارة أو الاستيراد، ولم يُجر تحويلًا جماعيًا على الحكايات المنشورة. يجب أن تنجح اختبارات CI أولًا، ثم تُختبر الحكايتان المرجعيتان «رجال البحر في أكتوبر» و«نجيب محفوظ» فعليًا قبل تقرير التوافق النهائي.
 
@@ -90,3 +90,16 @@ These published `data.json` files are metadata/index companions, not `KH_STORY_P
 A new test file checks that both real published stories remain correctly indexed, published, and localized, without treating their metadata files as V1 AI packages. Its first CI run caught an overly narrow language-wiring assertion for story 001; that assertion was corrected to recognize the actual `i18n.js` / `data-i18n` pattern. The corrected test passed in the latest foundation CI run 40452346404. Both published-story layout checks passed. This verifies index/layout consistency only, not V1↔V2 adapter conversion of real packages.
 
 The homepage browser audit run 40452346450 completed successfully: 203/203 flow steps across 10 language/viewport runs, 12/12 intro-popup checks, 28/28 SVG checks, zero hard failures, and zero audit warnings. The report covers 26 pages in AR/EN/FR/IT/DE; all 10 language/viewport sweeps reported zero horizontal overflow. This is a site regression audit; it does not validate V1↔V2 adapter integration.
+
+
+## تحديث تحقق CI — 2026-10-27 (الأحدث)
+
+حالة PR #387 على الفرع المعزول: 9 ملفات تأسيس/اختبار، ولا تعديل لصفحات الحكايات المنشورة أو فهرسها أو ملفات القارئ/الإدارة أو وظائف Supabase.
+
+- اختبارات العقد والمحوّل: **26/26 ناجحة**، run [40453979649](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40453979649).
+- فحص المتصفح الفعلي: **203/203 خطوات ناجحة** عبر 10 تشغيلات لغة/شاشة، و12/12 فحص شاشة البداية، و28/28 فحص SVG، بلا إخفاقات أو تحذيرات في التقرير؛ 26 صفحة × 5 لغات × شاشتين، وصفر تجاوز أفقي في كل الصفحات المفحوصة، run [40453979642](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40453979642).
+- أُنزِل تقرير الفحص وصور سطح المكتب والهاتف من artifacts وفُحص التقرير: جميع مجموعات التدفق العشر ناجحة، وقوائم hard failures وwarnings فارغة.
+- هذه النتائج تثبت سلامة الفحوص المحددة على الموقع الحالي، لكنها **لا تثبت توافق كل حزم V1 ولا تكامل المحوّل مع القارئ أو لوحة الإدارة**.
+- اختبار المحوّل الحالي يستخدم fixture اختباريًا يمر على مدقّق V1 الفعلي قبل التحويل وبعده؛ لم تُلتقط حتى الآن حزمة أصلية مُصدّرة من جلسة لوحة الإدارة الحية.
+
+القرار: أبقِ PR #387 مسودة. لا تدمج ولا تستبدل صيغة الاستيراد V1 قبل اختبار حزمة حقيقية من تدفق الإدارة ومراجعة كل الحقول التي لا يمكن تمثيلها دون فقد. ملاحظات نطاق PR القديمة في هذا الملف تاريخية، ويُرجع إلى بيانات PR #387 الحالية (9 ملفات) بدل الاعتماد على الأرقام السابقة التي وصفت PR #384 الواسع.
