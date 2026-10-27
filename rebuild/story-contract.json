@@ -103,6 +103,11 @@
           "url": {
             "type": "string",
             "pattern": "^https://"
+          },
+          "accessed_at": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Optional date when the source was accessed."
           }
         }
       }
@@ -228,7 +233,7 @@
         "summary": {
           "type": "string",
           "minLength": 1,
-          "description": "Must equal subtitle exactly in the same locale while the current admin import uses the lossless V1 compatibility projection."
+          "description": "A concise localized summary; it may differ from subtitle."
         },
         "blocks": {
           "type": "array",
@@ -257,6 +262,11 @@
               "text": {
                 "type": "string",
                 "minLength": 1
+              },
+              "image_after": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Optional ID of an image to display after this story block."
               }
             }
           }
@@ -319,7 +329,9 @@
             "archival",
             "illustration",
             "map",
-            "diagram"
+            "diagram",
+            "photograph",
+            "document"
           ]
         },
         "source_name": {
