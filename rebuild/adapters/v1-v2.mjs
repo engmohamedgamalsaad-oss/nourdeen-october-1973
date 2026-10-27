@@ -174,6 +174,9 @@ export function v1ToV2(input, { slug } = {}) {
   };
 }
 function imageToV1(image) {
+  if (!['archival','illustration','diagram','map'].includes(image.kind)) {
+    fail('V2 image kind "' + image.kind + '" has no valid V1 representation');
+  }
   const ar = image.i18n.ar;
   const out = {
     ...('url' in image ? { url: image.url } : { path: image.path }),
@@ -186,6 +189,12 @@ function imageToV1(image) {
 export function v2ToV1(input) {
   requireObject(input, 'V2 story');
   if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
+  if (!['october','history','science','women','people','curriculum','islamic'].includes(input.section)) {
+    fail('V2 section has no canonical V1 section_key: ' + input.section);
+  }
+  if (!Array.isArray(input.sources) || !Array.isArray(input.quiz) || !Array.isArray(input.images)) {
+    fail('V2 sources, quiz, and images must be arrays');
+  }
   const section_key = input.section === 'women' ? 'women' : input.section === 'people' ? 'people' : input.section;
   const visual_design = REVERSE_VARIANT[input.design?.variant];
   if (!visual_design) fail('V2 design variant has no V1 equivalent: ' + input.design?.variant);
