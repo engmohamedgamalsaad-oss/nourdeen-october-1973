@@ -1,4 +1,4 @@
-name: Khaledoon rebuild foundation checks # contract-only CI
+name: Khaledoon rebuild foundation checks # contract and V1-V2 adapter CI
 on:
   push:
     branches: [rebuild/khaledoon-foundation-2026-10-26]
@@ -15,5 +15,5 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - run: node --test rebuild/tests/*.test.mjs
+      - name: Run contract and adapter regression tests\n        run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
