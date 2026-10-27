@@ -12,6 +12,8 @@ test('V2 reader exposes all five language choices and changes text direction', (
   assert.match(js, /readerScript\.dataset\.storyPath\?document\.baseURI:ROOT/);
   assert.match(js, /openstreetmap\.org/);
   assert.match(js, /document\.body\.dataset\.design/);
+  assert.match(js, /j===q\.correct_option/);
+  assert.match(js, /lang\.options\[q\.correct_option\]/);
 });
 
 test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
