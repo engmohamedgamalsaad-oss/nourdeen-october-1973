@@ -70,6 +70,21 @@ test('preserves V1 metadata and requires every supplied metadata field in all lo
   assert(e.some(x => x.includes('i18n.fr.images_note required in every locale')));
 });
 
+test('allows stories that have no legacy metadata and preserves explicitly empty notes', () => {
+  const s = fixture();
+  for (const lang of langs) {
+    for (const key of ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note']) {
+      delete s.i18n[lang][key];
+    }
+  }
+  assert.deepEqual(validateStory(s), []);
+  for (const lang of langs) {
+    s.i18n[lang].history_note = '';
+    s.i18n[lang].images_note = '';
+  }
+  assert.deepEqual(validateStory(s), []);
+});
+
 test('rejects missing translations and image rights', () => {
   const s = fixture();
   delete s.i18n.de;
