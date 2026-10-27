@@ -103,9 +103,6 @@
           "url": {
             "type": "string",
             "pattern": "^https://"
-          },
-          "accessed_at": {
-            "type": "string"
           }
         }
       }
@@ -230,7 +227,8 @@
         },
         "summary": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "description": "Must equal subtitle exactly in the same locale while the current admin import uses the lossless V1 compatibility projection."
         },
         "blocks": {
           "type": "array",
@@ -259,9 +257,6 @@
               "text": {
                 "type": "string",
                 "minLength": 1
-              },
-              "image_after": {
-                "type": "string"
               }
             }
           }
@@ -322,10 +317,8 @@
         "kind": {
           "enum": [
             "archival",
-            "photograph",
             "illustration",
             "map",
-            "document",
             "diagram"
           ]
         },
