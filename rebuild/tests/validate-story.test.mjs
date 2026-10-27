@@ -26,6 +26,8 @@ function fixture() {
     summary: 'summary ' + l,
     student_name: 'student ' + l,
     narrator_name: 'narrator ' + l,
+    figure_name: 'figure ' + l,
+    person: 'person ' + l,
     grade: 'grade ' + l,
     narrator_grade: 'narrator grade ' + l,
     history_note: 'historical note ' + l,
@@ -55,7 +57,8 @@ function fixture() {
     cover: image(),
     images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
     sources: [{ title: 'Reference', organization: 'Archive', url: 'https://example.org/reference' }],
-    quiz
+    quiz,
+    map_location: null
   };
 }
 
@@ -73,7 +76,7 @@ test('preserves V1 metadata and requires every supplied metadata field in all lo
 test('allows stories that have no legacy metadata and preserves explicitly empty notes', () => {
   const s = fixture();
   for (const lang of langs) {
-    for (const key of ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note']) {
+    for (const key of ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person']) {
       delete s.i18n[lang][key];
     }
   }
@@ -83,6 +86,29 @@ test('allows stories that have no legacy metadata and preserves explicitly empty
     s.i18n[lang].images_note = '';
   }
   assert.deepEqual(validateStory(s), []);
+});
+
+test('accepts explicit no-location and validates fully localized verified map locations', () => {
+  const s = fixture();
+  assert.deepEqual(validateStory(s), []);
+  s.map_location = {
+    lat: 29.98,
+    lng: 31.13,
+    place: { ar: 'القاهرة', en: 'Cairo', fr: 'Le Caire', it: 'Il Cairo', de: 'Kairo' }
+  };
+  assert.deepEqual(validateStory(s), []);
+  s.map_location.place.de = 'القاهرة';
+  s.map_location.lat = 120;
+  const e = validateStory(s);
+  assert(e.some(x => x.includes('map_location.lat must be a valid latitude')));
+  assert(e.some(x => x.includes('map_location.place.de must not contain Arabic fallback')));
+});
+
+test('preserves localized figure identity and requires all locales when used', () => {
+  const s = fixture();
+  delete s.i18n.fr.figure_name;
+  const e = validateStory(s);
+  assert(e.some(x => x.includes('i18n.fr.figure_name required in every locale')));
 });
 
 test('rejects missing translations and image rights', () => {
