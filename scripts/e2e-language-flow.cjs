@@ -616,7 +616,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
   const hard = [];
   const ctx = await newContext(browser, origin, 'desktop');
   const seed = {
-    id: 'e2e-v2-import-draft',
+    id: 'e2e00000-0000-4000-8000-000000000001',
     status: 'pending',
     section: 'history',
     title: 'Existing E2E Draft',
