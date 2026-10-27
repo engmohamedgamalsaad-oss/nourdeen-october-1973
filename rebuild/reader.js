@@ -7,7 +7,7 @@ fr:{section:'Récit',story:'Le récit',gallery:'Images du récit',quiz:'Vérifie
 it:{section:'Racconto',story:'Il racconto',gallery:'Immagini del racconto',quiz:'Verifica la comprensione',sources:'Fonti e verifica',karma:'Karma',narrator:'Narratore',student:'Preparato e presentato da',answer:'Verifica la risposta',missing:'Il pacchetto è incompleto o non corrisponde a KHALEDOON_STORY_V2.'},
 de:{section:'Geschichte',story:'Die Geschichte',gallery:'Bilder zur Geschichte',quiz:'Verständnis prüfen',sources:'Quellen und Überprüfung',karma:'Karma',narrator:'Erzähler',student:'Erstellt und vorgestellt von',answer:'Antwort prüfen',missing:'Das Paket ist unvollständig oder entspricht nicht KHALEDOON_STORY_V2.'}};
 var current='ar',story=null;
-var ROOT=new URL('../',document.currentScript.src);
+var readerScript=document.currentScript;\nvar ROOT=new URL('../',readerScript.src);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
@@ -31,7 +31,7 @@ $('quiz').replaceChildren();story.quiz.forEach(function(q,index){var lang=q.i18n
 $('status').hidden=true;$('story').hidden=false;
 }
 document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;show()})});
-var path=new URLSearchParams(location.search).get('story');
+var path=new URLSearchParams(location.search).get('story')||readerScript.dataset.storyPath;
 if(!path||path.startsWith('/')||path.split('/').some(function(p){return p==='..'||p==='.'})||!path.endsWith('.json')){$('status').textContent='حدد حزمة JSON صالحة عبر ?story=PATH.json داخل المستودع.';return}
 fetch(new URL(path,ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
 if(data.format!=='KHALEDOON_STORY_V2'||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
