@@ -175,6 +175,20 @@
                   "minLength": 1
                 }
               }
+            },
+            "source_name": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Optional provenance label preserved from legacy V1 map metadata."
+            },
+            "source_url": {
+              "type": "string",
+              "pattern": "^https://",
+              "description": "Optional provenance URL preserved from legacy V1 map metadata."
+            },
+            "approximate": {
+              "type": "boolean",
+              "description": "Whether legacy V1 coordinates are approximate."
             }
           }
         }
