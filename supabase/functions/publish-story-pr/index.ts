@@ -288,9 +288,12 @@ Deno.serve(async (req: Request) => {
       treeEntries.push({ path: oldIndexPath, mode: '100644', type: 'blob', sha: redirectBlob.sha });
     }
     const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
+    const prMarkerPrefix = `<!-- khaledoon-story:${storyId}:`;
     const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
+    // Block a second open PR for the same ID even if the requested destination path differs.
+    // Otherwise two review branches could race to move/update the same story.
     const existingPull = Array.isArray(openPulls)
-      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarker) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
+      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarkerPrefix) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
       : null;
     if (existingPull) {
       return reply(409, {
