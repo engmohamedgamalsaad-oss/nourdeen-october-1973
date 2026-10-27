@@ -330,11 +330,12 @@ function normalizeReviewData(d){
  d.story_meta=meta;
  return d;
 }
+function cleanSourceMarkers(value){return String(value||'').replace(/\\s+—\\s+\\[org:([^\\]]+)\\]\\s+—\\s+/g,' — $1 — ')}
 function renderReview(d){
  d=normalizeReviewData(d);
  currentDraft=d;
  put('reviewTitle',d.title||'حكاية بلا عنوان');put('reviewSubtitle',d.subtitle||'');put('reviewSection',(d.section_label||'خالدون عبر التاريخ')+' · معاينة غير منشورة');put('reviewFigure',[d.figure_name,d.narrator_name?'الراوي/الطفلة: '+d.narrator_name:'',d.narrator_grade?'الصف: '+d.narrator_grade:''].filter(Boolean).join(' · '));
- put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',d.sources||'لم تُضف مصادر بعد.');renderReviewImages(d);put('reviewOriginal',d.original_body||'');
+ put('reviewKarma',d.karma_text||'لا يوجد نص لكارما بعد.');put('reviewBody',d.body||'لم يُكتب نص الحكاية بعد.');put('reviewHistory',d.history_note||'لا يوجد نص في هذا القسم.');put('reviewSources',cleanSourceMarkers(d.sources)||'لم تُضف مصادر بعد.');renderReviewImages(d);put('reviewOriginal',d.original_body||'');
  $('reviewOriginalWrap').hidden=!d.original_body;
  var aiMeta=d.story_meta&&typeof d.story_meta==='object'?d.story_meta:{};var aiProvider=String(aiMeta.ai_imported_provider_label||aiMeta.ai_imported_provider||d.provider_key||'أداة الذكاء الاصطناعي');var aiBadge=$('aiVersionBadge');if(aiBadge){aiBadge.hidden=!(aiMeta.ai_package_raw||aiMeta.ai_imported_at||aiMeta.ai_imported_provider);if(!aiBadge.hidden)aiBadge.textContent='نسخة AI — مصدرها '+aiProvider+'؛ الناتج محفوظ للمراجعة داخل قالب خالدون. هذه معاينة غير منشورة.'}
  renderReadiness(d);renderQuiz(d);renderTranslations(d);
