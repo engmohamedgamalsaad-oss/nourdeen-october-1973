@@ -288,6 +288,7 @@ export function v2ToV1(input) {
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
     // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
     if (matches.length === 1 && titleUrl === source.url && hostname === source.organization) continue;
+    if (matches.length) fail('source ' + (i + 1) + ' title already contains a URL that cannot be represented unambiguously');
   }
   for (const [i, image] of input.images.entries()) {
     if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in V1');
