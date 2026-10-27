@@ -107,6 +107,31 @@ test('round-trips every image kind supported by V1 and V2', () => {
   assert.equal(again.images[0].kind, 'document');
 });
 
+
+test('rejects V2-only summary, inline-image, custom-design, and lossy text features', () => {
+  const makeV2 = () => v1ToV2(fixture(), { slug: 'historical-figure' });
+
+  let v2 = makeV2();
+  v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
+  assert.throws(() => v2ToV1(v2), /summary differs from subtitle/);
+
+  v2 = makeV2();
+  v2.i18n.ar.blocks[0].image_after = 'image-1';
+  assert.throws(() => v2ToV1(v2), /inline image placement/);
+
+  v2 = makeV2();
+  v2.design.accent = '#123456';
+  assert.throws(() => v2ToV1(v2), /custom V2 accent/);
+
+  v2 = makeV2();
+  v2.i18n.ar.blocks[0].text = '  Karma asks a question ar.';
+  assert.throws(() => v2ToV1(v2), /text whitespace/);
+
+  v2 = makeV2();
+  v2.sources[0].organization = 'Different organization';
+  assert.throws(() => v2ToV1(v2), /cannot be represented losslessly/);
+});
+
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
   assert.throws(() => v1ToV2(fixture()), /stable slug/);
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
