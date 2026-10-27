@@ -147,7 +147,7 @@ function sourceRows(s){
  var rows=[];String(s||'').split(/\r?\n/).map(function(line){return line.trim()}).filter(Boolean).forEach(function(line){
   var urls=line.match(/https?:\/\/[^\s)\]>]+/g)||[];
   if(!urls.length){rows.push({line:line,url:'',label:line});return}
-   urls.forEach(function(raw){var url=raw.replace(/[.,;:]+$/,''),before=line.slice(0,line.indexOf(raw)).trim();var orgMarker=before.match(/^(.*?)\s+—\s+\[org:[^\]]+\]\s+—\s*$/);if(orgMarker)before=orgMarker[1].trim();before=before.replace(/[|—–:-]+$/,'').trim();var label=before||('مصدر '+(rows.length+1));rows.push({line:line,url:url,label:label})});
+   urls.forEach(function(raw){var url=raw.replace(/[.,;:]+$/,''),before=line.slice(0,line.indexOf(raw)).trim();var orgMarker=before.match(/^(.*?)\s+—\s+\[org:([^\]]+)\]\s+—\s*$/);if(orgMarker){try{before=(orgMarker[1].trim()+(orgMarker[2].trim()?' — '+decodeURIComponent(orgMarker[2]):'')).trim()}catch(ignoreOrgMarker){before=orgMarker[1].trim()}}before=before.replace(/[|—–:-]+$/,'').trim();var label=before||('مصدر '+(rows.length+1));rows.push({line:line,url:url,label:label})});
  });var seen={};return rows.filter(function(x){if(!x.url)return true;if(seen[x.url])return false;seen[x.url]=true;return true})
 }
 function translatedRows(d,id){
