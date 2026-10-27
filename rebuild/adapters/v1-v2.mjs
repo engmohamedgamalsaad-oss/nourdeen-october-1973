@@ -206,10 +206,11 @@ export function v2ToV1(input) {
   if (!['october','history','science','women','people','curriculum','islamic'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
-  if (!Array.isArray(input.sources) || input.sources.length < 1 ||
+  if (!Array.isArray(input.sources) || input.sources.length < 2 ||
+      new Set(input.sources.map(s => s?.url)).size < 2 ||
       !Array.isArray(input.quiz) || input.quiz.length !== 5 ||
-      !Array.isArray(input.images) || input.images.length < 2) {
-    fail('V2 requires at least one source, exactly five quiz questions, and at least two images');
+      !Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) {
+    fail('V2 requires at least two distinct sources, exactly five quiz questions, and between two and five images');
   }
   if (!nonempty(input.original_body)) fail('V2 original_body must be non-empty and preserved');
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug || '')) fail('V2 slug must be stable lowercase kebab-case');
