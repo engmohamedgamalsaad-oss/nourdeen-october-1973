@@ -177,9 +177,11 @@ test('normalizes recognizable legacy prompt output without inventing absent Arab
   assert.equal(v2.i18n.ar.blocks.filter(b => b.speaker === 'narrator').map(b => b.text).join('\n\n'), originalBody);
   assert.equal(v2.original_body, fixture().original_body);
   assert.equal(v2.quiz.length, 5);
-  for (const lang of ['ar', ...langs]) {
-    assert.equal(Object.hasOwn(v2.i18n[lang], 'student_name'), false,
-      'student_name must be omitted consistently if the Arabic value is missing');
+  assert.equal(Object.hasOwn(v2.i18n.ar, 'student_name'), false,
+    'do not invent an Arabic student_name when it is absent from the legacy package');
+  for (const lang of langs) {
+    assert.equal(v2.i18n[lang].student_name, 'Student ' + lang,
+      'preserve known localized student_name values even when Arabic is missing');
   }
 });
 
