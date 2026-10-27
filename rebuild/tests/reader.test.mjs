@@ -30,7 +30,7 @@ test('story text is inserted as text and source links are isolated', () => {
 test('static builder validates V2 packages and will not overwrite existing story pages', () => {
   assert.match(builder, /validateStory/);
   assert.match(builder, /validateLocalImagePaths/);
-  assert.match(builder, /KHALEDOON_STORY_V2/);
+  assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /data\.v2\.json/);
 });
