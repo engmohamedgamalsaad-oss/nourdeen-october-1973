@@ -268,35 +268,35 @@
         },
         "student_name": {
           "type": "string",
-          "description": "Optional localized story proposer/student name preserved from V1."
+          "description": "Optional localized story proposer/student name preserved only in locales explicitly present in the source; missing locales must not be guessed."
         },
         "narrator_name": {
           "type": "string",
-          "description": "Optional localized narrator name preserved from V1."
+          "description": "Optional localized narrator name; each locale may be omitted independently when the source has no reliable value."
         },
         "grade": {
           "type": "string",
-          "description": "Optional localized target school grade preserved from V1."
+          "description": "Optional localized target school grade; each locale may be omitted independently, and generic narrator labels are not school grades."
         },
         "narrator_grade": {
           "type": "string",
-          "description": "Optional localized narrator grade preserved from V1."
+          "description": "Optional localized narrator grade; each locale may be omitted independently when the source has no reliable value."
         },
         "history_note": {
           "type": "string",
-          "description": "Optional historical verification/context note; preserve even when empty."
+          "description": "Optional localized historical verification/context note; preserve source wording and allow missing locales independently."
         },
         "images_note": {
           "type": "string",
-          "description": "Optional image provenance/rights note; preserve even when empty."
+          "description": "Optional localized image provenance/rights note; preserve source wording and allow missing locales independently."
         },
         "figure_name": {
           "type": "string",
-          "description": "Optional localized historical figure name; preserve V1 figure_name/person."
+          "description": "Optional localized historical figure name; each locale may be omitted independently when no reliable value exists."
         },
         "person": {
           "type": "string",
-          "description": "Optional localized person label preserved from V1."
+          "description": "Optional localized person label; each locale may be omitted independently when no reliable value exists."
         }
       }
     },
