@@ -59,7 +59,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     const page = await readFile(pagePath, 'utf8');
     const saved = JSON.parse(await readFile(dataPath, 'utf8'));
     assert.match(page, /data-story-slug="987"/);
-    assert.match(page, /stories\/people\/987\/data\.v2\.json/);
+    assert.match(page, /data-story-path="data\.v2\.json"/);
     assert.equal(saved.format, 'KHALEDOON_STORY_V2');
     assert.equal(saved.original_body, 'Exact sample source text.');
     const second = spawnSync(process.execPath, [builder, input, '987'], { cwd: temp, encoding: 'utf8' });
