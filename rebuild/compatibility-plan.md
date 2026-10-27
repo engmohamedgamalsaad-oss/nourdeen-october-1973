@@ -38,6 +38,8 @@
 - اختبار كل اللغات الخمس، الصور، الغلاف، شاشة البداية، المعرض، الأسئلة، الطباعة والمشاركة في قارئ تجريبي غير منشور.
 - عدم تغيير الموقع الحي أو Supabase قبل اجتياز هذه البوابات ومراجعة مستقلة.
 
-## النتيجة الحالية
+## Current status
 
-عقد V2 ومدققه هما أساس أولي فقط. اختبارات المدقق لا تثبت التوافق مع V1، ولا تثبت جاهزية القارئ أو لوحة الإدارة أو دورة النشر. لذلك يظل هذا الفرع مسودة ولا يُدمج كبديل للنظام الحالي.
+V2 now has optional localized fields for student_name, narrator_name, grade, narrator_grade, history_note, and images_note. The validator requires any used field to exist across all five locales, and regression tests cover missing localized values. This prevents these fields from being omitted by the future contract, but it does not yet prove a V1-to-V2 conversion or round-trip preservation.
+
+Contract V2 and its validator are still only an initial foundation. Validator tests do not prove V1 compatibility, reader readiness, admin readiness, or publishing workflow readiness. Keep this branch as a draft; do not merge it as a replacement for the current system.
