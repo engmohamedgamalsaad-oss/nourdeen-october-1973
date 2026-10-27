@@ -304,7 +304,7 @@ test('rejects structurally incomplete V2 images and quiz instead of emitting inv
 
   v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.i18n.fr.blocks = [];
-  assert.throws(() => v2ToV1(v2), /at least three story blocks/);
+  assert.throws(() => v2ToV1(v2), /i18n\.fr\.blocks needs at least 3 blocks/);
 });
 
 test('rejects packages outside the actual V1 source and gallery limits', () => {
