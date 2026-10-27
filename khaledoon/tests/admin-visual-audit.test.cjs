@@ -117,6 +117,20 @@ async function main() {
       assert.ok(adminOverflow <= 2, 'Admin horizontal overflow on ' + viewport.name + ': ' + adminOverflow + 'px');
       console.log('ok - admin loaded and no horizontal overflow (' + viewport.name + ')');
 
+      // Exercise row-level edit/move actions against mock records only.
+      const editableSummary = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية مرسلة للمعاينة' }).first();
+      await editableSummary.click();
+      const editAction = page.getByRole('button', { name:'تعديل', exact:true }).first();
+      await editAction.waitFor({ state:'visible', timeout:10000 });
+      await editAction.click();
+      await page.getByRole('textbox', { name:'الصق ناتج الذكاء الاصطناعي JSON' }).waitFor({ state:'visible', timeout:10000 });
+      console.log('ok - row-level edit opens the editor for an ordinary draft (' + viewport.name + ')');
+      const moveAction = page.getByRole('button', { name:'نقل الحكاية', exact:true }).first();
+      await moveAction.click();
+      await page.getByRole('button', { name:'تأكيد النقل', exact:true }).waitFor({ state:'visible', timeout:10000 });
+      await page.getByRole('button', { name:'إلغاء', exact:true }).last().click();
+      console.log('ok - row-level move opens and closes its section panel (' + viewport.name + ')');
+
       // Exercise the user's one-button AI import lock cycle with invalid content only.
       // This must never write to Supabase; only the fake read endpoints are available.
       await page.goto('http://127.0.0.1:' + PORT + '/khaledoon/admin.html?editcode=visual-preview-001', { waitUntil:'domcontentloaded' });
