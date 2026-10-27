@@ -98,7 +98,7 @@ function sourcesToV2(value) {
     // V2 sources round-trip through a readable organization marker in V1's
     // plain-text source field. Ordinary legacy lines retain their original title.
     const beforeUrl = line.slice(0, line.indexOf(matches[0])).trim();
-    const marker = beforeUrl.match(/^(.*?) — \\[org:([^\\]]+)\\] —$/);
+    const marker = beforeUrl.match(/^(.*?) — \[org:([^\]]+)\] —$/);
     if (marker) return { title: marker[1], organization: marker[2], url };
     return { title: line, organization: hostname, url };
   });
@@ -281,10 +281,10 @@ export function v2ToV1(input) {
     }
     let hostname = '';
     try { hostname = new URL(source.url).hostname; } catch {}
-    if (!/^https:\\/\\//i.test(source.url) || !hostname) {
+    if (!/^https:\/\//i.test(source.url) || !hostname) {
       fail('source ' + (i + 1) + ' URL must be valid HTTPS');
     }
-    const matches = source.title.match(/https:\\/\\/[^\\s)\\]>]+/gi) || [];
+    const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
     // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
     if (matches.length === 1 && titleUrl === source.url && hostname === source.organization) continue;
@@ -374,7 +374,7 @@ export function v2ToV1(input) {
     body: textFromBlocks(ar.blocks, 'narrator'),
     history_note: ar.history_note || '', images_note: ar.images_note || '',
     sources: input.sources.map(s => {
-      const matches = s.title.match(/https:\\/\\/[^\\s)\\]>]+/gi) || [];
+      const matches = s.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
       let hostname = '';
       try { hostname = new URL(s.url).hostname; } catch {}
       const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
