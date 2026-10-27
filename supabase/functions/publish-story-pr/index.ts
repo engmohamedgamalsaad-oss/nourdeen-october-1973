@@ -127,7 +127,7 @@ Deno.serve(async (req: Request) => {
   let storyLockBranchForCleanup = "";
   async function releaseStoryLock() {
     const lockBranch = storyLockBranchForCleanup;
-    if (!lockBranch) return;
+    if (!lockBranch || !githubToken) return;
     storyLockBranchForCleanup = "";
     try {
       await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${lockBranch}`, githubToken, { method: "DELETE" });
