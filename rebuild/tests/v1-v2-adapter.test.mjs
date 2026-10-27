@@ -387,6 +387,6 @@ test('v2ToV1 enforces contract validation when called without the admin pre-vali
 
 test('rejects source titles with line breaks that the V1 line-based field cannot preserve', () => {
   const v2 = v1ToV2(fixture(), { slug: 'multiline-source-title' });
-  v2.sources[0].title = 'First line\\nSecond line';
+  v2.sources[0].title = 'First line\nSecond line';
   assert.throws(() => v2ToV1(v2), /title cannot be represented safely in the single-line V1 source field/);
 });
