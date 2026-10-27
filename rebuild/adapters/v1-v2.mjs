@@ -134,17 +134,15 @@ function metadataForLocale(v1, lang) {
     history_note: v1.history_note, images_note: v1.images_note,
     figure_name: v1.figure_name, person: v1.person
   };
+  const source = lang === 'ar' ? v1 : (v1.translations?.[lang] || {});
   const out = {};
   for (const key of keys) {
-    const values = LANGUAGES.map(langCode => {
-      const locale = langCode === 'ar' ? v1 : (v1.translations?.[langCode] || {});
-      const fallback = ['narrator_name','narrator_grade','figure_name','person'].includes(key)
-        ? baseValues[key] : undefined;
-      return locale[key] ?? fallback;
-    });
-    // Metadata is optional in V2. If the old package has it only in some
-    // locales, omit the field consistently rather than inventing a translation.
-    if (values.every(value => typeof value === 'string')) out[key] = values[LANGUAGES.indexOf(lang)];
+    const fallback = ['narrator_name','narrator_grade','figure_name','person'].includes(key)
+      ? baseValues[key] : undefined;
+    const value = source[key] ?? fallback;
+    // These fields are optional per locale. Preserve known translations even
+    // when the source omitted another language; never synthesize the missing one.
+    if (typeof value === 'string') out[key] = value;
   }
   return out;
 }
