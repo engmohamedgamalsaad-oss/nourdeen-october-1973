@@ -79,7 +79,7 @@ function imageToV2(image, label, id) {
     i18n[lang] = Object.fromEntries(['alt','caption','source_name','rights'].map(k => [k, locale[k]]));
   }
   const kind = image.kind;
-  if (!['archival','photograph','illustration','map','document','diagram'].includes(kind)) {
+  if (!['archival','illustration','map','diagram'].includes(kind)) {
     fail(label + '.kind "' + kind + '" is not representable in the current V2 contract');
   }
   if (!/^https:\/\//i.test(String(image.source_url || ''))) fail(label + '.source_url must be HTTPS');
@@ -89,7 +89,7 @@ function imageToV2(image, label, id) {
 function sourcesToV2(value) {
   if (typeof value !== 'string' || !value.trim()) fail('sources must be non-empty text');
   const lines = value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
-  return lines.map((line, i) => {
+  const sources = lines.map((line, i) => {
     const matches = line.match(/https:\/\/[^\s)\]>]+/gi) || [];
     if (matches.length !== 1) fail('sources line ' + (i + 1) + ' must contain exactly one HTTPS URL for reversible conversion');
     const url = matches[0].replace(/[.,;:]+$/, '');
@@ -152,7 +152,7 @@ export function v1ToV2(input, { slug } = {}) {
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
   const variant = VARIANT_MAP[input.visual_design];
   if (!variant) fail('visual_design has no lossless V2 mapping: ' + input.visual_design);
-  if (!Array.isArray(input.images) || input.images.length < 2) fail('at least two V1 images are required');
+  if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('V1 requires between two and five gallery images');
   const i18n = {};
   for (const lang of LANGUAGES) {
     const src = lang === 'ar' ? input : input.translations?.[lang];
