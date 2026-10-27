@@ -33,6 +33,6 @@
 - `adapters/v1-v2.mjs` و`validate-story.mjs`: محوّل ومدقق مستقلان مع رفض التحويلات غير الآمنة.
 - جسر إدخال V2 داخل `khaledoon/admin.html` مع وحدة المتصفح `khaledoon/assets/admin-v2-import.mjs`؛ يحفظ النص الأصلي ويترك الحكاية مسودة.
 - اختبارات العقد والمحوّل وربط لوحة الإدارة، بالإضافة إلى فحص متصفح يتحقق من تحميل وحدة V2.
-- آخر فحص عقد ناجح على الفرع: [GitHub Actions](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40480201083). فحص المتصفح الكامل ما زال قيد التنفيذ على أحدث نسخة، لذلك لم يُعلن نجاح التكامل بعد. التفاصيل والقيود في `admin-integration-plan.md` و`compatibility-plan.md`.
+- على آخر نسخة مفحوصة من فرع التكامل، نجحت فحوص GitHub Actions الثلاثة: [فحص تدفق اللغات والمتصفح](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40480473539)، [فحوص أساس إعادة البناء](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40480472333)، و[اختبارات دورة الحكاية](https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/actions/runs/40480472261). هذا يثبت نجاح اختبارات الكود، ولا يثبت اجتياز حزمة حقيقية بعينها. حزمة فاروق الباز لم تُرفع إلى المستودع العام ولم تُختبر بعد بالمدقق الفعلي. التفاصيل والقيود في `admin-integration-plan.md` و`compatibility-plan.md`.
 
 أي توسعة للعقد يجب أن تحدّث المخطط والمدقق والاختبارات معًا.
