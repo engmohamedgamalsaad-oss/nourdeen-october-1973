@@ -50,7 +50,13 @@ const records = [
     subtitle:'بيانات وهمية لاختبار التنبيه دون الربط التلقائي', figure_name:'أحمد زويل', narrator_name:'راوٍ تجريبي',
     narrator_grade:'الصف الأول الإعدادي', original_body:'نص وهمي ثالث ثابت.',
     body:'نص وهمي لاختبار التنبيه الاسترشادي عند تطابق اسم الشخصية مع صفحة موجودة.',
-    sources:'مصدر تجريبي', consent:true, created_at:'2026-10-18T09:00:00Z', translations:{}, story_meta:{} }
+    sources:'مصدر تجريبي', consent:true, created_at:'2026-10-18T09:00:00Z', translations:{}, story_meta:{} },
+  { id:'visual-published-004', status:'published', section:'science', title:'اختبار بصري — حكاية منشورة',
+    subtitle:'سجل منشور وهمي لا يمثل حكاية حقيقية', figure_name:'عالم منشور تجريبي', narrator_name:'راوٍ تجريبي',
+    narrator_grade:'الصف الأول الإعدادي', original_body:'النص الأصلي المنشور الوهمي.',
+    body:'نص وهمي لاختبار فتح محرر السجل المنشور ونقل نسخته الجديدة دون تعديل النسخة الحية.',
+    sources:'مصدر تجريبي', consent:true, created_at:'2026-10-17T09:00:00Z', translations:{},
+    story_meta:{ preview_review:{ decision:'published', static_story_id:'098', static_story_path:'stories/science/098/' } } }
 ];
 
 async function main() {
@@ -72,6 +78,7 @@ async function main() {
       });
       const page = await context.newPage();
       const submissionWrites = [];
+      const submissionPatches = [];
       const publisherCalls = [];
       await page.route('https://**/*', route => route.abort());
       await page.route(SUPA + '/**', async route => {
@@ -83,7 +90,7 @@ async function main() {
           publisherCalls.push(payload);
           return route.fulfill({ status:400, contentType:'application/json', body:JSON.stringify({ error:'legacy function does not support capabilities' }) });
         }
-        if (url.includes('/rest/v1/khaledoon_submissions') && !['GET','HEAD','OPTIONS'].includes(req.method())) submissionWrites.push(req.method() + ' ' + url);
+        if (url.includes('/rest/v1/khaledoon_submissions') && !['GET','HEAD','OPTIONS'].includes(req.method())) { submissionWrites.push(req.method() + ' ' + url); if(req.method()==='PATCH'){ try{submissionPatches.push(JSON.parse(req.postData()||'{}'))}catch(_){submissionPatches.push({})} } }
         if (url.includes('/rest/v1/rpc/is_admin')) {
           return route.fulfill({ status:200, contentType:'application/json', body:'true' });
         }
@@ -130,6 +137,26 @@ async function main() {
       await page.getByRole('button', { name:'تأكيد النقل', exact:true }).waitFor({ state:'visible', timeout:10000 });
       await page.getByRole('button', { name:'إلغاء', exact:true }).last().click();
       console.log('ok - row-level move opens and closes its section panel (' + viewport.name + ')');
+
+      // Published rows must also open the editor, and a move must be staged without changing the published row itself.
+      const publishedSummary = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية منشورة' }).first();
+      await publishedSummary.click();
+      const publishedRow = publishedSummary.locator('xpath=..');
+      await publishedRow.getByRole('button', { name:'تعديل', exact:true }).click();
+      await publishedRow.getByRole('textbox', { name:'الصق ناتج الذكاء الاصطناعي JSON' }).waitFor({ state:'visible', timeout:10000 });
+      console.log('ok - row-level edit opens the editor for a published story (' + viewport.name + ')');
+      await publishedRow.getByRole('button', { name:'نقل الحكاية', exact:true }).click();
+      await publishedRow.locator('.move-story-panel select').first().selectOption('history');
+      const patchesBeforeMove = submissionPatches.length;
+      await publishedRow.getByRole('button', { name:'تأكيد النقل', exact:true }).click();
+      await page.waitForFunction((before) => window.__unused || true, patchesBeforeMove);
+      await page.waitForTimeout(100);
+      const movePatch = submissionPatches.slice(patchesBeforeMove).find(p => p.story_meta && p.story_meta.pending_draft);
+      assert.ok(movePatch, 'moving a published story must persist a pending draft');
+      assert.equal(movePatch.story_meta.pending_draft.section, 'history', 'pending draft should use the destination section');
+      assert.equal(movePatch.status, undefined, 'move must not overwrite the published status');
+      assert.equal(movePatch.section, undefined, 'move must not change the published section before review');
+      console.log('ok - published story move is staged as a draft without changing live fields (' + viewport.name + ')');
 
       // Exercise the user's one-button AI import lock cycle with invalid content only.
       // This must never write to Supabase; only the fake read endpoints are available.
