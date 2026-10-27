@@ -56,7 +56,13 @@ const records = [
     narrator_grade:'الصف الأول الإعدادي', original_body:'النص الأصلي المنشور الوهمي.',
     body:'نص وهمي لاختبار فتح محرر السجل المنشور ونقل نسخته الجديدة دون تعديل النسخة الحية.',
     sources:'مصدر تجريبي', consent:true, created_at:'2026-10-17T09:00:00Z', translations:{},
-    story_meta:{ preview_review:{ decision:'published', static_story_id:'098', static_story_path:'stories/science/098/' } } }
+    story_meta:{ preview_review:{ decision:'published', static_story_id:'098', static_story_path:'stories/science/098/' } } },
+  { id:'visual-linked-published-005', status:'published', section:'science', title:'فاروق الباز',
+    subtitle:'سجل تحرير مرتبط صراحة بالصفحة المنشورة 012', figure_name:'فاروق الباز', narrator_name:'راوٍ تجريبي',
+    narrator_grade:'الصف الأول الإعدادي', original_body:'نص أصلي تجريبي مرتبط بصفحة منشورة.',
+    body:'نص تجريبي للتحقق من ظهور سجل التحرير المنشور داخل بطاقة صفحة الموقع.',
+    sources:'مصدر تجريبي', consent:true, created_at:'2026-10-16T09:00:00Z', translations:{},
+    story_meta:{ preview_review:{ decision:'published', static_story_id:'012', static_story_path:'stories/science/012/' } } }
 ];
 
 async function main() {
@@ -157,6 +163,16 @@ async function main() {
       assert.equal(movePatch.status, undefined, 'move must not overwrite the published status');
       assert.equal(movePatch.section, undefined, 'move must not change the published section before review');
       console.log('ok - published story move is staged as a draft without changing live fields (' + viewport.name + ')');
+
+      // Published static pages must retain their explicitly linked database editor instead of hiding it.
+      const siteSummary = page.locator('summary').filter({ hasText:'فاروق الباز' }).first();
+      await siteSummary.click();
+      const siteRow = siteSummary.locator('xpath=..');
+      const linkedRecordSummary = siteRow.locator('details.fcard > summary').first();
+      await linkedRecordSummary.waitFor({ state:'visible', timeout:10000 });
+      await linkedRecordSummary.click();
+      await siteRow.getByRole('textbox', { name:'العنوان' }).waitFor({ state:'visible', timeout:10000 });
+      console.log('ok - explicitly linked published record remains editable under its site page (' + viewport.name + ')');
 
       // Exercise the user's one-button AI import lock cycle with invalid content only.
       // This must never write to Supabase; only the fake read endpoints are available.
