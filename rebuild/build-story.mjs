@@ -53,7 +53,7 @@ const page = `<!doctype html>
 <script src="../../../rebuild/reader.js" data-kh-v2-reader data-story-path="stories/${story.section}/${storyId}/data.v2.json"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
-await writeFile(path.join(outDir, 'data.v2.json'), JSON.stringify(story, null, 2) + '\\n', { flag: 'wx' });
+await writeFile(path.join(outDir, 'data.v2.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
 await writeFile(path.join(outDir, 'index.html'), page, { flag: 'wx' });
 console.log('Built V2 story page: ' + path.relative(root, path.join(outDir, 'index.html')));
 console.log('Package: ' + path.relative(root, path.join(outDir, 'data.v2.json')));
