@@ -163,7 +163,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </div>
 </section>
 </main>
-<script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261026-cover-contract-1"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
+<script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261023-4"></script>
 <script>
 (function(){
@@ -912,7 +912,7 @@ function pubRow(it){
      if(pkg&&pkg.format==='KHALEDOON_STORY_V2'){
       var v2Adapter=window.KHStoryV2Adapter;
       if(!v2Adapter){aiFail('محول KHALEDOON_STORY_V2 لم يكتمل تحميله. أعد تحميل لوحة الإدارة وجرّب مرة أخرى.');return}
-      var v2Errors=v2Adapter.validateStory(pkg);
+      var v2Errors=v2Adapter.validateForAdminBridge(pkg);
       if(v2Errors.length){aiFail('حزمة V2 غير مكتملة:',v2Errors);return}
       try{pkg=v2Adapter.v2ToV1(pkg)}catch(v2ConversionError){aiFail(v2ConversionError.message||'تعذر تحويل حزمة V2 دون فقد بيانات.');return}
      }
@@ -936,7 +936,8 @@ function pubRow(it){
       nextMeta.original_body=oldOriginal||String(pkg.original_body||it.body||'');
       nextMeta.preview_review=Object.assign({},nextMeta.preview_review||{},{decision:'edited_after_review',edited_at:new Date().toISOString(),note:'استُورد ناتج الذكاء الاصطناعي كمسودة؛ يلزم تحريره ومعاينته من جديد.',reason:'',publish_error:null,static_story_id:null,static_story_path:null,bundle_downloaded:false,prepared_page_url:''});delete nextMeta.pending_draft;
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
-      var payload={section:chosenSection,figure_name:String(pkg.figure_name||it.figure_name||it.person||'شخصية تاريخية').trim().slice(0,120),title:String(pkg.title).trim().slice(0,140),subtitle:String(pkg.subtitle||'').slice(0,200),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||'كارما').trim().slice(0,40),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||'').slice(0,60),body:String(pkg.body).trim().slice(0,12000),history_note:String(pkg.history_note||'').slice(0,12000),sources:String(pkg.sources||'').slice(0,3000),images_note:String(pkg.images_note||'').slice(0,1500),original_body:nextMeta.original_body,translations:translations,status:'pending',story_meta:nextMeta};
+      if(String(pkg.sources||'').length>3000){aiFail('المصادر أطول من الحد المسموح (3000 حرف). اختصرها مع الحفاظ على جميع المراجع ثم أعد المحاولة؛ لم يتم حفظ المسودة.');return}
+       var payload={section:chosenSection,figure_name:String(pkg.figure_name||it.figure_name||it.person||'شخصية تاريخية').trim().slice(0,120),title:String(pkg.title).trim().slice(0,140),subtitle:String(pkg.subtitle||'').slice(0,200),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||'كارما').trim().slice(0,40),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||'').slice(0,60),body:String(pkg.body).trim().slice(0,12000),history_note:String(pkg.history_note||'').slice(0,12000),sources:String(pkg.sources||''),images_note:String(pkg.images_note||'').slice(0,1500),original_body:nextMeta.original_body,translations:translations,status:'pending',story_meta:nextMeta};
       /* لا نغيّر حالة سجل منشور ولا نستبدل نص الصفحة الحية؛ نضع ناتج AI في مسودة معلّقة. */
       var expectedAiTitle=payload.title,expectedAiBody=payload.body;
       if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload);delete nextMeta.pending_draft.story_meta;nextMeta.pending_draft.status='pending';payload={story_meta:nextMeta}}
@@ -1230,7 +1231,7 @@ if(session){
 }else showLogin();
 })();
 </script>
-<script type="module" src="assets/admin-v2-import.mjs?v=20261027-v2-admin-3"></script>
+<script type="module" src="assets/admin-v2-import.mjs?v=20261027-v2-admin-4"></script>
 </body>
 </html>
 
