@@ -178,6 +178,8 @@ test('rejects packages outside the actual V1 source and gallery limits', () => {
 
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.sources[1].url = v2.sources[0].url;
+  v2.sources[1].title = 'Reference B https://archive.example/a';
+  v2.sources[1].organization = 'archive.example';
   assert.throws(() => v2ToV1(v2), /at least two distinct sources/);
 });
 
