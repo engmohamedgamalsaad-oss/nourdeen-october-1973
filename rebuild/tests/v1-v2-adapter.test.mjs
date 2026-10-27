@@ -347,3 +347,15 @@ test('adapter output satisfies the independent V2 story validator in both direct
     'round-tripped V2 output must still satisfy the V2 validator');
 });
 
+test('round-trips normal V2 source titles and organization names through the V1 admin source field', () => {
+  const v1 = fixture();
+  const v2 = v1ToV2(v1, { slug: 'source-metadata-roundtrip' });
+  v2.sources = [
+    { title: 'Apollo 17 geology briefing', organization: 'NASA History Office', url: 'https://history.nasa.gov/apollo17' },
+    { title: 'Farouk El-Baz biography', organization: 'Boston University', url: 'https://www.bu.edu/earth/farouk-el-baz' }
+  ];
+  const back = v2ToV1(v2);
+  assert.match(back.sources, /Apollo 17 geology briefing — \[org:NASA History Office\] — https:\/\/history\.nasa\.gov\/apollo17/);
+  const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
+  assert.deepEqual(v2Again.sources, v2.sources);
+});
