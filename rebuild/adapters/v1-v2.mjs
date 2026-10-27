@@ -363,7 +363,7 @@ export function v2ToV1(input) {
     return { q: qAr.question, o: clone(qAr.options), a: q.correct_option, e: qAr.explanation, i18n };
   }) };
   return {
-    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person || '',
+    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person || ar.title,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || '',
     narrator_grade: ar.narrator_grade || ar.grade || '',
