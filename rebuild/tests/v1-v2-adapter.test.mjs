@@ -22,7 +22,7 @@ function fixture() {
     student_name: 'Student ' + lang, grade: 'Grade ' + lang,
     title: 'Title ' + lang, subtitle: 'Subtitle ' + lang,
     karma_text: 'Karma asks a question ' + lang + '.',
-    body: [1, 2, 3].map(n => ({ en: 'Did you know?', fr: 'Le saviez-vous ?', it: 'Lo sapevi?', de: 'Wusstest du?' })[lang] + ' Verified fact ' + n + ' ' + lang + '.').join('\\n\\n'),
+    body: [1, 2, 3].map(n => ({ en: 'Did you know?', fr: 'Le saviez-vous ?', it: 'Lo sapevi?', de: 'Wusstest du?' })[lang] + ' Verified fact ' + n + ' ' + lang + '.').join('\n\n'),
     history_note: 'Historical note ' + lang, images_note: 'Image rights note ' + lang
   }]));
   const questions = Array.from({ length: 5 }, (_, i) => ({
