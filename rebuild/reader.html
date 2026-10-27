@@ -26,12 +26,12 @@ figure{margin:16px 0;padding:0}figure img{display:block;width:100%;max-height:52
 .sources a{color:#f1cc82;overflow-wrap:anywhere}.sources li{margin:8px 0}
 .q{padding:14px 0;border-bottom:1px solid var(--line)}.q:last-child{border:0}.options{display:grid;gap:8px;margin:10px 0}.options button{border-radius:10px;text-align:start}.options button.correct{border-color:#7ec99c;background:#163c30}.options button.wrong{border-color:#df8d83;background:#3b2424}.explain{color:var(--muted);margin:8px 0}
 .status{padding:14px;border:1px solid #956c36;border-radius:12px;background:#332a1b;white-space:pre-wrap}body[data-design=ancient-civilization]{--bg:#21180f;--panel:#342519;--line:#705336}body[data-design=science-lab]{--bg:#081a24;--panel:#102d3b;--line:#28566a}body[data-design=women-leadership]{--bg:#211521;--panel:#342337;--line:#69465f}body[data-design=arts-culture]{--bg:#191923;--panel:#292a3b;--line:#555577}body[data-design=islamic-heritage]{--bg:#0b201a;--panel:#14372b;--line:#356a53}body[data-design=curriculum]{--bg:#101d2c;--panel:#1a2d43;--line:#3c5d7e}body[data-design=reader-story]{--bg:#1e1b16;--panel:#302b22;--line:#635440}body[data-design=portrait-biography]{--bg:#171d20;--panel:#263136;--line:#4a6068}
-[hidden]{display:none!important}a{color:inherit}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+body[data-theme=light]{--bg:#f5f0e6;--panel:#fffdf7;--line:#d5c8b1;--text:#27241f;--muted:#61594e}body[data-theme=light] header{background:#fffdf7f2}body[data-theme=light] .block{background:#f5f0e6}body[data-theme=light] .block[data-speaker=karma]{background:#f4e9cf}body[data-theme=light] figure img{background:#e8e0d2}body[data-theme=light] button{background:#fffdf7;color:#27241f}body[data-theme=light] button[aria-pressed=true]{background:var(--accent);color:#19160e}body[data-theme=light] .sources a{color:#79551d}[hidden]{display:none!important}a{color:inherit}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style></head>
 <body>
 <header><div class="bar"><div class="brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">
 <button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>
-</nav></div></header>
+</nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <main>
 <div id="status" class="status">جاري تحميل حزمة الحكاية الموحدة…</div>
 <article id="story" hidden>
