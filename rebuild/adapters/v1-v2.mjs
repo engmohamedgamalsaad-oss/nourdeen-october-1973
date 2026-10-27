@@ -1,3 +1,5 @@
+import { validateStory } from '../validate-story.mjs';
+
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
  *
@@ -252,6 +254,8 @@ function imageToV1(image) {
 export function v2ToV1(input) {
   requireObject(input, 'V2 story');
   if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
+  const contractErrors = validateStory(input);
+  if (contractErrors.length) fail('V2 contract validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
     fail('V2 section has no canonical V1 section_key: ' + input.section);
   }
@@ -331,6 +335,9 @@ export function v2ToV1(input) {
   }
   const ar = input.i18n?.ar;
   if (!isObject(ar)) fail('missing V2 Arabic locale');
+  if (!nonempty(ar.figure_name) && !nonempty(ar.person)) {
+    fail('Arabic figure_name or person is required for the current V1 admin record; title is not used as a substitute');
+  }
   let sawNarrator = false;
   for (const [i, block] of (ar.blocks || []).entries()) {
     if (block.speaker === 'narrator') sawNarrator = true;
@@ -364,7 +371,7 @@ export function v2ToV1(input) {
     return { q: qAr.question, o: clone(qAr.options), a: q.correct_option, e: qAr.explanation, i18n };
   }) };
   return {
-    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person || ar.title,
+    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || '',
     narrator_grade: ar.narrator_grade || ar.grade || '',
