@@ -106,9 +106,11 @@ function sourcesToV2(value) {
       let organization;
       try { organization = decodeURIComponent(marker[2]); }
       catch { fail('sources line ' + (i + 1) + ' has malformed encoded organization metadata'); }
-      return { title: marker[1], organization, url };
+      const title = marker[1];
+      return { title, organization, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization }])) };
     }
-    return { title: line, organization: hostname, url };
+    const title = line;
+    return { title, organization: hostname, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization }])) };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
     fail('V1 requires at least two distinct source URLs');
