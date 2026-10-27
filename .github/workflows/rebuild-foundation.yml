@@ -15,6 +15,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Run contract and adapter regression tests
+      - name: Check V2 runtime and builder syntax
+        run: node --check rebuild/reader.js && node --check rebuild/build-story.mjs
+      - name: Run contract and V2 reader regression tests
         run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
