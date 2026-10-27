@@ -21,6 +21,9 @@ function languageObjectCheck(value, label, out) {
 function imageCheck(im, label, out) {
   const allowed = ['url', 'path', 'kind', 'source_name', 'source_url', 'rights', 'i18n', 'id'];
   if (!keysCheck(im, ['kind', 'source_name', 'source_url', 'rights', 'i18n'], allowed, label, out)) return;
+  if (Object.hasOwn(im, 'id') && (typeof im.id !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(im.id))) {
+    out.push(label + '.id must be a stable lowercase ID');
+  }
   const hasUrl = Object.hasOwn(im, 'url');
   const hasPath = Object.hasOwn(im, 'path');
   if (hasUrl === hasPath) out.push(label + ': provide exactly one HTTPS url or local path');
