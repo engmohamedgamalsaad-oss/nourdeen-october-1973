@@ -132,6 +132,31 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
   assert.throws(() => v2ToV1(v2), /cannot be represented losslessly/);
 });
 
+
+test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them', () => {
+  const v1 = fixture();
+  v1.body = '  Leading spaces must not disappear.\n\nSecond paragraph.';
+  assert.throws(() => v1ToV2(v1, { slug: 'historical-figure' }), /cannot be round-tripped exactly/);
+
+  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.sources[0].accessed_at = '2026-10-27';
+  assert.throws(() => v2ToV1(v2), /accessed_at metadata has no lossless V1 field/);
+});
+
+test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
+  let v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.images = [];
+  assert.throws(() => v2ToV1(v2), /at least two images/);
+
+  v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  delete v2.quiz[0].i18n.de;
+  assert.throws(() => v2ToV1(v2), /incomplete in de/);
+
+  v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.i18n.fr.blocks = [];
+  assert.throws(() => v2ToV1(v2), /at least three story blocks/);
+});
+
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
   assert.throws(() => v1ToV2(fixture()), /stable slug/);
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
