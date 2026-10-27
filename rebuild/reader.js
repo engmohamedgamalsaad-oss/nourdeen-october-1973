@@ -7,7 +7,8 @@ fr:{section:'Récit',story:'Le récit',gallery:'Images du récit',quiz:'Vérifie
 it:{section:'Racconto',story:'Il racconto',gallery:'Immagini del racconto',quiz:'Verifica la comprensione',sources:'Fonti e verifica',karma:'Karma',narrator:'Narratore',student:'Preparato e presentato da',answer:'Verifica la risposta',missing:'Il pacchetto è incompleto o non corrisponde a KHALEDOON_STORY_V2.'},
 de:{section:'Geschichte',story:'Die Geschichte',gallery:'Bilder zur Geschichte',quiz:'Verständnis prüfen',sources:'Quellen und Überprüfung',karma:'Karma',narrator:'Erzähler',student:'Erstellt und vorgestellt von',answer:'Antwort prüfen',missing:'Das Paket ist unvollständig oder entspricht nicht KHALEDOON_STORY_V2.'}};
 var current='ar',story=null;
-var readerScript=document.currentScript;\nvar ROOT=new URL('../',readerScript.src);
+var readerScript=document.currentScript;
+var ROOT=new URL('../',readerScript.src);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
