@@ -1,7 +1,7 @@
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const sections = new Set(['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers']);
 const variants = new Set(['military-history', 'ancient-civilization', 'science-lab', 'women-leadership', 'arts-culture', 'islamic-heritage', 'curriculum', 'reader-story', 'portrait-biography']);
-const kinds = new Set(['archival', 'illustration', 'map', 'diagram']);
+const kinds = new Set(['archival', 'illustration', 'map', 'diagram', 'photograph', 'document']);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const https = x => typeof x === 'string' && /^https:\/\//i.test(x);
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -90,11 +90,10 @@ export function validateStory(s) {
       const t = s.i18n[lang];
       if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
-      if (nonempty(t.subtitle) && nonempty(t.summary) && t.summary !== t.subtitle) out.push('i18n.' + lang + '.summary must equal subtitle until the V2 reader is available');
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text'], label, out)) continue;
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after'], label, out)) continue;
         if (!['paragraph', 'did_you_know'].includes(b.type)) out.push(label + '.type invalid');
         if (!['karma', 'narrator'].includes(b.speaker)) out.push(label + '.speaker invalid');
         if (!nonempty(b.text)) out.push(label + '.text required');
@@ -123,7 +122,6 @@ export function validateStory(s) {
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
-    if (im?.id !== 'image-' + (i + 1)) out.push('images[' + i + '].id must be image-' + (i + 1) + ' for lossless admin conversion');
     if (imageIds.has(im?.id)) out.push('images[' + i + '].id duplicated');
     if (im?.id) imageIds.add(im.id);
   }
@@ -135,12 +133,12 @@ export function validateStory(s) {
   const sourceUrls = new Set();
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
-    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url'], label, out)) continue;
+    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
     if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
     if (https(src.url)) sourceUrls.add(src.url);
-    if (Object.hasOwn(src, 'accessed_at') && typeof src.accessed_at !== 'string') out.push(label + '.accessed_at must be a string');
+    if (Object.hasOwn(src, 'accessed_at') && !nonempty(src.accessed_at)) out.push(label + '.accessed_at must be a non-empty string when provided');
   }
 
   if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('quiz must contain exactly 5 questions');
@@ -148,7 +146,7 @@ export function validateStory(s) {
   for (const [i, q] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     const label = 'quiz[' + i + ']';
     if (!keysCheck(q, ['id', 'correct_option', 'i18n'], ['id', 'correct_option', 'i18n'], label, out)) continue;
-    if (q.id !== 'question-' + (i + 1)) out.push(label + '.id must be question-' + (i + 1) + ' for lossless admin conversion');
+    if (typeof q.id !== 'string' || !/^[a-z0-9-]+$/.test(q.id)) out.push(label + '.id must be a stable lowercase ID');
     if (ids.has(q.id)) out.push(label + '.id duplicated');
     if (q.id) ids.add(q.id);
     if (!Number.isInteger(q.correct_option) || q.correct_option < 0 || q.correct_option > 3) out.push(label + '.correct_option must be 0..3');
@@ -164,6 +162,42 @@ export function validateStory(s) {
   }
   return out;
 }
+
+/**
+ * Validate whether a structurally valid V2 package can pass through the
+ * temporary V1 admin preview/storage bridge without losing V2-only fields.
+ * Keep these constraints out of validateStory(): they are not V2 contract rules.
+ */
+export function validateForAdminBridge(s) {
+  const out = [...validateStory(s)];
+  if (!isObject(s)) return out;
+  for (const lang of LANGUAGES) {
+    const t = s.i18n?.[lang];
+    if (!isObject(t)) continue;
+    if (nonempty(t.subtitle) && nonempty(t.summary) && t.summary !== t.subtitle) {
+      out.push('bridge: i18n.' + lang + '.summary differs from subtitle and V1 cannot preserve it');
+    }
+    for (const [i, block] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
+      if (Object.hasOwn(block || {}, 'image_after')) {
+        out.push('bridge: i18n.' + lang + '.blocks[' + i + '].image_after cannot be represented by V1');
+      }
+    }
+  }
+  for (const [i, image] of (Array.isArray(s.images) ? s.images : []).entries()) {
+    if (image?.id !== 'image-' + (i + 1)) out.push('bridge: images[' + i + '].id must be image-' + (i + 1));
+    if (['photograph', 'document'].includes(image?.kind)) {
+      out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by V1');
+    }
+  }
+  for (const [i, question] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
+    if (question?.id !== 'question-' + (i + 1)) out.push('bridge: quiz[' + i + '].id must be question-' + (i + 1));
+  }
+  if (s.cover && ['photograph', 'document'].includes(s.cover.kind)) {
+    out.push('bridge: cover.kind "' + s.cover.kind + '" is not supported by V1');
+  }
+  return out;
+}
+
 export async function validateLocalImagePaths(story, root) {
   const { realpath, stat } = await import('node:fs/promises');
   const path = await import('node:path');
