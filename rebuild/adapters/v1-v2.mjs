@@ -96,6 +96,10 @@ function sourcesToV2(value) {
     const organization = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
     return { title: line, organization, url };
   });
+  if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
+    fail('V1 requires at least two distinct source URLs');
+  }
+  return sources;
 }
 function quizToV2(value) {
   let bank = value;
