@@ -729,8 +729,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(packageV2));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     await importButton.click();
-    await page.waitForFunction(() => { const t = document.body.innerText; return /تم تنفيذ الكود وحُفظت المسودة|تعذر|غير مكتملة|غير صحيحة|تجاوز النص|فشل حفظ المسودة|لم يرجع الخادم/.test(t); }, null, { timeout: 20000 });
-    const importStatus = await page.locator('body').innerText();
+    await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && !!el.textContent.trim(); }, null, { timeout: 20000 });
+    const importStatus = await page.locator('.ai-status[role="status"]').innerText();
     if (!/تم تنفيذ الكود وحُفظت المسودة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('V2 import did not preserve a readable Arabic source organization in the saved draft.');
