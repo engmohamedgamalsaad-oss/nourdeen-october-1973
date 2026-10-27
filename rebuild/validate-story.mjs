@@ -4,7 +4,7 @@ import path from 'node:path';
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const sections = new Set(['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers']);
 const variants = new Set(['military-history', 'ancient-civilization', 'science-lab', 'women-leadership', 'arts-culture', 'islamic-heritage', 'curriculum', 'reader-story', 'portrait-biography']);
-const kinds = new Set(['archival', 'photograph', 'illustration', 'map', 'document', 'diagram']);
+const kinds = new Set(['archival', 'illustration', 'map', 'diagram']);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const https = x => typeof x === 'string' && /^https:\/\//i.test(x);
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -93,10 +93,11 @@ export function validateStory(s) {
       const t = s.i18n[lang];
       if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
+      if (nonempty(t.subtitle) && nonempty(t.summary) && t.summary !== t.subtitle) out.push('i18n.' + lang + '.summary must equal subtitle until the V2 reader is available');
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after'], label, out)) continue;
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text'], label, out)) continue;
         if (!['paragraph', 'did_you_know'].includes(b.type)) out.push(label + '.type invalid');
         if (!['karma', 'narrator'].includes(b.speaker)) out.push(label + '.speaker invalid');
         if (!nonempty(b.text)) out.push(label + '.text required');
@@ -137,7 +138,7 @@ export function validateStory(s) {
   const sourceUrls = new Set();
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
-    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
+    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
     if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
