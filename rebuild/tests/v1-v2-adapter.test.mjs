@@ -390,3 +390,15 @@ test('rejects source titles with line breaks that the V1 line-based field cannot
   v2.sources[0].title = 'First line\nSecond line';
   assert.throws(() => v2ToV1(v2), /title cannot be represented safely in the single-line V1 source field/);
 });
+
+
+test('refuses six-question legacy packages with an explicit no-truncation message', () => {
+  const v1 = fixture();
+  v1.question_bank.questions.push({ ...v1.question_bank.questions[0], q: 'Extra sixth question ar' });
+  assert.equal(v1.question_bank.questions.length, 6);
+  assert.throws(
+    () => v1ToV2(v1, { slug: 'six-question-legacy-package' }),
+    /exactly five V1 quiz questions are required; received 6; choose exactly five explicitly before conversion—no questions are discarded automatically/
+  );
+  assert.equal(v1.question_bank.questions.length, 6, 'failed conversion must not mutate or truncate the source package');
+});
