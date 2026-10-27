@@ -9,6 +9,7 @@ const builder = await readFile(new URL('../build-story.mjs', import.meta.url), '
 test('V2 reader exposes all five language choices and changes text direction', () => {
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('data-lang="' + lang + '"'));
   assert.match(js, /current==='ar'\?'rtl':'ltr'/);
+  assert.match(js, /sectionLabels\[current\]\[story\.section\]/);
   assert.match(js, /readerScript\.dataset\.storyPath\?document\.baseURI:ROOT/);
   assert.match(js, /openstreetmap\.org/);
   assert.match(js, /document\.body\.dataset\.design/);
