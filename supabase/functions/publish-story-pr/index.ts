@@ -124,6 +124,15 @@ Deno.serve(async (req: Request) => {
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
   let branchNameForRecovery = "";
+  let storyLockBranchForCleanup = "";
+  async function releaseStoryLock() {
+    const lockBranch = storyLockBranchForCleanup;
+    if (!lockBranch) return;
+    storyLockBranchForCleanup = "";
+    try {
+      await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${lockBranch}`, githubToken, { method: "DELETE" });
+    } catch { /* lock cleanup is best effort; never hide the original publish result */ }
+  }
   try {
     // Read latest main as the PR base. All generated writes stay on a dedicated branch.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
@@ -305,6 +314,27 @@ Deno.serve(async (req: Request) => {
         branch: existingPull.head?.ref ?? null,
       });
     }
+    // GitHub rejects creation of an existing ref. A fixed per-story ref therefore acts as
+    // an atomic lock across concurrent invocations, unlike a check-then-scan alone.
+    const storyLockBranch = `khaledoon/publish-lock-${storyId}`;
+    try {
+      await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+        method: "POST",
+        body: JSON.stringify({ ref: "refs/heads/" + storyLockBranch, sha: baseSha }),
+      });
+      storyLockBranchForCleanup = storyLockBranch;
+    } catch (lockError) {
+      const lockDetail = lockError instanceof Error ? lockError.message : "";
+      if (lockDetail.includes("GitHub API 422") || lockDetail.includes("Reference already exists")) {
+        return reply(409, {
+          success: false,
+          error: "يوجد تجهيز نشر جارٍ لهذه الحكاية أو قفل قديم يحتاج مراجعة؛ لم ننشئ طلب دمج ثانيًا.",
+          detail: "إذا لم يوجد طلب دمج مفتوح لهذه الحكاية، راجع فرع القفل " + storyLockBranch + " قبل إعادة المحاولة.",
+          story_id: storyId,
+        });
+      }
+      throw lockError;
+    }
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
         method: 'POST',
@@ -350,6 +380,7 @@ Deno.serve(async (req: Request) => {
       try {
         await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${branchNameForRecovery}`, githubToken, { method: "DELETE" });
       } catch { /* branch cleanup is best effort; the duplicate PR is already closed */ }
+      await releaseStoryLock();
       return reply(409, {
         success: false,
         error: "تم رصد طلب متزامن لنفس الحكاية؛ أُغلق الطلب المكرر وبقي الطلب الأقدم.",
@@ -359,6 +390,7 @@ Deno.serve(async (req: Request) => {
         branch: winningPull.head?.ref ?? null,
       });
     }
+    await releaseStoryLock();
     return reply(201, {
       success: true,
       published_to_main: false,
@@ -378,6 +410,7 @@ Deno.serve(async (req: Request) => {
       message: "تم إنشاء طلب دمج للمراجعة. لم يتم تعديل main أو نشر الحكاية على الموقع."
     });
   } catch (error) {
+    await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
       error: "تعذر إنشاء طلب دمج للحكاية؛ لم تُكتب ملفات الحكاية إلى main.",
