@@ -762,7 +762,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     }
     return { checks: [{ ok: hard.length === 0, savedAsDraft: savedRecord.status !== 'published', sourceMarkerReadable: !String(savedRecord.sources || '').includes('%D8%'), previewOpened: !!popup }], hard };
   } catch (e) {
-    hard.push('Actual V2 paste/import browser flow failed: ' + String(e.message || e).split('\n')[0]);
+    hard.push('Actual V2 paste/import browser flow failed: ' + String(e.message || e).slice(0,1800));
     return { checks: [{ ok: false }], hard };
   } finally {
     await ctx.close();
