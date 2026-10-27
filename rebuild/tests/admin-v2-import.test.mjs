@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 
 test('admin import exposes V2 validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
-  assert.match(html, /<script type="module" src="assets\\/admin-v2-import\\.js\\?v=20261027-v2-admin-1"><\\/script>/);
+  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.js?v=20261027-v2-admin-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.js', import.meta.url), 'utf8');
   assert.match(module, /import \\{ v2ToV1, V2_FORMAT \\} from ['"]\\.\\.\\/\\.\\.\\/rebuild\\/adapters\\/v1-v2\\.mjs/);
   assert.match(module, /import \\{ validateStory \\} from ['"]\\.\\.\\/\\.\\.\\/rebuild\\/validate-story\\.mjs/);
