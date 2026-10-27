@@ -56,8 +56,9 @@ function imageCheck(im, label, out) {
 }
 export function validateStory(s) {
   const out = [];
-  const topKeys = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
-  if (!keysCheck(s, topKeys, topKeys, 'story', out)) return out;
+  const topRequired = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
+  const topAllowed = [...topRequired, 'map_location'];
+  if (!keysCheck(s, topRequired, topAllowed, 'story', out)) return out;
   if (s.format !== 'KHALEDOON_STORY_V2') out.push('format must be KHALEDOON_STORY_V2');
   if (typeof s.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s.slug)) out.push('slug must be lowercase kebab-case');
   if (!sections.has(s.section)) out.push('section is unsupported');
@@ -66,11 +67,31 @@ export function validateStory(s) {
     if (typeof s.design.accent !== 'string' || !/^#[0-9a-f]{6}$/i.test(s.design.accent)) out.push('design.accent must be a six-digit hex color');
   }
   if (!nonempty(s.original_body)) out.push('original_body must preserve submitted source text');
+
+  // map_location is optional; null explicitly means no verified location.
+  if (Object.hasOwn(s, 'map_location') && s.map_location !== null) {
+    const m = s.map_location;
+    if (!isObject(m)) out.push('map_location must be null or an object');
+    else {
+      for (const key of Object.keys(m)) if (!['lat', 'lng', 'place'].includes(key)) out.push('map_location: unexpected property "' + key + '"');
+      if (typeof m.lat !== 'number' || !Number.isFinite(m.lat) || m.lat < -90 || m.lat > 90) out.push('map_location.lat must be a valid latitude');
+      if (typeof m.lng !== 'number' || !Number.isFinite(m.lng) || m.lng < -180 || m.lng > 180) out.push('map_location.lng must be a valid longitude');
+      if (!isObject(m.place)) out.push('map_location.place must contain all five localized place names');
+      else {
+        languageObjectCheck(m.place, 'map_location.place', out);
+        for (const lang of LANGUAGES) {
+          if (!nonempty(m.place[lang])) out.push('map_location.place.' + lang + ' required');
+          else if (lang !== 'ar' && /[\\u0600-\\u06FF]/.test(m.place[lang])) out.push('map_location.place.' + lang + ' must not contain Arabic fallback');
+        }
+        for (const key of Object.keys(m.place)) if (!LANGUAGES.includes(key)) out.push('map_location.place: unexpected property "' + key + '"');
+      }
+    }
+  }
   if (isObject(s.i18n)) {
     languageObjectCheck(s.i18n, 'i18n', out);
     for (const lang of LANGUAGES) {
       const t = s.i18n[lang];
-      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note'], 'i18n.' + lang, out)) continue;
+      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
@@ -85,7 +106,7 @@ export function validateStory(s) {
   } else out.push('i18n must be an object');
 
   // V1 metadata is optional as a group, but if present it must survive in all five locales.
-  const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note'];
+  const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'];
   for (const field of preservedFields) {
     const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
     if (!presentSomewhere) continue;
