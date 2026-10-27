@@ -52,7 +52,7 @@
 
 ## Current status
 
-V2 now has optional localized fields for student_name, narrator_name, figure_name, person, grade, narrator_grade, history_note, and images_note. The validator requires any used field to exist across all five locales. The optional map_location field explicitly supports null or a validated lat/lng plus five localized place labels. Regression tests cover missing localized metadata, invalid coordinates, and Arabic fallback in non-Arabic place labels. These safeguards do not yet prove a V1-to-V2 conversion or round-trip preservation.
+V2 now has optional localized fields for student_name, narrator_name, figure_name, person, grade, narrator_grade, history_note, and images_note. The validator allows optional metadata to exist only in locales with reliable source values; missing translations are omitted rather than guessed. Grade/narrator_grade role labels are filtered so a generic ‘story narrator’ label is not presented as a school grade. The optional map_location field explicitly supports null or a validated lat/lng plus five localized place labels. Regression tests cover missing localized metadata, invalid coordinates, and Arabic fallback in non-Arabic place labels. These safeguards do not yet prove a V1-to-V2 conversion or round-trip preservation.
 
 Contract V2 and its validator are still only an initial foundation. Validator tests do not prove V1 compatibility, reader readiness, admin readiness, or publishing workflow readiness. Keep this branch as a draft; do not merge it as a replacement for the current system.
 
