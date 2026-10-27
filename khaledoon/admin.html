@@ -329,9 +329,14 @@ async function submitStoryPublishPR(it,btn){
  var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
- if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false){publisherCapabilityBlocked=true;throw new Error('وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة. توقّفنا قبل تجهيز أو إرسال ملفات الحكاية؛ لم يتم نشرها. راجع إصدار Supabase Edge Function قبل المحاولة.');}
+ var pendingDraft=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
+ var priorStoryPath=String(review.static_story_path||'').replace(/^\\/+|\\/+$/g,'');
+ var targetSectionKey=String((pendingDraft&&(pendingDraft.section_key||pendingDraft.section))||it.section_key||it.section||'');
+ var previousPathSection=priorStoryPath.split('/')[1]||'';
+ var isPublishedSectionMove=it.status==='published'&&!!pendingDraft&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
+ if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(isPublishedSectionMove&&capabilityResult.supports_story_move!==true?'خدمة النشر الحية لا تدعم نقل الحكايات المنشورة حتى الآن. تم إيقاف العملية قبل تجهيز أو إرسال الملفات، ولم تتغير النسخة المنشورة. يلزم تحديث Edge Function ثم إعادة المحاولة.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة. توقّفنا قبل تجهيز أو إرسال ملفات الحكاية؛ لم يتم نشرها. راجع إصدار Supabase Edge Function قبل المحاولة.');}
  await refreshIfNeeded();
- var draft=Object.assign({},it,meta.pending_draft||{});draft.story_meta=meta;
+ var draft=Object.assign({},it,pendingDraft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
  draft.translations=draft.translations||meta.translations||{};draft.question_bank_json=draft.question_bank_json||meta.question_bank_json||'';
  draft.cover=draft.cover||meta.cover||null;
