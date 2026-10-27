@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
-import { validateStory, validateLocalImagePaths } from '../validate-story.mjs';
+import { validateStory, validateLocalImagePaths, validateForAdminBridge } from '../validate-story.mjs';
 
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
 const image = () => ({
@@ -122,18 +122,25 @@ test('rejects missing translations and image rights', () => {
   assert(e.some(x => x.includes('quiz[0].i18n.it.explanation')));
 });
 
-test('rejects unsafe paths, invalid source URL, and quiz count', () => {
-  const s = fixture();
-  s.cover = { ...image(), url: undefined, path: '../private.jpg' };
-  s.sources[0].url = 'javascript:alert(1)';
-  s.cover.source_url = 'javascript:alert(1)';
-  s.quiz.pop();
-  const e = validateStory(s);
-  assert(e.some(x => x.includes('unsafe local path')));
-  assert(e.some(x => x.includes('cover.url must be HTTPS')));
-  assert(e.some(x => x.includes('cover: source_url')));
-  assert(e.some(x => x.includes('sources[0].url')));
-  assert(e.some(x => x.includes('exactly 5')));
+test('requires at least five V2 quiz questions but keeps the V1 bridge lossless', () => {
+  const tooFew = fixture();
+  tooFew.quiz.pop();
+  assert(validateStory(tooFew).some(x => x.includes('at least 5')));
+
+  const six = fixture();
+  six.quiz.push({ ...six.quiz[0], id: 'question-6' });
+  assert.deepEqual(validateStory(six), []);
+  assert(validateForAdminBridge(six).some(x => x.includes('supports exactly 5')));
+
+  const invalid = fixture();
+  invalid.cover = { ...image(), url: undefined, path: '../private.jpg' };
+  invalid.sources[0].url = 'javascript:alert(1)';
+  invalid.cover.source_url = 'javascript:alert(1)';
+  const errors = validateStory(invalid);
+  assert(errors.some(x => x.includes('unsafe local path')));
+  assert(errors.some(x => x.includes('cover.url must be HTTPS')));
+  assert(errors.some(x => x.includes('cover: source_url')));
+  assert(errors.some(x => x.includes('sources[0].url')));
 });
 
 test('rejects duplicate quiz IDs and malformed design color', () => {
