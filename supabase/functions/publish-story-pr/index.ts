@@ -159,7 +159,11 @@ Deno.serve(async (req: Request) => {
     if (duplicate) {
       throw new Error(`A published story with the same title and person already exists (ID ${String(duplicate.id).padStart(3, '0')}); refusing to publish a duplicate.`);
     }
-    const existingIndex = currentIndex.findIndex((entry: any) => String(entry.id ?? '').padStart(3, '0') === storyId);
+    const matchingIndices = currentIndex.map((entry: any, index: number) =>
+      String(entry.id ?? '').padStart(3, '0') === storyId ? index : -1
+    ).filter((index: number) => index >= 0);
+    if (matchingIndices.length > 1) throw new Error('Story ID appears more than once in the current index; refusing an ambiguous move.');
+    const existingIndex = matchingIndices[0] ?? -1;
     let previousRoot = '';
     if (existingIndex >= 0) {
       const previousPath = String(currentIndex[existingIndex].path ?? '').split('/').filter(Boolean).join('/');
@@ -171,7 +175,7 @@ Deno.serve(async (req: Request) => {
         previousRoot = previousPath + '/';
       }
     }
-    if (existingIndex < 0) {
+    if (existingIndex < 0 || previousRoot) {
       let existingStoryPage: any = null;
       try {
         existingStoryPage = await github(`/repos/${OWNER}/${REPO}/contents/${storyRoot}index.html?ref=${baseSha}`, githubToken);
@@ -180,7 +184,9 @@ Deno.serve(async (req: Request) => {
         if (!detail.startsWith("GitHub API 404:")) throw error;
       }
       if (existingStoryPage) {
-        throw new Error("Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
+        throw new Error(previousRoot
+          ? "Destination story page already exists outside the index; refusing to overwrite it during a move."
+          : "Story page path already exists on main but is missing from stories/index.json; refusing to overwrite it.");
       }
     }
     if (existingIndex >= 0) currentIndex[existingIndex] = incomingEntry; else currentIndex.push(incomingEntry);
