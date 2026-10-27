@@ -148,9 +148,9 @@ async function main() {
       await publishedRow.getByRole('button', { name:'نقل الحكاية', exact:true }).click();
       await publishedRow.locator('.move-story-panel select').first().selectOption('history');
       const patchesBeforeMove = submissionPatches.length;
+      const movePatchResponse = page.waitForResponse(response => response.url().includes('/rest/v1/khaledoon_submissions') && response.request().method()==='PATCH');
       await publishedRow.getByRole('button', { name:'تأكيد النقل', exact:true }).click();
-      await page.waitForFunction((before) => window.__unused || true, patchesBeforeMove);
-      await page.waitForTimeout(100);
+      await movePatchResponse;
       const movePatch = submissionPatches.slice(patchesBeforeMove).find(p => p.story_meta && p.story_meta.pending_draft);
       assert.ok(movePatch, 'moving a published story must persist a pending draft');
       assert.equal(movePatch.story_meta.pending_draft.section, 'history', 'pending draft should use the destination section');
