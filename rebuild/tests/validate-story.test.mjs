@@ -177,9 +177,10 @@ test('rejects duplicate quiz IDs and malformed design color', () => {
 
 test('rejects duplicate image IDs and broken inline image references', () => {
   const s = fixture();
-  s.images[1].id = 'photo-one';
+  s.images[1].id = 'image-1';
   s.i18n.en.blocks[1].image_after = 'missing-image';
   const e = validateStory(s);
+  assert(e.some(x => x.includes('images[1].id must be image-2')));
   assert(e.some(x => x.includes('images[1].id duplicated')));
   assert(e.some(x => x.includes('references missing image')));
 });
@@ -193,7 +194,7 @@ test('rejects unexpected properties and malformed stable IDs', () => {
   const e = validateStory(s);
   assert(e.some(x => x.includes('i18n.en: unexpected property')));
   assert(e.some(x => x.includes('sources[0]: unexpected property')));
-  assert(e.some(x => x.includes('quiz[0].id must be a lowercase stable ID')));
+  assert(e.some(x => x.includes('quiz[0].id must be question-1 for lossless admin conversion')));
   assert(e.some(x => x.includes('cover.id must be a stable lowercase ID')));
 });
 
