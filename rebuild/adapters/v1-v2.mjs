@@ -101,7 +101,12 @@ function sourcesToV2(value) {
     // plain-text source field. Ordinary legacy lines retain their original title.
     const beforeUrl = line.slice(0, line.indexOf(matches[0])).trim();
     const marker = beforeUrl.match(/^(.*?) — \[org:([^\]]+)\] —$/);
-    if (marker) return { title: marker[1], organization: marker[2], url };
+    if (marker) {
+      let organization;
+      try { organization = decodeURIComponent(marker[2]); }
+      catch { fail('sources line ' + (i + 1) + ' has malformed encoded organization metadata'); }
+      return { title: marker[1], organization, url };
+    }
     return { title: line, organization: hostname, url };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
@@ -288,6 +293,9 @@ export function v2ToV1(input) {
     if (!/^https:\/\//i.test(source.url) || !hostname) {
       fail('source ' + (i + 1) + ' URL must be valid HTTPS');
     }
+    if (/[\r\n]/.test(source.title) || / — \[org:[^\]]+\] —/.test(source.title)) {
+      fail('source ' + (i + 1) + ' title cannot be represented safely in the single-line V1 source field');
+    }
     const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
     // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
@@ -386,7 +394,7 @@ export function v2ToV1(input) {
       let hostname = '';
       try { hostname = new URL(s.url).hostname; } catch {}
       const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
-      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + s.organization + '] — ' + s.url);
+      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + encodeURIComponent(s.organization) + '] — ' + s.url);
     }).join('\n'),
     cover: imageToV1(input.cover),
     images: input.images.map(imageToV1),
