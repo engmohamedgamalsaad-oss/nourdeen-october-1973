@@ -25,7 +25,7 @@ main{max-width:900px;margin:24px auto;padding:0 16px 60px}
 figure{margin:16px 0;padding:0}figure img{display:block;width:100%;max-height:520px;object-fit:contain;background:#071116;border-radius:12px}figcaption{font-size:.9rem;color:var(--muted);padding:6px 2px}
 .sources a{color:#f1cc82;overflow-wrap:anywhere}.sources li{margin:8px 0}
 .q{padding:14px 0;border-bottom:1px solid var(--line)}.q:last-child{border:0}.options{display:grid;gap:8px;margin:10px 0}.options button{border-radius:10px;text-align:start}.options button.correct{border-color:#7ec99c;background:#163c30}.options button.wrong{border-color:#df8d83;background:#3b2424}.explain{color:var(--muted);margin:8px 0}
-.status{padding:14px;border:1px solid #956c36;border-radius:12px;background:#332a1b;white-space:pre-wrap}
+.status{padding:14px;border:1px solid #956c36;border-radius:12px;background:#332a1b;white-space:pre-wrap}body[data-design=ancient-civilization]{--bg:#21180f;--panel:#342519;--line:#705336}body[data-design=science-lab]{--bg:#081a24;--panel:#102d3b;--line:#28566a}body[data-design=women-leadership]{--bg:#211521;--panel:#342337;--line:#69465f}body[data-design=arts-culture]{--bg:#191923;--panel:#292a3b;--line:#555577}body[data-design=islamic-heritage]{--bg:#0b201a;--panel:#14372b;--line:#356a53}body[data-design=curriculum]{--bg:#101d2c;--panel:#1a2d43;--line:#3c5d7e}body[data-design=reader-story]{--bg:#1e1b16;--panel:#302b22;--line:#635440}body[data-design=portrait-biography]{--bg:#171d20;--panel:#263136;--line:#4a6068}
 [hidden]{display:none!important}a{color:inherit}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 </style></head>
 <body>
@@ -38,6 +38,7 @@ figure{margin:16px 0;padding:0}figure img{display:block;width:100%;max-height:52
 <section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p class="summary" id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p></section>
 <section class="section"><h2 id="story-heading">الحكاية</h2><div id="blocks"></div></section>
 <section class="section" id="gallery-section"><h2 id="gallery-heading">صور الحكاية</h2><div id="gallery"></div></section>
+<section class="section" id="map-section" hidden><h2 id="map-heading">مكان الحكاية</h2><p id="map-place"></p><p><a id="map-link" target="_blank" rel="noopener noreferrer">افتح الموقع على الخريطة</a></p></section>
 <section class="section"><h2 id="quiz-heading">اختبر فهمك</h2><div id="quiz"></div></section>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article>
