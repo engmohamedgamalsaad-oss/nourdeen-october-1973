@@ -74,10 +74,13 @@ function imageToV2(image, label, id) {
   for (const lang of LANGUAGES) {
     const locale = lang === 'ar' ? image : image.i18n?.[lang];
     if (!isObject(locale)) fail(label + ' is missing ' + lang + ' image text');
+    const localized = {};
     for (const key of ['alt', 'caption', 'source_name', 'rights']) {
-      if (!nonempty(locale[key])) fail(label + '.' + lang + '.' + key + ' is required');
+      const value = locale[key] ?? (['source_name', 'rights'].includes(key) ? image[key] : undefined);
+      if (!nonempty(value)) fail(label + '.' + lang + '.' + key + ' is required (or provide the legacy top-level attribution/rights)');
+      localized[key] = value;
     }
-    i18n[lang] = Object.fromEntries(['alt','caption','source_name','rights'].map(k => [k, locale[k]]));
+    i18n[lang] = localized;
   }
   const kind = image.kind;
   if (!['archival','illustration','map','diagram'].includes(kind)) {
@@ -171,7 +174,10 @@ export function v1ToV2(input, { slug } = {}) {
       ...metadataForLocale(input, lang)
     };
   }
-  const cover = imageToV2(input.cover, 'cover', undefined);
+  // Older valid V1 packages may not have a separate cover; use the first gallery image
+  // as the cover rather than rejecting the whole package or inventing an image.
+  const coverInput = isObject(input.cover) ? input.cover : input.images[0];
+  const cover = imageToV2(coverInput, 'cover', undefined);
   delete cover.id;
   const images = input.images.map((im, i) => imageToV2(im, 'images[' + i + ']', 'image-' + (i + 1)));
   const map = input.map_location === undefined ? null : input.map_location;
