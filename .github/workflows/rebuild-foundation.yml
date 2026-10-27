@@ -20,3 +20,5 @@ jobs:
       - name: Run contract and V2 reader regression tests
         run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
+      - name: Validate the real October sea story package
+        run: node rebuild/validate-package.mjs rebuild/story-packages/october-sea-men.v2.json
