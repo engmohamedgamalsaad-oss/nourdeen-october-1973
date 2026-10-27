@@ -103,3 +103,18 @@ The homepage browser audit run 40452346450 completed successfully: 203/203 flow 
 - اختبار المحوّل الحالي يستخدم fixture اختباريًا يمر على مدقّق V1 الفعلي قبل التحويل وبعده؛ لم تُلتقط حتى الآن حزمة أصلية مُصدّرة من جلسة لوحة الإدارة الحية.
 
 القرار: أبقِ PR #387 مسودة. لا تدمج ولا تستبدل صيغة الاستيراد V1 قبل اختبار حزمة حقيقية من تدفق الإدارة ومراجعة كل الحقول التي لا يمكن تمثيلها دون فقد. ملاحظات نطاق PR القديمة في هذا الملف تاريخية، ويُرجع إلى بيانات PR #387 الحالية (9 ملفات) بدل الاعتماد على الأرقام السابقة التي وصفت PR #384 الواسع.
+
+## Legacy prompt package compatibility review — 2026-10-27
+
+The full user-provided Farouk El-Baz prompt/package was inspected as a private conversation attachment, not copied into this public repository. It is not fully conformant with the old prompt's own declared V1 shape. The compatibility prompt must normalize these cases without publishing the sample itself:
+
+- Root `format` is missing even though the legacy prompt says it is required.
+- The Arabic narrator text is named `current_body`, while the legacy contract names it `body`.
+- `cover` is `null`; V2 requires a cover, so conversion must research and verify a separate replacement rather than emit a null cover or duplicate an existing gallery image.
+- The two gallery images have Arabic top-level source/rights fields, but their localized `i18n` entries contain only `alt` and `caption`; V2 needs localized source/rights fields too. These may be translated from the existing statements, but the wording must retain the source's uncertainty and must not claim that NASA reuse terms were verified when the package says they were not.
+- `question_bank` is a JSON-encoded string rather than an object; parse it before mapping the five questions.
+- Some metadata appears only in non-Arabic translations, while the Arabic package has generic narrator labels rather than a confirmed school grade. Do not invent a missing Arabic student name or turn a role label into a school grade.
+- Translation objects contain workflow fields such as `status` and `enabled`; these must not be carried into V2 content.
+
+The V2 prompt now explicitly handles these legacy variations, preserves `original_body`, keeps `map_location: null`, and requires a short blocker report if the missing cover or rights cannot be resolved honestly. The adapter remains deliberately conservative: it must reject unnormalized/incomplete data rather than fill missing translations or image rights with guessed values. The user-provided package was not added to the repository and was not converted into a publishable story.
+
