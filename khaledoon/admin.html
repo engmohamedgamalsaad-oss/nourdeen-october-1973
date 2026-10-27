@@ -828,9 +828,9 @@ function pubRow(it){
   var moveBtn=el('button','btn ghost','نقل الحكاية');moveBtn.type='button';moveBtn.title='نقل الحكاية إلى قسم آخر مع إعادة تجهيز تصميم القسم عند المعاينة والنشر';
   var movePanel=el('div','move-story-panel');movePanel.style.cssText='display:none;grid-column:1/-1;border:1px solid var(--line);border-radius:12px;padding:12px;gap:10px;background:var(--panel)';
   movePanel.appendChild(el('b','','نقل الحكاية إلى قسم آخر'));
-  var moveSection=sel(SEC,it.section||'october'),moveStage=sel(STG,it.stage||'','اختر المرحلة'),moveGrade=document.createElement('select');
+  var moveSource=it.status==='published'&&it.story_meta&&it.story_meta.pending_draft?it.story_meta.pending_draft:it;var moveSection=sel(SEC,moveSource.section||it.section||'october'),moveStage=sel(STG,moveSource.stage||it.stage||'','اختر المرحلة'),moveGrade=document.createElement('select');
   moveGrade.className='btn ghost';
-  function fillMoveGrades(){var max=moveStage.value==='primary'?6:3,keep=moveGrade.value||String(it.school_grade||'');moveGrade.textContent='';var blank=el('option','','اختر الصف');blank.value='';moveGrade.appendChild(blank);for(var gi=0;gi<max;gi++){var opt=el('option','','الصف '+ORD[gi]);opt.value=String(gi+1);moveGrade.appendChild(opt)}if(keep&&+keep<=max)moveGrade.value=keep}
+  function fillMoveGrades(){var max=moveStage.value==='primary'?6:3,keep=moveGrade.value||String(moveSource.school_grade||it.school_grade||'');moveGrade.textContent='';var blank=el('option','','اختر الصف');blank.value='';moveGrade.appendChild(blank);for(var gi=0;gi<max;gi++){var opt=el('option','','الصف '+ORD[gi]);opt.value=String(gi+1);moveGrade.appendChild(opt)}if(keep&&+keep<=max)moveGrade.value=keep}
   fillMoveGrades();moveStage.addEventListener('change',fillMoveGrades);
   var moveFields=el('div','fgrid');moveFields.appendChild(fld('القسم الجديد',moveSection));moveFields.appendChild(fld('المرحلة الدراسية عند اختيار المناهج',moveStage));moveFields.appendChild(fld('الصف عند اختيار المناهج',moveGrade));movePanel.appendChild(moveFields);
   function toggleMoveCurriculum(){var curriculum=moveSection.value==='curriculum';moveFields.children[1].hidden=!curriculum;moveFields.children[2].hidden=!curriculum}
