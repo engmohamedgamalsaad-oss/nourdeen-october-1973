@@ -279,7 +279,7 @@ test('rejects V2-only summary, inline-image, custom-design, and lossy text featu
 
   v2 = makeV2();
   v2.sources[0].organization = 'Different organization';
-  assert.throws(() => v2ToV1(v2), /cannot be represented losslessly/);
+  assert.throws(() => v2ToV1(v2), /title already contains a URL that cannot be represented unambiguously/);
 });
 
 
