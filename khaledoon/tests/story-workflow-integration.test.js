@@ -672,6 +672,17 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
+test('story publisher attempts to reconcile same-story PRs created concurrently', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  assert.ok(publisher.includes('const racingPulls = await githubAllPages'), 'after PR creation, publisher must re-scan open PRs for a concurrent duplicate');
+  assert.ok(publisher.includes('candidate.number < best.number'), 'when concurrent duplicates are visible, publisher must deterministically keep the lowest-numbered PR');
+  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ state: "closed" })'), 'the later duplicate PR must be closed rather than left open');
+  assert.ok(publisher.includes('git/refs/heads/${branchNameForRecovery}') && publisher.includes('method: "DELETE"'), 'duplicate cleanup must attempt to delete the duplicate branch');
+  assert.ok(publisher.includes('return reply(409, {') && publisher.includes('أُغلق الطلب المكرر وبقي الطلب الأقدم'), 'the duplicate caller must receive a conflict response pointing to the retained PR');
+  assert.ok(publisher.includes('branch cleanup is best effort'), 'branch cleanup failure must not pretend the duplicate PR remained open');
+  // This is a source-contract guard, not a true concurrent integration test; GitHub API race behavior remains unverified.
+});
+
 test('story publisher creates review PRs and never updates main directly', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
