@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { v1ToV2, v2ToV1 } from '../adapters/v1-v2.mjs';
+import legacyWorkflow from '../../khaledoon/assets/story-workflow.js';
 
 const langs = ['en', 'fr', 'it', 'de'];
 function image(label) {
@@ -45,6 +46,17 @@ function fixture() {
     translations, question_bank: { questions }
   };
 }
+
+test('round-trip fixture passes the actual current V1 admin package validator before and after conversion', () => {
+  const v1 = fixture();
+  const before = legacyWorkflow.validateStoryPackage(v1);
+  assert.equal(before.ok, true, before.errors.join('\n'));
+
+  const v2 = v1ToV2(v1, { slug: 'historical-figure' });
+  const back = v2ToV1(v2);
+  const after = legacyWorkflow.validateStoryPackage(back);
+  assert.equal(after.ok, true, after.errors.join('\n'));
+});
 
 test('V1 to V2 and back preserves original text, translated story streams, sources, images and quiz answers', () => {
   const v1 = fixture();
