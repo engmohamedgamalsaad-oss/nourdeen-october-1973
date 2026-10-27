@@ -56,7 +56,10 @@ function fixture() {
     i18n,
     cover: image(),
     images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
-    sources: [\n      { title: 'Reference A', organization: 'Archive A', url: 'https://example.org/reference-a' },\n      { title: 'Reference B', organization: 'Archive B', url: 'https://example.org/reference-b' }\n    ],
+    sources: [
+      { title: 'Reference A', organization: 'Archive A', url: 'https://example.org/reference-a' },
+      { title: 'Reference B', organization: 'Archive B', url: 'https://example.org/reference-b' }
+    ],
     quiz,
     map_location: null
   };
