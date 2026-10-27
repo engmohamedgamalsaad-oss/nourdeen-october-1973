@@ -70,7 +70,7 @@ export function validateStory(s) {
     languageObjectCheck(s.i18n, 'i18n', out);
     for (const lang of LANGUAGES) {
       const t = s.i18n[lang];
-      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks'], 'i18n.' + lang, out)) continue;
+      if (!keysCheck(t, ['title', 'subtitle', 'summary', 'blocks'], ['title', 'subtitle', 'summary', 'blocks', 'student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note'], 'i18n.' + lang, out)) continue;
       for (const key of ['title', 'subtitle', 'summary']) if (!nonempty(t[key])) out.push('i18n.' + lang + '.' + key + ' required');
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
@@ -83,6 +83,25 @@ export function validateStory(s) {
       }
     }
   } else out.push('i18n must be an object');
+
+  // V1 metadata is optional as a group, but if present it must survive in all five locales.
+  const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note'];
+  for (const field of preservedFields) {
+    const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
+    if (!presentSomewhere) continue;
+    for (const lang of LANGUAGES) {
+      const locale = s.i18n?.[lang];
+      if (!isObject(locale) || !Object.hasOwn(locale, field)) {
+        out.push('i18n.' + lang + '.' + field + ' required in every locale when used');
+        continue;
+      }
+      if (['history_note', 'images_note'].includes(field)) {
+        if (typeof locale[field] !== 'string') out.push('i18n.' + lang + '.' + field + ' must be a string when provided');
+      } else if (!nonempty(locale[field])) {
+        out.push('i18n.' + lang + '.' + field + ' must be non-empty when provided');
+      }
+    }
+  }
 
   imageCheck(s.cover, 'cover', out);
   if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
