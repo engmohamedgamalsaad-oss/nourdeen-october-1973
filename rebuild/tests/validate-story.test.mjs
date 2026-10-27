@@ -132,6 +132,11 @@ test('requires at least five V2 quiz questions but keeps the V1 bridge lossless'
   assert.deepEqual(validateStory(six), []);
   assert(validateForAdminBridge(six).some(x => x.includes('supports exactly 5')));
 
+  const sixImages = fixture();
+  sixImages.images.push({ ...sixImages.images[0], id: 'photo-six' });
+  assert.deepEqual(validateStory(sixImages), []);
+  assert(validateForAdminBridge(sixImages).some(x => x.includes('supports 2 to 5 images')));
+
   const invalid = fixture();
   invalid.cover = { ...image(), url: undefined, path: '../private.jpg' };
   invalid.sources[0].url = 'javascript:alert(1)';
