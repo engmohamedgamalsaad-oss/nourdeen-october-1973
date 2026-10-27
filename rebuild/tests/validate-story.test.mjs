@@ -133,7 +133,7 @@ test('requires at least five V2 quiz questions but keeps the V1 bridge lossless'
   assert(validateForAdminBridge(six).some(x => x.includes('supports exactly 5')));
 
   const sixImages = fixture();
-  sixImages.images.push({ ...sixImages.images[0], id: 'photo-six' });
+  for (let i = 3; i <= 6; i++) sixImages.images.push({ ...sixImages.images[0], id: 'photo-' + i });
   assert.deepEqual(validateStory(sixImages), []);
   assert(validateForAdminBridge(sixImages).some(x => x.includes('supports 2 to 5 images')));
 
@@ -175,7 +175,7 @@ test('rejects unexpected properties and malformed stable IDs', () => {
   const e = validateStory(s);
   assert(e.some(x => x.includes('i18n.en: unexpected property')));
   assert(e.some(x => x.includes('sources[0]: unexpected property')));
-  assert(e.some(x => x.includes('quiz[0].id must be a lowercase stable ID')));
+  assert(e.some(x => x.includes('quiz[0].id must be a stable lowercase ID')));
   assert(e.some(x => x.includes('cover.id must be a stable lowercase ID')));
 });
 
