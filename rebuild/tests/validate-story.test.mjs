@@ -206,6 +206,8 @@ test('rejects malformed image IDs in the base V2 contract', () => {
   s.images[0].id = 'Bad image ID';
   const errors = validateStory(s);
   assert(errors.some(x => x.includes('images[0].id must be a stable lowercase ID')));
+  const bridgeErrors = validateForAdminBridge(s);
+  assert.equal(bridgeErrors.filter(x => x.includes('images[0].id')).length, 1, 'malformed image ID should not produce a duplicate bridge error');
 });
 
 test('checks local image existence and rejects traversal and missing files', async () => {
