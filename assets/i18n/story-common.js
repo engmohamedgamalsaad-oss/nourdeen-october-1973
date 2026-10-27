@@ -2,6 +2,9 @@
 (function(){
 var S=window.StoryI18N=window.StoryI18N||{text:{},meta:{}};
 Object.assign(S.text,{
+"خالدون عبر التاريخ · 012":{"en":"Immortals Through History · 012","fr":"Immortels à travers l’histoire · 012","it":"Immortali attraverso la storia · 012","de":"Unsterbliche Persönlichkeiten der Geschichte · 012"},
+"خالدون عبر التاريخ · 014":{"en":"Immortals Through History · 014","fr":"Immortels à travers l’histoire · 014","it":"Immortali attraverso la storia · 014","de":"Unsterbliche Persönlichkeiten der Geschichte · 014"},
+"← التاريخ والحضارات":{"en":"← History and Civilizations","fr":"← Histoire et civilisations","it":"← Storia e civiltà","de":"← Geschichte und Zivilisationen"},
 "غلاف حكايات أكتوبر 1973":{"en":"Cover of the October 1973 stories","fr":"Couverture des récits d’octobre 1973","it":"Copertina dei racconti dell’ottobre 1973","de":"Titelbild der Geschichten zum Oktober 1973"},
 "اختار رد فعلك على الحكاية":{"en":"Choose your reaction to the story","fr":"Choisissez votre réaction à ce récit","it":"Scegli la tua reazione al racconto","de":"Wähle deine Reaktion auf die Geschichte"},
 "شعار مدرسة المنار القومية للغات للبنات":{"en":"Al-Manar National Language School for Girls logo","fr":"Logo de l’École nationale de langues Al-Manar pour filles","it":"Logo della Scuola nazionale di lingue Al-Manar per ragazze","de":"Logo der Al-Manar-Sprachschule für Mädchen"},
