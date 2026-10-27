@@ -196,6 +196,9 @@ for (const rel of htmlFiles) {
     continue;
   }
 
+  /* Standalone local V2 package review utility; it deliberately does not load legacy shared-language code. */
+  if (rel === 'rebuild/package-review.html' && html.includes('KHALEDOON_STORY_V2')) continue;
+
   /* locate the shared-script tag(s) */
   const tags = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']*home-language-only\.js[^"']*)["'][^>]*>/gi)];
   if (isHome) {
