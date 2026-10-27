@@ -41,7 +41,7 @@ function fixture() {
     design: { variant: 'arts-culture', accent: '#b8874b' },
     original_body: 'Exact sample source text.',
     i18n, cover: image('cover'), images: [image('inside-1'), image('inside-2')],
-    sources: [{ title: 'Sample source', organization: 'Example', url: 'https://example.org/source' }],
+    sources: [{ title: 'Sample source A', organization: 'Example', url: 'https://example.org/source-a' }, { title: 'Sample source B', organization: 'Example', url: 'https://example.org/source-b' }],
     quiz, map_location: null
   };
 }
