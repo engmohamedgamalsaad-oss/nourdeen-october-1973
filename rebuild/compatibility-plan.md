@@ -130,3 +130,9 @@ A distinct, official NASA image candidate was found for a future private V2 conv
 
 This establishes a grounded candidate and a source for the general usage conditions, not a blanket guarantee about every image on NASA's website. The individual asset should still be checked for a third-party copyright notice before any story package is approved. The image has not been added to the repository or published.
 
+### Latest compatibility hardening — 2026-10-27
+
+- The V2 contract and adapter now preserve optional localized metadata independently per language. If a legacy package provides a proposer name in EN/FR/IT/DE but not Arabic, those known values remain in those locales; Arabic stays absent instead of being invented, and the foreign values are not discarded.
+- The adapter now accepts an explicit `coverOverride` only when the old cover is absent or null. It requires a usable image locator, rejects reuse of a gallery image, and does not replace a valid existing cover. This is a controlled input from a research/editorial step, not automatic permission to treat an arbitrary NASA image as cleared.
+- Regression tests cover sparse proposer-name metadata and the safe cover-override rules.
+- Latest contract tests and homepage/browser checks are being re-run against the current head; do not call this latest adapter change verified until the runs for the final head are complete.
