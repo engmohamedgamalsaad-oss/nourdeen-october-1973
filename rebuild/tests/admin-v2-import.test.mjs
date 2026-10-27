@@ -9,7 +9,7 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261027-v2-admin-4'"));
   assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261027-v2-admin-4'"));
   assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY_V2'/);
-  assert.match(html, /var v2Errors=v2Adapter\.validateStory\(pkg\)/);
+  assert.match(html, /var v2Errors=v2Adapter\.validateForAdminBridge\(pkg\)/);
   assert.match(html, /pkg=v2Adapter\.v2ToV1\(pkg\)/);
   assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_V1'/);
   assert.ok(html.includes("story-template-bundle.js?v=20261027-source-clean-2"));
