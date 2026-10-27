@@ -190,7 +190,7 @@ for (const rel of htmlFiles) {
   if (rel === 'rebuild/reader.html' && html.includes('data-kh-v2-reader')) {
     const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
     for (const lang of v2Languages) {
-      if (!new RegExp('data-lang=["\\\\']' + lang + '["\\\\']').test(html)) fail('V2 reader is missing language button: ' + lang);
+      if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
     }
     if (!html.includes('id="theme-toggle"')) fail('V2 reader must expose its light/dark theme toggle.');
     continue;
