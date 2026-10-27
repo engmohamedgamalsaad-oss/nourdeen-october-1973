@@ -735,6 +735,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(packageV2));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
+    const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
     await importButton.click();
     try {
       await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
@@ -750,7 +751,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
       hard.push('V2 source organization was percent-encoded in Arabic instead of remaining readable.');
     }
     if (savedRecord.status === 'published') hard.push('V2 import unexpectedly published the story instead of saving a draft.');
-    const popup = page.context().pages().find((p) => p !== page && /preview\.html/.test(p.url()));
+    const popup = await popupPromise;
+    if (popup) await popup.waitForURL(/preview\.html/, { timeout: 15000 }).catch(() => {});
     if (popup) {
       await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
       await popup.waitForFunction(() => document.readyState === 'complete' && document.body, null, { timeout: 10000 }).catch(() => {});
