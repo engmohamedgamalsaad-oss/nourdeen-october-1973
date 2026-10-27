@@ -116,6 +116,68 @@
       "items": {
         "$ref": "#/$defs/question"
       }
+    },
+    "map_location": {
+      "description": "Optional location for stories/places.json. Use null explicitly when the location is unknown or not appropriate; never invent coordinates.",
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "lat",
+            "lng",
+            "place"
+          ],
+          "properties": {
+            "lat": {
+              "type": "number",
+              "minimum": -90,
+              "maximum": 90
+            },
+            "lng": {
+              "type": "number",
+              "minimum": -180,
+              "maximum": 180
+            },
+            "place": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "ar",
+                "en",
+                "fr",
+                "it",
+                "de"
+              ],
+              "properties": {
+                "ar": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "en": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "fr": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "it": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "de": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      ]
     }
   },
   "$defs": {
@@ -226,6 +288,14 @@
         "images_note": {
           "type": "string",
           "description": "Optional image provenance/rights note; preserve even when empty."
+        },
+        "figure_name": {
+          "type": "string",
+          "description": "Optional localized historical figure name; preserve V1 figure_name/person."
+        },
+        "person": {
+          "type": "string",
+          "description": "Optional localized person label preserved from V1."
         }
       }
     },
