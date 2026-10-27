@@ -716,6 +716,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     localStorage.setItem('kh_adm_session', JSON.stringify(session));
     sessionStorage.setItem('kh_adm_session', JSON.stringify(session));
   });
+  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/jpeg', body: Buffer.from([0xff, 0xd8, 0xff, 0xd9]) }));
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   try {
@@ -728,7 +729,9 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(packageV2));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     await importButton.click();
-    await page.waitForFunction(() => /حُفظت المسودة/.test(document.body.innerText), null, { timeout: 20000 });
+    await page.waitForFunction(() => { const t = document.body.innerText; return /تم تنفيذ الكود وحُفظت المسودة|تعذر|غير مكتملة|غير صحيحة|تجاوز النص|فشل حفظ المسودة|لم يرجع الخادم/.test(t); }, null, { timeout: 20000 });
+    const importStatus = await page.locator('body').innerText();
+    if (!/تم تنفيذ الكود وحُفظت المسودة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('V2 import did not preserve a readable Arabic source organization in the saved draft.');
     }
