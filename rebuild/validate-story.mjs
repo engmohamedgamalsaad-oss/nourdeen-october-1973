@@ -81,7 +81,7 @@ export function validateStory(s) {
         languageObjectCheck(m.place, 'map_location.place', out);
         for (const lang of LANGUAGES) {
           if (!nonempty(m.place[lang])) out.push('map_location.place.' + lang + ' required');
-          else if (lang !== 'ar' && /[\\u0600-\\u06FF]/.test(m.place[lang])) out.push('map_location.place.' + lang + ' must not contain Arabic fallback');
+          else if (lang !== 'ar' && /[\u0600-\u06FF]/.test(m.place[lang])) out.push('map_location.place.' + lang + ' must not contain Arabic fallback');
         }
         for (const key of Object.keys(m.place)) if (!LANGUAGES.includes(key)) out.push('map_location.place: unexpected property "' + key + '"');
       }
