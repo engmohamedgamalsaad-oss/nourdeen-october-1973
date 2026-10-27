@@ -290,7 +290,7 @@ test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them'
 
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   v2.sources[0].accessed_at = '2026-10-27';
-  assert.throws(() => v2ToV1(v2), /accessed_at metadata has no lossless V1 field/);
+  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*sources\\[0\\]\\.accessed_at metadata has no V1 field/);
 });
 
 test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
@@ -358,7 +358,7 @@ test('round-trips normal V2 source titles and organization names through the V1 
   const back = v2ToV1(v2);
   const legacyCheck = legacyWorkflow.validateStoryPackage(back);
   assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\n'));
-  assert.ok(back.sources.includes('Apollo 17 geology briefing — [org:NASA%20History%20Office%5D%20Research] — https://history.nasa.gov/apollo17'));
+  assert.ok(back.sources.includes('Apollo 17 geology briefing — [org:NASA History Office%5D Research] — https://history.nasa.gov/apollo17'));
   const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
   assert.deepEqual(v2Again.sources, v2.sources);
 });
