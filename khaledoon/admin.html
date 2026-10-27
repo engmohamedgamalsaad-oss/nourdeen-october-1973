@@ -824,7 +824,7 @@ function pubRow(it){
    e.preventDefault();e.stopPropagation();forceEditOpen=true;
    var oldBody=d.querySelector('.pbody');if(oldBody)oldBody.remove();built=false;
    d.open=true;build();
-   var bodyNode=d.querySelector('.pbody'),dataDetails=bodyNode&&bodyNode.querySelector('details'),editDetails=dataDetails&&dataDetails.querySelector('details');
+   var bodyNode=d.querySelector('.pbody'),dataDetails=bodyNode&&bodyNode.querySelector('details.review-data'),editDetails=dataDetails&&dataDetails.querySelector('details');
    if(dataDetails)dataDetails.open=true;if(editDetails)editDetails.open=true;
    var editorNode=editDetails&&editDetails.querySelector('.fcard');if(editorNode&&editorNode.scrollIntoView)editorNode.scrollIntoView({behavior:'smooth',block:'start'});
   });actions.appendChild(editBtn);
