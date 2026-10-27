@@ -56,7 +56,7 @@ function fixture() {
     i18n,
     cover: image(),
     images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
-    sources: [{ title: 'Reference', organization: 'Archive', url: 'https://example.org/reference' }],
+    sources: [\n      { title: 'Reference A', organization: 'Archive A', url: 'https://example.org/reference-a' },\n      { title: 'Reference B', organization: 'Archive B', url: 'https://example.org/reference-b' }\n    ],
     quiz,
     map_location: null
   };
@@ -134,6 +134,13 @@ test('rejects unsafe paths, invalid source URL, and quiz count', () => {
   assert(e.some(x => x.includes('cover: source_url')));
   assert(e.some(x => x.includes('sources[0].url')));
   assert(e.some(x => x.includes('exactly 5')));
+});
+
+test('requires two distinct source URLs', () => {
+  const s = fixture();
+  s.sources[1].url = s.sources[0].url;
+  const errors = validateStory(s);
+  assert(errors.some(x => x.includes('must be distinct from other source URLs')));
 });
 
 test('rejects duplicate quiz IDs and malformed design color', () => {
