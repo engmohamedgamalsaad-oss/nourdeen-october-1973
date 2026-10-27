@@ -676,8 +676,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     cover: localizedImage('cover'),
     images: [{ ...localizedImage('gallery-one'), id: 'image-1' }, { ...localizedImage('gallery-two'), id: 'image-2' }],
     sources: [
-      { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ', url: 'https://example.org/archive/one' },
-      { title: 'Archive reference two', organization: 'جامعة القاهرة', url: 'https://example.org/archive/two' }
+      { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ', url: 'https://example.org/archive/one', i18n: Object.fromEntries(langs.map((lang) => [lang, { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ' }])) },
+      { title: 'Archive reference two', organization: 'جامعة القاهرة', url: 'https://example.org/archive/two', i18n: Object.fromEntries(langs.map((lang) => [lang, { title: 'Archive reference two', organization: 'جامعة القاهرة' }])) }
     ],
     quiz: Array.from({ length: 5 }, (_, i) => ({
       id: 'question-' + (i + 1),
