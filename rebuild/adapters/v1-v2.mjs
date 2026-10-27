@@ -127,8 +127,6 @@ function quizToV2(value) {
   });
 }
 function metadataForLocale(v1, lang) {
-  const source = lang === 'ar' ? v1 : (v1.translations?.[lang] || {});
-  const out = {};
   const keys = ['student_name','narrator_name','grade','narrator_grade','history_note','images_note','figure_name','person'];
   const baseValues = {
     student_name: v1.student_name, narrator_name: v1.narrator_name,
@@ -136,21 +134,36 @@ function metadataForLocale(v1, lang) {
     history_note: v1.history_note, images_note: v1.images_note,
     figure_name: v1.figure_name, person: v1.person
   };
+  const out = {};
   for (const key of keys) {
-    const value = source[key] ?? (['narrator_name','narrator_grade','figure_name','person'].includes(key) ? baseValues[key] : undefined);
-    const used = LANGUAGES.some(l => {
-      const row = l === 'ar' ? v1 : v1.translations?.[l];
-      return row && Object.hasOwn(row, key) || baseValues[key] !== undefined;
+    const values = LANGUAGES.map(langCode => {
+      const locale = langCode === 'ar' ? v1 : (v1.translations?.[langCode] || {});
+      const fallback = ['narrator_name','narrator_grade','figure_name','person'].includes(key)
+        ? baseValues[key] : undefined;
+      return locale[key] ?? fallback;
     });
-    if (!used) continue;
-    if (typeof value !== 'string') fail('metadata ' + key + ' needs an explicit value in locale ' + lang);
-    out[key] = value;
+    // Metadata is optional in V2. If the old package has it only in some
+    // locales, omit the field consistently rather than inventing a translation.
+    if (values.every(value => nonempty(value))) out[key] = values[LANGUAGES.indexOf(lang)];
   }
   return out;
 }
+function normalizeLegacyPackage(input) {
+  const v1 = { ...input };
+  const hasLegacySignature = ['section_key','visual_design','original_body','translations','images']
+    .every(key => Object.hasOwn(v1, key));
+  if (v1.format === undefined && hasLegacySignature) v1.format = V1_FORMAT;
+  if (v1.format !== V1_FORMAT) fail('expected ' + V1_FORMAT + ' or a recognizable legacy V1 package');
+  if (!nonempty(v1.body) && nonempty(v1.current_body)) v1.body = v1.current_body;
+  if (typeof v1.question_bank === 'string') {
+    try { v1.question_bank = JSON.parse(v1.question_bank); }
+    catch { fail('question_bank string is not valid JSON'); }
+  }
+  return v1;
+}
 export function v1ToV2(input, { slug } = {}) {
   requireObject(input, 'V1 package');
-  if (input.format !== V1_FORMAT) fail('expected ' + V1_FORMAT);
+  input = normalizeLegacyPackage(input);
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug || '')) fail('caller must provide a stable slug; it is never guessed from a title');
   const section = SECTION_MAP[input.section_key];
   if (!section) fail('unsupported section_key: ' + input.section_key);
