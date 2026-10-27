@@ -1,7 +1,10 @@
+import { readFile, realpath, stat } from 'node:fs/promises';
+import path from 'node:path';
+
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const sections = new Set(['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers']);
 const variants = new Set(['military-history', 'ancient-civilization', 'science-lab', 'women-leadership', 'arts-culture', 'islamic-heritage', 'curriculum', 'reader-story', 'portrait-biography']);
-const kinds = new Set(['archival', 'illustration', 'map', 'diagram', 'photograph', 'document']);
+const kinds = new Set(['archival', 'photograph', 'illustration', 'map', 'document']);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const https = x => typeof x === 'string' && /^https:\/\//i.test(x);
 const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
@@ -102,13 +105,17 @@ export function validateStory(s) {
     }
   } else out.push('i18n must be an object');
 
-  // Optional legacy metadata is preserved per locale. A missing translation is
-  // not a validation error and must never be invented just to fill the schema.
+  // V1 metadata is optional as a group, but if present it must survive in all five locales.
   const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'];
   for (const field of preservedFields) {
+    const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
+    if (!presentSomewhere) continue;
     for (const lang of LANGUAGES) {
       const locale = s.i18n?.[lang];
-      if (!isObject(locale) || !Object.hasOwn(locale, field)) continue;
+      if (!isObject(locale) || !Object.hasOwn(locale, field)) {
+        out.push('i18n.' + lang + '.' + field + ' required in every locale when used');
+        continue;
+      }
       if (['history_note', 'images_note'].includes(field)) {
         if (typeof locale[field] !== 'string') out.push('i18n.' + lang + '.' + field + ' must be a string when provided');
       } else if (!nonempty(locale[field])) {
@@ -118,11 +125,11 @@ export function validateStory(s) {
   }
 
   imageCheck(s.cover, 'cover', out);
-  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('images must contain between 2 and 5 images');
+  if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
-    // Gallery images must carry a stable ID (image_after refers to it); the cover has none.
+    if (!/^[a-z0-9-]+$/.test(im?.id || '')) out.push('images[' + i + '].id must be a stable lowercase ID');
     if (imageIds.has(im?.id)) out.push('images[' + i + '].id duplicated');
     if (im?.id) imageIds.add(im.id);
   }
@@ -130,16 +137,13 @@ export function validateStory(s) {
     if (b?.image_after && !imageIds.has(b.image_after)) out.push('i18n.' + lang + '.blocks[' + i + '].image_after references missing image "' + b.image_after + '"');
   }
 
-  if (!Array.isArray(s.sources) || s.sources.length < 2) out.push('at least two sources required');
-  const sourceUrls = new Set();
+  if (!Array.isArray(s.sources) || !s.sources.length) out.push('at least one source required');
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
     if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
-    if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
-    if (https(src.url)) sourceUrls.add(src.url);
-    if (Object.hasOwn(src, 'accessed_at') && !nonempty(src.accessed_at)) out.push(label + '.accessed_at must be a non-empty string when provided');
+    if (Object.hasOwn(src, 'accessed_at') && typeof src.accessed_at !== 'string') out.push(label + '.accessed_at must be a string');
   }
 
   if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('quiz must contain exactly 5 questions');
@@ -147,7 +151,7 @@ export function validateStory(s) {
   for (const [i, q] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     const label = 'quiz[' + i + ']';
     if (!keysCheck(q, ['id', 'correct_option', 'i18n'], ['id', 'correct_option', 'i18n'], label, out)) continue;
-    if (typeof q.id !== 'string' || !/^[a-z0-9-]+$/.test(q.id)) out.push(label + '.id must be a stable lowercase ID');
+    if (typeof q.id !== 'string' || !/^[a-z0-9-]+$/.test(q.id)) out.push(label + '.id must be a lowercase stable ID');
     if (ids.has(q.id)) out.push(label + '.id duplicated');
     if (q.id) ids.add(q.id);
     if (!Number.isInteger(q.correct_option) || q.correct_option < 0 || q.correct_option > 3) out.push(label + '.correct_option must be 0..3');
@@ -163,50 +167,7 @@ export function validateStory(s) {
   }
   return out;
 }
-
-/**
- * Validate whether a structurally valid V2 package can pass through the
- * temporary V1 admin preview/storage bridge without losing V2-only fields.
- * Keep these constraints out of validateStory(): they are not V2 contract rules.
- */
-export function validateForAdminBridge(s) {
-  const out = [...validateStory(s)];
-  if (!isObject(s)) return out;
-  for (const lang of LANGUAGES) {
-    const t = s.i18n?.[lang];
-    if (!isObject(t)) continue;
-    if (nonempty(t.subtitle) && nonempty(t.summary) && t.summary !== t.subtitle) {
-      out.push('bridge: i18n.' + lang + '.summary differs from subtitle and V1 cannot preserve it');
-    }
-    for (const [i, block] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
-      if (Object.hasOwn(block || {}, 'image_after')) {
-        out.push('bridge: i18n.' + lang + '.blocks[' + i + '].image_after cannot be represented by V1');
-      }
-    }
-  }
-  for (const [i, image] of (Array.isArray(s.images) ? s.images : []).entries()) {
-    if (/^[a-z0-9-]+$/.test(image?.id || '') && image.id !== 'image-' + (i + 1)) out.push('bridge: images[' + i + '].id must be image-' + (i + 1));
-    if (['photograph', 'document'].includes(image?.kind)) {
-      out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by V1');
-    }
-  }
-  for (const [i, source] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
-    if (isObject(source) && Object.hasOwn(source, 'accessed_at')) {
-      out.push('bridge: sources[' + i + '].accessed_at metadata has no V1 field');
-    }
-  }
-  for (const [i, question] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
-    if (question?.id !== 'question-' + (i + 1)) out.push('bridge: quiz[' + i + '].id must be question-' + (i + 1));
-  }
-  if (s.cover && ['photograph', 'document'].includes(s.cover.kind)) {
-    out.push('bridge: cover.kind "' + s.cover.kind + '" is not supported by V1');
-  }
-  return out;
-}
-
 export async function validateLocalImagePaths(story, root) {
-  const { realpath, stat } = await import('node:fs/promises');
-  const path = await import('node:path');
   const out = [];
   const all = [story?.cover, ...(Array.isArray(story?.images) ? story.images : [])];
   let base;
@@ -224,17 +185,13 @@ export async function validateLocalImagePaths(story, root) {
   }
   return out;
 }
-if (typeof process !== 'undefined' && process.argv?.[1]) {
-  const nodePath = await import('node:path');
-  if (import.meta.url === new URL('file://' + nodePath.default.resolve(process.argv[1])).href) {
-    const filename = process.argv[2];
-    if (!filename) { console.error('Usage: node rebuild/validate-story.mjs <story.json>'); process.exitCode = 2; }
-    else try {
-      const { readFile } = await import('node:fs/promises');
-      const story = JSON.parse(await readFile(filename, 'utf8'));
-      const problems = [...validateStory(story), ...await validateLocalImagePaths(story, process.cwd())];
-      if (problems.length) { console.error('Rejected (' + problems.length + '):\n- ' + problems.join('\n- ')); process.exitCode = 1; }
-      else console.log('Story contract passed.');
-    } catch (e) { console.error('Unable to read/parse JSON: ' + e.message); process.exitCode = 2; }
-  }
+if (process.argv[1] && import.meta.url === new URL('file://' + path.resolve(process.argv[1])).href) {
+  const filename = process.argv[2];
+  if (!filename) { console.error('Usage: node rebuild/validate-story.mjs <story.json>'); process.exitCode = 2; }
+  else try {
+    const story = JSON.parse(await readFile(filename, 'utf8'));
+    const problems = [...validateStory(story), ...await validateLocalImagePaths(story, process.cwd())];
+    if (problems.length) { console.error('Rejected (' + problems.length + '):\n- ' + problems.join('\n- ')); process.exitCode = 1; }
+    else console.log('Story contract passed.');
+  } catch (e) { console.error('Unable to read/parse JSON: ' + e.message); process.exitCode = 2; }
 }
