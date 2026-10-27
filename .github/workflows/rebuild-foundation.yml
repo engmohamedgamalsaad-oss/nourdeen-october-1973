@@ -1,0 +1,20 @@
+name: Khaledoon rebuild foundation checks # contract and V1-V2 adapter CI
+on:
+  push:
+    branches: [rebuild/khaledoon-foundation-2026-10-26]
+  pull_request:
+    paths: ['rebuild/**', '.github/workflows/rebuild-foundation.yml']
+permissions:
+  contents: read
+jobs:
+  contract-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run contract and adapter regression tests
+        run: node --test rebuild/tests/*.test.mjs
+      - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
