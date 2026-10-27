@@ -174,7 +174,7 @@ article p.para{font-size:1.1rem;margin:0 0 18px;color:#e6eeee}
     if(lines.length){
       var ol=$('sSrc'); ol.textContent='';
       lines.forEach(function(line){
-        line=line.replace(/\s+—\s+\[org:[^\]]+\]\s+—(?=\s+https?:\/\/)/,'').trim();
+        line=line.replace(/\s+—\s+\[org:([^\]]+)\]\s+—(?=\s+https?:\/\/)/,' — $1 —').trim();
         var li=document.createElement('li');
         if(/^https?:\/\/\S+$/i.test(line)){ var a=document.createElement('a'); a.href=line; a.textContent=line; a.target='_blank'; a.rel='noopener noreferrer'; li.appendChild(a); }
         else li.textContent=line;
