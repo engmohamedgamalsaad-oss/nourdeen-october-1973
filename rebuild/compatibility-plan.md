@@ -64,3 +64,10 @@ Contract V2 and its validator are still only an initial foundation. Validator te
 المحوّل يرفض بدل التخمين أو الاختلاق في الحالات التالية: أقسام/تصميمات بلا تحويل عكسي صريح، سطر مصادر يحتوي أكثر من رابط أو لا يحتوي رابط HTTPS واحدًا، سؤال لا يملك أربعة اختيارات، أنواع صور لا يدعمها عقد V2، أو ترتيب كتل يتداخل فيه صوت كارما بعد صوت الراوي. هذه قيود محافظة وليست دليلًا على أن كل حكايات V1 الحالية قابلة للتحويل.
 
 اختبارات المحوّل تغطي النص الأصلي، فصل صوت كارما والراوي، بطاقات المعرفة، بيانات الصور وترجماتها، المصادر، وإجابات الأسئلة، إضافة إلى حالات الرفض الآمن. لم يُربط المحوّل بالقارئ أو لوحة الإدارة أو الاستيراد، ولم يُجر تحويلًا جماعيًا على الحكايات المنشورة. يجب أن تنجح اختبارات CI أولًا، ثم تُختبر الحكايتان المرجعيتان «رجال البحر في أكتوبر» و«نجيب محفوظ» فعليًا قبل تقرير التوافق النهائي.
+
+
+## Release-blocking review finding — 2026-10-27
+
+PR #384 currently contains 76 changed files (3,554 additions / 352 deletions), including existing reader/admin files, story pages and index/map data, and Supabase Edge Function source. Its actual diff is therefore broader than the isolated rebuild foundation described by the title. **Do not merge this PR as a whole.** Before any release, the changes must be split or narrowed and independently reviewed; published story data, existing URLs, reactions, and live Supabase must remain protected.
+
+The adapter files and CI workflow were committed to this branch, but no workflow run tied to the latest commit was visible during this review, and direct local Node execution was unavailable because the environment could not resolve GitHub. Consequently the adapter tests are authored but not yet verified as passing. No claim of a successful round-trip test is made until a current-head CI result is available.
