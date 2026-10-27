@@ -55,7 +55,7 @@ function fixture() {
     original_body: 'Submitted original',
     i18n,
     cover: image(),
-    images: [{ ...image(), id: 'photo-one' }, { ...image(), id: 'photo-two' }],
+    images: [{ ...image(), id: 'image-1' }, { ...image(), id: 'image-2' }],
     sources: [
       { title: 'Reference A', organization: 'Archive A', url: 'https://example.org/reference-a' },
       { title: 'Reference B', organization: 'Archive B', url: 'https://example.org/reference-b' }
@@ -75,7 +75,7 @@ test('requires the summary to match the subtitle for the current admin compatibi
 
 test('rejects inline image placement and image kinds the current admin cannot preserve', () => {
   const s = fixture();
-  s.i18n.en.blocks[1].image_after = 'photo-one';
+  s.i18n.en.blocks[1].image_after = 'image-1';
   s.images[0].kind = 'document';
   const e = validateStory(s);
   assert(e.some(x => x.includes('image_after')));
