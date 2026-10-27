@@ -171,7 +171,7 @@ async function main() {
       const linkedRecordSummary = siteRow.locator('details.fcard > summary').first();
       await linkedRecordSummary.waitFor({ state:'visible', timeout:10000 });
       await linkedRecordSummary.click();
-      await siteRow.getByRole('textbox', { name:'العنوان' }).waitFor({ state:'visible', timeout:10000 });
+      await siteRow.getByRole('textbox', { name:'العنوان' }).first().waitFor({ state:'visible', timeout:10000 });
       console.log('ok - explicitly linked published record remains editable under its site page (' + viewport.name + ')');
 
       // Exercise the user's one-button AI import lock cycle with invalid content only.
