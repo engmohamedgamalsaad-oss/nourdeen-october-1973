@@ -357,8 +357,8 @@ test('round-trips normal V2 source titles and organization names through the V1 
   assert.deepEqual(validateStory(v2), []);
   const back = v2ToV1(v2);
   const legacyCheck = legacyWorkflow.validateStoryPackage(back);
-  assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\\n'));
-  assert.match(back.sources, /Apollo 17 geology briefing — \\[org:NASA History Office\\] — https:\\/\\/history\\.nasa\\.gov\\/apollo17/);
+  assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\n'));
+  assert.ok(back.sources.includes('Apollo 17 geology briefing — [org:NASA History Office] — https://history.nasa.gov/apollo17'));
   const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
   assert.deepEqual(v2Again.sources, v2.sources);
 });
