@@ -8,7 +8,7 @@ import { validateStory, validateLocalImagePaths } from '../validate-story.mjs';
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
 const image = () => ({
   url: 'https://example.org/image.jpg',
-  kind: 'photograph',
+  kind: 'archival',
   source_name: 'Archive',
   source_url: 'https://example.org/source',
   rights: 'CC BY 4.0',
@@ -23,7 +23,7 @@ function fixture() {
   const i18n = Object.fromEntries(langs.map(l => [l, {
     title: 'title ' + l,
     subtitle: 'subtitle ' + l,
-    summary: 'summary ' + l,
+    summary: 'subtitle ' + l,
     student_name: 'student ' + l,
     narrator_name: 'narrator ' + l,
     figure_name: 'figure ' + l,
@@ -34,7 +34,7 @@ function fixture() {
     images_note: 'image note ' + l,
     blocks: [
       { type: 'paragraph', speaker: 'karma', text: 'opening ' + l },
-      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l, image_after: 'photo-one' },
+      { type: 'paragraph', speaker: 'narrator', text: 'story ' + l },
       { type: 'did_you_know', speaker: 'narrator', text: 'fact ' + l }
     ]
   }]));
@@ -66,6 +66,21 @@ function fixture() {
 }
 
 test('accepts complete five-language package', () => assert.deepEqual(validateStory(fixture()), []));
+
+test('requires the summary to match the subtitle for the current admin compatibility projection', () => {
+  const s = fixture();
+  s.i18n.fr.summary = 'Résumé distinct';
+  assert(validateStory(s).some(x => x.includes('i18n.fr.summary must equal subtitle')));
+});
+
+test('rejects inline image placement and image kinds the current admin cannot preserve', () => {
+  const s = fixture();
+  s.i18n.en.blocks[1].image_after = 'photo-one';
+  s.images[0].kind = 'document';
+  const e = validateStory(s);
+  assert(e.some(x => x.includes('image_after')));
+  assert(e.some(x => x.includes('images[0].kind invalid')));
+});
 
 test('preserves optional legacy metadata independently in each available locale', () => {
   const s = fixture();
