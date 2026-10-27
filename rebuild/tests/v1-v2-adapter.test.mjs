@@ -354,8 +354,11 @@ test('round-trips normal V2 source titles and organization names through the V1 
     { title: 'Apollo 17 geology briefing', organization: 'NASA History Office', url: 'https://history.nasa.gov/apollo17' },
     { title: 'Farouk El-Baz biography', organization: 'Boston University', url: 'https://www.bu.edu/earth/farouk-el-baz' }
   ];
+  assert.deepEqual(validateStory(v2), []);
   const back = v2ToV1(v2);
-  assert.match(back.sources, /Apollo 17 geology briefing — \[org:NASA History Office\] — https:\/\/history\.nasa\.gov\/apollo17/);
+  const legacyCheck = legacyWorkflow.validateStoryPackage(back);
+  assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\\n'));
+  assert.match(back.sources, /Apollo 17 geology briefing — \\[org:NASA History Office\\] — https:\\/\\/history\\.nasa\\.gov\\/apollo17/);
   const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
   assert.deepEqual(v2Again.sources, v2.sources);
 });
