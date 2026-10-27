@@ -159,7 +159,7 @@ function normalizeLegacyPackage(input) {
   }
   return v1;
 }
-export function v1ToV2(input, { slug } = {}) {
+export function v1ToV2(input, { slug, coverOverride } = {}) {
   requireObject(input, 'V1 package');
   input = normalizeLegacyPackage(input);
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug || '')) fail('caller must provide a stable slug; it is never guessed from a title');
@@ -182,7 +182,20 @@ export function v1ToV2(input, { slug } = {}) {
       ...metadataForLocale(input, lang)
     };
   }
-  const cover = imageToV2(input.cover, 'cover', undefined);
+  let coverSource = input.cover;
+  if (coverOverride !== undefined) {
+    if (input.cover !== null && input.cover !== undefined) {
+      fail('coverOverride is only allowed when the legacy cover is missing or null');
+    }
+    requireObject(coverOverride, 'coverOverride');
+    const coverLocator = coverOverride.url || coverOverride.path;
+    if (!nonempty(coverLocator)) fail('coverOverride needs a verified url or path');
+    if (input.images.some(im => (im?.url || im?.path) === coverLocator)) {
+      fail('coverOverride duplicates a gallery image; choose a separate verified cover');
+    }
+    coverSource = coverOverride;
+  }
+  const cover = imageToV2(coverSource, 'cover', undefined);
   delete cover.id;
   const images = input.images.map((im, i) => imageToV2(im, 'images[' + i + ']', 'image-' + (i + 1)));
   const map = input.map_location === undefined ? null : input.map_location;
