@@ -718,7 +718,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     localStorage.setItem('kh_adm_session', JSON.stringify(session));
     sessionStorage.setItem('kh_adm_session', JSON.stringify(session));
   });
-  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/jpeg', body: Buffer.from([0xff, 0xd8, 0xff, 0xd9]) }));
+  const validFixturePng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/k0cAAAAASUVORK5CYII=', 'base64');
+  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', body: validFixturePng }));
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   try {
