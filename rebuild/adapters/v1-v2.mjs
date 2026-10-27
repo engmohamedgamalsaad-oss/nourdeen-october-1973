@@ -94,8 +94,13 @@ function sourcesToV2(value) {
     const matches = line.match(/https:\/\/[^\s)\]>]+/gi) || [];
     if (matches.length !== 1) fail('sources line ' + (i + 1) + ' must contain exactly one HTTPS URL for reversible conversion');
     const url = matches[0].replace(/[.,;:]+$/, '');
-    const organization = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
-    return { title: line, organization, url };
+    const hostname = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
+    // V2 sources round-trip through a readable organization marker in V1's
+    // plain-text source field. Ordinary legacy lines retain their original title.
+    const beforeUrl = line.slice(0, line.indexOf(matches[0])).trim();
+    const marker = beforeUrl.match(/^(.*?) — \\[org:([^\\]]+)\\] —$/);
+    if (marker) return { title: marker[1], organization: marker[2], url };
+    return { title: line, organization: hostname, url };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
     fail('V1 requires at least two distinct source URLs');
@@ -274,13 +279,15 @@ export function v2ToV1(input) {
     if (Object.hasOwn(source, 'accessed_at')) {
       fail('source ' + (i + 1) + ' accessed_at metadata has no lossless V1 field');
     }
-    const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
-    const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
     let hostname = '';
     try { hostname = new URL(source.url).hostname; } catch {}
-    if (matches.length !== 1 || titleUrl !== source.url || hostname !== source.organization) {
-      fail('source ' + (i + 1) + ' cannot be represented losslessly in V1');
+    if (!/^https:\\/\\//i.test(source.url) || !hostname) {
+      fail('source ' + (i + 1) + ' URL must be valid HTTPS');
     }
+    const matches = source.title.match(/https:\\/\\/[^\\s)\\]>]+/gi) || [];
+    const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
+    // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
+    if (matches.length === 1 && titleUrl === source.url && hostname === source.organization) continue;
   }
   for (const [i, image] of input.images.entries()) {
     if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in V1');
@@ -366,7 +373,13 @@ export function v2ToV1(input) {
     karma_text: textFromBlocks(ar.blocks, 'karma'),
     body: textFromBlocks(ar.blocks, 'narrator'),
     history_note: ar.history_note || '', images_note: ar.images_note || '',
-    sources: input.sources.map(s => s.title).join('\n'),
+    sources: input.sources.map(s => {
+      const matches = s.title.match(/https:\\/\\/[^\\s)\\]>]+/gi) || [];
+      let hostname = '';
+      try { hostname = new URL(s.url).hostname; } catch {}
+      const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
+      return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + s.organization + '] — ' + s.url);
+    }).join('\n'),
     cover: imageToV1(input.cover),
     images: input.images.map(imageToV1),
     visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),
