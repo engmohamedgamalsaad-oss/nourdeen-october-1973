@@ -95,16 +95,21 @@ test('refuses unknown visual variants and invalid source text', () => {
 });
 
 
-test('round-trips every image kind supported by V1 and V2', () => {
+test('round-trips shared image kinds and rejects V2-only kinds at the V1 bridge', () => {
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.cover.kind = 'photograph';
-  v2.images[0].kind = 'document';
+  v2.cover.kind = 'archival';
+  v2.images[0].kind = 'map';
   const back = v2ToV1(v2);
-  assert.equal(back.cover.kind, 'photograph');
-  assert.equal(back.images[0].kind, 'document');
+  assert.equal(back.cover.kind, 'archival');
+  assert.equal(back.images[0].kind, 'map');
   const again = v1ToV2(back, { slug: 'historical-figure' });
-  assert.equal(again.cover.kind, 'photograph');
-  assert.equal(again.images[0].kind, 'document');
+  assert.equal(again.cover.kind, 'archival');
+  assert.equal(again.images[0].kind, 'map');
+
+  const unsupported = v1ToV2(fixture(), { slug: 'historical-figure' });
+  unsupported.cover.kind = 'photograph';
+  unsupported.images[0].kind = 'document';
+  assert.throws(() => v2ToV1(unsupported), /not supported by V1/);
 });
 
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
