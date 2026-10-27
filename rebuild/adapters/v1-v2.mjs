@@ -10,16 +10,15 @@ export const V2_FORMAT = 'KHALEDOON_STORY_V2';
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
-  october: 'october', history: 'history', science: 'science', learning: 'women',
-  women: 'women', fame: 'people', people: 'people', curriculum: 'curriculum',
-  islamic: 'islamic', readers: 'people'
+  october: 'october', history: 'history', science: 'science',
+  women: 'women', people: 'people', curriculum: 'curriculum', islamic: 'islamic'
 };
 const VARIANT_MAP = {
   timeline: 'curriculum', 'science-lab': 'science-lab',
   'ancient-civilization': 'ancient-civilization',
   'military-history': 'military-history', 'journey-map': 'islamic-heritage',
   'portrait-biography': 'portrait-biography', 'women-leadership': 'women-leadership',
-  'arts-culture': 'arts-culture', discovery: 'portrait-biography'
+  'arts-culture': 'arts-culture'
 };
 const ACCENTS = {
   october: '#d6ad55', history: '#d5b7ff', science: '#8ad9e8',
@@ -144,8 +143,8 @@ export function v1ToV2(input, { slug } = {}) {
   const section = SECTION_MAP[input.section_key];
   if (!section) fail('unsupported section_key: ' + input.section_key);
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
-  const variant = VARIANT_MAP[input.visual_design] || VARIANT_MAP['portrait-biography'];
-  if (!variant) fail('visual design is not mapped');
+  const variant = VARIANT_MAP[input.visual_design];
+  if (!variant) fail('visual_design has no lossless V2 mapping: ' + input.visual_design);
   if (!Array.isArray(input.images) || input.images.length < 2) fail('at least two V1 images are required');
   const i18n = {};
   for (const lang of LANGUAGES) {
@@ -204,6 +203,18 @@ export function v2ToV1(input) {
   }
   const ar = input.i18n?.ar;
   if (!isObject(ar)) fail('missing V2 Arabic locale');
+  let sawNarrator = false;
+  for (const [i, block] of (ar.blocks || []).entries()) {
+    if (block.speaker === 'narrator') sawNarrator = true;
+    if (block.speaker === 'karma' && sawNarrator) fail('Arabic block order interleaves Karma after narrator text; V1 stores these streams separately');
+  }
+  for (const lang of LEGACY_LANGUAGES) {
+    let narratorSeen = false;
+    for (const block of input.i18n[lang].blocks || []) {
+      if (block.speaker === 'narrator') narratorSeen = true;
+      if (block.speaker === 'karma' && narratorSeen) fail(lang + ' block order interleaves Karma after narrator text; V1 stores these streams separately');
+    }
+  }
   const question_bank = { questions: input.quiz.map(q => {
     const qAr = q.i18n.ar;
     const i18n = Object.fromEntries(LEGACY_LANGUAGES.map(lang => [lang, {
