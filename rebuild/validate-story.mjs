@@ -48,7 +48,7 @@ function imageCheck(im, label, out) {
     }
   }
   if (Object.hasOwn(im, 'id') && !/^[a-z0-9-]+$/.test(im.id || '')) {
-    out.push(label + '.id must be a stable lowercase ID');
+    out.push(label + '.id must be a lowercase stable ID');
   }
 }
 export function validateStory(s) {
@@ -106,9 +106,14 @@ export function validateStory(s) {
   // not a validation error and must never be invented just to fill the schema.
   const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'];
   for (const field of preservedFields) {
+    const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
+    if (!presentSomewhere) continue;
     for (const lang of LANGUAGES) {
       const locale = s.i18n?.[lang];
-      if (!isObject(locale) || !Object.hasOwn(locale, field)) continue;
+      if (!isObject(locale) || !Object.hasOwn(locale, field)) {
+        out.push('i18n.' + lang + '.' + field + ' required in every locale when used');
+        continue;
+      }
       if (['history_note', 'images_note'].includes(field)) {
         if (typeof locale[field] !== 'string') out.push('i18n.' + lang + '.' + field + ' must be a string when provided');
       } else if (!nonempty(locale[field])) {
