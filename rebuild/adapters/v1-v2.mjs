@@ -174,7 +174,7 @@ export function v1ToV2(input, { slug } = {}) {
   };
 }
 function imageToV1(image) {
-  if (!['archival','illustration','diagram','map'].includes(image.kind)) {
+  if (!['archival','photograph','illustration','map','document'].includes(image.kind)) {
     fail('V2 image kind "' + image.kind + '" has no valid V1 representation');
   }
   const ar = image.i18n.ar;
