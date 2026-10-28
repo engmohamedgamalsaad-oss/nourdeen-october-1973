@@ -170,7 +170,7 @@ test('unified v4 prompt is shared and legacy AI output is not copied into fresh 
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
-  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-1"));
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-2"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('الإصدار: 2026-10-23-v4'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
@@ -625,7 +625,7 @@ test('prompt manager preserves valid v4 customizations and migrates stale append
 test('prompt admin links to the canonical v4 files and avoids stale v3 links', function () {
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
   assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-1'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-2'));
   assert.ok(promptAdmin.includes('ليست مستقلة'), 'prompt admin must explain that provider files accompany the master');
   assert.ok(!promptAdmin.includes('prompts/2026-10-22-unified-v3/'));
   ['MASTER-STORY-WORKFLOW.md','CHATGPT.md','CLAUDE.md','DEEPSEEK.md','GEMINI.md','WORKFLOW-CHECKLIST.md'].forEach(function(file){
@@ -821,8 +821,8 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
   assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-1'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-1'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-2'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261028-unified-reader-prompt-2'));
   assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
   var providerPromptDir = 'khaledoon/prompts/2026-10-23-unified-v4/';
