@@ -60,6 +60,6 @@ test('V2 story content must be rich, source-grounded, and balanced about uncerta
   for (const [name, text] of [['V2 package prompt', packagePrompt], ['master workflow', master], ['checklist', checklist], ['V2 README', readme]]) {
     assert.match(text, /ثراء المحتوى|ثراء المحتوى التاريخي|ثراء المحتوى والدقة التاريخية/, name + ' must define the story richness gate');
     assert.match(text, /لا تجعل التحفظات|لا تهيمن عبارات|لا نكرر|لا تكرر/, name + ' must prevent uncertainty warnings from dominating the story');
-    assert.match(text, /مصادر موثوقة|مصادر موثوقة تدعمها/, name + ' must require source-grounded claims');
+    assert.match(text, /مصادر موثوقة|المصادر الموثوقة|مصادر موثوقة تدعمها/, name + ' must require source-grounded claims');
   }
 });
