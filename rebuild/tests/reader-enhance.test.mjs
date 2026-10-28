@@ -43,5 +43,6 @@ test('all five language labels exist and language/theme changes do not replay en
   assert.match(css, /\.story-intro-modal/);
   assert.match(css, /\.image-lightbox/);
   assert.match(css, /@media print/);
-  assert.match(css, /#blocks \.block\{background:color-mix/);\n  assert.match(css, /\.kh-image-fallback/);
+  assert.match(css, /#blocks \.block\{background:color-mix/);
+  assert.match(css, /\.kh-image-fallback/);
 });
