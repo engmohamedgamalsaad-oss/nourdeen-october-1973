@@ -85,8 +85,9 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   const expr = html.match(/var requireV2ForNewStory=([^;\n]+);/);
   assert.ok(guard && expr, 'policy expression must be present');
   const requires = new Function('draftNew', 'it', guard[0] + '; return ' + expr[1] + ';');
-  const legacy = { status: 'published', story_meta: {} };
-  assert.equal(requires(true, { status: 'pending' }), true, 'new story requires V2');
+  const legacy = { id: 'legacy-123', status: 'published', story_meta: {} };
+  assert.equal(requires(true, { status: 'pending' }), true, 'new story without a persisted id requires V2');
+  assert.equal(requires(true, legacy), false, 'global new-story mode must not force V2 on an existing record');
   assert.equal(requires(false, legacy), false, 'legacy record without flags stays on the compatibility path');
   assert.equal(requires(false, { story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
   assert.equal(requires(false, { story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
