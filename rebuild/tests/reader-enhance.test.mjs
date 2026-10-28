@@ -30,7 +30,7 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(css, /\.kh-progress\{/);
   assert.doesNotMatch(css, /(^|\n)(body|header|main|\.hero|\.section|h1|h2)\s*\{/, 'base page rules must not be replaced');
   assert.match(html, /reader\.js\?v=20261028-v2-reader-3/);
-  assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-3/);
+  assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-4/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
@@ -42,5 +42,5 @@ test('all five language labels exist and language/theme changes do not replay en
   for (const section of sections) assert.match(css, new RegExp('body\\[data-section=' + section + '\\]'), section + ' section palette');
   assert.match(css, /\.story-intro-modal/);
   assert.match(css, /\.image-lightbox/);
-  assert.match(css, /@media print/);
+  assert.match(css, /@media print/);\n  assert.match(css, /#blocks \.block\{background:color-mix/);
 });
