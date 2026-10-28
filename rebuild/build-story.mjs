@@ -44,7 +44,7 @@ const page = `<!doctype html>
 </head><body data-story-slug="${storyId}" data-design="${story.design.variant}" data-section="${story.section}" data-start-only data-disable-story-extras>
 <header><div class="bar"><div class="brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language"><button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button></nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
-<div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button><div class="intro-art"><img id="intro-cover" alt=""></div>
+<div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button><div class="intro-art"><img id="intro-cover" alt=""><div id="intro-cover-fallback" class="kh-image-fallback" hidden></div></div>
 <div class="intro-copy"><p class="intro-kicker" id="intro-kicker">خالدون عبر التاريخ</p><h2 id="intro-title">ابدأ الحكاية</h2><p id="intro-subtitle"></p><p id="intro-summary"></p><button id="intro-start" class="start-story-btn" type="button">ابدأ الحكاية ←</button></div></div></div>
 <main><div id="status" class="status">جاري تحميل حزمة الحكاية الموحدة…</div><article id="story" hidden>
 <section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
@@ -60,7 +60,7 @@ const page = `<!doctype html>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article></main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
-<script src="../../../rebuild/reader.js?v=20261028-v2-reader-3" data-kh-v2-reader data-story-path="data.v2.json"></script>
+<script src="../../../rebuild/reader.js?v=20261028-v2-reader-4" data-kh-v2-reader data-story-path="data.v2.json"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
 await writeFile(path.join(outDir, 'data.v2.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
