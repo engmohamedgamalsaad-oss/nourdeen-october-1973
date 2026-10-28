@@ -29,8 +29,8 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(css, /\.kh-progress\{/);
   assert.doesNotMatch(css, /(^|\n)(body|header|main|\.hero|\.section|h1|h2)\s*\{/, 'base page rules must not be replaced');
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-2/);
-  assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-2/);
+  assert.match(html, /reader\.js\?v=20261028-v2-reader-3/);
+  assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-3/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
@@ -38,5 +38,5 @@ test('all five language labels exist and language/theme changes do not replay en
     assert.match(js, new RegExp(lang + ":\\['"), lang + ' labels');
   }
   assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);return\}/);
-  assert.match(js, /prefers-reduced-motion: reduce/);
+  assert.match(js, /prefers-reduced-motion: reduce/);\n  for (const section of sections) assert.match(css, new RegExp('body\\[data-section=' + section + '\\]'), section + ' section palette');\n  assert.match(css, /\.story-intro-modal/);\n  assert.match(css, /\.image-lightbox/);\n  assert.match(css, /@media print/);
 });
