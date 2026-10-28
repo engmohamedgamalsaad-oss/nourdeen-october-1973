@@ -1,0 +1,107 @@
+/* Ali Mustafa Mosharafa — story-specific visual treatment, layered over the shared V2 reader. */
+body[data-story-slug="016"]{
+  --accent:#8ad9e8;--gold:#e9c77b;
+  background:
+    radial-gradient(ellipse at 85% 8%,rgba(40,126,151,.20),transparent 34rem),
+    radial-gradient(ellipse at 8% 35%,rgba(233,199,123,.07),transparent 28rem),
+    #07131e;
+}
+body[data-story-slug="016"] main{position:relative}
+body[data-story-slug="016"] .hero{
+  position:relative;isolation:isolate;min-height:390px;
+  border:1px solid rgba(138,217,232,.42);border-radius:28px;
+  background:
+    linear-gradient(90deg,rgba(5,19,29,.98) 0%,rgba(5,19,29,.90) 44%,rgba(5,19,29,.34) 100%),
+    radial-gradient(circle at 78% 42%,rgba(42,130,154,.42),transparent 38%),
+    linear-gradient(135deg,#0b2938,#07131e 72%);
+  box-shadow:0 24px 60px rgba(0,0,0,.28);
+}
+body[data-story-slug="016"] .hero:after{
+  content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;opacity:.24;
+  background-image:radial-gradient(circle,rgba(138,217,232,.85) 1px,transparent 1.8px);
+  background-size:38px 38px;mask-image:linear-gradient(90deg,transparent,black);
+}
+body[data-story-slug="016"] #section-name{
+  background:rgba(138,217,232,.14);color:#a9edf6;border:1px solid rgba(138,217,232,.38);
+  border-radius:999px;clip-path:none;padding:5px 14px;letter-spacing:.02em;
+}
+body[data-story-slug="016"] #title{
+  max-width:15ch;font-size:clamp(2.2rem,5vw,4.1rem);line-height:1.45;
+  color:#f8f4e9;text-shadow:0 3px 26px rgba(0,0,0,.45);
+}
+body[data-story-slug="016"] #subtitle{color:#b8e5ed;max-width:38rem}
+body[data-story-slug="016"] #summary{max-width:42rem;color:#e4e9eb}
+body[data-story-slug="016"] #cover figure{
+  max-width:430px;border-radius:24px;padding:9px;
+  background:linear-gradient(145deg,rgba(138,217,232,.20),rgba(233,199,123,.08));
+  border:1px solid rgba(138,217,232,.56);box-shadow:0 24px 65px rgba(0,0,0,.38);
+  transform:rotate(1deg);
+}
+body[data-story-slug="016"] #cover img{border-radius:17px}
+body[data-story-slug="016"] .section{
+  border-radius:22px;border-color:rgba(138,217,232,.20);
+  background:linear-gradient(145deg,rgba(16,39,52,.96),rgba(9,25,37,.98));
+}
+body[data-story-slug="016"] .section>h2{
+  display:flex;align-items:center;gap:12px;color:#f1e2b9;
+  font:800 clamp(1.35rem,3vw,1.8rem)/1.5 Marhey,Cairo,Arial,sans-serif;
+}
+body[data-story-slug="016"] .section>h2:before{
+  content:"";display:block;width:5px;height:1.7em;border-radius:8px;
+  background:linear-gradient(var(--accent),var(--gold));box-shadow:0 0 18px rgba(138,217,232,.22)
+}
+body[data-story-slug="016"] #blocks{padding-block:4px}
+body[data-story-slug="016"] #blocks .block{
+  padding:clamp(18px,3vw,28px);margin:20px 0;border-radius:18px;
+  border:1px solid rgba(138,217,232,.18);
+  background:linear-gradient(135deg,rgba(20,49,63,.98),rgba(11,31,44,.98));
+  box-shadow:0 12px 30px rgba(0,0,0,.13);position:relative;
+}
+body[data-story-slug="016"] #blocks .block[data-speaker="karma"]{
+  border-inline-start:5px solid var(--gold);
+  background:linear-gradient(120deg,rgba(233,199,123,.12),rgba(17,43,56,.98) 65%);
+}
+body[data-story-slug="016"] #blocks .block[data-type="did_you_know"]{
+  border:1px solid rgba(233,199,123,.48);border-inline-start:5px solid var(--gold);
+  border-radius:5px 18px 18px 5px;
+  background:linear-gradient(115deg,rgba(233,199,123,.13),rgba(20,49,63,.94));
+}
+body[data-story-slug="016"] #gallery figure{
+  border-radius:20px;background:#0a1d29;border-color:rgba(138,217,232,.25);
+  box-shadow:0 14px 35px rgba(0,0,0,.2);transition:transform .25s ease,border-color .25s ease;
+}
+body[data-story-slug="016"] #gallery figure:hover{transform:translateY(-3px);border-color:rgba(138,217,232,.65)}
+body[data-story-slug="016"] #gallery figcaption{color:#d9e6e8;line-height:1.9}
+body[data-story-slug="016"] #quiz .quiz-question,body[data-story-slug="016"] #quiz .question{
+  border-radius:16px;border-color:rgba(138,217,232,.25)
+}
+body[data-story-slug="016"] .intro-card{
+  border-radius:28px;border-color:rgba(138,217,232,.62);
+  background:radial-gradient(ellipse at 0 0,rgba(34,109,132,.28),transparent 55%),linear-gradient(135deg,#102b39,#07131e);
+}
+body[data-story-slug="016"] .intro-art{background:radial-gradient(circle at center,rgba(138,217,232,.14),#07131e 72%)}
+body[data-story-slug="016"] .intro-art img{object-fit:contain;padding:clamp(14px,3vw,30px)}
+body[data-story-slug="016"] .intro-copy h2{color:#f1e2b9}
+body[data-story-slug="016"] .start-story-btn{background:linear-gradient(110deg,#8ad9e8,#e9c77b);border:0;border-radius:999px;color:#07131e}
+body[data-story-slug="016"] .story-actions{gap:10px}
+body[data-story-slug="016"] .story-actions button,body[data-story-slug="016"] .story-actions a{border-radius:12px}
+body[data-story-slug="016"] .sources a{color:#a9edf6}
+body[data-story-slug="016"] .reactions-section{border-top:2px solid rgba(138,217,232,.2)}
+body[data-story-slug="016"] [hidden]{display:none!important}
+@media(max-width:700px){
+ body[data-story-slug="016"] main{margin:14px auto;padding-inline:12px}
+ body[data-story-slug="016"] .hero{min-height:0;border-radius:20px;background:linear-gradient(180deg,rgba(5,19,29,.48),rgba(5,19,29,.97) 36%),linear-gradient(135deg,#0b2938,#07131e)}
+ body[data-story-slug="016"] .hero:after{background-size:28px 28px;opacity:.15}
+ body[data-story-slug="016"] #title{font-size:clamp(1.9rem,8vw,2.7rem);max-width:100%}
+ body[data-story-slug="016"] #cover figure{transform:none;max-width:360px}
+ body[data-story-slug="016"] .section{border-radius:18px}
+ body[data-story-slug="016"] #blocks .block{margin:14px 0;border-radius:14px}
+}
+@media(prefers-reduced-motion:reduce){
+ body[data-story-slug="016"] #gallery figure,body[data-story-slug="016"] #cover figure{transition:none;transform:none}
+}
+@media print{
+ body[data-story-slug="016"]{background:#fff!important}
+ body[data-story-slug="016"] .hero,body[data-story-slug="016"] .section,body[data-story-slug="016"] #blocks .block{background:#fff!important;color:#111!important}
+ body[data-story-slug="016"] #title,body[data-story-slug="016"] .section>h2{color:#111!important}
+}
