@@ -13,29 +13,4 @@ Object.assign(S.text.it=S.text.it||{},{"الدكتور مجدي يعقوب في 
 Object.assign(S.text.de=S.text.de||{},{"الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.":"Dr. Magdi Yacoub auf einer 2008 aufgenommenen Fotografie.","صورة فوتوغرافية موثقة للدكتور مجدي يعقوب.":"Dokumentierte Fotografie von Dr. Magdi Yacoub.","رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.":"Symbolische Illustration zu Magdi Yacoubs Geschichte, kein Foto."});
 Object.keys(extra).forEach(function(lang){S.text[lang]=S.text[lang]||{};Object.assign(S.text[lang],extra[lang]);});
 
-/* Fill missing localized labels used by the documented photo gallery. */
-Object.assign(S.text.en=S.text.en||{},{
- "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.":"Dr Magdi Yacoub in a photograph taken in 2008.",
- "صورة فوتوغرافية موثقة للدكتور مجدي يعقوب.":"A documented photograph of Dr Magdi Yacoub.",
- "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.":"Symbolic illustration for Magdi Yacoub’s story, not a photograph.",
- "رابط المصدر":"Source link","رابط الرخصة":"Licence"
-});
-Object.assign(S.text.fr=S.text.fr||{},{
- "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.":"Le Dr Magdi Yacoub sur une photographie prise en 2008.",
- "صورة فوتوغرافية موثقة للدكتور مجدي يعقوب.":"Photographie documentée du Dr Magdi Yacoub.",
- "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.":"Illustration symbolique du récit de Magdi Yacoub, et non une photographie.",
- "رابط المصدر":"Lien vers la source","رابط الرخصة":"Licence"
-});
-Object.assign(S.text.it=S.text.it||{},{
- "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.":"Il dottor Magdi Yacoub in una fotografia scattata nel 2008.",
- "صورة فوتوغرافية موثقة للدكتور مجدي يعقوب.":"Fotografia documentata del dottor Magdi Yacoub.",
- "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.":"Illustrazione simbolica della storia di Magdi Yacoub, non una fotografia.",
- "رابط المصدر":"Link alla fonte","رابط الرخصة":"Licenza"
-});
-Object.assign(S.text.de=S.text.de||{},{
- "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.":"Dr. Magdi Yacoub auf einer 2008 aufgenommenen Fotografie.",
- "صورة فوتوغرافية موثقة للدكتور مجدي يعقوب.":"Dokumentierte Fotografie von Dr. Magdi Yacoub.",
- "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.":"Symbolische Illustration zu Magdi Yacoubs Geschichte, kein Foto.",
- "رابط المصدر":"Quellenlink","رابط الرخصة":"Lizenz"
-});
 })();
