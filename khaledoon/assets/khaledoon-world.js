@@ -37,8 +37,10 @@
   var status=el('p','kh-world-status');status.dataset.worldText='loading';
   var listTitle=el('h3');listTitle.dataset.worldText='stories';
   var list=el('div','kh-world-list');
+  var selectedInfo=el('p','kh-world-status');selectedInfo.hidden=true;
+  var selectedLink=el('a','kh-world-chip');selectedLink.hidden=true;
   var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
-  side.append(hint,status,listTitle,list,link);
+  side.append(hint,status,listTitle,list,selectedInfo,selectedLink,link);
   stage.append(canvas,side);
   wrap.append(head,stage);
   section.append(wrap);
