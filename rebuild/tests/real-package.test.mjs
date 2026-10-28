@@ -17,6 +17,14 @@ test('real October V2 draft keeps source metadata localized without Arabic fallb
   assert.equal(story.format, 'KHALEDOON_STORY_V2');
   assert.equal(story.section, 'october');
   assert.equal(story.quiz.length, 23, '20 legacy questions plus 3 supplemental questions must be preserved');
+  assert.equal(story.map_location.lat, 12.58333);
+  assert.equal(story.map_location.lng, 43.41667);
+  assert.ok(story.sources.some(source => source.url === 'https://www.marineregions.org/gazetteer.php?id=9080&p=details'),
+    'map coordinates must be backed by the Marine Regions source record');
+  for (const lang of langs) {
+    assert.ok(story.map_location.place[lang]?.trim(), 'localized map place missing for ' + lang);
+    if (lang !== 'ar') assert.equal(arabicScript.test(story.map_location.place[lang]), false, 'Arabic fallback in map place for ' + lang);
+  }
 
   for (const source of story.sources) {
     assert.equal(source.url.startsWith('https://'), true);
