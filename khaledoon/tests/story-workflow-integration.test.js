@@ -36,7 +36,7 @@ test('publisher moves a story in a review PR and preserves the previous story UR
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
   assert.ok(publisher.includes('function contentForSafetyScan(file:'), 'legacy V1 publisher must inspect decoded file content');
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded V2 markers must be decoded before the V1 artifact guard');
-  assert.ok(publisher.includes(String.raw`file.content.replace(/\\s/g, "")`), 'base64 whitespace must be removed with a real whitespace regex before decoding');
+  assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'V2 rejection must scan decoded content, not only the submitted base64 string');
   assert.ok(publisher.includes('2026-10-28-v2-draft-guard-1'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
