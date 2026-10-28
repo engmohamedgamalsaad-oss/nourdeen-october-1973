@@ -78,11 +78,23 @@ function show(){
  $('sources').replaceChildren();story.sources.forEach(s=>{const li=node('li');const localized=s.i18n&&s.i18n[l]||s;li.appendChild(link(s.url,localized.title+' — '+localized.organization));$('sources').appendChild(li)});
  $('preview').classList.remove('hidden');
 }
+function loadPackage(parsed,fromDraft){
+ story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
+ const issues=listIssues(story);issues.forEach(x=>$('issues').appendChild(node('li',x,'bad')));
+ $('counts').textContent='اللغات: '+langs.length+' · الأسئلة: '+(story.quiz||[]).length+' · الصور: '+(story.images||[]).length+' · المصادر: '+(story.sources||[]).length;
+ $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':(fromDraft?'تم تحميل مسودة V2 المحفوظة. هذه معاينة للقراءة فقط ولا تنشر الحكاية.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.');
+ $('status').className='status '+(issues.length?'bad':'good');
+ if(!issues.length)$('issues').appendChild(node('li','لا توجد أخطاء بنيوية أولية.','good'));
+ show();
+}
 $('file').addEventListener('change',async e=>{story=null;$('preview').classList.add('hidden');$('audit').classList.remove('hidden');$('issues').replaceChildren();const file=e.target.files&&e.target.files[0];if(!file)return;
- try{const parsed=JSON.parse(await file.text());story=parsed;const issues=listIssues(story);issues.forEach(x=>$('issues').appendChild(node('li',x, 'bad')));$('counts').textContent='اللغات: '+langs.length+' · الأسئلة: '+(story.quiz||[]).length+' · الصور: '+(story.images||[]).length+' · المصادر: '+(story.sources||[]).length;
- $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.';$('status').className='status '+(issues.length?'bad':'good');if(!issues.length)$('issues').appendChild(node('li','لا توجد أخطاء بنيوية أولية.','good'));show();
- }catch(err){story=null;$('status').textContent='تعذّر قراءة JSON: '+err.message;$('status').className='status bad';$('issues').appendChild(node('li','ملف JSON غير صالح.','bad'))}
+ try{loadPackage(JSON.parse(await file.text()),false)}
+ catch(err){story=null;$('status').textContent='تعذّر قراءة JSON: '+err.message;$('status').className='status bad';$('issues').appendChild(node('li','ملف JSON غير صالح.','bad'))}
 });
+if(new URLSearchParams(location.search).get('draft')==='1'){
+ try{const raw=localStorage.getItem('kh-v2-review-package');if(!raw)throw new Error('لا توجد حزمة V2 محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
+ catch(err){$('audit').classList.remove('hidden');$('status').textContent=err.message;$('status').className='status bad';$('issues').replaceChildren(node('li',err.message,'bad'))}
+}
 $('lang').addEventListener('change',show);
 })();
 </script>
