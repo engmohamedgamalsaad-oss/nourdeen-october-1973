@@ -21,6 +21,7 @@ async function main() {
   fs.mkdirSync(path.join(temp, 'rebuild'), { recursive: true });
   fs.copyFileSync(path.join(root, 'rebuild/reader.js'), path.join(temp, 'rebuild/reader.js'));
   fs.copyFileSync(path.join(root, 'rebuild/reader-enhance.css'), path.join(temp, 'rebuild/reader-enhance.css'));
+  fs.copyFileSync(path.join(root, 'rebuild/package-review.html'), path.join(temp, 'rebuild/package-review.html'));
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
@@ -90,6 +91,27 @@ async function main() {
   assert.equal(await page.locator('#sources a').count(), story.sources.length, 'all sources should render');
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
   await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
+
+  // Exercise the actual read-only package reviewer used by the V2 admin draft path.
+  const reviewContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  await reviewContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
+    if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
+    await route.abort();
+  });
+  const reviewer = await reviewContext.newPage();
+  reviewer.on('pageerror', error => errors.push(String(error.message || error)));
+  await reviewer.goto(base, { waitUntil: 'load' });
+  await reviewer.evaluate(pkg => localStorage.setItem('kh-v2-review-package', JSON.stringify(pkg)), story);
+  await reviewer.goto('http://127.0.0.1:' + server.address().port + '/rebuild/package-review.html?draft=1', { waitUntil: 'load' });
+  await reviewer.locator('#preview').waitFor({ state: 'visible', timeout: 10000 });
+  assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'read-only reviewer should render the saved V2 package');
+  assert.equal(await reviewer.locator('#quiz article').count(), story.quiz.length, 'reviewer must retain the complete V2 quiz bank');
+  assert.match(await reviewer.locator('header').textContent(), /لا تحفظ على Supabase ولا تنشر إلى الموقع/, 'reviewer must clearly state it cannot save or publish');
+  await reviewer.locator('#lang').selectOption('en');
+  assert.equal(await reviewer.locator('#title').textContent(), story.i18n.en.title, 'reviewer should switch localized title');
+  assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should switch to LTR for English');
+  await reviewer.screenshot({ path: path.join(artifactDir, 'v2-package-review-en.png'), fullPage: true, animations: 'disabled' });
+  await reviewContext.close();
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
   await mobileContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
