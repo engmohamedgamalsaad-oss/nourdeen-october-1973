@@ -43,7 +43,7 @@ test('canonical prompt and prompt admin use the unified story contract for new p
   const activeAdminTexts = await readFile(new URL('../../khaledoon/assets/khaledoon-admin-texts.js', import.meta.url), 'utf8');
   assert.match(master, /عقد البيانات الوحيد للحكايات الجديدة هو العقد الفعلي/);
   assert.match(master, /rebuild\/story-contract\.json/);
-  assert.match(master, /لا تستخدم مخطط KH_STORY_PACKAGE_V1/);
+  assert.match(master, /لا تُخرج حقولًا قديمة غير مدعومة/);
   assert.doesNotMatch(master, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
   assert.match(promptAdmin, /القالب الموحد هو مرجع البيانات الوحيد للحكايات الجديدة/);
   assert.match(promptAdmin, /لا تستخدم مخطط V1/);
