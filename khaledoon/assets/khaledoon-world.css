@@ -21,3 +21,11 @@ html[data-theme="light"] .kh-world-side h3{color:#f5dca7}
 html[data-theme="light"] .kh-world-chip{color:#fff4dc}
 @media(max-width:780px){.kh-world-head{grid-template-columns:1fr;gap:8px}.kh-world-stage{grid-template-columns:1fr;gap:0;padding:8px;min-height:0}.kh-world-canvas{height:min(78vw,340px);min-height:260px}.kh-world-side{padding:0 14px 16px}.kh-world-side .btn{width:100%}}
 @media(prefers-reduced-motion:reduce){.kh-world-chip{transition:none}.kh-world-chip:hover{transform:none}}
+
+/* Additional cinematic scroll reveals for the homepage only. Content remains visible if JS or motion APIs are unavailable. */
+html.kh-world-motion-ready .kh-reveal-item{opacity:0;transform:translateY(18px) scale(.99);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1);transition-delay:var(--kh-reveal-delay,0ms)}
+html.kh-world-motion-ready .kh-reveal-item.kh-reveal-visible{opacity:1;transform:none}
+#gateways .gate{transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
+#gateways .gate:focus-visible,.kh-world-chip:focus-visible,.kh-world-canvas:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){#gateways .gate:hover{transform:translateY(-6px) scale(1.008);box-shadow:0 18px 42px rgba(0,0,0,.22)}}
+@media(prefers-reduced-motion:reduce){html.kh-world-motion-ready .kh-reveal-item{opacity:1;transform:none;transition:none}}
