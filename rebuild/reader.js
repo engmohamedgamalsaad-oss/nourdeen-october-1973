@@ -18,7 +18,7 @@ var sectionLabels={ar:{october:'حكايات أكتوبر 1973',history:'الت�
 var current='ar',story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
-var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261028-v2-enhance-2',ROOT).href;document.head.appendChild(enhanceCss);
+var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261028-v2-enhance-3',ROOT).href;document.head.appendChild(enhanceCss);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
