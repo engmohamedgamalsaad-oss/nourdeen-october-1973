@@ -19,3 +19,54 @@ figure{margin:16px 0;padding:0}figure img{display:block;width:100%;max-height:52
 .q{padding:14px 0;border-bottom:1px solid var(--line)}.q:last-child{border:0}.options{display:grid;gap:8px;margin:10px 0}.options button{border-radius:10px;text-align:start}.options button.correct{border-color:#7ec99c;background:#163c30}.options button.wrong{border-color:#df8d83;background:#3b2424}.explain{color:var(--muted);margin:8px 0}
 .status{padding:14px;border:1px solid #956c36;border-radius:12px;background:#332a1b;white-space:pre-wrap}body[data-design=ancient-civilization]{--bg:#21180f;--panel:#342519;--line:#705336}body[data-design=science-lab]{--bg:#081a24;--panel:#102d3b;--line:#28566a}body[data-design=women-leadership]{--bg:#211521;--panel:#342337;--line:#69465f}body[data-design=arts-culture]{--bg:#191923;--panel:#292a3b;--line:#555577}body[data-design=islamic-heritage]{--bg:#0b201a;--panel:#14372b;--line:#356a53}body[data-design=curriculum]{--bg:#101d2c;--panel:#1a2d43;--line:#3c5d7e}body[data-design=reader-story]{--bg:#1e1b16;--panel:#302b22;--line:#635440}body[data-design=portrait-biography]{--bg:#171d20;--panel:#263136;--line:#4a6068}
 body[data-theme=light]{--bg:#f5f0e6;--panel:#fffdf7;--line:#d5c8b1;--text:#27241f;--muted:#61594e}body[data-theme=light] header{background:#fffdf7f2}body[data-theme=light] .block{background:#f5f0e6}body[data-theme=light] .block[data-speaker=karma]{background:#f4e9cf}body[data-theme=light] figure img{background:#e8e0d2}body[data-theme=light] button{background:#fffdf7;color:#27241f}body[data-theme=light] button[aria-pressed=true]{background:var(--accent);color:#19160e}body[data-theme=light] .sources a{color:#79551d}[hidden]{display:none!important}a{color:inherit}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+
+/* Approved shared story visual language: framed cover, rich hero, boxed reading scenes. */
+body{background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--accent) 18%,var(--bg)),var(--bg) 58%);overflow-x:hidden}
+header{box-shadow:0 8px 24px #0002}
+.bar{max-width:1120px;min-height:64px}
+main{max-width:1080px;margin:28px auto;padding-inline:clamp(12px,3vw,28px)}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(220px,.85fr);grid-template-areas:"section cover" "title cover" "subtitle cover" "summary cover" "student cover" "actions actions";align-items:center;gap:0 30px;padding:clamp(22px,5vw,52px);border-radius:24px;background:radial-gradient(ellipse at 14% 48%,color-mix(in srgb,var(--accent) 24%,transparent),transparent 48%),linear-gradient(125deg,color-mix(in srgb,var(--accent) 8%,var(--panel)),var(--panel));box-shadow:0 22px 56px #0002}
+#section-name{grid-area:section;justify-self:start;margin:0 0 10px}
+#title{grid-area:title;max-width:19ch;color:var(--text);font:800 clamp(2rem,4.8vw,3.7rem)/1.42 Marhey,Cairo,serif;text-shadow:0 5px 22px #0002;margin:4px 0 12px}
+#subtitle{grid-area:subtitle;font-size:clamp(1rem,2vw,1.25rem);line-height:1.9;margin:0 0 10px}
+#summary{grid-area:summary;max-width:65ch;line-height:2.05;margin:0 0 10px}
+#cover{grid-area:cover;min-width:0;align-self:center}
+#cover figure{max-width:400px;margin:0 auto;padding:8px;overflow:hidden;border:1px solid color-mix(in srgb,var(--accent) 58%,var(--line));border-radius:20px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 18%,var(--panel)),var(--bg));box-shadow:0 24px 55px #0004}
+#cover figure img{display:block;width:100%;height:clamp(250px,34vw,440px);max-height:440px;min-height:220px;object-fit:contain;background:var(--bg);border-radius:13px}
+#cover figcaption{text-align:center;line-height:1.8}
+#student{grid-area:student;margin:8px 0 0;line-height:1.8}
+.story-actions{grid-area:actions;justify-content:flex-start;padding-top:18px;margin-top:24px;border-top:1px solid color-mix(in srgb,var(--accent) 28%,transparent)}
+.hero,.section{border-color:color-mix(in srgb,var(--accent) 26%,var(--line));box-shadow:0 14px 34px #0001}
+.section{border-radius:22px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 4%,var(--panel)),var(--panel));padding:clamp(18px,4vw,34px)}
+.section h2{font-size:clamp(1.45rem,3vw,2rem);line-height:1.55;margin-bottom:18px}
+.block{position:relative;padding:18px clamp(15px,3vw,24px);margin:16px 0;border-radius:16px;border:1px solid color-mix(in srgb,var(--accent) 24%,var(--line));background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 5%,var(--panel)),var(--panel));box-shadow:0 8px 22px #0001;line-height:2.1}
+.block[data-speaker=karma]{background:linear-gradient(135deg,color-mix(in srgb,var(--accent) 13%,var(--panel)),var(--panel));border-inline-start:4px solid var(--accent)}
+.speaker{font-family:Marhey,Cairo,sans-serif;font-size:1rem;margin-bottom:8px}
+.block p{font-size:clamp(1rem,1.8vw,1.12rem);line-height:2.15}
+#gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px;align-items:start}
+#gallery figure{min-width:0;margin:0;padding:8px;border:1px solid color-mix(in srgb,var(--accent) 35%,var(--line));border-radius:18px;background:color-mix(in srgb,var(--accent) 5%,var(--panel));box-shadow:0 12px 28px #0002;overflow:hidden}
+#gallery figure img{width:100%;height:clamp(190px,25vw,310px);max-height:310px;min-height:160px;object-fit:cover;border-radius:12px;transition:transform .45s ease}
+#gallery figure:hover img{transform:scale(1.025)}
+#gallery figcaption{padding:10px 5px 4px;line-height:1.8}
+#map-section p,#history-note{line-height:2}
+#map-section a,.sources a{color:var(--accent);font-weight:700;overflow-wrap:anywhere}
+#quiz .q{padding:18px 0;border-bottom:1px solid color-mix(in srgb,var(--accent) 25%,var(--line))}
+#quiz .options button{min-height:44px;text-align:start;border-radius:12px}
+#quiz .explain{padding:10px 12px;border-inline-start:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 7%,var(--panel));border-radius:8px}
+body[data-theme=light] .hero,body[data-theme=light] .section{box-shadow:0 12px 30px #392d1a0d}
+body[data-theme=light] .block{box-shadow:0 6px 16px #392d1a0a}
+body[data-theme=light] #cover figure{background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 14%,#fff),#fffdf7);box-shadow:0 16px 34px #392d1a18}
+@media(max-width:700px){
+ main{margin:14px auto;padding-inline:12px}
+ .hero{grid-template-columns:minmax(0,1fr);grid-template-areas:"section" "title" "subtitle" "cover" "summary" "student" "actions";gap:0;padding:22px 18px;border-radius:18px}
+ #title{max-width:none;font-size:clamp(1.85rem,8vw,2.65rem)}
+ #cover{width:min(100%,420px);margin:16px auto 12px}
+ #cover figure img{height:clamp(220px,65vw,360px)}
+ .story-actions{justify-content:stretch;gap:8px}
+ .story-actions a,.story-actions button{flex:1 1 calc(50% - 8px);min-width:0;padding:10px 9px;font-size:.83rem}
+ .section{border-radius:17px;padding:18px 15px}
+ #gallery{grid-template-columns:1fr}
+ #gallery figure img{height:auto;max-height:360px;object-fit:contain}
+}
+@media(prefers-reduced-motion:reduce){#gallery figure img{transition:none}}
