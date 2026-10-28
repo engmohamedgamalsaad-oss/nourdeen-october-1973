@@ -187,7 +187,7 @@ for (const rel of htmlFiles) {
   if (isAdmin) continue;
 
   /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
-  if (rel === 'rebuild/reader.html' && html.includes('data-kh-v2-reader')) {
+  if (html.includes('data-kh-v2-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\\.v2\\.json["']/.test(html))) {
     const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
     for (const lang of v2Languages) {
       if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
