@@ -739,5 +739,38 @@
     "id": "015",
     "section": "science",
     "path": "stories/science/015/"
+  },
+  {
+    "title": "علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون",
+    "subtitle": "من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة.",
+    "person": "علي مصطفى مشرفة",
+    "color": "#8ad9e8",
+    "order": 16,
+    "published": true,
+    "i18n": {
+      "en": {
+        "title": "Ali Mostafa Mosharafa — An Egyptian Mind Exploring the Universe",
+        "subtitle": "From Damietta to theoretical physics: a scientist driven by questions and knowledge.",
+        "person": "Ali Mostafa Mosharafa"
+      },
+      "fr": {
+        "title": "Ali Mostafa Mosharafa — Un esprit égyptien à la découverte de l’Univers",
+        "subtitle": "De Damiette à la physique théorique : le parcours d’un scientifique guidé par les questions.",
+        "person": "Ali Mostafa Mosharafa"
+      },
+      "it": {
+        "title": "Ali Mostafa Mosharafa — Una mente egiziana alla scoperta dell’universo",
+        "subtitle": "Da Damietta alla fisica teorica: il percorso di uno scienziato guidato dalle domande.",
+        "person": "Ali Mostafa Mosharafa"
+      },
+      "de": {
+        "title": "Ali Mostafa Mosharafa — Ein ägyptischer Geist erforscht das Universum",
+        "subtitle": "Von Damiette zur theoretischen Physik: der Weg eines Forschers, der Fragen liebte.",
+        "person": "Ali Mostafa Mosharafa"
+      }
+    },
+    "id": "016",
+    "section": "science",
+    "path": "stories/science/016/"
   }
 ]
