@@ -29,7 +29,7 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(css, /\.kh-progress\{/);
   assert.doesNotMatch(css, /(^|\n)(body|header|main|\.hero|\.section|h1|h2)\s*\{/, 'base page rules must not be replaced');
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-2/);
+  assert.match(html, /reader\.js\?v=20261028-v2-reader-3/);
   assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-2/);
 });
 
