@@ -560,6 +560,7 @@ function makePreviewDraft(statusForPreview){
   return {title:d.title,subtitle:d.subtitle,section_label:SEC[d.section]||d.section,section_key:d.section,figure_name:d.figure_name,body:d.body,karma_text:d.story_meta&&d.story_meta.karma_text||'',question_bank_json:d.story_meta&&d.story_meta.question_bank_json||'',preview_source_url:d.story_meta&&d.story_meta.preview_source_url||'',history_note:d.history_note||'',sources:d.sources||'',images_note:d.images_note||'',cover:d.cover||(d.story_meta&&d.story_meta.cover)||null,images:d.images||(d.story_meta&&d.story_meta.images)||[],original_body:d.original_body||'',translations:d.translations||{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id||null,submission_table:'khaledoon_submissions',record_type:'modern',record_data:d,story_meta:d.story_meta||{},provider_key:providerSelect.value};
  }
  function openPreviewAfterSave(btn){
+  var v2MetaDirect=it.story_meta||{},v2PendingDirect=v2MetaDirect.pending_draft&&typeof v2MetaDirect.pending_draft==='object'?v2MetaDirect.pending_draft:null,v2PackageDirect=v2PendingDirect&&v2PendingDirect.v2_only_draft?v2PendingDirect.v2_package:(v2MetaDirect.v2_only_draft?v2MetaDirect.v2_package:null);if(v2PackageDirect){try{localStorage.setItem('kh-v2-review-package',JSON.stringify(v2PackageDirect))}catch(ignoreV2DirectStore){}var directV2Window=window.open('../rebuild/package-review.html?draft=1','_blank');if(directV2Window)directV2Window.opener=null;else say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. افتح صفحة مراجعة V2 يدويًا.');return}
   var popup=window.open('about:blank','_blank');
   if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
   try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ حفظ المسودة وتجهيز معاينة الحكاية…</body></html>');popup.document.close()}catch(e){}
@@ -760,7 +761,7 @@ if(!isNew){
  });
  bPub.title='لا ينشر مباشرة؛ يحفظ المسودة ثم يفتح المعاينة للموافقة قبل أي نشر.';
  bPub.addEventListener('click',function(){openPreviewAfterSave(bPub)});
- if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;bPreview.disabled=true;var v2ReadonlyNote=el('div','note','هذه مسودة V2 كاملة محفوظة للمراجعة. الحقول المعروضة هنا مجرد إسقاط متوافق مع الأدمن القديم وليست مصدر الحكاية. للتعديل، الصق حزمة V2 كاملة جديدة في خانة الذكاء الاصطناعي؛ النشر من المسار القديم محظور.');box.appendChild(v2ReadonlyNote)}
+ if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;var v2ReadonlyNote=el('div','note','هذه مسودة V2 كاملة محفوظة للمراجعة. الحقول المعروضة هنا مجرد إسقاط متوافق مع الأدمن القديم وليست مصدر الحكاية. للتعديل، الصق حزمة V2 كاملة جديدة في خانة الذكاء الاصطناعي؛ النشر من المسار القديم محظور.');box.appendChild(v2ReadonlyNote)}
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
