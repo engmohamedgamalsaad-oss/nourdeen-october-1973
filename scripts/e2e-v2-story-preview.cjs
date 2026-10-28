@@ -24,20 +24,8 @@ async function main() {
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
-  const sourcePackageFile = path.join(root, 'rebuild/story-packages/october-sea-men.v2.json');
-  const testPackage = JSON.parse(fs.readFileSync(sourcePackageFile, 'utf8'));
-  fs.mkdirSync(path.join(temp, 'assets'), { recursive: true });
+  const packageFile = path.join(root, 'rebuild/story-packages/october-sea-men.v2.json');
   const testImageSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400"><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#183b45"/><stop offset="1" stop-color="#081b22"/></linearGradient></defs><rect width="640" height="400" fill="url(#sky)"/><path d="M0 290 Q90 260 180 292 T360 292 T540 292 T720 292 V400 H0Z" fill="#1c5860"/><path d="M0 330 Q100 300 200 330 T400 330 T600 330 T800 330 V400 H0Z" fill="#0b303a"/><path d="M150 250 L490 250 L430 305 L205 305Z" fill="#d6ad55"/><path d="M220 240 L220 135 L310 230Z" fill="#e7d7ad"/><path d="M325 235 L325 155 L395 235Z" fill="#b8874b"/><path d="M135 315 H510" stroke="#e6d09a" stroke-width="4" opacity=".8"/><text x="320" y="80" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#f4e8c8">V2 layout test image</text></svg>';
-  const coverFixture = 'assets/v2-test-cover.svg';
-  fs.writeFileSync(path.join(temp, coverFixture), testImageSvg);
-  testPackage.cover.url = coverFixture;
-  testPackage.images.forEach((image, index) => {
-    const fixturePath = 'assets/v2-test-gallery-' + index + '.svg';
-    fs.writeFileSync(path.join(temp, fixturePath), testImageSvg);
-    image.url = fixturePath;
-  });
-  const packageFile = path.join(temp, 'october-sea-men.v2.test.json');
-  fs.writeFileSync(packageFile, JSON.stringify(testPackage, null, 2));
   const build = spawnSync(process.execPath, [path.join(root, 'rebuild/build-story.mjs'), packageFile, '016'], { cwd: temp, encoding: 'utf8' });
   assert.equal(build.status, 0, build.stderr || build.stdout || 'V2 story build failed');
   const story = JSON.parse(fs.readFileSync(path.join(temp, 'stories/october/016/data.v2.json'), 'utf8'));
@@ -57,7 +45,10 @@ async function main() {
   const base = 'http://127.0.0.1:' + server.address().port + '/stories/october/016/';
   browser = await chromium.launch({ headless: true });
   const context = await browser.newContext({ viewport: { width: 1366, height: 900 } });
-  await context.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), route => route.abort());
+  await context.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
+    if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
+    await route.abort();
+  });
   const page = await context.newPage();
   page.on('pageerror', error => errors.push(String(error.message || error)));
   await page.goto(base, { waitUntil: 'load' });
@@ -101,7 +92,10 @@ async function main() {
   await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
 
   const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
-  await mobileContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), route => route.abort());
+  await mobileContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
+    if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
+    await route.abort();
+  });
   const mobile = await mobileContext.newPage();
   mobile.on('pageerror', error => errors.push(String(error.message || error)));
   await mobile.goto(base, { waitUntil: 'load' });
