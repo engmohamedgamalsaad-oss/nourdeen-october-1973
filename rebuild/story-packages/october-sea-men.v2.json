@@ -674,6 +674,33 @@
           "organization": "Ain-Shams-Universität"
         }
       }
+    },
+    {
+      "title": "وحوش البحر .. أبطال البحرية المصرية",
+      "organization": "الأهرام اليومي",
+      "url": "https://gate.ahram.org.eg/daily/NewsPrint/448853.aspx",
+      "i18n": {
+        "ar": {
+          "title": "وحوش البحر .. أبطال البحرية المصرية",
+          "organization": "الأهرام اليومي"
+        },
+        "en": {
+          "title": "Sea Wolves: Heroes of the Egyptian Navy",
+          "organization": "Al-Ahram Daily"
+        },
+        "fr": {
+          "title": "Les loups de mer : héros de la marine égyptienne",
+          "organization": "Al-Ahram quotidien"
+        },
+        "it": {
+          "title": "Lupi di mare: eroi della Marina egiziana",
+          "organization": "Al-Ahram quotidiano"
+        },
+        "de": {
+          "title": "Seewölfe: Helden der ägyptischen Marine",
+          "organization": "Al-Ahram-Tageszeitung"
+        }
+      }
     }
   ],
   "quiz": [
