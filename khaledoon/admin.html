@@ -301,6 +301,7 @@ function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remov
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
+ if(meta.v2_only_draft||(meta.pending_draft&&meta.pending_draft.v2_only_draft)){say('err','حزمة V2 هذه محفوظة للمراجعة الكاملة فقط. مسار النشر الحالي لا يدعم نشر V2 دون فقد؛ تم إيقاف النشر.');return}
  if(review.publish_pr_url){
   if(!review.publish_pr_number||!review.publish_branch){window.open(review.publish_pr_url,'_blank','noopener');say('err','هذا سجل قديم لا يحتوي رقم طلب الدمج والفرع المسجلين؛ فتحنا الرابط للمراجعة فقط، ولم نؤكد النشر. أنشئ طلب مراجعة جديدًا بعد تحديث خدمة النشر الآمنة.');return}
   if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
