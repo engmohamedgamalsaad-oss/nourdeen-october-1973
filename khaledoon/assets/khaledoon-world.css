@@ -29,3 +29,20 @@ html.kh-world-motion-ready .kh-reveal-item.kh-reveal-visible{opacity:1;transform
 #gateways .gate:focus-visible,.kh-world-chip:focus-visible,.kh-world-canvas:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){#gateways .gate:hover{transform:translateY(-6px) scale(1.008);box-shadow:0 18px 42px rgba(0,0,0,.22)}}
 @media(prefers-reduced-motion:reduce){html.kh-world-motion-ready .kh-reveal-item{opacity:1;transform:none;transition:none}}
+
+
+/* Cinematic micro-interactions: preserve the existing Khaledoon palette and card geometry. */
+#gateways .gate{position:relative;isolation:isolate;overflow:hidden}
+#gateways .gate::before{transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease,opacity .35s ease;transform:scale(1.001);transform-origin:center}
+#gateways .gate::after{pointer-events:none}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  #gateways .gate:hover::before{transform:scale(1.055);filter:brightness(1.09) saturate(1.08)}
+  #gateways .gate:hover{border-color:color-mix(in srgb,var(--c,var(--gold)) 72%,white);box-shadow:0 18px 42px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.1)}
+}
+.kh-world-stage{position:relative}
+.kh-world-stage::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 18%,rgba(255,255,255,.045) 48%,transparent 68%);background-size:220% 100%;background-position:100% 0;opacity:0;transition:opacity .35s ease}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.kh-world-stage:hover::after{opacity:1;animation:khWorldSheen 1.15s ease-out 1}}
+@keyframes khWorldSheen{from{background-position:100% 0}to{background-position:-120% 0}}
+@media(prefers-reduced-motion:reduce){
+ #gateways .gate,#gateways .gate::before,.kh-world-stage::after{transition:none!important;animation:none!important;transform:none!important}
+}
