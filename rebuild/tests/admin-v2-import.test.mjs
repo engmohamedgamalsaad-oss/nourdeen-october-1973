@@ -89,11 +89,11 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   assert.equal(requires(true, { status: 'pending' }), true, 'new story without a persisted id requires V2');
   assert.equal(requires(true, legacy), false, 'global new-story mode must not force V2 on an existing record');
   assert.equal(requires(false, legacy), false, 'legacy record without flags stays on the compatibility path');
-  assert.equal(requires(false, { story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
-  assert.equal(requires(false, { story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
-  assert.equal(requires(false, { story_meta: { v2_only_draft: true } }), true, 'V2-only record stays V2');
-  assert.equal(requires(false, { story_meta: { pending_draft: { v2_only_draft: true } } }), true, 'published record with V2-only pending draft stays V2');
-  assert.equal(requires(false, { story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
+  assert.equal(requires(false, { id: 'legacy-v1-456', story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
+  assert.equal(requires(false, { id: 'v2-required-1', story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
+  assert.equal(requires(false, { id: 'v2-only-1', story_meta: { v2_only_draft: true } }), true, 'V2-only record stays V2');
+  assert.equal(requires(false, { id: 'pending-v2-1', story_meta: { pending_draft: { v2_only_draft: true } } }), true, 'published record with V2-only pending draft stays V2');
+  assert.equal(requires(false, { id: 'pending-v1-1', story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
   assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
   assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
   assert.match(html, /if\(isV2OnlyDraftRecord\(it\)\)\{aiFail\('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة\./, 'reimport must not silently clear a V2-only review gate');
