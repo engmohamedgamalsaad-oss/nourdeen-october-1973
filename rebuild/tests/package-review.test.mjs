@@ -23,6 +23,9 @@ test('package review page makes no network, storage, or publish writes', () => {
 test('package review page exposes all five locales and displays data through textContent', () => {
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('value="' + lang + '"'));
   assert.match(scripts[0], /textContent/);
+  assert.match(scripts[0], /function link\(url,label\)\{if\(typeof url!==.*https:/);
+  assert.match(scripts[0], /رابط مصدر الصورة/);
+  assert.match(scripts[0], /رابط المصدر/);
   assert.match(scripts[0], /KHALEDOON_STORY_V2/);
   assert.match(scripts[0], /src\.i18n/);
   assert.match(html, /id="map-section"/);
