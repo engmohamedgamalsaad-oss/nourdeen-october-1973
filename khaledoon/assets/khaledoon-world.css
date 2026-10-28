@@ -1,0 +1,60 @@
+/* Cinematic globe section for Khaledoon homepage. Original CSS; no external runtime dependency. */
+.kh-world{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 20% 50%,rgba(29,104,129,.18),transparent 54%),linear-gradient(180deg,rgba(6,20,34,.18),rgba(6,20,34,.02));border-block:1px solid rgba(240,200,120,.13)}
+.kh-world:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle,rgba(240,200,120,.65) 0 1px,transparent 1.6px),radial-gradient(circle,rgba(151,216,228,.5) 0 1px,transparent 1.7px);background-size:83px 97px,127px 141px;background-position:12px 20px,54px 63px;opacity:.2;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
+.kh-world-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);align-items:end;gap:22px;margin-bottom:20px}
+.kh-world-head h2{font-family:Marhey,"Cairo",serif;font-size:clamp(1.65rem,3.4vw,2.5rem);line-height:1.45;margin:6px 0;color:var(--cream)}
+.kh-world-head p{margin:0;color:var(--muted);font-size:14px}
+.kh-world-stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(240px,.75fr);gap:18px;align-items:center;min-height:350px;padding:14px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(13,36,57,.72),rgba(5,14,29,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 65px rgba(0,0,0,.12)}
+.kh-world-canvas{display:block;width:100%;height:360px;min-width:0;touch-action:pan-y;cursor:grab;outline-offset:4px}
+.kh-world-canvas.is-dragging{cursor:grabbing;touch-action:none}
+.kh-world-side{padding:18px 10px;min-width:0}
+.kh-world-hint{font-size:12px;color:#f3cf85;margin:0 0 5px}
+.kh-world-status{font-size:12px;color:var(--muted);margin:0 0 18px}
+.kh-world-side h3{font-size:16px;color:#f6dca8;margin:0 0 10px}
+.kh-world-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.kh-world-chip{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:1px solid rgba(240,200,120,.3);border-radius:99px;background:rgba(255,255,255,.035);font-size:12px;color:var(--ink);transition:transform .2s,border-color .2s,background .2s}
+.kh-world-chip:hover{transform:translateY(-2px);border-color:var(--gold);background:rgba(240,200,120,.09)}
+.kh-world-side .btn{width:fit-content;max-width:100%}
+html[data-theme="light"] .kh-world{background:radial-gradient(ellipse at 20% 50%,rgba(49,142,160,.12),transparent 54%),linear-gradient(180deg,rgba(255,255,255,.2),transparent)}
+html[data-theme="light"] .kh-world-stage{background:linear-gradient(135deg,rgba(16,58,83,.96),rgba(6,20,39,.96));border-color:rgba(138,90,18,.32)}
+html[data-theme="light"] .kh-world-side h3{color:#f5dca7}
+html[data-theme="light"] .kh-world-chip{color:#fff4dc}
+@media(max-width:780px){.kh-world-head{grid-template-columns:1fr;gap:8px}.kh-world-stage{grid-template-columns:1fr;gap:0;padding:8px;min-height:0}.kh-world-canvas{height:min(78vw,340px);min-height:260px}.kh-world-side{padding:0 14px 16px}.kh-world-side .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.kh-world-chip{transition:none}.kh-world-chip:hover{transform:none}}
+
+/* Additional cinematic scroll reveals for the homepage only. Content remains visible if JS or motion APIs are unavailable. */
+html.kh-world-motion-ready .kh-reveal-item{opacity:0;transform:translateY(18px) scale(.99);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1);transition-delay:var(--kh-reveal-delay,0ms)}
+html.kh-world-motion-ready .kh-reveal-item.kh-reveal-visible{opacity:1;transform:none}
+#gateways .gate{transform-style:preserve-3d;transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
+#gateways .gate:focus-visible,.kh-world-chip:focus-visible,.kh-world-canvas:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){#gateways .gate:hover{transform:translateY(-6px) scale(1.008);box-shadow:0 18px 42px rgba(0,0,0,.22)}}
+@media(prefers-reduced-motion:reduce){html.kh-world-motion-ready .kh-reveal-item{opacity:1;transform:none;transition:none}}
+
+
+/* Cinematic micro-interactions: preserve the existing Khaledoon palette and card geometry. */
+#gateways .gate{position:relative;isolation:isolate;overflow:hidden}
+#gateways .gate::before{transition:transform .8s cubic-bezier(.2,.7,.2,1),filter .8s ease,opacity .35s ease;transform:scale(1.001);transform-origin:center}
+#gateways .gate::after{pointer-events:none}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  #gateways .gate:hover::before{transform:scale(1.055);filter:brightness(1.09) saturate(1.08)}
+  #gateways .gate:hover{border-color:color-mix(in srgb,var(--c,var(--gold)) 72%,white);box-shadow:0 18px 42px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.1)}
+}
+.kh-world-stage{position:relative}
+.kh-world-stage::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(115deg,transparent 18%,rgba(255,255,255,.045) 48%,transparent 68%);background-size:220% 100%;background-position:100% 0;opacity:0;transition:opacity .35s ease}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.kh-world-stage:hover::after{opacity:1;animation:khWorldSheen 1.15s ease-out 1}}
+@keyframes khWorldSheen{from{background-position:100% 0}to{background-position:-120% 0}}
+@media(prefers-reduced-motion:reduce){
+ #gateways .gate,#gateways .gate::before,.kh-world-stage::after{transition:none!important;animation:none!important;transform:none!important}
+}
+
+
+/* Globe-to-map handoff: preserve the same navy/gold visual language while revealing the real interactive map. */
+.kh-world{transition:opacity .42s ease,transform .55s ease,filter .42s ease}
+.kh-world.kh-world-leaving{opacity:.68;transform:translateY(-10px) scale(.992);filter:saturate(.82)}
+#khMap{scroll-margin-top:110px;position:relative}
+#khMap:before{content:"";display:block;position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,rgba(240,200,120,.7),rgba(138,217,232,.65),transparent);opacity:.7;pointer-events:none}
+#khMap .khm-box{box-shadow:0 24px 65px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.04);transition:box-shadow .45s ease,border-color .45s ease}
+#khMap.kh-map-arriving .khm-box{border-color:rgba(240,200,120,.55);box-shadow:0 0 0 1px rgba(240,200,120,.12),0 24px 65px rgba(0,0,0,.15)}
+#khMap.kh-map-arrived .khm-box{animation:khMapReveal .7s cubic-bezier(.2,.75,.25,1) both}
+@keyframes khMapReveal{from{opacity:.72;transform:translateY(14px);filter:blur(2px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){.kh-world,#khMap .khm-box{transition:none!important;animation:none!important}.kh-world.kh-world-leaving{transform:none;filter:none}}
