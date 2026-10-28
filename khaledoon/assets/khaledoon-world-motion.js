@@ -4,7 +4,7 @@
  var root=document.documentElement;
  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
  if(!('IntersectionObserver' in window))return;
- var items=document.querySelectorAll('#gateways .gate, #how .step, .kh-world-stage, .khm-box, #gateways .info');
+ var items=document.querySelectorAll('#gateways .gate, #how .step, .kh-world-stage, .khm-box, #gateways .info, .section-visual-gallery figure, .hero-home-image-wrap, .card, .story-card, .collection-card');
  if(!items.length)return;
  items.forEach(function(n,i){n.classList.add('kh-reveal-item');n.style.setProperty('--kh-reveal-delay',Math.min(i%4,3)*65+'ms')});
  root.classList.add('kh-world-motion-ready');
