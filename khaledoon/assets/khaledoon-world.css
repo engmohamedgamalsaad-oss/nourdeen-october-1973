@@ -46,3 +46,15 @@ html.kh-world-motion-ready .kh-reveal-item.kh-reveal-visible{opacity:1;transform
 @media(prefers-reduced-motion:reduce){
  #gateways .gate,#gateways .gate::before,.kh-world-stage::after{transition:none!important;animation:none!important;transform:none!important}
 }
+
+
+/* Globe-to-map handoff: preserve the same navy/gold visual language while revealing the real interactive map. */
+.kh-world{transition:opacity .42s ease,transform .55s ease,filter .42s ease}
+.kh-world.kh-world-leaving{opacity:.68;transform:translateY(-10px) scale(.992);filter:saturate(.82)}
+#khMap{scroll-margin-top:110px;position:relative}
+#khMap:before{content:"";display:block;position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,rgba(240,200,120,.7),rgba(138,217,232,.65),transparent);opacity:.7;pointer-events:none}
+#khMap .khm-box{box-shadow:0 24px 65px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.04);transition:box-shadow .45s ease,border-color .45s ease}
+#khMap.kh-map-arriving .khm-box{border-color:rgba(240,200,120,.55);box-shadow:0 0 0 1px rgba(240,200,120,.12),0 24px 65px rgba(0,0,0,.15)}
+#khMap.kh-map-arrived .khm-box{animation:khMapReveal .7s cubic-bezier(.2,.75,.25,1) both}
+@keyframes khMapReveal{from{opacity:.72;transform:translateY(14px);filter:blur(2px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){.kh-world,#khMap .khm-box{transition:none!important;animation:none!important}.kh-world.kh-world-leaving{transform:none;filter:none}}
