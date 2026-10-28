@@ -34,7 +34,7 @@ test('every admin submission row exposes edit and move actions, including closed
 test('publisher moves a story in a review PR and preserves the previous story URL with a redirect', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
-  assert.ok(publisher.includes('2026-10-27-pr-move-v2'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('2026-10-28-v2-draft-guard-1'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
@@ -949,4 +949,21 @@ test('story builder derives the site base path from its current deployment inste
   assert.ok(bundle.includes("var liveUrl=siteBaseUrl()+'/stories/'"), 'legacy story existence checks must use the detected site base path');
   assert.ok(bundle.includes("baseUrl=siteBaseUrl()"), 'generated og:image and local image URLs must use the detected site base path');
   assert.ok(!bundle.includes("location.origin+'/nourdeen-october-1973"), 'builder must not generate incorrect repository URLs when run on localhost or a root-hosted staging site');
+});
+
+
+test('legacy publisher requires a source record and blocks V2-only drafts server-side', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(publisher.includes('requires_submission_id: true'));
+  assert.ok(publisher.includes('rejects_v2_only_drafts: true'));
+  assert.ok(publisher.includes('body.submission_table'));
+  assert.ok(publisher.includes('body.submission_id'));
+  assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
+  assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
+  assert.ok(publisher.includes('hasV2Artifacts'));
+  assert.ok(publisher.includes('return reply(409'));
+  assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
+  assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
+  assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
 });
