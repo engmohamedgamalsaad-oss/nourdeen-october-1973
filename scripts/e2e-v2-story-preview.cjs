@@ -65,7 +65,9 @@ async function main() {
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
   await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
 
-  const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+  const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+  await mobileContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), route => route.abort());
+  const mobile = await mobileContext.newPage();
   mobile.on('pageerror', error => errors.push(String(error.message || error)));
   await mobile.goto(base, { waitUntil: 'load' });
   await mobile.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
