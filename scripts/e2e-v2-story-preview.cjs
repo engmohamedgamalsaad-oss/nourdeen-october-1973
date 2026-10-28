@@ -20,6 +20,7 @@ function mime(file) {
 async function main() {
   fs.mkdirSync(path.join(temp, 'rebuild'), { recursive: true });
   fs.copyFileSync(path.join(root, 'rebuild/reader.js'), path.join(temp, 'rebuild/reader.js'));
+  fs.copyFileSync(path.join(root, 'rebuild/reader-base.css'), path.join(temp, 'rebuild/reader-base.css'));
   fs.copyFileSync(path.join(root, 'rebuild/reader-enhance.css'), path.join(temp, 'rebuild/reader-enhance.css'));
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
