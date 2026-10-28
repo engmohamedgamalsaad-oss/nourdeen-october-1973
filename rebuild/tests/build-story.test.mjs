@@ -71,13 +71,13 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     assert.match(page, /id="print-story"/);
     assert.match(page, /id="image-lightbox"/);
     assert.match(page, /reader\.js\?v=20261028-v2-reader-4/);
-    assert.match(page, /reader-base\.css\?v=20261028-unified-reader-1/, 'generated page must use the shared reader base stylesheet');
-    assert.match(baseCss, /Marhey,Cairo,sans-serif/, 'shared headings need a sans-serif fallback when web fonts are unavailable');
+    assert.match(page, /reader-base\.css\?v=20261028-unified-reader-2/, 'generated page must use the shared reader base stylesheet');
+    assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'shared headings need a sans-serif fallback when web fonts are unavailable');
     assert.match(page, /data-story-path="data\.v2\.json"/);
     assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, 'a story page built for eventual approved publication must not remain noindex');
     assert.match(page, /id="map-section"/);
     assert.match(page, /id="theme-toggle"/);
-    assert.match(page, /body\[data-design=ancient-civilization\]/);
+    assert.ok(baseCss.includes('body[data-design=ancient-civilization]'), 'shared stylesheet must map the design variants');
     assert.equal(saved.format, 'KHALEDOON_STORY_V2');
     assert.equal(saved.original_body, 'Exact sample source text.');
     const second = spawnSync(process.execPath, [builder, input, '987'], { cwd: temp, encoding: 'utf8' });
