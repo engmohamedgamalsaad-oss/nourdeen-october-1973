@@ -15,7 +15,7 @@ test('package review page makes no network, storage, or publish writes', () => {
   const script = scripts.join('\n');
   assert.doesNotMatch(script, /\bfetch\s*\(|XMLHttpRequest|localStorage\.(?:setItem|removeItem|clear)\s*\(|sessionStorage|indexedDB|supabase|github\.com\/repos/i);
   assert.match(script, /localStorage\.getItem\('kh-v2-review-package'\)/);
-  assert.match(script, /draft=1/);
+  assert.match(script, /get\('draft'\)==='1'/);
   assert.match(html, /لا تحفظ على Supabase ولا تنشر/);
   assert.match(html, /type="file" accept="\.json,application\/json"/);
 });
