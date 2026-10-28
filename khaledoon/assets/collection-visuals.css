@@ -382,3 +382,70 @@ html[data-theme="light"] body.collection-islamic .story-index-card .story-index-
 .story-index-card .story-index-cover-fallback{display:grid;place-items:center;padding:12px;background:linear-gradient(135deg,rgba(120,197,154,.28),rgba(228,194,122,.16));color:#f8f4e8;font-weight:900;text-align:center;line-height:1.7}
 body.collection-islamic{position:relative;isolation:isolate}
 html[data-theme="light"] .story-index-card .story-index-cover-fallback{color:#20392b;background:linear-gradient(135deg,#e0efdf,#f8edcf)}
+
+
+/* Cinematic image motion inspired by the reference site, adapted to Khaledoon's existing section identities.
+   Keep the image crop/layout intact; motion is subtle, hover-capable, and disabled for reduced-motion users. */
+.section-visual-gallery figure,
+body.collection-science .card,
+body.collection-women .card,
+body.collection-culture .card,
+body.collection-history .card,
+body.collection-curriculum .card,
+body.collection-october .card,
+body:not(.collection-october) .hero-home-image-wrap{
+  overflow:hidden;
+  transform:translateZ(0);
+  transition:box-shadow .32s ease,border-color .32s ease;
+}
+.section-visual-gallery img,
+body.collection-science .card img,
+body.collection-women .card img,
+body.collection-culture .card img,
+body.collection-history .card img,
+body.collection-curriculum .card img,
+body.collection-october .card img,
+body:not(.collection-october) .hero-home-image-wrap img{
+  transform:scale(1.001);
+  transform-origin:center;
+  transition:transform .7s cubic-bezier(.2,.7,.2,1),filter .7s ease;
+  will-change:auto;
+}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+  .section-visual-gallery figure:hover,
+  body.collection-science .card:hover,
+  body.collection-women .card:hover,
+  body.collection-culture .card:hover,
+  body.collection-history .card:hover,
+  body.collection-curriculum .card:hover,
+  body.collection-october .card:hover,
+  body:not(.collection-october) .hero-home-image-wrap:hover{
+    box-shadow:0 18px 42px rgba(0,0,0,.2);
+    border-color:var(--gold);
+  }
+  .section-visual-gallery figure:hover img,
+  body.collection-science .card:hover img,
+  body.collection-women .card:hover img,
+  body.collection-culture .card:hover img,
+  body.collection-history .card:hover img,
+  body.collection-curriculum .card:hover img,
+  body.collection-october .card:hover img,
+  body:not(.collection-october) .hero-home-image-wrap:hover img{
+    transform:scale(1.045);
+    filter:saturate(1.06) brightness(1.035);
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .section-visual-gallery figure,
+  .section-visual-gallery img,
+  body.collection-science .card,
+  body.collection-women .card,
+  body.collection-culture .card,
+  body.collection-history .card,
+  body.collection-curriculum .card,
+  body.collection-october .card,
+  body:not(.collection-october) .hero-home-image-wrap,
+  body:not(.collection-october) .hero-home-image-wrap img{
+    transition:none!important;transform:none!important;filter:none!important;will-change:auto!important;
+  }
+}
