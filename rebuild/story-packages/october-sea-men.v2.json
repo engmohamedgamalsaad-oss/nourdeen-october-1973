@@ -628,114 +628,1122 @@
   ],
   "quiz": [
     {
-      "id": "navy-role",
-      "correct_option": 0,
+      "id": "legacy-01",
+      "correct_option": 1,
       "i18n": {
         "ar": {
           "question": "ما الدور الذي أدّته البحرية المصرية خلال حرب أكتوبر؟",
           "options": [
-            "حماية السواحل والأجناب البحرية وتنفيذ مهام بحرية",
-            "قيادة القوات البرية كلها",
             "إدارة المطارات المدنية",
+            "تأمين الأجناب البحرية وتنفيذ مهام بحرية",
+            "قيادة القوات البرية كلها",
             "حفر قناة السويس"
           ],
-          "explanation": "كانت للبحرية مهام بحرية متخصصة ضمن الجهد العسكري الأوسع."
+          "explanation": "شاركت البحرية في تأمين السواحل والأجناب وتنفيذ مهام بحرية."
         },
         "en": {
           "question": "What role did the Egyptian Navy play during the October War?",
           "options": [
-            "Protecting coasts and maritime flanks and carrying out naval missions",
-            "Commanding all ground forces",
             "Managing civilian airports",
+            "Securing maritime flanks and carrying out naval missions",
+            "Commanding all ground forces",
             "Digging the Suez Canal"
           ],
-          "explanation": "The Navy had specialized maritime tasks within the wider military effort."
+          "explanation": "The Navy helped secure coasts and maritime flanks and carried out naval missions."
         },
         "fr": {
           "question": "Quel rôle la marine égyptienne a-t-elle joué pendant la guerre d’Octobre ?",
           "options": [
-            "Protéger les côtes et les flancs maritimes et mener des missions navales",
-            "Commander toutes les forces terrestres",
             "Gérer les aéroports civils",
+            "Sécuriser les flancs maritimes et mener des missions navales",
+            "Commander toutes les forces terrestres",
             "Creuser le canal de Suez"
           ],
-          "explanation": "La marine avait des missions maritimes spécifiques au sein de l’effort militaire général."
+          "explanation": "La marine a contribué à sécuriser les côtes et les flancs maritimes."
         },
         "it": {
           "question": "Quale ruolo ebbe la Marina egiziana durante la guerra d’Ottobre?",
           "options": [
-            "Proteggere coste e fianchi marittimi e svolgere missioni navali",
-            "Comandare tutte le forze terrestri",
             "Gestire gli aeroporti civili",
+            "Proteggere i fianchi marittimi e svolgere missioni navali",
+            "Comandare tutte le forze terrestri",
             "Scavare il Canale di Suez"
           ],
-          "explanation": "La Marina svolgeva compiti marittimi specifici nell’ambito dello sforzo militare complessivo."
+          "explanation": "La Marina contribuì a proteggere coste e fianchi marittimi."
         },
         "de": {
           "question": "Welche Rolle spielte die ägyptische Marine während des Oktoberkriegs?",
           "options": [
-            "Küsten und maritime Flanken schützen und Marineeinsätze durchführen",
-            "Alle Landstreitkräfte befehligen",
             "Zivilflughäfen verwalten",
+            "Maritime Flanken sichern und Marineeinsätze durchführen",
+            "Alle Landstreitkräfte befehligen",
             "Den Suezkanal graben"
           ],
-          "explanation": "Die Marine hatte besondere maritime Aufgaben innerhalb der gesamten militärischen Anstrengung."
+          "explanation": "Die Marine half, Küsten und maritime Flanken zu sichern."
         }
       }
     },
     {
-      "id": "eilat-date",
+      "id": "legacy-02",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "ما الحدث البحري البارز الذي وقع في 21 أكتوبر 1967؟",
+          "options": [
+            "بدء حرب أكتوبر",
+            "تحرير سيناء بالكامل",
+            "إغراق المدمرة إيلات بصواريخ مصرية",
+            "إنشاء أول غواصة نووية مصرية"
+          ],
+          "explanation": "أغرقت زوارق الصواريخ المصرية المدمرة إيلات عام 1967."
+        },
+        "en": {
+          "question": "What major naval event took place on 21 October 1967?",
+          "options": [
+            "The start of the October War",
+            "The complete liberation of Sinai",
+            "The sinking of the destroyer Eilat by Egyptian missiles",
+            "The creation of Egypt’s first nuclear submarine"
+          ],
+          "explanation": "Egyptian missile boats sank the destroyer Eilat in 1967."
+        },
+        "fr": {
+          "question": "Quel événement naval important a eu lieu le 21 octobre 1967 ?",
+          "options": [
+            "Le début de la guerre d’Octobre",
+            "La libération complète du Sinaï",
+            "Le naufrage du destroyer Eilat sous l’effet de missiles égyptiens",
+            "La création du premier sous-marin nucléaire égyptien"
+          ],
+          "explanation": "Des vedettes lance-missiles égyptiennes ont coulé le destroyer Eilat en 1967."
+        },
+        "it": {
+          "question": "Quale importante evento navale avvenne il 21 ottobre 1967?",
+          "options": [
+            "L’inizio della guerra d’Ottobre",
+            "La liberazione completa del Sinai",
+            "L’affondamento del cacciatorpediniere Eilat da parte di missili egiziani",
+            "La creazione del primo sottomarino nucleare egiziano"
+          ],
+          "explanation": "Motoscafi lanciamissili egiziani affondarono il cacciatorpediniere Eilat nel 1967."
+        },
+        "de": {
+          "question": "Welches wichtige Marineereignis fand am 21. Oktober 1967 statt?",
+          "options": [
+            "Der Beginn des Oktoberkriegs",
+            "Die vollständige Befreiung des Sinai",
+            "Die Versenkung des Zerstörers Eilat durch ägyptische Raketen",
+            "Der Bau von Ägyptens erstem Atom-U-Boot"
+          ],
+          "explanation": "Ägyptische Raketenboote versenkten den Zerstörer Eilat im Jahr 1967."
+        }
+      }
+    },
+    {
+      "id": "legacy-03",
       "correct_option": 0,
       "i18n": {
         "ar": {
-          "question": "متى أُغرقت المدمرة إيلات؟",
+          "question": "لماذا كانت خبرة حرب الاستنزاف مهمة؟",
           "options": [
-            "21 أكتوبر 1967",
-            "6 أكتوبر 1973",
-            "مارس 1974",
-            "يونيو 1967"
+            "ساعدت على تطوير الخبرة والاستعداد",
+            "ألغت دور القوات الجوية",
+            "جعلت الحرب بلا مخاطر",
+            "أنهت الحاجة للتدريب"
           ],
-          "explanation": "وقع إغراق إيلات في أكتوبر 1967، قبل حرب أكتوبر 1973 بنحو ست سنوات."
+          "explanation": "التدريب والخبرة السابقة ساهما في استعداد القوات."
         },
         "en": {
-          "question": "When was the destroyer Eilat sunk?",
+          "question": "Why was experience from the War of Attrition important?",
           "options": [
-            "21 October 1967",
-            "6 October 1973",
-            "March 1974",
-            "June 1967"
+            "It helped develop experience and preparedness",
+            "It eliminated the role of the air force",
+            "It made war risk-free",
+            "It ended the need for training"
           ],
-          "explanation": "Eilat was sunk in October 1967, about six years before the 1973 October War."
+          "explanation": "Training and prior experience contributed to the forces’ preparedness."
         },
         "fr": {
-          "question": "Quand le destroyer Eilat a-t-il été coulé ?",
+          "question": "Pourquoi l’expérience de la guerre d’usure était-elle importante ?",
           "options": [
-            "21 octobre 1967",
-            "6 octobre 1973",
-            "mars 1974",
-            "juin 1967"
+            "Elle a contribué à développer l’expérience et la préparation",
+            "Elle a éliminé le rôle de l’aviation",
+            "Elle a rendu la guerre sans risque",
+            "Elle a supprimé le besoin d’entraînement"
           ],
-          "explanation": "Eilat a été coulé en octobre 1967, environ six ans avant la guerre de 1973."
+          "explanation": "L’entraînement et l’expérience antérieure ont contribué à la préparation des forces."
         },
         "it": {
-          "question": "Quando fu affondato il cacciatorpediniere Eilat?",
+          "question": "Perché fu importante l’esperienza della guerra d’attrito?",
           "options": [
-            "21 ottobre 1967",
-            "6 ottobre 1973",
-            "marzo 1974",
-            "giugno 1967"
+            "Aiutò a sviluppare esperienza e preparazione",
+            "Annullò il ruolo dell’aeronautica",
+            "Rese la guerra priva di rischi",
+            "Eliminò la necessità dell’addestramento"
           ],
-          "explanation": "Eilat fu affondato nell’ottobre 1967, circa sei anni prima della guerra del 1973."
+          "explanation": "L’addestramento e l’esperienza precedente contribuirono alla preparazione delle forze."
         },
         "de": {
-          "question": "Wann wurde der Zerstörer Eilat versenkt?",
+          "question": "Warum war die Erfahrung aus dem Abnutzungskrieg wichtig?",
           "options": [
-            "21. Oktober 1967",
-            "6. Oktober 1973",
-            "März 1974",
-            "Juni 1967"
+            "Sie half, Erfahrung und Einsatzbereitschaft zu verbessern",
+            "Sie beseitigte die Rolle der Luftwaffe",
+            "Sie machte den Krieg risikofrei",
+            "Sie machte Ausbildung überflüssig"
           ],
-          "explanation": "Eilat wurde im Oktober 1967 versenkt, etwa sechs Jahre vor dem Krieg von 1973."
+          "explanation": "Ausbildung und frühere Erfahrung trugen zur Einsatzbereitschaft bei."
+        }
+      }
+    },
+    {
+      "id": "legacy-04",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "أين تعمل القوات البحرية المصرية؟",
+          "options": [
+            "في الجو فقط",
+            "داخل المصانع فقط",
+            "في الصحارى فقط",
+            "في البحر المتوسط والبحر الأحمر"
+          ],
+          "explanation": "لمصر سواحل على البحر المتوسط والبحر الأحمر."
+        },
+        "en": {
+          "question": "Where does the Egyptian Navy operate?",
+          "options": [
+            "Only in the air",
+            "Only inside factories",
+            "Only in deserts",
+            "In the Mediterranean Sea and the Red Sea"
+          ],
+          "explanation": "Egypt has coastlines on both the Mediterranean and Red Seas."
+        },
+        "fr": {
+          "question": "Où opère la marine égyptienne ?",
+          "options": [
+            "Uniquement dans les airs",
+            "Uniquement dans les usines",
+            "Uniquement dans les déserts",
+            "En Méditerranée et en mer Rouge"
+          ],
+          "explanation": "L’Égypte possède des côtes sur la Méditerranée et la mer Rouge."
+        },
+        "it": {
+          "question": "Dove opera la Marina egiziana?",
+          "options": [
+            "Solo in aria",
+            "Solo nelle fabbriche",
+            "Solo nei deserti",
+            "Nel Mar Mediterraneo e nel Mar Rosso"
+          ],
+          "explanation": "L’Egitto ha coste sul Mediterraneo e sul Mar Rosso."
+        },
+        "de": {
+          "question": "Wo ist die ägyptische Marine im Einsatz?",
+          "options": [
+            "Nur in der Luft",
+            "Nur in Fabriken",
+            "Nur in Wüsten",
+            "Im Mittelmeer und im Roten Meer"
+          ],
+          "explanation": "Ägypten hat Küsten am Mittelmeer und am Roten Meer."
+        }
+      }
+    },
+    {
+      "id": "legacy-05",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما الدرس من حكاية رجال البحر؟",
+          "options": [
+            "التدريب غير مهم",
+            "النصر يعتمد على تكامل الأدوار",
+            "البحر لا يؤثر في الحروب",
+            "المهام متشابهة دائمًا"
+          ],
+          "explanation": "الإنجاز الكبير يعتمد على أدوار متعددة متكاملة."
+        },
+        "en": {
+          "question": "What lesson does the story of the men of the sea teach?",
+          "options": [
+            "Training is unimportant",
+            "Success depends on complementary roles",
+            "The sea has no effect on wars",
+            "Tasks are always identical"
+          ],
+          "explanation": "Major achievements depend on different roles working together."
+        },
+        "fr": {
+          "question": "Quelle leçon retenir de l’histoire des hommes de la mer ?",
+          "options": [
+            "L’entraînement est inutile",
+            "La réussite dépend de la complémentarité des rôles",
+            "La mer n’influence pas les guerres",
+            "Les missions sont toujours identiques"
+          ],
+          "explanation": "Les grandes réussites reposent sur des rôles complémentaires."
+        },
+        "it": {
+          "question": "Quale lezione insegna la storia degli uomini del mare?",
+          "options": [
+            "L’addestramento non è importante",
+            "Il successo dipende dall’integrazione dei ruoli",
+            "Il mare non influisce sulle guerre",
+            "I compiti sono sempre uguali"
+          ],
+          "explanation": "I grandi risultati dipendono da ruoli diversi che lavorano insieme."
+        },
+        "de": {
+          "question": "Welche Lehre vermittelt die Geschichte der Männer des Meeres?",
+          "options": [
+            "Ausbildung ist unwichtig",
+            "Erfolg hängt vom Zusammenspiel verschiedener Aufgaben ab",
+            "Das Meer beeinflusst Kriege nicht",
+            "Aufgaben sind immer gleich"
+          ],
+          "explanation": "Große Erfolge beruhen auf dem Zusammenspiel verschiedener Aufgaben."
+        }
+      }
+    },
+    {
+      "id": "legacy-06",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما المقصود بتأمين خطوط الملاحة؟",
+          "options": [
+            "إغلاق الموانئ دائمًا",
+            "حماية حركة السفن والممرات البحرية",
+            "نقل القتال إلى البر فقط",
+            "إلغاء كل الرحلات البحرية"
+          ],
+          "explanation": "تأمين الملاحة يعني حماية الحركة البحرية وتقليل التهديدات."
+        },
+        "en": {
+          "question": "What does securing shipping lanes mean?",
+          "options": [
+            "Keeping ports permanently closed",
+            "Protecting ship traffic and maritime passages",
+            "Moving all fighting onto land",
+            "Cancelling all sea voyages"
+          ],
+          "explanation": "Securing shipping means protecting maritime traffic and reducing threats."
+        },
+        "fr": {
+          "question": "Que signifie sécuriser les routes maritimes ?",
+          "options": [
+            "Fermer les ports en permanence",
+            "Protéger la circulation des navires et les passages maritimes",
+            "Déplacer tous les combats à terre",
+            "Annuler tous les voyages en mer"
+          ],
+          "explanation": "Sécuriser la navigation consiste à protéger le trafic maritime et à réduire les menaces."
+        },
+        "it": {
+          "question": "Che cosa significa proteggere le rotte marittime?",
+          "options": [
+            "Chiudere sempre i porti",
+            "Proteggere il traffico navale e i passaggi marittimi",
+            "Spostare tutti i combattimenti a terra",
+            "Annullare tutti i viaggi in mare"
+          ],
+          "explanation": "Proteggere la navigazione significa tutelare il traffico marittimo e ridurre i rischi."
+        },
+        "de": {
+          "question": "Was bedeutet es, Schifffahrtswege zu sichern?",
+          "options": [
+            "Häfen dauerhaft schließen",
+            "Den Schiffsverkehr und Seewege schützen",
+            "Alle Kämpfe an Land verlagern",
+            "Alle Seereisen absagen"
+          ],
+          "explanation": "Schifffahrtssicherheit schützt den Seeverkehr und verringert Bedrohungen."
+        }
+      }
+    },
+    {
+      "id": "legacy-07",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "لماذا تحتاج الدولة ذات السواحل الطويلة إلى قوات بحرية؟",
+          "options": [
+            "لإصلاح السكك الحديدية",
+            "لإدارة المدارس",
+            "لحماية السواحل والمصالح البحرية",
+            "لإدارة الأنهار فقط"
+          ],
+          "explanation": "السواحل والموانئ وخطوط الملاحة مصالح تحتاج إلى حماية."
+        },
+        "en": {
+          "question": "Why does a country with a long coastline need naval forces?",
+          "options": [
+            "To repair railways",
+            "To manage schools",
+            "To protect coasts and maritime interests",
+            "To manage rivers only"
+          ],
+          "explanation": "Coasts, ports, and shipping lanes are interests that need protection."
+        },
+        "fr": {
+          "question": "Pourquoi un pays doté d’un long littoral a-t-il besoin de forces navales ?",
+          "options": [
+            "Pour réparer les chemins de fer",
+            "Pour gérer les écoles",
+            "Pour protéger les côtes et les intérêts maritimes",
+            "Pour gérer uniquement les fleuves"
+          ],
+          "explanation": "Les côtes, les ports et les routes maritimes doivent être protégés."
+        },
+        "it": {
+          "question": "Perché un paese con una lunga costa ha bisogno di forze navali?",
+          "options": [
+            "Per riparare le ferrovie",
+            "Per gestire le scuole",
+            "Per proteggere coste e interessi marittimi",
+            "Per gestire solo i fiumi"
+          ],
+          "explanation": "Coste, porti e rotte marittime sono interessi da proteggere."
+        },
+        "de": {
+          "question": "Warum braucht ein Land mit langer Küste Seestreitkräfte?",
+          "options": [
+            "Zur Reparatur von Eisenbahnen",
+            "Zur Verwaltung von Schulen",
+            "Zum Schutz der Küsten und maritimen Interessen",
+            "Nur zur Verwaltung von Flüssen"
+          ],
+          "explanation": "Küsten, Häfen und Seewege sind schützenswerte Interessen."
+        }
+      }
+    },
+    {
+      "id": "legacy-08",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "ما الذي يميز استخدام الصواريخ البحرية في مواجهة المدمرة إيلات؟",
+          "options": [
+            "إثبات أن التدريب غير مهم",
+            "الاستغناء عن الأطقم",
+            "إنهاء جميع الحروب البحرية",
+            "إظهار أثر التخطيط والتقنية في القتال البحري"
+          ],
+          "explanation": "تُظهر الواقعة أهمية الوسائل التقنية والتخطيط في العمليات البحرية."
+        },
+        "en": {
+          "question": "What did the use of naval missiles against Eilat demonstrate?",
+          "options": [
+            "That training is unimportant",
+            "That crews are unnecessary",
+            "The end of all naval wars",
+            "The impact of planning and technology in naval combat"
+          ],
+          "explanation": "The event highlights the importance of technology and planning in naval operations."
+        },
+        "fr": {
+          "question": "Que montre l’utilisation de missiles contre le destroyer Eilat ?",
+          "options": [
+            "Que l’entraînement est inutile",
+            "Que les équipages sont superflus",
+            "La fin de toutes les guerres navales",
+            "L’effet de la planification et de la technologie dans le combat naval"
+          ],
+          "explanation": "L’événement souligne l’importance de la technologie et de la planification dans les opérations navales."
+        },
+        "it": {
+          "question": "Che cosa dimostrò l’uso di missili navali contro Eilat?",
+          "options": [
+            "Che l’addestramento non serve",
+            "Che gli equipaggi sono superflui",
+            "La fine di tutte le guerre navali",
+            "L’effetto della pianificazione e della tecnologia nel combattimento navale"
+          ],
+          "explanation": "L’episodio evidenzia l’importanza della tecnologia e della pianificazione nelle operazioni navali."
+        },
+        "de": {
+          "question": "Was zeigte der Einsatz von Raketen gegen den Zerstörer Eilat?",
+          "options": [
+            "Dass Ausbildung unwichtig ist",
+            "Dass Besatzungen unnötig sind",
+            "Das Ende aller Seekriege",
+            "Die Wirkung von Planung und Technik im Seekrieg"
+          ],
+          "explanation": "Das Ereignis zeigt die Bedeutung von Technik und Planung bei Marineeinsätzen."
+        }
+      }
+    },
+    {
+      "id": "legacy-09",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "أي مصدر يساعد أكثر في التحقق من تفاصيل واقعة بحرية تاريخية؟",
+          "options": [
+            "سجلات وشهادات موثوقة تُقارن معًا",
+            "تخمين مبني على صورة",
+            "منشور مجهول بلا مراجع",
+            "رواية واحدة متداولة فقط"
+          ],
+          "explanation": "مقارنة الوثائق والشهادات تقلل احتمال تكرار معلومات غير دقيقة."
+        },
+        "en": {
+          "question": "Which source best helps verify details of a historical naval event?",
+          "options": [
+            "Reliable records and testimonies compared with one another",
+            "A guess based on a picture",
+            "An anonymous post without references",
+            "One widely repeated account only"
+          ],
+          "explanation": "Comparing records and testimony reduces the risk of repeating inaccurate information."
+        },
+        "fr": {
+          "question": "Quelle source aide le mieux à vérifier les détails d’un événement naval historique ?",
+          "options": [
+            "Des archives et témoignages fiables comparés entre eux",
+            "Une supposition fondée sur une image",
+            "Une publication anonyme sans références",
+            "Un seul récit répété"
+          ],
+          "explanation": "Comparer archives et témoignages réduit le risque de répéter des informations inexactes."
+        },
+        "it": {
+          "question": "Quale fonte aiuta meglio a verificare i dettagli di un evento navale storico?",
+          "options": [
+            "Registri e testimonianze attendibili confrontati tra loro",
+            "Un’ipotesi basata su una foto",
+            "Un post anonimo senza riferimenti",
+            "Un solo racconto ripetuto"
+          ],
+          "explanation": "Confrontare documenti e testimonianze riduce il rischio di ripetere informazioni inesatte."
+        },
+        "de": {
+          "question": "Welche Quelle hilft am besten, Einzelheiten eines historischen Marineereignisses zu prüfen?",
+          "options": [
+            "Zuverlässige Aufzeichnungen und Zeugenaussagen im Vergleich",
+            "Eine Vermutung aufgrund eines Bildes",
+            "Ein anonymer Beitrag ohne Quellen",
+            "Nur eine oft wiederholte Darstellung"
+          ],
+          "explanation": "Der Vergleich von Aufzeichnungen und Aussagen verringert das Risiko ungenauer Angaben."
+        }
+      }
+    },
+    {
+      "id": "legacy-10",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "ما الفرق بين المهمة البحرية والمهمة البرية؟",
+          "options": [
+            "القوات البرية تعمل في البحر دائمًا",
+            "البحرية لا تحتاج إلى تخطيط",
+            "لا يوجد أي فرق في المهام",
+            "تختلف البيئة والوسائل مع إمكانية التكامل بينهما"
+          ],
+          "explanation": "لكل مجال متطلباته، وقد تتكامل الأدوار ضمن خطة واحدة."
+        },
+        "en": {
+          "question": "What is the difference between a naval task and a land task?",
+          "options": [
+            "Ground forces always operate at sea",
+            "Naval forces do not need planning",
+            "There is no difference between the tasks",
+            "The environment and tools differ, but the roles can complement each other"
+          ],
+          "explanation": "Each environment has its requirements, and roles can work together within one plan."
+        },
+        "fr": {
+          "question": "Quelle différence existe-t-il entre une mission navale et une mission terrestre ?",
+          "options": [
+            "Les forces terrestres opèrent toujours en mer",
+            "La marine n’a pas besoin de planification",
+            "Il n’existe aucune différence entre les missions",
+            "L’environnement et les moyens diffèrent, mais les missions peuvent se compléter"
+          ],
+          "explanation": "Chaque milieu a ses exigences, et les missions peuvent se compléter dans un même plan."
+        },
+        "it": {
+          "question": "Qual è la differenza tra una missione navale e una terrestre?",
+          "options": [
+            "Le forze terrestri operano sempre in mare",
+            "La Marina non ha bisogno di pianificazione",
+            "Non esiste alcuna differenza tra i compiti",
+            "Ambiente e mezzi sono diversi, ma i ruoli possono integrarsi"
+          ],
+          "explanation": "Ogni ambiente ha esigenze proprie, ma i ruoli possono integrarsi in un unico piano."
+        },
+        "de": {
+          "question": "Was unterscheidet einen Marineeinsatz von einem Landauftrag?",
+          "options": [
+            "Landstreitkräfte sind immer auf See im Einsatz",
+            "Die Marine braucht keine Planung",
+            "Es gibt keinen Unterschied zwischen den Aufgaben",
+            "Umgebung und Mittel unterscheiden sich, doch die Aufgaben können sich ergänzen"
+          ],
+          "explanation": "Jeder Einsatzbereich hat eigene Anforderungen; Aufgaben können sich in einem Plan ergänzen."
+        }
+      }
+    },
+    {
+      "id": "legacy-11",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "لماذا لا يكفي امتلاك معدات متطورة وحده لتحقيق النجاح؟",
+          "options": [
+            "لأن الخطط غير ضرورية",
+            "لأن التدريب والقيادة والتنسيق عوامل أساسية أيضًا",
+            "لأن النجاح يحدث بالمصادفة فقط",
+            "لأن المعدات لا تؤثر إطلاقًا"
+          ],
+          "explanation": "المعدات لا تحقق هدفها دون أفراد مدربين وقيادة وتنسيق."
+        },
+        "en": {
+          "question": "Why is having advanced equipment alone not enough for success?",
+          "options": [
+            "Because plans are unnecessary",
+            "Because training, leadership, and coordination are also essential",
+            "Because success happens only by chance",
+            "Because equipment has no effect at all"
+          ],
+          "explanation": "Equipment cannot achieve its purpose without trained people, leadership, and coordination."
+        },
+        "fr": {
+          "question": "Pourquoi disposer d’équipements avancés ne suffit-il pas à lui seul ?",
+          "options": [
+            "Parce que les plans sont inutiles",
+            "Parce que l’entraînement, le commandement et la coordination sont également essentiels",
+            "Parce que le succès dépend uniquement du hasard",
+            "Parce que l’équipement n’a aucun effet"
+          ],
+          "explanation": "L’équipement ne suffit pas sans personnel formé, commandement et coordination."
+        },
+        "it": {
+          "question": "Perché possedere attrezzature avanzate non basta da solo per avere successo?",
+          "options": [
+            "Perché i piani sono inutili",
+            "Perché addestramento, comando e coordinamento sono essenziali",
+            "Perché il successo dipende solo dal caso",
+            "Perché le attrezzature non hanno alcun effetto"
+          ],
+          "explanation": "Le attrezzature non bastano senza personale addestrato, comando e coordinamento."
+        },
+        "de": {
+          "question": "Warum reicht moderne Ausrüstung allein nicht für den Erfolg?",
+          "options": [
+            "Weil Pläne unnötig sind",
+            "Weil Ausbildung, Führung und Abstimmung ebenfalls entscheidend sind",
+            "Weil Erfolg nur Zufall ist",
+            "Weil Ausrüstung überhaupt keinen Einfluss hat"
+          ],
+          "explanation": "Ausrüstung erfüllt ihren Zweck nur mit Ausbildung, Führung und Zusammenarbeit."
+        }
+      }
+    },
+    {
+      "id": "legacy-12",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "ما الاستنتاج المنطقي من تجربة حرب الاستنزاف؟",
+          "options": [
+            "كل حرب تشبه الأخرى تمامًا",
+            "التدريب يجعل الأخطاء مستحيلة",
+            "لا تتغير أساليب القتال",
+            "يمكن أن تسهم الخبرة السابقة في تحسين الاستعداد"
+          ],
+          "explanation": "الخبرة تساعد على الاستعداد، مع ضرورة مراعاة اختلاف ظروف كل عملية."
+        },
+        "en": {
+          "question": "What is a reasonable conclusion from the War of Attrition?",
+          "options": [
+            "Every war is exactly like another",
+            "Training makes mistakes impossible",
+            "Methods of combat never change",
+            "Prior experience can help improve preparedness"
+          ],
+          "explanation": "Experience can improve preparedness, while each operation’s circumstances still differ."
+        },
+        "fr": {
+          "question": "Quelle conclusion raisonnable tirer de la guerre d’usure ?",
+          "options": [
+            "Toutes les guerres sont exactement identiques",
+            "L’entraînement rend les erreurs impossibles",
+            "Les méthodes de combat ne changent jamais",
+            "L’expérience antérieure peut améliorer la préparation"
+          ],
+          "explanation": "L’expérience améliore la préparation, tout en tenant compte des circonstances propres à chaque opération."
+        },
+        "it": {
+          "question": "Quale conclusione ragionevole si può trarre dalla guerra d’attrito?",
+          "options": [
+            "Ogni guerra è identica alle altre",
+            "L’addestramento rende impossibili gli errori",
+            "I metodi di combattimento non cambiano mai",
+            "L’esperienza precedente può migliorare la preparazione"
+          ],
+          "explanation": "L’esperienza può migliorare la preparazione, tenendo conto delle diverse circostanze di ogni operazione."
+        },
+        "de": {
+          "question": "Welche vernünftige Schlussfolgerung lässt sich aus dem Abnutzungskrieg ziehen?",
+          "options": [
+            "Jeder Krieg ist genau wie jeder andere",
+            "Ausbildung macht Fehler unmöglich",
+            "Kampfmethoden ändern sich nie",
+            "Frühere Erfahrungen können die Vorbereitung verbessern"
+          ],
+          "explanation": "Erfahrung kann die Vorbereitung verbessern, doch jeder Einsatz hat eigene Bedingungen."
+        }
+      }
+    },
+    {
+      "id": "legacy-13",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "لماذا تُعد حماية الموانئ جزءًا من الأمن البحري؟",
+          "options": [
+            "لأنها نقاط مهمة للتجارة والإمداد والحركة",
+            "لأنها تخص السياحة فقط",
+            "لأن الموانئ لا ترتبط بالاقتصاد",
+            "لأن السفن لا تستخدمها"
+          ],
+          "explanation": "الموانئ مهمة لحركة التجارة والإمداد والأنشطة البحرية."
+        },
+        "en": {
+          "question": "Why is port protection part of maritime security?",
+          "options": [
+            "Because ports are important for trade, supplies, and movement",
+            "Because they are only for tourism",
+            "Because ports are unrelated to the economy",
+            "Because ships do not use them"
+          ],
+          "explanation": "Ports are important for trade, supplies, and maritime activity."
+        },
+        "fr": {
+          "question": "Pourquoi la protection des ports fait-elle partie de la sécurité maritime ?",
+          "options": [
+            "Parce que les ports sont essentiels au commerce, à l’approvisionnement et aux déplacements",
+            "Parce qu’ils servent uniquement au tourisme",
+            "Parce que les ports n’ont aucun lien avec l’économie",
+            "Parce que les navires ne les utilisent pas"
+          ],
+          "explanation": "Les ports sont importants pour le commerce, l’approvisionnement et l’activité maritime."
+        },
+        "it": {
+          "question": "Perché la protezione dei porti fa parte della sicurezza marittima?",
+          "options": [
+            "Perché i porti sono importanti per commercio, rifornimenti e traffici",
+            "Perché servono solo al turismo",
+            "Perché i porti non sono legati all’economia",
+            "Perché le navi non li usano"
+          ],
+          "explanation": "I porti sono importanti per il commercio, i rifornimenti e le attività marittime."
+        },
+        "de": {
+          "question": "Warum gehört der Schutz von Häfen zur maritimen Sicherheit?",
+          "options": [
+            "Weil Häfen für Handel, Versorgung und Verkehr wichtig sind",
+            "Weil sie nur dem Tourismus dienen",
+            "Weil Häfen nichts mit der Wirtschaft zu tun haben",
+            "Weil Schiffe sie nicht nutzen"
+          ],
+          "explanation": "Häfen sind für Handel, Versorgung und maritime Tätigkeiten wichtig."
+        }
+      }
+    },
+    {
+      "id": "legacy-14",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "أي عبارة تعبّر عن قراءة تاريخية متوازنة؟",
+          "options": [
+            "اعتبار كل رأي حقيقة",
+            "فهم الحدث في سياقه وفحص الأدلة",
+            "تجاهل التواريخ",
+            "اختيار الرواية الأكثر إثارة فقط"
+          ],
+          "explanation": "السياق والأدلة يساعدان على فهم الحدث بدلًا من الاكتفاء بالانطباع."
+        },
+        "en": {
+          "question": "Which statement reflects a balanced reading of history?",
+          "options": [
+            "Treating every opinion as fact",
+            "Understanding an event in context and examining evidence",
+            "Ignoring dates",
+            "Choosing only the most exciting account"
+          ],
+          "explanation": "Context and evidence help us understand an event beyond first impressions."
+        },
+        "fr": {
+          "question": "Quelle affirmation traduit une lecture équilibrée de l’histoire ?",
+          "options": [
+            "Considérer chaque opinion comme un fait",
+            "Comprendre l’événement dans son contexte et examiner les preuves",
+            "Ignorer les dates",
+            "Choisir uniquement le récit le plus spectaculaire"
+          ],
+          "explanation": "Le contexte et les preuves aident à dépasser les impressions immédiates."
+        },
+        "it": {
+          "question": "Quale affermazione esprime una lettura equilibrata della storia?",
+          "options": [
+            "Considerare ogni opinione un fatto",
+            "Capire l’evento nel suo contesto ed esaminare le prove",
+            "Ignorare le date",
+            "Scegliere solo il racconto più sensazionale"
+          ],
+          "explanation": "Contesto e prove aiutano a capire un evento oltre le prime impressioni."
+        },
+        "de": {
+          "question": "Welche Aussage zeigt einen ausgewogenen Umgang mit Geschichte?",
+          "options": [
+            "Jede Meinung als Tatsache ansehen",
+            "Ein Ereignis im Kontext verstehen und Belege prüfen",
+            "Daten ignorieren",
+            "Nur die spannendste Darstellung auswählen"
+          ],
+          "explanation": "Kontext und Belege helfen, ein Ereignis jenseits erster Eindrücke zu verstehen."
+        }
+      }
+    },
+    {
+      "id": "legacy-15",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "ما فائدة دراسة عمليات بحرية سابقة؟",
+          "options": [
+            "إلغاء الحاجة للتدريب",
+            "ضمان تكرار النتائج نفسها",
+            "إثبات أن الظروف لا تتغير",
+            "استخلاص دروس في التخطيط والاستعداد"
+          ],
+          "explanation": "تساعد دراسة التجارب على التعلم دون افتراض تطابق الظروف."
+        },
+        "en": {
+          "question": "What is the benefit of studying earlier naval operations?",
+          "options": [
+            "Removing the need for training",
+            "Guaranteeing the same results will recur",
+            "Proving that circumstances never change",
+            "Drawing lessons about planning and preparedness"
+          ],
+          "explanation": "Studying past experiences helps us learn without assuming conditions are identical."
+        },
+        "fr": {
+          "question": "Quel est l’intérêt d’étudier des opérations navales antérieures ?",
+          "options": [
+            "Supprimer le besoin d’entraînement",
+            "Garantir que les mêmes résultats se répéteront",
+            "Prouver que les circonstances ne changent pas",
+            "Tirer des leçons sur la planification et la préparation"
+          ],
+          "explanation": "L’étude des expériences passées permet d’apprendre sans supposer que les conditions sont identiques."
+        },
+        "it": {
+          "question": "Qual è il vantaggio di studiare precedenti operazioni navali?",
+          "options": [
+            "Eliminare la necessità dell’addestramento",
+            "Garantire che gli stessi risultati si ripetano",
+            "Dimostrare che le circostanze non cambiano",
+            "Ricavare lezioni sulla pianificazione e la preparazione"
+          ],
+          "explanation": "Studiare le esperienze passate aiuta a imparare senza presumere che le condizioni siano identiche."
+        },
+        "de": {
+          "question": "Welchen Nutzen hat die Untersuchung früherer Marineeinsätze?",
+          "options": [
+            "Ausbildung überflüssig machen",
+            "Gleiche Ergebnisse garantieren",
+            "Beweisen, dass sich Bedingungen nie ändern",
+            "Lehren über Planung und Vorbereitung gewinnen"
+          ],
+          "explanation": "Frühere Erfahrungen helfen beim Lernen, ohne gleiche Bedingungen vorauszusetzen."
+        }
+      }
+    },
+    {
+      "id": "legacy-16",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "لماذا قد تعمل القوات البحرية مع فروع عسكرية أخرى؟",
+          "options": [
+            "لأن كل فرع يؤدي المهمة نفسها",
+            "لتحقيق أهداف مشتركة بتنسيق الأدوار",
+            "لمنع تبادل المعلومات",
+            "لإلغاء القيادة"
+          ],
+          "explanation": "تتطلب العمليات المشتركة تنسيقًا بين المهام والقدرات المختلفة."
+        },
+        "en": {
+          "question": "Why might naval forces work with other military branches?",
+          "options": [
+            "Because every branch has the same task",
+            "To achieve shared goals by coordinating roles",
+            "To prevent information sharing",
+            "To eliminate command"
+          ],
+          "explanation": "Joint operations require coordination among different tasks and capabilities."
+        },
+        "fr": {
+          "question": "Pourquoi les forces navales peuvent-elles coopérer avec d’autres branches militaires ?",
+          "options": [
+            "Parce que chaque branche a la même mission",
+            "Pour atteindre des objectifs communs en coordonnant les rôles",
+            "Pour empêcher le partage d’informations",
+            "Pour supprimer le commandement"
+          ],
+          "explanation": "Les opérations conjointes exigent la coordination de missions et de capacités différentes."
+        },
+        "it": {
+          "question": "Perché le forze navali possono collaborare con altri reparti militari?",
+          "options": [
+            "Perché ogni reparto svolge lo stesso compito",
+            "Per raggiungere obiettivi comuni coordinando i ruoli",
+            "Per impedire lo scambio di informazioni",
+            "Per eliminare il comando"
+          ],
+          "explanation": "Le operazioni congiunte richiedono il coordinamento di compiti e capacità diverse."
+        },
+        "de": {
+          "question": "Warum können Seestreitkräfte mit anderen militärischen Teilstreitkräften zusammenarbeiten?",
+          "options": [
+            "Weil jede Teilstreitkraft dieselbe Aufgabe hat",
+            "Um gemeinsame Ziele durch abgestimmte Aufgaben zu erreichen",
+            "Um Informationsaustausch zu verhindern",
+            "Um Führung abzuschaffen"
+          ],
+          "explanation": "Gemeinsame Einsätze erfordern die Abstimmung unterschiedlicher Aufgaben und Fähigkeiten."
+        }
+      }
+    },
+    {
+      "id": "legacy-17",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "ما السؤال الأهم عند تقييم ادعاء تاريخي عن معركة؟",
+          "options": [
+            "هل يناسب رأيي؟",
+            "هل تكرر بلا مصدر؟",
+            "ما الدليل الذي يدعمه وما مصدره؟",
+            "هل يبدو مثيرًا؟"
+          ],
+          "explanation": "تقييم الدليل ومصدره أساس التحقق التاريخي."
+        },
+        "en": {
+          "question": "What is the most important question when assessing a historical claim about a battle?",
+          "options": [
+            "Does it fit my opinion?",
+            "Has it been repeated without a source?",
+            "What evidence supports it, and where does it come from?",
+            "Does it sound exciting?"
+          ],
+          "explanation": "Evaluating evidence and its source is central to historical verification."
+        },
+        "fr": {
+          "question": "Quelle est la question essentielle pour évaluer une affirmation historique sur une bataille ?",
+          "options": [
+            "Correspond-elle à mon opinion ?",
+            "A-t-elle été répétée sans source ?",
+            "Quelles preuves l’étayent et quelle est leur source ?",
+            "Est-ce spectaculaire ?"
+          ],
+          "explanation": "L’évaluation des preuves et de leur source est essentielle à la vérification historique."
+        },
+        "it": {
+          "question": "Qual è la domanda più importante per valutare un’affermazione storica su una battaglia?",
+          "options": [
+            "Concorda con la mia opinione?",
+            "È stata ripetuta senza fonte?",
+            "Quali prove la sostengono e qual è la loro fonte?",
+            "Sembra sensazionale?"
+          ],
+          "explanation": "Valutare le prove e la loro fonte è essenziale per verificare la storia."
+        },
+        "de": {
+          "question": "Welche Frage ist bei der Bewertung einer historischen Behauptung über eine Schlacht am wichtigsten?",
+          "options": [
+            "Passt sie zu meiner Meinung?",
+            "Wurde sie ohne Quelle wiederholt?",
+            "Welche Belege stützen sie und woher stammen sie?",
+            "Klingt sie aufregend?"
+          ],
+          "explanation": "Belege und ihre Herkunft zu prüfen ist grundlegend für historische Verifikation."
+        }
+      }
+    },
+    {
+      "id": "legacy-18",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "أي عامل يساعد الطاقم على أداء مهمته تحت الضغط؟",
+          "options": [
+            "تجاهل التعليمات",
+            "الاعتماد على الحظ",
+            "تغيير الخطة بلا تنسيق",
+            "التدريب الواضح والعمل المنظم"
+          ],
+          "explanation": "التدريب والتنظيم يساعدان على تنفيذ المهام في الظروف الصعبة."
+        },
+        "en": {
+          "question": "What helps a crew carry out its task under pressure?",
+          "options": [
+            "Ignoring instructions",
+            "Relying on luck",
+            "Changing the plan without coordination",
+            "Clear training and organized work"
+          ],
+          "explanation": "Training and organization help people perform in difficult conditions."
+        },
+        "fr": {
+          "question": "Qu’est-ce qui aide un équipage à accomplir sa mission sous pression ?",
+          "options": [
+            "Ignorer les consignes",
+            "Compter sur la chance",
+            "Changer le plan sans coordination",
+            "Une formation claire et un travail organisé"
+          ],
+          "explanation": "L’entraînement et l’organisation aident à agir dans des conditions difficiles."
+        },
+        "it": {
+          "question": "Che cosa aiuta un equipaggio a svolgere il compito sotto pressione?",
+          "options": [
+            "Ignorare le istruzioni",
+            "Affidarsi alla fortuna",
+            "Cambiare piano senza coordinamento",
+            "Addestramento chiaro e lavoro organizzato"
+          ],
+          "explanation": "Addestramento e organizzazione aiutano a operare in condizioni difficili."
+        },
+        "de": {
+          "question": "Was hilft einer Besatzung, ihre Aufgabe unter Druck zu erfüllen?",
+          "options": [
+            "Anweisungen ignorieren",
+            "Auf Glück vertrauen",
+            "Den Plan ohne Abstimmung ändern",
+            "Klare Ausbildung und geordnetes Arbeiten"
+          ],
+          "explanation": "Ausbildung und Organisation helfen bei schwierigen Bedingungen."
+        }
+      }
+    },
+    {
+      "id": "legacy-19",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "كيف نميز بين الحقيقة والاستنتاج في قصة تاريخية؟",
+          "options": [
+            "نحدد ما تثبته المصادر وما نستنتجه منها",
+            "نخلط الرأي بالوثيقة",
+            "نقبل كل التفاصيل بالتساوي",
+            "نحذف المعلومات المخالفة"
+          ],
+          "explanation": "الفصل بين الدليل والتفسير يجعل القراءة أدق."
+        },
+        "en": {
+          "question": "How do we distinguish fact from inference in a historical story?",
+          "options": [
+            "By identifying what sources establish and what we infer from them",
+            "By mixing opinion with documents",
+            "By accepting every detail equally",
+            "By removing conflicting information"
+          ],
+          "explanation": "Separating evidence from interpretation makes historical reading more accurate."
+        },
+        "fr": {
+          "question": "Comment distinguer un fait d’une déduction dans un récit historique ?",
+          "options": [
+            "En distinguant ce que les sources établissent de ce que nous en déduisons",
+            "En mélangeant opinion et document",
+            "En acceptant tous les détails de la même façon",
+            "En supprimant les informations contradictoires"
+          ],
+          "explanation": "Séparer les preuves de l’interprétation rend la lecture historique plus précise."
+        },
+        "it": {
+          "question": "Come distinguiamo un fatto da un’inferenza in un racconto storico?",
+          "options": [
+            "Distinguendo ciò che le fonti dimostrano da ciò che deduciamo",
+            "Confondendo opinioni e documenti",
+            "Accettando ogni dettaglio allo stesso modo",
+            "Eliminando le informazioni discordanti"
+          ],
+          "explanation": "Separare le prove dall’interpretazione rende la lettura storica più precisa."
+        },
+        "de": {
+          "question": "Wie unterscheidet man Tatsache und Schlussfolgerung in einer historischen Erzählung?",
+          "options": [
+            "Indem man unterscheidet, was Quellen belegen und was wir daraus ableiten",
+            "Indem man Meinung und Dokument vermischt",
+            "Indem man alle Einzelheiten gleich akzeptiert",
+            "Indem man widersprechende Informationen entfernt"
+          ],
+          "explanation": "Die Trennung von Beleg und Deutung macht historische Lektüre genauer."
+        }
+      }
+    },
+    {
+      "id": "legacy-20",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما الدرس الذي تقدمه قصة البحرية عن العمل الجماعي؟",
+          "options": [
+            "تبادل الخبرة غير مفيد",
+            "النجاح قد يعتمد على تكامل تخصصات متعددة",
+            "شخص واحد ينفذ كل المهام",
+            "التنسيق يعرقل كل عملية"
+          ],
+          "explanation": "العمليات المعقدة تحتاج إلى أدوار متكاملة وتنسيق."
+        },
+        "en": {
+          "question": "What lesson does the Navy story offer about teamwork?",
+          "options": [
+            "Sharing experience is unhelpful",
+            "Success may depend on several specialties working together",
+            "One person performs every task",
+            "Coordination obstructs every operation"
+          ],
+          "explanation": "Complex operations require complementary roles and coordination."
+        },
+        "fr": {
+          "question": "Quelle leçon l’histoire de la marine enseigne-t-elle sur le travail d’équipe ?",
+          "options": [
+            "Le partage d’expérience est inutile",
+            "La réussite peut dépendre de plusieurs spécialités qui travaillent ensemble",
+            "Une seule personne accomplit toutes les tâches",
+            "La coordination gêne toutes les opérations"
+          ],
+          "explanation": "Les opérations complexes nécessitent des rôles complémentaires et de la coordination."
+        },
+        "it": {
+          "question": "Quale lezione offre la storia della Marina sul lavoro di squadra?",
+          "options": [
+            "Condividere esperienze è inutile",
+            "Il successo può dipendere da diverse specialità che collaborano",
+            "Una sola persona svolge tutti i compiti",
+            "Il coordinamento ostacola ogni operazione"
+          ],
+          "explanation": "Le operazioni complesse richiedono ruoli complementari e coordinamento."
+        },
+        "de": {
+          "question": "Welche Lehre vermittelt die Marinegeschichte über Teamarbeit?",
+          "options": [
+            "Erfahrungsaustausch ist nutzlos",
+            "Erfolg kann vom Zusammenspiel verschiedener Fachbereiche abhängen",
+            "Eine Person erledigt alle Aufgaben",
+            "Abstimmung behindert jeden Einsatz"
+          ],
+          "explanation": "Komplexe Einsätze brauchen ergänzende Aufgaben und Abstimmung."
         }
       }
     },
@@ -792,118 +1800,6 @@
             "Er ist ein Kanal auf dem Sinai"
           ],
           "explanation": "Die Meerenge liegt auf der Seeroute zwischen Rotem Meer und Golf von Aden."
-        }
-      }
-    },
-    {
-      "id": "history-method",
-      "correct_option": 0,
-      "i18n": {
-        "ar": {
-          "question": "كيف نتحقق من ادعاء تاريخي؟",
-          "options": [
-            "بمقارنة مصادر موثوقة وفحص الأدلة",
-            "باختيار الرواية الأكثر إثارة",
-            "بالاعتماد على صورة واحدة",
-            "بتكرار ما يقوله الناس دون مصدر"
-          ],
-          "explanation": "مقارنة الأدلة تساعد على فصل الوقائع عن التفسيرات والروايات المختلف عليها."
-        },
-        "en": {
-          "question": "How should we check a historical claim?",
-          "options": [
-            "By comparing reliable sources and examining evidence",
-            "By choosing the most exciting account",
-            "By relying on one image",
-            "By repeating claims without sources"
-          ],
-          "explanation": "Comparing evidence helps distinguish facts from interpretations and disputed accounts."
-        },
-        "fr": {
-          "question": "Comment vérifier une affirmation historique ?",
-          "options": [
-            "En comparant des sources fiables et en examinant les preuves",
-            "En choisissant le récit le plus spectaculaire",
-            "En se fiant à une seule image",
-            "En répétant des propos sans source"
-          ],
-          "explanation": "Comparer les preuves aide à distinguer les faits des interprétations et des récits contestés."
-        },
-        "it": {
-          "question": "Come si verifica un’affermazione storica?",
-          "options": [
-            "Confrontando fonti affidabili ed esaminando le prove",
-            "Scegliendo il racconto più sensazionale",
-            "Affidandosi a una sola immagine",
-            "Ripetendo affermazioni senza fonti"
-          ],
-          "explanation": "Confrontare le prove aiuta a distinguere i fatti dalle interpretazioni e dai resoconti controversi."
-        },
-        "de": {
-          "question": "Wie überprüft man eine historische Behauptung?",
-          "options": [
-            "Durch den Vergleich verlässlicher Quellen und die Prüfung von Belegen",
-            "Indem man die spannendste Darstellung auswählt",
-            "Indem man sich auf ein Bild verlässt",
-            "Indem man unbelegte Behauptungen wiederholt"
-          ],
-          "explanation": "Der Vergleich von Belegen hilft, Tatsachen von Deutungen und umstrittenen Berichten zu unterscheiden."
-        }
-      }
-    },
-    {
-      "id": "teamwork",
-      "correct_option": 0,
-      "i18n": {
-        "ar": {
-          "question": "ما الدرس الذي توضحه الحكاية عن نجاح العمليات؟",
-          "options": [
-            "أهمية التدريب والتخطيط وتكامل الأدوار",
-            "أن المعدات وحدها تكفي",
-            "أن كل القوات تؤدي المهمة نفسها",
-            "أن التاريخ لا يحتاج إلى مصادر"
-          ],
-          "explanation": "العمليات المعقدة تحتاج إلى أفراد مدربين وخطة وتنسيق بين الأدوار."
-        },
-        "en": {
-          "question": "What lesson does the story offer about successful operations?",
-          "options": [
-            "The importance of training, planning, and coordinated roles",
-            "Equipment alone is enough",
-            "All forces perform the same task",
-            "History does not need sources"
-          ],
-          "explanation": "Complex operations require trained people, a plan, and coordination between roles."
-        },
-        "fr": {
-          "question": "Quelle leçon le récit donne-t-il sur la réussite des opérations ?",
-          "options": [
-            "L’importance de l’entraînement, de la planification et de la coordination",
-            "Le matériel suffit à lui seul",
-            "Toutes les forces ont la même mission",
-            "L’histoire n’a pas besoin de sources"
-          ],
-          "explanation": "Les opérations complexes nécessitent des personnes formées, un plan et une coordination des rôles."
-        },
-        "it": {
-          "question": "Quale lezione offre il racconto sul successo delle operazioni?",
-          "options": [
-            "L’importanza di addestramento, pianificazione e coordinamento",
-            "Bastano le attrezzature",
-            "Tutte le forze svolgono lo stesso compito",
-            "La storia non ha bisogno di fonti"
-          ],
-          "explanation": "Le operazioni complesse richiedono personale addestrato, un piano e coordinamento dei ruoli."
-        },
-        "de": {
-          "question": "Welche Lehre vermittelt die Geschichte über erfolgreiche Einsätze?",
-          "options": [
-            "Die Bedeutung von Ausbildung, Planung und abgestimmten Aufgaben",
-            "Ausrüstung allein reicht aus",
-            "Alle Truppen haben dieselbe Aufgabe",
-            "Geschichte braucht keine Quellen"
-          ],
-          "explanation": "Komplexe Einsätze benötigen ausgebildete Menschen, einen Plan und abgestimmte Aufgaben."
         }
       }
     },
