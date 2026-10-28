@@ -20,6 +20,10 @@ function mime(file) {
 async function main() {
   fs.mkdirSync(path.join(temp, 'rebuild'), { recursive: true });
   fs.copyFileSync(path.join(root, 'rebuild/reader.js'), path.join(temp, 'rebuild/reader.js'));
+  fs.copyFileSync(path.join(root, 'rebuild/reader-enhance.css'), path.join(temp, 'rebuild/reader-enhance.css'));
+  fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
+  fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
+  fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
   const packageFile = path.join(root, 'rebuild/story-packages/october-sea-men.v2.json');
   const build = spawnSync(process.execPath, [path.join(root, 'rebuild/build-story.mjs'), packageFile, '016'], { cwd: temp, encoding: 'utf8' });
   assert.equal(build.status, 0, build.stderr || build.stdout || 'V2 story build failed');
@@ -46,7 +50,17 @@ async function main() {
   await page.goto(base, { waitUntil: 'load' });
   await page.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
   assert.equal(await page.locator('#title').textContent(), story.i18n.ar.title);
+  assert.equal(await page.locator('#story-intro-modal').isVisible(), true, 'the story should open on a dedicated start screen');
+  assert.equal(await page.locator('#intro-title').textContent(), story.i18n.ar.title, 'start screen title should be localized');
+  await page.screenshot({ path: path.join(artifactDir, 'v2-story-start-ar.png'), fullPage: false, animations: 'disabled' });
+  await page.locator('#intro-start').click();
+  await page.locator('#story-intro-modal').waitFor({ state: 'hidden' });
   assert.equal(await page.locator('#cover img').getAttribute('alt'), story.cover.i18n.ar.alt, 'cover alt text should be localized');
+  assert.equal(await page.locator('#reaction-like').count(), 1, 'like control should exist');
+  assert.equal(await page.locator('[data-reaction-choice]').count(), 4, 'all reaction choices should exist');
+  assert.equal(await page.locator('#print-story').count(), 1, 'print control should exist');
+  assert.match(await page.locator('#share-whatsapp').getAttribute('href'), /wa\.me/);
+  assert.match(await page.locator('#share-facebook').getAttribute('href'), /facebook\.com\/sharer/);
   assert.equal(await page.locator('#quiz .q').count(), story.quiz.length, 'all V2 quiz questions should render');
   assert.equal(await page.locator('#gallery figure').count(), story.images.length, 'all localized gallery images should render');
   assert.equal(await page.locator('#map-section').isVisible(), true, 'verified map location should render');
@@ -60,6 +74,10 @@ async function main() {
   assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.en.caption), 'gallery caption should switch to English');
   assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n.en.title), 'source title should switch to English');
   assert.equal(await page.locator('#quiz .q').count(), story.quiz.length);
+  await page.locator('#gallery img').first().click();
+  assert.equal(await page.locator('#image-lightbox').isVisible(), true, 'gallery image should open a lightbox');
+  await page.locator('#lightbox-close').click();
+  assert.equal(await page.locator('#image-lightbox').isVisible(), false, 'lightbox should close');
   const firstCorrect = story.quiz[0].correct_option;
   await page.locator('#quiz .q').first().locator('.options button').nth(firstCorrect).click();
   assert.equal(await page.locator('#quiz .q').first().locator('.explain').count(), 1, 'quiz answer feedback should render');
@@ -75,6 +93,8 @@ async function main() {
   mobile.on('pageerror', error => errors.push(String(error.message || error)));
   await mobile.goto(base, { waitUntil: 'load' });
   await mobile.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
+  assert.equal(await mobile.locator('#story-intro-modal').isVisible(), true, 'mobile should show the start screen');
+  await mobile.locator('#intro-start').click();
   await mobile.locator('[data-lang="fr"]').click();
   await mobile.waitForFunction(() => document.documentElement.lang === 'fr');
   assert.equal(await mobile.locator('#title').textContent(), story.i18n.fr.title);
