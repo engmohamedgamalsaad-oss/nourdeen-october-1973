@@ -50,3 +50,16 @@ test('canonical prompt and prompt admin require V2 for all new story packages', 
   assert.match(activeAdminTexts, /عقد البيانات الوحيد للحكايات الجديدة هو V2/);
   assert.doesNotMatch(activeAdminTexts, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
 });
+
+
+test('V2 story content must be rich, source-grounded, and balanced about uncertainty', async () => {
+  const packagePrompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/V2-STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
+  const master = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', import.meta.url), 'utf8');
+  const checklist = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', import.meta.url), 'utf8');
+  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
+  for (const [name, text] of [['V2 package prompt', packagePrompt], ['master workflow', master], ['checklist', checklist], ['V2 README', readme]]) {
+    assert.match(text, /ثراء المحتوى|ثراء المحتوى التاريخي|ثراء المحتوى والدقة التاريخية/, name + ' must define the story richness gate');
+    assert.match(text, /لا تجعل التحفظات|لا تكرر التحذيرات|لا تكرر «غير مثبت تاريخيًا»|لا تكرر عبارة/, name + ' must prevent uncertainty warnings from dominating the story');
+    assert.match(text, /مصادر موثوقة|مصادر موثوقة تدعمها/, name + ' must require source-grounded claims');
+  }
+});
