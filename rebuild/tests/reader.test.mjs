@@ -24,7 +24,10 @@ test('V2 reader exposes all five language choices and changes text direction', (
 test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
   for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link', 'story-intro-modal', 'intro-start', 'story-actions', 'print-story', 'share-whatsapp', 'share-facebook', 'share-copy', 'reaction-like', 'reaction-status', 'image-lightbox']) assert.match(html, new RegExp('id="' + id + '"'));
   assert.match(html, /data-design=ancient-civilization/);
-  assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);\n  assert.match(js, /SECTION_PALETTE/);\n  assert.match(js, /initReactions/);\n  assert.match(js, /openLightbox/);
+  assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
+  assert.match(js, /SECTION_PALETTE/);
+  assert.match(js, /initReactions/);
+  assert.match(js, /openLightbox/);
 });
 
 test('V2 reader refuses to silently fall back to a legacy package', () => {
