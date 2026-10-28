@@ -44,6 +44,6 @@ test('static builder validates V2 packages and will not overwrite existing story
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /data\.v2\.json/);
-  assert.match(builder, /reader\.js\?v=20261028-v2-reader-1/);
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-1/);
+  assert.match(builder, /reader\.js\?v=20261028-v2-reader-2/);
+  assert.match(html, /reader\.js\?v=20261028-v2-reader-2/);
 });
