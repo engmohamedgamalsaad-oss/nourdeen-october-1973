@@ -962,6 +962,8 @@ test('legacy publisher requires a source record and blocks V2-only drafts server
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
   assert.ok(publisher.includes('hasV2Artifacts'));
+  assert.ok(publisher.indexOf('const submissionTable') < publisher.indexOf('const ref = await github'), 'submission guard must run before any branch ref lookup');
+  assert.ok(publisher.indexOf('const hasV2Artifacts') < publisher.indexOf('const ref = await github'), 'V2 file rejection must run before any GitHub write path');
   assert.ok(publisher.includes('return reply(409'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
