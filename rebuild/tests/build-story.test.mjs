@@ -63,7 +63,8 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     assert.match(page, /data-section="people"/);
     assert.match(page, /data-start-only/);
     assert.match(page, /data-disable-story-extras/);
-    assert.match(page, /id="intro-start"/);\n    assert.match(page, /id="intro-cover-fallback"/);
+    assert.match(page, /id="intro-start"/);
+    assert.match(page, /id="intro-cover-fallback"/);
     assert.match(page, /id="reaction-like"/);
     assert.match(page, /id="share-whatsapp"/);
     assert.match(page, /id="print-story"/);
