@@ -15,6 +15,15 @@ const headers = {
 const reply = (status: number, data: Record<string, unknown>) =>
   new Response(JSON.stringify(data), { status, headers });
 
+function contentForSafetyScan(file: { content: string; encoding?: string }): string {
+  if (file.encoding !== "base64") return file.content;
+  // GitHub accepts base64 content for binary assets, but V1 must not let
+  // encoded HTML/JSON bypass the V2-artifact rejection below.
+  const compact = file.content.replace(/\\s/g, "");
+  const bytes = Uint8Array.from(atob(compact), (character) => character.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").some((part) => part === "" || part === "." || part === "..")) return false;
@@ -136,10 +145,15 @@ Deno.serve(async (req: Request) => {
   if (sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true) {
     return reply(409, { error: "هذه مسودة V2 محفوظة للمراجعة الكاملة؛ ناشر V1 لا يستطيع نشرها بأمان." });
   }
-  const hasV2Artifacts = body.files.some((file: any) =>
-    /\/data\.v2\.json$/.test(file.path) ||
-    (typeof file.content === "string" && /KHALEDOON_STORY_V2|data\.v2\.json|data-kh-v2-reader/.test(file.content))
-  );
+  let hasV2Artifacts = false;
+  try {
+    hasV2Artifacts = body.files.some((file: any) =>
+      /\/data\.v2\.json$/.test(file.path) ||
+      /KHALEDOON_STORY_V2|data\.v2\.json|data-kh-v2-reader/.test(contentForSafetyScan(file))
+    );
+  } catch {
+    return reply(400, { error: "تعذر فك ترميز أحد الملفات للتحقق من توافقه مع ناشر V1." });
+  }
   if (hasV2Artifacts) return reply(409, { error: "ملفات V2 مرفوضة في ناشر V1 حتى يكتمل مسار نشر V2 المخصص." });
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
