@@ -41,7 +41,7 @@ function fixture() {
     design: { variant: 'arts-culture', accent: '#b8874b' },
     original_body: 'Exact sample source text.',
     i18n, cover: image('cover'), images: [image('inside-1'), image('inside-2')],
-    sources: ['A', 'B'].map((name, i) => ({ title: 'Sample source ' + name, organization: 'Example', url: 'https://example.org/source-' + name.toLowerCase(), i18n: Object.fromEntries(langs.map(lang => [lang, { title: 'Sample source ' + name, organization: 'Example' }])) })),
+    sources: ['A', 'B'].map((name, i) => ({ title: 'Sample source ' + name, organization: 'Example', url: 'https://example.org/source-' + name.toLowerCase(), i18n: Object.fromEntries(langs.map(lang => [lang, { title: 'Sample source ' + name + ' ' + lang, organization: 'Example ' + lang }])) })),
     quiz, map_location: null
   };
 }
