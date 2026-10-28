@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Original maritime history cover illustration</title>
+  <desc id="desc">A stylized naval vessel at sea beneath a gold horizon, with a second ship in the distance. This is an illustration, not a historical photograph.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#07131c"/><stop offset=".7" stop-color="#12323c"/><stop offset="1" stop-color="#31515a"/></linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#23434b"/><stop offset="1" stop-color="#07151d"/></linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#946c36"/><stop offset=".5" stop-color="#f0cc7d"/><stop offset="1" stop-color="#946c36"/></linearGradient>
+    <linearGradient id="hull" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d5c7a8"/><stop offset="1" stop-color="#5f6d6a"/></linearGradient>
+    <radialGradient id="glow"><stop offset="0" stop-color="#d6ad55" stop-opacity=".36"/><stop offset="1" stop-color="#d6ad55" stop-opacity="0"/></radialGradient>
+    <pattern id="stars" width="130" height="95" patternUnits="userSpaceOnUse"><circle cx="18" cy="21" r="1.5" fill="#e6d5a9" opacity=".6"/><circle cx="81" cy="55" r="1" fill="#fff0ca" opacity=".5"/><circle cx="112" cy="13" r=".9" fill="#fff0ca" opacity=".45"/></pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#sky)"/>
+  <rect width="1200" height="330" fill="url(#stars)"/>
+  <ellipse cx="760" cy="360" rx="420" ry="220" fill="url(#glow)"/>
+  <path d="M0 372 Q160 350 300 373 T600 372 T900 370 T1200 372 L1200 800 L0 800Z" fill="url(#sea)"/>
+  <path d="M0 387 Q100 375 200 389 T400 388 T600 386 T800 389 T1000 386 T1200 389" fill="none" stroke="#d6ad55" stroke-opacity=".8" stroke-width="3"/>
+  <g fill="none" stroke="#a9c3c2" stroke-opacity=".25" stroke-width="2">
+    <path d="M40 454 Q180 439 310 454 T590 454 T870 454 T1160 454"/>
+    <path d="M0 520 Q130 505 260 520 T520 520 T780 520 T1040 520 T1300 520"/>
+    <path d="M-40 603 Q110 590 260 603 T560 603 T860 603 T1160 603"/>
+    <path d="M40 690 Q170 675 300 690 T560 690 T820 690 T1080 690"/>
+  </g>
+  <g transform="translate(150 220) scale(.58)" opacity=".58">
+    <path d="M45 282 L420 282 L365 326 L105 326Z" fill="#07151d" stroke="#d6ad55" stroke-width="4"/>
+    <path d="M178 282 L190 204 L280 204 L300 282Z" fill="#182d35" stroke="#aeb9ae" stroke-width="3"/>
+    <path d="M225 204 L225 120 L234 120 L234 204" fill="#aeb9ae"/>
+    <path d="M234 135 L285 170 L234 170Z" fill="#c5b88f"/>
+    <path d="M145 250 L177 230 L177 250Z M310 250 L342 230 L342 250Z" fill="#d6ad55"/>
+  </g>
+  <g transform="translate(265 315)">
+    <path d="M20 190 L730 190 L650 263 L115 263Z" fill="#07131b" opacity=".65"/>
+    <path d="M40 156 L690 156 L625 222 L120 222Z" fill="url(#hull)" stroke="#d6ad55" stroke-width="5"/>
+    <path d="M145 155 L180 112 L460 112 L505 155Z" fill="#233a40" stroke="#c3b58f" stroke-width="4"/>
+    <path d="M235 112 L250 70 L390 70 L412 112Z" fill="#314a4e" stroke="#d6ad55" stroke-width="3"/>
+    <path d="M295 70 L295 22 L305 22 L305 70 M365 70 L365 36 L373 36 L373 70" fill="#b7b9a5"/>
+    <path d="M300 28 L340 49 L300 49Z" fill="#d6ad55"/>
+    <path d="M245 95 L278 95 M322 95 L355 95 M390 95 L410 95" stroke="#f0cc7d" stroke-width="5" stroke-linecap="round"/>
+    <path d="M165 170 L210 170 M235 170 L280 170 M305 170 L350 170 M375 170 L420 170 M445 170 L490 170 M515 170 L560 170" stroke="#263e44" stroke-width="5" stroke-linecap="round"/>
+    <path d="M40 222 Q160 250 285 222 T530 222 T690 222" fill="none" stroke="#f0cc7d" stroke-opacity=".75" stroke-width="3"/>
+  </g>
+  <g fill="none" stroke="url(#gold)" stroke-width="2" opacity=".65">
+    <circle cx="960" cy="190" r="72"/><circle cx="960" cy="190" r="48"/><path d="M960 105 V275 M875 190 H1045"/>
+  </g>
+  <path d="M0 755 Q200 720 400 755 T800 755 T1200 755" fill="none" stroke="#d6ad55" stroke-opacity=".6" stroke-width="2"/>
+  <rect x="26" y="26" width="1148" height="748" rx="24" fill="none" stroke="#d6ad55" stroke-opacity=".45" stroke-width="2"/>
+</svg>
