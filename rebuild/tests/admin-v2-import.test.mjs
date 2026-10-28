@@ -81,6 +81,10 @@ test('prompt administration links the dedicated V2 package instructions', async 
 
 test('V2 requirement separates new stories from legacy records and keeps V2-only records on V2', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
+  const submit = await readFile(new URL('../../khaledoon/submit.html', import.meta.url), 'utf8');
+  const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
+  assert.match(submit, /story_meta:\{v2_contract_required:true,source:'public_submission'\}/, 'new public submissions must persist the V2-required marker');
+  assert.match(builder, /if\(!d\.submission_id\)meta\.v2_contract_required=true/, 'new manual-builder records must persist the V2-required marker');
   const guard = html.match(/function isV2OnlyDraftRecord\(it\)\{[^\n]*?\}(?=\n)/);
   const expr = html.match(/var requireV2ForNewStory=([^;\n]+);/);
   assert.ok(guard && expr, 'policy expression must be present');
@@ -88,6 +92,8 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   const legacy = { id: 'legacy-123', status: 'published', story_meta: {} };
   assert.equal(requires(true, { status: 'pending' }), true, 'new story without a persisted id requires V2');
   assert.equal(requires(true, legacy), false, 'global new-story mode must not force V2 on an existing record');
+  assert.equal(requires(false, { id: 'new-public-submission-1', story_meta: { v2_contract_required: true, source: 'public_submission' } }), true, 'new public submission with an ID must require V2');
+  assert.equal(requires(false, { id: 'new-manual-builder-1', story_meta: { v2_contract_required: true, manual_builder: true } }), true, 'new manual-builder record with an ID must require V2');
   assert.equal(requires(false, legacy), false, 'legacy record without flags stays on the compatibility path');
   assert.equal(requires(false, { id: 'legacy-v1-456', story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
   assert.equal(requires(false, { id: 'v2-required-1', story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
