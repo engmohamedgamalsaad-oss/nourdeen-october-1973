@@ -13,7 +13,7 @@ h1,h2{margin:0 0 10px}h1{font-size:1.35rem;color:var(--accent)}h2{font-size:1.1r
 p{margin:8px 0}.muted{color:var(--muted)}.warning{border-inline-start:4px solid var(--accent);padding:10px 12px;background:#2b281f;border-radius:8px}
 label,button,select,input{font:inherit}button,select,input[type=file]{background:#0b1e25;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
 .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status{font-weight:700}.bad{color:var(--bad)}.good{color:var(--good)}
-.story-title{font-size:1.6rem;font-weight:800}.block{border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;white-space:pre-wrap}.karma{border-inline-start:4px solid var(--accent)}figure{margin:12px 0}img{max-width:100%;max-height:360px;object-fit:contain;border-radius:10px}a{color:#f0cc8d;overflow-wrap:anywhere}li{margin:7px 0}ul{padding-inline-start:22px}.hidden{display:none!important}
+.story-title{font-size:1.6rem;font-weight:800}.block{border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;white-space:pre-wrap}.karma{border-inline-start:4px solid var(--accent)}figure{margin:12px 0}img{max-width:100%;max-height:360px;object-fit:contain;border-radius:10px}a{color:#f0cc8d;overflow-wrap:anywhere}li{margin:7px 0}ul{padding-inline-start:22px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;direction:rtl;text-align:right}.hidden{display:none!important}
 </style>
 </head>
 <body>
@@ -28,6 +28,7 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 <section id="audit" class="panel hidden"><h2>٢. نتيجة الفحص البنيوي</h2><ul id="issues"></ul><p id="counts" class="muted"></p></section>
 <section id="preview" class="hidden">
 <section class="panel"><div id="section" class="muted"></div><div id="title" class="story-title"></div><h2 id="subtitle"></h2><p id="summary"></p><div id="cover"></div></section>
+<section class="panel"><details><summary>عرض النص الأصلي المحفوظ للمقارنة</summary><pre id="original-body" lang="ar" dir="rtl"></pre></details></section>
 <section class="panel"><h2>٣. نص الحكاية</h2><div id="blocks"></div><p id="history-note"></p></section>
 <section id="map-section" class="panel hidden"><h2>خريطة الحكاية</h2><p id="map-place"></p><a id="map-link" target="_blank" rel="noopener noreferrer">فتح الموقع على OpenStreetMap</a></section>
 <section class="panel"><h2>٤. الصور وحقوق الاستخدام</h2><div id="images"></div></section>
@@ -71,6 +72,7 @@ function show(){
  $('section').textContent='القسم: '+story.section+' · التصميم: '+(story.design&&story.design.variant||'غير محدد');$('title').textContent=t.title;$('subtitle').textContent=t.subtitle;$('summary').textContent=t.summary;
  $('cover').replaceChildren();renderImage($('cover'),story.cover,l,'الغلاف');
  $('blocks').replaceChildren();for(const b of t.blocks){const el=node('article',undefined,'block '+(b.speaker==='karma'?'karma':''));el.appendChild(node('strong',b.speaker==='karma'?'كارما':'الراوي'));el.appendChild(node('p',b.text));$('blocks').appendChild(el)}
+ $('original-body').textContent=story.original_body||'لا يوجد نص أصلي محفوظ في هذه الحزمة.';
  $('history-note').textContent=t.history_note||'لا توجد ملاحظة تاريخية مترجمة.';
  const map=story.map_location;$('map-section').classList.toggle('hidden',!map);
  if(map){$('map-place').textContent=map.place[l];$('map-link').href='https://www.openstreetmap.org/?mlat='+encodeURIComponent(map.lat)+'&mlon='+encodeURIComponent(map.lng)+'#map=13/'+encodeURIComponent(map.lat)+'/'+encodeURIComponent(map.lng)}
