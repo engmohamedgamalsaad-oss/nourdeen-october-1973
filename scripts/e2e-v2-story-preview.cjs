@@ -123,6 +123,13 @@ async function main() {
   await reviewer.locator('#lang').selectOption('en');
   assert.equal(await reviewer.locator('#title').textContent(), story.i18n.en.title, 'reviewer should switch localized title');
   assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should switch to LTR for English');
+  for (const lang of ['fr', 'it', 'de']) {
+    await reviewer.locator('#lang').selectOption(lang);
+    await reviewer.waitForFunction(expected => document.documentElement.lang === expected, lang);
+    assert.equal(await reviewer.locator('#title').textContent(), story.i18n[lang].title, 'reviewer should localize ' + lang + ' title');
+    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should use LTR for ' + lang);
+  }
+  await reviewer.locator('#lang').selectOption('en');
   await reviewer.screenshot({ path: path.join(artifactDir, 'v2-package-review-en.png'), fullPage: true, animations: 'disabled' });
   await reviewContext.close();
 
