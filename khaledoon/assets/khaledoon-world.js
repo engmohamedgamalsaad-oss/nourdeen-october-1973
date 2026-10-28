@@ -58,7 +58,12 @@
   var ctx=canvas.getContext('2d');
   if(!ctx){status.textContent=t('empty');return}
   var motionQuery=window.matchMedia?window.matchMedia('(prefers-reduced-motion: reduce)'):null;
-  var reduced=!!(motionQuery&&motionQuery.matches);\n  function canAnimate(){return !reduced&&inView&&pageVisible}\n  function syncAnimation(){if(!canAnimate()&&!drag&&raf){cancelAnimationFrame(raf);raf=0}else if(canAnimate())requestDraw()}\n  if('IntersectionObserver' in window){var worldVisibility=new IntersectionObserver(function(entries){inView=!!(entries[0]&&entries[0].isIntersecting);syncAnimation()},{threshold:0.01});worldVisibility.observe(section)}\n  document.addEventListener('visibilitychange',function(){pageVisible=!document.hidden;syncAnimation()});\n  if(motionQuery){var onMotionChange=function(e){reduced=e.matches;if(reduced)hint.textContent=t('reduced');else hint.textContent=t('hint');syncAnimation()};if(motionQuery.addEventListener)motionQuery.addEventListener('change',onMotionChange);else if(motionQuery.addListener)motionQuery.addListener(onMotionChange)}
+  var reduced=!!(motionQuery&&motionQuery.matches);
+  function canAnimate(){return !reduced&&inView&&pageVisible}
+  function syncAnimation(){if(!canAnimate()&&!drag&&raf){cancelAnimationFrame(raf);raf=0}else if(canAnimate())requestDraw()}
+  if('IntersectionObserver' in window){var worldVisibility=new IntersectionObserver(function(entries){inView=!!(entries[0]&&entries[0].isIntersecting);syncAnimation()},{threshold:0.01});worldVisibility.observe(section)}
+  document.addEventListener('visibilitychange',function(){pageVisible=!document.hidden;syncAnimation()});
+  if(motionQuery){var onMotionChange=function(e){reduced=e.matches;if(reduced)hint.textContent=t('reduced');else hint.textContent=t('hint');syncAnimation()};if(motionQuery.addEventListener)motionQuery.addEventListener('change',onMotionChange);else if(motionQuery.addListener)motionQuery.addListener(onMotionChange)}
   function safeStoryPath(s){
     var p=String(s&&s.path||'');
     if(/^stories\/[a-z0-9-]+\/[0-9]{3}\/$/.test(p))return p;
