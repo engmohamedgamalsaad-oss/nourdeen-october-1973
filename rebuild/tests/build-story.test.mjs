@@ -61,6 +61,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     assert.match(page, /data-story-slug="987"/);
     assert.match(page, /data-design="arts-culture"/);
     assert.match(page, /data-story-path="data\.v2\.json"/);
+    assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, 'a story page built for eventual approved publication must not remain noindex');
     assert.match(page, /id="map-section"/);
     assert.match(page, /id="theme-toggle"/);
     assert.match(page, /body\[data-design=ancient-civilization\]/);
