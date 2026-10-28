@@ -46,6 +46,7 @@ async function main() {
   await page.goto(base, { waitUntil: 'load' });
   await page.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
   assert.equal(await page.locator('#title').textContent(), story.i18n.ar.title);
+  assert.equal(await page.locator('#cover img').getAttribute('alt'), story.cover.i18n.ar.alt, 'cover alt text should be localized');
   assert.equal(await page.locator('#quiz .q').count(), story.quiz.length, 'all V2 quiz questions should render');
   assert.equal(await page.locator('#gallery figure').count(), story.images.length, 'all localized gallery images should render');
   assert.equal(await page.locator('#map-section').isVisible(), true, 'verified map location should render');
@@ -55,6 +56,9 @@ async function main() {
   await page.locator('[data-lang="en"]').click();
   await page.waitForFunction(() => document.documentElement.lang === 'en');
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
+  assert.equal(await page.locator('html').getAttribute('dir'), 'ltr');
+  assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.en.caption), 'gallery caption should switch to English');
+  assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n.en.title), 'source title should switch to English');
   assert.equal(await page.locator('#quiz .q').count(), story.quiz.length);
   const firstCorrect = story.quiz[0].correct_option;
   await page.locator('#quiz .q').first().locator('.options button').nth(firstCorrect).click();
@@ -74,6 +78,8 @@ async function main() {
   await mobile.locator('[data-lang="fr"]').click();
   await mobile.waitForFunction(() => document.documentElement.lang === 'fr');
   assert.equal(await mobile.locator('#title').textContent(), story.i18n.fr.title);
+  assert.equal(await mobile.locator('html').getAttribute('dir'), 'ltr');
+  assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.fr.caption), 'gallery caption should switch to French');
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 1, 'mobile story page must not overflow horizontally; measured ' + overflow + 'px');
   await mobile.screenshot({ path: path.join(artifactDir, 'v2-story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
