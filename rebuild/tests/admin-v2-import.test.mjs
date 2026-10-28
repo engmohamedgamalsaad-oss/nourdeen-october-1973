@@ -95,4 +95,5 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   assert.equal(requires(false, { story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
   assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
   assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
+  assert.match(html, /if\(isV2OnlyDraftRecord\(it\)\)\{aiFail\('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة\./, 'reimport must not silently clear a V2-only review gate');
 });
