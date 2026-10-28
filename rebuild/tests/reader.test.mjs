@@ -27,7 +27,8 @@ test('V2 reader renders story, gallery, quiz and source sections from one packag
   assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
   assert.match(js, /SECTION_PALETTE/);
   assert.match(js, /initReactions/);
-  assert.match(js, /openLightbox/);\n  assert.match(js, /showImageFallback/);
+  assert.match(js, /openLightbox/);
+  assert.match(js, /showImageFallback/);
 });
 
 test('V2 reader refuses to silently fall back to a legacy package', () => {
