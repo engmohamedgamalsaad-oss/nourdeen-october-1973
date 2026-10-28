@@ -37,7 +37,7 @@
   var status=el('p','kh-world-status');status.dataset.worldText='loading';
   var listTitle=el('h3');listTitle.dataset.worldText='stories';
   var list=el('div','kh-world-list');
-  var link=el('a','btn ghost');link.href='index.html#map';link.dataset.worldText='map';
+  var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
   side.append(hint,status,listTitle,list,link);
   stage.append(canvas,side);
   wrap.append(head,stage);
