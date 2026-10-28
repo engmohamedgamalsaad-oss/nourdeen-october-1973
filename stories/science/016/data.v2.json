@@ -854,5 +854,15 @@
       }
     }
   ],
-  "map_location": null
+  "map_location": {
+    "lat": 30.0277,
+    "lng": 31.2085,
+    "place": {
+      "ar": "جامعة القاهرة، الجيزة — الجامعة التي درّس فيها علي مصطفى مشرفة وتولى عمادة كلية العلوم بها.",
+      "en": "Cairo University, Giza — where Ali Mostafa Mosharafa taught and served as dean of the Faculty of Science.",
+      "fr": "Université du Caire, Gizeh — où Ali Mostafa Mosharafa a enseigné et dirigé la faculté des sciences.",
+      "it": "Università del Cairo, Giza — dove Ali Mostafa Mosharafa insegnò e fu preside della Facoltà di Scienze.",
+      "de": "Universität Kairo, Giza — dort lehrte Ali Mostafa Mosharafa und war Dekan der naturwissenschaftlichen Fakultät."
+    }
+  }
 }
