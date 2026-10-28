@@ -75,7 +75,6 @@
     "images": {
       "type": "array",
       "minItems": 2,
-      "maxItems": 5,
       "items": {
         "$ref": "#/$defs/image"
       }
@@ -115,7 +114,6 @@
     "quiz": {
       "type": "array",
       "minItems": 5,
-      "maxItems": 5,
       "items": {
         "$ref": "#/$defs/question"
       }

@@ -79,7 +79,7 @@ f.addEventListener('submit',async function(e){
  if(v('body').length<50){say('err','الحكاية قصيرة؛ اكتب 50 حرفًا على الأقل.');return}
  if(!$('consent').checked){say('err','لا بد من الموافقة على عرض الاسم الأول والصف بعد المراجعة.');return}
  try{var last=+localStorage.getItem('kh_last_submit')||0;if(Date.now()-last<60000){say('err','انتظر دقيقة قبل إرسال حكاية أخرى.');return}}catch(x){}
- var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),original_body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending'};
+ var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),original_body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending',story_meta:{v2_contract_required:true,source:'public_submission'}};
  btn.disabled=true;
  try{
   var r=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});

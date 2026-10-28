@@ -24,7 +24,7 @@ const path = require('node:path');
 const ROOT = process.cwd();
 const LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 const HOME_BUTTON = { ar: 0, en: 1, fr: 2, it: 3, de: 4 };
-const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html']);
+const ADMIN = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html', 'rebuild/reader.html', 'rebuild/package-review.html']);
 const out = (() => { const i = process.argv.indexOf('--out'); return i > 0 ? process.argv[i + 1] : ''; })();
 const screenshotDir = path.join(ROOT, 'language-audit-screenshots');
 fs.mkdirSync(screenshotDir, { recursive: true });
@@ -676,8 +676,8 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     cover: localizedImage('cover'),
     images: [{ ...localizedImage('gallery-one'), id: 'image-1' }, { ...localizedImage('gallery-two'), id: 'image-2' }],
     sources: [
-      { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ', url: 'https://example.org/archive/one' },
-      { title: 'Archive reference two', organization: 'جامعة القاهرة', url: 'https://example.org/archive/two' }
+      { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ', url: 'https://example.org/archive/one', i18n: Object.fromEntries(langs.map((lang) => [lang, { title: 'Archive reference one', organization: 'المتحف القومي للتاريخ' }])) },
+      { title: 'Archive reference two', organization: 'جامعة القاهرة', url: 'https://example.org/archive/two', i18n: Object.fromEntries(langs.map((lang) => [lang, { title: 'Archive reference two', organization: 'جامعة القاهرة' }])) }
     ],
     quiz: Array.from({ length: 5 }, (_, i) => ({
       id: 'question-' + (i + 1),

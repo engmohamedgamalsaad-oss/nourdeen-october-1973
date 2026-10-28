@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>مراجعة حزمة حكاية V2 | خالدون عبر التاريخ</title>
+<style>
+:root{color-scheme:dark;--bg:#09171d;--panel:#122830;--line:#36515a;--text:#f6f0e4;--muted:#b9c8c8;--accent:#c39a5a;--bad:#ffb4a9;--good:#a7e2bb}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.8 system-ui,"Segoe UI",sans-serif}
+header{padding:18px;border-bottom:1px solid var(--line);background:#0b1e25;position:sticky;top:0;z-index:2}
+header,main{max-width:1050px;margin:auto}main{padding:20px 14px 60px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+h1,h2{margin:0 0 10px}h1{font-size:1.35rem;color:var(--accent)}h2{font-size:1.1rem;color:var(--accent)}
+p{margin:8px 0}.muted{color:var(--muted)}.warning{border-inline-start:4px solid var(--accent);padding:10px 12px;background:#2b281f;border-radius:8px}
+label,button,select,input{font:inherit}button,select,input[type=file]{background:#0b1e25;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px 11px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.status{font-weight:700}.bad{color:var(--bad)}.good{color:var(--good)}
+.story-title{font-size:1.6rem;font-weight:800}.block{border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;white-space:pre-wrap}.karma{border-inline-start:4px solid var(--accent)}figure{margin:12px 0}img{max-width:100%;max-height:360px;object-fit:contain;border-radius:10px}a{color:#f0cc8d;overflow-wrap:anywhere}li{margin:7px 0}ul{padding-inline-start:22px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;direction:rtl;text-align:right}.hidden{display:none!important}
+</style>
+</head>
+<body>
+<header><h1>مراجعة حزمة الحكاية — خالدون عبر التاريخ</h1><div class="muted">أداة مراجعة محلية فقط: لا تحفظ على Supabase ولا تنشر إلى الموقع.</div></header>
+<main>
+<section class="panel">
+<h2>١. اختيار الحزمة</h2>
+<div class="row"><input id="file" type="file" accept=".json,application/json"><label for="lang">لغة المعاينة</label><select id="lang"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="de">Deutsch</option></select></div>
+<p id="status" class="status">اختر ملف JSON بصيغة KHALEDOON_STORY_V2.</p>
+<div class="warning">نجاح الفحص البنيوي لا يثبت صحة المعلومات التاريخية أو جودة الترجمة أو قانونية استخدام الصور. يلزم اعتماد بشري قبل النشر.</div>
+</section>
+<section id="audit" class="panel hidden"><h2>٢. نتيجة الفحص البنيوي</h2><ul id="issues"></ul><p id="counts" class="muted"></p></section>
+<section id="preview" class="hidden">
+<section class="panel"><div id="section" class="muted"></div><div id="title" class="story-title"></div><h2 id="subtitle"></h2><p id="summary"></p><div id="cover"></div></section>
+<section class="panel"><details><summary>عرض النص الأصلي المحفوظ للمقارنة</summary><pre id="original-body" lang="ar" dir="rtl"></pre></details></section>
+<section class="panel"><h2>٣. نص الحكاية</h2><div id="blocks"></div><p id="history-note"></p></section>
+<section id="map-section" class="panel hidden"><h2>خريطة الحكاية</h2><p id="map-place"></p><a id="map-link" target="_blank" rel="noopener noreferrer">فتح الموقع على OpenStreetMap</a></section>
+<section class="panel"><h2>٤. الصور وحقوق الاستخدام</h2><div id="images"></div></section>
+<section class="panel"><h2>٥. الاختبار</h2><div id="quiz"></div></section>
+<section class="panel"><h2>٦. المصادر</h2><ul id="sources"></ul></section>
+</section>
+</main>
+<script>
+(function(){
+'use strict';
+const langs=['ar','en','fr','it','de'];let story=null;
+const $=id=>document.getElementById(id);
+function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n}
+function link(url,label){if(typeof url!=='string'||!/^https:\/\//i.test(url))return node('span',label);const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
+function listIssues(s){
+ const out=[];if(!s||typeof s!=='object'||Array.isArray(s))return ['الملف لازم يحتوي على كائن JSON.'];
+ if(s.format!=='KHALEDOON_STORY_V2')out.push('format لازم يساوي KHALEDOON_STORY_V2.');
+ for(const k of ['slug','section','design','original_body','i18n','cover','images','sources','quiz'])if(!(k in s))out.push('حقل أساسي ناقص: '+k);
+ for(const l of langs){const t=s.i18n&&s.i18n[l];if(!t){out.push('الترجمة ناقصة: '+l);continue}
+  for(const k of ['title','subtitle','summary'])if(typeof t[k]!=='string'||!t[k].trim())out.push(l+': الحقل '+k+' ناقص.');
+  if(!Array.isArray(t.blocks)||t.blocks.length<3)out.push(l+': يلزم 3 مقاطع سردية على الأقل.');
+  else t.blocks.forEach((b,i)=>{if(!b||!['paragraph','did_you_know'].includes(b.type)||!['karma','narrator'].includes(b.speaker)||typeof b.text!=='string'||!b.text.trim())out.push(l+': المقطع '+(i+1)+' غير مكتمل.')});
+ }
+ if(!s.cover||!s.cover.source_url||!s.cover.source_name||!s.cover.rights)out.push('بيانات مصدر/حقوق الغلاف ناقصة.');
+ if(s.cover&&(!/^https:\/\//i.test(String(s.cover.source_url||''))))out.push('رابط مصدر الغلاف يجب أن يستخدم HTTPS.');
+ if(!Array.isArray(s.images)||s.images.length<2)out.push('يلزم صورتان على الأقل.');
+ for(const [i,im] of (Array.isArray(s.images)?s.images:[]).entries()){if(!im.source_url||!im.source_name||!im.rights||!im.i18n)out.push('بيانات المصدر أو الحقوق ناقصة للصورة '+(i+1)+'.');if(!/^https:\/\//i.test(String(im.source_url||'')))out.push('رابط مصدر الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');if(im.url&&!/^https:\/\//i.test(String(im.url)))out.push('رابط الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');}
+ if(!Array.isArray(s.sources)||s.sources.length<2)out.push('يلزم مصدران على الأقل.');
+ for(const [i,src] of (Array.isArray(s.sources)?s.sources:[]).entries()){
+  if(!src||!src.url||!src.title||!src.organization||!src.i18n){out.push('بيانات المصدر '+(i+1)+' أو ترجماته ناقصة.');continue}
+  if(!/^https:\/\//i.test(String(src.url)))out.push('رابط المصدر '+(i+1)+' يجب أن يستخدم HTTPS.');
+  for(const l of langs){const loc=src.i18n[l];if(!loc||!loc.title||!loc.organization)out.push('المصدر '+(i+1)+' غير مكتمل باللغة '+l+'.')}
+ }
+ if(!Array.isArray(s.quiz)||s.quiz.length<5)out.push('يلزم خمسة أسئلة على الأقل.');
+ for(const [i,q] of (Array.isArray(s.quiz)?s.quiz:[]).entries())for(const l of langs){const t=q.i18n&&q.i18n[l];if(!t||!t.question||!Array.isArray(t.options)||t.options.length!==4||!t.explanation)out.push('السؤال '+(i+1)+' ناقص أو غير مترجم بالكامل للغة '+l+'.')}
+ return [...new Set(out)];
+}
+function renderImage(host,im,lang,label){const t=im.i18n&&im.i18n[lang]||{};const box=node('article');box.appendChild(node('h3',label));if(im.url&&/^https:\/\//i.test(im.url)){const fig=node('figure');const img=node('img');img.src=im.url;img.alt=t.alt||'';img.loading='lazy';img.referrerPolicy='no-referrer';fig.appendChild(img);box.appendChild(fig)}box.appendChild(node('p',t.caption||'لا يوجد تعليق مترجم.'));box.appendChild(node('p','المصدر: '+(t.source_name||im.source_name||'غير محدد')));box.appendChild(node('p','الحقوق: '+(t.rights||im.rights||'غير محددة')));if(im.source_url)box.appendChild(link(im.source_url,'فتح صفحة المصدر والترخيص'));host.appendChild(box)}
+function show(){
+ if(!story)return;const l=$('lang').value,t=story.i18n[l];document.documentElement.lang=l;document.documentElement.dir=l==='ar'?'rtl':'ltr';
+ $('section').textContent='القسم: '+story.section+' · التصميم: '+(story.design&&story.design.variant||'غير محدد');$('title').textContent=t.title;$('subtitle').textContent=t.subtitle;$('summary').textContent=t.summary;
+ $('cover').replaceChildren();renderImage($('cover'),story.cover,l,'الغلاف');
+ $('blocks').replaceChildren();for(const b of t.blocks){const el=node('article',undefined,'block '+(b.speaker==='karma'?'karma':''));el.appendChild(node('strong',b.speaker==='karma'?'كارما':'الراوي'));el.appendChild(node('p',b.text));$('blocks').appendChild(el)}
+ $('original-body').textContent=story.original_body||'لا يوجد نص أصلي محفوظ في هذه الحزمة.';
+ $('history-note').textContent=t.history_note||'لا توجد ملاحظة تاريخية مترجمة.';
+ const map=story.map_location;$('map-section').classList.toggle('hidden',!map);
+ if(map){$('map-place').textContent=map.place[l];$('map-link').href='https://www.openstreetmap.org/?mlat='+encodeURIComponent(map.lat)+'&mlon='+encodeURIComponent(map.lng)+'#map=13/'+encodeURIComponent(map.lat)+'/'+encodeURIComponent(map.lng)}
+ else $('map-link').removeAttribute('href');
+ $('images').replaceChildren();story.images.forEach((im,i)=>renderImage($('images'),im,l,'الصورة '+(i+1)));
+ $('quiz').replaceChildren();story.quiz.forEach((q,i)=>{const qt=q.i18n[l];const el=node('article',undefined,'block');el.appendChild(node('strong',(i+1)+'. '+qt.question));const ul=node('ul');qt.options.forEach((o,j)=>{const li=node('li',o+(j===q.correct_option?' ✓':''));ul.appendChild(li)});el.appendChild(ul);el.appendChild(node('p',qt.explanation));$('quiz').appendChild(el)});
+ $('sources').replaceChildren();story.sources.forEach(s=>{const li=node('li');const localized=s.i18n&&s.i18n[l]||s;li.appendChild(link(s.url,localized.title+' — '+localized.organization));$('sources').appendChild(li)});
+ $('preview').classList.remove('hidden');
+}
+function loadPackage(parsed,fromDraft){
+ story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
+ const issues=listIssues(story);issues.forEach(x=>$('issues').appendChild(node('li',x,'bad')));
+ $('counts').textContent='اللغات: '+langs.length+' · الأسئلة: '+(story.quiz||[]).length+' · الصور: '+(story.images||[]).length+' · المصادر: '+(story.sources||[]).length;
+ $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':(fromDraft?'تم تحميل مسودة V2 المحفوظة. هذه معاينة للقراءة فقط ولا تنشر الحكاية.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.');
+ $('status').className='status '+(issues.length?'bad':'good');
+ if(!issues.length)$('issues').appendChild(node('li','لا توجد أخطاء بنيوية أولية.','good'));
+ show();
+}
+$('file').addEventListener('change',async e=>{story=null;$('preview').classList.add('hidden');$('audit').classList.remove('hidden');$('issues').replaceChildren();const file=e.target.files&&e.target.files[0];if(!file)return;
+ try{loadPackage(JSON.parse(await file.text()),false)}
+ catch(err){story=null;$('status').textContent='تعذّر قراءة JSON: '+err.message;$('status').className='status bad';$('issues').appendChild(node('li','ملف JSON غير صالح.','bad'))}
+});
+if(new URLSearchParams(location.search).get('draft')==='1'){
+ try{const raw=localStorage.getItem('kh-v2-review-package');if(!raw)throw new Error('لا توجد حزمة V2 محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
+ catch(err){$('audit').classList.remove('hidden');$('status').textContent=err.message;$('status').className='status bad';$('issues').replaceChildren(node('li',err.message,'bad'))}
+}
+$('lang').addEventListener('change',show);
+})();
+</script>
+</body></html>

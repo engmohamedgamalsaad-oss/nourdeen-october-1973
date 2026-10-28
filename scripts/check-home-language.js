@@ -20,7 +20,7 @@ const SUPPORTED = ['ar', 'en', 'fr', 'it', 'de'];
 /* الترجمة الألمانية مدمجة في مصدر اللغة المشترك؛ يمنع الرجوع إلى ملف منفصل قديم. */
 const LEGACY_I18N_RE = /khaledoon(?:-pages-i18n|-i18n-extra)?\.js/;
 /* لوحات الإدارة: ليست صفحات زوار، ولا تحمّل سكربت اللغة. */
-const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html']);
+const ADMIN_PAGES = new Set(['admin.html', 'admin-all.html', 'khaledoon/admin.html', 'khaledoon/preview.html', 'khaledoon/prompts-admin.html', 'khaledoon/sections-admin.html', 'khaledoon/story-builder.html', 'rebuild/reader.html', 'rebuild/package-review.html']);
 /* تعارضات موثّقة تنتظر قرار صاحب المشروع (لا تُعدَّل بصمت). */
 const KNOWN_LANG_PARAM_LINKS = {
   'read.html': 'رابط «اقرأ بالعربية» داخل صفحة قراءة حكاية الطلاب يضيف ?lang=ar، والقفل الموحد يزيله (موثّق في التقرير).'
@@ -185,6 +185,19 @@ for (const rel of htmlFiles) {
   if (langLinks && !KNOWN_LANG_PARAM_LINKS[rel]) fail(`${rel} contains ${langLinks} hard-coded ?lang= link(s); all pages share the saved language.`);
 
   if (isAdmin) continue;
+
+  /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
+  if (rel === 'rebuild/reader.html' && html.includes('data-kh-v2-reader')) {
+    const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
+    for (const lang of v2Languages) {
+      if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
+    }
+    if (!html.includes('id="theme-toggle"')) fail('V2 reader must expose its light/dark theme toggle.');
+    continue;
+  }
+
+  /* Standalone local V2 package review utility; it deliberately does not load legacy shared-language code. */
+  if (rel === 'rebuild/package-review.html' && html.includes('KHALEDOON_STORY_V2')) continue;
 
   /* locate the shared-script tag(s) */
   const tags = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']*home-language-only\.js[^"']*)["'][^>]*>/gi)];

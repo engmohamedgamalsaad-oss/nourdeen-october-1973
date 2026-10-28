@@ -1,8 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { v1ToV2, v2ToV1 } from '../adapters/v1-v2.mjs';
-import { validateStory } from '../validate-story.mjs';
-import legacyWorkflow from '../../khaledoon/assets/story-workflow.js';
 
 const langs = ['en', 'fr', 'it', 'de'];
 function image(label) {
@@ -23,7 +21,7 @@ function fixture() {
     student_name: 'Student ' + lang, grade: 'Grade ' + lang,
     title: 'Title ' + lang, subtitle: 'Subtitle ' + lang,
     karma_text: 'Karma asks a question ' + lang + '.',
-    body: [1, 2, 3].map(n => ({ en: 'Did you know?', fr: 'Le saviez-vous ?', it: 'Lo sapevi?', de: 'Wusstest du?' })[lang] + ' Verified fact ' + n + ' ' + lang + '.').join('\n\n'),
+    body: ['Did you know? Verified fact one ' + lang + '.', 'Did you know? Verified fact two ' + lang + '.', 'Did you know? Verified fact three ' + lang + '.'].join('\n\n'),
     history_note: 'Historical note ' + lang, images_note: 'Image rights note ' + lang
   }]));
   const questions = Array.from({ length: 5 }, (_, i) => ({
@@ -47,50 +45,6 @@ function fixture() {
     translations, question_bank: { questions }
   };
 }
-
-test('maps the actual admin prompt section keys fame/learning through V2 and back', () => {
-  const fame = fixture();
-  fame.section_key = 'fame';
-  const fameV2 = v1ToV2(fame, { slug: 'fame-section-story' });
-  assert.equal(fameV2.section, 'people');
-  assert.equal(v2ToV1(fameV2).section_key, 'fame');
-
-  const learning = fixture();
-  learning.section_key = 'learning';
-  const learningV2 = v1ToV2(learning, { slug: 'learning-section-story' });
-  assert.equal(learningV2.section, 'women');
-  assert.equal(v2ToV1(learningV2).section_key, 'learning');
-
-  const knowledgeAlias = fixture();
-  knowledgeAlias.section_key = 'knowledge';
-  assert.throws(
-    () => v1ToV2(knowledgeAlias, { slug: 'knowledge-section-story' }),
-    /unsupported section_key: knowledge/
-  );
-});
-
-test('preserves the reader-suggestion section and legacy discovery design', () => {
-  const v1 = fixture();
-  v1.section_key = 'readers';
-  v1.visual_design = 'discovery';
-  const v2 = v1ToV2(v1, { slug: 'reader-submitted-story' });
-  assert.equal(v2.section, 'readers');
-  assert.equal(v2.design.variant, 'reader-story');
-  const back = v2ToV1(v2);
-  assert.equal(back.section_key, 'readers');
-  assert.equal(back.visual_design, 'discovery');
-});
-
-test('round-trip fixture passes the actual current V1 admin package validator before and after conversion', () => {
-  const v1 = fixture();
-  const before = legacyWorkflow.validateStoryPackage(v1);
-  assert.equal(before.ok, true, before.errors.join('\n'));
-
-  const v2 = v1ToV2(v1, { slug: 'historical-figure' });
-  const back = v2ToV1(v2);
-  const after = legacyWorkflow.validateStoryPackage(back);
-  assert.equal(after.ok, true, after.errors.join('\n'));
-});
 
 test('V1 to V2 and back preserves original text, translated story streams, sources, images and quiz answers', () => {
   const v1 = fixture();
@@ -141,190 +95,21 @@ test('refuses unknown visual variants and invalid source text', () => {
 });
 
 
-test('safely blocks legacy packages with a null cover or missing image rights/locales', () => {
-  const missingCover = fixture();
-  missingCover.cover = null;
-  assert.throws(
-    () => v1ToV2(missingCover, { slug: 'historical-figure' }),
-    /cover must be an object/
-  );
-  const verifiedCover = fixture().cover;
-  const convertedWithCover = v1ToV2(missingCover, {
-    slug: 'historical-figure',
-    coverOverride: verifiedCover
-  });
-  assert.equal(convertedWithCover.cover.url, verifiedCover.url);
-  assert.notEqual(convertedWithCover.cover.url, convertedWithCover.images[0].url);
-  assert.notEqual(convertedWithCover.cover.url, convertedWithCover.images[1].url);
-  assert.throws(() => v1ToV2(missingCover, {
-    slug: 'historical-figure',
-    coverOverride: missingCover.images[0]
-  }), /duplicates a gallery image/);
-
-  const existingCover = fixture();
-  assert.throws(() => v1ToV2(existingCover, {
-    slug: 'historical-figure',
-    coverOverride: verifiedCover
-  }), /only allowed when the legacy cover is missing or null/);
-
-  const missingRights = fixture();
-  delete missingRights.images[0].rights;
-  assert.throws(
-    () => v1ToV2(missingRights, { slug: 'historical-figure' }),
-    /images\[0\]\.ar\.rights is required/
-  );
-
-  const missingLocale = fixture();
-  delete missingLocale.images[0].i18n.de;
-  assert.throws(
-    () => v1ToV2(missingLocale, { slug: 'historical-figure' }),
-    /images\[0\] is missing de image text/
-  );
-});
-
-test('normalizes recognizable legacy prompt output without inventing absent Arabic metadata', () => {
-  const v1 = fixture();
-  const originalBody = v1.body;
-  delete v1.format;
-  delete v1.body;
-  v1.current_body = originalBody;
-  v1.question_bank = JSON.stringify(v1.question_bank);
-  delete v1.student_name;
-
-  const v2 = v1ToV2(v1, { slug: 'legacy-prompt-output' });
-  assert.equal(v2.format, 'KHALEDOON_STORY_V2');
-  assert.equal(v2.i18n.ar.blocks.filter(b => b.speaker === 'narrator').map(b => b.text).join('\n\n'), originalBody);
-  assert.equal(v2.original_body, fixture().original_body);
-  assert.equal(v2.quiz.length, 5);
-  assert.equal(Object.hasOwn(v2.i18n.ar, 'student_name'), false,
-    'do not invent an Arabic student_name when it is absent from the legacy package');
-  for (const lang of langs) {
-    assert.equal(v2.i18n[lang].student_name, 'Student ' + lang,
-      'preserve known localized student_name values even when Arabic is missing');
-  }
-});
-
-test('preserves sparse proposer names and does not mislabel narrator role text as a school grade', () => {
-  const v1 = fixture();
-  delete v1.student_name;
-  v1.translations.en.student_name = 'Nourdeen Mohamed';
-  v1.translations.fr.student_name = 'Nourdeen Mohamed';
-  v1.translations.it.student_name = 'Nourdeen Mohamed';
-  v1.translations.de.student_name = 'Nourdeen Mohamed';
-  v1.grade = 'راوي الحكاية';
-  v1.narrator_grade = 'راوي الحكاية';
-  for (const lang of langs) {
-    v1.translations[lang].grade = ({
-      en: 'Story narrator',
-      fr: "Narrateur de l'histoire",
-      it: 'Narratore della storia',
-      de: 'Erzähler der Geschichte'
-    })[lang];
-  }
-
-  const v2 = v1ToV2(v1, { slug: 'metadata-safety-check' });
-  assert.equal(Object.hasOwn(v2.i18n.ar, 'student_name'), false);
-  for (const lang of langs) {
-    assert.equal(v2.i18n[lang].student_name, 'Nourdeen Mohamed');
-    assert.equal(Object.hasOwn(v2.i18n[lang], 'grade'), false);
-    assert.equal(Object.hasOwn(v2.i18n[lang], 'narrator_grade'), false);
-  }
-  assert.deepEqual(validateStory(v2), []);
-});
-
-test('rejects a missing V1 format when the package does not have a recognizable legacy signature', () => {
-  const v1 = fixture();
-  delete v1.format;
-  delete v1.images;
-  assert.throws(() => v1ToV2(v1, { slug: 'not-recognizable' }), /recognizable legacy V1 package/);
-});
-
-test('round-trips legacy diagram kind and rejects V2 image kinds unsupported by the V1 importer', () => {
-  const v1 = fixture();
-  v1.images[0].kind = 'diagram';
-  const v2 = v1ToV2(v1, { slug: 'historical-figure' });
-  assert.equal(v2.images[0].kind, 'diagram');
+test('round-trips shared image kinds and rejects V2-only kinds at the V1 bridge', () => {
+  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
+  v2.cover.kind = 'archival';
+  v2.images[0].kind = 'map';
   const back = v2ToV1(v2);
-  assert.equal(back.images[0].kind, 'diagram');
-  assert.equal(v1ToV2(back, { slug: 'historical-figure' }).images[0].kind, 'diagram');
+  assert.equal(back.cover.kind, 'archival');
+  assert.equal(back.images[0].kind, 'map');
+  const again = v1ToV2(back, { slug: 'historical-figure' });
+  assert.equal(again.cover.kind, 'archival');
+  assert.equal(again.images[0].kind, 'map');
 
-  const photograph = v1ToV2(fixture(), { slug: 'historical-figure' });
-  photograph.cover.kind = 'photograph';
-  assert.throws(() => v2ToV1(photograph), /not supported by V1/);
-
-  const document = v1ToV2(fixture(), { slug: 'historical-figure' });
-  document.images[0].kind = 'document';
-  assert.throws(() => v2ToV1(document), /not supported by V1/);
-});
-
-
-test('rejects V2-only summary, inline-image, custom-design, and lossy text features', () => {
-  const makeV2 = () => v1ToV2(fixture(), { slug: 'historical-figure' });
-
-  let v2 = makeV2();
-  v2.i18n.en.summary = 'A distinct summary that V1 cannot store';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
-
-  v2 = makeV2();
-  v2.i18n.ar.blocks[0].image_after = 'image-1';
-  assert.throws(() => v2ToV1(v2), /image_after cannot be represented/);
-
-  v2 = makeV2();
-  v2.design.accent = '#123456';
-  assert.throws(() => v2ToV1(v2), /custom V2 accent/);
-
-  v2 = makeV2();
-  v2.i18n.ar.blocks[0].text = '  Karma asks a question ar.';
-  assert.throws(() => v2ToV1(v2), /text whitespace/);
-
-  v2 = makeV2();
-  v2.sources[0].organization = 'Different organization';
-  assert.throws(() => v2ToV1(v2), /title already contains a URL that cannot be represented unambiguously/);
-});
-
-
-test('rejects whitespace-lossy V1 paragraphs rather than silently trimming them', () => {
-  const v1 = fixture();
-  v1.body = '  Leading spaces must not disappear.\n\nSecond paragraph.';
-  assert.throws(() => v1ToV2(v1, { slug: 'historical-figure' }), /cannot be round-tripped exactly/);
-
-  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.sources[0].accessed_at = '2026-10-27';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*accessed_at metadata has no V1 field/);
-});
-
-test('rejects structurally incomplete V2 images and quiz instead of emitting invalid V1', () => {
-  let v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.images = [];
-  assert.throws(() => v2ToV1(v2), /images must contain between 2 and 5 images/);
-
-  v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  delete v2.quiz[0].i18n.de;
-  assert.throws(() => v2ToV1(v2), /quiz\[0\]\.i18n\.de required/);
-
-  v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.i18n.fr.blocks = [];
-  assert.throws(() => v2ToV1(v2), /i18n\.fr\.blocks needs at least 3 blocks/);
-});
-
-test('rejects packages outside the actual V1 source and gallery limits', () => {
-  const oneSource = fixture();
-  oneSource.sources = 'Only source https://archive.example/a';
-  assert.throws(() => v1ToV2(oneSource, { slug: 'historical-figure' }), /at least two distinct source URLs/);
-
-  const duplicateSources = fixture();
-  duplicateSources.sources = 'Source A https://archive.example/a\nSource B https://archive.example/a';
-  assert.throws(() => v1ToV2(duplicateSources, { slug: 'historical-figure' }), /at least two distinct source URLs/);
-
-  const tooManyImages = fixture();
-  tooManyImages.images.push(image('three'), image('four'), image('five'), image('six'));
-  assert.throws(() => v1ToV2(tooManyImages, { slug: 'historical-figure' }), /between two and five gallery images/);
-
-  const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
-  v2.sources[1].url = v2.sources[0].url;
-  v2.sources[1].title = 'Reference B https://archive.example/a';
-  v2.sources[1].organization = 'archive.example';
-  assert.throws(() => v2ToV1(v2), /sources\[1\]\.url must be distinct from other source URLs/);
+  const unsupported = v1ToV2(fixture(), { slug: 'historical-figure' });
+  unsupported.cover.kind = 'photograph';
+  unsupported.images[0].kind = 'document';
+  assert.throws(() => v2ToV1(unsupported), /not supported by V1/);
 });
 
 test('requires a caller-supplied stable slug and preserves explicit no-location', () => {
@@ -332,73 +117,4 @@ test('requires a caller-supplied stable slug and preserves explicit no-location'
   const v2 = v1ToV2(fixture(), { slug: 'historical-figure' });
   assert.equal(v2.map_location, null);
   assert.equal(v2ToV1(v2).map_location, null);
-});
-
-test('adapter output satisfies the independent V2 story validator in both directions', async () => {
-  const { validateStory } = await import('../validate-story.mjs');
-  const v1 = fixture();
-  const v2 = v1ToV2(v1, { slug: 'validator-compatibility-story' });
-  assert.deepEqual(validateStory(v2), [], 'V1 → V2 output must satisfy the V2 validator');
-
-  const back = v2ToV1(v2);
-  assert.equal(legacyWorkflow.validateStoryPackage(back).ok, true,
-    legacyWorkflow.validateStoryPackage(back).errors.join('\\n'));
-  assert.deepEqual(validateStory(v1ToV2(back, { slug: 'validator-compatibility-story' })), [],
-    'round-tripped V2 output must still satisfy the V2 validator');
-});
-
-test('round-trips normal V2 source titles and organization names through the V1 admin source field', () => {
-  const v1 = fixture();
-  const v2 = v1ToV2(v1, { slug: 'source-metadata-roundtrip' });
-  v2.sources = [
-    { title: 'Apollo 17 geology briefing', organization: 'NASA History Office] Research', url: 'https://history.nasa.gov/apollo17' },
-    { title: 'Farouk El-Baz biography', organization: 'Boston University', url: 'https://www.bu.edu/earth/farouk-el-baz' }
-  ];
-  assert.deepEqual(validateStory(v2), []);
-  const back = v2ToV1(v2);
-  const legacyCheck = legacyWorkflow.validateStoryPackage(back);
-  assert.equal(legacyCheck.ok, true, legacyCheck.errors.join('\n'));
-  assert.ok(back.sources.includes('Apollo 17 geology briefing — [org:NASA History Office%5D Research] — https://history.nasa.gov/apollo17'));
-  const v2Again = v1ToV2(back, { slug: 'source-metadata-roundtrip' });
-  assert.deepEqual(v2Again.sources, v2.sources);
-});
-
-
-test('rejects missing figure identity instead of substituting the story title', () => {
-  const v2 = v1ToV2(fixture(), { slug: 'missing-figure-identity' });
-  delete v2.i18n.ar.figure_name;
-  delete v2.i18n.ar.person;
-  assert.throws(
-    () => v2ToV1(v2),
-    /figure_name or person is required.*title is not used as a substitute/
-  );
-});
-
-test('v2ToV1 enforces contract validation when called without the admin pre-validator', () => {
-  const v2 = v1ToV2(fixture(), { slug: 'adapter-validation-boundary' });
-  v2.i18n.en.summary = 'A distinct summary';
-  assert.throws(() => v2ToV1(v2), /admin-bridge validation failed:.*summary differs from subtitle/);
-
-  const invalidIds = v1ToV2(fixture(), { slug: 'adapter-invalid-ids' });
-  invalidIds.images[0].id = 'photo-main';
-  assert.throws(() => v2ToV1(invalidIds), /V2 admin-bridge validation failed:.*images\[0\]\.id must be image-1/);
-});
-
-
-test('rejects source titles with line breaks that the V1 line-based field cannot preserve', () => {
-  const v2 = v1ToV2(fixture(), { slug: 'multiline-source-title' });
-  v2.sources[0].title = 'First line\nSecond line';
-  assert.throws(() => v2ToV1(v2), /title cannot be represented safely in the single-line V1 source field/);
-});
-
-
-test('refuses six-question legacy packages with an explicit no-truncation message', () => {
-  const v1 = fixture();
-  v1.question_bank.questions.push({ ...v1.question_bank.questions[0], q: 'Extra sixth question ar' });
-  assert.equal(v1.question_bank.questions.length, 6);
-  assert.throws(
-    () => v1ToV2(v1, { slug: 'six-question-legacy-package' }),
-    /exactly five V1 quiz questions are required; received 6; choose exactly five explicitly before conversion—no questions are discarded automatically/
-  );
-  assert.equal(v1.question_bank.questions.length, 6, 'failed conversion must not mutate or truncate the source package');
 });

@@ -34,7 +34,11 @@ test('every admin submission row exposes edit and move actions, including closed
 test('publisher moves a story in a review PR and preserves the previous story URL with a redirect', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
-  assert.ok(publisher.includes('2026-10-27-pr-move-v2'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('function contentForSafetyScan(file:'), 'legacy V1 publisher must inspect decoded file content');
+  assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded V2 markers must be decoded before the V1 artifact guard');
+  assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
+  assert.ok(publisher.includes('contentForSafetyScan(file)'), 'V2 rejection must scan decoded content, not only the submitted base64 string');
+  assert.ok(publisher.includes('2026-10-28-v2-draft-guard-1'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
@@ -569,7 +573,8 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href='preview.html?story=1&submission='"));
+  assert.ok(admin.includes("aiPreviewPopup.location.href=v2OnlyDraft?'../rebuild/package-review.html?draft=1&v=20261028-v2-review-1':'preview.html?story=1&submission='"), 'V2-only drafts must use the full-package reviewer while V1 imports retain the legacy preview');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261028-v2-review-1'"), 'manual save-and-preview must also route V2-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
@@ -948,4 +953,23 @@ test('story builder derives the site base path from its current deployment inste
   assert.ok(bundle.includes("var liveUrl=siteBaseUrl()+'/stories/'"), 'legacy story existence checks must use the detected site base path');
   assert.ok(bundle.includes("baseUrl=siteBaseUrl()"), 'generated og:image and local image URLs must use the detected site base path');
   assert.ok(!bundle.includes("location.origin+'/nourdeen-october-1973"), 'builder must not generate incorrect repository URLs when run on localhost or a root-hosted staging site');
+});
+
+
+test('legacy publisher requires a source record and blocks V2-only drafts server-side', function () {
+  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
+  var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
+  assert.ok(publisher.includes('requires_submission_id: true'));
+  assert.ok(publisher.includes('rejects_v2_only_drafts: true'));
+  assert.ok(publisher.includes('body.submission_table'));
+  assert.ok(publisher.includes('body.submission_id'));
+  assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
+  assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
+  assert.ok(publisher.includes('hasV2Artifacts'));
+  assert.ok(publisher.indexOf('const submissionTable') < publisher.indexOf('const ref = await github'), 'submission guard must run before any branch ref lookup');
+  assert.ok(publisher.indexOf('const hasV2Artifacts') < publisher.indexOf('const ref = await github'), 'V2 file rejection must run before any GitHub write path');
+  assert.ok(publisher.includes('return reply(409'));
+  assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
+  assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
+  assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
 });

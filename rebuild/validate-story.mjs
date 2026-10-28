@@ -48,7 +48,7 @@ function imageCheck(im, label, out) {
     }
   }
   if (Object.hasOwn(im, 'id') && !/^[a-z0-9-]+$/.test(im.id || '')) {
-    out.push(label + '.id must be a stable lowercase ID');
+    out.push(label + '.id must be a lowercase stable ID');
   }
 }
 export function validateStory(s) {
@@ -106,9 +106,14 @@ export function validateStory(s) {
   // not a validation error and must never be invented just to fill the schema.
   const preservedFields = ['student_name', 'narrator_name', 'grade', 'narrator_grade', 'history_note', 'images_note', 'figure_name', 'person'];
   for (const field of preservedFields) {
+    const presentSomewhere = LANGUAGES.some(lang => isObject(s.i18n?.[lang]) && Object.hasOwn(s.i18n[lang], field));
+    if (!presentSomewhere) continue;
     for (const lang of LANGUAGES) {
       const locale = s.i18n?.[lang];
-      if (!isObject(locale) || !Object.hasOwn(locale, field)) continue;
+      if (!isObject(locale) || !Object.hasOwn(locale, field)) {
+        out.push('i18n.' + lang + '.' + field + ' required in every locale when used');
+        continue;
+      }
       if (['history_note', 'images_note'].includes(field)) {
         if (typeof locale[field] !== 'string') out.push('i18n.' + lang + '.' + field + ' must be a string when provided');
       } else if (!nonempty(locale[field])) {
@@ -118,7 +123,7 @@ export function validateStory(s) {
   }
 
   imageCheck(s.cover, 'cover', out);
-  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('images must contain between 2 and 5 images');
+  if (!Array.isArray(s.images) || s.images.length < 2) out.push('images must contain at least 2 images');
   const imageIds = new Set();
   for (const [i, im] of (Array.isArray(s.images) ? s.images : []).entries()) {
     imageCheck(im, 'images[' + i + ']', out);
@@ -134,15 +139,24 @@ export function validateStory(s) {
   const sourceUrls = new Set();
   for (const [i, src] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     const label = 'sources[' + i + ']';
-    if (!keysCheck(src, ['title', 'organization', 'url'], ['title', 'organization', 'url', 'accessed_at'], label, out)) continue;
+    if (!keysCheck(src, ['title', 'organization', 'url', 'i18n'], ['title', 'organization', 'url', 'i18n', 'accessed_at'], label, out)) continue;
     for (const key of ['title', 'organization']) if (!nonempty(src[key])) out.push(label + '.' + key + ' required');
     if (!https(src.url)) out.push(label + '.url must be HTTPS');
+    if (!isObject(src.i18n)) out.push(label + '.i18n must be an object with all five locales');
+    else {
+      languageObjectCheck(src.i18n, label + '.i18n', out);
+      for (const lang of LANGUAGES) {
+        const localized = src.i18n[lang], locLabel = label + '.i18n.' + lang;
+        if (!keysCheck(localized, ['title', 'organization'], ['title', 'organization'], locLabel, out)) continue;
+        for (const key of ['title', 'organization']) if (!nonempty(localized[key])) out.push(locLabel + '.' + key + ' required');
+      }
+    }
     if (https(src.url) && sourceUrls.has(src.url)) out.push(label + '.url must be distinct from other source URLs');
     if (https(src.url)) sourceUrls.add(src.url);
     if (Object.hasOwn(src, 'accessed_at') && !nonempty(src.accessed_at)) out.push(label + '.accessed_at must be a non-empty string when provided');
   }
 
-  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('quiz must contain exactly 5 questions');
+  if (!Array.isArray(s.quiz) || s.quiz.length < 5) out.push('quiz must contain at least 5 questions');
   const ids = new Set();
   for (const [i, q] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {
     const label = 'quiz[' + i + ']';
@@ -172,6 +186,8 @@ export function validateStory(s) {
 export function validateForAdminBridge(s) {
   const out = [...validateStory(s)];
   if (!isObject(s)) return out;
+  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('bridge: V1 admin preview supports exactly 5 quiz questions');
+  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('bridge: V1 admin preview supports 2 to 5 images');
   for (const lang of LANGUAGES) {
     const t = s.i18n?.[lang];
     if (!isObject(t)) continue;

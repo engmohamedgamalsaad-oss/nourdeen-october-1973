@@ -1,4 +1,4 @@
-import { validateForAdminBridge } from '../validate-story.mjs?v=20261027-v2-admin-5';
+import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261028-v2-admin-6';
 
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
@@ -106,9 +106,11 @@ function sourcesToV2(value) {
       let organization;
       try { organization = decodeURIComponent(marker[2]); }
       catch { fail('sources line ' + (i + 1) + ' has malformed encoded organization metadata'); }
-      return { title: marker[1], organization, url };
+      const title = marker[1];
+      return { title, organization, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization }])) };
     }
-    return { title: line, organization: hostname, url };
+    const title = line;
+    return { title, organization: hostname, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization: hostname }])) };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
     fail('V1 requires at least two distinct source URLs');
@@ -396,6 +398,89 @@ export function v2ToV1(input) {
     }).join('\n'),
     cover: imageToV1(input.cover),
     images: input.images.map(imageToV1),
+    visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),
+    translations, question_bank
+  };
+}
+
+
+/**
+ * Make a compatibility projection for an admin-only V2 draft.
+ * This projection is intentionally NOT publishable: the caller must store the
+ * complete validated V2 package separately and block the legacy V1 publisher.
+ * It keeps all quiz questions but flattens narrator/Karma block order only in
+ * the legacy projection; the authoritative V2 package remains unchanged.
+ */
+export function v2ToAdminDraft(input) {
+  requireObject(input, 'V2 story draft');
+  const errors = validateStory(input);
+  if (errors.length) fail('V2 story validation failed: ' + errors.join('; '));
+  const section_key = input.section === 'women' ? 'learning'
+    : input.section === 'people' ? 'fame' : input.section;
+  if (!['october','history','science','learning','fame','curriculum','islamic','readers'].includes(section_key)) {
+    fail('V2 section has no admin draft mapping: ' + input.section);
+  }
+  const visual_design = REVERSE_VARIANT[input.design?.variant];
+  if (!visual_design) fail('V2 design variant has no admin draft mapping: ' + input.design?.variant);
+  function projectionImage(image) {
+    requireObject(image, 'V2 draft image');
+    const ar = image.i18n?.ar;
+    if (!isObject(ar)) fail('V2 draft image is missing Arabic metadata');
+    // The old admin schema predates photograph/document kinds. This mapping is
+    // display-only; the exact original kind remains in the stored V2 package.
+    const kind = ['photograph','document'].includes(image.kind) ? 'archival' : image.kind;
+    if (!['archival','illustration','diagram','map'].includes(kind)) fail('Unsupported image kind in admin projection: ' + image.kind);
+    const out = {
+      ...('url' in image ? { url: image.url } : { path: image.path }),
+      alt: ar.alt, caption: ar.caption, kind,
+      source_name: image.source_name, source_url: image.source_url, rights: image.rights,
+      i18n: Object.fromEntries(LEGACY_LANGUAGES.map(lang => [lang, clone(image.i18n[lang])]))
+    };
+    return out;
+  }
+  const translations = {};
+  for (const lang of LEGACY_LANGUAGES) {
+    const src = input.i18n[lang];
+    translations[lang] = {
+      title: src.title, subtitle: src.subtitle,
+      karma_text: textFromBlocks(src.blocks || [], 'karma'),
+      body: textFromBlocks(src.blocks || [], 'narrator'),
+      student_name: src.student_name || input.i18n.ar.student_name || '',
+      grade: src.grade || input.i18n.ar.grade || '',
+      history_note: src.history_note || '',
+      images_note: src.images_note || ({en:'Image source and rights details are preserved in the V2 draft package and require review.',fr:'Les sources et les droits des images sont conservés dans le dossier V2 et doivent être vérifiés.',it:'Le fonti e i diritti delle immagini sono conservati nel pacchetto V2 e devono essere verificati.',de:'Bildquellen und Nutzungsrechte bleiben im V2-Paket erhalten und müssen geprüft werden.'})[lang]
+    };
+  }
+  const question_bank = { questions: input.quiz.map((q, i) => {
+    const ar = q.i18n.ar;
+    return {
+      q: ar.question, o: clone(ar.options), a: q.correct_option, e: ar.explanation,
+      i18n: Object.fromEntries(LEGACY_LANGUAGES.map(lang => [lang, {
+        q: q.i18n[lang].question, o: clone(q.i18n[lang].options), e: q.i18n[lang].explanation
+      }]))
+    };
+  }) };
+  const sources = input.sources.map(source => {
+    const title = source.i18n?.ar?.title || source.title;
+    return title + ' — [org:' + encodeOrganizationMarker(source.organization) + '] — ' + source.url;
+  }).join('\n');
+  const ar = input.i18n.ar;
+  return {
+    format: V1_FORMAT, section_key,
+    figure_name: ar.figure_name || ar.person || ar.title,
+    title: ar.title, subtitle: ar.subtitle,
+    narrator_name: ar.narrator_name || ar.student_name || 'كارما',
+    narrator_grade: ar.narrator_grade || ar.grade || '',
+    student_name: ar.student_name || ar.narrator_name || '',
+    grade: ar.grade || ar.narrator_grade || '',
+    original_body: input.original_body,
+    karma_text: textFromBlocks(ar.blocks || [], 'karma'),
+    body: textFromBlocks(ar.blocks || [], 'narrator'),
+    history_note: ar.history_note || '',
+    sources,
+    images_note: ar.images_note || 'بيانات المصدر والحقوق التفصيلية محفوظة في حزمة V2 وتحتاج إلى مراجعة.',
+    cover: projectionImage(input.cover),
+    images: input.images.map(projectionImage),
     visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),
     translations, question_bank
   };

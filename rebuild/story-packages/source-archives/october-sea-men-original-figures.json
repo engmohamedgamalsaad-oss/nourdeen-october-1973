@@ -1,0 +1,71 @@
+{
+  "source_path": "stories/october/001/index.html",
+  "source_blob_sha": "bf4c92290eb46b6a64a6c9a7f43cd0544ffc84dc",
+  "extraction_note": "Exact figure HTML snippets copied from the currently published page for preservation. Captions/alt text and linked source/rights notes must be reviewed and translated separately; this archive is not a licence grant.",
+  "figure_count": 9,
+  "figures": [
+    {
+      "index": 1,
+      "src": "Egyptian_soldiers_raising_flag.webp",
+      "alt": "جنود مصريون يرفعون العلم المصري",
+      "caption_text_without_small": "جنود مصريون يرفعون العلم في سيناء.",
+      "raw_html": "<figure class=\"image-frame\">\n      <img src=\"Egyptian_soldiers_raising_flag.webp\"\n           alt=\"جنود مصريون يرفعون العلم المصري\"\n           loading=\"lazy\">\n      <figcaption>\n        جنود مصريون يرفعون العلم في سيناء.\n        <small>الصورة توضح سياق النصر البري، وليست صورة للقوات البحرية. للمقارنة التاريخية: <a href=\"https://commons.wikimedia.org/wiki/File:Egyptian_soldiers_during_their_storming_of_the_Bar_Lev_Line.png\" target=\"_blank\" rel=\"noopener\">صورة أرشيفية مشابهة على Wikimedia Commons</a>.</small>\n      </figcaption>\n    </figure>"
+    },
+    {
+      "index": 2,
+      "src": "bab-el-mandeb-map.webp",
+      "alt": "خريطة باب المندب والبحر الأحمر",
+      "caption_text_without_small": "باب المندب والبحر الأحمر",
+      "raw_html": "<figure class=\"image-frame\">\n      <img src=\"bab-el-mandeb-map.webp\"\n           alt=\"خريطة باب المندب والبحر الأحمر\"\n           loading=\"lazy\">\n      <figcaption>\n        باب المندب والبحر الأحمر\n        <small>خريطة توضيحية للموقع الجغرافي. للمقارنة: <a href=\"https://commons.wikimedia.org/wiki/File:Map_of_Bab-el-Mandeb.png\" target=\"_blank\" rel=\"noopener\">خريطة باب المندب على Wikimedia Commons</a>.</small>\n      </figcaption>\n    </figure>"
+    },
+    {
+      "index": 3,
+      "src": "bab-el-mandeb-satellite.jpg",
+      "alt": "صورة فضائية لمنطقة مضيق باب المندب",
+      "caption_text_without_small": "مضيق باب المندب من منظور فضائي",
+      "raw_html": "<figure class=\"image-frame\">\n      <img src=\"bab-el-mandeb-satellite.jpg\"\n           alt=\"صورة فضائية لمنطقة مضيق باب المندب\"\n           loading=\"lazy\">\n      <figcaption>\n        مضيق باب المندب من منظور فضائي\n        <small>صورة توضيحية لطبيعة الممر البحري.</small>\n      </figcaption>\n    </figure>"
+    },
+    {
+      "index": 4,
+      "src": "nabil-01.jpg",
+      "alt": "الربان نبيل عبد الوهاب",
+      "caption_text_without_small": "الربان نبيل عبد الوهاب",
+      "raw_html": "<figure class=\"image-frame\">\n      <img src=\"nabil-01.jpg\"\n           alt=\"الربان نبيل عبد الوهاب\"\n           loading=\"lazy\">\n      <figcaption>الربان نبيل عبد الوهاب</figcaption>\n    </figure>"
+    },
+    {
+      "index": 5,
+      "src": "nabil-02.jpg",
+      "alt": "صورة تاريخية للربان نبيل عبد الوهاب",
+      "caption_text_without_small": "من تاريخ الضفادع البشرية",
+      "raw_html": "<figure class=\"image-frame\">\n        <img src=\"nabil-02.jpg\"\n             alt=\"صورة تاريخية للربان نبيل عبد الوهاب\"\n             loading=\"lazy\">\n        <figcaption>من تاريخ الضفادع البشرية</figcaption>\n      </figure>"
+    },
+    {
+      "index": 6,
+      "src": "nabil-03.jpg",
+      "alt": "صورة تاريخية مرتبطة بالربان نبيل عبد الوهاب",
+      "caption_text_without_small": "رجال البحرية المصرية",
+      "raw_html": "<figure class=\"image-frame\">\n        <img src=\"nabil-03.jpg\"\n             alt=\"صورة تاريخية مرتبطة بالربان نبيل عبد الوهاب\"\n             loading=\"lazy\">\n        <figcaption>رجال البحرية المصرية</figcaption>\n      </figure>"
+    },
+    {
+      "index": 7,
+      "src": "nabil-04.jpg",
+      "alt": "صورة إضافية مرتبطة بالربان نبيل عبد الوهاب",
+      "caption_text_without_small": "من تاريخ القوات البحرية",
+      "raw_html": "<figure class=\"image-frame\">\n        <img src=\"nabil-04.jpg\"\n             alt=\"صورة إضافية مرتبطة بالربان نبيل عبد الوهاب\"\n             loading=\"lazy\">\n        <figcaption>من تاريخ القوات البحرية</figcaption>\n      </figure>"
+    },
+    {
+      "index": 8,
+      "src": "nabil-05.jpg",
+      "alt": "صورة إضافية من حكاية نبيل عبد الوهاب",
+      "caption_text_without_small": "ذكريات من تاريخ البحرية المصرية",
+      "raw_html": "<figure class=\"image-frame\">\n        <img src=\"nabil-05.jpg\"\n             alt=\"صورة إضافية من حكاية نبيل عبد الوهاب\"\n             loading=\"lazy\">\n        <figcaption>ذكريات من تاريخ البحرية المصرية</figcaption>\n      </figure>"
+    },
+    {
+      "index": 9,
+      "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/INSEilat.jpg/330px-INSEilat.jpg",
+      "alt": "المدمرة الإسرائيلية إيلات قبل إغراقها عام 1967",
+      "caption_text_without_small": "المدمرة «إيلات»؛ صورة للسفينة نفسها وليست صورة لحظة إغراقها.",
+      "raw_html": "<figure class=\"image-frame\"><img src=\"https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/INSEilat.jpg/330px-INSEilat.jpg\" alt=\"المدمرة الإسرائيلية إيلات قبل إغراقها عام 1967\" loading=\"lazy\" decoding=\"async\"><figcaption>المدمرة «إيلات»؛ صورة للسفينة نفسها وليست صورة لحظة إغراقها. <small>المصدر والترخيص: <a href=\"https://commons.wikimedia.org/wiki/File:INSEilat.jpg\" target=\"_blank\" rel=\"noopener\">Wikimedia Commons</a>، ترخيص CC BY-SA 3.0.</small></figcaption></figure>"
+    }
+  ]
+}

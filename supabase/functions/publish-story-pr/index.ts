@@ -15,6 +15,15 @@ const headers = {
 const reply = (status: number, data: Record<string, unknown>) =>
   new Response(JSON.stringify(data), { status, headers });
 
+function contentForSafetyScan(file: { content: string; encoding?: string }): string {
+  if (file.encoding !== "base64") return file.content;
+  // GitHub accepts base64 content for binary assets, but V1 must not let
+  // encoded HTML/JSON bypass the V2-artifact rejection below.
+  const compact = file.content.replace(/\s/g, "");
+  const bytes = Uint8Array.from(atob(compact), (character) => character.charCodeAt(0));
+  return new TextDecoder().decode(bytes);
+}
+
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").some((part) => part === "" || part === "." || part === "..")) return false;
@@ -80,7 +89,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-27-pr-move-v2", writes_main_directly: false, supports_story_move: true });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-28-v2-draft-guard-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_v2_only_drafts: true, supports_v2_publish: false });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -120,6 +129,32 @@ Deno.serve(async (req: Request) => {
     total += file.content.length;
     if (total > 8_000_000) return reply(413, { error: "إجمالي الملفات يتجاوز الحد المسموح." });
   }
+
+  const submissionTable = body.submission_table === "submitted_stories" ? "submitted_stories"
+    : body.submission_table === "khaledoon_submissions" ? "khaledoon_submissions" : "";
+  const submissionId = typeof body.submission_id === "string" ? body.submission_id.trim() : "";
+  if (!submissionTable || !/^[A-Za-z0-9-]{1,100}$/.test(submissionId)) {
+    return reply(400, { error: "يلزم إرسال رقم سجل الحكاية وجدولها للتحقق من صلاحية النشر." });
+  }
+  const { data: sourceRecord, error: sourceRecordError } = await supabase
+    .from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle();
+  if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل إنشاء طلب المراجعة." });
+  if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
+  const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
+  const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
+  if (sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true) {
+    return reply(409, { error: "هذه مسودة V2 محفوظة للمراجعة الكاملة؛ ناشر V1 لا يستطيع نشرها بأمان." });
+  }
+  let hasV2Artifacts = false;
+  try {
+    hasV2Artifacts = body.files.some((file: any) =>
+      /\/data\.v2\.json$/.test(file.path) ||
+      /KHALEDOON_STORY_V2|data\.v2\.json|data-kh-v2-reader/.test(contentForSafetyScan(file))
+    );
+  } catch {
+    return reply(400, { error: "تعذر فك ترميز أحد الملفات للتحقق من توافقه مع ناشر V1." });
+  }
+  if (hasV2Artifacts) return reply(409, { error: "ملفات V2 مرفوضة في ناشر V1 حتى يكتمل مسار نشر V2 المخصص." });
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
