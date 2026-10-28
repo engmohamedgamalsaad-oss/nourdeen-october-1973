@@ -46,6 +46,18 @@
   wrap.append(head,stage);
   section.append(wrap);
   hero.insertAdjacentElement('afterend',section);
+  // A single journey: the globe becomes the visual doorway into the existing verified story map.
+  var mapLink=section.querySelector('[data-world-text="map"]');
+  if(mapLink) mapLink.addEventListener('click',function(){
+    var map=document.getElementById('khMap');
+    section.classList.add('kh-world-leaving');
+    if(map){map.classList.add('kh-map-arriving');window.setTimeout(function(){map.classList.add('kh-map-arrived')},80)}
+    // Let the transition begin before the browser scrolls to the map.
+    window.setTimeout(function(){
+      var target=document.getElementById('khMap');
+      if(target) target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+    },reduced?0:180);
+  });
   function labels(){
     section.querySelectorAll('[data-world-text]').forEach(function(n){n.textContent=t(n.dataset.worldText)});
     canvas.setAttribute('aria-label',t('title')+'. '+t('hint'));
