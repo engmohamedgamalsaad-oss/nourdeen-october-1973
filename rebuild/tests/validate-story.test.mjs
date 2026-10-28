@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, readFile } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { validateStory, validateLocalImagePaths, validateForAdminBridge } from '../validate-story.mjs';
@@ -205,4 +205,27 @@ test('checks local image existence and rejects traversal and missing files', asy
   } finally {
     await rm(root, { recursive: true, force: true });
   }
+});
+
+
+test('real October V2 package preserves all 20 archived legacy quiz questions plus three supplemental questions', async () => {
+  const root = path.resolve(new URL('../..', import.meta.url).pathname);
+  const pkg = JSON.parse(await readFile(path.join(root, 'rebuild/story-packages/october-sea-men.v2.json'), 'utf8'));
+  const legacy = JSON.parse(await readFile(path.join(root, 'rebuild/story-packages/source-archives/october-sea-men-legacy-quiz-001.json'), 'utf8'));
+  assert.equal(legacy.questions.length, 20);
+  assert.equal(pkg.quiz.length, 23);
+  for (let i = 0; i < 20; i++) {
+    assert.equal(pkg.quiz[i].id, 'legacy-' + String(i + 1).padStart(2, '0'));
+    assert.equal(pkg.quiz[i].i18n.ar.question, legacy.questions[i].q);
+    assert.equal(pkg.quiz[i].correct_option, [1,2,0,3,1,1,2,3,0,3,1,3,0,1,3,1,2,3,0,1][i]);
+    for (const lang of langs) {
+      const question = pkg.quiz[i].i18n[lang];
+      assert.ok(question.question.trim());
+      assert.equal(question.options.length, 4);
+      assert.ok(question.options.every(x => typeof x === 'string' && x.trim()));
+      assert.ok(question.explanation.trim());
+    }
+  }
+  assert.deepEqual(pkg.quiz.slice(20).map(q => q.id), ['strait-location', 'nabil-role', 'ketting-operation']);
+  assert.ok(new Set(pkg.quiz.slice(0, 20).map(q => q.correct_option)).size > 1, 'correct answers should not all occupy one position');
 });
