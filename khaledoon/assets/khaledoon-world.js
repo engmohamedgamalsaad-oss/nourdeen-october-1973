@@ -125,7 +125,7 @@
   function normalizePoint(p,s){
     var lat=Number(p&&p.lat),lng=Number(p&&p.lng);
     if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
-    return {lat:lat,lng:lng,story:s};
+    return {lat:lat,lng:lng,story:s,place:p.place||null,place_label:p.place_label||'',approximate:p.approximate===true};
   }
   Promise.all([
     fetch('stories/index.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
