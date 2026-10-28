@@ -50,8 +50,8 @@ test('valid V2 package beyond the V1 bridge is saved through a complete, non-pub
   assert.equal(draft.question_bank.questions.length, 23);
   assert.equal(JSON.parse(JSON.stringify(draft.question_bank)).questions.length, pkg.quiz.length);
   assert.equal(draft.images.length, pkg.images.length);
-  assert.equal(draft.cover.kind, 'archival', 'legacy projection maps unsupported photo kind only for display/storage compatibility');
-  assert.equal(pkg.cover.kind, 'photograph', 'authoritative V2 package must remain unchanged');
+  assert.equal(draft.cover.kind, 'illustration', 'the original SVG cover is already supported by the legacy display projection');
+  assert.equal(pkg.cover.kind, 'illustration', 'authoritative V2 package uses the original draft illustration');
 });
 
 
