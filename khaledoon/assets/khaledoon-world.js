@@ -5,11 +5,11 @@
   window.__khWorldExplorer=true;
   var langs=['ar','en','fr','it','de'];
   var copy={
-    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة أرضية تفاعلية تربط الأماكن التاريخية بالحكايات المنشورة. حرّك الكرة لاستكشافها؛ وتظهر النقاط اعتمادًا على إحداثيات مسجلة في بيانات المشروع فقط.',hint:'اسحب الكرة لتدويرها',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد مواقع موثقة كفاية لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'موقع موثق',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.'},
-    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'An interactive globe connecting historical places to published stories. Drag to explore; markers use only coordinates recorded in the project data.',hint:'Drag to rotate the globe',map:'Open the story map',loading:'Preparing the globe…',empty:'There are not enough verified locations to show yet.',stories:'Stories linked to places',placesCount:'verified places',reduced:'Automatic motion is paused by your device settings.'},
-    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe interactif relie les lieux historiques aux récits publiés. Faites-le glisser pour explorer ; les repères utilisent uniquement les coordonnées enregistrées dans le projet.',hint:'Faites glisser pour tourner le globe',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Il n’y a pas encore assez de lieux vérifiés.',stories:'Récits liés aux lieux',placesCount:'lieux vérifiés',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.'},
-    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo interattivo collega i luoghi storici alle storie pubblicate. Trascinalo per esplorare; i punti usano solo coordinate registrate nei dati del progetto.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non ci sono ancora abbastanza luoghi verificati.',stories:'Storie collegate ai luoghi',placesCount:'luoghi verificati',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.'},
-    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein interaktiver Globus verbindet historische Orte mit veröffentlichten Geschichten. Ziehe ihn zum Erkunden; Markierungen verwenden nur im Projekt gespeicherte Koordinaten.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind noch nicht genügend verifizierte Orte vorhanden.',stories:'Mit Orten verbundene Geschichten',placesCount:'verifizierte Orte',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
+    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة أرضية تفاعلية تربط الأماكن التاريخية بالحكايات المنشورة. حرّك الكرة لاستكشافها؛ ولا تظهر النقاط إلا عند توفر مصدر موثق للمكان.',hint:'اسحب الكرة لتدويرها',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد أماكن بمصادر موثقة مكتملة لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'مكان له مصدر',source:'المصدر',approximate:'الموقع تقريبي وفق المصدر',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.'},
+    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'An interactive globe connecting historical places to published stories. Drag to explore; markers appear only when a documented source is available for a place.',hint:'Drag to rotate the globe',map:'Open the story map',loading:'Preparing the globe…',empty:'No places with complete documented sources are available yet.',stories:'Stories linked to places',placesCount:'sourced places',source:'Source',approximate:'Approximate location according to the source',reduced:'Automatic motion is paused by your device settings.'},
+    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe interactif relie les lieux historiques aux récits publiés. Faites-le glisser pour explorer ; les repères ne s’affichent que si une source documentée est disponible.',hint:'Faites glisser pour tourner le globe',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Aucun lieu avec une source documentée complète n’est disponible.',stories:'Récits liés aux lieux',placesCount:'lieux sourcés',source:'Source',approximate:'Emplacement approximatif selon la source',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.'},
+    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo interattivo collega i luoghi storici alle storie pubblicate. I punti appaiono solo quando è disponibile una fonte documentata per il luogo.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non sono disponibili luoghi con fonti documentate complete.',stories:'Storie collegate ai luoghi',placesCount:'luoghi con fonte',source:'Fonte',approximate:'Posizione approssimativa secondo la fonte',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.'},
+    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein interaktiver Globus verbindet historische Orte mit veröffentlichten Geschichten. Markierungen erscheinen nur, wenn eine dokumentierte Quelle für den Ort verfügbar ist.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefährer Standort laut Quelle',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
   };
   var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null;
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
@@ -39,8 +39,9 @@
   var list=el('div','kh-world-list');
   var selectedInfo=el('p','kh-world-status');selectedInfo.hidden=true;
   var selectedLink=el('a','kh-world-chip');selectedLink.hidden=true;
+  var sourceLink=el('a','kh-world-chip');sourceLink.hidden=true;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';
   var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
-  side.append(hint,status,listTitle,list,selectedInfo,selectedLink,link);
+  side.append(hint,status,listTitle,list,selectedInfo,selectedLink,sourceLink,link);
   stage.append(canvas,side);
   wrap.append(head,stage);
   section.append(wrap);
@@ -63,14 +64,18 @@
     var sec=String(s&&s.section||''),id=String(s&&s.id||'').padStart(3,'0');
     return /^[a-z0-9-]+$/.test(sec)&&/^\d{3}$/.test(id)?'stories/'+sec+'/'+id+'/':'stories/';
   }
-  function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[key]||''}
+  function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[l]||s[key]||''}
   function localizedPlace(p){var l=lang(),v=p&&p.place;return typeof v==='string'?v:(v&&v[l])||(v&&v.ar)||''}
   function selectPoint(q){
     if(!q||!q.p||!q.p.story)return;
     selectedPoint=q.p;var story=q.p.story;
-    selectedInfo.textContent=[localizedPlace(q.p),localized(story,'person')||localized(story,'title')||story.id].filter(Boolean).join(' — ');
+    var placeText=localizedPlace(q.p);
+    if(q.p.approximate)placeText += (placeText?' — ':'')+t('approximate');
+    selectedInfo.textContent=[placeText,localized(story,'person')||localized(story,'title')||story.id].filter(Boolean).join(' — ');
     selectedInfo.hidden=false;selectedLink.textContent=localized(story,'title')||localized(story,'person')||story.id;
     selectedLink.href=safeStoryPath(story);selectedLink.hidden=false;
+    sourceLink.textContent=t('source')+': '+localized(q.p.source_name,'label');
+    sourceLink.href=q.p.source_url;sourceLink.hidden=false;
     renderStoryList();
   }
   function draw(){
@@ -126,8 +131,11 @@
   }
   function normalizePoint(p,s){
     var lat=Number(p&&p.lat),lng=Number(p&&p.lng);
+    var sourceUrl=String(p&&p.source_url||'');
+    var sourceNames=p&&p.source_name;
     if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
-    return {lat:lat,lng:lng,story:s,place:p.place||null,place_label:p.place_label||'',approximate:p.approximate===true};
+    if(!/^https:\/\//i.test(sourceUrl)||!sourceNames||!langs.every(function(l){return typeof sourceNames[l]==='string'&&sourceNames[l].trim()}))return null;
+    return {lat:lat,lng:lng,story:s,place:p.place||null,place_label:p.place_label||'',approximate:p.approximate===true,source_url:sourceUrl,source_name:sourceNames};
   }
   Promise.all([
     fetch('stories/index.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
