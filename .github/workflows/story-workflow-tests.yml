@@ -1,6 +1,8 @@
 name: Story workflow mocked tests
 
 on:
+  push:
+    branches: [main]
   pull_request:
     paths:
       - "khaledoon/admin.html"
