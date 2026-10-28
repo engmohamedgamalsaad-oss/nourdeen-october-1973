@@ -15,8 +15,8 @@ test('V2 reader exposes all five language choices and changes text direction', (
   assert.match(js, /openstreetmap\.org/);
   assert.match(js, /document\.body\.dataset\.design/);
   assert.match(html, /id="theme-toggle"/);
-  assert.match(baseCss, /Marhey,Cairo,sans-serif/, 'reader headings need a sans-serif fallback when external fonts are blocked');
-  assert.match(html, /reader-base\.css\?v=20261028-unified-reader-1/);
+  assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'reader headings need a sans-serif fallback when external fonts are blocked');
+  assert.match(html, /reader-base\.css\?v=20261028-unified-reader-2/);
   assert.match(js, /themeLight/);
   assert.match(js, /dataset\.theme/);
   assert.match(js, /j===q\.correct_option/);
@@ -25,7 +25,7 @@ test('V2 reader exposes all five language choices and changes text direction', (
 
 test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
   for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link', 'story-intro-modal', 'intro-start', 'story-actions', 'print-story', 'share-whatsapp', 'share-facebook', 'share-copy', 'reaction-like', 'reaction-status', 'image-lightbox', 'intro-cover-fallback']) assert.match(html, new RegExp('id="' + id + '"'));
-  assert.match(baseCss, /body\[data-design=ancient-civilization\]/);
+  assert.ok(baseCss.includes('body[data-design=ancient-civilization]'));
   assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
   assert.match(js, /SECTION_PALETTE/);
   assert.match(js, /initReactions/);
