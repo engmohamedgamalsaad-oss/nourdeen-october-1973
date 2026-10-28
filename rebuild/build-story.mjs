@@ -51,7 +51,7 @@ const page = `<!doctype html>
 <section class="section"><h2 id="quiz-heading">اختبر فهمك</h2><div id="quiz"></div></section>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article></main>
-<script src="../../../rebuild/reader.js?v=20261028-v2-reader-2" data-kh-v2-reader data-story-path="data.v2.json"></script>
+<script src="../../../rebuild/reader.js?v=20261028-v2-reader-3" data-kh-v2-reader data-story-path="data.v2.json"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
 await writeFile(path.join(outDir, 'data.v2.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
