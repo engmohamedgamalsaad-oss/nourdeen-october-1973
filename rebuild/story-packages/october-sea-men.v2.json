@@ -701,6 +701,33 @@
           "organization": "Al-Ahram-Tageszeitung"
         }
       }
+    },
+    {
+      "title": "بطل «إيلات» لبوابة الأهرام: كنا نتنافس للمشاركة في العملية",
+      "organization": "بوابة الأهرام",
+      "url": "https://gate.ahram.org.eg/News/4579453.aspx",
+      "i18n": {
+        "ar": {
+          "title": "بطل «إيلات» لبوابة الأهرام: كنا نتنافس للمشاركة في العملية",
+          "organization": "بوابة الأهرام"
+        },
+        "en": {
+          "title": "An Eilat operation veteran recalls competing to take part",
+          "organization": "Al-Ahram Gate"
+        },
+        "fr": {
+          "title": "Un vétéran de l’opération d’Eilat raconte la sélection des participants",
+          "organization": "Al-Ahram Gate"
+        },
+        "it": {
+          "title": "Un veterano dell’operazione di Eilat racconta la selezione dei partecipanti",
+          "organization": "Al-Ahram Gate"
+        },
+        "de": {
+          "title": "Ein Veteran der Eilat-Operation berichtet über die Auswahl der Teilnehmer",
+          "organization": "Al-Ahram Gate"
+        }
+      }
     }
   ],
   "quiz": [
