@@ -42,5 +42,6 @@ test('all five language labels exist and language/theme changes do not replay en
   for (const section of sections) assert.match(css, new RegExp('body\\[data-section=' + section + '\\]'), section + ' section palette');
   assert.match(css, /\.story-intro-modal/);
   assert.match(css, /\.image-lightbox/);
-  assert.match(css, /@media print/);\n  assert.match(css, /#blocks \.block\{background:color-mix/);
+  assert.match(css, /@media print/);
+  assert.match(css, /#blocks \.block\{background:color-mix/);
 });
