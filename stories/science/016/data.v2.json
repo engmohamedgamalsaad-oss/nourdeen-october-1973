@@ -1,0 +1,792 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "ali-mosharafa",
+  "section": "science",
+  "design": {
+    "variant": "science-lab",
+    "accent": "#8ad9e8"
+  },
+  "original_body": "لم يرسل المستخدم نصًا أصليًا لهذه الحكاية؛ أُعدّت من الصفر بالاعتماد على المصادر التاريخية المدرجة أدناه.",
+  "i18n": {
+    "ar": {
+      "title": "علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون",
+      "subtitle": "من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة.",
+      "summary": "حكاية عالم مصري ساهم في أبحاث الفيزياء الحديثة، وفتح أبواب الجامعة أمام أجيال من الباحثين.",
+      "figure_name": "علي مصطفى مشرفة",
+      "person": "علي مصطفى مشرفة",
+      "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
+      "images_note": "الصور في هذه الصفحة رسوم توضيحية أصلية من إعداد مشروع خالدون، وليست صورًا أرشيفية أو صورًا حقيقية لعلي مصطفى مشرفة.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في دمياط، يوم 11 يوليو 1898، وُلد علي مصطفى مشرفة. لم يكن يعرف وهو طفل أن حبّه للأرقام والأسئلة سيقوده إلى دراسة قوانين الطبيعة، ثم إلى أن يصبح واحدًا من أبرز علماء الفيزياء النظرية في مصر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني إيه فيزياء نظرية؟ هل هي تجارب وأنابيب في معمل؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الفيزياء النظرية تحاول فهم القواعد التي يعمل بها الكون باستخدام الرياضيات والتفكير، ثم تقارن أفكارها بما نعرفه من التجارب والملاحظات. ومشرفة اهتم بالرياضيات لأنها لغة دقيقة تساعد العلماء على وصف الحركة والطاقة والضوء والمادة."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ وُلد علي مصطفى مشرفة في دمياط يوم 11 يوليو 1898، وتوفي في القاهرة يوم 15 يناير 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ تذكر الهيئة العامة للاستعلامات أن مشرفة كان أول مصري يحصل على درجة دكتوراه العلوم، وأنه نالها عام 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "رجع مصر بعد الدراسة، ولا فضّل يكمل شغله برّه؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ أصبح مشرفة عميدًا لكلية العلوم بجامعة القاهرة عام 1936، وكان عمره 38 عامًا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بحث مشرفة في موضوعات مثل نظرية الكم والنسبية والعلاقة بين المادة والإشعاع. ونشر أبحاثًا علمية وكتبًا في الرياضيات والفيزياء، كما اهتم بتاريخ العلوم وترجمة المعرفة إلى العربية. وتذكر المصادر أنه تبادل المراسلات مع ألبرت أينشتاين؛ لكن قيمة مشرفة لا تختصر في علاقته بعالم مشهور، بل في عمله العلمي وتعليمه للطلاب."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني الإنجاز مش بس إنك تكتشف حاجة جديدة؛ ممكن كمان تعلّم غيرك إزاي يفكر ويبحث."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
+        }
+      ]
+    },
+    "en": {
+      "title": "Ali Mostafa Mosharafa — An Egyptian Mind Exploring the Universe",
+      "subtitle": "From Damietta to theoretical physics: a scientist driven by questions and knowledge.",
+      "summary": "The story of an Egyptian scientist who contributed to modern physics and helped shape generations of researchers.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
+      "images_note": "The images on this page are original illustrations created for the Khaledoon project, not archival photographs or real portraits of Mosharafa.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ali Mostafa Mosharafa was born in Damietta on 11 July 1898. As a child, he could not know that his love of numbers and questions would lead him to study the laws of nature and become one of Egypt’s leading theoretical physicists."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What does theoretical physics mean? Is it all experiments and test tubes in a lab?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Theoretical physics uses mathematics and reasoning to understand the rules of the universe, then compares its ideas with experiments and observations. Mosharafa valued mathematics because it helps scientists describe motion, energy, light, and matter precisely."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Ali Mostafa Mosharafa was born in Damietta on 11 July 1898 and died in Cairo on 15 January 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Egypt’s State Information Service describes Mosharafa as the first Egyptian to receive a Doctor of Science degree, which he earned in 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Did he return to Egypt after studying, or did he stay abroad?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Mosharafa became dean of Cairo University’s Faculty of Science in 1936, at the age of 38."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa researched quantum theory, relativity, and the relationship between matter and radiation. He published scientific papers and books on mathematics and physics, and also studied the history of science and helped make scientific knowledge available in Arabic. Sources record correspondence with Albert Einstein, but Mosharafa’s importance rests on his own scholarship and teaching—not simply on knowing a famous scientist."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So achievement is not only discovering something new. It can also mean teaching others how to think and investigate."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ali Mostafa Mosharafa — Un esprit égyptien à la découverte de l’Univers",
+      "subtitle": "De Damiette à la physique théorique : le parcours d’un scientifique guidé par les questions.",
+      "summary": "L’histoire d’un scientifique égyptien qui a contribué à la physique moderne et formé des générations de chercheurs.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
+      "images_note": "Les images de cette page sont des illustrations originales créées pour le projet Khaledoon, et non des photographies d’archives ou de vrais portraits de Mosharafa.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898. Enfant, il ne pouvait pas savoir que son goût pour les nombres et les questions le conduirait à étudier les lois de la nature et à devenir l’un des grands physiciens théoriciens d’Égypte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Que signifie « physique théorique » ? Est-ce seulement des expériences et des éprouvettes dans un laboratoire ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La physique théorique utilise les mathématiques et le raisonnement pour comprendre les règles de l’Univers, puis confronte ses idées aux expériences et aux observations. Mosharafa appréciait les mathématiques parce qu’elles aident à décrire précisément le mouvement, l’énergie, la lumière et la matière."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898 et mort au Caire le 15 janvier 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Selon le Service d’information de l’État égyptien, Mosharafa fut le premier Égyptien à obtenir le diplôme de Doctor of Science, en 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Est-il rentré en Égypte après ses études, ou est-il resté à l’étranger ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Mosharafa devint doyen de la faculté des sciences de l’Université du Caire en 1936, à l’âge de 38 ans."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa travailla sur la théorie quantique, la relativité et le lien entre matière et rayonnement. Il publia des articles et des livres de mathématiques et de physique, tout en s’intéressant à l’histoire des sciences et à la diffusion du savoir scientifique en arabe. Des sources mentionnent une correspondance avec Albert Einstein, mais son importance vient de ses propres recherches et de son enseignement, pas seulement de ce lien."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Alors, réussir, ce n’est pas seulement découvrir quelque chose : c’est aussi apprendre aux autres à réfléchir et à chercher."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
+        }
+      ]
+    },
+    "it": {
+      "title": "Ali Mostafa Mosharafa — Una mente egiziana alla scoperta dell’universo",
+      "subtitle": "Da Damietta alla fisica teorica: il percorso di uno scienziato guidato dalle domande.",
+      "summary": "La storia di uno scienziato egiziano che contribuì alla fisica moderna e alla formazione di nuove generazioni di ricercatori.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
+      "images_note": "Le immagini di questa pagina sono illustrazioni originali create per il progetto Khaledoon, non fotografie d’archivio né ritratti reali di Mosharafa.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898. Da bambino non poteva sapere che il suo amore per i numeri e le domande lo avrebbe portato a studiare le leggi della natura e a diventare uno dei più importanti fisici teorici egiziani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Che cosa significa fisica teorica? Sono solo esperimenti e provette in laboratorio?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La fisica teorica usa la matematica e il ragionamento per comprendere le regole dell’universo, confrontando poi le idee con esperimenti e osservazioni. Mosharafa apprezzava la matematica perché aiuta a descrivere con precisione movimento, energia, luce e materia."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898 e morì al Cairo il 15 gennaio 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Secondo il Servizio d’informazione dello Stato egiziano, Mosharafa fu il primo egiziano a ottenere il titolo di Doctor of Science, nel 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Dopo gli studi tornò in Egitto oppure rimase all’estero?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Mosharafa diventò preside della Facoltà di Scienze dell’Università del Cairo nel 1936, all’età di 38 anni."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa studiò la teoria dei quanti, la relatività e il rapporto tra materia e radiazione. Pubblicò articoli e libri di matematica e fisica, e si interessò anche alla storia della scienza e alla diffusione del sapere scientifico in arabo. Le fonti riportano una corrispondenza con Albert Einstein, ma la sua importanza deriva soprattutto dalle sue ricerche e dal suo insegnamento."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi il successo non è solo scoprire qualcosa di nuovo: è anche insegnare agli altri a pensare e a fare ricerca."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
+        }
+      ]
+    },
+    "de": {
+      "title": "Ali Mostafa Mosharafa — Ein ägyptischer Geist erforscht das Universum",
+      "subtitle": "Von Damiette zur theoretischen Physik: der Weg eines Forschers, der Fragen liebte.",
+      "summary": "Die Geschichte eines ägyptischen Wissenschaftlers, der zur modernen Physik beitrug und Generationen von Forschenden prägte.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
+      "images_note": "Die Bilder auf dieser Seite sind eigens für das Projekt Khaledoon angefertigte Illustrationen, keine Archivfotos und keine echten Porträts Mosharafas.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren. Als Kind konnte er nicht ahnen, dass seine Liebe zu Zahlen und Fragen ihn dazu führen würde, die Naturgesetze zu erforschen und einer der bedeutenden theoretischen Physiker Ägyptens zu werden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Was bedeutet theoretische Physik? Geht es dabei nur um Experimente und Reagenzgläser im Labor?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die theoretische Physik nutzt Mathematik und logisches Denken, um die Regeln des Universums zu verstehen. Ihre Ideen werden anschließend mit Experimenten und Beobachtungen verglichen. Mosharafa schätzte Mathematik, weil sie Bewegung, Energie, Licht und Materie genau beschreiben hilft."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren und starb am 15. Januar 1950 in Kairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Laut dem ägyptischen Staatlichen Informationsdienst war Mosharafa 1924 der erste Ägypter, der den Grad Doctor of Science erhielt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Kehrte er nach dem Studium nach Ägypten zurück oder blieb er im Ausland?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Mosharafa wurde 1936 im Alter von 38 Jahren Dekan der naturwissenschaftlichen Fakultät der Universität Kairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa forschte zur Quantentheorie, Relativität und zum Verhältnis von Materie und Strahlung. Er veröffentlichte wissenschaftliche Aufsätze und Bücher über Mathematik und Physik und interessierte sich auch für die Wissenschaftsgeschichte und die Vermittlung wissenschaftlichen Wissens auf Arabisch. Quellen erwähnen einen Briefwechsel mit Albert Einstein; Mosharafas Bedeutung beruht jedoch auf seiner eigenen Forschung und Lehre."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Erfolg bedeutet also nicht nur, etwas Neues zu entdecken. Man kann auch anderen beibringen, wie man denkt und forscht."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "path": "stories/science/016/cover.svg",
+    "kind": "illustration",
+    "source_name": "رسم توضيحي أصلي من مشروع خالدون",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+    "rights": "Original vector illustration created for this project; not an archival photograph.",
+    "id": "cover",
+    "i18n": {
+      "ar": {
+        "alt": "رسم توضيحي لكتاب علمي وذرة وخطوط ضوئية بألوان قسم العلوم",
+        "caption": "غلاف توضيحي أصلي، وليس صورة تاريخية",
+        "source_name": "مشروع خالدون",
+        "rights": "رسم أصلي أُعد للمشروع"
+      },
+      "en": {
+        "alt": "Original illustration of a science book, atom, and light lines in the science section palette",
+        "caption": "Original illustrative cover, not a historical photograph",
+        "source_name": "Khaledoon project",
+        "rights": "Original artwork made for this project"
+      },
+      "fr": {
+        "alt": "Illustration originale d’un livre scientifique, d’un atome et de lignes lumineuses",
+        "caption": "Couverture illustrée originale, pas une photographie historique",
+        "source_name": "Projet Khaledoon",
+        "rights": "Illustration originale créée pour ce projet"
+      },
+      "it": {
+        "alt": "Illustrazione originale di un libro scientifico, un atomo e raggi luminosi",
+        "caption": "Copertina illustrata originale, non una fotografia storica",
+        "source_name": "Progetto Khaledoon",
+        "rights": "Illustrazione originale creata per il progetto"
+      },
+      "de": {
+        "alt": "Originalillustration eines Wissenschaftsbuchs, eines Atoms und von Lichtlinien",
+        "caption": "Originalillustration als Titelbild, kein historisches Foto",
+        "source_name": "Khaledoon-Projekt",
+        "rights": "Originalgrafik für dieses Projekt"
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "study-desk",
+      "path": "stories/science/016/study-desk.svg",
+      "kind": "illustration",
+      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Original vector illustration created for this project; not a historical photograph.",
+      "i18n": {
+        "ar": {
+          "alt": "مكتب دراسة عليه كتب وأوراق رياضيات",
+          "caption": "الرياضيات كانت أداة أساسية في طريق مشرفة العلمي",
+          "source_name": "مشروع خالدون",
+          "rights": "رسم أصلي أُعد للمشروع"
+        },
+        "en": {
+          "alt": "Study desk with books and mathematics notes",
+          "caption": "Mathematics was a key tool in Mosharafa’s scientific journey",
+          "source_name": "Khaledoon project",
+          "rights": "Original artwork made for this project"
+        },
+        "fr": {
+          "alt": "Bureau d’étude avec des livres et des notes de mathématiques",
+          "caption": "Les mathématiques ont joué un rôle central dans le parcours scientifique de Mosharafa",
+          "source_name": "Projet Khaledoon",
+          "rights": "Illustration originale créée pour ce projet"
+        },
+        "it": {
+          "alt": "Scrivania con libri e appunti di matematica",
+          "caption": "La matematica fu uno strumento fondamentale nel percorso scientifico di Mosharafa",
+          "source_name": "Progetto Khaledoon",
+          "rights": "Illustrazione originale creata per il progetto"
+        },
+        "de": {
+          "alt": "Schreibtisch mit Büchern und mathematischen Notizen",
+          "caption": "Mathematik war ein wichtiges Werkzeug in Mosharafas wissenschaftlichem Weg",
+          "source_name": "Khaledoon-Projekt",
+          "rights": "Originalgrafik für dieses Projekt"
+        }
+      }
+    },
+    {
+      "id": "atom-diagram",
+      "path": "stories/science/016/atom-diagram.svg",
+      "kind": "diagram",
+      "source_name": "رسم تخطيطي أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Original conceptual diagram created for this project; not a historical scientific figure.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم تخطيطي مبسط لذرة ومسارات ضوئية",
+          "caption": "رسم مفاهيمي يذكّر بموضوعات المادة والإشعاع، وليس رسمًا من أبحاث مشرفة",
+          "source_name": "مشروع خالدون",
+          "rights": "رسم تخطيطي أصلي أُعد للمشروع"
+        },
+        "en": {
+          "alt": "Simplified conceptual diagram of an atom and light paths",
+          "caption": "A conceptual image recalling matter and radiation, not a figure from Mosharafa’s papers",
+          "source_name": "Khaledoon project",
+          "rights": "Original diagram made for this project"
+        },
+        "fr": {
+          "alt": "Schéma conceptuel simplifié d’un atome et de trajectoires lumineuses",
+          "caption": "Illustration conceptuelle évoquant la matière et le rayonnement, pas une figure des travaux de Mosharafa",
+          "source_name": "Projet Khaledoon",
+          "rights": "Schéma original créé pour ce projet"
+        },
+        "it": {
+          "alt": "Schema concettuale semplificato di un atomo e raggi di luce",
+          "caption": "Immagine concettuale che richiama materia e radiazione, non una figura degli studi di Mosharafa",
+          "source_name": "Progetto Khaledoon",
+          "rights": "Schema originale creato per il progetto"
+        },
+        "de": {
+          "alt": "Vereinfachte Konzeptgrafik eines Atoms und von Lichtwegen",
+          "caption": "Konzeptbild zu Materie und Strahlung, keine Abbildung aus Mosharafas Arbeiten",
+          "source_name": "Khaledoon-Projekt",
+          "rights": "Originaldiagramm für dieses Projekt"
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ali Moustafa Mosharafa",
+      "organization": "Egypt State Information Service",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/dr-ali-moustafa-mosharafa/",
+      "accessed_at": "2026-10-29"
+    },
+    {
+      "title": "Ali Moustafa Mosharrafa (1898–1950)",
+      "organization": "MacTutor History of Mathematics, University of St Andrews",
+      "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Mosharrafa/",
+      "accessed_at": "2026-10-29"
+    },
+    {
+      "title": "علي مصطفى مشرفة",
+      "organization": "الهيئة العامة للاستعلامات المصرية",
+      "url": "https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A3%D8%B9%D9%84%D8%A7%D9%85-%D9%88%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA-%D9%85%D8%B5%D8%B1%D9%8A%D8%A9/%D8%B9%D9%84%D9%8A-%D9%85%D8%B5%D8%B7%D9%81%D9%89-%D9%85%D8%B4%D8%B1%D9%81%D8%A9/",
+      "accessed_at": "2026-10-29"
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birthplace",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة وُلد علي مصطفى مشرفة؟",
+          "options": [
+            "القاهرة",
+            "دمياط",
+            "الإسكندرية",
+            "أسوان"
+          ],
+          "explanation": "وُلد مشرفة في دمياط في 11 يوليو 1898."
+        },
+        "en": {
+          "question": "In which city was Ali Mostafa Mosharafa born?",
+          "options": [
+            "Cairo",
+            "Damietta",
+            "Alexandria",
+            "Aswan"
+          ],
+          "explanation": "Mosharafa was born in Damietta on 11 July 1898."
+        },
+        "fr": {
+          "question": "Dans quelle ville Ali Mostafa Mosharafa est-il né ?",
+          "options": [
+            "Le Caire",
+            "Damiette",
+            "Alexandrie",
+            "Assouan"
+          ],
+          "explanation": "Mosharafa est né à Damiette le 11 juillet 1898."
+        },
+        "it": {
+          "question": "In quale città nacque Ali Mostafa Mosharafa?",
+          "options": [
+            "Il Cairo",
+            "Damietta",
+            "Alessandria",
+            "Assuan"
+          ],
+          "explanation": "Mosharafa nacque a Damietta l’11 luglio 1898."
+        },
+        "de": {
+          "question": "In welcher Stadt wurde Ali Mostafa Mosharafa geboren?",
+          "options": [
+            "Kairo",
+            "Damiette",
+            "Alexandria",
+            "Assuan"
+          ],
+          "explanation": "Mosharafa wurde am 11. Juli 1898 in Damiette geboren."
+        }
+      }
+    },
+    {
+      "id": "degree",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام حصل على درجة دكتوراه العلوم؟",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "حصل على درجة دكتوراه العلوم عام 1924."
+        },
+        "en": {
+          "question": "In which year did he earn the Doctor of Science degree?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "He earned the Doctor of Science degree in 1924."
+        },
+        "fr": {
+          "question": "En quelle année a-t-il obtenu le diplôme de Doctor of Science ?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Il a obtenu le diplôme de Doctor of Science en 1924."
+        },
+        "it": {
+          "question": "In quale anno ottenne il titolo di Doctor of Science?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Ottenne il titolo di Doctor of Science nel 1924."
+        },
+        "de": {
+          "question": "In welchem Jahr erhielt er den Grad Doctor of Science?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Er erhielt den Grad Doctor of Science im Jahr 1924."
+        }
+      }
+    },
+    {
+      "id": "professor",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي درّسه مشرفة في كلية العلوم؟",
+          "options": [
+            "الرياضيات التطبيقية",
+            "علم النبات",
+            "الطب",
+            "علم الآثار"
+          ],
+          "explanation": "أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة."
+        },
+        "en": {
+          "question": "What subject did Mosharafa teach at the Faculty of Science?",
+          "options": [
+            "Applied mathematics",
+            "Botany",
+            "Medicine",
+            "Archaeology"
+          ],
+          "explanation": "He became a professor of applied mathematics at Cairo University."
+        },
+        "fr": {
+          "question": "Quelle matière Mosharafa enseignait-il à la faculté des sciences ?",
+          "options": [
+            "Mathématiques appliquées",
+            "Botanique",
+            "Médecine",
+            "Archéologie"
+          ],
+          "explanation": "Il devint professeur de mathématiques appliquées à l’Université du Caire."
+        },
+        "it": {
+          "question": "Quale materia insegnò Mosharafa alla Facoltà di Scienze?",
+          "options": [
+            "Matematica applicata",
+            "Botanica",
+            "Medicina",
+            "Archeologia"
+          ],
+          "explanation": "Divenne professore di matematica applicata all’Università del Cairo."
+        },
+        "de": {
+          "question": "Welches Fach lehrte Mosharafa an der naturwissenschaftlichen Fakultät?",
+          "options": [
+            "Angewandte Mathematik",
+            "Botanik",
+            "Medizin",
+            "Archäologie"
+          ],
+          "explanation": "Er wurde Professor für angewandte Mathematik an der Universität Kairo."
+        }
+      }
+    },
+    {
+      "id": "dean",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "متى أصبح عميدًا لكلية العلوم بجامعة القاهرة؟",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "تولى عمادة كلية العلوم عام 1936، وكان أول مصري يشغل المنصب."
+        },
+        "en": {
+          "question": "When did he become dean of Cairo University’s Faculty of Science?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "He became dean in 1936, the first Egyptian to hold the position."
+        },
+        "fr": {
+          "question": "Quand est-il devenu doyen de la faculté des sciences de l’Université du Caire ?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Il est devenu doyen en 1936, le premier Égyptien à occuper ce poste."
+        },
+        "it": {
+          "question": "Quando divenne preside della Facoltà di Scienze dell’Università del Cairo?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Divenne preside nel 1936, il primo egiziano a ricoprire l’incarico."
+        },
+        "de": {
+          "question": "Wann wurde er Dekan der naturwissenschaftlichen Fakultät der Universität Kairo?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Er wurde 1936 Dekan und war der erste Ägypter in diesem Amt."
+        }
+      }
+    },
+    {
+      "id": "research",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "أي موضوع من الموضوعات التالية بحث فيه مشرفة؟",
+          "options": [
+            "الزراعة الصحراوية فقط",
+            "نظرية الكم والنسبية",
+            "العمارة الفرعونية",
+            "الملاحة البحرية"
+          ],
+          "explanation": "تناولت أبحاثه نظرية الكم والنسبية والعلاقة بين المادة والإشعاع."
+        },
+        "en": {
+          "question": "Which of these topics did Mosharafa research?",
+          "options": [
+            "Desert farming only",
+            "Quantum theory and relativity",
+            "Pharaonic architecture",
+            "Maritime navigation"
+          ],
+          "explanation": "His research included quantum theory, relativity, and matter-radiation relations."
+        },
+        "fr": {
+          "question": "Quel sujet Mosharafa a-t-il étudié ?",
+          "options": [
+            "Uniquement l’agriculture désertique",
+            "La théorie quantique et la relativité",
+            "L’architecture pharaonique",
+            "La navigation maritime"
+          ],
+          "explanation": "Ses recherches portaient notamment sur la théorie quantique, la relativité et la matière-radiation."
+        },
+        "it": {
+          "question": "Quale di questi temi studiò Mosharafa?",
+          "options": [
+            "Solo agricoltura nel deserto",
+            "Teoria dei quanti e relatività",
+            "Architettura faraonica",
+            "Navigazione marittima"
+          ],
+          "explanation": "Le sue ricerche includevano teoria dei quanti, relatività e rapporto tra materia e radiazione."
+        },
+        "de": {
+          "question": "Welches dieser Themen erforschte Mosharafa?",
+          "options": [
+            "Nur Wüstenlandwirtschaft",
+            "Quantentheorie und Relativität",
+            "Pharaonische Architektur",
+            "Schifffahrt"
+          ],
+          "explanation": "Seine Forschung umfasste Quantentheorie, Relativität und das Verhältnis von Materie und Strahlung."
+        }
+      }
+    }
+  ],
+  "map_location": null
+}
