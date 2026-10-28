@@ -41,7 +41,7 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 const langs=['ar','en','fr','it','de'];let story=null;
 const $=id=>document.getElementById(id);
 function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n}
-function link(url,label){const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
+function link(url,label){if(typeof url!=='string'||!/^https:\/\//i.test(url))return node('span',label);const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
 function listIssues(s){
  const out=[];if(!s||typeof s!=='object'||Array.isArray(s))return ['الملف لازم يحتوي على كائن JSON.'];
  if(s.format!=='KHALEDOON_STORY_V2')out.push('format لازم يساوي KHALEDOON_STORY_V2.');
@@ -52,11 +52,13 @@ function listIssues(s){
   else t.blocks.forEach((b,i)=>{if(!b||!['paragraph','did_you_know'].includes(b.type)||!['karma','narrator'].includes(b.speaker)||typeof b.text!=='string'||!b.text.trim())out.push(l+': المقطع '+(i+1)+' غير مكتمل.')});
  }
  if(!s.cover||!s.cover.source_url||!s.cover.source_name||!s.cover.rights)out.push('بيانات مصدر/حقوق الغلاف ناقصة.');
+ if(s.cover&&(!/^https:\/\//i.test(String(s.cover.source_url||''))))out.push('رابط مصدر الغلاف يجب أن يستخدم HTTPS.');
  if(!Array.isArray(s.images)||s.images.length<2)out.push('يلزم صورتان على الأقل.');
- for(const [i,im] of (Array.isArray(s.images)?s.images:[]).entries())if(!im.source_url||!im.source_name||!im.rights||!im.i18n)out.push('بيانات المصدر أو الحقوق ناقصة للصورة '+(i+1)+'.');
+ for(const [i,im] of (Array.isArray(s.images)?s.images:[]).entries()){if(!im.source_url||!im.source_name||!im.rights||!im.i18n)out.push('بيانات المصدر أو الحقوق ناقصة للصورة '+(i+1)+'.');if(!/^https:\/\//i.test(String(im.source_url||'')))out.push('رابط مصدر الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');if(im.url&&!/^https:\/\//i.test(String(im.url)))out.push('رابط الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');}
  if(!Array.isArray(s.sources)||s.sources.length<2)out.push('يلزم مصدران على الأقل.');
  for(const [i,src] of (Array.isArray(s.sources)?s.sources:[]).entries()){
   if(!src||!src.url||!src.title||!src.organization||!src.i18n){out.push('بيانات المصدر '+(i+1)+' أو ترجماته ناقصة.');continue}
+  if(!/^https:\/\//i.test(String(src.url)))out.push('رابط المصدر '+(i+1)+' يجب أن يستخدم HTTPS.');
   for(const l of langs){const loc=src.i18n[l];if(!loc||!loc.title||!loc.organization)out.push('المصدر '+(i+1)+' غير مكتمل باللغة '+l+'.')}
  }
  if(!Array.isArray(s.quiz)||s.quiz.length<5)out.push('يلزم خمسة أسئلة على الأقل.');
