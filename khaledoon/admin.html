@@ -927,7 +927,8 @@ function pubRow(it){
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
-  var requireV2ForNewStory=!!draftNew||!it.id||!!(it.story_meta&&it.story_meta.v2_contract_required);
+  var hasExplicitLegacyV1Package=!!(it.story_meta&&it.story_meta.ai_imported_format==='KH_STORY_PACKAGE_V1'&&it.story_meta.ai_package_raw);
+  var requireV2ForNewStory=!!draftNew||!hasExplicitLegacyV1Package||!!(it.story_meta&&it.story_meta.v2_contract_required);
   var forceCodeEdit=new URLSearchParams(location.search).get('editcode')===String(it.id);
   if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'||forceCodeEdit||forceEditOpen){
     var aiPanel=el('section','review-data');aiPanel.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:14px;background:var(--panel,#10242c);display:grid;gap:10px';
