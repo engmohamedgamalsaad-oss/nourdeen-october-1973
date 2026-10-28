@@ -11,6 +11,7 @@
     it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo interattivo collega i luoghi storici alle storie pubblicate. Trascinalo per esplorare; i punti usano solo coordinate registrate nei dati del progetto.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non ci sono ancora abbastanza luoghi verificati.',stories:'Storie collegate ai luoghi',placesCount:'luoghi verificati',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.'},
     de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein interaktiver Globus verbindet historische Orte mit veröffentlichten Geschichten. Ziehe ihn zum Erkunden; Markierungen verwenden nur im Projekt gespeicherte Koordinaten.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind noch nicht genügend verifizierte Orte vorhanden.',stories:'Mit Orten verbundene Geschichten',placesCount:'verifizierte Orte',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
   };
+  var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,raf=0;
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
   function t(k){return (copy[lang()]||copy.ar)[k]}
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
@@ -36,7 +37,7 @@
   var status=el('p','kh-world-status');status.dataset.worldText='loading';
   var listTitle=el('h3');listTitle.dataset.worldText='stories';
   var list=el('div','kh-world-list');
-  var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
+  var link=el('a','btn ghost');link.href='index.html#map';link.dataset.worldText='map';
   side.append(hint,status,listTitle,list,link);
   stage.append(canvas,side);
   wrap.append(head,stage);
@@ -53,7 +54,6 @@
   observer.observe(document.documentElement,{attributes:true,attributeFilter:['lang','dir']});
   var ctx=canvas.getContext('2d');
   if(!ctx){status.textContent=t('empty');return}
-  var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,raf=0,frame=0;
   var reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function safeStoryPath(s){
     var p=String(s&&s.path||'');
@@ -105,6 +105,7 @@
     if(!reduced||drag)raf=requestAnimationFrame(draw);
   }
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
+  requestDraw();
   function renderStoryList(){
     list.replaceChildren();
     points.slice(0,8).forEach(function(p){
@@ -121,11 +122,11 @@
     fetch('stories/index.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
     fetch('stories/places.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()})
   ]).then(function(data){
-    var stories=Array.isArray(data[0])?data[0]:[],places=data[1]||{},seen={};
+    var stories=Array.isArray(data[0])?data[0]:[],places=data[1]||{};
     stories.forEach(function(s){
       if(!s||s.published===false)return;
       var p=normalizePoint(places[String(s.id)],s);
-      if(p&&!seen[p.lat+','+p.lng]){seen[p.lat+','+p.lng]=true;points.push(p)}
+      if(p)points.push(p)
     });
     if(!points.length){status.textContent=t('empty');return}
     status.textContent=points.length+' '+t('placesCount');
