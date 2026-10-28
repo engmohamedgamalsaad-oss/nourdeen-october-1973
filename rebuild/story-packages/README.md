@@ -6,6 +6,12 @@ File: `october-sea-men.v2.json`
 
 This is the first real-content package used to exercise the V2 validator and builder. It is intentionally stored under `rebuild/story-packages/`, not under the published `stories/` tree.
 
+## Admin handling boundary
+
+The admin import path now validates a full V2 package first. If it cannot pass through the narrow V1 bridge without losing V2 fields, it saves the complete package in the admin record's `story_meta.v2_package`, keeps a clearly non-authoritative V1-shaped projection for existing admin listing fields, and opens this read-only package reviewer. The original V2 package is the source of truth; the projection may flatten the interleaving of narrator and Karma blocks and maps photo/document kinds only for legacy storage compatibility.
+
+**V2-only drafts are blocked from the current V1 publish and publish-confirmation handlers.** This is a safe draft/review step, not the final V2 publishing integration. A separate V2-aware review-request/publish path and a real staging Supabase round-trip test are still required before V2-only drafts can be published.
+
 Before publication, a reviewer must:
 - Replace the temporary cover choice with the approved story-specific cover artwork and confirm its rights. The current cover uses a correctly credited 1967 photograph of the destroyer Eilat and explicitly states that it is not a photograph from the 1973 war.
 - Compare `original_body` with the author's actual submitted source. It now contains the complete visible Arabic text from all eight story sections plus the closing section of the currently published page in reading order; it is not verified against the author's original submission file.
