@@ -81,8 +81,8 @@ test('prompt administration links the dedicated V2 package instructions', async 
 
 test('V2 requirement separates new stories from legacy records and keeps V2-only records on V2', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
-  const guard = html.match(/function isV2OnlyDraftRecord\\(it\\)\\{[^\\n]*?\\}(?=\\n)/);
-  const expr = html.match(/var requireV2ForNewStory=([^;\\n]+);/);
+  const guard = html.match(/function isV2OnlyDraftRecord\(it\)\{[^\n]*?\}(?=\n)/);
+  const expr = html.match(/var requireV2ForNewStory=([^;\n]+);/);
   assert.ok(guard && expr, 'policy expression must be present');
   const requires = new Function('draftNew', 'it', guard[0] + '; return ' + expr[1] + ';');
   const legacy = { status: 'published', story_meta: {} };
@@ -93,6 +93,6 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   assert.equal(requires(false, { story_meta: { v2_only_draft: true } }), true, 'V2-only record stays V2');
   assert.equal(requires(false, { story_meta: { pending_draft: { v2_only_draft: true } } }), true, 'published record with V2-only pending draft stays V2');
   assert.equal(requires(false, { story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
-  assert.match(html, /if\\(requireV2ForNewStory\\)nextMeta\\.v2_contract_required=true/, 'only V2-required records are marked');
-  assert.match(html, /if\\(v2OnlyDraft\\)\\{nextMeta\\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
+  assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
+  assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
 });
