@@ -11,7 +11,8 @@ test('admin import exposes V2 validator and converter and preserves original inp
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.mjs', import.meta.url), 'utf8');
   assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261028-v2-admin-6'"));
   assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261028-v2-admin-6'"));
-  assert.match(html, /var requireV2ForNewStory=!!draftNew\|\|!it\.id\|\|!!\(it\.story_meta&&it\.story_meta\.v2_contract_required\)/);
+  assert.match(html, /var hasExplicitLegacyV1Package=!!\(it\.story_meta&&it\.story_meta\.ai_imported_format==='KH_STORY_PACKAGE_V1'&&it\.story_meta\.ai_package_raw\)/);
+  assert.match(html, /var requireV2ForNewStory=!!draftNew\|\|!hasExplicitLegacyV1Package\|\|!!\(it\.story_meta&&it\.story_meta\.v2_contract_required\)/);
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'new stories must reject V1 and untagged JSON');
   assert.match(html, /v2_contract_required=true/, 'new V2 contract requirement persists for later edits');
   assert.match(html, /V2-STORY-PACKAGE-PROMPT\.md/);
