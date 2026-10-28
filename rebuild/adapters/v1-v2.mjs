@@ -1,4 +1,4 @@
-import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261027-v2-admin-5';
+import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261028-v2-admin-6';
 
 /**
  * Conservative V1 <-> V2 adapter for Khaledoon story packages.
@@ -448,7 +448,7 @@ export function v2ToAdminDraft(input) {
       student_name: src.student_name || input.i18n.ar.student_name || '',
       grade: src.grade || input.i18n.ar.grade || '',
       history_note: src.history_note || '',
-      images_note: src.images_note || 'Image source and rights details are preserved in the V2 draft package and require review.'
+      images_note: src.images_note || ({en:'Image source and rights details are preserved in the V2 draft package and require review.',fr:'Les sources et les droits des images sont conservés dans le dossier V2 et doivent être vérifiés.',it:'Le fonti e i diritti delle immagini sono conservati nel pacchetto V2 e devono essere verificati.',de:'Bildquellen und Nutzungsrechte bleiben im V2-Paket erhalten und müssen geprüft werden.'})[lang]
     };
   }
   const question_bank = { questions: input.quiz.map((q, i) => {
