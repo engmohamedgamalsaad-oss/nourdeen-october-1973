@@ -40,10 +40,13 @@ test('V2 is the only long-term story contract and V1 bridge is explicitly tempor
 test('canonical prompt and prompt admin require V2 for all new story packages', async () => {
   const master = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', import.meta.url), 'utf8');
   const promptAdmin = await readFile(new URL('../../khaledoon/prompts-admin.html', import.meta.url), 'utf8');
+  const activeAdminTexts = await readFile(new URL('../../khaledoon/assets/khaledoon-admin-texts.js', import.meta.url), 'utf8');
   assert.match(master, /عقد البيانات الوحيد للحكايات الجديدة هو V2/);
   assert.match(master, /rebuild\/story-contract\.json/);
   assert.match(master, /لا تستخدم مخطط KH_STORY_PACKAGE_V1/);
   assert.doesNotMatch(master, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
   assert.match(promptAdmin, /V2 هو عقد البيانات الوحيد للحكايات الجديدة/);
   assert.match(promptAdmin, /لا تستخدم مخطط V1/);
+  assert.match(activeAdminTexts, /عقد البيانات الوحيد للحكايات الجديدة هو V2/);
+  assert.doesNotMatch(activeAdminTexts, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
 });
