@@ -79,6 +79,17 @@ async function main() {
   assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.en.caption), 'gallery caption should switch to English');
   assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n.en.title), 'source title should switch to English');
   assert.equal(await page.locator('#quiz .q').count(), story.quiz.length);
+  for (const lang of ['it', 'de']) {
+    await page.locator('[data-lang="' + lang + '"]').click();
+    await page.waitForFunction(expected => document.documentElement.lang === expected, lang);
+    assert.equal(await page.locator('#title').textContent(), story.i18n[lang].title, lang + ' title should be localized');
+    assert.equal(await page.locator('html').getAttribute('dir'), 'ltr', lang + ' should use LTR');
+    assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n[lang].caption), lang + ' gallery caption should be localized');
+    assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n[lang].title), lang + ' source title should be localized');
+    assert.equal(await page.locator('#quiz .q').count(), story.quiz.length, lang + ' should retain all quiz questions');
+  }
+  await page.locator('[data-lang="en"]').click();
+  await page.waitForFunction(() => document.documentElement.lang === 'en');
   await page.locator('#gallery img').first().click();
   assert.equal(await page.locator('#image-lightbox').isVisible(), true, 'gallery image should open a lightbox');
   await page.locator('#lightbox-close').click();
