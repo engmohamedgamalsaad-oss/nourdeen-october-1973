@@ -18,6 +18,9 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
   assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
+  assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
+  assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative V2 package');
+  assert.ok(html.includes("var v2PackageDirect=v2PendingDirect&&v2PendingDirect.v2_only_draft?v2PendingDirect.v2_package:(v2MetaDirect.v2_only_draft?v2MetaDirect.v2_package:null)"), 'manual preview should open the saved V2 package without persisting legacy projection edits');
   assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_V1'/);
   assert.ok(html.includes("story-template-bundle.js?v=20261027-source-clean-2"));
   assert.ok(html.includes("sources:aiInputFormat==='KHALEDOON_STORY_V2'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000)"), 'V2 source text must remain complete while legacy V1 retains its historical 3000-character cap');
