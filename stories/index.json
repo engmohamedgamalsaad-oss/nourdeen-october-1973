@@ -267,7 +267,7 @@
       "Arabi",
       "Ahmed Orabi"
     ],
-    "color": "#d5b7ff",
+    "color": "#b8874b",
     "order": 6,
     "published": true,
     "i18n": {
@@ -315,7 +315,7 @@
     "title": "حكاية العالم أحمد زويل",
     "subtitle": "رحلة مع عالم مصري ساعد العلماء على مراقبة الذرات أثناء التفاعل الكيميائي.",
     "person": "أحمد زويل",
-    "color": "#8ad9e8",
+    "color": "#b8874b",
     "order": 7,
     "published": true,
     "i18n": {
@@ -355,54 +355,6 @@
     "id": "007",
     "section": "science",
     "path": "stories/science/007/"
-  },
-  {
-    "name": "غير محدد",
-    "grade": "غير محدد",
-    "className": "غير محدد",
-    "title": "سميرة موسى — حلم العلم للجميع",
-    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
-    "color": "#e7a1c1",
-    "order": 10,
-    "published": true,
-    "section": "women",
-    "i18n": {
-      "en": {
-        "title": "Sameera Moussa — Science for Everyone",
-        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity.",
-        "person": "Sameera Moussa",
-        "name": "Not specified",
-        "grade": "Not specified",
-        "className": "Not specified"
-      },
-      "fr": {
-        "title": "Sameera Moussa — La science pour tous",
-        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
-        "person": "Sameera Moussa",
-        "name": "Non précisé",
-        "grade": "Non précisé",
-        "className": "Non précisé"
-      },
-      "it": {
-        "title": "Sameera Moussa — La scienza per tutti",
-        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità.",
-        "person": "Sameera Moussa",
-        "name": "Non specificato",
-        "grade": "Non specificato",
-        "className": "Non specificato"
-      },
-      "de": {
-        "title": "Sameera Moussa — Wissenschaft für alle",
-        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
-        "person": "Sameera Moussa",
-        "name": "Nicht angegeben",
-        "grade": "Nicht angegeben",
-        "className": "Nicht angegeben"
-      }
-    },
-    "id": "010",
-    "path": "stories/women/010/",
-    "person": "سميرة موسى"
   },
   {
     "name": "مليكة محمد",
@@ -501,52 +453,35 @@
     "path": "stories/people/009/"
   },
   {
-    "name": "نوردين محمد",
-    "grade": "راوي الحكاية",
-    "className": "راوي الحكاية",
-    "title": "فاروق الباز",
-    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
-    "person": "فاروق الباز",
-    "color": "#8ad9e8",
-    "order": 12,
+    "name": "",
+    "grade": "",
+    "className": "",
+    "title": "سميرة موسى — حلم العلم للجميع",
+    "subtitle": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+    "color": "#d7b878",
+    "order": 10,
     "published": true,
+    "section": "women",
     "i18n": {
       "en": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Story narrator",
-        "className": "Story narrator",
-        "title": "Farouk El-Baz",
-        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
-        "person": "Farouk El-Baz"
+        "title": "Sameera Moussa — Science for Everyone",
+        "subtitle": "The story of an Egyptian scientist who believed science should serve humanity."
       },
       "fr": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narrateur de l'histoire",
-        "className": "Narrateur de l'histoire",
-        "title": "Farouk El-Baz",
-        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
-        "person": "Farouk El-Baz"
+        "title": "Sameera Moussa — La science pour tous",
+        "subtitle": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité."
       },
       "it": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Narratore della storia",
-        "className": "Narratore della storia",
-        "title": "Farouk El-Baz",
-        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
-        "person": "Farouk El-Baz"
+        "title": "Sameera Moussa — La scienza per tutti",
+        "subtitle": "La storia di una scienziata egiziana convinta che la scienza debba essere al servizio dell’umanità."
       },
       "de": {
-        "name": "Nourdeen Mohamed",
-        "grade": "Erzähler der Geschichte",
-        "className": "Erzähler der Geschichte",
-        "title": "Farouk El-Baz",
-        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
-        "person": "Farouk El-Baz"
+        "title": "Sameera Moussa — Wissenschaft für alle",
+        "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte."
       }
     },
-    "id": "012",
-    "section": "science",
-    "path": "stories/science/012/"
+    "id": "010",
+    "path": "stories/women/010/"
   },
   {
     "name": "نوردين محمد",
@@ -597,45 +532,93 @@
     "path": "stories/islamic/011/"
   },
   {
+    "name": "نوردين محمد",
+    "grade": "راوي الحكاية",
+    "className": "راوي الحكاية",
+    "title": "فاروق الباز",
+    "subtitle": "العالِم الذي ساعد رواد الفضاء على قراءة القمر والصحراء",
+    "person": "فاروق الباز",
+    "color": "#8ad9e8",
+    "order": 12,
+    "published": true,
+    "i18n": {
+      "en": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Story narrator",
+        "className": "Story narrator",
+        "title": "Farouk El-Baz",
+        "subtitle": "The scientist who helped astronauts read the Moon and the desert",
+        "person": "Farouk El-Baz"
+      },
+      "fr": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narrateur de l'histoire",
+        "className": "Narrateur de l'histoire",
+        "title": "Farouk El-Baz",
+        "subtitle": "Le scientifique qui a aidé les astronautes à lire la Lune et le désert",
+        "person": "Farouk El-Baz"
+      },
+      "it": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Narratore della storia",
+        "className": "Narratore della storia",
+        "title": "Farouk El-Baz",
+        "subtitle": "Lo scienziato che aiutò gli astronauti a leggere la Luna e il deserto",
+        "person": "Farouk El-Baz"
+      },
+      "de": {
+        "name": "Nourdeen Mohamed",
+        "grade": "Erzähler der Geschichte",
+        "className": "Erzähler der Geschichte",
+        "title": "Farouk El-Baz",
+        "subtitle": "Der Wissenschaftler, der Astronauten half, den Mond und die Wüste zu lesen",
+        "person": "Farouk El-Baz"
+      }
+    },
+    "id": "012",
+    "section": "science",
+    "path": "stories/science/012/"
+  },
+  {
     "name": "مليكة محمد جمال",
-    "grade": "الصف الأول الابتدائي",
-    "className": "الصف الأول الابتدائي",
+    "grade": "الصف الخامس الابتدائي",
+    "className": "الصف الخامس الابتدائي",
     "title": "حتشبسوت: الفرعون الذهبي على عرش النيل",
     "subtitle": "قصة الملكة الدبلوماسية التي ملأت مصر بالمعالم والعمران ورائدات التجار",
     "person": "الملكة حتشبسوت",
-    "color": "#e7a1c1",
+    "color": "#b86a9c",
     "order": 13,
     "published": true,
     "i18n": {
       "en": {
         "name": "Malika Mohamed Gamal",
-        "grade": "1st Grade",
-        "className": "1st Grade",
-        "title": "Hatshepsut: The Golden Female Pharaoh on the Nile Throne",
+        "grade": "5th Grade",
+        "className": "5th Grade",
+        "title": "Hatshepsut: The Golden Pharaoh on the Nile Throne",
         "subtitle": "The story of the diplomatic queen who filled Egypt with monuments and trade expeditions",
         "person": "Queen Hatshepsut"
       },
       "fr": {
         "name": "Malika Mohamed Gamal",
-        "grade": "1re année du primaire",
-        "className": "1re année du primaire",
-        "title": "Hatchepsout : La pharaonne d’or sur le trône du Nil",
+        "grade": "5ème Année Primaire",
+        "className": "5ème Année Primaire",
+        "title": "Hatshepsout : Le Pharaon d'or sur le trône du Nil",
         "subtitle": "L'histoire de la reine diplomate qui a enrichi l'Égypte de monuments et d'expéditions commerciales",
         "person": "La reine Hatchepsout"
       },
       "it": {
         "name": "Malika Mohamed Gamal",
-        "grade": "Prima elementare",
-        "className": "Prima elementare",
-        "title": "Hatshepsut: La faraona d’oro sul trono del Nilo",
+        "grade": "Quinta Elementare",
+        "className": "Quinta Elementare",
+        "title": "Hatshepsut: Il Faraone d'oro sul trono del Nilo",
         "subtitle": "La storia della regina diplomatica che riempì l'Egitto di monumenti e spedizioni commerciali",
         "person": "La regina Hatshepsut"
       },
       "de": {
         "name": "Malika Mohamed Gamal",
-        "grade": "1. Grundschulklasse",
-        "className": "1. Grundschulklasse",
-        "title": "Hatschepsut: Die goldene Pharaonin auf dem Thron des Nils",
+        "grade": "5. Grundschulklasse",
+        "className": "5. Grundschulklasse",
+        "title": "Hatschepsut: Der goldene Pharao auf dem Thron des Nils",
         "subtitle": "Die Geschichte der diplomatischen Königin, die Ägypten mit Bauwerken und Handelsreisen bereicherte",
         "person": "Königin Hatschepsut"
       }
@@ -693,7 +676,7 @@
     "path": "stories/history/014/"
   },
   {
-    "name": "مليكة محمد",
+    "name": "مليكة محمد جمال",
     "grade": "الصف الأول الابتدائي",
     "className": "الصف الأول الابتدائي",
     "title": "مجدي يعقوب",
@@ -704,7 +687,7 @@
     "published": true,
     "i18n": {
       "en": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "First grade",
         "className": "First grade",
         "title": "Magdi Yacoub",
@@ -712,7 +695,7 @@
         "person": "Magdi Yacoub"
       },
       "fr": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Première année de l’école primaire",
         "className": "Première année de l’école primaire",
         "title": "Magdi Yacoub",
@@ -720,7 +703,7 @@
         "person": "Magdi Yacoub"
       },
       "it": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Prima classe della scuola primaria",
         "className": "Prima classe della scuola primaria",
         "title": "Magdi Yacoub",
@@ -728,7 +711,7 @@
         "person": "Magdi Yacoub"
       },
       "de": {
-        "name": "Malika Mohamed",
+        "name": "Malika Mohamed Gamal",
         "grade": "Erste Klasse der Grundschule",
         "className": "Erste Klasse der Grundschule",
         "title": "Magdi Yacoub",
@@ -742,35 +725,13 @@
   },
   {
     "title": "علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون",
-    "subtitle": "من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة.",
-    "person": "علي مصطفى مشرفة",
-    "color": "#8ad9e8",
-    "order": 16,
     "published": true,
-    "i18n": {
-      "en": {
-        "title": "Ali Mostafa Mosharafa — An Egyptian Mind Exploring the Universe",
-        "subtitle": "From Damietta to theoretical physics: a scientist driven by questions and knowledge.",
-        "person": "Ali Mostafa Mosharafa"
-      },
-      "fr": {
-        "title": "Ali Mostafa Mosharafa — Un esprit égyptien à la découverte de l’Univers",
-        "subtitle": "De Damiette à la physique théorique : le parcours d’un scientifique guidé par les questions.",
-        "person": "Ali Mostafa Mosharafa"
-      },
-      "it": {
-        "title": "Ali Mostafa Mosharafa — Una mente egiziana alla scoperta dell’universo",
-        "subtitle": "Da Damietta alla fisica teorica: il percorso di uno scienziato guidato dalle domande.",
-        "person": "Ali Mostafa Mosharafa"
-      },
-      "de": {
-        "title": "Ali Mostafa Mosharafa — Ein ägyptischer Geist erforscht das Universum",
-        "subtitle": "Von Damiette zur theoretischen Physik: der Weg eines Forschers, der Fragen liebte.",
-        "person": "Ali Mostafa Mosharafa"
-      }
-    },
-    "id": "016",
+    "summary": "حكاية عالم مصري ساهم في أبحاث الفيزياء الحديثة، وفتح أبواب الجامعة أمام أجيال من الباحثين.",
     "section": "science",
+    "id": "016",
+    "person": "علي مصطفى مشرفة",
+    "cover": "stories/science/016/cover.svg",
+    "note": "ملف توافق فهرس قديم؛ المحتوى الكامل واللغات والأسئلة في data.v2.json.",
     "path": "stories/science/016/"
   }
 ]
