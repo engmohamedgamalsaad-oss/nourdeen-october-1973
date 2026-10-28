@@ -11,7 +11,7 @@
     it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo interattivo collega i luoghi storici alle storie pubblicate. Trascinalo per esplorare; i punti usano solo coordinate registrate nei dati del progetto.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non ci sono ancora abbastanza luoghi verificati.',stories:'Storie collegate ai luoghi',placesCount:'luoghi verificati',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.'},
     de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein interaktiver Globus verbindet historische Orte mit veröffentlichten Geschichten. Ziehe ihn zum Erkunden; Markierungen verwenden nur im Projekt gespeicherte Koordinaten.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind noch nicht genügend verifizierte Orte vorhanden.',stories:'Mit Orten verbundene Geschichten',placesCount:'verifizierte Orte',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
   };
-  var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,raf=0;
+  var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null;
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
   function t(k){return (copy[lang()]||copy.ar)[k]}
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
@@ -62,6 +62,15 @@
     return /^[a-z0-9-]+$/.test(sec)&&/^\d{3}$/.test(id)?'stories/'+sec+'/'+id+'/':'stories/';
   }
   function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[key]||''}
+  function localizedPlace(p){var l=lang(),v=p&&p.place;return typeof v==='string'?v:(v&&v[l])||(v&&v.ar)||''}
+  function selectPoint(q){
+    if(!q||!q.p||!q.p.story)return;
+    selectedPoint=q.p;var story=q.p.story;
+    selectedInfo.textContent=[localizedPlace(q.p),localized(story,'person')||localized(story,'title')||story.id].filter(Boolean).join(' — ');
+    selectedInfo.hidden=false;selectedLink.textContent=localized(story,'title')||localized(story,'person')||story.id;
+    selectedLink.href=safeStoryPath(story);selectedLink.hidden=false;
+    renderStoryList();
+  }
   function draw(){
     raf=0;
     var rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
@@ -89,12 +98,11 @@
       var x=Math.cos(la)*Math.sin(lo),y=Math.sin(la)*Math.cos(tilt)-Math.cos(la)*Math.cos(lo)*Math.sin(tilt),z=Math.sin(la)*Math.sin(tilt)+Math.cos(la)*Math.cos(lo)*Math.cos(tilt);
       if(z>-.05)projected.push({x:cx+x*r,y:cy-y*r,z:z,p:p,i:i});
     });
-    ctx.strokeStyle='rgba(240,200,120,.28)';ctx.lineWidth=1;
-    for(var i=1;i<projected.length;i++){var a=projected[i-1],b=projected[i];if(a.z>.2&&b.z>.2){ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(cx,cy,b.x,b.y);ctx.stroke()}}
+    hitTargets=projected.map(function(q){return {x:q.x,y:q.y,r:Math.max(10,2.8+Math.max(0,q.z)*2.3),p:q.p,z:q.z}});
     projected.forEach(function(q){
       var rr=2.8+Math.max(0,q.z)*2.3;
       ctx.beginPath();ctx.arc(q.x,q.y,rr*2.8,0,Math.PI*2);ctx.fillStyle='rgba(240,200,120,.10)';ctx.fill();
-      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle='#f3cf85';ctx.fill();
+      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle=(selectedPoint&&selectedPoint.story===q.p.story)?'#fff4c6':'#f3cf85';ctx.fill();
       ctx.strokeStyle='rgba(255,245,220,.9)';ctx.lineWidth=1;ctx.stroke();
     });
     ctx.restore();
@@ -110,6 +118,7 @@
     list.replaceChildren();
     points.slice(0,8).forEach(function(p){
       var a=el('a','kh-world-chip',localized(p.story,'person')||localized(p.story,'title')||p.story.id);
+      if(selectedPoint&&selectedPoint.story===p.story)a.setAttribute('aria-current','true');
       a.href=safeStoryPath(p.story);list.appendChild(a);
     });
   }
@@ -133,9 +142,9 @@
     renderStoryList();requestDraw();
   }).catch(function(){status.textContent=t('empty')});
   function pos(e){return e.clientX}
-  canvas.addEventListener('pointerdown',function(e){drag=true;lastX=pos(e);lastY=e.clientY;canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);canvas.classList.add('is-dragging')});
+  canvas.addEventListener('pointerdown',function(e){drag=true;lastX=startX=pos(e);lastY=startY=e.clientY;canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);canvas.classList.add('is-dragging')});
   canvas.addEventListener('pointermove',function(e){if(!drag)return;rot+=(pos(e)-lastX)*.006;tilt=Math.max(-.9,Math.min(.9,tilt+(e.clientY-lastY)*.004));lastX=pos(e);lastY=e.clientY;requestDraw()});
-  function endDrag(){drag=false;canvas.classList.remove('is-dragging');requestDraw()}
+  function endDrag(e){var moved=Math.hypot(pos(e)-startX,e.clientY-startY);drag=false;canvas.classList.remove('is-dragging');if(e.type==='pointerup'&&moved<7){var rect=canvas.getBoundingClientRect(),x=e.clientX-rect.left,y=e.clientY-rect.top,best=null,bestD=Infinity;hitTargets.forEach(function(q){var d=Math.hypot(q.x-x,q.y-y);if(d<=q.r&&d<bestD){best=q;bestD=d}});if(best)selectPoint(best)}requestDraw()}
   canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',endDrag);
   canvas.addEventListener('keydown',function(e){if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].indexOf(e.key)<0)return;e.preventDefault();if(e.key==='ArrowLeft')rot-=.12;if(e.key==='ArrowRight')rot+=.12;if(e.key==='ArrowUp')tilt=Math.max(-.9,tilt-.08);if(e.key==='ArrowDown')tilt=Math.min(.9,tilt+.08);requestDraw()});
   window.addEventListener('resize',requestDraw,{passive:true});
