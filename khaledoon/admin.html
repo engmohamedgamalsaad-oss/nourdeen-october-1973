@@ -298,7 +298,8 @@ function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.va
 
 function startButtonProgress(btn,label){if(!btn)return;if(!btn.dataset.khOriginalHtml)btn.dataset.khOriginalHtml=btn.innerHTML;btn.classList.add('kh-progress-active');btn.setAttribute('aria-busy','true');btn.disabled=true;if(label)btn.textContent=label;}
 function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remove('kh-progress-active');btn.removeAttribute('aria-busy');btn.disabled=false;if(btn.dataset.khOriginalHtml){btn.innerHTML=btn.dataset.khOriginalHtml;delete btn.dataset.khOriginalHtml;}if(successLabel)btn.textContent=successLabel;}
-function markV2DraftPublishButton(btn,it){if(!btn||!it)return;var m=it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;if(m.v2_only_draft||(p&&p.v2_only_draft)){btn.disabled=true;btn.textContent='مسودة V2 — النشر غير متاح';btn.title='حزمة V2 محفوظة كاملة للمراجعة؛ مسار النشر الحالي لا يدعمها دون فقد بيانات.'}}
+function isV2OnlyDraftRecord(it){var m=it&&it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;return !!(m.v2_only_draft||(p&&p.v2_only_draft))}
+function markV2DraftPublishButton(btn,it){if(!btn||!isV2OnlyDraftRecord(it))return;btn.disabled=true;btn.textContent='مسودة V2 — النشر غير متاح';btn.title='حزمة V2 محفوظة كاملة للمراجعة؛ مسار النشر الحالي لا يدعمها دون فقد بيانات.'}
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
@@ -759,6 +760,7 @@ if(!isNew){
  });
  bPub.title='لا ينشر مباشرة؛ يحفظ المسودة ثم يفتح المعاينة للموافقة قبل أي نشر.';
  bPub.addEventListener('click',function(){openPreviewAfterSave(bPub)});
+ if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;bPreview.disabled=true;var v2ReadonlyNote=el('div','note','هذه مسودة V2 كاملة محفوظة للمراجعة. الحقول المعروضة هنا مجرد إسقاط متوافق مع الأدمن القديم وليست مصدر الحكاية. للتعديل، الصق حزمة V2 كاملة جديدة في خانة الذكاء الاصطناعي؛ النشر من المسار القديم محظور.');box.appendChild(v2ReadonlyNote)}
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
