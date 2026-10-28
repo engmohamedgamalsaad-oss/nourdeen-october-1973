@@ -1,7 +1,7 @@
 name: Khaledoon rebuild foundation checks # contract and V1-V2 adapter CI
 on:
   push:
-    branches: [rebuild/v2-story-foundation-isolated-2026-10-27]
+    branches: [main, rebuild/v2-story-foundation-isolated-2026-10-27]
   pull_request:
     paths: ['rebuild/**', '.github/workflows/rebuild-foundation.yml']
 permissions:
