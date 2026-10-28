@@ -6,6 +6,7 @@ import { v2ToAdminDraft } from '../adapters/v1-v2.mjs';
 
 test('admin import exposes V2 validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
+  const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
   assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261028-v2-admin-6"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.mjs', import.meta.url), 'utf8');
   assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261028-v2-admin-6'"));
@@ -18,6 +19,7 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
   assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
+  assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
   assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
   assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative V2 package');
   assert.ok(html.includes("v2PackageDirect=v2PendingDirect&&v2PendingDirect.v2_only_draft?v2PendingDirect.v2_package:(v2MetaDirect.v2_only_draft?v2MetaDirect.v2_package:null)"), 'manual preview should open the saved V2 package without persisting legacy projection edits');
