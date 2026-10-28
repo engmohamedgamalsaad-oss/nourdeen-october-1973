@@ -372,6 +372,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
  try{
   var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
   var meta=Object.assign({},it.story_meta||{}),draft=meta.pending_draft;
+  if(meta.v2_only_draft||(draft&&draft.v2_only_draft))throw new Error('حزمة V2 هذه محفوظة للمراجعة الكاملة فقط ولا يمكن تأكيد نشرها عبر مسار V1.');
   if(!draft){draft={};['section','stage','school_grade','subject','figure_name','narrator_name','narrator_grade','title','subtitle','body','original_body','history_note','sources','images_note','admin_notes','translations','consent','student_name','grade','color','story_number'].forEach(function(k){if(it[k]!==undefined)draft[k]=it[k]})}
   if(table!=='submitted_stories'&&draft.consent!==true&&it.status!=='published')throw new Error('لا يمكن تأكيد النشر قبل تسجيل موافقة الراوي أو ولي الأمر.');
   if(meta.preview_review&&(meta.preview_review.static_story_path||meta.preview_review.prepared_page_url)){
