@@ -47,3 +47,17 @@ test('valid V2 package beyond the V1 bridge is saved through a complete, non-pub
   assert.equal(draft.cover.kind, 'archival', 'legacy projection maps unsupported photo kind only for display/storage compatibility');
   assert.equal(pkg.cover.kind, 'photograph', 'authoritative V2 package must remain unchanged');
 });
+
+
+test('source story text and all original figure captions remain archived for editorial review', async () => {
+  const packageUrl = new URL('../story-packages/october-sea-men.v2.json', import.meta.url);
+  const figuresUrl = new URL('../story-packages/source-archives/october-sea-men-original-figures.json', import.meta.url);
+  const pkg = JSON.parse(await readFile(packageUrl, 'utf8'));
+  const figures = JSON.parse(await readFile(figuresUrl, 'utf8'));
+  assert.ok(pkg.original_body.length > 5500);
+  assert.ok(pkg.original_body.includes('النصر لا يصنعه بطل واحد'));
+  assert.ok(pkg.original_body.includes('كيف تُقرأ الخريطة البحرية؟'));
+  assert.equal(figures.figure_count, 9);
+  assert.equal(figures.figures.length, 9);
+  assert.ok(figures.figures.every(item => item.raw_html.includes('<figure') && item.raw_html.includes('<img')));
+});
