@@ -1,0 +1,23 @@
+/* Cinematic globe section for Khaledoon homepage. Original CSS; no external runtime dependency. */
+.kh-world{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 20% 50%,rgba(29,104,129,.18),transparent 54%),linear-gradient(180deg,rgba(6,20,34,.18),rgba(6,20,34,.02));border-block:1px solid rgba(240,200,120,.13)}
+.kh-world:before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background-image:radial-gradient(circle,rgba(240,200,120,.65) 0 1px,transparent 1.6px),radial-gradient(circle,rgba(151,216,228,.5) 0 1px,transparent 1.7px);background-size:83px 97px,127px 141px;background-position:12px 20px,54px 63px;opacity:.2;mask-image:linear-gradient(90deg,transparent,#000 18%,#000 82%,transparent)}
+.kh-world-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.9fr);align-items:end;gap:22px;margin-bottom:20px}
+.kh-world-head h2{font-family:Marhey,"Cairo",serif;font-size:clamp(1.65rem,3.4vw,2.5rem);line-height:1.45;margin:6px 0;color:var(--cream)}
+.kh-world-head p{margin:0;color:var(--muted);font-size:14px}
+.kh-world-stage{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(240px,.75fr);gap:18px;align-items:center;min-height:350px;padding:14px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(135deg,rgba(13,36,57,.72),rgba(5,14,29,.72));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 24px 65px rgba(0,0,0,.12)}
+.kh-world-canvas{display:block;width:100%;height:360px;min-width:0;touch-action:pan-y;cursor:grab;outline-offset:4px}
+.kh-world-canvas.is-dragging{cursor:grabbing;touch-action:none}
+.kh-world-side{padding:18px 10px;min-width:0}
+.kh-world-hint{font-size:12px;color:#f3cf85;margin:0 0 5px}
+.kh-world-status{font-size:12px;color:var(--muted);margin:0 0 18px}
+.kh-world-side h3{font-size:16px;color:#f6dca8;margin:0 0 10px}
+.kh-world-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.kh-world-chip{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:1px solid rgba(240,200,120,.3);border-radius:99px;background:rgba(255,255,255,.035);font-size:12px;color:var(--ink);transition:transform .2s,border-color .2s,background .2s}
+.kh-world-chip:hover{transform:translateY(-2px);border-color:var(--gold);background:rgba(240,200,120,.09)}
+.kh-world-side .btn{width:fit-content;max-width:100%}
+html[data-theme="light"] .kh-world{background:radial-gradient(ellipse at 20% 50%,rgba(49,142,160,.12),transparent 54%),linear-gradient(180deg,rgba(255,255,255,.2),transparent)}
+html[data-theme="light"] .kh-world-stage{background:linear-gradient(135deg,rgba(16,58,83,.96),rgba(6,20,39,.96));border-color:rgba(138,90,18,.32)}
+html[data-theme="light"] .kh-world-side h3{color:#f5dca7}
+html[data-theme="light"] .kh-world-chip{color:#fff4dc}
+@media(max-width:780px){.kh-world-head{grid-template-columns:1fr;gap:8px}.kh-world-stage{grid-template-columns:1fr;gap:0;padding:8px;min-height:0}.kh-world-canvas{height:min(78vw,340px);min-height:260px}.kh-world-side{padding:0 14px 16px}.kh-world-side .btn{width:100%}}
+@media(prefers-reduced-motion:reduce){.kh-world-chip{transition:none}.kh-world-chip:hover{transform:none}}
