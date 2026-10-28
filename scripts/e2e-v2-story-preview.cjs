@@ -107,6 +107,8 @@ async function main() {
   assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'read-only reviewer should render the saved V2 package');
   assert.equal(await reviewer.locator('#quiz article').count(), story.quiz.length, 'reviewer must retain the complete V2 quiz bank');
   assert.match(await reviewer.locator('header').textContent(), /لا تحفظ على Supabase ولا تنشر إلى الموقع/, 'reviewer must clearly state it cannot save or publish');
+  assert.equal(await reviewer.locator('#back-to-admin').getAttribute('href'), '../khaledoon/admin.html', 'reviewer must provide a clear route back to the admin decision workflow');
+  assert.match(await reviewer.locator('#back-to-admin').textContent(), /لوحة الإدارة/, 'return link should clearly identify the admin workflow');
   await reviewer.locator('#lang').selectOption('en');
   assert.equal(await reviewer.locator('#title').textContent(), story.i18n.en.title, 'reviewer should switch localized title');
   assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should switch to LTR for English');
