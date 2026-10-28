@@ -491,19 +491,85 @@
       "title": "Ali Moustafa Mosharafa",
       "organization": "Egypt State Information Service",
       "url": "https://sis.gov.eg/en/egypt/egyptian-figures/dr-ali-moustafa-mosharafa/",
-      "accessed_at": "2026-10-29"
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Ali Moustafa Mosharafa",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
     },
     {
       "title": "Ali Moustafa Mosharrafa (1898–1950)",
       "organization": "MacTutor History of Mathematics, University of St Andrews",
       "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Mosharrafa/",
-      "accessed_at": "2026-10-29"
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة (1898–1950)",
+          "organization": "موسوعة ماكتوتر لتاريخ الرياضيات — جامعة سانت أندروز"
+        },
+        "en": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor History of Mathematics, University of St Andrews"
+        },
+        "fr": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, histoire des mathématiques — Université de St Andrews"
+        },
+        "it": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, storia della matematica — Università di St Andrews"
+        },
+        "de": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, Geschichte der Mathematik — University of St Andrews"
+        }
+      }
     },
     {
       "title": "علي مصطفى مشرفة",
       "organization": "الهيئة العامة للاستعلامات المصرية",
       "url": "https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A3%D8%B9%D9%84%D8%A7%D9%85-%D9%88%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA-%D9%85%D8%B5%D8%B1%D9%8A%D8%A9/%D8%B9%D9%84%D9%8A-%D9%85%D8%B5%D8%B7%D9%81%D9%89-%D9%85%D8%B4%D8%B1%D9%81%D8%A9/",
-      "accessed_at": "2026-10-29"
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
     }
   ],
   "quiz": [
