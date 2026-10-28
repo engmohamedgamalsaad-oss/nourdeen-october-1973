@@ -34,7 +34,7 @@ const ar = story.i18n.ar;
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const page = `<!doctype html>
 <html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="robots" content="noindex,nofollow">
+
 <title>${escape(ar.title)} | خالدون عبر التاريخ</title>
 <meta name="description" content="${escape(ar.summary)}">
 <meta property="og:type" content="article"><meta property="og:title" content="${escape(ar.title)}"><meta property="og:description" content="${escape(ar.summary)}">
