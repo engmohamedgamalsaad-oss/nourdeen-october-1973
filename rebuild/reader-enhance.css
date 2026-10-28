@@ -96,7 +96,7 @@ body.modal-open{overflow:hidden}
 @page{margin:15mm}
 header,.story-actions,.story-intro-modal,.image-lightbox,.reactions-section,#quiz-section,.kh-progress{display:none!important}
 html,body{background:#fff!important;color:#111!important}
-body *{color:#111!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;transition:none!important}
+html body *{color:#111!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;transition:none!important}
 main{max-width:none!important;margin:0!important;padding:0!important}
 .hero,.section{background:#fff!important;border:0!important;border-radius:0!important;overflow:visible!important;padding:8px 0!important}
 .block{background:#fff!important;border:1px solid #ccc!important;break-inside:avoid}
