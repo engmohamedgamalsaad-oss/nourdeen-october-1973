@@ -927,7 +927,7 @@ function pubRow(it){
  function build(){
   if(built)return;built=true;var b=el('div','pbody');
   if(it._t==='site'){b.appendChild(siteCard(it));d.appendChild(b);return}
-  /* V2 is required for new stories and records already marked V2-only; editing a legacy record alone must not force V2. */
+  /* New unsaved stories, records explicitly marked V2-required, and V2-only drafts require V2. Existing unmarked records retain the compatibility path. */
   var requireV2ForNewStory=!it.id||!!(it.story_meta&&it.story_meta.v2_contract_required)||isV2OnlyDraftRecord(it);
   var forceCodeEdit=new URLSearchParams(location.search).get('editcode')===String(it.id);
   if(itemState(it)==='awaiting_publish'||itemState(it)==='editing'||forceCodeEdit||forceEditOpen){
