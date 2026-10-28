@@ -41,6 +41,9 @@ body[data-reveal=drop].kh-motion .kh-in{animation-name:kh-drop}
 @media(max-width:480px){#blocks[data-motif]{padding-inline-start:2rem}#blocks[data-motif] .block::before{inset-inline-start:-1.95rem}#blocks[data-motif=steps] .block:nth-of-type(3n+2){margin-inline-start:.25rem}#blocks[data-motif=steps] .block:nth-of-type(3n+3){margin-inline-start:.5rem}.kh-hexes{gap:5px}.kh-hexes>div{width:29vw;min-height:5.2rem;font-size:.7rem}.kh-hexes b{font-size:1.35rem}}
 
 /* V2 reader: section identity, story-start cover, actions, reactions and accessible image lightbox. */
+.kh-image-fallback{display:grid;place-items:center;min-height:180px;width:100%;padding:22px;border:1px dashed var(--line);border-radius:12px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));color:var(--muted);font-weight:700;text-align:center;line-height:1.8;overflow-wrap:anywhere}
+.intro-art .kh-cover-fallback{min-height:220px;max-height:420px}
+.kh-image-unavailable{display:block}
 #blocks .block{background:color-mix(in srgb,var(--accent) 5%,var(--panel));border-color:var(--line)}
 #blocks .block[data-speaker=karma]{background:color-mix(in srgb,var(--accent) 11%,var(--panel));border-inline-start-color:var(--accent)}
 #blocks figure img,#gallery figure img,#cover figure img{background:var(--bg)}
