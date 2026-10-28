@@ -14,6 +14,13 @@ test('V2 reader exposes all five language choices and changes text direction', (
   assert.match(js, /openstreetmap\.org/);
   assert.match(js, /document\.body\.dataset\.design/);
   assert.match(html, /id="theme-toggle"/);
+  assert.match(html, /id="start-story"/);
+  assert.match(js, /start:'ابدأ الحكاية'/);
+  assert.match(js, /start:'Start story'/);
+  assert.match(js, /start:'Commencer le récit'/);
+  assert.match(js, /start:'Inizia il racconto'/);
+  assert.match(js, /start:'Geschichte starten'/);
+  assert.match(js, /target\.scrollIntoView/);
   assert.match(html, /Marhey,Cairo,sans-serif/, 'reader headings need a sans-serif fallback when external fonts are blocked');
   assert.match(js, /themeLight/);
   assert.match(js, /dataset\.theme/);
@@ -44,6 +51,7 @@ test('static builder validates V2 packages and will not overwrite existing story
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /data\.v2\.json/);
-  assert.match(builder, /reader\.js\?v=20261028-v2-reader-2/);
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-2/);
+  assert.match(builder, /reader\.js\?v=20261028-v2-reader-3/);
+  assert.match(html, /reader\.js\?v=20261028-v2-reader-3/);
+  assert.match(builder, /id="start-story"/);
 });
