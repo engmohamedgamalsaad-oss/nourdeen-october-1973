@@ -27,8 +27,7 @@ test('admin import exposes V2 validator and converter and preserves original inp
 
 
 test('valid V2 package beyond the V1 bridge is saved through a complete, non-publishable projection', async () => {
-  const root = new URL('../', import.meta.url);
-  const packageUrl = new URL('../story-packages/october-sea-men.v2.json', root);
+  const packageUrl = new URL('../story-packages/october-sea-men.v2.json', import.meta.url);
   const pkg = JSON.parse(await readFile(packageUrl, 'utf8'));
   assert.deepEqual(validateStory(pkg), []);
   const bridgeErrors = validateForAdminBridge(pkg);
