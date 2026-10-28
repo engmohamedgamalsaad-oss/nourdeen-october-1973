@@ -937,7 +937,7 @@ function pubRow(it){
     var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
-    var aiPaste=area('',12,100000),aiPasteLocked=false;aiPaste.placeholder='الصق هنا JSON من KH_STORY_PACKAGE_V1 أو KHALEDOON_STORY_V2…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج أولًا. اضغط «تعديل» لتنفيذ الاستيراد وقفل الخانة؛ واضغطه مرة أخرى لفتحها للتعديل أو المسح.'));
+    var aiPaste=area('',12,100000),aiPasteLocked=false;aiPaste.placeholder='الصق هنا JSON الناتج من البرومبت الموحد…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج أولًا. اضغط «تعديل» لتنفيذ الاستيراد وقفل الخانة؛ واضغطه مرة أخرى لفتحها للتعديل أو المسح.'));
     var aiClear=el('button','btn ghost','مسح محتوى خانة AI');aiClear.type='button';aiClear.setAttribute('aria-label','مسح محتوى ناتج الذكاء الاصطناعي');aiPanel.appendChild(aiClear);
     /* لا نعرض لوحة الإصلاح؛ نكتفي برسالة الخطأ عند فشل التحقق. */
     function showAiRepair(){ }
@@ -1016,7 +1016,7 @@ function pubRow(it){
       }
      }
      if(pkg&&typeof pkg==='object'&&!Array.isArray(pkg)&&!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)){pkg.format='KH_STORY_PACKAGE_V1';aiJsonWasRepaired=true}
-     if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){aiFail('صيغة الناتج غير صحيحة؛ استخدم KH_STORY_PACKAGE_V1 أو KHALEDOON_STORY_V2.');return}
+     if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){aiFail('صيغة الحزمة غير معروفة. انسخ البرومبت من جديد وألصق الناتج كاملًا كما هو.');return}
      var langs=['en','fr','it','de'];
      var packageCheck=v2OnlyDraft?{ok:true,errors:[]}:window.KHWorkflow.validateStoryPackage(pkg);
      if(!packageCheck.ok){aiFail('الحزمة غير مكتملة:',packageCheck.errors);return}
