@@ -5,6 +5,8 @@ import { readFile } from 'node:fs/promises';
 const js = await readFile(new URL('../reader.js', import.meta.url), 'utf8');
 const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
 const css = await readFile(new URL('../reader-enhance.css', import.meta.url), 'utf8');
+const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), 'utf8');
+const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
 const validator = await readFile(new URL('../validate-story.mjs', import.meta.url), 'utf8');
 const sectionMatch = validator.match(/const sections = new Set\(\[([^\]]+)\]/);
 assert.ok(sectionMatch, 'validator exposes the canonical section contract');
