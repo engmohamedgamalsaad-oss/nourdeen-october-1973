@@ -325,41 +325,41 @@
     }
   },
   "cover": {
-    "url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/INSEilat.jpg/330px-INSEilat.jpg",
-    "kind": "photograph",
-    "source_name": "Wikimedia Commons; uploader קודקוד צהוב",
-    "source_url": "https://commons.wikimedia.org/wiki/File:INSEilat.jpg",
-    "rights": "Creative Commons Attribution-ShareAlike 3.0 Unported (CC BY-SA 3.0); credit the author, link the licence (https://creativecommons.org/licenses/by-sa/3.0/), and indicate changes.",
+    "url": "https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/assets/images/drafts/october-sea-men-cover.svg",
+    "kind": "illustration",
+    "source_name": "Original vector illustration prepared for Khaledoon (draft)",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/assets/images/drafts/october-sea-men-cover.svg",
+    "rights": "Original SVG illustration prepared for the Khaledoon project; no third-party photograph or illustration is embedded. Publication approval is pending project-owner review.",
     "i18n": {
       "ar": {
-        "alt": "المدمرة الإسرائيلية إيلات قبل إغراقها عام 1967",
-        "caption": "غلاف مؤقت: المدمرة إيلات قبل إغراقها عام 1967؛ صورة سياقية وليست صورة من حرب أكتوبر 1973.",
-        "source_name": "ويكيميديا كومنز؛ المصوّر קודקוד צהוב",
-        "rights": "المشاع الإبداعي: النسب-المشاركة بالمثل 3.0؛ يجب ذكر صاحب الصورة ورابط الترخيص: https://creativecommons.org/licenses/by-sa/3.0/"
+        "alt": "رسم توضيحي أصلي لقطعة بحرية فوق أمواج البحر وخط ذهبي عند الأفق؛ ليس صورة أرشيفية.",
+        "caption": "غلاف توضيحي أصلي مُعدّ للمشروع؛ لا يصوّر سفينة أو واقعة تاريخية محددة، ويحتاج اعتماد صاحب المشروع قبل النشر.",
+        "source_name": "رسم متجهي أصلي مُعدّ لمشروع خالدون (مسودة)",
+        "rights": "رسم SVG أصلي مُعدّ للمشروع ولا يتضمن صورة لطرف ثالث؛ اعتماد النشر من صاحب المشروع ما زال مطلوبًا."
       },
       "en": {
-        "alt": "The Israeli destroyer Eilat before it was sunk in 1967",
-        "caption": "Temporary cover: destroyer Eilat before its sinking in 1967; contextual image, not a photograph from the 1973 October War.",
-        "source_name": "Wikimedia Commons; photographer קודקוד צהוב",
-        "rights": "CC BY-SA 3.0; credit the photographer and link the licence: https://creativecommons.org/licenses/by-sa/3.0/"
+        "alt": "Original illustration of a naval vessel at sea beneath a gold horizon; not an archival photograph.",
+        "caption": "Original draft cover illustration; it does not depict a specific historical ship or event and needs project-owner approval before publication.",
+        "source_name": "Original vector illustration prepared for Khaledoon (draft)",
+        "rights": "Original project SVG with no third-party photo embedded; project-owner publication approval is still pending."
       },
       "fr": {
-        "alt": "Le destroyer israélien Eilat avant son naufrage en 1967",
-        "caption": "Couverture provisoire : le destroyer Eilat avant son naufrage en 1967 ; image de contexte, pas une photo de la guerre de 1973.",
-        "source_name": "Wikimedia Commons ; photographe קודקוד צהוב",
-        "rights": "CC BY-SA 3.0 ; créditer le photographe et créer un lien vers la licence : https://creativecommons.org/licenses/by-sa/3.0/"
+        "alt": "Illustration originale d’un navire militaire en mer sous un horizon doré ; ce n’est pas une photographie d’archive.",
+        "caption": "Illustration de couverture originale en brouillon ; elle ne représente aucun navire ni événement historique précis et doit être approuvée avant publication.",
+        "source_name": "Illustration vectorielle originale préparée pour Khaledoon (brouillon)",
+        "rights": "SVG original préparé pour le projet, sans photographie tierce intégrée ; l’approbation du propriétaire du projet reste nécessaire."
       },
       "it": {
-        "alt": "Il cacciatorpediniere israeliano Eilat prima dell’affondamento nel 1967",
-        "caption": "Copertina provvisoria: il cacciatorpediniere Eilat prima dell’affondamento nel 1967; immagine di contesto, non della guerra del 1973.",
-        "source_name": "Wikimedia Commons; fotografo קודקוד צהוב",
-        "rights": "CC BY-SA 3.0; citare il fotografo e collegare la licenza: https://creativecommons.org/licenses/by-sa/3.0/"
+        "alt": "Illustrazione originale di una nave militare in mare sotto un orizzonte dorato; non è una fotografia d’archivio.",
+        "caption": "Illustrazione originale provvisoria per la copertina; non raffigura una nave o un evento storico specifico e richiede l’approvazione del proprietario del progetto.",
+        "source_name": "Illustrazione vettoriale originale preparata per Khaledoon (bozza)",
+        "rights": "SVG originale per il progetto senza fotografie di terzi incorporate; l’approvazione alla pubblicazione da parte del proprietario è ancora necessaria."
       },
       "de": {
-        "alt": "Der israelische Zerstörer Eilat vor seiner Versenkung 1967",
-        "caption": "Vorläufiges Titelbild: Zerstörer Eilat vor der Versenkung 1967; Kontextbild, kein Foto aus dem Oktoberkrieg 1973.",
-        "source_name": "Wikimedia Commons; Fotograf קודקוד צהוב",
-        "rights": "CC BY-SA 3.0; Fotograf nennen und die Lizenz verlinken: https://creativecommons.org/licenses/by-sa/3.0/"
+        "alt": "Originalillustration eines Marineschiffs auf See unter einem goldenen Horizont; kein historisches Archivfoto.",
+        "caption": "Vorläufige Originalillustration für das Titelbild; sie zeigt kein bestimmtes historisches Schiff oder Ereignis und benötigt vor der Veröffentlichung die Freigabe des Projektinhabers.",
+        "source_name": "Originale Vektorillustration für Khaledoon (Entwurf)",
+        "rights": "Originale SVG-Grafik für das Projekt ohne eingebettetes Drittanbieterfoto; die Freigabe zur Veröffentlichung durch den Projektinhaber steht noch aus."
       }
     }
   },
