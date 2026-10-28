@@ -22,9 +22,13 @@ test('V2 reader exposes all five language choices and changes text direction', (
 });
 
 test('V2 reader renders story, gallery, quiz and source sections from one package', () => {
-  for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link']) assert.match(html, new RegExp('id="' + id + '"'));
+  for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link', 'story-intro-modal', 'intro-start', 'story-actions', 'print-story', 'share-whatsapp', 'share-facebook', 'share-copy', 'reaction-like', 'reaction-status', 'image-lightbox', 'intro-cover-fallback']) assert.match(html, new RegExp('id="' + id + '"'));
   assert.match(html, /data-design=ancient-civilization/);
   assert.match(js, /data\.format!=='KHALEDOON_STORY_V2'/);
+  assert.match(js, /SECTION_PALETTE/);
+  assert.match(js, /initReactions/);
+  assert.match(js, /openLightbox/);
+  assert.match(js, /showImageFallback/);
 });
 
 test('V2 reader refuses to silently fall back to a legacy package', () => {
@@ -44,6 +48,6 @@ test('static builder validates V2 packages and will not overwrite existing story
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /data\.v2\.json/);
-  assert.match(builder, /reader\.js\?v=20261028-v2-reader-2/);
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-2/);
+  assert.match(builder, /reader\.js\?v=20261028-v2-reader-4/);
+  assert.match(html, /reader\.js\?v=20261028-v2-reader-4/);
 });

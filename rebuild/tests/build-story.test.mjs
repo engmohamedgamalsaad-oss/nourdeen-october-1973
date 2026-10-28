@@ -60,6 +60,16 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     const saved = JSON.parse(await readFile(dataPath, 'utf8'));
     assert.match(page, /data-story-slug="987"/);
     assert.match(page, /data-design="arts-culture"/);
+    assert.match(page, /data-section="people"/);
+    assert.match(page, /data-start-only/);
+    assert.match(page, /data-disable-story-extras/);
+    assert.match(page, /id="intro-start"/);
+    assert.match(page, /id="intro-cover-fallback"/);
+    assert.match(page, /id="reaction-like"/);
+    assert.match(page, /id="share-whatsapp"/);
+    assert.match(page, /id="print-story"/);
+    assert.match(page, /id="image-lightbox"/);
+    assert.match(page, /reader\.js\?v=20261028-v2-reader-4/);
     assert.match(page, /Marhey,Cairo,sans-serif/, 'generated headings need a sans-serif fallback when web fonts are unavailable');
     assert.match(page, /data-story-path="data\.v2\.json"/);
     assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, 'a story page built for eventual approved publication must not remain noindex');
