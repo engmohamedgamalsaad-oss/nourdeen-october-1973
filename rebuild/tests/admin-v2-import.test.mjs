@@ -61,3 +61,13 @@ test('source story text and all original figure captions remain archived for edi
   assert.equal(figures.figures.length, 9);
   assert.ok(figures.figures.every(item => item.raw_html.includes('<figure') && item.raw_html.includes('<img')));
 });
+test('prompt administration links the dedicated V2 package instructions', async () => {
+  const promptAdmin = await readFile(new URL('../../khaledoon/prompts-admin.html', import.meta.url), 'utf8');
+  const prompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/V2-STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
+  assert.ok(promptAdmin.includes('V2-STORY-PACKAGE-PROMPT.md'));
+  assert.ok(prompt.includes('KHALEDOON_STORY_V2'));
+  assert.ok(prompt.includes('استلام الأصل'));
+  assert.ok(prompt.includes('التدقيق التاريخي'));
+  assert.ok(prompt.includes('الاعتماد والنشر'));
+  assert.ok(prompt.includes('كائن JSON واحدًا فقط'));
+});
