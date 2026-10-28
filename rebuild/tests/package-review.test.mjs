@@ -29,6 +29,8 @@ test('package review page exposes all five locales and displays data through tex
   assert.match(scripts[0], /KHALEDOON_STORY_V2/);
   assert.match(scripts[0], /src\.i18n/);
   assert.match(html, /id="map-section"/);
+  assert.match(html, /id="original-body"/);
+  assert.match(scripts[0], /\$\('original-body'\)\.textContent=story\.original_body/);
   assert.match(scripts[0], /story\.map_location/);
   assert.match(scripts[0], /openstreetmap\.org/);
   assert.match(scripts[0], /خمسة أسئلة/);
