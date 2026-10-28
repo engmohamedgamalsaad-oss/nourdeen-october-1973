@@ -567,9 +567,7 @@ function makePreviewDraft(statusForPreview){
    if(!ok){try{popup.close()}catch(e){}return}
    try{
     var draft=makePreviewDraft(saveStatus);draft.submission_id=it.id||null;draft.story_meta=it.story_meta||{};draft.karma_text=draft.karma_text||'';draft.question_bank_json=draft.question_bank_json||'';
-    localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));
-    localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));
-    popup.location.href='preview.html?story=1&submission='+encodeURIComponent(it.id);
+    var v2MetaForPreview=it.story_meta||{},v2PendingForPreview=v2MetaForPreview.pending_draft&&typeof v2MetaForPreview.pending_draft==='object'?v2MetaForPreview.pending_draft:null,v2PackageForPreview=v2PendingForPreview&&v2PendingForPreview.v2_only_draft?v2PendingForPreview.v2_package:(v2MetaForPreview.v2_only_draft?v2MetaForPreview.v2_package:null);if(v2PackageForPreview){localStorage.setItem('kh-v2-review-package',JSON.stringify(v2PackageForPreview));popup.location.href='../rebuild/package-review.html?draft=1'}else{localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));popup.location.href='preview.html?story=1&submission='+encodeURIComponent(it.id)}
    }catch(e){try{popup.close()}catch(ignore){}say('err','حُفظت المسودة، لكن تعذر تجهيز بيانات المعاينة: '+e.message)}
   }).catch(function(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+(e.message||'حدث خطأ'))});
  }
