@@ -19,7 +19,7 @@ function contentForSafetyScan(file: { content: string; encoding?: string }): str
   if (file.encoding !== "base64") return file.content;
   // GitHub accepts base64 content for binary assets, but V1 must not let
   // encoded HTML/JSON bypass the V2-artifact rejection below.
-  const compact = file.content.replace(/\\s/g, "");
+  const compact = file.content.replace(/\s/g, "");
   const bytes = Uint8Array.from(atob(compact), (character) => character.charCodeAt(0));
   return new TextDecoder().decode(bytes);
 }
