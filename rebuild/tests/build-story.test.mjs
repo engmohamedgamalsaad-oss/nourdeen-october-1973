@@ -68,7 +68,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     assert.match(page, /id="share-whatsapp"/);
     assert.match(page, /id="print-story"/);
     assert.match(page, /id="image-lightbox"/);
-    assert.match(page, /reader.js\\?v=20261028-v2-reader-3/);
+    assert.match(page, /reader\.js\?v=20261028-v2-reader-3/);
     assert.match(page, /Marhey,Cairo,sans-serif/, 'generated headings need a sans-serif fallback when web fonts are unavailable');
     assert.match(page, /data-story-path="data\.v2\.json"/);
     assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, 'a story page built for eventual approved publication must not remain noindex');
