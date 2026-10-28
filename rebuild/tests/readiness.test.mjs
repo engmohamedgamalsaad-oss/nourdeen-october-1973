@@ -18,3 +18,13 @@ test('V2 package readiness invokes the strict shared validator', () => {
   assert.match(cli, /validateLocalImagePaths/);
   assert.match(cli, /validateStory\(story\)/);
 });
+
+test('documented production workflow keeps all nine review gates', async () => {
+  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
+  assert.match(readme, /مراحل إنتاج الحكاية — تسع مراحل إلزامية/);
+  for (const stage of [
+    'استلام الأصل', 'التدقيق التاريخي', 'تحرير السرد', 'التصميم حسب القسم',
+    'الصور والحقوق', 'اللغات الخمس', 'التحقق الآلي', 'المعاينة والمراجعة', 'الاعتماد والنشر'
+  ]) assert.ok(readme.includes(stage), 'missing workflow stage: ' + stage);
+  assert.match(readme, /الاعتماد لا ينشر تلقائيًا/);
+});
