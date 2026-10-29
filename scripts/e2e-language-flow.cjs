@@ -207,7 +207,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
     check('mouse-wheel zoom is wired to the globe', !(await zoomReset.isDisabled()), 'wheel interaction should change zoom away from the reset scale');
     await zoomReset.click();
     check('reset control returns the globe to its default scale', await zoomReset.isDisabled(), 'reset should disable at the default scale');
-    await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), null, { timeout: 10000 });
+    await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), { timeout: 10000 });
 
     const data = await page.evaluate(async () => {
       const [geo, stories, places] = await Promise.all([
@@ -240,7 +240,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
       ]);
       const canvas = document.querySelector('#khWorld .kh-world-canvas');
       const rect = canvas.getBoundingClientRect(), w = rect.width, h = Math.max(250, Math.min(480, rect.height || 360));
-      const r = Math.min(w * .40, h * .45), cx = w * .49, cy = h * .5, tilt = -.16;
+      const r = Math.min(w * .40, h * .41), cx = w * .49, cy = h * .5, tilt = -.16;
       for (const s of stories) {
         if (!s || s.published === false) continue;
         const p = places[String(s.id).padStart(3, '0')];
