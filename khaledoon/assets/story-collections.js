@@ -53,14 +53,19 @@
       link.href = root + path;
       link.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
       var image = node('img', '');
-      image.src = source.src;
       image.alt = localized(story, 'title') || localized(story, 'person') || '';
-      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.loading = index < 4 ? 'eager' : 'lazy';
       image.decoding = 'async';
-      image.addEventListener('error', function () {
-        var item = image.closest('.kh-section-gallery-item');
-        if (item) item.remove();
-      }, { once: true });
+      var candidates = [];
+      try { candidates = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
+      if (!Array.isArray(candidates) || !candidates.length) candidates = [source.currentSrc || source.src];
+      var imageCandidate = 0;
+      image.onerror = function () {
+        imageCandidate += 1;
+        if (imageCandidate < candidates.length) image.src = candidates[imageCandidate];
+        else { var item = image.closest('.kh-section-gallery-item'); if (item) item.remove(); }
+      };
+      image.src = candidates[0];
       var caption = node('span', 'kh-section-gallery-caption');
       caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
       var person = localized(story, 'person');
@@ -156,6 +161,7 @@
     }
     var coverPhoto = COVER_PHOTOS[path.replace(/\/+$/, '')];
     if (coverPhoto && !coverUrl) candidates = [root + coverPhoto].concat(candidates);
+    cover.setAttribute('data-cover-candidates', JSON.stringify(candidates));
     var candidateIndex = 0;
     cover.onerror = function () {
       candidateIndex += 1;
