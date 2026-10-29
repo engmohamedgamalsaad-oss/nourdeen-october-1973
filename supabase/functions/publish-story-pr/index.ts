@@ -246,6 +246,9 @@ Deno.serve(async (req: Request) => {
     }
     const hasStoryPlace = Object.prototype.hasOwnProperty.call(incomingPlaces, storyId);
     const place = hasStoryPlace ? incomingPlaces[storyId] : undefined;
+    if (existingIndex < 0 && (!hasStoryPlace || place === null)) {
+      throw new Error('New stories must include a verified, sourced map location so the globe marker is created automatically; do not invent coordinates.');
+    }
     const currentPlacesResponse = await github('/repos/' + OWNER + '/' + REPO + '/contents/stories/places.json?ref=' + baseSha, githubToken);
     const currentPlacesBytes = Uint8Array.from(atob(currentPlacesResponse.content.replace(/\s/g, '')), (c) => c.charCodeAt(0));
     const currentPlaces = JSON.parse(new TextDecoder().decode(currentPlacesBytes));
