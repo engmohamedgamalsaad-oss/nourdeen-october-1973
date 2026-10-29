@@ -15,7 +15,7 @@
       "figure_name": "علي مصطفى مشرفة",
       "person": "علي مصطفى مشرفة",
       "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
-      "images_note": "الصور في هذه الصفحة رسوم توضيحية أصلية من إعداد مشروع خالدون، وليست صورًا أرشيفية أو صورًا حقيقية لعلي مصطفى مشرفة.",
+      "images_note": "صورة الغلاف صورة تاريخية من ويكيميديا كومنز، وبيانات مصدرها وحقوقها موضحة في وصف الصورة. أما الرسوم الأخرى في المعرض فهي رسوم توضيحية أصلية أُعدت لمشروع خالدون، وليست صورًا أرشيفية أو أشكالًا مأخوذة من أبحاث مشرفة.",
       "blocks": [
         {
           "type": "paragraph",
@@ -101,7 +101,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
-      "images_note": "The images on this page are original illustrations created for the Khaledoon project, not archival photographs or real portraits of Mosharafa.",
+      "images_note": "The cover is a historical photograph hosted on Wikimedia Commons; its source and rights are identified in the image details. The other gallery items are original illustrations made for the Khaledoon project, not archival photographs or figures taken from Mosharafa’s research.",
       "blocks": [
         {
           "type": "paragraph",
@@ -187,7 +187,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
-      "images_note": "Les images de cette page sont des illustrations originales créées pour le projet Khaledoon, et non des photographies d’archives ou de vrais portraits de Mosharafa.",
+      "images_note": "La couverture est une photographie historique hébergée sur Wikimedia Commons ; sa source et ses droits sont indiqués dans les détails de l’image. Les autres éléments de la galerie sont des illustrations originales créées pour le projet Khaledoon, et non des photos d’archives ni des figures tirées des travaux de Mosharafa.",
       "blocks": [
         {
           "type": "paragraph",
@@ -273,7 +273,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
-      "images_note": "Le immagini di questa pagina sono illustrazioni originali create per il progetto Khaledoon, non fotografie d’archivio né ritratti reali di Mosharafa.",
+      "images_note": "La copertina è una fotografia storica ospitata su Wikimedia Commons; la fonte e i diritti sono indicati nei dettagli dell’immagine. Gli altri elementi della galleria sono illustrazioni originali realizzate per il progetto Khaledoon, non fotografie d’archivio né figure tratte dalle ricerche di Mosharafa.",
       "blocks": [
         {
           "type": "paragraph",
@@ -359,7 +359,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
-      "images_note": "Die Bilder auf dieser Seite sind eigens für das Projekt Khaledoon angefertigte Illustrationen, keine Archivfotos und keine echten Porträts Mosharafas.",
+      "images_note": "Das Titelbild ist eine historische Fotografie von Wikimedia Commons; Quelle und Rechte sind in den Bilddetails angegeben. Die übrigen Galerieelemente sind eigens für das Khaledoon-Projekt erstellte Illustrationen, keine Archivfotos und keine Abbildungen aus Mosharafas Forschung.",
       "blocks": [
         {
           "type": "paragraph",
@@ -481,47 +481,6 @@
     }
   },
   "images": [
-    {
-      "id": "mosharafa-portrait",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-      "path": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-      "kind": "historical-photograph",
-      "source_name": "Wikimedia Commons",
-      "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
-      "rights": "Public domain per Wikimedia Commons file page",
-      "i18n": {
-        "ar": {
-          "alt": "صورة فوتوغرافية تاريخية لعلي مصطفى مشرفة",
-          "caption": "صورة أرشيفية لعلي مصطفى مشرفة؛ منشورة على ويكيميديا كومنز",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "الملكية العامة وفق صفحة الملف في ويكيميديا كومنز"
-        },
-        "en": {
-          "alt": "Historical photograph of Ali Mostafa Mosharafa",
-          "caption": "Archival portrait of Ali Mostafa Mosharafa, hosted on Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Public domain according to the file page on Wikimedia Commons"
-        },
-        "fr": {
-          "alt": "Photographie historique d’Ali Mostafa Mosharafa",
-          "caption": "Portrait d’archive d’Ali Mostafa Mosharafa hébergé sur Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Domaine public selon la page du fichier sur Wikimedia Commons"
-        },
-        "it": {
-          "alt": "Fotografia storica di Ali Mostafa Mosharafa",
-          "caption": "Ritratto d’archivio di Ali Mostafa Mosharafa ospitato su Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Pubblico dominio secondo la pagina del file su Wikimedia Commons"
-        },
-        "de": {
-          "alt": "Historische Fotografie von Ali Mostafa Mosharafa",
-          "caption": "Archivporträt von Ali Mostafa Mosharafa auf Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Gemeinfrei laut Dateiseite auf Wikimedia Commons"
-        }
-      }
-    },
     {
       "id": "study-desk",
       "path": "stories/science/016/study-desk.svg",
