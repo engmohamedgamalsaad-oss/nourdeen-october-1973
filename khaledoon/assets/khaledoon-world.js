@@ -79,6 +79,31 @@
   var sectionPalette={october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a',readers:'#80d5c7'};
   function sectionColor(sectionId){return sectionPalette[sectionId]||'#b8874b'}
   function localizedValue(value){return typeof value==='string'?value:(value&&value[lang()])||(value&&value.ar)||''}
+  var cityNames={
+    'Cairo':{ar:'القاهرة',en:'Cairo',fr:'Le Caire',it:'Il Cairo',de:'Kairo'},
+    'London':{ar:'لندن',en:'London',fr:'Londres',it:'Londra',de:'London'},
+    'Paris':{ar:'باريس',en:'Paris',fr:'Paris',it:'Parigi',de:'Paris'},
+    'New York':{ar:'نيويورك',en:'New York',fr:'New York',it:'New York',de:'New York'},
+    'Tokyo':{ar:'طوكيو',en:'Tokyo',fr:'Tokyo',it:'Tokyo',de:'Tokio'},
+    'New Delhi':{ar:'نيودلهي',en:'New Delhi',fr:'New Delhi',it:'Nuova Delhi',de:'Neu-Delhi'},
+    'Beijing':{ar:'بكين',en:'Beijing',fr:'Pékin',it:'Pechino',de:'Peking'},
+    'Moscow':{ar:'موسكو',en:'Moscow',fr:'Moscou',it:'Mosca',de:'Moskau'},
+    'Istanbul':{ar:'إسطنبول',en:'Istanbul',fr:'Istanbul',it:'Istanbul',de:'Istanbul'},
+    'Rome':{ar:'روما',en:'Rome',fr:'Rome',it:'Roma',de:'Rom'},
+    'Sydney':{ar:'سيدني',en:'Sydney',fr:'Sydney',it:'Sydney',de:'Sydney'},
+    'Mexico City':{ar:'مكسيكو سيتي',en:'Mexico City',fr:'Mexico',it:'Città del Messico',de:'Mexiko-Stadt'},
+    'Rio de Janeiro':{ar:'ريو دي جانيرو',en:'Rio de Janeiro',fr:'Rio de Janeiro',it:'Rio de Janeiro',de:'Rio de Janeiro'},
+    'Sao Paulo':{ar:'ساو باولو',en:'São Paulo',fr:'São Paulo',it:'San Paolo',de:'São Paulo'},
+    'Seoul':{ar:'سيول',en:'Seoul',fr:'Séoul',it:'Seul',de:'Seoul'},
+    'Berlin':{ar:'برلين',en:'Berlin',fr:'Berlin',it:'Berlino',de:'Berlin'},
+    'Madrid':{ar:'مدريد',en:'Madrid',fr:'Madrid',it:'Madrid',de:'Madrid'},
+    'Mumbai':{ar:'مومباي',en:'Mumbai',fr:'Mumbai',it:'Mumbai',de:'Mumbai'},
+    'Jakarta':{ar:'جاكرتا',en:'Jakarta',fr:'Jakarta',it:'Giacarta',de:'Jakarta'},
+    'Lagos':{ar:'لاغوس',en:'Lagos',fr:'Lagos',it:'Lagos',de:'Lagos'},
+    'Buenos Aires':{ar:'بوينس آيرس',en:'Buenos Aires',fr:'Buenos Aires',it:'Buenos Aires',de:'Buenos Aires'},
+    'Alexandria':{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'}
+  };
+  function cityLabel(name){var value=cityNames[name];return value&&(value[lang()]||value.en)||''}
   function buildStoryCard(p){
     var story=p.story,catNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};
     var l=lang(),sec=story.section||'',category=(catNames[l]||catNames.ar)[sec]||(catNames.ar[sec]||t('stories')),color=sectionColor(sec);
@@ -200,7 +225,9 @@
         var q=geo3([city.lng,city.lat]);if(q.z<=.02)return;
         var rr=city.population>=5000000?1.7:1.1;
         ctx.beginPath();ctx.arc(cx+q.x*r,cy-q.y*r,rr,0,Math.PI*2);
-        ctx.fillStyle='rgba(230,241,238,.62)';ctx.fill();
+        ctx.fillStyle='rgba(230,241,238,.72)';ctx.fill();
+        var label=city.label&&r>150&&q.z>.32?cityLabel(city.name):'';
+        if(label){ctx.font='10px Cairo, sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle='rgba(238,246,243,.88)';ctx.fillText(label,cx+q.x*r+4,cy-q.y*r-4,72)}
       });
     }
     var projected=[];
