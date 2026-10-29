@@ -44,3 +44,23 @@ body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-art img{width:100%
   body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-subtitle{margin-inline:auto}
   body[data-story-slug]:has(>header) .hero:has(.hero-art) .hero-art{max-width:300px;aspect-ratio:4/5}
 }
+
+/* شاشة «ابدأ الحكاية» على الشاشات القصيرة (هاتف بالطول أو بالعرض):
+   تُضغط الصورة والهوامش والخطوط بحيث تظهر البطاقة كاملة مع الزر دون تمرير داخلي.
+   لا تمس الشاشات الطويلة ولا حكايات أكتوبر 001–004 (لها تصميمها القديم). */
+@media(max-height:640px){
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-splash{padding:10px}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-card{max-height:calc(100dvh - 20px);border-radius:18px}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-art{height:clamp(110px,26dvh,170px);padding:8px}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-copy{padding:14px 18px}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-title{margin:2px 0 6px;font-size:clamp(1.2rem,4.6vw,1.6rem);line-height:1.4}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-role,
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-sub{margin:0 0 8px;font-size:.92rem;line-height:1.65}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-splash-start{margin-top:4px;padding:10px 26px;min-height:44px}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-close{top:6px;width:36px;height:36px;font-size:1.2rem}
+}
+/* هاتف بالعرض: عمودان، فتمتد الصورة بطول البطاقة بدل ارتفاع ثابت يفرض تمريرًا */
+@media(max-height:640px) and (min-width:701px){
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-art{height:auto;align-self:stretch}
+  html body[data-story-slug]:not(:is([data-story-slug="001"],[data-story-slug="002"],[data-story-slug="003"],[data-story-slug="004"])) .story-start-art img{max-height:calc(100dvh - 60px)}
+}
