@@ -35,10 +35,8 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(builder, /reader-base\.css\?v=20261028-unified-reader-2/);
   assert.match(baseCss, /\.hero/);
   assert.match(html, /reader\.js\?v=20261028-v2-reader-4/);
-  assert.match(js, /reader-enhance\.css\?v=20261029-paragraph-reveal-2/);
-  assert.match(js, /#blocks \.block > p,#blocks \.block-timeline > li,#blocks > figure/, 'paragraphs, timeline items and inline images reveal individually');
-  assert.match(css, /#blocks \.block>p\.kh-pending/, 'only reading content is hidden while awaiting its reveal');
-  assert.match(css, /prefers-reduced-motion:reduce\),print\{body\.kh-motion #blocks \.block>p[\s\S]*opacity:1!important/, 'reduced motion and print keep reading content visible');
+  assert.match(js, /reader-enhance\.css\?v=20261029-motion-safety-rollback-1/);
+  assert.match(js, /Motion reveal is temporarily disabled to guarantee all reading text stays visible/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
