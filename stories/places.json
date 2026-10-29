@@ -221,5 +221,33 @@
     },
     "source_url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/",
     "photo": "stories/science/015/cover.svg"
+  },
+  "016": {
+    "lat": 30.0277,
+    "lng": 31.2085,
+    "approximate": true,
+    "place": {
+      "ar": "جامعة القاهرة، الجيزة",
+      "en": "Cairo University, Giza",
+      "fr": "Université du Caire, Gizeh",
+      "it": "Università del Cairo, Giza",
+      "de": "Universität Kairo, Giza"
+    },
+    "place_label": {
+      "ar": "الجامعة التي درّس فيها وتولى عمادة كلية العلوم بها: ",
+      "en": "University where he taught and served as dean of the Faculty of Science: ",
+      "fr": "Université où il a enseigné et dirigé la faculté des sciences : ",
+      "it": "Università in cui insegnò e fu preside della Facoltà di Scienze: ",
+      "de": "Universität, an der er lehrte und Dekan der naturwissenschaftlichen Fakultät war: "
+    },
+    "source_name": {
+      "ar": "الهيئة العامة للاستعلامات المصرية — علي مصطفى مشرفة",
+      "en": "Egypt State Information Service — Ali Mostafa Mosharafa",
+      "fr": "Service d’information de l’État égyptien — Ali Mostafa Mosharafa",
+      "it": "Servizio d’informazione dello Stato egiziano — Ali Mostafa Mosharafa",
+      "de": "Staatlicher Informationsdienst Ägyptens — Ali Mostafa Mosharafa"
+    },
+    "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/dr-ali-moustafa-mosharafa/",
+    "photo": "stories/science/016/cover.svg"
   }
 }
