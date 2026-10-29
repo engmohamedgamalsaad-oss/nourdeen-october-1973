@@ -86,7 +86,7 @@ async function main() {
     await page.waitForFunction(expected => document.documentElement.lang === expected, lang);
     assert.equal(await page.locator('#title').textContent(), story.i18n[lang].title, lang + ' title should be localized');
     assert.equal(await page.locator('html').getAttribute('dir'), 'ltr', lang + ' should use LTR');
-    assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n[lang].caption), lang + ' gallery caption should be localized');
+    assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n[lang].caption), lang + ' gallery caption should be localized');
     assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n[lang].title), lang + ' source title should be localized');
     assert.equal(await page.locator('#quiz .q').count(), 1, lang + ' should show one quiz question at a time');
   }
@@ -153,7 +153,7 @@ async function main() {
   await mobile.waitForFunction(() => document.documentElement.lang === 'fr');
   assert.equal(await mobile.locator('#title').textContent(), story.i18n.fr.title);
   assert.equal(await mobile.locator('html').getAttribute('dir'), 'ltr');
-  assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.fr.caption), 'gallery caption should switch to French');
+  assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n.fr.caption), 'gallery caption should switch to French');
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 1, 'mobile story page must not overflow horizontally; measured ' + overflow + 'px');
   await mobile.screenshot({ path: path.join(artifactDir, 'v2-story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
