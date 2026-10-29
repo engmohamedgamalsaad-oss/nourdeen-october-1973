@@ -487,3 +487,16 @@ html[dir="ltr"] .section h2:after{transform-origin:left}
 @media(prefers-reduced-motion:reduce){
  .story-intro-modal:not([hidden]) .intro-card,.story-intro-modal:not([hidden]) .intro-art img,.story-intro-modal:not([hidden]) .intro-copy,.section h2:after{animation:none!important}
 }
+
+
+/* Emergency readability fix: story body content must never remain blurred/hidden if reveal JS does not finish. */
+body.kh-motion #blocks .block.kh-pending,
+html body .scene-motion-target,
+html body .scene-motion-visible {
+  opacity: 1 !important;
+  filter: none !important;
+  transform: none !important;
+  clip-path: none !important;
+  transition: none !important;
+  animation: none !important;
+}
