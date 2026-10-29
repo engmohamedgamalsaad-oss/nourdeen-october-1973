@@ -89,7 +89,9 @@
         image.alt = (localized(story, 'title') || localized(story, 'person') || '') + (gallerySources.length > 1 ? ' — ' + (photoIndex + 1) : '');
         image.loading = index < 3 ? 'eager' : 'lazy';
         image.decoding = 'async';
-        attachCoverFallback(image, photoIndex === 0 ? [photoUrl].concat(candidates) : [photoUrl, candidates[0]]);
+        var imageCandidates = photoIndex === 0 ? [photoUrl].concat(candidates) : [photoUrl, candidates[0]];
+        image.setAttribute('data-cover-candidates', JSON.stringify(imageCandidates));
+        attachCoverFallback(image, imageCandidates);
         var caption = node('span', 'kh-section-gallery-caption');
         caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
         var person = localized(story, 'person');
