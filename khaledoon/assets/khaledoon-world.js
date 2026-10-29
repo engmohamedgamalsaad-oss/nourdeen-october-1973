@@ -287,7 +287,7 @@
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
   function setZoom(next){zoom=Math.max(.78,Math.min(1.2,next));zoomOut.disabled=zoom<=.78;zoomIn.disabled=zoom>=1.2;zoomReset.disabled=Math.abs(zoom-1)<.001;requestDraw()}
   function updateZoomLabels(){zoomIn.setAttribute('aria-label',t('zoomIn'));zoomIn.title=t('zoomIn');zoomOut.setAttribute('aria-label',t('zoomOut'));zoomOut.title=t('zoomOut');zoomReset.setAttribute('aria-label',t('zoomReset'));zoomReset.title=t('zoomReset')}
-  updateZoomLabels();
+  updateZoomLabels();setZoom(zoom);
   zoomControls.addEventListener('click',function(e){var b=e.target.closest('button[data-world-zoom]');if(!b)return;if(b.dataset.worldZoom==='in')setZoom(zoom+.1);else if(b.dataset.worldZoom==='out')setZoom(zoom-.1);else setZoom(1)});
   canvas.addEventListener('wheel',function(e){e.preventDefault();setZoom(zoom+(e.deltaY<0?.06:-.06))},{passive:false});
   /* Explicit globe-to-map handoff: animate the globe out, reveal the map, and respect reduced-motion preferences. */
