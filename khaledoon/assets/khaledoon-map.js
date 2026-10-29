@@ -98,8 +98,11 @@
   box.appendChild(canvas); box.appendChild(legend);
   wrap.appendChild(head); wrap.appendChild(box);
   sec.appendChild(wrap);
+  /* Keep the real interactive map directly after the globe so the transition feels like one continuous explorer. */
+  var globe = document.getElementById('khWorld');
   var anchor = document.getElementById('how');
-  if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor);
+  if (globe && globe.parentNode) globe.insertAdjacentElement('afterend', sec);
+  else if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(sec, anchor);
   else main.appendChild(sec);
 
   /* ---------- البيانات ---------- */
