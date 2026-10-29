@@ -43,6 +43,15 @@
     var track = node('div', 'kh-section-gallery-track');
     var firstGroup = node('div', 'kh-section-gallery-group');
     var count = 0;
+    function attachCoverFallback(target, paths) {
+      var candidateIndex = 0;
+      target.onerror = function () {
+        candidateIndex += 1;
+        if (candidateIndex < paths.length) target.src = paths[candidateIndex];
+        else { var item = target.closest('.kh-section-gallery-item'); if (item) item.remove(); }
+      };
+      target.src = paths[0];
+    }
     entries.forEach(function (entry, index) {
       var source = entry.card && entry.card.querySelector('img.story-index-cover');
       if (!source || !source.getAttribute('src')) return;
@@ -59,13 +68,8 @@
       var candidates = [];
       try { candidates = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
       if (!Array.isArray(candidates) || !candidates.length) candidates = [source.currentSrc || source.src];
-      var imageCandidate = 0;
-      image.onerror = function () {
-        imageCandidate += 1;
-        if (imageCandidate < candidates.length) image.src = candidates[imageCandidate];
-        else { var item = image.closest('.kh-section-gallery-item'); if (item) item.remove(); }
-      };
-      image.src = candidates[0];
+      image.setAttribute('data-cover-candidates', JSON.stringify(candidates));
+      attachCoverFallback(image, candidates);
       var caption = node('span', 'kh-section-gallery-caption');
       caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
       var person = localized(story, 'person');
@@ -80,6 +84,13 @@
       var secondGroup = firstGroup.cloneNode(true);
       secondGroup.setAttribute('aria-hidden', 'true');
       secondGroup.querySelectorAll('a').forEach(function (link) { link.tabIndex = -1; });
+      /* cloneNode does not copy JavaScript event handlers: restore image fallback
+         on the duplicated, initially visible half of the moving gallery. */
+      secondGroup.querySelectorAll('img[data-cover-candidates]').forEach(function (image) {
+        var paths = [];
+        try { paths = JSON.parse(image.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
+        if (Array.isArray(paths) && paths.length) attachCoverFallback(image, paths);
+      });
       track.appendChild(secondGroup);
       track.classList.add('is-moving');
     } else {
