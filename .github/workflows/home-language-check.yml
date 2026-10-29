@@ -23,7 +23,7 @@ jobs:
         with:
           node-version: 20
       - name: Check story gate, map links, and admin prompt JavaScript syntax
-        run: node --check scripts/check-new-story-readiness.js && node --check scripts/check-map-story-links.js && node --check khaledoon/assets/khaledoon-map.js && node --check khaledoon/assets/khaledoon-admin-texts.js
+        run: node --check scripts/check-new-story-readiness.js && node --check scripts/check-map-story-links.js && node --check khaledoon/assets/khaledoon-map.js && node --check khaledoon/assets/khaledoon-world.js && node --check khaledoon/assets/khaledoon-admin-texts.js
       - name: Verify all published stories are linked from the interactive map
         run: node scripts/check-map-story-links.js
       - name: Verify Natural Earth globe geometry, colors, and story-point integration
