@@ -54,7 +54,7 @@
     section.querySelectorAll('[data-world-text]').forEach(function(n){n.textContent=t(n.dataset.worldText)});
     canvas.setAttribute('aria-label',t('title')+'. '+t('hint'));
     section.dir=document.documentElement.dir||'rtl';
-    if(points.length){status.textContent=points.length+' '+t('placesCount');renderStoryList()}
+    if(points.length){status.textContent=points.length+' '+t('placesCount');renderStoryList()}if(selectedPoint&&!selectedCard.hidden)selectedCard.replaceChildren(buildStoryCard(selectedPoint))
   }
   labels();
   var observer=new MutationObserver(labels);
@@ -246,7 +246,7 @@
     },reduced?0:680);
   });
   requestDraw();
-  fetch('khaledoon/assets/geo/natural-earth-110m.json',{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Natural Earth data unavailable');return r.json()}).then(function(g){if(g&&Array.isArray(g.land)&&Array.isArray(g.borders)&&Array.isArray(g.cities)){geography=g;requestDraw()}}).catch(function(){status.textContent=t('empty')});
+  fetch('khaledoon/assets/geo/natural-earth-110m.json',{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Natural Earth data unavailable');return r.json()}).then(function(g){if(g&&Array.isArray(g.land)&&Array.isArray(g.borders)&&Array.isArray(g.cities)){geography=g;requestDraw()}}).catch(function(){if(!points.length)status.textContent=t('empty')});
   function renderStoryList(){
     list.replaceChildren();
     points.slice(0,8).forEach(function(p){
