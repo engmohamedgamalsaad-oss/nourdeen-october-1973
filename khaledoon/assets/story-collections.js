@@ -52,31 +52,52 @@
       };
       target.src = paths[0];
     }
+    /* صور مرتبطة بالحكايات: صور من صفحات الحكايات نفسها، حتى لو لم تكن صورة الغلاف.
+       تظل صورة الغلاف بديلًا تلقائيًا لأي حكاية لا تتوفر لها صور إضافية. */
+    var STORY_GALLERY_PHOTOS = {
+      '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/bab-el-mandeb-satellite.jpg','stories/october/001/nabil-01.jpg'],
+      '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
+      '004': ['stories/october/004/Atef_El_Sadat.jpg'],
+      '005': ['assets/images/stories/Portrait_of_Avicenna.jpg'],
+      '006': ['assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'],
+      '007': ['assets/images/stories/500px-Ahmed_Zewail__2010.jpg'],
+      '008': ['assets/images/stories/Tawfiq_al-Hakim.jpg','assets/images/stories/img-f9fc402a87.jpg'],
+      '009': ['assets/images/stories/Naguib_Mahfouz_HR.jpg','assets/images/stories/Naguib_Mahfouz_in_1960s.jpg','assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'],
+      '010': ['assets/images/stories/SameeraMoussa.jpg','assets/images/stories/img-45f23418d6.jpg'],
+      '011': ['assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg','assets/images/stories/Mosque_of_Amr_Interior.jpg','assets/images/stories/Mosque_of_Amr_ibn_al-As_-_Cairo.jpg'],
+      '012': ['assets/images/stories/s76-20263_large.jpg','assets/images/stories/s69-38669.jpg'],
+      '013': ['assets/images/stories/21V_CAT096R3.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
+      '015': ['assets/images/stories/M_Yacoub.jpg']
+    };
     entries.forEach(function (entry, index) {
       var source = entry.card && entry.card.querySelector('img.story-index-cover');
       if (!source || !source.getAttribute('src')) return;
       var story = entry.story;
       var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
       if (!validPath(path)) return;
-      var link = node('a', 'kh-section-gallery-item');
-      link.href = root + path;
-      link.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
-      var image = node('img', '');
-      image.alt = localized(story, 'title') || localized(story, 'person') || '';
-      image.loading = index < 4 ? 'eager' : 'lazy';
-      image.decoding = 'async';
       var candidates = [];
       try { candidates = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
       if (!Array.isArray(candidates) || !candidates.length) candidates = [source.currentSrc || source.src];
-      image.setAttribute('data-cover-candidates', JSON.stringify(candidates));
-      attachCoverFallback(image, candidates);
-      var caption = node('span', 'kh-section-gallery-caption');
-      caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
-      var person = localized(story, 'person');
-      if (person && person !== localized(story, 'title')) caption.appendChild(node('small', '', person));
-      link.append(image, caption);
-      firstGroup.appendChild(link);
-      count += 1;
+      var related = STORY_GALLERY_PHOTOS[String(story.id || '')] || [];
+      var gallerySources = related.map(function (photo) { return root + photo; });
+      if (!gallerySources.length) gallerySources = [candidates[0]];
+      gallerySources.slice(0, 4).forEach(function (photoUrl, photoIndex) {
+        var item = node('div', 'kh-section-gallery-item');
+        item.setAttribute('role', 'img');
+        item.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
+        var image = node('img', '');
+        image.alt = (localized(story, 'title') || localized(story, 'person') || '') + (gallerySources.length > 1 ? ' — ' + (photoIndex + 1) : '');
+        image.loading = index < 3 ? 'eager' : 'lazy';
+        image.decoding = 'async';
+        attachCoverFallback(image, photoIndex === 0 ? [photoUrl].concat(candidates) : [photoUrl, candidates[0]]);
+        var caption = node('span', 'kh-section-gallery-caption');
+        caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
+        var person = localized(story, 'person');
+        if (person && person !== localized(story, 'title')) caption.appendChild(node('small', '', person));
+        item.append(image, caption);
+        firstGroup.appendChild(item);
+        count += 1;
+      });
     });
     if (!count) return;
     track.appendChild(firstGroup);
@@ -86,7 +107,7 @@
       secondGroup.querySelectorAll('a').forEach(function (link) { link.tabIndex = -1; });
       /* cloneNode does not copy JavaScript event handlers: restore image fallback
          on the duplicated, initially visible half of the moving gallery. */
-      secondGroup.querySelectorAll('img[data-cover-candidates]').forEach(function (image) {
+      secondGroup.querySelectorAll('img').forEach(function (image) {
         var paths = [];
         try { paths = JSON.parse(image.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
         if (Array.isArray(paths) && paths.length) attachCoverFallback(image, paths);
