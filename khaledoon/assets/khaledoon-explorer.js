@@ -84,9 +84,10 @@
   document.addEventListener('click', function (e) {
     var a = e.target && e.target.closest ? e.target.closest('#khWorld a.btn.ghost') : null;
     if (!a || !document.getElementById('khMap')) return;
+    var sel = window._khWorldApi && window._khWorldApi.getSelected && window._khWorldApi.getSelected();
     var chosen = document.querySelector('#khWorld .kh-world-side > a.kh-world-chip:not([hidden])');
-    var m = chosen && /\/(\d{3})\/?$/.exec(chosen.getAttribute('href') || '');
-    var canvas = document.querySelector('#khWorld canvas');
+    var m = sel && sel.story && sel.story.id ? [0, String(sel.story.id)] : (chosen && /\/(\d{3})\/?$/.exec(chosen.getAttribute('href') || ''));
+    var canvas = document.querySelector('#khWorld .kh-world-gl canvas') || document.querySelector('#khWorld canvas');
     if (run({ storyId: m ? m[1] : '', from: 'globe', origin: originOf(canvas) })) { e.preventDefault(); e.stopImmediatePropagation(); }
   }, true);
 
