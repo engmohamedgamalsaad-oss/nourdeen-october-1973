@@ -424,3 +424,8 @@ header.story-header-hidden{transform:translateY(calc(-100% - 2px));opacity:0;poi
   header.story-header-hidden{transform:translateY(-100%)!important;opacity:0!important;transition:none!important}
   header:not(.story-header-hidden){transform:none!important;opacity:1!important;transition:none!important}
 }
+
+/* Visible disclosure for the illustrative start-screen cover. */
+.intro-art{position:relative}
+.intro-art-note{position:absolute;inset-inline-start:12px;bottom:12px;z-index:2;max-width:calc(100% - 24px);padding:4px 10px;border:1px solid #8ad9e880;border-radius:999px;background:#071923eF;color:#effcff;font:700 .72rem/1.7 Cairo,system-ui,sans-serif;box-shadow:0 4px 15px #0004}
+html[data-theme=light] .intro-art-note{background:#ffffffed;color:#164956;border-color:#9ccbd2}
