@@ -114,3 +114,30 @@ function selectPoint(q){ // q = {p: point, x: number, y: number}
 - لا تلمس touch-action:pan-y في السطر المحمي.
 - إدراج canvas Three.js قبل canvas 2D.
 - __khUseThree=true قبل world.js.
+
+
+## مراجعة فعلية للمستودع — 2026-10-29
+
+تمت مقارنة هذا المرجع مع الملفات الحالية في الفرع `main`. هذا القسم يدوّن نتائج التحقق، ولا يعني أن Three.js قد نُفّذ أو نُشر.
+
+### الحالة المؤكدة وقت المراجعة
+
+- `khaledoon/assets/khaledoon-world.js` ما زال نسخة Canvas 2D الأصلية؛ لم تُضف إليه `__khWorldApi` ولم تُعدّل دالتا `draw()` و`requestDraw()`.
+- `index.html` لا يحتوي حاليًا على `window.__khUseThree=true` ولا يحمل `khaledoon-world-three.js`.
+- `khaledoon/assets/khaledoon-world-three.js` لم يكن موجودًا في `main` وقت المراجعة.
+- CSS الحالي يحتفظ بقاعدة `.kh-world-canvas{...touch-action:pan-y...}` المحمية. لا تُعدّلها.
+- `scripts/check-natural-earth-globe.js` يتحقق من وجود رموز محددة في ملفات Canvas الحالية، بما فيها `function loadSectionPalette` و`function loadHiddenStories` و`story_visibility?select=story_id` و`dispatchEvent(new CustomEvent('kh:world-select'`، ومن قاعدة CSS المحمية.
+- `normalizePoint` الحالي يرفض النقاط التي لا تحتوي على رابط HTTPS ومصدر مترجم باللغات الخمس. لا تغيّر هذا السلوك.
+
+### ملاحظات مراجعة على مسودة Three.js المقدمة
+
+1. المسودة ترسم كرة بلون شبكي، وتضيف خطوط الحدود والمدن، لكنها لا ترسم مضلعات `g.land` نفسها؛ لذلك لن تظهر القارات كأشكال أرض فعلية كما تصف المهمة. يلزم تنفيذ بناء هندسة اليابسة من Polygon/MultiPolygon.
+2. الاستيراد المباشر لـ `OrbitControls.js` من jsDelivr باستخدام `import(ORBIT_URL)` قد يفشل في المتصفح بسبب استيراده الداخلي من الاسم المجرد `three` دون import map. يجب اختيار طريقة تحميل متوافقة واختبارها فعليًا.
+3. لا يجوز اعتبار `failWebGL` أو مسار الرجوع إلى Canvas 2D ناجحًا قبل اختبار فشل WebGL وفشل تحميل المكتبات في متصفح. يجب التأكد أيضًا من عدم بقاء `window.__khThreeGlobe` في حالة تمنع إعادة المحاولة عند فشل التهيئة.
+4. فحص النقاط في `animate()` يقارن `api.points.length` مع `lastLen`، لكن `rebuildMarkers()` لا يحدّث `lastLen` عند اكتمال التحميل الأول؛ يجب جعل اكتشاف التغير وإعادة البناء واضحين ومن دون إعادة بناء مستمرة.
+5. يجب مراجعة اتجاه الإحداثيات في `latLngToVec3` و`drawBorders` معًا؛ لا يكفي أن تكون الأرقام صحيحة، بل يجب أن تتطابق مواقع الحدود والمدن مع اتجاه الكرة والعلامات.
+6. المقتطف المرسل لإضافات CSS كان مقطوعًا عند `curs`، لذا لا يُعامل كملف CSS مكتمل أو قابل للإضافة كما هو.
+
+### قاعدة قبل التنفيذ
+
+لا ترفع ملفات Three.js أو تعدّل `index.html` على أساس المسودة وحدها. أولًا أصلح النقاط أعلاه، ثم طبّق أصغر تغيير آمن على نسخة `main` التي تمت قراءتها، وبعدها شغّل فحوصات CI واختبر الصفحة في متصفح. سجّل النتائج الفعلية فقط؛ لا تكتب أن اختبارًا نجح ما لم يتم تشغيله.
