@@ -40,9 +40,6 @@ body.dataset.reveal=opts[h%opts.length];body.style.setProperty('--kh-dur',(0.55+
 var boxes=$('blocks').querySelectorAll('.block');
 t.blocks.forEach(function(b,i){if(boxes[i])boxes[i].dataset.type=b.type||''});
 var old=$('kh-hexes');if(old)old.remove();
-var hex=document.createElement('div');hex.id='kh-hexes';hex.className='kh-hexes';
-[story.quiz.length,langs.length,story.sources.length].forEach(function(n,i){var d=document.createElement('div'),b=document.createElement('b');b.textContent=n.toLocaleString(current);d.append(b,document.createTextNode(' '+statLabels[current][i]));hex.appendChild(d)});
-$('summary').after(hex);
 var hd=document.querySelector('header');
 if(hd&&!$('kh-progress')){var pr=document.createElement('div');pr.id='kh-progress';pr.className='kh-progress';pr.setAttribute('aria-hidden','true');hd.appendChild(pr)}
 if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=document.documentElement,m=d.scrollHeight-d.clientHeight,pr=$('kh-progress');if(pr)pr.style.setProperty('--kh-p',m>0?Math.min(1,d.scrollTop/m):0)},{passive:true});progressListenerAdded=true}
