@@ -77,7 +77,7 @@
   function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[l]||s[key]||''}
   function localizedPlace(p){var l=lang(),v=p&&p.place;return typeof v==='string'?v:(v&&v[l])||(v&&v.ar)||''}
   /* Defaults mirror khaledoon-map.js; the admin-configured section colors override them when available. */
-  var sectionPalette={october:'#f0c878',history:'#d4b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#f5b37e',islamic:'#78c59a',readers:'#80d5c7'};
+  var sectionPalette={october:'#f0c878',history:'#d4b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#f5b37e',islamic:'#78c59a',readers:'#b8874b'};
   var sectionAliases={knowledge:'women',learning:'women',fame:'people'};
   function canonicalSection(sectionId){return sectionAliases[sectionId]||sectionId}
   function sectionColor(sectionId){return sectionPalette[canonicalSection(sectionId)]||'#b8874b'}
