@@ -48,7 +48,7 @@ for (const token of [
   'sectionColor(q.p.story.section)'
 ]) assert.ok(world.includes(token), 'globe integration missing: ' + token);
 assert.ok(css.includes('.kh-world-story-card'), 'globe character popup needs its card styles');
-assert.ok(world.includes("var zoom=1"), 'globe zoom state must exist');
+assert.ok(world.includes("tilt=-.16,zoom=1"), 'globe zoom state must exist');
 assert.ok(world.includes("function setZoom(next)"), 'globe must expose bounded zoom controls');
 assert.ok(world.includes("canvas.addEventListener('wheel'"), 'mouse-wheel zoom must be handled by the globe without scrolling the page');
 assert.ok(world.includes("zoomIn.setAttribute('aria-label',t('zoomIn'))"), 'zoom controls must have localized accessible labels');
