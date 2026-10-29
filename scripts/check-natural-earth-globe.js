@@ -9,7 +9,7 @@ function json(rel) { return JSON.parse(read(rel)); }
 const geo = json('khaledoon/assets/geo/natural-earth-110m.json');
 assert.match(geo.source_url, /^https:\/\/www\.naturalearthdata\.com\//, 'Natural Earth source URL must be HTTPS');
 assert.match(geo.source, /Natural Earth 1:110m/i, 'geography data must declare its Natural Earth scale/source');
-assert.match(geo.attribution, /public domain/i, 'geography attribution/license must be explicit');
+assert.match(geo.source + ' ' + geo.attribution, /public domain/i, 'geography attribution/license must be explicit');
 assert.ok(Array.isArray(geo.land) && geo.land.length >= 100, 'expected real land geometry, not a few hand-drawn silhouettes');
 assert.ok(Array.isArray(geo.borders) && geo.borders.length >= 100, 'expected country-border geometry');
 assert.ok(Array.isArray(geo.cities) && geo.cities.length >= 100, 'expected a substantial real-city coordinate set');
