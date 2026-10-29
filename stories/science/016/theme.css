@@ -472,3 +472,18 @@ html[dir="ltr"] #kh-progress{transform-origin:left center}
  .scene-motion-target,.scene-motion-visible{opacity:1!important;transform:none!important;filter:none!important;transition:none!important;animation:none!important}
  .hero #section-name,.hero #title,.hero #subtitle,.hero #summary,.hero #cover,.hero #student,.hero .story-actions{animation:none!important}
 }
+
+
+/* Match the approved story pattern: animated cover/start screen, then readable story cards. */
+@keyframes kh-intro-modal-enter{from{opacity:0;transform:translateY(24px) scale(.975)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes kh-intro-image-enter{from{opacity:0;transform:scale(1.045)}to{opacity:1;transform:scale(1)}}
+@keyframes kh-intro-copy-enter{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+@keyframes kh-heading-underline{from{transform:scaleX(0);opacity:.2}to{transform:scaleX(1);opacity:1}}
+.story-intro-modal:not([hidden]) .intro-card{animation:kh-intro-modal-enter .72s cubic-bezier(.16,1,.3,1) both}
+.story-intro-modal:not([hidden]) .intro-art img{animation:kh-intro-image-enter .9s cubic-bezier(.2,.8,.2,1) both}
+.story-intro-modal:not([hidden]) .intro-copy{animation:kh-intro-copy-enter .72s .12s both}
+.section h2:after{transform-origin:right;animation:kh-heading-underline .72s .15s both}
+html[dir="ltr"] .section h2:after{transform-origin:left}
+@media(prefers-reduced-motion:reduce){
+ .story-intro-modal:not([hidden]) .intro-card,.story-intro-modal:not([hidden]) .intro-art img,.story-intro-modal:not([hidden]) .intro-copy,.section h2:after{animation:none!important}
+}
