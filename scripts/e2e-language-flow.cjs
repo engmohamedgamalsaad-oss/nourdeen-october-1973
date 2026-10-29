@@ -301,7 +301,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
       viewport: document.documentElement.clientWidth,
       canvas: !!document.querySelector('#khWorld canvas'),
       list: document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip').length,
-      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
+      overflow: (() => { const el = document.querySelector('#khWorld'); const r = el.getBoundingClientRect(); return el.scrollWidth > el.clientWidth + 1 || r.left < -1 || r.right > document.documentElement.clientWidth + 1; })()
     }));
     check('globe remains visible and usable on mobile without horizontal overflow',
       state.canvas && state.list > 0 && state.width > 0 && !state.overflow, JSON.stringify(state));
