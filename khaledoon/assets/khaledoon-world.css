@@ -86,3 +86,14 @@ html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 3
 #khMap.kh-map-arrived .khm-canvas{animation:khMapCanvasReveal .68s ease both}
 @keyframes khMapCanvasReveal{from{opacity:.82;filter:brightness(1.16) saturate(1.2)}to{opacity:1;filter:none}}
 @media(prefers-reduced-motion:reduce){.kh-world-canvas,#khMap.kh-map-arrived .khm-canvas{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
+
+
+/* The globe and the existing Leaflet map form one continuous exploration sequence. */
+#khWorld{margin-bottom:0;border-bottom:0}
+#khWorld+#khMap{margin-top:0;padding-top:clamp(22px,3vw,38px);background:linear-gradient(180deg,rgba(6,20,34,.18),transparent 110px)}
+#khWorld+#khMap:before{height:3px;opacity:.9;background:linear-gradient(90deg,transparent,rgba(240,200,120,.78),rgba(138,217,232,.72),rgba(240,200,120,.78),transparent)}
+#khWorld+#khMap .head{margin-bottom:18px}
+#khWorld+#khMap .khm-box{border-color:rgba(240,200,120,.28);box-shadow:0 22px 58px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.05)}
+#khWorld.kh-world-leaving{filter:saturate(1.08)}
+#khMap.kh-map-arriving .khm-box{border-color:rgba(240,200,120,.7);box-shadow:0 0 0 2px rgba(240,200,120,.12),0 26px 68px rgba(0,0,0,.2)}
+@media(prefers-reduced-motion:reduce){#khWorld+#khMap .khm-box{transition:none!important}}
