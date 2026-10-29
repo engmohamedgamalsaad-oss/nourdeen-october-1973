@@ -77,3 +77,12 @@ html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 3
 /* Story categories on the globe use the existing section palette. */
 .kh-world-chip{border-color:var(--section-color,#b8874b)!important;color:var(--section-color,#b8874b)!important;background:color-mix(in srgb,var(--section-color,#b8874b) 10%,transparent)!important}
 .kh-world-chip:hover,.kh-world-chip[aria-current=true]{background:var(--section-color,#b8874b)!important;color:#07151f!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--section-color,#b8874b) 28%,transparent)}
+
+
+/* Cinematic handoff: the globe network enlarges as the real map reveals the selected story. */
+.kh-world-canvas{transform:scale(1);transform-origin:center;transition:transform .68s cubic-bezier(.2,.75,.25,1),filter .68s ease,opacity .5s ease}
+.kh-world.kh-world-leaving .kh-world-canvas{transform:scale(1.075);filter:brightness(1.2) drop-shadow(0 0 24px rgba(83,190,214,.38));opacity:.88}
+#khMap.kh-map-arriving .khm-canvas{filter:saturate(1.12)}
+#khMap.kh-map-arrived .khm-canvas{animation:khMapCanvasReveal .68s ease both}
+@keyframes khMapCanvasReveal{from{opacity:.82;filter:brightness(1.16) saturate(1.2)}to{opacity:1;filter:none}}
+@media(prefers-reduced-motion:reduce){.kh-world-canvas,#khMap.kh-map-arrived .khm-canvas{transition:none!important;animation:none!important;transform:none!important;filter:none!important;opacity:1!important}}
