@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">University learning illustration</title><desc id="desc">An original conceptual illustration of a university building, books and a path of discovery</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071827"/><stop offset="1" stop-color="#174b59"/></linearGradient><linearGradient id="stone" x2="0" y2="1"><stop stop-color="#f5e4b7"/><stop offset="1" stop-color="#b9a16d"/></linearGradient><radialGradient id="halo"><stop stop-color="#8ad9e8" stop-opacity=".4"/><stop offset="1" stop-color="#8ad9e8" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="800" rx="38" fill="url(#bg)"/><circle cx="850" cy="290" r="320" fill="url(#halo)"/>
+<g fill="none" stroke="#8ad9e8" opacity=".5"><path d="M80 140H1120M80 170H1120M80 650H1120" stroke-width="2"/><circle cx="1030" cy="120" r="4"/><circle cx="1100" cy="210" r="3"/><circle cx="170" cy="245" r="4"/></g>
+<path d="M210 390L600 205L990 390Z" fill="url(#stone)" stroke="#e6c27a" stroke-width="8"/><path d="M260 390H940V610H260Z" fill="#e7d6a8" stroke="#d8bb78" stroke-width="8"/>
+<g fill="#123b4a" stroke="#8ad9e8" stroke-width="5"><path d="M315 420h95v190h-95z"/><path d="M455 420h95v190h-95z"/><path d="M650 420h95v190h-95z"/><path d="M790 420h95v190h-95z"/></g>
+<path d="M565 465Q600 445 635 465V610H565Z" fill="#8b6d40"/><path d="M150 650Q600 600 1050 650L1120 730H80Z" fill="#0b2634"/><path d="M600 610L600 730M570 630L530 730M630 630L670 730" stroke="#e6c27a" stroke-width="5" opacity=".75"/>
+<g transform="translate(105 510)"><path d="M0 35Q45 5 90 35V125Q45 95 0 125Z" fill="#f6e8c7"/><path d="M90 35Q135 5 180 35V125Q135 95 90 125Z" fill="#fff7e4"/><path d="M90 35V125" stroke="#c89d53" stroke-width="5"/><g stroke="#68828a" stroke-width="4"><path d="M18 57h55M18 75h55M108 57h55M108 75h55"/></g></g>
+<g fill="#e6c27a"><circle cx="600" cy="205" r="12"/><path d="M600 155v-30M560 175l-20-20M640 175l20-20" stroke="#e6c27a" stroke-width="5"/></g>
+</svg>
