@@ -112,10 +112,30 @@
       if(z>-.05)projected.push({x:cx+x*r,y:cy-y*r,z:z,p:p,i:i});
     });
     hitTargets=projected.map(function(q){return {x:q.x,y:q.y,r:Math.max(10,2.8+Math.max(0,q.z)*2.3),p:q.p,z:q.z}});
+    /* Fine gold/cyan links are a visual story network, not historical travel routes. */
+    ctx.save();
+    ctx.lineWidth=.8;
+    projected.forEach(function(q,i){
+      var nearest=null,nearestD=Infinity;
+      for(var j=0;j<projected.length;j++){
+        if(i===j)continue;
+        var other=projected[j],distance=Math.hypot(other.x-q.x,other.y-q.y);
+        if(distance<nearestD){nearest=other;nearestD=distance}
+      }
+      if(nearest&&nearestD<r*.72&&projected.indexOf(nearest)>i){
+        ctx.beginPath();ctx.moveTo(q.x,q.y);
+        var mx=(q.x+nearest.x)/2,my=(q.y+nearest.y)/2-r*.035;
+        ctx.quadraticCurveTo(mx,my,nearest.x,nearest.y);
+        ctx.strokeStyle='rgba(138,217,232,'+(0.12+Math.min(q.z,nearest.z)*.12)+')';
+        ctx.stroke();
+      }
+    });
+    ctx.restore();
     projected.forEach(function(q){
       var rr=2.8+Math.max(0,q.z)*2.3;
-      ctx.beginPath();ctx.arc(q.x,q.y,rr*2.8,0,Math.PI*2);ctx.fillStyle='rgba(240,200,120,.10)';ctx.fill();
-      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle=(selectedPoint&&selectedPoint.story===q.p.story)?'#fff4c6':'#f3cf85';ctx.fill();
+      var chosen=!!(selectedPoint&&selectedPoint.story===q.p.story);
+      ctx.beginPath();ctx.arc(q.x,q.y,rr*(chosen?4.1:2.8),0,Math.PI*2);ctx.fillStyle=chosen?'rgba(255,244,198,.2)':'rgba(240,200,120,.10)';ctx.fill();
+      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle=chosen?'#fff4c6':'#f3cf85';ctx.fill();
       ctx.strokeStyle='rgba(255,245,220,.9)';ctx.lineWidth=1;ctx.stroke();
     });
     ctx.restore();
