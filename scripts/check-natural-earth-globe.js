@@ -52,6 +52,8 @@ assert.ok(world.includes('a.style.setProperty(\'--section-color\',sectionColor(s
 assert.ok(world.includes("approximate:'الموقع تقريبي ويحتاج إلى مراجعة'"), 'approximate-location notice must match the interactive map card');
 assert.ok(map.includes("document.addEventListener('kh:world-select'"), 'globe selection must hand off to the existing interactive map');
 assert.ok(bundle.includes("files.push({path:'stories/places.json'"), 'story publishing bundle must update the shared map places index');
+assert.ok(bundle.includes('if(!hasMapMeta)throw new Error(\'map_location إلزامي لكل حكاية'), 'story bundle must require an explicit map_location decision');
+assert.ok(publisher.includes('if (existingIndex < 0 && (!hasStoryPlace || place === null))'), 'new stories must not publish without a verified map point');
 assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'), 'publisher must synchronize a new story location into stories/places.json');
 assert.ok(publisher.includes('stories/places.json is required so publishing can synchronize the interactive map automatically'), 'publisher must require the synchronized places index');
 
