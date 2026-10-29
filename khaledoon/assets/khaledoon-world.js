@@ -168,6 +168,7 @@
   }
   function draw(){
     raf=0;
+    if(window._khUseThree&&glHooks){glHooks.redraw.forEach(function(f){try{f()}catch(e){}});return}
     var rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
     var w=Math.max(260,rect.width),h=Math.max(250,Math.min(480,rect.height||360));
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
@@ -285,10 +286,10 @@
     if(canAnimate()||drag)raf=requestAnimationFrame(draw);
   }
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
-  function setZoom(next){zoom=Math.max(.78,Math.min(1.2,next));zoomOut.disabled=zoom<=.78;zoomIn.disabled=zoom>=1.2;zoomReset.disabled=Math.abs(zoom-1)<.001;requestDraw()}
+  function setZoom(next){zoom=Math.max(.78,Math.min(1.2,next));zoomOut.disabled=zoom<=.78;zoomIn.disabled=zoom>=1.2;zoomReset.disabled=Math.abs(zoom-1)<.001&&!window._khUseThree;requestDraw()}
   function updateZoomLabels(){zoomIn.setAttribute('aria-label',t('zoomIn'));zoomIn.title=t('zoomIn');zoomOut.setAttribute('aria-label',t('zoomOut'));zoomOut.title=t('zoomOut');zoomReset.setAttribute('aria-label',t('zoomReset'));zoomReset.title=t('zoomReset')}
   updateZoomLabels();setZoom(zoom);
-  zoomControls.addEventListener('click',function(e){var b=e.target.closest('button[data-world-zoom]');if(!b)return;if(b.dataset.worldZoom==='in')setZoom(zoom+.1);else if(b.dataset.worldZoom==='out')setZoom(zoom-.1);else setZoom(1)});
+  zoomControls.addEventListener('click',function(e){var b=e.target.closest('button[data-world-zoom]');if(!b)return;if(b.dataset.worldZoom==='in')setZoom(zoom+.1);else if(b.dataset.worldZoom==='out')setZoom(zoom-.1);else{setZoom(1);if(glHooks)glHooks.reset.forEach(function(f){try{f()}catch(e){}})}});
   canvas.addEventListener('wheel',function(e){e.preventDefault();setZoom(zoom+(e.deltaY<0?.06:-.06))},{passive:false});
   /* Explicit globe-to-map handoff: animate the globe out, reveal the map, and respect reduced-motion preferences. */
   link.addEventListener('click',function(e){
@@ -308,6 +309,24 @@
       canvas.classList.remove('kh-world-zooming');
     },reduced?0:680);
   });
+  /* Bridge for khaledoon-world-gl.js. The 2D globe keeps owning points, selection, cards, zoom and events. */
+  var glHooks={redraw:[],reset:[]};
+  window._khWorldApi={
+    stage:stage,canvas:canvas,
+    getPoints:function(){return points},
+    getSelected:function(){return selectedPoint},
+    getGeography:function(){return geography},
+    getZoom:function(){return zoom},
+    setZoom:function(v){setZoom(v)},
+    select:function(p){selectPoint({p:p,x:0,y:0})},
+    sectionColor:function(id){return sectionColor(id)},
+    cityLabel:function(n){return cityLabel(n)},
+    redraw:function(){requestDraw()},
+    onRedraw:function(f){glHooks.redraw.push(f)},
+    onReset:function(f){glHooks.reset.push(f)}
+  };
+  /* Loads the optional WebGL layer; if it is missing or fails, the 2D globe keeps working. */
+  (function(){var s=document.createElement('script');s.src='khaledoon/assets/khaledoon-world-gl.js?v=20261030-gl-1';s.defer=true;(document.head||document.documentElement).appendChild(s)})();
   requestDraw();
   fetch('khaledoon/assets/geo/natural-earth-110m.json',{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Natural Earth data unavailable');return r.json()}).then(function(g){if(g&&Array.isArray(g.land)&&Array.isArray(g.borders)&&Array.isArray(g.cities)){geography=g;requestDraw()}}).catch(function(){if(!points.length)status.textContent=t('empty')});
   function renderStoryList(){
