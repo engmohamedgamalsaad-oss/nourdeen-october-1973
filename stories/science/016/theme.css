@@ -390,3 +390,31 @@ html[data-theme=light] .intro-langs button[aria-pressed=true]{background:#145f70
 .intro-copy h2{font-size:clamp(1.3rem,2.4vw,1.85rem)!important;line-height:1.5!important}
 .intro-copy{padding-block:clamp(16px,2.4vw,28px)!important}
 html[data-theme=light] .intro-kicker{color:#145f70!important;background:#e6f6f8!important;border-color:#9fd2da!important}
+
+/* 2026-10-29: compact one-line language controls and direction-aware header. */
+header{transition:transform .22s ease,opacity .22s ease;will-change:transform}
+header.story-header-hidden{transform:translateY(calc(-100% - 2px));opacity:0;pointer-events:none}
+.bar{flex-wrap:nowrap!important;align-items:center!important;gap:8px;min-height:50px;padding:5px clamp(8px,1.5vw,16px)}
+.brand{width:auto!important;max-width:30%;text-align:start!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:0 1 auto;font-size:clamp(.78rem,1.2vw,.98rem)!important}
+.langs{display:flex;flex-wrap:nowrap!important;align-items:center;justify-content:center;gap:3px;flex:0 0 auto;white-space:nowrap}
+.langs button{min-width:29px;padding:3px 6px!important;font-size:.7rem!important;line-height:1.45;border-radius:8px!important}
+#theme-toggle{flex:0 0 auto;margin:0!important;padding:4px 8px!important;font-size:.7rem!important;line-height:1.45;white-space:nowrap}
+.intro-langs{display:flex;flex-wrap:nowrap!important;gap:4px;white-space:nowrap}
+.intro-langs button{min-width:31px;padding:3px 7px!important;font-size:.7rem!important;line-height:1.5}
+@media(max-width:760px){
+ .bar{gap:5px;padding:4px 7px;min-height:44px}
+ .brand{max-width:25%;font-size:.75rem!important}
+ .langs{gap:2px}
+ .langs button{min-width:25px;padding:3px 4px!important;font-size:.64rem!important}
+ #theme-toggle{font-size:.64rem!important;padding:3px 5px!important}
+}
+@media(max-width:420px){
+ .brand{max-width:23%;font-size:.68rem!important}
+ #theme-toggle{width:27px;height:27px;padding:0!important;font-size:0!important;overflow:hidden}
+ #theme-toggle:before{content:"◐";font-size:15px;line-height:1}
+ .langs button{min-width:23px;padding:2px 3px!important;font-size:.61rem!important}
+ .intro-langs{gap:3px}
+ .intro-langs button{min-width:28px;padding:3px 5px!important;font-size:.65rem!important}
+}
+@media(prefers-reduced-motion:reduce){header{transition:none;will-change:auto}}
+@media print{header{display:none!important}}
