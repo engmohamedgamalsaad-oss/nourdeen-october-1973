@@ -1,5 +1,6 @@
 name: Homepage language flow checks
 # Includes source-data and marker synchronization checks for the cinematic globe.
+# The globe regression check also guards the section-color and location-warning parity.
 
 on:
   pull_request:
