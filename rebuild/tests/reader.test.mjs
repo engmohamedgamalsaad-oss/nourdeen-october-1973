@@ -10,13 +10,14 @@ const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), '
 test('V2 reader exposes all five language choices and changes text direction', () => {
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('data-lang="' + lang + '"'));
   assert.match(js, /current==='ar'\?'rtl':'ltr'/);
+  assert.match(js, /localStorage\.setItem\('kh-lang',current\)/);
   assert.match(js, /sectionLabels\[current\]\[story\.section\]/);
   assert.match(js, /readerScript\.dataset\.storyPath\?document\.baseURI:ROOT/);
   assert.match(js, /openstreetmap\.org/);
   assert.match(js, /document\.body\.dataset\.design/);
   assert.match(html, /id="theme-toggle"/);
   assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'reader headings need a sans-serif fallback when external fonts are blocked');
-  assert.match(html, /reader-base\.css\?v=20261028-unified-reader-2/);
+  assert.match(html, /reader-base\.css\?v=20261030-shared-reader-1/);
   assert.match(js, /themeLight/);
   assert.match(js, /dataset\.theme/);
   assert.match(js, /j===q\.correct_option/);
@@ -50,6 +51,6 @@ test('static builder validates V2 packages and will not overwrite existing story
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /data\.v2\.json/);
-  assert.match(builder, /reader\.js\?v=20261028-v2-reader-4/);
-  assert.match(html, /reader\.js\?v=20261028-v2-reader-4/);
+  assert.match(builder, /reader\.js\?v=20261030-shared-reader-1/);
+  assert.match(html, /reader\.js\?v=20261030-shared-reader-1/);
 });

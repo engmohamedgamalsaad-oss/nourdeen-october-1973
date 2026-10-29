@@ -112,3 +112,21 @@ figure{break-inside:avoid}figure img{max-height:440px!important;background:#fff!
 #story{display:block!important}#status{display:none!important}
 a{color:#111!important;text-decoration:underline}
 }
+
+
+/* Shared safety net: reduced-motion and print modes always expose all story content. */
+@media(prefers-reduced-motion:reduce),print {
+  body.kh-motion .kh-pending,
+  body.kh-motion .kh-in,
+  body.kh-motion #blocks .kh-pending,
+  body.kh-motion #gallery .kh-pending,
+  .kh-card-pending,
+  .kh-card-in {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: none !important;
+    clip-path: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
