@@ -41,6 +41,9 @@ for (const token of [
   'kh-world-story-card',
   'khm-card',
   'function loadSectionPalette',
+  'function loadHiddenStories',
+  'story_visibility?select=story_id',
+  'hidden.indexOf(String(s.id))>=0',
   "dispatchEvent(new CustomEvent('kh:world-select'",
   'sectionColor(q.p.story.section)'
 ]) assert.ok(world.includes(token), 'globe integration missing: ' + token);
