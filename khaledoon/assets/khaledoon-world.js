@@ -78,7 +78,7 @@
     var placeText=localizedPlace(q.p);
     if(q.p.approximate)placeText += (placeText?' — ':'')+t('approximate');
     var sectionNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};var category=(sectionNames[lang()]||sectionNames.ar)[story.section]||sectionNames.ar[story.section]||t('stories');selectedInfo.textContent=[placeText,category].filter(Boolean).join(' — ');
-    selectedInfo.hidden=false;selectedLink.textContent=category;
+    selectedInfo.hidden=false;selectedLink.textContent=localized(story,'title')||localized(story,'person')||category;
     selectedLink.href=safeStoryPath(story);selectedLink.hidden=false;
     sourceLink.textContent=t('source')+': '+localized(q.p.source_name,'label');
     sourceLink.href=q.p.source_url;sourceLink.hidden=false;
@@ -152,6 +152,8 @@
     if(!target)return;
     e.preventDefault();
     section.classList.add('kh-world-leaving');
+    canvas.classList.add('kh-world-zooming');
+    if(selectedPoint)document.dispatchEvent(new CustomEvent('kh:world-select',{detail:{storyId:String(selectedPoint.story.id),lat:selectedPoint.lat,lng:selectedPoint.lng}}));
     target.classList.remove('kh-map-arrived');
     target.classList.add('kh-map-arriving');
     target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
@@ -159,6 +161,7 @@
       target.classList.remove('kh-map-arriving');
       target.classList.add('kh-map-arrived');
       section.classList.remove('kh-world-leaving');
+      canvas.classList.remove('kh-world-zooming');
     },reduced?0:680);
   });
   requestDraw();
