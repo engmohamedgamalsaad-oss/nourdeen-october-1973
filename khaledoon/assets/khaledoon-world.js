@@ -5,13 +5,13 @@
   window.__khWorldExplorer=true;
   var langs=['ar','en','fr','it','de'];
   var copy={
-    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة ثلاثية الأبعاد بطابع سينمائي، تعتمد على قارات وحدود ومدن حقيقية من Natural Earth، وترتبط بالحكايات المنشورة ذات المواقع الموثقة.',hint:'اسحب الكرة لتدويرها',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد أماكن بمصادر موثقة مكتملة لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'مكان له مصدر',source:'المصدر',approximate:'الموقع تقريبي ويحتاج إلى مراجعة',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.',attribution:'بيانات الخريطة: Natural Earth'},
-    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'A cinematic 3D globe using real Natural Earth land, borders and major-city coordinates, connected to published stories with documented locations.',hint:'Drag to rotate the globe',map:'Open the story map',loading:'Preparing the globe…',empty:'No places with complete documented sources are available yet.',stories:'Stories linked to places',placesCount:'sourced places',source:'Source',approximate:'Approximate location; verification needed',reduced:'Automatic motion is paused by your device settings.',attribution:'Map data: Natural Earth'},
-    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe 3D cinématographique fondé sur les terres, frontières et grandes villes de Natural Earth, relié aux récits publiés et à leurs lieux documentés.',hint:'Faites glisser pour tourner le globe',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Aucun lieu avec une source documentée complète n’est disponible.',stories:'Récits liés aux lieux',placesCount:'lieux sourcés',source:'Source',approximate:'Emplacement approximatif à vérifier',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.',attribution:'Données cartographiques : Natural Earth'},
-    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo 3D cinematografico basato su terre, confini e grandi città di Natural Earth, collegato ai racconti pubblicati e ai luoghi documentati.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non sono disponibili luoghi con fonti documentate complete.',stories:'Storie collegate ai luoghi',placesCount:'luoghi con fonte',source:'Fonte',approximate:'Posizione approssimativa da verificare',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.',attribution:'Dati cartografici: Natural Earth'},
-    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein filmisch gestalteter 3D-Globus mit echten Landflächen, Grenzen und Großstädten aus Natural Earth, verknüpft mit veröffentlichten Geschichten und belegten Orten.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefähre Lage; noch zu überprüfen',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.',attribution:'Kartendaten: Natural Earth'}
+    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة ثلاثية الأبعاد بطابع سينمائي، تعتمد على قارات وحدود ومدن حقيقية من Natural Earth، وترتبط بالحكايات المنشورة ذات المواقع الموثقة.',hint:'اسحب الكرة لتدويرها',zoomIn:'تكبير الكرة',zoomOut:'تصغير الكرة',zoomReset:'الحجم الأصلي',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد أماكن بمصادر موثقة مكتملة لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'مكان له مصدر',source:'المصدر',approximate:'الموقع تقريبي ويحتاج إلى مراجعة',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.',attribution:'بيانات الخريطة: Natural Earth'},
+    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'A cinematic 3D globe using real Natural Earth land, borders and major-city coordinates, connected to published stories with documented locations.',hint:'Drag to rotate the globe',zoomIn:'Zoom in',zoomOut:'Zoom out',zoomReset:'Reset zoom',map:'Open the story map',loading:'Preparing the globe…',empty:'No places with complete documented sources are available yet.',stories:'Stories linked to places',placesCount:'sourced places',source:'Source',approximate:'Approximate location; verification needed',reduced:'Automatic motion is paused by your device settings.',attribution:'Map data: Natural Earth'},
+    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe 3D cinématographique fondé sur les terres, frontières et grandes villes de Natural Earth, relié aux récits publiés et à leurs lieux documentés.',hint:'Faites glisser pour tourner le globe',zoomIn:'Agrandir le globe',zoomOut:'Réduire le globe',zoomReset:'Réinitialiser le zoom',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Aucun lieu avec une source documentée complète n’est disponible.',stories:'Récits liés aux lieux',placesCount:'lieux sourcés',source:'Source',approximate:'Emplacement approximatif à vérifier',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.',attribution:'Données cartographiques : Natural Earth'},
+    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo 3D cinematografico basato su terre, confini e grandi città di Natural Earth, collegato ai racconti pubblicati e ai luoghi documentati.',hint:'Trascina per ruotare il globo',zoomIn:'Ingrandisci il globo',zoomOut:'Riduci il globo',zoomReset:'Reimposta zoom',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non sono disponibili luoghi con fonti documentate complete.',stories:'Storie collegate ai luoghi',placesCount:'luoghi con fonte',source:'Fonte',approximate:'Posizione approssimativa da verificare',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.',attribution:'Dati cartografici: Natural Earth'},
+    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein filmisch gestalteter 3D-Globus mit echten Landflächen, Grenzen und Großstädten aus Natural Earth, verknüpft mit veröffentlichten Geschichten und belegten Orten.',hint:'Zum Drehen den Globus ziehen',zoomIn:'Globus vergrößern',zoomOut:'Globus verkleinern',zoomReset:'Zoom zurücksetzen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefähre Lage; noch zu überprüfen',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.',attribution:'Kartendaten: Natural Earth'}
   };
-  var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null,inView=true,pageVisible=!document.hidden;
+  var points=[],rot=0,tilt=-.16,zoom=1,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null,inView=true,pageVisible=!document.hidden;
   /* Geographic shapes are loaded from the bundled, public-domain Natural Earth dataset. */
   var geography=null;
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
@@ -36,6 +36,11 @@
   canvas.tabIndex=0;
   var side=el('div','kh-world-side');
   var hint=el('p','kh-world-hint');hint.dataset.worldText='hint';
+  var zoomControls=el('div','kh-world-zoom-controls');
+  var zoomOut=el('button','kh-world-zoom-button','−');zoomOut.type='button';zoomOut.dataset.worldZoom='out';
+  var zoomReset=el('button','kh-world-zoom-button','↺');zoomReset.type='button';zoomReset.dataset.worldZoom='reset';
+  var zoomIn=el('button','kh-world-zoom-button','+');zoomIn.type='button';zoomIn.dataset.worldZoom='in';
+  zoomControls.append(zoomOut,zoomReset,zoomIn);
   var status=el('p','kh-world-status');status.dataset.worldText='loading';
   var listTitle=el('h3');listTitle.dataset.worldText='stories';
   var list=el('div','kh-world-list');
@@ -45,14 +50,14 @@
   var selectedCard=el('div','kh-world-story-card');selectedCard.hidden=true;selectedCard.setAttribute('aria-live','polite');
   var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
   var attribution=el('a','kh-world-attribution');attribution.href='https://www.naturalearthdata.com/';attribution.target='_blank';attribution.rel='noopener noreferrer';attribution.dataset.worldText='attribution';
-  side.append(hint,status,listTitle,list,selectedCard,selectedInfo,selectedLink,sourceLink,link,attribution);
+  side.append(hint,zoomControls,status,listTitle,list,selectedCard,selectedInfo,selectedLink,sourceLink,link,attribution);
   stage.append(canvas,side);
   wrap.append(head,stage);
   section.append(wrap);
   hero.insertAdjacentElement('afterend',section);
   function labels(){
     section.querySelectorAll('[data-world-text]').forEach(function(n){n.textContent=t(n.dataset.worldText)});
-    canvas.setAttribute('aria-label',t('title')+'. '+t('hint'));
+    canvas.setAttribute('aria-label',t('title')+'. '+t('hint'));updateZoomLabels();
     section.dir=document.documentElement.dir||'rtl';
     if(points.length){status.textContent=points.length+' '+t('placesCount');renderStoryList()}if(selectedPoint&&!selectedCard.hidden)selectedCard.replaceChildren(buildStoryCard(selectedPoint))
   }
@@ -167,7 +172,7 @@
     var w=Math.max(260,rect.width),h=Math.max(250,Math.min(480,rect.height||360));
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-    var r=Math.min(w*.40,h*.45),cx=w*.49,cy=h*.5;
+    var r=Math.min(w*.40,h*.45)*zoom,cx=w*.49,cy=h*.5;
     var glow=ctx.createRadialGradient(cx-r*.22,cy-r*.25,r*.05,cx,cy,r*1.25);
     glow.addColorStop(0,'rgba(42,139,155,.25)');glow.addColorStop(.7,'rgba(7,36,52,.12)');glow.addColorStop(1,'rgba(5,15,29,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
@@ -280,6 +285,11 @@
     if(canAnimate()||drag)raf=requestAnimationFrame(draw);
   }
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
+  function setZoom(next){zoom=Math.max(.78,Math.min(1.2,next));zoomOut.disabled=zoom<=.78;zoomIn.disabled=zoom>=1.2;zoomReset.disabled=Math.abs(zoom-1)<.001;requestDraw()}
+  function updateZoomLabels(){zoomIn.setAttribute('aria-label',t('zoomIn'));zoomIn.title=t('zoomIn');zoomOut.setAttribute('aria-label',t('zoomOut'));zoomOut.title=t('zoomOut');zoomReset.setAttribute('aria-label',t('zoomReset'));zoomReset.title=t('zoomReset')}
+  updateZoomLabels();
+  zoomControls.addEventListener('click',function(e){var b=e.target.closest('button[data-world-zoom]');if(!b)return;if(b.dataset.worldZoom==='in')setZoom(zoom+.1);else if(b.dataset.worldZoom==='out')setZoom(zoom-.1);else setZoom(1)});
+  canvas.addEventListener('wheel',function(e){e.preventDefault();setZoom(zoom+(e.deltaY<0?.06:-.06))},{passive:false});
   /* Explicit globe-to-map handoff: animate the globe out, reveal the map, and respect reduced-motion preferences. */
   link.addEventListener('click',function(e){
     var target=document.getElementById('khMap');
