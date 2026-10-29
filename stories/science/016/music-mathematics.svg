@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+<title id="title">Music and mathematics illustration</title><desc id="desc">Original illustration combining musical notes, a sound wave and mathematical curves</desc>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#071827"/><stop offset="1" stop-color="#26384c"/></linearGradient><radialGradient id="glow"><stop stop-color="#e6c27a" stop-opacity=".35"/><stop offset="1" stop-color="#e6c27a" stop-opacity="0"/></radialGradient></defs>
+<rect width="1200" height="800" rx="38" fill="url(#bg)"/><circle cx="600" cy="390" r="390" fill="url(#glow)"/>
+<g stroke="#8ad9e8" stroke-width="3" opacity=".3"><path d="M100 250H1100M100 290H1100M100 330H1100M100 370H1100M100 410H1100"/></g>
+<g fill="none" stroke="#8ad9e8" stroke-width="8" stroke-linecap="round"><path d="M90 505 C160 505 160 385 230 385S300 625 370 625S440 445 510 445S580 350 650 350S720 555 790 555S860 415 930 415S1000 500 1110 500"/><path d="M100 610 C220 610 220 530 340 530S460 690 580 690S700 550 820 550S940 610 1100 610" opacity=".55"/></g>
+<g fill="#f2d99b" stroke="#f2d99b" stroke-width="7" stroke-linecap="round"><path d="M265 170V355M265 170L365 145V325"/><ellipse cx="240" cy="360" rx="30" ry="18" transform="rotate(-22 240 360)"/><ellipse cx="340" cy="330" rx="30" ry="18" transform="rotate(-22 340 330)"/><path d="M760 125V320M760 125L865 150V295"/><ellipse cx="735" cy="325" rx="30" ry="18" transform="rotate(-22 735 325)"/><ellipse cx="840" cy="300" rx="30" ry="18" transform="rotate(-22 840 300)"/></g>
+<g fill="#f7e9c7" font-family="Georgia,serif" font-size="54" opacity=".95"><text x="440" y="190">f = frequency</text><text x="450" y="250" font-size="34" fill="#bfeef4">Sound · Pattern · Number</text></g>
+<g stroke="#e6c27a" stroke-width="4" fill="none" opacity=".85"><circle cx="600" cy="390" r="220" stroke-dasharray="8 16"/><circle cx="600" cy="390" r="170" stroke-dasharray="3 14"/></g>
+</svg>
