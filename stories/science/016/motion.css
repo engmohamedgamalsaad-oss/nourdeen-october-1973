@@ -9,6 +9,11 @@ html[dir="ltr"]{--kh-rv-x:22px}
 /* The old one-shot load animation ran while the cards were still off-screen. Scroll reveal replaces it. */
 html #blocks .block{animation:none}
 
+/* The shared reader also animates paragraphs / timeline rows / figures a second time (.kh-in).
+   Inside a card that already reveals as a whole this causes a double flash, so it is switched off here. */
+html body.kh-motion #blocks .kh-in,
+html body.kh-motion #gallery .kh-in{animation:none!important}
+
 /* ---- Pending / revealed states ---- */
 .kh-card-pending,.kh-card-in{
   transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .85s cubic-bezier(.2,.8,.2,1);
