@@ -269,15 +269,23 @@ async function cinematicGlobeRegression(browser, base, origin) {
         }, locale);
         await page.waitForFunction((title) => document.querySelector('#khWorld h2')?.textContent.trim() === title,
           titles[locale], { timeout: 4000 }).catch(() => {});
-        const localized = await page.evaluate(() => ({
-          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
-          dir: document.querySelector('#khWorld').dir,
-          card: !!document.querySelector('#khWorld .kh-world-story-card .khm-card'),
-          source: document.querySelector('#khWorld .kh-world-story-card .khm-source')?.textContent.trim() || ''
-        }));
+        const localized = await page.evaluate(async (locale, targetId) => {
+          const stories = await fetch('stories/index.json').then(r => r.json());
+          const story = stories.find(s => String(s.id).padStart(3, '0') === String(targetId).padStart(3, '0'));
+          return {
+            title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+            dir: document.querySelector('#khWorld').dir,
+            card: !!document.querySelector('#khWorld .kh-world-story-card .khm-card'),
+            source: document.querySelector('#khWorld .kh-world-story-card .khm-source')?.textContent.trim() || '',
+            chips: [...document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip')].map(a => a.textContent.trim()),
+            expectedPerson: story && (story.i18n?.[locale]?.person || story.person) || ''
+          };
+        }, locale, target.id);
         check('globe heading and selected card survive language ' + locale,
           localized.title === titles[locale] && localized.dir === (locale === 'ar' ? 'rtl' : 'ltr') && localized.card && !!localized.source,
           JSON.stringify(localized));
+        check('globe story chips show the localized character name in ' + locale,
+          !!localized.expectedPerson && localized.chips.includes(localized.expectedPerson), JSON.stringify(localized));
       }
     }
   } catch (e) {
