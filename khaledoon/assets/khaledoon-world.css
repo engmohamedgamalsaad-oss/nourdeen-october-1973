@@ -81,7 +81,7 @@ html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 3
 
 /* Cinematic handoff: the globe network enlarges as the real map reveals the selected story. */
 .kh-world-canvas{transform:scale(1);transform-origin:center;transition:transform .68s cubic-bezier(.2,.75,.25,1),filter .68s ease,opacity .5s ease}
-.kh-world.kh-world-leaving .kh-world-canvas{transform:scale(1.075);filter:brightness(1.2) drop-shadow(0 0 24px rgba(83,190,214,.38));opacity:.88}
+.kh-world.kh-world-leaving .kh-world-canvas,.kh-world-canvas.kh-world-zooming{transform:scale(1.22);filter:brightness(1.28) drop-shadow(0 0 28px rgba(83,190,214,.48));opacity:.9}
 #khMap.kh-map-arriving .khm-canvas{filter:saturate(1.12)}
 #khMap.kh-map-arrived .khm-canvas{animation:khMapCanvasReveal .68s ease both}
 @keyframes khMapCanvasReveal{from{opacity:.82;filter:brightness(1.16) saturate(1.2)}to{opacity:1;filter:none}}
