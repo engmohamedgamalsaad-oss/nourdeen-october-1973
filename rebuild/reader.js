@@ -46,7 +46,7 @@ if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=doc
 if(enhanceShown){body.classList.remove('kh-motion');return}
 enhanceShown=true;
 if(motionObserver)motionObserver.disconnect();clearTimeout(motionTimer);
-var targets=[].slice.call(document.querySelectorAll('#blocks .block,.kh-hexes'));
+var targets=[].slice.call(document.querySelectorAll('#blocks .block > p,#blocks .block-timeline > li,#blocks > figure,.kh-hexes'));
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(reduce||!('IntersectionObserver' in window)){body.classList.remove('kh-motion');return}
 targets.forEach(function(e){e.classList.add('kh-pending')});body.classList.add('kh-motion');
