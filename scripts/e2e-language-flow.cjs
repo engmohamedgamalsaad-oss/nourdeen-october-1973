@@ -285,7 +285,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
         }, locale);
         await page.waitForFunction((title) => document.querySelector('#khWorld h2')?.textContent.trim() === title,
           titles[locale], { timeout: 4000 }).catch(() => {});
-        const localized = await page.evaluate(async (locale, targetId) => {
+        const localized = await page.evaluate(async ({ locale, targetId }) => {
           const stories = await fetch('stories/index.json').then(r => r.json());
           const story = stories.find(s => String(s.id).padStart(3, '0') === String(targetId).padStart(3, '0'));
           return {
@@ -296,7 +296,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
             chips: [...document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip')].map(a => a.textContent.trim()),
             expectedPerson: story && (story.i18n?.[locale]?.person || story.person) || ''
           };
-        }, locale, target.id);
+        }, { locale, targetId: target.id });
         check('globe heading and selected card survive language ' + locale,
           localized.title === titles[locale] && localized.dir === (locale === 'ar' ? 'rtl' : 'ltr') && localized.card && !!localized.source,
           JSON.stringify(localized));
