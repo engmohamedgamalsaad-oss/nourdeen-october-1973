@@ -9,11 +9,14 @@
 .kh-world-canvas.is-dragging{cursor:grabbing;touch-action:none}
 .kh-world-side{padding:18px 10px;min-width:0}
 .kh-world-hint{font-size:12px;color:#f3cf85;margin:0 0 5px}
+.kh-world-zoom-controls{display:flex;align-items:center;gap:8px;margin:8px 0 14px}
+.kh-world-zoom-button{display:inline-grid;place-items:center;min-width:38px;min-height:38px;padding:0 10px;border:1px solid rgba(240,200,120,.38);border-radius:12px;background:rgba(255,255,255,.045);color:#f6dca8;font:700 20px/1 Cairo,Tahoma,sans-serif;cursor:pointer;touch-action:manipulation}
+.kh-world-zoom-button:hover:not(:disabled),.kh-world-zoom-button:focus-visible{border-color:#f0c878;background:rgba(240,200,120,.14);outline:2px solid rgba(240,200,120,.45);outline-offset:2px}
+.kh-world-zoom-button:disabled{opacity:.42;cursor:not-allowed}
 .kh-world-status{font-size:12px;color:var(--muted);margin:0 0 18px}
 .kh-world-side h3{font-size:16px;color:#f6dca8;margin:0 0 10px}
 .kh-world-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .kh-world-chip{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:1px solid rgba(240,200,120,.3);border-radius:99px;background:rgba(255,255,255,.035);font-size:12px;color:var(--ink);transition:transform .2s,border-color .2s,background .2s}
-.kh-world [hidden]{display:none!important}
 .kh-world [hidden]{display:none!important}
 .kh-world-chip:hover{transform:translateY(-2px);border-color:var(--gold);background:rgba(240,200,120,.09)}
 .kh-world-side .btn{width:fit-content;max-width:100%}
