@@ -118,6 +118,17 @@
     'Alexandria':{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'}
   };
   function cityLabel(name){var value=cityNames[name];return value&&(value[lang()]||value.en)||''}
+  function loadHiddenStories(){
+    if(!window.__khHiddenP){
+      var api='https://ypwprddkscnfblhftkeb.supabase.co',anon='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+      var request=fetch(api+'/rest/v1/story_visibility?select=story_id',{headers:{apikey:anon,Authorization:'Bearer '+anon},cache:'no-store'})
+        .then(function(r){return r.ok?r.json():[]})
+        .then(function(rows){return Array.isArray(rows)?rows.map(function(x){return String(x.story_id)}):[]})
+        .catch(function(){return []});
+      window.__khHiddenP=Promise.race([request,new Promise(function(resolve){window.setTimeout(function(){resolve([])},1800)})]);
+    }
+    return window.__khHiddenP;
+  }
   loadSectionPalette();
   function buildStoryCard(p){
     var story=p.story,catNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'أعلام الأدب والفنون والرياضة',curriculum:'شخصيات المناهج المصرية',islamic:'شخصيات إسلامية',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Figures in Literature, Arts and Sport',curriculum:'Egyptian Curriculum Figures',islamic:'Islamic Figures',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes qui ont marqué l’histoire',people:'Figures de la littérature, des arts et du sport',curriculum:'Figures des programmes égyptiens',islamic:'Figures de l’islam',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Protagonisti della letteratura, delle arti e dello sport',curriculum:'Personaggi dei programmi egiziani',islamic:'Figure islamiche',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen, die Geschichte schrieben',people:'Persönlichkeiten aus Literatur, Kunst und Sport',curriculum:'Figuren der ägyptischen Lehrpläne',islamic:'Persönlichkeiten des Islam',readers:'Leservorschläge'}};
@@ -307,11 +318,12 @@
   }
   Promise.all([
     fetch('stories/index.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
-    fetch('stories/places.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()})
+    fetch('stories/places.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
+    loadHiddenStories()
   ]).then(function(data){
-    var stories=Array.isArray(data[0])?data[0]:[],places=data[1]||{};
+    var stories=Array.isArray(data[0])?data[0]:[],places=data[1]||{},hidden=data[2]||[];
     stories.forEach(function(s){
-      if(!s||s.published===false)return;
+      if(!s||s.published===false||!s.title||hidden.indexOf(String(s.id))>=0)return;
       var p=normalizePoint(places[String(s.id)],s);
       if(p)points.push(p)
     });
