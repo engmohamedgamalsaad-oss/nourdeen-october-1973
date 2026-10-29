@@ -12,7 +12,7 @@
   var DEG = Math.PI / 180, PI = Math.PI;
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var HOME_LON = 29, HOME_LAT = 21, MAX_LAT = 75, MAX_POINTS = 1000;
-  var MIN_Z = 0.78, MAX_Z = 10, SEL_Z = 6;
+  var MIN_Z = 0.78, MAX_Z = 10, SEL_Z = 8;
 
   var api = null, stage = null, oldCanvas = null;
   var wrap, canvas, over, octx, gl, styleEl;
@@ -24,6 +24,7 @@
   var drag = false, lastX = 0, lastY = 0, startX = 0, startY = 0, pointers = {}, pinch = null, hover = -1, lastSel = null;
   var geoBuilt = false, mk = { count: 0, dirty: true, sig: '', len: -1, sel: null, groups: [] };
   var observers = [], lastSig = '', cleanups = [], photos = {}, zBtn = null;
+  var dismissed = null, hitPill = null, hitPin = null, ctrlEl = null, ctrlWrap = null, box = null;
   var L = { w: 0, h: 0, dpr: 1, cx: 0, cy: 0, R: 0 };
   var V = [1, 0, 0, 0, 1, 0, 0, 0, 1];
   var motionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
@@ -39,6 +40,23 @@
     var s = (p && p.story) || {}, l = lang(), i = s.i18n && s.i18n[l];
     return (i && (i.person || i.title)) || s[l] || s.person || s.title || '';
   }
+  function titleOf(p) {
+    var s = (p && p.story) || {}, i = s.i18n && s.i18n[lang()];
+    return (i && i.title) || s.title || '';
+  }
+  function placeOf(p) {
+    var l = lang(), v = p && p.place, lb = p && p.place_label;
+    var s = typeof v === 'string' ? v : (v && (v[l] || v.ar)) || '';
+    var t = typeof lb === 'string' ? lb : (lb && (lb[l] || lb.ar)) || '';
+    return s ? (String(t || '') + s).trim() : '';
+  }
+  function storyPath(s) {
+    var p = String(s && s.path || '');
+    if (/^stories\/[a-z0-9-]+\/[0-9]{3}\/$/.test(p)) return p;
+    var sec = String(s && s.section || ''), id = String(s && s.id || '');
+    while (id.length < 3) id = '0' + id;
+    return /^[a-z0-9-]+$/.test(sec) && /^\d{3}$/.test(id) ? 'stories/' + sec + '/' + id + '/' : 'stories/';
+  }
   function rgbOf(hex) {
     var m = /^#?([0-9a-f]{6})$/i.exec(hex || ''), n = m ? parseInt(m[1], 16) : 0xb8874b;
     return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
@@ -47,6 +65,12 @@
     target.addEventListener(type, fn, opts);
     cleanups.push(function () { try { target.removeEventListener(type, fn, opts); } catch (e) {} });
   }
+  /* The selected story, ignoring one the user has dismissed on the globe (the 2D layer cannot clear it). */
+  function curSel() {
+    var s = api && api.getSelected();
+    return s && s !== dismissed ? s : null;
+  }
+  function inRect(p, r) { return !!(r && p.x >= r.x && p.x <= r.x + r.w && p.y >= r.y && p.y <= r.y + r.h); }
 
   /* ---------- zoom (owned here: 0.78x - 10x) ---------- */
   function updateZoomButtons() {
@@ -68,7 +92,7 @@
     try { if (raf) cancelAnimationFrame(raf); } catch (e) {}
     raf = 0;
     observers.forEach(function (o) { try { o.disconnect(); } catch (e) {} });
-    cleanups.forEach(function (c) { c(); });
+    cleanups.forEach(function (c) { try { c(); } catch (e) {} });
     try { if (wrap && wrap.parentNode) wrap.parentNode.removeChild(wrap); } catch (e) {}
     try { if (styleEl && styleEl.parentNode) styleEl.parentNode.removeChild(styleEl); } catch (e) {}
     if (stage) stage.classList.remove('is-three');
@@ -91,8 +115,26 @@
     '.kh-world-gl .kh-gl-main:focus-visible{outline:2px solid #f0c878;outline-offset:5px;border-radius:18px}',
     '.kh-world-gl .kh-gl-over{pointer-events:none}',
     '.kh-world.kh-world-leaving .kh-world-gl{transform:scale(1.22);filter:brightness(1.28) drop-shadow(0 0 28px rgba(83,190,214,.48))}',
+    /* the story list and the big card under the globe are replaced by the small box beside the zoom buttons */
+    '.kh-world-stage.is-three .kh-world-list,.kh-world-stage.is-three .kh-world-side h3,.kh-world-stage.is-three .kh-world-story-card{display:none!important}',
+    '.kh-gl-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 14px;min-width:0}',
+    '.kh-gl-controls .kh-world-zoom-controls{margin:0;flex:none}',
+    '.kh-gl-story{display:none;flex:1 1 150px;min-width:0;align-items:center;gap:8px;min-height:40px;padding:4px 12px 4px 5px;',
+    'border:1px solid var(--c,#b8874b);border-radius:14px;color:#fff4dc;text-decoration:none;',
+    'background:linear-gradient(135deg,color-mix(in srgb,var(--c,#b8874b) 22%,#07151f),rgba(5,14,29,.92));',
+    'box-shadow:0 0 14px color-mix(in srgb,var(--c,#b8874b) 30%,transparent)}',
+    '.kh-gl-story.is-on{display:flex;animation:khGlStoryIn .4s cubic-bezier(.2,.9,.3,1.2) both}',
+    '.kh-gl-story:hover,.kh-gl-story:focus-visible{background:var(--c,#b8874b);color:#07151f;outline:none}',
+    '.kh-gl-story:hover .kh-gl-sb,.kh-gl-story:focus-visible .kh-gl-sb{color:#07151f}',
+    '.kh-gl-ph{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;overflow:hidden;',
+    'border:1.5px solid var(--c,#b8874b);background:rgba(255,255,255,.06);font:800 14px/1 Cairo,Tahoma,sans-serif;color:var(--c,#b8874b)}',
+    '.kh-gl-ph img{width:100%;height:100%;object-fit:cover;display:block}',
+    '.kh-gl-tx{display:flex;flex-direction:column;min-width:0;line-height:1.3}',
+    '.kh-gl-nm{font:700 13px/1.3 Cairo,Tahoma,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '.kh-gl-sb{font:600 10.5px/1.3 Cairo,Tahoma,sans-serif;color:var(--c,#b8874b);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}',
+    '@keyframes khGlStoryIn{from{opacity:0;transform:translateY(8px) scale(.92)}to{opacity:1;transform:none}}',
     '@media(max-width:780px){.kh-world-gl{height:min(82vw,350px);min-height:260px}}',
-    '@media(prefers-reduced-motion:reduce){.kh-world-gl{transition:none!important}}'
+    '@media(prefers-reduced-motion:reduce){.kh-world-gl{transition:none!important}.kh-gl-story.is-on{animation:none!important}}'
   ].join('');
 
   /* ---------- shaders ---------- */
@@ -320,7 +362,7 @@
 
   /* ---------- story markers ---------- */
   function syncMarkers() {
-    var pts = api.getPoints() || [], sel = api.getSelected();
+    var pts = api.getPoints() || [], sel = curSel();
     if (!mk.dirty && pts.length === mk.len && sel === mk.sel) return;
     var order = [], i, si = sel ? pts.indexOf(sel) : -1;
     for (i = 0; i < pts.length && order.length < MAX_POINTS - 2; i++) if (i !== hover && i !== si) order.push(i);
@@ -353,6 +395,35 @@
     return pts.length + ':' + pts.map(function (p) { return api.sectionColor(p.story && p.story.section); }).join(',');
   }
 
+  /* ---------- the small story box beside the zoom buttons ---------- */
+  function updateStoryBox(p) {
+    if (!box) return;
+    if (!p) { box.classList.remove('is-on'); return; }
+    var s = p.story || {}, name = nameOf(p), title = titleOf(p), url = String(p.photo || '');
+    var letter = Array.from(name || title || '★')[0] || '★';
+    box.href = storyPath(s);
+    box.title = name || title;
+    box.style.setProperty('--c', api.sectionColor(s.section));
+    box.replaceChildren();
+    var ph = document.createElement('span'); ph.className = 'kh-gl-ph';
+    if (url && !/^\s*javascript:/i.test(url)) {
+      var im = new Image(); im.alt = ''; im.loading = 'lazy';
+      im.onerror = function () { try { ph.textContent = letter; } catch (e) {} };
+      im.src = url; ph.appendChild(im);
+    } else ph.textContent = letter;
+    var tx = document.createElement('span'); tx.className = 'kh-gl-tx';
+    var nm = document.createElement('span'); nm.className = 'kh-gl-nm'; nm.textContent = name || title;
+    tx.appendChild(nm);
+    if (title && title !== name) {
+      var sb = document.createElement('span'); sb.className = 'kh-gl-sb'; sb.textContent = title;
+      tx.appendChild(sb);
+    }
+    box.appendChild(ph); box.appendChild(tx);
+    box.classList.remove('is-on');
+    void box.offsetWidth;
+    box.classList.add('is-on');
+  }
+
   /* ---------- picking ---------- */
   function candidates(x, y, radius) {
     var pts = api.getPoints() || [], out = [], i, q, d;
@@ -367,7 +438,7 @@
   function pickAt(x, y, touch) {
     var list = candidates(x, y, touch ? 20 : 12);
     if (!list.length) return -1;
-    var sel = api.getSelected(), pts = api.getPoints(), selI = sel ? pts.indexOf(sel) : -1;
+    var sel = curSel(), pts = api.getPoints(), selI = sel ? pts.indexOf(sel) : -1;
     var byIndex = list.slice().sort(function (a, b) { return a.i - b.i; }), k;
     for (k = 0; k < byIndex.length; k++) if (byIndex[k].i === selI) break;
     /* several stories on the same spot: each tap moves to the next one */
@@ -377,7 +448,17 @@
   }
   function selectIndex(i) {
     var pts = api.getPoints();
-    if (pts && pts[i]) api.select(pts[i]);
+    if (pts && pts[i]) { dismissed = null; api.select(pts[i]); }
+  }
+  /* Tapping the selected pin / name / dot: close the story and zoom back out to the starting view. */
+  function dismissSel() {
+    var s = api.getSelected();
+    if (s && s !== dismissed) {
+      dismissed = s; lastSel = null; arriveT = 0; hitPill = hitPin = null; mk.dirty = true; lastSig = '';
+      updateStoryBox(null);
+    }
+    setZoomGL(1);
+    resetView();
   }
 
   /* ---------- camera ---------- */
@@ -403,9 +484,10 @@
       if (al && canvas.getAttribute('aria-label') !== al) canvas.setAttribute('aria-label', al);
       var s = pointsSig();
       if (s !== mk.sig) { mk.sig = s; mk.dirty = true; }
-      var sel = api.getSelected();
+      var sel = curSel();
       if (sel !== lastSel) {
-        lastSel = sel; arriveT = 0;
+        lastSel = sel; arriveT = 0; mk.dirty = true;
+        updateStoryBox(sel);
         if (sel) { flyTo(sel.lat, sel.lng); if (zoomT < SEL_Z) setZoomGL(SEL_Z); }
       }
     } catch (e) { fail('redraw hook: ' + (e && e.message)); return; }
@@ -445,7 +527,7 @@
         vLon *= decay; vLat *= decay;
         if (Math.abs(vLon) < 0.4) vLon = 0;
         if (Math.abs(vLat) < 0.4) vLat = 0;
-      } else if (!reduced() && !api.getSelected() && nowMs() > autoPauseUntil) {
+      } else if (!reduced() && !curSel() && nowMs() > autoPauseUntil) {
         lon -= 2 * dt;
         if (lon < -180) lon += 360;
       }
@@ -520,19 +602,21 @@
     var c1 = 1.70158, c3 = c1 + 1;
     return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2);
   }
-  /* The name card: bottom-center sits at (x, ay); it pops open from that point. */
-  function pill(text, x, ay, color, prog, photo) {
+  /* The name card: bottom-center sits at (x, ay); it pops open from that point. Returns its rectangle. */
+  function pill(text, sub, x, ay, color, prog, photo) {
     octx.save();
+    var ph = photo ? 34 : 0, h = sub ? (photo ? 48 : 38) : (photo ? 44 : 24);
     octx.font = '600 12px Cairo, Tahoma, sans-serif';
-    var ph = photo ? 34 : 0, h = photo ? 44 : 24;
-    var tw = Math.min(190, octx.measureText(text).width);
+    var tw = octx.measureText(text).width;
+    if (sub) { octx.font = '500 10px Cairo, Tahoma, sans-serif'; tw = Math.max(tw, octx.measureText(sub).width); }
+    tw = Math.min(190, tw);
     var w = tw + 18 + (photo ? ph + 6 : 0);
     var px = clamp(x - w / 2, 4, L.w - w - 4), py = clamp(ay - h, 4, L.h - h - 4);
     var s = prog >= 1 ? 1 : Math.max(0, easeBack(prog));
     octx.translate(x, ay); octx.scale(s, s); octx.translate(-x, -ay);
     octx.globalAlpha = clamp(prog * 2, 0, 1);
     octx.beginPath();
-    if (octx.roundRect) octx.roundRect(px, py, w, h, photo ? 16 : 12); else octx.rect(px, py, w, h);
+    if (octx.roundRect) octx.roundRect(px, py, w, h, photo || sub ? 16 : 12); else octx.rect(px, py, w, h);
     octx.fillStyle = 'rgba(5,14,29,.9)'; octx.fill();
     octx.strokeStyle = color; octx.lineWidth = 1; octx.stroke();
     var tx = px + 9 + tw / 2;
@@ -547,13 +631,22 @@
       octx.strokeStyle = color; octx.lineWidth = 1.5; octx.stroke();
       tx = px + 8 + ph + 6 + tw / 2 + 2;
     }
-    octx.fillStyle = '#fff4dc'; octx.textAlign = 'center'; octx.textBaseline = 'middle';
-    octx.fillText(text, tx, py + h / 2 + 0.5, tw);
+    octx.textAlign = 'center'; octx.textBaseline = 'middle';
+    octx.fillStyle = '#fff4dc';
+    octx.font = '600 12px Cairo, Tahoma, sans-serif';
+    octx.fillText(text, tx, sub ? py + h / 2 - 7 : py + h / 2 + 0.5, tw);
+    if (sub) {
+      octx.font = '500 10px Cairo, Tahoma, sans-serif';
+      octx.fillStyle = 'rgba(243,207,133,.95)';
+      octx.fillText(sub, tx, py + h / 2 + 8, tw);
+    }
     octx.restore();
+    return { x: px, y: py, w: w, h: h };
   }
   /* Location pin: a circle on a downward point (its tip is the exact spot), glowing and fading. */
   function pin(x, y, color, pulse) {
     var r = 10, d = 26, th = Math.acos(r / d), hx = x, hy = y - d;
+    hitPin = { x: x - 14, y: y - d - r - 3, w: 28, h: d + r + 6 };
     octx.save();
     octx.beginPath(); octx.ellipse(x, y, 8 + 12 * pulse, 3 + 4 * pulse, 0, 0, PI * 2);
     octx.globalAlpha = 0.7 * (1 - pulse); octx.strokeStyle = color; octx.lineWidth = 1.5; octx.stroke();
@@ -571,7 +664,7 @@
     octx.restore();
   }
   function drawOverlay() {
-    var geo = api.getGeography && api.getGeography(), sel = api.getSelected(), pts = api.getPoints() || [];
+    var geo = api.getGeography && api.getGeography(), sel = curSel(), pts = api.getPoints() || [];
     var selI = sel ? pts.indexOf(sel) : -1;
     var tNow = nowMs();
     if (selI >= 0) {
@@ -582,6 +675,7 @@
     var sig = [lon.toFixed(2), lat.toFixed(2), L.R.toFixed(1), L.w, L.h, hover, mk.count, lang(), geo ? 1 : 0, selI, prog.toFixed(2), pulse.toFixed(2)].join('|');
     if (sig === lastSig) return;
     lastSig = sig;
+    hitPill = hitPin = null;
     octx.setTransform(L.dpr, 0, 0, L.dpr, 0, 0);
     octx.clearRect(0, 0, L.w, L.h);
     var cx = L.cx, cy = L.cy, R = L.R, i, q;
@@ -627,11 +721,14 @@
       if (idx < 0 || !pts[idx]) return;
       q = project(pts[idx].lat, pts[idx].lng);
       if (q.z < 0.1) return;
-      var col = api.sectionColor(pts[idx].story && pts[idx].story.section), t = nameOf(pts[idx]);
+      var col = api.sectionColor(pts[idx].story && pts[idx].story.section), t = nameOf(pts[idx]), sub = placeOf(pts[idx]);
       if (selected) {
         pin(q.x, q.y, col, pulse);
-        if (t && prog > 0) pill(t, q.x, q.y - 44, col, prog, getPhoto(pts[idx].photo));
-      } else if (t) pill(t, q.x, q.y - 10, col, 1, getPhoto(pts[idx].photo));
+        if (t && prog > 0) {
+          var rc = pill(t, sub, q.x, q.y - 44, col, prog, getPhoto(pts[idx].photo));
+          if (prog >= 0.6) hitPill = rc;
+        }
+      } else if (t) pill(t, sub, q.x, q.y - 10, col, 1, getPhoto(pts[idx].photo));
     };
     if (hover >= 0 && hover !== selI) labelFor(hover, false);
     labelFor(selI, true);
@@ -690,8 +787,15 @@
       if (nowMs() - moveT > 90) vLon = vLat = 0;
       if (e.type === 'pointerup' && wasDrag && moved < 7) {
         vLon = vLat = 0;
-        var p = localXY(e), idx = pickAt(p.x, p.y, e.pointerType !== 'mouse');
-        if (idx >= 0) selectIndex(idx);
+        var p = localXY(e), cs = curSel();
+        if (cs && (inRect(p, hitPill) || inRect(p, hitPin))) dismissSel();
+        else {
+          var idx = pickAt(p.x, p.y, e.pointerType !== 'mouse');
+          if (idx >= 0) {
+            var pts = api.getPoints() || [];
+            if (pts[idx] === cs) dismissSel(); else selectIndex(idx);
+          }
+        }
       }
       kick();
     }
@@ -713,6 +817,7 @@
       else if (e.key === 'ArrowDown') lat = clamp(lat - 6, -MAX_LAT, MAX_LAT);
       else if (e.key === '+' || e.key === '=') setZoomGL(zoomT * 1.25);
       else if (e.key === '-') setZoomGL(zoomT / 1.25);
+      else if (e.key === 'Escape' && curSel()) dismissSel();
       else if (e.key === 'Enter' || e.key === ' ') {
         var pts = api.getPoints() || [], best = -1, bz = 0.2, i, q;
         for (i = 0; i < pts.length; i++) { q = project(pts[i].lat, pts[i].lng); if (q.z > bz) { bz = q.z; best = i; } }
@@ -720,23 +825,37 @@
       } else handled = false;
       if (handled) { e.preventDefault(); if (lon > 180) lon -= 360; if (lon < -180) lon += 360; kick(); }
     });
-    /* The side zoom buttons: take them over (capture phase) so they can reach 10x. */
-    var ctrl = stage.querySelector('.kh-world-zoom-controls');
-    if (ctrl) {
+    /* The side zoom buttons: take them over (capture phase) so they can reach 10x, and put the small
+       story box right beside them. Everything is put back if the WebGL globe is ever removed. */
+    ctrlEl = stage.querySelector('.kh-world-zoom-controls');
+    if (ctrlEl && ctrlEl.parentNode) {
       zBtn = {
-        inn: ctrl.querySelector('[data-world-zoom="in"]'),
-        out: ctrl.querySelector('[data-world-zoom="out"]'),
-        reset: ctrl.querySelector('[data-world-zoom="reset"]')
+        inn: ctrlEl.querySelector('[data-world-zoom="in"]'),
+        out: ctrlEl.querySelector('[data-world-zoom="out"]'),
+        reset: ctrlEl.querySelector('[data-world-zoom="reset"]')
       };
-      on(ctrl, 'click', function (e) {
+      on(ctrlEl, 'click', function (e) {
         var b = e.target && e.target.closest ? e.target.closest('button[data-world-zoom]') : null;
         if (!b) return;
         e.stopPropagation();
         var k = b.dataset.worldZoom;
         if (k === 'in') setZoomGL(zoomT * 1.5);
         else if (k === 'out') setZoomGL(zoomT / 1.5);
-        else { setZoomGL(1); resetView(); }
+        else dismissSel();
       }, true);
+      ctrlWrap = document.createElement('div');
+      ctrlWrap.className = 'kh-gl-controls';
+      ctrlEl.parentNode.insertBefore(ctrlWrap, ctrlEl);
+      ctrlWrap.appendChild(ctrlEl);
+      box = document.createElement('a');
+      box.className = 'kh-gl-story';
+      ctrlWrap.appendChild(box);
+      cleanups.push(function () {
+        if (ctrlWrap && ctrlWrap.parentNode) {
+          if (ctrlEl) ctrlWrap.parentNode.insertBefore(ctrlEl, ctrlWrap);
+          ctrlWrap.parentNode.removeChild(ctrlWrap);
+        }
+      });
     }
   }
 
@@ -797,7 +916,11 @@
         var ro = new ResizeObserver(function () { lastSig = ''; kick(); });
         ro.observe(wrap); observers.push(ro);
       } else on(window, 'resize', function () { lastSig = ''; kick(); });
-      var mo = new MutationObserver(function () { lastSig = ''; mk.dirty = true; kick(); });
+      var mo = new MutationObserver(function () {
+        lastSig = ''; mk.dirty = true;
+        try { var cs = curSel(); if (cs) updateStoryBox(cs); } catch (e) {}
+        kick();
+      });
       mo.observe(document.documentElement, { attributes: true, attributeFilter: ['lang', 'dir'] });
       observers.push(mo);
       on(document, 'visibilitychange', function () { pageVisible = !document.hidden; if (pageVisible) kick(); });
@@ -812,7 +935,8 @@
       ready = true;
       if (api.getGeography && api.getGeography()) buildTexture(api.getGeography());
       mk.sig = pointsSig();
-      lastSel = api.getSelected();
+      lastSel = curSel();
+      updateStoryBox(lastSel);
       zoomT = 1; zoomNow = 1;
       render();
       var err = gl.getError();
