@@ -510,3 +510,135 @@ html body .scene-motion-visible {
   .intro-langs { margin-bottom: 8px !important; }
   .start-story-btn { margin-top: 8px !important; }
 }
+
+
+/* 2026-10-29: final light-theme contrast pass — override later dark editorial surfaces. */
+html[data-theme="light"] body {
+  color: #243a40 !important;
+  background-color: #f7fbfa !important;
+  background-image: radial-gradient(ellipse at 8% 8%, #d8f1f2 0, transparent 38%), linear-gradient(180deg, #f7fbfa 0%, #f3f7f4 55%, #fffdf8 100%) !important;
+}
+html[data-theme="light"] header {
+  background: rgba(255, 255, 250, .97) !important;
+  border-bottom-color: #c4dfe0 !important;
+}
+html[data-theme="light"] .langs button,
+html[data-theme="light"] #theme-toggle {
+  background: #ffffff !important;
+  color: #174b58 !important;
+  border-color: #b8d8dc !important;
+}
+html[data-theme="light"] .langs button[aria-pressed="true"] {
+  background: #176477 !important;
+  color: #ffffff !important;
+}
+html[data-theme="light"] .hero {
+  background: radial-gradient(ellipse at 83% 20%, #ccecef 0, transparent 38%), linear-gradient(135deg, #f0fbfb 0%, #ffffff 58%, #fbf7ed 100%) !important;
+  border-color: #c3dfe1 !important;
+  box-shadow: 0 20px 48px #25485412 !important;
+}
+html[data-theme="light"] #title,
+html[data-theme="light"] .hero #title { color: #173f4a !important; text-shadow: none !important; }
+html[data-theme="light"] #subtitle,
+html[data-theme="light"] #summary,
+html[data-theme="light"] #student { color: #365760 !important; }
+html[data-theme="light"] #student { background: #fff8e7 !important; border-color: #e3d2a7 !important; }
+html[data-theme="light"] #cover figure {
+  background: linear-gradient(145deg, #e4f5f6, #ffffff) !important;
+  border-color: #b9dadd !important;
+}
+html[data-theme="light"] .section,
+html[data-theme="light"] #quiz-section,
+html[data-theme="light"] #map-section,
+html[data-theme="light"] .reactions-section,
+html[data-theme="light"] .sources {
+  background: linear-gradient(145deg, #ffffff, #f0f8f7) !important;
+  color: #263f45 !important;
+  border-color: #d0e3e3 !important;
+  box-shadow: 0 12px 30px #2548540b !important;
+}
+html[data-theme="light"] .section h2,
+html[data-theme="light"] .section h2#quiz-heading,
+html[data-theme="light"] .reactions-title,
+html[data-theme="light"] .reactions-wrap .kicker {
+  color: #176477 !important;
+}
+html[data-theme="light"] #blocks .block,
+html[data-theme="light"] #blocks .block[data-speaker="narrator"],
+html[data-theme="light"] #blocks .block[data-type="science_note"] {
+  background: linear-gradient(135deg, #ffffff, #f0f8f7) !important;
+  color: #263f45 !important;
+  border-color: #cfe2e3 !important;
+  box-shadow: 0 8px 22px #2548540a !important;
+}
+html[data-theme="light"] #blocks .block[data-speaker="karma"],
+html[data-theme="light"] #blocks .block[data-type="did_you_know"],
+html[data-theme="light"] #blocks .block[data-type="timeline"] {
+  background: linear-gradient(125deg, #fff7e4, #f8fbf8) !important;
+  color: #3e4039 !important;
+  border-color: #e5d4a5 !important;
+}
+html[data-theme="light"] #blocks .block p,
+html[data-theme="light"] #blocks .block span,
+html[data-theme="light"] #blocks .block li,
+html[data-theme="light"] #blocks .block-timeline span {
+  color: #2b4248 !important;
+}
+html[data-theme="light"] #blocks .speaker,
+html[data-theme="light"] #blocks .block[data-speaker="narrator"] .speaker {
+  color: #176477 !important;
+}
+html[data-theme="light"] #blocks .block[data-speaker="karma"] .speaker,
+html[data-theme="light"] #blocks .block-timeline b {
+  color: #805b16 !important;
+}
+html[data-theme="light"] #gallery figure {
+  background: #ffffff !important;
+  border-color: #c9e0e2 !important;
+}
+html[data-theme="light"] #gallery figcaption,
+html[data-theme="light"] figcaption { color: #405960 !important; }
+html[data-theme="light"] #map-section a,
+html[data-theme="light"] .sources a { color: #126477 !important; }
+html[data-theme="light"] #quiz .q strong,
+html[data-theme="light"] #quiz .quiz-question,
+html[data-theme="light"] #quiz .explain {
+  color: #2c464c !important;
+}
+html[data-theme="light"] #quiz .options button,
+html[data-theme="light"] .reaction-btn,
+html[data-theme="light"] .story-actions button,
+html[data-theme="light"] .story-actions a {
+  background: #ffffff !important;
+  color: #174b58 !important;
+  border-color: #b8d8dc !important;
+}
+html[data-theme="light"] #quiz .options button:hover,
+html[data-theme="light"] .reaction-btn:hover { background: #eaf6f5 !important; }
+html[data-theme="light"] #quiz .options button.correct { background: #e3f5e9 !important; color: #185c37 !important; border-color: #91c9a5 !important; }
+html[data-theme="light"] #quiz .options button.wrong { background: #fff0ed !important; color: #8b3027 !important; border-color: #e0a39b !important; }
+html[data-theme="light"] #quiz .explain,
+html[data-theme="light"] #history-note { background: #fff7e5 !important; color: #4c4a3e !important; }
+html[data-theme="light"] .sources li { background: #edf6f5 !important; color: #2c464c !important; }
+html[data-theme="light"] .story-intro-modal {
+  background: rgba(238, 248, 247, .92) !important;
+  backdrop-filter: blur(12px);
+}
+html[data-theme="light"] .intro-card {
+  background: linear-gradient(135deg, #ffffff, #f0f9f8) !important;
+  border-color: #bddde0 !important;
+  color: #243f46 !important;
+}
+html[data-theme="light"] .intro-copy h2 { color: #145f70 !important; }
+html[data-theme="light"] .intro-copy p { color: #38555d !important; }
+html[data-theme="light"] .intro-art { background: radial-gradient(circle at 50% 45%, #e2f4f5, #f8fcfa 75%) !important; }
+html[data-theme="light"] .start-story-btn,
+html[data-theme="light"] #quiz-start {
+  background: linear-gradient(110deg, #176477, #238397) !important;
+  color: #ffffff !important;
+  border-color: #176477 !important;
+}
+html[data-theme="light"] .reaction-status,
+html[data-theme="light"] .reaction-intro,
+html[data-theme="light"] .reaction-count-line,
+html[data-theme="light"] #quiz-section .quiz-intro { color: #4a6268 !important; }
