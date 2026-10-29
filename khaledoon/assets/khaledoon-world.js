@@ -12,6 +12,28 @@
     de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein künstlerisch vereinfachter Globus verbindet historische Orte mit veröffentlichten Geschichten; er ist keine geografisch genaue Karte. Markierungen erfordern eine dokumentierte Quelle.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefährer Standort laut Quelle',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
   };
   var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null,inView=true,pageVisible=!document.hidden;
+  /* Simplified continent silhouettes for a recognizable artistic globe, not navigational geography. */
+  var landPolys=[
+    [[72,-168],[68,-140],[58,-128],[52,-124],[48,-112],[32,-117],[24,-106],[14,-96],[8,-82],[18,-76],[25,-80],[31,-75],[45,-62],[53,-58],[62,-74],[70,-90]],
+    [[12,-81],[4,-77],[-8,-78],[-20,-70],[-34,-72],[-55,-68],[-48,-52],[-28,-42],[-8,-35],[5,-50],[10,-62]],
+    [[72,-12],[60,-30],[50,-8],[43,-10],[35,-10],[30,-5],[14,-17],[5,-5],[-5,10],[-25,14],[-35,20],[-34,32],[-18,42],[0,50],[12,42],[24,35],[35,28],[45,38],[55,28],[65,18]],
+    [[70,30],[65,55],[58,80],[50,95],[45,120],[35,135],[20,120],[5,105],[-5,80],[8,60],[22,45],[35,35],[50,30]],
+    [[30,130],[45,145],[60,160],[68,178],[55,170],[42,155]],
+    [[-12,112],[-20,115],[-35,132],[-40,150],[-28,154],[-12,142],[-10,125]],
+    [[60,-52],[75,-45],[82,-28],[76,-18],[62,-30]]
+  ];
+  function insideLand(lat,lon,poly){
+    var inside=false;
+    for(var i=0,j=poly.length-1;i<poly.length;j=i++){
+      var yi=poly[i][0],xi=poly[i][1],yj=poly[j][0],xj=poly[j][1];
+      if(((yi>lat)!==(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi+1e-9)+xi))inside=!inside;
+    }
+    return inside;
+  }
+  function isLand(lat,lon){
+    for(var i=0;i<landPolys.length;i++)if(insideLand(lat,lon,landPolys[i]))return true;
+    return false;
+  }
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
   function t(k){return (copy[lang()]||copy.ar)[k]}
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
@@ -105,6 +127,22 @@
       ctx.ellipse(cx,yy,ww,Math.max(2,r*.025),0,0,Math.PI*2);ctx.stroke();
     }
     for(var lon=-60;lon<=60;lon+=30){ctx.beginPath();ctx.ellipse(cx,cy,Math.max(2,r*Math.cos(lon*Math.PI/180)),r,0,0,Math.PI*2);ctx.stroke()}
+    /* Draw sampled continent silhouettes beneath verified location markers. */
+    ctx.save();
+    ctx.fillStyle='rgba(108,190,190,.36)';
+    for(var gla=-56;gla<=78;gla+=5){
+      for(var glo=-176;glo<=180;glo+=5){
+        if(!isLand(gla,glo))continue;
+        var glar=gla*Math.PI/180,glor=glo*Math.PI/180+rot;
+        var gx=Math.cos(glar)*Math.sin(glor);
+        var gy=Math.sin(glar)*Math.cos(tilt)-Math.cos(glar)*Math.cos(glor)*Math.sin(tilt);
+        var gz=Math.sin(glar)*Math.sin(tilt)+Math.cos(glar)*Math.cos(glor)*Math.cos(tilt);
+        if(gz<=.04)continue;
+        var dot=Math.max(1.2,r*.014*gz);
+        ctx.beginPath();ctx.ellipse(cx+gx*r,cy-gy*r,dot*1.45,dot,0,0,Math.PI*2);ctx.fill();
+      }
+    }
+    ctx.restore();
     var projected=[];
     points.forEach(function(p,i){
       var la=p.lat*Math.PI/180,lo=p.lng*Math.PI/180+rot;
