@@ -21,7 +21,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "المشهد ١: طفل يحب الأسئلة",
-          "text": "في دمياط، يوم 11 يوليو 1898، وُلد علي مصطفى مشرفة. لم يكن يعرف وهو طفل أن حبّه للأرقام والأسئلة سيقوده إلى دراسة قوانين الطبيعة، ثم إلى أن يصبح واحدًا من أبرز علماء الفيزياء النظرية في مصر."
+          "text": "في دمياط، يوم 11 يوليو 1898، وُلد علي مصطفى مشرفة. لم يكن يعرف وهو طفل أن حبّه للأرقام والأسئلة سيقوده إلى دراسة قوانين الطبيعة، ثم إلى أن يصبح واحدًا من أبرز علماء الفيزياء النظرية في مصر.",
+          "image_after": "damietta-1911"
         },
         {
           "type": "paragraph",
@@ -36,7 +37,8 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "هل تعلم؟ وُلد علي مصطفى مشرفة في دمياط يوم 11 يوليو 1898، وتوفي في القاهرة يوم 15 يناير 1950."
+          "text": "هل تعلم؟ وُلد علي مصطفى مشرفة في دمياط يوم 11 يوليو 1898، وتوفي في القاهرة يوم 15 يناير 1950.",
+          "image_after": "ali-portrait-2"
         },
         {
           "type": "paragraph",
@@ -47,14 +49,14 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "يعني كان متفوق من بدري، وعارف هو عايز يتعلم إيه؟",
-          "image_after": "study-desk"
+          "text": "يعني كان متفوق من بدري، وعارف هو عايز يتعلم إيه؟"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "المشهد ٣: بعثة إلى إنجلترا",
-          "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924."
+          "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924.",
+          "image_after": "nottingham-college-1897"
         },
         {
           "type": "did_you_know",
@@ -64,19 +66,20 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "رجع مصر بعد الدراسة، ولا فضّل يكمل شغله برّه؟"
+          "text": "رجع مصر بعد الدراسة، ولا فضّل يكمل شغله برّه؟",
+          "image_after": "nottingham-library-1928"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "المشهد ٤: العودة إلى جامعة القاهرة",
-          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم.",
-          "image_after": "university-path"
+          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "هل تعلم؟ أصبح مشرفة عميدًا لكلية العلوم بجامعة القاهرة عام 1936، وكان عمره 38 عامًا."
+          "text": "هل تعلم؟ أصبح مشرفة عميدًا لكلية العلوم بجامعة القاهرة عام 1936، وكان عمره 38 عامًا.",
+          "image_after": "cairo-university-1990s"
         },
         {
           "type": "paragraph",
@@ -94,8 +97,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "وتذكر الهيئة العامة للاستعلامات أنه نشر نحو 25 بحثًا علميًا، وألّف قرابة 12 كتابًا في الرياضيات والفيزياء، كما ترجم عشرة كتب في الرياضيات والفلك إلى العربية. وشارك مع تلميذه محمد مرسي أحمد في نشر كتاب الخوارزمي الشهير في الجبر.",
-          "image_after": "atom-diagram"
+          "text": "وتذكر الهيئة العامة للاستعلامات أنه نشر نحو 25 بحثًا علميًا، وألّف قرابة 12 كتابًا في الرياضيات والفيزياء، كما ترجم عشرة كتب في الرياضيات والفلك إلى العربية. وشارك مع تلميذه محمد مرسي أحمد في نشر كتاب الخوارزمي الشهير في الجبر."
         },
         {
           "type": "paragraph",
@@ -107,7 +109,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "وامتد اهتمامه بالموسيقى إلى البحث أيضًا؛ فقد أسهم في تأسيس جمعية محبي الموسيقى المصرية عام 1945، واهتم بدراسة المقامات المصرية والعلاقات الرياضية بين النغمات.",
-          "image_after": "music-mathematics"
+          "image_after": "cairo-music-congress-1932"
         },
         {
           "type": "paragraph",
@@ -141,7 +143,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scene 1: A child who loved questions",
-          "text": "Ali Mostafa Mosharafa was born in Damietta on 11 July 1898. As a child, he could not know that his love of numbers and questions would lead him to study the laws of nature and become one of Egypt’s leading theoretical physicists."
+          "text": "Ali Mostafa Mosharafa was born in Damietta on 11 July 1898. As a child, he could not know that his love of numbers and questions would lead him to study the laws of nature and become one of Egypt’s leading theoretical physicists.",
+          "image_after": "damietta-1911"
         },
         {
           "type": "paragraph",
@@ -156,7 +159,8 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Did you know? Ali Mostafa Mosharafa was born in Damietta on 11 July 1898 and died in Cairo on 15 January 1950."
+          "text": "Did you know? Ali Mostafa Mosharafa was born in Damietta on 11 July 1898 and died in Cairo on 15 January 1950.",
+          "image_after": "ali-portrait-2"
         },
         {
           "type": "paragraph",
@@ -167,14 +171,14 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "So he was doing well from an early age—and he knew what he wanted to learn?",
-          "image_after": "study-desk"
+          "text": "So he was doing well from an early age—and he knew what he wanted to learn?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scene 3: A scholarship to England",
-          "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924."
+          "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924.",
+          "image_after": "nottingham-college-1897"
         },
         {
           "type": "did_you_know",
@@ -184,19 +188,20 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Did he return to Egypt after studying, or did he stay abroad?"
+          "text": "Did he return to Egypt after studying, or did he stay abroad?",
+          "image_after": "nottingham-library-1928"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scene 4: Back to Cairo University",
-          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully.",
-          "image_after": "university-path"
+          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Did you know? Mosharafa became dean of Cairo University’s Faculty of Science in 1936, at the age of 38."
+          "text": "Did you know? Mosharafa became dean of Cairo University’s Faculty of Science in 1936, at the age of 38.",
+          "image_after": "cairo-university-1990s"
         },
         {
           "type": "paragraph",
@@ -214,8 +219,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Egypt’s State Information Service records that he published about 25 scientific papers and authored around 12 books on mathematics and physics. He also translated ten books on mathematics and astronomy into Arabic, and helped publish al-Khwarizmi’s famous work on algebra with his student M. Morsi Ahmad.",
-          "image_after": "atom-diagram"
+          "text": "Egypt’s State Information Service records that he published about 25 scientific papers and authored around 12 books on mathematics and physics. He also translated ten books on mathematics and astronomy into Arabic, and helped publish al-Khwarizmi’s famous work on algebra with his student M. Morsi Ahmad."
         },
         {
           "type": "paragraph",
@@ -227,7 +231,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "His interest in music also became a subject of research. In 1945, he helped establish the Egyptian Society for Music Lovers and studied Egyptian musical modes and the mathematical relationships between notes.",
-          "image_after": "music-mathematics"
+          "image_after": "cairo-music-congress-1932"
         },
         {
           "type": "paragraph",
@@ -261,7 +265,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scène 1 : Un enfant qui aimait les questions",
-          "text": "Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898. Enfant, il ne pouvait pas savoir que son goût pour les nombres et les questions le conduirait à étudier les lois de la nature et à devenir l’un des grands physiciens théoriciens d’Égypte."
+          "text": "Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898. Enfant, il ne pouvait pas savoir que son goût pour les nombres et les questions le conduirait à étudier les lois de la nature et à devenir l’un des grands physiciens théoriciens d’Égypte.",
+          "image_after": "damietta-1911"
         },
         {
           "type": "paragraph",
@@ -276,7 +281,8 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Le saviez-vous ? Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898 et mort au Caire le 15 janvier 1950."
+          "text": "Le saviez-vous ? Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898 et mort au Caire le 15 janvier 1950.",
+          "image_after": "ali-portrait-2"
         },
         {
           "type": "paragraph",
@@ -287,14 +293,14 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Il réussissait donc très tôt, et il savait déjà ce qu’il voulait apprendre ?",
-          "image_after": "study-desk"
+          "text": "Il réussissait donc très tôt, et il savait déjà ce qu’il voulait apprendre ?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scène 3 : Une bourse pour l’Angleterre",
-          "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924."
+          "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924.",
+          "image_after": "nottingham-college-1897"
         },
         {
           "type": "did_you_know",
@@ -304,19 +310,20 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Est-il rentré en Égypte après ses études, ou est-il resté à l’étranger ?"
+          "text": "Est-il rentré en Égypte après ses études, ou est-il resté à l’étranger ?",
+          "image_after": "nottingham-library-1928"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scène 4 : Retour à l’Université du Caire",
-          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode.",
-          "image_after": "university-path"
+          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Le saviez-vous ? Mosharafa devint doyen de la faculté des sciences de l’Université du Caire en 1936, à l’âge de 38 ans."
+          "text": "Le saviez-vous ? Mosharafa devint doyen de la faculté des sciences de l’Université du Caire en 1936, à l’âge de 38 ans.",
+          "image_after": "cairo-university-1990s"
         },
         {
           "type": "paragraph",
@@ -334,8 +341,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Le Service d’information de l’État égyptien indique qu’il publia environ 25 articles scientifiques et écrivit près de 12 livres de mathématiques et de physique. Il traduisit aussi dix ouvrages de mathématiques et d’astronomie en arabe et participa, avec son élève M. Morsi Ahmad, à la publication du célèbre ouvrage d’algèbre d’al-Khwarizmi.",
-          "image_after": "atom-diagram"
+          "text": "Le Service d’information de l’État égyptien indique qu’il publia environ 25 articles scientifiques et écrivit près de 12 livres de mathématiques et de physique. Il traduisit aussi dix ouvrages de mathématiques et d’astronomie en arabe et participa, avec son élève M. Morsi Ahmad, à la publication du célèbre ouvrage d’algèbre d’al-Khwarizmi."
         },
         {
           "type": "paragraph",
@@ -347,7 +353,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Son intérêt pour la musique devint aussi un sujet de recherche. En 1945, il contribua à fonder la Société égyptienne des amateurs de musique et étudia les modes musicaux égyptiens ainsi que les rapports mathématiques entre les notes.",
-          "image_after": "music-mathematics"
+          "image_after": "cairo-music-congress-1932"
         },
         {
           "type": "paragraph",
@@ -381,7 +387,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scena 1: Un bambino che amava le domande",
-          "text": "Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898. Da bambino non poteva sapere che il suo amore per i numeri e le domande lo avrebbe portato a studiare le leggi della natura e a diventare uno dei più importanti fisici teorici egiziani."
+          "text": "Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898. Da bambino non poteva sapere che il suo amore per i numeri e le domande lo avrebbe portato a studiare le leggi della natura e a diventare uno dei più importanti fisici teorici egiziani.",
+          "image_after": "damietta-1911"
         },
         {
           "type": "paragraph",
@@ -396,7 +403,8 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Lo sapevi? Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898 e morì al Cairo il 15 gennaio 1950."
+          "text": "Lo sapevi? Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898 e morì al Cairo il 15 gennaio 1950.",
+          "image_after": "ali-portrait-2"
         },
         {
           "type": "paragraph",
@@ -407,14 +415,14 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Quindi era bravo fin da giovane e sapeva già che cosa voleva studiare?",
-          "image_after": "study-desk"
+          "text": "Quindi era bravo fin da giovane e sapeva già che cosa voleva studiare?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scena 3: Una borsa di studio per l’Inghilterra",
-          "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924."
+          "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924.",
+          "image_after": "nottingham-college-1897"
         },
         {
           "type": "did_you_know",
@@ -424,19 +432,20 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Dopo gli studi tornò in Egitto oppure rimase all’estero?"
+          "text": "Dopo gli studi tornò in Egitto oppure rimase all’estero?",
+          "image_after": "nottingham-library-1928"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scena 4: Il ritorno all’Università del Cairo",
-          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo.",
-          "image_after": "university-path"
+          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Lo sapevi? Mosharafa diventò preside della Facoltà di Scienze dell’Università del Cairo nel 1936, all’età di 38 anni."
+          "text": "Lo sapevi? Mosharafa diventò preside della Facoltà di Scienze dell’Università del Cairo nel 1936, all’età di 38 anni.",
+          "image_after": "cairo-university-1990s"
         },
         {
           "type": "paragraph",
@@ -454,8 +463,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Il Servizio d’informazione dello Stato egiziano riferisce che pubblicò circa 25 articoli scientifici e scrisse una dozzina di libri di matematica e fisica. Tradusse inoltre in arabo dieci libri di matematica e astronomia e collaborò con il suo allievo M. Morsi Ahmad alla pubblicazione della celebre opera di al-Khwarizmi sull’algebra.",
-          "image_after": "atom-diagram"
+          "text": "Il Servizio d’informazione dello Stato egiziano riferisce che pubblicò circa 25 articoli scientifici e scrisse una dozzina di libri di matematica e fisica. Tradusse inoltre in arabo dieci libri di matematica e astronomia e collaborò con il suo allievo M. Morsi Ahmad alla pubblicazione della celebre opera di al-Khwarizmi sull’algebra."
         },
         {
           "type": "paragraph",
@@ -467,7 +475,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Anche la musica divenne un campo di ricerca per lui. Nel 1945 contribuì a fondare la Società egiziana degli amanti della musica e studiò i modi musicali egiziani e i rapporti matematici tra le note.",
-          "image_after": "music-mathematics"
+          "image_after": "cairo-music-congress-1932"
         },
         {
           "type": "paragraph",
@@ -501,7 +509,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Szene 1: Ein Kind, das Fragen liebte",
-          "text": "Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren. Als Kind konnte er nicht ahnen, dass seine Liebe zu Zahlen und Fragen ihn dazu führen würde, die Naturgesetze zu erforschen und einer der bedeutenden theoretischen Physiker Ägyptens zu werden."
+          "text": "Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren. Als Kind konnte er nicht ahnen, dass seine Liebe zu Zahlen und Fragen ihn dazu führen würde, die Naturgesetze zu erforschen und einer der bedeutenden theoretischen Physiker Ägyptens zu werden.",
+          "image_after": "damietta-1911"
         },
         {
           "type": "paragraph",
@@ -516,7 +525,8 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Wusstest du? Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren und starb am 15. Januar 1950 in Kairo."
+          "text": "Wusstest du? Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren und starb am 15. Januar 1950 in Kairo.",
+          "image_after": "ali-portrait-2"
         },
         {
           "type": "paragraph",
@@ -527,14 +537,14 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Er war also schon früh sehr gut und wusste, was er lernen wollte?",
-          "image_after": "study-desk"
+          "text": "Er war also schon früh sehr gut und wusste, was er lernen wollte?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Szene 3: Ein Stipendium für England",
-          "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science."
+          "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science.",
+          "image_after": "nottingham-college-1897"
         },
         {
           "type": "did_you_know",
@@ -544,19 +554,20 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Kehrte er nach dem Studium nach Ägypten zurück oder blieb er im Ausland?"
+          "text": "Kehrte er nach dem Studium nach Ägypten zurück oder blieb er im Ausland?",
+          "image_after": "nottingham-library-1928"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Szene 4: Zurück an der Universität Kairo",
-          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten.",
-          "image_after": "university-path"
+          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Wusstest du? Mosharafa wurde 1936 im Alter von 38 Jahren Dekan der naturwissenschaftlichen Fakultät der Universität Kairo."
+          "text": "Wusstest du? Mosharafa wurde 1936 im Alter von 38 Jahren Dekan der naturwissenschaftlichen Fakultät der Universität Kairo.",
+          "image_after": "cairo-university-1990s"
         },
         {
           "type": "paragraph",
@@ -574,8 +585,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Nach Angaben des ägyptischen Staatlichen Informationsdienstes veröffentlichte er etwa 25 wissenschaftliche Arbeiten und verfasste rund zwölf Bücher über Mathematik und Physik. Außerdem übersetzte er zehn Bücher über Mathematik und Astronomie ins Arabische und half gemeinsam mit seinem Schüler M. Morsi Ahmad, al-Chwarizmis berühmtes Algebra-Werk herauszugeben.",
-          "image_after": "atom-diagram"
+          "text": "Nach Angaben des ägyptischen Staatlichen Informationsdienstes veröffentlichte er etwa 25 wissenschaftliche Arbeiten und verfasste rund zwölf Bücher über Mathematik und Physik. Außerdem übersetzte er zehn Bücher über Mathematik und Astronomie ins Arabische und half gemeinsam mit seinem Schüler M. Morsi Ahmad, al-Chwarizmis berühmtes Algebra-Werk herauszugeben."
         },
         {
           "type": "paragraph",
@@ -587,7 +597,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Auch Musik wurde für ihn zum Forschungsthema. 1945 half er bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde und untersuchte ägyptische Musikmodi sowie die mathematischen Beziehungen zwischen den Tönen.",
-          "image_after": "music-mathematics"
+          "image_after": "cairo-music-congress-1932"
         },
         {
           "type": "paragraph",
@@ -610,203 +620,243 @@
     }
   },
   "cover": {
-    "path": "stories/science/016/cover.svg",
-    "kind": "illustration",
-    "source_name": "رسم توضيحي أصلي من مشروع خالدون",
-    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-    "rights": "Original conceptual illustration created for this project; not a historical photograph.",
     "id": "cover",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
+    "kind": "historical_photo",
+    "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
+    "rights": "Public domain under Egyptian copyright rules, as documented on Wikimedia Commons; the photograph was scanned from the back cover of Mosharafa’s book Science and Us.",
     "i18n": {
       "ar": {
-        "alt": "رسم توضيحي لذرة مضيئة فوق كتاب مفتوح ومبنى جامعي ونوتات موسيقية",
-        "caption": "غلاف الحكاية: العلم والتعليم والموسيقى في رسم توضيحي أصلي",
-        "source_name": "مشروع خالدون",
-        "rights": "رسم مفاهيمي أصلي وليس صورة تاريخية"
+        "alt": "صورة أرشيفية لعلي مصطفى مشرفة",
+        "caption": "صورة تاريخية حقيقية لعلي مصطفى مشرفة، منشورة على ويكيميديا كومنز ومصنّفة ملكية عامة.",
+        "source_name": "ويكيميديا كومنز — Ali Mosharrafa.jpg",
+        "rights": "ملكية عامة وفق صفحة الملف؛ الصورة ممسوحة من ظهر غلاف كتاب «نحن والعلم»."
       },
       "en": {
-        "alt": "Illustration of a glowing atom above an open book, a university building and musical notes",
-        "caption": "Story cover: science, education and music in an original illustration",
-        "source_name": "Khaledoon project",
-        "rights": "Original conceptual artwork, not a historical image"
+        "alt": "Archival photograph of Ali Mostafa Mosharafa",
+        "caption": "A real archival photograph of Ali Mostafa Mosharafa, hosted on Wikimedia Commons and listed as public domain.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Public domain per the file page; scanned from the back cover of Science and Us."
       },
       "fr": {
-        "alt": "Illustration d’un atome lumineux au-dessus d’un livre ouvert, d’un bâtiment universitaire et de notes de musique",
-        "caption": "Couverture du récit : science, éducation et musique dans une illustration originale",
-        "source_name": "Projet Khaledoon",
-        "rights": "Illustration conceptuelle originale, pas une image historique"
+        "alt": "Photographie d’archive d’Ali Mostafa Mosharafa",
+        "caption": "Photographie d’archive authentique d’Ali Mostafa Mosharafa, hébergée sur Wikimedia Commons et indiquée comme appartenant au domaine public.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Domaine public selon la page du fichier ; numérisée depuis le dos du livre Science and Us."
       },
       "it": {
-        "alt": "Illustrazione di un atomo luminoso sopra un libro aperto, un edificio universitario e note musicali",
-        "caption": "Copertina del racconto: scienza, istruzione e musica in un’illustrazione originale",
-        "source_name": "Progetto Khaledoon",
-        "rights": "Illustrazione concettuale originale, non un’immagine storica"
+        "alt": "Fotografia d’archivio di Ali Mostafa Mosharafa",
+        "caption": "Fotografia d’archivio autentica di Ali Mostafa Mosharafa, ospitata su Wikimedia Commons e indicata come di pubblico dominio.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Pubblico dominio secondo la pagina del file; scansione dal retro del libro Science and Us."
       },
       "de": {
-        "alt": "Illustration eines leuchtenden Atoms über einem offenen Buch, einem Universitätsgebäude und Musiknoten",
-        "caption": "Titelbild der Geschichte: Wissenschaft, Bildung und Musik in einer Originalillustration",
-        "source_name": "Khaledoon-Projekt",
-        "rights": "Originale Konzeptgrafik, kein historisches Bild"
+        "alt": "Historische Fotografie von Ali Mostafa Mosharafa",
+        "caption": "Authentische historische Fotografie von Ali Mostafa Mosharafa, auf Wikimedia Commons veröffentlicht und als gemeinfrei gekennzeichnet.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Laut Dateiseite gemeinfrei; Scan von der Rückseite des Buchumschlags Science and Us."
       }
     }
   },
   "images": [
     {
-      "id": "study-desk",
-      "path": "stories/science/016/study-desk.svg",
-      "kind": "illustration",
-      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original vector illustration created for this project; not a historical photograph.",
+      "id": "damietta-1911",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Damietta.jpg",
+      "kind": "historical_image",
+      "source_name": "Wikimedia Commons — Damietta.jpg (1911)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Damietta.jpg",
+      "rights": "Public domain image from an 1911 published historical source; contextual view of the city, not a photograph of Mosharafa.",
       "i18n": {
         "ar": {
-          "alt": "مكتب دراسة عليه كتب وأوراق رياضيات",
-          "caption": "الرياضيات كانت أداة أساسية في طريق مشرفة العلمي",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم أصلي أُعد للمشروع"
+          "alt": "مشهد أرشيفي لمدينة دمياط على النيل",
+          "caption": "دمياط كما ظهرت في مشهد أرشيفي منشور عام 1911؛ صورة سياقية للمدينة وليست صورة لمشرفة أو لمنزله.",
+          "source_name": "ويكيميديا كومنز — Damietta.jpg (1911)",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
         },
         "en": {
-          "alt": "Study desk with books and mathematics notes",
-          "caption": "Mathematics was a key tool in Mosharafa’s scientific journey",
-          "source_name": "Khaledoon project",
-          "rights": "Original artwork made for this project"
+          "alt": "Archival view of Damietta on the Nile",
+          "caption": "An archival view of Damietta published in 1911; it shows the city, not Mosharafa or his home.",
+          "source_name": "Wikimedia Commons — Damietta.jpg (1911)",
+          "rights": "Listed as public domain on the file page."
         },
         "fr": {
-          "alt": "Bureau d’étude avec des livres et des notes de mathématiques",
-          "caption": "Les mathématiques ont joué un rôle central dans le parcours scientifique de Mosharafa",
-          "source_name": "Projet Khaledoon",
-          "rights": "Illustration originale créée pour ce projet"
+          "alt": "Vue d’archive de Damiette sur le Nil",
+          "caption": "Vue d’archive de Damiette publiée en 1911 ; elle montre la ville, pas Mosharafa ni sa maison.",
+          "source_name": "Wikimedia Commons — Damietta.jpg (1911)",
+          "rights": "Indiquée comme appartenant au domaine public sur la page du fichier."
         },
         "it": {
-          "alt": "Scrivania con libri e appunti di matematica",
-          "caption": "La matematica fu uno strumento fondamentale nel percorso scientifico di Mosharafa",
-          "source_name": "Progetto Khaledoon",
-          "rights": "Illustrazione originale creata per il progetto"
+          "alt": "Veduta d’archivio di Damietta sul Nilo",
+          "caption": "Veduta d’archivio di Damietta pubblicata nel 1911; mostra la città, non Mosharafa né la sua casa.",
+          "source_name": "Wikimedia Commons — Damietta.jpg (1911)",
+          "rights": "Indicata come di pubblico dominio nella pagina del file."
         },
         "de": {
-          "alt": "Schreibtisch mit Büchern und mathematischen Notizen",
-          "caption": "Mathematik war ein wichtiges Werkzeug in Mosharafas wissenschaftlichem Weg",
-          "source_name": "Khaledoon-Projekt",
-          "rights": "Originalgrafik für dieses Projekt"
+          "alt": "Historische Ansicht von Damiette am Nil",
+          "caption": "Historische Ansicht von Damiette, veröffentlicht 1911; sie zeigt die Stadt, nicht Mosharafa oder sein Zuhause.",
+          "source_name": "Wikimedia Commons — Damietta.jpg (1911)",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
         }
       }
     },
     {
-      "id": "university-path",
-      "path": "stories/science/016/university-path.svg",
-      "kind": "illustration",
-      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original conceptual illustration created for this project; it is not a documentary photograph of a specific campus.",
+      "id": "ali-portrait-2",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ali_Mosharrafa_1.jpg",
+      "kind": "historical_photo",
+      "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa_1.jpg",
+      "rights": "Historical portrait listed as public domain under Egyptian copyright rules on Wikimedia Commons.",
       "i18n": {
         "ar": {
-          "alt": "رسم توضيحي لمبنى جامعي وكتاب مفتوح",
-          "caption": "عاد مشرفة إلى مصر ليشارك في التعليم وبناء بيئة علمية",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم مفاهيمي أصلي، وليس صورة توثيقية لمبنى بعينه"
+          "alt": "صورة أرشيفية ثانية لعلي مصطفى مشرفة",
+          "caption": "صورة أرشيفية لمشرفة؛ مصدرها صفحة الملف في ويكيميديا كومنز.",
+          "source_name": "ويكيميديا كومنز — Ali Mosharrafa 1.jpg",
+          "rights": "مصنّفة ملكية عامة وفق صفحة الملف."
         },
         "en": {
-          "alt": "Conceptual illustration of a university building and an open book",
-          "caption": "Mosharafa returned to Egypt to contribute to teaching and scientific life",
-          "source_name": "Khaledoon project",
-          "rights": "Original conceptual artwork, not a documentary photograph of a specific building"
+          "alt": "A second archival portrait of Ali Mostafa Mosharafa",
+          "caption": "An archival portrait of Mosharafa; see the Wikimedia Commons file page for provenance.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Listed as public domain on the file page."
         },
         "fr": {
-          "alt": "Illustration conceptuelle d’un bâtiment universitaire et d’un livre ouvert",
-          "caption": "Mosharafa est rentré en Égypte pour contribuer à l’enseignement et à la vie scientifique",
-          "source_name": "Projet Khaledoon",
-          "rights": "Illustration conceptuelle originale, pas une photographie documentaire d’un bâtiment précis"
+          "alt": "Deuxième portrait d’archive d’Ali Mostafa Mosharafa",
+          "caption": "Portrait d’archive de Mosharafa ; la provenance figure sur la page du fichier Wikimedia Commons.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indiqué comme appartenant au domaine public sur la page du fichier."
         },
         "it": {
-          "alt": "Illustrazione concettuale di un edificio universitario e di un libro aperto",
-          "caption": "Mosharafa tornò in Egitto per contribuire all’insegnamento e alla vita scientifica",
-          "source_name": "Progetto Khaledoon",
-          "rights": "Illustrazione concettuale originale, non una foto documentaria di un edificio specifico"
+          "alt": "Secondo ritratto d’archivio di Ali Mostafa Mosharafa",
+          "caption": "Ritratto d’archivio di Mosharafa; la provenienza è indicata nella pagina del file su Wikimedia Commons.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indicato come di pubblico dominio nella pagina del file."
         },
         "de": {
-          "alt": "Konzeptillustration eines Universitätsgebäudes und eines offenen Buches",
-          "caption": "Mosharafa kehrte nach Ägypten zurück, um Lehre und Wissenschaft mitzugestalten",
-          "source_name": "Khaledoon-Projekt",
-          "rights": "Originale Konzeptgrafik, kein dokumentarisches Foto eines bestimmten Gebäudes"
+          "alt": "Ein zweites historisches Porträt von Ali Mostafa Mosharafa",
+          "caption": "Historisches Porträt Mosharafas; Herkunftsangaben stehen auf der Dateiseite von Wikimedia Commons.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
         }
       }
     },
     {
-      "id": "atom-diagram",
-      "path": "stories/science/016/atom-diagram.svg",
-      "kind": "diagram",
-      "source_name": "رسم تخطيطي أصلي من مشروع خالدون",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original conceptual diagram created for this project; not a historical scientific figure.",
+      "id": "nottingham-college-1897",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/University_College_Nottingham.jpg",
+      "kind": "archival_image",
+      "source_name": "Wikimedia Commons — University College Nottingham.jpg (1897)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:University_College_Nottingham.jpg",
+      "rights": "Public-domain archival image from the Illustrated Guide to the Church Congress, 1897; contextual image of the institution, not proof of a specific classroom.",
       "i18n": {
         "ar": {
-          "alt": "رسم تخطيطي مبسط لذرة ومسارات ضوئية",
-          "caption": "رسم مفاهيمي يذكّر بموضوعات المادة والإشعاع، وليس رسمًا من أبحاث مشرفة",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم تخطيطي أصلي أُعد للمشروع"
+          "alt": "صورة أرشيفية لمبنى University College Nottingham من دليل مصور عام 1897",
+          "caption": "صورة أرشيفية للمؤسسة في دليل مصور عام 1897، لتوضيح سياق بعثته في إنجلترا؛ لا تثبت أنها القاعة التي درس فيها.",
+          "source_name": "ويكيميديا كومنز — University College Nottingham (1897)",
+          "rights": "مصنّفة ملكية عامة."
         },
         "en": {
-          "alt": "Simplified conceptual diagram of an atom and light paths",
-          "caption": "A conceptual image recalling matter and radiation, not a figure from Mosharafa’s papers",
-          "source_name": "Khaledoon project",
-          "rights": "Original diagram made for this project"
+          "alt": "Archival image of University College Nottingham from an 1897 illustrated guide",
+          "caption": "An archival view of the institution in an 1897 illustrated guide, giving context for his studies in England; it does not identify his classroom.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Listed as public domain."
         },
         "fr": {
-          "alt": "Schéma conceptuel simplifié d’un atome et de trajectoires lumineuses",
-          "caption": "Illustration conceptuelle évoquant la matière et le rayonnement, pas une figure des travaux de Mosharafa",
-          "source_name": "Projet Khaledoon",
-          "rights": "Schéma original créé pour ce projet"
+          "alt": "Image d’archive de l’University College Nottingham tirée d’un guide illustré de 1897",
+          "caption": "Vue d’archive de l’établissement dans un guide illustré de 1897, pour situer ses études en Angleterre ; elle ne montre pas sa salle de cours.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indiquée comme appartenant au domaine public."
         },
         "it": {
-          "alt": "Schema concettuale semplificato di un atomo e raggi di luce",
-          "caption": "Immagine concettuale che richiama materia e radiazione, non una figura degli studi di Mosharafa",
-          "source_name": "Progetto Khaledoon",
-          "rights": "Schema originale creato per il progetto"
+          "alt": "Immagine d’archivio dell’University College Nottingham da una guida illustrata del 1897",
+          "caption": "Veduta d’archivio dell’istituto in una guida illustrata del 1897, come contesto dei suoi studi in Inghilterra; non identifica la sua aula.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indicata come di pubblico dominio."
         },
         "de": {
-          "alt": "Vereinfachte Konzeptgrafik eines Atoms und von Lichtwegen",
-          "caption": "Konzeptbild zu Materie und Strahlung, keine Abbildung aus Mosharafas Arbeiten",
-          "source_name": "Khaledoon-Projekt",
-          "rights": "Originaldiagramm für dieses Projekt"
+          "alt": "Archivbild des University College Nottingham aus einem illustrierten Führer von 1897",
+          "caption": "Archivansicht der Einrichtung in einem illustrierten Führer von 1897 als Kontext für sein Studium in England; sie zeigt nicht seinen konkreten Hörsaal.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Als gemeinfrei gekennzeichnet."
         }
       }
     },
     {
-      "id": "music-mathematics",
-      "path": "stories/science/016/music-mathematics.svg",
-      "kind": "illustration",
-      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original conceptual illustration created for this project; not a historical photograph or a reproduction of Mosharafa’s research.",
+      "id": "nottingham-library-1928",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/The_University_of_Nottingham_Hallward_Library._1928.jpg",
+      "kind": "historical_photo",
+      "source_name": "Wikimedia Commons — University of Nottingham library, 1928",
+      "source_url": "https://commons.wikimedia.org/wiki/File:The_University_of_Nottingham_Hallward_Library._1928.jpg",
+      "rights": "Archival photograph listed as public domain; used only as period university context, not asserted to be the exact building Mosharafa attended.",
       "i18n": {
         "ar": {
-          "alt": "نوتات موسيقية وموجات صوتية ومنحنيات رياضية",
-          "caption": "جمع مشرفة بين اهتمامه بالموسيقى والبحث العلمي",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم مفاهيمي أصلي وليس صورة تاريخية"
+          "alt": "صورة أرشيفية لمكتبة مرتبطة بجامعة نوتنغهام مؤرخة بنحو 1928",
+          "caption": "صورة أرشيفية من عام 1928، بعد فترة دراسة مشرفة في نوتنغهام؛ نستخدمها لسياق الحياة الجامعية لا باعتبارها مبنى دراسته المؤكد.",
+          "source_name": "ويكيميديا كومنز — جامعة نوتنغهام، 1928",
+          "rights": "مصنّفة ملكية عامة."
         },
         "en": {
-          "alt": "Musical notes, sound waves and mathematical curves",
-          "caption": "Mosharafa brought his interests in music and scientific research together",
-          "source_name": "Khaledoon project",
-          "rights": "Original conceptual artwork, not a historical image"
+          "alt": "Archival photograph of a University of Nottingham library dated around 1928",
+          "caption": "An archival image dated 1928, after Mosharafa’s time studying in Nottingham; shown as university context, not as his confirmed study building.",
+          "source_name": "Wikimedia Commons — University of Nottingham, 1928",
+          "rights": "Listed as public domain."
         },
         "fr": {
-          "alt": "Notes de musique, ondes sonores et courbes mathématiques",
-          "caption": "Mosharafa associait son intérêt pour la musique à la recherche scientifique",
-          "source_name": "Projet Khaledoon",
-          "rights": "Illustration conceptuelle originale, pas une image historique"
+          "alt": "Photographie d’archive d’une bibliothèque liée à l’Université de Nottingham, vers 1928",
+          "caption": "Image d’archive datée de 1928, après les études de Mosharafa à Nottingham ; elle illustre le contexte universitaire sans identifier son bâtiment d’étude.",
+          "source_name": "Wikimedia Commons — Université de Nottingham, 1928",
+          "rights": "Indiquée comme appartenant au domaine public."
         },
         "it": {
-          "alt": "Note musicali, onde sonore e curve matematiche",
-          "caption": "Mosharafa unì il suo interesse per la musica alla ricerca scientifica",
-          "source_name": "Progetto Khaledoon",
-          "rights": "Illustrazione concettuale originale, non un’immagine storica"
+          "alt": "Fotografia d’archivio di una biblioteca dell’Università di Nottingham, circa 1928",
+          "caption": "Immagine d’archivio del 1928, successiva agli studi di Mosharafa a Nottingham; mostra il contesto universitario, non il suo edificio di studio certo.",
+          "source_name": "Wikimedia Commons — Università di Nottingham, 1928",
+          "rights": "Indicata come di pubblico dominio."
         },
         "de": {
-          "alt": "Musiknoten, Schallwellen und mathematische Kurven",
-          "caption": "Mosharafa verband sein Interesse an Musik mit wissenschaftlicher Forschung",
-          "source_name": "Khaledoon-Projekt",
-          "rights": "Originale Konzeptgrafik, kein historisches Bild"
+          "alt": "Historisches Foto einer Bibliothek der Universität Nottingham, etwa 1928",
+          "caption": "Archivbild von 1928, nach Mosharafas Studienzeit in Nottingham; es dient als Universitätskontext und zeigt nicht nachweislich sein Studiengebäude.",
+          "source_name": "Wikimedia Commons — Universität Nottingham, 1928",
+          "rights": "Als gemeinfrei gekennzeichnet."
+        }
+      }
+    },
+    {
+      "id": "cairo-university-1990s",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CairoUniv.jpg",
+      "kind": "historical_photo",
+      "source_name": "Wikimedia Commons — CairoUniv.jpg (1990s)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:CairoUniv.jpg",
+      "rights": "Released into the public domain by the original uploader; image dates from the 1990s, not Mosharafa’s lifetime.",
+      "i18n": {
+        "ar": {
+          "alt": "مبنى جامعة القاهرة في صورة التُقطت في التسعينيات",
+          "caption": "صورة حقيقية لجامعة القاهرة من التسعينيات، أي بعد زمن مشرفة؛ توضح المكان المرتبط بعمله ولا تُعرض بوصفها صورة معاصرة له.",
+          "source_name": "ويكيميديا كومنز — CairoUniv.jpg",
+          "rights": "أطلقها رافعها الأصلي للملكية العامة."
+        },
+        "en": {
+          "alt": "Cairo University building in a photograph from the 1990s",
+          "caption": "A real photograph of Cairo University from the 1990s, decades after Mosharafa; it shows the institution associated with his work, not the campus in his lifetime.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Released into the public domain by its original uploader."
+        },
+        "fr": {
+          "alt": "Bâtiment de l’Université du Caire sur une photo des années 1990",
+          "caption": "Photographie réelle de l’Université du Caire datant des années 1990, après l’époque de Mosharafa ; elle montre l’institution liée à son travail, pas le campus de son vivant.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Mise dans le domaine public par son téléverseur d’origine."
+        },
+        "it": {
+          "alt": "Edificio dell’Università del Cairo in una foto degli anni Novanta",
+          "caption": "Fotografia reale dell’Università del Cairo degli anni Novanta, successiva all’epoca di Mosharafa; mostra l’istituzione legata al suo lavoro, non il campus ai suoi tempi.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Rilasciata nel pubblico dominio dal caricatore originale."
+        },
+        "de": {
+          "alt": "Gebäude der Universität Kairo auf einer Aufnahme aus den 1990er-Jahren",
+          "caption": "Echte Aufnahme der Universität Kairo aus den 1990er-Jahren, lange nach Mosharafas Zeit; sie zeigt die mit seiner Arbeit verbundene Institution, nicht den Campus zu seinen Lebzeiten.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Vom ursprünglichen Uploader gemeinfrei freigegeben."
         }
       }
     },
@@ -814,39 +864,79 @@
       "id": "space-time",
       "path": "stories/science/016/space-time.svg",
       "kind": "diagram",
-      "source_name": "رسم تخطيطي أصلي من مشروع خالدون",
+      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
       "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original conceptual diagram created for this project; not a historical scientific figure.",
+      "rights": "Original explanatory diagram; not a historical image or a figure from Mosharafa’s papers.",
       "i18n": {
         "ar": {
-          "alt": "شبكة منحنية حول كرة مضيئة وشعاع ضوء وذرة صغيرة",
-          "caption": "رسم مبسط يقرّب فكرة المكان والزمان والضوء، وليس شكلًا من أبحاث مشرفة",
+          "alt": "رسم مبسط للمكان والزمان والضوء",
+          "caption": "رسم توضيحي مبسط لفكرة المكان والزمان والضوء، أُعد للمساعدة على الفهم وليس من أبحاث مشرفة.",
           "source_name": "مشروع خالدون",
-          "rights": "رسم تخطيطي أصلي أُعد للمشروع"
+          "rights": "رسم توضيحي أصلي، وليس صورة تاريخية."
         },
         "en": {
-          "alt": "A curved grid around a glowing sphere, a ray of light and a tiny atom",
-          "caption": "A simple sketch of space, time and light, not a figure from Mosharafa’s papers",
+          "alt": "Simplified diagram of space, time and light",
+          "caption": "A simplified explanatory diagram of space, time and light, made to support understanding; it is not from Mosharafa’s research.",
           "source_name": "Khaledoon project",
-          "rights": "Original diagram made for this project"
+          "rights": "Original illustration, not a historical image."
         },
         "fr": {
-          "alt": "Une grille courbe autour d’une sphère lumineuse, un rayon de lumière et un petit atome",
-          "caption": "Schéma simple de l’espace, du temps et de la lumière, pas une figure des travaux de Mosharafa",
+          "alt": "Schéma simplifié de l’espace, du temps et de la lumière",
+          "caption": "Schéma explicatif simplifié de l’espace, du temps et de la lumière, créé pour faciliter la compréhension ; il ne provient pas des recherches de Mosharafa.",
           "source_name": "Projet Khaledoon",
-          "rights": "Schéma original créé pour ce projet"
+          "rights": "Illustration originale, pas une image historique."
         },
         "it": {
-          "alt": "Una griglia curva attorno a una sfera luminosa, un raggio di luce e un piccolo atomo",
-          "caption": "Schizzo semplice di spazio, tempo e luce, non una figura degli studi di Mosharafa",
+          "alt": "Schema semplificato di spazio, tempo e luce",
+          "caption": "Schema esplicativo semplificato di spazio, tempo e luce, realizzato per facilitare la comprensione; non proviene dalle ricerche di Mosharafa.",
           "source_name": "Progetto Khaledoon",
-          "rights": "Schema originale creato per il progetto"
+          "rights": "Illustrazione originale, non un’immagine storica."
         },
         "de": {
-          "alt": "Ein gekrümmtes Gitter um eine leuchtende Kugel, ein Lichtstrahl und ein winziges Atom",
-          "caption": "Einfache Skizze zu Raum, Zeit und Licht, keine Abbildung aus Mosharafas Arbeiten",
+          "alt": "Vereinfachtes Diagramm zu Raum, Zeit und Licht",
+          "caption": "Vereinfachtes Erklärdiagramm zu Raum, Zeit und Licht; es dient dem Verständnis und stammt nicht aus Mosharafas Forschung.",
           "source_name": "Khaledoon-Projekt",
-          "rights": "Originaldiagramm für dieses Projekt"
+          "rights": "Originalillustration, kein historisches Bild."
+        }
+      }
+    },
+    {
+      "id": "cairo-music-congress-1932",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "kind": "historical_photo",
+      "source_name": "Wikimedia Commons — Cairo Congress of Arab Music, 1932",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "rights": "Archival image of the 1932 Cairo Congress of Arab Music; public-domain status indicated on Wikimedia Commons. It does not establish that Mosharafa attended.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية للمؤتمر الأول للموسيقى العربية في القاهرة عام 1932",
+          "caption": "مشهد أرشيفي للمؤتمر الأول للموسيقى العربية بالقاهرة عام 1932، لتوضيح البيئة الثقافية في زمن مشرفة؛ لا يدل على حضوره المؤتمر.",
+          "source_name": "ويكيميديا كومنز — مؤتمر الموسيقى العربية بالقاهرة (1932)",
+          "rights": "مصنّف ملكية عامة في صفحة الملف."
+        },
+        "en": {
+          "alt": "Archival image of the 1932 Cairo Congress of Arab Music",
+          "caption": "An archival image of the 1932 Cairo Congress of Arab Music, showing the cultural setting of Mosharafa’s era; it does not imply he attended.",
+          "source_name": "Wikimedia Commons — Cairo Congress of Arab Music (1932)",
+          "rights": "Listed as public domain on the file page."
+        },
+        "fr": {
+          "alt": "Image d’archive du Congrès de musique arabe du Caire de 1932",
+          "caption": "Image d’archive du Congrès de musique arabe du Caire en 1932, qui illustre le contexte culturel de l’époque ; elle ne signifie pas que Mosharafa y a participé.",
+          "source_name": "Wikimedia Commons — Congrès de musique arabe du Caire (1932)",
+          "rights": "Indiquée comme appartenant au domaine public sur la page du fichier."
+        },
+        "it": {
+          "alt": "Immagine d’archivio del Congresso della musica araba al Cairo del 1932",
+          "caption": "Immagine d’archivio del Congresso della musica araba al Cairo del 1932, per mostrare il contesto culturale dell’epoca; non indica che Mosharafa vi partecipò.",
+          "source_name": "Wikimedia Commons — Congresso della musica araba al Cairo (1932)",
+          "rights": "Indicata come di pubblico dominio nella pagina del file."
+        },
+        "de": {
+          "alt": "Archivbild des Kairoer Kongresses für arabische Musik von 1932",
+          "caption": "Archivbild des Kairoer Kongresses für arabische Musik von 1932 als kultureller Kontext der Zeit; es bedeutet nicht, dass Mosharafa teilnahm.",
+          "source_name": "Wikimedia Commons — Kongress für arabische Musik in Kairo (1932)",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
         }
       }
     }
