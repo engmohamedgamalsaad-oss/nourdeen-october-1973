@@ -1,4 +1,5 @@
 name: Homepage language flow checks
+# Includes source-data and marker synchronization checks for the cinematic globe.
 
 on:
   pull_request:
