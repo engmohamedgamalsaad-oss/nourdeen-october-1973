@@ -35,8 +35,7 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(builder, /reader-base\.css\?v=20261028-unified-reader-2/);
   assert.match(baseCss, /\.hero/);
   assert.match(html, /reader\.js\?v=20261028-v2-reader-4/);
-  assert.match(js, /reader-enhance\.css\?v=20261029-motion-safety-rollback-1/);
-  assert.match(js, /Motion reveal is temporarily disabled to guarantee all reading text stays visible/);
+  assert.match(js, /reader-enhance\.css\?v=20261028-v2-enhance-5/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
@@ -44,6 +43,7 @@ test('all five language labels exist and language/theme changes do not replay en
     assert.match(js, new RegExp(lang + ":\\['"), lang + ' labels');
   }
   assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);return\}/);
+  assert.match(js, /prefers-reduced-motion: reduce/);
   for (const section of sections) assert.match(css, new RegExp('body\\[data-section=' + section + '\\]'), section + ' section palette');
   assert.match(css, /\.story-intro-modal/);
   assert.match(css, /\.image-lightbox/);
