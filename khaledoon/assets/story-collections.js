@@ -66,7 +66,7 @@
       '010': ['assets/images/stories/SameeraMoussa.jpg','assets/images/stories/img-45f23418d6.jpg'],
       '011': ['assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg','assets/images/stories/Mosque_of_Amr_Interior.jpg','assets/images/stories/Mosque_of_Amr_ibn_al-As_-_Cairo.jpg'],
       '012': ['assets/images/stories/s76-20263_large.jpg','assets/images/stories/s69-38669.jpg'],
-      '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg','assets/images/stories/21V_CAT096R3.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
+      '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
       '015': ['assets/images/stories/M_Yacoub.jpg']
     };
     entries.forEach(function (entry, index) {
@@ -149,7 +149,8 @@
     if (hero && hero.parentNode) hero.parentNode.insertBefore(section, hero);
     else if (box && box.parentNode) box.parentNode.insertBefore(section, box);
   }
-  var root = '../../';
+  /* GitHub Pages project root: keep collection assets anchored under the repository site path. */
+  var root = '/nourdeen-october-1973/';
   /* غلاف البطاقة = صورة حقيقية موثقة (مسارها من جذر الموقع، وكلها في assets/images/stories وموثقة في MANIFEST.md).
      الصورة هي الأساس، والـSVG احتياطي لو فشل تحميلها. مكان مؤقت واحد؛ الجزء 7 ينقل الحقل إلى data.json لكل حكاية.
      011 (عمرو بن العاص): لا توجد صورة موثقة للشخصية، فنستخدم صورة المكان (جامع عمرو بن العاص) حسب الاتفاق.
