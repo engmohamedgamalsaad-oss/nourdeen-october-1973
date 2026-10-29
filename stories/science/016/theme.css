@@ -310,3 +310,51 @@ html[data-theme="light"] .quiz-next{background:#126477;color:#fff;border:0}
 html[data-theme="dark"] #quiz .q{color:#eef8fa}
 .quiz-next{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;padding:11px 22px;border-radius:12px;background:#9beaf2;color:#08212c;font:800 1rem Cairo,sans-serif;cursor:pointer}
 .quiz-finish{padding:16px;margin-top:16px;border-radius:14px;border:1px solid #78d9e855;text-align:center;font-weight:800}
+
+
+/* Narrative illustrations: full-width, spaced images placed after their related dialogue. */
+#blocks > figure{
+  grid-column:1 / -1;
+  width:min(100%,820px);
+  justify-self:center;
+  margin:2px auto 10px;
+  padding:clamp(8px,1.5vw,14px);
+  overflow:hidden;
+  border:1px solid #8ad9e86b;
+  border-radius:22px;
+  background:linear-gradient(145deg,#123746,#091d29);
+  box-shadow:0 16px 38px #0004;
+}
+#blocks > figure img{
+  display:block;
+  width:100%;
+  height:auto;
+  max-height:clamp(240px,44vw,440px);
+  object-fit:contain;
+  border-radius:14px;
+  background:#071823;
+  cursor:zoom-in;
+}
+#blocks > figure figcaption{
+  padding:12px 10px 4px;
+  color:#cde8eb;
+  font-size:.88rem;
+  line-height:1.9;
+  overflow-wrap:anywhere;
+}
+html[data-theme=light] #blocks > figure{
+  background:linear-gradient(145deg,#fff,#edf8f7);
+  border-color:#bddde0;
+  box-shadow:0 12px 28px #25485414;
+}
+html[data-theme=light] #blocks > figure figcaption{color:#415a61}
+@media(max-width:760px){
+  #blocks > figure{width:100%;margin:0 auto 5px;border-radius:16px}
+  #blocks > figure img{max-height:340px;border-radius:11px}
+  #blocks > figure figcaption{font-size:.82rem;padding:10px 6px 3px}
+}
+@media print{
+  #blocks > figure{break-inside:avoid;box-shadow:none;background:#fff;border:1px solid #bbb}
+  #blocks > figure img{max-height:280px}
+  #blocks > figure figcaption{color:#222}
+}
