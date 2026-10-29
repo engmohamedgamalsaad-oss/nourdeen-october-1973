@@ -66,7 +66,7 @@
       '010': ['assets/images/stories/SameeraMoussa.jpg','assets/images/stories/img-45f23418d6.jpg'],
       '011': ['assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg','assets/images/stories/Mosque_of_Amr_Interior.jpg','assets/images/stories/Mosque_of_Amr_ibn_al-As_-_Cairo.jpg'],
       '012': ['assets/images/stories/s76-20263_large.jpg','assets/images/stories/s69-38669.jpg'],
-      '013': ['assets/images/stories/250px-Nefertiti_Bust.png','assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg','assets/images/stories/500px-Retrato_femenino__26771127162.jpg','assets/images/stories/21V_CAT096R3.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
+      '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg','assets/images/stories/21V_CAT096R3.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
       '015': ['assets/images/stories/M_Yacoub.jpg']
     };
     entries.forEach(function (entry, index) {
@@ -101,6 +101,29 @@
         count += 1;
       });
     });
+    /* صور نساء أخريات من القسم، مستقلة عن حكاية حتشبسوت وبعناوينها الصحيحة. */
+    if (sectionId === 'women') {
+      [
+        { src: 'assets/images/stories/250px-Nefertiti_Bust.png', title: 'الملكة نفرتيتي', alt: 'رأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري' },
+        { src: 'assets/images/stories/500px-Retrato_femenino__26771127162.jpg', title: 'كليوباترا السابعة', alt: 'لوحة جدارية رومانية يُحتمل أنها تمثل كليوباترا السابعة' }
+      ].forEach(function (photo) {
+        var item = node('div', 'kh-section-gallery-item');
+        item.setAttribute('role', 'img');
+        item.setAttribute('aria-label', photo.title);
+        var image = node('img', '');
+        image.alt = photo.alt;
+        image.loading = 'lazy';
+        image.decoding = 'async';
+        var photoCandidates = [root + photo.src];
+        image.setAttribute('data-cover-candidates', JSON.stringify(photoCandidates));
+        attachCoverFallback(image, photoCandidates);
+        var caption = node('span', 'kh-section-gallery-caption');
+        caption.appendChild(node('strong', '', photo.title));
+        item.append(image, caption);
+        firstGroup.appendChild(item);
+        count += 1;
+      });
+    }
     if (!count) return;
     track.appendChild(firstGroup);
     if (count > 1) {
