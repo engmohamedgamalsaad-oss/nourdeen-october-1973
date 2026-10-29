@@ -418,3 +418,9 @@ header.story-header-hidden{transform:translateY(calc(-100% - 2px));opacity:0;poi
 }
 @media(prefers-reduced-motion:reduce){header{transition:none;will-change:auto}}
 @media print{header{display:none!important}}
+
+/* Reduced-motion users still get the hide/reveal behavior, without animated movement. */
+@media(prefers-reduced-motion:reduce){
+  header.story-header-hidden{transform:translateY(-100%)!important;opacity:0!important;transition:none!important}
+  header:not(.story-header-hidden){transform:none!important;opacity:1!important;transition:none!important}
+}
