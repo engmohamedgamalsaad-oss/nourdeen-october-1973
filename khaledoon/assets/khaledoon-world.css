@@ -9,10 +9,15 @@
 .kh-world-canvas.is-dragging{cursor:grabbing;touch-action:none}
 .kh-world-side{padding:18px 10px;min-width:0}
 .kh-world-hint{font-size:12px;color:#f3cf85;margin:0 0 5px}
+.kh-world-zoom-controls{display:flex;align-items:center;gap:8px;margin:8px 0 14px}
+.kh-world-zoom-button{display:inline-grid;place-items:center;min-width:38px;min-height:38px;padding:0 10px;border:1px solid rgba(240,200,120,.38);border-radius:12px;background:rgba(255,255,255,.045);color:#f6dca8;font:700 20px/1 Cairo,Tahoma,sans-serif;cursor:pointer;touch-action:manipulation}
+.kh-world-zoom-button:hover:not(:disabled),.kh-world-zoom-button:focus-visible{border-color:#f0c878;background:rgba(240,200,120,.14);outline:2px solid rgba(240,200,120,.45);outline-offset:2px}
+.kh-world-zoom-button:disabled{opacity:.42;cursor:not-allowed}
 .kh-world-status{font-size:12px;color:var(--muted);margin:0 0 18px}
 .kh-world-side h3{font-size:16px;color:#f6dca8;margin:0 0 10px}
 .kh-world-list{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
 .kh-world-chip{display:inline-flex;align-items:center;min-height:36px;padding:5px 12px;border:1px solid rgba(240,200,120,.3);border-radius:99px;background:rgba(255,255,255,.035);font-size:12px;color:var(--ink);transition:transform .2s,border-color .2s,background .2s}
+.kh-world [hidden]{display:none!important}
 .kh-world-chip:hover{transform:translateY(-2px);border-color:var(--gold);background:rgba(240,200,120,.09)}
 .kh-world-side .btn{width:fit-content;max-width:100%}
 html[data-theme="light"] .kh-world{background:radial-gradient(ellipse at 20% 50%,rgba(49,142,160,.12),transparent 54%),linear-gradient(180deg,rgba(255,255,255,.2),transparent)}
@@ -97,3 +102,17 @@ html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 3
 #khWorld.kh-world-leaving{filter:saturate(1.08)}
 #khMap.kh-map-arriving .khm-box{border-color:rgba(240,200,120,.7);box-shadow:0 0 0 2px rgba(240,200,120,.12),0 26px 68px rgba(0,0,0,.2)}
 @media(prefers-reduced-motion:reduce){#khWorld+#khMap .khm-box{transition:none!important}}
+
+/* Natural Earth globe: keep the popup visually aligned with the existing character-map card. */
+.kh-world-story-card{margin-top:12px;max-width:280px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--ink);box-shadow:0 16px 38px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.04)}
+.kh-world-story-card[hidden]{display:none!important}
+.kh-world-story-card .khm-card{gap:8px}
+.kh-world-story-card .khm-ph{border-color:var(--c,#b8874b);box-shadow:0 0 0 3px color-mix(in srgb,var(--c,#b8874b) 18%,transparent)}
+.kh-world-story-card .khm-story{color:var(--c,#b8874b)}
+.kh-world-story-card .khm-go{display:inline-flex;align-items:center;justify-content:center;max-width:100%;padding:8px 13px;border:1px solid var(--c,#b8874b);border-radius:999px;color:var(--c,#b8874b);text-decoration:none;font-weight:700}
+.kh-world-story-card .khm-go:hover{background:var(--c,#b8874b);color:#07151f}
+.kh-world-avatar{display:grid;place-items:center;width:100%;height:100%;font-size:2rem;font-weight:800;color:var(--c,#b8874b);background:color-mix(in srgb,var(--c,#b8874b) 14%,transparent)}
+.kh-world-attribution{display:inline-block;margin-top:10px;font-size:11px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.kh-world-status{overflow-wrap:anywhere}
+@media(max-width:780px){.kh-world-story-card{max-width:none}.kh-world-story-card .khm-ph{width:76px;height:76px}}
+@media(prefers-reduced-motion:reduce){.kh-world-story-card,.kh-world-story-card *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}

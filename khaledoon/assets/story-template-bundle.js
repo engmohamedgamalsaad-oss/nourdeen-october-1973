@@ -307,6 +307,7 @@ async function download(draft,opts){
  // مزامنة ملف الخريطة الكامل، مع إبقاء المواقع الأخرى كما هي. خادم النشر يدمج سجل هذه الحكاية مع أحدث main.
  var hasMapMeta=!!(draft.story_meta&&Object.prototype.hasOwnProperty.call(draft.story_meta,'map_location'))||Object.prototype.hasOwnProperty.call(draft,'map_location');
  var mapLocation=Object.prototype.hasOwnProperty.call(draft,'map_location')?draft.map_location:(draft.story_meta&&draft.story_meta.map_location);
+ if(!hasMapMeta)throw new Error('map_location إلزامي لكل حكاية: أضف موقعًا موثقًا باللغات الخمس ومصدره، أو صعّد الحكاية للمراجعة بدل تركها بلا قرار خريطة.');
  var mapResponse=await fetch('../stories/places.json?bundle='+Date.now(),{cache:'no-store'});
  if(!mapResponse.ok)throw new Error('تعذر قراءة stories/places.json؛ أوقفنا إنشاء الحزمة لحماية علامات الخريطة الحالية.');
  var mapData=await mapResponse.json();

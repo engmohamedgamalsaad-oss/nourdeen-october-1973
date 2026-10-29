@@ -169,6 +169,175 @@ function judgeInner(label, s, lang, hard, warn, { requireClean = true } = {}) {
   }
 }
 
+async function cinematicGlobeRegression(browser, base, origin) {
+  const hard = [], checks = [];
+  const label = 'CINEMATIC GLOBE';
+  const check = (name, ok, detail = '') => {
+    checks.push({ name, ok, detail });
+    if (!ok) hard.push(label + ': ' + name + (detail ? ' — ' + detail : ''));
+  };
+  const titles = {
+    ar: 'اكتشف العالم من خلال حكاياته',
+    en: 'Explore the world through its stories',
+    fr: 'Explorez le monde à travers ses récits',
+    it: 'Esplora il mondo attraverso le sue storie',
+    de: 'Entdecke die Welt durch ihre Geschichten'
+  };
+  const desktop = await newContext(browser, origin, 'desktop');
+  try {
+    const page = await desktop.newPage();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const globe = page.locator('#khWorld');
+    await globe.waitFor({ state: 'attached', timeout: 10000 });
+    await globe.scrollIntoViewIfNeeded();
+    const canvas = page.locator('#khWorld .kh-world-canvas');
+    await canvas.waitFor({ state: 'visible', timeout: 10000 });
+    const zoomIn = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="in"]');
+    const zoomOut = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="out"]');
+    const zoomReset = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="reset"]');
+    check('zoom controls are visible and accessible', await zoomIn.isVisible() && await zoomOut.isVisible() && await zoomReset.isVisible() &&
+      !!(await zoomIn.getAttribute('aria-label')) && !!(await zoomOut.getAttribute('aria-label')), 'in/out/reset controls must be visible with accessible labels');
+    check('globe starts at its default zoom', await zoomReset.isDisabled(), 'reset control should start disabled at the default scale');
+    await zoomIn.click(); await zoomIn.click();
+    check('zoom-in control reaches its bounded maximum', await zoomIn.isDisabled(), 'zoom-in should disable at the maximum scale');
+    await zoomOut.click();
+    check('zoom-out control reverses the scale', !(await zoomIn.isDisabled()), 'zoom-in should be available after zooming out');
+    await canvas.dispatchEvent('wheel', { deltaY: -120, bubbles: true, cancelable: true });
+    check('mouse-wheel zoom is wired to the globe', !(await zoomReset.isDisabled()), 'wheel interaction should change zoom away from the reset scale');
+    await zoomReset.click();
+    check('reset control returns the globe to its default scale', await zoomReset.isDisabled(), 'reset should disable at the default scale');
+    await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), { timeout: 10000 });
+
+    const data = await page.evaluate(async () => {
+      const [geo, stories, places] = await Promise.all([
+        fetch('khaledoon/assets/geo/natural-earth-110m.json').then(r => r.json()),
+        fetch('stories/index.json').then(r => r.json()),
+        fetch('stories/places.json').then(r => r.json())
+      ]);
+      const eligible = (Array.isArray(stories) ? stories : []).filter(s => {
+        const p = places[String(s.id).padStart(3, '0')];
+        return s && s.published !== false && p && Number.isFinite(Number(p.lat)) &&
+          Number.isFinite(Number(p.lng)) && /^https:\/\//i.test(String(p.source_url || '')) &&
+          p.source_name && ['ar','en','fr','it','de'].every(l => typeof p.source_name[l] === 'string' && p.source_name[l].trim());
+      });
+      return { land: geo.land && geo.land.length, borders: geo.borders && geo.borders.length,
+        cities: geo.cities && geo.cities.length, eligible: eligible.length,
+        listed: document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip').length,
+        status: document.querySelector('#khWorld .kh-world-status')?.textContent || '' };
+    });
+    check('real Natural Earth land, borders and cities load', data.land >= 100 && data.borders >= 100 && data.cities >= 100,
+      'land=' + data.land + ', borders=' + data.borders + ', cities=' + data.cities);
+    check('sourced story locations populate the globe list', data.eligible > 0 && data.listed > 0,
+      'eligible=' + data.eligible + ', visible list chips=' + data.listed + ', status=' + data.status);
+    const hiddenControls = await page.locator('#khWorld [hidden]').evaluateAll(nodes => nodes.map(n => getComputedStyle(n).display));
+    check('hidden globe controls stay hidden', hiddenControls.every(display => display === 'none'), JSON.stringify(hiddenControls));
+
+    const target = await page.evaluate(async () => {
+      const [stories, places] = await Promise.all([
+        fetch('stories/index.json').then(r => r.json()),
+        fetch('stories/places.json').then(r => r.json())
+      ]);
+      const canvas = document.querySelector('#khWorld .kh-world-canvas');
+      const rect = canvas.getBoundingClientRect(), w = rect.width, h = Math.max(250, Math.min(480, rect.height || 360));
+      const r = Math.min(w * .40, h * .41), cx = w * .49, cy = h * .5, tilt = -.16;
+      for (const s of stories) {
+        if (!s || s.published === false) continue;
+        const p = places[String(s.id).padStart(3, '0')];
+        if (!p || !Number.isFinite(Number(p.lat)) || !Number.isFinite(Number(p.lng)) ||
+            !/^https:\/\//i.test(String(p.source_url || '')) || !p.source_name ||
+            !['ar','en','fr','it','de'].every(l => typeof p.source_name[l] === 'string' && p.source_name[l].trim())) continue;
+        const la = Number(p.lat) * Math.PI / 180, lo = Number(p.lng) * Math.PI / 180;
+        const x = Math.cos(la) * Math.sin(lo);
+        const y = Math.sin(la) * Math.cos(tilt) - Math.cos(la) * Math.cos(lo) * Math.sin(tilt);
+        const z = Math.sin(la) * Math.sin(tilt) + Math.cos(la) * Math.cos(lo) * Math.cos(tilt);
+        if (z > .2) return { x: rect.left + cx + x * r, y: rect.top + cy - y * r, id: String(s.id), z };
+      }
+      return null;
+    });
+    check('a documented story marker is available on the visible hemisphere', !!target,
+      target ? 'story=' + target.id + ', z=' + target.z.toFixed(3) : 'no visible sourced point found');
+    if (target) {
+      await page.mouse.click(target.x, target.y);
+      const card = page.locator('#khWorld .kh-world-story-card .khm-card');
+      await card.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+      const cardState = await page.evaluate(() => {
+        const root = document.querySelector('#khWorld .kh-world-story-card');
+        const card = root && root.querySelector('.khm-card');
+        const source = card && card.querySelector('.khm-source');
+        const go = card && card.querySelector('.khm-go');
+        return { visible: !!card && !root.hidden, name: card && card.querySelector('.khm-go')?.textContent.trim() || '',
+          category: card && card.querySelector('.khm-story')?.textContent.trim() || '',
+          source: source && source.textContent.trim() || '', sourceUrl: source && source.href || '',
+          storyHref: go && go.getAttribute('href') || '', className: card && card.className || '' };
+      });
+      check('clicking a globe marker opens the existing interactive-map card structure',
+        cardState.visible && cardState.className.includes('khm-card') && !!cardState.name && !!cardState.category,
+        JSON.stringify(cardState));
+      check('the globe card includes a sourced link and a story-reading link',
+        /^https:\/\//i.test(cardState.sourceUrl) && /^stories\/[a-z0-9-]+\/[0-9]{3}\/$/.test(cardState.storyHref),
+        JSON.stringify(cardState));
+      await page.screenshot({ path: path.join(screenshotDir, 'globe-desktop.png'), animations: 'disabled' });
+      for (const locale of LANGS) {
+        await page.evaluate((l) => {
+          document.documentElement.lang = l;
+          document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+        }, locale);
+        await page.waitForFunction((title) => document.querySelector('#khWorld h2')?.textContent.trim() === title,
+          titles[locale], { timeout: 4000 }).catch(() => {});
+        const localized = await page.evaluate(async ({ locale, targetId }) => {
+          const stories = await fetch('stories/index.json').then(r => r.json());
+          const story = stories.find(s => String(s.id).padStart(3, '0') === String(targetId).padStart(3, '0'));
+          return {
+            title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+            dir: document.querySelector('#khWorld').dir,
+            card: !!document.querySelector('#khWorld .kh-world-story-card .khm-card'),
+            source: document.querySelector('#khWorld .kh-world-story-card .khm-source')?.textContent.trim() || '',
+            chips: [...document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip')].map(a => a.textContent.trim()),
+            expectedPerson: story && (story.i18n?.[locale]?.person || story.person) || ''
+          };
+        }, { locale, targetId: target.id });
+        check('globe heading and selected card survive language ' + locale,
+          localized.title === titles[locale] && localized.dir === (locale === 'ar' ? 'rtl' : 'ltr') && localized.card && !!localized.source,
+          JSON.stringify(localized));
+        check('globe story chips show the localized character name in ' + locale,
+          !!localized.expectedPerson && localized.chips.includes(localized.expectedPerson), JSON.stringify(localized));
+      }
+    }
+  } catch (e) {
+    hard.push(label + ': browser regression could not complete — ' + String(e.message || e).split('\n')[0]);
+  } finally {
+    await desktop.close();
+  }
+
+  const mobile = await newContext(browser, origin, 'mobile');
+  try {
+    const page = await mobile.newPage();
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.goto(base + '/', { waitUntil: 'load' });
+    const globe = page.locator('#khWorld');
+    await globe.waitFor({ state: 'attached', timeout: 10000 });
+    await globe.scrollIntoViewIfNeeded();
+    await page.locator('#khWorld .kh-world-canvas').waitFor({ state: 'visible', timeout: 10000 });
+    await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), null, { timeout: 10000 });
+    const state = await page.evaluate(() => ({
+      width: document.querySelector('#khWorld').getBoundingClientRect().width,
+      viewport: document.documentElement.clientWidth,
+      canvas: !!document.querySelector('#khWorld canvas'),
+      list: document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip').length,
+      overflow: (() => { const el = document.querySelector('#khWorld'); const r = el.getBoundingClientRect(); return el.scrollWidth > el.clientWidth + 1 || r.left < -1 || r.right > document.documentElement.clientWidth + 1; })()
+    }));
+    check('globe remains visible and usable on mobile without horizontal overflow',
+      state.canvas && state.list > 0 && state.width > 0 && !state.overflow, JSON.stringify(state));
+    await globe.screenshot({ path: path.join(screenshotDir, 'globe-mobile.png'), animations: 'disabled' });
+  } catch (e) {
+    hard.push(label + ': mobile browser regression could not complete — ' + String(e.message || e).split('\n')[0]);
+  } finally {
+    await mobile.close();
+  }
+  return { label, checks, hard, warn: [] };
+}
+
 async function flow(browser, base, origin, lang, viewport) {
   const hard = [], warn = [], steps = [], res = [];
   const label = `FLOW ${lang}/${viewport}`;
@@ -801,6 +970,7 @@ async function adminV2ModuleRegression(browser, base, origin) {
       results.flow.push(...await Promise.all(LANGS.map((l) => flow(browser, base, origin, l, viewport))));
       results.sweep.push(...await Promise.all(LANGS.map((l) => sweep(browser, base, origin, l, viewport, pages))));
     }
+    results.cinematicGlobe = await cinematicGlobeRegression(browser, base, origin);
     results.introPopup = await introPopupRegression(browser, base, origin);
     results.svgArtwork = await svgArtworkRegression(browser, base, origin);
     results.targetArabicAudit = await targetArabicTextAudit(browser, base, origin);
@@ -809,7 +979,7 @@ async function adminV2ModuleRegression(browser, base, origin) {
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminV2Import ? results.adminV2Import.hard : [], results.adminV2ActualImport ? results.adminV2ActualImport.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminV2Import ? results.adminV2Import.hard : [], results.adminV2ActualImport ? results.adminV2ActualImport.hard : [], results.cinematicGlobe ? results.cinematicGlobe.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -819,6 +989,7 @@ async function adminV2ModuleRegression(browser, base, origin) {
   const stepOk = results.flow.reduce((n, r) => n + r.steps.filter((s) => s.ok).length, 0);
   console.log(`FLOW: ${stepOk}/${stepCount} steps passed across ${results.flow.length} language/viewport runs.`);
   console.log(`SWEEP: ${pages.length} visitor pages x ${LANGS.length} languages x 2 viewports = ${pages.length * LANGS.length * 2} loads.`);
+  console.log(`CINEMATIC GLOBE: ${results.cinematicGlobe ? results.cinematicGlobe.checks.filter((c) => c.ok).length : 0}/${results.cinematicGlobe ? results.cinematicGlobe.checks.length : 0} checks passed.`);
   console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
   console.log(`TARGET ARABIC TEXT AUDIT: ${results.targetArabicAudit ? results.targetArabicAudit.rows.length : 0} page/language samples recorded; see report.targetArabicAudit for each Arabic fragment.`);
