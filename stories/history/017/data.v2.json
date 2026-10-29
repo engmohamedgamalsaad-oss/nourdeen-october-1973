@@ -1,0 +1,733 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "ibn-sina",
+  "section": "history",
+  "design": {
+    "variant": "portrait-biography",
+    "accent": "#d5b7ff"
+  },
+  "original_body": "أهلاً بك يا صديقي! تعرف؟ وأنا أبحث وأتصفح، خطرت على بالي قصة شخصية أسطورية حقيقية، وهو **ابن سينا** (أو \"الشيخ الرئيس\" كما كانوا يسمونه أحياناً).\n\nتخيل معي: ولد قبل حوالي ألف سنة (تحديداً سنة 980 ميلادية)، وقبل أن يبلغ عمرك (13 سنة) كان قد حفظ القرآن الكريم كاملاً، ودرس الفلسفة والرياضيات والعلوم لدرجة أن أساتذته أصبحوا يتعلمون منه!\n\nولم يتوقف عند هذا الحد، بل أصبح \"دكتاتور\" الطب في زمانه (بالعكس طبعاً، أقصد عبقري الطب!)، فألف كتاباً ضخماً اسمه **\"القانون في الطب\"**، ظل يُدَرَّس في أشهر جامعات أوروبا لمئات السنين، وكان يحفظ الكثير من الأمراض وعلاجاتها عن ظهر قلب وهو شاب صغير.\n\nهل تحب أن نعرف شيئاً آخر عنه، أو عن أي عالم آخر من العصور القديمة؟",
+  "i18n": {
+    "ar": {
+      "title": "ابن سينا — الشيخ الرئيس",
+      "subtitle": "رحلة عالم جمع بين الطب والفلسفة وترك أثرًا امتد قرونًا",
+      "summary": "حكاية ابن سينا، الطبيب والفيلسوف الذي ألّف القانون في الطب، وكيف انتقلت المعرفة بين الثقافات.",
+      "student_name": "نوردين محمد جمال",
+      "grade": "الصف الأول الإعدادي",
+      "history_note": "تُذكر سنة الميلاد نحو 980، وتُعرض بعض تفاصيل السيرة بصياغة حذرة لأن المصادر تختلف في جزئياتها. الرسم المنشور لابن سينا من القرن السادس عشر تمثيل لاحق وليس صورة معاصرة له.",
+      "images_note": "الغلاف والرسم داخل الحكاية رسومان توضيحيان من أصول المشروع، أما صورة ابن سينا المنشورة عام 1584 فهي تمثيل فني متأخر وليست صورة معاصرة.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "بداية الحكاية: عالم من بخارى",
+          "text": "وُلد أبو علي الحسين بن عبد الله بن سينا نحو عام 980 ميلاديًا قرب بخارى، في منطقة تقع اليوم في أوزبكستان. عاش في زمن كانت فيه الكتب تُنسخ باليد، وكانت المعرفة تنتقل عبر المعلمين ومجالس العلماء والرحلات بين المدن."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "يعني كان عالم في الطب بس؟",
+          "text": "لا، اهتم ابن سينا بالطب والفلسفة والمنطق والطبيعة وغيرها من مجالات المعرفة. وتعلّم من الكتب والمعلمين، ثم اعتمد على الدراسة والملاحظة والخبرة في عمله."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "كتاب اشتهر عبر الحدود",
+          "text": "من أشهر مؤلفاته «القانون في الطب»، وهو كتاب نظّم معارف طبية كانت معروفة في عصره وأضاف إليها من دراسته وخبرته. تُرجم الكتاب إلى اللاتينية في العصور الوسطى وأصبح مرجعًا مهمًا في التعليم الطبي الأوروبي لقرون."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المعرفة تتغير مع الزمن",
+          "text": "أهمية القانون في الطب تاريخية وعلمية؛ فهو يساعدنا على فهم ما عرفه الأطباء في زمن ابن سينا. لكن الطب الحديث تطوّر بفضل البحث والتجارب والأدلة الجديدة، لذلك لا تُستخدم وصفات الكتب القديمة بديلًا عن الرعاية الطبية الحديثة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "يعني نتعلم من الماضي، بس نراجع المعلومات كمان؟",
+          "text": "بالضبط. نقرأ أعمال العلماء لفهم كيف تطورت المعرفة، ونفرّق بين ما كان معروفًا في زمنهم وما تدعمه الأدلة اليوم."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "رحلة قصيرة عبر الزمن",
+          "text": "980 — وُلد ابن سينا قرب بخارى\nالقرن الحادي عشر — ألّف أعمالًا في الطب والفلسفة\nالقرن الثاني عشر وما بعده — تُرجم القانون في الطب إلى اللاتينية وانتشر في أوروبا\n1037 — توفي ابن سينا، وبقيت كتبه مؤثرة في تاريخ المعرفة"
+        }
+      ]
+    },
+    "en": {
+      "title": "Ibn Sina — The Master Scholar",
+      "subtitle": "The journey of a physician and philosopher whose work shaped learning for centuries",
+      "summary": "Meet Ibn Sina, the physician and philosopher behind The Canon of Medicine, and discover how knowledge traveled across cultures.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "grade": "First year of preparatory school",
+      "history_note": "The birth year is given as approximately 980; some biographical details vary among sources. The 16th-century image of Ibn Sina is a later artistic representation, not a contemporary portrait.",
+      "images_note": "The cover and manuscript illustration are project illustrations. The image of Ibn Sina published in 1584 is a later artistic representation, not a contemporary portrait.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A scholar from Bukhara",
+          "text": "Abu Ali al-Husayn ibn Abd Allah ibn Sina was born around 980 CE near Bukhara, in a region that is now part of Uzbekistan. Books were copied by hand, and knowledge traveled through teachers, scholarly circles, and journeys between cities."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Was he only a doctor?",
+          "text": "No. Ibn Sina studied medicine, philosophy, logic, and the natural world. He learned from books and teachers, then drew on study, observation, and experience in his work."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "A book that crossed borders",
+          "text": "One of his best-known works is The Canon of Medicine. It organized medical knowledge known in his time and included his own learning and experience. Translated into Latin during the Middle Ages, it became an important text in European medical education for centuries."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Knowledge changes over time",
+          "text": "The Canon matters historically because it helps us understand medicine in Ibn Sina’s era. Modern medicine has developed through research, experiments, and new evidence, so old medical texts should not replace modern medical care."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "So we learn from the past, but check what we know today?",
+          "text": "Exactly. We study earlier scholars to understand how knowledge developed, while distinguishing their era’s ideas from what current evidence supports."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "A brief timeline",
+          "text": "c. 980 — Ibn Sina was born near Bukhara\n11th century — He wrote works on medicine and philosophy\n12th century onward — The Canon was translated into Latin and circulated in Europe\n1037 — Ibn Sina died, leaving works that influenced the history of learning"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ibn Sina — le maître savant",
+      "subtitle": "Le parcours d’un médecin et philosophe dont l’œuvre a marqué le savoir pendant des siècles",
+      "summary": "Découvrez Ibn Sina, médecin et philosophe, auteur du Canon de la médecine, et la circulation du savoir entre les cultures.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "grade": "Première année du collège",
+      "history_note": "L’année de naissance est donnée vers 980 ; certains détails biographiques varient selon les sources. L’image du XVIe siècle est une représentation artistique tardive, non un portrait contemporain.",
+      "images_note": "La couverture et l’illustration du manuscrit sont des créations illustratives du projet. L’image publiée en 1584 est une représentation artistique postérieure.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un savant de Boukhara",
+          "text": "Abu Ali al-Husayn ibn Abd Allah ibn Sina est né vers 980 de notre ère près de Boukhara, dans une région qui appartient aujourd’hui à l’Ouzbékistan. Les livres étaient copiés à la main et le savoir circulait grâce aux maîtres, aux cercles savants et aux voyages entre les villes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Était-il seulement médecin ?",
+          "text": "Non. Ibn Sina étudia la médecine, la philosophie, la logique et la nature. Il apprit dans les livres et auprès de maîtres, puis s’appuya sur l’étude, l’observation et l’expérience."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Un livre qui a franchi les frontières",
+          "text": "L’une de ses œuvres les plus connues est le Canon de la médecine. Il organisait les connaissances médicales de son époque et intégrait son travail. Traduit en latin au Moyen Âge, il devint un ouvrage important de l’enseignement médical européen pendant des siècles."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le savoir évolue avec le temps",
+          "text": "Le Canon est important pour l’histoire, car il aide à comprendre la médecine à l’époque d’Ibn Sina. La médecine moderne a progressé grâce à la recherche, aux expériences et à de nouvelles preuves : les anciens traités ne remplacent donc pas les soins actuels."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Alors, on apprend du passé mais on vérifie aussi les connaissances d’aujourd’hui ?",
+          "text": "Exactement. Nous étudions les savants du passé pour comprendre l’évolution du savoir, tout en distinguant les idées de leur époque de celles confirmées par les preuves actuelles."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Quelques repères",
+          "text": "Vers 980 — Naissance d’Ibn Sina près de Boukhara\nXIe siècle — Il écrit des ouvrages de médecine et de philosophie\nÀ partir du XIIe siècle — Le Canon est traduit en latin et circule en Europe\n1037 — Mort d’Ibn Sina ; ses livres restent importants dans l’histoire du savoir"
+        }
+      ]
+    },
+    "it": {
+      "title": "Ibn Sina — il grande maestro",
+      "subtitle": "Il percorso di un medico e filosofo la cui opera influenzò lo studio per secoli",
+      "summary": "Scopri Ibn Sina, medico e filosofo autore del Canone della medicina, e come il sapere viaggiò tra culture diverse.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "grade": "Primo anno della scuola preparatoria",
+      "history_note": "L’anno di nascita è indicato intorno al 980; alcuni dettagli biografici variano secondo le fonti. L’immagine del XVI secolo è una rappresentazione artistica successiva, non un ritratto contemporaneo.",
+      "images_note": "La copertina e l’illustrazione del manoscritto sono illustrazioni del progetto. L’immagine pubblicata nel 1584 è una rappresentazione artistica successiva.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Uno studioso di Bukhara",
+          "text": "Abu Ali al-Husayn ibn Abd Allah ibn Sina nacque intorno al 980 vicino a Bukhara, in una regione che oggi fa parte dell’Uzbekistan. I libri venivano copiati a mano e il sapere circolava attraverso insegnanti, circoli di studiosi e viaggi tra città."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Era soltanto un medico?",
+          "text": "No. Ibn Sina studiò medicina, filosofia, logica e natura. Imparò dai libri e dai maestri, poi si affidò allo studio, all’osservazione e all’esperienza."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Un libro che superò i confini",
+          "text": "Una delle sue opere più note è il Canone della medicina. Organizzava le conoscenze mediche del suo tempo e includeva il suo studio e la sua esperienza. Tradotto in latino nel Medioevo, divenne un testo importante nell’istruzione medica europea per secoli."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "La conoscenza cambia nel tempo",
+          "text": "Il Canone è importante per la storia perché ci aiuta a capire la medicina dell’epoca di Ibn Sina. La medicina moderna è progredita grazie a ricerche, esperimenti e nuove prove; i testi antichi non sostituiscono quindi le cure moderne."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Quindi impariamo dal passato, ma controlliamo anche ciò che sappiamo oggi?",
+          "text": "Esatto. Studiamo gli studiosi del passato per capire come si è sviluppata la conoscenza, distinguendo le idee della loro epoca da quelle sostenute dalle prove attuali."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Breve cronologia",
+          "text": "980 circa — Nascita di Ibn Sina vicino a Bukhara\nXI secolo — Scrive opere di medicina e filosofia\nDal XII secolo — Il Canone viene tradotto in latino e circola in Europa\n1037 — Muore Ibn Sina; i suoi libri restano influenti nella storia del sapere"
+        }
+      ]
+    },
+    "de": {
+      "title": "Ibn Sina — der große Gelehrte",
+      "subtitle": "Der Weg eines Arztes und Philosophen, dessen Werk das Lernen über Jahrhunderte prägte",
+      "summary": "Lerne Ibn Sina kennen, den Arzt und Philosophen hinter dem Kanon der Medizin, und erfahre, wie Wissen Kulturen überquerte.",
+      "student_name": "Nourdeen Mohamed Gamal",
+      "grade": "1. Klasse der Sekundarstufe I",
+      "history_note": "Das Geburtsjahr wird ungefähr mit 980 angegeben; einzelne biografische Details unterscheiden sich je nach Quelle. Die Darstellung aus dem 16. Jahrhundert ist kein zeitgenössisches Porträt.",
+      "images_note": "Titelbild und Manuskriptillustration sind Projektillustrationen. Das 1584 veröffentlichte Bild ist eine spätere künstlerische Darstellung.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Ein Gelehrter aus Buchara",
+          "text": "Abu Ali al-Husain ibn Abd Allah ibn Sina wurde um 980 n. Chr. nahe Buchara geboren, in einer Region, die heute zu Usbekistan gehört. Bücher wurden von Hand abgeschrieben, und Wissen verbreitete sich durch Lehrende, Gelehrtenkreise und Reisen zwischen Städten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "War er nur Arzt?",
+          "text": "Nein. Ibn Sina beschäftigte sich mit Medizin, Philosophie, Logik und Naturkunde. Er lernte aus Büchern und bei Lehrern und stützte seine Arbeit auf Studium, Beobachtung und Erfahrung."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Ein Buch, das Grenzen überwand",
+          "text": "Eines seiner bekanntesten Werke ist der Kanon der Medizin. Er ordnete medizinisches Wissen seiner Zeit und bezog seine Studien und Erfahrungen ein. Im Mittelalter ins Lateinische übersetzt, wurde er über Jahrhunderte zu einem wichtigen Werk der europäischen medizinischen Ausbildung."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Wissen verändert sich mit der Zeit",
+          "text": "Der Kanon ist historisch wichtig, weil er die Medizin zu Ibn Sinas Zeit verständlich macht. Die moderne Medizin entwickelte sich durch Forschung, Experimente und neue Belege. Alte medizinische Bücher ersetzen daher keine heutige medizinische Versorgung."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Wir lernen also aus der Vergangenheit und prüfen trotzdem das heutige Wissen?",
+          "text": "Genau. Wir lesen frühere Gelehrte, um die Entwicklung des Wissens zu verstehen, und unterscheiden ihre damaligen Vorstellungen von dem, was heutige Belege stützen."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Kurzer Zeitstrahl",
+          "text": "Um 980 — Ibn Sina wird nahe Buchara geboren\n11. Jahrhundert — Er verfasst Werke über Medizin und Philosophie\nAb dem 12. Jahrhundert — Der Kanon wird ins Lateinische übersetzt und in Europa verbreitet\n1037 — Ibn Sina stirbt; seine Bücher bleiben für die Wissensgeschichte bedeutsam"
+        }
+      ]
+    }
+  },
+  "cover": {
+    "path": "stories/history/005/cover.svg",
+    "kind": "illustration",
+    "source_name": "Khaledoon project illustration",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+    "rights": "Project illustration; used for educational storytelling.",
+    "i18n": {
+      "ar": {
+        "alt": "رسم توضيحي لكتب ومخطوطات علمية",
+        "caption": "غلاف توضيحي للحكاية، وليس صورة تاريخية لابن سينا.",
+        "source_name": "رسوم مشروع خالدون",
+        "rights": "Project illustration; used for educational storytelling."
+      },
+      "en": {
+        "alt": "Illustration of scholarly books and manuscripts",
+        "caption": "Illustrated story cover, not a historical portrait of Ibn Sina.",
+        "source_name": "Khaledoon project illustrations",
+        "rights": "Project illustration; used for educational storytelling."
+      },
+      "fr": {
+        "alt": "Illustration de livres et manuscrits savants",
+        "caption": "Couverture illustrée, et non portrait historique d’Ibn Sina.",
+        "source_name": "Illustrations du projet Khaledoon",
+        "rights": "Project illustration; used for educational storytelling."
+      },
+      "it": {
+        "alt": "Illustrazione di libri e manoscritti",
+        "caption": "Copertina illustrata, non un ritratto storico di Ibn Sina.",
+        "source_name": "Illustrazioni del progetto Khaledoon",
+        "rights": "Project illustration; used for educational storytelling."
+      },
+      "de": {
+        "alt": "Illustration von Büchern und Manuskripten",
+        "caption": "Illustriertes Titelbild, kein historisches Porträt von Ibn Sina.",
+        "source_name": "Illustrationen des Khaledoon-Projekts",
+        "rights": "Project illustration; used for educational storytelling."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "image-1",
+      "path": "stories/history/005/folio.svg",
+      "kind": "illustration",
+      "source_name": "Khaledoon project illustration",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Project illustration; used for educational storytelling.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي لمخطوطة طبية قديمة",
+          "caption": "رسم تعليمي يوضح الكتب الطبية في العصور الوسطى؛ ليس مخطوطة أصلية.",
+          "source_name": "رسوم مشروع خالدون",
+          "rights": "Project illustration; used for educational storytelling."
+        },
+        "en": {
+          "alt": "Illustration of a medieval medical manuscript",
+          "caption": "Educational illustration of medieval medical books, not an original manuscript.",
+          "source_name": "Khaledoon project illustrations",
+          "rights": "Project illustration; used for educational storytelling."
+        },
+        "fr": {
+          "alt": "Illustration d’un manuscrit médical médiéval",
+          "caption": "Illustration pédagogique, et non manuscrit original.",
+          "source_name": "Illustrations du projet Khaledoon",
+          "rights": "Project illustration; used for educational storytelling."
+        },
+        "it": {
+          "alt": "Illustrazione di un manoscritto medico medievale",
+          "caption": "Illustrazione didattica, non un manoscritto originale.",
+          "source_name": "Illustrazioni del progetto Khaledoon",
+          "rights": "Project illustration; used for educational storytelling."
+        },
+        "de": {
+          "alt": "Illustration eines mittelalterlichen medizinischen Manuskripts",
+          "caption": "Lehrillustration, kein originales Manuskript.",
+          "source_name": "Illustrationen des Khaledoon-Projekts",
+          "rights": "Project illustration; used for educational storytelling."
+        }
+      }
+    },
+    {
+      "id": "image-2",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Portrait_of_Avicenna.jpg",
+      "kind": "illustration",
+      "source_name": "André Thevet / Smithsonian Libraries via Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Portrait_of_Avicenna.jpg",
+      "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death.",
+      "i18n": {
+        "ar": {
+          "alt": "تمثيل فني متأخر لابن سينا",
+          "caption": "صورة نُشرت عام 1584 بعد وفاة ابن سينا بقرون؛ تمثيل فني لا صورة معاصرة.",
+          "source_name": "أندريه تيفيه عبر مكتبات سميثسونيان",
+          "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death."
+        },
+        "en": {
+          "alt": "Later artistic representation of Ibn Sina",
+          "caption": "Published in 1584, centuries after Ibn Sina’s death; not a contemporary portrait.",
+          "source_name": "André Thevet via Smithsonian Libraries",
+          "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death."
+        },
+        "fr": {
+          "alt": "Représentation artistique tardive d’Ibn Sina",
+          "caption": "Publiée en 1584, des siècles après sa mort ; ce n’est pas un portrait contemporain.",
+          "source_name": "André Thevet via Smithsonian Libraries",
+          "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death."
+        },
+        "it": {
+          "alt": "Rappresentazione artistica successiva di Ibn Sina",
+          "caption": "Pubblicata nel 1584, secoli dopo la sua morte; non è un ritratto contemporaneo.",
+          "source_name": "André Thevet tramite Smithsonian Libraries",
+          "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death."
+        },
+        "de": {
+          "alt": "Spätere künstlerische Darstellung von Ibn Sina",
+          "caption": "1584 veröffentlicht, Jahrhunderte nach seinem Tod; kein zeitgenössisches Porträt.",
+          "source_name": "André Thevet über Smithsonian Libraries",
+          "rights": "Public domain; later historical artistic representation, published centuries after Ibn Sina's death."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "The Canon of Medicine",
+      "organization": "Library of Congress",
+      "url": "https://www.loc.gov/item/2021667332/",
+      "i18n": {
+        "ar": {
+          "title": "القانون في الطب — مكتبة الكونغرس الأمريكية",
+          "organization": "مكتبة الكونغرس الأمريكية"
+        },
+        "en": {
+          "title": "The Canon of Medicine — Library of Congress",
+          "organization": "Library of Congress"
+        },
+        "fr": {
+          "title": "Le Canon de la médecine — Library of Congress",
+          "organization": "Library of Congress"
+        },
+        "it": {
+          "title": "Il Canone della medicina — Library of Congress",
+          "organization": "Library of Congress"
+        },
+        "de": {
+          "title": "Der Kanon der Medizin — Library of Congress",
+          "organization": "Library of Congress"
+        }
+      }
+    },
+    {
+      "title": "Ibn Sina and the Canon of Medicine",
+      "organization": "PubMed Central",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3343704/",
+      "i18n": {
+        "ar": {
+          "title": "Ibn Sina and the Canon of Medicine — PubMed Central",
+          "organization": "المركز الوطني لمعلومات التقانة الحيوية / PubMed Central"
+        },
+        "en": {
+          "title": "Ibn Sina and the Canon of Medicine — PubMed Central",
+          "organization": "National Center for Biotechnology Information / PubMed Central"
+        },
+        "fr": {
+          "title": "Ibn Sina et le Canon de la médecine — PubMed Central",
+          "organization": "National Center for Biotechnology Information / PubMed Central"
+        },
+        "it": {
+          "title": "Ibn Sina e il Canone della medicina — PubMed Central",
+          "organization": "National Center for Biotechnology Information / PubMed Central"
+        },
+        "de": {
+          "title": "Ibn Sina und der Kanon der Medizin — PubMed Central",
+          "organization": "National Center for Biotechnology Information / PubMed Central"
+        }
+      }
+    },
+    {
+      "title": "Avicenna (Ibn Sina)",
+      "organization": "MacTutor History of Mathematics",
+      "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Avicenna/",
+      "i18n": {
+        "ar": {
+          "title": "Avicenna (Ibn Sina) — MacTutor History of Mathematics",
+          "organization": "جامعة سانت أندروز"
+        },
+        "en": {
+          "title": "Avicenna (Ibn Sina) — MacTutor History of Mathematics",
+          "organization": "University of St Andrews"
+        },
+        "fr": {
+          "title": "Avicenne (Ibn Sina) — MacTutor History of Mathematics",
+          "organization": "Université de St Andrews"
+        },
+        "it": {
+          "title": "Avicenna (Ibn Sina) — MacTutor History of Mathematics",
+          "organization": "Università di St Andrews"
+        },
+        "de": {
+          "title": "Avicenna (Ibn Sina) — MacTutor History of Mathematics",
+          "organization": "University of St Andrews"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "question-1",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "أين وُلد ابن سينا تقريبًا؟",
+          "options": [
+            "قرب بخارى",
+            "القاهرة",
+            "روما",
+            "قرطبة"
+          ],
+          "explanation": "تقع بخارى التاريخية في منطقة تقع اليوم ضمن أوزبكستان."
+        },
+        "en": {
+          "question": "Near which city was Ibn Sina born?",
+          "options": [
+            "Bukhara",
+            "Cairo",
+            "Rome",
+            "Cordoba"
+          ],
+          "explanation": "Historic Bukhara is in a region that is now part of Uzbekistan."
+        },
+        "fr": {
+          "question": "Près de quelle ville Ibn Sina est-il né ?",
+          "options": [
+            "Boukhara",
+            "Le Caire",
+            "Rome",
+            "Cordoue"
+          ],
+          "explanation": "Boukhara se trouve dans une région aujourd’hui située en Ouzbékistan."
+        },
+        "it": {
+          "question": "Vicino a quale città nacque Ibn Sina?",
+          "options": [
+            "Bukhara",
+            "Il Cairo",
+            "Roma",
+            "Cordova"
+          ],
+          "explanation": "Bukhara si trova in una regione che oggi fa parte dell’Uzbekistan."
+        },
+        "de": {
+          "question": "In der Nähe welcher Stadt wurde Ibn Sina geboren?",
+          "options": [
+            "Buchara",
+            "Kairo",
+            "Rom",
+            "Córdoba"
+          ],
+          "explanation": "Das historische Buchara liegt in einer Region des heutigen Usbekistan."
+        }
+      }
+    },
+    {
+      "id": "question-2",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما أشهر كتب ابن سينا الطبية؟",
+          "options": [
+            "القانون في الطب",
+            "الأمير",
+            "المقدمة",
+            "الجمهورية"
+          ],
+          "explanation": "نظّم القانون في الطب معارف طبية معروفة في عصره."
+        },
+        "en": {
+          "question": "Which medical book is Ibn Sina best known for?",
+          "options": [
+            "The Canon of Medicine",
+            "The Prince",
+            "The Muqaddimah",
+            "The Republic"
+          ],
+          "explanation": "The Canon organized medical knowledge known in his era."
+        },
+        "fr": {
+          "question": "Quel ouvrage médical est le plus connu d’Ibn Sina ?",
+          "options": [
+            "Le Canon de la médecine",
+            "Le Prince",
+            "La Muqaddima",
+            "La République"
+          ],
+          "explanation": "Le Canon organisait les connaissances médicales de son époque."
+        },
+        "it": {
+          "question": "Per quale opera medica è più noto Ibn Sina?",
+          "options": [
+            "Il Canone della medicina",
+            "Il Principe",
+            "La Muqaddima",
+            "La Repubblica"
+          ],
+          "explanation": "Il Canone organizzava le conoscenze mediche della sua epoca."
+        },
+        "de": {
+          "question": "Für welches medizinische Werk ist Ibn Sina besonders bekannt?",
+          "options": [
+            "Der Kanon der Medizin",
+            "Der Fürst",
+            "Die Muqaddima",
+            "Der Staat"
+          ],
+          "explanation": "Der Kanon ordnete das medizinische Wissen seiner Zeit."
+        }
+      }
+    },
+    {
+      "id": "question-3",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "إلى أي لغة تُرجم القانون في الطب في العصور الوسطى؟",
+          "options": [
+            "اللاتينية",
+            "اليابانية",
+            "الصينية",
+            "الروسية"
+          ],
+          "explanation": "تُرجم الكتاب إلى اللاتينية وانتشر في التعليم الطبي الأوروبي."
+        },
+        "en": {
+          "question": "Into which language was the Canon translated in the Middle Ages?",
+          "options": [
+            "Latin",
+            "Japanese",
+            "Chinese",
+            "Russian"
+          ],
+          "explanation": "The book was translated into Latin and circulated in European medical education."
+        },
+        "fr": {
+          "question": "Dans quelle langue le Canon fut-il traduit au Moyen Âge ?",
+          "options": [
+            "Le latin",
+            "Le japonais",
+            "Le chinois",
+            "Le russe"
+          ],
+          "explanation": "L’ouvrage fut traduit en latin et circula dans l’enseignement médical européen."
+        },
+        "it": {
+          "question": "In quale lingua fu tradotto il Canone nel Medioevo?",
+          "options": [
+            "Latino",
+            "Giapponese",
+            "Cinese",
+            "Russo"
+          ],
+          "explanation": "Il libro fu tradotto in latino e circolò nell’insegnamento medico europeo."
+        },
+        "de": {
+          "question": "In welche Sprache wurde der Kanon im Mittelalter übersetzt?",
+          "options": [
+            "Latein",
+            "Japanisch",
+            "Chinesisch",
+            "Russisch"
+          ],
+          "explanation": "Das Buch wurde ins Lateinische übersetzt und in Europa verbreitet."
+        }
+      }
+    },
+    {
+      "id": "question-4",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "لماذا ندرس كتب الطب القديمة اليوم؟",
+          "options": [
+            "لفهم تاريخ المعرفة",
+            "لاستخدامها بدل الطب الحديث",
+            "لأنها لا تتغير",
+            "لأنها تجارب حديثة"
+          ],
+          "explanation": "تساعدنا الكتب القديمة على فهم تطور الطب، لكنها لا تحل محل الرعاية الطبية المبنية على الأدلة الحديثة."
+        },
+        "en": {
+          "question": "Why do we study old medical books today?",
+          "options": [
+            "To understand the history of knowledge",
+            "To replace modern medicine",
+            "Because they never change",
+            "Because they contain modern experiments"
+          ],
+          "explanation": "Old books help explain medical history but do not replace evidence-based modern care."
+        },
+        "fr": {
+          "question": "Pourquoi étudie-t-on aujourd’hui les anciens livres médicaux ?",
+          "options": [
+            "Pour comprendre l’histoire du savoir",
+            "Pour remplacer la médecine moderne",
+            "Parce qu’ils ne changent jamais",
+            "Parce qu’ils contiennent des expériences modernes"
+          ],
+          "explanation": "Ils éclairent l’histoire de la médecine, mais ne remplacent pas les soins modernes fondés sur les preuves."
+        },
+        "it": {
+          "question": "Perché studiamo oggi gli antichi libri di medicina?",
+          "options": [
+            "Per capire la storia del sapere",
+            "Per sostituire la medicina moderna",
+            "Perché non cambiano mai",
+            "Perché contengono esperimenti moderni"
+          ],
+          "explanation": "Aiutano a capire la storia della medicina, ma non sostituiscono le cure moderne basate su prove."
+        },
+        "de": {
+          "question": "Warum lesen wir heute alte medizinische Bücher?",
+          "options": [
+            "Um die Wissensgeschichte zu verstehen",
+            "Um moderne Medizin zu ersetzen",
+            "Weil sie sich nie ändern",
+            "Weil sie moderne Experimente enthalten"
+          ],
+          "explanation": "Sie erklären die Medizingeschichte, ersetzen aber keine evidenzbasierte moderne Versorgung."
+        }
+      }
+    },
+    {
+      "id": "question-5",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما الفكرة الأساسية في نهاية الحكاية؟",
+          "options": [
+            "نتعلم من الماضي ونراجع الأدلة",
+            "كل معلومة قديمة صحيحة دائمًا",
+            "الطب لا يتغير",
+            "العلم مجال واحد فقط"
+          ],
+          "explanation": "تُظهر الحكاية قيمة التعلم من العلماء مع التمييز بين المعرفة التاريخية والأدلة الحديثة."
+        },
+        "en": {
+          "question": "What is the story’s main lesson?",
+          "options": [
+            "Learn from the past and check evidence",
+            "Every old idea is always correct",
+            "Medicine never changes",
+            "Science has only one field"
+          ],
+          "explanation": "The story values learning from earlier scholars while distinguishing historical knowledge from current evidence."
+        },
+        "fr": {
+          "question": "Quelle est l’idée principale du récit ?",
+          "options": [
+            "Apprendre du passé et vérifier les preuves",
+            "Toute idée ancienne est toujours juste",
+            "La médecine ne change jamais",
+            "La science n’a qu’un seul domaine"
+          ],
+          "explanation": "Le récit valorise l’apprentissage du passé et la distinction entre savoir historique et preuves actuelles."
+        },
+        "it": {
+          "question": "Qual è il messaggio principale del racconto?",
+          "options": [
+            "Imparare dal passato e verificare le prove",
+            "Ogni idea antica è sempre corretta",
+            "La medicina non cambia mai",
+            "La scienza ha un solo campo"
+          ],
+          "explanation": "Il racconto valorizza lo studio del passato distinguendolo dalle prove attuali."
+        },
+        "de": {
+          "question": "Was ist die wichtigste Aussage der Geschichte?",
+          "options": [
+            "Aus der Vergangenheit lernen und Belege prüfen",
+            "Jede alte Idee ist immer richtig",
+            "Medizin verändert sich nie",
+            "Wissenschaft hat nur ein Gebiet"
+          ],
+          "explanation": "Die Geschichte betont, aus der Vergangenheit zu lernen und historische Vorstellungen von aktuellen Belegen zu unterscheiden."
+        }
+      }
+    }
+  ]
+}
