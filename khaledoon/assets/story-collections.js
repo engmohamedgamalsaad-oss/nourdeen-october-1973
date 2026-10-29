@@ -83,7 +83,7 @@
     viewport.appendChild(track);
     shell.append(heading, viewport);
     section.appendChild(shell);
-    var hero = document.querySelector('.hero');
+    var hero = document.querySelector('.hero, .hero-home');
     if (hero && hero.parentNode) hero.parentNode.insertBefore(section, hero);
     else if (box && box.parentNode) box.parentNode.insertBefore(section, box);
   }
@@ -218,7 +218,6 @@
     .then(function (config) {
       var sections = Array.isArray(config.sections) ? config.sections : [];
       setSectionTitle(sections.find(function (item) { return item.id === sectionId; }));
-      if (!box) return null;
       return Promise.all([
         fetch(root + 'stories/index.json', { cache: 'no-cache' }).then(function (response) { if (!response.ok) throw new Error('index'); return response.json(); }),
         loadHiddenIds()
@@ -227,6 +226,13 @@
           var list = (Array.isArray(stories) ? stories : [])
             .filter(function (story) { return story && story.published !== false && story.section === sectionId && hiddenIds.indexOf(String(story.id)) < 0; })
             .sort(function (a, b) { return (Number(a.order) || 9999) - (Number(b.order) || 9999); });
+          if (!box) {
+            var standaloneGalleryEntries = list.map(function (story) {
+              return { story: story, card: renderCard(story) };
+            }).filter(function (entry) { return !!entry.card; });
+            buildSectionGallery(standaloneGalleryEntries);
+            return;
+          }
           box.replaceChildren();
           if (!list.length) {
             box.appendChild(node('div', 'empty story-index-empty', ui.empty));
