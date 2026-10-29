@@ -87,6 +87,6 @@ const els=[...document.querySelectorAll(".hero-content > *, .story .container > 
 els.forEach((e,i)=>{e.classList.add("write-in");e.style.setProperty("--write-delay",((i%5)*90)+"ms")});document.body.classList.add("motion-ready");
 const io=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add("write-visible");io.unobserve(entry.target)}}),{threshold:.12,rootMargin:"0px 0px -30px 0px"});els.forEach(e=>io.observe(e));
 })();
-</script><script src="../../../assets/shared/story.js?v=20261026-transition"></script><script src="../../../assets/shared/story-quiz.js?v=20261017"></script>
+</script><script src="../../../assets/shared/story.js?v=20261029-start-screen-height-1"></script><script src="../../../assets/shared/story-quiz.js?v=20261017"></script>
 <script src="../../../assets/shared/story-body-i18n.js?v=20261025-translation-audit"></script>
 </body></html>
