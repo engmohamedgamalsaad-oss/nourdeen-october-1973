@@ -198,6 +198,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
     const zoomReset = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="reset"]');
     check('zoom controls are visible and accessible', await zoomIn.isVisible() && await zoomOut.isVisible() && await zoomReset.isVisible() &&
       !!(await zoomIn.getAttribute('aria-label')) && !!(await zoomOut.getAttribute('aria-label')), 'in/out/reset controls must be visible with accessible labels');
+    check('globe starts at its default zoom', await zoomReset.isDisabled(), 'reset control should start disabled at the default scale');
     await zoomIn.click(); await zoomIn.click();
     check('zoom-in control reaches its bounded maximum', await zoomIn.isDisabled(), 'zoom-in should disable at the maximum scale');
     await zoomOut.click();
