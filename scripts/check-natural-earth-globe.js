@@ -48,6 +48,12 @@ for (const token of [
   'sectionColor(q.p.story.section)'
 ]) assert.ok(world.includes(token), 'globe integration missing: ' + token);
 assert.ok(css.includes('.kh-world-story-card'), 'globe character popup needs its card styles');
+assert.ok(world.includes("var zoom=1"), 'globe zoom state must exist');
+assert.ok(world.includes("function setZoom(next)"), 'globe must expose bounded zoom controls');
+assert.ok(world.includes("canvas.addEventListener('wheel'"), 'mouse-wheel zoom must be handled by the globe without scrolling the page');
+assert.ok(world.includes("zoomIn.setAttribute('aria-label',t('zoomIn'))"), 'zoom controls must have localized accessible labels');
+assert.ok(css.includes('.kh-world-zoom-controls') && css.includes('.kh-world-zoom-button'), 'globe zoom controls need visible, responsive styling');
+assert.ok(css.includes('.kh-world-canvas{display:block;width:100%;height:360px;min-width:0;touch-action:pan-y;cursor:grab;outline-offset:4px}'), 'globe must preserve horizontal drag while allowing normal vertical page scroll');
 assert.ok(world.includes('a.style.setProperty(\'--section-color\',sectionColor(section))'), 'story list chips must use the same live section palette as globe markers');
 assert.ok(world.includes("approximate:'الموقع تقريبي ويحتاج إلى مراجعة'"), 'approximate-location notice must match the interactive map card');
 assert.ok(map.includes("document.addEventListener('kh:world-select'"), 'globe selection must hand off to the existing interactive map');
