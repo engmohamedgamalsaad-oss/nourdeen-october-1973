@@ -172,7 +172,7 @@
     var w=Math.max(260,rect.width),h=Math.max(250,Math.min(480,rect.height||360));
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-    var r=Math.min(w*.40,h*.45)*zoom,cx=w*.49,cy=h*.5;
+    var r=Math.min(w*.40,h*.41)*zoom,cx=w*.49,cy=h*.5;
     var glow=ctx.createRadialGradient(cx-r*.22,cy-r*.25,r*.05,cx,cy,r*1.25);
     glow.addColorStop(0,'rgba(42,139,155,.25)');glow.addColorStop(.7,'rgba(7,36,52,.12)');glow.addColorStop(1,'rgba(5,15,29,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
