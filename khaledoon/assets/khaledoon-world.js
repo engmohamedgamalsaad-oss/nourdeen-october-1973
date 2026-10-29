@@ -76,8 +76,22 @@
   }
   function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[l]||s[key]||''}
   function localizedPlace(p){var l=lang(),v=p&&p.place;return typeof v==='string'?v:(v&&v[l])||(v&&v.ar)||''}
-  var sectionPalette={october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a',readers:'#80d5c7'};
-  function sectionColor(sectionId){return sectionPalette[sectionId]||'#b8874b'}
+  /* Defaults mirror khaledoon-map.js; the admin-configured section colors override them when available. */
+  var sectionPalette={october:'#f0c878',history:'#d4b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#f5b37e',islamic:'#78c59a',readers:'#80d5c7'};
+  var sectionAliases={knowledge:'women',learning:'women',fame:'people'};
+  function canonicalSection(sectionId){return sectionAliases[sectionId]||sectionId}
+  function sectionColor(sectionId){return sectionPalette[canonicalSection(sectionId)]||'#b8874b'}
+  function loadSectionPalette(){
+    var api='https://ypwprddkscnfblhftkeb.supabase.co',anon='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+    return fetch(api+'/rest/v1/khaledoon_admin_config?config_key=eq.sections&select=config_value&limit=1',{headers:{apikey:anon,Authorization:'Bearer '+anon},cache:'no-store'})
+      .then(function(r){return r.ok?r.json():[]})
+      .then(function(rows){
+        var value=rows&&rows[0]&&rows[0].config_value,colors=value&&value.colors||{};
+        Object.keys(colors).forEach(function(id){var c=colors[id]&&colors[id].outer;if(/^#[0-9a-f]{6}$/i.test(c||''))sectionPalette[canonicalSection(id)]=c});
+        requestDraw();
+        if(selectedPoint&&!selectedCard.hidden)selectedCard.replaceChildren(buildStoryCard(selectedPoint));
+      }).catch(function(){});
+  }
   function localizedValue(value){return typeof value==='string'?value:(value&&value[lang()])||(value&&value.ar)||''}
   var cityNames={
     'Cairo':{ar:'القاهرة',en:'Cairo',fr:'Le Caire',it:'Il Cairo',de:'Kairo'},
@@ -104,9 +118,10 @@
     'Alexandria':{ar:'الإسكندرية',en:'Alexandria',fr:'Alexandrie',it:'Alessandria',de:'Alexandria'}
   };
   function cityLabel(name){var value=cityNames[name];return value&&(value[lang()]||value.en)||''}
+  loadSectionPalette();
   function buildStoryCard(p){
     var story=p.story,catNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};
-    var l=lang(),sec=story.section||'',category=(catNames[l]||catNames.ar)[sec]||(catNames.ar[sec]||t('stories')),color=sectionColor(sec);
+    var l=lang(),sec=canonicalSection(story.section||''),category=(catNames[l]||catNames.ar)[sec]||(catNames.ar[sec]||t('stories')),color=sectionColor(sec);
     var card=el('div','khm-card');card.dir=document.documentElement.dir||'rtl';
     var ph=el('div','khm-ph');ph.style.setProperty('--c',color);
     var photo=String(p.photo||'');
