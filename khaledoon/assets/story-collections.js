@@ -19,6 +19,74 @@
     de: { read: 'Geschichte lesen →', empty: 'In diesem Bereich gibt es noch keine veröffentlichten Geschichten.', error: 'Die Geschichten konnten nicht geladen werden. Bitte aktualisiere die Seite.' }
   };
   var ui = labels[lang] || labels.ar;
+
+  function buildSectionGallery(entries) {
+    if (!entries || !entries.length) return;
+    var labelsByLang = {
+      ar: { title: 'صور من حكايات القسم', region: 'معرض صور حكايات هذا القسم' },
+      en: { title: 'Stories in pictures', region: 'Image gallery for this section' },
+      fr: { title: 'Les récits en images', region: 'Galerie d’images de cette rubrique' },
+      it: { title: 'Le storie in immagini', region: 'Galleria immagini di questa sezione' },
+      de: { title: 'Geschichten in Bildern', region: 'Bildergalerie dieses Bereichs' }
+    };
+    var copy = labelsByLang[lang] || labelsByLang.ar;
+    var section = node('section', 'kh-section-gallery');
+    section.setAttribute('aria-label', copy.region);
+    var shell = node('div', 'kh-section-gallery-shell');
+    var heading = node('div', 'kh-section-gallery-heading');
+    heading.appendChild(node('span', 'kh-section-gallery-kicker', 'KHALEDOON • STORIES'));
+    heading.appendChild(node('h2', '', copy.title));
+    var viewport = node('div', 'kh-section-gallery-viewport');
+    viewport.setAttribute('role', 'region');
+    viewport.setAttribute('aria-label', copy.region);
+    viewport.setAttribute('tabindex', '0');
+    var track = node('div', 'kh-section-gallery-track');
+    var firstGroup = node('div', 'kh-section-gallery-group');
+    var count = 0;
+    entries.forEach(function (entry, index) {
+      var source = entry.card && entry.card.querySelector('img.story-index-cover');
+      if (!source || !source.getAttribute('src')) return;
+      var story = entry.story;
+      var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
+      if (!validPath(path)) return;
+      var link = node('a', 'kh-section-gallery-item');
+      link.href = root + path;
+      link.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
+      var image = node('img', '');
+      image.src = source.src;
+      image.alt = localized(story, 'title') || localized(story, 'person') || '';
+      image.loading = index < 3 ? 'eager' : 'lazy';
+      image.decoding = 'async';
+      image.addEventListener('error', function () {
+        var item = image.closest('.kh-section-gallery-item');
+        if (item) item.remove();
+      }, { once: true });
+      var caption = node('span', 'kh-section-gallery-caption');
+      caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
+      var person = localized(story, 'person');
+      if (person && person !== localized(story, 'title')) caption.appendChild(node('small', '', person));
+      link.append(image, caption);
+      firstGroup.appendChild(link);
+      count += 1;
+    });
+    if (!count) return;
+    track.appendChild(firstGroup);
+    if (count > 1) {
+      var secondGroup = firstGroup.cloneNode(true);
+      secondGroup.setAttribute('aria-hidden', 'true');
+      secondGroup.querySelectorAll('a').forEach(function (link) { link.tabIndex = -1; });
+      track.appendChild(secondGroup);
+      track.classList.add('is-moving');
+    } else {
+      track.classList.add('is-static');
+    }
+    viewport.appendChild(track);
+    shell.append(heading, viewport);
+    section.appendChild(shell);
+    var hero = document.querySelector('.hero');
+    if (hero && hero.parentNode) hero.parentNode.insertBefore(section, hero);
+    else if (box && box.parentNode) box.parentNode.insertBefore(section, box);
+  }
   var root = '../../';
   /* غلاف البطاقة = صورة حقيقية موثقة (مسارها من جذر الموقع، وكلها في assets/images/stories وموثقة في MANIFEST.md).
      الصورة هي الأساس، والـSVG احتياطي لو فشل تحميلها. مكان مؤقت واحد؛ الجزء 7 ينقل الحقل إلى data.json لكل حكاية.
@@ -164,10 +232,15 @@
             box.appendChild(node('div', 'empty story-index-empty', ui.empty));
             return;
           }
+          var galleryEntries = [];
           list.forEach(function (story) {
             var card = renderCard(story);
-            if (card) box.appendChild(card);
+            if (card) {
+              box.appendChild(card);
+              galleryEntries.push({ story: story, card: card });
+            }
           });
+          buildSectionGallery(galleryEntries);
           if (!box.children.length) box.appendChild(node('div', 'empty story-index-empty', ui.empty));
           if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
             var cards = box.querySelectorAll('.card');
