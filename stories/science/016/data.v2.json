@@ -69,6 +69,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "يعني الإنجاز مش بس إنك تكتشف حاجة جديدة؛ ممكن كمان تعلّم غيرك إزاي يفكر ويبحث."
         },
@@ -76,21 +81,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "في جامعة القاهرة، لم يكن دوره مقتصرًا على إلقاء المحاضرات. تولّى عمادة كلية العلوم عام 1936، وكان حريصًا على أن تكون الجامعة مكانًا للبحث والتفكير، لا مكانًا لحفظ المعلومات فقط. وكان يعمل في وقت كانت فيه فرص البحث العلمي في مصر أقل مما هي عليه اليوم."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "اهتم مشرفة بموضوعات دقيقة مثل نظرية الكم والنسبية والعلاقة بين المادة والإشعاع. نشر أبحاثًا علمية في دوريات متخصصة، وكتب مؤلفات في الرياضيات والفيزياء، كما ساهم في نقل كتب علمية إلى العربية؛ لأنه رأى أن المعرفة ينبغي أن تصل إلى القارئ بلغته."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
         }
       ]
     },
@@ -155,6 +145,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "So achievement is not only discovering something new. It can also mean teaching others how to think and investigate."
         },
@@ -162,21 +157,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "At Cairo University, his role went beyond delivering lectures. He became dean of the Faculty of Science in 1936 and worked to make the university a place for research and independent thought, not simply memorization. He worked at a time when scientific research opportunities in Egypt were more limited than they are today."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa studied demanding topics including quantum theory, relativity, and the relationship between matter and radiation. He published research in specialist journals and wrote books on mathematics and physics. He also helped bring scientific works into Arabic because he believed knowledge should be accessible to readers in their own language."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
         }
       ]
     },
@@ -241,6 +221,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Alors, réussir, ce n’est pas seulement découvrir quelque chose : c’est aussi apprendre aux autres à réfléchir et à chercher."
         },
@@ -248,21 +233,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "À l’Université du Caire, son rôle ne se limitait pas aux cours. Il devint doyen de la faculté des sciences en 1936 et voulait faire de l’université un lieu de recherche et de réflexion, et non de simple mémorisation. Il travaillait à une époque où les possibilités de recherche scientifique en Égypte étaient plus limitées qu’aujourd’hui."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa étudia des sujets exigeants comme la théorie quantique, la relativité et le rapport entre matière et rayonnement. Il publia des recherches dans des revues spécialisées et écrivit des ouvrages de mathématiques et de physique. Il contribua aussi à rendre des ouvrages scientifiques accessibles en arabe, car il pensait que le savoir devait être accessible dans la langue des lecteurs."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
         }
       ]
     },
@@ -327,6 +297,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Quindi il successo non è solo scoprire qualcosa di nuovo: è anche insegnare agli altri a pensare e a fare ricerca."
         },
@@ -334,21 +309,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "All’Università del Cairo il suo ruolo non si limitava alle lezioni. Nel 1936 divenne preside della Facoltà di Scienze e lavorò perché l’università fosse un luogo di ricerca e pensiero indipendente, non soltanto di memorizzazione. Operava in un periodo in cui le opportunità di ricerca scientifica in Egitto erano più limitate di oggi."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa studiò temi complessi come la teoria quantistica, la relatività e il rapporto tra materia e radiazione. Pubblicò ricerche in riviste specialistiche e scrisse libri di matematica e fisica. Contribuì anche a rendere accessibili in arabo opere scientifiche, perché credeva che la conoscenza dovesse raggiungere i lettori nella loro lingua."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
         }
       ]
     },
@@ -413,6 +373,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Erfolg bedeutet also nicht nur, etwas Neues zu entdecken. Man kann auch anderen beibringen, wie man denkt und forscht."
         },
@@ -420,21 +385,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "An der Universität Kairo bestand seine Aufgabe nicht nur darin, Vorlesungen zu halten. 1936 wurde er Dekan der naturwissenschaftlichen Fakultät und setzte sich dafür ein, dass die Universität ein Ort der Forschung und des eigenständigen Denkens war – nicht nur des Auswendiglernens. Er arbeitete in einer Zeit, in der es in Ägypten weniger Möglichkeiten für wissenschaftliche Forschung gab als heute."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa beschäftigte sich mit anspruchsvollen Themen wie Quantentheorie, Relativität und dem Zusammenhang zwischen Materie und Strahlung. Er veröffentlichte Fachaufsätze und schrieb Bücher über Mathematik und Physik. Außerdem half er dabei, wissenschaftliche Werke auf Arabisch zugänglich zu machen, denn Wissen sollte die Menschen in ihrer eigenen Sprache erreichen."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
         }
       ]
     }
