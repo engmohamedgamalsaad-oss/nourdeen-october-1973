@@ -712,81 +712,81 @@
   "images": [
     {
       "id": "university-path",
-      "path": "stories/science/016/university-path.svg",
-      "kind": "illustration",
-      "source_name": "Khaledoon project — original illustration",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original educational illustration, not a historical photograph.",
+      "kind": "archival",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/University_College_Nottingham.jpg",
+      "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:University_College_Nottingham.jpg",
+      "rights": "Archival image from an 1897 illustrated guide, listed as public domain. It shows the institution, not Mosharafa’s specific classroom.",
       "i18n": {
         "ar": {
-          "alt": "رسم تعليمي لمسار الدراسة إلى إنجلترا",
-          "caption": "رسم تعليمي لمسار الدراسة إلى إنجلترا — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم تعليمي أصلي، وليس صورة تاريخية."
+          "alt": "صورة أرشيفية لكلية University College Nottingham من عام 1897",
+          "caption": "صورة أرشيفية للمؤسسة من دليل مصوّر عام 1897؛ توضح سياق دراسته في إنجلترا ولا تثبت أنها قاعة دراسته.",
+          "source_name": "ويكيميديا كومنز — University College Nottingham (1897)",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
         },
         "en": {
-          "alt": "Educational illustration of the study path to England",
-          "caption": "Educational illustration of the study path to England — a modern educational illustration, not an archival photograph.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Archival image of University College Nottingham from 1897",
+          "caption": "An archival view of the institution from an 1897 illustrated guide; it provides context for his studies in England, not proof of his specific classroom.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Listed as public domain on the file page."
         },
         "fr": {
-          "alt": "Illustration pédagogique du parcours d’études vers l’Angleterre",
-          "caption": "Illustration pédagogique du parcours d’études vers l’Angleterre — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Image d’archive de l’University College Nottingham datant de 1897",
+          "caption": "Vue d’archive de l’établissement tirée d’un guide illustré de 1897 ; elle situe ses études en Angleterre sans identifier sa salle de cours.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indiquée comme appartenant au domaine public."
         },
         "it": {
-          "alt": "Illustrazione didattica del percorso di studio verso l’Inghilterra",
-          "caption": "Illustrazione didattica del percorso di studio verso l’Inghilterra — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Immagine d’archivio dell’University College Nottingham del 1897",
+          "caption": "Veduta dell’istituto tratta da una guida illustrata del 1897; contestualizza gli studi in Inghilterra, ma non identifica la sua aula.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indicata come di pubblico dominio."
         },
         "de": {
-          "alt": "Lehrillustration des Studienwegs nach England",
-          "caption": "Lehrillustration des Studienwegs nach England — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Archivbild des University College Nottingham aus dem Jahr 1897",
+          "caption": "Ansicht der Einrichtung aus einem illustrierten Führer von 1897; sie bietet Studienkontext, belegt aber nicht seinen konkreten Hörsaal.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Als gemeinfrei gekennzeichnet."
         }
       }
     },
     {
       "id": "atom-diagram",
-      "path": "stories/science/016/atom-diagram.svg",
-      "kind": "diagram",
-      "source_name": "Khaledoon project — original illustration",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original educational illustration, not a historical photograph.",
+      "kind": "photograph",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ali_Mosharrafa_1.jpg",
+      "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa_1.jpg",
+      "rights": "Historical portrait of Ali Mostafa Mosharafa, listed as public domain on Wikimedia Commons.",
       "i18n": {
         "ar": {
-          "alt": "رسم مبسط لفكرة الذرة",
-          "caption": "رسم مبسط لفكرة الذرة — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم تعليمي أصلي، وليس صورة تاريخية."
+          "alt": "صورة أرشيفية لعلي مصطفى مشرفة",
+          "caption": "صورة أرشيفية ثانية لمشرفة؛ صورة حقيقية للشخصية وليست رسمًا مولّدًا.",
+          "source_name": "ويكيميديا كومنز — Ali Mosharrafa 1.jpg",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
         },
         "en": {
-          "alt": "Simplified diagram of an atom",
-          "caption": "Simplified diagram of an atom — a modern educational illustration, not an archival photograph.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Archival portrait of Ali Mostafa Mosharafa",
+          "caption": "A second archival portrait of Mosharafa; a real photograph of the person, not a generated illustration.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Listed as public domain on the file page."
         },
         "fr": {
-          "alt": "Schéma simplifié d’un atome",
-          "caption": "Schéma simplifié d’un atome — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Portrait d’archive d’Ali Mostafa Mosharafa",
+          "caption": "Un deuxième portrait d’archive de Mosharafa ; une vraie photographie, et non une illustration générée.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indiqué comme appartenant au domaine public."
         },
         "it": {
-          "alt": "Schema semplificato di un atomo",
-          "caption": "Schema semplificato di un atomo — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Ritratto d’archivio di Ali Mostafa Mosharafa",
+          "caption": "Un secondo ritratto d’archivio di Mosharafa; una fotografia reale, non un’illustrazione generata.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indicato come di pubblico dominio."
         },
         "de": {
-          "alt": "Vereinfachtes Atomdiagramm",
-          "caption": "Vereinfachtes Atomdiagramm — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Historisches Porträt von Ali Mostafa Mosharafa",
+          "caption": "Ein zweites historisches Porträt Mosharafas; eine echte Fotografie, keine generierte Illustration.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Als gemeinfrei gekennzeichnet."
         }
       }
     },
@@ -832,81 +832,81 @@
     },
     {
       "id": "space-time",
-      "path": "stories/science/016/space-time.svg",
-      "kind": "diagram",
-      "source_name": "Khaledoon project — original illustration",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original educational illustration, not a historical photograph.",
+      "kind": "photograph",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CairoUniv.jpg",
+      "source_name": "Wikimedia Commons — CairoUniv.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:CairoUniv.jpg",
+      "rights": "Photograph of Cairo University from the 1990s, released into the public domain by the original uploader; later than Mosharafa’s lifetime.",
       "i18n": {
         "ar": {
-          "alt": "رسم مبسط للمكان والزمان والضوء",
-          "caption": "رسم مبسط للمكان والزمان والضوء — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم تعليمي أصلي، وليس صورة تاريخية."
+          "alt": "صورة حقيقية لجامعة القاهرة من التسعينيات",
+          "caption": "صورة لجامعة القاهرة من التسعينيات، بعد زمن مشرفة؛ توضح المؤسسة التي عمل بها ولا تمثل شكلها في حياته.",
+          "source_name": "ويكيميديا كومنز — CairoUniv.jpg",
+          "rights": "أطلقها رافعها الأصلي للملكية العامة."
         },
         "en": {
-          "alt": "Simplified diagram of space, time and light",
-          "caption": "Simplified diagram of space, time and light — a modern educational illustration, not an archival photograph.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Real photograph of Cairo University from the 1990s",
+          "caption": "A real photograph of Cairo University from the 1990s, after Mosharafa’s lifetime; it shows the institution where he worked, not its appearance in his era.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Released into the public domain by its original uploader."
         },
         "fr": {
-          "alt": "Schéma simplifié de l’espace, du temps et de la lumière",
-          "caption": "Schéma simplifié de l’espace, du temps et de la lumière — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Photographie réelle de l’Université du Caire datant des années 1990",
+          "caption": "Photo de l’Université du Caire prise dans les années 1990, après l’époque de Mosharafa ; elle montre l’institution où il a travaillé, pas son apparence de son vivant.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Mise dans le domaine public par son téléverseur d’origine."
         },
         "it": {
-          "alt": "Schema semplificato di spazio, tempo e luce",
-          "caption": "Schema semplificato di spazio, tempo e luce — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Fotografia reale dell’Università del Cairo degli anni Novanta",
+          "caption": "Foto dell’Università del Cairo degli anni Novanta, successiva all’epoca di Mosharafa; mostra l’istituzione in cui lavorò, non il campus del suo tempo.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Rilasciata nel pubblico dominio dal caricatore originale."
         },
         "de": {
-          "alt": "Vereinfachtes Diagramm zu Raum, Zeit und Licht",
-          "caption": "Vereinfachtes Diagramm zu Raum, Zeit und Licht — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Echtes Foto der Universität Kairo aus den 1990er-Jahren",
+          "caption": "Foto der Universität Kairo aus den 1990er-Jahren, nach Mosharafas Zeit; es zeigt die Institution, an der er arbeitete, nicht den Campus seiner Lebenszeit.",
+          "source_name": "Wikimedia Commons — CairoUniv.jpg",
+          "rights": "Vom ursprünglichen Uploader gemeinfrei freigegeben."
         }
       }
     },
     {
       "id": "music-mathematics",
-      "path": "stories/science/016/music-mathematics.svg",
-      "kind": "illustration",
-      "source_name": "Khaledoon project — original illustration",
-      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
-      "rights": "Original educational illustration, not a historical photograph.",
+      "kind": "archival",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "source_name": "Wikimedia Commons — Cairo Congress of Arab Music (1932)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "rights": "Archival photograph of the 1932 Cairo Congress of Arab Music, listed as public domain. It illustrates the era’s cultural setting and does not imply Mosharafa attended.",
       "i18n": {
         "ar": {
-          "alt": "رسم تعليمي عن العلاقة بين الموسيقى والرياضيات",
-          "caption": "رسم تعليمي عن العلاقة بين الموسيقى والرياضيات — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "مشروع خالدون",
-          "rights": "رسم تعليمي أصلي، وليس صورة تاريخية."
+          "alt": "صورة أرشيفية لمؤتمر الموسيقى العربية بالقاهرة عام 1932",
+          "caption": "صورة أرشيفية للمؤتمر الأول للموسيقى العربية عام 1932؛ توضح البيئة الثقافية في عصر مشرفة ولا تعني أنه حضر المؤتمر.",
+          "source_name": "ويكيميديا كومنز — مؤتمر الموسيقى العربية بالقاهرة (1932)",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
         },
         "en": {
-          "alt": "Educational illustration about music and mathematics",
-          "caption": "Educational illustration about music and mathematics — a modern educational illustration, not an archival photograph.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Archival photograph of the 1932 Cairo Congress of Arab Music",
+          "caption": "An archival photograph of the 1932 Cairo Congress of Arab Music; it shows the era’s cultural setting and does not imply Mosharafa attended.",
+          "source_name": "Wikimedia Commons — Cairo Congress of Arab Music (1932)",
+          "rights": "Listed as public domain on the file page."
         },
         "fr": {
-          "alt": "Illustration pédagogique sur la musique et les mathématiques",
-          "caption": "Illustration pédagogique sur la musique et les mathématiques — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Photographie d’archive du Congrès de musique arabe du Caire de 1932",
+          "caption": "Photographie d’archive du congrès de 1932 ; elle illustre le contexte culturel de l’époque sans suggérer que Mosharafa y a participé.",
+          "source_name": "Wikimedia Commons — Congrès de musique arabe du Caire (1932)",
+          "rights": "Indiquée comme appartenant au domaine public."
         },
         "it": {
-          "alt": "Illustrazione didattica su musica e matematica",
-          "caption": "Illustrazione didattica su musica e matematica — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Fotografia d’archivio del Congresso della musica araba al Cairo del 1932",
+          "caption": "Fotografia d’archivio del congresso del 1932; illustra il contesto culturale dell’epoca senza suggerire che Mosharafa vi abbia partecipato.",
+          "source_name": "Wikimedia Commons — Congresso della musica araba al Cairo (1932)",
+          "rights": "Indicata come di pubblico dominio."
         },
         "de": {
-          "alt": "Lehrillustration zu Musik und Mathematik",
-          "caption": "Lehrillustration zu Musik und Mathematik — رسم تعليمي حديث، وليس صورة أرشيفية.",
-          "source_name": "Khaledoon project",
-          "rights": "Original educational illustration, not a historical photograph."
+          "alt": "Archivfoto des Kairoer Kongresses für arabische Musik von 1932",
+          "caption": "Archivfoto des Kongresses von 1932; es zeigt den kulturellen Kontext der Zeit und bedeutet nicht, dass Mosharafa teilnahm.",
+          "source_name": "Wikimedia Commons — Kongress für arabische Musik in Kairo (1932)",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
         }
       }
     }
