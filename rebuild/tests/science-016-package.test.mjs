@@ -13,7 +13,8 @@ test('Mosharafa package is valid and uses only local images', async () => {
   const story = await load();
   assert.deepEqual(validateStory(story), []);
   assert.deepEqual(await validateLocalImagePaths(story, root), []);
-  assert.equal(story.cover.kind, 'illustration');
+  assert.equal(story.cover.kind, 'archival');
+  assert.equal(story.cover.path, 'stories/science/016/cover.jpg', 'cover must use the local historical photograph');
   assert.ok(!story.cover.url, 'cover must be a local file, not a remote hotlink');
 });
 
