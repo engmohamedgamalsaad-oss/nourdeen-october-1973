@@ -30,7 +30,7 @@ document.addEventListener('site-language-change',function(){try{localStorage.set
 var st=document.getElementById('story');
 function addStoryMotion(){
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var targets=[].slice.call(document.querySelectorAll('#blocks > figure,.hero .section-name,.hero #title,.hero #subtitle,.hero #summary,.hero #cover,.hero #student,.hero .story-actions,article#story > .section'));
+  var targets=[].slice.call(document.querySelectorAll('#blocks > figure,article#story > .section'));
   if(reduce){targets.forEach(function(el){el.classList.add('scene-motion-visible')});return}
   targets.forEach(function(el){el.classList.add('scene-motion-target')});
   if(!('IntersectionObserver' in window)){targets.forEach(function(el){el.classList.add('scene-motion-visible')});return}
