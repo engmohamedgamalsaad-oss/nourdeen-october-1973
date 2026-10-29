@@ -15,7 +15,7 @@
       "figure_name": "علي مصطفى مشرفة",
       "person": "علي مصطفى مشرفة",
       "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
-      "images_note": "الصور في هذه الصفحة رسوم توضيحية أصلية من إعداد مشروع خالدون، وليست صورًا أرشيفية أو صورًا حقيقية لعلي مصطفى مشرفة.",
+      "images_note": "صورة الغلاف صورة تاريخية من ويكيميديا كومنز، وبيانات مصدرها وحقوقها موضحة في وصف الصورة. أما الرسوم الأخرى في المعرض فهي رسوم توضيحية أصلية أُعدت لمشروع خالدون، وليست صورًا أرشيفية أو أشكالًا مأخوذة من أبحاث مشرفة.",
       "blocks": [
         {
           "type": "paragraph",
@@ -40,6 +40,17 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "في عام 1914، حصل مشرفة على شهادة البكالوريا وهو في السادسة عشرة من عمره، وكان أصغر من نالها في ذلك الوقت. اختار دراسة الرياضيات في دار المعلمين العليا، لأنه كان يريد التعمق في المجال الذي أحبه."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني كان متفوق من بدري، وعارف هو عايز يتعلم إيه؟",
+          "image_after": "study-desk"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
           "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924."
         },
         {
@@ -55,7 +66,8 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم."
+          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم.",
+          "image_after": "university-path"
         },
         {
           "type": "did_you_know",
@@ -69,6 +81,23 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وتذكر الهيئة العامة للاستعلامات أنه نشر نحو 25 بحثًا علميًا، وألّف قرابة 12 كتابًا في الرياضيات والفيزياء، كما ترجم عشرة كتب في الرياضيات والفلك إلى العربية. وشارك مع تلميذه محمد مرسي أحمد في نشر كتاب الخوارزمي الشهير في الجبر.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وامتد اهتمامه بالموسيقى إلى البحث أيضًا؛ فقد أسهم في تأسيس جمعية محبي الموسيقى المصرية عام 1945، واهتم بدراسة المقامات المصرية والعلاقات الرياضية بين النغمات.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "يعني الإنجاز مش بس إنك تكتشف حاجة جديدة؛ ممكن كمان تعلّم غيرك إزاي يفكر ويبحث."
         },
@@ -76,21 +105,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "في جامعة القاهرة، لم يكن دوره مقتصرًا على إلقاء المحاضرات. تولّى عمادة كلية العلوم عام 1936، وكان حريصًا على أن تكون الجامعة مكانًا للبحث والتفكير، لا مكانًا لحفظ المعلومات فقط. وكان يعمل في وقت كانت فيه فرص البحث العلمي في مصر أقل مما هي عليه اليوم."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "اهتم مشرفة بموضوعات دقيقة مثل نظرية الكم والنسبية والعلاقة بين المادة والإشعاع. نشر أبحاثًا علمية في دوريات متخصصة، وكتب مؤلفات في الرياضيات والفيزياء، كما ساهم في نقل كتب علمية إلى العربية؛ لأنه رأى أن المعرفة ينبغي أن تصل إلى القارئ بلغته."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
         }
       ]
     },
@@ -101,7 +115,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
-      "images_note": "The images on this page are original illustrations created for the Khaledoon project, not archival photographs or real portraits of Mosharafa.",
+      "images_note": "The cover is a historical photograph hosted on Wikimedia Commons; its source and rights are identified in the image details. The other gallery items are original illustrations made for the Khaledoon project, not archival photographs or figures taken from Mosharafa’s research.",
       "blocks": [
         {
           "type": "paragraph",
@@ -126,6 +140,17 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "In 1914, at the age of sixteen, Mosharafa earned his baccalaureate, becoming the youngest student to receive it at that time. He chose to study mathematics at the Higher Teachers’ College because he wanted to go deeper into the subject he loved."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So he was doing well from an early age—and he knew what he wanted to learn?",
+          "image_after": "study-desk"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
           "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924."
         },
         {
@@ -141,7 +166,8 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully."
+          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully.",
+          "image_after": "university-path"
         },
         {
           "type": "did_you_know",
@@ -155,6 +181,23 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egypt’s State Information Service records that he published about 25 scientific papers and authored around 12 books on mathematics and physics. He also translated ten books on mathematics and astronomy into Arabic, and helped publish al-Khwarizmi’s famous work on algebra with his student M. Morsi Ahmad.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "His interest in music also became a subject of research. In 1945, he helped establish the Egyptian Society for Music Lovers and studied Egyptian musical modes and the mathematical relationships between notes.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "So achievement is not only discovering something new. It can also mean teaching others how to think and investigate."
         },
@@ -162,21 +205,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "At Cairo University, his role went beyond delivering lectures. He became dean of the Faculty of Science in 1936 and worked to make the university a place for research and independent thought, not simply memorization. He worked at a time when scientific research opportunities in Egypt were more limited than they are today."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa studied demanding topics including quantum theory, relativity, and the relationship between matter and radiation. He published research in specialist journals and wrote books on mathematics and physics. He also helped bring scientific works into Arabic because he believed knowledge should be accessible to readers in their own language."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
         }
       ]
     },
@@ -187,7 +215,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
-      "images_note": "Les images de cette page sont des illustrations originales créées pour le projet Khaledoon, et non des photographies d’archives ou de vrais portraits de Mosharafa.",
+      "images_note": "La couverture est une photographie historique hébergée sur Wikimedia Commons ; sa source et ses droits sont indiqués dans les détails de l’image. Les autres éléments de la galerie sont des illustrations originales créées pour le projet Khaledoon, et non des photos d’archives ni des figures tirées des travaux de Mosharafa.",
       "blocks": [
         {
           "type": "paragraph",
@@ -212,6 +240,17 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "En 1914, à l’âge de seize ans, Mosharafa obtint le baccalauréat et fut alors le plus jeune à recevoir ce diplôme. Il choisit d’étudier les mathématiques à l’École supérieure des enseignants, afin d’approfondir la matière qu’il aimait."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Il réussissait donc très tôt, et il savait déjà ce qu’il voulait apprendre ?",
+          "image_after": "study-desk"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
           "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924."
         },
         {
@@ -227,7 +266,8 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode."
+          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode.",
+          "image_after": "university-path"
         },
         {
           "type": "did_you_know",
@@ -241,6 +281,23 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le Service d’information de l’État égyptien indique qu’il publia environ 25 articles scientifiques et écrivit près de 12 livres de mathématiques et de physique. Il traduisit aussi dix ouvrages de mathématiques et d’astronomie en arabe et participa, avec son élève M. Morsi Ahmad, à la publication du célèbre ouvrage d’algèbre d’al-Khwarizmi.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Son intérêt pour la musique devint aussi un sujet de recherche. En 1945, il contribua à fonder la Société égyptienne des amateurs de musique et étudia les modes musicaux égyptiens ainsi que les rapports mathématiques entre les notes.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Alors, réussir, ce n’est pas seulement découvrir quelque chose : c’est aussi apprendre aux autres à réfléchir et à chercher."
         },
@@ -248,21 +305,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "À l’Université du Caire, son rôle ne se limitait pas aux cours. Il devint doyen de la faculté des sciences en 1936 et voulait faire de l’université un lieu de recherche et de réflexion, et non de simple mémorisation. Il travaillait à une époque où les possibilités de recherche scientifique en Égypte étaient plus limitées qu’aujourd’hui."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa étudia des sujets exigeants comme la théorie quantique, la relativité et le rapport entre matière et rayonnement. Il publia des recherches dans des revues spécialisées et écrivit des ouvrages de mathématiques et de physique. Il contribua aussi à rendre des ouvrages scientifiques accessibles en arabe, car il pensait que le savoir devait être accessible dans la langue des lecteurs."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
         }
       ]
     },
@@ -273,7 +315,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
-      "images_note": "Le immagini di questa pagina sono illustrazioni originali create per il progetto Khaledoon, non fotografie d’archivio né ritratti reali di Mosharafa.",
+      "images_note": "La copertina è una fotografia storica ospitata su Wikimedia Commons; la fonte e i diritti sono indicati nei dettagli dell’immagine. Gli altri elementi della galleria sono illustrazioni originali realizzate per il progetto Khaledoon, non fotografie d’archivio né figure tratte dalle ricerche di Mosharafa.",
       "blocks": [
         {
           "type": "paragraph",
@@ -298,6 +340,17 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "Nel 1914, a sedici anni, Mosharafa conseguì il diploma di maturità, diventando il più giovane a ottenerlo in quel periodo. Scelse di studiare matematica all’Istituto superiore per la formazione degli insegnanti per approfondire la materia che amava."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi era bravo fin da giovane e sapeva già che cosa voleva studiare?",
+          "image_after": "study-desk"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
           "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924."
         },
         {
@@ -313,7 +366,8 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo."
+          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo.",
+          "image_after": "university-path"
         },
         {
           "type": "did_you_know",
@@ -327,6 +381,23 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il Servizio d’informazione dello Stato egiziano riferisce che pubblicò circa 25 articoli scientifici e scrisse una dozzina di libri di matematica e fisica. Tradusse inoltre in arabo dieci libri di matematica e astronomia e collaborò con il suo allievo M. Morsi Ahmad alla pubblicazione della celebre opera di al-Khwarizmi sull’algebra.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Anche la musica divenne un campo di ricerca per lui. Nel 1945 contribuì a fondare la Società egiziana degli amanti della musica e studiò i modi musicali egiziani e i rapporti matematici tra le note.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Quindi il successo non è solo scoprire qualcosa di nuovo: è anche insegnare agli altri a pensare e a fare ricerca."
         },
@@ -334,21 +405,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "All’Università del Cairo il suo ruolo non si limitava alle lezioni. Nel 1936 divenne preside della Facoltà di Scienze e lavorò perché l’università fosse un luogo di ricerca e pensiero indipendente, non soltanto di memorizzazione. Operava in un periodo in cui le opportunità di ricerca scientifica in Egitto erano più limitate di oggi."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa studiò temi complessi come la teoria quantistica, la relatività e il rapporto tra materia e radiazione. Pubblicò ricerche in riviste specialistiche e scrisse libri di matematica e fisica. Contribuì anche a rendere accessibili in arabo opere scientifiche, perché credeva che la conoscenza dovesse raggiungere i lettori nella loro lingua."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
         }
       ]
     },
@@ -359,7 +415,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
-      "images_note": "Die Bilder auf dieser Seite sind eigens für das Projekt Khaledoon angefertigte Illustrationen, keine Archivfotos und keine echten Porträts Mosharafas.",
+      "images_note": "Das Titelbild ist eine historische Fotografie von Wikimedia Commons; Quelle und Rechte sind in den Bilddetails angegeben. Die übrigen Galerieelemente sind eigens für das Khaledoon-Projekt erstellte Illustrationen, keine Archivfotos und keine Abbildungen aus Mosharafas Forschung.",
       "blocks": [
         {
           "type": "paragraph",
@@ -384,6 +440,17 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "1914 erwarb Mosharafa im Alter von sechzehn Jahren das Baccalaureat und war damals der jüngste Empfänger dieses Abschlusses. Er entschied sich für Mathematik an der Höheren Lehrerschule, um das Fach, das er liebte, weiter zu vertiefen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Er war also schon früh sehr gut und wusste, was er lernen wollte?",
+          "image_after": "study-desk"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
           "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science."
         },
         {
@@ -399,7 +466,8 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten."
+          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten.",
+          "image_after": "university-path"
         },
         {
           "type": "did_you_know",
@@ -413,6 +481,23 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nach Angaben des ägyptischen Staatlichen Informationsdienstes veröffentlichte er etwa 25 wissenschaftliche Arbeiten und verfasste rund zwölf Bücher über Mathematik und Physik. Außerdem übersetzte er zehn Bücher über Mathematik und Astronomie ins Arabische und half gemeinsam mit seinem Schüler M. Morsi Ahmad, al-Chwarizmis berühmtes Algebra-Werk herauszugeben.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Auch Musik wurde für ihn zum Forschungsthema. 1945 half er bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde und untersuchte ägyptische Musikmodi sowie die mathematischen Beziehungen zwischen den Tönen.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Erfolg bedeutet also nicht nur, etwas Neues zu entdecken. Man kann auch anderen beibringen, wie man denkt und forscht."
         },
@@ -420,21 +505,6 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "An der Universität Kairo bestand seine Aufgabe nicht nur darin, Vorlesungen zu halten. 1936 wurde er Dekan der naturwissenschaftlichen Fakultät und setzte sich dafür ein, dass die Universität ein Ort der Forschung und des eigenständigen Denkens war – nicht nur des Auswendiglernens. Er arbeitete in einer Zeit, in der es in Ägypten weniger Möglichkeiten für wissenschaftliche Forschung gab als heute."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Mosharafa beschäftigte sich mit anspruchsvollen Themen wie Quantentheorie, Relativität und dem Zusammenhang zwischen Materie und Strahlung. Er veröffentlichte Fachaufsätze und schrieb Bücher über Mathematik und Physik. Außerdem half er dabei, wissenschaftliche Werke auf Arabisch zugänglich zu machen, denn Wissen sollte die Menschen in ihrer eigenen Sprache erreichen."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
         }
       ]
     }
@@ -482,47 +552,6 @@
   },
   "images": [
     {
-      "id": "mosharafa-portrait",
-      "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-      "path": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-      "kind": "historical-photograph",
-      "source_name": "Wikimedia Commons",
-      "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
-      "rights": "Public domain per Wikimedia Commons file page",
-      "i18n": {
-        "ar": {
-          "alt": "صورة فوتوغرافية تاريخية لعلي مصطفى مشرفة",
-          "caption": "صورة أرشيفية لعلي مصطفى مشرفة؛ منشورة على ويكيميديا كومنز",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "الملكية العامة وفق صفحة الملف في ويكيميديا كومنز"
-        },
-        "en": {
-          "alt": "Historical photograph of Ali Mostafa Mosharafa",
-          "caption": "Archival portrait of Ali Mostafa Mosharafa, hosted on Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Public domain according to the file page on Wikimedia Commons"
-        },
-        "fr": {
-          "alt": "Photographie historique d’Ali Mostafa Mosharafa",
-          "caption": "Portrait d’archive d’Ali Mostafa Mosharafa hébergé sur Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Domaine public selon la page du fichier sur Wikimedia Commons"
-        },
-        "it": {
-          "alt": "Fotografia storica di Ali Mostafa Mosharafa",
-          "caption": "Ritratto d’archivio di Ali Mostafa Mosharafa ospitato su Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Pubblico dominio secondo la pagina del file su Wikimedia Commons"
-        },
-        "de": {
-          "alt": "Historische Fotografie von Ali Mostafa Mosharafa",
-          "caption": "Archivporträt von Ali Mostafa Mosharafa auf Wikimedia Commons",
-          "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-          "rights": "Gemeinfrei laut Dateiseite auf Wikimedia Commons"
-        }
-      }
-    },
-    {
       "id": "study-desk",
       "path": "stories/science/016/study-desk.svg",
       "kind": "illustration",
@@ -563,6 +592,46 @@
       }
     },
     {
+      "id": "university-path",
+      "path": "stories/science/016/university-path.svg",
+      "kind": "illustration",
+      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Original conceptual illustration created for this project; it is not a documentary photograph of a specific campus.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي لمبنى جامعي وكتاب مفتوح",
+          "caption": "عاد مشرفة إلى مصر ليشارك في التعليم وبناء بيئة علمية",
+          "source_name": "مشروع خالدون",
+          "rights": "رسم مفاهيمي أصلي، وليس صورة توثيقية لمبنى بعينه"
+        },
+        "en": {
+          "alt": "Conceptual illustration of a university building and an open book",
+          "caption": "Mosharafa returned to Egypt to contribute to teaching and scientific life",
+          "source_name": "Khaledoon project",
+          "rights": "Original conceptual artwork, not a documentary photograph of a specific building"
+        },
+        "fr": {
+          "alt": "Illustration conceptuelle d’un bâtiment universitaire et d’un livre ouvert",
+          "caption": "Mosharafa est rentré en Égypte pour contribuer à l’enseignement et à la vie scientifique",
+          "source_name": "Projet Khaledoon",
+          "rights": "Illustration conceptuelle originale, pas une photographie documentaire d’un bâtiment précis"
+        },
+        "it": {
+          "alt": "Illustrazione concettuale di un edificio universitario e di un libro aperto",
+          "caption": "Mosharafa tornò in Egitto per contribuire all’insegnamento e alla vita scientifica",
+          "source_name": "Progetto Khaledoon",
+          "rights": "Illustrazione concettuale originale, non una foto documentaria di un edificio specifico"
+        },
+        "de": {
+          "alt": "Konzeptillustration eines Universitätsgebäudes und eines offenen Buches",
+          "caption": "Mosharafa kehrte nach Ägypten zurück, um Lehre und Wissenschaft mitzugestalten",
+          "source_name": "Khaledoon-Projekt",
+          "rights": "Originale Konzeptgrafik, kein dokumentarisches Foto eines bestimmten Gebäudes"
+        }
+      }
+    },
+    {
       "id": "atom-diagram",
       "path": "stories/science/016/atom-diagram.svg",
       "kind": "diagram",
@@ -599,6 +668,46 @@
           "caption": "Konzeptbild zu Materie und Strahlung, keine Abbildung aus Mosharafas Arbeiten",
           "source_name": "Khaledoon-Projekt",
           "rights": "Originaldiagramm für dieses Projekt"
+        }
+      }
+    },
+    {
+      "id": "music-mathematics",
+      "path": "stories/science/016/music-mathematics.svg",
+      "kind": "illustration",
+      "source_name": "رسم توضيحي أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Original conceptual illustration created for this project; not a historical photograph or a reproduction of Mosharafa’s research.",
+      "i18n": {
+        "ar": {
+          "alt": "نوتات موسيقية وموجات صوتية ومنحنيات رياضية",
+          "caption": "جمع مشرفة بين اهتمامه بالموسيقى والبحث العلمي",
+          "source_name": "مشروع خالدون",
+          "rights": "رسم مفاهيمي أصلي وليس صورة تاريخية"
+        },
+        "en": {
+          "alt": "Musical notes, sound waves and mathematical curves",
+          "caption": "Mosharafa brought his interests in music and scientific research together",
+          "source_name": "Khaledoon project",
+          "rights": "Original conceptual artwork, not a historical image"
+        },
+        "fr": {
+          "alt": "Notes de musique, ondes sonores et courbes mathématiques",
+          "caption": "Mosharafa associait son intérêt pour la musique à la recherche scientifique",
+          "source_name": "Projet Khaledoon",
+          "rights": "Illustration conceptuelle originale, pas une image historique"
+        },
+        "it": {
+          "alt": "Note musicali, onde sonore e curve matematiche",
+          "caption": "Mosharafa unì il suo interesse per la musica alla ricerca scientifica",
+          "source_name": "Progetto Khaledoon",
+          "rights": "Illustrazione concettuale originale, non un’immagine storica"
+        },
+        "de": {
+          "alt": "Musiknoten, Schallwellen und mathematische Kurven",
+          "caption": "Mosharafa verband sein Interesse an Musik mit wissenschaftlicher Forschung",
+          "source_name": "Khaledoon-Projekt",
+          "rights": "Originale Konzeptgrafik, kein historisches Bild"
         }
       }
     }
