@@ -833,40 +833,40 @@
     {
       "id": "space-time",
       "kind": "photograph",
-      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/CairoUniv.jpg",
-      "source_name": "Wikimedia Commons — CairoUniv.jpg",
-      "source_url": "https://commons.wikimedia.org/wiki/File:CairoUniv.jpg",
-      "rights": "Photograph of Cairo University from the 1990s, released into the public domain by the original uploader; later than Mosharafa’s lifetime.",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cairouni.jpg",
+      "source_name": "Wikimedia Commons — Cairouni.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cairouni.jpg",
+      "rights": "Photograph by user:mmustafa, licensed CC BY-SA 3.0; credit and license are required.",
       "i18n": {
         "ar": {
           "alt": "صورة حقيقية لجامعة القاهرة من التسعينيات",
-          "caption": "صورة لجامعة القاهرة من التسعينيات، بعد زمن مشرفة؛ توضح المؤسسة التي عمل بها ولا تمثل شكلها في حياته.",
-          "source_name": "ويكيميديا كومنز — CairoUniv.jpg",
-          "rights": "أطلقها رافعها الأصلي للملكية العامة."
+          "caption": "صورة حقيقية لجامعة القاهرة التُقطت عام 2008، بعد زمن مشرفة؛ توضح الجامعة المرتبطة بمسيرته ولا تمثل شكلها في حياته.",
+          "source_name": "ويكيميديا كومنز — Cairouni.jpg",
+          "rights": "مرخّصة CC BY-SA 3.0؛ يلزم الإسناد والإشارة إلى الترخيص."
         },
         "en": {
           "alt": "Real photograph of Cairo University from the 1990s",
-          "caption": "A real photograph of Cairo University from the 1990s, after Mosharafa’s lifetime; it shows the institution where he worked, not its appearance in his era.",
-          "source_name": "Wikimedia Commons — CairoUniv.jpg",
-          "rights": "Released into the public domain by its original uploader."
+          "caption": "A real photograph of Cairo University taken in 2008, after Mosharafa’s lifetime; it shows the institution linked to his career, not the campus in his era.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licensed CC BY-SA 3.0; attribution and license notice are required."
         },
         "fr": {
           "alt": "Photographie réelle de l’Université du Caire datant des années 1990",
-          "caption": "Photo de l’Université du Caire prise dans les années 1990, après l’époque de Mosharafa ; elle montre l’institution où il a travaillé, pas son apparence de son vivant.",
-          "source_name": "Wikimedia Commons — CairoUniv.jpg",
-          "rights": "Mise dans le domaine public par son téléverseur d’origine."
+          "caption": "Photographie réelle de l’Université du Caire prise en 2008, après l’époque de Mosharafa ; elle montre l’institution liée à sa carrière, pas le campus de son vivant.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licence CC BY-SA 3.0 ; attribution et mention de la licence requises."
         },
         "it": {
           "alt": "Fotografia reale dell’Università del Cairo degli anni Novanta",
-          "caption": "Foto dell’Università del Cairo degli anni Novanta, successiva all’epoca di Mosharafa; mostra l’istituzione in cui lavorò, non il campus del suo tempo.",
-          "source_name": "Wikimedia Commons — CairoUniv.jpg",
-          "rights": "Rilasciata nel pubblico dominio dal caricatore originale."
+          "caption": "Fotografia reale dell’Università del Cairo scattata nel 2008, dopo l’epoca di Mosharafa; mostra l’istituzione legata alla sua carriera, non il campus del suo tempo.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licenza CC BY-SA 3.0; sono richiesti attribuzione e avviso di licenza."
         },
         "de": {
           "alt": "Echtes Foto der Universität Kairo aus den 1990er-Jahren",
-          "caption": "Foto der Universität Kairo aus den 1990er-Jahren, nach Mosharafas Zeit; es zeigt die Institution, an der er arbeitete, nicht den Campus seiner Lebenszeit.",
-          "source_name": "Wikimedia Commons — CairoUniv.jpg",
-          "rights": "Vom ursprünglichen Uploader gemeinfrei freigegeben."
+          "caption": "Echtes Foto der Universität Kairo aus dem Jahr 2008, nach Mosharafas Zeit; es zeigt die mit seiner Laufbahn verbundene Institution, nicht den Campus seiner Lebenszeit.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Lizenz CC BY-SA 3.0; Namensnennung und Lizenzhinweis sind erforderlich."
         }
       }
     },
