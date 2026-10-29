@@ -27,7 +27,7 @@ html[dir=ltr] #section-name{padding:2px 26px 2px 14px;clip-path:polygon(0 0,calc
 html[lang=ar] #blocks[data-motif=num] .block::before{content:counter(khn,arabic-indic)}
 .block[data-type=did_you_know]{--kh-tint:color-mix(in srgb,var(--accent) 15%,var(--panel));border:0;border-block-start:4px solid var(--accent);border-radius:0;background:linear-gradient(var(--kh-tint),var(--kh-tint))}
 .block[data-type=did_you_know]::after{content:"";position:absolute;inset-block-start:0;inset-inline-end:0;border-inline-start:24px solid transparent;border-block-start:24px solid var(--accent)}
-body.kh-motion #blocks .block>p.kh-pending,body.kh-motion #blocks .block-timeline>li.kh-pending,body.kh-motion #blocks>figure.kh-pending,body.kh-motion .kh-hexes.kh-pending{opacity:0}
+body.kh-motion .block.kh-pending,body.kh-motion .kh-hexes.kh-pending{opacity:0}
 body.kh-motion .kh-in{opacity:1;animation-duration:var(--kh-dur,.65s);animation-fill-mode:both;animation-timing-function:cubic-bezier(.2,.7,.2,1)}
 body[data-reveal=slide].kh-motion .kh-in{animation-name:kh-slide}
 body[data-reveal=zoom].kh-motion .kh-in{animation-name:kh-zoom}
@@ -37,7 +37,7 @@ body[data-reveal=drop].kh-motion .kh-in{animation-name:kh-drop}
 @keyframes kh-zoom{from{opacity:0;transform:scale(.96)}}
 @keyframes kh-wipe{from{opacity:0;clip-path:inset(0 0 0 35%)}}
 @keyframes kh-drop{from{opacity:0;transform:translateY(-18px)}}
-@media(prefers-reduced-motion:reduce),print{body.kh-motion #blocks .block>p,body.kh-motion #blocks .block-timeline>li,body.kh-motion #blocks>figure,body.kh-motion .kh-hexes{opacity:1!important;animation:none!important;transform:none!important}.kh-progress{display:none}}
+@media(prefers-reduced-motion:reduce),print{body.kh-motion .block,body.kh-motion .kh-hexes{opacity:1!important;animation:none!important}.kh-progress{display:none}}
 @media(max-width:480px){#blocks[data-motif]{padding-inline-start:2rem}#blocks[data-motif] .block::before{inset-inline-start:-1.95rem}#blocks[data-motif=steps] .block:nth-of-type(3n+2){margin-inline-start:.25rem}#blocks[data-motif=steps] .block:nth-of-type(3n+3){margin-inline-start:.5rem}.kh-hexes{gap:5px}.kh-hexes>div{width:29vw;min-height:5.2rem;font-size:.7rem}.kh-hexes b{font-size:1.35rem}}
 
 /* V2 reader: section identity, story-start cover, actions, reactions and accessible image lightbox. */
@@ -71,7 +71,7 @@ body[data-theme=light][data-section=readers]{--bg:#edf8f6;--panel:#fbfffe;--line
 .story-actions #share-facebook{background:#1877f2;color:#fff;border-color:#1877f2}
 .story-actions #print-story{background:var(--accent);color:#15140f;border-color:var(--accent)}
 .story-actions a:focus-visible,.story-actions button:focus-visible,.intro-close:focus-visible,.start-story-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.story-intro-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:rgba(2,8,12,.88);backdrop-filter:none}
+.story-intro-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:rgba(2,8,12,.88);backdrop-filter:blur(14px)}
 .story-intro-modal[hidden],.image-lightbox[hidden]{display:none!important}
 .intro-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;width:min(900px,100%);max-height:min(90vh,760px);overflow:auto;border:1px solid var(--accent);border-radius:24px;background:var(--panel);box-shadow:0 30px 90px #0009}
 .intro-art{display:grid;place-items:center;min-height:260px;padding:22px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 22%,var(--panel)),var(--panel))}
