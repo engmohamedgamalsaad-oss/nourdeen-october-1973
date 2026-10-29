@@ -358,3 +358,35 @@ html[data-theme=light] #blocks > figure figcaption{color:#415a61}
   #blocks > figure img{max-height:280px}
   #blocks > figure figcaption{color:#222}
 }
+
+/* Scene headings, science note and timeline (added 2026-10-29) */
+.block.has-heading{padding-top:clamp(20px,3vw,30px)}
+.block-heading{margin:0 0 12px;padding:6px 14px;display:inline-block;border-radius:999px;background:#8ad9e826;border:1px solid #8ad9e86b;color:#a8edf3;font-size:clamp(.95rem,1.5vw,1.08rem);font-weight:800;line-height:1.7}
+.block[data-type=science_note]{border:1px solid #8ad9e8a3;border-inline-start:5px solid #8ad9e8;background:linear-gradient(120deg,#0f4352cc,#0b2733)}
+.block[data-type=science_note]:before{content:"⚛";display:inline-grid;place-items:center;width:29px;height:29px;margin-inline-end:8px;border-radius:50%;background:#8ad9e8;color:#08212c;font-weight:900}
+.block[data-type=timeline]{border:1px solid #d8b86b8a;border-inline-start:5px solid #e6c27a;background:linear-gradient(120deg,#3b3220aa,#0f2a35)}
+.block-timeline{list-style:none;margin:0;padding:0;display:grid;gap:10px;position:relative}
+.block-timeline li{display:grid;grid-template-columns:5.2rem 1fr;gap:12px;align-items:baseline;padding:8px 12px;border-radius:12px;background:#ffffff0d;line-height:1.8}
+.block-timeline b{color:#f1d18d;font-variant-numeric:tabular-nums;font-size:1.05rem}
+.block-timeline span{color:#e8f2f4}
+html[data-theme=light] .block-heading{background:#d9f1f4;border-color:#9fd2da;color:#145f70}
+html[data-theme=light] .block[data-type=science_note]{background:linear-gradient(120deg,#e3f6f8,#f7faf8);border-color:#8ad0da}
+html[data-theme=light] .block[data-type=timeline]{background:linear-gradient(120deg,#fff4d5,#f7faf8);border-color:#dfc47e}
+html[data-theme=light] .block-timeline li{background:#ffffffb8}
+html[data-theme=light] .block-timeline b{color:#8b651c}
+html[data-theme=light] .block-timeline span{color:#263e44}
+@media(max-width:560px){.block-timeline li{grid-template-columns:4.1rem 1fr;gap:8px;padding:7px 9px}}
+@media print{.block-heading{background:#fff!important;color:#111!important;border-color:#999!important}.block-timeline li,.block-timeline b,.block-timeline span{background:#fff!important;color:#111!important}.block-timeline li{break-inside:avoid}}
+
+/* Language switcher inside the start screen */
+.intro-langs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.intro-langs button{font:700 .78rem Cairo,system-ui,sans-serif;padding:5px 11px;border-radius:999px;border:1px solid #8ad9e86b;background:#ffffff12;color:#d1e7eb;cursor:pointer}
+.intro-langs button[aria-pressed=true]{background:#8ad9e8;color:#08212c;border-color:#8ad9e8}
+.intro-langs button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+html[data-theme=light] .intro-langs button{background:#fff;color:#145f70;border-color:#9fd2da}
+html[data-theme=light] .intro-langs button[aria-pressed=true]{background:#145f70;color:#fff;border-color:#145f70}
+
+/* Start screen: keep the start button visible with the language switcher present */
+.intro-copy h2{font-size:clamp(1.3rem,2.4vw,1.85rem)!important;line-height:1.5!important}
+.intro-copy{padding-block:clamp(16px,2.4vw,28px)!important}
+html[data-theme=light] .intro-kicker{color:#145f70!important;background:#e6f6f8!important;border-color:#9fd2da!important}
