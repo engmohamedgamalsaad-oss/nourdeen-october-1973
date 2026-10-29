@@ -46,17 +46,10 @@ if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=doc
 if(enhanceShown){body.classList.remove('kh-motion');return}
 enhanceShown=true;
 if(motionObserver)motionObserver.disconnect();clearTimeout(motionTimer);
+/* Motion reveal is temporarily disabled to guarantee all reading text stays visible. */
 var targets=[].slice.call(document.querySelectorAll('#blocks .block,#blocks .kh-hexes'));
-/* Disable reveal animations until visibility is verified; never hide reading content. */
 targets.forEach(function(e){e.classList.remove('kh-pending','kh-in')});
 body.classList.remove('kh-motion');
-return;
-var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(reduce||!('IntersectionObserver' in window)){body.classList.remove('kh-motion');return}
-targets.forEach(function(e){e.classList.add('kh-pending')});body.classList.add('kh-motion');
-var observer=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.remove('kh-pending');x.target.classList.add('kh-in');observer.unobserve(x.target)}})},{threshold:.12});
-motionObserver=observer;targets.forEach(function(e){observer.observe(e)});
-motionTimer=setTimeout(function(){targets.forEach(function(e){e.classList.remove('kh-pending');e.classList.add('kh-in')});observer.disconnect()},6000);
 }
 function show(){
 if(!story)return;document.body.dataset.theme=document.documentElement.getAttribute('data-theme')||'dark';var t=story.i18n[current];if(!t){$('status').textContent=ui[current].missing;return}
