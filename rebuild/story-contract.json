@@ -248,7 +248,9 @@
               "type": {
                 "enum": [
                   "paragraph",
-                  "did_you_know"
+                  "did_you_know",
+                  "science_note",
+                  "timeline"
                 ]
               },
               "speaker": {
@@ -265,6 +267,11 @@
                 "type": "string",
                 "minLength": 1,
                 "description": "Optional ID of an image to display after this story block."
+              },
+              "heading": {
+                "type": "string",
+                "minLength": 1,
+                "description": "Optional scene or box heading shown above the block. For a timeline, text lines use \"year — event\"."
               }
             }
           }

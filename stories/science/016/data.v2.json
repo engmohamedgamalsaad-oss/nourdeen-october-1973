@@ -15,11 +15,12 @@
       "figure_name": "علي مصطفى مشرفة",
       "person": "علي مصطفى مشرفة",
       "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
-      "images_note": "صورة الغلاف صورة تاريخية من ويكيميديا كومنز، وبيانات مصدرها وحقوقها موضحة في وصف الصورة. أما الرسوم الأخرى في المعرض فهي رسوم توضيحية أصلية أُعدت لمشروع خالدون، وليست صورًا أرشيفية أو أشكالًا مأخوذة من أبحاث مشرفة.",
+      "images_note": "جميع الرسوم في هذه الحكاية رسوم توضيحية أصلية أُعدت لمشروع خالدون، وليست صورًا أرشيفية ولا أشكالًا مأخوذة من أبحاث مشرفة. لم تُستخدم صورة فوتوغرافية لمشرفة لأن مصدرها وحقوقها لم يُتحقق منهما بعد.",
       "blocks": [
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ١: طفل يحب الأسئلة",
           "text": "في دمياط، يوم 11 يوليو 1898، وُلد علي مصطفى مشرفة. لم يكن يعرف وهو طفل أن حبّه للأرقام والأسئلة سيقوده إلى دراسة قوانين الطبيعة، ثم إلى أن يصبح واحدًا من أبرز علماء الفيزياء النظرية في مصر."
         },
         {
@@ -40,6 +41,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ٢: البكالوريا والاختيار",
           "text": "في عام 1914، حصل مشرفة على شهادة البكالوريا وهو في السادسة عشرة من عمره، وكان أصغر من نالها في ذلك الوقت. اختار دراسة الرياضيات في دار المعلمين العليا، لأنه كان يريد التعمق في المجال الذي أحبه."
         },
         {
@@ -51,6 +53,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ٣: بعثة إلى إنجلترا",
           "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924."
         },
         {
@@ -66,6 +69,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ٤: العودة إلى جامعة القاهرة",
           "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم.",
           "image_after": "university-path"
         },
@@ -77,7 +81,15 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ٥: أسئلة الكون",
           "text": "بحث مشرفة في موضوعات مثل نظرية الكم والنسبية والعلاقة بين المادة والإشعاع. ونشر أبحاثًا علمية وكتبًا في الرياضيات والفيزياء، كما اهتم بتاريخ العلوم وترجمة المعرفة إلى العربية. وتذكر المصادر أنه تبادل المراسلات مع ألبرت أينشتاين؛ لكن قيمة مشرفة لا تختصر في علاقته بعالم مشهور، بل في عمله العلمي وتعليمه للطلاب."
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "معلومة علمية مبسطة",
+          "text": "النسبية نظرية تدرس العلاقة بين المكان والزمان والحركة والجاذبية. أما نظرية الكم فتدرس سلوك الأشياء الصغيرة جدًا مثل الذرات والضوء. وهاتان النظريتان من أعمدة الفيزياء الحديثة.",
+          "image_after": "space-time"
         },
         {
           "type": "paragraph",
@@ -88,6 +100,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "المشهد ٦: حين تلتقي الموسيقى بالرياضيات",
           "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
         },
         {
@@ -102,8 +115,15 @@
           "text": "يعني الإنجاز مش بس إنك تكتشف حاجة جديدة؛ ممكن كمان تعلّم غيرك إزاي يفكر ويبحث."
         },
         {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "شريط زمني",
+          "text": "1898 — ولادته في دمياط\n1914 — حصوله على البكالوريا في السادسة عشرة\n1917 — اختياره لبعثة علمية إلى إنجلترا\n1923 — الدكتوراه في الفلسفة\n1924 — دكتوراه العلوم\n1926 — أستاذ الرياضيات التطبيقية بجامعة القاهرة\n1936 — عميد كلية العلوم\n1945 — المشاركة في تأسيس جمعية محبي الموسيقى المصرية\n1950 — وفاته في القاهرة"
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "الخاتمة: أثر يبقى",
           "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
         }
       ]
@@ -115,11 +135,12 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
-      "images_note": "The cover is a historical photograph hosted on Wikimedia Commons; its source and rights are identified in the image details. The other gallery items are original illustrations made for the Khaledoon project, not archival photographs or figures taken from Mosharafa’s research.",
+      "images_note": "All images in this story are original illustrations made for the Khaledoon project, not archival photographs or figures taken from Mosharafa’s research. No photograph of Mosharafa is used because its source and rights have not been verified yet.",
       "blocks": [
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 1: A child who loved questions",
           "text": "Ali Mostafa Mosharafa was born in Damietta on 11 July 1898. As a child, he could not know that his love of numbers and questions would lead him to study the laws of nature and become one of Egypt’s leading theoretical physicists."
         },
         {
@@ -140,6 +161,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 2: The baccalaureate and a choice",
           "text": "In 1914, at the age of sixteen, Mosharafa earned his baccalaureate, becoming the youngest student to receive it at that time. He chose to study mathematics at the Higher Teachers’ College because he wanted to go deeper into the subject he loved."
         },
         {
@@ -151,6 +173,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 3: A scholarship to England",
           "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924."
         },
         {
@@ -166,6 +189,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 4: Back to Cairo University",
           "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully.",
           "image_after": "university-path"
         },
@@ -177,7 +201,15 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 5: Questions about the universe",
           "text": "Mosharafa researched quantum theory, relativity, and the relationship between matter and radiation. He published scientific papers and books on mathematics and physics, and also studied the history of science and helped make scientific knowledge available in Arabic. Sources record correspondence with Albert Einstein, but Mosharafa’s importance rests on his own scholarship and teaching—not simply on knowing a famous scientist."
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "A simple science note",
+          "text": "Relativity studies how space, time, motion and gravity are connected. Quantum theory studies how very small things, such as atoms and light, behave. Together, they are two pillars of modern physics.",
+          "image_after": "space-time"
         },
         {
           "type": "paragraph",
@@ -188,6 +220,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scene 6: Where music meets mathematics",
           "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
         },
         {
@@ -202,8 +235,15 @@
           "text": "So achievement is not only discovering something new. It can also mean teaching others how to think and investigate."
         },
         {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Timeline",
+          "text": "1898 — Born in Damietta\n1914 — Earns the baccalaureate at sixteen\n1917 — Selected for a scholarship to England\n1923 — PhD\n1924 — Doctor of Science\n1926 — Professor of applied mathematics at Cairo University\n1936 — Dean of the Faculty of Science\n1945 — Helps establish the Egyptian Society for Music Lovers\n1950 — Dies in Cairo"
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Conclusion: A lasting impact",
           "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
         }
       ]
@@ -215,11 +255,12 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
-      "images_note": "La couverture est une photographie historique hébergée sur Wikimedia Commons ; sa source et ses droits sont indiqués dans les détails de l’image. Les autres éléments de la galerie sont des illustrations originales créées pour le projet Khaledoon, et non des photos d’archives ni des figures tirées des travaux de Mosharafa.",
+      "images_note": "Toutes les images de ce récit sont des illustrations originales créées pour le projet Khaledoon, et non des photos d’archives ni des figures tirées des travaux de Mosharafa. Aucune photographie de Mosharafa n’est utilisée, car sa source et ses droits n’ont pas encore été vérifiés.",
       "blocks": [
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 1 : Un enfant qui aimait les questions",
           "text": "Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898. Enfant, il ne pouvait pas savoir que son goût pour les nombres et les questions le conduirait à étudier les lois de la nature et à devenir l’un des grands physiciens théoriciens d’Égypte."
         },
         {
@@ -240,6 +281,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 2 : Le baccalauréat et un choix",
           "text": "En 1914, à l’âge de seize ans, Mosharafa obtint le baccalauréat et fut alors le plus jeune à recevoir ce diplôme. Il choisit d’étudier les mathématiques à l’École supérieure des enseignants, afin d’approfondir la matière qu’il aimait."
         },
         {
@@ -251,6 +293,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 3 : Une bourse pour l’Angleterre",
           "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924."
         },
         {
@@ -266,6 +309,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 4 : Retour à l’Université du Caire",
           "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode.",
           "image_after": "university-path"
         },
@@ -277,7 +321,15 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 5 : Les questions de l’Univers",
           "text": "Mosharafa travailla sur la théorie quantique, la relativité et le lien entre matière et rayonnement. Il publia des articles et des livres de mathématiques et de physique, tout en s’intéressant à l’histoire des sciences et à la diffusion du savoir scientifique en arabe. Des sources mentionnent une correspondance avec Albert Einstein, mais son importance vient de ses propres recherches et de son enseignement, pas seulement de ce lien."
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Une note scientifique simple",
+          "text": "La relativité étudie les liens entre l’espace, le temps, le mouvement et la gravité. La théorie quantique étudie le comportement des très petits objets, comme les atomes et la lumière. Ce sont deux piliers de la physique moderne.",
+          "image_after": "space-time"
         },
         {
           "type": "paragraph",
@@ -288,6 +340,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scène 6 : Quand la musique rencontre les mathématiques",
           "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
         },
         {
@@ -302,8 +355,15 @@
           "text": "Alors, réussir, ce n’est pas seulement découvrir quelque chose : c’est aussi apprendre aux autres à réfléchir et à chercher."
         },
         {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Chronologie",
+          "text": "1898 — Naissance à Damiette\n1914 — Baccalauréat à seize ans\n1917 — Choisi pour une bourse en Angleterre\n1923 — Doctorat\n1924 — Doctor of Science\n1926 — Professeur de mathématiques appliquées à l’Université du Caire\n1936 — Doyen de la faculté des sciences\n1945 — Contribue à fonder la Société égyptienne des amateurs de musique\n1950 — Décès au Caire"
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Conclusion : Une trace durable",
           "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
         }
       ]
@@ -315,11 +375,12 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
-      "images_note": "La copertina è una fotografia storica ospitata su Wikimedia Commons; la fonte e i diritti sono indicati nei dettagli dell’immagine. Gli altri elementi della galleria sono illustrazioni originali realizzate per il progetto Khaledoon, non fotografie d’archivio né figure tratte dalle ricerche di Mosharafa.",
+      "images_note": "Tutte le immagini di questo racconto sono illustrazioni originali create per il progetto Khaledoon, non fotografie d’archivio né figure tratte dalle ricerche di Mosharafa. Non è usata alcuna fotografia di Mosharafa perché fonte e diritti non sono ancora stati verificati.",
       "blocks": [
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 1: Un bambino che amava le domande",
           "text": "Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898. Da bambino non poteva sapere che il suo amore per i numeri e le domande lo avrebbe portato a studiare le leggi della natura e a diventare uno dei più importanti fisici teorici egiziani."
         },
         {
@@ -340,6 +401,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 2: La maturità e una scelta",
           "text": "Nel 1914, a sedici anni, Mosharafa conseguì il diploma di maturità, diventando il più giovane a ottenerlo in quel periodo. Scelse di studiare matematica all’Istituto superiore per la formazione degli insegnanti per approfondire la materia che amava."
         },
         {
@@ -351,6 +413,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 3: Una borsa di studio per l’Inghilterra",
           "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924."
         },
         {
@@ -366,6 +429,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 4: Il ritorno all’Università del Cairo",
           "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo.",
           "image_after": "university-path"
         },
@@ -377,7 +441,15 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 5: Le domande dell’universo",
           "text": "Mosharafa studiò la teoria dei quanti, la relatività e il rapporto tra materia e radiazione. Pubblicò articoli e libri di matematica e fisica, e si interessò anche alla storia della scienza e alla diffusione del sapere scientifico in arabo. Le fonti riportano una corrispondenza con Albert Einstein, ma la sua importanza deriva soprattutto dalle sue ricerche e dal suo insegnamento."
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Una semplice nota scientifica",
+          "text": "La relatività studia i legami tra spazio, tempo, movimento e gravità. La teoria dei quanti studia il comportamento delle cose molto piccole, come gli atomi e la luce. Sono due pilastri della fisica moderna.",
+          "image_after": "space-time"
         },
         {
           "type": "paragraph",
@@ -388,6 +460,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Scena 6: Quando la musica incontra la matematica",
           "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
         },
         {
@@ -402,8 +475,15 @@
           "text": "Quindi il successo non è solo scoprire qualcosa di nuovo: è anche insegnare agli altri a pensare e a fare ricerca."
         },
         {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Cronologia",
+          "text": "1898 — Nasce a Damietta\n1914 — Ottiene la maturità a sedici anni\n1917 — Scelto per una borsa di studio in Inghilterra\n1923 — Dottorato\n1924 — Doctor of Science\n1926 — Professore di matematica applicata all’Università del Cairo\n1936 — Preside della Facoltà di Scienze\n1945 — Contribuisce a fondare la Società egiziana degli amanti della musica\n1950 — Muore al Cairo"
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Conclusione: Un’eredità duratura",
           "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
         }
       ]
@@ -415,11 +495,12 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
-      "images_note": "Das Titelbild ist eine historische Fotografie von Wikimedia Commons; Quelle und Rechte sind in den Bilddetails angegeben. Die übrigen Galerieelemente sind eigens für das Khaledoon-Projekt erstellte Illustrationen, keine Archivfotos und keine Abbildungen aus Mosharafas Forschung.",
+      "images_note": "Alle Bilder dieser Geschichte sind eigens für das Khaledoon-Projekt erstellte Originalillustrationen, keine Archivfotos und keine Abbildungen aus Mosharafas Forschung. Es wird kein Foto von Mosharafa verwendet, da Quelle und Rechte noch nicht überprüft wurden.",
       "blocks": [
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 1: Ein Kind, das Fragen liebte",
           "text": "Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren. Als Kind konnte er nicht ahnen, dass seine Liebe zu Zahlen und Fragen ihn dazu führen würde, die Naturgesetze zu erforschen und einer der bedeutenden theoretischen Physiker Ägyptens zu werden."
         },
         {
@@ -440,6 +521,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 2: Das Baccalaureat und eine Entscheidung",
           "text": "1914 erwarb Mosharafa im Alter von sechzehn Jahren das Baccalaureat und war damals der jüngste Empfänger dieses Abschlusses. Er entschied sich für Mathematik an der Höheren Lehrerschule, um das Fach, das er liebte, weiter zu vertiefen."
         },
         {
@@ -451,6 +533,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 3: Ein Stipendium für England",
           "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science."
         },
         {
@@ -466,6 +549,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 4: Zurück an der Universität Kairo",
           "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten.",
           "image_after": "university-path"
         },
@@ -477,7 +561,15 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 5: Fragen an das Universum",
           "text": "Mosharafa forschte zur Quantentheorie, Relativität und zum Verhältnis von Materie und Strahlung. Er veröffentlichte wissenschaftliche Aufsätze und Bücher über Mathematik und Physik und interessierte sich auch für die Wissenschaftsgeschichte und die Vermittlung wissenschaftlichen Wissens auf Arabisch. Quellen erwähnen einen Briefwechsel mit Albert Einstein; Mosharafas Bedeutung beruht jedoch auf seiner eigenen Forschung und Lehre."
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Eine einfache Wissensnotiz",
+          "text": "Die Relativitätstheorie untersucht, wie Raum, Zeit, Bewegung und Schwerkraft zusammenhängen. Die Quantentheorie untersucht, wie sich sehr kleine Dinge wie Atome und Licht verhalten. Beide sind Säulen der modernen Physik.",
+          "image_after": "space-time"
         },
         {
           "type": "paragraph",
@@ -488,6 +580,7 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Szene 6: Wo Musik auf Mathematik trifft",
           "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
         },
         {
@@ -502,51 +595,57 @@
           "text": "Erfolg bedeutet also nicht nur, etwas Neues zu entdecken. Man kann auch anderen beibringen, wie man denkt und forscht."
         },
         {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Zeitstrahl",
+          "text": "1898 — Geboren in Damiette\n1914 — Baccalaureat mit sechzehn Jahren\n1917 — Für ein Stipendium in England ausgewählt\n1923 — Doktortitel\n1924 — Doctor of Science\n1926 — Professor für angewandte Mathematik an der Universität Kairo\n1936 — Dekan der naturwissenschaftlichen Fakultät\n1945 — Hilft bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde\n1950 — Stirbt in Kairo"
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
+          "heading": "Schluss: Eine bleibende Wirkung",
           "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
         }
       ]
     }
   },
   "cover": {
-    "path": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-    "url": "https://upload.wikimedia.org/wikipedia/commons/9/9e/Ali_Mosharrafa.jpg",
-    "kind": "historical-photograph",
-    "source_name": "Wikimedia Commons",
-    "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
-    "rights": "Public domain per Wikimedia Commons file page",
+    "path": "stories/science/016/cover.svg",
+    "kind": "illustration",
+    "source_name": "رسم توضيحي أصلي من مشروع خالدون",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+    "rights": "Original conceptual illustration created for this project; not a historical photograph.",
     "id": "cover",
     "i18n": {
       "ar": {
-        "alt": "صورة فوتوغرافية تاريخية لعلي مصطفى مشرفة",
-        "caption": "صورة أرشيفية لعلي مصطفى مشرفة؛ منشورة على ويكيميديا كومنز",
-        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-        "rights": "الملكية العامة وفق صفحة الملف في ويكيميديا كومنز"
+        "alt": "رسم توضيحي لذرة مضيئة فوق كتاب مفتوح ومبنى جامعي ونوتات موسيقية",
+        "caption": "غلاف الحكاية: العلم والتعليم والموسيقى في رسم توضيحي أصلي",
+        "source_name": "مشروع خالدون",
+        "rights": "رسم مفاهيمي أصلي وليس صورة تاريخية"
       },
       "en": {
-        "alt": "Historical photograph of Ali Mostafa Mosharafa",
-        "caption": "Archival portrait of Ali Mostafa Mosharafa, hosted on Wikimedia Commons",
-        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-        "rights": "Public domain according to the file page on Wikimedia Commons"
+        "alt": "Illustration of a glowing atom above an open book, a university building and musical notes",
+        "caption": "Story cover: science, education and music in an original illustration",
+        "source_name": "Khaledoon project",
+        "rights": "Original conceptual artwork, not a historical image"
       },
       "fr": {
-        "alt": "Photographie historique d’Ali Mostafa Mosharafa",
-        "caption": "Portrait d’archive d’Ali Mostafa Mosharafa hébergé sur Wikimedia Commons",
-        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-        "rights": "Domaine public selon la page du fichier sur Wikimedia Commons"
+        "alt": "Illustration d’un atome lumineux au-dessus d’un livre ouvert, d’un bâtiment universitaire et de notes de musique",
+        "caption": "Couverture du récit : science, éducation et musique dans une illustration originale",
+        "source_name": "Projet Khaledoon",
+        "rights": "Illustration conceptuelle originale, pas une image historique"
       },
       "it": {
-        "alt": "Fotografia storica di Ali Mostafa Mosharafa",
-        "caption": "Ritratto d’archivio di Ali Mostafa Mosharafa ospitato su Wikimedia Commons",
-        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-        "rights": "Pubblico dominio secondo la pagina del file su Wikimedia Commons"
+        "alt": "Illustrazione di un atomo luminoso sopra un libro aperto, un edificio universitario e note musicali",
+        "caption": "Copertina del racconto: scienza, istruzione e musica in un’illustrazione originale",
+        "source_name": "Progetto Khaledoon",
+        "rights": "Illustrazione concettuale originale, non un’immagine storica"
       },
       "de": {
-        "alt": "Historische Fotografie von Ali Mostafa Mosharafa",
-        "caption": "Archivporträt von Ali Mostafa Mosharafa auf Wikimedia Commons",
-        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
-        "rights": "Gemeinfrei laut Dateiseite auf Wikimedia Commons"
+        "alt": "Illustration eines leuchtenden Atoms über einem offenen Buch, einem Universitätsgebäude und Musiknoten",
+        "caption": "Titelbild der Geschichte: Wissenschaft, Bildung und Musik in einer Originalillustration",
+        "source_name": "Khaledoon-Projekt",
+        "rights": "Originale Konzeptgrafik, kein historisches Bild"
       }
     }
   },
@@ -708,6 +807,46 @@
           "caption": "Mosharafa verband sein Interesse an Musik mit wissenschaftlicher Forschung",
           "source_name": "Khaledoon-Projekt",
           "rights": "Originale Konzeptgrafik, kein historisches Bild"
+        }
+      }
+    },
+    {
+      "id": "space-time",
+      "path": "stories/science/016/space-time.svg",
+      "kind": "diagram",
+      "source_name": "رسم تخطيطي أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973",
+      "rights": "Original conceptual diagram created for this project; not a historical scientific figure.",
+      "i18n": {
+        "ar": {
+          "alt": "شبكة منحنية حول كرة مضيئة وشعاع ضوء وذرة صغيرة",
+          "caption": "رسم مبسط يقرّب فكرة المكان والزمان والضوء، وليس شكلًا من أبحاث مشرفة",
+          "source_name": "مشروع خالدون",
+          "rights": "رسم تخطيطي أصلي أُعد للمشروع"
+        },
+        "en": {
+          "alt": "A curved grid around a glowing sphere, a ray of light and a tiny atom",
+          "caption": "A simple sketch of space, time and light, not a figure from Mosharafa’s papers",
+          "source_name": "Khaledoon project",
+          "rights": "Original diagram made for this project"
+        },
+        "fr": {
+          "alt": "Une grille courbe autour d’une sphère lumineuse, un rayon de lumière et un petit atome",
+          "caption": "Schéma simple de l’espace, du temps et de la lumière, pas une figure des travaux de Mosharafa",
+          "source_name": "Projet Khaledoon",
+          "rights": "Schéma original créé pour ce projet"
+        },
+        "it": {
+          "alt": "Una griglia curva attorno a una sfera luminosa, un raggio di luce e un piccolo atomo",
+          "caption": "Schizzo semplice di spazio, tempo e luce, non una figura degli studi di Mosharafa",
+          "source_name": "Progetto Khaledoon",
+          "rights": "Schema originale creato per il progetto"
+        },
+        "de": {
+          "alt": "Ein gekrümmtes Gitter um eine leuchtende Kugel, ein Lichtstrahl und ein winziges Atom",
+          "caption": "Einfache Skizze zu Raum, Zeit und Licht, keine Abbildung aus Mosharafas Arbeiten",
+          "source_name": "Khaledoon-Projekt",
+          "rights": "Originaldiagramm für dieses Projekt"
         }
       }
     }

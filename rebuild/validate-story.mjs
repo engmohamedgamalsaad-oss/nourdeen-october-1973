@@ -93,8 +93,10 @@ export function validateStory(s) {
       if (!Array.isArray(t.blocks) || t.blocks.length < 3) out.push('i18n.' + lang + '.blocks needs at least 3 blocks');
       for (const [i, b] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
         const label = 'i18n.' + lang + '.blocks[' + i + ']';
-        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after'], label, out)) continue;
-        if (!['paragraph', 'did_you_know'].includes(b.type)) out.push(label + '.type invalid');
+        if (!keysCheck(b, ['type', 'speaker', 'text'], ['type', 'speaker', 'text', 'image_after', 'heading'], label, out)) continue;
+        if (!['paragraph', 'did_you_know', 'science_note', 'timeline'].includes(b.type)) out.push(label + '.type invalid');
+        if (Object.hasOwn(b, 'heading') && !nonempty(b.heading)) out.push(label + '.heading must be a non-empty string when provided');
+        if (b.type === 'timeline' && !(typeof b.text === 'string' && b.text.split('\n').every(line => /\S.*\s—\s\S/.test(line)))) out.push(label + '.text must be lines of "year — event" for a timeline');
         if (!['karma', 'narrator'].includes(b.speaker)) out.push(label + '.speaker invalid');
         if (!nonempty(b.text)) out.push(label + '.text required');
         if (Object.hasOwn(b, 'image_after') && !nonempty(b.image_after)) out.push(label + '.image_after must be a non-empty image ID when provided');
