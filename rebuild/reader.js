@@ -18,7 +18,7 @@ var sectionLabels={ar:{october:'حكايات أكتوبر 1973',history:'الت�
 var current=(function(){try{var saved=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar';return langs.indexOf(saved)>=0?saved:'ar'}catch(e){return 'ar'}})(),story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
-var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261029-motion-safety-rollback-1',ROOT).href;document.head.appendChild(enhanceCss);
+var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261028-v2-enhance-5',ROOT).href;document.head.appendChild(enhanceCss);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
@@ -46,10 +46,13 @@ if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=doc
 if(enhanceShown){body.classList.remove('kh-motion');return}
 enhanceShown=true;
 if(motionObserver)motionObserver.disconnect();clearTimeout(motionTimer);
-/* Motion reveal is temporarily disabled to guarantee all reading text stays visible. */
-var targets=[].slice.call(document.querySelectorAll('#blocks .block,#blocks .kh-hexes'));
-targets.forEach(function(e){e.classList.remove('kh-pending','kh-in')});
-body.classList.remove('kh-motion');
+var targets=[].slice.call(document.querySelectorAll('#blocks .block > p,#blocks .block-timeline > li,#blocks > figure,.kh-hexes'));
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce||!('IntersectionObserver' in window)){body.classList.remove('kh-motion');return}
+targets.forEach(function(e){e.classList.add('kh-pending')});body.classList.add('kh-motion');
+var observer=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.remove('kh-pending');x.target.classList.add('kh-in');observer.unobserve(x.target)}})},{threshold:.12});
+motionObserver=observer;targets.forEach(function(e){observer.observe(e)});
+motionTimer=setTimeout(function(){targets.forEach(function(e){e.classList.remove('kh-pending');e.classList.add('kh-in')});observer.disconnect()},6000);
 }
 function show(){
 if(!story)return;document.body.dataset.theme=document.documentElement.getAttribute('data-theme')||'dark';var t=story.i18n[current];if(!t){$('status').textContent=ui[current].missing;return}
