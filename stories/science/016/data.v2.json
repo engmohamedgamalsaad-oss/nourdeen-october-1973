@@ -15,7 +15,7 @@
       "figure_name": "علي مصطفى مشرفة",
       "person": "علي مصطفى مشرفة",
       "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
-      "images_note": "جميع الرسوم في هذه الحكاية رسوم توضيحية أصلية أُعدت لمشروع خالدون، وليست صورًا أرشيفية ولا أشكالًا مأخوذة من أبحاث مشرفة. لم تُستخدم صورة فوتوغرافية لمشرفة لأن مصدرها وحقوقها لم يُتحقق منهما بعد.",
+      "images_note": "تضم الحكاية صورًا أرشيفية حقيقية من مصادر موثقة، وصورة لجامعة القاهرة التُقطت بعد زمن مشرفة لتوضيح المؤسسة لا شكلها في عصره. الصور ليست مولّدة بالذكاء الاصطناعي؛ راجع تعليق كل صورة لمعرفة سياقها ومصدرها وترخيصها.",
       "blocks": [
         {
           "type": "paragraph",
@@ -147,7 +147,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
-      "images_note": "All images in this story are original illustrations made for the Khaledoon project, not archival photographs or figures taken from Mosharafa’s research. No photograph of Mosharafa is used because its source and rights have not been verified yet.",
+      "images_note": "This story uses real archival photographs from documented sources, plus a later photograph of Cairo University to identify the institution rather than depict it in Mosharafa’s time. The images are not AI-generated; each caption gives its context, source, and license.",
       "blocks": [
         {
           "type": "paragraph",
@@ -279,7 +279,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
-      "images_note": "Toutes les images de ce récit sont des illustrations originales créées pour le projet Khaledoon, et non des photos d’archives ni des figures tirées des travaux de Mosharafa. Aucune photographie de Mosharafa n’est utilisée, car sa source et ses droits n’ont pas encore été vérifiés.",
+      "images_note": "Ce récit utilise de vraies photographies d’archives provenant de sources documentées, ainsi qu’une photo ultérieure de l’Université du Caire pour identifier l’institution, et non son apparence à l’époque de Mosharafa. Les images ne sont pas générées par IA ; chaque légende précise le contexte, la source et la licence.",
       "blocks": [
         {
           "type": "paragraph",
@@ -411,7 +411,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
-      "images_note": "Tutte le immagini di questo racconto sono illustrazioni originali create per il progetto Khaledoon, non fotografie d’archivio né figure tratte dalle ricerche di Mosharafa. Non è usata alcuna fotografia di Mosharafa perché fonte e diritti non sono ancora stati verificati.",
+      "images_note": "Questo racconto usa vere fotografie d’archivio da fonti documentate e una foto successiva dell’Università del Cairo per identificare l’istituzione, non il suo aspetto ai tempi di Mosharafa. Le immagini non sono generate dall’IA; ogni didascalia indica contesto, fonte e licenza.",
       "blocks": [
         {
           "type": "paragraph",
@@ -543,7 +543,7 @@
       "figure_name": "Ali Mostafa Mosharafa",
       "person": "Ali Mostafa Mosharafa",
       "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
-      "images_note": "Alle Bilder dieser Geschichte sind eigens für das Khaledoon-Projekt erstellte Originalillustrationen, keine Archivfotos und keine Abbildungen aus Mosharafas Forschung. Es wird kein Foto von Mosharafa verwendet, da Quelle und Rechte noch nicht überprüft wurden.",
+      "images_note": "Diese Geschichte verwendet echte Archivfotos aus dokumentierten Quellen sowie ein späteres Foto der Universität Kairo, das die Institution zeigt, nicht ihr Aussehen zu Mosharafas Zeit. Die Bilder sind nicht KI-generiert; jede Bildunterschrift nennt Kontext, Quelle und Lizenz.",
       "blocks": [
         {
           "type": "paragraph",
