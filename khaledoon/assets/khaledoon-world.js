@@ -126,6 +126,21 @@
     if(canAnimate()||drag)raf=requestAnimationFrame(draw);
   }
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
+  /* Explicit globe-to-map handoff: animate the globe out, reveal the map, and respect reduced-motion preferences. */
+  link.addEventListener('click',function(e){
+    var target=document.getElementById('khMap');
+    if(!target)return;
+    e.preventDefault();
+    section.classList.add('kh-world-leaving');
+    target.classList.remove('kh-map-arrived');
+    target.classList.add('kh-map-arriving');
+    target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
+    window.setTimeout(function(){
+      target.classList.remove('kh-map-arriving');
+      target.classList.add('kh-map-arrived');
+      section.classList.remove('kh-world-leaving');
+    },reduced?0:680);
+  });
   requestDraw();
   function renderStoryList(){
     list.replaceChildren();
