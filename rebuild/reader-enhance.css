@@ -71,7 +71,7 @@ body[data-theme=light][data-section=readers]{--bg:#edf8f6;--panel:#fbfffe;--line
 .story-actions #share-facebook{background:#1877f2;color:#fff;border-color:#1877f2}
 .story-actions #print-story{background:var(--accent);color:#15140f;border-color:var(--accent)}
 .story-actions a:focus-visible,.story-actions button:focus-visible,.intro-close:focus-visible,.start-story-btn:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
-.story-intro-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:rgba(2,8,12,.88);backdrop-filter:blur(14px)}
+.story-intro-modal{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:18px;background:rgba(2,8,12,.88);backdrop-filter:none}
 .story-intro-modal[hidden],.image-lightbox[hidden]{display:none!important}
 .intro-card{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;width:min(900px,100%);max-height:min(90vh,760px);overflow:auto;border:1px solid var(--accent);border-radius:24px;background:var(--panel);box-shadow:0 30px 90px #0009}
 .intro-art{display:grid;place-items:center;min-height:260px;padding:22px;background:linear-gradient(145deg,color-mix(in srgb,var(--accent) 22%,var(--panel)),var(--panel))}
