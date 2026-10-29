@@ -18,7 +18,7 @@ var sectionLabels={ar:{october:'حكايات أكتوبر 1973',history:'الت�
 var current=(function(){try{var saved=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar';return langs.indexOf(saved)>=0?saved:'ar'}catch(e){return 'ar'}})(),story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
-var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261028-v2-enhance-5',ROOT).href;document.head.appendChild(enhanceCss);
+var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261030-shared-reader-1',ROOT).href;document.head.appendChild(enhanceCss);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
@@ -75,7 +75,7 @@ if($('quiz-start')){$('quiz-start').textContent=ui[current].quizStart;if($('quiz
 $('status').hidden=true;$('story').hidden=false;
 var pageUrl=location.href.split('#')[0],shareText=encodeURIComponent(t.title+' — '+pageUrl);$('share-whatsapp').href='https://wa.me/?text='+shareText;$('share-facebook').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(pageUrl);enhance(t);
 }
-document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;show();document.dispatchEvent(new Event('site-language-change'))})});
+document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;try{localStorage.setItem('kh-lang',current);localStorage.setItem('lang',current)}catch(e){}show();document.dispatchEvent(new Event('site-language-change'))})});
 var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click',function(){var root=document.documentElement,next=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',next);document.body.dataset.theme=next;try{localStorage.setItem('kh-theme',next)}catch(e){}show()});
 function closeIntro(){var modal=$('story-intro-modal');modal.hidden=true;document.body.classList.remove('modal-open')}
 function openIntro(){var modal=$('story-intro-modal');modal.hidden=false;document.body.classList.add('modal-open');$('intro-start').focus()}
