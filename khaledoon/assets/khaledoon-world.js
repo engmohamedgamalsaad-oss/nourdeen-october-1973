@@ -5,35 +5,15 @@
   window.__khWorldExplorer=true;
   var langs=['ar','en','fr','it','de'];
   var copy={
-    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة تفاعلية تربط الأماكن التاريخية بالحكايات المنشورة. هذا تمثيل فني مبسط وليس خريطة جغرافية دقيقة؛ ولا تظهر النقاط إلا عند توفر مصدر موثق للمكان.',hint:'اسحب الكرة لتدويرها',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد أماكن بمصادر موثقة مكتملة لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'مكان له مصدر',source:'المصدر',approximate:'الموقع تقريبي وفق المصدر',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.'},
-    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'An artistic, simplified globe connecting historical places to published stories, not a geographically precise map. Markers appear only when a documented source is available.',hint:'Drag to rotate the globe',map:'Open the story map',loading:'Preparing the globe…',empty:'No places with complete documented sources are available yet.',stories:'Stories linked to places',placesCount:'sourced places',source:'Source',approximate:'Approximate location according to the source',reduced:'Automatic motion is paused by your device settings.'},
-    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe artistique simplifié relie les lieux historiques aux récits publiés ; ce n’est pas une carte géographique précise. Les repères exigent une source documentée.',hint:'Faites glisser pour tourner le globe',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Aucun lieu avec une source documentée complète n’est disponible.',stories:'Récits liés aux lieux',placesCount:'lieux sourcés',source:'Source',approximate:'Emplacement approximatif selon la source',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.'},
-    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo artistico semplificato collega i luoghi storici alle storie pubblicate; non è una mappa geograficamente precisa. I punti richiedono una fonte documentata.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non sono disponibili luoghi con fonti documentate complete.',stories:'Storie collegate ai luoghi',placesCount:'luoghi con fonte',source:'Fonte',approximate:'Posizione approssimativa secondo la fonte',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.'},
-    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein künstlerisch vereinfachter Globus verbindet historische Orte mit veröffentlichten Geschichten; er ist keine geografisch genaue Karte. Markierungen erfordern eine dokumentierte Quelle.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefährer Standort laut Quelle',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.'}
+    ar:{kicker:'حكايات تتجاوز الحدود',title:'اكتشف العالم من خلال حكاياته',lead:'كرة ثلاثية الأبعاد بطابع سينمائي، تعتمد على قارات وحدود ومدن حقيقية من Natural Earth، وترتبط بالحكايات المنشورة ذات المواقع الموثقة.',hint:'اسحب الكرة لتدويرها',map:'افتح خريطة الشخصيات',loading:'نجهّز الكرة الأرضية…',empty:'لا توجد أماكن بمصادر موثقة مكتملة لعرضها الآن.',stories:'حكايات مرتبطة بالمواقع',placesCount:'مكان له مصدر',source:'المصدر',approximate:'الموقع تقريبي وفق المصدر',reduced:'الحركة التلقائية متوقفة حسب إعدادات جهازك.',attribution:'بيانات الخريطة: Natural Earth'},
+    en:{kicker:'Stories beyond borders',title:'Explore the world through its stories',lead:'A cinematic 3D globe using real Natural Earth land, borders and major-city coordinates, connected to published stories with documented locations.',hint:'Drag to rotate the globe',map:'Open the story map',loading:'Preparing the globe…',empty:'No places with complete documented sources are available yet.',stories:'Stories linked to places',placesCount:'sourced places',source:'Source',approximate:'Approximate location according to the source',reduced:'Automatic motion is paused by your device settings.',attribution:'Map data: Natural Earth'},
+    fr:{kicker:'Des récits sans frontières',title:'Explorez le monde à travers ses récits',lead:'Un globe 3D cinématographique fondé sur les terres, frontières et grandes villes de Natural Earth, relié aux récits publiés et à leurs lieux documentés.',hint:'Faites glisser pour tourner le globe',map:'Ouvrir la carte des récits',loading:'Préparation du globe…',empty:'Aucun lieu avec une source documentée complète n’est disponible.',stories:'Récits liés aux lieux',placesCount:'lieux sourcés',source:'Source',approximate:'Emplacement approximatif selon la source',reduced:'Le mouvement automatique est désactivé par les réglages de votre appareil.',attribution:'Données cartographiques : Natural Earth'},
+    it:{kicker:'Storie senza confini',title:'Esplora il mondo attraverso le sue storie',lead:'Un globo 3D cinematografico basato su terre, confini e grandi città di Natural Earth, collegato ai racconti pubblicati e ai luoghi documentati.',hint:'Trascina per ruotare il globo',map:'Apri la mappa delle storie',loading:'Preparazione del globo…',empty:'Non sono disponibili luoghi con fonti documentate complete.',stories:'Storie collegate ai luoghi',placesCount:'luoghi con fonte',source:'Fonte',approximate:'Posizione approssimativa secondo la fonte',reduced:'Il movimento automatico è disattivato dalle impostazioni del dispositivo.',attribution:'Dati cartografici: Natural Earth'},
+    de:{kicker:'Geschichten ohne Grenzen',title:'Entdecke die Welt durch ihre Geschichten',lead:'Ein filmisch gestalteter 3D-Globus mit echten Landflächen, Grenzen und Großstädten aus Natural Earth, verknüpft mit veröffentlichten Geschichten und belegten Orten.',hint:'Zum Drehen den Globus ziehen',map:'Geschichtenkarte öffnen',loading:'Globus wird vorbereitet…',empty:'Es sind keine Orte mit vollständigen dokumentierten Quellen verfügbar.',stories:'Mit Orten verbundene Geschichten',placesCount:'Orte mit Quelle',source:'Quelle',approximate:'Ungefährer Standort laut Quelle',reduced:'Die automatische Bewegung ist durch deine Geräteeinstellungen deaktiviert.',attribution:'Kartendaten: Natural Earth'}
   };
   var points=[],rot=0,tilt=-.16,drag=false,lastX=0,lastY=0,startX=0,startY=0,raf=0,hitTargets=[],selectedPoint=null,inView=true,pageVisible=!document.hidden;
-  /* Simplified continent silhouettes for a recognizable artistic globe, not navigational geography. */
-  var landPolys=[
-    [[72,-168],[68,-140],[58,-128],[52,-124],[48,-112],[32,-117],[24,-106],[14,-96],[8,-82],[18,-76],[25,-80],[31,-75],[45,-62],[53,-58],[62,-74],[70,-90]],
-    [[12,-81],[4,-77],[-8,-78],[-20,-70],[-34,-72],[-55,-68],[-48,-52],[-28,-42],[-8,-35],[5,-50],[10,-62]],
-    [[72,-12],[60,-30],[50,-8],[43,-10],[35,-10],[30,-5],[14,-17],[5,-5],[-5,10],[-25,14],[-35,20],[-34,32],[-18,42],[0,50],[12,42],[24,35],[35,28],[45,38],[55,28],[65,18]],
-    [[70,30],[65,55],[58,80],[50,95],[45,120],[35,135],[20,120],[5,105],[-5,80],[8,60],[22,45],[35,35],[50,30]],
-    [[30,130],[45,145],[60,160],[68,178],[55,170],[42,155]],
-    [[-12,112],[-20,115],[-35,132],[-40,150],[-28,154],[-12,142],[-10,125]],
-    [[60,-52],[75,-45],[82,-28],[76,-18],[62,-30]]
-  ];
-  function insideLand(lat,lon,poly){
-    var inside=false;
-    for(var i=0,j=poly.length-1;i<poly.length;j=i++){
-      var yi=poly[i][0],xi=poly[i][1],yj=poly[j][0],xj=poly[j][1];
-      if(((yi>lat)!==(yj>lat))&&(lon<(xj-xi)*(lat-yi)/(yj-yi+1e-9)+xi))inside=!inside;
-    }
-    return inside;
-  }
-  function isLand(lat,lon){
-    for(var i=0;i<landPolys.length;i++)if(insideLand(lat,lon,landPolys[i]))return true;
-    return false;
-  }
+  /* Geographic shapes are loaded from the bundled, public-domain Natural Earth dataset. */
+  var geography=null;
   function lang(){var l=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();return langs.indexOf(l)>=0?l:'ar'}
   function t(k){return (copy[lang()]||copy.ar)[k]}
   function el(tag,cls,txt){var n=document.createElement(tag);if(cls)n.className=cls;if(txt!=null)n.textContent=txt;return n}
@@ -62,8 +42,10 @@
   var selectedInfo=el('p','kh-world-status');selectedInfo.hidden=true;
   var selectedLink=el('a','kh-world-chip');selectedLink.hidden=true;
   var sourceLink=el('a','kh-world-chip');sourceLink.hidden=true;sourceLink.target='_blank';sourceLink.rel='noopener noreferrer';
+  var selectedCard=el('div','kh-world-story-card');selectedCard.hidden=true;selectedCard.setAttribute('aria-live','polite');
   var link=el('a','btn ghost');link.href='index.html#khMap';link.dataset.worldText='map';
-  side.append(hint,status,listTitle,list,selectedInfo,selectedLink,sourceLink,link);
+  var attribution=el('a','kh-world-attribution');attribution.href='https://www.naturalearthdata.com/';attribution.target='_blank';attribution.rel='noopener noreferrer';attribution.dataset.worldText='attribution';
+  side.append(hint,status,listTitle,list,selectedCard,selectedInfo,selectedLink,sourceLink,link,attribution);
   stage.append(canvas,side);
   wrap.append(head,stage);
   section.append(wrap);
@@ -94,17 +76,39 @@
   }
   function localized(s,key){var l=lang();return (s.i18n&&s.i18n[l]&&s.i18n[l][key])||s[l]||s[key]||''}
   function localizedPlace(p){var l=lang(),v=p&&p.place;return typeof v==='string'?v:(v&&v[l])||(v&&v.ar)||''}
+  var sectionPalette={october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a',readers:'#80d5c7'};
+  function sectionColor(sectionId){return sectionPalette[sectionId]||'#b8874b'}
+  function localizedValue(value){return typeof value==='string'?value:(value&&value[lang()])||(value&&value.ar)||''}
+  function buildStoryCard(p){
+    var story=p.story,catNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};
+    var l=lang(),sec=story.section||'',category=(catNames[l]||catNames.ar)[sec]||(catNames.ar[sec]||t('stories')),color=sectionColor(sec);
+    var card=el('div','khm-card');card.dir=document.documentElement.dir||'rtl';
+    var ph=el('div','khm-ph');ph.style.setProperty('--c',color);
+    var photo=String(p.photo||'');
+    if(photo&&!/^javascript:/i.test(photo)){
+      var img=el('img');img.alt=localized(story,'person')||localized(story,'title')||'';img.loading='lazy';img.src=photo;
+      img.addEventListener('error',function(){ph.replaceChildren(el('span','kh-world-avatar',Array.from(img.alt||'★')[0]||'★'))});
+      ph.appendChild(img);
+    }else{ph.appendChild(el('span','kh-world-avatar',Array.from(localized(story,'person')||'★')[0]||'★'))}
+    card.appendChild(ph);
+    card.appendChild(el('div','khm-name',localized(story,'person')||localized(story,'title')||category));
+    var place=localizedPlace(p),label=localizedValue(p.place_label);
+    if(place)card.appendChild(el('div','khm-place',(label||'')+place));
+    var sourceUrl=String(p.source_url||'');
+    if(/^https:\/\//i.test(sourceUrl)){var src=el('a','khm-source',t('source')+': '+localizedValue(p.source_name));src.href=sourceUrl;src.target='_blank';src.rel='noopener noreferrer';card.appendChild(src)}
+    if(p.approximate)card.appendChild(el('div','khm-approx',t('approximate')));
+    var sec=el('div','khm-story',category);sec.style.setProperty('--c',color);card.appendChild(sec);
+    var go=el('a','khm-go',localized(story,'title')||t('stories'));go.href=safeStoryPath(story);card.appendChild(go);
+    card.style.setProperty('--c',color);
+    return card;
+  }
   function selectPoint(q){
     if(!q||!q.p||!q.p.story)return;
-    selectedPoint=q.p;canvas.style.transformOrigin=Math.round(q.x)+'px '+Math.round(q.y)+'px';var story=q.p.story;
-    var placeText=localizedPlace(q.p);
-    if(q.p.approximate)placeText += (placeText?' — ':'')+t('approximate');
-    var sectionNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};var category=(sectionNames[lang()]||sectionNames.ar)[story.section]||sectionNames.ar[story.section]||t('stories');selectedInfo.textContent=[placeText,category].filter(Boolean).join(' — ');
-    selectedInfo.hidden=false;selectedLink.textContent=localized(story,'title')||localized(story,'person')||category;
-    selectedLink.href=safeStoryPath(story);selectedLink.hidden=false;
-    sourceLink.textContent=t('source')+': '+localized(q.p.source_name,'label');
-    sourceLink.href=q.p.source_url;sourceLink.hidden=false;
-    renderStoryList();
+    selectedPoint=q.p;canvas.style.transformOrigin=Math.round(q.x)+'px '+Math.round(q.y)+'px';
+    selectedCard.replaceChildren(buildStoryCard(q.p));selectedCard.hidden=false;
+    selectedInfo.hidden=true;selectedLink.hidden=true;sourceLink.hidden=true;
+    renderStoryList();requestDraw();
+    document.dispatchEvent(new CustomEvent('kh:world-select',{detail:{storyId:String(q.p.story.id),lat:q.p.lat,lng:q.p.lng}}));
   }
   function draw(){
     raf=0;
@@ -127,25 +131,78 @@
       ctx.ellipse(cx,yy,ww,Math.max(2,r*.025),0,0,Math.PI*2);ctx.stroke();
     }
     for(var lon=-60;lon<=60;lon+=30){ctx.beginPath();ctx.ellipse(cx,cy,Math.max(2,r*Math.cos(lon*Math.PI/180)),r,0,0,Math.PI*2);ctx.stroke()}
-    /* Build recognizable, connected continent masses from the documented silhouette grid.
-       The overlapping cells avoid the dotted-bead look while keeping the canvas lightweight. */
-    ctx.save();
-    ctx.fillStyle='rgba(117,205,190,.62)';
-    for(var gla=-56;gla<=78;gla+=5){
-      for(var glo=-176;glo<=180;glo+=5){
-        if(!isLand(gla,glo))continue;
-        var glar=gla*Math.PI/180,glor=glo*Math.PI/180+rot;
-        var gx=Math.cos(glar)*Math.sin(glor);
-        var gy=Math.sin(glar)*Math.cos(tilt)-Math.cos(glar)*Math.cos(glor)*Math.sin(tilt);
-        var gz=Math.sin(glar)*Math.sin(tilt)+Math.cos(glar)*Math.cos(glor)*Math.cos(tilt);
-        if(gz<=.035)continue;
-        var dot=Math.max(2.2,r*.047*gz);
-        ctx.beginPath();
-        ctx.ellipse(cx+gx*r,cy-gy*r,dot*1.34,dot,0,0,Math.PI*2);
-        ctx.fill();
-      }
+    function geo3(coord){
+      var gla=Number(coord[1])*Math.PI/180,glo=Number(coord[0])*Math.PI/180+rot;
+      var x=Math.cos(gla)*Math.sin(glo);
+      var y=Math.sin(gla)*Math.cos(tilt)-Math.cos(gla)*Math.cos(glo)*Math.sin(tilt);
+      var z=Math.sin(gla)*Math.sin(tilt)+Math.cos(gla)*Math.cos(glo)*Math.cos(tilt);
+      return {x:x,y:y,z:z};
     }
-    ctx.restore();
+    function denseRing(ring){
+      var out=[];
+      for(var ri=0;ri<ring.length;ri++){
+        var a=ring[ri],b=ring[(ri+1)%ring.length];
+        if(ri===0)out.push(a);
+        var dl=b[0]-a[0];if(dl>180)dl-=360;else if(dl< -180)dl+=360;
+        var steps=Math.max(1,Math.ceil(Math.max(Math.abs(dl),Math.abs(b[1]-a[1]))/3));
+        for(var st=1;st<steps;st++)out.push([a[0]+dl*st/steps,a[1]+(b[1]-a[1])*st/steps]);
+        out.push([a[0]+dl,b[1]]);
+      }
+      return out;
+    }
+    function drawLandRing(ring){
+      if(!ring||ring.length<3)return;
+      var pts=denseRing(ring).map(geo3),clipped=[];
+      for(var pi=0;pi<pts.length;pi++){
+        var prev=pts[(pi+pts.length-1)%pts.length],cur=pts[pi],pin=prev.z>=0,cin=cur.z>=0;
+        if(pin!==cin){
+          var tt=prev.z/(prev.z-cur.z),ix=prev.x+(cur.x-prev.x)*tt,iy=prev.y+(cur.y-prev.y)*tt,ilen=Math.hypot(ix,iy)||1;
+          clipped.push({x:ix/ilen,y:iy/ilen,z:0});
+        }
+        if(cin)clipped.push(cur);
+      }
+      if(clipped.length<3)return;
+      ctx.beginPath();ctx.moveTo(cx+clipped[0].x*r,cy-clipped[0].y*r);
+      for(var ci=1;ci<clipped.length;ci++)ctx.lineTo(cx+clipped[ci].x*r,cy-clipped[ci].y*r);
+      ctx.closePath();ctx.fillStyle='rgba(117,205,190,.72)';ctx.fill();
+      ctx.strokeStyle='rgba(176,232,219,.24)';ctx.lineWidth=.45;ctx.stroke();
+    }
+    function drawBorder(coords){
+      if(!coords||coords.length<2)return;
+      var line=[];
+      for(var bi=0;bi<coords.length;bi++){
+        var cur=geo3(coords[bi]),prev=bi?geo3(coords[bi-1]):null;
+        if(prev&&Math.abs(coords[bi][0]-coords[bi-1][0])>180){if(line.length>1){ctx.beginPath();ctx.moveTo(line[0].x,line[0].y);for(var li=1;li<line.length;li++)ctx.lineTo(line[li].x,line[li].y);ctx.stroke()}line=[]}
+        if(prev&&prev.z>=0&&cur.z<0){var tt=prev.z/(prev.z-cur.z),ix=prev.x+(cur.x-prev.x)*tt,iy=prev.y+(cur.y-prev.y)*tt,ilen=Math.hypot(ix,iy)||1;line.push({x:cx+ix/ilen*r,y:cy-iy/ilen*r})}
+        if(cur.z>=0)line.push({x:cx+cur.x*r,y:cy-cur.y*r});
+        else if(line.length>1){ctx.beginPath();ctx.moveTo(line[0].x,line[0].y);for(var li2=1;li2<line.length;li2++)ctx.lineTo(line[li2].x,line[li2].y);ctx.stroke();line=[]}
+      }
+      if(line.length>1){ctx.beginPath();ctx.moveTo(line[0].x,line[0].y);for(var lj=1;lj<line.length;lj++)ctx.lineTo(line[lj].x,line[lj].y);ctx.stroke()}
+    }
+    if(geography&&Array.isArray(geography.land)){
+      ctx.save();ctx.fillStyle='rgba(117,205,190,.72)';
+      geography.land.forEach(function(g){
+        if(g.type==='Polygon')drawLandRing(g.coordinates[0]);
+        else if(g.type==='MultiPolygon')g.coordinates.forEach(function(poly){if(poly[0])drawLandRing(poly[0])});
+      });
+      ctx.restore();
+    }
+    if(geography&&Array.isArray(geography.borders)){
+      ctx.save();ctx.strokeStyle='rgba(214,231,220,.32)';ctx.lineWidth=.55;
+      geography.borders.forEach(function(g){
+        var lines=g.type==='LineString'?[g.coordinates]:g.type==='MultiLineString'?g.coordinates:[];
+        lines.forEach(drawBorder);
+      });
+      ctx.restore();
+    }
+    if(geography&&Array.isArray(geography.cities)){
+      geography.cities.forEach(function(city){
+        var q=geo3([city.lng,city.lat]);if(q.z<=.02)return;
+        var rr=city.population>=5000000?1.7:1.1;
+        ctx.beginPath();ctx.arc(cx+q.x*r,cy-q.y*r,rr,0,Math.PI*2);
+        ctx.fillStyle='rgba(230,241,238,.62)';ctx.fill();
+      });
+    }
     var projected=[];
     points.forEach(function(p,i){
       var la=p.lat*Math.PI/180,lo=p.lng*Math.PI/180+rot;
@@ -157,8 +214,9 @@
     projected.forEach(function(q){
       var rr=2.8+Math.max(0,q.z)*2.3;
       var chosen=!!(selectedPoint&&selectedPoint.story===q.p.story);
-      ctx.beginPath();ctx.arc(q.x,q.y,rr*(chosen?4.1:2.8),0,Math.PI*2);ctx.fillStyle=chosen?'rgba(255,244,198,.2)':'rgba(240,200,120,.10)';ctx.fill();
-      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle=chosen?'#fff4c6':'#f3cf85';ctx.fill();
+      var markColor=sectionColor(q.p.story.section);
+      ctx.beginPath();ctx.arc(q.x,q.y,rr*(chosen?4.1:2.8),0,Math.PI*2);ctx.fillStyle=chosen?'rgba(255,244,198,.22)':markColor+'2e';ctx.fill();
+      ctx.beginPath();ctx.arc(q.x,q.y,rr,0,Math.PI*2);ctx.fillStyle=chosen?'#fff4c6':markColor;ctx.fill();
       ctx.strokeStyle='rgba(255,245,220,.9)';ctx.lineWidth=1;ctx.stroke();
     });
     ctx.restore();
@@ -188,6 +246,7 @@
     },reduced?0:680);
   });
   requestDraw();
+  fetch('khaledoon/assets/geo/natural-earth-110m.json',{cache:'force-cache'}).then(function(r){if(!r.ok)throw new Error('Natural Earth data unavailable');return r.json()}).then(function(g){if(g&&Array.isArray(g.land)&&Array.isArray(g.borders)&&Array.isArray(g.cities)){geography=g;requestDraw()}}).catch(function(){status.textContent=t('empty')});
   function renderStoryList(){
     list.replaceChildren();
     points.slice(0,8).forEach(function(p){
@@ -202,7 +261,7 @@
     var sourceNames=p&&p.source_name;
     if(!Number.isFinite(lat)||!Number.isFinite(lng)||Math.abs(lat)>90||Math.abs(lng)>180)return null;
     if(!/^https:\/\//i.test(sourceUrl)||!sourceNames||!langs.every(function(l){return typeof sourceNames[l]==='string'&&sourceNames[l].trim()}))return null;
-    return {lat:lat,lng:lng,story:s,place:p.place||null,place_label:p.place_label||'',approximate:p.approximate===true,source_url:sourceUrl,source_name:sourceNames};
+    return {lat:lat,lng:lng,story:s,place:p.place||null,place_label:p.place_label||'',approximate:p.approximate===true,source_url:sourceUrl,source_name:sourceNames,photo:p.photo||s.photo||'',credit:p.credit||''};
   }
   Promise.all([
     fetch('stories/index.json',{cache:'no-cache'}).then(function(r){if(!r.ok)throw 0;return r.json()}),
