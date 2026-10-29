@@ -1,6 +1,7 @@
 name: Homepage language flow checks
 # Includes source-data and marker synchronization checks for the cinematic globe.
 # The globe regression check also guards the section-color and location-warning parity.
+# Hidden stories must remain hidden in both the globe and the main map.
 
 on:
   pull_request:
