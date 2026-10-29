@@ -8,8 +8,7 @@
   'use strict';
   if (window.__khMap) return;
   window.__khMap = true;
-  /* The interactive globe is the primary explorer on the homepage. Keep this legacy map module available for compatibility, but do not inject a second flat map when the globe is present. */
-  if (document.getElementById('khWorld')) return;
+  /* Keep the existing interactive map available below the globe. The globe's handoff link targets #khMap, so both explorers must be present. */
   var main = document.querySelector('main');
   if (!main) return;
 
