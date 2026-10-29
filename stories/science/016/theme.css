@@ -285,3 +285,28 @@ html[data-theme=light] #history-note{border-inline-start-color:#bb8b2e}
  #title,.section h2,.block p,.speaker,#subtitle,#summary,#student,#history-note{color:#111!important;text-shadow:none!important}
  #cover figure img{max-height:280px}
 }
+/* Review correction: theme state is stored on <html>; keep all surfaces readable in both modes. */
+html[data-theme="light"] body{background:radial-gradient(ellipse at 82% 0%,#d9f2f4 0%,#f7f5ed 60%,#fff 100%);color:#21343a}
+html[data-theme="light"] header{background:rgba(255,255,250,.96);border-bottom-color:#b8dce0;color:#1b3740}
+html[data-theme="light"] .langs button{background:#f4fbfb;color:#164956;border-color:#9ccbd2}
+html[data-theme="light"] .langs button[aria-pressed="true"]{background:#126477;color:#fff}
+html[data-theme="light"] #theme-toggle{background:#fff;color:#164956;border-color:#9ccbd2}
+html[data-theme="light"] .section,html[data-theme="light"] .section.sources{background:linear-gradient(145deg,#fffefa,#eef8f7);color:#243a40;border-color:#c7e1e2}
+html[data-theme="light"] .section p,html[data-theme="light"] .section li,html[data-theme="light"] .section a{color:#29474e}
+html[data-theme="light"] #gallery figure{background:#fff;color:#29474e;border-color:#bddde0}
+html[data-theme="light"] #gallery figcaption{color:#415a61}
+html[data-theme="light"] #quiz .q{color:#21343a;border-color:#c5dfe1}
+html[data-theme="light"] #quiz .options button{background:#fff;color:#233c43;border-color:#b6d4d8}
+html[data-theme="light"] #quiz .options button:disabled{opacity:.9}
+html[data-theme="light"] #quiz .explain{background:#e9f5f4;color:#23454c}
+html[data-theme="light"] .story-intro-modal{background:rgba(229,243,243,.9)}
+html[data-theme="light"] .intro-card{background:linear-gradient(135deg,#f7ffff,#fffdf7);color:#213a42}
+html[data-theme="light"] .intro-copy h2{color:#145f70}
+html[data-theme="light"] .intro-copy p{color:#3f5960}
+html[data-theme="light"] .story-actions button,html[data-theme="light"] .story-actions a{background:#fff;color:#174c59;border-color:#a9d5d9}
+html[data-theme="light"] .story-actions #print-story{background:#126477;color:#fff;border-color:#126477}
+html[data-theme="light"] #history-note{background:#fff7e3;color:#4d4738}
+html[data-theme="light"] .quiz-next{background:#126477;color:#fff;border:0}
+html[data-theme="dark"] #quiz .q{color:#eef8fa}
+.quiz-next{display:inline-flex;align-items:center;justify-content:center;margin-top:16px;padding:11px 22px;border-radius:12px;background:#9beaf2;color:#08212c;font:800 1rem Cairo,sans-serif;cursor:pointer}
+.quiz-finish{padding:16px;margin-top:16px;border-radius:14px;border:1px solid #78d9e855;text-align:center;font-weight:800}
