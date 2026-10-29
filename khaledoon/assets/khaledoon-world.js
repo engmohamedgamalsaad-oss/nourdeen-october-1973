@@ -46,18 +46,6 @@
   wrap.append(head,stage);
   section.append(wrap);
   hero.insertAdjacentElement('afterend',section);
-  // A single journey: the globe becomes the visual doorway into the existing verified story map.
-  var mapLink=section.querySelector('[data-world-text="map"]');
-  if(mapLink) mapLink.addEventListener('click',function(){
-    var map=document.getElementById('khMap');
-    section.classList.add('kh-world-leaving');
-    if(map){map.classList.add('kh-map-arriving');window.setTimeout(function(){map.classList.add('kh-map-arrived')},80)}
-    // Let the transition begin before the browser scrolls to the map.
-    window.setTimeout(function(){
-      var target=document.getElementById('khMap');
-      if(target) target.scrollIntoView({behavior:reduced?'auto':'smooth',block:'start'});
-    },reduced?0:180);
-  });
   function labels(){
     section.querySelectorAll('[data-world-text]').forEach(function(n){n.textContent=t(n.dataset.worldText)});
     canvas.setAttribute('aria-label',t('title')+'. '+t('hint'));
@@ -89,8 +77,8 @@
     selectedPoint=q.p;var story=q.p.story;
     var placeText=localizedPlace(q.p);
     if(q.p.approximate)placeText += (placeText?' — ':'')+t('approximate');
-    selectedInfo.textContent=[placeText,localized(story,'person')||localized(story,'title')||story.id].filter(Boolean).join(' — ');
-    selectedInfo.hidden=false;selectedLink.textContent=localized(story,'title')||localized(story,'person')||story.id;
+    var sectionNames={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};var category=(sectionNames[lang()]||sectionNames.ar)[story.section]||sectionNames.ar[story.section]||t('stories');selectedInfo.textContent=[placeText,category].filter(Boolean).join(' — ');
+    selectedInfo.hidden=false;selectedLink.textContent=category;
     selectedLink.href=safeStoryPath(story);selectedLink.hidden=false;
     sourceLink.textContent=t('source')+': '+localized(q.p.source_name,'label');
     sourceLink.href=q.p.source_url;sourceLink.hidden=false;
@@ -142,7 +130,7 @@
   function renderStoryList(){
     list.replaceChildren();
     points.slice(0,8).forEach(function(p){
-      var a=el('a','kh-world-chip',localized(p.story,'person')||localized(p.story,'title')||p.story.id);
+      var labels={ar:{october:'حكايات أكتوبر 1973',history:'التاريخ والحضارات',science:'العلم والعلماء',women:'نساء خالدات',people:'الأدب والفنون والرياضة',curriculum:'المناهج المصرية',islamic:'التاريخ الإسلامي',readers:'اقتراحات القراء'},en:{october:'October 1973 Stories',history:'History and Civilizations',science:'Science and Scientists',women:'Women Who Made History',people:'Literature, Arts and Sports',curriculum:'Egyptian Curriculum',islamic:'Islamic History',readers:'Reader Suggestions'},fr:{october:'Récits d’octobre 1973',history:'Histoire et civilisations',science:'Sciences et scientifiques',women:'Femmes marquantes',people:'Littérature, arts et sport',curriculum:'Programme scolaire égyptien',islamic:'Histoire islamique',readers:'Suggestions des lecteurs'},it:{october:'Storie dell’ottobre 1973',history:'Storia e civiltà',science:'Scienza e scienziati',women:'Donne che hanno fatto la storia',people:'Letteratura, arte e sport',curriculum:'Programma scolastico egiziano',islamic:'Storia islamica',readers:'Suggerimenti dei lettori'},de:{october:'Geschichten zum Oktober 1973',history:'Geschichte und Zivilisationen',science:'Wissenschaft und Forschende',women:'Frauen der Geschichte',people:'Literatur, Kunst und Sport',curriculum:'Ägyptischer Lehrplan',islamic:'Islamische Geschichte',readers:'Leservorschläge'}};var category=(labels[lang()]||labels.ar)[p.story.section]||(labels.ar[p.story.section]||t('stories'));var a=el('a','kh-world-chip',category);a.style.setProperty('--section-color',({october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a',readers:'#80d5c7'})[p.story.section]||'#b8874b');
       if(selectedPoint&&selectedPoint.story===p.story)a.setAttribute('aria-current','true');
       a.href=safeStoryPath(p.story);list.appendChild(a);
     });

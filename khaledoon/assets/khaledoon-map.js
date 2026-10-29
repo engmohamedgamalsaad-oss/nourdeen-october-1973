@@ -8,6 +8,8 @@
   'use strict';
   if (window.__khMap) return;
   window.__khMap = true;
+  /* The interactive globe is the primary explorer on the homepage. Keep this legacy map module available for compatibility, but do not inject a second flat map when the globe is present. */
+  if (document.getElementById('khWorld')) return;
   var main = document.querySelector('main');
   if (!main) return;
 
@@ -190,7 +192,7 @@
       c.appendChild(source);
     }
     if (p.approximate === true) c.appendChild(el('div', 'khm-approx', T('approx')));
-    c.appendChild(el('div', 'khm-story', pick(s, 'title', l)));
+    c.appendChild(el('div', 'khm-story', (SEC[e.sec] && SEC[e.sec].t[l]) || SEC[e.sec].t.ar));
     if (p.credit && validPhoto(p.photo)) c.appendChild(el('div', 'khm-credit', T('credit') + p.credit));
     var a = el('a', 'khm-go', T('read'));
     a.href = storyHref(s);

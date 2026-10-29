@@ -67,8 +67,9 @@ async function main() {
   assert.equal(await page.locator('#print-story').count(), 1, 'print control should exist');
   assert.match(await page.locator('#share-whatsapp').getAttribute('href'), /wa\.me/);
   assert.match(await page.locator('#share-facebook').getAttribute('href'), /facebook\.com\/sharer/);
-  assert.equal(await page.locator('#quiz .q').count(), story.quiz.length, 'all V2 quiz questions should render');
-  assert.equal(await page.locator('#gallery figure').count(), story.images.length, 'all localized gallery images should render');
+  assert.equal(await page.locator('#quiz .q').count(), 1, 'the quiz should reveal only one question at a time');
+  const galleryImages = story.images.filter(image => String(image.url || image.path || '') !== String(story.cover.url || story.cover.path || ''));
+  assert.equal(await page.locator('#gallery figure').count(), galleryImages.length, 'the gallery should not repeat the cover image');
   assert.equal(await page.locator('#map-section').isVisible(), true, 'verified map location should render');
   assert.match(await page.locator('#map-link').getAttribute('href'), /openstreetmap\.org/);
   await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-ar.png'), fullPage: true, animations: 'disabled' });
@@ -77,17 +78,17 @@ async function main() {
   await page.waitForFunction(() => document.documentElement.lang === 'en');
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
   assert.equal(await page.locator('html').getAttribute('dir'), 'ltr');
-  assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.en.caption), 'gallery caption should switch to English');
+  assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n.en.caption), 'gallery caption should switch to English');
   assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n.en.title), 'source title should switch to English');
-  assert.equal(await page.locator('#quiz .q').count(), story.quiz.length);
+  assert.equal(await page.locator('#quiz .q').count(), 1, 'English should still show one quiz question at a time');
   for (const lang of ['it', 'de']) {
     await page.locator('[data-lang="' + lang + '"]').click();
     await page.waitForFunction(expected => document.documentElement.lang === expected, lang);
     assert.equal(await page.locator('#title').textContent(), story.i18n[lang].title, lang + ' title should be localized');
     assert.equal(await page.locator('html').getAttribute('dir'), 'ltr', lang + ' should use LTR');
-    assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n[lang].caption), lang + ' gallery caption should be localized');
+    assert.ok((await page.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n[lang].caption), lang + ' gallery caption should be localized');
     assert.ok((await page.locator('#sources a').first().textContent()).includes(story.sources[0].i18n[lang].title), lang + ' source title should be localized');
-    assert.equal(await page.locator('#quiz .q').count(), story.quiz.length, lang + ' should retain all quiz questions');
+    assert.equal(await page.locator('#quiz .q').count(), 1, lang + ' should show one quiz question at a time');
   }
   await page.locator('[data-lang="en"]').click();
   await page.waitForFunction(() => document.documentElement.lang === 'en');
@@ -98,6 +99,9 @@ async function main() {
   const firstCorrect = story.quiz[0].correct_option;
   await page.locator('#quiz .q').first().locator('.options button').nth(firstCorrect).click();
   assert.equal(await page.locator('#quiz .q').first().locator('.explain').count(), 1, 'quiz answer feedback should render');
+  await page.locator('#quiz .quiz-next').click();
+  assert.equal(await page.locator('#quiz .q').count(), 1, 'next question should replace the previous question');
+  assert.ok((await page.locator('#quiz .q').first().textContent()).includes(story.quiz[1].i18n.en.question), 'next question should appear after answering the first');
   await page.locator('#theme-toggle').click();
   assert.equal(await page.locator('body').getAttribute('data-theme'), 'light', 'theme toggle should switch to light mode');
   assert.equal(await page.locator('#sources a').count(), story.sources.length, 'all sources should render');
@@ -149,12 +153,12 @@ async function main() {
   await mobile.waitForFunction(() => document.documentElement.lang === 'fr');
   assert.equal(await mobile.locator('#title').textContent(), story.i18n.fr.title);
   assert.equal(await mobile.locator('html').getAttribute('dir'), 'ltr');
-  assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(story.images[0].i18n.fr.caption), 'gallery caption should switch to French');
+  assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n.fr.caption), 'gallery caption should switch to French');
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 1, 'mobile story page must not overflow horizontally; measured ' + overflow + 'px');
   await mobile.screenshot({ path: path.join(artifactDir, 'v2-story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
   assert.deepEqual(errors, [], 'V2 story page should not throw browser errors');
-  console.log(JSON.stringify({ ok: true, story: story.slug, languagesChecked: ['ar','en','fr'], quizQuestions: story.quiz.length, galleryImages: story.images.length, sources: story.sources.length, mobileOverflowPx: overflow, screenshots: artifactDir }, null, 2));
+  console.log(JSON.stringify({ ok: true, story: story.slug, languagesChecked: ['ar','en','fr'], quizQuestions: story.quiz.length, galleryImages: galleryImages.length, sources: story.sources.length, mobileOverflowPx: overflow, screenshots: artifactDir }, null, 2));
 }
 main().catch(error => { console.error(error.stack || error); process.exitCode = 1; }).finally(async () => {
   if (browser) await browser.close().catch(() => {});
