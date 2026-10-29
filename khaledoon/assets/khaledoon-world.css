@@ -97,3 +97,17 @@ html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 3
 #khWorld.kh-world-leaving{filter:saturate(1.08)}
 #khMap.kh-map-arriving .khm-box{border-color:rgba(240,200,120,.7);box-shadow:0 0 0 2px rgba(240,200,120,.12),0 26px 68px rgba(0,0,0,.2)}
 @media(prefers-reduced-motion:reduce){#khWorld+#khMap .khm-box{transition:none!important}}
+
+/* Natural Earth globe: keep the popup visually aligned with the existing character-map card. */
+.kh-world-story-card{margin-top:12px;max-width:280px;padding:14px;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--ink);box-shadow:0 16px 38px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.04)}
+.kh-world-story-card[hidden]{display:none!important}
+.kh-world-story-card .khm-card{gap:8px}
+.kh-world-story-card .khm-ph{border-color:var(--c,#b8874b);box-shadow:0 0 0 3px color-mix(in srgb,var(--c,#b8874b) 18%,transparent)}
+.kh-world-story-card .khm-story{color:var(--c,#b8874b)}
+.kh-world-story-card .khm-go{display:inline-flex;align-items:center;justify-content:center;max-width:100%;padding:8px 13px;border:1px solid var(--c,#b8874b);border-radius:999px;color:var(--c,#b8874b);text-decoration:none;font-weight:700}
+.kh-world-story-card .khm-go:hover{background:var(--c,#b8874b);color:#07151f}
+.kh-world-avatar{display:grid;place-items:center;width:100%;height:100%;font-size:2rem;font-weight:800;color:var(--c,#b8874b);background:color-mix(in srgb,var(--c,#b8874b) 14%,transparent)}
+.kh-world-attribution{display:inline-block;margin-top:10px;font-size:11px;color:var(--muted);text-decoration:underline;text-underline-offset:3px}
+.kh-world-status{overflow-wrap:anywhere}
+@media(max-width:780px){.kh-world-story-card{max-width:none}.kh-world-story-card .khm-ph{width:76px;height:76px}}
+@media(prefers-reduced-motion:reduce){.kh-world-story-card,.kh-world-story-card *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
