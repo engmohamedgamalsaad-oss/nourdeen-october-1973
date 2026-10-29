@@ -45,6 +45,8 @@ for (const token of [
   'sectionColor(q.p.story.section)'
 ]) assert.ok(world.includes(token), 'globe integration missing: ' + token);
 assert.ok(css.includes('.kh-world-story-card'), 'globe character popup needs its card styles');
+assert.ok(world.includes('a.style.setProperty(\'--section-color\',sectionColor(section))'), 'story list chips must use the same live section palette as globe markers');
+assert.ok(world.includes("approximate:'الموقع تقريبي ويحتاج إلى مراجعة'"), 'approximate-location notice must match the interactive map card');
 assert.ok(map.includes("document.addEventListener('kh:world-select'"), 'globe selection must hand off to the existing interactive map');
 assert.ok(bundle.includes("files.push({path:'stories/places.json'"), 'story publishing bundle must update the shared map places index');
 assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'), 'publisher must synchronize a new story location into stories/places.json');
