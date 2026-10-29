@@ -106,7 +106,7 @@
   var points = [];
   var storiesAll = [];
   var hidden = {};
-  var map = null, group = null, markers = [];
+  var map = null, group = null, markers = [], pendingStoryId = null;
 
   function validPhoto(p) { return typeof p === 'string' && /^[\w\-.\/]+\.(jpe?g|png|webp|svg)$/i.test(p) && p.indexOf('..') < 0 && p.charAt(0) !== '/'; }
   function validNum(n, lim) { return typeof n === 'number' && isFinite(n) && Math.abs(n) <= lim; }
@@ -226,6 +226,18 @@
     labels();
   }
 
+  function focusStory(id) {
+    pendingStoryId=String(id||'');
+    if(!map||!markers.length||!pendingStoryId)return;
+    var marker=markers.find(function(m){return m._storyId===pendingStoryId;});
+    if(!marker)return;
+    var entry=storiesAll.find(function(e){return String(e.s.id)===pendingStoryId;});
+    if(entry&&hidden[entry.sec]){hidden[entry.sec]=false;var chip=legend.querySelector('[data-sec="'+entry.sec+'"]');if(chip)chip.setAttribute('aria-pressed','true');refresh(false)}
+    map.setView(marker.getLatLng(),Math.max(map.getZoom(),6),{animate:!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches),duration:.7});
+    marker.openPopup();
+  }
+  document.addEventListener('kh:world-select',function(e){if(e&&e.detail&&e.detail.storyId)focusStory(e.detail.storyId)});
+
   function refresh(fit) {
     if (!map || !group) return;
     group.clearLayers();
@@ -249,12 +261,13 @@
         title: pick(e.s, 'person', lang()), keyboard: true
       });
       m._sec = e.sec;
+      m._storyId = String(e.s.id);
       m.bindPopup(function () { return card(e); }, { className: 'khm-popup', maxWidth: 260 });
       markers.push(m);
     });
     map.addLayer(group);
     refresh(true);
-    setTimeout(function () { map.invalidateSize(); }, 200);
+    setTimeout(function () { map.invalidateSize(); if(pendingStoryId)focusStory(pendingStoryId); }, 200);
   }
 
   function fallbackList() {
