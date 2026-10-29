@@ -58,3 +58,18 @@ html.kh-world-motion-ready .kh-reveal-item.kh-reveal-visible{opacity:1;transform
 #khMap.kh-map-arrived .khm-box{animation:khMapReveal .7s cubic-bezier(.2,.75,.25,1) both}
 @keyframes khMapReveal{from{opacity:.72;transform:translateY(14px);filter:blur(2px)}to{opacity:1;transform:translateY(0);filter:blur(0)}}
 @media(prefers-reduced-motion:reduce){.kh-world,#khMap .khm-box{transition:none!important;animation:none!important}.kh-world.kh-world-leaving{transform:none;filter:none}}
+
+
+/* Refined globe presentation: richer atmosphere, depth, and restrained orbital accents. */
+.kh-world{padding-block:clamp(28px,4vw,54px);background:radial-gradient(ellipse at 48% 45%,rgba(28,113,145,.17),transparent 48%),linear-gradient(180deg,rgba(6,20,34,.04),rgba(6,20,34,.22))}
+.kh-world-head{margin-bottom:clamp(18px,3vw,30px)}
+.kh-world-stage{min-height:360px;border-radius:28px;border-color:rgba(240,200,120,.28);background:radial-gradient(ellipse at 32% 44%,rgba(48,153,176,.18),transparent 40%),linear-gradient(145deg,rgba(11,35,56,.95),rgba(4,13,27,.98));box-shadow:0 24px 65px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.07)}
+.kh-world-canvas{height:390px;filter:drop-shadow(0 10px 22px rgba(32,143,175,.2));outline:none}
+.kh-world-canvas:focus-visible{outline:2px solid #f0c878;outline-offset:5px;border-radius:18px}
+.kh-world-side{position:relative}
+.kh-world-side:before{content:"";display:block;width:64px;height:3px;margin:0 0 16px;background:linear-gradient(90deg,#eac57d,#69c9d7,transparent);border-radius:99px}
+.kh-world-hint{display:inline-flex;padding:6px 11px;border:1px solid rgba(240,200,120,.25);border-radius:999px;background:rgba(240,200,120,.07)}
+.kh-world-chip{border-color:rgba(119,203,218,.3);background:linear-gradient(135deg,rgba(20,68,87,.62),rgba(7,26,43,.76));box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
+.kh-world-chip:hover{border-color:#f0c878;background:rgba(240,200,120,.1)}
+html[data-theme="light"] .kh-world-stage{background:radial-gradient(ellipse at 32% 44%,rgba(48,153,176,.2),transparent 40%),linear-gradient(145deg,#0c2d45,#071626);box-shadow:0 20px 50px rgba(18,51,70,.18)}
+@media(max-width:780px){.kh-world-stage{border-radius:22px}.kh-world-canvas{height:min(82vw,350px);min-height:260px}.kh-world-side{padding-top:10px}}
