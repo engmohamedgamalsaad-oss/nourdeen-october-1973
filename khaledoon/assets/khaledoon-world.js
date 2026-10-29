@@ -112,7 +112,7 @@
     var w=Math.max(260,rect.width),h=Math.max(250,Math.min(480,rect.height||360));
     if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr)}
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-    var r=Math.min(w*.38,h*.43),cx=w*.48,cy=h*.5;
+    var r=Math.min(w*.40,h*.45),cx=w*.49,cy=h*.5;
     var glow=ctx.createRadialGradient(cx-r*.22,cy-r*.25,r*.05,cx,cy,r*1.25);
     glow.addColorStop(0,'rgba(42,139,155,.25)');glow.addColorStop(.7,'rgba(7,36,52,.12)');glow.addColorStop(1,'rgba(5,15,29,0)');
     ctx.fillStyle=glow;ctx.fillRect(0,0,w,h);
@@ -127,9 +127,10 @@
       ctx.ellipse(cx,yy,ww,Math.max(2,r*.025),0,0,Math.PI*2);ctx.stroke();
     }
     for(var lon=-60;lon<=60;lon+=30){ctx.beginPath();ctx.ellipse(cx,cy,Math.max(2,r*Math.cos(lon*Math.PI/180)),r,0,0,Math.PI*2);ctx.stroke()}
-    /* Draw sampled continent silhouettes beneath verified location markers. */
+    /* Build recognizable, connected continent masses from the documented silhouette grid.
+       The overlapping cells avoid the dotted-bead look while keeping the canvas lightweight. */
     ctx.save();
-    ctx.fillStyle='rgba(108,190,190,.36)';
+    ctx.fillStyle='rgba(117,205,190,.62)';
     for(var gla=-56;gla<=78;gla+=5){
       for(var glo=-176;glo<=180;glo+=5){
         if(!isLand(gla,glo))continue;
@@ -137,9 +138,11 @@
         var gx=Math.cos(glar)*Math.sin(glor);
         var gy=Math.sin(glar)*Math.cos(tilt)-Math.cos(glar)*Math.cos(glor)*Math.sin(tilt);
         var gz=Math.sin(glar)*Math.sin(tilt)+Math.cos(glar)*Math.cos(glor)*Math.cos(tilt);
-        if(gz<=.04)continue;
-        var dot=Math.max(1.2,r*.014*gz);
-        ctx.beginPath();ctx.ellipse(cx+gx*r,cy-gy*r,dot*1.45,dot,0,0,Math.PI*2);ctx.fill();
+        if(gz<=.035)continue;
+        var dot=Math.max(2.2,r*.047*gz);
+        ctx.beginPath();
+        ctx.ellipse(cx+gx*r,cy-gy*r,dot*1.34,dot,0,0,Math.PI*2);
+        ctx.fill();
       }
     }
     ctx.restore();
@@ -150,25 +153,7 @@
       if(z>-.05)projected.push({x:cx+x*r,y:cy-y*r,z:z,p:p,i:i});
     });
     hitTargets=projected.map(function(q){return {x:q.x,y:q.y,r:Math.max(10,2.8+Math.max(0,q.z)*2.3),p:q.p,z:q.z}});
-    /* Fine gold/cyan links are a visual story network, not historical travel routes. */
-    ctx.save();
-    ctx.lineWidth=.8;
-    projected.forEach(function(q,i){
-      var nearest=null,nearestD=Infinity;
-      for(var j=0;j<projected.length;j++){
-        if(i===j)continue;
-        var other=projected[j],distance=Math.hypot(other.x-q.x,other.y-q.y);
-        if(distance<nearestD){nearest=other;nearestD=distance}
-      }
-      if(nearest&&nearestD<r*.72&&projected.indexOf(nearest)>i){
-        ctx.beginPath();ctx.moveTo(q.x,q.y);
-        var mx=(q.x+nearest.x)/2,my=(q.y+nearest.y)/2-r*.035;
-        ctx.quadraticCurveTo(mx,my,nearest.x,nearest.y);
-        ctx.strokeStyle='rgba(138,217,232,'+(0.12+Math.min(q.z,nearest.z)*.12)+')';
-        ctx.stroke();
-      }
-    });
-    ctx.restore();
+    /* Story markers remain independent: no decorative lines imply unverified historical routes. */
     projected.forEach(function(q){
       var rr=2.8+Math.max(0,q.z)*2.3;
       var chosen=!!(selectedPoint&&selectedPoint.story===q.p.story);
@@ -180,7 +165,7 @@
     ctx.beginPath();ctx.arc(cx,cy,r+1,0,Math.PI*2);ctx.strokeStyle='rgba(240,200,120,.55)';ctx.lineWidth=1;ctx.stroke();
     ctx.beginPath();ctx.ellipse(cx,cy,r*1.18,r*.2,-.35,0,Math.PI*2);ctx.strokeStyle='rgba(240,200,120,.28)';ctx.stroke();
     ctx.beginPath();ctx.ellipse(cx,cy,r*1.11,r*.16,-.35,0,Math.PI*2);ctx.strokeStyle='rgba(240,200,120,.14)';ctx.stroke();
-    if(!drag&&!reduced)rot+=.0017;
+    if(!drag&&!reduced)rot+=.00055;
     if(canAnimate()||drag)raf=requestAnimationFrame(draw);
   }
   function requestDraw(){if(!raf)raf=requestAnimationFrame(draw)}
