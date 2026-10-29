@@ -106,3 +106,26 @@ html[data-theme=light] .story-actions #print-story{background:#126477;color:#fff
  #title,.section h2,.block p,.speaker,#subtitle,#summary,#student{color:#111!important;text-shadow:none!important}
  .block{break-inside:avoid}
 }
+
+
+/* Live-preview refinements: compact intro, progressive quiz, and restrained motion. */
+.story-intro-modal{padding:clamp(12px,3vw,24px);overflow:auto}
+.intro-card{width:min(780px,100%);max-height:min(84dvh,650px);grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr);border-radius:22px;overflow:auto}
+.intro-art{min-height:250px;max-height:430px}
+.intro-art img{display:block;width:100%;height:100%;max-height:430px;object-fit:contain;padding:clamp(8px,1.8vw,18px)}
+.intro-copy{padding:clamp(20px,3.2vw,38px)}
+.intro-copy h2{font-size:clamp(1.5rem,3vw,2.25rem);line-height:1.45}
+.intro-copy p{line-height:1.85}
+#quiz-section .quiz-intro{margin:.2rem 0 1rem;color:var(--muted);line-height:1.9}
+.quiz-start-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:12px 24px;border:1px solid #78d9e8;border-radius:999px;background:linear-gradient(115deg,#a5eff6,#58bdcf);color:#08212c;font:800 1rem Cairo,sans-serif;cursor:pointer;box-shadow:0 10px 28px #0003;transition:transform .25s,box-shadow .25s}
+.quiz-start-btn:hover{transform:translateY(-2px);box-shadow:0 14px 32px #0004}
+#quiz{margin-top:18px}
+#quiz .q{padding:20px 0}
+#blocks .block{animation:story-block-enter .65s cubic-bezier(.2,.75,.25,1) both;animation-delay:calc(var(--story-index,0)*65ms)}
+#blocks .block:nth-child(1){--story-index:0}#blocks .block:nth-child(2){--story-index:1}#blocks .block:nth-child(3){--story-index:2}#blocks .block:nth-child(4){--story-index:3}#blocks .block:nth-child(5){--story-index:4}#blocks .block:nth-child(6){--story-index:5}
+@keyframes story-block-enter{from{opacity:0;transform:translateY(15px);filter:blur(2px)}to{opacity:1;transform:none;filter:blur(0)}}
+.section{animation:story-section-arrive .7s ease both}
+@keyframes story-section-arrive{from{opacity:.75;transform:translateY(9px)}to{opacity:1;transform:none}}
+html[data-theme=light] .quiz-start-btn{background:linear-gradient(115deg,#126477,#1a7e91);color:#fff;border-color:#126477}
+@media(max-width:700px){.intro-card{width:min(520px,100%);max-height:88dvh;grid-template-columns:1fr}.intro-art{min-height:155px;max-height:215px}.intro-art img{height:210px;max-height:210px}.intro-copy{padding:18px 20px 22px}.intro-copy p{margin:.4rem 0;line-height:1.75}.intro-copy h2{margin:.35rem 0}.quiz-start-btn{width:100%}}
+@media(prefers-reduced-motion:reduce){#blocks .block,.section{animation:none!important}.quiz-start-btn{transition:none!important}}
