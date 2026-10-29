@@ -708,7 +708,7 @@
     {
       "id": "sameera-moussa",
       "path": "assets/images/stories/SameeraMoussa.jpg",
-      "kind": "historical_photo",
+      "kind": "photograph",
       "source_name": "Wikimedia Commons — SameeraMoussa.jpg (Al Ahram, 1952)",
       "source_url": "https://commons.wikimedia.org/wiki/File:SameeraMoussa.jpg",
       "rights": "Archival portrait first published in Al Ahram in 1952; listed as public domain under Egyptian copyright rules on Wikimedia Commons.",
@@ -748,7 +748,7 @@
     {
       "id": "apollo-soyuz-research",
       "path": "assets/images/stories/s76-20263_large.jpg",
-      "kind": "historical_photo",
+      "kind": "photograph",
       "source_name": "NASA — Apollo-Soyuz Test Project, 1 July 1975",
       "source_url": "https://www.nasa.gov/image-detail/amf-s76-20263/",
       "rights": "NASA archival photograph; credit NASA. This is a later example of space-science work, not an image from Mosharafa’s lifetime or research.",
@@ -788,7 +788,7 @@
     {
       "id": "apollo-11-landing-map",
       "path": "assets/images/stories/s69-38669.jpg",
-      "kind": "archival_map",
+      "kind": "map",
       "source_name": "NASA — Apollo 11 landing site, Sea of Tranquility",
       "source_url": "https://www.nasa.gov/image-article/apollo-11-landing-site-2-sea-of-tranquility/",
       "rights": "NASA archival map/image; credit NASA. Later space exploration context, not part of Mosharafa’s work.",
