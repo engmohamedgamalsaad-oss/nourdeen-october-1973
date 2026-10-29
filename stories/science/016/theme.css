@@ -489,7 +489,7 @@ html[dir="ltr"] .section h2:after{transform-origin:left}
 }
 
 
-/* Emergency readability fix: story body content must never remain blurred/hidden if reveal JS does not finish. */
+/* Safety fallback: keep story content readable while preserving its entrance animation. */
 body.kh-motion #blocks .block.kh-pending,
 html body .scene-motion-target,
 html body .scene-motion-visible {
@@ -497,6 +497,16 @@ html body .scene-motion-visible {
   filter: none !important;
   transform: none !important;
   clip-path: none !important;
-  transition: none !important;
-  animation: none !important;
+}
+/* Mobile start screen: slightly shorter vertically so the start button fits more comfortably. */
+@media (max-width: 760px) {
+  .story-intro-modal { padding-block: 8px !important; }
+  .intro-card { max-height: 84svh !important; }
+  .intro-art { min-height: 145px !important; max-height: 175px !important; }
+  .intro-art img { height: 170px !important; min-height: 145px !important; max-height: 170px !important; }
+  .intro-copy { padding-block: 12px !important; }
+  .intro-copy h2 { margin-block: 4px !important; }
+  .intro-copy p { margin-block: 4px !important; line-height: 1.65 !important; }
+  .intro-langs { margin-bottom: 8px !important; }
+  .start-story-btn { margin-top: 8px !important; }
 }
