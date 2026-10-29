@@ -216,6 +216,8 @@ async function cinematicGlobeRegression(browser, base, origin) {
       'land=' + data.land + ', borders=' + data.borders + ', cities=' + data.cities);
     check('sourced story locations populate the globe list', data.eligible > 0 && data.listed > 0,
       'eligible=' + data.eligible + ', visible list chips=' + data.listed + ', status=' + data.status);
+    const hiddenControls = await page.locator('#khWorld [hidden]').evaluateAll(nodes => nodes.map(n => getComputedStyle(n).display));
+    check('hidden globe controls stay hidden', hiddenControls.every(display => display === 'none'), JSON.stringify(hiddenControls));
 
     const target = await page.evaluate(async () => {
       const [stories, places] = await Promise.all([
