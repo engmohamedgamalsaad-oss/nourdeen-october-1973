@@ -267,6 +267,47 @@ test('Amr ibn al-As V2 package validates with child narration, historical uncert
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
+test('Farouk El-Baz V2 package validates with Karma narration, NASA image credits, and an official Zagazig map source', async () => {
+  const story = await loadJson('stories/science/012/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Farouk El-Baz V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'science');
+  assert.equal(story.design.variant, 'science-lab');
+  assert.equal(story.i18n.ar.student_name, 'نوردين محمد');
+  assert.equal(story.i18n.ar.narrator_name, 'كارما');
+  assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.i18n.ar.grade, undefined, 'generic narrator label is not treated as a school grade');
+  assert.equal(story.images.length, 3);
+  assert.equal(story.quiz.length, 5);
+  assert.equal(story.sources.length, 8);
+  assert.equal(story.i18n.ar.blocks.length, 9);
+  assert.match(story.i18n.ar.history_note, /اللجنة/);
+  assert.match(story.i18n.ar.images_note, /NASA/);
+  assert.ok(story.sources.some(source => source.url === 'https://www.asu.edu.eg/736/news'));
+  assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 9, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  const page = await readFile(path.join(root, 'stories/science/012/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /khaledoon-story-map-link\.js/);
+});
+
+
 
 
 
