@@ -235,7 +235,14 @@
       "de": "Ain-Schams-Universität — Farouk El-Baz"
     },
     "source_url": "https://www.asu.edu.eg/ar/148/page",
-    "photo": "stories/science/012/cover.svg"
+    "photo": "stories/science/012/cover.svg",
+    "place_label": {
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
+    }
   },
   "013": {
     "lat": 25.7383,
