@@ -70,7 +70,15 @@
       "fr": "Village de Hariyat Razna, Charqiya",
       "it": "Villaggio di Hariyat Razna, Sharqia",
       "de": "Dorf Hariyat Razna, Scharkia"
-    }
+    },
+    "source_name": {
+      "ar": "الهيئة العامة للاستعلامات المصرية — أحمد عرابي",
+      "en": "Egyptian State Information Service — Ahmed Urabi",
+      "fr": "Service d’information de l’État égyptien — Ahmed Urabi",
+      "it": "Servizio d’informazione dello Stato egiziano — Ahmed Urabi",
+      "de": "Ägyptischer Staatlicher Informationsdienst — Ahmed Urabi"
+    },
+    "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/ahmed-urabi/"
   },
   "007": {
     "lat": 31.0341,
