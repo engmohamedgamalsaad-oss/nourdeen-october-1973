@@ -187,7 +187,7 @@ for (const rel of htmlFiles) {
   if (isAdmin) continue;
 
   /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
-  if (html.includes('data-kh-v2-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\\.v2\\.json["']/.test(html))) {
+  if (html.includes('data-kh-v2-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\.v2\.json["']/.test(html))) {
     const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
     for (const lang of v2Languages) {
       if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
@@ -395,8 +395,14 @@ for (const rel of [
   'stories/science/007/index.html'
 ]) {
   const html = read(rel);
-  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
-  if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+  const v2Reader = html.includes('data-kh-v2-reader') && /data-story-path=["']data\.v2\.json["']/.test(html);
+  if (v2Reader) {
+    if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: V2 reader is missing its own light/dark mode controller.`);
+    if (!/rebuild\/reader-base\.css/.test(html)) fail(`${rel}: V2 reader is missing its theme stylesheet layer.`);
+  } else {
+    if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+    if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+  }
 }
 {
   const rel = 'khaledoon/collections/october.html';

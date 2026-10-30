@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { validateStory, validateLocalImagePaths } from '../validate-story.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
@@ -66,4 +67,35 @@ test('real October draft records localized image credits and direct licence link
   assert.ok(map, 'Bab el-Mandeb map record is required');
   assert.ok(map.rights.includes('https://creativecommons.org/licenses/by-sa/3.0/'));
   assert.ok(map.rights.includes('https://www.openstreetmap.org/copyright'));
+});
+
+test('Ibn Sina V2 story package validates and preserves its five-language reading flow', async () => {
+  const story = await loadJson('stories/history/005/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Ibn Sina V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'history');
+  assert.equal(story.i18n.ar.blocks.length, 11);
+  assert.equal(story.quiz.length, 10, 'keep the ten questions already translated in all five languages');
+  assert.equal(story.sources.length, 3);
+  assert.equal(story.images.length, 2);
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 11, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'editorial verification note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  const page = await readFile(path.join(root, 'stories/history/005/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /name="robots" content="noindex,nofollow"/);
+  assert.match(page, /rebuild\/reader\.js/);
 });
