@@ -96,7 +96,7 @@ test('Ibn Sina V2 story package validates and preserves its five-language readin
   const page = await readFile(path.join(root, 'stories/history/005/index.html'), 'utf8');
   assert.match(page, /data-kh-v2-reader/);
   assert.match(page, /data-story-path="data\.v2\.json"/);
-  assert.match(page, /name="robots" content="noindex,nofollow"/);
+  assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
 
@@ -123,6 +123,6 @@ test('Ahmed Urabi V2 story package validates with five-language blocks, images, 
   const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
   assert.match(page, /data-kh-v2-reader/);
   assert.match(page, /data-story-path="data\.v2\.json"/);
-  assert.match(page, /name="robots" content="noindex,nofollow"/);
+  assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
