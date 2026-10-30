@@ -144,7 +144,22 @@
       "fr": "Quartier de Gamaliya, Le Caire",
       "it": "Quartiere di Gamaliya, Il Cairo",
       "de": "Stadtviertel Gamaliya, Kairo"
-    }
+    },
+    "place_label": {
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
+    },
+    "source_name": {
+      "ar": "جائزة نوبل — السيرة الرسمية لنجيب محفوظ",
+      "en": "Nobel Prize — Naguib Mahfouz biography",
+      "fr": "Prix Nobel — biographie de Naguib Mahfouz",
+      "it": "Premio Nobel — biografia di Naguib Mahfouz",
+      "de": "Nobelpreis — Biografie von Naguib Mahfouz"
+    },
+    "source_url": "https://www.nobelprize.org/prizes/literature/1988/mahfouz/biographical/"
   },
   "010": {
     "lat": 30.6425,
