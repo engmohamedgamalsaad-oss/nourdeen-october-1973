@@ -78,6 +78,7 @@ figcaption{font-size:.9rem;color:var(--muted);padding:8px 5px;line-height:1.8;ov
 .image-lightbox button{position:absolute;top:16px;inset-inline-end:16px;width:44px;height:44px;border-radius:50%;font-size:1.7rem;padding:0}
 body[data-design=ancient-civilization]{--bg:#21180f;--panel:#342519;--line:#705336}
 body[data-design=science-lab]{--bg:#081a24;--panel:#102d3b;--line:#28566a}
+body[data-design=military-history]{--bg:#14251e;--panel:#25352d;--line:#52664d}
 body[data-design=women-leadership]{--bg:#211521;--panel:#342337;--line:#69465f}
 body[data-design=arts-culture],body[data-design=portrait-biography]{--bg:#191923;--panel:#292a3b;--line:#555577}
 body[data-design=islamic-heritage]{--bg:#0b201a;--panel:#14372b;--line:#356a53}
