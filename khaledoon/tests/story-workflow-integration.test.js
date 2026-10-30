@@ -842,32 +842,67 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   });
 });
 
-test('Magdi Yacoub opening paragraph has exact five-language source-key coverage and no stale Aswan claim', function () {
+test('Magdi Yacoub V2 package preserves the corrected five-language opening, documented photos, and verified map location', function () {
   var translations = fs.readFileSync('stories/science/015/translations.js', 'utf8');
   var opening = 'وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى.';
-  assert.equal(translations.split('"' + opening + '":"').length - 1, 8, 'the actual opening text node must be translated in both locale dictionaries for en/fr/it/de');
+  assert.equal(translations.split('"' + opening + '":"').length - 1, 8, 'the corrected opening text node must retain exact EN/FR/IT/DE source-key coverage');
   assert.ok(translations.includes('Magdi Yacoub was born on 16 November 1935 in Belbeis'), 'English opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub est né le 16 novembre 1935 à Belbeis'), 'French opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub nacque il 16 novembre 1935 a Belbeis'), 'Italian opening must match the corrected fact');
   assert.ok(translations.includes('Magdi Yacoub wurde am 16. November 1935 in Belbeis'), 'German opening must match the corrected fact');
   assert.ok(!translations.includes('خصوصاً في أسوان، ولد طفل صغير'), 'the stale contradictory Aswan opening must not return');
+
   var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
   var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
-  var photoRightsText = 'تحتوي هذه الصفحة على صورتين فوتوغرافيتين موثقتين للدكتور مجدي يعقوب: صورة من تصوير Raafat برخصة CC BY-SA 3.0، وصورة له أثناء تسلّم ميدالية ليستر عام 2015 من تصوير Carcharoth برخصة CC BY-SA 4.0. تظهر روابط المصدر والرخصة مع كل صورة. أما صورة نافذة البداية فهي رسم توضيحي أصلي وليست صورة أرشيفية.';
-  var listerAlt = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015 في الكلية الملكية للجراحين بإنجلترا.';
-  var listerCaption = 'الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015.';
-  var listerSource = 'صورة أرشيفية · تصوير Carcharoth عبر Wikimedia Commons';
-  assert.ok(magdiPage.includes(photoRightsText), 'Magdi Yacoub page must accurately describe two sourced archival photos and one original illustration');
-  assert.ok(!magdiPage.includes('تتوفر ثلاث صور فوتوغرافية موثقة'), 'stale claim of three archival photos must not return');
-  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/Special:FilePath/Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal photograph must load from the sourced Commons file');
-  assert.ok(magdiPage.includes('https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG'), 'the Lister Medal image must link to its source record');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"This page uses two sourced photographs'), 'the corrected rights paragraph must have an English translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Cette page utilise deux photographies'), 'the corrected rights paragraph must have a French translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Questa pagina usa due fotografie'), 'the corrected rights paragraph must have an Italian translation');
-  assert.ok(magdiExtra.includes('"' + photoRightsText + '":"Diese Seite verwendet zwei belegte Fotografien'), 'the corrected rights paragraph must have a German translation');
-  assert.ok(magdiExtra.includes('"' + listerAlt + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image alt text must be translated into English');
-  assert.ok(magdiExtra.includes('"' + listerCaption + '":"Magdi Yacoub receives the 2015 Lister Medal'), 'the new image caption must be translated into English');
-  assert.ok(magdiExtra.includes('"' + listerSource + '":"Archival photograph'), 'the new image credit must be translated into English');
+  var story = JSON.parse(fs.readFileSync('stories/science/015/data.v2.json', 'utf8'));
+  var original = fs.readFileSync('stories/science/015/original.md', 'utf8')
+    .replace(/^# النص الأصلي كما وصل دون تعديل\s*\n\n/, '').trimEnd();
+  var places = JSON.parse(fs.readFileSync('stories/places.json', 'utf8'));
+  assert.equal(story.format, 'KHALEDOON_STORY_V2');
+  assert.equal(story.section, 'science');
+  assert.equal(story.design.variant, 'portrait-biography');
+  assert.equal(story.original_body, original, 'the submitted original_body must remain verbatim');
+  assert.equal(story.i18n.ar.blocks.length, 10);
+  assert.equal(story.quiz.length, 6, 'all six original quiz questions must be preserved');
+  assert.ok(story.i18n.ar.blocks[2].text.includes('بلبيس') && !story.i18n.ar.blocks[2].text.includes('أسوان'), 'the reader-facing opening must use the corrected birthplace');
+
+  var photos = story.images.filter(function (image) { return image.kind === 'photograph'; });
+  var illustration = story.images.find(function (image) { return image.kind === 'illustration'; });
+  assert.equal(photos.length, 2, 'the V2 gallery must contain two sourced photographs');
+  assert.ok(illustration && illustration.path === 'stories/science/015/cover-popup.svg', 'the gallery must retain the original non-photographic illustration');
+  var raafat = photos.find(function (image) { return image.source_url === 'https://commons.wikimedia.org/wiki/File:M_Yacoub.JPG'; });
+  var lister = photos.find(function (image) { return image.source_url === 'https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG'; });
+  assert.ok(raafat && raafat.path === 'assets/images/stories/M_Yacoub.jpg' && raafat.rights.includes('CC BY-SA 3.0'), 'the local Raafat photograph and CC BY-SA 3.0 credit must be preserved');
+  assert.ok(lister && lister.url === 'https://commons.wikimedia.org/wiki/Special:FilePath/Yacoub_Lister_Medal_2015.JPG' && lister.rights.includes('CC BY-SA 4.0'), 'the Lister Medal photograph and CC BY-SA 4.0 credit must be preserved');
+  assert.ok(story.sources.some(function (source) { return source.url === 'https://creativecommons.org/licenses/by-sa/3.0/'; }), 'the CC BY-SA 3.0 licence must be directly linked');
+  assert.ok(story.sources.some(function (source) { return source.url === 'https://creativecommons.org/licenses/by-sa/4.0/'; }), 'the CC BY-SA 4.0 licence must be directly linked');
+  assert.ok(story.sources.some(function (source) { return source.url === raafat.source_url; }), 'the Raafat Commons source page must be linked');
+  assert.ok(story.sources.some(function (source) { return source.url === lister.source_url; }), 'the Lister Medal Commons source page must be linked');
+
+  ['ar', 'en', 'fr', 'it', 'de'].forEach(function (lang) {
+    assert.equal(story.i18n[lang].blocks.length, 10, lang + ' must contain all story blocks');
+    assert.equal(story.i18n[lang].person, story.i18n[lang].figure_name, lang + ' person metadata must remain localized');
+    [raafat, lister, illustration].forEach(function (image) {
+      ['alt', 'caption', 'source_name', 'rights'].forEach(function (field) {
+        assert.ok(image.i18n[lang][field] && image.i18n[lang][field].trim(), lang + ' image ' + field + ' must be present');
+      });
+    });
+    story.sources.forEach(function (source) {
+      assert.ok(source.i18n[lang].title && source.i18n[lang].organization, lang + ' source title and organization must be translated');
+    });
+    story.quiz.forEach(function (question) {
+      assert.ok(question.i18n[lang].question && question.i18n[lang].options.length === 4 && question.i18n[lang].explanation, lang + ' quiz question must be complete');
+    });
+  });
+  assert.equal(lister.i18n.en.caption, 'Magdi Yacoub receives the 2015 Lister Medal.', 'the Lister photo caption must use the concise translated caption');
+  assert.ok(magdiExtra.includes('"الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015.":"Magdi Yacoub receives the 2015 Lister Medal."'), 'the concise Lister caption must remain in the translation dictionary');
+
+  assert.equal(story.map_location.lat, places['015'].lat);
+  assert.equal(story.map_location.lng, places['015'].lng);
+  assert.deepEqual(story.map_location.place, places['015'].place, 'the V2 map location must match the verified Belbeis place record');
+  assert.ok(magdiPage.includes('data-kh-v2-reader') && magdiPage.includes('data-story-path="data.v2.json"'), 'Magdi page must use the shared V2 reader');
+  assert.ok(magdiPage.includes('rebuild/reader.js') && magdiPage.includes('khaledoon-story-map-link.js'), 'V2 reader and interactive 3D map link must be connected');
+  assert.ok(magdiPage.includes('id="site-brand"'), 'the shared reader must localize the site brand');
 });
  
 console.log('\n' + passed + ' integration checks passed' + (process.exitCode ? ', with failures' : ''));
