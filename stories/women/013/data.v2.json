@@ -1,0 +1,1041 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "hatshepsut",
+  "section": "women",
+  "design": {
+    "variant": "women-leadership",
+    "accent": "#b86a9c"
+  },
+  "original_body": "حتشبسوت واحدة من أشهر حكام مصر القديمة، وحكمت خلال الأسرة الثامنة عشرة في عصر الدولة الحديثة، في القرن الخامس عشر قبل الميلاد تقريبًا. بدأت وصيةً على الملك الصغير تحتمس الثالث، ثم تولّت الحكم بلقب الفرعون.\n\nتميّز عهدها بالاهتمام بالتجارة والبناء، ومن أشهر إنجازاتها إرسال بعثة تجارية إلى بلاد بونت لجلب البخور والأشجار العطرية والسلع الثمينة. كما شُيّد في عهدها معبدها الجنائزي الرائع في الدير البحري بالأقصر، وأُقيمت مسلات ضخمة في معابد الكرنك.",
+  "i18n": {
+    "ar": {
+      "title": "حتشبسوت: الفرعون الذهبي على عرش النيل",
+      "subtitle": "قصة الملكة الدبلوماسية التي ملأت مصر بالمعالم والعمران ورائدات التجار",
+      "summary": "قصة الملكة الدبلوماسية التي ملأت مصر بالمعالم والعمران ورائدات التجار",
+      "student_name": "مليكة محمد جمال",
+      "grade": "الصف الخامس الابتدائي",
+      "narrator_name": "كارما",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "الملكة حتشبسوت",
+      "person": "الملكة حتشبسوت",
+      "history_note": "تختلف الآراء حول سبب محو صور وأسماء حتشبسوت من بعض المعابد؛ فهناك تفسير قديم يربطه بانتقام شخصي من تحتمس الثالث، بينما يرى باحثون محدثون أن الدافع قد يكون سياسيًا لترسيخ شرعية أمنحتب الثاني. لا يوجد اتفاق نهائي على تفسير واحد.\n\nلا يزال الموقع الدقيق لبلاد بونت موضع نقاش؛ وتضعها قراءات أثرية كثيرة في منطقة القرن الأفريقي، لكن لا يصح اختزالها في دولة حديثة واحدة.\n\nأشارت تقارير صحفية بعد فحوص مومياء حتشبسوت عام 2007 إلى احتمالات تتعلق بالسكري والسرطان، لكن هذه الاستنتاجات الطبية ليست تشخيصًا نهائيًا متفقًا عليه؛ لذلك لا تُعرض هنا كحقائق مؤكدة.",
+      "images_note": "تضم الحكاية صورًا من مجموعة Open Access في متحف المتروبوليتان، وتصف سجلات القطع الصور بأنها ضمن الملكية العامة/CC0، إضافة إلى صورة بانورامية لمعبد الدير البحري بتصوير Vyacheslav Argenberg وترخيص CC BY 4.0. الغلاف والرسوم التوضيحية أصلية وليست صورًا أثرية. يجب إبقاء الإسناد وروابط المصادر والرخص.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "كارما: فضول وأسئلة وملاحظات",
+          "text": "هل تعلمون يا أصدقائي أنني عندما زرت معبد الدير البحري شُدِهت بالكامل؟ كيف استطاع البنّاء المهندس سننموت تصميم معبد يندمج في حضن الجبل بكل هذا السحر!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "ومن أكثر ما لفت انتباهي رحلة حتشبسوت إلى بلاد بونت، التي تصف نقوش معبدها وصول أشجار المر الحية إلى مصر. إنها حكاية عن التجارة ونقل النباتات بين البلاد، وتُظهر اهتمام المصريين القدماء بما جلبوه من أماكن بعيدة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "الحكاية",
+          "text": "في قلب عصر الدولة الحديثة العظيم، وتحديدًا في القرن الخامس عشر قبل الميلاد، برزت الملكة «غانمت آمون حتشبسوت» كواحدة من أقوى شخصيات التاريخ المصري القديم. بعد وفاة زوجها تحتمس الثاني، تولت وصاية العرش على ابن زوجها الطفل تحتمس الثالث. ولكن بفضل حكماء عصرها ودعم كبار الكهنة، أعلنت نفسها فرعونًا رسميًا لتضمن استقرار البلاد ووحدتها.",
+          "image_after": "hatshepsut-limestone-statue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "رحلة إلى بلاد بونت",
+          "text": "ولكي تُثبت بشرعيتها أمام الشعب والآلهة، أظهرت حتشبسوت شجاعة استثنائية؛ حيث ظهرت في النقوش بالزي الموحد للفراعنة مع الذقن المستعارة. فضلت حتشبسوت السلام والازدهار الاقتصادي على الحروب، وجهزت أسطولًا تجاريًا ضخمًا أبحر نحو بلاد بونت، التي يرجّح كثير من الباحثين أنها تقع في منطقة القرن الأفريقي، مع استمرار النقاش حول موقعها الدقيق لجلب البخور والأبنوس والعاج وأشجار المر الجذور.",
+          "image_after": "hatshepsut-temple-panorama"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "العمارة والإنجازات",
+          "text": "ولم يقتصر إنجازها على التجارة، بل كان معمارها معجزة هندسية خلدها التاريخ؛ حيث أشرف مهندسها البارع «سننموت» على بناء معبد الدير البحري الجنائزي غرب الأقصر، والمكون من ثلاث طبقات مدرجة تتناغم مع طبيعة الجبل الذاتي. كما أقامت مسلات شاهقة من الجرانيت الوردي في معبد الكرنك، بلغت إحداها أكثر من تسعة وعشرين مترًا.",
+          "image_after": "hatshepsut-met-statue"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "أشجار المر والتجارة",
+          "text": "هل تعلم؟ كان استيراد أشجار المر الحية بجذورها في حفر طينية خاصة من أولى محاولات زراعة النباتات المنقولة عبر البحار في التاريخ المكتوب!"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "ما الذي نعرفه عن صحتها؟",
+          "text": "أشارت تقارير صحفية بعد فحوص مومياء حتشبسوت عام 2007 إلى احتمالات تتعلق بالسكري والسرطان، لكن هذه الاستنتاجات الطبية ليست تشخيصًا نهائيًا متفقًا عليه."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "لماذا مُحيت بعض أسمائها؟",
+          "text": "بعد وفاة حتشبسوت، مُحيت بعض صورها وأسمائها من معابد؛ ويختلف المؤرخون حول السبب، ومن التفسيرات المطروحة دوافع سياسية مرتبطة بانتقال الحكم إلى أمنحتب الثاني.",
+          "image_after": "hatshepsut-granite-statue"
+        }
+      ]
+    },
+    "en": {
+      "title": "Hatshepsut: The Golden Pharaoh on the Nile Throne",
+      "subtitle": "The story of the diplomatic queen who filled Egypt with monuments and trade expeditions",
+      "summary": "The story of the diplomatic queen who filled Egypt with monuments and trade expeditions",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "5th Grade",
+      "narrator_name": "Karma",
+      "narrator_grade": "Third grade of primary school",
+      "figure_name": "Queen Hatshepsut",
+      "person": "Queen Hatshepsut",
+      "history_note": "The reason Hatshepsut’s images and names were erased from some temples remains debated. An older explanation linked it to personal revenge by Thutmose III, while many modern scholars consider a political motive intended to strengthen Amenhotep II’s legitimacy. There is no final consensus on a single explanation.\n\nThe precise location of the Land of Punt remains debated. Many archaeological interpretations place it in the Horn of Africa, but it should not be reduced to one modern country.\n\nPress reports after examinations of Hatshepsut’s mummy in 2007 suggested possible diabetes and cancer, but these medical conclusions are not a universally accepted definitive diagnosis and are not presented here as established facts.",
+      "images_note": "The story uses images from The Metropolitan Museum of Art Open Access collection, whose object records mark them public domain/CC0, plus a panoramic view of Deir el-Bahari by Vyacheslav Argenberg under CC BY 4.0. The cover and illustrations are original artwork, not archaeological photographs. Keep all credits, source links, and license details.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosity, questions and observations",
+          "text": "Did you know, my friends, that when I visited the Deir el-Bahari temple I was completely amazed? How was the architect Senenmut able to design a temple that blends into the mountain so magically!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "One detail that fascinated me was Hatshepsut’s expedition to the Land of Punt. Inscriptions at her temple describe living myrrh trees being brought to Egypt. The story offers a glimpse of long-distance trade and the movement of plants between lands."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "The story",
+          "text": "In the heart of the glorious New Kingdom era, specifically in the fifteenth century BC, Queen Maatkare Hatshepsut emerged as one of the most powerful figures in ancient Egyptian history. Following the passing of her husband Thutmose II, she assumed regency over her young stepson Thutmose III. Supported by wise advisors and high priests, she officially declared herself Pharaoh to ensure stability and national unity.",
+          "image_after": "hatshepsut-limestone-statue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "An expedition to Punt",
+          "text": "To establish her legitimacy before her people and the gods, Hatshepsut displayed exceptional leadership; she was depicted in reliefs wearing full pharaonic attire and the ceremonial beard. Prioritizing peace and economic prosperity over war, she organized a massive trading fleet that sailed to the Land of Punt, often placed in the Horn of Africa, although its precise location remains debated to bring back incense, ebony, ivory, and rooted myrrh trees.",
+          "image_after": "hatshepsut-temple-panorama"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Architecture and achievements",
+          "text": "Her achievements were not limited to commerce; her architectural legacy remains an engineering marvel. Her brilliant architect, Senenmut, supervised the construction of the mortuary temple at Deir el-Bahari in western Luxor, featuring three grand terraces harmonizing with the cliffside. She also erected tall pink granite obelisks at Karnak Temple, one standing over twenty-nine meters high.",
+          "image_after": "hatshepsut-met-statue"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Myrrh trees and trade",
+          "text": "Did you know? Importing live myrrh trees with their roots packed in special clay pots was among the earliest documented attempts at maritime plant translocation in written history!"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "What do we know about her health?",
+          "text": "Press reports after examinations of Hatshepsut’s mummy in 2007 suggested possible diabetes and cancer, but these medical conclusions are not a universally accepted definitive diagnosis."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Why were some of her names erased?",
+          "text": "After Hatshepsut’s death, some of her images and names were erased from temples. Historians debate why; one influential explanation points to political motives linked to the succession of Amenhotep II.",
+          "image_after": "hatshepsut-granite-statue"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Hatshepsout : Le Pharaon d'or sur le trône du Nil",
+      "subtitle": "L'histoire de la reine diplomate qui a enrichi l'Égypte de monuments et d'expéditions commerciales",
+      "summary": "L'histoire de la reine diplomate qui a enrichi l'Égypte de monuments et d'expéditions commerciales",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "5ème Année Primaire",
+      "narrator_name": "Karma",
+      "narrator_grade": "Troisième année de l’école primaire",
+      "figure_name": "La reine Hatchepsout",
+      "person": "La reine Hatchepsout",
+      "history_note": "La raison de l’effacement des images et des noms d’Hatchepsout dans certains temples reste débattue. Une ancienne explication y voyait une vengeance personnelle de Thoutmosis III, tandis que de nombreux chercheurs modernes privilégient une motivation politique visant à renforcer la légitimité d’Amenhotep II. Il n’existe pas de consensus définitif.\n\nLa localisation exacte du pays de Pount reste discutée. De nombreuses interprétations archéologiques le situent dans la Corne de l’Afrique, sans le réduire à un seul pays moderne.\n\nDes articles de presse publiés après les examens de la momie d’Hatchepsout en 2007 ont évoqué un possible diabète et un cancer, mais ces conclusions médicales ne constituent pas un diagnostic définitif universellement accepté et ne sont pas présentées ici comme des faits établis.",
+      "images_note": "Le récit utilise des images de la collection Open Access du Metropolitan Museum of Art, dont les fiches indiquent le domaine public/CC0, ainsi qu’une vue panoramique de Deir el-Bahari par Vyacheslav Argenberg sous CC BY 4.0. La couverture et les illustrations sont originales, et non des photographies archéologiques. Conservez les crédits, liens sources et licences.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma : curiosité, questions et observations",
+          "text": "Saviez-vous, mes amis, que lorsque j'ai visité le temple de Deir el-Bahari, j'ai été totalement émerveillée ? Comment l'architecte Sénenmout a-t-il pu concevoir un temple s'intégrant si magiquement au cœur de la montagne !"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un détail qui m’a fascinée est l’expédition d’Hatchepsout au pays de Pount. Les inscriptions de son temple décrivent l’arrivée en Égypte de plants de myrrhe vivants. Ce récit donne un aperçu du commerce à longue distance et de la circulation des plantes entre les régions."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le récit",
+          "text": "Au cœur du glorieux Nouvel Empire, précisément au XVe siècle avant J.-C., la reine Hatshepsout s'est imposée comme l'une des figures les plus puissantes de l'Égypte ancienne. Après la mort de son époux Thoutmosis II, elle assure la régence pour son jeune beau-fils Thoutmosis III. Soutenue par des conseillers avisés et le grand clergé, elle se proclame officiellement Pharaon afin de garantir la stabilité et l'unité du pays.",
+          "image_after": "hatshepsut-limestone-statue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une expédition au pays de Pount",
+          "text": "Pour asseoir sa légitimité devant son peuple et les dieux, Hatshepsout fait preuve d'une audace remarquable ; elle se fait représenter dans les reliefs avec les attributs pharaoniques traditionnels et la barbe cérémonielle. Privilégiant la paix et la prospérité économique à la guerre, elle arme une grande flotte commerciale à destination du pays de Pount, souvent situé dans la Corne de l’Afrique, bien que son emplacement exact reste débattu pour en rapporter de l'encens, de l'ébène, de l'ivoire et des myrrhiers enracinés.",
+          "image_after": "hatshepsut-temple-panorama"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Architecture et réalisations",
+          "text": "Son œuvre ne se limite pas au commerce ; ses réalisations architecturales constituent un chef-d'œuvre d'ingénierie. Son brillant architecte Sénenmout supervise la construction du temple funéraire de Deir el-Bahari à l'ouest de Louxor, composé de trois terrasses majestueuses intégrées à la falaise. Elle élève également de grands obélisques en granit rose au temple de Karnak, dont l'un dépasse vingt-neuf mètres de hauteur.",
+          "image_after": "hatshepsut-met-statue"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Arbres à myrrhe et commerce",
+          "text": "Le saviez-vous ? L'importation d'arbres à myrrhe vivants avec leurs racines préservées dans des paniers de terre est l'une des plus anciennes tentatives de transplantation végétale maritime répertoriées dans l'histoire !"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Que sait-on de sa santé ?",
+          "text": "Des articles de presse après les examens de la momie d’Hatchepsout en 2007 ont évoqué un possible diabète et un cancer, mais ces conclusions ne constituent pas un diagnostic définitif universellement accepté."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Pourquoi certains de ses noms ont-ils été effacés ?",
+          "text": "Après la mort d’Hatchepsout, certaines de ses images et de ses inscriptions furent effacées de temples. Les historiens en débattent ; une explication importante évoque des motifs politiques liés à la succession d’Amenhotep II.",
+          "image_after": "hatshepsut-granite-statue"
+        }
+      ]
+    },
+    "it": {
+      "title": "Hatshepsut: Il Faraone d'oro sul trono del Nilo",
+      "subtitle": "La storia della regina diplomatica che riempì l'Egitto di monumenti e spedizioni commerciali",
+      "summary": "La storia della regina diplomatica che riempì l'Egitto di monumenti e spedizioni commerciali",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "Quinta Elementare",
+      "narrator_name": "Karma",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "La regina Hatshepsut",
+      "person": "La regina Hatshepsut",
+      "history_note": "Il motivo della cancellazione delle immagini e dei nomi di Hatshepsut da alcuni templi è ancora discusso. Una vecchia spiegazione la collegava a una vendetta personale di Thutmose III, mentre molti studiosi moderni ritengono plausibile una motivazione politica volta a rafforzare la legittimità di Amenhotep II. Non esiste un consenso definitivo su un’unica spiegazione.\n\nLa posizione esatta della Terra di Punt è ancora dibattuta. Molte interpretazioni archeologiche la collocano nel Corno d’Africa, ma non è corretto identificarla con un solo Stato moderno.\n\nArticoli di stampa dopo gli esami della mummia di Hatshepsut nel 2007 hanno ipotizzato diabete e cancro, ma queste conclusioni non sono una diagnosi definitiva universalmente accettata e non vengono presentate qui come fatti accertati.",
+      "images_note": "Il racconto utilizza immagini della collezione Open Access del Metropolitan Museum of Art, le cui schede indicano pubblico dominio/CC0, oltre a una veduta panoramica di Deir el-Bahari di Vyacheslav Argenberg con licenza CC BY 4.0. Copertina e illustrazioni sono opere originali, non fotografie archeologiche. Conservare crediti, link e licenze.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosità, domande e osservazioni",
+          "text": "Sapete, amici miei, che quando ho visitato il tempio di Deir el-Bahari sono rimasta completamente incantata? Come ha fatto l'architetto Senenmut a progettare un tempio che si fonde così magicamente con la montagna!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un dettaglio che mi ha colpito è la spedizione di Hatshepsut nella terra di Punt. Le iscrizioni del suo tempio descrivono l’arrivo in Egitto di alberi di mirra vivi. È un racconto che mostra il commercio a lunga distanza e lo spostamento delle piante tra regioni diverse."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "La storia",
+          "text": "Nel cuore del glorioso Nuovo Regno, precisamente nel quindicesimo secolo a.C., la regina Hatshepsut emerse come una delle figure più potenti dell'antico Egitto. Dopo la morte del marito Tutmosi II, assunse la reggenza per il giovane figliastro Tutmosi III. Con il sostegno di saggi consiglieri e alti sacerdoti, si proclamò ufficialmente Faraone per garantire la stabilità e l'unità del paese.",
+          "image_after": "hatshepsut-limestone-statue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una spedizione nella Terra di Punt",
+          "text": "Per affermare la propria legittimità di fronte al popolo e agli dei, Hatshepsut mostrò uno straordinario carisma; venne raffigurata nei rilievi con gli abiti tradizionali dei faraoni e la barba rituale. Preferendo la pace e la prosperità economica alle guerre, organizzò un'imponente flotta commerciale diretta nella terra di Punt (l'attuale Somalia) per importare incenso, ebano, avorio e alberi di mirra con le radici.",
+          "image_after": "hatshepsut-temple-panorama"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Architettura e realizzazioni",
+          "text": "I suoi successi non si limitarono al commercio; la sua eredità architettonica rimane una meraviglia dell'ingegneria. Il suo geniale architetto Senenmut diresse la costruzione del tempio funerario a Deir el-Bahari a ovest di Luxor, formato da tre magnifiche terrazze integrate nella roccia. Erresse anche maestosi obelischi di granito rosa nel tempio di Karnak, uno dei quali supera i ventinove metri d'altezza.",
+          "image_after": "hatshepsut-met-statue"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Alberi di mirra e commercio",
+          "text": "Lo sapevi? L'importazione di alberi di mirra vivi con le radici protette in ceste di terra rappresenta uno dei primi tentativi documentati di trapianto vegetale via mare nella storia scritta!"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Che cosa sappiamo della sua salute?",
+          "text": "Articoli di stampa dopo gli esami della mummia di Hatshepsut nel 2007 hanno ipotizzato diabete e cancro, ma queste conclusioni non sono una diagnosi definitiva universalmente accettata."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Perché alcuni dei suoi nomi furono cancellati?",
+          "text": "Dopo la morte di Hatshepsut, alcune sue immagini e iscrizioni furono cancellate dai templi. Gli storici discutono il motivo; una spiegazione influente richiama ragioni politiche legate alla successione di Amenhotep II.",
+          "image_after": "hatshepsut-granite-statue"
+        }
+      ]
+    },
+    "de": {
+      "title": "Hatschepsut: Der goldene Pharao auf dem Thron des Nils",
+      "subtitle": "Die Geschichte der diplomatischen Königin, die Ägypten mit Bauwerken und Handelsreisen bereicherte",
+      "summary": "Die Geschichte der diplomatischen Königin, die Ägypten mit Bauwerken und Handelsreisen bereicherte",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "5. Grundschulklasse",
+      "narrator_name": "Karma",
+      "narrator_grade": "Dritte Klasse der Grundschule",
+      "figure_name": "Königin Hatschepsut",
+      "person": "Königin Hatschepsut",
+      "history_note": "Der Grund für die Tilgung von Hatschepsuts Bildern und Namen aus einigen Tempeln ist umstritten. Eine ältere Erklärung führte sie auf persönliche Rache Thutmosis’ III. zurück; viele moderne Forschende halten dagegen ein politisches Motiv zur Stärkung der Legitimität Amenophis’ II. für plausibel. Eine endgültige Einigkeit gibt es nicht.\n\nDie genaue Lage des Landes Punt ist weiterhin umstritten. Viele archäologische Deutungen verorten es am Horn von Afrika, doch sollte es nicht auf einen einzigen heutigen Staat reduziert werden.\n\nPresseberichte nach Untersuchungen von Hatschepsuts Mumie im Jahr 2007 vermuteten Diabetes und Krebs. Diese medizinischen Schlussfolgerungen sind jedoch keine allgemein anerkannte endgültige Diagnose und werden hier nicht als gesicherte Tatsachen dargestellt.",
+      "images_note": "Die Geschichte verwendet Bilder aus der Open-Access-Sammlung des Metropolitan Museum of Art, deren Objektdatensätze Gemeinfreiheit/CC0 angeben, sowie eine Panoramaaufnahme von Deir el-Bahari von Vyacheslav Argenberg unter CC BY 4.0. Titelbild und Illustrationen sind Originalgrafiken, keine archäologischen Fotografien. Bildnachweise, Quellenlinks und Lizenzangaben müssen erhalten bleiben.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: Neugier, Fragen und Beobachtungen",
+          "text": "Wusstet ihr, meine Freunde, dass ich völlig staunte, als ich den Tempel von Deir el-Bahari besuchte? Wie konnte der Architekt Senenmut einen Tempel entwerfen, der sich so magisch in den Berg einfügt!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Besonders faszinierend fand ich Hatschepsuts Expedition ins Land Punt. Inschriften an ihrem Tempel beschreiben, wie lebende Myrrhenbäume nach Ägypten gebracht wurden. Die Geschichte gibt einen Einblick in den Fernhandel und den Austausch von Pflanzen zwischen verschiedenen Regionen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Die Geschichte",
+          "text": "Im Herzen des glorreichen Neuen Reiches, genau im fünfzehnten Jahrhundert v. Chr., stieg Königin Hatschepsut zu einer der mächtigsten Persönlichkeiten des alten Ägyptens auf. Nach dem Tod ihres Mannes Thutmosis II. übernahm sie die Regentschaft für ihren jungen Stiefsohn Thutmosis III. Mit der Unterstützung weiser Berater und der Hohenpriester erklärte sie sich offiziell zum Pharao, um die Stabilität des Landes zu sichern.",
+          "image_after": "hatshepsut-limestone-statue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine Expedition ins Land Punt",
+          "text": "Um ihre Legitimität vor dem Volk und den Göttern zu festigen, bewies Hatschepsut außergewöhnlichen Mut; sie ließ sich in Reliefs mit pharaonischen Insignien und dem zeremoniellen Zeremonialbart darstellen. Sie bevorzugte Frieden und wirtschaftlichen Wohlstand gegenüber Kriegen und rüstete eine große Handelsflotte aus, die ins Land Punt (heutiges Somalia) segelte, um Weihrauch, Ebenholz, Elfenbein und bewurzelte Myrrhebäume einzuführen.",
+          "image_after": "hatshepsut-temple-panorama"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Architektur und Errungenschaften",
+          "text": "Ihre Leistungen beschränkten sich nicht auf den Handel; ihr architektonisches Erbe bleibt ein Meisterwerk der Ingenieurkunst. Ihr genialer Baumeister Senenmut leitete den Bau des Totentempels in Deir el-Bahari westlich von Luxor, der aus drei Terrassen besteht, die harmonisch in die Felswand gebaut wurden. Zudem errichtete sie riesige Obelisken aus rosa Granit im Karnak-Tempel, von denen einer über neunundzwanzig Meter hoch ist.",
+          "image_after": "hatshepsut-met-statue"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Myrrhebäume und Handel",
+          "text": "Wusstest du schon? Der Import lebender Myrrhebäume mit ihren Wurzeln in speziellen Tongefäßen war einer der frühesten dokumentierten Versuche einer pflanzlichen Verpflanzung über den Seeweg in der Geschichte!"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Was wissen wir über ihre Gesundheit?",
+          "text": "Presseberichte nach Untersuchungen von Hatschepsuts Mumie im Jahr 2007 vermuteten Diabetes und Krebs; diese Schlussfolgerungen sind jedoch keine allgemein anerkannte endgültige Diagnose."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Warum wurden einige ihrer Namen getilgt?",
+          "text": "Nach Hatschepsuts Tod wurden einige ihrer Darstellungen und Namen aus Tempeln getilgt. Historiker diskutieren die Gründe; eine wichtige Erklärung verweist auf politische Motive im Zusammenhang mit der Nachfolge Amenophis’ II.",
+          "image_after": "hatshepsut-granite-statue"
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/women/013/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — غلاف توضيحي أصلي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/women/013/cover.svg",
+    "rights": "Original illustration created for the Khaledoon project; not an archaeological image or historical visual evidence.",
+    "i18n": {
+      "ar": {
+        "alt": "غلاف توضيحي لحكاية حتشبسوت، وليس صورة أثرية",
+        "caption": "غلاف توضيحي أصلي للحكاية.",
+        "source_name": "خالدون عبر التاريخ — غلاف توضيحي",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة أثرية أو دليلًا بصريًا تاريخيًا."
+      },
+      "en": {
+        "alt": "Illustrated cover for the Hatshepsut story, not an archaeological photograph",
+        "caption": "Original illustrated cover for the story.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Original illustration created for the Khaledoon project; not an archaeological image or historical visual evidence."
+      },
+      "fr": {
+        "alt": "Illustrated cover for the Hatshepsut story, not an archaeological photograph",
+        "caption": "Original illustrated cover for the story.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une image archéologique ni une preuve visuelle historique."
+      },
+      "it": {
+        "alt": "Illustrated cover for the Hatshepsut story, not an archaeological photograph",
+        "caption": "Original illustrated cover for the story.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è un’immagine archeologica né una prova visiva storica."
+      },
+      "de": {
+        "alt": "Illustrated cover for the Hatshepsut story, not an archaeological photograph",
+        "caption": "Original illustrated cover for the story.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Originalillustration für das Khaledoon-Projekt; kein archäologisches Bild und kein historischer Bildbeleg."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "hatshepsut-limestone-statue",
+      "path": "assets/images/stories/21V_CAT096R3.jpg",
+      "kind": "photograph",
+      "source_name": "متحف المتروبوليتان للفنون — Open Access",
+      "source_url": "https://www.metmuseum.org/art/collection/search/544450",
+      "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link.",
+      "i18n": {
+        "ar": {
+          "alt": "تمثال للملكة حتشبسوت وهي تجلس على العرش برداء الفرعون",
+          "caption": "تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون.",
+          "source_name": "متحف المتروبوليتان للفنون — Open Access",
+          "rights": "الصورة من مجموعة Open Access في متحف المتروبوليتان، وسجل القطعة يحددها ضمن الملكية العامة/CC0. احتفظ برابط سجل المتحف."
+        },
+        "en": {
+          "alt": "Seated statue of Queen Hatshepsut wearing the pharaonic regalia",
+          "caption": "تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link."
+        },
+        "fr": {
+          "alt": "Statue assise de la reine Hatshepsout portant les attributs pharaoniques",
+          "caption": "تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image issue de la collection Open Access du Met ; la fiche de l’objet l’indique comme appartenant au domaine public/CC0. Conservez le lien de la fiche."
+        },
+        "it": {
+          "alt": "Statua seduta della regina Hatshepsut con le regalie faraoniche",
+          "caption": "تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Immagine dalla collezione Open Access del Met; la scheda dell’oggetto la indica come di pubblico dominio/CC0. Conservare il link alla scheda."
+        },
+        "de": {
+          "alt": "Sitzstatue der Königin Hatschepsut mit pharaonischen Insignien",
+          "caption": "تمثال حتشبسوت الجالس المصنوع من الحجر الجيري في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Bild aus der Open-Access-Sammlung des Met; der Objektdatensatz kennzeichnet es als gemeinfrei/CC0. Link zum Museumsdatensatz beibehalten."
+        }
+      }
+    },
+    {
+      "id": "hatshepsut-temple-panorama",
+      "path": "assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg",
+      "kind": "photograph",
+      "source_name": "Vyacheslav Argenberg عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Thebes,_Luxor,_Egypt,_Panoramic_view_of_Deir_el-Bahari,_Temple_of_Hatshepsut.jpg",
+      "rights": "Photograph by Vyacheslav Argenberg, licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). Credit the photographer and link to the source and license.",
+      "i18n": {
+        "ar": {
+          "alt": "منظر بانورامي لمعبد حتشبسوت الجنائزي في الدير البحري بالأقصر",
+          "caption": "معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر.",
+          "source_name": "Vyacheslav Argenberg عبر Wikimedia Commons",
+          "rights": "تصوير Vyacheslav Argenberg، مرخص بموجب Creative Commons Attribution 4.0 International (CC BY 4.0). اذكر المصور واربط المصدر والرخصة."
+        },
+        "en": {
+          "alt": "Panoramic view of Hatshepsut's mortuary temple at Deir el-Bahari in Luxor",
+          "caption": "معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر.",
+          "source_name": "Vyacheslav Argenberg via Wikimedia Commons",
+          "rights": "Photograph by Vyacheslav Argenberg, licensed under Creative Commons Attribution 4.0 International (CC BY 4.0). Credit the photographer and link to the source and license."
+        },
+        "fr": {
+          "alt": "Vue panoramique du temple funéraire de Hatshepsout à Deir el-Bahari à Louxor",
+          "caption": "معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر.",
+          "source_name": "Vyacheslav Argenberg via Wikimedia Commons",
+          "rights": "Photographie de Vyacheslav Argenberg sous licence Creative Commons Attribution 4.0 International (CC BY 4.0). Citez le photographe et liez la source et la licence."
+        },
+        "it": {
+          "alt": "Vista panoramica del tempio funerario di Hatshepsut a Deir el-Bahari a Luxor",
+          "caption": "معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر.",
+          "source_name": "Vyacheslav Argenberg tramite Wikimedia Commons",
+          "rights": "Fotografia di Vyacheslav Argenberg con licenza Creative Commons Attribution 4.0 International (CC BY 4.0). Citare il fotografo e collegare fonte e licenza."
+        },
+        "de": {
+          "alt": "Panoramablick auf den Totentempel der Hatschepsut in Deir el-Bahari in Luxor",
+          "caption": "معبد حتشبسوت المتدرج المحفور في أحضان جبل الدير البحري غرب الأقصر.",
+          "source_name": "Vyacheslav Argenberg über Wikimedia Commons",
+          "rights": "Foto von Vyacheslav Argenberg unter Creative-Commons-Lizenz Attribution 4.0 International (CC BY 4.0). Fotograf nennen sowie Quelle und Lizenz verlinken."
+        }
+      }
+    },
+    {
+      "id": "hatshepsut-met-statue",
+      "path": "assets/images/stories/DT534.jpg",
+      "kind": "photograph",
+      "source_name": "متحف المتروبوليتان للفنون — Open Access",
+      "source_url": "https://www.metmuseum.org/art/collection/search/544849",
+      "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link.",
+      "i18n": {
+        "ar": {
+          "alt": "تمثال حتشبسوت المعروف باسم الفرعون الأنثى من مجموعة متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت من مجموعة Open Access في متحف المتروبوليتان للفنون.",
+          "source_name": "متحف المتروبوليتان للفنون — Open Access",
+          "rights": "الصورة من مجموعة Open Access في متحف المتروبوليتان، وسجل القطعة يحددها ضمن الملكية العامة/CC0. احتفظ برابط سجل المتحف."
+        },
+        "en": {
+          "alt": "تمثال حتشبسوت المعروف باسم الفرعون الأنثى من مجموعة متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت من مجموعة Open Access في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link."
+        },
+        "fr": {
+          "alt": "تمثال حتشبسوت المعروف باسم الفرعون الأنثى من مجموعة متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت من مجموعة Open Access في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image issue de la collection Open Access du Met ; la fiche de l’objet l’indique comme appartenant au domaine public/CC0. Conservez le lien de la fiche."
+        },
+        "it": {
+          "alt": "تمثال حتشبسوت المعروف باسم الفرعون الأنثى من مجموعة متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت من مجموعة Open Access في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Immagine dalla collezione Open Access del Met; la scheda dell’oggetto la indica come di pubblico dominio/CC0. Conservare il link alla scheda."
+        },
+        "de": {
+          "alt": "تمثال حتشبسوت المعروف باسم الفرعون الأنثى من مجموعة متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت من مجموعة Open Access في متحف المتروبوليتان للفنون.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Bild aus der Open-Access-Sammlung des Met; der Objektdatensatz kennzeichnet es als gemeinfrei/CC0. Link zum Museumsdatensatz beibehalten."
+        }
+      }
+    },
+    {
+      "id": "hatshepsut-granite-statue",
+      "path": "https://collectionapi.metmuseum.org/api/collection/v1/iiif/548519/2346343/main-image",
+      "kind": "photograph",
+      "source_name": "متحف المتروبوليتان للفنون — Open Access",
+      "source_url": "https://www.metmuseum.org/art/collection/search/548519",
+      "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link.",
+      "i18n": {
+        "ar": {
+          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
+          "source_name": "متحف المتروبوليتان للفنون — Open Access",
+          "rights": "الصورة من مجموعة Open Access في متحف المتروبوليتان، وسجل القطعة يحددها ضمن الملكية العامة/CC0. احتفظ برابط سجل المتحف."
+        },
+        "en": {
+          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link."
+        },
+        "fr": {
+          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Image issue de la collection Open Access du Met ; la fiche de l’objet l’indique comme appartenant au domaine public/CC0. Conservez le lien de la fiche."
+        },
+        "it": {
+          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Immagine dalla collezione Open Access del Met; la scheda dell’oggetto la indica come di pubblico dominio/CC0. Conservare il link alla scheda."
+        },
+        "de": {
+          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
+          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
+          "source_name": "The Metropolitan Museum of Art — Open Access",
+          "rights": "Bild aus der Open-Access-Sammlung des Met; der Objektdatensatz kennzeichnet es als gemeinfrei/CC0. Link zum Museumsdatensatz beibehalten."
+        }
+      }
+    },
+    {
+      "id": "hatshepsut-cover-popup",
+      "path": "stories/women/013/cover-popup.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/women/013/cover-popup.svg",
+      "rights": "Original illustration created for the Khaledoon project; not an archaeological image or historical visual evidence.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي، وليس صورة تاريخية",
+          "caption": "رسم توضيحي أصلي للحكاية.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة أثرية أو دليلًا بصريًا تاريخيًا."
+        },
+        "en": {
+          "alt": "Illustration, not a historical photograph",
+          "caption": "Original illustration created for the Khaledoon project; not an archaeological image or historical visual evidence.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; not an archaeological image or historical visual evidence."
+        },
+        "fr": {
+          "alt": "Illustration, not a historical photograph",
+          "caption": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une image archéologique ni une preuve visuelle historique.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une image archéologique ni une preuve visuelle historique."
+        },
+        "it": {
+          "alt": "Illustration, not a historical photograph",
+          "caption": "Illustrazione originale creata per il progetto Khaledoon; non è un’immagine archeologica né una prova visiva storica.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è un’immagine archeologica né una prova visiva storica."
+        },
+        "de": {
+          "alt": "Illustration, not a historical photograph",
+          "caption": "Originalillustration für das Khaledoon-Projekt; kein archäologisches Bild und kein historischer Bildbeleg.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein archäologisches Bild und kein historischer Bildbeleg."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "حتشبسوت الجالسة — متحف المتروبوليتان للفنون، سجل 544450",
+      "organization": "متحف المتروبوليتان للفنون",
+      "url": "https://www.metmuseum.org/art/collection/search/544450",
+      "i18n": {
+        "ar": {
+          "title": "حتشبسوت الجالسة — متحف المتروبوليتان للفنون، سجل 544450",
+          "organization": "متحف المتروبوليتان للفنون"
+        },
+        "en": {
+          "title": "Hatshepsut Seated — The Metropolitan Museum of Art, record 544450",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "fr": {
+          "title": "Hatchepsout assise — The Metropolitan Museum of Art, fiche 544450",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "it": {
+          "title": "Hatshepsut seduta — The Metropolitan Museum of Art, scheda 544450",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "de": {
+          "title": "Sitzende Hatschepsut — The Metropolitan Museum of Art, Datensatz 544450",
+          "organization": "The Metropolitan Museum of Art"
+        }
+      }
+    },
+    {
+      "title": "تمثال حتشبسوت — متحف المتروبوليتان، سجل 544849",
+      "organization": "متحف المتروبوليتان للفنون",
+      "url": "https://www.metmuseum.org/art/collection/search/544849",
+      "i18n": {
+        "ar": {
+          "title": "تمثال حتشبسوت — متحف المتروبوليتان، سجل 544849",
+          "organization": "متحف المتروبوليتان للفنون"
+        },
+        "en": {
+          "title": "Hatshepsut statue — The Met, record 544849",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "fr": {
+          "title": "Statue d’Hatchepsout — The Met, fiche 544849",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "it": {
+          "title": "Statua di Hatshepsut — The Met, scheda 544849",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "de": {
+          "title": "Hatschepsut-Statue — The Met, Datensatz 544849",
+          "organization": "The Metropolitan Museum of Art"
+        }
+      }
+    },
+    {
+      "title": "تمثال حتشبسوت الجالس من الجرانيت — متحف المتروبوليتان، سجل 548519",
+      "organization": "متحف المتروبوليتان للفنون",
+      "url": "https://www.metmuseum.org/art/collection/search/548519",
+      "i18n": {
+        "ar": {
+          "title": "تمثال حتشبسوت الجالس من الجرانيت — متحف المتروبوليتان، سجل 548519",
+          "organization": "متحف المتروبوليتان للفنون"
+        },
+        "en": {
+          "title": "Seated granite statue of Hatshepsut — The Met, record 548519",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "fr": {
+          "title": "Statue assise en granit d’Hatchepsout — The Met, fiche 548519",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "it": {
+          "title": "Statua seduta in granito di Hatshepsut — The Met, scheda 548519",
+          "organization": "The Metropolitan Museum of Art"
+        },
+        "de": {
+          "title": "Sitzende Granitstatue der Hatschepsut — The Met, Datensatz 548519",
+          "organization": "The Metropolitan Museum of Art"
+        }
+      }
+    },
+    {
+      "title": "منظر بانورامي لمعبد حتشبسوت — ويكيميديا كومنز",
+      "organization": "ويكيميديا كومنز",
+      "url": "https://commons.wikimedia.org/wiki/File:Thebes,_Luxor,_Egypt,_Panoramic_view_of_Deir_el-Bahari,_Temple_of_Hatshepsut.jpg",
+      "i18n": {
+        "ar": {
+          "title": "منظر بانورامي لمعبد حتشبسوت — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Panoramic view of Hatshepsut’s temple — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Vue panoramique du temple d’Hatchepsout — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Veduta panoramica del tempio di Hatshepsut — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Panoramablick auf den Hatschepsut-Tempel — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "مجموعة الفن المصري — متحف الفنون الجميلة في بوسطن",
+      "organization": "متحف الفنون الجميلة في بوسطن",
+      "url": "https://www.mfa.org",
+      "i18n": {
+        "ar": {
+          "title": "مجموعة الفن المصري — متحف الفنون الجميلة في بوسطن",
+          "organization": "متحف الفنون الجميلة في بوسطن"
+        },
+        "en": {
+          "title": "Egyptian Art collection — Museum of Fine Arts, Boston",
+          "organization": "Museum of Fine Arts, Boston"
+        },
+        "fr": {
+          "title": "Collection d’art égyptien — Museum of Fine Arts, Boston",
+          "organization": "Museum of Fine Arts, Boston"
+        },
+        "it": {
+          "title": "Collezione di arte egizia — Museum of Fine Arts, Boston",
+          "organization": "Museum of Fine Arts, Boston"
+        },
+        "de": {
+          "title": "Sammlung ägyptischer Kunst — Museum of Fine Arts, Boston",
+          "organization": "Museum of Fine Arts, Boston"
+        }
+      }
+    },
+    {
+      "title": "معبد حتشبسوت بالدير البحري — وزارة السياحة والآثار المصرية",
+      "organization": "وزارة السياحة والآثار المصرية",
+      "url": "https://egymonuments.gov.eg/en/monuments/hatshepsut-temple/",
+      "i18n": {
+        "ar": {
+          "title": "معبد حتشبسوت بالدير البحري — وزارة السياحة والآثار المصرية",
+          "organization": "وزارة السياحة والآثار المصرية"
+        },
+        "en": {
+          "title": "Hatshepsut Temple at Deir el-Bahari — Egyptian Ministry of Tourism and Antiquities",
+          "organization": "Egyptian Ministry of Tourism and Antiquities"
+        },
+        "fr": {
+          "title": "Temple d’Hatchepsout à Deir el-Bahari — Ministère égyptien du Tourisme et des Antiquités",
+          "organization": "Ministère égyptien du Tourisme et des Antiquités"
+        },
+        "it": {
+          "title": "Tempio di Hatshepsut a Deir el-Bahari — Ministero egiziano del Turismo e delle Antichità",
+          "organization": "Ministero egiziano del Turismo e delle Antichità"
+        },
+        "de": {
+          "title": "Hatschepsut-Tempel in Deir el-Bahari — Ägyptisches Ministerium für Tourismus und Altertümer",
+          "organization": "Ägyptisches Ministerium für Tourismus und Altertümer"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "reign-period",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي عصر من تاريخ مصر القديمة حكمت الملكة حتشبسوت؟",
+          "options": [
+            "عصر الدولة القديمة",
+            "عصر الدولة الحديثة",
+            "عصر الدولة الوسطى",
+            "العصر المتأخر"
+          ],
+          "explanation": "حكمت الملكة حتشبسوت خلال الأسرة الثامنة عشرة في عصر الدولة الحديثة، وهو عصر المجد الحربي والتجاري لمصر."
+        },
+        "en": {
+          "question": "In which era of ancient Egyptian history did Queen Hatshepsut rule?",
+          "options": [
+            "Old Kingdom",
+            "New Kingdom",
+            "Middle Kingdom",
+            "Late Period"
+          ],
+          "explanation": "Queen Hatshepsut ruled during the Eighteenth Dynasty in the New Kingdom era."
+        },
+        "fr": {
+          "question": "À quelle époque de l'histoire de l'Égypte ancienne la reine Hatshepsout a-t-elle régné ?",
+          "options": [
+            "L'Ancien Empire",
+            "Le Nouvel Empire",
+            "Moyen Empire",
+            "Basse Époque"
+          ],
+          "explanation": "La reine Hatshepsout a régné sous la XVIIIe dynastie pendant le Nouvel Empire."
+        },
+        "it": {
+          "question": "In quale epoca della storia dell'antico Egitto ha regnato la regina Hatshepsut?",
+          "options": [
+            "Antico Regno",
+            "Nuovo Regno",
+            "Medio Regno",
+            "Tardo Periodo"
+          ],
+          "explanation": "La regina Hatshepsut ha regnato durante la Diciottesima Dinastia nel Nuovo Regno."
+        },
+        "de": {
+          "question": "In welcher Epoche der altägyptischen Geschichte regierte Königin Hatschepsut?",
+          "options": [
+            "Altes Reich",
+            "Neues Reich",
+            "Mittleres Reich",
+            "Spätzeit"
+          ],
+          "explanation": "Königin Hatschepsut regierte während der 18. Dynastie im Neuen Reich."
+        }
+      }
+    },
+    {
+      "id": "punts-expedition",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما هي البلاد التي أرسلت إليها حتشبسوت بعثتها التجارية الشهيرة؟",
+          "options": [
+            "بلاد بونت",
+            "بلاد بابل",
+            "بلاد اليونان",
+            "بلاد فارس"
+          ],
+          "explanation": "أرسلت حتشبسوت أسطولًا تجاريًا شهيرًا إلى بلاد بونت لجلب البخور والسلع الثمينة والأشجار العطرية."
+        },
+        "en": {
+          "question": "To which land did Hatshepsut send her famous commercial expedition?",
+          "options": [
+            "Land of Punt",
+            "Babylon",
+            "Greece",
+            "Persia"
+          ],
+          "explanation": "Hatshepsut dispatched a famous naval trade expedition to the Land of Punt."
+        },
+        "fr": {
+          "question": "Vers quel pays Hatshepsout a-t-elle envoyé sa célèbre expédition commerciale ?",
+          "options": [
+            "Le pays de Pount",
+            "Babylone",
+            "La Grèce",
+            "La Perse"
+          ],
+          "explanation": "Hatshepsout a envoyé une expédition maritime vers le pays de Pount pour rapporter de l'encens et des marchandises précieuses."
+        },
+        "it": {
+          "question": "Verso quale terra Hatshepsut inviò la sua famosa spedizione commerciale?",
+          "options": [
+            "Terra di Punt",
+            "Babilonia",
+            "Grecia",
+            "Persia"
+          ],
+          "explanation": "Hatshepsut inviò una famosa spedizione commerciale nella terra di Punt."
+        },
+        "de": {
+          "question": "In welches Land schickte Hatschepsut ihre berühmte Handelsexpedition?",
+          "options": [
+            "Land Punt",
+            "Babylon",
+            "Griechenland",
+            "Persien"
+          ],
+          "explanation": "Hatschepsut entsandte eine berühmte Handelsexpedition in das Land Punt."
+        }
+      }
+    },
+    {
+      "id": "architect",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "أين يقع معبد حتشبسوت الجنائزي الشهير؟",
+          "options": [
+            "في الجيزة",
+            "في الدير البحري بالأقصر",
+            "في أسوان",
+            "في الإسكندرية"
+          ],
+          "explanation": "يقع معبد حتشبسوت الجنائزي الفريد في منطقة الدير البحري بالبر الغربي للأقصر."
+        },
+        "en": {
+          "question": "Where is Hatshepsut's famous mortuary temple located?",
+          "options": [
+            "In Giza",
+            "At Deir el-Bahari in Luxor",
+            "In Aswan",
+            "In Alexandria"
+          ],
+          "explanation": "Hatshepsut's mortuary temple is located at Deir el-Bahari on the West Bank of Luxor."
+        },
+        "fr": {
+          "question": "Où se situe le célèbre temple funéraire de Hatshepsout ?",
+          "options": [
+            "À Gizeh",
+            "À Deir el-Bahari à Louxor",
+            "À Assouan",
+            "À Alexandrie"
+          ],
+          "explanation": "Le temple funéraire d'Hatshepsout se trouve à Deir el-Bahari sur la rive ouest de Louxor."
+        },
+        "it": {
+          "question": "Dove si trova il famoso tempio funerario di Hatshepsut?",
+          "options": [
+            "A Giza",
+            "A Deir el-Bahari a Luxor",
+            "Ad Assuan",
+            "Ad Alessandria"
+          ],
+          "explanation": "Il tempio funerario di Hatshepsut si trova a Deir el-Bahari, sulla riva ovest di Luxor."
+        },
+        "de": {
+          "question": "Wo befindet sich der berühmte Totentempel der Hatschepsut?",
+          "options": [
+            "In Gizeh",
+            "In Deir el-Bahari in Luxor",
+            "In Assuan",
+            "In Alexandria"
+          ],
+          "explanation": "Der Totentempel der Hatschepsut befindet sich in Deir el-Bahari am Westufer von Luxor."
+        }
+      }
+    },
+    {
+      "id": "myrrh-trees",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "من هو المهندس المعماري الذي صمم معبد حتشبسوت بالدير البحري؟",
+          "options": [
+            "إمهوتب",
+            "سننموت",
+            "أمنحتب بن حابو",
+            "بتاح حتب"
+          ],
+          "explanation": "المهندس سننموت هو الذي أشرف على تصميم وبناء معبد حتشبسوت المدرج بالدير البحري."
+        },
+        "en": {
+          "question": "Who was the architect that designed Hatshepsut's temple at Deir el-Bahari?",
+          "options": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep son of Hapu",
+            "Ptahhotep"
+          ],
+          "explanation": "Senenmut was the royal architect who designed and supervised the building of Deir el-Bahari."
+        },
+        "fr": {
+          "question": "Quel architecte a conçu le temple de Hatshepsout à Deir el-Bahari ?",
+          "options": [
+            "Imhotep",
+            "Sénenmout",
+            "Amenhotep fils de Hapon",
+            "Ptahhotep"
+          ],
+          "explanation": "Sénenmout est l'architecte qui a conçu le temple à terrasses de Deir el-Bahari."
+        },
+        "it": {
+          "question": "Chi fu l'architetto che progettò il tempio di Hatshepsut a Deir el-Bahari?",
+          "options": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep figlio di Hapu",
+            "Ptahhotep"
+          ],
+          "explanation": "Senenmut fu l'architetto che progettò e diresse i lavori a Deir el-Bahari."
+        },
+        "de": {
+          "question": "Wer war der Architekt, der Hatschepsuts Tempel in Deir el-Bahari entwarf?",
+          "options": [
+            "Imhotep",
+            "Senenmut",
+            "Amenhotep Sohn des Hapu",
+            "Ptahhotep"
+          ],
+          "explanation": "Senenmut war der Architekt, der den Terrassentempel in Deir el-Bahari entwarf."
+        }
+      }
+    },
+    {
+      "id": "erasure-debate",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما هي الشجرة النادرة التي جلبتها بعثة حتشبسوت بجذورها لزراعتها في مصر؟",
+          "options": [
+            "شجرة الزيتون",
+            "شجرة المر",
+            "شجرة الأرز",
+            "شجرة النخيل"
+          ],
+          "explanation": "جلبت البعثة أشجار المر الحية بجذورها لزراعتها في ساحات المعبد بمصر."
+        },
+        "en": {
+          "question": "Which rare tree did Hatshepsut's expedition bring back with its roots to plant in Egypt?",
+          "options": [
+            "Olive tree",
+            "Myrrh tree",
+            "Cedar tree",
+            "Palm tree"
+          ],
+          "explanation": "The expedition brought back live myrrh trees with roots to plant them near the temple."
+        },
+        "fr": {
+          "question": "Quel arbre rare l'expédition d'Hatshepsout a-t-elle rapporté avec ses racines ?",
+          "options": [
+            "L'olivier",
+            "Le myrrhier",
+            "Le cèdre",
+            "Le palrmier"
+          ],
+          "explanation": "L'expédition a rapporté des myrrhiers vivants avec leurs racines pour les planter en Égypte."
+        },
+        "it": {
+          "question": "Quale albero raro la spedizione di Hatshepsut portò con le radici per piantarlo in Egitto?",
+          "options": [
+            "Olivo",
+            "Albero di mirra",
+            "Cedro",
+            "Palma"
+          ],
+          "explanation": "La spedizione portò alberi di mirra vivi con le radici per piantarli in Egitto."
+        },
+        "de": {
+          "question": "Welchen seltenen Baum brachte Hatschepsuts Expedition mit Wurzeln nach Ägypten?",
+          "options": [
+            "Olivenbaum",
+            "Myrrhebaum",
+            "Zedernbaum",
+            "Palme"
+          ],
+          "explanation": "Die Expedition brachte lebende Myrrhebäume mit Wurzeln mit, um sie in Ägypten anzupflanzen."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 25.7383,
+    "lng": 32.6065,
+    "place": {
+      "ar": "معبد حتشبسوت بالدير البحري، الأقصر",
+      "en": "Hatshepsut’s temple at Deir el-Bahari, Luxor",
+      "fr": "Temple d’Hatchepsout à Deir el-Bahari, Louxor",
+      "it": "Tempio di Hatshepsut a Deir el-Bahari, Luxor",
+      "de": "Tempel der Hatschepsut in Deir el-Bahari, Luxor"
+    }
+  }
+}
