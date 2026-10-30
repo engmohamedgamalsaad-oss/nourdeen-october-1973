@@ -1,43 +1,43 @@
 {
   "name": "مليكة محمد جمال",
-  "grade": "الصف الخامس الابتدائي",
-  "className": "الصف الخامس الابتدائي",
+  "grade": "الصف الأول الابتدائي",
+  "className": "الصف الأول الابتدائي",
   "title": "حتشبسوت: الفرعون الذهبي على عرش النيل",
   "subtitle": "قصة الملكة الدبلوماسية التي ملأت مصر بالمعالم والعمران ورائدات التجار",
   "person": "الملكة حتشبسوت",
-  "color": "#b86a9c",
+  "color": "#e7a1c1",
   "order": 13,
   "published": true,
   "i18n": {
     "en": {
       "name": "Malika Mohamed Gamal",
-      "grade": "5th Grade",
-      "className": "5th Grade",
-      "title": "Hatshepsut: The Golden Pharaoh on the Nile Throne",
+      "grade": "1st Grade",
+      "className": "1st Grade",
+      "title": "Hatshepsut: The Golden Female Pharaoh on the Nile Throne",
       "subtitle": "The story of the diplomatic queen who filled Egypt with monuments and trade expeditions",
       "person": "Queen Hatshepsut"
     },
     "fr": {
       "name": "Malika Mohamed Gamal",
-      "grade": "5ème Année Primaire",
-      "className": "5ème Année Primaire",
-      "title": "Hatshepsout : Le Pharaon d'or sur le trône du Nil",
+      "grade": "1re année du primaire",
+      "className": "1re année du primaire",
+      "title": "Hatchepsout : La pharaonne d’or sur le trône du Nil",
       "subtitle": "L'histoire de la reine diplomate qui a enrichi l'Égypte de monuments et d'expéditions commerciales",
       "person": "La reine Hatchepsout"
     },
     "it": {
       "name": "Malika Mohamed Gamal",
-      "grade": "Quinta Elementare",
-      "className": "Quinta Elementare",
-      "title": "Hatshepsut: Il Faraone d'oro sul trono del Nilo",
+      "grade": "Prima elementare",
+      "className": "Prima elementare",
+      "title": "Hatshepsut: La faraona d’oro sul trono del Nilo",
       "subtitle": "La storia della regina diplomatica che riempì l'Egitto di monumenti e spedizioni commerciali",
       "person": "La regina Hatshepsut"
     },
     "de": {
       "name": "Malika Mohamed Gamal",
-      "grade": "5. Grundschulklasse",
-      "className": "5. Grundschulklasse",
-      "title": "Hatschepsut: Der goldene Pharao auf dem Thron des Nils",
+      "grade": "1. Grundschulklasse",
+      "className": "1. Grundschulklasse",
+      "title": "Hatschepsut: Die goldene Pharaonin auf dem Thron des Nils",
       "subtitle": "Die Geschichte der diplomatischen Königin, die Ägypten mit Bauwerken und Handelsreisen bereicherte",
       "person": "Königin Hatschepsut"
     }
