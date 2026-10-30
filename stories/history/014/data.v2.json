@@ -1,0 +1,939 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "abu-bakr-al-khwarizmi",
+  "section": "history",
+  "design": {
+    "variant": "portrait-biography",
+    "accent": "#d4b7ff"
+  },
+  "original_body": "الخوارزمى\nأبو بكر بن محمد بن العباس الخوارزمي، الكاتب والشاعر واللغوي المعروف، وُلد عام 323 هـ، واشتهر بفن الكتابة والشعر، حيث سافر بين البلدان لنشر العلم",
+  "i18n": {
+    "ar": {
+      "title": "أبو بكر الخوارزمي: حكاية شاعر رحّالة",
+      "subtitle": "رحلة أديب عباسي حمل كلماته بين المدن، واشتهر بقوة لغته وذاكرته.",
+      "summary": "رحلة أديب عباسي حمل كلماته بين المدن، واشتهر بقوة لغته وذاكرته.",
+      "student_name": "كارما محمد",
+      "grade": "الصف الثالث الابتدائي",
+      "narrator_name": "كارما",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "أبو بكر محمد بن العباس الخوارزمي",
+      "person": "أبو بكر محمد بن العباس الخوارزمي",
+      "history_note": "تتناول هذه الحكاية أبا بكر محمد بن العباس الخوارزمي، الشاعر والكاتب المعروف في المصادر الأدبية. تعرض جامعة ييل كتاب رسائل أبي بكر الخوارزمي وتعرّف مؤلفه بأنه أديب وشاعر وعالم بالأنساب عاش تقريبًا بين 934 أو 935 و993 أو 994م. لا ينبغي الخلط بينه وبين محمد بن موسى الخوارزمي، عالم الرياضيات المعروف.\n\nتختلف المراجع في تحويل السنوات الهجرية إلى الميلادية وفي بعض تفاصيل الأنساب وتسلسل الرحلات؛ لذلك عُرضت التواريخ الميلادية على أنها تقريبية. تفاصيل علاقته بوالي سجستان وسجنه تعتمد على الروايات الواردة في كتب التراجم، ولم تُتحقق هنا بصورة مستقلة من شاهد معاصر.",
+      "images_note": "الصفحتان المصورتان من طبعة 1880 اللتان ظهرتا في الصفحة القديمة لم تُدرجا كصور في القالب الموحد؛ لأن GetArchive وسيط، ولا يكفي اسمه أو سجله وحده لإثبات مصدر النسخة الرقمية أو حقوق إعادة استخدامها. أبقينا رابطَي السجلين في المصادر للمراجعة. الغلاف والرسم التوضيحي المعروضان أصلان من المشروع، وليسا صورة شخصية تاريخية.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "كارما: فضول وأسئلة وملاحظات",
+          "text": "أنا كارما، ولما سمعت عن أبي بكر الخوارزمي، تخيلت أديبًا يحمل كتبه ورسائله من مدينة إلى أخرى. لكنني اكتشفت أن هناك أكثر من شخصية عُرفت باسم الخوارزمي، وأن بطل حكايتنا اليوم شاعر وكاتب، وليس عالم الرياضيات الشهير نفسه."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أكثر ما لفت انتباهي أن أبا بكر لم يكتفِ بمدينة واحدة؛ فقد تنقل بين مدن كثيرة، والتقى بأصحاب العلم والأدب. يبدو أن السفر كان بالنسبة إليه فرصة ليتعلم ويكتب ويكوّن علاقات جديدة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "وتعلمت من حكايته أن قوة الذاكرة واللغة يمكن أن تفتحا أبوابًا كثيرة، وأن الأديب يستطيع أن يترك أثرًا كبيرًا حتى لو لم يخترع آلة أو يكتشف قانونًا علميًا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد البداية: أديب في العصر العباسي",
+          "text": "في القرن الرابع الهجري، ازدهرت الكتابة والشعر ومجالس الأدب في أجزاء واسعة من العالم الإسلامي. وفي هذا الجو الثقافي عاش أبو بكر محمد بن العباس الخوارزمي، الذي اشتهر كاتبًا وشاعرًا وعالمًا باللغة. وتذكر كتب التراجم أنه وُلد سنة 323 هـ، نحو 935م، ونشأ في خوارزم."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد الرحلة: من مدينة إلى أخرى",
+          "text": "لم تبقَ حياة أبي بكر محصورة في مسقط رأسه. فقد تنقل بين مناطق ومدن متعددة، منها دمشق وحلب وبخارى وسجستان وأصفهان ونيسابور، واتصل بأمراء ووزراء وأهل علم وأدب. وكانت مجالس الحكام في ذلك العصر تستقبل الشعراء والكتّاب، إذ كان الأدب والرسائل وسيلتين مهمتين للتعبير عن الأفكار وبناء المكانة الاجتماعية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد اللغة: موهبة في الكلمات",
+          "text": "اشتهر أبو بكر بقوة معرفته باللغة العربية والشعر والأنساب، وترك رسائل أدبية وديوانًا من الشعر. وكانت الرسائل في ذلك الزمن أكثر من مجرد كلمات عابرة؛ فقد استخدمها الكتّاب لعرض الأفكار والمدح والعتاب وطلب المساعدة. ولهذا احتاج الكاتب الماهر إلى لغة دقيقة وذاكرة قوية وقدرة على اختيار العبارة المناسبة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد صعب: حين لا تسير الرحلة كما نريد",
+          "text": "تروي كتب التراجم أنه اتصل بوالي سجستان طاهر بن محمد، ثم وقع خلاف بينهما بعد أن مدحه وهجاه، وانتهى الأمر بسجنه مدة. وتذكر الروايات أنه كتب قصيدة يستعطف فيها الأمير أبا نصر أحمد الميكالي ويشرح ما يمر به. وتوضح هذه الحكاية أن حياة الأدباء لم تكن دائمًا سهلة، وأن علاقاتهم بأصحاب السلطة كان يمكن أن تمنحهم الرعاية أو تعرضهم للمشكلات."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد الاستقرار: نيسابور",
+          "text": "بعد تنقلاته، استقر أبو بكر في نيسابور، وهي مدينة مهمة في الحياة الثقافية والعلمية في خراسان. واتصل بالصاحب بن عباد، الوزير والأديب المعروف، وشارك في مجالس الأدب. وتذكر مصادر التراجم أنه توفي في نيسابور سنة 383 هـ، أي في أواخر القرن الرابع الهجري."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "مشهد الأثر: ماذا بقي من حكايته؟",
+          "text": "بقي اسم أبي بكر الخوارزمي في كتب الأدب والتراجم بوصفه شاعرًا وكاتبًا واسع المعرفة باللغة. وتساعدنا أخباره على فهم جانب من الحياة الثقافية في العصر العباسي، حين كانت الرسائل والقصائد وسيلة للتواصل والتأثير، وكان انتقال الأدباء بين المدن جزءًا من رحلتهم في طلب المكانة والمعرفة."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "هل تعلم؟",
+          "text": "بطاقة 1: لم يكن لقب الخوارزمي خاصًا بشخص واحد؛ فقد اشتهر أيضًا عالم الرياضيات محمد بن موسى الخوارزمي، وهو شخص آخر عاش في زمن أسبق."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "بطاقة 2: تذكر بعض المصادر لأبي بكر نسبًا ولقبًا مرتبطين بخوارزم وطبرستان، لكن تفاصيل الأنساب والألقاب ليست متطابقة في كل المراجع."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "بطاقة 3: كانت الرسائل الأدبية فنًا مهمًا في العصر العباسي، وكان الكاتب الماهر يجمع بين المعرفة باللغة والقدرة على صياغة الأفكار بأسلوب مؤثر."
+        }
+      ]
+    },
+    "en": {
+      "title": "Abu Bakr al-Khwarizmi: The Journey of a Poet",
+      "subtitle": "The story of an Abbasid writer who traveled between cities and became known for his language and memory.",
+      "summary": "The story of an Abbasid writer who traveled between cities and became known for his language and memory.",
+      "student_name": "Karma Mohamed",
+      "grade": "Third grade",
+      "narrator_name": "Karma",
+      "narrator_grade": "Third grade",
+      "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "history_note": "This story concerns Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, a poet and writer known from Arabic literary sources. Yale University Library describes a collection of his letters and identifies him as a literary scholar, poet, and genealogist who lived around 934 or 935 to 993 or 994 CE. He must not be confused with Muhammad ibn Musa al-Khwarizmi, the famous mathematician.\n\nReferences differ in converting Hijri dates to Gregorian dates and in some details about ancestry and travel chronology. Gregorian dates are therefore approximate. The account of his relationship with the governor of Sijistan and his imprisonment comes from biographical narratives and has not been independently verified here through a contemporary witness.",
+      "images_note": "The two scans from the 1880 edition shown on the old page are not embedded in the unified reader because GetArchive is an intermediary; its record alone does not establish the digital copy’s institutional provenance or reuse rights. Both record links remain in the sources for verification. The displayed cover and illustration are original project artwork, not historical portraits.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosity, questions and observations",
+          "text": "I'm Karma. When I heard about Abu Bakr al-Khwarizmi, I imagined a writer carrying his books and letters from one city to another. But I discovered that more than one person was known as al-Khwarizmi, and the hero of our story was a poet and writer, not the famous mathematician himself."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What caught my attention most was that Abu Bakr did not stay in one city. He traveled through many places and met people interested in learning and literature. It seems that travel gave him opportunities to learn, write, and build new relationships."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "His story taught me that a strong memory and a command of language can open many doors. A writer can leave a lasting mark even without inventing a machine or discovering a scientific law."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Opening scene: A writer in the Abbasid era",
+          "text": "During the fourth century AH, writing, poetry, and literary gatherings flourished across many parts of the Islamic world. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi lived in this cultural environment. He became known as a writer, poet, and scholar of language. Biographical sources place his life in the tenth century."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Travel scene: From one city to another",
+          "text": "Abu Bakr's life was not confined to his birthplace. He traveled through several regions and cities, including Damascus, Aleppo, Bukhara, Sijistan, Isfahan, and Nishapur. He made connections with rulers, ministers, scholars, and literary figures. In that era, rulers' courts welcomed poets and writers, and literature and letters were important ways to express ideas and build social standing."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Language scene: A talent for words",
+          "text": "Abu Bakr became known for his command of Arabic, poetry, and genealogy. He left literary letters and a collection of poetry. Letters in those days were more than passing words: writers used them to express ideas, offer praise, convey criticism, and ask for help. A skilled writer therefore needed precise language, a strong memory, and the ability to choose the right expression."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A difficult scene: When a journey goes wrong",
+          "text": "Biographical accounts say that Abu Bakr became associated with Tahir ibn Muhammad, the governor of Sijistan. After praising the governor and later satirizing him, Abu Bakr fell into conflict with him and was imprisoned for a time. The accounts state that he wrote a poem appealing to the prince Abu Nasr Ahmad al-Mikali and describing his hardship. This story shows that literary life was not always easy and that relationships with powerful people could bring support or trouble."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A scene of settlement: Nishapur",
+          "text": "After his travels, Abu Bakr settled in Nishapur, an important center of cultural and scholarly life in Khurasan. He established a connection with Sahib ibn Abbad, a well-known minister and literary figure, and took part in literary gatherings. Biographical sources place his death near the end of the tenth century."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "The legacy: What remains of his story?",
+          "text": "Abu Bakr al-Khwarizmi is remembered in literary and biographical works as a poet and writer with extensive knowledge of language. His story helps us understand part of cultural life in the Abbasid era, when letters and poems were tools of communication and influence, and traveling between cities was part of many writers' search for knowledge and recognition."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Did you know?",
+          "text": "Card 1: The name al-Khwarizmi did not belong to just one person. The famous mathematician Muhammad ibn Musa al-Khwarizmi was another person who lived earlier."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Card 2: Some sources connect Abu Bakr's family background with Khwarazm and Tabaristan, although accounts of names and ancestry are not identical in every reference."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Card 3: Literary correspondence was an important art in the Abbasid era. Skilled writers combined knowledge of language with the ability to present ideas in an influential style."
+        }
+      ]
+    },
+    "fr": {
+      "title": "Abou Bakr al-Khwarizmi : le voyage d'un poète",
+      "subtitle": "L'histoire d'un écrivain abbasside qui voyageait entre les villes et était connu pour sa maîtrise de la langue et sa mémoire.",
+      "summary": "L'histoire d'un écrivain abbasside qui voyageait entre les villes et était connu pour sa maîtrise de la langue et sa mémoire.",
+      "student_name": "Karma Mohamed",
+      "grade": "Troisième année du primaire",
+      "narrator_name": "Karma",
+      "narrator_grade": "Troisième année du primaire",
+      "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "history_note": "Cette histoire porte sur Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi, poète et écrivain connu par les sources littéraires arabes. La bibliothèque de l'université Yale décrit un recueil de ses lettres et le présente comme un homme de lettres, poète et spécialiste de la généalogie ayant vécu vers 934 ou 935–993 ou 994. Il ne faut pas le confondre avec Muhammad ibn Musa al-Khwarizmi, le célèbre mathématicien.\n\nLes références diffèrent dans la conversion des dates de l'Hégire en dates grégoriennes et dans certains détails concernant les origines familiales et la chronologie des voyages. Les dates grégoriennes sont donc approximatives. Le récit de ses relations avec le gouverneur du Sijistan et de son emprisonnement provient de textes biographiques et n'a pas été vérifié indépendamment à partir d'un témoin contemporain.",
+      "images_note": "Les deux scans de l’édition de 1880 visibles sur l’ancienne page ne sont pas intégrés au lecteur unifié, car GetArchive est un intermédiaire et sa notice seule ne prouve ni la provenance institutionnelle de la copie numérique ni ses droits de réutilisation. Les deux liens restent dans les sources pour vérification. La couverture et l’illustration affichées sont des créations originales du projet, et non des portraits historiques.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma : curiosité, questions et observations",
+          "text": "Je m'appelle Karma. Quand j'ai entendu parler d'Abou Bakr al-Khwarizmi, j'ai imaginé un écrivain transportant ses livres et ses lettres d'une ville à l'autre. Mais j'ai découvert que plusieurs personnes étaient connues sous le nom d'al-Khwarizmi, et que le héros de notre histoire était un poète et un écrivain, et non le célèbre mathématicien lui-même."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ce qui m'a le plus frappée, c'est qu'Abou Bakr ne restait pas dans une seule ville. Il voyageait beaucoup et rencontrait des personnes passionnées par le savoir et la littérature. On dirait que ses voyages lui offraient des occasions d'apprendre, d'écrire et de nouer de nouvelles relations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Son histoire m'a appris qu'une bonne mémoire et une excellente maîtrise de la langue peuvent ouvrir de nombreuses portes. Un écrivain peut laisser une trace durable sans inventer une machine ni découvrir une loi scientifique."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène d’ouverture : un écrivain à l’époque abbasside",
+          "text": "Au IVe siècle de l'Hégire, l'écriture, la poésie et les réunions littéraires prospéraient dans de nombreuses régions du monde islamique. Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi vivait dans cet environnement culturel. Il devint connu comme écrivain, poète et spécialiste de la langue. Les sources biographiques situent sa vie au Xe siècle."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène de voyage : d’une ville à l’autre",
+          "text": "La vie d'Abou Bakr ne se limita pas à son lieu de naissance. Il voyagea dans plusieurs régions et villes, notamment Damas, Alep, Boukhara, le Sijistan, Ispahan et Nichapour. Il noua des relations avec des souverains, des ministres, des savants et des hommes de lettres. À cette époque, les cours des souverains accueillaient les poètes et les écrivains. La littérature et les lettres permettaient d'exprimer des idées et de gagner en reconnaissance sociale."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène de langue : un talent pour les mots",
+          "text": "Abou Bakr était connu pour sa maîtrise de l'arabe, de la poésie et de la généalogie. Il a laissé des lettres littéraires et un recueil de poésie. À cette époque, les lettres étaient bien plus que de simples mots : les écrivains s'en servaient pour présenter des idées, faire des éloges, exprimer des reproches ou demander de l'aide. Un bon écrivain devait donc posséder une langue précise, une mémoire solide et la capacité de choisir la bonne expression."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une étape difficile : quand le voyage se complique",
+          "text": "Selon les récits biographiques, Abou Bakr entra en relation avec Tahir ibn Muhammad, gouverneur du Sijistan. Après avoir fait son éloge puis écrit contre lui des vers satiriques, il se retrouva en conflit avec le gouverneur et fut emprisonné pendant un certain temps. Les récits indiquent qu'il composa un poème pour implorer le prince Abou Nasr Ahmad al-Mikali et décrire ses difficultés. Cette histoire montre que la vie littéraire n'était pas toujours facile et que les relations avec les puissants pouvaient apporter du soutien ou provoquer des ennuis."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une étape de stabilité : Nichapour",
+          "text": "Après ses voyages, Abou Bakr s'installa à Nichapour, une ville importante pour la culture et le savoir au Khorassan. Il se rapprocha de Sahib ibn Abbad, un ministre et homme de lettres réputé, et participa à des réunions littéraires. Les sources biographiques situent sa mort vers la fin du Xe siècle."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "L’héritage : que reste-t-il de son histoire ?",
+          "text": "Abou Bakr al-Khwarizmi est resté dans les ouvrages littéraires et biographiques comme un poète et un écrivain possédant une vaste connaissance de la langue. Son histoire nous aide à comprendre une partie de la vie culturelle de l'époque abbasside, lorsque les lettres et les poèmes servaient à communiquer et à exercer une influence, et que les voyages entre les villes faisaient partie de la quête de savoir et de reconnaissance des écrivains."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Le saviez-vous ?",
+          "text": "Carte 1 : Le nom al-Khwarizmi ne désignait pas une seule personne. Le célèbre mathématicien Muhammad ibn Musa al-Khwarizmi était une autre personne, qui vécut plus tôt."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Carte 2 : Certaines sources relient les origines familiales d'Abou Bakr au Khwarazm et au Tabaristan, mais les références ne donnent pas toutes exactement les mêmes informations sur ses noms et sa généalogie."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Carte 3 : La correspondance littéraire était un art important à l'époque abbasside. Les écrivains habiles associaient la connaissance de la langue à la capacité de présenter leurs idées de manière persuasive."
+        }
+      ]
+    },
+    "it": {
+      "title": "Abu Bakr al-Khwarizmi: il viaggio di un poeta",
+      "subtitle": "La storia di uno scrittore dell'epoca abbaside che viaggiò tra le città e divenne famoso per la sua lingua e la sua memoria.",
+      "summary": "La storia di uno scrittore dell'epoca abbaside che viaggiò tra le città e divenne famoso per la sua lingua e la sua memoria.",
+      "student_name": "Karma Mohamed",
+      "grade": "Terza classe della scuola primaria",
+      "narrator_name": "Karma",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "history_note": "Questa storia riguarda Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, poeta e scrittore noto attraverso le fonti letterarie arabe. La biblioteca dell'Università di Yale descrive una raccolta delle sue lettere e lo identifica come letterato, poeta e studioso di genealogia vissuto approssimativamente tra il 934 o 935 e il 993 o 994. Non va confuso con Muhammad ibn Musa al-Khwarizmi, il famoso matematico.\n\nLe fonti differiscono nella conversione delle date dell'Egira in date gregoriane e in alcuni dettagli sulle origini familiari e sulla cronologia dei viaggi. Le date gregoriane sono quindi approssimative. I racconti sui rapporti con il governatore del Sijistan e sulla prigionia derivano dalla letteratura biografica e non sono stati verificati indipendentemente attraverso testimonianze contemporanee.",
+      "images_note": "Le due scansioni dell’edizione del 1880 mostrate nella vecchia pagina non sono incorporate nel lettore unificato perché GetArchive è un intermediario; la sua scheda da sola non dimostra la provenienza istituzionale della copia digitale né i diritti di riutilizzo. Entrambi i link restano nelle fonti per la verifica. Copertina e illustrazione visualizzate sono opere originali del progetto, non ritratti storici.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosità, domande e osservazioni",
+          "text": "Sono Karma. Quando ho sentito parlare di Abu Bakr al-Khwarizmi, ho immaginato uno scrittore che portava libri e lettere da una città all'altra. Ma ho scoperto che più persone erano conosciute con il nome al-Khwarizmi e che il protagonista della nostra storia era un poeta e scrittore, non il famoso matematico."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "La cosa che mi ha colpita di più è che Abu Bakr non rimase in una sola città. Viaggiò in molti luoghi e incontrò persone interessate alla conoscenza e alla letteratura. Sembra che i viaggi gli offrissero occasioni per imparare, scrivere e costruire nuove relazioni."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "La sua storia mi ha insegnato che una buona memoria e una grande padronanza della lingua possono aprire molte porte. Uno scrittore può lasciare un segno duraturo anche senza inventare una macchina o scoprire una legge scientifica."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena iniziale: uno scrittore nell’epoca abbaside",
+          "text": "Nel IV secolo dell'Egira, la scrittura, la poesia e gli incontri letterari fiorivano in molte parti del mondo islamico. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi visse in questo ambiente culturale. Divenne noto come scrittore, poeta e studioso della lingua. Le fonti biografiche collocano la sua vita nel X secolo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena di viaggio: da una città all’altra",
+          "text": "La vita di Abu Bakr non rimase limitata al luogo di nascita. Viaggiò in diverse regioni e città, tra cui Damasco, Aleppo, Bukhara, Sijistan, Isfahan e Nishapur. Entrò in contatto con sovrani, ministri, studiosi e letterati. In quell'epoca, le corti dei sovrani accoglievano poeti e scrittori, mentre la letteratura e le lettere erano strumenti importanti per esprimere idee e ottenere riconoscimento sociale."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena della lingua: talento per le parole",
+          "text": "Abu Bakr era noto per la sua conoscenza dell'arabo, della poesia e della genealogia. Lasciò lettere letterarie e una raccolta di poesie. A quei tempi, le lettere erano più di semplici parole: gli scrittori le usavano per esprimere idee, lodare, criticare e chiedere aiuto. Un bravo scrittore aveva quindi bisogno di una lingua precisa, di una buona memoria e della capacità di scegliere l'espressione giusta."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una fase difficile: quando il viaggio si complica",
+          "text": "Secondo le fonti biografiche, Abu Bakr entrò in contatto con Tahir ibn Muhammad, governatore del Sijistan. Dopo averlo elogiato e successivamente deriso in versi satirici, entrò in conflitto con lui e fu imprigionato per un periodo. Le fonti raccontano che scrisse una poesia per supplicare il principe Abu Nasr Ahmad al-Mikali e descrivere le proprie difficoltà. Questa vicenda mostra che la vita letteraria non era sempre facile e che i rapporti con i potenti potevano offrire sostegno oppure causare problemi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una fase di stabilità: Nishapur",
+          "text": "Dopo i suoi viaggi, Abu Bakr si stabilì a Nishapur, una città importante per la vita culturale e intellettuale del Khurasan. Entrò in rapporto con Sahib ibn Abbad, un ministro e letterato famoso, e partecipò agli incontri letterari. Le fonti biografiche collocano la sua morte verso la fine del X secolo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "L’eredità: che cosa resta della sua storia?",
+          "text": "Abu Bakr al-Khwarizmi è ricordato nelle opere letterarie e biografiche come poeta e scrittore con una vasta conoscenza della lingua. La sua vicenda ci aiuta a comprendere una parte della vita culturale dell'epoca abbaside, quando lettere e poesie erano strumenti di comunicazione e influenza e i viaggi tra le città facevano parte della ricerca di conoscenza e riconoscimento degli scrittori."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Lo sapevi?",
+          "text": "Scheda 1: Il nome al-Khwarizmi non apparteneva a una sola persona. Il famoso matematico Muhammad ibn Musa al-Khwarizmi era un'altra persona e visse prima."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Scheda 2: Alcune fonti collegano le origini familiari di Abu Bakr al Khwarazm e al Tabaristan, ma i riferimenti non concordano sempre sui nomi e sui dettagli genealogici."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Scheda 3: La corrispondenza letteraria era un'arte importante nell'epoca abbaside. Gli scrittori esperti univano la conoscenza della lingua alla capacità di presentare le idee in modo efficace."
+        }
+      ]
+    },
+    "de": {
+      "title": "Abu Bakr al-Chwarizmi: Die Reise eines Dichters",
+      "subtitle": "Die Geschichte eines Schriftstellers aus der Abbasidenzeit, der zwischen Städten reiste und für seine Sprachkenntnisse und sein Gedächtnis bekannt war.",
+      "summary": "Die Geschichte eines Schriftstellers aus der Abbasidenzeit, der zwischen Städten reiste und für seine Sprachkenntnisse und sein Gedächtnis bekannt war.",
+      "student_name": "Karma Mohamed",
+      "grade": "Dritte Grundschulklasse",
+      "narrator_name": "Karma",
+      "narrator_grade": "Dritte Grundschulklasse",
+      "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
+      "history_note": "Diese Geschichte handelt von Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi, einem Dichter und Schriftsteller, der aus arabischen literarischen Quellen bekannt ist. Die Bibliothek der Yale University beschreibt eine Sammlung seiner Briefe und bezeichnet ihn als Literaten, Dichter und Genealogen, der ungefähr von 934 oder 935 bis 993 oder 994 lebte. Er darf nicht mit Muhammad ibn Musa al-Chwarizmi, dem berühmten Mathematiker, verwechselt werden.\n\nDie Quellen unterscheiden sich bei der Umrechnung der Hidschra-Jahre in den gregorianischen Kalender und bei einigen Angaben zur Familienherkunft und zur Reihenfolge der Reisen. Gregorianische Daten sind deshalb Näherungswerte. Die Berichte über seine Beziehungen zum Statthalter von Sidschistan und seine Gefangenschaft stammen aus biografischer Literatur und wurden hier nicht unabhängig anhand zeitgenössischer Zeugnisse überprüft.",
+      "images_note": "Die zwei Scans der Ausgabe von 1880, die auf der alten Seite gezeigt wurden, sind im einheitlichen Reader nicht eingebettet, da GetArchive eine Zwischenquelle ist und der Datensatz allein weder die institutionelle Herkunft der digitalen Kopie noch die Wiederverwendungsrechte belegt. Beide Links bleiben zur Überprüfung in den Quellen erhalten. Titelbild und Illustration sind Originalgrafiken des Projekts, keine historischen Porträts.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: Neugier, Fragen und Beobachtungen",
+          "text": "Ich bin Karma. Als ich von Abu Bakr al-Chwarizmi hörte, stellte ich mir einen Schriftsteller vor, der seine Bücher und Briefe von einer Stadt zur anderen trug. Doch ich entdeckte, dass mehrere Personen unter dem Namen al-Chwarizmi bekannt waren. Der Held unserer Geschichte war Dichter und Schriftsteller, nicht der berühmte Mathematiker."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Am meisten beeindruckte mich, dass Abu Bakr nicht in einer einzigen Stadt blieb. Er reiste durch viele Orte und traf Menschen, die sich für Wissen und Literatur interessierten. Seine Reisen boten ihm offenbar Gelegenheiten, zu lernen, zu schreiben und neue Beziehungen aufzubauen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Seine Geschichte hat mir gezeigt, dass ein gutes Gedächtnis und sichere Sprachkenntnisse viele Türen öffnen können. Ein Schriftsteller kann bleibende Spuren hinterlassen, auch ohne eine Maschine zu erfinden oder ein Naturgesetz zu entdecken."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Auftaktszene: Ein Schriftsteller in der Abbasidenzeit",
+          "text": "Im vierten Jahrhundert nach der Hidschra blühten das Schreiben, die Dichtkunst und literarische Zusammenkünfte in vielen Teilen der islamischen Welt. Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi lebte in diesem kulturellen Umfeld. Er wurde als Schriftsteller, Dichter und Sprachgelehrter bekannt. Biografische Quellen ordnen sein Leben dem zehnten Jahrhundert zu."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Reiseszene: Von einer Stadt zur nächsten",
+          "text": "Abu Bakrs Leben beschränkte sich nicht auf seinen Geburtsort. Er reiste durch verschiedene Regionen und Städte, darunter Damaskus, Aleppo, Buchara, Sidschistan, Isfahan und Nischapur. Dabei knüpfte er Kontakte zu Herrschern, Ministern, Gelehrten und Literaten. In jener Zeit empfingen die Höfe der Herrscher Dichter und Schriftsteller. Literatur und Briefe waren wichtige Mittel, um Gedanken auszudrücken und gesellschaftliche Anerkennung zu gewinnen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Sprachszene: Talent für Worte",
+          "text": "Abu Bakr war für seine Kenntnisse der arabischen Sprache, der Dichtkunst und der Genealogie bekannt. Er hinterließ literarische Briefe und eine Gedichtsammlung. Briefe waren damals mehr als flüchtige Worte: Schriftsteller nutzten sie, um Gedanken auszudrücken, Lob auszusprechen, Kritik zu üben und um Hilfe zu bitten. Ein guter Schriftsteller benötigte deshalb eine präzise Sprache, ein starkes Gedächtnis und die Fähigkeit, den passenden Ausdruck zu wählen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine schwierige Phase: Wenn die Reise nicht wie geplant verläuft",
+          "text": "Biografischen Berichten zufolge stand Abu Bakr mit Tahir ibn Muhammad, dem Statthalter von Sidschistan, in Verbindung. Nachdem er den Statthalter zunächst gelobt und später in Versen verspottet hatte, geriet er mit ihm in Konflikt und wurde eine Zeit lang eingesperrt. Den Berichten zufolge verfasste er ein Gedicht, in dem er Prinz Abu Nasr Ahmad al-Mikali um Hilfe bat und seine Schwierigkeiten schilderte. Diese Geschichte zeigt, dass das Leben von Literaten nicht immer leicht war und Beziehungen zu mächtigen Personen Unterstützung bringen, aber auch Probleme verursachen konnten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine Phase der Niederlassung: Nischapur",
+          "text": "Nach seinen Reisen ließ sich Abu Bakr in Nischapur nieder, einer bedeutenden Stadt des kulturellen und wissenschaftlichen Lebens in Chorasan. Er knüpfte Kontakte zu Sahib ibn Abbad, einem bekannten Minister und Literaten, und nahm an literarischen Zusammenkünften teil. Biografische Quellen ordnen seinen Tod dem Ende des zehnten Jahrhunderts zu."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Das Vermächtnis: Was bleibt von seiner Geschichte?",
+          "text": "Abu Bakr al-Chwarizmi wird in literarischen und biografischen Werken als Dichter und Schriftsteller mit umfassenden Sprachkenntnissen erinnert. Seine Geschichte hilft uns, einen Teil des kulturellen Lebens in der Abbasidenzeit zu verstehen. Damals dienten Briefe und Gedichte der Kommunikation und Einflussnahme, und Reisen zwischen Städten gehörten für viele Schriftsteller zur Suche nach Wissen und Anerkennung."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Wusstest du schon?",
+          "text": "Karte 1: Der Name al-Chwarizmi gehörte nicht nur einer Person. Der berühmte Mathematiker Muhammad ibn Musa al-Chwarizmi war eine andere Person und lebte früher."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Karte 2: Einige Quellen verbinden Abu Bakrs familiäre Herkunft mit Chwarazm und Tabaristan. Die Angaben zu Namen und Abstammung stimmen jedoch nicht in allen Nachschlagewerken überein."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Karte 3: Literarische Briefe waren eine wichtige Kunst in der Abbasidenzeit. Geschickte Schriftsteller verbanden Sprachkenntnisse mit der Fähigkeit, Gedanken wirkungsvoll auszudrücken."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/history/014/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — غلاف توضيحي أصلي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/history/014/cover.svg",
+    "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Abu Bakr al-Khwarizmi.",
+    "i18n": {
+      "ar": {
+        "alt": "غلاف توضيحي لحكاية أبي بكر الخوارزمي، وليس صورة تاريخية",
+        "caption": "غلاف توضيحي لحكاية أبي بكر الخوارزمي، وليس صورة تاريخية",
+        "source_name": "خالدون عبر التاريخ — غلاف توضيحي",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو بورتريه موثقًا لأبي بكر الخوارزمي."
+      },
+      "en": {
+        "alt": "Illustrated cover for Abu Bakr al-Khwarizmi’s story, not a historical portrait",
+        "caption": "Illustrated cover for Abu Bakr al-Khwarizmi’s story, not a historical portrait",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Abu Bakr al-Khwarizmi."
+      },
+      "fr": {
+        "alt": "Couverture illustrée de l’histoire d’Abou Bakr al-Khwarizmi, et non un portrait historique",
+        "caption": "Couverture illustrée de l’histoire d’Abou Bakr al-Khwarizmi, et non un portrait historique",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait vérifié d’Abou Bakr al-Khwarizmi."
+      },
+      "it": {
+        "alt": "Copertina illustrata della storia di Abu Bakr al-Khwarizmi, non un ritratto storico",
+        "caption": "Copertina illustrata della storia di Abu Bakr al-Khwarizmi, non un ritratto storico",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto verificato di Abu Bakr al-Khwarizmi."
+      },
+      "de": {
+        "alt": "Illustriertes Titelbild zur Geschichte Abu Bakr al-Khwarizmis, kein historisches Porträt",
+        "caption": "Illustriertes Titelbild zur Geschichte Abu Bakr al-Khwarizmis, kein historisches Porträt",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "khwarizmi-manuscript-illustration",
+      "path": "stories/history/014/cover-popup.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/history/014/cover-popup.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Abu Bakr al-Khwarizmi.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي للحكاية، وليس صورة تاريخية أرشيفية",
+          "caption": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو بورتريه موثقًا لأبي بكر الخوارزمي.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو بورتريه موثقًا لأبي بكر الخوارزمي."
+        },
+        "en": {
+          "alt": "Illustration for the story, not an archival historical photograph",
+          "caption": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Abu Bakr al-Khwarizmi.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Abu Bakr al-Khwarizmi."
+        },
+        "fr": {
+          "alt": "Illustration de l’histoire, et non photographie historique d’archives",
+          "caption": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait vérifié d’Abou Bakr al-Khwarizmi.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait vérifié d’Abou Bakr al-Khwarizmi."
+        },
+        "it": {
+          "alt": "Illustrazione della storia, non una fotografia storica d’archivio",
+          "caption": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto verificato di Abu Bakr al-Khwarizmi.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto verificato di Abu Bakr al-Khwarizmi."
+        },
+        "de": {
+          "alt": "Illustration zur Geschichte, kein historisches Archivfoto",
+          "caption": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "رسائل أبي بكر الخوارزمي — مكتبة جامعة ييل",
+      "organization": "مكتبة جامعة ييل",
+      "url": "https://onlineexhibits.library.yale.edu/s/arabic-printing/item/2233",
+      "i18n": {
+        "ar": {
+          "title": "رسائل أبي بكر الخوارزمي — مكتبة جامعة ييل",
+          "organization": "مكتبة جامعة ييل"
+        },
+        "en": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Yale University Library",
+          "organization": "Yale University Library"
+        },
+        "fr": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Bibliothèque de l’Université Yale",
+          "organization": "Bibliothèque de l’Université Yale"
+        },
+        "it": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Biblioteca dell’Università Yale",
+          "organization": "Biblioteca dell’Università Yale"
+        },
+        "de": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Yale University Library",
+          "organization": "Yale University Library"
+        }
+      }
+    },
+    {
+      "title": "رسائل أبي بكر الخوارزمي — Arabic Collections Online، طبعة 1880",
+      "organization": "Arabic Collections Online — جامعة نيويورك والجامعة الأمريكية بالقاهرة",
+      "url": "https://sites.dlib.nyu.edu/viewer/books/auc_aco001126/1?embed=1&lang=ar",
+      "i18n": {
+        "ar": {
+          "title": "رسائل أبي بكر الخوارزمي — Arabic Collections Online، طبعة 1880",
+          "organization": "Arabic Collections Online — جامعة نيويورك والجامعة الأمريكية بالقاهرة"
+        },
+        "en": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Arabic Collections Online, 1880 edition",
+          "organization": "Arabic Collections Online — New York University and The American University in Cairo"
+        },
+        "fr": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Arabic Collections Online, édition de 1880",
+          "organization": "Arabic Collections Online — Université de New York et Université américaine du Caire"
+        },
+        "it": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Arabic Collections Online, edizione 1880",
+          "organization": "Arabic Collections Online — New York University e American University in Cairo"
+        },
+        "de": {
+          "title": "Rasa'il Abi Bakr al-Khwarizmi — Arabic Collections Online, Ausgabe 1880",
+          "organization": "Arabic Collections Online — New York University und American University in Cairo"
+        }
+      }
+    },
+    {
+      "title": "سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 — GetArchive (1)",
+      "organization": "GetArchive — سجل وسيط يحتاج إلى مطابقة مؤسسية",
+      "url": "https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-05c5c1",
+      "i18n": {
+        "ar": {
+          "title": "سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 — GetArchive (1)",
+          "organization": "GetArchive — سجل وسيط يحتاج إلى مطابقة مؤسسية"
+        },
+        "en": {
+          "title": "Digital record of the 1880 edition of al-Khwarizmi’s letters — GetArchive (1)",
+          "organization": "GetArchive — intermediary record requiring institutional verification"
+        },
+        "fr": {
+          "title": "Notice numérique de l’édition 1880 des lettres d’al-Khwarizmi — GetArchive (1)",
+          "organization": "GetArchive — notice intermédiaire à vérifier auprès d’une institution"
+        },
+        "it": {
+          "title": "Scheda digitale dell’edizione 1880 delle lettere di al-Khwarizmi — GetArchive (1)",
+          "organization": "GetArchive — record intermedio da verificare con un’istituzione"
+        },
+        "de": {
+          "title": "Digitaler Datensatz zur Ausgabe von 1880 der Briefe al-Khwarizmis — GetArchive (1)",
+          "organization": "GetArchive — Zwischenquelle, die institutionell verifiziert werden muss"
+        }
+      }
+    },
+    {
+      "title": "سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 — GetArchive (2)",
+      "organization": "GetArchive — سجل وسيط يحتاج إلى مطابقة مؤسسية",
+      "url": "https://loc.getarchive.net/media/rasail-abi-bakr-al-khuwarizmi-1670d3",
+      "i18n": {
+        "ar": {
+          "title": "سجل رقمي لطبعة رسائل أبي بكر الخوارزمي، 1880 — GetArchive (2)",
+          "organization": "GetArchive — سجل وسيط يحتاج إلى مطابقة مؤسسية"
+        },
+        "en": {
+          "title": "Digital record of the 1880 edition of al-Khwarizmi’s letters — GetArchive (2)",
+          "organization": "GetArchive — intermediary record requiring institutional verification"
+        },
+        "fr": {
+          "title": "Notice numérique de l’édition 1880 des lettres d’al-Khwarizmi — GetArchive (2)",
+          "organization": "GetArchive — notice intermédiaire à vérifier auprès d’une institution"
+        },
+        "it": {
+          "title": "Scheda digitale dell’edizione 1880 delle lettere di al-Khwarizmi — GetArchive (2)",
+          "organization": "GetArchive — record intermedio da verificare con un’istituzione"
+        },
+        "de": {
+          "title": "Digitaler Datensatz zur Ausgabe von 1880 der Briefe al-Khwarizmis — GetArchive (2)",
+          "organization": "GetArchive — Zwischenquelle, die institutionell verifiziert werden muss"
+        }
+      }
+    },
+    {
+      "title": "ديوان أبي بكر الخوارزمي — بريل الأكاديمية",
+      "organization": "بريل الأكاديمية",
+      "url": "https://brill.com/abstract/title/55127",
+      "i18n": {
+        "ar": {
+          "title": "ديوان أبي بكر الخوارزمي — بريل الأكاديمية",
+          "organization": "بريل الأكاديمية"
+        },
+        "en": {
+          "title": "Dīwān Abū Bakr al-Khwārazmī — Brill Academic Publishers",
+          "organization": "Brill Academic Publishers"
+        },
+        "fr": {
+          "title": "Dīwān Abū Bakr al-Khwārazmī — Éditions académiques Brill",
+          "organization": "Éditions académiques Brill"
+        },
+        "it": {
+          "title": "Dīwān Abū Bakr al-Khwārazmī — Brill Academic Publishers",
+          "organization": "Brill Academic Publishers"
+        },
+        "de": {
+          "title": "Dīwān Abū Bakr al-Khwārazmī — Brill Academic Publishers",
+          "organization": "Brill Academic Publishers"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "known-for",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "بماذا اشتهر أبو بكر الخوارزمي؟",
+          "options": [
+            "بالشعر والكتابة واللغة",
+            "بصناعة السفن",
+            "برسم الخرائط فقط",
+            "بقيادة الجيوش"
+          ],
+          "explanation": "اشتهر أبو بكر الخوارزمي شاعرًا وكاتبًا وصاحب معرفة واسعة باللغة العربية."
+        },
+        "en": {
+          "question": "What was Abu Bakr al-Khwarizmi known for?",
+          "options": [
+            "Poetry, writing, and language",
+            "Shipbuilding",
+            "Mapmaking only",
+            "Leading armies"
+          ],
+          "explanation": "Abu Bakr al-Khwarizmi was known as a poet and writer with extensive knowledge of Arabic."
+        },
+        "fr": {
+          "question": "Pour quoi Abou Bakr al-Khwarizmi était-il connu ?",
+          "options": [
+            "La poésie, l'écriture et la langue",
+            "La construction de navires",
+            "La cartographie uniquement",
+            "Le commandement des armées"
+          ],
+          "explanation": "Abou Bakr al-Khwarizmi était connu comme poète et écrivain maîtrisant largement l'arabe."
+        },
+        "it": {
+          "question": "Per che cosa era famoso Abu Bakr al-Khwarizmi?",
+          "options": [
+            "Poesia, scrittura e lingua",
+            "Costruzione di navi",
+            "Solo cartografia",
+            "Comando degli eserciti"
+          ],
+          "explanation": "Abu Bakr al-Khwarizmi era noto come poeta e scrittore con una vasta conoscenza dell'arabo."
+        },
+        "de": {
+          "question": "Wofür war Abu Bakr al-Chwarizmi bekannt?",
+          "options": [
+            "Dichtkunst, Schreiben und Sprache",
+            "Schiffbau",
+            "Nur Kartografie",
+            "Führung von Armeen"
+          ],
+          "explanation": "Abu Bakr al-Chwarizmi war als Dichter und Schriftsteller mit umfassenden Arabischkenntnissen bekannt."
+        }
+      }
+    },
+    {
+      "id": "grew-up",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة أو منطقة نشأ أبو بكر الخوارزمي؟",
+          "options": [
+            "نيسابور",
+            "خوارزم",
+            "دمشق",
+            "أصفهان"
+          ],
+          "explanation": "تذكر المصادر أنه نشأ في خوارزم قبل أن يتنقل بين مدن أخرى."
+        },
+        "en": {
+          "question": "In which city or region did Abu Bakr al-Khwarizmi grow up?",
+          "options": [
+            "Nishapur",
+            "Khwarazm",
+            "Damascus",
+            "Isfahan"
+          ],
+          "explanation": "Sources state that he grew up in Khwarazm before traveling to other cities."
+        },
+        "fr": {
+          "question": "Dans quelle ville ou région Abou Bakr al-Khwarizmi a-t-il grandi ?",
+          "options": [
+            "Nichapour",
+            "Khwarazm",
+            "Damas",
+            "Ispahan"
+          ],
+          "explanation": "Les sources indiquent qu'il a grandi au Khwarazm avant de voyager vers d'autres villes."
+        },
+        "it": {
+          "question": "In quale città o regione crebbe Abu Bakr al-Khwarizmi?",
+          "options": [
+            "Nishapur",
+            "Khwarazm",
+            "Damasco",
+            "Isfahan"
+          ],
+          "explanation": "Le fonti affermano che crebbe nel Khwarazm prima di viaggiare verso altre città."
+        },
+        "de": {
+          "question": "In welcher Stadt oder Region wuchs Abu Bakr al-Chwarizmi auf?",
+          "options": [
+            "Nischapur",
+            "Chwarazm",
+            "Damaskus",
+            "Isfahan"
+          ],
+          "explanation": "Quellen geben an, dass er in Chwarazm aufwuchs, bevor er in andere Städte reiste."
+        }
+      }
+    },
+    {
+      "id": "settled",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "ما المدينة التي استقر فيها أبو بكر في نهاية رحلته؟",
+          "options": [
+            "بخارى",
+            "حلب",
+            "نيسابور",
+            "دمشق"
+          ],
+          "explanation": "تذكر مصادر التراجم أنه استقر في نيسابور."
+        },
+        "en": {
+          "question": "In which city did Abu Bakr eventually settle?",
+          "options": [
+            "Bukhara",
+            "Aleppo",
+            "Nishapur",
+            "Damascus"
+          ],
+          "explanation": "Biographical sources state that he settled in Nishapur."
+        },
+        "fr": {
+          "question": "Dans quelle ville Abou Bakr finit-il par s'installer ?",
+          "options": [
+            "Boukhara",
+            "Alep",
+            "Nichapour",
+            "Damas"
+          ],
+          "explanation": "Les sources biographiques indiquent qu'il s'installa à Nichapour."
+        },
+        "it": {
+          "question": "In quale città si stabilì infine Abu Bakr?",
+          "options": [
+            "Bukhara",
+            "Aleppo",
+            "Nishapur",
+            "Damasco"
+          ],
+          "explanation": "Le fonti biografiche affermano che si stabilì a Nishapur."
+        },
+        "de": {
+          "question": "In welcher Stadt ließ sich Abu Bakr schließlich nieder?",
+          "options": [
+            "Buchara",
+            "Aleppo",
+            "Nischapur",
+            "Damaskus"
+          ],
+          "explanation": "Biografische Quellen geben an, dass er sich in Nischapur niederließ."
+        }
+      }
+    },
+    {
+      "id": "letters",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "لماذا كانت الرسائل مهمة للكتّاب في العصر العباسي؟",
+          "options": [
+            "للتعبير عن الأفكار والمدح والعتاب وطلب المساعدة",
+            "للاستغناء عن تعلم اللغة",
+            "لإيقاف السفر بين المدن",
+            "لصناعة الأدوات"
+          ],
+          "explanation": "كانت الرسائل وسيلة للتواصل والتعبير عن الأفكار وبناء العلاقات وطلب المساعدة."
+        },
+        "en": {
+          "question": "Why were letters important to writers in the Abbasid era?",
+          "options": [
+            "To express ideas, praise, criticism, and requests for help",
+            "To avoid learning languages",
+            "To stop travel between cities",
+            "To manufacture tools"
+          ],
+          "explanation": "Letters were a means of communication, expressing ideas, building relationships, and asking for help."
+        },
+        "fr": {
+          "question": "Pourquoi les lettres étaient-elles importantes pour les écrivains à l'époque abbasside ?",
+          "options": [
+            "Pour exprimer des idées, des éloges, des reproches et des demandes d'aide",
+            "Pour éviter d'apprendre les langues",
+            "Pour arrêter les voyages entre les villes",
+            "Pour fabriquer des outils"
+          ],
+          "explanation": "Les lettres permettaient de communiquer, d'exprimer des idées, de nouer des relations et de demander de l'aide."
+        },
+        "it": {
+          "question": "Perché le lettere erano importanti per gli scrittori nell'epoca abbaside?",
+          "options": [
+            "Per esprimere idee, elogi, critiche e richieste di aiuto",
+            "Per evitare di imparare le lingue",
+            "Per fermare i viaggi tra le città",
+            "Per fabbricare strumenti"
+          ],
+          "explanation": "Le lettere erano uno strumento di comunicazione, espressione delle idee, costruzione di relazioni e richiesta di aiuto."
+        },
+        "de": {
+          "question": "Warum waren Briefe für Schriftsteller in der Abbasidenzeit wichtig?",
+          "options": [
+            "Um Gedanken, Lob, Kritik und Bitten um Hilfe auszudrücken",
+            "Um das Erlernen von Sprachen zu vermeiden",
+            "Um Reisen zwischen Städten zu verhindern",
+            "Um Werkzeuge herzustellen"
+          ],
+          "explanation": "Briefe dienten der Kommunikation, dem Ausdruck von Gedanken, dem Aufbau von Beziehungen und der Bitte um Hilfe."
+        }
+      }
+    },
+    {
+      "id": "other-khwarizmi",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "هل أبو بكر الخوارزمي هو نفسه عالم الرياضيات محمد بن موسى الخوارزمي؟",
+          "options": [
+            "نعم، هما الشخص نفسه",
+            "لا، هما شخصان مختلفان",
+            "لا توجد مصادر تذكر أيًّا منهما",
+            "كانا ملكين"
+          ],
+          "explanation": "أبو بكر الخوارزمي شاعر وكاتب، أما محمد بن موسى الخوارزمي فهو عالم رياضيات آخر."
+        },
+        "en": {
+          "question": "Was Abu Bakr al-Khwarizmi the same person as the mathematician Muhammad ibn Musa al-Khwarizmi?",
+          "options": [
+            "Yes, they were the same person",
+            "No, they were two different people",
+            "No sources mention either person",
+            "They were both kings"
+          ],
+          "explanation": "Abu Bakr al-Khwarizmi was a poet and writer, while Muhammad ibn Musa al-Khwarizmi was a different mathematician."
+        },
+        "fr": {
+          "question": "Abou Bakr al-Khwarizmi était-il la même personne que le mathématicien Muhammad ibn Musa al-Khwarizmi ?",
+          "options": [
+            "Oui, c'était la même personne",
+            "Non, c'étaient deux personnes différentes",
+            "Aucune source ne mentionne l'un ou l'autre",
+            "Ils étaient tous deux rois"
+          ],
+          "explanation": "Abou Bakr al-Khwarizmi était poète et écrivain, tandis que Muhammad ibn Musa al-Khwarizmi était un autre mathématicien."
+        },
+        "it": {
+          "question": "Abu Bakr al-Khwarizmi era la stessa persona del matematico Muhammad ibn Musa al-Khwarizmi?",
+          "options": [
+            "Sì, erano la stessa persona",
+            "No, erano due persone diverse",
+            "Nessuna fonte menziona nessuno dei due",
+            "Erano entrambi re"
+          ],
+          "explanation": "Abu Bakr al-Khwarizmi era poeta e scrittore, mentre Muhammad ibn Musa al-Khwarizmi era un altro matematico."
+        },
+        "de": {
+          "question": "War Abu Bakr al-Chwarizmi dieselbe Person wie der Mathematiker Muhammad ibn Musa al-Chwarizmi?",
+          "options": [
+            "Ja, sie waren dieselbe Person",
+            "Nein, sie waren zwei verschiedene Personen",
+            "Keine Quelle erwähnt eine der beiden Personen",
+            "Sie waren beide Könige"
+          ],
+          "explanation": "Abu Bakr al-Chwarizmi war Dichter und Schriftsteller, während Muhammad ibn Musa al-Chwarizmi ein anderer Mathematiker war."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 39.7747,
+    "lng": 64.4286,
+    "place": {
+      "ar": "بخارى، إحدى المدن المذكورة في مصادر سيرته",
+      "en": "Bukhara, one of the cities associated in biographical sources",
+      "fr": "Boukhara, l’une des villes mentionnées dans les sources biographiques",
+      "it": "Bukhara, una delle città citate nelle fonti biografiche",
+      "de": "Buchara, eine der in biografischen Quellen genannten Städte"
+    }
+  }
+}
