@@ -57,6 +57,7 @@
     var STORY_GALLERY_PHOTOS = {
       '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/bab-el-mandeb-satellite.jpg','stories/october/001/nabil-01.jpg'],
       '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
+      '003': ['stories/october/003/cover.jpg'],
       '004': ['stories/october/004/Atef_El_Sadat.jpg'],
       '005': ['assets/images/stories/Portrait_of_Avicenna.jpg'],
       '006': ['assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'],
@@ -162,6 +163,7 @@
      011 (عمرو بن العاص): لا توجد صورة موثقة للشخصية، فنستخدم صورة المكان (جامع عمرو بن العاص) حسب الاتفاق.
      013 (حتشبسوت) و012 (فاروق الباز): لم تُضف بعد. */
   var COVER_PHOTOS = {
+    'stories/october/003': 'stories/october/003/cover.jpg',
     'stories/science/015': 'assets/images/stories/M_Yacoub.jpg',
     'stories/science/007': 'assets/images/stories/500px-Ahmed_Zewail__2010.jpg',
     'stories/women/010': 'assets/images/stories/SameeraMoussa.jpg',
