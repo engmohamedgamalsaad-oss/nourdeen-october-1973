@@ -689,6 +689,60 @@
           "organization": "Wikimedia Commons — Foto von Carcharoth"
         }
       }
+    },
+    {
+      "title": "رخصة المشاع الإبداعي — النسبة والمشاركة بالمثل 3.0 (CC BY-SA 3.0)",
+      "organization": "Creative Commons",
+      "url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "i18n": {
+        "ar": {
+          "title": "رخصة المشاع الإبداعي — النسبة والمشاركة بالمثل 3.0 (CC BY-SA 3.0)",
+          "organization": "Creative Commons"
+        },
+        "en": {
+          "title": "Creative Commons Attribution-ShareAlike 3.0 Unported License",
+          "organization": "Creative Commons"
+        },
+        "fr": {
+          "title": "Licence Creative Commons Attribution – Partage dans les mêmes conditions 3.0 non transposé",
+          "organization": "Creative Commons"
+        },
+        "it": {
+          "title": "Licenza Creative Commons Attribuzione - Condividi allo stesso modo 3.0 Unported",
+          "organization": "Creative Commons"
+        },
+        "de": {
+          "title": "Creative-Commons-Lizenz Namensnennung – Weitergabe unter gleichen Bedingungen 3.0 Unported",
+          "organization": "Creative Commons"
+        }
+      }
+    },
+    {
+      "title": "رخصة المشاع الإبداعي — النسبة والمشاركة بالمثل 4.0 الدولية (CC BY-SA 4.0)",
+      "organization": "Creative Commons",
+      "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "i18n": {
+        "ar": {
+          "title": "رخصة المشاع الإبداعي — النسبة والمشاركة بالمثل 4.0 الدولية (CC BY-SA 4.0)",
+          "organization": "Creative Commons"
+        },
+        "en": {
+          "title": "Creative Commons Attribution-ShareAlike 4.0 International License",
+          "organization": "Creative Commons"
+        },
+        "fr": {
+          "title": "Licence Creative Commons Attribution – Partage dans les mêmes conditions 4.0 International",
+          "organization": "Creative Commons"
+        },
+        "it": {
+          "title": "Licenza Creative Commons Attribuzione - Condividi allo stesso modo 4.0 Internazionale",
+          "organization": "Creative Commons"
+        },
+        "de": {
+          "title": "Creative-Commons-Lizenz Namensnennung – Weitergabe unter gleichen Bedingungen 4.0 International",
+          "organization": "Creative Commons"
+        }
+      }
     }
   ],
   "quiz": [
