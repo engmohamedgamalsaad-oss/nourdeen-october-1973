@@ -207,7 +207,14 @@
       "de": "Museum des Islam — Amr ibn al-As"
     },
     "source_url": "https://islam.museum/ar/person/amr-ibn-al-as/",
-    "photo": "stories/islamic/011/cover.svg"
+    "photo": "stories/islamic/011/cover.svg",
+    "place_label": {
+      "ar": "موطنه الأول: ",
+      "en": "Early home: ",
+      "fr": "Premier lieu de vie : ",
+      "it": "Luogo d’origine: ",
+      "de": "Früher Lebensort: "
+    }
   },
   "012": {
     "lat": 30.5877,
