@@ -584,17 +584,83 @@
     {
       "title": "Ahmad ʿUrābī",
       "organization": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/biography/Ahmad-Urabi"
+      "url": "https://www.britannica.com/biography/Ahmad-Urabi",
+      "i18n": {
+        "ar": {
+          "title": "أحمد عرابي",
+          "organization": "الموسوعة البريطانية"
+        },
+        "en": {
+          "title": "Ahmad Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "fr": {
+          "title": "Ahmad Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "it": {
+          "title": "Ahmad Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "de": {
+          "title": "Ahmad Urabi",
+          "organization": "Encyclopaedia Britannica"
+        }
+      }
     },
     {
       "title": "ʿUrābī Revolt",
       "organization": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/event/Urabi-Revolt"
+      "url": "https://www.britannica.com/event/Urabi-Revolt",
+      "i18n": {
+        "ar": {
+          "title": "الثورة العرابية",
+          "organization": "الموسوعة البريطانية"
+        },
+        "en": {
+          "title": "The Urabi Revolt",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "fr": {
+          "title": "La révolte d’Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "it": {
+          "title": "La rivolta di Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "de": {
+          "title": "Die Urabi-Revolte",
+          "organization": "Encyclopaedia Britannica"
+        }
+      }
     },
     {
       "title": "Egypt: The Urabi revolt",
       "organization": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/place/Egypt/The-Urabi-revolt"
+      "url": "https://www.britannica.com/place/Egypt/The-Urabi-revolt",
+      "i18n": {
+        "ar": {
+          "title": "مصر: الثورة العرابية",
+          "organization": "الموسوعة البريطانية"
+        },
+        "en": {
+          "title": "Egypt: The Urabi Revolt",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "fr": {
+          "title": "Égypte : la révolte d’Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "it": {
+          "title": "Egitto: la rivolta di Urabi",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "de": {
+          "title": "Ägypten: Die Urabi-Revolte",
+          "organization": "Encyclopaedia Britannica"
+        }
+      }
     }
   ],
   "quiz": [
