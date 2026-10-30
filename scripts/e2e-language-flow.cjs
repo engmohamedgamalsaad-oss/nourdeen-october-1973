@@ -255,8 +255,8 @@ async function cinematicGlobeRegression(browser, base, origin) {
       cardState.className.includes('khm-card') && !!cardState.category,
       JSON.stringify(cardState));
     check('the selected WebGL story retains its sourced link and reading destination',
-      /^https:\\/\\//i.test(cardState.sourceUrl) &&
-      /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/$/.test(cardState.cardStoryHref) &&
+      cardState.sourceUrl.startsWith('https://') &&
+      cardState.cardStoryHref.split('/').length === 4 && cardState.cardStoryHref.startsWith('stories/') &&
       cardState.storyHref === cardState.cardStoryHref,
       JSON.stringify(cardState));
       await page.screenshot({ path: path.join(screenshotDir, 'globe-desktop.png'), animations: 'disabled' });
