@@ -81,15 +81,31 @@
     "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/ahmed-urabi/"
   },
   "007": {
-    "lat": 31.0341,
-    "lng": 30.4682,
+    "lat": 31.20194,
+    "lng": 29.90528,
     "place": {
-      "ar": "دمنهور، البحيرة",
-      "en": "Damanhur, Beheira",
-      "fr": "Damanhour, Béhéra",
-      "it": "Damanhur, Beheira",
-      "de": "Damanhur, Buheira"
-    }
+      "ar": "جامعة الإسكندرية، حيث درس زويل الكيمياء وتخرج في كلية العلوم عام 1967.",
+      "en": "Alexandria University, where Zewail studied chemistry and graduated from the Faculty of Science in 1967.",
+      "fr": "Université d’Alexandrie, où Zewail a étudié la chimie et obtenu son diplôme à la faculté des sciences en 1967.",
+      "it": "Università di Alessandria, dove Zewail studiò chimica e si laureò presso la Facoltà di Scienze nel 1967.",
+      "de": "Universität Alexandria, an der Zewail Chemie studierte und 1967 seinen Abschluss an der naturwissenschaftlichen Fakultät machte."
+    },
+    "place_label": {
+      "ar": "مكان الدراسة الجامعية: ",
+      "en": "University studied at: ",
+      "fr": "Université où il a étudié : ",
+      "it": "Università in cui studiò: ",
+      "de": "Studienort: "
+    },
+    "approximate": true,
+    "source_name": {
+      "ar": "الموسوعة البريطانية — أحمد زويل",
+      "en": "Encyclopaedia Britannica — Ahmed H. Zewail",
+      "fr": "Encyclopaedia Britannica — Ahmed H. Zewail",
+      "it": "Encyclopaedia Britannica — Ahmed H. Zewail",
+      "de": "Encyclopaedia Britannica — Ahmed H. Zewail"
+    },
+    "source_url": "https://www.britannica.com/biography/Ahmed-Zewail"
   },
   "008": {
     "lat": 31.2001,
