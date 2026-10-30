@@ -14,7 +14,7 @@
     title: { ar: 'مكان مرتبط بالحكاية', en: 'A place linked to the story', fr: 'Un lieu lié à l’histoire', it: 'Un luogo legato alla storia', de: 'Ein Ort, der mit der Geschichte verbunden ist' },
     born: { ar: 'مكان الميلاد: ', en: 'Born in: ', fr: 'Lieu de naissance : ', it: 'Luogo di nascita: ', de: 'Geburtsort: ' },
     approx: { ar: 'الموقع تقريبي ويحتاج إلى مراجعة', en: 'Approximate location; verification needed', fr: 'Emplacement approximatif à vérifier', it: 'Posizione approssimativa da verificare', de: 'Ungefähre Lage; noch zu überprüfen' },
-    link: { ar: '⌖ اعرض الحكاية على خريطة خالدون التفاعلية ←', en: '⌖ Show this story on the interactive map →', fr: '⌖ Voir cette histoire sur la carte interactive →', it: '⌖ Mostra la storia sulla mappa interattiva →', de: '⌖ Geschichte auf der interaktiven Karte zeigen →' }
+    link: { ar: '⌖ اعرض الحكاية على الكرة الأرضية التفاعلية ثلاثية الأبعاد ←', en: '⌖ Show this story on the interactive 3D globe →', fr: '⌖ Voir cette histoire sur le globe interactif 3D →', it: '⌖ Mostra la storia sul globo interattivo 3D →', de: '⌖ Diese Geschichte auf dem interaktiven 3D-Globus zeigen →' }
   };
   var refs = null;
 
@@ -102,7 +102,7 @@
         var p = places && places[slug];
         if (!p || !ok(p.lat, 90) || !ok(p.lng, 180)) return;
         addStyle();
-        build(p, new URL('index.html#khMap', root).href);
+        build(p, new URL('index.html#khWorld', root).href);
         new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
       })
       .catch(function () {});
