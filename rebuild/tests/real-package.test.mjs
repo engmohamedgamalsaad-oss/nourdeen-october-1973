@@ -358,6 +358,51 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   assert.match(readerCss, /header\{position:sticky/, 'language header stays visible while scrolling');
 });
 
+test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-language quiz, and rights-safe image handling', async () => {
+  const story = await loadJson('stories/history/014/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Abu Bakr al-Khwarizmi V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'history');
+  assert.equal(story.design.variant, 'portrait-biography');
+  assert.equal(story.i18n.ar.student_name, 'كارما محمد');
+  assert.equal(story.i18n.ar.grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.i18n.ar.narrator_name, 'كارما');
+  assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.images.length, 1, 'only original project artwork is embedded until scan rights are verified');
+  assert.equal(story.quiz.length, 5);
+  assert.equal(story.sources.length, 5);
+  assert.equal(story.i18n.ar.blocks.length, 12);
+  assert.match(story.i18n.ar.history_note, /لا ينبغي الخلط/);
+  assert.match(story.i18n.ar.history_note, /تقريبية/);
+  assert.match(story.i18n.ar.images_note, /GetArchive/);
+  assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 12, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const image of [story.cover, ...story.images]) {
+      assert.ok(image.i18n[lang].alt?.trim(), 'image alt missing in ' + lang);
+      assert.ok(image.i18n[lang].caption?.trim(), 'image caption missing in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  const page = await readFile(path.join(root, 'stories/history/014/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /khaledoon-story-map-link\.js/);
+});
+
+
 
 
 
