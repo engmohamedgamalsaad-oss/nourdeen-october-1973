@@ -69,8 +69,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "لماذا مُحيت بعض أسمائها؟",
-          "text": "بعد وفاة حتشبسوت، مُحيت بعض صورها وأسمائها من معابد؛ ويختلف المؤرخون حول السبب، ومن التفسيرات المطروحة دوافع سياسية مرتبطة بانتقال الحكم إلى أمنحتب الثاني.",
-          "image_after": "hatshepsut-granite-statue"
+          "text": "بعد وفاة حتشبسوت، مُحيت بعض صورها وأسمائها من معابد؛ ويختلف المؤرخون حول السبب، ومن التفسيرات المطروحة دوافع سياسية مرتبطة بانتقال الحكم إلى أمنحتب الثاني."
         }
       ]
     },
@@ -135,8 +134,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Why were some of her names erased?",
-          "text": "After Hatshepsut’s death, some of her images and names were erased from temples. Historians debate why; one influential explanation points to political motives linked to the succession of Amenhotep II.",
-          "image_after": "hatshepsut-granite-statue"
+          "text": "After Hatshepsut’s death, some of her images and names were erased from temples. Historians debate why; one influential explanation points to political motives linked to the succession of Amenhotep II."
         }
       ]
     },
@@ -201,8 +199,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Pourquoi certains de ses noms ont-ils été effacés ?",
-          "text": "Après la mort d’Hatchepsout, certaines de ses images et de ses inscriptions furent effacées de temples. Les historiens en débattent ; une explication importante évoque des motifs politiques liés à la succession d’Amenhotep II.",
-          "image_after": "hatshepsut-granite-statue"
+          "text": "Après la mort d’Hatchepsout, certaines de ses images et de ses inscriptions furent effacées de temples. Les historiens en débattent ; une explication importante évoque des motifs politiques liés à la succession d’Amenhotep II."
         }
       ]
     },
@@ -267,8 +264,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Perché alcuni dei suoi nomi furono cancellati?",
-          "text": "Dopo la morte di Hatshepsut, alcune sue immagini e iscrizioni furono cancellate dai templi. Gli storici discutono il motivo; una spiegazione influente richiama ragioni politiche legate alla successione di Amenhotep II.",
-          "image_after": "hatshepsut-granite-statue"
+          "text": "Dopo la morte di Hatshepsut, alcune sue immagini e iscrizioni furono cancellate dai templi. Gli storici discutono il motivo; una spiegazione influente richiama ragioni politiche legate alla successione di Amenhotep II."
         }
       ]
     },
@@ -333,8 +329,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Warum wurden einige ihrer Namen getilgt?",
-          "text": "Nach Hatschepsuts Tod wurden einige ihrer Darstellungen und Namen aus Tempeln getilgt. Historiker diskutieren die Gründe; eine wichtige Erklärung verweist auf politische Motive im Zusammenhang mit der Nachfolge Amenophis’ II.",
-          "image_after": "hatshepsut-granite-statue"
+          "text": "Nach Hatschepsuts Tod wurden einige ihrer Darstellungen und Namen aus Tempeln getilgt. Historiker diskutieren die Gründe; eine wichtige Erklärung verweist auf politische Motive im Zusammenhang mit der Nachfolge Amenophis’ II."
         }
       ]
     }
@@ -495,46 +490,6 @@
         "de": {
           "alt": "Statue der Hatschepsut, bekannt als weiblicher Pharao, aus der Sammlung des Met.",
           "caption": "Statue der Hatschepsut aus der Open-Access-Sammlung des Metropolitan Museum of Art.",
-          "source_name": "The Metropolitan Museum of Art — Open Access",
-          "rights": "Bild aus der Open-Access-Sammlung des Met; der Objektdatensatz kennzeichnet es als gemeinfrei/CC0. Link zum Museumsdatensatz beibehalten."
-        }
-      }
-    },
-    {
-      "id": "hatshepsut-granite-statue",
-      "path": "https://collectionapi.metmuseum.org/api/collection/v1/iiif/548519/2346343/main-image",
-      "kind": "photograph",
-      "source_name": "متحف المتروبوليتان للفنون — Open Access",
-      "source_url": "https://www.metmuseum.org/art/collection/search/548519",
-      "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link.",
-      "i18n": {
-        "ar": {
-          "alt": "تمثال حتشبسوت الجالس من الجرانيت في متحف المتروبوليتان",
-          "caption": "تمثال حتشبسوت الجالس من الجرانيت، من مجموعة متحف المتروبوليتان.",
-          "source_name": "متحف المتروبوليتان للفنون — Open Access",
-          "rights": "الصورة من مجموعة Open Access في متحف المتروبوليتان، وسجل القطعة يحددها ضمن الملكية العامة/CC0. احتفظ برابط سجل المتحف."
-        },
-        "en": {
-          "alt": "Seated granite statue of Hatshepsut at The Metropolitan Museum of Art.",
-          "caption": "Seated granite statue of Hatshepsut from The Met collection.",
-          "source_name": "The Metropolitan Museum of Art — Open Access",
-          "rights": "Image from The Met Open Access collection; the object record identifies it as public domain/CC0. Keep the museum record link."
-        },
-        "fr": {
-          "alt": "Statue assise en granit d’Hatchepsout au Metropolitan Museum of Art.",
-          "caption": "Statue assise en granit d’Hatchepsout provenant de la collection du Met.",
-          "source_name": "The Metropolitan Museum of Art — Open Access",
-          "rights": "Image issue de la collection Open Access du Met ; la fiche de l’objet l’indique comme appartenant au domaine public/CC0. Conservez le lien de la fiche."
-        },
-        "it": {
-          "alt": "Statua seduta in granito di Hatshepsut al Metropolitan Museum of Art.",
-          "caption": "Statua seduta in granito di Hatshepsut dalla collezione del Met.",
-          "source_name": "The Metropolitan Museum of Art — Open Access",
-          "rights": "Immagine dalla collezione Open Access del Met; la scheda dell’oggetto la indica come di pubblico dominio/CC0. Conservare il link alla scheda."
-        },
-        "de": {
-          "alt": "Sitzende Granitstatue der Hatschepsut im Metropolitan Museum of Art.",
-          "caption": "Sitzende Granitstatue der Hatschepsut aus der Sammlung des Met.",
           "source_name": "The Metropolitan Museum of Art — Open Access",
           "rights": "Bild aus der Open-Access-Sammlung des Met; der Objektdatensatz kennzeichnet es als gemeinfrei/CC0. Link zum Museumsdatensatz beibehalten."
         }
