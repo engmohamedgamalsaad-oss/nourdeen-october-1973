@@ -33,6 +33,16 @@ for (const sample of [
     }
     const html = fs.readFileSync(htmlPath, 'utf8');
     assert.match(html, /<html[^>]*lang="ar"/i, 'reader page starts in Arabic');
-    assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
+    if (sample.id === '009') {
+      const v2Path = path.join(dir, 'data.v2.json');
+      assert.ok(fs.existsSync(v2Path), 'migrated story has a V2 package');
+      const v2 = JSON.parse(fs.readFileSync(v2Path, 'utf8'));
+      assert.equal(v2.format, 'KHALEDOON_STORY_V2');
+      assert.equal(v2.section, 'people');
+      assert.match(html, /data-kh-v2-reader/, 'Naguib Mahfouz uses the unified V2 reader');
+      assert.match(html, /data-story-path="data\.v2\.json"/, 'V2 reader loads the story package');
+    } else {
+      assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
+    }
   });
 }
