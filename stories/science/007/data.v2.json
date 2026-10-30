@@ -1,0 +1,1149 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "ahmed-zewail",
+  "section": "science",
+  "design": {
+    "variant": "science-lab",
+    "accent": "#8ad9e8"
+  },
+  "original_body": "أحمد زويل عالم مصري عظيم، اتولد في مدينة دمنهور سنة 1946، وكان بيحب العلم من وهو صغير. اجتهد في دراسته لحد ما سافر أمريكا، ونجح في أبحاثه العلمية واكتشف طريقة لدراسة حركة الجزيئات بسرعة فائقة باستخدام ليزر الفيمتو ثانية. وفي سنة 1999، حصل على جائزة نوبل في الكيمياء، ورفع اسم مصر والعرب في العالم كله.\n\nحكاية أحمد زويل بتعلّمنا إن النجاح محتاج صبر واجتهاد وإيمان بالحلم، وإن الطالب الصغير ممكن يكبر ويصبح عالمًا عظيمًا يخدم بلده والإنسانية كلها.",
+  "i18n": {
+    "ar": {
+      "title": "حكاية العالم أحمد زويل",
+      "subtitle": "رحلة قصيرة مع عالم مصري ساعد العلماء على مراقبة الذرات وهي تتحرك أثناء التفاعل الكيميائي.",
+      "summary": "حكاية أحمد زويل: العالم المصري الحائز على جائزة نوبل في الكيمياء، وكيف ساعدت نبضات الليزر القصيرة جدًا على مراقبة الذرات أثناء التفاعل.",
+      "student_name": "مليكة محمد جمال",
+      "grade": "الصف الأول الابتدائي",
+      "figure_name": "أحمد زويل",
+      "person": "أحمد زويل",
+      "history_note": "ملاحظة تحريرية: جملة «كان بيحب العلم من وهو صغير» من كلام الراوية، ولم نجد لها مصدرًا مباشرًا في المراجع المذكورة. اختُصرت بداية الراوية لأن تفاصيل الفيمتو ثانية ونوبل شُرحت لاحقًا بدقة أكبر، والنص الأصلي محفوظ كاملًا. تختلف المصادر في مكان نشأته (الإسكندرية في موقع نوبل ودسوق في مصادر أخرى)، فلم نذكره. معلومات مكتبة الإسكندرية في قسم «من الإسكندرية إلى العالم» مصدرها صحف مصرية وليس موقع المكتبة نفسه. الرسوم توضيحية وليست صورًا علمية أو أرشيفية.",
+      "images_note": "الصور داخل الحكاية رسوم توضيحية أصلية من إعداد المشروع، وليست صورًا أرشيفية أو لقطات علمية حقيقية. يوضح تعليق كل رسم ما يمثله.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "من هنا بدأت الحكاية",
+          "text": "أحمد زويل عالم مصري عظيم، اتولد في مدينة دمنهور سنة 1946، وكان بيحب العلم من وهو صغير. اجتهد في دراسته لحد ما سافر أمريكا، ونجح في أبحاثه العلمية، ورفع اسم مصر والعرب في العالم كله."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وُلد أحمد حسن زويل يوم 26 فبراير 1946 في مدينة دمنهور بمصر. درس الكيمياء في جامعة الإسكندرية، ثم سافر إلى الولايات المتحدة ونال الدكتوراه من جامعة بنسلفانيا. وبعد فترة عمل في جامعة كاليفورنيا ببركلي، انتقل سنة 1976 إلى معهد كاليفورنيا للتكنولوجيا (كالتك) في مدينة باسادينا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "ماذا يحدث داخل التفاعل الكيميائي؟",
+          "text": "في التفاعل الكيميائي تتحرك الذرات داخل الجزيئات وتتغير أماكنها حتى تتكوّن مواد جديدة. والذرات داخل الجزيء تهتز، والزمن بين اهتزازة وأخرى قصير جدًا: بين 10 و100 فيمتو ثانية. والفيمتو ثانية جزء من مليون مليار جزء من الثانية الواحدة. ولفترة طويلة كان العلماء في الغالب يستنتجون ما يحدث بين بداية التفاعل ونهايته دون أن يروه.",
+          "image_after": "folio"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "ما معنى الفيمتو ثانية؟",
+          "text": "الفيمتو ثانية تساوي واحدًا على مليون مليار من الثانية. هذا الزمن بالغ القِصر، لكنه مهم لفهم حركة الذرات أثناء التفاعل الكيميائي.",
+          "image_after": "scale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "نبضات ليزر شديدة القِصر",
+          "text": "في أواخر الثمانينيات طوّر زويل طرقًا لدراسة التفاعلات الكيميائية بتفصيل، باستخدام نبضات ليزر شديدة القِصر. وبفضلها استطاع العلماء لأول مرة أن يلاحظوا الذرات وهي تتحرك أثناء التفاعل، كأن الحدث يجري بالحركة البطيئة. وسُمّي هذا المجال «كيمياء الفيمتو»."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي 12 أكتوبر 1999 أعلنت الأكاديمية الملكية السويدية للعلوم فوز زويل بجائزة نوبل في الكيمياء لدراساته عن حالات الانتقال في التفاعلات الكيميائية باستخدام مطيافية الفيمتو ثانية. وكان أول مصري وأول عربي يفوز بجائزة نوبل في مجال علمي."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "توفي زويل يوم 2 أغسطس 2016 في باسادينا بولاية كاليفورنيا. وكان أيضًا رئيسًا لمجلس أمناء مدينة زويل للعلوم والتكنولوجيا في القاهرة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "محطات أخرى في رحلته",
+          "text": "تخرج زويل في كلية العلوم بجامعة الإسكندرية سنة 1967 بتقدير امتياز مع مرتبة الشرف في الكيمياء، وعمل فيها معيدًا قبل سفره إلى أمريكا. وفي سنة 2010 أُطلق اسمه على مدرج في الكلية.",
+          "image_after": "route"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وبعد نوبل شارك سنة 2009 في المجلس الاستشاري للرئيس الأمريكي للعلوم والتكنولوجيا، وكان أول مبعوث علمي أمريكي إلى الشرق الأوسط. واستُخدمت مطيافية الفيمتو ثانية بعده في دراسة التحفيز والمواد والإلكترونيات."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وارتبط زويل بمكتبة الإسكندرية أيضًا: كان عضوًا في مجلسها الاستشاري، وأتاحت المكتبة لزوارها الاطلاع على نسخة من شهادة جائزته في قسم نوبل. وبعد وفاته أهدت زوجته مكتبته الخاصة إلى مكتبة الإسكندرية، باستثناء كتب العلوم البحتة التي ذهبت إلى جامعة زويل تنفيذًا لوصيته."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وسجّل زويل رحلته في مذكراته «رحلة عبر الزمن» (2002)، التي حرّرها الصحفي أحمد المسلماني."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "كما قالت مليكة",
+          "text": "حكاية أحمد زويل بتعلّمنا إن النجاح محتاج صبر واجتهاد وإيمان بالحلم، وإن الطالب الصغير ممكن يكبر ويصبح عالمًا عظيمًا يخدم بلده والإنسانية كلها."
+        }
+      ]
+    },
+    "en": {
+      "title": "The Story of the Scientist Ahmed Zewail",
+      "subtitle": "A short journey with an Egyptian scientist who helped researchers watch atoms move during a chemical reaction.",
+      "summary": "The story of Ahmed Zewail, the Egyptian Nobel laureate in Chemistry, and how very short laser pulses let scientists watch atoms during a reaction.",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "First grade (Primary)",
+      "figure_name": "Ahmed Zewail",
+      "person": "Ahmed Zewail",
+      "history_note": "Editorial note: the sentence saying he loved science from when he was little comes from the narrator, and we did not find a direct source for it in the references listed. The narrator’s opening was shortened because the details about the femtosecond and the Nobel Prize are explained more precisely later; the full original text is kept. Sources differ on where he grew up (Alexandria on the Nobel site, Desouk in other sources), so we do not state it. The Bibliotheca Alexandrina details in the “From Alexandria to the world” section come from Egyptian press reports, not from the library’s own website. The artwork is illustrative, not scientific or archival imagery.",
+      "images_note": "The story uses original project illustrations, not archival photographs or real scientific captures. Each caption explains what the illustration represents.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Here is where the story began",
+          "text": "Ahmed Zewail was a great Egyptian scientist. He was born in the city of Damanhur in 1946, and he loved science from when he was little. He worked hard in his studies until he travelled to America, succeeded in his scientific research, and raised the name of Egypt and the Arabs across the whole world."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Hassan Zewail was born on 26 February 1946 in Damanhur, Egypt. He studied chemistry at Alexandria University, then travelled to the United States, where he earned his doctorate at the University of Pennsylvania. After a period at the University of California, Berkeley, he moved in 1976 to the California Institute of Technology (Caltech) in Pasadena."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "What happens inside a chemical reaction?",
+          "text": "In a chemical reaction, atoms inside molecules move and change places until new substances form. The atoms in a molecule vibrate, and the time between one vibration and the next is extremely short: between 10 and 100 femtoseconds. A femtosecond is one millionth of a billionth of a second. For a long time, scientists could mostly infer what happens between the beginning and the end of a reaction, without seeing it.",
+          "image_after": "folio"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "What is a femtosecond?",
+          "text": "A femtosecond is one quadrillionth of a second. This extremely short interval helps scientists study how atoms move during a chemical reaction.",
+          "image_after": "scale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Extremely short laser pulses",
+          "text": "In the late 1980s, Zewail developed methods for studying chemical reactions in fine detail, using extremely short laser pulses. With them, scientists could for the first time watch atoms moving during a reaction, as if the event were in slow motion. This new field became known as femtochemistry."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "On 12 October 1999, the Royal Swedish Academy of Sciences announced that Zewail had won the Nobel Prize in Chemistry for his studies of the transition states of chemical reactions using femtosecond spectroscopy. He was the first Egyptian and the first Arab to win a Nobel Prize in a scientific field."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail died on 2 August 2016 in Pasadena, California. He was also chairman of the board of trustees of Zewail City of Science and Technology in Cairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "More stops on his journey",
+          "text": "Zewail graduated from the Faculty of Science at Alexandria University in 1967 with a bachelor’s degree in chemistry, with honours, and worked there as a teaching assistant before travelling to America. In 2010, a lecture hall at the faculty was named after him.",
+          "image_after": "route"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "After the Nobel Prize, he joined the US President’s Council of Advisors on Science and Technology in 2009, and he was the first US science envoy to the Middle East. Femtosecond spectroscopy has since been used to study catalysis, materials and electronics."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail was also linked to the Bibliotheca Alexandrina: he was a member of its advisory council, and the library offered visitors a copy of his Nobel certificate to view in its Nobel section. After his death, his wife donated his private library to the Bibliotheca Alexandrina, except the pure-science books, which went to Zewail University in line with his will."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail recorded his journey in his memoir, published in Arabic as “Rihla Abra al-Zaman” (“A Journey Through Time”, 2002) and edited by the journalist Ahmed al-Muslimani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "In Malika’s words",
+          "text": "Ahmed Zewail’s story teaches us that success takes patience, hard work and faith in a dream, and that a young student can grow up to become a great scientist who serves their country and all of humanity."
+        }
+      ]
+    },
+    "fr": {
+      "title": "L’histoire du savant Ahmed Zewail",
+      "subtitle": "Un court voyage auprès d’un savant égyptien qui a aidé les chercheurs à observer les atomes en mouvement pendant une réaction chimique.",
+      "summary": "L’histoire d’Ahmed Zewail, prix Nobel égyptien de chimie, et de la façon dont des impulsions laser très brèves permettent d’observer les atomes pendant une réaction.",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "1re année du primaire",
+      "figure_name": "Ahmed Zewail",
+      "person": "Ahmed Zewail",
+      "history_note": "Note éditoriale : la phrase disant qu’il aimait la science depuis son enfance vient de la narratrice, et nous n’avons pas trouvé de source directe pour elle dans les références citées. Le début de la narratrice a été raccourci car les détails sur la femtoseconde et le prix Nobel sont expliqués plus précisément ensuite ; le texte original est conservé en entier. Les sources divergent sur le lieu où il a grandi (Alexandrie sur le site du Nobel, Desouk ailleurs) ; nous ne l’indiquons donc pas. Les informations sur la Bibliotheca Alexandrina de la section « D’Alexandrie au monde » proviennent de la presse égyptienne, et non du site de la bibliothèque. Les illustrations ne sont ni des images scientifiques ni des archives.",
+      "images_note": "Le récit utilise des illustrations originales du projet, et non des photographies d’archives ou de véritables images scientifiques. Chaque légende précise ce que représente l’illustration.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "C’est ici que l’histoire a commencé",
+          "text": "Ahmed Zewail est un grand savant égyptien. Il est né dans la ville de Damanhour en 1946 et il aimait la science depuis son plus jeune âge. Il a travaillé dur dans ses études jusqu’à partir en Amérique, a réussi dans ses recherches scientifiques et a fait rayonner le nom de l’Égypte et des Arabes dans le monde entier."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Hassan Zewail est né le 26 février 1946 à Damanhour, en Égypte. Il a étudié la chimie à l’université d’Alexandrie, puis est parti aux États-Unis, où il a obtenu son doctorat à l’université de Pennsylvanie. Après un passage à l’université de Californie à Berkeley, il a rejoint en 1976 le California Institute of Technology (Caltech), à Pasadena."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Que se passe-t-il à l’intérieur d’une réaction chimique ?",
+          "text": "Dans une réaction chimique, les atomes des molécules se déplacent et changent de place jusqu’à former de nouvelles substances. Les atomes d’une molécule vibrent, et le temps entre deux vibrations est extrêmement court : entre 10 et 100 femtosecondes. Une femtoseconde est un millionième de milliardième de seconde. Pendant longtemps, les scientifiques ne pouvaient surtout que déduire ce qui se passe entre le début et la fin d’une réaction, sans le voir.",
+          "image_after": "folio"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Qu’est-ce qu’une femtoseconde ?",
+          "text": "Une femtoseconde équivaut à un millionième de milliardième de seconde. Cet intervalle extrêmement bref aide les scientifiques à étudier le mouvement des atomes pendant une réaction chimique.",
+          "image_after": "scale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Des impulsions laser extrêmement brèves",
+          "text": "À la fin des années 1980, Zewail a mis au point des méthodes pour étudier les réactions chimiques en détail, à l’aide d’impulsions laser extrêmement brèves. Grâce à elles, les scientifiques ont pu, pour la première fois, observer les atomes en mouvement pendant une réaction, comme au ralenti. Ce nouveau domaine a été appelé la femtochimie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le 12 octobre 1999, l’Académie royale des sciences de Suède a annoncé que Zewail recevait le prix Nobel de chimie pour ses études des états de transition des réactions chimiques par spectroscopie femtoseconde. Il a été le premier Égyptien et le premier Arabe à obtenir un prix Nobel scientifique."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail est mort le 2 août 2016 à Pasadena, en Californie. Il présidait aussi le conseil d’administration de la Cité Zewail des sciences et de la technologie, au Caire."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "D’autres étapes de son parcours",
+          "text": "Zewail est diplômé de la faculté des sciences de l’université d’Alexandrie en 1967, avec une licence de chimie obtenue avec les honneurs, et il y a travaillé comme assistant avant de partir en Amérique. En 2010, un amphithéâtre de la faculté a reçu son nom.",
+          "image_after": "route"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Après le prix Nobel, il a rejoint en 2009 le Conseil des conseillers du président américain pour la science et la technologie, et il a été le premier envoyé scientifique des États-Unis au Moyen-Orient. La spectroscopie femtoseconde a depuis été utilisée pour étudier la catalyse, les matériaux et l’électronique."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail était aussi lié à la Bibliotheca Alexandrina : il était membre de son conseil consultatif, et la bibliothèque a proposé à ses visiteurs de consulter une copie de son diplôme Nobel dans sa section Nobel. Après sa mort, sa veuve a offert sa bibliothèque personnelle à la Bibliotheca Alexandrina, à l’exception des livres de sciences pures, destinés à l’université Zewail conformément à son testament."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail a raconté son parcours dans ses mémoires, publiées en arabe sous le titre « Rihla abra al-zaman » (« Voyage à travers le temps », 2002) et éditées par le journaliste Ahmed al-Muslimani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Dans les mots de Malika",
+          "text": "L’histoire d’Ahmed Zewail nous apprend que la réussite demande de la patience, de l’effort et la foi dans son rêve, et qu’un petit élève peut devenir un grand savant au service de son pays et de toute l’humanité."
+        }
+      ]
+    },
+    "it": {
+      "title": "La storia dello scienziato Ahmed Zewail",
+      "subtitle": "Un breve viaggio con uno scienziato egiziano che ha aiutato i ricercatori a osservare gli atomi in movimento durante una reazione chimica.",
+      "summary": "La storia di Ahmed Zewail, premio Nobel egiziano per la Chimica, e di come impulsi laser brevissimi permettono di osservare gli atomi durante una reazione.",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "1ª classe della scuola primaria",
+      "figure_name": "Ahmed Zewail",
+      "person": "Ahmed Zewail",
+      "history_note": "Nota editoriale: la frase secondo cui amava la scienza fin da piccolo viene dalla narratrice e non abbiamo trovato una fonte diretta nei riferimenti indicati. L’inizio della narratrice è stato accorciato perché i dettagli sul femtosecondo e sul Nobel sono spiegati con più precisione dopo; il testo originale è conservato per intero. Le fonti divergono sul luogo in cui è cresciuto (Alessandria sul sito del Nobel, Desouk altrove), quindi non lo indichiamo. Le informazioni sulla Biblioteca di Alessandria nella sezione «Da Alessandria al mondo» provengono dalla stampa egiziana, non dal sito della biblioteca. Le immagini sono illustrative, non scientifiche né d’archivio.",
+      "images_note": "Il racconto utilizza illustrazioni originali del progetto, non fotografie d’archivio né immagini scientifiche reali. Ogni didascalia spiega ciò che rappresenta.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Da qui è cominciata la storia",
+          "text": "Ahmed Zewail è stato un grande scienziato egiziano. È nato nella città di Damanhur nel 1946 e amava la scienza fin da piccolo. Ha studiato con impegno fino a partire per l’America, ha avuto successo nelle sue ricerche scientifiche e ha portato in alto il nome dell’Egitto e degli arabi nel mondo intero."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Hassan Zewail è nato il 26 febbraio 1946 a Damanhur, in Egitto. Ha studiato chimica all’Università di Alessandria, poi si è trasferito negli Stati Uniti, dove ha conseguito il dottorato all’Università della Pennsylvania. Dopo un periodo all’Università della California a Berkeley, nel 1976 è passato al California Institute of Technology (Caltech) a Pasadena."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Che cosa succede dentro una reazione chimica?",
+          "text": "In una reazione chimica gli atomi all’interno delle molecole si muovono e cambiano posto fino a formare nuove sostanze. Gli atomi di una molecola vibrano e il tempo tra una vibrazione e l’altra è brevissimo: tra 10 e 100 femtosecondi. Un femtosecondo è un milionesimo di miliardesimo di secondo. Per molto tempo gli scienziati potevano soprattutto dedurre ciò che accade tra l’inizio e la fine di una reazione, senza vederlo.",
+          "image_after": "folio"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Che cos’è un femtosecondo?",
+          "text": "Un femtosecondo equivale a un milionesimo di miliardesimo di secondo. Questo intervallo brevissimo aiuta gli scienziati a studiare il movimento degli atomi durante una reazione chimica.",
+          "image_after": "scale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Impulsi laser brevissimi",
+          "text": "Alla fine degli anni Ottanta Zewail sviluppò metodi per studiare le reazioni chimiche nei dettagli, usando impulsi laser brevissimi. Grazie a essi gli scienziati poterono, per la prima volta, osservare gli atomi in movimento durante una reazione, come al rallentatore. Questo nuovo campo fu chiamato femtochimica."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il 12 ottobre 1999 la Reale Accademia svedese delle scienze annunciò che Zewail aveva vinto il Premio Nobel per la Chimica per i suoi studi sugli stati di transizione delle reazioni chimiche con la spettroscopia al femtosecondo. Fu il primo egiziano e il primo arabo a vincere un Nobel scientifico."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail è morto il 2 agosto 2016 a Pasadena, in California. Era anche presidente del consiglio di amministrazione della Zewail City of Science and Technology, al Cairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Altre tappe del suo percorso",
+          "text": "Zewail si laureò in chimica alla Facoltà di Scienze dell’Università di Alessandria nel 1967, con lode, e vi lavorò come assistente prima di partire per l’America. Nel 2010 un’aula magna della facoltà fu intitolata a lui.",
+          "image_after": "route"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dopo il Nobel entrò nel 2009 nel Consiglio dei consulenti scientifici e tecnologici del presidente degli Stati Uniti, e fu il primo inviato scientifico americano in Medio Oriente. La spettroscopia al femtosecondo è stata poi usata per studiare catalisi, materiali ed elettronica."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail era legato anche alla Biblioteca di Alessandria: faceva parte del suo consiglio consultivo e la biblioteca offriva ai visitatori una copia del suo certificato Nobel da consultare nella sezione Nobel. Dopo la sua morte la moglie ha donato la sua biblioteca privata alla Biblioteca di Alessandria, tranne i libri di scienze pure, destinati all’Università Zewail secondo il suo testamento."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail raccontò il suo percorso nelle memorie pubblicate in arabo con il titolo «Rihla abra al-zaman» («Viaggio attraverso il tempo», 2002) e curate dal giornalista Ahmed al-Muslimani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Con le parole di Malika",
+          "text": "La storia di Ahmed Zewail ci insegna che il successo richiede pazienza, impegno e fede nel proprio sogno, e che un piccolo studente può crescere e diventare un grande scienziato al servizio del suo paese e di tutta l’umanità."
+        }
+      ]
+    },
+    "de": {
+      "title": "Die Geschichte des Wissenschaftlers Ahmed Zewail",
+      "subtitle": "Eine kurze Reise mit einem ägyptischen Wissenschaftler, der Forschenden half, Atome bei einer chemischen Reaktion in Bewegung zu beobachten.",
+      "summary": "Die Geschichte von Ahmed Zewail, dem ägyptischen Nobelpreisträger für Chemie, und wie sehr kurze Laserpulse es Wissenschaftlern ermöglichten, Atome während einer Reaktion zu beobachten.",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "1. Klasse der Grundschule",
+      "figure_name": "Ahmed Zewail",
+      "person": "Ahmed Zewail",
+      "history_note": "Redaktioneller Hinweis: Der Satz, dass er sich schon als Kind für Wissenschaft begeisterte, stammt von der Erzählerin; in den aufgeführten Quellen fanden wir dafür keinen direkten Beleg. Der Einstieg der Erzählerin wurde gekürzt, weil die Einzelheiten zur Femtosekunde und zum Nobelpreis später genauer erklärt werden; der vollständige Originaltext bleibt erhalten. Die Quellen nennen unterschiedliche Orte seiner Kindheit – Alexandria auf der Nobel-Website und Desouk in anderen Quellen –, deshalb legen wir uns darauf nicht fest. Die Angaben zur Bibliotheca Alexandrina im Abschnitt „Von Alexandria in die Welt“ stammen aus ägyptischen Presseberichten, nicht von der Website der Bibliothek selbst. Die Abbildungen sind illustrative Darstellungen und keine wissenschaftlichen oder historischen Archivbilder.",
+      "images_note": "Die Geschichte verwendet eigens für das Projekt erstellte Illustrationen, keine Archivfotos oder echten wissenschaftlichen Aufnahmen. Jede Bildunterschrift erklärt die Darstellung.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Hier begann die Geschichte",
+          "text": "Ahmed Zewail war ein bedeutender ägyptischer Wissenschaftler. Er wurde 1946 in der Stadt Damanhur geboren und interessierte sich schon als Kind für die Wissenschaft. Er lernte fleißig, ging später nach Amerika und war mit seiner Forschung erfolgreich. Damit machte er Ägypten und die arabische Welt weltweit bekannt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Hassan Zewail wurde am 26. Februar 1946 in Damanhur in Ägypten geboren. Er studierte Chemie an der Universität Alexandria und reiste anschließend in die Vereinigten Staaten, wo er an der University of Pennsylvania promovierte. Nach einer Zeit an der University of California in Berkeley wechselte er 1976 zum California Institute of Technology (Caltech) in Pasadena."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Was geschieht in einer chemischen Reaktion?",
+          "text": "Bei einer chemischen Reaktion bewegen sich Atome innerhalb von Molekülen und ordnen sich neu an, bis neue Stoffe entstehen. Die Atome in einem Molekül schwingen, und die Zeit zwischen zwei Schwingungen ist extrem kurz: etwa 10 bis 100 Femtosekunden. Eine Femtosekunde ist ein billiardstel einer Sekunde. Lange Zeit konnten Wissenschaftler meist nur erschließen, was zwischen Beginn und Ende einer Reaktion geschieht, ohne den Ablauf direkt zu beobachten.",
+          "image_after": "folio"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Was ist eine Femtosekunde?",
+          "text": "Eine Femtosekunde ist ein Billiardstel einer Sekunde. Dieses extrem kurze Zeitintervall hilft Forschenden, die Bewegung von Atomen während einer chemischen Reaktion zu untersuchen.",
+          "image_after": "scale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Extrem kurze Laserpulse",
+          "text": "Ende der 1980er-Jahre entwickelte Zewail Methoden, um chemische Reaktionen mithilfe extrem kurzer Laserpulse genau zu untersuchen. Dadurch konnten Wissenschaftler erstmals beobachten, wie sich Atome während einer Reaktion bewegen – als würde das Geschehen in Zeitlupe ablaufen. Dieses Forschungsgebiet wurde als Femtochemie bekannt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Am 12. Oktober 1999 gab die Königlich Schwedische Akademie der Wissenschaften bekannt, dass Zewail den Nobelpreis für Chemie für seine Untersuchungen der Übergangszustände chemischer Reaktionen mithilfe der Femtosekundenspektroskopie erhalten hatte. Er war der erste Ägypter und der erste Araber, der einen Nobelpreis in einem naturwissenschaftlichen Fach gewann."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail starb am 2. August 2016 in Pasadena, Kalifornien. Außerdem war er Vorsitzender des Kuratoriums der Zewail-Stadt für Wissenschaft und Technologie in Kairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Weitere Stationen seines Weges",
+          "text": "Zewail schloss 1967 sein Chemiestudium an der Fakultät für Naturwissenschaften der Universität Alexandria mit Auszeichnung ab und arbeitete dort als wissenschaftlicher Assistent, bevor er nach Amerika ging. 2010 wurde ein Hörsaal der Fakultät nach ihm benannt.",
+          "image_after": "route"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nach dem Nobelpreis gehörte er 2009 dem Beratergremium des US-Präsidenten für Wissenschaft und Technologie an. Außerdem war er der erste US-amerikanische Wissenschaftsgesandte für den Nahen Osten. Die Femtosekundenspektroskopie wird seither unter anderem zur Untersuchung von Katalyse, Materialien und Elektronik eingesetzt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail war auch mit der Bibliotheca Alexandrina verbunden: Er gehörte ihrem Beirat an, und die Bibliothek ermöglichte Besuchern, eine Kopie seiner Nobelurkunde im Nobelbereich anzusehen. Nach seinem Tod schenkte seine Frau seine private Bibliothek der Bibliotheca Alexandrina. Die Bücher über reine Naturwissenschaften gingen gemäß seinem letzten Willen an die Zewail-Universität."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zewail hielt seinen Lebensweg in seinen Memoiren „Rihla Abra al-Zaman“ („Eine Reise durch die Zeit“, 2002) fest, die vom Journalisten Ahmed al-Muslimani redigiert wurden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "In Malikas Worten",
+          "text": "Ahmed Zewails Geschichte lehrt uns, dass Erfolg Geduld, Fleiß und Vertrauen in einen Traum braucht. Auch ein junger Schüler kann zu einem großen Wissenschaftler heranwachsen, der seinem Land und der ganzen Menschheit dient."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/science/007/cover.svg",
+    "kind": "illustration",
+    "source_name": "رسم أصلي من مشروع خالدون",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/007/cover.svg",
+    "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture.",
+    "i18n": {
+      "ar": {
+        "alt": "رسم توضيحي لذرات تتحرك ونبضات ليزر، وليس صورة علمية حقيقية",
+        "caption": "رحلة قصيرة مع عالم مصري ساعد العلماء على مراقبة الذرات وهي تتحرك أثناء التفاعل الكيميائي.",
+        "source_name": "رسم أصلي من مشروع خالدون",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو لقطة علمية حقيقية."
+      },
+      "en": {
+        "alt": "Illustration of moving atoms and laser pulses, not a real scientific image",
+        "caption": "A short journey with an Egyptian scientist who helped researchers watch atoms move during a chemical reaction.",
+        "source_name": "Original Khaledoon project illustration",
+        "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture."
+      },
+      "fr": {
+        "alt": "Illustration d’atomes en mouvement et d’impulsions laser, pas une image scientifique réelle",
+        "caption": "Un court voyage auprès d’un savant égyptien qui a aidé les chercheurs à observer les atomes en mouvement pendant une réaction chimique.",
+        "source_name": "Illustration originale du projet Khaledoon",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni une véritable image scientifique."
+      },
+      "it": {
+        "alt": "Illustrazione di atomi in movimento e impulsi laser, non un’immagine scientifica reale",
+        "caption": "Un breve viaggio con uno scienziato egiziano che ha aiutato i ricercatori a osservare gli atomi in movimento durante una reazione chimica.",
+        "source_name": "Illustrazione originale del progetto Khaledoon",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un’immagine scientifica reale."
+      },
+      "de": {
+        "alt": "Illustration sich bewegender Atome und Laserpulse, kein echtes wissenschaftliches Bild",
+        "caption": "Eine kurze Reise mit einem ägyptischen Wissenschaftler, der Forschenden half, Atome bei einer chemischen Reaktion in Bewegung zu beobachten.",
+        "source_name": "Originalillustration des Khaledoon-Projekts",
+        "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und keine echte wissenschaftliche Aufnahme."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "folio",
+      "path": "stories/science/007/folio.svg",
+      "kind": "illustration",
+      "source_name": "رسم أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/007/folio.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي لأربع لقطات متتابعة لذرات تتحرك",
+          "caption": "رسم توضيحي لفكرة تتبّع الذرات في لحظات قصيرة جدًا؛ ليس صورة علمية حقيقية.",
+          "source_name": "رسم أصلي من مشروع خالدون",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو لقطة علمية حقيقية."
+        },
+        "en": {
+          "alt": "Illustration of four consecutive snapshots of moving atoms",
+          "caption": "Illustration of the idea of following atoms over extremely short moments; not a real scientific image.",
+          "source_name": "Original Khaledoon project illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture."
+        },
+        "fr": {
+          "alt": "Illustration de quatre instantanés successifs d’atomes en mouvement",
+          "caption": "Illustration de l’idée de suivre les atomes pendant des instants extrêmement courts ; ce n’est pas une image scientifique réelle.",
+          "source_name": "Illustration originale du projet Khaledoon",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni une véritable image scientifique."
+        },
+        "it": {
+          "alt": "Illustrazione di quattro istantanee successive di atomi in movimento",
+          "caption": "Illustrazione dell’idea di seguire gli atomi in istanti brevissimi; non è un’immagine scientifica reale.",
+          "source_name": "Illustrazione originale del progetto Khaledoon",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un’immagine scientifica reale."
+        },
+        "de": {
+          "alt": "Illustration von vier aufeinanderfolgenden Momentaufnahmen sich bewegender Atome",
+          "caption": "Illustration zur Beobachtung von Atomen in extrem kurzen Zeitspannen; keine echte wissenschaftliche Aufnahme.",
+          "source_name": "Originalillustration des Khaledoon-Projekts",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und keine echte wissenschaftliche Aufnahme."
+        }
+      }
+    },
+    {
+      "id": "scale",
+      "path": "stories/science/007/scale.svg",
+      "kind": "illustration",
+      "source_name": "رسم أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/007/scale.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي لأشرطة تقصر تدريجيًا من الثانية إلى الفيمتو ثانية",
+          "caption": "رسم توضيحي لمقياس الزمن: كل خطوة أصغر ألف مرة من التي قبلها، حتى نصل إلى الفيمتو ثانية (واحد على مليون مليار من الثانية).",
+          "source_name": "رسم أصلي من مشروع خالدون",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو لقطة علمية حقيقية."
+        },
+        "en": {
+          "alt": "Illustration of bars shrinking step by step from a second to a femtosecond",
+          "caption": "Illustration of the time scale: each step is a thousand times smaller than the one before, down to the femtosecond (one millionth of a billionth of a second).",
+          "source_name": "Original Khaledoon project illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture."
+        },
+        "fr": {
+          "alt": "Illustration de barres qui raccourcissent de la seconde à la femtoseconde",
+          "caption": "Illustration de l’échelle du temps : chaque étape est mille fois plus petite que la précédente, jusqu’à la femtoseconde (un millionième de milliardième de seconde).",
+          "source_name": "Illustration originale du projet Khaledoon",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni une véritable image scientifique."
+        },
+        "it": {
+          "alt": "Illustrazione di barre che si accorciano dal secondo al femtosecondo",
+          "caption": "Illustrazione della scala del tempo: ogni passo è mille volte più piccolo del precedente, fino al femtosecondo (un milionesimo di miliardesimo di secondo).",
+          "source_name": "Illustrazione originale del progetto Khaledoon",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un’immagine scientifica reale."
+        },
+        "de": {
+          "alt": "Illustration von Balken, die Schritt für Schritt von einer Sekunde auf eine Femtosekunde schrumpfen",
+          "caption": "Illustration der Zeitskala: Jeder Schritt ist tausendmal kleiner als der vorherige, bis hinunter zur Femtosekunde (ein Millionstel einer Milliardstel Sekunde).",
+          "source_name": "Originalillustration des Khaledoon-Projekts",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und keine echte wissenschaftliche Aufnahme."
+        }
+      }
+    },
+    {
+      "id": "route",
+      "path": "stories/science/007/route.svg",
+      "kind": "illustration",
+      "source_name": "رسم أصلي من مشروع خالدون",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/007/route.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي لمسار من ساحل الإسكندرية إلى كاليفورنيا",
+          "caption": "رسم توضيحي لمسار زويل من الإسكندرية إلى كاليفورنيا؛ ليس خريطة دقيقة.",
+          "source_name": "رسم أصلي من مشروع خالدون",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو لقطة علمية حقيقية."
+        },
+        "en": {
+          "alt": "Illustration of a route from the Alexandria coast to California",
+          "caption": "Illustration of Zewail’s path from Alexandria to California; not an accurate map.",
+          "source_name": "Original Khaledoon project illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical photograph or a real scientific capture."
+        },
+        "fr": {
+          "alt": "Illustration d’un trajet de la côte d’Alexandrie à la Californie",
+          "caption": "Illustration du parcours de Zewail d’Alexandrie à la Californie ; ce n’est pas une carte précise.",
+          "source_name": "Illustration originale du projet Khaledoon",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni une véritable image scientifique."
+        },
+        "it": {
+          "alt": "Illustrazione di un percorso dalla costa di Alessandria alla California",
+          "caption": "Illustrazione del percorso di Zewail da Alessandria alla California; non è una mappa precisa.",
+          "source_name": "Illustrazione originale del progetto Khaledoon",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un’immagine scientifica reale."
+        },
+        "de": {
+          "alt": "Illustration eines Weges von der Küste Alexandrias nach Kalifornien",
+          "caption": "Illustration von Zewails Weg von Alexandria nach Kalifornien; keine genaue Karte.",
+          "source_name": "Originalillustration des Khaledoon-Projekts",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und keine echte wissenschaftliche Aufnahme."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "NobelPrize.org — Ahmed Zewail: Facts",
+      "organization": "NobelPrize.org",
+      "url": "https://www.nobelprize.org/prizes/chemistry/1999/zewail/facts/",
+      "i18n": {
+        "ar": {
+          "title": "NobelPrize.org — Ahmed Zewail: Facts",
+          "organization": "NobelPrize.org"
+        },
+        "en": {
+          "title": "NobelPrize.org — Ahmed Zewail: Facts",
+          "organization": "NobelPrize.org"
+        },
+        "fr": {
+          "title": "NobelPrize.org — Ahmed Zewail: Facts",
+          "organization": "NobelPrize.org"
+        },
+        "it": {
+          "title": "NobelPrize.org — Ahmed Zewail: Facts",
+          "organization": "NobelPrize.org"
+        },
+        "de": {
+          "title": "NobelPrize.org — Ahmed Zewail: Facts",
+          "organization": "NobelPrize.org"
+        }
+      }
+    },
+    {
+      "title": "Royal Swedish Academy of Sciences — Press release, 12 October 1999",
+      "organization": "Royal Swedish Academy of Sciences",
+      "url": "https://www.nobelprize.org/nobel_prizes/chemistry/laureates/1999/press.html",
+      "i18n": {
+        "ar": {
+          "title": "Royal Swedish Academy of Sciences — Press release, 12 October 1999",
+          "organization": "Royal Swedish Academy of Sciences"
+        },
+        "en": {
+          "title": "Royal Swedish Academy of Sciences — Press release, 12 October 1999",
+          "organization": "Royal Swedish Academy of Sciences"
+        },
+        "fr": {
+          "title": "Royal Swedish Academy of Sciences — Press release, 12 October 1999",
+          "organization": "Royal Swedish Academy of Sciences"
+        },
+        "it": {
+          "title": "Royal Swedish Academy of Sciences — Press release, 12 October 1999",
+          "organization": "Royal Swedish Academy of Sciences"
+        },
+        "de": {
+          "title": "Königlich Schwedische Akademie der Wissenschaften — Pressemitteilung, 12. Oktober 1999",
+          "organization": "Königlich Schwedische Akademie der Wissenschaften"
+        }
+      }
+    },
+    {
+      "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+      "organization": "Encyclopaedia Britannica",
+      "url": "https://www.britannica.com/biography/Ahmed-Zewail",
+      "i18n": {
+        "ar": {
+          "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "en": {
+          "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "fr": {
+          "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "it": {
+          "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+          "organization": "Encyclopaedia Britannica"
+        },
+        "de": {
+          "title": "Encyclopaedia Britannica — Ahmed H. Zewail",
+          "organization": "Encyclopaedia Britannica"
+        }
+      }
+    },
+    {
+      "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+      "organization": "Lindau Nobel Laureate Meetings",
+      "url": "https://mediatheque.lindau-nobel.org/laureates/zewail/research-profile",
+      "i18n": {
+        "ar": {
+          "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+          "organization": "Lindau Nobel Laureate Meetings"
+        },
+        "en": {
+          "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+          "organization": "Lindau Nobel Laureate Meetings"
+        },
+        "fr": {
+          "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+          "organization": "Lindau Nobel Laureate Meetings"
+        },
+        "it": {
+          "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+          "organization": "Lindau Nobel Laureate Meetings"
+        },
+        "de": {
+          "title": "Lindau Nobel Laureate Meetings — Zewail research profile",
+          "organization": "Lindau Nobel Laureate Meetings"
+        }
+      }
+    },
+    {
+      "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+      "organization": "The Royal Society",
+      "url": "https://royalsociety.org/people/ahmed-zewail-12586",
+      "i18n": {
+        "ar": {
+          "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+          "organization": "The Royal Society"
+        },
+        "en": {
+          "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+          "organization": "The Royal Society"
+        },
+        "fr": {
+          "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+          "organization": "The Royal Society"
+        },
+        "it": {
+          "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+          "organization": "The Royal Society"
+        },
+        "de": {
+          "title": "The Royal Society — Professor Ahmed Zewail ForMemRS",
+          "organization": "The Royal Society"
+        }
+      }
+    },
+    {
+      "title": "مصراوي — علوم الإسكندرية تنعى طالبها زويل",
+      "organization": "مصراوي",
+      "url": "https://www.masrawy.com/news/news_regions/details/2016/8/3/910625/-علوم-الإسكندرية-تنعى-طالبها-زويل-وعميد-الكلية-توقعنا-حصوله-على-نوبل",
+      "i18n": {
+        "ar": {
+          "title": "مصراوي — علوم الإسكندرية تنعى طالبها زويل",
+          "organization": "مصراوي"
+        },
+        "en": {
+          "title": "Masrawy — Alexandria University’s Faculty of Science mourns its student Zewail",
+          "organization": "Masrawy"
+        },
+        "fr": {
+          "title": "Masrawy — La faculté des sciences d’Alexandrie pleure son étudiant Zewail",
+          "organization": "Masrawy"
+        },
+        "it": {
+          "title": "Masrawy — La Facoltà di Scienze di Alessandria piange il suo studente Zewail",
+          "organization": "Masrawy"
+        },
+        "de": {
+          "title": "Masrawy — Die Fakultät für Naturwissenschaften der Universität Alexandria trauert um ihren Studenten Zewail",
+          "organization": "Masrawy"
+        }
+      }
+    },
+    {
+      "title": "الوطن — مكتبة الإسكندرية تنعى «زويل» بعرض مقتنياته",
+      "organization": "الوطن",
+      "url": "https://www.elwatannews.com/news/details/1309618",
+      "i18n": {
+        "ar": {
+          "title": "الوطن — مكتبة الإسكندرية تنعى «زويل» بعرض مقتنياته",
+          "organization": "الوطن"
+        },
+        "en": {
+          "title": "Al-Watan — The Bibliotheca Alexandrina mourns Zewail by displaying his belongings",
+          "organization": "Al-Watan"
+        },
+        "fr": {
+          "title": "Al-Watan — La Bibliotheca Alexandrina rend hommage à Zewail en exposant ses effets",
+          "organization": "Al-Watan"
+        },
+        "it": {
+          "title": "Al-Watan — La Biblioteca di Alessandria ricorda Zewail esponendo i suoi oggetti",
+          "organization": "Al-Watan"
+        },
+        "de": {
+          "title": "Al-Watan — Die Bibliotheca Alexandrina trauert um Zewail und zeigt seine persönlichen Gegenstände",
+          "organization": "Al-Watan"
+        }
+      }
+    },
+    {
+      "title": "مبتدا — إهداء زوجة زويل مكتبته الخاصة إلى مكتبة الإسكندرية",
+      "organization": "مبتدا",
+      "url": "https://www.mobtada.com/details/635757",
+      "i18n": {
+        "ar": {
+          "title": "مبتدا — إهداء زوجة زويل مكتبته الخاصة إلى مكتبة الإسكندرية",
+          "organization": "مبتدا"
+        },
+        "en": {
+          "title": "Mobtada — Zewail’s wife donates his private library to the Bibliotheca Alexandrina",
+          "organization": "Mobtada"
+        },
+        "fr": {
+          "title": "Mobtada — La veuve de Zewail offre sa bibliothèque personnelle à la Bibliotheca Alexandrina",
+          "organization": "Mobtada"
+        },
+        "it": {
+          "title": "Mobtada — La moglie di Zewail dona la sua biblioteca privata alla Biblioteca di Alessandria",
+          "organization": "Mobtada"
+        },
+        "de": {
+          "title": "Mobtada — Zewails Frau schenkt seine Privatbibliothek der Bibliotheca Alexandrina",
+          "organization": "Mobtada"
+        }
+      }
+    },
+    {
+      "title": "Chemistry World — Ahmed Zewail",
+      "organization": "Chemistry World",
+      "url": "https://chemistryworld.com/1010007.article",
+      "i18n": {
+        "ar": {
+          "title": "Chemistry World — Ahmed Zewail",
+          "organization": "Chemistry World"
+        },
+        "en": {
+          "title": "Chemistry World — Ahmed Zewail",
+          "organization": "Chemistry World"
+        },
+        "fr": {
+          "title": "Chemistry World — Ahmed Zewail",
+          "organization": "Chemistry World"
+        },
+        "it": {
+          "title": "Chemistry World — Ahmed Zewail",
+          "organization": "Chemistry World"
+        },
+        "de": {
+          "title": "Chemistry World — Ahmed Zewail",
+          "organization": "Chemistry World"
+        }
+      }
+    },
+    {
+      "title": "العربية — 4 كتب حكى فيها زويل رحلة الوصول إلى نوبل",
+      "organization": "العربية",
+      "url": "https://www.alarabiya.net/arab-and-world/egypt/2016/08/03/بالصور-4-كتب-حكى-فيها-زويل-رحلة-الوصول-إلى-نوبل",
+      "i18n": {
+        "ar": {
+          "title": "العربية — 4 كتب حكى فيها زويل رحلة الوصول إلى نوبل",
+          "organization": "العربية"
+        },
+        "en": {
+          "title": "Al Arabiya — Four books in which Zewail told the journey to the Nobel",
+          "organization": "Al Arabiya"
+        },
+        "fr": {
+          "title": "Al Arabiya — Quatre livres où Zewail raconte le chemin vers le Nobel",
+          "organization": "Al Arabiya"
+        },
+        "it": {
+          "title": "Al Arabiya — Quattro libri in cui Zewail racconta il cammino verso il Nobel",
+          "organization": "Al Arabiya"
+        },
+        "de": {
+          "title": "Al Arabiya — Vier Bücher, in denen Zewail den Weg zum Nobelpreis erzählte",
+          "organization": "Al Arabiya"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "nobel-year",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام حصل أحمد زويل على جائزة نوبل في الكيمياء؟",
+          "options": [
+            "1989",
+            "1995",
+            "1999",
+            "2005"
+          ],
+          "explanation": "أعلنت الأكاديمية الملكية السويدية فوزه بالجائزة في 12 أكتوبر 1999."
+        },
+        "en": {
+          "question": "In which year did Ahmed Zewail receive the Nobel Prize in Chemistry?",
+          "options": [
+            "1989",
+            "1995",
+            "1999",
+            "2005"
+          ],
+          "explanation": "The Royal Swedish Academy announced his award on 12 October 1999."
+        },
+        "fr": {
+          "question": "En quelle année Ahmed Zewail a-t-il reçu le prix Nobel de chimie ?",
+          "options": [
+            "1989",
+            "1995",
+            "1999",
+            "2005"
+          ],
+          "explanation": "L’Académie royale des sciences de Suède a annoncé son prix le 12 octobre 1999."
+        },
+        "it": {
+          "question": "In quale anno Ahmed Zewail ricevette il Premio Nobel per la Chimica?",
+          "options": [
+            "1989",
+            "1995",
+            "1999",
+            "2005"
+          ],
+          "explanation": "L’Accademia reale svedese delle scienze annunciò il premio il 12 ottobre 1999."
+        },
+        "de": {
+          "question": "In welchem Jahr erhielt Ahmed Zewail den Nobelpreis für Chemie?",
+          "options": [
+            "1989",
+            "1995",
+            "1999",
+            "2005"
+          ],
+          "explanation": "Die Königlich Schwedische Akademie der Wissenschaften gab den Preis am 12. Oktober 1999 bekannt."
+        }
+      }
+    },
+    {
+      "id": "femtochemistry",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ماذا أتاحت أبحاث زويل في كيمياء الفيمتو للعلماء؟",
+          "options": [
+            "ملاحظة حركة الذرات أثناء التفاعل",
+            "تغيير العناصر الكيميائية",
+            "إيقاف التفاعلات نهائيًا",
+            "رؤية الذرات بالعين المجردة"
+          ],
+          "explanation": "ساعدت نبضات الليزر فائقة القِصر العلماء على متابعة حركة الذرات أثناء التفاعل."
+        },
+        "en": {
+          "question": "What did Zewail’s femtochemistry research allow scientists to do?",
+          "options": [
+            "Observe atoms moving during reactions",
+            "Change chemical elements",
+            "Stop reactions permanently",
+            "See atoms with the naked eye"
+          ],
+          "explanation": "Ultrashort laser pulses helped scientists follow atomic motion during reactions."
+        },
+        "fr": {
+          "question": "Qu’a permis aux scientifiques la recherche de Zewail en femtochimie ?",
+          "options": [
+            "Observer le mouvement des atomes pendant les réactions",
+            "Modifier les éléments chimiques",
+            "Arrêter définitivement les réactions",
+            "Voir les atomes à l’œil nu"
+          ],
+          "explanation": "Les impulsions laser ultracourtes ont permis de suivre le mouvement des atomes pendant les réactions."
+        },
+        "it": {
+          "question": "Che cosa permise agli scienziati la ricerca di Zewail sulla femtochimica?",
+          "options": [
+            "Osservare il movimento degli atomi durante le reazioni",
+            "Cambiare gli elementi chimici",
+            "Fermare per sempre le reazioni",
+            "Vedere gli atomi a occhio nudo"
+          ],
+          "explanation": "Gli impulsi laser ultrabrevi hanno aiutato a seguire il movimento degli atomi durante le reazioni."
+        },
+        "de": {
+          "question": "Was ermöglichte Zewails Forschung zur Femtochemie?",
+          "options": [
+            "Die Bewegung von Atomen während Reaktionen zu beobachten",
+            "Chemische Elemente zu verändern",
+            "Reaktionen dauerhaft anzuhalten",
+            "Atome mit bloßem Auge zu sehen"
+          ],
+          "explanation": "Ultrakurze Laserpulse halfen dabei, die Bewegung von Atomen während Reaktionen zu verfolgen."
+        }
+      }
+    },
+    {
+      "id": "alexandria-study",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي جامعة درس زويل الكيمياء قبل سفره إلى الولايات المتحدة؟",
+          "options": [
+            "جامعة القاهرة",
+            "جامعة الإسكندرية",
+            "جامعة أسيوط",
+            "جامعة المنصورة"
+          ],
+          "explanation": "درس الكيمياء في جامعة الإسكندرية وتخرج في كلية العلوم عام 1967."
+        },
+        "en": {
+          "question": "At which university did Zewail study chemistry before moving to the United States?",
+          "options": [
+            "Cairo University",
+            "Alexandria University",
+            "Assiut University",
+            "Mansoura University"
+          ],
+          "explanation": "He studied chemistry at Alexandria University and graduated from its Faculty of Science in 1967."
+        },
+        "fr": {
+          "question": "Dans quelle université Zewail a-t-il étudié la chimie avant de partir aux États-Unis ?",
+          "options": [
+            "Université du Caire",
+            "Université d’Alexandrie",
+            "Université d’Assiout",
+            "Université de Mansourah"
+          ],
+          "explanation": "Il a étudié la chimie à l’université d’Alexandrie et a obtenu son diplôme en 1967."
+        },
+        "it": {
+          "question": "In quale università Zewail studiò chimica prima di trasferirsi negli Stati Uniti?",
+          "options": [
+            "Università del Cairo",
+            "Università di Alessandria",
+            "Università di Assiut",
+            "Università di Mansura"
+          ],
+          "explanation": "Studiò chimica all’Università di Alessandria e si laureò nel 1967."
+        },
+        "de": {
+          "question": "An welcher Universität studierte Zewail Chemie, bevor er in die Vereinigten Staaten ging?",
+          "options": [
+            "Universität Kairo",
+            "Universität Alexandria",
+            "Universität Assiut",
+            "Universität Mansura"
+          ],
+          "explanation": "Er studierte Chemie an der Universität Alexandria und schloss sein Studium 1967 ab."
+        }
+      }
+    },
+    {
+      "id": "caltech-move",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "إلى أي معهد انتقل زويل عام 1976 للعمل والبحث؟",
+          "options": [
+            "جامعة بنسلفانيا",
+            "جامعة الإسكندرية",
+            "جامعة كاليفورنيا في بركلي",
+            "معهد كاليفورنيا للتكنولوجيا (كالتك)"
+          ],
+          "explanation": "انتقل إلى معهد كاليفورنيا للتكنولوجيا في باسادينا عام 1976."
+        },
+        "en": {
+          "question": "Which institution did Zewail join in 1976?",
+          "options": [
+            "University of Pennsylvania",
+            "Alexandria University",
+            "University of California, Berkeley",
+            "California Institute of Technology (Caltech)"
+          ],
+          "explanation": "He moved to the California Institute of Technology in Pasadena in 1976."
+        },
+        "fr": {
+          "question": "Quel établissement Zewail a-t-il rejoint en 1976 ?",
+          "options": [
+            "Université de Pennsylvanie",
+            "Université d’Alexandrie",
+            "Université de Californie à Berkeley",
+            "California Institute of Technology (Caltech)"
+          ],
+          "explanation": "Il a rejoint le California Institute of Technology à Pasadena en 1976."
+        },
+        "it": {
+          "question": "A quale istituto si unì Zewail nel 1976?",
+          "options": [
+            "Università della Pennsylvania",
+            "Università di Alessandria",
+            "Università della California, Berkeley",
+            "California Institute of Technology (Caltech)"
+          ],
+          "explanation": "Nel 1976 passò al California Institute of Technology a Pasadena."
+        },
+        "de": {
+          "question": "An welche Einrichtung wechselte Zewail 1976?",
+          "options": [
+            "University of Pennsylvania",
+            "Universität Alexandria",
+            "University of California, Berkeley",
+            "California Institute of Technology (Caltech)"
+          ],
+          "explanation": "1976 wechselte er zum California Institute of Technology in Pasadena."
+        }
+      }
+    },
+    {
+      "id": "femtosecond",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "كم تساوي الفيمتو ثانية؟",
+          "options": [
+            "جزءًا من ألف من الثانية",
+            "جزءًا من مليون من الثانية",
+            "جزءًا من مليون مليار من الثانية",
+            "ثانية كاملة"
+          ],
+          "explanation": "الفيمتو ثانية تساوي واحدًا على مليون مليار من الثانية."
+        },
+        "en": {
+          "question": "How long is one femtosecond?",
+          "options": [
+            "One thousandth of a second",
+            "One millionth of a second",
+            "One quadrillionth of a second",
+            "One full second"
+          ],
+          "explanation": "A femtosecond is one quadrillionth of a second."
+        },
+        "fr": {
+          "question": "Quelle est la durée d’une femtoseconde ?",
+          "options": [
+            "Un millième de seconde",
+            "Un millionième de seconde",
+            "Un millionième de milliardième de seconde",
+            "Une seconde entière"
+          ],
+          "explanation": "Une femtoseconde équivaut à un millionième de milliardième de seconde."
+        },
+        "it": {
+          "question": "Quanto dura un femtosecondo?",
+          "options": [
+            "Un millesimo di secondo",
+            "Un milionesimo di secondo",
+            "Un milionesimo di miliardesimo di secondo",
+            "Un secondo intero"
+          ],
+          "explanation": "Un femtosecondo equivale a un milionesimo di miliardesimo di secondo."
+        },
+        "de": {
+          "question": "Wie lang ist eine Femtosekunde?",
+          "options": [
+            "Ein Tausendstel einer Sekunde",
+            "Ein Millionstel einer Sekunde",
+            "Ein Billiardstel einer Sekunde",
+            "Eine ganze Sekunde"
+          ],
+          "explanation": "Eine Femtosekunde ist ein Billiardstel einer Sekunde."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 31.20194,
+    "lng": 29.90528,
+    "place": {
+      "ar": "جامعة الإسكندرية، حيث درس زويل الكيمياء وتخرج في كلية العلوم عام 1967.",
+      "en": "Alexandria University, where Zewail studied chemistry and graduated from the Faculty of Science in 1967.",
+      "fr": "Université d’Alexandrie, où Zewail a étudié la chimie et obtenu son diplôme à la faculté des sciences en 1967.",
+      "it": "Università di Alessandria, dove Zewail studiò chimica e si laureò presso la Facoltà di Scienze nel 1967.",
+      "de": "Universität Alexandria, an der Zewail Chemie studierte und 1967 seinen Abschluss an der naturwissenschaftlichen Fakultät machte."
+    }
+  }
+}
