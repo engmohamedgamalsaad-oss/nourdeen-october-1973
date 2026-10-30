@@ -228,5 +228,45 @@ test('Sameera Moussa V2 package validates with five-language science narrative, 
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
+test('Amr ibn al-As V2 package validates with child narration, historical uncertainty notes, and credited mosque photographs', async () => {
+  const story = await loadJson('stories/islamic/011/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Amr ibn al-As V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'islamic');
+  assert.equal(story.design.variant, 'islamic-heritage');
+  assert.equal(story.i18n.ar.student_name, 'نوردين محمد');
+  assert.equal(story.i18n.ar.grade, 'الصف الاول الاعدادى');
+  assert.equal(story.i18n.ar.narrator_name, 'كارما');
+  assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.images.length, 4);
+  assert.equal(story.quiz.length, 5);
+  assert.equal(story.sources.length, 3);
+  assert.equal(story.i18n.ar.blocks.length, 8);
+  assert.match(story.i18n.ar.history_note, /مكان دفنه/);
+  assert.match(story.i18n.ar.images_note, /CC BY 2\.0/);
+  assert.match(story.i18n.ar.images_note, /CC BY-SA 3\.0/);
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 8, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  const page = await readFile(path.join(root, 'stories/islamic/011/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /khaledoon-story-map-link\.js/);
+});
+
+
 
 
