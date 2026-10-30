@@ -1,0 +1,1043 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "magdi-yacoub",
+  "section": "science",
+  "design": {
+    "variant": "portrait-biography",
+    "accent": "#8ad9e8"
+  },
+  "original_body": "قلب ينبض بالحياة: حكاية صانع الأمل\nفي إحدى قرى صعيد مصر الهادئة، وخصوصاً في أسوان، ولد طفل صغير يُدعى مجدي يعقوب. كان طفلاً هادئاً، لكنه كان يحمل في عينيه فضولاً كبيراً ونظرة مليئة بالرحمة.",
+  "i18n": {
+    "ar": {
+      "title": "مجدي يعقوب",
+      "subtitle": "قلب ينبض بالحياة",
+      "summary": "قلب ينبض بالحياة",
+      "student_name": "مليكة محمد جمال",
+      "grade": "الصف الأول الابتدائي",
+      "narrator_name": "كارما",
+      "figure_name": "مجدي يعقوب",
+      "person": "مجدي يعقوب",
+      "history_note": "النص الأصلي يذكر أن مجدي يعقوب وُلد في أسوان، لكن مصادر السيرة الموثوقة تذكر أنه وُلد في بلبيس بمحافظة الشرقية يوم 16 نوفمبر 1935. صُححت المعلومة في المتن مع الحفاظ على original_body حرفيًا. وتذكر المصادر أنه تخرج في كلية طب جامعة القاهرة عام 1957، وانتقل إلى بريطانيا عام 1962، وعمل في هارفيلد، وأسهم في تطوير جراحة القلب وزراعة الأعضاء. كما توثق المصادر تأسيس مؤسسة مجدي يعقوب للقلب عام 2008 وبدء عمل مركز أسوان للقلب عام 2009، وتأسيس سلسلة الأمل عام 1995. اختير تصميم portrait-biography لأن الحكاية سيرة طبيب معاصر، ولأن محطات حياته وإنجازاته هي محور السرد؛ ويُفضّل استخدام لون علمي هادئ مع لمسات تركوازية وحمراء مستوحاة من القلب، دون تحويل الصفحة إلى تصميم طبي مزدحم. تختلف بعض المصادر في تفاصيل طفولته وقصة وفاة عمته؛ لذلك صيغ أثر هذه التجربة بحذر دون اختراع حوار أو اقتباس. أُضيفت ثلاث فقرات هل تعلم؟ اعتمادًا على المصادر المذكورة، ولا ينبغي اعتبارها اقتباسات من مجدي يعقوب.",
+      "images_note": "تتوفر صورتان فوتوغرافيتان موثقتان في Wikimedia Commons، وتعرض صفحتا المصدر اسمي المصورين ورخصتي CC BY-SA 3.0 وCC BY-SA 4.0. يجب الاحتفاظ بالإسناد ورابط الرخصة والإشارة إلى أي تعديل، والالتزام بشرط المشاركة بالمثل عند نشر نسخة معدلة. لم يُختبر تحميل الصورتين أو ظهورهما في صفحة الحكاية أو شاشة البداية؛ التحقق من صفحة المصدر لا يثبت نجاح العرض داخل الموقع.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "كارما: فضول وأسئلة وملاحظات",
+          "text": "أنا كارما، ولما سمعت حكاية الدكتور مجدي يعقوب، فكرت في حاجة مهمة: إزاي طفل بيحب يساعد الناس ممكن يكبر ويبقى طبيبًا ينقذ حياة أطفال كتير؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أكتر حاجة عجبتني إن العلم مش مجرد كتب وامتحانات؛ ممكن نتعلم علشان نساعد إنسانًا مريضًا، ونخلي أسرته تفرح برجوعه لبيته. نفسي أعرف أكتر عن القلب، العضو الصغير اللي بيشتغل طول الوقت علشان يخلينا نعيش."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "قلب ينبض بالحياة: حكاية صانع الأمل",
+          "text": "وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "درس الطب في جامعة القاهرة وتخرج عام 1957، ثم سافر إلى بريطانيا عام 1962 لمواصلة التدريب والعمل. ومع مرور السنوات، أصبح جراحًا بارزًا متخصصًا في جراحة القلب والصدر، وعمل في مستشفيات بريطانية منها مستشفى هارفيلد. وساعد في تطوير عمليات لعلاج أمراض القلب المعقدة، ومنها بعض العيوب الخِلقية التي يولد بها الأطفال."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ عمل مجدي يعقوب في مستشفى هارفيلد لسنوات طويلة، وأسهم في بناء برنامج مهم لزراعة القلب والرئتين. وتذكر السيرة المهنية المنشورة لدى مؤسسات أكاديمية أن هذا البرنامج شهد إجراء أكثر من 2500 عملية زراعة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لم تتوقف رحلته عند غرفة العمليات. أسهم مجدي يعقوب في إنشاء برامج كبيرة لزراعة القلب والرئتين في هارفيلد، حيث أُجريت آلاف عمليات الزراعة. وفي مصر، تأسست مؤسسة مجدي يعقوب للقلب عام 2008، ثم بدأ مركز أسوان للقلب استقبال المرضى عام 2009، ليقدم الرعاية الطبية ويسهم في التدريب والبحث العلمي. وهكذا أصبح الوصول إلى علاج متخصص أقرب إلى كثير من المرضى، بدل اضطرارهم إلى السفر بعيدًا بحثًا عن المساعدة."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ لم يقتصر اهتمام مجدي يعقوب على علاج المرضى؛ فقد أسس مؤسسة سلسلة الأمل في بريطانيا عام 1995، لدعم علاج الأطفال الذين يحتاجون إلى عمليات قلب يمكن أن تساعدهم على عيش حياة أفضل."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وتشير معلومات مؤسسة مجدي يعقوب إلى أن مركز أسوان للقلب يجمع بين علاج المرضى وتدريب الأطباء والممرضين ودعم البحث العلمي. وهذا يعني أن أثر المركز لا يتوقف عند عملية واحدة؛ فالمعرفة التي يتعلمها الفريق الطبي يمكن أن تساعد في علاج مرضى آخرين أيضًا."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ يعمل مجدي يعقوب في مجال البحث العلمي إلى جانب خبرته الجراحية، وتشمل مجالات البحث المرتبطة بفريقه تطوير صمامات القلب وهندسة الأنسجة وتجديد عضلة القلب. فالعلماء لا يكتفون بعلاج المشكلة اليوم، بل يبحثون أيضًا عن طرق أفضل للعلاج في المستقبل."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تعلّمنا حكاية مجدي يعقوب أن الرحمة وحدها لا تكفي إذا لم نصحبها بالعلم والعمل، وأن الطبيب لا يعمل بمفرده؛ فخلف كل عملية فريق من الأطباء والممرضين والباحثين. وقد حصل على تكريمات علمية وإنسانية عديدة، منها وسام الاستحقاق البريطاني عام 2014. وتبقى رسالته للأطفال واضحة: اسألوا، وتعلموا، واجتهدوا، واجعلوا معرفتكم وسيلة لمساعدة الآخرين."
+        }
+      ]
+    },
+    "en": {
+      "title": "Magdi Yacoub",
+      "subtitle": "A Heart That Brings Hope",
+      "summary": "A Heart That Brings Hope",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "First grade",
+      "narrator_name": "Karma",
+      "figure_name": "Magdi Yacoub",
+      "person": "Magdi Yacoub",
+      "history_note": "The original text says Magdi Yacoub was born in Aswan, but reliable biographical sources state that he was born in Belbeis, in Sharqia Governorate, on 16 November 1935. This fact was corrected in the story while original_body was preserved verbatim. Sources confirm that he graduated from Cairo University Medical School in 1957, moved to Britain in 1962, worked at Harefield, and contributed to advances in heart surgery and transplantation. They also document the establishment of the Magdi Yacoub Heart Foundation in 2008, the start of the Aswan Heart Centre in 2009, and the founding of Chain of Hope in 1995. The portrait-biography design was chosen because this is the life story of a modern doctor; his life milestones and achievements are central to the narrative. A calm scientific palette with teal and heart-inspired red accents is suitable without making the page visually crowded. Sources differ in some details about his childhood and his aunt’s death, so that experience is described cautiously without invented dialogue or quotations. Three Did you know? paragraphs were added using the listed sources; they are not quotations from Yacoub.",
+      "images_note": "Two photographs are available from Wikimedia Commons, and their source pages identify the photographers and CC BY-SA 3.0 and CC BY-SA 4.0 licences. Attribution, the licence link and notice of any changes must be retained, and share-alike conditions must be followed for adapted versions. Loading and display of the images on the story page and opening screen have not been tested; checking a source page does not prove that the images display correctly on the website.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosity, questions and observations",
+          "text": "I’m Karma, and when I heard Dr Magdi Yacoub’s story, I thought of something important: how can a child who loves helping people grow up to become a doctor who saves the lives of many children?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What I liked most is that science is not just books and exams. We can learn to help a sick person and make their family happy when they return home. I want to learn more about the heart, the small organ that keeps working all the time so that we can live."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A Heart That Brings Hope: The Story of a Hope Maker",
+          "text": "Magdi Yacoub was born on 16 November 1935 in Belbeis, in Egypt’s Sharqia Governorate. From childhood, he became familiar with medicine through his father, a doctor, and later chose to use his knowledge and work to help patients."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He studied medicine at Cairo University and graduated in 1957. In 1962, he travelled to Britain to continue his training and work. Over the years, he became a leading cardiothoracic surgeon and worked at British hospitals, including Harefield Hospital. He helped develop operations to treat complex heart conditions, including some congenital defects that children are born with."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Magdi Yacoub worked at Harefield Hospital for many years and helped build an important heart and lung transplant programme. Biographical information published by academic institutions states that the programme saw more than 2,500 transplant operations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "His journey did not stop in the operating room. Yacoub helped establish major heart and lung transplant programmes at Harefield, where thousands of transplant operations were performed. In Egypt, the Magdi Yacoub Heart Foundation was established in 2008, and the Aswan Heart Centre began receiving patients in 2009. It provides medical care and contributes to training and scientific research. This brought specialist treatment closer to many patients who might otherwise have had to travel far to seek help."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Yacoub’s work was not limited to treating patients. In 1995, he founded the Chain of Hope charity in Britain to support children who need heart operations that can help them live healthier lives."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Information from the Magdi Yacoub Heart Foundation explains that the Aswan Heart Centre combines patient care with training doctors and nurses and supporting scientific research. This means its impact does not end with one operation: what the medical team learns can also help other patients."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Yacoub is involved in scientific research as well as surgery. Research connected with his team includes heart-valve tissue engineering and the study of heart-muscle regeneration. Scientists do not only treat problems today; they also look for better treatments for the future."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Yacoub’s story teaches us that kindness needs to be joined with knowledge and hard work, and that a doctor never works alone: every operation depends on a team of doctors, nurses and researchers. He has received many scientific and humanitarian honours, including the UK Order of Merit in 2014. His message to children remains clear: ask questions, learn, work hard and use your knowledge to help others."
+        }
+      ]
+    },
+    "fr": {
+      "title": "Magdi Yacoub",
+      "subtitle": "Un cœur qui fait naître l’espoir",
+      "summary": "Un cœur qui fait naître l’espoir",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "Première année de l’école primaire",
+      "narrator_name": "Karma",
+      "figure_name": "Magdi Yacoub",
+      "person": "Magdi Yacoub",
+      "history_note": "Le texte original indique que Magdi Yacoub est né à Assouan, mais des sources biographiques fiables précisent qu’il est né à Belbeis, dans le gouvernorat de Charkia, le 16 novembre 1935. Cette information a été corrigée tout en conservant original_body mot pour mot. Les sources confirment qu’il a obtenu son diplôme de médecine à l’Université du Caire en 1957, qu’il est parti en Grande-Bretagne en 1962, qu’il a travaillé à Harefield et qu’il a contribué aux progrès de la chirurgie cardiaque et des transplantations. Elles documentent également la création de la Fondation Magdi Yacoub pour le cœur en 2008, le début des activités du Centre cardiaque d’Assouan en 2009 et la fondation de Chain of Hope en 1995. Le design portrait-biography a été choisi parce qu’il s’agit de la biographie d’un médecin contemporain et que les étapes de sa vie et ses réalisations sont au cœur du récit. Une palette scientifique sobre, avec du turquoise et des touches de rouge évoquant le cœur, convient sans surcharger la page. Les sources divergent sur certains détails de son enfance et de la mort de sa tante ; cette expérience est donc évoquée avec prudence, sans dialogue ni citation inventés. Trois paragraphes Le saviez-vous ? ont été ajoutés à partir des sources indiquées ; ils ne constituent pas des citations de Yacoub.",
+      "images_note": "Deux photographies sont disponibles sur Wikimedia Commons ; leurs pages sources identifient les photographes et les licences CC BY-SA 3.0 et CC BY-SA 4.0. L’attribution, le lien vers la licence et la mention des modifications doivent être conservés, et les conditions de partage à l’identique doivent être respectées pour les versions adaptées. Le chargement et l’affichage des images sur la page du récit et sur l’écran de démarrage n’ont pas été testés ; vérifier une page source ne prouve pas que les images s’affichent correctement sur le site.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma : curiosité, questions et observations",
+          "text": "Je m’appelle Karma et, en découvrant l’histoire du docteur Magdi Yacoub, j’ai pensé à quelque chose d’important : comment un enfant qui aime aider les autres peut-il devenir un médecin qui sauve la vie de nombreux enfants ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ce que j’aime le plus, c’est que les sciences ne se résument pas aux livres et aux examens. Nous pouvons apprendre pour aider une personne malade et rendre sa famille heureuse lorsqu’elle rentre chez elle. J’aimerais en savoir davantage sur le cœur, ce petit organe qui travaille sans arrêt pour nous permettre de vivre."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un cœur qui fait naître l’espoir : l’histoire d’un faiseur d’espoir",
+          "text": "Magdi Yacoub est né le 16 novembre 1935 à Belbeis, dans le gouvernorat égyptien de Charkia. Dès son enfance, il a découvert la médecine grâce à son père, qui était médecin, puis il a choisi de mettre ses connaissances et son travail au service des patients."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il a étudié la médecine à l’Université du Caire et obtenu son diplôme en 1957. En 1962, il est parti en Grande-Bretagne pour poursuivre sa formation et travailler. Au fil des années, il est devenu un grand chirurgien cardiothoracique et a travaillé dans des hôpitaux britanniques, notamment à Harefield. Il a contribué au développement d’opérations destinées à traiter des maladies cardiaques complexes, dont certaines malformations congénitales présentes dès la naissance."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Magdi Yacoub a travaillé de nombreuses années à l’hôpital Harefield et a contribué à développer un important programme de transplantation cardiaque et pulmonaire. Des informations biographiques publiées par des institutions universitaires indiquent que ce programme a compté plus de 2 500 transplantations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Son parcours ne s’est pas arrêté au bloc opératoire. Yacoub a contribué à la mise en place de grands programmes de transplantation cardiaque et pulmonaire à Harefield, où des milliers de transplantations ont été réalisées. En Égypte, la Fondation Magdi Yacoub pour le cœur a été créée en 2008, puis le Centre cardiaque d’Assouan a commencé à accueillir des patients en 2009. Il offre des soins et participe à la formation et à la recherche scientifique. Ainsi, de nombreux patients ont pu se rapprocher de soins spécialisés au lieu de devoir parcourir de longues distances."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Le travail de Yacoub ne se limitait pas aux soins. En 1995, il a fondé au Royaume-Uni l’association Chain of Hope pour aider des enfants ayant besoin d’opérations cardiaques susceptibles d’améliorer leur vie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les informations de la Fondation Magdi Yacoub expliquent que le Centre cardiaque d’Assouan associe les soins aux patients à la formation des médecins et des infirmiers ainsi qu’au soutien de la recherche scientifique. Son action ne s’arrête donc pas à une seule opération : les connaissances acquises par l’équipe médicale peuvent également aider d’autres patients."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Yacoub participe à la recherche scientifique en plus de son travail de chirurgien. Les recherches liées à son équipe comprennent l’ingénierie tissulaire des valves cardiaques et l’étude de la régénération du muscle cardiaque. Les scientifiques ne soignent pas seulement les problèmes d’aujourd’hui : ils cherchent aussi de meilleurs traitements pour l’avenir."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’histoire de Yacoub nous apprend que la compassion doit s’accompagner de connaissances et de travail, et qu’un médecin ne travaille jamais seul : derrière chaque opération se trouve une équipe de médecins, d’infirmiers et de chercheurs. Il a reçu de nombreuses distinctions scientifiques et humanitaires, dont l’Ordre du Mérite britannique en 2014. Son message aux enfants reste clair : posez des questions, apprenez, faites des efforts et utilisez vos connaissances pour aider les autres."
+        }
+      ]
+    },
+    "it": {
+      "title": "Magdi Yacoub",
+      "subtitle": "Un cuore che fa nascere la speranza",
+      "summary": "Un cuore che fa nascere la speranza",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "Prima classe della scuola primaria",
+      "narrator_name": "Karma",
+      "figure_name": "Magdi Yacoub",
+      "person": "Magdi Yacoub",
+      "history_note": "Il testo originale afferma che Magdi Yacoub nacque ad Assuan, ma fonti biografiche affidabili indicano che nacque a Belbeis, nel governatorato di Sharqia, il 16 novembre 1935. Questa informazione è stata corretta mantenendo original_body parola per parola. Le fonti confermano che si laureò in medicina all’Università del Cairo nel 1957, si trasferì in Gran Bretagna nel 1962, lavorò a Harefield e contribuì ai progressi della cardiochirurgia e dei trapianti. Documentano anche la fondazione della Fondazione Cuore Magdi Yacoub nel 2008, l’avvio del Centro Cardiaco di Assuan nel 2009 e la fondazione di Chain of Hope nel 1995. È stato scelto il design portrait-biography perché la storia riguarda la vita di un medico contemporaneo e le tappe della sua vita e i suoi risultati sono centrali nel racconto. Una palette scientifica sobria, con toni turchesi e accenti rossi ispirati al cuore, è adatta senza appesantire la pagina. Le fonti differiscono su alcuni dettagli dell’infanzia e della morte della zia; l’episodio è quindi descritto con cautela, senza inventare dialoghi o citazioni. Sono stati aggiunti tre paragrafi Lo sapevi? sulla base delle fonti elencate; non sono citazioni di Yacoub.",
+      "images_note": "Sono disponibili due fotografie su Wikimedia Commons; le pagine sorgente identificano i fotografi e le licenze CC BY-SA 3.0 e CC BY-SA 4.0. Devono essere mantenuti l’attribuzione, il collegamento alla licenza e l’indicazione di eventuali modifiche; le versioni adattate devono rispettare le condizioni di condivisione allo stesso modo. Il caricamento e la visualizzazione delle immagini nella pagina del racconto e nella schermata iniziale non sono stati testati; controllare la pagina sorgente non dimostra che le immagini vengano mostrate correttamente sul sito.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosità, domande e osservazioni",
+          "text": "Sono Karma e, ascoltando la storia del dottor Magdi Yacoub, ho pensato a una cosa importante: come può un bambino che ama aiutare le persone diventare un medico capace di salvare la vita di tanti bambini?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "La cosa che mi piace di più è che la scienza non è fatta soltanto di libri ed esami. Possiamo imparare per aiutare una persona malata e rendere felice la sua famiglia quando torna a casa. Vorrei conoscere meglio il cuore, il piccolo organo che continua a lavorare senza sosta e ci permette di vivere."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un cuore che fa nascere la speranza: la storia di chi dona speranza",
+          "text": "Magdi Yacoub nacque il 16 novembre 1935 a Belbeis, nel governatorato egiziano di Sharqia. Fin da bambino conobbe il mondo della medicina grazie al padre, che era medico, e in seguito scelse di usare le proprie conoscenze e il proprio lavoro per aiutare i pazienti."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Studiò medicina all’Università del Cairo e si laureò nel 1957. Nel 1962 si trasferì in Gran Bretagna per continuare la formazione e lavorare. Negli anni divenne un importante chirurgo cardiotoracico e lavorò in ospedali britannici, tra cui quello di Harefield. Contribuì a sviluppare interventi per curare malattie cardiache complesse, comprese alcune malformazioni congenite presenti fin dalla nascita."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Magdi Yacoub lavorò per molti anni all’ospedale di Harefield e contribuì a sviluppare un importante programma di trapianto di cuore e polmoni. Informazioni biografiche pubblicate da istituzioni accademiche riferiscono che il programma ha visto oltre 2.500 operazioni di trapianto."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il suo percorso non si fermò in sala operatoria. Yacoub contribuì a creare importanti programmi di trapianto di cuore e polmoni a Harefield, dove furono eseguiti migliaia di trapianti. In Egitto, la Fondazione Cuore Magdi Yacoub nacque nel 2008 e il Centro Cardiaco di Assuan iniziò ad accogliere pazienti nel 2009. Il centro offre cure mediche e contribuisce alla formazione e alla ricerca scientifica. In questo modo, molti pazienti hanno potuto avvicinarsi alle cure specialistiche senza dover viaggiare molto lontano."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Il lavoro di Yacoub non riguardava soltanto le cure. Nel 1995 fondò in Gran Bretagna l’organizzazione benefica Chain of Hope per aiutare i bambini che hanno bisogno di interventi cardiaci capaci di migliorare la loro vita."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le informazioni della Fondazione Cuore Magdi Yacoub spiegano che il Centro Cardiaco di Assuan unisce l’assistenza ai pazienti alla formazione di medici e infermieri e al sostegno della ricerca scientifica. Il suo impatto, quindi, non termina con una singola operazione: le conoscenze acquisite dall’équipe medica possono aiutare anche altri pazienti."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Oltre a lavorare come chirurgo, Yacoub partecipa alla ricerca scientifica. Le ricerche legate al suo gruppo comprendono l’ingegneria dei tessuti delle valvole cardiache e lo studio della rigenerazione del muscolo cardiaco. Gli scienziati non curano soltanto i problemi di oggi: cercano anche terapie migliori per il futuro."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La storia di Yacoub ci insegna che la compassione deve essere accompagnata dalla conoscenza e dall’impegno, e che un medico non lavora mai da solo: dietro ogni intervento c’è una squadra di medici, infermieri e ricercatori. Ha ricevuto numerosi riconoscimenti scientifici e umanitari, tra cui l’Ordine al Merito britannico nel 2014. Il suo messaggio ai bambini è chiaro: fate domande, imparate, impegnatevi e usate ciò che sapete per aiutare gli altri."
+        }
+      ]
+    },
+    "de": {
+      "title": "Magdi Yacoub",
+      "subtitle": "Ein Herz, das Hoffnung schenkt",
+      "summary": "Ein Herz, das Hoffnung schenkt",
+      "student_name": "Malika Mohamed Gamal",
+      "grade": "Erste Klasse der Grundschule",
+      "narrator_name": "Karma",
+      "figure_name": "Magdi Yacoub",
+      "person": "Magdi Yacoub",
+      "history_note": "Im Originaltext steht, Magdi Yacoub sei in Assuan geboren worden. Zuverlässige biografische Quellen nennen jedoch Belbeis im Gouvernement Sharqia als seinen Geburtsort und den 16. November 1935 als sein Geburtsdatum. Diese Angabe wurde korrigiert, während original_body wortgetreu erhalten blieb. Die Quellen bestätigen, dass er 1957 sein Medizinstudium an der Universität Kairo abschloss, 1962 nach Großbritannien ging, in Harefield arbeitete und zur Weiterentwicklung der Herzchirurgie und Transplantationsmedizin beitrug. Sie dokumentieren außerdem die Gründung der Magdi-Yacoub-Herzstiftung 2008, den Beginn der Arbeit des Herzzentrums in Assuan 2009 und die Gründung von Chain of Hope 1995. Das Design portrait-biography wurde gewählt, weil es um die Lebensgeschichte eines modernen Arztes geht und seine Lebensstationen und Leistungen im Mittelpunkt stehen. Eine ruhige wissenschaftliche Farbpalette mit Türkis und herzroten Akzenten passt dazu, ohne die Seite zu überladen. Quellen unterscheiden sich in einigen Einzelheiten seiner Kindheit und des Todes seiner Tante; deshalb wird dieses Erlebnis vorsichtig beschrieben, ohne Dialoge oder Zitate zu erfinden. Drei Abschnitte Schon gewusst? wurden anhand der angegebenen Quellen ergänzt und sind keine Zitate von Yacoub.",
+      "images_note": "Zwei Fotografien sind auf Wikimedia Commons verfügbar; die Quellseiten nennen die Fotografen und die Lizenzen CC BY-SA 3.0 und CC BY-SA 4.0. Namensnennung, Lizenzlink und Hinweis auf Änderungen müssen erhalten bleiben; angepasste Versionen müssen die Share-Alike-Bedingungen erfüllen. Das Laden und Anzeigen der Bilder auf der Geschichtsseite und dem Startbildschirm wurde nicht getestet. Eine geprüfte Quellseite beweist nicht, dass die Bilder auf der Website korrekt angezeigt werden.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: Neugier, Fragen und Beobachtungen",
+          "text": "Ich bin Karma, und als ich die Geschichte von Dr. Magdi Yacoub hörte, dachte ich über etwas Wichtiges nach: Wie kann ein Kind, das gern anderen hilft, zu einem Arzt heranwachsen, der das Leben vieler Kinder rettet?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Am besten gefällt mir, dass Wissenschaft nicht nur aus Büchern und Prüfungen besteht. Wir können lernen, um einem kranken Menschen zu helfen und seine Familie glücklich zu machen, wenn er nach Hause zurückkehren kann. Ich möchte mehr über das Herz erfahren, das kleine Organ, das ununterbrochen arbeitet und uns am Leben hält."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Ein Herz, das Hoffnung schenkt: Die Geschichte eines Hoffnungsstifters",
+          "text": "Magdi Yacoub wurde am 16. November 1935 in Belbeis im ägyptischen Gouvernement Sharqia geboren. Schon als Kind lernte er durch seinen Vater, der Arzt war, die Medizin kennen. Später entschied er sich, sein Wissen und seine Arbeit einzusetzen, um kranken Menschen zu helfen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Er studierte Medizin an der Universität Kairo und schloss sein Studium 1957 ab. 1962 reiste er nach Großbritannien, um seine Ausbildung fortzusetzen und dort zu arbeiten. Im Laufe der Jahre wurde er ein bedeutender Herz- und Thoraxchirurg und arbeitete an britischen Krankenhäusern, darunter im Harefield Hospital. Er half dabei, Operationen zur Behandlung komplexer Herzerkrankungen zu entwickeln, darunter einige angeborene Herzfehler."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Schon gewusst? Magdi Yacoub arbeitete viele Jahre im Harefield Hospital und half beim Aufbau eines bedeutenden Programms für Herz- und Lungentransplantationen. Biografische Angaben akademischer Einrichtungen berichten, dass in diesem Programm mehr als 2.500 Transplantationen durchgeführt wurden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sein Weg endete nicht im Operationssaal. Yacoub trug dazu bei, große Programme für Herz- und Lungentransplantationen in Harefield aufzubauen, wo Tausende Transplantationen durchgeführt wurden. In Ägypten wurde die Magdi-Yacoub-Herzstiftung 2008 gegründet; das Herzzentrum in Assuan begann 2009, Patienten aufzunehmen. Es bietet medizinische Versorgung und unterstützt Ausbildung und wissenschaftliche Forschung. Dadurch konnten viele Patienten spezialisierte Hilfe näher an ihrem Wohnort erhalten, statt weit reisen zu müssen."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Schon gewusst? Yacoubs Arbeit beschränkte sich nicht auf die Behandlung von Patienten. 1995 gründete er in Großbritannien die Hilfsorganisation Chain of Hope, um Kindern zu helfen, die Herzoperationen benötigen, damit sie gesünder leben können."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Informationen der Magdi-Yacoub-Herzstiftung erklären, dass das Herzzentrum in Assuan die Patientenversorgung mit der Ausbildung von Ärzten und Pflegekräften sowie der Unterstützung wissenschaftlicher Forschung verbindet. Seine Wirkung endet also nicht mit einer einzigen Operation: Das Wissen, das das medizinische Team gewinnt, kann auch anderen Patienten helfen."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Schon gewusst? Neben seiner Arbeit als Chirurg ist Yacoub an wissenschaftlicher Forschung beteiligt. Zu den Forschungsgebieten seines Teams gehören die Gewebezüchtung von Herzklappen und die Untersuchung der Regeneration des Herzmuskels. Wissenschaftler behandeln nicht nur die Probleme von heute, sondern suchen auch nach besseren Behandlungsmöglichkeiten für die Zukunft."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Yacoubs Geschichte zeigt uns, dass Mitgefühl Wissen und harte Arbeit braucht und dass ein Arzt niemals allein arbeitet: Hinter jeder Operation steht ein Team aus Ärzten, Pflegekräften und Forschenden. Er erhielt zahlreiche wissenschaftliche und humanitäre Auszeichnungen, darunter 2014 den britischen Order of Merit. Seine Botschaft an Kinder bleibt klar: Stellt Fragen, lernt, strengt euch an und nutzt euer Wissen, um anderen zu helfen."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "path": "stories/science/015/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — غلاف توضيحي أصلي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/015/cover.svg",
+    "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة فوتوغرافية أو صورة تاريخية للدكتور مجدي يعقوب.",
+    "i18n": {
+      "ar": {
+        "alt": "غلاف توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة تاريخية",
+        "caption": "غلاف توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة تاريخية",
+        "source_name": "خالدون عبر التاريخ — غلاف توضيحي أصلي",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة فوتوغرافية أو صورة تاريخية للدكتور مجدي يعقوب."
+      },
+      "en": {
+        "alt": "Illustrated cover for Magdi Yacoub’s story, not a historical photograph",
+        "caption": "Illustrated cover for Magdi Yacoub’s story, not a historical photograph",
+        "source_name": "Khaledoon — original illustrated cover",
+        "rights": "Original illustration created for the Khaledoon project; not a photograph or historical portrait of Dr Magdi Yacoub."
+      },
+      "fr": {
+        "alt": "Couverture illustrée de l’histoire de Magdi Yacoub, et non une photographie historique",
+        "caption": "Couverture illustrée de l’histoire de Magdi Yacoub, et non une photographie historique",
+        "source_name": "Khaledoon — couverture illustrée originale",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie ni un portrait historique du Dr Magdi Yacoub."
+      },
+      "it": {
+        "alt": "Copertina illustrata della storia di Magdi Yacoub, non una fotografia storica",
+        "caption": "Copertina illustrata della storia di Magdi Yacoub, non una fotografia storica",
+        "source_name": "Khaledoon — copertina illustrata originale",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia né un ritratto storico del dottor Magdi Yacoub."
+      },
+      "de": {
+        "alt": "Illustriertes Titelbild zur Geschichte von Magdi Yacoub, kein historisches Foto",
+        "caption": "Illustriertes Titelbild zur Geschichte von Magdi Yacoub, kein historisches Foto",
+        "source_name": "Khaledoon — originales illustriertes Titelbild",
+        "rights": "Originalillustration für das Khaledoon-Projekt; keine Fotografie und kein historisches Porträt von Dr. Magdi Yacoub."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "magdi-yacoub-2008-photo",
+      "path": "assets/images/stories/M_Yacoub.jpg",
+      "kind": "photograph",
+      "source_name": "تصوير Raafat عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:M_Yacoub.JPG",
+      "rights": "CC BY-SA 3.0. تصوير Raafat. يجب ذكر المصور والمصدر والرخصة، والإشارة إلى أي تعديل، وإتاحة الأعمال المعدلة تحت الرخصة نفسها.",
+      "i18n": {
+        "ar": {
+          "alt": "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.",
+          "caption": "الدكتور مجدي يعقوب في صورة فوتوغرافية التُقطت عام 2008.",
+          "source_name": "تصوير Raafat عبر Wikimedia Commons",
+          "rights": "CC BY-SA 3.0. تصوير Raafat. يجب ذكر المصور والمصدر والرخصة، والإشارة إلى أي تعديل، وإتاحة الأعمال المعدلة تحت الرخصة نفسها."
+        },
+        "en": {
+          "alt": "Dr Magdi Yacoub in a photograph taken in 2008.",
+          "caption": "Dr Magdi Yacoub in a photograph taken in 2008.",
+          "source_name": "Photo by Raafat via Wikimedia Commons",
+          "rights": "CC BY-SA 3.0. Photograph by Raafat. Credit the photographer and source, link the licence, indicate changes, and share adaptations under the same licence."
+        },
+        "fr": {
+          "alt": "Le Dr Magdi Yacoub sur une photographie prise en 2008.",
+          "caption": "Le Dr Magdi Yacoub sur une photographie prise en 2008.",
+          "source_name": "Photo de Raafat via Wikimedia Commons",
+          "rights": "CC BY-SA 3.0. Photographie de Raafat. Citer le photographe et la source, fournir le lien de la licence, signaler les modifications et partager les adaptations sous la même licence."
+        },
+        "it": {
+          "alt": "Il dottor Magdi Yacoub in una fotografia scattata nel 2008.",
+          "caption": "Il dottor Magdi Yacoub in una fotografia scattata nel 2008.",
+          "source_name": "Foto di Raafat tramite Wikimedia Commons",
+          "rights": "CC BY-SA 3.0. Fotografia di Raafat. Citare il fotografo e la fonte, collegare la licenza, indicare le modifiche e condividere gli adattamenti con la stessa licenza."
+        },
+        "de": {
+          "alt": "Dr. Magdi Yacoub auf einer Fotografie aus dem Jahr 2008.",
+          "caption": "Dr. Magdi Yacoub auf einer Fotografie aus dem Jahr 2008.",
+          "source_name": "Foto von Raafat über Wikimedia Commons",
+          "rights": "CC BY-SA 3.0. Foto von Raafat. Fotograf und Quelle nennen, die Lizenz verlinken, Änderungen kennzeichnen und Bearbeitungen unter derselben Lizenz weitergeben."
+        }
+      }
+    },
+    {
+      "id": "magdi-yacoub-lister-medal-2015",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Yacoub_Lister_Medal_2015.JPG",
+      "kind": "photograph",
+      "source_name": "تصوير Carcharoth عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG",
+      "rights": "CC BY-SA 4.0. تصوير Carcharoth. يجب ذكر المصور والمصدر والرخصة، والإشارة إلى أي تعديل، وإتاحة الأعمال المعدلة تحت الرخصة نفسها.",
+      "i18n": {
+        "ar": {
+          "alt": "الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015 في الكلية الملكية للجراحين بإنجلترا.",
+          "caption": "الدكتور مجدي يعقوب يتسلم ميدالية ليستر عام 2015 في الكلية الملكية للجراحين بإنجلترا.",
+          "source_name": "تصوير Carcharoth عبر Wikimedia Commons",
+          "rights": "CC BY-SA 4.0. تصوير Carcharoth. يجب ذكر المصور والمصدر والرخصة، والإشارة إلى أي تعديل، وإتاحة الأعمال المعدلة تحت الرخصة نفسها."
+        },
+        "en": {
+          "alt": "Magdi Yacoub receives the 2015 Lister Medal at the Royal College of Surgeons of England.",
+          "caption": "Magdi Yacoub receives the 2015 Lister Medal at the Royal College of Surgeons of England.",
+          "source_name": "Photo by Carcharoth via Wikimedia Commons",
+          "rights": "CC BY-SA 4.0. Photograph by Carcharoth. Credit the photographer and source, link the licence, indicate changes, and share adaptations under the same licence."
+        },
+        "fr": {
+          "alt": "Magdi Yacoub reçoit la médaille Lister 2015 au Royal College of Surgeons of England.",
+          "caption": "Magdi Yacoub reçoit la médaille Lister 2015 au Royal College of Surgeons of England.",
+          "source_name": "Photo de Carcharoth via Wikimedia Commons",
+          "rights": "CC BY-SA 4.0. Photographie de Carcharoth. Citer le photographe et la source, fournir le lien de la licence, signaler les modifications et partager les adaptations sous la même licence."
+        },
+        "it": {
+          "alt": "Magdi Yacoub riceve la Medaglia Lister 2015 al Royal College of Surgeons of England.",
+          "caption": "Magdi Yacoub riceve la Medaglia Lister 2015 al Royal College of Surgeons of England.",
+          "source_name": "Foto di Carcharoth tramite Wikimedia Commons",
+          "rights": "CC BY-SA 4.0. Fotografia di Carcharoth. Citare il fotografo e la fonte, collegare la licenza, indicare le modifiche e condividere gli adattamenti con la stessa licenza."
+        },
+        "de": {
+          "alt": "Magdi Yacoub erhält 2015 die Lister-Medaille am Royal College of Surgeons of England.",
+          "caption": "Magdi Yacoub erhält 2015 die Lister-Medaille am Royal College of Surgeons of England.",
+          "source_name": "Foto von Carcharoth über Wikimedia Commons",
+          "rights": "CC BY-SA 4.0. Foto von Carcharoth. Fotograf und Quelle nennen, die Lizenz verlinken, Änderungen kennzeichnen und Bearbeitungen unter derselben Lizenz weitergeben."
+        }
+      }
+    },
+    {
+      "id": "magdi-yacoub-intro-illustration",
+      "path": "stories/science/015/cover-popup.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/science/015/cover-popup.svg",
+      "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة فوتوغرافية أو صورة تاريخية للدكتور مجدي يعقوب.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.",
+          "caption": "رسم توضيحي رمزي لحكاية مجدي يعقوب، وليس صورة فوتوغرافية.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة فوتوغرافية أو صورة تاريخية للدكتور مجدي يعقوب."
+        },
+        "en": {
+          "alt": "Symbolic illustration for Magdi Yacoub’s story, not a photograph.",
+          "caption": "Symbolic illustration for Magdi Yacoub’s story, not a photograph.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a photograph or historical portrait of Dr Magdi Yacoub."
+        },
+        "fr": {
+          "alt": "Illustration symbolique de l’histoire de Magdi Yacoub, et non une photographie.",
+          "caption": "Illustration symbolique de l’histoire de Magdi Yacoub, et non une photographie.",
+          "source_name": "Khaledoon — illustration originale",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie ni un portrait historique du Dr Magdi Yacoub."
+        },
+        "it": {
+          "alt": "Illustrazione simbolica della storia di Magdi Yacoub, non una fotografia.",
+          "caption": "Illustrazione simbolica della storia di Magdi Yacoub, non una fotografia.",
+          "source_name": "Khaledoon — illustrazione originale",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia né un ritratto storico del dottor Magdi Yacoub."
+        },
+        "de": {
+          "alt": "Symbolische Illustration zur Geschichte von Magdi Yacoub, keine Fotografie.",
+          "caption": "Symbolische Illustration zur Geschichte von Magdi Yacoub, keine Fotografie.",
+          "source_name": "Khaledoon — Originalillustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; keine Fotografie und kein historisches Porträt von Dr. Magdi Yacoub."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
+      "organization": "الهيئة العامة للاستعلامات المصرية",
+      "url": "https://sis.gov.eg/ar/مصر/المجتمع/أعلام-وشخصيات-مصرية/مجدي-يعقوب/",
+      "i18n": {
+        "ar": {
+          "title": "الهيئة العامة للاستعلامات المصرية — مجدي يعقوب",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Egypt State Information Service — Magdi Yacoub",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Service d’information de l’État égyptien — Magdi Yacoub",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Servizio informazioni dello Stato egiziano — Magdi Yacoub",
+          "organization": "Servizio informazioni dello Stato egiziano"
+        },
+        "de": {
+          "title": "Staatlicher Informationsdienst Ägyptens — Magdi Yacoub",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
+    },
+    {
+      "title": "إمبريال كوليدج لندن — الملف التعريفي للبروفيسور مجدي يعقوب",
+      "organization": "إمبريال كوليدج لندن",
+      "url": "https://profiles.imperial.ac.uk/m.yacoub",
+      "i18n": {
+        "ar": {
+          "title": "إمبريال كوليدج لندن — الملف التعريفي للبروفيسور مجدي يعقوب",
+          "organization": "إمبريال كوليدج لندن"
+        },
+        "en": {
+          "title": "Imperial College London — Professor Magdi Yacoub profile",
+          "organization": "Imperial College London"
+        },
+        "fr": {
+          "title": "Imperial College London — Profil du professeur Magdi Yacoub",
+          "organization": "Imperial College London"
+        },
+        "it": {
+          "title": "Imperial College London — Profilo del professor Magdi Yacoub",
+          "organization": "Imperial College London"
+        },
+        "de": {
+          "title": "Imperial College London — Profil von Professor Magdi Yacoub",
+          "organization": "Imperial College London"
+        }
+      }
+    },
+    {
+      "title": "مؤسسة مجدي يعقوب للقلب — عن المؤسسة",
+      "organization": "مؤسسة مجدي يعقوب للقلب",
+      "url": "https://www.myf-egypt.org/about/",
+      "i18n": {
+        "ar": {
+          "title": "مؤسسة مجدي يعقوب للقلب — عن المؤسسة",
+          "organization": "مؤسسة مجدي يعقوب للقلب"
+        },
+        "en": {
+          "title": "Magdi Yacoub Heart Foundation — About the Foundation",
+          "organization": "Magdi Yacoub Heart Foundation"
+        },
+        "fr": {
+          "title": "Fondation Magdi Yacoub pour le cœur — À propos de la fondation",
+          "organization": "Fondation Magdi Yacoub pour le cœur"
+        },
+        "it": {
+          "title": "Fondazione Cuore Magdi Yacoub — La fondazione",
+          "organization": "Fondazione Cuore Magdi Yacoub"
+        },
+        "de": {
+          "title": "Magdi-Yacoub-Herzstiftung — Über die Stiftung",
+          "organization": "Magdi-Yacoub-Herzstiftung"
+        }
+      }
+    },
+    {
+      "title": "مؤسسة مجدي يعقوب للقلب — مركز أسوان للقلب",
+      "organization": "مؤسسة مجدي يعقوب للقلب",
+      "url": "https://www.myf-egypt.org/aswan-heart-centre/",
+      "i18n": {
+        "ar": {
+          "title": "مؤسسة مجدي يعقوب للقلب — مركز أسوان للقلب",
+          "organization": "مؤسسة مجدي يعقوب للقلب"
+        },
+        "en": {
+          "title": "Magdi Yacoub Heart Foundation — Aswan Heart Centre",
+          "organization": "Magdi Yacoub Heart Foundation"
+        },
+        "fr": {
+          "title": "Fondation Magdi Yacoub pour le cœur — Centre cardiaque d’Assouan",
+          "organization": "Fondation Magdi Yacoub pour le cœur"
+        },
+        "it": {
+          "title": "Fondazione Cuore Magdi Yacoub — Centro Cardiaco di Assuan",
+          "organization": "Fondazione Cuore Magdi Yacoub"
+        },
+        "de": {
+          "title": "Magdi-Yacoub-Herzstiftung — Herzzentrum Assuan",
+          "organization": "Magdi-Yacoub-Herzstiftung"
+        }
+      }
+    },
+    {
+      "title": "جامعة أكسفورد — مجدي يعقوب",
+      "organization": "جامعة أكسفورد",
+      "url": "https://www.pharm.ox.ac.uk/team/magdi-yacoub",
+      "i18n": {
+        "ar": {
+          "title": "جامعة أكسفورد — مجدي يعقوب",
+          "organization": "جامعة أكسفورد"
+        },
+        "en": {
+          "title": "University of Oxford — Magdi Yacoub",
+          "organization": "University of Oxford"
+        },
+        "fr": {
+          "title": "Université d’Oxford — Magdi Yacoub",
+          "organization": "Université d’Oxford"
+        },
+        "it": {
+          "title": "Università di Oxford — Magdi Yacoub",
+          "organization": "Università di Oxford"
+        },
+        "de": {
+          "title": "Universität Oxford — Magdi Yacoub",
+          "organization": "Universität Oxford"
+        }
+      }
+    },
+    {
+      "title": "صورة مجدي يعقوب — ويكيميديا كومنز (تصوير Raafat)",
+      "organization": "ويكيميديا كومنز — تصوير Raafat",
+      "url": "https://commons.wikimedia.org/wiki/File:M_Yacoub.JPG",
+      "i18n": {
+        "ar": {
+          "title": "صورة مجدي يعقوب — ويكيميديا كومنز (تصوير Raafat)",
+          "organization": "ويكيميديا كومنز — تصوير Raafat"
+        },
+        "en": {
+          "title": "Magdi Yacoub photograph — Wikimedia Commons (photo by Raafat)",
+          "organization": "Wikimedia Commons — photo by Raafat"
+        },
+        "fr": {
+          "title": "Photographie de Magdi Yacoub — Wikimedia Commons (photo de Raafat)",
+          "organization": "Wikimedia Commons — photo de Raafat"
+        },
+        "it": {
+          "title": "Fotografia di Magdi Yacoub — Wikimedia Commons (foto di Raafat)",
+          "organization": "Wikimedia Commons — foto di Raafat"
+        },
+        "de": {
+          "title": "Fotografie von Magdi Yacoub — Wikimedia Commons (Foto von Raafat)",
+          "organization": "Wikimedia Commons — Foto von Raafat"
+        }
+      }
+    },
+    {
+      "title": "مجدي يعقوب يتسلم ميدالية ليستر 2015 — ويكيميديا كومنز",
+      "organization": "ويكيميديا كومنز — تصوير Carcharoth",
+      "url": "https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG",
+      "i18n": {
+        "ar": {
+          "title": "مجدي يعقوب يتسلم ميدالية ليستر 2015 — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز — تصوير Carcharoth"
+        },
+        "en": {
+          "title": "Magdi Yacoub receiving the 2015 Lister Medal — Wikimedia Commons",
+          "organization": "Wikimedia Commons — photo by Carcharoth"
+        },
+        "fr": {
+          "title": "Magdi Yacoub recevant la médaille Lister 2015 — Wikimedia Commons",
+          "organization": "Wikimedia Commons — photo de Carcharoth"
+        },
+        "it": {
+          "title": "Magdi Yacoub riceve la Medaglia Lister 2015 — Wikimedia Commons",
+          "organization": "Wikimedia Commons — foto di Carcharoth"
+        },
+        "de": {
+          "title": "Magdi Yacoub erhält die Lister-Medaille 2015 — Wikimedia Commons",
+          "organization": "Wikimedia Commons — Foto von Carcharoth"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birthplace",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة وُلد مجدي يعقوب؟",
+          "options": [
+            "أسوان",
+            "بلبيس",
+            "الإسكندرية",
+            "الأقصر"
+          ],
+          "explanation": "وُلد مجدي يعقوب في بلبيس بمحافظة الشرقية في مصر."
+        },
+        "en": {
+          "question": "In which city was Magdi Yacoub born?",
+          "options": [
+            "Aswan",
+            "Belbeis",
+            "Alexandria",
+            "Luxor"
+          ],
+          "explanation": "Magdi Yacoub was born in Belbeis in Egypt’s Sharqia Governorate."
+        },
+        "fr": {
+          "question": "Dans quelle ville Magdi Yacoub est-il né ?",
+          "options": [
+            "Assouan",
+            "Belbeis",
+            "Alexandrie",
+            "Louxor"
+          ],
+          "explanation": "Magdi Yacoub est né à Belbeis, dans le gouvernorat égyptien de Charkia."
+        },
+        "it": {
+          "question": "In quale città è nato Magdi Yacoub?",
+          "options": [
+            "Assuan",
+            "Belbeis",
+            "Alessandria",
+            "Luxor"
+          ],
+          "explanation": "Magdi Yacoub è nato a Belbeis, nel governatorato egiziano di Sharqia."
+        },
+        "de": {
+          "question": "In welcher Stadt wurde Magdi Yacoub geboren?",
+          "options": [
+            "Assuan",
+            "Belbeis",
+            "Alexandria",
+            "Luxor"
+          ],
+          "explanation": "Magdi Yacoub wurde in Belbeis im ägyptischen Gouvernement Sharqia geboren."
+        }
+      }
+    },
+    {
+      "id": "medical-school",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "في أي جامعة درس مجدي يعقوب الطب؟",
+          "options": [
+            "جامعة القاهرة",
+            "جامعة أسوان",
+            "جامعة أكسفورد",
+            "جامعة الإسكندرية"
+          ],
+          "explanation": "درس الطب في جامعة القاهرة وتخرج عام 1957."
+        },
+        "en": {
+          "question": "At which university did Magdi Yacoub study medicine?",
+          "options": [
+            "Cairo University",
+            "Aswan University",
+            "Oxford University",
+            "Alexandria University"
+          ],
+          "explanation": "He studied medicine at Cairo University and graduated in 1957."
+        },
+        "fr": {
+          "question": "Dans quelle université Magdi Yacoub a-t-il étudié la médecine ?",
+          "options": [
+            "Université du Caire",
+            "Université d’Assouan",
+            "Université d’Oxford",
+            "Université d’Alexandrie"
+          ],
+          "explanation": "Il a étudié la médecine à l’Université du Caire et a obtenu son diplôme en 1957."
+        },
+        "it": {
+          "question": "In quale università Magdi Yacoub ha studiato medicina?",
+          "options": [
+            "Università del Cairo",
+            "Università di Assuan",
+            "Università di Oxford",
+            "Università di Alessandria"
+          ],
+          "explanation": "Ha studiato medicina all’Università del Cairo e si è laureato nel 1957."
+        },
+        "de": {
+          "question": "An welcher Universität studierte Magdi Yacoub Medizin?",
+          "options": [
+            "Universität Kairo",
+            "Universität Assuan",
+            "Universität Oxford",
+            "Universität Alexandria"
+          ],
+          "explanation": "Er studierte Medizin an der Universität Kairo und schloss sein Studium 1957 ab."
+        }
+      }
+    },
+    {
+      "id": "britain-1962",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "إلى أي دولة سافر مجدي يعقوب عام 1962 لمواصلة التدريب والعمل؟",
+          "options": [
+            "فرنسا",
+            "إيطاليا",
+            "بريطانيا",
+            "ألمانيا"
+          ],
+          "explanation": "سافر إلى بريطانيا عام 1962 لمواصلة تدريبه ومسيرته الطبية."
+        },
+        "en": {
+          "question": "Which country did Magdi Yacoub travel to in 1962 to continue his training and work?",
+          "options": [
+            "France",
+            "Italy",
+            "Britain",
+            "Germany"
+          ],
+          "explanation": "He travelled to Britain in 1962 to continue his training and medical career."
+        },
+        "fr": {
+          "question": "Dans quel pays Magdi Yacoub est-il parti en 1962 pour poursuivre sa formation et son travail ?",
+          "options": [
+            "France",
+            "Italie",
+            "Grande-Bretagne",
+            "Allemagne"
+          ],
+          "explanation": "Il est parti en Grande-Bretagne en 1962 pour poursuivre sa formation et sa carrière médicale."
+        },
+        "it": {
+          "question": "In quale paese si recò Magdi Yacoub nel 1962 per continuare la sua formazione e il suo lavoro?",
+          "options": [
+            "Francia",
+            "Italia",
+            "Gran Bretagna",
+            "Germania"
+          ],
+          "explanation": "Nel 1962 si recò in Gran Bretagna per continuare la formazione e la carriera medica."
+        },
+        "de": {
+          "question": "In welches Land reiste Magdi Yacoub 1962, um seine Ausbildung und Arbeit fortzusetzen?",
+          "options": [
+            "Frankreich",
+            "Italien",
+            "Großbritannien",
+            "Deutschland"
+          ],
+          "explanation": "Er reiste 1962 nach Großbritannien, um seine Ausbildung und medizinische Laufbahn fortzusetzen."
+        }
+      }
+    },
+    {
+      "id": "medical-specialty",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما التخصص الطبي الذي اشتهر به مجدي يعقوب؟",
+          "options": [
+            "طب العيون",
+            "جراحة القلب والصدر",
+            "طب الأسنان",
+            "طب الأطفال العام"
+          ],
+          "explanation": "اشتهر بجراحة القلب والصدر، وعمل على علاج أمراض القلب المعقدة."
+        },
+        "en": {
+          "question": "Which medical specialty made Magdi Yacoub famous?",
+          "options": [
+            "Ophthalmology",
+            "Cardiothoracic surgery",
+            "Dentistry",
+            "General paediatrics"
+          ],
+          "explanation": "He became famous for cardiothoracic surgery and treating complex heart conditions."
+        },
+        "fr": {
+          "question": "Quelle spécialité médicale a rendu Magdi Yacoub célèbre ?",
+          "options": [
+            "Ophtalmologie",
+            "Chirurgie cardiothoracique",
+            "Dentisterie",
+            "Pédiatrie générale"
+          ],
+          "explanation": "Il est devenu célèbre pour la chirurgie cardiothoracique et le traitement de maladies cardiaques complexes."
+        },
+        "it": {
+          "question": "Quale specialità medica ha reso famoso Magdi Yacoub?",
+          "options": [
+            "Oftalmologia",
+            "Cardiochirurgia e chirurgia toracica",
+            "Odontoiatria",
+            "Pediatria generale"
+          ],
+          "explanation": "È diventato famoso per la cardiochirurgia e per il trattamento di malattie cardiache complesse."
+        },
+        "de": {
+          "question": "Durch welches medizinische Fachgebiet wurde Magdi Yacoub bekannt?",
+          "options": [
+            "Augenheilkunde",
+            "Herz- und Thoraxchirurgie",
+            "Zahnmedizin",
+            "Allgemeine Kinderheilkunde"
+          ],
+          "explanation": "Er wurde durch die Herz- und Thoraxchirurgie und die Behandlung komplexer Herzerkrankungen bekannt."
+        }
+      }
+    },
+    {
+      "id": "heart-foundation",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "متى تأسست مؤسسة مجدي يعقوب للقلب في مصر؟",
+          "options": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "explanation": "تأسست المؤسسة عام 2008 لدعم الرعاية الطبية والتدريب والبحث."
+        },
+        "en": {
+          "question": "When was the Magdi Yacoub Heart Foundation established in Egypt?",
+          "options": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "explanation": "The foundation was established in 2008 to support medical care, training and research."
+        },
+        "fr": {
+          "question": "Quand la Fondation Magdi Yacoub pour le cœur a-t-elle été créée en Égypte ?",
+          "options": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "explanation": "La fondation a été créée en 2008 pour soutenir les soins médicaux, la formation et la recherche."
+        },
+        "it": {
+          "question": "Quando è stata fondata in Egitto la Fondazione Cuore Magdi Yacoub?",
+          "options": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "explanation": "La fondazione è stata istituita nel 2008 per sostenere le cure mediche, la formazione e la ricerca."
+        },
+        "de": {
+          "question": "Wann wurde die Magdi-Yacoub-Herzstiftung in Ägypten gegründet?",
+          "options": [
+            "1995",
+            "2001",
+            "2008",
+            "2014"
+          ],
+          "explanation": "Die Stiftung wurde 2008 gegründet, um medizinische Versorgung, Ausbildung und Forschung zu unterstützen."
+        }
+      }
+    },
+    {
+      "id": "aswan-centre",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام بدأ مركز أسوان للقلب استقبال المرضى؟",
+          "options": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "explanation": "بدأ مركز أسوان للقلب استقبال المرضى عام 2009."
+        },
+        "en": {
+          "question": "In which year did the Aswan Heart Centre begin receiving patients?",
+          "options": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "explanation": "The Aswan Heart Centre began receiving patients in 2009."
+        },
+        "fr": {
+          "question": "En quelle année le Centre cardiaque d’Assouan a-t-il commencé à accueillir des patients ?",
+          "options": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "explanation": "Le Centre cardiaque d’Assouan a commencé à accueillir des patients en 2009."
+        },
+        "it": {
+          "question": "In quale anno il Centro Cardiaco di Assuan ha iniziato ad accogliere i pazienti?",
+          "options": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "explanation": "Il Centro Cardiaco di Assuan ha iniziato ad accogliere i pazienti nel 2009."
+        },
+        "de": {
+          "question": "In welchem Jahr begann das Herzzentrum in Assuan, Patienten aufzunehmen?",
+          "options": [
+            "2005",
+            "2008",
+            "2009",
+            "2015"
+          ],
+          "explanation": "Das Herzzentrum in Assuan begann 2009, Patienten aufzunehmen."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 30.420387,
+    "lng": 31.562232,
+    "place": {
+      "ar": "بلبيس، الشرقية",
+      "en": "Belbeis, Sharqia",
+      "fr": "Belbeis, gouvernorat de Charqiya",
+      "it": "Belbeis, governatorato di Sharqia",
+      "de": "Belbeis, Gouvernement Scharkia"
+    }
+  }
+}
