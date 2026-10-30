@@ -31,7 +31,8 @@ const v2StoryFiles = [
   'stories/people/009/data.v2.json',
   'stories/women/010/data.v2.json',
   'stories/islamic/011/data.v2.json',
-  'stories/science/012/data.v2.json'
+  'stories/science/012/data.v2.json',
+  'stories/women/013/data.v2.json'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
