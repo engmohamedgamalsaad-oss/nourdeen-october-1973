@@ -142,7 +142,9 @@ for (const file of translationMaps) {
         'stories/history/005/index.html', 'stories/history/006/index.html',
         'stories/science/007/index.html',
         // V2 story prose is stored in JSON data, not duplicated in the page shell.
-        'stories/history/005/data.v2.json', 'stories/history/006/data.v2.json'
+        'stories/history/005/data.v2.json', 'stories/history/006/data.v2.json',
+        // This legacy German source paragraph is retained in the Orabi translation module.
+        'stories/history/006/translations.js'
       ].map(read).join('\n');
       const missingSources = entries.filter(([key]) => !sourcePages.includes(key));
       if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match source text in stories 001–003.');
