@@ -269,24 +269,23 @@ async function cinematicGlobeRegression(browser, base, origin) {
           titles[locale], { timeout: 4000 }).catch(() => {});
         const localized = await page.evaluate(async ({ locale }) => {
           const stories = await fetch('stories/index.json').then(r => r.json());
-          const href = document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on')?.getAttribute('href') || '';
-          const pathParts = href.split('/');
-          const storyId = pathParts.length === 4 && /^\\d{3}$/.test(pathParts[2]) ? pathParts[2] : '';
-          const story = storyId && stories.find(s => String(s.id).padStart(3, '0') === storyId);
+          const expectedPeople = stories
+            .map(story => (story.i18n?.[locale]?.person || story.person || '').trim())
+            .filter(Boolean);
           return {
             title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
             dir: document.querySelector('#khWorld').dir,
             card: !!document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on'),
             source: document.querySelector('#khWorld .kh-world-story-card .khm-source')?.textContent.trim() || '',
             chips: [...document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip')].map(a => a.textContent.trim()),
-            expectedPerson: story && (story.i18n?.[locale]?.person || story.person) || ''
+            expectedPeople
           };
         }, { locale });
         check('globe heading and selected card survive language ' + locale,
           localized.title === titles[locale] && localized.dir === (locale === 'ar' ? 'rtl' : 'ltr') && localized.card && !!localized.source,
           JSON.stringify(localized));
         check('globe story chips show the localized character name in ' + locale,
-          !!localized.expectedPerson && localized.chips.includes(localized.expectedPerson), JSON.stringify(localized));
+          localized.chips.length > 0 && localized.chips.every(name => localized.expectedPeople.includes(name)), JSON.stringify(localized));
       }
   } catch (e) {
     hard.push(label + ': browser regression could not complete — ' + String(e.message || e).split('\n')[0]);
