@@ -43,7 +43,23 @@
       "fr": "Région de Boukhara, Ouzbékistan",
       "it": "Regione di Bukhara, Uzbekistan",
       "de": "Region Buchara, Usbekistan"
-    }
+    },
+    "approximate": true,
+    "place_label": {
+      "ar": "منطقة مرتبطة بمولده قرب بخارى: ",
+      "en": "Area associated with his birthplace near Bukhara: ",
+      "fr": "Région liée à son lieu de naissance près de Boukhara : ",
+      "it": "Area collegata al suo luogo di nascita vicino a Bukhara: ",
+      "de": "Mit seinem Geburtsort nahe Buchara verbundene Region: "
+    },
+    "source_name": {
+      "ar": "مكتبة الإسكندرية — السيرة التعريفية لابن سينا",
+      "en": "Bibliotheca Alexandrina — Avicenna biography",
+      "fr": "Bibliotheca Alexandrina — Biographie d’Avicenne",
+      "it": "Bibliotheca Alexandrina — Biografia di Avicenna",
+      "de": "Bibliotheca Alexandrina — Biografie Avicennas"
+    },
+    "source_url": "https://www.bibalex.org/libraries/presentation/static/Ibn-Sina.pdf"
   },
   "006": {
     "lat": 30.5877,
