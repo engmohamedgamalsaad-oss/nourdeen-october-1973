@@ -317,7 +317,7 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   assert.equal(story.section, 'women');
   assert.equal(story.design.variant, 'women-leadership');
   assert.equal(story.i18n.ar.student_name, 'مليكة محمد جمال');
-  assert.equal(story.i18n.ar.grade, 'الصف الخامس الابتدائي');
+  assert.equal(story.i18n.ar.grade, 'الصف الأول الابتدائي');
   assert.equal(story.i18n.ar.narrator_name, 'كارما');
   assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
   assert.equal(story.images.length, 4);
