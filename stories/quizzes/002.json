@@ -11,7 +11,49 @@
         "إغلاق البحر المتوسط"
       ],
       "a": 0,
-      "e": "كان الساتر الترابي لخط بارليف عائقًا أمام عبور القوات والمعدات."
+      "e": "كان الساتر الترابي لخط بارليف عائقًا أمام عبور القوات والمعدات.",
+      "i18n": {
+        "en": {
+          "q": "What engineering obstacle did Egyptian forces face during the crossing?",
+          "o": [
+            "The high earthen embankment",
+            "A shortage of drinking water in Cairo",
+            "Building a bridge over the Blue Nile",
+            "The closure of the Mediterranean"
+          ],
+          "e": "The Bar Lev Line’s earthen embankment was an obstacle to crossing with troops and equipment."
+        },
+        "fr": {
+          "q": "Quel obstacle technique les forces égyptiennes ont-elles rencontré lors du franchissement ?",
+          "o": [
+            "Le haut remblai de terre",
+            "Le manque d’eau potable au Caire",
+            "La construction d’un pont sur le Nil Bleu",
+            "La fermeture de la Méditerranée"
+          ],
+          "e": "Le remblai de la ligne Bar-Lev faisait obstacle au passage des troupes et du matériel."
+        },
+        "it": {
+          "q": "Quale ostacolo ingegneristico affrontarono le forze egiziane durante l’attraversamento?",
+          "o": [
+            "L’alto terrapieno di terra",
+            "La mancanza di acqua potabile al Cairo",
+            "La costruzione di un ponte sul Nilo Azzurro",
+            "La chiusura del Mediterraneo"
+          ],
+          "e": "Il terrapieno della linea Bar-Lev ostacolava il passaggio delle truppe e dei mezzi."
+        },
+        "de": {
+          "q": "Auf welches technische Hindernis stießen die ägyptischen Streitkräfte beim Übergang?",
+          "o": [
+            "Der hohe Erdwall",
+            "Ein Trinkwassermangel in Kairo",
+            "Der Bau einer Brücke über den Blauen Nil",
+            "Die Sperrung des Mittelmeers"
+          ],
+          "e": "Der Erdwall der Bar-Lev-Linie behinderte den Übergang von Truppen und Ausrüstung."
+        }
+      }
     },
     {
       "q": "ما الفكرة المرتبطة بباقي زكي يوسف؟",
@@ -22,7 +64,49 @@
         "تغيير مجرى النيل"
       ],
       "a": 0,
-      "e": "ارتبط اسمه باستخدام ضغط المياه لتجريف أجزاء من الساتر."
+      "e": "ارتبط اسمه باستخدام ضغط المياه لتجريف أجزاء من الساتر.",
+      "i18n": {
+        "en": {
+          "q": "What idea is associated with Baki Zaki Youssef?",
+          "o": [
+            "Using water pumps to open breaches in the embankment",
+            "Towing tanks with aircraft",
+            "Destroying the embankment only by hand",
+            "Changing the course of the Nile"
+          ],
+          "e": "His name is associated with using high-pressure water to erode parts of the embankment."
+        },
+        "fr": {
+          "q": "Quelle idée est associée à Baki Zaki Youssef ?",
+          "o": [
+            "Utiliser des pompes à eau pour ouvrir des brèches dans le remblai",
+            "Remorquer les chars avec des avions",
+            "Détruire le remblai uniquement à la main",
+            "Modifier le cours du Nil"
+          ],
+          "e": "Son nom est associé à l’utilisation de jets d’eau sous pression pour éroder une partie du remblai."
+        },
+        "it": {
+          "q": "Quale idea è associata a Baki Zaki Youssef?",
+          "o": [
+            "Usare pompe ad acqua per aprire varchi nel terrapieno",
+            "Trainare i carri armati con gli aerei",
+            "Distruggere il terrapieno soltanto a mano",
+            "Cambiare il corso del Nilo"
+          ],
+          "e": "Il suo nome è associato all’uso di getti d’acqua ad alta pressione per erodere parti del terrapieno."
+        },
+        "de": {
+          "q": "Welche Idee wird mit Baki Zaki Youssef verbunden?",
+          "o": [
+            "Wasserpumpen einzusetzen, um Öffnungen im Erdwall zu schaffen",
+            "Panzer mit Flugzeugen zu ziehen",
+            "Den Erdwall ausschließlich von Hand abzutragen",
+            "Den Lauf des Nils zu verändern"
+          ],
+          "e": "Sein Name ist mit dem Einsatz von Wasser unter hohem Druck verbunden, um Teile des Walls abzutragen."
+        }
+      }
     },
     {
       "q": "لماذا كان فتح الثغرات مهمًا؟",
@@ -33,7 +117,49 @@
         "لإخفاء قناة السويس"
       ],
       "a": 0,
-      "e": "الثغرات فتحت ممرات لعبور القوات والمعدات."
+      "e": "الثغرات فتحت ممرات لعبور القوات والمعدات.",
+      "i18n": {
+        "en": {
+          "q": "Why was opening breaches important?",
+          "o": [
+            "It allowed troops and equipment to pass",
+            "It stopped shipping in the Red Sea",
+            "It built airfields",
+            "It concealed the Suez Canal"
+          ],
+          "e": "The breaches created passages for troops and equipment."
+        },
+        "fr": {
+          "q": "Pourquoi était-il important d’ouvrir des brèches ?",
+          "o": [
+            "Pour permettre le passage des troupes et du matériel",
+            "Pour arrêter la navigation en mer Rouge",
+            "Pour construire des aérodromes",
+            "Pour cacher le canal de Suez"
+          ],
+          "e": "Les brèches ont créé des passages pour les troupes et le matériel."
+        },
+        "it": {
+          "q": "Perché era importante aprire dei varchi?",
+          "o": [
+            "Per consentire il passaggio di truppe e mezzi",
+            "Per fermare la navigazione nel Mar Rosso",
+            "Per costruire aeroporti",
+            "Per nascondere il Canale di Suez"
+          ],
+          "e": "I varchi crearono passaggi per le truppe e i mezzi."
+        },
+        "de": {
+          "q": "Warum war es wichtig, Öffnungen im Wall zu schaffen?",
+          "o": [
+            "Damit Truppen und Ausrüstung hindurchkommen konnten",
+            "Um die Schifffahrt im Roten Meer zu stoppen",
+            "Um Flugplätze zu bauen",
+            "Um den Suezkanal zu verbergen"
+          ],
+          "e": "Die Öffnungen schufen Durchgänge für Truppen und Ausrüstung."
+        }
+      }
     },
     {
       "q": "أي مبدأ علمي يظهر في الفكرة؟",
@@ -44,7 +170,49 @@
         "أن المضخات تعمل بلا طاقة"
       ],
       "a": 0,
-      "e": "استُخدمت قوة تدفق الماء لإزالة أجزاء من التربة."
+      "e": "استُخدمت قوة تدفق الماء لإزالة أجزاء من التربة.",
+      "i18n": {
+        "en": {
+          "q": "Which scientific principle appears in the idea?",
+          "o": [
+            "Using the force of flowing water to solve an engineering problem",
+            "Solutions do not need science",
+            "Sand is not affected by water",
+            "Pumps work without energy"
+          ],
+          "e": "The force of flowing water was used to remove parts of the soil."
+        },
+        "fr": {
+          "q": "Quel principe scientifique apparaît dans cette idée ?",
+          "o": [
+            "Utiliser la force de l’eau pour résoudre un problème technique",
+            "Les solutions n’ont pas besoin de science",
+            "Le sable n’est pas affecté par l’eau",
+            "Les pompes fonctionnent sans énergie"
+          ],
+          "e": "La force de l’eau en mouvement a servi à enlever une partie du sol."
+        },
+        "it": {
+          "q": "Quale principio scientifico emerge da questa idea?",
+          "o": [
+            "Usare la forza dell’acqua per risolvere un problema ingegneristico",
+            "Le soluzioni non hanno bisogno della scienza",
+            "La sabbia non viene influenzata dall’acqua",
+            "Le pompe funzionano senza energia"
+          ],
+          "e": "La forza dell’acqua in movimento fu usata per rimuovere parte del terreno."
+        },
+        "de": {
+          "q": "Welches wissenschaftliche Prinzip zeigt sich in dieser Idee?",
+          "o": [
+            "Die Kraft des fließenden Wassers zur Lösung eines technischen Problems nutzen",
+            "Lösungen brauchen keine Wissenschaft",
+            "Sand wird von Wasser nicht beeinflusst",
+            "Pumpen funktionieren ohne Energie"
+          ],
+          "e": "Die Kraft des strömenden Wassers wurde genutzt, um Teile des Bodens abzutragen."
+        }
+      }
     },
     {
       "q": "ما الدرس الأوسع من الحكاية؟",
@@ -55,7 +223,49 @@
         "العمل الفردي يغني عن الفرق"
       ],
       "a": 0,
-      "e": "توضح الحكاية أهمية التفكير العلمي والتخطيط والعمل الجماعي."
+      "e": "توضح الحكاية أهمية التفكير العلمي والتخطيط والعمل الجماعي.",
+      "i18n": {
+        "en": {
+          "q": "What broader lesson does the story teach?",
+          "o": [
+            "Thinking and planning help solve problems",
+            "Force alone solves everything",
+            "Experimentation is useless",
+            "Individual work replaces teams"
+          ],
+          "e": "The story shows the importance of scientific thinking, planning, and teamwork."
+        },
+        "fr": {
+          "q": "Quelle leçon plus générale cette histoire enseigne-t-elle ?",
+          "o": [
+            "La réflexion et la planification aident à résoudre les problèmes",
+            "La force seule résout tout",
+            "L’expérimentation est inutile",
+            "Le travail individuel remplace les équipes"
+          ],
+          "e": "Cette histoire montre l’importance de la réflexion scientifique, de la planification et du travail d’équipe."
+        },
+        "it": {
+          "q": "Quale insegnamento più ampio offre questa storia?",
+          "o": [
+            "Il pensiero e la pianificazione aiutano a risolvere i problemi",
+            "La sola forza risolve tutto",
+            "La sperimentazione è inutile",
+            "Il lavoro individuale sostituisce le squadre"
+          ],
+          "e": "La storia mostra l’importanza del pensiero scientifico, della pianificazione e del lavoro di squadra."
+        },
+        "de": {
+          "q": "Welche allgemeinere Lehre vermittelt die Geschichte?",
+          "o": [
+            "Nachdenken und Planung helfen, Probleme zu lösen",
+            "Kraft allein löst alles",
+            "Experimente sind nutzlos",
+            "Einzelarbeit ersetzt Teams"
+          ],
+          "e": "Die Geschichte zeigt, wie wichtig wissenschaftliches Denken, Planung und Teamarbeit sind."
+        }
+      }
     },
     {
       "q": "ما الميزة العملية لاستخدام مضخات المياه أمام الساتر الترابي؟",
