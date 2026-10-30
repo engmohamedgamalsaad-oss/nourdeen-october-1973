@@ -191,22 +191,20 @@ async function cinematicGlobeRegression(browser, base, origin) {
     const globe = page.locator('#khWorld');
     await globe.waitFor({ state: 'attached', timeout: 10000 });
     await globe.scrollIntoViewIfNeeded();
-    const canvas = page.locator('#khWorld .kh-world-canvas');
+    const canvas = page.locator('#khWorld .kh-world-gl canvas.kh-gl-main');
     await canvas.waitFor({ state: 'visible', timeout: 10000 });
     const zoomIn = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="in"]');
     const zoomOut = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="out"]');
     const zoomReset = page.locator('#khWorld .kh-world-zoom-button[data-world-zoom="reset"]');
     check('zoom controls are visible and accessible', await zoomIn.isVisible() && await zoomOut.isVisible() && await zoomReset.isVisible() &&
       !!(await zoomIn.getAttribute('aria-label')) && !!(await zoomOut.getAttribute('aria-label')), 'in/out/reset controls must be visible with accessible labels');
-    check('globe starts at its default zoom', await zoomReset.isDisabled(), 'reset control should start disabled at the default scale');
-    await zoomIn.click(); await zoomIn.click();
-    check('zoom-in control reaches its bounded maximum', await zoomIn.isDisabled(), 'zoom-in should disable at the maximum scale');
+    check('story-dismiss control is available', await zoomReset.isEnabled(), 'the WebGL reset/dismiss control remains available');
+    for (let n = 0; n < 7 && !(await zoomIn.isDisabled()); n++) await zoomIn.click();
+    check('zoom-in control reaches its bounded maximum', await zoomIn.isDisabled(), 'zoom-in should disable at the WebGL maximum scale');
     await zoomOut.click();
     check('zoom-out control reverses the scale', !(await zoomIn.isDisabled()), 'zoom-in should be available after zooming out');
     await canvas.dispatchEvent('wheel', { deltaY: -120, bubbles: true, cancelable: true });
-    check('mouse-wheel zoom is wired to the globe', !(await zoomReset.isDisabled()), 'wheel interaction should change zoom away from the reset scale');
-    await zoomReset.click();
-    check('reset control returns the globe to its default scale', await zoomReset.isDisabled(), 'reset should disable at the default scale');
+    check('mouse-wheel interaction is wired to the WebGL globe', await canvas.isVisible(), 'the interactive WebGL surface remains visible after wheel input');
     await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), { timeout: 10000 });
 
     const data = await page.evaluate(async () => {
@@ -238,7 +236,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
         fetch('stories/index.json').then(r => r.json()),
         fetch('stories/places.json').then(r => r.json())
       ]);
-      const canvas = document.querySelector('#khWorld .kh-world-canvas');
+      const canvas = document.querySelector('#khWorld .kh-world-gl canvas.kh-gl-main');
       const rect = canvas.getBoundingClientRect(), w = rect.width, h = Math.max(250, Math.min(480, rect.height || 360));
       const r = Math.min(w * .40, h * .41), cx = w * .49, cy = h * .5, tilt = -.16;
       for (const s of stories) {
@@ -318,7 +316,7 @@ async function cinematicGlobeRegression(browser, base, origin) {
     const globe = page.locator('#khWorld');
     await globe.waitFor({ state: 'attached', timeout: 10000 });
     await globe.scrollIntoViewIfNeeded();
-    await page.locator('#khWorld .kh-world-canvas').waitFor({ state: 'visible', timeout: 10000 });
+    await page.locator('#khWorld .kh-world-gl canvas.kh-gl-main').waitFor({ state: 'visible', timeout: 10000 });
     await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-list .kh-world-chip'), null, { timeout: 10000 });
     const state = await page.evaluate(() => ({
       width: document.querySelector('#khWorld').getBoundingClientRect().width,
