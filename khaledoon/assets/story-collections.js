@@ -22,13 +22,15 @@
 
   /* ===== صور من حكايات القسم =====
      معرض صور تاريخية حقيقية داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليس شريطًا متحركًا.
-     الصورة لكل حكاية منشورة تُأخذ تلقائيًا بالترتيب:
-       1) صور تاريخية مختارة لها في STORY_GALLERY_PHOTOS،
-       2) صورة غلافها إذا كانت صورة فعلية (jpg/webp/png) من حقل cover في data.json أو ملفات cover.*،
-     ولا تُستخدم رسوم SVG التوضيحية ولا بطاقات بديلة: الحكاية التي لا تملك صورة فعلية لا تظهر في المعرض حتى تُضاف لها صورة.
-     كل صورة تُختبر أولًا قبل عرضها، وكل صورة رابط لحكايتها.
+     صورة كل حكاية منشورة تُأخذ تلقائيًا بالترتيب:
+       1) صور مختارة موثّقة لها في STORY_GALLERY_PHOTOS (تسبق كل شيء)،
+       2) لو لم توجد: بحث تلقائي عن صورة الشخصية في ويكيبيديا (العربية ثم الإنجليزية) وتحميلها من ويكيميديا كومنز،
+          مع قبول الصور الحرة الترخيص فقط (CC0 / CC BY / CC BY-SA / ملكية عامة) وعرض المصدر والترخيص تحت المعرض،
+       3) لا تُستخدم صور الغلاف ولا رسوم SVG ولا بطاقات بديلة: حكاية لا تجد لها صورة تاريخية لا تظهر في المعرض.
+     لإيقاف البحث التلقائي عن حكاية بعينها (مثلًا لو جاءت صورة غير مناسبة) ضع رقمها في AUTO_PHOTO_BLOCKLIST أو ضع صورها في STORY_GALLERY_PHOTOS.
      التنسيق في khaledoon/assets/section-photos.css ويُحمَّل من هنا تلقائيًا. */
   var MOSAIC_MAX = 5; /* أكثر من هذا العدد من الحكايات يتحول المعرض إلى صف أفقي يُسحب */
+  var AUTO_PHOTO_BLOCKLIST = {}; /* مثال: { '014': true } */
   /* صور تاريخية مختارة (خفيفة الحجم، مسجلة مصادرها في assets/images/stories/MANIFEST.md أو في مجلد الحكاية). */
   var STORY_GALLERY_PHOTOS = {
     '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/nabil-01.jpg'],
@@ -59,7 +61,7 @@
       var link = document.createElement('link');
       link.id = 'khSectionPhotosCss';
       link.rel = 'stylesheet';
-      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-2';
+      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-3';
       link.onload = link.onerror = function () { resolve(); };
       document.head.appendChild(link);
       setTimeout(resolve, 2500);
@@ -79,24 +81,71 @@
       probe.src = url;
     });
   }
-  function probeFirst(urls) {
-    return urls.reduce(function (chain, url) {
-      return chain.then(function (found) { return found || probeImage(url); });
-    }, Promise.resolve(null));
+
+  /* ---- بحث تلقائي عن صورة الشخصية في ويكيبيديا / ويكيميديا كومنز ---- */
+  var FREE_LICENSE = /^(CC0|CC[ -]BY|Public domain|PD[ -]|No restrictions|Attribution)/i;
+  var WIKI_CACHE_DAYS = 7;
+  function wikiJson(url) {
+    return fetch(url).then(function (response) { if (!response.ok) throw new Error('wiki'); return response.json(); });
   }
-  function storyPhotoUrls(entry) {
+  function nameTokens(text) {
+    return String(text || '').toLowerCase().split(/[\s\-\u2013\u2014\u060c,.()]+/).filter(function (token) { return token.length > 2; });
+  }
+  function plainText(html) {
+    try { return (new DOMParser().parseFromString(String(html || ''), 'text/html').body.textContent || '').trim(); } catch (_) { return ''; }
+  }
+  function wikiLookup(host, query) {
+    var url = 'https://' + host + '.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=0&gsrlimit=3&prop=pageimages&piprop=name&gsrsearch=' + encodeURIComponent(query);
+    return wikiJson(url).then(function (data) {
+      var pages = data && data.query && data.query.pages ? Object.keys(data.query.pages).map(function (key) { return data.query.pages[key]; }) : [];
+      pages.sort(function (a, b) { return (a.index || 0) - (b.index || 0); });
+      /* نأخذ أول نتيجة فقط ونتأكد أن عنوانها يطابق اسم الشخصية، حتى لا تظهر صورة شخص آخر. */
+      var page = pages[0];
+      if (!page || !page.pageimage) return null;
+      var tokens = nameTokens(query), title = String(page.title || '').toLowerCase();
+      var matches = tokens.filter(function (token) { return title.indexOf(token) >= 0; }).length;
+      if (!tokens.length || matches < Math.min(2, tokens.length)) return null;
+      var infoUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata%7Curl%7Cmime&iiurlwidth=640&titles=' + encodeURIComponent('File:' + page.pageimage);
+      return wikiJson(infoUrl).then(function (info) {
+        var pagesById = info && info.query && info.query.pages;
+        var filePage = pagesById && pagesById[Object.keys(pagesById)[0]];
+        var image = filePage && filePage.imageinfo && filePage.imageinfo[0];
+        if (!image || !/^image\/(jpeg|png|webp)/i.test(image.mime || '')) return null;
+        var meta = image.extmetadata || {};
+        var license = meta.LicenseShortName && meta.LicenseShortName.value || '';
+        if (!FREE_LICENSE.test(license)) return null;
+        if (meta.NonFree && String(meta.NonFree.value).toLowerCase() === 'true') return null;
+        var artist = plainText(meta.Artist && meta.Artist.value).slice(0, 70);
+        return { src: image.thumburl || image.url, page: image.descriptionurl, license: license, artist: artist };
+      });
+    });
+  }
+  function wikiPortrait(story) {
+    var key = 'kh-sp-wiki-v1:' + story.section + '/' + story.id;
+    try {
+      var cached = JSON.parse(localStorage.getItem(key) || 'null');
+      if (cached && Date.now() - cached.t < WIKI_CACHE_DAYS * 864e5) return Promise.resolve(cached.v);
+    } catch (_) {}
+    var english = story.i18n && story.i18n.en && story.i18n.en.person;
+    var attempts = [['ar', story.person], ['en', english]].filter(function (attempt) { return !!attempt[1]; });
+    return attempts.reduce(function (chain, attempt) {
+      return chain.then(function (found) { return found || wikiLookup(attempt[0], attempt[1]); });
+    }, Promise.resolve(null)).then(function (result) {
+      try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), v: result })); } catch (_) {}
+      return result;
+    });
+  }
+  function storyPhotos(entry) {
     var story = entry.story;
-    var source = entry.card && entry.card.querySelector('img.story-index-cover');
-    var covers = [];
-    if (source) { try { covers = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {} }
-    if (!Array.isArray(covers)) covers = [];
-    /* رسوم SVG التوضيحية لا تدخل المعرض: هو معرض صور تاريخية فعلية فقط. */
-    covers = covers.filter(function (url) { return !/\.svg(\?|#|$)/i.test(String(url)); });
     var curated = (STORY_GALLERY_PHOTOS[String(story.id || '')] || []).map(function (photo) { return root + photo; });
     return Promise.all(curated.map(function (url) { return probeImage(url); })).then(function (found) {
       found = found.filter(Boolean);
-      if (found.length) return found;
-      return probeFirst(covers).then(function (url) { return url ? [url] : []; });
+      if (found.length) return found.map(function (url) { return { src: url }; });
+      if (AUTO_PHOTO_BLOCKLIST[String(story.id || '')]) return [];
+      return withTimeout(wikiPortrait(story), 8000, null).then(function (portrait) {
+        if (!portrait || !portrait.src) return [];
+        return probeImage(portrait.src).then(function (ok) { return ok ? [{ src: ok, credit: portrait }] : []; });
+      });
     });
   }
   function mountPhotos(section) {
@@ -133,31 +182,38 @@
       it: ['Precedente', 'Successivo'],
       de: ['Zurück', 'Weiter']
     };
+    var creditsByLang = {
+      ar: 'مصدر الصور: ويكيميديا كومنز —',
+      en: 'Images: Wikimedia Commons —',
+      fr: 'Images : Wikimedia Commons —',
+      it: 'Immagini: Wikimedia Commons —',
+      de: 'Bilder: Wikimedia Commons —'
+    };
     var heading = copyByLang[lang] || copyByLang.ar;
     var navLabels = navByLang[lang] || navByLang.ar;
+    var creditsLabel = creditsByLang[lang] || creditsByLang.ar;
     var storyEntries = entries.slice();
     var extras = EXTRA_SECTION_PHOTOS[sectionId] || [];
     Promise.all([
       ensurePhotoStyles(),
-      Promise.all(storyEntries.map(function (entry) { return withTimeout(storyPhotoUrls(entry), 9000, []); })),
+      Promise.all(storyEntries.map(function (entry) { return withTimeout(storyPhotos(entry), 14000, []); })),
       Promise.all(extras.map(function (extra) { return withTimeout(probeImage(root + extra.src), 9000, null); }))
     ]).then(function (result) {
-      var storyPhotos = result[1], extraPhotos = result[2];
+      var photoLists = result[1], extraPhotos = result[2];
       var firsts = [], standalone = [], seconds = [];
       storyEntries.forEach(function (entry, storyIndex) {
         var story = entry.story;
         var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
         var href = validPath(path) ? root + path : '';
-        var urls = (storyPhotos[storyIndex] || []).slice(0, 3);
-        urls.forEach(function (url, photoIndex) {
-          var tile = { order: storyIndex * 10 + photoIndex, src: url, story: story, href: href };
+        (photoLists[storyIndex] || []).slice(0, 3).forEach(function (photo, photoIndex) {
+          var tile = { order: storyIndex * 10 + photoIndex, src: photo.src, credit: photo.credit, story: story, href: href };
           (photoIndex === 0 ? firsts : seconds).push(tile);
         });
       });
       extras.forEach(function (extra, index) {
         if (extraPhotos[index]) standalone.push({ order: 1000 + index, src: extraPhotos[index], title: extra.title, alt: extra.alt });
       });
-      /* صورة واحدة على الأقل لكل حكاية لها صورة فعلية؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
+      /* صورة واحدة على الأقل لكل حكاية لها صورة تاريخية؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
       var scrolling = firsts.length > MOSAIC_MAX;
       var picked = scrolling ? firsts : firsts.concat(standalone, seconds).slice(0, MOSAIC_MAX);
       if (!picked.length) return;
@@ -174,17 +230,17 @@
         item.style.setProperty('--i', String(Math.min(index, 8)));
         var link = tile.href ? node('a', 'kh-sp-tile') : node('div', 'kh-sp-tile');
         if (tile.href) link.href = tile.href;
-        var label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
+        tile.label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
         var visual = node('img', '');
         visual.src = tile.src;
         /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
-        visual.alt = tile.story ? '' : (tile.alt || label);
+        visual.alt = tile.story ? '' : (tile.alt || tile.label);
         visual.decoding = 'async';
         visual.onerror = function () { item.style.visibility = 'hidden'; };
         var caption = node('span', 'kh-sp-cap');
-        caption.appendChild(node('strong', '', label));
+        caption.appendChild(node('strong', '', tile.label));
         var person = tile.story ? localized(tile.story, 'person') : '';
-        if (person && person !== label) caption.appendChild(node('small', '', person));
+        if (person && person !== tile.label) caption.appendChild(node('small', '', person));
         link.append(visual, caption);
         item.appendChild(link);
         grid.appendChild(item);
@@ -204,6 +260,22 @@
           nav.appendChild(button);
         });
         inner.appendChild(nav);
+      }
+      /* نسبة الصور المجلوبة تلقائيًا: المصور والترخيص ورابط صفحة الملف. */
+      var credited = picked.filter(function (tile) { return tile.credit && tile.credit.page; });
+      if (credited.length) {
+        var credits = node('p', 'kh-sp-credits');
+        credits.appendChild(document.createTextNode(creditsLabel + ' '));
+        credited.forEach(function (tile, index) {
+          if (index) credits.appendChild(document.createTextNode(' · '));
+          var detail = [tile.credit.artist, tile.credit.license].filter(Boolean).join('، ');
+          var anchor = node('a', '', tile.label + (detail ? ' (' + detail + ')' : ''));
+          anchor.href = tile.credit.page;
+          anchor.target = '_blank';
+          anchor.rel = 'noopener';
+          credits.appendChild(anchor);
+        });
+        inner.appendChild(credits);
       }
       section.appendChild(inner);
       mountPhotos(section);
