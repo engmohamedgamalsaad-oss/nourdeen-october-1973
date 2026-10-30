@@ -328,7 +328,7 @@ for (const rel of walk('').filter((f) => /\.(?:js|cjs)$/.test(f)).sort()) {
       const de = JSON.parse(match[1]);
       const entries = Object.entries(de);
       if (entries.length < 200) fail(`Shared language source: only ${entries.length} German entries; expected at least 200.`);
-      const bad = entries.filter(([k, v]) => typeof v !== 'string' || !v.trim() || /\\bundefined\\b/.test(v));
+      const bad = entries.filter(([k, v]) => typeof v !== 'string' || !v.trim() || /undefined/.test(v));
       if (bad.length) fail(`Shared language source: ${bad.length} empty/invalid German values, e.g. "${bad[0][0].slice(0, 40)}".`);
       const arabicValues = entries.filter(([, v]) => /[؀-ۿ]/.test(v));
       if (arabicValues.length) fail(`Shared language source: ${arabicValues.length} German values still contain Arabic text, e.g. "${arabicValues[0][0].slice(0, 40)}".`);
@@ -421,7 +421,7 @@ for (const rel of [
 }
 {
   const page = read('stories/science/007/index.html');
-  const buttons = [...page.matchAll(/<button\\b[^>]*\\bdata-lang=["'](ar|en|fr|it|de)["'][^>]*>/g)].map((m) => m[1]);
+  const buttons = [...page.matchAll(/<button[^>]*data-lang=["'](ar|en|fr|it|de)["'][^>]*>/g)].map((m) => m[1]);
   if (new Set(buttons).size !== 5 || !['ar', 'en', 'fr', 'it', 'de'].every((locale) => buttons.includes(locale))) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must expose all five language buttons (ar/en/fr/it/de).');
   }
@@ -481,7 +481,7 @@ for (const rel of [
   const map = read(mapScriptPath);
   if (!/var LANGS = \['ar', 'en', 'fr', 'it', 'de'\]/.test(map)) fail('Interactive map must support ar/en/fr/it/de.');
   for (const locale of ['ar', 'en', 'fr', 'it', 'de']) {
-    if (!new RegExp('\\b' + locale + ':').test(map)) fail('Interactive map is missing locale data for ' + locale + '.');
+    if (!new RegExp('' + locale + ':').test(map)) fail('Interactive map is missing locale data for ' + locale + '.');
   }
   if (!map.includes("get('stories/index.json')") || !map.includes("get('stories/places.json')")) {
     fail('Interactive map must read the current story index and place data.');
