@@ -117,7 +117,22 @@
       "fr": "Alexandrie",
       "it": "Alessandria",
       "de": "Alexandria"
-    }
+    },
+    "place_label": {
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
+    },
+    "source_name": {
+      "ar": "موسوعة لاروس — توفيق الحكيم",
+      "en": "Larousse Encyclopedia — Tawfiq al-Hakim",
+      "fr": "Encyclopédie Larousse — Tawfiq al-Hakim",
+      "it": "Enciclopedia Larousse — Tawfiq al-Hakim",
+      "de": "Larousse-Enzyklopädie — Tawfiq al-Hakim"
+    },
+    "source_url": "https://www.larousse.fr/encyclopedie/litterature/Tawfiq_al-_Hakim/173803"
   },
   "009": {
     "lat": 30.0478,
