@@ -25,6 +25,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "لو كان ابن سينا طبيبًا بارعًا، فهل كان يكتب عن الطب فقط؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لا، ودي من الحاجات المميزة في حكايته. كتب كمان في الفلسفة والمنطق وموضوعات أخرى؛ لأنه كان يرى أن فهم الإنسان والعالم يحتاج إلى أكثر من علم واحد."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "وُلد ابن سينا، واسمه أبو علي الحسين بن عبد الله بن سينا، نحو عام 980 ميلاديًا في منطقة بخارى، الواقعة في أوزبكستان حاليًا. اهتم منذ صغره بالتعلم، ودرس القرآن واللغة والفلسفة والعلوم، ثم اتجه إلى الطب حتى أصبح طبيبًا معروفًا في عصره."
         },
@@ -95,6 +105,16 @@
           "speaker": "narrator",
           "heading": "The beginning",
           "text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "If Ibn Sina was a skilled physician, did he write only about medicine?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No, and that is one of the remarkable things about his story. He also wrote about philosophy, logic, and other subjects. He believed that understanding people and the world required more than one field of knowledge."
         },
         {
           "type": "paragraph",
@@ -171,6 +191,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Non, et c’est l’un des aspects remarquables de son parcours. Il a également écrit sur la philosophie, la logique et d’autres sujets. Il pensait que comprendre l’être humain et le monde demandait plusieurs domaines de connaissance."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ibn Sina, de son nom complet Abu Ali al-Husayn ibn Abd Allah ibn Sina, serait né vers 980 dans la région de Boukhara, aujourd’hui en Ouzbékistan. Il s’intéressa tôt au savoir, puis devint un médecin reconnu à son époque."
         },
@@ -244,6 +274,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No, ed è uno degli aspetti più interessanti della sua storia. Scrisse anche di filosofia, logica e altri argomenti. Riteneva che per comprendere le persone e il mondo servisse conoscere più discipline."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ibn Sina, il cui nome completo era Abu Ali al-Husayn ibn Abd Allah ibn Sina, nacque intorno al 980 d.C. nella regione di Bukhara, nell’attuale Uzbekistan. Si dedicò presto allo studio e in seguito divenne un medico noto ai suoi tempi."
         },
@@ -314,6 +354,16 @@
           "speaker": "narrator",
           "heading": "Der Anfang",
           "text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nein, und das ist eine Besonderheit seiner Geschichte. Er schrieb auch über Philosophie, Logik und andere Themen. Er war überzeugt, dass man Menschen und die Welt nur mit Wissen aus mehreren Fachgebieten verstehen kann."
         },
         {
           "type": "paragraph",
