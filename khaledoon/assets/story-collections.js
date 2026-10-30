@@ -87,7 +87,10 @@
         item.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
         var image = node('img', '');
         image.alt = (localized(story, 'title') || localized(story, 'person') || '') + (gallerySources.length > 1 ? ' — ' + (photoIndex + 1) : '');
-        image.loading = index < 3 ? 'eager' : 'lazy';
+        /* A moving gallery must not defer off-screen cards: the next duplicated group
+           enters the viewport continuously, so lazy loading can leave blank frames. */
+        image.loading = 'eager';
+        image.setAttribute('fetchpriority', index < 2 ? 'high' : 'low');
         image.decoding = 'async';
         var imageCandidates = photoIndex === 0 ? [photoUrl].concat(candidates) : [photoUrl, candidates[0]];
         image.setAttribute('data-cover-candidates', JSON.stringify(imageCandidates));
@@ -112,7 +115,10 @@
         item.setAttribute('aria-label', photo.title);
         var image = node('img', '');
         image.alt = photo.alt;
-        image.loading = 'lazy';
+        /* Keep standalone gallery images eager too; they may move into view before
+           the browser's lazy-load threshold is recalculated. */
+        image.loading = 'eager';
+        image.setAttribute('fetchpriority', 'low');
         image.decoding = 'async';
         var photoCandidates = [root + photo.src];
         image.setAttribute('data-cover-candidates', JSON.stringify(photoCandidates));
