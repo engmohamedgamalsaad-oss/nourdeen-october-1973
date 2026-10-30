@@ -1,0 +1,905 @@
+{
+  "format": "KHALEDOON_STORY_V2",
+  "slug": "amr-ibn-al-as",
+  "section": "islamic",
+  "design": {
+    "variant": "islamic-heritage",
+    "accent": "#78c59a"
+  },
+  "original_body": "عمرو بن العاص صحابي وقائد عسكري اشتهر بدهائه وحنكته، أسلم عام 8 هـ قبل فتح مكة، وكان من أشد الناس عداءً للإسلام قبل إسلامه . قاد فتح مصر في عهد عمر بن الخطاب وأصبح واليها، وهو مؤسس مدينة الفسطاط (القاهرة القديمة) وأول من بنى جامعًا فيها . توفي بمصر سنة 43 هـ تقريبًا، وكان من دهاة العرب المعدودين .",
+  "i18n": {
+    "ar": {
+      "title": "عمرو بن العاص",
+      "subtitle": "فتح مصر",
+      "summary": "فتح مصر",
+      "student_name": "نوردين محمد",
+      "grade": "الصف الاول الاعدادى",
+      "narrator_name": "كارما",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "عمرو بن العاص",
+      "person": "عمرو بن العاص",
+      "history_note": "بعض التفاصيل في حياة عمرو بن العاص فيها خلاف بين المؤرخين. تاريخ إسلامه: أشهر الروايات تقول إنه أسلم في السنة 8 هـ مع خالد بن الوليد، لكن فيه رواية تانية تقول إنه أسلم في الحبشة عند النجاشي سنة 7 هـ أو قبل كده. الرواية الأشهر عند أهل السير هي سنة 8 هـ.\n\nسنة وفاته: اتوفى في أول شوال سنة 43 هـ، اللي يوافق يناير 664 م. لكن فيه مصادر بتقول إنه عاش حوالي 90 سنة، وفيه خلاف على سنة ميلاده بالتحديد.\n\nمكان دفنه: المصادر القديمة بتقول إنه دفن في سفح جبل المقطم في مصر، لكن تحديد القبر نفسه اختلف عليه المؤرخين. بعض الباحثين بيقولوا إن مكان القبر ضاع مع الوقت، وإن عمرو نفسه أوصى إنه ما يتحطش على قبره حجر ولا خشبة. فمفيش مكان محدد متفق عليه لزيارته.\n\nجامع عمرو بن العاص: بني سنة 21 هـ تقريبًا، لكن المبنى الحالي مش هو البناء الأصلي. اتعرض المسجد لحريق كبير سنة 1175 م لما وزير الفاطميين شاور حرق الفسطاط عشان يمنع الصليبيين، وبعدين صلاح الدين الأيوبي أمر بإعادة بنائه. يعني اللي موجود دلوقتي هو نتيجة إعادات بناء وترميم كتير على مر القرون.",
+      "images_note": "لا توجد صور فوتوغرافية موثوقة لعمرو بن العاص نفسه؛ التصوير لم يكن موجودًا في عصره. لذلك تعرض الحكاية صورًا للجامع المرتبط به: صورة David Stanley بترخيص CC BY 2.0، وصورة Jeff Dahl التي أُطلقت للملكية العامة، وصورة Mohammed Moussa بترخيص CC BY-SA 3.0. الغلاف والرسم التوضيحي أصليان وليسا صورتين تاريخيتين.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "كارما: فضول وأسئلة وملاحظات",
+          "text": "يا سلام! يعني عمرو بن العاص ده كان الأول بيحارب الإسلام وبعدين بقى من أذكى قواد المسلمين؟ ده تحول خطير أوي! وكمان هو اللي بنى أول جامع في مصر كلها؟ يعني لما أقف في جامع عمرو بن العاص في القاهرة القديمة، أنا واقفة في مكان عمره أكثر من ألف وأربعمية سنة؟ حاجة تفرح جدًا!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "بس عجبني إنه كان بيحب يروح الحبشة قبل كده، وده اللي خلاه يشوف النجاشي مسلم ويسلم هو كمان. يعني السفر بيغير الإنسان بجد! وأنا نفسي أعرف إيه اللي خلى واحد ذكي زي ده يغير رأيه في الإسلام كده مرة واحدة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "عمرو بن العاص: من مكة إلى مصر",
+          "text": "عمرو بن العاص صحابي وقائد عسكري اشتهر بدهائه وحنكته، أسلم عام 8 هـ قبل فتح مكة، وكان من أشد الناس عداءً للإسلام قبل إسلامه . قاد فتح مصر في عهد عمر بن الخطاب وأصبح واليها، وهو مؤسس مدينة الفسطاط (القاهرة القديمة) وأول من بنى جامعًا فيها . توفي بمصر سنة 43 هـ تقريبًا، وكان من دهاة العرب المعدودين ."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "رحلة التجارة والحبشة",
+          "text": "لكن حكاية عمرو بن العاص أطول من كده بكتير. هو من قبيلة بني سهم، فرع من قريش، وأبوه العاص بن وائل كان من سادات مكة. اشتغل بالتجارة، وكان بيسافر بماله إلى الشام واليمن ومصر والحبشة، وده اللي خلاه يعرف الدنيا كويس قبل ما يدخل الإسلام. ولما ظهر الإسلام، كان من أشد المعارضين، وحضر غزوة بدر وأحد والخندق في صف قريش ضد المسلمين."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لكن في سنة 8 هـ، قرر يسافر إلى الحبشة عند النجاشي، وهناك لقاه قد أسلم، فأسلم هو كمان على يده. وركب سفينة وراجع المدينة المنورة، وفي الطريق التقى بخالد بن الوليد وعثمان بن طلحة، ودخلوا المدينة مع بعض معلنين إسلامهم. النبي ﷺ قال عنهم كلمة حلوة: «إن مكة قد ألقت إلينا أفلاذ كبدها»."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "بعد إسلامه",
+          "text": "بعد إسلامه، بقى من أقرب قادة النبي. بعته النبي في سرية ذات السلاسل، وبعدين بعته لهدم صنم سواع. وفي سنة 8 هـ بعته مع كتاب إلى ملكي عمان جيفر وعباد ابني الجلندي، ولما أسلموا عيّنه النبي واليًا على الزكاة هناك."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "فتح مصر وتأسيس الفسطاط",
+          "text": "وفي عهد عمر بن الخطاب، كان عمرو هو اللي قاد فتح مصر. دخل مصر سنة 20 هـ تقريبًا، وحاصر حصن بابليون، وبعد ما فتحها أسس مدينة الفسطاط، وبنى فيها أول جامع في مصر وأفريقيا كلها. الجامع ده اتسمى جامع عمرو بن العاص، وكان في البداية بسيط جدًا: مساحته 50 في 30 ذراع، وحوائطه من الطوب اللبن، وسقفه من الجريد، وأعمدته من جذوع النخل. لكنه بقى بعد كده مدرسة كبيرة، وأول مركز علمي في مصر قبل الأزهر بحوالي 600 سنة.",
+          "image_after": "amr-mosque-exterior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "والي مصر",
+          "text": "عمر بن الخطاب كان بيقول عن عمرو: «ما ينبغي لأبي عبد الله أن يمشي على الأرض إلا أميرًا». يعني كان عارف قيمته كويس. وعمرو فضل واليًا على مصر فترات طويلة، وفي عهد معاوية بن أبي سفيان فضل واليًا عليها لحد ما توفي سنة 43 هـ تقريبًا، ودفن في مصر.",
+          "image_after": "amr-mosque-interior"
+        }
+      ]
+    },
+    "en": {
+      "title": "Amr ibn al-As",
+      "subtitle": "The Conquest of Egypt",
+      "summary": "The Conquest of Egypt",
+      "student_name": "Nourdin Mohamed",
+      "grade": "First Year Preparatory",
+      "narrator_name": "Karma",
+      "narrator_grade": "Third grade of primary school",
+      "figure_name": "Amr ibn al-As",
+      "person": "Amr ibn al-As",
+      "history_note": "Some details in the life of Amr ibn al-As are disputed among historians. The date of his Islam: the most famous report says he embraced Islam in the year 8 AH with Khalid ibn al-Walid, but another report says he embraced Islam in Abyssinia at the hands of the Negus in the year 7 AH or earlier. The most famous report among biographers is the year 8 AH.\n\nThe year of his death: he died on the first of Shawwal in the year 43 AH, which corresponds to January 664 CE. But some sources say he lived about 90 years, and there is disagreement about the exact year of his birth.\n\nHis burial place: early sources say he was buried at the foot of Mount Muqattam in Egypt, but historians disagreed about identifying the grave itself. Some researchers say the location of the grave was lost over time, and that Amr himself advised that no stone or wood be placed on his grave. So there is no specific agreed-upon place to visit.\n\nThe Mosque of Amr ibn al-As: it was built around the year 21 AH, but the current building is not the original structure. The mosque suffered a great fire in 1175 CE when the Fatimid vizier Shawar burned Fustat to prevent the Crusaders, and later Saladin al-Ayyubi ordered its rebuilding. So what exists today is the result of many reconstructions and restorations over the centuries.",
+      "images_note": "No verified photographs of Amr ibn al-As himself exist; photography did not exist in his era. The story therefore shows photographs of the mosque associated with him: David Stanley’s image under CC BY 2.0, Jeff Dahl’s public-domain image, and Mohammed Moussa’s image under CC BY-SA 3.0. The cover and illustration are original artwork, not historical photographs.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosity, questions and observations",
+          "text": "Wow! So Amr ibn al-As first fought against Islam and then became one of the smartest Muslim commanders? That is a huge change! And he was the one who built the first mosque in all of Egypt? So when I stand in the Mosque of Amr ibn al-As in Old Cairo, I am standing in a place that is more than 1,400 years old? That makes me really happy!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "But I liked that he used to travel to Abyssinia before that, and that is what made him see the Negus had become Muslim and he became Muslim too. So travel really changes people! And I really want to know what made a smart man like him change his mind about Islam all at once?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Amr ibn al-As: from Mecca to Egypt",
+          "text": "Amr ibn al-As was a Companion and a military commander known for his cleverness and wisdom. He embraced Islam in 8 AH before the conquest of Mecca, and he had been one of the fiercest opponents of Islam before that. He led the conquest of Egypt during the caliphate of Umar ibn al-Khattab and became its governor. He founded the city of Fustat (Old Cairo) and built the first mosque there. He died in Egypt around 43 AH and was counted among the most ingenious Arabs."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Trade and the journey to Abyssinia",
+          "text": "But the story of Amr ibn al-As is much longer than that. He was from the Banu Sahm clan, a branch of the Quraysh, and his father, al-As ibn Wa'il, was one of the chiefs of Mecca. He worked in trade and traveled with his goods to Syria, Yemen, Egypt, and Abyssinia, which made him know the world well before entering Islam. When Islam appeared, he was one of its strongest opponents, and he attended the battles of Badr, Uhud, and the Trench on the side of Quraysh against the Muslims."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "But in the year 8 AH, he decided to travel to Abyssinia to the Negus, and there he found that he had embraced Islam, so Amr embraced Islam at his hands. He boarded a ship and returned to Medina, and on the way he met Khalid ibn al-Walid and Uthman ibn Talha, and they entered Medina together declaring their Islam. The Prophet ﷺ said about them: «Indeed, Mecca has thrown to us the pieces of its liver.»"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "After embracing Islam",
+          "text": "After his Islam, he became one of the closest commanders of the Prophet. The Prophet sent him on the expedition of Dhat al-Salasil, and later sent him to destroy the idol Suwa'. In the year 8 AH he sent him with a letter to the kings of Oman, Jayfar and Abbad, the sons of al-Julanda, and when they embraced Islam, the Prophet appointed him governor of alms there."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "The conquest of Egypt and the founding of Fustat",
+          "text": "During the caliphate of Umar ibn al-Khattab, Amr was the one who led the conquest of Egypt. He entered Egypt around the year 20 AH, besieged the Babylon Fortress, and after its conquest he founded the city of Fustat and built there the first mosque in Egypt and all of Africa. This mosque was called the Mosque of Amr ibn al-As, and at first it was very simple: its area was 50 by 30 cubits, its walls were of mud brick, its roof of palm fronds, and its columns of palm trunks. But later it became a great school and the first center of learning in Egypt, about 600 years before al-Azhar.",
+          "image_after": "amr-mosque-exterior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Governor of Egypt",
+          "text": "Umar ibn al-Khattab used to say about Amr: «Abu Abdullah should not walk on the earth except as a commander.» He knew his worth well. Amr remained governor of Egypt for long periods, and under Mu'awiya ibn Abi Sufyan he continued as its governor until he died around 43 AH and was buried in Egypt.",
+          "image_after": "amr-mosque-interior"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Amr ibn al-As",
+      "subtitle": "La conquête de l'Égypte",
+      "summary": "La conquête de l'Égypte",
+      "student_name": "Nourdin Mohamed",
+      "grade": "Première année préparatoire",
+      "narrator_name": "Karma",
+      "narrator_grade": "Troisième année de l’école primaire",
+      "figure_name": "Amr ibn al-As",
+      "person": "Amr ibn al-As",
+      "history_note": "Certains détails de la vie d'Amr ibn al-As sont contestés parmi les historiens. La date de son islam : le récit le plus célèbre dit qu'il a embrassé l'islam en l'an 8 H avec Khalid ibn al-Walid, mais un autre récit dit qu'il a embrassé l'islam en Abyssinie entre les mains du Négus en l'an 7 H ou avant. Le récit le plus célèbre chez les biographes est l'an 8 H.\n\nL'année de sa mort : il est mort le premier de Shawwal de l'an 43 H, ce qui correspond à janvier 664. Mais certaines sources disent qu'il a vécu environ 90 ans, et il y a désaccord sur l'année exacte de sa naissance.\n\nSon lieu de sépulture : les sources anciennes disent qu'il a été enterré au pied du mont Muqattam en Égypte, mais les historiens ont divergé sur l'identification de la tombe elle-même. Certains chercheurs disent que l'emplacement de la tombe a été perdu avec le temps, et qu'Amr lui-même avait recommandé qu'aucune pierre ni bois ne soit placé sur sa tombe. Il n'y a donc pas de lieu précis convenu pour la visite.\n\nLa mosquée d'Amr ibn al-As : elle a été construite vers l'an 21 H, mais le bâtiment actuel n'est pas la structure originale. La mosquée a subi un grand incendie en 1175 lorsque le vizir fatimide Shawar a brûlé Fustat pour empêcher les Croisés, et plus tard Saladin al-Ayyubi a ordonné sa reconstruction. Donc ce qui existe aujourd'hui est le résultat de nombreuses reconstructions et restaurations au fil des siècles.",
+      "images_note": "Il n’existe pas de photographie vérifiée d’Amr ibn al-As lui-même ; la photographie n’existait pas à son époque. Le récit montre donc des photographies de la mosquée qui lui est associée : image de David Stanley sous CC BY 2.0, image de Jeff Dahl dans le domaine public et image de Mohammed Moussa sous CC BY-SA 3.0. La couverture et l’illustration sont des créations originales, pas des photographies historiques.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma : curiosité, questions et observations",
+          "text": "Waouh ! Donc Amr ibn al-As a d'abord combattu l'islam puis est devenu l'un des commandants musulmans les plus intelligents ? C'est un changement énorme ! Et c'est lui qui a construit la première mosquée de toute l'Égypte ? Donc quand je me tiens dans la mosquée d'Amr ibn al-As dans le Vieux Caire, je suis dans un lieu qui a plus de 1 400 ans ? Ça me rend vraiment heureuse !"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Mais j'ai aimé qu'il voyageait en Abyssinie avant cela, et c'est ce qui lui a fait voir que le Négus était devenu musulman et il est devenu musulman aussi. Donc les voyages changent vraiment les gens ! Et je veux vraiment savoir ce qui a poussé un homme intelligent comme lui à changer d'avis sur l'islam d'un seul coup ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Amr ibn al-As : de La Mecque à l’Égypte",
+          "text": "Amr ibn al-As était un Compagnon et un commandant militaire connu pour sa ruse et sa sagesse. Il a embrassé l'islam en 8 H avant la conquête de La Mecque, et il avait été l'un des plus farouches opposants à l'islam auparavant. Il a dirigé la conquête de l'Égypte sous le califat d'Umar ibn al-Khattab et en est devenu le gouverneur. Il a fondé la ville de Fustat (le Vieux Caire) et y a construit la première mosquée. Il est mort en Égypte vers 43 H et était compté parmi les Arabes les plus ingénieux."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le commerce et le voyage en Abyssinie",
+          "text": "Mais l'histoire d'Amr ibn al-As est bien plus longue que cela. Il était du clan des Banu Sahm, une branche des Quraysh, et son père, al-As ibn Wa'il, était l'un des chefs de La Mecque. Il travaillait dans le commerce et voyageait avec ses marchandises en Syrie, au Yémen, en Égypte et en Abyssinie, ce qui lui a fait bien connaître le monde avant d'entrer en islam. Lorsque l'islam est apparu, il était l'un de ses plus farouches opposants, et il a participé aux batailles de Badr, Uhud et du Fossé aux côtés des Quraysh contre les musulmans."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mais en l'an 8 H, il décida de se rendre en Abyssinie chez le Négus, et là il découvrit qu'il avait embrassé l'islam, alors Amr embrassa l'islam entre ses mains. Il monta sur un navire et retourna à Médine, et en chemin il rencontra Khalid ibn al-Walid et Uthman ibn Talha, et ils entrèrent ensemble à Médine en déclarant leur islam. Le Prophète ﷺ dit à leur sujet : « La Mecque nous a certes jeté les morceaux de son foie. »"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Après sa conversion à l’islam",
+          "text": "Après son islam, il devint l'un des commandants les plus proches du Prophète. Le Prophète l'envoya dans l'expédition de Dhat al-Salasil, puis l'envoya détruire l'idole Suwa'. En l'an 8 H, il l'envoya avec une lettre aux rois d'Oman, Jayfar et Abbad, les fils d'al-Julanda, et lorsqu'ils embrassèrent l'islam, le Prophète le nomma gouverneur de l'aumône là-bas."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "La conquête de l’Égypte et la fondation de Fustat",
+          "text": "Sous le califat d'Umar ibn al-Khattab, c'est Amr qui a dirigé la conquête de l'Égypte. Il entra en Égypte vers l'an 20 H, assiégea la forteresse de Babylone, et après sa conquête il fonda la ville de Fustat et y construisit la première mosquée d'Égypte et de toute l'Afrique. Cette mosquée fut appelée la mosquée d'Amr ibn al-As, et au début elle était très simple : sa superficie était de 50 sur 30 coudées, ses murs de briques crues, son toit de palmes, et ses colonnes de troncs de palmiers. Mais plus tard, elle devint une grande école et le premier centre d'enseignement en Égypte, environ 600 ans avant al-Azhar.",
+          "image_after": "amr-mosque-exterior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Gouverneur d’Égypte",
+          "text": "Umar ibn al-Khattab disait à propos d'Amr : « Abu Abdullah ne devrait marcher sur la terre qu'en tant que commandant. » Il connaissait bien sa valeur. Amr resta gouverneur de l'Égypte pendant de longues périodes, et sous Mu'awiya ibn Abi Sufyan il continua comme son gouverneur jusqu'à sa mort vers 43 H, et il fut enterré en Égypte.",
+          "image_after": "amr-mosque-interior"
+        }
+      ]
+    },
+    "it": {
+      "title": "Amr ibn al-As",
+      "subtitle": "La conquista dell'Egitto",
+      "summary": "La conquista dell'Egitto",
+      "student_name": "Nourdin Mohamed",
+      "grade": "Primo anno preparatorio",
+      "narrator_name": "Karma",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "Amr ibn al-As",
+      "person": "Amr ibn al-As",
+      "history_note": "Alcuni dettagli della vita di Amr ibn al-As sono contestati tra gli storici. La data del suo Islam: il racconto più famoso dice che abbracciò l'Islam nell'anno 8 AH con Khalid ibn al-Walid, ma un altro racconto dice che abbracciò l'Islam in Abissinia per mano del Negus nell'anno 7 AH o prima. Il racconto più famoso presso i biografi è l'anno 8 AH.\n\nL'anno della sua morte: morì il primo di Shawwal dell'anno 43 AH, che corrisponde a gennaio 664. Ma alcune fonti dicono che visse circa 90 anni, e c'è disaccordo sull'anno esatto della sua nascita.\n\nIl suo luogo di sepoltura: le fonti antiche dicono che fu sepolto ai piedi del monte Muqattam in Egitto, ma gli storici hanno divergito sull'identificazione della tomba stessa. Alcuni ricercatori dicono che la posizione della tomba fu persa nel tempo, e che Amr stesso raccomandò che non fosse posta pietra né legno sulla sua tomba. Quindi non c'è un luogo specifico concordato per la visita.\n\nLa Moschea di Amr ibn al-As: fu costruita intorno all'anno 21 AH, ma l'edificio attuale non è la struttura originale. La moschea subì un grande incendio nel 1175 quando il visir fatimide Shawar bruciò Fustat per impedire ai Crociati, e successivamente Saladino al-Ayyubi ordinò la sua ricostruzione. Quindi ciò che esiste oggi è il risultato di molte ricostruzioni e restauri nel corso dei secoli.",
+      "images_note": "Non esistono fotografie verificate di Amr ibn al-As; la fotografia non esisteva nella sua epoca. Il racconto mostra quindi fotografie della moschea a lui associata: immagine di David Stanley con licenza CC BY 2.0, immagine di Jeff Dahl di pubblico dominio e immagine di Mohammed Moussa con licenza CC BY-SA 3.0. La copertina e l’illustrazione sono opere originali, non fotografie storiche.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosità, domande e osservazioni",
+          "text": "Wow! Quindi Amr ibn al-As prima combatteva contro l'Islam e poi è diventato uno dei comandanti musulmani più intelligenti? È un cambiamento enorme! E è stato lui a costruire la prima moschea di tutto l'Egitto? Quindi quando sto nella Moschea di Amr ibn al-As nel Cairo Vecchia, sono in un luogo che ha più di 1.400 anni? Questo mi rende davvero felice!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ma mi è piaciuto che viaggiava in Abissinia prima di allora, e questo è ciò che gli ha fatto vedere che il Negus era diventato musulmano e anche lui è diventato musulmano. Quindi i viaggi cambiano davvero le persone! E voglio davvero sapere cosa ha spinto un uomo intelligente come lui a cambiare idea sull'Islam tutto in una volta?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Amr ibn al-As: dalla Mecca all’Egitto",
+          "text": "Amr ibn al-As era un Compagno e un comandante militare noto per la sua astuzia e saggezza. Abbracciò l'Islam nell'8 AH prima della conquista della Mecca, ed era stato uno dei più accaniti oppositori dell'Islam prima di allora. Guidò la conquista dell'Egitto durante il califfato di Umar ibn al-Khattab e ne divenne governatore. Fondò la città di Fustat (Il Cairo Vecchia) e vi costruì la prima moschea. Morì in Egitto intorno al 43 AH ed era annoverato tra gli arabi più ingegnosi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Il commercio e il viaggio in Abissinia",
+          "text": "Ma la storia di Amr ibn al-As è molto più lunga di così. Era del clan dei Banu Sahm, un ramo dei Quraysh, e suo padre, al-As ibn Wa'il, era uno dei capi della Mecca. Lavorava nel commercio e viaggiava con le sue merci in Siria, Yemen, Egitto e Abissinia, il che gli fece conoscere bene il mondo prima di entrare nell'Islam. Quando apparve l'Islam, fu uno dei suoi più accaniti oppositori, e partecipò alle battaglie di Badr, Uhud e del Fossato dalla parte dei Quraysh contro i musulmani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ma nell'anno 8 AH, decise di recarsi in Abissinia dal Negus, e lì trovò che si era convertito all'Islam, così Amr abbracciò l'Islam per mano sua. Salì su una nave e tornò a Medina, e lungo la strada incontrò Khalid ibn al-Walid e Uthman ibn Talha, ed entrarono insieme a Medina dichiarando il loro Islam. Il Profeta ﷺ disse di loro: «La Mecca ci ha gettato i pezzi del suo fegato.»"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Dopo la conversione all’Islam",
+          "text": "Dopo il suo Islam, divenne uno dei comandanti più vicini al Profeta. Il Profeta lo inviò nella spedizione di Dhat al-Salasil, e poi lo inviò a distruggere l'idolo Suwa'. Nell'anno 8 AH lo inviò con una lettera ai re dell'Oman, Jayfar e Abbad, figli di al-Julanda, e quando abbracciarono l'Islam, il Profeta lo nominò governatore dell'elemosina lì."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "La conquista dell’Egitto e la fondazione di Fustat",
+          "text": "Durante il califfato di Umar ibn al-Khattab, fu Amr a guidare la conquista dell'Egitto. Entrò in Egitto intorno all'anno 20 AH, assediò la fortezza di Babilonia, e dopo la sua conquista fondò la città di Fustat e vi costruì la prima moschea in Egitto e in tutta l'Africa. Questa moschea fu chiamata la Moschea di Amr ibn al-As, e all'inizio era molto semplice: la sua area era di 50 per 30 cubiti, le sue mura erano di mattoni crudi, il suo tetto di foglie di palma e le sue colonne di tronchi di palma. Ma in seguito divenne una grande scuola e il primo centro di apprendimento in Egitto, circa 600 anni prima di al-Azhar.",
+          "image_after": "amr-mosque-exterior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Governatore d’Egitto",
+          "text": "Umar ibn al-Khattab diceva di Amr: «Abu Abdullah non dovrebbe camminare sulla terra se non come comandante.» Conosceva bene il suo valore. Amr rimase governatore dell'Egitto per lunghi periodi, e sotto Mu'awiya ibn Abi Sufyan continuò come suo governatore fino alla sua morte intorno al 43 AH, e fu sepolto in Egitto.",
+          "image_after": "amr-mosque-interior"
+        }
+      ]
+    },
+    "de": {
+      "title": "Amr ibn al-As",
+      "subtitle": "Die Eroberung Ägyptens",
+      "summary": "Die Eroberung Ägyptens",
+      "student_name": "Nourdin Mohamed",
+      "grade": "Erste Vorbereitungsklasse",
+      "narrator_name": "Karma",
+      "narrator_grade": "Dritte Klasse der Grundschule",
+      "figure_name": "Amr ibn al-As",
+      "person": "Amr ibn al-As",
+      "history_note": "Einige Details im Leben von Amr ibn al-As sind unter Historikern umstritten. Das Datum seines Islam: Der bekannteste Bericht besagt, dass er den Islam im Jahr 8 n. H. zusammen mit Khalid ibn al-Walid annahm, aber ein anderer Bericht besagt, dass er den Islam in Abessinien durch den Negus im Jahr 7 n. H. oder früher annahm. Der bekannteste Bericht bei den Biographen ist das Jahr 8 n. H.\n\nDas Jahr seines Todes: Er starb am ersten Shawwal des Jahres 43 n. H., was Januar 664 entspricht. Aber einige Quellen sagen, dass er etwa 90 Jahre lebte, und es gibt Uneinigkeit über das genaue Jahr seiner Geburt.\n\nSeine Grabstätte: Frühe Quellen besagen, dass er am Fuße des Berges Muqattam in Ägypten begraben wurde, aber die Historiker waren sich über die Identifizierung des Grabes selbst uneinig. Einige Forscher sagen, dass der Ort des Grabes mit der Zeit verloren ging und dass Amr selbst empfahl, dass weder Stein noch Holz auf sein Grab gelegt werden sollte. Es gibt also keinen bestimmten vereinbarten Ort für einen Besuch.\n\nDie Moschee des Amr ibn al-As: Sie wurde um das Jahr 21 n. H. erbaut, aber das heutige Gebäude ist nicht die ursprüngliche Struktur. Die Moschee erlitt 1175 einen großen Brand, als der fatimidische Wesir Shawar Fustat niederbrannte, um die Kreuzfahrer aufzuhalten, und später befahl Saladin al-Ayyubi ihren Wiederaufbau. Was heute existiert, ist also das Ergebnis vieler Rekonstruktionen und Restaurierungen über die Jahrhunderte.",
+      "images_note": "Es gibt keine verifizierten Fotografien von Amr ibn al-As selbst; zu seiner Zeit gab es noch keine Fotografie. Die Geschichte zeigt daher Aufnahmen der mit ihm verbundenen Moschee: ein Bild von David Stanley unter CC BY 2.0, ein gemeinfreies Bild von Jeff Dahl und ein Bild von Mohammed Moussa unter CC BY-SA 3.0. Titelbild und Illustration sind Originalgrafiken, keine historischen Fotografien.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: Neugier, Fragen und Beobachtungen",
+          "text": "Wow! Also kämpfte Amr ibn al-As zuerst gegen den Islam und wurde dann einer der klügsten muslimischen Befehlshaber? Das ist eine enorme Veränderung! Und er war derjenige, der die erste Moschee in ganz Ägypten baute? Wenn ich also in der Moschee des Amr ibn al-As in Alt-Kairo stehe, stehe ich an einem Ort, der über 1.400 Jahre alt ist? Das macht mich wirklich glücklich!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Aber mir hat gefallen, dass er vorher nach Abessinien reiste, und das ließ ihn sehen, dass der Negus Muslim geworden war, und er wurde auch Muslim. Reisen verändern Menschen also wirklich! Und ich möchte wirklich wissen, was einen klugen Mann wie ihn dazu brachte, seine Meinung über den Islam auf einmal zu ändern?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Amr ibn al-As: von Mekka nach Ägypten",
+          "text": "Amr ibn al-As war ein Gefährte und ein militärischer Befehlshaber, der für seine Klugheit und Weisheit bekannt war. Er nahm den Islam im Jahr 8 n. H. vor der Eroberung Mekkas an, und er war zuvor einer der erbittertsten Gegner des Islam gewesen. Er führte die Eroberung Ägyptens während des Kalifats von Umar ibn al-Khattab an und wurde dessen Gouverneur. Er gründete die Stadt Fustat (Alt-Kairo) und baute dort die erste Moschee. Er starb in Ägypten um das Jahr 43 n. H. und wurde zu den geistreichsten Arabern gezählt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Handel und die Reise nach Abessinien",
+          "text": "Aber die Geschichte von Amr ibn al-As ist viel länger als das. Er stammte aus dem Clan der Banu Sahm, einem Zweig der Quraysh, und sein Vater, al-As ibn Wa'il, war einer der Häuptlinge Mekkas. Er arbeitete im Handel und reiste mit seinen Waren nach Syrien, Jemen, Ägypten und Abessinien, was ihn die Welt gut kennen ließ, bevor er den Islam annahm. Als der Islam erschien, war er einer seiner stärksten Gegner, und er nahm an den Schlachten von Badr, Uhud und dem Graben auf der Seite der Quraysh gegen die Muslime teil."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Aber im Jahr 8 n. H. beschloss er, nach Abessinien zum Negus zu reisen, und dort fand er, dass dieser den Islam angenommen hatte, also nahm Amr den Islam durch ihn an. Er bestieg ein Schiff und kehrte nach Medina zurück, und unterwegs traf er Khalid ibn al-Walid und Uthman ibn Talha, und sie betraten gemeinsam Medina und erklärten ihren Islam. Der Prophet ﷺ sagte über sie: «Wahrlich, Mekka hat uns die Stücke seiner Leber zugeworfen.»"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Nach seiner Annahme des Islam",
+          "text": "Nach seinem Islam wurde er einer der engsten Befehlshaber des Propheten. Der Prophet sandte ihn auf den Feldzug von Dhat al-Salasil und später, um den Götzen Suwa' zu zerstören. Im Jahr 8 n. H. sandte er ihn mit einem Brief zu den Königen von Oman, Jayfar und Abbad, den Söhnen von al-Julanda, und als sie den Islam annahmen, ernannte der Prophet ihn dort zum Gouverneur für die Almosen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Die Eroberung Ägyptens und die Gründung von Fustat",
+          "text": "Während des Kalifats von Umar ibn al-Khattab war Amr derjenige, der die Eroberung Ägyptens anführte. Er betrat Ägypten um das Jahr 20 n. H., belagerte die Festung Babylon und gründete nach ihrer Eroberung die Stadt Fustat und baute dort die erste Moschee in Ägypten und ganz Afrika. Diese Moschee wurde die Moschee des Amr ibn al-As genannt, und zunächst war sie sehr einfach: Ihre Fläche betrug 50 mal 30 Ellen, ihre Mauern waren aus Lehmziegeln, ihr Dach aus Palmwedeln und ihre Säulen aus Palmenstämmen. Aber später wurde sie eine große Schule und das erste Bildungszentrum in Ägypten, etwa 600 Jahre vor al-Azhar.",
+          "image_after": "amr-mosque-exterior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Gouverneur von Ägypten",
+          "text": "Umar ibn al-Khattab sagte über Amr: «Abu Abdullah sollte nicht auf der Erde wandeln, außer als Befehlshaber.» Er kannte seinen Wert gut. Amr blieb lange Zeit Gouverneur von Ägypten, und unter Mu'awiya ibn Abi Sufyan blieb er dessen Gouverneur, bis er um das Jahr 43 n. H. starb und in Ägypten begraben wurde.",
+          "image_after": "amr-mosque-interior"
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/islamic/011/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — غلاف توضيحي أصلي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/islamic/011/cover.svg",
+    "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Amr ibn al-As.",
+    "i18n": {
+      "ar": {
+        "alt": "غلاف توضيحي لحكاية عمرو بن العاص وجامعه في الفسطاط",
+        "caption": "غلاف توضيحي أصلي وليس صورة أرشيفية لعمرو بن العاص.",
+        "source_name": "خالدون عبر التاريخ — غلاف توضيحي",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو بورتريه موثقًا لعمرو بن العاص."
+      },
+      "en": {
+        "alt": "Illustrated cover for the story of Amr ibn al-As and his mosque in Fustat",
+        "caption": "Original illustrated cover, not an archival portrait of Amr ibn al-As.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Amr ibn al-As."
+      },
+      "fr": {
+        "alt": "Illustrated cover for the story of Amr ibn al-As and his mosque in Fustat",
+        "caption": "Original illustrated cover, not an archival portrait of Amr ibn al-As.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni un portrait vérifié d’Amr ibn al-As."
+      },
+      "it": {
+        "alt": "Illustrated cover for the story of Amr ibn al-As and his mosque in Fustat",
+        "caption": "Original illustrated cover, not an archival portrait of Amr ibn al-As.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto verificato di Amr ibn al-As."
+      },
+      "de": {
+        "alt": "Illustrated cover for the story of Amr ibn al-As and his mosque in Fustat",
+        "caption": "Original illustrated cover, not an archival portrait of Amr ibn al-As.",
+        "source_name": "Khaledoon — illustrated cover",
+        "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Amr ibn al-As."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "amr-mosque-exterior",
+      "path": "assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg",
+      "kind": "photograph",
+      "source_name": "David Stanley عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Mosque_of_Amr_ibn_al-As_(8591305436).jpg",
+      "rights": "Photograph by David Stanley, licensed under Creative Commons Attribution 2.0 (CC BY 2.0). Credit the photographer and link to the source and license.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة خارجية لجامع عمرو بن العاص في القاهرة القديمة",
+          "caption": "جامع عمرو بن العاص في القاهرة القديمة، أول مسجد بني في مصر وأفريقيا",
+          "source_name": "David Stanley عبر Wikimedia Commons",
+          "rights": "الصورة من تصوير David Stanley، مرخصة بموجب Creative Commons Attribution 2.0 (CC BY 2.0). يجب ذكر المصور ورابط المصدر والرخصة."
+        },
+        "en": {
+          "alt": "Exterior view of the Mosque of Amr ibn al-As in Old Cairo",
+          "caption": "The Mosque of Amr ibn al-As in Old Cairo, the first mosque built in Egypt and Africa",
+          "source_name": "David Stanley via Wikimedia Commons",
+          "rights": "Photograph by David Stanley, licensed under Creative Commons Attribution 2.0 (CC BY 2.0). Credit the photographer and link to the source and license."
+        },
+        "fr": {
+          "alt": "Vue extérieure de la mosquée d'Amr ibn al-As dans le Vieux Caire",
+          "caption": "La mosquée d'Amr ibn al-As dans le Vieux Caire, la première mosquée construite en Égypte et en Afrique",
+          "source_name": "David Stanley via Wikimedia Commons",
+          "rights": "Photographie de David Stanley, sous licence Creative Commons Attribution 2.0 (CC BY 2.0). Citez le photographe et ajoutez les liens vers la source et la licence."
+        },
+        "it": {
+          "alt": "Veduta esterna della Moschea di Amr ibn al-As nel Cairo Vecchia",
+          "caption": "La Moschea di Amr ibn al-As nel Cairo Vecchia, la prima moschea costruita in Egitto e in Africa",
+          "source_name": "David Stanley tramite Wikimedia Commons",
+          "rights": "Fotografia di David Stanley, con licenza Creative Commons Attribution 2.0 (CC BY 2.0). Citare il fotografo e collegare fonte e licenza."
+        },
+        "de": {
+          "alt": "Außenansicht der Moschee des Amr ibn al-As in Alt-Kairo",
+          "caption": "Die Moschee des Amr ibn al-As in Alt-Kairo, die erste in Ägypten und Afrika erbaute Moschee",
+          "source_name": "David Stanley über Wikimedia Commons",
+          "rights": "Foto von David Stanley unter Creative-Commons-Lizenz Attribution 2.0 (CC BY 2.0). Fotograf nennen sowie Quelle und Lizenz verlinken."
+        }
+      }
+    },
+    {
+      "id": "amr-mosque-interior",
+      "path": "assets/images/stories/Mosque_of_Amr_Interior.jpg",
+      "kind": "photograph",
+      "source_name": "Jeff Dahl عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Mosque_of_Amr_Interior.jpg",
+      "rights": "According to the file page, photographer Jeff Dahl released this image into the public domain. Keep the source link and check the file record.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة فوتوغرافية لداخل جامع عمرو بن العاص في القاهرة",
+          "caption": "صورة فوتوغرافية لداخل جامع عمرو بن العاص في القاهرة",
+          "source_name": "Jeff Dahl عبر Wikimedia Commons",
+          "rights": "بحسب صفحة الملف، أطلق المصور Jeff Dahl الصورة إلى الملكية العامة. احتفظ برابط المصدر وراجع بيانات الملف."
+        },
+        "en": {
+          "alt": "Photograph of the interior of the Mosque of Amr ibn al-As in Cairo",
+          "caption": "Photograph of the interior of the Mosque of Amr ibn al-As in Cairo",
+          "source_name": "Jeff Dahl via Wikimedia Commons",
+          "rights": "According to the file page, photographer Jeff Dahl released this image into the public domain. Keep the source link and check the file record."
+        },
+        "fr": {
+          "alt": "Photographie de l’intérieur de la mosquée d’Amr ibn al-As au Caire",
+          "caption": "Photographie de l’intérieur de la mosquée d’Amr ibn al-As au Caire",
+          "source_name": "Jeff Dahl via Wikimedia Commons",
+          "rights": "Selon la page du fichier, le photographe Jeff Dahl a placé cette image dans le domaine public. Conservez le lien source et vérifiez la fiche."
+        },
+        "it": {
+          "alt": "Fotografia dell’interno della Moschea di Amr ibn al-As al Cairo",
+          "caption": "Fotografia dell’interno della Moschea di Amr ibn al-As al Cairo",
+          "source_name": "Jeff Dahl tramite Wikimedia Commons",
+          "rights": "Secondo la pagina del file, il fotografo Jeff Dahl ha rilasciato questa immagine nel pubblico dominio. Conservare il link alla fonte e verificare la scheda."
+        },
+        "de": {
+          "alt": "Fotografie des Innenraums der Amr-ibn-al-As-Moschee in Kairo",
+          "caption": "Fotografie des Innenraums der Amr-ibn-al-As-Moschee in Kairo",
+          "source_name": "Jeff Dahl über Wikimedia Commons",
+          "rights": "Laut Dateiseite hat der Fotograf Jeff Dahl dieses Bild gemeinfrei freigegeben. Quellenlink beibehalten und Dateiangaben prüfen."
+        }
+      }
+    },
+    {
+      "id": "amr-mosque-arcades",
+      "path": "assets/images/stories/Mosque_of_Amr_ibn_al-As_-_Cairo.jpg",
+      "kind": "photograph",
+      "source_name": "Mohammed Moussa عبر Wikimedia Commons",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Mosque_of_Amr_ibn_al-As_-_Cairo.jpg",
+      "rights": "Photograph by Mohammed Moussa, licensed under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0). Credit the photographer, link to the source and license, and share adaptations under the same license.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة فوتوغرافية لأروقة جامع عمرو بن العاص في القاهرة",
+          "caption": "صورة فوتوغرافية لأروقة جامع عمرو بن العاص في القاهرة",
+          "source_name": "Mohammed Moussa عبر Wikimedia Commons",
+          "rights": "الصورة من تصوير Mohammed Moussa، مرخصة بموجب Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0). يجب ذكر المصور، ورابط المصدر والرخصة، ومشاركة أي تعديل وفق الترخيص نفسه."
+        },
+        "en": {
+          "alt": "Photograph of the arcades of the Mosque of Amr ibn al-As in Cairo",
+          "caption": "Photograph of the arcades of the Mosque of Amr ibn al-As in Cairo",
+          "source_name": "Mohammed Moussa via Wikimedia Commons",
+          "rights": "Photograph by Mohammed Moussa, licensed under Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0). Credit the photographer, link to the source and license, and share adaptations under the same license."
+        },
+        "fr": {
+          "alt": "Photographie des arcades de la mosquée d’Amr ibn al-As au Caire",
+          "caption": "Photographie des arcades de la mosquée d’Amr ibn al-As au Caire",
+          "source_name": "Mohammed Moussa via Wikimedia Commons",
+          "rights": "Photographie de Mohammed Moussa, sous licence Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0). Citez le photographe, liez la source et la licence, et partagez les adaptations sous la même licence."
+        },
+        "it": {
+          "alt": "Fotografia dei portici della Moschea di Amr ibn al-As al Cairo",
+          "caption": "Fotografia dei portici della Moschea di Amr ibn al-As al Cairo",
+          "source_name": "Mohammed Moussa tramite Wikimedia Commons",
+          "rights": "Fotografia di Mohammed Moussa, con licenza Creative Commons Attribution-ShareAlike 3.0 (CC BY-SA 3.0). Citare il fotografo, collegare fonte e licenza e condividere gli adattamenti con la stessa licenza."
+        },
+        "de": {
+          "alt": "Fotografie der Arkaden der Amr-ibn-al-As-Moschee in Kairo",
+          "caption": "Fotografie der Arkaden der Amr-ibn-al-As-Moschee in Kairo",
+          "source_name": "Mohammed Moussa über Wikimedia Commons",
+          "rights": "Foto von Mohammed Moussa unter Creative-Commons-Lizenz Attribution-ShareAlike 3.0 (CC BY-SA 3.0). Fotograf nennen, Quelle und Lizenz verlinken und Bearbeitungen unter derselben Lizenz weitergeben."
+        }
+      }
+    },
+    {
+      "id": "amr-courtyard-illustration",
+      "path": "stories/islamic/011/cover-popup.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/islamic/011/cover-popup.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Amr ibn al-As.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي تخيلي للصحن الداخلي لجامع عمرو بن العاص، ليس صورة أرشيفية",
+          "caption": "رسم توضيحي تخيلي لجامع عمرو بن العاص من الداخل",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو بورتريه موثقًا لعمرو بن العاص."
+        },
+        "en": {
+          "alt": "An illustrative drawing of the interior courtyard of the Mosque of Amr ibn al-As, not an archival photograph",
+          "caption": "Illustrative drawing of the interior courtyard of the Mosque of Amr ibn al-As",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical photograph or verified portrait of Amr ibn al-As."
+        },
+        "fr": {
+          "alt": "Un dessin illustratif de la cour intérieure de la mosquée d'Amr ibn al-As, pas une photographie d'archive",
+          "caption": "Dessin illustratif de la cour intérieure de la mosquée d'Amr ibn al-As",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est ni une photographie historique ni un portrait vérifié d’Amr ibn al-As."
+        },
+        "it": {
+          "alt": "Un disegno illustrativo del cortile interno della Moschea di Amr ibn al-As, non una fotografia d'archivio",
+          "caption": "Disegno illustrativo del cortile interno della Moschea di Amr ibn al-As",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto verificato di Amr ibn al-As."
+        },
+        "de": {
+          "alt": "Eine illustrative Zeichnung des Innenhofs der Moschee des Amr ibn al-As, keine Archivfotografie",
+          "caption": "Illustrative Zeichnung des Innenhofs der Moschee des Amr ibn al-As",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Amr ibn al-As."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "جامع عمرو بن العاص — وزارة السياحة والآثار المصرية",
+      "organization": "وزارة السياحة والآثار المصرية",
+      "url": "https://egymonuments.gov.eg/monuments/the-mosque-of-amr-ibn-al-as/",
+      "i18n": {
+        "ar": {
+          "title": "جامع عمرو بن العاص — وزارة السياحة والآثار المصرية",
+          "organization": "وزارة السياحة والآثار المصرية"
+        },
+        "en": {
+          "title": "Mosque of Amr ibn al-As — Egyptian Ministry of Tourism and Antiquities",
+          "organization": "Egyptian Ministry of Tourism and Antiquities"
+        },
+        "fr": {
+          "title": "Mosquée d’Amr ibn al-As — Ministère égyptien du Tourisme et des Antiquités",
+          "organization": "Ministère égyptien du Tourisme et des Antiquités"
+        },
+        "it": {
+          "title": "Moschea di Amr ibn al-As — Ministero egiziano del Turismo e delle Antichità",
+          "organization": "Ministero egiziano del Turismo e delle Antichità"
+        },
+        "de": {
+          "title": "Moschee des Amr ibn al-As — Ägyptisches Ministerium für Tourismus und Altertümer",
+          "organization": "Ägyptisches Ministerium für Tourismus und Altertümer"
+        }
+      }
+    },
+    {
+      "title": "جامع عمرو بن العاص — وزارة الأوقاف المصرية",
+      "organization": "وزارة الأوقاف المصرية",
+      "url": "https://awkafonline.gov.eg/about/mosques/48/",
+      "i18n": {
+        "ar": {
+          "title": "جامع عمرو بن العاص — وزارة الأوقاف المصرية",
+          "organization": "وزارة الأوقاف المصرية"
+        },
+        "en": {
+          "title": "Mosque of Amr ibn al-As — Egyptian Ministry of Awqaf",
+          "organization": "Egyptian Ministry of Awqaf"
+        },
+        "fr": {
+          "title": "Mosquée d’Amr ibn al-As — Ministère égyptien des Awqaf",
+          "organization": "Ministère égyptien des Awqaf"
+        },
+        "it": {
+          "title": "Moschea di Amr ibn al-As — Ministero egiziano degli Awqaf",
+          "organization": "Ministero egiziano degli Awqaf"
+        },
+        "de": {
+          "title": "Moschee des Amr ibn al-As — Ägyptisches Awqaf-Ministerium",
+          "organization": "Ägyptisches Awqaf-Ministerium"
+        }
+      }
+    },
+    {
+      "title": "عمرو بن العاص — ويكيبيديا العربية",
+      "organization": "ويكيبيديا العربية",
+      "url": "https://ar.wikipedia.org/wiki/عمرو_بن_العاص",
+      "i18n": {
+        "ar": {
+          "title": "عمرو بن العاص — ويكيبيديا العربية",
+          "organization": "ويكيبيديا العربية"
+        },
+        "en": {
+          "title": "Amr ibn al-As — Arabic Wikipedia",
+          "organization": "Arabic Wikipedia"
+        },
+        "fr": {
+          "title": "Amr ibn al-As — Wikipédia en arabe",
+          "organization": "Wikipédia en arabe"
+        },
+        "it": {
+          "title": "Amr ibn al-As — Wikipedia in arabo",
+          "organization": "Wikipedia in arabo"
+        },
+        "de": {
+          "title": "Amr ibn al-As — arabische Wikipedia",
+          "organization": "Arabische Wikipedia"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "conversion-year",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي سنة هجرية أسلم عمرو بن العاص حسب الرواية الأشهر؟",
+          "options": [
+            "السنة 6 هـ",
+            "السنة 8 هـ",
+            "السنة 10 هـ",
+            "السنة 12 هـ"
+          ],
+          "explanation": "الرواية الأشهر عند أهل السير تقول إن عمرو بن العاص أسلم سنة 8 هـ قبل فتح مكة، ودخل المدينة مع خالد بن الوليد."
+        },
+        "en": {
+          "question": "In which Hijri year did Amr ibn al-As embrace Islam according to the most famous report?",
+          "options": [
+            "Year 6 AH",
+            "Year 8 AH",
+            "Year 10 AH",
+            "Year 12 AH"
+          ],
+          "explanation": "The most famous report among biographers says that Amr ibn al-As embraced Islam in the year 8 AH before the conquest of Mecca, and entered Medina with Khalid ibn al-Walid."
+        },
+        "fr": {
+          "question": "En quelle année hégirienne Amr ibn al-As a-t-il embrassé l'islam selon le récit le plus célèbre ?",
+          "options": [
+            "Année 6 H",
+            "Année 8 H",
+            "Année 10 H",
+            "Année 12 H"
+          ],
+          "explanation": "Le récit le plus célèbre chez les biographes dit qu'Amr ibn al-As a embrassé l'islam en l'an 8 H avant la conquête de La Mecque, et est entré à Médine avec Khalid ibn al-Walid."
+        },
+        "it": {
+          "question": "In quale anno egiriano Amr ibn al-As abbracciò l'Islam secondo il racconto più famoso?",
+          "options": [
+            "Anno 6 AH",
+            "Anno 8 AH",
+            "Anno 10 AH",
+            "Anno 12 AH"
+          ],
+          "explanation": "Il racconto più famoso presso i biografi dice che Amr ibn al-As abbracciò l'Islam nell'anno 8 AH prima della conquista della Mecca, ed entrò a Medina con Khalid ibn al-Walid."
+        },
+        "de": {
+          "question": "In welchem Hijri-Jahr nahm Amr ibn al-As nach dem bekanntesten Bericht den Islam an?",
+          "options": [
+            "Jahr 6 n. H.",
+            "Jahr 8 n. H.",
+            "Jahr 10 n. H.",
+            "Jahr 12 n. H."
+          ],
+          "explanation": "Der bekannteste Bericht bei den Biographen besagt, dass Amr ibn al-As den Islam im Jahr 8 n. H. vor der Eroberung Mekkas annahm und mit Khalid ibn al-Walid nach Medina kam."
+        }
+      }
+    },
+    {
+      "id": "caliph",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "من الخليفة الذي قاد عمرو بن العاص فتح مصر في عهده؟",
+          "options": [
+            "أبو بكر الصديق",
+            "عمر بن الخطاب",
+            "عثمان بن عفان",
+            "علي بن أبي طالب"
+          ],
+          "explanation": "قاد عمرو بن العاص فتح مصر في عهد الخليفة عمر بن الخطاب، وأصبح واليًا عليها بعد فتحها."
+        },
+        "en": {
+          "question": "Under which caliph did Amr ibn al-As lead the conquest of Egypt?",
+          "options": [
+            "Abu Bakr al-Siddiq",
+            "Umar ibn al-Khattab",
+            "Uthman ibn Affan",
+            "Ali ibn Abi Talib"
+          ],
+          "explanation": "Amr ibn al-As led the conquest of Egypt during the caliphate of Umar ibn al-Khattab, and became its governor after its conquest."
+        },
+        "fr": {
+          "question": "Sous quel calife Amr ibn al-As a-t-il dirigé la conquête de l'Égypte ?",
+          "options": [
+            "Abou Bakr al-Siddiq",
+            "Umar ibn al-Khattab",
+            "Uthman ibn Affan",
+            "Ali ibn Abi Talib"
+          ],
+          "explanation": "Amr ibn al-As a dirigé la conquête de l'Égypte sous le califat d'Umar ibn al-Khattab, et en est devenu le gouverneur après sa conquête."
+        },
+        "it": {
+          "question": "Sotto quale califfo Amr ibn al-As guidò la conquista dell'Egitto?",
+          "options": [
+            "Abu Bakr al-Siddiq",
+            "Umar ibn al-Khattab",
+            "Uthman ibn Affan",
+            "Ali ibn Abi Talib"
+          ],
+          "explanation": "Amr ibn al-As guidò la conquista dell'Egitto durante il califfato di Umar ibn al-Khattab, e ne divenne governatore dopo la sua conquista."
+        },
+        "de": {
+          "question": "Unter welchem Kalifen führte Amr ibn al-As die Eroberung Ägyptens an?",
+          "options": [
+            "Abu Bakr al-Siddiq",
+            "Umar ibn al-Khattab",
+            "Uthman ibn Affan",
+            "Ali ibn Abi Talib"
+          ],
+          "explanation": "Amr ibn al-As führte die Eroberung Ägyptens während des Kalifats von Umar ibn al-Khattab an und wurde nach ihrer Eroberung dessen Gouverneur."
+        }
+      }
+    },
+    {
+      "id": "fustat",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما اسم المدينة التي أسسها عمرو بن العاص في مصر؟",
+          "options": [
+            "الإسكندرية",
+            "الفسطاط",
+            "القاهرة",
+            "أسوان"
+          ],
+          "explanation": "أسس عمرو بن العاص مدينة الفسطاط بعد فتح مصر، وهي تعرف اليوم بالقاهرة القديمة، وبنى فيها أول جامع في مصر وأفريقيا."
+        },
+        "en": {
+          "question": "What is the name of the city that Amr ibn al-As founded in Egypt?",
+          "options": [
+            "Alexandria",
+            "Fustat",
+            "Cairo",
+            "Aswan"
+          ],
+          "explanation": "Amr ibn al-As founded the city of Fustat after the conquest of Egypt, known today as Old Cairo, and built there the first mosque in Egypt and Africa."
+        },
+        "fr": {
+          "question": "Quel est le nom de la ville qu'Amr ibn al-As a fondée en Égypte ?",
+          "options": [
+            "Alexandrie",
+            "Fustat",
+            "Le Caire",
+            "Assouan"
+          ],
+          "explanation": "Amr ibn al-As a fondé la ville de Fustat après la conquête de l'Égypte, connue aujourd'hui sous le nom de Vieux Caire, et y a construit la première mosquée d'Égypte et d'Afrique."
+        },
+        "it": {
+          "question": "Qual è il nome della città che Amr ibn al-As fondò in Egitto?",
+          "options": [
+            "Alessandria",
+            "Fustat",
+            "Il Cairo",
+            "Assuan"
+          ],
+          "explanation": "Amr ibn al-As fondò la città di Fustat dopo la conquista dell'Egitto, oggi nota come Cairo Vecchia, e vi costruì la prima moschea in Egitto e in Africa."
+        },
+        "de": {
+          "question": "Wie heißt die Stadt, die Amr ibn al-As in Ägypten gründete?",
+          "options": [
+            "Alexandria",
+            "Fustat",
+            "Kairo",
+            "Assuan"
+          ],
+          "explanation": "Amr ibn al-As gründete nach der Eroberung Ägyptens die Stadt Fustat, die heute als Alt-Kairo bekannt ist, und baute dort die erste Moschee in Ägypten und Afrika."
+        }
+      }
+    },
+    {
+      "id": "abyssinia",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "أين أسلم عمرو بن العاص حسب إحدى الروايات المشهورة؟",
+          "options": [
+            "في مكة",
+            "في المدينة",
+            "في الحبشة عند النجاشي",
+            "في الشام"
+          ],
+          "explanation": "تذكر روايات أن عمرو بن العاص أسلم في الحبشة عند النجاشي، ثم عاد إلى المدينة وأعلن إسلامه مع خالد بن الوليد."
+        },
+        "en": {
+          "question": "Where did Amr ibn al-As embrace Islam according to a famous report?",
+          "options": [
+            "In Mecca",
+            "In Medina",
+            "In Abyssinia at the Negus",
+            "In Syria"
+          ],
+          "explanation": "Reports mention that Amr ibn al-As embraced Islam in Abyssinia at the hands of the Negus, then returned to Medina and declared his Islam with Khalid ibn al-Walid."
+        },
+        "fr": {
+          "question": "Où Amr ibn al-As a-t-il embrassé l'islam selon un récit célèbre ?",
+          "options": [
+            "À La Mecque",
+            "À Médine",
+            "En Abyssinie chez le Négus",
+            "En Syrie"
+          ],
+          "explanation": "Des récits mentionnent qu'Amr ibn al-As a embrassé l'islam en Abyssinie entre les mains du Négus, puis est retourné à Médine et a déclaré son islam avec Khalid ibn al-Walid."
+        },
+        "it": {
+          "question": "Dove abbracciò l'Islam Amr ibn al-As secondo un racconto famoso?",
+          "options": [
+            "Alla Mecca",
+            "A Medina",
+            "In Abissinia dal Negus",
+            "In Siria"
+          ],
+          "explanation": "I racconti menzionano che Amr ibn al-As abbracciò l'Islam in Abissinia per mano del Negus, poi tornò a Medina e dichiarò il suo Islam con Khalid ibn al-Walid."
+        },
+        "de": {
+          "question": "Wo nahm Amr ibn al-As nach einem bekannten Bericht den Islam an?",
+          "options": [
+            "In Mekka",
+            "In Medina",
+            "In Abessinien beim Negus",
+            "In Syrien"
+          ],
+          "explanation": "Berichte erwähnen, dass Amr ibn al-As in Abessinien durch den Negus den Islam annahm, dann nach Medina zurückkehrte und seinen Islam zusammen mit Khalid ibn al-Walid erklärte."
+        }
+      }
+    },
+    {
+      "id": "mosque-title",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما اللقب الذي اشتهر به جامع عمرو بن العاص؟",
+          "options": [
+            "تاج الجوامع",
+            "مسجد النور",
+            "جامع الأزهر",
+            "مسجد الحاكم"
+          ],
+          "explanation": "يُلقب جامع عمرو بن العاص بـ«تاج الجوامع» و«الجامع العتيق»، وهو أول مسجد بني في مصر وأفريقيا."
+        },
+        "en": {
+          "question": "What title is the Mosque of Amr ibn al-As famously known by?",
+          "options": [
+            "Crown of Mosques",
+            "Mosque of Light",
+            "Al-Azhar Mosque",
+            "Al-Hakim Mosque"
+          ],
+          "explanation": "The Mosque of Amr ibn al-As is known as the «Crown of Mosques» and the «Ancient Mosque», and it is the first mosque built in Egypt and Africa."
+        },
+        "fr": {
+          "question": "Par quel titre la mosquée d'Amr ibn al-As est-elle célèbre ?",
+          "options": [
+            "Couronne des mosquées",
+            "Mosquée de la Lumière",
+            "Mosquée al-Azhar",
+            "Mosquée al-Hakim"
+          ],
+          "explanation": "La mosquée d'Amr ibn al-As est connue sous le nom de « Couronne des mosquées » et de « Mosquée ancienne », et c'est la première mosquée construite en Égypte et en Afrique."
+        },
+        "it": {
+          "question": "Con quale titolo è famosa la Moschea di Amr ibn al-As?",
+          "options": [
+            "Corona delle Moschee",
+            "Moschea della Luce",
+            "Moschea di al-Azhar",
+            "Moschea di al-Hakim"
+          ],
+          "explanation": "La Moschea di Amr ibn al-As è nota come la «Corona delle Moschee» e la «Moschea Antica», ed è la prima moschea costruita in Egitto e in Africa."
+        },
+        "de": {
+          "question": "Unter welchem Titel ist die Moschee des Amr ibn al-As berühmt?",
+          "options": [
+            "Krone der Moscheen",
+            "Moschee des Lichts",
+            "al-Azhar-Moschee",
+            "al-Hakim-Moschee"
+          ],
+          "explanation": "Die Moschee des Amr ibn al-As ist als «Krone der Moscheen» und «Alte Moschee» bekannt, und sie ist die erste in Ägypten und Afrika erbaute Moschee."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 21.42664,
+    "lng": 39.82563,
+    "place": {
+      "ar": "مكة المكرمة",
+      "en": "Mecca",
+      "fr": "La Mecque",
+      "it": "La Mecca",
+      "de": "Mekka"
+    }
+  }
+}
