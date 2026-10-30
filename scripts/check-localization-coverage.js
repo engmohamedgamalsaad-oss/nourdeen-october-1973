@@ -26,7 +26,8 @@ const inlineStoryFiles = [
   // are checked from their data.v2.json package below.
 ];
 const v2StoryFiles = [
-  'stories/science/007/data.v2.json'
+  'stories/science/007/data.v2.json',
+  'stories/people/008/data.v2.json'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
