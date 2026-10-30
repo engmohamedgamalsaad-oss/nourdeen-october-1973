@@ -705,7 +705,7 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', selector: '.story-visual-gallery figure:nth-of-type(2) img', decorative: true },
+    { slug: 'stories/science/015/', selector: '#gallery figure:nth-of-type(3) img', decorative: true },
     { slug: 'stories/science/007/', decorative: true },
     { slug: 'stories/women/013/', decorative: true },
     { slug: 'stories/islamic/011/', decorative: true },
