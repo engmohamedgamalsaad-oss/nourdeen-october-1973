@@ -20,141 +20,173 @@
   };
   var ui = labels[lang] || labels.ar;
 
-  function buildSectionGallery(entries) {
-    if (!entries || !entries.length) return;
-    var labelsByLang = {
-      ar: { title: 'صور من حكايات القسم', region: 'معرض صور حكايات هذا القسم' },
-      en: { title: 'Stories in pictures', region: 'Image gallery for this section' },
-      fr: { title: 'Les récits en images', region: 'Galerie d’images de cette rubrique' },
-      it: { title: 'Le storie in immagini', region: 'Galleria immagini di questa sezione' },
-      de: { title: 'Geschichten in Bildern', region: 'Bildergalerie dieses Bereichs' }
-    };
-    var copy = labelsByLang[lang] || labelsByLang.ar;
-    var section = node('section', 'kh-section-gallery');
-    section.setAttribute('aria-label', copy.region);
-    var shell = node('div', 'kh-section-gallery-shell');
-    var heading = node('div', 'kh-section-gallery-heading');
-    heading.appendChild(node('span', 'kh-section-gallery-kicker', 'KHALEDOON • STORIES'));
-    heading.appendChild(node('h2', '', copy.title));
-    var viewport = node('div', 'kh-section-gallery-viewport');
-    viewport.setAttribute('role', 'region');
-    viewport.setAttribute('aria-label', copy.region);
-    viewport.setAttribute('tabindex', '0');
-    var track = node('div', 'kh-section-gallery-track');
-    var firstGroup = node('div', 'kh-section-gallery-group');
-    var count = 0;
-    function attachCoverFallback(target, paths) {
-      var candidateIndex = 0;
-      target.onerror = function () {
-        candidateIndex += 1;
-        if (candidateIndex < paths.length) target.src = paths[candidateIndex];
-        else { var item = target.closest('.kh-section-gallery-item'); if (item) item.remove(); }
-      };
-      target.src = paths[0];
-    }
-    /* صور مرتبطة بالحكايات: صور من صفحات الحكايات نفسها، حتى لو لم تكن صورة الغلاف.
-       تظل صورة الغلاف بديلًا تلقائيًا لأي حكاية لا تتوفر لها صور إضافية. */
-    var STORY_GALLERY_PHOTOS = {
-      '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/bab-el-mandeb-satellite.jpg','stories/october/001/nabil-01.jpg'],
-      '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
-      '003': ['stories/october/003/cover.jpg'],
-      '004': ['stories/october/004/Atef_El_Sadat.jpg'],
-      '005': ['assets/images/stories/Portrait_of_Avicenna.jpg'],
-      '006': ['assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'],
-      '007': ['assets/images/stories/500px-Ahmed_Zewail__2010.jpg'],
-      '008': ['assets/images/stories/Tawfiq_al-Hakim.jpg','assets/images/stories/img-f9fc402a87.jpg'],
-      '009': ['assets/images/stories/Naguib_Mahfouz_HR.jpg','assets/images/stories/Naguib_Mahfouz_in_1960s.jpg','assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'],
-      '010': ['assets/images/stories/SameeraMoussa.jpg','assets/images/stories/img-45f23418d6.jpg'],
-      '011': ['assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg','assets/images/stories/Mosque_of_Amr_Interior.jpg','assets/images/stories/Mosque_of_Amr_ibn_al-As_-_Cairo.jpg'],
-      '012': ['assets/images/stories/s76-20263_large.jpg','assets/images/stories/s69-38669.jpg'],
-      '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg','assets/images/stories/Thebes__Luxor__Egypt__Panoramic_view_of_Deir_el-Bahari__Temple_of_Hatshepsut.jpg','assets/images/stories/DT534.jpg'],
-      '015': ['assets/images/stories/M_Yacoub.jpg']
-    };
-    entries.forEach(function (entry, index) {
-      var source = entry.card && entry.card.querySelector('img.story-index-cover');
-      if (!source || !source.getAttribute('src')) return;
-      var story = entry.story;
-      var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
-      if (!validPath(path)) return;
-      var candidates = [];
-      try { candidates = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
-      if (!Array.isArray(candidates) || !candidates.length) candidates = [source.currentSrc || source.src];
-      var related = STORY_GALLERY_PHOTOS[String(story.id || '')] || [];
-      var gallerySources = related.map(function (photo) { return root + photo; });
-      if (!gallerySources.length) gallerySources = [candidates[0]];
-      gallerySources.slice(0, 4).forEach(function (photoUrl, photoIndex) {
-        var item = node('div', 'kh-section-gallery-item');
-        item.setAttribute('role', 'img');
-        item.setAttribute('aria-label', localized(story, 'title') || localized(story, 'person') || ui.read);
-        var image = node('img', '');
-        image.alt = (localized(story, 'title') || localized(story, 'person') || '') + (gallerySources.length > 1 ? ' — ' + (photoIndex + 1) : '');
-        /* A moving gallery must not defer off-screen cards: the next duplicated group
-           enters the viewport continuously, so lazy loading can leave blank frames. */
-        image.loading = 'eager';
-        image.setAttribute('fetchpriority', index < 2 ? 'high' : 'low');
-        image.decoding = 'async';
-        var imageCandidates = photoIndex === 0 ? [photoUrl].concat(candidates) : [photoUrl, candidates[0]];
-        image.setAttribute('data-cover-candidates', JSON.stringify(imageCandidates));
-        attachCoverFallback(image, imageCandidates);
-        var caption = node('span', 'kh-section-gallery-caption');
-        caption.appendChild(node('strong', '', localized(story, 'title') || localized(story, 'person') || story.id));
-        var person = localized(story, 'person');
-        if (person && person !== localized(story, 'title')) caption.appendChild(node('small', '', person));
-        item.append(image, caption);
-        firstGroup.appendChild(item);
-        count += 1;
-      });
+  /* ===== صور من حكايات القسم =====
+     فسيفساء ثابتة داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليست شريطًا متحركًا.
+     كل صورة تُختبر أولًا؛ التي لا تُحمَّل تُستبعد بدل أن تترك مكانًا فارغًا، وكل صورة رابط لحكايتها.
+     التنسيق في khaledoon/assets/section-photos.css ويُحمَّل من هنا تلقائيًا. */
+  var PHOTO_MAX = 5;
+  /* صور من صفحات الحكايات نفسها (خفيفة الحجم فقط). أي حكاية غير مذكورة هنا تظهر بصورة غلافها تلقائيًا. */
+  var STORY_GALLERY_PHOTOS = {
+    '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/nabil-01.jpg'],
+    '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
+    '004': ['stories/october/004/Atef_El_Sadat.jpg'],
+    '005': ['assets/images/stories/Portrait_of_Avicenna.jpg'],
+    '006': ['assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'],
+    '007': ['assets/images/stories/500px-Ahmed_Zewail__2010.jpg'],
+    '008': ['assets/images/stories/Tawfiq_al-Hakim.jpg'],
+    '009': ['assets/images/stories/Naguib_Mahfouz_HR.jpg','assets/images/stories/Naguib_Mahfouz_in_1960s.jpg','assets/images/stories/Naguib_Mahfouz_in_cafe.jpg'],
+    '010': ['assets/images/stories/SameeraMoussa.jpg','assets/images/stories/img-45f23418d6.jpg'],
+    '011': ['assets/images/stories/Mosque_of_Amr_ibn_al-As__8591305436.jpg','assets/images/stories/Mosque_of_Amr_Interior.jpg'],
+    '012': ['assets/images/stories/s76-20263_large.jpg','assets/images/stories/s69-38669.jpg'],
+    '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'],
+    '015': ['assets/images/stories/M_Yacoub.jpg']
+  };
+  /* صور إضافية لقسم بعينه، ليست مرتبطة بحكاية (تظهر بلا رابط). */
+  var EXTRA_SECTION_PHOTOS = {
+    women: [
+      { src: 'assets/images/stories/250px-Nefertiti_Bust.png', title: 'الملكة نفرتيتي', alt: 'رأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري' },
+      { src: 'assets/images/stories/500px-Retrato_femenino__26771127162.jpg', title: 'كليوباترا السابعة', alt: 'لوحة جدارية رومانية يُحتمل أنها تمثل كليوباترا السابعة' }
+    ]
+  };
+
+  function ensurePhotoStyles() {
+    return new Promise(function (resolve) {
+      if (document.getElementById('khSectionPhotosCss')) { resolve(); return; }
+      var link = document.createElement('link');
+      link.id = 'khSectionPhotosCss';
+      link.rel = 'stylesheet';
+      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-1';
+      link.onload = link.onerror = function () { resolve(); };
+      document.head.appendChild(link);
+      setTimeout(resolve, 2500);
     });
-    /* صور نساء أخريات من القسم، مستقلة عن حكاية حتشبسوت وبعناوينها الصحيحة. */
-    if (sectionId === 'women') {
-      [
-        { src: 'assets/images/stories/250px-Nefertiti_Bust.png', title: 'الملكة نفرتيتي', alt: 'رأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري' },
-        { src: 'assets/images/stories/500px-Retrato_femenino__26771127162.jpg', title: 'كليوباترا السابعة', alt: 'لوحة جدارية رومانية يُحتمل أنها تمثل كليوباترا السابعة' }
-      ].forEach(function (photo) {
-        var item = node('div', 'kh-section-gallery-item');
-        item.setAttribute('role', 'img');
-        item.setAttribute('aria-label', photo.title);
-        var image = node('img', '');
-        image.alt = photo.alt;
-        /* Keep standalone gallery images eager too; they may move into view before
-           the browser's lazy-load threshold is recalculated. */
-        image.loading = 'eager';
-        image.setAttribute('fetchpriority', 'low');
-        image.decoding = 'async';
-        var photoCandidates = [root + photo.src];
-        image.setAttribute('data-cover-candidates', JSON.stringify(photoCandidates));
-        attachCoverFallback(image, photoCandidates);
-        var caption = node('span', 'kh-section-gallery-caption');
-        caption.appendChild(node('strong', '', photo.title));
-        item.append(image, caption);
-        firstGroup.appendChild(item);
-        count += 1;
-      });
-    }
-    if (!count) return;
-    track.appendChild(firstGroup);
-    if (count > 1) {
-      var secondGroup = firstGroup.cloneNode(true);
-      secondGroup.setAttribute('aria-hidden', 'true');
-      secondGroup.querySelectorAll('a').forEach(function (link) { link.tabIndex = -1; });
-      /* cloneNode does not copy JavaScript event handlers: restore image fallback
-         on the duplicated, initially visible half of the moving gallery. */
-      secondGroup.querySelectorAll('img').forEach(function (image) {
-        var paths = [];
-        try { paths = JSON.parse(image.getAttribute('data-cover-candidates') || '[]'); } catch (_) {}
-        if (Array.isArray(paths) && paths.length) attachCoverFallback(image, paths);
-      });
-      track.appendChild(secondGroup);
-      track.classList.add('is-moving');
-    } else {
-      track.classList.add('is-static');
-    }
-    viewport.appendChild(track);
-    shell.append(heading, viewport);
-    section.appendChild(shell);
+  }
+  function withTimeout(promise, ms, fallback) {
+    return new Promise(function (resolve) {
+      var timer = setTimeout(function () { resolve(fallback); }, ms);
+      promise.then(function (value) { clearTimeout(timer); resolve(value); }, function () { clearTimeout(timer); resolve(fallback); });
+    });
+  }
+  function probeImage(url) {
+    return new Promise(function (resolve) {
+      var probe = new Image();
+      probe.onload = function () { resolve(url); };
+      probe.onerror = function () { resolve(null); };
+      probe.src = url;
+    });
+  }
+  function probeFirst(urls) {
+    return urls.reduce(function (chain, url) {
+      return chain.then(function (found) { return found || probeImage(url); });
+    }, Promise.resolve(null));
+  }
+  function storyPhotoUrls(entry) {
+    var story = entry.story;
+    var source = entry.card && entry.card.querySelector('img.story-index-cover');
+    var covers = [];
+    if (source) { try { covers = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {} }
+    if (!Array.isArray(covers)) covers = [];
+    var curated = (STORY_GALLERY_PHOTOS[String(story.id || '')] || []).map(function (photo) { return root + photo; });
+    return Promise.all(curated.map(function (url) { return probeImage(url); })).then(function (found) {
+      found = found.filter(Boolean);
+      if (found.length) return found;
+      return probeFirst(covers).then(function (url) { return url ? [url] : []; });
+    });
+  }
+  function mountPhotos(section) {
     var hero = document.querySelector('.hero, .hero-home');
-    if (hero && hero.parentNode) hero.parentNode.insertBefore(section, hero);
-    else if (box && box.parentNode) box.parentNode.insertBefore(section, box);
+    if (!hero) {
+      var main = document.querySelector('main');
+      section.classList.add('is-band');
+      if (main && main.parentNode) main.parentNode.insertBefore(section, main);
+      else document.body.insertBefore(section, document.body.firstChild);
+      return;
+    }
+    var wrap = hero.classList.contains('hero-home') ? null : hero.querySelector('.wrap');
+    if (wrap) {
+      wrap.classList.add('kh-sp-host');
+      wrap.appendChild(section);
+    } else {
+      section.classList.add('is-band');
+      hero.parentNode.insertBefore(section, hero.nextSibling);
+    }
+  }
+  function buildSectionGallery(entries) {
+    if (!entries || !entries.length || document.querySelector('.kh-sp')) return;
+    var copyByLang = {
+      ar: 'صور من حكايات القسم',
+      en: 'Stories in pictures',
+      fr: 'Les récits en images',
+      it: 'Le storie in immagini',
+      de: 'Geschichten in Bildern'
+    };
+    var heading = copyByLang[lang] || copyByLang.ar;
+    /* لو زادت الحكايات عن الحد نعرض أحدث حكايات القسم؛ بطاقات الحكايات تحت تعرض الكل. */
+    var storyEntries = entries.length > PHOTO_MAX ? entries.slice(-PHOTO_MAX) : entries.slice();
+    var extras = EXTRA_SECTION_PHOTOS[sectionId] || [];
+    Promise.all([
+      ensurePhotoStyles(),
+      Promise.all(storyEntries.map(function (entry) { return withTimeout(storyPhotoUrls(entry), 9000, []); })),
+      Promise.all(extras.map(function (extra) { return withTimeout(probeImage(root + extra.src), 9000, null); }))
+    ]).then(function (result) {
+      var storyPhotos = result[1], extraPhotos = result[2];
+      var firsts = [], standalone = [], seconds = [];
+      storyEntries.forEach(function (entry, storyIndex) {
+        (storyPhotos[storyIndex] || []).slice(0, 3).forEach(function (url, photoIndex) {
+          var story = entry.story;
+          var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
+          var tile = { order: storyIndex * 10 + photoIndex, src: url, story: story, href: validPath(path) ? root + path : '' };
+          (photoIndex === 0 ? firsts : seconds).push(tile);
+        });
+      });
+      extras.forEach(function (extra, index) {
+        if (extraPhotos[index]) standalone.push({ order: 1000 + index, src: extraPhotos[index], title: extra.title, alt: extra.alt });
+      });
+      var picked = firsts.concat(standalone, seconds).slice(0, PHOTO_MAX);
+      if (!picked.length) return;
+      picked.sort(function (a, b) { return a.order - b.order; });
+
+      var section = node('section', 'kh-sp');
+      section.setAttribute('aria-labelledby', 'khSpTitle');
+      var inner = node('div', 'kh-sp-inner');
+      var title = node('h2', 'kh-sp-title', heading);
+      title.id = 'khSpTitle';
+      var grid = node('ul', 'kh-sp-grid kh-sp-n' + picked.length);
+      picked.forEach(function (tile, index) {
+        var item = node('li', 'kh-sp-item');
+        item.style.setProperty('--i', String(index));
+        var link = tile.href ? node('a', 'kh-sp-tile') : node('div', 'kh-sp-tile');
+        if (tile.href) link.href = tile.href;
+        var label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
+        var image = node('img', '');
+        image.src = tile.src;
+        /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
+        image.alt = tile.story ? '' : (tile.alt || label);
+        image.decoding = 'async';
+        image.onerror = function () { item.style.visibility = 'hidden'; };
+        var caption = node('span', 'kh-sp-cap');
+        caption.appendChild(node('strong', '', label));
+        var person = tile.story ? localized(tile.story, 'person') : '';
+        if (person && person !== label) caption.appendChild(node('small', '', person));
+        link.append(image, caption);
+        item.appendChild(link);
+        grid.appendChild(item);
+      });
+      inner.append(title, grid);
+      section.appendChild(inner);
+      mountPhotos(section);
+      if ('IntersectionObserver' in window) {
+        var watcher = new IntersectionObserver(function (changes) {
+          if (changes.some(function (change) { return change.isIntersecting; })) {
+            section.classList.add('is-in');
+            watcher.disconnect();
+          }
+        }, { threshold: 0.15 });
+        watcher.observe(section);
+      } else {
+        section.classList.add('is-in');
+      }
+    });
   }
   /* GitHub Pages project root: keep collection assets anchored under the repository site path. */
   var root = '/nourdeen-october-1973/';
@@ -163,7 +195,6 @@
      011 (عمرو بن العاص): لا توجد صورة موثقة للشخصية، فنستخدم صورة المكان (جامع عمرو بن العاص) حسب الاتفاق.
      013 (حتشبسوت) و012 (فاروق الباز): لم تُضف بعد. */
   var COVER_PHOTOS = {
-    'stories/october/003': 'stories/october/003/cover.jpg',
     'stories/science/015': 'assets/images/stories/M_Yacoub.jpg',
     'stories/science/007': 'assets/images/stories/500px-Ahmed_Zewail__2010.jpg',
     'stories/women/010': 'assets/images/stories/SameeraMoussa.jpg',
