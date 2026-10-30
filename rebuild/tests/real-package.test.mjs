@@ -159,3 +159,39 @@ test('Tawfiq al-Hakim V2 package validates with five-language text, archival ima
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
+test('Naguib Mahfouz V2 package validates with Karma narration, archival photos, five-language quiz, and Cairo map point', async () => {
+  const story = await loadJson('stories/people/009/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Naguib Mahfouz V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'people');
+  assert.equal(story.design.variant, 'portrait-biography');
+  assert.equal(story.i18n.ar.grade, 'الأول الإعدادي');
+  assert.equal(story.i18n.ar.narrator_name, 'كارما');
+  assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.images.length, 3);
+  assert.equal(story.quiz.length, 6);
+  assert.equal(story.sources.length, 5);
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 13, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
+  const page = await readFile(path.join(root, 'stories/people/009/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /khaledoon-story-map-link\.js/);
+});
+
+
