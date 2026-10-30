@@ -27,7 +27,8 @@ const inlineStoryFiles = [
 ];
 const v2StoryFiles = [
   'stories/science/007/data.v2.json',
-  'stories/people/008/data.v2.json'
+  'stories/people/008/data.v2.json',
+  'stories/people/009/data.v2.json'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
