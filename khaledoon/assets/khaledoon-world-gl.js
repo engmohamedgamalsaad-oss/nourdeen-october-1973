@@ -23,6 +23,7 @@
   var autoPauseUntil = 0, lastT = 0, timeAcc = 0, moveT = 0;
   var drag = false, lastX = 0, lastY = 0, startX = 0, startY = 0, pointers = {}, pinch = null, hover = -1, lastSel = null;
   var geoBuilt = false, mk = { count: 0, dirty: true, sig: '', len: -1, sel: null, groups: [] };
+  var layerOpen = false;
   var observers = [], lastSig = '', cleanups = [], photos = {}, zBtn = null;
   var dismissed = null, hitPill = null, hitPin = null, ctrlEl = null, ctrlWrap = null, box = null;
   var L = { w: 0, h: 0, dpr: 1, cx: 0, cy: 0, R: 0 };
@@ -400,7 +401,7 @@
     if (!box) return;
     if (!p) { box.classList.remove('is-on'); return; }
     var s = p.story || {}, name = nameOf(p), title = titleOf(p), url = String(p.photo || '');
-    var letter = Array.from(name || title || '★')[0] || '★';
+    var letter = Array.from(name || title || '\u2605')[0] || '\u2605';
     box.href = storyPath(s);
     box.title = name || title;
     box.style.setProperty('--c', api.sectionColor(s.section));
@@ -497,12 +498,13 @@
 
   /* ---------- frame loop ---------- */
   function wantLoop() {
-    if (dead || !ready || !inView || !pageVisible) return false;
+    if (dead || !ready || !inView || !pageVisible || layerOpen) return false;
     if (!reduced()) return true;
     return dirty || !!fly || drag || Math.abs(vLon) > 0.05 || Math.abs(vLat) > 0.05 || Math.abs(zoomNow - zoomT) > 0.002;
   }
   function kick() {
     dirty = true;
+    if (layerOpen) return;
     if (!raf && !dead && inView && pageVisible) raf = requestAnimationFrame(frame);
   }
   function frame(now) {
@@ -535,6 +537,11 @@
     if (!reduced()) timeAcc += dt;
     try { render(); } catch (err) { fail('render: ' + (err && err.message)); return; }
     dirty = false;
+    /* At the 10x limit the real street map (khaledoon-world-map-layer.js) takes over from underneath. */
+    if (!layerOpen && !fly && zoomT >= MAX_Z - 0.0005 && zoomNow >= MAX_Z * 0.992) {
+      layerOpen = true;
+      try { document.dispatchEvent(new CustomEvent('kh:globe-maxzoom', { detail: { lon: lon, lat: lat, R: L.R, w: L.w, h: L.h } })); } catch (e2) { layerOpen = false; }
+    }
     if (wantLoop()) raf = requestAnimationFrame(frame); else lastT = 0;
   }
 
@@ -949,6 +956,20 @@
       fail((e && e.message) || 'init');
     }
   }
+
+  /* Small bridge for the map layer: wrap element, resume the globe at a position/zoom, or go all the way home. */
+  window._khGL = {
+    wrap: function () { return wrap; },
+    isOpen: function () { return layerOpen; },
+    resume: function (lo, la, z) {
+      layerOpen = false; fly = null; vLon = vLat = 0;
+      lon = lo; lat = clamp(la, -MAX_LAT, MAX_LAT);
+      zoomT = clamp(z || MAX_Z * 0.9, MIN_Z, MAX_Z * 0.95); zoomNow = zoomT;
+      autoPauseUntil = nowMs() + 6000; updateZoomButtons(); kick();
+    },
+    home: function () { layerOpen = false; zoomNow = MAX_Z * 0.9; dismissSel(); kick(); }
+  };
+  (function () { var s2 = document.createElement('script'); s2.src = 'khaledoon/assets/khaledoon-world-map-layer.js?v=20261030-layer-1'; s2.defer = true; (document.head || document.documentElement).appendChild(s2); })();
 
   var tries = 0;
   function boot() {
