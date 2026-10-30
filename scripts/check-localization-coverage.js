@@ -22,10 +22,11 @@ const storyFiles = [
 /* Stories whose text lives inside index.html: each language must appear in all
    three inline translation tables (story text, UI labels, and reaction/status text). */
 const inlineStoryFiles = [
-  // This page keeps its own T / EXTRA / REACTION_TEXT tables.
-  'stories/science/007/index.html'
-  // Other current story pages use the shared story template and are checked
-  // by check-home-language.js; the former stories/islamic/011 page no longer exists.
+  // No active story page keeps private inline locale dictionaries; V2 stories
+  // are checked from their data.v2.json package below.
+];
+const v2StoryFiles = [
+  'stories/science/007/data.v2.json'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
@@ -97,8 +98,23 @@ for (const file of inlineStoryFiles) {
     const pattern = new RegExp("(^|[^A-Za-z0-9_])['\"]?" + lang + "['\"]?\\s*:\\s*\\{", 'g');
     const found = (source.match(pattern) || []).length;
     if (found < 3) {
-      problems.push(file + ': locale "' + lang + '" appears in ' + found + ' of the 3 translation tables (T, EXTRA, REACTION_TEXT).');
+      problems.push(file + ': locale "' + lang + '" appears in ' + found + ' of the 3 inline translation tables.');
     }
+  }
+}
+for (const file of v2StoryFiles) {
+  try {
+    const story = JSON.parse(read(file));
+    for (const lang of required) {
+      const data = story.i18n && story.i18n[lang];
+      if (!data || !String(data.title || '').trim() || !String(data.subtitle || '').trim() ||
+          !String(data.summary || '').trim() || !Array.isArray(data.blocks) || data.blocks.length < 3) {
+        problems.push(file + ': missing required V2 story translations for "' + lang + '".');
+      }
+    }
+    console.log(file + ': inspected V2 story content in all five locales.');
+  } catch (e) {
+    problems.push(file + ': could not parse V2 package: ' + e.message);
   }
 }
 
@@ -140,8 +156,9 @@ for (const file of translationMaps) {
         'stories/october/001/index.html', 'stories/october/002/index.html',
         'stories/october/003/index.html', 'stories/october/004/index.html',
         'stories/history/005/index.html', 'stories/history/006/index.html',
-        'stories/science/007/index.html',
-        // V2 story prose is stored in JSON data, not duplicated in the page shell.
+        'stories/science/007/legacy-original.html',
+        'stories/science/007/data.v2.json',
+        // V2 story prose is stored in JSON data; the old page is retained as a legacy archive.
         'stories/history/005/data.v2.json', 'stories/history/006/data.v2.json',
         // This legacy German source paragraph is retained in the Orabi translation module.
         'stories/history/006/translations.js'
