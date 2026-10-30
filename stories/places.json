@@ -167,11 +167,26 @@
     "approximate": true,
     "place": {
       "ar": "سنبو الكبرى، زفتى، الغربية",
-      "en": "Sinbu al-Kubra, Zefta, Gharbia",
-      "fr": "Sinbu al-Kubra, Zefta, Gharbia",
-      "it": "Sinbu al-Kubra, Zefta, Gharbia",
-      "de": "Sinbu al-Kubra, Zefta, Gharbia"
-    }
+      "en": "Sanbu al-Kubra, Zefta, Gharbia",
+      "fr": "Sanbu al-Kubra, Zefta, Gharbia",
+      "it": "Sanbu al-Kubra, Zefta, Gharbia",
+      "de": "Sanbu al-Kubra, Zefta, Gharbia"
+    },
+    "place_label": {
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
+    },
+    "source_name": {
+      "ar": "هيئة الاستعلامات المصرية — سميرة موسى",
+      "en": "Egyptian State Information Service — Sameera Moussa",
+      "fr": "Service d’information de l’État égyptien — Sameera Moussa",
+      "it": "Servizio d’informazione dello Stato egiziano — Sameera Moussa",
+      "de": "Ägyptischer Staatlicher Informationsdienst — Sameera Moussa"
+    },
+    "source_url": "https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A3%D8%B9%D9%84%D8%A7%D9%85-%D9%88%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA-%D9%85%D8%B5%D8%B1%D9%8A%D8%A9/%D8%B3%D9%85%D9%8A%D8%B1%D8%A9-%D9%85%D9%88%D8%B3%D9%89/"
   },
   "011": {
     "lat": 21.42664,
