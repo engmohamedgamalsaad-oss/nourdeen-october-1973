@@ -856,7 +856,7 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
   var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
   var story = JSON.parse(fs.readFileSync('stories/science/015/data.v2.json', 'utf8'));
   var original = fs.readFileSync('stories/science/015/original.md', 'utf8')
-    .replace(/^# النص الأصلي كما وصل دون تعديل\\s*\\n\\n/, '').trimEnd();
+    .replace(/^# النص الأصلي كما وصل دون تعديل\s*\n\n/, '').trimEnd();
   var places = JSON.parse(fs.readFileSync('stories/places.json', 'utf8'));
   assert.equal(story.format, 'KHALEDOON_STORY_V2');
   assert.equal(story.section, 'science');
