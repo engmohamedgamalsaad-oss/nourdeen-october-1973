@@ -307,6 +307,58 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
+test('Hatshepsut V2 package validates five-language history, image rights, and the sticky language header', async () => {
+  const story = await loadJson('stories/women/013/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Hatshepsut V2 package must pass the actual V2 contract and local-image checks');
+  assert.equal(story.section, 'women');
+  assert.equal(story.design.variant, 'women-leadership');
+  assert.equal(story.i18n.ar.student_name, 'مليكة محمد جمال');
+  assert.equal(story.i18n.ar.grade, 'الصف الخامس الابتدائي');
+  assert.equal(story.i18n.ar.narrator_name, 'كارما');
+  assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
+  assert.equal(story.images.length, 5);
+  assert.equal(story.quiz.length, 5);
+  assert.equal(story.sources.length, 6);
+  assert.equal(story.i18n.ar.blocks.length, 8);
+  assert.match(story.i18n.ar.history_note, /القرن الأفريقي/);
+  assert.match(story.i18n.ar.history_note, /السكري والسرطان/);
+  assert.match(story.i18n.ar.images_note, /CC BY 4\.0/);
+  assert.match(story.i18n.ar.images_note, /CC0/);
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 8, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+    for (const image of [story.cover, ...story.images]) {
+      assert.ok(image.i18n[lang].alt?.trim(), 'image alt missing in ' + lang);
+      assert.ok(image.i18n[lang].caption?.trim(), 'image caption missing in ' + lang);
+      if (lang !== 'ar') assert.doesNotMatch(image.i18n[lang].alt, /[\u0600-\u06FF]/, 'Arabic fallback in image alt for ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+    }
+  }
+  for (const lang of ['it', 'de']) {
+    assert.doesNotMatch(story.i18n[lang].blocks[3].text, /Somalia/);
+  }
+  const page = await readFile(path.join(root, 'stories/women/013/index.html'), 'utf8');
+  const readerCss = await readFile(path.join(root, 'rebuild/reader-base.css'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-lang="ar"/);
+  assert.match(page, /khaledoon-story-map-link\.js/);
+  assert.match(readerCss, /header\{position:sticky/, 'language header stays visible while scrolling');
+});
+
+
 
 
 
