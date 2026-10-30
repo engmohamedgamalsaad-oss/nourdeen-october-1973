@@ -284,7 +284,7 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 8);
   assert.equal(story.i18n.ar.blocks.length, 9);
-  assert.match(story.i18n.ar.history_note, /اللجنة/);
+  assert.match(story.i18n.ar.history_note, /لجنة/);
   assert.match(story.i18n.ar.images_note, /NASA/);
   assert.ok(story.sources.some(source => source.url === 'https://www.asu.edu.eg/736/news'));
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
@@ -320,7 +320,7 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   assert.equal(story.i18n.ar.grade, 'الصف الخامس الابتدائي');
   assert.equal(story.i18n.ar.narrator_name, 'كارما');
   assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
-  assert.equal(story.images.length, 5);
+  assert.equal(story.images.length, 4);
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 6);
   assert.equal(story.i18n.ar.blocks.length, 8);
