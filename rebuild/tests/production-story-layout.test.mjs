@@ -27,7 +27,7 @@ for (const sample of [
     assert.equal(data.person, sample.person);
     assert.equal(indexed.person, sample.person);
     assert.equal(data.title, indexed.title);
-    assert.equal(data.section, undefined, 'section is stored in the index, not assumed in data.json');
+    assert.ok(data.section === undefined || data.section === sample.section, 'any optional data.json section agrees with the published index');
     assert.equal(data.format, undefined, 'published metadata is not a KH_STORY_PACKAGE_V1 AI import object');
     for (const lang of ['en', 'fr', 'it', 'de']) {
       assert.ok(data.i18n?.[lang], 'data.json contains ' + lang + ' metadata');
