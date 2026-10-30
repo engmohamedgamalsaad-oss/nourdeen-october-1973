@@ -231,50 +231,34 @@ async function cinematicGlobeRegression(browser, base, origin) {
     const hiddenControls = await page.locator('#khWorld [hidden]').evaluateAll(nodes => nodes.map(n => getComputedStyle(n).display));
     check('hidden globe controls stay hidden', hiddenControls.every(display => display === 'none'), JSON.stringify(hiddenControls));
 
-    const target = await page.evaluate(async () => {
-      const [stories, places] = await Promise.all([
-        fetch('stories/index.json').then(r => r.json()),
-        fetch('stories/places.json').then(r => r.json())
-      ]);
-      const canvas = document.querySelector('#khWorld .kh-world-gl canvas.kh-gl-main');
-      const rect = canvas.getBoundingClientRect(), w = rect.width, h = Math.max(250, Math.min(480, rect.height || 360));
-      const r = Math.min(w * .40, h * .41), cx = w * .49, cy = h * .5, tilt = -.16;
-      for (const s of stories) {
-        if (!s || s.published === false) continue;
-        const p = places[String(s.id).padStart(3, '0')];
-        if (!p || !Number.isFinite(Number(p.lat)) || !Number.isFinite(Number(p.lng)) ||
-            !/^https:\/\//i.test(String(p.source_url || '')) || !p.source_name ||
-            !['ar','en','fr','it','de'].every(l => typeof p.source_name[l] === 'string' && p.source_name[l].trim())) continue;
-        const la = Number(p.lat) * Math.PI / 180, lo = Number(p.lng) * Math.PI / 180;
-        const x = Math.cos(la) * Math.sin(lo);
-        const y = Math.sin(la) * Math.cos(tilt) - Math.cos(la) * Math.cos(lo) * Math.sin(tilt);
-        const z = Math.sin(la) * Math.sin(tilt) + Math.cos(la) * Math.cos(lo) * Math.cos(tilt);
-        if (z > .2) return { x: rect.left + cx + x * r, y: rect.top + cy - y * r, id: String(s.id), z };
-      }
-      return null;
+    /* The WebGL camera rotates and animates independently; use its supported keyboard
+       selection path rather than projecting a marker with the retired 2D test formula. */
+    await canvas.focus();
+    await canvas.press('Enter');
+    const storyBox = page.locator('#khWorld .kh-gl-controls .kh-gl-story.is-on');
+    await storyBox.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
+    const cardState = await page.evaluate(() => {
+      const root = document.querySelector('#khWorld .kh-world-story-card');
+      const card = root && root.querySelector('.khm-card');
+      const source = card && card.querySelector('.khm-source');
+      const go = card && card.querySelector('.khm-go');
+      const box = document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on');
+      return { selected: !!card && !root.hidden, visibleStoryBox: !!box,
+        name: box && box.querySelector('.kh-gl-nm')?.textContent.trim() || '',
+        storyHref: box && box.getAttribute('href') || '',
+        category: card && card.querySelector('.khm-story')?.textContent.trim() || '',
+        source: source && source.textContent.trim() || '', sourceUrl: source && source.href || '',
+        cardStoryHref: go && go.getAttribute('href') || '', className: card && card.className || '' };
     });
-    check('a documented story marker is available on the visible hemisphere', !!target,
-      target ? 'story=' + target.id + ', z=' + target.z.toFixed(3) : 'no visible sourced point found');
-    if (target) {
-      await page.mouse.click(target.x, target.y);
-      const card = page.locator('#khWorld .kh-world-story-card .khm-card');
-      await card.waitFor({ state: 'visible', timeout: 5000 }).catch(() => {});
-      const cardState = await page.evaluate(() => {
-        const root = document.querySelector('#khWorld .kh-world-story-card');
-        const card = root && root.querySelector('.khm-card');
-        const source = card && card.querySelector('.khm-source');
-        const go = card && card.querySelector('.khm-go');
-        return { visible: !!card && !root.hidden, name: card && card.querySelector('.khm-go')?.textContent.trim() || '',
-          category: card && card.querySelector('.khm-story')?.textContent.trim() || '',
-          source: source && source.textContent.trim() || '', sourceUrl: source && source.href || '',
-          storyHref: go && go.getAttribute('href') || '', className: card && card.className || '' };
-      });
-      check('clicking a globe marker opens the existing interactive-map card structure',
-        cardState.visible && cardState.className.includes('khm-card') && !!cardState.name && !!cardState.category,
-        JSON.stringify(cardState));
-      check('the globe card includes a sourced link and a story-reading link',
-        /^https:\/\//i.test(cardState.sourceUrl) && /^stories\/[a-z0-9-]+\/[0-9]{3}\/$/.test(cardState.storyHref),
-        JSON.stringify(cardState));
+    check('keyboard selection opens the WebGL story box and existing sourced story data',
+      cardState.selected && cardState.visibleStoryBox && !!cardState.name &&
+      cardState.className.includes('khm-card') && !!cardState.category,
+      JSON.stringify(cardState));
+    check('the selected WebGL story retains its sourced link and reading destination',
+      /^https:\\/\\//i.test(cardState.sourceUrl) &&
+      /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/$/.test(cardState.cardStoryHref) &&
+      cardState.storyHref === cardState.cardStoryHref,
+      JSON.stringify(cardState));
       await page.screenshot({ path: path.join(screenshotDir, 'globe-desktop.png'), animations: 'disabled' });
       for (const locale of LANGS) {
         await page.evaluate((l) => {
@@ -283,18 +267,20 @@ async function cinematicGlobeRegression(browser, base, origin) {
         }, locale);
         await page.waitForFunction((title) => document.querySelector('#khWorld h2')?.textContent.trim() === title,
           titles[locale], { timeout: 4000 }).catch(() => {});
-        const localized = await page.evaluate(async ({ locale, targetId }) => {
+        const localized = await page.evaluate(async ({ locale }) => {
           const stories = await fetch('stories/index.json').then(r => r.json());
-          const story = stories.find(s => String(s.id).padStart(3, '0') === String(targetId).padStart(3, '0'));
+          const href = document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on')?.getAttribute('href') || '';
+          const match = /^stories\\/[a-z0-9-]+\\/(\\d{3})\\/$/.exec(href);
+          const story = match && stories.find(s => String(s.id).padStart(3, '0') === match[1]);
           return {
             title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
             dir: document.querySelector('#khWorld').dir,
-            card: !!document.querySelector('#khWorld .kh-world-story-card .khm-card'),
+            card: !!document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on'),
             source: document.querySelector('#khWorld .kh-world-story-card .khm-source')?.textContent.trim() || '',
             chips: [...document.querySelectorAll('#khWorld .kh-world-list .kh-world-chip')].map(a => a.textContent.trim()),
             expectedPerson: story && (story.i18n?.[locale]?.person || story.person) || ''
           };
-        }, { locale, targetId: target.id });
+        }, { locale });
         check('globe heading and selected card survive language ' + locale,
           localized.title === titles[locale] && localized.dir === (locale === 'ar' ? 'rtl' : 'ltr') && localized.card && !!localized.source,
           JSON.stringify(localized));
