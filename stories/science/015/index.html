@@ -11,7 +11,7 @@
 <meta property="og:title" content="مجدي يعقوب: قلب ينبض بالحياة"><meta property="og:description" content="حكاية جراح القلب المصري مجدي يعقوب ورحلته في العلم والعمل والإنقاذ."><meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/science/015/cover.svg">
 </head>
 <body data-story-slug="015" data-design="portrait-biography" data-section="science" data-start-only data-gallery="unplaced">
-<header><div class="bar"><div class="brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">
+<header><div class="bar"><div class="brand" id="reader-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">
 <button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>
 </nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
@@ -45,4 +45,18 @@
 </main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
 <script src="../../../rebuild/reader.js?v=20261030-shared-reader-1" data-kh-v2-reader data-story-path="data.v2.json"></script>
+<script>
+(function(){
+  var brand=document.getElementById('reader-brand');
+  if(!brand)return;
+  var names={ar:'خالدون عبر التاريخ',en:'Immortals Through History',fr:'Immortels à travers l’histoire',it:'Immortali attraverso la storia',de:'Unsterbliche durch die Geschichte'};
+  function update(){
+    var lang=(document.documentElement.lang||'ar').slice(0,2).toLowerCase();
+    brand.textContent=names[lang]||names.ar;
+  }
+  update();
+  document.addEventListener('site-language-change',update);
+  new MutationObserver(update).observe(document.documentElement,{attributes:true,attributeFilter:['lang']});
+})();
+</script>
 <script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>
