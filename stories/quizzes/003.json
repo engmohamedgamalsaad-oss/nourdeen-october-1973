@@ -11,7 +11,49 @@
         "لإيقاف التدريب"
       ],
       "a": 0,
-      "e": "حماية الرسائل تساعد على الحفاظ على سرية الخطط."
+      "e": "حماية الرسائل تساعد على الحفاظ على سرية الخطط.",
+      "i18n": {
+        "en": {
+          "q": "Why do armies need secure communications?",
+          "o": [
+            "So opponents cannot understand important messages",
+            "To stop soldiers from communicating",
+            "To replace maps",
+            "To end training"
+          ],
+          "e": "Protecting messages helps keep plans confidential."
+        },
+        "fr": {
+          "q": "Pourquoi les armées ont-elles besoin de communications sécurisées ?",
+          "o": [
+            "Pour empêcher l’adversaire de comprendre les messages importants",
+            "Pour empêcher les soldats de communiquer",
+            "Pour remplacer les cartes",
+            "Pour mettre fin à l’entraînement"
+          ],
+          "e": "La protection des messages aide à préserver la confidentialité des plans."
+        },
+        "it": {
+          "q": "Perché gli eserciti hanno bisogno di comunicazioni sicure?",
+          "o": [
+            "Per impedire agli avversari di capire i messaggi importanti",
+            "Per impedire ai soldati di comunicare",
+            "Per sostituire le mappe",
+            "Per porre fine all’addestramento"
+          ],
+          "e": "Proteggere i messaggi aiuta a mantenere riservati i piani."
+        },
+        "de": {
+          "q": "Warum benötigen Armeen sichere Kommunikation?",
+          "o": [
+            "Damit Gegner wichtige Nachrichten nicht verstehen",
+            "Um Soldaten die Kommunikation zu verbieten",
+            "Um Karten zu ersetzen",
+            "Um die Ausbildung zu beenden"
+          ],
+          "e": "Der Schutz von Nachrichten hilft, Pläne vertraulich zu halten."
+        }
+      }
     },
     {
       "q": "ما الفكرة المرتبطة بحكاية الشفرة النوبية؟",
@@ -22,7 +64,49 @@
         "استخدام إشارات المرور فقط"
       ],
       "a": 0,
-      "e": "تروي شهادات تاريخية عن استخدام متحدثين بلغات نوبية في اتصالات الحرب."
+      "e": "تروي شهادات تاريخية عن استخدام متحدثين بلغات نوبية في اتصالات الحرب.",
+      "i18n": {
+        "en": {
+          "q": "What idea is associated with the story of the Nubian code?",
+          "o": [
+            "Using Nubian-language speakers to transmit messages they understood",
+            "Writing orders in a language everyone knew",
+            "Sending messages without words",
+            "Using traffic signals only"
+          ],
+          "e": "Historical accounts describe the use of speakers of Nubian languages in wartime communications."
+        },
+        "fr": {
+          "q": "Quelle idée est associée à l’histoire du code nubien ?",
+          "o": [
+            "Utiliser des locuteurs de langues nubiennes pour transmettre des messages qu’ils comprenaient",
+            "Écrire les ordres dans une langue connue de tous",
+            "Envoyer des messages sans mots",
+            "N’utiliser que des signaux routiers"
+          ],
+          "e": "Des récits historiques évoquent l’utilisation de locuteurs de langues nubiennes dans les communications pendant la guerre."
+        },
+        "it": {
+          "q": "Quale idea è associata alla storia del codice nubiano?",
+          "o": [
+            "Usare parlanti di lingue nubiane per trasmettere messaggi che comprendevano",
+            "Scrivere gli ordini in una lingua conosciuta da tutti",
+            "Inviare messaggi senza parole",
+            "Usare soltanto segnali stradali"
+          ],
+          "e": "Alcuni resoconti storici descrivono l’uso di parlanti di lingue nubiane nelle comunicazioni durante la guerra."
+        },
+        "de": {
+          "q": "Welche Idee ist mit der Geschichte des nubischen Codes verbunden?",
+          "o": [
+            "Sprecher nubischer Sprachen für Nachrichten einzusetzen, die sie verstanden",
+            "Befehle in einer Sprache zu schreiben, die alle kannten",
+            "Nachrichten ohne Worte zu senden",
+            "Nur Verkehrssignale zu verwenden"
+          ],
+          "e": "Historische Berichte schildern den Einsatz von Sprechern nubischer Sprachen in der Kommunikation während des Krieges."
+        }
+      }
     },
     {
       "q": "أي وصف أدق للغات النوبية؟",
@@ -33,7 +117,49 @@
         "لغة واحدة متطابقة في كل مكان"
       ],
       "a": 0,
-      "e": "النوبية تضم لغات وتنوعات متعددة."
+      "e": "النوبية تضم لغات وتنوعات متعددة.",
+      "i18n": {
+        "en": {
+          "q": "Which description of Nubian languages is most accurate?",
+          "o": [
+            "They are languages and varieties with a long history",
+            "They were invented in 1973",
+            "No one speaks them",
+            "They are one identical language everywhere"
+          ],
+          "e": "Nubian includes several languages and varieties."
+        },
+        "fr": {
+          "q": "Quelle description des langues nubiennes est la plus exacte ?",
+          "o": [
+            "Ce sont des langues et des variétés linguistiques à longue histoire",
+            "Elles ont été inventées en 1973",
+            "Personne ne les parle",
+            "Elles forment partout une seule langue identique"
+          ],
+          "e": "Le terme nubien recouvre plusieurs langues et variétés."
+        },
+        "it": {
+          "q": "Quale descrizione delle lingue nubiane è più corretta?",
+          "o": [
+            "Sono lingue e varietà linguistiche con una lunga storia",
+            "Sono state inventate nel 1973",
+            "Nessuno le parla",
+            "Sono un’unica lingua identica ovunque"
+          ],
+          "e": "Il nubiano comprende diverse lingue e varietà."
+        },
+        "de": {
+          "q": "Welche Beschreibung der nubischen Sprachen ist am zutreffendsten?",
+          "o": [
+            "Es sind Sprachen und Sprachvarietäten mit langer Geschichte",
+            "Sie wurden 1973 erfunden",
+            "Niemand spricht sie",
+            "Sie bilden überall eine völlig identische Sprache"
+          ],
+          "e": "Zum Nubischen gehören mehrere Sprachen und Varietäten."
+        }
+      }
     },
     {
       "q": "هل استخدام لغة لا يعرفها المتنصت يضمن السرية المطلقة؟",
@@ -44,7 +170,49 @@
         "لا قيمة للمعرفة اللغوية"
       ],
       "a": 0,
-      "e": "اختلاف المعرفة اللغوية قد يصعّب الفهم لكنه لا يضمن السرية المطلقة."
+      "e": "اختلاف المعرفة اللغوية قد يصعّب الفهم لكنه لا يضمن السرية المطلقة.",
+      "i18n": {
+        "en": {
+          "q": "Does using a language an eavesdropper does not know guarantee complete secrecy?",
+          "o": [
+            "No. It may make understanding harder, but it cannot guarantee secrecy by itself",
+            "Yes, in every situation",
+            "Yes, without discipline",
+            "Language knowledge has no value"
+          ],
+          "e": "A language difference may make messages harder to understand, but it does not guarantee complete secrecy."
+        },
+        "fr": {
+          "q": "L’utilisation d’une langue inconnue d’un espion garantit-elle un secret absolu ?",
+          "o": [
+            "Non. Elle peut rendre la compréhension plus difficile, sans garantir à elle seule le secret",
+            "Oui, dans toutes les situations",
+            "Oui, sans discipline",
+            "La connaissance des langues ne sert à rien"
+          ],
+          "e": "Une différence linguistique peut compliquer la compréhension, mais ne garantit pas à elle seule un secret absolu."
+        },
+        "it": {
+          "q": "Usare una lingua sconosciuta a chi intercetta garantisce la segretezza assoluta?",
+          "o": [
+            "No. Può rendere più difficile la comprensione, ma da sola non garantisce la segretezza",
+            "Sì, in ogni situazione",
+            "Sì, senza disciplina",
+            "Conoscere le lingue non serve"
+          ],
+          "e": "Una differenza linguistica può rendere più difficile capire i messaggi, ma non garantisce da sola la segretezza assoluta."
+        },
+        "de": {
+          "q": "Garantiert eine Sprache, die ein Abhörender nicht kennt, vollständige Geheimhaltung?",
+          "o": [
+            "Nein. Sie kann das Verstehen erschweren, garantiert allein aber keine Geheimhaltung",
+            "Ja, in jeder Situation",
+            "Ja, auch ohne Disziplin",
+            "Sprachkenntnisse sind wertlos"
+          ],
+          "e": "Ein Sprachunterschied kann das Verständnis erschweren, garantiert aber allein keine vollständige Geheimhaltung."
+        }
+      }
     },
     {
       "q": "كيف نتعامل مع الروايات التاريخية عن الشفرة؟",
@@ -55,7 +223,49 @@
         "نتجاهل الشهادات"
       ],
       "a": 0,
-      "e": "مقارنة المصادر تمنع اعتبار كل تفصيل مروي حقيقة مؤكدة."
+      "e": "مقارنة المصادر تمنع اعتبار كل تفصيل مروي حقيقة مؤكدة.",
+      "i18n": {
+        "en": {
+          "q": "How should we approach historical accounts of the code?",
+          "o": [
+            "Compare sources and distinguish what is documented from what is disputed",
+            "Assume every detail is settled",
+            "Rely on a single rumor",
+            "Ignore testimonies"
+          ],
+          "e": "Comparing sources prevents us from treating every reported detail as confirmed fact."
+        },
+        "fr": {
+          "q": "Comment devons-nous examiner les récits historiques sur le code ?",
+          "o": [
+            "Comparer les sources et distinguer les faits documentés des points controversés",
+            "Considérer chaque détail comme définitivement établi",
+            "S’appuyer sur une seule rumeur",
+            "Ignorer les témoignages"
+          ],
+          "e": "La comparaison des sources évite de considérer chaque détail rapporté comme un fait confirmé."
+        },
+        "it": {
+          "q": "Come dovremmo esaminare i resoconti storici sul codice?",
+          "o": [
+            "Confrontare le fonti e distinguere i fatti documentati dai dettagli controversi",
+            "Considerare ogni dettaglio definitivamente accertato",
+            "Affidarci a una sola voce",
+            "Ignorare le testimonianze"
+          ],
+          "e": "Confrontare le fonti evita di considerare ogni dettaglio riportato come un fatto confermato."
+        },
+        "de": {
+          "q": "Wie sollten wir historische Berichte über den Code beurteilen?",
+          "o": [
+            "Quellen vergleichen und Belegtes von Umstrittenem unterscheiden",
+            "Jedes Detail als geklärt ansehen",
+            "Uns auf ein einziges Gerücht verlassen",
+            "Zeugenaussagen ignorieren"
+          ],
+          "e": "Der Quellenvergleich verhindert, dass jede überlieferte Einzelheit als bestätigte Tatsache gilt."
+        }
+      }
     },
     {
       "q": "ما الهدف الأساسي من تشفير الرسائل العسكرية؟",
