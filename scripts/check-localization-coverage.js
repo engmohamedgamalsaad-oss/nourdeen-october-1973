@@ -136,7 +136,16 @@ for (const file of translationMaps) {
       if (entries.length < 50) problems.push('germanStoryText: expected at least 50 entries, found ' + entries.length + '.');
       const bad = entries.filter(([key, value]) => typeof value !== 'string' || !value.trim() || /\bundefined\b/.test(value) || /[\u0600-\u06FF]/.test(value));
       if (bad.length) problems.push('germanStoryText: ' + bad.length + ' empty, invalid, or Arabic-valued entries.');
-      const sourcePages = ['stories/october/001/index.html', 'stories/october/002/index.html', 'stories/october/003/index.html', 'stories/october/004/index.html', 'stories/history/005/index.html', 'stories/history/006/index.html', 'stories/science/007/index.html'].map(read).join('\n');
+      const sourcePages = [
+        'stories/october/001/index.html', 'stories/october/002/index.html',
+        'stories/october/003/index.html', 'stories/october/004/index.html',
+        'stories/history/005/index.html', 'stories/history/006/index.html',
+        'stories/science/007/index.html',
+        // V2 story prose is stored in JSON data, not duplicated in the page shell.
+        'stories/history/005/data.v2.json', 'stories/history/006/data.v2.json',
+        // This legacy German source paragraph is retained in the Orabi translation module.
+        'stories/history/006/translations.js'
+      ].map(read).join('\n');
       const missingSources = entries.filter(([key]) => !sourcePages.includes(key));
       if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match source text in stories 001–003.');
       if (!bad.length && !missingSources.length) console.log('germanStoryText: verified ' + entries.length + ' German additions for October stories 001–003.');
