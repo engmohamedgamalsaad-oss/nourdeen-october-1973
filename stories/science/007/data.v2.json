@@ -27,6 +27,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "إزاي العلماء قدروا يشوفوا الذرات وهي صغيرة جدًا؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "أحمد زويل ساعد في فتح نافذة جديدة على التفاعلات الكيميائية باستخدام نبضات ليزر فائقة القِصر. كانت النبضة تقيس زمنًا صغيرًا للغاية، يُسمى الفيمتوثانية، فصار العلماء يدرسون كيف تتغير الجزيئات أثناء التفاعل."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "وُلد أحمد حسن زويل يوم 26 فبراير 1946 في مدينة دمنهور بمصر. درس الكيمياء في جامعة الإسكندرية، ثم سافر إلى الولايات المتحدة ونال الدكتوراه من جامعة بنسلفانيا. وبعد فترة عمل في جامعة كاليفورنيا ببركلي، انتقل سنة 1976 إلى معهد كاليفورنيا للتكنولوجيا (كالتك) في مدينة باسادينا."
         },
@@ -106,6 +116,16 @@
           "speaker": "narrator",
           "heading": "Here is where the story began",
           "text": "Ahmed Zewail was a great Egyptian scientist. He was born in the city of Damanhur in 1946, and he loved science from when he was little. He worked hard in his studies until he travelled to America, succeeded in his scientific research, and raised the name of Egypt and the Arabs across the whole world."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "How could scientists observe atoms when they are so incredibly small?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Zewail helped open a new window onto chemical reactions by using extremely short laser pulses. These pulses measured incredibly tiny intervals called femtoseconds, allowing scientists to study how molecules change during a reaction."
         },
         {
           "type": "paragraph",
@@ -191,6 +211,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Comment les scientifiques pouvaient-ils observer les atomes, alors qu’ils sont si petits ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Zewail a contribué à ouvrir une nouvelle fenêtre sur les réactions chimiques grâce à des impulsions laser extrêmement brèves. Elles mesuraient des durées minuscules appelées femtosecondes et permettaient d’étudier la transformation des molécules pendant une réaction."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Hassan Zewail est né le 26 février 1946 à Damanhour, en Égypte. Il a étudié la chimie à l’université d’Alexandrie, puis est parti aux États-Unis, où il a obtenu son doctorat à l’université de Pennsylvanie. Après un passage à l’université de Californie à Berkeley, il a rejoint en 1976 le California Institute of Technology (Caltech), à Pasadena."
         },
@@ -273,6 +303,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Come potevano gli scienziati osservare gli atomi, se sono così piccoli?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Zewail contribuì ad aprire una nuova finestra sulle reazioni chimiche usando impulsi laser brevissimi. Questi impulsi misuravano intervalli minuscoli, chiamati femtosecondi, permettendo agli scienziati di studiare come cambiano le molecole durante una reazione."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Hassan Zewail è nato il 26 febbraio 1946 a Damanhur, in Egitto. Ha studiato chimica all’Università di Alessandria, poi si è trasferito negli Stati Uniti, dove ha conseguito il dottorato all’Università della Pennsylvania. Dopo un periodo all’Università della California a Berkeley, nel 1976 è passato al California Institute of Technology (Caltech) a Pasadena."
         },
@@ -352,6 +392,16 @@
           "speaker": "narrator",
           "heading": "Hier begann die Geschichte",
           "text": "Ahmed Zewail war ein bedeutender ägyptischer Wissenschaftler. Er wurde 1946 in der Stadt Damanhur geboren und interessierte sich schon als Kind für die Wissenschaft. Er lernte fleißig, ging später nach Amerika und war mit seiner Forschung erfolgreich. Damit machte er Ägypten und die arabische Welt weltweit bekannt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Wie konnten Forschende Atome beobachten, obwohl sie so unglaublich klein sind?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ahmed Zewail half dabei, mit extrem kurzen Laserpulsen einen neuen Blick auf chemische Reaktionen zu ermöglichen. Diese Pulse erfassten winzige Zeitspannen, sogenannte Femtosekunden. So konnten Forschende untersuchen, wie sich Moleküle während einer Reaktion verändern."
         },
         {
           "type": "paragraph",
