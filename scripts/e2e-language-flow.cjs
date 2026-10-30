@@ -288,7 +288,6 @@ async function cinematicGlobeRegression(browser, base, origin) {
         check('globe story chips show the localized character name in ' + locale,
           !!localized.expectedPerson && localized.chips.includes(localized.expectedPerson), JSON.stringify(localized));
       }
-    }
   } catch (e) {
     hard.push(label + ': browser regression could not complete — ' + String(e.message || e).split('\n')[0]);
   } finally {
