@@ -270,8 +270,9 @@ async function cinematicGlobeRegression(browser, base, origin) {
         const localized = await page.evaluate(async ({ locale }) => {
           const stories = await fetch('stories/index.json').then(r => r.json());
           const href = document.querySelector('#khWorld .kh-gl-controls .kh-gl-story.is-on')?.getAttribute('href') || '';
-          const match = /^stories\\/[a-z0-9-]+\\/(\\d{3})\\/$/.exec(href);
-          const story = match && stories.find(s => String(s.id).padStart(3, '0') === match[1]);
+          const pathParts = href.split('/');
+          const storyId = pathParts.length === 4 && /^\\d{3}$/.test(pathParts[2]) ? pathParts[2] : '';
+          const story = storyId && stories.find(s => String(s.id).padStart(3, '0') === storyId);
           return {
             title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
             dir: document.querySelector('#khWorld').dir,
