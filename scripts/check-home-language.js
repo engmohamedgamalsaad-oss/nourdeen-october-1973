@@ -395,8 +395,14 @@ for (const rel of [
   'stories/science/007/index.html'
 ]) {
   const html = read(rel);
-  if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
-  if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+  const v2Reader = html.includes('data-kh-v2-reader') && /data-story-path=["']data\\.v2\\.json["']/.test(html);
+  if (v2Reader) {
+    if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: V2 reader is missing its own light/dark mode controller.`);
+    if (!/rebuild\\/reader-base\\.css/.test(html)) fail(`${rel}: V2 reader is missing its theme stylesheet layer.`);
+  } else {
+    if (!/khaledoon-theme\\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
+    if (!/shared\\/base\\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
+  }
 }
 {
   const rel = 'khaledoon/collections/october.html';
