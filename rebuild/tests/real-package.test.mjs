@@ -99,3 +99,30 @@ test('Ibn Sina V2 story package validates and preserves its five-language readin
   assert.match(page, /name="robots" content="noindex,nofollow"/);
   assert.match(page, /rebuild\/reader\.js/);
 });
+
+test('Ahmed Urabi V2 story package validates with five-language blocks, images, and quiz', async () => {
+  const story = await loadJson('stories/history/006/data.v2.json');
+  const errors = [
+    ...validateStory(story),
+    ...await validateLocalImagePaths(story, root)
+  ];
+  assert.deepEqual(errors, [], 'Ahmed Urabi V2 package must pass the V2 contract and local-image checks');
+  assert.equal(story.section, 'history');
+  assert.equal(story.i18n.ar.blocks.length, 14);
+  assert.equal(story.quiz.length, 10);
+  assert.equal(story.sources.length, 3);
+  assert.equal(story.images.length, 2);
+  for (const lang of langs) {
+    assert.equal(story.i18n[lang].blocks.length, 14, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    for (const question of story.quiz) {
+      assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
+      assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+    }
+  }
+  const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
+  assert.match(page, /data-kh-v2-reader/);
+  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /name="robots" content="noindex,nofollow"/);
+  assert.match(page, /rebuild\/reader\.js/);
+});
