@@ -357,19 +357,27 @@ test('preview review panel displays image thumbnails and attribution from the sa
   assert.ok(preview.includes('renderReviewImages(d);'));
   assert.ok(preview.includes('pub-image-card'));
 });
-test('Hatshepsut cover SVG has no embedded text that can leak across languages', function () {
+test('Hatshepsut cover SVG has no embedded text and V2 package provides localized accessible image text', function () {
   var svg = fs.readFileSync('stories/women/013/cover-popup.svg', 'utf8');
-  assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to the localized HTML');
+  assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to localized package metadata');
   assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
-  assert.ok(svg.includes('aria-hidden=\"true\"'), 'HTML image alt text is the accessible label');
-  var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
-  assert.ok(story.includes('alt=\"رسم توضيحي، وليس صورة تاريخية\"'), 'cover image alt must use a shared localized translation key');
+  assert.ok(svg.includes('aria-hidden=\"true\"'), 'decorative SVG must be hidden from assistive technology');
+  var pkg = JSON.parse(fs.readFileSync('stories/women/013/data.v2.json', 'utf8'));
+  ['ar','en','fr','it','de'].forEach(function (lang) {
+    assert.ok(pkg.cover.i18n[lang].alt, 'cover alt must be localized for ' + lang);
+    assert.ok(pkg.cover.i18n[lang].caption, 'cover caption must be localized for ' + lang);
+  });
 });
-test('Hatshepsut page keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
+test('Hatshepsut V2 reader keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
   var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
+  var readerCss = fs.readFileSync('rebuild/reader-base.css', 'utf8');
+  var readerJs = fs.readFileSync('rebuild/reader.js', 'utf8');
   var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
-  assert.ok(story.includes('body.motion-ready .write-in.write-visible'), 'Hatshepsut story text must reveal when it enters view');
-  assert.ok(story.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
+  assert.ok(story.includes('data-kh-v2-reader'), 'Hatshepsut must use the unified V2 reader');
+  assert.ok(story.includes('data-story-path=\"data.v2.json\"'), 'V2 page must load its localized story package');
+  assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'V2 story blocks must reveal on scroll');
+  assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
+  assert.ok(readerCss.includes('header{position:sticky'), 'language header must remain visible while scrolling');
   assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
   assert.ok(collection.includes('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'women card must prefer the verified Hatshepsut museum photo');
   assert.ok(fs.existsSync('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'preferred museum image must exist in the repository');
