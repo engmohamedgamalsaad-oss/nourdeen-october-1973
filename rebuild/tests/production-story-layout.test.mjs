@@ -8,7 +8,8 @@ const index = JSON.parse(fs.readFileSync(path.join(root, 'stories/index.json'), 
 
 for (const sample of [
   { id: '001', section: 'october', person: 'نبيل عبد الوهاب' },
-  { id: '009', section: 'people', person: 'نجيب محفوظ' }
+  { id: '009', section: 'people', person: 'نجيب محفوظ' },
+  { id: '010', section: 'women', person: 'سميرة موسى' }
 ]) {
   test('production story ' + sample.id + ' stays in the current published layout (not treated as a V1 AI package)', () => {
     const dir = path.join(root, 'stories', sample.section, sample.id);
@@ -33,13 +34,13 @@ for (const sample of [
     }
     const html = fs.readFileSync(htmlPath, 'utf8');
     assert.match(html, /<html[^>]*lang="ar"/i, 'reader page starts in Arabic');
-    if (sample.id === '009') {
+    if (['009', '010'].includes(sample.id)) {
       const v2Path = path.join(dir, 'data.v2.json');
       assert.ok(fs.existsSync(v2Path), 'migrated story has a V2 package');
       const v2 = JSON.parse(fs.readFileSync(v2Path, 'utf8'));
       assert.equal(v2.format, 'KHALEDOON_STORY_V2');
-      assert.equal(v2.section, 'people');
-      assert.match(html, /data-kh-v2-reader/, 'Naguib Mahfouz uses the unified V2 reader');
+      assert.equal(v2.section, sample.section);
+      assert.match(html, /data-kh-v2-reader/, 'migrated story uses the unified V2 reader');
       assert.match(html, /data-story-path="data\.v2\.json"/, 'V2 reader loads the story package');
     } else {
       assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
