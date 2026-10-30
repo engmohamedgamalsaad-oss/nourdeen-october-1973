@@ -21,15 +21,15 @@
   var ui = labels[lang] || labels.ar;
 
   /* ===== صور من حكايات القسم =====
-     فسيفساء ثابتة داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليست شريطًا متحركًا.
-     كل حكاية منشورة في القسم لها مكان فيه تلقائيًا (حتى الحكايات الجديدة)، بالترتيب:
-       1) صور مختارة لها في STORY_GALLERY_PHOTOS (اختياري)،
-       2) صورة غلافها (من حقل cover في data.json أو ملفات cover.* داخل مجلد الحكاية)،
-       3) لو لا توجد أي صورة من الاثنتين: بطاقة بلون الحكاية وأول حرف من عنوانها.
-     كل صورة تُختبر أولًا؛ التي لا تُحمَّل تُستبدل بالخطة التالية، وكل صورة رابط لحكايتها.
+     معرض صور تاريخية حقيقية داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليس شريطًا متحركًا.
+     الصورة لكل حكاية منشورة تُأخذ تلقائيًا بالترتيب:
+       1) صور تاريخية مختارة لها في STORY_GALLERY_PHOTOS،
+       2) صورة غلافها إذا كانت صورة فعلية (jpg/webp/png) من حقل cover في data.json أو ملفات cover.*،
+     ولا تُستخدم رسوم SVG التوضيحية ولا بطاقات بديلة: الحكاية التي لا تملك صورة فعلية لا تظهر في المعرض حتى تُضاف لها صورة.
+     كل صورة تُختبر أولًا قبل عرضها، وكل صورة رابط لحكايتها.
      التنسيق في khaledoon/assets/section-photos.css ويُحمَّل من هنا تلقائيًا. */
   var MOSAIC_MAX = 5; /* أكثر من هذا العدد من الحكايات يتحول المعرض إلى صف أفقي يُسحب */
-  /* صور مختارة اختيارية (خفيفة الحجم). أي حكاية غير مذكورة هنا تظهر بصورة غلافها تلقائيًا. */
+  /* صور تاريخية مختارة (خفيفة الحجم، مسجلة مصادرها في assets/images/stories/MANIFEST.md أو في مجلد الحكاية). */
   var STORY_GALLERY_PHOTOS = {
     '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/nabil-01.jpg'],
     '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
@@ -90,6 +90,8 @@
     var covers = [];
     if (source) { try { covers = JSON.parse(source.getAttribute('data-cover-candidates') || '[]'); } catch (_) {} }
     if (!Array.isArray(covers)) covers = [];
+    /* رسوم SVG التوضيحية لا تدخل المعرض: هو معرض صور تاريخية فعلية فقط. */
+    covers = covers.filter(function (url) { return !/\.svg(\?|#|$)/i.test(String(url)); });
     var curated = (STORY_GALLERY_PHOTOS[String(story.id || '')] || []).map(function (photo) { return root + photo; });
     return Promise.all(curated.map(function (url) { return probeImage(url); })).then(function (found) {
       found = found.filter(Boolean);
@@ -147,11 +149,6 @@
         var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
         var href = validPath(path) ? root + path : '';
         var urls = (storyPhotos[storyIndex] || []).slice(0, 3);
-        if (!urls.length) {
-          /* لا توجد صورة لهذه الحكاية: نعرض بطاقة بلونها بدل استبعادها. */
-          firsts.push({ order: storyIndex * 10, art: true, story: story, href: href });
-          return;
-        }
         urls.forEach(function (url, photoIndex) {
           var tile = { order: storyIndex * 10 + photoIndex, src: url, story: story, href: href };
           (photoIndex === 0 ? firsts : seconds).push(tile);
@@ -160,7 +157,7 @@
       extras.forEach(function (extra, index) {
         if (extraPhotos[index]) standalone.push({ order: 1000 + index, src: extraPhotos[index], title: extra.title, alt: extra.alt });
       });
-      /* حكاية واحدة على الأقل لكل منشورة؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
+      /* صورة واحدة على الأقل لكل حكاية لها صورة فعلية؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
       var scrolling = firsts.length > MOSAIC_MAX;
       var picked = scrolling ? firsts : firsts.concat(standalone, seconds).slice(0, MOSAIC_MAX);
       if (!picked.length) return;
@@ -178,19 +175,12 @@
         var link = tile.href ? node('a', 'kh-sp-tile') : node('div', 'kh-sp-tile');
         if (tile.href) link.href = tile.href;
         var label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
-        var visual;
-        if (tile.art) {
-          visual = node('span', 'kh-sp-art', Array.from(label)[0] || '•');
-          visual.setAttribute('aria-hidden', 'true');
-          visual.style.setProperty('--c', /^#[0-9a-f]{6}$/i.test(tile.story.color || '') ? tile.story.color : '#2c6f80');
-        } else {
-          visual = node('img', '');
-          visual.src = tile.src;
-          /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
-          visual.alt = tile.story ? '' : (tile.alt || label);
-          visual.decoding = 'async';
-          visual.onerror = function () { item.style.visibility = 'hidden'; };
-        }
+        var visual = node('img', '');
+        visual.src = tile.src;
+        /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
+        visual.alt = tile.story ? '' : (tile.alt || label);
+        visual.decoding = 'async';
+        visual.onerror = function () { item.style.visibility = 'hidden'; };
         var caption = node('span', 'kh-sp-cap');
         caption.appendChild(node('strong', '', label));
         var person = tile.story ? localized(tile.story, 'person') : '';
