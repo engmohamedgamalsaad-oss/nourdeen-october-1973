@@ -48,7 +48,7 @@ var RA={ar:'اختار رد فعلك على الحكاية',en:'Choose your reac
 LB={ar:'عرض الصورة المكبرة',en:'Enlarged image view',fr:'Image agrandie',it:'Immagine ingrandita',de:'Vergrößerte Bildansicht'},
 TH={ar:['التبديل إلى الوضع الفاتح','التبديل إلى الوضع الداكن'],en:['Switch to light mode','Switch to dark mode'],fr:['Passer en mode clair','Passer en mode sombre'],it:['Passa alla modalità chiara','Passa alla modalità scura'],de:['Zum hellen Modus wechseln','Zum dunklen Modus wechseln']};
 function sync(){var r=document.documentElement,l=(r.lang||'ar').slice(0,2);if(!RA[l])l='ar';
-var artNotes={ar:'صورة أرشيفية حقيقية',en:'Authentic archival photograph',fr:'Photographie d’archive authentique',it:'Fotografia d’archivio autentica',de:'Authentisches Archivfoto'};var artNote=document.getElementById('intro-art-note');if(artNote)artNote.textContent=artNotes[l];
+var artNotes={ar:'رسم توضيحي أصلي لغلاف الحكاية',en:'Original illustrated cover artwork',fr:'Illustration originale de couverture',it:'Illustrazione originale di copertina',de:'Originale Titelillustration'};var artNote=document.getElementById('intro-art-note');if(artNote)artNote.textContent=artNotes[l];
 var ro=document.getElementById('reaction-options');if(ro)ro.setAttribute('aria-label',RA[l]);
 var lb=document.getElementById('image-lightbox');if(lb)lb.setAttribute('aria-label',LB[l]);
 var fab=document.querySelector('.kh-fab');if(fab){var t=TH[l][r.getAttribute('data-theme')==='light'?1:0];fab.setAttribute('aria-label',t);fab.title=t}}
