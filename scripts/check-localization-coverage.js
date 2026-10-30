@@ -136,10 +136,17 @@ for (const file of translationMaps) {
       if (entries.length < 50) problems.push('germanStoryText: expected at least 50 entries, found ' + entries.length + '.');
       const bad = entries.filter(([key, value]) => typeof value !== 'string' || !value.trim() || /\bundefined\b/.test(value) || /[\u0600-\u06FF]/.test(value));
       if (bad.length) problems.push('germanStoryText: ' + bad.length + ' empty, invalid, or Arabic-valued entries.');
-      const sourcePages = ['stories/october/001/index.html', 'stories/october/002/index.html', 'stories/october/003/index.html', 'stories/october/004/index.html', 'stories/history/005/index.html', 'stories/history/006/index.html', 'stories/science/007/index.html'].map(read).join('\n');
+      const sourcePages = [
+        // V1 stories keep their source text in HTML; V2 history stories store it in JSON.
+        'stories/october/001/index.html', 'stories/october/002/index.html',
+        'stories/october/003/index.html', 'stories/october/004/index.html',
+        'stories/history/005/index.html', 'stories/history/005/data.v2.json',
+        'stories/history/006/index.html', 'stories/history/006/data.v2.json',
+        'stories/science/007/index.html'
+      ].map(read).join('\n');
       const missingSources = entries.filter(([key]) => !sourcePages.includes(key));
-      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match source text in stories 001–003.');
-      if (!bad.length && !missingSources.length) console.log('germanStoryText: verified ' + entries.length + ' German additions for October stories 001–003.');
+      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match any configured story source file (HTML or V2 JSON).');
+      if (!bad.length && !missingSources.length) console.log('germanStoryText: verified ' + entries.length + ' German additions against configured story source files.');
     } catch (e) {
       problems.push('germanStoryText: could not parse the map: ' + e.message);
     }
