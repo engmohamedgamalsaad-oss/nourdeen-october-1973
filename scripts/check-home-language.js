@@ -420,26 +420,41 @@ for (const rel of [
   if (!exists('assets/shared/read-theme.css')) fail('Reader theme stylesheet is missing.');
 }
 {
-  const zewail = read('stories/science/007/index.html');
-  const languageButtons = [...zewail.matchAll(/<button\b[^>]*\bdata-lang=[\"'](ar|en|fr|it|de)[\"'][^>]*>/g)].map((m) => m[1]);
-  if (new Set(languageButtons).size !== 5 || !['ar', 'en', 'fr', 'it', 'de'].every((locale) => languageButtons.includes(locale))) {
+  const page = read('stories/science/007/index.html');
+  const buttons = [...page.matchAll(/<button\\b[^>]*\\bdata-lang=["'](ar|en|fr|it|de)["'][^>]*>/g)].map((m) => m[1]);
+  if (new Set(buttons).size !== 5 || !['ar', 'en', 'fr', 'it', 'de'].every((locale) => buttons.includes(locale))) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must expose all five language buttons (ar/en/fr/it/de).');
   }
-  const t = zewail.match(/const T=\{([\s\S]*?)\n\};/);
-  if (!t || !/\bar:\{/.test(t[1]) || !/\ben:\{/.test(t[1]) || !/\bfr:\{/.test(t[1]) ||
-      !/\bit:\{/.test(t[1]) || !/\bde:\{/.test(t[1])) {
-    fail('stories/science/007/index.html: the Ahmed Zewail story must define all five language dictionaries.');
-  } else {
-    try {
-      const dictionaries = vm.runInNewContext('({' + t[1] + '})');
-      const keys = Object.keys(dictionaries.ar || {});
-      for (const locale of ['en', 'fr', 'it', 'de']) {
-        const translated = Object.keys(dictionaries[locale] || {});
-        const missing = keys.filter((key) => !translated.includes(key));
-        if (missing.length) fail(`stories/science/007/index.html: ${locale} is missing ${missing.length} translation key(s): ${missing.slice(0, 5).join(', ')}.`);
+  if (!page.includes('data-kh-v2-reader') || !page.includes('data-story-path="data.v2.json"')) {
+    fail('stories/science/007/index.html: the Ahmed Zewail story must use the unified V2 reader.');
+  }
+  try {
+    const story = JSON.parse(read('stories/science/007/data.v2.json'));
+    const locales = ['ar', 'en', 'fr', 'it', 'de'];
+    if (story.format !== 'KHALEDOON_STORY_V2') fail('Ahmed Zewail story package must use KHALEDOON_STORY_V2.');
+    for (const locale of locales) {
+      const data = story.i18n && story.i18n[locale];
+      if (!data || !data.title || !data.subtitle || !data.summary || !Array.isArray(data.blocks) || data.blocks.length < 3) {
+        fail('Ahmed Zewail story package is missing required localized reading fields for ' + locale + '.');
       }
-      notes.push(`Ahmed Zewail story: ${keys.length} fields in all five languages`);
-    } catch (e) { fail(`stories/science/007/index.html: could not audit the language dictionaries: ${e.message}`); }
+      for (const [i, block] of (data && Array.isArray(data.blocks) ? data.blocks : []).entries()) {
+        if (!block.text || !block.type || !block.speaker) fail('Ahmed Zewail story block ' + i + ' is incomplete in ' + locale + '.');
+      }
+      for (const [i, source] of (Array.isArray(story.sources) ? story.sources : []).entries()) {
+        if (!source.i18n || !source.i18n[locale] || !source.i18n[locale].title || !source.i18n[locale].organization) {
+          fail('Ahmed Zewail source ' + i + ' is missing localized attribution in ' + locale + '.');
+        }
+      }
+      for (const [i, question] of (Array.isArray(story.quiz) ? story.quiz : []).entries()) {
+        const q = question.i18n && question.i18n[locale];
+        if (!q || !q.question || !q.explanation || !Array.isArray(q.options) || q.options.length !== 4) {
+          fail('Ahmed Zewail quiz question ' + i + ' is incomplete in ' + locale + '.');
+        }
+      }
+    }
+    notes.push('Ahmed Zewail V2 package: five-language story, image, source and quiz coverage');
+  } catch (e) {
+    fail('stories/science/007/data.v2.json: could not audit the unified story package: ' + e.message);
   }
 }
 {
