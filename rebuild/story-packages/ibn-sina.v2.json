@@ -499,17 +499,83 @@
     {
       "title": "The Canon of Medicine — Ibn Sina",
       "organization": "Library of Congress",
-      "url": "https://www.loc.gov/item/2021667332/"
+      "url": "https://www.loc.gov/item/2021667332/",
+      "i18n": {
+        "ar": {
+          "title": "القانون في الطب",
+          "organization": "مكتبة الكونغرس الأمريكية"
+        },
+        "en": {
+          "title": "The Canon of Medicine",
+          "organization": "Library of Congress"
+        },
+        "fr": {
+          "title": "Le Canon de la médecine",
+          "organization": "Bibliothèque du Congrès"
+        },
+        "it": {
+          "title": "Il Canone della medicina",
+          "organization": "Library of Congress"
+        },
+        "de": {
+          "title": "Der Kanon der Medizin",
+          "organization": "Library of Congress"
+        }
+      }
     },
     {
       "title": "Ibn Sina and the Canon of Medicine",
       "organization": "PubMed Central",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3343704/"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3343704/",
+      "i18n": {
+        "ar": {
+          "title": "PubMed Central",
+          "organization": "PubMed Central"
+        },
+        "en": {
+          "title": "PubMed Central",
+          "organization": "PubMed Central"
+        },
+        "fr": {
+          "title": "PubMed Central",
+          "organization": "PubMed Central"
+        },
+        "it": {
+          "title": "PubMed Central",
+          "organization": "PubMed Central"
+        },
+        "de": {
+          "title": "PubMed Central",
+          "organization": "PubMed Central"
+        }
+      }
     },
     {
       "title": "Historical review of Ibn Sina",
       "organization": "PubMed Central",
-      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3078202/"
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3078202/",
+      "i18n": {
+        "ar": {
+          "title": "مراجعة عن ابن سينا",
+          "organization": "PubMed Central"
+        },
+        "en": {
+          "title": "Avicenna overview",
+          "organization": "PubMed Central"
+        },
+        "fr": {
+          "title": "Présentation d’Avicenne",
+          "organization": "PubMed Central"
+        },
+        "it": {
+          "title": "Panoramica su Avicenna",
+          "organization": "PubMed Central"
+        },
+        "de": {
+          "title": "Überblick über Avicenna",
+          "organization": "PubMed Central"
+        }
+      }
     }
   ],
   "quiz": [
