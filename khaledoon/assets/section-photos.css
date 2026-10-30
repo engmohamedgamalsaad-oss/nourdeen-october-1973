@@ -1,6 +1,7 @@
 /* Khaledoon — «صور من حكايات القسم»
    فسيفساء صور ثابتة داخل ترويسة كل قسم (وبعد الغلاف في قسم أكتوبر).
-   لا يوجد تمرير تلقائي؛ كل صورة رابط لحكايتها. يبنيها story-collections.js ويحمّل هذا الملف بنفسه. */
+   كل حكاية لها مكان فيها؛ لو زادت عن 5 تتحول إلى صف أفقي يُسحب.
+   كل صورة رابط لحكايتها. يبنيها story-collections.js ويحمّل هذا الملف بنفسه. */
 .kh-sp{--kh-sp-accent:var(--gold,#8ad9e8);--kh-sp-line:var(--line,rgba(255,255,255,.28));position:relative;z-index:1}
 .kh-sp-title{display:flex;align-items:center;gap:12px;margin:0 0 12px;color:var(--kh-sp-accent);font:800 .88rem/1.5 Cairo,Tahoma,sans-serif;letter-spacing:.02em}
 .kh-sp-title::after{content:"";flex:1;height:1px;background:var(--kh-sp-line)}
@@ -28,6 +29,8 @@
 
 .kh-sp-tile{position:relative;display:block;width:100%;height:100%;overflow:hidden;border-radius:14px;border:1px solid var(--kh-sp-line);background:var(--panel,#16303a);box-shadow:0 10px 24px rgba(0,0,0,.22);color:#fff;text-decoration:none;isolation:isolate;transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease,border-color .35s ease}
 .kh-sp-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 22%;display:block;transition:filter .5s ease;animation:kh-sp-drift 16s ease-in-out infinite alternate;animation-delay:calc(var(--i,0)*-3s)}
+/* حكاية ليس لها أي صورة بعد: بطاقة بلون الحكاية وأول حرف من عنوانها، حتى لا تغيب عن المعرض */
+.kh-sp-art{position:absolute;inset:0;display:grid;place-items:center;padding-bottom:26px;background:radial-gradient(circle at 82% 14%,rgba(255,255,255,.22),transparent 48%),linear-gradient(145deg,var(--c,#2c6f80),#0b1a22);font:900 clamp(2.4rem,6vw,3.6rem)/1 Marhey,Cairo,sans-serif;color:rgba(255,255,255,.92)}
 .kh-sp-tile::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,transparent 45%,rgba(4,10,16,.88))}
 .kh-sp-cap{position:absolute;z-index:2;inset:auto 10px 8px 10px;display:grid;gap:1px;text-shadow:0 2px 8px #000}
 .kh-sp-cap strong{font-size:.78rem;line-height:1.45;font-weight:800;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:1;overflow:hidden}
@@ -49,6 +52,15 @@ a.kh-sp-tile:focus-visible{outline:3px solid var(--kh-sp-accent);outline-offset:
 .kh-sp.is-band .kh-sp-grid{height:clamp(290px,34vw,400px)}
 html[data-theme="light"] .kh-sp.is-band{background:linear-gradient(180deg,rgba(255,255,255,.75),rgba(255,255,255,.35))}
 
+/* أكثر من 5 حكايات: صف أفقي يُسحب (مع أسهم للكمبيوتر) وكل حكاية لها بطاقة */
+.kh-sp .kh-sp-grid.kh-sp-scroll{display:flex;height:auto;overflow-x:auto;scroll-snap-type:x mandatory;gap:10px;padding:2px 2px 12px;scrollbar-width:thin}
+.kh-sp-scroll>.kh-sp-item{flex:0 0 clamp(190px,40%,260px);aspect-ratio:4/3;scroll-snap-align:start}
+.kh-sp.is-band .kh-sp-scroll>.kh-sp-item{flex-basis:clamp(220px,24%,300px)}
+.kh-sp-scroll>.kh-sp-item:nth-child(1) .kh-sp-cap strong{font-size:.78rem;-webkit-line-clamp:1}
+.kh-sp-nav{display:flex;gap:8px;justify-content:flex-end;margin-top:2px}
+.kh-sp-nav button{width:36px;height:36px;border-radius:50%;border:1px solid var(--kh-sp-line);background:transparent;color:var(--kh-sp-accent);font:800 1.2rem/1 Cairo,Tahoma,sans-serif;cursor:pointer;padding:0}
+.kh-sp-nav button:hover,.kh-sp-nav button:focus-visible{background:var(--kh-sp-accent);color:#10232c;outline:none}
+
 /* الهاتف: الصور صف أفقي يُسحب باللمس تحت نص الترويسة */
 @media(max-width:860px){
   .wrap.kh-sp-host{grid-template-columns:minmax(0,1fr)}
@@ -60,6 +72,7 @@ html[data-theme="light"] .kh-sp.is-band{background:linear-gradient(180deg,rgba(2
   .kh-sp-n1>.kh-sp-item{flex-basis:100%}
   .kh-sp-n2>.kh-sp-item{flex-basis:calc(50% - 5px)}
   .kh-sp-item:nth-child(1) .kh-sp-cap strong{font-size:.86rem}
+  .kh-sp-nav{display:none}
 }
 
 @media(prefers-reduced-motion:reduce){

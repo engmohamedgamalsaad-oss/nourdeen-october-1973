@@ -22,10 +22,14 @@
 
   /* ===== صور من حكايات القسم =====
      فسيفساء ثابتة داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليست شريطًا متحركًا.
-     كل صورة تُختبر أولًا؛ التي لا تُحمَّل تُستبعد بدل أن تترك مكانًا فارغًا، وكل صورة رابط لحكايتها.
+     كل حكاية منشورة في القسم لها مكان فيه تلقائيًا (حتى الحكايات الجديدة)، بالترتيب:
+       1) صور مختارة لها في STORY_GALLERY_PHOTOS (اختياري)،
+       2) صورة غلافها (من حقل cover في data.json أو ملفات cover.* داخل مجلد الحكاية)،
+       3) لو لا توجد أي صورة من الاثنتين: بطاقة بلون الحكاية وأول حرف من عنوانها.
+     كل صورة تُختبر أولًا؛ التي لا تُحمَّل تُستبدل بالخطة التالية، وكل صورة رابط لحكايتها.
      التنسيق في khaledoon/assets/section-photos.css ويُحمَّل من هنا تلقائيًا. */
-  var PHOTO_MAX = 5;
-  /* صور من صفحات الحكايات نفسها (خفيفة الحجم فقط). أي حكاية غير مذكورة هنا تظهر بصورة غلافها تلقائيًا. */
+  var MOSAIC_MAX = 5; /* أكثر من هذا العدد من الحكايات يتحول المعرض إلى صف أفقي يُسحب */
+  /* صور مختارة اختيارية (خفيفة الحجم). أي حكاية غير مذكورة هنا تظهر بصورة غلافها تلقائيًا. */
   var STORY_GALLERY_PHOTOS = {
     '001': ['stories/october/001/Egyptian_soldiers_raising_flag.webp','stories/october/001/bab-el-mandeb-map.webp','stories/october/001/nabil-01.jpg'],
     '002': ['stories/october/002/Crossing_the_Bar_Lev_Line,_October_War.jpg'],
@@ -41,7 +45,7 @@
     '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'],
     '015': ['assets/images/stories/M_Yacoub.jpg']
   };
-  /* صور إضافية لقسم بعينه، ليست مرتبطة بحكاية (تظهر بلا رابط). */
+  /* صور إضافية لقسم بعينه، ليست مرتبطة بحكاية (تظهر بلا رابط، وفقط لو عدد الحكايات لا يملأ المعرض). */
   var EXTRA_SECTION_PHOTOS = {
     women: [
       { src: 'assets/images/stories/250px-Nefertiti_Bust.png', title: 'الملكة نفرتيتي', alt: 'رأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري' },
@@ -55,7 +59,7 @@
       var link = document.createElement('link');
       link.id = 'khSectionPhotosCss';
       link.rel = 'stylesheet';
-      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-1';
+      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-2';
       link.onload = link.onerror = function () { resolve(); };
       document.head.appendChild(link);
       setTimeout(resolve, 2500);
@@ -120,9 +124,16 @@
       it: 'Le storie in immagini',
       de: 'Geschichten in Bildern'
     };
+    var navByLang = {
+      ar: ['السابق', 'التالي'],
+      en: ['Previous', 'Next'],
+      fr: ['Précédent', 'Suivant'],
+      it: ['Precedente', 'Successivo'],
+      de: ['Zurück', 'Weiter']
+    };
     var heading = copyByLang[lang] || copyByLang.ar;
-    /* لو زادت الحكايات عن الحد نعرض أحدث حكايات القسم؛ بطاقات الحكايات تحت تعرض الكل. */
-    var storyEntries = entries.length > PHOTO_MAX ? entries.slice(-PHOTO_MAX) : entries.slice();
+    var navLabels = navByLang[lang] || navByLang.ar;
+    var storyEntries = entries.slice();
     var extras = EXTRA_SECTION_PHOTOS[sectionId] || [];
     Promise.all([
       ensurePhotoStyles(),
@@ -132,17 +143,26 @@
       var storyPhotos = result[1], extraPhotos = result[2];
       var firsts = [], standalone = [], seconds = [];
       storyEntries.forEach(function (entry, storyIndex) {
-        (storyPhotos[storyIndex] || []).slice(0, 3).forEach(function (url, photoIndex) {
-          var story = entry.story;
-          var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
-          var tile = { order: storyIndex * 10 + photoIndex, src: url, story: story, href: validPath(path) ? root + path : '' };
+        var story = entry.story;
+        var path = validPath(story.path) ? story.path : ('stories/' + story.section + '/' + story.id + '/');
+        var href = validPath(path) ? root + path : '';
+        var urls = (storyPhotos[storyIndex] || []).slice(0, 3);
+        if (!urls.length) {
+          /* لا توجد صورة لهذه الحكاية: نعرض بطاقة بلونها بدل استبعادها. */
+          firsts.push({ order: storyIndex * 10, art: true, story: story, href: href });
+          return;
+        }
+        urls.forEach(function (url, photoIndex) {
+          var tile = { order: storyIndex * 10 + photoIndex, src: url, story: story, href: href };
           (photoIndex === 0 ? firsts : seconds).push(tile);
         });
       });
       extras.forEach(function (extra, index) {
         if (extraPhotos[index]) standalone.push({ order: 1000 + index, src: extraPhotos[index], title: extra.title, alt: extra.alt });
       });
-      var picked = firsts.concat(standalone, seconds).slice(0, PHOTO_MAX);
+      /* حكاية واحدة على الأقل لكل منشورة؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
+      var scrolling = firsts.length > MOSAIC_MAX;
+      var picked = scrolling ? firsts : firsts.concat(standalone, seconds).slice(0, MOSAIC_MAX);
       if (!picked.length) return;
       picked.sort(function (a, b) { return a.order - b.order; });
 
@@ -151,28 +171,50 @@
       var inner = node('div', 'kh-sp-inner');
       var title = node('h2', 'kh-sp-title', heading);
       title.id = 'khSpTitle';
-      var grid = node('ul', 'kh-sp-grid kh-sp-n' + picked.length);
+      var grid = node('ul', 'kh-sp-grid ' + (scrolling ? 'kh-sp-scroll' : 'kh-sp-n' + picked.length));
       picked.forEach(function (tile, index) {
         var item = node('li', 'kh-sp-item');
-        item.style.setProperty('--i', String(index));
+        item.style.setProperty('--i', String(Math.min(index, 8)));
         var link = tile.href ? node('a', 'kh-sp-tile') : node('div', 'kh-sp-tile');
         if (tile.href) link.href = tile.href;
         var label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
-        var image = node('img', '');
-        image.src = tile.src;
-        /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
-        image.alt = tile.story ? '' : (tile.alt || label);
-        image.decoding = 'async';
-        image.onerror = function () { item.style.visibility = 'hidden'; };
+        var visual;
+        if (tile.art) {
+          visual = node('span', 'kh-sp-art', Array.from(label)[0] || '•');
+          visual.setAttribute('aria-hidden', 'true');
+          visual.style.setProperty('--c', /^#[0-9a-f]{6}$/i.test(tile.story.color || '') ? tile.story.color : '#2c6f80');
+        } else {
+          visual = node('img', '');
+          visual.src = tile.src;
+          /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
+          visual.alt = tile.story ? '' : (tile.alt || label);
+          visual.decoding = 'async';
+          visual.onerror = function () { item.style.visibility = 'hidden'; };
+        }
         var caption = node('span', 'kh-sp-cap');
         caption.appendChild(node('strong', '', label));
         var person = tile.story ? localized(tile.story, 'person') : '';
         if (person && person !== label) caption.appendChild(node('small', '', person));
-        link.append(image, caption);
+        link.append(visual, caption);
         item.appendChild(link);
         grid.appendChild(item);
       });
       inner.append(title, grid);
+      if (scrolling) {
+        var rtl = document.documentElement.dir === 'rtl';
+        var nav = node('div', 'kh-sp-nav');
+        [[-1, navLabels[0], rtl ? '›' : '‹'], [1, navLabels[1], rtl ? '‹' : '›']].forEach(function (def) {
+          var button = node('button', '', def[2]);
+          button.type = 'button';
+          button.setAttribute('aria-label', def[1]);
+          button.addEventListener('click', function () {
+            var flip = getComputedStyle(grid).direction === 'rtl' ? -1 : 1;
+            grid.scrollBy({ left: def[0] * flip * grid.clientWidth * 0.8, behavior: 'smooth' });
+          });
+          nav.appendChild(button);
+        });
+        inner.appendChild(nav);
+      }
       section.appendChild(inner);
       mountPhotos(section);
       if ('IntersectionObserver' in window) {
