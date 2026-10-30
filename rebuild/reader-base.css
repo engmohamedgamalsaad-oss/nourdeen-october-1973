@@ -203,3 +203,122 @@ body[data-theme=light] .intro-copy h2 { color: var(--text); }
     transition: none !important;
   }
 }
+
+
+/* Theme contract: keep reader surfaces, controls and text in sync in both modes.
+   Section-specific --accent remains untouched so each story keeps its own identity. */
+body { color-scheme: dark; }
+body[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f5f1e8;
+  --panel: #fffdf8;
+  --line: #d8cdb9;
+  --text: #252b2e;
+  --muted: #59666b;
+  --kh-light-link: #145b66;
+  --kh-light-heading: color-mix(in srgb, var(--accent) 70%, #17252b);
+}
+body[data-theme="light"] header {
+  color: var(--text);
+  border-bottom-color: var(--line);
+  box-shadow: 0 5px 18px rgba(48, 43, 32, .08);
+}
+body[data-theme="light"] .brand,
+body[data-theme="light"] #title,
+body[data-theme="light"] .intro-copy h2 {
+  color: var(--text);
+  text-shadow: none;
+}
+body[data-theme="light"] #subtitle,
+body[data-theme="light"] #summary,
+body[data-theme="light"] #student,
+body[data-theme="light"] .block p,
+body[data-theme="light"] .block li,
+body[data-theme="light"] #quiz,
+body[data-theme="light"] #history-note,
+body[data-theme="light"] .intro-copy p,
+body[data-theme="light"] #gallery figcaption,
+body[data-theme="light"] figcaption,
+body[data-theme="light"] .reaction-count-line,
+body[data-theme="light"] .reactions-intro {
+  color: var(--text);
+}
+body[data-theme="light"] .section h2,
+body[data-theme="light"] .speaker,
+body[data-theme="light"] .kicker,
+body[data-theme="light"] .intro-kicker {
+  color: var(--kh-light-heading);
+}
+body[data-theme="light"] .hero,
+body[data-theme="light"] .section,
+body[data-theme="light"] .block,
+body[data-theme="light"] #gallery figure,
+body[data-theme="light"] #cover figure,
+body[data-theme="light"] .intro-card {
+  border-color: var(--line);
+}
+body[data-theme="light"] .hero,
+body[data-theme="light"] .section,
+body[data-theme="light"] .block,
+body[data-theme="light"] #gallery figure,
+body[data-theme="light"] .intro-card {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--accent) 4%, var(--panel)), var(--panel));
+}
+body[data-theme="light"] .block[data-speaker="karma"] {
+  background: linear-gradient(135deg, #fff6df, #fffdf8);
+  border-inline-start-color: #a87920;
+}
+body[data-theme="light"] .block[data-type="did_you_know"] {
+  background: linear-gradient(120deg, #fff3d6, #fffdf8);
+  border-color: #c7a65a;
+}
+body[data-theme="light"] .langs button,
+body[data-theme="light"] #theme-toggle,
+body[data-theme="light"] .story-actions button,
+body[data-theme="light"] .story-actions a,
+body[data-theme="light"] .reaction-btn,
+body[data-theme="light"] #quiz .options button {
+  background: var(--panel);
+  color: var(--text);
+  border-color: var(--line);
+}
+body[data-theme="light"] .langs button[aria-pressed="true"],
+body[data-theme="light"] button[aria-pressed="true"],
+body[data-theme="light"] .primary,
+body[data-theme="light"] .start-story-btn {
+  background: var(--accent);
+  color: #19160e;
+  border-color: color-mix(in srgb, var(--accent) 78%, #5a451e);
+}
+body[data-theme="light"] .sources a,
+body[data-theme="light"] #map-section a {
+  color: var(--kh-light-link);
+  text-decoration-thickness: .08em;
+  text-underline-offset: .16em;
+}
+body[data-theme="light"] #quiz .options button.correct {
+  background: #e4f4e9;
+  color: #185b35;
+  border-color: #91c9a5;
+}
+body[data-theme="light"] #quiz .options button.wrong {
+  background: #fff0ed;
+  color: #8b3027;
+  border-color: #dfa39a;
+}
+body[data-theme="light"] .status {
+  background: #fff3d7;
+  color: #493313;
+  border-color: #c9a45d;
+}
+body[data-theme="light"] .story-intro-modal {
+  background: rgba(235, 243, 241, .94);
+}
+body[data-theme="light"] .image-lightbox {
+  background: rgba(20, 29, 34, .94);
+  color: #fff;
+}
+body[data-theme="light"] button:disabled,
+body[data-theme="light"] .story-actions a[aria-disabled="true"] {
+  opacity: .68;
+}
