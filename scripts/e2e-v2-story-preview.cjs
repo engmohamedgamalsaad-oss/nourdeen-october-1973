@@ -106,6 +106,34 @@ async function main() {
   assert.equal(await page.locator('body').getAttribute('data-theme'), 'light', 'theme toggle should switch to light mode');
   assert.equal(await page.locator('#sources a').count(), story.sources.length, 'all sources should render');
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
+  const lightPalette = await page.evaluate(() => {
+    const s = getComputedStyle(document.body);
+    return {
+      theme: document.body.dataset.theme,
+      scheme: s.colorScheme,
+      text: s.getPropertyValue('--text').trim(),
+      panel: s.getPropertyValue('--panel').trim(),
+      muted: s.getPropertyValue('--muted').trim(),
+      title: getComputedStyle(document.querySelector('#title')).color,
+      link: getComputedStyle(document.querySelector('#sources a')).color
+    };
+  });
+  assert.equal(lightPalette.theme, 'light');
+  assert.equal(lightPalette.scheme, 'light', 'native controls must follow light mode');
+  assert.notEqual(lightPalette.text, '#f6f0e4', 'light mode must not retain dark-mode text tokens');
+  assert.notEqual(lightPalette.panel, '#17232e', 'light mode must not retain dark-mode surface tokens');
+  assert.notEqual(lightPalette.link, 'rgb(227, 189, 120)', 'light-mode links must not retain the gold-on-dark link color');
+  await page.locator('#theme-toggle').click();
+  assert.equal(await page.locator('body').getAttribute('data-theme'), 'dark', 'theme toggle should switch back to dark mode');
+  const darkPalette = await page.evaluate(() => {
+    const s = getComputedStyle(document.body);
+    return { scheme: s.colorScheme, text: s.getPropertyValue('--text').trim(), panel: s.getPropertyValue('--panel').trim() };
+  });
+  assert.equal(darkPalette.scheme, 'dark', 'native controls must follow dark mode');
+  assert.notEqual(darkPalette.text, lightPalette.text, 'text palette must change when returning to dark mode');
+  assert.notEqual(darkPalette.panel, lightPalette.panel, 'surface palette must change when returning to dark mode');
+  await page.locator('#theme-toggle').click();
+  assert.equal(await page.locator('body').getAttribute('data-theme'), 'light', 'light mode should remain selectable after round trip');
   await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
 
   // Exercise the actual read-only package reviewer used by the V2 admin draft path.
