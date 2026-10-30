@@ -9,7 +9,8 @@ const index = JSON.parse(fs.readFileSync(path.join(root, 'stories/index.json'), 
 for (const sample of [
   { id: '001', section: 'october', person: 'نبيل عبد الوهاب' },
   { id: '009', section: 'people', person: 'نجيب محفوظ' },
-  { id: '010', section: 'women', person: 'سميرة موسى' }
+  { id: '010', section: 'women', person: 'سميرة موسى' },
+  { id: '011', section: 'islamic', person: 'عمرو بن العاص' }
 ]) {
   test('production story ' + sample.id + ' stays in the current published layout (not treated as a V1 AI package)', () => {
     const dir = path.join(root, 'stories', sample.section, sample.id);
@@ -34,7 +35,7 @@ for (const sample of [
     }
     const html = fs.readFileSync(htmlPath, 'utf8');
     assert.match(html, /<html[^>]*lang="ar"/i, 'reader page starts in Arabic');
-    if (['009', '010'].includes(sample.id)) {
+    if (['009', '010', '011'].includes(sample.id)) {
       const v2Path = path.join(dir, 'data.v2.json');
       assert.ok(fs.existsSync(v2Path), 'migrated story has a V2 package');
       const v2 = JSON.parse(fs.readFileSync(v2Path, 'utf8'));
