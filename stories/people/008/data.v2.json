@@ -29,6 +29,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "ليه بعض مسرحيات توفيق الحكيم بنسميها مسرحًا ذهنيًا؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لأن بعض مسرحياته تهتم بالأفكار والأسئلة والحوار بين الشخصيات أكثر من اعتمادها على الحركة الكثيرة فوق خشبة المسرح. القارئ أو المشاهد يتخيل المواقف ويفكر في المعنى، كأنه يشارك في بناء العرض بعقله."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "بداية الحكاية",
           "text": "تخيّل أن تدخل مسرحًا، فتجد أمامك شخصيات تتحاور، وأحداثًا تدفعك إلى التفكير في الحياة والاختيارات التي يصنعها الإنسان. هذا أحد العوالم التي فتحها الأديب المصري توفيق الحكيم، الذي أصبح من أبرز رواد المسرح العربي الحديث، وعُرف باهتمامه بالأفكار الفلسفية والاجتماعية داخل أعماله."
@@ -97,6 +107,16 @@
           "speaker": "narrator",
           "heading": "A note from Malika",
           "text": "I used to think that a play had to be full of movement and lots of talking on stage. But I discovered that some plays make us think, imagine, and ask important questions! Tawfiq al-Hakim used theatre to explore ideas about people and society. I was especially interested to learn that his experience of life and law helped him write about people and their problems. Literature is not just stories we hear; it can also help us understand the world!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Why are some of Tawfiq al-Hakim’s plays called intellectual theatre?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Because some of his plays focus on ideas, questions, and conversations between characters more than on constant physical action on stage. Readers and viewers imagine the situations and think about their meaning, almost as if they help build the performance in their minds."
         },
         {
           "type": "paragraph",
@@ -171,6 +191,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Pourquoi certaines pièces de Tawfiq al-Hakim sont-elles qualifiées de théâtre intellectuel ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Parce que certaines de ses pièces privilégient les idées, les questions et les échanges entre personnages plutôt que l’action physique sur scène. Le lecteur ou le spectateur imagine les situations et réfléchit à leur sens, comme s’il participait à la création du spectacle par la pensée."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "Le début du récit",
           "text": "Imagine entrer dans un théâtre et voir des personnages dialoguer tandis que les événements t’amènent à réfléchir à la vie et aux choix des êtres humains. C’est l’un des univers que l’écrivain égyptien Tawfiq al-Hakim a ouverts aux lecteurs. Il est devenu l’un des grands pionniers du théâtre arabe moderne, et ses œuvres sont connues pour leurs idées philosophiques et leurs questions sociales."
@@ -242,6 +272,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Perché alcune opere di Tawfiq al-Hakim sono chiamate teatro intellettuale?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Perché alcune sue opere danno più spazio alle idee, alle domande e ai dialoghi tra i personaggi che all’azione fisica sul palcoscenico. Il lettore o lo spettatore immagina le situazioni e ne riflette sul significato, quasi partecipando alla costruzione dello spettacolo con la mente."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "L’inizio della storia",
           "text": "Immagina di entrare in un teatro e vedere personaggi che dialogano, mentre gli eventi ti spingono a riflettere sulla vita e sulle scelte delle persone. Questo è uno dei mondi aperti dallo scrittore egiziano Tawfiq al-Hakim, diventato uno dei principali pionieri del teatro arabo moderno. Le sue opere sono note per le idee filosofiche e le questioni sociali che affrontano."
@@ -310,6 +350,16 @@
           "speaker": "narrator",
           "heading": "Eine Notiz von Malika",
           "text": "Ich dachte früher, ein Theaterstück müsse unbedingt viele Bewegungen und viele Worte auf der Bühne haben. Aber ich habe entdeckt, dass uns manche Stücke zum Nachdenken, Vorstellen und Stellen wichtiger Fragen bringen! Tawfiq al-Hakim nutzte das Theater, um Ideen über Menschen und die Gesellschaft zu erkunden. Besonders interessant fand ich, dass ihm seine Lebens- und Rechtserfahrung half, über Menschen und ihre Probleme zu schreiben. Literatur besteht nicht nur aus Geschichten, die wir hören; sie kann uns auch helfen, die Welt zu verstehen!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Warum nennt man einige Stücke von Tawfiq al-Hakim ein geistiges Theater?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Weil einige seiner Stücke Ideen, Fragen und Gespräche zwischen den Figuren stärker betonen als viel Bewegung auf der Bühne. Lesende und Zuschauende stellen sich die Situationen vor und denken über ihre Bedeutung nach – als würden sie das Stück in Gedanken mitgestalten."
         },
         {
           "type": "paragraph",
