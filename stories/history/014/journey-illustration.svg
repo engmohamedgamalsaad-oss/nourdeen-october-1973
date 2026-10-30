@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="760" viewBox="0 0 1000 760" role="img" aria-labelledby="title desc">
+<title id="title">An Abbasid writer's journey</title>
+<desc id="desc">Original project illustration of an open manuscript, reed pen, ink pot and a route connecting historic cities. It is not an archival artifact or a portrait.</desc>
+<defs>
+ <linearGradient id="sky" x2="1" y2="1"><stop stop-color="#14232e"/><stop offset="1" stop-color="#405b68"/></linearGradient>
+ <linearGradient id="paper" x2="0" y2="1"><stop stop-color="#fff0c9"/><stop offset="1" stop-color="#d9bd88"/></linearGradient>
+ <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+</defs>
+<rect width="1000" height="760" rx="34" fill="url(#sky)"/>
+<circle cx="800" cy="150" r="210" fill="#d9b978" opacity=".12"/>
+<path d="M70 585 C210 470 330 650 475 535 S760 430 925 535" fill="none" stroke="#8bd4d8" stroke-width="5" stroke-dasharray="12 15" opacity=".8"/>
+<g fill="#e7d4a7" stroke="#8bd4d8" stroke-width="3">
+ <circle cx="140" cy="540" r="10"/><circle cx="365" cy="565" r="10"/><circle cx="600" cy="485" r="10"/><circle cx="860" cy="500" r="10"/>
+</g>
+<ellipse cx="505" cy="570" rx="360" ry="70" fill="#07131a" opacity=".45" filter="url(#shadow)"/>
+<g transform="translate(180 190)">
+ <path d="M0 85 Q155 30 320 90 V410 Q155 350 0 400Z" fill="url(#paper)" stroke="#c5a36a" stroke-width="12"/>
+ <path d="M320 90 Q485 30 640 85 V400 Q485 350 320 410Z" fill="#f7e7bf" stroke="#c5a36a" stroke-width="12"/>
+ <path d="M320 90 V410" stroke="#98774d" stroke-width="9"/>
+ <g stroke="#8a7657" stroke-width="5" opacity=".65">
+  <path d="M38 155 Q165 135 275 158 M38 205 Q165 185 275 208 M38 255 Q165 235 275 258 M38 305 Q165 285 275 308 M38 355 Q165 335 275 358"/>
+  <path d="M365 155 Q485 135 602 158 M365 205 Q485 185 602 208 M365 255 Q485 235 602 258 M365 305 Q485 285 602 308 M365 355 Q485 335 602 358"/>
+ </g>
+ <path d="M65 115 Q150 90 245 115 M390 115 Q485 90 575 115" fill="none" stroke="#b58d54" stroke-width="4"/>
+</g>
+<g transform="translate(760 170) rotate(18)">
+ <path d="M0 0 Q35 30 52 220 L25 270 Q8 160 0 0Z" fill="#d9bd88" stroke="#f4dfb1" stroke-width="5"/>
+ <path d="M25 270 L36 310 L52 220Z" fill="#b48b52"/>
+</g>
+<g transform="translate(785 465)">
+ <path d="M0 20 Q35 0 70 20 L62 95 Q35 112 8 95Z" fill="#17232b" stroke="#d8b779" stroke-width="6"/>
+ <path d="M8 20 Q35 34 62 20" fill="none" stroke="#d8b779" stroke-width="5"/>
+</g>
+<path d="M80 690H920" stroke="#d8b779" stroke-width="3" opacity=".7"/>
+<text x="500" y="720" text-anchor="middle" fill="#f3dfb4" font-family="serif" font-size="22" letter-spacing="3">LETTERS • LANGUAGE • JOURNEYS</text>
+</svg>

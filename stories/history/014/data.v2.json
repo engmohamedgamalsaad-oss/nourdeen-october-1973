@@ -19,7 +19,7 @@
       "figure_name": "أبو بكر محمد بن العباس الخوارزمي",
       "person": "أبو بكر محمد بن العباس الخوارزمي",
       "history_note": "تتناول هذه الحكاية أبا بكر محمد بن العباس الخوارزمي، الشاعر والكاتب المعروف في المصادر الأدبية. تعرض جامعة ييل كتاب رسائل أبي بكر الخوارزمي وتعرّف مؤلفه بأنه أديب وشاعر وعالم بالأنساب عاش تقريبًا بين 934 أو 935 و993 أو 994م. لا ينبغي الخلط بينه وبين محمد بن موسى الخوارزمي، عالم الرياضيات المعروف.\n\nتختلف المراجع في تحويل السنوات الهجرية إلى الميلادية وفي بعض تفاصيل الأنساب وتسلسل الرحلات؛ لذلك عُرضت التواريخ الميلادية على أنها تقريبية. تفاصيل علاقته بوالي سجستان وسجنه تعتمد على الروايات الواردة في كتب التراجم، ولم تُتحقق هنا بصورة مستقلة من شاهد معاصر.",
-      "images_note": "الصفحتان المصورتان من طبعة 1880 اللتان ظهرتا في الصفحة القديمة لم تُدرجا كصور في القالب الموحد؛ لأن GetArchive وسيط، ولا يكفي اسمه أو سجله وحده لإثبات مصدر النسخة الرقمية أو حقوق إعادة استخدامها. أبقينا رابطَي السجلين في المصادر للمراجعة. الغلاف والرسم التوضيحي المعروضان أصلان من المشروع، وليسا صورة شخصية تاريخية.",
+      "images_note": "الغلاف والرسمان المعروضان أعمال أصلية أُعدّت لمشروع خالدون، وليست صورًا شخصية تاريخية أو مخطوطات أثرية. رابطا سجلي طبعة رسائل أبي بكر الخوارزمي لعام 1880 محفوظان في المصادر للمراجعة، ولم نستخدم صورًا أرشيفية قبل التحقق من مصدرها وحقوقها.",
       "blocks": [
         {
           "type": "paragraph",
@@ -102,7 +102,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "This story concerns Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, a poet and writer known from Arabic literary sources. Yale University Library describes a collection of his letters and identifies him as a literary scholar, poet, and genealogist who lived around 934 or 935 to 993 or 994 CE. He must not be confused with Muhammad ibn Musa al-Khwarizmi, the famous mathematician.\n\nReferences differ in converting Hijri dates to Gregorian dates and in some details about ancestry and travel chronology. Gregorian dates are therefore approximate. The account of his relationship with the governor of Sijistan and his imprisonment comes from biographical narratives and has not been independently verified here through a contemporary witness.",
-      "images_note": "The two scans from the 1880 edition shown on the old page are not embedded in the unified reader because GetArchive is an intermediary; its record alone does not establish the digital copy’s institutional provenance or reuse rights. Both record links remain in the sources for verification. The displayed cover and illustration are original project artwork, not historical portraits.",
+      "images_note": "The displayed cover and illustrations are original Khaledoon project artwork, not historical portraits or archival manuscript scans. Links to the two records for the 1880 edition remain in the sources; no archival images were used without verified provenance and reuse rights.",
       "blocks": [
         {
           "type": "paragraph",
@@ -185,7 +185,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Cette histoire porte sur Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi, poète et écrivain connu par les sources littéraires arabes. La bibliothèque de l'université Yale décrit un recueil de ses lettres et le présente comme un homme de lettres, poète et spécialiste de la généalogie ayant vécu vers 934 ou 935–993 ou 994. Il ne faut pas le confondre avec Muhammad ibn Musa al-Khwarizmi, le célèbre mathématicien.\n\nLes références diffèrent dans la conversion des dates de l'Hégire en dates grégoriennes et dans certains détails concernant les origines familiales et la chronologie des voyages. Les dates grégoriennes sont donc approximatives. Le récit de ses relations avec le gouverneur du Sijistan et de son emprisonnement provient de textes biographiques et n'a pas été vérifié indépendamment à partir d'un témoin contemporain.",
-      "images_note": "Les deux scans de l’édition de 1880 visibles sur l’ancienne page ne sont pas intégrés au lecteur unifié, car GetArchive est un intermédiaire et sa notice seule ne prouve ni la provenance institutionnelle de la copie numérique ni ses droits de réutilisation. Les deux liens restent dans les sources pour vérification. La couverture et l’illustration affichées sont des créations originales du projet, et non des portraits historiques.",
+      "images_note": "La couverture et les illustrations affichées sont des créations originales du projet Khaledoon, et non des portraits historiques ni des scans de manuscrits anciens. Les liens vers les deux notices de l’édition de 1880 restent dans les sources ; aucune image d’archives n’a été utilisée sans provenance et droits de réutilisation vérifiés.",
       "blocks": [
         {
           "type": "paragraph",
@@ -268,7 +268,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Questa storia riguarda Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, poeta e scrittore noto attraverso le fonti letterarie arabe. La biblioteca dell'Università di Yale descrive una raccolta delle sue lettere e lo identifica come letterato, poeta e studioso di genealogia vissuto approssimativamente tra il 934 o 935 e il 993 o 994. Non va confuso con Muhammad ibn Musa al-Khwarizmi, il famoso matematico.\n\nLe fonti differiscono nella conversione delle date dell'Egira in date gregoriane e in alcuni dettagli sulle origini familiari e sulla cronologia dei viaggi. Le date gregoriane sono quindi approssimative. I racconti sui rapporti con il governatore del Sijistan e sulla prigionia derivano dalla letteratura biografica e non sono stati verificati indipendentemente attraverso testimonianze contemporanee.",
-      "images_note": "Le due scansioni dell’edizione del 1880 mostrate nella vecchia pagina non sono incorporate nel lettore unificato perché GetArchive è un intermediario; la sua scheda da sola non dimostra la provenienza istituzionale della copia digitale né i diritti di riutilizzo. Entrambi i link restano nelle fonti per la verifica. Copertina e illustrazione visualizzate sono opere originali del progetto, non ritratti storici.",
+      "images_note": "La copertina e le illustrazioni mostrate sono opere originali del progetto Khaledoon, non ritratti storici né scansioni di manoscritti d'archivio. I collegamenti ai due record dell'edizione del 1880 restano nelle fonti; non sono state usate immagini d'archivio senza provenienza e diritti di riutilizzo verificati.",
       "blocks": [
         {
           "type": "paragraph",
@@ -351,7 +351,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Diese Geschichte handelt von Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi, einem Dichter und Schriftsteller, der aus arabischen literarischen Quellen bekannt ist. Die Bibliothek der Yale University beschreibt eine Sammlung seiner Briefe und bezeichnet ihn als Literaten, Dichter und Genealogen, der ungefähr von 934 oder 935 bis 993 oder 994 lebte. Er darf nicht mit Muhammad ibn Musa al-Chwarizmi, dem berühmten Mathematiker, verwechselt werden.\n\nDie Quellen unterscheiden sich bei der Umrechnung der Hidschra-Jahre in den gregorianischen Kalender und bei einigen Angaben zur Familienherkunft und zur Reihenfolge der Reisen. Gregorianische Daten sind deshalb Näherungswerte. Die Berichte über seine Beziehungen zum Statthalter von Sidschistan und seine Gefangenschaft stammen aus biografischer Literatur und wurden hier nicht unabhängig anhand zeitgenössischer Zeugnisse überprüft.",
-      "images_note": "Die zwei Scans der Ausgabe von 1880, die auf der alten Seite gezeigt wurden, sind im einheitlichen Reader nicht eingebettet, da GetArchive eine Zwischenquelle ist und der Datensatz allein weder die institutionelle Herkunft der digitalen Kopie noch die Wiederverwendungsrechte belegt. Beide Links bleiben zur Überprüfung in den Quellen erhalten. Titelbild und Illustration sind Originalgrafiken des Projekts, keine historischen Porträts.",
+      "images_note": "Das Titelbild und die gezeigten Illustrationen sind Originalarbeiten des Khaledoon-Projekts, keine historischen Porträts oder Archivscans von Manuskripten. Die Links zu den beiden Datensätzen der Ausgabe von 1880 bleiben in den Quellen; Archivbilder wurden ohne verifizierte Herkunft und Nutzungsrechte nicht verwendet.",
       "blocks": [
         {
           "type": "paragraph",
@@ -502,6 +502,46 @@
           "caption": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi.",
           "source_name": "Khaledoon — original illustration",
           "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi."
+        }
+      }
+    },
+    {
+      "id": "khwarizmi-journey-illustration",
+      "path": "stories/history/014/journey-illustration.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/history/014/journey-illustration.svg",
+      "rights": "Original illustration created for the Khaledoon project. It depicts a general literary journey and manuscript setting; it is not an archival object, historical portrait, or documentary reconstruction.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم أصلي لكتاب ورسالة وريشة وخط رحلة بين المدن",
+          "caption": "رسم توضيحي أصلي يرمز إلى عالم الرسائل ورحلات الأدباء؛ وليس مخطوطًا أثريًا أو صورة تاريخية.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+          "rights": "رسم أصلي لمشروع خالدون؛ لا يمثل قطعة أثرية أو صورة تاريخية موثقة."
+        },
+        "en": {
+          "alt": "Original illustration of a book, letter, reed pen and route between cities",
+          "caption": "Original illustration evoking literary correspondence and writers' journeys; not an ancient manuscript or historical photograph.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original artwork for the Khaledoon project; not an artifact or verified historical image."
+        },
+        "fr": {
+          "alt": "Illustration originale d’un livre, d’une lettre, d’un calame et d’un itinéraire entre villes",
+          "caption": "Illustration originale évoquant la correspondance littéraire et les voyages des écrivains ; ce n’est ni un manuscrit ancien ni une photographie historique.",
+          "source_name": "Khaledoon — illustration originale",
+          "rights": "Création originale du projet Khaledoon ; ce n’est pas un artefact ni une image historique vérifiée."
+        },
+        "it": {
+          "alt": "Illustrazione originale di un libro, una lettera, una penna di canna e un percorso tra città",
+          "caption": "Illustrazione originale che richiama la corrispondenza letteraria e i viaggi degli scrittori; non è un manoscritto antico né una fotografia storica.",
+          "source_name": "Khaledoon — illustrazione originale",
+          "rights": "Opera originale del progetto Khaledoon; non è un reperto né un'immagine storica verificata."
+        },
+        "de": {
+          "alt": "Originalillustration eines Buches, Briefes, Schreibrohrs und einer Reiseroute zwischen Städten",
+          "caption": "Originalillustration zu literarischer Korrespondenz und den Reisen von Schriftstellern; kein altes Manuskript und kein historisches Foto.",
+          "source_name": "Khaledoon — Originalillustration",
+          "rights": "Originalkunstwerk des Khaledoon-Projekts; kein Artefakt und kein verifiziertes historisches Bild."
         }
       }
     }
