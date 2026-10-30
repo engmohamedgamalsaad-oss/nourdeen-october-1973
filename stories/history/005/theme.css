@@ -672,3 +672,125 @@ html[data-theme="light"] body[data-story-slug="005"] #cover figure,html[data-the
 html[data-theme="light"] body[data-story-slug="005"] .intro-card{background:linear-gradient(135deg,#fff,#f7f2fb)!important;border-color:#d9cbe9!important}
 html[data-theme="light"] body[data-story-slug="005"] .intro-copy h2{color:#55377f!important}
 html[data-theme="light"] body[data-story-slug="005"] .intro-copy p{color:#5b4b68!important}
+
+
+/* Ibn Sina identity correction: preserve Mosharafa reader layout, restore the story's
+   own violet-and-gold palette instead of inheriting Mosharafa's teal surfaces. */
+:root{--accent:#d5b7ff;--gold:#e3bd78;--bg:#171326;--panel:#211a35;--line:#57446f;--text:#f8f4ff;--muted:#d4c9e5}
+header{background:rgba(13,8,25,.96);border-bottom-color:#d5b7ff66}
+.hero{background:radial-gradient(ellipse at 12% 30%,#68458a80,transparent 50%),linear-gradient(125deg,#21152f 0%,#171326 55%,#100d1b 100%);border-color:#d5b7ff66}
+.hero:before{background:repeating-linear-gradient(135deg,transparent 0 34px,#d5b7ff12 35px 36px),radial-gradient(circle at 80% 20%,#e3bd78 0 1px,transparent 2px)}
+#section-name{background:linear-gradient(110deg,#f0dcaa,#c79a55);color:#24172d}
+#title{color:#fff8ff}
+#subtitle{color:#e7d8f4}
+#summary{color:#eee5f6}
+#cover figure{border-color:#e3bd78a8;background:linear-gradient(145deg,#49345f,#171326)}
+#cover figure:before{border-color:#e3bd7840}
+#cover figcaption{color:#e7d9f1}
+#student{color:#e5d5ef}
+.story-actions{border-top-color:#d5b7ff55}
+.story-actions button,.story-actions a{background:#30213f;border-color:#9b7abb;color:#fff7ff}
+.story-actions #print-story{background:linear-gradient(120deg,#f0d9a2,#c79a55);color:#26192d;border-color:#e3bd78}
+.section{border-color:#d5b7ff55;background:linear-gradient(145deg,#241a35f5,#171326f7)}
+.section h2{color:#e5cbff}
+.section h2:after{background:linear-gradient(90deg,#e3bd78a8,transparent)}
+.block{border-color:#d5b7ff4d;background:linear-gradient(135deg,#302342e8,#1b1529f5)}
+.block[data-speaker=narrator]{border-inline-start-color:#a98acb}
+.block[data-speaker=karma]{border-inline-start-color:#e3bd78;background:linear-gradient(135deg,#55412666,#241a35)}
+.block[data-type=did_you_know]{border-color:#e3bd788a;border-inline-start-color:#e3bd78;background:linear-gradient(120deg,#55412699,#241a35)}
+.block[data-type=did_you_know]:before{background:#e3bd78;color:#24172d}
+.speaker{color:#e5cbff}
+.block[data-speaker=karma] .speaker{color:#f1d18d}
+.block p{color:#f0e9f7}
+#gallery figure{border-color:#d5b7ff66;background:linear-gradient(145deg,#302342,#1b1529)}
+#gallery figcaption{color:#e2d4ed}
+#map-section{background:radial-gradient(ellipse at 85% 0%,#68458a66,transparent 60%),linear-gradient(145deg,#241a35,#171326)}
+#map-section a,.sources a{color:#e5cbff}
+#quiz .q{border-bottom-color:#d5b7ff55}
+#quiz .options button{background:#30213f;border-color:#8d6bad;color:#fff7ff}
+#quiz .options button:hover{background:#49345f}
+#quiz .options button.correct{background:#244b38;border-color:#75cba0}
+#quiz .options button.wrong{background:#512b35;border-color:#df9187}
+#quiz .explain{color:#f0e9f7;background:#302342;border-inline-start-color:#e3bd78}
+.sources li{background:#ffffff08}
+#history-note{border-inline-start-color:#e3bd78;color:#e2d4ed}
+.story-intro-modal{background:rgba(9,5,17,.92)}
+.intro-card{border-color:#d5b7ffb0;background:linear-gradient(135deg,#302342,#171326 78%)}
+.intro-art{background:radial-gradient(circle at 50% 45%,#49345f,#100d1b 75%)}
+.intro-copy h2{color:#e5cbff}
+.intro-copy p{color:#e2d4ed}
+.start-story-btn{background:linear-gradient(110deg,#f0d9a2,#c79a55);color:#26192d}
+.image-lightbox{background:rgba(9,5,17,.97)}
+html[data-theme=light] header{background:#fffdf8ed;border-bottom-color:#d7c2eb}
+html[data-theme=light] .hero{background:radial-gradient(ellipse at 12% 30%,#eadcf6,transparent 50%),linear-gradient(125deg,#fffaff,#f7f0fb 70%);border-color:#d7c2eb}
+html[data-theme=light] #section-name{background:linear-gradient(110deg,#eadcf6,#cdb4e3);color:#342343}
+html[data-theme=light] #title{color:#342343}
+html[data-theme=light] #subtitle,html[data-theme=light] #summary,html[data-theme=light] #student{color:#554568}
+html[data-theme=light] #cover figure{background:linear-gradient(145deg,#eadcf6,#fffdf8);border-color:#d8c3e9}
+html[data-theme=light] .section{background:linear-gradient(145deg,#fffdfb,#f8f2fa);border-color:#e0d3e9}
+html[data-theme=light] .section h2{color:#674a82}
+html[data-theme=light] .block,html[data-theme=light] .block[data-speaker=narrator]{background:linear-gradient(135deg,#fff,#faf6fc);border-color:#e4d9eb;color:#342b3b}
+html[data-theme=light] .block[data-speaker=karma]{background:linear-gradient(135deg,#fff5dc,#fbf7fc);border-inline-start-color:#bb8b2e}
+html[data-theme=light] .block[data-type=did_you_know]{background:linear-gradient(120deg,#fff4d5,#fbf7fc);border-color:#dfc47e}
+html[data-theme=light] .block p{color:#3f3448}
+html[data-theme=light] .speaker{color:#674a82}
+html[data-theme=light] .block[data-speaker=karma] .speaker{color:#8b651c}
+html[data-theme=light] #gallery figure{background:#fff;border-color:#e0d3e9}
+html[data-theme=light] #gallery figcaption,html[data-theme=light] figcaption{color:#554568}
+html[data-theme=light] #map-section{background:linear-gradient(145deg,#f5eff9,#fffdf8)}
+
+
+/* Final scoped overrides: outrank the legacy Mosharafa-derived selectors on story 005. */
+body[data-story-slug="005"] header{background:rgba(13,8,25,.96)!important;border-bottom-color:#d5b7ff66!important}
+body[data-story-slug="005"] .hero{background:radial-gradient(ellipse at 12% 30%,#68458a80,transparent 50%),linear-gradient(125deg,#21152f 0%,#171326 55%,#100d1b 100%)!important;border-color:#d5b7ff66!important}
+body[data-story-slug="005"] .hero:before{background:repeating-linear-gradient(135deg,transparent 0 34px,#d5b7ff12 35px 36px),radial-gradient(circle at 80% 20%,#e3bd78 0 1px,transparent 2px)!important}
+body[data-story-slug="005"] #section-name{background:linear-gradient(110deg,#f0dcaa,#c79a55)!important;color:#24172d!important}
+body[data-story-slug="005"] #title{color:#fff8ff!important}
+body[data-story-slug="005"] #subtitle{color:#e7d8f4!important}
+body[data-story-slug="005"] #summary{color:#eee5f6!important}
+body[data-story-slug="005"] #cover figure{border-color:#e3bd78a8!important;background:linear-gradient(145deg,#49345f,#171326)!important}
+body[data-story-slug="005"] #cover figure:before{border-color:#e3bd7840!important}
+body[data-story-slug="005"] #cover figcaption,body[data-story-slug="005"] #gallery figcaption{color:#e7d9f1!important}
+body[data-story-slug="005"] #student{color:#e5d5ef!important}
+body[data-story-slug="005"] .story-actions{border-top-color:#d5b7ff55!important}
+body[data-story-slug="005"] .story-actions button,body[data-story-slug="005"] .story-actions a{background:#30213f!important;border-color:#9b7abb!important;color:#fff7ff!important}
+body[data-story-slug="005"] .story-actions #print-story,body[data-story-slug="005"] .start-story-btn,body[data-story-slug="005"] #quiz-start{background:linear-gradient(110deg,#f0d9a2,#c79a55)!important;color:#26192d!important;border-color:#e3bd78!important}
+body[data-story-slug="005"] .section,body[data-story-slug="005"] #quiz-section,body[data-story-slug="005"] #map-section,body[data-story-slug="005"] .reactions-section,body[data-story-slug="005"] .sources{border-color:#d5b7ff55!important;background:linear-gradient(145deg,#241a35f5,#171326f7)!important}
+body[data-story-slug="005"] .section h2,body[data-story-slug="005"] .reactions-title{color:#e5cbff!important}
+body[data-story-slug="005"] .section h2:after{background:linear-gradient(90deg,#e3bd78a8,transparent)!important}
+body[data-story-slug="005"] #blocks .block{border-color:#d5b7ff4d!important;background:linear-gradient(135deg,#302342e8,#1b1529f5)!important}
+body[data-story-slug="005"] #blocks .block[data-speaker="narrator"]{border-inline-start-color:#a98acb!important}
+body[data-story-slug="005"] #blocks .block[data-speaker="karma"]{border-inline-start-color:#e3bd78!important;background:linear-gradient(135deg,#55412666,#241a35)!important}
+body[data-story-slug="005"] #blocks .speaker{color:#e5cbff!important}
+body[data-story-slug="005"] #blocks .block[data-speaker="karma"] .speaker{color:#f1d18d!important}
+body[data-story-slug="005"] #blocks .block p{color:#f0e9f7!important}
+body[data-story-slug="005"] #gallery figure{border-color:#d5b7ff66!important;background:linear-gradient(145deg,#302342,#1b1529)!important}
+body[data-story-slug="005"] #map-section a,body[data-story-slug="005"] .sources a{color:#e5cbff!important}
+body[data-story-slug="005"] #quiz .q{border-bottom-color:#d5b7ff55!important}
+body[data-story-slug="005"] #quiz .options button{background:#30213f!important;border-color:#8d6bad!important;color:#fff7ff!important}
+body[data-story-slug="005"] #quiz .options button:hover{background:#49345f!important}
+body[data-story-slug="005"] #quiz .explain,body[data-story-slug="005"] #history-note{color:#f0e9f7!important;background:#302342!important;border-inline-start-color:#e3bd78!important}
+body[data-story-slug="005"] .sources li{background:#ffffff08!important}
+body[data-story-slug="005"] .story-intro-modal{background:rgba(9,5,17,.92)!important}
+body[data-story-slug="005"] .intro-card{border-color:#d5b7ffb0!important;background:linear-gradient(135deg,#302342,#171326 78%)!important}
+body[data-story-slug="005"] .intro-art{background:radial-gradient(circle at 50% 45%,#49345f,#100d1b 75%)!important}
+body[data-story-slug="005"] .intro-copy h2{color:#e5cbff!important}
+body[data-story-slug="005"] .intro-copy p{color:#e2d4ed!important}
+body[data-story-slug="005"] .image-lightbox{background:rgba(9,5,17,.97)!important}
+
+html[data-theme="light"] body[data-story-slug="005"] header{background:#fffdf8ed!important;border-bottom-color:#d7c2eb!important}
+html[data-theme="light"] body[data-story-slug="005"] .hero{background:radial-gradient(ellipse at 12% 30%,#eadcf6,transparent 50%),linear-gradient(125deg,#fffaff,#f7f0fb 70%)!important;border-color:#d7c2eb!important}
+html[data-theme="light"] body[data-story-slug="005"] #section-name{background:linear-gradient(110deg,#eadcf6,#cdb4e3)!important;color:#342343!important}
+html[data-theme="light"] body[data-story-slug="005"] #title{color:#342343!important}
+html[data-theme="light"] body[data-story-slug="005"] #subtitle,html[data-theme="light"] body[data-story-slug="005"] #summary,html[data-theme="light"] body[data-story-slug="005"] #student{color:#554568!important}
+html[data-theme="light"] body[data-story-slug="005"] #cover figure,html[data-theme="light"] body[data-story-slug="005"] #gallery figure{background:#fff!important;border-color:#e0d3e9!important}
+html[data-theme="light"] body[data-story-slug="005"] .section,html[data-theme="light"] body[data-story-slug="005"] #quiz-section,html[data-theme="light"] body[data-story-slug="005"] #map-section,html[data-theme="light"] body[data-story-slug="005"] .reactions-section,html[data-theme="light"] body[data-story-slug="005"] .sources{background:linear-gradient(145deg,#fffdfb,#f8f2fa)!important;border-color:#e0d3e9!important;color:#40334f!important}
+html[data-theme="light"] body[data-story-slug="005"] .section h2,html[data-theme="light"] body[data-story-slug="005"] .reactions-title{color:#674a82!important}
+html[data-theme="light"] body[data-story-slug="005"] #blocks .block{background:linear-gradient(135deg,#fff,#faf6fc)!important;border-color:#e4d9eb!important;color:#342b3b!important}
+html[data-theme="light"] body[data-story-slug="005"] #blocks .block p,html[data-theme="light"] body[data-story-slug="005"] #blocks .speaker{color:#4b3d59!important}
+html[data-theme="light"] body[data-story-slug="005"] #blocks .block[data-speaker="karma"]{background:linear-gradient(135deg,#fff5dc,#fbf7fc)!important;border-inline-start-color:#bb8b2e!important}
+html[data-theme="light"] body[data-story-slug="005"] #quiz .options button{background:#fff!important;border-color:#d7c2eb!important;color:#40334f!important}
+html[data-theme="light"] body[data-story-slug="005"] .story-intro-modal{background:rgba(247,241,252,.94)!important}
+html[data-theme="light"] body[data-story-slug="005"] .intro-card{background:linear-gradient(135deg,#fffdfb,#f7f2fb)!important;border-color:#d9cbe9!important}
+html[data-theme="light"] body[data-story-slug="005"] .intro-copy h2{color:#55377f!important}
+html[data-theme="light"] body[data-story-slug="005"] .intro-copy p{color:#5b4b68!important}
