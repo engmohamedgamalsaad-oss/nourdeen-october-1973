@@ -1,0 +1,44 @@
+/* assets/shared/khaledoon-snap.css
+   مغناطيس التمرير على الموبايل: كل مقطع يثبّت على الشاشة بدل ما يقف مقصوص.
+   يعمل على الموبايل فقط (عرض 780px أو أقل)، ولا يغيّر الكمبيوتر.
+   مستورد من: rebuild/reader-base.css (كل الحكايات الجديدة)، khaledoon/assets/khaledoon-theme.css
+   (الرئيسية وصفحات الأقسام وحكايات أكتوبر عن طريق assets/shared/base.css). */
+
+:root{
+  /* قوة المغناطيس:
+     proximity = يلتقط أقرب مقطع لما توقف قريب منه، ويسيبك تقرأ المقاطع الطويلة بحرية (الأأمن).
+     mandatory = أقوى: دايمًا يثبّت على أقرب مقطع، لكنه ممكن يقصّ مقطعًا أطول من الشاشة. */
+  --kh-snap-strictness:proximity;
+}
+
+@media screen and (max-width:780px){
+  html:not([data-kh-snap="off"]){scroll-snap-type:y var(--kh-snap-strictness)}
+
+  /* مسافة الهيدر الثابت (الرئيسية لها قاعدتها الخاصة في khaledoon-mobile.css فلا نلمسها) */
+  html:has(> body > header:not(.topbar)){scroll-padding-top:74px}
+  html:has(> body[data-design] > header){scroll-padding-top:92px}
+  html:has(> body[data-story-slug] > header.topbar){scroll-padding-top:72px}
+
+  /* ===== نقاط التثبيت ===== */
+  /* عام */
+  .hero,
+  body > footer,
+  /* الرئيسية */
+  #gateways .head,#gateways .gate,#how .head,#how .info,#how .voice,
+  /* صفحات الأقسام */
+  .heading,.cards > *,.story-index-cards > *,
+  /* الحكايات الجديدة */
+  .section,.block,#blocks > figure,#gallery > figure,.reactions-wrap,
+  /* حكايات أكتوبر */
+  section.story,section.end,.kh-dialogue-section,.story-quiz-section,.reactions-section,.sources,
+  .container > p,.container > figure,.container > .panel,.container > .quote,
+  .timeline .event,.lessons .lesson,.two > *,.kh-dialogue-turn{
+    scroll-snap-align:start;
+  }
+}
+
+@media screen and (max-width:430px){
+  html:has(> body[data-design] > header){scroll-padding-top:116px}
+}
+
+@media print{html{scroll-snap-type:none!important}}
