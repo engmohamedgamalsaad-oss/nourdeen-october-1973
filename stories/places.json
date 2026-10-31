@@ -35,22 +35,22 @@
     }
   },
   "005": {
-    "lat": 39.7747,
-    "lng": 64.4286,
+    "lat": 39.994444,
+    "lng": 64.379167,
     "place": {
-      "ar": "منطقة بخارى، أوزبكستان",
-      "en": "Bukhara region, Uzbekistan",
-      "fr": "Région de Boukhara, Ouzbékistan",
-      "it": "Regione di Bukhara, Uzbekistan",
-      "de": "Region Buchara, Usbekistan"
+      "ar": "قرية أفشنة، منطقة بيشك، ولاية بخارى، أوزبكستان",
+      "en": "Afshona village, Peshku District, Bukhara Region, Uzbekistan",
+      "fr": "Village d’Afshona, district de Peshku, région de Boukhara, Ouzbékistan",
+      "it": "Villaggio di Afshona, distretto di Peshku, regione di Bukhara, Uzbekistan",
+      "de": "Dorf Afshona, Bezirk Peshku, Region Buchara, Usbekistan"
     },
     "approximate": true,
     "place_label": {
-      "ar": "منطقة مرتبطة بمولده قرب بخارى: ",
-      "en": "Area associated with his birthplace near Bukhara: ",
-      "fr": "Région liée à son lieu de naissance près de Boukhara : ",
-      "it": "Area collegata al suo luogo di nascita vicino a Bukhara: ",
-      "de": "Mit seinem Geburtsort nahe Buchara verbundene Region: "
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
     },
     "source_name": {
       "ar": "مكتبة الإسكندرية — السيرة التعريفية لابن سينا",
@@ -62,14 +62,14 @@
     "source_url": "https://www.bibalex.org/libraries/presentation/static/Ibn-Sina.pdf"
   },
   "006": {
-    "lat": 30.5877,
-    "lng": 31.502,
+    "lat": 30.6027,
+    "lng": 31.5388,
     "place": {
-      "ar": "قرية هرية رزنة، الشرقية",
-      "en": "Hariyat Razna village, Sharqia",
-      "fr": "Village de Hariyat Razna, Charqiya",
-      "it": "Villaggio di Hariyat Razna, Sharqia",
-      "de": "Dorf Hariyat Razna, Scharkia"
+      "ar": "قرية هرية رزنة، محافظة الشرقية، مصر",
+      "en": "Hirriyat Raznah village, Sharqia Governorate, Egypt",
+      "fr": "Village de Hirriyat Raznah, gouvernorat de Sharqia, Égypte",
+      "it": "Villaggio di Hirriyat Raznah, governatorato di Sharqia, Egitto",
+      "de": "Dorf Hirriyat Raznah, Gouvernement Scharkia, Ägypten"
     },
     "source_name": {
       "ar": "الهيئة العامة للاستعلامات المصرية — أحمد عرابي",
@@ -78,7 +78,14 @@
       "it": "Servizio d’informazione dello Stato egiziano — Ahmed Urabi",
       "de": "Ägyptischer Staatlicher Informationsdienst — Ahmed Urabi"
     },
-    "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/ahmed-urabi/"
+    "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/ahmed-urabi/",
+    "place_label": {
+      "ar": "مكان الميلاد: ",
+      "en": "Birthplace: ",
+      "fr": "Lieu de naissance : ",
+      "it": "Luogo di nascita: ",
+      "de": "Geburtsort: "
+    }
   },
   "007": {
     "lat": 31.20194,

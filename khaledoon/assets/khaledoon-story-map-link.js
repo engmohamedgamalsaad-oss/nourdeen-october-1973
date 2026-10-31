@@ -93,7 +93,7 @@
 
   function init() {
     var slug = document.body && document.body.getAttribute('data-story-slug');
-    if (!slug || !/^0(0[5-9]|1[0-5])$/.test(slug)) return;
+    if (!slug || !/^0(0[5-9]|1[0-6])$/.test(slug)) return;
     if (document.querySelector('.interactive-map-link')) return;
     var root = siteRoot();
     fetch(new URL('stories/places.json', root).href, { cache: 'no-cache' })

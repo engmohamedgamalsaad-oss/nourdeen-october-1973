@@ -1374,5 +1374,16 @@
         }
       }
     }
-  ]
+  ],
+  "map_location": {
+    "lat": 30.6027,
+    "lng": 31.5388,
+    "place": {
+      "ar": "قرية هرية رزنة، محافظة الشرقية، مصر",
+      "en": "Hirriyat Raznah village, Sharqia Governorate, Egypt",
+      "fr": "Village de Hirriyat Raznah, gouvernorat de Sharqia, Égypte",
+      "it": "Villaggio di Hirriyat Raznah, governatorato di Sharqia, Egitto",
+      "de": "Dorf Hirriyat Raznah, Gouvernement Scharkia, Ägypten"
+    }
+  }
 }

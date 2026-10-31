@@ -1289,5 +1289,16 @@
         }
       }
     }
-  ]
+  ],
+  "map_location": {
+    "lat": 39.994444,
+    "lng": 64.379167,
+    "place": {
+      "ar": "قرية أفشنة، منطقة بيشك، ولاية بخارى، أوزبكستان",
+      "en": "Afshona village, Peshku District, Bukhara Region, Uzbekistan",
+      "fr": "Village d’Afshona, district de Peshku, région de Boukhara, Ouzbékistan",
+      "it": "Villaggio di Afshona, distretto di Peshku, regione di Bukhara, Uzbekistan",
+      "de": "Dorf Afshona, Bezirk Peshku, Region Buchara, Usbekistan"
+    }
+  }
 }
