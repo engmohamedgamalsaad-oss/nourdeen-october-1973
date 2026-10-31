@@ -19,7 +19,7 @@
       "figure_name": "أبو بكر محمد بن العباس الخوارزمي",
       "person": "أبو بكر محمد بن العباس الخوارزمي",
       "history_note": "تتناول هذه الحكاية أبا بكر محمد بن العباس الخوارزمي، الشاعر والكاتب المعروف في المصادر الأدبية. تعرض جامعة ييل كتاب رسائل أبي بكر الخوارزمي وتعرّف مؤلفه بأنه أديب وشاعر وعالم بالأنساب عاش تقريبًا بين 934 أو 935 و993 أو 994م. لا ينبغي الخلط بينه وبين محمد بن موسى الخوارزمي، عالم الرياضيات المعروف.\n\nتختلف المراجع في تحويل السنوات الهجرية إلى الميلادية وفي بعض تفاصيل الأنساب وتسلسل الرحلات؛ لذلك عُرضت التواريخ الميلادية على أنها تقريبية. تفاصيل علاقته بوالي سجستان وسجنه تعتمد على الروايات الواردة في كتب التراجم، ولم تُتحقق هنا بصورة مستقلة من شاهد معاصر.",
-      "images_note": "الصفحتان المصورتان من طبعة 1880 اللتان ظهرتا في الصفحة القديمة لم تُدرجا كصور في القالب الموحد؛ لأن GetArchive وسيط، ولا يكفي اسمه أو سجله وحده لإثبات مصدر النسخة الرقمية أو حقوق إعادة استخدامها. أبقينا رابطَي السجلين في المصادر للمراجعة. الغلاف والرسم التوضيحي المعروضان أصلان من المشروع، وليسا صورة شخصية تاريخية.",
+      "images_note": "الغلاف والرسمان المصاحبان من إنتاج المشروع، وليسا صورًا تاريخية أو بورتريه موثقًا. لم ندرج صور صفحات طبعة 1880 من السجلات الوسيطة قبل التحقق من ملف الصورة وحقوق إعادة استخدامها.",
       "blocks": [
         {
           "type": "paragraph",
@@ -63,7 +63,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "مشهد اللغة: موهبة في الكلمات",
-          "text": "اشتهر أبو بكر بقوة معرفته باللغة العربية والشعر والأنساب، وترك رسائل أدبية وديوانًا من الشعر. وكانت الرسائل في ذلك الزمن أكثر من مجرد كلمات عابرة؛ فقد استخدمها الكتّاب لعرض الأفكار والمدح والعتاب وطلب المساعدة. ولهذا احتاج الكاتب الماهر إلى لغة دقيقة وذاكرة قوية وقدرة على اختيار العبارة المناسبة."
+          "text": "اشتهر أبو بكر بقوة معرفته باللغة العربية والشعر والأنساب، وترك رسائل أدبية وديوانًا من الشعر. وكانت الرسائل في ذلك الزمن أكثر من مجرد كلمات عابرة؛ فقد استخدمها الكتّاب لعرض الأفكار والمدح والعتاب وطلب المساعدة. ولهذا احتاج الكاتب الماهر إلى لغة دقيقة وذاكرة قوية وقدرة على اختيار العبارة المناسبة.",
+          "image_after": "khwarizmi-letter-writing"
         },
         {
           "type": "paragraph",
@@ -112,7 +113,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "This story concerns Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, a poet and writer known from Arabic literary sources. Yale University Library describes a collection of his letters and identifies him as a literary scholar, poet, and genealogist who lived around 934 or 935 to 993 or 994 CE. He must not be confused with Muhammad ibn Musa al-Khwarizmi, the famous mathematician.\n\nReferences differ in converting Hijri dates to Gregorian dates and in some details about ancestry and travel chronology. Gregorian dates are therefore approximate. The account of his relationship with the governor of Sijistan and his imprisonment comes from biographical narratives and has not been independently verified here through a contemporary witness.",
-      "images_note": "The two scans from the 1880 edition shown on the old page are not embedded in the unified reader because GetArchive is an intermediary; its record alone does not establish the digital copy’s institutional provenance or reuse rights. Both record links remain in the sources for verification. The displayed cover and illustration are original project artwork, not historical portraits.",
+      "images_note": "The cover and accompanying illustrations were created for this project; they are not historical photographs or verified portraits. Scans from the 1880 edition were not embedded from intermediary records before the image files and reuse rights could be verified.",
       "blocks": [
         {
           "type": "paragraph",
@@ -156,7 +157,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Language scene: A talent for words",
-          "text": "Abu Bakr became known for his command of Arabic, poetry, and genealogy. He left literary letters and a collection of poetry. Letters in those days were more than passing words: writers used them to express ideas, offer praise, convey criticism, and ask for help. A skilled writer therefore needed precise language, a strong memory, and the ability to choose the right expression."
+          "text": "Abu Bakr became known for his command of Arabic, poetry, and genealogy. He left literary letters and a collection of poetry. Letters in those days were more than passing words: writers used them to express ideas, offer praise, convey criticism, and ask for help. A skilled writer therefore needed precise language, a strong memory, and the ability to choose the right expression.",
+          "image_after": "khwarizmi-letter-writing"
         },
         {
           "type": "paragraph",
@@ -205,7 +207,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Cette histoire porte sur Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi, poète et écrivain connu par les sources littéraires arabes. La bibliothèque de l'université Yale décrit un recueil de ses lettres et le présente comme un homme de lettres, poète et spécialiste de la généalogie ayant vécu vers 934 ou 935–993 ou 994. Il ne faut pas le confondre avec Muhammad ibn Musa al-Khwarizmi, le célèbre mathématicien.\n\nLes références diffèrent dans la conversion des dates de l'Hégire en dates grégoriennes et dans certains détails concernant les origines familiales et la chronologie des voyages. Les dates grégoriennes sont donc approximatives. Le récit de ses relations avec le gouverneur du Sijistan et de son emprisonnement provient de textes biographiques et n'a pas été vérifié indépendamment à partir d'un témoin contemporain.",
-      "images_note": "Les deux scans de l’édition de 1880 visibles sur l’ancienne page ne sont pas intégrés au lecteur unifié, car GetArchive est un intermédiaire et sa notice seule ne prouve ni la provenance institutionnelle de la copie numérique ni ses droits de réutilisation. Les deux liens restent dans les sources pour vérification. La couverture et l’illustration affichées sont des créations originales du projet, et non des portraits historiques.",
+      "images_note": "La couverture et les illustrations qui accompagnent le récit ont été créées pour ce projet ; ce ne sont ni des photographies historiques ni des portraits vérifiés. Les pages de l’édition de 1880 n’ont pas été intégrées à partir de notices intermédiaires avant vérification des fichiers et des droits de réutilisation.",
       "blocks": [
         {
           "type": "paragraph",
@@ -249,7 +251,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scène de langue : un talent pour les mots",
-          "text": "Abou Bakr était connu pour sa maîtrise de l'arabe, de la poésie et de la généalogie. Il a laissé des lettres littéraires et un recueil de poésie. À cette époque, les lettres étaient bien plus que de simples mots : les écrivains s'en servaient pour présenter des idées, faire des éloges, exprimer des reproches ou demander de l'aide. Un bon écrivain devait donc posséder une langue précise, une mémoire solide et la capacité de choisir la bonne expression."
+          "text": "Abou Bakr était connu pour sa maîtrise de l'arabe, de la poésie et de la généalogie. Il a laissé des lettres littéraires et un recueil de poésie. À cette époque, les lettres étaient bien plus que de simples mots : les écrivains s'en servaient pour présenter des idées, faire des éloges, exprimer des reproches ou demander de l'aide. Un bon écrivain devait donc posséder une langue précise, une mémoire solide et la capacité de choisir la bonne expression.",
+          "image_after": "khwarizmi-letter-writing"
         },
         {
           "type": "paragraph",
@@ -298,7 +301,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Questa storia riguarda Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi, poeta e scrittore noto attraverso le fonti letterarie arabe. La biblioteca dell'Università di Yale descrive una raccolta delle sue lettere e lo identifica come letterato, poeta e studioso di genealogia vissuto approssimativamente tra il 934 o 935 e il 993 o 994. Non va confuso con Muhammad ibn Musa al-Khwarizmi, il famoso matematico.\n\nLe fonti differiscono nella conversione delle date dell'Egira in date gregoriane e in alcuni dettagli sulle origini familiari e sulla cronologia dei viaggi. Le date gregoriane sono quindi approssimative. I racconti sui rapporti con il governatore del Sijistan e sulla prigionia derivano dalla letteratura biografica e non sono stati verificati indipendentemente attraverso testimonianze contemporanee.",
-      "images_note": "Le due scansioni dell’edizione del 1880 mostrate nella vecchia pagina non sono incorporate nel lettore unificato perché GetArchive è un intermediario; la sua scheda da sola non dimostra la provenienza istituzionale della copia digitale né i diritti di riutilizzo. Entrambi i link restano nelle fonti per la verifica. Copertina e illustrazione visualizzate sono opere originali del progetto, non ritratti storici.",
+      "images_note": "La copertina e le illustrazioni che accompagnano il racconto sono state create per questo progetto; non sono fotografie storiche né ritratti verificati. Le scansioni dell’edizione del 1880 non sono state inserite da registri intermedi prima di verificare i file e i diritti di riutilizzo.",
       "blocks": [
         {
           "type": "paragraph",
@@ -342,7 +345,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scena della lingua: talento per le parole",
-          "text": "Abu Bakr era noto per la sua conoscenza dell'arabo, della poesia e della genealogia. Lasciò lettere letterarie e una raccolta di poesie. A quei tempi, le lettere erano più di semplici parole: gli scrittori le usavano per esprimere idee, lodare, criticare e chiedere aiuto. Un bravo scrittore aveva quindi bisogno di una lingua precisa, di una buona memoria e della capacità di scegliere l'espressione giusta."
+          "text": "Abu Bakr era noto per la sua conoscenza dell'arabo, della poesia e della genealogia. Lasciò lettere letterarie e una raccolta di poesie. A quei tempi, le lettere erano più di semplici parole: gli scrittori le usavano per esprimere idee, lodare, criticare e chiedere aiuto. Un bravo scrittore aveva quindi bisogno di una lingua precisa, di una buona memoria e della capacità di scegliere l'espressione giusta.",
+          "image_after": "khwarizmi-letter-writing"
         },
         {
           "type": "paragraph",
@@ -391,7 +395,7 @@
       "figure_name": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "person": "Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi",
       "history_note": "Diese Geschichte handelt von Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi, einem Dichter und Schriftsteller, der aus arabischen literarischen Quellen bekannt ist. Die Bibliothek der Yale University beschreibt eine Sammlung seiner Briefe und bezeichnet ihn als Literaten, Dichter und Genealogen, der ungefähr von 934 oder 935 bis 993 oder 994 lebte. Er darf nicht mit Muhammad ibn Musa al-Chwarizmi, dem berühmten Mathematiker, verwechselt werden.\n\nDie Quellen unterscheiden sich bei der Umrechnung der Hidschra-Jahre in den gregorianischen Kalender und bei einigen Angaben zur Familienherkunft und zur Reihenfolge der Reisen. Gregorianische Daten sind deshalb Näherungswerte. Die Berichte über seine Beziehungen zum Statthalter von Sidschistan und seine Gefangenschaft stammen aus biografischer Literatur und wurden hier nicht unabhängig anhand zeitgenössischer Zeugnisse überprüft.",
-      "images_note": "Die zwei Scans der Ausgabe von 1880, die auf der alten Seite gezeigt wurden, sind im einheitlichen Reader nicht eingebettet, da GetArchive eine Zwischenquelle ist und der Datensatz allein weder die institutionelle Herkunft der digitalen Kopie noch die Wiederverwendungsrechte belegt. Beide Links bleiben zur Überprüfung in den Quellen erhalten. Titelbild und Illustration sind Originalgrafiken des Projekts, keine historischen Porträts.",
+      "images_note": "Das Titelbild und die begleitenden Illustrationen wurden für dieses Projekt erstellt; sie sind weder historische Fotografien noch verifizierte Porträts. Scans der Ausgabe von 1880 wurden nicht aus Zwischenverzeichnissen eingebunden, bevor Bilddateien und Wiederverwendungsrechte geprüft waren.",
       "blocks": [
         {
           "type": "paragraph",
@@ -435,7 +439,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Sprachszene: Talent für Worte",
-          "text": "Abu Bakr war für seine Kenntnisse der arabischen Sprache, der Dichtkunst und der Genealogie bekannt. Er hinterließ literarische Briefe und eine Gedichtsammlung. Briefe waren damals mehr als flüchtige Worte: Schriftsteller nutzten sie, um Gedanken auszudrücken, Lob auszusprechen, Kritik zu üben und um Hilfe zu bitten. Ein guter Schriftsteller benötigte deshalb eine präzise Sprache, ein starkes Gedächtnis und die Fähigkeit, den passenden Ausdruck zu wählen."
+          "text": "Abu Bakr war für seine Kenntnisse der arabischen Sprache, der Dichtkunst und der Genealogie bekannt. Er hinterließ literarische Briefe und eine Gedichtsammlung. Briefe waren damals mehr als flüchtige Worte: Schriftsteller nutzten sie, um Gedanken auszudrücken, Lob auszusprechen, Kritik zu üben und um Hilfe zu bitten. Ein guter Schriftsteller benötigte deshalb eine präzise Sprache, ein starkes Gedächtnis und die Fähigkeit, den passenden Ausdruck zu wählen.",
+          "image_after": "khwarizmi-letter-writing"
         },
         {
           "type": "paragraph",
@@ -552,6 +557,46 @@
           "caption": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi.",
           "source_name": "Khaledoon — original illustration",
           "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto und kein verifiziertes Porträt von Abu Bakr al-Khwarizmi."
+        }
+      }
+    },
+    {
+      "id": "khwarizmi-letter-writing",
+      "path": "stories/history/014/letter-writing.svg",
+      "kind": "illustration",
+      "source_name": "Khaledoon — original illustration",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/history/014/letter-writing.svg",
+      "rights": "Original illustration created for the Khaledoon project; it does not depict an authentic manuscript or a real historical person.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي أصلي لمكتب كتابة ورسائل أدبية من أجواء العصر العباسي؛ ليس مخطوطًا أثريًا",
+          "caption": "رسم توضيحي أصلي لأدوات الكتابة والرسائل الأدبية، وليس صورة لمخطوط تاريخي أصلي.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ لا يصوّر مخطوطًا أثريًا أو شخصية تاريخية حقيقية."
+        },
+        "en": {
+          "alt": "Original illustration of a writing desk and literary letters inspired by the Abbasid era; not an artifact",
+          "caption": "Original illustration of writing tools and literary correspondence, not a photograph of an authentic historical manuscript.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; it does not depict an authentic manuscript or a real historical person."
+        },
+        "fr": {
+          "alt": "Illustration originale d’un bureau d’écriture et de lettres littéraires inspirés de l’époque abbasside ; ce n’est pas un artefact",
+          "caption": "Illustration originale d’outils d’écriture et de correspondance littéraire, et non une photographie d’un manuscrit historique authentique.",
+          "source_name": "Khaledoon — illustration originale",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; elle ne représente ni un manuscrit authentique ni une personne historique réelle."
+        },
+        "it": {
+          "alt": "Illustrazione originale di una scrivania e lettere letterarie ispirate all’epoca abbaside; non è un reperto",
+          "caption": "Illustrazione originale di strumenti di scrittura e corrispondenza letteraria, non una fotografia di un manoscritto storico autentico.",
+          "source_name": "Khaledoon — illustrazione originale",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non raffigura un manoscritto autentico né una persona storica reale."
+        },
+        "de": {
+          "alt": "Originalillustration eines Schreibplatzes und literarischer Briefe aus der Abbasidenzeit; kein historisches Objekt",
+          "caption": "Originalillustration von Schreibgeräten und literarischer Korrespondenz, keine Fotografie eines authentischen historischen Manuskripts.",
+          "source_name": "Khaledoon — Originalillustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; sie zeigt weder ein authentisches Manuskript noch eine reale historische Person."
         }
       }
     }
