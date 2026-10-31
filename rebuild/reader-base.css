@@ -1,5 +1,6 @@
 /* Shared reader template adapted from the approved Khaledoon story pages.
    Story data changes content and section accent only; structure and controls stay fixed. */
+@import url("../assets/shared/khaledoon-snap.css?v=20261031-1");
 :root{--accent:#d6ad55;--gold:#e3bd78;--bg:#101824;--panel:#17232e;--line:#42505c;--text:#f6f0e4;--muted:#c4cbd2}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
