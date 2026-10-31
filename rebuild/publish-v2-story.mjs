@@ -44,10 +44,14 @@ async function nextId(index) {
   for (let n = 1; n <= 9999; n++) {
     const id = String(n).padStart(3, '0');
     if (used.has(id)) continue;
-    if (await pathExists('stories/' + id + '/index.html')) continue;
-    let found = false;
+    let found = await pathExists('stories/' + id + '/index.html') ||
+      await pathExists('stories/quizzes/' + id + '.json');
     for (const section of SECTIONS) {
-      if (await pathExists('stories/' + section + '/' + id + '/index.html')) { found = true; break; }
+      if (found) break;
+      const root = 'stories/' + section + '/' + id + '/';
+      for (const file of ['index.html', 'data.json', 'data.v2.json']) {
+        if (await pathExists(root + file)) { found = true; break; }
+      }
     }
     if (!found) return id;
   }
