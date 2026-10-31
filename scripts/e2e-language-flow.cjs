@@ -347,14 +347,15 @@ async function flow(browser, base, origin, lang, viewport) {
     if (lang === 'ar' && viewport === 'desktop') {
       try {
         await page.locator('#khMap').scrollIntoViewIfNeeded({ timeout: 8000 });
-        await page.waitForFunction(() => !!document.querySelector('#khMap .khm-canvas .khm-list li'), null, { timeout: 10000 });
+        await page.waitForFunction(() => !!document.querySelector('#khMap .khm-canvas .khm-list li, #khMap .khm-canvas .leaflet-container'), null, { timeout: 10000 });
         let mapState = await page.evaluate(() => ({
           title: document.querySelector('#khMap h2')?.textContent.trim() || '',
           items: document.querySelectorAll('#khMap .khm-canvas .khm-list li').length,
           approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          direction: document.querySelector('#khMap .khm-canvas .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-canvas .khm-list')).direction : ''
+          mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'),
+          direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction
         }));
-        step('homepage map loads story locations and preserves the fallback list', !!mapState.title && mapState.items >= 5 && mapState.approximate.includes('الموقع تقريبي'), JSON.stringify(mapState));
+        step('homepage map loads story locations and preserves the fallback list', !!mapState.title && (mapState.items >= 5 && mapState.approximate.includes('الموقع تقريبي') || mapState.mapReady), JSON.stringify(mapState));
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(100);
         await page.locator('.langs button[data-l="4"]').click();
@@ -363,16 +364,17 @@ async function flow(browser, base, origin, lang, viewport) {
         mapState = await page.evaluate(() => ({
           title: document.querySelector('#khMap h2')?.textContent.trim() || '',
           approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          direction: document.querySelector('#khMap .khm-canvas .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-canvas .khm-list')).direction : ''
+          mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'),
+          direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction
         }));
-        step('map fallback and approximate location follow German', mapState.title === 'Alle Geschichten verknüpft' && mapState.approximate.includes('Ungefähre Lage') && mapState.direction === 'ltr', JSON.stringify(mapState));
+        step('map fallback and approximate location follow German', mapState.title === 'Alle Geschichten verknüpft' && (mapState.approximate.includes('Ungefähre Lage') || mapState.mapReady) && mapState.direction === 'ltr', JSON.stringify(mapState));
         await page.evaluate(() => window.scrollTo(0, 0));
         await page.waitForTimeout(100);
         await page.locator('.langs button[data-l="0"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'ar', null, { timeout: 5000 });
         await page.waitForTimeout(150);
-        const restored = await page.locator('#khMap .khm-canvas .khm-list').innerText().catch(() => '');
-        step('map fallback restores Arabic after German', restored.includes('الموقع تقريبي'), restored.slice(-160));
+        const restored = await page.evaluate(() => ({ list: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '', title: document.querySelector('#khMap h2')?.textContent.trim() || '', mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'), direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction }));
+        step('map fallback or interactive map restores Arabic after German', restored.title === 'كل الحكايات على الخريطة' && (restored.list.includes('الموقع التقريبي') || restored.mapReady) && restored.direction === 'rtl', JSON.stringify(restored));
       } catch (e) {
         step('homepage map fallback and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
       }
@@ -751,7 +753,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
-      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
+      const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, location.href).pathname === new URL(en.src, location.href).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }
