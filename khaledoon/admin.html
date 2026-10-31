@@ -1011,9 +1011,6 @@ function pubRow(it){
       /* V2 is the canonical source for every new story. The V1-shaped admin projection is display-only; publication always uses the exact saved V2 package. */
       v2OnlyDraft=true;v2PackageRaw=JSON.parse(JSON.stringify(pkg));
       try{pkg=v2Adapter.v2ToAdminDraft(pkg)}catch(v2DraftError){aiFail(v2DraftError.message||'تعذر تجهيز إسقاط الإدارة لحزمة V2 دون تغيير الحزمة الأصلية.');return}
-      }else{
-       if(isV2OnlyDraftRecord(it)){aiFail('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة. إعادة الاستيراد لا تزيل هذا القيد تلقائيًا؛ يلزم قرار مراجعة صريح قبل تحويله إلى مسار متوافق. لم يتم حفظ أي تغيير.');return}try{pkg=v2Adapter.v2ToV1(pkg)}catch(v2ConversionError){aiFail(v2ConversionError.message||'تعذر تحويل حزمة V2 دون فقد بيانات.');return}
-      }
      }
      if(pkg&&typeof pkg==='object'&&!Array.isArray(pkg)&&!pkg.format&&pkg.section_key&&pkg.translations&&pkg.question_bank&&Array.isArray(pkg.images)){pkg.format='KH_STORY_PACKAGE_V1';aiJsonWasRepaired=true}
      if(!pkg||pkg.format!=='KH_STORY_PACKAGE_V1'){aiFail('صيغة الحزمة غير معروفة. انسخ البرومبت من جديد وألصق الناتج كاملًا كما هو.');return}
