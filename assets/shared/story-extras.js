@@ -1,28 +1,29 @@
-/* Story extras: print / save-as-PDF button, quiz link, and a clean print stylesheet. */
+/* Story extras: print / save-as-PDF button and a clean print stylesheet.
+   The old "test your knowledge" link and the dark box behind this section were removed:
+   the quiz already appears in the story itself, and the section now sits on the page background. */
 (function () {
   'use strict';
   if (document.querySelector('.story-extras')) return;
 
   var lang = (window.I18N && window.I18N.lang && window.I18N.lang()) || document.documentElement.lang || 'ar';
   var copy = {
-    ar: { heading: 'خد الحكاية معاك', print: 'اطبع الحكاية أو احفظها PDF', quiz: 'اختبر معلوماتك عن الحكاية', hint: 'من نافذة الطباعة اختر «حفظ كملف PDF».' },
-    en: { heading: 'Take this story with you', print: 'Print or save as PDF', quiz: 'Test your knowledge of this story', hint: 'In the print window, choose “Save as PDF”.' },
-    fr: { heading: 'Emportez ce récit', print: 'Imprimer ou enregistrer en PDF', quiz: 'Testez vos connaissances sur ce récit', hint: 'Dans la fenêtre d’impression, choisissez « Enregistrer en PDF ».' },
-    it: { heading: 'Porta con te questo racconto', print: 'Stampa o salva in PDF', quiz: 'Metti alla prova ciò che sai su questo racconto', hint: 'Nella finestra di stampa scegli «Salva come PDF».' },
-    de: { heading: 'Nimm diese Geschichte mit', print: 'Drucken oder als PDF speichern', quiz: 'Teste dein Wissen über diese Geschichte', hint: 'Wähle im Druckfenster „Als PDF speichern“.' }
+    ar: { heading: 'خد الحكاية معاك', print: 'اطبع الحكاية أو احفظها PDF', hint: 'من نافذة الطباعة اختر «حفظ كملف PDF».' },
+    en: { heading: 'Take this story with you', print: 'Print or save as PDF', hint: 'In the print window, choose “Save as PDF”.' },
+    fr: { heading: 'Emportez ce récit', print: 'Imprimer ou enregistrer en PDF', hint: 'Dans la fenêtre d’impression, choisissez « Enregistrer en PDF ».' },
+    it: { heading: 'Porta con te questo racconto', print: 'Stampa o salva in PDF', hint: 'Nella finestra di stampa scegli «Salva come PDF».' },
+    de: { heading: 'Nimm diese Geschichte mit', print: 'Drucken oder als PDF speichern', hint: 'Wähle im Druckfenster „Als PDF speichern“.' }
   };
   var t = copy[lang] || copy.ar;
 
   var style = document.createElement('style');
   style.textContent = [
-    '.story-extras{padding:44px 20px;text-align:center;background:rgba(2,8,12,.96);border-top:1px solid rgba(227,189,120,.22)}',
-    '.story-extras h2{margin:0 0 16px;color:#e3bd78;font-family:"Marhey","Cairo",sans-serif;font-size:clamp(1.3rem,3.5vw,1.8rem)}',
+    '.story-extras{padding:34px 20px;text-align:center;background:transparent;border:0}',
+    '.story-extras h2{margin:0 0 16px;color:var(--accent,#e3bd78);font-family:"Marhey","Cairo",sans-serif;font-size:clamp(1.3rem,3.5vw,1.8rem)}',
     '.story-extras-row{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}',
     '.story-extras a,.story-extras button{font:700 1rem "Cairo",sans-serif;cursor:pointer;text-decoration:none;border-radius:10px;padding:12px 20px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}',
-    '.story-extras .se-print{background:#e3bd78;color:#171006;border:0}',
-    '.story-extras .se-quiz{background:transparent;color:#f4e5c8;border:1px solid rgba(227,189,120,.6)}',
-    '.story-extras a:focus-visible,.story-extras button:focus-visible{outline:3px solid #fff;outline-offset:3px}',
-    '.story-extras p{margin:14px 0 0;color:#b7c9cc;font-size:.9rem}',
+    '.story-extras .se-print{background:var(--accent,#e3bd78);color:#171006;border:0}',
+    '.story-extras a:focus-visible,.story-extras button:focus-visible{outline:3px solid var(--accent,#fff);outline-offset:3px}',
+    '.story-extras p{margin:14px 0 0;color:var(--muted,#b7c9cc);font-size:.9rem}',
     '@media print{',
     '@page{margin:16mm}',
     'html,body{background:#fff!important}',
@@ -59,17 +60,10 @@
   printBtn.textContent = '🖨️ ' + t.print;
   printBtn.addEventListener('click', function () { window.print(); });
 
-  var quiz = document.createElement('a');
-  quiz.className = 'se-quiz';
-  quiz.href = '#story-quiz-heading';
-  quiz.addEventListener('click', function (event) { var target = document.getElementById('story-quiz-heading'); if (target) { event.preventDefault(); target.scrollIntoView({behavior: 'smooth', block: 'center'}); var start = document.getElementById('story-quiz-start'); if (start) start.focus({preventScroll: true}); } });
-  quiz.textContent = '📝 ' + t.quiz;
-
   var hint = document.createElement('p');
   hint.textContent = t.hint;
 
   row.appendChild(printBtn);
-  row.appendChild(quiz);
   section.appendChild(h);
   section.appendChild(row);
   section.appendChild(hint);
@@ -79,7 +73,6 @@
     var c = copy[curLang()] || copy.ar;
     h.textContent = c.heading;
     printBtn.textContent = '🖨️ ' + c.print;
-    quiz.textContent = '📝 ' + c.quiz;
     hint.textContent = c.hint;
   }
   document.addEventListener('site-language-change', function () { setTimeout(applyLang, 0); });
