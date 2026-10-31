@@ -343,38 +343,34 @@ async function flow(browser, base, origin, lang, viewport) {
     const homeOptions = await page.locator('.langs button[data-l]').count();
     step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
-    /* The map intentionally falls back to a text list when external Leaflet CDN requests are blocked. */
+    /* The homepage now leads with the cinematic globe; test its current five-language UI rather than the retired #khMap-only fallback selector. */
     if (lang === 'ar' && viewport === 'desktop') {
       try {
-        await page.locator('#khMap').scrollIntoViewIfNeeded({ timeout: 8000 });
-        await page.waitForFunction(() => !!document.querySelector('#khMap .khm-canvas .khm-list li'), null, { timeout: 10000 });
-        let mapState = await page.evaluate(() => ({
-          title: document.querySelector('#khMap h2')?.textContent.trim() || '',
-          items: document.querySelectorAll('#khMap .khm-canvas .khm-list li').length,
-          approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          direction: document.querySelector('#khMap .khm-canvas .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-canvas .khm-list')).direction : ''
+        await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-canvas'), null, { timeout: 10000 });
+        let worldState = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          canvas: !!document.querySelector('#khWorld .kh-world-canvas'),
+          controls: document.querySelectorAll('#khWorld [data-world-zoom]').length
         }));
-        step('homepage map loads story locations and preserves the fallback list', !!mapState.title && mapState.items >= 5 && mapState.approximate.includes('الموقع تقريبي'), JSON.stringify(mapState));
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForTimeout(100);
+        step('homepage globe renders with zoom controls', worldState.canvas && worldState.controls === 3 && worldState.title === 'اكتشف العالم من خلال حكاياته', JSON.stringify(worldState));
         await page.locator('.langs button[data-l="4"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'de', null, { timeout: 5000 });
-        await page.waitForTimeout(150);
-        mapState = await page.evaluate(() => ({
-          title: document.querySelector('#khMap h2')?.textContent.trim() || '',
-          approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          direction: document.querySelector('#khMap .khm-canvas .khm-list') ? getComputedStyle(document.querySelector('#khMap .khm-canvas .khm-list')).direction : ''
+        await page.waitForFunction(() => document.querySelector('#khWorld h2')?.textContent.trim() === 'Entdecke die Welt durch ihre Geschichten', null, { timeout: 5000 });
+        worldState = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          direction: getComputedStyle(document.querySelector('#khWorld')).direction
         }));
-        step('map fallback and approximate location follow German', mapState.title === 'Alle Geschichten verknüpft' && mapState.approximate.includes('Ungefähre Lage') && mapState.direction === 'ltr', JSON.stringify(mapState));
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForTimeout(100);
+        step('homepage globe follows German language', worldState.title === 'Entdecke die Welt durch ihre Geschichten' && worldState.direction === 'ltr', JSON.stringify(worldState));
         await page.locator('.langs button[data-l="0"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'ar', null, { timeout: 5000 });
-        await page.waitForTimeout(150);
-        const restored = await page.locator('#khMap .khm-canvas .khm-list').innerText().catch(() => '');
-        step('map fallback restores Arabic after German', restored.includes('الموقع تقريبي'), restored.slice(-160));
+        await page.waitForFunction(() => document.querySelector('#khWorld h2')?.textContent.trim() === 'اكتشف العالم من خلال حكاياته', null, { timeout: 5000 });
+        const restored = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          direction: getComputedStyle(document.querySelector('#khWorld')).direction
+        }));
+        step('homepage globe restores Arabic after German', restored.title === 'اكتشف العالم من خلال حكاياته' && restored.direction === 'rtl', JSON.stringify(restored));
       } catch (e) {
-        step('homepage map fallback and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
+        step('homepage globe and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
       }
     }
 
@@ -656,20 +652,20 @@ async function introPopupRegression(browser, base, origin) {
         await page.goto(`${base}/${rel}`, { waitUntil: 'load', timeout: 20000 });
         await page.waitForTimeout(1200);
         const state = await page.evaluate(() => {
-          const splash = document.querySelector('.story-splash');
-          const image = splash && splash.querySelector('.story-start-art img');
+          const splash = document.querySelector('#story-intro-modal');
+          const image = splash && splash.querySelector('.intro-art img');
           const rect = image ? image.getBoundingClientRect() : { width: 0, height: 0 };
           return {
             splashConnected: !!splash && splash.isConnected,
             imageConnected: !!image && image.isConnected,
-            splashCount: document.querySelectorAll('.story-splash').length,
-            splashDisplay: splash ? getComputedStyle(splash).display : 'missing',
+            splashCount: document.querySelectorAll('#story-intro-modal').length,
+            splashDisplay: splash ? (splash.hidden ? 'none' : getComputedStyle(splash).display) : 'missing',
             imageFit: image ? getComputedStyle(image).objectFit : 'missing',
             imageWidth: Math.round(rect.width),
             imageHeight: Math.round(rect.height),
-            title: splash?.querySelector('.story-start-title')?.textContent?.trim() || '',
-            startButton: !!splash?.querySelector('.story-splash-start'),
-            closeButton: !!splash?.querySelector('.story-start-close')
+            title: splash?.querySelector('#intro-title')?.textContent?.trim() || '',
+            startButton: !!splash?.querySelector('#intro-start'),
+            closeButton: !!splash?.querySelector('#intro-close')
           };
         });
         const ok = state.splashConnected && state.imageConnected && state.splashCount === 1 &&
@@ -679,16 +675,16 @@ async function introPopupRegression(browser, base, origin) {
         checks.push({ viewport, slug, stage: 'unified-splash-after-delay', ok, state });
         if (!ok) hard.push(`Unified intro splash ${slug}/${viewport} missing or invalid after load: ${JSON.stringify(state)}`);
 
-        await page.locator('.story-splash-start').click({ timeout: 5000 });
-        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
-        const startClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        await page.locator('#intro-start').click({ timeout: 5000 });
+        await page.waitForFunction(() => document.querySelector('#story-intro-modal')?.hidden === true, null, { timeout: 5000 }).catch(() => {});
+        const startClosed = await page.evaluate(() => document.querySelector('#story-intro-modal')?.hidden === true);
         checks.push({ viewport, slug, stage: 'start-button-closes-splash', ok: startClosed });
         if (!startClosed) hard.push(`Unified intro splash ${slug}/${viewport}: start button did not close it`);
 
         await page.reload({ waitUntil: 'load', timeout: 20000 });
-        await page.locator('.story-start-close').click({ timeout: 5000 });
-        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
-        const closeClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        await page.locator('#intro-close').click({ timeout: 5000 });
+        await page.waitForFunction(() => document.querySelector('#story-intro-modal')?.hidden === true, null, { timeout: 5000 }).catch(() => {});
+        const closeClosed = await page.evaluate(() => document.querySelector('#story-intro-modal')?.hidden === true);
         checks.push({ viewport, slug, stage: 'close-button-closes-splash', ok: closeClosed });
         if (!closeClosed) hard.push(`Unified intro splash ${slug}/${viewport}: close button did not close it`);
       }
@@ -729,7 +725,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(900);
       const en = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset || (img.getAttribute('src') || '');
         let svg = '';
@@ -744,14 +740,14 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
       const ar = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset || (img.getAttribute('src') || '');
         let svg = '';
         try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
-      const arOk = item.decorative ? (ar.found && ar.src === en.src && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
+      const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, base + '/' + item.slug).pathname === new URL(en.src, base + '/' + item.slug).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }

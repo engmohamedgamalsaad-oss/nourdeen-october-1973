@@ -25,6 +25,26 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "إيه اللي كان مميزًا في حلم سميرة موسى للعلم؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كانت تؤمن أن المعرفة العلمية لا ينبغي أن تبقى حكرًا على قلة من الناس، بل يمكن أن تساعد المجتمع والإنسان. لذلك ارتبطت حكايتها بالطموح إلى التعلم وبفكرة أن للعلم مسؤولية تجاه حياة البشر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "إزاي وصلت سميرة موسى لمكانة علمية كبيرة في وقت كان طريق النساء للجامعة أصعب؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بالتفوق والإصرار ومواصلة الدراسة والعمل الأكاديمي، ثم التخصص في الإشعاع الذري. نجاحها لم يكن لحظة واحدة، بل مسارًا طويلًا من التعلم والبحث وسط تحديات عصرها."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "كانت سميرة متفوقة، لكن اختيارها لم يكن مجرد البحث عن وظيفة مرموقة. فقد أصرت على الالتحاق بكلية العلوم بجامعة فؤاد الأول، التي أصبحت لاحقًا جامعة القاهرة، رغم أن درجاتها كانت تتيح لها خيارات دراسية أخرى. وفي ذلك الوقت، لم يكن من المعتاد أن تصل النساء إلى مواقع علمية جامعية متقدمة."
         },
@@ -111,6 +131,26 @@
           "speaker": "narrator",
           "text": "On 3 March 1917, Sameera Moussa was born in Sanbu al-Kubra, in the Zefta district of Egypt’s Gharbia Governorate. From childhood, she was interested in reading and learning. Her family later moved to Cairo, where she continued her education at schools including Qasr al-Shawq and Banat al-Ashraf.",
           "heading": "From Sanbu al-Kubra to the world of science"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What was special about Sameera Moussa’s dream for science?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "She believed scientific knowledge should not remain limited to a small group of people; it could serve society and humanity. Her story is therefore connected both to the ambition to learn and to the idea that science carries a responsibility toward human life."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "How did Sameera Moussa build a strong scientific career when university opportunities for women were more limited?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Through academic excellence, determination, continued study, and university work, followed by specialization in atomic radiation. Her achievement was not a single moment but a long path of learning and research amid the challenges of her time."
         },
         {
           "type": "paragraph",
@@ -203,6 +243,26 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Qu’est-ce qui rendait particulier le rêve de Sameera Moussa pour la science ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Elle pensait que le savoir scientifique ne devait pas rester réservé à quelques personnes, mais qu’il pouvait aider la société et l’humanité. Son histoire est donc liée à la volonté d’apprendre et à l’idée que la science a une responsabilité envers la vie humaine."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Comment Sameera Moussa a-t-elle construit une carrière scientifique remarquable à une époque où l’accès des femmes à l’université était plus difficile ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Grâce à son excellence scolaire, sa détermination, la poursuite de ses études et son travail universitaire, avant de se spécialiser dans le domaine des rayonnements atomiques. Sa réussite fut un long parcours d’apprentissage et de recherche face aux défis de son époque."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Excellente élève, Sameera ne cherche pas seulement un emploi prestigieux. Elle tient à intégrer la faculté des sciences de l’université Fouad Ier, devenue l’université du Caire, alors que ses résultats lui offrent d’autres possibilités. À cette époque, les femmes accèdent rarement à des postes universitaires avancés en sciences."
         },
@@ -292,6 +352,26 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Che cosa rendeva speciale il sogno di Sameera Moussa per la scienza?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Credeva che la conoscenza scientifica non dovesse restare nelle mani di pochi, ma potesse aiutare la società e l’umanità. La sua storia unisce quindi il desiderio di imparare all’idea che la scienza abbia una responsabilità verso la vita delle persone."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Come riuscì Sameera Moussa a costruire una carriera scientifica importante in un periodo in cui per le donne era più difficile accedere all’università?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Grazie all’eccellenza negli studi, alla determinazione, alla prosecuzione della formazione e al lavoro accademico, fino a specializzarsi nelle radiazioni atomiche. Il suo successo fu un lungo percorso di apprendimento e ricerca, affrontando le difficoltà del suo tempo."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Sameera era una studentessa eccellente, ma il suo obiettivo non era soltanto ottenere un lavoro prestigioso. Insistette per entrare alla Facoltà di Scienze dell’Università Fouad I, oggi Università del Cairo, anche se i suoi voti le offrivano altre possibilità. All’epoca poche donne raggiungevano posizioni accademiche avanzate nelle scienze."
         },
@@ -378,6 +458,26 @@
           "speaker": "narrator",
           "text": "Am 3. März 1917 wurde Sameera Moussa in Sanbu al-Kubra im Bezirk Zefta in der ägyptischen Provinz Gharbia geboren. Schon als Kind interessierte sie sich für Lesen und Lernen. Später zog ihre Familie nach Kairo, wo sie unter anderem an den Schulen Qasr al-Shawq und Banat al-Ashraf weiterlernte.",
           "heading": "Vom Dorf Sanbu al-Kubra auf den Weg der Wissenschaft"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Was war das Besondere an Sameera Moussas Traum von der Wissenschaft?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sie war überzeugt, dass wissenschaftliches Wissen nicht wenigen Menschen vorbehalten bleiben sollte, sondern der Gesellschaft und der Menschheit helfen kann. Ihre Geschichte verbindet deshalb den Wunsch zu lernen mit dem Gedanken, dass Wissenschaft Verantwortung für das menschliche Leben trägt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Wie konnte Sameera Moussa eine bedeutende wissenschaftliche Laufbahn aufbauen, obwohl Frauen damals größere Hürden beim Zugang zur Universität hatten?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Durch hervorragende Leistungen, Entschlossenheit, kontinuierliches Studium und akademische Arbeit, später mit einer Spezialisierung auf Atomstrahlung. Ihr Erfolg war kein einzelner Augenblick, sondern ein langer Weg des Lernens und Forschens unter den Herausforderungen ihrer Zeit."
         },
         {
           "type": "paragraph",

@@ -29,8 +29,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وهذه ملاحظة جميلة يا كارما؛ فالقاهرة لم تكن مجرد خلفية للأحداث في روايات محفوظ، بل كانت عالمًا كاملًا بشوارعه ومقاهيه وبيوته وناسِه. ومن مراقبة الحياة اليومية صنع أدبًا وصل إلى قرّاء في بلدان كثيرة."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "أكتر حاجة عجبتني إنه بدأ رحلته من القاهرة، المدينة اللي عاش فيها، ووصل بكلامه إلى قراء في بلاد بعيدة. حسّيت إن الحكاية الصادقة ممكن تسافر أبعد من صاحبها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لم يكن من الممكن أن يعرف النتيجة وهو يبدأ؛ فالكتابة رحلة طويلة من المحاولة والتعلّم. وفي عام 1988 حصل نجيب محفوظ على جائزة نوبل في الأدب، فأصبحت أعماله معروفة على نطاق عالمي أوسع."
         },
         {
           "type": "paragraph",
@@ -123,8 +133,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "That is a thoughtful observation, Karma. Cairo was not merely a backdrop in Mahfouz’s novels; it was a whole world of streets, cafés, homes, and people. By observing everyday life, he created literature that reached readers in many countries."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "What I liked most is that he began his journey in Cairo, the city where he lived, and his writing reached readers in distant countries. I felt that an honest story can travel farther than its author."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He could not have known the outcome when he began; writing is a long journey of practice and learning. In 1988, Naguib Mahfouz received the Nobel Prize in Literature, bringing his work to an even wider international audience."
         },
         {
           "type": "paragraph",
@@ -217,8 +237,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "C’est une belle remarque, Karma. Le Caire n’était pas un simple décor dans les romans de Mahfouz : c’était tout un univers de rues, de cafés, de maisons et de personnages. En observant la vie quotidienne, il a créé une œuvre qui a touché des lecteurs dans de nombreux pays."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Ce que j’ai préféré, c’est qu’il a commencé son parcours au Caire, la ville où il vivait, et que ses écrits ont atteint des lecteurs dans des pays lointains. J’ai compris qu’une histoire sincère peut voyager plus loin que son auteur."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il ne pouvait pas connaître le résultat au début de son parcours : l’écriture est un long chemin fait d’essais et d’apprentissage. En 1988, Naguib Mahfouz a reçu le prix Nobel de littérature, faisant connaître son œuvre à un public international encore plus large."
         },
         {
           "type": "paragraph",
@@ -311,8 +341,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "È una bella osservazione, Karma. Il Cairo non era soltanto uno sfondo nei romanzi di Mahfouz: era un intero mondo di strade, caffè, case e persone. Osservando la vita quotidiana, creò opere lette in molti paesi."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Mi è piaciuto soprattutto che abbia iniziato il suo percorso al Cairo, la città in cui viveva, e che i suoi scritti siano arrivati a lettori di paesi lontani. Ho capito che una storia sincera può viaggiare più lontano del suo autore."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "All’inizio non poteva sapere dove lo avrebbe portato il suo percorso: scrivere è un lungo cammino di tentativi e apprendimento. Nel 1988 Naguib Mahfouz ricevette il Premio Nobel per la Letteratura, facendo conoscere le sue opere a un pubblico internazionale ancora più vasto."
         },
         {
           "type": "paragraph",
@@ -405,8 +445,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das ist eine schöne Beobachtung, Karma. Kairo war in Mahfuz’ Romanen nicht nur Kulisse, sondern eine ganze Welt aus Straßen, Cafés, Häusern und Menschen. Indem er den Alltag beobachtete, schuf er Literatur, die Leserinnen und Leser in vielen Ländern erreichte."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Am besten gefiel mir, dass seine Reise in Kairo begann, der Stadt, in der er lebte, und dass seine Texte Leser in weit entfernten Ländern erreichten. Ich habe verstanden, dass eine ehrliche Geschichte weiter reisen kann als ihr Autor."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zu Beginn konnte er nicht wissen, wohin ihn sein Weg führen würde; Schreiben ist ein langer Prozess des Übens und Lernens. 1988 erhielt Naguib Mahfuz den Nobelpreis für Literatur, wodurch seine Werke international noch bekannter wurden."
         },
         {
           "type": "paragraph",

@@ -29,6 +29,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كان اندماج المعبد في واجهة الجبل نتيجة تخطيط معماري دقيق، وليس سحرًا. وتُنسب أعمال تصميم المعبد والإشراف على بنائه إلى سننموت، أحد كبار رجال حتشبسوت؛ أما تفاصيل دوره فتُدرس من خلال النقوش والآثار."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "ومن أكثر ما لفت انتباهي رحلة حتشبسوت إلى بلاد بونت، التي تصف نقوش معبدها وصول أشجار المر الحية إلى مصر. إنها حكاية عن التجارة ونقل النباتات بين البلاد، وتُظهر اهتمام المصريين القدماء بما جلبوه من أماكن بعيدة."
         },
@@ -91,6 +96,11 @@
           "speaker": "karma",
           "heading": "Karma: curiosity, questions and observations",
           "text": "Did you know, my friends, that when I visited the Deir el-Bahari temple I was completely amazed? How was the architect Senenmut able to design a temple that blends into the mountain so magically!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The temple’s integration with the mountain façade was the result of careful architectural planning, not magic. The design and supervision of the temple are associated with Senenmut, a senior official under Hatshepsut; the details of his role are studied through inscriptions and archaeological evidence."
         },
         {
           "type": "paragraph",
@@ -159,6 +169,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’intégration du temple dans la façade de la montagne résulte d’une planification architecturale précise, et non de la magie. La conception et la supervision du temple sont associées à Sénènmout, haut dignitaire sous Hatchepsout ; le détail de son rôle est étudié à partir des inscriptions et des vestiges archéologiques."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Un détail qui m’a fascinée est l’expédition d’Hatchepsout au pays de Pount. Les inscriptions de son temple décrivent l’arrivée en Égypte de plants de myrrhe vivants. Ce récit donne un aperçu du commerce à longue distance et de la circulation des plantes entre les régions."
         },
@@ -224,6 +239,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’integrazione del tempio nella parete della montagna fu il risultato di un’attenta pianificazione architettonica, non di magia. Il progetto e la supervisione del tempio sono associati a Senenmut, alto funzionario al tempo di Hatshepsut; i dettagli del suo ruolo vengono studiati attraverso iscrizioni e reperti archeologici."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Un dettaglio che mi ha colpito è la spedizione di Hatshepsut nella terra di Punt. Le iscrizioni del suo tempio descrivono l’arrivo in Egitto di alberi di mirra vivi. È un racconto che mostra il commercio a lunga distanza e lo spostamento delle piante tra regioni diverse."
         },
@@ -286,6 +306,11 @@
           "speaker": "karma",
           "heading": "Karma: Neugier, Fragen und Beobachtungen",
           "text": "Wusstet ihr, meine Freunde, dass ich völlig staunte, als ich den Tempel von Deir el-Bahari besuchte? Wie konnte der Architekt Senenmut einen Tempel entwerfen, der sich so magisch in den Berg einfügt!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Einbindung des Tempels in die Felswand war das Ergebnis sorgfältiger Architekturplanung und keine Magie. Entwurf und Bauaufsicht werden Senenmut zugeschrieben, einem hohen Beamten unter Hatschepsut; Einzelheiten seiner Rolle werden anhand von Inschriften und archäologischen Funden untersucht."
         },
         {
           "type": "paragraph",

@@ -28,6 +28,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "والإجابة تبدأ من الفضول والتعلّم، ثم التدريب الطويل والعمل مع فريق طبي. مجدي يعقوب لم يصبح جرّاح قلب في يوم واحد؛ فقد احتاج الطريق إلى دراسة وخبرة ومهارة، وإلى تعاون أطباء وممرضين وباحثين."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "أكتر حاجة عجبتني إن العلم مش مجرد كتب وامتحانات؛ ممكن نتعلم علشان نساعد إنسانًا مريضًا، ونخلي أسرته تفرح برجوعه لبيته. نفسي أعرف أكتر عن القلب، العضو الصغير اللي بيشتغل طول الوقت علشان يخلينا نعيش."
         },
@@ -91,6 +96,11 @@
           "speaker": "karma",
           "heading": "Karma: curiosity, questions and observations",
           "text": "I’m Karma, and when I heard Dr Magdi Yacoub’s story, I thought of something important: how can a child who loves helping people grow up to become a doctor who saves the lives of many children?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The answer begins with curiosity and learning, followed by years of training and teamwork. Magdi Yacoub did not become a heart surgeon overnight; the path required study, experience, skill, and cooperation among doctors, nurses, and researchers."
         },
         {
           "type": "paragraph",
@@ -160,6 +170,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La réponse commence par la curiosité et l’apprentissage, puis par de longues années de formation et de travail en équipe. Magdi Yacoub n’est pas devenu chirurgien cardiaque du jour au lendemain : ce parcours a demandé des études, de l’expérience, des compétences et la coopération de médecins, d’infirmiers et de chercheurs."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Ce que j’aime le plus, c’est que les sciences ne se résument pas aux livres et aux examens. Nous pouvons apprendre pour aider une personne malade et rendre sa famille heureuse lorsqu’elle rentre chez elle. J’aimerais en savoir davantage sur le cœur, ce petit organe qui travaille sans arrêt pour nous permettre de vivre."
         },
@@ -226,6 +241,11 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La risposta comincia con la curiosità e lo studio, seguiti da anni di formazione e lavoro di squadra. Magdi Yacoub non è diventato cardiochirurgo in un giorno: il percorso ha richiesto studio, esperienza, competenza e collaborazione tra medici, infermieri e ricercatori."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "La cosa che mi piace di più è che la scienza non è fatta soltanto di libri ed esami. Possiamo imparare per aiutare una persona malata e rendere felice la sua famiglia quando torna a casa. Vorrei conoscere meglio il cuore, il piccolo organo che continua a lavorare senza sosta e ci permette di vivere."
         },
@@ -289,6 +309,11 @@
           "speaker": "karma",
           "heading": "Karma: Neugier, Fragen und Beobachtungen",
           "text": "Ich bin Karma, und als ich die Geschichte von Dr. Magdi Yacoub hörte, dachte ich über etwas Wichtiges nach: Wie kann ein Kind, das gern anderen hilft, zu einem Arzt heranwachsen, der das Leben vieler Kinder rettet?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Antwort beginnt mit Neugier und Lernen, gefolgt von jahrelanger Ausbildung und Teamarbeit. Magdi Yacoub wurde nicht über Nacht Herzchirurg: Der Weg erforderte Studium, Erfahrung, Können und die Zusammenarbeit von Ärztinnen, Ärzten, Pflegekräften und Forschenden."
         },
         {
           "type": "paragraph",

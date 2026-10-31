@@ -29,8 +29,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وهنا من المهم أن نميّز بين أبي بكر الخوارزمي، الشاعر والأديب الذي نتحدث عنه، وبين محمد بن موسى الخوارزمي، العالم المعروف في الرياضيات. تشابه الاسم لا يعني أنهما الشخص نفسه؛ لذلك نرجع إلى المصادر وننتبه إلى العصر والتخصص."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "أكثر ما لفت انتباهي أن أبا بكر لم يكتفِ بمدينة واحدة؛ فقد تنقل بين مدن كثيرة، والتقى بأصحاب العلم والأدب. يبدو أن السفر كان بالنسبة إليه فرصة ليتعلم ويكتب ويكوّن علاقات جديدة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بالضبط؛ فالتنقل بين المدن كان يتيح للأديب لقاء العلماء والكتّاب وتبادل الأفكار. لكننا لا نحتاج إلى تخيّل تفاصيل غير ثابتة؛ يكفينا ما تسنده المصادر عن رحلاته وصلاته بأهل الأدب."
         },
         {
           "type": "paragraph",
@@ -112,8 +122,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Here we must distinguish Abu Bakr al-Khwarizmi, the poet and writer in this story, from Muhammad ibn Musa al-Khwarizmi, the well-known mathematician. Similar names do not make them the same person, so we check each figure’s period and field against reliable sources."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "What caught my attention most was that Abu Bakr did not stay in one city. He traveled through many places and met people interested in learning and literature. It seems that travel gave him opportunities to learn, write, and build new relationships."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Exactly. Travelling between cities could bring a writer into contact with scholars and other writers and allow ideas to circulate. We should not invent details that the sources do not establish; the documented journeys and literary connections are enough."
         },
         {
           "type": "paragraph",
@@ -195,8 +215,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il faut ici distinguer Abou Bakr al-Khwarizmi, le poète et écrivain de ce récit, de Muhammad ibn Musa al-Khwarizmi, le célèbre mathématicien. Des noms proches ne désignent pas nécessairement la même personne : il faut vérifier l’époque et le domaine de chacun."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Ce qui m'a le plus frappée, c'est qu'Abou Bakr ne restait pas dans une seule ville. Il voyageait beaucoup et rencontrait des personnes passionnées par le savoir et la littérature. On dirait que ses voyages lui offraient des occasions d'apprendre, d'écrire et de nouer de nouvelles relations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "En effet. Les déplacements entre les villes permettaient à un écrivain de rencontrer des savants et d’autres auteurs et d’échanger des idées. Inutile d’inventer des détails non établis : les voyages et les relations littéraires attestés suffisent."
         },
         {
           "type": "paragraph",
@@ -278,8 +308,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Qui è importante distinguere Abu Bakr al-Khwarizmi, il poeta e scrittore di questo racconto, da Muhammad ibn Musa al-Khwarizmi, il celebre matematico. Nomi simili non indicano necessariamente la stessa persona: occorre verificare epoca e attività di ciascuno."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "La cosa che mi ha colpita di più è che Abu Bakr non rimase in una sola città. Viaggiò in molti luoghi e incontrò persone interessate alla conoscenza e alla letteratura. Sembra che i viaggi gli offrissero occasioni per imparare, scrivere e costruire nuove relazioni."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Esatto. Viaggiare tra le città permetteva a uno scrittore di incontrare studiosi e altri autori e di scambiare idee. Non dobbiamo inventare particolari non documentati: bastano i viaggi e i rapporti letterari attestati dalle fonti."
         },
         {
           "type": "paragraph",
@@ -361,8 +401,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Hier müssen wir Abu Bakr al-Khwarizmi, den Dichter und Schriftsteller dieser Geschichte, von Muhammad ibn Musa al-Khwarizmi, dem bekannten Mathematiker, unterscheiden. Ähnliche Namen bedeuten nicht, dass es dieselbe Person ist; deshalb prüfen wir Lebenszeit und Fachgebiet."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Am meisten beeindruckte mich, dass Abu Bakr nicht in einer einzigen Stadt blieb. Er reiste durch viele Orte und traf Menschen, die sich für Wissen und Literatur interessierten. Seine Reisen boten ihm offenbar Gelegenheiten, zu lernen, zu schreiben und neue Beziehungen aufzubauen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Genau. Reisen zwischen Städten konnten einem Schriftsteller Begegnungen mit Gelehrten und anderen Autoren sowie den Austausch von Ideen ermöglichen. Wir sollten keine unbelegten Einzelheiten erfinden; die überlieferten Reisen und literarischen Kontakte genügen."
         },
         {
           "type": "paragraph",

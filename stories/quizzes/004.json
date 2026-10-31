@@ -11,7 +11,49 @@
         "6 يونيو 1967"
       ],
       "a": 0,
-      "e": "بدأت الحرب في السادس من أكتوبر 1973."
+      "e": "بدأت الحرب في السادس من أكتوبر 1973.",
+      "i18n": {
+        "en": {
+          "q": "When did the October War of 1973 begin?",
+          "o": [
+            "6 October 1973",
+            "23 July 1952",
+            "25 January 2011",
+            "6 June 1967"
+          ],
+          "e": "The war began on 6 October 1973."
+        },
+        "fr": {
+          "q": "Quand la guerre d’octobre 1973 a-t-elle commencé ?",
+          "o": [
+            "Le 6 octobre 1973",
+            "Le 23 juillet 1952",
+            "Le 25 janvier 2011",
+            "Le 6 juin 1967"
+          ],
+          "e": "La guerre a commencé le 6 octobre 1973."
+        },
+        "it": {
+          "q": "Quando iniziò la guerra dell’ottobre 1973?",
+          "o": [
+            "6 ottobre 1973",
+            "23 luglio 1952",
+            "25 gennaio 2011",
+            "6 giugno 1967"
+          ],
+          "e": "La guerra iniziò il 6 ottobre 1973."
+        },
+        "de": {
+          "q": "Wann begann der Oktoberkrieg 1973?",
+          "o": [
+            "Am 6. Oktober 1973",
+            "Am 23. Juli 1952",
+            "Am 25. Januar 2011",
+            "Am 6. Juni 1967"
+          ],
+          "e": "Der Krieg begann am 6. Oktober 1973."
+        }
+      }
     },
     {
       "q": "ما الهدف العام من الضربة الجوية الأولى؟",
@@ -22,7 +64,49 @@
         "تدمير كل الجسور بمصر"
       ],
       "a": 0,
-      "e": "كانت الضربة جزءًا من خطة منسقة لدعم عبور القوات."
+      "e": "كانت الضربة جزءًا من خطة منسقة لدعم عبور القوات.",
+      "i18n": {
+        "en": {
+          "q": "What was the general aim of the first air strike?",
+          "o": [
+            "To support the crossing plan and strike selected military targets",
+            "To move civilians to Europe",
+            "To stop global shipping",
+            "To destroy every bridge in Egypt"
+          ],
+          "e": "The air strike was part of a coordinated plan to support the crossing of the forces."
+        },
+        "fr": {
+          "q": "Quel était l’objectif général de la première frappe aérienne ?",
+          "o": [
+            "Soutenir le plan de franchissement et frapper des objectifs militaires précis",
+            "Transférer des civils en Europe",
+            "Arrêter le commerce maritime mondial",
+            "Détruire tous les ponts d’Égypte"
+          ],
+          "e": "La frappe aérienne faisait partie d’un plan coordonné visant à soutenir le franchissement des forces."
+        },
+        "it": {
+          "q": "Qual era l’obiettivo generale del primo attacco aereo?",
+          "o": [
+            "Sostenere il piano di attraversamento e colpire obiettivi militari selezionati",
+            "Trasferire civili in Europa",
+            "Fermare il traffico marittimo mondiale",
+            "Distruggere tutti i ponti in Egitto"
+          ],
+          "e": "L’attacco aereo faceva parte di un piano coordinato per sostenere l’attraversamento delle forze."
+        },
+        "de": {
+          "q": "Was war das allgemeine Ziel des ersten Luftangriffs?",
+          "o": [
+            "Den Übergangsplan unterstützen und ausgewählte militärische Ziele angreifen",
+            "Zivilisten nach Europa bringen",
+            "Den weltweiten Schiffsverkehr stoppen",
+            "Alle Brücken in Ägypten zerstören"
+          ],
+          "e": "Der Luftangriff war Teil eines abgestimmten Plans zur Unterstützung des Übergangs der Streitkräfte."
+        }
+      }
     },
     {
       "q": "لماذا احتاجت الخطة إلى تنسيق جوي وبري؟",
@@ -33,7 +117,49 @@
         "لأن العبور لا يحتاج استعدادًا"
       ],
       "a": 0,
-      "e": "التنسيق يربط توقيت الضربات بتحرك القوات البرية."
+      "e": "التنسيق يربط توقيت الضربات بتحرك القوات البرية.",
+      "i18n": {
+        "en": {
+          "q": "Why did the plan require coordination between air and ground forces?",
+          "o": [
+            "Because successful operations depend on tasks happening at the right time",
+            "Because each force works separately",
+            "To eliminate communication",
+            "Because a crossing needs no preparation"
+          ],
+          "e": "Coordination connects the timing of air strikes with the movement of ground forces."
+        },
+        "fr": {
+          "q": "Pourquoi le plan exigeait-il une coordination entre les forces aériennes et terrestres ?",
+          "o": [
+            "Parce que la réussite dépend du bon moment pour chaque mission",
+            "Parce que chaque force agit séparément",
+            "Pour supprimer les communications",
+            "Parce qu’un franchissement ne demande aucune préparation"
+          ],
+          "e": "La coordination relie le calendrier des frappes aériennes au mouvement des forces terrestres."
+        },
+        "it": {
+          "q": "Perché il piano richiedeva coordinamento tra forze aeree e terrestri?",
+          "o": [
+            "Perché il successo dipende dal momento giusto per ogni compito",
+            "Perché ogni forza opera separatamente",
+            "Per eliminare le comunicazioni",
+            "Perché un attraversamento non richiede preparazione"
+          ],
+          "e": "Il coordinamento collega i tempi degli attacchi aerei al movimento delle forze terrestri."
+        },
+        "de": {
+          "q": "Warum erforderte der Plan eine Abstimmung zwischen Luft- und Bodentruppen?",
+          "o": [
+            "Weil erfolgreiche Einsätze davon abhängen, dass Aufgaben zur richtigen Zeit stattfinden",
+            "Weil jede Truppe getrennt arbeitet",
+            "Um Kommunikation abzuschaffen",
+            "Weil ein Übergang keine Vorbereitung braucht"
+          ],
+          "e": "Die Abstimmung verbindet den Zeitpunkt der Luftangriffe mit der Bewegung der Bodentruppen."
+        }
+      }
     },
     {
       "q": "ما الذي يميز دراسة التاريخ العسكري الجيدة؟",
@@ -44,7 +170,49 @@
         "نقل القصص دون تحقق"
       ],
       "a": 0,
-      "e": "التحقق من المصادر والسياق يساعد على فهم الأحداث."
+      "e": "التحقق من المصادر والسياق يساعد على فهم الأحداث.",
+      "i18n": {
+        "en": {
+          "q": "What characterizes good study of military history?",
+          "o": [
+            "Using sources and comparing accounts",
+            "Relying on a single photograph",
+            "Ignoring dates",
+            "Repeating stories without checking them"
+          ],
+          "e": "Checking sources and context helps us understand events accurately."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui caractérise une bonne étude de l’histoire militaire ?",
+          "o": [
+            "Utiliser des sources et comparer les récits",
+            "S’appuyer sur une seule photographie",
+            "Ignorer les dates",
+            "Répéter les histoires sans les vérifier"
+          ],
+          "e": "La vérification des sources et du contexte aide à comprendre les événements avec précision."
+        },
+        "it": {
+          "q": "Che cosa caratterizza un buon studio della storia militare?",
+          "o": [
+            "Usare le fonti e confrontare i resoconti",
+            "Affidarsi a una sola fotografia",
+            "Ignorare le date",
+            "Ripetere i racconti senza verificarli"
+          ],
+          "e": "Verificare le fonti e il contesto aiuta a comprendere gli eventi con precisione."
+        },
+        "de": {
+          "q": "Was kennzeichnet eine gute Beschäftigung mit Militärgeschichte?",
+          "o": [
+            "Quellen nutzen und Berichte miteinander vergleichen",
+            "Sich auf ein einziges Foto verlassen",
+            "Daten ignorieren",
+            "Geschichten ungeprüft wiederholen"
+          ],
+          "e": "Die Prüfung von Quellen und Kontext hilft, Ereignisse genauer zu verstehen."
+        }
+      }
     },
     {
       "q": "كيف نفهم دور الطيارين في الحرب؟",
@@ -55,7 +223,49 @@
         "دور مدني فقط"
       ],
       "a": 0,
-      "e": "القوة الجوية تعمل ضمن خطة أوسع تشمل فروعًا متعددة."
+      "e": "القوة الجوية تعمل ضمن خطة أوسع تشمل فروعًا متعددة.",
+      "i18n": {
+        "en": {
+          "q": "How should we understand the role of pilots in the war?",
+          "o": [
+            "As part of an integrated military system",
+            "As the only force that mattered",
+            "Without the other branches",
+            "As a purely civilian role"
+          ],
+          "e": "Air power operates within a wider plan involving several military branches."
+        },
+        "fr": {
+          "q": "Comment faut-il comprendre le rôle des pilotes pendant la guerre ?",
+          "o": [
+            "Comme une partie d’un dispositif militaire intégré",
+            "Comme la seule force importante",
+            "Sans les autres composantes militaires",
+            "Comme un rôle purement civil"
+          ],
+          "e": "La force aérienne agit dans le cadre d’un plan plus large impliquant plusieurs branches militaires."
+        },
+        "it": {
+          "q": "Come dobbiamo comprendere il ruolo dei piloti nella guerra?",
+          "o": [
+            "Come parte di un sistema militare integrato",
+            "Come l’unica forza importante",
+            "Senza le altre forze armate",
+            "Come un ruolo puramente civile"
+          ],
+          "e": "La forza aerea opera all’interno di un piano più ampio che coinvolge diverse componenti militari."
+        },
+        "de": {
+          "q": "Wie sollten wir die Rolle der Piloten im Krieg verstehen?",
+          "o": [
+            "Als Teil eines zusammenwirkenden militärischen Systems",
+            "Als einzige wichtige Streitkraft",
+            "Unabhängig von den anderen Truppenteilen",
+            "Als rein zivile Aufgabe"
+          ],
+          "e": "Die Luftstreitkräfte handeln im Rahmen eines umfassenderen Plans mit mehreren militärischen Bereichen."
+        }
+      }
     },
     {
       "q": "لماذا يُعد توقيت الضربة الجوية عنصرًا مهمًا في خطة عسكرية؟",

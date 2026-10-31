@@ -11,7 +11,49 @@
         "حفر قناة السويس"
       ],
       "a": 0,
-      "e": "شاركت البحرية في تأمين السواحل والأجناب وتنفيذ مهام بحرية."
+      "e": "شاركت البحرية في تأمين السواحل والأجناب وتنفيذ مهام بحرية.",
+      "i18n": {
+        "en": {
+          "q": "What role did the Egyptian Navy play during the October War?",
+          "o": [
+            "Securing maritime flanks and carrying out naval missions",
+            "Commanding all ground forces",
+            "Managing civilian airports",
+            "Digging the Suez Canal"
+          ],
+          "e": "The Navy helped secure the coasts and maritime flanks and carried out naval missions."
+        },
+        "fr": {
+          "q": "Quel rôle la marine égyptienne a-t-elle joué pendant la guerre d’octobre ?",
+          "o": [
+            "Protéger les flancs maritimes et mener des missions navales",
+            "Commander toutes les forces terrestres",
+            "Gérer les aéroports civils",
+            "Creuser le canal de Suez"
+          ],
+          "e": "La marine a contribué à protéger les côtes et les flancs maritimes et à mener des missions navales."
+        },
+        "it": {
+          "q": "Quale ruolo svolse la Marina egiziana durante la guerra d’ottobre?",
+          "o": [
+            "Proteggere i fianchi marittimi e svolgere missioni navali",
+            "Comandare tutte le forze terrestri",
+            "Gestire gli aeroporti civili",
+            "Scavare il Canale di Suez"
+          ],
+          "e": "La Marina contribuì a proteggere le coste e i fianchi marittimi e a svolgere missioni navali."
+        },
+        "de": {
+          "q": "Welche Rolle spielte die ägyptische Marine während des Oktoberkriegs?",
+          "o": [
+            "Die Seeflanken sichern und Marineeinsätze durchführen",
+            "Alle Bodentruppen befehligen",
+            "Zivile Flughäfen verwalten",
+            "Den Suezkanal ausheben"
+          ],
+          "e": "Die Marine half, die Küsten und Seeflanken zu sichern und Marineeinsätze durchzuführen."
+        }
+      }
     },
     {
       "q": "ما الحدث البحري البارز الذي وقع في 21 أكتوبر 1967؟",
@@ -22,7 +64,49 @@
         "إنشاء أول غواصة نووية مصرية"
       ],
       "a": 0,
-      "e": "أغرقت زوارق الصواريخ المصرية المدمرة إيلات عام 1967."
+      "e": "أغرقت زوارق الصواريخ المصرية المدمرة إيلات عام 1967.",
+      "i18n": {
+        "en": {
+          "q": "What notable naval event took place on 21 October 1967?",
+          "o": [
+            "Egyptian missile boats sank the destroyer Eilat",
+            "The October War began",
+            "The whole of Sinai was liberated",
+            "Egypt built its first nuclear submarine"
+          ],
+          "e": "Egyptian missile boats sank the Israeli destroyer Eilat in 1967."
+        },
+        "fr": {
+          "q": "Quel événement naval important s’est produit le 21 octobre 1967 ?",
+          "o": [
+            "Des vedettes lance-missiles égyptiennes ont coulé le destroyer Eilat",
+            "La guerre d’octobre a commencé",
+            "Tout le Sinaï a été libéré",
+            "L’Égypte a construit son premier sous-marin nucléaire"
+          ],
+          "e": "Des vedettes lance-missiles égyptiennes ont coulé le destroyer israélien Eilat en 1967."
+        },
+        "it": {
+          "q": "Quale importante evento navale avvenne il 21 ottobre 1967?",
+          "o": [
+            "Le unità missilistiche egiziane affondarono il cacciatorpediniere Eilat",
+            "Iniziò la guerra d’ottobre",
+            "Fu liberato tutto il Sinai",
+            "L’Egitto costruì il suo primo sottomarino nucleare"
+          ],
+          "e": "Nel 1967 unità missilistiche egiziane affondarono il cacciatorpediniere israeliano Eilat."
+        },
+        "de": {
+          "q": "Welches bedeutende Ereignis auf See ereignete sich am 21. Oktober 1967?",
+          "o": [
+            "Ägyptische Raketenboote versenkten den Zerstörer Eilat",
+            "Der Oktoberkrieg begann",
+            "Der gesamte Sinai wurde befreit",
+            "Ägypten baute sein erstes Atom-U-Boot"
+          ],
+          "e": "Ägyptische Raketenboote versenkten 1967 den israelischen Zerstörer Eilat."
+        }
+      }
     },
     {
       "q": "لماذا كانت خبرة حرب الاستنزاف مهمة؟",
@@ -33,7 +117,49 @@
         "جعلت الحرب بلا مخاطر"
       ],
       "a": 0,
-      "e": "التدريب والخبرة السابقة ساهما في استعداد القوات."
+      "e": "التدريب والخبرة السابقة ساهما في استعداد القوات.",
+      "i18n": {
+        "en": {
+          "q": "Why was experience from the War of Attrition important?",
+          "o": [
+            "It helped develop skills and readiness",
+            "It ended the need for training",
+            "It removed the role of the air force",
+            "It made war risk-free"
+          ],
+          "e": "Earlier training and experience contributed to the forces’ readiness."
+        },
+        "fr": {
+          "q": "Pourquoi l’expérience de la guerre d’usure était-elle importante ?",
+          "o": [
+            "Elle a contribué à développer l’expérience et la préparation",
+            "Elle a supprimé le besoin d’entraînement",
+            "Elle a éliminé le rôle de l’aviation",
+            "Elle a rendu la guerre sans risque"
+          ],
+          "e": "L’entraînement et l’expérience antérieurs ont contribué à préparer les forces."
+        },
+        "it": {
+          "q": "Perché fu importante l’esperienza della guerra d’attrito?",
+          "o": [
+            "Contribuì a sviluppare esperienza e preparazione",
+            "Rese inutile l’addestramento",
+            "Eliminò il ruolo dell’aeronautica",
+            "Rese la guerra priva di rischi"
+          ],
+          "e": "L’addestramento e l’esperienza precedenti contribuirono alla preparazione delle forze."
+        },
+        "de": {
+          "q": "Warum war die Erfahrung aus dem Abnutzungskrieg wichtig?",
+          "o": [
+            "Sie half, Erfahrung und Einsatzbereitschaft aufzubauen",
+            "Sie machte Training überflüssig",
+            "Sie beseitigte die Rolle der Luftwaffe",
+            "Sie machte den Krieg risikofrei"
+          ],
+          "e": "Frühere Ausbildung und Erfahrung trugen zur Einsatzbereitschaft der Streitkräfte bei."
+        }
+      }
     },
     {
       "q": "أين تعمل القوات البحرية المصرية؟",
@@ -44,7 +170,49 @@
         "داخل المصانع فقط"
       ],
       "a": 0,
-      "e": "لمصر سواحل على البحر المتوسط والبحر الأحمر."
+      "e": "لمصر سواحل على البحر المتوسط والبحر الأحمر.",
+      "i18n": {
+        "en": {
+          "q": "Where does the Egyptian Navy operate?",
+          "o": [
+            "In the Mediterranean and Red Seas",
+            "Only in deserts",
+            "Only in the air",
+            "Only inside factories"
+          ],
+          "e": "Egypt has coastlines on both the Mediterranean Sea and the Red Sea."
+        },
+        "fr": {
+          "q": "Où opère la marine égyptienne ?",
+          "o": [
+            "En Méditerranée et en mer Rouge",
+            "Uniquement dans les déserts",
+            "Uniquement dans les airs",
+            "Uniquement dans les usines"
+          ],
+          "e": "L’Égypte possède des côtes sur la Méditerranée et la mer Rouge."
+        },
+        "it": {
+          "q": "Dove opera la Marina egiziana?",
+          "o": [
+            "Nel Mar Mediterraneo e nel Mar Rosso",
+            "Solo nei deserti",
+            "Solo in aria",
+            "Solo all’interno delle fabbriche"
+          ],
+          "e": "L’Egitto ha coste sia sul Mar Mediterraneo sia sul Mar Rosso."
+        },
+        "de": {
+          "q": "Wo ist die ägyptische Marine im Einsatz?",
+          "o": [
+            "Im Mittelmeer und im Roten Meer",
+            "Nur in Wüsten",
+            "Nur in der Luft",
+            "Nur in Fabriken"
+          ],
+          "e": "Ägypten hat Küsten sowohl am Mittelmeer als auch am Roten Meer."
+        }
+      }
     },
     {
       "q": "ما الدرس من حكاية رجال البحر؟",
@@ -55,7 +223,49 @@
         "البحر لا يؤثر في الحروب"
       ],
       "a": 0,
-      "e": "الإنجاز الكبير يعتمد على أدوار متعددة متكاملة."
+      "e": "الإنجاز الكبير يعتمد على أدوار متعددة متكاملة.",
+      "i18n": {
+        "en": {
+          "q": "What lesson does the story of the sailors teach?",
+          "o": [
+            "Victory depends on different roles working together",
+            "Training is unimportant",
+            "All missions are always the same",
+            "The sea has no effect on wars"
+          ],
+          "e": "Major achievements depend on many different roles working together."
+        },
+        "fr": {
+          "q": "Quelle leçon l’histoire des marins nous enseigne-t-elle ?",
+          "o": [
+            "La victoire dépend de la complémentarité des rôles",
+            "L’entraînement n’est pas important",
+            "Toutes les missions sont toujours identiques",
+            "La mer n’a aucun effet sur les guerres"
+          ],
+          "e": "Les grandes réussites reposent sur la coopération de nombreux rôles différents."
+        },
+        "it": {
+          "q": "Quale insegnamento offre la storia dei marinai?",
+          "o": [
+            "La vittoria dipende dalla collaborazione di ruoli diversi",
+            "L’addestramento non è importante",
+            "Tutte le missioni sono sempre uguali",
+            "Il mare non influisce sulle guerre"
+          ],
+          "e": "I grandi risultati dipendono dalla collaborazione tra ruoli diversi."
+        },
+        "de": {
+          "q": "Welche Lehre vermittelt die Geschichte der Seeleute?",
+          "o": [
+            "Der Erfolg hängt vom Zusammenspiel verschiedener Aufgaben ab",
+            "Ausbildung ist unwichtig",
+            "Alle Einsätze sind immer gleich",
+            "Das Meer hat keinen Einfluss auf Kriege"
+          ],
+          "e": "Große Erfolge beruhen darauf, dass viele unterschiedliche Aufgaben zusammenwirken."
+        }
+      }
     },
     {
       "q": "ما المقصود بتأمين خطوط الملاحة؟",
