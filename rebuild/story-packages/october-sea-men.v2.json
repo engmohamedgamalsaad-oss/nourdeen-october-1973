@@ -1975,6 +1975,15 @@
       "fr": "Détroit de Bab el-Mandeb",
       "it": "Stretto di Bab el-Mandeb",
       "de": "Bab-al-Mandab-Straße"
-    }
+    },
+    "source_name": {
+      "ar": "معجم المناطق البحرية — معهد فلاندرز البحري",
+      "en": "Marine Regions Gazetteer — Flanders Marine Institute",
+      "fr": "Gazetteer Marine Regions — Institut marin de Flandre",
+      "it": "Gazetteer Marine Regions — Istituto marino delle Fiandre",
+      "de": "Marine-Regions-Gazetteer — Flämisches Meeresinstitut"
+    },
+    "source_url": "https://www.marineregions.org/gazetteer.php?id=9080&p=details",
+    "approximate": true
   }
 }

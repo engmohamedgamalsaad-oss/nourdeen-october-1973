@@ -66,22 +66,28 @@ export function validateStory(s) {
   if (!nonempty(s.original_body)) out.push('original_body must preserve submitted source text');
 
   // map_location is optional; null explicitly means no verified location.
+  // A non-null location must carry translated place labels and a verifiable source.
   if (Object.hasOwn(s, 'map_location') && s.map_location !== null) {
     const m = s.map_location;
+    const allowedMapKeys = ['lat', 'lng', 'place', 'place_label', 'source_name', 'source_url', 'approximate'];
     if (!isObject(m)) out.push('map_location must be null or an object');
     else {
-      for (const key of Object.keys(m)) if (!['lat', 'lng', 'place'].includes(key)) out.push('map_location: unexpected property "' + key + '"');
+      for (const key of Object.keys(m)) if (!allowedMapKeys.includes(key)) out.push('map_location: unexpected property "' + key + '"');
       if (typeof m.lat !== 'number' || !Number.isFinite(m.lat) || m.lat < -90 || m.lat > 90) out.push('map_location.lat must be a valid latitude');
       if (typeof m.lng !== 'number' || !Number.isFinite(m.lng) || m.lng < -180 || m.lng > 180) out.push('map_location.lng must be a valid longitude');
-      if (!isObject(m.place)) out.push('map_location.place must contain all five localized place names');
-      else {
-        languageObjectCheck(m.place, 'map_location.place', out);
+      for (const field of ['place', 'place_label', 'source_name']) {
+        if (field !== 'place' && (m[field] === undefined || m[field] === null)) continue;
+        if (!isObject(m[field])) { out.push('map_location.' + field + ' must be translated into all five languages'); continue; }
+        languageObjectCheck(m[field], 'map_location.' + field, out);
         for (const lang of LANGUAGES) {
-          if (!nonempty(m.place[lang])) out.push('map_location.place.' + lang + ' required');
-          else if (lang !== 'ar' && /[\u0600-\u06FF]/.test(m.place[lang])) out.push('map_location.place.' + lang + ' must not contain Arabic fallback');
+          if (!nonempty(m[field][lang])) out.push('map_location.' + field + '.' + lang + ' required');
+          else if (lang !== 'ar' && /[\u0600-\u06FF]/.test(m[field][lang])) out.push('map_location.' + field + '.' + lang + ' must not contain Arabic fallback');
         }
-        for (const key of Object.keys(m.place)) if (!LANGUAGES.includes(key)) out.push('map_location.place: unexpected property "' + key + '"');
+        for (const key of Object.keys(m[field])) if (!LANGUAGES.includes(key)) out.push('map_location.' + field + ': unsupported locale "' + key + '"');
       }
+      if (m.source_url !== undefined && !https(m.source_url)) out.push('map_location.source_url must be HTTPS');
+      if ((m.source_name === undefined) !== (m.source_url === undefined)) out.push('map_location.source_name and source_url must be provided together; the V2 publishing gate requires both.');
+      if (m.approximate !== undefined && typeof m.approximate !== 'boolean') out.push('map_location.approximate must be boolean');
     }
   }
   if (isObject(s.i18n)) {
