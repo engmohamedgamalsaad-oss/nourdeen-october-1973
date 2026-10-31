@@ -76,7 +76,7 @@ export function validateStory(s) {
       if (typeof m.lat !== 'number' || !Number.isFinite(m.lat) || m.lat < -90 || m.lat > 90) out.push('map_location.lat must be a valid latitude');
       if (typeof m.lng !== 'number' || !Number.isFinite(m.lng) || m.lng < -180 || m.lng > 180) out.push('map_location.lng must be a valid longitude');
       for (const field of ['place', 'place_label', 'source_name']) {
-        if (field === 'place_label' && (m.place_label === undefined || m.place_label === null)) continue;
+        if (field !== 'place' && (m[field] === undefined || m[field] === null)) continue;
         if (!isObject(m[field])) { out.push('map_location.' + field + ' must be translated into all five languages'); continue; }
         languageObjectCheck(m[field], 'map_location.' + field, out);
         for (const lang of LANGUAGES) {
@@ -85,7 +85,8 @@ export function validateStory(s) {
         }
         for (const key of Object.keys(m[field])) if (!LANGUAGES.includes(key)) out.push('map_location.' + field + ': unsupported locale "' + key + '"');
       }
-      if (!https(m.source_url)) out.push('map_location.source_url must be HTTPS');
+      if (m.source_url !== undefined && !https(m.source_url)) out.push('map_location.source_url must be HTTPS');
+      if ((m.source_name === undefined) !== (m.source_url === undefined)) out.push('map_location.source_name and source_url must be provided together; the V2 publishing gate requires both.');
       if (m.approximate !== undefined && typeof m.approximate !== 'boolean') out.push('map_location.approximate must be boolean');
     }
   }
