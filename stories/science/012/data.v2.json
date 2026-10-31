@@ -28,8 +28,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "صحيح؛ لم يكن فاروق الباز رائد فضاء، بل عالمًا استخدم الصور والبيانات الجيولوجية لمساعدة فرق أبولو على فهم سطح القمر واختيار مواقع مناسبة للهبوط. هذا عمل علمي مهم يحدث على الأرض لكنه يخدم استكشاف الفضاء."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "ما أعجبني أن القمر والصحراء يبدوان بعيدين جدًا، ومع ذلك استخدم العالِم الفكرة نفسها في الاثنين: أن ننظر إلى الصور من بعيد ونقرأ ما فيها بصبر. كأن الصورة كتاب مفتوح لمن يعرف كيف يقرؤه."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وهذه هي الفكرة المشتركة: قراءة الصور تحتاج إلى ملاحظة دقيقة ومقارنة وبيانات، لا إلى النظر السريع فقط. وعندما طُبّقت هذه المهارات على صور الصحراء، ساعدت الباحثين على فهم آثار الأنهار والبيئات القديمة."
         },
         {
           "type": "paragraph",
@@ -96,8 +106,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "That is right: Farouk El-Baz was not an astronaut. He was a scientist who used images and geological data to help the Apollo teams understand the Moon’s surface and select suitable landing sites. His work was done on Earth but supported space exploration."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "What I liked is that the Moon and the desert seem very far apart, yet the scientist used the same idea for both: look at pictures from far away and read them patiently. A picture is like an open book for someone who knows how to read it."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "That is the shared idea: interpreting images requires careful observation, comparison, and data—not just a quick look. When these skills were applied to desert images, they helped researchers understand traces of ancient rivers and environments."
         },
         {
           "type": "paragraph",
@@ -164,8 +184,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "C’est exact : Farouk El-Baz n’était pas astronaute. C’était un scientifique qui utilisait des images et des données géologiques pour aider les équipes Apollo à comprendre la surface de la Lune et à choisir des sites d’alunissage adaptés. Son travail, réalisé sur Terre, a contribué à l’exploration spatiale."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Ce que j'ai aimé, c'est que la Lune et le désert semblent très éloignés, et pourtant le scientifique a utilisé la même idée pour les deux : regarder des images de loin et les lire avec patience. Une image est comme un livre ouvert pour qui sait la lire."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "C’est le point commun : interpréter des images demande une observation attentive, des comparaisons et des données, pas un simple coup d’œil. Appliquées aux images du désert, ces méthodes ont aidé les chercheurs à comprendre les traces d’anciens cours d’eau et milieux naturels."
         },
         {
           "type": "paragraph",
@@ -232,8 +262,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Esatto: Farouk El-Baz non era un astronauta. Era uno scienziato che usava immagini e dati geologici per aiutare le squadre Apollo a comprendere la superficie lunare e scegliere siti di atterraggio adatti. Il suo lavoro si svolgeva sulla Terra, ma sosteneva l’esplorazione spaziale."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Mi è piaciuto che la Luna e il deserto sembrino lontanissimi, eppure lo scienziato ha usato la stessa idea per entrambi: guardare le immagini da lontano e leggerle con pazienza. Un'immagine è come un libro aperto per chi sa leggerla."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Questa è l’idea comune: interpretare immagini richiede osservazione attenta, confronti e dati, non soltanto uno sguardo veloce. Applicate alle immagini del deserto, queste competenze hanno aiutato i ricercatori a comprendere le tracce di antichi fiumi e ambienti."
         },
         {
           "type": "paragraph",
@@ -300,8 +340,18 @@
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Genau: Farouk El-Baz war kein Astronaut. Er war Wissenschaftler und nutzte Bilder sowie geologische Daten, um den Apollo-Teams zu helfen, die Mondoberfläche zu verstehen und geeignete Landeplätze auszuwählen. Seine Arbeit fand auf der Erde statt und unterstützte dennoch die Weltraumforschung."
+        },
+        {
+          "type": "paragraph",
           "speaker": "karma",
           "text": "Mir hat gefallen, dass der Mond und die Wüste so weit voneinander entfernt scheinen und der Wissenschaftler trotzdem für beide dieselbe Idee nutzte: Bilder aus der Ferne ansehen und sie geduldig lesen. Ein Bild ist wie ein offenes Buch für jeden, der es lesen kann."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das ist die gemeinsame Idee: Bilder zu deuten erfordert genaue Beobachtung, Vergleiche und Daten – nicht nur einen flüchtigen Blick. Auf Wüstenbilder angewandt, halfen diese Methoden Forschenden, Spuren alter Flüsse und Landschaften zu erkennen."
         },
         {
           "type": "paragraph",
