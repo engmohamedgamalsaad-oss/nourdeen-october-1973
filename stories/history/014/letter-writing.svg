@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="760" viewBox="0 0 1200 760" role="img" aria-label="Original illustration of literary correspondence">
+<defs>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#102330"/><stop offset="1" stop-color="#31495a"/></linearGradient>
+<linearGradient id="paper" x2="1" y2="1"><stop stop-color="#fff0c8"/><stop offset="1" stop-color="#c9a976"/></linearGradient>
+</defs>
+<rect width="1200" height="760" fill="url(#bg)"/>
+<rect x="42" y="42" width="1116" height="676" rx="24" fill="none" stroke="#d7b579" stroke-width="3"/>
+<g transform="translate(190 150) rotate(-3 360 210)">
+<path d="M25 35Q200 0 380 45V465Q200 410 25 455Z" fill="url(#paper)" stroke="#9c7849" stroke-width="9"/>
+<path d="M380 45Q560 0 735 35V455Q560 410 380 465Z" fill="#f5e5bd" stroke="#9c7849" stroke-width="9"/>
+<path d="M380 45V465" stroke="#9c7849" stroke-width="8"/>
+<g stroke="#6d6250" stroke-width="5" stroke-linecap="round" opacity=".72">
+<path d="M65 105H340M65 145H340M65 185H325M65 225H340M65 265H325M65 305H340M65 345H325"/>
+<path d="M420 105H695M420 145H695M420 185H680M420 225H695M420 265H680M420 305H695M420 345H680"/>
+</g>
+<path d="M50 75H350M410 75H710" stroke="#b28a53" stroke-width="3"/>
+</g>
+<g transform="translate(875 100) rotate(24)">
+<path d="M18 470Q-5 190 150 12Q270 190 18 470Z" fill="#d7bd83" stroke="#f1dfb7" stroke-width="7"/>
+<path d="M18 470L150 12" stroke="#8b6a3f" stroke-width="5"/>
+</g>
+<g transform="translate(890 510)">
+<path d="M0 40Q90 0 180 40L164 165Q90 200 16 165Z" fill="#132b37" stroke="#d4b477" stroke-width="7"/>
+<ellipse cx="90" cy="40" rx="90" ry="27" fill="#182d38" stroke="#d4b477" stroke-width="6"/>
+<ellipse cx="90" cy="40" rx="52" ry="15" fill="#07131b"/>
+</g>
+<circle cx="165" cy="575" r="42" fill="#9d493c" stroke="#e4bd7a" stroke-width="6"/>
+<circle cx="165" cy="575" r="28" fill="none" stroke="#eacb8e" stroke-width="3"/>
+</svg>
