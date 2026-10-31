@@ -343,40 +343,34 @@ async function flow(browser, base, origin, lang, viewport) {
     const homeOptions = await page.locator('.langs button[data-l]').count();
     step('homepage offers exactly the supported languages (ar/en/fr/it/de)', homeOptions === LANGS.length, `count=${homeOptions}`);
 
-    /* The map intentionally falls back to a text list when external Leaflet CDN requests are blocked. */
+    /* The homepage now leads with the cinematic globe; test its current five-language UI rather than the retired #khMap-only fallback selector. */
     if (lang === 'ar' && viewport === 'desktop') {
       try {
-        await page.locator('#khMap').scrollIntoViewIfNeeded({ timeout: 8000 });
-        await page.waitForFunction(() => !!document.querySelector('#khMap .khm-canvas .khm-list li, #khMap .khm-canvas .leaflet-container'), null, { timeout: 10000 });
-        let mapState = await page.evaluate(() => ({
-          title: document.querySelector('#khMap h2')?.textContent.trim() || '',
-          items: document.querySelectorAll('#khMap .khm-canvas .khm-list li').length,
-          approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'),
-          direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction
+        await page.waitForFunction(() => !!document.querySelector('#khWorld .kh-world-canvas'), null, { timeout: 10000 });
+        let worldState = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          canvas: !!document.querySelector('#khWorld .kh-world-canvas'),
+          controls: document.querySelectorAll('#khWorld [data-world-zoom]').length
         }));
-        step('homepage map loads story locations and preserves the fallback list', !!mapState.title && (mapState.items >= 5 && mapState.approximate.includes('الموقع تقريبي') || mapState.mapReady), JSON.stringify(mapState));
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForTimeout(100);
+        step('homepage globe renders with zoom controls', worldState.canvas && worldState.controls === 3 && worldState.title === 'اكتشف العالم من خلال حكاياته', JSON.stringify(worldState));
         await page.locator('.langs button[data-l="4"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'de', null, { timeout: 5000 });
-        await page.waitForTimeout(150);
-        mapState = await page.evaluate(() => ({
-          title: document.querySelector('#khMap h2')?.textContent.trim() || '',
-          approximate: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '',
-          mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'),
-          direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction
+        await page.waitForFunction(() => document.querySelector('#khWorld h2')?.textContent.trim() === 'Entdecke die Welt durch ihre Geschichten', null, { timeout: 5000 });
+        worldState = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          direction: getComputedStyle(document.querySelector('#khWorld')).direction
         }));
-        step('map fallback and approximate location follow German', mapState.title === 'Alle Geschichten verknüpft' && (mapState.approximate.includes('Ungefähre Lage') || mapState.mapReady) && mapState.direction === 'ltr', JSON.stringify(mapState));
-        await page.evaluate(() => window.scrollTo(0, 0));
-        await page.waitForTimeout(100);
+        step('homepage globe follows German language', worldState.title === 'Entdecke die Welt durch ihre Geschichten' && worldState.direction === 'ltr', JSON.stringify(worldState));
         await page.locator('.langs button[data-l="0"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'ar', null, { timeout: 5000 });
-        await page.waitForTimeout(150);
-        const restored = await page.evaluate(() => ({ list: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '', title: document.querySelector('#khMap h2')?.textContent.trim() || '', mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'), direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction }));
-        step('map fallback or interactive map restores Arabic after German', restored.title === 'كل الحكايات على الخريطة' && (restored.list.includes('الموقع تقريبي') || restored.mapReady) && restored.direction === 'rtl', JSON.stringify(restored));
+        await page.waitForFunction(() => document.querySelector('#khWorld h2')?.textContent.trim() === 'اكتشف العالم من خلال حكاياته', null, { timeout: 5000 });
+        const restored = await page.evaluate(() => ({
+          title: document.querySelector('#khWorld h2')?.textContent.trim() || '',
+          direction: getComputedStyle(document.querySelector('#khWorld')).direction
+        }));
+        step('homepage globe restores Arabic after German', restored.title === 'اكتشف العالم من خلال حكاياته' && restored.direction === 'rtl', JSON.stringify(restored));
       } catch (e) {
-        step('homepage map fallback and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
+        step('homepage globe and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
       }
     }
 
