@@ -35,6 +35,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "وليه كتاب «القانون في الطب» فضل معروفًا لقرون طويلة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لأنه جمع معارف طبية من عصور سابقة، ونظّمها وأضاف إليها ابن سينا من دراسته وخبرته. وده بيوضح قيمة الكتاب في تاريخ الطب، من غير ما نعتبره بديلًا عن العلم الطبي الحديث."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "وُلد ابن سينا، واسمه أبو علي الحسين بن عبد الله بن سينا، نحو عام 980 ميلاديًا في منطقة بخارى، الواقعة في أوزبكستان حاليًا. اهتم منذ صغره بالتعلم، ودرس القرآن واللغة والفلسفة والعلوم، ثم اتجه إلى الطب حتى أصبح طبيبًا معروفًا في عصره."
         },
@@ -115,6 +125,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "No, and that is one of the remarkable things about his story. He also wrote about philosophy, logic, and other subjects. He believed that understanding people and the world required more than one field of knowledge."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Why did The Canon of Medicine remain well known for so many centuries?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "It gathered medical knowledge from earlier periods, organized it, and included what Ibn Sina added through his study and experience. This explains its place in medical history, without treating it as a substitute for modern medicine."
         },
         {
           "type": "paragraph",
@@ -201,6 +221,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Pourquoi Le Canon de la médecine est-il resté célèbre pendant tant de siècles ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il rassemblait des connaissances médicales antérieures, les organisait et y ajoutait les apports d’Ibn Sina issus de ses études et de son expérience. Cela explique sa place dans l’histoire de la médecine, sans le considérer comme un substitut à la médecine moderne."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ibn Sina, de son nom complet Abu Ali al-Husayn ibn Abd Allah ibn Sina, serait né vers 980 dans la région de Boukhara, aujourd’hui en Ouzbékistan. Il s’intéressa tôt au savoir, puis devint un médecin reconnu à son époque."
         },
@@ -284,6 +314,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Perché il Canone della medicina rimase famoso per tanti secoli?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Raccolse conoscenze mediche precedenti, le organizzò e vi aggiunse ciò che Ibn Sina aveva elaborato attraverso lo studio e l’esperienza. Questo spiega il suo posto nella storia della medicina, senza considerarlo un sostituto della medicina moderna."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ibn Sina, il cui nome completo era Abu Ali al-Husayn ibn Abd Allah ibn Sina, nacque intorno al 980 d.C. nella regione di Bukhara, nell’attuale Uzbekistan. Si dedicò presto allo studio e in seguito divenne un medico noto ai suoi tempi."
         },
@@ -364,6 +404,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Nein, und das ist eine Besonderheit seiner Geschichte. Er schrieb auch über Philosophie, Logik und andere Themen. Er war überzeugt, dass man Menschen und die Welt nur mit Wissen aus mehreren Fachgebieten verstehen kann."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Warum blieb der Kanon der Medizin über viele Jahrhunderte bekannt?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Er sammelte medizinisches Wissen früherer Zeiten, ordnete es und ergänzte es um Erkenntnisse aus Ibn Sinas Studium und Erfahrung. Das erklärt seine Bedeutung in der Medizingeschichte, ohne ihn als Ersatz für die moderne Medizin zu betrachten."
         },
         {
           "type": "paragraph",
