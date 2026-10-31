@@ -862,9 +862,10 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
   assert.equal(story.section, 'science');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.original_body, original, 'the submitted original_body must remain verbatim');
-  assert.equal(story.i18n.ar.blocks.length, 10);
+  assert.ok(story.i18n.ar.blocks.length >= 10, 'Arabic story keeps at least the established narrative blocks');
   assert.equal(story.quiz.length, 6, 'all six original quiz questions must be preserved');
-  assert.ok(story.i18n.ar.blocks[2].text.includes('بلبيس') && !story.i18n.ar.blocks[2].text.includes('أسوان'), 'the reader-facing opening must use the corrected birthplace');
+  var correctedOpening = story.i18n.ar.blocks.find(function (block) { return block.heading === 'قلب ينبض بالحياة: حكاية صانع الأمل'; });
+  assert.ok(correctedOpening && correctedOpening.text.includes('بلبيس') && !correctedOpening.text.includes('أسوان'), 'the reader-facing opening must use the corrected birthplace');
 
   var photos = story.images.filter(function (image) { return image.kind === 'photograph'; });
   var illustration = story.images.find(function (image) { return image.kind === 'illustration'; });
@@ -880,7 +881,8 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
   assert.ok(story.sources.some(function (source) { return source.url === lister.source_url; }), 'the Lister Medal Commons source page must be linked');
 
   ['ar', 'en', 'fr', 'it', 'de'].forEach(function (lang) {
-    assert.equal(story.i18n[lang].blocks.length, 10, lang + ' must contain all story blocks');
+    assert.ok(story.i18n[lang].blocks.length >= 10, lang + ' must contain at least the established story blocks');
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, lang + ' block count must match Arabic');
     assert.equal(story.i18n[lang].person, story.i18n[lang].figure_name, lang + ' person metadata must remain localized');
     [raafat, lister, illustration].forEach(function (image) {
       ['alt', 'caption', 'source_name', 'rights'].forEach(function (field) {

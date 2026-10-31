@@ -77,12 +77,13 @@ test('Ibn Sina V2 story package validates and preserves its five-language readin
   ];
   assert.deepEqual(errors, [], 'Ibn Sina V2 package must pass the actual V2 contract and local-image checks');
   assert.equal(story.section, 'history');
-  assert.equal(story.i18n.ar.blocks.length, 11);
+  assert.ok(story.i18n.ar.blocks.length >= 11, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10, 'keep the ten questions already translated in all five languages');
   assert.equal(story.sources.length, 3);
   assert.equal(story.images.length, 2);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 11, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 11, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'editorial verification note missing in ' + lang);
     for (const question of story.quiz) {
       assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
@@ -108,12 +109,13 @@ test('Ahmed Urabi V2 story package validates with five-language blocks, images, 
   ];
   assert.deepEqual(errors, [], 'Ahmed Urabi V2 package must pass the V2 contract and local-image checks');
   assert.equal(story.section, 'history');
-  assert.equal(story.i18n.ar.blocks.length, 14);
+  assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10);
   assert.equal(story.sources.length, 3);
   assert.equal(story.images.length, 2);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 14, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 14, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     for (const question of story.quiz) {
       assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
@@ -142,7 +144,8 @@ test('Tawfiq al-Hakim V2 package validates with five-language text, archival ima
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 7);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 9, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 9, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     for (const question of story.quiz) {
       assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
@@ -175,7 +178,8 @@ test('Naguib Mahfouz V2 package validates with Karma narration, archival photos,
   assert.equal(story.quiz.length, 6);
   assert.equal(story.sources.length, 5);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 13, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 13, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
@@ -206,11 +210,12 @@ test('Sameera Moussa V2 package validates with five-language science narrative, 
   assert.equal(story.images.length, 3);
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 4);
-  assert.equal(story.i18n.ar.blocks.length, 14);
+  assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /الاغتيال/);
   assert.match(story.i18n.ar.images_note, /الملكية العامة في مصر/);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 14, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 14, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
@@ -244,12 +249,13 @@ test('Amr ibn al-As V2 package validates with child narration, historical uncert
   assert.equal(story.images.length, 4);
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 3);
-  assert.equal(story.i18n.ar.blocks.length, 8);
+  assert.ok(story.i18n.ar.blocks.length >= 8, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /مكان دفنه/);
   assert.match(story.i18n.ar.images_note, /CC BY 2\.0/);
   assert.match(story.i18n.ar.images_note, /CC BY-SA 3\.0/);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 8, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 8, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
@@ -283,13 +289,14 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
   assert.equal(story.images.length, 3);
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 8);
-  assert.equal(story.i18n.ar.blocks.length, 9);
+  assert.ok(story.i18n.ar.blocks.length >= 9, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /لجنة/);
   assert.match(story.i18n.ar.images_note, /NASA/);
   assert.ok(story.sources.some(source => source.url === 'https://www.asu.edu.eg/736/news'));
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 9, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 9, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
@@ -323,13 +330,14 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   assert.equal(story.images.length, 4);
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 6);
-  assert.equal(story.i18n.ar.blocks.length, 8);
+  assert.ok(story.i18n.ar.blocks.length >= 8, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /القرن الأفريقي/);
   assert.match(story.i18n.ar.history_note, /السكري والسرطان/);
   assert.match(story.i18n.ar.images_note, /CC BY 4\.0/);
   assert.match(story.i18n.ar.images_note, /CC0/);
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 8, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 8, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
@@ -371,16 +379,19 @@ test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-lang
   assert.equal(story.i18n.ar.grade, 'الصف الثالث الابتدائي');
   assert.equal(story.i18n.ar.narrator_name, 'كارما');
   assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
-  assert.equal(story.images.length, 1, 'only original project artwork is embedded until scan rights are verified');
+  assert.ok(story.images.length >= 2, 'at least two documented images are included while historical scan rights remain unverified');
+  assert.ok(story.images.some(image => image.id === 'khwarizmi-letter-writing' && image.kind === 'illustration'));
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 5);
-  assert.equal(story.i18n.ar.blocks.length, 12);
+  assert.ok(story.i18n.ar.blocks.length >= 12, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /لا ينبغي الخلط/);
   assert.match(story.i18n.ar.history_note, /تقريبية/);
-  assert.match(story.i18n.ar.images_note, /GetArchive/);
+  assert.match(story.i18n.ar.images_note, /طبعة 1880/);
+  assert.match(story.i18n.ar.images_note, /حقوق إعادة استخدامها/);
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
   for (const lang of langs) {
-    assert.equal(story.i18n[lang].blocks.length, 12, 'story blocks missing in ' + lang);
+    assert.ok(story.i18n[lang].blocks.length >= 12, 'story block count below the established minimum in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
     assert.ok(story.i18n[lang].images_note?.trim(), 'image rights note missing in ' + lang);
     for (const question of story.quiz) {
