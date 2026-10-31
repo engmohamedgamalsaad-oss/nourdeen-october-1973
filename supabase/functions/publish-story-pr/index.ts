@@ -96,7 +96,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-31-v2-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-28-v2-draft-guard-1", v2_publish_version: "2026-10-31-v2-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
