@@ -2,12 +2,21 @@
    يضيف قسم «على الخريطة» في صفحات الحكايات 005–015 عندما يكون للحكاية مكان موثق في stories/places.json،
    وفيه رابط يفتح خريطة الصفحة الرئيسية (#khMap). لا يمس حكايات أكتوبر (001–004).
    إن كان في الصفحة رابط للخريطة بالفعل (.interactive-map-link) لا يضيف شيئًا؛ وإن كان فيها قسم .story-map-link بدون رابط يضيف الرابط فيه فقط.
-   لا يستخدم innerHTML مع أي بيانات. يتبع لغة الصفحة (html lang) ويتحدّث عند تغييرها. */
+   لا يستخدم innerHTML مع أي بيانات. يتبع لغة الصفحة (html lang) ويتحدّث عند تغييرها.
+   ملاحظة: يحمّل أيضًا khaledoon-story-nav.js (أزرار «رجوع» و«الرئيسية» في الهيدر) من نفس المجلد،
+   لأن هذا الملف تحمّله كل صفحات الحكايات المبنية على القالب الموحّد. */
 (function () {
   'use strict';
   if (window.__khStoryMap) return;
   window.__khStoryMap = true;
   var cs = document.currentScript;
+  try {
+    if (cs && cs.src && !window.__khStoryNav) {
+      var navScript = document.createElement('script');
+      navScript.src = new URL('khaledoon-story-nav.js?v=20261031-nav-1', cs.src).href;
+      document.head.appendChild(navScript);
+    }
+  } catch (e) {}
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var STR = {
     kicker: { ar: 'على الخريطة', en: 'On the map', fr: 'Sur la carte', it: 'Sulla mappa', de: 'Auf der Karte' },
