@@ -37,6 +37,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني الفيمتوثانية قصيرة قد إيه؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الفيمتوثانية جزء من مليون مليار جزء من الثانية؛ زمن صغير جدًا يساعد العلماء على متابعة التغيرات السريعة داخل التفاعلات الكيميائية."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "وُلد أحمد حسن زويل يوم 26 فبراير 1946 في مدينة دمنهور بمصر. درس الكيمياء في جامعة الإسكندرية، ثم سافر إلى الولايات المتحدة ونال الدكتوراه من جامعة بنسلفانيا. وبعد فترة عمل في جامعة كاليفورنيا ببركلي، انتقل سنة 1976 إلى معهد كاليفورنيا للتكنولوجيا (كالتك) في مدينة باسادينا."
         },
@@ -126,6 +136,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Zewail helped open a new window onto chemical reactions by using extremely short laser pulses. These pulses measured incredibly tiny intervals called femtoseconds, allowing scientists to study how molecules change during a reaction."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Just how short is a femtosecond?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A femtosecond is one quadrillionth of a second. This extremely brief timescale helps scientists follow rapid changes during chemical reactions."
         },
         {
           "type": "paragraph",
@@ -221,6 +241,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "À quel point une femtoseconde est-elle courte ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Une femtoseconde correspond à un millionième de milliardième de seconde, soit 10⁻¹⁵ seconde. Cette durée minuscule aide les scientifiques à suivre les changements rapides des réactions chimiques."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Hassan Zewail est né le 26 février 1946 à Damanhour, en Égypte. Il a étudié la chimie à l’université d’Alexandrie, puis est parti aux États-Unis, où il a obtenu son doctorat à l’université de Pennsylvanie. Après un passage à l’université de Californie à Berkeley, il a rejoint en 1976 le California Institute of Technology (Caltech), à Pasadena."
         },
@@ -313,6 +343,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quanto è breve, esattamente, un femtosecondo?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Un femtosecondo è un milionesimo di miliardesimo di secondo, cioè 10⁻¹⁵ secondi. Questa durata minuscola aiuta gli scienziati a seguire i rapidi cambiamenti nelle reazioni chimiche."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Hassan Zewail è nato il 26 febbraio 1946 a Damanhur, in Egitto. Ha studiato chimica all’Università di Alessandria, poi si è trasferito negli Stati Uniti, dove ha conseguito il dottorato all’Università della Pennsylvania. Dopo un periodo all’Università della California a Berkeley, nel 1976 è passato al California Institute of Technology (Caltech) a Pasadena."
         },
@@ -402,6 +442,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Ahmed Zewail half dabei, mit extrem kurzen Laserpulsen einen neuen Blick auf chemische Reaktionen zu ermöglichen. Diese Pulse erfassten winzige Zeitspannen, sogenannte Femtosekunden. So konnten Forschende untersuchen, wie sich Moleküle während einer Reaktion verändern."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Wie kurz ist eine Femtosekunde eigentlich?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Femtosekunde ist ein billiardstel einer Sekunde, also 10⁻¹⁵ Sekunden. Diese winzige Zeitspanne hilft Forschenden, schnelle Veränderungen bei chemischen Reaktionen zu verfolgen."
         },
         {
           "type": "paragraph",

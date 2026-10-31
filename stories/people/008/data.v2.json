@@ -39,6 +39,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "هل المسرح الذهني معناه إن مفيش أحداث على المسرح؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لا، ممكن تكون فيه شخصيات ومواقف وأحداث، لكن التركيز الأكبر بيكون على الأفكار والصراع الداخلي والحوار اللي يدعو الجمهور للتفكير."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "بداية الحكاية",
           "text": "تخيّل أن تدخل مسرحًا، فتجد أمامك شخصيات تتحاور، وأحداثًا تدفعك إلى التفكير في الحياة والاختيارات التي يصنعها الإنسان. هذا أحد العوالم التي فتحها الأديب المصري توفيق الحكيم، الذي أصبح من أبرز رواد المسرح العربي الحديث، وعُرف باهتمامه بالأفكار الفلسفية والاجتماعية داخل أعماله."
@@ -117,6 +127,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Because some of his plays focus on ideas, questions, and conversations between characters more than on constant physical action on stage. Readers and viewers imagine the situations and think about their meaning, almost as if they help build the performance in their minds."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Does intellectual theatre mean that nothing happens on stage?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No. It can still include characters, situations, and events, but its main focus is on ideas, inner conflict, and dialogue that invites the audience to think."
         },
         {
           "type": "paragraph",
@@ -201,6 +221,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Le théâtre d’idées signifie-t-il qu’il ne se passe rien sur scène ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Non. Il peut comporter des personnages, des situations et des événements, mais il met surtout l’accent sur les idées, les conflits intérieurs et les dialogues qui invitent le public à réfléchir."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "Le début du récit",
           "text": "Imagine entrer dans un théâtre et voir des personnages dialoguer tandis que les événements t’amènent à réfléchir à la vie et aux choix des êtres humains. C’est l’un des univers que l’écrivain égyptien Tawfiq al-Hakim a ouverts aux lecteurs. Il est devenu l’un des grands pionniers du théâtre arabe moderne, et ses œuvres sont connues pour leurs idées philosophiques et leurs questions sociales."
@@ -282,6 +312,16 @@
         },
         {
           "type": "paragraph",
+          "speaker": "karma",
+          "text": "Il teatro di idee significa che sul palcoscenico non accade nulla?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No. Può includere personaggi, situazioni ed eventi, ma mette soprattutto al centro le idee, i conflitti interiori e i dialoghi che invitano il pubblico a riflettere."
+        },
+        {
+          "type": "paragraph",
           "speaker": "narrator",
           "heading": "L’inizio della storia",
           "text": "Immagina di entrare in un teatro e vedere personaggi che dialogano, mentre gli eventi ti spingono a riflettere sulla vita e sulle scelte delle persone. Questo è uno dei mondi aperti dallo scrittore egiziano Tawfiq al-Hakim, diventato uno dei principali pionieri del teatro arabo moderno. Le sue opere sono note per le idee filosofiche e le questioni sociali che affrontano."
@@ -360,6 +400,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Weil einige seiner Stücke Ideen, Fragen und Gespräche zwischen den Figuren stärker betonen als viel Bewegung auf der Bühne. Lesende und Zuschauende stellen sich die Situationen vor und denken über ihre Bedeutung nach – als würden sie das Stück in Gedanken mitgestalten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Bedeutet Gedankentheater, dass auf der Bühne nichts geschieht?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nein. Es kann Figuren, Situationen und Ereignisse geben, doch im Mittelpunkt stehen stärker die Ideen, innere Konflikte und Dialoge, die das Publikum zum Nachdenken anregen."
         },
         {
           "type": "paragraph",
