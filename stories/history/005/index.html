@@ -8,18 +8,19 @@
 <title>ابن سينا — الشيخ الرئيس | خالدون عبر التاريخ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261031-header-unified-1"><link rel="stylesheet" href="theme.css?v=20261030-mosharafa-layout-1"><link rel="stylesheet" href="motion.css?v=20261030-mosharafa-motion-1"></head>
+<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261031-header-unified-1"><meta property="og:title" content="ابن سينا — الشيخ الرئيس"><meta property="og:description" content="رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون."><meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/history/005/cover.svg">
+</head>
 <body data-story-slug="005" data-design="ancient-civilization" data-section="history" data-start-only data-gallery="unplaced">
 <header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">
 <button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>
 </nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
 <div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button>
-<div class="intro-art"><img id="intro-cover" alt=""><p id="intro-art-note"></p><div id="intro-cover-fallback" class="kh-image-fallback" hidden></div></div><div class="intro-copy"><p class="intro-kicker" id="intro-kicker">خالدون عبر التاريخ</p><h2 id="intro-title">ابدأ الحكاية</h2><p id="intro-subtitle"></p><p id="intro-summary"></p><button id="intro-start" class="start-story-btn" type="button">ابدأ الحكاية ←</button></div></div></div>
+<div class="intro-art"><img id="intro-cover" alt=""><div id="intro-cover-fallback" class="kh-image-fallback" hidden></div></div><div class="intro-copy"><p class="intro-kicker" id="intro-kicker">خالدون عبر التاريخ</p><h2 id="intro-title">ابدأ الحكاية</h2><p id="intro-subtitle"></p><p id="intro-summary"></p><button id="intro-start" class="start-story-btn" type="button">ابدأ الحكاية ←</button></div></div></div>
 <main>
 <div id="status" class="status">جاري تحميل حزمة الحكاية الموحدة…</div>
 <article id="story" hidden>
-<section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
+<section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p class="summary" id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
 <div class="story-actions" id="story-actions" aria-label="Story actions">
 <button type="button" id="print-story">🖨️ طباعة / حفظ PDF</button>
 <a id="share-whatsapp" target="_blank" rel="noopener noreferrer">واتساب</a>
@@ -29,7 +30,7 @@
 <section class="section"><h2 id="story-heading">الحكاية</h2><div id="blocks"></div></section>
 <section class="section" id="gallery-section"><h2 id="gallery-heading">صور الحكاية</h2><div id="gallery"></div></section>
 <section class="section" id="map-section" hidden><h2 id="map-heading">مكان الحكاية</h2><p id="map-place"></p><p><a id="map-link" target="_blank" rel="noopener noreferrer">افتح الموقع على الخريطة</a></p></section>
-<section class="section" id="quiz-section"><h2 id="quiz-heading">اختبر فهمك</h2><p class="quiz-intro" id="quiz-intro">جرّب معلوماتك بعد ما تخلص الحكاية، سؤالًا وراء سؤال.</p><button type="button" id="quiz-start" class="quiz-start-btn">ابدأ الاختبار ←</button><div id="quiz" hidden></div></section>
+<section class="section" id="quiz-section"><h2 id="quiz-heading">اختبر فهمك</h2><div id="quiz"></div></section>
 <section class="section reactions-section" id="reactions-section">
 <div class="reactions-wrap"><p class="kicker" id="reaction-kicker">رأيك يهمنا</p><h2 class="reactions-title" id="reaction-heading">ما رأيك في الحكاية؟</h2><p class="reactions-intro" id="reaction-intro">اختَر الانطباع الذي يناسبك بعد القراءة.</p>
 <div class="reaction-like-row"><button class="reaction-btn reaction-like" id="reaction-like" type="button" aria-pressed="false"><span class="reaction-label" id="like-label">❤️ أعجبتني</span><span class="reaction-count" data-reaction-count="like">0</span></button></div>
@@ -44,93 +45,4 @@
 </main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
 <script src="../../../rebuild/reader.js?v=20261030-shared-reader-1" data-kh-v2-reader data-story-path="data.v2.json"></script>
-<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-ibn-sina-3d-globe-link-1" defer></script><script>
-(function(){
-var RA={ar:'اختار رد فعلك على الحكاية',en:'Choose your reaction to the story',fr:'Choisissez votre réaction au récit',it:'Scegli la tua reazione al racconto',de:'Wähle deine Reaktion auf die Geschichte'},
-LB={ar:'عرض الصورة المكبرة',en:'Enlarged image view',fr:'Image agrandie',it:'Immagine ingrandita',de:'Vergrößerte Bildansicht'},
-TH={ar:['التبديل إلى الوضع الفاتح','التبديل إلى الوضع الداكن'],en:['Switch to light mode','Switch to dark mode'],fr:['Passer en mode clair','Passer en mode sombre'],it:['Passa alla modalità chiara','Passa alla modalità scura'],de:['Zum hellen Modus wechseln','Zum dunklen Modus wechseln']};
-function sync(){var r=document.documentElement,l=(r.lang||'ar').slice(0,2);if(!RA[l])l='ar';
-var artNotes={ar:'رسم توضيحي أصلي لغلاف الحكاية',en:'Original illustrated cover artwork',fr:'Illustration originale de couverture',it:'Illustrazione originale di copertina',de:'Originale Titelillustration'};var artNote=document.getElementById('intro-art-note');if(artNote)artNote.textContent=artNotes[l];
-var ro=document.getElementById('reaction-options');if(ro)ro.setAttribute('aria-label',RA[l]);
-var lb=document.getElementById('image-lightbox');if(lb)lb.setAttribute('aria-label',LB[l]);
-var fab=document.querySelector('.kh-fab');if(fab){var t=TH[l][r.getAttribute('data-theme')==='light'?1:0];fab.setAttribute('aria-label',t);fab.title=t}}
-function reloadExtras(){var o=document.querySelector('.story-extras');if(!o)return;o.remove();var sc=document.createElement('script');sc.src='../../../assets/shared/story-extras.js?'+Date.now();document.body.appendChild(sc)}
-document.addEventListener('site-language-change',function(){try{localStorage.setItem('kh-lang',document.documentElement.lang)}catch(e){}setTimeout(function(){sync();reloadExtras()},0)});
-var st=document.getElementById('story');
-
-/* Scroll-reveal for cards, images and small sections (styles live in motion.css).
-   Safe by default: content stays visible unless the observer below is running.
-   Elements already on screen (or already scrolled past) are never hidden. */
-var khIO=null,khRerun=0;
-function khReveal(el,k,instant){
-  if(khIO)khIO.unobserve(el);
-  if(el.classList.contains('kh-card-in')||el.classList.contains('kh-card-done'))return;
-  if(instant)el.classList.add('kh-card-instant');
-  else if(k)el.style.setProperty('--kh-d',(Math.min(k,3)*0.08).toFixed(2)+'s');
-  el.classList.remove('kh-card-pending');
-  el.classList.add('kh-card-in');
-  setTimeout(function(){el.classList.add('kh-card-done');el.classList.remove('kh-card-instant');el.style.removeProperty('--kh-d')},instant?80:2400);
-}
-function khObserver(){
-  if(khIO)return khIO;
-  khIO=new IntersectionObserver(function(entries){
-    var k=0;
-    entries.forEach(function(en){
-      var el=en.target;
-      if(!el.isConnected){khIO.unobserve(el);return}
-      if(en.isIntersecting){khReveal(el,k++,false)}
-      else if(en.boundingClientRect.bottom<0){khReveal(el,0,true)}
-    });
-  },{threshold:.06,rootMargin:'0px 0px -6% 0px'});
-  return khIO;
-}
-function addStoryMotion(){
-  try{
-    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduce||!('IntersectionObserver' in window))return;
-    var io=khObserver(),vh=window.innerHeight||document.documentElement.clientHeight||700,
-        list=[].slice.call(document.querySelectorAll('#blocks > .block,#blocks > figure,#gallery > figure,#map-section,#quiz-section,#reactions-section,.sources'));
-    list.forEach(function(el){
-      var c=el.classList;
-      if(c.contains('kh-card-in')||c.contains('kh-card-done'))return;
-      if(!c.contains('kh-card-pending')){
-        if(el.hidden||!el.getClientRects().length)return;
-        if(el.getBoundingClientRect().top<vh*.92){c.add('kh-card-done');return}
-        c.add('kh-card-pending');
-        [].forEach.call(el.querySelectorAll('.block-timeline > li'),function(li,i){li.style.setProperty('--i',Math.min(i,14))});
-      }
-      io.observe(el);
-    });
-  }catch(e){
-    [].forEach.call(document.querySelectorAll('.kh-card-pending'),function(el){el.classList.remove('kh-card-pending')});
-  }
-}
-function khSchedule(){
-  if(khRerun)cancelAnimationFrame(khRerun);
-  khRerun=requestAnimationFrame(function(){khRerun=0;if(st&&!st.hidden)addStoryMotion()});
-}
-if(window.MutationObserver){
-  ['blocks','gallery'].forEach(function(id){var n=document.getElementById(id);if(n)new MutationObserver(khSchedule).observe(n,{childList:true})});
-}
-if(st&&window.MutationObserver){new MutationObserver(function(){if(!st.hidden){sync();addStoryMotion();setTimeout(sync,1200)}}).observe(st,{attributes:true,attributeFilter:['hidden']})}
-})();
-
-/* Compact language bar: hide while scrolling down, reveal while scrolling up. */
-(function(){
-  var header=document.querySelector('body > header');
-  if(!header)return;
-  var lastY=window.scrollY||0;
-  var busy=false;
-  function update(){
-    var y=window.scrollY||0;
-    if(y<40){header.classList.remove('story-header-hidden');}
-    else if(y>lastY+5){header.classList.add('story-header-hidden');}
-    else if(y<lastY-5){header.classList.remove('story-header-hidden');}
-    lastY=y;busy=false;
-  }
-  window.addEventListener('scroll',function(){
-    if(!busy){busy=true;window.requestAnimationFrame(update);}
-  },{passive:true});
-})();
-
-</script></body></html>
+<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>
