@@ -150,6 +150,7 @@ function localizedPlaces(story) {
   if (story.map_location === null) return null;
   const map = story.map_location;
   if (!map || typeof map !== 'object') fail('map_location يجب أن يكون كائن موقع موثق أو null صراحةً.');
+  if (!map.source_name || typeof map.source_name !== 'object' || !/^https:\/\//i.test(String(map.source_url || ''))) fail('لا يمكن نشر علامة الخريطة دون اسم مصدر مترجم للغات الخمس ورابط HTTPS للمصدر.');
   return {
     lat: map.lat,
     lng: map.lng,
