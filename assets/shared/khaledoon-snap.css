@@ -6,8 +6,8 @@
 
 :root{
   /* قوة المغناطيس:
-     proximity = يلتقط أقرب مقطع لما توقف قريب منه، ويسيبك تقرأ المقاطع الطويلة بحرية (الأأمن).
-     mandatory = أقوى: دايمًا يثبّت على أقرب مقطع، لكنه ممكن يقصّ مقطعًا أطول من الشاشة. */
+     proximity = يلتقط أقرب مقطع لما توقف قريب منه، ويسيبك تقرأ المقاطع الطويلة بحرية (أنعم وأأمن).
+     mandatory = أقوى وأشد: دايمًا يثبّت، لكنه ممكن يقصّ مقطعًا أطول من الشاشة. */
   --kh-snap-strictness:proximity;
 }
 
@@ -19,22 +19,23 @@
   html:has(> body[data-design] > header){scroll-padding-top:100px}
   html:has(> body[data-story-slug] > header.topbar){scroll-padding-top:72px}
 
-  /* ===== نقاط التثبيت ===== */
-  /* عام */
+  /* ===== نقاط التثبيت =====
+     قليلة وكبيرة عن قصد: كثرة النقاط الصغيرة تخلّي الحركة مشدودة ومتقطعة. */
   .hero,
   body > footer,
   /* الرئيسية */
-  #gateways .head,#gateways .gate,#how .head,#how .info,#how .voice,
+  #gateways .head,#how .head,#how .info,#how .voice,
   /* صفحات الأقسام */
-  .heading,.cards > *,.story-index-cards > *,
+  .heading,
   /* الحكايات الجديدة */
-  .section,.block,#blocks > figure,#gallery > figure,.reactions-wrap,
+  .section,.block,.reactions-wrap,
   /* حكايات أكتوبر */
   section.story,section.end,.kh-dialogue-section,.story-quiz-section,.reactions-section,.sources,
-  .container > p,.container > figure,.container > .panel,.container > .quote,
-  .timeline .event,.lessons .lesson,.two > *,.kh-dialogue-turn{
+  .container > p,.container > figure,.container > .panel,.container > .quote{
     scroll-snap-align:start;
   }
 }
 
+/* من يفضّل تقليل الحركة: بدون مغناطيس */
+@media (prefers-reduced-motion:reduce){html{scroll-snap-type:none!important}}
 @media print{html{scroll-snap-type:none!important}}
