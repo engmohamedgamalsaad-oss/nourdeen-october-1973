@@ -14,9 +14,9 @@
 @media screen and (max-width:780px){
   html:not([data-kh-snap="off"]){scroll-snap-type:y var(--kh-snap-strictness)}
 
-  /* مسافة الهيدر الثابت (الرئيسية لها قاعدتها الخاصة في khaledoon-mobile.css فلا نلمسها) */
+  /* مسافة الهيدر الثابت أعلى الشاشة (الرئيسية لها قاعدتها الخاصة في khaledoon-mobile.css فلا نلمسها) */
   html:has(> body > header:not(.topbar)){scroll-padding-top:74px}
-  html:has(> body[data-design] > header){scroll-padding-top:92px}
+  html:has(> body[data-design] > header){scroll-padding-top:100px}
   html:has(> body[data-story-slug] > header.topbar){scroll-padding-top:72px}
 
   /* ===== نقاط التثبيت ===== */
@@ -35,10 +35,6 @@
   .timeline .event,.lessons .lesson,.two > *,.kh-dialogue-turn{
     scroll-snap-align:start;
   }
-}
-
-@media screen and (max-width:430px){
-  html:has(> body[data-design] > header){scroll-padding-top:116px}
 }
 
 @media print{html{scroll-snap-type:none!important}}
