@@ -38,6 +38,16 @@
           "text": "ومن أكثر ما لفت انتباهي رحلة حتشبسوت إلى بلاد بونت، التي تصف نقوش معبدها وصول أشجار المر الحية إلى مصر. إنها حكاية عن التجارة ونقل النباتات بين البلاد، وتُظهر اهتمام المصريين القدماء بما جلبوه من أماكن بعيدة."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "يعني حتشبسوت ما كانتش مجرد اسم على العرش؛ كانت بتستخدم العمارة والتجارة ضمن مشروعات حكمها؟"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "هذا ما تُظهره آثار عصرها؛ فمعبد الدير البحري ونقوش رحلة بلاد بونت يقدمان أدلة على مشروعاتها الملكية. أما تفسير دوافعها السياسية، فيحتاج إلى قراءة النقوش والسياق التاريخي معًا."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "الحكاية",
@@ -106,6 +116,16 @@
           "type": "paragraph",
           "speaker": "karma",
           "text": "One detail that fascinated me was Hatshepsut’s expedition to the Land of Punt. Inscriptions at her temple describe living myrrh trees being brought to Egypt. The story offers a glimpse of long-distance trade and the movement of plants between lands."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "So Hatshepsut was not merely a name on the throne; architecture and trade were part of her royal projects?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "That is what surviving evidence from her reign shows. Deir el-Bahari temple and the reliefs depicting the expedition to Punt provide evidence of royal projects. Interpreting her political motives requires reading the inscriptions alongside their historical context."
         },
         {
           "type": "paragraph",
@@ -178,6 +198,16 @@
           "text": "Un détail qui m’a fascinée est l’expédition d’Hatchepsout au pays de Pount. Les inscriptions de son temple décrivent l’arrivée en Égypte de plants de myrrhe vivants. Ce récit donne un aperçu du commerce à longue distance et de la circulation des plantes entre les régions."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Hatchepsout n’était donc pas seulement un nom sur le trône : l’architecture et le commerce faisaient partie de ses projets royaux ?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "C’est ce que montrent les vestiges de son règne. Le temple de Deir el-Bahari et les reliefs représentant l’expédition au pays de Pount témoignent de projets royaux. Pour interpréter ses motivations politiques, il faut lire les inscriptions dans leur contexte historique."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Le récit",
@@ -248,6 +278,16 @@
           "text": "Un dettaglio che mi ha colpito è la spedizione di Hatshepsut nella terra di Punt. Le iscrizioni del suo tempio descrivono l’arrivo in Egitto di alberi di mirra vivi. È un racconto che mostra il commercio a lunga distanza e lo spostamento delle piante tra regioni diverse."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Quindi Hatshepsut non era soltanto un nome sul trono: architettura e commercio facevano parte dei suoi progetti reali?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "È ciò che mostrano le testimonianze del suo regno. Il tempio di Deir el-Bahari e i rilievi della spedizione nel paese di Punt documentano progetti reali. Per interpretare le sue motivazioni politiche, occorre leggere le iscrizioni nel loro contesto storico."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "La storia",
@@ -316,6 +356,16 @@
           "type": "paragraph",
           "speaker": "karma",
           "text": "Besonders faszinierend fand ich Hatschepsuts Expedition ins Land Punt. Inschriften an ihrem Tempel beschreiben, wie lebende Myrrhenbäume nach Ägypten gebracht wurden. Die Geschichte gibt einen Einblick in den Fernhandel und den Austausch von Pflanzen zwischen verschiedenen Regionen."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Hatschepsut war also nicht nur ein Name auf dem Thron; Architektur und Handel gehörten zu ihren königlichen Vorhaben?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Das zeigen die erhaltenen Zeugnisse ihrer Regierungszeit. Der Tempel von Deir el-Bahari und die Reliefs der Expedition ins Land Punt belegen königliche Projekte. Ihre politischen Motive lassen sich nur verstehen, wenn man die Inschriften im historischen Zusammenhang liest."
         },
         {
           "type": "paragraph",

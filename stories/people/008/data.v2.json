@@ -48,6 +48,16 @@
           "text": "لا، ممكن تكون فيه شخصيات ومواقف وأحداث، لكن التركيز الأكبر بيكون على الأفكار والصراع الداخلي والحوار اللي يدعو الجمهور للتفكير."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "يعني المسرح الذهني مش معناه إن مفيش حكاية أو شخصيات، لكن إن الفكرة والصراع الداخلي هما الأهم؟"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "بالضبط. في عدد من أعمال توفيق الحكيم يتقدم الحوار الفكري والصراع النفسي على الحركة المسرحية الكبيرة، لذلك يحتاج القارئ أو المشاهد إلى التأمل في المعنى وراء الكلام."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "بداية الحكاية",
@@ -137,6 +147,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "No. It can still include characters, situations, and events, but its main focus is on ideas, inner conflict, and dialogue that invites the audience to think."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "So 'theatre of the mind' does not mean there is no plot or characters; it means ideas and inner conflict take the leading role?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Exactly. In many of Tawfiq al-Hakim's works, intellectual dialogue and psychological conflict are more prominent than large stage action. Readers and viewers are invited to think about the meaning behind the words."
         },
         {
           "type": "paragraph",
@@ -230,6 +250,16 @@
           "text": "Non. Il peut comporter des personnages, des situations et des événements, mais il met surtout l’accent sur les idées, les conflits intérieurs et les dialogues qui invitent le public à réfléchir."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Le « théâtre de l’esprit » ne signifie donc pas qu’il n’y a ni intrigue ni personnages, mais que les idées et les conflits intérieurs occupent le premier plan ?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Exactement. Dans plusieurs œuvres de Tawfiq al-Hakim, le dialogue intellectuel et le conflit psychologique prennent le pas sur les grandes actions scéniques. Le lecteur ou le spectateur est invité à réfléchir au sens des paroles."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Le début du récit",
@@ -321,6 +351,16 @@
           "text": "No. Può includere personaggi, situazioni ed eventi, ma mette soprattutto al centro le idee, i conflitti interiori e i dialoghi che invitano il pubblico a riflettere."
         },
         {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Il «teatro mentale» non significa quindi che manchino trama e personaggi, ma che le idee e i conflitti interiori sono al centro?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Esatto. In molte opere di Tawfiq al-Hakim il dialogo intellettuale e il conflitto psicologico hanno più rilievo della grande azione scenica. Il lettore o lo spettatore è invitato a riflettere sul significato delle parole."
+        },
+        {
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "L’inizio della storia",
@@ -410,6 +450,16 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Nein. Es kann Figuren, Situationen und Ereignisse geben, doch im Mittelpunkt stehen stärker die Ideen, innere Konflikte und Dialoge, die das Publikum zum Nachdenken anregen."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Bedeutet „Theater des Geistes“ also nicht, dass Handlung und Figuren fehlen, sondern dass Ideen und innere Konflikte im Mittelpunkt stehen?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Genau. In vielen Werken Tawfiq al-Hakims stehen gedankliche Dialoge und psychologische Konflikte stärker im Vordergrund als große Bühnenaktionen. Leserinnen, Leser und Publikum sollen über die Bedeutung hinter den Worten nachdenken."
         },
         {
           "type": "paragraph",
