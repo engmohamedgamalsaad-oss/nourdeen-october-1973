@@ -7,10 +7,10 @@ import { v2ToAdminDraft } from '../adapters/v1-v2.mjs';
 test('admin import exposes V2 validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261028-v2-admin-6"></script>'));
+  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261031-v2-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261028-v2-admin-6'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261028-v2-admin-6'"));
+  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261031-v2-publisher-1'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261031-v2-publisher-1'"));
   assert.match(html, /var requireV2ForNewStory=!it\.id\|\|!!\(it\.story_meta&&it\.story_meta\.v2_contract_required\)\|\|isV2OnlyDraftRecord\(it\)/);
   assert.doesNotMatch(html, /hasExplicitLegacyV1Package/, 'editing an old record must not force V2 just because it lacks an explicit V1 package');
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'new stories must reject V1 and untagged JSON');
@@ -19,11 +19,10 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /rebuild\/story-contract\.json/);
   assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY_V2'/);
   assert.match(html, /var v2ValidationErrors=v2Adapter\.validateV2\(pkg\)/);
-  assert.match(html, /var v2Errors=v2Adapter\.validateForAdminBridge\(pkg\)/);
-  assert.match(html, /pkg=v2Adapter\.v2ToV1\(pkg\)/);
+  assert.match(html, /v2OnlyDraft=true;v2PackageRaw=JSON\.parse\(JSON\.stringify\(pkg\)\)/, 'every V2 import must preserve the full original package as the canonical source');
+  assert.doesNotMatch(html, /pkg=v2Adapter\.v2ToV1\(pkg\)/, 'new V2 stories must never be converted into V1 for publishing');
   assert.match(html, /pkg=v2Adapter\.v2ToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
-  assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
   assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
@@ -41,7 +40,7 @@ test('admin import exposes V2 validator and converter and preserves original inp
 });
 
 
-test('valid V2 package beyond the V1 bridge is saved through a complete, non-publishable projection', async () => {
+test('valid V2 package remains canonical while the admin uses a non-authoritative projection', async () => {
   const packageUrl = new URL('../story-packages/october-sea-men.v2.json', import.meta.url);
   const pkg = JSON.parse(await readFile(packageUrl, 'utf8'));
   assert.deepEqual(validateStory(pkg), []);
@@ -106,5 +105,5 @@ test('V2 requirement separates new stories from legacy records and keeps V2-only
   assert.equal(requires(false, { id: 'pending-v1-1', story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
   assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
   assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
-  assert.match(html, /if\(isV2OnlyDraftRecord\(it\)\)\{aiFail\('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة\./, 'reimport must not silently clear a V2-only review gate');
+  assert.match(html, /v2OnlyDraft=true;v2PackageRaw=JSON\.parse\(JSON\.stringify\(pkg\)\)/, 'reimport must keep the original V2 package as the canonical source');
 });
