@@ -8,7 +8,7 @@
 <title>علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون | خالدون عبر التاريخ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261031-header-unified-1"><meta property="og:title" content="علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون"><meta property="og:description" content="من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة."><meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/science/016/cover.svg">
+<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261031-header-unified-1"><link rel="stylesheet" href="motion.css?v=20261031-card-image-motion-2"><meta property="og:title" content="علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون"><meta property="og:description" content="من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة."><meta property="og:image" content="https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/stories/science/016/cover.svg">
 </head>
 <body data-story-slug="016" data-design="science-lab" data-section="science" data-start-only data-gallery="unplaced">
 <header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">
@@ -45,4 +45,63 @@
 </main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
 <script src="../../../rebuild/reader.js?v=20261030-shared-reader-1" data-kh-v2-reader data-story-path="data.v2.json"></script>
+<script>
+/* Scroll-reveal for cards, images and small sections (styles live in motion.css).
+   Safe by default: content stays visible unless the observer below is running.
+   Elements already on screen (or already scrolled past) are never hidden. */
+(function(){
+var st=document.getElementById('story'),khIO=null,khRerun=0;
+function khReveal(el,k,instant){
+  if(khIO)khIO.unobserve(el);
+  if(el.classList.contains('kh-card-in')||el.classList.contains('kh-card-done'))return;
+  if(instant)el.classList.add('kh-card-instant');
+  else if(k)el.style.setProperty('--kh-d',(Math.min(k,3)*0.08).toFixed(2)+'s');
+  el.classList.remove('kh-card-pending');
+  el.classList.add('kh-card-in');
+  setTimeout(function(){el.classList.add('kh-card-done');el.classList.remove('kh-card-instant');el.style.removeProperty('--kh-d')},instant?80:2400);
+}
+function khObserver(){
+  if(khIO)return khIO;
+  khIO=new IntersectionObserver(function(entries){
+    var k=0;
+    entries.forEach(function(en){
+      var el=en.target;
+      if(!el.isConnected){khIO.unobserve(el);return}
+      if(en.isIntersecting){khReveal(el,k++,false)}
+      else if(en.boundingClientRect.bottom<0){khReveal(el,0,true)}
+    });
+  },{threshold:.06,rootMargin:'0px 0px -6% 0px'});
+  return khIO;
+}
+function addStoryMotion(){
+  try{
+    var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(reduce||!('IntersectionObserver' in window))return;
+    var io=khObserver(),vh=window.innerHeight||document.documentElement.clientHeight||700,
+        list=[].slice.call(document.querySelectorAll('#blocks > .block,#blocks > figure,#gallery > figure,#map-section,#quiz-section,#reactions-section,.sources'));
+    list.forEach(function(el){
+      var c=el.classList;
+      if(c.contains('kh-card-in')||c.contains('kh-card-done'))return;
+      if(!c.contains('kh-card-pending')){
+        if(el.hidden||!el.getClientRects().length)return;
+        if(el.getBoundingClientRect().top<vh*.92){c.add('kh-card-done');return}
+        c.add('kh-card-pending');
+        [].forEach.call(el.querySelectorAll('.block-timeline > li'),function(li,i){li.style.setProperty('--i',Math.min(i,14))});
+      }
+      io.observe(el);
+    });
+  }catch(e){
+    [].forEach.call(document.querySelectorAll('.kh-card-pending'),function(el){el.classList.remove('kh-card-pending')});
+  }
+}
+function khSchedule(){
+  if(khRerun)cancelAnimationFrame(khRerun);
+  khRerun=requestAnimationFrame(function(){khRerun=0;if(st&&!st.hidden)addStoryMotion()});
+}
+if(window.MutationObserver){
+  ['blocks','gallery'].forEach(function(id){var n=document.getElementById(id);if(n)new MutationObserver(khSchedule).observe(n,{childList:true})});
+  if(st)new MutationObserver(function(){if(!st.hidden)addStoryMotion()}).observe(st,{attributes:true,attributeFilter:['hidden']});
+}
+})();
+</script>
 <script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>
