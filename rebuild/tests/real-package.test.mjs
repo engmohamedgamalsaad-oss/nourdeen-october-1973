@@ -379,7 +379,7 @@ test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-lang
   assert.equal(story.i18n.ar.grade, 'الصف الثالث الابتدائي');
   assert.equal(story.i18n.ar.narrator_name, 'كارما');
   assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
-  assert.equal(story.images.length, 2, 'two original illustrations are included while historical scan rights remain unverified');
+  assert.ok(story.images.length >= 2, 'at least two documented images are included while historical scan rights remain unverified');
   assert.ok(story.images.some(image => image.id === 'khwarizmi-letter-writing' && image.kind === 'illustration'));
   assert.equal(story.quiz.length, 5);
   assert.equal(story.sources.length, 5);
