@@ -747,7 +747,7 @@ async function svgArtworkRegression(browser, base, origin) {
         try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
         return { found: true, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
-      const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, location.href).pathname === new URL(en.src, location.href).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
+      const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, base + '/' + item.slug).pathname === new URL(en.src, base + '/' + item.slug).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
       if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
     }
