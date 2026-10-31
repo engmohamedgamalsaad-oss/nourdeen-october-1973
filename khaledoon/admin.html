@@ -1008,10 +1008,9 @@ function pubRow(it){
       if(!v2Adapter){aiFail('محول KHALEDOON_STORY_V2 لم يكتمل تحميله. أعد تحميل لوحة الإدارة وجرّب مرة أخرى.');return}
       var v2ValidationErrors=v2Adapter.validateV2(pkg);
       if(v2ValidationErrors.length){aiFail('حزمة V2 غير مكتملة:',v2ValidationErrors);return}
-      var v2Errors=v2Adapter.validateForAdminBridge(pkg);
-      if(v2Errors.length){
-       v2OnlyDraft=true;v2PackageRaw=JSON.parse(JSON.stringify(pkg));
-       try{pkg=v2Adapter.v2ToAdminDraft(pkg)}catch(v2DraftError){aiFail(v2DraftError.message||'تعذر تجهيز إسقاط مراجعة آمن لحزمة V2.');return}
+      /* V2 is the canonical source for every new story. The V1-shaped admin projection is display-only; publication always uses the exact saved V2 package. */
+      v2OnlyDraft=true;v2PackageRaw=JSON.parse(JSON.stringify(pkg));
+      try{pkg=v2Adapter.v2ToAdminDraft(pkg)}catch(v2DraftError){aiFail(v2DraftError.message||'تعذر تجهيز إسقاط الإدارة لحزمة V2 دون تغيير الحزمة الأصلية.');return}
       }else{
        if(isV2OnlyDraftRecord(it)){aiFail('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة. إعادة الاستيراد لا تزيل هذا القيد تلقائيًا؛ يلزم قرار مراجعة صريح قبل تحويله إلى مسار متوافق. لم يتم حفظ أي تغيير.');return}try{pkg=v2Adapter.v2ToV1(pkg)}catch(v2ConversionError){aiFail(v2ConversionError.message||'تعذر تحويل حزمة V2 دون فقد بيانات.');return}
       }
@@ -1048,7 +1047,7 @@ function pubRow(it){
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       var savedDraft=it.status==='published'?(rows[0].story_meta&&rows[0].story_meta.pending_draft):rows[0];if(!savedDraft||String(savedDraft.title||'')!==expectedAiTitle||String(savedDraft.body||'')!==expectedAiBody)throw new Error('الخادم لم يُرجع المسودة المحفوظة مطابقة للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();if(v2OnlyDraft){try{localStorage.setItem('kh-v2-review-package',JSON.stringify(v2PackageRaw))}catch(ignoreV2ReviewStore){}}if(aiPreviewPopup){aiPreviewPopup.location.href=v2OnlyDraft?'../rebuild/package-review.html?draft=1&v=20261028-v2-review-1':'preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay('ok',v2OnlyDraft?'✅ حُفظت حزمة V2 كاملة كمسودة مراجعة وفتحت المعاينة المخصصة. لا يمكن نشرها من مسار V1.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay('ok',v2OnlyDraft?'✅ حُفظت حزمة V2 كاملة كمسودة مراجعة. استخدم زر «فتح معاينة الحكاية» لعرضها؛ النشر محظور حتى اكتمال مسار V2.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
+      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();if(v2OnlyDraft){try{localStorage.setItem('kh-v2-review-package',JSON.stringify(v2PackageRaw))}catch(ignoreV2ReviewStore){}}if(aiPreviewPopup){aiPreviewPopup.location.href=v2OnlyDraft?'../rebuild/package-review.html?draft=1&v=20261028-v2-review-1':'preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay('ok',v2OnlyDraft?'✅ حُفظت حزمة V2 كاملة كمسودة مراجعة وفتحت المعاينة المخصصة. يمكن نشرها من مسار القالب الموحد بعد اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay('ok',v2OnlyDraft?'✅ حُفظت حزمة V2 كاملة كمسودة مراجعة. استخدم زر «فتح معاينة الحكاية» لعرضها؛ النشر محظور حتى اكتمال مسار V2.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
      }catch(e){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignorePreviewClose){}}aiFail(e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
