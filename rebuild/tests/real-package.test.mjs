@@ -386,7 +386,8 @@ test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-lang
   assert.ok(story.i18n.ar.blocks.length >= 12, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /لا ينبغي الخلط/);
   assert.match(story.i18n.ar.history_note, /تقريبية/);
-  assert.match(story.i18n.ar.images_note, /GetArchive/);
+  assert.match(story.i18n.ar.images_note, /طبعة 1880/);
+  assert.match(story.i18n.ar.images_note, /حقوق إعادة استخدامها/);
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
   for (const lang of langs) {
     assert.ok(story.i18n[lang].blocks.length >= 12, 'story block count below the established minimum in ' + lang);
