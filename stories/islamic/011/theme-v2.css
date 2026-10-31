@@ -1,0 +1,124 @@
+/* Amr ibn al-As — Islamic heritage palette, fully paired for dark and light modes. */
+body[data-story-slug="011"]{
+  --accent:#78c59a;
+  --gold:#d6b36d;
+  --bg:#0b201a;
+  --panel:#14372b;
+  --line:#356a53;
+  --text:#f2f7f1;
+  --muted:#c5d5c9;
+  background:radial-gradient(ellipse at 78% 0%,#1c4938 0%,#0b201a 48%,#07150f 100%);
+  background-attachment:fixed;
+}
+body[data-story-slug="011"] header{
+  background:color-mix(in srgb,#0b201a 94%,transparent);
+  border-bottom-color:#78c59a55;
+}
+body[data-story-slug="011"] .hero{
+  border-color:#78c59a66;
+  background:radial-gradient(ellipse at 12% 25%,#78c59a2b,transparent 48%),linear-gradient(125deg,#173c2e 0%,#102c22 55%,#17291f 100%);
+}
+body[data-story-slug="011"] .section{
+  border-color:#78c59a4d;
+  background:linear-gradient(145deg,#17382b,#10291f);
+}
+body[data-story-slug="011"] .block{
+  border-color:#78c59a45;
+  background:linear-gradient(135deg,#1a3b2d,#122d22);
+}
+body[data-story-slug="011"] .block[data-speaker="karma"]{
+  border-inline-start:4px solid var(--gold);
+  background:linear-gradient(135deg,#493b2355,#17382b);
+}
+body[data-story-slug="011"] .block[data-type="did_you_know"]{
+  border-color:#d6b36d99;
+  border-inline-start:5px solid var(--gold);
+  background:linear-gradient(120deg,#493b2355,#17382b);
+}
+body[data-story-slug="011"] .speaker{color:#a9e4bd}
+body[data-story-slug="011"] .block[data-speaker="karma"] .speaker{color:#f0d18f}
+body[data-story-slug="011"] #cover figure,
+body[data-story-slug="011"] #gallery figure{
+  border-color:#78c59a66;
+  background:linear-gradient(145deg,#1b4433,#0d241b);
+}
+body[data-story-slug="011"] #cover figure img,
+body[data-story-slug="011"] #gallery figure img{background:#0b201a}
+body[data-story-slug="011"] .intro-card{
+  border-color:#78c59a88;
+  background:linear-gradient(135deg,#17382b,#0b201a 78%);
+}
+body[data-story-slug="011"] .intro-art{position:relative;background:#0d281e}
+body[data-story-slug="011"] .intro-art-note{
+  position:absolute;inset-inline-start:12px;bottom:12px;z-index:2;
+  max-width:calc(100% - 24px);padding:5px 11px;
+  border:1px solid #78c59a88;border-radius:999px;
+  background:#071b13ed;color:#f2f7f1;
+  font:700 .72rem/1.7 Cairo,system-ui,sans-serif;
+  box-shadow:0 4px 15px #0005;
+}
+body[data-story-slug="011"] .story-actions button,
+body[data-story-slug="011"] .story-actions a{border-radius:12px}
+body[data-story-slug="011"] .story-actions #print-story{
+  background:linear-gradient(120deg,#a9dfb9,#69b98a);color:#10271b;border-color:#a9dfb9;
+}
+body[data-story-slug="011"][data-theme="light"]{
+  --bg:#f4f1e7;
+  --panel:#fffdf7;
+  --line:#d4ddce;
+  --text:#26372d;
+  --muted:#58675d;
+  background:radial-gradient(ellipse at 80% 0%,#e0eee2 0%,#f4f1e7 55%,#eee9dc 100%);
+  color:var(--text);
+}
+body[data-story-slug="011"][data-theme="light"] header{
+  background:rgba(255,253,247,.96);
+  border-bottom-color:#cbd9cc;
+}
+body[data-story-slug="011"][data-theme="light"] .hero{
+  border-color:#c6d9c8;
+  background:radial-gradient(ellipse at 12% 25%,#78c59a30,transparent 48%),linear-gradient(125deg,#e6f1e6,#fffdf7 58%,#f2eddf);
+}
+body[data-story-slug="011"][data-theme="light"] .section{
+  border-color:#d2ddcf;
+  background:linear-gradient(145deg,#fffefa,#f8f8ef);
+  box-shadow:0 12px 28px rgba(42,65,46,.08);
+}
+body[data-story-slug="011"][data-theme="light"] .block{
+  border-color:#d4dfd1;
+  background:linear-gradient(135deg,#fffefa,#f4f7ef);
+  box-shadow:0 7px 18px rgba(42,65,46,.07);
+}
+body[data-story-slug="011"][data-theme="light"] .block[data-speaker="karma"]{
+  border-inline-start-color:#a77c2c;
+  background:linear-gradient(135deg,#fff4d8,#fffdf7);
+}
+body[data-story-slug="011"][data-theme="light"] .block[data-type="did_you_know"]{
+  border-color:#d4bd83;
+  border-inline-start-color:#a77c2c;
+  background:linear-gradient(120deg,#fff1cf,#fffdf7);
+}
+body[data-story-slug="011"][data-theme="light"] .speaker{color:#286b49}
+body[data-story-slug="011"][data-theme="light"] .block[data-speaker="karma"] .speaker{color:#8b641f}
+body[data-story-slug="011"][data-theme="light"] #cover figure,
+body[data-story-slug="011"][data-theme="light"] #gallery figure{
+  border-color:#d2ddcf;
+  background:linear-gradient(145deg,#fffefa,#eef4e9);
+}
+body[data-story-slug="011"][data-theme="light"] #cover figure img,
+body[data-story-slug="011"][data-theme="light"] #gallery figure img{background:#e9eee5}
+body[data-story-slug="011"][data-theme="light"] .intro-card{
+  border-color:#c6d9c8;
+  background:linear-gradient(135deg,#fffdf7,#edf4e9);
+}
+body[data-story-slug="011"][data-theme="light"] .intro-art{background:#e7eee4}
+body[data-story-slug="011"][data-theme="light"] .intro-art-note{
+  background:#fffdf2ed;color:#284b35;border-color:#a9cbb0;
+  box-shadow:0 3px 12px rgba(42,65,46,.14);
+}
+body[data-story-slug="011"][data-theme="light"] .story-actions #print-story{
+  background:linear-gradient(120deg,#d8efdc,#a9d9b5);color:#193b27;border-color:#9ac9a5;
+}
+@media(max-width:700px){
+  body[data-story-slug="011"] .intro-art-note{font-size:.66rem;inset-inline-start:8px;bottom:8px}
+}
