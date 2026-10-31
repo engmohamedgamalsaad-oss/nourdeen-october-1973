@@ -74,6 +74,16 @@
   section.appendChild(row);
   section.appendChild(hint);
 
+  function curLang() { return (window.I18N && window.I18N.lang && window.I18N.lang()) || document.documentElement.lang || 'ar'; }
+  function applyLang() {
+    var c = copy[curLang()] || copy.ar;
+    h.textContent = c.heading;
+    printBtn.textContent = '🖨️ ' + c.print;
+    quiz.textContent = '📝 ' + c.quiz;
+    hint.textContent = c.hint;
+  }
+  document.addEventListener('site-language-change', function () { setTimeout(applyLang, 0); });
+
   var anchor = document.querySelector('.reactions-section');
   if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(section, anchor);
   else document.body.appendChild(section);
