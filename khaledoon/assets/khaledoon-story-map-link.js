@@ -16,6 +16,11 @@
       navScript.src = new URL('khaledoon-story-nav.js?v=20261031-nav-1', cs.src).href;
       document.head.appendChild(navScript);
     }
+    if (cs && cs.src && !window.__khMotion) {
+      var motionScript = document.createElement('script');
+      motionScript.src = new URL('khaledoon-story-motion.js?v=20261031-motion-1', cs.src).href;
+      document.head.appendChild(motionScript);
+    }
   } catch (e) {}
   var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var STR = {

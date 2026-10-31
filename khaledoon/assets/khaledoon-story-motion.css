@@ -1,0 +1,106 @@
+/* Khaledoon story pages: scroll-reveal motion for cards, images and small sections (all V2 stories).
+   SAFE BY DEFAULT: nothing is hidden unless khaledoon-story-motion.js adds .kh-card-pending
+   after its IntersectionObserver is running. No blur is used (keeps mobile smooth).
+   Glow colours follow the section accent (--accent) so every section keeps its own colour. */
+
+:root{--kh-rv-x:-22px}
+html[dir="ltr"]{--kh-rv-x:22px}
+@media(max-width:760px){:root{--kh-rv-x:-12px}html[dir="ltr"]{--kh-rv-x:12px}}
+
+/* The old one-shot load animation ran while the cards were still off-screen. Scroll reveal replaces it. */
+html #blocks .block{animation:none}
+
+/* The shared reader also animates paragraphs / timeline rows / figures a second time (.kh-in).
+   Inside a card that already reveals as a whole this causes a double flash, so it is switched off here. */
+html body.kh-motion #blocks .kh-in,
+html body.kh-motion #gallery .kh-in{animation:none!important}
+
+/* ---- Pending / revealed states ---- */
+.kh-card-pending,.kh-card-in{
+  transition:opacity .7s cubic-bezier(.2,.8,.2,1),transform .85s cubic-bezier(.2,.8,.2,1);
+  transition-delay:var(--kh-d,0s);
+}
+.kh-card-pending{opacity:0;transform:translate3d(0,30px,0) scale(.975)}
+.block.kh-card-pending[data-speaker="narrator"]{transform:translate3d(var(--kh-rv-x),26px,0) scale(.98)}
+.block.kh-card-pending[data-speaker="karma"]{transform:translate3d(calc(var(--kh-rv-x) * -1),26px,0) scale(.98)}
+.section.kh-card-pending{transform:translate3d(0,22px,0)}
+.kh-card-in{opacity:1;transform:none}
+
+/* After the reveal: calm hover only. */
+.kh-card-done{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transition-delay:0s}
+@media(hover:hover){
+  #blocks > .block.kh-card-done:hover{transform:translate3d(0,-3px,0);box-shadow:0 18px 38px #0004,0 0 0 1px color-mix(in srgb,var(--accent,#8ad9e8) 30%,transparent)}
+}
+
+/* ---- Cards: soft glow that fades out right after they appear (gold for Karma) ---- */
+@keyframes kh-card-glow{from{box-shadow:0 0 0 1px color-mix(in srgb,var(--accent,#8ad9e8) 55%,transparent),0 0 34px color-mix(in srgb,var(--accent,#8ad9e8) 30%,transparent)}}
+@keyframes kh-card-glow-gold{from{box-shadow:0 0 0 1px #e6c27a99,0 0 34px #e6c27a4a}}
+#blocks > .block.kh-card-in:not(.kh-card-done){animation:kh-card-glow 1.5s .25s ease-out backwards}
+#blocks > .block[data-speaker="karma"].kh-card-in:not(.kh-card-done){animation-name:kh-card-glow-gold}
+
+/* ---- Timeline rows appear one after another ---- */
+.block.kh-card-pending .block-timeline li{opacity:0;transform:translate3d(var(--kh-rv-x),0,0)}
+.block.kh-card-in .block-timeline li{
+  opacity:1;transform:none;
+  transition:opacity .55s ease,transform .6s cubic-bezier(.2,.8,.2,1);
+  transition-delay:calc(.25s + var(--i,0) * .09s);
+}
+
+/* ---- Images: frame rises, picture settles from a slight zoom, caption follows, one light sweep ---- */
+#blocks > figure,#gallery figure{position:relative;overflow:hidden}
+#blocks > figure.kh-card-pending img,#gallery figure.kh-card-pending img{transform:scale(1.07)}
+#blocks > figure.kh-card-in:not(.kh-card-done) img,
+#gallery figure.kh-card-in:not(.kh-card-done) img{
+  transform:scale(1);
+  transition:transform 1.5s cubic-bezier(.2,.8,.2,1);
+  transition-delay:var(--kh-d,0s);
+}
+#blocks > figure.kh-card-pending figcaption,#gallery figure.kh-card-pending figcaption{opacity:0;transform:translate3d(0,10px,0)}
+#blocks > figure.kh-card-in:not(.kh-card-done) figcaption,
+#gallery figure.kh-card-in:not(.kh-card-done) figcaption{
+  opacity:1;transform:none;
+  transition:opacity .7s .35s ease,transform .7s .35s ease;
+}
+@keyframes kh-img-sweep{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
+#blocks > figure.kh-card-in:not(.kh-card-done):after,
+#gallery figure.kh-card-in:not(.kh-card-done):after{
+  content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.18) 50%,transparent 62%);
+  animation:kh-img-sweep 1.2s .4s ease-out both;
+}
+#blocks > figure.kh-card-done img{transition:transform .45s ease,filter .45s ease}
+@media(hover:hover){
+  #blocks > figure.kh-card-done:hover img{transform:scale(1.02);filter:brightness(1.06)}
+}
+
+/* ---- Small sections (map, quiz, reactions, sources): rise + heading line draws itself ---- */
+.section.kh-card-pending,.section.kh-card-in{animation:none}
+.section.kh-card-pending h2:after,.section.kh-card-in h2:after{animation:none}
+.section.kh-card-pending h2:after{transform:scaleX(0);opacity:.2}
+.section.kh-card-in h2:after{
+  transform:scaleX(1);opacity:1;
+  transition:transform .9s .25s cubic-bezier(.2,.8,.2,1),opacity .6s .25s ease;
+}
+
+/* ---- Elements that were already above the viewport snap into place without animating ---- */
+.kh-card-instant,.kh-card-instant *,.kh-card-instant:after{transition:none!important;animation:none!important}
+
+/* ---- Reduced motion and print: everything simply visible ---- */
+@media(prefers-reduced-motion:reduce){
+  .kh-card-pending,.kh-card-in,
+  .kh-card-pending img,.kh-card-in img,
+  .kh-card-pending figcaption,.kh-card-in figcaption,
+  .kh-card-pending .block-timeline li,.kh-card-in .block-timeline li{
+    opacity:1!important;transform:none!important;transition:none!important;animation:none!important;
+  }
+  .kh-card-pending h2:after,.kh-card-in h2:after{transform:none!important;opacity:1!important;transition:none!important;animation:none!important}
+  #blocks > figure:after,#gallery figure:after{display:none!important}
+}
+@media print{
+  .kh-card-pending,.kh-card-in,
+  .kh-card-pending img,.kh-card-pending figcaption,.kh-card-pending .block-timeline li{
+    opacity:1!important;transform:none!important;transition:none!important;animation:none!important;
+  }
+  .kh-card-pending h2:after{transform:none!important;opacity:1!important}
+  #blocks > figure:after,#gallery figure:after{display:none!important}
+}
