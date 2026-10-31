@@ -155,8 +155,8 @@ Deno.serve(async (req: Request) => {
   let hasV2Artifacts = false;
   try {
     hasV2Artifacts = body.files.some((file: any) =>
-      /\\/data\\.v2\\.json$/.test(file.path) ||
-      /KHALEDOON_STORY_V2|data\\.v2\\.json|data-kh-v2-reader/.test(contentForSafetyScan(file))
+      /\/data\.v2\.json$/.test(file.path) ||
+      /KHALEDOON_STORY_V2|data\.v2\.json|data-kh-v2-reader/.test(contentForSafetyScan(file))
     );
   } catch {
     return reply(400, { error: "تعذر فك ترميز أحد الملفات للتحقق من توافق الحكاية." });
@@ -171,9 +171,9 @@ Deno.serve(async (req: Request) => {
       return reply(409, { error: "يجب اعتماد معاينة الحكاية قبل إنشاء طلب مراجعة للنشر." });
     }
     try {
-      const packageFile = body.files.find((file: any) => /\\/data\\.v2\\.json$/.test(file.path));
-      const pageFile = body.files.find((file: any) => /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/index\\.html$/.test(file.path));
-      const quizFile = body.files.find((file: any) => /^stories\\/quizzes\\/[0-9]{3}\\.json$/.test(file.path));
+      const packageFile = body.files.find((file: any) => /\/data\.v2\.json$/.test(file.path));
+      const pageFile = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
+      const quizFile = body.files.find((file: any) => /^stories\/quizzes\/[0-9]{3}\.json$/.test(file.path));
       const indexFile = body.files.find((file: any) => file.path === "stories/index.json");
       const placesFile = body.files.find((file: any) => file.path === "stories/places.json");
       if (!packageFile || !pageFile || !quizFile || !indexFile || !placesFile) {
@@ -189,7 +189,7 @@ Deno.serve(async (req: Request) => {
       if (!Array.isArray(packageData.quiz) || packageData.quiz.length < 5) {
         return reply(400, { error: "حزمة V2 يجب أن تحتوي على خمسة أسئلة على الأقل." });
       }
-      const pageMatch = pageFile.path.match(/^stories\\/([a-z0-9-]+)\\/([0-9]{3})\\/index\\.html$/);
+      const pageMatch = pageFile.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
       const storySection = pageMatch?.[1], storyId = pageMatch?.[2];
       const storyRoot = storySection && storyId ? "stories/" + storySection + "/" + storyId + "/" : "";
       const pageHtml = contentForSafetyScan(pageFile);
@@ -206,7 +206,7 @@ Deno.serve(async (req: Request) => {
       }
       const incomingIndex = JSON.parse(contentForSafetyScan(indexFile));
       if (!Array.isArray(incomingIndex)) return reply(400, { error: "فهرس الحكايات يجب أن يكون مصفوفة." });
-      const normalizedStoryRoot = storyRoot.replace(/\\/$/, "");
+      const normalizedStoryRoot = storyRoot.replace(/\/$/, "");
       const indexEntry = incomingIndex.find((entry: any) =>
         String(entry.id ?? "").padStart(3, "0") === storyId &&
         String(entry.path ?? "").split("/").filter(Boolean).join("/") === normalizedStoryRoot
