@@ -171,12 +171,13 @@ Deno.serve(async (req: Request) => {
       return reply(409, { error: "يجب اعتماد معاينة الحكاية قبل إنشاء طلب مراجعة للنشر." });
     }
     try {
-      const packageFile = body.files.find((file: any) => /\/data\.v2\.json$/.test(file.path));
-      const pageFile = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
-      const quizFile = body.files.find((file: any) => /^stories\/quizzes\/[0-9]{3}\.json$/.test(file.path));
+      const packageFiles = body.files.filter((file: any) => /\/data\.v2\.json$/.test(file.path));
+      const pageFiles = body.files.filter((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
+      const quizFiles = body.files.filter((file: any) => /^stories\/quizzes\/[0-9]{3}\.json$/.test(file.path));
+      const packageFile = packageFiles[0], pageFile = pageFiles[0], quizFile = quizFiles[0];
       const indexFile = body.files.find((file: any) => file.path === "stories/index.json");
       const placesFile = body.files.find((file: any) => file.path === "stories/places.json");
-      if (!packageFile || !pageFile || !quizFile || !indexFile || !placesFile) {
+      if (packageFiles.length !== 1 || pageFiles.length !== 1 || quizFiles.length !== 1 || !packageFile || !pageFile || !quizFile || !indexFile || !placesFile) {
         return reply(400, { error: "حزمة V2 للنشر تحتاج صفحة index.html وdata.v2.json وبنك الأسئلة والفهرس وبيانات الخريطة." });
       }
       const packageData = JSON.parse(contentForSafetyScan(packageFile));
@@ -197,8 +198,7 @@ Deno.serve(async (req: Request) => {
           !pageHtml.includes("data-kh-v2-reader") ||
           !pageHtml.includes('data-story-path="data.v2.json"') ||
           !pageHtml.includes('data-story-slug="' + storyId + '"') ||
-          !packageFile.path.startsWith(storyRoot) ||
-          !packageFile.path.endsWith("/data.v2.json")) {
+          packageFile.path !== storyRoot + "data.v2.json") {
         return reply(400, { error: "مسار صفحة V2 أو ربط القارئ لا يطابق القسم ورقم الحكاية." });
       }
       if (quizFile.path !== "stories/quizzes/" + storyId + ".json") {
@@ -213,7 +213,11 @@ Deno.serve(async (req: Request) => {
       );
       if (!indexEntry || indexEntry.section !== storySection ||
           indexEntry.title !== packageData.i18n?.ar?.title ||
-          indexEntry.person !== (packageData.i18n?.ar?.figure_name || packageData.i18n?.ar?.person || packageData.i18n?.ar?.title)) {
+          indexEntry.person !== (packageData.i18n?.ar?.figure_name || packageData.i18n?.ar?.person || packageData.i18n?.ar?.title) ||
+          ["en", "fr", "it", "de"].some((lang) =>
+            indexEntry.i18n?.[lang]?.title !== packageData.i18n?.[lang]?.title ||
+            indexEntry.i18n?.[lang]?.person !== (packageData.i18n?.[lang]?.figure_name || packageData.i18n?.[lang]?.person || packageData.i18n?.[lang]?.title)
+          )) {
         return reply(400, { error: "عنصر فهرس الحكايات لا يطابق حزمة V2 المعتمدة." });
       }
       const quiz = JSON.parse(contentForSafetyScan(quizFile));
@@ -245,6 +249,8 @@ Deno.serve(async (req: Request) => {
       if (packageData.map_location && (!place || Number(place.lat) !== packageData.map_location.lat ||
           Number(place.lng) !== packageData.map_location.lng ||
           stableJson(place.place) !== stableJson(packageData.map_location.place) ||
+          stableJson(place.place_label ?? null) !== stableJson(packageData.map_location.place_label ?? null) ||
+          Boolean(place.approximate) !== Boolean(packageData.map_location.approximate) ||
           place.source_url !== packageData.map_location.source_url ||
           stableJson(place.source_name) !== stableJson(packageData.map_location.source_name))) {
         return reply(400, { error: "موقع الخريطة لا يطابق الموقع الموثق داخل حزمة V2." });
