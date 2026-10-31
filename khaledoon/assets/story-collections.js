@@ -21,7 +21,8 @@
   var ui = labels[lang] || labels.ar;
 
   /* ===== صور من حكايات القسم =====
-     معرض صور تاريخية حقيقية داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)، وليس شريطًا متحركًا.
+     معرض صور تاريخية حقيقية يدور وحده داخل ترويسة القسم (وبعد الغلاف في قسم أكتوبر)،
+     بتأثيرات انتقال متنوعة، يتوقف عند مرور الماوس أو زر الإيقاف، ويُسحب باللمس. كل شريحة رابط لحكايتها.
      صورة كل حكاية منشورة تُأخذ تلقائيًا بالترتيب:
        1) صور مختارة موثّقة لها في STORY_GALLERY_PHOTOS (تسبق كل شيء)،
        2) لو لم توجد: بحث تلقائي عن صورة الشخصية في ويكيبيديا (العربية ثم الإنجليزية) وتحميلها من ويكيميديا كومنز،
@@ -29,7 +30,9 @@
        3) لا تُستخدم صور الغلاف ولا رسوم SVG ولا بطاقات بديلة: حكاية لا تجد لها صورة تاريخية لا تظهر في المعرض.
      لإيقاف البحث التلقائي عن حكاية بعينها (مثلًا لو جاءت صورة غير مناسبة) ضع رقمها في AUTO_PHOTO_BLOCKLIST أو ضع صورها في STORY_GALLERY_PHOTOS.
      التنسيق في khaledoon/assets/section-photos.css ويُحمَّل من هنا تلقائيًا. */
-  var MOSAIC_MAX = 5; /* أكثر من هذا العدد من الحكايات يتحول المعرض إلى صف أفقي يُسحب */
+  var MAX_SLIDES = 14; /* أقصى عدد شرائح في الدورة الواحدة */
+  var SLIDE_MS = 5200; /* مدة كل صورة بالملي ثانية */
+  var SLIDE_FX = ['iris', 'fade', 'wipe'];
   var AUTO_PHOTO_BLOCKLIST = {}; /* مثال: { '014': true } */
   /* صور تاريخية مختارة (خفيفة الحجم، مسجلة مصادرها في assets/images/stories/MANIFEST.md أو في مجلد الحكاية). */
   var STORY_GALLERY_PHOTOS = {
@@ -47,7 +50,7 @@
     '013': ['assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'],
     '015': ['assets/images/stories/M_Yacoub.jpg']
   };
-  /* صور إضافية لقسم بعينه، ليست مرتبطة بحكاية (تظهر بلا رابط، وفقط لو عدد الحكايات لا يملأ المعرض). */
+  /* صور إضافية لقسم بعينه، ليست مرتبطة بحكاية (تظهر بلا رابط). */
   var EXTRA_SECTION_PHOTOS = {
     women: [
       { src: 'assets/images/stories/250px-Nefertiti_Bust.png', title: 'الملكة نفرتيتي', alt: 'رأس تمثال الملكة نفرتيتي من مجموعة متحف برلين المصري' },
@@ -61,7 +64,7 @@
       var link = document.createElement('link');
       link.id = 'khSectionPhotosCss';
       link.rel = 'stylesheet';
-      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-3';
+      link.href = root + 'khaledoon/assets/section-photos.css?v=20261030-4';
       link.onload = link.onerror = function () { resolve(); };
       document.head.appendChild(link);
       setTimeout(resolve, 2500);
@@ -105,7 +108,7 @@
       var tokens = nameTokens(query), title = String(page.title || '').toLowerCase();
       var matches = tokens.filter(function (token) { return title.indexOf(token) >= 0; }).length;
       if (!tokens.length || matches < Math.min(2, tokens.length)) return null;
-      var infoUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata%7Curl%7Cmime&iiurlwidth=640&titles=' + encodeURIComponent('File:' + page.pageimage);
+      var infoUrl = 'https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=extmetadata%7Curl%7Cmime&iiurlwidth=800&titles=' + encodeURIComponent('File:' + page.pageimage);
       return wikiJson(infoUrl).then(function (info) {
         var pagesById = info && info.query && info.query.pages;
         var filePage = pagesById && pagesById[Object.keys(pagesById)[0]];
@@ -176,11 +179,11 @@
       de: 'Geschichten in Bildern'
     };
     var navByLang = {
-      ar: ['السابق', 'التالي'],
-      en: ['Previous', 'Next'],
-      fr: ['Précédent', 'Suivant'],
-      it: ['Precedente', 'Successivo'],
-      de: ['Zurück', 'Weiter']
+      ar: ['السابق', 'التالي', 'إيقاف التشغيل التلقائي', 'تشغيل تلقائي'],
+      en: ['Previous', 'Next', 'Pause slideshow', 'Play slideshow'],
+      fr: ['Précédent', 'Suivant', 'Mettre en pause', 'Lecture automatique'],
+      it: ['Precedente', 'Successivo', 'Pausa', 'Riproduzione automatica'],
+      de: ['Zurück', 'Weiter', 'Pause', 'Automatisch abspielen']
     };
     var creditsByLang = {
       ar: 'مصدر الصور: ويكيميديا كومنز —',
@@ -213,62 +216,166 @@
       extras.forEach(function (extra, index) {
         if (extraPhotos[index]) standalone.push({ order: 1000 + index, src: extraPhotos[index], title: extra.title, alt: extra.alt });
       });
-      /* صورة واحدة على الأقل لكل حكاية لها صورة تاريخية؛ الصور الإضافية تملأ الفسيفساء فقط لو لم تمتلئ. */
-      var scrolling = firsts.length > MOSAIC_MAX;
-      var picked = scrolling ? firsts : firsts.concat(standalone, seconds).slice(0, MOSAIC_MAX);
+      /* الأولوية: صورة لكل حكاية، ثم الصور الإضافية للقسم، ثم باقي صور الحكايات؛ ثم تُرتّب حسب ترتيب الحكايات. */
+      var picked = firsts.concat(standalone, seconds).slice(0, MAX_SLIDES);
       if (!picked.length) return;
       picked.sort(function (a, b) { return a.order - b.order; });
 
+      var rtl = document.documentElement.dir === 'rtl';
+      var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
       var section = node('section', 'kh-sp');
       section.setAttribute('aria-labelledby', 'khSpTitle');
       var inner = node('div', 'kh-sp-inner');
       var title = node('h2', 'kh-sp-title', heading);
       title.id = 'khSpTitle';
-      var grid = node('ul', 'kh-sp-grid ' + (scrolling ? 'kh-sp-scroll' : 'kh-sp-n' + picked.length));
-      picked.forEach(function (tile, index) {
-        var item = node('li', 'kh-sp-item');
-        item.style.setProperty('--i', String(Math.min(index, 8)));
-        var link = tile.href ? node('a', 'kh-sp-tile') : node('div', 'kh-sp-tile');
-        if (tile.href) link.href = tile.href;
+      var stage = node('div', 'kh-sp-stage');
+      stage.setAttribute('role', 'region');
+      stage.setAttribute('aria-roledescription', 'carousel');
+      stage.setAttribute('aria-label', heading);
+      stage.tabIndex = 0;
+      stage.style.setProperty('--kh-sp-ms', SLIDE_MS + 'ms');
+
+      var slides = picked.map(function (tile, index) {
+        var slide = tile.href ? node('a', 'kh-sp-slide') : node('div', 'kh-sp-slide');
+        if (tile.href) slide.href = tile.href;
+        slide.setAttribute('data-fx', SLIDE_FX[index % SLIDE_FX.length]);
+        slide.setAttribute('data-kb', String(index % 3));
         tile.label = tile.story ? (localized(tile.story, 'title') || localized(tile.story, 'person') || '') : tile.title;
-        var visual = node('img', '');
-        visual.src = tile.src;
+        var backdrop = node('span', 'kh-sp-bg');
+        backdrop.setAttribute('aria-hidden', 'true');
+        backdrop.style.backgroundImage = 'url("' + String(tile.src).replace(/"/g, '%22') + '")';
+        var image = node('img', '');
+        image.src = tile.src;
         /* الصورة المرتبطة بحكاية يصفها نص الرابط نفسه، فلا نكرر الوصف. */
-        visual.alt = tile.story ? '' : (tile.alt || tile.label);
-        visual.decoding = 'async';
-        visual.onerror = function () { item.style.visibility = 'hidden'; };
+        image.alt = tile.story ? '' : (tile.alt || tile.label);
+        image.decoding = 'async';
+        image.onload = function () { if (image.naturalHeight > image.naturalWidth * 1.05) slide.classList.add('is-portrait'); };
         var caption = node('span', 'kh-sp-cap');
         caption.appendChild(node('strong', '', tile.label));
         var person = tile.story ? localized(tile.story, 'person') : '';
         if (person && person !== tile.label) caption.appendChild(node('small', '', person));
-        link.append(visual, caption);
-        item.appendChild(link);
-        grid.appendChild(item);
+        slide.append(backdrop, image, caption);
+        stage.appendChild(slide);
+        return slide;
       });
-      inner.append(title, grid);
-      if (scrolling) {
-        var rtl = document.documentElement.dir === 'rtl';
-        var nav = node('div', 'kh-sp-nav');
-        [[-1, navLabels[0], rtl ? '›' : '‹'], [1, navLabels[1], rtl ? '‹' : '›']].forEach(function (def) {
-          var button = node('button', '', def[2]);
-          button.type = 'button';
-          button.setAttribute('aria-label', def[1]);
-          button.addEventListener('click', function () {
-            var flip = getComputedStyle(grid).direction === 'rtl' ? -1 : 1;
-            grid.scrollBy({ left: def[0] * flip * grid.clientWidth * 0.8, behavior: 'smooth' });
-          });
-          nav.appendChild(button);
-        });
-        inner.appendChild(nav);
+
+      var many = slides.length > 1;
+      var counter, dots = [], bar, barFill, toggle;
+      var current = -1, timer = null;
+      var userPaused = reduceMotion, hovering = false, focused = false, tabHidden = document.hidden, inView = !('IntersectionObserver' in window);
+
+      function isPlaying() { return many && !userPaused && !hovering && !focused && !tabHidden && inView; }
+      function restartBar() {
+        if (!bar) return;
+        bar.classList.remove('run');
+        void bar.offsetWidth;
+        bar.classList.add('run');
       }
+      function schedule() {
+        clearTimeout(timer);
+        var playing = isPlaying();
+        stage.classList.toggle('is-playing', playing);
+        if (!playing) return;
+        restartBar();
+        timer = setTimeout(function () { show(current + 1); }, SLIDE_MS);
+      }
+      function show(target) {
+        var count = slides.length;
+        target = (target % count + count) % count;
+        if (target === current) return;
+        var old = slides[current];
+        slides.forEach(function (slide, index) {
+          if (index !== target && slide !== old) slide.classList.remove('is-active', 'is-leaving');
+        });
+        if (old) {
+          old.classList.remove('is-active');
+          old.classList.add('is-leaving');
+          clearTimeout(old._khLeave);
+          old._khLeave = setTimeout(function () { old.classList.remove('is-leaving'); }, 1500);
+        }
+        var incoming = slides[target];
+        clearTimeout(incoming._khLeave);
+        incoming.classList.remove('is-leaving');
+        incoming.classList.add('is-active');
+        current = target;
+        if (counter) counter.textContent = (target + 1 < 10 ? '0' : '') + (target + 1) + ' / ' + (count < 10 ? '0' : '') + count;
+        dots.forEach(function (dot, index) { dot.setAttribute('aria-current', index === target ? 'true' : 'false'); });
+        schedule();
+      }
+      function step(direction) { show(current + direction); }
+
+      if (many) {
+        counter = node('span', 'kh-sp-count');
+        counter.setAttribute('aria-hidden', 'true');
+        var prev = node('button', 'kh-sp-btn kh-sp-prev', rtl ? '\u203a' : '\u2039');
+        var next = node('button', 'kh-sp-btn kh-sp-next', rtl ? '\u2039' : '\u203a');
+        prev.type = next.type = 'button';
+        prev.setAttribute('aria-label', navLabels[0]);
+        next.setAttribute('aria-label', navLabels[1]);
+        prev.addEventListener('click', function () { step(-1); });
+        next.addEventListener('click', function () { step(1); });
+        toggle = node('button', 'kh-sp-btn kh-sp-toggle', userPaused ? '\u25b6' : '\u275a\u275a');
+        toggle.type = 'button';
+        toggle.setAttribute('aria-label', userPaused ? navLabels[3] : navLabels[2]);
+        toggle.addEventListener('click', function () {
+          userPaused = !userPaused;
+          toggle.textContent = userPaused ? '\u25b6' : '\u275a\u275a';
+          toggle.setAttribute('aria-label', userPaused ? navLabels[3] : navLabels[2]);
+          schedule();
+        });
+        var dotBox = node('div', 'kh-sp-dots');
+        slides.forEach(function (slide, index) {
+          var dot = node('button', 'kh-sp-dot');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', String(index + 1) + ' / ' + slides.length);
+          dot.addEventListener('click', function () { show(index); });
+          dots.push(dot);
+          dotBox.appendChild(dot);
+        });
+        bar = node('span', 'kh-sp-progress');
+        bar.setAttribute('aria-hidden', 'true');
+        barFill = node('i');
+        bar.appendChild(barFill);
+        stage.append(counter, prev, next, toggle, dotBox, bar);
+
+        stage.addEventListener('pointerenter', function (event) { if (event.pointerType === 'mouse') { hovering = true; schedule(); } });
+        stage.addEventListener('pointerleave', function (event) { if (event.pointerType === 'mouse') { hovering = false; schedule(); } });
+        stage.addEventListener('focusin', function (event) {
+          try { focused = event.target.matches(':focus-visible'); } catch (_) { focused = false; }
+          schedule();
+        });
+        stage.addEventListener('focusout', function () { focused = false; schedule(); });
+        stage.addEventListener('keydown', function (event) {
+          if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+          event.preventDefault();
+          var forward = (event.key === 'ArrowRight') !== rtl;
+          step(forward ? 1 : -1);
+        });
+        /* سحب بالإصبع للتنقل، ولا يفتح الحكاية إذا كانت الحركة سحباً. */
+        var startX = null, swiped = false;
+        stage.addEventListener('pointerdown', function (event) { startX = event.clientX; swiped = false; });
+        stage.addEventListener('pointerup', function (event) {
+          if (startX === null) return;
+          var delta = event.clientX - startX;
+          startX = null;
+          if (Math.abs(delta) < 45) return;
+          swiped = true;
+          step((rtl ? delta > 0 : delta < 0) ? 1 : -1);
+        });
+        stage.addEventListener('pointercancel', function () { startX = null; });
+        stage.addEventListener('click', function (event) { if (swiped) { event.preventDefault(); swiped = false; } }, true);
+        document.addEventListener('visibilitychange', function () { tabHidden = document.hidden; schedule(); });
+      }
+
+      inner.append(title, stage);
       /* نسبة الصور المجلوبة تلقائيًا: المصور والترخيص ورابط صفحة الملف. */
       var credited = picked.filter(function (tile) { return tile.credit && tile.credit.page; });
       if (credited.length) {
         var credits = node('p', 'kh-sp-credits');
         credits.appendChild(document.createTextNode(creditsLabel + ' '));
         credited.forEach(function (tile, index) {
-          if (index) credits.appendChild(document.createTextNode(' · '));
-          var detail = [tile.credit.artist, tile.credit.license].filter(Boolean).join('، ');
+          if (index) credits.appendChild(document.createTextNode(' \u00b7 '));
+          var detail = [tile.credit.artist, tile.credit.license].filter(Boolean).join('\u060c ');
           var anchor = node('a', '', tile.label + (detail ? ' (' + detail + ')' : ''));
           anchor.href = tile.credit.page;
           anchor.target = '_blank';
@@ -279,16 +386,18 @@
       }
       section.appendChild(inner);
       mountPhotos(section);
+      show(0);
+
       if ('IntersectionObserver' in window) {
         var watcher = new IntersectionObserver(function (changes) {
-          if (changes.some(function (change) { return change.isIntersecting; })) {
-            section.classList.add('is-in');
-            watcher.disconnect();
-          }
-        }, { threshold: 0.15 });
+          inView = changes.some(function (change) { return change.isIntersecting; });
+          if (inView) section.classList.add('is-in');
+          schedule();
+        }, { threshold: 0.2 });
         watcher.observe(section);
       } else {
         section.classList.add('is-in');
+        schedule();
       }
     });
   }
