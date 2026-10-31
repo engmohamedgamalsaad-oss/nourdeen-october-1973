@@ -125,7 +125,8 @@
         {
           "type": "object",
           "additionalProperties": false,
-          "required": ["lat", "lng", "place", "source_name", "source_url"],
+          "required": ["lat", "lng", "place"],
+          "dependentRequired": { "source_name": ["source_url"], "source_url": ["source_name"] },
           "properties": {
             "lat": { "type": "number", "minimum": -90, "maximum": 90 },
             "lng": { "type": "number", "minimum": -180, "maximum": 180 },
