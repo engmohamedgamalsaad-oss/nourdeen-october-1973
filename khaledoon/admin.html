@@ -328,7 +328,7 @@ async function submitStoryPublishPR(it,btn){
   await confirmStoryPublishAfterUpload(it,btn);return
  }
  if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
- if(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function'){say('err','قالب تجهيز ملفات الحكاية غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
+ if(!v2Only&&(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')){say('err','قالب تجهيز ملفات الحكاية القديمة غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
