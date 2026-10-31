@@ -328,7 +328,6 @@ async function submitStoryPublishPR(it,btn){
   await confirmStoryPublishAfterUpload(it,btn);return
  }
  if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
- if(!v2Only&&(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')){say('err','قالب تجهيز ملفات الحكاية القديمة غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
@@ -337,7 +336,8 @@ async function submitStoryPublishPR(it,btn){
  var targetSectionKey=String((v2Package&&v2Package.section)||(pendingDraft&&(pendingDraft.section_key||pendingDraft.section))||it.section_key||it.section||'');
  var previousPathSection=priorStoryPath.split('/')[1]||'';
  var isPublishedSectionMove=it.status==='published'&&!!pendingDraft&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
- if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false||capabilityResult.requires_submission_id!==true||capabilityResult.rejects_v2_only_drafts!==true||(v2Only&&capabilityResult.supports_v2_publish!==true)||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(v2Only&&capabilityResult.supports_v2_publish!==true?'خدمة النشر الحية لم تُحدّث بعد لدعم القالب الموحد؛ لم نرسل أي ملفات.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة أو نقل الحكايات؛ لم نرسل أي ملفات.')}
+ if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false||capabilityResult.requires_submission_id!==true||capabilityResult.rejects_v2_only_drafts!==true||(v2Only&&capabilityResult.supports_v2_publish!==true)||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(isPublishedSectionMove&&capabilityResult.supports_story_move!==true?'خدمة النشر الحية لا تدعم نقل الحكايات المنشورة حتى الآن. تم إيقاف العملية قبل تجهيز أو إرسال الملفات، ولم تتغير النسخة المنشورة. يلزم تحديث Edge Function ثم إعادة المحاولة.':v2Only&&capabilityResult.supports_v2_publish!==true?'خدمة النشر الحية لم تُحدّث بعد لدعم القالب الموحد؛ لم نرسل أي ملفات.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة؛ لم نرسل أي ملفات.')}
+ if(!v2Only&&(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')){say('err','قالب تجهيز ملفات الحكاية القديمة غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  await refreshIfNeeded();
  var draft=Object.assign({},it,pendingDraft||{});draft.story_meta=meta;
  draft.section_key=draft.section_key||SITEKEY[String(draft.section||'')]||String(draft.section||meta.section_key||'');
