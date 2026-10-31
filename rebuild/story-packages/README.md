@@ -8,7 +8,7 @@ This is the first real-content package used to exercise the V2 validator and bui
 
 ## Admin handling boundary
 
-The admin import path now validates a full V2 package first. If it cannot pass through the narrow V1 bridge without losing V2 fields, it saves the complete package in the admin record's `story_meta.v2_package`, keeps a clearly non-authoritative V1-shaped projection for existing admin listing fields, and opens this read-only package reviewer. The original V2 package is the source of truth; the projection may flatten the interleaving of narrator and Karma blocks and maps photo/document kinds only for legacy storage compatibility.
+The admin import path validates the complete V2 package and always saves the exact package in `story_meta.v2_package`. It also creates a clearly non-authoritative V1-shaped projection for existing admin listing fields and opens the package reviewer. The projection may flatten narrator/Karma block order and map photo/document kinds for legacy display compatibility, but it is never used to build or publish a new story. The V2 package remains the source of truth through page generation and the server-side publish guard.
 
 **تحديث مسار النشر — 2026-10-31:** في فرع `feat/unified-story-production-path` أصبحت كل حزمة V2 جديدة هي المصدر المعتمد، ولا تُحوّل إلى V1 للنشر. أضيف مولّد متصفح ينشئ صفحة القارئ الموحد وملف `data.v2.json` والفهرس وبيانات الخريطة وبنك الأسئلة، كما أضيف تحقق خادمي يطابق الملف المنشور مع الحزمة المحفوظة والمعتمدة في سجل Supabase. المسار ينشئ PR للمراجعة ولا يكتب مباشرة إلى main. النسخة الحية التي فُحصت ما زالت Edge Function v12 ولا تعلن دعم V2؛ لم تُنشر نسخة الفرع ولم تُدمج بعد. لذلك لا يُعد هذا تكاملًا منشورًا حتى اعتماد الفرع ونشر الوظيفة الجديدة.
 
