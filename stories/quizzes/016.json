@@ -1,0 +1,642 @@
+{
+  "questions": [
+    {
+      "q": "في أي مدينة وُلد علي مصطفى مشرفة؟",
+      "o": [
+        "القاهرة",
+        "دمياط",
+        "الإسكندرية",
+        "أسوان"
+      ],
+      "a": 1,
+      "e": "وُلد مشرفة في دمياط في 11 يوليو 1898.",
+      "i18n": {
+        "en": {
+          "q": "In which city was Ali Mostafa Mosharafa born?",
+          "o": [
+            "Cairo",
+            "Damietta",
+            "Alexandria",
+            "Aswan"
+          ],
+          "e": "Mosharafa was born in Damietta on 11 July 1898."
+        },
+        "fr": {
+          "q": "Dans quelle ville Ali Mostafa Mosharafa est-il né ?",
+          "o": [
+            "Le Caire",
+            "Damiette",
+            "Alexandrie",
+            "Assouan"
+          ],
+          "e": "Mosharafa est né à Damiette le 11 juillet 1898."
+        },
+        "it": {
+          "q": "In quale città nacque Ali Mostafa Mosharafa?",
+          "o": [
+            "Il Cairo",
+            "Damietta",
+            "Alessandria",
+            "Assuan"
+          ],
+          "e": "Mosharafa nacque a Damietta l’11 luglio 1898."
+        },
+        "de": {
+          "q": "In welcher Stadt wurde Ali Mostafa Mosharafa geboren?",
+          "o": [
+            "Kairo",
+            "Damiette",
+            "Alexandria",
+            "Assuan"
+          ],
+          "e": "Mosharafa wurde am 11. Juli 1898 in Damiette geboren."
+        }
+      }
+    },
+    {
+      "q": "في أي عام حصل على درجة دكتوراه العلوم؟",
+      "o": [
+        "1917",
+        "1920",
+        "1924",
+        "1936"
+      ],
+      "a": 2,
+      "e": "حصل على درجة دكتوراه العلوم عام 1924.",
+      "i18n": {
+        "en": {
+          "q": "In which year did he earn the Doctor of Science degree?",
+          "o": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "e": "He earned the Doctor of Science degree in 1924."
+        },
+        "fr": {
+          "q": "En quelle année a-t-il obtenu le diplôme de Doctor of Science ?",
+          "o": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "e": "Il a obtenu le diplôme de Doctor of Science en 1924."
+        },
+        "it": {
+          "q": "In quale anno ottenne il titolo di Doctor of Science?",
+          "o": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "e": "Ottenne il titolo di Doctor of Science nel 1924."
+        },
+        "de": {
+          "q": "In welchem Jahr erhielt er den Grad Doctor of Science?",
+          "o": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "e": "Er erhielt den Grad Doctor of Science im Jahr 1924."
+        }
+      }
+    },
+    {
+      "q": "ما المجال الذي درّسه مشرفة في كلية العلوم؟",
+      "o": [
+        "الرياضيات التطبيقية",
+        "علم النبات",
+        "الطب",
+        "علم الآثار"
+      ],
+      "a": 0,
+      "e": "أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة.",
+      "i18n": {
+        "en": {
+          "q": "What subject did Mosharafa teach at the Faculty of Science?",
+          "o": [
+            "Applied mathematics",
+            "Botany",
+            "Medicine",
+            "Archaeology"
+          ],
+          "e": "He became a professor of applied mathematics at Cairo University."
+        },
+        "fr": {
+          "q": "Quelle matière Mosharafa enseignait-il à la faculté des sciences ?",
+          "o": [
+            "Mathématiques appliquées",
+            "Botanique",
+            "Médecine",
+            "Archéologie"
+          ],
+          "e": "Il devint professeur de mathématiques appliquées à l’Université du Caire."
+        },
+        "it": {
+          "q": "Quale materia insegnò Mosharafa alla Facoltà di Scienze?",
+          "o": [
+            "Matematica applicata",
+            "Botanica",
+            "Medicina",
+            "Archeologia"
+          ],
+          "e": "Divenne professore di matematica applicata all’Università del Cairo."
+        },
+        "de": {
+          "q": "Welches Fach lehrte Mosharafa an der naturwissenschaftlichen Fakultät?",
+          "o": [
+            "Angewandte Mathematik",
+            "Botanik",
+            "Medizin",
+            "Archäologie"
+          ],
+          "e": "Er wurde Professor für angewandte Mathematik an der Universität Kairo."
+        }
+      }
+    },
+    {
+      "q": "متى أصبح عميدًا لكلية العلوم بجامعة القاهرة؟",
+      "o": [
+        "1923",
+        "1926",
+        "1930",
+        "1936"
+      ],
+      "a": 3,
+      "e": "تولى عمادة كلية العلوم عام 1936، وكان أول مصري يشغل المنصب.",
+      "i18n": {
+        "en": {
+          "q": "When did he become dean of Cairo University’s Faculty of Science?",
+          "o": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "e": "He became dean in 1936, the first Egyptian to hold the position."
+        },
+        "fr": {
+          "q": "Quand est-il devenu doyen de la faculté des sciences de l’Université du Caire ?",
+          "o": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "e": "Il est devenu doyen en 1936, le premier Égyptien à occuper ce poste."
+        },
+        "it": {
+          "q": "Quando divenne preside della Facoltà di Scienze dell’Università del Cairo?",
+          "o": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "e": "Divenne preside nel 1936, il primo egiziano a ricoprire l’incarico."
+        },
+        "de": {
+          "q": "Wann wurde er Dekan der naturwissenschaftlichen Fakultät der Universität Kairo?",
+          "o": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "e": "Er wurde 1936 Dekan und war der erste Ägypter in diesem Amt."
+        }
+      }
+    },
+    {
+      "q": "أي موضوع من الموضوعات التالية بحث فيه مشرفة؟",
+      "o": [
+        "الزراعة الصحراوية فقط",
+        "نظرية الكم والنسبية",
+        "العمارة الفرعونية",
+        "الملاحة البحرية"
+      ],
+      "a": 1,
+      "e": "تناولت أبحاثه نظرية الكم والنسبية والعلاقة بين المادة والإشعاع.",
+      "i18n": {
+        "en": {
+          "q": "Which of these topics did Mosharafa research?",
+          "o": [
+            "Desert farming only",
+            "Quantum theory and relativity",
+            "Pharaonic architecture",
+            "Maritime navigation"
+          ],
+          "e": "His research included quantum theory, relativity, and matter-radiation relations."
+        },
+        "fr": {
+          "q": "Quel sujet Mosharafa a-t-il étudié ?",
+          "o": [
+            "Uniquement l’agriculture désertique",
+            "La théorie quantique et la relativité",
+            "L’architecture pharaonique",
+            "La navigation maritime"
+          ],
+          "e": "Ses recherches portaient notamment sur la théorie quantique, la relativité et la matière-radiation."
+        },
+        "it": {
+          "q": "Quale di questi temi studiò Mosharafa?",
+          "o": [
+            "Solo agricoltura nel deserto",
+            "Teoria dei quanti e relatività",
+            "Architettura faraonica",
+            "Navigazione marittima"
+          ],
+          "e": "Le sue ricerche includevano teoria dei quanti, relatività e rapporto tra materia e radiazione."
+        },
+        "de": {
+          "q": "Welches dieser Themen erforschte Mosharafa?",
+          "o": [
+            "Nur Wüstenlandwirtschaft",
+            "Quantentheorie und Relativität",
+            "Pharaonische Architektur",
+            "Schifffahrt"
+          ],
+          "e": "Seine Forschung umfasste Quantentheorie, Relativität und das Verhältnis von Materie und Strahlung."
+        }
+      }
+    },
+    {
+      "q": "في أي عام حصل مشرفة على شهادة البكالوريا؟",
+      "o": [
+        "1910",
+        "1914",
+        "1917",
+        "1923"
+      ],
+      "a": 1,
+      "e": "حصل على البكالوريا عام 1914 وهو في السادسة عشرة، وكان أصغر من نالها في ذلك الوقت.",
+      "i18n": {
+        "en": {
+          "q": "In which year did Mosharafa earn his baccalaureate?",
+          "o": [
+            "1910",
+            "1914",
+            "1917",
+            "1923"
+          ],
+          "e": "He earned it in 1914 at the age of sixteen, the youngest student to receive it at that time."
+        },
+        "fr": {
+          "q": "En quelle année Mosharafa a-t-il obtenu le baccalauréat ?",
+          "o": [
+            "1910",
+            "1914",
+            "1917",
+            "1923"
+          ],
+          "e": "Il l’a obtenu en 1914, à seize ans, et fut alors le plus jeune à recevoir ce diplôme."
+        },
+        "it": {
+          "q": "In quale anno Mosharafa conseguì il diploma di maturità?",
+          "o": [
+            "1910",
+            "1914",
+            "1917",
+            "1923"
+          ],
+          "e": "Lo conseguì nel 1914, a sedici anni, diventando il più giovane a ottenerlo in quel periodo."
+        },
+        "de": {
+          "q": "In welchem Jahr erwarb Mosharafa das Baccalaureat?",
+          "o": [
+            "1910",
+            "1914",
+            "1917",
+            "1923"
+          ],
+          "e": "1914 erwarb er im Alter von sechzehn Jahren das Baccalaureat und war damals der jüngste Empfänger dieses Abschlusses."
+        }
+      }
+    },
+    {
+      "q": "إلى أي بلد اختير مشرفة في بعثة علمية عام 1917؟",
+      "o": [
+        "فرنسا",
+        "إنجلترا",
+        "ألمانيا",
+        "إيطاليا"
+      ],
+      "a": 1,
+      "e": "اختير عام 1917 لبعثة علمية إلى إنجلترا، ودرس في جامعة نوتنغهام ثم في كلية الملك بلندن.",
+      "i18n": {
+        "en": {
+          "q": "To which country was Mosharafa selected for a scientific mission in 1917?",
+          "o": [
+            "France",
+            "England",
+            "Germany",
+            "Italy"
+          ],
+          "e": "In 1917 he was selected for a scientific mission to England, studying at the University of Nottingham and then at King’s College London."
+        },
+        "fr": {
+          "q": "Dans quel pays Mosharafa a-t-il été choisi pour une mission scientifique en 1917 ?",
+          "o": [
+            "France",
+            "Angleterre",
+            "Allemagne",
+            "Italie"
+          ],
+          "e": "En 1917, il fut choisi pour une mission scientifique en Angleterre : il étudia à l’Université de Nottingham, puis au King’s College de Londres."
+        },
+        "it": {
+          "q": "In quale paese fu scelto Mosharafa per una missione scientifica nel 1917?",
+          "o": [
+            "Francia",
+            "Inghilterra",
+            "Germania",
+            "Italia"
+          ],
+          "e": "Nel 1917 fu scelto per una missione scientifica in Inghilterra: studiò all’Università di Nottingham e poi al King’s College di Londra."
+        },
+        "de": {
+          "q": "In welches Land wurde Mosharafa 1917 für einen wissenschaftlichen Studienaufenthalt ausgewählt?",
+          "o": [
+            "Frankreich",
+            "England",
+            "Deutschland",
+            "Italien"
+          ],
+          "e": "1917 wurde er für einen wissenschaftlichen Studienaufenthalt in England ausgewählt; er studierte an der Universität Nottingham und danach am King’s College London."
+        }
+      }
+    },
+    {
+      "q": "من الطالبة التي دعمها مشرفة وأصبحت عالمة بارزة في أبحاث الإشعاع الذري؟",
+      "o": [
+        "سميرة موسى",
+        "هدى شعراوي",
+        "مي زيادة",
+        "درية شفيق"
+      ],
+      "a": 0,
+      "e": "دعم مشرفة طالبته سميرة موسى وشجّعها حتى تواصل طريقها العلمي.",
+      "i18n": {
+        "en": {
+          "q": "Which student did Mosharafa support who became a prominent scientist in atomic radiation research?",
+          "o": [
+            "Sameera Moussa",
+            "Huda Sha’arawi",
+            "May Ziadeh",
+            "Doria Shafik"
+          ],
+          "e": "Mosharafa supported his student Sameera Moussa and encouraged her to continue on her scientific path."
+        },
+        "fr": {
+          "q": "Quelle étudiante Mosharafa a-t-il soutenue, devenue une scientifique reconnue dans la recherche sur le rayonnement atomique ?",
+          "o": [
+            "Sameera Moussa",
+            "Hoda Chaaraoui",
+            "May Ziadé",
+            "Doria Chafik"
+          ],
+          "e": "Mosharafa soutint son étudiante Sameera Moussa et l’encouragea à poursuivre sa voie scientifique."
+        },
+        "it": {
+          "q": "Quale studentessa sostenne Mosharafa, diventata una scienziata di rilievo nella ricerca sulle radiazioni atomiche?",
+          "o": [
+            "Sameera Moussa",
+            "Huda Sha’arawi",
+            "May Ziadeh",
+            "Doria Shafik"
+          ],
+          "e": "Mosharafa sostenne la sua studentessa Sameera Moussa e la incoraggiò a proseguire il suo percorso scientifico."
+        },
+        "de": {
+          "q": "Welche Studentin unterstützte Mosharafa, die später eine bedeutende Forscherin der Atomstrahlung wurde?",
+          "o": [
+            "Sameera Moussa",
+            "Huda Schaarawi",
+            "May Ziadeh",
+            "Doria Schafik"
+          ],
+          "e": "Mosharafa unterstützte seine Studentin Sameera Moussa und ermutigte sie, ihren wissenschaftlichen Weg weiterzugehen."
+        }
+      }
+    },
+    {
+      "q": "ما الذي تحاول الفيزياء النظرية فعله بحسب الحكاية؟",
+      "o": [
+        "فهم قواعد الكون بالرياضيات والتفكير ثم مقارنتها بالتجارب والملاحظات",
+        "إجراء تجارب المعمل دون أي رياضيات",
+        "دراسة تاريخ الحضارات القديمة",
+        "تصنيع الأجهزة الإلكترونية فقط"
+      ],
+      "a": 0,
+      "e": "الفيزياء النظرية تحاول فهم القواعد التي يعمل بها الكون باستخدام الرياضيات والتفكير، ثم تقارن أفكارها بالتجارب والملاحظات.",
+      "i18n": {
+        "en": {
+          "q": "According to the story, what does theoretical physics try to do?",
+          "o": [
+            "Understand the rules of the universe through mathematics and reasoning, then compare them with experiments and observations",
+            "Run laboratory experiments without any mathematics",
+            "Study the history of ancient civilizations",
+            "Only manufacture electronic devices"
+          ],
+          "e": "Theoretical physics tries to understand the rules by which the universe works using mathematics and reasoning, then compares its ideas with experiments and observations."
+        },
+        "fr": {
+          "q": "Selon le récit, que cherche à faire la physique théorique ?",
+          "o": [
+            "Comprendre les règles de l’univers grâce aux mathématiques et au raisonnement, puis les confronter aux expériences et aux observations",
+            "Faire des expériences de laboratoire sans aucune mathématique",
+            "Étudier l’histoire des civilisations anciennes",
+            "Fabriquer uniquement des appareils électroniques"
+          ],
+          "e": "La physique théorique cherche à comprendre les règles du fonctionnement de l’univers à l’aide des mathématiques et du raisonnement, puis confronte ses idées aux expériences et aux observations."
+        },
+        "it": {
+          "q": "Secondo il racconto, che cosa cerca di fare la fisica teorica?",
+          "o": [
+            "Comprendere le regole dell’universo con la matematica e il ragionamento, poi confrontarle con esperimenti e osservazioni",
+            "Fare esperimenti di laboratorio senza alcuna matematica",
+            "Studiare la storia delle civiltà antiche",
+            "Fabbricare soltanto dispositivi elettronici"
+          ],
+          "e": "La fisica teorica cerca di capire le regole con cui funziona l’universo usando la matematica e il ragionamento, poi confronta le sue idee con esperimenti e osservazioni."
+        },
+        "de": {
+          "q": "Was versucht die theoretische Physik laut der Geschichte?",
+          "o": [
+            "Die Regeln des Universums mit Mathematik und Denken verstehen und sie dann mit Experimenten und Beobachtungen vergleichen",
+            "Laborversuche ganz ohne Mathematik durchführen",
+            "Die Geschichte antiker Zivilisationen erforschen",
+            "Nur elektronische Geräte herstellen"
+          ],
+          "e": "Die theoretische Physik versucht, die Regeln des Universums mithilfe von Mathematik und Denken zu verstehen, und vergleicht ihre Ideen anschließend mit Experimenten und Beobachtungen."
+        }
+      }
+    },
+    {
+      "q": "أي فن أحبه مشرفة وأسهم في تأسيس جمعية له عام 1945؟",
+      "o": [
+        "الموسيقى",
+        "المسرح",
+        "الرسم",
+        "النحت"
+      ],
+      "a": 0,
+      "e": "أسهم في تأسيس جمعية محبي الموسيقى المصرية عام 1945، واهتم بدراسة المقامات المصرية والعلاقات الرياضية بين النغمات.",
+      "i18n": {
+        "en": {
+          "q": "Which art did Mosharafa love and help found a society for in 1945?",
+          "o": [
+            "Music",
+            "Theatre",
+            "Painting",
+            "Sculpture"
+          ],
+          "e": "In 1945 he helped establish the Egyptian Society for Music Lovers and studied Egyptian musical modes and the mathematical relationships between notes."
+        },
+        "fr": {
+          "q": "Quel art Mosharafa aimait-il et pour lequel a-t-il contribué à fonder une société en 1945 ?",
+          "o": [
+            "La musique",
+            "Le théâtre",
+            "La peinture",
+            "La sculpture"
+          ],
+          "e": "En 1945, il contribua à fonder la Société égyptienne des amateurs de musique et étudia les modes musicaux égyptiens ainsi que les rapports mathématiques entre les notes."
+        },
+        "it": {
+          "q": "Quale arte amava Mosharafa e per quale contribuì a fondare una società nel 1945?",
+          "o": [
+            "La musica",
+            "Il teatro",
+            "La pittura",
+            "La scultura"
+          ],
+          "e": "Nel 1945 contribuì a fondare la Società egiziana degli amanti della musica e studiò i modi musicali egiziani e i rapporti matematici tra le note."
+        },
+        "de": {
+          "q": "Welche Kunst liebte Mosharafa und für welche half er 1945 bei der Gründung einer Gesellschaft?",
+          "o": [
+            "Musik",
+            "Theater",
+            "Malerei",
+            "Bildhauerei"
+          ],
+          "e": "1945 half er bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde und untersuchte ägyptische Musikmodi sowie die mathematischen Beziehungen zwischen den Tönen."
+        }
+      }
+    },
+    {
+      "q": "متى وأين توفي علي مصطفى مشرفة؟",
+      "o": [
+        "القاهرة، 15 يناير 1950",
+        "دمياط، 11 يوليو 1898",
+        "الإسكندرية، 1936",
+        "لندن، 1924"
+      ],
+      "a": 0,
+      "e": "توفي في القاهرة يوم 15 يناير 1950.",
+      "i18n": {
+        "en": {
+          "q": "When and where did Ali Mostafa Mosharafa die?",
+          "o": [
+            "Cairo, 15 January 1950",
+            "Damietta, 11 July 1898",
+            "Alexandria, 1936",
+            "London, 1924"
+          ],
+          "e": "He died in Cairo on 15 January 1950."
+        },
+        "fr": {
+          "q": "Quand et où Ali Mostafa Mosharafa est-il mort ?",
+          "o": [
+            "Le Caire, 15 janvier 1950",
+            "Damiette, 11 juillet 1898",
+            "Alexandrie, 1936",
+            "Londres, 1924"
+          ],
+          "e": "Il est mort au Caire le 15 janvier 1950."
+        },
+        "it": {
+          "q": "Quando e dove morì Ali Mostafa Mosharafa?",
+          "o": [
+            "Il Cairo, 15 gennaio 1950",
+            "Damietta, 11 luglio 1898",
+            "Alessandria, 1936",
+            "Londra, 1924"
+          ],
+          "e": "Morì al Cairo il 15 gennaio 1950."
+        },
+        "de": {
+          "q": "Wann und wo starb Ali Mostafa Mosharafa?",
+          "o": [
+            "Kairo, 15. Januar 1950",
+            "Damiette, 11. Juli 1898",
+            "Alexandria, 1936",
+            "London, 1924"
+          ],
+          "e": "Er starb am 15. Januar 1950 in Kairo."
+        }
+      }
+    },
+    {
+      "q": "ما الذي يجعل العلم يكبر بحسب خاتمة الحكاية؟",
+      "o": [
+        "طرح أسئلة دقيقة والبحث عن أدلة",
+        "الاكتفاء بالحكايات المثيرة",
+        "تجنّب الرياضيات",
+        "حفظ المعلومات دون فهم"
+      ],
+      "a": 0,
+      "e": "تقول الخاتمة إن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة.",
+      "i18n": {
+        "en": {
+          "q": "According to the ending of the story, what makes science grow?",
+          "o": [
+            "Asking precise questions and looking for evidence",
+            "Settling for exciting stories",
+            "Avoiding mathematics",
+            "Memorising facts without understanding"
+          ],
+          "e": "The ending says science grows when we ask precise questions and look for evidence, not when we settle for exciting stories."
+        },
+        "fr": {
+          "q": "Selon la conclusion du récit, qu’est-ce qui fait grandir la science ?",
+          "o": [
+            "Poser des questions précises et chercher des preuves",
+            "Se contenter d’histoires passionnantes",
+            "Éviter les mathématiques",
+            "Mémoriser sans comprendre"
+          ],
+          "e": "La conclusion dit que la science grandit quand nous posons des questions précises et cherchons des preuves, et non quand nous nous contentons d’histoires passionnantes."
+        },
+        "it": {
+          "q": "Secondo la conclusione del racconto, che cosa fa crescere la scienza?",
+          "o": [
+            "Porre domande precise e cercare prove",
+            "Accontentarsi di storie emozionanti",
+            "Evitare la matematica",
+            "Memorizzare senza capire"
+          ],
+          "e": "La conclusione dice che la scienza cresce quando poniamo domande precise e cerchiamo prove, non quando ci accontentiamo di storie emozionanti."
+        },
+        "de": {
+          "q": "Was lässt die Wissenschaft laut dem Schluss der Geschichte wachsen?",
+          "o": [
+            "Genaue Fragen stellen und nach Belegen suchen",
+            "Sich mit spannenden Geschichten zufriedengeben",
+            "Mathematik meiden",
+            "Fakten ohne Verständnis auswendig lernen"
+          ],
+          "e": "Der Schluss sagt, dass die Wissenschaft wächst, wenn wir genaue Fragen stellen und nach Belegen suchen, und nicht, wenn wir uns mit spannenden Geschichten zufriedengeben."
+        }
+      }
+    }
+  ],
+  "id": "016",
+  "title": "علي مصطفى مشرفة"
+}
