@@ -374,7 +374,7 @@ async function flow(browser, base, origin, lang, viewport) {
         await page.waitForFunction(() => document.documentElement.lang === 'ar', null, { timeout: 5000 });
         await page.waitForTimeout(150);
         const restored = await page.evaluate(() => ({ list: document.querySelector('#khMap .khm-canvas .khm-list')?.innerText || '', title: document.querySelector('#khMap h2')?.textContent.trim() || '', mapReady: !!document.querySelector('#khMap .khm-canvas .leaflet-container'), direction: getComputedStyle(document.querySelector('#khMap .khm-canvas')).direction }));
-        step('map fallback or interactive map restores Arabic after German', restored.title === 'كل الحكايات على الخريطة' && (restored.list.includes('الموقع التقريبي') || restored.mapReady) && restored.direction === 'rtl', JSON.stringify(restored));
+        step('map fallback or interactive map restores Arabic after German', restored.title === 'كل الحكايات على الخريطة' && (restored.list.includes('الموقع تقريبي') || restored.mapReady) && restored.direction === 'rtl', JSON.stringify(restored));
       } catch (e) {
         step('homepage map fallback and language switch', false, String(e.message || e).split('\\n')[0].slice(0, 500));
       }
