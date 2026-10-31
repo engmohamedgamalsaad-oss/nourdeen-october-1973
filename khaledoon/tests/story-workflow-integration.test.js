@@ -864,7 +864,8 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
   assert.equal(story.original_body, original, 'the submitted original_body must remain verbatim');
   assert.ok(story.i18n.ar.blocks.length >= 10, 'Arabic story keeps at least the established narrative blocks');
   assert.equal(story.quiz.length, 6, 'all six original quiz questions must be preserved');
-  assert.ok(story.i18n.ar.blocks[2].text.includes('بلبيس') && !story.i18n.ar.blocks[2].text.includes('أسوان'), 'the reader-facing opening must use the corrected birthplace');
+  var correctedOpening = story.i18n.ar.blocks.find(function (block) { return block.heading === 'قلب ينبض بالحياة: حكاية صانع الأمل'; });
+  assert.ok(correctedOpening && correctedOpening.text.includes('بلبيس') && !correctedOpening.text.includes('أسوان'), 'the reader-facing opening must use the corrected birthplace');
 
   var photos = story.images.filter(function (image) { return image.kind === 'photograph'; });
   var illustration = story.images.find(function (image) { return image.kind === 'illustration'; });
