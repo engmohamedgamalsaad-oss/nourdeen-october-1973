@@ -656,20 +656,20 @@ async function introPopupRegression(browser, base, origin) {
         await page.goto(`${base}/${rel}`, { waitUntil: 'load', timeout: 20000 });
         await page.waitForTimeout(1200);
         const state = await page.evaluate(() => {
-          const splash = document.querySelector('.story-splash');
-          const image = splash && splash.querySelector('.story-start-art img');
+          const splash = document.querySelector('#story-intro-modal');
+          const image = splash && splash.querySelector('.intro-art img');
           const rect = image ? image.getBoundingClientRect() : { width: 0, height: 0 };
           return {
             splashConnected: !!splash && splash.isConnected,
             imageConnected: !!image && image.isConnected,
-            splashCount: document.querySelectorAll('.story-splash').length,
-            splashDisplay: splash ? getComputedStyle(splash).display : 'missing',
+            splashCount: document.querySelectorAll('#story-intro-modal').length,
+            splashDisplay: splash ? (splash.hidden ? 'none' : getComputedStyle(splash).display) : 'missing',
             imageFit: image ? getComputedStyle(image).objectFit : 'missing',
             imageWidth: Math.round(rect.width),
             imageHeight: Math.round(rect.height),
-            title: splash?.querySelector('.story-start-title')?.textContent?.trim() || '',
-            startButton: !!splash?.querySelector('.story-splash-start'),
-            closeButton: !!splash?.querySelector('.story-start-close')
+            title: splash?.querySelector('#intro-title')?.textContent?.trim() || '',
+            startButton: !!splash?.querySelector('#intro-start'),
+            closeButton: !!splash?.querySelector('#intro-close')
           };
         });
         const ok = state.splashConnected && state.imageConnected && state.splashCount === 1 &&
@@ -679,16 +679,16 @@ async function introPopupRegression(browser, base, origin) {
         checks.push({ viewport, slug, stage: 'unified-splash-after-delay', ok, state });
         if (!ok) hard.push(`Unified intro splash ${slug}/${viewport} missing or invalid after load: ${JSON.stringify(state)}`);
 
-        await page.locator('.story-splash-start').click({ timeout: 5000 });
-        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
-        const startClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        await page.locator('#intro-start').click({ timeout: 5000 });
+        await page.waitForFunction(() => document.querySelector('#story-intro-modal')?.hidden === true, null, { timeout: 5000 }).catch(() => {});
+        const startClosed = await page.evaluate(() => document.querySelector('#story-intro-modal')?.hidden === true);
         checks.push({ viewport, slug, stage: 'start-button-closes-splash', ok: startClosed });
         if (!startClosed) hard.push(`Unified intro splash ${slug}/${viewport}: start button did not close it`);
 
         await page.reload({ waitUntil: 'load', timeout: 20000 });
-        await page.locator('.story-start-close').click({ timeout: 5000 });
-        await page.waitForFunction(() => !document.querySelector('.story-splash'), null, { timeout: 5000 }).catch(() => {});
-        const closeClosed = await page.evaluate(() => !document.querySelector('.story-splash'));
+        await page.locator('#intro-close').click({ timeout: 5000 });
+        await page.waitForFunction(() => document.querySelector('#story-intro-modal')?.hidden === true, null, { timeout: 5000 }).catch(() => {});
+        const closeClosed = await page.evaluate(() => document.querySelector('#story-intro-modal')?.hidden === true);
         checks.push({ viewport, slug, stage: 'close-button-closes-splash', ok: closeClosed });
         if (!closeClosed) hard.push(`Unified intro splash ${slug}/${viewport}: close button did not close it`);
       }
@@ -729,7 +729,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(900);
       const en = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset || (img.getAttribute('src') || '');
         let svg = '';
