@@ -150,7 +150,7 @@ Deno.serve(async (req: Request) => {
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isV2OnlyDraft = sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
-  const savedV2Package = (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
+  const savedV2Package: any = (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
     (sourceMeta.v2_only_draft === true ? sourceMeta.v2_package : null);
   let hasV2Artifacts = false;
   try {
