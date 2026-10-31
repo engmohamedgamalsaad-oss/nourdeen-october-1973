@@ -207,6 +207,12 @@ Deno.serve(async (req: Request) => {
       const incomingIndex = JSON.parse(contentForSafetyScan(indexFile));
       if (!Array.isArray(incomingIndex)) return reply(400, { error: "فهرس الحكايات يجب أن يكون مصفوفة." });
       const normalizedStoryRoot = storyRoot.replace(/\/$/, "");
+      const priorPath = String(review.static_story_path ?? "").split("/").filter(Boolean).join("/");
+      const priorId = String(review.static_story_id ?? "").trim();
+      if ((priorPath && priorPath !== normalizedStoryRoot) ||
+          (priorId && priorId.padStart(3, "0") !== storyId)) {
+        return reply(409, { error: "مسار أو رقم الحكاية لا يطابق سجل المعاينة المعتمد؛ لا يمكن استبدال صفحة أخرى." });
+      }
       const indexEntry = incomingIndex.find((entry: any) =>
         String(entry.id ?? "").padStart(3, "0") === storyId &&
         String(entry.path ?? "").split("/").filter(Boolean).join("/") === normalizedStoryRoot
