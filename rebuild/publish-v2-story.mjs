@@ -6,6 +6,18 @@ const SITE_BASE = 'https://engmohamedgamalsaad-oss.github.io/nourdeen-october-19
 const REPO_ROOT = new URL('../', import.meta.url);
 
 function fail(message) { throw new Error(message); }
+function stableValue(value) {
+  if (Array.isArray(value)) return value.map(stableValue);
+  if (value && typeof value === 'object') {
+    const out = {};
+    Object.keys(value).sort().forEach(key => { out[key] = stableValue(value[key]); });
+    return out;
+  }
+  return value;
+}
+function samePackage(a, b) {
+  return JSON.stringify(stableValue(a)) === JSON.stringify(stableValue(b));
+}
 function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -158,6 +170,9 @@ async function checkLocalImages(story) {
   }
 }
 export async function buildV2StoryFiles(story, options = {}) {
+  const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
+  const savedPackage = getSavedPackage(options.record, options.draft, meta);
+  if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة V2 التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
   const problems = validateStory(story);
   if (problems.length) fail('حزمة القالب الموحد غير مكتملة:\n• ' + problems.join('\n• '));
   if (!Object.hasOwn(story, 'map_location')) fail('أضف map_location صراحةً: موقع موثق أو null إذا لم يتوفر موقع موثوق.');
@@ -166,7 +181,6 @@ export async function buildV2StoryFiles(story, options = {}) {
   if (!Array.isArray(index)) fail('فهرس الحكايات ليس مصفوفة صالحة.');
   const places = await readJson('stories/places.json', 'ملف الخريطة');
   if (!places || typeof places !== 'object' || Array.isArray(places)) fail('ملف الخريطة ليس كائنًا صالحًا.');
-  const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
   const review = meta.preview_review && typeof meta.preview_review === 'object' ? meta.preview_review : {};
   const previousPath = String(review.static_story_path || '').split('/').filter(Boolean).join('/');
   const previousId = String(review.static_story_id || '');
