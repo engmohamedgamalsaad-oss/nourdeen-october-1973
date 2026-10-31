@@ -22,10 +22,10 @@ function esc(value) {
   return String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 async function fetchRepo(path, options = {}) {
+  const { cacheBust, ...requestOptions } = options;
   const url = new URL(path.replace(/^\//, ''), REPO_ROOT);
-  if (options.cacheBust) url.searchParams.set('_v2', String(Date.now()));
-  const response = await fetch(url.href, { cache: 'no-store', ...options });
-  return response;
+  if (cacheBust) url.searchParams.set('_v2', String(Date.now()));
+  return await fetch(url.href, { cache: 'no-store', ...requestOptions });
 }
 async function readJson(path, label) {
   const response = await fetchRepo(path, { cacheBust: true });
