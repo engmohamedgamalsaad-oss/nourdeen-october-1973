@@ -119,69 +119,39 @@
       }
     },
     "map_location": {
-      "description": "Optional location for stories/places.json. Use null explicitly when the location is unknown or not appropriate; never invent coordinates.",
+      "description": "Optional location for stories/places.json. Use null explicitly when the location is unknown or not appropriate; never invent coordinates. A non-null location must include translated place and source names plus an HTTPS source URL.",
       "oneOf": [
-        {
-          "type": "null"
-        },
+        { "type": "null" },
         {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "lat",
-            "lng",
-            "place"
-          ],
+          "required": ["lat", "lng", "place", "source_name", "source_url"],
           "properties": {
-            "lat": {
-              "type": "number",
-              "minimum": -90,
-              "maximum": 90
-            },
-            "lng": {
-              "type": "number",
-              "minimum": -180,
-              "maximum": 180
-            },
-            "place": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": [
-                "ar",
-                "en",
-                "fr",
-                "it",
-                "de"
-              ],
-              "properties": {
-                "ar": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "en": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "fr": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "it": {
-                  "type": "string",
-                  "minLength": 1
-                },
-                "de": {
-                  "type": "string",
-                  "minLength": 1
-                }
-              }
-            }
+            "lat": { "type": "number", "minimum": -90, "maximum": 90 },
+            "lng": { "type": "number", "minimum": -180, "maximum": 180 },
+            "place": { "$ref": "#/$defs/localizedPlace" },
+            "place_label": { "$ref": "#/$defs/localizedPlace" },
+            "source_name": { "$ref": "#/$defs/localizedPlace" },
+            "source_url": { "type": "string", "pattern": "^https://" },
+            "approximate": { "type": "boolean" }
           }
         }
       ]
     }
   },
   "$defs": {
+    "localizedPlace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ar", "en", "fr", "it", "de"],
+      "properties": {
+        "ar": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 },
+        "fr": { "type": "string", "minLength": 1 },
+        "it": { "type": "string", "minLength": 1 },
+        "de": { "type": "string", "minLength": 1 }
+      }
+    },
     "languages": {
       "type": "object",
       "additionalProperties": false,
