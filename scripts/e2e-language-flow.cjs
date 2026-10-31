@@ -746,7 +746,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
       const ar = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.story-start-art img');
+        const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset || (img.getAttribute('src') || '');
         let svg = '';
