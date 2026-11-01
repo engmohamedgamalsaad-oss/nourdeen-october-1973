@@ -1,0 +1,25 @@
+name: All story contract audit
+
+on:
+  pull_request:
+    paths:
+      - "stories/**"
+      - "rebuild/**"
+      - ".github/workflows/all-story-contract-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  all-story-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Audit every non-October story package
+        run: node --test rebuild/tests/all-published-stories.test.mjs
