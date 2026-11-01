@@ -125,7 +125,7 @@ function quizToStory(value) {
     try { bank = JSON.parse(bank); } catch { fail('question_bank_json is not valid JSON'); }
   }
   const questions = bank?.questions;
-  if (!Array.isArray(questions) || questions.length !== 5) fail('exactly five legacy quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; choose exactly five explicitly before conversion—no questions are discarded automatically');
+  if (!Array.isArray(questions) || questions.length < 5) fail('at least five legacy quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; no questions are discarded automatically');
   return questions.map((q, i) => {
     requireObject(q, 'question ' + (i + 1));
     if (!Array.isArray(q.o) || q.o.length !== 4 || !Number.isInteger(q.a) || q.a < 0 || q.a > 3) {
