@@ -45,7 +45,7 @@ for (const sample of [
       assert.equal(storyPackage.format, 'KHALEDOON_STORY');
       assert.equal(storyPackage.section, sample.section);
       assert.match(html, /data-kh-story-reader/, 'migrated story uses the unified unified reader');
-      assert.match(html, /data-story-path="data\.v2\.json"/, 'V2 reader loads the story package');
+      assert.match(html, /data-story-path="story\.json"/, 'V2 reader loads the story package');
     } else {
       assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
     }
