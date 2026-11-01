@@ -26,7 +26,7 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
-  assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
+  assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending unified-package drafts');
   assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative V2 package');
   assert.ok(html.includes("v2PackageDirect=v2PendingDirect&&v2PendingDirect.v2_only_draft?v2PendingDirect.v2_package:(v2MetaDirect.v2_only_draft?v2MetaDirect.v2_package:null)"), 'manual preview should open the saved V2 package without persisting legacy projection edits');
   assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_V1'/);
@@ -83,28 +83,22 @@ test('prompt administration links the dedicated V2 package instructions', async 
 });
 
 
-test('V2 requirement separates new stories from legacy records and keeps V2-only records on V2', async () => {
+test('the unified package is required for every non-October story, including existing records', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const submit = await readFile(new URL('../../khaledoon/submit.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.match(submit, /story_meta:\{v2_contract_required:true,source:'public_submission'\}/, 'new public submissions must persist the V2-required marker');
-  assert.match(builder, /if\(!d\.submission_id\)meta\.v2_contract_required=true/, 'new manual-builder records must persist the V2-required marker');
+  assert.match(submit, /story_meta:\{v2_contract_required:true,source:'public_submission'\}/, 'new public submissions must persist the unified-package marker');
+  assert.match(builder, /if\(!d\.submission_id\)meta\.v2_contract_required=true/, 'new manual-builder records must persist the unified-package marker');
   const guard = html.match(/function isV2OnlyDraftRecord\(it\)\{[^\n]*?\}(?=\n)/);
-  const expr = html.match(/var requireV2ForNewStory=([^;\n]+);/);
-  assert.ok(guard && expr, 'policy expression must be present');
-  const requires = new Function('draftNew', 'it', guard[0] + '; return ' + expr[1] + ';');
-  const legacy = { id: 'legacy-123', status: 'published', story_meta: {} };
-  assert.equal(requires(true, { status: 'pending' }), true, 'new story without a persisted id requires V2');
-  assert.equal(requires(true, legacy), false, 'global new-story mode must not force V2 on an existing record');
-  assert.equal(requires(false, { id: 'new-public-submission-1', story_meta: { v2_contract_required: true, source: 'public_submission' } }), true, 'new public submission with an ID must require V2');
-  assert.equal(requires(false, { id: 'new-manual-builder-1', story_meta: { v2_contract_required: true, manual_builder: true } }), true, 'new manual-builder record with an ID must require V2');
-  assert.equal(requires(false, legacy), false, 'legacy record without flags stays on the compatibility path');
-  assert.equal(requires(false, { id: 'legacy-v1-456', story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
-  assert.equal(requires(false, { id: 'v2-required-1', story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
-  assert.equal(requires(false, { id: 'v2-only-1', story_meta: { v2_only_draft: true } }), true, 'V2-only record stays V2');
-  assert.equal(requires(false, { id: 'pending-v2-1', story_meta: { pending_draft: { v2_only_draft: true } } }), true, 'published record with V2-only pending draft stays V2');
-  assert.equal(requires(false, { id: 'pending-v1-1', story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
-  assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
-  assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
-  assert.match(html, /if\(isV2OnlyDraftRecord\(it\)\)\{aiFail\('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة\./, 'reimport must not silently clear a V2-only review gate');
+  const expr = html.match(/var requireUnifiedStoryPackage=([^;\n]+);/);
+  assert.ok(guard && expr, 'unified-package policy expression must be present');
+  const requires = new Function('it', guard[0] + '; return ' + expr[1] + ';');
+  assert.equal(requires({ id: null, _t: 'k', status: 'pending' }), true, 'new stories require the unified package');
+  assert.equal(requires({ id: 'existing-legacy', _t: 'k', status: 'published', story_meta: {} }), true, 'existing non-October records must be migrated before republishing');
+  assert.equal(requires({ id: 'existing-october', _t: 'o', status: 'published', story_meta: {} }), false, 'October retains its explicitly protected workflow');
+  assert.equal(requires({ id: 'unified-1', _t: 'k', story_meta: { unified_contract_required: true } }), true, 'unified records remain on the unified package');
+  assert.equal(requires({ id: 'unified-2', _t: 'k', story_meta: { v2_only_draft: true } }), true, 'saved canonical packages remain protected');
+  assert.match(html, /if\(requireUnifiedStoryPackage\)\{nextMeta\.unified_contract_required=true;nextMeta\.v2_contract_required=true;\}/, 'unified imports persist the new marker and retain backward compatibility');
+  assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'the complete canonical package is stored separately from its admin projection');
+  assert.match(html, /it\._t!=='o'&&!v2Only/, 'non-October publishing is blocked until the unified package has been imported');
 });
