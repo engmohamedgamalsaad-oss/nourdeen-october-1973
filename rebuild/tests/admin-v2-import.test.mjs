@@ -98,5 +98,6 @@ test('unified package is mandatory for every non-October story, including legacy
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'non-October records must reject the old package format');
   assert.ok(html.includes('if(requireV2ForNewStory)nextMeta.v2_contract_required=true'));
   assert.ok(html.includes('if(v2OnlyDraft){nextMeta.v2_only_draft=true'));
+  assert.ok(html.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October records must be blocked from the legacy publish path');
   assert.ok(html.includes('if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'legacy save and publish controls stay disabled for authoritative unified drafts');
 });
