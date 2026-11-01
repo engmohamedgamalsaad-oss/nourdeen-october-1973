@@ -280,6 +280,7 @@
      to one raw JSON object, matching the canonical v4 prompt and import contract. The old sentences below
      are retained only where they still occur in admin.html; tests guard against drift. */
   var PROMPT_MARKER = 'KHALEDOON_STORY';
+  var LEGACY_PROMPT_MARKER = 'KH_STORY_PACKAGE_V1';
   var PROMPT_RULES = [
     ['أخرج الحزمة وفق المخطط فقط؛ لا تضف شرحًا خارج JSON.',
       'أخرج الحزمة وفق المخطط ككائن JSON خام فقط؛ لا تضف شرحًا خارج الكائن أو أسوار كود.'],
@@ -311,7 +312,7 @@
 
   function toRawJsonPrompt(text) {
     try {
-      if (typeof text !== 'string' || text.indexOf(PROMPT_MARKER) < 0) return text;
+      if (typeof text !== 'string' || (text.indexOf(PROMPT_MARKER) < 0 && text.indexOf(LEGACY_PROMPT_MARKER) < 0)) return text;
       var out = text;
       PROMPT_RULES.forEach(function (rule) { out = out.split(rule[0]).join(rule[1]); });
       if (out.indexOf(EXTRA_RULES_TITLE) < 0) {
