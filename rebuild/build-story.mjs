@@ -45,7 +45,7 @@ const page = `<!doctype html>
 <meta property="og:type" content="article"><meta property="og:title" content="${escape(ar.title)}"><meta property="og:description" content="${escape(ar.summary)}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1"><style>:root{--accent:${story.design.accent}}</style>
+<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1"><link rel="stylesheet" href="../../../rebuild/reader-enhance.css?v=20261101-story-reader-1"><style>:root{--accent:${story.design.accent}}</style>
 </head><body data-story-slug="${storyId}" data-design="${story.design.variant}" data-section="${story.section}" data-start-only data-disable-story-extras><script>document.body.setAttribute("data-theme",document.documentElement.getAttribute("data-theme")||"dark");</script>
 <header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language"><button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button></nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
