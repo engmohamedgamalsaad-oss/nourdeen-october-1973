@@ -299,7 +299,7 @@ function fallbackCopy(text,done){var ta=document.createElement('textarea');ta.va
 function startButtonProgress(btn,label){if(!btn)return;if(!btn.dataset.khOriginalHtml)btn.dataset.khOriginalHtml=btn.innerHTML;btn.classList.add('kh-progress-active');btn.setAttribute('aria-busy','true');btn.disabled=true;if(label)btn.textContent=label;}
 function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remove('kh-progress-active');btn.removeAttribute('aria-busy');btn.disabled=false;if(btn.dataset.khOriginalHtml){btn.innerHTML=btn.dataset.khOriginalHtml;delete btn.dataset.khOriginalHtml;}if(successLabel)btn.textContent=successLabel;}
 function isV2OnlyDraftRecord(it){var m=it&&it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;return !!(m.v2_only_draft||(p&&p.v2_only_draft))}
-function isOctoberLegacyRecord(it){if(!it)return false;if(it._t==='o')return true;var m=it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:{},values=[it.section,it.section_key,m.section,m.section_key,p.section,p.section_key];return values.some(function(v){return String(v||'').trim().toLowerCase()==='october'})}
+function isOctoberLegacyRecord(it){if(!it)return false;if(it._t==='o')return true;var m=it.story_meta||{},values=[it.section,it.section_key,m.section,m.section_key];return values.some(function(v){return String(v||'').trim().toLowerCase()==='october'})}
 function markV2DraftPublishButton(btn,it){if(!btn||!isV2OnlyDraftRecord(it))return;btn.title='حزمة القالب الموحد ستُنشر عبر القارئ الموحد وطلب مراجعة آمن؛ لا يتغير الموقع قبل الدمج.'}
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
