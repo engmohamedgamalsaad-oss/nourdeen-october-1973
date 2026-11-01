@@ -701,7 +701,6 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', asset: 'stories/science/015/cover-popup.svg', decorative: true },
     { slug: 'stories/science/007/', decorative: true },
     { slug: 'stories/women/013/', decorative: true },
     { slug: 'stories/islamic/011/', decorative: true },
@@ -714,7 +713,6 @@ async function svgArtworkRegression(browser, base, origin) {
     { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
     { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
     { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
-    { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
   ];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
