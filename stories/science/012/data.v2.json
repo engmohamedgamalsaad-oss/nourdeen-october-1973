@@ -17,8 +17,8 @@
       "narrator_grade": "الصف الثالث الابتدائي",
       "figure_name": "فاروق الباز",
       "person": "فاروق الباز",
-      "history_note": "الوقائع المضافة إلى هذه الحكاية مأخوذة من المصادر المذكورة: ويكيبيديا، والجزيرة، وصفحة تعليمية من المرصد المدرسي، وسيرة في موقع ecotechnics، ومقابلة منشورة في مجلة أشبرن عبر موقع ذا بيرن، وتعريف جامعي في موقع interfaces.che.wisc.edu. بعضها مصادر ثانوية أو صحفية، ولذلك يُستحسن مراجعة التواريخ والمناصب الأساسية في سجلات ناسا أو مؤسسة سميثسونيان قبل التوسع في استخدامها.\n\nهناك نقاط تحتاج حذرًا. النص الأصلي يذكر الصحراء الغربية، بينما تتحدث المصادر التي وجدتها عن مجارٍ مدفونة تحت الصحراء الكبرى وعن مياه جوفية في مصر وعُمان والإمارات، ولا يحدد أي منها مكان كل كشف بدقة، لذلك استُخدمت صيغة الصحراء الكبرى في المعلومات المضافة. واختيار مواقع الهبوط كان عملًا جماعيًا للجنة ضمّت عشرات العلماء وكان الباز سكرتيرها، وليس قرارًا فرديًا. أما لقب «الملك» وكلام ألفريد وردن عن التدريب فمصدرهما الصحافة، ولم أتحقق منهما في وثيقة أولية. وتختلف المصادر في وصف بداية عمله، فبعضها يقول إنه بدأ في ناسا عام 1967 وبعضها يذكر شركة بيلكوم المتعاقدة مع ناسا.\n\nتختلف بعض المراجع في يوم الميلاد بين 1 و2 يناير 1938؛ اعتمدت الحكاية 2 يناير وفق صفحة جامعة عين شمس، مع توضيح وجود هذا الاختلاف.",
-      "images_note": "الصورة الأولى لقطة أرشيفية من تدريب أبولو-سويوز عام 1975، والثانية رسم توضيحي فوق صورة قمرية التقطتها أبولو 10، وليست صورة فعلية لهبوط أبولو 11. تُنسب الصورتان إلى NASA. تسمح إرشادات ناسا عمومًا بالاستخدام التعليمي أو المعلوماتي لموادها ما لم يظهر حق لطرف ثالث؛ يجب مراجعة سجل كل صورة وعدم الإيحاء بتأييد ناسا.",
+      "history_note": "بعض الوقائع مأخوذة من مصادر صحفية وموسوعية، لذلك يُنصح بمراجعة التواريخ الأساسية في سجلات ناسا ومؤسسة سميثسونيان. واختيار مواقع الهبوط كان عملًا جماعيًا للجنة ضمّت عشرات العلماء وكان الباز سكرتيرها. وتختلف المراجع في يوم ميلاده بين 1 و2 يناير 1938؛ واعتمدت الحكاية 2 يناير وفق جامعة عين شمس.",
+      "images_note": "الصورة الأولى لقطة أرشيفية من تدريب أبولو-سويوز عام 1975، والثانية رسم توضيحي فوق صورة قمرية التقطتها أبولو 10 وليست صورة فعلية لهبوط أبولو 11. الصورتان من NASA.",
       "blocks": [
         {
           "type": "paragraph",
@@ -95,8 +95,8 @@
       "narrator_grade": "Third grade of primary school",
       "figure_name": "Farouk El-Baz",
       "person": "Farouk El-Baz",
-      "history_note": "The facts added to this story come from the sources listed: Wikipedia, Al Jazeera, an educational page of the Schools' Observatory, a biography on ecotechnics.edu, an interview article published in Ashburn Magazine through The Burn, and a university profile at interfaces.che.wisc.edu. Several are secondary or journalistic sources, so the main dates and roles should be rechecked in NASA or Smithsonian records before wider use.\n\nSome points call for caution. The original text mentions the Western Desert, while the sources found speak of channels buried under the Sahara and of groundwater in Egypt, Oman and the UAE, and none of them pins down the exact place of each discovery, so the added information says the Sahara. Choosing the landing sites was the collective work of a committee of dozens of scientists, with El-Baz as its secretary, not an individual decision. The nickname «the King» and Alfred Worden's remark about the training come from press reports and were not checked in a primary document. Sources also differ on how his work began: some say he started at NASA in 1967, others mention Bellcomm, a company working for NASA.\n\nSome references differ on the birth date, giving either 1 or 2 January 1938. This story uses 2 January as stated by Ain Shams University and records the discrepancy.",
-      "images_note": "The first image is an archival photograph from Apollo-Soyuz training in 1975. The second is an illustration over a lunar photograph taken by Apollo 10, not an actual photograph of Apollo 11 landing. Credit both to NASA. NASA generally allows educational or informational use of its content unless third-party rights are indicated; check each image record and do not imply NASA endorsement.",
+      "history_note": "Some facts come from press and encyclopedic sources, so key dates are best checked against NASA or Smithsonian records. Choosing the landing sites was the collective work of a committee of dozens of scientists, with El-Baz as its secretary. References differ on his birth date (1 or 2 January 1938); this story uses 2 January, following Ain Shams University.",
+      "images_note": "The first image is an archival photograph from Apollo-Soyuz training in 1975. The second is an illustration over a lunar photograph taken by Apollo 10, not an actual photograph of the Apollo 11 landing. Both images are credited to NASA.",
       "blocks": [
         {
           "type": "paragraph",
@@ -173,8 +173,8 @@
       "narrator_grade": "Troisième année de l’école primaire",
       "figure_name": "Farouk El-Baz",
       "person": "Farouk El-Baz",
-      "history_note": "Les faits ajoutés à cette histoire proviennent des sources indiquées : Wikipédia, Al Jazeera, une page pédagogique du Schools' Observatory, une biographie sur ecotechnics.edu, un article d'entretien publié dans Ashburn Magazine via The Burn, et une présentation universitaire sur interfaces.che.wisc.edu. Plusieurs sont des sources secondaires ou journalistiques ; il faut donc revérifier les dates et les fonctions principales dans les archives de la NASA ou de la Smithsonian avant un usage plus large.\n\nCertains points demandent de la prudence. Le texte d'origine mentionne le désert occidental, alors que les sources trouvées parlent de lits enfouis sous le Sahara et d'eaux souterraines en Égypte, à Oman et aux Émirats, sans préciser le lieu exact de chaque découverte ; les informations ajoutées parlent donc du Sahara. Le choix des sites d'alunissage a été le travail collectif d'un comité de dizaines de scientifiques, dont El-Baz était le secrétaire, et non une décision individuelle. Le surnom «le Roi» et la remarque d'Alfred Worden sur l'entraînement viennent de la presse et n'ont pas été vérifiés dans un document primaire. Les sources divergent aussi sur le début de son travail : certaines disent qu'il a commencé à la NASA en 1967, d'autres citent Bellcomm, société travaillant pour la NASA.\n\nCertaines références divergent sur la date de naissance, indiquant le 1er ou le 2 janvier 1938. Ce récit retient le 2 janvier, selon l’Université Ain Shams, tout en signalant cette divergence.",
-      "images_note": "La première image est une photographie d’archive de l’entraînement Apollo-Soyouz en 1975. La seconde est une illustration superposée à une photographie lunaire prise par Apollo 10, et non une photographie réelle de l’alunissage d’Apollo 11. Créditez les deux à NASA. NASA autorise généralement l’usage éducatif ou informatif de ses contenus sauf droits de tiers indiqués ; vérifiez chaque fiche et n’impliquez aucun soutien de NASA.",
+      "history_note": "Certains faits proviennent de sources journalistiques et encyclopédiques ; il est donc conseillé de vérifier les dates principales dans les archives de la NASA ou de la Smithsonian. Le choix des sites d’alunissage a été le travail collectif d’un comité de dizaines de scientifiques, dont El-Baz était le secrétaire. Les références divergent sur sa date de naissance (1er ou 2 janvier 1938) ; ce récit retient le 2 janvier, selon l’Université Ain Shams.",
+      "images_note": "La première image est une photographie d’archive de l’entraînement Apollo-Soyouz en 1975. La seconde est une illustration superposée à une photographie lunaire prise par Apollo 10, et non une photographie réelle de l’alunissage d’Apollo 11. Les deux images sont créditées à la NASA.",
       "blocks": [
         {
           "type": "paragraph",
@@ -251,8 +251,8 @@
       "narrator_grade": "Terza classe della scuola primaria",
       "figure_name": "Farouk El-Baz",
       "person": "Farouk El-Baz",
-      "history_note": "I fatti aggiunti a questa storia provengono dalle fonti elencate: Wikipedia, Al Jazeera, una pagina didattica dello Schools' Observatory, una biografia su ecotechnics.edu, un articolo-intervista pubblicato su Ashburn Magazine tramite The Burn e un profilo universitario su interfaces.che.wisc.edu. Diverse sono fonti secondarie o giornalistiche, quindi date e ruoli principali vanno ricontrollati negli archivi della NASA o della Smithsonian prima di un uso più ampio.\n\nAlcuni punti richiedono cautela. Il testo originale cita il Deserto Occidentale, mentre le fonti trovate parlano di letti sepolti sotto il Sahara e di acque sotterranee in Egitto, Oman ed Emirati, senza precisare il luogo esatto di ogni scoperta; le informazioni aggiunte parlano perciò del Sahara. La scelta dei siti di allunaggio fu il lavoro collettivo di un comitato di decine di scienziati, di cui El-Baz era segretario, non una decisione individuale. Il soprannome «il Re» e l'osservazione di Alfred Worden sull'addestramento provengono dalla stampa e non sono stati verificati in un documento primario. Le fonti differiscono anche sull'inizio del suo lavoro: alcune dicono che iniziò alla NASA nel 1967, altre citano la Bellcomm, società che lavorava per la NASA.\n\nAlcune fonti divergono sulla data di nascita, indicando il 1º o il 2 gennaio 1938. Questo racconto adotta il 2 gennaio, secondo l’Università Ain Shams, segnalando la discrepanza.",
-      "images_note": "La prima immagine è una fotografia d’archivio dell’addestramento Apollo-Soyuz del 1975. La seconda è un’illustrazione sovrapposta a una fotografia lunare scattata da Apollo 10, non una fotografia reale dell’allunaggio di Apollo 11. Accreditare entrambe a NASA. NASA consente in genere l’uso educativo o informativo dei propri contenuti salvo diritti di terzi; verificare ogni scheda e non suggerire un’approvazione da parte di NASA.",
+      "history_note": "Alcuni fatti provengono da fonti giornalistiche ed enciclopediche, quindi conviene verificare le date principali negli archivi della NASA o dello Smithsonian. La scelta dei siti di allunaggio fu il lavoro collettivo di un comitato di decine di scienziati, di cui El-Baz era il segretario. I riferimenti divergono sulla data di nascita (1 o 2 gennaio 1938); questa storia riporta il 2 gennaio, secondo l’Università Ain Shams.",
+      "images_note": "La prima immagine è una fotografia d’archivio dell’addestramento Apollo-Soyuz del 1975. La seconda è un’illustrazione sovrapposta a una fotografia lunare scattata da Apollo 10, non una fotografia reale dell’allunaggio di Apollo 11. Entrambe le immagini sono attribuite alla NASA.",
       "blocks": [
         {
           "type": "paragraph",
@@ -329,8 +329,8 @@
       "narrator_grade": "Dritte Klasse der Grundschule",
       "figure_name": "Farouk El-Baz",
       "person": "Farouk El-Baz",
-      "history_note": "Die zu dieser Geschichte hinzugefügten Fakten stammen aus den aufgeführten Quellen: Wikipedia, Al Jazeera, eine Lernseite des Schools' Observatory, eine Biografie auf ecotechnics.edu, ein Interviewartikel im Ashburn Magazine über The Burn und ein Universitätsprofil auf interfaces.che.wisc.edu. Mehrere davon sind Sekundär- oder Pressequellen, daher sollten die wichtigsten Daten und Funktionen vor einer weiteren Verwendung in Unterlagen der NASA oder der Smithsonian überprüft werden.\n\nEinige Punkte erfordern Vorsicht. Der Originaltext nennt die Westliche Wüste, während die gefundenen Quellen von begrabenen Flussläufen unter der Sahara und von Grundwasser in Ägypten, im Oman und in den Emiraten sprechen, ohne den genauen Ort jeder Entdeckung zu nennen; die ergänzten Informationen sprechen deshalb von der Sahara. Die Auswahl der Landeplätze war die gemeinsame Arbeit eines Komitees aus Dutzenden Wissenschaftlern, dessen Sekretär El-Baz war, und keine Einzelentscheidung. Der Spitzname «der König» und Alfred Wordens Bemerkung zum Training stammen aus der Presse und wurden nicht in einem Primärdokument überprüft. Die Quellen unterscheiden sich auch beim Beginn seiner Arbeit: Einige sagen, er habe 1967 bei der NASA angefangen, andere nennen Bellcomm, eine Firma, die für die NASA arbeitete.\n\nEinige Quellen nennen unterschiedliche Geburtstage, den 1. oder 2. Januar 1938. Diese Geschichte verwendet den 2. Januar nach Angaben der Ain-Schams-Universität und weist auf die Abweichung hin.",
-      "images_note": "Das erste Bild ist ein Archivfoto vom Apollo-Soyuz-Training 1975. Das zweite ist eine Illustration über einer Mondaufnahme von Apollo 10 und kein tatsächliches Foto der Apollo-11-Landung. Beide Bilder NASA zuordnen. NASA erlaubt im Allgemeinen die Bildungs- oder Informationsnutzung eigener Inhalte, sofern keine Rechte Dritter angegeben sind; jeden Bilddatensatz prüfen und keine NASA-Unterstützung suggerieren.",
+      "history_note": "Einige Fakten stammen aus journalistischen und enzyklopädischen Quellen; die wichtigsten Daten sollten daher in den Archiven der NASA oder der Smithsonian geprüft werden. Die Auswahl der Landestellen war die gemeinsame Arbeit eines Komitees aus Dutzenden Wissenschaftlern, dessen Sekretär El-Baz war. Die Quellen nennen als Geburtsdatum den 1. oder 2. Januar 1938; diese Geschichte folgt der Angabe der Ain-Shams-Universität (2. Januar).",
+      "images_note": "Das erste Bild ist eine Archivfotografie vom Apollo-Sojus-Training 1975. Das zweite ist eine Illustration über einer Mondaufnahme von Apollo 10 und keine echte Fotografie der Apollo-11-Landung. Beide Bilder werden der NASA zugeschrieben.",
       "blocks": [
         {
           "type": "paragraph",
@@ -421,19 +421,19 @@
       },
       "fr": {
         "alt": "Couverture illustrative — pas une photographie d’archive historique",
-        "caption": "Original illustrated cover for the story, not a historical photograph.",
+        "caption": "Couverture illustrée originale, pas une photographie historique.",
         "source_name": "Khaledoon — illustrated cover",
         "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique."
       },
       "it": {
         "alt": "Copertina illustrativa — non è una fotografia d’archivio storica",
-        "caption": "Original illustrated cover for the story, not a historical photograph.",
+        "caption": "Copertina illustrata originale, non una fotografia storica.",
         "source_name": "Khaledoon — illustrated cover",
         "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica."
       },
       "de": {
         "alt": "Illustratives Titelbild — kein historisches Archivfoto",
-        "caption": "Original illustrated cover for the story, not a historical photograph.",
+        "caption": "Original-Titelbild als Illustration, keine historische Fotografie.",
         "source_name": "Khaledoon — illustrated cover",
         "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto."
       }
@@ -541,19 +541,19 @@
           "rights": "Original illustration created for the Khaledoon project; not a historical photograph."
         },
         "fr": {
-          "alt": "Illustration of the Moon, desert and exploration routes",
+          "alt": "Illustration de la Lune, du désert et des routes d’exploration",
           "caption": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique.",
           "source_name": "Khaledoon — original illustration",
           "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique."
         },
         "it": {
-          "alt": "Illustration of the Moon, desert and exploration routes",
+          "alt": "Illustrazione della Luna, del deserto e delle rotte di esplorazione",
           "caption": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica.",
           "source_name": "Khaledoon — original illustration",
           "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica."
         },
         "de": {
-          "alt": "Illustration of the Moon, desert and exploration routes",
+          "alt": "Illustration von Mond, Wüste und Erkundungsrouten",
           "caption": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto.",
           "source_name": "Khaledoon — original illustration",
           "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches Foto."
@@ -640,87 +640,6 @@
         "de": {
           "title": "Farouk El-Baz — The Schools’ Observatory",
           "organization": "The Schools’ Observatory"
-        }
-      }
-    },
-    {
-      "title": "د. فاروق الباز — Ecotechnics",
-      "organization": "Ecotechnics",
-      "url": "https://ecotechnics.edu/team/farouk-el-baz/",
-      "i18n": {
-        "ar": {
-          "title": "د. فاروق الباز — Ecotechnics",
-          "organization": "Ecotechnics"
-        },
-        "en": {
-          "title": "Dr. Farouk El-Baz — Ecotechnics",
-          "organization": "Ecotechnics"
-        },
-        "fr": {
-          "title": "Dr Farouk El-Baz — Ecotechnics",
-          "organization": "Ecotechnics"
-        },
-        "it": {
-          "title": "Dr Farouk El-Baz — Ecotechnics",
-          "organization": "Ecotechnics"
-        },
-        "de": {
-          "title": "Dr. Farouk El-Baz — Ecotechnics",
-          "organization": "Ecotechnics"
-        }
-      }
-    },
-    {
-      "title": "فاروق الباز ومهمة أبولو — The Burn",
-      "organization": "The Burn",
-      "url": "https://theburn.com/2020/06/14/lansdowne-resident-played-key-role-in-the-nasa-moon-landings/",
-      "i18n": {
-        "ar": {
-          "title": "فاروق الباز ومهمة أبولو — The Burn",
-          "organization": "The Burn"
-        },
-        "en": {
-          "title": "Farouk El-Baz and the Apollo moon landings — The Burn",
-          "organization": "The Burn"
-        },
-        "fr": {
-          "title": "Farouk El-Baz et les missions Apollo — The Burn",
-          "organization": "The Burn"
-        },
-        "it": {
-          "title": "Farouk El-Baz e gli allunaggi Apollo — The Burn",
-          "organization": "The Burn"
-        },
-        "de": {
-          "title": "Farouk El-Baz und die Apollo-Mondlandungen — The Burn",
-          "organization": "The Burn"
-        }
-      }
-    },
-    {
-      "title": "فاروق الباز — جامعة ويسكونسن",
-      "organization": "جامعة ويسكونسن",
-      "url": "https://interfaces.che.wisc.edu/farouk-el-baz/",
-      "i18n": {
-        "ar": {
-          "title": "فاروق الباز — جامعة ويسكونسن",
-          "organization": "جامعة ويسكونسن"
-        },
-        "en": {
-          "title": "Farouk El-Baz — University of Wisconsin",
-          "organization": "University of Wisconsin"
-        },
-        "fr": {
-          "title": "Farouk El-Baz — Université du Wisconsin",
-          "organization": "Université du Wisconsin"
-        },
-        "it": {
-          "title": "Farouk El-Baz — Università del Wisconsin",
-          "organization": "Università del Wisconsin"
-        },
-        "de": {
-          "title": "Farouk El-Baz — University of Wisconsin",
-          "organization": "University of Wisconsin"
         }
       }
     },
