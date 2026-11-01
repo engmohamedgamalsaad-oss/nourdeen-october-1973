@@ -247,4 +247,5 @@ export async function buildV2StoryFiles(story, options = {}) {
   ];
   return { id, section: story.section, path: root, files, format: story.format };
 }
-window.KHStoryV2Publisher = { buildFiles: buildV2StoryFiles };
+window.KHStoryPublisher = { buildFiles: buildV2StoryFiles };
+window.KHStoryV2Publisher = window.KHStoryPublisher; // temporary compatibility alias
