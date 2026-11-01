@@ -1,4 +1,4 @@
-import { validateStory } from './validate-story.mjs?v=20261031-v2-publisher-1';
+import { validateStory } from './validate-story.mjs?v=20261101-story-publisher-1';
 
 const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const SECTIONS = ['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers'];
