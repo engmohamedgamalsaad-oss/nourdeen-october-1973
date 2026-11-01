@@ -37,7 +37,7 @@ function fixture() {
     }]))
   }));
   return {
-    format: 'KHALEDOON_STORY_V2', slug: 'test-story', section: 'people',
+    format: 'KHALEDOON_STORY', slug: 'test-story', section: 'people',
     design: { variant: 'arts-culture', accent: '#b8874b' },
     original_body: 'Exact sample source text.',
     i18n, cover: image('cover'), images: [image('inside-1'), image('inside-2')],
@@ -54,7 +54,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     const run = spawnSync(process.execPath, [builder, input, '987'], { cwd: temp, encoding: 'utf8' });
     assert.equal(run.status, 0, run.stderr || run.stdout);
     const pagePath = path.join(temp, 'stories/people/987/index.html');
-    const dataPath = path.join(temp, 'stories/people/987/data.v2.json');
+    const dataPath = path.join(temp, 'stories/people/987/story.json');
     await access(pagePath); await access(dataPath);
     const page = await readFile(pagePath, 'utf8');
     const saved = JSON.parse(await readFile(dataPath, 'utf8'));
@@ -78,7 +78,7 @@ test('build-story creates a V2 page and package, then refuses to overwrite them'
     assert.match(page, /id="map-section"/);
     assert.match(page, /id="theme-toggle"/);
     assert.ok(baseCss.includes('body[data-design=ancient-civilization]'), 'shared stylesheet must map the design variants');
-    assert.equal(saved.format, 'KHALEDOON_STORY_V2');
+    assert.equal(saved.format, 'KHALEDOON_STORY');
     assert.equal(saved.original_body, 'Exact sample source text.');
     const second = spawnSync(process.execPath, [builder, input, '987'], { cwd: temp, encoding: 'utf8' });
     assert.notEqual(second.status, 0);
