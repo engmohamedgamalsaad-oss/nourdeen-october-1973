@@ -11,7 +11,49 @@
         "الآثار فقط"
       ],
       "a": 0,
-      "e": "اشتهر زويل بدراسة التفاعلات الكيميائية على مقياس الفيمتو ثانية."
+      "e": "اشتهر زويل بدراسة التفاعلات الكيميائية على مقياس الفيمتو ثانية.",
+      "i18n": {
+        "en": {
+          "q": "What field was Ahmed Zewail famous for?",
+          "o": [
+            "Chemistry and the study of ultrafast reactions",
+            "Oceanography only",
+            "Military aircraft engineering",
+            "Archaeology only"
+          ],
+          "e": "Zewail became famous for studying chemical reactions on the femtosecond scale."
+        },
+        "fr": {
+          "q": "Dans quel domaine Ahmed Zewail est-il devenu célèbre ?",
+          "o": [
+            "La chimie et l’étude des réactions ultrarapides",
+            "L’océanographie uniquement",
+            "L’ingénierie des avions de combat",
+            "L’archéologie uniquement"
+          ],
+          "e": "Zewail est devenu célèbre pour son étude des réactions chimiques à l’échelle de la femtoseconde."
+        },
+        "it": {
+          "q": "In quale campo è diventato famoso Ahmed Zewail?",
+          "o": [
+            "La chimica e lo studio delle reazioni ultraveloci",
+            "Solo l’oceanografia",
+            "L’ingegneria degli aerei da guerra",
+            "Solo l’archeologia"
+          ],
+          "e": "Zewail è diventato famoso per lo studio delle reazioni chimiche sulla scala del femtosecondo."
+        },
+        "de": {
+          "q": "Worin wurde Ahmed Zewail berühmt?",
+          "o": [
+            "Chemie und die Erforschung ultraschneller Reaktionen",
+            "Nur Ozeanografie",
+            "Kampfflugzeugbau",
+            "Nur Archäologie"
+          ],
+          "e": "Zewail wurde berühmt, weil er chemische Reaktionen im Femtosekundenbereich untersuchte."
+        }
+      }
     },
     {
       "q": "في أي عام حصل زويل على نوبل في الكيمياء؟",
@@ -22,7 +64,49 @@
         "2011"
       ],
       "a": 0,
-      "e": "حصل على جائزة نوبل في الكيمياء عام 1999."
+      "e": "حصل على جائزة نوبل في الكيمياء عام 1999.",
+      "i18n": {
+        "en": {
+          "q": "In which year did Zewail win the Nobel Prize in Chemistry?",
+          "o": [
+            "1999",
+            "1973",
+            "1946",
+            "2011"
+          ],
+          "e": "He won the Nobel Prize in Chemistry in 1999."
+        },
+        "fr": {
+          "q": "En quelle année Zewail a-t-il reçu le prix Nobel de chimie ?",
+          "o": [
+            "1999",
+            "1973",
+            "1946",
+            "2011"
+          ],
+          "e": "Il a reçu le prix Nobel de chimie en 1999."
+        },
+        "it": {
+          "q": "In quale anno Zewail ha ricevuto il Premio Nobel per la Chimica?",
+          "o": [
+            "1999",
+            "1973",
+            "1946",
+            "2011"
+          ],
+          "e": "Ha ricevuto il Premio Nobel per la Chimica nel 1999."
+        },
+        "de": {
+          "q": "In welchem Jahr erhielt Zewail den Nobelpreis für Chemie?",
+          "o": [
+            "1999",
+            "1973",
+            "1946",
+            "2011"
+          ],
+          "e": "Er erhielt den Nobelpreis für Chemie im Jahr 1999."
+        }
+      }
     },
     {
       "q": "ما المقصود بالفيمتو ثانية؟",
@@ -33,7 +117,49 @@
         "جزء من مئة ثانية"
       ],
       "a": 0,
-      "e": "الفيمتو ثانية تساوي 10⁻¹⁵ ثانية."
+      "e": "الفيمتو ثانية تساوي 10⁻¹⁵ ثانية.",
+      "i18n": {
+        "en": {
+          "q": "What is a femtosecond?",
+          "o": [
+            "One quadrillionth of a second",
+            "A whole hour",
+            "One thousand seconds",
+            "One hundredth of a second"
+          ],
+          "e": "A femtosecond equals 10⁻¹⁵ of a second."
+        },
+        "fr": {
+          "q": "Qu’est-ce qu’une femtoseconde ?",
+          "o": [
+            "Un millionième de milliardième de seconde",
+            "Une heure entière",
+            "Mille secondes",
+            "Un centième de seconde"
+          ],
+          "e": "Une femtoseconde est égale à 10⁻¹⁵ seconde."
+        },
+        "it": {
+          "q": "Che cos’è un femtosecondo?",
+          "o": [
+            "Un milionesimo di miliardesimo di secondo",
+            "Un’ora intera",
+            "Mille secondi",
+            "Un centesimo di secondo"
+          ],
+          "e": "Un femtosecondo è uguale a 10⁻¹⁵ secondi."
+        },
+        "de": {
+          "q": "Was ist eine Femtosekunde?",
+          "o": [
+            "Ein billiardstel einer Sekunde",
+            "Eine ganze Stunde",
+            "Tausend Sekunden",
+            "Eine hundertstel Sekunde"
+          ],
+          "e": "Eine Femtosekunde entspricht 10⁻¹⁵ Sekunden."
+        }
+      }
     },
     {
       "q": "أين وُلد أحمد زويل؟",
@@ -44,7 +170,49 @@
         "روما في إيطاليا"
       ],
       "a": 0,
-      "e": "وُلد في دمنهور بمصر يوم 26 فبراير 1946."
+      "e": "وُلد في دمنهور بمصر يوم 26 فبراير 1946.",
+      "i18n": {
+        "en": {
+          "q": "Where was Ahmed Zewail born?",
+          "o": [
+            "Damanhur, Egypt",
+            "Berlin, Germany",
+            "Baghdad, Iraq",
+            "Rome, Italy"
+          ],
+          "e": "He was born in Damanhur, Egypt, on 26 February 1946."
+        },
+        "fr": {
+          "q": "Où est né Ahmed Zewail ?",
+          "o": [
+            "Damanhour, en Égypte",
+            "Berlin, en Allemagne",
+            "Bagdad, en Irak",
+            "Rome, en Italie"
+          ],
+          "e": "Il est né à Damanhour, en Égypte, le 26 février 1946."
+        },
+        "it": {
+          "q": "Dove è nato Ahmed Zewail?",
+          "o": [
+            "Damanhur, in Egitto",
+            "Berlino, in Germania",
+            "Baghdad, in Iraq",
+            "Roma, in Italia"
+          ],
+          "e": "È nato a Damanhur, in Egitto, il 26 febbraio 1946."
+        },
+        "de": {
+          "q": "Wo wurde Ahmed Zewail geboren?",
+          "o": [
+            "Damanhur in Ägypten",
+            "Berlin in Deutschland",
+            "Bagdad im Irak",
+            "Rom in Italien"
+          ],
+          "e": "Er wurde am 26. Februar 1946 in Damanhur in Ägypten geboren."
+        }
+      }
     },
     {
       "q": "ما أهمية دراسة التفاعل في زمن قصير جدًا؟",
@@ -55,7 +223,49 @@
         "تغني عن التجارب"
       ],
       "a": 0,
-      "e": "تتيح تقنيات الفيمتو كيمياء رصد مراحل سريعة جدًا من التفاعلات."
+      "e": "تتيح تقنيات الفيمتو كيمياء رصد مراحل سريعة جدًا من التفاعلات.",
+      "i18n": {
+        "en": {
+          "q": "Why is it important to study a reaction over a very short time?",
+          "o": [
+            "It helps follow the movement of atoms during the reaction",
+            "It stops reactions",
+            "It turns elements into planets",
+            "It replaces experiments"
+          ],
+          "e": "Femtochemistry techniques make it possible to observe very fast stages of reactions."
+        },
+        "fr": {
+          "q": "Pourquoi est-il important d’étudier une réaction sur une durée très courte ?",
+          "o": [
+            "Cela aide à suivre le mouvement des atomes pendant la réaction",
+            "Cela arrête les réactions",
+            "Cela transforme les éléments en planètes",
+            "Cela remplace les expériences"
+          ],
+          "e": "Les techniques de la femtochimie permettent d’observer des étapes très rapides des réactions."
+        },
+        "it": {
+          "q": "Perché è importante studiare una reazione in un tempo brevissimo?",
+          "o": [
+            "Aiuta a seguire il movimento degli atomi durante la reazione",
+            "Ferma le reazioni",
+            "Trasforma gli elementi in pianeti",
+            "Sostituisce gli esperimenti"
+          ],
+          "e": "Le tecniche della femtochimica permettono di osservare fasi molto rapide delle reazioni."
+        },
+        "de": {
+          "q": "Warum ist es wichtig, eine Reaktion in sehr kurzer Zeit zu untersuchen?",
+          "o": [
+            "Es hilft, die Bewegung der Atome während der Reaktion zu verfolgen",
+            "Es stoppt Reaktionen",
+            "Es verwandelt Elemente in Planeten",
+            "Es ersetzt Experimente"
+          ],
+          "e": "Mit den Methoden der Femtochemie lassen sich sehr schnelle Phasen von Reaktionen beobachten."
+        }
+      }
     },
     {
       "q": "ما الذي تدرسه كيمياء الفيمتو؟",
@@ -66,7 +276,49 @@
         "تكوين الصخور وحده"
       ],
       "a": 0,
-      "e": "تتيح كيمياء الفيمتو دراسة مراحل شديدة السرعة في التفاعلات الكيميائية."
+      "e": "تتيح كيمياء الفيمتو دراسة مراحل شديدة السرعة في التفاعلات الكيميائية.",
+      "i18n": {
+        "en": {
+          "q": "What does femtochemistry study?",
+          "o": [
+            "The motion of atoms and molecules during ultrafast reactions",
+            "Only the motion of planets",
+            "The history of languages",
+            "Only the make-up of rocks"
+          ],
+          "e": "Femtochemistry makes it possible to study extremely fast stages of chemical reactions."
+        },
+        "fr": {
+          "q": "Qu’étudie la femtochimie ?",
+          "o": [
+            "Le mouvement des atomes et des molécules pendant des réactions ultrarapides",
+            "Uniquement le mouvement des planètes",
+            "L’histoire des langues",
+            "Uniquement la composition des roches"
+          ],
+          "e": "La femtochimie permet d’étudier des étapes extrêmement rapides des réactions chimiques."
+        },
+        "it": {
+          "q": "Che cosa studia la femtochimica?",
+          "o": [
+            "Il movimento di atomi e molecole durante reazioni ultraveloci",
+            "Solo il movimento dei pianeti",
+            "La storia delle lingue",
+            "Solo la composizione delle rocce"
+          ],
+          "e": "La femtochimica permette di studiare fasi estremamente rapide delle reazioni chimiche."
+        },
+        "de": {
+          "q": "Was untersucht die Femtochemie?",
+          "o": [
+            "Die Bewegung von Atomen und Molekülen bei ultraschnellen Reaktionen",
+            "Nur die Bewegung der Planeten",
+            "Die Geschichte der Sprachen",
+            "Nur die Zusammensetzung von Gestein"
+          ],
+          "e": "Die Femtochemie ermöglicht es, extrem schnelle Phasen chemischer Reaktionen zu untersuchen."
+        }
+      }
     },
     {
       "q": "لماذا تعد الفيمتو ثانية مقياسًا مهمًا؟",
@@ -77,7 +329,49 @@
         "لأنها توقف الزمن"
       ],
       "a": 0,
-      "e": "تساوي الفيمتو ثانية 10⁻¹⁵ من الثانية، وهي مناسبة لظواهر فائقة السرعة."
+      "e": "تساوي الفيمتو ثانية 10⁻¹⁵ من الثانية، وهي مناسبة لظواهر فائقة السرعة.",
+      "i18n": {
+        "en": {
+          "q": "Why is the femtosecond an important scale?",
+          "o": [
+            "Because some steps of reactions happen in extremely short times",
+            "Because it is longer than a year",
+            "Because it is a unit for measuring distance",
+            "Because it stops time"
+          ],
+          "e": "A femtosecond is 10⁻¹⁵ of a second, which suits ultrafast phenomena."
+        },
+        "fr": {
+          "q": "Pourquoi la femtoseconde est-elle une échelle importante ?",
+          "o": [
+            "Parce que certaines étapes des réactions se déroulent en des temps extrêmement courts",
+            "Parce qu’elle est plus longue qu’une année",
+            "Parce que c’est une unité pour mesurer la distance",
+            "Parce qu’elle arrête le temps"
+          ],
+          "e": "Une femtoseconde vaut 10⁻¹⁵ seconde, ce qui convient aux phénomènes ultrarapides."
+        },
+        "it": {
+          "q": "Perché il femtosecondo è una scala importante?",
+          "o": [
+            "Perché alcune fasi delle reazioni avvengono in tempi brevissimi",
+            "Perché è più lungo di un anno",
+            "Perché è un’unità per misurare la distanza",
+            "Perché ferma il tempo"
+          ],
+          "e": "Un femtosecondo è 10⁻¹⁵ di secondo, adatto ai fenomeni ultraveloci."
+        },
+        "de": {
+          "q": "Warum ist die Femtosekunde eine wichtige Größe?",
+          "o": [
+            "Weil manche Schritte von Reaktionen in extrem kurzer Zeit ablaufen",
+            "Weil sie länger als ein Jahr ist",
+            "Weil sie eine Einheit zur Messung von Entfernungen ist",
+            "Weil sie die Zeit anhält"
+          ],
+          "e": "Eine Femtosekunde beträgt 10⁻¹⁵ Sekunden und eignet sich für ultraschnelle Vorgänge."
+        }
+      }
     },
     {
       "q": "ما الفكرة العامة وراء متابعة التفاعل أثناء حدوثه؟",
@@ -88,7 +382,49 @@
         "الاستغناء عن القياس"
       ],
       "a": 0,
-      "e": "متابعة المراحل تكشف تفاصيل لا تظهر من مقارنة البداية والنهاية وحدهما."
+      "e": "متابعة المراحل تكشف تفاصيل لا تظهر من مقارنة البداية والنهاية وحدهما.",
+      "i18n": {
+        "en": {
+          "q": "What is the general idea behind following a reaction while it happens?",
+          "o": [
+            "Understanding its stages instead of only knowing the substances before and after the reaction",
+            "Always preventing the reaction",
+            "Changing the definition of elements",
+            "Doing without measurement"
+          ],
+          "e": "Following the stages reveals details that do not appear from comparing the start and the end alone."
+        },
+        "fr": {
+          "q": "Quelle est l’idée générale du suivi d’une réaction pendant qu’elle se produit ?",
+          "o": [
+            "Comprendre ses étapes plutôt que de connaître seulement les substances avant et après la réaction",
+            "Empêcher toujours la réaction",
+            "Changer la définition des éléments",
+            "Se passer de mesures"
+          ],
+          "e": "Suivre les étapes révèle des détails qu’on ne voit pas en comparant seulement le début et la fin."
+        },
+        "it": {
+          "q": "Qual è l’idea generale dietro il seguire una reazione mentre avviene?",
+          "o": [
+            "Capirne le fasi invece di conoscere solo le sostanze prima e dopo la reazione",
+            "Impedire sempre la reazione",
+            "Cambiare la definizione degli elementi",
+            "Fare a meno delle misurazioni"
+          ],
+          "e": "Seguire le fasi rivela dettagli che non emergono confrontando solo l’inizio e la fine."
+        },
+        "de": {
+          "q": "Was ist der Grundgedanke dahinter, eine Reaktion während des Ablaufs zu verfolgen?",
+          "o": [
+            "Ihre Phasen zu verstehen, statt nur die Stoffe vor und nach der Reaktion zu kennen",
+            "Die Reaktion immer zu verhindern",
+            "Die Definition der Elemente zu ändern",
+            "Auf Messungen zu verzichten"
+          ],
+          "e": "Wer die Phasen verfolgt, entdeckt Einzelheiten, die man beim bloßen Vergleich von Anfang und Ende nicht sieht."
+        }
+      }
     },
     {
       "q": "ما المجال الذي حصل فيه أحمد زويل على جائزة نوبل؟",
@@ -99,7 +435,49 @@
         "الاقتصاد"
       ],
       "a": 0,
-      "e": "حصل أحمد زويل على جائزة نوبل في الكيمياء عام 1999."
+      "e": "حصل أحمد زويل على جائزة نوبل في الكيمياء عام 1999.",
+      "i18n": {
+        "en": {
+          "q": "In which field did Ahmed Zewail win the Nobel Prize?",
+          "o": [
+            "Chemistry",
+            "Literature",
+            "Peace",
+            "Economics"
+          ],
+          "e": "Ahmed Zewail won the Nobel Prize in Chemistry in 1999."
+        },
+        "fr": {
+          "q": "Dans quel domaine Ahmed Zewail a-t-il reçu le prix Nobel ?",
+          "o": [
+            "La chimie",
+            "La littérature",
+            "La paix",
+            "L’économie"
+          ],
+          "e": "Ahmed Zewail a reçu le prix Nobel de chimie en 1999."
+        },
+        "it": {
+          "q": "In quale campo Ahmed Zewail ha ricevuto il Premio Nobel?",
+          "o": [
+            "Chimica",
+            "Letteratura",
+            "Pace",
+            "Economia"
+          ],
+          "e": "Ahmed Zewail ha ricevuto il Premio Nobel per la Chimica nel 1999."
+        },
+        "de": {
+          "q": "In welchem Bereich erhielt Ahmed Zewail den Nobelpreis?",
+          "o": [
+            "Chemie",
+            "Literatur",
+            "Frieden",
+            "Wirtschaft"
+          ],
+          "e": "Ahmed Zewail erhielt den Nobelpreis für Chemie im Jahr 1999."
+        }
+      }
     },
     {
       "q": "ما الذي يجعل الاكتشاف العلمي قابلًا للتقييم؟",
@@ -110,7 +488,49 @@
         "تكرار عنوانه"
       ],
       "a": 0,
-      "e": "المنهج والبيانات وإمكانية التحقق أسس لتقييم النتائج العلمية."
+      "e": "المنهج والبيانات وإمكانية التحقق أسس لتقييم النتائج العلمية.",
+      "i18n": {
+        "en": {
+          "q": "What makes a scientific discovery open to evaluation?",
+          "o": [
+            "Describing the method and results and allowing them to be examined",
+            "Only the fame of the person who made it",
+            "Not publishing its details",
+            "Repeating its title"
+          ],
+          "e": "Method, data and the possibility of checking are the foundations for evaluating scientific results."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui permet d’évaluer une découverte scientifique ?",
+          "o": [
+            "Décrire la méthode et les résultats et permettre de les examiner",
+            "Uniquement la célébrité de son auteur",
+            "Ne pas publier ses détails",
+            "Répéter son titre"
+          ],
+          "e": "La méthode, les données et la possibilité de vérifier sont les bases de l’évaluation des résultats scientifiques."
+        },
+        "it": {
+          "q": "Che cosa rende valutabile una scoperta scientifica?",
+          "o": [
+            "Descrivere il metodo e i risultati e permettere di esaminarli",
+            "Solo la fama di chi l’ha fatta",
+            "Non pubblicarne i dettagli",
+            "Ripeterne il titolo"
+          ],
+          "e": "Metodo, dati e possibilità di verifica sono le basi per valutare i risultati scientifici."
+        },
+        "de": {
+          "q": "Was macht eine wissenschaftliche Entdeckung überprüfbar?",
+          "o": [
+            "Die Methode und die Ergebnisse zu beschreiben und ihre Prüfung zu ermöglichen",
+            "Nur die Berühmtheit der Person, die sie gemacht hat",
+            "Ihre Einzelheiten nicht zu veröffentlichen",
+            "Ihren Titel zu wiederholen"
+          ],
+          "e": "Methode, Daten und die Möglichkeit der Überprüfung sind die Grundlagen, um wissenschaftliche Ergebnisse zu bewerten."
+        }
+      }
     },
     {
       "q": "لماذا يحتاج التصوير العلمي فائق السرعة إلى أدوات متخصصة؟",
@@ -121,7 +541,49 @@
         "لأن الزمن يقاس بالأمتار"
       ],
       "a": 0,
-      "e": "الظواهر السريعة تتطلب وسائل قادرة على قياسها أو تتبعها بدقة."
+      "e": "الظواهر السريعة تتطلب وسائل قادرة على قياسها أو تتبعها بدقة.",
+      "i18n": {
+        "en": {
+          "q": "Why does ultrafast scientific imaging need specialised tools?",
+          "o": [
+            "To observe changes that happen in very short periods of time",
+            "Because light does not interact with matter",
+            "To remove the need for experiments",
+            "Because time is measured in metres"
+          ],
+          "e": "Fast phenomena need tools that can measure or track them accurately."
+        },
+        "fr": {
+          "q": "Pourquoi l’imagerie scientifique ultrarapide a-t-elle besoin d’outils spécialisés ?",
+          "o": [
+            "Pour observer des changements qui se produisent en des temps très courts",
+            "Parce que la lumière n’interagit pas avec la matière",
+            "Pour supprimer le besoin d’expériences",
+            "Parce que le temps se mesure en mètres"
+          ],
+          "e": "Les phénomènes rapides exigent des moyens capables de les mesurer ou de les suivre avec précision."
+        },
+        "it": {
+          "q": "Perché l’imaging scientifico ultraveloce ha bisogno di strumenti specializzati?",
+          "o": [
+            "Per osservare cambiamenti che avvengono in tempi brevissimi",
+            "Perché la luce non interagisce con la materia",
+            "Per eliminare il bisogno di esperimenti",
+            "Perché il tempo si misura in metri"
+          ],
+          "e": "I fenomeni rapidi richiedono strumenti in grado di misurarli o seguirli con precisione."
+        },
+        "de": {
+          "q": "Warum braucht ultraschnelle wissenschaftliche Bildgebung spezielle Werkzeuge?",
+          "o": [
+            "Um Veränderungen zu beobachten, die in sehr kurzen Zeitspannen ablaufen",
+            "Weil Licht nicht mit Materie wechselwirkt",
+            "Um Experimente überflüssig zu machen",
+            "Weil Zeit in Metern gemessen wird"
+          ],
+          "e": "Schnelle Vorgänge erfordern Mittel, die sie genau messen oder verfolgen können."
+        }
+      }
     },
     {
       "q": "ما الفرق بين الفيمتو ثانية والميكرو ثانية؟",
@@ -132,7 +594,49 @@
         "كلتاهما وحدتا طول"
       ],
       "a": 0,
-      "e": "الفيمتو ثانية 10⁻¹⁵ ثانية والميكرو ثانية 10⁻⁶ ثانية."
+      "e": "الفيمتو ثانية 10⁻¹⁵ ثانية والميكرو ثانية 10⁻⁶ ثانية.",
+      "i18n": {
+        "en": {
+          "q": "What is the difference between a femtosecond and a microsecond?",
+          "o": [
+            "A femtosecond is much shorter than a microsecond",
+            "A microsecond is always shorter",
+            "They are equal",
+            "Both are units of length"
+          ],
+          "e": "A femtosecond is 10⁻¹⁵ seconds and a microsecond is 10⁻⁶ seconds."
+        },
+        "fr": {
+          "q": "Quelle est la différence entre une femtoseconde et une microseconde ?",
+          "o": [
+            "Une femtoseconde est beaucoup plus courte qu’une microseconde",
+            "Une microseconde est toujours plus courte",
+            "Elles sont égales",
+            "Ce sont deux unités de longueur"
+          ],
+          "e": "Une femtoseconde vaut 10⁻¹⁵ seconde et une microseconde 10⁻⁶ seconde."
+        },
+        "it": {
+          "q": "Qual è la differenza tra un femtosecondo e un microsecondo?",
+          "o": [
+            "Un femtosecondo è molto più breve di un microsecondo",
+            "Un microsecondo è sempre più breve",
+            "Sono uguali",
+            "Entrambi sono unità di lunghezza"
+          ],
+          "e": "Un femtosecondo è 10⁻¹⁵ secondi e un microsecondo è 10⁻⁶ secondi."
+        },
+        "de": {
+          "q": "Was ist der Unterschied zwischen einer Femtosekunde und einer Mikrosekunde?",
+          "o": [
+            "Eine Femtosekunde ist viel kürzer als eine Mikrosekunde",
+            "Eine Mikrosekunde ist immer kürzer",
+            "Sie sind gleich lang",
+            "Beide sind Längeneinheiten"
+          ],
+          "e": "Eine Femtosekunde sind 10⁻¹⁵ Sekunden und eine Mikrosekunde 10⁻⁶ Sekunden."
+        }
+      }
     },
     {
       "q": "ما الذي ينبغي فعله عند قراءة خبر عن اكتشاف علمي؟",
@@ -143,7 +647,49 @@
         "تجاهل حدود الدراسة"
       ],
       "a": 0,
-      "e": "المصادر العلمية تساعد على التمييز بين النتائج المثبتة والمبالغات."
+      "e": "المصادر العلمية تساعد على التمييز بين النتائج المثبتة والمبالغات.",
+      "i18n": {
+        "en": {
+          "q": "What should you do when reading a news story about a scientific discovery?",
+          "o": [
+            "Go back to the original study or reliable scientific sources",
+            "Rely on the headline alone",
+            "Treat every commercial application as proven",
+            "Ignore the limits of the study"
+          ],
+          "e": "Scientific sources help tell proven results from exaggerations."
+        },
+        "fr": {
+          "q": "Que faut-il faire en lisant une information sur une découverte scientifique ?",
+          "o": [
+            "Revenir à l’étude d’origine ou à des sources scientifiques fiables",
+            "Se fier au titre seul",
+            "Considérer toute application commerciale comme prouvée",
+            "Ignorer les limites de l’étude"
+          ],
+          "e": "Les sources scientifiques aident à distinguer les résultats prouvés des exagérations."
+        },
+        "it": {
+          "q": "Che cosa bisogna fare quando si legge una notizia su una scoperta scientifica?",
+          "o": [
+            "Tornare allo studio originale o a fonti scientifiche affidabili",
+            "Fidarsi del solo titolo",
+            "Considerare dimostrata ogni applicazione commerciale",
+            "Ignorare i limiti dello studio"
+          ],
+          "e": "Le fonti scientifiche aiutano a distinguere i risultati dimostrati dalle esagerazioni."
+        },
+        "de": {
+          "q": "Was sollte man tun, wenn man eine Nachricht über eine wissenschaftliche Entdeckung liest?",
+          "o": [
+            "Zur ursprünglichen Studie oder zu verlässlichen wissenschaftlichen Quellen zurückgehen",
+            "Sich allein auf die Überschrift verlassen",
+            "Jede kommerzielle Anwendung als bewiesen ansehen",
+            "Die Grenzen der Studie ignorieren"
+          ],
+          "e": "Wissenschaftliche Quellen helfen, belegte Ergebnisse von Übertreibungen zu unterscheiden."
+        }
+      }
     },
     {
       "q": "لماذا لا يعني الفوز بجائزة علمية أن كل رأي لصاحبها صحيح؟",
@@ -154,7 +700,49 @@
         "لأن العلماء لا يخطئون"
       ],
       "a": 0,
-      "e": "الجوائز تقدير لإنجازات محددة ولا تستبدل تقييم الأدلة لكل ادعاء."
+      "e": "الجوائز تقدير لإنجازات محددة ولا تستبدل تقييم الأدلة لكل ادعاء.",
+      "i18n": {
+        "en": {
+          "q": "Why does winning a scientific prize not mean that every opinion of the winner is correct?",
+          "o": [
+            "Because every claim needs its own evidence",
+            "Because prizes are always worthless",
+            "Because science never changes",
+            "Because scientists never make mistakes"
+          ],
+          "e": "Prizes recognise specific achievements and do not replace evaluating the evidence for each claim."
+        },
+        "fr": {
+          "q": "Pourquoi gagner un prix scientifique ne signifie-t-il pas que chaque opinion de son lauréat est juste ?",
+          "o": [
+            "Parce que chaque affirmation a besoin de ses propres preuves",
+            "Parce que les prix n’ont toujours aucune valeur",
+            "Parce que la science ne change jamais",
+            "Parce que les scientifiques ne se trompent jamais"
+          ],
+          "e": "Les prix récompensent des réalisations précises et ne remplacent pas l’examen des preuves pour chaque affirmation."
+        },
+        "it": {
+          "q": "Perché vincere un premio scientifico non significa che ogni opinione del vincitore sia giusta?",
+          "o": [
+            "Perché ogni affermazione ha bisogno di prove proprie",
+            "Perché i premi non hanno mai valore",
+            "Perché la scienza non cambia mai",
+            "Perché gli scienziati non sbagliano mai"
+          ],
+          "e": "I premi riconoscono risultati specifici e non sostituiscono la valutazione delle prove per ogni affermazione."
+        },
+        "de": {
+          "q": "Warum bedeutet ein Wissenschaftspreis nicht, dass jede Meinung des Preisträgers richtig ist?",
+          "o": [
+            "Weil jede Behauptung eigene Belege braucht",
+            "Weil Preise immer wertlos sind",
+            "Weil sich die Wissenschaft nie ändert",
+            "Weil Wissenschaftler sich nie irren"
+          ],
+          "e": "Preise würdigen bestimmte Leistungen und ersetzen nicht die Prüfung der Belege für jede einzelne Behauptung."
+        }
+      }
     },
     {
       "q": "ما أهمية التعاون في الأبحاث العلمية الحديثة؟",
@@ -165,7 +753,49 @@
         "لأن النتائج لا تحتاج مراجعة"
       ],
       "a": 0,
-      "e": "تتطلب أبحاث كثيرة خبرات متنوعة وتقاسمًا للأدوات والمهام."
+      "e": "تتطلب أبحاث كثيرة خبرات متنوعة وتقاسمًا للأدوات والمهام.",
+      "i18n": {
+        "en": {
+          "q": "Why is collaboration important in modern scientific research?",
+          "o": [
+            "Because complex problems may need different fields and tools",
+            "Because working alone is forbidden",
+            "Because collaboration removes the need for checking",
+            "Because results do not need review"
+          ],
+          "e": "Much research requires varied expertise and sharing tools and tasks."
+        },
+        "fr": {
+          "q": "Pourquoi la collaboration est-elle importante dans la recherche scientifique moderne ?",
+          "o": [
+            "Parce que les problèmes complexes peuvent demander des disciplines et des outils différents",
+            "Parce que le travail individuel est interdit",
+            "Parce que la collaboration supprime la vérification",
+            "Parce que les résultats n’ont pas besoin d’être revus"
+          ],
+          "e": "De nombreuses recherches exigent des expertises variées et le partage des outils et des tâches."
+        },
+        "it": {
+          "q": "Perché la collaborazione è importante nella ricerca scientifica moderna?",
+          "o": [
+            "Perché i problemi complessi possono richiedere discipline e strumenti diversi",
+            "Perché il lavoro individuale è vietato",
+            "Perché la collaborazione elimina la verifica",
+            "Perché i risultati non hanno bisogno di revisione"
+          ],
+          "e": "Molte ricerche richiedono competenze diverse e la condivisione di strumenti e compiti."
+        },
+        "de": {
+          "q": "Warum ist Zusammenarbeit in der modernen Forschung wichtig?",
+          "o": [
+            "Weil komplexe Probleme unterschiedliche Fachgebiete und Werkzeuge erfordern können",
+            "Weil Einzelarbeit verboten ist",
+            "Weil Zusammenarbeit die Überprüfung überflüssig macht",
+            "Weil Ergebnisse keine Prüfung brauchen"
+          ],
+          "e": "Viele Forschungsarbeiten erfordern unterschiedliches Fachwissen sowie das Teilen von Werkzeugen und Aufgaben."
+        }
+      }
     },
     {
       "q": "كيف يمكن شرح إنجاز علمي لجمهور عام بدقة؟",
@@ -176,7 +806,49 @@
         "استخدام مصطلحات بلا شرح"
       ],
       "a": 0,
-      "e": "التبسيط الجيد يجعل الفكرة مفهومة دون تغيير مضمونها."
+      "e": "التبسيط الجيد يجعل الفكرة مفهومة دون تغيير مضمونها.",
+      "i18n": {
+        "en": {
+          "q": "How can a scientific achievement be explained accurately to the general public?",
+          "o": [
+            "By simplifying the idea while keeping its meaning and limits",
+            "By removing all caveats",
+            "By exaggerating the results",
+            "By using terms without explaining them"
+          ],
+          "e": "Good simplification makes the idea understandable without changing its content."
+        },
+        "fr": {
+          "q": "Comment expliquer avec exactitude une réalisation scientifique au grand public ?",
+          "o": [
+            "En simplifiant l’idée tout en gardant son sens et ses limites",
+            "En supprimant toutes les réserves",
+            "En exagérant les résultats",
+            "En utilisant des termes sans les expliquer"
+          ],
+          "e": "Une bonne simplification rend l’idée compréhensible sans en changer le contenu."
+        },
+        "it": {
+          "q": "Come si può spiegare con precisione un risultato scientifico al grande pubblico?",
+          "o": [
+            "Semplificando l’idea e mantenendone il significato e i limiti",
+            "Eliminando tutte le riserve",
+            "Esagerando i risultati",
+            "Usando termini senza spiegarli"
+          ],
+          "e": "Una buona semplificazione rende l’idea comprensibile senza cambiarne il contenuto."
+        },
+        "de": {
+          "q": "Wie kann man einer breiten Öffentlichkeit eine wissenschaftliche Leistung genau erklären?",
+          "o": [
+            "Indem man die Idee vereinfacht und dabei ihre Bedeutung und ihre Grenzen beibehält",
+            "Indem man alle Einschränkungen weglässt",
+            "Indem man die Ergebnisse übertreibt",
+            "Indem man Fachbegriffe ohne Erklärung benutzt"
+          ],
+          "e": "Eine gute Vereinfachung macht die Idee verständlich, ohne ihren Inhalt zu verändern."
+        }
+      }
     },
     {
       "q": "ما المقصود بفرضية علمية؟",
@@ -187,7 +859,49 @@
         "حقيقة لمجرد نشرها"
       ],
       "a": 0,
-      "e": "الفرضية تُختبر وتُراجع وفق الأدلة والنتائج."
+      "e": "الفرضية تُختبر وتُراجع وفق الأدلة والنتائج.",
+      "i18n": {
+        "en": {
+          "q": "What is a scientific hypothesis?",
+          "o": [
+            "An explanation or prediction that can be tested with evidence",
+            "A result that cannot be reviewed",
+            "An opinion that needs no checking",
+            "A fact just because it is published"
+          ],
+          "e": "A hypothesis is tested and reviewed according to evidence and results."
+        },
+        "fr": {
+          "q": "Qu’est-ce qu’une hypothèse scientifique ?",
+          "o": [
+            "Une explication ou une prévision qui peut être testée par des preuves",
+            "Un résultat qui ne peut pas être revu",
+            "Une opinion qui n’a pas besoin d’être vérifiée",
+            "Un fait par le seul fait d’être publié"
+          ],
+          "e": "Une hypothèse est testée et révisée selon les preuves et les résultats."
+        },
+        "it": {
+          "q": "Che cos’è un’ipotesi scientifica?",
+          "o": [
+            "Una spiegazione o previsione che può essere verificata con prove",
+            "Un risultato che non può essere riesaminato",
+            "Un’opinione che non ha bisogno di verifica",
+            "Un fatto per il solo fatto di essere pubblicata"
+          ],
+          "e": "Un’ipotesi viene messa alla prova e rivista in base alle prove e ai risultati."
+        },
+        "de": {
+          "q": "Was ist eine wissenschaftliche Hypothese?",
+          "o": [
+            "Eine Erklärung oder Vorhersage, die sich mit Belegen überprüfen lässt",
+            "Ein Ergebnis, das nicht überprüft werden kann",
+            "Eine Meinung, die keine Prüfung braucht",
+            "Eine Tatsache, nur weil sie veröffentlicht wurde"
+          ],
+          "e": "Eine Hypothese wird anhand von Belegen und Ergebnissen geprüft und überarbeitet."
+        }
+      }
     },
     {
       "q": "لماذا تهم الدقة في القياس الزمني للتفاعلات؟",
@@ -198,7 +912,49 @@
         "لأن القياس يمنع التفاعل"
       ],
       "a": 0,
-      "e": "الدقة الزمنية مهمة لفصل مراحل تحدث بسرعة شديدة."
+      "e": "الدقة الزمنية مهمة لفصل مراحل تحدث بسرعة شديدة.",
+      "i18n": {
+        "en": {
+          "q": "Why does precision in timing reactions matter?",
+          "o": [
+            "Because it helps tell apart stages that are close together and fast",
+            "Because time does not affect a reaction",
+            "Because rounding off is always better",
+            "Because measuring prevents the reaction"
+          ],
+          "e": "Time precision is important for separating stages that happen extremely fast."
+        },
+        "fr": {
+          "q": "Pourquoi la précision dans la mesure du temps des réactions est-elle importante ?",
+          "o": [
+            "Parce qu’elle aide à distinguer des étapes rapides et très proches",
+            "Parce que le temps n’influence pas la réaction",
+            "Parce qu’arrondir est toujours préférable",
+            "Parce que la mesure empêche la réaction"
+          ],
+          "e": "La précision temporelle est importante pour séparer des étapes qui se produisent extrêmement vite."
+        },
+        "it": {
+          "q": "Perché la precisione nella misura del tempo delle reazioni è importante?",
+          "o": [
+            "Perché aiuta a distinguere fasi rapide e ravvicinate",
+            "Perché il tempo non influisce sulla reazione",
+            "Perché arrotondare è sempre meglio",
+            "Perché la misurazione impedisce la reazione"
+          ],
+          "e": "La precisione temporale è importante per separare fasi che avvengono in modo estremamente rapido."
+        },
+        "de": {
+          "q": "Warum ist Genauigkeit bei der Zeitmessung von Reaktionen wichtig?",
+          "o": [
+            "Weil sie hilft, schnelle und dicht aufeinanderfolgende Phasen zu unterscheiden",
+            "Weil die Zeit eine Reaktion nicht beeinflusst",
+            "Weil Runden immer besser ist",
+            "Weil das Messen die Reaktion verhindert"
+          ],
+          "e": "Zeitliche Genauigkeit ist wichtig, um Phasen zu trennen, die extrem schnell ablaufen."
+        }
+      }
     },
     {
       "q": "ما الذي يمكن أن يضيفه فهم التفاعلات السريعة؟",
@@ -209,7 +965,49 @@
         "جعل كل التفاعلات متطابقة"
       ],
       "a": 0,
-      "e": "فهم الآليات يساعد الباحثين على تفسير التفاعلات وتطوير المعرفة."
+      "e": "فهم الآليات يساعد الباحثين على تفسير التفاعلات وتطوير المعرفة.",
+      "i18n": {
+        "en": {
+          "q": "What can understanding fast reactions add?",
+          "o": [
+            "Deeper knowledge of how reactions work and how they develop",
+            "A guarantee that all scientific problems are solved",
+            "Removing the need for chemistry",
+            "Making all reactions identical"
+          ],
+          "e": "Understanding the mechanisms helps researchers explain reactions and advance knowledge."
+        },
+        "fr": {
+          "q": "Qu’est-ce que la compréhension des réactions rapides peut apporter ?",
+          "o": [
+            "Une connaissance plus profonde des mécanismes des réactions et de leur évolution",
+            "La garantie de résoudre tous les problèmes scientifiques",
+            "La suppression du besoin de chimie",
+            "Le fait de rendre toutes les réactions identiques"
+          ],
+          "e": "Comprendre les mécanismes aide les chercheurs à expliquer les réactions et à faire progresser les connaissances."
+        },
+        "it": {
+          "q": "Che cosa può aggiungere la comprensione delle reazioni rapide?",
+          "o": [
+            "Una conoscenza più profonda dei meccanismi delle reazioni e di come si sviluppano",
+            "La garanzia di risolvere tutti i problemi scientifici",
+            "L’eliminazione del bisogno della chimica",
+            "Rendere tutte le reazioni identiche"
+          ],
+          "e": "Capire i meccanismi aiuta i ricercatori a spiegare le reazioni e a far progredire la conoscenza."
+        },
+        "de": {
+          "q": "Was kann das Verständnis schneller Reaktionen beitragen?",
+          "o": [
+            "Tieferes Wissen über die Mechanismen von Reaktionen und ihre Entwicklung",
+            "Die Garantie, dass alle wissenschaftlichen Probleme gelöst werden",
+            "Chemie überflüssig zu machen",
+            "Alle Reaktionen gleich zu machen"
+          ],
+          "e": "Wer die Mechanismen versteht, kann Reaktionen besser erklären und das Wissen voranbringen."
+        }
+      }
     },
     {
       "q": "أي وصف أقرب إلى إنجاز أحمد زويل؟",
@@ -220,7 +1018,49 @@
         "ابتكار لقاح شلل الأطفال"
       ],
       "a": 0,
-      "e": "ارتبط إنجازه بتطوير مجال كيمياء الفيمتو ورصد التفاعلات فائقة السرعة."
+      "e": "ارتبط إنجازه بتطوير مجال كيمياء الفيمتو ورصد التفاعلات فائقة السرعة.",
+      "i18n": {
+        "en": {
+          "q": "Which description is closest to Ahmed Zewail’s achievement?",
+          "o": [
+            "Developing ways to observe chemical reactions on an extremely short timescale",
+            "Inventing the first personal computer",
+            "Discovering a planet outside the Solar System",
+            "Inventing the polio vaccine"
+          ],
+          "e": "His achievement was linked to developing the field of femtochemistry and observing ultrafast reactions."
+        },
+        "fr": {
+          "q": "Quelle description est la plus proche de la réalisation d’Ahmed Zewail ?",
+          "o": [
+            "Avoir mis au point des moyens d’observer les réactions chimiques à une échelle de temps extrêmement courte",
+            "Avoir inventé le premier ordinateur personnel",
+            "Avoir découvert une planète hors du système solaire",
+            "Avoir inventé le vaccin contre la poliomyélite"
+          ],
+          "e": "Sa réalisation est liée au développement de la femtochimie et à l’observation des réactions ultrarapides."
+        },
+        "it": {
+          "q": "Quale descrizione è più vicina al risultato di Ahmed Zewail?",
+          "o": [
+            "Aver sviluppato mezzi per osservare le reazioni chimiche su una scala temporale brevissima",
+            "Aver inventato il primo personal computer",
+            "Aver scoperto un pianeta fuori dal Sistema Solare",
+            "Aver inventato il vaccino contro la poliomielite"
+          ],
+          "e": "Il suo risultato è legato allo sviluppo della femtochimica e all’osservazione delle reazioni ultraveloci."
+        },
+        "de": {
+          "q": "Welche Beschreibung trifft Ahmed Zewails Leistung am besten?",
+          "o": [
+            "Er entwickelte Methoden, um chemische Reaktionen auf einer extrem kurzen Zeitskala zu beobachten",
+            "Er erfand den ersten Personal Computer",
+            "Er entdeckte einen Planeten außerhalb des Sonnensystems",
+            "Er erfand den Impfstoff gegen Kinderlähmung"
+          ],
+          "e": "Seine Leistung ist mit der Entwicklung der Femtochemie und der Beobachtung ultraschneller Reaktionen verbunden."
+        }
+      }
     }
   ]
 }

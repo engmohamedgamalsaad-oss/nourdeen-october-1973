@@ -276,7 +276,49 @@
         "استبدال كل وسائل الاتصال"
       ],
       "a": 0,
-      "e": "التشفير يحمي محتوى الرسائل من الاطلاع غير المصرح به."
+      "e": "التشفير يحمي محتوى الرسائل من الاطلاع غير المصرح به.",
+      "i18n": {
+        "en": {
+          "q": "What is the main purpose of encrypting military messages?",
+          "o": [
+            "To reduce the ability of unauthorized people to understand the content",
+            "To make the message longer only",
+            "To stop the sender from understanding it",
+            "To replace all means of communication"
+          ],
+          "e": "Encryption protects the content of messages from unauthorized access."
+        },
+        "fr": {
+          "q": "Quel est le but principal du chiffrement des messages militaires ?",
+          "o": [
+            "Réduire la capacité des personnes non autorisées à comprendre le contenu",
+            "Rendre le message plus long seulement",
+            "Empêcher l’expéditeur de le comprendre",
+            "Remplacer tous les moyens de communication"
+          ],
+          "e": "Le chiffrement protège le contenu des messages contre toute consultation non autorisée."
+        },
+        "it": {
+          "q": "Qual è lo scopo principale della cifratura dei messaggi militari?",
+          "o": [
+            "Ridurre la capacità delle persone non autorizzate di capire il contenuto",
+            "Rendere il messaggio solo più lungo",
+            "Impedire al mittente di capirlo",
+            "Sostituire tutti i mezzi di comunicazione"
+          ],
+          "e": "La cifratura protegge il contenuto dei messaggi dalla lettura non autorizzata."
+        },
+        "de": {
+          "q": "Was ist der Hauptzweck der Verschlüsselung militärischer Nachrichten?",
+          "o": [
+            "Die Fähigkeit Unbefugter, den Inhalt zu verstehen, zu verringern",
+            "Die Nachricht nur länger zu machen",
+            "Den Absender daran zu hindern, sie zu verstehen",
+            "Alle Kommunikationsmittel zu ersetzen"
+          ],
+          "e": "Die Verschlüsselung schützt den Inhalt von Nachrichten vor unbefugter Einsichtnahme."
+        }
+      }
     },
     {
       "q": "ما الفرق بين لغة مشتركة وشفرة سرية؟",
@@ -287,7 +329,49 @@
         "الشفرة لا تحمل معنى"
       ],
       "a": 0,
-      "e": "معرفة اللغة لا تعني بالضرورة معرفة نظام تشفير، والعكس صحيح."
+      "e": "معرفة اللغة لا تعني بالضرورة معرفة نظام تشفير، والعكس صحيح.",
+      "i18n": {
+        "en": {
+          "q": "What is the difference between a common language and a secret code?",
+          "o": [
+            "A language is a natural means of communication, while a code includes a method for protecting the meaning",
+            "There is no difference between them in any case",
+            "Every natural language is automatically secret",
+            "A code carries no meaning"
+          ],
+          "e": "Knowing a language does not necessarily mean knowing an encryption system, and the reverse is also true."
+        },
+        "fr": {
+          "q": "Quelle est la différence entre une langue commune et un code secret ?",
+          "o": [
+            "La langue est un moyen de communication naturel, alors que le code comprend une méthode pour protéger le sens",
+            "Il n’y a aucune différence entre les deux dans tous les cas",
+            "Toute langue naturelle est automatiquement secrète",
+            "Un code ne porte aucun sens"
+          ],
+          "e": "Connaître une langue ne signifie pas nécessairement connaître un système de chiffrement, et l’inverse est vrai aussi."
+        },
+        "it": {
+          "q": "Qual è la differenza tra una lingua comune e un codice segreto?",
+          "o": [
+            "La lingua è un mezzo di comunicazione naturale, mentre il codice comprende un metodo per proteggere il significato",
+            "Non c’è alcuna differenza tra i due in nessun caso",
+            "Ogni lingua naturale è automaticamente segreta",
+            "Un codice non ha alcun significato"
+          ],
+          "e": "Conoscere una lingua non significa necessariamente conoscere un sistema di cifratura, e anche il contrario è vero."
+        },
+        "de": {
+          "q": "Was ist der Unterschied zwischen einer gemeinsamen Sprache und einem Geheimcode?",
+          "o": [
+            "Eine Sprache ist ein natürliches Kommunikationsmittel, ein Code dagegen enthält eine Methode zum Schutz der Bedeutung",
+            "Es gibt in keinem Fall einen Unterschied zwischen ihnen",
+            "Jede natürliche Sprache ist automatisch geheim",
+            "Ein Code hat keine Bedeutung"
+          ],
+          "e": "Eine Sprache zu kennen bedeutet nicht unbedingt, ein Verschlüsselungssystem zu kennen, und umgekehrt gilt das auch."
+        }
+      }
     },
     {
       "q": "لماذا يجب الحذر عند سرد تفاصيل الاتصالات السرية تاريخيًا؟",
@@ -298,7 +382,49 @@
         "لأن التواريخ غير مهمة"
       ],
       "a": 0,
-      "e": "تتطلب التفاصيل الحساسة مقارنة الروايات والشهادات المتاحة."
+      "e": "تتطلب التفاصيل الحساسة مقارنة الروايات والشهادات المتاحة.",
+      "i18n": {
+        "en": {
+          "q": "Why must we be careful when telling the details of secret communications in history?",
+          "o": [
+            "Because some accounts may differ and need documentation",
+            "Because sources are never useful",
+            "Because every story in circulation is confirmed",
+            "Because dates are not important"
+          ],
+          "e": "Sensitive details require comparing the available accounts and testimonies."
+        },
+        "fr": {
+          "q": "Pourquoi faut-il être prudent en racontant les détails des communications secrètes dans l’histoire ?",
+          "o": [
+            "Parce que certains récits peuvent différer et nécessitent d’être documentés",
+            "Parce que les sources ne servent jamais à rien",
+            "Parce que toute histoire qui circule est confirmée",
+            "Parce que les dates ne sont pas importantes"
+          ],
+          "e": "Les détails sensibles exigent de comparer les récits et les témoignages disponibles."
+        },
+        "it": {
+          "q": "Perché bisogna essere prudenti quando si raccontano i dettagli delle comunicazioni segrete nella storia?",
+          "o": [
+            "Perché alcuni resoconti possono differire e hanno bisogno di essere documentati",
+            "Perché le fonti non sono mai utili",
+            "Perché ogni storia che circola è confermata",
+            "Perché le date non sono importanti"
+          ],
+          "e": "I dettagli sensibili richiedono di confrontare i resoconti e le testimonianze disponibili."
+        },
+        "de": {
+          "q": "Warum muss man vorsichtig sein, wenn man Einzelheiten geheimer Kommunikation in der Geschichte erzählt?",
+          "o": [
+            "Weil sich manche Berichte unterscheiden können und belegt werden müssen",
+            "Weil Quellen niemals nützlich sind",
+            "Weil jede im Umlauf befindliche Geschichte bestätigt ist",
+            "Weil Daten nicht wichtig sind"
+          ],
+          "e": "Heikle Einzelheiten erfordern den Vergleich der verfügbaren Berichte und Zeugenaussagen."
+        }
+      }
     },
     {
       "q": "أي إجراء يقوي أمن الاتصالات اليوم؟",
@@ -309,7 +435,49 @@
         "إرسال البيانات الحساسة علنًا"
       ],
       "a": 0,
-      "e": "أمن الاتصال يحتاج إلى أدوات مناسبة وممارسات تحقق جيدة."
+      "e": "أمن الاتصال يحتاج إلى أدوات مناسبة وممارسات تحقق جيدة.",
+      "i18n": {
+        "en": {
+          "q": "Which action strengthens communications security today?",
+          "o": [
+            "Using suitable means of protection and verifying the identity of the parties",
+            "Publishing passwords",
+            "Reusing one password for everyone",
+            "Sending sensitive data openly"
+          ],
+          "e": "Communications security needs suitable tools and good verification practices."
+        },
+        "fr": {
+          "q": "Quelle action renforce la sécurité des communications aujourd’hui ?",
+          "o": [
+            "Utiliser des moyens de protection adaptés et vérifier l’identité des interlocuteurs",
+            "Publier les mots de passe",
+            "Réutiliser un seul mot de passe pour tout le monde",
+            "Envoyer les données sensibles en clair"
+          ],
+          "e": "La sécurité des communications nécessite des outils adaptés et de bonnes pratiques de vérification."
+        },
+        "it": {
+          "q": "Quale azione rafforza oggi la sicurezza delle comunicazioni?",
+          "o": [
+            "Usare mezzi di protezione adeguati e verificare l’identità delle parti",
+            "Pubblicare le password",
+            "Riutilizzare una sola password per tutti",
+            "Inviare dati sensibili apertamente"
+          ],
+          "e": "La sicurezza delle comunicazioni richiede strumenti adeguati e buone pratiche di verifica."
+        },
+        "de": {
+          "q": "Welche Maßnahme stärkt heute die Sicherheit der Kommunikation?",
+          "o": [
+            "Geeignete Schutzmittel verwenden und die Identität der Beteiligten überprüfen",
+            "Passwörter veröffentlichen",
+            "Ein einziges Passwort für alle wiederverwenden",
+            "Sensible Daten offen versenden"
+          ],
+          "e": "Die Sicherheit der Kommunikation braucht geeignete Werkzeuge und gute Überprüfungsgewohnheiten."
+        }
+      }
     },
     {
       "q": "ما الذي يمكن أن يجعل الرسالة غير مفهومة للمتنصت؟",
@@ -320,7 +488,49 @@
         "تكرارها على الملأ"
       ],
       "a": 0,
-      "e": "فهم الرسالة يتطلب معرفة اللغة أو طريقة الترميز المستخدمة."
+      "e": "فهم الرسالة يتطلب معرفة اللغة أو طريقة الترميز المستخدمة.",
+      "i18n": {
+        "en": {
+          "q": "What can make a message incomprehensible to an eavesdropper?",
+          "o": [
+            "Lack of the necessary knowledge of the language or the coding system",
+            "Only increasing the size of the paper",
+            "Writing the message in large handwriting",
+            "Repeating it in public"
+          ],
+          "e": "Understanding a message requires knowing the language or the coding method used."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui peut rendre un message incompréhensible pour un espion ?",
+          "o": [
+            "L’absence de la connaissance nécessaire de la langue ou du système de codage",
+            "Seulement l’augmentation de la taille du papier",
+            "Écrire le message en gros caractères",
+            "Le répéter en public"
+          ],
+          "e": "Comprendre un message exige de connaître la langue ou la méthode de codage utilisée."
+        },
+        "it": {
+          "q": "Che cosa può rendere un messaggio incomprensibile a chi intercetta?",
+          "o": [
+            "La mancanza della conoscenza necessaria della lingua o del sistema di codifica",
+            "Solo l’aumento delle dimensioni della carta",
+            "Scrivere il messaggio con una grafia grande",
+            "Ripeterlo in pubblico"
+          ],
+          "e": "Capire un messaggio richiede di conoscere la lingua o il metodo di codifica usato."
+        },
+        "de": {
+          "q": "Was kann eine Nachricht für einen Abhörenden unverständlich machen?",
+          "o": [
+            "Das Fehlen der nötigen Kenntnis der Sprache oder des Kodierungssystems",
+            "Nur eine Vergrößerung des Papiers",
+            "Die Nachricht in großer Schrift zu schreiben",
+            "Sie öffentlich zu wiederholen"
+          ],
+          "e": "Eine Nachricht zu verstehen erfordert die Kenntnis der Sprache oder der verwendeten Kodierungsmethode."
+        }
+      }
     },
     {
       "q": "هل الاعتماد على أن الخصم لا يعرف لغة معينة كافٍ وحده؟",
@@ -331,7 +541,49 @@
         "لا حاجة لأي إجراءات أخرى"
       ],
       "a": 0,
-      "e": "اللغة قد تكون عائقًا، لكن حماية المعلومات تحتاج تدابير إضافية."
+      "e": "اللغة قد تكون عائقًا، لكن حماية المعلومات تحتاج تدابير إضافية.",
+      "i18n": {
+        "en": {
+          "q": "Is relying on the opponent not knowing a certain language enough by itself?",
+          "o": [
+            "No, it is better for security not to rely on this factor alone",
+            "Yes, in all circumstances",
+            "Yes, even when messages are exposed",
+            "No other measures are needed"
+          ],
+          "e": "A language may be an obstacle, but protecting information needs additional measures."
+        },
+        "fr": {
+          "q": "Se fier au fait que l’adversaire ne connaît pas une certaine langue suffit-il à lui seul ?",
+          "o": [
+            "Non, il vaut mieux que la sécurité ne repose pas sur ce seul facteur",
+            "Oui, dans toutes les circonstances",
+            "Oui, même lorsque les messages sont découverts",
+            "Aucune autre mesure n’est nécessaire"
+          ],
+          "e": "Une langue peut être un obstacle, mais la protection des informations exige des mesures supplémentaires."
+        },
+        "it": {
+          "q": "Basarsi sul fatto che l’avversario non conosce una certa lingua basta da solo?",
+          "o": [
+            "No, è meglio che la sicurezza non si basi solo su questo fattore",
+            "Sì, in tutte le circostanze",
+            "Sì, anche quando i messaggi vengono scoperti",
+            "Non servono altre misure"
+          ],
+          "e": "Una lingua può essere un ostacolo, ma proteggere le informazioni richiede misure aggiuntive."
+        },
+        "de": {
+          "q": "Reicht es allein aus, sich darauf zu verlassen, dass der Gegner eine bestimmte Sprache nicht kennt?",
+          "o": [
+            "Nein, die Sicherheit sollte besser nicht nur auf diesem Faktor beruhen",
+            "Ja, unter allen Umständen",
+            "Ja, auch wenn Nachrichten aufgedeckt werden",
+            "Es sind keine weiteren Maßnahmen nötig"
+          ],
+          "e": "Eine Sprache kann ein Hindernis sein, aber der Schutz von Informationen erfordert zusätzliche Maßnahmen."
+        }
+      }
     },
     {
       "q": "ما معنى التحقق المتقاطع من رواية تاريخية؟",
@@ -342,7 +594,49 @@
         "اختيار الرواية الأقصر"
       ],
       "a": 0,
-      "e": "المقارنة بين مصادر مستقلة تساعد على اختبار الرواية."
+      "e": "المقارنة بين مصادر مستقلة تساعد على اختبار الرواية.",
+      "i18n": {
+        "en": {
+          "q": "What does cross-checking a historical account mean?",
+          "o": [
+            "Comparing it with other independent sources",
+            "Repeating it from the same source",
+            "Deleting the different accounts",
+            "Choosing the shortest account"
+          ],
+          "e": "Comparing independent sources helps test an account."
+        },
+        "fr": {
+          "q": "Que signifie la vérification croisée d’un récit historique ?",
+          "o": [
+            "La comparer avec d’autres sources indépendantes",
+            "La répéter à partir de la même source",
+            "Supprimer les récits différents",
+            "Choisir le récit le plus court"
+          ],
+          "e": "La comparaison entre des sources indépendantes aide à mettre un récit à l’épreuve."
+        },
+        "it": {
+          "q": "Che cosa significa la verifica incrociata di un resoconto storico?",
+          "o": [
+            "Confrontarlo con altre fonti indipendenti",
+            "Ripeterlo dalla stessa fonte",
+            "Eliminare i resoconti diversi",
+            "Scegliere il resoconto più breve"
+          ],
+          "e": "Confrontare fonti indipendenti aiuta a mettere alla prova un resoconto."
+        },
+        "de": {
+          "q": "Was bedeutet es, einen historischen Bericht gegenzuprüfen?",
+          "o": [
+            "Ihn mit anderen unabhängigen Quellen zu vergleichen",
+            "Ihn aus derselben Quelle zu wiederholen",
+            "Die abweichenden Berichte zu löschen",
+            "Den kürzesten Bericht auszuwählen"
+          ],
+          "e": "Der Vergleich unabhängiger Quellen hilft, einen Bericht zu überprüfen."
+        }
+      }
     },
     {
       "q": "ما الدرس الإنساني من مشاركة متحدثين بلغات نوبية في الاتصالات؟",
@@ -353,7 +647,49 @@
         "أن التواصل لا يحتاج إلى تدريب"
       ],
       "a": 0,
-      "e": "المعرفة اللغوية يمكن أن تكون موردًا عمليًا مهمًا."
+      "e": "المعرفة اللغوية يمكن أن تكون موردًا عمليًا مهمًا.",
+      "i18n": {
+        "en": {
+          "q": "What is the human lesson from the participation of speakers of Nubian languages in communications?",
+          "o": [
+            "That linguistic and cultural diversity can help solve practical challenges",
+            "That one language is worth less than others",
+            "That diversity prevents cooperation",
+            "That communication needs no training"
+          ],
+          "e": "Language knowledge can be an important practical resource."
+        },
+        "fr": {
+          "q": "Quelle est la leçon humaine de la participation de locuteurs de langues nubiennes aux communications ?",
+          "o": [
+            "Que la diversité linguistique et culturelle peut contribuer à résoudre des défis pratiques",
+            "Qu’une langue a moins de valeur que les autres",
+            "Que la diversité empêche la coopération",
+            "Que la communication n’a pas besoin de formation"
+          ],
+          "e": "La connaissance des langues peut être une ressource pratique importante."
+        },
+        "it": {
+          "q": "Qual è la lezione umana della partecipazione di parlanti di lingue nubiane alle comunicazioni?",
+          "o": [
+            "Che la diversità linguistica e culturale può contribuire a risolvere sfide pratiche",
+            "Che una lingua vale meno delle altre",
+            "Che la diversità impedisce la cooperazione",
+            "Che la comunicazione non ha bisogno di addestramento"
+          ],
+          "e": "La conoscenza delle lingue può essere un’importante risorsa pratica."
+        },
+        "de": {
+          "q": "Was ist die menschliche Lehre aus der Beteiligung von Sprechern nubischer Sprachen an der Kommunikation?",
+          "o": [
+            "Dass sprachliche und kulturelle Vielfalt helfen kann, praktische Herausforderungen zu lösen",
+            "Dass eine Sprache weniger wert ist als andere",
+            "Dass Vielfalt die Zusammenarbeit verhindert",
+            "Dass Kommunikation kein Training braucht"
+          ],
+          "e": "Sprachkenntnisse können eine wichtige praktische Ressource sein."
+        }
+      }
     },
     {
       "q": "ما الفرق بين المعلومة الموثقة والتفصيل غير المحسوم؟",
@@ -364,7 +700,49 @@
         "لا يمكن التمييز بينهما"
       ],
       "a": 0,
-      "e": "ينبغي توضيح درجة الثقة بدل عرض كل التفاصيل كحقائق."
+      "e": "ينبغي توضيح درجة الثقة بدل عرض كل التفاصيل كحقائق.",
+      "i18n": {
+        "en": {
+          "q": "What is the difference between documented information and an unsettled detail?",
+          "o": [
+            "The first is supported by clear evidence, while the second needs further verification",
+            "Both are confirmed facts",
+            "The unsettled detail is always more important",
+            "They cannot be told apart"
+          ],
+          "e": "We should make clear the level of confidence instead of presenting every detail as a fact."
+        },
+        "fr": {
+          "q": "Quelle est la différence entre une information documentée et un détail non tranché ?",
+          "o": [
+            "La première est appuyée par des preuves claires, alors que le second nécessite une vérification supplémentaire",
+            "Les deux sont des faits confirmés",
+            "Le détail non tranché est toujours plus important",
+            "On ne peut pas les distinguer"
+          ],
+          "e": "Il faut préciser le degré de confiance au lieu de présenter tous les détails comme des faits."
+        },
+        "it": {
+          "q": "Qual è la differenza tra un’informazione documentata e un dettaglio non accertato?",
+          "o": [
+            "La prima è sostenuta da prove chiare, mentre il secondo richiede ulteriori verifiche",
+            "Entrambi sono fatti confermati",
+            "Il dettaglio non accertato è sempre più importante",
+            "Non è possibile distinguerli"
+          ],
+          "e": "Dobbiamo chiarire il grado di affidabilità invece di presentare ogni dettaglio come un fatto."
+        },
+        "de": {
+          "q": "Was ist der Unterschied zwischen einer belegten Information und einer ungeklärten Einzelheit?",
+          "o": [
+            "Die erste wird durch klare Beweise gestützt, die zweite braucht weitere Überprüfung",
+            "Beide sind bestätigte Tatsachen",
+            "Die ungeklärte Einzelheit ist immer wichtiger",
+            "Man kann sie nicht unterscheiden"
+          ],
+          "e": "Wir sollten den Grad der Sicherheit deutlich machen, statt jede Einzelheit als Tatsache darzustellen."
+        }
+      }
     },
     {
       "q": "لماذا تهم دقة نقل الرسالة في الظروف العسكرية؟",
@@ -375,7 +753,49 @@
         "لأن الأخطاء مستحيلة"
       ],
       "a": 0,
-      "e": "دقة الاتصال تساعد على فهم التعليمات وتقليل الالتباس."
+      "e": "دقة الاتصال تساعد على فهم التعليمات وتقليل الالتباس.",
+      "i18n": {
+        "en": {
+          "q": "Why does the accuracy of conveying a message matter in military conditions?",
+          "o": [
+            "Because a misunderstanding can affect decisions and execution",
+            "Because the wording of the message has no effect",
+            "Because messages carry no instructions",
+            "Because mistakes are impossible"
+          ],
+          "e": "Accurate communication helps in understanding instructions and reducing confusion."
+        },
+        "fr": {
+          "q": "Pourquoi l’exactitude de la transmission d’un message est-elle importante en situation militaire ?",
+          "o": [
+            "Parce qu’un malentendu peut influencer les décisions et l’exécution",
+            "Parce que la formulation du message n’a aucun effet",
+            "Parce que les messages ne contiennent pas d’instructions",
+            "Parce que les erreurs sont impossibles"
+          ],
+          "e": "Une communication précise aide à comprendre les instructions et à réduire la confusion."
+        },
+        "it": {
+          "q": "Perché è importante l’accuratezza nella trasmissione di un messaggio in condizioni militari?",
+          "o": [
+            "Perché un malinteso può influire sulle decisioni e sull’esecuzione",
+            "Perché la formulazione del messaggio non ha effetto",
+            "Perché i messaggi non contengono istruzioni",
+            "Perché gli errori sono impossibili"
+          ],
+          "e": "Una comunicazione accurata aiuta a capire le istruzioni e a ridurre la confusione."
+        },
+        "de": {
+          "q": "Warum ist die Genauigkeit bei der Übermittlung einer Nachricht unter militärischen Bedingungen wichtig?",
+          "o": [
+            "Weil ein Missverständnis Entscheidungen und Ausführung beeinflussen kann",
+            "Weil die Formulierung der Nachricht keine Wirkung hat",
+            "Weil Nachrichten keine Anweisungen enthalten",
+            "Weil Fehler unmöglich sind"
+          ],
+          "e": "Genaue Kommunikation hilft, Anweisungen zu verstehen und Verwirrung zu verringern."
+        }
+      }
     },
     {
       "q": "أي سلوك يعكس احترامًا للغات النوبية؟",
@@ -386,7 +806,49 @@
         "تجاهل أصحابها"
       ],
       "a": 0,
-      "e": "اللغات النوبية لها تاريخ وتنوعات ومجتمعات متحدثة بها."
+      "e": "اللغات النوبية لها تاريخ وتنوعات ومجتمعات متحدثة بها.",
+      "i18n": {
+        "en": {
+          "q": "Which behavior reflects respect for Nubian languages?",
+          "o": [
+            "Recognizing their diversity and the history of their speakers",
+            "Considering them a recently invented language with no evidence",
+            "Assuming that all their varieties are identical",
+            "Ignoring their speakers"
+          ],
+          "e": "Nubian languages have a history, varieties and communities of speakers."
+        },
+        "fr": {
+          "q": "Quel comportement reflète du respect pour les langues nubiennes ?",
+          "o": [
+            "Reconnaître leur diversité et l’histoire de leurs locuteurs",
+            "Les considérer comme une langue inventée récemment, sans preuve",
+            "Supposer que toutes leurs variétés sont identiques",
+            "Ignorer leurs locuteurs"
+          ],
+          "e": "Les langues nubiennes ont une histoire, des variétés et des communautés de locuteurs."
+        },
+        "it": {
+          "q": "Quale comportamento riflette rispetto per le lingue nubiane?",
+          "o": [
+            "Riconoscere la loro diversità e la storia dei loro parlanti",
+            "Considerarle una lingua inventata di recente, senza prove",
+            "Supporre che tutte le loro varietà siano identiche",
+            "Ignorare i loro parlanti"
+          ],
+          "e": "Le lingue nubiane hanno una storia, varietà e comunità di parlanti."
+        },
+        "de": {
+          "q": "Welches Verhalten zeigt Respekt vor den nubischen Sprachen?",
+          "o": [
+            "Ihre Vielfalt und die Geschichte ihrer Sprecher anzuerkennen",
+            "Sie für eine erst kürzlich erfundene Sprache ohne Beleg zu halten",
+            "Anzunehmen, dass alle ihre Varietäten gleich sind",
+            "Ihre Sprecher zu ignorieren"
+          ],
+          "e": "Die nubischen Sprachen haben eine Geschichte, Varietäten und Sprechergemeinschaften."
+        }
+      }
     },
     {
       "q": "ما الذي يجعل قصة تاريخية عن الاتصالات أكثر إقناعًا؟",
@@ -397,7 +859,49 @@
         "رفض أي سؤال"
       ],
       "a": 0,
-      "e": "تزداد موثوقية الرواية عندما تدعمها أدلة قابلة للفحص."
+      "e": "تزداد موثوقية الرواية عندما تدعمها أدلة قابلة للفحص.",
+      "i18n": {
+        "en": {
+          "q": "What makes a historical story about communications more convincing?",
+          "o": [
+            "Clear sources, context and agreement among the evidence",
+            "Many exaggerations",
+            "Absence of the names of sources",
+            "Rejecting any question"
+          ],
+          "e": "An account becomes more reliable when it is supported by evidence that can be examined."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui rend une histoire de communications plus convaincante ?",
+          "o": [
+            "Des sources claires, un contexte et la concordance des preuves",
+            "Beaucoup d’exagérations",
+            "L’absence de noms de sources",
+            "Le refus de toute question"
+          ],
+          "e": "Un récit devient plus fiable lorsqu’il est appuyé par des preuves vérifiables."
+        },
+        "it": {
+          "q": "Che cosa rende più convincente una storia sulle comunicazioni?",
+          "o": [
+            "Fonti chiare, contesto e accordo tra le prove",
+            "Molte esagerazioni",
+            "L’assenza dei nomi delle fonti",
+            "Rifiutare qualsiasi domanda"
+          ],
+          "e": "Un resoconto diventa più affidabile quando è sostenuto da prove che si possono esaminare."
+        },
+        "de": {
+          "q": "Was macht eine historische Geschichte über Kommunikation überzeugender?",
+          "o": [
+            "Klare Quellen, Zusammenhang und Übereinstimmung der Belege",
+            "Viele Übertreibungen",
+            "Das Fehlen der Namen der Quellen",
+            "Jede Frage abzulehnen"
+          ],
+          "e": "Ein Bericht wird glaubwürdiger, wenn er durch überprüfbare Belege gestützt wird."
+        }
+      }
     },
     {
       "q": "ما المخاطرة في نشر تفاصيل اتصال حساس دون تحقق؟",
@@ -408,7 +912,49 @@
         "لا توجد مخاطرة مطلقًا"
       ],
       "a": 0,
-      "e": "النشر المسؤول يوازن بين التوثيق والدقة وحماية المعلومات."
+      "e": "النشر المسؤول يوازن بين التوثيق والدقة وحماية المعلومات.",
+      "i18n": {
+        "en": {
+          "q": "What is the risk of publishing details of a sensitive communication without verification?",
+          "o": [
+            "Misleading the public or revealing information that should be protected",
+            "Always increasing the accuracy of the record",
+            "Preventing every misunderstanding",
+            "There is absolutely no risk"
+          ],
+          "e": "Responsible publishing balances documentation, accuracy and protecting information."
+        },
+        "fr": {
+          "q": "Quel est le risque de publier sans vérification les détails d’une communication sensible ?",
+          "o": [
+            "Tromper le public ou révéler des informations qu’il faut protéger",
+            "Augmenter toujours l’exactitude du registre",
+            "Empêcher tous les malentendus",
+            "Il n’y a absolument aucun risque"
+          ],
+          "e": "Une publication responsable équilibre la documentation, l’exactitude et la protection des informations."
+        },
+        "it": {
+          "q": "Qual è il rischio di pubblicare senza verifica i dettagli di una comunicazione sensibile?",
+          "o": [
+            "Ingannare il pubblico o rivelare informazioni che andrebbero protette",
+            "Aumentare sempre l’accuratezza del registro",
+            "Evitare ogni malinteso",
+            "Non c’è assolutamente alcun rischio"
+          ],
+          "e": "Una pubblicazione responsabile bilancia documentazione, accuratezza e protezione delle informazioni."
+        },
+        "de": {
+          "q": "Was ist das Risiko, Einzelheiten einer sensiblen Kommunikation ohne Überprüfung zu veröffentlichen?",
+          "o": [
+            "Die Öffentlichkeit irrezuführen oder Informationen preiszugeben, die geschützt werden sollten",
+            "Die Genauigkeit der Aufzeichnung immer zu erhöhen",
+            "Jedes Missverständnis zu verhindern",
+            "Es gibt überhaupt kein Risiko"
+          ],
+          "e": "Verantwortungsvolles Veröffentlichen verbindet Dokumentation, Genauigkeit und den Schutz von Informationen."
+        }
+      }
     },
     {
       "q": "ما الذي تعلمنا إياه الحكاية عن المعرفة المتخصصة؟",
@@ -419,7 +965,49 @@
         "لا تفيد الفرق"
       ],
       "a": 0,
-      "e": "يمكن للخبرة المتخصصة أن تساعد في مواجهة تحديات عملية."
+      "e": "يمكن للخبرة المتخصصة أن تساعد في مواجهة تحديات عملية.",
+      "i18n": {
+        "en": {
+          "q": "What does the story teach us about specialized knowledge?",
+          "o": [
+            "It can become an important resource when used at the right time",
+            "It has no value outside school",
+            "It needs no practice",
+            "It does not help teams"
+          ],
+          "e": "Specialized expertise can help in facing practical challenges."
+        },
+        "fr": {
+          "q": "Que nous enseigne cette histoire sur les connaissances spécialisées ?",
+          "o": [
+            "Elles peuvent devenir une ressource importante lorsqu’elles sont utilisées au bon moment",
+            "Elles n’ont aucune valeur en dehors de l’école",
+            "Elles n’ont pas besoin de pratique",
+            "Elles ne servent pas aux équipes"
+          ],
+          "e": "Une expertise spécialisée peut aider à faire face à des défis pratiques."
+        },
+        "it": {
+          "q": "Che cosa ci insegna la storia sulla conoscenza specializzata?",
+          "o": [
+            "Può diventare una risorsa importante quando viene usata al momento giusto",
+            "Non ha valore fuori dalla scuola",
+            "Non ha bisogno di pratica",
+            "Non serve alle squadre"
+          ],
+          "e": "Una competenza specializzata può aiutare ad affrontare sfide pratiche."
+        },
+        "de": {
+          "q": "Was lehrt uns die Geschichte über spezialisiertes Wissen?",
+          "o": [
+            "Es kann zu einer wichtigen Ressource werden, wenn es zur richtigen Zeit eingesetzt wird",
+            "Es hat außerhalb der Schule keinen Wert",
+            "Es braucht keine Übung",
+            "Es nützt Teams nichts"
+          ],
+          "e": "Spezialisiertes Fachwissen kann helfen, praktische Herausforderungen zu bewältigen."
+        }
+      }
     },
     {
       "q": "كيف نتعامل مع اختلاف المصادر حول تفاصيل واقعة؟",
@@ -430,7 +1018,49 @@
         "نحوّل الاحتمال إلى حقيقة"
       ],
       "a": 0,
-      "e": "عرض الخلاف بوضوح أدق من إخفائه أو حسمه بلا دليل."
+      "e": "عرض الخلاف بوضوح أدق من إخفائه أو حسمه بلا دليل.",
+      "i18n": {
+        "en": {
+          "q": "How do we deal with differences between sources about the details of an event?",
+          "o": [
+            "We state where they agree and differ and look for additional evidence",
+            "We choose only the most widespread one",
+            "We ignore all the sources",
+            "We turn a possibility into a fact"
+          ],
+          "e": "Presenting the disagreement clearly is more accurate than hiding it or settling it without evidence."
+        },
+        "fr": {
+          "q": "Comment traiter les différences entre les sources sur les détails d’un événement ?",
+          "o": [
+            "Nous indiquons les points d’accord et de désaccord et cherchons des preuves supplémentaires",
+            "Nous choisissons seulement la plus répandue",
+            "Nous ignorons toutes les sources",
+            "Nous transformons une possibilité en fait"
+          ],
+          "e": "Présenter clairement le désaccord est plus exact que de le cacher ou de le trancher sans preuve."
+        },
+        "it": {
+          "q": "Come ci comportiamo quando le fonti differiscono sui dettagli di un evento?",
+          "o": [
+            "Indichiamo dove concordano e dove differiscono e cerchiamo ulteriori prove",
+            "Scegliamo solo la più diffusa",
+            "Ignoriamo tutte le fonti",
+            "Trasformiamo una possibilità in un fatto"
+          ],
+          "e": "Presentare chiaramente il disaccordo è più accurato che nasconderlo o risolverlo senza prove."
+        },
+        "de": {
+          "q": "Wie gehen wir mit Unterschieden zwischen Quellen über die Einzelheiten eines Ereignisses um?",
+          "o": [
+            "Wir nennen, wo sie übereinstimmen und wo sie abweichen, und suchen zusätzliche Belege",
+            "Wir wählen nur die am weitesten verbreitete aus",
+            "Wir ignorieren alle Quellen",
+            "Wir machen aus einer Möglichkeit eine Tatsache"
+          ],
+          "e": "Den Widerspruch klar darzustellen ist genauer, als ihn zu verbergen oder ohne Beleg zu entscheiden."
+        }
+      }
     }
   ]
 }

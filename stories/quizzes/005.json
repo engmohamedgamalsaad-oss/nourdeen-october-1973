@@ -541,7 +541,49 @@
         "لأن التصوير كان منتشرًا في عصره"
       ],
       "a": 1,
-      "e": "عاش ابن سينا قبل اختراع التصوير الفوتوغرافي بقرون."
+      "e": "عاش ابن سينا قبل اختراع التصوير الفوتوغرافي بقرون.",
+      "i18n": {
+        "en": {
+          "q": "Why do we not have a photograph of Ibn Sina from his own time?",
+          "o": [
+            "Because he lived in the twentieth century",
+            "Because he lived centuries before photography appeared",
+            "Because he did not live in any city",
+            "Because photography was widespread in his time"
+          ],
+          "e": "Ibn Sina lived centuries before photography was invented."
+        },
+        "fr": {
+          "q": "Pourquoi n’avons-nous pas de photographie d’Ibn Sina datant de son époque ?",
+          "o": [
+            "Parce qu’il a vécu au XXe siècle",
+            "Parce qu’il a vécu des siècles avant l’apparition de la photographie",
+            "Parce qu’il n’a vécu dans aucune ville",
+            "Parce que la photographie était répandue à son époque"
+          ],
+          "e": "Ibn Sina a vécu des siècles avant l’invention de la photographie."
+        },
+        "it": {
+          "q": "Perché non abbiamo una fotografia di Ibn Sina della sua epoca?",
+          "o": [
+            "Perché visse nel XX secolo",
+            "Perché visse secoli prima della comparsa della fotografia",
+            "Perché non visse in nessuna città",
+            "Perché la fotografia era diffusa ai suoi tempi"
+          ],
+          "e": "Ibn Sina visse secoli prima dell’invenzione della fotografia."
+        },
+        "de": {
+          "q": "Warum haben wir kein Foto von Ibn Sina aus seiner Zeit?",
+          "o": [
+            "Weil er im 20. Jahrhundert lebte",
+            "Weil er Jahrhunderte vor der Erfindung der Fotografie lebte",
+            "Weil er in keiner Stadt lebte",
+            "Weil die Fotografie zu seiner Zeit weit verbreitet war"
+          ],
+          "e": "Ibn Sina lebte Jahrhunderte vor der Erfindung der Fotografie."
+        }
+      }
     },
     {
       "q": "كيف ينبغي وصف الرسوم التي تُظهر ابن سينا اليوم؟",
@@ -552,7 +594,49 @@
         "تمثيلات فنية لاحقة وليست صورًا مؤكدة لملامحه"
       ],
       "a": 3,
-      "e": "الرسوم المتداولة تمثيلات فنية لاحقة ولا تثبت ملامحه الحقيقية."
+      "e": "الرسوم المتداولة تمثيلات فنية لاحقة ولا تثبت ملامحه الحقيقية.",
+      "i18n": {
+        "en": {
+          "q": "How should we describe the pictures that show Ibn Sina today?",
+          "o": [
+            "Photographs taken of him",
+            "Military maps",
+            "Documents that prove exactly what his face looked like",
+            "Later artistic depictions, not confirmed images of his features"
+          ],
+          "e": "The pictures in circulation are later artistic depictions and do not prove his real features."
+        },
+        "fr": {
+          "q": "Comment faut-il décrire les images qui montrent Ibn Sina aujourd’hui ?",
+          "o": [
+            "Des photographies prises de lui",
+            "Des cartes militaires",
+            "Des documents qui prouvent exactement l’aspect de son visage",
+            "Des représentations artistiques plus tardives, et non des images confirmées de ses traits"
+          ],
+          "e": "Les images qui circulent sont des représentations artistiques plus tardives et ne prouvent pas ses vrais traits."
+        },
+        "it": {
+          "q": "Come bisogna descrivere i disegni che mostrano Ibn Sina oggi?",
+          "o": [
+            "Fotografie scattate a lui",
+            "Mappe militari",
+            "Documenti che provano con precisione come era il suo viso",
+            "Rappresentazioni artistiche successive, non immagini confermate dei suoi lineamenti"
+          ],
+          "e": "I disegni in circolazione sono rappresentazioni artistiche successive e non provano i suoi veri lineamenti."
+        },
+        "de": {
+          "q": "Wie sollte man die Bilder beschreiben, die Ibn Sina heute zeigen?",
+          "o": [
+            "Fotos, die von ihm gemacht wurden",
+            "Militärkarten",
+            "Dokumente, die genau beweisen, wie sein Gesicht aussah",
+            "Spätere künstlerische Darstellungen, keine gesicherten Bilder seiner Gesichtszüge"
+          ],
+          "e": "Die verbreiteten Bilder sind spätere künstlerische Darstellungen und beweisen seine wahren Gesichtszüge nicht."
+        }
+      }
     },
     {
       "q": "كيف كان العلماء يتبادلون المعرفة في زمن ابن سينا؟",
@@ -563,7 +647,49 @@
         "بالهواتف الذكية"
       ],
       "a": 0,
-      "e": "اعتمد انتقال المعرفة على المخطوطات والنسخ والمجالس والسفر."
+      "e": "اعتمد انتقال المعرفة على المخطوطات والنسخ والمجالس والسفر.",
+      "i18n": {
+        "en": {
+          "q": "How did scholars exchange knowledge in Ibn Sina’s time?",
+          "o": [
+            "Through handwritten books, hand copying, scholars’ gatherings and travel",
+            "Only through websites",
+            "Through television broadcasts",
+            "Through smartphones"
+          ],
+          "e": "Knowledge was passed on through manuscripts, copying, gatherings and travel."
+        },
+        "fr": {
+          "q": "Comment les savants échangeaient-ils les connaissances à l’époque d’Ibn Sina ?",
+          "o": [
+            "Par des livres manuscrits, la copie à la main, les assemblées de savants et les voyages",
+            "Uniquement par des sites Internet",
+            "Par des émissions de télévision",
+            "Par des téléphones intelligents"
+          ],
+          "e": "La transmission du savoir reposait sur les manuscrits, la copie, les assemblées et les voyages."
+        },
+        "it": {
+          "q": "Come si scambiavano le conoscenze gli studiosi ai tempi di Ibn Sina?",
+          "o": [
+            "Con libri manoscritti, copiatura a mano, riunioni di studiosi e viaggi",
+            "Solo con i siti web",
+            "Con le trasmissioni televisive",
+            "Con gli smartphone"
+          ],
+          "e": "La trasmissione del sapere si basava su manoscritti, copiatura, riunioni e viaggi."
+        },
+        "de": {
+          "q": "Wie tauschten Gelehrte zu Ibn Sinas Zeit Wissen aus?",
+          "o": [
+            "Durch handgeschriebene Bücher, Abschreiben von Hand, Gelehrtenrunden und Reisen",
+            "Nur über Websites",
+            "Durch Fernsehsendungen",
+            "Durch Smartphones"
+          ],
+          "e": "Das Wissen wurde durch Handschriften, Abschreiben, Gelehrtenrunden und Reisen weitergegeben."
+        }
+      }
     },
     {
       "q": "هل تعني أهمية «القانون في الطب» أن كل ما فيه يصلح علاجًا اليوم؟",
@@ -574,7 +700,49 @@
         "لا؛ لذلك لا قيمة لدراسة تاريخ الطب"
       ],
       "a": 2,
-      "e": "الأهمية التاريخية لا تجعل كل نظرية أو وصفة قديمة صالحة للطب الحديث."
+      "e": "الأهمية التاريخية لا تجعل كل نظرية أو وصفة قديمة صالحة للطب الحديث.",
+      "i18n": {
+        "en": {
+          "q": "Does the importance of The Canon of Medicine mean that everything in it is suitable as treatment today?",
+          "o": [
+            "Yes; every old prescription is automatically correct",
+            "Yes; there is no need for medical research",
+            "No; we study it historically, and modern treatment needs modern evidence",
+            "No; so studying the history of medicine has no value"
+          ],
+          "e": "Historical importance does not make every old theory or prescription suitable for modern medicine."
+        },
+        "fr": {
+          "q": "L’importance du Canon de la médecine signifie-t-elle que tout ce qu’il contient convient comme traitement aujourd’hui ?",
+          "o": [
+            "Oui : toute ancienne recette est automatiquement correcte",
+            "Oui : la recherche médicale n’est pas nécessaire",
+            "Non : on l’étudie sur le plan historique, et les traitements modernes demandent des preuves actuelles",
+            "Non : donc étudier l’histoire de la médecine n’a aucune valeur"
+          ],
+          "e": "L’importance historique ne rend pas chaque théorie ou recette ancienne adaptée à la médecine moderne."
+        },
+        "it": {
+          "q": "L’importanza del Canone della medicina significa che tutto ciò che contiene va bene come cura oggi?",
+          "o": [
+            "Sì: ogni antica ricetta è automaticamente corretta",
+            "Sì: non c’è bisogno di ricerca medica",
+            "No: lo studiamo dal punto di vista storico, e la cura moderna richiede prove attuali",
+            "No: quindi studiare la storia della medicina non ha valore"
+          ],
+          "e": "L’importanza storica non rende ogni teoria o ricetta antica adatta alla medicina moderna."
+        },
+        "de": {
+          "q": "Bedeutet die Wichtigkeit des Kanons der Medizin, dass alles darin heute als Behandlung taugt?",
+          "o": [
+            "Ja; jedes alte Rezept ist automatisch richtig",
+            "Ja; medizinische Forschung ist nicht nötig",
+            "Nein; wir untersuchen ihn historisch, und moderne Behandlung braucht aktuelle Belege",
+            "Nein; deshalb hat das Studium der Medizingeschichte keinen Wert"
+          ],
+          "e": "Historische Bedeutung macht nicht jede alte Theorie oder jedes alte Rezept für die moderne Medizin geeignet."
+        }
+      }
     },
     {
       "q": "ما الطريقة الأفضل للتحقق من معلومة عن ابن سينا؟",
@@ -585,7 +753,49 @@
         "اختيار الرواية الأكثر إثارة"
       ],
       "a": 1,
-      "e": "مقارنة المصادر وفهم السياق يساعدان على التحقق من الدقة."
+      "e": "مقارنة المصادر وفهم السياق يساعدان على التحقق من الدقة.",
+      "i18n": {
+        "en": {
+          "q": "What is the best way to check information about Ibn Sina?",
+          "o": [
+            "Repeating it because it is widespread",
+            "Comparing it with reliable sources and examining its context",
+            "Relying on a picture with no explanation",
+            "Choosing the most exciting version"
+          ],
+          "e": "Comparing sources and understanding the context help to check accuracy."
+        },
+        "fr": {
+          "q": "Quelle est la meilleure façon de vérifier une information sur Ibn Sina ?",
+          "o": [
+            "La répéter parce qu’elle est répandue",
+            "La comparer à des sources fiables et examiner son contexte",
+            "Se fier à une image sans explication",
+            "Choisir la version la plus passionnante"
+          ],
+          "e": "Comparer les sources et comprendre le contexte aident à vérifier l’exactitude."
+        },
+        "it": {
+          "q": "Qual è il modo migliore per verificare un’informazione su Ibn Sina?",
+          "o": [
+            "Ripeterla perché è diffusa",
+            "Confrontarla con fonti affidabili ed esaminarne il contesto",
+            "Fidarsi di un’immagine senza spiegazione",
+            "Scegliere la versione più emozionante"
+          ],
+          "e": "Confrontare le fonti e capire il contesto aiuta a verificare l’esattezza."
+        },
+        "de": {
+          "q": "Was ist der beste Weg, eine Information über Ibn Sina zu überprüfen?",
+          "o": [
+            "Sie zu wiederholen, weil sie weit verbreitet ist",
+            "Sie mit zuverlässigen Quellen zu vergleichen und ihren Zusammenhang zu prüfen",
+            "Sich auf ein Bild ohne Erklärung zu verlassen",
+            "Die spannendste Version zu wählen"
+          ],
+          "e": "Quellen zu vergleichen und den Zusammenhang zu verstehen hilft, die Richtigkeit zu überprüfen."
+        }
+      }
     },
     {
       "q": "ما الفكرة الأساسية التي تقدمها الحكاية عن أثر ابن سينا؟",
@@ -596,7 +806,49 @@
         "يمكن للمعرفة المكتوبة أن تنتقل بين البلدان والأجيال"
       ],
       "a": 3,
-      "e": "انتقلت مؤلفات ابن سينا إلى مناطق وأجيال مختلفة وظل أثرها حاضرًا."
+      "e": "انتقلت مؤلفات ابن سينا إلى مناطق وأجيال مختلفة وظل أثرها حاضرًا.",
+      "i18n": {
+        "en": {
+          "q": "What is the main idea the story presents about Ibn Sina’s influence?",
+          "o": [
+            "Knowledge does not travel beyond one city",
+            "Books do not affect education",
+            "Learning does not need research",
+            "Written knowledge can travel between countries and generations"
+          ],
+          "e": "Ibn Sina’s works reached different regions and generations, and their influence remained present."
+        },
+        "fr": {
+          "q": "Quelle est l’idée principale du récit sur l’influence d’Ibn Sina ?",
+          "o": [
+            "Le savoir ne sort pas d’une seule ville",
+            "Les livres n’ont pas d’effet sur l’enseignement",
+            "Apprendre n’a pas besoin de recherche",
+            "Le savoir écrit peut voyager entre les pays et les générations"
+          ],
+          "e": "Les ouvrages d’Ibn Sina ont atteint diverses régions et générations, et leur influence est restée présente."
+        },
+        "it": {
+          "q": "Qual è l’idea principale che il racconto presenta sull’influenza di Ibn Sina?",
+          "o": [
+            "La conoscenza non esce da una sola città",
+            "I libri non influiscono sull’istruzione",
+            "Imparare non richiede ricerca",
+            "La conoscenza scritta può viaggiare tra paesi e generazioni"
+          ],
+          "e": "Le opere di Ibn Sina raggiunsero regioni e generazioni diverse e la loro influenza rimase presente."
+        },
+        "de": {
+          "q": "Welche Hauptidee vermittelt die Geschichte über Ibn Sinas Wirkung?",
+          "o": [
+            "Wissen verlässt eine einzelne Stadt nicht",
+            "Bücher haben keinen Einfluss auf die Bildung",
+            "Lernen braucht keine Forschung",
+            "Geschriebenes Wissen kann zwischen Ländern und Generationen wandern"
+          ],
+          "e": "Ibn Sinas Werke gelangten in verschiedene Regionen und zu verschiedenen Generationen, und ihre Wirkung blieb bestehen."
+        }
+      }
     },
     {
       "q": "ما الذي يساعدنا على فهم إنجاز عالم عاش قبل ألف عام؟",
@@ -607,7 +859,49 @@
         "الاعتماد على الشائعات"
       ],
       "a": 2,
-      "e": "فهم السياق التاريخي مع دراسة الأعمال والمصادر يقدم صورة أكثر توازنًا."
+      "e": "فهم السياق التاريخي مع دراسة الأعمال والمصادر يقدم صورة أكثر توازنًا.",
+      "i18n": {
+        "en": {
+          "q": "What helps us understand the achievement of a scholar who lived a thousand years ago?",
+          "o": [
+            "Judging him only by today’s standards",
+            "Ignoring historical sources",
+            "Studying his works, the conditions of his time and his influence",
+            "Relying on rumors"
+          ],
+          "e": "Understanding the historical context, together with studying the works and sources, gives a more balanced picture."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui nous aide à comprendre l’œuvre d’un savant qui a vécu il y a mille ans ?",
+          "o": [
+            "Le juger uniquement selon les critères d’aujourd’hui",
+            "Ignorer les sources historiques",
+            "Étudier ses ouvrages, les conditions de son époque et son influence",
+            "Se fier aux rumeurs"
+          ],
+          "e": "Comprendre le contexte historique, en étudiant les ouvrages et les sources, donne une image plus équilibrée."
+        },
+        "it": {
+          "q": "Che cosa ci aiuta a capire l’impresa di uno studioso vissuto mille anni fa?",
+          "o": [
+            "Giudicarlo solo con i criteri di oggi",
+            "Ignorare le fonti storiche",
+            "Studiare le sue opere, le condizioni del suo tempo e la sua influenza",
+            "Affidarsi alle dicerie"
+          ],
+          "e": "Capire il contesto storico, insieme allo studio delle opere e delle fonti, offre un quadro più equilibrato."
+        },
+        "de": {
+          "q": "Was hilft uns, die Leistung eines Gelehrten zu verstehen, der vor tausend Jahren lebte?",
+          "o": [
+            "Ihn nur nach den heutigen Maßstäben zu beurteilen",
+            "Die historischen Quellen zu ignorieren",
+            "Seine Werke, die Verhältnisse seiner Zeit und seine Wirkung zu studieren",
+            "Sich auf Gerüchte zu verlassen"
+          ],
+          "e": "Den historischen Zusammenhang zu verstehen und die Werke und Quellen zu studieren, ergibt ein ausgewogeneres Bild."
+        }
+      }
     },
     {
       "q": "أي وصف أدق لاهتمامات ابن سينا كما تعرضها الحكاية؟",
@@ -618,7 +912,49 @@
         "لم يكتب أي مؤلفات"
       ],
       "a": 0,
-      "e": "توضح الحكاية أن اهتماماته شملت الطب والفلسفة والمنطق وموضوعات أخرى."
+      "e": "توضح الحكاية أن اهتماماته شملت الطب والفلسفة والمنطق وموضوعات أخرى.",
+      "i18n": {
+        "en": {
+          "q": "Which description best fits Ibn Sina’s interests as the story presents them?",
+          "o": [
+            "He combined medicine and philosophy and was interested in many fields of knowledge",
+            "He was limited to leading armies",
+            "He worked in photography alone",
+            "He wrote no books"
+          ],
+          "e": "The story shows that his interests included medicine, philosophy, logic and other subjects."
+        },
+        "fr": {
+          "q": "Quelle description correspond le mieux aux centres d’intérêt d’Ibn Sina tels que le récit les présente ?",
+          "o": [
+            "Il a réuni la médecine et la philosophie et s’est intéressé à de nombreux domaines du savoir",
+            "Il s’est limité à commander des armées",
+            "Il a travaillé uniquement dans la photographie",
+            "Il n’a écrit aucun ouvrage"
+          ],
+          "e": "Le récit montre que ses intérêts comprenaient la médecine, la philosophie, la logique et d’autres sujets."
+        },
+        "it": {
+          "q": "Quale descrizione è più precisa per gli interessi di Ibn Sina come li presenta il racconto?",
+          "o": [
+            "Unì medicina e filosofia e si interessò a molti campi del sapere",
+            "Si limitò a comandare eserciti",
+            "Lavorò solo nella fotografia",
+            "Non scrisse alcuna opera"
+          ],
+          "e": "Il racconto mostra che i suoi interessi comprendevano medicina, filosofia, logica e altri argomenti."
+        },
+        "de": {
+          "q": "Welche Beschreibung passt am besten zu Ibn Sinas Interessen, wie die Geschichte sie darstellt?",
+          "o": [
+            "Er verband Medizin und Philosophie und interessierte sich für viele Wissensgebiete",
+            "Er beschränkte sich darauf, Heere zu führen",
+            "Er arbeitete nur in der Fotografie",
+            "Er schrieb keine Werke"
+          ],
+          "e": "Die Geschichte zeigt, dass zu seinen Interessen Medizin, Philosophie, Logik und weitere Themen gehörten."
+        }
+      }
     },
     {
       "q": "ما الفرق بين دراسة كتاب طبي قديم واستخدامه كمرجع علاجي حديث؟",
@@ -629,7 +965,49 @@
         "دراسته تكشف تاريخ المعرفة، أما العلاج فيحتاج إلى أدلة طبية حديثة"
       ],
       "a": 3,
-      "e": "نستفيد من الكتاب لفهم تاريخ الطب، ولا نستبدل به الأدلة الطبية المعاصرة."
+      "e": "نستفيد من الكتاب لفهم تاريخ الطب، ولا نستبدل به الأدلة الطبية المعاصرة.",
+      "i18n": {
+        "en": {
+          "q": "What is the difference between studying an old medical book and using it as a modern treatment reference?",
+          "o": [
+            "There is no difference at all",
+            "Everything written long ago is fine to use without review",
+            "Studying history prevents medicine from developing",
+            "Studying it reveals the history of knowledge, but treatment needs modern medical evidence"
+          ],
+          "e": "We benefit from the book to understand the history of medicine, and we do not replace modern medical evidence with it."
+        },
+        "fr": {
+          "q": "Quelle est la différence entre étudier un ancien livre de médecine et l’utiliser comme référence de traitement moderne ?",
+          "o": [
+            "Il n’y a aucune différence",
+            "Tout ce qui a été écrit autrefois convient sans vérification",
+            "Étudier l’histoire empêche la médecine de progresser",
+            "L’étudier révèle l’histoire du savoir, mais le traitement demande des preuves médicales modernes"
+          ],
+          "e": "Le livre nous sert à comprendre l’histoire de la médecine, et nous ne remplaçons pas par lui les preuves médicales actuelles."
+        },
+        "it": {
+          "q": "Qual è la differenza tra studiare un antico libro di medicina e usarlo come riferimento per le cure moderne?",
+          "o": [
+            "Non c’è alcuna differenza",
+            "Tutto ciò che fu scritto in passato va bene senza verifica",
+            "Studiare la storia impedisce lo sviluppo della medicina",
+            "Studiarlo rivela la storia del sapere, ma la cura richiede prove mediche moderne"
+          ],
+          "e": "Il libro ci serve per capire la storia della medicina, e non sostituiamo con esso le prove mediche attuali."
+        },
+        "de": {
+          "q": "Was ist der Unterschied zwischen dem Studium eines alten medizinischen Buches und seiner Verwendung als modernes Behandlungsbuch?",
+          "o": [
+            "Es gibt keinen Unterschied",
+            "Alles, was früher geschrieben wurde, taugt ohne Prüfung",
+            "Das Studium der Geschichte verhindert die Entwicklung der Medizin",
+            "Sein Studium zeigt die Geschichte des Wissens, aber die Behandlung braucht moderne medizinische Belege"
+          ],
+          "e": "Wir nutzen das Buch, um die Geschichte der Medizin zu verstehen, und ersetzen damit nicht die aktuellen medizinischen Belege."
+        }
+      }
     },
     {
       "q": "ما الدرس الذي تلخصه حكاية ابن سينا؟",
@@ -640,7 +1018,49 @@
         "شهرة العالم تثبت صحة كل ما كتبه"
       ],
       "a": 1,
-      "e": "تؤكد الحكاية أثر التعلم المتعدد المجالات، مع أهمية التحقق والنقد."
+      "e": "تؤكد الحكاية أثر التعلم المتعدد المجالات، مع أهمية التحقق والنقد.",
+      "i18n": {
+        "en": {
+          "q": "What lesson does the story of Ibn Sina sum up?",
+          "o": [
+            "Specializing in one subject is the only path to knowledge",
+            "Love of learning and a variety of interests can leave a long-lasting mark",
+            "There is no point in writing down ideas",
+            "A scholar’s fame proves everything he wrote is correct"
+          ],
+          "e": "The story stresses the impact of learning in many fields, along with the importance of checking and criticism."
+        },
+        "fr": {
+          "q": "Quelle leçon le récit d’Ibn Sina résume-t-il ?",
+          "o": [
+            "Se spécialiser dans un seul sujet est le seul chemin vers le savoir",
+            "L’amour d’apprendre et la variété des intérêts peuvent laisser une trace durable",
+            "Il ne sert à rien de noter ses idées",
+            "La célébrité d’un savant prouve que tout ce qu’il a écrit est exact"
+          ],
+          "e": "Le récit souligne l’effet d’un apprentissage dans plusieurs domaines, ainsi que l’importance de la vérification et de l’esprit critique."
+        },
+        "it": {
+          "q": "Quale lezione riassume il racconto di Ibn Sina?",
+          "o": [
+            "Specializzarsi in un solo argomento è l’unica via verso la conoscenza",
+            "L’amore per l’apprendimento e la varietà di interessi possono lasciare un segno duraturo",
+            "Non serve a nulla mettere per iscritto le idee",
+            "La fama di uno studioso prova che tutto ciò che scrisse è corretto"
+          ],
+          "e": "Il racconto sottolinea l’effetto dell’apprendimento in più campi, insieme all’importanza della verifica e dello spirito critico."
+        },
+        "de": {
+          "q": "Welche Lehre fasst die Geschichte von Ibn Sina zusammen?",
+          "o": [
+            "Sich auf ein Thema zu spezialisieren ist der einzige Weg zum Wissen",
+            "Die Liebe zum Lernen und vielfältige Interessen können eine dauerhafte Spur hinterlassen",
+            "Es hat keinen Nutzen, Gedanken aufzuschreiben",
+            "Der Ruhm eines Gelehrten beweist, dass alles, was er schrieb, richtig ist"
+          ],
+          "e": "Die Geschichte betont die Wirkung des Lernens in vielen Gebieten sowie die Bedeutung von Überprüfung und Kritik."
+        }
+      }
     }
   ]
 }

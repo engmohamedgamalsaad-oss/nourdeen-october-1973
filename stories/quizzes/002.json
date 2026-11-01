@@ -276,7 +276,49 @@
         "رفع الساتر إلى أعلى"
       ],
       "a": 0,
-      "e": "دفع المياه ساعد على تجريف التربة وفتح ثغرات للعبور."
+      "e": "دفع المياه ساعد على تجريف التربة وفتح ثغرات للعبور.",
+      "i18n": {
+        "en": {
+          "q": "What is the practical advantage of using water pumps in front of the earthen embankment?",
+          "o": [
+            "Removing soil and opening passages faster than manual work alone",
+            "Turning sand into rock",
+            "Removing the need for passages",
+            "Raising the embankment higher"
+          ],
+          "e": "Pushing water helped to erode the soil and open breaches for crossing."
+        },
+        "fr": {
+          "q": "Quel est l’avantage pratique d’utiliser des pompes à eau devant le remblai de terre ?",
+          "o": [
+            "Enlever la terre et ouvrir des passages plus vite qu’avec le seul travail manuel",
+            "Transformer le sable en roche",
+            "Supprimer le besoin de passages",
+            "Élever le remblai plus haut"
+          ],
+          "e": "Le jet d’eau a aidé à éroder la terre et à ouvrir des brèches pour le passage."
+        },
+        "it": {
+          "q": "Qual è il vantaggio pratico dell’uso delle pompe ad acqua davanti al terrapieno?",
+          "o": [
+            "Rimuovere la terra e aprire passaggi più velocemente del solo lavoro manuale",
+            "Trasformare la sabbia in roccia",
+            "Eliminare il bisogno di passaggi",
+            "Alzare il terrapieno più in alto"
+          ],
+          "e": "Spingere l’acqua aiutò a erodere il terreno e ad aprire varchi per l’attraversamento."
+        },
+        "de": {
+          "q": "Was ist der praktische Vorteil, Wasserpumpen vor dem Erdwall einzusetzen?",
+          "o": [
+            "Erde abzutragen und Durchgänge schneller zu öffnen als allein durch Handarbeit",
+            "Sand in Felsen zu verwandeln",
+            "Die Notwendigkeit von Durchgängen aufzuheben",
+            "Den Wall höher zu machen"
+          ],
+          "e": "Das Wasser half, den Boden abzutragen und Öffnungen zum Übergang zu schaffen."
+        }
+      }
     },
     {
       "q": "ما الذي يجعل الفكرة الهندسية مناسبة لمشكلة محددة؟",
@@ -287,7 +329,49 @@
         "أن تعتمد على المصادفة"
       ],
       "a": 0,
-      "e": "الحل الجيد يراعي طبيعة المشكلة والموارد والظروف."
+      "e": "الحل الجيد يراعي طبيعة المشكلة والموارد والظروف.",
+      "i18n": {
+        "en": {
+          "q": "What makes an engineering idea suitable for a specific problem?",
+          "o": [
+            "That it responds to the nature of the obstacle and the required goal",
+            "That it is always complicated",
+            "That it ignores the conditions of the site",
+            "That it depends on chance"
+          ],
+          "e": "A good solution takes into account the nature of the problem, the resources, and the conditions."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui rend une idée technique adaptée à un problème précis ?",
+          "o": [
+            "Qu’elle réponde à la nature de l’obstacle et à l’objectif visé",
+            "Qu’elle soit toujours compliquée",
+            "Qu’elle ignore les conditions du site",
+            "Qu’elle dépende du hasard"
+          ],
+          "e": "Une bonne solution tient compte de la nature du problème, des ressources et des conditions."
+        },
+        "it": {
+          "q": "Che cosa rende un’idea ingegneristica adatta a un problema specifico?",
+          "o": [
+            "Che risponda alla natura dell’ostacolo e all’obiettivo richiesto",
+            "Che sia sempre complicata",
+            "Che ignori le condizioni del luogo",
+            "Che dipenda dal caso"
+          ],
+          "e": "Una buona soluzione tiene conto della natura del problema, delle risorse e delle condizioni."
+        },
+        "de": {
+          "q": "Was macht eine technische Idee für ein bestimmtes Problem geeignet?",
+          "o": [
+            "Dass sie auf die Art des Hindernisses und das gewünschte Ziel eingeht",
+            "Dass sie immer kompliziert ist",
+            "Dass sie die Bedingungen vor Ort ignoriert",
+            "Dass sie vom Zufall abhängt"
+          ],
+          "e": "Eine gute Lösung berücksichtigt die Art des Problems, die Mittel und die Bedingungen."
+        }
+      }
     },
     {
       "q": "أي خطوة تسبق اختيار حل هندسي ناجح؟",
@@ -298,7 +382,49 @@
         "تنفيذ أول فكرة دون تقييم"
       ],
       "a": 0,
-      "e": "تحديد المشكلة والقيود يساعد على اختيار حل مناسب."
+      "e": "تحديد المشكلة والقيود يساعد على اختيار حل مناسب.",
+      "i18n": {
+        "en": {
+          "q": "Which step comes before choosing a successful engineering solution?",
+          "o": [
+            "Understanding the problem and its limits",
+            "Buying equipment without studying",
+            "Ignoring measurements",
+            "Carrying out the first idea without evaluating it"
+          ],
+          "e": "Defining the problem and its limits helps in choosing a suitable solution."
+        },
+        "fr": {
+          "q": "Quelle étape précède le choix d’une solution technique réussie ?",
+          "o": [
+            "Comprendre le problème et ses contraintes",
+            "Acheter du matériel sans étude",
+            "Ignorer les mesures",
+            "Appliquer la première idée sans l’évaluer"
+          ],
+          "e": "Définir le problème et ses contraintes aide à choisir une solution adaptée."
+        },
+        "it": {
+          "q": "Quale passo precede la scelta di una soluzione ingegneristica efficace?",
+          "o": [
+            "Capire il problema e i suoi limiti",
+            "Comprare attrezzature senza studiarle",
+            "Ignorare le misurazioni",
+            "Attuare la prima idea senza valutarla"
+          ],
+          "e": "Definire il problema e i suoi limiti aiuta a scegliere una soluzione adatta."
+        },
+        "de": {
+          "q": "Welcher Schritt kommt vor der Wahl einer erfolgreichen technischen Lösung?",
+          "o": [
+            "Das Problem und seine Grenzen zu verstehen",
+            "Ausrüstung ohne Prüfung zu kaufen",
+            "Messungen zu ignorieren",
+            "Die erste Idee ohne Bewertung umzusetzen"
+          ],
+          "e": "Das Problem und seine Grenzen zu bestimmen hilft, eine passende Lösung zu wählen."
+        }
+      }
     },
     {
       "q": "لماذا يحتاج استخدام المضخات إلى تنسيق بين الأفراد؟",
@@ -309,7 +435,49 @@
         "لإلغاء التخطيط"
       ],
       "a": 0,
-      "e": "التنفيذ يتطلب تنظيم المعدات والأفراد وتوقيت العمل."
+      "e": "التنفيذ يتطلب تنظيم المعدات والأفراد وتوقيت العمل.",
+      "i18n": {
+        "en": {
+          "q": "Why does using pumps require coordination among the people involved?",
+          "o": [
+            "To operate the equipment and open the passages safely and at the required time",
+            "Because each person works alone",
+            "To prevent the exchange of instructions",
+            "To cancel the planning"
+          ],
+          "e": "Carrying it out requires organizing the equipment, the people, and the timing of the work."
+        },
+        "fr": {
+          "q": "Pourquoi l’utilisation des pompes demande-t-elle une coordination entre les personnes ?",
+          "o": [
+            "Pour faire fonctionner le matériel et ouvrir les passages en toute sécurité et au bon moment",
+            "Parce que chacun travaille seul",
+            "Pour empêcher l’échange d’instructions",
+            "Pour supprimer la planification"
+          ],
+          "e": "La réalisation demande d’organiser le matériel, les personnes et le moment du travail."
+        },
+        "it": {
+          "q": "Perché l’uso delle pompe richiede coordinamento tra le persone?",
+          "o": [
+            "Per far funzionare le attrezzature e aprire i passaggi in sicurezza e al momento richiesto",
+            "Perché ognuno lavora da solo",
+            "Per impedire lo scambio di istruzioni",
+            "Per annullare la pianificazione"
+          ],
+          "e": "L’esecuzione richiede di organizzare le attrezzature, le persone e i tempi del lavoro."
+        },
+        "de": {
+          "q": "Warum erfordert der Einsatz der Pumpen Abstimmung zwischen den Beteiligten?",
+          "o": [
+            "Um die Geräte zu bedienen und die Durchgänge sicher und zur richtigen Zeit zu öffnen",
+            "Weil jeder allein arbeitet",
+            "Um den Austausch von Anweisungen zu verhindern",
+            "Um die Planung abzuschaffen"
+          ],
+          "e": "Die Durchführung erfordert die Organisation von Geräten, Personen und dem Zeitpunkt der Arbeit."
+        }
+      }
     },
     {
       "q": "ما معنى الابتكار في سياق الحكاية؟",
@@ -320,7 +488,49 @@
         "الاعتماد على القوة وحدها"
       ],
       "a": 0,
-      "e": "الابتكار قد يكون في تطبيق المعرفة لحل مشكلة قائمة."
+      "e": "الابتكار قد يكون في تطبيق المعرفة لحل مشكلة قائمة.",
+      "i18n": {
+        "en": {
+          "q": "What does innovation mean in the context of the story?",
+          "o": [
+            "Using known knowledge in a way that solves a practical challenge",
+            "Inventing something without a purpose",
+            "Rejecting all available tools",
+            "Relying on force alone"
+          ],
+          "e": "Innovation can lie in applying knowledge to solve an existing problem."
+        },
+        "fr": {
+          "q": "Que signifie l’innovation dans le contexte de cette histoire ?",
+          "o": [
+            "Utiliser une connaissance connue d’une manière qui résout un défi pratique",
+            "Inventer quelque chose sans but",
+            "Refuser tous les outils disponibles",
+            "Compter sur la force seule"
+          ],
+          "e": "L’innovation peut consister à appliquer des connaissances pour résoudre un problème existant."
+        },
+        "it": {
+          "q": "Che cosa significa innovazione nel contesto della storia?",
+          "o": [
+            "Usare una conoscenza già nota in un modo che risolve una sfida pratica",
+            "Inventare qualcosa senza uno scopo",
+            "Rifiutare tutti gli strumenti disponibili",
+            "Affidarsi alla sola forza"
+          ],
+          "e": "L’innovazione può consistere nell’applicare la conoscenza per risolvere un problema esistente."
+        },
+        "de": {
+          "q": "Was bedeutet Innovation im Zusammenhang mit der Geschichte?",
+          "o": [
+            "Bekanntes Wissen so einzusetzen, dass es eine praktische Herausforderung löst",
+            "Etwas ohne Zweck zu erfinden",
+            "Alle verfügbaren Werkzeuge abzulehnen",
+            "Sich allein auf Kraft zu verlassen"
+          ],
+          "e": "Innovation kann darin bestehen, Wissen anzuwenden, um ein bestehendes Problem zu lösen."
+        }
+      }
     },
     {
       "q": "أي عامل قد يؤثر في كفاءة إزالة التربة بالماء؟",
@@ -331,7 +541,49 @@
         "اسم المكان وحده"
       ],
       "a": 0,
-      "e": "خصائص التربة ومعدل تدفق الماء يؤثران في عملية التجريف."
+      "e": "خصائص التربة ومعدل تدفق الماء يؤثران في عملية التجريف.",
+      "i18n": {
+        "en": {
+          "q": "Which factor may affect the efficiency of removing soil with water?",
+          "o": [
+            "The nature of the soil and the flow of the water",
+            "The color of the military uniform",
+            "The number of pages in the report",
+            "The name of the place alone"
+          ],
+          "e": "The properties of the soil and the rate of water flow affect the erosion process."
+        },
+        "fr": {
+          "q": "Quel facteur peut influencer l’efficacité de l’enlèvement de la terre par l’eau ?",
+          "o": [
+            "La nature du sol et le débit de l’eau",
+            "La couleur de l’uniforme militaire",
+            "Le nombre de pages du rapport",
+            "Le nom du lieu seul"
+          ],
+          "e": "Les propriétés du sol et le débit de l’eau influencent le processus d’érosion."
+        },
+        "it": {
+          "q": "Quale fattore può influire sull’efficienza della rimozione del terreno con l’acqua?",
+          "o": [
+            "La natura del terreno e il flusso dell’acqua",
+            "Il colore dell’uniforme militare",
+            "Il numero di pagine del rapporto",
+            "Il solo nome del luogo"
+          ],
+          "e": "Le caratteristiche del terreno e la velocità del flusso dell’acqua influiscono sul processo di erosione."
+        },
+        "de": {
+          "q": "Welcher Faktor kann die Wirksamkeit beim Abtragen von Erde mit Wasser beeinflussen?",
+          "o": [
+            "Die Beschaffenheit des Bodens und der Wasserstrom",
+            "Die Farbe der Militäruniform",
+            "Die Seitenzahl des Berichts",
+            "Allein der Name des Ortes"
+          ],
+          "e": "Die Eigenschaften des Bodens und die Fließgeschwindigkeit des Wassers beeinflussen den Abtragungsvorgang."
+        }
+      }
     },
     {
       "q": "لماذا تُعد التجربة والتقييم مهمين في الحلول الهندسية؟",
@@ -342,7 +594,49 @@
         "لإلغاء معايير السلامة"
       ],
       "a": 0,
-      "e": "التقييم يساعد على اكتشاف المشكلات وتحسين الأداء."
+      "e": "التقييم يساعد على اكتشاف المشكلات وتحسين الأداء.",
+      "i18n": {
+        "en": {
+          "q": "Why are testing and evaluation important in engineering solutions?",
+          "o": [
+            "To make sure of effectiveness and improve the carrying out",
+            "To prove that the plan does not need any change",
+            "To avoid collecting observations",
+            "To cancel safety standards"
+          ],
+          "e": "Evaluation helps to discover problems and improve performance."
+        },
+        "fr": {
+          "q": "Pourquoi l’essai et l’évaluation sont-ils importants dans les solutions techniques ?",
+          "o": [
+            "Pour s’assurer de l’efficacité et améliorer la réalisation",
+            "Pour prouver que le plan n’a besoin d’aucune modification",
+            "Pour éviter de recueillir des observations",
+            "Pour supprimer les normes de sécurité"
+          ],
+          "e": "L’évaluation aide à découvrir les problèmes et à améliorer les performances."
+        },
+        "it": {
+          "q": "Perché la sperimentazione e la valutazione sono importanti nelle soluzioni ingegneristiche?",
+          "o": [
+            "Per verificarne l’efficacia e migliorare l’esecuzione",
+            "Per dimostrare che il piano non ha bisogno di modifiche",
+            "Per evitare di raccogliere osservazioni",
+            "Per eliminare le norme di sicurezza"
+          ],
+          "e": "La valutazione aiuta a scoprire i problemi e a migliorare le prestazioni."
+        },
+        "de": {
+          "q": "Warum sind Erproben und Bewerten bei technischen Lösungen wichtig?",
+          "o": [
+            "Um die Wirksamkeit sicherzustellen und die Durchführung zu verbessern",
+            "Um zu beweisen, dass der Plan keine Änderung braucht",
+            "Um das Sammeln von Beobachtungen zu vermeiden",
+            "Um die Sicherheitsstandards abzuschaffen"
+          ],
+          "e": "Die Bewertung hilft, Probleme zu entdecken und die Leistung zu verbessern."
+        }
+      }
     },
     {
       "q": "ما المقصود بعبارة العقل قبل السلاح في الحكاية؟",
@@ -353,7 +647,49 @@
         "أن القوة لا قيمة لها في أي موقف"
       ],
       "a": 0,
-      "e": "الفكرة تبرز قيمة الحل المدروس مع استخدام الوسائل المناسبة."
+      "e": "الفكرة تبرز قيمة الحل المدروس مع استخدام الوسائل المناسبة.",
+      "i18n": {
+        "en": {
+          "q": "What is meant by the phrase “mind before weapon” in the story?",
+          "o": [
+            "Putting thinking and planning first in order to solve obstacles",
+            "Doing without all equipment",
+            "Rejecting teamwork",
+            "That force has no value in any situation"
+          ],
+          "e": "The idea highlights the value of a well-thought-out solution while using suitable means."
+        },
+        "fr": {
+          "q": "Que signifie l’expression « l’esprit avant l’arme » dans cette histoire ?",
+          "o": [
+            "Placer la réflexion et la planification en premier pour résoudre les obstacles",
+            "Se passer de tout matériel",
+            "Refuser le travail d’équipe",
+            "Que la force n’a aucune valeur dans aucune situation"
+          ],
+          "e": "L’idée met en valeur une solution bien réfléchie tout en utilisant les moyens adaptés."
+        },
+        "it": {
+          "q": "Che cosa si intende con l’espressione «la mente prima dell’arma» nella storia?",
+          "o": [
+            "Mettere al primo posto il pensiero e la pianificazione per superare gli ostacoli",
+            "Fare a meno di tutte le attrezzature",
+            "Rifiutare il lavoro di squadra",
+            "Che la forza non ha valore in nessuna situazione"
+          ],
+          "e": "L’idea mette in risalto il valore di una soluzione ben ponderata, usando i mezzi adatti."
+        },
+        "de": {
+          "q": "Was ist mit dem Ausdruck „Verstand vor Waffe“ in der Geschichte gemeint?",
+          "o": [
+            "Denken und Planen an die erste Stelle zu setzen, um Hindernisse zu lösen",
+            "Auf alle Geräte zu verzichten",
+            "Teamarbeit abzulehnen",
+            "Dass Kraft in keiner Lage einen Wert hat"
+          ],
+          "e": "Die Idee hebt den Wert einer durchdachten Lösung hervor, bei der passende Mittel eingesetzt werden."
+        }
+      }
     },
     {
       "q": "كيف يمكن نقل درس الحكاية إلى الحياة اليومية؟",
@@ -364,7 +700,49 @@
         "انتظار أن تختفي المشكلة"
       ],
       "a": 0,
-      "e": "حل المشكلات يبدأ بالفهم ثم اختيار الحل ومراجعة النتيجة."
+      "e": "حل المشكلات يبدأ بالفهم ثم اختيار الحل ومراجعة النتيجة.",
+      "i18n": {
+        "en": {
+          "q": "How can the lesson of the story be carried over into everyday life?",
+          "o": [
+            "Analyzing the obstacle, then trying a suitable solution and evaluating it",
+            "Rushing in before understanding the problem",
+            "Sticking to one solution no matter how much it fails",
+            "Waiting for the problem to disappear"
+          ],
+          "e": "Solving problems begins with understanding, then choosing the solution and reviewing the result."
+        },
+        "fr": {
+          "q": "Comment peut-on transposer la leçon de l’histoire dans la vie de tous les jours ?",
+          "o": [
+            "Analyser l’obstacle, puis essayer une solution adaptée et l’évaluer",
+            "Se précipiter avant de comprendre le problème",
+            "S’accrocher à une seule solution même si elle échoue",
+            "Attendre que le problème disparaisse"
+          ],
+          "e": "Résoudre des problèmes commence par comprendre, puis choisir la solution et examiner le résultat."
+        },
+        "it": {
+          "q": "Come si può trasferire l’insegnamento della storia nella vita di ogni giorno?",
+          "o": [
+            "Analizzare l’ostacolo, poi provare una soluzione adatta e valutarla",
+            "Lanciarsi prima di aver capito il problema",
+            "Restare attaccati a un’unica soluzione anche se fallisce",
+            "Aspettare che il problema sparisca"
+          ],
+          "e": "Risolvere i problemi comincia dalla comprensione, poi dalla scelta della soluzione e dalla verifica del risultato."
+        },
+        "de": {
+          "q": "Wie kann man die Lehre der Geschichte auf den Alltag übertragen?",
+          "o": [
+            "Das Hindernis analysieren, dann eine passende Lösung ausprobieren und bewerten",
+            "Sich hineinstürzen, bevor man das Problem versteht",
+            "An einer einzigen Lösung festhalten, egal wie oft sie scheitert",
+            "Darauf warten, dass das Problem verschwindet"
+          ],
+          "e": "Probleme zu lösen beginnt mit dem Verstehen, dann folgt die Wahl der Lösung und die Überprüfung des Ergebnisses."
+        }
+      }
     },
     {
       "q": "ما سبب أهمية معرفة خصائص الساتر قبل التعامل معه؟",
@@ -375,7 +753,49 @@
         "لضمان عدم وجود مخاطر"
       ],
       "a": 0,
-      "e": "معرفة طبيعة العائق تؤثر في اختيار أسلوب التعامل معه."
+      "e": "معرفة طبيعة العائق تؤثر في اختيار أسلوب التعامل معه.",
+      "i18n": {
+        "en": {
+          "q": "Why is it important to know the properties of the embankment before dealing with it?",
+          "o": [
+            "To decide on the suitable method and equipment",
+            "To decide only the names of the soldiers",
+            "To cancel the need for calculations",
+            "To guarantee that there are no risks"
+          ],
+          "e": "Knowing the nature of the obstacle affects the choice of the way to deal with it."
+        },
+        "fr": {
+          "q": "Pourquoi est-il important de connaître les propriétés du remblai avant de s’en occuper ?",
+          "o": [
+            "Pour déterminer la méthode et le matériel adaptés",
+            "Pour déterminer seulement les noms des soldats",
+            "Pour supprimer le besoin de calculs",
+            "Pour garantir l’absence de risques"
+          ],
+          "e": "Connaître la nature de l’obstacle influence le choix de la manière de le traiter."
+        },
+        "it": {
+          "q": "Perché è importante conoscere le caratteristiche del terrapieno prima di affrontarlo?",
+          "o": [
+            "Per stabilire il metodo e le attrezzature adatti",
+            "Per stabilire soltanto i nomi dei soldati",
+            "Per eliminare il bisogno di calcoli",
+            "Per garantire che non ci siano rischi"
+          ],
+          "e": "Conoscere la natura dell’ostacolo influisce sulla scelta del modo di affrontarlo."
+        },
+        "de": {
+          "q": "Warum ist es wichtig, die Eigenschaften des Erdwalls zu kennen, bevor man ihn angeht?",
+          "o": [
+            "Um die passende Methode und Ausrüstung festzulegen",
+            "Um nur die Namen der Soldaten festzulegen",
+            "Um die Notwendigkeit von Berechnungen aufzuheben",
+            "Um sicherzustellen, dass es keine Gefahren gibt"
+          ],
+          "e": "Die Art des Hindernisses zu kennen beeinflusst die Wahl der Vorgehensweise."
+        }
+      }
     },
     {
       "q": "أي مثال يمثل تفكيرًا هندسيًا؟",
@@ -386,7 +806,49 @@
         "تكرار محاولة فاشلة بلا تعديل"
       ],
       "a": 0,
-      "e": "التفكير الهندسي يقارن البدائل وفق معايير واضحة."
+      "e": "التفكير الهندسي يقارن البدائل وفق معايير واضحة.",
+      "i18n": {
+        "en": {
+          "q": "Which example represents engineering thinking?",
+          "o": [
+            "Comparing several solutions according to time, resources, and safety",
+            "Choosing the most famous solution without checking",
+            "Ignoring the limits",
+            "Repeating a failed attempt without any change"
+          ],
+          "e": "Engineering thinking compares alternatives according to clear criteria."
+        },
+        "fr": {
+          "q": "Quel exemple représente une pensée d’ingénieur ?",
+          "o": [
+            "Comparer plusieurs solutions selon le temps, les ressources et la sécurité",
+            "Choisir la solution la plus connue sans l’examiner",
+            "Ignorer les contraintes",
+            "Répéter un essai qui a échoué sans rien modifier"
+          ],
+          "e": "La pensée d’ingénieur compare les alternatives selon des critères clairs."
+        },
+        "it": {
+          "q": "Quale esempio rappresenta un pensiero ingegneristico?",
+          "o": [
+            "Confrontare più soluzioni in base a tempo, risorse e sicurezza",
+            "Scegliere la soluzione più famosa senza verificarla",
+            "Ignorare i limiti",
+            "Ripetere un tentativo fallito senza modificarlo"
+          ],
+          "e": "Il pensiero ingegneristico confronta le alternative in base a criteri chiari."
+        },
+        "de": {
+          "q": "Welches Beispiel zeigt technisches Denken?",
+          "o": [
+            "Mehrere Lösungen nach Zeit, Mitteln und Sicherheit zu vergleichen",
+            "Die bekannteste Lösung ohne Prüfung zu wählen",
+            "Die Grenzen zu ignorieren",
+            "Einen gescheiterten Versuch ohne Änderung zu wiederholen"
+          ],
+          "e": "Technisches Denken vergleicht Alternativen nach klaren Kriterien."
+        }
+      }
     },
     {
       "q": "لماذا لا يعني نجاح حل واحد أنه مناسب لكل مشكلة؟",
@@ -397,7 +859,49 @@
         "لأن كل المشكلات متطابقة"
       ],
       "a": 0,
-      "e": "تختلف المشكلات في ظروفها، لذا يجب تقييم ملاءمة كل حل."
+      "e": "تختلف المشكلات في ظروفها، لذا يجب تقييم ملاءمة كل حل.",
+      "i18n": {
+        "en": {
+          "q": "Why does the success of one solution not mean that it suits every problem?",
+          "o": [
+            "Because the conditions, materials, and limits may differ",
+            "Because solutions never succeed",
+            "Because experience has no value",
+            "Because all problems are identical"
+          ],
+          "e": "Problems differ in their conditions, so the suitability of each solution must be evaluated."
+        },
+        "fr": {
+          "q": "Pourquoi le succès d’une solution ne veut-il pas dire qu’elle convient à tous les problèmes ?",
+          "o": [
+            "Parce que les conditions, les matériaux et les contraintes peuvent différer",
+            "Parce que les solutions ne réussissent jamais",
+            "Parce que l’expérience n’a aucune valeur",
+            "Parce que tous les problèmes sont identiques"
+          ],
+          "e": "Les problèmes diffèrent par leurs conditions ; il faut donc évaluer l’adéquation de chaque solution."
+        },
+        "it": {
+          "q": "Perché il successo di una soluzione non significa che vada bene per ogni problema?",
+          "o": [
+            "Perché le condizioni, i materiali e i limiti possono essere diversi",
+            "Perché le soluzioni non hanno mai successo",
+            "Perché l’esperienza non ha valore",
+            "Perché tutti i problemi sono identici"
+          ],
+          "e": "I problemi differiscono nelle loro condizioni, quindi bisogna valutare l’adeguatezza di ogni soluzione."
+        },
+        "de": {
+          "q": "Warum bedeutet der Erfolg einer Lösung nicht, dass sie für jedes Problem passt?",
+          "o": [
+            "Weil Bedingungen, Materialien und Grenzen unterschiedlich sein können",
+            "Weil Lösungen nie gelingen",
+            "Weil Erfahrung keinen Wert hat",
+            "Weil alle Probleme gleich sind"
+          ],
+          "e": "Probleme unterscheiden sich in ihren Bedingungen, deshalb muss die Eignung jeder Lösung bewertet werden."
+        }
+      }
     },
     {
       "q": "ما العلاقة بين العلم والتطبيق في هذه القصة؟",
@@ -408,7 +912,49 @@
         "التجربة تعارض العلم بالضرورة"
       ],
       "a": 0,
-      "e": "تظهر قيمة المعرفة عندما تُستخدم عمليًا بطريقة مناسبة."
+      "e": "تظهر قيمة المعرفة عندما تُستخدم عمليًا بطريقة مناسبة.",
+      "i18n": {
+        "en": {
+          "q": "What is the relationship between science and application in this story?",
+          "o": [
+            "Knowledge becomes useful when it is applied to solve the problem",
+            "Science is always separate from reality",
+            "Application does not need understanding",
+            "Experiment necessarily opposes science"
+          ],
+          "e": "The value of knowledge appears when it is used practically in a suitable way."
+        },
+        "fr": {
+          "q": "Quelle est la relation entre la science et l’application dans cette histoire ?",
+          "o": [
+            "La connaissance devient utile lorsqu’on l’applique pour résoudre le problème",
+            "La science est toujours séparée de la réalité",
+            "L’application n’a pas besoin de compréhension",
+            "L’expérience s’oppose forcément à la science"
+          ],
+          "e": "La valeur de la connaissance apparaît quand on l’utilise concrètement de manière adaptée."
+        },
+        "it": {
+          "q": "Qual è il rapporto tra scienza e applicazione in questa storia?",
+          "o": [
+            "La conoscenza diventa utile quando viene applicata per risolvere il problema",
+            "La scienza è sempre separata dalla realtà",
+            "L’applicazione non ha bisogno di comprensione",
+            "La sperimentazione si oppone necessariamente alla scienza"
+          ],
+          "e": "Il valore della conoscenza appare quando viene usata concretamente nel modo adatto."
+        },
+        "de": {
+          "q": "Welche Beziehung besteht in dieser Geschichte zwischen Wissenschaft und Anwendung?",
+          "o": [
+            "Wissen wird nützlich, wenn es angewendet wird, um das Problem zu lösen",
+            "Wissenschaft ist immer von der Wirklichkeit getrennt",
+            "Anwendung braucht kein Verständnis",
+            "Das Experiment widerspricht notwendigerweise der Wissenschaft"
+          ],
+          "e": "Der Wert des Wissens zeigt sich, wenn es praktisch und auf passende Weise genutzt wird."
+        }
+      }
     },
     {
       "q": "أي وصف أقرب لدور الفريق في تنفيذ فكرة هندسية؟",
@@ -419,7 +965,49 @@
         "تغيير الهدف باستمرار"
       ],
       "a": 0,
-      "e": "توزيع المهام والتواصل يساعدان على تنفيذ الحل."
+      "e": "توزيع المهام والتواصل يساعدان على تنفيذ الحل.",
+      "i18n": {
+        "en": {
+          "q": "Which description is closest to the role of the team in carrying out an engineering idea?",
+          "o": [
+            "Distributing tasks, coordinating the carrying out, and following up the results",
+            "Waiting for one person to finish everything",
+            "Hiding information from the team",
+            "Constantly changing the goal"
+          ],
+          "e": "Distributing tasks and communication help in carrying out the solution."
+        },
+        "fr": {
+          "q": "Quelle description est la plus proche du rôle de l’équipe dans la réalisation d’une idée technique ?",
+          "o": [
+            "Répartir les tâches, coordonner la réalisation et suivre les résultats",
+            "Attendre qu’une seule personne fasse tout",
+            "Cacher des informations à l’équipe",
+            "Changer sans cesse d’objectif"
+          ],
+          "e": "La répartition des tâches et la communication aident à mettre en œuvre la solution."
+        },
+        "it": {
+          "q": "Quale descrizione si avvicina di più al ruolo della squadra nell’attuare un’idea ingegneristica?",
+          "o": [
+            "Distribuire i compiti, coordinare l’esecuzione e seguire i risultati",
+            "Aspettare che una sola persona faccia tutto",
+            "Nascondere le informazioni alla squadra",
+            "Cambiare continuamente l’obiettivo"
+          ],
+          "e": "La distribuzione dei compiti e la comunicazione aiutano ad attuare la soluzione."
+        },
+        "de": {
+          "q": "Welche Beschreibung kommt der Rolle des Teams bei der Umsetzung einer technischen Idee am nächsten?",
+          "o": [
+            "Aufgaben zu verteilen, die Durchführung abzustimmen und die Ergebnisse zu verfolgen",
+            "Darauf zu warten, dass eine einzelne Person alles erledigt",
+            "Informationen vor dem Team zu verbergen",
+            "Das Ziel ständig zu ändern"
+          ],
+          "e": "Aufgabenverteilung und Kommunikation helfen, die Lösung umzusetzen."
+        }
+      }
     },
     {
       "q": "ما الذي ينبغي فعله إذا لم يحقق الحل النتيجة المتوقعة؟",
@@ -430,7 +1018,49 @@
         "افتراض أن القياس غير مهم"
       ],
       "a": 0,
-      "e": "مراجعة النتائج تساعد على فهم الخلل وتحسين الحل."
+      "e": "مراجعة النتائج تساعد على فهم الخلل وتحسين الحل.",
+      "i18n": {
+        "en": {
+          "q": "What should be done if a solution does not achieve the expected result?",
+          "o": [
+            "Examine the causes and adjust the method based on evidence",
+            "Hide the result",
+            "Repeat the mistake without reviewing",
+            "Assume that measurement is not important"
+          ],
+          "e": "Reviewing the results helps to understand the fault and improve the solution."
+        },
+        "fr": {
+          "q": "Que faut-il faire si une solution n’atteint pas le résultat attendu ?",
+          "o": [
+            "Examiner les causes et modifier la méthode à partir des preuves",
+            "Cacher le résultat",
+            "Répéter l’erreur sans réviser",
+            "Supposer que la mesure n’est pas importante"
+          ],
+          "e": "Examiner les résultats aide à comprendre le défaut et à améliorer la solution."
+        },
+        "it": {
+          "q": "Che cosa si dovrebbe fare se una soluzione non raggiunge il risultato previsto?",
+          "o": [
+            "Esaminare le cause e modificare il metodo in base alle prove",
+            "Nascondere il risultato",
+            "Ripetere l’errore senza rivederlo",
+            "Supporre che la misurazione non sia importante"
+          ],
+          "e": "Rivedere i risultati aiuta a capire il difetto e a migliorare la soluzione."
+        },
+        "de": {
+          "q": "Was sollte man tun, wenn eine Lösung nicht das erwartete Ergebnis bringt?",
+          "o": [
+            "Die Ursachen prüfen und die Methode anhand von Belegen anpassen",
+            "Das Ergebnis verstecken",
+            "Den Fehler ohne Überprüfung wiederholen",
+            "Annehmen, dass die Messung nicht wichtig ist"
+          ],
+          "e": "Die Überprüfung der Ergebnisse hilft, den Fehler zu verstehen und die Lösung zu verbessern."
+        }
+      }
     }
   ]
 }

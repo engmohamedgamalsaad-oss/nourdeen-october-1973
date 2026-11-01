@@ -276,7 +276,49 @@
         "لأنه يضمن النتيجة وحده"
       ],
       "a": 0,
-      "e": "التوقيت يرتبط بالتنسيق مع بقية مراحل العملية."
+      "e": "التوقيت يرتبط بالتنسيق مع بقية مراحل العملية.",
+      "i18n": {
+        "en": {
+          "q": "Why is the timing of an air strike an important element in a military plan?",
+          "o": [
+            "Because it is linked to the timing of the movements of the other forces",
+            "Because timing has no effect on operations",
+            "Because it removes the need for reconnaissance",
+            "Because it guarantees the result on its own"
+          ],
+          "e": "Timing is linked to coordination with the other stages of the operation."
+        },
+        "fr": {
+          "q": "Pourquoi le moment d’une frappe aérienne est-il un élément important dans un plan militaire ?",
+          "o": [
+            "Parce qu’il est lié au moment des mouvements des autres forces",
+            "Parce que le moment n’a aucun effet sur les opérations",
+            "Parce qu’il supprime le besoin de reconnaissance",
+            "Parce qu’il garantit à lui seul le résultat"
+          ],
+          "e": "Le moment choisi est lié à la coordination avec les autres phases de l’opération."
+        },
+        "it": {
+          "q": "Perché i tempi di un attacco aereo sono un elemento importante in un piano militare?",
+          "o": [
+            "Perché sono legati ai tempi dei movimenti delle altre forze",
+            "Perché i tempi non influiscono sulle operazioni",
+            "Perché elimina il bisogno di ricognizione",
+            "Perché da solo garantisce il risultato"
+          ],
+          "e": "I tempi sono legati al coordinamento con le altre fasi dell’operazione."
+        },
+        "de": {
+          "q": "Warum ist der Zeitpunkt eines Luftangriffs ein wichtiges Element in einem Militärplan?",
+          "o": [
+            "Weil er mit dem Zeitpunkt der Bewegungen der übrigen Truppen zusammenhängt",
+            "Weil der Zeitpunkt keinen Einfluss auf Einsätze hat",
+            "Weil er die Aufklärung überflüssig macht",
+            "Weil er allein das Ergebnis garantiert"
+          ],
+          "e": "Der Zeitpunkt hängt mit der Abstimmung mit den übrigen Phasen des Einsatzes zusammen."
+        }
+      }
     },
     {
       "q": "ما المقصود بالعمل المشترك بين القوات؟",
@@ -287,7 +329,49 @@
         "توحيد كل المعدات"
       ],
       "a": 0,
-      "e": "العمل المشترك ينسق الأدوار المختلفة بدل أن تعمل بمعزل."
+      "e": "العمل المشترك ينسق الأدوار المختلفة بدل أن تعمل بمعزل.",
+      "i18n": {
+        "en": {
+          "q": "What is meant by joint action between the forces?",
+          "o": [
+            "Coordinating different capabilities and tasks to achieve one goal",
+            "Cancelling the roles of some forces",
+            "Carrying out every task without communication",
+            "Making all equipment the same"
+          ],
+          "e": "Joint action coordinates the different roles instead of having them work in isolation."
+        },
+        "fr": {
+          "q": "Que signifie l’action conjointe des forces ?",
+          "o": [
+            "Coordonner des capacités et des missions différentes pour atteindre un seul objectif",
+            "Supprimer le rôle de certaines forces",
+            "Exécuter chaque mission sans communication",
+            "Uniformiser tous les équipements"
+          ],
+          "e": "L’action conjointe coordonne les différents rôles au lieu de les laisser agir isolément."
+        },
+        "it": {
+          "q": "Che cosa si intende per azione congiunta tra le forze?",
+          "o": [
+            "Coordinare capacità e compiti diversi per raggiungere un unico obiettivo",
+            "Eliminare il ruolo di alcune forze",
+            "Eseguire ogni compito senza comunicazione",
+            "Rendere uguali tutti i mezzi"
+          ],
+          "e": "L’azione congiunta coordina i diversi ruoli invece di farli lavorare in isolamento."
+        },
+        "de": {
+          "q": "Was ist mit gemeinsamem Handeln der Truppen gemeint?",
+          "o": [
+            "Unterschiedliche Fähigkeiten und Aufgaben abstimmen, um ein gemeinsames Ziel zu erreichen",
+            "Die Rolle einiger Truppen abschaffen",
+            "Jede Aufgabe ohne Verbindung ausführen",
+            "Die gesamte Ausrüstung vereinheitlichen"
+          ],
+          "e": "Gemeinsames Handeln stimmt die verschiedenen Rollen aufeinander ab, statt sie getrennt arbeiten zu lassen."
+        }
+      }
     },
     {
       "q": "ما الذي ينبغي مراعاته عند دراسة نتائج ضربة جوية؟",
@@ -298,7 +382,49 @@
         "الانطباعات وحدها"
       ],
       "a": 0,
-      "e": "تقييم النتائج يحتاج إلى أدلة وسياق وفهم لحدود المصادر."
+      "e": "تقييم النتائج يحتاج إلى أدلة وسياق وفهم لحدود المصادر.",
+      "i18n": {
+        "en": {
+          "q": "What should be taken into account when studying the results of an air strike?",
+          "o": [
+            "The objectives, the context, and the available reports and their limits",
+            "Only one account",
+            "Photos without a date",
+            "Impressions alone"
+          ],
+          "e": "Assessing results needs evidence, context, and an understanding of the limits of the sources."
+        },
+        "fr": {
+          "q": "Que faut-il prendre en compte quand on étudie les résultats d’une frappe aérienne ?",
+          "o": [
+            "Les objectifs, le contexte, les rapports disponibles et leurs limites",
+            "Un seul récit",
+            "Des photos sans date",
+            "Les impressions seules"
+          ],
+          "e": "Évaluer les résultats demande des preuves, du contexte et une bonne compréhension des limites des sources."
+        },
+        "it": {
+          "q": "Che cosa bisogna considerare quando si studiano i risultati di un attacco aereo?",
+          "o": [
+            "Gli obiettivi, il contesto, i rapporti disponibili e i loro limiti",
+            "Un solo resoconto",
+            "Foto senza data",
+            "Le sole impressioni"
+          ],
+          "e": "Valutare i risultati richiede prove, contesto e comprensione dei limiti delle fonti."
+        },
+        "de": {
+          "q": "Was sollte man beim Untersuchen der Ergebnisse eines Luftangriffs beachten?",
+          "o": [
+            "Die Ziele, den Zusammenhang sowie die verfügbaren Berichte und ihre Grenzen",
+            "Nur einen einzigen Bericht",
+            "Fotos ohne Datum",
+            "Nur Eindrücke"
+          ],
+          "e": "Die Bewertung von Ergebnissen braucht Belege, Zusammenhang und ein Verständnis für die Grenzen der Quellen."
+        }
+      }
     },
     {
       "q": "لماذا لا يصح اختزال نتيجة حرب في حدث واحد؟",
@@ -309,7 +435,49 @@
         "لأن المصادر غير ضرورية"
       ],
       "a": 0,
-      "e": "الحروب أحداث معقدة تتداخل فيها عوامل متعددة."
+      "e": "الحروب أحداث معقدة تتداخل فيها عوامل متعددة.",
+      "i18n": {
+        "en": {
+          "q": "Why is it not right to reduce the outcome of a war to a single event?",
+          "o": [
+            "Because outcomes are affected by many factors and operations",
+            "Because events are never connected",
+            "Because planning is unimportant",
+            "Because sources are not necessary"
+          ],
+          "e": "Wars are complex events in which many factors overlap."
+        },
+        "fr": {
+          "q": "Pourquoi n’est-il pas juste de réduire l’issue d’une guerre à un seul événement ?",
+          "o": [
+            "Parce que les résultats dépendent de nombreux facteurs et opérations",
+            "Parce que les événements ne sont jamais liés",
+            "Parce que la planification n’a aucune importance",
+            "Parce que les sources ne sont pas nécessaires"
+          ],
+          "e": "Les guerres sont des événements complexes où de nombreux facteurs s’entremêlent."
+        },
+        "it": {
+          "q": "Perché non è corretto ridurre l’esito di una guerra a un solo evento?",
+          "o": [
+            "Perché i risultati sono influenzati da molti fattori e operazioni",
+            "Perché gli eventi non sono mai collegati",
+            "Perché la pianificazione non ha importanza",
+            "Perché le fonti non sono necessarie"
+          ],
+          "e": "Le guerre sono eventi complessi in cui si intrecciano molti fattori."
+        },
+        "de": {
+          "q": "Warum ist es nicht richtig, den Ausgang eines Krieges auf ein einziges Ereignis zu verkürzen?",
+          "o": [
+            "Weil die Ergebnisse von vielen Faktoren und Einsätzen beeinflusst werden",
+            "Weil Ereignisse nie zusammenhängen",
+            "Weil Planung keine Bedeutung hat",
+            "Weil Quellen nicht nötig sind"
+          ],
+          "e": "Kriege sind komplexe Ereignisse, in denen viele Faktoren ineinandergreifen."
+        }
+      }
     },
     {
       "q": "ما فائدة الخرائط في التخطيط العسكري؟",
@@ -320,7 +488,49 @@
         "استبدال التنسيق"
       ],
       "a": 0,
-      "e": "الخرائط أداة لفهم المكان، ويجب تحديثها والتحقق من معلوماتها."
+      "e": "الخرائط أداة لفهم المكان، ويجب تحديثها والتحقق من معلوماتها.",
+      "i18n": {
+        "en": {
+          "q": "What is the use of maps in military planning?",
+          "o": [
+            "Showing locations, distances, and obstacles",
+            "Removing the need for reconnaissance",
+            "Guaranteeing that every piece of information is correct",
+            "Replacing coordination"
+          ],
+          "e": "Maps are a tool for understanding a place, and their information must be updated and checked."
+        },
+        "fr": {
+          "q": "À quoi servent les cartes dans la planification militaire ?",
+          "o": [
+            "À montrer les positions, les distances et les obstacles",
+            "À supprimer le besoin de reconnaissance",
+            "À garantir que chaque information est exacte",
+            "À remplacer la coordination"
+          ],
+          "e": "Les cartes sont un outil pour comprendre un lieu ; leurs informations doivent être mises à jour et vérifiées."
+        },
+        "it": {
+          "q": "A che cosa servono le mappe nella pianificazione militare?",
+          "o": [
+            "A mostrare posizioni, distanze e ostacoli",
+            "A eliminare il bisogno di ricognizione",
+            "A garantire che ogni informazione sia corretta",
+            "A sostituire il coordinamento"
+          ],
+          "e": "Le mappe sono uno strumento per comprendere il luogo; le loro informazioni vanno aggiornate e verificate."
+        },
+        "de": {
+          "q": "Wozu dienen Karten in der Militärplanung?",
+          "o": [
+            "Orte, Entfernungen und Hindernisse zeigen",
+            "Die Aufklärung überflüssig machen",
+            "Die Richtigkeit jeder Information garantieren",
+            "Die Abstimmung ersetzen"
+          ],
+          "e": "Karten sind ein Mittel, um einen Ort zu verstehen; ihre Angaben müssen aktualisiert und überprüft werden."
+        }
+      }
     },
     {
       "q": "ما الذي يميز المصدر الأولي لدراسة حدث تاريخي؟",
@@ -331,7 +541,49 @@
         "أنه أحدث منشور على الإنترنت"
       ],
       "a": 0,
-      "e": "المصدر الأولي قد يقدم شهادة مباشرة لكنه يظل بحاجة إلى نقد ومقارنة."
+      "e": "المصدر الأولي قد يقدم شهادة مباشرة لكنه يظل بحاجة إلى نقد ومقارنة.",
+      "i18n": {
+        "en": {
+          "q": "What distinguishes a primary source for studying a historical event?",
+          "o": [
+            "That it often comes from the time of the event or from a participant in it",
+            "That it is always free of bias",
+            "That it needs no comparison",
+            "That it is the newest post on the internet"
+          ],
+          "e": "A primary source may offer direct testimony, but it still needs to be critically examined and compared."
+        },
+        "fr": {
+          "q": "Qu’est-ce qui caractérise une source primaire pour étudier un événement historique ?",
+          "o": [
+            "Elle provient souvent de l’époque de l’événement ou d’un participant",
+            "Elle est toujours exempte de partialité",
+            "Elle n’a pas besoin d’être comparée",
+            "C’est la publication la plus récente sur Internet"
+          ],
+          "e": "Une source primaire peut offrir un témoignage direct, mais elle doit quand même être soumise à un examen critique et comparée."
+        },
+        "it": {
+          "q": "Che cosa caratterizza una fonte primaria per studiare un evento storico?",
+          "o": [
+            "Il fatto che spesso proviene dall’epoca dell’evento o da un partecipante",
+            "Il fatto che è sempre priva di parzialità",
+            "Il fatto che non ha bisogno di confronto",
+            "Il fatto che è la pubblicazione più recente su internet"
+          ],
+          "e": "Una fonte primaria può offrire una testimonianza diretta, ma ha comunque bisogno di essere esaminata criticamente e confrontata."
+        },
+        "de": {
+          "q": "Was kennzeichnet eine Primärquelle für die Untersuchung eines historischen Ereignisses?",
+          "o": [
+            "Dass sie oft aus der Zeit des Ereignisses stammt oder von einem Beteiligten",
+            "Dass sie immer frei von Voreingenommenheit ist",
+            "Dass sie keinen Vergleich braucht",
+            "Dass sie die neueste Veröffentlichung im Internet ist"
+          ],
+          "e": "Eine Primärquelle kann ein unmittelbares Zeugnis liefern, muss aber dennoch kritisch geprüft und verglichen werden."
+        }
+      }
     },
     {
       "q": "لماذا قد تختلف شهادات المشاركين في الحدث نفسه؟",
@@ -342,7 +594,49 @@
         "لأن التواريخ لا معنى لها"
       ],
       "a": 0,
-      "e": "قد يرى المشاركون جوانب مختلفة ويتذكرونها بطرق متفاوتة."
+      "e": "قد يرى المشاركون جوانب مختلفة ويتذكرونها بطرق متفاوتة.",
+      "i18n": {
+        "en": {
+          "q": "Why might the testimonies of participants in the same event differ?",
+          "o": [
+            "Because of differences in their positions, their memory, and what they were able to know",
+            "Because all testimonies are false",
+            "Because facts cannot be recorded",
+            "Because dates have no meaning"
+          ],
+          "e": "Participants may see different sides and remember them in different ways."
+        },
+        "fr": {
+          "q": "Pourquoi les témoignages des participants à un même événement peuvent-ils différer ?",
+          "o": [
+            "À cause de leurs positions, de leur mémoire et de ce qu’ils ont pu savoir",
+            "Parce que tous les témoignages sont faux",
+            "Parce que les faits ne peuvent pas être enregistrés",
+            "Parce que les dates n’ont aucun sens"
+          ],
+          "e": "Les participants peuvent voir des aspects différents et s’en souvenir de manières différentes."
+        },
+        "it": {
+          "q": "Perché le testimonianze dei partecipanti allo stesso evento possono differire?",
+          "o": [
+            "Per le differenze nelle loro posizioni, nella loro memoria e in ciò che hanno potuto sapere",
+            "Perché tutte le testimonianze sono false",
+            "Perché i fatti non si possono registrare",
+            "Perché le date non hanno significato"
+          ],
+          "e": "I partecipanti possono vedere aspetti diversi e ricordarli in modi diversi."
+        },
+        "de": {
+          "q": "Warum können sich die Aussagen von Beteiligten am selben Ereignis unterscheiden?",
+          "o": [
+            "Wegen ihrer unterschiedlichen Standorte, ihres Gedächtnisses und dessen, was sie wissen konnten",
+            "Weil alle Aussagen falsch sind",
+            "Weil sich Tatsachen nicht aufzeichnen lassen",
+            "Weil Daten keine Bedeutung haben"
+          ],
+          "e": "Beteiligte können unterschiedliche Seiten sehen und sich auf verschiedene Weise erinnern."
+        }
+      }
     },
     {
       "q": "ما الاستنتاج الأفضل من تنسيق الطيران مع القوات البرية؟",
@@ -353,7 +647,49 @@
         "التنسيق يضمن النصر حتمًا"
       ],
       "a": 0,
-      "e": "التنسيق يدعم تنفيذ الخطة لكنه لا يضمن النتيجة وحده."
+      "e": "التنسيق يدعم تنفيذ الخطة لكنه لا يضمن النتيجة وحده.",
+      "i18n": {
+        "en": {
+          "q": "What is the best conclusion from the coordination of aviation with the ground forces?",
+          "o": [
+            "Timing and communication are important elements in joint operations",
+            "Communication can be dispensed with",
+            "Each branch always achieves the goal on its own",
+            "Coordination inevitably guarantees victory"
+          ],
+          "e": "Coordination supports carrying out the plan, but it does not guarantee the result on its own."
+        },
+        "fr": {
+          "q": "Quelle est la meilleure conclusion à tirer de la coordination de l’aviation avec les forces terrestres ?",
+          "o": [
+            "Le moment choisi et la communication sont des éléments importants dans les opérations conjointes",
+            "On peut se passer de la communication",
+            "Chaque branche atteint toujours l’objectif seule",
+            "La coordination garantit forcément la victoire"
+          ],
+          "e": "La coordination soutient l’exécution du plan, mais elle ne garantit pas à elle seule le résultat."
+        },
+        "it": {
+          "q": "Qual è la conclusione migliore dal coordinamento dell’aviazione con le forze terrestri?",
+          "o": [
+            "I tempi e la comunicazione sono elementi importanti nelle operazioni congiunte",
+            "Si può fare a meno della comunicazione",
+            "Ogni componente raggiunge sempre l’obiettivo da sola",
+            "Il coordinamento garantisce necessariamente la vittoria"
+          ],
+          "e": "Il coordinamento sostiene l’esecuzione del piano, ma da solo non garantisce il risultato."
+        },
+        "de": {
+          "q": "Welche Schlussfolgerung aus der Abstimmung der Luftwaffe mit den Bodentruppen ist die beste?",
+          "o": [
+            "Zeitpunkt und Kommunikation sind wichtige Elemente gemeinsamer Einsätze",
+            "Auf Kommunikation kann man verzichten",
+            "Jeder Truppenteil erreicht das Ziel immer allein",
+            "Abstimmung garantiert unweigerlich den Sieg"
+          ],
+          "e": "Abstimmung unterstützt die Ausführung des Plans, garantiert aber allein nicht das Ergebnis."
+        }
+      }
     },
     {
       "q": "كيف نقيّم رقمًا متداولًا عن خسائر أو نتائج معركة؟",
@@ -364,7 +700,49 @@
         "نتجاهل تاريخ نشره"
       ],
       "a": 0,
-      "e": "الأرقام التاريخية تحتاج إلى معرفة مصدرها وطريقة حسابها."
+      "e": "الأرقام التاريخية تحتاج إلى معرفة مصدرها وطريقة حسابها.",
+      "i18n": {
+        "en": {
+          "q": "How do we evaluate a widely circulated number about the losses or results of a battle?",
+          "o": [
+            "We check its source and definitions and compare it with other estimates",
+            "We accept it because it is specific",
+            "We choose the larger number",
+            "We ignore the date it was published"
+          ],
+          "e": "Historical numbers require knowing their source and how they were calculated."
+        },
+        "fr": {
+          "q": "Comment évaluer un chiffre largement diffusé sur les pertes ou les résultats d’une bataille ?",
+          "o": [
+            "On vérifie sa source et ses définitions et on le compare à d’autres estimations",
+            "On l’accepte parce qu’il est précis",
+            "On choisit le chiffre le plus grand",
+            "On ignore sa date de publication"
+          ],
+          "e": "Les chiffres historiques demandent de connaître leur source et leur mode de calcul."
+        },
+        "it": {
+          "q": "Come valutiamo un numero molto diffuso sulle perdite o sui risultati di una battaglia?",
+          "o": [
+            "Controlliamo la sua fonte e le sue definizioni e lo confrontiamo con altre stime",
+            "Lo accettiamo perché è preciso",
+            "Scegliamo il numero più grande",
+            "Ignoriamo la data di pubblicazione"
+          ],
+          "e": "I numeri storici richiedono di conoscere la loro fonte e il modo in cui sono stati calcolati."
+        },
+        "de": {
+          "q": "Wie beurteilen wir eine weit verbreitete Zahl zu den Verlusten oder Ergebnissen einer Schlacht?",
+          "o": [
+            "Wir prüfen ihre Quelle und ihre Definitionen und vergleichen sie mit anderen Schätzungen",
+            "Wir akzeptieren sie, weil sie genau ist",
+            "Wir wählen die größere Zahl",
+            "Wir ignorieren das Datum der Veröffentlichung"
+          ],
+          "e": "Historische Zahlen erfordern, dass man ihre Quelle und die Art ihrer Berechnung kennt."
+        }
+      }
     },
     {
       "q": "ما أهمية فهم ظروف عام 1973 عند قراءة أحداث أكتوبر؟",
@@ -375,7 +753,49 @@
         "لإلغاء دور المصادر"
       ],
       "a": 0,
-      "e": "السياق الزمني والسياسي والعسكري ضروري لفهم القرارات."
+      "e": "السياق الزمني والسياسي والعسكري ضروري لفهم القرارات.",
+      "i18n": {
+        "en": {
+          "q": "Why is it important to understand the circumstances of 1973 when reading the events of October?",
+          "o": [
+            "To understand the decisions, capabilities, and context at that time",
+            "Only to project today’s circumstances onto the past",
+            "To ignore what came before the war",
+            "To cancel the role of sources"
+          ],
+          "e": "The time, political, and military context is necessary to understand the decisions."
+        },
+        "fr": {
+          "q": "Pourquoi est-il important de comprendre les conditions de 1973 pour lire les événements d’octobre ?",
+          "o": [
+            "Pour comprendre les décisions, les capacités et le contexte de l’époque",
+            "Uniquement pour projeter les conditions d’aujourd’hui sur le passé",
+            "Pour ignorer ce qui a précédé la guerre",
+            "Pour supprimer le rôle des sources"
+          ],
+          "e": "Le contexte temporel, politique et militaire est nécessaire pour comprendre les décisions."
+        },
+        "it": {
+          "q": "Perché è importante comprendere le condizioni del 1973 quando si leggono gli eventi di ottobre?",
+          "o": [
+            "Per comprendere le decisioni, le capacità e il contesto di allora",
+            "Solo per proiettare le condizioni di oggi sul passato",
+            "Per ignorare ciò che precedette la guerra",
+            "Per eliminare il ruolo delle fonti"
+          ],
+          "e": "Il contesto temporale, politico e militare è necessario per comprendere le decisioni."
+        },
+        "de": {
+          "q": "Warum ist es wichtig, die Umstände des Jahres 1973 zu verstehen, wenn man die Ereignisse des Oktobers liest?",
+          "o": [
+            "Um die Entscheidungen, die Fähigkeiten und den damaligen Zusammenhang zu verstehen",
+            "Nur um die heutigen Umstände auf die Vergangenheit zu übertragen",
+            "Um zu ignorieren, was dem Krieg vorausging",
+            "Um die Rolle der Quellen abzuschaffen"
+          ],
+          "e": "Der zeitliche, politische und militärische Zusammenhang ist nötig, um die Entscheidungen zu verstehen."
+        }
+      }
     },
     {
       "q": "أي عبارة تفرق بين الارتباط والسببية؟",
@@ -386,7 +806,49 @@
         "الارتباط والسببية شيء واحد"
       ],
       "a": 0,
-      "e": "إثبات السببية يحتاج إلى أدلة تتجاوز مجرد التزامن."
+      "e": "إثبات السببية يحتاج إلى أدلة تتجاوز مجرد التزامن.",
+      "i18n": {
+        "en": {
+          "q": "Which statement distinguishes between correlation and causation?",
+          "o": [
+            "Two events happening at the same time does not by itself prove that one caused the other",
+            "Any two simultaneous events are cause and effect",
+            "Causation needs no evidence",
+            "Correlation and causation are the same thing"
+          ],
+          "e": "Proving causation needs evidence beyond mere simultaneity."
+        },
+        "fr": {
+          "q": "Quelle phrase distingue la corrélation de la causalité ?",
+          "o": [
+            "Deux événements simultanés ne prouvent pas à eux seuls que l’un est la cause de l’autre",
+            "Deux événements simultanés sont toujours cause et effet",
+            "La causalité n’a pas besoin de preuve",
+            "La corrélation et la causalité sont la même chose"
+          ],
+          "e": "Prouver la causalité demande des preuves qui vont au-delà de la simple simultanéité."
+        },
+        "it": {
+          "q": "Quale frase distingue la correlazione dalla causalità?",
+          "o": [
+            "Due eventi simultanei non dimostrano da soli che uno sia la causa dell’altro",
+            "Due eventi simultanei sono sempre causa ed effetto",
+            "La causalità non ha bisogno di prove",
+            "Correlazione e causalità sono la stessa cosa"
+          ],
+          "e": "Dimostrare la causalità richiede prove che vadano oltre la semplice simultaneità."
+        },
+        "de": {
+          "q": "Welcher Satz unterscheidet Korrelation von Kausalität?",
+          "o": [
+            "Dass zwei Ereignisse gleichzeitig geschehen, beweist allein nicht, dass das eine die Ursache des anderen ist",
+            "Alle zwei gleichzeitigen Ereignisse sind Ursache und Wirkung",
+            "Kausalität braucht keinen Beleg",
+            "Korrelation und Kausalität sind dasselbe"
+          ],
+          "e": "Der Nachweis von Kausalität erfordert Belege, die über bloße Gleichzeitigkeit hinausgehen."
+        }
+      }
     },
     {
       "q": "ما فائدة مراجعة مصادر متعددة عن الضربة الجوية؟",
@@ -397,7 +859,49 @@
         "تجنب فهم السياق"
       ],
       "a": 0,
-      "e": "المقارنة تساعد على كشف الاتفاق والاختلاف ومواطن عدم اليقين."
+      "e": "المقارنة تساعد على كشف الاتفاق والاختلاف ومواطن عدم اليقين.",
+      "i18n": {
+        "en": {
+          "q": "What is the benefit of reviewing multiple sources about the air strike?",
+          "o": [
+            "Building a more accurate picture and noticing differences between accounts",
+            "Ensuring that every source is correct",
+            "Choosing the source that confirms our opinion",
+            "Avoiding understanding the context"
+          ],
+          "e": "Comparison helps reveal agreement, disagreement, and areas of uncertainty."
+        },
+        "fr": {
+          "q": "Quel est l’intérêt de consulter plusieurs sources sur la frappe aérienne ?",
+          "o": [
+            "Construire une image plus précise et remarquer les différences entre les récits",
+            "S’assurer que chaque source est exacte",
+            "Choisir la source qui confirme notre opinion",
+            "Éviter de comprendre le contexte"
+          ],
+          "e": "La comparaison aide à révéler les accords, les désaccords et les points d’incertitude."
+        },
+        "it": {
+          "q": "Qual è l’utilità di consultare più fonti sull’attacco aereo?",
+          "o": [
+            "Costruire un quadro più preciso e notare le differenze tra i resoconti",
+            "Garantire che ogni fonte sia corretta",
+            "Scegliere la fonte che conferma la nostra opinione",
+            "Evitare di comprendere il contesto"
+          ],
+          "e": "Il confronto aiuta a far emergere accordi, disaccordi e punti di incertezza."
+        },
+        "de": {
+          "q": "Welchen Nutzen hat es, mehrere Quellen zum Luftangriff zu prüfen?",
+          "o": [
+            "Ein genaueres Bild gewinnen und Unterschiede zwischen den Berichten bemerken",
+            "Sicherstellen, dass jede Quelle richtig ist",
+            "Die Quelle auswählen, die unsere Meinung bestätigt",
+            "Vermeiden, den Zusammenhang zu verstehen"
+          ],
+          "e": "Der Vergleich hilft, Übereinstimmungen, Unterschiede und unsichere Stellen zu erkennen."
+        }
+      }
     },
     {
       "q": "لماذا يجب التفريق بين الهدف المعلن والنتيجة الفعلية؟",
@@ -408,7 +912,49 @@
         "لأن النتائج لا تقاس"
       ],
       "a": 0,
-      "e": "قد تختلف النتائج الفعلية عن الأهداف المخططة ويجب دراستها."
+      "e": "قد تختلف النتائج الفعلية عن الأهداف المخططة ويجب دراستها.",
+      "i18n": {
+        "en": {
+          "q": "Why must we distinguish between the stated goal and the actual result?",
+          "o": [
+            "Because planning and real-world results are not the same thing",
+            "Because goals are never written down",
+            "Because every plan succeeds completely",
+            "Because results are not measured"
+          ],
+          "e": "Actual results may differ from the planned goals and must be studied."
+        },
+        "fr": {
+          "q": "Pourquoi faut-il distinguer l’objectif annoncé du résultat réel ?",
+          "o": [
+            "Parce que la planification et les résultats réels ne sont pas la même chose",
+            "Parce que les objectifs ne sont jamais écrits",
+            "Parce que chaque plan réussit entièrement",
+            "Parce que les résultats ne se mesurent pas"
+          ],
+          "e": "Les résultats réels peuvent différer des objectifs prévus et doivent être étudiés."
+        },
+        "it": {
+          "q": "Perché bisogna distinguere l’obiettivo dichiarato dal risultato effettivo?",
+          "o": [
+            "Perché la pianificazione e i risultati reali non sono la stessa cosa",
+            "Perché gli obiettivi non vengono mai scritti",
+            "Perché ogni piano riesce completamente",
+            "Perché i risultati non si misurano"
+          ],
+          "e": "I risultati effettivi possono differire dagli obiettivi pianificati e vanno studiati."
+        },
+        "de": {
+          "q": "Warum muss man das erklärte Ziel vom tatsächlichen Ergebnis unterscheiden?",
+          "o": [
+            "Weil Planung und tatsächliche Ergebnisse nicht dasselbe sind",
+            "Weil Ziele nie aufgeschrieben werden",
+            "Weil jeder Plan vollständig gelingt",
+            "Weil Ergebnisse nicht gemessen werden"
+          ],
+          "e": "Die tatsächlichen Ergebnisse können von den geplanten Zielen abweichen und müssen untersucht werden."
+        }
+      }
     },
     {
       "q": "ما معنى التسلسل الزمني في دراسة المعركة؟",
@@ -419,7 +965,49 @@
         "اختيار حدث واحد فقط"
       ],
       "a": 0,
-      "e": "التسلسل الزمني يوضح تطور الأحداث والعلاقة بين مراحلها."
+      "e": "التسلسل الزمني يوضح تطور الأحداث والعلاقة بين مراحلها.",
+      "i18n": {
+        "en": {
+          "q": "What does chronological order mean in the study of a battle?",
+          "o": [
+            "Arranging events in order to understand their development and connections",
+            "Gathering events without order",
+            "Replacing dates with predictions",
+            "Choosing only one event"
+          ],
+          "e": "Chronological order shows how events developed and the relationship between their stages."
+        },
+        "fr": {
+          "q": "Que signifie l’ordre chronologique dans l’étude d’une bataille ?",
+          "o": [
+            "Classer les événements dans l’ordre pour comprendre leur évolution et leurs liens",
+            "Rassembler les événements sans ordre",
+            "Remplacer les dates par des prévisions",
+            "Choisir un seul événement"
+          ],
+          "e": "L’ordre chronologique montre l’évolution des événements et la relation entre leurs phases."
+        },
+        "it": {
+          "q": "Che cosa significa ordine cronologico nello studio di una battaglia?",
+          "o": [
+            "Mettere in ordine gli eventi per comprenderne lo sviluppo e i legami",
+            "Raccogliere gli eventi senza ordine",
+            "Sostituire le date con previsioni",
+            "Scegliere un solo evento"
+          ],
+          "e": "L’ordine cronologico mostra lo sviluppo degli eventi e il rapporto tra le loro fasi."
+        },
+        "de": {
+          "q": "Was bedeutet die zeitliche Abfolge beim Untersuchen einer Schlacht?",
+          "o": [
+            "Ereignisse ordnen, um ihre Entwicklung und ihre Zusammenhänge zu verstehen",
+            "Ereignisse ohne Ordnung sammeln",
+            "Daten durch Vermutungen ersetzen",
+            "Nur ein einziges Ereignis auswählen"
+          ],
+          "e": "Die zeitliche Abfolge zeigt, wie sich die Ereignisse entwickelten und wie ihre Phasen zusammenhängen."
+        }
+      }
     },
     {
       "q": "أي ممارسة تدعم فهم التاريخ العسكري دون مبالغة؟",
@@ -430,7 +1018,49 @@
         "الحكم دون سياق"
       ],
       "a": 0,
-      "e": "القراءة النقدية تميز الدليل من التفسير وتتجنب المبالغة."
+      "e": "القراءة النقدية تميز الدليل من التفسير وتتجنب المبالغة.",
+      "i18n": {
+        "en": {
+          "q": "Which practice supports understanding military history without exaggeration?",
+          "o": [
+            "Distinguishing documented facts from interpretations",
+            "Describing every decision as perfect",
+            "Hiding disagreement between sources",
+            "Judging without context"
+          ],
+          "e": "Critical reading distinguishes evidence from interpretation and avoids exaggeration."
+        },
+        "fr": {
+          "q": "Quelle pratique favorise la compréhension de l’histoire militaire sans exagération ?",
+          "o": [
+            "Distinguer les faits documentés des interprétations",
+            "Présenter chaque décision comme parfaite",
+            "Cacher les désaccords entre les sources",
+            "Juger sans contexte"
+          ],
+          "e": "La lecture critique distingue la preuve de l’interprétation et évite l’exagération."
+        },
+        "it": {
+          "q": "Quale pratica favorisce la comprensione della storia militare senza esagerazioni?",
+          "o": [
+            "Distinguere i fatti documentati dalle interpretazioni",
+            "Descrivere ogni decisione come perfetta",
+            "Nascondere il disaccordo tra le fonti",
+            "Giudicare senza contesto"
+          ],
+          "e": "La lettura critica distingue la prova dall’interpretazione ed evita l’esagerazione."
+        },
+        "de": {
+          "q": "Welche Vorgehensweise fördert das Verständnis der Militärgeschichte ohne Übertreibung?",
+          "o": [
+            "Dokumentierte Tatsachen von Deutungen unterscheiden",
+            "Jede Entscheidung als perfekt beschreiben",
+            "Meinungsverschiedenheiten zwischen den Quellen verschweigen",
+            "Ohne Zusammenhang urteilen"
+          ],
+          "e": "Kritisches Lesen unterscheidet den Beleg von der Deutung und vermeidet Übertreibung."
+        }
+      }
     }
   ]
 }
