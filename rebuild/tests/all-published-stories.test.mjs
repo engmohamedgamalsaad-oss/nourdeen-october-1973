@@ -33,7 +33,7 @@ test('every non-October story package and published reader uses the canonical co
   assert.ok(packagePaths.length >= published.length, 'every published non-October story must have a canonical package');
 
   for (const item of published) {
-    const base = String(item.path || '').replace(/\\/+$/, '');
+    const base = String(item.path || '').replace(/\/+$/, '');
     assert.ok(base.startsWith('stories/') && !base.includes('..'), 'unsafe or missing indexed story path: ' + item.id);
     assert.ok(packagePaths.includes(base + '/story.json'), 'published story ' + item.id + ' is missing story.json');
     assert.ok(await exists(path.join(root, base, 'index.html')), 'published story ' + item.id + ' is missing index.html');
@@ -63,11 +63,11 @@ test('every non-October story package and published reader uses the canonical co
     if (await exists(pagePath)) {
       const html = await readFile(pagePath, 'utf8');
       assert.match(html, /data-kh-story-reader/, relative + ' must use the canonical reader marker');
-      assert.match(html, /data-story-path="story\\.json"/, relative + ' must load story.json');
-      assert.doesNotMatch(html, /data-kh-v2-reader|data-story-path="data\\.v2\\.json"/, relative + ' must not depend on the old reader marker or filename');
+      assert.match(html, /data-story-path="story\.json"/, relative + ' must load story.json');
+      assert.doesNotMatch(html, /data-kh-v2-reader|data-story-path="data\.v2\.json"/, relative + ' must not depend on the old reader marker or filename');
     }
 
-    const id = String(relative.match(/\\/(\\d{3})\\/story\\.json$/)?.[1] || '');
+    const id = String(relative.match(/\/(\d{3})\/story\.json$/)?.[1] || '');
     if (published.some(item => String(item.id).padStart(3, '0') === id)) {
       const place = places[id];
       assert.ok(place && Number.isFinite(place.lat) && Number.isFinite(place.lng), relative + ' published story needs its verified map point');
