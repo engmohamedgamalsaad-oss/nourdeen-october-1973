@@ -9,5 +9,3 @@ window.KHStoryAdapter = {
   validateForAdminBridge
 };
 
-window.KHStoryV2Adapter = window.KHStoryAdapter; // temporary compatibility alias
-window.KHStoryAdapter.validateV2 = window.KHStoryAdapter.validateStory;
