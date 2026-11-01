@@ -392,7 +392,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
    var liveText=normalizeStoryText(liveDoc.body.textContent),liveTitle=liveDoc.querySelector('h1'),liveV2Package=null;
    if(liveV2Page){
     var liveV2Response=await fetch(new URL('data.v2.json?verify='+Date.now(),canonicalLiveUrl),{cache:'no-store'});
-    if(!liveV2Response.ok)throw new Error('حزمة data.v2.json غير موجودة على الموقع الحي. لم أغيّر حالة السجل.');
+    if(!liveV2Response.ok)throw new Error('بيانات الحكاية الموحدة غير موجودة على الموقع الحي. لم أغيّر حالة السجل.');
     liveV2Package=await liveV2Response.json();
     if(liveV2Package.format!=='KHALEDOON_STORY_V2'||!['ar','en','fr','it','de'].every(function(lang){return liveV2Package.i18n&&liveV2Package.i18n[lang]&&liveV2Package.i18n[lang].title&&Array.isArray(liveV2Package.i18n[lang].blocks)}))throw new Error('حزمة القارئ الموحد الحية ناقصة أو لا تحتوي اللغات الخمس. لم أغيّر حالة السجل.');
     function stableStoryValue(value){if(Array.isArray(value))return value.map(stableStoryValue);if(value&&typeof value==='object'){var out={};Object.keys(value).sort().forEach(function(k){out[k]=stableStoryValue(value[k])});return out}return value}
