@@ -4,7 +4,7 @@
   "section": "history",
   "design": {
     "variant": "portrait-biography",
-    "accent": "#d4b7ff"
+    "accent": "#d5b7ff"
   },
   "original_body": "الخوارزمى\nأبو بكر بن محمد بن العباس الخوارزمي، الكاتب والشاعر واللغوي المعروف، وُلد عام 323 هـ، واشتهر بفن الكتابة والشعر، حيث سافر بين البلدان لنشر العلم",
   "i18n": {
@@ -51,7 +51,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "مشهد البداية: أديب في العصر العباسي",
-          "text": "في القرن الرابع الهجري، ازدهرت الكتابة والشعر ومجالس الأدب في أجزاء واسعة من العالم الإسلامي. وفي هذا الجو الثقافي عاش أبو بكر محمد بن العباس الخوارزمي، الذي اشتهر كاتبًا وشاعرًا وعالمًا باللغة. وتذكر كتب التراجم أنه وُلد سنة 323 هـ، نحو 935م، ونشأ في خوارزم."
+          "text": "في القرن الرابع الهجري، ازدهرت الكتابة والشعر ومجالس الأدب في أجزاء واسعة من العالم الإسلامي. وفي هذا الجو الثقافي عاش أبو بكر محمد بن العباس الخوارزمي، الذي اشتهر كاتبًا وشاعرًا وعالمًا باللغة. وتذكر كتب التراجم أنه وُلد سنة 323 هـ، نحو 935م، ونشأ في خوارزم.",
+          "image_after": "khwarizmi-manuscript-illustration"
         },
         {
           "type": "paragraph",
@@ -88,17 +89,17 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "هل تعلم؟",
-          "text": "بطاقة 1: لم يكن لقب الخوارزمي خاصًا بشخص واحد؛ فقد اشتهر أيضًا عالم الرياضيات محمد بن موسى الخوارزمي، وهو شخص آخر عاش في زمن أسبق."
+          "text": "هل تعلم؟ بطاقة 1: لم يكن لقب الخوارزمي خاصًا بشخص واحد؛ فقد اشتهر أيضًا عالم الرياضيات محمد بن موسى الخوارزمي، وهو شخص آخر عاش في زمن أسبق."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "بطاقة 2: تذكر بعض المصادر لأبي بكر نسبًا ولقبًا مرتبطين بخوارزم وطبرستان، لكن تفاصيل الأنساب والألقاب ليست متطابقة في كل المراجع."
+          "text": "هل تعلم؟ بطاقة 2: تذكر بعض المصادر لأبي بكر نسبًا ولقبًا مرتبطين بخوارزم وطبرستان، لكن تفاصيل الأنساب والألقاب ليست متطابقة في كل المراجع."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "بطاقة 3: كانت الرسائل الأدبية فنًا مهمًا في العصر العباسي، وكان الكاتب الماهر يجمع بين المعرفة باللغة والقدرة على صياغة الأفكار بأسلوب مؤثر."
+          "text": "هل تعلم؟ بطاقة 3: كانت الرسائل الأدبية فنًا مهمًا في العصر العباسي، وكان الكاتب الماهر يجمع بين المعرفة باللغة والقدرة على صياغة الأفكار بأسلوب مؤثر."
         }
       ]
     },
@@ -145,7 +146,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Opening scene: A writer in the Abbasid era",
-          "text": "During the fourth century AH, writing, poetry, and literary gatherings flourished across many parts of the Islamic world. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi lived in this cultural environment. He became known as a writer, poet, and scholar of language. Biographical sources place his life in the tenth century."
+          "text": "During the fourth century AH, writing, poetry, and literary gatherings flourished across many parts of the Islamic world. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi lived in this cultural environment. He became known as a writer, poet, and scholar of language. Biographical sources place his life in the tenth century.",
+          "image_after": "khwarizmi-manuscript-illustration"
         },
         {
           "type": "paragraph",
@@ -182,17 +184,17 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Did you know?",
-          "text": "Card 1: The name al-Khwarizmi did not belong to just one person. The famous mathematician Muhammad ibn Musa al-Khwarizmi was another person who lived earlier."
+          "text": "Did you know? Card 1: The name al-Khwarizmi did not belong to just one person. The famous mathematician Muhammad ibn Musa al-Khwarizmi was another person who lived earlier."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Card 2: Some sources connect Abu Bakr's family background with Khwarazm and Tabaristan, although accounts of names and ancestry are not identical in every reference."
+          "text": "Did you know? Card 2: Some sources connect Abu Bakr's family background with Khwarazm and Tabaristan, although accounts of names and ancestry are not identical in every reference."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Card 3: Literary correspondence was an important art in the Abbasid era. Skilled writers combined knowledge of language with the ability to present ideas in an influential style."
+          "text": "Did you know? Card 3: Literary correspondence was an important art in the Abbasid era. Skilled writers combined knowledge of language with the ability to present ideas in an influential style."
         }
       ]
     },
@@ -239,7 +241,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scène d’ouverture : un écrivain à l’époque abbasside",
-          "text": "Au IVe siècle de l'Hégire, l'écriture, la poésie et les réunions littéraires prospéraient dans de nombreuses régions du monde islamique. Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi vivait dans cet environnement culturel. Il devint connu comme écrivain, poète et spécialiste de la langue. Les sources biographiques situent sa vie au Xe siècle."
+          "text": "Au IVe siècle de l'Hégire, l'écriture, la poésie et les réunions littéraires prospéraient dans de nombreuses régions du monde islamique. Abou Bakr Muhammad ibn al-Abbas al-Khwarizmi vivait dans cet environnement culturel. Il devint connu comme écrivain, poète et spécialiste de la langue. Les sources biographiques situent sa vie au Xe siècle.",
+          "image_after": "khwarizmi-manuscript-illustration"
         },
         {
           "type": "paragraph",
@@ -276,17 +279,17 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Le saviez-vous ?",
-          "text": "Carte 1 : Le nom al-Khwarizmi ne désignait pas une seule personne. Le célèbre mathématicien Muhammad ibn Musa al-Khwarizmi était une autre personne, qui vécut plus tôt."
+          "text": "Le saviez-vous ? Carte 1 : Le nom al-Khwarizmi ne désignait pas une seule personne. Le célèbre mathématicien Muhammad ibn Musa al-Khwarizmi était une autre personne, qui vécut plus tôt."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Carte 2 : Certaines sources relient les origines familiales d'Abou Bakr au Khwarazm et au Tabaristan, mais les références ne donnent pas toutes exactement les mêmes informations sur ses noms et sa généalogie."
+          "text": "Le saviez-vous ? Carte 2 : Certaines sources relient les origines familiales d'Abou Bakr au Khwarazm et au Tabaristan, mais les références ne donnent pas toutes exactement les mêmes informations sur ses noms et sa généalogie."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Carte 3 : La correspondance littéraire était un art important à l'époque abbasside. Les écrivains habiles associaient la connaissance de la langue à la capacité de présenter leurs idées de manière persuasive."
+          "text": "Le saviez-vous ? Carte 3 : La correspondance littéraire était un art important à l'époque abbasside. Les écrivains habiles associaient la connaissance de la langue à la capacité de présenter leurs idées de manière persuasive."
         }
       ]
     },
@@ -333,7 +336,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Scena iniziale: uno scrittore nell’epoca abbaside",
-          "text": "Nel IV secolo dell'Egira, la scrittura, la poesia e gli incontri letterari fiorivano in molte parti del mondo islamico. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi visse in questo ambiente culturale. Divenne noto come scrittore, poeta e studioso della lingua. Le fonti biografiche collocano la sua vita nel X secolo."
+          "text": "Nel IV secolo dell'Egira, la scrittura, la poesia e gli incontri letterari fiorivano in molte parti del mondo islamico. Abu Bakr Muhammad ibn al-Abbas al-Khwarizmi visse in questo ambiente culturale. Divenne noto come scrittore, poeta e studioso della lingua. Le fonti biografiche collocano la sua vita nel X secolo.",
+          "image_after": "khwarizmi-manuscript-illustration"
         },
         {
           "type": "paragraph",
@@ -370,17 +374,17 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Lo sapevi?",
-          "text": "Scheda 1: Il nome al-Khwarizmi non apparteneva a una sola persona. Il famoso matematico Muhammad ibn Musa al-Khwarizmi era un'altra persona e visse prima."
+          "text": "Lo sapevi? Scheda 1: Il nome al-Khwarizmi non apparteneva a una sola persona. Il famoso matematico Muhammad ibn Musa al-Khwarizmi era un'altra persona e visse prima."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Scheda 2: Alcune fonti collegano le origini familiari di Abu Bakr al Khwarazm e al Tabaristan, ma i riferimenti non concordano sempre sui nomi e sui dettagli genealogici."
+          "text": "Lo sapevi? Scheda 2: Alcune fonti collegano le origini familiari di Abu Bakr al Khwarazm e al Tabaristan, ma i riferimenti non concordano sempre sui nomi e sui dettagli genealogici."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Scheda 3: La corrispondenza letteraria era un'arte importante nell'epoca abbaside. Gli scrittori esperti univano la conoscenza della lingua alla capacità di presentare le idee in modo efficace."
+          "text": "Lo sapevi? Scheda 3: La corrispondenza letteraria era un'arte importante nell'epoca abbaside. Gli scrittori esperti univano la conoscenza della lingua alla capacità di presentare le idee in modo efficace."
         }
       ]
     },
@@ -427,7 +431,8 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Auftaktszene: Ein Schriftsteller in der Abbasidenzeit",
-          "text": "Im vierten Jahrhundert nach der Hidschra blühten das Schreiben, die Dichtkunst und literarische Zusammenkünfte in vielen Teilen der islamischen Welt. Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi lebte in diesem kulturellen Umfeld. Er wurde als Schriftsteller, Dichter und Sprachgelehrter bekannt. Biografische Quellen ordnen sein Leben dem zehnten Jahrhundert zu."
+          "text": "Im vierten Jahrhundert nach der Hidschra blühten das Schreiben, die Dichtkunst und literarische Zusammenkünfte in vielen Teilen der islamischen Welt. Abu Bakr Muhammad ibn al-Abbas al-Chwarizmi lebte in diesem kulturellen Umfeld. Er wurde als Schriftsteller, Dichter und Sprachgelehrter bekannt. Biografische Quellen ordnen sein Leben dem zehnten Jahrhundert zu.",
+          "image_after": "khwarizmi-manuscript-illustration"
         },
         {
           "type": "paragraph",
@@ -464,17 +469,17 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Wusstest du schon?",
-          "text": "Karte 1: Der Name al-Chwarizmi gehörte nicht nur einer Person. Der berühmte Mathematiker Muhammad ibn Musa al-Chwarizmi war eine andere Person und lebte früher."
+          "text": "Wusstest du? Karte 1: Der Name al-Chwarizmi gehörte nicht nur einer Person. Der berühmte Mathematiker Muhammad ibn Musa al-Chwarizmi war eine andere Person und lebte früher."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Karte 2: Einige Quellen verbinden Abu Bakrs familiäre Herkunft mit Chwarazm und Tabaristan. Die Angaben zu Namen und Abstammung stimmen jedoch nicht in allen Nachschlagewerken überein."
+          "text": "Wusstest du? Karte 2: Einige Quellen verbinden Abu Bakrs familiäre Herkunft mit Chwarazm und Tabaristan. Die Angaben zu Namen und Abstammung stimmen jedoch nicht in allen Nachschlagewerken überein."
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Karte 3: Literarische Briefe waren eine wichtige Kunst in der Abbasidenzeit. Geschickte Schriftsteller verbanden Sprachkenntnisse mit der Fähigkeit, Gedanken wirkungsvoll auszudrücken."
+          "text": "Wusstest du? Karte 3: Literarische Briefe waren eine wichtige Kunst in der Abbasidenzeit. Geschickte Schriftsteller verbanden Sprachkenntnisse mit der Fähigkeit, Gedanken wirkungsvoll auszudrücken."
         }
       ]
     }

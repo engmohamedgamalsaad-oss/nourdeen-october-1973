@@ -1,22 +1,25 @@
-name: New story style gate
+name: Unified story package audit
 
-# Runs the automatic style check (rebuild/validate-style.mjs) on every story
-# page ADDED by a pull request. Pages already in the project are not re-checked here. It does not replace human review of facts and translations.
+# Validate every canonical story package on every relevant PR.
+# Existing-story editorial findings are reported without rewriting history;
+# newly added stories must pass the full style gate.
 on:
   pull_request:
     paths:
       - "stories/**/story.json"
+      - "stories/**/index.html"
       - "rebuild/validate-style.mjs"
       - "rebuild/validate-package.mjs"
+      - "rebuild/validate-story.mjs"
       - ".github/workflows/new-story-style-gate.yml"
 
 permissions:
   contents: read
 
 jobs:
-  style-gate:
+  all-story-audit:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -26,25 +29,58 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Style-check story pages added in this pull request
+      - name: Validate structure and canonical reader wiring for every story
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
         run: |
-          files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'stories/*/*/story.json')
-          if [ -z "$files" ]; then
-            echo "No story pages were added in this pull request; nothing to style-check."
-            exit 0
-          fi
+          set -uo pipefail
           status=0
-          for f in $files; do
-            echo "== $f"
-            legacy="${f%/story.json}/data.v2.json"
-            if git cat-file -e "$BASE_SHA:$legacy" 2>/dev/null; then
-              echo "Existing story package migrated from data.v2.json; validate its structure without applying new-story editorial thresholds."
-              node rebuild/validate-package.mjs "$f" || status=1
-            else
-              node rebuild/validate-package.mjs --style "$f" || status=1
+          report="$RUNNER_TEMP/story-style-audit.txt"
+          : > "$report"
+
+          mapfile -t files < <(git ls-files 'stories/*/*/story.json')
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No canonical story packages found." >&2
+            exit 1
+          fi
+
+          for f in "${files[@]}"; do
+            echo "== Structural validation: $f"
+            node rebuild/validate-package.mjs "$f" || status=1
+            node -e 'const fs=require("fs");const s=JSON.parse(fs.readFileSync(process.argv[1],"utf8"));if(s.format!=="KHALEDOON_STORY"){console.error("Non-canonical package format in "+process.argv[1]+": "+s.format);process.exit(1)}' "$f" || status=1
+
+            page="${f%/story.json}/index.html"
+            if [ ! -f "$page" ]; then
+              echo "Missing reader page: $page" >&2
+              status=1
+            elif ! grep -q 'data-kh-story-reader' "$page" || ! grep -q 'data-story-path="story.json"' "$page"; then
+              echo "Non-canonical reader wiring: $page" >&2
+              status=1
             fi
+
+            echo "== Editorial style audit: $f"
+            if node rebuild/validate-package.mjs --style "$f" >> "$report" 2>&1; then
+              echo "STYLE PASS: $f"
+            else
+              if git cat-file -e "$BASE_SHA:$f" 2>/dev/null; then
+                echo "STYLE REVIEW REQUIRED (existing content; non-blocking): $f"
+                cat "$report" | tail -n 35
+              else
+                echo "STYLE FAIL (new story): $f" >&2
+                cat "$report" >&2
+                status=1
+              fi
+            fi
+            : > "$report"
           done
-          exit $status
+
+          legacy_files=$(find stories -path 'stories/october' -prune -o -name 'data.v2.json' -print)
+          if [ -n "$legacy_files" ]; then
+            echo "Legacy story package files remain outside the protected October section:" >&2
+            echo "$legacy_files" >&2
+            status=1
+          fi
+
+          exit "$status"

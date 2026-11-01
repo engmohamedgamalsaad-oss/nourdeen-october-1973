@@ -109,7 +109,8 @@
           "speaker": "narrator",
           "text": "كما أن ابن سينا لم يكن طبيبًا فقط؛ فقد كتب في المنطق والفلسفة والطبيعة، وهو ما يعكس اتساع اهتمام بعض العلماء في عصره بمجالات متعددة. ومع ذلك، من الأفضل أن ننسب إليه الأعمال والأفكار الموثقة بدل إطلاق أوصاف مطلقة لا يمكن اختبارها."
         }
-      ]
+      ],
+      "figure_name": "ابن سينا"
     },
     "en": {
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
@@ -212,7 +213,8 @@
           "speaker": "narrator",
           "text": "Ibn Sina was not only a physician: he also wrote about logic, philosophy, and the natural world, reflecting the wide-ranging interests of some scholars of his era. Still, it is best to credit him with documented works and ideas rather than make absolute claims that cannot be verified."
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "fr": {
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
@@ -315,7 +317,8 @@
           "speaker": "narrator",
           "text": "Ibn Sina n’était pas seulement médecin : il a aussi écrit sur la logique, la philosophie et la nature, ce qui illustre la diversité des intérêts de certains savants de son époque. Il vaut toutefois mieux lui attribuer des œuvres et des idées documentées que formuler des affirmations absolues impossibles à vérifier."
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "it": {
       "title": "Ibn Sina — al-Shaykh al-Ra’is",
@@ -418,7 +421,8 @@
           "speaker": "narrator",
           "text": "Ibn Sina non fu soltanto un medico: scrisse anche di logica, filosofia e natura, mostrando l’ampiezza degli interessi di alcuni studiosi del suo tempo. È comunque preferibile attribuirgli opere e idee documentate, evitando affermazioni assolute che non possono essere verificate."
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "de": {
       "title": "Ibn Sina — al-Scheich al-Ra’is",
@@ -521,7 +525,8 @@
           "speaker": "narrator",
           "text": "Ibn Sina war nicht nur Arzt: Er schrieb auch über Logik, Philosophie und Natur und zeigte damit die breite Interessenvielfalt mancher Gelehrter seiner Zeit. Dennoch sollten wir ihm dokumentierte Werke und Ideen zuschreiben, statt absolute Behauptungen aufzustellen, die sich nicht überprüfen lassen."
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     }
   },
   "cover": {

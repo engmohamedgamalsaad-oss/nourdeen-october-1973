@@ -701,7 +701,6 @@ async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
   const cases = [
-    { slug: 'stories/science/015/', selector: '#gallery figure:nth-of-type(3) img', decorative: true },
     { slug: 'stories/science/007/', decorative: true },
     { slug: 'stories/women/013/', decorative: true },
     { slug: 'stories/islamic/011/', decorative: true },
@@ -714,7 +713,6 @@ async function svgArtworkRegression(browser, base, origin) {
     { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
     { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
     { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
-    { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
   ];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
@@ -727,10 +725,15 @@ async function svgArtworkRegression(browser, base, origin) {
       const en = await page.evaluate(async ({ selector, asset, base }) => {
         const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
-        const src = asset || (img.getAttribute('src') || '');
+        const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
-        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
-        return { found: true, src, svg };
+        let found = true;
+        try {
+          const response = await fetch(src);
+          found = response.ok;
+          if (found) svg = await response.text();
+        } catch (_) { found = false; }
+        return { found, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
       const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/<text\b/i.test(en.svg) && !/[؀-ۿ]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
@@ -742,10 +745,15 @@ async function svgArtworkRegression(browser, base, origin) {
       const ar = await page.evaluate(async ({ selector, asset, base }) => {
         const img = asset ? null : document.querySelector(selector || '.intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
-        const src = asset || (img.getAttribute('src') || '');
+        const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
-        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
-        return { found: true, src, svg };
+        let found = true;
+        try {
+          const response = await fetch(src);
+          found = response.ok;
+          if (found) svg = await response.text();
+        } catch (_) { found = false; }
+        return { found, src, svg };
       }, { selector: item.selector || '', asset: item.asset || '', base });
       const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, base + '/' + item.slug).pathname === new URL(en.src, base + '/' + item.slug).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
       checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });

@@ -33,7 +33,8 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "كتاب اشتهر عبر الحدود",
-          "text": "من أشهر مؤلفاته «القانون في الطب»، وهو كتاب نظّم معارف طبية كانت معروفة في عصره وأضاف إليها من دراسته وخبرته. تُرجم الكتاب إلى اللاتينية في العصور الوسطى وأصبح مرجعًا مهمًا في التعليم الطبي الأوروبي لقرون."
+          "text": "هل تعلم؟ من أشهر مؤلفاته «القانون في الطب»، وهو كتاب نظّم معارف طبية كانت معروفة في عصره وأضاف إليها من دراسته وخبرته. تُرجم الكتاب إلى اللاتينية في العصور الوسطى وأصبح مرجعًا مهمًا في التعليم الطبي الأوروبي لقرون.",
+          "image_after": "image-1"
         },
         {
           "type": "paragraph",
@@ -51,9 +52,11 @@
           "type": "timeline",
           "speaker": "narrator",
           "heading": "رحلة قصيرة عبر الزمن",
-          "text": "980 — وُلد ابن سينا قرب بخارى\nالقرن الحادي عشر — ألّف أعمالًا في الطب والفلسفة\nالقرن الثاني عشر وما بعده — تُرجم القانون في الطب إلى اللاتينية وانتشر في أوروبا\n1037 — توفي ابن سينا، وبقيت كتبه مؤثرة في تاريخ المعرفة"
+          "text": "980 — وُلد ابن سينا قرب بخارى\nالقرن الحادي عشر — ألّف أعمالًا في الطب والفلسفة\nالقرن الثاني عشر وما بعده — تُرجم القانون في الطب إلى اللاتينية وانتشر في أوروبا\n1037 — توفي ابن سينا، وبقيت كتبه مؤثرة في تاريخ المعرفة",
+          "image_after": "image-2"
         }
-      ]
+      ],
+      "figure_name": "ابن سينا"
     },
     "en": {
       "title": "Ibn Sina — The Master Scholar",
@@ -80,7 +83,8 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "A book that crossed borders",
-          "text": "One of his best-known works is The Canon of Medicine. It organized medical knowledge known in his time and included his own learning and experience. Translated into Latin during the Middle Ages, it became an important text in European medical education for centuries."
+          "text": "Did you know? One of his best-known works is The Canon of Medicine. It organized medical knowledge known in his time and included his own learning and experience. Translated into Latin during the Middle Ages, it became an important text in European medical education for centuries.",
+          "image_after": "image-1"
         },
         {
           "type": "paragraph",
@@ -98,9 +102,11 @@
           "type": "timeline",
           "speaker": "narrator",
           "heading": "A brief timeline",
-          "text": "c. 980 — Ibn Sina was born near Bukhara\n11th century — He wrote works on medicine and philosophy\n12th century onward — The Canon was translated into Latin and circulated in Europe\n1037 — Ibn Sina died, leaving works that influenced the history of learning"
+          "text": "c. 980 — Ibn Sina was born near Bukhara\n11th century — He wrote works on medicine and philosophy\n12th century onward — The Canon was translated into Latin and circulated in Europe\n1037 — Ibn Sina died, leaving works that influenced the history of learning",
+          "image_after": "image-2"
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "fr": {
       "title": "Ibn Sina — le maître savant",
@@ -127,7 +133,8 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Un livre qui a franchi les frontières",
-          "text": "L’une de ses œuvres les plus connues est le Canon de la médecine. Il organisait les connaissances médicales de son époque et intégrait son travail. Traduit en latin au Moyen Âge, il devint un ouvrage important de l’enseignement médical européen pendant des siècles."
+          "text": "Le saviez-vous ? L’une de ses œuvres les plus connues est le Canon de la médecine. Il organisait les connaissances médicales de son époque et intégrait son travail. Traduit en latin au Moyen Âge, il devint un ouvrage important de l’enseignement médical européen pendant des siècles.",
+          "image_after": "image-1"
         },
         {
           "type": "paragraph",
@@ -145,9 +152,11 @@
           "type": "timeline",
           "speaker": "narrator",
           "heading": "Quelques repères",
-          "text": "Vers 980 — Naissance d’Ibn Sina près de Boukhara\nXIe siècle — Il écrit des ouvrages de médecine et de philosophie\nÀ partir du XIIe siècle — Le Canon est traduit en latin et circule en Europe\n1037 — Mort d’Ibn Sina ; ses livres restent importants dans l’histoire du savoir"
+          "text": "Vers 980 — Naissance d’Ibn Sina près de Boukhara\nXIe siècle — Il écrit des ouvrages de médecine et de philosophie\nÀ partir du XIIe siècle — Le Canon est traduit en latin et circule en Europe\n1037 — Mort d’Ibn Sina ; ses livres restent importants dans l’histoire du savoir",
+          "image_after": "image-2"
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "it": {
       "title": "Ibn Sina — il grande maestro",
@@ -174,7 +183,8 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Un libro che superò i confini",
-          "text": "Una delle sue opere più note è il Canone della medicina. Organizzava le conoscenze mediche del suo tempo e includeva il suo studio e la sua esperienza. Tradotto in latino nel Medioevo, divenne un testo importante nell’istruzione medica europea per secoli."
+          "text": "Lo sapevi? Una delle sue opere più note è il Canone della medicina. Organizzava le conoscenze mediche del suo tempo e includeva il suo studio e la sua esperienza. Tradotto in latino nel Medioevo, divenne un testo importante nell’istruzione medica europea per secoli.",
+          "image_after": "image-1"
         },
         {
           "type": "paragraph",
@@ -192,9 +202,11 @@
           "type": "timeline",
           "speaker": "narrator",
           "heading": "Breve cronologia",
-          "text": "980 circa — Nascita di Ibn Sina vicino a Bukhara\nXI secolo — Scrive opere di medicina e filosofia\nDal XII secolo — Il Canone viene tradotto in latino e circola in Europa\n1037 — Muore Ibn Sina; i suoi libri restano influenti nella storia del sapere"
+          "text": "980 circa — Nascita di Ibn Sina vicino a Bukhara\nXI secolo — Scrive opere di medicina e filosofia\nDal XII secolo — Il Canone viene tradotto in latino e circola in Europa\n1037 — Muore Ibn Sina; i suoi libri restano influenti nella storia del sapere",
+          "image_after": "image-2"
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     },
     "de": {
       "title": "Ibn Sina — der große Gelehrte",
@@ -221,7 +233,8 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Ein Buch, das Grenzen überwand",
-          "text": "Eines seiner bekanntesten Werke ist der Kanon der Medizin. Er ordnete medizinisches Wissen seiner Zeit und bezog seine Studien und Erfahrungen ein. Im Mittelalter ins Lateinische übersetzt, wurde er über Jahrhunderte zu einem wichtigen Werk der europäischen medizinischen Ausbildung."
+          "text": "Wusstest du? Eines seiner bekanntesten Werke ist der Kanon der Medizin. Er ordnete medizinisches Wissen seiner Zeit und bezog seine Studien und Erfahrungen ein. Im Mittelalter ins Lateinische übersetzt, wurde er über Jahrhunderte zu einem wichtigen Werk der europäischen medizinischen Ausbildung.",
+          "image_after": "image-1"
         },
         {
           "type": "paragraph",
@@ -239,9 +252,11 @@
           "type": "timeline",
           "speaker": "narrator",
           "heading": "Kurzer Zeitstrahl",
-          "text": "Um 980 — Ibn Sina wird nahe Buchara geboren\n11. Jahrhundert — Er verfasst Werke über Medizin und Philosophie\nAb dem 12. Jahrhundert — Der Kanon wird ins Lateinische übersetzt und in Europa verbreitet\n1037 — Ibn Sina stirbt; seine Bücher bleiben für die Wissensgeschichte bedeutsam"
+          "text": "Um 980 — Ibn Sina wird nahe Buchara geboren\n11. Jahrhundert — Er verfasst Werke über Medizin und Philosophie\nAb dem 12. Jahrhundert — Der Kanon wird ins Lateinische übersetzt und in Europa verbreitet\n1037 — Ibn Sina stirbt; seine Bücher bleiben für die Wissensgeschichte bedeutsam",
+          "image_after": "image-2"
         }
-      ]
+      ],
+      "figure_name": "Ibn Sina"
     }
   },
   "cover": {
@@ -507,13 +522,13 @@
     },
     {
       "id": "question-2",
-      "correct_option": 0,
+      "correct_option": 1,
       "i18n": {
         "ar": {
           "question": "ما أشهر كتب ابن سينا الطبية؟",
           "options": [
-            "القانون في الطب",
             "الأمير",
+            "القانون في الطب",
             "المقدمة",
             "الجمهورية"
           ],
@@ -522,8 +537,8 @@
         "en": {
           "question": "Which medical book is Ibn Sina best known for?",
           "options": [
-            "The Canon of Medicine",
             "The Prince",
+            "The Canon of Medicine",
             "The Muqaddimah",
             "The Republic"
           ],
@@ -532,8 +547,8 @@
         "fr": {
           "question": "Quel ouvrage médical est le plus connu d’Ibn Sina ?",
           "options": [
-            "Le Canon de la médecine",
             "Le Prince",
+            "Le Canon de la médecine",
             "La Muqaddima",
             "La République"
           ],
@@ -542,8 +557,8 @@
         "it": {
           "question": "Per quale opera medica è più noto Ibn Sina?",
           "options": [
-            "Il Canone della medicina",
             "Il Principe",
+            "Il Canone della medicina",
             "La Muqaddima",
             "La Repubblica"
           ],
@@ -552,8 +567,8 @@
         "de": {
           "question": "Für welches medizinische Werk ist Ibn Sina besonders bekannt?",
           "options": [
-            "Der Kanon der Medizin",
             "Der Fürst",
+            "Der Kanon der Medizin",
             "Die Muqaddima",
             "Der Staat"
           ],
@@ -563,14 +578,14 @@
     },
     {
       "id": "question-3",
-      "correct_option": 0,
+      "correct_option": 2,
       "i18n": {
         "ar": {
           "question": "إلى أي لغة تُرجم القانون في الطب في العصور الوسطى؟",
           "options": [
-            "اللاتينية",
-            "اليابانية",
             "الصينية",
+            "اليابانية",
+            "اللاتينية",
             "الروسية"
           ],
           "explanation": "تُرجم الكتاب إلى اللاتينية وانتشر في التعليم الطبي الأوروبي."
@@ -578,9 +593,9 @@
         "en": {
           "question": "Into which language was the Canon translated in the Middle Ages?",
           "options": [
-            "Latin",
-            "Japanese",
             "Chinese",
+            "Japanese",
+            "Latin",
             "Russian"
           ],
           "explanation": "The book was translated into Latin and circulated in European medical education."
@@ -588,9 +603,9 @@
         "fr": {
           "question": "Dans quelle langue le Canon fut-il traduit au Moyen Âge ?",
           "options": [
-            "Le latin",
-            "Le japonais",
             "Le chinois",
+            "Le japonais",
+            "Le latin",
             "Le russe"
           ],
           "explanation": "L’ouvrage fut traduit en latin et circula dans l’enseignement médical européen."
@@ -598,9 +613,9 @@
         "it": {
           "question": "In quale lingua fu tradotto il Canone nel Medioevo?",
           "options": [
-            "Latino",
-            "Giapponese",
             "Cinese",
+            "Giapponese",
+            "Latino",
             "Russo"
           ],
           "explanation": "Il libro fu tradotto in latino e circolò nell’insegnamento medico europeo."
@@ -608,9 +623,9 @@
         "de": {
           "question": "In welche Sprache wurde der Kanon im Mittelalter übersetzt?",
           "options": [
-            "Latein",
-            "Japanisch",
             "Chinesisch",
+            "Japanisch",
+            "Latein",
             "Russisch"
           ],
           "explanation": "Das Buch wurde ins Lateinische übersetzt und in Europa verbreitet."
@@ -619,55 +634,55 @@
     },
     {
       "id": "question-4",
-      "correct_option": 0,
+      "correct_option": 3,
       "i18n": {
         "ar": {
           "question": "لماذا ندرس كتب الطب القديمة اليوم؟",
           "options": [
-            "لفهم تاريخ المعرفة",
+            "لأنها تجارب حديثة",
             "لاستخدامها بدل الطب الحديث",
             "لأنها لا تتغير",
-            "لأنها تجارب حديثة"
+            "لفهم تاريخ المعرفة"
           ],
           "explanation": "تساعدنا الكتب القديمة على فهم تطور الطب، لكنها لا تحل محل الرعاية الطبية المبنية على الأدلة الحديثة."
         },
         "en": {
           "question": "Why do we study old medical books today?",
           "options": [
-            "To understand the history of knowledge",
+            "Because they contain modern experiments",
             "To replace modern medicine",
             "Because they never change",
-            "Because they contain modern experiments"
+            "To understand the history of knowledge"
           ],
           "explanation": "Old books help explain medical history but do not replace evidence-based modern care."
         },
         "fr": {
           "question": "Pourquoi étudie-t-on aujourd’hui les anciens livres médicaux ?",
           "options": [
-            "Pour comprendre l’histoire du savoir",
+            "Parce qu’ils contiennent des expériences modernes",
             "Pour remplacer la médecine moderne",
             "Parce qu’ils ne changent jamais",
-            "Parce qu’ils contiennent des expériences modernes"
+            "Pour comprendre l’histoire du savoir"
           ],
           "explanation": "Ils éclairent l’histoire de la médecine, mais ne remplacent pas les soins modernes fondés sur les preuves."
         },
         "it": {
           "question": "Perché studiamo oggi gli antichi libri di medicina?",
           "options": [
-            "Per capire la storia del sapere",
+            "Perché contengono esperimenti moderni",
             "Per sostituire la medicina moderna",
             "Perché non cambiano mai",
-            "Perché contengono esperimenti moderni"
+            "Per capire la storia del sapere"
           ],
           "explanation": "Aiutano a capire la storia della medicina, ma non sostituiscono le cure moderne basate su prove."
         },
         "de": {
           "question": "Warum lesen wir heute alte medizinische Bücher?",
           "options": [
-            "Um die Wissensgeschichte zu verstehen",
+            "Weil sie moderne Experimente enthalten",
             "Um moderne Medizin zu ersetzen",
             "Weil sie sich nie ändern",
-            "Weil sie moderne Experimente enthalten"
+            "Um die Wissensgeschichte zu verstehen"
           ],
           "explanation": "Sie erklären die Medizingeschichte, ersetzen aber keine evidenzbasierte moderne Versorgung."
         }
