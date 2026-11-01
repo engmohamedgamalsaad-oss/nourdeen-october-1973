@@ -7,10 +7,10 @@ import { v2ToAdminDraft } from '../adapters/v1-v2.mjs';
 test('admin import exposes V2 validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261028-v2-admin-6"></script>'));
+  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261031-v2-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261028-v2-admin-6'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261028-v2-admin-6'"));
+  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261031-v2-publisher-1'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261031-v2-publisher-1'"));
   assert.match(html, /var requireV2ForNewStory=!it\.id\|\|!!\(it\.story_meta&&it\.story_meta\.v2_contract_required\)\|\|isV2OnlyDraftRecord\(it\)/);
   assert.doesNotMatch(html, /hasExplicitLegacyV1Package/, 'editing an old record must not force V2 just because it lacks an explicit V1 package');
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'new stories must reject V1 and untagged JSON');
