@@ -85,7 +85,8 @@ test('prompt administration links the dedicated V2 package instructions', async 
 test('unified package is mandatory for every non-October story, including legacy records', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const guard = html.split('\n').find(line => line.startsWith('function isOctoberLegacyRecord('));
-  const expr = html.match(/var requireV2ForNewStory=([^;\\n]+);/);
+  const exprLine = html.split('\n').find(line => line.includes('var requireV2ForNewStory='));
+  const expr = exprLine && exprLine.match(/var requireV2ForNewStory=(.*);/);
   assert.ok(guard && expr, 'October exception and unified policy must exist');
   const requires = new Function('it', guard + '; return ' + expr[1] + ';');
 
