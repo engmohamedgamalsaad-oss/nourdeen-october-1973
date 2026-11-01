@@ -18,7 +18,7 @@ const root = process.cwd();
 let story;
 try { story = JSON.parse(await readFile(path.resolve(inputFile), 'utf8')); }
 catch (error) { console.error('Cannot read valid JSON: ' + error.message); process.exit(2); }
-story = normalizeStoryFormat(story);
+story = normalizeStoryFormat(story, { slug: storyId });
 const problems = [
   ...validateStory(story),
   ...await validateLocalImagePaths(story, root)
