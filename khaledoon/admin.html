@@ -1028,7 +1028,7 @@ function pubRow(it){
      if(pkg&&isStoryPackageFormat(pkg.format)){
       var storyAdapter=window.KHStoryAdapter;
       if(!storyAdapter){aiFail('تعذر تحميل مكوّن استيراد الحزمة الموحدة. أعد تحميل لوحة الإدارة وجرّب مرة أخرى.');return}
-      var v2ValidationErrors=storyAdapter.validateV2(pkg);
+      var v2ValidationErrors=storyAdapter.validateStory(pkg);
       if(v2ValidationErrors.length){aiFail('حزمة القالب الموحد غير مكتملة:',v2ValidationErrors);return}
       /* V2 is the canonical source for every new story. The V1-shaped admin projection is display-only; publication always uses the exact saved V2 package. */
       storyOnlyDraft=true;storyPackageRaw=JSON.parse(JSON.stringify(pkg));
