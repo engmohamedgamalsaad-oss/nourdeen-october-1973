@@ -11,6 +11,11 @@ export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_V1';
 export const LEGACY_STORY_FORMAT = 'KHALEDOON_STORY_V2';
 export const STORY_FORMAT = 'KHALEDOON_STORY';
 const isStoryFormat = value => value === STORY_FORMAT || value === LEGACY_STORY_FORMAT;
+export function normalizeStoryFormat(input) {
+  requireObject(input, 'story package');
+  if (!isStoryFormat(input.format)) fail('expected ' + STORY_FORMAT + ' or a supported transitional story format');
+  return input.format === STORY_FORMAT ? input : { ...input, format: STORY_FORMAT };
+}
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
@@ -125,7 +130,7 @@ function quizToStory(value) {
     try { bank = JSON.parse(bank); } catch { fail('question_bank_json is not valid JSON'); }
   }
   const questions = bank?.questions;
-  if (!Array.isArray(questions) || questions.length !== 5) fail('exactly five legacy quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; choose exactly five explicitly before conversion—no questions are discarded automatically');
+  if (!Array.isArray(questions) || questions.length < 5) fail('at least five legacy quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; no questions are discarded automatically');
   return questions.map((q, i) => {
     requireObject(q, 'question ' + (i + 1));
     if (!Array.isArray(q.o) || q.o.length !== 4 || !Number.isInteger(q.a) || q.a < 0 || q.a > 3) {
@@ -262,8 +267,7 @@ function imageToLegacy(image) {
   return out;
 }
 export function storyToLegacy(input) {
-  requireObject(input, 'unified story');
-  if (!isStoryFormat(input.format)) fail('expected ' + STORY_FORMAT + ' or a supported legacy story package');
+  input = normalizeStoryFormat(input);
   const contractErrors = validateForAdminBridge(input);
   if (contractErrors.length) fail('unified story admin-bridge validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
@@ -414,7 +418,7 @@ export function storyToLegacy(input) {
  * the legacy projection; the authoritative unified story package remains unchanged.
  */
 export function storyToAdminDraft(input) {
-  requireObject(input, 'unified story draft');
+  input = normalizeStoryFormat(input);
   const errors = validateStory(input);
   if (errors.length) fail('unified story validation failed: ' + errors.join('; '));
   const section_key = input.section === 'women' ? 'learning'
