@@ -35,10 +35,10 @@ test('publisher moves a story in a review PR and preserves the previous story UR
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
   assert.ok(publisher.includes('function contentForSafetyScan(file:'), 'legacy V1 publisher must inspect decoded file content');
-  assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded V2 markers must be decoded before the V1 artifact guard');
+  assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
-  assert.ok(publisher.includes('contentForSafetyScan(file)'), 'V2 rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-10-28-v2-draft-guard-1'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
+  assert.ok(publisher.includes('2026-11-01-story-publisher-1'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
@@ -581,8 +581,8 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href=v2OnlyDraft?'../rebuild/package-review.html?draft=1&v=20261028-v2-review-1':'preview.html?story=1&submission='"), 'V2-only drafts must use the full-package reviewer while V1 imports retain the legacy preview');
-  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261028-v2-review-1'"), 'manual save-and-preview must also route V2-only drafts to the full-package reviewer');
+  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261101-story-review-1':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261101-story-review-1'"), 'manual save-and-preview must also route V2-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
@@ -976,7 +976,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
   var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
   var bundleIndex = admin.indexOf('var pack;', submitStart);
-  var unifiedBuilderIndex = admin.indexOf('window.KHStoryV2Publisher.buildFiles', submitStart);
+  var unifiedBuilderIndex = admin.indexOf('window.KHStoryPublisher.buildFiles', submitStart);
   assert.ok(capIndex >= 0 && bundleIndex > capIndex && unifiedBuilderIndex > capIndex, 'capability handshake must run before either unified or October compatibility bundle generation');
 });
 
@@ -1011,7 +1011,7 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
-  assert.ok(publisher.includes('const savedV2Package: any ='));
+  assert.ok(publisher.includes('const savedStoryPackage: any ='));
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
   var packageGuard = publisher.indexOf('if (isV2OnlyDraft) {');
