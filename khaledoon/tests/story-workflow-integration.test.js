@@ -377,7 +377,7 @@ test('Hatshepsut V2 reader keeps accessible scroll reveal and the women card pre
   assert.ok(story.includes('data-story-path=\"data.v2.json\"'), 'V2 page must load its localized story package');
   assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'V2 story blocks must reveal on scroll');
   assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
-  assert.ok(readerCss.includes('header{position:sticky'), 'language header must remain visible while scrolling');
+  assert.ok(readerCss.includes('header{position:static'), 'language header must scroll away with the page');
   assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
   assert.ok(collection.includes('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'women card must prefer the verified Hatshepsut museum photo');
   assert.ok(fs.existsSync('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'preferred museum image must exist in the repository');
@@ -975,8 +975,9 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
   var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
-  var bundleIndex = admin.indexOf('var pack=await window.KHStoryBundle.download', submitStart);
-  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
+  var bundleIndex = admin.indexOf('var pack;', submitStart);
+  var unifiedBuilderIndex = admin.indexOf('window.KHStoryV2Publisher.buildFiles', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex && unifiedBuilderIndex > capIndex, 'capability handshake must run before either unified or October compatibility bundle generation');
 });
 
 
