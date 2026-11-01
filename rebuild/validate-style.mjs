@@ -1,4 +1,4 @@
-// Style gate for NEW V2 story packages. It checks the editorial rules in
+// Style gate for story packages added to the project. It checks the editorial rules in
 // khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md
 // ("الأسلوب والفحص الآلي للحكايات الجديدة"). It complements validateStory()
 // (the structural contract) and never replaces human review of facts/translation.

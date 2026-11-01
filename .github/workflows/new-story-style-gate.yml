@@ -1,8 +1,7 @@
 name: New story style gate
 
-# Runs the automatic style check (rebuild/validate-style.mjs) on every V2 story
-# page ADDED by a pull request. Existing stories are not re-checked, so older
-# pages are never blocked. It does not replace human review of facts and translations.
+# Runs the automatic style check (rebuild/validate-style.mjs) on every story
+# page ADDED by a pull request. Pages already in the project are not re-checked here. It does not replace human review of facts and translations.
 on:
   pull_request:
     paths:
@@ -27,14 +26,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Style-check newly added V2 story pages
+      - name: Style-check story pages added in this pull request
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'stories/*/*/data.v2.json')
           if [ -z "$files" ]; then
-            echo "No new V2 story pages in this pull request; nothing to style-check."
+            echo "No story pages were added in this pull request; nothing to style-check."
             exit 0
           fi
           status=0

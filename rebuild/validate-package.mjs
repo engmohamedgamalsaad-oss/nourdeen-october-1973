@@ -24,7 +24,7 @@ const errors = [
   ...(style ? validateStyle(story) : [])
 ];
 if (errors.length) {
-  console.error('V2 story package failed validation:\n- ' + errors.join('\n- '));
+  console.error('Story package failed validation:\n- ' + errors.join('\n- '));
   process.exit(1);
 }
-console.log('V2 story package valid: ' + story.slug + ' [' + story.section + ']' + (style ? ' (style gate passed)' : ''));
+console.log('Story package valid: ' + story.slug + ' [' + story.section + ']' + (style ? ' (style gate passed)' : ''));
