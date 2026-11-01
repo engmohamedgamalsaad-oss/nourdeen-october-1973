@@ -5,7 +5,7 @@ import { readFile } from 'node:fs/promises';
 const gate = await readFile(new URL('../../scripts/check-new-story-readiness.js', import.meta.url), 'utf8');
 const cli = await readFile(new URL('../validate-package.mjs', import.meta.url), 'utf8');
 
-test('new unified story story pages use the canonical package and bypass V1-only requirements', () => {
+test('new unified story pages use the canonical package and bypass V1-only requirements', () => {
   assert.match(gate, /data-story-path=\["']story\\.json\["']/);
   assert.match(gate, /data\.v2\.json/);
   assert.match(gate, /unified story is canonical/);
