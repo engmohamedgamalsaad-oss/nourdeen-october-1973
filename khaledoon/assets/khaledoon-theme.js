@@ -31,6 +31,8 @@
   function apply(t, persist) {
     root.classList.add('kh-theme-anim');
     root.setAttribute('data-theme', t);
+    /* قارئ V2 يعتمد أيضًا على body[data-theme]؛ مزامنة الجذر والجسم تمنع زر الفوتر من تغيير الحالة دون تغيير ألوان الصفحة. */
+    if (document.body) document.body.setAttribute('data-theme', t);
     if (persist) { try { localStorage.setItem(KEY, t); } catch (e) {} }
     paint(t);
     clearTimeout(timer);
@@ -55,8 +57,16 @@
   window.addEventListener('storage', function (e) {
     if (e.key === KEY && (e.newValue === 'light' || e.newValue === 'dark')) { root.setAttribute('data-theme', e.newValue); paint(e.newValue); }
   });
+  /* زر الهيدر في قارئ V2 يغيّر data-theme مباشرة؛ راقب التغيير لتحديث أيقونة الزر العائم واسمها. */
   try {
-    matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (!saved()) paint(cur()); });
+    new MutationObserver(function () {
+      var t = cur();
+      if (document.body && document.body.getAttribute('data-theme') !== t) document.body.setAttribute('data-theme', t);
+      paint(t);
+    }).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+  } catch (e) {}
+  try {
+    matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () { if (!saved()) { apply(sys(), false); } });
   } catch (e) {}
 })();
 
