@@ -362,7 +362,7 @@ test('Hatshepsut cover SVG has no embedded text and V2 package provides localize
   assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to localized package metadata');
   assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
   assert.ok(svg.includes('aria-hidden=\"true\"'), 'decorative SVG must be hidden from assistive technology');
-  var pkg = JSON.parse(fs.readFileSync('stories/women/013/data.v2.json', 'utf8'));
+  var pkg = JSON.parse(fs.readFileSync('stories/women/013/story.json', 'utf8'));
   ['ar','en','fr','it','de'].forEach(function (lang) {
     assert.ok(pkg.cover.i18n[lang].alt, 'cover alt must be localized for ' + lang);
     assert.ok(pkg.cover.i18n[lang].caption, 'cover caption must be localized for ' + lang);
@@ -373,8 +373,8 @@ test('Hatshepsut V2 reader keeps accessible scroll reveal and the women card pre
   var readerCss = fs.readFileSync('rebuild/reader-base.css', 'utf8');
   var readerJs = fs.readFileSync('rebuild/reader.js', 'utf8');
   var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
-  assert.ok(story.includes('data-kh-v2-reader'), 'Hatshepsut must use the unified V2 reader');
-  assert.ok(story.includes('data-story-path=\"data.v2.json\"'), 'V2 page must load its localized story package');
+  assert.ok(story.includes('data-kh-story-reader'), 'Hatshepsut must use the unified V2 reader');
+  assert.ok(story.includes('data-story-path=\"story.json\"'), 'V2 page must load its localized story package');
   assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'V2 story blocks must reveal on scroll');
   assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
   assert.ok(readerCss.includes('header{position:static'), 'language header must scroll away with the page');
@@ -854,11 +854,11 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
 
   var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
   var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
-  var story = JSON.parse(fs.readFileSync('stories/science/015/data.v2.json', 'utf8'));
+  var story = JSON.parse(fs.readFileSync('stories/science/015/story.json', 'utf8'));
   var original = fs.readFileSync('stories/science/015/original.md', 'utf8')
     .replace(/^# النص الأصلي كما وصل دون تعديل\s*\n\n/, '').trimEnd();
   var places = JSON.parse(fs.readFileSync('stories/places.json', 'utf8'));
-  assert.equal(story.format, 'KHALEDOON_STORY_V2');
+  assert.equal(story.format, 'KHALEDOON_STORY');
   assert.equal(story.section, 'science');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.original_body, original, 'the submitted original_body must remain verbatim');
@@ -902,7 +902,7 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
   assert.equal(story.map_location.lat, places['015'].lat);
   assert.equal(story.map_location.lng, places['015'].lng);
   assert.deepEqual(story.map_location.place, places['015'].place, 'the V2 map location must match the verified Belbeis place record');
-  assert.ok(magdiPage.includes('data-kh-v2-reader') && magdiPage.includes('data-story-path="data.v2.json"'), 'Magdi page must use the shared V2 reader');
+  assert.ok(magdiPage.includes('data-kh-story-reader') && magdiPage.includes('data-story-path="story.json"'), 'Magdi page must use the shared V2 reader');
   assert.ok(magdiPage.includes('rebuild/reader.js') && magdiPage.includes('khaledoon-story-map-link.js'), 'V2 reader and interactive 3D map link must be connected');
   assert.ok(magdiPage.includes('id="site-brand"'), 'the shared reader must localize the site brand');
 });
@@ -1006,11 +1006,11 @@ test('unified publisher requires an approved canonical package from its source r
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('requires_submission_id: true'));
-  assert.ok(publisher.includes('supports_v2_publish: true'));
+  assert.ok(publisher.includes('supports_story_package_publish: true'));
   assert.ok(publisher.includes('body.submission_table'));
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
-  assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
+  assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
   assert.ok(publisher.includes('const savedV2Package: any ='));
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
@@ -1021,7 +1021,7 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
-  assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
+  assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
   assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
