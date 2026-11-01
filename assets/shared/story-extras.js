@@ -87,7 +87,7 @@
   try {
     if (window.__khTheme || document.querySelector('script[data-kh-theme]')) return;
     var s = document.createElement('script');
-    s.src = src ? new URL('../../khaledoon/assets/khaledoon-theme.js?v=1', src).href : '../../khaledoon/assets/khaledoon-theme.js?v=1';
+    s.src = src ? new URL('../../khaledoon/assets/khaledoon-theme.js?v=2', src).href : '../../khaledoon/assets/khaledoon-theme.js?v=2';
     s.defer = true;
     s.setAttribute('data-kh-theme', '');
     document.head.appendChild(s);
