@@ -7,7 +7,8 @@ import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=2
  * guessing or silently discarding data. Keep this module isolated until reader,
  * admin, and import integrations have their own compatibility tests.
  */
-export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_V1';
+export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_LEGACY';
+export const LEGACY_PACKAGE_FORMAT_ALIASES = ['KH_STORY_PACKAGE_LEGACY', 'KH_STORY_PACKAGE_V1'];
 export const LEGACY_STORY_FORMAT = 'KHALEDOON_STORY_V2';
 export const STORY_FORMAT = 'KHALEDOON_STORY';
 // Compatibility exports retained for older integrations during the migration window.
@@ -190,7 +191,7 @@ function normalizeLegacyPackage(input) {
   const hasLegacySignature = ['section_key','visual_design','original_body','translations','images']
     .every(key => Object.hasOwn(v1, key));
   if (v1.format === undefined && hasLegacySignature) v1.format = V1_FORMAT;
-  if (v1.format !== V1_FORMAT) fail('expected ' + V1_FORMAT + ' or a recognizable legacy V1 package');
+  if (!LEGACY_PACKAGE_FORMAT_ALIASES.includes(v1.format)) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy package');
   if (!nonempty(v1.body) && nonempty(v1.current_body)) v1.body = v1.current_body;
   if (typeof v1.question_bank === 'string') {
     try { v1.question_bank = JSON.parse(v1.question_bank); }
@@ -206,7 +207,7 @@ export function v1ToV2(input, { slug, coverOverride } = {}) {
   if (!section) fail('unsupported section_key: ' + input.section_key);
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
   const variant = VARIANT_MAP[input.visual_design];
-  if (!variant) fail('visual_design has no lossless V2 mapping: ' + input.visual_design);
+  if (!variant) fail('visual_design has no lossless story mapping: ' + input.visual_design);
   if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('V1 requires between two and five gallery images');
   const i18n = {};
   for (const lang of LANGUAGES) {
@@ -384,7 +385,7 @@ export function v2ToV1(input) {
     return { q: qAr.question, o: clone(qAr.options), a: q.correct_option, e: qAr.explanation, i18n };
   }) };
   return {
-    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
+    format: LEGACY_PACKAGE_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || '',
     narrator_grade: ar.narrator_grade || ar.grade || '',
