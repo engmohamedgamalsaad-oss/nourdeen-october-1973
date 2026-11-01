@@ -2,8 +2,8 @@
 
 Status: migration in progress — canonical story files are live; legacy draft compatibility is still required
 Branch: `chore/story-naming-final-audit-20261101`
-Current main baseline: `161cad560fc3c7176b4f536b023ecd94be976739`
-Latest audit branch commit: `c4d93326d74c077b48ed9414c246b4cf43d410ed`
+Current main baseline at PR #442 creation: `1b89e129a79a3fb73a6a4579fba13204a3a42cf2`
+Latest audit branch commit: `b9d63c73ac5ab27a2f4e4d29f7cab6662aae7b15`
 
 ## Goal
 
