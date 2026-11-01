@@ -797,7 +797,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   });
   const storyPackage = {
     format: 'KHALEDOON_STORY',
-    slug: 'e2e-v2-import-story',
+    slug: 'e2e-story-import-story',
     section: 'history',
     design: { variant: 'portrait-biography', accent: '#d5b7ff' },
     original_body: 'النص الأصلي الذي وصل من صاحب الاقتراح دون تغيير.',
