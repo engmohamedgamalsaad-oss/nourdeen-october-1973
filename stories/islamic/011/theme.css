@@ -1,63 +1,30 @@
-/* Amr ibn al-As — Islamic heritage palette, with explicit light/dark surfaces. */
-:root{--accent:#78c59a;--gold:#e3bd78}
-body{background:radial-gradient(ellipse at 82% 0%,#174a3b 0%,#0b201a 42%,#07130f 82%);background-attachment:fixed}
-header{background:rgba(7,24,19,.95);border-bottom:1px solid #78c59a66;box-shadow:0 8px 28px #0005}
-.bar{max-width:1240px;min-height:70px}main{max-width:1180px}
-.hero{position:relative;isolation:isolate;min-height:470px;padding:clamp(26px,5vw,58px);border:1px solid #78c59a55;border-radius:28px;background:radial-gradient(ellipse at 12% 30%,#28765366,transparent 48%),linear-gradient(125deg,#123b2c,#0b2920 52%,#111f1a);box-shadow:0 28px 75px #0005}
-#section-name{padding:5px 17px;background:linear-gradient(110deg,#e4cb91,#b58a4b);color:#18251d;clip-path:none;border-radius:999px}
-#title{font-size:clamp(2.15rem,4.6vw,4rem);line-height:1.5;text-shadow:0 8px 30px #0007}
-#subtitle{color:#d6e9dc}#summary{color:#edf4ed;line-height:2.1}
-#cover figure{max-width:430px;padding:10px;border:1px solid #d8bd7c99;border-radius:24px;background:linear-gradient(145deg,#28523c,#0a2119);box-shadow:0 25px 60px #0007}
-#cover figure img{min-height:260px;background:#0a2119;border-radius:15px}
-.story-actions{border-top-color:#78c59a45}
-.story-actions button,.story-actions a{border-radius:12px;background:#15382a;border-color:#57866a;color:#eff8ef}
-.story-actions #print-story{background:linear-gradient(120deg,#e5cc91,#b88e50);color:#18251d;border-color:#e5cc91}
-.section{border-radius:24px;border-color:#78c59a45;background:linear-gradient(145deg,#123326f5,#0a2119f7);box-shadow:0 18px 45px #0003}
-.section h2{display:flex;align-items:center;gap:12px;color:#d9c28b}
-.section h2:after{content:"";height:2px;flex:1;background:linear-gradient(90deg,#d8bd7c99,transparent)}
-#blocks{display:grid;gap:13px}
-.block{margin:0;padding:clamp(17px,2.5vw,26px);border-radius:17px;border-color:#78c59a45;background:linear-gradient(135deg,#194633e8,#0e2b20f5)}
-.block[data-speaker=narrator]{border-inline-start:4px solid #70b88d}
-.block[data-speaker=karma]{border-inline-start:4px solid #e3bd78;background:linear-gradient(135deg,#4a3b2266,#123326)}
-.block[data-type=did_you_know]{border:1px solid #d8bd7c8a;border-inline-start:5px solid #e3bd78;background:linear-gradient(120deg,#49391f99,#123326)}
-.speaker{color:#a8dfb9}.block[data-speaker=karma] .speaker{color:#f0d49b}.block p{color:#edf5ed;font-size:clamp(1.02rem,1.7vw,1.15rem)}
-#gallery{grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:18px}
-#gallery figure{padding:10px;border-radius:20px;border-color:#78c59a66;background:linear-gradient(145deg,#174331,#0b241b)}
-#gallery figure img{height:clamp(220px,28vw,340px);background:#0a2119;border-radius:13px}#gallery figcaption{color:#d4e5d8}
-#map-section{background:linear-gradient(145deg,#123326,#0a2119)}#map-section a,.sources a{color:#b7e5c2}
-#quiz .options button{background:#14382a;border-color:#56836a;color:#eff8ef}#quiz .explain{color:#e4efe5;background:#183e2e;border-inline-start-color:#e3bd78}
-.sources li{padding:10px 13px;border-radius:12px;background:#ffffff08}
-#history-note{border-inline-start:3px solid #e3bd78;padding:12px 16px;background:#ffffff08;color:#d4e5d8}
-.story-intro-modal{background:rgba(2,12,8,.91)}.intro-card{width:min(1000px,100%);border-color:#78c59a99;border-radius:28px;background:linear-gradient(135deg,#194633,#091b14 78%)}
-.intro-art{background:radial-gradient(circle at 50% 45%,#286747,#071a12 75%)}.intro-copy h2{color:#e6d19d}.intro-copy p{color:#d6e9dc}
-.start-story-btn{border-radius:13px;background:linear-gradient(110deg,#e7d39e,#b9d9a7);color:#18251d}
-body[data-theme=light]{background:radial-gradient(ellipse at 82% 0%,#dff1e5,#f5f1e8 62%,#fffdf8);color:#24332c}
-body[data-theme=light] header{background:rgba(255,253,248,.96);border-bottom-color:#b8d8c3;box-shadow:0 5px 18px rgba(40,65,47,.08)}
-body[data-theme=light] .brand{color:#176344;text-shadow:none}
-body[data-theme=light] .hero{background:radial-gradient(ellipse at 12% 30%,#c5e7cf,transparent 48%),linear-gradient(125deg,#e8f5e9,#fffdf8 70%);border-color:#b9d9c0;box-shadow:0 20px 48px #25485416}
-body[data-theme=light] #title{color:#173d2b;text-shadow:none}
-body[data-theme=light] #subtitle,body[data-theme=light] #summary,body[data-theme=light] #student{color:#385447}
-body[data-theme=light] #cover figure{background:linear-gradient(145deg,#dcefe0,#fff);border-color:#b5d5bd}
-body[data-theme=light] .section{background:linear-gradient(145deg,#fffefa,#eef7ef);border-color:#c9dfcc}
-body[data-theme=light] .section h2{color:#286846}
-body[data-theme=light] .block,body[data-theme=light] .block[data-speaker=narrator]{background:linear-gradient(135deg,#fff,#f1f8f1);border-color:#d0e3d4;color:#243b2f}
-body[data-theme=light] .block[data-speaker=karma]{background:linear-gradient(135deg,#fff7df,#f5faf4);border-inline-start-color:#b58a38}
-body[data-theme=light] .block[data-type=did_you_know]{background:linear-gradient(120deg,#fff4d5,#f7faf4);border-color:#dfc47e}
-body[data-theme=light] .block p{color:#293f33}body[data-theme=light] .speaker{color:#236c49}
-body[data-theme=light] .block[data-speaker=karma] .speaker{color:#8b651c}
-body[data-theme=light] #gallery figure{background:#fff;border-color:#c4ddc9}
-body[data-theme=light] #gallery figcaption,body[data-theme=light] figcaption{color:#455b4d}
-body[data-theme=light] #map-section{background:linear-gradient(145deg,#eef8ef,#fffdf8)}
-body[data-theme=light] #map-section a,body[data-theme=light] .sources a{color:#176344}
-body[data-theme=light] #quiz .options button{background:#fff;color:#293f33;border-color:#bdd5c2}
-body[data-theme=light] #quiz .explain{background:#eaf5ec;color:#345747}
-body[data-theme=light] .sources li{background:#eaf5ec}
-body[data-theme=light] #history-note{background:#fff7e3;color:#4d4738}
-body[data-theme=light] .intro-card{background:linear-gradient(135deg,#f7fff8,#fffdf8);color:#243b2f;border-color:#b8d8c3}
-body[data-theme=light] .intro-copy h2{color:#1c6845}body[data-theme=light] .intro-copy p{color:#3f594a}
-body[data-theme=light] .intro-art{background:#e4f2e6}
-body[data-theme=light] .story-actions button,body[data-theme=light] .story-actions a{background:#fff;color:#205c40;border-color:#b8d8c3}
-body[data-theme=light] .story-actions #print-story{background:#216b49;color:#fff;border-color:#216b49}
-body[data-theme=light] .langs button,body[data-theme=light] #theme-toggle{background:#fff;color:#254234;border-color:#b8d8c3}
-body[data-theme=light] .langs button[aria-pressed=true],body[data-theme=light] button[aria-pressed=true]{background:#216b49;color:#fff;border-color:#216b49}
-@media(max-width:700px){main{margin:14px auto}.hero{border-radius:18px}.section{border-radius:18px}}
+/* Amr ibn al-As — a distinct Islamic-heritage palette with readable light and dark modes. */
+body[data-story-slug="011"]{--accent:#78c59a;--gold:#d6b36d;--bg:#0b201a;--panel:#14372b;--line:#356a53;--text:#f2f7f1;--muted:#c5d5c9;color:var(--text);background:radial-gradient(ellipse at 78% 0%,#1c4938 0%,#0b201a 48%,#07150f 100%);background-attachment:fixed}
+body[data-story-slug="011"] header{background:rgba(11,32,26,.96);border-bottom:1px solid #78c59a55}
+body[data-story-slug="011"] .hero{border-color:#78c59a66;background:radial-gradient(ellipse at 12% 25%,#78c59a2b,transparent 48%),linear-gradient(125deg,#173c2e 0%,#102c22 55%,#17291f 100%)}
+body[data-story-slug="011"] .section{border-color:#78c59a4d;background:linear-gradient(145deg,#17382b,#10291f)}
+body[data-story-slug="011"] .block{border-color:#78c59a45;background:linear-gradient(135deg,#1a3b2d,#122d22)}
+body[data-story-slug="011"] .block[data-speaker="karma"]{border-inline-start:4px solid var(--gold);background:linear-gradient(135deg,#493b2355,#17382b)}
+body[data-story-slug="011"] .block[data-type="did_you_know"]{border-color:#d6b36d99;border-inline-start:5px solid var(--gold);background:linear-gradient(120deg,#493b2355,#17382b)}
+body[data-story-slug="011"] .speaker{color:#a9e4bd}
+body[data-story-slug="011"] .block[data-speaker="karma"] .speaker{color:#f0d18f}
+body[data-story-slug="011"] #cover figure,body[data-story-slug="011"] #gallery figure{border-color:#78c59a66;background:linear-gradient(145deg,#1b4433,#0d241b)}
+body[data-story-slug="011"] #cover figure img,body[data-story-slug="011"] #gallery figure img{background:#0b201a}
+body[data-story-slug="011"] .intro-card{border-color:#78c59a88;background:linear-gradient(135deg,#17382b,#0b201a 78%)}
+body[data-story-slug="011"] .intro-art{background:#0d281e}
+body[data-story-slug="011"] .story-actions #print-story{background:linear-gradient(120deg,#a9dfb9,#69b98a);color:#10271b;border-color:#a9dfb9}
+body[data-story-slug="011"][data-theme="light"]{--bg:#f4f1e7;--panel:#fffdf7;--line:#d4ddce;--text:#26372d;--muted:#58675d;color:var(--text);background:radial-gradient(ellipse at 80% 0%,#e0eee2 0%,#f4f1e7 55%,#eee9dc 100%);background-attachment:fixed}
+body[data-story-slug="011"][data-theme="light"] header{background:rgba(255,253,247,.97);border-bottom-color:#cbd9cc}
+body[data-story-slug="011"][data-theme="light"] .hero{border-color:#c6d9c8;background:radial-gradient(ellipse at 12% 25%,#78c59a30,transparent 48%),linear-gradient(125deg,#e6f1e6,#fffdf7 58%,#f2eddf)}
+body[data-story-slug="011"][data-theme="light"] .section{border-color:#d2ddcf;background:linear-gradient(145deg,#fffefa,#f8f8ef);box-shadow:0 12px 28px rgba(42,65,46,.08)}
+body[data-story-slug="011"][data-theme="light"] .block{border-color:#d4dfd1;background:linear-gradient(135deg,#fffefa,#f4f7ef);box-shadow:0 7px 18px rgba(42,65,46,.07)}
+body[data-story-slug="011"][data-theme="light"] .block[data-speaker="karma"]{border-inline-start-color:#a77c2c;background:linear-gradient(135deg,#fff4d8,#fffdf7)}
+body[data-story-slug="011"][data-theme="light"] .block[data-type="did_you_know"]{border-color:#d4bd83;border-inline-start-color:#a77c2c;background:linear-gradient(120deg,#fff1cf,#fffdf7)}
+body[data-story-slug="011"][data-theme="light"] .speaker{color:#286b49}
+body[data-story-slug="011"][data-theme="light"] .block[data-speaker="karma"] .speaker{color:#8b641f}
+body[data-story-slug="011"][data-theme="light"] #cover figure,body[data-story-slug="011"][data-theme="light"] #gallery figure{border-color:#d2ddcf;background:linear-gradient(145deg,#fffefa,#eef4e9)}
+body[data-story-slug="011"][data-theme="light"] #cover figure img,body[data-story-slug="011"][data-theme="light"] #gallery figure img{background:#e9eee5}
+body[data-story-slug="011"][data-theme="light"] .intro-card{border-color:#c6d9c8;background:linear-gradient(135deg,#fffdf7,#edf4e9)}
+body[data-story-slug="011"][data-theme="light"] .intro-art{background:#e7eee4}
+body[data-story-slug="011"][data-theme="light"] .story-actions #print-story{background:linear-gradient(120deg,#d8efdc,#a9d9b5);color:#193b27;border-color:#9ac9a5}
+@media(max-width:700px){body[data-story-slug="011"] .section{padding:18px 15px}}
