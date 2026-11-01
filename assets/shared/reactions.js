@@ -149,7 +149,10 @@
   choiceButtons.forEach(button => button.addEventListener("click", () => submitReaction(button.dataset.reactionChoice)));
   document.addEventListener("site-language-change", paintSavedState);
   paintSavedState();
-  loadCounts().catch(() => setStatus(tr("r_counts_error", "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.")));
+  let countsFailed = false;
+  const paintCountsError = () => { if (countsFailed) setStatus(tr("r_counts_error", "عدادات التفاعل غير متاحة مؤقتًا. جرّب تحديث الصفحة.")); };
+  document.addEventListener("site-language-change", () => setTimeout(paintCountsError, 0));
+  loadCounts().catch(() => { countsFailed = true; paintCountsError(); });
 })();
 
 /* Loads the print / quiz block (kept in its own file next to this one). */
