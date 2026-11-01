@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
 
 const root = process.cwd();
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'khaledoon-v2-browser-'));
-const artifactDir = process.env.KH_V2_ARTIFACT_DIR || path.join(root, 'artifacts/v2-story-preview');
+const artifactDir = process.env.KH_V2_ARTIFACT_DIR || path.join(root, 'artifacts/story-preview');
 fs.mkdirSync(artifactDir, { recursive: true });
 let server, browser;
 const errors = [];
@@ -30,7 +30,7 @@ async function main() {
   const testImageSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400"><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#183b45"/><stop offset="1" stop-color="#081b22"/></linearGradient></defs><rect width="640" height="400" fill="url(#sky)"/><path d="M0 290 Q90 260 180 292 T360 292 T540 292 T720 292 V400 H0Z" fill="#1c5860"/><path d="M0 330 Q100 300 200 330 T400 330 T600 330 T800 330 V400 H0Z" fill="#0b303a"/><path d="M150 250 L490 250 L430 305 L205 305Z" fill="#d6ad55"/><path d="M220 240 L220 135 L310 230Z" fill="#e7d7ad"/><path d="M325 235 L325 155 L395 235Z" fill="#b8874b"/><path d="M135 315 H510" stroke="#e6d09a" stroke-width="4" opacity=".8"/><text x="320" y="80" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#f4e8c8">V2 layout test image</text></svg>';
   const build = spawnSync(process.execPath, [path.join(root, 'rebuild/build-story.mjs'), packageFile, '016'], { cwd: temp, encoding: 'utf8' });
   assert.equal(build.status, 0, build.stderr || build.stdout || 'V2 story build failed');
-  const story = JSON.parse(fs.readFileSync(path.join(temp, 'stories/october/016/data.v2.json'), 'utf8'));
+  const story = JSON.parse(fs.readFileSync(path.join(temp, 'stories/october/016/story.json'), 'utf8'));
   server = http.createServer((req, res) => {
     try {
       const pathname = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname);
@@ -58,7 +58,7 @@ async function main() {
   assert.equal(await page.locator('#title').textContent(), story.i18n.ar.title);
   assert.equal(await page.locator('#story-intro-modal').isVisible(), true, 'the story should open on a dedicated start screen');
   assert.equal(await page.locator('#intro-title').textContent(), story.i18n.ar.title, 'start screen title should be localized');
-  await page.screenshot({ path: path.join(artifactDir, 'v2-story-start-ar.png'), fullPage: false, animations: 'disabled' });
+  await page.screenshot({ path: path.join(artifactDir, 'story-start-ar.png'), fullPage: false, animations: 'disabled' });
   await page.locator('#intro-start').click();
   await page.locator('#story-intro-modal').waitFor({ state: 'hidden' });
   assert.equal(await page.locator('#cover img').getAttribute('alt'), story.cover.i18n.ar.alt, 'cover alt text should be localized');
@@ -72,7 +72,7 @@ async function main() {
   assert.equal(await page.locator('#gallery figure').count(), galleryImages.length, 'the gallery should not repeat the cover image');
   assert.equal(await page.locator('#map-section').isVisible(), true, 'verified map location should render');
   assert.match(await page.locator('#map-link').getAttribute('href'), /openstreetmap\.org/);
-  await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-ar.png'), fullPage: true, animations: 'disabled' });
+  await page.screenshot({ path: path.join(artifactDir, 'story-desktop-ar.png'), fullPage: true, animations: 'disabled' });
 
   await page.locator('[data-lang="en"]').click();
   await page.waitForFunction(() => document.documentElement.lang === 'en');
@@ -134,7 +134,7 @@ async function main() {
   assert.notEqual(darkPalette.panel, lightPalette.panel, 'surface palette must change when returning to dark mode');
   await page.locator('#theme-toggle').click();
   assert.equal(await page.locator('body').getAttribute('data-theme'), 'light', 'light mode should remain selectable after round trip');
-  await page.screenshot({ path: path.join(artifactDir, 'v2-story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
+  await page.screenshot({ path: path.join(artifactDir, 'story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
 
   // Exercise the actual read-only package reviewer used by the V2 admin draft path.
   const reviewContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
@@ -184,7 +184,7 @@ async function main() {
   assert.ok((await mobile.locator('#gallery figcaption').first().textContent()).includes(galleryImages[0].i18n.fr.caption), 'gallery caption should switch to French');
   const overflow = await mobile.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
   assert.ok(overflow <= 1, 'mobile story page must not overflow horizontally; measured ' + overflow + 'px');
-  await mobile.screenshot({ path: path.join(artifactDir, 'v2-story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
+  await mobile.screenshot({ path: path.join(artifactDir, 'story-mobile-fr.png'), fullPage: true, animations: 'disabled' });
   assert.deepEqual(errors, [], 'V2 story page should not throw browser errors');
   console.log(JSON.stringify({ ok: true, story: story.slug, languagesChecked: ['ar','en','fr'], quizQuestions: story.quiz.length, galleryImages: galleryImages.length, sources: story.sources.length, mobileOverflowPx: overflow, screenshots: artifactDir }, null, 2));
 }
