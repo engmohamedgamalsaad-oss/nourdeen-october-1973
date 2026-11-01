@@ -25,7 +25,7 @@ const inlineStoryFiles = [
   // No active story page keeps private inline locale dictionaries; unified story pages
   // are checked from their story.json package below.
 ];
-const v2StoryFiles = [
+const storyPackageFiles = [
   'stories/science/007/story.json',
   'stories/people/008/story.json',
   'stories/people/009/story.json',
@@ -109,7 +109,7 @@ for (const file of inlineStoryFiles) {
     }
   }
 }
-for (const file of v2StoryFiles) {
+for (const file of storyPackageFiles) {
   try {
     const story = JSON.parse(read(file));
     for (const lang of required) {
