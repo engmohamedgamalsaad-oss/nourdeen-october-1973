@@ -39,6 +39,12 @@ jobs:
           status=0
           for f in $files; do
             echo "== $f"
-            node rebuild/validate-package.mjs --style "$f" || status=1
+            legacy="${f%/story.json}/data.v2.json"
+            if git cat-file -e "$BASE_SHA:$legacy" 2>/dev/null; then
+              echo "Existing story package migrated from data.v2.json; validate its structure without applying new-story editorial thresholds."
+              node rebuild/validate-package.mjs "$f" || status=1
+            else
+              node rebuild/validate-package.mjs --style "$f" || status=1
+            fi
           done
           exit $status
