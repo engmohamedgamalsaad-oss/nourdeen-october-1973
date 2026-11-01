@@ -6,7 +6,7 @@ import { validateStory, validateLocalImagePaths } from './validate-story.mjs';
 const fail = message => { console.error(message); process.exitCode = 1; };
 const [inputFile, storyId] = process.argv.slice(2);
 if (!inputFile || !storyId) {
-  console.error('Usage: node rebuild/build-story.mjs <v2-story.json> <three-digit-story-id>');
+  console.error('Usage: node rebuild/build-story.mjs <story.json> <three-digit-story-id>');
   process.exit(2);
 }
 if (!/^\d{3}$/.test(storyId)) {
@@ -17,16 +17,17 @@ const root = process.cwd();
 let story;
 try { story = JSON.parse(await readFile(path.resolve(inputFile), 'utf8')); }
 catch (error) { console.error('Cannot read valid JSON: ' + error.message); process.exit(2); }
+if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
 const problems = [
   ...validateStory(story),
   ...await validateLocalImagePaths(story, root)
 ];
 if (problems.length) {
-  console.error('V2 package rejected (' + problems.length + ' problems):\\n- ' + problems.join('\\n- '));
+  console.error('unified story package rejected (' + problems.length + ' problems):\\n- ' + problems.join('\\n- '));
   process.exit(1);
 }
 const outDir = path.join(root, 'stories', story.section, storyId);
-for (const file of ['index.html', 'data.v2.json']) {
+for (const file of ['index.html', 'story.json']) {
   try { await access(path.join(outDir, file)); console.error('Refusing to overwrite existing ' + path.relative(root, path.join(outDir, file))); process.exit(1); }
   catch (error) { if (error.code !== 'ENOENT') throw error; }
 }
@@ -60,11 +61,11 @@ const page = `<!doctype html>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article></main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
-<script src="../../../rebuild/reader.js?v=20261030-shared-reader-1" data-kh-v2-reader data-story-path="data.v2.json"></script>
+<script src="../../../rebuild/reader.js?v=20261030-shared-reader-1" data-kh-story-reader data-story-path="story.json"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
-await writeFile(path.join(outDir, 'data.v2.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
+await writeFile(path.join(outDir, 'story.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
 await writeFile(path.join(outDir, 'index.html'), page, { flag: 'wx' });
-console.log('Built V2 story page: ' + path.relative(root, path.join(outDir, 'index.html')));
-console.log('Package: ' + path.relative(root, path.join(outDir, 'data.v2.json')));
+console.log('Built unified story page: ' + path.relative(root, path.join(outDir, 'index.html')));
+console.log('Package: ' + path.relative(root, path.join(outDir, 'story.json')));
 console.log('Not published: add the page to the review branch, run checks, and review before merge.');
