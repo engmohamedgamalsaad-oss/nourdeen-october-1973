@@ -1024,4 +1024,5 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
   assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
 });
