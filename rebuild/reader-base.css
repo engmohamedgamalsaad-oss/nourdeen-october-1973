@@ -1,11 +1,11 @@
 /* Shared reader template adapted from the approved Khaledoon story pages.
    Story data changes content and section accent only; structure and controls stay fixed. */
-@import url("../assets/shared/khaledoon-snap.css?v=20261031-1");
+@import url("../assets/shared/khaledoon-snap.css?v=20261101-header-flow-1");
 :root{--accent:#d6ad55;--gold:#e3bd78;--bg:#101824;--panel:#17232e;--line:#42505c;--text:#f6f0e4;--muted:#c4cbd2}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{margin:0;min-width:0;overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,color-mix(in srgb,var(--accent) 16%,var(--bg)),var(--bg) 60%);color:var(--text);font:16px/1.9 Cairo,Arial,sans-serif}
-header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));backdrop-filter:blur(12px);box-shadow:0 8px 24px #0002}
+header{position:static;top:auto;z-index:20;background:color-mix(in srgb,var(--bg) 94%,transparent);border-bottom:1px solid color-mix(in srgb,var(--accent) 30%,var(--line));backdrop-filter:blur(12px);box-shadow:0 8px 24px #0002}
 .bar{max-width:1120px;min-height:64px;margin:auto;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .brand{font:700 1.12rem Marhey,Cairo,Arial,sans-serif;color:var(--accent)}
 .langs{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
@@ -324,10 +324,10 @@ body[data-theme="light"] .story-actions a[aria-disabled="true"] {
   opacity: .68;
 }
 
-/* Unified story header: stable sticky bar and touch-scrollable language controls. */
+/* Unified story header: scrolls away naturally to preserve reading space. */
 header{
-  position:sticky;
-  top:0;
+  position:static;
+  top:auto;
   z-index:100;
   isolation:isolate;
   width:100%;
@@ -355,7 +355,7 @@ header{
 .langs button{flex:0 0 auto;white-space:nowrap}
 #theme-toggle{flex:0 0 auto;white-space:nowrap}
 @media(max-width:700px){
-  header{top:0}
+  header{top:auto}
   .bar{
     display:grid;
     grid-template-columns:minmax(0,1fr) auto;
