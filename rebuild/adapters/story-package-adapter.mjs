@@ -490,3 +490,7 @@ export function v2ToAdminDraft(input) {
     translations, question_bank
   };
 }
+
+// Canonical semantic aliases; legacy names remain exported for old integrations.
+export const legacyToStory = v1ToV2;
+export const storyToLegacy = v2ToV1;
