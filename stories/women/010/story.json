@@ -935,13 +935,13 @@
     },
     {
       "id": "research-field",
-      "correct_option": 0,
+      "correct_option": 1,
       "i18n": {
         "ar": {
           "question": "ما المجال الذي ارتبط بجزء مهم من أبحاث سميرة موسى؟",
           "options": [
-            "الأشعة السينية والإشعاع",
             "علم الفلك الرصدي فقط",
+            "الأشعة السينية والإشعاع",
             "الهندسة المدنية",
             "علم النبات"
           ],
@@ -950,8 +950,8 @@
         "en": {
           "question": "Which field was important in part of Sameera Moussa’s research?",
           "options": [
-            "X-rays and radiation",
             "Observational astronomy only",
+            "X-rays and radiation",
             "Civil engineering",
             "Botany"
           ],
@@ -960,8 +960,8 @@
         "fr": {
           "question": "Quel domaine occupait une place importante dans une partie de ses recherches ?",
           "options": [
-            "Les rayons X et les rayonnements",
             "Uniquement l’astronomie d’observation",
+            "Les rayons X et les rayonnements",
             "Le génie civil",
             "La botanique"
           ],
@@ -970,8 +970,8 @@
         "it": {
           "question": "Quale campo fu importante in una parte delle sue ricerche?",
           "options": [
-            "Raggi X e radiazioni",
             "Solo astronomia osservativa",
+            "Raggi X e radiazioni",
             "Ingegneria civile",
             "Botanica"
           ],
@@ -980,8 +980,8 @@
         "de": {
           "question": "Welches Gebiet spielte in einem Teil ihrer Forschung eine wichtige Rolle?",
           "options": [
-            "Röntgenstrahlen und Strahlung",
             "Nur beobachtende Astronomie",
+            "Röntgenstrahlen und Strahlung",
             "Bauingenieurwesen",
             "Botanik"
           ],
@@ -991,14 +991,14 @@
     },
     {
       "id": "mentor",
-      "correct_option": 0,
+      "correct_option": 2,
       "i18n": {
         "ar": {
           "question": "من العالم المصري الذي ارتبط بدعم مسيرتها العلمية؟",
           "options": [
-            "علي مصطفى مشرفة",
-            "أحمد زويل",
             "مصطفى السيد",
+            "أحمد زويل",
+            "علي مصطفى مشرفة",
             "فاروق الباز"
           ],
           "explanation": "كان علي مصطفى مشرفة من الشخصيات العلمية المؤثرة في مسيرتها."
@@ -1006,9 +1006,9 @@
         "en": {
           "question": "Which Egyptian scientist was associated with supporting her scientific path?",
           "options": [
-            "Ali Mostafa Mosharafa",
-            "Ahmed Zewail",
             "Mostafa El-Sayed",
+            "Ahmed Zewail",
+            "Ali Mostafa Mosharafa",
             "Farouk El-Baz"
           ],
           "explanation": "Ali Mostafa Mosharafa was one of the influential scientific figures in her career."
@@ -1016,9 +1016,9 @@
         "fr": {
           "question": "Quel scientifique égyptien est associé à son parcours scientifique ?",
           "options": [
-            "Ali Mostafa Mosharafa",
-            "Ahmed Zewail",
             "Mostafa El-Sayed",
+            "Ahmed Zewail",
+            "Ali Mostafa Mosharafa",
             "Farouk El-Baz"
           ],
           "explanation": "Ali Mostafa Mosharafa fait partie des figures scientifiques qui ont influencé son parcours."
@@ -1026,9 +1026,9 @@
         "it": {
           "question": "Quale scienziato egiziano è associato al suo percorso scientifico?",
           "options": [
-            "Ali Mostafa Mosharafa",
-            "Ahmed Zewail",
             "Mostafa El-Sayed",
+            "Ahmed Zewail",
+            "Ali Mostafa Mosharafa",
             "Farouk El-Baz"
           ],
           "explanation": "Ali Mostafa Mosharafa fu una delle figure scientifiche influenti nel suo percorso."
@@ -1036,9 +1036,9 @@
         "de": {
           "question": "Welcher ägyptische Wissenschaftler wird mit der Förderung ihres wissenschaftlichen Weges verbunden?",
           "options": [
-            "Ali Mostafa Mosharafa",
-            "Ahmed Zewail",
             "Mostafa El-Sayed",
+            "Ahmed Zewail",
+            "Ali Mostafa Mosharafa",
             "Farouk El-Baz"
           ],
           "explanation": "Ali Mostafa Mosharafa war eine der einflussreichen wissenschaftlichen Persönlichkeiten in ihrer Laufbahn."
@@ -1047,55 +1047,55 @@
     },
     {
       "id": "peaceful-atom",
-      "correct_option": 0,
+      "correct_option": 3,
       "i18n": {
         "ar": {
           "question": "ما الفكرة التي ارتبطت برؤيتها لاستخدام الطاقة الذرية؟",
           "options": [
-            "توظيف العلم في خدمة الإنسان والاستخدامات السلمية",
+            "حصر العلم في بلد واحد",
             "استخدام العلم للسلاح فقط",
             "إيقاف البحث العلمي",
-            "حصر العلم في بلد واحد"
+            "توظيف العلم في خدمة الإنسان والاستخدامات السلمية"
           ],
           "explanation": "اهتمت سميرة موسى بالاستخدام السلمي للإشعاع والطاقة الذرية وبإمكانات التطبيقات الطبية."
         },
         "en": {
           "question": "What idea was linked to her vision for atomic energy?",
           "options": [
-            "Using science for humanity and peaceful purposes",
+            "Restricting science to one country",
             "Using science only for weapons",
             "Stopping scientific research",
-            "Restricting science to one country"
+            "Using science for humanity and peaceful purposes"
           ],
           "explanation": "She supported peaceful uses of radiation and atomic energy, including potential medical applications."
         },
         "fr": {
           "question": "Quelle idée était liée à sa vision de l’énergie atomique ?",
           "options": [
-            "Mettre la science au service de l’humanité et d’usages pacifiques",
+            "Réserver la science à un seul pays",
             "N’utiliser la science que pour les armes",
             "Arrêter la recherche scientifique",
-            "Réserver la science à un seul pays"
+            "Mettre la science au service de l’humanité et d’usages pacifiques"
           ],
           "explanation": "Elle défendait les usages pacifiques des rayonnements et de l’énergie atomique, notamment les applications médicales possibles."
         },
         "it": {
           "question": "Quale idea era legata alla sua visione dell’energia atomica?",
           "options": [
-            "Usare la scienza per l’umanità e per scopi pacifici",
+            "Riservare la scienza a un solo paese",
             "Usare la scienza solo per le armi",
             "Fermare la ricerca scientifica",
-            "Riservare la scienza a un solo paese"
+            "Usare la scienza per l’umanità e per scopi pacifici"
           ],
           "explanation": "Sosteneva gli usi pacifici delle radiazioni e dell’energia atomica, comprese le possibili applicazioni mediche."
         },
         "de": {
           "question": "Welche Idee war mit ihrer Vorstellung von Atomenergie verbunden?",
           "options": [
-            "Wissenschaft zum Wohl der Menschen und für friedliche Zwecke einsetzen",
+            "Wissenschaft auf ein Land beschränken",
             "Wissenschaft nur für Waffen nutzen",
             "Forschung einstellen",
-            "Wissenschaft auf ein Land beschränken"
+            "Wissenschaft zum Wohl der Menschen und für friedliche Zwecke einsetzen"
           ],
           "explanation": "Sie setzte sich für friedliche Anwendungen von Strahlung und Atomenergie ein, auch im medizinischen Bereich."
         }
