@@ -263,7 +263,8 @@
         try { valid.push(parseSingle(c)); } catch (ignore) { /* try the next object */ }
       });
       if (!valid.length) throw firstError;
-      var packages = valid.filter(function (r) { return r.value && r.value.format === 'KH_STORY_PACKAGE_V1'; });
+      var packages = valid.filter(function (r) { return r.value && r.value.format === 'KHALEDOON_STORY'; });
+      if (!packages.length) packages = valid.filter(function (r) { return r.value && r.value.format === 'KH_STORY_PACKAGE_V1'; });
       var pool = packages.length ? packages : valid;
       var chosen = pool.reduce(function (a, b) { return b.text.length > a.text.length ? b : a; });
       var notes = chosen.notes.slice();
@@ -278,7 +279,7 @@
      Legacy provider-specific prompt fragments may still ask for fenced JSON. Normalize those fragments
      to one raw JSON object, matching the canonical v4 prompt and import contract. The old sentences below
      are retained only where they still occur in admin.html; tests guard against drift. */
-  var PROMPT_MARKER = 'KH_STORY_PACKAGE_V1';
+  var PROMPT_MARKER = 'KHALEDOON_STORY';
   var PROMPT_RULES = [
     ['أخرج الحزمة وفق المخطط فقط؛ لا تضف شرحًا خارج JSON.',
       'أخرج الحزمة وفق المخطط ككائن JSON خام فقط؛ لا تضف شرحًا خارج الكائن أو أسوار كود.'],
