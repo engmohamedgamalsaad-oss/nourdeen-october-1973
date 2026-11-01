@@ -507,13 +507,13 @@
     },
     {
       "id": "question-2",
-      "correct_option": 0,
+      "correct_option": 1,
       "i18n": {
         "ar": {
           "question": "ما أشهر كتب ابن سينا الطبية؟",
           "options": [
-            "القانون في الطب",
             "الأمير",
+            "القانون في الطب",
             "المقدمة",
             "الجمهورية"
           ],
@@ -522,8 +522,8 @@
         "en": {
           "question": "Which medical book is Ibn Sina best known for?",
           "options": [
-            "The Canon of Medicine",
             "The Prince",
+            "The Canon of Medicine",
             "The Muqaddimah",
             "The Republic"
           ],
@@ -532,8 +532,8 @@
         "fr": {
           "question": "Quel ouvrage médical est le plus connu d’Ibn Sina ?",
           "options": [
-            "Le Canon de la médecine",
             "Le Prince",
+            "Le Canon de la médecine",
             "La Muqaddima",
             "La République"
           ],
@@ -542,8 +542,8 @@
         "it": {
           "question": "Per quale opera medica è più noto Ibn Sina?",
           "options": [
-            "Il Canone della medicina",
             "Il Principe",
+            "Il Canone della medicina",
             "La Muqaddima",
             "La Repubblica"
           ],
@@ -552,8 +552,8 @@
         "de": {
           "question": "Für welches medizinische Werk ist Ibn Sina besonders bekannt?",
           "options": [
-            "Der Kanon der Medizin",
             "Der Fürst",
+            "Der Kanon der Medizin",
             "Die Muqaddima",
             "Der Staat"
           ],
@@ -563,14 +563,14 @@
     },
     {
       "id": "question-3",
-      "correct_option": 0,
+      "correct_option": 2,
       "i18n": {
         "ar": {
           "question": "إلى أي لغة تُرجم القانون في الطب في العصور الوسطى؟",
           "options": [
-            "اللاتينية",
-            "اليابانية",
             "الصينية",
+            "اليابانية",
+            "اللاتينية",
             "الروسية"
           ],
           "explanation": "تُرجم الكتاب إلى اللاتينية وانتشر في التعليم الطبي الأوروبي."
@@ -578,9 +578,9 @@
         "en": {
           "question": "Into which language was the Canon translated in the Middle Ages?",
           "options": [
-            "Latin",
-            "Japanese",
             "Chinese",
+            "Japanese",
+            "Latin",
             "Russian"
           ],
           "explanation": "The book was translated into Latin and circulated in European medical education."
@@ -588,9 +588,9 @@
         "fr": {
           "question": "Dans quelle langue le Canon fut-il traduit au Moyen Âge ?",
           "options": [
-            "Le latin",
-            "Le japonais",
             "Le chinois",
+            "Le japonais",
+            "Le latin",
             "Le russe"
           ],
           "explanation": "L’ouvrage fut traduit en latin et circula dans l’enseignement médical européen."
@@ -598,9 +598,9 @@
         "it": {
           "question": "In quale lingua fu tradotto il Canone nel Medioevo?",
           "options": [
-            "Latino",
-            "Giapponese",
             "Cinese",
+            "Giapponese",
+            "Latino",
             "Russo"
           ],
           "explanation": "Il libro fu tradotto in latino e circolò nell’insegnamento medico europeo."
@@ -608,9 +608,9 @@
         "de": {
           "question": "In welche Sprache wurde der Kanon im Mittelalter übersetzt?",
           "options": [
-            "Latein",
-            "Japanisch",
             "Chinesisch",
+            "Japanisch",
+            "Latein",
             "Russisch"
           ],
           "explanation": "Das Buch wurde ins Lateinische übersetzt und in Europa verbreitet."
@@ -619,55 +619,55 @@
     },
     {
       "id": "question-4",
-      "correct_option": 0,
+      "correct_option": 3,
       "i18n": {
         "ar": {
           "question": "لماذا ندرس كتب الطب القديمة اليوم؟",
           "options": [
-            "لفهم تاريخ المعرفة",
+            "لأنها تجارب حديثة",
             "لاستخدامها بدل الطب الحديث",
             "لأنها لا تتغير",
-            "لأنها تجارب حديثة"
+            "لفهم تاريخ المعرفة"
           ],
           "explanation": "تساعدنا الكتب القديمة على فهم تطور الطب، لكنها لا تحل محل الرعاية الطبية المبنية على الأدلة الحديثة."
         },
         "en": {
           "question": "Why do we study old medical books today?",
           "options": [
-            "To understand the history of knowledge",
+            "Because they contain modern experiments",
             "To replace modern medicine",
             "Because they never change",
-            "Because they contain modern experiments"
+            "To understand the history of knowledge"
           ],
           "explanation": "Old books help explain medical history but do not replace evidence-based modern care."
         },
         "fr": {
           "question": "Pourquoi étudie-t-on aujourd’hui les anciens livres médicaux ?",
           "options": [
-            "Pour comprendre l’histoire du savoir",
+            "Parce qu’ils contiennent des expériences modernes",
             "Pour remplacer la médecine moderne",
             "Parce qu’ils ne changent jamais",
-            "Parce qu’ils contiennent des expériences modernes"
+            "Pour comprendre l’histoire du savoir"
           ],
           "explanation": "Ils éclairent l’histoire de la médecine, mais ne remplacent pas les soins modernes fondés sur les preuves."
         },
         "it": {
           "question": "Perché studiamo oggi gli antichi libri di medicina?",
           "options": [
-            "Per capire la storia del sapere",
+            "Perché contengono esperimenti moderni",
             "Per sostituire la medicina moderna",
             "Perché non cambiano mai",
-            "Perché contengono esperimenti moderni"
+            "Per capire la storia del sapere"
           ],
           "explanation": "Aiutano a capire la storia della medicina, ma non sostituiscono le cure moderne basate su prove."
         },
         "de": {
           "question": "Warum lesen wir heute alte medizinische Bücher?",
           "options": [
-            "Um die Wissensgeschichte zu verstehen",
+            "Weil sie moderne Experimente enthalten",
             "Um moderne Medizin zu ersetzen",
             "Weil sie sich nie ändern",
-            "Weil sie moderne Experimente enthalten"
+            "Um die Wissensgeschichte zu verstehen"
           ],
           "explanation": "Sie erklären die Medizingeschichte, ersetzen aber keine evidenzbasierte moderne Versorgung."
         }
