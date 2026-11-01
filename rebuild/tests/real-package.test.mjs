@@ -142,7 +142,9 @@ test('Tawfiq al-Hakim unified story package validates with five-language text, a
   assert.equal(story.i18n.ar.narrator_grade, 'الصف الثالث الابتدائي');
   assert.equal(story.images.length, 2);
   assert.equal(story.quiz.length, 5);
-  assert.ok(story.sources.length >= 2, 'Tawfiq al-Hakim story must retain at least two cited sources; the package currently contains five');
+  assert.equal(story.sources.length, 5, 'five editorial sources remain in the sources collection');
+  assert.ok(story.images.some(image => image.source_url === 'https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg'));
+  assert.ok(story.images.some(image => image.source_url === 'https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg'), 'the two image citations remain attached to their image records');
   for (const lang of langs) {
     assert.ok(story.i18n[lang].blocks.length >= 9, 'story block count below the established minimum in ' + lang);
     assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
