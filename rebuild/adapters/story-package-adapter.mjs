@@ -203,7 +203,7 @@ export function legacyToStory(input, { slug, coverOverride } = {}) {
   if (!section) fail('unsupported section_key: ' + input.section_key);
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
   const variant = VARIANT_MAP[input.visual_design];
-  if (!variant) fail('visual_design has no lossless unified story mapping: ' + input.visual_design);
+  if (!variant) fail('visual_design has no lossless story mapping: ' + input.visual_design);
   if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('legacy package requires between two and five gallery images');
   const i18n = {};
   for (const lang of LANGUAGES) {
