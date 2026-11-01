@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { legacyToStory, storyToLegacy } from '../adapters/story-package-adapter.mjs';
+import { legacyToStory, storyToLegacy, storyToAdminDraft } from '../adapters/story-package-adapter.mjs';
 
 const langs = ['en', 'fr', 'it', 'de'];
 function image(label) {
@@ -70,6 +70,27 @@ test('legacy package to unified story and back preserves original text, translat
     assert.equal(back.translations[lang].karma_text, v1.translations[lang].karma_text);
     assert.equal(back.translations[lang].grade, v1.translations[lang].grade);
   }
+});
+
+test('preserves every legacy quiz question when a package contains more than five', () => {
+  const legacy = fixture();
+  const sixth = JSON.parse(JSON.stringify(legacy.question_bank.questions[0]));
+  sixth.q = 'Question six ar';
+  sixth.e = 'Explanation six ar';
+  sixth.i18n = Object.fromEntries(langs.map(lang => [lang, {
+    q: 'Question six ' + lang,
+    o: ['A','B','C','D'].map(x => x + ' ' + lang),
+    e: 'Explanation six ' + lang
+  }]));
+  legacy.question_bank.questions.push(sixth);
+  const canonical = legacyToStory(legacy, { slug: 'historical-figure' });
+  assert.equal(canonical.quiz.length, 6);
+  assert.equal(canonical.quiz[5].id, 'question-6');
+  assert.equal(canonical.quiz[5].correct_option, sixth.a);
+  assert.equal(canonical.quiz[5].i18n.de.question, 'Question six de');
+  const adminDraft = storyToAdminDraft(canonical);
+  assert.equal(adminDraft.question_bank.questions.length, 6);
+  assert.equal(adminDraft.question_bank.questions[5].q, sixth.q);
 });
 
 test('refuses ambiguous source lines rather than silently flattening source citations', () => {
