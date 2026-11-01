@@ -151,10 +151,13 @@ Deno.serve(async (req: Request) => {
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
-  const savedStoryPackage: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
+  const savedStoryPackageRaw: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
     (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
     (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
     (sourceMeta.v2_only_draft === true ? sourceMeta.v2_package : null);
+  const savedStoryPackage: any = savedStoryPackageRaw && typeof savedStoryPackageRaw === "object"
+    ? { ...savedStoryPackageRaw, format: savedStoryPackageRaw.format === "KHALEDOON_STORY_V2" ? "KHALEDOON_STORY" : savedStoryPackageRaw.format }
+    : null;
   let hasStoryArtifacts = false;
   try {
     hasStoryArtifacts = body.files.some((file: any) =>
