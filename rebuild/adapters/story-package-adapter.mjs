@@ -1,4 +1,4 @@
-import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261028-v2-admin-6';
+import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261101-story-package-adapter-1';
 
 /**
  * Conservative legacy-package ↔ unified-story adapter for Khaledoon story packages.
