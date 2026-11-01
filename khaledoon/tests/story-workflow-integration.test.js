@@ -1002,20 +1002,25 @@ test('story builder derives the site base path from its current deployment inste
 });
 
 
-test('legacy publisher requires a source record and blocks V2-only drafts server-side', function () {
+test('unified publisher requires an approved canonical package from its source record', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('requires_submission_id: true'));
-  assert.ok(publisher.includes('rejects_v2_only_drafts: true'));
+  assert.ok(publisher.includes('supports_v2_publish: true'));
   assert.ok(publisher.includes('body.submission_table'));
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
-  assert.ok(publisher.includes('hasV2Artifacts'));
-  assert.ok(publisher.indexOf('const submissionTable') < publisher.indexOf('const ref = await github'), 'submission guard must run before any branch ref lookup');
-  assert.ok(publisher.indexOf('const hasV2Artifacts') < publisher.indexOf('const ref = await github'), 'V2 file rejection must run before any GitHub write path');
-  assert.ok(publisher.includes('return reply(409'));
+  assert.ok(publisher.includes('const savedV2Package: any ='));
+  assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
+  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
+  var packageGuard = publisher.indexOf('if (isV2OnlyDraft) {');
+  var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
+  var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
+  assert.ok(packageGuard >= 0 && branchWrite > packageGuard && prWrite > packageGuard, 'canonical package checks must run before branch or PR creation');
+  assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
+  assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
 });
