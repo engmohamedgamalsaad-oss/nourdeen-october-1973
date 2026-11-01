@@ -1,0 +1,45 @@
+name: New story style gate
+
+# Runs the automatic style check (rebuild/validate-style.mjs) on every V2 story
+# page ADDED by a pull request. Existing stories are not re-checked, so older
+# pages are never blocked. It does not replace human review of facts and translations.
+on:
+  pull_request:
+    paths:
+      - "stories/**/data.v2.json"
+      - "rebuild/validate-style.mjs"
+      - "rebuild/validate-package.mjs"
+      - ".github/workflows/new-story-style-gate.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  style-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Style-check newly added V2 story pages
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'stories/*/*/data.v2.json')
+          if [ -z "$files" ]; then
+            echo "No new V2 story pages in this pull request; nothing to style-check."
+            exit 0
+          fi
+          status=0
+          for f in $files; do
+            echo "== $f"
+            node rebuild/validate-package.mjs --style "$f" || status=1
+          done
+          exit $status
