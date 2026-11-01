@@ -24,7 +24,7 @@ var sectionLabels={ar:{october:'حكايات أكتوبر 1973',history:'الت�
 var current=(function(){try{var saved=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar';return langs.indexOf(saved)>=0?saved:'ar'}catch(e){return 'ar'}})(),story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
-var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261030-shared-reader-1',ROOT).href;document.head.appendChild(enhanceCss);
+var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261101-story-reader-1',ROOT).href;document.head.appendChild(enhanceCss);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
@@ -94,7 +94,7 @@ $('intro-start').addEventListener('click',closeIntro);$('intro-close').addEventL
 $('print-story').addEventListener('click',function(){window.print()});
 $('share-copy').addEventListener('click',function(){var b=$('share-copy');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href.split('#')[0]).then(function(){b.textContent=extraUi[current].copied}).catch(function(){b.textContent=extraUi[current].copyFail})}else{b.textContent=extraUi[current].copyFail}});
 $('lightbox-close').addEventListener('click',closeLightbox);$('image-lightbox').addEventListener('click',function(e){if(e.target===$('image-lightbox'))closeLightbox()});document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeLightbox();if(!$('story-intro-modal').hidden)closeIntro()}});
-function initReactions(){if(window.__khV2ReactionsStarted)return;window.__khV2ReactionsStarted=true;if(!document.body.dataset.storySlug)document.body.dataset.storySlug=story.slug||'v2-story';if(!window.I18N)window.I18N={lang:function(){return current},t:function(key){return key}};var sc=document.createElement('script');sc.src=new URL('assets/shared/reactions.js?v=20261028-v2-reactions-1',ROOT).href;sc.async=false;document.body.appendChild(sc)}
+function initReactions(){if(window.__khV2ReactionsStarted)return;window.__khV2ReactionsStarted=true;if(!document.body.dataset.storySlug)document.body.dataset.storySlug=story.slug||'v2-story';if(!window.I18N)window.I18N={lang:function(){return current},t:function(key){return key}};var sc=document.createElement('script');sc.src=new URL('assets/shared/reactions.js?v=20261101-story-reactions-1',ROOT).href;sc.async=false;document.body.appendChild(sc)}
 var path=new URLSearchParams(location.search).get('story')||readerScript.dataset.storyPath;
 if(!path||path.startsWith('/')||path.split('/').some(function(p){return p==='..'||p==='.'})||!path.endsWith('.json')){$('status').textContent='حدد حزمة JSON صالحة عبر ?story=PATH.json داخل المستودع.';return}
 fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
