@@ -96,7 +96,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-10-28-v2-draft-guard-1", v2_publish_version: "2026-10-31-v2-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-11-01-story-publisher-1", story_publish_version: "2026-11-01-story-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -149,20 +149,23 @@ Deno.serve(async (req: Request) => {
   if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
-  const isV2OnlyDraft = sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
-  const savedV2Package: any = (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
+  const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
+    sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
+  const savedStoryPackage: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
+    (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
+    (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
     (sourceMeta.v2_only_draft === true ? sourceMeta.v2_package : null);
-  let hasV2Artifacts = false;
+  let hasStoryArtifacts = false;
   try {
-    hasV2Artifacts = body.files.some((file: any) =>
-      /\/data\.v2\.json$/.test(file.path) ||
-      /KHALEDOON_STORY_V2|data\.v2\.json|data-kh-v2-reader/.test(contentForSafetyScan(file))
+    hasStoryArtifacts = body.files.some((file: any) =>
+      /\/(?:story|data\.v2)\.json$/.test(file.path) ||
+      /KHALEDOON_STORY(?:_V2)?|(?:story|data)\.v2\.json|data-kh-(?:story|v2)-reader/.test(contentForSafetyScan(file))
     );
   } catch {
     return reply(400, { error: "تعذر فك ترميز أحد الملفات للتحقق من توافق الحكاية." });
   }
-  if (isV2OnlyDraft) {
-    if (!savedV2Package || savedV2Package.format !== "KHALEDOON_STORY_V2") {
+  if (isStoryOnlyDraft) {
+    if (!savedStoryPackage || !["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(savedStoryPackage.format)) {
       return reply(409, { error: "حزمة V2 الأصلية غير موجودة في سجل الإدارة؛ لم ننشئ طلب مراجعة." });
     }
     const review = sourceMeta.preview_review && typeof sourceMeta.preview_review === "object"
@@ -171,7 +174,7 @@ Deno.serve(async (req: Request) => {
       return reply(409, { error: "يجب اعتماد معاينة الحكاية قبل إنشاء طلب مراجعة للنشر." });
     }
     try {
-      const packageFiles = body.files.filter((file: any) => /\/data\.v2\.json$/.test(file.path));
+      const packageFiles = body.files.filter((file: any) => /\/(?:story|data\.v2)\.json$/.test(file.path));
       const pageFiles = body.files.filter((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
       const quizFiles = body.files.filter((file: any) => /^stories\/quizzes\/[0-9]{3}\.json$/.test(file.path));
       const packageFile = packageFiles[0], pageFile = pageFiles[0], quizFile = quizFiles[0];
@@ -181,7 +184,7 @@ Deno.serve(async (req: Request) => {
         return reply(400, { error: "حزمة V2 للنشر تحتاج صفحة index.html وdata.v2.json وبنك الأسئلة والفهرس وبيانات الخريطة." });
       }
       const packageData = JSON.parse(contentForSafetyScan(packageFile));
-      if (packageData.format !== "KHALEDOON_STORY_V2" || stableJson(packageData) !== stableJson(savedV2Package)) {
+      if (!["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(packageData.format) || stableJson(packageData) !== stableJson(savedStoryPackage)) {
         return reply(409, { error: "ملف data.v2.json لا يطابق حزمة V2 المحفوظة والمعتمدة في سجل الإدارة." });
       }
       if (!Object.prototype.hasOwnProperty.call(packageData, "map_location")) {
@@ -195,10 +198,10 @@ Deno.serve(async (req: Request) => {
       const storyRoot = storySection && storyId ? "stories/" + storySection + "/" + storyId + "/" : "";
       const pageHtml = contentForSafetyScan(pageFile);
       if (!storyRoot || packageData.section !== storySection ||
-          !pageHtml.includes("data-kh-v2-reader") ||
-          !pageHtml.includes('data-story-path="data.v2.json"') ||
+          !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
+          !(pageHtml.includes('data-story-path="story.json"') || pageHtml.includes('data-story-path="data.v2.json"')) ||
           !pageHtml.includes('data-story-slug="' + storyId + '"') ||
-          packageFile.path !== storyRoot + "data.v2.json") {
+          packageFile.path !== storyRoot + (packageFile.path.endsWith("/story.json") ? "story.json" : "data.v2.json")) {
         return reply(400, { error: "مسار صفحة V2 أو ربط القارئ لا يطابق القسم ورقم الحكاية." });
       }
       if (quizFile.path !== "stories/quizzes/" + storyId + ".json") {
@@ -265,7 +268,7 @@ Deno.serve(async (req: Request) => {
       const detail = error instanceof Error ? error.message : "Unknown error";
       return reply(400, { error: "تعذر التحقق من حزمة V2 قبل إنشاء طلب المراجعة.", detail: detail.slice(0, 400) });
     }
-  } else if (hasV2Artifacts) {
+  } else if (hasStoryArtifacts) {
     return reply(409, { error: "ملفات V2 لا يمكن إرسالها من سجل لا يحمل حزمة V2 معتمدة." });
   }
 
