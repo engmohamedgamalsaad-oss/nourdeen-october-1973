@@ -245,6 +245,31 @@ export function legacyToStory(input, { slug, coverOverride } = {}) {
     map_location: map === null ? null : clone(map)
   };
 }
+
+/**
+ * Normalize supported package generations to the current canonical story shape.
+ * Legacy V1 conversion is lossless and requires a caller-supplied slug when
+ * building a real page. Validation-only callers may use a clearly temporary
+ * slug; that value must never be persisted or published.
+ */
+export function normalizeStoryFormat(input, { slug, coverOverride, validationOnly = false } = {}) {
+  requireObject(input, 'story package');
+  if (input.format === STORY_FORMAT) return clone(input);
+  if (input.format === LEGACY_STORY_FORMAT) {
+    const story = clone(input);
+    story.format = STORY_FORMAT;
+    return story;
+  }
+  const legacy = input.format === LEGACY_PACKAGE_FORMAT ||
+    (input.format === undefined && ['section_key','visual_design','original_body','translations','images'].every(key => Object.hasOwn(input, key)));
+  if (legacy) {
+    const stableSlug = slug || input.slug || (validationOnly ? 'legacy-package-validation-only' : '');
+    if (!stableSlug) fail('caller must provide a stable slug when normalizing a legacy package');
+    return legacyToStory(input, { slug: stableSlug, coverOverride });
+  }
+  fail('unsupported story package format: ' + String(input.format || '(missing)'));
+}
+
 function imageToLegacy(image) {
   if (!['archival','illustration','diagram','map'].includes(image.kind)) {
     fail('unified story image kind "' + image.kind + '" has no valid legacy representation');
