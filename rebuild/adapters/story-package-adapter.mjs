@@ -1,19 +1,15 @@
 import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261028-v2-admin-6';
 
 /**
- * Conservative legacy package ↔ unified story adapter for Khaledoon story packages.
+ * Conservative legacy-package ↔ unified-story adapter for Khaledoon story packages.
  *
  * Conversion deliberately rejects shapes that cannot be represented without
  * guessing or silently discarding data. Keep this module isolated until reader,
  * admin, and import integrations have their own compatibility tests.
  */
-export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_LEGACY';
-export const LEGACY_PACKAGE_FORMAT_ALIASES = ['KH_STORY_PACKAGE_LEGACY', 'KH_STORY_PACKAGE_V1'];
+export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_V1';
 export const LEGACY_STORY_FORMAT = 'KHALEDOON_STORY_V2';
 export const STORY_FORMAT = 'KHALEDOON_STORY';
-// Compatibility exports retained for older integrations during the migration window.
-export const LEGACY_PACKAGE_FORMAT = LEGACY_PACKAGE_FORMAT;
-export const STORY_FORMAT = STORY_FORMAT;
 const isStoryFormat = value => value === STORY_FORMAT || value === LEGACY_STORY_FORMAT;
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
@@ -39,7 +35,7 @@ const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const encodeOrganizationMarker = value => String(value).replace(/[%\]\r\n]/g, ch => '%' + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
 const clone = x => JSON.parse(JSON.stringify(x));
-function fail(message) { throw new Error('legacy story conversion stopped safely: ' + message); }
+function fail(message) { throw new Error('legacy/unified story conversion stopped safely: ' + message); }
 function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an object'); }
 function isDidYouKnowText(text) {
   return /^هل تعلم[؟?:]|^did you know\?|^le saviez-vous\s*\?|^lo sapevi\s*\?|^wusstest du\s*\?/i.test(text);
@@ -191,7 +187,7 @@ function normalizeLegacyPackage(input) {
   const hasLegacySignature = ['section_key','visual_design','original_body','translations','images']
     .every(key => Object.hasOwn(v1, key));
   if (v1.format === undefined && hasLegacySignature) v1.format = LEGACY_PACKAGE_FORMAT;
-  if (!LEGACY_PACKAGE_FORMAT_ALIASES.includes(v1.format)) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy package');
+  if (v1.format !== LEGACY_PACKAGE_FORMAT) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy legacy package');
   if (!nonempty(v1.body) && nonempty(v1.current_body)) v1.body = v1.current_body;
   if (typeof v1.question_bank === 'string') {
     try { v1.question_bank = JSON.parse(v1.question_bank); }
@@ -207,7 +203,7 @@ export function legacyToStory(input, { slug, coverOverride } = {}) {
   if (!section) fail('unsupported section_key: ' + input.section_key);
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
   const variant = VARIANT_MAP[input.visual_design];
-  if (!variant) fail('visual_design has no lossless story mapping: ' + input.visual_design);
+  if (!variant) fail('visual_design has no lossless unified story mapping: ' + input.visual_design);
   if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('legacy package requires between two and five gallery images');
   const i18n = {};
   for (const lang of LANGUAGES) {
@@ -267,7 +263,7 @@ function imageToLegacy(image) {
 }
 export function storyToLegacy(input) {
   requireObject(input, 'unified story');
-  if (!isStoryFormat(input.format)) fail('expected ' + STORY_FORMAT + ' (legacy package formats remain readable during migration)');
+  if (!isStoryFormat(input.format)) fail('expected ' + STORY_FORMAT + ' or a supported legacy story package');
   const contractErrors = validateForAdminBridge(input);
   if (contractErrors.length) fail('unified story admin-bridge validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
@@ -491,6 +487,3 @@ export function storyToAdminDraft(input) {
     translations, question_bank
   };
 }
-
-// Canonical semantic aliases; legacy names remain exported for old integrations.
-
