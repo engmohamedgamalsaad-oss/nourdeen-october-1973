@@ -93,7 +93,7 @@ test('unified package is mandatory for every non-October story, including legacy
   assert.equal(requires({ id: 'new-123', section: 'science', story_meta: {} }), true, 'new story must use the unified package');
   assert.equal(requires({ id: 'old-october-123', _t: 'o', status: 'published', story_meta: {} }), false, 'October submission table keeps its existing workflow');
   assert.equal(requires({ id: 'old-october-456', section: 'october', status: 'published', story_meta: {} }), false, 'October section records keep their existing workflow');
-  assert.equal(requires({ id: 'old-october-789', story_meta: { pending_draft: { section_key: 'october' } } }), false, 'October pending drafts remain excluded');
+  assert.equal(requires({ id: 'old-non-october-789', section: 'science', story_meta: { pending_draft: { section_key: 'october' } } }), true, 'pending draft metadata cannot exempt a non-October source record from the unified package');
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'non-October records must reject the old package format');
   assert.ok(html.includes('if(requireV2ForNewStory)nextMeta.v2_contract_required=true'));
   assert.ok(html.includes('if(v2OnlyDraft){nextMeta.v2_only_draft=true'));
