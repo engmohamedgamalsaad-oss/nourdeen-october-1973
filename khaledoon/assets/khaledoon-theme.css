@@ -3,7 +3,7 @@
    يتجاهل الملف بالكامل فيبقى التصميم القديم كما هو (تدهور آمن).
    الوضع التلقائي يتبع النظام، واختيار الزائر يُحفظ في المفتاح المشترك kh-theme.
    صفحة حكايات أكتوبر (تحتوي .hero-home) مستثناة من هذه الطبقة: تصميمها داكن بصورة غلاف ثابتة ويحتاج معالجة خاصة. */
-@import url("../../assets/shared/khaledoon-snap.css?v=20261031-1");
+@import url("../../assets/shared/khaledoon-snap.css?v=20261101-header-flow-1");
 :root{color-scheme:light dark;--kh-ease:cubic-bezier(.2,.7,.2,1)}
 :root[data-theme=light]{color-scheme:light}
 :root[data-theme=dark]{color-scheme:dark}
@@ -37,7 +37,10 @@
   background-color:var(--kh-c2);background-repeat:no-repeat;background-attachment:scroll;
   color:var(--kh-ink);min-height:100dvh;
 
-  /* ---- الشريط العلوي ---- */
+  /* ---- الشريط العلوي: يمرّ مع الصفحة ولا يظل مثبتًا أثناء القراءة ---- */
+  header:not(.topbar),.topbar{
+    position:static!important;top:auto!important;
+  }
   header:not(.topbar),.topbar:not(:has(.wrap)){
     background:light-dark(rgba(255,253,246,.9),color-mix(in srgb,var(--kh-base) 6%,rgba(5,9,22,.92)));
     -webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);
