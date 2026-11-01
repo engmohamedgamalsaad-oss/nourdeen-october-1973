@@ -760,7 +760,7 @@ async function svgArtworkRegression(browser, base, origin) {
 }
 
 
-async function adminV2ActualImportRegression(browser, base, origin) {
+async function adminStoryActualImportRegression(browser, base, origin) {
   const hard = [];
   const ctx = await newContext(browser, origin, 'desktop');
   const seed = {
@@ -795,14 +795,14 @@ async function adminV2ActualImportRegression(browser, base, origin) {
       rights: lang === 'ar' ? 'Illustration rights' : 'Rights ' + lang
     }]))
   });
-  const packageV2 = {
-    format: 'KHALEDOON_STORY_V2',
+  const storyPackage = {
+    format: 'KHALEDOON_STORY',
     slug: 'e2e-v2-import-story',
     section: 'history',
     design: { variant: 'portrait-biography', accent: '#d5b7ff' },
     original_body: 'النص الأصلي الذي وصل من صاحب الاقتراح دون تغيير.',
     i18n: Object.fromEntries(langs.map((lang) => [lang, {
-      title: 'V2 Import Test ' + lang,
+      title: 'Unified Story Import Test ' + lang,
       subtitle: 'A test subtitle ' + lang,
       summary: 'A test subtitle ' + lang,
       student_name: 'Student ' + lang,
@@ -881,7 +881,7 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     await card.locator('summary').click();
     const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
-    await textarea.fill(JSON.stringify(packageV2));
+    await textarea.fill(JSON.stringify(storyPackage));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
     await importButton.click();
@@ -891,14 +891,14 @@ async function adminV2ActualImportRegression(browser, base, origin) {
       throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
     }
     const importStatus = await page.locator('.ai-status[role="status"]').innerText();
-    if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
+    if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('story import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
-      hard.push('V2 import did not preserve a readable Arabic source organization in the saved draft.');
+      hard.push('story import did not preserve a readable Arabic source organization in the saved draft.');
     }
     if (String(savedRecord.sources || '').includes('%D8%')) {
-      hard.push('V2 source organization was percent-encoded in Arabic instead of remaining readable.');
+      hard.push('story source organization was percent-encoded in Arabic instead of remaining readable.');
     }
-    if (savedRecord.status === 'published') hard.push('V2 import unexpectedly published the story instead of saving a draft.');
+    if (savedRecord.status === 'published') hard.push('story import unexpectedly published the story instead of saving a draft.');
     const popup = await popupPromise;
     if (popup) await popup.waitForURL(/preview\.html/, { timeout: 15000 }).catch(() => {});
     if (popup) {
@@ -906,33 +906,33 @@ async function adminV2ActualImportRegression(browser, base, origin) {
       await popup.waitForFunction(() => document.readyState === 'complete' && document.body, null, { timeout: 10000 }).catch(() => {});
       const visibleText = await popup.locator('body').innerText().catch(() => '');
       if (visibleText.includes('[org:')) hard.push('Reader preview leaked the internal [org: source marker.');
-      if (!visibleText.includes('V2 Import Test')) hard.push('V2 draft preview did not render the imported title.');
+      if (!visibleText.includes('Unified Story Import Test')) hard.push('story draft preview did not render the imported title.');
     } else {
-      hard.push('V2 import saved but did not open its expected preview popup.');
+      hard.push('story import saved but did not open its expected preview popup.');
     }
     return { checks: [{ ok: hard.length === 0, savedAsDraft: savedRecord.status !== 'published', sourceMarkerReadable: !String(savedRecord.sources || '').includes('%D8%'), previewOpened: !!popup }], hard };
   } catch (e) {
-    hard.push('Actual V2 paste/import browser flow failed: ' + String(e.message || e).slice(0,1800));
+    hard.push('Actual story paste/import browser flow failed: ' + String(e.message || e).slice(0,1800));
     return { checks: [{ ok: false }], hard };
   } finally {
     await ctx.close();
   }
 }
 
-async function adminV2ModuleRegression(browser, base, origin) {
+async function adminStoryModuleRegression(browser, base, origin) {
   const hard = [];
   const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
     await page.waitForFunction(() => {
-      const a = window.KHStoryV2Adapter;
-      return !!a && a.V2_FORMAT === 'KHALEDOON_STORY_V2' &&
+      const a = window.KHStoryAdapter;
+      return !!a && a.STORY_FORMAT === 'KHALEDOON_STORY' &&
         typeof a.validateForAdminBridge === 'function' && typeof a.v2ToV1 === 'function';
     }, null, { timeout: 10000 });
     return { checks: [{ ok: true, moduleLoaded: true }], hard };
   } catch (e) {
-    hard.push('Admin V2 import module did not load: ' + String(e.message || e).split('\\n')[0]);
+    hard.push('Admin story import module did not load: ' + String(e.message || e).split('\\n')[0]);
     return { checks: [{ ok: false, moduleLoaded: false }], hard };
   } finally {
     await ctx.close();
@@ -953,12 +953,12 @@ async function adminV2ModuleRegression(browser, base, origin) {
     results.introPopup = await introPopupRegression(browser, base, origin);
     results.svgArtwork = await svgArtworkRegression(browser, base, origin);
     results.targetArabicAudit = await targetArabicTextAudit(browser, base, origin);
-    results.adminV2Import = await adminV2ModuleRegression(browser, base, origin);
-    results.adminV2ActualImport = await adminV2ActualImportRegression(browser, base, origin);
+    results.adminStoryImport = await adminStoryModuleRegression(browser, base, origin);
+    results.adminStoryActualImport = await adminStoryActualImportRegression(browser, base, origin);
   } finally { await browser.close(); server.close(); }
 
   const dedupe = (a) => [...new Set(a)];
-  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminV2Import ? results.adminV2Import.hard : [], results.adminV2ActualImport ? results.adminV2ActualImport.hard : [], results.cinematicGlobe ? results.cinematicGlobe.hard : []));
+  const hard = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.hard).concat(results.introPopup ? results.introPopup.hard : [], results.svgArtwork ? results.svgArtwork.hard : [], results.targetArabicAudit ? results.targetArabicAudit.hard : [], results.adminStoryImport ? results.adminStoryImport.hard : [], results.adminStoryActualImport ? results.adminStoryActualImport.hard : [], results.cinematicGlobe ? results.cinematicGlobe.hard : []));
   const warn = dedupe([...results.flow, ...results.sweep].flatMap((r) => r.warn));
   results.summary = { hard: hard.length, warnings: warn.length };
   results.hardFailures = hard; results.warnings = warn;
@@ -972,8 +972,8 @@ async function adminV2ModuleRegression(browser, base, origin) {
   console.log(`INTRO POPUP: ${results.introPopup ? results.introPopup.checks.filter((c) => c.ok).length : 0}/${results.introPopup ? results.introPopup.checks.length : 0} checks passed.`);
   console.log(`SVG ARTWORK: ${results.svgArtwork ? results.svgArtwork.checks.filter((c) => c.ok).length : 0}/${results.svgArtwork ? results.svgArtwork.checks.length : 0} checks passed.`);
   console.log(`TARGET ARABIC TEXT AUDIT: ${results.targetArabicAudit ? results.targetArabicAudit.rows.length : 0} page/language samples recorded; see report.targetArabicAudit for each Arabic fragment.`);
-  console.log(`ADMIN V2 IMPORT MODULE: ${results.adminV2Import ? results.adminV2Import.checks.filter((c) => c.ok).length : 0}/1 module checks passed.`);
-  console.log(`ADMIN V2 ACTUAL IMPORT: ${results.adminV2ActualImport ? results.adminV2ActualImport.checks.filter((c) => c.ok).length : 0}/1 real paste/save/preview checks passed.`);
+  console.log(`ADMIN STORY IMPORT MODULE: ${results.adminStoryImport ? results.adminStoryImport.checks.filter((c) => c.ok).length : 0}/1 module checks passed.`);
+  console.log(`ADMIN STORY ACTUAL IMPORT: ${results.adminStoryActualImport ? results.adminStoryActualImport.checks.filter((c) => c.ok).length : 0}/1 real paste/save/preview checks passed.`);
   console.log(`HARD failures: ${hard.length}   WARNINGS: ${warn.length}`);
   hard.slice(0, 60).forEach((m) => console.log('  FAIL ' + m));
   if (hard.length > 60) console.log(`  ... ${hard.length - 60} more (see --out report)`);
