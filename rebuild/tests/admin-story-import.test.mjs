@@ -23,7 +23,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.match(html, /pkg=storyAdapter\.storyToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
   assert.ok(html.includes("package-review.html?draft=1"), 'unified story-only drafts should use the full-package read-only preview');
-  assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
+  assert.match(builder, /package-review\.html\?v=20261101-story-review-1/);
   assert.ok(html.includes('function isunified storyOnlyDraftRecord(it)'), 'admin should identify top-level and pending unified story-only drafts');
   assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative unified story package');
   assert.ok(html.includes("storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null)"), 'manual preview should open the saved unified story package without persisting legacy projection edits');
