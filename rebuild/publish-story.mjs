@@ -49,7 +49,7 @@ async function nextId(index) {
     for (const section of SECTIONS) {
       if (found) break;
       const root = 'stories/' + section + '/' + id + '/';
-      for (const file of ['index.html', 'data.json', 'story.json']) {
+      for (const file of ['index.html', 'data.json', 'story.json', 'data.v2.json']) {
         if (await pathExists(root + file)) { found = true; break; }
       }
     }
@@ -178,7 +178,9 @@ async function checkLocalImages(story) {
     if (!response.ok) fail('ملف الصورة المحلي غير موجود أو غير قابل للوصول (' + response.status + '): ' + path);
   }
 }
-export async function buildV2StoryFiles(story, options = {}) {
+export async function buildStoryFiles(story, options = {}) {
+  story = JSON.parse(JSON.stringify(story));
+  if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
   const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
   const savedPackage = getSavedPackage(options.record, options.draft, meta);
   if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة V2 التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
@@ -247,5 +249,5 @@ export async function buildV2StoryFiles(story, options = {}) {
   ];
   return { id, section: story.section, path: root, files, format: story.format };
 }
-window.KHStoryPublisher = { buildFiles: buildV2StoryFiles };
+window.KHStoryPublisher = { buildFiles: buildStoryFiles };
 window.KHStoryV2Publisher = window.KHStoryPublisher; // temporary compatibility alias
