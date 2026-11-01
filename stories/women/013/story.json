@@ -778,13 +778,13 @@
   "quiz": [
     {
       "id": "reign-period",
-      "correct_option": 1,
+      "correct_option": 0,
       "i18n": {
         "ar": {
           "question": "في أي عصر من تاريخ مصر القديمة حكمت الملكة حتشبسوت؟",
           "options": [
-            "عصر الدولة القديمة",
             "عصر الدولة الحديثة",
+            "عصر الدولة القديمة",
             "عصر الدولة الوسطى",
             "العصر المتأخر"
           ],
@@ -793,8 +793,8 @@
         "en": {
           "question": "In which era of ancient Egyptian history did Queen Hatshepsut rule?",
           "options": [
-            "Old Kingdom",
             "New Kingdom",
+            "Old Kingdom",
             "Middle Kingdom",
             "Late Period"
           ],
@@ -803,8 +803,8 @@
         "fr": {
           "question": "À quelle époque de l'histoire de l'Égypte ancienne la reine Hatshepsout a-t-elle régné ?",
           "options": [
-            "L'Ancien Empire",
             "Le Nouvel Empire",
+            "L'Ancien Empire",
             "Moyen Empire",
             "Basse Époque"
           ],
@@ -813,8 +813,8 @@
         "it": {
           "question": "In quale epoca della storia dell'antico Egitto ha regnato la regina Hatshepsut?",
           "options": [
-            "Antico Regno",
             "Nuovo Regno",
+            "Antico Regno",
             "Medio Regno",
             "Tardo Periodo"
           ],
@@ -823,8 +823,8 @@
         "de": {
           "question": "In welcher Epoche der altägyptischen Geschichte regierte Königin Hatschepsut?",
           "options": [
-            "Altes Reich",
             "Neues Reich",
+            "Altes Reich",
             "Mittleres Reich",
             "Spätzeit"
           ],
@@ -834,13 +834,13 @@
     },
     {
       "id": "punts-expedition",
-      "correct_option": 0,
+      "correct_option": 1,
       "i18n": {
         "ar": {
           "question": "ما هي البلاد التي أرسلت إليها حتشبسوت بعثتها التجارية الشهيرة؟",
           "options": [
-            "بلاد بونت",
             "بلاد بابل",
+            "بلاد بونت",
             "بلاد اليونان",
             "بلاد فارس"
           ],
@@ -849,8 +849,8 @@
         "en": {
           "question": "To which land did Hatshepsut send her famous commercial expedition?",
           "options": [
-            "Land of Punt",
             "Babylon",
+            "Land of Punt",
             "Greece",
             "Persia"
           ],
@@ -859,8 +859,8 @@
         "fr": {
           "question": "Vers quel pays Hatshepsout a-t-elle envoyé sa célèbre expédition commerciale ?",
           "options": [
-            "Le pays de Pount",
             "Babylone",
+            "Le pays de Pount",
             "La Grèce",
             "La Perse"
           ],
@@ -869,8 +869,8 @@
         "it": {
           "question": "Verso quale terra Hatshepsut inviò la sua famosa spedizione commerciale?",
           "options": [
-            "Terra di Punt",
             "Babilonia",
+            "Terra di Punt",
             "Grecia",
             "Persia"
           ],
@@ -879,8 +879,8 @@
         "de": {
           "question": "In welches Land schickte Hatschepsut ihre berühmte Handelsexpedition?",
           "options": [
-            "Land Punt",
             "Babylon",
+            "Land Punt",
             "Griechenland",
             "Persien"
           ],
@@ -890,14 +890,14 @@
     },
     {
       "id": "architect",
-      "correct_option": 1,
+      "correct_option": 2,
       "i18n": {
         "ar": {
           "question": "أين يقع معبد حتشبسوت الجنائزي الشهير؟",
           "options": [
             "في الجيزة",
-            "في الدير البحري بالأقصر",
             "في أسوان",
+            "في الدير البحري بالأقصر",
             "في الإسكندرية"
           ],
           "explanation": "يقع معبد حتشبسوت الجنائزي الفريد في منطقة الدير البحري بالبر الغربي للأقصر."
@@ -906,8 +906,8 @@
           "question": "Where is Hatshepsut's famous mortuary temple located?",
           "options": [
             "In Giza",
-            "At Deir el-Bahari in Luxor",
             "In Aswan",
+            "At Deir el-Bahari in Luxor",
             "In Alexandria"
           ],
           "explanation": "Hatshepsut's mortuary temple is located at Deir el-Bahari on the West Bank of Luxor."
@@ -916,8 +916,8 @@
           "question": "Où se situe le célèbre temple funéraire de Hatshepsout ?",
           "options": [
             "À Gizeh",
-            "À Deir el-Bahari à Louxor",
             "À Assouan",
+            "À Deir el-Bahari à Louxor",
             "À Alexandrie"
           ],
           "explanation": "Le temple funéraire d'Hatshepsout se trouve à Deir el-Bahari sur la rive ouest de Louxor."
@@ -926,8 +926,8 @@
           "question": "Dove si trova il famoso tempio funerario di Hatshepsut?",
           "options": [
             "A Giza",
-            "A Deir el-Bahari a Luxor",
             "Ad Assuan",
+            "A Deir el-Bahari a Luxor",
             "Ad Alessandria"
           ],
           "explanation": "Il tempio funerario di Hatshepsut si trova a Deir el-Bahari, sulla riva ovest di Luxor."
@@ -936,8 +936,8 @@
           "question": "Wo befindet sich der berühmte Totentempel der Hatschepsut?",
           "options": [
             "In Gizeh",
-            "In Deir el-Bahari in Luxor",
             "In Assuan",
+            "In Deir el-Bahari in Luxor",
             "In Alexandria"
           ],
           "explanation": "Der Totentempel der Hatschepsut befindet sich in Deir el-Bahari am Westufer von Luxor."
@@ -946,15 +946,15 @@
     },
     {
       "id": "myrrh-trees",
-      "correct_option": 1,
+      "correct_option": 3,
       "i18n": {
         "ar": {
           "question": "من هو المهندس المعماري الذي صمم معبد حتشبسوت بالدير البحري؟",
           "options": [
             "إمهوتب",
-            "سننموت",
+            "بتاح حتب",
             "أمنحتب بن حابو",
-            "بتاح حتب"
+            "سننموت"
           ],
           "explanation": "المهندس سننموت هو الذي أشرف على تصميم وبناء معبد حتشبسوت المدرج بالدير البحري."
         },
@@ -962,9 +962,9 @@
           "question": "Who was the architect that designed Hatshepsut's temple at Deir el-Bahari?",
           "options": [
             "Imhotep",
-            "Senenmut",
+            "Ptahhotep",
             "Amenhotep son of Hapu",
-            "Ptahhotep"
+            "Senenmut"
           ],
           "explanation": "Senenmut was the royal architect who designed and supervised the building of Deir el-Bahari."
         },
@@ -972,9 +972,9 @@
           "question": "Quel architecte a conçu le temple de Hatshepsout à Deir el-Bahari ?",
           "options": [
             "Imhotep",
-            "Sénenmout",
+            "Ptahhotep",
             "Amenhotep fils de Hapon",
-            "Ptahhotep"
+            "Sénenmout"
           ],
           "explanation": "Sénenmout est l'architecte qui a conçu le temple à terrasses de Deir el-Bahari."
         },
@@ -982,9 +982,9 @@
           "question": "Chi fu l'architetto che progettò il tempio di Hatshepsut a Deir el-Bahari?",
           "options": [
             "Imhotep",
-            "Senenmut",
+            "Ptahhotep",
             "Amenhotep figlio di Hapu",
-            "Ptahhotep"
+            "Senenmut"
           ],
           "explanation": "Senenmut fu l'architetto che progettò e diresse i lavori a Deir el-Bahari."
         },
@@ -992,9 +992,9 @@
           "question": "Wer war der Architekt, der Hatschepsuts Tempel in Deir el-Bahari entwarf?",
           "options": [
             "Imhotep",
-            "Senenmut",
+            "Ptahhotep",
             "Amenhotep Sohn des Hapu",
-            "Ptahhotep"
+            "Senenmut"
           ],
           "explanation": "Senenmut war der Architekt, der den Terrassentempel in Deir el-Bahari entwarf."
         }
@@ -1002,13 +1002,13 @@
     },
     {
       "id": "erasure-debate",
-      "correct_option": 1,
+      "correct_option": 0,
       "i18n": {
         "ar": {
           "question": "ما هي الشجرة النادرة التي جلبتها بعثة حتشبسوت بجذورها لزراعتها في مصر؟",
           "options": [
-            "شجرة الزيتون",
             "شجرة المر",
+            "شجرة الزيتون",
             "شجرة الأرز",
             "شجرة النخيل"
           ],
@@ -1017,8 +1017,8 @@
         "en": {
           "question": "Which rare tree did Hatshepsut's expedition bring back with its roots to plant in Egypt?",
           "options": [
-            "Olive tree",
             "Myrrh tree",
+            "Olive tree",
             "Cedar tree",
             "Palm tree"
           ],
@@ -1027,8 +1027,8 @@
         "fr": {
           "question": "Quel arbre rare l'expédition d'Hatshepsout a-t-elle rapporté avec ses racines ?",
           "options": [
-            "L'olivier",
             "Le myrrhier",
+            "L'olivier",
             "Le cèdre",
             "Le palrmier"
           ],
@@ -1037,8 +1037,8 @@
         "it": {
           "question": "Quale albero raro la spedizione di Hatshepsut portò con le radici per piantarlo in Egitto?",
           "options": [
-            "Olivo",
             "Albero di mirra",
+            "Olivo",
             "Cedro",
             "Palma"
           ],
@@ -1047,8 +1047,8 @@
         "de": {
           "question": "Welchen seltenen Baum brachte Hatschepsuts Expedition mit Wurzeln nach Ägypten?",
           "options": [
-            "Olivenbaum",
             "Myrrhebaum",
+            "Olivenbaum",
             "Zedernbaum",
             "Palme"
           ],
