@@ -30,7 +30,18 @@ function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){retur
 function rootPath(){return ROOT}
 function asset(value){if(!value)return '';if(/^https:\/\//i.test(value))return value;return new URL(value.replace(/^\.\//,''),ROOT).href}
 function locale(obj){return obj&&obj[current]||null}
-function localizedImage(im){var t=locale(im.i18n)||{};return {src:asset(im.url||im.path),alt:t.alt||'',caption:t.caption||'',source:t.source_name||im.source_name||'',rights:t.rights||im.rights||''}}
+var OWN_ILLUS=/khaledoon|خالدون/i,SHORT_CAP={ar:'رسم توضيحي',en:'Illustration',fr:'Illustration',it:'Illustrazione',de:'Illustration'};
+var COVER_PICK={'016':'atom-diagram'};
+var EXTRA_COVERS={'007':{id:'zewail-photo',path:'assets/images/stories/500px-Ahmed_Zewail__2010.jpg',kind:'photograph',source_name:'Wikimedia Commons — Ahmed Zewail (2010)',source_url:'https://commons.wikimedia.org/wiki/File:Ahmed_Zewail_(2010).jpg',rights:'Wikimedia Commons — see the file page for the licence.',i18n:{ar:{alt:'أحمد زويل',caption:'أحمد زويل',source_name:'Wikimedia Commons',rights:''},en:{alt:'Ahmed Zewail',caption:'Ahmed Zewail',source_name:'Wikimedia Commons',rights:''},fr:{alt:'Ahmed Zewail',caption:'Ahmed Zewail',source_name:'Wikimedia Commons',rights:''},it:{alt:'Ahmed Zewail',caption:'Ahmed Zewail',source_name:'Wikimedia Commons',rights:''},de:{alt:'Ahmed Zewail',caption:'Ahmed Zewail',source_name:'Wikimedia Commons',rights:''}}}};
+function isOwnIllus(im){return !!im&&im.kind==='illustration'&&OWN_ILLUS.test(im.source_name||'')}
+function isRealPhoto(im){return !!im&&(im.kind==='photograph'||im.kind==='archival')&&!!(im.path||im.url)}
+function normalizeStory(d){try{var slug=String(document.body.dataset.storySlug||d.slug||'');var imgs=d.images.slice(),removed={},pick=null;var forced=COVER_PICK[slug];
+if(forced)pick=imgs.find(function(x){return x.id===forced&&isRealPhoto(x)})||null;
+if(!pick&&!isRealPhoto(d.cover))pick=EXTRA_COVERS[slug]||imgs.find(isRealPhoto)||null;
+if(pick){d.cover=pick;imgs=imgs.filter(function(x){if(x===pick||x.id===pick.id){removed[x.id]=1;return false}return true})}
+var keep=!isOwnIllus(d.cover);imgs=imgs.filter(function(x){if(!isOwnIllus(x))return true;if(keep){keep=false;return true}removed[x.id]=1;return false});
+d.images=imgs;Object.keys(d.i18n).forEach(function(l){(d.i18n[l].blocks||[]).forEach(function(b){if(b.image_after&&removed[b.image_after])delete b.image_after})})}catch(e){}return d}
+function localizedImage(im){var t=locale(im.i18n)||{};if(isOwnIllus(im))return {src:asset(im.url||im.path),alt:t.alt||'',caption:SHORT_CAP[current]||SHORT_CAP.ar,source:'',rights:''};return {src:asset(im.url||im.path),alt:t.alt||'',caption:t.caption||'',source:t.source_name||im.source_name||'',rights:t.rights||im.rights||''}}
 function openLightbox(d){var box=$('image-lightbox');if(!box||!d.src)return;$('lightbox-image').src=d.src;$('lightbox-image').alt=d.alt||'';$('lightbox-caption').textContent=[d.caption,d.source,d.rights].filter(Boolean).join(' — ');box.hidden=false;document.body.classList.add('lightbox-open');$('lightbox-close').focus()}
 function closeLightbox(){var box=$('image-lightbox');if(box)box.hidden=true;document.body.classList.remove('lightbox-open')}
 function showImageFallback(img,fig,d){if(img.dataset.khFallback)return;img.dataset.khFallback='1';img.hidden=true;fig.classList.add('kh-image-unavailable');var fallback=document.createElement('div');fallback.className='kh-image-fallback';fallback.textContent=d.alt||d.caption||'Image unavailable';fig.insertBefore(fallback,img.nextSibling)}
@@ -99,6 +110,6 @@ var path=new URLSearchParams(location.search).get('story')||readerScript.dataset
 if(!path||path.startsWith('/')||path.split('/').some(function(p){return p==='..'||p==='.'})||!path.endsWith('.json')){$('status').textContent='حدد حزمة JSON صالحة عبر ?story=PATH.json داخل المستودع.';return}
 fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json()}).then(function(data){
 if(!['KHALEDOON_STORY','KHALEDOON_STORY_V2'].includes(data.format)||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
-story=data;document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'october';document.body.style.setProperty('--accent',SECTION_PALETTE[story.section]||'#d6ad55');if(!document.body.dataset.storySlug)document.body.dataset.storySlug=data.slug||'v2-story';return detectBank().then(function(ok){bankQuiz=ok;show();if(document.body.hasAttribute('data-start-only'))openIntro();initReactions();if(ok)loadBankQuiz()});
+story=normalizeStory(data);document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'october';document.body.style.setProperty('--accent',SECTION_PALETTE[story.section]||'#d6ad55');if(!document.body.dataset.storySlug)document.body.dataset.storySlug=data.slug||'v2-story';return detectBank().then(function(ok){bankQuiz=ok;show();if(document.body.hasAttribute('data-start-only'))openIntro();initReactions();if(ok)loadBankQuiz()});
 }).catch(function(e){$('status').textContent='تعذّر تحميل حزمة الحكاية: '+e.message+'\nلم يتم الرجوع تلقائيًا إلى أي صيغة قديمة.'});
 })();
