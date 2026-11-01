@@ -5,7 +5,7 @@ window.KHStoryAdapter = {
   STORY_FORMAT,
   storyToLegacy,
   storyToAdminDraft,
-  validateStory: function (story) { try { return validateCanonicalStory(normalizeStoryFormat(story)); } catch (error) { return [error.message || 'Invalid story package']; } },
+  validateStory: function (story) { try { return validateCanonicalStory(normalizeStoryFormat(story, { validationOnly: true })); } catch (error) { return [error.message || 'Invalid story package']; } },
   validateForAdminBridge: function (story) { try { return validateForAdminBridge(normalizeStoryFormat(story)); } catch (error) { return [error.message || 'Invalid story package']; } }
 };
 
