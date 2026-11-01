@@ -1,0 +1,1172 @@
+{
+  "format": "KHALEDOON_STORY",
+  "slug": "sameera-moussa",
+  "section": "women",
+  "design": {
+    "variant": "women-leadership",
+    "accent": "#d7b878"
+  },
+  "original_body": "حكاية جديدة فى قسم نساء خالدات برقم 010 سميرة موسى — حلم العلم للجميع\nحكاية عالمة مصرية متخصصة في الفيزياء النووية، آمنت بأهمية تسخير العلم لخدمة الإنسان.",
+  "i18n": {
+    "ar": {
+      "title": "سميرة موسى — حلم العلم للجميع",
+      "subtitle": "حكاية عالمة مصرية رأت أن المعرفة لا تكتمل قيمتها إلا حين تتحول إلى منفعة للناس.",
+      "summary": "حكاية عالمة مصرية آمنت بأن العلم يجب أن يخدم الإنسان",
+      "figure_name": "سميرة موسى",
+      "person": "سميرة موسى",
+      "history_note": "تنبيه تحريري: المصادر لا تتفق في كل التفاصيل. لا تعرض الحكاية فرضية الاغتيال أو معادلة صنع قنبلة من النحاس أو روايات المنشآت السرية كحقائق مثبتة. كما تختلف المراجع في يوم الوفاة، لذلك نثبت سنة 1952 فقط، ولا نجزم بيوم محدد.",
+      "images_note": "تضم الحكاية صورتين أرشيفيتين من ويكيميديا كومنز، وتصف صفحتا الملف كليهما بأنهما ضمن الملكية العامة في مصر. احتفظ برابط المصدر وبيانات الإسناد، وراجع قوانين بلد إعادة الاستخدام. الغلاف والرسوم التوضيحية أصلية وليست صورًا تاريخية.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في 3 مارس 1917، وُلدت سميرة موسى في قرية سنبو الكبرى، التابعة لمركز زفتى بمحافظة الغربية. ومنذ طفولتها، أظهرت اهتمامًا بالقراءة والتعلّم. ثم انتقلت مع أسرتها إلى القاهرة، حيث واصلت دراستها في مدارسها، ومنها مدرسة قصر الشوق ومدرسة بنات الأشراف.",
+          "heading": "من قرية سنبو الكبرى إلى طريق العلم"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "إيه اللي كان مميزًا في حلم سميرة موسى للعلم؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كانت تؤمن أن المعرفة العلمية لا ينبغي أن تبقى حكرًا على قلة من الناس، بل يمكن أن تساعد المجتمع والإنسان. لذلك ارتبطت حكايتها بالطموح إلى التعلم وبفكرة أن للعلم مسؤولية تجاه حياة البشر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "إزاي وصلت سميرة موسى لمكانة علمية كبيرة في وقت كان طريق النساء للجامعة أصعب؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بالتفوق والإصرار ومواصلة الدراسة والعمل الأكاديمي، ثم التخصص في الإشعاع الذري. نجاحها لم يكن لحظة واحدة، بل مسارًا طويلًا من التعلم والبحث وسط تحديات عصرها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كانت سميرة متفوقة، لكن اختيارها لم يكن مجرد البحث عن وظيفة مرموقة. فقد أصرت على الالتحاق بكلية العلوم بجامعة فؤاد الأول، التي أصبحت لاحقًا جامعة القاهرة، رغم أن درجاتها كانت تتيح لها خيارات دراسية أخرى. وفي ذلك الوقت، لم يكن من المعتاد أن تصل النساء إلى مواقع علمية جامعية متقدمة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تخرجت عام 1939 بتفوق، بعد دراسة موضوعات مرتبطة بالأشعة السينية وتأثيرها في المواد. وكان عالم الفيزياء المصري علي مصطفى مشرفة من الشخصيات العلمية التي أثرت في مسيرتها. وقد عُيّنت سميرة في الجامعة، ثم أصبحت من أوائل النساء اللاتي شغلن منصبًا أكاديميًا في كلية العلوم؛ وهو إنجاز فتح الباب أمام حضور أكبر للنساء في البحث والتدريس الجامعي.",
+          "image_after": "sameera-archive-1952"
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "هل معنى كده إن حلم سميرة موسى كان إن العلم يبقى متاحًا للناس، مش حكرًا على المعامل الكبيرة؟"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "نعم، عُرفت باهتمامها بتطبيقات الطاقة الذرية السلمية وبإتاحة المعرفة العلمية. وعند الحديث عن تفاصيل أبحاثها أو ظروف وفاتها، نلتزم بما تثبته المصادر ولا نحوّل الروايات غير المحققة إلى حقائق."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "واصلت سميرة دراستها العليا، وحصلت على درجة الماجستير في موضوع يتعلق بالتوصيل الحراري للغازات. ثم سافرت إلى بريطانيا لاستكمال أبحاثها في مجال الإشعاع، ونالت الدكتوراه عن دراسة الأشعة السينية وتأثيرها على المواد المختلفة. وتذكر المصادر المصرية أنها أنجزت رسالتها في مدة أقصر من المدة المعتادة آنذاك.",
+          "heading": "لم تتوقف عند التخرج"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "قد تبدو الأشعة السينية بعيدة عن حياتنا اليومية، لكنها تساعد العلماء على فهم تركيب المواد، كما أن تقنيات الإشعاع أصبحت ذات أهمية كبيرة في الطب والصناعة والبحث العلمي. وكانت دراسة سميرة لهذه الظواهر جزءًا من مجال علمي سريع التطور، بدأ العالم يكتشف إمكاناته ومخاطره في الوقت نفسه."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "إن حصولها على الدكتوراه لم يكن نهاية الرحلة؛ فقد سعت إلى أن يكون للعلماء المصريين دور في هذا المجال، وأن تمتلك مصر خبرة علمية محلية بدل الاكتفاء باستيراد المعرفة من الخارج."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في منتصف القرن العشرين، ارتبطت كلمة «الذرة» في أذهان كثيرين بالسلاح النووي، خصوصًا بعد استخدام القنابل الذرية في الحرب العالمية الثانية. لكن الطاقة والتقنيات النووية لها استخدامات سلمية أيضًا، منها تطبيقات طبية تساعد في تشخيص بعض الأمراض وعلاجها، واستخدامات في الصناعة والبحث العلمي.",
+          "heading": "الذرة ليست سلاحًا فقط"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "اهتمت سميرة موسى بفكرة تسخير الإشعاع والطاقة الذرية لخدمة الإنسان، وبأن تصبح فوائدها الطبية متاحة بتكلفة معقولة. وتُنسب إليها عبارة تعبّر عن رغبتها في جعل العلاج النووي في متناول الناس مثل الأسبرين؛ لكن لأن تداول الأقوال التاريخية قد يختلف في صياغته ومصدره، نعرض هنا الفكرة العامة دون اعتبار العبارة اقتباسًا موثقًا حرفيًا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كما ارتبط اسمها بالدعوة إلى الاستخدام السلمي للطاقة الذرية، وبالجهود الرامية إلى جعل مصر جزءًا من الحوار العلمي حول هذا المجال. وتذكر مصادر سيرتها أنها ساهمت في تنظيم لقاءات ومبادرات تحت شعار «الذرة من أجل السلام». وتبقى الرسالة الأهم في قصتها أن التقدم العلمي يحتاج إلى مسؤولية أخلاقية، وأن المعرفة يمكن أن تكون أداة للعلاج والبناء بدلًا من التدمير.",
+          "image_after": "sameera-archive-pre1952"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في عام 1952، توفيت سميرة موسى في الولايات المتحدة إثر حادث سيارة، وكانت في الخامسة والثلاثين من عمرها. وقد أثارت وفاتها أسئلة وروايات متعددة، وانتشرت فرضيات تقول إن الحادث كان مدبرًا. لكن وجود رواية متداولة لا يجعلها حقيقة مثبتة؛ لذلك لا يصح الجزم بأنها اغتيلت أو اتهام جهة بعينها من دون أدلة موثوقة يمكن التحقق منها.",
+          "heading": "وفاة مبكرة وأسئلة تحتاج إلى دليل"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وتختلف بعض المراجع في اليوم المحدد لوفاتها: تذكر هيئة الاستعلامات المصرية ومعهد الفيزياء الأمريكي تاريخ 5 أغسطس 1952، بينما تورد مراجع أخرى 15 أغسطس. لذلك نثبت هنا سنة الوفاة فقط، ونترك اليوم الدقيق حتى تتوافر إحالة أولية حاسمة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كذلك تنتشر حكايات عن معادلة توصلت إليها لصنع قنبلة نووية من معادن رخيصة، وعن دخولها منشآت نووية سرية في الولايات المتحدة. ترد هذه التفاصيل في بعض السير الصحفية، لكن المسودة لا تعرضها كإنجازات علمية مؤكدة ما لم تتوفر أوراق بحثية أو وثائق أولية موثوقة تدعمها. احترام العالمة لا يحتاج إلى إضافة إنجازات غير مثبتة؛ فسيرتها التعليمية والأكاديمية وحدها جديرة بالتقدير."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "رحلت سميرة موسى في سن مبكرة، ولم تتح لها سنوات طويلة لمتابعة أبحاثها. لكن سيرتها تظل مثالًا على الإصرار على التعلم، وعلى دخول مجالات علمية كانت فرص النساء فيها محدودة، وعلى التفكير في أثر المعرفة خارج المختبر والجامعة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "إن «العلم للجميع» لا يعني أن كل شخص سيصبح عالمًا، بل أن يكون التعليم متاحًا، وأن تُستخدم نتائج البحث في تحسين الحياة، وأن تُناقش المخاطر بصدق، وأن تُبنى الأحكام على الأدلة لا على الشائعات. وهذا هو الجانب الذي يجعل حكاية سميرة موسى مهمة للأجيال الجديدة.",
+          "heading": "الحلم الذي يتجاوز صاحبه",
+          "image_after": "sameera-illustration"
+        }
+      ]
+    },
+    "en": {
+      "title": "Sameera Moussa — Science for Everyone",
+      "subtitle": "The story of an Egyptian scientist who believed knowledge matters most when it benefits people.",
+      "summary": "The story of an Egyptian scientist who believed science should serve humanity.",
+      "figure_name": "Sameera Moussa",
+      "person": "Sameera Moussa",
+      "history_note": "Editorial note: Sources do not agree on every detail. The story does not present the alleged assassination, a formula for making a bomb from copper, or claims about secret facilities as established facts. References also disagree on the exact day of death, so the story states only the year 1952.",
+      "images_note": "The story includes two archival photographs from Wikimedia Commons; both file pages mark them as public domain in Egypt. Keep the source links and attribution, and check the laws of the country where they are reused. The cover and illustrations are original artwork, not historical photographs.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "On 3 March 1917, Sameera Moussa was born in Sanbu al-Kubra, in the Zefta district of Egypt’s Gharbia Governorate. From childhood, she was interested in reading and learning. Her family later moved to Cairo, where she continued her education at schools including Qasr al-Shawq and Banat al-Ashraf.",
+          "heading": "From Sanbu al-Kubra to the world of science"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What was special about Sameera Moussa’s dream for science?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "She believed scientific knowledge should not remain limited to a small group of people; it could serve society and humanity. Her story is therefore connected both to the ambition to learn and to the idea that science carries a responsibility toward human life."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "How did Sameera Moussa build a strong scientific career when university opportunities for women were more limited?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Through academic excellence, determination, continued study, and university work, followed by specialization in atomic radiation. Her achievement was not a single moment but a long path of learning and research amid the challenges of her time."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera excelled at school, but her goal was more than finding a prestigious job. She insisted on studying at Fouad I University’s Faculty of Science, now Cairo University, although her grades offered other options. At the time, women rarely reached advanced academic positions in science."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "She graduated with distinction in 1939 after studying topics related to X-rays and their effects on materials. Egyptian physicist Ali Mostafa Mosharafa was among the scientific figures who influenced her. She was appointed at the university and became one of the first women to hold an academic post in its Faculty of Science, helping open doors for women in research and teaching.",
+          "image_after": "sameera-archive-1952"
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Does that mean Sameera Moussa wanted science to benefit everyone, rather than remain limited to major laboratories?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Yes. She was known for her interest in peaceful applications of atomic energy and making scientific knowledge more accessible. When discussing her research or the circumstances of her death, we must stick to what reliable sources establish and not present unverified accounts as facts."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera continued her postgraduate studies and earned a master’s degree on the thermal conductivity of gases. She then travelled to Britain for radiation research and earned a doctorate studying X-rays and their effects on different materials. Egyptian sources say she completed her dissertation faster than was usual at the time.",
+          "heading": "She did not stop at graduation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "X-rays may seem distant from everyday life, but they help scientists understand the structure of materials. Radiation technologies later became important in medicine, industry and research. Sameera studied these phenomena during a rapidly developing scientific era, when their possibilities and risks were both becoming clearer."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Earning her doctorate was not the end of her journey. She wanted Egyptian scientists to play a role in this field and for Egypt to develop local scientific expertise rather than relying solely on knowledge imported from abroad."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In the mid-twentieth century, many people associated the word “atom” with nuclear weapons, especially after the atomic bombings of the Second World War. Yet nuclear energy and technology also have peaceful uses, including medical applications for diagnosing and treating some diseases, as well as industrial and scientific research.",
+          "heading": "The atom is not only a weapon"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera Moussa cared about using radiation and atomic energy for humanity and making medical benefits affordable. A saying about making nuclear treatment as accessible as aspirin is attributed to her, but historical quotations circulate in varying forms and with uncertain sourcing. We therefore present the general idea without treating that wording as a verified verbatim quotation."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Her name is also associated with advocacy for peaceful uses of atomic energy and efforts to include Egypt in scientific discussions of the field. Biographical accounts mention meetings and initiatives under the slogan “Atoms for Peace.” The central lesson is that scientific progress requires ethical responsibility and that knowledge can build and heal rather than destroy.",
+          "image_after": "sameera-archive-pre1952"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In 1952, Moussa died in the United States following a car accident, aged 35. Her death prompted questions and competing accounts, including claims that the accident was deliberate. But a widely circulated story is not proof: it is not responsible to state that she was assassinated or accuse anyone without reliable, verifiable evidence.",
+          "heading": "An early death and questions requiring evidence"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sources disagree on the exact day of her death. The Egyptian State Information Service and the American Institute of Physics give 5 August 1952, while other references give 15 August. We therefore state only the year until a decisive primary source is available."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Stories also circulate about a formula for making a nuclear bomb from inexpensive metals and about her entering secret nuclear facilities in the United States. Some journalistic biographies repeat these details, but this account does not present them as established scientific achievements without reliable research papers or primary documents. Her documented education and academic work deserve recognition without embellishment."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Moussa died young and had little time to continue her research. Her life nevertheless illustrates persistence in learning, entry into scientific fields where women had limited opportunities, and concern for the impact of knowledge beyond the laboratory and university."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "‘Science for everyone’ does not mean that everyone will become a scientist. It means education should be accessible, research should improve lives, risks should be discussed honestly, and conclusions should rest on evidence rather than rumour. That is why Sameera Moussa’s story matters to new generations.",
+          "heading": "A dream that outlives its dreamer",
+          "image_after": "sameera-illustration"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Sameera Moussa — La science pour tous",
+      "subtitle": "L’histoire d’une scientifique égyptienne convaincue que le savoir prend tout son sens lorsqu’il profite aux gens.",
+      "summary": "L’histoire d’une scientifique égyptienne convaincue que la science doit servir l’humanité.",
+      "figure_name": "Sameera Moussa",
+      "person": "Sameera Moussa",
+      "history_note": "Note éditoriale : les sources ne concordent pas sur tous les détails. Le récit ne présente pas l’hypothèse d’un assassinat, une formule de fabrication d’une bombe à partir de cuivre ni les récits sur des installations secrètes comme des faits établis. Les références divergent aussi sur le jour exact du décès ; le récit ne retient donc que l’année 1952.",
+      "images_note": "Le récit comprend deux photographies d’archives provenant de Wikimedia Commons ; les deux pages de fichier les indiquent comme appartenant au domaine public en Égypte. Conservez les liens et les crédits, et vérifiez les lois du pays de réutilisation. La couverture et les illustrations sont originales, et non des photographies historiques.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le 3 mars 1917, Sameera Moussa naît à Sanbu al-Kubra, dans le district de Zefta, au gouvernorat égyptien de Gharbia. Dès l’enfance, elle s’intéresse à la lecture et à l’apprentissage. Sa famille déménage ensuite au Caire, où elle poursuit ses études, notamment aux écoles Qasr al-Shawq et Banat al-Ashraf.",
+          "heading": "De Sanbu al-Kubra au chemin de la science"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Qu’est-ce qui rendait particulier le rêve de Sameera Moussa pour la science ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Elle pensait que le savoir scientifique ne devait pas rester réservé à quelques personnes, mais qu’il pouvait aider la société et l’humanité. Son histoire est donc liée à la volonté d’apprendre et à l’idée que la science a une responsabilité envers la vie humaine."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Comment Sameera Moussa a-t-elle construit une carrière scientifique remarquable à une époque où l’accès des femmes à l’université était plus difficile ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Grâce à son excellence scolaire, sa détermination, la poursuite de ses études et son travail universitaire, avant de se spécialiser dans le domaine des rayonnements atomiques. Sa réussite fut un long parcours d’apprentissage et de recherche face aux défis de son époque."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Excellente élève, Sameera ne cherche pas seulement un emploi prestigieux. Elle tient à intégrer la faculté des sciences de l’université Fouad Ier, devenue l’université du Caire, alors que ses résultats lui offrent d’autres possibilités. À cette époque, les femmes accèdent rarement à des postes universitaires avancés en sciences."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Elle obtient son diplôme avec distinction en 1939 après des études sur les rayons X et leurs effets sur les matériaux. Le physicien égyptien Ali Mostafa Mosharafa compte parmi les scientifiques qui influencent son parcours. Nommée à l’université, elle devient l’une des premières femmes à y occuper un poste universitaire en sciences, ouvrant davantage la voie aux femmes dans la recherche et l’enseignement.",
+          "image_after": "sameera-archive-1952"
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Cela signifie-t-il que Sameera Moussa voulait que la science profite à tous, au lieu de rester réservée aux grands laboratoires ?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Oui. Elle était connue pour son intérêt pour les applications pacifiques de l’énergie atomique et pour la diffusion du savoir scientifique. Pour parler de ses recherches ou des circonstances de sa mort, nous devons nous en tenir aux faits établis et ne pas présenter des récits non vérifiés comme des certitudes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Elle poursuit ses études supérieures et obtient une maîtrise sur la conductivité thermique des gaz. Elle se rend ensuite en Grande-Bretagne pour poursuivre ses recherches sur les rayonnements et obtient un doctorat consacré aux rayons X et à leurs effets sur différents matériaux. Selon des sources égyptiennes, elle rédige sa thèse plus rapidement que la durée habituelle de l’époque.",
+          "heading": "Elle ne s’est pas arrêtée au diplôme"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les rayons X peuvent sembler éloignés de la vie quotidienne, mais ils aident à comprendre la structure des matériaux. Les technologies liées aux rayonnements prennent ensuite de l’importance en médecine, dans l’industrie et dans la recherche. Ses travaux s’inscrivent dans un domaine en plein développement, dont le monde découvre à la fois les possibilités et les risques."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le doctorat ne marque pas la fin de son parcours. Elle souhaite que les scientifiques égyptiens contribuent à ce domaine et que l’Égypte développe ses propres compétences au lieu de dépendre uniquement des connaissances importées."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Au milieu du XXe siècle, le mot « atome » évoque souvent les armes nucléaires, notamment après les bombardements atomiques de la Seconde Guerre mondiale. Pourtant, l’énergie et les techniques nucléaires ont aussi des usages pacifiques, notamment en médecine, dans l’industrie et dans la recherche.",
+          "heading": "L’atome n’est pas seulement une arme"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera Moussa veut mettre les rayonnements et l’énergie atomique au service de l’humanité et rendre leurs applications médicales abordables. Une formule lui est attribuée au sujet d’un traitement nucléaire accessible comme l’aspirine, mais les citations historiques circulent sous des formes variables et avec des sources incertaines. Nous présentons donc l’idée générale sans considérer ces mots comme une citation littérale vérifiée."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Son nom est également associé à la défense des usages pacifiques de l’énergie atomique et à la volonté d’inclure l’Égypte dans le dialogue scientifique. Des biographies évoquent des rencontres et initiatives autour du slogan « Des atomes pour la paix ». La leçon essentielle est que le progrès scientifique exige une responsabilité éthique et que le savoir peut soigner et construire plutôt que détruire.",
+          "image_after": "sameera-archive-pre1952"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "En 1952, elle meurt aux États-Unis dans un accident de voiture, à l’âge de 35 ans. Sa mort suscite diverses questions et récits, dont l’hypothèse d’un accident organisé. Mais la diffusion d’un récit ne constitue pas une preuve : sans éléments fiables et vérifiables, il ne faut pas affirmer qu’elle a été assassinée ni accuser une partie.",
+          "heading": "Une mort précoce et des questions qui exigent des preuves"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les sources ne s’accordent pas sur le jour exact de sa mort. Le Service d’information de l’État égyptien et l’American Institute of Physics indiquent le 5 août 1952, tandis que d’autres références donnent le 15 août. Nous retenons donc uniquement l’année en attendant une source primaire décisive."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Des récits évoquent aussi une formule permettant de fabriquer une bombe nucléaire à partir de métaux bon marché et l’accès à des installations nucléaires secrètes aux États-Unis. Certains articles reprennent ces détails, mais nous ne les présentons pas comme des faits scientifiques établis sans documents primaires ou publications fiables. Son parcours scolaire et universitaire mérite d’être reconnu sans embellissement."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Morte jeune, Sameera Moussa n’a pas eu de longues années pour poursuivre ses recherches. Son parcours reste un exemple de persévérance, d’entrée des femmes dans des domaines scientifiques peu ouverts à leur époque et de réflexion sur l’utilité du savoir au-delà du laboratoire."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "« La science pour tous » ne signifie pas que chacun deviendra scientifique. Cela signifie que l’éducation doit être accessible, que la recherche doit améliorer la vie, que les risques doivent être discutés honnêtement et que les conclusions doivent s’appuyer sur des preuves plutôt que sur des rumeurs. Voilà pourquoi son histoire compte pour les nouvelles générations.",
+          "heading": "Un rêve qui survit à celle qui l’a porté",
+          "image_after": "sameera-illustration"
+        }
+      ]
+    },
+    "it": {
+      "title": "Sameera Moussa — La scienza per tutti",
+      "subtitle": "La storia di una scienziata egiziana convinta che la conoscenza abbia valore quando è utile alle persone.",
+      "summary": "La storia di una scienziata egiziana convinta che la scienza debba servire l’umanità.",
+      "figure_name": "Sameera Moussa",
+      "person": "Sameera Moussa",
+      "history_note": "Nota editoriale: le fonti non concordano su tutti i dettagli. Il racconto non presenta come fatti accertati l’ipotesi di un assassinio, una formula per fabbricare una bomba usando rame o le storie su strutture segrete. Le fonti divergono anche sul giorno esatto della morte, quindi il racconto indica soltanto il 1952.",
+      "images_note": "Il racconto include due fotografie d’archivio da Wikimedia Commons; entrambe le pagine dei file le indicano come di pubblico dominio in Egitto. Conservare i link e i crediti e verificare le leggi del paese di riutilizzo. La copertina e le illustrazioni sono originali, non fotografie storiche.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il 3 marzo 1917 Sameera Moussa nacque a Sanbu al-Kubra, nel distretto di Zefta, nel governatorato egiziano di Gharbia. Fin da bambina mostrò interesse per la lettura e lo studio. In seguito la famiglia si trasferì al Cairo, dove continuò gli studi in scuole tra cui Qasr al-Shawq e Banat al-Ashraf.",
+          "heading": "Dal villaggio di Sanbu al-Kubra al percorso della scienza"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Che cosa rendeva speciale il sogno di Sameera Moussa per la scienza?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Credeva che la conoscenza scientifica non dovesse restare nelle mani di pochi, ma potesse aiutare la società e l’umanità. La sua storia unisce quindi il desiderio di imparare all’idea che la scienza abbia una responsabilità verso la vita delle persone."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Come riuscì Sameera Moussa a costruire una carriera scientifica importante in un periodo in cui per le donne era più difficile accedere all’università?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Grazie all’eccellenza negli studi, alla determinazione, alla prosecuzione della formazione e al lavoro accademico, fino a specializzarsi nelle radiazioni atomiche. Il suo successo fu un lungo percorso di apprendimento e ricerca, affrontando le difficoltà del suo tempo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera era una studentessa eccellente, ma il suo obiettivo non era soltanto ottenere un lavoro prestigioso. Insistette per entrare alla Facoltà di Scienze dell’Università Fouad I, oggi Università del Cairo, anche se i suoi voti le offrivano altre possibilità. All’epoca poche donne raggiungevano posizioni accademiche avanzate nelle scienze."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Si laureò con lode nel 1939 dopo aver studiato i raggi X e i loro effetti sui materiali. Il fisico egiziano Ali Mostafa Mosharafa fu tra le figure scientifiche che influenzarono il suo percorso. Fu assunta dall’università e divenne una delle prime donne a ricoprire un incarico accademico nella Facoltà di Scienze, contribuendo ad aprire nuove opportunità per le donne nella ricerca e nell’insegnamento.",
+          "image_after": "sameera-archive-1952"
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Significa che Sameera Moussa voleva che la scienza fosse utile a tutti, invece di restare limitata ai grandi laboratori?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Sì. Era nota per il suo interesse nelle applicazioni pacifiche dell’energia atomica e per rendere più accessibile la conoscenza scientifica. Quando parliamo delle sue ricerche o delle circostanze della sua morte, dobbiamo attenerci a ciò che le fonti affidabili confermano e non presentare racconti non verificati come fatti."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Proseguì gli studi post-laurea e conseguì un master sulla conducibilità termica dei gas. Si recò poi in Gran Bretagna per continuare le ricerche sulle radiazioni e ottenne un dottorato sugli effetti dei raggi X su diversi materiali. Secondo fonti egiziane, completò la tesi in meno tempo di quanto fosse consueto allora.",
+          "heading": "Non si fermò alla laurea"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I raggi X possono sembrare lontani dalla vita quotidiana, ma aiutano gli scienziati a comprendere la struttura dei materiali. Le tecnologie basate sulle radiazioni sono diventate importanti in medicina, industria e ricerca. Il lavoro di Sameera si inseriva in un campo in rapida evoluzione, di cui il mondo stava scoprendo sia le possibilità sia i rischi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il dottorato non fu la fine del suo percorso. Voleva che gli scienziati egiziani partecipassero a questo settore e che l’Egitto sviluppasse competenze scientifiche proprie, senza dipendere soltanto dalle conoscenze importate."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A metà del Novecento la parola «atomo» era spesso associata alle armi nucleari, soprattutto dopo le bombe atomiche della Seconda guerra mondiale. Tuttavia, l’energia e le tecnologie nucleari hanno anche impieghi pacifici, dalla medicina all’industria e alla ricerca.",
+          "heading": "L’atomo non è soltanto un’arma"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera Moussa era interessata a usare le radiazioni e l’energia atomica a beneficio dell’umanità e a rendere accessibili le applicazioni mediche. Le viene attribuita una frase sul rendere le cure nucleari accessibili come l’aspirina, ma le citazioni storiche circolano in forme diverse e con fonti incerte. Presentiamo quindi l’idea generale senza considerare quelle parole una citazione letterale verificata."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il suo nome è legato anche alla promozione degli usi pacifici dell’energia atomica e agli sforzi per includere l’Egitto nel dialogo scientifico. Alcune biografie ricordano incontri e iniziative con lo slogan «Atomi per la pace». La lezione principale è che il progresso scientifico richiede responsabilità etica e che la conoscenza può curare e costruire invece di distruggere.",
+          "image_after": "sameera-archive-pre1952"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nel 1952 morì negli Stati Uniti in un incidente automobilistico, all’età di 35 anni. La sua morte generò domande e racconti contrastanti, comprese ipotesi secondo cui l’incidente fosse stato organizzato. Ma una storia diffusa non è una prova: senza evidenze affidabili e verificabili non è corretto affermare che sia stata assassinata o accusare qualcuno.",
+          "heading": "Una morte prematura e domande che richiedono prove"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le fonti non concordano sul giorno esatto della morte. Il Servizio d’informazione dello Stato egiziano e l’American Institute of Physics indicano il 5 agosto 1952, mentre altri riferimenti riportano il 15 agosto. Per questo riportiamo soltanto l’anno, in attesa di una fonte primaria decisiva."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Circolano anche racconti su una formula per costruire una bomba nucleare con metalli economici e sull’accesso a impianti nucleari segreti negli Stati Uniti. Alcuni articoli ripetono questi dettagli, ma non li presentiamo come risultati scientifici accertati senza documenti primari o pubblicazioni affidabili. La sua formazione e il lavoro accademico meritano rispetto senza aggiunte non dimostrate."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera Moussa morì giovane e non ebbe molti anni per proseguire le sue ricerche. La sua vita resta un esempio di perseveranza nello studio, di ingresso delle donne in campi scientifici allora poco accessibili e di attenzione all’impatto della conoscenza oltre il laboratorio e l’università."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "«La scienza per tutti» non significa che tutti diventeranno scienziati. Significa rendere accessibile l’istruzione, usare la ricerca per migliorare la vita, discutere i rischi con sincerità e basare le conclusioni sulle prove anziché sulle voci. È questo che rende importante la storia di Sameera Moussa per le nuove generazioni.",
+          "heading": "Un sogno che sopravvive a chi lo ha immaginato",
+          "image_after": "sameera-illustration"
+        }
+      ]
+    },
+    "de": {
+      "title": "Sameera Moussa — Wissenschaft für alle",
+      "subtitle": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissen den Menschen zugutekommen muss.",
+      "summary": "Die Geschichte einer ägyptischen Wissenschaftlerin, die daran glaubte, dass Wissenschaft den Menschen dienen sollte.",
+      "figure_name": "Sameera Moussa",
+      "person": "Sameera Moussa",
+      "history_note": "Redaktioneller Hinweis: Die Quellen stimmen nicht in allen Einzelheiten überein. Die Geschichte stellt weder die behauptete Ermordung noch eine Formel für eine Bombe aus Kupfer oder Berichte über geheime Anlagen als erwiesene Tatsachen dar. Auch beim genauen Todestag weichen die Quellen voneinander ab; daher wird nur das Jahr 1952 genannt.",
+      "images_note": "Die Geschichte enthält zwei Archivfotos von Wikimedia Commons; beide Dateiseiten kennzeichnen sie in Ägypten als gemeinfrei. Quellenlinks und Bildnachweise müssen erhalten bleiben; außerdem sind die Gesetze des Landes der Weiterverwendung zu prüfen. Titelbild und Illustrationen sind Originalgrafiken, keine historischen Fotografien.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Am 3. März 1917 wurde Sameera Moussa in Sanbu al-Kubra im Bezirk Zefta in der ägyptischen Provinz Gharbia geboren. Schon als Kind interessierte sie sich für Lesen und Lernen. Später zog ihre Familie nach Kairo, wo sie unter anderem an den Schulen Qasr al-Shawq und Banat al-Ashraf weiterlernte.",
+          "heading": "Vom Dorf Sanbu al-Kubra auf den Weg der Wissenschaft"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Was war das Besondere an Sameera Moussas Traum von der Wissenschaft?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sie war überzeugt, dass wissenschaftliches Wissen nicht wenigen Menschen vorbehalten bleiben sollte, sondern der Gesellschaft und der Menschheit helfen kann. Ihre Geschichte verbindet deshalb den Wunsch zu lernen mit dem Gedanken, dass Wissenschaft Verantwortung für das menschliche Leben trägt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Wie konnte Sameera Moussa eine bedeutende wissenschaftliche Laufbahn aufbauen, obwohl Frauen damals größere Hürden beim Zugang zur Universität hatten?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Durch hervorragende Leistungen, Entschlossenheit, kontinuierliches Studium und akademische Arbeit, später mit einer Spezialisierung auf Atomstrahlung. Ihr Erfolg war kein einzelner Augenblick, sondern ein langer Weg des Lernens und Forschens unter den Herausforderungen ihrer Zeit."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera war eine hervorragende Schülerin, doch ihr Ziel war nicht nur eine angesehene Stelle. Sie bestand darauf, an der naturwissenschaftlichen Fakultät der Fouad-I.-Universität, der heutigen Universität Kairo, zu studieren, obwohl ihre Noten andere Wege ermöglichten. Damals erreichten nur wenige Frauen hohe akademische Positionen in den Naturwissenschaften."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "1939 schloss sie ihr Studium mit Auszeichnung ab; ihre Arbeit befasste sich unter anderem mit Röntgenstrahlen und deren Wirkung auf Materialien. Der ägyptische Physiker Ali Mostafa Mosharafa gehörte zu den Wissenschaftlern, die ihren Weg beeinflussten. Sie wurde an der Universität angestellt und war eine der ersten Frauen mit einer akademischen Stelle an deren naturwissenschaftlicher Fakultät. Damit eröffnete sie Frauen weitere Möglichkeiten in Forschung und Lehre.",
+          "image_after": "sameera-archive-1952"
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Bedeutet das, dass Sameera Moussa wollte, dass Wissenschaft allen zugutekommt und nicht nur großen Laboren vorbehalten bleibt?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Ja. Sie war für ihr Interesse an friedlichen Anwendungen der Atomenergie und an der Verbreitung wissenschaftlichen Wissens bekannt. Bei Aussagen über ihre Forschung oder die Umstände ihres Todes müssen wir uns auf belegte Informationen stützen und unbestätigte Berichte nicht als Tatsachen darstellen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sie setzte ihr Aufbaustudium fort und erwarb einen Masterabschluss über die Wärmeleitfähigkeit von Gasen. Anschließend reiste sie nach Großbritannien, um auf dem Gebiet der Strahlung weiterzuforschen, und promovierte über Röntgenstrahlen und ihre Wirkung auf verschiedene Materialien. Ägyptischen Quellen zufolge schloss sie ihre Dissertation schneller ab, als es damals üblich war.",
+          "heading": "Mit dem Abschluss war ihre Reise nicht vorbei"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Röntgenstrahlen mögen weit vom Alltag entfernt erscheinen, doch sie helfen, den Aufbau von Materialien zu verstehen. Strahlungstechnologien wurden später in Medizin, Industrie und Forschung wichtig. Sameeras Arbeit gehörte zu einem sich rasch entwickelnden Wissenschaftsgebiet, dessen Chancen und Risiken die Welt gleichzeitig entdeckte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mit der Promotion war ihre Reise nicht zu Ende. Sie wollte, dass ägyptische Wissenschaftler auf diesem Gebiet mitwirkten und Ägypten eigene wissenschaftliche Fähigkeiten aufbaute, statt sich ausschließlich auf Wissen aus dem Ausland zu verlassen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mitte des 20. Jahrhunderts verbanden viele Menschen das Wort „Atom“ mit Kernwaffen, besonders nach den Atombombenabwürfen im Zweiten Weltkrieg. Kernenergie und Nukleartechnik haben jedoch auch friedliche Anwendungen, etwa in der Medizin, der Industrie und der wissenschaftlichen Forschung.",
+          "heading": "Das Atom ist nicht nur eine Waffe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sameera Moussa wollte Strahlung und Atomenergie zum Nutzen der Menschen einsetzen und medizinische Anwendungen erschwinglich machen. Ihr wird eine Aussage zugeschrieben, nach der nukleare Behandlung so zugänglich wie Aspirin sein sollte. Historische Zitate werden jedoch unterschiedlich wiedergegeben und sind nicht immer zuverlässig belegt. Deshalb geben wir den Grundgedanken wieder, ohne die Formulierung als wörtlich gesichertes Zitat auszugeben."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ihr Name wird auch mit dem Einsatz für friedliche Anwendungen der Atomenergie und dem Bemühen verbunden, Ägypten in den wissenschaftlichen Austausch einzubeziehen. Biografische Berichte erwähnen Treffen und Initiativen unter dem Motto „Atome für den Frieden“. Die wichtigste Lehre lautet: Wissenschaftlicher Fortschritt braucht ethische Verantwortung; Wissen kann heilen und aufbauen, statt zu zerstören.",
+          "image_after": "sameera-archive-pre1952"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "1952 starb Moussa im Alter von 35 Jahren nach einem Autounfall in den Vereinigten Staaten. Ihr Tod führte zu Fragen und unterschiedlichen Erzählungen, darunter die Vermutung, der Unfall sei absichtlich herbeigeführt worden. Eine verbreitete Erzählung ist jedoch kein Beweis. Ohne verlässliche, überprüfbare Belege sollte man weder einen Mord behaupten noch jemanden beschuldigen.",
+          "heading": "Ein früher Tod und Fragen, die Belege erfordern"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Quellen stimmen beim genauen Todestag nicht überein. Der ägyptische Staatliche Informationsdienst und das American Institute of Physics nennen den 5. August 1952, andere Nachschlagewerke den 15. August. Deshalb nennen wir nur das Jahr, bis eine eindeutige Primärquelle vorliegt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Es gibt auch Geschichten über eine Formel zur Herstellung einer Atombombe aus billigen Metallen und über ihren Zugang zu geheimen Nuklearanlagen in den USA. Einige journalistische Biografien wiederholen solche Details, doch ohne zuverlässige Primärdokumente oder wissenschaftliche Veröffentlichungen stellen wir sie nicht als gesicherte Leistungen dar. Ihre belegte Ausbildung und akademische Arbeit verdienen Anerkennung ohne Ausschmückungen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Moussa starb jung und hatte nur wenig Zeit, ihre Forschung fortzusetzen. Ihr Leben steht dennoch für Beharrlichkeit beim Lernen, für den Eintritt von Frauen in damals schwer zugängliche Wissenschaftsbereiche und für die Frage, wie Wissen über Labor und Universität hinaus wirken kann."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "„Wissenschaft für alle“ bedeutet nicht, dass jeder Wissenschaftler wird. Es bedeutet, Bildung zugänglich zu machen, Forschung zur Verbesserung des Lebens einzusetzen, Risiken ehrlich zu diskutieren und Schlussfolgerungen auf Belege statt auf Gerüchte zu stützen. Darum ist Sameera Moussas Geschichte für neue Generationen wichtig.",
+          "heading": "Ein Traum, der seine Trägerin überdauert",
+          "image_after": "sameera-illustration"
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/women/010/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/women/010/cover.svg",
+    "rights": "Original illustration created for the Khaledoon project; not a historical or verified portrait photograph.",
+    "i18n": {
+      "ar": {
+        "alt": "رسم توضيحي لسميرة موسى ورموز العلم والذرة",
+        "caption": "رسم توضيحي لسميرة موسى ورموز العلم والذرة",
+        "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+        "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو صورة شخصية موثقة."
+      },
+      "en": {
+        "alt": "Illustration of Sameera Moussa with symbols of science and the atom",
+        "caption": "Illustration of Sameera Moussa with symbols of science and the atom",
+        "source_name": "Khaledoon — original illustration",
+        "rights": "Original illustration created for the Khaledoon project; not a historical or verified portrait photograph."
+      },
+      "fr": {
+        "alt": "Illustration de Sameera Moussa avec des symboles de la science et de l’atome",
+        "caption": "Illustration de Sameera Moussa avec des symboles de la science et de l’atome",
+        "source_name": "Khaledoon — original illustration",
+        "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait documentaire."
+      },
+      "it": {
+        "alt": "Illustrazione di Sameera Moussa con simboli della scienza e dell’atomo",
+        "caption": "Illustrazione di Sameera Moussa con simboli della scienza e dell’atomo",
+        "source_name": "Khaledoon — original illustration",
+        "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto documentario."
+      },
+      "de": {
+        "alt": "Illustration von Sameera Moussa mit Symbolen der Wissenschaft und des Atoms",
+        "caption": "Illustration von Sameera Moussa mit Symbolen der Wissenschaft und des Atoms",
+        "source_name": "Khaledoon — original illustration",
+        "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches oder dokumentarisches Porträtfoto."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "sameera-archive-1952",
+      "path": "assets/images/stories/SameeraMoussa.jpg",
+      "kind": "photograph",
+      "source_name": "جريدة الأهرام عبر ويكيميديا كومنز",
+      "source_url": "https://commons.wikimedia.org/wiki/File:SameeraMoussa.jpg",
+      "rights": "The Wikimedia Commons file page marks this photograph as public domain in Egypt; retain the source link and check the law in the country of reuse.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لسميرة موسى، منشورة في جريدة الأهرام عام 1952",
+          "caption": "صورة أرشيفية لسميرة موسى. المصدر: جريدة الأهرام عبر ويكيميديا كومنز؛ راجعي صفحة الملف لتفاصيل الإتاحة وحقوق الاستخدام.",
+          "source_name": "جريدة الأهرام عبر ويكيميديا كومنز",
+          "rights": "تصف صفحة الملف على ويكيميديا كومنز الصورة بأنها ضمن الملكية العامة في مصر؛ يُرجى الاحتفاظ برابط المصدر ومراجعة قانون بلد إعادة الاستخدام."
+        },
+        "en": {
+          "alt": "Archival photograph of Sameera Moussa, published in Al-Ahram in 1952",
+          "caption": "Archival photograph of Sameera Moussa. Source: Al-Ahram newspaper via Wikimedia Commons; consult the file page for availability and reuse details.",
+          "source_name": "Al-Ahram newspaper via Wikimedia Commons",
+          "rights": "The Wikimedia Commons file page marks this photograph as public domain in Egypt; retain the source link and check the law in the country of reuse."
+        },
+        "fr": {
+          "alt": "Photographie d’archive de Sameera Moussa, publiée dans Al-Ahram en 1952",
+          "caption": "Photographie d’archive de Sameera Moussa. Source : journal Al-Ahram via Wikimedia Commons ; consultez la page du fichier pour les conditions de disponibilité et de réutilisation.",
+          "source_name": "Al-Ahram newspaper via Wikimedia Commons",
+          "rights": "La page Wikimedia Commons indique que cette photographie est dans le domaine public en Égypte ; conservez le lien source et vérifiez la loi du pays de réutilisation."
+        },
+        "it": {
+          "alt": "Fotografia d’archivio di Sameera Moussa, pubblicata su Al-Ahram nel 1952",
+          "caption": "Fotografia d’archivio di Sameera Moussa. Fonte: quotidiano Al-Ahram tramite Wikimedia Commons; consultare la pagina del file per i dettagli di disponibilità e riutilizzo.",
+          "source_name": "Al-Ahram newspaper via Wikimedia Commons",
+          "rights": "La pagina Wikimedia Commons indica che questa fotografia è di pubblico dominio in Egitto; conservare il link alla fonte e verificare la legge del paese di riutilizzo."
+        },
+        "de": {
+          "alt": "Archivfoto von Sameera Moussa, 1952 in Al-Ahram veröffentlicht",
+          "caption": "Archivfoto von Sameera Moussa. Quelle: Zeitung Al-Ahram über Wikimedia Commons; Angaben zur Verfügbarkeit und Wiederverwendung stehen auf der Dateiseite.",
+          "source_name": "Al-Ahram newspaper via Wikimedia Commons",
+          "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet dieses Foto in Ägypten als gemeinfrei; Quellenlink beibehalten und das Recht des Landes der Weiterverwendung prüfen."
+        }
+      }
+    },
+    {
+      "id": "sameera-archive-pre1952",
+      "path": "assets/images/stories/img-45f23418d6.jpg",
+      "kind": "photograph",
+      "source_name": "بوابة الفجر عبر ويكيميديا كومنز",
+      "source_url": "https://commons.wikimedia.org/wiki/File:%D8%B3%D9%85%D9%8A%D8%B1%D8%A9_%D9%85%D9%88%D8%B3%D9%89.jpg",
+      "rights": "The Wikimedia Commons file page marks this photograph as public domain in Egypt; retain the source link and check the law in the country of reuse.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية أخرى لسميرة موسى قبل عام 1952",
+          "caption": "صورة أرشيفية لسميرة موسى قبل عام 1952. المصدر وبيانات الإتاحة: صفحة الملف على ويكيميديا كومنز (بوابة الفجر).",
+          "source_name": "بوابة الفجر عبر ويكيميديا كومنز",
+          "rights": "تصف صفحة الملف على ويكيميديا كومنز الصورة بأنها ضمن الملكية العامة في مصر؛ يُرجى الاحتفاظ برابط المصدر ومراجعة قانون بلد إعادة الاستخدام."
+        },
+        "en": {
+          "alt": "Another archival photograph of Sameera Moussa, dated before 1952",
+          "caption": "Archival photograph of Sameera Moussa before 1952. Source and availability details are listed on the Wikimedia Commons file page (Al-Fagr portal).",
+          "source_name": "Al-Fagr portal via Wikimedia Commons",
+          "rights": "The Wikimedia Commons file page marks this photograph as public domain in Egypt; retain the source link and check the law in the country of reuse."
+        },
+        "fr": {
+          "alt": "Autre photographie d’archive de Sameera Moussa, antérieure à 1952",
+          "caption": "Photographie d’archive de Sameera Moussa antérieure à 1952. La source et les conditions de disponibilité figurent sur la page Wikimedia Commons (portail Al-Fagr).",
+          "source_name": "Al-Fagr portal via Wikimedia Commons",
+          "rights": "La page Wikimedia Commons indique que cette photographie est dans le domaine public en Égypte ; conservez le lien source et vérifiez la loi du pays de réutilisation."
+        },
+        "it": {
+          "alt": "Un’altra fotografia d’archivio di Sameera Moussa, precedente al 1952",
+          "caption": "Fotografia d’archivio di Sameera Moussa precedente al 1952. Fonte e condizioni di disponibilità sono indicate nella pagina del file su Wikimedia Commons (portale Al-Fagr).",
+          "source_name": "Al-Fagr portal via Wikimedia Commons",
+          "rights": "La pagina Wikimedia Commons indica che questa fotografia è di pubblico dominio in Egitto; conservare il link alla fonte e verificare la legge del paese di riutilizzo."
+        },
+        "de": {
+          "alt": "Ein weiteres Archivfoto von Sameera Moussa, aufgenommen vor 1952",
+          "caption": "Archivfoto von Sameera Moussa aus der Zeit vor 1952. Quelle und Verfügbarkeitsangaben stehen auf der Wikimedia-Commons-Dateiseite (Al-Fagr-Portal).",
+          "source_name": "Al-Fagr portal via Wikimedia Commons",
+          "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet dieses Foto in Ägypten als gemeinfrei; Quellenlink beibehalten und das Recht des Landes der Weiterverwendung prüfen."
+        }
+      }
+    },
+    {
+      "id": "sameera-illustration",
+      "path": "stories/women/010/cover-popup.svg",
+      "kind": "illustration",
+      "source_name": "خالدون عبر التاريخ — رسم توضيحي لكتاب علمي ونموذج ذرة",
+      "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/women/010/cover-popup.svg",
+      "rights": "Original illustration created for the Khaledoon project; not a historical or verified portrait photograph.",
+      "i18n": {
+        "ar": {
+          "alt": "رسم توضيحي رمزي لكتاب علمي ونموذج ذرة",
+          "caption": "رسم توضيحي أُعد لهذه الحكاية؛ ليس صورة أرشيفية ولا صورة شخصية أصلية لسميرة موسى.",
+          "source_name": "خالدون عبر التاريخ — رسم توضيحي أصلي",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون؛ ليس صورة تاريخية أو صورة شخصية موثقة."
+        },
+        "en": {
+          "alt": "Illustration of Sameera Moussa with symbols of science and the atom",
+          "caption": "Original illustration created for the Khaledoon project; not a historical or verified portrait photograph.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Original illustration created for the Khaledoon project; not a historical or verified portrait photograph."
+        },
+        "fr": {
+          "alt": "Illustration de Sameera Moussa avec des symboles de la science et de l’atome",
+          "caption": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait documentaire.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustration originale créée pour le projet Khaledoon ; ce n’est pas une photographie historique ni un portrait documentaire."
+        },
+        "it": {
+          "alt": "Illustrazione di Sameera Moussa con simboli della scienza e dell’atomo",
+          "caption": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto documentario.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Illustrazione originale creata per il progetto Khaledoon; non è una fotografia storica né un ritratto documentario."
+        },
+        "de": {
+          "alt": "Illustration von Sameera Moussa mit Symbolen der Wissenschaft und des Atoms",
+          "caption": "Originalillustration für das Khaledoon-Projekt; kein historisches oder dokumentarisches Porträtfoto.",
+          "source_name": "Khaledoon — original illustration",
+          "rights": "Originalillustration für das Khaledoon-Projekt; kein historisches oder dokumentarisches Porträtfoto."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "هيئة الاستعلامات المصرية — سميرة موسى",
+      "organization": "هيئة الاستعلامات المصرية",
+      "url": "https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A3%D8%B9%D9%84%D8%A7%D9%85-%D9%88%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA-%D9%85%D8%B5%D8%B1%D9%8A%D8%A9/%D8%B3%D9%85%D9%8A%D8%B1%D8%A9-%D9%85%D9%88%D8%B3%D9%89/",
+      "i18n": {
+        "ar": {
+          "title": "هيئة الاستعلامات المصرية — سميرة موسى",
+          "organization": "هيئة الاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Egyptian State Information Service — Sameera Moussa",
+          "organization": "Egyptian State Information Service"
+        },
+        "fr": {
+          "title": "Service d’information de l’État égyptien — Sameera Moussa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Servizio statale d’informazione egiziano — Sameera Moussa",
+          "organization": "Servizio statale d’informazione egiziano"
+        },
+        "de": {
+          "title": "Ägyptischer Staatlicher Informationsdienst — Sameera Moussa",
+          "organization": "Ägyptischer Staatlicher Informationsdienst"
+        }
+      }
+    },
+    {
+      "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+      "organization": "American Institute of Physics, Physics Today",
+      "url": "https://physicstoday.aip.org/news/sameera-moussa",
+      "i18n": {
+        "ar": {
+          "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+          "organization": "American Institute of Physics, Physics Today"
+        },
+        "en": {
+          "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+          "organization": "American Institute of Physics, Physics Today"
+        },
+        "fr": {
+          "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+          "organization": "American Institute of Physics, Physics Today"
+        },
+        "it": {
+          "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+          "organization": "American Institute of Physics, Physics Today"
+        },
+        "de": {
+          "title": "American Institute of Physics, Physics Today — Sameera Moussa",
+          "organization": "American Institute of Physics, Physics Today"
+        }
+      }
+    },
+    {
+      "title": "الجزيرة نت — سميرة موسى أو «مس كوري الشرق»",
+      "organization": "الجزيرة نت",
+      "url": "https://www.aljazeera.net/encyclopedia/2024/3/22/%D8%B3%D9%85%D9%8A%D8%B1%D8%A9-%D9%85%D9%88%D8%B3%D9%89-%D8%A3%D9%88-%D9%85%D8%B3-%D9%83%D9%88%D8%B1%D9%8A-%D8%A7%D9%84%D8%B4%D8%B1%D9%82-%D8%A3%D9%88%D9%84-%D8%B9%D8%A7%D9%84%D9%85%D8%A9",
+      "i18n": {
+        "ar": {
+          "title": "الجزيرة نت — سميرة موسى أو «مس كوري الشرق»",
+          "organization": "الجزيرة نت"
+        },
+        "en": {
+          "title": "Al Jazeera — Sameera Moussa, the “Eastern Miss Curie”",
+          "organization": "Al Jazeera"
+        },
+        "fr": {
+          "title": "Al Jazeera — Sameera Moussa, la « Miss Curie de l’Orient »",
+          "organization": "Al Jazeera"
+        },
+        "it": {
+          "title": "Al Jazeera — Sameera Moussa, la « Miss Curie d’Oriente »",
+          "organization": "Al Jazeera"
+        },
+        "de": {
+          "title": "Al Jazeera — Sameera Moussa, die „Miss Curie des Orients“",
+          "organization": "Al Jazeera"
+        }
+      }
+    },
+    {
+      "title": "الجزيرة نت — رواية اغتيال سميرة موسى: حقيقة واحدة وسيل من المبالغات والأساطير",
+      "organization": "الجزيرة نت",
+      "url": "https://www.aljazeera.net/science/2024/8/30/رواية-اغتيال-سميرة-موسى-حقيقة-واحدة",
+      "i18n": {
+        "ar": {
+          "title": "الجزيرة نت — رواية اغتيال سميرة موسى: حقيقة واحدة وسيل من المبالغات والأساطير",
+          "organization": "الجزيرة نت"
+        },
+        "en": {
+          "title": "Al Jazeera — The story of Sameera Moussa’s alleged assassination: facts and myths",
+          "organization": "Al Jazeera"
+        },
+        "fr": {
+          "title": "Al Jazeera — L’hypothèse de l’assassinat de Sameera Moussa : faits et mythes",
+          "organization": "Al Jazeera"
+        },
+        "it": {
+          "title": "Al Jazeera — La presunta uccisione di Sameera Moussa: fatti e miti",
+          "organization": "Al Jazeera"
+        },
+        "de": {
+          "title": "Al Jazeera — Die Erzählung von Sameera Moussas angeblicher Ermordung: Fakten und Mythen",
+          "organization": "Al Jazeera"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birth-year",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام وُلدت سميرة موسى؟",
+          "options": [
+            "1917",
+            "1925",
+            "1939",
+            "1952"
+          ],
+          "explanation": "وُلدت سميرة موسى في 3 مارس 1917 في قرية سنبو الكبرى."
+        },
+        "en": {
+          "question": "In what year was Sameera Moussa born?",
+          "options": [
+            "1917",
+            "1925",
+            "1939",
+            "1952"
+          ],
+          "explanation": "She was born on 3 March 1917 in Sanbu al-Kubra."
+        },
+        "fr": {
+          "question": "En quelle année Sameera Moussa est-elle née ?",
+          "options": [
+            "1917",
+            "1925",
+            "1939",
+            "1952"
+          ],
+          "explanation": "Elle est née le 3 mars 1917 à Sanbu al-Kubra."
+        },
+        "it": {
+          "question": "In quale anno nacque Sameera Moussa?",
+          "options": [
+            "1917",
+            "1925",
+            "1939",
+            "1952"
+          ],
+          "explanation": "Nacque il 3 marzo 1917 a Sanbu al-Kubra."
+        },
+        "de": {
+          "question": "In welchem Jahr wurde Sameera Moussa geboren?",
+          "options": [
+            "1917",
+            "1925",
+            "1939",
+            "1952"
+          ],
+          "explanation": "Sie wurde am 3. März 1917 in Sanbu al-Kubra geboren."
+        }
+      }
+    },
+    {
+      "id": "research-field",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي ارتبط بجزء مهم من أبحاث سميرة موسى؟",
+          "options": [
+            "الأشعة السينية والإشعاع",
+            "علم الفلك الرصدي فقط",
+            "الهندسة المدنية",
+            "علم النبات"
+          ],
+          "explanation": "تناولت دراساتها الأشعة السينية وتأثيرها في المواد، كما اهتمت بتطبيقات الإشعاع."
+        },
+        "en": {
+          "question": "Which field was important in part of Sameera Moussa’s research?",
+          "options": [
+            "X-rays and radiation",
+            "Observational astronomy only",
+            "Civil engineering",
+            "Botany"
+          ],
+          "explanation": "Her studies examined X-rays and their effects on materials, and she was interested in radiation applications."
+        },
+        "fr": {
+          "question": "Quel domaine occupait une place importante dans une partie de ses recherches ?",
+          "options": [
+            "Les rayons X et les rayonnements",
+            "Uniquement l’astronomie d’observation",
+            "Le génie civil",
+            "La botanique"
+          ],
+          "explanation": "Ses travaux portaient sur les rayons X, leurs effets sur les matériaux et les applications des rayonnements."
+        },
+        "it": {
+          "question": "Quale campo fu importante in una parte delle sue ricerche?",
+          "options": [
+            "Raggi X e radiazioni",
+            "Solo astronomia osservativa",
+            "Ingegneria civile",
+            "Botanica"
+          ],
+          "explanation": "I suoi studi esaminarono i raggi X e i loro effetti sui materiali, oltre alle applicazioni delle radiazioni."
+        },
+        "de": {
+          "question": "Welches Gebiet spielte in einem Teil ihrer Forschung eine wichtige Rolle?",
+          "options": [
+            "Röntgenstrahlen und Strahlung",
+            "Nur beobachtende Astronomie",
+            "Bauingenieurwesen",
+            "Botanik"
+          ],
+          "explanation": "Ihre Studien behandelten Röntgenstrahlen und ihre Wirkung auf Materialien sowie Anwendungen der Strahlung."
+        }
+      }
+    },
+    {
+      "id": "mentor",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "من العالم المصري الذي ارتبط بدعم مسيرتها العلمية؟",
+          "options": [
+            "علي مصطفى مشرفة",
+            "أحمد زويل",
+            "مصطفى السيد",
+            "فاروق الباز"
+          ],
+          "explanation": "كان علي مصطفى مشرفة من الشخصيات العلمية المؤثرة في مسيرتها."
+        },
+        "en": {
+          "question": "Which Egyptian scientist was associated with supporting her scientific path?",
+          "options": [
+            "Ali Mostafa Mosharafa",
+            "Ahmed Zewail",
+            "Mostafa El-Sayed",
+            "Farouk El-Baz"
+          ],
+          "explanation": "Ali Mostafa Mosharafa was one of the influential scientific figures in her career."
+        },
+        "fr": {
+          "question": "Quel scientifique égyptien est associé à son parcours scientifique ?",
+          "options": [
+            "Ali Mostafa Mosharafa",
+            "Ahmed Zewail",
+            "Mostafa El-Sayed",
+            "Farouk El-Baz"
+          ],
+          "explanation": "Ali Mostafa Mosharafa fait partie des figures scientifiques qui ont influencé son parcours."
+        },
+        "it": {
+          "question": "Quale scienziato egiziano è associato al suo percorso scientifico?",
+          "options": [
+            "Ali Mostafa Mosharafa",
+            "Ahmed Zewail",
+            "Mostafa El-Sayed",
+            "Farouk El-Baz"
+          ],
+          "explanation": "Ali Mostafa Mosharafa fu una delle figure scientifiche influenti nel suo percorso."
+        },
+        "de": {
+          "question": "Welcher ägyptische Wissenschaftler wird mit der Förderung ihres wissenschaftlichen Weges verbunden?",
+          "options": [
+            "Ali Mostafa Mosharafa",
+            "Ahmed Zewail",
+            "Mostafa El-Sayed",
+            "Farouk El-Baz"
+          ],
+          "explanation": "Ali Mostafa Mosharafa war eine der einflussreichen wissenschaftlichen Persönlichkeiten in ihrer Laufbahn."
+        }
+      }
+    },
+    {
+      "id": "peaceful-atom",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما الفكرة التي ارتبطت برؤيتها لاستخدام الطاقة الذرية؟",
+          "options": [
+            "توظيف العلم في خدمة الإنسان والاستخدامات السلمية",
+            "استخدام العلم للسلاح فقط",
+            "إيقاف البحث العلمي",
+            "حصر العلم في بلد واحد"
+          ],
+          "explanation": "اهتمت سميرة موسى بالاستخدام السلمي للإشعاع والطاقة الذرية وبإمكانات التطبيقات الطبية."
+        },
+        "en": {
+          "question": "What idea was linked to her vision for atomic energy?",
+          "options": [
+            "Using science for humanity and peaceful purposes",
+            "Using science only for weapons",
+            "Stopping scientific research",
+            "Restricting science to one country"
+          ],
+          "explanation": "She supported peaceful uses of radiation and atomic energy, including potential medical applications."
+        },
+        "fr": {
+          "question": "Quelle idée était liée à sa vision de l’énergie atomique ?",
+          "options": [
+            "Mettre la science au service de l’humanité et d’usages pacifiques",
+            "N’utiliser la science que pour les armes",
+            "Arrêter la recherche scientifique",
+            "Réserver la science à un seul pays"
+          ],
+          "explanation": "Elle défendait les usages pacifiques des rayonnements et de l’énergie atomique, notamment les applications médicales possibles."
+        },
+        "it": {
+          "question": "Quale idea era legata alla sua visione dell’energia atomica?",
+          "options": [
+            "Usare la scienza per l’umanità e per scopi pacifici",
+            "Usare la scienza solo per le armi",
+            "Fermare la ricerca scientifica",
+            "Riservare la scienza a un solo paese"
+          ],
+          "explanation": "Sosteneva gli usi pacifici delle radiazioni e dell’energia atomica, comprese le possibili applicazioni mediche."
+        },
+        "de": {
+          "question": "Welche Idee war mit ihrer Vorstellung von Atomenergie verbunden?",
+          "options": [
+            "Wissenschaft zum Wohl der Menschen und für friedliche Zwecke einsetzen",
+            "Wissenschaft nur für Waffen nutzen",
+            "Forschung einstellen",
+            "Wissenschaft auf ein Land beschränken"
+          ],
+          "explanation": "Sie setzte sich für friedliche Anwendungen von Strahlung und Atomenergie ein, auch im medizinischen Bereich."
+        }
+      }
+    },
+    {
+      "id": "historical-evidence",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "كيف ينبغي التعامل مع الروايات غير المثبتة عن وفاتها؟",
+          "options": [
+            "تمييز الروايات عن الحقائق وعدم الجزم بلا دليل",
+            "اعتبار كل رواية حقيقة مؤكدة",
+            "تجاهل المصادر",
+            "اختيار الرواية الأكثر انتشارًا فقط"
+          ],
+          "explanation": "المسؤولية التاريخية تقتضي توضيح ما تثبته المصادر وما يبقى موضع خلاف."
+        },
+        "en": {
+          "question": "How should unverified accounts of her death be treated?",
+          "options": [
+            "Separate claims from facts and avoid certainty without evidence",
+            "Treat every story as confirmed fact",
+            "Ignore sources",
+            "Choose only the most popular account"
+          ],
+          "explanation": "Historical responsibility means explaining what sources establish and what remains disputed."
+        },
+        "fr": {
+          "question": "Comment faut-il traiter les récits non vérifiés sur sa mort ?",
+          "options": [
+            "Distinguer les affirmations des faits et éviter toute certitude sans preuve",
+            "Considérer chaque récit comme établi",
+            "Ignorer les sources",
+            "Ne retenir que le récit le plus populaire"
+          ],
+          "explanation": "La rigueur historique consiste à préciser ce que les sources établissent et ce qui reste contesté."
+        },
+        "it": {
+          "question": "Come dovrebbero essere trattati i racconti non verificati sulla sua morte?",
+          "options": [
+            "Distinguere le affermazioni dai fatti e non essere categorici senza prove",
+            "Considerare ogni racconto un fatto certo",
+            "Ignorare le fonti",
+            "Scegliere solo la versione più diffusa"
+          ],
+          "explanation": "La responsabilità storica richiede di distinguere ciò che le fonti dimostrano da ciò che resta controverso."
+        },
+        "de": {
+          "question": "Wie sollte man unbestätigte Berichte über ihren Tod behandeln?",
+          "options": [
+            "Behauptungen von Fakten trennen und ohne Belege keine Gewissheit behaupten",
+            "Jede Erzählung als erwiesene Tatsache behandeln",
+            "Quellen ignorieren",
+            "Nur die bekannteste Version auswählen"
+          ],
+          "explanation": "Historische Sorgfalt bedeutet zu erklären, was Quellen belegen und was umstritten bleibt."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 30.6425,
+    "lng": 31.2043,
+    "place": {
+      "ar": "سنبو الكبرى، زفتى، الغربية، مسقط رأس سميرة موسى.",
+      "en": "Sanbu al-Kubra, Zefta, Gharbia, birthplace of Sameera Moussa.",
+      "fr": "Sanbu al-Kubra, Zefta, Gharbia, lieu de naissance de Sameera Moussa.",
+      "it": "Sanbu al-Kubra, Zefta, Gharbia, luogo di nascita di Sameera Moussa.",
+      "de": "Sanbu al-Kubra, Zefta, Gharbia, Geburtsort von Sameera Moussa."
+    }
+  }
+}
