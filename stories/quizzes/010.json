@@ -5,20 +5,20 @@
     {
       "q": "في أي عام وُلدت سميرة موسى؟",
       "o": [
-        "1917",
         "1925",
         "1939",
+        "1917",
         "1952"
       ],
-      "a": 0,
+      "a": 2,
       "e": "وُلدت سميرة موسى في 3 مارس 1917 في قرية سنبو الكبرى.",
       "i18n": {
         "en": {
           "q": "In what year was Sameera Moussa born?",
           "o": [
-            "1917",
             "1925",
             "1939",
+            "1917",
             "1952"
           ],
           "e": "She was born on 3 March 1917 in Sanbu al-Kubra."
@@ -26,9 +26,9 @@
         "fr": {
           "q": "En quelle année Sameera Moussa est-elle née ?",
           "o": [
-            "1917",
             "1925",
             "1939",
+            "1917",
             "1952"
           ],
           "e": "Elle est née le 3 mars 1917 à Sanbu al-Kubra."
@@ -36,9 +36,9 @@
         "it": {
           "q": "In quale anno nacque Sameera Moussa?",
           "o": [
-            "1917",
             "1925",
             "1939",
+            "1917",
             "1952"
           ],
           "e": "Nacque il 3 marzo 1917 a Sanbu al-Kubra."
@@ -46,9 +46,9 @@
         "de": {
           "q": "In welchem Jahr wurde Sameera Moussa geboren?",
           "o": [
-            "1917",
             "1925",
             "1939",
+            "1917",
             "1952"
           ],
           "e": "Sie wurde am 3. März 1917 in Sanbu al-Kubra geboren."
@@ -111,51 +111,51 @@
     {
       "q": "من العالم المصري الذي ارتبط بدعم مسيرتها العلمية؟",
       "o": [
-        "علي مصطفى مشرفة",
         "أحمد زويل",
         "مصطفى السيد",
-        "فاروق الباز"
+        "فاروق الباز",
+        "علي مصطفى مشرفة"
       ],
-      "a": 0,
+      "a": 3,
       "e": "كان علي مصطفى مشرفة من الشخصيات العلمية المؤثرة في مسيرتها.",
       "i18n": {
         "en": {
           "q": "Which Egyptian scientist was associated with supporting her scientific path?",
           "o": [
-            "Ali Mostafa Mosharafa",
             "Ahmed Zewail",
             "Mostafa El-Sayed",
-            "Farouk El-Baz"
+            "Farouk El-Baz",
+            "Ali Mostafa Mosharafa"
           ],
           "e": "Ali Mostafa Mosharafa was one of the influential scientific figures in her career."
         },
         "fr": {
           "q": "Quel scientifique égyptien est associé à son parcours scientifique ?",
           "o": [
-            "Ali Mostafa Mosharafa",
             "Ahmed Zewail",
             "Mostafa El-Sayed",
-            "Farouk El-Baz"
+            "Farouk El-Baz",
+            "Ali Mostafa Mosharafa"
           ],
           "e": "Ali Mostafa Mosharafa fait partie des figures scientifiques qui ont influencé son parcours."
         },
         "it": {
           "q": "Quale scienziato egiziano è associato al suo percorso scientifico?",
           "o": [
-            "Ali Mostafa Mosharafa",
             "Ahmed Zewail",
             "Mostafa El-Sayed",
-            "Farouk El-Baz"
+            "Farouk El-Baz",
+            "Ali Mostafa Mosharafa"
           ],
           "e": "Ali Mostafa Mosharafa fu una delle figure scientifiche influenti nel suo percorso."
         },
         "de": {
           "q": "Welcher ägyptische Wissenschaftler wird mit der Förderung ihres wissenschaftlichen Weges verbunden?",
           "o": [
-            "Ali Mostafa Mosharafa",
             "Ahmed Zewail",
             "Mostafa El-Sayed",
-            "Farouk El-Baz"
+            "Farouk El-Baz",
+            "Ali Mostafa Mosharafa"
           ],
           "e": "Ali Mostafa Mosharafa war eine der einflussreichen wissenschaftlichen Persönlichkeiten in ihrer Laufbahn."
         }
@@ -164,19 +164,19 @@
     {
       "q": "ما الفكرة التي ارتبطت برؤيتها لاستخدام الطاقة الذرية؟",
       "o": [
-        "توظيف العلم في خدمة الإنسان والاستخدامات السلمية",
         "استخدام العلم للسلاح فقط",
+        "توظيف العلم في خدمة الإنسان والاستخدامات السلمية",
         "إيقاف البحث العلمي",
         "حصر العلم في بلد واحد"
       ],
-      "a": 0,
+      "a": 1,
       "e": "اهتمت سميرة موسى بالاستخدام السلمي للإشعاع والطاقة الذرية وبإمكانات التطبيقات الطبية.",
       "i18n": {
         "en": {
           "q": "What idea was linked to her vision for atomic energy?",
           "o": [
-            "Using science for humanity and peaceful purposes",
             "Using science only for weapons",
+            "Using science for humanity and peaceful purposes",
             "Stopping scientific research",
             "Restricting science to one country"
           ],
@@ -185,8 +185,8 @@
         "fr": {
           "q": "Quelle idée était liée à sa vision de l’énergie atomique ?",
           "o": [
-            "Mettre la science au service de l’humanité et d’usages pacifiques",
             "N’utiliser la science que pour les armes",
+            "Mettre la science au service de l’humanité et d’usages pacifiques",
             "Arrêter la recherche scientifique",
             "Réserver la science à un seul pays"
           ],
@@ -195,8 +195,8 @@
         "it": {
           "q": "Quale idea era legata alla sua visione dell’energia atomica?",
           "o": [
-            "Usare la scienza per l’umanità e per scopi pacifici",
             "Usare la scienza solo per le armi",
+            "Usare la scienza per l’umanità e per scopi pacifici",
             "Fermare la ricerca scientifica",
             "Riservare la scienza a un solo paese"
           ],
@@ -205,8 +205,8 @@
         "de": {
           "q": "Welche Idee war mit ihrer Vorstellung von Atomenergie verbunden?",
           "o": [
-            "Wissenschaft zum Wohl der Menschen und für friedliche Zwecke einsetzen",
             "Wissenschaft nur für Waffen nutzen",
+            "Wissenschaft zum Wohl der Menschen und für friedliche Zwecke einsetzen",
             "Forschung einstellen",
             "Wissenschaft auf ein Land beschränken"
           ],
@@ -217,20 +217,20 @@
     {
       "q": "كيف ينبغي التعامل مع الروايات غير المثبتة عن وفاتها؟",
       "o": [
-        "تمييز الروايات عن الحقائق وعدم الجزم بلا دليل",
         "اعتبار كل رواية حقيقة مؤكدة",
         "تجاهل المصادر",
+        "تمييز الروايات عن الحقائق وعدم الجزم بلا دليل",
         "اختيار الرواية الأكثر انتشارًا فقط"
       ],
-      "a": 0,
+      "a": 2,
       "e": "المسؤولية التاريخية تقتضي توضيح ما تثبته المصادر وما يبقى موضع خلاف.",
       "i18n": {
         "en": {
           "q": "How should unverified accounts of her death be treated?",
           "o": [
-            "Separate claims from facts and avoid certainty without evidence",
             "Treat every story as confirmed fact",
             "Ignore sources",
+            "Separate claims from facts and avoid certainty without evidence",
             "Choose only the most popular account"
           ],
           "e": "Historical responsibility means explaining what sources establish and what remains disputed."
@@ -238,9 +238,9 @@
         "fr": {
           "q": "Comment faut-il traiter les récits non vérifiés sur sa mort ?",
           "o": [
-            "Distinguer les affirmations des faits et éviter toute certitude sans preuve",
             "Considérer chaque récit comme établi",
             "Ignorer les sources",
+            "Distinguer les affirmations des faits et éviter toute certitude sans preuve",
             "Ne retenir que le récit le plus populaire"
           ],
           "e": "La rigueur historique consiste à préciser ce que les sources établissent et ce qui reste contesté."
@@ -248,9 +248,9 @@
         "it": {
           "q": "Come dovrebbero essere trattati i racconti non verificati sulla sua morte?",
           "o": [
-            "Distinguere le affermazioni dai fatti e non essere categorici senza prove",
             "Considerare ogni racconto un fatto certo",
             "Ignorare le fonti",
+            "Distinguere le affermazioni dai fatti e non essere categorici senza prove",
             "Scegliere solo la versione più diffusa"
           ],
           "e": "La responsabilità storica richiede di distinguere ciò che le fonti dimostrano da ciò che resta controverso."
@@ -258,9 +258,9 @@
         "de": {
           "q": "Wie sollte man unbestätigte Berichte über ihren Tod behandeln?",
           "o": [
-            "Behauptungen von Fakten trennen und ohne Belege keine Gewissheit behaupten",
             "Jede Erzählung als erwiesene Tatsache behandeln",
             "Quellen ignorieren",
+            "Behauptungen von Fakten trennen und ohne Belege keine Gewissheit behaupten",
             "Nur die bekannteste Version auswählen"
           ],
           "e": "Historische Sorgfalt bedeutet zu erklären, was Quellen belegen und was umstritten bleibt."
