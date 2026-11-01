@@ -19,7 +19,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.match(html, /STORY-PACKAGE-PROMPT\.md/);
   assert.match(html, /rebuild\/story-contract\.json/);
   assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY'/);
-  assert.match(html, /var storyValidationErrors=storyAdapter\.validateunified story\(pkg\)/);
+  assert.match(html, /var storyValidationErrors=storyAdapter\.validateStory\(pkg\)/);
   assert.match(html, /pkg=storyAdapter\.storyToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
   assert.ok(html.includes("package-review.html?draft=1"), 'unified story-only drafts should use the full-package read-only preview');
