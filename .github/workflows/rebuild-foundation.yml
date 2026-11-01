@@ -32,4 +32,4 @@ jobs:
           cp rebuild/reader.js "$tmpdir/rebuild/reader.js"
           (cd "$tmpdir" && node "$GITHUB_WORKSPACE/rebuild/build-story.mjs" "$GITHUB_WORKSPACE/rebuild/story-packages/october-sea-men.v2.json" 016)
           test -s "$tmpdir/stories/october/016/index.html"
-          node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$tmpdir/stories/october/016/data.v2.json"
+          node -e "JSON.parse(require('node:fs').readFileSync(process.argv[1], 'utf8'))" "$tmpdir/stories/october/016/story.json"
