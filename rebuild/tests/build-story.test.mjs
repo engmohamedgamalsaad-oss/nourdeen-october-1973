@@ -46,8 +46,8 @@ function fixture() {
   };
 }
 
-test('build-story creates a V2 page and package, then refuses to overwrite them', async () => {
-  const temp = await mkdtemp(path.join(tmpdir(), 'kh-v2-build-'));
+test('build-story creates a unified story page and package, then refuses to overwrite them', async () => {
+  const temp = await mkdtemp(path.join(tmpdir(), 'kh-story-build-'));
   try {
     const input = path.join(temp, 'story.json');
     await writeFile(input, JSON.stringify(fixture()), 'utf8');
