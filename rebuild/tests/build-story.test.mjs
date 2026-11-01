@@ -70,8 +70,8 @@ test('build-story creates a unified story page and package, then refuses to over
     assert.match(page, /id="share-whatsapp"/);
     assert.match(page, /id="print-story"/);
     assert.match(page, /id="image-lightbox"/);
-    assert.match(page, /reader\.js\?v=20261030-shared-reader-1/);
-    assert.match(page, /reader-base\.css\?v=20261030-shared-reader-1/, 'generated page must use the shared reader base stylesheet');
+    assert.match(page, /reader\.js\?v=20261101-story-reader-1/);
+    assert.match(page, /reader-base\.css\?v=20261101-story-reader-1/, 'generated page must use the shared reader base stylesheet');
     assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'shared headings need a sans-serif fallback when web fonts are unavailable');
     assert.match(page, /data-story-path="story\.json"/);
     assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, 'a story page built for eventual approved publication must not remain noindex');
