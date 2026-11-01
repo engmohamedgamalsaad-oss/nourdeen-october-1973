@@ -200,7 +200,7 @@ async function main() {
       assert.equal(submissionWrites.length, writesBeforePaste, 'invalid AI packages must never write to Supabase');
       console.log('ok - AI textarea paste/execute/unlock/execute lock cycle (' + viewport.name + ')');
 
-      // A legacy deployed publisher must fail closed: only the capabilities probe may be sent.
+      // A non-October legacy story must be stopped before the old publisher or any upload request.
       const approvedSummary = page.locator('summary').filter({ hasText:'اختبار بصري — حكاية بانتظار النشر' }).first();
       await approvedSummary.click();
       const approvedCard = approvedSummary.locator('xpath=..');
@@ -208,18 +208,11 @@ async function main() {
       const publishButton = approvedCard.getByRole('button', { name:'نشر الحكاية' });
       await publishButton.waitFor({ state:'visible' });
       await publishButton.scrollIntoViewIfNeeded();
-      const capabilitiesRequest = page.waitForRequest(req =>
-        req.url().includes('/functions/v1/publish-story-pr') &&
-        (() => { try { return JSON.parse(req.postData() || '{}').action === 'capabilities'; } catch (_) { return false; } })(),
-        { timeout:10000 }
-      );
       await publishButton.click();
-      await capabilitiesRequest;
-      assert.equal(publisherCalls.length, 1, 'publish action must perform one capabilities handshake');
-      assert.equal(publisherCalls[0].action, 'capabilities', 'admin must probe the function before sending story files');
-      assert.equal(Object.prototype.hasOwnProperty.call(publisherCalls[0], 'files'), false, 'capabilities probe must not contain story files');
-      assert.equal(submissionWrites.length, writesBeforePublisherProbe, 'unsupported legacy publisher must not cause a submission write');
-      console.log('ok - legacy publisher capability mismatch blocks before upload (' + viewport.name + ')');
+      await page.getByText(/هذه الحكاية خارج قسم أكتوبر ولم تُحوّل بعد إلى حزمة القالب الموحد/).waitFor({ state:'visible', timeout:10000 });
+      assert.equal(publisherCalls.length, 0, 'non-October legacy story must be blocked before calling the publisher');
+      assert.equal(submissionWrites.length, writesBeforePublisherProbe, 'blocked legacy story must not cause a submission write');
+      console.log('ok - non-October legacy publisher is blocked before upload (' + viewport.name + ')');
 
       const builder = await context.newPage();
       await builder.goto('http://127.0.0.1:' + PORT + '/khaledoon/story-builder.html', { waitUntil:'domcontentloaded' });
