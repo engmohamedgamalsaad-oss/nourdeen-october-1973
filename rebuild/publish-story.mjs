@@ -117,7 +117,7 @@ function makeReaderHtml(story, id, coverUrl) {
     '<meta property="og:description" content="' + esc(ar.summary) + '"><meta property="og:image" content="' + esc(coverUrl) + '">\n' +
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
     '<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">\n' +
-    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1">\n</head>\n' +
+    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1"><link rel="stylesheet" href="../../../rebuild/reader-enhance.css?v=20261101-story-reader-1">\n</head>\n' +
     '<body data-story-slug="' + id + '" data-design="' + esc(story.design.variant) + '" data-section="' + section + '" data-start-only data-gallery="unplaced"><script>document.body.setAttribute("data-theme",document.documentElement.getAttribute("data-theme")||"dark");</script>\n' +
     '<header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">' +
     '<button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>' +
