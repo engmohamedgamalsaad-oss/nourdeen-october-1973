@@ -18,8 +18,8 @@
       "narrator_grade": "الصف الثالث الابتدائي",
       "figure_name": "توفيق الحكيم",
       "person": "توفيق الحكيم",
-      "history_note": "الوقائع الأساسية في الحكاية مدعومة بمصادر مرجعية تشمل الهيئة العامة للاستعلامات المصرية، وموسوعة الجزيرة، وموسوعة لاروس، وموسوعة Treccani. تاريخ الميلاد الأكثر اعتمادًا في هذه المراجع هو 9 أكتوبر 1898، والوفاة 26 يوليو 1987. توجد مشكلة في صفحة الهيئة العامة للاستعلامات المصرية نفسها: بياناتها العلوية تذكر عام 1898، بينما يذكر متن الصفحة عام 1903؛ لذلك اعتمدت تاريخ 1898 الذي تؤيده مراجع أخرى، وسجّلت هذا التعارض بدل إخفائه. تذكر المصادر أن أهل الكهف نُشرت عام 1933، وأن شهرزاد ظهرت عام 1934، وأن يوميات نائب في الأرياف صدرت عام 1937. وصف المسرح الذهني توصيف نقدي شائع لأعمال الحكيم، وليس اسمًا رسميًا وحيدًا متفقًا عليه لكل إنتاجه. اختير التصميم portrait-biography لأن الحكاية تتمحور حول سيرة كاتب وأثره الأدبي، وليس حول تسلسل معركة أو تجربة علمية. لم يُضف حقل مستقل لبطاقات هل تعلم لأن مخطط الاستيراد الحالي لا يعرّف حقلًا لها؛ أُدرجت المعلومات الإضافية الموثقة داخل المتن بدل اختراع حقل قد لا تدعمه لوحة الإدارة. الصور المستخدمة صور فوتوغرافية حقيقية للشخصية، وليست صورًا مولدة. صفحة ملف الصورة الأولى تصنفها ضمن الملكية العامة وفق بيانات Wikimedia Commons، والثانية تحمل ترخيص Creative Commons Attribution-ShareAlike 4.0؛ ينبغي الاحتفاظ بإسناد الصورة الثانية ورابط الترخيص عند استخدامها.",
-      "images_note": "التصميم المختار portrait-biography لأن الحكاية سيرة شخصية أدبية، وتساعد الصور الأرشيفية على التعرف إلى الكاتب الحقيقي. الصورة الأولى مؤرخة في صفحة Commons بعام 1985 ومصنفة ملكية عامة وفق بيانات الصفحة. الصورة الثانية صورة حقيقية للشخصية منشورة بترخيص CC BY-SA 4.0، ويتطلب استخدامها الإسناد والالتزام بشروط الترخيص. يجب إبقاء رابط صفحة المصدر واضحًا وعدم حذف بيانات الحقوق عند النشر.",
+      "history_note": "تاريخ الميلاد الأكثر اعتمادًا في المراجع هو 9 أكتوبر 1898 والوفاة 26 يوليو 1987. وتذكر صفحة الهيئة العامة للاستعلامات عامين مختلفين (1898 و1903)، فاعتمدت الحكاية 1898 لأن مراجع أخرى تؤيده. و«المسرح الذهني» وصف نقدي شائع لأعمال الحكيم، وليس اسمًا رسميًا لكل إنتاجه.",
+      "images_note": "الصورتان صور حقيقية للكاتب: الأولى ملكية عامة وفق صفحتها على ويكيميديا كومنز، والثانية بترخيص CC BY-SA 4.0 مع وجوب الإسناد.",
       "blocks": [
         {
           "type": "paragraph",
@@ -119,8 +119,8 @@
       "narrator_grade": "Third grade of primary school",
       "figure_name": "Tawfiq al-Hakim",
       "person": "Tawfiq al-Hakim",
-      "history_note": "The main facts in this story are supported by the Egyptian State Information Service, Al Jazeera Encyclopedia, Larousse, and Treccani. The most consistently reported dates are 9 October 1898 for his birth and 26 July 1987 for his death. The Egyptian State Information Service page contains a discrepancy: its heading gives 1898, while its body mentions 1903. This story uses 1898 because other reference works support it. The People of the Cave appeared in 1933, Shahrazad in 1934, and Diary of a Country Prosecutor in 1937. Intellectual drama is a common critical description of al-Hakim’s work, not a single official label for all of his writing. The portrait-biography design was chosen because the story focuses on a literary figure and his legacy. No separate Did You Know field was added because the current import schema does not define one. The photographs are archival images, not AI-generated images. The first Commons file is marked public domain on its file page; the second is licensed under CC BY-SA 4.0 and requires attribution.",
-      "images_note": "The portrait-biography design suits a story about a writer’s life and literary legacy. The first archival photograph is dated 1985 on its Commons file page and is marked public domain under the copyright information shown there. The second photograph is licensed under CC BY-SA 4.0, so attribution, a licence link, and notice of any changes are required. Keep the source information with the image.",
+      "history_note": "The most consistently reported dates are 9 October 1898 for his birth and 26 July 1987 for his death. The Egyptian State Information Service page gives two different years (1898 and 1903); this story uses 1898 because other reference works support it. “Intellectual drama” is a common critical description of al-Hakim’s work, not an official label for all of his writing.",
+      "images_note": "Both images are real photographs of the writer: the first is public domain according to its Wikimedia Commons page, the second is licensed under CC BY-SA 4.0 and requires attribution.",
       "blocks": [
         {
           "type": "paragraph",
@@ -220,8 +220,8 @@
       "narrator_grade": "Troisième année de l’école primaire",
       "figure_name": "Tawfiq al-Hakim",
       "person": "Tawfiq al-Hakim",
-      "history_note": "Les faits principaux de ce récit sont étayés par l’Autorité égyptienne de l’information, l’encyclopédie d’Al Jazeera, Larousse et Treccani. Les dates les plus souvent indiquées sont le 9 octobre 1898 pour sa naissance et le 26 juillet 1987 pour sa mort. La page de l’Autorité égyptienne de l’information présente une contradiction : son en-tête indique 1898, tandis que le texte mentionne 1903. Le récit retient 1898, confirmé par d’autres ouvrages de référence. Les Gens de la caverne a paru en 1933, Schéhérazade en 1934 et Journal d’un substitut de campagne en 1937. Le théâtre d’idées est une description critique courante de son œuvre, et non une étiquette officielle unique pour tous ses écrits. Le design portrait-biographie a été choisi parce que le récit porte sur la vie et l’héritage d’un écrivain. Le schéma d’importation actuel ne définit pas de champ indépendant pour les cartes « Le saviez-vous ? » ; les informations supplémentaires figurent donc dans le récit. Les photographies sont des images d’archives et non des images générées par IA. Le premier fichier Commons est marqué comme appartenant au domaine public sur sa page ; le second est sous licence CC BY-SA 4.0 et exige une attribution.",
-      "images_note": "Le design portrait-biographie convient à un récit consacré à la vie d’un écrivain et à son héritage littéraire. La première photographie d’archives est datée de 1985 sur sa page Commons et marquée comme appartenant au domaine public selon les informations de droits indiquées. La seconde est sous licence CC BY-SA 4.0 ; il faut donc fournir l’attribution, un lien vers la licence et signaler toute modification. Conserver les informations de source avec l’image.",
+      "history_note": "Les dates les plus souvent citées sont le 9 octobre 1898 pour sa naissance et le 26 juillet 1987 pour sa mort. La page du Service d’information de l’État égyptien donne deux années différentes (1898 et 1903) ; ce récit retient 1898, car d’autres ouvrages de référence la confirment. Le « théâtre de l’esprit » est une description critique courante de l’œuvre d’al-Hakim, et non une étiquette officielle pour toute sa production.",
+      "images_note": "Les deux images sont de vraies photographies de l’écrivain : la première est dans le domaine public selon sa page Wikimedia Commons, la seconde est sous licence CC BY-SA 4.0 et exige une attribution.",
       "blocks": [
         {
           "type": "paragraph",
@@ -321,8 +321,8 @@
       "narrator_grade": "Terza classe della scuola primaria",
       "figure_name": "Tawfiq al-Hakim",
       "person": "Tawfiq al-Hakim",
-      "history_note": "I fatti principali del racconto sono sostenuti da fonti di riferimento quali il Servizio statale d’informazione egiziano, l’enciclopedia di Al Jazeera, Larousse e Treccani. Le date riportate più spesso sono il 9 ottobre 1898 per la nascita e il 26 luglio 1987 per la morte. La pagina del Servizio statale d’informazione egiziano contiene una discrepanza: nell’intestazione indica il 1898, mentre nel testo menziona il 1903. Il racconto usa il 1898, confermato da altre opere di riferimento. La gente della caverna uscì nel 1933, Shahrazad nel 1934 e Diario di un procuratore di campagna nel 1937. Teatro delle idee è una descrizione critica comune delle opere di al-Hakim, non un’unica etichetta ufficiale per tutta la sua produzione. È stato scelto il design portrait-biography perché il racconto riguarda la vita e l’eredità di uno scrittore. Lo schema di importazione attuale non definisce un campo separato per le schede «Lo sapevi?», quindi le informazioni aggiuntive sono inserite nel testo. Le fotografie sono immagini d’archivio reali, non generate dall’IA. Il primo file Commons è indicato come di pubblico dominio nella relativa pagina; il secondo è distribuito con licenza CC BY-SA 4.0 e richiede attribuzione.",
-      "images_note": "Il design portrait-biography è adatto a una storia sulla vita di uno scrittore e sulla sua eredità letteraria. La prima fotografia d’archivio è datata 1985 nella pagina Commons ed è indicata come di pubblico dominio secondo le informazioni sui diritti riportate. La seconda è concessa con licenza CC BY-SA 4.0; occorre quindi indicare l’autore o la fonte, inserire il collegamento alla licenza e segnalare eventuali modifiche. Conservare i dati della fonte insieme all’immagine.",
+      "history_note": "Le date più spesso riportate sono il 9 ottobre 1898 per la nascita e il 26 luglio 1987 per la morte. La pagina del Servizio di informazione di Stato egiziano indica due anni diversi (1898 e 1903); questa storia usa il 1898 perché altre opere di riferimento lo confermano. Il «teatro della mente» è una descrizione critica diffusa dell’opera di al-Hakim, non un’etichetta ufficiale per tutta la sua produzione.",
+      "images_note": "Entrambe le immagini sono fotografie reali dello scrittore: la prima è di pubblico dominio secondo la sua pagina di Wikimedia Commons, la seconda ha licenza CC BY-SA 4.0 e richiede l’attribuzione.",
       "blocks": [
         {
           "type": "paragraph",
@@ -377,7 +377,7 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Il diritto e la vita delle persone",
-          "text": "Dopo il ritorno lavorò nel campo giudiziario e si spostò in diverse zone dell’Egitto. Questa esperienza gli permise di conoscere più da vicino la vita e i problemi delle persone e influenzò alcuni dei suoi scritti. Tra le sue opere più note c’è il romanzo Diario di un procuratore di campagna, pubblicato nel 1937, che descrive aspetti della vita rurale e il rapporto tra gli abitanti e la giustizia."
+          "text": "Dopo il ritorno lavorò nel campo giudiziario e si sposto in diverse zone dell’Egitto. Questa esperienza gli permise di conoscere più da vicino la vita e i problemi delle persone e influenzò alcuni dei suoi scritti. Tra le sue opere più note c’è il romanzo Diario di un procuratore di campagna, pubblicato nel 1937, che descrive aspetti della vita rurale e il rapporto tra gli abitanti e la giustizia."
         },
         {
           "type": "paragraph",
@@ -422,8 +422,8 @@
       "narrator_grade": "Dritte Klasse der Grundschule",
       "figure_name": "Tawfiq al-Hakim",
       "person": "Tawfiq al-Hakim",
-      "history_note": "Die wichtigsten Fakten dieser Geschichte werden durch das ägyptische Staatliche Informationsservice, die Enzyklopädie von Al Jazeera, Larousse und Treccani gestützt. Am häufigsten werden der 9. Oktober 1898 als Geburtsdatum und der 26. Juli 1987 als Sterbedatum angegeben. Die Seite des ägyptischen Staatlichen Informationsservice enthält einen Widerspruch: In der Überschrift steht 1898, im Fließtext dagegen 1903. Diese Geschichte verwendet 1898, da andere Nachschlagewerke dieses Jahr bestätigen. Die Leute der Höhle erschien 1933, Scheherazade 1934 und Tagebuch eines Staatsanwalts auf dem Lande 1937. Ideentheater ist eine verbreitete literaturkritische Beschreibung von al-Hakims Werk, aber keine einzige offizielle Bezeichnung für sein gesamtes Schaffen. Das Design portrait-biography wurde gewählt, weil die Geschichte das Leben und Vermächtnis eines Schriftstellers behandelt. Das aktuelle Importschema definiert kein eigenes Feld für «Schon gewusst?»-Karten; zusätzliche Fakten wurden deshalb in den Erzähltext aufgenommen. Die Fotografien sind echte Archivbilder und keine KI-generierten Bilder. Die erste Commons-Datei ist auf ihrer Dateiseite als gemeinfrei gekennzeichnet; die zweite steht unter CC BY-SA 4.0 und erfordert eine Namensnennung.",
-      "images_note": "Das Design portrait-biography passt zu einer Geschichte über das Leben eines Schriftstellers und sein literarisches Vermächtnis. Das erste Archivfoto ist auf der Commons-Seite auf 1985 datiert und gemäß den dortigen Rechteangaben als gemeinfrei gekennzeichnet. Das zweite Foto steht unter der Lizenz CC BY-SA 4.0; daher müssen die Quelle genannt, die Lizenz verlinkt und Änderungen angegeben werden. Die Quellenangaben sollten zusammen mit dem Bild erhalten bleiben.",
+      "history_note": "Am häufigsten werden der 9. Oktober 1898 als Geburtsdatum und der 26. Juli 1987 als Todesdatum genannt. Die Seite des Ägyptischen Staatlichen Informationsdienstes nennt zwei verschiedene Jahre (1898 und 1903); diese Geschichte folgt 1898, weil andere Nachschlagewerke es stützen. „Theater des Geistes“ ist eine verbreitete kritische Beschreibung von al-Hakims Werk, keine offizielle Bezeichnung für sein gesamtes Schaffen.",
+      "images_note": "Beide Bilder sind echte Fotografien des Schriftstellers: Das erste ist laut Wikimedia-Commons-Seite gemeinfrei, das zweite steht unter CC BY-SA 4.0 und erfordert eine Namensnennung.",
       "blocks": [
         {
           "type": "paragraph",
@@ -559,39 +559,39 @@
       "id": "hakim-1985",
       "path": "assets/images/stories/Tawfiq_al-Hakim.jpg",
       "kind": "photograph",
-      "source_name": "· Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
+      "source_name": "Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
       "source_url": "https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg",
-      "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد. ·",
+      "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد.",
       "i18n": {
         "ar": {
           "alt": "صورة فوتوغرافية لتوفيق الحكيم، الكاتب والمسرحي المصري، في ثمانينيات القرن العشرين.",
           "caption": "توفيق الحكيم، أحد أبرز رواد المسرح العربي الحديث. تصف صفحة ملف الصورة تاريخها بأنه عام 1985.",
-          "source_name": "· Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
-          "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد. ·"
+          "source_name": "Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
+          "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد."
         },
         "en": {
           "alt": "Photograph of Tawfiq al-Hakim, the Egyptian writer and playwright, in the 1980s.",
           "caption": "Tawfiq al-Hakim, one of the leading pioneers of modern Arabic drama. The file page dates the photograph to 1985.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; original source attributed to Al Riyadh newspaper",
-          "rights": "The Wikimedia Commons page marks this image as public domain under the Egyptian and U.S. copyright information shown there. Check the source page before reuse and retain attribution details. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg; original source attributed to Al Riyadh newspaper",
+          "rights": "The Wikimedia Commons page marks this image as public domain under the Egyptian and U.S. copyright information shown there. Check the source page before reuse and retain attribution details."
         },
         "fr": {
           "alt": "Photographie de Tawfiq al-Hakim, écrivain et dramaturge égyptien, dans les années 1980.",
           "caption": "Tawfiq al-Hakim, l’un des grands pionniers du théâtre arabe moderne. La page du fichier date la photographie de 1985.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg ; source originale attribuée au journal Al Riyadh",
-          "rights": "La page Wikimedia Commons classe cette image dans le domaine public selon les informations sur les droits égyptiens et américains qui y figurent. Vérifiez la page source avant réutilisation et conservez l’attribution. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg ; source originale attribuée au journal Al Riyadh",
+          "rights": "La page Wikimedia Commons classe cette image dans le domaine public selon les informations sur les droits égyptiens et américains qui y figurent. Vérifiez la page source avant réutilisation et conservez l’attribution."
         },
         "it": {
           "alt": "Fotografia di Tawfiq al-Hakim, scrittore e drammaturgo egiziano, negli anni Ottanta.",
           "caption": "Tawfiq al-Hakim, uno dei principali pionieri del teatro arabo moderno. La pagina del file data la fotografia al 1985.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; fonte originale attribuita al quotidiano Al Riyadh",
-          "rights": "La pagina Wikimedia Commons indica che l’immagine è di pubblico dominio secondo le informazioni sul copyright egiziano e statunitense riportate. Controlla la pagina fonte prima di riutilizzarla e conserva l’attribuzione. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg; fonte originale attribuita al quotidiano Al Riyadh",
+          "rights": "La pagina Wikimedia Commons indica che l’immagine è di pubblico dominio secondo le informazioni sul copyright egiziano e statunitense riportate. Controlla la pagina fonte prima di riutilizzarla e conserva l’attribuzione."
         },
         "de": {
           "alt": "Fotografie von Tawfiq al-Hakim, dem ägyptischen Schriftsteller und Dramatiker, aus den 1980er-Jahren.",
           "caption": "Tawfiq al-Hakim, einer der bedeutenden Wegbereiter des modernen arabischen Theaters. Die Dateiseite datiert das Foto auf 1985.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; ursprüngliche Quelle laut Angabe: Zeitung Al Riyadh",
-          "rights": "Die Wikimedia-Commons-Seite kennzeichnet das Bild anhand der dort genannten ägyptischen und US-amerikanischen Urheberrechtsangaben als gemeinfrei. Bitte prüfe die Quellseite vor der Wiederverwendung und bewahre die Quellenangabe auf. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg; ursprüngliche Quelle laut Angabe: Zeitung Al Riyadh",
+          "rights": "Die Wikimedia-Commons-Seite kennzeichnet das Bild anhand der dort genannten ägyptischen und US-amerikanischen Urheberrechtsangaben als gemeinfrei. Bitte prüfe die Quellseite vor der Wiederverwendung und bewahre die Quellenangabe auf."
         }
       }
     },
@@ -599,39 +599,39 @@
       "id": "hakim-commons",
       "path": "assets/images/stories/img-f9fc402a87.jpg",
       "kind": "photograph",
-      "source_name": "· Wikimedia Commons، ملف توفيق الحكيم.jpg",
+      "source_name": "Wikimedia Commons، ملف توفيق الحكيم.jpg",
       "source_url": "https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg",
-      "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق. ·",
+      "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق.",
       "i18n": {
         "ar": {
           "alt": "صورة فوتوغرافية لتوفيق الحكيم، الكاتب المصري المعروف بإسهامه في تطوير المسرح العربي.",
           "caption": "صورة لتوفيق الحكيم من ملف منشور على ويكيميديا كومنز بترخيص المشاع الإبداعي نَسب المصنف ومشاركته بالمثل 4.0.",
-          "source_name": "· Wikimedia Commons، ملف توفيق الحكيم.jpg",
-          "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق. ·"
+          "source_name": "Wikimedia Commons، ملف توفيق الحكيم.jpg",
+          "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق."
         },
         "en": {
           "alt": "Photograph of Tawfiq al-Hakim, the Egyptian writer known for his contribution to Arabic drama.",
           "caption": "A photograph of Tawfiq al-Hakim from a Wikimedia Commons file licensed under Creative Commons Attribution-ShareAlike 4.0.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
-          "rights": "Licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Credit the source, link to the license, note changes, and share adaptations under the same or a compatible license. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Credit the source, link to the license, note changes, and share adaptations under the same or a compatible license."
         },
         "fr": {
           "alt": "Photographie de Tawfiq al-Hakim, écrivain égyptien connu pour sa contribution au théâtre arabe.",
           "caption": "Photographie de Tawfiq al-Hakim provenant d’un fichier Wikimedia Commons sous licence Creative Commons Attribution-Partage dans les mêmes conditions 4.0.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
-          "rights": "Sous licence Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Citez la source, ajoutez le lien de licence, indiquez les modifications et partagez toute adaptation sous la même licence ou une licence compatible. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Sous licence Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Citez la source, ajoutez le lien de licence, indiquez les modifications et partagez toute adaptation sous la même licence ou une licence compatible."
         },
         "it": {
           "alt": "Fotografia di Tawfiq al-Hakim, scrittore egiziano noto per il suo contributo al teatro arabo.",
           "caption": "Fotografia di Tawfiq al-Hakim da un file di Wikimedia Commons con licenza Creative Commons Attribuzione-Condividi allo stesso modo 4.0.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
-          "rights": "Con licenza Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Attribuisci la fonte, aggiungi il link alla licenza, indica le modifiche e condividi gli adattamenti con la stessa licenza o una compatibile. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Con licenza Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Attribuisci la fonte, aggiungi il link alla licenza, indica le modifiche e condividi gli adattamenti con la stessa licenza o una compatibile."
         },
         "de": {
           "alt": "Fotografie von Tawfiq al-Hakim, dem ägyptischen Schriftsteller, der zur Entwicklung des arabischen Theaters beitrug.",
           "caption": "Eine Fotografie von Tawfiq al-Hakim aus einer Wikimedia-Commons-Datei unter der Lizenz Creative Commons Namensnennung-Weitergabe unter gleichen Bedingungen 4.0.",
-          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
-          "rights": "Lizenziert unter Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Quelle nennen, Lizenz verlinken, Änderungen angeben und Bearbeitungen unter derselben oder einer kompatiblen Lizenz weitergeben. ·"
+          "source_name": "Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Lizenziert unter Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Quelle nennen, Lizenz verlinken, Änderungen angeben und Bearbeitungen unter derselben oder einer kompatiblen Lizenz weitergeben."
         }
       }
     }
@@ -769,60 +769,6 @@
         "de": {
           "title": "Encyclopedia.com, Tawfiq al-Hakim (1898–1987): Biografie, Jurastudium, Parisaufenthalt, Justizdienst und Tagebuch eines Staatsanwalts auf dem Land.",
           "organization": "Encyclopedia.com"
-        }
-      }
-    },
-    {
-      "title": "Wikimedia Commons، Tawfiq al-Hakim.jpg، صفحة الملف ومصدر الصورة وبيانات الملكية العامة:",
-      "organization": "Wikimedia Commons",
-      "url": "https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg",
-      "i18n": {
-        "ar": {
-          "title": "Wikimedia Commons، Tawfiq al-Hakim.jpg، صفحة الملف ومصدر الصورة وبيانات الملكية العامة:",
-          "organization": "Wikimedia Commons"
-        },
-        "en": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: file page, source, and public-domain information.",
-          "organization": "Wikimedia Commons"
-        },
-        "fr": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg : page du fichier, source et informations sur le domaine public.",
-          "organization": "Wikimedia Commons"
-        },
-        "it": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: pagina del file, fonte e informazioni sul pubblico dominio.",
-          "organization": "Wikimedia Commons"
-        },
-        "de": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: Dateiseite, Quelle und Angaben zur Gemeinfreiheit.",
-          "organization": "Wikimedia Commons"
-        }
-      }
-    },
-    {
-      "title": "Wikimedia Commons، توفيق الحكيم.jpg، صفحة الملف وترخيص CC BY-SA 4.0:",
-      "organization": "Wikimedia Commons",
-      "url": "https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg",
-      "i18n": {
-        "ar": {
-          "title": "Wikimedia Commons، توفيق الحكيم.jpg، صفحة الملف وترخيص CC BY-SA 4.0:",
-          "organization": "Wikimedia Commons"
-        },
-        "en": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: file page and CC BY-SA 4.0 license.",
-          "organization": "Wikimedia Commons"
-        },
-        "fr": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg : page du fichier et licence CC BY-SA 4.0.",
-          "organization": "Wikimedia Commons"
-        },
-        "it": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: pagina del file e licenza CC BY-SA 4.0.",
-          "organization": "Wikimedia Commons"
-        },
-        "de": {
-          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: Dateiseite und CC-BY-SA-4.0-Lizenz.",
-          "organization": "Wikimedia Commons"
         }
       }
     }
