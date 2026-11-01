@@ -700,23 +700,17 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
+  // Test the SVG source files directly. The splash may deliberately choose a real archival photograph,
+  // so inspecting its current <img> would incorrectly treat a photograph as a failed SVG localization.
   const cases = [
-    { slug: 'stories/science/015/', selector: '#gallery figure:nth-of-type(3) img', decorative: true },
-    { slug: 'stories/science/007/', decorative: true },
-    { slug: 'stories/women/013/', decorative: true },
-    { slug: 'stories/islamic/011/', decorative: true },
-    { slug: 'stories/history/014/', decorative: true },
-    { slug: 'stories/science/012/', decorative: true },
-    { slug: 'stories/women/010/', decorative: true },
     { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
-    { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
-    { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
-    { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
     { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
+    { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
     { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
+    { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
+    { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
     { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
-  ];
-  const ctx = await newContext(browser, origin, 'desktop');
+  ];  const ctx = await newContext(browser, origin, 'desktop');
   const page = await ctx.newPage();
   try {
     await page.goto(base + '/assets/shared/home-language-only.js');
