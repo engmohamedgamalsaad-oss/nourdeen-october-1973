@@ -1011,10 +1011,10 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
-  assert.ok(publisher.includes('const savedStoryPackage: any ='));
+  assert.ok(publisher.includes('const savedStoryPackageRaw: any ='));
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
-  var packageGuard = publisher.indexOf('if (isunified storyOnlyDraft) {');
+  var packageGuard = publisher.indexOf('if (isStoryOnlyDraft) {');
   var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
   var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
   assert.ok(packageGuard >= 0 && branchWrite > packageGuard && prWrite > packageGuard, 'canonical package checks must run before branch or PR creation');
@@ -1022,7 +1022,7 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
-  assert.ok(admin.includes('var requireunified storyForNewStory=!isOctoberLegacyRecord(it)'));
+  assert.ok(admin.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'));
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
 });
