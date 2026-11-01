@@ -783,7 +783,7 @@ if(!isNew){
  });
  bPub.title='لا ينشر مباشرة؛ يحفظ المسودة ثم يفتح المعاينة للموافقة قبل أي نشر.';
  bPub.addEventListener('click',function(){openPreviewAfterSave(bPub)});
- if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;var v2ReadonlyNote=el('div','note','هذه مسودة محفوظة بالقالب الموحد. البيانات المعروضة هنا للقراءة فقط؛ ولتعديل الحكاية الصق حزمة موحدة كاملة جديدة. الحفظ والمعاينة والنشر تتم من المسار الموحد.');box.appendChild(v2ReadonlyNote)}
+ if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;var unifiedReadonlyNote=el('div','note',isV2OnlyDraftRecord(it)?'هذه مسودة محفوظة بالقالب الموحد. البيانات المعروضة هنا للقراءة فقط؛ ولتعديل الحكاية الصق حزمة موحدة كاملة جديدة. الحفظ والمعاينة والنشر تتم من المسار الموحد.':'هذه الحكاية خارج قسم أكتوبر؛ أوقفنا الحفظ والمعاينة من المسار القديم. لتعديلها، استخدم أداة تجهيز الحكاية أعلاه والصق الحزمة الموحدة كاملة، ثم راجع المعاينة واعتمدها قبل النشر.');box.appendChild(unifiedReadonlyNote)}
  return box;
 }
 /* حذف نهائي لسجل الحكاية من لوحة الإدارة (khaledoon_submissions أو submitted_stories القديم). لا يمس صفحة الحكاية المنشورة على الموقع. */
