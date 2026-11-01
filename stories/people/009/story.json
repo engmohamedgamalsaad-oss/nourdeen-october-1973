@@ -1,0 +1,1180 @@
+{
+  "format": "KHALEDOON_STORY",
+  "slug": "naguib-mahfouz",
+  "section": "people",
+  "design": {
+    "variant": "portrait-biography",
+    "accent": "#e2b36d"
+  },
+  "original_body": "نجيب محفوظ هو أديب وروائي مصري، وُلد في القاهرة عام 1911، ويُعد من أهم الكُتّاب في الأدب العربي.\nتناول في رواياته حياة المصريين وتفاصيل المجتمع، وناقش قضايا الفقر والعدالة والتقاليد والتغيرات الاجتماعية.",
+  "i18n": {
+    "ar": {
+      "title": "نجيب محفوظ: حكاية أديب جعل العالم يقرأ مصر",
+      "subtitle": "من أزقة القاهرة القديمة إلى جائزة نوبل في الأدب",
+      "summary": "من أزقة القاهرة القديمة إلى جائزة نوبل في الأدب",
+      "student_name": "نور دين محمد",
+      "narrator_name": "كارما",
+      "grade": "الأول الإعدادي",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "نجيب محفوظ",
+      "person": "نجيب محفوظ",
+      "history_note": "الوقائع الأساسية عن الميلاد والوفاة والتعليم والأعمال وجائزة نوبل مستندة إلى السيرة الرسمية لجائزة نوبل ومصادر مصرية ثقافية رسمية. وُلد محفوظ في حي الجمالية بالقاهرة في 11 ديسمبر 1911، وتوفي في 30 أغسطس 2006، وحصل على جائزة نوبل في الأدب عام 1988.\nتختلف بعض المصادر في طريقة كتابة الأسماء العربية بالحروف اللاتينية وفي ترجمة عناوين الروايات، كما تختلف الدراسات في تقسيم مراحل إنتاجه الأدبي؛ لذلك لا تُعرض هذه التصنيفات باعتبارها تقسيمًا وحيدًا متفقًا عليه. الملخصات التعليمية والتفسيرات الواردة هنا صياغة تحريرية وليست اقتباسات حرفية من محفوظ. لا تنسب إليه الحكاية أقوالًا غير موثقة.",
+      "images_note": "تضم الحزمة صورًا فوتوغرافية تاريخية لنجيب محفوظ، وليست رسومًا تخيلية. صفحات ويكيميديا كومنز المعنية تعرض معلومات عن المصدر والترخيص، ومنها بيانات تشير إلى الملكية العامة في مصر. ينبغي إعادة التحقق من صفحة كل صورة وترخيصها قبل استخدامها في النشر العام، لأن حالة الحقوق قد تختلف بحسب البلد وطريقة إعادة الاستخدام.\nلم أدرج صور أغلفة كتب أو مشاهد أفلام حتى لا تختلط صورة الكاتب بصور أعماله. العناوين والتعليقات وصفية ولا تدّعي أن الصورة توثق حدثًا غير مثبت.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "كارما: فضول وأسئلة وملاحظات",
+          "text": "أنا كارما، وكنت فاكرة إن الكاتب بيقعد يكتب قصصًا من خياله وبس، لكن اكتشفت إن نجيب محفوظ كان بيلاحظ الناس والشوارع والحياة حواليه، وبعدها يحوّل كل ده إلى حكايات نقدر نتعلم منها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وهذه ملاحظة جميلة يا كارما؛ فالقاهرة لم تكن مجرد خلفية للأحداث في روايات محفوظ، بل كانت عالمًا كاملًا بشوارعه ومقاهيه وبيوته وناسِه. ومن مراقبة الحياة اليومية صنع أدبًا وصل إلى قرّاء في بلدان كثيرة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أكتر حاجة عجبتني إنه بدأ رحلته من القاهرة، المدينة اللي عاش فيها، ووصل بكلامه إلى قراء في بلاد بعيدة. حسّيت إن الحكاية الصادقة ممكن تسافر أبعد من صاحبها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لم يكن من الممكن أن يعرف النتيجة وهو يبدأ؛ فالكتابة رحلة طويلة من المحاولة والتعلّم. وفي عام 1988 حصل نجيب محفوظ على جائزة نوبل في الأدب، فأصبحت أعماله معروفة على نطاق عالمي أوسع."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "وعرفت كمان إنه حصل على جائزة نوبل سنة 1988. يا ترى كان يتخيل وهو بيبدأ الكتابة إن قصصه هتخلّي العالم كله يهتم بالحياة المصرية؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "في قلب القاهرة القديمة",
+          "text": "في قلب القاهرة القديمة، وتحديدًا في حي الجمالية، وُلد نجيب محفوظ في 11 ديسمبر عام 1911. كانت الشوارع الشعبية والحارات والأسواق والبيوت المتجاورة جزءًا من عالمه اليومي، فكبر وهو يرى كيف يعيش الناس، وكيف تختلف أحلامهم ومشكلاتهم، وكيف تتغير الحياة من جيل إلى جيل. لم تكن القاهرة بالنسبة إليه مجرد مكان للسكن؛ بل أصبحت عالمًا واسعًا يستلهم منه شخصيات رواياته وأحداثها.",
+          "image_after": "mahfouz-1980s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "القراءة والفلسفة",
+          "text": "منذ صغره، ازداد اهتمامه بالقراءة والتاريخ. درس الفلسفة في جامعة القاهرة وتخرج عام 1934، ثم اتجه إلى العمل والكتابة. لم يبدأ شهرته العالمية دفعة واحدة؛ بل بنى طريقه بالتدريج، من المقالات والقصص إلى الروايات التي حاول من خلالها فهم الإنسان والمجتمع."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "من مصر القديمة إلى المجتمع الحديث",
+          "text": "في بداياته الأدبية، كتب محفوظ روايات تاريخية تستلهم مصر القديمة، منها عبث الأقدار ورادوبيس وكفاح طيبة. وبذلك جمع بين اهتمامه بتاريخ بلده ورغبته في أن يحكي للقراء عن الإنسان واختياراته ومصيره. ثم اتجه بصورة أوضح إلى تصوير المجتمع المصري الحديث، فظهرت في أعماله تفاصيل الحياة اليومية، واختلاف الطبقات الاجتماعية، وأحلام الشباب، وصراعات الأسر، وتأثير الظروف الاقتصادية والاجتماعية في الناس."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "زقاق المدق والثلاثية القاهرية",
+          "text": "ومن أشهر أعماله رواية زقاق المدق، التي نُشرت عام 1947، والثلاثية الشهيرة التي تضم بين القصرين وقصر الشوق والسكرية. وتتابع الثلاثية حياة أسرة قاهرية عبر أجيال مختلفة، وتعرض التغيرات التي شهدها المجتمع المصري خلال عقود مضطربة من تاريخه. ومن خلال الشخصيات والأماكن والحوار، يستطيع القارئ أن يرى القاهرة كأنها حاضرة أمامه، وأن يفكر في العلاقة بين اختيارات الفرد والظروف التي يعيش فيها.",
+          "image_after": "mahfouz-1960s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "العدالة والحرية والتغيير",
+          "text": "لم تكن كتاباته مجرد وصف للشوارع والبيوت؛ فقد تناول قضايا العدالة والحرية والفقر والتقاليد والتغيير. وكان يمنح شخصياته مشاعر ودوافع متباينة، فلا تبدو الحياة عنده بسيطة أو ذات إجابة واحدة. وهذا ما يجعل قراءة أعماله فرصة لفهم وجهات نظر مختلفة والتأمل في نتائج القرارات التي يتخذها البشر."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "حكايات من حياة الكاتب",
+          "text": "هل تعلم؟ قبل أن يصبح روائيًا مشهورًا، نشر محفوظ مقالات وقصصًا قصيرة، كما عمل موظفًا حكوميًا سنوات طويلة. ولم تكن الكتابة عنده منفصلة عن متابعة الحياة اليومية التي عرفها عن قرب."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "الثلاثية القاهرية",
+          "text": "هل تعلم؟ نُشرت الثلاثية القاهرية في منتصف خمسينيات القرن العشرين، وتتكون من ثلاث روايات هي بين القصرين وقصر الشوق والسكرية. وقد أصبحت من أشهر الأعمال التي ارتبطت بتصوير المجتمع المصري."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "جائزة نوبل",
+          "text": "هل تعلم؟ في عام 1988 حصل نجيب محفوظ على جائزة نوبل في الأدب، وكان أول كاتب أدبه باللغة العربية يحصل على هذه الجائزة. وقد سلط هذا الإنجاز الضوء عالميًا على الأدب العربي وعلى قدرة الحكايات المحلية على التعبير عن تجارب إنسانية مشتركة.",
+          "image_after": "mahfouz-cafe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "رحلة لا تتوقف",
+          "text": "لم تتوقف رحلة محفوظ عند الشهرة؛ فقد واصل الكتابة في أشكال أدبية مختلفة، وترك عشرات الروايات ومجموعات القصص والمقالات. وفي 30 أغسطس عام 2006 رحل عن عالمنا، لكن كتبه ظلت حاضرة لدى القراء، وما زالت أعماله تُقرأ وتُناقش وتُترجم."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "ما الذي نتعلمه؟",
+          "text": "تعلّمنا حكاية نجيب محفوظ أن مراقبة الحياة بفضول، والقراءة المستمرة، والصبر على تطوير الموهبة يمكن أن تفتح أبوابًا لم تكن تبدو قريبة في البداية. لقد كتب عن أناس وأماكن عرفها، لكنه لمس في حكاياتهم أسئلة يفهمها البشر في بلدان مختلفة: كيف نعيش معًا؟ وكيف نواجه الظلم؟ وكيف تؤثر اختياراتنا في مستقبلنا؟"
+        }
+      ]
+    },
+    "en": {
+      "title": "Naguib Mahfouz: The Writer Who Helped the World Read Egypt",
+      "subtitle": "From the old streets of Cairo to the Nobel Prize in Literature",
+      "summary": "From the old streets of Cairo to the Nobel Prize in Literature",
+      "student_name": "Nour Din Mohamed",
+      "narrator_name": "Karma",
+      "grade": "First preparatory grade",
+      "narrator_grade": "Third grade of primary school",
+      "figure_name": "Naguib Mahfouz",
+      "person": "Naguib Mahfouz",
+      "history_note": "The key facts about Mahfouz’s birth, death, education, works, and Nobel Prize are based on the official Nobel Prize biography and Egyptian cultural sources. He was born in Gamaliya, Cairo, on 11 December 1911, died on 30 August 2006, and received the Nobel Prize in Literature in 1988.\nSources differ in the Latin spelling of Arabic names and in the translation of novel titles. Scholars also differ in how they divide his literary career into periods, so no single classification is presented as universally accepted. The educational summaries and interpretations here are editorial writing, not direct quotations from Mahfouz. No unverified statements are attributed to him.",
+      "images_note": "This package contains historical photographs of Naguib Mahfouz, not fictional illustrations. The relevant Wikimedia Commons pages provide source and licensing information, including statements that the photographs are in the public domain in Egypt. Check each file page and its licence again before public use, since rights may vary by country and intended reuse.\nNo book covers or film stills have been included, avoiding confusion between the writer and adaptations of his works. The titles and captions are descriptive and do not claim that a photograph documents an unverified event.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosity, questions and observations",
+          "text": "I’m Karma. I used to think that writers simply sat down and made up stories. But I discovered that Naguib Mahfouz watched the people, streets, and everyday life around him, then turned what he observed into stories we can learn from."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "That is a thoughtful observation, Karma. Cairo was not merely a backdrop in Mahfouz’s novels; it was a whole world of streets, cafés, homes, and people. By observing everyday life, he created literature that reached readers in many countries."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What I liked most is that he began his journey in Cairo, the city where he lived, and his writing reached readers in distant countries. I felt that an honest story can travel farther than its author."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He could not have known the outcome when he began; writing is a long journey of practice and learning. In 1988, Naguib Mahfouz received the Nobel Prize in Literature, bringing his work to an even wider international audience."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "I also learned that he received the Nobel Prize in 1988. I wonder whether, when he first began writing, he imagined that the whole world would become interested in Egyptian life."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "In the heart of old Cairo",
+          "text": "In the heart of old Cairo, in the neighbourhood of Gamaliya, Naguib Mahfouz was born on 11 December 1911. Popular streets, alleys, markets, and neighbouring homes formed part of his everyday world. As he grew up, he saw how people lived, how their dreams and problems differed, and how life changed from one generation to the next. Cairo was not merely the place where he lived; it became a wide world from which he drew the characters and events of his novels.",
+          "image_after": "mahfouz-1980s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Reading and philosophy",
+          "text": "From an early age, he became increasingly interested in reading and history. He studied philosophy at Cairo University and graduated in 1934, then turned to work and writing. His international fame did not arrive all at once. He built his career gradually, moving from articles and short stories to novels through which he tried to understand people and society."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "From ancient Egypt to modern society",
+          "text": "In his early literary career, Mahfouz wrote historical novels inspired by ancient Egypt, including Khufu’s Wisdom, Rhadopis of Nubia, and Thebes at War. In this way, he combined his interest in his country’s history with his desire to tell readers about human beings, their choices, and their destinies. He later turned more clearly towards modern Egyptian society. His works began to portray everyday life, differences between social classes, young people’s dreams, family conflicts, and the effects of economic and social conditions on people."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Midaq Alley and the Cairo Trilogy",
+          "text": "Among his best-known works is Midaq Alley, published in 1947, and his famous Cairo Trilogy, consisting of Palace Walk, Palace of Desire, and Sugar Street. The trilogy follows a Cairene family across generations and presents changes in Egyptian society during turbulent decades of its history. Through characters, places, and dialogue, readers can picture Cairo as if it were before them and reflect on the relationship between personal choices and the circumstances in which people live.",
+          "image_after": "mahfouz-1960s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Justice, freedom and change",
+          "text": "His writing did more than describe streets and homes. He explored justice, freedom, poverty, traditions, and change. He gave his characters different feelings and motivations, so life in his work rarely appears simple or limited to a single answer. Reading his books is therefore an opportunity to understand different points of view and think about the consequences of human decisions."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "A writer’s everyday life",
+          "text": "Did you know? Before becoming a famous novelist, Mahfouz published articles and short stories and worked as a government employee for many years. His writing remained connected to the everyday life he had observed closely."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "The Cairo Trilogy",
+          "text": "Did you know? The Cairo Trilogy was published in the mid-1950s and consists of Palace Walk, Palace of Desire, and Sugar Street. It became one of the best-known literary works associated with the portrayal of Egyptian society."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "The Nobel Prize",
+          "text": "Did you know? In 1988, Naguib Mahfouz received the Nobel Prize in Literature, becoming the first writer working in Arabic to receive the award. His achievement brought worldwide attention to Arabic literature and to the ability of local stories to express shared human experiences.",
+          "image_after": "mahfouz-cafe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A journey that continued",
+          "text": "Mahfouz’s journey did not end with fame. He continued writing in different literary forms and left behind dozens of novels, story collections, and articles. He died on 30 August 2006, but his books remained alive among readers, and his work continues to be read, discussed, and translated."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "What can we learn?",
+          "text": "The story of Naguib Mahfouz teaches us that observing life with curiosity, reading regularly, and patiently developing a talent can open doors that once seemed far away. He wrote about people and places he knew, yet their stories touched questions that people in different countries can understand: How can we live together? How can we confront injustice? And how do our choices affect our future?"
+        }
+      ]
+    },
+    "fr": {
+      "title": "Naguib Mahfouz : l’écrivain qui a fait découvrir l’Égypte au monde",
+      "subtitle": "Des vieilles ruelles du Caire au prix Nobel de littérature",
+      "summary": "Des vieilles ruelles du Caire au prix Nobel de littérature",
+      "student_name": "Nour Din Mohamed",
+      "narrator_name": "Karma",
+      "grade": "Première année préparatoire",
+      "narrator_grade": "Troisième année de l’école primaire",
+      "figure_name": "Naguib Mahfouz",
+      "person": "Naguib Mahfouz",
+      "history_note": "Les faits essentiels concernant la naissance, la mort, les études, les œuvres et le prix Nobel de Mahfouz reposent sur la biographie officielle du prix Nobel et sur des sources culturelles égyptiennes. Il est né à Gamaliya, au Caire, le 11 décembre 1911, est mort le 30 août 2006 et a reçu le prix Nobel de littérature en 1988.\nLes sources diffèrent parfois dans la transcription latine des noms arabes et dans la traduction des titres des romans. Les chercheurs ne découpent pas tous sa carrière littéraire de la même manière ; aucune classification unique n’est donc présentée comme universellement admise. Les résumés pédagogiques et les interprétations de ce texte sont des formulations éditoriales, et non des citations directes de Mahfouz. Aucune parole non vérifiée ne lui est attribuée.",
+      "images_note": "Ce dossier contient des photographies historiques de Naguib Mahfouz, et non des illustrations fictives. Les pages correspondantes de Wikimedia Commons indiquent les sources et les informations de licence, notamment des mentions de domaine public en Égypte. Vérifiez à nouveau la page de chaque fichier et sa licence avant toute publication, car les droits peuvent varier selon le pays et l’utilisation envisagée.\nAucune couverture de livre ni image de film n’a été incluse, afin de ne pas confondre l’écrivain avec les adaptations de ses œuvres. Les titres et légendes sont descriptifs et ne prétendent pas documenter un événement non vérifié.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma : curiosité, questions et observations",
+          "text": "Je m’appelle Karma. Je pensais que les écrivains s’asseyaient simplement pour inventer des histoires. Mais j’ai découvert que Naguib Mahfouz observait les gens, les rues et la vie quotidienne autour de lui, puis transformait ses observations en récits dont nous pouvons tirer des leçons."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "C’est une belle remarque, Karma. Le Caire n’était pas un simple décor dans les romans de Mahfouz : c’était tout un univers de rues, de cafés, de maisons et de personnages. En observant la vie quotidienne, il a créé une œuvre qui a touché des lecteurs dans de nombreux pays."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ce que j’ai préféré, c’est qu’il a commencé son parcours au Caire, la ville où il vivait, et que ses écrits ont atteint des lecteurs dans des pays lointains. J’ai compris qu’une histoire sincère peut voyager plus loin que son auteur."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il ne pouvait pas connaître le résultat au début de son parcours : l’écriture est un long chemin fait d’essais et d’apprentissage. En 1988, Naguib Mahfouz a reçu le prix Nobel de littérature, faisant connaître son œuvre à un public international encore plus large."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "J’ai aussi appris qu’il avait reçu le prix Nobel en 1988. Je me demande s’il imaginait, au début de sa carrière, que le monde entier s’intéresserait à la vie égyptienne."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Au cœur du vieux Caire",
+          "text": "Au cœur du vieux Caire, dans le quartier de Gamaliya, Naguib Mahfouz est né le 11 décembre 1911. Les rues populaires, les ruelles, les marchés et les maisons voisines faisaient partie de son quotidien. En grandissant, il observait la façon dont les gens vivaient, la diversité de leurs rêves et de leurs difficultés, ainsi que les changements d’une génération à l’autre. Le Caire n’était pas seulement son lieu de résidence : c’était un vaste univers qui lui inspirait les personnages et les événements de ses romans.",
+          "image_after": "mahfouz-1980s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Lecture et philosophie",
+          "text": "Dès son jeune âge, il s’intéressa de plus en plus à la lecture et à l’histoire. Il étudia la philosophie à l’Université du Caire et obtint son diplôme en 1934, avant de se consacrer au travail et à l’écriture. Sa renommée internationale ne vint pas d’un seul coup. Il construisit progressivement sa carrière, passant des articles et des nouvelles aux romans qui lui permettaient d’explorer l’être humain et la société."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "De l’Égypte ancienne à la société moderne",
+          "text": "Au début de sa carrière littéraire, Mahfouz écrivit des romans historiques inspirés de l’Égypte ancienne, notamment La Sagesse de Khéops, Rhadopis et La Lutte de Thèbes. Il associait ainsi son intérêt pour l’histoire de son pays à son désir de raconter les êtres humains, leurs choix et leur destin. Par la suite, il se tourna plus nettement vers la société égyptienne moderne. Ses œuvres décrivirent la vie quotidienne, les différences entre les classes sociales, les rêves des jeunes, les conflits familiaux et les effets des conditions économiques et sociales sur les individus."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "L’Impasse des deux palais et la trilogie du Caire",
+          "text": "Parmi ses œuvres les plus connues figure L’Impasse des deux palais, dans la traduction française courante du premier tome de sa célèbre trilogie, ainsi que la trilogie du Caire, composée de Bayn al-Qasrayn, Qasr al-Shawq et al-Sukkariyya. Cette trilogie suit une famille cairote sur plusieurs générations et montre les transformations de la société égyptienne pendant des décennies mouvementées. Grâce aux personnages, aux lieux et aux dialogues, le lecteur peut imaginer le Caire devant lui et réfléchir aux liens entre les choix personnels et les circonstances de la vie.",
+          "image_after": "mahfouz-1960s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Justice, liberté et changement",
+          "text": "Ses écrits ne se limitaient pas à décrire des rues et des maisons. Il abordait la justice, la liberté, la pauvreté, les traditions et le changement. Ses personnages avaient des sentiments et des motivations variés, si bien que la vie n’y semblait ni simple ni réductible à une seule réponse. Lire ses œuvres permet ainsi de comprendre différents points de vue et de réfléchir aux conséquences des décisions humaines."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "La vie quotidienne d’un écrivain",
+          "text": "Le saviez-vous ? Avant de devenir un romancier célèbre, Mahfouz publia des articles et des nouvelles et travailla pendant de nombreuses années dans l’administration. Son écriture resta liée à la vie quotidienne qu’il avait observée de près."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "La trilogie du Caire",
+          "text": "Le saviez-vous ? La trilogie du Caire fut publiée au milieu des années 1950 et se compose de Bayn al-Qasrayn, Qasr al-Shawq et al-Sukkariyya. Elle devint l’une des œuvres les plus célèbres consacrées à la représentation de la société égyptienne."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Le prix Nobel",
+          "text": "Le saviez-vous ? En 1988, Naguib Mahfouz reçut le prix Nobel de littérature, devenant le premier écrivain de langue arabe à recevoir cette distinction. Cette réussite attira l’attention internationale sur la littérature arabe et sur la capacité des récits locaux à exprimer des expériences humaines communes.",
+          "image_after": "mahfouz-cafe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un parcours qui continue",
+          "text": "La carrière de Mahfouz ne s’arrêta pas à la célébrité. Il continua d’écrire dans différents genres littéraires et laissa des dizaines de romans, de recueils de nouvelles et d’articles. Il mourut le 30 août 2006, mais ses livres continuèrent à vivre auprès des lecteurs et ses œuvres sont encore lues, étudiées et traduites."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Que pouvons-nous apprendre ?",
+          "text": "L’histoire de Naguib Mahfouz nous apprend que l’observation curieuse de la vie, la lecture régulière et le développement patient d’un talent peuvent ouvrir des portes qui semblaient lointaines. Il écrivait sur les personnes et les lieux qu’il connaissait, mais leurs histoires touchaient à des questions comprises dans de nombreux pays : comment vivre ensemble, comment combattre l’injustice et comment nos choix influencent-ils notre avenir ?"
+        }
+      ]
+    },
+    "it": {
+      "title": "Naguib Mahfouz: lo scrittore che ha fatto conoscere l’Egitto al mondo",
+      "subtitle": "Dalle antiche strade del Cairo al Premio Nobel per la letteratura",
+      "summary": "Dalle antiche strade del Cairo al Premio Nobel per la letteratura",
+      "student_name": "Nour Din Mohamed",
+      "narrator_name": "Karma",
+      "grade": "Primo anno della scuola preparatoria",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "Naguib Mahfouz",
+      "person": "Naguib Mahfouz",
+      "history_note": "I fatti principali sulla nascita, la morte, gli studi, le opere e il Premio Nobel di Mahfouz si basano sulla biografia ufficiale del Nobel e su fonti culturali egiziane. Nacque a Gamaliya, al Cairo, l’11 dicembre 1911, morì il 30 agosto 2006 e ricevette il Premio Nobel per la letteratura nel 1988.\nLe fonti possono differire nella traslitterazione dei nomi arabi e nella traduzione dei titoli dei romanzi. Anche gli studiosi suddividono in modi diversi le fasi della sua produzione letteraria, quindi nessuna classificazione viene presentata come universalmente condivisa. I riassunti didattici e le interpretazioni qui contenuti sono formulazioni editoriali, non citazioni dirette di Mahfouz. Non gli vengono attribuite dichiarazioni non verificate.",
+      "images_note": "Il pacchetto contiene fotografie storiche di Naguib Mahfouz, non illustrazioni immaginarie. Le pagine pertinenti di Wikimedia Commons riportano informazioni sulle fonti e sulle licenze, comprese indicazioni di pubblico dominio in Egitto. Prima della pubblicazione, controllare nuovamente la pagina di ogni file e la relativa licenza, perché i diritti possono variare in base al paese e all’uso previsto.\nNon sono state incluse copertine di libri né immagini tratte da film, per evitare di confondere lo scrittore con gli adattamenti delle sue opere. Titoli e didascalie sono descrittivi e non sostengono di documentare eventi non verificati.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: curiosità, domande e osservazioni",
+          "text": "Sono Karma. Pensavo che gli scrittori si sedessero semplicemente a inventare storie. Poi ho scoperto che Naguib Mahfouz osservava le persone, le strade e la vita quotidiana intorno a sé, trasformando ciò che vedeva in racconti da cui possiamo imparare."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "È una bella osservazione, Karma. Il Cairo non era soltanto uno sfondo nei romanzi di Mahfouz: era un intero mondo di strade, caffè, case e persone. Osservando la vita quotidiana, creò opere lette in molti paesi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Mi è piaciuto soprattutto che abbia iniziato il suo percorso al Cairo, la città in cui viveva, e che i suoi scritti siano arrivati a lettori di paesi lontani. Ho capito che una storia sincera può viaggiare più lontano del suo autore."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "All’inizio non poteva sapere dove lo avrebbe portato il suo percorso: scrivere è un lungo cammino di tentativi e apprendimento. Nel 1988 Naguib Mahfouz ricevette il Premio Nobel per la Letteratura, facendo conoscere le sue opere a un pubblico internazionale ancora più vasto."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ho anche scoperto che nel 1988 ricevette il Premio Nobel. Mi chiedo se, quando iniziò a scrivere, immaginasse che tutto il mondo si sarebbe interessato alla vita egiziana."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Nel cuore del Cairo antico",
+          "text": "Nel cuore del Cairo antico, nel quartiere di Gamaliya, Naguib Mahfouz nacque l’11 dicembre 1911. Le strade popolari, i vicoli, i mercati e le case vicine facevano parte della sua vita quotidiana. Crescendo, osservò come vivevano le persone, quanto fossero diversi i loro sogni e problemi e come la vita cambiasse da una generazione all’altra. Il Cairo non era soltanto il luogo in cui abitava: divenne un vasto mondo da cui trasse personaggi e vicende per i suoi romanzi.",
+          "image_after": "mahfouz-1980s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Lettura e filosofia",
+          "text": "Fin da giovane si interessò sempre più alla lettura e alla storia. Studiò filosofia all’Università del Cairo e si laureò nel 1934, per poi dedicarsi al lavoro e alla scrittura. La fama internazionale non arrivò tutta in una volta. Costruì la sua carriera gradualmente, passando dagli articoli e dai racconti ai romanzi con cui cercava di comprendere le persone e la società."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Dall’antico Egitto alla società moderna",
+          "text": "All’inizio della sua carriera letteraria, Mahfouz scrisse romanzi storici ispirati all’antico Egitto, tra cui La saggezza di Cheope, Rhadopis e La battaglia di Tebe. In questo modo unì il suo interesse per la storia del paese al desiderio di raccontare gli esseri umani, le loro scelte e il loro destino. In seguito si concentrò più chiaramente sulla società egiziana moderna. Le sue opere rappresentarono la vita quotidiana, le differenze tra le classi sociali, i sogni dei giovani, i conflitti familiari e gli effetti delle condizioni economiche e sociali sulle persone."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Il vicolo del mortaio e la Trilogia del Cairo",
+          "text": "Tra le sue opere più note c’è Il vicolo del mortaio, pubblicato nel 1947, insieme alla celebre Trilogia del Cairo, composta da Tra i due palazzi, Il palazzo del desiderio e Il giardino del passato, titoli resi in italiano con varianti editoriali. La trilogia segue una famiglia cairota attraverso diverse generazioni e racconta i cambiamenti della società egiziana durante decenni turbolenti. Attraverso personaggi, luoghi e dialoghi, il lettore può immaginare il Cairo come se fosse davanti ai suoi occhi e riflettere sul rapporto tra le scelte personali e le circostanze in cui si vive.",
+          "image_after": "mahfouz-1960s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Giustizia, libertà e cambiamento",
+          "text": "I suoi scritti non si limitavano a descrivere strade e case. Affrontavano la giustizia, la libertà, la povertà, le tradizioni e il cambiamento. I personaggi avevano sentimenti e motivazioni diversi, perciò la vita nelle sue opere non appariva semplice né riducibile a un’unica risposta. Leggere i suoi libri offre quindi l’occasione di comprendere punti di vista differenti e riflettere sulle conseguenze delle decisioni umane."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "La vita quotidiana di uno scrittore",
+          "text": "Lo sapevi? Prima di diventare un romanziere famoso, Mahfouz pubblicò articoli e racconti brevi e lavorò per molti anni come dipendente pubblico. La sua scrittura rimase legata alla vita quotidiana che aveva osservato da vicino."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "La Trilogia del Cairo",
+          "text": "Lo sapevi? La Trilogia del Cairo fu pubblicata a metà degli anni Cinquanta ed è composta da Tra i due palazzi, Il palazzo del desiderio e Il giardino del passato, secondo titoli italiani diffusi. Divenne una delle opere più note legate alla rappresentazione della società egiziana."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Il Premio Nobel",
+          "text": "Lo sapevi? Nel 1988 Naguib Mahfouz ricevette il Premio Nobel per la letteratura, diventando il primo scrittore che scriveva in arabo a ottenere il riconoscimento. Il premio attirò l’attenzione mondiale sulla letteratura araba e sulla capacità delle storie locali di esprimere esperienze umane condivise.",
+          "image_after": "mahfouz-cafe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un percorso che continua",
+          "text": "Il percorso di Mahfouz non si concluse con la fama. Continuò a scrivere in forme letterarie diverse e lasciò decine di romanzi, raccolte di racconti e articoli. Morì il 30 agosto 2006, ma i suoi libri rimasero vivi tra i lettori e le sue opere continuano a essere lette, discusse e tradotte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Che cosa possiamo imparare?",
+          "text": "La storia di Naguib Mahfouz ci insegna che osservare la vita con curiosità, leggere regolarmente e sviluppare un talento con pazienza può aprire porte che inizialmente sembravano lontane. Scrisse di persone e luoghi che conosceva, ma le loro storie toccavano domande comprensibili in molti paesi: come possiamo vivere insieme? Come possiamo affrontare l’ingiustizia? E in che modo le nostre scelte influenzano il futuro?"
+        }
+      ]
+    },
+    "de": {
+      "title": "Naguib Mahfouz: Der Schriftsteller, der Ägypten der Welt näherbrachte",
+      "subtitle": "Von den alten Gassen Kairos bis zum Nobelpreis für Literatur",
+      "summary": "Von den alten Gassen Kairos bis zum Nobelpreis für Literatur",
+      "student_name": "Nour Din Mohamed",
+      "narrator_name": "Karma",
+      "grade": "Erstes Vorbereitungsjahr",
+      "narrator_grade": "Dritte Klasse der Grundschule",
+      "figure_name": "Naguib Mahfouz",
+      "person": "Naguib Mahfouz",
+      "history_note": "Die wichtigsten Angaben zu Mahfouz’ Geburt, Tod, Ausbildung, Werken und Nobelpreis beruhen auf der offiziellen Nobelpreis-Biografie und ägyptischen Kulturquellen. Er wurde am 11. Dezember 1911 in Gamaliya, Kairo, geboren, starb am 30. August 2006 und erhielt 1988 den Nobelpreis für Literatur.\nQuellen unterscheiden sich gelegentlich bei der lateinischen Schreibweise arabischer Namen und bei Übersetzungen von Romantiteln. Auch die Einteilung seiner literarischen Schaffensphasen wird von Forschenden unterschiedlich vorgenommen; deshalb wird keine einzelne Einteilung als allgemein verbindlich dargestellt. Die pädagogischen Zusammenfassungen und Deutungen hier sind redaktionelle Formulierungen und keine direkten Zitate von Mahfouz. Ihm werden keine ungeprüften Aussagen zugeschrieben.",
+      "images_note": "Dieses Paket enthält historische Fotografien von Naguib Mahfouz und keine erfundenen Illustrationen. Die entsprechenden Wikimedia-Commons-Seiten nennen Quellen- und Lizenzinformationen, darunter Angaben zur Gemeinfreiheit in Ägypten. Vor einer Veröffentlichung sollten die Dateiseiten und Lizenzen erneut geprüft werden, da die Rechte je nach Land und Verwendungszweck unterschiedlich sein können.\nBuchumschläge und Filmstandbilder wurden nicht aufgenommen, damit der Schriftsteller nicht mit Verfilmungen seiner Werke verwechselt wird. Titel und Bildunterschriften sind beschreibend und behaupten nicht, ein ungeprüftes Ereignis zu dokumentieren.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "heading": "Karma: Neugier, Fragen und Beobachtungen",
+          "text": "Ich bin Karma. Früher dachte ich, Schriftsteller würden sich einfach hinsetzen und Geschichten erfinden. Doch ich habe entdeckt, dass Naguib Mahfouz die Menschen, Straßen und den Alltag um sich herum beobachtete und daraus Geschichten machte, aus denen wir lernen können."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das ist eine schöne Beobachtung, Karma. Kairo war in Mahfuz’ Romanen nicht nur Kulisse, sondern eine ganze Welt aus Straßen, Cafés, Häusern und Menschen. Indem er den Alltag beobachtete, schuf er Literatur, die Leserinnen und Leser in vielen Ländern erreichte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Am besten gefiel mir, dass seine Reise in Kairo begann, der Stadt, in der er lebte, und dass seine Texte Leser in weit entfernten Ländern erreichten. Ich habe verstanden, dass eine ehrliche Geschichte weiter reisen kann als ihr Autor."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Zu Beginn konnte er nicht wissen, wohin ihn sein Weg führen würde; Schreiben ist ein langer Prozess des Übens und Lernens. 1988 erhielt Naguib Mahfuz den Nobelpreis für Literatur, wodurch seine Werke international noch bekannter wurden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Außerdem erfuhr ich, dass er 1988 den Nobelpreis erhielt. Ich frage mich, ob er sich zu Beginn seiner schriftstellerischen Arbeit vorstellen konnte, dass sich die ganze Welt für das ägyptische Leben interessieren würde."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Im Herzen des alten Kairo",
+          "text": "Im Herzen des alten Kairo, im Viertel Gamaliya, wurde Naguib Mahfouz am 11. Dezember 1911 geboren. Belebte Straßen, enge Gassen, Märkte und benachbarte Häuser gehörten zu seiner alltäglichen Welt. Als er aufwuchs, beobachtete er, wie Menschen lebten, wie unterschiedlich ihre Träume und Probleme waren und wie sich das Leben von einer Generation zur nächsten veränderte. Kairo war für ihn nicht nur ein Wohnort, sondern eine weite Welt, aus der er die Figuren und Ereignisse seiner Romane schöpfte.",
+          "image_after": "mahfouz-1980s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Lesen und Philosophie",
+          "text": "Schon in jungen Jahren interessierte er sich immer mehr für Lesen und Geschichte. Er studierte Philosophie an der Universität Kairo und schloss sein Studium 1934 ab. Danach wandte er sich der Arbeit und dem Schreiben zu. Sein internationaler Ruhm kam nicht über Nacht. Er entwickelte seine Laufbahn Schritt für Schritt und ging von Artikeln und Kurzgeschichten zu Romanen über, mit denen er Menschen und Gesellschaft verstehen wollte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Vom alten Ägypten zur modernen Gesellschaft",
+          "text": "Zu Beginn seiner literarischen Laufbahn schrieb Mahfouz historische Romane, die vom alten Ägypten inspiriert waren, darunter Chufu-Weisheit, Rhadopis und Theben im Kampf. So verband er sein Interesse an der Geschichte seines Landes mit dem Wunsch, von Menschen, ihren Entscheidungen und ihrem Schicksal zu erzählen. Später richtete er seinen Blick deutlicher auf die moderne ägyptische Gesellschaft. Seine Werke schilderten den Alltag, Unterschiede zwischen gesellschaftlichen Schichten, die Träume junger Menschen, familiäre Konflikte und die Auswirkungen wirtschaftlicher und gesellschaftlicher Bedingungen auf die Menschen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Die Midaq-Gasse und die Kairo-Trilogie",
+          "text": "Zu seinen bekanntesten Werken gehören Die Midaq-Gasse, die 1947 veröffentlicht wurde, und seine berühmte Kairo-Trilogie mit den Romanen Zwischen den Palästen, Palast der Sehnsucht und Die Zuckerstraße. Die Trilogie begleitet eine Kairoer Familie über mehrere Generationen und zeigt Veränderungen der ägyptischen Gesellschaft während bewegter Jahrzehnte. Durch Figuren, Orte und Dialoge können Leser Kairo vor sich sehen und über den Zusammenhang zwischen persönlichen Entscheidungen und den Lebensumständen nachdenken.",
+          "image_after": "mahfouz-1960s"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Gerechtigkeit, Freiheit und Wandel",
+          "text": "Seine Texte beschrieben nicht nur Straßen und Häuser. Er beschäftigte sich mit Gerechtigkeit, Freiheit, Armut, Traditionen und Wandel. Seine Figuren hatten unterschiedliche Gefühle und Beweggründe, sodass das Leben in seinen Werken selten einfach oder auf eine einzige Antwort zu reduzieren war. Seine Bücher zu lesen bietet deshalb die Möglichkeit, verschiedene Sichtweisen zu verstehen und über die Folgen menschlicher Entscheidungen nachzudenken."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Der Alltag eines Schriftstellers",
+          "text": "Schon gewusst? Bevor Mahfouz ein berühmter Romanautor wurde, veröffentlichte er Artikel und Kurzgeschichten und arbeitete viele Jahre als Staatsbediensteter. Sein Schreiben blieb mit dem Alltag verbunden, den er aufmerksam beobachtet hatte."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Die Kairo-Trilogie",
+          "text": "Schon gewusst? Die Kairo-Trilogie erschien Mitte der 1950er-Jahre und besteht aus Zwischen den Palästen, Palast der Sehnsucht und Die Zuckerstraße. Sie wurde zu einem der bekanntesten literarischen Werke über die Darstellung der ägyptischen Gesellschaft."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Der Nobelpreis",
+          "text": "Schon gewusst? Im Jahr 1988 erhielt Naguib Mahfouz den Nobelpreis für Literatur. Er war damit der erste Schriftsteller, der auf Arabisch schrieb und diese Auszeichnung erhielt. Der Preis lenkte weltweit Aufmerksamkeit auf die arabische Literatur und darauf, wie lokale Geschichten gemeinsame menschliche Erfahrungen ausdrücken können.",
+          "image_after": "mahfouz-cafe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine fortdauernde Reise",
+          "text": "Mahfouz’ Weg endete nicht mit seinem Ruhm. Er schrieb in unterschiedlichen literarischen Formen weiter und hinterließ Dutzende Romane, Kurzgeschichtensammlungen und Artikel. Er starb am 30. August 2006, doch seine Bücher blieben bei den Lesern lebendig; seine Werke werden weiterhin gelesen, diskutiert und übersetzt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Was können wir lernen?",
+          "text": "Die Geschichte von Naguib Mahfouz zeigt uns, dass neugieriges Beobachten des Lebens, regelmäßiges Lesen und geduldiges Entwickeln einer Begabung Türen öffnen können, die zunächst weit entfernt scheinen. Er schrieb über Menschen und Orte, die er kannte, berührte dabei aber Fragen, die Menschen in vielen Ländern verstehen: Wie können wir zusammenleben? Wie können wir Ungerechtigkeit begegnen? Und wie beeinflussen unsere Entscheidungen unsere Zukunft?"
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "assets/images/stories/Naguib_Mahfouz_HR.jpg",
+    "kind": "photograph",
+    "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Naguib_Mahfouz_HR.jpg",
+    "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication.",
+    "i18n": {
+      "ar": {
+        "alt": "صورة أرشيفية لنجيب محفوظ",
+        "caption": "نجيب محفوظ، في صورة فوتوغرافية تعود إلى ثمانينيات القرن العشرين وفق بيانات ملف الصورة.",
+        "source_name": "ويكيميديا كومنز — ملف Naguib Mahfouz HR.jpg",
+        "rights": "تذكر صفحة ملف ويكيميديا كومنز أن الصورة ضمن الملكية العامة في مصر. يجب مراجعة قوانين حقوق النشر في بلد إعادة الاستخدام قبل النشر."
+      },
+      "en": {
+        "alt": "Black-and-white photographic portrait of Egyptian novelist Naguib Mahfouz",
+        "caption": "Naguib Mahfouz in a photograph dated to the 1980s according to the file information.",
+        "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+        "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication."
+      },
+      "fr": {
+        "alt": "Portrait photographique en noir et blanc de l’écrivain égyptien Naguib Mahfouz",
+        "caption": "Naguib Mahfouz sur une photographie datée des années 1980 selon les informations du fichier.",
+        "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+        "rights": "La page Wikimedia Commons indique que la photographie est dans le domaine public en Égypte. Vérifiez les règles de droit d’auteur du pays de réutilisation avant publication."
+      },
+      "it": {
+        "alt": "Ritratto fotografico in bianco e nero dello scrittore egiziano Naguib Mahfouz",
+        "caption": "Naguib Mahfouz in una fotografia datata agli anni Ottanta secondo le informazioni del file.",
+        "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+        "rights": "La pagina Wikimedia Commons indica che la fotografia è di pubblico dominio in Egitto. Verificare le norme sul diritto d’autore del paese di riutilizzo prima della pubblicazione."
+      },
+      "de": {
+        "alt": "Schwarz-Weiß-Porträt des ägyptischen Schriftstellers Naguib Mahfouz",
+        "caption": "Naguib Mahfouz auf einer laut Dateiinformationen aus den 1980er-Jahren stammenden Fotografie.",
+        "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+        "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet das Foto als in Ägypten gemeinfrei. Vor der Veröffentlichung sind die Urheberrechtsregeln des Landes der Wiederverwendung zu prüfen."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "mahfouz-1980s",
+      "path": "assets/images/stories/Naguib_Mahfouz_HR.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Naguib_Mahfouz_HR.jpg",
+      "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة فوتوغرافية بالأبيض والأسود للروائي المصري نجيب محفوظ",
+          "caption": "نجيب محفوظ، في صورة فوتوغرافية تعود إلى ثمانينيات القرن العشرين وفق بيانات ملف الصورة.",
+          "source_name": "ويكيميديا كومنز — File: Naguib Mahfouz HR.jpg",
+          "rights": "تذكر صفحة ملف ويكيميديا كومنز أن الصورة ضمن الملكية العامة في مصر. يجب مراجعة قوانين حقوق النشر في بلد إعادة الاستخدام قبل النشر."
+        },
+        "en": {
+          "alt": "Black-and-white photographic portrait of Egyptian novelist Naguib Mahfouz",
+          "caption": "Naguib Mahfouz in a photograph dated to the 1980s according to the file information.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+          "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication."
+        },
+        "fr": {
+          "alt": "Portrait photographique en noir et blanc de l’écrivain égyptien Naguib Mahfouz",
+          "caption": "Naguib Mahfouz sur une photographie datée des années 1980 selon les informations du fichier.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+          "rights": "La page Wikimedia Commons indique que la photographie est dans le domaine public en Égypte. Vérifiez les règles de droit d’auteur du pays de réutilisation avant publication."
+        },
+        "it": {
+          "alt": "Ritratto fotografico in bianco e nero dello scrittore egiziano Naguib Mahfouz",
+          "caption": "Naguib Mahfouz in una fotografia datata agli anni Ottanta secondo le informazioni del file.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+          "rights": "La pagina Wikimedia Commons indica che la fotografia è di pubblico dominio in Egitto. Verificare le norme sul diritto d’autore del paese di riutilizzo prima della pubblicazione."
+        },
+        "de": {
+          "alt": "Schwarz-Weiß-Porträt des ägyptischen Schriftstellers Naguib Mahfouz",
+          "caption": "Naguib Mahfouz auf einer laut Dateiinformationen aus den 1980er-Jahren stammenden Fotografie.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz HR.jpg",
+          "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet das Foto als in Ägypten gemeinfrei. Vor der Veröffentlichung sind die Urheberrechtsregeln des Landes der Wiederverwendung zu prüfen."
+        }
+      }
+    },
+    {
+      "id": "mahfouz-1960s",
+      "path": "assets/images/stories/Naguib_Mahfouz_in_1960s.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons — File: Naguib Mahfouz in 1960s.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Naguib_Mahfouz_in_1960s.jpg",
+      "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لنجيب محفوظ في ستينيات القرن العشرين",
+          "caption": "نجيب محفوظ في صورة تعود إلى عام 1960 بحسب بيانات ملف الصورة.",
+          "source_name": "ويكيميديا كومنز — File: Naguib Mahfouz in 1960s.jpg",
+          "rights": "تذكر صفحة ملف ويكيميديا كومنز أن الصورة ضمن الملكية العامة في مصر. يجب مراجعة قوانين حقوق النشر في بلد إعادة الاستخدام قبل النشر."
+        },
+        "en": {
+          "alt": "Archival photograph of Naguib Mahfouz in the 1960s",
+          "caption": "Naguib Mahfouz in a photograph dated 1960 according to the file information.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in 1960s.jpg",
+          "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication."
+        },
+        "fr": {
+          "alt": "Photographie d’archives de Naguib Mahfouz dans les années 1960",
+          "caption": "Naguib Mahfouz sur une photographie datée de 1960 selon les informations du fichier.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in 1960s.jpg",
+          "rights": "La page Wikimedia Commons indique que la photographie est dans le domaine public en Égypte. Vérifiez les règles de droit d’auteur du pays de réutilisation avant publication."
+        },
+        "it": {
+          "alt": "Fotografia d’archivio di Naguib Mahfouz negli anni Sessanta",
+          "caption": "Naguib Mahfouz in una fotografia datata 1960 secondo le informazioni del file.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in 1960s.jpg",
+          "rights": "La pagina Wikimedia Commons indica che la fotografia è di pubblico dominio in Egitto. Verificare le norme sul diritto d’autore del paese di riutilizzo prima della pubblicazione."
+        },
+        "de": {
+          "alt": "Archivfotografie von Naguib Mahfouz aus den 1960er-Jahren",
+          "caption": "Naguib Mahfouz auf einer laut Dateiinformationen auf 1960 datierten Fotografie.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in 1960s.jpg",
+          "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet das Foto als in Ägypten gemeinfrei. Vor der Veröffentlichung sind die Urheberrechtsregeln des Landes der Wiederverwendung zu prüfen."
+        }
+      }
+    },
+    {
+      "id": "mahfouz-cafe",
+      "path": "assets/images/stories/Naguib_Mahfouz_in_cafe.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons — File: Naguib Mahfouz in cafe.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Naguib_Mahfouz_in_cafe.jpg",
+      "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لنجيب محفوظ في مقهى عام 1968",
+          "caption": "نجيب محفوظ في مقهى، في صورة مؤرخة بعام 1968 بحسب بيانات الملف.",
+          "source_name": "ويكيميديا كومنز — File: Naguib Mahfouz in cafe.jpg",
+          "rights": "تذكر صفحة ملف ويكيميديا كومنز أن الصورة ضمن الملكية العامة في مصر. يجب مراجعة قوانين حقوق النشر في بلد إعادة الاستخدام قبل النشر."
+        },
+        "en": {
+          "alt": "Archival photograph of Naguib Mahfouz in a café in 1968",
+          "caption": "Naguib Mahfouz in a café, in a photograph dated 1968 according to the file information.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in cafe.jpg",
+          "rights": "The Wikimedia Commons file page identifies the photograph as public domain in Egypt. Check copyright rules in the country of reuse before publication."
+        },
+        "fr": {
+          "alt": "Photographie d’archives de Naguib Mahfouz dans un café en 1968",
+          "caption": "Naguib Mahfouz dans un café, sur une photographie datée de 1968 selon les informations du fichier.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in cafe.jpg",
+          "rights": "La page Wikimedia Commons indique que la photographie est dans le domaine public en Égypte. Vérifiez les règles de droit d’auteur du pays de réutilisation avant publication."
+        },
+        "it": {
+          "alt": "Fotografia d’archivio di Naguib Mahfouz in un caffè nel 1968",
+          "caption": "Naguib Mahfouz in un caffè, in una fotografia datata 1968 secondo le informazioni del file.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in cafe.jpg",
+          "rights": "La pagina Wikimedia Commons indica che la fotografia è di pubblico dominio in Egitto. Verificare le norme sul diritto d’autore del paese di riutilizzo prima della pubblicazione."
+        },
+        "de": {
+          "alt": "Archivfotografie von Naguib Mahfouz in einem Café im Jahr 1968",
+          "caption": "Naguib Mahfouz in einem Café auf einer laut Dateiinformationen auf 1968 datierten Fotografie.",
+          "source_name": "Wikimedia Commons — File: Naguib Mahfouz in cafe.jpg",
+          "rights": "Die Wikimedia-Commons-Dateiseite kennzeichnet das Foto als in Ägypten gemeinfrei. Vor der Veröffentlichung sind die Urheberrechtsregeln des Landes der Wiederverwendung zu prüfen."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "جائزة نوبل — السيرة الرسمية لنجيب محفوظ",
+      "organization": "جائزة نوبل",
+      "url": "https://www.nobelprize.org/prizes/literature/1988/mahfouz/biographical/",
+      "i18n": {
+        "ar": {
+          "title": "جائزة نوبل — السيرة الرسمية لنجيب محفوظ",
+          "organization": "جائزة نوبل"
+        },
+        "en": {
+          "title": "Official Nobel Prize biography of Naguib Mahfouz",
+          "organization": "Nobel Prize"
+        },
+        "fr": {
+          "title": "Biographie officielle du prix Nobel de Naguib Mahfouz",
+          "organization": "Biographie officielle du prix Nobel de Naguib Mahfouz"
+        },
+        "it": {
+          "title": "Biografia ufficiale del Nobel su Naguib Mahfouz",
+          "organization": "Biografia ufficiale del Nobel su Naguib Mahfouz"
+        },
+        "de": {
+          "title": "Offizielle Nobelpreis-Biografie von Naguib Mahfouz",
+          "organization": "Offizielle Nobelpreis-Biografie von Naguib Mahfouz"
+        }
+      }
+    },
+    {
+      "title": "جائزة نوبل — البيان الصحفي لجائزة الأدب لعام 1988",
+      "organization": "جائزة نوبل",
+      "url": "https://www.nobelprize.org/prizes/literature/1988/press-release/",
+      "i18n": {
+        "ar": {
+          "title": "جائزة نوبل — البيان الصحفي لجائزة الأدب لعام 1988",
+          "organization": "جائزة نوبل"
+        },
+        "en": {
+          "title": "Nobel Prize in Literature 1988 — press release",
+          "organization": "Nobel Prize"
+        },
+        "fr": {
+          "title": "Communiqué du prix Nobel de littérature 1988",
+          "organization": "Communiqué du prix Nobel de littérature 1988"
+        },
+        "it": {
+          "title": "Comunicato del Premio Nobel per la letteratura 1988",
+          "organization": "Comunicato del Premio Nobel per la letteratura 1988"
+        },
+        "de": {
+          "title": "Pressemitteilung zum Nobelpreis für Literatur 1988",
+          "organization": "Pressemitteilung zum Nobelpreis für Literatur 1988"
+        }
+      }
+    },
+    {
+      "title": "متحف نجيب محفوظ — سيرة نجيب محفوظ",
+      "organization": "متحف نجيب محفوظ",
+      "url": "https://www.mahfouzmuseum.gov.eg/?q=node%2F2543",
+      "i18n": {
+        "ar": {
+          "title": "متحف نجيب محفوظ — سيرة نجيب محفوظ",
+          "organization": "متحف نجيب محفوظ"
+        },
+        "en": {
+          "title": "Naguib Mahfouz Museum — biography and collection",
+          "organization": "Naguib Mahfouz Museum"
+        },
+        "fr": {
+          "title": "Musée Naguib Mahfouz — biographie et collection",
+          "organization": "Musée Naguib Mahfouz"
+        },
+        "it": {
+          "title": "Museo Naguib Mahfouz — biografia e collezione",
+          "organization": "Museo Naguib Mahfouz"
+        },
+        "de": {
+          "title": "Naguib-Mahfouz-Museum — Biografie und Sammlung",
+          "organization": "Naguib-Mahfouz-Museum"
+        }
+      }
+    },
+    {
+      "title": "الهيئة العامة للاستعلامات المصرية — سيرة نجيب محفوظ",
+      "organization": "الهيئة العامة للاستعلامات المصرية",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/naguib-mahfouz/",
+      "i18n": {
+        "ar": {
+          "title": "الهيئة العامة للاستعلامات المصرية — سيرة نجيب محفوظ",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Egyptian State Information Service — Naguib Mahfouz",
+          "organization": "Egyptian State Information Service"
+        },
+        "fr": {
+          "title": "Service d’information de l’État égyptien — Naguib Mahfouz",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Servizio d’informazione dello Stato egiziano — Naguib Mahfouz",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Ägyptischer Staatlicher Informationsdienst — Naguib Mahfouz",
+          "organization": "Ägyptischer Staatlicher Informationsdienst"
+        }
+      }
+    },
+    {
+      "title": "جائزة نوبل — ابن حضارتين",
+      "organization": "جائزة نوبل",
+      "url": "https://www.nobelprize.org/prizes/literature/1988/mahfouz/article/",
+      "i18n": {
+        "ar": {
+          "title": "جائزة نوبل — ابن حضارتين",
+          "organization": "جائزة نوبل"
+        },
+        "en": {
+          "title": "Nobel Prize — The Son of Two Civilizations",
+          "organization": "Nobel Prize"
+        },
+        "fr": {
+          "title": "Prix Nobel — Le fils de deux civilisations",
+          "organization": "Prix Nobel"
+        },
+        "it": {
+          "title": "Premio Nobel — Il figlio di due civiltà",
+          "organization": "Premio Nobel"
+        },
+        "de": {
+          "title": "Nobelpreis — Der Sohn zweier Zivilisationen",
+          "organization": "Nobelpreis"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birthplace",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة وُلد نجيب محفوظ؟",
+          "options": [
+            "القاهرة",
+            "الإسكندرية",
+            "أسوان",
+            "طنطا"
+          ],
+          "explanation": "وُلد نجيب محفوظ في حي الجمالية بالقاهرة يوم 11 ديسمبر 1911."
+        },
+        "en": {
+          "question": "In which city was Naguib Mahfouz born?",
+          "options": [
+            "Cairo",
+            "Alexandria",
+            "Aswan",
+            "Tanta"
+          ],
+          "explanation": "Naguib Mahfouz was born in the Gamaliya district of Cairo on 11 December 1911."
+        },
+        "fr": {
+          "question": "Dans quelle ville Naguib Mahfouz est-il né ?",
+          "options": [
+            "Le Caire",
+            "Alexandrie",
+            "Assouan",
+            "Tanta"
+          ],
+          "explanation": "Naguib Mahfouz est né dans le quartier de Gamaliya, au Caire, le 11 décembre 1911."
+        },
+        "it": {
+          "question": "In quale città nacque Naguib Mahfouz?",
+          "options": [
+            "Il Cairo",
+            "Alessandria",
+            "Assuan",
+            "Tanta"
+          ],
+          "explanation": "Naguib Mahfouz nacque nel quartiere di Gamaliya, al Cairo, l’11 dicembre 1911."
+        },
+        "de": {
+          "question": "In welcher Stadt wurde Naguib Mahfouz geboren?",
+          "options": [
+            "Kairo",
+            "Alexandria",
+            "Assuan",
+            "Tanta"
+          ],
+          "explanation": "Naguib Mahfouz wurde am 11. Dezember 1911 im Stadtviertel Gamaliya in Kairo geboren."
+        }
+      }
+    },
+    {
+      "id": "nobel-prize",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام حصل نجيب محفوظ على جائزة نوبل في الأدب؟",
+          "options": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "explanation": "حصل نجيب محفوظ على جائزة نوبل في الأدب عام 1988."
+        },
+        "en": {
+          "question": "In what year did Naguib Mahfouz receive the Nobel Prize in Literature?",
+          "options": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "explanation": "Naguib Mahfouz received the Nobel Prize in Literature in 1988."
+        },
+        "fr": {
+          "question": "En quelle année Naguib Mahfouz a-t-il reçu le prix Nobel de littérature ?",
+          "options": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "explanation": "Naguib Mahfouz a reçu le prix Nobel de littérature en 1988."
+        },
+        "it": {
+          "question": "In quale anno Naguib Mahfouz ricevette il Premio Nobel per la letteratura?",
+          "options": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "explanation": "Naguib Mahfouz ricevette il Premio Nobel per la letteratura nel 1988."
+        },
+        "de": {
+          "question": "In welchem Jahr erhielt Naguib Mahfouz den Nobelpreis für Literatur?",
+          "options": [
+            "1978",
+            "1988",
+            "1998",
+            "2006"
+          ],
+          "explanation": "Naguib Mahfouz erhielt 1988 den Nobelpreis für Literatur."
+        }
+      }
+    },
+    {
+      "id": "philosophy",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي درسه نجيب محفوظ في جامعة القاهرة؟",
+          "options": [
+            "الطب",
+            "الهندسة",
+            "الفلسفة",
+            "الزراعة"
+          ],
+          "explanation": "درس نجيب محفوظ الفلسفة في جامعة القاهرة وتخرج عام 1934."
+        },
+        "en": {
+          "question": "What subject did Naguib Mahfouz study at Cairo University?",
+          "options": [
+            "Medicine",
+            "Engineering",
+            "Philosophy",
+            "Agriculture"
+          ],
+          "explanation": "Naguib Mahfouz studied philosophy at Cairo University and graduated in 1934."
+        },
+        "fr": {
+          "question": "Quelle discipline Naguib Mahfouz a-t-il étudiée à l’Université du Caire ?",
+          "options": [
+            "La médecine",
+            "L’ingénierie",
+            "La philosophie",
+            "L’agriculture"
+          ],
+          "explanation": "Naguib Mahfouz a étudié la philosophie à l’Université du Caire et a obtenu son diplôme en 1934."
+        },
+        "it": {
+          "question": "Quale materia studiò Naguib Mahfouz all’Università del Cairo?",
+          "options": [
+            "Medicina",
+            "Ingegneria",
+            "Filosofia",
+            "Agraria"
+          ],
+          "explanation": "Naguib Mahfouz studiò filosofia all’Università del Cairo e si laureò nel 1934."
+        },
+        "de": {
+          "question": "Welches Fach studierte Naguib Mahfouz an der Universität Kairo?",
+          "options": [
+            "Medizin",
+            "Ingenieurwesen",
+            "Philosophie",
+            "Landwirtschaft"
+          ],
+          "explanation": "Naguib Mahfouz studierte Philosophie an der Universität Kairo und schloss sein Studium 1934 ab."
+        }
+      }
+    },
+    {
+      "id": "cairo-trilogy",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "أي مجموعة من الروايات تكوّن ثلاثية القاهرة؟",
+          "options": [
+            "بين القصرين، قصر الشوق، السكرية",
+            "زقاق المدق، رادوبيس، كفاح طيبة",
+            "أولاد حارتنا، ميرامار، اللص والكلاب",
+            "عبث الأقدار، خان الخليلي، القاهرة الجديدة"
+          ],
+          "explanation": "تتكون ثلاثية القاهرة من بين القصرين وقصر الشوق والسكرية."
+        },
+        "en": {
+          "question": "Which novels make up the Cairo Trilogy?",
+          "options": [
+            "Palace Walk, Palace of Desire, Sugar Street",
+            "Midaq Alley, Rhadopis, Thebes at War",
+            "Children of Gebelawi, Miramar, The Thief and the Dogs",
+            "Khufu’s Wisdom, Khan al-Khalili, Cairo Modern"
+          ],
+          "explanation": "The Cairo Trilogy consists of Palace Walk, Palace of Desire, and Sugar Street."
+        },
+        "fr": {
+          "question": "Quels romans composent la trilogie du Caire ?",
+          "options": [
+            "Bayn al-Qasrayn, Qasr al-Shawq, al-Sukkariyya",
+            "L’Impasse des deux palais, Rhadopis, La Lutte de Thèbes",
+            "Les Fils de la médina, Miramar, Le Voleur et les chiens",
+            "La Sagesse de Khéops, Khan al-Khalili, Le Caire moderne"
+          ],
+          "explanation": "La trilogie du Caire se compose de Bayn al-Qasrayn, Qasr al-Shawq et al-Sukkariyya."
+        },
+        "it": {
+          "question": "Quali romanzi compongono la Trilogia del Cairo?",
+          "options": [
+            "Tra i due palazzi, Il palazzo del desiderio, Il giardino del passato",
+            "Il vicolo del mortaio, Rhadopis, La battaglia di Tebe",
+            "I figli della medina, Miramar, Il ladro e i cani",
+            "La saggezza di Cheope, Khan al-Khalili, Il Cairo moderno"
+          ],
+          "explanation": "La Trilogia del Cairo è composta da Tra i due palazzi, Il palazzo del desiderio e Il giardino del passato."
+        },
+        "de": {
+          "question": "Welche Romane bilden die Kairo-Trilogie?",
+          "options": [
+            "Zwischen den Palästen, Palast der Sehnsucht, Die Zuckerstraße",
+            "Die Midaq-Gasse, Rhadopis, Theben im Kampf",
+            "Die Kinder unseres Viertels, Miramar, Der Dieb und die Hunde",
+            "Chufu-Weisheit, Khan al-Khalili, Modernes Kairo"
+          ],
+          "explanation": "Die Kairo-Trilogie besteht aus Zwischen den Palästen, Palast der Sehnsucht und Die Zuckerstraße."
+        }
+      }
+    },
+    {
+      "id": "literary-work",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما الذي استلهمه محفوظ من حي الجمالية؟",
+          "options": [
+            "الشخصيات وتفاصيل الحياة اليومية",
+            "قواعد بناء الطائرات",
+            "طرق زراعة القطن فقط",
+            "خرائط الكواكب"
+          ],
+          "explanation": "ساعدته مشاهد الحياة اليومية في الجمالية على رسم شخصيات وأماكن وأحداث في رواياته."
+        },
+        "en": {
+          "question": "What did Mahfouz draw from the Gamaliya neighbourhood?",
+          "options": [
+            "Characters and details of everyday life",
+            "Aircraft construction rules",
+            "Cotton-growing methods only",
+            "Maps of planets"
+          ],
+          "explanation": "Everyday life in Gamaliya helped inspire characters, places, and events in his novels."
+        },
+        "fr": {
+          "question": "Qu’est-ce que Mahfouz a tiré de son quartier de Gamaliya ?",
+          "options": [
+            "Des personnages et des détails de la vie quotidienne",
+            "Des règles de construction aéronautique",
+            "Uniquement des méthodes de culture du coton",
+            "Des cartes des planètes"
+          ],
+          "explanation": "La vie quotidienne à Gamaliya a inspiré des personnages, des lieux et des événements de ses romans."
+        },
+        "it": {
+          "question": "Che cosa trasse Mahfouz dal quartiere di Gamaliya?",
+          "options": [
+            "Personaggi e dettagli della vita quotidiana",
+            "Regole per costruire aeroplani",
+            "Soltanto tecniche di coltivazione del cotone",
+            "Mappe dei pianeti"
+          ],
+          "explanation": "La vita quotidiana a Gamaliya contribuì a ispirare personaggi, luoghi ed eventi dei suoi romanzi."
+        },
+        "de": {
+          "question": "Was nahm Mahfouz aus dem Viertel Gamaliya als Inspiration mit?",
+          "options": [
+            "Figuren und Einzelheiten des Alltags",
+            "Regeln für den Flugzeugbau",
+            "Nur Methoden des Baumwollanbaus",
+            "Karten der Planeten"
+          ],
+          "explanation": "Der Alltag in Gamaliya inspirierte Figuren, Orte und Ereignisse in seinen Romanen."
+        }
+      }
+    },
+    {
+      "id": "question-6",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام توفي نجيب محفوظ؟",
+          "options": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "explanation": "توفي نجيب محفوظ في 30 أغسطس عام 2006."
+        },
+        "en": {
+          "question": "In what year did Naguib Mahfouz die?",
+          "options": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "explanation": "Naguib Mahfouz died on 30 August 2006."
+        },
+        "fr": {
+          "question": "En quelle année Naguib Mahfouz est-il mort ?",
+          "options": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "explanation": "Naguib Mahfouz est mort le 30 août 2006."
+        },
+        "it": {
+          "question": "In quale anno morì Naguib Mahfouz?",
+          "options": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "explanation": "Naguib Mahfouz morì il 30 agosto 2006."
+        },
+        "de": {
+          "question": "In welchem Jahr starb Naguib Mahfouz?",
+          "options": [
+            "1988",
+            "1999",
+            "2006",
+            "2011"
+          ],
+          "explanation": "Naguib Mahfouz starb am 30. August 2006."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 30.0478,
+    "lng": 31.2625,
+    "place": {
+      "ar": "حي الجمالية، القاهرة، حيث وُلد نجيب محفوظ.",
+      "en": "Gamaliya district, Cairo, where Naguib Mahfouz was born.",
+      "fr": "Quartier de Gamaliya, au Caire, où Naguib Mahfouz est né.",
+      "it": "Quartiere di Gamaliya, al Cairo, dove nacque Naguib Mahfouz.",
+      "de": "Stadtviertel Gamaliya in Kairo, wo Naguib Mahfouz geboren wurde."
+    }
+  }
+}
