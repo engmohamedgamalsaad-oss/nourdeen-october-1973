@@ -12,7 +12,7 @@ test('legacy publisher fails closed for V2 drafts before creating any GitHub bra
   const submissionId = source.indexOf('const submissionId =');
   const recordRead = source.indexOf('.from(submissionTable).select("id,story_meta")');
   const v2DraftGuard = source.indexOf('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true');
-  const artifactGuard = source.indexOf('if (hasV2Artifacts) return reply(409');
+  const artifactGuard = source.indexOf('else if (hasV2Artifacts) {');
   const branchWrite = source.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
   const pullRequestWrite = source.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
 
