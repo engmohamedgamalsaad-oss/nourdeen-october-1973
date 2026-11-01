@@ -34,22 +34,25 @@ for (const file of ['index.html', 'story.json']) {
 }
 const ar = story.i18n.ar;
 const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+// Shared page shell: keep identical to rebuild/publish-story.mjs (makeReaderHtml).
+// Per-section colour and design differences live in reader-base.css / reader-enhance.css,
+// keyed by body[data-section] and body[data-design]; never in the page itself.
 const page = `<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script><meta name="viewport" content="width=device-width,initial-scale=1">
+<script src="../../../assets/shared/home-language-only.js?v=20261030-v2-language-fix"></script>
 <title>${escape(ar.title)} | خالدون عبر التاريخ</title>
 <meta name="description" content="${escape(ar.summary)}">
 <meta property="og:type" content="article"><meta property="og:title" content="${escape(ar.title)}"><meta property="og:description" content="${escape(ar.summary)}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1"><style>:root{--accent:${story.design.accent}}</style>
-</head><body data-story-slug="${storyId}" data-design="${story.design.variant}" data-section="${story.section}" data-start-only data-disable-story-extras>
-<header><div class="bar"><div class="brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language"><button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button></nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
+</head><body data-story-slug="${storyId}" data-design="${story.design.variant}" data-section="${story.section}" data-start-only data-disable-story-extras><script>document.body.setAttribute("data-theme",document.documentElement.getAttribute("data-theme")||"dark");</script>
+<header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language"><button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button></nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
 <div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button><div class="intro-art"><img id="intro-cover" alt=""><div id="intro-cover-fallback" class="kh-image-fallback" hidden></div></div>
 <div class="intro-copy"><p class="intro-kicker" id="intro-kicker">خالدون عبر التاريخ</p><h2 id="intro-title">ابدأ الحكاية</h2><p id="intro-subtitle"></p><p id="intro-summary"></p><button id="intro-start" class="start-story-btn" type="button">ابدأ الحكاية ←</button></div></div></div>
 <main><div id="status" class="status">جاري تحميل حزمة الحكاية الموحدة…</div><article id="story" hidden>
-<section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
+<section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p class="summary" id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
 <div class="story-actions" id="story-actions" aria-label="Story actions"><button type="button" id="print-story">🖨️ طباعة / حفظ PDF</button><a id="share-whatsapp" target="_blank" rel="noopener noreferrer">واتساب</a><a id="share-facebook" target="_blank" rel="noopener noreferrer">فيسبوك</a><button type="button" id="share-copy">🔗 نسخ الرابط</button></div></section>
 <section class="section"><h2 id="story-heading">الحكاية</h2><div id="blocks"></div></section>
 <section class="section" id="gallery-section"><h2 id="gallery-heading">صور الحكاية</h2><div id="gallery"></div></section>
@@ -63,6 +66,7 @@ const page = `<!doctype html>
 </article></main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
 <script src="../../../rebuild/reader.js?v=20261101-story-reader-1" data-kh-story-reader data-story-path="story.json"></script>
+<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
 await writeFile(path.join(outDir, 'story.json'), JSON.stringify(story, null, 2) + '\n', { flag: 'wx' });
