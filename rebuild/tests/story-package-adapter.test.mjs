@@ -46,7 +46,7 @@ function fixture() {
   };
 }
 
-test('V1 to V2 and back preserves original text, translated story streams, sources, images and quiz answers', () => {
+test('legacy package to unified story and back preserves original text, translated story streams, sources, images and quiz answers', () => {
   const v1 = fixture();
   const v2 = legacyToStory(v1, { slug: 'historical-figure' });
   assert.equal(v2.format, 'KHALEDOON_STORY');
@@ -88,14 +88,14 @@ test('refuses V1 quizzes with fewer than four options rather than inventing choi
 test('refuses unknown visual variants and invalid source text', () => {
   const v1 = fixture();
   v1.visual_design = 'unmapped-design';
-  assert.throws(() => legacyToStory(v1, { slug: 'historical-figure' }), /no lossless V2 mapping/);
+  assert.throws(() => legacyToStory(v1, { slug: 'historical-figure' }), /no lossless story mapping/);
   const v2 = legacyToStory(fixture(), { slug: 'historical-figure' });
   v2.i18n.en.blocks.push({ type: 'paragraph', speaker: 'karma', text: 'Late Karma line' });
   assert.throws(() => storyToLegacy(v2), /interleaves Karma/);
 });
 
 
-test('round-trips shared image kinds and rejects V2-only kinds at the V1 bridge', () => {
+test('round-trips shared image kinds and rejects story-only kinds at the V1 bridge', () => {
   const v2 = legacyToStory(fixture(), { slug: 'historical-figure' });
   v2.cover.kind = 'archival';
   v2.images[0].kind = 'map';
