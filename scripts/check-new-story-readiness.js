@@ -64,7 +64,8 @@ for (const pagePath of pages) {
     let valid = false;
     if (v2) {
       try {
-        validationOutput = execFileSync(process.execPath, ["rebuild/validate-package.mjs", v2Path], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+        // --style: a NEW story must also pass the style gate (see rebuild/validate-style.mjs).
+        validationOutput = execFileSync(process.execPath, ["rebuild/validate-package.mjs", "--style", v2Path], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
         valid = true;
       } catch (error) {
         validationOutput = (error.stdout || "") + (error.stderr || "");
