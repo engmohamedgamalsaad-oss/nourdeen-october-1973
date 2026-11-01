@@ -72,6 +72,26 @@ test('legacy package to unified story and back preserves original text, translat
   }
 });
 
+test('preserves every legacy quiz question when the source contains more than five', () => {
+  const v1 = fixture();
+  const sixth = JSON.parse(JSON.stringify(v1.question_bank.questions[0]));
+  sixth.q = 'Question 5 ar';
+  sixth.e = 'Explanation 5 ar';
+  sixth.i18n = Object.fromEntries(langs.map(lang => [lang, {
+    q: 'Question 5 ' + lang,
+    o: ['A','B','C','D'].map(x => x + ' ' + lang),
+    e: 'Explanation 5 ' + lang
+  }]));
+  v1.question_bank.questions.push(sixth);
+  const story = legacyToStory(v1, { slug: 'historical-figure' });
+  assert.equal(story.quiz.length, 6);
+  assert.deepEqual(story.quiz.map(question => question.id), [
+    'question-1','question-2','question-3','question-4','question-5','question-6'
+  ]);
+  assert.equal(story.quiz[5].correct_option, sixth.a);
+  assert.equal(story.quiz[5].i18n.de.question, 'Question 5 de');
+});
+
 test('refuses ambiguous source lines rather than silently flattening source citations', () => {
   const v1 = fixture();
   v1.sources = 'One line https://archive.example/a and https://museum.example/b';
