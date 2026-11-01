@@ -7,7 +7,7 @@ import { storyToAdminDraft } from '../adapters/story-package-adapter.mjs';
 test('admin import exposes unified story validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261101-story-package-adapter-1"></script>'));
+  assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261101-story-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-story-import.mjs', import.meta.url), 'utf8');
   assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-publisher-1'"));
   assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-publisher-1'"));
@@ -27,7 +27,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.ok(html.includes('function isStoryOnlyDraftRecord(it)'), 'admin should identify top-level and pending unified story-only drafts');
   assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative unified story package');
   assert.ok(html.includes("storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null)"), 'manual preview should open the saved unified story package without persisting legacy projection edits');
-  assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_legacy'/);
+  assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_LEGACY'/);
   assert.ok(html.includes("story-template-bundle.js?v=20261027-source-clean-2"));
   assert.ok(html.includes("sources:aiInputFormat==='KHALEDOON_STORY'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000)"), 'unified story source text must remain complete while legacy imports retain its historical 3000-character cap');
   assert.ok(html.includes("aiInputFormat==='KHALEDOON_STORY'&&visibleSourceLength>3000"), 'only unified story imports should reject source text exceeding the visible-character limit');
@@ -46,7 +46,7 @@ test('valid unified story package beyond the legacy bridge is saved through a co
   const bridgeErrors = validateForAdminBridge(pkg);
   assert.ok(bridgeErrors.some(e => e.includes('supports exactly 5 quiz questions')));
   const draft = storyToAdminDraft(pkg);
-  assert.equal(draft.format, 'KH_STORY_PACKAGE_legacy');
+  assert.equal(draft.format, 'KH_STORY_PACKAGE_LEGACY');
   assert.equal(draft.section_key, 'october');
   assert.equal(draft.original_body, pkg.original_body);
   assert.equal(draft.question_bank.questions.length, 23);
