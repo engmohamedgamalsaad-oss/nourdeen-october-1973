@@ -1,5 +1,5 @@
-import { storyToLegacy, storyToAdminDraft, normalizeStoryFormat, STORY_FORMAT } from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-2';
-import { validateForAdminBridge, validateStory as validateCanonicalStory } from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-2';
+import { storyToLegacy, storyToAdminDraft, normalizeStoryFormat, STORY_FORMAT } from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-3';
+import { validateForAdminBridge, validateStory as validateCanonicalStory } from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-3';
 
 window.KHStoryAdapter = {
   STORY_FORMAT,
