@@ -96,7 +96,7 @@ test('Ibn Sina unified story package validates and preserves its five-language r
   }
   const page = await readFile(path.join(root, 'stories/history/005/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
@@ -124,7 +124,7 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   }
   const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
@@ -158,7 +158,7 @@ test('Tawfiq al-Hakim unified story package validates with five-language text, a
   }
   const page = await readFile(path.join(root, 'stories/people/008/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
@@ -194,7 +194,7 @@ test('Naguib Mahfouz unified story package validates with Karma narration, archi
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
   const page = await readFile(path.join(root, 'stories/people/009/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
@@ -229,7 +229,7 @@ test('Sameera Moussa unified story package validates with five-language science 
   }
   const page = await readFile(path.join(root, 'stories/women/010/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
@@ -269,7 +269,7 @@ test('Amr ibn al-As unified story package validates with child narration, histor
   }
   const page = await readFile(path.join(root, 'stories/islamic/011/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
@@ -310,7 +310,7 @@ test('Farouk El-Baz unified story package validates with Karma narration, NASA i
   }
   const page = await readFile(path.join(root, 'stories/science/012/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
@@ -360,7 +360,7 @@ test('Hatshepsut unified story package validates five-language history, image ri
   const page = await readFile(path.join(root, 'stories/women/013/index.html'), 'utf8');
   const readerCss = await readFile(path.join(root, 'rebuild/reader-base.css'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /data-lang="ar"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
   assert.match(readerCss, /header\{position:static/, 'language header scrolls away with the page to preserve reading space');
@@ -409,7 +409,7 @@ test('Abu Bakr al-Khwarizmi unified story package validates identity distinction
   }
   const page = await readFile(path.join(root, 'stories/history/014/index.html'), 'utf8');
   assert.match(page, /data-kh-story-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
