@@ -2,10 +2,13 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { validateStory, validateLocalImagePaths } from './validate-story.mjs';
+import { validateStyle } from './validate-style.mjs';
 
-const input = process.argv[2];
+const args = process.argv.slice(2);
+const style = args.includes('--style');
+const input = args.find(arg => !arg.startsWith('--'));
 if (!input) {
-  console.error('Usage: node rebuild/validate-package.mjs <story-package.json>');
+  console.error('Usage: node rebuild/validate-package.mjs [--style] <story-package.json>');
   process.exit(2);
 }
 let story;
@@ -17,10 +20,11 @@ try {
 }
 const errors = [
   ...validateStory(story),
-  ...await validateLocalImagePaths(story, process.cwd())
+  ...await validateLocalImagePaths(story, process.cwd()),
+  ...(style ? validateStyle(story) : [])
 ];
 if (errors.length) {
-  console.error('V2 story package failed validation:\n- ' + errors.join('\n- '));
+  console.error('Story package failed validation:\n- ' + errors.join('\n- '));
   process.exit(1);
 }
-console.log('V2 story package valid: ' + story.slug + ' [' + story.section + ']');
+console.log('Story package valid: ' + story.slug + ' [' + story.section + ']' + (style ? ' (style gate passed)' : ''));
