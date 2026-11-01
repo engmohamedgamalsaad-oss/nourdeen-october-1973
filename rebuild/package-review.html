@@ -22,7 +22,7 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 <section class="panel">
 <h2>١. اختيار الحزمة</h2>
 <div class="row"><input id="file" type="file" accept=".json,application/json"><label for="lang">لغة المعاينة</label><select id="lang"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="de">Deutsch</option></select></div>
-<p id="status" class="status">اختر ملف JSON بصيغة KHALEDOON_STORY_V2.</p>
+<p id="status" class="status">اختر ملف JSON بصيغة KHALEDOON_STORY.</p>
 <div class="warning">نجاح الفحص البنيوي لا يثبت صحة المعلومات التاريخية أو جودة الترجمة أو قانونية استخدام الصور. يلزم اعتماد بشري قبل النشر.</div>
 </section>
 <section id="audit" class="panel hidden"><h2>٢. نتيجة الفحص البنيوي</h2><ul id="issues"></ul><p id="counts" class="muted"></p></section>
@@ -45,7 +45,7 @@ function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefi
 function link(url,label){if(typeof url!=='string'||!/^https:\/\//i.test(url))return node('span',label);const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
 function listIssues(s){
  const out=[];if(!s||typeof s!=='object'||Array.isArray(s))return ['الملف لازم يحتوي على كائن JSON.'];
- if(s.format!=='KHALEDOON_STORY_V2')out.push('format لازم يساوي KHALEDOON_STORY_V2.');
+ if(s.format!=='KHALEDOON_STORY')out.push('format لازم يساوي KHALEDOON_STORY.');
  for(const k of ['slug','section','design','original_body','i18n','cover','images','sources','quiz'])if(!(k in s))out.push('حقل أساسي ناقص: '+k);
  for(const l of langs){const t=s.i18n&&s.i18n[l];if(!t){out.push('الترجمة ناقصة: '+l);continue}
   for(const k of ['title','subtitle','summary'])if(typeof t[k]!=='string'||!t[k].trim())out.push(l+': الحقل '+k+' ناقص.');
@@ -96,7 +96,7 @@ $('file').addEventListener('change',async e=>{story=null;$('preview').classList.
  catch(err){story=null;$('status').textContent='تعذّر قراءة JSON: '+err.message;$('status').className='status bad';$('issues').appendChild(node('li','ملف JSON غير صالح.','bad'))}
 });
 if(new URLSearchParams(location.search).get('draft')==='1'){
- try{const raw=localStorage.getItem('kh-v2-review-package');if(!raw)throw new Error('لا توجد حزمة V2 محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
+ try{const raw=localStorage.getItem('kh-story-review-package');if(!raw)throw new Error('لا توجد حزمة V2 محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
  catch(err){$('audit').classList.remove('hidden');$('status').textContent=err.message;$('status').className='status bad';$('issues').replaceChildren(node('li',err.message,'bad'))}
 }
 $('lang').addEventListener('change',show);
