@@ -392,7 +392,7 @@ for (const rel of [
   'stories/october/001/index.html','stories/october/002/index.html',
   'stories/october/003/index.html','stories/october/004/index.html',
   'stories/history/005/index.html','stories/history/006/index.html',
-  'stories/science/007/index.html','stories/people/008/index.html','stories/people/009/index.html','stories/women/010/index.html','stories/islamic/011/index.html','stories/science/012/index.html','stories/women/013/index.html','stories/history/014/index.html'
+  'stories/science/007/index.html','stories/people/008/index.html','stories/people/009/index.html','stories/women/010/index.html','stories/islamic/011/index.html','stories/science/012/index.html','stories/women/013/index.html','stories/history/014/index.html','stories/science/015/index.html','stories/science/016/index.html','stories/history/017/index.html'
 ]) {
   const html = read(rel);
   const storyReader = html.includes('data-kh-story-reader') && /data-story-path=["']story\.json["']/.test(html);
