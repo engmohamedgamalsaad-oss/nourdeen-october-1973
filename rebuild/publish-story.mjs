@@ -182,8 +182,10 @@ export async function buildStoryFiles(story, options = {}) {
   story = JSON.parse(JSON.stringify(story));
   if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
   const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
-  const savedPackage = getSavedPackage(options.record, options.draft, meta);
-  if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة V2 التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
+  const savedPackageRaw = getSavedPackage(options.record, options.draft, meta);
+  const savedPackage = savedPackageRaw ? JSON.parse(JSON.stringify(savedPackageRaw)) : null;
+  if (savedPackage?.format === 'KHALEDOON_STORY_V2') savedPackage.format = 'KHALEDOON_STORY';
+  if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة الحكاية التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
   const problems = validateStory(story);
   if (problems.length) fail('حزمة القالب الموحد غير مكتملة:\n• ' + problems.join('\n• '));
   if (!Object.hasOwn(story, 'map_location')) fail('أضف map_location صراحةً: موقع موثق أو null إذا لم يتوفر موقع موثوق.');
