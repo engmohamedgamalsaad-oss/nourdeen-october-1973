@@ -187,7 +187,7 @@ function normalizeLegacyPackage(input) {
   const hasLegacySignature = ['section_key','visual_design','original_body','translations','images']
     .every(key => Object.hasOwn(v1, key));
   if (v1.format === undefined && hasLegacySignature) v1.format = LEGACY_PACKAGE_FORMAT;
-  if (v1.format !== LEGACY_PACKAGE_FORMAT) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy legacy package');
+  if (v1.format !== LEGACY_PACKAGE_FORMAT) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy package');
   if (!nonempty(v1.body) && nonempty(v1.current_body)) v1.body = v1.current_body;
   if (typeof v1.question_bank === 'string') {
     try { v1.question_bank = JSON.parse(v1.question_bank); }
