@@ -100,12 +100,15 @@ function localizedIndexEntry(story, id, root) {
     path: root
   };
 }
+// Shared page shell: keep identical to rebuild/build-story.mjs.
+// Per-section colour and design differences live in reader-base.css / reader-enhance.css,
+// keyed by body[data-section] and body[data-design]; never in the page itself.
 function makeReaderHtml(story, id, coverUrl) {
   const ar = story.i18n.ar;
   const section = story.section;
   let html = '<!doctype html>\n' +
     '<html lang="ar" dir="rtl">\n<head>\n<meta charset="utf-8">' +
-    '<script>try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");d.setAttribute("data-theme",t)}catch(e){document.documentElement.setAttribute("data-theme","dark")}</script>' +
+    '<script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script>' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">\n' +
     '<script src="../../../assets/shared/home-language-only.js?v=20261030-v2-language-fix"></script>\n' +
     '<meta name="description" content="' + esc(ar.summary) + '">\n' +
@@ -114,8 +117,8 @@ function makeReaderHtml(story, id, coverUrl) {
     '<meta property="og:description" content="' + esc(ar.summary) + '"><meta property="og:image" content="' + esc(coverUrl) + '">\n' +
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
     '<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">\n' +
-    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1">\n</head>\n' +
-    '<body data-story-slug="' + id + '" data-design="' + esc(story.design.variant) + '" data-section="' + section + '" data-start-only data-gallery="unplaced">\n' +
+    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1"><link rel="stylesheet" href="../../../rebuild/reader-enhance.css?v=20261101-story-reader-1">\n</head>\n' +
+    '<body data-story-slug="' + id + '" data-design="' + esc(story.design.variant) + '" data-section="' + section + '" data-start-only data-gallery="unplaced"><script>document.body.setAttribute("data-theme",document.documentElement.getAttribute("data-theme")||"dark");</script>\n' +
     '<header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">' +
     '<button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>' +
     '</nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>\n' +
