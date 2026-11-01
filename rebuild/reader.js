@@ -100,7 +100,7 @@ var pageUrl=location.href.split('#')[0],shareText=encodeURIComponent(t.title+' �
 document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;try{localStorage.setItem('kh-lang',current);localStorage.setItem('lang',current)}catch(e){}show();document.dispatchEvent(new Event('site-language-change'))})});
 var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click',function(){var root=document.documentElement,next=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',next);document.body.dataset.theme=next;try{localStorage.setItem('kh-theme',next)}catch(e){}show()});
 function closeIntro(){var modal=$('story-intro-modal');modal.hidden=true;document.body.classList.remove('modal-open')}
-function openIntro(){var modal=$('story-intro-modal');modal.hidden=false;document.body.classList.add('modal-open');$('intro-start').focus()}
+function openIntro(){var modal=$('story-intro-modal');modal.hidden=false;document.body.classList.add('modal-open');$('intro-start').focus({preventScroll:true})}
 $('intro-start').addEventListener('click',closeIntro);$('intro-close').addEventListener('click',closeIntro);if($('quiz-start'))$('quiz-start').addEventListener('click',function(){quizStarted=true;$('quiz').hidden=false;$('quiz-start').hidden=true;$('quiz').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
 $('print-story').addEventListener('click',function(){window.print()});
 $('share-copy').addEventListener('click',function(){var b=$('share-copy');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href.split('#')[0]).then(function(){b.textContent=extraUi[current].copied}).catch(function(){b.textContent=extraUi[current].copyFail})}else{b.textContent=extraUi[current].copyFail}});
@@ -112,4 +112,13 @@ fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(f
 if(!['KHALEDOON_STORY','KHALEDOON_STORY_V2'].includes(data.format)||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
 story=normalizeStory(data);document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'october';document.body.style.setProperty('--accent',SECTION_PALETTE[story.section]||'#d6ad55');if(!document.body.dataset.storySlug)document.body.dataset.storySlug=data.slug||'v2-story';return detectBank().then(function(ok){bankQuiz=ok;show();if(document.body.hasAttribute('data-start-only'))openIntro();initReactions();if(ok)loadBankQuiz()});
 }).catch(function(e){$('status').textContent='تعذّر تحميل حزمة الحكاية: '+e.message+'\nلم يتم الرجوع تلقائيًا إلى أي صيغة قديمة.'});
+})();
+
+;(function(){
+try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+function khTop(){if(location.hash)return;try{window.scrollTo(0,0)}catch(e){}}
+khTop();
+window.addEventListener('DOMContentLoaded',khTop);
+window.addEventListener('load',function(){khTop();requestAnimationFrame(function(){requestAnimationFrame(khTop)})});
+window.addEventListener('pageshow',khTop);
 })();
