@@ -395,7 +395,7 @@ for (const rel of [
   'stories/science/007/index.html','stories/people/008/index.html','stories/people/009/index.html','stories/women/010/index.html','stories/islamic/011/index.html','stories/science/012/index.html','stories/women/013/index.html','stories/history/014/index.html'
 ]) {
   const html = read(rel);
-  const storyReader = html.includes('data-kh-story-reader') && /data-story-path=["']data\.v2\.json["']/.test(html);
+  const storyReader = html.includes('data-kh-story-reader') && /data-story-path=["']story\.json["']/.test(html);
   if (storyReader) {
     if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: unified story reader is missing its own light/dark mode controller.`);
     if (!/rebuild\/reader-base\.css/.test(html)) fail(`${rel}: unified story reader is missing its theme stylesheet layer.`);
