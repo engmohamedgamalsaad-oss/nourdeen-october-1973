@@ -305,6 +305,7 @@ async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
  var v2Only=isV2OnlyDraftRecord(it),v2Pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null,v2Package=v2Only?((v2Pending&&v2Pending.v2_package)||meta.v2_package):null;if(v2Only&&(!v2Package||v2Package.format!=='KHALEDOON_STORY_V2')){say('err','حزمة القالب الموحد غير موجودة في سجل المراجعة؛ لم نرسل أي ملفات.');return}
+ if(!isOctoberLegacyRecord(it)&&!v2Only){say('err','هذه الحكاية خارج قسم أكتوبر ولم تُحوّل بعد إلى حزمة القالب الموحد. افتح «تعديل»، أعد تجهيزها بالحزمة الموحدة، ثم أرسلها للمعاينة والاعتماد قبل النشر. لم يتم إرسال أي ملفات.');return}
  if(review.publish_pr_url){
   if(!review.publish_pr_number||!review.publish_branch){window.open(review.publish_pr_url,'_blank','noopener');say('err','هذا سجل قديم لا يحتوي رقم طلب الدمج والفرع المسجلين؛ فتحنا الرابط للمراجعة فقط، ولم نؤكد النشر. أنشئ طلب مراجعة جديدًا بعد تحديث خدمة النشر الآمنة.');return}
   if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
