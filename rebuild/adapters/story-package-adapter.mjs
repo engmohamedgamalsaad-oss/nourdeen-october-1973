@@ -416,7 +416,7 @@ export function v2ToV1(input) {
  * It keeps all quiz questions but flattens narrator/Karma block order only in
  * the legacy projection; the authoritative V2 package remains unchanged.
  */
-export function v2ToAdminDraft(input) {
+export function storyToAdminDraft(input) {
   requireObject(input, 'V2 story draft');
   const errors = validateStory(input);
   if (errors.length) fail('V2 story validation failed: ' + errors.join('; '));
@@ -494,3 +494,5 @@ export function v2ToAdminDraft(input) {
 // Canonical semantic aliases; legacy names remain exported for old integrations.
 export const legacyToStory = v1ToV2;
 export const storyToLegacy = v2ToV1;
+
+export const v2ToAdminDraft = storyToAdminDraft;
