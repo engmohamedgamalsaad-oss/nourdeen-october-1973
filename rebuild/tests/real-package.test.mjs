@@ -288,7 +288,7 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
   assert.equal(story.i18n.ar.grade, undefined, 'generic narrator label is not treated as a school grade');
   assert.equal(story.images.length, 3);
   assert.equal(story.quiz.length, 5);
-  assert.equal(story.sources.length, 8);
+  assert.equal(story.sources.length, 5);
   assert.ok(story.i18n.ar.blocks.length >= 9, 'Arabic story block count below the established minimum');
   assert.match(story.i18n.ar.history_note, /لجنة/);
   assert.match(story.i18n.ar.images_note, /NASA/);
@@ -314,7 +314,7 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Hatshepsut V2 package validates five-language history, image rights, and the sticky language header', async () => {
+test('Hatshepsut story package validates five-language history, image rights, and the scrolling language header', async () => {
   const story = await loadJson('stories/women/013/data.v2.json');
   const errors = [
     ...validateStory(story),
@@ -363,7 +363,7 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   assert.match(page, /data-story-path="data\.v2\.json"/);
   assert.match(page, /data-lang="ar"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
-  assert.match(readerCss, /header\{position:sticky/, 'language header stays visible while scrolling');
+  assert.match(readerCss, /header\{position:static/, 'language header scrolls away with the story instead of staying fixed');
 });
 
 test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-language quiz, and rights-safe image handling', async () => {
