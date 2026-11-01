@@ -9,8 +9,8 @@ test('admin import exposes unified story validator and converter and preserves o
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
   assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261101-story-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-story-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-publisher-1'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-publisher-1'"));
+  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-1'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-1'"));
   assert.match(html, /function isOctoberLegacyRecord\(it\)/);
   assert.match(html, /var requireUnifiedStoryPackage=!isOctoberLegacyRecord\(it\)/, 'all non-October records must use the unified package');
   assert.doesNotMatch(html, /hasExplicitLegacyPackage/, 'editing an old record must not force unified story just because it lacks an explicit legacy package');
@@ -18,10 +18,10 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.match(html, /story_contract_required=true/, 'new unified story contract requirement persists for later edits');
   assert.match(html, /STORY-PACKAGE-PROMPT\.md/);
   assert.match(html, /rebuild\/story-contract\.json/);
-  assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY'/);
+  assert.match(html, /pkg&&isStoryPackageFormat\(pkg\.format\)/);
   assert.match(html, /var storyValidationErrors=storyAdapter\.validateStory\(pkg\)/);
   assert.match(html, /pkg=storyAdapter\.storyToAdminDraft\(pkg\)/);
-  assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
+  assert.match(html, /nextMeta\.story_package=storyPackageRaw/);
   assert.ok(html.includes("package-review.html?draft=1"), 'unified story-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261101-story-review-1/);
   assert.ok(html.includes('function isStoryOnlyDraftRecord(it)'), 'admin should identify top-level and pending unified story-only drafts');
