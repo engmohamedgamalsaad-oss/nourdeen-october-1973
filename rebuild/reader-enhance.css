@@ -120,7 +120,7 @@ body.modal-open{overflow:hidden}
 .reaction-btn.is-selected,.reaction-btn.correct{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 18%,var(--panel))}
 .reaction-count{display:inline-flex;min-width:28px;justify-content:center;padding:1px 7px;border-radius:999px;background:color-mix(in srgb,var(--accent) 14%,var(--panel));margin-inline-start:8px}
 .reaction-status,.reaction-count-line{display:block;text-align:center;color:var(--muted);font-size:.88rem;margin:12px 0 0}
-@media(max-width:620px){.intro-card{grid-template-columns:1fr;max-height:92vh}.intro-art{min-height:170px;max-height:240px;padding:14px}.intro-art img{max-height:220px}.intro-copy{padding:20px}.start-story-btn{width:100%}.reaction-options{grid-template-columns:1fr}.story-actions a,.story-actions button{flex:1 1 42%}}
+@media(max-width:620px){.intro-card{grid-template-columns:1fr;max-height:92vh}.intro-art{min-height:170px;max-height:240px;padding:14px}.intro-art img{max-height:220px}.intro-copy{padding:20px}.intro-copy h2{font-size:1.5rem}.start-story-btn{width:100%}.reaction-options{grid-template-columns:1fr}.story-actions a,.story-actions button{flex:1 1 42%}}
 @media print{
 @page{margin:15mm}
 header,.story-actions,.story-intro-modal,.image-lightbox,.reactions-section,#quiz-section,.kh-progress{display:none!important}
