@@ -1,0 +1,1517 @@
+{
+  "format": "KHALEDOON_STORY",
+  "slug": "ali-mosharafa",
+  "section": "science",
+  "design": {
+    "variant": "science-lab",
+    "accent": "#8ad9e8"
+  },
+  "original_body": "لم يرسل المستخدم نصًا أصليًا لهذه الحكاية؛ أُعدّت من الصفر بالاعتماد على المصادر التاريخية المدرجة أدناه.",
+  "i18n": {
+    "ar": {
+      "title": "علي مصطفى مشرفة — عقل مصري يقرأ أسرار الكون",
+      "subtitle": "من دمياط إلى الفيزياء النظرية: رحلة عالم آمن بقوة السؤال والمعرفة.",
+      "summary": "حكاية عالم مصري ساهم في أبحاث الفيزياء الحديثة، وفتح أبواب الجامعة أمام أجيال من الباحثين.",
+      "figure_name": "علي مصطفى مشرفة",
+      "person": "علي مصطفى مشرفة",
+      "history_note": "تستند الوقائع الأساسية إلى الهيئة العامة للاستعلامات وموسوعة ماكتوتر لتاريخ الرياضيات. لا تتناول الحكاية الروايات غير المثبتة عن ظروف وفاته.",
+      "images_note": "تضم الحكاية صورًا أرشيفية حقيقية من مصادر موثقة، وصورة لجامعة القاهرة التُقطت بعد زمن مشرفة لتوضيح المؤسسة لا شكلها في عصره. الصور ليست مولّدة بالذكاء الاصطناعي؛ راجع تعليق كل صورة لمعرفة سياقها ومصدرها وترخيصها.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ١: طفل يحب الأسئلة",
+          "text": "في دمياط، يوم 11 يوليو 1898، وُلد علي مصطفى مشرفة. لم يكن يعرف وهو طفل أن حبّه للأرقام والأسئلة سيقوده إلى دراسة قوانين الطبيعة، ثم إلى أن يصبح واحدًا من أبرز علماء الفيزياء النظرية في مصر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني إيه فيزياء نظرية؟ هل هي تجارب وأنابيب في معمل؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الفيزياء النظرية تحاول فهم القواعد التي يعمل بها الكون باستخدام الرياضيات والتفكير، ثم تقارن أفكارها بما نعرفه من التجارب والملاحظات. ومشرفة اهتم بالرياضيات لأنها لغة دقيقة تساعد العلماء على وصف الحركة والطاقة والضوء والمادة."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ وُلد علي مصطفى مشرفة في دمياط يوم 11 يوليو 1898، وتوفي في القاهرة يوم 15 يناير 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ٢: البكالوريا والاختيار",
+          "text": "في عام 1914، حصل مشرفة على شهادة البكالوريا وهو في السادسة عشرة من عمره، وكان أصغر من نالها في ذلك الوقت. اختار دراسة الرياضيات في دار المعلمين العليا، لأنه كان يريد التعمق في المجال الذي أحبه."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني كان متفوق من بدري، وعارف هو عايز يتعلم إيه؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ٣: بعثة إلى إنجلترا",
+          "text": "تفوق مشرفة في دراسته، ثم التحق بدار المعلمين العليا. وفي عام 1917 اختير لبعثة علمية إلى إنجلترا. درس في جامعة نوتنغهام، ثم واصل دراساته في كلية الملك بلندن، حيث حصل على الدكتوراه في الفلسفة عام 1923، ثم على دكتوراه العلوم عام 1924.",
+          "image_after": "university-path"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ تذكر الهيئة العامة للاستعلامات أن مشرفة كان أول مصري يحصل على درجة دكتوراه العلوم، وأنه نالها عام 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "رجع مصر بعد الدراسة، ولا فضّل يكمل شغله برّه؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ٤: العودة إلى جامعة القاهرة",
+          "text": "عاد إلى مصر ودرّس الرياضيات، ثم أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة عام 1926، وهو دون الثلاثين. وفي عام 1936 تولّى عمادة كلية العلوم، وكان أول مصري يشغل هذا المنصب. لم يكن دوره محاضرات فقط؛ فقد ساهم في بناء بيئة علمية يتعلّم فيها الطلاب البحث والتفكير المنظم."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "هل تعلم؟ أصبح مشرفة عميدًا لكلية العلوم بجامعة القاهرة عام 1936، وكان عمره 38 عامًا."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "أثر يتجاوز المعادلات",
+          "text": "ومن أثره في الجامعة أنه دعم طالبتَه سميرة موسى، التي أصبحت عالمة مصرية بارزة في أبحاث الإشعاع الذري. آمن بقدرتها وشجّعها حتى تواصل طريقها العلمي؛ فدعم المعلم قد يفتح بابًا لمستقبل كامل.",
+          "image_after": "sameera-moussa"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ٥: أسئلة الكون",
+          "text": "بحث مشرفة في موضوعات مثل نظرية الكم والنسبية والعلاقة بين المادة والإشعاع. ونشر أبحاثًا علمية وكتبًا في الرياضيات والفيزياء، كما اهتم بتاريخ العلوم وترجمة المعرفة إلى العربية. وتذكر المصادر أنه تبادل المراسلات مع ألبرت أينشتاين؛ لكن قيمة مشرفة لا تختصر في علاقته بعالم مشهور، بل في عمله العلمي وتعليمه للطلاب.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "معلومة علمية مبسطة",
+          "text": "النسبية نظرية تدرس العلاقة بين المكان والزمان والحركة والجاذبية. أما نظرية الكم فتدرس سلوك الأشياء الصغيرة جدًا مثل الذرات والضوء. وهاتان النظريتان من أعمدة الفيزياء الحديثة.",
+          "image_after": "space-time"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وتذكر الهيئة العامة للاستعلامات أنه نشر نحو 25 بحثًا علميًا، وألّف قرابة 12 كتابًا في الرياضيات والفيزياء، كما ترجم عشرة كتب في الرياضيات والفلك إلى العربية. وشارك مع تلميذه محمد مرسي أحمد في نشر كتاب الخوارزمي الشهير في الجبر."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "العلم يواصل رحلته",
+          "text": "استمر استكشاف الفضاء بعد زمن مشرفة بعقود. وتعرض الصورة التالية خريطة ناسا لموقع هبوط أبولو 11 عام 1969؛ مثال لاحق على أهمية القياس والخرائط في البحث العلمي، وليست جزءًا من أعمال مشرفة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المشهد ٦: حين تلتقي الموسيقى بالرياضيات",
+          "text": "ولم تكن اهتماماته محصورة في المعادلات؛ فقد أحب الموسيقى وكتب عنها أيضًا. هذه الجوانب تذكّرنا بأن العالم ليس آلة لحل المسائل، بل إنسان واسع الفضول، ويمكن للفن والعلم أن يجتمعا في شخص واحد."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وامتد اهتمامه بالموسيقى إلى البحث أيضًا؛ فقد أسهم في تأسيس جمعية محبي الموسيقى المصرية عام 1945، واهتم بدراسة المقامات المصرية والعلاقات الرياضية بين النغمات.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني الإنجاز مش بس إنك تكتشف حاجة جديدة؛ ممكن كمان تعلّم غيرك إزاي يفكر ويبحث."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "شريط زمني",
+          "text": "1898 — ولادته في دمياط\n1914 — حصوله على البكالوريا في السادسة عشرة\n1917 — اختياره لبعثة علمية إلى إنجلترا\n1923 — الدكتوراه في الفلسفة\n1924 — دكتوراه العلوم\n1926 — أستاذ الرياضيات التطبيقية بجامعة القاهرة\n1936 — عميد كلية العلوم\n1945 — المشاركة في تأسيس جمعية محبي الموسيقى المصرية\n1950 — وفاته في القاهرة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "الخاتمة: أثر يبقى",
+          "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
+        }
+      ]
+    },
+    "en": {
+      "title": "Ali Mostafa Mosharafa — An Egyptian Mind Exploring the Universe",
+      "subtitle": "From Damietta to theoretical physics: a scientist driven by questions and knowledge.",
+      "summary": "The story of an Egyptian scientist who contributed to modern physics and helped shape generations of researchers.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Core facts are based on Egypt’s State Information Service and the MacTutor History of Mathematics. Unverified stories about his death are not included.",
+      "images_note": "This story uses real archival photographs from documented sources, plus a later photograph of Cairo University to identify the institution rather than depict it in Mosharafa’s time. The images are not AI-generated; each caption gives its context, source, and license.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 1: A child who loved questions",
+          "text": "Ali Mostafa Mosharafa was born in Damietta on 11 July 1898. As a child, he could not know that his love of numbers and questions would lead him to study the laws of nature and become one of Egypt’s leading theoretical physicists."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "What does theoretical physics mean? Is it all experiments and test tubes in a lab?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Theoretical physics uses mathematics and reasoning to understand the rules of the universe, then compares its ideas with experiments and observations. Mosharafa valued mathematics because it helps scientists describe motion, energy, light, and matter precisely."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Ali Mostafa Mosharafa was born in Damietta on 11 July 1898 and died in Cairo on 15 January 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 2: The baccalaureate and a choice",
+          "text": "In 1914, at the age of sixteen, Mosharafa earned his baccalaureate, becoming the youngest student to receive it at that time. He chose to study mathematics at the Higher Teachers’ College because he wanted to go deeper into the subject he loved."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So he was doing well from an early age—and he knew what he wanted to learn?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 3: A scholarship to England",
+          "text": "Mosharafa excelled at school and attended the Higher Teachers’ College. In 1917, he was selected for a scholarship to England. He studied at the University of Nottingham and continued at King’s College London, earning a PhD in 1923 and a Doctor of Science degree in 1924.",
+          "image_after": "university-path"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Egypt’s State Information Service describes Mosharafa as the first Egyptian to receive a Doctor of Science degree, which he earned in 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Did he return to Egypt after studying, or did he stay abroad?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 4: Back to Cairo University",
+          "text": "He returned to Egypt to teach mathematics. In 1926, before turning thirty, he became a professor of applied mathematics at Cairo University’s Faculty of Science. In 1936, he became its dean—the first Egyptian to hold that post. He helped build a scientific environment where students could learn to research and think carefully."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Did you know? Mosharafa became dean of Cairo University’s Faculty of Science in 1936, at the age of 38."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "An influence beyond equations",
+          "text": "His university legacy also included supporting his student Sameera Moussa, who became a leading Egyptian scientist in atomic-radiation research. He believed in her abilities and encouraged her scientific path; a teacher’s support can open the door to an entire future.",
+          "image_after": "sameera-moussa"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 5: Questions about the universe",
+          "text": "Mosharafa researched quantum theory, relativity, and the relationship between matter and radiation. He published scientific papers and books on mathematics and physics, and also studied the history of science and helped make scientific knowledge available in Arabic. Sources record correspondence with Albert Einstein, but Mosharafa’s importance rests on his own scholarship and teaching—not simply on knowing a famous scientist.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "A simple science note",
+          "text": "Relativity studies how space, time, motion and gravity are connected. Quantum theory studies how very small things, such as atoms and light, behave. Together, they are two pillars of modern physics.",
+          "image_after": "space-time"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egypt’s State Information Service records that he published about 25 scientific papers and authored around 12 books on mathematics and physics. He also translated ten books on mathematics and astronomy into Arabic, and helped publish al-Khwarizmi’s famous work on algebra with his student M. Morsi Ahmad."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "Science continues its journey",
+          "text": "Space exploration continued for decades after Mosharafa’s time. The following image is NASA’s map of the Apollo 11 landing site in 1969, a later example of how measurement and mapping support research; it is not part of Mosharafa’s work."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scene 6: Where music meets mathematics",
+          "text": "His interests were not confined to equations: he also loved music and wrote about it. These interests remind us that a scientist is not a machine for solving problems, but a curious person—and art and science can belong in the same life."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "His interest in music also became a subject of research. In 1945, he helped establish the Egyptian Society for Music Lovers and studied Egyptian musical modes and the mathematical relationships between notes.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So achievement is not only discovering something new. It can also mean teaching others how to think and investigate."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Timeline",
+          "text": "1898 — Born in Damietta\n1914 — Earns the baccalaureate at sixteen\n1917 — Selected for a scholarship to England\n1923 — PhD\n1924 — Doctor of Science\n1926 — Professor of applied mathematics at Cairo University\n1936 — Dean of the Faculty of Science\n1945 — Helps establish the Egyptian Society for Music Lovers\n1950 — Dies in Cairo"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Conclusion: A lasting impact",
+          "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
+        }
+      ]
+    },
+    "fr": {
+      "title": "Ali Mostafa Mosharafa — Un esprit égyptien à la découverte de l’Univers",
+      "subtitle": "De Damiette à la physique théorique : le parcours d’un scientifique guidé par les questions.",
+      "summary": "L’histoire d’un scientifique égyptien qui a contribué à la physique moderne et formé des générations de chercheurs.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Les faits essentiels s’appuient sur le Service d’information de l’État égyptien et MacTutor. Les récits non vérifiés sur sa mort sont exclus.",
+      "images_note": "Ce récit utilise de vraies photographies d’archives provenant de sources documentées, ainsi qu’une photo ultérieure de l’Université du Caire pour identifier l’institution, et non son apparence à l’époque de Mosharafa. Les images ne sont pas générées par IA ; chaque légende précise le contexte, la source et la licence.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 1 : Un enfant qui aimait les questions",
+          "text": "Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898. Enfant, il ne pouvait pas savoir que son goût pour les nombres et les questions le conduirait à étudier les lois de la nature et à devenir l’un des grands physiciens théoriciens d’Égypte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Que signifie « physique théorique » ? Est-ce seulement des expériences et des éprouvettes dans un laboratoire ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La physique théorique utilise les mathématiques et le raisonnement pour comprendre les règles de l’Univers, puis confronte ses idées aux expériences et aux observations. Mosharafa appréciait les mathématiques parce qu’elles aident à décrire précisément le mouvement, l’énergie, la lumière et la matière."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Ali Mostafa Mosharafa est né à Damiette le 11 juillet 1898 et mort au Caire le 15 janvier 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 2 : Le baccalauréat et un choix",
+          "text": "En 1914, à l’âge de seize ans, Mosharafa obtint le baccalauréat et fut alors le plus jeune à recevoir ce diplôme. Il choisit d’étudier les mathématiques à l’École supérieure des enseignants, afin d’approfondir la matière qu’il aimait."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Il réussissait donc très tôt, et il savait déjà ce qu’il voulait apprendre ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 3 : Une bourse pour l’Angleterre",
+          "text": "Mosharafa brillait à l’école et fréquenta l’École supérieure des enseignants. En 1917, il obtint une bourse pour étudier en Angleterre. Il étudia à l’Université de Nottingham, puis poursuivit ses études au King’s College de Londres : il obtint un doctorat en 1923, puis un Doctor of Science en 1924.",
+          "image_after": "university-path"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Selon le Service d’information de l’État égyptien, Mosharafa fut le premier Égyptien à obtenir le diplôme de Doctor of Science, en 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Est-il rentré en Égypte après ses études, ou est-il resté à l’étranger ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 4 : Retour à l’Université du Caire",
+          "text": "Il rentra en Égypte pour enseigner les mathématiques. En 1926, avant ses trente ans, il devint professeur de mathématiques appliquées à la faculté des sciences de l’Université du Caire. En 1936, il en devint le doyen, le premier Égyptien à occuper ce poste. Il contribua à créer un milieu où les étudiants pouvaient apprendre à rechercher et à raisonner avec méthode."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ? Mosharafa devint doyen de la faculté des sciences de l’Université du Caire en 1936, à l’âge de 38 ans."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "Une influence au-delà des équations",
+          "text": "Son héritage universitaire comprend aussi le soutien apporté à son étudiante Sameera Moussa, devenue une scientifique égyptienne reconnue dans la recherche sur le rayonnement atomique. Il croyait en ses capacités et l’a encouragée dans son parcours scientifique : le soutien d’un enseignant peut ouvrir la voie à tout un avenir.",
+          "image_after": "sameera-moussa"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 5 : Les questions de l’Univers",
+          "text": "Mosharafa travailla sur la théorie quantique, la relativité et le lien entre matière et rayonnement. Il publia des articles et des livres de mathématiques et de physique, tout en s’intéressant à l’histoire des sciences et à la diffusion du savoir scientifique en arabe. Des sources mentionnent une correspondance avec Albert Einstein, mais son importance vient de ses propres recherches et de son enseignement, pas seulement de ce lien.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Une note scientifique simple",
+          "text": "La relativité étudie les liens entre l’espace, le temps, le mouvement et la gravité. La théorie quantique étudie le comportement des très petits objets, comme les atomes et la lumière. Ce sont deux piliers de la physique moderne.",
+          "image_after": "space-time"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le Service d’information de l’État égyptien indique qu’il publia environ 25 articles scientifiques et écrivit près de 12 livres de mathématiques et de physique. Il traduisit aussi dix ouvrages de mathématiques et d’astronomie en arabe et participa, avec son élève M. Morsi Ahmad, à la publication du célèbre ouvrage d’algèbre d’al-Khwarizmi."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "La science poursuit son chemin",
+          "text": "L’exploration spatiale s’est poursuivie pendant des décennies après l’époque de Mosharafa. L’image suivante est une carte de la NASA du site d’alunissage d’Apollo 11 en 1969, exemple ultérieur de l’importance des mesures et des cartes en recherche ; elle ne fait pas partie des travaux de Mosharafa."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scène 6 : Quand la musique rencontre les mathématiques",
+          "text": "Ses intérêts ne se limitaient pas aux équations : il aimait aussi la musique et écrivait à son sujet. Cela rappelle qu’un scientifique n’est pas une machine à résoudre des problèmes, mais une personne curieuse ; l’art et la science peuvent coexister dans une même vie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Son intérêt pour la musique devint aussi un sujet de recherche. En 1945, il contribua à fonder la Société égyptienne des amateurs de musique et étudia les modes musicaux égyptiens ainsi que les rapports mathématiques entre les notes.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Alors, réussir, ce n’est pas seulement découvrir quelque chose : c’est aussi apprendre aux autres à réfléchir et à chercher."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Chronologie",
+          "text": "1898 — Naissance à Damiette\n1914 — Baccalauréat à seize ans\n1917 — Choisi pour une bourse en Angleterre\n1923 — Doctorat\n1924 — Doctor of Science\n1926 — Professeur de mathématiques appliquées à l’Université du Caire\n1936 — Doyen de la faculté des sciences\n1945 — Contribue à fonder la Société égyptienne des amateurs de musique\n1950 — Décès au Caire"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Conclusion : Une trace durable",
+          "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
+        }
+      ]
+    },
+    "it": {
+      "title": "Ali Mostafa Mosharafa — Una mente egiziana alla scoperta dell’universo",
+      "subtitle": "Da Damietta alla fisica teorica: il percorso di uno scienziato guidato dalle domande.",
+      "summary": "La storia di uno scienziato egiziano che contribuì alla fisica moderna e alla formazione di nuove generazioni di ricercatori.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "I fatti principali si basano sul Servizio d’informazione dello Stato egiziano e su MacTutor. Sono escluse le storie non verificate sulla sua morte.",
+      "images_note": "Questo racconto usa vere fotografie d’archivio da fonti documentate e una foto successiva dell’Università del Cairo per identificare l’istituzione, non il suo aspetto ai tempi di Mosharafa. Le immagini non sono generate dall’IA; ogni didascalia indica contesto, fonte e licenza.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 1: Un bambino che amava le domande",
+          "text": "Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898. Da bambino non poteva sapere che il suo amore per i numeri e le domande lo avrebbe portato a studiare le leggi della natura e a diventare uno dei più importanti fisici teorici egiziani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Che cosa significa fisica teorica? Sono solo esperimenti e provette in laboratorio?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La fisica teorica usa la matematica e il ragionamento per comprendere le regole dell’universo, confrontando poi le idee con esperimenti e osservazioni. Mosharafa apprezzava la matematica perché aiuta a descrivere con precisione movimento, energia, luce e materia."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Ali Mostafa Mosharafa nacque a Damietta l’11 luglio 1898 e morì al Cairo il 15 gennaio 1950."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 2: La maturità e una scelta",
+          "text": "Nel 1914, a sedici anni, Mosharafa conseguì il diploma di maturità, diventando il più giovane a ottenerlo in quel periodo. Scelse di studiare matematica all’Istituto superiore per la formazione degli insegnanti per approfondire la materia che amava."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi era bravo fin da giovane e sapeva già che cosa voleva studiare?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 3: Una borsa di studio per l’Inghilterra",
+          "text": "Mosharafa eccelleva a scuola e frequentò l’Istituto superiore per la formazione degli insegnanti. Nel 1917 fu scelto per una borsa di studio in Inghilterra. Studiò all’Università di Nottingham e poi al King’s College di Londra, dove conseguì il dottorato nel 1923 e il titolo di Doctor of Science nel 1924.",
+          "image_after": "university-path"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Secondo il Servizio d’informazione dello Stato egiziano, Mosharafa fu il primo egiziano a ottenere il titolo di Doctor of Science, nel 1924."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Dopo gli studi tornò in Egitto oppure rimase all’estero?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 4: Il ritorno all’Università del Cairo",
+          "text": "Tornò in Egitto per insegnare matematica. Nel 1926, prima di compiere trent’anni, diventò professore di matematica applicata alla Facoltà di Scienze dell’Università del Cairo. Nel 1936 ne divenne preside, il primo egiziano a ricoprire quell’incarico. Contribuì a creare un ambiente in cui gli studenti potessero imparare a fare ricerca e ragionare con metodo."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Lo sapevi? Mosharafa diventò preside della Facoltà di Scienze dell’Università del Cairo nel 1936, all’età di 38 anni."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "Un’influenza oltre le equazioni",
+          "text": "La sua eredità universitaria comprende anche il sostegno alla studentessa Sameera Moussa, diventata una scienziata egiziana di rilievo nella ricerca sulle radiazioni atomiche. Credeva nelle sue capacità e la incoraggiò nel percorso scientifico: il sostegno di un insegnante può aprire la porta a un intero futuro.",
+          "image_after": "sameera-moussa"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 5: Le domande dell’universo",
+          "text": "Mosharafa studiò la teoria dei quanti, la relatività e il rapporto tra materia e radiazione. Pubblicò articoli e libri di matematica e fisica, e si interessò anche alla storia della scienza e alla diffusione del sapere scientifico in arabo. Le fonti riportano una corrispondenza con Albert Einstein, ma la sua importanza deriva soprattutto dalle sue ricerche e dal suo insegnamento.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Una semplice nota scientifica",
+          "text": "La relatività studia i legami tra spazio, tempo, movimento e gravità. La teoria dei quanti studia il comportamento delle cose molto piccole, come gli atomi e la luce. Sono due pilastri della fisica moderna.",
+          "image_after": "space-time"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il Servizio d’informazione dello Stato egiziano riferisce che pubblicò circa 25 articoli scientifici e scrisse una dozzina di libri di matematica e fisica. Tradusse inoltre in arabo dieci libri di matematica e astronomia e collaborò con il suo allievo M. Morsi Ahmad alla pubblicazione della celebre opera di al-Khwarizmi sull’algebra."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "La scienza continua il suo viaggio",
+          "text": "L’esplorazione spaziale è proseguita per decenni dopo l’epoca di Mosharafa. L’immagine seguente è una mappa NASA del sito di allunaggio di Apollo 11 nel 1969, un esempio successivo dell’importanza di misurazioni e mappe nella ricerca; non fa parte del lavoro di Mosharafa."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Scena 6: Quando la musica incontra la matematica",
+          "text": "I suoi interessi non si fermavano alle equazioni: amava anche la musica e ne scrisse. Questo ci ricorda che uno scienziato non è una macchina che risolve problemi, ma una persona curiosa; arte e scienza possono convivere nella stessa vita."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Anche la musica divenne un campo di ricerca per lui. Nel 1945 contribuì a fondare la Società egiziana degli amanti della musica e studiò i modi musicali egiziani e i rapporti matematici tra le note.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi il successo non è solo scoprire qualcosa di nuovo: è anche insegnare agli altri a pensare e a fare ricerca."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Cronologia",
+          "text": "1898 — Nasce a Damietta\n1914 — Ottiene la maturità a sedici anni\n1917 — Scelto per una borsa di studio in Inghilterra\n1923 — Dottorato\n1924 — Doctor of Science\n1926 — Professore di matematica applicata all’Università del Cairo\n1936 — Preside della Facoltà di Scienze\n1945 — Contribuisce a fondare la Società egiziana degli amanti della musica\n1950 — Muore al Cairo"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Conclusione: Un’eredità duratura",
+          "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
+        }
+      ]
+    },
+    "de": {
+      "title": "Ali Mostafa Mosharafa — Ein ägyptischer Geist erforscht das Universum",
+      "subtitle": "Von Damiette zur theoretischen Physik: der Weg eines Forschers, der Fragen liebte.",
+      "summary": "Die Geschichte eines ägyptischen Wissenschaftlers, der zur modernen Physik beitrug und Generationen von Forschenden prägte.",
+      "figure_name": "Ali Mostafa Mosharafa",
+      "person": "Ali Mostafa Mosharafa",
+      "history_note": "Die wichtigsten Fakten beruhen auf dem ägyptischen Staatlichen Informationsdienst und MacTutor. Unbestätigte Geschichten über seinen Tod werden nicht übernommen.",
+      "images_note": "Diese Geschichte verwendet echte Archivfotos aus dokumentierten Quellen sowie ein späteres Foto der Universität Kairo, das die Institution zeigt, nicht ihr Aussehen zu Mosharafas Zeit. Die Bilder sind nicht KI-generiert; jede Bildunterschrift nennt Kontext, Quelle und Lizenz.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 1: Ein Kind, das Fragen liebte",
+          "text": "Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren. Als Kind konnte er nicht ahnen, dass seine Liebe zu Zahlen und Fragen ihn dazu führen würde, die Naturgesetze zu erforschen und einer der bedeutenden theoretischen Physiker Ägyptens zu werden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Was bedeutet theoretische Physik? Geht es dabei nur um Experimente und Reagenzgläser im Labor?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die theoretische Physik nutzt Mathematik und logisches Denken, um die Regeln des Universums zu verstehen. Ihre Ideen werden anschließend mit Experimenten und Beobachtungen verglichen. Mosharafa schätzte Mathematik, weil sie Bewegung, Energie, Licht und Materie genau beschreiben hilft."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Ali Mostafa Mosharafa wurde am 11. Juli 1898 in Damiette geboren und starb am 15. Januar 1950 in Kairo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 2: Das Baccalaureat und eine Entscheidung",
+          "text": "1914 erwarb Mosharafa im Alter von sechzehn Jahren das Baccalaureat und war damals der jüngste Empfänger dieses Abschlusses. Er entschied sich für Mathematik an der Höheren Lehrerschule, um das Fach, das er liebte, weiter zu vertiefen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Er war also schon früh sehr gut und wusste, was er lernen wollte?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 3: Ein Stipendium für England",
+          "text": "Mosharafa war ein hervorragender Schüler und besuchte die Höhere Lehrerschule. 1917 erhielt er ein Stipendium für England. Er studierte an der Universität Nottingham und setzte seine Ausbildung am King’s College London fort. Dort erwarb er 1923 einen Doktortitel und 1924 den Grad Doctor of Science.",
+          "image_after": "university-path"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Laut dem ägyptischen Staatlichen Informationsdienst war Mosharafa 1924 der erste Ägypter, der den Grad Doctor of Science erhielt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Kehrte er nach dem Studium nach Ägypten zurück oder blieb er im Ausland?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 4: Zurück an der Universität Kairo",
+          "text": "Er kehrte nach Ägypten zurück, um Mathematik zu unterrichten. 1926 wurde er, noch vor seinem 30. Geburtstag, Professor für angewandte Mathematik an der Fakultät für Naturwissenschaften der Universität Kairo. 1936 wurde er Dekan – als erster Ägypter in diesem Amt. Er half dabei, ein wissenschaftliches Umfeld aufzubauen, in dem Studierende Forschen und systematisches Denken lernen konnten."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Wusstest du? Mosharafa wurde 1936 im Alter von 38 Jahren Dekan der naturwissenschaftlichen Fakultät der Universität Kairo."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "Ein Einfluss über Gleichungen hinaus",
+          "text": "Zu seinem Vermächtnis an der Universität gehörte auch die Unterstützung seiner Studentin Sameera Moussa, die zu einer bedeutenden ägyptischen Wissenschaftlerin auf dem Gebiet der Atomstrahlung wurde. Er glaubte an ihre Fähigkeiten und ermutigte sie auf ihrem wissenschaftlichen Weg; die Unterstützung einer Lehrkraft kann eine ganze Zukunft eröffnen.",
+          "image_after": "sameera-moussa"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 5: Fragen an das Universum",
+          "text": "Mosharafa forschte zur Quantentheorie, Relativität und zum Verhältnis von Materie und Strahlung. Er veröffentlichte wissenschaftliche Aufsätze und Bücher über Mathematik und Physik und interessierte sich auch für die Wissenschaftsgeschichte und die Vermittlung wissenschaftlichen Wissens auf Arabisch. Quellen erwähnen einen Briefwechsel mit Albert Einstein; Mosharafas Bedeutung beruht jedoch auf seiner eigenen Forschung und Lehre.",
+          "image_after": "atom-diagram"
+        },
+        {
+          "type": "science_note",
+          "speaker": "narrator",
+          "heading": "Eine einfache Wissensnotiz",
+          "text": "Die Relativitätstheorie untersucht, wie Raum, Zeit, Bewegung und Schwerkraft zusammenhängen. Die Quantentheorie untersucht, wie sich sehr kleine Dinge wie Atome und Licht verhalten. Beide sind Säulen der modernen Physik.",
+          "image_after": "space-time"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nach Angaben des ägyptischen Staatlichen Informationsdienstes veröffentlichte er etwa 25 wissenschaftliche Arbeiten und verfasste rund zwölf Bücher über Mathematik und Physik. Außerdem übersetzte er zehn Bücher über Mathematik und Astronomie ins Arabische und half gemeinsam mit seinem Schüler M. Morsi Ahmad, al-Chwarizmis berühmtes Algebra-Werk herauszugeben."
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "heading": "Die Wissenschaft setzt ihre Reise fort",
+          "text": "Die Weltraumforschung wurde noch Jahrzehnte nach Mosharafas Zeit fortgesetzt. Das folgende Bild zeigt die NASA-Karte des Apollo-11-Landeplatzes von 1969 als späteres Beispiel für die Bedeutung von Messungen und Karten in der Forschung; sie gehört nicht zu Mosharafas Arbeit."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Szene 6: Wo Musik auf Mathematik trifft",
+          "text": "Seine Interessen beschränkten sich nicht auf Gleichungen: Er liebte auch Musik und schrieb darüber. Das erinnert uns daran, dass ein Wissenschaftler keine Maschine zum Lösen von Aufgaben ist, sondern ein neugieriger Mensch – Kunst und Wissenschaft können in einem Leben zusammenkommen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Auch Musik wurde für ihn zum Forschungsthema. 1945 half er bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde und untersuchte ägyptische Musikmodi sowie die mathematischen Beziehungen zwischen den Tönen.",
+          "image_after": "music-mathematics"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Erfolg bedeutet also nicht nur, etwas Neues zu entdecken. Man kann auch anderen beibringen, wie man denkt und forscht."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "heading": "Zeitstrahl",
+          "text": "1898 — Geboren in Damiette\n1914 — Baccalaureat mit sechzehn Jahren\n1917 — Für ein Stipendium in England ausgewählt\n1923 — Doktortitel\n1924 — Doctor of Science\n1926 — Professor für angewandte Mathematik an der Universität Kairo\n1936 — Dekan der naturwissenschaftlichen Fakultät\n1945 — Hilft bei der Gründung der Ägyptischen Gesellschaft der Musikfreunde\n1950 — Stirbt in Kairo"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Schluss: Eine bleibende Wirkung",
+          "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/science/016/cover.jpg",
+    "kind": "archival",
+    "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+    "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
+    "rights": "Historical portrait listed as public domain on Wikimedia Commons.",
+    "i18n": {
+      "ar": {
+        "alt": "صورة تاريخية حقيقية لعلي مصطفى مشرفة",
+        "caption": "صورة أرشيفية حقيقية لعلي مصطفى مشرفة، وليست رسمًا توضيحيًا.",
+        "source_name": "ويكيميديا كومنز — Ali Mosharrafa.jpg",
+        "rights": "ملكية عامة وفق صفحة الملف."
+      },
+      "en": {
+        "alt": "Authentic historical photograph of Ali Mostafa Mosharafa",
+        "caption": "A real archival photograph of Ali Mostafa Mosharafa, not an illustration.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Public domain per the file page."
+      },
+      "fr": {
+        "alt": "Photographie historique authentique d’Ali Mostafa Mosharafa",
+        "caption": "Une vraie photographie d’archive d’Ali Mostafa Mosharafa, pas une illustration.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Domaine public selon la page du fichier."
+      },
+      "it": {
+        "alt": "Fotografia storica autentica di Ali Mostafa Mosharafa",
+        "caption": "Una vera fotografia d’archivio di Ali Mostafa Mosharafa, non un’illustrazione.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Pubblico dominio secondo la pagina del file."
+      },
+      "de": {
+        "alt": "Authentische historische Fotografie von Ali Mostafa Mosharafa",
+        "caption": "Ein echtes historisches Foto von Ali Mostafa Mosharafa, keine Illustration.",
+        "source_name": "Wikimedia Commons — Ali Mosharrafa.jpg",
+        "rights": "Laut Dateiseite gemeinfrei."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "university-path",
+      "kind": "archival",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/University_College_Nottingham.jpg",
+      "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:University_College_Nottingham.jpg",
+      "rights": "Archival image from an 1897 illustrated guide, listed as public domain. It shows the institution, not Mosharafa’s specific classroom.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لكلية University College Nottingham من عام 1897",
+          "caption": "صورة أرشيفية للمؤسسة من دليل مصوّر عام 1897؛ توضح سياق دراسته في إنجلترا ولا تثبت أنها قاعة دراسته.",
+          "source_name": "ويكيميديا كومنز — University College Nottingham (1897)",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
+        },
+        "en": {
+          "alt": "Archival image of University College Nottingham from 1897",
+          "caption": "An archival view of the institution from an 1897 illustrated guide; it provides context for his studies in England, not proof of his specific classroom.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Listed as public domain on the file page."
+        },
+        "fr": {
+          "alt": "Image d’archive de l’University College Nottingham datant de 1897",
+          "caption": "Vue d’archive de l’établissement tirée d’un guide illustré de 1897 ; elle situe ses études en Angleterre sans identifier sa salle de cours.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indiquée comme appartenant au domaine public."
+        },
+        "it": {
+          "alt": "Immagine d’archivio dell’University College Nottingham del 1897",
+          "caption": "Veduta dell’istituto tratta da una guida illustrata del 1897; contestualizza gli studi in Inghilterra, ma non identifica la sua aula.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Indicata come di pubblico dominio."
+        },
+        "de": {
+          "alt": "Archivbild des University College Nottingham aus dem Jahr 1897",
+          "caption": "Ansicht der Einrichtung aus einem illustrierten Führer von 1897; sie bietet Studienkontext, belegt aber nicht seinen konkreten Hörsaal.",
+          "source_name": "Wikimedia Commons — University College Nottingham (1897)",
+          "rights": "Als gemeinfrei gekennzeichnet."
+        }
+      }
+    },
+    {
+      "id": "atom-diagram",
+      "kind": "photograph",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Ali_Mosharrafa_1.jpg",
+      "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa_1.jpg",
+      "rights": "Historical portrait of Ali Mostafa Mosharafa, listed as public domain on Wikimedia Commons.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لعلي مصطفى مشرفة",
+          "caption": "صورة أرشيفية ثانية لمشرفة؛ صورة حقيقية للشخصية وليست رسمًا مولّدًا.",
+          "source_name": "ويكيميديا كومنز — Ali Mosharrafa 1.jpg",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
+        },
+        "en": {
+          "alt": "Archival portrait of Ali Mostafa Mosharafa",
+          "caption": "A second archival portrait of Mosharafa; a real photograph of the person, not a generated illustration.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Listed as public domain on the file page."
+        },
+        "fr": {
+          "alt": "Portrait d’archive d’Ali Mostafa Mosharafa",
+          "caption": "Un deuxième portrait d’archive de Mosharafa ; une vraie photographie, et non une illustration générée.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indiqué comme appartenant au domaine public."
+        },
+        "it": {
+          "alt": "Ritratto d’archivio di Ali Mostafa Mosharafa",
+          "caption": "Un secondo ritratto d’archivio di Mosharafa; una fotografia reale, non un’illustrazione generata.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Indicato come di pubblico dominio."
+        },
+        "de": {
+          "alt": "Historisches Porträt von Ali Mostafa Mosharafa",
+          "caption": "Ein zweites historisches Porträt Mosharafas; eine echte Fotografie, keine generierte Illustration.",
+          "source_name": "Wikimedia Commons — Ali Mosharrafa 1.jpg",
+          "rights": "Als gemeinfrei gekennzeichnet."
+        }
+      }
+    },
+    {
+      "id": "sameera-moussa",
+      "path": "assets/images/stories/SameeraMoussa.jpg",
+      "kind": "photograph",
+      "source_name": "Wikimedia Commons — SameeraMoussa.jpg (Al Ahram, 1952)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:SameeraMoussa.jpg",
+      "rights": "Archival portrait first published in Al Ahram in 1952; listed as public domain under Egyptian copyright rules on Wikimedia Commons.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية للعالمة المصرية سميرة موسى",
+          "caption": "سميرة موسى، إحدى تلميذات مشرفة؛ الصورة أرشيفية منشورة أول مرة في الأهرام عام 1952.",
+          "source_name": "ويكيميديا كومنز — صورة سميرة موسى",
+          "rights": "مصنّفة ملكية عامة وفق صفحة الملف."
+        },
+        "en": {
+          "alt": "Archival portrait of Egyptian scientist Sameera Moussa",
+          "caption": "Sameera Moussa, one of Mosharafa’s students; this archival portrait was first published in Al Ahram in 1952.",
+          "source_name": "Wikimedia Commons — Sameera Moussa portrait",
+          "rights": "Listed as public domain on the file page."
+        },
+        "fr": {
+          "alt": "Portrait d’archive de la scientifique égyptienne Sameera Moussa",
+          "caption": "Sameera Moussa, l’une des étudiantes de Mosharafa ; ce portrait d’archive a été publié pour la première fois dans Al Ahram en 1952.",
+          "source_name": "Wikimedia Commons — Portrait de Sameera Moussa",
+          "rights": "Indiqué comme appartenant au domaine public sur la page du fichier."
+        },
+        "it": {
+          "alt": "Ritratto d’archivio della scienziata egiziana Sameera Moussa",
+          "caption": "Sameera Moussa, una delle studentesse di Mosharafa; questo ritratto d’archivio fu pubblicato per la prima volta su Al Ahram nel 1952.",
+          "source_name": "Wikimedia Commons — Ritratto di Sameera Moussa",
+          "rights": "Indicato come di pubblico dominio nella pagina del file."
+        },
+        "de": {
+          "alt": "Historisches Porträt der ägyptischen Wissenschaftlerin Sameera Moussa",
+          "caption": "Sameera Moussa, eine von Mosharafas Studentinnen; dieses Archivporträt wurde erstmals 1952 in Al Ahram veröffentlicht.",
+          "source_name": "Wikimedia Commons — Porträt von Sameera Moussa",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
+        }
+      }
+    },
+    {
+      "id": "space-time",
+      "kind": "photograph",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Cairouni.jpg",
+      "source_name": "Wikimedia Commons — Cairouni.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Cairouni.jpg",
+      "rights": "Photograph by user:mmustafa, licensed CC BY-SA 3.0; credit and license are required.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة حقيقية لجامعة القاهرة من التسعينيات",
+          "caption": "صورة حقيقية لجامعة القاهرة التُقطت عام 2008، بعد زمن مشرفة؛ توضح الجامعة المرتبطة بمسيرته ولا تمثل شكلها في حياته.",
+          "source_name": "ويكيميديا كومنز — Cairouni.jpg",
+          "rights": "مرخّصة CC BY-SA 3.0؛ يلزم الإسناد والإشارة إلى الترخيص."
+        },
+        "en": {
+          "alt": "Real photograph of Cairo University from the 1990s",
+          "caption": "A real photograph of Cairo University taken in 2008, after Mosharafa’s lifetime; it shows the institution linked to his career, not the campus in his era.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licensed CC BY-SA 3.0; attribution and license notice are required."
+        },
+        "fr": {
+          "alt": "Photographie réelle de l’Université du Caire datant des années 1990",
+          "caption": "Photographie réelle de l’Université du Caire prise en 2008, après l’époque de Mosharafa ; elle montre l’institution liée à sa carrière, pas le campus de son vivant.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licence CC BY-SA 3.0 ; attribution et mention de la licence requises."
+        },
+        "it": {
+          "alt": "Fotografia reale dell’Università del Cairo degli anni Novanta",
+          "caption": "Fotografia reale dell’Università del Cairo scattata nel 2008, dopo l’epoca di Mosharafa; mostra l’istituzione legata alla sua carriera, non il campus del suo tempo.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Licenza CC BY-SA 3.0; sono richiesti attribuzione e avviso di licenza."
+        },
+        "de": {
+          "alt": "Echtes Foto der Universität Kairo aus den 1990er-Jahren",
+          "caption": "Echtes Foto der Universität Kairo aus dem Jahr 2008, nach Mosharafas Zeit; es zeigt die mit seiner Laufbahn verbundene Institution, nicht den Campus seiner Lebenszeit.",
+          "source_name": "Wikimedia Commons — Cairouni.jpg",
+          "rights": "Lizenz CC BY-SA 3.0; Namensnennung und Lizenzhinweis sind erforderlich."
+        }
+      }
+    },
+    {
+      "id": "music-mathematics",
+      "kind": "archival",
+      "url": "https://commons.wikimedia.org/wiki/Special:FilePath/Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "source_name": "Wikimedia Commons — Cairo Congress of Arab Music (1932)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "rights": "Archival photograph of the 1932 Cairo Congress of Arab Music, listed as public domain. It illustrates the era’s cultural setting and does not imply Mosharafa attended.",
+      "i18n": {
+        "ar": {
+          "alt": "صورة أرشيفية لمؤتمر الموسيقى العربية بالقاهرة عام 1932",
+          "caption": "صورة أرشيفية للمؤتمر الأول للموسيقى العربية عام 1932؛ توضح البيئة الثقافية في عصر مشرفة ولا تعني أنه حضر المؤتمر.",
+          "source_name": "ويكيميديا كومنز — مؤتمر الموسيقى العربية بالقاهرة (1932)",
+          "rights": "مصنّفة ملكية عامة في صفحة الملف."
+        },
+        "en": {
+          "alt": "Archival photograph of the 1932 Cairo Congress of Arab Music",
+          "caption": "An archival photograph of the 1932 Cairo Congress of Arab Music; it shows the era’s cultural setting and does not imply Mosharafa attended.",
+          "source_name": "Wikimedia Commons — Cairo Congress of Arab Music (1932)",
+          "rights": "Listed as public domain on the file page."
+        },
+        "fr": {
+          "alt": "Photographie d’archive du Congrès de musique arabe du Caire de 1932",
+          "caption": "Photographie d’archive du congrès de 1932 ; elle illustre le contexte culturel de l’époque sans suggérer que Mosharafa y a participé.",
+          "source_name": "Wikimedia Commons — Congrès de musique arabe du Caire (1932)",
+          "rights": "Indiquée comme appartenant au domaine public."
+        },
+        "it": {
+          "alt": "Fotografia d’archivio del Congresso della musica araba al Cairo del 1932",
+          "caption": "Fotografia d’archivio del congresso del 1932; illustra il contesto culturale dell’epoca senza suggerire che Mosharafa vi abbia partecipato.",
+          "source_name": "Wikimedia Commons — Congresso della musica araba al Cairo (1932)",
+          "rights": "Indicata come di pubblico dominio."
+        },
+        "de": {
+          "alt": "Archivfoto des Kairoer Kongresses für arabische Musik von 1932",
+          "caption": "Archivfoto des Kongresses von 1932; es zeigt den kulturellen Kontext der Zeit und bedeutet nicht, dass Mosharafa teilnahm.",
+          "source_name": "Wikimedia Commons — Kongress für arabische Musik in Kairo (1932)",
+          "rights": "Auf der Dateiseite als gemeinfrei gekennzeichnet."
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "Ali Moustafa Mosharafa",
+      "organization": "Egypt State Information Service",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/dr-ali-moustafa-mosharafa/",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Ali Moustafa Mosharafa",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
+    },
+    {
+      "title": "Ali Moustafa Mosharrafa (1898–1950)",
+      "organization": "MacTutor History of Mathematics, University of St Andrews",
+      "url": "https://mathshistory.st-andrews.ac.uk/Biographies/Mosharrafa/",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة (1898–1950)",
+          "organization": "موسوعة ماكتوتر لتاريخ الرياضيات — جامعة سانت أندروز"
+        },
+        "en": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor History of Mathematics, University of St Andrews"
+        },
+        "fr": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, histoire des mathématiques — Université de St Andrews"
+        },
+        "it": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, storia della matematica — Università di St Andrews"
+        },
+        "de": {
+          "title": "Ali Moustafa Mosharrafa (1898–1950)",
+          "organization": "MacTutor, Geschichte der Mathematik — University of St Andrews"
+        }
+      }
+    },
+    {
+      "title": "علي مصطفى مشرفة",
+      "organization": "الهيئة العامة للاستعلامات المصرية",
+      "url": "https://sis.gov.eg/ar/%D9%85%D8%B5%D8%B1/%D8%A7%D9%84%D9%85%D8%AC%D8%AA%D9%85%D8%B9/%D8%A3%D8%B9%D9%84%D8%A7%D9%85-%D9%88%D8%B4%D8%AE%D8%B5%D9%8A%D8%A7%D8%AA-%D9%85%D8%B5%D8%B1%D9%8A%D8%A9/%D8%B9%D9%84%D9%8A-%D9%85%D8%B5%D8%B7%D9%81%D9%89-%D9%85%D8%B4%D8%B1%D9%81%D8%A9/",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "علي مصطفى مشرفة",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Ali Mostafa Mosharafa",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
+    },
+    {
+      "title": "Sameera Moussa",
+      "organization": "Egypt State Information Service",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/samira-moussa/",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "سميرة موسى",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Sameera Moussa",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Sameera Moussa",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "Sameera Moussa",
+          "organization": "Servizio d’informazione dello Stato egiziano"
+        },
+        "de": {
+          "title": "Sameera Moussa",
+          "organization": "Staatlicher Informationsdienst Ägyptens"
+        }
+      }
+    },
+    {
+      "title": "Ali Mosharrafa.jpg — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Ali_Mosharrafa.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "صورة علي مصطفى مشرفة — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Ali Mosharrafa.jpg — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Ali Mosharrafa.jpg — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Ali Mosharrafa.jpg — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Ali Mosharrafa.jpg — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "Damietta.jpg (1911) — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Damietta.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "دمياط في مشهد أرشيفي (1911) — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Damietta archival view (1911) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Vue d’archive de Damiette (1911) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Veduta d’archivio di Damietta (1911) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Historische Ansicht von Damiette (1911) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "University College Nottingham (1897) — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:University_College_Nottingham.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "مبنى University College Nottingham في دليل 1897 — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "University College Nottingham (1897) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "University College Nottingham (1897) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "University College Nottingham (1897) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "University College Nottingham (1897) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "University of Nottingham library (1928) — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:The_University_of_Nottingham_Hallward_Library._1928.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "مكتبة جامعة نوتنغهام (1928) — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "University of Nottingham library (1928) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Bibliothèque de l’Université de Nottingham (1928) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Biblioteca dell’Università di Nottingham (1928) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Bibliothek der Universität Nottingham (1928) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "CairoUniv.jpg (1990s) — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:CairoUniv.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "جامعة القاهرة في صورة من التسعينيات — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Cairo University (1990s) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Université du Caire (années 1990) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Università del Cairo (anni Novanta) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Universität Kairo (1990er-Jahre) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "Sameera Moussa portrait — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:SameeraMoussa.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "صورة سميرة موسى الأرشيفية — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Sameera Moussa archival portrait — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Portrait d’archive de Sameera Moussa — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Ritratto d’archivio di Sameera Moussa — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Archivporträt von Sameera Moussa — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "Cairo Congress of Arab Music (1932) — Wikimedia Commons",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Congreso_de_m%C3%BAsica_%C3%A1rabe_de_El_Cairo.jpg",
+      "accessed_at": "2026-10-29",
+      "i18n": {
+        "ar": {
+          "title": "المؤتمر الأول للموسيقى العربية بالقاهرة (1932) — ويكيميديا كومنز",
+          "organization": "ويكيميديا كومنز"
+        },
+        "en": {
+          "title": "Cairo Congress of Arab Music (1932) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Congrès de musique arabe du Caire (1932) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Congresso della musica araba al Cairo (1932) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Kongress für arabische Musik in Kairo (1932) — Wikimedia Commons",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birthplace",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة وُلد علي مصطفى مشرفة؟",
+          "options": [
+            "القاهرة",
+            "دمياط",
+            "الإسكندرية",
+            "أسوان"
+          ],
+          "explanation": "وُلد مشرفة في دمياط في 11 يوليو 1898."
+        },
+        "en": {
+          "question": "In which city was Ali Mostafa Mosharafa born?",
+          "options": [
+            "Cairo",
+            "Damietta",
+            "Alexandria",
+            "Aswan"
+          ],
+          "explanation": "Mosharafa was born in Damietta on 11 July 1898."
+        },
+        "fr": {
+          "question": "Dans quelle ville Ali Mostafa Mosharafa est-il né ?",
+          "options": [
+            "Le Caire",
+            "Damiette",
+            "Alexandrie",
+            "Assouan"
+          ],
+          "explanation": "Mosharafa est né à Damiette le 11 juillet 1898."
+        },
+        "it": {
+          "question": "In quale città nacque Ali Mostafa Mosharafa?",
+          "options": [
+            "Il Cairo",
+            "Damietta",
+            "Alessandria",
+            "Assuan"
+          ],
+          "explanation": "Mosharafa nacque a Damietta l’11 luglio 1898."
+        },
+        "de": {
+          "question": "In welcher Stadt wurde Ali Mostafa Mosharafa geboren?",
+          "options": [
+            "Kairo",
+            "Damiette",
+            "Alexandria",
+            "Assuan"
+          ],
+          "explanation": "Mosharafa wurde am 11. Juli 1898 in Damiette geboren."
+        }
+      }
+    },
+    {
+      "id": "degree",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام حصل على درجة دكتوراه العلوم؟",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "حصل على درجة دكتوراه العلوم عام 1924."
+        },
+        "en": {
+          "question": "In which year did he earn the Doctor of Science degree?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "He earned the Doctor of Science degree in 1924."
+        },
+        "fr": {
+          "question": "En quelle année a-t-il obtenu le diplôme de Doctor of Science ?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Il a obtenu le diplôme de Doctor of Science en 1924."
+        },
+        "it": {
+          "question": "In quale anno ottenne il titolo di Doctor of Science?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Ottenne il titolo di Doctor of Science nel 1924."
+        },
+        "de": {
+          "question": "In welchem Jahr erhielt er den Grad Doctor of Science?",
+          "options": [
+            "1917",
+            "1920",
+            "1924",
+            "1936"
+          ],
+          "explanation": "Er erhielt den Grad Doctor of Science im Jahr 1924."
+        }
+      }
+    },
+    {
+      "id": "professor",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي درّسه مشرفة في كلية العلوم؟",
+          "options": [
+            "الرياضيات التطبيقية",
+            "علم النبات",
+            "الطب",
+            "علم الآثار"
+          ],
+          "explanation": "أصبح أستاذًا للرياضيات التطبيقية في كلية العلوم بجامعة القاهرة."
+        },
+        "en": {
+          "question": "What subject did Mosharafa teach at the Faculty of Science?",
+          "options": [
+            "Applied mathematics",
+            "Botany",
+            "Medicine",
+            "Archaeology"
+          ],
+          "explanation": "He became a professor of applied mathematics at Cairo University."
+        },
+        "fr": {
+          "question": "Quelle matière Mosharafa enseignait-il à la faculté des sciences ?",
+          "options": [
+            "Mathématiques appliquées",
+            "Botanique",
+            "Médecine",
+            "Archéologie"
+          ],
+          "explanation": "Il devint professeur de mathématiques appliquées à l’Université du Caire."
+        },
+        "it": {
+          "question": "Quale materia insegnò Mosharafa alla Facoltà di Scienze?",
+          "options": [
+            "Matematica applicata",
+            "Botanica",
+            "Medicina",
+            "Archeologia"
+          ],
+          "explanation": "Divenne professore di matematica applicata all’Università del Cairo."
+        },
+        "de": {
+          "question": "Welches Fach lehrte Mosharafa an der naturwissenschaftlichen Fakultät?",
+          "options": [
+            "Angewandte Mathematik",
+            "Botanik",
+            "Medizin",
+            "Archäologie"
+          ],
+          "explanation": "Er wurde Professor für angewandte Mathematik an der Universität Kairo."
+        }
+      }
+    },
+    {
+      "id": "dean",
+      "correct_option": 3,
+      "i18n": {
+        "ar": {
+          "question": "متى أصبح عميدًا لكلية العلوم بجامعة القاهرة؟",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "تولى عمادة كلية العلوم عام 1936، وكان أول مصري يشغل المنصب."
+        },
+        "en": {
+          "question": "When did he become dean of Cairo University’s Faculty of Science?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "He became dean in 1936, the first Egyptian to hold the position."
+        },
+        "fr": {
+          "question": "Quand est-il devenu doyen de la faculté des sciences de l’Université du Caire ?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Il est devenu doyen en 1936, le premier Égyptien à occuper ce poste."
+        },
+        "it": {
+          "question": "Quando divenne preside della Facoltà di Scienze dell’Università del Cairo?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Divenne preside nel 1936, il primo egiziano a ricoprire l’incarico."
+        },
+        "de": {
+          "question": "Wann wurde er Dekan der naturwissenschaftlichen Fakultät der Universität Kairo?",
+          "options": [
+            "1923",
+            "1926",
+            "1930",
+            "1936"
+          ],
+          "explanation": "Er wurde 1936 Dekan und war der erste Ägypter in diesem Amt."
+        }
+      }
+    },
+    {
+      "id": "research",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "أي موضوع من الموضوعات التالية بحث فيه مشرفة؟",
+          "options": [
+            "الزراعة الصحراوية فقط",
+            "نظرية الكم والنسبية",
+            "العمارة الفرعونية",
+            "الملاحة البحرية"
+          ],
+          "explanation": "تناولت أبحاثه نظرية الكم والنسبية والعلاقة بين المادة والإشعاع."
+        },
+        "en": {
+          "question": "Which of these topics did Mosharafa research?",
+          "options": [
+            "Desert farming only",
+            "Quantum theory and relativity",
+            "Pharaonic architecture",
+            "Maritime navigation"
+          ],
+          "explanation": "His research included quantum theory, relativity, and matter-radiation relations."
+        },
+        "fr": {
+          "question": "Quel sujet Mosharafa a-t-il étudié ?",
+          "options": [
+            "Uniquement l’agriculture désertique",
+            "La théorie quantique et la relativité",
+            "L’architecture pharaonique",
+            "La navigation maritime"
+          ],
+          "explanation": "Ses recherches portaient notamment sur la théorie quantique, la relativité et la matière-radiation."
+        },
+        "it": {
+          "question": "Quale di questi temi studiò Mosharafa?",
+          "options": [
+            "Solo agricoltura nel deserto",
+            "Teoria dei quanti e relatività",
+            "Architettura faraonica",
+            "Navigazione marittima"
+          ],
+          "explanation": "Le sue ricerche includevano teoria dei quanti, relatività e rapporto tra materia e radiazione."
+        },
+        "de": {
+          "question": "Welches dieser Themen erforschte Mosharafa?",
+          "options": [
+            "Nur Wüstenlandwirtschaft",
+            "Quantentheorie und Relativität",
+            "Pharaonische Architektur",
+            "Schifffahrt"
+          ],
+          "explanation": "Seine Forschung umfasste Quantentheorie, Relativität und das Verhältnis von Materie und Strahlung."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 30.0277,
+    "lng": 31.2085,
+    "place": {
+      "ar": "جامعة القاهرة، الجيزة — الجامعة التي درّس فيها علي مصطفى مشرفة وتولى عمادة كلية العلوم بها.",
+      "en": "Cairo University, Giza — where Ali Mostafa Mosharafa taught and served as dean of the Faculty of Science.",
+      "fr": "Université du Caire, Gizeh — où Ali Mostafa Mosharafa a enseigné et dirigé la faculté des sciences.",
+      "it": "Università del Cairo, Giza — dove Ali Mostafa Mosharafa insegnò e fu preside della Facoltà di Scienze.",
+      "de": "Universität Kairo, Giza — dort lehrte Ali Mostafa Mosharafa und war Dekan der naturwissenschaftlichen Fakultät."
+    }
+  }
+}
