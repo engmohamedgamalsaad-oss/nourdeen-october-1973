@@ -7,6 +7,7 @@ const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
 const css = await readFile(new URL('../reader-enhance.css', import.meta.url), 'utf8');
 const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), 'utf8');
 const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
+const publisher = await readFile(new URL('../publish-story.mjs', import.meta.url), 'utf8');
 const validator = await readFile(new URL('../validate-story.mjs', import.meta.url), 'utf8');
 const sectionMatch = validator.match(/const sections = new Set\(\[([^\]]+)\]/);
 assert.ok(sectionMatch, 'validator exposes the canonical section contract');
@@ -35,7 +36,9 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(builder, /reader-base\.css\?v=20261101-story-reader-1/);
   assert.match(baseCss, /\.hero/);
   assert.match(html, /reader\.js\?v=20261101-story-reader-1/);
-  assert.match(js, /reader-enhance\.css\?v=20261101-story-reader-1/);
+  assert.match(js, /reader-enhance\.css\?v=20261101-story-reader-2/);
+  assert.match(builder, /reader-enhance\.css\?v=20261101-story-reader-1/);
+  assert.match(publisher, /reader-enhance\.css\?v=20261101-story-reader-1/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
