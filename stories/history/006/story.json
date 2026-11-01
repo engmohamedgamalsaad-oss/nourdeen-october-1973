@@ -126,7 +126,8 @@
           "speaker": "narrator",
           "text": "وعندما نسمع العبارة الشهيرة المنسوبة إلى عرابي «لقد خلقنا الله أحرارًا»، يجدر بنا تذكر أن شهرة العبارة لا تعني أن كل صياغة متداولة لها محضر حرفي متفق عليه؛ لذلك تعرض الحكاية العبارة بوصفها من أشهر ما نُسب إلى موقف عابدين، مع الإشارة إلى اختلاف الروايات."
         }
-      ]
+      ],
+      "figure_name": "أحمد عرابي"
     },
     "en": {
       "title": "Ahmed Urabi — When He Raised His Voice",
@@ -246,7 +247,8 @@
           "speaker": "narrator",
           "text": "When we hear the famous phrase attributed to Urabi, “God created us free,” we should remember that its popularity does not make every version an agreed verbatim record. This story presents it as one of the best-known sayings associated with Abdeen while noting that accounts differ."
         }
-      ]
+      ],
+      "figure_name": "Ahmed Urabi"
     },
     "fr": {
       "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
@@ -366,7 +368,8 @@
           "speaker": "narrator",
           "text": "Lorsque nous entendons la phrase célèbre attribuée à Urabi, « Dieu nous a créés libres », rappelons que sa popularité ne fait pas de chaque version une transcription littérale reconnue. Ce récit la présente comme l’une des formules les plus connues associées à Abdeen, tout en signalant les divergences entre les récits."
         }
-      ]
+      ],
+      "figure_name": "Ahmed Urabi"
     },
     "it": {
       "title": "Ahmed Urabi — Quando fece sentire la sua voce",
@@ -486,7 +489,8 @@
           "speaker": "narrator",
           "text": "Quando sentiamo la celebre frase attribuita a Urabi, «Dio ci ha creati liberi», ricordiamo che la sua notorietà non rende ogni versione una trascrizione letterale concordata. Questo racconto la presenta come una delle frasi più note associate ad Abdeen, segnalando però le differenze tra le fonti."
         }
-      ]
+      ],
+      "figure_name": "Ahmed Urabi"
     },
     "de": {
       "title": "Ahmed Urabi — Als er seine Stimme erhob",
@@ -606,7 +610,8 @@
           "speaker": "narrator",
           "text": "Wenn wir den Urabi zugeschriebenen Satz „Gott hat uns frei geschaffen“ hören, sollten wir bedenken, dass seine Bekanntheit nicht jede Fassung zu einem bestätigten Wortprotokoll macht. Diese Geschichte stellt ihn als einen der bekanntesten Aussprüche im Zusammenhang mit Abdin dar und weist zugleich auf unterschiedliche Berichte hin."
         }
-      ]
+      ],
+      "figure_name": "Ahmed Urabi"
     }
   },
   "cover": {
