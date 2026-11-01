@@ -186,17 +186,17 @@ for (const rel of htmlFiles) {
 
   if (isAdmin) continue;
 
-  /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
-  if (html.includes('data-kh-story-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\.v2\.json["']/.test(html))) {
-    const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
-    for (const lang of v2Languages) {
-      if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
+  /* The unified story reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
+  if (html.includes('data-kh-story-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']story\.json["']/.test(html))) {
+    const storyLanguages = ['ar', 'en', 'fr', 'it', 'de'];
+    for (const lang of storyLanguages) {
+      if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('unified story reader is missing language button: ' + lang);
     }
-    if (!html.includes('id="theme-toggle"')) fail('V2 reader must expose its light/dark theme toggle.');
+    if (!html.includes('id="theme-toggle"')) fail('unified story reader must expose its light/dark theme toggle.');
     continue;
   }
 
-  /* Standalone local V2 package review utility; it deliberately does not load legacy shared-language code. */
+  /* Standalone local story package review utility; it deliberately does not load legacy shared-language code. */
   if (rel === 'rebuild/package-review.html' && html.includes('KHALEDOON_STORY')) continue;
 
   /* locate the shared-script tag(s) */
@@ -397,8 +397,8 @@ for (const rel of [
   const html = read(rel);
   const storyReader = html.includes('data-kh-story-reader') && /data-story-path=["']data\.v2\.json["']/.test(html);
   if (storyReader) {
-    if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: V2 reader is missing its own light/dark mode controller.`);
-    if (!/rebuild\/reader-base\.css/.test(html)) fail(`${rel}: V2 reader is missing its theme stylesheet layer.`);
+    if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: unified story reader is missing its own light/dark mode controller.`);
+    if (!/rebuild\/reader-base\.css/.test(html)) fail(`${rel}: unified story reader is missing its theme stylesheet layer.`);
   } else {
     if (!/khaledoon-theme\.js/.test(html)) fail(`${rel}: missing shared light/dark mode controller.`);
     if (!/shared\/base\.css/.test(html)) fail(`${rel}: missing shared theme stylesheet layer.`);
@@ -426,7 +426,7 @@ for (const rel of [
     fail('stories/science/007/index.html: the Ahmed Zewail story must expose all five language buttons (ar/en/fr/it/de).');
   }
   if (!page.includes('data-kh-story-reader') || !page.includes('data-story-path="story.json"')) {
-    fail('stories/science/007/index.html: the Ahmed Zewail story must use the unified V2 reader.');
+    fail('stories/science/007/index.html: the Ahmed Zewail story must use the unified unified story reader.');
   }
   try {
     const story = JSON.parse(read('stories/science/007/story.json'));
