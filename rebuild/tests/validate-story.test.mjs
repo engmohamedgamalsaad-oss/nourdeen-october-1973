@@ -57,7 +57,7 @@ function fixture() {
     }]))
   }));
   return {
-    format: 'KHALEDOON_STORY_V2',
+    format: 'KHALEDOON_STORY',
     slug: 'sample-story',
     section: 'october',
     design: { variant: 'military-history', accent: '#d6ad55' },
@@ -131,7 +131,7 @@ test('rejects missing translations and image rights', () => {
   assert(e.some(x => x.includes('quiz[0].i18n.it.explanation')));
 });
 
-test('requires at least five V2 quiz questions but keeps the V1 bridge lossless', () => {
+test('requires at least five unified story quiz questions but keeps the V1 bridge lossless', () => {
   const tooFew = fixture();
   tooFew.quiz.pop();
   assert(validateStory(tooFew).some(x => x.includes('at least 5')));
@@ -208,7 +208,7 @@ test('checks local image existence and rejects traversal and missing files', asy
 });
 
 
-test('real October V2 package preserves all 20 archived legacy quiz questions plus three supplemental questions', async () => {
+test('real October unified story package preserves all 20 archived legacy quiz questions plus three supplemental questions', async () => {
   const root = path.resolve(new URL('../..', import.meta.url).pathname);
   const pkg = JSON.parse(await readFile(path.join(root, 'rebuild/story-packages/october-sea-men.v2.json'), 'utf8'));
   const legacy = JSON.parse(await readFile(path.join(root, 'rebuild/story-packages/source-archives/october-sea-men-legacy-quiz-001.json'), 'utf8'));

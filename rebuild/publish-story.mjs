@@ -1,4 +1,4 @@
-import { validateStory } from './validate-story.mjs?v=20261031-v2-publisher-1';
+import { validateStory } from './validate-story.mjs?v=20261101-story-publisher-1';
 
 const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const SECTIONS = ['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers'];
@@ -24,7 +24,7 @@ function esc(value) {
 async function fetchRepo(path, options = {}) {
   const { cacheBust, ...requestOptions } = options;
   const url = new URL(path.replace(/^\//, ''), REPO_ROOT);
-  if (cacheBust) url.searchParams.set('_v2', String(Date.now()));
+  if (cacheBust) url.searchParams.set('_story', String(Date.now()));
   return await fetch(url.href, { cache: 'no-store', ...requestOptions });
 }
 async function readJson(path, label) {
@@ -49,7 +49,7 @@ async function nextId(index) {
     for (const section of SECTIONS) {
       if (found) break;
       const root = 'stories/' + section + '/' + id + '/';
-      for (const file of ['index.html', 'data.json', 'data.v2.json']) {
+      for (const file of ['index.html', 'data.json', 'story.json', 'data.v2.json']) {
         if (await pathExists(root + file)) { found = true; break; }
       }
     }
@@ -59,9 +59,13 @@ async function nextId(index) {
 }
 function getSavedPackage(record, draft, meta) {
   const pending = meta.pending_draft && typeof meta.pending_draft === 'object' ? meta.pending_draft : null;
-  return (pending?.v2_only_draft ? pending.v2_package : null) ||
+  return (pending?.story_only_draft ? (pending.story_package || pending.v2_package) : null) ||
+    (pending?.v2_only_draft ? pending.v2_package : null) ||
+    (draft?.story_only_draft ? (draft.story_package || draft.v2_package) : null) ||
     (draft?.v2_only_draft ? draft.v2_package : null) ||
+    (meta.story_only_draft ? (meta.story_package || meta.v2_package) : null) ||
     (meta.v2_only_draft ? meta.v2_package : null) ||
+    (record?.story_only_draft ? (record.story_package || record.v2_package) : null) ||
     (record?.v2_only_draft ? record.v2_package : null) || null;
 }
 function localizedIndexEntry(story, id, root) {
@@ -109,7 +113,7 @@ function makeReaderHtml(story, id, coverUrl) {
     '<meta property="og:description" content="' + esc(ar.summary) + '"><meta property="og:image" content="' + esc(coverUrl) + '">\n' +
     '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n' +
     '<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">\n' +
-    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261031-v2-reader-1">\n</head>\n' +
+    '<link rel="stylesheet" href="../../../rebuild/reader-base.css?v=20261101-story-reader-1">\n</head>\n' +
     '<body data-story-slug="' + id + '" data-design="' + esc(story.design.variant) + '" data-section="' + section + '" data-start-only data-gallery="unplaced">\n' +
     '<header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><nav class="langs" aria-label="Language">' +
     '<button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>' +
@@ -131,7 +135,7 @@ function makeReaderHtml(story, id, coverUrl) {
     '<p class="reaction-status" id="reaction-status" role="status" aria-live="polite"></p><span class="reaction-count-line" id="reaction-limit">يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.</span></div></section>' +
     '<section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section></article></main>\n' +
     '<div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>\n' +
-    '<script src="../../../rebuild/reader.js?v=20261031-v2-reader-1" data-kh-v2-reader data-story-path="data.v2.json"></script>' +
+    '<script src="../../../rebuild/reader.js?v=20261101-story-reader-1" data-kh-story-reader data-story-path="story.json"></script>' +
     '<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>\n';
   return html;
 }
@@ -174,10 +178,14 @@ async function checkLocalImages(story) {
     if (!response.ok) fail('ملف الصورة المحلي غير موجود أو غير قابل للوصول (' + response.status + '): ' + path);
   }
 }
-export async function buildV2StoryFiles(story, options = {}) {
+export async function buildStoryFiles(story, options = {}) {
+  story = JSON.parse(JSON.stringify(story));
+  if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
   const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
-  const savedPackage = getSavedPackage(options.record, options.draft, meta);
-  if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة V2 التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
+  const savedPackageRaw = getSavedPackage(options.record, options.draft, meta);
+  const savedPackage = savedPackageRaw ? JSON.parse(JSON.stringify(savedPackageRaw)) : null;
+  if (savedPackage?.format === 'KHALEDOON_STORY_V2') savedPackage.format = 'KHALEDOON_STORY';
+  if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة الحكاية التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
   const problems = validateStory(story);
   if (problems.length) fail('حزمة القالب الموحد غير مكتملة:\n• ' + problems.join('\n• '));
   if (!Object.hasOwn(story, 'map_location')) fail('أضف map_location صراحةً: موقع موثق أو null إذا لم يتوفر موقع موثوق.');
@@ -233,7 +241,7 @@ export async function buildV2StoryFiles(story, options = {}) {
     story.sources.map(s => '- [' + (s.i18n?.ar?.title || s.title) + '](' + s.url + ') — ' + (s.i18n?.ar?.organization || s.organization)).join('\n') + '\n';
   const files = [
     { path: root + 'index.html', content: makeReaderHtml(story, id, coverUrl) },
-    { path: root + 'data.v2.json', content: JSON.stringify(story, null, 2) + '\n' },
+    { path: root + 'story.json', content: JSON.stringify(story, null, 2) + '\n' },
     { path: root + 'data.json', content: JSON.stringify(data, null, 2) + '\n' },
     { path: root + 'sources.md', content: sourceMarkdown },
     { path: root + 'original.md', content: '# النص الأصلي كما وصل دون تعديل\n\n' + story.original_body + '\n' },
@@ -243,4 +251,4 @@ export async function buildV2StoryFiles(story, options = {}) {
   ];
   return { id, section: story.section, path: root, files, format: story.format };
 }
-window.KHStoryV2Publisher = { buildFiles: buildV2StoryFiles };
+window.KHStoryPublisher = { buildFiles: buildStoryFiles };

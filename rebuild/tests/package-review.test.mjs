@@ -14,7 +14,7 @@ test('package review page has one syntactically valid local script', () => {
 test('package review page makes no network, storage, or publish writes', () => {
   const script = scripts.join('\n');
   assert.doesNotMatch(script, /\bfetch\s*\(|XMLHttpRequest|localStorage\.(?:setItem|removeItem|clear)\s*\(|sessionStorage|indexedDB|supabase|github\.com\/repos/i);
-  assert.match(script, /localStorage\.getItem\('kh-v2-review-package'\)/);
+  assert.match(script, /localStorage\.getItem\('kh-story-review-package'\)/);
   assert.match(script, /get\('draft'\)==='1'/);
   assert.match(html, /لا تحفظ على Supabase ولا تنشر/);
   assert.match(html, /type="file" accept="\.json,application\/json"/);
@@ -26,7 +26,7 @@ test('package review page exposes all five locales and displays data through tex
   assert.match(scripts[0], /function link\(url,label\)\{if\(typeof url!==.*https:/);
   assert.match(scripts[0], /رابط مصدر الصورة/);
   assert.match(scripts[0], /رابط المصدر/);
-  assert.match(scripts[0], /KHALEDOON_STORY_V2/);
+  assert.match(scripts[0], /KHALEDOON_STORY/);
   assert.match(scripts[0], /src\.i18n/);
   assert.match(html, /id="map-section"/);
   assert.match(html, /id="original-body"/);

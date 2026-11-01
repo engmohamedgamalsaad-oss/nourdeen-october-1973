@@ -5,7 +5,7 @@ name: New story style gate
 on:
   pull_request:
     paths:
-      - "stories/**/data.v2.json"
+      - "stories/**/story.json"
       - "rebuild/validate-style.mjs"
       - "rebuild/validate-package.mjs"
       - ".github/workflows/new-story-style-gate.yml"
@@ -31,7 +31,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'stories/*/*/data.v2.json')
+          files=$(git diff --name-only --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- 'stories/*/*/story.json')
           if [ -z "$files" ]; then
             echo "No story pages were added in this pull request; nothing to style-check."
             exit 0
@@ -39,6 +39,12 @@ jobs:
           status=0
           for f in $files; do
             echo "== $f"
-            node rebuild/validate-package.mjs --style "$f" || status=1
+            legacy="${f%/story.json}/data.v2.json"
+            if git cat-file -e "$BASE_SHA:$legacy" 2>/dev/null; then
+              echo "Existing story package migrated from data.v2.json; validate its structure without applying new-story editorial thresholds."
+              node rebuild/validate-package.mjs "$f" || status=1
+            else
+              node rebuild/validate-package.mjs --style "$f" || status=1
+            fi
           done
           exit $status

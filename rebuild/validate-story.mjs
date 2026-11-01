@@ -56,7 +56,7 @@ export function validateStory(s) {
   const topRequired = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
   const topAllowed = [...topRequired, 'map_location'];
   if (!keysCheck(s, topRequired, topAllowed, 'story', out)) return out;
-  if (s.format !== 'KHALEDOON_STORY_V2') out.push('format must be KHALEDOON_STORY_V2');
+  if (!['KHALEDOON_STORY', 'KHALEDOON_STORY_V2'].includes(s.format)) out.push('format must be KHALEDOON_STORY');
   if (typeof s.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s.slug)) out.push('slug must be lowercase kebab-case');
   if (!sections.has(s.section)) out.push('section is unsupported');
   if (keysCheck(s.design, ['variant', 'accent'], ['variant', 'accent'], 'design', out)) {

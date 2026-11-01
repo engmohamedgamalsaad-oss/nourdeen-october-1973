@@ -69,13 +69,13 @@ test('real October draft records localized image credits and direct licence link
   assert.ok(map.rights.includes('https://www.openstreetmap.org/copyright'));
 });
 
-test('Ibn Sina V2 story package validates and preserves its five-language reading flow', async () => {
-  const story = await loadJson('stories/history/005/data.v2.json');
+test('Ibn Sina unified story package validates and preserves its five-language reading flow', async () => {
+  const story = await loadJson('stories/history/005/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Ibn Sina V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Ibn Sina unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'history');
   assert.ok(story.i18n.ar.blocks.length >= 11, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10, 'keep the ten questions already translated in all five languages');
@@ -95,19 +95,19 @@ test('Ibn Sina V2 story package validates and preserves its five-language readin
     }
   }
   const page = await readFile(path.join(root, 'stories/history/005/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
 
-test('Ahmed Urabi V2 story package validates with five-language blocks, images, and quiz', async () => {
-  const story = await loadJson('stories/history/006/data.v2.json');
+test('Ahmed Urabi unified story package validates with five-language blocks, images, and quiz', async () => {
+  const story = await loadJson('stories/history/006/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Ahmed Urabi V2 package must pass the V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Ahmed Urabi unified story package must pass the V2 contract and local-image checks');
   assert.equal(story.section, 'history');
   assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10);
@@ -123,19 +123,19 @@ test('Ahmed Urabi V2 story package validates with five-language blocks, images, 
     }
   }
   const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
 });
 
-test('Tawfiq al-Hakim V2 package validates with five-language text, archival image rights, sources, and quiz', async () => {
-  const story = await loadJson('stories/people/008/data.v2.json');
+test('Tawfiq al-Hakim unified story package validates with five-language text, archival image rights, sources, and quiz', async () => {
+  const story = await loadJson('stories/people/008/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Tawfiq al-Hakim V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Tawfiq al-Hakim unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'people');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.i18n.ar.grade, 'الصف الأول الابتدائي');
@@ -157,18 +157,18 @@ test('Tawfiq al-Hakim V2 package validates with five-language text, archival ima
     }
   }
   const page = await readFile(path.join(root, 'stories/people/008/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Naguib Mahfouz V2 package validates with Karma narration, archival photos, five-language quiz, and Cairo map point', async () => {
-  const story = await loadJson('stories/people/009/data.v2.json');
+test('Naguib Mahfouz unified story package validates with Karma narration, archival photos, five-language quiz, and Cairo map point', async () => {
+  const story = await loadJson('stories/people/009/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Naguib Mahfouz V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Naguib Mahfouz unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'people');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.i18n.ar.grade, 'الأول الإعدادي');
@@ -193,18 +193,18 @@ test('Naguib Mahfouz V2 package validates with Karma narration, archival photos,
   }
   assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng));
   const page = await readFile(path.join(root, 'stories/people/009/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Sameera Moussa V2 package validates with five-language science narrative, cautious history notes, and sourced archival photos', async () => {
-  const story = await loadJson('stories/women/010/data.v2.json');
+test('Sameera Moussa unified story package validates with five-language science narrative, cautious history notes, and sourced archival photos', async () => {
+  const story = await loadJson('stories/women/010/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Sameera Moussa V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Sameera Moussa unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'women');
   assert.equal(story.design.variant, 'women-leadership');
   assert.equal(story.images.length, 3);
@@ -228,18 +228,18 @@ test('Sameera Moussa V2 package validates with five-language science narrative, 
     }
   }
   const page = await readFile(path.join(root, 'stories/women/010/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Amr ibn al-As V2 package validates with child narration, historical uncertainty notes, and credited mosque photographs', async () => {
-  const story = await loadJson('stories/islamic/011/data.v2.json');
+test('Amr ibn al-As unified story package validates with child narration, historical uncertainty notes, and credited mosque photographs', async () => {
+  const story = await loadJson('stories/islamic/011/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Amr ibn al-As V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Amr ibn al-As unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'islamic');
   assert.equal(story.design.variant, 'islamic-heritage');
   assert.equal(story.i18n.ar.student_name, 'نوردين محمد');
@@ -268,18 +268,18 @@ test('Amr ibn al-As V2 package validates with child narration, historical uncert
     }
   }
   const page = await readFile(path.join(root, 'stories/islamic/011/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Farouk El-Baz V2 package validates with Karma narration, NASA image credits, and an official Zagazig map source', async () => {
-  const story = await loadJson('stories/science/012/data.v2.json');
+test('Farouk El-Baz unified story package validates with Karma narration, NASA image credits, and an official Zagazig map source', async () => {
+  const story = await loadJson('stories/science/012/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Farouk El-Baz V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Farouk El-Baz unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'science');
   assert.equal(story.design.variant, 'science-lab');
   assert.equal(story.i18n.ar.student_name, 'نوردين محمد');
@@ -309,18 +309,18 @@ test('Farouk El-Baz V2 package validates with Karma narration, NASA image credit
     }
   }
   const page = await readFile(path.join(root, 'stories/science/012/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 
-test('Hatshepsut V2 package validates five-language history, image rights, and the sticky language header', async () => {
-  const story = await loadJson('stories/women/013/data.v2.json');
+test('Hatshepsut unified story package validates five-language history, image rights, and the sticky language header', async () => {
+  const story = await loadJson('stories/women/013/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Hatshepsut V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Hatshepsut unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'women');
   assert.equal(story.design.variant, 'women-leadership');
   assert.equal(story.i18n.ar.student_name, 'مليكة محمد جمال');
@@ -359,20 +359,20 @@ test('Hatshepsut V2 package validates five-language history, image rights, and t
   }
   const page = await readFile(path.join(root, 'stories/women/013/index.html'), 'utf8');
   const readerCss = await readFile(path.join(root, 'rebuild/reader-base.css'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /data-lang="ar"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
   assert.match(readerCss, /header\{position:static/, 'language header scrolls away with the page to preserve reading space');
 });
 
-test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-language quiz, and rights-safe image handling', async () => {
-  const story = await loadJson('stories/history/014/data.v2.json');
+test('Abu Bakr al-Khwarizmi unified story package validates identity distinction, five-language quiz, and rights-safe image handling', async () => {
+  const story = await loadJson('stories/history/014/story.json');
   const errors = [
     ...validateStory(story),
     ...await validateLocalImagePaths(story, root)
   ];
-  assert.deepEqual(errors, [], 'Abu Bakr al-Khwarizmi V2 package must pass the actual V2 contract and local-image checks');
+  assert.deepEqual(errors, [], 'Abu Bakr al-Khwarizmi unified story package must pass the actual unified story contract and local-image checks');
   assert.equal(story.section, 'history');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.i18n.ar.student_name, 'كارما محمد');
@@ -408,8 +408,8 @@ test('Abu Bakr al-Khwarizmi V2 package validates identity distinction, five-lang
     }
   }
   const page = await readFile(path.join(root, 'stories/history/014/index.html'), 'utf8');
-  assert.match(page, /data-kh-v2-reader/);
-  assert.match(page, /data-story-path="data\.v2\.json"/);
+  assert.match(page, /data-kh-story-reader/);
+  assert.match(page, /data-story-path="story\.json"/);
   assert.match(page, /khaledoon-story-map-link\.js/);
 });
 

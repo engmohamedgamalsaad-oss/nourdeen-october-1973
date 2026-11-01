@@ -11,10 +11,10 @@ test('unified publisher accepts only the saved canonical package after approval 
   const admin = source.indexOf('await supabase.rpc("is_admin")');
   const submissionId = source.indexOf('const submissionId =');
   const recordRead = source.indexOf('.from(submissionTable).select("id,story_meta")');
-  const savedPackage = source.indexOf('const savedV2Package: any =');
-  const packageGuard = source.indexOf('if (isV2OnlyDraft) {');
+  const savedPackage = source.indexOf('const savedStoryPackage: any =');
+  const packageGuard = source.indexOf('if (isStoryOnlyDraft) {');
   const approvalGuard = source.indexOf('review.decision !== "approved_waiting_for_github_upload"');
-  const packageMatch = source.indexOf('stableJson(packageData) !== stableJson(savedV2Package)');
+  const packageMatch = source.indexOf('stableJson(packageData) !== stableJson(savedStoryPackage)');
   const branchWrite = source.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
   const pullRequestWrite = source.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
 
@@ -29,7 +29,8 @@ test('unified publisher accepts only the saved canonical package after approval 
   assert.ok(packageGuard < approvalGuard && approvalGuard < branchWrite, 'reject unapproved packages before creating a Git branch');
   assert.ok(packageMatch < branchWrite && packageMatch < pullRequestWrite, 'submitted files must exactly match the approved saved package before PR creation');
 
-  assert.match(source, /supports_v2_publish:\s*true/);
+  assert.match(source, /supports_story_package_publish:\s*true/);
+  assert.match(source, /supports_v2_publish:\s*true/, 'legacy capability alias remains during rollout');
   assert.match(source, /requires_submission_id:\s*true/);
   assert.match(source, /published_to_main:\s*false/);
   assert.match(source, /No files were written to main by this function/);

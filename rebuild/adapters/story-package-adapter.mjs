@@ -1,14 +1,16 @@
-import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261028-v2-admin-6';
+import { validateForAdminBridge, validateStory } from '../validate-story.mjs?v=20261101-story-package-adapter-1';
 
 /**
- * Conservative V1 <-> V2 adapter for Khaledoon story packages.
+ * Conservative legacy-package ↔ unified-story adapter for Khaledoon story packages.
  *
  * Conversion deliberately rejects shapes that cannot be represented without
  * guessing or silently discarding data. Keep this module isolated until reader,
  * admin, and import integrations have their own compatibility tests.
  */
-export const V1_FORMAT = 'KH_STORY_PACKAGE_V1';
-export const V2_FORMAT = 'KHALEDOON_STORY_V2';
+export const LEGACY_PACKAGE_FORMAT = 'KH_STORY_PACKAGE_V1';
+export const LEGACY_STORY_FORMAT = 'KHALEDOON_STORY_V2';
+export const STORY_FORMAT = 'KHALEDOON_STORY';
+const isStoryFormat = value => value === STORY_FORMAT || value === LEGACY_STORY_FORMAT;
 export const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const LEGACY_LANGUAGES = ['en', 'fr', 'it', 'de'];
 const SECTION_MAP = {
@@ -33,7 +35,7 @@ const isObject = x => x !== null && typeof x === 'object' && !Array.isArray(x);
 const nonempty = x => typeof x === 'string' && x.trim().length > 0;
 const encodeOrganizationMarker = value => String(value).replace(/[%\]\r\n]/g, ch => '%' + ch.charCodeAt(0).toString(16).toUpperCase().padStart(2, '0'));
 const clone = x => JSON.parse(JSON.stringify(x));
-function fail(message) { throw new Error('V1/V2 conversion stopped safely: ' + message); }
+function fail(message) { throw new Error('legacy/unified story conversion stopped safely: ' + message); }
 function requireObject(x, label) { if (!isObject(x)) fail(label + ' must be an object'); }
 function isDidYouKnowText(text) {
   return /^هل تعلم[؟?:]|^did you know\?|^le saviez-vous\s*\?|^lo sapevi\s*\?|^wusstest du\s*\?/i.test(text);
@@ -70,7 +72,7 @@ function urlOrPath(item, label) {
   }
   return url ? { url } : { path };
 }
-function imageToV2(image, label, id) {
+function imageToStory(image, label, id) {
   requireObject(image, label);
   const source = urlOrPath(image, label);
   const i18n = {};
@@ -84,13 +86,13 @@ function imageToV2(image, label, id) {
   }
   const kind = image.kind;
   if (!['archival','illustration','map','diagram'].includes(kind)) {
-    fail(label + '.kind "' + kind + '" is not representable in the current V2 contract');
+    fail(label + '.kind "' + kind + '" is not representable in the current unified story contract');
   }
   if (!/^https:\/\//i.test(String(image.source_url || ''))) fail(label + '.source_url must be HTTPS');
   return { ...source, id, kind, source_name: image.source_name, source_url: image.source_url,
     rights: image.rights, i18n };
 }
-function sourcesToV2(value) {
+function sourcesToStory(value) {
   if (typeof value !== 'string' || !value.trim()) fail('sources must be non-empty text');
   const lines = value.split(/\r?\n/).map(s => s.trim()).filter(Boolean);
   const sources = lines.map((line, i) => {
@@ -98,7 +100,7 @@ function sourcesToV2(value) {
     if (matches.length !== 1) fail('sources line ' + (i + 1) + ' must contain exactly one HTTPS URL for reversible conversion');
     const url = matches[0].replace(/[.,;:]+$/, '');
     const hostname = (() => { try { return new URL(url).hostname; } catch { return ''; } })();
-    // V2 sources round-trip through a readable organization marker in V1's
+    // unified story sources round-trip through a readable organization marker in legacy's
     // plain-text source field. Ordinary legacy lines retain their original title.
     const beforeUrl = line.slice(0, line.indexOf(matches[0])).trim();
     const marker = beforeUrl.match(/^(.*?) — \[org:([^\]]+)\] —$/);
@@ -113,17 +115,17 @@ function sourcesToV2(value) {
     return { title, organization: hostname, url, i18n: Object.fromEntries(LANGUAGES.map(lang => [lang, { title, organization: hostname }])) };
   });
   if (sources.length < 2 || new Set(sources.map(s => s.url)).size < 2) {
-    fail('V1 requires at least two distinct source URLs');
+    fail('legacy package requires at least two distinct source URLs');
   }
   return sources;
 }
-function quizToV2(value) {
+function quizToStory(value) {
   let bank = value;
   if (typeof bank === 'string') {
     try { bank = JSON.parse(bank); } catch { fail('question_bank_json is not valid JSON'); }
   }
   const questions = bank?.questions;
-  if (!Array.isArray(questions) || questions.length !== 5) fail('exactly five V1 quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; choose exactly five explicitly before conversion—no questions are discarded automatically');
+  if (!Array.isArray(questions) || questions.length !== 5) fail('exactly five legacy quiz questions are required; received ' + (Array.isArray(questions) ? questions.length : 'a non-array value') + '; choose exactly five explicitly before conversion—no questions are discarded automatically');
   return questions.map((q, i) => {
     requireObject(q, 'question ' + (i + 1));
     if (!Array.isArray(q.o) || q.o.length !== 4 || !Number.isInteger(q.a) || q.a < 0 || q.a > 3) {
@@ -184,8 +186,8 @@ function normalizeLegacyPackage(input) {
   const v1 = { ...input };
   const hasLegacySignature = ['section_key','visual_design','original_body','translations','images']
     .every(key => Object.hasOwn(v1, key));
-  if (v1.format === undefined && hasLegacySignature) v1.format = V1_FORMAT;
-  if (v1.format !== V1_FORMAT) fail('expected ' + V1_FORMAT + ' or a recognizable legacy V1 package');
+  if (v1.format === undefined && hasLegacySignature) v1.format = LEGACY_PACKAGE_FORMAT;
+  if (v1.format !== LEGACY_PACKAGE_FORMAT) fail('expected ' + LEGACY_PACKAGE_FORMAT + ' or a recognizable legacy package');
   if (!nonempty(v1.body) && nonempty(v1.current_body)) v1.body = v1.current_body;
   if (typeof v1.question_bank === 'string') {
     try { v1.question_bank = JSON.parse(v1.question_bank); }
@@ -193,16 +195,16 @@ function normalizeLegacyPackage(input) {
   }
   return v1;
 }
-export function v1ToV2(input, { slug, coverOverride } = {}) {
-  requireObject(input, 'V1 package');
+export function legacyToStory(input, { slug, coverOverride } = {}) {
+  requireObject(input, 'legacy package');
   input = normalizeLegacyPackage(input);
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug || '')) fail('caller must provide a stable slug; it is never guessed from a title');
   const section = SECTION_MAP[input.section_key];
   if (!section) fail('unsupported section_key: ' + input.section_key);
   if (!nonempty(input.original_body)) fail('original_body is required and must remain unchanged');
   const variant = VARIANT_MAP[input.visual_design];
-  if (!variant) fail('visual_design has no lossless V2 mapping: ' + input.visual_design);
-  if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('V1 requires between two and five gallery images');
+  if (!variant) fail('visual_design has no lossless story mapping: ' + input.visual_design);
+  if (!Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) fail('legacy package requires between two and five gallery images');
   const i18n = {};
   for (const lang of LANGUAGES) {
     const src = lang === 'ar' ? input : input.translations?.[lang];
@@ -229,27 +231,27 @@ export function v1ToV2(input, { slug, coverOverride } = {}) {
     }
     coverSource = coverOverride;
   }
-  const cover = imageToV2(coverSource, 'cover', undefined);
+  const cover = imageToStory(coverSource, 'cover', undefined);
   delete cover.id;
-  const images = input.images.map((im, i) => imageToV2(im, 'images[' + i + ']', 'image-' + (i + 1)));
+  const images = input.images.map((im, i) => imageToStory(im, 'images[' + i + ']', 'image-' + (i + 1)));
   const map = input.map_location === undefined ? null : input.map_location;
   return {
-    format: V2_FORMAT, slug, section,
+    format: STORY_FORMAT, slug, section,
     design: { variant, accent: ACCENTS[section] || '#d6ad55' },
     original_body: input.original_body,
     i18n, cover, images,
-    sources: sourcesToV2(input.sources),
-    quiz: quizToV2(input.question_bank),
+    sources: sourcesToStory(input.sources),
+    quiz: quizToStory(input.question_bank),
     map_location: map === null ? null : clone(map)
   };
 }
-function imageToV1(image) {
+function imageToLegacy(image) {
   if (!['archival','illustration','diagram','map'].includes(image.kind)) {
-    fail('V2 image kind "' + image.kind + '" has no valid V1 representation');
+    fail('unified story image kind "' + image.kind + '" has no valid legacy representation');
   }
   const ar = image.i18n.ar;
   if (ar.source_name !== image.source_name || ar.rights !== image.rights) {
-    fail('Arabic image attribution/rights must match the V1 top-level fields');
+    fail('Arabic image attribution/rights must match the legacy top-level fields');
   }
   const out = {
     ...('url' in image ? { url: image.url } : { path: image.path }),
@@ -259,30 +261,30 @@ function imageToV1(image) {
   };
   return out;
 }
-export function v2ToV1(input) {
-  requireObject(input, 'V2 story');
-  if (input.format !== V2_FORMAT) fail('expected ' + V2_FORMAT);
+export function storyToLegacy(input) {
+  requireObject(input, 'unified story');
+  if (!isStoryFormat(input.format)) fail('expected ' + STORY_FORMAT + ' or a supported legacy story package');
   const contractErrors = validateForAdminBridge(input);
-  if (contractErrors.length) fail('V2 admin-bridge validation failed: ' + contractErrors.join('; '));
+  if (contractErrors.length) fail('unified story admin-bridge validation failed: ' + contractErrors.join('; '));
   if (!['october','history','science','women','people','curriculum','islamic','readers'].includes(input.section)) {
-    fail('V2 section has no canonical V1 section_key: ' + input.section);
+    fail('unified story section has no canonical legacy section_key: ' + input.section);
   }
   if (!Array.isArray(input.sources) || input.sources.length < 2 ||
       new Set(input.sources.map(s => s?.url)).size < 2 ||
       !Array.isArray(input.quiz) || input.quiz.length !== 5 ||
       !Array.isArray(input.images) || input.images.length < 2 || input.images.length > 5) {
-    fail('V2 requires at least two distinct sources, exactly five quiz questions, and between two and five images');
+    fail('unified story requires at least two distinct sources, exactly five quiz questions, and between two and five images');
   }
-  if (!nonempty(input.original_body)) fail('V2 original_body must be non-empty and preserved');
-  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug || '')) fail('V2 slug must be stable lowercase kebab-case');
-  requireObject(input.cover, 'V2 cover');
-  if (Object.hasOwn(input.cover, 'id')) fail('V2 cover ID has no V1 representation');
+  if (!nonempty(input.original_body)) fail('unified story original_body must be non-empty and preserved');
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(input.slug || '')) fail('unified story slug must be stable lowercase kebab-case');
+  requireObject(input.cover, 'unified story cover');
+  if (Object.hasOwn(input.cover, 'id')) fail('unified story cover ID has no legacy representation');
 
   const section_key = input.section === 'women' ? 'learning' : input.section === 'people' ? 'fame' : input.section;
   const visual_design = REVERSE_VARIANT[input.design?.variant];
-  if (!visual_design) fail('V2 design variant has no V1 equivalent: ' + input.design?.variant);
+  if (!visual_design) fail('unified story design variant has no legacy equivalent: ' + input.design?.variant);
   if (input.design?.accent !== ACCENTS[input.section]) {
-    fail('custom V2 accent cannot be represented by the V1 story package');
+    fail('custom unified story accent cannot be represented by the legacy story package');
   }
   for (const [i, source] of input.sources.entries()) {
     if (!isObject(source) || !nonempty(source.title) || !nonempty(source.url) || !nonempty(source.organization)) {
@@ -294,45 +296,45 @@ export function v2ToV1(input) {
       fail('source ' + (i + 1) + ' URL must be valid HTTPS');
     }
     if (/[\r\n]/.test(source.title) || / — \[org:[^\]]+\] —/.test(source.title)) {
-      fail('source ' + (i + 1) + ' title cannot be represented safely in the single-line V1 source field');
+      fail('source ' + (i + 1) + ' title cannot be represented safely in the single-line legacy source field');
     }
     const matches = source.title.match(/https:\/\/[^\s)\]>]+/gi) || [];
     const titleUrl = matches[0]?.replace(/[.,;:]+$/, '');
-    // Existing V1 lines have already encoded the URL in title; retain them byte-for-byte.
+    // Existing legacy lines have already encoded the URL in title; retain them byte-for-byte.
     if (matches.length === 1 && titleUrl === source.url && hostname === source.organization) continue;
     if (matches.length) fail('source ' + (i + 1) + ' title already contains a URL that cannot be represented unambiguously');
   }
   for (const [i, image] of input.images.entries()) {
-    if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in V1');
+    if (image?.id !== 'image-' + (i + 1)) fail('non-canonical image IDs cannot be represented losslessly in legacy');
   }
   for (const [i, question] of input.quiz.entries()) {
-    if (question?.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in V1');
+    if (question?.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in legacy');
   }
   const translations = {};
   for (const lang of LANGUAGES) {
     const src = input.i18n?.[lang];
-    if (!isObject(src)) fail('missing V2 locale ' + lang);
+    if (!isObject(src)) fail('missing unified story locale ' + lang);
     for (const key of ['title', 'subtitle', 'summary']) {
       if (!nonempty(src[key])) fail(lang + '.' + key + ' is required');
     }
-    if (src.summary !== src.subtitle) fail(lang + ' summary differs from subtitle and cannot be preserved by V1');
+    if (src.summary !== src.subtitle) fail(lang + ' summary differs from subtitle and cannot be preserved by legacy');
     if (!Array.isArray(src.blocks) || src.blocks.length < 3) fail(lang + ' needs at least three story blocks');
     for (const [i, block] of src.blocks.entries()) {
       if (!isObject(block) || !['karma', 'narrator'].includes(block.speaker) ||
           !['paragraph', 'did_you_know'].includes(block.type) || !nonempty(block.text)) {
         fail(lang + ' block ' + (i + 1) + ' is incomplete');
       }
-      if (Object.hasOwn(block, 'image_after')) fail(lang + ' block ' + (i + 1) + ' has inline image placement that V1 cannot preserve');
+      if (Object.hasOwn(block, 'image_after')) fail(lang + ' block ' + (i + 1) + ' has inline image placement that legacy cannot preserve');
       if (!nonempty(block.text) || block.text !== block.text.trim() || /\n{2,}/.test(block.text)) {
-        fail(lang + ' block ' + (i + 1) + ' has text whitespace that V1 cannot round-trip exactly');
+        fail(lang + ' block ' + (i + 1) + ' has text whitespace that legacy cannot round-trip exactly');
       }
       const inferredType = isDidYouKnowText(block.text) ? 'did_you_know' : 'paragraph';
-      if (block.type !== inferredType) fail(lang + ' block ' + (i + 1) + ' type cannot be preserved by V1');
+      if (block.type !== inferredType) fail(lang + ' block ' + (i + 1) + ' type cannot be preserved by legacy');
     }
   }
   for (const lang of LEGACY_LANGUAGES) {
     const src = input.i18n?.[lang];
-    if (!isObject(src)) fail('missing V2 locale ' + lang);
+    if (!isObject(src)) fail('missing unified story locale ' + lang);
     translations[lang] = {
       title: src.title, subtitle: src.subtitle,
       karma_text: textFromBlocks(src.blocks || [], 'karma'),
@@ -342,25 +344,25 @@ export function v2ToV1(input) {
     };
   }
   const ar = input.i18n?.ar;
-  if (!isObject(ar)) fail('missing V2 Arabic locale');
+  if (!isObject(ar)) fail('missing unified story Arabic locale');
   if (!nonempty(ar.figure_name) && !nonempty(ar.person)) {
-    fail('Arabic figure_name or person is required for the current V1 admin record; title is not used as a substitute');
+    fail('Arabic figure_name or person is required for the current legacy admin record; title is not used as a substitute');
   }
   let sawNarrator = false;
   for (const [i, block] of (ar.blocks || []).entries()) {
     if (block.speaker === 'narrator') sawNarrator = true;
-    if (block.speaker === 'karma' && sawNarrator) fail('Arabic block order interleaves Karma after narrator text; V1 stores these streams separately');
+    if (block.speaker === 'karma' && sawNarrator) fail('Arabic block order interleaves Karma after narrator text; legacy stores these streams separately');
   }
   for (const lang of LEGACY_LANGUAGES) {
     let narratorSeen = false;
     for (const block of input.i18n[lang].blocks || []) {
       if (block.speaker === 'narrator') narratorSeen = true;
-      if (block.speaker === 'karma' && narratorSeen) fail(lang + ' block order interleaves Karma after narrator text; V1 stores these streams separately');
+      if (block.speaker === 'karma' && narratorSeen) fail(lang + ' block order interleaves Karma after narrator text; legacy stores these streams separately');
     }
   }
   const question_bank = { questions: input.quiz.map((q, i) => {
     requireObject(q, 'quiz question ' + (i + 1));
-    if (q.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in V1');
+    if (q.id !== 'question-' + (i + 1)) fail('non-canonical quiz IDs cannot be represented losslessly in legacy');
     if (!Number.isInteger(q.correct_option) || q.correct_option < 0 || q.correct_option > 3) {
       fail('quiz question ' + (i + 1) + ' has an invalid answer index');
     }
@@ -379,7 +381,7 @@ export function v2ToV1(input) {
     return { q: qAr.question, o: clone(qAr.options), a: q.correct_option, e: qAr.explanation, i18n };
   }) };
   return {
-    format: V1_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
+    format: LEGACY_PACKAGE_FORMAT, section_key, figure_name: ar.figure_name || ar.person,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || '',
     narrator_grade: ar.narrator_grade || ar.grade || '',
@@ -396,8 +398,8 @@ export function v2ToV1(input) {
       const alreadyLegacyLine = matches.length === 1 && matches[0].replace(/[.,;:]+$/, '') === s.url && hostname === s.organization;
       return alreadyLegacyLine ? s.title : (s.title + ' — [org:' + encodeOrganizationMarker(s.organization) + '] — ' + s.url);
     }).join('\n'),
-    cover: imageToV1(input.cover),
-    images: input.images.map(imageToV1),
+    cover: imageToLegacy(input.cover),
+    images: input.images.map(imageToLegacy),
     visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),
     translations, question_bank
   };
@@ -405,29 +407,29 @@ export function v2ToV1(input) {
 
 
 /**
- * Make a compatibility projection for an admin-only V2 draft.
+ * Make a compatibility projection for an admin-only unified story draft.
  * This projection is intentionally NOT publishable: the caller must store the
- * complete validated V2 package separately and block the legacy V1 publisher.
+ * complete validated unified story package separately and block the legacy legacy publisher.
  * It keeps all quiz questions but flattens narrator/Karma block order only in
- * the legacy projection; the authoritative V2 package remains unchanged.
+ * the legacy projection; the authoritative unified story package remains unchanged.
  */
-export function v2ToAdminDraft(input) {
-  requireObject(input, 'V2 story draft');
+export function storyToAdminDraft(input) {
+  requireObject(input, 'unified story draft');
   const errors = validateStory(input);
-  if (errors.length) fail('V2 story validation failed: ' + errors.join('; '));
+  if (errors.length) fail('unified story validation failed: ' + errors.join('; '));
   const section_key = input.section === 'women' ? 'learning'
     : input.section === 'people' ? 'fame' : input.section;
   if (!['october','history','science','learning','fame','curriculum','islamic','readers'].includes(section_key)) {
-    fail('V2 section has no admin draft mapping: ' + input.section);
+    fail('unified story section has no admin draft mapping: ' + input.section);
   }
   const visual_design = REVERSE_VARIANT[input.design?.variant];
-  if (!visual_design) fail('V2 design variant has no admin draft mapping: ' + input.design?.variant);
+  if (!visual_design) fail('unified story design variant has no admin draft mapping: ' + input.design?.variant);
   function projectionImage(image) {
-    requireObject(image, 'V2 draft image');
+    requireObject(image, 'unified story draft image');
     const ar = image.i18n?.ar;
-    if (!isObject(ar)) fail('V2 draft image is missing Arabic metadata');
+    if (!isObject(ar)) fail('unified story draft image is missing Arabic metadata');
     // The old admin schema predates photograph/document kinds. This mapping is
-    // display-only; the exact original kind remains in the stored V2 package.
+    // display-only; the exact original kind remains in the stored unified story package.
     const kind = ['photograph','document'].includes(image.kind) ? 'archival' : image.kind;
     if (!['archival','illustration','diagram','map'].includes(kind)) fail('Unsupported image kind in admin projection: ' + image.kind);
     const out = {
@@ -448,7 +450,7 @@ export function v2ToAdminDraft(input) {
       student_name: src.student_name || input.i18n.ar.student_name || '',
       grade: src.grade || input.i18n.ar.grade || '',
       history_note: src.history_note || '',
-      images_note: src.images_note || ({en:'Image source and rights details are preserved in the V2 draft package and require review.',fr:'Les sources et les droits des images sont conservés dans le dossier V2 et doivent être vérifiés.',it:'Le fonti e i diritti delle immagini sono conservati nel pacchetto V2 e devono essere verificati.',de:'Bildquellen und Nutzungsrechte bleiben im V2-Paket erhalten und müssen geprüft werden.'})[lang]
+      images_note: src.images_note || ({en:'Image source and rights details are preserved in the unified story draft package and require review.',fr:'Les sources et les droits des images sont conservés dans le dossier unified story et doivent être vérifiés.',it:'Le fonti e i diritti delle immagini sono conservati nel pacchetto unified story e devono essere verificati.',de:'Bildquellen und Nutzungsrechte bleiben im unified story-Paket erhalten und müssen geprüft werden.'})[lang]
     };
   }
   const question_bank = { questions: input.quiz.map((q, i) => {
@@ -466,7 +468,7 @@ export function v2ToAdminDraft(input) {
   }).join('\n');
   const ar = input.i18n.ar;
   return {
-    format: V1_FORMAT, section_key,
+    format: LEGACY_PACKAGE_FORMAT, section_key,
     figure_name: ar.figure_name || ar.person || ar.title,
     title: ar.title, subtitle: ar.subtitle,
     narrator_name: ar.narrator_name || ar.student_name || 'كارما',
@@ -478,7 +480,7 @@ export function v2ToAdminDraft(input) {
     body: textFromBlocks(ar.blocks || [], 'narrator'),
     history_note: ar.history_note || '',
     sources,
-    images_note: ar.images_note || 'بيانات المصدر والحقوق التفصيلية محفوظة في حزمة V2 وتحتاج إلى مراجعة.',
+    images_note: ar.images_note || 'بيانات المصدر والحقوق التفصيلية محفوظة في حزمة unified story وتحتاج إلى مراجعة.',
     cover: projectionImage(input.cover),
     images: input.images.map(projectionImage),
     visual_design, map_location: input.map_location === undefined ? null : clone(input.map_location),

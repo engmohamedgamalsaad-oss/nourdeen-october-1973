@@ -35,10 +35,10 @@ test('publisher moves a story in a review PR and preserves the previous story UR
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
   assert.ok(publisher.includes('function contentForSafetyScan(file:'), 'legacy V1 publisher must inspect decoded file content');
-  assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded V2 markers must be decoded before the V1 artifact guard');
+  assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
-  assert.ok(publisher.includes('contentForSafetyScan(file)'), 'V2 rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-10-28-v2-draft-guard-1'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
+  assert.ok(publisher.includes('2026-11-01-story-publisher-1'), 'publisher capability version must identify the move-capable implementation');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
@@ -357,25 +357,25 @@ test('preview review panel displays image thumbnails and attribution from the sa
   assert.ok(preview.includes('renderReviewImages(d);'));
   assert.ok(preview.includes('pub-image-card'));
 });
-test('Hatshepsut cover SVG has no embedded text and V2 package provides localized accessible image text', function () {
+test('Hatshepsut cover SVG has no embedded text and unified story package provides localized accessible image text', function () {
   var svg = fs.readFileSync('stories/women/013/cover-popup.svg', 'utf8');
   assert.ok(!/<text|<tspan|<title|<desc/i.test(svg), 'cover SVG must leave all words to localized package metadata');
   assert.ok(!/[\u0600-\u06FF]/.test(svg), 'cover SVG must not contain Arabic text');
   assert.ok(svg.includes('aria-hidden=\"true\"'), 'decorative SVG must be hidden from assistive technology');
-  var pkg = JSON.parse(fs.readFileSync('stories/women/013/data.v2.json', 'utf8'));
+  var pkg = JSON.parse(fs.readFileSync('stories/women/013/story.json', 'utf8'));
   ['ar','en','fr','it','de'].forEach(function (lang) {
     assert.ok(pkg.cover.i18n[lang].alt, 'cover alt must be localized for ' + lang);
     assert.ok(pkg.cover.i18n[lang].caption, 'cover caption must be localized for ' + lang);
   });
 });
-test('Hatshepsut V2 reader keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
+test('Hatshepsut unified story reader keeps accessible scroll reveal and the women card prefers a real museum photo', function () {
   var story = fs.readFileSync('stories/women/013/index.html', 'utf8');
   var readerCss = fs.readFileSync('rebuild/reader-base.css', 'utf8');
   var readerJs = fs.readFileSync('rebuild/reader.js', 'utf8');
   var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
-  assert.ok(story.includes('data-kh-v2-reader'), 'Hatshepsut must use the unified V2 reader');
-  assert.ok(story.includes('data-story-path=\"data.v2.json\"'), 'V2 page must load its localized story package');
-  assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'V2 story blocks must reveal on scroll');
+  assert.ok(story.includes('data-kh-story-reader'), 'Hatshepsut must use the unified unified story reader');
+  assert.ok(story.includes('data-story-path=\"story.json\"'), 'unified story page must load its localized story package');
+  assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'unified story story blocks must reveal on scroll');
   assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
   assert.ok(readerCss.includes('header{position:static'), 'language header must scroll away with the page');
   assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
@@ -581,8 +581,8 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href=v2OnlyDraft?'../rebuild/package-review.html?draft=1&v=20261028-v2-review-1':'preview.html?story=1&submission='"), 'V2-only drafts must use the full-package reviewer while V1 imports retain the legacy preview');
-  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261028-v2-review-1'"), 'manual save-and-preview must also route V2-only drafts to the full-package reviewer');
+  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261101-story-review-1':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261101-story-review-1'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
@@ -842,7 +842,7 @@ test('v4 prompt architecture uses one master prompt and concise provider instruc
   });
 });
 
-test('Magdi Yacoub V2 package preserves the corrected five-language opening, documented photos, and verified map location', function () {
+test('Magdi Yacoub unified story package preserves the corrected five-language opening, documented photos, and verified map location', function () {
   var translations = fs.readFileSync('stories/science/015/translations.js', 'utf8');
   var opening = 'وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى.';
   assert.equal(translations.split('"' + opening + '":"').length - 1, 8, 'the corrected opening text node must retain exact EN/FR/IT/DE source-key coverage');
@@ -854,11 +854,11 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
 
   var magdiPage = fs.readFileSync('stories/science/015/index.html', 'utf8');
   var magdiExtra = fs.readFileSync('stories/science/015/translations-extra.js', 'utf8');
-  var story = JSON.parse(fs.readFileSync('stories/science/015/data.v2.json', 'utf8'));
+  var story = JSON.parse(fs.readFileSync('stories/science/015/story.json', 'utf8'));
   var original = fs.readFileSync('stories/science/015/original.md', 'utf8')
     .replace(/^# النص الأصلي كما وصل دون تعديل\s*\n\n/, '').trimEnd();
   var places = JSON.parse(fs.readFileSync('stories/places.json', 'utf8'));
-  assert.equal(story.format, 'KHALEDOON_STORY_V2');
+  assert.equal(story.format, 'KHALEDOON_STORY');
   assert.equal(story.section, 'science');
   assert.equal(story.design.variant, 'portrait-biography');
   assert.equal(story.original_body, original, 'the submitted original_body must remain verbatim');
@@ -869,7 +869,7 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
 
   var photos = story.images.filter(function (image) { return image.kind === 'photograph'; });
   var illustration = story.images.find(function (image) { return image.kind === 'illustration'; });
-  assert.equal(photos.length, 2, 'the V2 gallery must contain two sourced photographs');
+  assert.equal(photos.length, 2, 'the unified story gallery must contain two sourced photographs');
   assert.ok(illustration && illustration.path === 'stories/science/015/cover-popup.svg', 'the gallery must retain the original non-photographic illustration');
   var raafat = photos.find(function (image) { return image.source_url === 'https://commons.wikimedia.org/wiki/File:M_Yacoub.JPG'; });
   var lister = photos.find(function (image) { return image.source_url === 'https://commons.wikimedia.org/wiki/File:Yacoub_Lister_Medal_2015.JPG'; });
@@ -901,9 +901,9 @@ test('Magdi Yacoub V2 package preserves the corrected five-language opening, doc
 
   assert.equal(story.map_location.lat, places['015'].lat);
   assert.equal(story.map_location.lng, places['015'].lng);
-  assert.deepEqual(story.map_location.place, places['015'].place, 'the V2 map location must match the verified Belbeis place record');
-  assert.ok(magdiPage.includes('data-kh-v2-reader') && magdiPage.includes('data-story-path="data.v2.json"'), 'Magdi page must use the shared V2 reader');
-  assert.ok(magdiPage.includes('rebuild/reader.js') && magdiPage.includes('khaledoon-story-map-link.js'), 'V2 reader and interactive 3D map link must be connected');
+  assert.deepEqual(story.map_location.place, places['015'].place, 'the unified story map location must match the verified Belbeis place record');
+  assert.ok(magdiPage.includes('data-kh-story-reader') && magdiPage.includes('data-story-path="story.json"'), 'Magdi page must use the shared unified story reader');
+  assert.ok(magdiPage.includes('rebuild/reader.js') && magdiPage.includes('khaledoon-story-map-link.js'), 'unified story reader and interactive 3D map link must be connected');
   assert.ok(magdiPage.includes('id="site-brand"'), 'the shared reader must localize the site brand');
 });
  
@@ -976,7 +976,7 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
   var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
   var bundleIndex = admin.indexOf('var pack;', submitStart);
-  var unifiedBuilderIndex = admin.indexOf('window.KHStoryV2Publisher.buildFiles', submitStart);
+  var unifiedBuilderIndex = admin.indexOf('window.KHStoryPublisher.buildFiles', submitStart);
   assert.ok(capIndex >= 0 && bundleIndex > capIndex && unifiedBuilderIndex > capIndex, 'capability handshake must run before either unified or October compatibility bundle generation');
 });
 
@@ -1006,23 +1006,23 @@ test('unified publisher requires an approved canonical package from its source r
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('requires_submission_id: true'));
-  assert.ok(publisher.includes('supports_v2_publish: true'));
+  assert.ok(publisher.includes('supports_story_package_publish: true'));
   assert.ok(publisher.includes('body.submission_table'));
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
-  assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
-  assert.ok(publisher.includes('const savedV2Package: any ='));
+  assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
+  assert.ok(publisher.includes('const savedStoryPackageRaw: any ='));
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
-  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
-  var packageGuard = publisher.indexOf('if (isV2OnlyDraft) {');
+  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
+  var packageGuard = publisher.indexOf('if (isStoryOnlyDraft) {');
   var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
   var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
   assert.ok(packageGuard >= 0 && branchWrite > packageGuard && prWrite > packageGuard, 'canonical package checks must run before branch or PR creation');
   assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
-  assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
-  assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
-  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
+  assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
+  assert.ok(admin.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'));
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
 });

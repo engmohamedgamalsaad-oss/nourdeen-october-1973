@@ -48,29 +48,29 @@ for (const pagePath of pages) {
   requireCheck(Boolean(html), story, "story page exists");
   if (!html) continue;
 
-  // V2 is canonical: validate the package and skip every V1 quiz/data requirement.
-  const v2Page = html.includes('data-kh-v2-reader') &&
-    /data-story-path=["']data\.v2\.json["']/.test(html) &&
+  // The unified story contract is canonical: validate the package and skip every V1 quiz/data requirement.
+  const storyPage = html.includes('data-kh-story-reader') &&
+    /data-story-path=["']story\.json["']/.test(html) &&
     html.includes('rebuild/reader.js');
-  if (v2Page) {
-    const v2Path = `stories/${section}/${id}/data.v2.json`;
-    const v2Text = read(v2Path);
-    let v2 = null;
-    try { v2 = v2Text ? JSON.parse(v2Text) : null; } catch {}
-    requireCheck(Boolean(v2), story, `V2 package ${v2Path} exists and is valid JSON`);
-    requireCheck(Boolean(v2 && v2.format === "KHALEDOON_STORY_V2"), story, "V2 package is the canonical story format");
-    requireCheck(html.includes('name="robots" content="noindex,nofollow"'), story, "new V2 page remains unlisted until reviewed and approved");
+  if (storyPage) {
+    const storyPath = `stories/${section}/${id}/story.json`;
+    const storyText = read(storyPath);
+    let storyPackage = null;
+    try { storyPackage = storyText ? JSON.parse(storyText) : null; } catch {}
+    requireCheck(Boolean(storyPackage), story, `Story package ${storyPath} exists and is valid JSON`);
+    requireCheck(Boolean(storyPackage && storyPackage.format === "KHALEDOON_STORY"), story, "Story package is the canonical story format");
+    requireCheck(html.includes('name="robots" content="noindex,nofollow"'), story, "new Unified story page remains unlisted until reviewed and approved");
     let validationOutput = "";
     let valid = false;
-    if (v2) {
+    if (storyPackage) {
       try {
-        validationOutput = execFileSync(process.execPath, ["rebuild/validate-package.mjs", v2Path], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+        validationOutput = execFileSync(process.execPath, ["rebuild/validate-package.mjs", storyPath], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
         valid = true;
       } catch (error) {
         validationOutput = (error.stdout || "") + (error.stderr || "");
       }
     }
-    requireCheck(valid, story, "V2 contract, translations, quiz, source and image metadata validate" + (valid ? "" : ": " + validationOutput.trim().slice(0, 500)));
+    requireCheck(valid, story, "Unified story contract, translations, quiz, source and image metadata validate" + (valid ? "" : ": " + validationOutput.trim().slice(0, 500)));
     continue;
   }
 

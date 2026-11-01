@@ -31,7 +31,7 @@
   function apply(t, persist) {
     root.classList.add('kh-theme-anim');
     root.setAttribute('data-theme', t);
-    /* قارئ V2 يعتمد أيضًا على body[data-theme]؛ مزامنة الجذر والجسم تمنع زر الفوتر من تغيير الحالة دون تغيير ألوان الصفحة. */
+    /* قارئ الحكاية الموحد يعتمد أيضًا على body[data-theme]؛ مزامنة الجذر والجسم تمنع زر الفوتر من تغيير الحالة دون تغيير ألوان الصفحة. */
     if (document.body) document.body.setAttribute('data-theme', t);
     if (persist) { try { localStorage.setItem(KEY, t); } catch (e) {} }
     paint(t);
@@ -57,7 +57,7 @@
   window.addEventListener('storage', function (e) {
     if (e.key === KEY && (e.newValue === 'light' || e.newValue === 'dark')) { root.setAttribute('data-theme', e.newValue); paint(e.newValue); }
   });
-  /* زر الهيدر في قارئ V2 يغيّر data-theme مباشرة؛ راقب التغيير لتحديث أيقونة الزر العائم واسمها. */
+  /* زر الهيدر في قارئ الحكاية الموحد يغيّر data-theme مباشرة؛ راقب التغيير لتحديث أيقونة الزر العائم واسمها. */
   try {
     new MutationObserver(function () {
       var t = cur();

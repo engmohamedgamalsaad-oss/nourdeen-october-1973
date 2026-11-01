@@ -22,18 +22,18 @@ const storyFiles = [
 /* Stories whose text lives inside index.html: each language must appear in all
    three inline translation tables (story text, UI labels, and reaction/status text). */
 const inlineStoryFiles = [
-  // No active story page keeps private inline locale dictionaries; V2 stories
-  // are checked from their data.v2.json package below.
+  // No active story page keeps private inline locale dictionaries; unified story pages
+  // are checked from their story.json package below.
 ];
-const v2StoryFiles = [
-  'stories/science/007/data.v2.json',
-  'stories/people/008/data.v2.json',
-  'stories/people/009/data.v2.json',
-  'stories/women/010/data.v2.json',
-  'stories/islamic/011/data.v2.json',
-  'stories/science/012/data.v2.json',
-  'stories/women/013/data.v2.json',
-  'stories/history/014/data.v2.json'
+const storyPackageFiles = [
+  'stories/science/007/story.json',
+  'stories/people/008/story.json',
+  'stories/people/009/story.json',
+  'stories/women/010/story.json',
+  'stories/islamic/011/story.json',
+  'stories/science/012/story.json',
+  'stories/women/013/story.json',
+  'stories/history/014/story.json'
 ];
 const translationMaps = [
   'assets/shared/story-body-i18n.js',
@@ -109,19 +109,19 @@ for (const file of inlineStoryFiles) {
     }
   }
 }
-for (const file of v2StoryFiles) {
+for (const file of storyPackageFiles) {
   try {
     const story = JSON.parse(read(file));
     for (const lang of required) {
       const data = story.i18n && story.i18n[lang];
       if (!data || !String(data.title || '').trim() || !String(data.subtitle || '').trim() ||
           !String(data.summary || '').trim() || !Array.isArray(data.blocks) || data.blocks.length < 3) {
-        problems.push(file + ': missing required V2 story translations for "' + lang + '".');
+        problems.push(file + ': missing required unified story translations for "' + lang + '".');
       }
     }
-    console.log(file + ': inspected V2 story content in all five locales.');
+    console.log(file + ': inspected unified story content in all five locales.');
   } catch (e) {
-    problems.push(file + ': could not parse V2 package: ' + e.message);
+    problems.push(file + ': could not parse story package: ' + e.message);
   }
 }
 
@@ -164,9 +164,9 @@ for (const file of translationMaps) {
         'stories/october/003/index.html', 'stories/october/004/index.html',
         'stories/history/005/index.html', 'stories/history/006/index.html',
         'stories/science/007/legacy-original.html',
-        'stories/science/007/data.v2.json',
-        // V2 story prose is stored in JSON data; the old page is retained as a legacy archive.
-        'stories/history/005/data.v2.json', 'stories/history/006/data.v2.json',
+        'stories/science/007/story.json',
+        // unified story prose is stored in JSON data; the old page is retained as a legacy archive.
+        'stories/history/005/story.json', 'stories/history/006/story.json',
         // This legacy German source paragraph is retained in the Orabi translation module.
         'stories/history/006/translations.js'
       ].map(read).join('\n');

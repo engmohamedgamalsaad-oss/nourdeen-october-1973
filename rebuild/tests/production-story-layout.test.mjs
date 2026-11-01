@@ -39,13 +39,13 @@ for (const sample of [
     const html = fs.readFileSync(htmlPath, 'utf8');
     assert.match(html, /<html[^>]*lang="ar"/i, 'reader page starts in Arabic');
     if (['009', '010', '011', '012', '013', '014'].includes(sample.id)) {
-      const v2Path = path.join(dir, 'data.v2.json');
-      assert.ok(fs.existsSync(v2Path), 'migrated story has a V2 package');
-      const v2 = JSON.parse(fs.readFileSync(v2Path, 'utf8'));
-      assert.equal(v2.format, 'KHALEDOON_STORY_V2');
-      assert.equal(v2.section, sample.section);
-      assert.match(html, /data-kh-v2-reader/, 'migrated story uses the unified V2 reader');
-      assert.match(html, /data-story-path="data\.v2\.json"/, 'V2 reader loads the story package');
+      const storyPath = path.join(dir, 'story.json');
+      assert.ok(fs.existsSync(storyPath), 'migrated story has a unified story package');
+      const storyPackage = JSON.parse(fs.readFileSync(storyPath, 'utf8'));
+      assert.equal(storyPackage.format, 'KHALEDOON_STORY');
+      assert.equal(storyPackage.section, sample.section);
+      assert.match(html, /data-kh-story-reader/, 'migrated story uses the unified unified reader');
+      assert.match(html, /data-story-path="story\.json"/, 'V2 reader loads the story package');
     } else {
       assert.match(html, /i18n\.js|data-i18n|data\.json|KH_LANG|setLanguage/i, 'reader page contains a language/data integration point');
     }

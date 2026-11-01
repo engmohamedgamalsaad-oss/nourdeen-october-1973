@@ -5,14 +5,14 @@ import { readFile } from 'node:fs/promises';
 const gate = await readFile(new URL('../../scripts/check-new-story-readiness.js', import.meta.url), 'utf8');
 const cli = await readFile(new URL('../validate-package.mjs', import.meta.url), 'utf8');
 
-test('new V2 story pages use the canonical package and bypass V1-only requirements', () => {
-  assert.match(gate, /data-story-path=\["']data\\\.v2\\\.json\["']/);
-  assert.match(gate, /data\.v2\.json/);
-  assert.match(gate, /V2 is canonical/);
+test('new unified story pages use the canonical package and bypass V1-only requirements', () => {
+  assert.ok(gate.includes('data-story-path=') && gate.includes('storyPath = `stories/${section}/${id}/story.json`'));
+  assert.match(gate, /story\.json/);
+  assert.match(gate, /Story package is the canonical story format/);
   assert.match(gate, /continue;/);
 });
 
-test('V2 package readiness invokes the strict shared validator', () => {
+test('unified story package readiness invokes the strict shared validator', () => {
   assert.match(gate, /rebuild\/validate-package\.mjs/);
   assert.match(cli, /validateStory/);
   assert.match(cli, /validateLocalImagePaths/);
@@ -52,12 +52,12 @@ test('canonical prompt and prompt admin use the unified story contract for new p
 });
 
 
-test('V2 story content must be rich, source-grounded, and balanced about uncertainty', async () => {
-  const packagePrompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/V2-STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
+test('unified story story content must be rich, source-grounded, and balanced about uncertainty', async () => {
+  const packagePrompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
   const master = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', import.meta.url), 'utf8');
   const checklist = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', import.meta.url), 'utf8');
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
-  for (const [name, text] of [['V2 package prompt', packagePrompt], ['master workflow', master], ['checklist', checklist], ['V2 README', readme]]) {
+  for (const [name, text] of [['unified story package prompt', packagePrompt], ['master workflow', master], ['checklist', checklist], ['unified story README', readme]]) {
     assert.match(text, /ثراء المحتوى|ثراء المحتوى التاريخي|ثراء المحتوى والدقة التاريخية/, name + ' must define the story richness gate');
     assert.match(text, /لا تجعل التحفظات|لا تهيمن عبارات|لا نكرر|لا تكرر/, name + ' must prevent uncertainty warnings from dominating the story');
     assert.match(text, /مصادر موثوقة|المصادر الموثوقة|مصادر موثوقة تدعمها/, name + ' must require source-grounded claims');

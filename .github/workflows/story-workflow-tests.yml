@@ -14,7 +14,7 @@ on:
       - "khaledoon/tests/**"
       - "supabase/functions/publish-story-pr/index.ts"
       - "rebuild/**"
-      - "scripts/e2e-v2-story-preview.cjs"
+      - "scripts/e2e-story-preview.cjs"
       - ".github/workflows/story-workflow-tests.yml"
   workflow_dispatch:
 
@@ -55,9 +55,9 @@ jobs:
         run: |
           # GitHub-hosted Ubuntu runners provide the common Chromium system libraries; avoid apt mirror delays.
           npx playwright install chromium
-      - name: Run real-browser V2 story preview checks
+      - name: Run real-browser unified story preview checks
         timeout-minutes: 5
-        run: node scripts/e2e-v2-story-preview.cjs
+        run: node scripts/e2e-story-preview.cjs
       - name: Run mocked headless preview tests
         timeout-minutes: 5
         run: node khaledoon/tests/story-workflow-browser.test.cjs
