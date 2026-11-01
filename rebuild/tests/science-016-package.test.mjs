@@ -7,7 +7,7 @@ import { validateStory, validateLocalImagePaths } from '../validate-story.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const langs = ['ar', 'en', 'fr', 'it', 'de'];
-const load = async () => JSON.parse(await readFile(path.join(root, 'stories/science/016/data.v2.json'), 'utf8'));
+const load = async () => JSON.parse(await readFile(path.join(root, 'stories/science/016/story.json'), 'utf8'));
 
 test('Mosharafa package is valid and uses only local images', async () => {
   const story = await load();
