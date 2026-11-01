@@ -1,0 +1,1123 @@
+{
+  "format": "KHALEDOON_STORY",
+  "slug": "tawfiq-al-hakim",
+  "section": "people",
+  "design": {
+    "variant": "portrait-biography",
+    "accent": "#e2b36d"
+  },
+  "original_body": "هو أديب ومسرحي مصري بارز، يُعد من أهم رواد المسرح العربي الحديث، واشتهر بأعماله التي جمعت بين الفكر والفلسفة والقضايا الاجتماعية، وأسهم في تطوير الكتابة المسرحية في مصر والعالم العربي.",
+  "i18n": {
+    "ar": {
+      "title": "رائد المسرح الذهني",
+      "subtitle": "حكاية الكاتب المصري الذي جعل المسرح مساحة للتفكير واكتشاف الإنسان",
+      "summary": "حكاية الكاتب المصري الذي جعل المسرح مساحة للتفكير واكتشاف الإنسان",
+      "student_name": "مليكة محمد",
+      "narrator_name": "مليكة محمد",
+      "grade": "الصف الأول الابتدائي",
+      "narrator_grade": "الصف الثالث الابتدائي",
+      "figure_name": "توفيق الحكيم",
+      "person": "توفيق الحكيم",
+      "history_note": "الوقائع الأساسية في الحكاية مدعومة بمصادر مرجعية تشمل الهيئة العامة للاستعلامات المصرية، وموسوعة الجزيرة، وموسوعة لاروس، وموسوعة Treccani. تاريخ الميلاد الأكثر اعتمادًا في هذه المراجع هو 9 أكتوبر 1898، والوفاة 26 يوليو 1987. توجد مشكلة في صفحة الهيئة العامة للاستعلامات المصرية نفسها: بياناتها العلوية تذكر عام 1898، بينما يذكر متن الصفحة عام 1903؛ لذلك اعتمدت تاريخ 1898 الذي تؤيده مراجع أخرى، وسجّلت هذا التعارض بدل إخفائه. تذكر المصادر أن أهل الكهف نُشرت عام 1933، وأن شهرزاد ظهرت عام 1934، وأن يوميات نائب في الأرياف صدرت عام 1937. وصف المسرح الذهني توصيف نقدي شائع لأعمال الحكيم، وليس اسمًا رسميًا وحيدًا متفقًا عليه لكل إنتاجه. اختير التصميم portrait-biography لأن الحكاية تتمحور حول سيرة كاتب وأثره الأدبي، وليس حول تسلسل معركة أو تجربة علمية. لم يُضف حقل مستقل لبطاقات هل تعلم لأن مخطط الاستيراد الحالي لا يعرّف حقلًا لها؛ أُدرجت المعلومات الإضافية الموثقة داخل المتن بدل اختراع حقل قد لا تدعمه لوحة الإدارة. الصور المستخدمة صور فوتوغرافية حقيقية للشخصية، وليست صورًا مولدة. صفحة ملف الصورة الأولى تصنفها ضمن الملكية العامة وفق بيانات Wikimedia Commons، والثانية تحمل ترخيص Creative Commons Attribution-ShareAlike 4.0؛ ينبغي الاحتفاظ بإسناد الصورة الثانية ورابط الترخيص عند استخدامها.",
+      "images_note": "التصميم المختار portrait-biography لأن الحكاية سيرة شخصية أدبية، وتساعد الصور الأرشيفية على التعرف إلى الكاتب الحقيقي. الصورة الأولى مؤرخة في صفحة Commons بعام 1985 ومصنفة ملكية عامة وفق بيانات الصفحة. الصورة الثانية صورة حقيقية للشخصية منشورة بترخيص CC BY-SA 4.0، ويتطلب استخدامها الإسناد والالتزام بشروط الترخيص. يجب إبقاء رابط صفحة المصدر واضحًا وعدم حذف بيانات الحقوق عند النشر.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "ملاحظة من مليكة",
+          "text": "أنا كنت فاكرة إن المسرحية لازم يكون فيها حركة وكلام كتير على المسرح، لكن اكتشفت إن فيه مسرحيات بتخلينا نفكر ونتخيل ونسأل نفسنا أسئلة مهمة! توفيق الحكيم استخدم المسرح علشان يناقش أفكارًا عن الإنسان والمجتمع. وأكثر حاجة لفتت نظري إن خبرته في الحياة والقانون ساعدته يكتب عن الناس ومشكلاتهم. كده الأدب مش بس حكايات بنسمعها، ده كمان طريقة نفهم بيها العالم!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "ليه بعض مسرحيات توفيق الحكيم بنسميها مسرحًا ذهنيًا؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لأن بعض مسرحياته تهتم بالأفكار والأسئلة والحوار بين الشخصيات أكثر من اعتمادها على الحركة الكثيرة فوق خشبة المسرح. القارئ أو المشاهد يتخيل المواقف ويفكر في المعنى، كأنه يشارك في بناء العرض بعقله."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "هل المسرح الذهني معناه إن مفيش أحداث على المسرح؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لا، ممكن تكون فيه شخصيات ومواقف وأحداث، لكن التركيز الأكبر بيكون على الأفكار والصراع الداخلي والحوار اللي يدعو الجمهور للتفكير."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "يعني المسرح الذهني مش معناه إن مفيش حكاية أو شخصيات، لكن إن الفكرة والصراع الداخلي هما الأهم؟"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "بالضبط. في عدد من أعمال توفيق الحكيم يتقدم الحوار الفكري والصراع النفسي على الحركة المسرحية الكبيرة، لذلك يحتاج القارئ أو المشاهد إلى التأمل في المعنى وراء الكلام."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "بداية الحكاية",
+          "text": "تخيّل أن تدخل مسرحًا، فتجد أمامك شخصيات تتحاور، وأحداثًا تدفعك إلى التفكير في الحياة والاختيارات التي يصنعها الإنسان. هذا أحد العوالم التي فتحها الأديب المصري توفيق الحكيم، الذي أصبح من أبرز رواد المسرح العربي الحديث، وعُرف باهتمامه بالأفكار الفلسفية والاجتماعية داخل أعماله."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "النشأة والدراسة",
+          "text": "وُلد توفيق الحكيم في الإسكندرية في 9 أكتوبر عام 1898، ونشأ في زمن كانت فيه مصر تشهد تغيرات ثقافية واجتماعية واسعة. أحب الأدب والمسرح، ودرس القانون، ثم سافر إلى فرنسا في عشرينيات القرن العشرين. وهناك شاهد عروضًا مسرحية واطّلع على ثقافات وأفكار متنوعة. لم يحصل على الدكتوراه التي سافر من أجلها، لكنه عاد إلى مصر بخبرة ثقافية ساعدته على تطوير رؤيته للكتابة.",
+          "image_after": "hakim-1985"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "القانون وحياة الناس",
+          "text": "بعد عودته عمل في المجال القضائي، وتنقّل في عدد من المناطق المصرية. وقد منحته هذه التجربة فرصة للتعرف إلى حياة الناس ومشكلاتهم، فظهرت آثارها في بعض كتاباته. ومن أشهر أعماله رواية يوميات نائب في الأرياف، التي صدرت عام 1937، وتعرض جوانب من الحياة الريفية وعلاقة الناس بإجراءات العدالة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "المسرح الذهني",
+          "text": "وفي عام 1933 نشر مسرحية أهل الكهف، وهي عمل يستلهم قصة أصحاب الكهف ويطرح أسئلة عن الزمن والتغير وتجربة الإنسان. وقد ارتبط اسم هذه المسرحية ببداية مرحلة مهمة في تطور المسرح الذهني في الأدب العربي؛ وهو اتجاه يهتم بالأفكار والصراعات الفكرية، وليس بالحركة المسرحية وحدها. ثم كتب مسرحية شهرزاد عام 1934، مستلهمًا شخصية معروفة من حكايات ألف ليلة وليلة، وأعاد تناولها بطريقة فلسفية.",
+          "image_after": "hakim-commons"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "أعمال أدبية متنوعة",
+          "text": "لم يكتب توفيق الحكيم للمسرح فقط، بل كتب الرواية والقصة والمقالة أيضًا. ومن أعماله المعروفة عودة الروح وعصفور من الشرق، إلى جانب عدد كبير من المسرحيات التي تناولت قضايا الإنسان والمجتمع والسياسة. وتنوّعت أعماله بين استلهام التراث، ومناقشة الواقع، والتأمل في الأفكار والعلاقات الإنسانية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "سؤال للتفكير",
+          "text": "يا ترى، هل يمكن أن تغيّر فكرة واحدة الطريقة التي ننظر بها إلى العالم؟ كان المسرح عند توفيق الحكيم مساحة لتجربة الأفكار وطرح الأسئلة. وتوضح رحلته أن الكاتب يستطيع أن يستفيد من القراءة والسفر والعمل وملاحظة الناس، ثم يحوّل ما تعلمه إلى أدب يجعل الجمهور يفكر ويتناقش."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "أثر باقٍ",
+          "text": "توفي توفيق الحكيم في القاهرة يوم 26 يوليو عام 1987، لكنه ترك أثرًا كبيرًا في الأدب والمسرح العربيين. وما زالت أعماله تتيح للقراء والطلاب فرصة التعرف إلى تاريخ المسرح الحديث، وملاحظة كيف يمكن للأدب أن يجمع بين المتعة والتفكير."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "محطات من أعماله",
+          "text": "من المحطات البارزة في أعماله: أهل الكهف عام 1933، وشهرزاد عام 1934، ويوميات نائب في الأرياف عام 1937."
+        }
+      ]
+    },
+    "en": {
+      "title": "A Pioneer of Thoughtful Drama",
+      "subtitle": "The Egyptian writer who made theatre a space for ideas and discovery",
+      "summary": "The Egyptian writer who made theatre a space for ideas and discovery",
+      "student_name": "Malika Mohamed",
+      "narrator_name": "Malika Mohamed",
+      "grade": "First grade of primary school",
+      "narrator_grade": "Third grade of primary school",
+      "figure_name": "Tawfiq al-Hakim",
+      "person": "Tawfiq al-Hakim",
+      "history_note": "The main facts in this story are supported by the Egyptian State Information Service, Al Jazeera Encyclopedia, Larousse, and Treccani. The most consistently reported dates are 9 October 1898 for his birth and 26 July 1987 for his death. The Egyptian State Information Service page contains a discrepancy: its heading gives 1898, while its body mentions 1903. This story uses 1898 because other reference works support it. The People of the Cave appeared in 1933, Shahrazad in 1934, and Diary of a Country Prosecutor in 1937. Intellectual drama is a common critical description of al-Hakim’s work, not a single official label for all of his writing. The portrait-biography design was chosen because the story focuses on a literary figure and his legacy. No separate Did You Know field was added because the current import schema does not define one. The photographs are archival images, not AI-generated images. The first Commons file is marked public domain on its file page; the second is licensed under CC BY-SA 4.0 and requires attribution.",
+      "images_note": "The portrait-biography design suits a story about a writer’s life and literary legacy. The first archival photograph is dated 1985 on its Commons file page and is marked public domain under the copyright information shown there. The second photograph is licensed under CC BY-SA 4.0, so attribution, a licence link, and notice of any changes are required. Keep the source information with the image.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A note from Malika",
+          "text": "I used to think that a play had to be full of movement and lots of talking on stage. But I discovered that some plays make us think, imagine, and ask important questions! Tawfiq al-Hakim used theatre to explore ideas about people and society. I was especially interested to learn that his experience of life and law helped him write about people and their problems. Literature is not just stories we hear; it can also help us understand the world!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Why are some of Tawfiq al-Hakim’s plays called intellectual theatre?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Because some of his plays focus on ideas, questions, and conversations between characters more than on constant physical action on stage. Readers and viewers imagine the situations and think about their meaning, almost as if they help build the performance in their minds."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Does intellectual theatre mean that nothing happens on stage?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No. It can still include characters, situations, and events, but its main focus is on ideas, inner conflict, and dialogue that invites the audience to think."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "So 'theatre of the mind' does not mean there is no plot or characters; it means ideas and inner conflict take the leading role?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Exactly. In many of Tawfiq al-Hakim's works, intellectual dialogue and psychological conflict are more prominent than large stage action. Readers and viewers are invited to think about the meaning behind the words."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "The beginning",
+          "text": "Imagine entering a theatre and seeing characters talking to one another while the events make you think about life and the choices people make. This is one of the worlds opened up by the Egyptian writer Tawfiq al-Hakim, who became one of the leading pioneers of modern Arabic drama. His works are known for exploring philosophical ideas and social questions."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Early life and studies",
+          "text": "Tawfiq al-Hakim was born in Alexandria on 9 October 1898, at a time when Egypt was experiencing cultural and social change. He loved literature and theatre and studied law before travelling to France in the 1920s. There, he watched theatrical performances and encountered different cultures and ideas. He did not complete the doctorate he had planned to pursue, but he returned to Egypt with cultural experiences that helped shape his writing.",
+          "image_after": "hakim-1985"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Law and people’s lives",
+          "text": "After returning, he worked in the legal system and travelled between several Egyptian areas. This experience gave him a closer look at people’s lives and problems, and it influenced some of his writing. One of his best-known works is the novel Diary of a Country Prosecutor, published in 1937, which portrays aspects of rural life and people’s encounters with the justice system."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Intellectual drama",
+          "text": "In 1933, he published the play The People of the Cave, inspired by the story of the Sleepers of the Cave. The play raises questions about time, change, and human experience. It is associated with an important stage in the development of intellectual drama in Arabic literature, a form that focuses on ideas and inner conflicts rather than stage action alone. He later wrote Shahrazad in 1934, drawing on a familiar character from One Thousand and One Nights and exploring her story in a philosophical way.",
+          "image_after": "hakim-commons"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A varied literary legacy",
+          "text": "Tawfiq al-Hakim did not write only for the theatre. He also wrote novels, short stories, and essays. His well-known works include Return of the Spirit and A Bird from the East, alongside many plays about people, society, and politics. His writing drew on heritage, examined real life, and explored ideas and human relationships."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A question to consider",
+          "text": "Can one idea change the way we look at the world? For al-Hakim, theatre was a place to test ideas and ask questions. His life shows how a writer can learn from reading, travel, work, and observing people, then turn those experiences into literature that encourages audiences to think and discuss."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "A lasting legacy",
+          "text": "Tawfiq al-Hakim died in Cairo on 26 July 1987, but he left a lasting mark on Arabic literature and theatre. His works still help readers and students discover the history of modern drama and see how literature can combine enjoyment with thought."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Works and dates",
+          "text": "Three notable milestones in his writing are The People of the Cave (1933), Shahrazad (1934), and Diary of a Country Prosecutor (1937)."
+        }
+      ]
+    },
+    "fr": {
+      "title": "Un pionnier du théâtre d’idées",
+      "subtitle": "L’écrivain égyptien qui a fait du théâtre un espace de réflexion et de découverte",
+      "summary": "L’écrivain égyptien qui a fait du théâtre un espace de réflexion et de découverte",
+      "student_name": "Malika Mohamed",
+      "narrator_name": "Malika Mohamed",
+      "grade": "Première année de l’école primaire",
+      "narrator_grade": "Troisième année de l’école primaire",
+      "figure_name": "Tawfiq al-Hakim",
+      "person": "Tawfiq al-Hakim",
+      "history_note": "Les faits principaux de ce récit sont étayés par l’Autorité égyptienne de l’information, l’encyclopédie d’Al Jazeera, Larousse et Treccani. Les dates les plus souvent indiquées sont le 9 octobre 1898 pour sa naissance et le 26 juillet 1987 pour sa mort. La page de l’Autorité égyptienne de l’information présente une contradiction : son en-tête indique 1898, tandis que le texte mentionne 1903. Le récit retient 1898, confirmé par d’autres ouvrages de référence. Les Gens de la caverne a paru en 1933, Schéhérazade en 1934 et Journal d’un substitut de campagne en 1937. Le théâtre d’idées est une description critique courante de son œuvre, et non une étiquette officielle unique pour tous ses écrits. Le design portrait-biographie a été choisi parce que le récit porte sur la vie et l’héritage d’un écrivain. Le schéma d’importation actuel ne définit pas de champ indépendant pour les cartes « Le saviez-vous ? » ; les informations supplémentaires figurent donc dans le récit. Les photographies sont des images d’archives et non des images générées par IA. Le premier fichier Commons est marqué comme appartenant au domaine public sur sa page ; le second est sous licence CC BY-SA 4.0 et exige une attribution.",
+      "images_note": "Le design portrait-biographie convient à un récit consacré à la vie d’un écrivain et à son héritage littéraire. La première photographie d’archives est datée de 1985 sur sa page Commons et marquée comme appartenant au domaine public selon les informations de droits indiquées. La seconde est sous licence CC BY-SA 4.0 ; il faut donc fournir l’attribution, un lien vers la licence et signaler toute modification. Conserver les informations de source avec l’image.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une note de Malika",
+          "text": "Je pensais qu’une pièce de théâtre devait forcément avoir beaucoup de mouvements et de paroles sur scène. Mais j’ai découvert que certaines pièces nous font réfléchir, imaginer et poser des questions importantes ! Tawfiq al-Hakim utilisait le théâtre pour explorer des idées sur les personnes et la société. Ce qui m’a particulièrement intéressée, c’est que son expérience de la vie et du droit l’a aidé à écrire sur les gens et leurs problèmes. La littérature n’est pas seulement composée d’histoires que l’on écoute : elle peut aussi nous aider à comprendre le monde !"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Pourquoi certaines pièces de Tawfiq al-Hakim sont-elles qualifiées de théâtre intellectuel ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Parce que certaines de ses pièces privilégient les idées, les questions et les échanges entre personnages plutôt que l’action physique sur scène. Le lecteur ou le spectateur imagine les situations et réfléchit à leur sens, comme s’il participait à la création du spectacle par la pensée."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Le théâtre d’idées signifie-t-il qu’il ne se passe rien sur scène ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Non. Il peut comporter des personnages, des situations et des événements, mais il met surtout l’accent sur les idées, les conflits intérieurs et les dialogues qui invitent le public à réfléchir."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Le « théâtre de l’esprit » ne signifie donc pas qu’il n’y a ni intrigue ni personnages, mais que les idées et les conflits intérieurs occupent le premier plan ?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Exactement. Dans plusieurs œuvres de Tawfiq al-Hakim, le dialogue intellectuel et le conflit psychologique prennent le pas sur les grandes actions scéniques. Le lecteur ou le spectateur est invité à réfléchir au sens des paroles."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le début du récit",
+          "text": "Imagine entrer dans un théâtre et voir des personnages dialoguer tandis que les événements t’amènent à réfléchir à la vie et aux choix des êtres humains. C’est l’un des univers que l’écrivain égyptien Tawfiq al-Hakim a ouverts aux lecteurs. Il est devenu l’un des grands pionniers du théâtre arabe moderne, et ses œuvres sont connues pour leurs idées philosophiques et leurs questions sociales."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Jeunesse et études",
+          "text": "Tawfiq al-Hakim est né à Alexandrie le 9 octobre 1898, à une époque où l’Égypte connaissait des changements culturels et sociaux. Il aimait la littérature et le théâtre et a étudié le droit avant de partir en France dans les années 1920. Il y a assisté à des représentations théâtrales et découvert différentes cultures et idées. Il n’a pas terminé le doctorat qu’il envisageait, mais il est revenu en Égypte avec des expériences culturelles qui ont contribué à façonner son écriture.",
+          "image_after": "hakim-1985"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le droit et la vie des gens",
+          "text": "À son retour, il a travaillé dans le domaine judiciaire et s’est déplacé dans plusieurs régions égyptiennes. Cette expérience lui a permis de mieux connaître la vie et les difficultés des habitants, et elle a influencé certains de ses écrits. Parmi ses œuvres les plus connues figure le roman Journal d’un substitut de campagne, publié en 1937, qui décrit certains aspects de la vie rurale et les relations entre les habitants et la justice."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Le théâtre d’idées",
+          "text": "En 1933, il a publié la pièce Les Gens de la caverne, inspirée du récit des Dormants de la caverne. Elle pose des questions sur le temps, le changement et l’expérience humaine. Cette œuvre est associée à une étape importante du développement du théâtre d’idées dans la littérature arabe, un théâtre qui met l’accent sur les idées et les conflits intérieurs plutôt que sur l’action scénique seule. Il a ensuite écrit Schéhérazade en 1934, en reprenant un personnage célèbre des Mille et Une Nuits pour explorer son histoire d’une manière philosophique.",
+          "image_after": "hakim-commons"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une œuvre littéraire variée",
+          "text": "Tawfiq al-Hakim n’a pas écrit uniquement pour le théâtre. Il a aussi écrit des romans, des nouvelles et des essais. Parmi ses œuvres connues figurent Le Retour de l’esprit et L’Oiseau d’Orient, ainsi que de nombreuses pièces portant sur l’être humain, la société et la politique. Ses écrits s’inspiraient du patrimoine, observaient la vie réelle et exploraient les idées et les relations humaines."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Une question à méditer",
+          "text": "Une seule idée peut-elle changer notre façon de voir le monde ? Pour al-Hakim, le théâtre était un lieu où mettre les idées à l’épreuve et poser des questions. Son parcours montre qu’un écrivain peut apprendre grâce à la lecture, aux voyages, au travail et à l’observation des gens, puis transformer ces expériences en littérature qui invite le public à réfléchir et à discuter."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un héritage durable",
+          "text": "Tawfiq al-Hakim est mort au Caire le 26 juillet 1987, mais il a laissé une empreinte durable dans la littérature et le théâtre arabes. Ses œuvres permettent encore aux lecteurs et aux élèves de découvrir l’histoire du théâtre moderne et de comprendre comment la littérature peut associer plaisir et réflexion."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Œuvres et dates",
+          "text": "Trois étapes marquantes de son œuvre sont Les Gens de la caverne (1933), Schéhérazade (1934) et Journal d’un substitut de campagne (1937)."
+        }
+      ]
+    },
+    "it": {
+      "title": "Un pioniere del teatro delle idee",
+      "subtitle": "Lo scrittore egiziano che trasformò il teatro in uno spazio di pensiero e scoperta",
+      "summary": "Lo scrittore egiziano che trasformò il teatro in uno spazio di pensiero e scoperta",
+      "student_name": "Malika Mohamed",
+      "narrator_name": "Malika Mohamed",
+      "grade": "Prima classe della scuola primaria",
+      "narrator_grade": "Terza classe della scuola primaria",
+      "figure_name": "Tawfiq al-Hakim",
+      "person": "Tawfiq al-Hakim",
+      "history_note": "I fatti principali del racconto sono sostenuti da fonti di riferimento quali il Servizio statale d’informazione egiziano, l’enciclopedia di Al Jazeera, Larousse e Treccani. Le date riportate più spesso sono il 9 ottobre 1898 per la nascita e il 26 luglio 1987 per la morte. La pagina del Servizio statale d’informazione egiziano contiene una discrepanza: nell’intestazione indica il 1898, mentre nel testo menziona il 1903. Il racconto usa il 1898, confermato da altre opere di riferimento. La gente della caverna uscì nel 1933, Shahrazad nel 1934 e Diario di un procuratore di campagna nel 1937. Teatro delle idee è una descrizione critica comune delle opere di al-Hakim, non un’unica etichetta ufficiale per tutta la sua produzione. È stato scelto il design portrait-biography perché il racconto riguarda la vita e l’eredità di uno scrittore. Lo schema di importazione attuale non definisce un campo separato per le schede «Lo sapevi?», quindi le informazioni aggiuntive sono inserite nel testo. Le fotografie sono immagini d’archivio reali, non generate dall’IA. Il primo file Commons è indicato come di pubblico dominio nella relativa pagina; il secondo è distribuito con licenza CC BY-SA 4.0 e richiede attribuzione.",
+      "images_note": "Il design portrait-biography è adatto a una storia sulla vita di uno scrittore e sulla sua eredità letteraria. La prima fotografia d’archivio è datata 1985 nella pagina Commons ed è indicata come di pubblico dominio secondo le informazioni sui diritti riportate. La seconda è concessa con licenza CC BY-SA 4.0; occorre quindi indicare l’autore o la fonte, inserire il collegamento alla licenza e segnalare eventuali modifiche. Conservare i dati della fonte insieme all’immagine.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una nota di Malika",
+          "text": "Pensavo che uno spettacolo teatrale dovesse avere per forza tanti movimenti e tante parole sul palcoscenico. Invece ho scoperto che alcune opere ci fanno pensare, immaginare e porre domande importanti! Tawfiq al-Hakim usava il teatro per esplorare idee sulle persone e sulla società. Mi ha colpito soprattutto sapere che la sua esperienza della vita e del diritto lo aiutò a scrivere delle persone e dei loro problemi. La letteratura non è soltanto una raccolta di storie da ascoltare: può aiutarci anche a capire il mondo!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Perché alcune opere di Tawfiq al-Hakim sono chiamate teatro intellettuale?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Perché alcune sue opere danno più spazio alle idee, alle domande e ai dialoghi tra i personaggi che all’azione fisica sul palcoscenico. Il lettore o lo spettatore immagina le situazioni e ne riflette sul significato, quasi partecipando alla costruzione dello spettacolo con la mente."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Il teatro di idee significa che sul palcoscenico non accade nulla?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "No. Può includere personaggi, situazioni ed eventi, ma mette soprattutto al centro le idee, i conflitti interiori e i dialoghi che invitano il pubblico a riflettere."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Il «teatro mentale» non significa quindi che manchino trama e personaggi, ma che le idee e i conflitti interiori sono al centro?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Esatto. In molte opere di Tawfiq al-Hakim il dialogo intellettuale e il conflitto psicologico hanno più rilievo della grande azione scenica. Il lettore o lo spettatore è invitato a riflettere sul significato delle parole."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "L’inizio della storia",
+          "text": "Immagina di entrare in un teatro e vedere personaggi che dialogano, mentre gli eventi ti spingono a riflettere sulla vita e sulle scelte delle persone. Questo è uno dei mondi aperti dallo scrittore egiziano Tawfiq al-Hakim, diventato uno dei principali pionieri del teatro arabo moderno. Le sue opere sono note per le idee filosofiche e le questioni sociali che affrontano."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Infanzia e studi",
+          "text": "Tawfiq al-Hakim nacque ad Alessandria il 9 ottobre 1898, in un periodo in cui l’Egitto attraversava cambiamenti culturali e sociali. Amava la letteratura e il teatro e studiò legge prima di recarsi in Francia negli anni Venti. Lì assistette a spettacoli teatrali e conobbe culture e idee diverse. Non completò il dottorato che aveva progettato di conseguire, ma tornò in Egitto con esperienze culturali che contribuirono a formare il suo modo di scrivere.",
+          "image_after": "hakim-1985"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Il diritto e la vita delle persone",
+          "text": "Dopo il ritorno lavorò nel campo giudiziario e si spostò in diverse zone dell’Egitto. Questa esperienza gli permise di conoscere più da vicino la vita e i problemi delle persone e influenzò alcuni dei suoi scritti. Tra le sue opere più note c’è il romanzo Diario di un procuratore di campagna, pubblicato nel 1937, che descrive aspetti della vita rurale e il rapporto tra gli abitanti e la giustizia."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Il teatro delle idee",
+          "text": "Nel 1933 pubblicò la pièce La gente della caverna, ispirata alla storia dei Dormienti della caverna. L’opera pone domande sul tempo, sul cambiamento e sull’esperienza umana. È legata a una fase importante nello sviluppo del teatro delle idee nella letteratura araba, un tipo di teatro che dà rilievo alle idee e ai conflitti interiori, non soltanto all’azione sul palcoscenico. Nel 1934 scrisse Shahrazad, riprendendo un personaggio noto delle Mille e una notte e raccontandone la storia in modo filosofico.",
+          "image_after": "hakim-commons"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una produzione letteraria varia",
+          "text": "Tawfiq al-Hakim non scrisse soltanto per il teatro: compose anche romanzi, racconti e saggi. Tra le sue opere più note ci sono Il ritorno dello spirito e L’uccello d’Oriente, insieme a numerosi testi teatrali dedicati alle persone, alla società e alla politica. I suoi scritti attingevano alla tradizione, osservavano la vita reale ed esploravano le idee e i rapporti umani."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Una domanda su cui riflettere",
+          "text": "Può un’idea cambiare il modo in cui guardiamo il mondo? Per al-Hakim il teatro era uno spazio in cui mettere alla prova le idee e porre domande. La sua vita mostra come uno scrittore possa imparare dalla lettura, dai viaggi, dal lavoro e dall’osservazione delle persone, trasformando poi queste esperienze in letteratura che invita il pubblico a riflettere e discutere."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Un’eredità duratura",
+          "text": "Tawfiq al-Hakim morì al Cairo il 26 luglio 1987, ma lasciò un segno duraturo nella letteratura e nel teatro arabi. Le sue opere aiutano ancora lettori e studenti a scoprire la storia del teatro moderno e a capire come la letteratura possa unire piacere e riflessione."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Opere e date",
+          "text": "Tre tappe importanti della sua produzione sono La gente della caverna (1933), Shahrazad (1934) e Diario di un procuratore di campagna (1937)."
+        }
+      ]
+    },
+    "de": {
+      "title": "Ein Pionier des Ideentheaters",
+      "subtitle": "Der ägyptische Schriftsteller, der das Theater zu einem Ort des Nachdenkens und Entdeckens machte",
+      "summary": "Der ägyptische Schriftsteller, der das Theater zu einem Ort des Nachdenkens und Entdeckens machte",
+      "student_name": "Malika Mohamed",
+      "narrator_name": "Malika Mohamed",
+      "grade": "Erste Klasse der Grundschule",
+      "narrator_grade": "Dritte Klasse der Grundschule",
+      "figure_name": "Tawfiq al-Hakim",
+      "person": "Tawfiq al-Hakim",
+      "history_note": "Die wichtigsten Fakten dieser Geschichte werden durch das ägyptische Staatliche Informationsservice, die Enzyklopädie von Al Jazeera, Larousse und Treccani gestützt. Am häufigsten werden der 9. Oktober 1898 als Geburtsdatum und der 26. Juli 1987 als Sterbedatum angegeben. Die Seite des ägyptischen Staatlichen Informationsservice enthält einen Widerspruch: In der Überschrift steht 1898, im Fließtext dagegen 1903. Diese Geschichte verwendet 1898, da andere Nachschlagewerke dieses Jahr bestätigen. Die Leute der Höhle erschien 1933, Scheherazade 1934 und Tagebuch eines Staatsanwalts auf dem Lande 1937. Ideentheater ist eine verbreitete literaturkritische Beschreibung von al-Hakims Werk, aber keine einzige offizielle Bezeichnung für sein gesamtes Schaffen. Das Design portrait-biography wurde gewählt, weil die Geschichte das Leben und Vermächtnis eines Schriftstellers behandelt. Das aktuelle Importschema definiert kein eigenes Feld für «Schon gewusst?»-Karten; zusätzliche Fakten wurden deshalb in den Erzähltext aufgenommen. Die Fotografien sind echte Archivbilder und keine KI-generierten Bilder. Die erste Commons-Datei ist auf ihrer Dateiseite als gemeinfrei gekennzeichnet; die zweite steht unter CC BY-SA 4.0 und erfordert eine Namensnennung.",
+      "images_note": "Das Design portrait-biography passt zu einer Geschichte über das Leben eines Schriftstellers und sein literarisches Vermächtnis. Das erste Archivfoto ist auf der Commons-Seite auf 1985 datiert und gemäß den dortigen Rechteangaben als gemeinfrei gekennzeichnet. Das zweite Foto steht unter der Lizenz CC BY-SA 4.0; daher müssen die Quelle genannt, die Lizenz verlinkt und Änderungen angegeben werden. Die Quellenangaben sollten zusammen mit dem Bild erhalten bleiben.",
+      "blocks": [
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine Notiz von Malika",
+          "text": "Ich dachte früher, ein Theaterstück müsse unbedingt viele Bewegungen und viele Worte auf der Bühne haben. Aber ich habe entdeckt, dass uns manche Stücke zum Nachdenken, Vorstellen und Stellen wichtiger Fragen bringen! Tawfiq al-Hakim nutzte das Theater, um Ideen über Menschen und die Gesellschaft zu erkunden. Besonders interessant fand ich, dass ihm seine Lebens- und Rechtserfahrung half, über Menschen und ihre Probleme zu schreiben. Literatur besteht nicht nur aus Geschichten, die wir hören; sie kann uns auch helfen, die Welt zu verstehen!"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Warum nennt man einige Stücke von Tawfiq al-Hakim ein geistiges Theater?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Weil einige seiner Stücke Ideen, Fragen und Gespräche zwischen den Figuren stärker betonen als viel Bewegung auf der Bühne. Lesende und Zuschauende stellen sich die Situationen vor und denken über ihre Bedeutung nach – als würden sie das Stück in Gedanken mitgestalten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Bedeutet Gedankentheater, dass auf der Bühne nichts geschieht?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nein. Es kann Figuren, Situationen und Ereignisse geben, doch im Mittelpunkt stehen stärker die Ideen, innere Konflikte und Dialoge, die das Publikum zum Nachdenken anregen."
+        },
+        {
+          "speaker": "karma",
+          "type": "paragraph",
+          "text": "Bedeutet „Theater des Geistes“ also nicht, dass Handlung und Figuren fehlen, sondern dass Ideen und innere Konflikte im Mittelpunkt stehen?"
+        },
+        {
+          "speaker": "narrator",
+          "type": "paragraph",
+          "text": "Genau. In vielen Werken Tawfiq al-Hakims stehen gedankliche Dialoge und psychologische Konflikte stärker im Vordergrund als große Bühnenaktionen. Leserinnen, Leser und Publikum sollen über die Bedeutung hinter den Worten nachdenken."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Der Anfang der Geschichte",
+          "text": "Stell dir vor, du betrittst ein Theater und siehst Figuren miteinander sprechen, während die Ereignisse dich dazu bringen, über das Leben und die Entscheidungen der Menschen nachzudenken. Eine solche Welt eröffnete der ägyptische Schriftsteller Tawfiq al-Hakim. Er wurde zu einem der bedeutenden Wegbereiter des modernen arabischen Theaters. Seine Werke sind dafür bekannt, philosophische Ideen und gesellschaftliche Fragen aufzugreifen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Frühe Jahre und Studium",
+          "text": "Tawfiq al-Hakim wurde am 9. Oktober 1898 in Alexandria geboren, zu einer Zeit, in der Ägypten kulturelle und gesellschaftliche Veränderungen erlebte. Er liebte Literatur und Theater und studierte Jura, bevor er in den 1920er-Jahren nach Frankreich reiste. Dort besuchte er Theateraufführungen und lernte unterschiedliche Kulturen und Ideen kennen. Die geplante Promotion schloss er nicht ab, doch er kehrte mit kulturellen Erfahrungen nach Ägypten zurück, die sein Schreiben prägten.",
+          "image_after": "hakim-1985"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Recht und das Leben der Menschen",
+          "text": "Nach seiner Rückkehr arbeitete er im Justizwesen und war in verschiedenen Regionen Ägyptens tätig. Dadurch lernte er das Leben und die Probleme der Menschen näher kennen; diese Erfahrungen beeinflussten einige seiner Werke. Zu seinen bekanntesten Büchern gehört der Roman Tagebuch eines Staatsanwalts auf dem Lande, der 1937 erschien und Aspekte des ländlichen Lebens sowie die Begegnung der Menschen mit dem Justizsystem schildert."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Das Ideentheater",
+          "text": "1933 veröffentlichte er das Theaterstück Die Leute der Höhle, das von der Erzählung der Höhlenschläfer inspiriert ist. Das Stück wirft Fragen über Zeit, Veränderung und menschliche Erfahrungen auf. Es wird mit einer wichtigen Entwicklungsphase des Ideentheaters in der arabischen Literatur verbunden. Bei dieser Theaterform stehen Gedanken und innere Konflikte im Mittelpunkt, nicht nur die Handlung auf der Bühne. 1934 schrieb er Scheherazade und griff dabei eine bekannte Figur aus Tausendundeiner Nacht auf, deren Geschichte er philosophisch deutete.",
+          "image_after": "hakim-commons"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Ein vielfältiges literarisches Werk",
+          "text": "Tawfiq al-Hakim schrieb nicht nur Theaterstücke, sondern auch Romane, Kurzgeschichten und Essays. Zu seinen bekannten Werken zählen Die Rückkehr des Geistes und Der Vogel aus dem Osten sowie zahlreiche Theaterstücke über Menschen, Gesellschaft und Politik. Seine Werke schöpften aus dem kulturellen Erbe, beobachteten das wirkliche Leben und erkundeten Ideen und menschliche Beziehungen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Eine Frage zum Nachdenken",
+          "text": "Kann eine einzige Idee verändern, wie wir die Welt sehen? Für al-Hakim war das Theater ein Ort, an dem Ideen erprobt und Fragen gestellt werden konnten. Sein Lebensweg zeigt, dass ein Schriftsteller durch Lesen, Reisen, Arbeit und die Beobachtung anderer Menschen lernen und diese Erfahrungen anschließend in Literatur verwandeln kann, die das Publikum zum Nachdenken und Diskutieren anregt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "heading": "Ein bleibendes Vermächtnis",
+          "text": "Tawfiq al-Hakim starb am 26. Juli 1987 in Kairo, hinterließ aber einen bleibenden Einfluss auf die arabische Literatur und das Theater. Seine Werke helfen Leserinnen, Lesern und Schülerinnen und Schülern weiterhin dabei, die Geschichte des modernen Theaters kennenzulernen und zu entdecken, wie Literatur Freude und Nachdenken verbinden kann."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Werke und Daten",
+          "text": "Drei wichtige Stationen seines Werks sind Die Leute der Höhle (1933), Scheherazade (1934) und Tagebuch eines Staatsanwalts auf dem Lande (1937)."
+        }
+      ]
+    }
+  },
+  "cover": {
+    "id": "cover",
+    "path": "stories/people/008/cover.svg",
+    "kind": "illustration",
+    "source_name": "خالدون عبر التاريخ — غلاف توضيحي",
+    "source_url": "https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/stories/people/008/cover.svg",
+    "rights": "Original programmatically generated cover artwork for the Khaledoon project; not an archival photograph.",
+    "i18n": {
+      "ar": {
+        "alt": "غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية",
+        "caption": "غلاف توضيحي مولّد برمجيًا — ليس صورة تاريخية أرشيفية",
+        "source_name": "خالدون عبر التاريخ — غلاف توضيحي",
+        "rights": "غلاف توضيحي أصلي مولّد برمجيًا لمشروع خالدون؛ ليس صورة تاريخية أرشيفية."
+      },
+      "en": {
+        "alt": "Decorative cover artwork generated in code — not an archival photograph",
+        "caption": "Decorative cover artwork generated in code — not an archival photograph",
+        "source_name": "Khaledoon — decorative cover illustration",
+        "rights": "Original programmatically generated cover artwork for the Khaledoon project; not an archival photograph."
+      },
+      "fr": {
+        "alt": "Illustration de couverture générée par code — ce n’est pas une photographie d’archive",
+        "caption": "Illustration de couverture générée par code — ce n’est pas une photographie d’archive",
+        "source_name": "Khaledoon — illustration décorative de couverture",
+        "rights": "Illustration de couverture originale générée par code pour le projet Khaledoon ; ce n’est pas une photographie d’archive."
+      },
+      "it": {
+        "alt": "Copertina illustrativa generata via codice — non è una fotografia d’archivio",
+        "caption": "Copertina illustrativa generata via codice — non è una fotografia d’archivio",
+        "source_name": "Khaledoon — illustrazione decorativa di copertina",
+        "rights": "Illustrazione di copertina originale generata via codice per il progetto Khaledoon; non è una fotografia d’archivio."
+      },
+      "de": {
+        "alt": "Dekoratives, programmatisch erzeugtes Titelbild — kein historisches Archivfoto",
+        "caption": "Dekoratives, programmatisch erzeugtes Titelbild — kein historisches Archivfoto",
+        "source_name": "Khaledoon — dekorative Titelillustration",
+        "rights": "Originales, programmatisch erzeugtes Titelbild für das Khaledoon-Projekt; kein historisches Archivfoto."
+      }
+    }
+  },
+  "images": [
+    {
+      "id": "hakim-1985",
+      "path": "assets/images/stories/Tawfiq_al-Hakim.jpg",
+      "kind": "photograph",
+      "source_name": "· Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg",
+      "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد. ·",
+      "i18n": {
+        "ar": {
+          "alt": "صورة فوتوغرافية لتوفيق الحكيم، الكاتب والمسرحي المصري، في ثمانينيات القرن العشرين.",
+          "caption": "توفيق الحكيم، أحد أبرز رواد المسرح العربي الحديث. تصف صفحة ملف الصورة تاريخها بأنه عام 1985.",
+          "source_name": "· Wikimedia Commons، ملف Tawfiq al-Hakim.jpg، والمصدر الأصلي المنسوب إلى صحيفة الرياض",
+          "rights": "تصف صفحة Wikimedia Commons الصورة بأنها في الملكية العامة وفق بيانات حقوق النشر المصرية والأمريكية الموضحة في الصفحة. راجع صفحة المصدر قبل إعادة الاستخدام، واحتفظ ببيانات الإسناد. ·"
+        },
+        "en": {
+          "alt": "Photograph of Tawfiq al-Hakim, the Egyptian writer and playwright, in the 1980s.",
+          "caption": "Tawfiq al-Hakim, one of the leading pioneers of modern Arabic drama. The file page dates the photograph to 1985.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; original source attributed to Al Riyadh newspaper",
+          "rights": "The Wikimedia Commons page marks this image as public domain under the Egyptian and U.S. copyright information shown there. Check the source page before reuse and retain attribution details. ·"
+        },
+        "fr": {
+          "alt": "Photographie de Tawfiq al-Hakim, écrivain et dramaturge égyptien, dans les années 1980.",
+          "caption": "Tawfiq al-Hakim, l’un des grands pionniers du théâtre arabe moderne. La page du fichier date la photographie de 1985.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg ; source originale attribuée au journal Al Riyadh",
+          "rights": "La page Wikimedia Commons classe cette image dans le domaine public selon les informations sur les droits égyptiens et américains qui y figurent. Vérifiez la page source avant réutilisation et conservez l’attribution. ·"
+        },
+        "it": {
+          "alt": "Fotografia di Tawfiq al-Hakim, scrittore e drammaturgo egiziano, negli anni Ottanta.",
+          "caption": "Tawfiq al-Hakim, uno dei principali pionieri del teatro arabo moderno. La pagina del file data la fotografia al 1985.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; fonte originale attribuita al quotidiano Al Riyadh",
+          "rights": "La pagina Wikimedia Commons indica che l’immagine è di pubblico dominio secondo le informazioni sul copyright egiziano e statunitense riportate. Controlla la pagina fonte prima di riutilizzarla e conserva l’attribuzione. ·"
+        },
+        "de": {
+          "alt": "Fotografie von Tawfiq al-Hakim, dem ägyptischen Schriftsteller und Dramatiker, aus den 1980er-Jahren.",
+          "caption": "Tawfiq al-Hakim, einer der bedeutenden Wegbereiter des modernen arabischen Theaters. Die Dateiseite datiert das Foto auf 1985.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg; ursprüngliche Quelle laut Angabe: Zeitung Al Riyadh",
+          "rights": "Die Wikimedia-Commons-Seite kennzeichnet das Bild anhand der dort genannten ägyptischen und US-amerikanischen Urheberrechtsangaben als gemeinfrei. Bitte prüfe die Quellseite vor der Wiederverwendung und bewahre die Quellenangabe auf. ·"
+        }
+      }
+    },
+    {
+      "id": "hakim-commons",
+      "path": "assets/images/stories/img-f9fc402a87.jpg",
+      "kind": "photograph",
+      "source_name": "· Wikimedia Commons، ملف توفيق الحكيم.jpg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg",
+      "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق. ·",
+      "i18n": {
+        "ar": {
+          "alt": "صورة فوتوغرافية لتوفيق الحكيم، الكاتب المصري المعروف بإسهامه في تطوير المسرح العربي.",
+          "caption": "صورة لتوفيق الحكيم من ملف منشور على ويكيميديا كومنز بترخيص المشاع الإبداعي نَسب المصنف ومشاركته بالمثل 4.0.",
+          "source_name": "· Wikimedia Commons، ملف توفيق الحكيم.jpg",
+          "rights": "مرخصة بموجب Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). يجب نسب الصورة إلى مصدرها، وإرفاق رابط الترخيص، وذكر أي تعديلات، ومشاركة أي عمل مشتق وفق الترخيص نفسه أو ترخيص متوافق. ·"
+        },
+        "en": {
+          "alt": "Photograph of Tawfiq al-Hakim, the Egyptian writer known for his contribution to Arabic drama.",
+          "caption": "A photograph of Tawfiq al-Hakim from a Wikimedia Commons file licensed under Creative Commons Attribution-ShareAlike 4.0.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Licensed under Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Credit the source, link to the license, note changes, and share adaptations under the same or a compatible license. ·"
+        },
+        "fr": {
+          "alt": "Photographie de Tawfiq al-Hakim, écrivain égyptien connu pour sa contribution au théâtre arabe.",
+          "caption": "Photographie de Tawfiq al-Hakim provenant d’un fichier Wikimedia Commons sous licence Creative Commons Attribution-Partage dans les mêmes conditions 4.0.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Sous licence Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Citez la source, ajoutez le lien de licence, indiquez les modifications et partagez toute adaptation sous la même licence ou une licence compatible. ·"
+        },
+        "it": {
+          "alt": "Fotografia di Tawfiq al-Hakim, scrittore egiziano noto per il suo contributo al teatro arabo.",
+          "caption": "Fotografia di Tawfiq al-Hakim da un file di Wikimedia Commons con licenza Creative Commons Attribuzione-Condividi allo stesso modo 4.0.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Con licenza Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Attribuisci la fonte, aggiungi il link alla licenza, indica le modifiche e condividi gli adattamenti con la stessa licenza o una compatibile. ·"
+        },
+        "de": {
+          "alt": "Fotografie von Tawfiq al-Hakim, dem ägyptischen Schriftsteller, der zur Entwicklung des arabischen Theaters beitrug.",
+          "caption": "Eine Fotografie von Tawfiq al-Hakim aus einer Wikimedia-Commons-Datei unter der Lizenz Creative Commons Namensnennung-Weitergabe unter gleichen Bedingungen 4.0.",
+          "source_name": "· Wikimedia Commons, Tawfiq al-Hakim.jpg",
+          "rights": "Lizenziert unter Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0). Quelle nennen, Lizenz verlinken, Änderungen angeben und Bearbeitungen unter derselben oder einer kompatiblen Lizenz weitergeben. ·"
+        }
+      }
+    }
+  ],
+  "sources": [
+    {
+      "title": "الهيئة العامة للاستعلامات المصرية، توفيق الحكيم، بيانات السيرة والأعمال:",
+      "organization": "الهيئة العامة للاستعلامات المصرية",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/tawfiq-al-hakim/",
+      "i18n": {
+        "ar": {
+          "title": "الهيئة العامة للاستعلامات المصرية، توفيق الحكيم، بيانات السيرة والأعمال:",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
+        },
+        "en": {
+          "title": "Egypt State Information Service, Tawfiq al-Hakim: biography and works.",
+          "organization": "Egypt State Information Service"
+        },
+        "fr": {
+          "title": "Service d’information de l’État égyptien, Tawfiq al-Hakim : biographie et œuvres.",
+          "organization": "Service d’information de l’État égyptien"
+        },
+        "it": {
+          "title": "State Information Service egiziano, Tawfiq al-Hakim: biografia e opere.",
+          "organization": "State Information Service egiziano"
+        },
+        "de": {
+          "title": "Ägyptischer Staatlicher Informationsdienst, Tawfiq al-Hakim: Biografie und Werke.",
+          "organization": "Ägyptischer Staatlicher Informationsdienst"
+        }
+      }
+    },
+    {
+      "title": "الجزيرة نت، توفيق الحكيم، سيرة ومعلومات عن أهل الكهف والمسرح الذهني:",
+      "organization": "الجزيرة نت",
+      "url": "https://www.aljazeera.net/encyclopedia/2015/3/14/توفيق-الحكيم",
+      "i18n": {
+        "ar": {
+          "title": "الجزيرة نت، توفيق الحكيم، سيرة ومعلومات عن أهل الكهف والمسرح الذهني:",
+          "organization": "الجزيرة نت"
+        },
+        "en": {
+          "title": "Al Jazeera, Tawfiq al-Hakim: biography, The People of the Cave, and thought theatre.",
+          "organization": "Al Jazeera"
+        },
+        "fr": {
+          "title": "Al Jazeera, Tawfiq al-Hakim : biographie, Les Gens de la caverne et théâtre d’idées.",
+          "organization": "Al Jazeera"
+        },
+        "it": {
+          "title": "Al Jazeera, Tawfiq al-Hakim: biografia, La gente della caverna e teatro delle idee.",
+          "organization": "Al Jazeera"
+        },
+        "de": {
+          "title": "Al Jazeera, Tawfiq al-Hakim: Biografie, Die Leute der Höhle und Ideentheater.",
+          "organization": "Al Jazeera"
+        }
+      }
+    },
+    {
+      "title": "Encyclopaedia Larousse، Tawfiq al-Hakim، سيرة وأعمال ومعلومات عن المسرح الذهني:",
+      "organization": "Encyclopaedia Larousse",
+      "url": "https://www.larousse.fr/encyclopedie/litterature/Tawfiq_al-_Hakim/173803",
+      "i18n": {
+        "ar": {
+          "title": "Encyclopaedia Larousse، Tawfiq al-Hakim، سيرة وأعمال ومعلومات عن المسرح الذهني:",
+          "organization": "Encyclopaedia Larousse"
+        },
+        "en": {
+          "title": "Larousse Encyclopedia, Tawfiq al-Hakim: biography, works, and thought theatre.",
+          "organization": "Larousse Encyclopedia"
+        },
+        "fr": {
+          "title": "Encyclopédie Larousse, Tawfiq al-Hakim : biographie, œuvres et théâtre d’idées.",
+          "organization": "Encyclopédie Larousse"
+        },
+        "it": {
+          "title": "Enciclopedia Larousse, Tawfiq al-Hakim: biografia, opere e teatro delle idee.",
+          "organization": "Enciclopedia Larousse"
+        },
+        "de": {
+          "title": "Larousse-Enzyklopädie, Tawfiq al-Hakim: Biografie, Werke und Ideentheater.",
+          "organization": "Larousse-Enzyklopädie"
+        }
+      }
+    },
+    {
+      "title": "Treccani، Al-Hakim, Tawfiq، سيرة وأعمال وتواريخ بعض المسرحيات والروايات:",
+      "organization": "Treccani",
+      "url": "https://www.treccani.it/enciclopedia/tawfiq-al-hakim/",
+      "i18n": {
+        "ar": {
+          "title": "Treccani، Al-Hakim, Tawfiq، سيرة وأعمال وتواريخ بعض المسرحيات والروايات:",
+          "organization": "Treccani"
+        },
+        "en": {
+          "title": "Treccani, Tawfiq al-Hakim: biography, works, and dates of selected plays and novels.",
+          "organization": "Treccani"
+        },
+        "fr": {
+          "title": "Treccani, Tawfiq al-Hakim : biographie, œuvres et dates de certaines pièces et romans.",
+          "organization": "Treccani"
+        },
+        "it": {
+          "title": "Treccani, Tawfiq al-Hakim: biografia, opere e date di alcune opere teatrali e romanzi.",
+          "organization": "Treccani"
+        },
+        "de": {
+          "title": "Treccani, Tawfiq al-Hakim: Biografie, Werke und Erscheinungsdaten ausgewählter Stücke und Romane.",
+          "organization": "Treccani"
+        }
+      }
+    },
+    {
+      "title": "Encyclopedia.com، Hakim, Tawfiq al- (1898–1987)، سيرة ودراسة القانون ورحلته إلى باريس وعمله القضائي ورواية يوميات نائب في الأرياف:",
+      "organization": "Encyclopedia.com",
+      "url": "https://www.encyclopedia.com/international/encyclopedias-almanacs-transcripts-and-maps/hakim-tawfiq-al-1898-1987",
+      "i18n": {
+        "ar": {
+          "title": "Encyclopedia.com، Hakim, Tawfiq al- (1898–1987)، سيرة ودراسة القانون ورحلته إلى باريس وعمله القضائي ورواية يوميات نائب في الأرياف:",
+          "organization": "Encyclopedia.com"
+        },
+        "en": {
+          "title": "Encyclopedia.com, Tawfiq al-Hakim (1898–1987): biography, legal studies, Paris, judicial work, and Diary of a Country Prosecutor.",
+          "organization": "Encyclopedia.com"
+        },
+        "fr": {
+          "title": "Encyclopedia.com, Tawfiq al-Hakim (1898–1987) : biographie, études de droit, séjour à Paris, carrière judiciaire et Journal d’un substitut de campagne.",
+          "organization": "Encyclopedia.com"
+        },
+        "it": {
+          "title": "Encyclopedia.com, Tawfiq al-Hakim (1898–1987): biografia, studi di legge, soggiorno a Parigi, lavoro giudiziario e Diario di un procuratore di campagna.",
+          "organization": "Encyclopedia.com"
+        },
+        "de": {
+          "title": "Encyclopedia.com, Tawfiq al-Hakim (1898–1987): Biografie, Jurastudium, Parisaufenthalt, Justizdienst und Tagebuch eines Staatsanwalts auf dem Land.",
+          "organization": "Encyclopedia.com"
+        }
+      }
+    },
+    {
+      "title": "Wikimedia Commons، Tawfiq al-Hakim.jpg، صفحة الملف ومصدر الصورة وبيانات الملكية العامة:",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:Tawfiq_al-Hakim.jpg",
+      "i18n": {
+        "ar": {
+          "title": "Wikimedia Commons، Tawfiq al-Hakim.jpg، صفحة الملف ومصدر الصورة وبيانات الملكية العامة:",
+          "organization": "Wikimedia Commons"
+        },
+        "en": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: file page, source, and public-domain information.",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg : page du fichier, source et informations sur le domaine public.",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: pagina del file, fonte e informazioni sul pubblico dominio.",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: Dateiseite, Quelle und Angaben zur Gemeinfreiheit.",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    },
+    {
+      "title": "Wikimedia Commons، توفيق الحكيم.jpg، صفحة الملف وترخيص CC BY-SA 4.0:",
+      "organization": "Wikimedia Commons",
+      "url": "https://commons.wikimedia.org/wiki/File:توفيق_الحكيم.jpg",
+      "i18n": {
+        "ar": {
+          "title": "Wikimedia Commons، توفيق الحكيم.jpg، صفحة الملف وترخيص CC BY-SA 4.0:",
+          "organization": "Wikimedia Commons"
+        },
+        "en": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: file page and CC BY-SA 4.0 license.",
+          "organization": "Wikimedia Commons"
+        },
+        "fr": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg : page du fichier et licence CC BY-SA 4.0.",
+          "organization": "Wikimedia Commons"
+        },
+        "it": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: pagina del file e licenza CC BY-SA 4.0.",
+          "organization": "Wikimedia Commons"
+        },
+        "de": {
+          "title": "Wikimedia Commons, Tawfiq al-Hakim.jpg: Dateiseite und CC-BY-SA-4.0-Lizenz.",
+          "organization": "Wikimedia Commons"
+        }
+      }
+    }
+  ],
+  "quiz": [
+    {
+      "id": "birthplace",
+      "correct_option": 0,
+      "i18n": {
+        "ar": {
+          "question": "في أي مدينة وُلد توفيق الحكيم؟",
+          "options": [
+            "الإسكندرية",
+            "القاهرة",
+            "أسوان",
+            "المنصورة"
+          ],
+          "explanation": "وُلد توفيق الحكيم في الإسكندرية يوم 9 أكتوبر عام 1898."
+        },
+        "en": {
+          "question": "In which city was Tawfiq al-Hakim born?",
+          "options": [
+            "Alexandria",
+            "Cairo",
+            "Aswan",
+            "Mansoura"
+          ],
+          "explanation": "Tawfiq al-Hakim was born in Alexandria on 9 October 1898."
+        },
+        "fr": {
+          "question": "Dans quelle ville Tawfiq al-Hakim est-il né ?",
+          "options": [
+            "Alexandrie",
+            "Le Caire",
+            "Assouan",
+            "Mansourah"
+          ],
+          "explanation": "Tawfiq al-Hakim est né à Alexandrie le 9 octobre 1898."
+        },
+        "it": {
+          "question": "In quale città nacque Tawfiq al-Hakim?",
+          "options": [
+            "Alessandria",
+            "Il Cairo",
+            "Assuan",
+            "Mansura"
+          ],
+          "explanation": "Tawfiq al-Hakim nacque ad Alessandria il 9 ottobre 1898."
+        },
+        "de": {
+          "question": "In welcher Stadt wurde Tawfiq al-Hakim geboren?",
+          "options": [
+            "Alexandria",
+            "Kairo",
+            "Assuan",
+            "Mansura"
+          ],
+          "explanation": "Tawfiq al-Hakim wurde am 9. Oktober 1898 in Alexandria geboren."
+        }
+      }
+    },
+    {
+      "id": "theatre",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي اشتهر به توفيق الحكيم إلى جانب الرواية والقصة؟",
+          "options": [
+            "الطب",
+            "المسرح",
+            "الهندسة",
+            "الفلك"
+          ],
+          "explanation": "اشتهر توفيق الحكيم بكتاباته المسرحية، وكان من رواد المسرح العربي الحديث."
+        },
+        "en": {
+          "question": "In which field was Tawfiq al-Hakim especially known, alongside novels and short stories?",
+          "options": [
+            "Medicine",
+            "Theatre",
+            "Engineering",
+            "Astronomy"
+          ],
+          "explanation": "Tawfiq al-Hakim was especially known for his plays and was a pioneer of modern Arabic drama."
+        },
+        "fr": {
+          "question": "Dans quel domaine Tawfiq al-Hakim était-il particulièrement connu, en plus du roman et de la nouvelle ?",
+          "options": [
+            "La médecine",
+            "Le théâtre",
+            "L’ingénierie",
+            "L’astronomie"
+          ],
+          "explanation": "Tawfiq al-Hakim était particulièrement connu pour ses pièces et fut un pionnier du théâtre arabe moderne."
+        },
+        "it": {
+          "question": "In quale campo era particolarmente noto Tawfiq al-Hakim, oltre ai romanzi e ai racconti?",
+          "options": [
+            "Medicina",
+            "Teatro",
+            "Ingegneria",
+            "Astronomia"
+          ],
+          "explanation": "Tawfiq al-Hakim era noto soprattutto per le sue opere teatrali ed era un pioniere del teatro arabo moderno."
+        },
+        "de": {
+          "question": "In welchem Bereich war Tawfiq al-Hakim neben Romanen und Kurzgeschichten besonders bekannt?",
+          "options": [
+            "Medizin",
+            "Theater",
+            "Ingenieurwesen",
+            "Astronomie"
+          ],
+          "explanation": "Tawfiq al-Hakim war besonders für seine Theaterstücke bekannt und ein Wegbereiter des modernen arabischen Theaters."
+        }
+      }
+    },
+    {
+      "id": "people-of-the-cave",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "في أي عام نُشرت مسرحية أهل الكهف؟",
+          "options": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "explanation": "نُشرت مسرحية أهل الكهف عام 1933، وتُعد من الأعمال المهمة في تطور المسرح الذهني."
+        },
+        "en": {
+          "question": "In what year was The People of the Cave published?",
+          "options": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "explanation": "The People of the Cave was published in 1933 and is considered an important work in the development of intellectual drama."
+        },
+        "fr": {
+          "question": "En quelle année Les Gens de la caverne a-t-elle été publiée ?",
+          "options": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "explanation": "Les Gens de la caverne a été publiée en 1933 et constitue une œuvre importante dans le développement du théâtre d’idées."
+        },
+        "it": {
+          "question": "In quale anno fu pubblicata La gente della caverna?",
+          "options": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "explanation": "La gente della caverna fu pubblicata nel 1933 ed è considerata un’opera importante nello sviluppo del teatro delle idee."
+        },
+        "de": {
+          "question": "In welchem Jahr wurde Die Leute der Höhle veröffentlicht?",
+          "options": [
+            "1925",
+            "1933",
+            "1937",
+            "1952"
+          ],
+          "explanation": "Die Leute der Höhle erschien 1933 und gilt als wichtiges Werk für die Entwicklung des Ideentheaters."
+        }
+      }
+    },
+    {
+      "id": "law-studies",
+      "correct_option": 1,
+      "i18n": {
+        "ar": {
+          "question": "ما المجال الذي درسه توفيق الحكيم قبل سفره إلى فرنسا؟",
+          "options": [
+            "الطب",
+            "القانون",
+            "الهندسة",
+            "الزراعة"
+          ],
+          "explanation": "درس توفيق الحكيم القانون، ثم سافر إلى فرنسا في عشرينيات القرن العشرين، حيث اهتم بالمسرح والثقافة."
+        },
+        "en": {
+          "question": "What did Tawfiq al-Hakim study before travelling to France?",
+          "options": [
+            "Medicine",
+            "Law",
+            "Engineering",
+            "Agriculture"
+          ],
+          "explanation": "Tawfiq al-Hakim studied law and then travelled to France in the 1920s, where he became interested in theatre and culture."
+        },
+        "fr": {
+          "question": "Qu’a étudié Tawfiq al-Hakim avant de partir en France ?",
+          "options": [
+            "La médecine",
+            "Le droit",
+            "L’ingénierie",
+            "L’agriculture"
+          ],
+          "explanation": "Tawfiq al-Hakim a étudié le droit, puis est parti en France dans les années 1920, où il s’est intéressé au théâtre et à la culture."
+        },
+        "it": {
+          "question": "Che cosa studiò Tawfiq al-Hakim prima di recarsi in Francia?",
+          "options": [
+            "Medicina",
+            "Giurisprudenza",
+            "Ingegneria",
+            "Agricoltura"
+          ],
+          "explanation": "Tawfiq al-Hakim studiò giurisprudenza e poi si recò in Francia negli anni Venti, dove si interessò al teatro e alla cultura."
+        },
+        "de": {
+          "question": "Was studierte Tawfiq al-Hakim, bevor er nach Frankreich reiste?",
+          "options": [
+            "Medizin",
+            "Rechtswissenschaft",
+            "Ingenieurwesen",
+            "Landwirtschaft"
+          ],
+          "explanation": "Tawfiq al-Hakim studierte Jura und reiste anschließend in den 1920er-Jahren nach Frankreich, wo er sich für Theater und Kultur interessierte."
+        }
+      }
+    },
+    {
+      "id": "france-journey",
+      "correct_option": 2,
+      "i18n": {
+        "ar": {
+          "question": "ما العمل الذي نشره توفيق الحكيم عام 1937 عن جوانب من الحياة الريفية؟",
+          "options": [
+            "شهرزاد",
+            "أهل الكهف",
+            "يوميات نائب في الأرياف",
+            "عودة الروح"
+          ],
+          "explanation": "نُشرت رواية يوميات نائب في الأرياف عام 1937، وتعرض جوانب من الحياة الريفية وعلاقة الناس بالعدالة."
+        },
+        "en": {
+          "question": "Which work by Tawfiq al-Hakim was published in 1937 and portrayed aspects of rural life?",
+          "options": [
+            "Shahrazad",
+            "The People of the Cave",
+            "Diary of a Country Prosecutor",
+            "Return of the Spirit"
+          ],
+          "explanation": "Diary of a Country Prosecutor was published in 1937 and portrays aspects of rural life and people's encounters with justice."
+        },
+        "fr": {
+          "question": "Quelle œuvre de Tawfiq al-Hakim, publiée en 1937, décrit certains aspects de la vie rurale ?",
+          "options": [
+            "Schéhérazade",
+            "Les Gens de la caverne",
+            "Journal d’un substitut de campagne",
+            "Le Retour de l’esprit"
+          ],
+          "explanation": "Journal d’un substitut de campagne a été publié en 1937 et décrit certains aspects de la vie rurale et les relations des habitants avec la justice."
+        },
+        "it": {
+          "question": "Quale opera di Tawfiq al-Hakim fu pubblicata nel 1937 e descrive aspetti della vita rurale?",
+          "options": [
+            "Shahrazad",
+            "La gente della caverna",
+            "Diario di un procuratore di campagna",
+            "Il ritorno dello spirito"
+          ],
+          "explanation": "Diario di un procuratore di campagna fu pubblicato nel 1937 e descrive aspetti della vita rurale e il rapporto degli abitanti con la giustizia."
+        },
+        "de": {
+          "question": "Welches Werk von Tawfiq al-Hakim erschien 1937 und schildert Aspekte des ländlichen Lebens?",
+          "options": [
+            "Scheherazade",
+            "Die Leute der Höhle",
+            "Tagebuch eines Staatsanwalts auf dem Lande",
+            "Die Rückkehr des Geistes"
+          ],
+          "explanation": "Tagebuch eines Staatsanwalts auf dem Lande erschien 1937 und schildert Aspekte des ländlichen Lebens und die Begegnung der Menschen mit der Justiz."
+        }
+      }
+    }
+  ],
+  "map_location": {
+    "lat": 31.2001,
+    "lng": 29.9187,
+    "place": {
+      "ar": "الإسكندرية، مسقط رأس توفيق الحكيم.",
+      "en": "Alexandria, the birthplace of Tawfiq al-Hakim.",
+      "fr": "Alexandrie, ville natale de Tawfiq al-Hakim.",
+      "it": "Alessandria, città natale di Tawfiq al-Hakim.",
+      "de": "Alexandria, der Geburtsort von Tawfiq al-Hakim."
+    }
+  }
+}
