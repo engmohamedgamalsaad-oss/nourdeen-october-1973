@@ -20,7 +20,6 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /rebuild\/story-contract\.json/);
   assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY_V2'/);
   assert.match(html, /var v2ValidationErrors=v2Adapter\.validateV2\(pkg\)/);
-  assert.match(html, /var v2ValidationErrors=v2Adapter\.validateV2\(pkg\)/);
   assert.match(html, /pkg=v2Adapter\.v2ToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
   assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
@@ -85,7 +84,7 @@ test('prompt administration links the dedicated V2 package instructions', async 
 
 test('unified package is mandatory for every non-October story, including legacy records', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
-  const guard = html.split('\\n').find(line => line.startsWith('function isOctoberLegacyRecord('));
+  const guard = html.split('\n').find(line => line.startsWith('function isOctoberLegacyRecord('));
   const expr = html.match(/var requireV2ForNewStory=([^;\\n]+);/);
   assert.ok(guard && expr, 'October exception and unified policy must exist');
   const requires = new Function('it', guard + '; return ' + expr[1] + ';');
@@ -96,7 +95,7 @@ test('unified package is mandatory for every non-October story, including legacy
   assert.equal(requires({ id: 'old-october-456', section: 'october', status: 'published', story_meta: {} }), false, 'October section records keep their existing workflow');
   assert.equal(requires({ id: 'old-october-789', story_meta: { pending_draft: { section_key: 'october' } } }), false, 'October pending drafts remain excluded');
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'non-October records must reject the old package format');
-  assert.match(html, /if\\(requireV2ForNewStory\\)nextMeta\\.v2_contract_required=true/);
-  assert.match(html, /if\\(v2OnlyDraft\\)\\{nextMeta\\.v2_only_draft=true/);
-  assert.match(html, /if\\(isV2OnlyDraftRecord\\(it\\)\\)\\{bSave\\.disabled=true;bPub\\.disabled=true;/, 'legacy save and publish controls stay disabled for authoritative unified drafts');
+  assert.ok(html.includes('if(requireV2ForNewStory)nextMeta.v2_contract_required=true'));
+  assert.ok(html.includes('if(v2OnlyDraft){nextMeta.v2_only_draft=true'));
+  assert.ok(html.includes('if(isV2OnlyDraftRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'legacy save and publish controls stay disabled for authoritative unified drafts');
 });
