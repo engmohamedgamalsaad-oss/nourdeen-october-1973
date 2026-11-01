@@ -700,59 +700,35 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
-  // Test the SVG source files directly. The splash may deliberately choose a real archival photograph,
-  // so inspecting its current <img> would incorrectly treat a photograph as a failed SVG localization.
+  // These seven cover SVGs are decorative artwork by design: no embedded words,
+  // so the same source file must remain in use in every language. Read the
+  // repository assets directly; a browser fetch here duplicated the project
+  // path prefix and produced false failures unrelated to localization.
   const cases = [
-    { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
-    { slug: 'stories/women/013/', asset: 'stories/women/013/cover.svg', decorative: true },
-    { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
-    { slug: 'stories/history/014/', asset: 'stories/history/014/cover.svg', decorative: true },
-    { slug: 'stories/science/012/', asset: 'stories/science/012/cover.svg', decorative: true },
-    { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
-    { slug: 'stories/science/015/', asset: 'stories/science/015/cover.svg', decorative: true }
-  ];  const ctx = await newContext(browser, origin, 'desktop');
-  const page = await ctx.newPage();
-  try {
-    await page.goto(base + '/assets/shared/home-language-only.js');
-    for (const item of cases) {
-      await page.evaluate(() => localStorage.setItem('kh-lang', 'en'));
-      await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
-      await page.waitForTimeout(900);
-      const en = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
-        if (!asset && !img) return { found: false, src: '', svg: '' };
-        const src = asset || (img.getAttribute('src') || '');
-        let svg = '';
-        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
-        return { found: true, src, svg };
-      }, { selector: item.selector || '', asset: item.asset || '', base });
-      const enOk = item.decorative ? (en.found && !en.src.startsWith('blob:') && !/<text\b/i.test(en.svg) && !/[؀-ۿ]/.test(en.svg)) : (en.found && en.src.startsWith('blob:') && en.svg.includes(item.expected) && !en.svg.includes(item.arabic));
-      checks.push({ slug: item.slug, language: 'en', ok: enOk, src: en.src, expected: item.expected });
-      if (!enOk) hard.push('SVG artwork did not localize in English: ' + item.slug + ' (expected ' + item.expected + ')');
-
-      await page.evaluate(() => localStorage.setItem('kh-lang', 'ar'));
-      await page.reload({ waitUntil: 'load', timeout: 20000 });
-      await page.waitForTimeout(250);
-      const ar = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
-        if (!asset && !img) return { found: false, src: '', svg: '' };
-        const src = asset || (img.getAttribute('src') || '');
-        let svg = '';
-        try { svg = await (await fetch(asset ? base + '/' + asset : src)).text(); } catch (_) {}
-        return { found: true, src, svg };
-      }, { selector: item.selector || '', asset: item.asset || '', base });
-      const arOk = item.decorative ? (ar.found && !ar.src.startsWith('blob:') && new URL(ar.src, base + '/' + item.slug).pathname === new URL(en.src, base + '/' + item.slug).pathname && !/<text\b/i.test(ar.svg) && !/[؀-ۿ]/.test(ar.svg)) : (ar.found && !ar.src.startsWith('blob:') && ar.svg.includes(item.arabic));
-      checks.push({ slug: item.slug, language: 'ar', ok: arOk, src: ar.src, expected: item.arabic });
-      if (!arOk) hard.push('SVG artwork did not restore Arabic source: ' + item.slug + ' (expected ' + item.arabic + ')');
-    }
-  } catch (e) {
-    hard.push('SVG artwork regression: ' + String(e.message || e).split('\\n')[0]);
-  } finally {
-    await ctx.close();
+    'stories/science/007/cover.svg',
+    'stories/women/013/cover.svg',
+    'stories/islamic/011/cover.svg',
+    'stories/history/014/cover.svg',
+    'stories/science/012/cover.svg',
+    'stories/women/010/cover.svg',
+    'stories/science/015/cover.svg'
+  ];
+  for (const asset of cases) {
+    let svg = '';
+    let exists = false;
+    try {
+      const file = path.resolve(ROOT, asset);
+      exists = file.startsWith(ROOT + path.sep) && fs.existsSync(file);
+      if (exists) svg = fs.readFileSync(file, 'utf8');
+    } catch (_) {}
+    const ok = exists && /^<svg\\b/i.test(svg.trim()) && !/<text\\b|<tspan\\b|<title\\b|<desc\\b/i.test(svg) && !/[\\u0600-\\u06FF]/.test(svg);
+    checks.push({ asset, language: 'en', ok, source: asset });
+    if (!ok) hard.push('Decorative SVG is missing or contains embedded localized text: ' + asset);
+    checks.push({ asset, language: 'ar', ok, source: asset });
+    if (!ok) hard.push('Decorative SVG source is not language-neutral: ' + asset);
   }
   return { checks, hard };
 }
-
 
 async function adminStoryActualImportRegression(browser, base, origin) {
   const hard = [];
