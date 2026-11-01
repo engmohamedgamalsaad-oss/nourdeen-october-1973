@@ -1013,7 +1013,7 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(publisher.includes('sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true'));
   assert.ok(publisher.includes('const savedStoryPackage: any ='));
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
-  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
+  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
   var packageGuard = publisher.indexOf('if (isV2OnlyDraft) {');
   var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
   var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
@@ -1023,6 +1023,6 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
   assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
-  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
 });
