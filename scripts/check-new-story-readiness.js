@@ -50,7 +50,7 @@ for (const pagePath of pages) {
 
   // The unified story contract is canonical: validate the package and skip every V1 quiz/data requirement.
   const storyPage = html.includes('data-kh-story-reader') &&
-    /data-story-path=["']data\.v2\.json["']/.test(html) &&
+    /data-story-path=["']story\.json["']/.test(html) &&
     html.includes('rebuild/reader.js');
   if (storyPage) {
     const storyPath = `stories/${section}/${id}/story.json`;
