@@ -49,8 +49,41 @@ function makeImage(im,altOnly){var d=localizedImage(im);var fig=document.createE
 var SECTION_MOTIF={october:'dots',history:'steps',science:'arrows',women:'halo',people:'square',curriculum:'num',islamic:'diamonds',readers:'dots'};
 var REVEALS={october:['slide','wipe'],history:['drop','wipe'],science:['zoom','slide'],women:['wipe','slide'],people:['zoom','drop'],curriculum:['slide','drop'],islamic:['zoom','slide'],readers:['drop','zoom']};
 var statLabels={ar:['سؤالًا','لغات','مصادر'],en:['questions','languages','sources'],fr:['questions','langues','sources'],it:['domande','lingue','fonti'],de:['Fragen','Sprachen','Quellen']};
-var motionObserver=null,motionTimer=0,enhanceShown=false,progressListenerAdded=false,quizStarted=false,bankQuiz=false;
+var enhanceShown=false,progressListenerAdded=false,quizStarted=false,bankQuiz=false;
 function hashText(x){var h=0;for(var i=0;i<x.length;i++)h=(h*31+x.charCodeAt(i))>>>0;return h}
+var khIO=null;
+function khReveal(el,k,instant){
+if(khIO)khIO.unobserve(el);
+if(el.classList.contains('kh-card-in')||el.classList.contains('kh-card-done'))return;
+if(instant)el.classList.add('kh-card-instant');
+else if(k)el.style.setProperty('--kh-d',(Math.min(k,3)*0.08).toFixed(2)+'s');
+el.classList.remove('kh-card-pending');el.classList.add('kh-card-in');
+setTimeout(function(){el.classList.add('kh-card-done');el.classList.remove('kh-card-instant');el.style.removeProperty('--kh-d')},instant?80:2400);
+}
+function khObserver(){
+if(khIO)return khIO;
+khIO=new IntersectionObserver(function(entries){var k=0;entries.forEach(function(en){var el=en.target;if(!el.isConnected){khIO.unobserve(el);return}if(en.isIntersecting){khReveal(el,k++,false)}else if(en.boundingClientRect.bottom<0){khReveal(el,0,true)}})},{threshold:.06,rootMargin:'0px 0px -6% 0px'});
+return khIO;
+}
+function initCardReveal(){
+try{
+var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(reduce||!('IntersectionObserver' in window))return;
+var io=khObserver(),vh=window.innerHeight||document.documentElement.clientHeight||700,
+list=[].slice.call(document.querySelectorAll('#blocks > .block,#blocks > figure,#gallery > figure,#map-section,#quiz-section,#reactions-section,.sources'));
+list.forEach(function(el){
+var c=el.classList;
+if(c.contains('kh-card-in')||c.contains('kh-card-done'))return;
+if(!c.contains('kh-card-pending')){
+if(el.hidden||!el.getClientRects().length)return;
+if(el.getBoundingClientRect().top<vh*.92){c.add('kh-card-done');return}
+c.add('kh-card-pending');
+[].forEach.call(el.querySelectorAll('.block-timeline > li'),function(li,i){li.style.setProperty('--i',Math.min(i,14))});
+}
+io.observe(el);
+});
+}catch(e){[].forEach.call(document.querySelectorAll('.kh-card-pending'),function(el){el.classList.remove('kh-card-pending')})}
+}
 function enhance(t){
 var section=SECTION_MOTIF[story.section]?story.section:'october',h=hashText(String(story.slug||section)),opts=REVEALS[section],body=document.body;
 body.dataset.reveal=opts[h%opts.length];body.style.setProperty('--kh-dur',(0.55+(h%3)*0.1).toFixed(2)+'s');$('blocks').dataset.motif=SECTION_MOTIF[section];
@@ -62,14 +95,7 @@ if(hd&&!$('kh-progress')){var pr=document.createElement('div');pr.id='kh-progres
 if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=document.documentElement,m=d.scrollHeight-d.clientHeight,pr=$('kh-progress');if(pr)pr.style.setProperty('--kh-p',m>0?Math.min(1,d.scrollTop/m):0)},{passive:true});progressListenerAdded=true}
 if(enhanceShown){body.classList.remove('kh-motion');return}
 enhanceShown=true;
-if(motionObserver)motionObserver.disconnect();clearTimeout(motionTimer);
-var targets=[].slice.call(document.querySelectorAll('#blocks .block > p,#blocks .block-timeline > li,#blocks > figure,.kh-hexes'));
-var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-if(reduce||!('IntersectionObserver' in window)){body.classList.remove('kh-motion');return}
-targets.forEach(function(e){e.classList.add('kh-pending')});body.classList.add('kh-motion');
-var observer=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.remove('kh-pending');x.target.classList.add('kh-in');observer.unobserve(x.target)}})},{threshold:.12});
-motionObserver=observer;targets.forEach(function(e){observer.observe(e)});
-motionTimer=setTimeout(function(){targets.forEach(function(e){e.classList.remove('kh-pending');e.classList.add('kh-in')});observer.disconnect()},6000);
+initCardReveal();
 }
 var quizId=(location.pathname.match(/\/(\d{3})\/?$/)||[])[1];
 function detectBank(){if(!quizId)return Promise.resolve(false);return fetch(new URL('stories/quizzes/'+quizId+'.json',ROOT)).then(function(r){return r.ok?r.json():null}).then(function(d){return !!(d&&Array.isArray(d.questions)&&d.questions.length>=5)}).catch(function(){return false})}
