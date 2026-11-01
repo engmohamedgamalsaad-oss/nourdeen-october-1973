@@ -7,11 +7,12 @@ import { v2ToAdminDraft } from '../adapters/v1-v2.mjs';
 test('admin import exposes V2 validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261028-v2-admin-6"></script>'));
+  assert.ok(html.includes('<script type="module" src="assets/admin-v2-import.mjs?v=20261031-v2-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-v2-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261028-v2-admin-6'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261028-v2-admin-6'"));
-  assert.match(html, /var requireV2ForNewStory=!it\.id\|\|!!\(it\.story_meta&&it\.story_meta\.v2_contract_required\)\|\|isV2OnlyDraftRecord\(it\)/);
+  assert.ok(module.includes("from '../../rebuild/adapters/v1-v2.mjs?v=20261031-v2-publisher-1'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261031-v2-publisher-1'"));
+  assert.match(html, /function isOctoberLegacyRecord\(it\)/);
+  assert.match(html, /var requireV2ForNewStory=!isOctoberLegacyRecord\(it\)/, 'all non-October records must use the unified package');
   assert.doesNotMatch(html, /hasExplicitLegacyV1Package/, 'editing an old record must not force V2 just because it lacks an explicit V1 package');
   assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'new stories must reject V1 and untagged JSON');
   assert.match(html, /v2_contract_required=true/, 'new V2 contract requirement persists for later edits');
@@ -19,11 +20,8 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /rebuild\/story-contract\.json/);
   assert.match(html, /pkg&&pkg\.format==='KHALEDOON_STORY_V2'/);
   assert.match(html, /var v2ValidationErrors=v2Adapter\.validateV2\(pkg\)/);
-  assert.match(html, /var v2Errors=v2Adapter\.validateForAdminBridge\(pkg\)/);
-  assert.match(html, /pkg=v2Adapter\.v2ToV1\(pkg\)/);
   assert.match(html, /pkg=v2Adapter\.v2ToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
-  assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
   assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
@@ -83,28 +81,23 @@ test('prompt administration links the dedicated V2 package instructions', async 
 });
 
 
-test('V2 requirement separates new stories from legacy records and keeps V2-only records on V2', async () => {
+test('unified package is mandatory for every non-October story, including legacy records', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
-  const submit = await readFile(new URL('../../khaledoon/submit.html', import.meta.url), 'utf8');
-  const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.match(submit, /story_meta:\{v2_contract_required:true,source:'public_submission'\}/, 'new public submissions must persist the V2-required marker');
-  assert.match(builder, /if\(!d\.submission_id\)meta\.v2_contract_required=true/, 'new manual-builder records must persist the V2-required marker');
-  const guard = html.match(/function isV2OnlyDraftRecord\(it\)\{[^\n]*?\}(?=\n)/);
-  const expr = html.match(/var requireV2ForNewStory=([^;\n]+);/);
-  assert.ok(guard && expr, 'policy expression must be present');
-  const requires = new Function('draftNew', 'it', guard[0] + '; return ' + expr[1] + ';');
-  const legacy = { id: 'legacy-123', status: 'published', story_meta: {} };
-  assert.equal(requires(true, { status: 'pending' }), true, 'new story without a persisted id requires V2');
-  assert.equal(requires(true, legacy), false, 'global new-story mode must not force V2 on an existing record');
-  assert.equal(requires(false, { id: 'new-public-submission-1', story_meta: { v2_contract_required: true, source: 'public_submission' } }), true, 'new public submission with an ID must require V2');
-  assert.equal(requires(false, { id: 'new-manual-builder-1', story_meta: { v2_contract_required: true, manual_builder: true } }), true, 'new manual-builder record with an ID must require V2');
-  assert.equal(requires(false, legacy), false, 'legacy record without flags stays on the compatibility path');
-  assert.equal(requires(false, { id: 'legacy-v1-456', story_meta: { ai_imported_format: 'KH_STORY_PACKAGE_V1', ai_package_raw: '{}' } }), false, 'explicit V1 legacy record stays on V1');
-  assert.equal(requires(false, { id: 'v2-required-1', story_meta: { v2_contract_required: true } }), true, 'record already marked V2-required stays V2');
-  assert.equal(requires(false, { id: 'v2-only-1', story_meta: { v2_only_draft: true } }), true, 'V2-only record stays V2');
-  assert.equal(requires(false, { id: 'pending-v2-1', story_meta: { pending_draft: { v2_only_draft: true } } }), true, 'published record with V2-only pending draft stays V2');
-  assert.equal(requires(false, { id: 'pending-v1-1', story_meta: { pending_draft: { title: 'x' } } }), false, 'ordinary V1 pending draft does not force V2');
-  assert.match(html, /if\(requireV2ForNewStory\)nextMeta\.v2_contract_required=true/, 'only V2-required records are marked');
-  assert.match(html, /if\(v2OnlyDraft\)\{nextMeta\.v2_only_draft=true/, 'bridge-incompatible V2 imports are stored as V2 review drafts');
-  assert.match(html, /if\(isV2OnlyDraftRecord\(it\)\)\{aiFail\('هذا السجل يحمل مسودة V2-only محفوظة للمراجعة\./, 'reimport must not silently clear a V2-only review gate');
+  const guard = html.split('\n').find(line => line.startsWith('function isOctoberLegacyRecord('));
+  const exprLine = html.split('\n').find(line => line.includes('var requireV2ForNewStory='));
+  const expr = exprLine && exprLine.match(/var requireV2ForNewStory=(.*);/);
+  assert.ok(guard && expr, 'October exception and unified policy must exist');
+  const requires = new Function('it', guard + '; return ' + expr[1] + ';');
+
+  assert.equal(requires({ id: 'legacy-123', section: 'history', story_meta: {} }), true, 'old non-October record must use the unified package when edited');
+  assert.equal(requires({ id: 'new-123', section: 'science', story_meta: {} }), true, 'new story must use the unified package');
+  assert.equal(requires({ id: 'old-october-123', _t: 'o', status: 'published', story_meta: {} }), false, 'October submission table keeps its existing workflow');
+  assert.equal(requires({ id: 'old-october-456', section: 'october', status: 'published', story_meta: {} }), false, 'October section records keep their existing workflow');
+  assert.equal(requires({ id: 'old-non-october-789', section: 'science', story_meta: { pending_draft: { section_key: 'october' } } }), true, 'pending draft metadata cannot exempt a non-October source record from the unified package');
+  assert.match(html, /requireV2ForNewStory&&aiInputFormat!=='KHALEDOON_STORY_V2'/, 'non-October records must reject the old package format');
+  assert.ok(html.includes('if(requireV2ForNewStory)nextMeta.v2_contract_required=true'));
+  assert.ok(html.includes('if(v2OnlyDraft){nextMeta.v2_only_draft=true'));
+  assert.ok(html.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October records must be blocked from the legacy publish path');
+  assert.ok(html.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'legacy save and preview controls must be disabled for every non-October record');
+  assert.ok(html.includes('هذه الحكاية خارج قسم أكتوبر؛ أوقفنا الحفظ والمعاينة من المسار القديم.'), 'legacy records must be directed to the unified package workflow');
 });

@@ -377,7 +377,7 @@ test('Hatshepsut V2 reader keeps accessible scroll reveal and the women card pre
   assert.ok(story.includes('data-story-path=\"data.v2.json\"'), 'V2 page must load its localized story package');
   assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'V2 story blocks must reveal on scroll');
   assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
-  assert.ok(readerCss.includes('header{position:sticky'), 'language header must remain visible while scrolling');
+  assert.ok(readerCss.includes('header{position:static'), 'language header must scroll away with the page');
   assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
   assert.ok(collection.includes('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'women card must prefer the verified Hatshepsut museum photo');
   assert.ok(fs.existsSync('assets/images/stories/500px-The_Female_Pharaoh_Hatshepsut_MET_DT534.jpg'), 'preferred museum image must exist in the repository');
@@ -975,8 +975,9 @@ test('story publisher creates a draft PR and confirms it was merged before marki
   assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
   assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
   var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
-  var bundleIndex = admin.indexOf('var pack=await window.KHStoryBundle.download', submitStart);
-  assert.ok(capIndex >= 0 && bundleIndex > capIndex, 'capability handshake must run before the story bundle is generated or sent');
+  var bundleIndex = admin.indexOf('var pack;', submitStart);
+  var unifiedBuilderIndex = admin.indexOf('window.KHStoryV2Publisher.buildFiles', submitStart);
+  assert.ok(capIndex >= 0 && bundleIndex > capIndex && unifiedBuilderIndex > capIndex, 'capability handshake must run before either unified or October compatibility bundle generation');
 });
 
 
@@ -1001,20 +1002,27 @@ test('story builder derives the site base path from its current deployment inste
 });
 
 
-test('legacy publisher requires a source record and blocks V2-only drafts server-side', function () {
+test('unified publisher requires an approved canonical package from its source record', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('requires_submission_id: true'));
-  assert.ok(publisher.includes('rejects_v2_only_drafts: true'));
+  assert.ok(publisher.includes('supports_v2_publish: true'));
   assert.ok(publisher.includes('body.submission_table'));
   assert.ok(publisher.includes('body.submission_id'));
   assert.ok(publisher.includes('.from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle()'));
   assert.ok(publisher.includes('sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true'));
-  assert.ok(publisher.includes('hasV2Artifacts'));
-  assert.ok(publisher.indexOf('const submissionTable') < publisher.indexOf('const ref = await github'), 'submission guard must run before any branch ref lookup');
-  assert.ok(publisher.indexOf('const hasV2Artifacts') < publisher.indexOf('const ref = await github'), 'V2 file rejection must run before any GitHub write path');
-  assert.ok(publisher.includes('return reply(409'));
+  assert.ok(publisher.includes('const savedV2Package: any ='));
+  assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
+  assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedV2Package)'));
+  var packageGuard = publisher.indexOf('if (isV2OnlyDraft) {');
+  var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
+  var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
+  assert.ok(packageGuard >= 0 && branchWrite > packageGuard && prWrite > packageGuard, 'canonical package checks must run before branch or PR creation');
+  assert.ok(publisher.includes('published_to_main: false'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_v2_only_drafts!==true'));
+  assert.ok(admin.includes('var requireV2ForNewStory=!isOctoberLegacyRecord(it)'));
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!v2Only)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
 });

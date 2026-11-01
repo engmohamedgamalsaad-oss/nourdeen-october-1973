@@ -29,12 +29,12 @@ test('documented production workflow keeps all nine review gates', async () => {
   assert.match(readme, /الاعتماد لا ينشر تلقائيًا/);
 });
 
-test('V2 is the only long-term story contract and V1 bridge is explicitly temporary', async () => {
+test('the unified story contract is the only workflow outside October', async () => {
   const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
-  assert.match(readme, /V2 هو العقد الوحيد للحكايات الجديدة/);
-  assert.match(readme, /جسر V1 الحالي أداة انتقال مؤقتة/);
-  assert.match(readme, /لا تضف ميزات جديدة إلى V1/);
-  assert.match(readme, /لا تُحذف ملفات أو بيانات V1 المنشورة قبل إثبات/);
+  assert.match(readme, /النظام المعتمد واحد/);
+  assert.match(readme, /كل الحكايات خارج قسم أكتوبر تُنشأ وتُحدّث وتُنشر من حزمة القالب الموحد نفسها/);
+  assert.match(readme, /قسم أكتوبر مستثنى مؤقتًا/);
+  assert.match(readme, /لا تُستخدم مصدرًا لإنشاء صفحة أو نشر حكاية خارج أكتوبر/);
 });
 
 test('canonical prompt and prompt admin use the unified story contract for new packages', async () => {
