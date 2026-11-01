@@ -8,7 +8,7 @@ const cli = await readFile(new URL('../validate-package.mjs', import.meta.url), 
 test('new unified story pages use the canonical package and bypass V1-only requirements', () => {
   assert.ok(gate.includes('data-story-path=') && gate.includes('storyPath = `stories/${section}/${id}/story.json`'));
   assert.match(gate, /story\.json/);
-  assert.match(gate, /unified story is canonical/);
+  assert.match(gate, /Story package is the canonical story format/);
   assert.match(gate, /continue;/);
 });
 
