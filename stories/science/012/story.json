@@ -701,13 +701,13 @@
   "quiz": [
     {
       "id": "birthplace",
-      "correct_option": 1,
+      "correct_option": 0,
       "i18n": {
         "ar": {
           "question": "في أي عام وُلد فاروق الباز؟",
           "options": [
-            "1936",
             "1938",
+            "1936",
             "1940",
             "1945"
           ],
@@ -716,8 +716,8 @@
         "en": {
           "question": "In which year was Farouk El-Baz born?",
           "options": [
-            "1936",
             "1938",
+            "1936",
             "1940",
             "1945"
           ],
@@ -726,8 +726,8 @@
         "fr": {
           "question": "En quelle année Farouk El-Baz est-il né ?",
           "options": [
-            "1936",
             "1938",
+            "1936",
             "1940",
             "1945"
           ],
@@ -736,8 +736,8 @@
         "it": {
           "question": "In quale anno nacque Farouk El-Baz?",
           "options": [
-            "1936",
             "1938",
+            "1936",
             "1940",
             "1945"
           ],
@@ -746,8 +746,8 @@
         "de": {
           "question": "In welchem Jahr wurde Farouk El-Baz geboren?",
           "options": [
-            "1936",
             "1938",
+            "1936",
             "1940",
             "1945"
           ],
@@ -813,14 +813,14 @@
     },
     {
       "id": "landing-sites",
-      "correct_option": 0,
+      "correct_option": 2,
       "i18n": {
         "ar": {
           "question": "ماذا أظهرت صور الأقمار الصناعية والرادار تحت رمال الصحراء؟",
           "options": [
-            "مجاري أنهار قديمة",
-            "مدينة كاملة تحت الرمال",
             "براكين نشطة",
+            "مدينة كاملة تحت الرمال",
+            "مجاري أنهار قديمة",
             "بحرًا حديثًا"
           ],
           "explanation": "أظهرت الصور والرادار مجاري أنهار قديمة مدفونة تحت رمال الصحراء الكبرى."
@@ -828,9 +828,9 @@
         "en": {
           "question": "What did satellite images and radar reveal beneath the desert sands?",
           "options": [
-            "Ancient river channels",
-            "A whole city under the sand",
             "Active volcanoes",
+            "A whole city under the sand",
+            "Ancient river channels",
             "A new sea"
           ],
           "explanation": "The images and radar revealed ancient river channels buried under the sands of the Sahara."
@@ -838,9 +838,9 @@
         "fr": {
           "question": "Que les images satellites et le radar ont-ils révélé sous les sables du désert ?",
           "options": [
-            "D'anciens lits de rivières",
-            "Une ville entière sous le sable",
             "Des volcans actifs",
+            "Une ville entière sous le sable",
+            "D'anciens lits de rivières",
             "Une mer récente"
           ],
           "explanation": "Les images et le radar ont révélé d'anciens lits de rivières enfouis sous les sables du Sahara."
@@ -848,9 +848,9 @@
         "it": {
           "question": "Che cosa rivelarono le immagini satellitari e il radar sotto le sabbie del deserto?",
           "options": [
-            "Antichi letti di fiumi",
-            "Un'intera città sotto la sabbia",
             "Vulcani attivi",
+            "Un'intera città sotto la sabbia",
+            "Antichi letti di fiumi",
             "Un mare recente"
           ],
           "explanation": "Le immagini e il radar rivelarono antichi letti di fiumi sepolti sotto le sabbie del Sahara."
@@ -858,9 +858,9 @@
         "de": {
           "question": "Was zeigten Satellitenbilder und Radar unter dem Wüstensand?",
           "options": [
-            "Uralte Flussläufe",
-            "Eine ganze Stadt unter dem Sand",
             "Aktive Vulkane",
+            "Eine ganze Stadt unter dem Sand",
+            "Uralte Flussläufe",
             "Ein neues Meer"
           ],
           "explanation": "Die Bilder und das Radar zeigten uralte Flussläufe, die unter dem Sand der Sahara begraben liegen."
@@ -869,15 +869,15 @@
     },
     {
       "id": "desert-water",
-      "correct_option": 1,
+      "correct_option": 3,
       "i18n": {
         "ar": {
           "question": "لماذا تفيد معرفة مجاري الأنهار القديمة المدفونة؟",
           "options": [
             "لأنها ترفع حرارة الصحراء",
-            "لأنها قد تدل على أماكن المياه الجوفية",
+            "لأنها توقف الرياح",
             "لأنها تغيّر شكل القمر",
-            "لأنها توقف الرياح"
+            "لأنها قد تدل على أماكن المياه الجوفية"
           ],
           "explanation": "قد تدل المجاري القديمة على أماكن المياه الجوفية، وقد ساعد هذا العمل في البحث عن المياه في صحارى مصر وعُمان والإمارات."
         },
@@ -885,9 +885,9 @@
           "question": "Why is it useful to know about buried ancient river channels?",
           "options": [
             "Because they make the desert hotter",
-            "Because they may point to places with groundwater",
+            "Because they stop the wind",
             "Because they change the shape of the Moon",
-            "Because they stop the wind"
+            "Because they may point to places with groundwater"
           ],
           "explanation": "Ancient channels may point to groundwater, and this work helped the search for water in the deserts of Egypt, Oman and the UAE."
         },
@@ -895,9 +895,9 @@
           "question": "Pourquoi est-il utile de connaître les anciens lits de rivières enfouis ?",
           "options": [
             "Parce qu'ils rendent le désert plus chaud",
-            "Parce qu'ils peuvent indiquer où se trouvent des eaux souterraines",
+            "Parce qu'ils arrêtent le vent",
             "Parce qu'ils changent la forme de la Lune",
-            "Parce qu'ils arrêtent le vent"
+            "Parce qu'ils peuvent indiquer où se trouvent des eaux souterraines"
           ],
           "explanation": "Les anciens lits peuvent indiquer des eaux souterraines, et ce travail a aidé la recherche d'eau dans les déserts d'Égypte, d'Oman et des Émirats."
         },
@@ -905,9 +905,9 @@
           "question": "Perché è utile conoscere gli antichi letti di fiumi sepolti?",
           "options": [
             "Perché rendono il deserto più caldo",
-            "Perché possono indicare dove si trovano acque sotterranee",
+            "Perché fermano il vento",
             "Perché cambiano la forma della Luna",
-            "Perché fermano il vento"
+            "Perché possono indicare dove si trovano acque sotterranee"
           ],
           "explanation": "Gli antichi letti possono indicare acque sotterranee, e questo lavoro ha aiutato la ricerca d'acqua nei deserti di Egitto, Oman ed Emirati."
         },
@@ -915,9 +915,9 @@
           "question": "Warum ist es nützlich, begrabene uralte Flussläufe zu kennen?",
           "options": [
             "Weil sie die Wüste heißer machen",
-            "Weil sie auf Orte mit Grundwasser hinweisen können",
+            "Weil sie den Wind aufhalten",
             "Weil sie die Form des Mondes verändern",
-            "Weil sie den Wind aufhalten"
+            "Weil sie auf Orte mit Grundwasser hinweisen können"
           ],
           "explanation": "Uralte Flussläufe können auf Grundwasser hinweisen, und diese Arbeit half bei der Wassersuche in den Wüsten Ägyptens, des Omans und der Emirate."
         }
@@ -925,13 +925,13 @@
     },
     {
       "id": "other-honors",
-      "correct_option": 1,
+      "correct_option": 0,
       "i18n": {
         "ar": {
           "question": "ما اللقب الذي أطلقه عليه رواد الفضاء؟",
           "options": [
-            "النسر",
             "الملك",
+            "النسر",
             "الصقر",
             "الأستاذ الصغير"
           ],
@@ -940,8 +940,8 @@
         "en": {
           "question": "What nickname did the astronauts give him?",
           "options": [
-            "The Eagle",
             "The King",
+            "The Eagle",
             "The Falcon",
             "The Little Professor"
           ],
@@ -950,8 +950,8 @@
         "fr": {
           "question": "Quel surnom les astronautes lui ont-ils donné ?",
           "options": [
-            "L'Aigle",
             "Le Roi",
+            "L'Aigle",
             "Le Faucon",
             "Le Petit Professeur"
           ],
@@ -960,8 +960,8 @@
         "it": {
           "question": "Quale soprannome gli diedero gli astronauti?",
           "options": [
-            "L'Aquila",
             "Il Re",
+            "L'Aquila",
             "Il Falco",
             "Il Piccolo Professore"
           ],
@@ -970,8 +970,8 @@
         "de": {
           "question": "Welchen Spitznamen gaben ihm die Astronauten?",
           "options": [
-            "Der Adler",
             "Der König",
+            "Der Adler",
             "Der Falke",
             "Der kleine Professor"
           ],
