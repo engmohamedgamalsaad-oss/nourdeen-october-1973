@@ -39,6 +39,10 @@ html[lang=ar] #blocks[data-motif=num] .block::before{content:counter(khn,arabic-
 .block.kh-card-pending[data-speaker="narrator"]{transform:translate3d(var(--kh-rv-x),26px,0) scale(.98)}
 .block.kh-card-pending[data-speaker="karma"]{transform:translate3d(calc(var(--kh-rv-x) * -1),26px,0) scale(.98)}
 .section.kh-card-pending{transform:translate3d(0,22px,0)}
+.kh-card-pending.kh-card-up{transform:translate3d(0,-30px,0) scale(.975)}
+.block.kh-card-pending.kh-card-up[data-speaker="narrator"]{transform:translate3d(var(--kh-rv-x),-26px,0) scale(.98)}
+.block.kh-card-pending.kh-card-up[data-speaker="karma"]{transform:translate3d(calc(var(--kh-rv-x) * -1),-26px,0) scale(.98)}
+.section.kh-card-pending.kh-card-up{transform:translate3d(0,-22px,0)}
 .kh-card-in{opacity:1;transform:none}
 .kh-card-done{transition:transform .3s ease,box-shadow .3s ease,border-color .3s ease;transition-delay:0s}
 @media(hover:hover){#blocks > .block.kh-card-done:hover{transform:translate3d(0,-3px,0);box-shadow:0 18px 38px #0004,0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent)}}
