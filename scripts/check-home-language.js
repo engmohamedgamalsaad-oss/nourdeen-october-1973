@@ -187,7 +187,7 @@ for (const rel of htmlFiles) {
   if (isAdmin) continue;
 
   /* The V2 reader owns its five-language switcher; it intentionally does not load the legacy shared-language script. */
-  if (html.includes('data-kh-v2-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\.v2\.json["']/.test(html))) {
+  if (html.includes('data-kh-story-reader') && (rel === 'rebuild/reader.html' || /data-story-path=["']data\.v2\.json["']/.test(html))) {
     const v2Languages = ['ar', 'en', 'fr', 'it', 'de'];
     for (const lang of v2Languages) {
       if (!html.includes('data-lang="' + lang + '"') && !html.includes("data-lang='" + lang + "'")) fail('V2 reader is missing language button: ' + lang);
@@ -197,7 +197,7 @@ for (const rel of htmlFiles) {
   }
 
   /* Standalone local V2 package review utility; it deliberately does not load legacy shared-language code. */
-  if (rel === 'rebuild/package-review.html' && html.includes('KHALEDOON_STORY_V2')) continue;
+  if (rel === 'rebuild/package-review.html' && html.includes('KHALEDOON_STORY')) continue;
 
   /* locate the shared-script tag(s) */
   const tags = [...html.matchAll(/<script[^>]*\ssrc=["']([^"']*home-language-only\.js[^"']*)["'][^>]*>/gi)];
@@ -395,8 +395,8 @@ for (const rel of [
   'stories/science/007/index.html','stories/people/008/index.html','stories/people/009/index.html','stories/women/010/index.html','stories/islamic/011/index.html','stories/science/012/index.html','stories/women/013/index.html','stories/history/014/index.html'
 ]) {
   const html = read(rel);
-  const v2Reader = html.includes('data-kh-v2-reader') && /data-story-path=["']data\.v2\.json["']/.test(html);
-  if (v2Reader) {
+  const storyReader = html.includes('data-kh-story-reader') && /data-story-path=["']data\.v2\.json["']/.test(html);
+  if (storyReader) {
     if (!/id=["']theme-toggle["']/.test(html)) fail(`${rel}: V2 reader is missing its own light/dark mode controller.`);
     if (!/rebuild\/reader-base\.css/.test(html)) fail(`${rel}: V2 reader is missing its theme stylesheet layer.`);
   } else {
@@ -425,13 +425,13 @@ for (const rel of [
   if (new Set(buttons).size !== 5 || !['ar', 'en', 'fr', 'it', 'de'].every((locale) => buttons.includes(locale))) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must expose all five language buttons (ar/en/fr/it/de).');
   }
-  if (!page.includes('data-kh-v2-reader') || !page.includes('data-story-path="data.v2.json"')) {
+  if (!page.includes('data-kh-story-reader') || !page.includes('data-story-path="story.json"')) {
     fail('stories/science/007/index.html: the Ahmed Zewail story must use the unified V2 reader.');
   }
   try {
-    const story = JSON.parse(read('stories/science/007/data.v2.json'));
+    const story = JSON.parse(read('stories/science/007/story.json'));
     const locales = ['ar', 'en', 'fr', 'it', 'de'];
-    if (story.format !== 'KHALEDOON_STORY_V2') fail('Ahmed Zewail story package must use KHALEDOON_STORY_V2.');
+    if (story.format !== 'KHALEDOON_STORY') fail('Ahmed Zewail story package must use KHALEDOON_STORY.');
     for (const locale of locales) {
       const data = story.i18n && story.i18n[locale];
       if (!data || !data.title || !data.subtitle || !data.summary || !Array.isArray(data.blocks) || data.blocks.length < 3) {
@@ -454,7 +454,7 @@ for (const rel of [
     }
     notes.push('Ahmed Zewail V2 package: five-language story, image, source and quiz coverage');
   } catch (e) {
-    fail('stories/science/007/data.v2.json: could not audit the unified story package: ' + e.message);
+    fail('stories/science/007/story.json: could not audit the unified story package: ' + e.message);
   }
 }
 {
