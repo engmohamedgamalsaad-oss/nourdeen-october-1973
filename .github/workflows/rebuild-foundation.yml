@@ -1,4 +1,4 @@
-name: Khaledoon rebuild foundation checks # contract and V1-V2 adapter CI
+name: Khaledoon rebuild foundation checks # unified story contract and adapter CI
 on:
   push:
     branches: [main, rebuild/v2-story-foundation-isolated-2026-10-27]
@@ -15,9 +15,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Check V2 runtime and builder syntax
+      - name: Check unified story runtime and builder syntax
         run: node --check rebuild/reader.js && node --check rebuild/build-story.mjs && node --check rebuild/validate-package.mjs && node --check scripts/check-new-story-readiness.js
-      - name: Run contract and V2 reader regression tests
+      - name: Run unified story reader regression tests
         run: node --test rebuild/tests/*.test.mjs
       - run: node -e "JSON.parse(require('node:fs').readFileSync('rebuild/story-contract.json','utf8'))"
       - name: Validate the real October sea story package
