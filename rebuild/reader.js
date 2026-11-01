@@ -24,7 +24,7 @@ var sectionLabels={ar:{october:'حكايات أكتوبر 1973',history:'الت�
 var current=(function(){try{var saved=localStorage.getItem('kh-lang')||localStorage.getItem('lang')||'ar';return langs.indexOf(saved)>=0?saved:'ar'}catch(e){return 'ar'}})(),story=null;
 var readerScript=document.currentScript;
 var ROOT=new URL('../',readerScript.src);
-var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261101-story-reader-1',ROOT).href;document.head.appendChild(enhanceCss);
+var enhanceCss=document.createElement('link');enhanceCss.rel='stylesheet';enhanceCss.href=new URL('rebuild/reader-enhance.css?v=20261101-story-reader-2',ROOT).href;document.head.appendChild(enhanceCss);
 function $(id){return document.getElementById(id)}
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function rootPath(){return ROOT}
@@ -51,36 +51,44 @@ var REVEALS={october:['slide','wipe'],history:['drop','wipe'],science:['zoom','s
 var statLabels={ar:['سؤالًا','لغات','مصادر'],en:['questions','languages','sources'],fr:['questions','langues','sources'],it:['domande','lingue','fonti'],de:['Fragen','Sprachen','Quellen']};
 var enhanceShown=false,progressListenerAdded=false,quizStarted=false,bankQuiz=false;
 function hashText(x){var h=0;for(var i=0;i<x.length;i++)h=(h*31+x.charCodeAt(i))>>>0;return h}
-var khIO=null;
-function khReveal(el,k,instant){
-if(khIO)khIO.unobserve(el);
-if(el.classList.contains('kh-card-in')||el.classList.contains('kh-card-done'))return;
-if(instant)el.classList.add('kh-card-instant');
-else if(k)el.style.setProperty('--kh-d',(Math.min(k,3)*0.08).toFixed(2)+'s');
-el.classList.remove('kh-card-pending');el.classList.add('kh-card-in');
-setTimeout(function(){el.classList.add('kh-card-done');el.classList.remove('kh-card-instant');el.style.removeProperty('--kh-d')},instant?80:2400);
+var khIO=null,khRO=null;
+function khFar(el){var r=el.getBoundingClientRect(),vh=window.innerHeight||700;return r.bottom<-vh*.6||r.top>vh*1.6}
+function khReset(el){
+clearTimeout(el._khT);
+el.classList.toggle('kh-card-up',el.getBoundingClientRect().bottom<0);
+el.classList.add('kh-card-instant');
+el.classList.remove('kh-card-in','kh-card-done');el.classList.add('kh-card-pending');
+void el.offsetWidth;
+requestAnimationFrame(function(){el.classList.remove('kh-card-instant')});
 }
-function khObserver(){
-if(khIO)return khIO;
-khIO=new IntersectionObserver(function(entries){var k=0;entries.forEach(function(en){var el=en.target;if(!el.isConnected){khIO.unobserve(el);return}if(en.isIntersecting){khReveal(el,k++,false)}else if(en.boundingClientRect.bottom<0){khReveal(el,0,true)}})},{threshold:.06,rootMargin:'0px 0px -6% 0px'});
-return khIO;
+function khReveal(el,k){
+if(el.classList.contains('kh-card-in')||el.classList.contains('kh-card-done'))return;
+if(k)el.style.setProperty('--kh-d',(Math.min(k,3)*0.08).toFixed(2)+'s');
+el.classList.remove('kh-card-pending');el.classList.add('kh-card-in');
+clearTimeout(el._khT);
+el._khT=setTimeout(function(){el.classList.add('kh-card-done');el.style.removeProperty('--kh-d');if(el.isConnected&&khFar(el))khReset(el)},2400);
+}
+function khObservers(){
+if(khIO)return;
+khIO=new IntersectionObserver(function(entries){var k=0;entries.forEach(function(en){var el=en.target;if(!el.isConnected){khIO.unobserve(el);khRO.unobserve(el);return}if(en.isIntersecting&&el.classList.contains('kh-card-pending'))khReveal(el,k++)})},{threshold:.06,rootMargin:'0px 0px -6% 0px'});
+khRO=new IntersectionObserver(function(entries){entries.forEach(function(en){var el=en.target;if(!el.isConnected){khIO.unobserve(el);khRO.unobserve(el);return}if(!en.isIntersecting&&el.classList.contains('kh-card-done'))khReset(el)})},{rootMargin:'60% 0px 60% 0px'});
 }
 function initCardReveal(){
 try{
 var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 if(reduce||!('IntersectionObserver' in window))return;
-var io=khObserver(),vh=window.innerHeight||document.documentElement.clientHeight||700,
+khObservers();
+var vh=window.innerHeight||document.documentElement.clientHeight||700,
 list=[].slice.call(document.querySelectorAll('#blocks > .block,#blocks > figure,#gallery > figure,#map-section,#quiz-section,#reactions-section,.sources'));
 list.forEach(function(el){
 var c=el.classList;
-if(c.contains('kh-card-in')||c.contains('kh-card-done'))return;
-if(!c.contains('kh-card-pending')){
+if(!c.contains('kh-card-in')&&!c.contains('kh-card-done')&&!c.contains('kh-card-pending')){
 if(el.hidden||!el.getClientRects().length)return;
-if(el.getBoundingClientRect().top<vh*.92){c.add('kh-card-done');return}
-c.add('kh-card-pending');
-[].forEach.call(el.querySelectorAll('.block-timeline > li'),function(li,i){li.style.setProperty('--i',Math.min(i,14))});
+if(el.getBoundingClientRect().top<vh*.92)c.add('kh-card-done');
+else{c.add('kh-card-pending');
+[].forEach.call(el.querySelectorAll('.block-timeline > li'),function(li,i){li.style.setProperty('--i',Math.min(i,14))})}
 }
-io.observe(el);
+khIO.observe(el);khRO.observe(el);
 });
 }catch(e){[].forEach.call(document.querySelectorAll('.kh-card-pending'),function(el){el.classList.remove('kh-card-pending')})}
 }
@@ -126,7 +134,7 @@ var pageUrl=location.href.split('#')[0],shareText=encodeURIComponent(t.title+' �
 document.querySelectorAll('[data-lang]').forEach(function(b){b.addEventListener('click',function(){current=b.dataset.lang;try{localStorage.setItem('kh-lang',current);localStorage.setItem('lang',current)}catch(e){}show();document.dispatchEvent(new Event('site-language-change'))})});
 var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click',function(){var root=document.documentElement,next=root.getAttribute('data-theme')==='light'?'dark':'light';root.setAttribute('data-theme',next);document.body.dataset.theme=next;try{localStorage.setItem('kh-theme',next)}catch(e){}show()});
 function closeIntro(){var modal=$('story-intro-modal');modal.hidden=true;document.body.classList.remove('modal-open')}
-function openIntro(){var modal=$('story-intro-modal');modal.hidden=false;document.body.classList.add('modal-open');$('intro-start').focus()}
+function openIntro(){var modal=$('story-intro-modal');modal.hidden=false;document.body.classList.add('modal-open');$('intro-start').focus({preventScroll:true})}
 $('intro-start').addEventListener('click',closeIntro);$('intro-close').addEventListener('click',closeIntro);if($('quiz-start'))$('quiz-start').addEventListener('click',function(){quizStarted=true;$('quiz').hidden=false;$('quiz-start').hidden=true;$('quiz').scrollIntoView({behavior:window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'})});
 $('print-story').addEventListener('click',function(){window.print()});
 $('share-copy').addEventListener('click',function(){var b=$('share-copy');if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(location.href.split('#')[0]).then(function(){b.textContent=extraUi[current].copied}).catch(function(){b.textContent=extraUi[current].copyFail})}else{b.textContent=extraUi[current].copyFail}});
@@ -138,4 +146,13 @@ fetch(new URL(path,readerScript.dataset.storyPath?document.baseURI:ROOT)).then(f
 if(!['KHALEDOON_STORY','KHALEDOON_STORY_V2'].includes(data.format)||!data.i18n||!langs.every(function(l){return data.i18n[l]&&data.i18n[l].title&&Array.isArray(data.i18n[l].blocks)})||!data.cover||!Array.isArray(data.images)||!Array.isArray(data.quiz)||!Array.isArray(data.sources))throw new Error(ui.ar.missing);
 story=normalizeStory(data);document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'october';document.body.style.setProperty('--accent',SECTION_PALETTE[story.section]||'#d6ad55');if(!document.body.dataset.storySlug)document.body.dataset.storySlug=data.slug||'v2-story';return detectBank().then(function(ok){bankQuiz=ok;show();if(document.body.hasAttribute('data-start-only'))openIntro();initReactions();if(ok)loadBankQuiz()});
 }).catch(function(e){$('status').textContent='تعذّر تحميل حزمة الحكاية: '+e.message+'\nلم يتم الرجوع تلقائيًا إلى أي صيغة قديمة.'});
+})();
+
+;(function(){
+try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+function khTop(){if(location.hash)return;try{window.scrollTo(0,0)}catch(e){}}
+khTop();
+window.addEventListener('DOMContentLoaded',khTop);
+window.addEventListener('load',function(){khTop();requestAnimationFrame(function(){requestAnimationFrame(khTop)})});
+window.addEventListener('pageshow',khTop);
 })();
