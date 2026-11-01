@@ -56,7 +56,7 @@ export function validateStory(s) {
   const topRequired = ['format', 'slug', 'section', 'design', 'original_body', 'i18n', 'cover', 'images', 'sources', 'quiz'];
   const topAllowed = [...topRequired, 'map_location'];
   if (!keysCheck(s, topRequired, topAllowed, 'story', out)) return out;
-  if (!['KHALEDOON_STORY', 'KHALEDOON_STORY_V2'].includes(s.format)) out.push('format must be KHALEDOON_STORY');
+  if (s.format !== 'KHALEDOON_STORY') out.push('format must be KHALEDOON_STORY; normalize transitional inputs before validation');
   if (typeof s.slug !== 'string' || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s.slug)) out.push('slug must be lowercase kebab-case');
   if (!sections.has(s.section)) out.push('section is unsupported');
   if (keysCheck(s.design, ['variant', 'accent'], ['variant', 'accent'], 'design', out)) {
@@ -187,15 +187,15 @@ export function validateStory(s) {
 }
 
 /**
- * Validate whether a structurally valid V2 package can pass through the
- * temporary V1 admin preview/storage bridge without losing V2-only fields.
+ * Validate whether a canonical story package can pass through the
+ * temporary legacy-shaped admin preview projection without losing canonical fields.
  * Keep these constraints out of validateStory(): they are not V2 contract rules.
  */
 export function validateForAdminBridge(s) {
   const out = [...validateStory(s)];
   if (!isObject(s)) return out;
-  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('bridge: V1 admin preview supports exactly 5 quiz questions');
-  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('bridge: V1 admin preview supports 2 to 5 images');
+  if (!Array.isArray(s.quiz) || s.quiz.length !== 5) out.push('bridge: legacy admin round-trip supports exactly 5 quiz questions');
+  if (!Array.isArray(s.images) || s.images.length < 2 || s.images.length > 5) out.push('bridge: legacy admin round-trip supports 2 to 5 images');
   for (const lang of LANGUAGES) {
     const t = s.i18n?.[lang];
     if (!isObject(t)) continue;
@@ -204,19 +204,19 @@ export function validateForAdminBridge(s) {
     }
     for (const [i, block] of (Array.isArray(t.blocks) ? t.blocks : []).entries()) {
       if (Object.hasOwn(block || {}, 'image_after')) {
-        out.push('bridge: i18n.' + lang + '.blocks[' + i + '].image_after cannot be represented by V1');
+        out.push('bridge: i18n.' + lang + '.blocks[' + i + '].image_after cannot be represented by the legacy projection');
       }
     }
   }
   for (const [i, image] of (Array.isArray(s.images) ? s.images : []).entries()) {
     if (/^[a-z0-9-]+$/.test(image?.id || '') && image.id !== 'image-' + (i + 1)) out.push('bridge: images[' + i + '].id must be image-' + (i + 1));
     if (['photograph', 'document'].includes(image?.kind)) {
-      out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by V1');
+      out.push('bridge: images[' + i + '].kind "' + image.kind + '" is not supported by the legacy projection');
     }
   }
   for (const [i, source] of (Array.isArray(s.sources) ? s.sources : []).entries()) {
     if (isObject(source) && Object.hasOwn(source, 'accessed_at')) {
-      out.push('bridge: sources[' + i + '].accessed_at metadata has no V1 field');
+      out.push('bridge: sources[' + i + '].accessed_at metadata has no legacy projection field');
     }
   }
   for (const [i, question] of (Array.isArray(s.quiz) ? s.quiz : []).entries()) {

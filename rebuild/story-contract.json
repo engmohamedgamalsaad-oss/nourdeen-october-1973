@@ -17,11 +17,8 @@
   ],
   "properties": {
     "format": {
-      "enum": [
-        "KHALEDOON_STORY",
-        "KHALEDOON_STORY_V2"
-      ],
-      "description": "New stories must use KHALEDOON_STORY. The previous identifier is accepted only while published stories are migrated."
+      "const": "KHALEDOON_STORY",
+      "description": "The only canonical persisted story package format."
     },
     "slug": {
       "type": "string",

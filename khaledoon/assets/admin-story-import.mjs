@@ -1,11 +1,11 @@
-import { storyToLegacy, storyToAdminDraft, STORY_FORMAT } from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-1';
-import { validateForAdminBridge, validateStory } from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-1';
+import { storyToLegacy, storyToAdminDraft, normalizeStoryFormat, STORY_FORMAT } from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-2';
+import { validateForAdminBridge, validateStory as validateCanonicalStory } from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-2';
 
 window.KHStoryAdapter = {
   STORY_FORMAT,
   storyToLegacy,
   storyToAdminDraft,
-  validateStory,
-  validateForAdminBridge
+  validateStory: function (story) { try { return validateCanonicalStory(normalizeStoryFormat(story)); } catch (error) { return [error.message || 'Invalid story package']; } },
+  validateForAdminBridge: function (story) { try { return validateForAdminBridge(normalizeStoryFormat(story)); } catch (error) { return [error.message || 'Invalid story package']; } }
 };
 
