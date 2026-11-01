@@ -886,12 +886,12 @@ async function adminV2ActualImportRegression(browser, base, origin) {
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
     await importButton.click();
     try {
-      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
+      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
     } catch (waitError) {
       throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
     }
     const importStatus = await page.locator('.ai-status[role="status"]').innerText();
-    if (!/تم تنفيذ الكود وحُفظت المسودة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
+    if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('V2 import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('V2 import did not preserve a readable Arabic source organization in the saved draft.');
     }
