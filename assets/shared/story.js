@@ -662,3 +662,12 @@
     if (event.key === 'Escape') { closeLightbox(); }
   });
 })();
+
+;(function(){
+try{if('scrollRestoration' in history)history.scrollRestoration='manual'}catch(e){}
+function khTop(){if(location.hash)return;try{window.scrollTo(0,0)}catch(e){}}
+khTop();
+window.addEventListener('DOMContentLoaded',khTop);
+window.addEventListener('load',function(){khTop();requestAnimationFrame(function(){requestAnimationFrame(khTop)})});
+window.addEventListener('pageshow',khTop);
+})();
