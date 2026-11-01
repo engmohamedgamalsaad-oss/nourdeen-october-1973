@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
 
 const root = process.cwd();
 const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'khaledoon-story-browser-'));
-const artifactDir = process.env.KH_unified story_ARTIFACT_DIR || path.join(root, 'artifacts/story-preview');
+const artifactDir = process.env.KH_STORY_ARTIFACT_DIR || process.env.KH_V2_ARTIFACT_DIR || path.join(root, 'artifacts/story-preview');
 fs.mkdirSync(artifactDir, { recursive: true });
 let server, browser;
 const errors = [];
