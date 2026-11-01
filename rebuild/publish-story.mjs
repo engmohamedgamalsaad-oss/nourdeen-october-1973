@@ -1,4 +1,5 @@
-import { validateStory } from './validate-story.mjs?v=20261101-story-publisher-1';
+import { validateStory } from './validate-story.mjs?v=20261101-story-publisher-2';
+import { normalizeStoryFormat } from './adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-2';
 
 const LANGUAGES = ['ar', 'en', 'fr', 'it', 'de'];
 const SECTIONS = ['october', 'history', 'science', 'women', 'people', 'curriculum', 'islamic', 'readers'];
@@ -179,12 +180,10 @@ async function checkLocalImages(story) {
   }
 }
 export async function buildStoryFiles(story, options = {}) {
-  story = JSON.parse(JSON.stringify(story));
-  if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
+  story = normalizeStoryFormat(JSON.parse(JSON.stringify(story)));
   const meta = options.storyMeta && typeof options.storyMeta === 'object' ? options.storyMeta : {};
   const savedPackageRaw = getSavedPackage(options.record, options.draft, meta);
-  const savedPackage = savedPackageRaw ? JSON.parse(JSON.stringify(savedPackageRaw)) : null;
-  if (savedPackage?.format === 'KHALEDOON_STORY_V2') savedPackage.format = 'KHALEDOON_STORY';
+  const savedPackage = savedPackageRaw ? normalizeStoryFormat(JSON.parse(JSON.stringify(savedPackageRaw))) : null;
   if (!savedPackage || !samePackage(savedPackage, story)) fail('حزمة الحكاية التي ستُنشر لا تطابق النسخة المحفوظة في سجل الإدارة؛ أوقفنا النشر لحماية المحتوى المعتمد.');
   const problems = validateStory(story);
   if (problems.length) fail('حزمة القالب الموحد غير مكتملة:\n• ' + problems.join('\n• '));

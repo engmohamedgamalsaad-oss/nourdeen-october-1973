@@ -2,19 +2,21 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { validateStory, validateForAdminBridge } from '../validate-story.mjs';
-import { storyToAdminDraft } from '../adapters/story-package-adapter.mjs';
+import { storyToAdminDraft, normalizeStoryFormat } from '../adapters/story-package-adapter.mjs';
 
 test('admin import exposes unified story validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
   assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261101-story-publisher-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-story-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-1'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-1'"));
+  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-2'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-2'"));
   assert.match(html, /function isOctoberLegacyRecord\(it\)/);
   assert.match(html, /var requireUnifiedStoryPackage=!isOctoberLegacyRecord\(it\)/, 'all non-October records must use the unified package');
   assert.doesNotMatch(html, /hasExplicitLegacyPackage/, 'editing an old record must not force unified story just because it lacks an explicit legacy package');
   assert.match(html, /requireUnifiedStoryPackage&&aiInputFormat!=='KHALEDOON_STORY'/, 'new stories must reject legacy and untagged JSON');
+  assert.match(html, /if\(!requireUnifiedStoryPackage\)\{schema=/, 'the October-only legacy prompt must not overwrite the official canonical JSON Schema');
+  assert.match(html, /storyPackageRaw=JSON\.parse\(JSON\.stringify\(storyAdapter\.normalizeStoryFormat\(pkg\)\)\)/, 'transitional reads must be normalized before persistence');
   assert.match(html, /story_contract_required=true/, 'new unified story contract requirement persists for later edits');
   assert.match(html, /STORY-PACKAGE-PROMPT\.md/);
   assert.match(html, /rebuild\/story-contract\.json/);
@@ -27,7 +29,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.ok(html.includes('function isStoryOnlyDraftRecord(it)'), 'admin should identify top-level and pending unified story-only drafts');
   assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative unified story package');
   assert.ok(html.includes("storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null)"), 'manual preview should open the saved unified story package without persisting legacy projection edits');
-  assert.match(html, /ai_imported_format:aiInputFormat\|\|'KH_STORY_PACKAGE_V1'/);
+  assert.match(html, /ai_imported_format:storyOnlyDraft\?'KHALEDOON_STORY'/, 'new non-October drafts must record the canonical package identifier');
   assert.ok(html.includes("story-template-bundle.js?v=20261027-source-clean-2"));
   assert.ok(html.includes("sources:aiInputFormat==='KHALEDOON_STORY'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000)"), 'unified story source text must remain complete while legacy imports retain its historical 3000-character cap');
   assert.ok(html.includes("aiInputFormat==='KHALEDOON_STORY'&&visibleSourceLength>3000"), 'only unified story imports should reject source text exceeding the visible-character limit');
@@ -42,11 +44,14 @@ test('admin import exposes unified story validator and converter and preserves o
 test('valid unified story package beyond the legacy bridge is saved through a complete, non-publishable projection', async () => {
   const packageUrl = new URL('../story-packages/october-sea-men.v2.json', import.meta.url);
   const pkg = JSON.parse(await readFile(packageUrl, 'utf8'));
-  assert.deepEqual(validateStory(pkg), []);
-  const bridgeErrors = validateForAdminBridge(pkg);
+  const canonicalPackage = normalizeStoryFormat(pkg);
+  assert.deepEqual(validateStory(canonicalPackage), []);
+  const bridgeErrors = validateForAdminBridge(canonicalPackage);
   assert.ok(bridgeErrors.some(e => e.includes('supports exactly 5 quiz questions')));
   const draft = storyToAdminDraft(pkg);
   assert.equal(draft.format, 'KH_STORY_PACKAGE_V1');
+  assert.equal(canonicalPackage.format, 'KHALEDOON_STORY');
+  assert.equal(pkg.format, 'KHALEDOON_STORY_V2', 'the archived October source package must remain unchanged');
   assert.equal(draft.section_key, 'october');
   assert.equal(draft.original_body, pkg.original_body);
   assert.equal(draft.question_bank.questions.length, 23);

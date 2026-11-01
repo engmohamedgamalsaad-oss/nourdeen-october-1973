@@ -2,6 +2,7 @@
 import { readFile, writeFile, mkdir, access } from 'node:fs/promises';
 import path from 'node:path';
 import { validateStory, validateLocalImagePaths } from './validate-story.mjs';
+import { normalizeStoryFormat } from './adapters/story-package-adapter.mjs';
 
 const fail = message => { console.error(message); process.exitCode = 1; };
 const [inputFile, storyId] = process.argv.slice(2);
@@ -17,7 +18,7 @@ const root = process.cwd();
 let story;
 try { story = JSON.parse(await readFile(path.resolve(inputFile), 'utf8')); }
 catch (error) { console.error('Cannot read valid JSON: ' + error.message); process.exit(2); }
-if (story.format === 'KHALEDOON_STORY_V2') story.format = 'KHALEDOON_STORY';
+story = normalizeStoryFormat(story);
 const problems = [
   ...validateStory(story),
   ...await validateLocalImagePaths(story, root)
