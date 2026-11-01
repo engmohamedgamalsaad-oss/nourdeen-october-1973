@@ -26,7 +26,7 @@ async function main() {
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
-  const packageFile = path.join(root, 'rebuild/story-packages/october-sea-men.story.json');
+  const packageFile = path.join(root, 'rebuild/story-packages/october-sea-men.v2.json');
   const testImageSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 400"><defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#183b45"/><stop offset="1" stop-color="#081b22"/></linearGradient></defs><rect width="640" height="400" fill="url(#sky)"/><path d="M0 290 Q90 260 180 292 T360 292 T540 292 T720 292 V400 H0Z" fill="#1c5860"/><path d="M0 330 Q100 300 200 330 T400 330 T600 330 T800 330 V400 H0Z" fill="#0b303a"/><path d="M150 250 L490 250 L430 305 L205 305Z" fill="#d6ad55"/><path d="M220 240 L220 135 L310 230Z" fill="#e7d7ad"/><path d="M325 235 L325 155 L395 235Z" fill="#b8874b"/><path d="M135 315 H510" stroke="#e6d09a" stroke-width="4" opacity=".8"/><text x="320" y="80" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#f4e8c8">unified story layout test image</text></svg>';
   const build = spawnSync(process.execPath, [path.join(root, 'rebuild/build-story.mjs'), packageFile, '016'], { cwd: temp, encoding: 'utf8' });
   assert.equal(build.status, 0, build.stderr || build.stdout || 'unified story story build failed');
