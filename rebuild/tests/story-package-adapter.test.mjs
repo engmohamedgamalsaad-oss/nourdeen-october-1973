@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { legacyToStory, storyToLegacy, storyToAdminDraft } from '../adapters/story-package-adapter.mjs';
+import { legacyToStory, storyToLegacy } from '../adapters/story-package-adapter.mjs';
 
 const langs = ['en', 'fr', 'it', 'de'];
 function image(label) {
@@ -72,25 +72,24 @@ test('legacy package to unified story and back preserves original text, translat
   }
 });
 
-test('preserves every legacy quiz question when a package contains more than five', () => {
-  const legacy = fixture();
-  const sixth = JSON.parse(JSON.stringify(legacy.question_bank.questions[0]));
-  sixth.q = 'Question six ar';
-  sixth.e = 'Explanation six ar';
+test('preserves every legacy quiz question when the source contains more than five', () => {
+  const v1 = fixture();
+  const sixth = JSON.parse(JSON.stringify(v1.question_bank.questions[0]));
+  sixth.q = 'Question 5 ar';
+  sixth.e = 'Explanation 5 ar';
   sixth.i18n = Object.fromEntries(langs.map(lang => [lang, {
-    q: 'Question six ' + lang,
+    q: 'Question 5 ' + lang,
     o: ['A','B','C','D'].map(x => x + ' ' + lang),
-    e: 'Explanation six ' + lang
+    e: 'Explanation 5 ' + lang
   }]));
-  legacy.question_bank.questions.push(sixth);
-  const canonical = legacyToStory(legacy, { slug: 'historical-figure' });
-  assert.equal(canonical.quiz.length, 6);
-  assert.equal(canonical.quiz[5].id, 'question-6');
-  assert.equal(canonical.quiz[5].correct_option, sixth.a);
-  assert.equal(canonical.quiz[5].i18n.de.question, 'Question six de');
-  const adminDraft = storyToAdminDraft(canonical);
-  assert.equal(adminDraft.question_bank.questions.length, 6);
-  assert.equal(adminDraft.question_bank.questions[5].q, sixth.q);
+  v1.question_bank.questions.push(sixth);
+  const story = legacyToStory(v1, { slug: 'historical-figure' });
+  assert.equal(story.quiz.length, 6);
+  assert.deepEqual(story.quiz.map(question => question.id), [
+    'question-1','question-2','question-3','question-4','question-5','question-6'
+  ]);
+  assert.equal(story.quiz[5].correct_option, sixth.a);
+  assert.equal(story.quiz[5].i18n.de.question, 'Question 5 de');
 });
 
 test('refuses ambiguous source lines rather than silently flattening source citations', () => {

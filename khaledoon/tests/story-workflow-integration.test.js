@@ -375,7 +375,7 @@ test('Hatshepsut unified story reader keeps accessible scroll reveal and the wom
   var collection = fs.readFileSync('khaledoon/assets/story-collections.js', 'utf8');
   assert.ok(story.includes('data-kh-story-reader'), 'Hatshepsut must use the unified unified story reader');
   assert.ok(story.includes('data-story-path=\"story.json\"'), 'unified story page must load its localized story package');
-  assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('kh-pending') && readerJs.includes('kh-in'), 'unified story story blocks must reveal on scroll');
+  assert.ok(readerJs.includes('IntersectionObserver') && readerJs.includes('function khReveal(') && readerJs.includes('io.observe(el)'), 'unified story story blocks must reveal on scroll');
   assert.ok(readerCss.includes('@media(prefers-reduced-motion:reduce)'), 'reduced-motion users must not have hidden story text');
   assert.ok(readerCss.includes('header{position:static'), 'language header must scroll away with the page');
   assert.ok(collection.includes("String(story.id || '') === '013'"), 'card image selection must target only story 013');
