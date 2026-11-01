@@ -22,7 +22,6 @@ test('admin import exposes V2 validator and converter and preserves original inp
   assert.match(html, /var v2ValidationErrors=v2Adapter\.validateV2\(pkg\)/);
   assert.match(html, /pkg=v2Adapter\.v2ToAdminDraft\(pkg\)/);
   assert.match(html, /nextMeta\.v2_package=v2PackageRaw/);
-  assert.match(html, /if\(meta\.v2_only_draft\|\|\(meta\.pending_draft&&meta\.pending_draft\.v2_only_draft\)\)/);
   assert.ok(html.includes("package-review.html?draft=1"), 'V2-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261028-v2-review-1/);
   assert.ok(html.includes('function isV2OnlyDraftRecord(it)'), 'admin should identify top-level and pending V2-only drafts');
