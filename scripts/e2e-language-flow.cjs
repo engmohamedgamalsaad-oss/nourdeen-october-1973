@@ -700,8 +700,8 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
-  // The reader may intentionally promote a real photograph over a decorative cover.
-  // Check the source SVG assets directly instead of assuming every rendered intro cover is an SVG.
+  // Some stories intentionally promote a real photograph over their decorative cover.
+  // Verify the original SVG assets directly instead of assuming every rendered intro cover is an SVG.
   const cases = [
     { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
     { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
@@ -877,7 +877,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   const failedRequests = [];
-  page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
+  page.on('requestfailed', (request) => { const url=request.url(); if(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//i.test(url)) return; failedRequests.push({ url, error: request.failure()?.errorText || '' }); });
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
     await page.waitForFunction(() => !!document.querySelector('details.pubrow'), null, { timeout: 15000 });
