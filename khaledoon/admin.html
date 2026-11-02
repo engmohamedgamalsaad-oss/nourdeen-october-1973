@@ -1101,7 +1101,7 @@ function adoptPromptManagerState(raw){
  var isV5=typeof raw.main==='string'&&raw.main.indexOf('2026-11-02-v5')>=0;
  var versions=Array.isArray(raw.versions)?raw.versions:[];
  if(!isV5&&(raw.main||raw.workflow||raw.providers)){
-  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — محفوظة في سجل الاسترجاع المحلي',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
+  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — أُضيفت إلى سجل الإصدارات في المحرر ولم تُحفظ مركزيًا',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
  }
  var activeProviders=Object.assign({},promptProvidersCache);
  if(isV5&&raw.providers&&typeof raw.providers==='object'){
