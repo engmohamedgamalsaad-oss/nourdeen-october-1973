@@ -64,7 +64,7 @@ function openUnifiedReader(){
  try{localStorage.setItem('kh-story-review-package',JSON.stringify(story));}
  catch(e){$('status').textContent='تعذر حفظ حزمة المعاينة في تخزين المتصفح: '+e.message;$('status').className='status bad';return}
  $('status').textContent='اجتاز الفحص البنيوي. جارٍ فتح الحكاية داخل القارئ الموحد…';
- location.replace('reader.html?draft=1&v=20261102-canonical-preview-reader-1');
+ const params=new URLSearchParams(location.search);const readerUrl=new URL('reader.html',location.href);readerUrl.searchParams.set('draft','1');readerUrl.searchParams.set('v','20261102-canonical-preview-reader-2');['submission','table'].forEach(k=>{const v=params.get(k);if(v)readerUrl.searchParams.set(k,v)});location.replace(readerUrl.toString());
 }
 function loadPackage(parsed,fromDraft){
  story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
