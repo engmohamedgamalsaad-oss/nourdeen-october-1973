@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
+const review = await readFile(new URL('../package-review.html', import.meta.url), 'utf8');
 const js = await readFile(new URL('../reader.js', import.meta.url), 'utf8');
 const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
 const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), 'utf8');
@@ -23,6 +24,9 @@ test('unified reader exposes all five language choices and changes text directio
   assert.match(js, /previewMode/);
   assert.match(html, /id="preview-banner"/);
   assert.match(html, /id="preview-return"/);
+  assert.match(review, /reader\.html\?draft=1/);
+  assert.doesNotMatch(review, /id="preview"/, 'review must not maintain a second story template');
+  assert.match(review, /location\.replace/);
   assert.match(html, /khaledoon-story-map-link\.js/);
   const themeStart = js.indexOf("var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click'");
   const themeEnd = js.indexOf('function closeIntro()', themeStart);
