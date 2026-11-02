@@ -935,7 +935,7 @@ function pubRow(it){
     if(!response.ok)throw new Error('تعذر حفظ النقل ('+response.status+').');
     var rows=await response.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد النقل.');
     moveSave.textContent='تم النقل';movePanel.style.display='none';say('ok',it.status==='published'?'تم حفظ النقل كمسودة مراجعة؛ النسخة المنشورة لم تتغير.':'تم نقل الحكاية إلى القسم الجديد كمسودة، وسيُستخدم تصميم القسم الجديد في المعاينة.');
-    await loadList();
+    await loadList();if(view==='vis'){vLoaded=false;await loadVis()}
    }catch(error){say('err',error.message||'تعذر نقل الحكاية.');moveSave.disabled=false;moveSave.textContent=oldLabel}
   });
   var moveActions=el('div','fbar');moveActions.appendChild(moveSave);moveActions.appendChild(moveCancel);movePanel.appendChild(moveActions);
@@ -1397,6 +1397,30 @@ function renderVis(){
    setHidden(s,!h,btn);
   });
   row.appendChild(btn);
+  /* نقل الحكاية المنشورة من قائمة الظهور: لا نربط بالعنوان؛ نستخدم رقم الصفحة الصريح فقط. */
+  var linkedSubmission=items.find(function(rec){
+   if(!rec||rec._t==='site'||rec.status!=='published'||!window.KHWorkflow||typeof window.KHWorkflow.linkedSite!=='function')return false;
+   var linked=window.KHWorkflow.linkedSite(rec,vStories);
+   return !!(linked&&String(linked.id)===String(s.id));
+  });
+  var movePublished=el('button','btn ghost','نقل إلى قسم آخر');movePublished.type='button';
+  var moveHost=el('div','published-move-host');moveHost.style.cssText='grid-column:1/-1;width:100%';moveHost.hidden=true;
+  if(linkedSubmission){
+   var linkedMoveRow=pubRow(linkedSubmission);moveHost.appendChild(linkedMoveRow);
+   movePublished.title='فتح سجل الحكاية المرتبط لبدء إعادة تجهيزها بالقالب الموحد وتصميم القسم الجديد.';
+   movePublished.addEventListener('click',function(){
+    moveHost.hidden=false;linkedMoveRow.open=true;
+    var controls=Array.prototype.slice.call(linkedMoveRow.querySelectorAll('button'));
+    var actualMove=controls.find(function(control){return control.textContent.trim()==='نقل الحكاية'});
+    if(actualMove)actualMove.click();
+    else say('err','تعذر فتح إجراء النقل في السجل المرتبط؛ لم تتغير الحكاية.');
+   });
+  }else{
+   movePublished.disabled=true;
+   movePublished.title='لا يوجد سجل إرسال مرتبط برقم هذه الصفحة؛ لن نربطها بعنوان مشابه أو ننشئ سجلًا تخمينيًا.';
+   movePublished.setAttribute('aria-label','النقل غير متاح: لا يوجد سجل إرسال مرتبط برقم الصفحة');
+  }
+  row.appendChild(movePublished);row.appendChild(moveHost);
    if(h){
     var del=el('button','btn del delbtn','طلب حذف نهائي');del.type='button';del.title='ينشئ طلب دمج Draft؛ لا تُحذف الملفات أو علامة الخريطة من الموقع إلا بعد مراجعة الطلب ودمجه ثم تأكيد الحذف.';
     del.addEventListener('click',function(){deleteHiddenStory(s,del)});
