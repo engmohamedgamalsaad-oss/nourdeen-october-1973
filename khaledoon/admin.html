@@ -402,7 +402,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
     if(draft.title&&liveStoryPackage.i18n.ar.title!==draft.title)throw new Error('عنوان حزمة القارئ الحية لا يطابق العنوان المعتمد. لم أغيّر حالة السجل.');
    }else{
     if(draft.title&&(!liveTitle||!normalizeStoryText(liveTitle.textContent).includes(normalizeStoryText(draft.title))))throw new Error('عنوان الصفحة الحية لا يطابق العنوان الذي تمت الموافقة عليه. لم أغيّر حالة السجل.');
-    var requiredText=[].concat(String(draft.body||'').split(/\n{2,}/),String(draft.karma_text||'').split(/\n{2,}/)).map(normalizeStoryText).filter(function(t){return t.length>=20});
+    var requiredText=[].concat(String(draft.body||'').split(/\\n{2,}/),String(draft.karma_text||'').split(/\\n{2,}/)).map(normalizeStoryText).filter(function(t){return t.length>=20});
     if(requiredText.some(function(t){return liveText.indexOf(t)<0}))throw new Error('نص الراوي أو مقاطع كارما في الصفحة الحية لا تطابق النسخة التي تمت معاينتها. لم أغيّر حالة السجل.');
    }
    var quizResponse=await fetch('/nourdeen-october-1973/stories/quizzes/'+encodeURIComponent(liveSlug)+'.json?verify='+Date.now(),{cache:'no-store'});if(!quizResponse.ok)throw new Error('بنك الأسئلة غير موجود على الموقع الحي ('+quizResponse.status+'). لم أغيّر حالة السجل.');var quizData=await quizResponse.json();if(!Array.isArray(quizData.questions)||quizData.questions.length<5||quizData.questions.some(function(q){return !q.i18n||['en','fr','it','de'].some(function(lang){return !q.i18n[lang]||!q.i18n[lang].q||!Array.isArray(q.i18n[lang].o)||!q.i18n[lang].e})}))throw new Error('بنك الأسئلة الحي ناقص أو لا يحتوي الترجمات الأربع المطلوبة. لم أغيّر حالة السجل.');
