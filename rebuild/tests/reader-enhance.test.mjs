@@ -45,7 +45,7 @@ test('all five language labels exist and language/theme changes do not replay en
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) {
     assert.match(js, new RegExp(lang + ":\\['"), lang + ' labels');
   }
-  assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);return\}/);
+  assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);initCardReveal\(\);return\}/);
   assert.match(js, /prefers-reduced-motion: reduce/);
   for (const section of sections) assert.match(css, new RegExp('body\\[data-section=' + section + '\\]'), section + ' section palette');
   assert.match(css, /\.story-intro-modal/);
