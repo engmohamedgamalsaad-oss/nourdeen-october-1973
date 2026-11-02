@@ -358,7 +358,10 @@
     });
     if(!points.length){status.textContent=t('empty');return}
     status.textContent=points.length+' '+t('placesCount');
-    renderStoryList();requestDraw();
+    renderStoryList();
+    var requestedStory='';try{requestedStory=new URLSearchParams(window.location.search).get('story')||''}catch(e){}
+    if(requestedStory){var requestedPoint=points.find(function(p){return String(p.story.id)===requestedStory});if(requestedPoint){rot=-requestedPoint.lng*Math.PI/180;tilt=Math.max(-.9,Math.min(.9,requestedPoint.lat*Math.PI/180));selectPoint({p:requestedPoint,x:0,y:0});}}
+    requestDraw();
   }).catch(function(){status.textContent=t('empty')});
   function pos(e){return e.clientX}
   canvas.addEventListener('pointerdown',function(e){drag=true;lastX=startX=pos(e);lastY=startY=e.clientY;canvas.setPointerCapture&&canvas.setPointerCapture(e.pointerId);canvas.classList.add('is-dragging')});
