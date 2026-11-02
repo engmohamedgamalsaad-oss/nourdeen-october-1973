@@ -841,7 +841,7 @@ function siteCard(it){
    var details=document.createElement('details');details.className='fcard';details.style.marginTop='12px';
    var label=[record.title||'سجل إرسال بلا عنوان',itemStateLabel(record)].filter(Boolean).join(' • ');
    details.appendChild(el('summary','','سجل إرسال مرتبط: '+label));
-   var body=el('div','pbody');body.appendChild(card(record));details.appendChild(body);box.appendChild(details);
+   var body=el('div','pbody');body.appendChild(pubRow(record));details.appendChild(body);box.appendChild(details);
   });
  }
  return box;
