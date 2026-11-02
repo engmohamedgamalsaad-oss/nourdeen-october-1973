@@ -96,7 +96,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-11-01-story-publisher-1", story_publish_version: "2026-11-01-story-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-11-02-canonical-publisher-1", story_publish_version: "2026-11-02-canonical-story-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -151,6 +151,10 @@ Deno.serve(async (req: Request) => {
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
+  const isV2OnlyDraft = sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
+  const submittedStoryPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
+  const submittedStoryMatch = submittedStoryPage?.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
+  const submittedStorySection = submittedStoryMatch?.[1] ?? "";
   const savedStoryPackageRaw: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
     (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
     (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
@@ -169,7 +173,7 @@ Deno.serve(async (req: Request) => {
   }
   if (isStoryOnlyDraft) {
     if (!savedStoryPackage || !["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(savedStoryPackage.format)) {
-      return reply(409, { error: "حزمة V2 الأصلية غير موجودة في سجل الإدارة؛ لم ننشئ طلب مراجعة." });
+      return reply(409, { error: "حزمة الحكاية الأصلية غير موجودة في سجل الإدارة؛ لم ننشئ طلب مراجعة." });
     }
     const review = sourceMeta.preview_review && typeof sourceMeta.preview_review === "object"
       ? sourceMeta.preview_review as Record<string, unknown> : {};
@@ -184,28 +188,39 @@ Deno.serve(async (req: Request) => {
       const indexFile = body.files.find((file: any) => file.path === "stories/index.json");
       const placesFile = body.files.find((file: any) => file.path === "stories/places.json");
       if (packageFiles.length !== 1 || pageFiles.length !== 1 || quizFiles.length !== 1 || !packageFile || !pageFile || !quizFile || !indexFile || !placesFile) {
-        return reply(400, { error: "حزمة V2 للنشر تحتاج صفحة index.html وdata.v2.json وبنك الأسئلة والفهرس وبيانات الخريطة." });
+        return reply(400, { error: "حزمة الحكاية للنشر تحتاج صفحة index.html وملف الحكاية وبنك الأسئلة والفهرس وبيانات الخريطة." });
       }
       const packageData = JSON.parse(contentForSafetyScan(packageFile));
       if (!["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(packageData.format) || stableJson(packageData) !== stableJson(savedStoryPackage)) {
-        return reply(409, { error: "ملف data.v2.json لا يطابق حزمة V2 المحفوظة والمعتمدة في سجل الإدارة." });
+        return reply(409, { error: "ملف الحكاية لا يطابق الحزمة المحفوظة والمعتمدة في سجل الإدارة." });
       }
       if (!Object.prototype.hasOwnProperty.call(packageData, "map_location")) {
         return reply(400, { error: "يجب تحديد map_location صراحةً: موقع موثق أو null." });
       }
       if (!Array.isArray(packageData.quiz) || packageData.quiz.length < 5) {
-        return reply(400, { error: "حزمة V2 يجب أن تحتوي على خمسة أسئلة على الأقل." });
+        return reply(400, { error: "حزمة الحكاية يجب أن تحتوي على خمسة أسئلة على الأقل." });
       }
       const pageMatch = pageFile.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
       const storySection = pageMatch?.[1], storyId = pageMatch?.[2];
       const storyRoot = storySection && storyId ? "stories/" + storySection + "/" + storyId + "/" : "";
       const pageHtml = contentForSafetyScan(pageFile);
+      if (storySection !== "october" &&
+          (isV2OnlyDraft || savedStoryPackageRaw?.format === "KHALEDOON_STORY_V2" ||
+           packageData.format !== "KHALEDOON_STORY" ||
+           packageFile.path !== storyRoot + "story.json" ||
+           !pageHtml.includes("data-kh-story-reader") ||
+           !pageHtml.includes('data-story-path="story.json"') ||
+           pageHtml.includes("data-kh-v2-reader") ||
+           pageHtml.includes('data-story-path="data.v2.json"'))) {
+        return reply(409, { error: "الحكايات خارج قسم أكتوبر يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
+      }
+
       if (!storyRoot || packageData.section !== storySection ||
           !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
           !(pageHtml.includes('data-story-path="story.json"') || pageHtml.includes('data-story-path="data.v2.json"')) ||
           !pageHtml.includes('data-story-slug="' + storyId + '"') ||
           packageFile.path !== storyRoot + (packageFile.path.endsWith("/story.json") ? "story.json" : "data.v2.json")) {
-        return reply(400, { error: "مسار صفحة V2 أو ربط القارئ لا يطابق القسم ورقم الحكاية." });
+        return reply(400, { error: "مسار صفحة الحكاية أو ربط القارئ لا يطابق القسم ورقم الحكاية." });
       }
       if (quizFile.path !== "stories/quizzes/" + storyId + ".json") {
         return reply(400, { error: "رقم بنك الأسئلة لا يطابق رقم صفحة الحكاية." });
@@ -230,11 +245,11 @@ Deno.serve(async (req: Request) => {
             indexEntry.i18n?.[lang]?.title !== packageData.i18n?.[lang]?.title ||
             indexEntry.i18n?.[lang]?.person !== (packageData.i18n?.[lang]?.figure_name || packageData.i18n?.[lang]?.person || packageData.i18n?.[lang]?.title)
           )) {
-        return reply(400, { error: "عنصر فهرس الحكايات لا يطابق حزمة V2 المعتمدة." });
+        return reply(400, { error: "عنصر فهرس الحكايات لا يطابق الحزمة المعتمدة." });
       }
       const quiz = JSON.parse(contentForSafetyScan(quizFile));
       if (!Array.isArray(quiz.questions) || quiz.questions.length !== packageData.quiz.length) {
-        return reply(400, { error: "بنك الأسئلة لا يطابق عدد أسئلة حزمة V2." });
+        return reply(400, { error: "بنك الأسئلة لا يطابق عدد أسئلة الحزمة المعتمدة." });
       }
       for (let i = 0; i < packageData.quiz.length; i++) {
         const source = packageData.quiz[i], output = quiz.questions[i];
@@ -246,7 +261,7 @@ Deno.serve(async (req: Request) => {
               stableJson(output.i18n[lang]?.o) !== stableJson(source.i18n?.[lang]?.options) ||
               output.i18n[lang]?.e !== source.i18n?.[lang]?.explanation
             )) {
-          return reply(400, { error: "بنك الأسئلة أو إحدى ترجماته لا تطابق حزمة V2 المعتمدة." });
+          return reply(400, { error: "بنك الأسئلة أو إحدى ترجماته لا تطابق الحزمة المعتمدة." });
         }
       }
       const incomingPlaces = JSON.parse(contentForSafetyScan(placesFile));
@@ -265,14 +280,16 @@ Deno.serve(async (req: Request) => {
           Boolean(place.approximate) !== Boolean(packageData.map_location.approximate) ||
           place.source_url !== packageData.map_location.source_url ||
           stableJson(place.source_name) !== stableJson(packageData.map_location.source_name))) {
-        return reply(400, { error: "موقع الخريطة لا يطابق الموقع الموثق داخل حزمة V2." });
+        return reply(400, { error: "موقع الخريطة لا يطابق الموقع الموثق داخل الحزمة." });
       }
     } catch (error) {
       const detail = error instanceof Error ? error.message : "Unknown error";
-      return reply(400, { error: "تعذر التحقق من حزمة V2 قبل إنشاء طلب المراجعة.", detail: detail.slice(0, 400) });
+      return reply(400, { error: "تعذر التحقق من الحزمة قبل إنشاء طلب المراجعة.", detail: detail.slice(0, 400) });
     }
   } else if (hasStoryArtifacts) {
-    return reply(409, { error: "ملفات V2 لا يمكن إرسالها من سجل لا يحمل حزمة V2 معتمدة." });
+    return reply(409, { error: "ملفات القالب الموحد لا يمكن إرسالها من سجل لا يحمل حزمة معتمدة." });
+  } else if (submittedStorySection && submittedStorySection !== "october") {
+    return reply(409, { error: "مسار النشر القديم متاح لقسم أكتوبر فقط؛ يجب إعادة تجهيز الحكايات الأخرى بحزمة KHALEDOON_STORY المعتمدة." });
   }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
