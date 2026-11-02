@@ -2,8 +2,7 @@
   "use strict";
   var match = location.pathname.match(/\/(\d{3})\/?$/);
   var id = match && match[1];
-  if (!id) return;
-
+  
   var lang = (document.documentElement.lang || "ar").slice(0, 2);
   var TEXT = {
     ar: {
@@ -170,10 +169,13 @@
   }
   start.addEventListener("click", begin);
   var root = location.pathname.split("/stories/")[0] + "/";
-  fetch(root + "stories/quizzes/" + id + ".json").then(function (response) {
-    if (!response.ok) throw new Error("HTTP " + response.status);
-    return response.json();
-  }).then(function (data) {
+  var previewBank = window.__KH_PREVIEW_QUIZ_BANK;
+  var bankRequest = previewBank ? Promise.resolve(previewBank) :
+    (id ? fetch(root + "stories/quizzes/" + id + ".json").then(function (response) {
+      if (!response.ok) throw new Error("HTTP " + response.status);
+      return response.json();
+    }) : Promise.reject(new Error("Quiz bank is unavailable in preview")));
+  bankRequest.then(function (data) {
     all = data.questions || [];
     if (all.length < 5) throw new Error("Insufficient quiz questions");
   }).catch(function () {
