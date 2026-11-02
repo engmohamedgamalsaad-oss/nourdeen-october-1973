@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
+const review = await readFile(new URL('../package-review.html', import.meta.url), 'utf8');
 const js = await readFile(new URL('../reader.js', import.meta.url), 'utf8');
 const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
 const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), 'utf8');
@@ -19,6 +20,14 @@ test('unified reader exposes all five language choices and changes text directio
   assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'reader headings need a sans-serif fallback when external fonts are blocked');
   assert.match(html, /reader-base\.css\?v=20261101-story-reader-1/);
   assert.match(js, /themeLight/);
+  assert.match(js, /kh-story-review-package/);
+  assert.match(js, /previewMode/);
+  assert.match(html, /id="preview-banner"/);
+  assert.match(html, /id="preview-return"/);
+  assert.match(review, /reader\.html\?draft=1/);
+  assert.doesNotMatch(review, /id="preview"/, 'review must not maintain a second story template');
+  assert.match(review, /location\.replace/);
+  assert.match(html, /khaledoon-story-map-link\.js/);
   const themeStart = js.indexOf("var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click'");
   const themeEnd = js.indexOf('function closeIntro()', themeStart);
   const themeHandler = themeStart >= 0 && themeEnd > themeStart ? js.slice(themeStart, themeEnd) : '';
@@ -58,6 +67,6 @@ test('static builder validates story packages and will not overwrite existing st
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /story\.json/);
-  assert.match(builder, /reader\.js\?v=20261102-canonical-theme-reader-2/);
-  assert.match(html, /reader\.js\?v=20261102-canonical-theme-reader-2/);
+  assert.match(builder, /reader\.js\?v=20261102-canonical-preview-reader-1/);
+  assert.match(html, /reader\.js\?v=20261102-canonical-preview-reader-1/);
 });
