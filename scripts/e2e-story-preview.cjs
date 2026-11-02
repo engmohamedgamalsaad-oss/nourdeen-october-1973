@@ -23,6 +23,12 @@ async function main() {
   fs.copyFileSync(path.join(root, 'rebuild/reader-base.css'), path.join(temp, 'rebuild/reader-base.css'));
   fs.copyFileSync(path.join(root, 'rebuild/reader-enhance.css'), path.join(temp, 'rebuild/reader-enhance.css'));
   fs.copyFileSync(path.join(root, 'rebuild/package-review.html'), path.join(temp, 'rebuild/package-review.html'));
+  fs.copyFileSync(path.join(root, 'rebuild/reader.html'), path.join(temp, 'rebuild/reader.html'));
+  fs.mkdirSync(path.join(temp, 'khaledoon/assets'), { recursive: true });
+  fs.copyFileSync(path.join(root, 'khaledoon/assets/khaledoon-story-map-link.js'), path.join(temp, 'khaledoon/assets/khaledoon-story-map-link.js'));
+  fs.copyFileSync(path.join(root, 'khaledoon/assets/khaledoon-story-nav.js'), path.join(temp, 'khaledoon/assets/khaledoon-story-nav.js'));
+  fs.mkdirSync(path.join(temp, 'stories'), { recursive: true });
+  fs.copyFileSync(path.join(root, 'stories/places.json'), path.join(temp, 'stories/places.json'));
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.js'), path.join(temp, 'assets/shared/reactions.js'));
   fs.copyFileSync(path.join(root, 'assets/shared/reactions.css'), path.join(temp, 'assets/shared/reactions.css'));
@@ -151,22 +157,25 @@ async function main() {
   await reviewer.goto(base, { waitUntil: 'load' });
   await reviewer.evaluate(pkg => localStorage.setItem('kh-story-review-package', JSON.stringify(pkg)), story);
   await reviewer.goto('http://127.0.0.1:' + server.address().port + '/rebuild/package-review.html?draft=1', { waitUntil: 'load' });
-  await reviewer.locator('#preview').waitFor({ state: 'visible', timeout: 10000 });
-  assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'read-only reviewer should render the saved unified story package');
-  assert.equal(await reviewer.locator('#quiz article').count(), story.quiz.length, 'reviewer must retain the complete unified story quiz bank');
-  assert.match(await reviewer.locator('header').textContent(), /لا تحفظ على Supabase ولا تنشر إلى الموقع/, 'reviewer must clearly state it cannot save or publish');
-  assert.equal(await reviewer.locator('#back-to-admin').getAttribute('href'), '../khaledoon/admin.html', 'reviewer must provide a clear route back to the admin decision workflow');
-  assert.match(await reviewer.locator('#back-to-admin').textContent(), /لوحة الإدارة/, 'return link should clearly identify the admin workflow');
-  await reviewer.locator('#lang').selectOption('en');
-  assert.equal(await reviewer.locator('#title').textContent(), story.i18n.en.title, 'reviewer should switch localized title');
-  assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should switch to LTR for English');
-  for (const lang of ['fr', 'it', 'de']) {
-    await reviewer.locator('#lang').selectOption(lang);
+  await reviewer.waitForURL(/reader\.html\?draft=1/, { timeout: 10000 });
+  await reviewer.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
+  await reviewer.locator('#preview-banner').waitFor({ state: 'visible', timeout: 10000 });
+  await reviewer.locator('#story-intro-modal').waitFor({ state: 'visible', timeout: 10000 });
+  assert.equal(await reviewer.locator('#title').textContent(), story.i18n.ar.title, 'read-only reviewer must render the saved package in the actual shared reader');
+  assert.equal(await reviewer.locator('#preview-return').isVisible(), true, 'shared reader preview must provide a route back to the admin');
+  assert.equal(await reviewer.locator('#reactions-section').isVisible(), false, 'draft preview must not expose live reaction controls');
+  assert.equal(await reviewer.locator('#share-whatsapp').isVisible(), false, 'draft preview must suppress external sharing');
+  assert.equal(await reviewer.locator('#quiz .q').count(), 1, 'shared reader preview must use the same one-question-at-a-time quiz');
+  await reviewer.locator('#intro-start').click();
+  await reviewer.locator('#story-intro-modal').waitFor({ state: 'hidden' });
+  assert.equal(await reviewer.locator('#cover img').getAttribute('alt'), story.cover.i18n.ar.alt, 'shared reader preview must localize the cover');
+  for (const lang of ['en', 'fr', 'it', 'de']) {
+    await reviewer.locator('[data-lang="' + lang + '"]').click();
     await reviewer.waitForFunction(expected => document.documentElement.lang === expected, lang);
-    assert.equal(await reviewer.locator('#title').textContent(), story.i18n[lang].title, 'reviewer should localize ' + lang + ' title');
-    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', 'reviewer should use LTR for ' + lang);
+    assert.equal(await reviewer.locator('#title').textContent(), story.i18n[lang].title, 'shared reader preview must localize ' + lang);
+    assert.equal(await reviewer.locator('html').getAttribute('dir'), 'ltr', lang + ' preview must use LTR');
   }
-  await reviewer.locator('#lang').selectOption('en');
+  await reviewer.locator('[data-lang="en"]').click();
   await reviewer.screenshot({ path: path.join(artifactDir, 'story-package-review-en.png'), fullPage: true, animations: 'disabled' });
   await reviewContext.close();
 
