@@ -200,10 +200,10 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261027-source-clean-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'));
-  assert.ok(shared.includes('لا تخترع إحداثيات'));
-  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'));
-  assert.ok(shared.includes('لا تخترع إحداثيات'));
+  assert.ok(shared.includes('## 8) الموقع على الخريطة'), 'the v5 map section must be present');
+  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'), 'the map location must be sourced');
+  assert.ok(shared.includes('لا تخترع إحداثيات'), 'map coordinates must never be invented');
+  assert.ok(shared.includes('map_location'), 'the canonical map field must be documented');
 });
 test('production publisher and deletion functions remain review-only until a PR is merged', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
