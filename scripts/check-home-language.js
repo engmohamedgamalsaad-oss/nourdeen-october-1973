@@ -156,10 +156,10 @@ for (const rel of htmlFiles) {
   /* A language guard that lists en/fr/it without de (inline <head> scripts) leaves German pages RTL/untranslated. */
   if (/\[\s*["']en["']\s*,\s*["']fr["']\s*,\s*["']it["']\s*\]/.test(html)) fail(`${rel}: a language array lists en/fr/it without de.`);
   if (/===\s*["']it["']/.test(html) && !/===\s*["']de["']/.test(html)) fail(`${rel}: a language comparison handles it but not de.`);
-  /* Every inline script must at least compile (a stray comma once broke science.html in German). */
+  /* Every classic inline script must compile; module scripts use import syntax and are not valid vm.Script input. */
   {
     let n = 0;
-    for (const m of html.matchAll(/<script(?![^>]*\ssrc=)(?![^>]*type=["'](?:application\/ld\+json|text\/template|importmap)["'])[^>]*>([\s\S]*?)<\/script>/gi)) {
+    for (const m of html.matchAll(/<script(?![^>]*\ssrc=)(?![^>]*type=["'](?:application\/ld\+json|text\/template|importmap|module)["'])[^>]*>([\s\S]*?)<\/script>/gi)) {
       n++;
       try { new vm.Script(m[1], { filename: `${rel}#inline${n}` }); }
       catch (e) { fail(`${rel}: inline script #${n} has a syntax error: ${e.message}`); }

@@ -772,5 +772,61 @@
     "id": "016",
     "section": "science",
     "path": "stories/science/016/"
+  },
+  {
+    "name": "مليكة محمد",
+    "grade": "الصف الأول الابتدائي",
+    "className": "الصف الأول الابتدائي",
+    "title": "ابن بطوطة",
+    "subtitle": "الرحالة المغربي الذي سافر ثلاثين سنة",
+    "person": "ابن بطوطة",
+    "color": "#d5b7ff",
+    "order": 17,
+    "published": true,
+    "i18n": {
+      "ar": {
+        "name": "مليكة محمد",
+        "grade": "الصف الأول الابتدائي",
+        "className": "الصف الأول الابتدائي",
+        "title": "ابن بطوطة",
+        "subtitle": "الرحالة المغربي الذي سافر ثلاثين سنة",
+        "person": "ابن بطوطة"
+      },
+      "en": {
+        "name": "Malika Mohamed",
+        "grade": "Grade 1 (primary school)",
+        "className": "Grade 1 (primary school)",
+        "title": "Ibn Battuta",
+        "subtitle": "The Moroccan traveler who journeyed for thirty years",
+        "person": "Ibn Battuta"
+      },
+      "fr": {
+        "name": "Malika Mohamed",
+        "grade": "1re année du primaire",
+        "className": "1re année du primaire",
+        "title": "Ibn Battuta",
+        "subtitle": "Le voyageur marocain qui a parcouru le monde pendant trente ans",
+        "person": "Ibn Battuta"
+      },
+      "it": {
+        "name": "Malika Mohamed",
+        "grade": "Prima elementare",
+        "className": "Prima elementare",
+        "title": "Ibn Battuta",
+        "subtitle": "Il viaggiatore marocchino che girò il mondo per trent'anni",
+        "person": "Ibn Battuta"
+      },
+      "de": {
+        "name": "Malika Mohamed",
+        "grade": "1. Klasse (Grundschule)",
+        "className": "1. Klasse (Grundschule)",
+        "title": "Ibn Battuta",
+        "subtitle": "Der marokkanische Reisende, der dreißig Jahre unterwegs war",
+        "person": "Ibn Battuta"
+      }
+    },
+    "id": "017",
+    "section": "history",
+    "path": "stories/history/017/"
   }
 ]

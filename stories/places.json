@@ -355,5 +355,32 @@
     },
     "source_url": "https://sis.gov.eg/en/egypt/egyptian-figures/dr-ali-moustafa-mosharafa/",
     "photo": "stories/science/016/cover.svg"
+  },
+  "017": {
+    "lat": 35.7595,
+    "lng": -5.834,
+    "place": {
+      "ar": "طنجة، المغرب",
+      "de": "Tanger, Marokko",
+      "en": "Tangier, Morocco",
+      "fr": "Tanger, Maroc",
+      "it": "Tangeri, Marocco"
+    },
+    "place_label": {
+      "ar": "مسقط رأس ابن بطوطة ونقطة انطلاق رحلته",
+      "de": "Geburtsort von Ibn Battuta und Ausgangspunkt seiner Reise",
+      "en": "Ibn Battuta's birthplace and the starting point of his journey",
+      "fr": "Lieu de naissance d'Ibn Battuta et point de départ de son voyage",
+      "it": "Luogo di nascita di Ibn Battuta e punto di partenza del suo viaggio"
+    },
+    "approximate": true,
+    "source_name": {
+      "ar": "ويكيبيديا — ابن بطوطة",
+      "de": "Wikipedia — Ibn Battuta",
+      "en": "Wikipedia — Ibn Battuta",
+      "fr": "Wikipédia — Ibn Battuta",
+      "it": "Wikipedia — Ibn Battuta"
+    },
+    "source_url": "https://en.wikipedia.org/wiki/Ibn_Battuta"
   }
 }

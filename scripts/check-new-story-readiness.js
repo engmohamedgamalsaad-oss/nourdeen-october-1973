@@ -59,7 +59,15 @@ for (const pagePath of pages) {
     try { storyPackage = storyText ? JSON.parse(storyText) : null; } catch {}
     requireCheck(Boolean(storyPackage), story, `Story package ${storyPath} exists and is valid JSON`);
     requireCheck(Boolean(storyPackage && storyPackage.format === "KHALEDOON_STORY"), story, "Story package is the canonical story format");
-    requireCheck(html.includes('name="robots" content="noindex,nofollow"'), story, "new Unified story page remains unlisted until reviewed and approved");
+    const indexText = read("stories/index.json");
+    let listedAsPublished = false;
+    try {
+      const indexEntries = indexText ? JSON.parse(indexText) : [];
+      listedAsPublished = Array.isArray(indexEntries) && indexEntries.some(entry =>
+        String(entry.id || "").padStart(3, "0") === id && entry.published === true
+      );
+    } catch {}
+    requireCheck(listedAsPublished || html.includes('name="robots" content="noindex,nofollow"'), story, "new Unified story page stays hidden until approved, then may be listed as published");
     let validationOutput = "";
     let valid = false;
     if (storyPackage) {
