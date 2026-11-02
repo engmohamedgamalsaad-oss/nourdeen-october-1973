@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>مراجعة حزمة حكاية V2 | خالدون عبر التاريخ</title>
+<title>معاينة الحكاية بالقالب الموحد | خالدون عبر التاريخ</title>
 <style>
 :root{color-scheme:dark;--bg:#09171d;--panel:#122830;--line:#36515a;--text:#f6f0e4;--muted:#b9c8c8;--accent:#c39a5a;--bad:#ffb4a9;--good:#a7e2bb}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.8 system-ui,"Segoe UI",sans-serif}
@@ -17,24 +17,16 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 </style>
 </head>
 <body>
-<header><h1>مراجعة حزمة الحكاية — خالدون عبر التاريخ</h1><div class="muted">أداة مراجعة محلية فقط: لا تحفظ على Supabase ولا تنشر إلى الموقع.</div><p><a id="back-to-admin" href="../khaledoon/admin.html">العودة إلى لوحة الإدارة لإكمال قرار المراجعة</a></p></header>
+<header><h1>فحص حزمة الحكاية الموحدة</h1><div class="muted">يتم عرض الحكاية بعد الفحص داخل القارئ الحقيقي المستخدم في صفحات الموقع. لا يتم النشر من هذه النافذة.</div><p><a id="back-to-admin" href="../khaledoon/admin.html">العودة إلى لوحة الإدارة لإكمال قرار المراجعة</a></p></header>
 <main>
 <section class="panel">
 <h2>١. اختيار الحزمة</h2>
-<div class="row"><input id="file" type="file" accept=".json,application/json"><label for="lang">لغة المعاينة</label><select id="lang"><option value="ar">العربية</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="de">Deutsch</option></select></div>
+<div class="row"><input id="file" type="file" accept=".json,application/json"></div>
 <p id="status" class="status">اختر ملف JSON بصيغة KHALEDOON_STORY.</p>
 <div class="warning">نجاح الفحص البنيوي لا يثبت صحة المعلومات التاريخية أو جودة الترجمة أو قانونية استخدام الصور. يلزم اعتماد بشري قبل النشر.</div>
 </section>
 <section id="audit" class="panel hidden"><h2>٢. نتيجة الفحص البنيوي</h2><ul id="issues"></ul><p id="counts" class="muted"></p></section>
-<section id="preview" class="hidden">
-<section class="panel"><div id="section" class="muted"></div><div id="title" class="story-title"></div><h2 id="subtitle"></h2><p id="summary"></p><div id="cover"></div></section>
-<section class="panel"><details><summary>عرض النص الأصلي المحفوظ للمقارنة</summary><pre id="original-body" lang="ar" dir="rtl"></pre></details></section>
-<section class="panel"><h2>٣. نص الحكاية</h2><div id="blocks"></div><p id="history-note"></p></section>
-<section id="map-section" class="panel hidden"><h2>خريطة الحكاية</h2><p id="map-place"></p><a id="map-link" target="_blank" rel="noopener noreferrer">فتح الموقع على OpenStreetMap</a></section>
-<section class="panel"><h2>٤. الصور وحقوق الاستخدام</h2><div id="images"></div></section>
-<section class="panel"><h2>٥. الاختبار</h2><div id="quiz"></div></section>
-<section class="panel"><h2>٦. المصادر</h2><ul id="sources"></ul></section>
-</section>
+
 </main>
 <script>
 (function(){
@@ -66,27 +58,17 @@ function listIssues(s){
  for(const [i,q] of (Array.isArray(s.quiz)?s.quiz:[]).entries())for(const l of langs){const t=q.i18n&&q.i18n[l];if(!t||!t.question||!Array.isArray(t.options)||t.options.length!==4||!t.explanation)out.push('السؤال '+(i+1)+' ناقص أو غير مترجم بالكامل للغة '+l+'.')}
  return [...new Set(out)];
 }
-function renderImage(host,im,lang,label){const t=im.i18n&&im.i18n[lang]||{};const box=node('article');box.appendChild(node('h3',label));if(im.url&&/^https:\/\//i.test(im.url)){const fig=node('figure');const img=node('img');img.src=im.url;img.alt=t.alt||'';img.loading='lazy';img.referrerPolicy='no-referrer';fig.appendChild(img);box.appendChild(fig)}box.appendChild(node('p',t.caption||'لا يوجد تعليق مترجم.'));box.appendChild(node('p','المصدر: '+(t.source_name||im.source_name||'غير محدد')));box.appendChild(node('p','الحقوق: '+(t.rights||im.rights||'غير محددة')));if(im.source_url)box.appendChild(link(im.source_url,'فتح صفحة المصدر والترخيص'));host.appendChild(box)}
-function show(){
- if(!story)return;const l=$('lang').value,t=story.i18n[l];document.documentElement.lang=l;document.documentElement.dir=l==='ar'?'rtl':'ltr';
- $('section').textContent='القسم: '+story.section+' · التصميم: '+(story.design&&story.design.variant||'غير محدد');$('title').textContent=t.title;$('subtitle').textContent=t.subtitle;$('summary').textContent=t.summary;
- $('cover').replaceChildren();renderImage($('cover'),story.cover,l,'الغلاف');
- $('blocks').replaceChildren();for(const b of t.blocks){const el=node('article',undefined,'block '+(b.speaker==='karma'?'karma':''));el.appendChild(node('strong',b.speaker==='karma'?'كارما':'الراوي'));el.appendChild(node('p',b.text));$('blocks').appendChild(el)}
- $('original-body').textContent=story.original_body||'لا يوجد نص أصلي محفوظ في هذه الحزمة.';
- $('history-note').textContent=t.history_note||'لا توجد ملاحظة تاريخية مترجمة.';
- const map=story.map_location;$('map-section').classList.toggle('hidden',!map);
- if(map){$('map-place').textContent=map.place[l];$('map-link').href='https://www.openstreetmap.org/?mlat='+encodeURIComponent(map.lat)+'&mlon='+encodeURIComponent(map.lng)+'#map=13/'+encodeURIComponent(map.lat)+'/'+encodeURIComponent(map.lng)}
- else $('map-link').removeAttribute('href');
- $('images').replaceChildren();story.images.forEach((im,i)=>renderImage($('images'),im,l,'الصورة '+(i+1)));
- $('quiz').replaceChildren();story.quiz.forEach((q,i)=>{const qt=q.i18n[l];const el=node('article',undefined,'block');el.appendChild(node('strong',(i+1)+'. '+qt.question));const ul=node('ul');qt.options.forEach((o,j)=>{const li=node('li',o+(j===q.correct_option?' ✓':''));ul.appendChild(li)});el.appendChild(ul);el.appendChild(node('p',qt.explanation));$('quiz').appendChild(el)});
- $('sources').replaceChildren();story.sources.forEach(s=>{const li=node('li');const localized=s.i18n&&s.i18n[l]||s;li.appendChild(link(s.url,localized.title+' — '+localized.organization));$('sources').appendChild(li)});
- $('preview').classList.remove('hidden');
+function openUnifiedReader(){
+ try{localStorage.setItem('kh-story-review-package',JSON.stringify(story));}
+ catch(e){$('status').textContent='تعذر حفظ حزمة المعاينة في تخزين المتصفح: '+e.message;$('status').className='status bad';return}
+ $('status').textContent='اجتاز الفحص البنيوي. جارٍ فتح الحكاية داخل القارئ الموحد…';
+ location.replace('reader.html?draft=1&v=20261102-canonical-preview-reader-1');
 }
 function loadPackage(parsed,fromDraft){
  story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
  const issues=listIssues(story);issues.forEach(x=>$('issues').appendChild(node('li',x,'bad')));
  $('counts').textContent='اللغات: '+langs.length+' · الأسئلة: '+(story.quiz||[]).length+' · الصور: '+(story.images||[]).length+' · المصادر: '+(story.sources||[]).length;
- $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':(fromDraft?'تم تحميل مسودة V2 المحفوظة. هذه معاينة للقراءة فقط ولا تنشر الحكاية.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.');
+ $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':(fromDraft?'تم تحميل مسودة KHALEDOON_STORY المحفوظة.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.');
  $('status').className='status '+(issues.length?'bad':'good');
  if(!issues.length)$('issues').appendChild(node('li','لا توجد أخطاء بنيوية أولية.','good'));
  show();
@@ -96,7 +78,7 @@ $('file').addEventListener('change',async e=>{story=null;$('preview').classList.
  catch(err){story=null;$('status').textContent='تعذّر قراءة JSON: '+err.message;$('status').className='status bad';$('issues').appendChild(node('li','ملف JSON غير صالح.','bad'))}
 });
 if(new URLSearchParams(location.search).get('draft')==='1'){
- try{const raw=localStorage.getItem('kh-story-review-package');if(!raw)throw new Error('لا توجد حزمة V2 محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
+ try{const raw=localStorage.getItem('kh-story-review-package');if(!raw)throw new Error('لا توجد حزمة KHALEDOON_STORY محفوظة في هذا المتصفح. افتح المعاينة من لوحة الإدارة أو اختر ملف JSON.');loadPackage(JSON.parse(raw),true)}
  catch(err){$('audit').classList.remove('hidden');$('status').textContent=err.message;$('status').className='status bad';$('issues').replaceChildren(node('li',err.message,'bad'))}
 }
 $('lang').addEventListener('change',show);
