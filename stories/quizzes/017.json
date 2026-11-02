@@ -1,0 +1,271 @@
+{
+  "id": "017",
+  "title": "ابن بطوطة",
+  "questions": [
+    {
+      "q": "في أي مدينة وُلد ابن بطوطة؟",
+      "o": [
+        "القاهرة",
+        "مكة المكرمة",
+        "طنجة",
+        "دمشق"
+      ],
+      "a": 2,
+      "e": "وُلد ابن بطوطة في مدينة طنجة بالمغرب عام 1304م، وخرج منها عام 1325م.",
+      "i18n": {
+        "en": {
+          "q": "In which city was Ibn Battuta born?",
+          "o": [
+            "Cairo",
+            "Mecca",
+            "Tangier",
+            "Damascus"
+          ],
+          "e": "Ibn Battuta was born in Tangier, Morocco, in 1304, and he left it in 1325."
+        },
+        "fr": {
+          "q": "Dans quelle ville Ibn Battuta est-il né ?",
+          "o": [
+            "Le Caire",
+            "La Mecque",
+            "Tanger",
+            "Damas"
+          ],
+          "e": "Ibn Battuta est né à Tanger, au Maroc, en 1304, et il l'a quittée en 1325."
+        },
+        "it": {
+          "q": "In quale città nacque Ibn Battuta?",
+          "o": [
+            "Il Cairo",
+            "La Mecca",
+            "Tangeri",
+            "Damasco"
+          ],
+          "e": "Ibn Battuta nacque a Tangeri, in Marocco, nel 1304 e la lasciò nel 1325."
+        },
+        "de": {
+          "q": "In welcher Stadt wurde Ibn Battuta geboren?",
+          "o": [
+            "Kairo",
+            "Mekka",
+            "Tanger",
+            "Damaskus"
+          ],
+          "e": "Ibn Battuta wurde 1304 in Tanger in Marokko geboren und verließ die Stadt 1325."
+        }
+      }
+    },
+    {
+      "q": "لماذا خرج ابن بطوطة من طنجة عام 1325م؟",
+      "o": [
+        "ليؤدي فريضة الحج",
+        "ليعمل في التجارة",
+        "ليشارك في حرب",
+        "ليدرس في الهند"
+      ],
+      "a": 0,
+      "e": "كان هدفه الأول أداء الحج في مكة المكرمة، ثم واصل السفر نحو ثلاثين سنة.",
+      "i18n": {
+        "en": {
+          "q": "Why did Ibn Battuta leave Tangier in 1325?",
+          "o": [
+            "To perform the Hajj",
+            "To work in trade",
+            "To join a war",
+            "To study in India"
+          ],
+          "e": "His first goal was to perform the Hajj in Mecca, and then he kept traveling for about thirty years."
+        },
+        "fr": {
+          "q": "Pourquoi Ibn Battuta a-t-il quitté Tanger en 1325 ?",
+          "o": [
+            "Pour accomplir le hajj",
+            "Pour travailler dans le commerce",
+            "Pour participer à une guerre",
+            "Pour étudier en Inde"
+          ],
+          "e": "Son premier but était d'accomplir le hajj à La Mecque, puis il a continué à voyager pendant une trentaine d'années."
+        },
+        "it": {
+          "q": "Perché Ibn Battuta lasciò Tangeri nel 1325?",
+          "o": [
+            "Per compiere l'hajj",
+            "Per lavorare nel commercio",
+            "Per partecipare a una guerra",
+            "Per studiare in India"
+          ],
+          "e": "Il suo primo scopo era compiere l'hajj alla Mecca, poi continuò a viaggiare per circa trent'anni."
+        },
+        "de": {
+          "q": "Warum verließ Ibn Battuta 1325 Tanger?",
+          "o": [
+            "Um den Hadsch zu vollziehen",
+            "Um im Handel zu arbeiten",
+            "Um an einem Krieg teilzunehmen",
+            "Um in Indien zu studieren"
+          ],
+          "e": "Sein erstes Ziel war der Hadsch in Mekka, danach reiste er etwa dreißig Jahre weiter."
+        }
+      }
+    },
+    {
+      "q": "من الذي أملى عليه ابن بطوطة قصة رحلاته؟",
+      "o": [
+        "ماركو بولو",
+        "السلطان محمد بن تغلق",
+        "هاملتون جيب",
+        "ابن جزي الكلبي"
+      ],
+      "a": 3,
+      "e": "أملى ابن بطوطة رحلاته على الأديب ابن جزي الكلبي، بطلب من سلطان المغرب، فرتّبها وصاغها.",
+      "i18n": {
+        "en": {
+          "q": "To whom did Ibn Battuta dictate the story of his travels?",
+          "o": [
+            "Marco Polo",
+            "Sultan Muhammad ibn Tughluq",
+            "Hamilton Gibb",
+            "Ibn Juzayy al-Kalbi"
+          ],
+          "e": "At the request of the Sultan of Morocco, Ibn Battuta dictated his travels to the writer Ibn Juzayy al-Kalbi, who arranged and polished them."
+        },
+        "fr": {
+          "q": "À qui Ibn Battuta a-t-il dicté le récit de ses voyages ?",
+          "o": [
+            "Marco Polo",
+            "Le sultan Muhammad ibn Tughluq",
+            "Hamilton Gibb",
+            "Ibn Juzayy al-Kalbi"
+          ],
+          "e": "À la demande du sultan du Maroc, Ibn Battuta a dicté ses voyages à l'écrivain Ibn Juzayy al-Kalbi, qui les a organisés et mis en forme."
+        },
+        "it": {
+          "q": "A chi dettò Ibn Battuta il racconto dei suoi viaggi?",
+          "o": [
+            "Marco Polo",
+            "Il sultano Muhammad ibn Tughluq",
+            "Hamilton Gibb",
+            "Ibn Juzayy al-Kalbi"
+          ],
+          "e": "Su richiesta del sultano del Marocco, Ibn Battuta dettò i suoi viaggi allo scrittore Ibn Juzayy al-Kalbi, che li ordinò e li rifinì."
+        },
+        "de": {
+          "q": "Wem diktierte Ibn Battuta die Geschichte seiner Reisen?",
+          "o": [
+            "Marco Polo",
+            "Sultan Muhammad ibn Tughluq",
+            "Hamilton Gibb",
+            "Ibn Juzayy al-Kalbi"
+          ],
+          "e": "Auf Wunsch des Sultans von Marokko diktierte Ibn Battuta seine Reisen dem Schriftsteller Ibn Juzayy al-Kalbi, der sie ordnete und ausformulierte."
+        }
+      }
+    },
+    {
+      "q": "تقريبًا في كم دولة حديثة تقع الأراضي التي زارها ابن بطوطة؟",
+      "o": [
+        "نحو 10 دول",
+        "نحو 44 دولة",
+        "نحو 4 دول",
+        "نحو 100 دولة"
+      ],
+      "a": 1,
+      "e": "تذكر مراجع كثيرة أن رحلاته مرّت بأراضٍ تقع اليوم في نحو 44 دولة حديثة، وهو رقم تقريبي.",
+      "i18n": {
+        "en": {
+          "q": "Roughly how many modern countries lie on the lands Ibn Battuta visited?",
+          "o": [
+            "About 10 countries",
+            "About 44 countries",
+            "About 4 countries",
+            "About 100 countries"
+          ],
+          "e": "Many references say his travels crossed lands that today lie in about 44 modern countries, and this number is approximate."
+        },
+        "fr": {
+          "q": "Environ combien de pays actuels se trouvent sur les terres visitées par Ibn Battuta ?",
+          "o": [
+            "Environ 10 pays",
+            "Environ 44 pays",
+            "Environ 4 pays",
+            "Environ 100 pays"
+          ],
+          "e": "De nombreuses références disent que ses voyages ont traversé des terres situées aujourd'hui dans environ 44 pays modernes ; ce chiffre est approximatif."
+        },
+        "it": {
+          "q": "Circa in quanti paesi moderni si trovano le terre visitate da Ibn Battuta?",
+          "o": [
+            "Circa 10 paesi",
+            "Circa 44 paesi",
+            "Circa 4 paesi",
+            "Circa 100 paesi"
+          ],
+          "e": "Molte opere di riferimento dicono che i suoi viaggi attraversarono terre che oggi si trovano in circa 44 paesi moderni; la cifra è approssimativa."
+        },
+        "de": {
+          "q": "In ungefähr wie vielen heutigen Ländern liegen die Gebiete, die Ibn Battuta besuchte?",
+          "o": [
+            "Etwa 10 Länder",
+            "Etwa 44 Länder",
+            "Etwa 4 Länder",
+            "Etwa 100 Länder"
+          ],
+          "e": "Viele Nachschlagewerke sagen, dass seine Reisen durch Gebiete führten, die heute in etwa 44 modernen Ländern liegen; diese Zahl ist ungefähr."
+        }
+      }
+    },
+    {
+      "q": "ماذا تعني كلمة «رحلة» في اللغة العربية؟",
+      "o": [
+        "الجبل",
+        "الطعام",
+        "السفر",
+        "الحرب"
+      ],
+      "a": 2,
+      "e": "كلمة «رحلة» تعني السفر، وصارت أيضًا اسمًا لنوع من الكتب يروي فيه المؤلف ما رآه في أسفاره.",
+      "i18n": {
+        "en": {
+          "q": "What does the Arabic word «rihla» mean?",
+          "o": [
+            "Mountain",
+            "Food",
+            "Journey",
+            "War"
+          ],
+          "e": "The word «rihla» means journey, and it also became the name of a kind of book in which an author tells what he saw on his travels."
+        },
+        "fr": {
+          "q": "Que signifie le mot arabe « rihla » ?",
+          "o": [
+            "Montagne",
+            "Nourriture",
+            "Voyage",
+            "Guerre"
+          ],
+          "e": "Le mot « rihla » signifie voyage, et il est aussi devenu le nom d'un genre de livres où l'auteur raconte ce qu'il a vu pendant ses voyages."
+        },
+        "it": {
+          "q": "Che cosa significa la parola araba «rihla»?",
+          "o": [
+            "Montagna",
+            "Cibo",
+            "Viaggio",
+            "Guerra"
+          ],
+          "e": "La parola «rihla» significa viaggio ed è diventata anche il nome di un tipo di libro in cui l'autore racconta ciò che ha visto nei suoi viaggi."
+        },
+        "de": {
+          "q": "Was bedeutet das arabische Wort «rihla»?",
+          "o": [
+            "Berg",
+            "Essen",
+            "Reise",
+            "Krieg"
+          ],
+          "e": "Das Wort «rihla» bedeutet Reise und wurde auch zum Namen einer Buchart, in der ein Autor erzählt, was er auf seinen Reisen gesehen hat."
+        }
+      }
+    }
+  ]
+}
