@@ -32,7 +32,7 @@ function normalize(raw){
  var isV5=typeof raw.main==='string'&&raw.main.indexOf('2026-11-02-v5')>=0;
  var versions=Array.isArray(raw.versions)?raw.versions:[];
  if(!isV5&&(raw.main||raw.workflow||raw.providers)){
-  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — محفوظة في سجل الاسترجاع المحلي',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
+  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — أُضيفت إلى سجل الإصدارات في المحرر ولم تُحفظ مركزيًا',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
  }
  var providers=defaults();
  if(isV5&&raw.providers&&typeof raw.providers==='object'){
@@ -72,7 +72,7 @@ async function loadCurrent(){
  try{if(window.KHAdminTools){var row=await window.KHAdminTools.getConfig('prompts');if(row&&row.config_value&&typeof row.config_value.main==='string'&&typeof row.config_value.workflow==='string'&&Array.isArray(row.config_value.custom)){raw=row.config_value;central=true}}}catch(e){say('تعذر تحميل المخزن المركزي: '+e.message)}
  if(!raw){try{raw=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem(OLD_KEY)||'null')}catch(e){}}
  state=raw?normalize(raw):readCurrent();fill();
- if(central){say('تم تحميل المخزن المركزي. إذا كانت بياناته أقدم من v5 عُرضت افتراضيات v5 مع الاحتفاظ بالنسخة القديمة في سجل الاسترجاع المحلي؛ لم يُكتب شيء تلقائيًا. راجع ثم احفظ صراحةً عند الحاجة.')}
+ if(central){say('تم تحميل المخزن المركزي. إذا كانت بياناته أقدم من v5 عُرضت افتراضيات v5 مع إضافة النسخة القديمة إلى سجل الإصدارات في المحرر؛ لم يُكتب شيء تلقائيًا. راجع ثم احفظ صراحةً عند الحاجة.')}
  else if(raw){say('تم تحميل نسخة محلية فقط؛ لم يتم التحقق من المخزن المركزي.')}
  else{say('تم تحميل النسخة الافتراضية الحالية من ملفات المشروع.')}
 }
