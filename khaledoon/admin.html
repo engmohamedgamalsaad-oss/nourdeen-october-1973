@@ -313,6 +313,7 @@ async function submitStoryPublishPR(it,btn){
   if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
   try{
+   await refreshIfNeeded();
    var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch})});
    var statusResult=await statusResponse.json().catch(function(){return {}});
    if(!statusResponse.ok||!statusResult.success)throw new Error(statusResult.error||statusResult.detail||'تعذر التحقق من حالة طلب الدمج.');
@@ -333,6 +334,7 @@ async function submitStoryPublishPR(it,btn){
  }
  if(review.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم ارجع إلى هذه الصفحة واضغط «نشر الحكاية».');return}
  var publisherCapabilityBlocked=false;startButtonProgress(btn,'جارٍ التحقق من أمان النشر…');try{
+ await refreshIfNeeded();
  var capabilityResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'capabilities'})});
  var capabilityResult=await capabilityResponse.json().catch(function(){return {}});
  var pendingDraft=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
