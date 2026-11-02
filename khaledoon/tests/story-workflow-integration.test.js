@@ -113,7 +113,7 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0"));
   assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')<0"));
-  assert.ok(admin.includes("raw.workflow.indexOf('2026-11-02-v5')<0"));
+  assert.ok(admin.includes("workflow:isV5&&typeof raw.workflow==='string'"));
 });
 test('standalone v5 provider prompts share the exact canonical reference and match embedded provider appendices', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
