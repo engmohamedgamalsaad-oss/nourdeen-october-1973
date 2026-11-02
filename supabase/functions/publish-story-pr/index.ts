@@ -304,7 +304,22 @@ Deno.serve(async (req: Request) => {
     } catch { /* lock cleanup is best effort; never hide the original publish result */ }
   }
   try {
-    // Read latest main as the PR base. All generated writes stay on a dedicated branch.
+    // Serialize publishes with an atomic repository lock before reading the main base.
+    const initialRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
+    const lockBranch = "khaledoon/publish-main-lock";
+    try {
+      await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
+        method: "POST",
+        body: JSON.stringify({ ref: "refs/heads/" + lockBranch, sha: initialRef.object.sha }),
+      });
+      storyLockBranchForCleanup = lockBranch;
+    } catch (lockError) {
+      const lockDetail = lockError instanceof Error ? lockError.message : "";
+      if (lockDetail.includes("GitHub API 422") || lockDetail.includes("Reference already exists")) {
+        return reply(409, { success: false, error: "يوجد نشر آخر جارٍ الآن؛ انتظر قليلًا ثم أعد المحاولة. لم تتغير الملفات المنشورة." });
+      }
+      throw lockError;
+    }
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
