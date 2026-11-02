@@ -66,7 +66,7 @@ async function decide(isApprove){
   if(record.status!=='published')payload.status=isApprove?(table==='submitted_stories'?'pending':'review'):'pending';
   if(record.status==='published'){
    if(isApprove){
-    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type'].forEach(function(k){delete pending[k]});
+    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type','story_meta'].forEach(function(k){delete pending[k]});
     pending.story_meta=meta;pending.status='pending';meta.pending_draft=pending;
    }else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending'}
   }
