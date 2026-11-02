@@ -139,7 +139,7 @@ function makeReaderHtml(story, id, coverUrl) {
     '<p class="reaction-status" id="reaction-status" role="status" aria-live="polite"></p><span class="reaction-count-line" id="reaction-limit">يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.</span></div></section>' +
     '<section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section></article></main>\n' +
     '<div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>\n' +
-    '<script src="../../../rebuild/reader.js?v=20261102-canonical-reader-1" data-kh-story-reader data-story-path="story.json"></script>' +
+    '<script src="../../../rebuild/reader.js?v=20261102-canonical-theme-reader-1" data-kh-story-reader data-story-path="story.json"></script>' +
     '<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>\n';
   return html;
 }
