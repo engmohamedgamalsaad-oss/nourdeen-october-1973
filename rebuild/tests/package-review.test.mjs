@@ -25,7 +25,10 @@ test('canonical review only hands the validated draft to the shared reader and n
 });
 
 test('canonical review checks all five locales, image/source metadata and quiz translations before handoff', () => {
-  for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(html, new RegExp('value="' + lang + '"'));
+  for (const lang of ['ar', 'en', 'fr', 'it', 'de']) {
+    assert.match(readerHtml, new RegExp('data-lang="' + lang + '"'), 'shared reader language button: ' + lang);
+    assert.match(legacyHtml, new RegExp('value="' + lang + '"'), 'October legacy preview language option: ' + lang);
+  }
   assert.match(scripts[0], /textContent/);
   assert.match(scripts[0], /s\.format!=='KHALEDOON_STORY'/);
   assert.match(scripts[0], /s\.i18n&&s\.i18n\[l\]/);
