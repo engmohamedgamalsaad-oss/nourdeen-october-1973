@@ -37,29 +37,44 @@ test('the unified story contract is the only workflow outside October', async ()
   assert.match(readme, /لا تُستخدم مصدرًا لإنشاء صفحة أو نشر حكاية خارج أكتوبر/);
 });
 
-test('canonical prompt and prompt admin use the unified story contract for new packages', async () => {
-  const master = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', import.meta.url), 'utf8');
+test('canonical v5 prompt and prompt admin use the official story contract', async () => {
+  const master = await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8');
   const promptAdmin = await readFile(new URL('../../khaledoon/prompts-admin.html', import.meta.url), 'utf8');
   const activeAdminTexts = await readFile(new URL('../../khaledoon/assets/khaledoon-admin-texts.js', import.meta.url), 'utf8');
-  assert.match(master, /العقد الفعلي الموجود في `rebuild\/story-contract\.json`/);
+  assert.match(master, /المخطط الرسمي/);
   assert.match(master, /rebuild\/story-contract\.json/);
-  assert.match(master, /لا تُخرج حقولًا قديمة غير مدعومة/);
-  assert.doesNotMatch(master, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
-  assert.match(promptAdmin, /القالب الموحد هو المرجع المعتمد للحكايات الجديدة/);
-  assert.match(promptAdmin, /لا تستخدم المخطط القديم/);
-  assert.match(activeAdminTexts, /العقد الفعلي الموجود في `rebuild\/story-contract\.json`/);
+  assert.match(master, /لا تُخرج حقولًا غير موجودة في المخطط/);
+  assert.match(promptAdmin, /كل ملف أداة في مسار v5 نسخة مستقلة كاملة/);
+  assert.match(promptAdmin, /لا تجمع معه مرجعًا أو نسخة v4 إضافية/);
+  assert.match(activeAdminTexts, /المخطط الرسمي/);
+  assert.match(activeAdminTexts, /rebuild\/story-contract\.json/);
   assert.doesNotMatch(activeAdminTexts, /افحص مخطط KH_STORY_PACKAGE_V1 الفعلي/);
 });
 
+test('the four standalone v5 prompts contain the same shared reference and distinct provider appendices', async () => {
+  const master = (await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8')).trim();
+  const files = ['chatgpt', 'claude', 'deepseek', 'gemini'];
+  const prompts = await Promise.all(files.map(name =>
+    readFile(new URL('../../khaledoon/prompts/2026-11-02-unified-v5/story-prompt-' + name + '.md', import.meta.url), 'utf8')
+  ));
+  for (let i = 0; i < prompts.length; i++) {
+    const appendixAt = prompts[i].indexOf('# تعليمات خاصة بـ ');
+    assert.ok(appendixAt > 0, files[i] + ' must have a provider appendix');
+    const shared = prompts[i].slice(0, appendixAt).replace(/\n*---\n*$/, '').trim();
+    assert.equal(shared, master, files[i] + ' must include the exact canonical reference');
+    assert.match(prompts[i], /الإصدار: 2026-11-02-v5/);
+  }
+});
 
-test('unified story story content must be rich, source-grounded, and balanced about uncertainty', async () => {
-  const packagePrompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
-  const master = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', import.meta.url), 'utf8');
-  const checklist = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', import.meta.url), 'utf8');
-  const readme = await readFile(new URL('../README.md', import.meta.url), 'utf8');
-  for (const [name, text] of [['unified story package prompt', packagePrompt], ['master workflow', master], ['checklist', checklist], ['unified story README', readme]]) {
-    assert.match(text, /ثراء المحتوى|ثراء المحتوى التاريخي|ثراء المحتوى والدقة التاريخية/, name + ' must define the story richness gate');
-    assert.match(text, /لا تجعل التحفظات|لا تهيمن عبارات|لا نكرر|لا تكرر/, name + ' must prevent uncertainty warnings from dominating the story');
-    assert.match(text, /مصادر موثوقة|المصادر الموثوقة|مصادر موثوقة تدعمها/, name + ' must require source-grounded claims');
+test('v5 story content gate requires specific, source-grounded facts and balanced uncertainty', async () => {
+  const master = await readFile(new URL('../../docs/khaledoon-story-production-workflow.md', import.meta.url), 'utf8');
+  const files = ['chatgpt', 'claude', 'deepseek', 'gemini'];
+  const prompts = await Promise.all(files.map(name =>
+    readFile(new URL('../../khaledoon/prompts/2026-11-02-unified-v5/story-prompt-' + name + '.md', import.meta.url), 'utf8')
+  ));
+  for (const [name, content] of [['canonical reference', master], ...files.map((name, i) => [name, prompts[i]])]) {
+    assert.match(content, /معلومات تاريخية محددة وكافية/, name + ' must require specific historical detail');
+    assert.match(content, /اذكر الخلاف \*\*مرة واحدة\*\*/, name + ' must keep uncertainty notes balanced');
+    assert.match(content, /مصادر موثوقة قابلة للفتح/, name + ' must require verifiable sources');
   }
 });

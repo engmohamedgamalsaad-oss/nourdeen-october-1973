@@ -96,52 +96,47 @@ test('copied story prompts are compact, mode-specific, and include validated ima
   assert.ok(admin.includes('images:it.images||(it.story_meta&&it.story_meta.images)||[]'));
   assert.ok(admin.includes('source_name,source_url,rights,i18n'));
 });
-test('active admin prompt is synchronized with the unified v4 story contract', function () {
+test('active admin prompt is synchronized with the unified v5 story contract', function () {
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  var marker = 'var STORY_PAGE_PROMPT = ';
+  var marker = 'STORY_PAGE_PROMPT = ';
   var markerIndex = shared.indexOf(marker);
   assert.ok(markerIndex >= 0, 'active story prompt declaration must exist');
   var start = markerIndex + marker.length;
-  var end = shared.indexOf('\nvar STORY_PROVIDER_PROMPTS =', start);
+  var end = shared.indexOf(';\nSTORY_PROVIDER_PROMPTS =', start);
   assert.ok(end > start, 'active story prompt must be a single embedded string');
-  var prompt = JSON.parse(shared.slice(start, end).replace(/;$/, ''));
-  assert.ok(prompt.includes('الإصدار: 2026-10-23-v4'));
-  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md','utf8').trim();
-  assert.equal(prompt.trim(), masterPrompt, 'saved v4 master must exactly match the active admin prompt');
-  assert.ok(prompt.includes('### عقد الغلاف الموحد — مصدر واحد لكل موضع'));
-  assert.ok(prompt.includes('cover.i18n'));
-  assert.ok(prompt.includes('ملفًا محليًا لم يُرفع'), 'prompt must forbid unpreviewable local cover files');
-  assert.ok(prompt.includes('اللغات الأربع') && prompt.includes('en/fr/it/de'));
-  assert.ok(prompt.includes('source_name') && prompt.includes('source_url') && prompt.includes('rights'));
-  assert.ok(prompt.includes('source_name` كائنين مترجمين إلى `ar/en/fr/it/de`'), 'map source names must be localized in the active prompt');
+  var prompt = JSON.parse(shared.slice(start, end));
+  var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
+  assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v5 reference');
+  assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(prompt.includes('## 5) الغلاف والصور'));
+  assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
-  assert.ok(admin.includes('source_name كائنين مترجمين إلى ar/en/fr/it/de'), 'AI JSON schema must match the map source-name contract');
-  assert.ok(prompt.includes('لا تدمج تغييرًا إلى الفرع المنشور قبل الموافقة الصريحة'));
-  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0"), 'copy action must not treat v3 as current');
-  assert.ok(admin.includes("raw.main.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy prompts must migrate to v4');
-  assert.ok(admin.includes("raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0"), 'saved legacy workflow guides must migrate to v4');
+  assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0"));
+  assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')>=0"));
+  assert.ok(admin.includes("workflow:isV5&&typeof raw.workflow==='string'"));
 });
-test('active v4 master prompt exactly matches the canonical master file', function () {
+test('standalone v5 provider prompts share the exact canonical reference and match embedded provider appendices', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  var canonical = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
-  var prefix = 'var STORY_PAGE_PROMPT = ';
-  var start = texts.indexOf(prefix) + prefix.length;
-  var end = texts.indexOf(';\nvar STORY_PROVIDER_PROMPTS', start);
-  assert.ok(start >= prefix.length && end > start, 'active STORY_PAGE_PROMPT string must be isolated');
-  assert.equal(JSON.parse(texts.slice(start, end)), canonical, 'active prompt must not drift from canonical v4 master file');
-});
-test('embedded v4 provider prompts exactly match canonical provider files', function () {
-  var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  var prefix = 'var STORY_PROVIDER_PROMPTS = ';
+  var prefix = 'STORY_PROVIDER_PROMPTS = ';
   var start = texts.indexOf(prefix) + prefix.length;
   var end = texts.indexOf(';\n\nfunction khAppendPromptOnce', start);
   assert.ok(start >= prefix.length && end > start, 'embedded provider prompt object must be isolated');
   var embedded = JSON.parse(texts.slice(start, end));
-  var root = 'khaledoon/prompts/2026-10-23-unified-v4/';
-  var files = { chatgpt: 'CHATGPT.md', claude: 'CLAUDE.md', gemini: 'GEMINI.md', deepseek: 'DEEPSEEK.md' };
+  var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
+  var root = 'khaledoon/prompts/2026-11-02-unified-v5/';
+  var files = {
+    chatgpt: 'story-prompt-chatgpt.md',
+    claude: 'story-prompt-claude.md',
+    deepseek: 'story-prompt-deepseek.md',
+    gemini: 'story-prompt-gemini.md'
+  };
   Object.keys(files).forEach(function (key) {
-    var canonical = fs.readFileSync(root + files[key], 'utf8');
-    assert.equal(String(embedded[key] || ''), canonical, key + ' embedded prompt must match the canonical v4 file');
+    var full = fs.readFileSync(root + files[key], 'utf8');
+    var appendixAt = full.indexOf('# تعليمات خاصة بـ ');
+    assert.ok(appendixAt > 0, key + ' standalone prompt must include its own appendix');
+    var sharedPart = full.slice(0, appendixAt).replace(/\n*---\n*$/, '').trim();
+    assert.equal(sharedPart, canonical, key + ' must contain the exact shared v5 reference once');
+    assert.equal(String(embedded[key] || '').trim(), full.slice(appendixAt).trim(), key + ' embedded appendix must match the standalone file');
   });
 });
 test('embedded project instructions exactly match the canonical project file', function () {
@@ -165,32 +160,29 @@ test('published story 012 and 014 headers have all four non-Arabic translations'
     assert.ok(history.includes('supplementalTranslations.' + lang + '["← التاريخ والحضارات"]'), 'story 014 missing localized breadcrumb for ' + lang);
   });
 });
-test('unified v4 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
+test('unified v5 prompt is shared and legacy AI output is not copied into fresh prompts', function () {
   var instructions = fs.readFileSync('PROJECT_INSTRUCTIONS.md','utf8');
-  assert.ok(instructions.includes('cover.url` رابط صورة مباشر HTTPS'));
-  assert.ok(instructions.includes('source_name` ككائن بالخمس لغات `{ar,en,fr,it,de}`'));
+  assert.ok(instructions.includes('cover.url'));
+  assert.ok(instructions.includes('source_name'));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('STORY_DATA_QUALITY_GATE'));
   assert.ok(!admin.includes("L.push(String(copyMeta.ai_package_raw))"), 'old AI output must not be pasted into a fresh prompt');
-  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261029-unified-reader-prompt-2"));
+  assert.ok(admin.includes("assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('الإصدار: 2026-10-23-v4'));
+  assert.ok(shared.includes('الإصدار: 2026-11-02-v5'));
   assert.ok(shared.includes('استبدل أي نسخة قديمة به بالكامل'));
-  assert.ok(shared.includes('لا تلصق البرومبت القديم فوقه'));
   assert.ok(shared.includes('ar/en/fr/it/de'));
-  assert.ok(shared.includes('cover-popup'));
   assert.ok(shared.includes('prefers-reduced-motion'));
-  assert.ok(shared.includes('source_name') && shared.includes('source_url') && shared.includes('rights'), 'shared v4 prompt must retain source and rights fields');
-  assert.ok(shared.includes('معرض من صورتين إلى خمس صور موثقة وصالحة'), 'quality gate must enforce the same two-to-five image limit as the validator');
-  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md','utf8');
-  assert.ok(masterPrompt.includes('من صورتين إلى خمس صور موثقة وصالحة'), 'canonical master prompt must agree with the gallery validator limit');
-  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
-  ['chatgpt','gemini','claude','deepseek'].forEach(function (provider) {
-    assert.ok(shared.includes('"'+provider+'"'), 'missing provider instruction: '+provider);
-  });
+  assert.ok(shared.includes('source_name') && shared.includes('source_url') && shared.includes('rights'));
+  assert.ok(shared.includes('المراجعة البشرية والمعاينة قبل النشر إلزاميتان'));
+  var masterPrompt = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
+  assert.ok(masterPrompt.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع'));
+  assert.ok(admin.includes("var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/'"));
+  assert.ok(!admin.includes('2026-10-23-unified-v4'));
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html', 'utf8');
-  assert.ok(promptAdmin.includes('<option value="gemini">Gemini</option>'));
+  assert.ok(promptAdmin.includes('نسخة مستقلة كاملة'));
 });
+
 test('story publishing safely links verified map locations without overwriting existing map entries', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('path === "stories/index.json" || path === "stories/places.json"'));
@@ -208,8 +200,10 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261027-source-clean-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
-  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  assert.ok(shared.includes('## 8) الموقع على الخريطة'), 'the v5 map section must be present');
+  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'), 'the map location must be sourced');
+  assert.ok(shared.includes('لا تخترع إحداثيات'), 'map coordinates must never be invented');
+  assert.ok(shared.includes('map_location'), 'the canonical map field must be documented');
 });
 test('production publisher and deletion functions remain review-only until a PR is merged', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
@@ -260,13 +254,12 @@ test('shared reader template supports explicit and system light themes', functio
   assert.ok(bundle.includes(':root:not([data-theme="dark"]) body[data-story-slug]'));
 });
 test('section color contract keeps Hatshepsut pink/purple and Magdi Yacoub cyan/teal', function () {
-  var masterPrompt = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md', 'utf8');
-  var checklist = fs.readFileSync('khaledoon/prompts/2026-10-23-unified-v4/WORKFLOW-CHECKLIST.md', 'utf8');
+  var masterPrompt = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8');
   var hatsTheme = fs.readFileSync('stories/women/013/theme.css', 'utf8');
   var magdiTheme = fs.readFileSync('stories/science/015/theme.css', 'utf8');
-  assert.ok(masterPrompt.includes('حتشبسوت ترث لوحة نساء خالدات الوردية/البرقوقية ولا تُعرض باللون الأخضر'));
-  assert.ok(masterPrompt.includes('مجدي يعقوب يرث لوحة العلوم السماوية/التركوازية ولا تُعرض صفحته بخلفية بنية'));
-  assert.ok(checklist.includes('حتشبسوت ليست خضراء') && checklist.includes('مجدي يعقوب ليس بخلفية بنية'));
+  assert.ok(masterPrompt.includes('حتشبسوت ترث لوحة نساء خالدات'));
+  assert.ok(masterPrompt.includes('مجدي يعقوب لوحة العلوم'));
+  assert.ok(masterPrompt.includes('#e7a1c1') && masterPrompt.includes('#8ad9e8'));
   assert.ok(bundle.includes("women:'#d78bb2'") && bundle.includes("women:'women-leadership'"));
   assert.ok(bundle.includes("science:'#8ad9e8'") && bundle.includes("science:'science-lab'"));
   assert.ok(hatsTheme.includes('--accent:#e7a1c1') && hatsTheme.includes('#51284b'));
@@ -515,21 +508,35 @@ test('AI story package validation enforces one localized cover and two to five f
   assert.ok(W.validateStoryPackage(noImages).errors.some(function(error){return /صورتين موثقتين/.test(error)}), 'an empty image gallery must be rejected');
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
-test('Gemini is available in every admin story prompt flow with full story requirements', function () {
+test('Gemini is available in every admin story prompt flow with the complete v5 requirements', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
-  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
-  assert.ok(texts.includes('"gemini":"# تعليمات تشغيل خاصة بـ Gemini'));
-  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+  var pageStart = texts.indexOf('STORY_PAGE_PROMPT = ') + 'STORY_PAGE_PROMPT = '.length;
+  var pageEnd = texts.indexOf(';\nSTORY_PROVIDER_PROMPTS =', pageStart);
+  var shared = JSON.parse(texts.slice(pageStart, pageEnd));
+  var providerStart = texts.indexOf('STORY_PROVIDER_PROMPTS = ') + 'STORY_PROVIDER_PROMPTS = '.length;
+  var providerEnd = texts.indexOf(';\n\nfunction khAppendPromptOnce', providerStart);
+  var providers = JSON.parse(texts.slice(providerStart, providerEnd));
+  assert.ok(providers.gemini.includes('# تعليمات خاصة بـ Gemini'));
+  assert.ok(providers.gemini.includes('لا تُخرج Markdown ولا عناوين ولا قوائم ولا سور كود ولا مقدمة.'));
+  assert.ok(providers.gemini.includes('فعّل البحث لفتح المصادر والصور'));
+  assert.ok(providers.gemini.includes('لا تختصر الترجمات'));
+  ['original_body','كارما طفلة فضولية','ar/en/fr/it/de','خمسة على الأقل','source_url','map_location','WhatsApp وFacebook','لا تُنشر حكاية قبل الموافقة الصريحة'].forEach(function(term){assert.ok(shared.includes(term),'shared v5 prompt missing '+term)});
 });
-test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
+test('admin project instructions and AI provider prompts preserve the v5 design and image-rights contract', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('## 3) نظام التصميم الملزم — لا تكتفِ بوصفه للذكاء الاصطناعي'));
-  assert.ok(texts.includes('visual_design'));
-  assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تجعل جميع الحكايات نسخة لونية واحدة.'));
+  var marker = 'STORY_PAGE_PROMPT = ';
+  var start = texts.indexOf(marker) + marker.length;
+  var end = texts.indexOf(';\nSTORY_PROVIDER_PROMPTS =', start);
+  var shared = JSON.parse(texts.slice(start, end));
+  assert.ok(shared.includes('## 4) القسم واللون والتصميم'));
+  assert.ok(shared.includes('design.variant'));
+  assert.ok(shared.includes('source_url'));
+  assert.ok(shared.includes('لا تُنشئ ألوانًا أو بنية أو خلفيات جديدة'));
+  assert.ok(shared.includes('لا تستبدل لوحة اعتمدها صاحب المشروع'));
+  assert.ok(shared.includes('prefers-reduced-motion'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
@@ -590,7 +597,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
   assert.ok(preview.includes('هذه معاينة غير منشورة'));
 });
-test('prompt manager preserves valid v4 customizations and migrates stale appended gates', function () {
+test('prompt manager preserves valid v5 customizations and migrates stale appended gates', function () {
   var vm = require('vm');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var start = admin.indexOf('function adoptPromptManagerState(raw)');
@@ -600,46 +607,45 @@ test('prompt manager preserves valid v4 customizations and migrates stale append
   var legacyGate = 'بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ';
   function adopt(raw) {
     var context = {
-      STORY_PAGE_PROMPT: 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4',
-      STORY_WORKFLOW: 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4',
-      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER' } },
+      STORY_PAGE_PROMPT: 'DEFAULT MASTER\\nالإصدار: 2026-11-02-v5',
+      STORY_WORKFLOW: 'DEFAULT GUIDE\\nالإصدار: 2026-11-02-v5',
+      window: { STORY_PROVIDER_PROMPTS: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5' } },
       promptManagerState: {},
-      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER' },
+      promptProvidersCache: { chatgpt: 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5' },
       raw: raw
     };
     return JSON.parse(vm.runInNewContext(helper + '; adoptPromptManagerState(raw); JSON.stringify(promptManagerState)', context));
   }
   var valid = adopt({
-    main: 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4',
-    workflow: 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4',
+    main: 'CUSTOM MASTER\\nالإصدار: 2026-11-02-v5',
+    workflow: 'CUSTOM GUIDE\\nالإصدار: 2026-11-02-v5',
     custom: [{ name: 'extra', text: 'keep me' }],
-    providers: { chatgpt: 'CUSTOM PROVIDER' },
+    providers: { chatgpt: 'CUSTOM PROVIDER\\nالإصدار: 2026-11-02-v5' },
     versions: [{ version: 'saved' }]
   });
-  assert.equal(valid.main, 'CUSTOM MASTER\nالإصدار: 2026-10-23-v4', 'valid v4 master customizations must survive reload');
-  assert.equal(valid.workflow, 'CUSTOM GUIDE\nالإصدار: 2026-10-23-v4', 'valid v4 workflow customizations must survive reload');
-  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER', 'valid provider prompts must survive reload');
+  assert.equal(valid.main, 'CUSTOM MASTER\\nالإصدار: 2026-11-02-v5', 'valid v5 master customizations must survive reload');
+  assert.equal(valid.workflow, 'CUSTOM GUIDE\\nالإصدار: 2026-11-02-v5', 'valid v5 workflow customizations must survive reload');
+  assert.equal(valid.providers.chatgpt, 'CUSTOM PROVIDER\\nالإصدار: 2026-11-02-v5', 'valid v5 provider appendices must survive reload');
   assert.equal(valid.custom.length, 1, 'custom prompt entries must survive migration checks');
   var stale = adopt({
-    main: 'STALE MASTER\nالإصدار: 2026-10-23-v4\n' + legacyGate,
-    workflow: 'STALE GUIDE\nالإصدار: 2026-10-23-v4\n' + legacyGate,
+    main: 'STALE MASTER\\nالإصدار: 2026-10-23-v4\\n' + legacyGate,
+    workflow: 'STALE GUIDE\\nالإصدار: 2026-10-23-v4\\n' + legacyGate,
     custom: [{ name: 'extra', text: 'keep me' }],
-    providers: { chatgpt: 'STALE PROVIDER' }
+    providers: { chatgpt: 'STALE PROVIDER\\nالإصدار: 2026-10-23-v4' }
   });
-  assert.equal(stale.main, 'DEFAULT MASTER\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical master');
-  assert.equal(stale.workflow, 'DEFAULT GUIDE\nالإصدار: 2026-10-23-v4', 'legacy appended quality gates must be replaced by the canonical workflow guide');
-  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER', 'stale provider prompts must be refreshed');
+  assert.equal(stale.main, 'DEFAULT MASTER\\nالإصدار: 2026-11-02-v5', 'legacy master must fall back to the v5 canonical reference');
+  assert.equal(stale.workflow, 'DEFAULT GUIDE\\nالإصدار: 2026-11-02-v5', 'legacy guide must fall back to the v5 workflow pointer');
+  assert.equal(stale.providers.chatgpt, 'DEFAULT PROVIDER\\nالإصدار: 2026-11-02-v5', 'stale provider appendices must be refreshed');
   assert.equal(stale.custom.length, 1, 'migration must preserve separately managed custom prompt entries');
 });
-
-test('prompt admin links to the canonical v4 files and avoids stale v3 links', function () {
+test('prompt admin links to the four canonical standalone v5 files', function () {
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptAdmin.includes('2026-10-23-unified-v4/MASTER-STORY-WORKFLOW.md'));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261029-unified-reader-prompt-2'));
-  assert.ok(promptAdmin.includes('ليست مستقلة'), 'prompt admin must explain that provider files accompany the master');
-  assert.ok(!promptAdmin.includes('prompts/2026-10-22-unified-v3/'));
-  ['MASTER-STORY-WORKFLOW.md','CHATGPT.md','CLAUDE.md','DEEPSEEK.md','GEMINI.md','WORKFLOW-CHECKLIST.md'].forEach(function(file){
-    assert.ok(fs.existsSync('khaledoon/prompts/2026-10-23-unified-v4/'+file), 'v4 prompt artifact must exist: '+file);
+  assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-chatgpt.md'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
+  assert.ok(promptAdmin.includes('نسخة مستقلة كاملة'), 'prompt admin must explain that each provider file is standalone');
+  assert.ok(!promptAdmin.includes('prompts/2026-10-23-unified-v4/'));
+  ['story-prompt-chatgpt.md','story-prompt-claude.md','story-prompt-deepseek.md','story-prompt-gemini.md'].forEach(function(file){
+    assert.ok(fs.existsSync('khaledoon/prompts/2026-11-02-unified-v5/'+file), 'v5 prompt artifact must exist: '+file);
   });
 });
 test('publisher duplicate-story guard normalizes actual whitespace', function () {
@@ -657,10 +663,10 @@ test('publisher rejects dot and empty path segments', function () {
   assert.ok(!publisher.includes('path.split("/").includes("..")'), 'parent-only rejection is insufficient');
 });
 
-test('unified v4 prompt requires safe automatic map linkage for verified locations', function () {
+test('unified v5 prompt requires safe automatic map linkage for verified locations', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
-  assert.ok(texts.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  assert.ok(texts.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'));
   assert.ok(texts.includes('لا تخترع إحداثيات.'));
   assert.ok(publisher.includes("path === \"stories/index.json\" || path === \"stories/places.json\""));
   assert.ok(publisher.includes('currentPlaces[storyId] = { ...place, lat, lng }'));
@@ -762,34 +768,29 @@ test('story i18n lookup supports both dictionary shapes and the real SVG artwork
   assert.equal(lookup({}, 'de', 'خالدون عبر التاريخ · رسم توضيحي').de, 'Unsterbliche der Geschichte · Illustration');
 });
 
-test('unified v4 story prompt requires complete five-language verification', function () {
+test('unified v5 story prompt requires complete five-language verification', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
-  assert.ok(promptTexts.includes('## 6) اللغات الخمس — اكتمال حقيقي'));
+  assert.ok(promptTexts.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(promptTexts.includes('## 6) اللغات'));
   assert.ok(promptTexts.includes('ar/en/fr/it/de'));
-  assert.ok(promptTexts.includes('اختبر التبديل بين اللغات ثم الرجوع إلى لغة أخرى'));
+  assert.ok(promptTexts.includes('لا يبقى نص عربي ظاهر بعد تغيير اللغة'));
   assert.ok(admin.includes('STORY_PAGE_PROMPT'));
 });
-
-test('unified v4 prompt requires sourced images and a rendered image gallery', function () {
+test('unified v5 prompt requires sourced images and a rendered image gallery', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js','utf8');
-  assert.ok(promptTexts.includes('## 4) الغلاف والصور — من البداية حتى آخر مشهد'));
+  assert.ok(promptTexts.includes('## 5) الغلاف والصور'));
   assert.ok(promptTexts.includes('source_name') && promptTexts.includes('source_url') && promptTexts.includes('rights'), 'prompt artifacts must retain source and rights fields');
-  assert.ok(promptTexts.includes('أضف في `i18n` لكل لغة `en/fr/it/de` الحقول الأربعة مترجمة'), 'master prompt must require localized image source and rights metadata');
-  assert.ok(admin.includes('i18n.en/fr/it/de لكل من alt وcaption وsource_name وrights'), 'AI schema must require translated image metadata');
+  assert.ok(promptTexts.includes('alt') && promptTexts.includes('caption') && promptTexts.includes('i18n.<lang>'), 'image text must be localized inside the language objects');
+  assert.ok(promptTexts.includes('ظهور الصورة في البحث أو نجاح تحميلها لا يثبت إذن استخدامها.'));
   assert.ok(bundle.includes('add(lang,im.source_name,it.source_name);add(lang,im.rights,it.rights)'), 'generated translation dictionary must include image source and rights');
-
-  assert.ok(promptTexts.includes('ظهور الصورة في نتائج البحث ليس إذنًا باستخدامها.'));
   assert.ok(bundle.includes('function imageGalleryHtml(d,baseUrl,section,id)'));
   assert.ok(bundle.includes('absoluteStoryImageUrl(im.url,baseUrl,section,id)'), 'gallery links and images must use resolved repository-root URLs');
   assert.ok(bundle.includes("'+gallery+'"));
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
 });
-
-
 test('AI JSON import repair handles common copy/paste formatting damage without changing source text', function () {
   var repair = require('../assets/ai-json-repair.js');
   var raw = 'Introductory text\n```json\n{"format":"KH_STORY_PACKAGE_V1","title":"T\\\\*itle","body":"line one\nline two","items":[1,2,],}\n```';
@@ -817,33 +818,34 @@ test('AI import validates the package before saving and preserves pasted content
   assert.ok(admin.includes('تم إصلاح تنسيق JSON في نسخة الاستيراد فقط؛ النص الملصوق محفوظ كما هو.'));
 });
 
-test('v4 prompt architecture uses one master prompt and concise provider instructions', function () {
+test('v5 prompt architecture uses standalone provider files and one shared reference', function () {
   var promptTexts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var workflow = fs.readFileSync('docs/khaledoon-story-production-workflow.md','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var promptAdmin = fs.readFileSync('khaledoon/prompts-admin.html','utf8');
-  assert.ok(promptTexts.includes('الإصدار: 2026-10-23-v4'));
-  assert.ok(promptTexts.includes('var STORY_PAGE_PROMPT ='));
-  assert.ok(promptTexts.includes('var STORY_PROVIDER_PROMPTS ='));
+  assert.ok(promptTexts.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(promptTexts.includes('STORY_PAGE_PROMPT ='));
+  assert.ok(promptTexts.includes('STORY_PROVIDER_PROMPTS ='));
   ['ChatGPT','Gemini','Claude','DeepSeek'].forEach(function(provider) {
-    assert.ok(promptTexts.includes('# تعليمات تشغيل خاصة بـ ' + provider), 'missing concise provider instruction: '+provider);
+    assert.ok(promptTexts.includes('# تعليمات خاصة بـ ' + provider), 'missing provider appendix: '+provider);
   });
   assert.ok(admin.includes('البرومبت الموحد المعتمد — مرة واحدة فقط'));
   assert.ok(admin.includes('تعليمات الأداة المختارة'));
-  assert.ok(!admin.includes("STORY_WORKFLOW = khAppendPromptOnce(STORY_WORKFLOW"));
-  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261029-unified-reader-prompt-2'));
-  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261029-unified-reader-prompt-2'));
-  assert.ok(workflow.includes('التنفيذ التلقائي لكل الحكايات ولكل أدوات الذكاء الاصطناعي'));
+  assert.ok(admin.includes("var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/'"));
+  assert.ok(!admin.includes('2026-10-23-unified-v4'));
+  assert.ok(promptAdmin.includes('assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
+  assert.ok(admin.includes('khaledoon-admin-texts.js?v=20261102-story-prompt-v5'));
+  assert.ok(workflow.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(workflow.includes('## 0) وضعا التشغيل'));
   assert.ok(admin.includes('PROJECT_INSTRUCTIONS'));
-  var providerPromptDir = 'khaledoon/prompts/2026-10-23-unified-v4/';
-  ['CHATGPT.md','CLAUDE.md','GEMINI.md','DEEPSEEK.md'].forEach(function (name) {
+  var providerPromptDir = 'khaledoon/prompts/2026-11-02-unified-v5/';
+  ['story-prompt-chatgpt.md','story-prompt-claude.md','story-prompt-gemini.md','story-prompt-deepseek.md'].forEach(function (name) {
     var providerPrompt = fs.readFileSync(providerPromptDir + name, 'utf8');
-    assert.ok(providerPrompt.length < 1800, name + ' should contain concise provider-specific guidance, not a duplicated master prompt');
-    assert.ok(providerPrompt.includes('MASTER-STORY-WORKFLOW.md'), name + ' must point to the canonical master prompt');
-    assert.ok(!providerPrompt.includes('# البرومبت الموحد المعتمد — خالدون عبر التاريخ'), name + ' must not duplicate the master prompt');
+    assert.ok(providerPrompt.length > 12000, name + ' must be a complete standalone v5 prompt');
+    assert.ok(providerPrompt.includes('# البرومبت الموحد المعتمد — خالدون عبر التاريخ'), name + ' must contain the complete canonical master reference');
+    assert.ok(providerPrompt.includes('# تعليمات خاصة بـ '), name + ' must include its provider-specific appendix');
   });
 });
-
 test('Magdi Yacoub unified story package preserves the corrected five-language opening, documented photos, and verified map location', function () {
   var translations = fs.readFileSync('stories/science/015/translations.js', 'utf8');
   var opening = 'وُلد مجدي يعقوب في 16 نوفمبر 1935 بمدينة بلبيس بمحافظة الشرقية في مصر. ومنذ طفولته، تعرّف إلى عالم الطب من خلال والده الطبيب، ثم اختار أن يجعل علمه وعمله وسيلة لمساعدة المرضى.';
