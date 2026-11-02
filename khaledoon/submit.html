@@ -54,7 +54,7 @@
 <script>
 (function(){
 'use strict';
-var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
+var API='https://ypwprddkscnfblhftkeb.supabase.co',KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn',ANON_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inlwd3ByZGRrc2NuZmJsaGZ0a2ViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE1NTAzNzUsImV4cCI6MjEwNzEyNjM3NX0.HePnLoIx_m1PoB2wKeTHrxsl5WmCpTJ6aCOC7CptML0';
 function $(i){return document.getElementById(i)}
 var f=$('f'),sec=$('section'),stage=$('stage'),grade=$('grade'),msg=$('msg'),btn=$('go');
 var W=['الأول','الثاني','الثالث','الرابع','الخامس','السادس'];
@@ -82,7 +82,7 @@ f.addEventListener('submit',async function(e){
  var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),original_body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending',story_meta:{}};
  btn.disabled=true;
  try{
-  var r=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+KEY,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});
+  var r=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+ANON_JWT,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});
   if(!r.ok){say('err',r.status===404?'خدمة الإرسال لم تُفعّل بعد. حاول لاحقًا.':'تعذر الإرسال الآن ('+r.status+'). راجع الحقول وحاول مرة أخرى.');btn.disabled=false;return}
   try{localStorage.setItem('kh_last_submit',String(Date.now()))}catch(x){}
   f.hidden=true;$('done').hidden=false;window.scrollTo({top:0,behavior:'smooth'});
