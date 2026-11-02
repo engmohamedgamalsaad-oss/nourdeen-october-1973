@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 
 const html = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
+const review = await readFile(new URL('../package-review.html', import.meta.url), 'utf8');
+const legacyReview = await readFile(new URL('../package-review-legacy.html', import.meta.url), 'utf8');
 const js = await readFile(new URL('../reader.js', import.meta.url), 'utf8');
 const builder = await readFile(new URL('../build-story.mjs', import.meta.url), 'utf8');
 const baseCss = await readFile(new URL('../reader-base.css', import.meta.url), 'utf8');
@@ -28,6 +30,23 @@ test('unified reader exposes all five language choices and changes text directio
   assert.match(js, /dataset\.theme/);
   assert.match(js, /j===q\.correct_option/);
   assert.match(js, /lang\.options\[q\.correct_option\]/);
+});
+
+test('canonical drafts preview through the real shared reader while October preview remains unchanged', () => {
+  assert.match(js, /var previewMode=new URLSearchParams\(location\.search\)\.get\('draft'\)==='1'/);
+  assert.match(js, /function renderStoryPackage\(data,isPreview\)/);
+  assert.match(js, /kh-story-review-package/);
+  assert.match(js, /\(isPreview\?Promise\.resolve\(false\):detectBank\(\)\)/, 'draft preview must use its own embedded quiz, not a published quiz bank');
+  assert.match(js, /reactions-section/);
+  assert.match(html, /id="preview-banner"/);
+  assert.match(html, /id="preview-return"/);
+  assert.match(html, /khaledoon-story-map-link\.js/);
+  assert.match(review, /reader\.html\?draft=1/);
+  assert.match(review, /location\.replace/);
+  assert.doesNotMatch(review, /id="preview"/, 'non-October preview must not maintain a second story template');
+  assert.match(review, /parsed\.section==='october'/, 'October package review keeps the existing legacy preview');
+  assert.match(review, /package-review-legacy\.html/);
+  assert.match(legacyReview, /id="preview"/, 'the original October preview remains available');
 });
 
 test('unified reader renders story, gallery, quiz and source sections from one package', () => {
