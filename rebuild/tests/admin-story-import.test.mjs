@@ -75,18 +75,32 @@ test('source story text and all original figure captions remain archived for edi
   assert.equal(figures.figures.length, 9);
   assert.ok(figures.figures.every(item => item.raw_html.includes('<figure') && item.raw_html.includes('<img')));
 });
-test('prompt administration links the dedicated unified story package instructions', async () => {
+test('prompt administration links the four standalone v5 prompts and Admin loads only the selected file', async () => {
   const promptAdmin = await readFile(new URL('../../khaledoon/prompts-admin.html', import.meta.url), 'utf8');
-  const prompt = await readFile(new URL('../../khaledoon/prompts/2026-10-23-unified-v4/STORY-PACKAGE-PROMPT.md', import.meta.url), 'utf8');
-  assert.ok(promptAdmin.includes('STORY-PACKAGE-PROMPT.md'));
-  assert.ok(prompt.includes('KHALEDOON_STORY'));
-  assert.ok(prompt.includes('استلام الأصل'));
-  assert.ok(prompt.includes('التدقيق التاريخي'));
-  assert.ok(prompt.includes('الاعتماد والنشر'));
-  assert.ok(prompt.includes('كائن JSON واحدًا فقط'));
+  const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
+  assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-chatgpt.md'));
+  assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-claude.md'));
+  assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-deepseek.md'));
+  assert.ok(promptAdmin.includes('prompts/2026-11-02-unified-v5/story-prompt-gemini.md'));
+  assert.ok(html.includes("var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/'"));
+  assert.ok(html.includes("chatgpt:'story-prompt-chatgpt.md'"));
+  assert.ok(html.includes("claude:'story-prompt-claude.md'"));
+  assert.ok(html.includes("deepseek:'story-prompt-deepseek.md'"));
+  assert.ok(html.includes("gemini:'story-prompt-gemini.md'"));
+  assert.ok(html.includes('fetch(promptRoot+providerPromptFile'));
+  assert.ok(!html.includes('STORY-PACKAGE-PROMPT.md'), 'v5 standalone files must not be combined with a second package prompt');
+  const files = ['chatgpt', 'claude', 'deepseek', 'gemini'];
+  const prompts = await Promise.all(files.map(name =>
+    readFile(new URL('../../khaledoon/prompts/2026-11-02-unified-v5/story-prompt-' + name + '.md', import.meta.url), 'utf8')
+  ));
+  for (const [i, prompt] of prompts.entries()) {
+    assert.ok(prompt.includes('KHALEDOON_STORY'));
+    assert.ok(prompt.includes('استلام الأصل'));
+    assert.ok(prompt.includes('التدقيق التاريخي'));
+    assert.ok(prompt.includes('الاعتماد'));
+    assert.ok(prompt.includes('كائن JSON واحدًا فقط'));
+  }
 });
-
-
 test('unified package is mandatory for every non-October story, including legacy records', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const guard = html.split('\n').find(line => line.startsWith('function isOctoberLegacyRecord('));
