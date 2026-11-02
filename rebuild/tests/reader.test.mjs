@@ -19,6 +19,8 @@ test('unified reader exposes all five language choices and changes text directio
   assert.ok(baseCss.includes('Marhey,Cairo,Arial,sans-serif'), 'reader headings need a sans-serif fallback when external fonts are blocked');
   assert.match(html, /reader-base\.css\?v=20261101-story-reader-1/);
   assert.match(js, /themeLight/);
+  assert.match(js, /function syncThemeButton\\(\\)/);
+  assert.match(js, /setItem\\('kh-theme',next\\)\\}catch\\(e\\)\\{\\}syncThemeButton\\(\\)\\}\\);/);
   assert.match(js, /dataset\.theme/);
   assert.match(js, /j===q\.correct_option/);
   assert.match(js, /lang\.options\[q\.correct_option\]/);
@@ -51,6 +53,6 @@ test('static builder validates story packages and will not overwrite existing st
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /story\.json/);
-  assert.match(builder, /reader\.js\?v=20261101-story-reader-1/);
-  assert.match(html, /reader\.js\?v=20261101-story-reader-1/);
+  assert.match(builder, /reader\.js\?v=20261102-canonical-theme-reader-1/);
+  assert.match(html, /reader\.js\?v=20261102-canonical-theme-reader-1/);
 });
