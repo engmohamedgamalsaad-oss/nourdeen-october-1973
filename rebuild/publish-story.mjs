@@ -200,9 +200,11 @@ export async function buildStoryFiles(story, options = {}) {
   const previousPath = String(review.static_story_path || '').split('/').filter(Boolean).join('/');
   const previousId = String(review.static_story_id || '');
   let id = '';
+  let previousSection = '';
   if (previousPath) {
     const match = previousPath.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})$/);
-    if (!match || match[1] !== story.section) fail('تغيير قسم حكاية منشورة يحتاج مسار نقل منفصلًا؛ أوقفنا العملية لحماية الرابط القديم.');
+    if (!match) fail('مسار الحكاية السابق غير صالح؛ أوقفنا العملية لحماية الرابط القديم.');
+    previousSection = match[1];
     id = match[2];
     if (previousId && previousId.padStart(3, '0') !== id) fail('رقم الحكاية المحفوظ لا يطابق مسارها السابق.');
   } else if (previousId) {
@@ -216,9 +218,17 @@ export async function buildStoryFiles(story, options = {}) {
   const existingAt = index.findIndex(x => String(x.id || '').padStart(3, '0') === id);
   if (existingAt >= 0) {
     const current = index[existingAt];
-    if (current.section !== story.section) fail('رقم الحكاية مستخدم في قسم آخر.');
     const currentPath = String(current.path || '').split('/').filter(Boolean).join('/');
-    if (currentPath && currentPath !== root.replace(/\/$/, '')) fail('مسار الحكاية في الفهرس لا يطابق المسار المحفوظ.');
+    if (current.section !== story.section) {
+      if (!previousPath || currentPath !== previousPath || previousSection !== current.section) {
+        fail('رقم الحكاية مرتبط بقسم آخر دون مسار نقل مطابق؛ لم نغيّر القسم أو الرابط.');
+      }
+    }
+    if (currentPath && currentPath !== root.replace(/\/$/, '') && currentPath !== previousPath) {
+      fail('مسار الحكاية في الفهرس لا يطابق المسار السابق المسجل؛ أوقفنا النقل.');
+    }
+  } else if (previousPath) {
+    fail('مسار الحكاية السابق غير موجود في الفهرس؛ أوقفنا النقل لحماية الرابط القديم.');
   } else if (await pathExists(root + 'index.html')) {
     fail('صفحة بهذا الرقم موجودة خارج الفهرس؛ لم نستبدلها.');
   }
