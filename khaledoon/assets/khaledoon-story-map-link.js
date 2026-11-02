@@ -1,4 +1,4 @@
-/* خالدون عبر التاريخ — رابط الحكاية بالخريطة التفاعلية.
+/* Unified-reader pages own their reveal animation; keep the legacy motion loader for older story pages only.\n   خالدون عبر التاريخ — رابط الحكاية بالخريطة التفاعلية.
    يضيف قسم «على الخريطة» في صفحات الحكايات 005–015 عندما يكون للحكاية مكان موثق في stories/places.json،
    وفيه رابط يفتح خريطة الصفحة الرئيسية (#khMap). لا يمس حكايات أكتوبر (001–004).
    إن كان في الصفحة رابط للخريطة بالفعل (.interactive-map-link) لا يضيف شيئًا؛ وإن كان فيها قسم .story-map-link بدون رابط يضيف الرابط فيه فقط.
@@ -16,7 +16,7 @@
       navScript.src = new URL('khaledoon-story-nav.js?v=20261031-nav-1', cs.src).href;
       document.head.appendChild(navScript);
     }
-    if (cs && cs.src && !window.__khMotion) {
+    if (cs && cs.src && !window.__khMotion && !document.querySelector('script[data-kh-story-reader]')) {
       var motionScript = document.createElement('script');
       motionScript.src = new URL('khaledoon-story-motion.js?v=20261031-motion-1', cs.src).href;
       document.head.appendChild(motionScript);
