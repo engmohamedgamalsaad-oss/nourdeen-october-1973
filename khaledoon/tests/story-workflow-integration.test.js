@@ -110,6 +110,10 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
   assert.ok(prompt.includes('## 5) الغلاف والصور'));
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
+  assert.ok(!canonical.includes('\\`'), 'canonical v5 prompt must use real Markdown backticks, not escaped backticks');
+  var repoLine = canonical.split('\n').find(function (line) { return line.startsWith('المستودع: '); });
+  var siteLine = canonical.split('\n').find(function (line) { return line.startsWith('الموقع: '); });
+  assert.ok(repoLine && siteLine && repoLine !== siteLine, 'repository and site links must be on separate lines');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0"));
   assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')>=0"));
