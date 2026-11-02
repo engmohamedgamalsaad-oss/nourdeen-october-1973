@@ -700,13 +700,9 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
+  // The reader may intentionally promote a real photograph over a decorative cover.
+  // Check the source SVG assets directly instead of assuming every rendered intro cover is an SVG.
   const cases = [
-    { slug: 'stories/science/007/', decorative: true },
-    { slug: 'stories/women/013/', decorative: true },
-    { slug: 'stories/islamic/011/', decorative: true },
-    { slug: 'stories/history/014/', decorative: true },
-    { slug: 'stories/science/012/', decorative: true },
-    { slug: 'stories/women/010/', decorative: true },
     { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
     { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
     { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
@@ -723,7 +719,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(900);
       const en = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
+        const img = asset ? null : document.querySelector(selector || '#intro-cover, .intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
@@ -743,7 +739,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
       const ar = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
+        const img = asset ? null : document.querySelector(selector || '#intro-cover, .intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
@@ -791,7 +787,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   const apiCalls = [];
   const langs = ['ar', 'en', 'fr', 'it', 'de'];
   const localizedImage = (name) => ({
-    url: 'https://example.org/' + name + '.jpg',
+    url: 'https://example.org/' + name + '.png',
     kind: 'illustration',
     source_name: 'المصدر الأصلي',
     source_url: 'https://example.org/archive/' + name,
@@ -877,7 +873,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     sessionStorage.setItem('kh_adm_session', JSON.stringify(session));
   });
   const validFixturePng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/k0cAAAAASUVORK5CYII=', 'base64');
-  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', body: validFixturePng }));
+  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET, HEAD, OPTIONS', 'access-control-allow-headers': '*' }, body: validFixturePng }));
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   const failedRequests = [];
@@ -908,10 +904,10 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     }
     if (savedRecord.status === 'published') hard.push('story import unexpectedly published the story instead of saving a draft.');
     const popup = await popupPromise;
-    if (popup) await popup.waitForURL(/preview\.html/, { timeout: 15000 }).catch(() => {});
+    if (popup) await popup.waitForURL(/reader\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
     if (popup) {
       await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
-      await popup.waitForFunction(() => document.readyState === 'complete' && document.body, null, { timeout: 10000 }).catch(() => {});
+      await popup.waitForFunction(() => document.readyState === 'complete' && document.querySelector('#title') && document.querySelector('#title').textContent.trim().length > 0, null, { timeout: 15000 }).catch(() => {});
       const visibleText = await popup.locator('body').innerText().catch(() => '');
       if (visibleText.includes('[org:')) hard.push('Reader preview leaked the internal [org: source marker.');
       if (!visibleText.includes('Unified Story Import Test')) hard.push('story draft preview did not render the imported title.');
