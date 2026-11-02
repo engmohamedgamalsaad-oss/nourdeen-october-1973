@@ -237,8 +237,9 @@ async function loadList(){
  /* اربط سجل التحرير بالصفحة المنشورة باستخدام المعرّف الصريح فقط؛ لا نخفي السجل من الإدارة قبل عرضه داخل صفحة الموقع. */
  var linkedPublished={};
  adminRecords.forEach(function(record){
-  if(record.status!=='published')return;
   var page=window.KHWorkflow.linkedSite(record,sitePageItems);
+  /* سجل الصفحة قد يتحول إلى review أثناء تجهيز نقلها؛ وجود pending_draft لا يلغي الصفحة القديمة المنشورة. */
+  if(record.status!=='published'&&!(page&&record.story_meta&&record.story_meta.pending_draft&&typeof record.story_meta.pending_draft==='object'))return;
   if(page){
    if(!Array.isArray(page.submissions))page.submissions=[];
    page.submissions.push(record);
@@ -1402,7 +1403,7 @@ function renderVis(){
   /* نقل الحكاية المنشورة من قائمة الظهور: لا نربط بالعنوان؛ نستخدم رقم الصفحة الصريح فقط. */
   /* loadList يضع السجلات المرتبطة داخل sitePageItems[].submissions ويستبعدها من القائمة الرئيسية items. */
   var linkedPage=items.find(function(rec){return rec&&rec._t==='site'&&String(rec.id)===String(s.id)});
-  var linkedSubmission=linkedPage&&Array.isArray(linkedPage.submissions)?linkedPage.submissions.find(function(rec){return rec&&rec.status==='published'}):null;
+  var linkedSubmission=linkedPage&&Array.isArray(linkedPage.submissions)?(linkedPage.submissions.find(function(rec){return rec&&rec.status==='published'})||linkedPage.submissions.find(function(rec){return rec&&rec.story_meta&&rec.story_meta.pending_draft&&typeof rec.story_meta.pending_draft==='object'})):null;
   var movePublished=el('button','btn ghost','نقل إلى قسم آخر');movePublished.type='button';
   var moveHost=el('div','published-move-host');moveHost.style.cssText='grid-column:1/-1;width:100%';moveHost.hidden=true;
   if(linkedSubmission){
