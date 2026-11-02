@@ -30,7 +30,8 @@ test('package review hands canonical packages to the real five-language reader',
   assert.match(scripts[0], /textContent/);
   for (const lang of ['ar', 'en', 'fr', 'it', 'de']) assert.match(readerHtml, new RegExp('data-lang="' + lang + '"'));
   assert.match(readerHtml, /id="map-section"/);
-  assert.match(readerHtml, /id="original-body"/);
+  assert.match(readerHtml, /id="story"/);
+  assert.match(readerHtml, /id="intro-cover"/);
   assert.match(readerHtml, /id="blocks"/);
   assert.match(readerHtml, /id="quiz-section"/);
 });
