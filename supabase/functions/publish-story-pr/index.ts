@@ -294,7 +294,6 @@ Deno.serve(async (req: Request) => {
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
-  let branchNameForRecovery = "";
   let storyLockBranchForCleanup = "";
   async function releaseStoryLock() {
     const lockBranch = storyLockBranchForCleanup;
@@ -470,49 +469,10 @@ Deno.serve(async (req: Request) => {
       });
       treeEntries.push({ path: oldIndexPath, mode: '100644', type: 'blob', sha: redirectBlob.sha });
     }
-    const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`;
-    const prMarkerPrefix = `<!-- khaledoon-story:${storyId}:`;
-    const openPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
-    // Block a second open PR for the same ID even if the requested destination path differs.
-    // Otherwise two review branches could race to move/update the same story.
-    const existingPull = Array.isArray(openPulls)
-      ? openPulls.find((pull: any) => String(pull.body ?? '').includes(prMarkerPrefix) && pull.head?.repo?.full_name === OWNER + "/" + REPO)
-      : null;
-    if (existingPull) {
-      return reply(409, {
-        success: false,
-        error: "يوجد طلب دمج مفتوح لهذه الحكاية بالفعل؛ لم ننشئ نسخة ثانية.",
-        detail: "راجع طلب الدمج الحالي: " + existingPull.html_url,
-        pull_request_url: existingPull.html_url,
-        pull_request_number: existingPull.number,
-        branch: existingPull.head?.ref ?? null,
-      });
-    }
-    // GitHub rejects creation of an existing ref. A fixed per-story ref therefore acts as
-    // an atomic lock across concurrent invocations, unlike a check-then-scan alone.
-    const storyLockBranch = `khaledoon/publish-lock-${storyId}`;
-    try {
-      await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
-        method: "POST",
-        body: JSON.stringify({ ref: "refs/heads/" + storyLockBranch, sha: baseSha }),
-      });
-      storyLockBranchForCleanup = storyLockBranch;
-    } catch (lockError) {
-      const lockDetail = lockError instanceof Error ? lockError.message : "";
-      if (lockDetail.includes("GitHub API 422") || lockDetail.includes("Reference already exists")) {
-        return reply(409, {
-          success: false,
-          error: "يوجد تجهيز نشر جارٍ لهذه الحكاية أو قفل قديم يحتاج مراجعة؛ لم ننشئ طلب دمج ثانيًا.",
-          detail: "إذا لم يوجد طلب دمج مفتوح لهذه الحكاية، راجع فرع القفل " + storyLockBranch + " قبل إعادة المحاولة.",
-          story_id: storyId,
-        });
-      }
-      throw lockError;
-    }
+    // Build one atomic commit from the validated current main tree.
     for (const file of safeFiles) {
       const blob = await github('/repos/' + OWNER + '/' + REPO + '/git/blobs', githubToken, {
-        method: 'POST',
-        body: JSON.stringify({ content: file.content, encoding: file.encoding === 'base64' ? 'base64' : 'utf-8' }),
+        method: 'POST', body: JSON.stringify({ content: file.content, encoding: file.encoding === 'base64' ? 'base64' : 'utf-8' }),
       });
       treeEntries.push({ path: file.path, mode: '100644', type: 'blob', sha: blob.sha });
     }
@@ -522,73 +482,24 @@ Deno.serve(async (req: Request) => {
     const commit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
       method: "POST", body: JSON.stringify({ message: `Publish approved story: ${title}`, tree: tree.sha, parents: [baseSha] }),
     });
-    const branchSuffix = crypto.randomUUID().replace(/-/g, "").slice(0, 10);
-    branchNameForRecovery = `khaledoon/story-${storyId}-${branchSuffix}`;
-    await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
-      method: "POST",
-      body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha }),
+    const latestRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
+    if (latestRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز الحكاية؛ أوقفت النشر لتجنب استبدال تحديث أحدث. أعد المحاولة.");
+    await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
+      method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
     });
-    const prBody = prMarker + "\n\n" + description +
-      "\n\n## Automatic safety checks\n" +
-      "- Generated files were validated by the admin workflow.\n" +
-      "- The story index and interactive-map data are included in this pull request.\n" +
-      "- This is a draft pull request; it is not published until a human reviews and merges it.\n" +
-      "- No files were written to main by this function.";
-    const pull = await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {
-      method: "POST",
-      body: JSON.stringify({ title, head: branchNameForRecovery, base: BASE, body: prBody, draft: true }),
-    });
-    // Defense in depth for a request that bypassed the ref lock (for example, an older
-    // function version still running during rollout): reconcile any visible same-story PRs.
-    const racingPulls = await githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken);
-    const competingPulls = racingPulls.filter((candidate: any) =>
-      String(candidate.body ?? '').includes(prMarkerPrefix) && candidate.head?.repo?.full_name === OWNER + "/" + REPO
-    );
-    const winningPull = competingPulls.reduce((best: any, candidate: any) =>
-      (!best || candidate.number < best.number) ? candidate : best, null);
-    if (winningPull && winningPull.number !== pull.number) {
-      await github(`/repos/${OWNER}/${REPO}/pulls/${pull.number}`, githubToken, {
-        method: "PATCH", body: JSON.stringify({ state: "closed" }),
-      });
-      try {
-        await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${branchNameForRecovery}`, githubToken, { method: "DELETE" });
-      } catch { /* branch cleanup is best effort; the duplicate PR is already closed */ }
-      await releaseStoryLock();
-      return reply(409, {
-        success: false,
-        error: "تم رصد طلب متزامن لنفس الحكاية؛ أُغلق الطلب المكرر وبقي الطلب الأقدم.",
-        detail: "راجع طلب الدمج الحالي: " + winningPull.html_url,
-        pull_request_url: winningPull.html_url,
-        pull_request_number: winningPull.number,
-        branch: winningPull.head?.ref ?? null,
-      });
-    }
     await releaseStoryLock();
-    return reply(201, {
-      success: true,
-      published_to_main: false,
-      pull_request_url: pull.html_url,
-      pull_request_number: pull.number,
-      pull_request_state: pull.state,
-      pull_request_draft: pull.draft === true,
-      branch: branchNameForRecovery,
-      commit_sha: commit.sha,
-      story_id: storyId,
-      story_path: normalizedRoot,
-      map_linked: mapMarkerAdded,
-      map_marker_added: mapMarkerAdded,
-      map_message: mapMarkerAdded
-        ? "تم تضمين علامة الحكاية وبياناتها في الخريطة داخل طلب الدمج؛ لم تتغير الخريطة المنشورة."
-        : "تم تضمين بيانات الخريطة في طلب الدمج؛ لم تُضف علامة لأن الحكاية لا تحتوي على موقع موثق.",
-      message: "تم إنشاء طلب دمج للمراجعة. لم يتم تعديل main أو نشر الحكاية على الموقع."
+    return reply(200, {
+      success: true, published_to_main: true, commit_sha: commit.sha, story_id: storyId, story_path: normalizedRoot,
+      map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
+      map_message: mapMarkerAdded ? "تم نشر الحكاية وتحديث علامة الخريطة مباشرة في main." : "تم نشر الحكاية مباشرة في main دون إضافة علامة خريطة لعدم توفر موقع موثق.",
+      message: "تم تسجيل الحكاية مباشرة في main؛ بدأ GitHub Pages عملية النشر تلقائيًا."
     });
   } catch (error) {
     await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
-      error: "تعذر إنشاء طلب دمج للحكاية؛ لم تُكتب ملفات الحكاية إلى main.",
+      error: "تعذر نشر الحكاية مباشرة إلى main؛ لم تُسجّل كحكاية منشورة.",
       detail: detail.slice(0, 500),
-      branch: branchNameForRecovery || null,
     });
   }
 });
