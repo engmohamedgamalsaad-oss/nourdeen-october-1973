@@ -89,7 +89,8 @@
         "required": [
           "title",
           "organization",
-          "url"
+          "url",
+          "i18n"
         ],
         "properties": {
           "title": {
@@ -108,6 +109,34 @@
             "type": "string",
             "minLength": 1,
             "description": "Optional date when the source was accessed."
+          },
+          "i18n": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ar",
+              "en",
+              "fr",
+              "it",
+              "de"
+            ],
+            "properties": {
+              "ar": {
+                "$ref": "#/$defs/sourceText"
+              },
+              "en": {
+                "$ref": "#/$defs/sourceText"
+              },
+              "fr": {
+                "$ref": "#/$defs/sourceText"
+              },
+              "it": {
+                "$ref": "#/$defs/sourceText"
+              },
+              "de": {
+                "$ref": "#/$defs/sourceText"
+              }
+            }
           }
         }
       }
@@ -202,6 +231,24 @@
           "minLength": 1
         },
         "de": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "sourceText": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "organization"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
           "type": "string",
           "minLength": 1
         }
