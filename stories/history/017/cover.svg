@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img" aria-labelledby="title desc">
+<title id="title">رحلات ابن بطوطة</title><desc id="desc">رسم رمزي لكتاب سفر وبوصلة ومسار رحلة عبر خريطة قديمة</desc>
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#182b3a"/><stop offset=".55" stop-color="#35485a"/><stop offset="1" stop-color="#6b527e"/></linearGradient>
+ <radialGradient id="glow"><stop stop-color="#e8d6ff" stop-opacity=".34"/><stop offset="1" stop-color="#e8d6ff" stop-opacity="0"/></radialGradient>
+ <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0cf"/><stop offset="1" stop-color="#d9bd8b"/></linearGradient>
+</defs>
+<rect width="900" height="1100" fill="url(#bg)"/><circle cx="690" cy="300" r="390" fill="url(#glow)"/>
+<g opacity=".18" fill="none" stroke="#f1dfbb" stroke-width="3"><circle cx="450" cy="470" r="330"/><circle cx="450" cy="470" r="260"/><path d="M120 470H780M450 140V800M218 238L682 702M682 238L218 702"/></g>
+<path d="M95 640Q205 560 315 625T540 610T810 590" fill="none" stroke="#e5c98e" stroke-width="7" stroke-dasharray="13 17" opacity=".8"/>
+<g transform="translate(450 440)">
+ <circle r="180" fill="#172a38" fill-opacity=".48" stroke="#e9d5a8" stroke-width="8"/>
+ <circle r="148" fill="none" stroke="#e9d5a8" stroke-width="3" opacity=".8"/>
+ <path d="M0-125L27-24L125 0L27 24L0 125L-27 24L-125 0L-27-24Z" fill="#e7c98c" stroke="#fff0cf" stroke-width="5"/>
+ <circle r="17" fill="#fff0cf"/>
+ <path d="M0-125V125M-125 0H125" stroke="#fff0cf" stroke-width="2" opacity=".55"/>
+</g>
+<g transform="translate(145 700)">
+ <path d="M0 70Q135 5 270 70V300Q135 240 0 300Z" fill="url(#paper)" stroke="#b18a57" stroke-width="12"/>
+ <path d="M270 70Q405 5 540 70V300Q405 240 270 300Z" fill="#f6e6c3" stroke="#b18a57" stroke-width="12"/>
+ <path d="M270 70V300" stroke="#9d784e" stroke-width="8"/>
+ <g stroke="#8b7657" stroke-width="6" opacity=".65"><path d="M38 125H225M38 165H225M38 205H205M310 125H500M310 165H500M310 205H480"/></g>
+</g>
+<g transform="translate(690 210) rotate(18)"><path d="M0 0L56 195L28 240L0 195Z" fill="#e7c98c" stroke="#fff0cf" stroke-width="5"/><path d="M0 0L56 195" stroke="#fff0cf" stroke-width="4"/></g>
+<rect y="970" width="900" height="130" fill="#142635" opacity=".88"/><path d="M70 990H830" stroke="#e5c98e" stroke-width="4" opacity=".85"/>
+</svg>
