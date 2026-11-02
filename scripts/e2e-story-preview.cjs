@@ -46,7 +46,10 @@ async function main() {
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const base = 'http://127.0.0.1:' + server.address().port + '/stories/october/016/';
   browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1366, height: 900 } });
+  // The story page follows the visitor's system colour scheme until a theme is saved
+  // (same early script as the published pages). Pin the scheme so the theme assertions
+  // below start from dark mode deterministically instead of depending on the browser default.
+  const context = await browser.newContext({ viewport: { width: 1366, height: 900 }, colorScheme: 'dark' });
   await context.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
     if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
     await route.abort();
@@ -55,6 +58,7 @@ async function main() {
   page.on('pageerror', error => errors.push(String(error.message || error)));
   await page.goto(base, { waitUntil: 'load' });
   await page.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
+  assert.equal(await page.locator('body').getAttribute('data-theme'), 'dark', 'the page should start in dark mode for a dark-preferring visitor');
   assert.equal(await page.locator('#title').textContent(), story.i18n.ar.title);
   assert.equal(await page.locator('#story-intro-modal').isVisible(), true, 'the story should open on a dedicated start screen');
   assert.equal(await page.locator('#intro-title').textContent(), story.i18n.ar.title, 'start screen title should be localized');
@@ -137,7 +141,7 @@ async function main() {
   await page.screenshot({ path: path.join(artifactDir, 'story-desktop-en-light.png'), fullPage: true, animations: 'disabled' });
 
   // Exercise the actual read-only package reviewer used by the unified story admin draft path.
-  const reviewContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+  const reviewContext = await browser.newContext({ viewport: { width: 1280, height: 900 }, colorScheme: 'dark' });
   await reviewContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
     if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
     await route.abort();
@@ -166,7 +170,7 @@ async function main() {
   await reviewer.screenshot({ path: path.join(artifactDir, 'story-package-review-en.png'), fullPage: true, animations: 'disabled' });
   await reviewContext.close();
 
-  const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1 });
+  const mobileContext = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, colorScheme: 'dark' });
   await mobileContext.route(url => !String(url).startsWith('http://127.0.0.1:' + server.address().port), async route => {
     if (route.request().resourceType() === 'image') { await route.fulfill({ status: 200, contentType: 'image/svg+xml', body: testImageSvg }); return; }
     await route.abort();
