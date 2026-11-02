@@ -36,6 +36,7 @@ test('unified reader renders story, gallery, quiz and source sections from one p
   assert.match(js, /data\.format!=='KHALEDOON_STORY'/);
   assert.match(js, /SECTION_PALETTE/);
   assert.match(js, /initReactions/);
+  assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);initCardReveal\(\);return\}/, 'language changes must reattach reveal observers to newly rendered story blocks');
   assert.match(js, /openLightbox/);
   assert.match(js, /showImageFallback/);
 });
@@ -57,6 +58,6 @@ test('static builder validates story packages and will not overwrite existing st
   assert.match(builder, /validateStory\(story\)/);
   assert.match(builder, /Refusing to overwrite existing/);
   assert.match(builder, /story\.json/);
-  assert.match(builder, /reader\.js\?v=20261102-canonical-theme-reader-1/);
-  assert.match(html, /reader\.js\?v=20261102-canonical-theme-reader-1/);
+  assert.match(builder, /reader\.js\?v=20261102-canonical-theme-reader-2/);
+  assert.match(html, /reader\.js\?v=20261102-canonical-theme-reader-2/);
 });

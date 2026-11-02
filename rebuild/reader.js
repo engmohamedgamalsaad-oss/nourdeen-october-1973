@@ -101,7 +101,7 @@ var old=$('kh-hexes');if(old)old.remove();
 var hd=document.querySelector('header');
 if(hd&&!$('kh-progress')){var pr=document.createElement('div');pr.id='kh-progress';pr.className='kh-progress';pr.setAttribute('aria-hidden','true');hd.appendChild(pr)}
 if(!progressListenerAdded){window.addEventListener('scroll',function(){var d=document.documentElement,m=d.scrollHeight-d.clientHeight,pr=$('kh-progress');if(pr)pr.style.setProperty('--kh-p',m>0?Math.min(1,d.scrollTop/m):0)},{passive:true});progressListenerAdded=true}
-if(enhanceShown){body.classList.remove('kh-motion');return}
+if(enhanceShown){body.classList.remove('kh-motion');initCardReveal();return}
 enhanceShown=true;
 initCardReveal();
 }
