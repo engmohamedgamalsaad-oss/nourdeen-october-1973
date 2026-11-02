@@ -51,7 +51,7 @@ const page = `<!doctype html>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
 <div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button><div class="intro-art"><img id="intro-cover" alt=""><div id="intro-cover-fallback" class="kh-image-fallback" hidden></div></div>
 <div class="intro-copy"><p class="intro-kicker" id="intro-kicker">خالدون عبر التاريخ</p><h2 id="intro-title">ابدأ الحكاية</h2><p id="intro-subtitle"></p><p id="intro-summary"></p><button id="intro-start" class="start-story-btn" type="button">ابدأ الحكاية ←</button></div></div></div>
-<main><div id="status" class="status">جاري تحميل حزمة الحكاية الموحدة…</div><article id="story" hidden>
+<main><div id="status" class="status" role="status" aria-live="polite" aria-atomic="true">جاري تحميل حزمة الحكاية الموحدة…</div><article id="story" hidden>
 <section class="hero"><div class="kicker" id="section-name"></div><h1 id="title"></h1><p class="subtitle" id="subtitle"></p><p class="summary" id="summary"></p><div id="cover"></div><p id="student" class="kicker"></p>
 <div class="story-actions" id="story-actions" aria-label="Story actions"><button type="button" id="print-story">🖨️ طباعة / حفظ PDF</button><a id="share-whatsapp" target="_blank" rel="noopener noreferrer">واتساب</a><a id="share-facebook" target="_blank" rel="noopener noreferrer">فيسبوك</a><button type="button" id="share-copy">🔗 نسخ الرابط</button></div></section>
 <section class="section"><h2 id="story-heading">الحكاية</h2><div id="blocks"></div></section>
@@ -65,7 +65,7 @@ const page = `<!doctype html>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article></main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
-<script src="../../../rebuild/reader.js?v=20261101-story-reader-1" data-kh-story-reader data-story-path="story.json"></script>
+<script src="../../../rebuild/reader.js?v=20261102-theme-fast-switch-1" data-kh-story-reader data-story-path="story.json"></script>
 <script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });

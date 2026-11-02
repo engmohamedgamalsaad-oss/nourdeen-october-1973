@@ -31,6 +31,8 @@ async function main() {
   const build = spawnSync(process.execPath, [path.join(root, 'rebuild/build-story.mjs'), packageFile, '016'], { cwd: temp, encoding: 'utf8' });
   assert.equal(build.status, 0, build.stderr || build.stdout || 'unified story story build failed');
   const story = JSON.parse(fs.readFileSync(path.join(temp, 'stories/october/016/story.json'), 'utf8'));
+  assert.equal(story.format, 'KHALEDOON_STORY', 'V2 source package should normalize to the canonical reader format');
+  assert.equal(JSON.parse(fs.readFileSync(packageFile, 'utf8')).format, 'KHALEDOON_STORY_V2', 'building a V2 package must not mutate the source file');
   server = http.createServer((req, res) => {
     try {
       const pathname = decodeURIComponent(new URL(req.url, 'http://127.0.0.1').pathname);
@@ -58,6 +60,8 @@ async function main() {
   page.on('pageerror', error => errors.push(String(error.message || error)));
   await page.goto(base, { waitUntil: 'load' });
   await page.locator('#story').waitFor({ state: 'visible', timeout: 10000 });
+  await page.locator('#status').waitFor({ state: 'hidden' });
+  assert.equal(await page.locator('#status').textContent(), '', 'successful load should clear the transient status line');
   assert.equal(await page.locator('body').getAttribute('data-theme'), 'dark', 'the page should start in dark mode for a dark-preferring visitor');
   assert.equal(await page.locator('#title').textContent(), story.i18n.ar.title);
   assert.equal(await page.locator('#story-intro-modal').isVisible(), true, 'the story should open on a dedicated start screen');
@@ -106,8 +110,10 @@ async function main() {
   await page.locator('#quiz .quiz-next').click();
   assert.equal(await page.locator('#quiz .q').count(), 1, 'next question should replace the previous question');
   assert.ok((await page.locator('#quiz .q').first().textContent()).includes(story.quiz[1].i18n.en.question), 'next question should appear after answering the first');
+  await page.evaluate(() => { window.__khThemeNodes = { title: document.querySelector('#title'), blocks: document.querySelector('#blocks'), quiz: document.querySelector('#quiz .q') }; });
   await page.locator('#theme-toggle').click();
   assert.equal(await page.locator('body').getAttribute('data-theme'), 'light', 'theme toggle should switch to light mode');
+  assert.equal(await page.evaluate(() => window.__khThemeNodes.title === document.querySelector('#title') && window.__khThemeNodes.blocks === document.querySelector('#blocks') && window.__khThemeNodes.quiz === document.querySelector('#quiz .q')), true, 'theme switch must not rerender or replace story and quiz DOM');
   assert.equal(await page.locator('#sources a').count(), story.sources.length, 'all sources should render');
   assert.equal(await page.locator('#title').textContent(), story.i18n.en.title);
   const lightPalette = await page.evaluate(() => {

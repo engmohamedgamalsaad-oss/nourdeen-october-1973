@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { legacyToStory, storyToLegacy, storyToAdminDraft } from '../adapters/story-package-adapter.mjs';
+import { legacyToStory, storyToLegacy, storyToAdminDraft, normalizeStoryFormat } from '../adapters/story-package-adapter.mjs';
 
 const langs = ['en', 'fr', 'it', 'de'];
 function image(label) {
@@ -16,6 +16,15 @@ function image(label) {
     }]))
   };
 }
+test('normalizes transitional V2 packages without mutating the archived source object', () => {
+  const source = { format: 'KHALEDOON_STORY_V2', slug: 'october-sea-men' };
+  const normalized = normalizeStoryFormat(source);
+  assert.notEqual(normalized, source);
+  assert.equal(normalized.format, 'KHALEDOON_STORY');
+  assert.equal(source.format, 'KHALEDOON_STORY_V2');
+  assert.throws(() => normalizeStoryFormat({ format: 'UNKNOWN_STORY' }), /expected KHALEDOON_STORY or a supported transitional story format/);
+});
+
 function fixture() {
   const translations = Object.fromEntries(langs.map(lang => [lang, {
     student_name: 'Student ' + lang, grade: 'Grade ' + lang,
