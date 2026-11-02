@@ -402,7 +402,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
     if(draft.title&&liveStoryPackage.i18n.ar.title!==draft.title)throw new Error('عنوان حزمة القارئ الحية لا يطابق العنوان المعتمد. لم أغيّر حالة السجل.');
    }else{
     if(draft.title&&(!liveTitle||!normalizeStoryText(liveTitle.textContent).includes(normalizeStoryText(draft.title))))throw new Error('عنوان الصفحة الحية لا يطابق العنوان الذي تمت الموافقة عليه. لم أغيّر حالة السجل.');
-    var requiredText=[].concat(String(draft.body||'').split(/\\n{2,}/),String(draft.karma_text||'').split(/\\n{2,}/)).map(normalizeStoryText).filter(function(t){return t.length>=20});
+    var requiredText=[].concat(String(draft.body||'').split(/\n{2,}/),String(draft.karma_text||'').split(/\n{2,}/)).map(normalizeStoryText).filter(function(t){return t.length>=20});
     if(requiredText.some(function(t){return liveText.indexOf(t)<0}))throw new Error('نص الراوي أو مقاطع كارما في الصفحة الحية لا تطابق النسخة التي تمت معاينتها. لم أغيّر حالة السجل.');
    }
    var quizResponse=await fetch('/nourdeen-october-1973/stories/quizzes/'+encodeURIComponent(liveSlug)+'.json?verify='+Date.now(),{cache:'no-store'});if(!quizResponse.ok)throw new Error('بنك الأسئلة غير موجود على الموقع الحي ('+quizResponse.status+'). لم أغيّر حالة السجل.');var quizData=await quizResponse.json();if(!Array.isArray(quizData.questions)||quizData.questions.length<5||quizData.questions.some(function(q){return !q.i18n||['en','fr','it','de'].some(function(lang){return !q.i18n[lang]||!q.i18n[lang].q||!Array.isArray(q.i18n[lang].o)||!q.i18n[lang].e})}))throw new Error('بنك الأسئلة الحي ناقص أو لا يحتوي الترجمات الأربع المطلوبة. لم أغيّر حالة السجل.');
@@ -630,7 +630,7 @@ function makePreviewDraft(statusForPreview){
     var tx=String(p.text).trim();
     var legacy=tx.length>2500||tx.indexOf('البرومبت الرئيسي النهائي')>=0||tx.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||tx.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
     return !legacy&&workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;
-  }).map(function(p){return '--- '+String(p.name).trim()+' ---\\n'+String(p.text).trim()}).join('\\n\\n');
+  }).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n');
   if(managedExtras){L.push('');L.push('================ إضافات قصيرة غير مكررة ================');L.push(managedExtras);}
   L.push('');
   L.push('=== بيانات الحكاية ===');
@@ -1119,7 +1119,7 @@ function adoptPromptManagerState(raw){
  promptProvidersCache=Object.assign({},activeProviders);
 }
 function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
-function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-02-v5')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v5 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\\n\\n')}
+function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-02-v5')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v5 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\n\n')}
 async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
  try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
@@ -1131,7 +1131,7 @@ function buildNewStoryPrompt(providerKey,mode){
   var mainText=String(promptManagerState.main||'').indexOf('2026-11-02-v5')>=0?String(promptManagerState.main):String(STORY_PAGE_PROMPT||'');
   var providerText=String((promptProvidersCache&&promptProvidersCache[selected])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selected])||'');
   if(providerText.indexOf('2026-11-02-v5')<0)providerText=String((STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selected])||'');
-  return [mainText,'=== تعليمات خاصة بـ '+(names[selected]||'ChatGPT')+' ===',providerText].filter(Boolean).join('\\n\\n');
+  return [mainText,'=== تعليمات خاصة بـ '+(names[selected]||'ChatGPT')+' ===',providerText].filter(Boolean).join('\n\n');
  }
 
  var selectedProvider=providerKey||'chatgpt';
