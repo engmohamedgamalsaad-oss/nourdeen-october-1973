@@ -65,7 +65,7 @@ function openUnifiedReader(){
  location.replace('reader.html?draft=1&v=20261102-unified-reader-preview-1');
 }
 function loadPackage(parsed,fromDraft){
- if(parsed&&parsed.format==='KHALEDOON_STORY_V2'&&(parsed.section==='october'||parsed.section_key==='october')){
+ if(parsed&&(parsed.section==='october'||parsed.section_key==='october')){
   try{localStorage.setItem('kh-story-review-package',JSON.stringify(parsed));location.replace('package-review-legacy.html?draft=1&v=20261102-october-v2-preview-1')}
   catch(e){$('status').textContent='تعذر فتح معاينة أكتوبر القديمة: '+e.message;$('status').className='status bad'}
   return;
