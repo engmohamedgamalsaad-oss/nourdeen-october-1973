@@ -106,7 +106,7 @@ def main():
         acc = PALETTE[p.parent.parent.name]
         if d['design'].get('accent') != acc:
             d['design']['accent'] = acc; changed = True
-        out = json.dumps(d, indent=2, ensure_ascii=False) + ('\\n' if raw.endswith('\\n') else '')
+        out = json.dumps(d, indent=2, ensure_ascii=False) + ('\n' if raw.endswith('\n') else '')
         if key == 'people/008':
             assert 'si spedò' in out, 'already fixed?'
             out = out.replace('si spedò', 'si spostò'); changed = True
