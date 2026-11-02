@@ -38,7 +38,9 @@ test('publisher moves a story in a review PR and preserves the previous story UR
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-11-01-story-publisher-1'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('2026-11-02-canonical-publisher-1'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('supports_v2_publish: false'), 'V2 publishing must not be advertised as a current general capability');
+  assert.ok(publisher.includes('submittedStorySection && submittedStorySection !== "october"'), 'legacy V1 publishing must be limited to October');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');

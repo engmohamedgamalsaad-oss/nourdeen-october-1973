@@ -30,7 +30,9 @@ test('unified publisher accepts only the saved canonical package after approval 
   assert.ok(packageMatch < branchWrite && packageMatch < pullRequestWrite, 'submitted files must exactly match the approved saved package before PR creation');
 
   assert.match(source, /supports_story_package_publish:\s*true/);
-  assert.match(source, /supports_v2_publish:\s*true/, 'legacy capability alias remains during rollout');
+  assert.match(source, /supports_v2_publish:\s*false/, 'V2 publishing must not be advertised as a current capability');
+  assert.match(source, /if \(storySection !== "october" &&/, 'non-October story packages must use the canonical format and shared reader');
+  assert.match(source, /else if \(submittedStorySection && submittedStorySection !== "october"\)/, 'the legacy V1 publish route must be limited to October');
   assert.match(source, /requires_submission_id:\s*true/);
   assert.match(source, /published_to_main:\s*false/);
   assert.match(source, /No files were written to main by this function/);

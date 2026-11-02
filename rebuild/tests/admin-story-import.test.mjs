@@ -103,6 +103,7 @@ test('unified package is mandatory for every non-October story, including legacy
   assert.ok(html.includes('if(requireUnifiedStoryPackage)nextMeta.story_contract_required=true'));
   assert.ok(html.includes('if(storyOnlyDraft){nextMeta.story_only_draft=true'));
   assert.ok(html.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October records must be blocked from the legacy publish path');
+  assert.ok(html.includes("if(!isOctoberLegacyRecord(it)&&storyOnly&&storyPackage.format!=='KHALEDOON_STORY')"), 'non-October records must reject V2 and transitional packages at the admin boundary');
   assert.ok(html.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'legacy save and preview controls must be disabled for every non-October record');
   assert.ok(html.includes('هذه الحكاية خارج قسم أكتوبر؛ أوقفنا الحفظ والمعاينة من المسار القديم.'), 'legacy records must be directed to the unified package workflow');
 });
