@@ -47,6 +47,7 @@ test('canonical drafts preview through the real shared reader while October prev
   assert.match(review, /parsed\.section==='october'/, 'October package review keeps the existing legacy preview');
   assert.match(review, /package-review-legacy\.html/);
   assert.match(legacyReview, /id="preview"/, 'the original October preview remains available');
+  assert.match(legacyReview, /parsed\.section!=='october'/, 'the legacy preview must reject non-October stories');
 });
 
 test('unified reader renders story, gallery, quiz and source sections from one package', () => {
