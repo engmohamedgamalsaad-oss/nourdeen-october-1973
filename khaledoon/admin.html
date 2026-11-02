@@ -694,7 +694,7 @@ function makePreviewDraft(statusForPreview){
  }
  if(isNew){var bc=el('button','btn ghost','إلغاء');bc.type='button';bc.addEventListener('click',function(){draftNew=false;render()});bar.appendChild(bc)}
  else{var bd=el('button','btn del','حذف');bd.type='button';bd.addEventListener('click',function(){if(confirm('حذف هذه الحكاية نهائيًا؟'))remove(it,bd)});bar.appendChild(bd)}
-if(!isNew){
+if(!isNew&&isOctoberLegacyRecord(it)){
   var bMove=el('button','btn ghost','نقل إلى قسم آخر');bMove.type='button';
   bar.insertBefore(bMove,bCopy.nextSibling);
   var mv=el('div','mvbox');mv.hidden=true;
@@ -869,6 +869,7 @@ function pubRow(it){
    if(dataDetails)dataDetails.open=true;if(editDetails)editDetails.open=true;
    var editorNode=editDetails&&editDetails.querySelector('.fcard');if(editorNode&&editorNode.scrollIntoView)editorNode.scrollIntoView({behavior:'smooth',block:'start'});
   });actions.appendChild(editBtn);
+  if(it.id){
   var moveBtn=el('button','btn ghost','نقل الحكاية');moveBtn.type='button';moveBtn.title='نقل الحكاية إلى قسم آخر مع إعادة تجهيز تصميم القسم عند المعاينة والنشر';
   var movePanel=el('div','move-story-panel');movePanel.style.cssText='display:none;grid-column:1/-1;border:1px solid var(--line);border-radius:12px;padding:12px;gap:10px;background:var(--panel)';
   movePanel.appendChild(el('b','','نقل الحكاية إلى قسم آخر'));
@@ -892,15 +893,42 @@ function pubRow(it){
    var oldLabel=moveSave.textContent;moveSave.disabled=true;moveSave.textContent='جارٍ حفظ النقل…';
    try{
     var table=it._t==='o'?'submitted_stories':'khaledoon_submissions',meta=Object.assign({},it.story_meta||{}),sectionKey=SITEKEY[target]||target;
+    var canonicalTarget=target==='learning'?'women':target==='fame'?'people':target;
+    var accents={october:'#d6ad55',history:'#d5b7ff',science:'#8ad9e8',women:'#d78bb2',people:'#e2b36d',curriculum:'#9bb7ff',islamic:'#78c59a',readers:'#d6ad55'};
+    var review=meta.preview_review&&typeof meta.preview_review==='object'?Object.assign({},meta.preview_review):{};
+    if(review.publish_pr_url&&!review.publish_commit_sha)throw new Error('يوجد طلب دمج مفتوح للحكاية. أكمل مراجعته أو أغلقه قبل النقل؛ لم تتغير بيانات الحكاية.');
+    function moveSavedPackage(holder){
+     if(!holder||typeof holder!=='object')return false;
+     var packageKey=holder.story_only_draft?'story_package':holder.v2_only_draft?'v2_package':(holder.story_package?'story_package':holder.v2_package?'v2_package':'');
+     if(!packageKey||!holder[packageKey]||typeof holder[packageKey]!=='object')return false;
+     var movedPackage=JSON.parse(JSON.stringify(holder[packageKey]));
+     if(movedPackage.format==='KHALEDOON_STORY'||movedPackage.format==='KHALEDOON_STORY_V2'){
+      movedPackage.section=canonicalTarget;
+      if(movedPackage.design&&typeof movedPackage.design==='object')movedPackage.design.accent=accents[canonicalTarget]||movedPackage.design.accent;
+      if(window.KHStoryAdapter&&typeof window.KHStoryAdapter.validateStory==='function'){
+       var moveErrors=window.KHStoryAdapter.validateStory(movedPackage);
+       if(moveErrors.length)throw new Error('تعذر نقل الحزمة الموحدة دون فقد بيانات: '+moveErrors.slice(0,5).join('؛ '));
+      }
+     }
+     holder[packageKey]=movedPackage;
+     return true;
+    }
     var patch;
     if(it.status==='published'){
      var pending=Object.assign({},meta.pending_draft||it);
+     if(!pending.story_package&&!pending.v2_package){if(meta.story_package){pending.story_package=meta.story_package;pending.story_only_draft=meta.story_only_draft===true}else if(meta.v2_package){pending.v2_package=meta.v2_package;pending.v2_only_draft=meta.v2_only_draft===true}}
+     moveSavedPackage(pending);
      pending.section=target;pending.section_key=sectionKey;pending.stage=stage;pending.school_grade=grade;pending.subject=target==='curriculum'?(pending.subject||null):null;pending.status='pending';delete pending._t;delete pending.story_meta;
-     meta.pending_draft=pending;patch={story_meta:meta};
+     meta.pending_draft=pending;meta.section_key=sectionKey;patch={story_meta:meta};
     }else{
+     moveSavedPackage(meta);
+     if(meta.pending_draft&&typeof meta.pending_draft==='object'){moveSavedPackage(meta.pending_draft);meta.pending_draft.section=target;meta.pending_draft.section_key=sectionKey;meta.pending_draft.stage=stage;meta.pending_draft.school_grade=grade;meta.pending_draft.subject=target==='curriculum'?(meta.pending_draft.subject||null):null}
      meta.section_key=sectionKey;
      patch={section:target,stage:stage,school_grade:grade,subject:target==='curriculum'?(it.subject||null):null,status:'pending',story_meta:meta};
     }
+    review.decision='edited_after_review';review.edited_at=new Date().toISOString();review.note='تم نقل الحكاية إلى قسم آخر؛ يلزم إرسال معاينة جديدة واعتمادها قبل النشر.';review.publish_error=null;
+    ['publish_pr_url','publish_pr_number','publish_branch','publish_head_sha','publish_commit_sha','published_to_main_at'].forEach(function(key){delete review[key]});
+    meta.preview_review=review;patch.story_meta=meta;
     var response=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(patch)});
     if(!response.ok)throw new Error('تعذر حفظ النقل ('+response.status+').');
     var rows=await response.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد النقل.');
@@ -911,6 +939,7 @@ function pubRow(it){
   var moveActions=el('div','fbar');moveActions.appendChild(moveSave);moveActions.appendChild(moveCancel);movePanel.appendChild(moveActions);
   moveBtn.setAttribute('aria-expanded','false');moveBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var open=movePanel.style.display!=='grid';movePanel.style.display=open?'grid':'none';moveBtn.setAttribute('aria-expanded',open?'true':'false')});
   actions.appendChild(moveBtn);actions.appendChild(movePanel);
+  }
  }
  if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish')){
   var isSentForPreview=itemState(it)==='preview_sent';
@@ -938,11 +967,12 @@ function pubRow(it){
   actions.appendChild(openReview);
  }
  /* إظهار خطوة تأكيد النشر مباشرة في سجل الحكاية بعد اعتماد المعاينة، بدل حصرها داخل محرر الحكاية. */
- if(it._t!=='site'){
+ if(it._t!=='site'&&it.id){
   var publishConfirm=el('button','btn primary',pr.publish_pr_url?'فتح طلب الدمج':'نشر الحكاية');publishConfirm.type='button';publishConfirm.title='يظهر الزر دائمًا؛ يلزم اعتماد المعاينة قبل إرسال طلب النشر إلى GitHub.';
   markStoryDraftPublishButton(publishConfirm,it);publishConfirm.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(pr.decision!=='approved_waiting_for_github_upload'){say('err','اعتمد المعاينة أولًا، ثم اضغط «نشر الحكاية».');return}submitStoryPublishPR(it,publishConfirm)});actions.appendChild(publishConfirm);
   if(pr.publish_pr_url){var verifyPublish=el('button','btn ghost','تأكيد النشر بعد الدمج');verifyPublish.type='button';markStoryDraftPublishButton(verifyPublish,it);verifyPublish.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();confirmStoryPublishAfterUpload(it,verifyPublish)});actions.appendChild(verifyPublish)}
  }
+ if(it.id){
  var hb=el('button','btn hidebtn '+(hid?'primary':'ghost'),hid?'إظهار':'إخفاء');hb.type='button';
  var hw=el('span','hidebtn-wrap');
  if(!sv){
@@ -956,7 +986,8 @@ function pubRow(it){
   setHidden(sv,!hid,hb);
  });
  hw.appendChild(hb);actions.appendChild(hw);
- if(it._t!=='site'&&it.status!=='published'){
+ }
+ if(it._t!=='site'&&it.id&&it.status!=='published'){
   var db=el('button','btn del delbtn','حذف');db.type='button';db.title='حذف سجل المسودة من لوحة الإدارة فقط';
   db.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
@@ -1227,7 +1258,7 @@ function render(){
  var shown=items.filter(function(i){
   return (fStatus==='all'||(fStatus==='site_pages'?i._t==='site':(fStatus==='published'?i._t!=='site'&&itemState(i)==='published':itemState(i)===fStatus&&!(fStatus==='awaiting_publish'&&isAlreadyOnSite(i)))))&&(fSec==='all'||i.section===fSec)&&(!k||[i.title,i.figure_name,i.narrator_name,i.student_name,i.grade,i.subtitle].some(function(v){return String(v||'').toLocaleLowerCase().indexOf(k)!==-1}));
  });
- if(draftNew)list.appendChild(card({status:'pending',section:'curriculum'}));
+ if(draftNew){openIds['k:null']=true;list.appendChild(pubRow({id:null,_t:'k',status:'pending',section:'curriculum',created_at:new Date().toISOString(),story_meta:{}}));}
  if(!shown.length&&!draftNew)list.appendChild(el('div','fcard',k?'لا توجد حكايات مطابقة للبحث.':'لا توجد حكايات هنا بعد.'));
  shown.forEach(function(i){list.appendChild(pubRow(i))});
 }
