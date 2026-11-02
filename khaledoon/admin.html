@@ -612,14 +612,14 @@ function makePreviewDraft(statusForPreview){
   // المصدر الموحد هو المرجع الكامل. لا نكدّس workflow وبوابات قديمة أو تعليمات صور مكررة.
   var selectedAI=providerSelect.value||'chatgpt';
   var savedMain=String(promptManagerState.main||'').trim();
-  var isCurrentMaster=savedMain.indexOf('الإصدار: 2026-10-23-v4')>=0;
+  var isCurrentMaster=savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0;
   var workflowPrompt=(isCurrentMaster?savedMain:String(STORY_PAGE_PROMPT||'')).trim();
   L.push('================ البرومبت الموحد المعتمد — مرة واحدة فقط ================');
   if(workflowPrompt)L.push(workflowPrompt);
   L.push('');
   L.push('================ تعليمات الأداة المختارة: '+selectedAI.toUpperCase()+' ================');
   var providerCandidate=String((promptProvidersCache&&promptProvidersCache[selectedAI])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'').trim();
-  var providerIsLegacy=providerCandidate.length>1800||providerCandidate.indexOf('البرومبت الرئيسي النهائي')>=0||providerCandidate.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||providerCandidate.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
+  var providerIsLegacy=providerCandidate.indexOf('2026-11-02-v5')<0||providerCandidate.length>1800||providerCandidate.indexOf('البرومبت الرئيسي النهائي')>=0||providerCandidate.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||providerCandidate.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
   var selectedAIInstructions=providerIsLegacy?String((STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selectedAI])||'').trim():providerCandidate;
   if(selectedAIInstructions)L.push(selectedAIInstructions);
   L.push('');
@@ -990,12 +990,13 @@ function pubRow(it){
       if(requireUnifiedStoryPackage){
        try{
         var providerPromptFile={chatgpt:'CHATGPT.md',gemini:'GEMINI.md',claude:'CLAUDE.md',deepseek:'DEEPSEEK.md'}[provider]||'CHATGPT.md';
-        var promptRoot='../khaledoon/prompts/2026-10-23-unified-v4/';
-        var storyResources=await Promise.all([fetch(promptRoot+'MASTER-STORY-WORKFLOW.md',{cache:'no-store'}),fetch(promptRoot+'STORY-PACKAGE-PROMPT.md',{cache:'no-store'}),fetch(promptRoot+providerPromptFile,{cache:'no-store'}),fetch('../rebuild/story-contract.json',{cache:'no-store'})]);
-        if(storyResources.some(function(response){return !response.ok}))throw new Error('تعذر تحميل البرومبت الموحد أو تعليمات الأداة أو مخطط الحكاية.');
-        var masterPromptText=await storyResources[0].text(),storyPromptText=await storyResources[1].text(),providerPromptText=await storyResources[2].text(),storyContractText=await storyResources[3].text(),storyContract=JSON.parse(storyContractText);
-        basePrompt='خالدون عبر التاريخ — تعليمات واحدة لإنشاء حكاية متوافقة مع القالب المشترك. التزم بمرجع المشروع، ثم بعقد الحزمة، ثم بتعليمات الأداة؛ إذا اختلفت أسماء الحقول فالمخطط الرسمي هو الحاكم.\n\n=== المرجع الموحد للمحتوى والتصميم ===\n'+masterPromptText+'\n\n=== حزمة الحكاية التي يقبلها القالب ===\n'+storyPromptText+'\n\n=== تعليمات الأداة المختارة ===\n'+providerPromptText+'\n\nأخرج JSON واحدًا يطابق المخطط الرسمي حرفيًا. لا تُخرج HTML أو CSS، ولا تغيّر تصميم القالب أو ترتيب الأزرار أو الخلفيات. لا تدّعِ التحقق من صور أو مصادر لم تفحصها.';
-        schema='JSON Schema الرسمي — rebuild/story-contract.json:\n'+JSON.stringify(storyContract,null,2);
+        var promptRoot='../khaledoon/prompts/2026-11-02-unified-v5/';
+        var storyResources=await Promise.all([fetch(promptRoot+providerPromptFile,{cache:'no-store'}),fetch('../rebuild/story-contract.json',{cache:'no-store'})]);
+        if(storyResources.some(function(response){return !response.ok}))throw new Error('تعذر تحميل ملف v5 المستقل للأداة أو مخطط الحكاية.');
+        var providerPromptText=await storyResources[0].text(),storyContractText=await storyResources[1].text(),storyContract=JSON.parse(storyContractText);
+        if(providerPromptText.indexOf('2026-11-02-v5')<0)throw new Error('ملف الأداة المحمّل ليس إصدار v5 المعتمد.');
+        basePrompt=providerPromptText+'\\n\\nأخرج JSON واحدًا يطابق المخطط الرسمي حرفيًا. لا تُخرج HTML أو CSS، ولا تغيّر تصميم القالب أو ترتيب الأزرار أو الخلفيات. لا تدّعِ التحقق من صور أو مصادر لم تفحصها.';
+        schema='JSON Schema الرسمي — rebuild/story-contract.json:\\n'+JSON.stringify(storyContract,null,2);
        }catch(storyPromptError){aiSay('err','تعذر تجهيز برومبت القالب الموحد من ملفات المشروع: '+String(storyPromptError&&storyPromptError.message||storyPromptError));return}
       }else{
      if(!requireUnifiedStoryPackage){schema="'أخرج كائن JSON صالحًا واحدًا فقط كنص خام، بلا أسوار كود أو Markdown أو مقدمة أو خاتمة. لا تضع أي نص خارج الكائن، ولا تستخدم تنسيق Markdown داخل قيم النصوص. أول خاصية في كائن JSON الجذر يجب أن تكون حرفيًا \"format\": \"KH_STORY_PACKAGE_V1\"، ثم فاصلة ثم بقية الحقول. بداية إلزامية مثالها: { \"format\": \"KH_STORY_PACKAGE_V1\", \"section_key\": \"fame\", ... }. لا تذكر format في الشرح فقط ولا تضعه داخل كائن فرعي. لا تضف مقدمة أو خاتمة ولا أي كتلة كود. الحقول: format, section_key, figure_name, title, subtitle, narrator_name, narrator_grade, original_body, karma_text, body, history_note, sources, images_note, visual_design, cover, map_location, images, translations, question_bank. cover كائن إلزامي واحد: url رابط HTTPS مباشر أو path محلي موجود فعليًا، alt وcaption بالعربية، source_name وsource_url (HTTPS) وrights وkind، وcover.i18n.en/fr/it/de ولكل لغة alt وcaption وsource_name وrights مترجمة. إذا كان cover.path فيجب أن يكون مسار أصل موجود تحت assets/images/ أو images/ أو stories/؛ لا تضع مسارًا محليًا في cover.url ولا تستخدم ملفًا غير مرفوع. استخدم كائن الغلاف نفسه في بطاقة الفهرس وHero ونافذة البداية وog:image. section_key واحدة من october, science, learning, fame, history, curriculum, islamic, readers. map_location إما null عند عدم وجود موقع تاريخي موثق، أو كائن يحتوي lat وlng رقميين وplace وsource_name كائنين مترجمين إلى ar/en/fr/it/de وsource_url HTTPS وapproximate اختياريًا. لا تخترع إحداثيات أو مصادر. احفظ original_body حرفيًا. translations تحتوي en,fr,it,de؛ ولكل لغة student_name,grade,title,subtitle,karma_text,body,history_note,images_note بنصوص كاملة غير فارغة. visual_design واحدة من timeline, science-lab, ancient-civilization, military-history, journey-map, portrait-biography, women-leadership, arts-culture, discovery. images مصفوفة من صورتين إلى خمس صور موثقة وصالحة؛ كل صورة تحتوي url,alt,caption,kind,source_name,source_url,rights,i18n؛ يكون url رابط HTTPS مباشرًا أو مسارًا آمنًا من جذر المستودع تحت assets/images/ أو images/ أو stories/ لملف موجود، ولا تستخدم ./ أو ../، ويُفحص الملف المحلي عند الاستيراد؛ kind واحدة من archival,illustration,diagram,map؛ وi18n.en/fr/it/de ولكل لغة alt وcaption وsource_name وrights مترجمة. لا تخترع روابط أو تراخيص. لا تُخرج حزمة JSON للاستيراد إذا تعذر التحقق من صورتين على الأقل؛ اذكر النقص في images_note وhistory_note بدل اختلاق معلومات أو روابط. يجب أن يحتوي body على ثلاث فقرات «هل تعلم؟» منفصلة على الأقل، كل فقرة تبدأ بـ «هل تعلم؟» وتُترجم في الموضع نفسه وتبدأ بعلامة Did you know? / Le saviez-vous ? / Lo sapevi? / Wusstest du? حسب اللغة؛ القالب يعرضها كبطاقات معرفة. لا تضف حقل JSON غير مدعوم. اذكر سبب اختيار visual_design في history_note. فضّل الحقول المحددة في المخطط وتجنب الحقول الإضافية غير المدعومة؛ هذه المهمة لإنتاج بيانات الحكاية فقط، ولا تدّعِ اختبار وظائف الموقع. question_bank.questions فيها خمسة أسئلة على الأقل؛ كل سؤال q وo (اختيارات نصية) وa (فهرس صحيح يبدأ من صفر) وe وi18n؛ وi18n.en/fr/it/de تحتوي q وo وe مترجمة مع العدد نفسه من الاختيارات. لا تُخرج HTML ولا تدّعِ رفع ملفات أو نشر الصفحة.'";}
@@ -1095,14 +1096,44 @@ var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-
 }
 var promptProvidersCache=window.STORY_PROVIDER_PROMPTS&&typeof window.STORY_PROVIDER_PROMPTS==='object'?Object.assign({},window.STORY_PROVIDER_PROMPTS):{};
 var promptManagerState={main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),custom:[],providers:Object.assign({},promptProvidersCache),versions:[]};
-function adoptPromptManagerState(raw){if(!raw||typeof raw!=='object')return;var _mk="بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ";if(typeof raw.workflow!=='string'||raw.workflow.indexOf('الإصدار: 2026-10-23-v4')<0||raw.workflow.indexOf(_mk)>=0||typeof raw.main!=='string'||raw.main.indexOf('الإصدار: 2026-10-23-v4')<0||raw.main.indexOf(_mk)>=0){raw=Object.assign({},raw,{main:String(STORY_PAGE_PROMPT||''),workflow:String(STORY_WORKFLOW||''),providers:Object.assign({},window.STORY_PROVIDER_PROMPTS||{})})}promptManagerState={main:typeof raw.main==='string'?raw.main:String(STORY_PAGE_PROMPT||''),workflow:typeof raw.workflow==='string'?raw.workflow:String(STORY_WORKFLOW||''),custom:Array.isArray(raw.custom)?raw.custom:[],providers:Object.assign({},promptProvidersCache,raw.providers&&typeof raw.providers==='object'?raw.providers:{}),versions:Array.isArray(raw.versions)?raw.versions:[]};promptProvidersCache=Object.assign({},promptManagerState.providers)}
+function adoptPromptManagerState(raw){
+ if(!raw||typeof raw!=='object')return;
+ var isV5=typeof raw.main==='string'&&raw.main.indexOf('2026-11-02-v5')>=0;
+ var versions=Array.isArray(raw.versions)?raw.versions:[];
+ if(!isV5&&(raw.main||raw.workflow||raw.providers)){
+  versions=versions.concat([{saved_at:new Date().toISOString(),note:'نسخة إعدادات قديمة قبل تفعيل v5 — محفوظة في سجل الاسترجاع المحلي',main:raw.main||'',workflow:raw.workflow||'',custom:Array.isArray(raw.custom)?raw.custom:[],providers:raw.providers||{}}]).slice(-10);
+ }
+ var activeProviders=Object.assign({},promptProvidersCache);
+ if(isV5&&raw.providers&&typeof raw.providers==='object'){
+  Object.keys(raw.providers).forEach(function(k){
+   if(typeof raw.providers[k]==='string'&&raw.providers[k].indexOf('2026-11-02-v5')>=0)activeProviders[k]=raw.providers[k];
+  });
+ }
+ promptManagerState={
+  main:isV5?raw.main:String(STORY_PAGE_PROMPT||''),
+  workflow:isV5&&typeof raw.workflow==='string'?raw.workflow:String(STORY_WORKFLOW||''),
+  custom:Array.isArray(raw.custom)?raw.custom:[],
+  providers:activeProviders,
+  versions:versions
+ };
+ promptProvidersCache=Object.assign({},activeProviders);
+}
 function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
-function managedPromptSections(providerKey){var lines=[];lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===');lines.push(promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== البرومبت الرئيسي لتطوير صفحة الحكاية — النسخة المحفوظة ===');lines.push(promptManagerState.main||STORY_PAGE_PROMPT||'');var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===');lines.push(extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===');lines.push(promptProvidersCache[providerKey||'chatgpt']||'إذا تعذر الوصول إلى GitHub، أخرج الملفات كاملة مع المسارات وخطوات الرفع اليدوي.');return lines.join('\n\n')}
+function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-02-v5')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v5 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\\n\\n')}
 async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
  try{var local=JSON.parse(localStorage.getItem('kh_prompt_manager_draft_v2')||localStorage.getItem('kh_prompt_manager_draft_v1')||'null');if(local)adoptPromptManagerState(local)}catch(e){}
 }
 function buildNewStoryPrompt(providerKey,mode){
+ if(mode!=='package'){
+  var selected=providerKey||'chatgpt';
+  var names={chatgpt:'ChatGPT',gemini:'Gemini',claude:'Claude',deepseek:'DeepSeek'};
+  var mainText=String(promptManagerState.main||'').indexOf('2026-11-02-v5')>=0?String(promptManagerState.main):String(STORY_PAGE_PROMPT||'');
+  var providerText=String((promptProvidersCache&&promptProvidersCache[selected])||(STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selected])||'');
+  if(providerText.indexOf('2026-11-02-v5')<0)providerText=String((STORY_PROVIDER_PROMPTS&&STORY_PROVIDER_PROMPTS[selected])||'');
+  return [mainText,'=== تعليمات خاصة بـ '+(names[selected]||'ChatGPT')+' ===',providerText].filter(Boolean).join('\\n\\n');
+ }
+
  var selectedProvider=providerKey||'chatgpt';
  var providerNames={chatgpt:'ChatGPT',gemini:'Gemini',claude:'Claude',deepseek:'DeepSeek'};
  var providerNote={
