@@ -83,6 +83,7 @@ function show(){
  $('preview').classList.remove('hidden');
 }
 function loadPackage(parsed,fromDraft){
+ if(!parsed||(parsed.section!=='october'&&parsed.section_key!=='october')){$('status').textContent='هذه المعاينة القديمة مخصصة لقسم أكتوبر فقط. استخدم حزمة KHALEDOON_STORY ومعاينة القارئ الموحد لبقية الأقسام.';$('status').className='status bad';return}
  story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
  const issues=listIssues(story);issues.forEach(x=>$('issues').appendChild(node('li',x,'bad')));
  $('counts').textContent='اللغات: '+langs.length+' · الأسئلة: '+(story.quiz||[]).length+' · الصور: '+(story.images||[]).length+' · المصادر: '+(story.sources||[]).length;
