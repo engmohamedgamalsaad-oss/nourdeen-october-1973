@@ -112,7 +112,7 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(admin.includes("savedMain.indexOf('الإصدار: 2026-11-02-v5')>=0"));
-  assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')<0"));
+  assert.ok(admin.includes("raw.main.indexOf('2026-11-02-v5')>=0"));
   assert.ok(admin.includes("workflow:isV5&&typeof raw.workflow==='string'"));
 });
 test('standalone v5 provider prompts share the exact canonical reference and match embedded provider appendices', function () {
@@ -200,8 +200,10 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261027-source-clean-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
-  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
-  assert.ok(shared.includes('اربط الحكاية بالفهرس والخريطة تلقائيًا وفق بنية المشروع الحالية عند وجود مكان موثق.'));
+  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'));
+  assert.ok(shared.includes('لا تخترع إحداثيات'));
+  assert.ok(shared.includes('ابحث أولًا عن مكان موثق مرتبط بالسيرة'));
+  assert.ok(shared.includes('لا تخترع إحداثيات'));
 });
 test('production publisher and deletion functions remain review-only until a PR is merged', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
@@ -506,21 +508,35 @@ test('AI story package validation enforces one localized cover and two to five f
   assert.ok(W.validateStoryPackage(noImages).errors.some(function(error){return /صورتين موثقتين/.test(error)}), 'an empty image gallery must be rejected');
   assert.ok(bundle.includes('أضف صورتين على الأقل'));
 });
-test('Gemini is available in every admin story prompt flow with full story requirements', function () {
+test('Gemini is available in every admin story prompt flow with the complete v5 requirements', function () {
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
-  assert.ok(texts.includes('var STORY_PROVIDER_PROMPTS ='));
-  assert.ok(texts.includes('"gemini":"# تعليمات تشغيل خاصة بـ Gemini'));
-  ['original_body','كارما طفلة فضولية','الألمانية','خمسة أسئلة','source_url','visual_design','WhatsApp وFacebook','معاينة خاصة','موافقة صاحب المشروع الصريحة','لا تدّعِ تنفيذًا أو اختبارًا أو نشرًا لم يحدث بالفعل'].forEach(function(term){assert.ok(texts.includes(term),'Gemini prompt missing '+term)});
+  var pageStart = texts.indexOf('STORY_PAGE_PROMPT = ') + 'STORY_PAGE_PROMPT = '.length;
+  var pageEnd = texts.indexOf(';\\nSTORY_PROVIDER_PROMPTS =', pageStart);
+  var shared = JSON.parse(texts.slice(pageStart, pageEnd));
+  var providerStart = texts.indexOf('STORY_PROVIDER_PROMPTS = ') + 'STORY_PROVIDER_PROMPTS = '.length;
+  var providerEnd = texts.indexOf(';\\n\\nfunction khAppendPromptOnce', providerStart);
+  var providers = JSON.parse(texts.slice(providerStart, providerEnd));
+  assert.ok(providers.gemini.includes('# تعليمات خاصة بـ Gemini'));
+  assert.ok(providers.gemini.includes('لا تُخرج Markdown ولا عناوين ولا قوائم ولا سور كود ولا مقدمة.'));
+  assert.ok(providers.gemini.includes('فعّل البحث لفتح المصادر والصور'));
+  assert.ok(providers.gemini.includes('لا تختصر الترجمات'));
+  ['original_body','كارما طفلة فضولية','ar/en/fr/it/de','خمسة على الأقل','source_url','map_location','WhatsApp وFacebook','لا تُنشر حكاية قبل الموافقة الصريحة'].forEach(function(term){assert.ok(shared.includes(term),'shared v5 prompt missing '+term)});
 });
-test('admin project instructions and AI provider prompts require custom layouts and image rights', function () {
+test('admin project instructions and AI provider prompts preserve the v5 design and image-rights contract', function () {
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
-  assert.ok(texts.includes('## 3) نظام التصميم الملزم — لا تكتفِ بوصفه للذكاء الاصطناعي'));
-  assert.ok(texts.includes('visual_design'));
-  assert.ok(texts.includes('source_url'));
-  assert.ok(texts.includes('لا تجعل جميع الحكايات نسخة لونية واحدة.'));
+  var marker = 'STORY_PAGE_PROMPT = ';
+  var start = texts.indexOf(marker) + marker.length;
+  var end = texts.indexOf(';\\nSTORY_PROVIDER_PROMPTS =', start);
+  var shared = JSON.parse(texts.slice(start, end));
+  assert.ok(shared.includes('## 4) القسم واللون والتصميم'));
+  assert.ok(shared.includes('design.variant'));
+  assert.ok(shared.includes('source_url'));
+  assert.ok(shared.includes('لا تُنشئ ألوانًا أو بنية أو خلفيات جديدة'));
+  assert.ok(shared.includes('لا تستبدل لوحة اعتمدها صاحب المشروع'));
+  assert.ok(shared.includes('prefers-reduced-motion'));
 });
 ['manual','AI'].forEach(function (mode) {
   test(mode + ' path: save, reject, resend, approve, failed verification, publish', function () {
