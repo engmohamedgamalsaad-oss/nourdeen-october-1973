@@ -700,13 +700,10 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
+  // Unified-reader cover selection may deliberately promote a documented real photograph,
+  // so inspect the decorative SVG assets directly instead of assuming every page currently
+  // displays its SVG cover as the intro image.
   const cases = [
-    { slug: 'stories/science/007/', decorative: true },
-    { slug: 'stories/women/013/', decorative: true },
-    { slug: 'stories/islamic/011/', decorative: true },
-    { slug: 'stories/history/014/', decorative: true },
-    { slug: 'stories/science/012/', decorative: true },
-    { slug: 'stories/women/010/', decorative: true },
     { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
     { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
     { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
@@ -892,7 +889,8 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(storyPackage));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
-    await importButton.click();
+    await importButton.click(); // First click unlocks the protected paste field.
+    await importButton.click(); // Second click validates and imports the pasted package.
     try {
       await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
     } catch (waitError) {
