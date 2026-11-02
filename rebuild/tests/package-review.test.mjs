@@ -4,6 +4,7 @@ import { readFile } from 'node:fs/promises';
 import vm from 'node:vm';
 
 const html = await readFile(new URL('../package-review.html', import.meta.url), 'utf8');
+const readerHtml = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
 const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
 const legacyHtml = await readFile(new URL('../package-review-legacy.html', import.meta.url), 'utf8');
 const legacyScripts = [...legacyHtml.matchAll(/<script>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
