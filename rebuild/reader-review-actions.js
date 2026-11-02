@@ -4,7 +4,7 @@ var params=new URLSearchParams(location.search);
 if(params.get('draft')!=='1')return;
 var SUPA='https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-var panel=null,approve=null,reject=null,reason=null,status=null,busy=false,draft=null,ctx=null;
+var panel=null,approve=null,reject=null,back=null,reason=null,status=null,busy=false,draft=null,ctx=null;
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.style.color=bad?'#ffb8b8':'#b9efc9'}}
 function addControls(){
@@ -15,13 +15,15 @@ function addControls(){
  panel=document.createElement('section');panel.id='kh-preview-decision-panel';panel.setAttribute('aria-label','قرارات مراجعة المعاينة');
  approve=document.createElement('button');approve.id='kh-preview-approve';approve.type='button';approve.textContent='اعتماد المعاينة';
  reject=document.createElement('button');reject.id='kh-preview-reject';reject.type='button';reject.textContent='رفض المعاينة';
+ back=document.createElement('button');back.id='kh-preview-back';back.type='button';back.textContent='الرجوع إلى لوحة الإدارة';back.style.background='#17313a';back.style.color='#f5f0e6';
  reason=document.createElement('textarea');reason.id='kh-preview-reason';reason.maxLength=1000;reason.placeholder='اكتب سبب رفض المعاينة (مطلوب قبل تسجيل الرفض)';
  status=document.createElement('div');status.id='kh-preview-decision-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- panel.append(approve,reject,reason,status);
+ panel.append(approve,reject,back,reason,status);
  var header=document.querySelector('header');
  if(header&&header.parentNode)header.parentNode.insertBefore(panel,header.nextSibling);else document.body.insertBefore(panel,document.body.firstChild);
  approve.addEventListener('click',function(){decide(true)});
- reject.addEventListener('click',function(){if(reason.style.display==='block'){decide(false)}else{reason.style.display='block';reason.focus();message('اكتب سبب الرفض ثم اضغط «رفض المعاينة» مرة أخرى.')}})
+ reject.addEventListener('click',function(){if(reason.style.display==='block'){decide(false)}else{reason.style.display='block';reason.focus();message('اكتب سبب الرفض ثم اضغط «رفض المعاينة» مرة أخرى.')}});
+ back.addEventListener('click',function(){var id=draft&&draft.submission_id?encodeURIComponent(draft.submission_id):'';location.href='../khaledoon/admin.html?returnfrompreview=1'+(id?'&submission='+id:'')});
 }
 function getContext(){
  try{ctx=JSON.parse(localStorage.getItem('kh-story-review-context')||'null')}catch(e){ctx=null}
@@ -84,7 +86,7 @@ async function decide(isApprove){
   var checkRows=await verify.json(),check=checkRows[0],review=check&&check.story_meta&&check.story_meta.preview_review;
   if(!review||review.decision!==expected)throw new Error('فشل التحقق النهائي من القرار. لا تعتبر المعاينة معتمدة.');
   try{localStorage.removeItem('kh-story-review-context')}catch(e){}
-  approve.disabled=true;reject.disabled=true;reason.disabled=true;
+  approve.disabled=true;reject.disabled=true;reason.disabled=true;back.disabled=false;
   if(isApprove){
    message('تم اعتماد المعاينة وحفظ القرار والتحقق منه. لم يتم نشر الحكاية؛ النشر خطوة منفصلة من لوحة الإدارة.');
   }else{
