@@ -424,7 +424,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
    if(table==='submitted_stories'&&storyPackage.section!=='october')throw new Error('سجل أكتوبر لا يمكنه اعتماد حكاية من قسم آخر.');
    if(table!=='submitted_stories')payload.section=storyPackage.section;
    payload.title=storyPackage.i18n.ar.title;payload.subtitle=storyPackage.i18n.ar.subtitle;
-   payload.body=storyPackage.i18n.ar.blocks.filter(function(b){return b.speaker==='narrator'}).map(function(b){return b.text}).join('\n\n');
+   payload.body=storyPackage.i18n.ar.blocks.filter(function(b){return b.speaker==='narrator'}).map(function(b){return b.text}).join('\\n\\n');
    payload.figure_name=storyPackage.i18n.ar.figure_name||storyPackage.i18n.ar.person||storyPackage.i18n.ar.title;payload.color=storyPackage.design.accent;
    meta.original_body=storyPackage.original_body;meta.story_package=storyPackage;meta.story_only_draft=true;meta.story_review_state='published';delete meta.v2_package;delete meta.v2_only_draft;delete meta.v2_review_state;
   }
@@ -630,7 +630,7 @@ function makePreviewDraft(statusForPreview){
     var tx=String(p.text).trim();
     var legacy=tx.length>2500||tx.indexOf('البرومبت الرئيسي النهائي')>=0||tx.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||tx.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
     return !legacy&&workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;
-  }).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n');
+  }).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\\n\\n');
   if(managedExtras){L.push('');L.push('================ إضافات قصيرة غير مكررة ================');L.push(managedExtras);}
   L.push('');
   L.push('=== بيانات الحكاية ===');
@@ -1118,7 +1118,7 @@ function adoptPromptManagerState(raw){
  };
  promptProvidersCache=Object.assign({},activeProviders);
 }
-function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\n\n')}
+function managedCustomPromptText(){return (promptManagerState.custom||[]).filter(function(p){return p&&String(p.name||'').trim()&&String(p.text||'').trim()}).map(function(p){return '--- '+String(p.name).trim()+' ---\n'+String(p.text).trim()}).join('\\n\\n')}
 function managedPromptSections(providerKey){var lines=[],mainText=String(promptManagerState.main||STORY_PAGE_PROMPT||'');if(mainText.indexOf('2026-11-02-v5')<0)lines.push('=== دليل تجهيز الحكايات — النسخة المحفوظة ===',promptManagerState.workflow||STORY_WORKFLOW||'');lines.push('=== المرجع الموحد v5 — مرة واحدة فقط ===',mainText);var extra=managedCustomPromptText();if(extra){lines.push('=== البرومبتات الإضافية المحفوظة ===',extra)}lines.push('=== تعليمات الأداة المختارة: '+String(providerKey||'chatgpt').toUpperCase()+' ===',promptProvidersCache[providerKey||'chatgpt']||'');return lines.join('\n\n')}
 async function loadPromptProviders(){
  try{var r=await rest('khaledoon_admin_config?config_key=eq.prompts&select=config_value');if(r.ok){var rows=await r.json();if(rows[0]&&rows[0].config_value&&typeof rows[0].config_value==='object'){adoptPromptManagerState(rows[0].config_value);try{localStorage.setItem('kh_prompt_manager_draft_v2',JSON.stringify(rows[0].config_value))}catch(e){}return}}}catch(e){}
