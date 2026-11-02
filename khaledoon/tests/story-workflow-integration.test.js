@@ -102,7 +102,7 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   var markerIndex = shared.indexOf(marker);
   assert.ok(markerIndex >= 0, 'active story prompt declaration must exist');
   var start = markerIndex + marker.length;
-  var end = shared.indexOf(';\\nSTORY_PROVIDER_PROMPTS =', start);
+  var end = shared.indexOf(';\nSTORY_PROVIDER_PROMPTS =', start);
   assert.ok(end > start, 'active story prompt must be a single embedded string');
   var prompt = JSON.parse(shared.slice(start, end));
   var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
@@ -119,7 +119,7 @@ test('standalone v5 provider prompts share the exact canonical reference and mat
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   var prefix = 'STORY_PROVIDER_PROMPTS = ';
   var start = texts.indexOf(prefix) + prefix.length;
-  var end = texts.indexOf(';\\n\\nfunction khAppendPromptOnce', start);
+  var end = texts.indexOf(';\n\nfunction khAppendPromptOnce', start);
   assert.ok(start >= prefix.length && end > start, 'embedded provider prompt object must be isolated');
   var embedded = JSON.parse(texts.slice(start, end));
   var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
@@ -134,7 +134,7 @@ test('standalone v5 provider prompts share the exact canonical reference and mat
     var full = fs.readFileSync(root + files[key], 'utf8');
     var appendixAt = full.indexOf('# تعليمات خاصة بـ ');
     assert.ok(appendixAt > 0, key + ' standalone prompt must include its own appendix');
-    var sharedPart = full.slice(0, appendixAt).replace(/\\n*---\\n*$/, '').trim();
+    var sharedPart = full.slice(0, appendixAt).replace(/\n*---\n*$/, '').trim();
     assert.equal(sharedPart, canonical, key + ' must contain the exact shared v5 reference once');
     assert.equal(String(embedded[key] || '').trim(), full.slice(appendixAt).trim(), key + ' embedded appendix must match the standalone file');
   });
@@ -585,7 +585,7 @@ test('prompt manager preserves valid v5 customizations and migrates stale append
   var vm = require('vm');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
   var start = admin.indexOf('function adoptPromptManagerState(raw)');
-  var end = admin.indexOf('\\nfunction managedCustomPromptText()', start);
+  var end = admin.indexOf('\nfunction managedCustomPromptText()', start);
   assert.ok(start >= 0 && end > start, 'prompt state migration helper must be isolatable');
   var helper = admin.slice(start, end);
   var legacyGate = 'بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ';
