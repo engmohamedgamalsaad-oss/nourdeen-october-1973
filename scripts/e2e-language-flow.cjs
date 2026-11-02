@@ -700,13 +700,10 @@ async function introPopupRegression(browser, base, origin) {
 async function svgArtworkRegression(browser, base, origin) {
   const hard = [];
   const checks = [];
+  // Unified-reader cover selection may deliberately promote a documented real photograph,
+  // so inspect the decorative SVG assets directly instead of assuming every page currently
+  // displays its SVG cover as the intro image.
   const cases = [
-    { slug: 'stories/science/007/', decorative: true },
-    { slug: 'stories/women/013/', decorative: true },
-    { slug: 'stories/islamic/011/', decorative: true },
-    { slug: 'stories/history/014/', decorative: true },
-    { slug: 'stories/science/012/', decorative: true },
-    { slug: 'stories/women/010/', decorative: true },
     { slug: 'stories/science/007/', asset: 'stories/science/007/cover.svg', decorative: true },
     { slug: 'stories/women/010/', asset: 'stories/women/010/cover.svg', decorative: true },
     { slug: 'stories/islamic/011/', asset: 'stories/islamic/011/cover.svg', decorative: true },
@@ -723,7 +720,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.goto(base + '/' + item.slug, { waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(900);
       const en = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
+        const img = asset ? null : document.querySelector(selector || '#intro-cover, .intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
@@ -743,7 +740,7 @@ async function svgArtworkRegression(browser, base, origin) {
       await page.reload({ waitUntil: 'load', timeout: 20000 });
       await page.waitForTimeout(250);
       const ar = await page.evaluate(async ({ selector, asset, base }) => {
-        const img = asset ? null : document.querySelector(selector || '.intro-art img');
+        const img = asset ? null : document.querySelector(selector || '#intro-cover, .intro-art img');
         if (!asset && !img) return { found: false, src: '', svg: '' };
         const src = asset ? new URL(asset, base + '/').href : (img.currentSrc || img.src || img.getAttribute('src') || '');
         let svg = '';
@@ -791,7 +788,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   const apiCalls = [];
   const langs = ['ar', 'en', 'fr', 'it', 'de'];
   const localizedImage = (name) => ({
-    url: 'https://example.org/' + name + '.jpg',
+    url: 'https://example.org/' + name + '.png',
     kind: 'illustration',
     source_name: 'المصدر الأصلي',
     source_url: 'https://example.org/archive/' + name,
@@ -877,10 +874,14 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     sessionStorage.setItem('kh_adm_session', JSON.stringify(session));
   });
   const validFixturePng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/k0cAAAAASUVORK5CYII=', 'base64');
-  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', body: validFixturePng }));
+  await ctx.route(/^https:\/\/example\.org\/.*/, async (route) => route.fulfill({ status: 200, contentType: 'image/png', headers: { 'access-control-allow-origin': '*', 'access-control-allow-methods': 'GET, HEAD, OPTIONS', 'access-control-allow-headers': '*' }, body: validFixturePng }));
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   const failedRequests = [];
+  const pageErrors = [];
+  const consoleErrors = [];
+  page.on('pageerror', (error) => pageErrors.push(String(error && error.message || error)));
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
@@ -892,11 +893,17 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(storyPackage));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
+    // The current admin explicitly starts the paste field unlocked. Only perform an
+    // unlock click when the rendered textarea is actually read-only; never double-submit.
+    if (await textarea.evaluate((el) => el.readOnly)) {
+      await importButton.click();
+      await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
+    }
     await importButton.click();
     try {
       await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
     } catch (waitError) {
-      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; textareaReadOnly=' + await textarea.evaluate((el) => el.readOnly).catch(() => 'unknown') + '; importButtonCount=' + await importButton.count() + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
     }
     const importStatus = await page.locator('.ai-status[role="status"]').innerText();
     if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('story import was rejected: ' + importStatus.slice(-900));
@@ -908,10 +915,10 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     }
     if (savedRecord.status === 'published') hard.push('story import unexpectedly published the story instead of saving a draft.');
     const popup = await popupPromise;
-    if (popup) await popup.waitForURL(/preview\.html/, { timeout: 15000 }).catch(() => {});
+    if (popup) await popup.waitForURL(/reader\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
     if (popup) {
       await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
-      await popup.waitForFunction(() => document.readyState === 'complete' && document.body, null, { timeout: 10000 }).catch(() => {});
+      await popup.waitForFunction(() => document.readyState === 'complete' && document.querySelector('#title') && document.querySelector('#title').textContent.trim().length > 0, null, { timeout: 15000 }).catch(() => {});
       const visibleText = await popup.locator('body').innerText().catch(() => '');
       if (visibleText.includes('[org:')) hard.push('Reader preview leaked the internal [org: source marker.');
       if (!visibleText.includes('Unified Story Import Test')) hard.push('story draft preview did not render the imported title.');
@@ -936,7 +943,7 @@ async function adminStoryModuleRegression(browser, base, origin) {
     await page.waitForFunction(() => {
       const a = window.KHStoryAdapter;
       return !!a && a.STORY_FORMAT === 'KHALEDOON_STORY' &&
-        typeof a.validateForAdminBridge === 'function' && typeof a.storyToLegacy === 'function';
+        typeof a.validateForAdminBridge === 'function' && typeof a.storyToLegacy === 'function' && typeof a.normalizeStoryFormat === 'function';
     }, null, { timeout: 10000 });
     return { checks: [{ ok: true, moduleLoaded: true }], hard };
   } catch (e) {
