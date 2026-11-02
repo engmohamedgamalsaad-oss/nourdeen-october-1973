@@ -35,6 +35,7 @@ test('unified reader exposes all five language choices and changes text directio
 test('canonical drafts preview through the real shared reader while October preview remains unchanged', () => {
   assert.match(js, /var previewMode=new URLSearchParams\(location\.search\)\.get\('draft'\)==='1'/);
   assert.match(js, /function renderStoryPackage\(data,isPreview\)/);
+  for (const lang of ['ar','en','fr','it','de']) assert.match(js, new RegExp('previewUi\\s*=\\s*\\{[\\s\\S]*?\\b'+lang+':\\{'), `preview banner must be translated to ${lang}`);
   assert.match(js, /kh-story-review-package/);
   assert.match(js, /\(isPreview\?Promise\.resolve\(false\):detectBank\(\)\)/, 'draft preview must use its own embedded quiz, not a published quiz bank');
   assert.match(js, /reactions-section/);
