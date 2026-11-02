@@ -27,7 +27,7 @@ function getContext(){
  try{ctx=JSON.parse(localStorage.getItem('kh-story-review-context')||'null')}catch(e){ctx=null}
  if(!ctx){try{ctx=JSON.parse(localStorage.getItem('kh-story-preview-context')||localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){ctx=null}}
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
- if((!ctx||!ctx.submission_id)&&urlId){ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}}
+ if(urlId&&(!ctx||String(ctx.submission_id)!==String(urlId))){ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}}
  if(!ctx||!ctx.submission_id)return false;
  var source=ctx.record_data&&typeof ctx.record_data==='object'?ctx.record_data:ctx;
  draft=Object.assign({},source,{submission_id:ctx.submission_id,submission_table:ctx.submission_table||'khaledoon_submissions',record_type:ctx.record_type||'modern',story_meta:ctx.story_meta||source.story_meta||{}});
