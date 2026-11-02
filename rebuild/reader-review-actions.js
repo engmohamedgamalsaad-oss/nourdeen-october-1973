@@ -88,9 +88,11 @@ async function decide(isApprove){
   try{localStorage.removeItem('kh-story-review-context')}catch(e){}
   approve.disabled=true;reject.disabled=true;reason.disabled=true;back.disabled=false;
   if(isApprove){
-   message('تم اعتماد المعاينة وحفظ القرار والتحقق منه. لم يتم نشر الحكاية؛ النشر خطوة منفصلة من لوحة الإدارة.');
+   message('تم اعتماد المعاينة وحفظ القرار والتحقق منه. ستعود الآن إلى لوحة الإدارة لاستكمال النشر.');
+   setTimeout(function(){location.href='../khaledoon/admin.html?returnfrompreview=1&submission='+encodeURIComponent(draft.submission_id)},1100);
   }else{
-   message('تم رفض المعاينة وإعادة الحكاية للتحرير. سبب الرفض محفوظ.');
+   message('تم رفض المعاينة وإعادة الحكاية للتحرير. سبب الرفض محفوظ. ستعود الآن إلى لوحة الإدارة.');
+   setTimeout(function(){location.href='../khaledoon/admin.html?returnfrompreview=1&submission='+encodeURIComponent(draft.submission_id)},1100);
   }
  }catch(e){message('لم يتم تأكيد القرار: '+(e&&e.message||'خطأ غير معروف')+' — لم يتم اعتبار المعاينة معتمدة.',true);setBusy(false)}
 }
