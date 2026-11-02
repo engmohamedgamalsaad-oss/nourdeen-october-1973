@@ -1,5 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img" aria-labelledby="title desc">
-<title id="title">رحلات ابن بطوطة</title><desc id="desc">رسم رمزي لكتاب سفر وبوصلة ومسار رحلة عبر خريطة قديمة</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100">
 <defs>
  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#182b3a"/><stop offset=".55" stop-color="#35485a"/><stop offset="1" stop-color="#6b527e"/></linearGradient>
  <radialGradient id="glow"><stop stop-color="#e8d6ff" stop-opacity=".34"/><stop offset="1" stop-color="#e8d6ff" stop-opacity="0"/></radialGradient>
