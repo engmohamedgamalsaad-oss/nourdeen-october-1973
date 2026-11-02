@@ -342,7 +342,7 @@ async function submitStoryPublishPR(it,btn){
  var priorStoryPath=String(review.static_story_path||'').split('/').filter(Boolean).join('/');
  var targetSectionKey=String((storyPackage&&storyPackage.section)||(pendingDraft&&(pendingDraft.section_key||pendingDraft.section))||it.section_key||it.section||'');
  var previousPathSection=priorStoryPath.split('/')[1]||'';
- var isPublishedSectionMove=it.status==='published'&&!!pendingDraft&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
+ var isPublishedSectionMove=!!pendingDraft&&!!review.static_story_id&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
  if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false||capabilityResult.requires_submission_id!==true||(capabilityResult.rejects_story_only_drafts!==true&&capabilityResult.rejects_v2_only_drafts!==true)||(storyOnly&&(capabilityResult.supports_story_package_publish!==true&&capabilityResult.supports_v2_publish!==true))||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(isPublishedSectionMove&&capabilityResult.supports_story_move!==true?'خدمة النشر الحية لا تدعم نقل الحكايات المنشورة حتى الآن. تم إيقاف العملية قبل تجهيز أو إرسال الملفات، ولم تتغير النسخة المنشورة. يلزم تحديث Edge Function ثم إعادة المحاولة.':storyOnly&&capabilityResult.supports_story_package_publish!==true?'خدمة النشر الحية لم تُحدّث بعد لدعم القالب الموحد؛ لم نرسل أي ملفات.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة؛ لم نرسل أي ملفات.')}
  if(!storyOnly&&(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')){say('err','قالب تجهيز ملفات الحكاية القديمة غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  await refreshIfNeeded();
@@ -876,7 +876,7 @@ function pubRow(it){
   var moveBtn=el('button','btn ghost','نقل الحكاية');moveBtn.type='button';moveBtn.title='نقل الحكاية إلى قسم آخر مع إعادة تجهيز تصميم القسم عند المعاينة والنشر';
   var movePanel=el('div','move-story-panel');movePanel.style.cssText='display:none;grid-column:1/-1;border:1px solid var(--line);border-radius:12px;padding:12px;gap:10px;background:var(--panel)';
   movePanel.appendChild(el('b','','نقل الحكاية إلى قسم آخر'));
-  var moveSource=it.status==='published'&&it.story_meta&&it.story_meta.pending_draft?it.story_meta.pending_draft:it;
+  var moveSource=it.story_meta&&it.story_meta.pending_draft&&typeof it.story_meta.pending_draft==='object'?it.story_meta.pending_draft:it;
   var moveSection=sel(SEC,moveSource.section||it.section||'october'),moveStage=sel(STG,moveSource.stage||it.stage||'','اختر المرحلة'),moveGrade=document.createElement('select');
   moveGrade.className='btn ghost';
   function fillMoveGrades(){var max=moveStage.value==='primary'?6:3,keep=moveGrade.value||String(moveSource.school_grade||it.school_grade||'');moveGrade.textContent='';var blank=el('option','','اختر الصف');blank.value='';moveGrade.appendChild(blank);for(var gi=0;gi<max;gi++){var opt=el('option','','الصف '+ORD[gi]);opt.value=String(gi+1);moveGrade.appendChild(opt)}if(keep&&+keep<=max)moveGrade.value=keep}
@@ -945,7 +945,7 @@ function pubRow(it){
   actions.appendChild(moveBtn);actions.appendChild(movePanel);
   }
  }
- var hasPendingDraft=!!(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft&&typeof it.story_meta.pending_draft==='object');
+ var hasPendingDraft=!!(it.story_meta&&it.story_meta.pending_draft&&typeof it.story_meta.pending_draft==='object');
  if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish'||hasPendingDraft)){
   var isSentForPreview=itemState(it)==='preview_sent';
   var openReview=el('button','btn primary',hasPendingDraft?'معاينة المسودة بعد النقل':(isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ'));openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
