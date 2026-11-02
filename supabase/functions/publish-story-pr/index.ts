@@ -96,7 +96,7 @@ Deno.serve(async (req: Request) => {
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
   if (body?.action === "capabilities") {
-    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-11-01-story-publisher-1", story_publish_version: "2026-11-01-story-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: true });
+    return reply(200, { success: true, publisher_mode: "draft_pr", version: "2026-11-01-story-publisher-1", story_publish_version: "2026-11-01-story-publish-1", writes_main_directly: false, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false });
   }
   if (body?.action === "verify_pr") {
     const number = Number(body.pull_request_number);
@@ -151,6 +151,10 @@ Deno.serve(async (req: Request) => {
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
+  const isV2OnlyDraft = sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
+  const submittedStoryPage = body.files.find((file: any) => /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/index\\.html$/.test(file.path));
+  const submittedStoryMatch = submittedStoryPage?.path.match(/^stories\\/([a-z0-9-]+)\\/([0-9]{3})\\/index\\.html$/);
+  const submittedStorySection = submittedStoryMatch?.[1] ?? "";
   const savedStoryPackageRaw: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
     (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
     (pendingMeta.v2_only_draft === true ? pendingMeta.v2_package : null) ??
@@ -200,6 +204,17 @@ Deno.serve(async (req: Request) => {
       const storySection = pageMatch?.[1], storyId = pageMatch?.[2];
       const storyRoot = storySection && storyId ? "stories/" + storySection + "/" + storyId + "/" : "";
       const pageHtml = contentForSafetyScan(pageFile);
+      if (storySection !== "october" &&
+          (isV2OnlyDraft || savedStoryPackageRaw?.format === "KHALEDOON_STORY_V2" ||
+           packageData.format !== "KHALEDOON_STORY" ||
+           packageFile.path !== storyRoot + "story.json" ||
+           !pageHtml.includes("data-kh-story-reader") ||
+           !pageHtml.includes('data-story-path="story.json"') ||
+           pageHtml.includes("data-kh-v2-reader") ||
+           pageHtml.includes('data-story-path="data.v2.json"'))) {
+        return reply(409, { error: "الحكايات خارج قسم أكتوبر يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
+      }
+
       if (!storyRoot || packageData.section !== storySection ||
           !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
           !(pageHtml.includes('data-story-path="story.json"') || pageHtml.includes('data-story-path="data.v2.json"')) ||
@@ -273,6 +288,8 @@ Deno.serve(async (req: Request) => {
     }
   } else if (hasStoryArtifacts) {
     return reply(409, { error: "ملفات V2 لا يمكن إرسالها من سجل لا يحمل حزمة V2 معتمدة." });
+  } else if (submittedStorySection && submittedStorySection !== "october") {
+    return reply(409, { error: "مسار النشر القديم متاح لقسم أكتوبر فقط؛ يجب إعادة تجهيز الحكايات الأخرى بحزمة KHALEDOON_STORY المعتمدة." });
   }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
