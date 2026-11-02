@@ -248,7 +248,7 @@ async function loadList(){
  var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]});
  items=visibleRecords.concat(sitePageItems).sort(function(a,b){return String(b.created_at||'').localeCompare(String(a.created_at||''))});
  var requestedParams=new URLSearchParams(location.search),requestedCodeEdit=requestedParams.get('editcode'),returnFromPreview=requestedParams.get('returnfrompreview')==='1';if(requestedCodeEdit){var requestedTable=requestedParams.get('table')||'khaledoon_submissions',requestedPrefix=requestedTable==='submitted_stories'?'o:':'k:';openIds[requestedPrefix+requestedCodeEdit]=true;if(!requestedCodeEditInitialized){aiInitialUnlockById[requestedPrefix+requestedCodeEdit]=true;requestedCodeEditInitialized=true;}fStatus='all';fSec='all';}
- render();if(returnFromPreview&&requestedCodeEdit){var returnCodeEditor=document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');if(returnCodeEditor){returnCodeEditor.scrollIntoView({behavior:'auto',block:'center'});try{returnCodeEditor.focus({preventScroll:true})}catch(ignoreReturnFocus){returnCodeEditor.focus()}}}
+ render();if(view==='vis'&&vLoaded)renderVis();if(returnFromPreview&&requestedCodeEdit){var returnCodeEditor=document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');if(returnCodeEditor){returnCodeEditor.scrollIntoView({behavior:'auto',block:'center'});try{returnCodeEditor.focus({preventScroll:true})}catch(ignoreReturnFocus){returnCodeEditor.focus()}}}
 }
 function itemState(i){return i&&i._t==='site'?'published':window.KHWorkflow.stateOf(i).state}
 function itemStateLabel(i){return window.KHWorkflow.LABEL[itemState(i)]||itemState(i)}
@@ -929,7 +929,8 @@ function pubRow(it){
      patch={section:target,stage:stage,school_grade:grade,subject:target==='curriculum'?(it.subject||null):null,status:'pending',story_meta:meta};
     }
     review.decision='edited_after_review';review.edited_at=new Date().toISOString();review.note='تم نقل الحكاية إلى قسم آخر؛ يلزم إرسال معاينة جديدة واعتمادها قبل النشر.';review.publish_error=null;
-    ['publish_pr_url','publish_pr_number','publish_branch','publish_head_sha','publish_commit_sha','published_to_main_at'].forEach(function(key){delete review[key]});
+    ['publish_pr_url','publish_pr_number','publish_branch','publish_head_sha','publish_commit_sha','published_to_main_at','publish_page_url','static_story_path','prepared_page_url'].forEach(function(key){delete review[key]});
+    review.bundle_downloaded=false;
     meta.preview_review=review;patch.story_meta=meta;
     var response=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(patch)});
     if(!response.ok)throw new Error('تعذر حفظ النقل ('+response.status+').');
@@ -943,9 +944,10 @@ function pubRow(it){
   actions.appendChild(moveBtn);actions.appendChild(movePanel);
   }
  }
- if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish')){
+ var hasPendingDraft=!!(it.status==='published'&&it.story_meta&&it.story_meta.pending_draft&&typeof it.story_meta.pending_draft==='object');
+ if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish'||hasPendingDraft)){
   var isSentForPreview=itemState(it)==='preview_sent';
-  var openReview=el('button','btn primary',isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ');openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
+  var openReview=el('button','btn primary',hasPendingDraft?'معاينة المسودة بعد النقل':(isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ'));openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
   openReview.addEventListener('click',function(e){
    e.preventDefault();e.stopPropagation();
    var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
@@ -956,7 +958,7 @@ function pubRow(it){
    try{
     if(pkg){
      localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));
-     localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:table,record_type:'modern',status:it.status||'pending',story_meta:meta,record_data:Object.assign({},pending||it)}));
+     localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:table,record_type:'modern',status:pending?'pending':(it.status||'pending'),story_meta:meta,record_data:Object.assign({},pending||it)}));
      var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';
      if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank');
      url='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3';
@@ -1398,11 +1400,9 @@ function renderVis(){
   });
   row.appendChild(btn);
   /* نقل الحكاية المنشورة من قائمة الظهور: لا نربط بالعنوان؛ نستخدم رقم الصفحة الصريح فقط. */
-  var linkedSubmission=items.find(function(rec){
-   if(!rec||rec._t==='site'||rec.status!=='published'||!window.KHWorkflow||typeof window.KHWorkflow.linkedSite!=='function')return false;
-   var linked=window.KHWorkflow.linkedSite(rec,vStories);
-   return !!(linked&&String(linked.id)===String(s.id));
-  });
+  /* loadList يضع السجلات المرتبطة داخل sitePageItems[].submissions ويستبعدها من القائمة الرئيسية items. */
+  var linkedPage=items.find(function(rec){return rec&&rec._t==='site'&&String(rec.id)===String(s.id)});
+  var linkedSubmission=linkedPage&&Array.isArray(linkedPage.submissions)?linkedPage.submissions.find(function(rec){return rec&&rec.status==='published'}):null;
   var movePublished=el('button','btn ghost','نقل إلى قسم آخر');movePublished.type='button';
   var moveHost=el('div','published-move-host');moveHost.style.cssText='grid-column:1/-1;width:100%';moveHost.hidden=true;
   if(linkedSubmission){
@@ -1410,9 +1410,8 @@ function renderVis(){
    movePublished.title='فتح سجل الحكاية المرتبط لبدء إعادة تجهيزها بالقالب الموحد وتصميم القسم الجديد.';
    movePublished.addEventListener('click',function(){
     moveHost.hidden=false;linkedMoveRow.open=true;
-    var controls=Array.prototype.slice.call(linkedMoveRow.querySelectorAll('button'));
-    var actualMove=controls.find(function(control){return control.textContent.trim()==='نقل الحكاية'});
-    if(actualMove)actualMove.click();
+    var actualMove=Array.prototype.slice.call(linkedMoveRow.querySelectorAll('button')).find(function(control){return control.textContent.trim()==='نقل الحكاية'});
+    if(actualMove){actualMove.click();moveHost.scrollIntoView({behavior:'smooth',block:'nearest'})}
     else say('err','تعذر فتح إجراء النقل في السجل المرتبط؛ لم تتغير الحكاية.');
    });
   }else{
