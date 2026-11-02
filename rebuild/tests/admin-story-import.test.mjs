@@ -19,7 +19,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.match(html, /if\(!requireUnifiedStoryPackage\)\{schema=/, 'the October-only legacy prompt must not overwrite the official canonical JSON Schema');
   assert.match(html, /storyPackageRaw=JSON\.parse\(JSON\.stringify\(storyAdapter\.normalizeStoryFormat\(pkg\)\)\)/, 'transitional reads must be normalized before persistence');
   assert.match(html, /story_contract_required=true/, 'new unified story contract requirement persists for later edits');
-  assert.match(html, /STORY-PACKAGE-PROMPT\.md/);
+  assert.match(html, /var promptRoot='\.\.\/khaledoon\/prompts\/2026-11-02-unified-v5\//);
   assert.match(html, /rebuild\/story-contract\.json/);
   assert.match(html, /pkg&&isStoryPackageFormat\(pkg\.format\)/);
   assert.match(html, /var storyValidationErrors=storyAdapter\.validateStory\(pkg\)/);
@@ -35,8 +35,8 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.ok(html.includes("sources:aiInputFormat==='KHALEDOON_STORY'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000)"), 'unified story source text must remain complete while legacy imports retain its historical 3000-character cap');
   assert.ok(html.includes("aiInputFormat==='KHALEDOON_STORY'&&visibleSourceLength>3000"), 'only unified story imports should reject source text exceeding the visible-character limit');
   assert.match(html, /aiPaste\.placeholder='الصق هنا JSON الناتج من البرومبت الموحد/);
-  assert.match(html, /MASTER-STORY-WORKFLOW\.md/);
-  assert.match(html, /providerPromptFile=\{chatgpt:'CHATGPT\.md',gemini:'GEMINI\.md',claude:'CLAUDE\.md',deepseek:'DEEPSEEK\.md'\}/);
+  assert.match(html, /providerPromptText/);
+  assert.match(html, /providerPromptFile=\{chatgpt:'story-prompt-chatgpt\.md',gemini:'story-prompt-gemini\.md',claude:'story-prompt-claude\.md',deepseek:'story-prompt-deepseek\.md'\}/);
   assert.match(html, /storyContext= inputData|storyContext=inputData/);
   assert.match(html, /requested_section:sectionAliases/);
 });
