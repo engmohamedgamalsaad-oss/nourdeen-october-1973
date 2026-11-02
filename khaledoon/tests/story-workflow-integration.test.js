@@ -514,10 +514,10 @@ test('Gemini is available in every admin story prompt flow with the complete v5 
   assert.equal(admin.split("['gemini','Gemini']").length-1,4);
   assert.ok(admin.includes("gemini:mode==='package'?'أخرج كائن JSON واحدًا صالحًا للاستيراد فقط"));
   var pageStart = texts.indexOf('STORY_PAGE_PROMPT = ') + 'STORY_PAGE_PROMPT = '.length;
-  var pageEnd = texts.indexOf(';\\nSTORY_PROVIDER_PROMPTS =', pageStart);
+  var pageEnd = texts.indexOf(';\nSTORY_PROVIDER_PROMPTS =', pageStart);
   var shared = JSON.parse(texts.slice(pageStart, pageEnd));
   var providerStart = texts.indexOf('STORY_PROVIDER_PROMPTS = ') + 'STORY_PROVIDER_PROMPTS = '.length;
-  var providerEnd = texts.indexOf(';\\n\\nfunction khAppendPromptOnce', providerStart);
+  var providerEnd = texts.indexOf(';\n\nfunction khAppendPromptOnce', providerStart);
   var providers = JSON.parse(texts.slice(providerStart, providerEnd));
   assert.ok(providers.gemini.includes('# تعليمات خاصة بـ Gemini'));
   assert.ok(providers.gemini.includes('لا تُخرج Markdown ولا عناوين ولا قوائم ولا سور كود ولا مقدمة.'));
@@ -529,7 +529,7 @@ test('admin project instructions and AI provider prompts preserve the v5 design 
   var texts = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js','utf8');
   var marker = 'STORY_PAGE_PROMPT = ';
   var start = texts.indexOf(marker) + marker.length;
-  var end = texts.indexOf(';\\nSTORY_PROVIDER_PROMPTS =', start);
+  var end = texts.indexOf(';\nSTORY_PROVIDER_PROMPTS =', start);
   var shared = JSON.parse(texts.slice(start, end));
   assert.ok(shared.includes('## 4) القسم واللون والتصميم'));
   assert.ok(shared.includes('design.variant'));
