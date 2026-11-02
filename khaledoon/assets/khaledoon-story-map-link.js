@@ -1,5 +1,5 @@
 /* Unified-reader pages own their reveal animation; keep the legacy motion loader for older story pages only.\n   خالدون عبر التاريخ — رابط الحكاية بالخريطة التفاعلية.
-   يضيف قسم «على الخريطة» في صفحات الحكايات 005–015 عندما يكون للحكاية مكان موثق في stories/places.json،
+   يضيف قسم «على الخريطة» في جميع صفحات الحكايات غير التابعة لقسم أكتوبر عندما يكون للحكاية مكان موثق في stories/places.json،
    وفيه رابط يفتح خريطة الصفحة الرئيسية (#khMap). لا يمس حكايات أكتوبر (001–004).
    إن كان في الصفحة رابط للخريطة بالفعل (.interactive-map-link) لا يضيف شيئًا؛ وإن كان فيها قسم .story-map-link بدون رابط يضيف الرابط فيه فقط.
    لا يستخدم innerHTML مع أي بيانات. يتبع لغة الصفحة (html lang) ويتحدّث عند تغييرها.
@@ -107,7 +107,7 @@
 
   function init() {
     var slug = document.body && document.body.getAttribute('data-story-slug');
-    if (!slug || !/^0(0[5-9]|1[0-6])$/.test(slug)) return;
+    if (!slug || !/^\d{3}$/.test(slug) || /^00[1-4]$/.test(slug)) return;
     if (document.querySelector('.interactive-map-link')) return;
     var root = siteRoot();
     fetch(new URL('stories/places.json', root).href, { cache: 'no-cache' })
@@ -116,7 +116,7 @@
         var p = places && places[slug];
         if (!p || !ok(p.lat, 90) || !ok(p.lng, 180)) return;
         addStyle();
-        build(p, new URL('index.html#khWorld', root).href);
+        build(p, new URL('index.html?story=' + encodeURIComponent(slug) + '#khWorld', root).href);
         new MutationObserver(render).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
       })
       .catch(function () {});
