@@ -35,7 +35,7 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(html, /reader-base\.css\?v=20261101-story-reader-1/);
   assert.match(builder, /reader-base\.css\?v=20261101-story-reader-1/);
   assert.match(baseCss, /\.hero/);
-  assert.match(html, /reader\.js\?v=20261101-story-reader-1/);
+  assert.match(html, /reader\.js\?v=20261102-theme-fast-switch-1/);
   assert.match(js, /reader-enhance\.css\?v=20261101-story-reader-2/);
   assert.match(builder, /reader-enhance\.css\?v=20261101-story-reader-1/);
   assert.match(publisher, /reader-enhance\.css\?v=20261101-story-reader-1/);
