@@ -145,7 +145,7 @@ Deno.serve(async (req: Request) => {
   }
   const { data: sourceRecord, error: sourceRecordError } = await supabase
     .from(submissionTable).select("id,story_meta").eq("id", submissionId).maybeSingle();
-  if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل إنشاء طلب المراجعة." });
+  if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل النشر المباشر." });
   if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
@@ -173,12 +173,12 @@ Deno.serve(async (req: Request) => {
   }
   if (isStoryOnlyDraft) {
     if (!savedStoryPackage || !["KHALEDOON_STORY", "KHALEDOON_STORY_V2"].includes(savedStoryPackage.format)) {
-      return reply(409, { error: "حزمة الحكاية الأصلية غير موجودة في سجل الإدارة؛ لم ننشئ طلب مراجعة." });
+      return reply(409, { error: "حزمة الحكاية الأصلية غير موجودة في سجل الإدارة؛ لم يتم النشر." });
     }
     const review = sourceMeta.preview_review && typeof sourceMeta.preview_review === "object"
       ? sourceMeta.preview_review as Record<string, unknown> : {};
     if (review.decision !== "approved_waiting_for_github_upload") {
-      return reply(409, { error: "يجب اعتماد معاينة الحكاية قبل إنشاء طلب مراجعة للنشر." });
+      return reply(409, { error: "يجب قبول معاينة الحكاية قبل النشر المباشر." });
     }
     try {
       const packageFiles = body.files.filter((file: any) => /\/(?:story|data\.v2)\.json$/.test(file.path));
@@ -284,7 +284,7 @@ Deno.serve(async (req: Request) => {
       }
     } catch (error) {
       const detail = error instanceof Error ? error.message : "Unknown error";
-      return reply(400, { error: "تعذر التحقق من الحزمة قبل إنشاء طلب المراجعة.", detail: detail.slice(0, 400) });
+      return reply(400, { error: "تعذر التحقق من الحزمة قبل النشر المباشر.", detail: detail.slice(0, 400) });
     }
   } else if (hasStoryArtifacts) {
     return reply(409, { error: "ملفات القالب الموحد لا يمكن إرسالها من سجل لا يحمل حزمة معتمدة." });
@@ -293,33 +293,10 @@ Deno.serve(async (req: Request) => {
   }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
-  const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
-  let storyLockBranchForCleanup = "";
-  async function releaseStoryLock() {
-    const lockBranch = storyLockBranchForCleanup;
-    if (!lockBranch || !githubToken) return;
-    storyLockBranchForCleanup = "";
-    try {
-      await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${lockBranch}`, githubToken, { method: "DELETE" });
-    } catch { /* lock cleanup is best effort; never hide the original publish result */ }
-  }
+  const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "يتم تسجيل الملفات مباشرة في main بعد اعتماد المعاينة والتحقق من سجل الحكاية.";
   try {
-    // Serialize publishes with an atomic repository lock before reading the main base.
-    const initialRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
-    const lockBranch = "khaledoon/publish-main-lock";
-    try {
-      await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {
-        method: "POST",
-        body: JSON.stringify({ ref: "refs/heads/" + lockBranch, sha: initialRef.object.sha }),
-      });
-      storyLockBranchForCleanup = lockBranch;
-    } catch (lockError) {
-      const lockDetail = lockError instanceof Error ? lockError.message : "";
-      if (lockDetail.includes("GitHub API 422") || lockDetail.includes("Reference already exists")) {
-        return reply(409, { success: false, error: "يوجد نشر آخر جارٍ الآن؛ انتظر قليلًا ثم أعد المحاولة. لم تتغير الملفات المنشورة." });
-      }
-      throw lockError;
-    }
+    // Snapshot main once. The final non-forced ref update is the atomic concurrency guard:
+    // a concurrent publish based on an older SHA cannot overwrite a newer main commit.
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
@@ -457,7 +434,7 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
     });
-    // A section move updates the index and removes the previous story assets in the same review PR.
+    // A section move updates the index and removes the previous story assets in the same atomic main commit.
     // Keep the old index URL as a redirect so saved links/QR codes do not immediately break.
     if (previousRoot) {
       const oldTree = await github(`/repos/${OWNER}/${REPO}/git/trees/${baseCommit.tree.sha}?recursive=1`, githubToken);
@@ -502,7 +479,6 @@ Deno.serve(async (req: Request) => {
     await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
       method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false }),
     });
-    await releaseStoryLock();
     return reply(200, {
       success: true, published_to_main: true, commit_sha: commit.sha, story_id: storyId, story_path: normalizedRoot,
       map_linked: mapMarkerAdded, map_marker_added: mapMarkerAdded,
@@ -510,7 +486,6 @@ Deno.serve(async (req: Request) => {
       message: "تم تسجيل الحكاية مباشرة في main؛ بدأ GitHub Pages عملية النشر تلقائيًا."
     });
   } catch (error) {
-    await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
       error: "تعذر نشر الحكاية مباشرة إلى main؛ لم تُسجّل كحكاية منشورة.",
