@@ -28,35 +28,37 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 <section id="audit" class="panel hidden"><h2>٢. نتيجة الفحص البنيوي</h2><ul id="issues"></ul><p id="counts" class="muted"></p></section>
 
 </main>
-<script>
+<script type="module">
+import { validateStory } from './validate-story.mjs';
 (function(){
 'use strict';
 const langs=['ar','en','fr','it','de'];let story=null;
 const $=id=>document.getElementById(id);
 function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n}
 function link(url,label){if(typeof url!=='string'||!/^https:\/\//i.test(url))return node('span',label);const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
+function formatIssue(issue){
+ const block=String(issue).match(/^i18n\\.(ar|en|fr|it|de)\\.blocks\\[(\\d+)\\]\\.(.+)$/);
+ if(block){
+  const names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'};
+  const n=Number(block[2])+1,field=block[3],prefix=names[block[1]]+' — المقطع '+n+': ';
+  if(field==='type invalid')return prefix+'نوع المقطع غير معتمد في العقد الموحد.';
+  if(field==='speaker invalid')return prefix+'المتحدث غير محدد بشكل صحيح.';
+  if(field==='text required')return prefix+'النص فارغ أو غير مكتمل.';
+  if(field==='text must be lines of "year — event" for a timeline')return prefix+'صيغة الخط الزمني يجب أن تكون «سنة — حدث» في كل سطر.';
+  if(field==='heading must be a non-empty string when provided')return prefix+'العنوان الفرعي موجود لكنه فارغ.';
+  if(field==='image_after must be a non-empty image ID when provided')return prefix+'مرجع الصورة فارغ.';
+  return prefix+field;
+ }
+ return String(issue)
+  .replace(/^i18n\\.(ar|en|fr|it|de)\\./,(_,l)=>({ar:'العربية: ',en:'الإنجليزية: ',fr:'الفرنسية: ',it:'الإيطالية: ',de:'الألمانية: '}[l]))
+  .replace(/blocks\\[(\\d+)\\]/g,(_,i)=>'المقطع '+(Number(i)+1))
+  .replace(/ required$/g,' مطلوب')
+  .replace(/ must be HTTPS/g,' يجب أن يكون رابط HTTPS')
+  .replace(/ invalid$/g,' غير صالح');
+}
 function listIssues(s){
- const out=[];if(!s||typeof s!=='object'||Array.isArray(s))return ['الملف لازم يحتوي على كائن JSON.'];
- if(s.format!=='KHALEDOON_STORY')out.push('format لازم يساوي KHALEDOON_STORY.');
- for(const k of ['slug','section','design','original_body','i18n','cover','images','sources','quiz'])if(!(k in s))out.push('حقل أساسي ناقص: '+k);
- for(const l of langs){const t=s.i18n&&s.i18n[l];if(!t){out.push('الترجمة ناقصة: '+l);continue}
-  for(const k of ['title','subtitle','summary'])if(typeof t[k]!=='string'||!t[k].trim())out.push(l+': الحقل '+k+' ناقص.');
-  if(!Array.isArray(t.blocks)||t.blocks.length<3)out.push(l+': يلزم 3 مقاطع سردية على الأقل.');
-  else t.blocks.forEach((b,i)=>{if(!b||!['paragraph','did_you_know'].includes(b.type)||!['karma','narrator'].includes(b.speaker)||typeof b.text!=='string'||!b.text.trim())out.push(l+': المقطع '+(i+1)+' غير مكتمل.')});
- }
- if(!s.cover||!s.cover.source_url||!s.cover.source_name||!s.cover.rights)out.push('بيانات مصدر/حقوق الغلاف ناقصة.');
- if(s.cover&&(!/^https:\/\//i.test(String(s.cover.source_url||''))))out.push('رابط مصدر الغلاف يجب أن يستخدم HTTPS.');
- if(!Array.isArray(s.images)||s.images.length<2)out.push('يلزم صورتان على الأقل.');
- for(const [i,im] of (Array.isArray(s.images)?s.images:[]).entries()){if(!im.source_url||!im.source_name||!im.rights||!im.i18n)out.push('بيانات المصدر أو الحقوق ناقصة للصورة '+(i+1)+'.');if(!/^https:\/\//i.test(String(im.source_url||'')))out.push('رابط مصدر الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');if(im.url&&!/^https:\/\//i.test(String(im.url)))out.push('رابط الصورة '+(i+1)+' يجب أن يستخدم HTTPS.');}
- if(!Array.isArray(s.sources)||s.sources.length<2)out.push('يلزم مصدران على الأقل.');
- for(const [i,src] of (Array.isArray(s.sources)?s.sources:[]).entries()){
-  if(!src||!src.url||!src.title||!src.organization||!src.i18n){out.push('بيانات المصدر '+(i+1)+' أو ترجماته ناقصة.');continue}
-  if(!/^https:\/\//i.test(String(src.url)))out.push('رابط المصدر '+(i+1)+' يجب أن يستخدم HTTPS.');
-  for(const l of langs){const loc=src.i18n[l];if(!loc||!loc.title||!loc.organization)out.push('المصدر '+(i+1)+' غير مكتمل باللغة '+l+'.')}
- }
- if(!Array.isArray(s.quiz)||s.quiz.length<5)out.push('يلزم خمسة أسئلة على الأقل.');
- for(const [i,q] of (Array.isArray(s.quiz)?s.quiz:[]).entries())for(const l of langs){const t=q.i18n&&q.i18n[l];if(!t||!t.question||!Array.isArray(t.options)||t.options.length!==4||!t.explanation)out.push('السؤال '+(i+1)+' ناقص أو غير مترجم بالكامل للغة '+l+'.')}
- return [...new Set(out)];
+ if(!s||typeof s!=='object'||Array.isArray(s))return ['الملف لازم يحتوي على كائن JSON.'];
+ return validateStory(s).map(formatIssue);
 }
 function openUnifiedReader(){
  try{localStorage.setItem('kh-story-review-package',JSON.stringify(story));}
