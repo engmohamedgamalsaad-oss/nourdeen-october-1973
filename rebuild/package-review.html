@@ -37,7 +37,7 @@ const $=id=>document.getElementById(id);
 function node(tag,text,cls){const n=document.createElement(tag);if(text!==undefined)n.textContent=String(text);if(cls)n.className=cls;return n}
 function link(url,label){if(typeof url!=='string'||!/^https:\/\//i.test(url))return node('span',label);const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a}
 function formatIssue(issue){
- const block=String(issue).match(/^i18n\\.(ar|en|fr|it|de)\\.blocks\\[(\\d+)\\]\\.(.+)$/);
+ const block=String(issue).match(/^i18n\.(ar|en|fr|it|de)\.blocks\[(\d+)\]\.(.+)$/);
  if(block){
   const names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'};
   const n=Number(block[2])+1,field=block[3],prefix=names[block[1]]+' — المقطع '+n+': ';
@@ -50,8 +50,8 @@ function formatIssue(issue){
   return prefix+field;
  }
  return String(issue)
-  .replace(/^i18n\\.(ar|en|fr|it|de)\\./,(_,l)=>({ar:'العربية: ',en:'الإنجليزية: ',fr:'الفرنسية: ',it:'الإيطالية: ',de:'الألمانية: '}[l]))
-  .replace(/blocks\\[(\\d+)\\]/g,(_,i)=>'المقطع '+(Number(i)+1))
+  .replace(/^i18n\.(ar|en|fr|it|de)\./,(_,l)=>({ar:'العربية: ',en:'الإنجليزية: ',fr:'الفرنسية: ',it:'الإيطالية: ',de:'الألمانية: '}[l]))
+  .replace(/blocks\[(\d+)\]/g,(_,i)=>'المقطع '+(Number(i)+1))
   .replace(/ required$/g,' مطلوب')
   .replace(/ must be HTTPS/g,' يجب أن يكون رابط HTTPS')
   .replace(/ invalid$/g,' غير صالح');
