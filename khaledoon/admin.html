@@ -854,7 +854,7 @@ function pubRow(it){
  var hasSitePage=it._t==='site'||(it.status==='published'&&sv);
  var meta=[itemStateLabel(it),dt,SEC[it.section]||'',hasSitePage?'ملف الموقع':''].filter(Boolean).join(' • ');w.appendChild(el('small','pd',meta));
  if(it._t!=='site'&&!sv&&window.KHWorkflow&&window.KHWorkflow.possibleSiteMatches){var matches=window.KHWorkflow.possibleSiteMatches(it,vStories);if(matches.length){var advisory=el('small','ph',matches.length===1?'تنبيه: قد تطابق صفحة «'+(matches[0].title||matches[0].id)+'» (رقم '+matches[0].id+'). لم يتم الربط تلقائيًا.':'تنبيه: توجد '+matches.length+' صفحات محتملة التطابق؛ راجعها يدويًا. لم يتم الربط تلقائيًا.');advisory.style.color='var(--gold)';advisory.style.display='block';w.appendChild(advisory)}}
- var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url){if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','تعذر إكمال آخر محاولة نشر: '+pr.publish_error.reason));else w.appendChild(el('small','ph','المعاينة معتمدة، لكن لم يُسجل مسار ملفات الحكاية على الموقع بعد. اضغط «نشر الحكاية» لمعرفة نتيجة التجهيز والرفع.'));}if(pr.publish_error&&pr.publish_error.reason&&(pr.static_story_path||pr.prepared_page_url))w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
+ var pr=it.story_meta&&it.story_meta.preview_review||{};if(itemState(it)==='awaiting_publish'&&!pr.static_story_path&&!pr.prepared_page_url){if(pr.publish_error&&pr.publish_error.reason)w.appendChild(el('small','ph','تعذر إكمال آخر محاولة نشر: '+pr.publish_error.reason));else w.appendChild(el('small','ph','المعاينة معتمدة، لكن لم يُسجل مسار ملفات الحكاية على الموقع بعد. اضغط «نشر الحكاية» لمعرفة نتيجة التجهيز والرفع.'));}if(itemState(it)==='awaiting_publish'&&pr.publish_error&&pr.publish_error.reason&&(pr.static_story_path||pr.prepared_page_url))w.appendChild(el('small','ph','آخر فشل في فحص النشر: '+pr.publish_error.reason));
  if(hid)w.appendChild(el('small','ph','مخفية عن زوار الموقع'));
  if(it._t!=='site'){var pc=el('small','pc');pc.setAttribute('data-ck',copyKey(it));paintTag(pc);w.appendChild(pc);}
  s.appendChild(w);
@@ -912,9 +912,29 @@ function pubRow(it){
   moveBtn.setAttribute('aria-expanded','false');moveBtn.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var open=movePanel.style.display!=='grid';movePanel.style.display=open?'grid':'none';moveBtn.setAttribute('aria-expanded',open?'true':'false')});
   actions.appendChild(moveBtn);actions.appendChild(movePanel);
  }
- if(it._t!=='site'&&itemState(it)==='awaiting_publish'){
-  var openReview=el('button','btn primary','فتح معاينة القارئ');openReview.type='button';openReview.title='فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
-  openReview.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;var win=window.open(url,'_blank');if(!win)say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');});
+ if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish')){
+  var isSentForPreview=itemState(it)==='preview_sent';
+  var openReview=el('button','btn primary',isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ');openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
+  openReview.addEventListener('click',function(e){
+   e.preventDefault();e.stopPropagation();
+   var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
+   var meta=it.story_meta&&typeof it.story_meta==='object'?it.story_meta:{};
+   var pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
+   var pkg=pending&&(pending.story_only_draft||pending.v2_only_draft)?(pending.story_package||pending.v2_package):((meta.story_only_draft||meta.v2_only_draft)?(meta.story_package||meta.v2_package):null);
+   var url;
+   try{
+    if(pkg){
+     localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));
+     localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:table,record_type:'modern',status:it.status||'pending',story_meta:meta,record_data:Object.assign({},pending||it)}));
+     var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';
+     if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank');
+     url='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3';
+    }else{
+     url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;
+    }
+    var win=window.open(url,'_blank');if(win)win.opener=null;else say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');
+   }catch(err){say('err','تعذر تجهيز بيانات المعاينة: '+(err&&err.message?err.message:'خطأ غير معروف'));}
+  });
   actions.appendChild(openReview);
  }
  /* إظهار خطوة تأكيد النشر مباشرة في سجل الحكاية بعد اعتماد المعاينة، بدل حصرها داخل محرر الحكاية. */
