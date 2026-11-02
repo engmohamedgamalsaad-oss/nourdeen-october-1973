@@ -1,4 +1,5 @@
-/* Unified-reader pages own their reveal animation; keep the legacy motion loader for older story pages only.\n   خالدون عبر التاريخ — رابط الحكاية بالخريطة التفاعلية.
+/* Unified-reader pages own their reveal animation; keep the legacy motion loader for older story pages only.
+   خالدون عبر التاريخ — رابط الحكاية بالخريطة التفاعلية.
    يضيف قسم «على الخريطة» في صفحات الحكايات 005–015 عندما يكون للحكاية مكان موثق في stories/places.json،
    وفيه رابط يفتح خريطة الصفحة الرئيسية (#khMap). لا يمس حكايات أكتوبر (001–004).
    إن كان في الصفحة رابط للخريطة بالفعل (.interactive-map-link) لا يضيف شيئًا؛ وإن كان فيها قسم .story-map-link بدون رابط يضيف الرابط فيه فقط.
@@ -53,7 +54,7 @@
     if (document.getElementById('khm-story-map-style')) return;
     var st = document.createElement('style');
     st.id = 'khm-story-map-style';
-    st.textContent = '.interactive-map-link{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 20px;border:1px solid currentColor;border-radius:999px;font-weight:800;text-decoration:none;line-height:1.7}.interactive-map-link:hover{text-decoration:underline}.interactive-map-link:focus-visible{outline:3px solid currentColor;outline-offset:3px}@media print{.story-map-link .interactive-map-link{display:none}}';
+    st.textContent = 'html,body,main{overflow-anchor:none}.interactive-map-link{display:inline-flex;align-items:center;gap:8px;margin-top:6px;padding:10px 20px;border:1px solid currentColor;border-radius:999px;font-weight:800;text-decoration:none;line-height:1.7}.interactive-map-link:hover{text-decoration:underline}.interactive-map-link:focus-visible{outline:3px solid currentColor;outline-offset:3px}@media print{.story-map-link .interactive-map-link{display:none}}';
     document.head.appendChild(st);
   }
 
