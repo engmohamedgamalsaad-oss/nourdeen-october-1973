@@ -878,6 +878,10 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   await ctx.route(/^https:\/\/ypwprddkscnfblhftkeb\.supabase\.co\/.*/, routeApi);
   const page = await ctx.newPage();
   const failedRequests = [];
+  const pageErrors = [];
+  const consoleErrors = [];
+  page.on('pageerror', (error) => pageErrors.push(String(error && error.message || error)));
+  page.on('console', (message) => { if (message.type() === 'error') consoleErrors.push(message.text()); });
   page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
@@ -889,12 +893,17 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     await textarea.fill(JSON.stringify(storyPackage));
     const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
-    await importButton.click(); // First click unlocks the protected paste field.
-    await importButton.click(); // Second click validates and imports the pasted package.
+    // The current admin explicitly starts the paste field unlocked. Only perform an
+    // unlock click when the rendered textarea is actually read-only; never double-submit.
+    if (await textarea.evaluate((el) => el.readOnly)) {
+      await importButton.click();
+      await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
+    }
+    await importButton.click();
     try {
       await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
     } catch (waitError) {
-      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; textareaReadOnly=' + await textarea.evaluate((el) => el.readOnly).catch(() => 'unknown') + '; importButtonCount=' + await importButton.count() + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
     }
     const importStatus = await page.locator('.ai-status[role="status"]').innerText();
     if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('story import was rejected: ' + importStatus.slice(-900));
