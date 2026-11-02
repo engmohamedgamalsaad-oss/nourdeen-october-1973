@@ -302,7 +302,7 @@ function stopButtonProgress(btn,successLabel){if(!btn)return;btn.classList.remov
 function isStoryOnlyDraftRecord(it){var m=it&&it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;return !!(m.story_only_draft||m.v2_only_draft||(p&&(p.story_only_draft||p.v2_only_draft)))}
 function isStoryPackageFormat(format){return format==='KHALEDOON_STORY'||format==='KHALEDOON_STORY_V2'}
 function isOctoberLegacyRecord(it){if(!it)return false;if(it._t==='o')return true;var m=it.story_meta||{},values=[it.section,it.section_key,m.section,m.section_key];return values.some(function(v){return String(v||'').trim().toLowerCase()==='october'})}
-function markStoryDraftPublishButton(btn,it){if(!btn||!isStoryOnlyDraftRecord(it))return;btn.title='حزمة القالب الموحد ستُنشر عبر القارئ الموحد وطلب مراجعة آمن؛ لا يتغير الموقع قبل الدمج.'}
+function markStoryDraftPublishButton(btn,it){if(!btn||!isStoryOnlyDraftRecord(it))return;btn.title='بعد اعتماد المعاينة تُكتب ملفات الحكاية مباشرة إلى main ثم ينشر GitHub Pages التحديث تلقائيًا.'}
 async function submitStoryPublishPR(it,btn){
  if(!it||it._t==='site'){say('err','لا يمكن نشر هذا السجل.');return}
  var meta=Object.assign({},it.story_meta||{}),review=meta.preview_review||{};
@@ -310,15 +310,15 @@ async function submitStoryPublishPR(it,btn){
  if(!isOctoberLegacyRecord(it)&&storyOnly&&storyPackage.format!=='KHALEDOON_STORY'){say('err','الحكايات خارج قسم أكتوبر يجب تجهيزها بالقالب الموحد المعتمد قبل النشر. أعد تجهيز الحكاية بالقالب الموحد؛ لم نرسل أي ملفات.');return}
  if(!isOctoberLegacyRecord(it)&&!storyOnly){say('err','هذه الحكاية خارج قسم أكتوبر ولم تُحوّل بعد إلى حزمة القالب الموحد. افتح «تعديل»، أعد تجهيزها بالحزمة الموحدة، ثم أرسلها للمعاينة والاعتماد قبل النشر. لم يتم إرسال أي ملفات.');return}
  if(review.publish_pr_url){
-  if(!review.publish_pr_number||!review.publish_branch){window.open(review.publish_pr_url,'_blank','noopener');say('err','هذا سجل قديم لا يحتوي رقم طلب الدمج والفرع المسجلين؛ فتحنا الرابط للمراجعة فقط، ولم نؤكد النشر. أنشئ طلب مراجعة جديدًا بعد تحديث خدمة النشر الآمنة.');return}
-  if(review.decision!=='approved_waiting_for_github_upload'){window.open(review.publish_pr_url,'_blank','noopener');say('info','فتحنا طلب الدمج الموجود للمراجعة، لكن يلزم إعادة اعتماد المعاينة قبل تأكيد النشر.');return}
+  if(!review.publish_pr_number||!review.publish_branch){say('err','هذا سجل نشر قديم غير مكتمل. أعد تجهيز الحكاية وإرسالها للمعاينة ثم استخدم مسار النشر المباشر الجديد.');return}
+  if(review.decision!=='approved_waiting_for_github_upload'){say('info','طلب النشر القديم لا يحمل اعتماد معاينة صالحًا. أعد فتح المعاينة واعتمادها قبل النشر.');return}
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
   try{
    await refreshIfNeeded();
    var statusResponse=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch})});
    var statusResult=await statusResponse.json().catch(function(){return {}});
    if(!statusResponse.ok||!statusResult.success)throw new Error(statusResult.error||statusResult.detail||'تعذر التحقق من حالة طلب الدمج.');
-   if(!statusResult.merged){window.open(review.publish_pr_url,'_blank','noopener');say('info','طلب الدمج لم يُدمج بعد. فتحته للمراجعة؛ الموقع المنشور لم يتغير.');return}
+   if(!statusResult.merged){say('info','هذا طلب نشر قديم لم يكتمل. لن أفتح GitHub؛ أعد تجهيز الحكاية واعتمادها ثم استخدم النشر المباشر.');return}
    meta.preview_review=Object.assign({},review,{publish_commit_sha:statusResult.merge_commit_sha||statusResult.head_sha,published_to_main_at:new Date().toISOString(),note:'تم دمج طلب المراجعة؛ يجري التحقق من الصفحة المنشورة الآن.'});
    var statusTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';
    var statusSaved=await rest(statusTable+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
@@ -343,7 +343,7 @@ async function submitStoryPublishPR(it,btn){
  var targetSectionKey=String((storyPackage&&storyPackage.section)||(pendingDraft&&(pendingDraft.section_key||pendingDraft.section))||it.section_key||it.section||'');
  var previousPathSection=priorStoryPath.split('/')[1]||'';
  var isPublishedSectionMove=!!pendingDraft&&!!review.static_story_id&&(!priorStoryPath||!previousPathSection||previousPathSection!==targetSectionKey);
- if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='draft_pr'||capabilityResult.writes_main_directly!==false||capabilityResult.requires_submission_id!==true||(capabilityResult.rejects_story_only_drafts!==true&&capabilityResult.rejects_v2_only_drafts!==true)||(storyOnly&&(capabilityResult.supports_story_package_publish!==true&&capabilityResult.supports_v2_publish!==true))||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(isPublishedSectionMove&&capabilityResult.supports_story_move!==true?'خدمة النشر الحية لا تدعم نقل الحكايات المنشورة حتى الآن. تم إيقاف العملية قبل تجهيز أو إرسال الملفات، ولم تتغير النسخة المنشورة. يلزم تحديث Edge Function ثم إعادة المحاولة.':storyOnly&&capabilityResult.supports_story_package_publish!==true?'خدمة النشر الحية لم تُحدّث بعد لدعم القالب الموحد؛ لم نرسل أي ملفات.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة؛ لم نرسل أي ملفات.')}
+ if(!capabilityResponse.ok||!capabilityResult.success||capabilityResult.publisher_mode!=='direct_main'||capabilityResult.writes_main_directly!==true||capabilityResult.requires_submission_id!==true||(capabilityResult.rejects_story_only_drafts!==true&&capabilityResult.rejects_v2_only_drafts!==true)||(storyOnly&&(capabilityResult.supports_story_package_publish!==true&&capabilityResult.supports_v2_publish!==true))||(isPublishedSectionMove&&capabilityResult.supports_story_move!==true)){publisherCapabilityBlocked=true;throw new Error(isPublishedSectionMove&&capabilityResult.supports_story_move!==true?'خدمة النشر الحية لا تدعم نقل الحكايات المنشورة حتى الآن. تم إيقاف العملية قبل تجهيز أو إرسال الملفات، ولم تتغير النسخة المنشورة. يلزم تحديث Edge Function ثم إعادة المحاولة.':storyOnly&&capabilityResult.supports_story_package_publish!==true?'خدمة النشر الحية لم تُحدّث بعد لدعم القالب الموحد؛ لم نرسل أي ملفات.':'وظيفة النشر الحية لا تؤكد دعم طلبات المراجعة الآمنة؛ لم نرسل أي ملفات.')}
  if(!storyOnly&&(!window.KHStoryBundle||typeof window.KHStoryBundle.download!=='function')){say('err','قالب تجهيز ملفات الحكاية القديمة غير متاح. حدّث الصفحة وحاول مرة أخرى.');return}
  await refreshIfNeeded();
  var draft=Object.assign({},it,pendingDraft||{});draft.story_meta=meta;
@@ -355,14 +355,13 @@ async function submitStoryPublishPR(it,btn){
  var pack;if(storyOnly){if(!window.KHStoryPublisher||typeof window.KHStoryPublisher.buildFiles!=='function')throw new Error('مولّد ملفات القالب الموحد لم يكتمل تحميله؛ حدّث الصفحة وحاول مرة أخرى.');pack=await window.KHStoryPublisher.buildFiles(storyPackage,{storyMeta:meta,record:it,draft:draft})}else{pack=await window.KHStoryBundle.download(draft,{approved:true,returnFiles:true})}if(!pack||!Array.isArray(pack.files)||!pack.files.length)throw new Error('لم تُجهز ملفات الحكاية؛ راجع اكتمال المحتوى والترجمات والصور والأسئلة.')
  var response=await fetch(API+'/functions/v1/publish-story-pr',{method:'POST',headers:hdr(),body:JSON.stringify({title:'مراجعة حكاية: '+String(draft.title||draft.figure_name||'خالدون').slice(0,100),body:'مراجعة الحكاية بعد اعتماد المعاينة. رقم الحكاية: '+pack.id+'؛ المسار: '+pack.path+'.',submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions',files:pack.files})});
  var result=await response.json().catch(function(){return {}});
- if(!response.ok||!result.success||result.published_to_main!==false||!result.commit_sha||!result.pull_request_url||!result.pull_request_number||!result.story_path)throw new Error(result.error||result.detail||('تعذر إنشاء طلب مراجعة الحكاية في GitHub ('+response.status+').'));
- meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_pr_url:result.pull_request_url,publish_pr_number:result.pull_request_number,publish_branch:result.branch||'',publish_head_sha:result.commit_sha,publish_page_url:'',map_linked:result.map_linked===true,map_marker_added:result.map_marker_added===true,map_message:String(result.map_message||''),decision:'approved_waiting_for_github_upload',note:'تم إنشاء طلب دمج للمراجعة. لم يتم النشر على الموقع حتى الدمج في main.'});
+ if(!response.ok||!result.success||result.published_to_main!==true||!result.commit_sha||!result.story_id||!result.story_path)throw new Error(result.error||result.detail||('تعذر إنشاء طلب مراجعة الحكاية في GitHub ('+response.status+').'));
+ meta.preview_review=Object.assign({},review,{static_story_id:result.story_id||pack.id,static_story_path:result.story_path,bundle_downloaded:true,publish_pr_url:'',publish_pr_number:null,publish_branch:'',publish_head_sha:result.commit_sha,publish_commit_sha:result.commit_sha,published_to_main_at:new Date().toISOString(),publish_page_url:'',map_linked:result.map_linked===true,map_marker_added:result.map_marker_added===true,map_message:String(result.map_message||''),decision:'approved_waiting_for_github_upload',note:'تم تسجيل ملفات الحكاية مباشرة في main؛ يجري التحقق من الصفحة المنشورة.'});
  var persistedDraft=Object.assign({},draft);delete persistedDraft.story_meta;delete persistedDraft._t;meta.pending_draft=persistedDraft;
  var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';var saved=await rest(table+'?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:meta})});
- if(!saved.ok)throw new Error('تم إنشاء طلب الدمج في GitHub لكن تعذر حفظ بيانات المراجعة في سجل الإدارة ('+saved.status+'). افتح الطلب يدويًا وتحقق من السجل قبل إعادة المحاولة.');
+ if(!saved.ok)throw new Error('تم تسجيل الملفات في main لكن تعذر حفظ بيانات النشر في سجل الإدارة ('+saved.status+'). أعد المحاولة من لوحة الإدارة بعد التحقق من سجل الحكاية.');
  it.story_meta=meta;
- window.open(result.pull_request_url,'_blank','noopener');
- say('info',(result.map_message?String(result.map_message)+' ':'')+'تم إنشاء طلب مراجعة في GitHub. لم يتغير الموقع المنشور؛ راجع الطلب وادمجه بعد الموافقة.');
+ await confirmStoryPublishAfterUpload(it,btn);
  }catch(e){
  var publishFailure=e&&e.message?e.message:'تعذر نشر الحكاية';
  if(!publisherCapabilityBlocked){try{
