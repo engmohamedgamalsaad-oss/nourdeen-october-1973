@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="700" viewBox="0 0 900 700" role="img" aria-labelledby="title">
+<title id="title">رحلات ابن بطوطة</title>
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#182b3a"/><stop offset="1" stop-color="#6b527e"/></linearGradient><linearGradient id="paper" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff0cf"/><stop offset="1" stop-color="#d9bd8b"/></linearGradient></defs>
+<rect width="900" height="700" rx="32" fill="url(#bg)"/>
+<circle cx="690" cy="260" r="190" fill="#e8d6ff" opacity=".12"/>
+<g transform="translate(450 275)"><circle r="170" fill="#172a38" fill-opacity=".55" stroke="#e9d5a8" stroke-width="8"/><circle r="138" fill="none" stroke="#e9d5a8" stroke-width="3"/><path d="M0-120L25-22L120 0L25 22L0 120L-25 22L-120 0L-25-22Z" fill="#e7c98c" stroke="#fff0cf" stroke-width="5"/><circle r="14" fill="#fff0cf"/></g>
+<g transform="translate(90 470)"><path d="M0 35Q90 0 180 35V145Q90 110 0 145Z" fill="url(#paper)" stroke="#b18a57" stroke-width="8"/><path d="M180 35Q270 0 360 35V145Q270 110 180 145Z" fill="#f6e6c3" stroke="#b18a57" stroke-width="8"/><path d="M180 35V145" stroke="#9d784e" stroke-width="6"/></g>
+<path d="M90 640H810" stroke="#e5c98e" stroke-width="4" opacity=".8"/>
+</svg>
