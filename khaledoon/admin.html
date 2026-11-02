@@ -309,7 +309,7 @@ async function submitStoryPublishPR(it,btn){
  var storyOnly=isStoryOnlyDraftRecord(it),storyPending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null,storyPackage=storyOnly?((storyPending&&(storyPending.story_package||storyPending.v2_package))||meta.story_package||meta.v2_package):null;if(storyOnly&&(!storyPackage||!isStoryPackageFormat(storyPackage.format))){say('err','حزمة القالب الموحد غير موجودة في سجل المراجعة؛ لم نرسل أي ملفات.');return}
  if(!isOctoberLegacyRecord(it)&&storyOnly&&storyPackage.format!=='KHALEDOON_STORY'){say('err','الحكايات خارج قسم أكتوبر يجب تجهيزها بالقالب الموحد المعتمد قبل النشر. أعد تجهيز الحكاية بالقالب الموحد؛ لم نرسل أي ملفات.');return}
  if(!isOctoberLegacyRecord(it)&&!storyOnly){say('err','هذه الحكاية خارج قسم أكتوبر ولم تُحوّل بعد إلى حزمة القالب الموحد. افتح «تعديل»، أعد تجهيزها بالحزمة الموحدة، ثم أرسلها للمعاينة والاعتماد قبل النشر. لم يتم إرسال أي ملفات.');return}
- if(review.publish_pr_url){
+ if(false&&review.publish_pr_url){
   if(!review.publish_pr_number||!review.publish_branch){say('err','هذا سجل نشر قديم غير مكتمل. أعد تجهيز الحكاية وإرسالها للمعاينة ثم استخدم مسار النشر المباشر الجديد.');return}
   if(review.decision!=='approved_waiting_for_github_upload'){say('info','طلب النشر القديم لا يحمل اعتماد معاينة صالحًا. أعد فتح المعاينة واعتمادها قبل النشر.');return}
   startButtonProgress(btn,'جارٍ التحقق من طلب الدمج…');
