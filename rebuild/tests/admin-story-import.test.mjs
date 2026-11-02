@@ -7,10 +7,11 @@ import { storyToAdminDraft, normalizeStoryFormat } from '../adapters/story-packa
 test('admin import exposes unified story validator and converter and preserves original input format', async () => {
   const html = await readFile(new URL('../../khaledoon/admin.html', import.meta.url), 'utf8');
   const builder = await readFile(new URL('../../khaledoon/story-builder.html', import.meta.url), 'utf8');
-  assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261101-story-publisher-1"></script>'));
+  assert.ok(html.includes('<script type="module" src="assets/admin-story-import.mjs?v=20261102-story-import-bridge-1"></script>'));
   const module = await readFile(new URL('../../khaledoon/assets/admin-story-import.mjs', import.meta.url), 'utf8');
-  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261101-story-package-adapter-2'"));
-  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261101-story-package-adapter-2'"));
+  assert.ok(module.includes("from '../../rebuild/adapters/story-package-adapter.mjs?v=20261102-story-package-adapter-3'"));
+  assert.ok(module.includes("from '../../rebuild/validate-story.mjs?v=20261102-story-package-adapter-3'"));
+  assert.match(module, /normalizeStoryFormat: function \(story\) \{ return normalizeStoryFormat\(story\); \}/, 'admin bridge must expose the normalizer used by the import handler');
   assert.match(html, /function isOctoberLegacyRecord\(it\)/);
   assert.match(html, /var requireUnifiedStoryPackage=!isOctoberLegacyRecord\(it\)/, 'all non-October records must use the unified package');
   assert.doesNotMatch(html, /hasExplicitLegacyPackage/, 'editing an old record must not force unified story just because it lacks an explicit legacy package');
