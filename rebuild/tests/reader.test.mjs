@@ -36,6 +36,7 @@ test('unified reader renders story, gallery, quiz and source sections from one p
   assert.match(js, /data\.format!=='KHALEDOON_STORY'/);
   assert.match(js, /SECTION_PALETTE/);
   assert.match(js, /initReactions/);
+  assert.match(js, /if\(enhanceShown\)\{body\.classList\.remove\('kh-motion'\);initCardReveal\(\);return\}/, 'language changes must reattach reveal observers to newly rendered story blocks');
   assert.match(js, /openLightbox/);
   assert.match(js, /showImageFallback/);
 });
