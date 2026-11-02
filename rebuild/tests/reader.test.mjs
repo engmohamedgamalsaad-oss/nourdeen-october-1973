@@ -24,10 +24,10 @@ test('unified reader exposes all five language choices and changes text directio
   assert.match(js, /previewMode/);
   assert.match(html, /id="preview-banner"/);
   assert.match(html, /id="preview-return"/);
-  assert.match(review, /reader\\.html\\?draft=1/);
+  assert.match(review, /reader\.html\?draft=1/);
   assert.doesNotMatch(review, /id="preview"/, 'review must not maintain a second story template');
-  assert.match(review, /location\\.replace/);
-  assert.match(html, /khaledoon-story-map-link\\.js/);
+  assert.match(review, /location\.replace/);
+  assert.match(html, /khaledoon-story-map-link\.js/);
   const themeStart = js.indexOf("var themeButton=$('theme-toggle');if(themeButton)themeButton.addEventListener('click'");
   const themeEnd = js.indexOf('function closeIntro()', themeStart);
   const themeHandler = themeStart >= 0 && themeEnd > themeStart ? js.slice(themeStart, themeEnd) : '';
