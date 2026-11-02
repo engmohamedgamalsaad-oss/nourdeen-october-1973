@@ -152,8 +152,8 @@ Deno.serve(async (req: Request) => {
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
   const isV2OnlyDraft = sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
-  const submittedStoryPage = body.files.find((file: any) => /^stories\\/[a-z0-9-]+\\/[0-9]{3}\\/index\\.html$/.test(file.path));
-  const submittedStoryMatch = submittedStoryPage?.path.match(/^stories\\/([a-z0-9-]+)\\/([0-9]{3})\\/index\\.html$/);
+  const submittedStoryPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
+  const submittedStoryMatch = submittedStoryPage?.path.match(/^stories\/([a-z0-9-]+)\/([0-9]{3})\/index\.html$/);
   const submittedStorySection = submittedStoryMatch?.[1] ?? "";
   const savedStoryPackageRaw: any = (pendingMeta.story_only_draft === true ? pendingMeta.story_package : null) ??
     (sourceMeta.story_only_draft === true ? sourceMeta.story_package : null) ??
