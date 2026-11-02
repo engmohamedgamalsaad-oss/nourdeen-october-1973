@@ -27,7 +27,7 @@ test('unified reader exposes all five language choices and changes text directio
 test('unified reader renders story, gallery, quiz and source sections from one package', () => {
   for (const id of ['title', 'subtitle', 'summary', 'blocks', 'gallery', 'quiz', 'sources', 'map-section', 'map-link', 'story-intro-modal', 'intro-start', 'story-actions', 'print-story', 'share-whatsapp', 'share-facebook', 'share-copy', 'reaction-like', 'reaction-status', 'image-lightbox', 'intro-cover-fallback']) assert.match(html, new RegExp('id="' + id + '"'));
   assert.ok(baseCss.includes('body[data-design=ancient-civilization]'));
-  assert.match(js, /!\['KHALEDOON_STORY','KHALEDOON_STORY_V2'\]\.includes\(data\.format\)/);
+  assert.match(js, /data\.format!=='KHALEDOON_STORY'/);
   assert.match(js, /SECTION_PALETTE/);
   assert.match(js, /initReactions/);
   assert.match(js, /openLightbox/);
