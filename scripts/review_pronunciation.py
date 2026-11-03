@@ -196,7 +196,7 @@ def review_block(
 
     ordered = sorted(segments, key=lambda item: item.get("chunk_index", 0))
     audio = " ".join(item["text"].strip() for item in ordered)
-    submitted = re.sub(r"\\s+", " ", submitted_audio_text).strip()
+    submitted = re.sub(r"\s+", " ", submitted_audio_text).strip()
     visible_words = tokenize(visible)
     submitted_words = tokenize(submitted)
     manifest_words = tokenize(audio)
