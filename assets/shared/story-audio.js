@@ -1,14 +1,14 @@
 (function () {
   'use strict';
   var story = window.__KH_STORY_PACKAGE;
-  if (!story || !story.section || story.section === 'october') return;
+  if (!story || story.section !== 'science' || story.slug !== 'magdi-yacoub') return;
 
   var copy = {
-    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', fallback: 'الملفات الصوتية غير متاحة الآن؛ نستخدم صوت المتصفح إن كان مدعومًا.', noVoice: 'لا تتوفر ملفات صوتية أو أصوات قراءة في هذا المتصفح.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
-    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', fallback: 'Audio files are unavailable; using the browser voice if supported.', noVoice: 'No audio files or speech voices are available in this browser.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment', open: 'Open audio controls', close: 'Close audio controls' },
-    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', fallback: 'Fichiers audio indisponibles ; utilisation de la voix du navigateur si possible.', noVoice: 'Aucun fichier audio ni voix de lecture disponible dans ce navigateur.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait', open: 'Ouvrir les commandes audio', close: 'Fermer les commandes audio' },
-    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', fallback: 'File audio non disponibili; uso della voce del browser se supportata.', noVoice: 'Nessun file audio o voce disponibile in questo browser.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento', open: 'Apri i controlli audio', close: 'Chiudi i controlli audio' },
-    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', fallback: 'Audiodateien sind nicht verfügbar; falls möglich wird die Browserstimme verwendet.', noVoice: 'In diesem Browser sind keine Audiodateien oder Vorlesestimmen verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt', open: 'Audiosteuerung öffnen', close: 'Audiosteuerung schließen' }
+    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', noVoice: 'التسجيلات الصوتية المختارة غير متاحة حاليًا.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
+    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', noVoice: 'The selected audio recordings are currently unavailable.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment', open: 'Open audio controls', close: 'Close audio controls' },
+    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', noVoice: 'Les enregistrements audio sélectionnés sont actuellement indisponibles.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait', open: 'Ouvrir les commandes audio', close: 'Fermer les commandes audio' },
+    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', noVoice: 'Le registrazioni audio selezionate non sono attualmente disponibili.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento', open: 'Apri i controlli audio', close: 'Chiudi i controlli audio' },
+    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', noVoice: 'Die ausgewählten Audioaufnahmen sind derzeit nicht verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt', open: 'Audiosteuerung öffnen', close: 'Audiosteuerung schließen' }
   };
   var style = document.createElement('style');
   style.textContent = [
@@ -39,10 +39,10 @@
   var lang = document.documentElement.lang || 'ar';
   var ui = copy[lang] || copy.ar;
   var blocks = story.i18n && story.i18n[lang] && story.i18n[lang].blocks || [];
+  var approvedVoices = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
   var queue = [];
   var index = 0;
   var activeAudio = null;
-  var activeUtterance = null;
   var mode = 'idle';
   var manifestUrl = null;
   var currentBlock = null;
@@ -98,8 +98,6 @@
       activeAudio.load();
       activeAudio = null;
     }
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    activeUtterance = null;
     mode = 'idle';
     index = 0;
     clearHighlight();
@@ -119,31 +117,6 @@
       var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       currentBlock.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
     }
-  }
-
-  function fallbackSpeak(segment, onEnd) {
-    if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-      status.textContent = ui.noVoice;
-      mode = 'idle';
-      pauseButton.disabled = true;
-      stopButton.disabled = false;
-      return;
-    }
-    var sourceBlock = blocks[segment.block_index] || {};
-    var utterance = new SpeechSynthesisUtterance(segment.text || sourceBlock.text || '');
-    utterance.volume = Number(volumeControl.value);
-    var locales = { ar: 'ar-EG', en: 'en-US', fr: 'fr-FR', it: 'it-IT', de: 'de-DE' };
-    utterance.lang = locales[lang] || 'ar-EG';
-    utterance.rate = 0.96;
-    utterance.pitch = segment.speaker === 'karma' ? 1.12 : 1;
-    var voices = window.speechSynthesis.getVoices();
-    var voice = voices.find(function (v) { return v.lang && v.lang.toLowerCase() === utterance.lang.toLowerCase(); }) ||
-      voices.find(function (v) { return v.lang && v.lang.toLowerCase().indexOf(utterance.lang.slice(0, 2)) === 0; });
-    if (voice) utterance.voice = voice;
-    utterance.onend = onEnd;
-    utterance.onerror = function () { status.textContent = ui.noVoice; mode = 'idle'; };
-    activeUtterance = utterance;
-    window.speechSynthesis.speak(utterance);
   }
 
   function playNext() {
@@ -172,41 +145,41 @@
       if (mode === 'playing') window.setTimeout(playNext, 350);
     }
 
-    if (segment.url) {
-      activeAudio = new Audio(segment.url);
-      activeAudio.volume = Number(volumeControl.value);
-      activeAudio.preload = 'auto';
-      activeAudio.onended = advance;
-      activeAudio.onerror = function () {
-        var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
-        if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
-        else advance();
-      };
-      var pending = activeAudio.play();
-      if (pending && typeof pending.catch === 'function') {
-        pending.catch(function () {
-          var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
-          if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
-          else { status.textContent = ui.noVoice; advance(); }
-        });
-      }
-    } else {
-      fallbackSpeak(segment, advance);
+    if (!segment.url) {
+      mode = 'idle';
+      status.textContent = ui.noVoice;
+      pauseButton.disabled = true;
+      stopButton.disabled = false;
+      return;
     }
-  }
-
-  function buildFallbackQueue() {
-    queue = blocks.map(function (block, blockIndex) {
-      return block && block.text && (block.speaker === 'karma' || block.speaker === 'narrator')
-        ? { block_index: blockIndex, speaker: block.speaker, text: block.text }
-        : null;
-    }).filter(Boolean);
+    activeAudio = new Audio(segment.url);
+    activeAudio.volume = Number(volumeControl.value);
+    activeAudio.preload = 'auto';
+    activeAudio.onended = advance;
+    activeAudio.onerror = function () {
+      activeAudio = null;
+      mode = 'idle';
+      status.textContent = ui.noVoice;
+      pauseButton.disabled = true;
+      stopButton.disabled = false;
+    };
+    var pending = activeAudio.play();
+    if (pending && typeof pending.catch === 'function') {
+      pending.catch(function () {
+        activeAudio = null;
+        mode = 'idle';
+        status.textContent = ui.noVoice;
+        pauseButton.disabled = true;
+        stopButton.disabled = false;
+      });
+    }
   }
 
   function loadManifest() {
     stop();
     setLanguage();
-    if (story.section === 'october') return;
+    if (lang !== 'ar') { host.hidden = true; queue = []; return; }
+    host.hidden = false;
     manifestUrl = new URL('../../../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href);
     status.textContent = ui.loading;
     fetch(manifestUrl.href, { cache: 'no-cache' }).then(function (response) {
@@ -214,6 +187,7 @@
       return response.json();
     }).then(function (manifest) {
       if (!manifest || manifest.version !== 1 || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
+      if (manifest.segments.some(function (segment) { return !approvedVoices[segment.speaker] || segment.voice !== approvedVoices[segment.speaker]; })) throw new Error('Audio manifest does not match the approved pilot voices');
       queue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,
@@ -225,8 +199,8 @@
       if (!queue.length) throw new Error('Empty audio manifest');
       status.textContent = '';
     }).catch(function () {
-      buildFallbackQueue();
-      status.textContent = queue.length ? ui.fallback : ui.noVoice;
+      queue = [];
+      status.textContent = ui.noVoice;
     });
   }
 
@@ -242,13 +216,11 @@
     setExpanded(true);
     if (mode === 'paused') {
       if (activeAudio) activeAudio.play();
-      else if ('speechSynthesis' in window) window.speechSynthesis.resume();
       mode = 'playing';
       pauseButton.textContent = ui.pause;
       return;
     }
     if (mode === 'idle') {
-      if (!queue.length) buildFallbackQueue();
       index = 0;
       if (queue.length) playNext();
       else status.textContent = ui.noVoice;
@@ -257,7 +229,6 @@
   pauseButton.addEventListener('click', function () {
     if (mode !== 'playing') return;
     if (activeAudio) activeAudio.pause();
-    else if ('speechSynthesis' in window) window.speechSynthesis.pause();
     mode = 'paused';
     pauseButton.textContent = ui.resume;
     setExpanded(false);
@@ -266,7 +237,6 @@
   volumeControl.addEventListener('input', function () {
     var value = Number(volumeControl.value);
     if (activeAudio) activeAudio.volume = value;
-    if (activeUtterance) activeUtterance.volume = value;
   });
   document.addEventListener('site-language-change', loadManifest);
   setLanguage();
