@@ -446,7 +446,8 @@ function dropApprovalIfEdited(it,fields,meta){
  function oldOf(k){return compare(k,base[k]!=null?base[k]:m[k])}
  function newOf(k){return compare(k,fields[k]!=null?fields[k]:dm[k])}
  var fieldsToCheck=['title','subtitle','body','sources','history_note','images_note','karma_text','question_bank_json','student_name','grade','figure_name','narrator_name','narrator_grade','section','stage','school_grade','subject','consent'];
- var changed=fieldsToCheck.some(function(k){return oldOf(k)!==newOf(k)});
+ function hasField(o,k){return Object.prototype.hasOwnProperty.call(o||{},k)}
+ var changed=fieldsToCheck.some(function(k){return (hasField(fields,k)||hasField(dm,k))&&oldOf(k)!==newOf(k)});
  function translationSnapshot(value){
   var out={};
   ['en','fr','it','de'].forEach(function(lang){
