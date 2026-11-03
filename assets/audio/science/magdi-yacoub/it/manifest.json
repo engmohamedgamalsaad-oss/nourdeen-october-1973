@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "engine": "edge-tts",
+  "engine": "fish-audio+edge-tts",
   "story": "magdi-yacoub",
   "section": "science",
   "language": "it",
@@ -9,92 +9,118 @@
       "block_index": 0,
       "speaker": "karma",
       "voice": "it-IT-ElsaNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "000.mp3",
-      "hash": "17cbb012347b40c2b5bc363e3e04537e9b199b426afdb24311d5f33b6f458c51"
+      "hash": "a7b2e2d8b6d7fc6f951dc067a4aa6503e942accbf91e882580f2e40c4822ff5a"
     },
     {
       "block_index": 1,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "001.mp3",
-      "hash": "5ab016c260672d14d315fb41bf5166e70d8721932aa051b31ef900b026785641"
+      "hash": "9f5be0f7d75da61144f00770417b031e6dd6a544480e0816170b25b72112537f"
     },
     {
       "block_index": 2,
       "speaker": "karma",
       "voice": "it-IT-ElsaNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "002.mp3",
-      "hash": "cb519c17d27d54925cc3467b72346a5591b7bc500be34ceab0f6724762ec05cd"
+      "hash": "627bf12eafa83cd2d1edfb28c41079fa416f9c9aa142b64e2eba93bba071d610"
     },
     {
       "block_index": 3,
       "speaker": "karma",
       "voice": "it-IT-ElsaNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "003.mp3",
-      "hash": "13fe3b73a9a345a6cc14d86ab09f3fe7dbc9cdbfc8137b3c87a7af1ca53c75cf"
+      "hash": "c97c3fac7bbdb296302fbf3ccfffc44991052464b0213caf69cda30c8a0b3d57"
     },
     {
       "block_index": 4,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "004.mp3",
-      "hash": "e76ae32155601070e187bd9234afbdf103c0ffea581340364d066d00b794b12b"
+      "hash": "d920336d618e3e724739e9829a2c4bf9e7ebde0854c6e8f3adf09cdaa28cddf9"
     },
     {
       "block_index": 5,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "005.mp3",
-      "hash": "716b235fa24b88d4a29dd94d97987b652bb7c495d9901e066e939028c968f38c"
+      "hash": "9d289a2528d051f3b310f764f9796856c306a2ef82b9148a46ad9a5f199e834a"
     },
     {
       "block_index": 6,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "006.mp3",
-      "hash": "58f2e73a0467e435f7e6b37fd4fb351b7d754d1aa932117dbb1626f15e8d6b92"
+      "hash": "9d8a2d681ecd3023fc1f6813c18b0998e4f167109224f7689d764118610515ff"
     },
     {
       "block_index": 7,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "007.mp3",
-      "hash": "f5b5191d525eded1aeae147b77ed61239be4e5b2f9da2b8b02b9fae4d29c49d8"
+      "hash": "bfe8de6763430317fa76061662f4a8ed8430d885e171c5736d293be006dc8701"
     },
     {
       "block_index": 8,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "008.mp3",
-      "hash": "43a21d50427eee1c70dc509395b47f71eebb646c9aaa173e3b6431444a20fc46"
+      "hash": "8b6dd390342180789520cd521c23fe8b66218841ebeedccdfe6e92a01f6d5a07"
     },
     {
       "block_index": 9,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "009.mp3",
-      "hash": "7712d23fcfe1bf47e5602f58d151ef57baebc756ed2cabd5c89a2d490c7df698"
+      "hash": "9e9426c1d70b8f3ffa7bc3c0e35ed906c4d464e9b63fc0ddfce244d7e28cc09f"
     },
     {
       "block_index": 10,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "010.mp3",
-      "hash": "7cef15c8477b51c421e626f661cb55c5cd4dedfce51e87e970711f36d053ae58"
+      "hash": "194a377ad079c819ec0f9e710993a988bc3a28b8628f2109d7e5a89e5fe1483d"
     },
     {
       "block_index": 11,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "011.mp3",
-      "hash": "51152b43d29614fbba797be1c399b42be16d99b4d82123084162f02afce72b01"
+      "hash": "4e9c7d164874fe330619985c5d99637a88318f13624f4b11b9ad1952339f285e"
     },
     {
       "block_index": 12,
       "speaker": "narrator",
       "voice": "it-IT-DiegoNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
       "src": "012.mp3",
-      "hash": "e0c09ec566c08311f339bdad30240adcb1bef345f730ad58d30e8c1c04be1777"
+      "hash": "fdbb09699888bb1dc09310e4112fe3f47990d3e1f2dca028e9af9c5af7b828f5"
     }
   ]
 }
