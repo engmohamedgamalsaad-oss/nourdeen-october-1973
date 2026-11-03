@@ -26,13 +26,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
-      - name: Validate the pilot generator
-        run: python -m py_compile scripts/generate_magdi_yacoub_single_audio.py
+      - name: Validate the Magdi Yacoub Arabic generator
+        run: python -m py_compile scripts/generate_story_audio.py
 
-      - name: Generate only Magdi Yacoub Arabic segment 001 when needed
+      - name: Generate Magdi Yacoub Arabic audio; only narrator clips with changed voice hash are regenerated
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_magdi_yacoub_single_audio.py
+        run: python scripts/generate_story_audio.py
 
       - name: Commit only the pilot segment and its manifest
         shell: bash
@@ -40,12 +40,12 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/audio/science/magdi-yacoub/ar/001.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
+          git add assets/audio/science/magdi-yacoub/ar/*.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
           if git diff --cached --quiet; then
             echo 'The approved pilot audio is already current.'
             exit 0
           fi
-          git commit -m 'Update Magdi Yacoub Arabic pilot audio segment'
+          git commit -m 'Generate Magdi Yacoub Arabic with approved narrator voice'
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
