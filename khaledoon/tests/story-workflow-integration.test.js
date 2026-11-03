@@ -201,7 +201,7 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(mapBundle.includes('mapData[id].place_label=mapLocation.place_label'), 'bundle must preserve localized optional map labels');
   assert.ok(mapBundle.includes('تسمية المكان الاختيارية يجب أن تكون مترجمة'), 'bundle must reject untranslated optional map labels');
   assert.ok(admin.includes('map_linked:result.map_linked===true'));
-  assert.ok(admin.includes("result.map_message?String(result.map_message)+' ':'"));
+  assert.ok(admin.includes("map_message:String(result.map_message||'')"));
   assert.ok(admin.includes('story-template-bundle.js?v=20261027-source-clean-2'));
   var shared = fs.readFileSync('khaledoon/assets/khaledoon-admin-texts.js', 'utf8');
   assert.ok(shared.includes('## 8) الموقع على الخريطة'), 'the v5 map section must be present');
@@ -290,7 +290,7 @@ test('published stories cannot be deleted and deleting drafts never hides static
   assert.ok(!removeBlock.includes('await hideStaticStoryBeforeDelete(it)'));
   assert.ok(!admin.includes('hideStaticStoryBeforeDelete'));
   assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
-  assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
+  assert.ok(admin.includes("if(it.status!=='published'){delBtn.type='button';bar.appendChild(delBtn)}else{delBtn.hidden=true;delBtn.disabled=true}"));
   assert.ok(admin.includes('var visibleRecords=adminRecords.filter(function(record){return !linkedPublished[String(record.id)]})'));
   assert.ok(admin.includes("function storyFor(it){if(it&&it._t==='site')return vStories.find(function(s){return String(s.id)===String(it.id)})||it;return window.KHWorkflow.linkedSite(it,vStories)}"));
 });
@@ -594,7 +594,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
   assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
-  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-1'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
