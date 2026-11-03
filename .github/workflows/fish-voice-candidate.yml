@@ -1,0 +1,27 @@
+name: fish-voice-candidate
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/fish-voice-candidate.yml'
+permissions:
+  contents: read
+jobs:
+  sample:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Generate candidate sample
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os,json,urllib.request,pathlib
+          p={"text":"والإجابة تبدأ من الفضول والتعلّم، ثم التدريب الطويل والعمل مع فريق طبي. مجدي يعقوب لم يصبح جرّاح قلب في يوم واحد؛ فقد احتاج الطريق إلى دراسة وخبرة ومهارة.","reference_id":"b65cfd7ce5e44607aedafeea3dbb01e8","format":"mp3"}
+          q=urllib.request.Request("https://api.fish.audio/v1/tts",data=json.dumps(p,ensure_ascii=False).encode(),headers={"Authorization":"Bearer "+os.environ["FISH_AUDIO_API_KEY"],"Content-Type":"application/json","model":"s2.1-pro-free"},method="POST")
+          with urllib.request.urlopen(q,timeout=90) as r: a=r.read()
+          pathlib.Path("candidate.mp3").write_bytes(a)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fish-voice-candidate
+          path: candidate.mp3
