@@ -193,9 +193,13 @@ def validate_manifest(
                 f"Manifest block_index={block_index} is outside the story block range 0..{len(blocks) - 1}."
             )
             continue
-        if not isinstance(segment.get("text"), str) or not segment["text"].strip():
+        # Production manifests may intentionally omit submitted text and retain only
+        # the content hash. Do not reject those records or invent a text comparison.
+        if "text" in segment and (
+            not isinstance(segment.get("text"), str) or not segment["text"].strip()
+        ):
             errors.append(
-                f"Manifest block_index={block_index}, chunk_index={chunk_index} has empty audio text."
+                f"Manifest block_index={block_index}, chunk_index={chunk_index} has invalid audio text."
             )
             continue
         story_block = blocks[block_index]
@@ -229,22 +233,33 @@ def review_block(
         raise ReviewError(f"Story block {block_index} has empty/non-text visible content.")
 
     ordered = sorted(segments, key=lambda item: item.get("chunk_index", 0))
-    audio = " ".join(item["text"].strip() for item in ordered)
+    manifest_text_available = all(
+        isinstance(item.get("text"), str) and item["text"].strip()
+        for item in ordered
+    )
+    audio = (
+        " ".join(item["text"].strip() for item in ordered)
+        if manifest_text_available else None
+    )
     submitted = re.sub(r"\s+", " ", submitted_audio_text).strip()
     visible_words = tokenize(visible)
     submitted_words = tokenize(submitted)
-    manifest_words = tokenize(audio)
+    manifest_words = tokenize(audio) if audio is not None else []
     visible_to_submitted = sequence_differences(visible_words, submitted_words)
-    submitted_to_manifest = sequence_differences(submitted_words, manifest_words)
+    submitted_to_manifest = (
+        sequence_differences(submitted_words, manifest_words)
+        if manifest_text_available else []
+    )
     visible_punctuation = sequence_differences(
         punctuation_marks(visible), punctuation_marks(submitted)
     )
-    manifest_punctuation = sequence_differences(
-        punctuation_marks(submitted), punctuation_marks(audio)
+    manifest_punctuation = (
+        sequence_differences(punctuation_marks(submitted), punctuation_marks(audio))
+        if manifest_text_available else []
     )
     visible_diacritics = diacritics(visible)
     submitted_diacritics = diacritics(submitted)
-    manifest_diacritics = diacritics(audio)
+    manifest_diacritics = diacritics(audio) if audio is not None else []
 
     voice_records = []
     for item in ordered:
@@ -262,7 +277,7 @@ def review_block(
             "pitch": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("pitch"),
             "request_fields": ["text", "reference_id", "format"] if item.get("provider") == "fish-audio" else None,
             "request_headers": ["Content-Type", "model", "Authorization (secret value not recorded)"] if item.get("provider") == "fish-audio" else None,
-            "exact_submitted_chunk_text": item.get("text"),
+            "manifest_text_available": isinstance(item.get("text"), str) and bool(item["text"].strip()),
         })
 
     return {
@@ -271,6 +286,9 @@ def review_block(
         "visible_text": visible,
         "audio_pronunciation_source_text": submitted,
         "audio_text_from_manifest": audio,
+        "manifest_text_verification": (
+            "AVAILABLE" if manifest_text_available else "NOT_STORED_IN_MANIFEST"
+        ),
         "word_identity_and_order": {
             "visible_vs_submitted": {
                 "status": (
@@ -284,9 +302,12 @@ def review_block(
                 "differences": visible_to_submitted,
             },
             "submitted_vs_manifest": {
-                "status": "PASS" if not submitted_to_manifest else "FAIL",
+                "status": (
+                    "NOT_AVAILABLE" if not manifest_text_available
+                    else "PASS" if not submitted_to_manifest else "FAIL"
+                ),
                 "submitted_word_count": len(submitted_words),
-                "manifest_word_count": len(manifest_words),
+                "manifest_word_count": len(manifest_words) if manifest_text_available else None,
                 "differences": submitted_to_manifest,
             },
         },
@@ -296,7 +317,10 @@ def review_block(
                 "differences": visible_punctuation,
             },
             "submitted_vs_manifest": {
-                "status": "SAME" if not manifest_punctuation else "DIFFERENT_RECORDED",
+                "status": (
+                    "NOT_AVAILABLE" if not manifest_text_available
+                    else "SAME" if not manifest_punctuation else "DIFFERENT_RECORDED"
+                ),
                 "differences": manifest_punctuation,
             },
         },
@@ -308,10 +332,16 @@ def review_block(
                 "differences": sequence_differences(visible_diacritics, submitted_diacritics),
             },
             "submitted_vs_manifest": {
-                "status": "SAME" if submitted_diacritics == manifest_diacritics else "DIFFERENT_RECORDED",
+                "status": (
+                    "NOT_AVAILABLE" if not manifest_text_available
+                    else "SAME" if submitted_diacritics == manifest_diacritics else "DIFFERENT_RECORDED"
+                ),
                 "submitted_marks": submitted_diacritics,
-                "manifest_marks": manifest_diacritics,
-                "differences": sequence_differences(submitted_diacritics, manifest_diacritics),
+                "manifest_marks": manifest_diacritics if manifest_text_available else None,
+                "differences": (
+                    sequence_differences(submitted_diacritics, manifest_diacritics)
+                    if manifest_text_available else []
+                ),
             },
         },
         "audio_segments": voice_records,
@@ -428,8 +458,9 @@ def build_report(
             "Neither PASS nor REVIEW proves that the audio actually pronounces words correctly."
         ),
         "synthesis_settings_note": (
-            "The exact audio-only source is read from audio-pronunciation.json; exact submitted chunks "
-            "are read from manifest segment text. Voice ID/provider/model are read from the manifest. "
+            "The exact audio-only source is read from audio-pronunciation.json. Some production manifest "
+            "records retain only a content hash and do not store submitted text; in that case this report "
+            "does not claim a source-to-manifest text match. Voice ID/provider/model are read from the manifest. "
             "For the current Fish Audio request, "
             "rate and pitch are not sent to the provider; the request uses text, reference_id and MP3 format. "
             "The report records these as NOT_SENT rather than treating unrelated generator constants as applied settings."
