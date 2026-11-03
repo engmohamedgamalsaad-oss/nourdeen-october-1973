@@ -8,7 +8,7 @@ The visible story text is the source of truth and is never rewritten by audio ge
 2. Split it into sentence-sized pieces for diacritization.
 3. Apply `text2tashkeel==0.1.0` with the `rawi-ensemble` model.
 4. Rejoin the sentence pieces and split long speech into chunks at sentence/word boundaries.
-5. Synthesize each chunk with the configured Fish Audio speaker.
+5. Synthesize each chunk with the configured Fish Audio speaker and pass the Arabic rate as Fish `prosody.speed` (for example, -2% becomes 0.98x). Fish's cloud API does not expose the Edge-style pitch setting used by Edge TTS.
 6. Normalize Arabic Fish MP3s with FFmpeg loudnorm before writing the manifest.
 7. Keep the vocalized text in the manifest so browser speech fallback uses the same reading copy.
 8. Keep a short pause between consecutive audio chunks.
