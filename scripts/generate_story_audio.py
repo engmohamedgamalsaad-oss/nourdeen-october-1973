@@ -79,7 +79,7 @@ _ARABIC_DIACRITIZER = None
 def diacritize_arabic_text(text: str) -> str:
     """Prepare an audio-only Arabic reading copy without changing story text."""
     global _ARABIC_DIACRITIZER
-    if not re.search(r"[\\u0600-\\u06FF]", text):
+    if not re.search(r"[\u0600-\u06FF]", text):
         return text
 
     if _ARABIC_DIACRITIZER is None:
@@ -93,13 +93,13 @@ def diacritize_arabic_text(text: str) -> str:
 
     # The model documentation recommends one sentence per call. Keep the
     # sentence context intact and preserve the original punctuation/spacing.
-    parts = re.split(r"(?<=[.!?؟؛])(?=\\s)|(?<=\\n)", text)
+    parts = re.split(r"(?<=[.!?؟؛])(?=\s)|(?<=\n)", text)
     output: list[str] = []
     for part in parts:
         if not part or part.isspace():
             output.append(part)
             continue
-        if re.search(r"[\\u0600-\\u06FF]", part):
+        if re.search(r"[\u0600-\u06FF]", part):
             vocalized = _ARABIC_DIACRITIZER.diacritize(part)
             if not isinstance(vocalized, str) or not vocalized.strip():
                 raise RuntimeError("Arabic diacritizer returned empty text.")
@@ -114,7 +114,7 @@ def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
     if len(text) <= max_chars:
         return [text]
 
-    sentences = [part.strip() for part in re.split(r"(?<=[.!?؟؛])\\s+", text) if part.strip()]
+    sentences = [part.strip() for part in re.split(r"(?<=[.!?؟؛])\s+", text) if part.strip()]
     chunks: list[str] = []
     current = ""
 
@@ -288,7 +288,7 @@ async def generate_story(story_path: Path) -> bool:
             if not isinstance(block, dict):
                 continue
             speaker = block.get("speaker")
-            original_text = re.sub(r"\\s+", " ", str(block.get("text") or "")).strip()
+            original_text = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
             if speaker not in ("karma", "narrator") or not original_text:
                 continue
 
