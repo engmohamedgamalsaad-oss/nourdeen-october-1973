@@ -24,6 +24,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ffmpeg
+      - name: Validate isolated generator syntax
+        run: python -m py_compile scripts/generate_magdi_yacoub_single_audio.py
       - name: Generate only segment 001
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
