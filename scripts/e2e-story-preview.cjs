@@ -15,7 +15,7 @@ fs.mkdirSync(artifactDir, { recursive: true });
 let server, browser;
 const errors = [];
 function mime(file) {
-  return ({'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'})[path.extname(file).toLowerCase()] || 'application/octet-stream';
+  return ({'.html':'text/html; charset=utf-8','.js':'text/javascript; charset=utf-8','.mjs':'text/javascript; charset=utf-8','.json':'application/json','.css':'text/css; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'})[path.extname(file).toLowerCase()] || 'application/octet-stream';
 }
 async function main() {
   fs.mkdirSync(path.join(temp, 'rebuild'), { recursive: true });
