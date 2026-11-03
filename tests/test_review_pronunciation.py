@@ -53,7 +53,11 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
-            "PASS",
+            "NOT_AVAILABLE",
+        )
+        self.assertEqual(
+            report["block"]["manifest_text_verification"],
+            "NOT_STORED_IN_MANIFEST",
         )
 
 
