@@ -1,0 +1,348 @@
+#!/usr/bin/env python3
+"""Read-only Arabic comparison of visible story text and its audio manifest.
+
+This reviewer does not edit story data, manifests, or MP3 files and never calls a
+TTS provider. A textual pass confirms written-word identity and order only; it
+does not establish that a voice model pronounced the words correctly.
+"""
+from __future__ import annotations
+
+import argparse
+import difflib
+import json
+import re
+import sys
+import unicodedata
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_STORY = Path("stories/science/015/story.json")
+DEFAULT_MANIFEST = Path("assets/audio/science/magdi-yacoub/ar/manifest.json")
+DEFAULT_BLOCK_INDEX = 1
+
+# The agreed comparison normalization is intentionally narrow.
+REMOVED_CODEPOINTS = (
+    *range(0x064B, 0x0653),  # U+064B–U+0652
+    0x0670,                 # superscript alef
+    0x0640,                 # tatweel
+)
+REMOVE_MARKS = {codepoint: None for codepoint in REMOVED_CODEPOINTS}
+WORD_RE = re.compile(r"[^\W_]+", re.UNICODE)
+DIACRITIC_RE = re.compile(r"[\u064B-\u0652\u0670]")
+
+
+class ReviewError(Exception):
+    """Raised when inputs cannot be compared safely."""
+
+
+def read_json(path: Path, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ReviewError(f"Cannot read {label} as UTF-8 JSON: {path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise ReviewError(f"{label} must contain a JSON object: {path}")
+    return value
+
+
+def resolve_input(raw_path: str | Path, label: str) -> Path:
+    candidate = Path(raw_path)
+    if not candidate.is_absolute():
+        candidate = ROOT / candidate
+    try:
+        resolved = candidate.resolve(strict=True)
+        resolved.relative_to(ROOT.resolve())
+    except (OSError, ValueError) as exc:
+        raise ReviewError(f"{label} must be an existing file inside the repository: {raw_path}") from exc
+    if not resolved.is_file():
+        raise ReviewError(f"{label} is not a file: {resolved}")
+    return resolved
+
+
+def normalize_words_text(value: str) -> str:
+    """Remove only the agreed marks; preserve Arabic letter identity."""
+    return value.translate(REMOVE_MARKS)
+
+
+def tokenize(value: str) -> list[str]:
+    return WORD_RE.findall(normalize_words_text(value))
+
+
+def punctuation_marks(value: str) -> list[str]:
+    normalized = normalize_words_text(value)
+    return [
+        char for char in normalized
+        if unicodedata.category(char).startswith("P")
+    ]
+
+
+def diacritics(value: str) -> list[str]:
+    return DIACRITIC_RE.findall(value)
+
+
+def sequence_differences(before: list[str], after: list[str]) -> list[dict[str, Any]]:
+    matcher = difflib.SequenceMatcher(a=before, b=after, autojunk=False)
+    changes: list[dict[str, Any]] = []
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == "equal":
+            continue
+        changes.append({
+            "change": tag,
+            "visible_positions_1_based": [i1 + 1, i2],
+            "audio_positions_1_based": [j1 + 1, j2],
+            "visible": before[i1:i2],
+            "audio": after[j1:j2],
+        })
+    return changes
+
+
+def validate_manifest(
+    manifest: dict[str, Any], blocks: list[Any], story: dict[str, Any], language: str
+) -> tuple[dict[int, list[dict[str, Any]]], list[str]]:
+    errors: list[str] = []
+    slug = story.get("slug")
+    section = story.get("section")
+
+    if manifest.get("story") != slug:
+        errors.append(f"Manifest story mismatch: expected {slug!r}, got {manifest.get('story')!r}.")
+    if manifest.get("section") != section:
+        errors.append(f"Manifest section mismatch: expected {section!r}, got {manifest.get('section')!r}.")
+    if manifest.get("language") != language:
+        errors.append(f"Manifest language mismatch: expected {language!r}, got {manifest.get('language')!r}.")
+
+    segments = manifest.get("segments")
+    if not isinstance(segments, list):
+        raise ReviewError("Manifest 'segments' must be a list.")
+
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    seen_pairs: set[tuple[int, int]] = set()
+
+    for position, segment in enumerate(segments, start=1):
+        if not isinstance(segment, dict):
+            errors.append(f"Manifest segment #{position} is not an object.")
+            continue
+        block_index = segment.get("block_index")
+        chunk_index = segment.get("chunk_index", 0)
+        if (
+            not isinstance(block_index, int) or isinstance(block_index, bool)
+            or not isinstance(chunk_index, int) or isinstance(chunk_index, bool)
+            or block_index < 0 or chunk_index < 0
+        ):
+            errors.append(f"Manifest segment #{position} has an invalid block_index/chunk_index.")
+            continue
+
+        # Multiple chunks may legitimately belong to one block. The unique key
+        # is therefore (block_index, chunk_index), not block_index alone.
+        pair = (block_index, chunk_index)
+        if pair in seen_pairs:
+            errors.append(
+                f"Duplicate manifest segment for block_index={block_index}, chunk_index={chunk_index}."
+            )
+            continue
+        seen_pairs.add(pair)
+
+        if block_index >= len(blocks):
+            errors.append(
+                f"Manifest block_index={block_index} is outside the story block range 0..{len(blocks) - 1}."
+            )
+            continue
+        if not isinstance(segment.get("text"), str) or not segment["text"].strip():
+            errors.append(
+                f"Manifest block_index={block_index}, chunk_index={chunk_index} has empty audio text."
+            )
+            continue
+        story_block = blocks[block_index]
+        if isinstance(story_block, dict):
+            expected_speaker = story_block.get("speaker")
+            if segment.get("speaker") != expected_speaker:
+                errors.append(
+                    f"Speaker mismatch at block_index={block_index}, chunk_index={chunk_index}: "
+                    f"story={expected_speaker!r}, manifest={segment.get('speaker')!r}."
+                )
+        grouped.setdefault(block_index, []).append(segment)
+
+    for block_index, items in grouped.items():
+        items.sort(key=lambda item: item.get("chunk_index", 0))
+        indexes = [item.get("chunk_index", 0) for item in items]
+        expected = list(range(len(indexes)))
+        if indexes != expected:
+            errors.append(
+                f"Chunk indexes for block_index={block_index} must be contiguous from 0; got {indexes}."
+            )
+
+    return grouped, errors
+
+
+def review_block(
+    block_index: int, block: dict[str, Any], segments: list[dict[str, Any]]
+) -> dict[str, Any]:
+    visible = block.get("text")
+    if not isinstance(visible, str) or not visible.strip():
+        raise ReviewError(f"Story block {block_index} has empty/non-text visible content.")
+
+    ordered = sorted(segments, key=lambda item: item.get("chunk_index", 0))
+    audio = " ".join(item["text"].strip() for item in ordered)
+    visible_words = tokenize(visible)
+    audio_words = tokenize(audio)
+    word_changes = sequence_differences(visible_words, audio_words)
+    punctuation_changes = sequence_differences(
+        punctuation_marks(visible), punctuation_marks(audio)
+    )
+    visible_diacritics = diacritics(visible)
+    audio_diacritics = diacritics(audio)
+
+    voice_records = []
+    for item in ordered:
+        voice_records.append({
+            "chunk_index": item.get("chunk_index", 0),
+            "audio_file": item.get("src"),
+            "speaker": item.get("speaker"),
+            "provider": item.get("provider"),
+            "model": item.get("model"),
+            "voice_id": item.get("voice"),
+            # Current manifests do not persist synthesis rate/pitch. Do not infer them.
+            "rate": item.get("rate"),
+            "pitch": item.get("pitch"),
+        })
+
+    return {
+        "block_index": block_index,
+        "speaker": block.get("speaker"),
+        "visible_text": visible,
+        "audio_text": audio,
+        "word_identity_and_order": {
+            "status": "PASS" if not word_changes else "FAIL",
+            "visible_word_count": len(visible_words),
+            "audio_word_count": len(audio_words),
+            "differences": word_changes,
+        },
+        "punctuation": {
+            "status": "SAME" if not punctuation_changes else "DIFFERENT_RECORDED",
+            "visible_marks": punctuation_marks(visible),
+            "audio_marks": punctuation_marks(audio),
+            "differences": punctuation_changes,
+        },
+        "diacritics": {
+            "status": "SAME" if visible_diacritics == audio_diacritics else "DIFFERENT_RECORDED",
+            "visible_marks": visible_diacritics,
+            "audio_marks": audio_diacritics,
+        },
+        "audio_segments": voice_records,
+        "human_review_required": bool(word_changes or punctuation_changes or visible_diacritics != audio_diacritics),
+        "textual_result": "PASS" if not word_changes else "FAIL",
+        "spoken_pronunciation_result": "NOT_TESTED",
+    }
+
+
+def build_report(story_path: Path, manifest_path: Path, language: str, block_index: int) -> dict[str, Any]:
+    story = read_json(story_path, "story")
+    manifest = read_json(manifest_path, "audio manifest")
+
+    if story.get("format") != "KHALEDOON_STORY":
+        raise ReviewError("Unsupported story format; expected KHALEDOON_STORY.")
+    if not isinstance(story.get("slug"), str) or not story["slug"].strip():
+        raise ReviewError("Story is missing a valid slug.")
+    if not isinstance(story.get("section"), str) or not story["section"].strip():
+        raise ReviewError("Story is missing a valid section.")
+    if language != "ar":
+        raise ReviewError("This first version intentionally reviews Arabic only.")
+
+    localized = story.get("i18n", {}).get(language)
+    blocks = localized.get("blocks") if isinstance(localized, dict) else None
+    if not isinstance(blocks, list) or not blocks:
+        raise ReviewError(f"Story has no non-empty i18n.{language}.blocks list.")
+    if block_index < 0 or block_index >= len(blocks):
+        raise ReviewError(f"block-index {block_index} is outside the story block range.")
+
+    grouped, structural_errors = validate_manifest(manifest, blocks, story, language)
+    selected_segments = grouped.get(block_index, [])
+    if not selected_segments:
+        structural_errors.append(f"No audio manifest segment exists for block_index={block_index}.")
+
+    block = blocks[block_index]
+    if not isinstance(block, dict):
+        raise ReviewError(f"Story block {block_index} is not an object.")
+
+    block_report = None
+    if selected_segments:
+        block_report = review_block(block_index, block, selected_segments)
+
+    textual_pass = bool(block_report and block_report["textual_result"] == "PASS")
+    return {
+        "tool": "review_pronunciation.py",
+        "tool_version": 1,
+        "mode": "READ_ONLY",
+        "story": story.get("slug"),
+        "section": story.get("section"),
+        "language": language,
+        "story_file": str(story_path.relative_to(ROOT)),
+        "manifest_file": str(manifest_path.relative_to(ROOT)),
+        "scope": {
+            "block_index": block_index,
+            "note": "Default scope is Magdi Yacoub Arabic block 1, mapped to manifest audio file 001.mp3 in the current pilot."
+        },
+        "structural_validation": {
+            "status": "PASS" if not structural_errors else "FAIL",
+            "errors": structural_errors,
+        },
+        "block": block_report,
+        "overall_textual_result": (
+            "FAIL" if structural_errors or not textual_pass else "PASS"
+        ),
+        "spoken_pronunciation_result": "NOT_TESTED",
+        "important_limit": (
+            "A textual PASS proves only that the written words and their order match after the agreed "
+            "narrow mark normalization. It does not prove that the audio actually pronounces them correctly."
+        ),
+        "synthesis_settings_note": (
+            "Voice ID/provider/model are read from the manifest. Rate and pitch are reported only if "
+            "the manifest explicitly stores them; this tool does not infer missing settings."
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Read-only comparison of Arabic visible story text and audio manifest text."
+    )
+    parser.add_argument("--story", default=str(DEFAULT_STORY), help="Story JSON path inside the repository.")
+    parser.add_argument("--manifest", default=str(DEFAULT_MANIFEST), help="Audio manifest path inside the repository.")
+    parser.add_argument("--language", default="ar", choices=("ar",), help="Language to review (Arabic only in v1).")
+    parser.add_argument("--block-index", type=int, default=DEFAULT_BLOCK_INDEX,
+                        help="Zero-based story block index; defaults to pilot block 1 / 001.mp3.")
+    parser.add_argument("--report", help="Optional path for saving the JSON report; no project input is modified.")
+    parser.add_argument("--fail-on-mismatch", action="store_true",
+                        help="Exit with status 1 when textual or structural review fails.")
+    args = parser.parse_args()
+
+    try:
+        story_path = resolve_input(args.story, "Story")
+        manifest_path = resolve_input(args.manifest, "Manifest")
+        report = build_report(story_path, manifest_path, args.language, args.block_index)
+    except ReviewError as exc:
+        print(json.dumps({"overall_textual_result": "ERROR", "error": str(exc)}, ensure_ascii=False, indent=2))
+        return 2
+
+    rendered = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.report:
+        destination = Path(args.report).expanduser()
+        if not destination.is_absolute():
+            destination = Path.cwd() / destination
+        try:
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(rendered + "\n", encoding="utf-8")
+        except OSError as exc:
+            print(f"Cannot write report: {exc}", file=sys.stderr)
+            return 2
+        print(f"Report saved to: {destination}")
+    else:
+        print(rendered)
+
+    if args.fail_on_mismatch and report["overall_textual_result"] != "PASS":
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
