@@ -49,6 +49,20 @@ class NumberFormClassificationTests(unittest.TestCase):
         )
 
 
+class MarkPositionTests(unittest.TestCase):
+    def test_punctuation_position_is_part_of_comparison(self):
+        self.assertNotEqual(
+            reviewer.punctuation_marks("أهلاً، يا صديقي."),
+            reviewer.punctuation_marks("أهلاً يا، صديقي."),
+        )
+
+    def test_diacritic_position_is_part_of_comparison(self):
+        self.assertNotEqual(
+            reviewer.diacritics("بَت"),
+            reviewer.diacritics("بتَ"),
+        )
+
+
 class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
     def test_default_pilot_block_is_structurally_and_textually_valid(self):
         report = reviewer.build_report(
