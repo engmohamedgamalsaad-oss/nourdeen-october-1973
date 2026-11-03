@@ -63,6 +63,12 @@ class MarkPositionTests(unittest.TestCase):
         )
 
 
+    def test_positioned_mark_records_can_be_diffed(self):
+        before = reviewer.punctuation_marks("أهلاً، يا صديقي.")
+        after = reviewer.punctuation_marks("أهلاً يا، صديقي.")
+        self.assertTrue(reviewer.sequence_differences(before, after))
+
+
 class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
     def test_default_pilot_block_is_structurally_and_textually_valid(self):
         report = reviewer.build_report(
