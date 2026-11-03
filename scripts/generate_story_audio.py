@@ -13,6 +13,7 @@ import json
 import os
 import re
 import sys
+import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -107,6 +108,30 @@ def diacritize_arabic_text(text: str) -> str:
         else:
             output.append(part)
     return "".join(output)
+
+
+def normalize_arabic_audio(path: Path) -> None:
+    """Normalize Arabic Fish tracks to a consistent loudness before publishing."""
+    normalized = path.with_name(path.stem + ".normalized.mp3")
+    try:
+        subprocess.run(
+            [
+                "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+                "-i", str(path),
+                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
+                "-ar", "44100", "-b:a", "128k", str(normalized),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.PIPE,
+            timeout=90,
+        )
+        if not normalized.is_file() or normalized.stat().st_size < 512:
+            raise RuntimeError("FFmpeg loudnorm returned an empty audio file")
+        normalized.replace(path)
+    except Exception:
+        normalized.unlink(missing_ok=True)
+        raise
 
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
@@ -209,6 +234,7 @@ async def synthesize_fish_audio(text: str, destination: Path, voice_id: str) -> 
             if len(audio) < 512:
                 raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
             temporary.write_bytes(audio)
+            normalize_arabic_audio(temporary)
             temporary.replace(destination)
             return
         except urllib.error.HTTPError as exc:
