@@ -24,7 +24,7 @@ import edge_tts
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "3"
-ARABIC_AUDIO_TEXT_VERSION = "text2tashkeel-0.1.0-rawi-ensemble-fish-prosody-v2"
+ARABIC_AUDIO_TEXT_VERSION = "manual-word-pronunciation-corrections-only-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # approved narrator voice B; force a complete published non-October refresh after prior run stalled
 FISH_AUDIO_MODEL = "s2.1-pro-free"
@@ -74,41 +74,15 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-_ARABIC_DIACRITIZER = None
+def prepare_arabic_audio_text(text: str) -> str:
+    """Keep Arabic audio natural; apply only explicitly reviewed word-level fixes.
 
-
-def diacritize_arabic_text(text: str) -> str:
-    """Prepare an audio-only Arabic reading copy without changing story text."""
-    global _ARABIC_DIACRITIZER
-    if not re.search(r"[\u0600-\u06FF]", text):
-        return text
-
-    if _ARABIC_DIACRITIZER is None:
-        try:
-            from text2tashkeel import Diacritizer
-        except ImportError as exc:
-            raise RuntimeError(
-                "Arabic audio requires text2tashkeel==0.1.0; refusing to synthesize unvocalized Arabic."
-            ) from exc
-        _ARABIC_DIACRITIZER = Diacritizer("rawi-ensemble")
-
-    # The model documentation recommends one sentence per call. Keep the
-    # sentence context intact and preserve the original punctuation/spacing.
-    parts = re.split(r"(?<=[.!?؟؛])(?=\s)|(?<=\n)", text)
-    output: list[str] = []
-    for part in parts:
-        if not part or part.isspace():
-            output.append(part)
-            continue
-        if re.search(r"[\u0600-\u06FF]", part):
-            vocalized = _ARABIC_DIACRITIZER.diacritize(part)
-            if not isinstance(vocalized, str) or not vocalized.strip():
-                raise RuntimeError("Arabic diacritizer returned empty text.")
-            output.append(vocalized)
-        else:
-            output.append(part)
-    return "".join(output)
-
+    Do not run automatic full-sentence tashkeel here. It damages colloquial
+    dialogue and can introduce incorrect case endings and word readings.
+    Story-specific pronunciation corrections must be added deliberately,
+    without changing the displayed story text.
+    """
+    return text
 
 def normalize_arabic_audio(path: Path) -> None:
     """Normalize Arabic Fish tracks to a consistent loudness before publishing."""
@@ -329,7 +303,7 @@ async def generate_story(story_path: Path) -> bool:
             if speaker not in ("karma", "narrator") or not original_text:
                 continue
 
-            audio_text = diacritize_arabic_text(original_text) if lang == "ar" else original_text
+            audio_text = prepare_arabic_audio_text(original_text) if lang == "ar" else original_text
             chunks = split_audio_chunks(audio_text)
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
             use_fish_audio = lang == "ar" and speaker in ("karma", "narrator")
