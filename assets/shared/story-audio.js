@@ -20,7 +20,8 @@
     '.kh-audio-controls button:disabled{opacity:.45;cursor:not-allowed}',
     '.kh-audio-status{margin:10px 0 0;color:var(--muted);font-size:.9rem;line-height:1.8}',
     '.kh-audio-progress{display:block;width:100%;height:5px;margin-top:12px;accent-color:var(--accent)}',
-    '#blocks>.block.kh-audio-current{outline:2px solid var(--accent);outline-offset:3px}'
+    '#blocks>.block.kh-audio-current{outline:1px solid color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:3px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease;scroll-margin-block:18vh}',
+    '@media(prefers-reduced-motion:reduce){#blocks>.block.kh-audio-current{transition:none!important}}'
   ].join('');
   document.head.appendChild(style);
 
@@ -89,6 +90,8 @@
     if (cards[blockIndex]) {
       currentBlock = cards[blockIndex];
       currentBlock.classList.add('kh-audio-current');
+      var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      currentBlock.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
     }
   }
 
