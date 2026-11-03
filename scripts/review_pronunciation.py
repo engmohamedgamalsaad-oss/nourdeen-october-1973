@@ -28,7 +28,6 @@ REMOVED_CODEPOINTS = (
     0x0640,                 # tatweel
 )
 REMOVE_MARKS = {codepoint: None for codepoint in REMOVED_CODEPOINTS}
-WORD_RE = re.compile(r"[^\W_]+", re.UNICODE)
 DIACRITIC_RE = re.compile(r"[\u064B-\u0652\u0670]")
 
 
@@ -66,7 +65,20 @@ def normalize_words_text(value: str) -> str:
 
 
 def tokenize(value: str) -> list[str]:
-    return WORD_RE.findall(normalize_words_text(value))
+    # Keep every Unicode combining mark that was not explicitly removed above.
+    # This prevents the comparison from silently ignoring unapproved marks.
+    tokens: list[str] = []
+    current: list[str] = []
+    for char in normalize_words_text(value):
+        category = unicodedata.category(char)
+        if char.isalnum() or category.startswith("M"):
+            current.append(char)
+        elif current:
+            tokens.append("".join(current))
+            current = []
+    if current:
+        tokens.append("".join(current))
+    return tokens
 
 
 def punctuation_marks(value: str) -> list[str]:
