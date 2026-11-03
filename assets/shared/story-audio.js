@@ -12,13 +12,16 @@
   };
   var style = document.createElement('style');
   style.textContent = [
-    '.kh-audio-player{margin:18px 0 24px;padding:18px;border:1px solid var(--line);border-radius:18px;background:color-mix(in srgb,var(--accent) 9%,var(--panel));color:var(--text)}',
-    '.kh-audio-player h3{margin:0 0 12px;color:var(--accent);font:800 1.1rem Cairo,Arial,sans-serif}',
+    '.kh-audio-player{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:9999;width:min(350px,calc(100vw - 24px));box-sizing:border-box;margin:0;padding:12px 14px;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);box-shadow:0 12px 38px rgba(0,0,0,.24);isolation:isolate}',
+    '.kh-audio-player h3{margin:0 0 9px;color:var(--accent);font:800 1rem Cairo,Arial,sans-serif}',
     '.kh-audio-controls{display:flex;flex-wrap:wrap;gap:8px}',
-    '.kh-audio-controls button{min-height:42px;padding:8px 15px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font:700 .9rem Cairo,Arial,sans-serif;cursor:pointer}',
+    '.kh-audio-controls button{min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font:700 .88rem Cairo,Arial,sans-serif;cursor:pointer}',
     '.kh-audio-controls #kh-audio-play{background:var(--accent);border-color:var(--accent);color:#171717}',
     '.kh-audio-controls button:disabled{opacity:.45;cursor:not-allowed}',
-    '.kh-audio-status{margin:10px 0 0;color:var(--muted);font-size:.9rem;line-height:1.8}',
+    '.kh-audio-status{margin:7px 0 0;color:var(--muted);font-size:.82rem;line-height:1.55;max-height:2.6em;overflow:hidden}',
+    '.kh-audio-volume{display:flex;align-items:center;gap:9px;margin-top:8px;color:var(--muted);font:600 .78rem Cairo,Arial,sans-serif}',
+    '.kh-audio-volume input{flex:1;min-width:70px;accent-color:var(--accent);cursor:pointer}',
+    '@media(max-width:480px){.kh-audio-player{right:10px;bottom:max(10px,env(safe-area-inset-bottom));width:min(330px,calc(100vw - 20px));padding:10px 12px}.kh-audio-controls{gap:6px}.kh-audio-controls button{min-height:38px;padding:6px 10px;font-size:.82rem}}',
     '.kh-audio-progress{display:block;width:100%;height:5px;margin-top:12px;accent-color:var(--accent)}',
     '#blocks>.block.kh-audio-current{outline:1px solid color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:3px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease;scroll-margin-block:18vh}',
     '@media(prefers-reduced-motion:reduce){#blocks>.block.kh-audio-current{transition:none!important}}'
@@ -39,7 +42,7 @@
   var host = document.createElement('section');
   host.className = 'kh-audio-player';
   host.id = 'kh-audio-player';
-  host.innerHTML = '<h3 id="kh-audio-title"></h3><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p>';
+  host.innerHTML = '<h3 id="kh-audio-title"></h3><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><label class="kh-audio-volume"><span>' + (lang === 'ar' ? 'مستوى الصوت' : 'Volume') + '</span><input id="kh-audio-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></label><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p>';
   var blocksHost = document.getElementById('blocks');
   if (blocksHost && blocksHost.parentNode) blocksHost.parentNode.insertBefore(host, blocksHost);
 
@@ -48,10 +51,12 @@
   var stopButton = document.getElementById('kh-audio-stop');
   var status = document.getElementById('kh-audio-status');
   var progress = document.getElementById('kh-audio-progress');
+  var volumeControl = document.getElementById('kh-audio-volume');
 
   function setLanguage() {
     lang = document.documentElement.lang || 'ar';
     ui = copy[lang] || copy.ar;
+    host.dir = lang === 'ar' ? 'rtl' : 'ltr';
     blocks = story.i18n && story.i18n[lang] && story.i18n[lang].blocks || [];
     document.getElementById('kh-audio-title').textContent = ui.title;
     playButton.textContent = ui.play;
@@ -105,6 +110,7 @@
     }
     var sourceBlock = blocks[segment.block_index] || {};
     var utterance = new SpeechSynthesisUtterance(sourceBlock.text || segment.text || '');
+    utterance.volume = Number(volumeControl.value);
     var locales = { ar: 'ar-EG', en: 'en-US', fr: 'fr-FR', it: 'it-IT', de: 'de-DE' };
     utterance.lang = locales[lang] || 'ar-EG';
     utterance.rate = 0.96;
@@ -146,6 +152,7 @@
 
     if (segment.url) {
       activeAudio = new Audio(segment.url);
+      activeAudio.volume = Number(volumeControl.value);
       activeAudio.preload = 'auto';
       activeAudio.onended = advance;
       activeAudio.onerror = function () {
@@ -223,6 +230,11 @@
     pauseButton.textContent = ui.resume;
   });
   stopButton.addEventListener('click', stop);
+  volumeControl.addEventListener('input', function () {
+    var value = Number(volumeControl.value);
+    if (activeAudio) activeAudio.volume = value;
+    if (activeUtterance) activeUtterance.volume = value;
+  });
   document.addEventListener('site-language-change', loadManifest);
   setLanguage();
   loadManifest();
