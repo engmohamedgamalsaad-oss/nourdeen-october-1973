@@ -1,37 +1,21 @@
-name: story-audio
+name: story-audio-magdi-yacoub-pilot
+
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'stories/*/*/story.json'
-      - 'stories/*/*/data.json'
-      - 'stories/*/*/audio-pronunciation.json'
   workflow_dispatch:
-    inputs:
-      story_path:
-        description: 'Optional exact path, e.g. stories/science/015/story.json'
-        required: false
-        type: string
-      all:
-        description: 'Generate audio for every published non-October story'
-        required: false
-        default: false
-        type: boolean
 
 permissions:
   contents: write
 
 concurrency:
-  group: story-audio-approved-voice-refresh-${{ github.ref }}
+  group: magdi-yacoub-arabic-audio-pilot
   cancel-in-progress: false
 
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 20
     steps:
       - name: Check out main
-        id: checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: main
@@ -42,75 +26,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
-      - name: Install audio dependencies
-        run: python -m pip install --disable-pip-version-check 'edge-tts>=7.2.0,<8'
+      - name: Validate the pilot generator
+        run: python -m py_compile scripts/generate_magdi_yacoub_single_audio.py
 
-      - name: Validate audio pipeline prerequisites
-        run: |
-          python -m py_compile scripts/generate_story_audio.py
-          node --check assets/shared/story-audio.js
-
-
-      - name: Generate audio for manually selected stories
-        if: github.event_name == 'workflow_dispatch' && inputs.story_path != ''
+      - name: Generate only Magdi Yacoub Arabic segment 001 when needed
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-          STORY_PATH: ${{ inputs.story_path }}
-        run: python scripts/generate_story_audio.py --paths "$STORY_PATH"
+        run: python scripts/generate_magdi_yacoub_single_audio.py
 
-      - name: Generate audio for all published stories
-        if: github.event_name == 'workflow_dispatch' && inputs.story_path == '' && inputs.all == 'true'
-        env:
-          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py --all
-
-      - name: Generate audio for the initial published pilot
-        if: github.event_name == 'workflow_dispatch' && inputs.story_path == '' && inputs.all != 'true'
-        env:
-          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py --paths stories/science/015/story.json
-
-      - name: Generate audio for changed published stories
-        if: github.event_name == 'push'
-        shell: bash
-        env:
-          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: |
-          set -euo pipefail
-          mapfile -t all_changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
-          mapfile -t changed < <(printf '%s\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data|audio-pronunciation)\.json$' || true)
-
-          declare -a selected=()
-          declare -A seen=()
-          for file in "${changed[@]}"; do
-            dir="$(dirname "$file")"
-            candidate="$dir/story.json"
-            if [[ -f "$candidate" && -z "${seen[$candidate]+x}" ]]; then
-              selected+=("$candidate")
-              seen["$candidate"]=1
-            fi
-          done
-
-          if [[ ${#selected[@]} -gt 0 ]]; then
-            python scripts/generate_story_audio.py --paths "${selected[@]}"
-          else
-            echo 'No eligible story package changed; skipping audio generation.'
-          fi
-
-      - name: Commit generated audio to main
-        if: success() && steps.checkout.outcome == 'success'
+      - name: Commit only the pilot segment and its manifest
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          mkdir -p assets/audio
-          git add assets/audio
+          git add assets/audio/science/magdi-yacoub/ar/001.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
           if git diff --cached --quiet; then
-            echo 'Audio files are already current.'
+            echo 'The approved pilot audio is already current.'
             exit 0
           fi
-          git commit -m 'Add generated story audio'
+          git commit -m 'Update Magdi Yacoub Arabic pilot audio segment'
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
