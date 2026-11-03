@@ -22,7 +22,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: story-audio-\${{ github.ref }}
+  group: story-audio-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   generate:
@@ -38,7 +38,7 @@ jobs:
         run: python -m pip install --disable-pip-version-check 'edge-tts>=7.2.0,<8'
       - name: Generate audio for manually selected stories
         if: github.event_name == 'workflow_dispatch' && inputs.story_path != ''
-        run: python scripts/generate_story_audio.py --paths "\${{ inputs.story_path }}"
+        run: python scripts/generate_story_audio.py --paths "${{ inputs.story_path }}"
       - name: Generate audio for all published stories
         if: github.event_name == 'workflow_dispatch' && inputs.story_path == '' && inputs.all == 'true'
         run: python scripts/generate_story_audio.py --all
@@ -50,7 +50,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git diff --name-only "\${{ github.event.before }}" "\${{ github.sha }}" -- 'stories/*/*/story.json' 'stories/*/*/data.json')
+          mapfile -t changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'stories/*/*/story.json' 'stories/*/*/data.json')
           declare -a selected=()
           declare -A seen=()
           for file in "\${changed[@]}"; do
