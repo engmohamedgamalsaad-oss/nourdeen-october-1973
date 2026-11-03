@@ -475,6 +475,8 @@ def write_outputs(result):
         if path.is_symlink() or path.resolve().parent != QA_DIR.resolve():
             raise RuntimeError(f"Refusing unsafe output path: {path}")
         temp = path.with_name(path.name + ".tmp")
+        if temp.is_symlink():
+            raise RuntimeError(f"Refusing symlinked temporary output: {temp}")
         temp.write_text(content, encoding="utf-8")
         temp.replace(path)
     return list(targets)
