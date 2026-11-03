@@ -444,7 +444,18 @@ function dropApprovalIfEdited(it,fields,meta){
  function norm(x){return String(x==null?'':x).trim()}
  function oldOf(k){return norm(base[k]!=null?base[k]:m[k])}
  function newOf(k){return norm(fields[k]!=null?fields[k]:dm[k])}
- var changed=['title','subtitle','body','sources','history_note','images_note','karma_text','question_bank_json'].some(function(k){return oldOf(k)!==newOf(k)});
+ var fieldsToCheck=['title','subtitle','body','sources','history_note','images_note','karma_text','question_bank_json','student_name','grade','figure_name','narrator_name','narrator_grade','section','stage','school_grade','subject','consent'];
+ var changed=fieldsToCheck.some(function(k){return oldOf(k)!==newOf(k)});
+ function translationSnapshot(value){
+  var out={};
+  ['en','fr','it','de'].forEach(function(lang){
+   var t=value&&value[lang]&&typeof value[lang]==='object'?value[lang]:{};
+   out[lang]={enabled:t.enabled===undefined?'':!!t.enabled,title:norm(t.title),subtitle:norm(t.subtitle),student_name:norm(t.student_name),grade:norm(t.grade),karma_text:norm(t.karma_text),body:norm(t.body),history_note:norm(t.history_note),images_note:norm(t.images_note)};
+  });
+  return JSON.stringify(out);
+ }
+ var oldTranslations=base.translations||m.translations||{},newTranslations=fields.translations||dm.translations||oldTranslations;
+ changed=changed||translationSnapshot(oldTranslations)!==translationSnapshot(newTranslations);
  return changed?window.KHWorkflow.markEdited(meta||m,new Date()):meta;
 }
 function legacyCard(it){
@@ -478,7 +489,7 @@ function legacyCard(it){
  function collectLegacyTranslations(){var out={};Object.keys(legacyTranslationInputs).forEach(function(lang){var t=legacyTranslationInputs[lang];out[lang]={enabled:true,status:'draft',title:t.title.value.trim(),subtitle:t.subtitle.value.trim(),student_name:name.value.trim(),grade:grade.value.trim(),karma_text:t.karma_text.value.trim(),body:t.body.value.trim(),history_note:t.history_note.value.trim(),images_note:t.images_note.value.trim()}});return out}
  async function persistLegacy(nextStatus,btn){
   var requestedStatus=nextStatus||status.value;
-  var translations=collectLegacyTranslations();var storyMeta=Object.assign({},it.story_meta||{});storyMeta.karma_text=karma.value.trim();storyMeta.question_bank_json=quizJson.value.trim();storyMeta.translations=translations;storyMeta=dropApprovalIfEdited(it,{title:title.value,subtitle:subtitle.value,body:body.value,sources:sources.value,history_note:hist.value,images_note:imagesNote.value,karma_text:karma.value,question_bank_json:quizJson.value},storyMeta);
+  var translations=collectLegacyTranslations();var storyMeta=Object.assign({},it.story_meta||{});storyMeta.karma_text=karma.value.trim();storyMeta.question_bank_json=quizJson.value.trim();storyMeta.translations=translations;storyMeta=dropApprovalIfEdited(it,{student_name:name.value,grade:grade.value,title:title.value,subtitle:subtitle.value,body:body.value,sources:sources.value,history_note:hist.value,images_note:imagesNote.value,karma_text:karma.value,question_bank_json:quizJson.value,translations:translations},storyMeta);
   var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:requestedStatus,story_number:it.story_number||null,story_meta:storyMeta};
   d.story_meta.original_body=legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim();d.story_meta.pending_draft=Object.assign({},d,{figure_name:title.value.trim(),section:'october',section_key:'october',original_body:d.story_meta.original_body,history_note:hist.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),translations:translations});delete d.story_meta.pending_draft.story_meta;
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return false}
@@ -486,7 +497,7 @@ function legacyCard(it){
   if(d.status==='published')d.status='pending';
   var payload=d;
   if(it.status==='published'&&requestedStatus!=='rejected'){
-   var meta=Object.assign({},d.story_meta||{},it.story_meta||{});meta.original_body=d.story_meta.original_body;meta.karma_text=karma.value.trim();meta.question_bank_json=quizJson.value.trim();meta.translations=translations;meta.pending_draft=Object.assign({},d.story_meta.pending_draft);meta.pending_draft.preview_source_url=meta.preview_source_url||'';meta.pending_draft.status='pending';payload={story_meta:meta};d.status='published';
+   var meta=Object.assign({},it.story_meta||{},d.story_meta||{});meta.original_body=d.story_meta.original_body;meta.karma_text=karma.value.trim();meta.question_bank_json=quizJson.value.trim();meta.translations=translations;meta.pending_draft=Object.assign({},d.story_meta.pending_draft);meta.pending_draft.preview_source_url=meta.preview_source_url||'';meta.pending_draft.status='pending';payload={story_meta:meta};d.status='published';
   }else if(requestedStatus==='rejected'){payload=d;payload.status='rejected'}else{payload=d;payload.status='pending';payload.story_meta=d.story_meta}
   btn.disabled=true;
   try{
@@ -738,7 +749,7 @@ if(!isNew&&isOctoberLegacyRecord(it)){
   try{
    var payload=d;
    if(!isNew&&it.status==='published'){
-    var meta=Object.assign({},it.story_meta||{});meta.pending_draft=Object.assign({},d);delete meta.pending_draft.story_meta;meta.pending_draft.status='pending';payload={story_meta:meta};
+    var meta=Object.assign({},it.story_meta||{},d.story_meta||{});meta.pending_draft=Object.assign({},d);delete meta.pending_draft.story_meta;meta.pending_draft.status='pending';payload={story_meta:meta};
    }
    var r=isNew?await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)})
               :await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(it.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
@@ -1104,7 +1115,7 @@ function pubRow(it){
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       var savedDraft=it.status==='published'?(rows[0].story_meta&&rows[0].story_meta.pending_draft):rows[0];if(!savedDraft||String(savedDraft.title||'')!==expectedAiTitle||String(savedDraft.body||'')!==expectedAiBody)throw new Error('الخادم لم يُرجع المسودة المحفوظة مطابقة للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();if(storyOnlyDraft){if(shouldRecordPreview(it)){try{await recordPreviewSent(it)}catch(recordError){aiSay('err','حُفظت الحكاية لكن تعذر تسجيل مرحلة المعاينة: '+(recordError.message||''))}}stageStoryReview(it,storyPackageRaw)}if(aiPreviewPopup){aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay('ok',storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة. يمكن نشرها من مسار القالب الموحد بعد اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay('ok',storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد. استخدم زر «فتح معاينة الحكاية» لعرضها؛ لا يتم النشر قبل اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
+      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();var previewRecordError='';if(storyOnlyDraft){if(shouldRecordPreview(it)){try{await recordPreviewSent(it)}catch(recordError){previewRecordError=recordError.message||'تعذر تسجيل مرحلة المعاينة.'}}stageStoryReview(it,storyPackageRaw)}if(aiPreviewPopup){aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية وفتحت المعاينة، لكن تعذر تسجيل مرحلة المعاينة: '+previewRecordError:storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة. يمكن نشرها من مسار القالب الموحد بعد اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية، لكن تعذر تسجيل مرحلة المعاينة: '+previewRecordError:storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد. استخدم زر «فتح معاينة الحكاية» لعرضها؛ لا يتم النشر قبل اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
      }catch(e){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignorePreviewClose){}}aiFail(e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
