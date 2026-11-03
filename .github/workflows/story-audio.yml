@@ -5,8 +5,6 @@ on:
     paths:
       - 'stories/*/*/story.json'
       - 'stories/*/*/data.json'
-      - 'scripts/generate_story_audio.py'
-      - 'assets/shared/story-audio.js'
   workflow_dispatch:
     inputs:
       story_path:
@@ -63,7 +61,8 @@ jobs:
         if: github.event_name == 'workflow_dispatch' && inputs.story_path != ''
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py --paths "${{ inputs.story_path }}"
+          STORY_PATH: ${{ inputs.story_path }}
+        run: python scripts/generate_story_audio.py --paths "$STORY_PATH"
 
       - name: Generate audio for all published stories
         if: github.event_name == 'workflow_dispatch' && inputs.story_path == '' && inputs.all == 'true'
@@ -86,12 +85,6 @@ jobs:
           set -euo pipefail
           mapfile -t all_changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
           mapfile -t changed < <(printf '%s\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\.json$' || true)
-
-          if printf '%s\n' "${all_changed[@]}" | grep -Eq '^scripts/generate_story_audio\.py$'; then
-            echo 'Audio generator changed; refresh all published non-October stories.'
-            python scripts/generate_story_audio.py --all
-            exit 0
-          fi
 
           declare -a selected=()
           declare -A seen=()
