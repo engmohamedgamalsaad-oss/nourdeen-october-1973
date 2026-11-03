@@ -448,7 +448,11 @@ def build_report(
         "overall_textual_result": (
             "FAIL" if structural_errors or (block_report and block_report["textual_result"] == "FAIL")
             else "REVIEW" if block_report and block_report["textual_result"] == "REVIEW"
-            else "PASS" if textual_pass else "FAIL"
+            else (
+                "PASS_SOURCE_ONLY"
+                if textual_pass and block_report.get("manifest_text_verification") == "NOT_STORED_IN_MANIFEST"
+                else "PASS" if textual_pass else "FAIL"
+            )
         ),
         "spoken_pronunciation_result": "NOT_TESTED",
         "important_limit": (
@@ -517,7 +521,7 @@ def main() -> int:
     else:
         print(rendered)
 
-    if args.fail_on_mismatch and report["overall_textual_result"] != "PASS":
+    if args.fail_on_mismatch and report["overall_textual_result"] not in ("PASS", "PASS_SOURCE_ONLY"):
         return 1
     return 0
 
