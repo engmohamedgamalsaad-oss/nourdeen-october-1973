@@ -134,7 +134,8 @@ def remove_date_connector(tokens: list[str]) -> list[str]:
         if (
             token == "من"
             and next_token in ARABIC_MONTH_TOKENS
-            and any(is_number_form_token(item) for item in previous)
+            and bool(previous)
+            and is_number_form_token(previous[-1])
         ):
             continue
         result.append(token)
