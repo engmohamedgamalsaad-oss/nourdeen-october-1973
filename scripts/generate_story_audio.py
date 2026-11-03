@@ -22,8 +22,9 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "2"
-FISH_AUDIO_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
+GENERATOR_VERSION = "3"
+FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
+FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 VOICE_SETTINGS = {
     "ar": {
@@ -100,7 +101,7 @@ async def synthesize(
     ) from last_error
 
 
-async def synthesize_fish_audio(text: str, destination: Path) -> None:
+async def synthesize_fish_audio(text: str, destination: Path, voice_id: str) -> None:
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError(
@@ -111,7 +112,7 @@ async def synthesize_fish_audio(text: str, destination: Path) -> None:
     temporary = destination.with_name(destination.stem + ".partial.mp3")
     payload = json.dumps({
         "text": text,
-        "reference_id": FISH_AUDIO_VOICE_ID,
+        "reference_id": voice_id,
         "format": "mp3",
     }, ensure_ascii=False).encode("utf-8")
     request = urllib.request.Request(
@@ -200,9 +201,13 @@ async def generate_story(story_path: Path) -> bool:
             if speaker not in ("karma", "narrator") or not text:
                 continue
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
-            use_fish_audio = lang == "ar" and speaker == "karma"
+            use_fish_audio = lang == "ar" and speaker in ("karma", "narrator")
+            fish_voice_id = (
+                FISH_AUDIO_KARMA_VOICE_ID if speaker == "karma"
+                else FISH_AUDIO_NARRATOR_VOICE_ID
+            )
             candidates = (
-                [FISH_AUDIO_VOICE_ID]
+                [fish_voice_id]
                 if use_fish_audio
                 else [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
             )
@@ -230,7 +235,7 @@ async def generate_story(story_path: Path) -> bool:
                     break
                 try:
                     if use_fish_audio:
-                        await synthesize_fish_audio(text, destination)
+                        await synthesize_fish_audio(text, destination, candidate_voice)
                     else:
                         await synthesize(text, candidate_voice, rate, pitch, destination)
                     selected_voice = candidate_voice
