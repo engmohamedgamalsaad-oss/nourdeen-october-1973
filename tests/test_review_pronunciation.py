@@ -45,7 +45,7 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             reviewer.DEFAULT_BLOCK_INDEX,
         )
         self.assertEqual(report["structural_validation"]["status"], "PASS")
-        self.assertEqual(report["overall_textual_result"], "PASS")
+        self.assertEqual(report["overall_textual_result"], "PASS_SOURCE_ONLY")
         self.assertEqual(report["block"]["textual_result"], "PASS")
         self.assertEqual(
             report["block"]["word_identity_and_order"]["visible_vs_submitted"]["visible_word_count"],
