@@ -38,4 +38,4 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
 
       - name: Run the read-only pilot report
-        run: python scripts/review_pronunciation.py --report "$RUNNER_TEMP/pronunciation-review.json"
+        run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
