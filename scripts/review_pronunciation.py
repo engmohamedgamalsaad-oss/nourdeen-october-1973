@@ -347,7 +347,12 @@ def main() -> int:
             destination = Path.cwd() / destination
         try:
             destination.parent.mkdir(parents=True, exist_ok=True)
-            destination.write_text(rendered + "\n", encoding="utf-8")
+            # Exclusive creation prevents overwriting either input or any existing file.
+            with destination.open("x", encoding="utf-8") as handle:
+                handle.write(rendered + "\n")
+        except FileExistsError:
+            print(f"Refusing to overwrite an existing file: {destination}", file=sys.stderr)
+            return 2
         except OSError as exc:
             print(f"Cannot write report: {exc}", file=sys.stderr)
             return 2
