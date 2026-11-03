@@ -24,9 +24,8 @@ VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
 MODEL = "s2.1-pro-free"
 GENERATOR_VERSION = "3"
 AUDIO_TEXT_VERSION = "manual-word-pronunciation-corrections-only-v1"
-RATE = "-2%"
+RATE = "-2%"  # hash input only; no speed is sent to Fish
 PITCH = "+0Hz"
-SPEED = 0.98
 
 EXPECTED_VISIBLE_TEXT = (
     "والإجابة تبدأ من الفضول والتعلّم، ثم التدريب الطويل والعمل مع فريق طبي. "
@@ -36,12 +35,12 @@ EXPECTED_VISIBLE_TEXT = (
 
 # Audio-only, limited vocalization: no automatic full-sentence tashkeel.
 AUDIO_TEXT = (
-    "والإجابة تبدأ من الفضول والتعلُّم، ثم التدريب الطويل والعمل مع فريق طِبِّيّ. "
-    "مَجْدِي يَعْقُوب لم يصبح جَرَّاح قلب في يوم واحد؛ فقد احتاج الطريق إلى دراسة وخبرة ومهارة، "
+    "والإجابة تبدأ من الفضول والتعلُّم، ثم التدريب الطويل والعمل مع فريق طِبِّيّ. "
+    "مَجْدِي يَعْقُوب لم يصبح جَرَّاح قلب في يوم واحد؛ فقد احتاج الطريق إلى دراسة وخبرة ومهارة، "
     "وإلى تعاون أطباء وممرضين وباحثين."
 )
 
-MARKS = re.compile(r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]")
+MARKS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭـ]")
 
 
 def normalized_arabic(value: str) -> str:
@@ -75,7 +74,6 @@ def synthesize(api_key: str, destination: Path) -> None:
             "text": AUDIO_TEXT,
             "reference_id": VOICE_ID,
             "format": "mp3",
-            "prosody": {"speed": SPEED, "volume": 0},
         },
         ensure_ascii=False,
     ).encode("utf-8")
@@ -85,7 +83,6 @@ def synthesize(api_key: str, destination: Path) -> None:
         "model": MODEL,
     }
     raw_tmp = destination.with_name(".001.generated.tmp.mp3")
-    normalized_tmp = destination.with_name(".001.normalized.tmp.mp3")
     last_error: Exception | None = None
 
     try:
@@ -115,26 +112,10 @@ def synthesize(api_key: str, destination: Path) -> None:
                 raise RuntimeError(f"Fish Audio failed after 3 attempts: {last_error}") from last_error
             time.sleep(2 ** attempt)
 
-        subprocess.run(
-            [
-                "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-                "-i", str(raw_tmp),
-                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-                "-ar", "44100", "-b:a", "128k",
-                str(normalized_tmp),
-            ],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-            timeout=90,
-        )
-        if not normalized_tmp.is_file() or normalized_tmp.stat().st_size < 512:
-            raise RuntimeError("FFmpeg normalization returned an invalid MP3.")
-
         probe = subprocess.run(
             [
                 "ffprobe", "-v", "error", "-show_entries", "format=duration",
-                "-of", "default=noprint_wrappers=1:nokey=1", str(normalized_tmp),
+                "-of", "default=noprint_wrappers=1:nokey=1", str(raw_tmp),
             ],
             check=True,
             capture_output=True,
@@ -146,11 +127,10 @@ def synthesize(api_key: str, destination: Path) -> None:
             raise RuntimeError(f"Unexpected audio duration: {duration:.2f} seconds.")
 
         # Replace only 001.mp3 after synthesis and technical checks have passed.
-        normalized_tmp.replace(destination)
+        raw_tmp.replace(destination)
         print(f"GENERATED {destination.relative_to(ROOT)} ({duration:.2f}s, {destination.stat().st_size} bytes)")
     finally:
         raw_tmp.unlink(missing_ok=True)
-        normalized_tmp.unlink(missing_ok=True)
 
 
 def main() -> None:
