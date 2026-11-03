@@ -42,7 +42,7 @@
   var host = document.createElement('section');
   host.className = 'kh-audio-player';
   host.id = 'kh-audio-player';
-  host.innerHTML = '<h3 id="kh-audio-title"></h3><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><label class="kh-audio-volume"><span>' + (lang === 'ar' ? 'مستوى الصوت' : 'Volume') + '</span><input id="kh-audio-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></label><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p>';
+  host.innerHTML = '<h3 id="kh-audio-title"></h3><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><label class="kh-audio-volume"><span id="kh-audio-volume-label">' + (lang === 'ar' ? 'مستوى الصوت' : 'Volume') + '</span><input id="kh-audio-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></label><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p>';
   var blocksHost = document.getElementById('blocks');
   if (blocksHost && blocksHost.parentNode) blocksHost.parentNode.insertBefore(host, blocksHost);
 
@@ -57,6 +57,7 @@
     lang = document.documentElement.lang || 'ar';
     ui = copy[lang] || copy.ar;
     host.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('kh-audio-volume-label').textContent = lang === 'ar' ? 'مستوى الصوت' : 'Volume';
     blocks = story.i18n && story.i18n[lang] && story.i18n[lang].blocks || [];
     document.getElementById('kh-audio-title').textContent = ui.title;
     playButton.textContent = ui.play;
