@@ -154,10 +154,6 @@ def synthesize(api_key: str, destination: Path) -> None:
 
 
 def main() -> None:
-    api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("FISH_AUDIO_API_KEY is missing from GitHub Actions secrets.")
-
     package = load_json(STORY_PATH)
     metadata = load_json(DATA_PATH)
     if package.get("format") != "KHALEDOON_STORY" or package.get("section") != "science":
@@ -186,14 +182,33 @@ def main() -> None:
         or segment.get("provider") != "fish-audio"
     ):
         raise RuntimeError("Published segment 001 no longer matches the approved narrator voice; refusing to overwrite.")
-    if not AUDIO_PATH.is_file() or AUDIO_PATH.stat().st_size < 512:
-        raise RuntimeError("Existing 001.mp3 is missing or invalid; refusing to proceed.")
+    expected_hash = text_hash(AUDIO_TEXT)
+    audio_is_valid = False
+    if AUDIO_PATH.is_file() and AUDIO_PATH.stat().st_size >= 512:
+        try:
+            probe = subprocess.run(
+                ["ffprobe", "-v", "error", "-show_entries", "format=duration",
+                 "-of", "default=noprint_wrappers=1:nokey=1", str(AUDIO_PATH)],
+                check=True, capture_output=True, text=True, timeout=30,
+            )
+            duration = float(probe.stdout.strip())
+            audio_is_valid = 4.0 <= duration <= 90.0
+        except (subprocess.CalledProcessError, ValueError, OSError, subprocess.TimeoutExpired):
+            audio_is_valid = False
+
+    if audio_is_valid and segment.get("hash") == expected_hash and segment.get("text") == AUDIO_TEXT:
+        print("UNCHANGED: Magdi Yacoub Arabic segment 001 is current and valid; no TTS request made.")
+        return
+
+    api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("FISH_AUDIO_API_KEY is missing from GitHub Actions secrets.")
 
     AUDIO_DIR.mkdir(parents=True, exist_ok=True)
     synthesize(api_key, AUDIO_PATH)
 
     # Update only the matching manifest record; preserve every other segment byte-for-byte in meaning.
-    segment["hash"] = text_hash(AUDIO_TEXT)
+    segment["hash"] = expected_hash
     segment["text"] = AUDIO_TEXT
     temporary_manifest = MANIFEST_PATH.with_name("manifest.json.tmp")
     temporary_manifest.write_text(
