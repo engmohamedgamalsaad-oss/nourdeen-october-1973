@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import difflib
+import hashlib
 import json
 import re
 import sys
@@ -33,6 +34,13 @@ DIACRITIC_RE = re.compile(r"[\u064B-\u0652\u0670]")
 
 class ReviewError(Exception):
     """Raised when inputs cannot be compared safely."""
+
+
+def sha256_file(path: Path, label: str) -> str:
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError as exc:
+        raise ReviewError(f"Cannot calculate {label} SHA-256: {path}: {exc}") from exc
 
 
 def read_json(path: Path, label: str) -> dict[str, Any]:
@@ -345,6 +353,7 @@ def review_block(
         voice_records.append({
             "chunk_index": item.get("chunk_index", 0),
             "audio_file": item.get("src"),
+            "content_hash": item.get("hash"),
             "speaker": item.get("speaker"),
             "provider": item.get("provider"),
             "model": item.get("model"),
@@ -508,6 +517,7 @@ def build_report(
         "language": language,
         "story_file": str(story_path.relative_to(ROOT)),
         "manifest_file": str(manifest_path.relative_to(ROOT)),
+        "manifest_sha256": sha256_file(manifest_path, "manifest"),
         "pronunciation_file": (
             str(pronunciation_path.relative_to(ROOT)) if pronunciation_path.is_file() else None
         ),
@@ -583,6 +593,8 @@ def build_all_report(
         "story": story.get("slug"),
         "section": story.get("section"),
         "language": language,
+        "manifest_file": str(manifest_path.relative_to(ROOT)),
+        "manifest_sha256": reports[0]["manifest_sha256"],
         "scope": {"all_blocks": True, "block_count": len(blocks)},
         "summary": {
             "overall_textual_result": overall,
