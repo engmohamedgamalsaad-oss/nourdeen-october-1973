@@ -77,7 +77,7 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
     """Use a reviewed, story-specific pronunciation script for audio only."""
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
-    candidate = re.sub(r"\\s+", " ", candidate).strip()
+    candidate = re.sub(r"\s+", " ", candidate).strip()
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
     return candidate
@@ -413,7 +413,7 @@ async def generate_story(story_path: Path) -> bool:
             if old_file.name not in keep:
                 old_file.unlink()
 
-    print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {", ".join(languages_to_generate)}")
+    print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {', '.join(languages_to_generate)}")
     return True
 
 
