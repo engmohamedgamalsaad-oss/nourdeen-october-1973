@@ -24,9 +24,12 @@ async function main() {
   fs.copyFileSync(path.join(root, 'rebuild/reader-enhance.css'), path.join(temp, 'rebuild/reader-enhance.css'));
   fs.copyFileSync(path.join(root, 'rebuild/package-review.html'), path.join(temp, 'rebuild/package-review.html'));
   fs.copyFileSync(path.join(root, 'rebuild/reader.html'), path.join(temp, 'rebuild/reader.html'));
+  fs.copyFileSync(path.join(root, 'rebuild/validate-story.mjs'), path.join(temp, 'rebuild/validate-story.mjs'));
+  fs.copyFileSync(path.join(root, 'rebuild/reader-review-actions.js'), path.join(temp, 'rebuild/reader-review-actions.js'));
   fs.mkdirSync(path.join(temp, 'khaledoon/assets'), { recursive: true });
   fs.copyFileSync(path.join(root, 'khaledoon/assets/khaledoon-story-map-link.js'), path.join(temp, 'khaledoon/assets/khaledoon-story-map-link.js'));
   fs.copyFileSync(path.join(root, 'khaledoon/assets/khaledoon-story-nav.js'), path.join(temp, 'khaledoon/assets/khaledoon-story-nav.js'));
+  fs.copyFileSync(path.join(root, 'khaledoon/assets/story-workflow.js'), path.join(temp, 'khaledoon/assets/story-workflow.js'));
   fs.mkdirSync(path.join(temp, 'stories'), { recursive: true });
   fs.copyFileSync(path.join(root, 'stories/places.json'), path.join(temp, 'stories/places.json'));
   fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
