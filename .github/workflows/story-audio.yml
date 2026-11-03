@@ -54,7 +54,7 @@ jobs:
           from text2tashkeel import Diacritizer
           diacritizer = Diacritizer("rawi-ensemble")
           sample = diacritizer.diacritize("درس الطفل العلم في المدرسة.")
-          if not any("\\u064b" <= char <= "\\u065f" or char == "\\u0670" for char in sample):
+          if not any("\u064b" <= char <= "\u065f" or char == "\u0670" for char in sample):
               raise SystemExit("Arabic diacritizer did not produce vowel marks.")
           print("Arabic diacritizer ready:", sample)
           PY
@@ -85,9 +85,9 @@ jobs:
         run: |
           set -euo pipefail
           mapfile -t all_changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
-          mapfile -t changed < <(printf '%s\\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\\.json$' || true)
+          mapfile -t changed < <(printf '%s\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\.json$' || true)
 
-          if printf '%s\\n' "${all_changed[@]}" | grep -Eq '^scripts/generate_story_audio\\.py$'; then
+          if printf '%s\n' "${all_changed[@]}" | grep -Eq '^scripts/generate_story_audio\.py$'; then
             echo 'Audio generator changed; refresh all published non-October stories.'
             python scripts/generate_story_audio.py --all
             exit 0
