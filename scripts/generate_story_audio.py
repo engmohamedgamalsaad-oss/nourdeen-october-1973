@@ -202,7 +202,7 @@ async def synthesize(
 
 def fish_speed_from_rate(rate: str) -> float:
     """Translate Edge-style percentage rate into Fish Audio's speed multiplier."""
-    match = re.fullmatch(r"([+-]?\\d+(?:\\.\\d+)?)%", rate.strip())
+    match = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)%", rate.strip())
     if not match:
         return 1.0
     return max(0.5, min(2.0, 1.0 + float(match.group(1)) / 100.0))
