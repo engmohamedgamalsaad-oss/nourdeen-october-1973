@@ -418,37 +418,12 @@ async def generate_story(story_path: Path) -> bool:
 
 
 async def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--all", action="store_true", help="process all published non-October stories")
-    parser.add_argument("--paths", nargs="*", default=[], help="story.json paths to process")
-    args = parser.parse_args()
-
-    if args.all:
-        paths = sorted((ROOT / "stories").glob("*/*/story.json"))
-    else:
-        paths = [ROOT / value for value in args.paths]
-
-    if not paths:
-        print("No story packages selected; nothing to do.")
-        return 0
-
-    seen: set[Path] = set()
-    failures: list[str] = []
-    for path in paths:
-        resolved = path.resolve()
-        if resolved in seen:
-            continue
-        seen.add(resolved)
-        try:
-            await generate_story(resolved)
-        except Exception as exc:
-            failures.append(f"{path}: {exc}")
-            print(f"ERROR {path}: {exc}", file=sys.stderr)
-
-    if failures:
-        print("\n".join(failures), file=sys.stderr)
-        return 1
-    return 0
+    print(
+        "DISABLED: the story-wide audio generator is frozen during the "
+        "Magdi Yacoub pilot. Use generate_magdi_yacoub_single_audio.py only.",
+        file=sys.stderr,
+    )
+    return 2
 
 
 if __name__ == "__main__":
