@@ -27,4 +27,6 @@ The visible story text is the source of truth and is never rewritten by audio ge
 - The package reports 2.04% diacritic error rate on its own held-out corpus. Treat this as a benchmark claim, not a guarantee for Khaledoon's child-friendly biographies; names, dates, and ambiguous words still need listening review.
 - The package documentation recommends one sentence per diacritization call. Its benchmark documentation also discusses corpus-overlap caveats.
 
+- Fish Audio's current public guidance describes its free plan as personal/non-commercial; paid plans are required for commercial use. The exact usage rights and creator permissions for the two selected community voice IDs have not been independently confirmed. Before monetization, sponsorship, or other commercial use, verify the account plan and each voice's permissions with Fish Audio. Do not use a voice that imitates an identifiable real person without the required consent.
+
 This pipeline affects generated audio assets only. It does not add tashkeel to the visible Arabic story text.
