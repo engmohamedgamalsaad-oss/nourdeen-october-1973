@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var story = window.__KH_STORY_PACKAGE;
-  if (!story || !story.section || story.section === 'october') return;
+  if (!story || story.section !== 'science' || story.slug !== 'magdi-yacoub') return;
 
   var copy = {
     ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', fallback: 'الملفات الصوتية غير متاحة الآن؛ نستخدم صوت المتصفح إن كان مدعومًا.', noVoice: 'لا تتوفر ملفات صوتية أو أصوات قراءة في هذا المتصفح.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
@@ -98,7 +98,6 @@
       activeAudio.load();
       activeAudio = null;
     }
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
     activeUtterance = null;
     mode = 'idle';
     index = 0;
@@ -119,31 +118,6 @@
       var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       currentBlock.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'center' });
     }
-  }
-
-  function fallbackSpeak(segment, onEnd) {
-    if (!('speechSynthesis' in window) || !('SpeechSynthesisUtterance' in window)) {
-      status.textContent = ui.noVoice;
-      mode = 'idle';
-      pauseButton.disabled = true;
-      stopButton.disabled = false;
-      return;
-    }
-    var sourceBlock = blocks[segment.block_index] || {};
-    var utterance = new SpeechSynthesisUtterance(segment.text || sourceBlock.text || '');
-    utterance.volume = Number(volumeControl.value);
-    var locales = { ar: 'ar-EG', en: 'en-US', fr: 'fr-FR', it: 'it-IT', de: 'de-DE' };
-    utterance.lang = locales[lang] || 'ar-EG';
-    utterance.rate = 0.96;
-    utterance.pitch = segment.speaker === 'karma' ? 1.12 : 1;
-    var voices = window.speechSynthesis.getVoices();
-    var voice = voices.find(function (v) { return v.lang && v.lang.toLowerCase() === utterance.lang.toLowerCase(); }) ||
-      voices.find(function (v) { return v.lang && v.lang.toLowerCase().indexOf(utterance.lang.slice(0, 2)) === 0; });
-    if (voice) utterance.voice = voice;
-    utterance.onend = onEnd;
-    utterance.onerror = function () { status.textContent = ui.noVoice; mode = 'idle'; };
-    activeUtterance = utterance;
-    window.speechSynthesis.speak(utterance);
   }
 
   function playNext() {
@@ -172,41 +146,41 @@
       if (mode === 'playing') window.setTimeout(playNext, 350);
     }
 
-    if (segment.url) {
-      activeAudio = new Audio(segment.url);
-      activeAudio.volume = Number(volumeControl.value);
-      activeAudio.preload = 'auto';
-      activeAudio.onended = advance;
-      activeAudio.onerror = function () {
-        var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
-        if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
-        else advance();
-      };
-      var pending = activeAudio.play();
-      if (pending && typeof pending.catch === 'function') {
-        pending.catch(function () {
-          var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
-          if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
-          else { status.textContent = ui.noVoice; advance(); }
-        });
-      }
-    } else {
-      fallbackSpeak(segment, advance);
+    if (!segment.url) {
+      mode = 'idle';
+      status.textContent = ui.noVoice;
+      pauseButton.disabled = true;
+      stopButton.disabled = false;
+      return;
     }
-  }
-
-  function buildFallbackQueue() {
-    queue = blocks.map(function (block, blockIndex) {
-      return block && block.text && (block.speaker === 'karma' || block.speaker === 'narrator')
-        ? { block_index: blockIndex, speaker: block.speaker, text: block.text }
-        : null;
-    }).filter(Boolean);
+    activeAudio = new Audio(segment.url);
+    activeAudio.volume = Number(volumeControl.value);
+    activeAudio.preload = 'auto';
+    activeAudio.onended = advance;
+    activeAudio.onerror = function () {
+      activeAudio = null;
+      mode = 'idle';
+      status.textContent = ui.noVoice;
+      pauseButton.disabled = true;
+      stopButton.disabled = false;
+    };
+    var pending = activeAudio.play();
+    if (pending && typeof pending.catch === 'function') {
+      pending.catch(function () {
+        activeAudio = null;
+        mode = 'idle';
+        status.textContent = ui.noVoice;
+        pauseButton.disabled = true;
+        stopButton.disabled = false;
+      });
+    }
   }
 
   function loadManifest() {
     stop();
     setLanguage();
-    if (story.section === 'october') return;
+    if (lang !== 'ar') { host.hidden = true; queue = []; return; }
+    host.hidden = false;
     manifestUrl = new URL('../../../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href);
     status.textContent = ui.loading;
     fetch(manifestUrl.href, { cache: 'no-cache' }).then(function (response) {
@@ -225,8 +199,8 @@
       if (!queue.length) throw new Error('Empty audio manifest');
       status.textContent = '';
     }).catch(function () {
-      buildFallbackQueue();
-      status.textContent = queue.length ? ui.fallback : ui.noVoice;
+      queue = [];
+      status.textContent = ui.noVoice;
     });
   }
 
@@ -242,13 +216,11 @@
     setExpanded(true);
     if (mode === 'paused') {
       if (activeAudio) activeAudio.play();
-      else if ('speechSynthesis' in window) window.speechSynthesis.resume();
       mode = 'playing';
       pauseButton.textContent = ui.pause;
       return;
     }
     if (mode === 'idle') {
-      if (!queue.length) buildFallbackQueue();
       index = 0;
       if (queue.length) playNext();
       else status.textContent = ui.noVoice;
@@ -257,7 +229,6 @@
   pauseButton.addEventListener('click', function () {
     if (mode !== 'playing') return;
     if (activeAudio) activeAudio.pause();
-    else if ('speechSynthesis' in window) window.speechSynthesis.pause();
     mode = 'paused';
     pauseButton.textContent = ui.resume;
     setExpanded(false);
