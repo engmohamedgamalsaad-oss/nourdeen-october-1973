@@ -24,7 +24,7 @@ test('unified reader exposes all five language choices and changes text directio
   assert.match(js, /previewMode/);
   assert.match(html, /id="preview-banner"/);
   assert.match(html, /id="preview-return"/);
-  assert.match(review, /reader\.html\?draft=1/);
+  assert.match(review, /reader\.html/);\n  assert.match(review, /searchParams\.set\('draft','1'\)/);
   assert.doesNotMatch(review, /id="preview"/, 'review must not maintain a second story template');
   assert.match(review, /location\.replace/);
   assert.match(html, /khaledoon-story-map-link\.js/);
