@@ -23,10 +23,10 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "3"
-ARABIC_AUDIO_TEXT_VERSION = "manual-word-pronunciation-corrections-only-v1"
+GENERATOR_VERSION = "4"
+ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
-FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # approved narrator voice B; force a complete published non-October refresh after prior run stalled
+FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # preserve the narrator voice already published for this story
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 VOICE_SETTINGS = {
     "ar": {
@@ -74,15 +74,13 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def prepare_arabic_audio_text(text: str) -> str:
-    """Keep Arabic audio natural; apply only explicitly reviewed word-level fixes.
-
-    Do not run automatic full-sentence tashkeel here. It damages colloquial
-    dialogue and can introduce incorrect case endings and word readings.
-    Story-specific pronunciation corrections must be added deliberately,
-    without changing the displayed story text.
-    """
-    return text
+def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
+    """Use a reviewed, story-specific pronunciation script for audio only."""
+    candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
+    candidate = re.sub(r"\\s+", " ", candidate).strip()
+    if not candidate:
+        raise ValueError("Arabic audio pronunciation text must not be empty")
+    return candidate
 
 def normalize_arabic_audio(path: Path) -> None:
     """Normalize Arabic Fish tracks to a consistent loudness before publishing."""
@@ -271,9 +269,22 @@ async def generate_story(story_path: Path) -> bool:
     if not isinstance(translations, dict):
         raise ValueError(f"Missing i18n object in {relative}")
 
+    pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    pronunciation_data = read_json(pronunciation_path) if pronunciation_path.is_file() else {}
+    if pronunciation_data:
+        if pronunciation_data.get("story") != slug or pronunciation_data.get("language") != "ar":
+            raise ValueError(f"{pronunciation_path}: story/language metadata mismatch")
+        pronunciation_blocks = pronunciation_data.get("blocks")
+        if not isinstance(pronunciation_blocks, dict):
+            raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
+        languages_to_generate = ("ar",)
+    else:
+        pronunciation_blocks = {}
+        languages_to_generate = LANGUAGES
+
     story_audio_root = ROOT / "assets" / "audio" / section / slug
     completed = 0
-    for lang in LANGUAGES:
+    for lang in languages_to_generate:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
         if not isinstance(blocks, list) or not blocks:
@@ -303,7 +314,7 @@ async def generate_story(story_path: Path) -> bool:
             if speaker not in ("karma", "narrator") or not original_text:
                 continue
 
-            audio_text = prepare_arabic_audio_text(original_text) if lang == "ar" else original_text
+            audio_text = prepare_arabic_audio_text(original_text, pronunciation_blocks.get(str(block_index))) if lang == "ar" else original_text
             chunks = split_audio_chunks(audio_text)
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
             use_fish_audio = lang == "ar" and speaker in ("karma", "narrator")
@@ -311,8 +322,9 @@ async def generate_story(story_path: Path) -> bool:
                 FISH_AUDIO_KARMA_VOICE_ID if speaker == "karma"
                 else FISH_AUDIO_NARRATOR_VOICE_ID
             )
+            previous_block_voice = old_segments.get((block_index, 0), {}).get("voice")
             candidates = (
-                [fish_voice_id]
+                [previous_block_voice or fish_voice_id]
                 if use_fish_audio
                 else [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
             )
@@ -401,7 +413,7 @@ async def generate_story(story_path: Path) -> bool:
             if old_file.name not in keep:
                 old_file.unlink()
 
-    print(f"READY {relative.parent}: {completed} audio segments across {len(LANGUAGES)} languages")
+    print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {", ".join(languages_to_generate)}")
     return True
 
 
