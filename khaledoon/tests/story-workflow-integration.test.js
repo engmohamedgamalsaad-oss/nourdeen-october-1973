@@ -26,30 +26,30 @@ test('every admin submission row exposes edit and move actions, including closed
   assert.ok(admin.includes("editDetails.open=true"), 'edit action must open the existing story editor');
   assert.ok(admin.includes('forceEditOpen=true') && admin.includes('||forceEditOpen){'), 'edit must force-build the editor for already-published records');
   assert.ok(admin.includes("querySelector('details.review-data')"), 'edit must target the review/editor panel rather than the original-body details');
-  assert.ok(admin.includes("meta.pending_draft=pending;patch={story_meta:meta}"), 'published story moves must remain drafts until reviewed');
+  assert.ok(admin.includes('meta.pending_draft=pending;'), 'published story moves must be saved as a pending draft');
   assert.ok(admin.includes('capabilityResult.supports_story_move!==true'), 'published moves must stop before packaging when the deployed publisher lacks move support');
   assert.ok(admin.includes('لم تتغير النسخة المنشورة'), 'blocked published moves must explicitly preserve the live story');
   assert.ok(admin.includes("moveSave.textContent='جارٍ حفظ النقل…'"));
 });
-test('publisher moves a story in a review PR and preserves the previous story URL with a redirect', function () {
+test('publisher moves a story directly and preserves the previous story URL with a redirect', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   assert.ok(publisher.includes('supports_story_move: true'), 'new publisher capability must explicitly advertise move support');
   assert.ok(publisher.includes('function contentForSafetyScan(file:'), 'legacy V1 publisher must inspect decoded file content');
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-11-02-canonical-publisher-1'), 'publisher capability version must identify the move-capable implementation');
+  assert.ok(publisher.includes('2026-11-02-direct-main-publisher-1'), 'publisher capability version must identify the direct-main implementation');
   assert.ok(publisher.includes('supports_v2_publish: false'), 'V2 publishing must not be advertised as a current general capability');
   assert.ok(publisher.includes('submittedStorySection && submittedStorySection !== "october"'), 'legacy V1 publishing must be limited to October');
   assert.ok(publisher.includes("let previousRoot = ''"));
   assert.ok(publisher.includes("oldTree.truncated"));
   assert.ok(publisher.includes('matchingIndices.length > 1'), 'ambiguous duplicate IDs must block a move');
-  assert.ok(publisher.includes('prMarkerPrefix') && publisher.includes("includes(prMarkerPrefix)"), 'an open PR for the same story ID must block a concurrent move to another path');
+  assert.ok(publisher.includes('const lockBranch = "khaledoon/publish-main-lock"'), 'all moves must use the shared atomic main lock');
   assert.ok(publisher.includes('Destination story page already exists outside the index'), 'an occupied destination must not be overwritten');
   assert.ok(publisher.includes("const oldIndexPath = previousRoot + 'index.html'"));
   assert.ok(publisher.includes("treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null })"));
   assert.ok(publisher.includes("This story has moved."));
-  assert.ok(publisher.includes("published_to_main: false"), 'moving a story must remain a review PR, never a direct main write');
+  assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
@@ -209,15 +209,14 @@ test('story publishing safely links verified map locations without overwriting e
   assert.ok(shared.includes('لا تخترع إحداثيات'), 'map coordinates must never be invented');
   assert.ok(shared.includes('map_location'), 'the canonical map field must be documented');
 });
-test('production publisher and deletion functions remain review-only until a PR is merged', function () {
+test('story publisher commits directly to main while deletion remains review-only', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
-  assert.ok(publisher.includes('publisher_mode: "draft_pr"'));
-  assert.ok(publisher.includes('published_to_main: false'));
-  assert.ok(publisher.includes('draft: true'));
-  assert.ok(publisher.includes('pull_request_url: pull.html_url'));
-  assert.ok(publisher.includes('refs/heads/" + branchNameForRecovery'));
-  assert.ok(publisher.includes('/pulls'));
-  assert.ok(!publisher.includes('git/refs/heads/${BASE}'), 'publisher must not update main directly');
+  assert.ok(publisher.includes('publisher_mode: "direct_main"'));
+  assert.ok(publisher.includes('published_to_main: true'));
+  assert.ok(publisher.includes('writes_main_directly: true'));
+  assert.ok(publisher.includes('draft: true') === false);
+  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
+  assert.ok(!publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'), 'story publishing must not create a PR');
 
   var deletion = fs.readFileSync('supabase/functions/delete-hidden-story/index.ts', 'utf8');
   assert.ok(deletion.includes('deletion_mode: "draft_pr"'));
@@ -283,7 +282,7 @@ test('admin links submissions to static pages by explicit identifier only', func
   assert.ok(admin.includes('window.KHWorkflow.linkedSite(record,sitePageItems)'));
 });
 test('published stories cannot be deleted and deleting drafts never hides static pages', function () {
-  assert.ok(admin.includes("if(it._t!=='site'&&it.status!=='published')"));
+  assert.ok(admin.includes("if(it&&it.status==='published')"));
   assert.ok(admin.includes("if(it&&it.status==='published'){say('err','ممنوع حذف سجل حكاية منشورة من هذه القائمة؛ استخدم «إخفاء» فقط.');return}"));
   var removeItemBlock = admin.slice(admin.indexOf('async function removeItem'), admin.indexOf('async function remove(it,btn)'));
   var removeBlock = admin.slice(admin.indexOf('async function remove(it,btn)'), admin.indexOf('function copyKey'));
@@ -594,7 +593,7 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-1':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
+  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
   assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-1'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
@@ -697,55 +696,33 @@ test('verified map_location is carried from AI import into bundle and merged saf
   assert.ok(!edge.includes('map_linked: true, map_marker_added: mapMarkerAdded'));
 });
 
-test('story publisher prevents concurrent same-story PR creation with a GitHub ref lock', function () {
+test('story publisher serializes approved direct-main publishes with an atomic repository lock', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
-  var lockIndex = publisher.indexOf('const storyLockBranch = `khaledoon/publish-lock-${storyId}`');
+  var lockIndex = publisher.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
   var blobLoopIndex = publisher.indexOf('for (const file of safeFiles)', lockIndex);
-  assert.ok(lockIndex >= 0 && blobLoopIndex > lockIndex, 'publisher must acquire the per-story lock before creating file blobs');
-  assert.ok(publisher.includes('ref: "refs/heads/" + storyLockBranch'), 'lock acquisition must use a fixed GitHub ref unique to the story ID');
-  assert.ok(publisher.includes('lockDetail.includes("GitHub API 422")'), 'an already-existing lock must fail closed with a conflict response');
-  assert.ok(publisher.includes('async function releaseStoryLock()'), 'publisher must have a lock cleanup path');
-  assert.ok(publisher.includes('await releaseStoryLock();'), 'publisher must release the lock on success, duplicate reconciliation, and caught failure');
-  assert.ok(publisher.includes('قفل قديم يحتاج مراجعة'), 'stale lock failures must explain the manual recovery condition');
+  assert.ok(lockIndex >= 0 && blobLoopIndex > lockIndex, 'publisher must acquire the repository lock before creating file blobs');
+  assert.ok(publisher.includes('ref: "refs/heads/" + lockBranch'));
+  assert.ok(publisher.includes('async function releaseStoryLock()'));
+  assert.ok(publisher.includes('await releaseStoryLock();'));
+  assert.ok(publisher.includes('يوجد نشر آخر جارٍ الآن'));
+  assert.ok(publisher.includes('latestRef.object.sha !== baseSha'), 'publisher must stop if main changes while the commit is prepared');
+  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'));
 });
 
-test('story publisher attempts to reconcile same-story PRs created concurrently', function () {
-  var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
-  assert.ok(publisher.includes('const racingPulls = await githubAllPages'), 'after PR creation, publisher must re-scan open PRs for a concurrent duplicate');
-  assert.ok(publisher.includes('candidate.number < best.number'), 'when concurrent duplicates are visible, publisher must deterministically keep the lowest-numbered PR');
-  assert.ok(publisher.includes('method: "PATCH", body: JSON.stringify({ state: "closed" })'), 'the later duplicate PR must be closed rather than left open');
-  assert.ok(publisher.includes('git/refs/heads/${branchNameForRecovery}') && publisher.includes('method: "DELETE"'), 'duplicate cleanup must attempt to delete the duplicate branch');
-  assert.ok(publisher.includes('return reply(409, {') && publisher.includes('أُغلق الطلب المكرر وبقي الطلب الأقدم'), 'the duplicate caller must receive a conflict response pointing to the retained PR');
-  assert.ok(publisher.includes('branch cleanup is best effort'), 'branch cleanup failure must not pretend the duplicate PR remained open');
-  // This is a source-contract guard, not a true concurrent integration test; GitHub API race behavior remains unverified.
-});
-
-test('story publisher creates review PRs and never updates main directly', function () {
+test('story publisher commits to main without creating pull requests', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
-  assert.ok(publisher.includes('body: JSON.stringify({ ref: "refs/heads/" + branchNameForRecovery, sha: commit.sha })'));
-  assert.ok(publisher.includes('/pulls'));
-  assert.ok(publisher.includes('published_to_main: false'));
-  assert.ok(publisher.includes('action === "verify_pr"'));
-  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'));
-  assert.ok(admin.includes("action:'verify_pr'"));
-  assert.ok(admin.includes('branch:review.publish_branch'));
-  assert.ok(admin.includes('publish_branch:result.branch||'));
-  assert.ok(admin.includes("body:JSON.stringify({action:'capabilities'})"));
-  assert.ok(admin.includes("capabilityResult.publisher_mode!=='draft_pr'"));
-  assert.ok(admin.includes("capabilityResult.writes_main_directly!==false"));
-  assert.ok(admin.includes('var publisherCapabilityBlocked=false'));
-  assert.ok(admin.includes('if(!publisherCapabilityBlocked)'));
-  assert.ok(admin.includes('publisherCapabilityBlocked=true'));
-  assert.ok(admin.indexOf("body:JSON.stringify({action:'capabilities'})") < admin.indexOf("body:JSON.stringify({title:'مراجعة حكاية:"));
-  assert.ok(publisher.includes('branch: branchNameForRecovery'));
-  assert.ok(publisher.includes('pull.head?.repo?.full_name'));
-  assert.ok(!publisher.includes('git/refs/heads/\u0024{BASE}'));
-  
-  assert.ok(admin.includes('publish_pr_url:result.pull_request_url'));
-  assert.ok(admin.includes('طلب الدمج لم يُدمج بعد'));
-  assert.ok(admin.includes('الموقع المنشور لم يتغير'));
-  assert.ok(!admin.includes('!result.published_to_main'));
+  assert.ok(publisher.includes('publisher_mode: "direct_main"'));
+  assert.ok(publisher.includes('writes_main_directly: true'));
+  assert.ok(publisher.includes('published_to_main: true'));
+  assert.ok(publisher.includes('git/refs/heads/${BASE}'));
+  assert.ok(!publisher.includes('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {'));
+  assert.ok(admin.includes("capabilityResult.publisher_mode!=='direct_main'"));
+  assert.ok(admin.includes('result.published_to_main!==true'));
+  assert.ok(admin.includes('publish_commit_sha:result.commit_sha'));
+  assert.ok(admin.includes('التحقق من النشر'));
+  assert.ok(admin.includes('if(review.publish_commit_sha||review.published_to_main_at)'));
+  assert.ok(!admin.includes("action:'verify_pr'"), 'the active admin flow must not verify a PR');
 });
 
 test('story i18n lookup supports both dictionary shapes and the real SVG artwork dictionary', function () {
@@ -950,45 +927,22 @@ test('hidden-story deletion is review-only until a merged deletion PR is verifie
 
 
 
-test('story publisher creates a draft PR and confirms it was merged before marking live', function () {
+test('direct-main publisher records its commit and admin verifies the actual live story before marking it published', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts','utf8');
   var admin = fs.readFileSync('khaledoon/admin.html','utf8');
-  assert.ok(publisher.includes('method: "POST"') && publisher.includes('ref: "refs/heads/" + branchNameForRecovery'), 'story commits must be placed on a dedicated branch');
-  assert.ok(publisher.includes('head: branchNameForRecovery, base: BASE, body: prBody, draft: true'), 'publishing must open a draft pull request for human review');
-  assert.ok(publisher.includes('const prMarker = `<!-- khaledoon-story:${storyId}:${normalizedRoot} -->`'), 'each publication PR must carry a stable story marker');
-  assert.ok(publisher.includes('async function githubAllPages(') && publisher.includes('page=${page}') && publisher.includes('batch.length < 100'), 'publisher must paginate pull-request searches instead of silently scanning only the first 100 results');
-  assert.ok(publisher.includes('refusing to continue with incomplete pull-request results'), 'publisher must fail closed if pagination exceeds its safety cap');
-  assert.ok(publisher.includes('githubAllPages(`/repos/${OWNER}/${REPO}/pulls?state=open&base=${BASE}`, githubToken)'), 'duplicate-publication search must scan every page of open PRs');
-  assert.ok(publisher.includes('if (existingPull)') && publisher.includes('لم ننشئ نسخة ثانية'), 'an existing open PR must prevent duplicate publication branches');
-  assert.ok(publisher.includes('published_to_main: false'), 'a created PR must never be reported as already published');
-  assert.ok(publisher.includes('if (existingIndex < 0 || previousRoot)') && publisher.includes('Story page path already exists on main but is missing from stories/index.json'), 'publisher must refuse to overwrite an unindexed existing story path');
-  assert.ok(publisher.includes("'/contents/stories/index.json?ref=' + baseSha") && publisher.includes("'/contents/stories/places.json?ref=' + baseSha"), 'index and map reads must use the exact commit used as the PR base');
-  assert.ok(publisher.includes('body?.action === "capabilities"') && publisher.includes('publisher_mode: "draft_pr"'), 'publisher must advertise its safe mode before the admin uploads files');
-  assert.ok(publisher.includes('body?.action === "verify_pr"'), 'publisher must expose an authenticated PR-state verification action');
-  assert.ok(publisher.includes('pull.head?.ref !== expectedBranch'), 'PR verification must match the exact recorded branch, not an arbitrary PR to main');
-  assert.ok(publisher.includes('merged: pull.merged === true || Boolean(pull.merged_at)'), 'PR verification must report GitHub merge state');
-  assert.ok(!publisher.includes('github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {'), 'publisher must not patch the main ref');
-  assert.ok(!publisher.includes('method: "PATCH", body: JSON.stringify({ sha: commit.sha, force: false })'), 'publisher must not fast-forward main directly');
-  assert.ok(admin.includes('publish_pr_number:result.pull_request_number'), 'admin must retain the created PR number for later verification');
-  assert.ok(admin.includes("action:'verify_pr',pull_request_number:review.publish_pr_number,branch:review.publish_branch"), 'admin must verify the exact recorded PR branch before confirming publication');
-  var publishStart = admin.indexOf('async function submitStoryPublishPR');
-  var publishEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', publishStart);
-  var publishBlock = admin.slice(publishStart, publishEnd);
-  assert.ok(publishBlock.includes('if(!statusResult.merged){window.open(review.publish_pr_url') && publishBlock.indexOf('if(!statusResult.merged)') < publishBlock.indexOf('published_to_main_at:new Date().toISOString()'), 'an open PR must not be marked as published');
-  assert.ok(admin.includes('if(!review.publish_pr_number||!review.publish_branch)') && admin.includes('لم نؤكد النشر'), 'legacy PR records without a verifiable number must not bypass merge verification');
-  assert.ok(admin.includes('result.published_to_main!==false'), 'admin must reject the old direct-main response contract');
-  var submitStart = admin.indexOf('async function submitStoryPublishPR');
-  var submitEnd = admin.indexOf('async function confirmStoryPublishAfterUpload', submitStart);
-  var submitBlock = admin.slice(submitStart, submitEnd);
-  assert.ok(submitBlock.indexOf('if(review.publish_pr_url)') < submitBlock.indexOf("if(review.decision!=='approved_waiting_for_github_upload')"), 'existing PR links must remain accessible after the story is confirmed published');
-  assert.ok(admin.includes("JSON.stringify({action:'capabilities'})") && admin.includes("capabilityResult.publisher_mode!=='draft_pr'"), 'admin must stop before upload when the deployed function is still the legacy direct-main publisher');
-  var capIndex = admin.indexOf("JSON.stringify({action:'capabilities'})", submitStart);
-  var bundleIndex = admin.indexOf('var pack;', submitStart);
-  var unifiedBuilderIndex = admin.indexOf('window.KHStoryPublisher.buildFiles', submitStart);
-  assert.ok(capIndex >= 0 && bundleIndex > capIndex && unifiedBuilderIndex > capIndex, 'capability handshake must run before either unified or October compatibility bundle generation');
+  assert.ok(publisher.includes('publisher_mode: "direct_main"'));
+  assert.ok(publisher.includes('published_to_main: true'));
+  assert.ok(publisher.includes('commit_sha: commit.sha'));
+  assert.ok(publisher.includes('story_path: normalizedRoot'));
+  assert.ok(admin.includes('publish_commit_sha:result.commit_sha'));
+  assert.ok(admin.includes('static_story_path:result.story_path'));
+  assert.ok(admin.includes('async function confirmStoryPublishAfterUpload'));
+  assert.ok(admin.includes("fetch(verifyUrl.href,{cache:'no-store'})"));
+  assert.ok(admin.includes('liveStoryPackage.i18n[lang]'));
+  assert.ok(admin.includes('published_to_main_at:new Date().toISOString()'));
+  assert.ok(admin.includes('if(review.publish_commit_sha||review.published_to_main_at)'));
+  assert.ok(!admin.includes("action:'verify_pr'"), 'the current publication flow must not depend on PR verification');
 });
-
-
 
 test('story generation uses a stable shared theme asset and fails closed when it cannot load', function () {
   var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
@@ -1010,7 +964,7 @@ test('story builder derives the site base path from its current deployment inste
 });
 
 
-test('unified publisher requires an approved canonical package from its source record', function () {
+test('unified publisher requires an approved canonical package from its source record before direct-main commit', function () {
   var publisher = fs.readFileSync('supabase/functions/publish-story-pr/index.ts', 'utf8');
   var admin = fs.readFileSync('khaledoon/admin.html', 'utf8');
   assert.ok(publisher.includes('requires_submission_id: true'));
@@ -1023,14 +977,14 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(publisher.includes('review.decision !== "approved_waiting_for_github_upload"'));
   assert.ok(publisher.includes('stableJson(packageData) !== stableJson(savedStoryPackage)'));
   var packageGuard = publisher.indexOf('if (isStoryOnlyDraft) {');
-  var branchWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs`, githubToken, {');
-  var prWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/pulls`, githubToken, {');
-  assert.ok(packageGuard >= 0 && branchWrite > packageGuard && prWrite > packageGuard, 'canonical package checks must run before branch or PR creation');
-  assert.ok(publisher.includes('published_to_main: false'));
+  var lockWrite = publisher.indexOf('const lockBranch = "khaledoon/publish-main-lock"');
+  var mainWrite = publisher.indexOf('await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {');
+  assert.ok(packageGuard >= 0 && lockWrite > packageGuard && mainWrite > lockWrite, 'canonical package checks must run before locking and updating main');
+  assert.ok(publisher.includes('published_to_main: true'));
   assert.ok(admin.includes("submission_id:String(it.id||''),submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions'"));
   assert.ok(admin.includes('capabilityResult.requires_submission_id!==true'));
   assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
   assert.ok(admin.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'));
-  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October stories must never use the legacy publisher even if they predate the unified package');
-  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'non-October records must not save or preview through legacy controls');
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'));
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'));
 });
