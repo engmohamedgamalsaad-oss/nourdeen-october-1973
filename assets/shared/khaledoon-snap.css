@@ -1,41 +1,13 @@
 /* assets/shared/khaledoon-snap.css
-   مغناطيس التمرير على الموبايل: كل مقطع يثبّت على الشاشة بدل ما يقف مقصوص.
-   يعمل على الموبايل فقط (عرض 780px أو أقل)، ولا يغيّر الكمبيوتر.
-   مستورد من: rebuild/reader-base.css (كل الحكايات الجديدة)، khaledoon/assets/khaledoon-theme.css
-   (الرئيسية وصفحات الأقسام وحكايات أكتوبر عن طريق assets/shared/base.css). */
+   مغناطيس التمرير (scroll-snap) أُلغي بالكامل من الرئيسية وصفحات الأقسام والحكايات.
+   تم الإبقاء على الملف لأنه مستورد من: rebuild/reader-base.css و khaledoon/assets/khaledoon-theme.css.
+   تم الإبقاء فقط على مسافة الهيدر الثابت (scroll-padding-top) لأنها تؤثر على روابط # أيضًا. */
 
-:root{
-  /* قوة المغناطيس:
-     proximity = يلتقط أقرب مقطع لما توقف قريب منه، ويسيبك تقرأ المقاطع الطويلة بحرية (أنعم وأأمن).
-     mandatory = أقوى وأشد: دايمًا يثبّت، لكنه ممكن يقصّ مقطعًا أطول من الشاشة. */
-  --kh-snap-strictness:proximity;
-}
+html{scroll-snap-type:none!important}
 
 @media screen and (max-width:780px){
-  html:not([data-kh-snap="off"]){scroll-snap-type:y var(--kh-snap-strictness)}
-
   /* مسافة الهيدر الثابت أعلى الشاشة (الرئيسية لها قاعدتها الخاصة في khaledoon-mobile.css فلا نلمسها) */
   html:has(> body > header:not(.topbar)){scroll-padding-top:74px}
   html:has(> body[data-design] > header){scroll-padding-top:100px}
   html:has(> body[data-story-slug] > header.topbar){scroll-padding-top:72px}
-
-  /* ===== نقاط التثبيت =====
-     قليلة وكبيرة عن قصد: كثرة النقاط الصغيرة تخلّي الحركة مشدودة ومتقطعة. */
-  .hero,
-  body > footer,
-  /* الرئيسية */
-  #gateways .head,#how .head,#how .info,#how .voice,
-  /* صفحات الأقسام */
-  .heading,
-  /* الحكايات الجديدة */
-  .section,.block,.reactions-wrap,
-  /* حكايات أكتوبر */
-  section.story,section.end,.kh-dialogue-section,.story-quiz-section,.reactions-section,.sources,
-  .container > p,.container > figure,.container > .panel,.container > .quote{
-    scroll-snap-align:start;
-  }
 }
-
-/* من يفضّل تقليل الحركة: بدون مغناطيس */
-@media (prefers-reduced-motion:reduce){html{scroll-snap-type:none!important}}
-@media print{html{scroll-snap-type:none!important}}
