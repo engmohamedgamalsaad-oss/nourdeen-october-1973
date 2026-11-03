@@ -81,16 +81,57 @@ def tokenize(value: str) -> list[str]:
     return tokens
 
 
-def punctuation_marks(value: str) -> list[str]:
+def punctuation_marks(value: str) -> list[dict[str, Any]]:
+    """Record punctuation with its word and character position, not just its symbol."""
     normalized = normalize_words_text(value)
-    return [
-        char for char in normalized
-        if unicodedata.category(char).startswith("P")
-    ]
+    marks: list[dict[str, Any]] = []
+    word_position = 0
+    char_position = 0
+    in_word = False
+    for char in normalized:
+        category = unicodedata.category(char)
+        if char.isalnum() or category.startswith("M"):
+            if not in_word:
+                word_position += 1
+                char_position = 0
+                in_word = True
+            if not category.startswith("M"):
+                char_position += 1
+        else:
+            if category.startswith("P"):
+                marks.append({
+                    "mark": char,
+                    "after_word": word_position,
+                    "char_position": char_position,
+                })
+            in_word = False
+    return marks
 
 
-def diacritics(value: str) -> list[str]:
-    return DIACRITIC_RE.findall(value)
+def diacritics(value: str) -> list[dict[str, Any]]:
+    """Record approved diacritics with their exact word and character position."""
+    marks: list[dict[str, Any]] = []
+    word_position = 0
+    char_position = 0
+    in_word = False
+    for char in value:
+        category = unicodedata.category(char)
+        if char.isalnum():
+            if not in_word:
+                word_position += 1
+                char_position = 0
+                in_word = True
+            char_position += 1
+        elif category.startswith("M"):
+            if DIACRITIC_RE.fullmatch(char):
+                marks.append({
+                    "mark": char,
+                    "word_position": word_position,
+                    "char_position": char_position,
+                })
+        else:
+            in_word = False
+    return marks
 
 
 # These tokens are used only to classify a visible-vs-spoken number rewrite.
