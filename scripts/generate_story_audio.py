@@ -130,7 +130,7 @@ async def synthesize_fish_audio(text: str, destination: Path) -> None:
     except urllib.error.HTTPError as exc:
         detail = exc.read(1200).decode("utf-8", errors="replace")
         raise RuntimeError(f"Fish Audio API returned HTTP {exc.code}: {detail}") from exc
-    if len(audio) < 512 or not audio.startswith(b"ID3") and not audio.startswith(b"\\xff\\xfb"):
+    if len(audio) < 512:
         raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
     temporary.write_bytes(audio)
     temporary.replace(destination)
