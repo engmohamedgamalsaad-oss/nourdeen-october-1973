@@ -53,22 +53,22 @@ jobs:
           mapfile -t changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}" -- 'stories/*/*/story.json' 'stories/*/*/data.json')
           declare -a selected=()
           declare -A seen=()
-          for file in "\${changed[@]}"; do
+          for file in "${changed[@]}"; do
             dir="$(dirname "$file")"
             candidate="$dir/story.json"
-            if [[ -f "$candidate" && -z "\${seen[$candidate]+x}" ]]; then
+            if [[ -f "$candidate" && -z "${seen[$candidate]+x}" ]]; then
               selected+=("$candidate")
               seen["$candidate"]=1
             fi
           done
-          if [[ \${#selected[@]} -eq 0 ]]; then
+          if [[ ${#selected[@]} -eq 0 ]]; then
             # First installation: publish a real sample on the live site, not a preview.
             if [[ -f stories/science/015/story.json ]]; then
               selected=("stories/science/015/story.json")
             fi
           fi
-          if [[ \${#selected[@]} -gt 0 ]]; then
-            python scripts/generate_story_audio.py --paths "\${selected[@]}"
+          if [[ ${#selected[@]} -gt 0 ]]; then
+            python scripts/generate_story_audio.py --paths "${selected[@]}"
           else
             echo 'No eligible story package changed.'
           fi
@@ -79,6 +79,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p assets/audio
           git add assets/audio
           if git diff --cached --quiet; then
             echo 'Audio files are already current.'
