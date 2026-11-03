@@ -187,7 +187,8 @@ def validate_manifest(
 
 
 def review_block(
-    block_index: int, block: dict[str, Any], segments: list[dict[str, Any]]
+    block_index: int, block: dict[str, Any], segments: list[dict[str, Any]],
+    submitted_audio_text: str,
 ) -> dict[str, Any]:
     visible = block.get("text")
     if not isinstance(visible, str) or not visible.strip():
@@ -195,14 +196,21 @@ def review_block(
 
     ordered = sorted(segments, key=lambda item: item.get("chunk_index", 0))
     audio = " ".join(item["text"].strip() for item in ordered)
+    submitted = re.sub(r"\\s+", " ", submitted_audio_text).strip()
     visible_words = tokenize(visible)
-    audio_words = tokenize(audio)
-    word_changes = sequence_differences(visible_words, audio_words)
-    punctuation_changes = sequence_differences(
-        punctuation_marks(visible), punctuation_marks(audio)
+    submitted_words = tokenize(submitted)
+    manifest_words = tokenize(audio)
+    visible_to_submitted = sequence_differences(visible_words, submitted_words)
+    submitted_to_manifest = sequence_differences(submitted_words, manifest_words)
+    visible_punctuation = sequence_differences(
+        punctuation_marks(visible), punctuation_marks(submitted)
+    )
+    manifest_punctuation = sequence_differences(
+        punctuation_marks(submitted), punctuation_marks(audio)
     )
     visible_diacritics = diacritics(visible)
-    audio_diacritics = diacritics(audio)
+    submitted_diacritics = diacritics(submitted)
+    manifest_diacritics = diacritics(audio)
 
     voice_records = []
     for item in ordered:
@@ -219,45 +227,77 @@ def review_block(
             "rate": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("rate"),
             "pitch": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("pitch"),
             "request_fields": ["text", "reference_id", "format"] if item.get("provider") == "fish-audio" else None,
+            "exact_submitted_chunk_text": item.get("text"),
         })
 
     return {
         "block_index": block_index,
         "speaker": block.get("speaker"),
         "visible_text": visible,
-        "audio_text": audio,
+        "audio_pronunciation_source_text": submitted,
+        "audio_text_from_manifest": audio,
         "word_identity_and_order": {
-            "status": "PASS" if not word_changes else "FAIL",
-            "visible_word_count": len(visible_words),
-            "audio_word_count": len(audio_words),
-            "differences": word_changes,
+            "visible_vs_submitted": {
+                "status": "PASS" if not visible_to_submitted else "FAIL",
+                "visible_word_count": len(visible_words),
+                "submitted_word_count": len(submitted_words),
+                "differences": visible_to_submitted,
+            },
+            "submitted_vs_manifest": {
+                "status": "PASS" if not submitted_to_manifest else "FAIL",
+                "submitted_word_count": len(submitted_words),
+                "manifest_word_count": len(manifest_words),
+                "differences": submitted_to_manifest,
+            },
         },
         "punctuation": {
-            "status": "SAME" if not punctuation_changes else "DIFFERENT_RECORDED",
-            "visible_marks": punctuation_marks(visible),
-            "audio_marks": punctuation_marks(audio),
-            "differences": punctuation_changes,
+            "visible_vs_submitted": {
+                "status": "SAME" if not visible_punctuation else "DIFFERENT_RECORDED",
+                "differences": visible_punctuation,
+            },
+            "submitted_vs_manifest": {
+                "status": "SAME" if not manifest_punctuation else "DIFFERENT_RECORDED",
+                "differences": manifest_punctuation,
+            },
         },
         "diacritics": {
-            "status": "SAME" if visible_diacritics == audio_diacritics else "DIFFERENT_RECORDED",
-            "visible_marks": visible_diacritics,
-            "audio_marks": audio_diacritics,
-            "differences": sequence_differences(visible_diacritics, audio_diacritics),
+            "visible_vs_submitted": {
+                "status": "SAME" if visible_diacritics == submitted_diacritics else "DIFFERENT_RECORDED",
+                "visible_marks": visible_diacritics,
+                "submitted_marks": submitted_diacritics,
+                "differences": sequence_differences(visible_diacritics, submitted_diacritics),
+            },
+            "submitted_vs_manifest": {
+                "status": "SAME" if submitted_diacritics == manifest_diacritics else "DIFFERENT_RECORDED",
+                "submitted_marks": submitted_diacritics,
+                "manifest_marks": manifest_diacritics,
+                "differences": sequence_differences(submitted_diacritics, manifest_diacritics),
+            },
         },
         "audio_segments": voice_records,
         "human_text_review_required": bool(
-            word_changes or punctuation_changes or visible_diacritics != audio_diacritics
+            visible_to_submitted or submitted_to_manifest
+            or visible_punctuation or manifest_punctuation
+            or visible_diacritics != submitted_diacritics
+            or submitted_diacritics != manifest_diacritics
         ),
         "listening_review_required": True,
         "human_review_required": True,
-        "textual_result": "PASS" if not word_changes else "FAIL",
+        "textual_result": (
+            "PASS" if not visible_to_submitted and not submitted_to_manifest else "FAIL"
+        ),
         "spoken_pronunciation_result": "NOT_TESTED",
     }
 
 
-def build_report(story_path: Path, manifest_path: Path, language: str, block_index: int) -> dict[str, Any]:
+def build_report(
+    story_path: Path, manifest_path: Path, language: str, block_index: int,
+    pronunciation_path: Path | None = None,
+) -> dict[str, Any]:
     story = read_json(story_path, "story")
     manifest = read_json(manifest_path, "audio manifest")
+    pronunciation_path = pronunciation_path or story_path.with_name("audio-pronunciation.json")
+    pronunciation = read_json(pronunciation_path, "audio pronunciation") if pronunciation_path.is_file() else {}
 
     if story.get("format") != "KHALEDOON_STORY":
         raise ReviewError("Unsupported story format; expected KHALEDOON_STORY.")
@@ -275,7 +315,23 @@ def build_report(story_path: Path, manifest_path: Path, language: str, block_ind
     if block_index < 0 or block_index >= len(blocks):
         raise ReviewError(f"block-index {block_index} is outside the story block range.")
 
-    grouped, structural_errors = validate_manifest(manifest, blocks, story, language)
+    structural_errors: list[str] = []
+    if pronunciation:
+        if pronunciation.get("story") != story.get("slug"):
+            structural_errors.append("Audio pronunciation story slug does not match story.json.")
+        if pronunciation.get("language") != language:
+            structural_errors.append("Audio pronunciation language does not match requested language.")
+    pronunciation_blocks = pronunciation.get("blocks", {}) if pronunciation else {}
+    if not isinstance(pronunciation_blocks, dict):
+        raise ReviewError("Audio pronunciation 'blocks' must be an object keyed by block index.")
+    submitted_audio_text = pronunciation_blocks.get(str(block_index))
+    if not isinstance(submitted_audio_text, str) or not submitted_audio_text.strip():
+        structural_errors.append(
+            f"Audio pronunciation source has no non-empty text for block_index={block_index}."
+        )
+        submitted_audio_text = ""
+    grouped, manifest_errors = validate_manifest(manifest, blocks, story, language)
+    structural_errors.extend(manifest_errors)
     selected_segments = grouped.get(block_index, [])
     if not selected_segments:
         structural_errors.append(f"No audio manifest segment exists for block_index={block_index}.")
@@ -286,7 +342,9 @@ def build_report(story_path: Path, manifest_path: Path, language: str, block_ind
 
     block_report = None
     if selected_segments:
-        block_report = review_block(block_index, block, selected_segments)
+        block_report = review_block(
+            block_index, block, selected_segments, submitted_audio_text
+        )
 
     textual_pass = bool(block_report and block_report["textual_result"] == "PASS")
     return {
@@ -298,6 +356,9 @@ def build_report(story_path: Path, manifest_path: Path, language: str, block_ind
         "language": language,
         "story_file": str(story_path.relative_to(ROOT)),
         "manifest_file": str(manifest_path.relative_to(ROOT)),
+        "pronunciation_file": (
+            str(pronunciation_path.relative_to(ROOT)) if pronunciation_path.is_file() else None
+        ),
         "scope": {
             "block_index": block_index,
             "note": "Default scope is Magdi Yacoub Arabic block 1, mapped to manifest audio file 001.mp3 in the current pilot."
@@ -316,7 +377,9 @@ def build_report(story_path: Path, manifest_path: Path, language: str, block_ind
             "narrow mark normalization. It does not prove that the audio actually pronounces them correctly."
         ),
         "synthesis_settings_note": (
-            "Voice ID/provider/model are read from the manifest. For the current Fish Audio request, "
+            "The exact audio-only source is read from audio-pronunciation.json; exact submitted chunks "
+            "are read from manifest segment text. Voice ID/provider/model are read from the manifest. "
+            "For the current Fish Audio request, "
             "rate and pitch are not sent to the provider; the request uses text, reference_id and MP3 format. "
             "The report records these as NOT_SENT rather than treating unrelated generator constants as applied settings."
         ),
@@ -329,6 +392,7 @@ def main() -> int:
     )
     parser.add_argument("--story", default=str(DEFAULT_STORY), help="Story JSON path inside the repository.")
     parser.add_argument("--manifest", default=str(DEFAULT_MANIFEST), help="Audio manifest path inside the repository.")
+    parser.add_argument("--pronunciation", help="Optional audio-pronunciation.json path; defaults beside story.json.")
     parser.add_argument("--language", default="ar", choices=("ar",), help="Language to review (Arabic only in v1).")
     parser.add_argument("--block-index", type=int, default=DEFAULT_BLOCK_INDEX,
                         help="Zero-based story block index; defaults to pilot block 1 / 001.mp3.")
@@ -340,7 +404,13 @@ def main() -> int:
     try:
         story_path = resolve_input(args.story, "Story")
         manifest_path = resolve_input(args.manifest, "Manifest")
-        report = build_report(story_path, manifest_path, args.language, args.block_index)
+        pronunciation_path = (
+            resolve_input(args.pronunciation, "Audio pronunciation")
+            if args.pronunciation else story_path.with_name("audio-pronunciation.json")
+        )
+        report = build_report(
+            story_path, manifest_path, args.language, args.block_index, pronunciation_path
+        )
     except ReviewError as exc:
         print(json.dumps({"overall_textual_result": "ERROR", "error": str(exc)}, ensure_ascii=False, indent=2))
         return 2
