@@ -75,8 +75,41 @@ jobs:
           set -euo pipefail
           mapfile -t all_changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
           mapfile -t changed < <(printf '%s\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\.json$' || true)
-          if printf '%s\n' "${all_changed[@]}" | grep -Eq '^(scripts/generate_story_audio\.py|\.github/workflows/story-audio\.yml)$'; then
-            echo 'Audio generator/workflow changed; refresh all published non-October stories.'
+          if printf '%s\n' "${all_changed[@]}" | grep -Eq '^scripts/generate_story_audio\.py
+          declare -a selected=()
+          declare -A seen=()
+          for file in "${changed[@]}"; do
+            dir="$(dirname "$file")"
+            candidate="$dir/story.json"
+            if [[ -f "$candidate" && -z "${seen[$candidate]+x}" ]]; then
+              selected+=("$candidate")
+              seen["$candidate"]=1
+            fi
+          done
+          if [[ ${#selected[@]} -gt 0 ]]; then
+            FISH_AUDIO_API_KEY="${{ secrets.FISH_AUDIO_API_KEY }}" python scripts/generate_story_audio.py --paths "${selected[@]}"
+          else
+            echo 'No eligible story package changed.'
+          fi
+      - name: Commit generated audio to main
+        if: success() && steps.checkout.outcome == 'success'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          mkdir -p assets/audio
+          git add assets/audio
+          if git diff --cached --quiet; then
+            echo 'Audio files are already current.'
+            exit 0
+          fi
+          git commit -m 'Add generated story audio'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+; then
+            echo 'Audio generator changed; refresh all published non-October stories.'
             FISH_AUDIO_API_KEY="${{ secrets.FISH_AUDIO_API_KEY }}" python scripts/generate_story_audio.py --all
             exit 0
           fi
