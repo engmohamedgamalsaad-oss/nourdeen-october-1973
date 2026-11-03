@@ -40,7 +40,7 @@ AUDIO_TEXT = (
     "وإلى تعاون أطباء وممرضين وباحثين."
 )
 
-MARKS = re.compile(r"[\\u0610-\\u061A\\u064B-\\u065F\\u0670\\u06D6-\\u06ED\\u0640]")
+MARKS = re.compile(r"[ؐ-ًؚ-ٰٟۖ-ۭـ]")
 
 
 def normalized_arabic(value: str) -> str:
