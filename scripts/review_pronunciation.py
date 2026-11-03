@@ -242,9 +242,14 @@ def review_block(
             "status": "SAME" if visible_diacritics == audio_diacritics else "DIFFERENT_RECORDED",
             "visible_marks": visible_diacritics,
             "audio_marks": audio_diacritics,
+            "differences": sequence_differences(visible_diacritics, audio_diacritics),
         },
         "audio_segments": voice_records,
-        "human_review_required": bool(word_changes or punctuation_changes or visible_diacritics != audio_diacritics),
+        "human_text_review_required": bool(
+            word_changes or punctuation_changes or visible_diacritics != audio_diacritics
+        ),
+        "listening_review_required": True,
+        "human_review_required": True,
         "textual_result": "PASS" if not word_changes else "FAIL",
         "spoken_pronunciation_result": "NOT_TESTED",
     }
