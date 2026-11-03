@@ -33,7 +33,7 @@ class NumberFormClassificationTests(unittest.TestCase):
     def test_date_spoken_with_ordinal_and_month_connector_requires_review(self):
         self.assertTrue(
             self.classify(
-                "ولد في 16 نوفمبر سنة 1935",
+                "ولد في 16 نوفمبر 1935",
                 "ولد في السادس عشر من نوفمبر سنة ألف وتسعمية خمسة وتلاتين",
             )
         )
