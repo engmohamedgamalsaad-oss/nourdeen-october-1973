@@ -227,6 +227,7 @@ def review_block(
             "rate": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("rate"),
             "pitch": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("pitch"),
             "request_fields": ["text", "reference_id", "format"] if item.get("provider") == "fish-audio" else None,
+            "request_headers": ["Content-Type", "model", "Authorization (secret value not recorded)"] if item.get("provider") == "fish-audio" else None,
             "exact_submitted_chunk_text": item.get("text"),
         })
 
@@ -359,6 +360,10 @@ def build_report(
         "pronunciation_file": (
             str(pronunciation_path.relative_to(ROOT)) if pronunciation_path.is_file() else None
         ),
+        "pronunciation_source_metadata": {
+            "version": pronunciation.get("version"),
+            "revision": pronunciation.get("revision"),
+        } if pronunciation else None,
         "scope": {
             "block_index": block_index,
             "note": "Default scope is Magdi Yacoub Arabic block 1, mapped to manifest audio file 001.mp3 in the current pilot."
