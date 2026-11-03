@@ -57,7 +57,7 @@
 | `october`    | `#d6ad55`        | حسب الموضوع                                                        |
 | `history`    | `#d5b7ff`        | `ancient-civilization` / `military-history` / `portrait-biography` |
 | `science`    | `#8ad9e8`        | `science-lab` / `portrait-biography`                               |
-| `women`      | `#e7a1c1`        | `women-leadership`                                                 |
+| `women`      | `#d78bb2`        | `women-leadership`                                                 |
 | `people`     | `#e2b36d`        | `portrait-biography`                                               |
 | `islamic`    | `#78c59a`        | `islamic-heritage`                                                 |
 | `curriculum` | `#9bb7ff`        | `curriculum`                                                       |
