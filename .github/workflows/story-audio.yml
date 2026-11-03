@@ -49,7 +49,7 @@ jobs:
           from text2tashkeel import Diacritizer
           diacritizer = Diacritizer("rawi-ensemble")
           sample = diacritizer.diacritize("درس الطفل العلم في المدرسة.")
-          if not any("\\u064b" <= char <= "\\u065f" or char == "\\u0670" for char in sample):
+          if not any("\u064b" <= char <= "\u065f" or char == "\u0670" for char in sample):
               raise SystemExit("Arabic diacritizer did not produce vowel marks.")
           print("Arabic diacritizer ready:", sample)
           PY
