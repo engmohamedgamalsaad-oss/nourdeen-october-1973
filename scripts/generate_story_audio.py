@@ -24,7 +24,7 @@ import edge_tts
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "3"
-ARABIC_AUDIO_TEXT_VERSION = "text2tashkeel-0.1.0-rawi-ensemble-v1"
+ARABIC_AUDIO_TEXT_VERSION = "text2tashkeel-0.1.0-rawi-ensemble-fish-prosody-v2"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # approved narrator voice B; force a complete published non-October refresh after prior run stalled
 FISH_AUDIO_MODEL = "s2.1-pro-free"
@@ -200,7 +200,17 @@ async def synthesize(
     ) from last_error
 
 
-async def synthesize_fish_audio(text: str, destination: Path, voice_id: str) -> None:
+def fish_speed_from_rate(rate: str) -> float:
+    """Translate Edge-style percentage rate into Fish Audio's speed multiplier."""
+    match = re.fullmatch(r"([+-]?\\d+(?:\\.\\d+)?)%", rate.strip())
+    if not match:
+        return 1.0
+    return max(0.5, min(2.0, 1.0 + float(match.group(1)) / 100.0))
+
+
+async def synthesize_fish_audio(
+    text: str, destination: Path, voice_id: str, speed: float = 1.0
+) -> None:
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError(
@@ -213,6 +223,7 @@ async def synthesize_fish_audio(text: str, destination: Path, voice_id: str) -> 
         "text": text,
         "reference_id": voice_id,
         "format": "mp3",
+        "prosody": {"speed": speed, "volume": 0},
     }, ensure_ascii=False).encode("utf-8")
     last_error: Exception | None = None
 
@@ -362,7 +373,10 @@ async def generate_story(story_path: Path) -> bool:
                         break
                     try:
                         if use_fish_audio:
-                            await synthesize_fish_audio(chunk_text, destination, candidate_voice)
+                            await synthesize_fish_audio(
+                                chunk_text, destination, candidate_voice,
+                                speed=fish_speed_from_rate(rate),
+                            )
                         else:
                             await synthesize(chunk_text, candidate_voice, rate, pitch, destination)
                         selected_voice = candidate_voice
