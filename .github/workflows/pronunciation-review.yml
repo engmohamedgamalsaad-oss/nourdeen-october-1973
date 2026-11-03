@@ -1,0 +1,41 @@
+name: Arabic pronunciation reviewer checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'scripts/review_pronunciation.py'
+      - 'tests/test_review_pronunciation.py'
+      - 'stories/science/015/story.json'
+      - 'stories/science/015/audio-pronunciation.json'
+      - 'assets/audio/science/magdi-yacoub/ar/manifest.json'
+      - '.github/workflows/pronunciation-review.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pronunciation-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  reviewer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile reviewer
+        run: python -m py_compile scripts/review_pronunciation.py
+
+      - name: Run focused unit and pilot integration tests
+        run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
+
+      - name: Run the read-only pilot report
+        run: python scripts/review_pronunciation.py --report "$RUNNER_TEMP/pronunciation-review.json"
