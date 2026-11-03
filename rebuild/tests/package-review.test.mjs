@@ -24,7 +24,8 @@ test('package review performs no network or remote publish writes and stores onl
 });
 
 test('package review hands canonical packages to the real five-language reader', () => {
-  assert.match(html, /reader\.html\?draft=1/);
+  assert.match(scripts[0], /new URL\('reader\.html'/);
+  assert.match(scripts[0], /readerUrl\.searchParams\.set\('draft','1'\)/);
   assert.doesNotMatch(html, /id="preview"/);
   assert.match(scripts[0], /location\.replace/);
   assert.match(scripts[0], /KHALEDOON_STORY/);
