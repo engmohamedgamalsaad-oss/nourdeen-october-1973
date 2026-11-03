@@ -863,7 +863,7 @@ function pubRow(it){
   var moveFields=el('div','fgrid');moveFields.appendChild(fld('القسم الجديد',moveSection));moveFields.appendChild(fld('المرحلة الدراسية عند اختيار المناهج',moveStage));moveFields.appendChild(fld('الصف عند اختيار المناهج',moveGrade));movePanel.appendChild(moveFields);
   function toggleMoveCurriculum(){var curriculum=moveSection.value==='curriculum';moveFields.children[1].hidden=!curriculum;moveFields.children[2].hidden=!curriculum}
   toggleMoveCurriculum();moveSection.addEventListener('change',toggleMoveCurriculum);
-  movePanel.appendChild(el('p','fnote','سيُحفظ النقل كمسودة مراجعة؛ لا تتغير النسخة المنشورة حتى تُراجع المعاينة ويُعتمد طلب الدمج.'));
+  movePanel.appendChild(el('p','fnote','سيُحفظ النقل كمسودة مراجعة؛ لا تتغير النسخة المنشورة حتى تُراجع المعاينة وتوافق عليها، ثم يتم النشر المباشر.'));
   var moveSave=el('button','btn primary','تأكيد النقل');moveSave.type='button';var moveCancel=el('button','btn ghost','إلغاء');moveCancel.type='button';
   moveCancel.addEventListener('click',function(){movePanel.style.display='none';moveBtn.setAttribute('aria-expanded','false')});
   moveSave.addEventListener('click',async function(ev){
