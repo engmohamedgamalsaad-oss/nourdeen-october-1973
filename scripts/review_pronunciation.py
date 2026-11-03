@@ -93,6 +93,40 @@ def diacritics(value: str) -> list[str]:
     return DIACRITIC_RE.findall(value)
 
 
+# These tokens are used only to classify a visible-vs-spoken number rewrite.
+# A match after removing them is NEVER treated as PASS: the exact number must still
+# be checked by a human because this lexical heuristic does not calculate numeric value.
+ARABIC_NUMBER_FORM_TOKENS = {
+    "ألف", "ألفين", "ألفان", "الف", "ألاف", "آلاف",
+    "مئة", "مائة", "مية", "ميه", "تسعمية", "تسعمائة", "تسعمائه",
+    "خمسمية", "خمسمائة", "خمسمائه", "سبعمية", "سبعمائة", "سبعمائه",
+    "ثمانمية", "ثمانمائة", "ثمانمائه", "أربعمية", "أربعمائة",
+    "مئتين", "مائتين", "مئتان", "مائتان",
+    "واحد", "واحدة", "اثنين", "اتنين", "اثنا", "اثنتين",
+    "ثلاثة", "ثلاث", "أربعة", "أربع", "خمسة", "خمس", "ستة", "ست",
+    "سبعة", "سبع", "ثمانية", "ثمان", "تسعة", "تسع", "عشرة", "عشر",
+    "أحد", "إحدى", "عشرون", "عشرين", "ثلاثون", "ثلاثين",
+    "أربعون", "أربعين", "خمسون", "خمسين", "ستون", "ستين",
+    "سبعون", "سبعين", "ثمانون", "ثمانين", "تسعون", "تسعين",
+    "وتسعمية", "وتسعمائة", "وخمسة", "وتلاتين", "وستين", "وخمسين",
+    "وتسعين", "وأربعتاشر", "وأربعة", "واتنين", "وتمانية", "وتسعة",
+    "السادس", "العاشر", "من", "سنة", "عام",
+}
+
+
+def is_number_form_token(token: str) -> bool:
+    return token.isdigit() or token in ARABIC_NUMBER_FORM_TOKENS
+
+
+def is_number_form_only_difference(before: list[str], after: list[str]) -> bool:
+    """Conservatively flag number-format rewrites for human review, never auto-approve."""
+    if before == after:
+        return False
+    before_words = [token for token in before if not is_number_form_token(token)]
+    after_words = [token for token in after if not is_number_form_token(token)]
+    return before_words == after_words
+
+
 def sequence_differences(before: list[str], after: list[str]) -> list[dict[str, Any]]:
     matcher = difflib.SequenceMatcher(a=before, b=after, autojunk=False)
     changes: list[dict[str, Any]] = []
@@ -239,7 +273,12 @@ def review_block(
         "audio_text_from_manifest": audio,
         "word_identity_and_order": {
             "visible_vs_submitted": {
-                "status": "PASS" if not visible_to_submitted else "FAIL",
+                "status": (
+                    "PASS" if not visible_to_submitted
+                    else "NUMBER_FORM_REVIEW" if is_number_form_only_difference(visible_words, submitted_words)
+                    else "FAIL"
+                ),
+                "number_form_only_difference": is_number_form_only_difference(visible_words, submitted_words),
                 "visible_word_count": len(visible_words),
                 "submitted_word_count": len(submitted_words),
                 "differences": visible_to_submitted,
@@ -285,7 +324,10 @@ def review_block(
         "listening_review_required": True,
         "human_review_required": True,
         "textual_result": (
-            "PASS" if not visible_to_submitted and not submitted_to_manifest else "FAIL"
+            "FAIL" if submitted_to_manifest
+            else "PASS" if not visible_to_submitted
+            else "REVIEW" if is_number_form_only_difference(visible_words, submitted_words)
+            else "FAIL"
         ),
         "spoken_pronunciation_result": "NOT_TESTED",
     }
@@ -374,12 +416,16 @@ def build_report(
         },
         "block": block_report,
         "overall_textual_result": (
-            "FAIL" if structural_errors or not textual_pass else "PASS"
+            "FAIL" if structural_errors or (block_report and block_report["textual_result"] == "FAIL")
+            else "REVIEW" if block_report and block_report["textual_result"] == "REVIEW"
+            else "PASS" if textual_pass else "FAIL"
         ),
         "spoken_pronunciation_result": "NOT_TESTED",
         "important_limit": (
             "A textual PASS proves only that the written words and their order match after the agreed "
-            "narrow mark normalization. It does not prove that the audio actually pronounces them correctly."
+            "narrow mark normalization. REVIEW means the visible and spoken texts differ only by tokens "
+            "classified as possible number wording; a human must confirm the exact numeric value. "
+            "Neither PASS nor REVIEW proves that the audio actually pronounces words correctly."
         ),
         "synthesis_settings_note": (
             "The exact audio-only source is read from audio-pronunciation.json; exact submitted chunks "
