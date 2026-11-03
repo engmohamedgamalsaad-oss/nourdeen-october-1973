@@ -58,8 +58,8 @@ jobs:
         run: |
           set -euo pipefail
           mapfile -t all_changed < <(git diff --name-only "${{ github.event.before }}" "${{ github.sha }}")
-          mapfile -t changed < <(printf '%s\\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\\.json$' || true)
-          if printf '%s\\n' "${all_changed[@]}" | grep -qx 'scripts/generate_story_audio.py'; then
+          mapfile -t changed < <(printf '%s\n' "${all_changed[@]}" | grep -E '^stories/[^/]+/[^/]+/(story|data)\.json$' || true)
+          if printf '%s\n' "${all_changed[@]}" | grep -qx 'scripts/generate_story_audio.py'; then
             echo 'Audio generator changed; refresh all published non-October stories.'
             python scripts/generate_story_audio.py --all
             exit 0
