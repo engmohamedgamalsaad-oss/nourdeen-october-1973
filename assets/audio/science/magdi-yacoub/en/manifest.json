@@ -7,120 +7,157 @@
   "segments": [
     {
       "block_index": 0,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "en-US-JennyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "000.mp3",
-      "hash": "950ca30b71ea84e568e573ed827b782a95ecbdf7c630fddd2283bfc39fefc3e3"
+      "hash": "950ca30b71ea84e568e573ed827b782a95ecbdf7c630fddd2283bfc39fefc3e3",
+      "text": "I’m Karma, and when I heard Dr Magdi Yacoub’s story, I thought of something important: how can a child who loves helping people grow up to become a doctor who saves the lives of many children?"
     },
     {
       "block_index": 1,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "001.mp3",
-      "hash": "03ef869dd2e0709605a4f0f01fa47393f46cc68281f93b06f1d9e91276a3d26d"
+      "hash": "03ef869dd2e0709605a4f0f01fa47393f46cc68281f93b06f1d9e91276a3d26d",
+      "text": "The answer begins with curiosity and learning, followed by years of training and teamwork. Magdi Yacoub did not become a heart surgeon overnight; the path required study, experience, skill, and cooperation among doctors, nurses, and researchers."
     },
     {
       "block_index": 2,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "en-US-JennyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "002.mp3",
-      "hash": "363bf78a410805aeaf0d177e7f6af3a6a7f2edfad3b6857e3a37ad479a1569ec"
+      "hash": "363bf78a410805aeaf0d177e7f6af3a6a7f2edfad3b6857e3a37ad479a1569ec",
+      "text": "What I liked most is that science is not just books and exams. We can learn to help a sick person and make their family happy when they return home. I want to learn more about the heart, the small organ that keeps working all the time so that we can live."
     },
     {
       "block_index": 3,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "en-US-JennyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "003.mp3",
-      "hash": "bebc8f5b82d231f2d9b1caae59ca3a55a9d492f39ecc5d995c65cc61182409a9"
+      "hash": "bebc8f5b82d231f2d9b1caae59ca3a55a9d492f39ecc5d995c65cc61182409a9",
+      "text": "So the Aswan centre does more than treat patients?"
     },
     {
       "block_index": 4,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "004.mp3",
-      "hash": "9dc3d7eeea3f12b8b68f4d1a9b298d972334e916c95b0a29f8beb27f2d51063b"
+      "hash": "9dc3d7eeea3f12b8b68f4d1a9b298d972334e916c95b0a29f8beb27f2d51063b",
+      "text": "Exactly. It provides medical care, trains doctors and nurses, and supports research. The experience the team gains can help other patients too, not only the person being treated today."
     },
     {
       "block_index": 5,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "005.mp3",
-      "hash": "1596be3ef75224f5936208e61549a42cd6ff35adb9fa02998ac6b4209a6337bb"
+      "hash": "1596be3ef75224f5936208e61549a42cd6ff35adb9fa02998ac6b4209a6337bb",
+      "text": "Magdi Yacoub was born on 16 November 1935 in Belbeis, in Egypt’s Sharqia Governorate. From childhood, he became familiar with medicine through his father, a doctor, and later chose to use his knowledge and work to help patients."
     },
     {
       "block_index": 6,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "006.mp3",
-      "hash": "94fdfbcaea42958ea0d28309fb6644b01677d83e6185f793088edcb2246794fb"
+      "hash": "94fdfbcaea42958ea0d28309fb6644b01677d83e6185f793088edcb2246794fb",
+      "text": "He studied medicine at Cairo University and graduated in 1957. In 1962, he travelled to Britain to continue his training and work. Over the years, he became a leading cardiothoracic surgeon and worked at British hospitals, including Harefield Hospital. He helped develop operations to treat complex heart conditions, including some congenital defects that children are born with."
     },
     {
       "block_index": 7,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "007.mp3",
-      "hash": "07f30d267c61d813d4ea5e24f59f4391be7abaa93d3a3eaaea0ead5385ab3708"
+      "hash": "07f30d267c61d813d4ea5e24f59f4391be7abaa93d3a3eaaea0ead5385ab3708",
+      "text": "Did you know? Magdi Yacoub worked at Harefield Hospital for many years and helped build an important heart and lung transplant programme. Biographical information published by academic institutions states that the programme saw more than 2,500 transplant operations."
     },
     {
       "block_index": 8,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "008.mp3",
-      "hash": "332cee59ec1229ddd45e955f8da2150124f63c79b779b3c9efa6a83c5833013b"
+      "hash": "2d400e63b9c7a5ea9715134ba5df501b49d4865454aa56d688dc77409dbdcaea",
+      "text": "His journey did not stop in the operating room. Yacoub helped establish major heart and lung transplant programmes at Harefield, where thousands of transplant operations were performed. In Egypt, the Magdi Yacoub Heart Foundation was established in 2008, and the Aswan Heart Centre began receiving patients in 2009. It provides medical care and contributes to training and scientific research."
+    },
+    {
+      "block_index": 8,
+      "chunk_index": 1,
+      "speaker": "narrator",
+      "voice": "en-US-GuyNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
+      "src": "008-01.mp3",
+      "hash": "6e14a906561e6c7460952adbe927edd809d1c7ff83106db54ae29e3b4d92d79f",
+      "text": "This brought specialist treatment closer to many patients who might otherwise have had to travel far to seek help."
     },
     {
       "block_index": 9,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "009.mp3",
-      "hash": "cb1b45ef3f949f8d6db51cf885b2e2e66ea8826862475303a34c0936c5e149f6"
+      "hash": "cb1b45ef3f949f8d6db51cf885b2e2e66ea8826862475303a34c0936c5e149f6",
+      "text": "Did you know? Yacoub’s work was not limited to treating patients. In 1995, he founded the Chain of Hope charity in Britain to support children who need heart operations that can help them live healthier lives."
     },
     {
       "block_index": 10,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "010.mp3",
-      "hash": "ba43ec7da4266385c42d954022b7bb412900dd6eccf2fb39edb9f1b1d12c0aca"
+      "hash": "ba43ec7da4266385c42d954022b7bb412900dd6eccf2fb39edb9f1b1d12c0aca",
+      "text": "Information from the Magdi Yacoub Heart Foundation explains that the Aswan Heart Centre combines patient care with training doctors and nurses and supporting scientific research. This means its impact does not end with one operation: what the medical team learns can also help other patients."
     },
     {
       "block_index": 11,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "011.mp3",
-      "hash": "58dea012d5afefcf0afcf5d1dcfc5360b8892989cdebfa50cb4e2c65f61132ee"
+      "hash": "58dea012d5afefcf0afcf5d1dcfc5360b8892989cdebfa50cb4e2c65f61132ee",
+      "text": "Did you know? Yacoub is involved in scientific research as well as surgery. Research connected with his team includes heart-valve tissue engineering and the study of heart-muscle regeneration. Scientists do not only treat problems today; they also look for better treatments for the future."
     },
     {
       "block_index": 12,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "en-US-GuyNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "012.mp3",
-      "hash": "d436c159ddfb2323edc9a9a0c273b58bde9ea3daf5ee8a7c9092af23d7259c32"
+      "hash": "d436c159ddfb2323edc9a9a0c273b58bde9ea3daf5ee8a7c9092af23d7259c32",
+      "text": "Yacoub’s story teaches us that kindness needs to be joined with knowledge and hard work, and that a doctor never works alone: every operation depends on a team of doctors, nurses and researchers. He has received many scientific and humanitarian honours, including the UK Order of Merit in 2014. His message to children remains clear: ask questions, learn, work hard and use your knowledge to help others."
     }
   ]
 }

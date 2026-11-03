@@ -7,120 +7,157 @@
   "segments": [
     {
       "block_index": 0,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "de-DE-KatjaNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "000.mp3",
-      "hash": "7fa2a8ac587e5201fcbe2c93bf3c7f40aaf2c56917ee013ae530d73130440cf7"
+      "hash": "7fa2a8ac587e5201fcbe2c93bf3c7f40aaf2c56917ee013ae530d73130440cf7",
+      "text": "Ich bin Karma, und als ich die Geschichte von Dr. Magdi Yacoub hörte, dachte ich über etwas Wichtiges nach: Wie kann ein Kind, das gern anderen hilft, zu einem Arzt heranwachsen, der das Leben vieler Kinder rettet?"
     },
     {
       "block_index": 1,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "001.mp3",
-      "hash": "53dbcb6642dbfd36e2cd19d403be0d3a7812649a07830f448dea2d3b9f08b6c3"
+      "hash": "53dbcb6642dbfd36e2cd19d403be0d3a7812649a07830f448dea2d3b9f08b6c3",
+      "text": "Die Antwort beginnt mit Neugier und Lernen, gefolgt von jahrelanger Ausbildung und Teamarbeit. Magdi Yacoub wurde nicht über Nacht Herzchirurg: Der Weg erforderte Studium, Erfahrung, Können und die Zusammenarbeit von Ärztinnen, Ärzten, Pflegekräften und Forschenden."
     },
     {
       "block_index": 2,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "de-DE-KatjaNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "002.mp3",
-      "hash": "89d39e87a61ff77d8809f30ca0359638e0ecf79047b23b21d7dffe9917c79de5"
+      "hash": "89d39e87a61ff77d8809f30ca0359638e0ecf79047b23b21d7dffe9917c79de5",
+      "text": "Am besten gefällt mir, dass Wissenschaft nicht nur aus Büchern und Prüfungen besteht. Wir können lernen, um einem kranken Menschen zu helfen und seine Familie glücklich zu machen, wenn er nach Hause zurückkehren kann. Ich möchte mehr über das Herz erfahren, das kleine Organ, das ununterbrochen arbeitet und uns am Leben hält."
     },
     {
       "block_index": 3,
+      "chunk_index": 0,
       "speaker": "karma",
       "voice": "de-DE-KatjaNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "003.mp3",
-      "hash": "cb92f6a0214291983c8af2116499c67b59c0c1dec5c733b6bb7e08b6541c55f8"
+      "hash": "cb92f6a0214291983c8af2116499c67b59c0c1dec5c733b6bb7e08b6541c55f8",
+      "text": "Behandelt das Zentrum in Assuan also nicht nur Patientinnen und Patienten?"
     },
     {
       "block_index": 4,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "004.mp3",
-      "hash": "27620a87d0681b77da9e4f57c32372e3585be011f6e18c071de41304ee0e1b2a"
+      "hash": "27620a87d0681b77da9e4f57c32372e3585be011f6e18c071de41304ee0e1b2a",
+      "text": "Genau. Es bietet medizinische Versorgung, bildet Ärztinnen, Ärzte und Pflegekräfte aus und unterstützt die Forschung. Die Erfahrungen des Teams können dadurch auch anderen Patientinnen und Patienten helfen, nicht nur der Person, die heute behandelt wird."
     },
     {
       "block_index": 5,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "005.mp3",
-      "hash": "c46cafe1b281d613a521c084f80464e15a329a79e64dd02c2973873005b37c82"
+      "hash": "c46cafe1b281d613a521c084f80464e15a329a79e64dd02c2973873005b37c82",
+      "text": "Magdi Yacoub wurde am 16. November 1935 in Belbeis im ägyptischen Gouvernement Sharqia geboren. Schon als Kind lernte er durch seinen Vater, der Arzt war, die Medizin kennen. Später entschied er sich, sein Wissen und seine Arbeit einzusetzen, um kranken Menschen zu helfen."
     },
     {
       "block_index": 6,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "006.mp3",
-      "hash": "946a932594e8fe6b382b9d3dcc6b4fbd39e92af99c8284f81cbe5310f3e8f758"
+      "hash": "946a932594e8fe6b382b9d3dcc6b4fbd39e92af99c8284f81cbe5310f3e8f758",
+      "text": "Er studierte Medizin an der Universität Kairo und schloss sein Studium 1957 ab. 1962 reiste er nach Großbritannien, um seine Ausbildung fortzusetzen und dort zu arbeiten. Im Laufe der Jahre wurde er ein bedeutender Herz- und Thoraxchirurg und arbeitete an britischen Krankenhäusern, darunter im Harefield Hospital. Er half dabei, Operationen zur Behandlung komplexer Herzerkrankungen zu entwickeln, darunter einige angeborene Herzfehler."
     },
     {
       "block_index": 7,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "007.mp3",
-      "hash": "c123b180cfaa6a88e4f9a9fd4abeb7c91831ad6497513e879021d02b61fe6328"
+      "hash": "c123b180cfaa6a88e4f9a9fd4abeb7c91831ad6497513e879021d02b61fe6328",
+      "text": "Wusstest du? Magdi Yacoub arbeitete viele Jahre im Harefield Hospital und half beim Aufbau eines bedeutenden Programms für Herz- und Lungentransplantationen. Biografische Angaben akademischer Einrichtungen berichten, dass in diesem Programm mehr als 2.500 Transplantationen durchgeführt wurden."
     },
     {
       "block_index": 8,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "008.mp3",
-      "hash": "55f14d88d33905803b317975d8b26810ad87cb04435c5173a7f655974b1e3272"
+      "hash": "9b4a34d0127d9e093b57166f1b76511dc1f87cd39a9207828041e99eeb59d5fb",
+      "text": "Sein Weg endete nicht im Operationssaal. Yacoub trug dazu bei, große Programme für Herz- und Lungentransplantationen in Harefield aufzubauen, wo Tausende Transplantationen durchgeführt wurden. In Ägypten wurde die Magdi-Yacoub-Herzstiftung 2008 gegründet; das Herzzentrum in Assuan begann 2009, Patienten aufzunehmen. Es bietet medizinische Versorgung und unterstützt Ausbildung und wissenschaftliche Forschung."
+    },
+    {
+      "block_index": 8,
+      "chunk_index": 1,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "provider": "edge-tts",
+      "model": "edge-tts",
+      "src": "008-01.mp3",
+      "hash": "ef9df23ba195f0a75c0609d84b58eee8861a1e93a972bb5ac3938fff6a5ffa36",
+      "text": "Dadurch konnten viele Patienten spezialisierte Hilfe näher an ihrem Wohnort erhalten, statt weit reisen zu müssen."
     },
     {
       "block_index": 9,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "009.mp3",
-      "hash": "f90bc3b5ade38187909af970ee5d16dd7cfbac5850d6b41d6d3fb2863b1f394f"
+      "hash": "f90bc3b5ade38187909af970ee5d16dd7cfbac5850d6b41d6d3fb2863b1f394f",
+      "text": "Wusstest du? Yacoubs Arbeit beschränkte sich nicht auf die Behandlung von Patienten. 1995 gründete er in Großbritannien die Hilfsorganisation Chain of Hope, um Kindern zu helfen, die Herzoperationen benötigen, damit sie gesünder leben können."
     },
     {
       "block_index": 10,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "010.mp3",
-      "hash": "df9175c29c829d086b29079ebccf1c8eaeca5c83e607ca38d410229a7733f4c0"
+      "hash": "df9175c29c829d086b29079ebccf1c8eaeca5c83e607ca38d410229a7733f4c0",
+      "text": "Informationen der Magdi-Yacoub-Herzstiftung erklären, dass das Herzzentrum in Assuan die Patientenversorgung mit der Ausbildung von Ärzten und Pflegekräften sowie der Unterstützung wissenschaftlicher Forschung verbindet. Seine Wirkung endet also nicht mit einer einzigen Operation: Das Wissen, das das medizinische Team gewinnt, kann auch anderen Patienten helfen."
     },
     {
       "block_index": 11,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "011.mp3",
-      "hash": "a5114ae0b732356cf37a4c55addc66917474988621b950cd2451ca42d1700980"
+      "hash": "a5114ae0b732356cf37a4c55addc66917474988621b950cd2451ca42d1700980",
+      "text": "Wusstest du? Neben seiner Arbeit als Chirurg ist Yacoub an wissenschaftlicher Forschung beteiligt. Zu den Forschungsgebieten seines Teams gehören die Gewebezüchtung von Herzklappen und die Untersuchung der Regeneration des Herzmuskels. Wissenschaftler behandeln nicht nur die Probleme von heute, sondern suchen auch nach besseren Behandlungsmöglichkeiten für die Zukunft."
     },
     {
       "block_index": 12,
+      "chunk_index": 0,
       "speaker": "narrator",
       "voice": "de-DE-ConradNeural",
       "provider": "edge-tts",
       "model": "edge-tts",
       "src": "012.mp3",
-      "hash": "f1c95b76bf568d4b1fa1ffcd171b43bbf1cddd6682194a20cece7d49f5dbaf78"
+      "hash": "f1c95b76bf568d4b1fa1ffcd171b43bbf1cddd6682194a20cece7d49f5dbaf78",
+      "text": "Yacoubs Geschichte zeigt uns, dass Mitgefühl Wissen und harte Arbeit braucht und dass ein Arzt niemals allein arbeitet: Hinter jeder Operation steht ein Team aus Ärzten, Pflegekräften und Forschenden. Er erhielt zahlreiche wissenschaftliche und humanitäre Auszeichnungen, darunter 2014 den britischen Order of Merit. Seine Botschaft an Kinder bleibt klar: Stellt Fragen, lernt, strengt euch an und nutzt euer Wissen, um anderen zu helfen."
     }
   ]
 }
