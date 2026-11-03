@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "engine": "edge-tts",
+  "story": "magdi-yacoub",
+  "section": "science",
+  "language": "de",
+  "segments": [
+    {
+      "block_index": 0,
+      "speaker": "karma",
+      "voice": "de-DE-KatjaNeural",
+      "src": "000.mp3",
+      "hash": "1ae748aab8fb4d762238c6a8ecbed85d7cab738c6ec1c75b69bbeadf56eb2ffb"
+    },
+    {
+      "block_index": 1,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "001.mp3",
+      "hash": "d000e01bf49cbdb707f2c1d7244cf31d7231da775e510f61adabe0567dfeebba"
+    },
+    {
+      "block_index": 2,
+      "speaker": "karma",
+      "voice": "de-DE-KatjaNeural",
+      "src": "002.mp3",
+      "hash": "6f360be91f5935416de192f76af4b8aca30cf014186f11044b4115e33cfae455"
+    },
+    {
+      "block_index": 3,
+      "speaker": "karma",
+      "voice": "de-DE-KatjaNeural",
+      "src": "003.mp3",
+      "hash": "e5b44670a38dc51feaec8d67cf2ffb497405178e92908955f673d7b3051b83aa"
+    },
+    {
+      "block_index": 4,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "004.mp3",
+      "hash": "f4f7fcc8b97a35820bf164710192d362c61f14c80200bd417e08ca9949671b51"
+    },
+    {
+      "block_index": 5,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "005.mp3",
+      "hash": "bd5ad3528d3557a1130e8daaee213a09d22527e6116a18d4d8ab50c3bb7b2b87"
+    },
+    {
+      "block_index": 6,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "006.mp3",
+      "hash": "a114b0404620f96526961645ff4085d41095654496f02c37fc60955fd415a2e1"
+    },
+    {
+      "block_index": 7,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "007.mp3",
+      "hash": "05e4232a2b785b49ac5d6c0e0b52b6377ffe2a235643770354a8e521c0d50bb6"
+    },
+    {
+      "block_index": 8,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "008.mp3",
+      "hash": "e971ba117aedbea776058ec52d8aec051767d21727c0a6b4b4b26e52ce18d7c0"
+    },
+    {
+      "block_index": 9,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "009.mp3",
+      "hash": "58d60e72ab235f58dc11cd6ba65339925f6a24324d720ceec1d9c8f52e77d982"
+    },
+    {
+      "block_index": 10,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "010.mp3",
+      "hash": "13053a72d17da4599e5ecbf176616eeac802bb3cad639126671f96bb3ccc9528"
+    },
+    {
+      "block_index": 11,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "011.mp3",
+      "hash": "0d79a14d4cd2c7cee8f59c8a23fcc433b96823cc014d8b595435b6b81d5d6bea"
+    },
+    {
+      "block_index": 12,
+      "speaker": "narrator",
+      "voice": "de-DE-ConradNeural",
+      "src": "012.mp3",
+      "hash": "40ea61608f399257eaa251a580ee76d34c3f537c951ec00710290013541a5306"
+    }
+  ]
+}

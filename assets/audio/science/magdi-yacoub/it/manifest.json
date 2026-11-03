@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "engine": "edge-tts",
+  "story": "magdi-yacoub",
+  "section": "science",
+  "language": "it",
+  "segments": [
+    {
+      "block_index": 0,
+      "speaker": "karma",
+      "voice": "it-IT-ElsaNeural",
+      "src": "000.mp3",
+      "hash": "17cbb012347b40c2b5bc363e3e04537e9b199b426afdb24311d5f33b6f458c51"
+    },
+    {
+      "block_index": 1,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "001.mp3",
+      "hash": "5ab016c260672d14d315fb41bf5166e70d8721932aa051b31ef900b026785641"
+    },
+    {
+      "block_index": 2,
+      "speaker": "karma",
+      "voice": "it-IT-ElsaNeural",
+      "src": "002.mp3",
+      "hash": "cb519c17d27d54925cc3467b72346a5591b7bc500be34ceab0f6724762ec05cd"
+    },
+    {
+      "block_index": 3,
+      "speaker": "karma",
+      "voice": "it-IT-ElsaNeural",
+      "src": "003.mp3",
+      "hash": "13fe3b73a9a345a6cc14d86ab09f3fe7dbc9cdbfc8137b3c87a7af1ca53c75cf"
+    },
+    {
+      "block_index": 4,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "004.mp3",
+      "hash": "e76ae32155601070e187bd9234afbdf103c0ffea581340364d066d00b794b12b"
+    },
+    {
+      "block_index": 5,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "005.mp3",
+      "hash": "716b235fa24b88d4a29dd94d97987b652bb7c495d9901e066e939028c968f38c"
+    },
+    {
+      "block_index": 6,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "006.mp3",
+      "hash": "58f2e73a0467e435f7e6b37fd4fb351b7d754d1aa932117dbb1626f15e8d6b92"
+    },
+    {
+      "block_index": 7,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "007.mp3",
+      "hash": "f5b5191d525eded1aeae147b77ed61239be4e5b2f9da2b8b02b9fae4d29c49d8"
+    },
+    {
+      "block_index": 8,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "008.mp3",
+      "hash": "43a21d50427eee1c70dc509395b47f71eebb646c9aaa173e3b6431444a20fc46"
+    },
+    {
+      "block_index": 9,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "009.mp3",
+      "hash": "7712d23fcfe1bf47e5602f58d151ef57baebc756ed2cabd5c89a2d490c7df698"
+    },
+    {
+      "block_index": 10,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "010.mp3",
+      "hash": "7cef15c8477b51c421e626f661cb55c5cd4dedfce51e87e970711f36d053ae58"
+    },
+    {
+      "block_index": 11,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "011.mp3",
+      "hash": "51152b43d29614fbba797be1c399b42be16d99b4d82123084162f02afce72b01"
+    },
+    {
+      "block_index": 12,
+      "speaker": "narrator",
+      "voice": "it-IT-DiegoNeural",
+      "src": "012.mp3",
+      "hash": "e0c09ec566c08311f339bdad30240adcb1bef345f730ad58d30e8c1c04be1777"
+    }
+  ]
+}
