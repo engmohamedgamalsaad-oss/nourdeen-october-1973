@@ -4,11 +4,11 @@
   if (!story || !story.section || story.section === 'october') return;
 
   var copy = {
-    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', fallback: 'الملفات الصوتية غير متاحة الآن؛ نستخدم صوت المتصفح إن كان مدعومًا.', noVoice: 'لا تتوفر ملفات صوتية أو أصوات قراءة في هذا المتصفح.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع' },
-    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', fallback: 'Audio files are unavailable; using the browser voice if supported.', noVoice: 'No audio files or speech voices are available in this browser.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment' },
-    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', fallback: 'Fichiers audio indisponibles ; utilisation de la voix du navigateur si possible.', noVoice: 'Aucun fichier audio ni voix de lecture disponible dans ce navigateur.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait' },
-    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', fallback: 'File audio non disponibili; uso della voce del browser se supportata.', noVoice: 'Nessun file audio o voce disponibile in questo browser.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento' },
-    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', fallback: 'Audiodateien sind nicht verfügbar; falls möglich wird die Browserstimme verwendet.', noVoice: 'In diesem Browser sind keine Audiodateien oder Vorlesestimmen verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt' }
+    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', fallback: 'الملفات الصوتية غير متاحة الآن؛ نستخدم صوت المتصفح إن كان مدعومًا.', noVoice: 'لا تتوفر ملفات صوتية أو أصوات قراءة في هذا المتصفح.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
+    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', fallback: 'Audio files are unavailable; using the browser voice if supported.', noVoice: 'No audio files or speech voices are available in this browser.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment', open: 'Open audio controls', close: 'Close audio controls' },
+    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', fallback: 'Fichiers audio indisponibles ; utilisation de la voix du navigateur si possible.', noVoice: 'Aucun fichier audio ni voix de lecture disponible dans ce navigateur.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait', open: 'Ouvrir les commandes audio', close: 'Fermer les commandes audio' },
+    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', fallback: 'File audio non disponibili; uso della voce del browser se supportata.', noVoice: 'Nessun file audio o voce disponibile in questo browser.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento', open: 'Apri i controlli audio', close: 'Chiudi i controlli audio' },
+    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', fallback: 'Audiodateien sind nicht verfügbar; falls möglich wird die Browserstimme verwendet.', noVoice: 'In diesem Browser sind keine Audiodateien oder Vorlesestimmen verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt', open: 'Audiosteuerung öffnen', close: 'Audiosteuerung schließen' }
   };
   var style = document.createElement('style');
   style.textContent = [
@@ -68,7 +68,8 @@
     expanded = !!value;
     host.classList.toggle('is-expanded', expanded);
     toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-    toggleButton.setAttribute('aria-label', expanded ? 'Close audio controls' : 'Open audio controls');
+    toggleButton.setAttribute('aria-label', expanded ? ui.close : ui.open);
+    closeButton.setAttribute('aria-label', ui.close);
   }
 
   function setLanguage() {
