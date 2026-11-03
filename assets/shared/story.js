@@ -442,49 +442,8 @@
     targets.forEach(function (el) { observer.observe(el); });
   }
 
-  /* =========================================
-     4) Parallax لخلفية الغلاف
-  ========================================= */
-  function initHeroParallax() {
-    var hero = document.querySelector('.hero');
-    var photo = document.querySelector('.hero-photo');
-    var content = document.querySelector('.hero-content');
-
-    if (!hero || !photo) { return; }
-
-    var pending = false;
-
-    function update() {
-      pending = false;
-
-      var y = window.pageYOffset || 0;
-      var h = hero.offsetHeight || window.innerHeight;
-
-      if (y > h) { return; }
-
-      photo.style.transform =
-        'translate3d(0,' + (y * 0.045).toFixed(1) + 'px,0) scale(1.05)';
-
-      if (content) {
-        content.style.transform =
-          'translate3d(0,' + (y * -0.05).toFixed(1) + 'px,0)';
-      }
-    }
-
-    function request() {
-      if (pending) { return; }
-      pending = true;
-      window.requestAnimationFrame(update);
-    }
-
-    window.addEventListener('scroll', request, { passive: true });
-    window.addEventListener('resize', request);
-    update();
-  }
-
   if (richStory && !reduceMotion) {
     initScrollReveal();
-    initHeroParallax();
   }
 
   /* =========================================
