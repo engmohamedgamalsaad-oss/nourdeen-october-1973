@@ -138,6 +138,14 @@ def remove_date_connector(tokens: list[str]) -> list[str]:
             and is_number_form_token(previous[-1])
         ):
             continue
+        if (
+            token == "سنة"
+            and index > 0
+            and tokens[index - 1] in ARABIC_MONTH_TOKENS
+            and next_token is not None
+            and is_number_form_token(next_token)
+        ):
+            continue
         result.append(token)
     return result
 
