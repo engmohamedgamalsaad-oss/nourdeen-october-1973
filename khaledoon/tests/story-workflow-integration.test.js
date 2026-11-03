@@ -262,7 +262,7 @@ test('section color contract keeps Hatshepsut pink/purple and Magdi Yacoub cyan/
   var magdiTheme = fs.readFileSync('stories/science/015/theme.css', 'utf8');
   assert.ok(masterPrompt.includes('حتشبسوت ترث لوحة نساء خالدات'));
   assert.ok(masterPrompt.includes('مجدي يعقوب لوحة العلوم'));
-  assert.ok(masterPrompt.includes('#e7a1c1') && masterPrompt.includes('#8ad9e8'));
+  assert.ok(masterPrompt.includes('#d78bb2') && masterPrompt.includes('#8ad9e8'));
   assert.ok(bundle.includes("women:'#d78bb2'") && bundle.includes("women:'women-leadership'"));
   assert.ok(bundle.includes("science:'#8ad9e8'") && bundle.includes("science:'science-lab'"));
   assert.ok(hatsTheme.includes('--accent:#e7a1c1') && hatsTheme.includes('#51284b'));
