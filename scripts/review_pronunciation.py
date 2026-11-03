@@ -472,6 +472,68 @@ def build_report(
     }
 
 
+def build_all_report(
+    story_path: Path, manifest_path: Path, language: str,
+    pronunciation_path: Path | None = None,
+) -> dict[str, Any]:
+    """Build one read-only report covering every speakable story block."""
+    story = read_json(story_path, "story")
+    localized = story.get("i18n", {}).get(language)
+    blocks = localized.get("blocks") if isinstance(localized, dict) else None
+    if not isinstance(blocks, list) or not blocks:
+        raise ReviewError(f"Story has no non-empty i18n.{language}.blocks list.")
+
+    reports = [
+        build_report(story_path, manifest_path, language, index, pronunciation_path)
+        for index in range(len(blocks))
+    ]
+    results = [item["overall_textual_result"] for item in reports]
+    if any(result == "FAIL" for result in results):
+        overall = "FAIL"
+    elif any(result == "REVIEW" for result in results):
+        overall = "REVIEW"
+    elif any(result == "PASS_SOURCE_ONLY" for result in results):
+        overall = "PASS_SOURCE_ONLY"
+    else:
+        overall = "PASS"
+
+    return {
+        "tool": "review_pronunciation.py",
+        "tool_version": 1,
+        "mode": "READ_ONLY",
+        "story": story.get("slug"),
+        "section": story.get("section"),
+        "language": language,
+        "scope": {"all_blocks": True, "block_count": len(blocks)},
+        "summary": {
+            "overall_textual_result": overall,
+            "block_results": {
+                status: results.count(status)
+                for status in ("PASS", "PASS_SOURCE_ONLY", "REVIEW", "FAIL")
+            },
+            "structural_failures": sum(
+                1 for item in reports
+                if item["structural_validation"]["status"] != "PASS"
+            ),
+            "spoken_pronunciation_result": "NOT_TESTED",
+        },
+        "blocks": [
+            {
+                "block_index": index,
+                "overall_textual_result": item["overall_textual_result"],
+                "structural_validation": item["structural_validation"],
+                "block": item["block"],
+            }
+            for index, item in enumerate(reports)
+        ],
+        "important_limit": (
+            "This report compares written source text only. It cannot establish spoken "
+            "pronunciation, pauses, pacing, or audio quality. Manifest text comparisons "
+            "are reported as unavailable when the manifest stores only a content hash."
+        ),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Read-only comparison of Arabic visible story text and audio manifest text."
@@ -482,6 +544,8 @@ def main() -> int:
     parser.add_argument("--language", default="ar", choices=("ar",), help="Language to review (Arabic only in v1).")
     parser.add_argument("--block-index", type=int, default=DEFAULT_BLOCK_INDEX,
                         help="Zero-based story block index; defaults to pilot block 1 / 001.mp3.")
+    parser.add_argument("--all-blocks", action="store_true",
+                        help="Review every Arabic block in the selected story instead of one block.")
     parser.add_argument("--report", help="Optional path for saving the JSON report; no project input is modified.")
     parser.add_argument("--fail-on-mismatch", action="store_true",
                         help="Exit with status 1 when textual or structural review fails.")
@@ -494,8 +558,12 @@ def main() -> int:
             resolve_input(args.pronunciation, "Audio pronunciation")
             if args.pronunciation else story_path.with_name("audio-pronunciation.json")
         )
-        report = build_report(
-            story_path, manifest_path, args.language, args.block_index, pronunciation_path
+        report = (
+            build_all_report(story_path, manifest_path, args.language, pronunciation_path)
+            if args.all_blocks
+            else build_report(
+                story_path, manifest_path, args.language, args.block_index, pronunciation_path
+            )
         )
     except ReviewError as exc:
         print(json.dumps({"overall_textual_result": "ERROR", "error": str(exc)}, ensure_ascii=False, indent=2))
