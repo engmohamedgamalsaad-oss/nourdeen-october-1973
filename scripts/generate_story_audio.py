@@ -27,7 +27,7 @@ VOICE_SETTINGS = {
     },
     "en": {
         "karma": ("en-US-JennyNeural", "+0%", "+8Hz"),
-        "narrator": ("en-US-GuyNeural", "-2%", "+0Hz"),
+        "narrator": ("en-US-DavisNeural", "-2%", "+0Hz"),
     },
     "fr": {
         "karma": ("fr-FR-EloiseNeural", "+0%", "+8Hz"),
@@ -40,6 +40,12 @@ VOICE_SETTINGS = {
     "de": {
         "karma": ("de-DE-KatjaNeural", "+0%", "+8Hz"),
         "narrator": ("de-DE-ConradNeural", "-2%", "+0Hz"),
+    },
+}
+
+VOICE_FALLBACKS = {
+    "en": {
+        "narrator": ("en-US-JasonNeural", "en-US-GuyNeural"),
     },
 }
 
@@ -73,10 +79,11 @@ async def synthesize(
             communicator = edge_tts.Communicate(
                 text, voice, rate=rate, pitch=pitch
             )
-            await communicator.save(str(temporary))
+            await asyncio.wait_for(communicator.save(str(temporary)), timeout=35)
             if not temporary.is_file() or temporary.stat().st_size < 512:
                 raise RuntimeError("TTS returned an empty or invalid MP3 file")
             temporary.replace(destination)
+            await asyncio.sleep(1.0)
             return
         except Exception as exc:
             last_error = exc
@@ -151,19 +158,48 @@ async def generate_story(story_path: Path) -> bool:
             text = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
             if speaker not in ("karma", "narrator") or not text:
                 continue
-            voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
-            digest = text_hash(text, voice, rate, pitch, lang)
+            primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
+            candidates = [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
             filename = f"{block_index:03d}.mp3"
             destination = output_dir / filename
             previous = old_segments.get(block_index, {})
-            if previous.get("hash") != digest or not destination.is_file() or destination.stat().st_size < 512:
-                await synthesize(text, voice, rate, pitch, destination)
-                print(f"GENERATED {relative.parent}/{lang}/{filename} ({speaker})")
-            else:
-                print(f"UNCHANGED {relative.parent}/{lang}/{filename}")
+            previous_voice = previous.get("voice")
+            if previous_voice in candidates:
+                candidates.remove(previous_voice)
+                candidates.insert(0, previous_voice)
+
+            selected_voice = None
+            digest = None
+            for candidate_voice in candidates:
+                candidate_hash = text_hash(text, candidate_voice, rate, pitch, lang)
+                if (
+                    previous.get("hash") == candidate_hash
+                    and previous_voice in (None, candidate_voice)
+                    and destination.is_file()
+                    and destination.stat().st_size >= 512
+                ):
+                    selected_voice = candidate_voice
+                    digest = candidate_hash
+                    print(f"UNCHANGED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
+                    break
+                try:
+                    await synthesize(text, candidate_voice, rate, pitch, destination)
+                    selected_voice = candidate_voice
+                    digest = candidate_hash
+                    print(f"GENERATED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
+                    break
+                except Exception as exc:
+                    print(f"VOICE RETRY {relative.parent}/{lang}/{filename}: {candidate_voice}: {exc}", file=sys.stderr)
+
+            if selected_voice is None or digest is None:
+                raise RuntimeError(
+                    f"No working voice for {lang}/{speaker} block {block_index}; tried {candidates}"
+                )
+
             segments.append({
                 "block_index": block_index,
                 "speaker": speaker,
+                "voice": selected_voice,
                 "src": filename,
                 "hash": digest,
             })
