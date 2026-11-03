@@ -130,7 +130,7 @@
       return;
     }
     var sourceBlock = blocks[segment.block_index] || {};
-    var utterance = new SpeechSynthesisUtterance(sourceBlock.text || segment.text || '');
+    var utterance = new SpeechSynthesisUtterance(segment.text || sourceBlock.text || '');
     utterance.volume = Number(volumeControl.value);
     var locales = { ar: 'ar-EG', en: 'en-US', fr: 'fr-FR', it: 'it-IT', de: 'de-DE' };
     utterance.lang = locales[lang] || 'ar-EG';
@@ -169,7 +169,7 @@
 
     function advance() {
       index += 1;
-      if (mode === 'playing') playNext();
+      if (mode === 'playing') window.setTimeout(playNext, 350);
     }
 
     if (segment.url) {
@@ -178,14 +178,14 @@
       activeAudio.preload = 'auto';
       activeAudio.onended = advance;
       activeAudio.onerror = function () {
-        var fallbackText = blocks[segment.block_index] && blocks[segment.block_index].text;
+        var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
         if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
         else advance();
       };
       var pending = activeAudio.play();
       if (pending && typeof pending.catch === 'function') {
         pending.catch(function () {
-          var fallbackText = blocks[segment.block_index] && blocks[segment.block_index].text;
+          var fallbackText = segment.text || (blocks[segment.block_index] && blocks[segment.block_index].text);
           if (fallbackText && 'speechSynthesis' in window) fallbackSpeak(segment, advance);
           else { status.textContent = ui.noVoice; advance(); }
         });
@@ -218,6 +218,7 @@
         return {
           block_index: segment.block_index,
           speaker: segment.speaker,
+          text: segment.text || '',
           url: new URL(segment.src + '?v=' + encodeURIComponent(String(segment.hash || manifest.generated_at || manifest.version)), manifestUrl).href
         };
       });
