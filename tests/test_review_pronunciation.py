@@ -69,6 +69,45 @@ class MarkPositionTests(unittest.TestCase):
         self.assertTrue(reviewer.sequence_differences(before, after))
 
 
+class ManifestTextComparisonTests(unittest.TestCase):
+    def make_segment(self, text: str) -> dict:
+        return {
+            "chunk_index": 0,
+            "text": text,
+            "src": "000.mp3",
+            "hash": "a" * 64,
+            "speaker": "narrator",
+            "provider": "test",
+        }
+
+    def test_manifest_text_is_compared_when_it_is_available(self):
+        report = reviewer.review_block(
+            0,
+            {"text": "ولد عام 1935", "speaker": "narrator"},
+            [self.make_segment("ولد عام 1935")],
+            "ولد عام 1935",
+        )
+        self.assertEqual(report["manifest_text_verification"], "AVAILABLE")
+        self.assertEqual(
+            report["word_identity_and_order"]["submitted_vs_manifest"]["status"],
+            "PASS",
+        )
+        self.assertEqual(report["textual_result"], "PASS")
+
+    def test_manifest_text_mismatch_is_not_hidden(self):
+        report = reviewer.review_block(
+            0,
+            {"text": "ولد عام 1935", "speaker": "narrator"},
+            [self.make_segment("ولد عام 1936")],
+            "ولد عام 1935",
+        )
+        self.assertEqual(
+            report["word_identity_and_order"]["submitted_vs_manifest"]["status"],
+            "FAIL",
+        )
+        self.assertEqual(report["textual_result"], "FAIL")
+
+
 class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
     def test_default_pilot_block_is_structurally_and_textually_valid(self):
         report = reviewer.build_report(
