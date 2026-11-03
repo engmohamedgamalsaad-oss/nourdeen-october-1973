@@ -213,9 +213,12 @@ def review_block(
             "provider": item.get("provider"),
             "model": item.get("model"),
             "voice_id": item.get("voice"),
-            # Current manifests do not persist synthesis rate/pitch. Do not infer them.
-            "rate": item.get("rate"),
-            "pitch": item.get("pitch"),
+            "audio_format": Path(str(item.get("src") or "")).suffix.lstrip(".").lower() or None,
+            # Fish Audio's active request sends text, reference_id and format;
+            # it does not send rate/pitch. Never report unused generator constants as applied settings.
+            "rate": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("rate"),
+            "pitch": "NOT_SENT_TO_FISH_AUDIO" if item.get("provider") == "fish-audio" else item.get("pitch"),
+            "request_fields": ["text", "reference_id", "format"] if item.get("provider") == "fish-audio" else None,
         })
 
     return {
@@ -308,8 +311,9 @@ def build_report(story_path: Path, manifest_path: Path, language: str, block_ind
             "narrow mark normalization. It does not prove that the audio actually pronounces them correctly."
         ),
         "synthesis_settings_note": (
-            "Voice ID/provider/model are read from the manifest. Rate and pitch are reported only if "
-            "the manifest explicitly stores them; this tool does not infer missing settings."
+            "Voice ID/provider/model are read from the manifest. For the current Fish Audio request, "
+            "rate and pitch are not sent to the provider; the request uses text, reference_id and MP3 format. "
+            "The report records these as NOT_SENT rather than treating unrelated generator constants as applied settings."
         ),
     }
 
