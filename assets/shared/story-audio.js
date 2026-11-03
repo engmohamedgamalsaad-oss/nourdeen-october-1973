@@ -4,11 +4,11 @@
   if (!story || story.section !== 'science' || story.slug !== 'magdi-yacoub') return;
 
   var copy = {
-    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', noVoice: 'التسجيلات الصوتية الأصلية غير متاحة حاليًا.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
-    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', noVoice: 'The original audio recordings are currently unavailable.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment', open: 'Open audio controls', close: 'Close audio controls' },
-    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', noVoice: 'Les enregistrements audio originaux sont actuellement indisponibles.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait', open: 'Ouvrir les commandes audio', close: 'Fermer les commandes audio' },
-    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', noVoice: 'Le registrazioni audio originali non sono attualmente disponibili.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento', open: 'Apri i controlli audio', close: 'Chiudi i controlli audio' },
-    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', noVoice: 'Die Original-Audioaufnahmen sind derzeit nicht verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt', open: 'Audiosteuerung öffnen', close: 'Audiosteuerung schließen' }
+    ar: { title: 'استمع للحكاية', play: '▶ استمع للحكاية', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', noVoice: 'التسجيلات الصوتية المختارة غير متاحة حاليًا.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت' },
+    en: { title: 'Listen to the story', play: '▶ Listen to the story', pause: 'Pause', resume: 'Resume', stop: 'Stop', loading: 'Preparing audio…', noVoice: 'The selected audio recordings are currently unavailable.', done: 'The story has finished.', karma: 'Karma', narrator: 'Narrator', progress: 'Segment', open: 'Open audio controls', close: 'Close audio controls' },
+    fr: { title: 'Écouter le récit', play: '▶ Écouter le récit', pause: 'Pause', resume: 'Reprendre', stop: 'Arrêter', loading: 'Préparation audio…', noVoice: 'Les enregistrements audio sélectionnés sont actuellement indisponibles.', done: 'Le récit est terminé.', karma: 'Karma', narrator: 'Narrateur', progress: 'Extrait', open: 'Ouvrir les commandes audio', close: 'Fermer les commandes audio' },
+    it: { title: 'Ascolta il racconto', play: '▶ Ascolta il racconto', pause: 'Pausa', resume: 'Riprendi', stop: 'Ferma', loading: 'Preparazione audio…', noVoice: 'Le registrazioni audio selezionate non sono attualmente disponibili.', done: 'Il racconto è terminato.', karma: 'Karma', narrator: 'Narratore', progress: 'Segmento', open: 'Apri i controlli audio', close: 'Chiudi i controlli audio' },
+    de: { title: 'Geschichte anhören', play: '▶ Geschichte anhören', pause: 'Pause', resume: 'Fortsetzen', stop: 'Stopp', loading: 'Audio wird vorbereitet…', noVoice: 'Die ausgewählten Audioaufnahmen sind derzeit nicht verfügbar.', done: 'Die Geschichte ist zu Ende.', karma: 'Karma', narrator: 'Erzähler', progress: 'Abschnitt', open: 'Audiosteuerung öffnen', close: 'Audiosteuerung schließen' }
   };
   var style = document.createElement('style');
   style.textContent = [
@@ -39,6 +39,7 @@
   var lang = document.documentElement.lang || 'ar';
   var ui = copy[lang] || copy.ar;
   var blocks = story.i18n && story.i18n[lang] && story.i18n[lang].blocks || [];
+  var approvedVoices = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
   var queue = [];
   var index = 0;
   var activeAudio = null;
@@ -186,6 +187,7 @@
       return response.json();
     }).then(function (manifest) {
       if (!manifest || manifest.version !== 1 || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
+      if (manifest.segments.some(function (segment) { return !approvedVoices[segment.speaker] || segment.voice !== approvedVoices[segment.speaker]; })) throw new Error('Audio manifest does not match the approved pilot voices');
       queue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,
