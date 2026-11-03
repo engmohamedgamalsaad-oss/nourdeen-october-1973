@@ -22,9 +22,9 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "3"
+GENERATOR_VERSION = "4"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
-FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
+FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 VOICE_SETTINGS = {
     "ar": {
