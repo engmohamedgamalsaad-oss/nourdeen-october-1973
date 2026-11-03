@@ -24,7 +24,7 @@ permissions:
 
 concurrency:
   group: story-audio-approved-voice-refresh-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   generate:
