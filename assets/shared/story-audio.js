@@ -231,6 +231,12 @@
 
   toggleButton.addEventListener('click', function () { setExpanded(!expanded); });
   closeButton.addEventListener('click', function () { setExpanded(false); });
+  document.addEventListener('click', function (event) {
+    if (expanded && !host.contains(event.target)) setExpanded(false);
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && expanded) setExpanded(false);
+  });
   playButton.addEventListener('click', function () {
     setExpanded(true);
     if (mode === 'paused') {
@@ -253,6 +259,7 @@
     else if ('speechSynthesis' in window) window.speechSynthesis.pause();
     mode = 'paused';
     pauseButton.textContent = ui.resume;
+    setExpanded(false);
   });
   stopButton.addEventListener('click', stop);
   volumeControl.addEventListener('input', function () {
