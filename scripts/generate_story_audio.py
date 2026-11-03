@@ -10,8 +10,11 @@ import argparse
 import asyncio
 import hashlib
 import json
+import os
 import re
 import sys
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Any
 
@@ -19,7 +22,9 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "1"
+GENERATOR_VERSION = "2"
+FISH_AUDIO_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
+FISH_AUDIO_MODEL = "s2.1-pro-free"
 VOICE_SETTINGS = {
     "ar": {
         "karma": ("ar-EG-SalmaNeural", "+0%", "+8Hz"),
@@ -95,6 +100,42 @@ async def synthesize(
     ) from last_error
 
 
+async def synthesize_fish_audio(text: str, destination: Path) -> None:
+    api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError(
+            "FISH_AUDIO_API_KEY is missing. Add it in GitHub Settings > Secrets and variables > Actions."
+        )
+
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    temporary = destination.with_name(destination.stem + ".partial.mp3")
+    payload = json.dumps({
+        "text": text,
+        "reference_id": FISH_AUDIO_VOICE_ID,
+        "format": "mp3",
+    }, ensure_ascii=False).encode("utf-8")
+    request = urllib.request.Request(
+        "https://api.fish.audio/v1/tts",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "model": FISH_AUDIO_MODEL,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            audio = response.read()
+    except urllib.error.HTTPError as exc:
+        detail = exc.read(1200).decode("utf-8", errors="replace")
+        raise RuntimeError(f"Fish Audio API returned HTTP {exc.code}: {detail}") from exc
+    if len(audio) < 512 or not audio.startswith(b"ID3") and not audio.startswith(b"\\xff\\xfb"):
+        raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
+    temporary.write_bytes(audio)
+    temporary.replace(destination)
+
+
 async def generate_story(story_path: Path) -> bool:
     story_path = story_path.resolve()
     try:
@@ -159,7 +200,12 @@ async def generate_story(story_path: Path) -> bool:
             if speaker not in ("karma", "narrator") or not text:
                 continue
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
-            candidates = [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
+            use_fish_audio = lang == "ar" and speaker == "karma"
+            candidates = (
+                [FISH_AUDIO_VOICE_ID]
+                if use_fish_audio
+                else [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
+            )
             filename = f"{block_index:03d}.mp3"
             destination = output_dir / filename
             previous = old_segments.get(block_index, {})
@@ -183,7 +229,10 @@ async def generate_story(story_path: Path) -> bool:
                     print(f"UNCHANGED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
                     break
                 try:
-                    await synthesize(text, candidate_voice, rate, pitch, destination)
+                    if use_fish_audio:
+                        await synthesize_fish_audio(text, destination)
+                    else:
+                        await synthesize(text, candidate_voice, rate, pitch, destination)
                     selected_voice = candidate_voice
                     digest = candidate_hash
                     print(f"GENERATED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
@@ -200,6 +249,8 @@ async def generate_story(story_path: Path) -> bool:
                 "block_index": block_index,
                 "speaker": speaker,
                 "voice": selected_voice,
+                "provider": "fish-audio" if use_fish_audio else "edge-tts",
+                "model": FISH_AUDIO_MODEL if use_fish_audio else "edge-tts",
                 "src": filename,
                 "hash": digest,
             })
@@ -210,7 +261,7 @@ async def generate_story(story_path: Path) -> bool:
 
         manifest = {
             "version": 1,
-            "engine": "edge-tts",
+            "engine": "fish-audio+edge-tts",
             "story": slug,
             "section": section,
             "language": lang,
