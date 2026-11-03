@@ -86,6 +86,8 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             report["block"]["manifest_text_verification"],
             "NOT_STORED_IN_MANIFEST",
         )
+        self.assertRegex(report["manifest_sha256"], r"^[0-9a-f]{64}$")
+        self.assertRegex(report["block"]["audio_segments"][0]["content_hash"], r"^[0-9a-f]{64}$")
 
     def test_all_thirteen_magdi_blocks_are_reported_without_false_manifest_passes(self):
         report = reviewer.build_all_report(
