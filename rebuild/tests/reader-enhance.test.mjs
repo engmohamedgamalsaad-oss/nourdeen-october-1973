@@ -32,13 +32,13 @@ test('visual additions are additive and support RTL/LTR, light/dark and reduced 
   assert.match(css, /prefers-reduced-motion:reduce/);
   assert.match(css, /\.kh-progress\{/);
   assert.doesNotMatch(css, /(^|\n)(body|header|main|\.hero|\.section|h1|h2)\s*\{/, 'base page rules must not be replaced');
-  assert.match(html, /reader-base\.css\?v=20261101-story-reader-1/);
-  assert.match(builder, /reader-base\.css\?v=20261101-story-reader-1/);
+  assert.match(html, /reader-base\.css\?v=20261101-story-reader-2/);
+  assert.match(builder, /reader-base\.css\?v=20261101-story-reader-2/);
   assert.match(baseCss, /\.hero/);
   assert.match(html, /reader\.js\?v=20261102-canonical-preview-reader-3/);
   assert.match(js, /reader-enhance\.css\?v=20261101-story-reader-2/);
   assert.match(builder, /reader-enhance\.css\?v=20261101-story-reader-2/);
-  assert.match(publisher, /reader-enhance\.css\?v=20261101-story-reader-1/);
+  assert.match(publisher, /reader-enhance\.css\?v=20261101-story-reader-2/);
 });
 
 test('all five language labels exist and language/theme changes do not replay entrance animations', () => {
