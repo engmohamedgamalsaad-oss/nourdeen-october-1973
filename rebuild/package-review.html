@@ -65,7 +65,7 @@ function openUnifiedReader(){
  catch(e){$('status').textContent='تعذر حفظ حزمة المعاينة في تخزين المتصفح: '+e.message;$('status').className='status bad';return}
  if(story&&(story.section==='october'||story.section_key==='october')){location.replace('package-review-legacy.html?draft=1&v=20261102-october-legacy-1');return}
  $('status').textContent='اجتاز الفحص البنيوي. جارٍ فتح الحكاية داخل القارئ الموحد…';
- const params=new URLSearchParams(location.search);const readerUrl=new URL('reader.html',location.href);readerUrl.searchParams.set('draft','1');readerUrl.searchParams.set('v','20261102-canonical-preview-reader-2');['submission','table'].forEach(k=>{const v=params.get(k);if(v)readerUrl.searchParams.set(k,v)});location.replace(readerUrl.toString());
+ const params=new URLSearchParams(location.search);const readerUrl=new URL('reader.html',location.href);readerUrl.searchParams.set('draft','1');readerUrl.searchParams.set('v','20261102-canonical-preview-reader-3');['submission','table'].forEach(k=>{const v=params.get(k);if(v)readerUrl.searchParams.set(k,v)});location.replace(readerUrl.toString());
 }
 function loadPackage(parsed,fromDraft){
  story=parsed;$('audit').classList.remove('hidden');$('issues').replaceChildren();
