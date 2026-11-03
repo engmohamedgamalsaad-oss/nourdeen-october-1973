@@ -260,21 +260,3 @@ html[data-theme] .topbar .langrow .langs button[aria-pressed="true"]{
   .hero:not(.sub)::before,.hero:not(.sub)::after{display:none!important}
   .hero:not(.sub) .hero-in{padding:36px 0 44px}
 }
-
-
-/* 2026-11-03: remove only the magnetic/pinned homepage scroll composition.
-   Keep the ordinary cover image, star twinkles, typography and all story-page reveals. */
-.hero-background-layer{display:none!important}
-.hero-stars{z-index:0}
-.hero:not(.sub)>.wrap{position:relative;z-index:1}
-@media(max-width:780px){
-  html[data-theme] .hero:not(.sub){
-    background:linear-gradient(90deg,rgba(3,12,17,.78),rgba(3,12,17,.38) 55%,rgba(3,12,17,.62)),url("main-cover.jpg") center 40%/cover no-repeat!important;
-    min-height:480px!important;
-    align-items:center!important;
-  }
-  html[data-theme="light"] .hero:not(.sub){
-    background:linear-gradient(90deg,rgba(255,249,232,.72),rgba(255,249,232,.42) 55%,rgba(255,249,232,.65)),url("main-cover.jpg") center 40%/cover no-repeat!important;
-  }
-  html[data-theme] .hero:not(.sub) .hero-in{padding:50px 0 64px!important}
-}
