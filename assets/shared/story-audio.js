@@ -12,17 +12,25 @@
   };
   var style = document.createElement('style');
   style.textContent = [
-    '.kh-audio-player{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:9999;width:min(350px,calc(100vw - 24px));box-sizing:border-box;margin:0;padding:12px 14px;border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);box-shadow:0 12px 38px rgba(0,0,0,.24);isolation:isolate}',
-    '.kh-audio-player h3{margin:0 0 9px;color:var(--accent);font:800 1rem Cairo,Arial,sans-serif}',
-    '.kh-audio-controls{display:flex;flex-wrap:wrap;gap:8px}',
-    '.kh-audio-controls button{min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font:700 .88rem Cairo,Arial,sans-serif;cursor:pointer}',
+    '.kh-audio-player{position:fixed;right:max(14px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));z-index:9999;width:56px;height:56px;box-sizing:border-box;margin:0;padding:0;border:0;background:transparent;color:var(--text);isolation:isolate}',
+    '.kh-audio-toggle{display:flex;width:56px;height:56px;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:50%;background:var(--panel);color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.24);cursor:pointer}',
+    '.kh-audio-toggle svg{width:25px;height:25px;display:block}',
+    '.kh-audio-panel{display:none;width:min(278px,calc(100vw - 28px));box-sizing:border-box;padding:11px 12px;border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--text);box-shadow:0 12px 34px rgba(0,0,0,.25)}',
+    '.kh-audio-player.is-expanded{width:min(278px,calc(100vw - 28px));height:auto}',
+    '.kh-audio-player.is-expanded .kh-audio-toggle{display:none}',
+    '.kh-audio-player.is-expanded .kh-audio-panel{display:block}',
+    '.kh-audio-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}',
+    '.kh-audio-player h3{margin:0;color:var(--accent);font:800 .9rem Cairo,Arial,sans-serif}',
+    '.kh-audio-close{width:28px;height:28px;flex:0 0 28px;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--text);font-size:17px;line-height:1;cursor:pointer}',
+    '.kh-audio-controls{display:flex;flex-wrap:wrap;gap:6px}',
+    '.kh-audio-controls button{min-height:34px;padding:5px 9px;border:1px solid var(--line);border-radius:999px;background:var(--panel);color:var(--text);font:700 .78rem Cairo,Arial,sans-serif;cursor:pointer}',
     '.kh-audio-controls #kh-audio-play{background:var(--accent);border-color:var(--accent);color:#171717}',
     '.kh-audio-controls button:disabled{opacity:.45;cursor:not-allowed}',
-    '.kh-audio-status{margin:7px 0 0;color:var(--muted);font-size:.82rem;line-height:1.55;max-height:2.6em;overflow:hidden}',
-    '.kh-audio-volume{display:flex;align-items:center;gap:9px;margin-top:8px;color:var(--muted);font:600 .78rem Cairo,Arial,sans-serif}',
-    '.kh-audio-volume input{flex:1;min-width:70px;accent-color:var(--accent);cursor:pointer}',
-    '@media(max-width:480px){.kh-audio-player{right:10px;bottom:max(10px,env(safe-area-inset-bottom));width:min(330px,calc(100vw - 20px));padding:10px 12px}.kh-audio-controls{gap:6px}.kh-audio-controls button{min-height:38px;padding:6px 10px;font-size:.82rem}}',
-    '.kh-audio-progress{display:block;width:100%;height:5px;margin-top:12px;accent-color:var(--accent)}',
+    '.kh-audio-status{margin:6px 0 0;color:var(--muted);font-size:.72rem;line-height:1.45;max-height:2.5em;overflow:hidden}',
+    '.kh-audio-volume{display:flex;align-items:center;gap:7px;margin-top:6px;color:var(--muted);font:600 .72rem Cairo,Arial,sans-serif}',
+    '.kh-audio-volume input{flex:1;min-width:65px;accent-color:var(--accent);cursor:pointer}',
+    '.kh-audio-progress{display:block;width:100%;height:4px;margin-top:8px;accent-color:var(--accent)}',
+    '@media(max-width:480px){.kh-audio-player{right:10px;bottom:max(10px,env(safe-area-inset-bottom))}.kh-audio-toggle{width:52px;height:52px}.kh-audio-player.is-expanded{width:min(270px,calc(100vw - 20px))}.kh-audio-panel{width:100%;padding:10px}.kh-audio-controls button{min-height:33px;padding:5px 8px;font-size:.76rem}}',
     '#blocks>.block.kh-audio-current{outline:1px solid color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:3px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease;scroll-margin-block:18vh}',
     '@media(prefers-reduced-motion:reduce){#blocks>.block.kh-audio-current{transition:none!important}}'
   ].join('');
@@ -38,11 +46,12 @@
   var mode = 'idle';
   var manifestUrl = null;
   var currentBlock = null;
+  var expanded = false;
 
   var host = document.createElement('section');
   host.className = 'kh-audio-player';
   host.id = 'kh-audio-player';
-  host.innerHTML = '<h3 id="kh-audio-title"></h3><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><label class="kh-audio-volume"><span id="kh-audio-volume-label">' + (lang === 'ar' ? 'مستوى الصوت' : 'Volume') + '</span><input id="kh-audio-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></label><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p>';
+  host.innerHTML = '<button type="button" class="kh-audio-toggle" id="kh-audio-toggle" aria-label="Open audio controls" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"></path><path d="M15.5 8.5a5 5 0 0 1 0 7"></path><path d="M18.5 5.5a9 9 0 0 1 0 13"></path></svg></button><div class="kh-audio-panel"><div class="kh-audio-panel-head"><h3 id="kh-audio-title"></h3><button type="button" class="kh-audio-close" id="kh-audio-close" aria-label="Close audio controls">×</button></div><div class="kh-audio-controls"><button type="button" id="kh-audio-play"></button><button type="button" id="kh-audio-pause" disabled></button><button type="button" id="kh-audio-stop" disabled></button></div><label class="kh-audio-volume"><span id="kh-audio-volume-label">' + (lang === 'ar' ? 'مستوى الصوت' : 'Volume') + '</span><input id="kh-audio-volume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Volume"></label><progress class="kh-audio-progress" id="kh-audio-progress" max="1" value="0"></progress><p class="kh-audio-status" id="kh-audio-status" role="status" aria-live="polite"></p></div>';
   var blocksHost = document.getElementById('blocks');
   if (blocksHost && blocksHost.parentNode) blocksHost.parentNode.insertBefore(host, blocksHost);
 
@@ -52,6 +61,15 @@
   var status = document.getElementById('kh-audio-status');
   var progress = document.getElementById('kh-audio-progress');
   var volumeControl = document.getElementById('kh-audio-volume');
+  var toggleButton = document.getElementById('kh-audio-toggle');
+  var closeButton = document.getElementById('kh-audio-close');
+
+  function setExpanded(value) {
+    expanded = !!value;
+    host.classList.toggle('is-expanded', expanded);
+    toggleButton.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    toggleButton.setAttribute('aria-label', expanded ? 'Close audio controls' : 'Open audio controls');
+  }
 
   function setLanguage() {
     lang = document.documentElement.lang || 'ar';
@@ -88,6 +106,7 @@
     stopButton.disabled = true;
     pauseButton.textContent = ui.pause;
     progress.value = 0;
+    setExpanded(false);
   }
 
   function highlight(blockIndex) {
@@ -134,6 +153,7 @@
       pauseButton.disabled = true;
       stopButton.disabled = true;
       progress.value = queue.length ? queue.length : 0;
+      setExpanded(false);
       return;
     }
     var segment = queue[index];
@@ -208,7 +228,10 @@
     });
   }
 
+  toggleButton.addEventListener('click', function () { setExpanded(true); });
+  closeButton.addEventListener('click', function () { setExpanded(false); });
   playButton.addEventListener('click', function () {
+    setExpanded(true);
     if (mode === 'paused') {
       if (activeAudio) activeAudio.play();
       else if ('speechSynthesis' in window) window.speechSynthesis.resume();
