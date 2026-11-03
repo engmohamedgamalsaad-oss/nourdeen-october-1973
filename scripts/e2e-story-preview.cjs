@@ -158,7 +158,7 @@ async function main() {
   const reviewer = await reviewContext.newPage();
   reviewer.on('pageerror', error => errors.push(String(error.message || error)));
   await reviewer.goto(base, { waitUntil: 'load' });
-  const unifiedReviewPackage = { ...story, section: 'people', section_key: 'people' }; // October remains on its isolated legacy preview path.
+  const unifiedReviewPackage = { ...story, section: 'people' }; // October remains on its isolated legacy preview path.
   await reviewer.evaluate(pkg => localStorage.setItem('kh-story-review-package', JSON.stringify(pkg)), unifiedReviewPackage);
   await reviewer.goto('http://127.0.0.1:' + server.address().port + '/rebuild/package-review.html?draft=1', { waitUntil: 'load' });
   await reviewer.waitForURL(/reader\.html\?draft=1/, { timeout: 10000 });
