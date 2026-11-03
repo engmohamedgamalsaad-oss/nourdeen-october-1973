@@ -60,6 +60,19 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             "NOT_STORED_IN_MANIFEST",
         )
 
+    def test_all_thirteen_magdi_blocks_are_reported_without_false_manifest_passes(self):
+        report = reviewer.build_all_report(
+            ROOT / reviewer.DEFAULT_STORY,
+            ROOT / reviewer.DEFAULT_MANIFEST,
+            "ar",
+        )
+        self.assertEqual(report["scope"]["block_count"], 13)
+        self.assertEqual(report["summary"]["structural_failures"], 0)
+        self.assertEqual(report["summary"]["block_results"]["PASS_SOURCE_ONLY"], 7)
+        self.assertEqual(report["summary"]["block_results"]["REVIEW"], 6)
+        self.assertEqual(report["summary"]["block_results"]["FAIL"], 0)
+        self.assertEqual(report["summary"]["overall_textual_result"], "REVIEW")
+
 
 if __name__ == "__main__":
     unittest.main()
