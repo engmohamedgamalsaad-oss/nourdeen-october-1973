@@ -214,8 +214,15 @@ def is_number_form_only_difference(before: list[str], after: list[str]) -> bool:
     return before_words == after_words
 
 
-def sequence_differences(before: list[str], after: list[str]) -> list[dict[str, Any]]:
-    matcher = difflib.SequenceMatcher(a=before, b=after, autojunk=False)
+def sequence_differences(before: list[Any], after: list[Any]) -> list[dict[str, Any]]:
+    def comparable(value: Any) -> Any:
+        return tuple(sorted(value.items())) if isinstance(value, dict) else value
+
+    matcher = difflib.SequenceMatcher(
+        a=[comparable(value) for value in before],
+        b=[comparable(value) for value in after],
+        autojunk=False,
+    )
     changes: list[dict[str, Any]] = []
     for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         if tag == "equal":
