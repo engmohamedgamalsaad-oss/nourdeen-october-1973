@@ -118,12 +118,41 @@ def is_number_form_token(token: str) -> bool:
     return token.isdigit() or token in ARABIC_NUMBER_FORM_TOKENS
 
 
+ARABIC_MONTH_TOKENS = {
+    "يناير", "فبراير", "مارس", "أبريل", "ابريل", "مايو", "يونيو",
+    "يوليو", "أغسطس", "اغسطس", "سبتمبر", "أكتوبر", "اكتوبر",
+    "نوفمبر", "ديسمبر",
+}
+
+
+def remove_date_connector(tokens: list[str]) -> list[str]:
+    """Ignore 'من' only when it links a spoken date ordinal to an Arabic month."""
+    result: list[str] = []
+    for index, token in enumerate(tokens):
+        previous = tokens[max(0, index - 3):index]
+        next_token = tokens[index + 1] if index + 1 < len(tokens) else None
+        if (
+            token == "من"
+            and next_token in ARABIC_MONTH_TOKENS
+            and any(is_number_form_token(item) for item in previous)
+        ):
+            continue
+        result.append(token)
+    return result
+
+
 def is_number_form_only_difference(before: list[str], after: list[str]) -> bool:
-    """Conservatively flag number-format rewrites for human review, never auto-approve."""
+    """Flag number/date wording rewrites for human review, never auto-approve."""
     if before == after:
         return False
-    before_words = [token for token in before if not is_number_form_token(token)]
-    after_words = [token for token in after if not is_number_form_token(token)]
+    before_words = [
+        token for token in remove_date_connector(before)
+        if not is_number_form_token(token)
+    ]
+    after_words = [
+        token for token in remove_date_connector(after)
+        if not is_number_form_token(token)
+    ]
     return before_words == after_words
 
 
