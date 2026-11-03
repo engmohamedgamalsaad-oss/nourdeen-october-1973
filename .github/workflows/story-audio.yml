@@ -22,7 +22,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: story-audio-${{ github.ref }}
+  group: story-audio-approved-voice-refresh-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   generate:
