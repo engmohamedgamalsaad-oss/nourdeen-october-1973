@@ -13,7 +13,6 @@ import json
 import os
 import re
 import sys
-import subprocess
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -26,7 +25,7 @@ LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "4"
 ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
-FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # preserve the narrator voice already published for this story
+FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 VOICE_SETTINGS = {
     "ar": {
@@ -81,30 +80,6 @@ def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None)
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
     return candidate
-
-def normalize_arabic_audio(path: Path) -> None:
-    """Normalize Arabic Fish tracks to a consistent loudness before publishing."""
-    normalized = path.with_name(path.stem + ".normalized.mp3")
-    try:
-        subprocess.run(
-            [
-                "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
-                "-i", str(path),
-                "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-                "-ar", "44100", "-b:a", "128k", str(normalized),
-            ],
-            check=True,
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.PIPE,
-            timeout=90,
-        )
-        if not normalized.is_file() or normalized.stat().st_size < 512:
-            raise RuntimeError("FFmpeg loudnorm returned an empty audio file")
-        normalized.replace(path)
-    except Exception:
-        normalized.unlink(missing_ok=True)
-        raise
-
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
     """Split only at sentence/word boundaries; never cut through a word."""
@@ -172,16 +147,8 @@ async def synthesize(
     ) from last_error
 
 
-def fish_speed_from_rate(rate: str) -> float:
-    """Translate Edge-style percentage rate into Fish Audio's speed multiplier."""
-    match = re.fullmatch(r"([+-]?\d+(?:\.\d+)?)%", rate.strip())
-    if not match:
-        return 1.0
-    return max(0.5, min(2.0, 1.0 + float(match.group(1)) / 100.0))
-
-
 async def synthesize_fish_audio(
-    text: str, destination: Path, voice_id: str, speed: float = 1.0
+    text: str, destination: Path, voice_id: str
 ) -> None:
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
@@ -195,7 +162,6 @@ async def synthesize_fish_audio(
         "text": text,
         "reference_id": voice_id,
         "format": "mp3",
-        "prosody": {"speed": speed, "volume": 0},
     }, ensure_ascii=False).encode("utf-8")
     last_error: Exception | None = None
 
@@ -217,7 +183,6 @@ async def synthesize_fish_audio(
             if len(audio) < 512:
                 raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
             temporary.write_bytes(audio)
-            normalize_arabic_audio(temporary)
             temporary.replace(destination)
             return
         except urllib.error.HTTPError as exc:
@@ -324,7 +289,7 @@ async def generate_story(story_path: Path) -> bool:
             )
             previous_block_voice = old_segments.get((block_index, 0), {}).get("voice")
             candidates = (
-                [previous_block_voice or fish_voice_id]
+                [fish_voice_id]
                 if use_fish_audio
                 else [primary_voice, *VOICE_FALLBACKS.get(lang, {}).get(speaker, ())]
             )
@@ -359,10 +324,7 @@ async def generate_story(story_path: Path) -> bool:
                         break
                     try:
                         if use_fish_audio:
-                            await synthesize_fish_audio(
-                                chunk_text, destination, candidate_voice,
-                                speed=fish_speed_from_rate(rate),
-                            )
+                            await synthesize_fish_audio(chunk_text, destination, candidate_voice)
                         else:
                             await synthesize(chunk_text, candidate_voice, rate, pitch, destination)
                         selected_voice = candidate_voice
@@ -418,12 +380,11 @@ async def generate_story(story_path: Path) -> bool:
 
 
 async def main() -> int:
-    print(
-        "DISABLED: the story-wide audio generator is frozen during the "
-        "Magdi Yacoub pilot. Use generate_magdi_yacoub_single_audio.py only.",
-        file=sys.stderr,
-    )
-    return 2
+    # The only enabled Fish Audio target is Magdi Yacoub Arabic.
+    # Existing Karma clips remain unchanged; narrator clips are regenerated
+    # with the owner-approved voice because the voice ID is part of the hash.
+    story = ROOT / "stories" / "science" / "015" / "story.json"
+    return 0 if await generate_story(story) else 1
 
 
 if __name__ == "__main__":
