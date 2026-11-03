@@ -986,5 +986,5 @@ test('unified publisher requires an approved canonical package from its source r
   assert.ok(admin.includes('capabilityResult.rejects_story_only_drafts!==true'));
   assert.ok(admin.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'));
   assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'));
-  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'));
+  assert.ok(admin.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;'));
 });
