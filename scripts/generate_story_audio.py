@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import edge_tts
-import review_pronunciation as pronunciation_review
+from audio_text_guard import validate_pronunciation_blocks
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
@@ -113,18 +113,10 @@ def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None)
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
 
-    visible_words = pronunciation_review.tokenize(text)
-    audio_words = pronunciation_review.tokenize(candidate)
-    if visible_words != audio_words:
-        if pronunciation_review.is_number_form_only_difference(visible_words, audio_words):
-            reason = "number/date wording differs and requires editorial correction in the visible story first"
-        else:
-            reason = "spoken words or their order differ from the visible story"
-        raise ValueError(
-            "Unsafe Arabic audio text rejected before TTS: "
-            f"{reason}. Do not rewrite, add, remove, or reorder words; "
-            "only diacritics and punctuation may differ."
-        )
+    validate_pronunciation_blocks(
+        [{"speaker": "narrator", "text": text}],
+        {"0": candidate},
+    )
     return candidate
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
@@ -263,6 +255,10 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         pronunciation_blocks = pronunciation_data.get("blocks")
         if not isinstance(pronunciation_blocks, dict):
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
+        # Validate every override before creating output folders or contacting TTS.
+        validate_pronunciation_blocks(
+            translations.get("ar", {}).get("blocks", []), pronunciation_blocks
+        )
         languages_to_generate = ("ar",)
     else:
         pronunciation_blocks = {}
