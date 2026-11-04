@@ -21,6 +21,31 @@ class AudioTextComparisonTests(unittest.TestCase):
             "REVIEW_NUMBER_FORM",
         )
 
+    def test_exact_approved_arabic_number_rewrite_is_accepted(self):
+        self.assertEqual(
+            audit.compare_text(
+                "ولد في 16 نوفمبر 1935",
+                "ولد في السادس عشر من نوفمبر سنة ألف وتسعمية خمسة وتلاتين",
+                "ar",
+                {
+                    "16": "السادس عشر من",
+                    "1935": "سنة ألف وتسعمية خمسة وتلاتين",
+                },
+            ),
+            "PASS_APPROVED_NUMBER_REWRITE",
+        )
+
+    def test_number_whitelist_does_not_allow_unrelated_word_change(self):
+        self.assertEqual(
+            audit.compare_text(
+                "ولد عام 1935 في بلبيس",
+                "ولد عام ألف وتسعمية خمسة وتلاتين في القاهرة",
+                "ar",
+                {"1935": "ألف وتسعمية خمسة وتلاتين"},
+            ),
+            "FAIL_WORD_IDENTITY_OR_ORDER",
+        )
+
     def test_arabic_added_word_is_a_failure(self):
         self.assertEqual(
             audit.compare_text("العمل مع فريق طبي", "العمل مع مجموعة من الأطباء", "ar"),
