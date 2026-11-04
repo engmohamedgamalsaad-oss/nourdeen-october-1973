@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "scope": {"initial_story": "science/015", "language": "ar",
+    "purpose": "Names, places, institutions and recurring terms for review; not pronunciation corrections."},
+  "entities": [
+    {"id":"magdi-yacoub","type":"person","canonical":"مجدي يعقوب","variants":["الدكتور مجدي يعقوب","دكتور مجدي يعقوب"]},
+    {"id":"aswan","type":"place","canonical":"أسوان","variants":["مدينة أسوان","محافظة أسوان"]},
+    {"id":"belbeis","type":"place","canonical":"بلبيس","variants":["مدينة بلبيس"]},
+    {"id":"sharqia","type":"place","canonical":"الشرقية","variants":["محافظة الشرقية"]},
+    {"id":"cairo-university","type":"institution","canonical":"جامعة القاهرة","variants":[]},
+    {"id":"harefield-hospital","type":"institution","canonical":"مستشفى هارفيلد","variants":["هارفيلد"]},
+    {"id":"magdi-yacoub-heart-foundation","type":"institution","canonical":"مؤسسة مجدي يعقوب للقلب","variants":[]},
+    {"id":"aswan-heart-centre","type":"institution","canonical":"مركز أسوان للقلب","variants":["مركز أسوان"]},
+    {"id":"chain-of-hope","type":"organization","canonical":"سلسلة الأمل","variants":["مؤسسة سلسلة الأمل"]},
+    {"id":"heart-lung-transplant","type":"medical_term","canonical":"زراعة القلب والرئتين","variants":["زراعة القلب والرئة"]},
+    {"id":"cardiothoracic-surgery","type":"medical_term","canonical":"جراحة القلب والصدر","variants":[]},
+    {"id":"congenital-heart-defects","type":"medical_term","canonical":"العيوب الخلقية","variants":["عيوب خلقية"]}
+  ],
+  "title_triggers": ["مدينة","محافظة","قرية","جامعة","مستشفى","مركز","مؤسسة","جمعية","شركة","قصر","جزيرة"],
+  "colloquial_markers": ["إزاي","أكتر","مش","كده","علشان","عايز","عاوز","يعني","دي","ده","بتاع"]
+}
