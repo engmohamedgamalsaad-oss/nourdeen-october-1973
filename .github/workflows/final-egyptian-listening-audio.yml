@@ -19,6 +19,11 @@ jobs:
           ref: audio/final-egyptian-20261104
           persist-credentials: true
 
+      - name: Install FFmpeg for MP3 assembly
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
       - name: Generate full story audio with the selected voices
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
@@ -59,7 +64,7 @@ jobs:
               concat.append(target)
               print(f"GENERATED segment={index:02d} speaker={segment['speaker']} voice={voice} bytes={len(audio)}")
           concat_file = out / "concat.txt"
-          concat_file.write_text("".join("file '" + f.name + "'\\n" for f in concat), encoding="utf-8")
+          concat_file.write_text("".join("file '" + f.name + "'\n" for f in concat), encoding="utf-8")
           final = pathlib.Path("assets/audio/science/magdi-yacoub/ar/magdi-yacoub-egyptian-final-listening.mp3")
           subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", "-y", str(final)], check=True)
           if not final.exists() or final.stat().st_size < 10000:
