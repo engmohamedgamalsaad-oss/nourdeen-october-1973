@@ -1,6 +1,7 @@
 name: Isolated SILMA Ali Mosharrafa Arabic trial
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - experiment/silma-ali-mosharrafa-20261104
