@@ -19,7 +19,7 @@ on:
           - fr
           - it
           - de
-        default: ar
+        default: all
       confirm_fish_audio_request:
         description: "Choose yes only after explicitly approving real audio generation and any Fish Audio credit use"
         required: true
