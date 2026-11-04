@@ -225,7 +225,10 @@ async def generate_story(
     if story_path.name != "story.json" or len(relative.parts) != 4 or relative.parts[0] != "stories":
         raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
     section = relative.parts[1]
-    if section.casefold() in {"october", "october-1973", "october1973"}:
+    # Normalize separators and punctuation so aliases such as october_1973,
+    # October 1973, and october-1973 cannot bypass the protected section gate.
+    section_key = re.sub(r"[^a-z0-9]", "", section.casefold())
+    if "october" in section_key:
         print(f"SKIP protected October story: {relative}")
         return False
 
@@ -394,8 +397,10 @@ async def generate_story(
                 )
                 planned_segments += len(split_audio_chunks(planned_text))
             print(
-                f"DRY RUN ONLY: {relative.parent}/{lang} would produce "
-                f"{planned_segments} segments; no folders, MP3s, manifests, or TTS requests."
+                f"DRY RUN INVENTORY: {relative.parent}/{lang} contains "
+                f"{planned_segments} speakable segments. This is not a regeneration "
+                "or credit estimate; existing manifest matches are not simulated. "
+                "No folders, MP3s, manifests, or TTS requests were created."
             )
             continue
 
