@@ -354,7 +354,7 @@ async def generate_story(story_path: Path) -> bool:
             }
             temporary = manifest_path.with_suffix(".json.partial")
             temporary.write_text(
-                json.dumps(checkpoint_manifest, ensure_ascii=False, indent=2) + "\\n",
+                json.dumps(checkpoint_manifest, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
             )
             temporary.replace(manifest_path)
