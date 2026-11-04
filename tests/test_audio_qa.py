@@ -72,6 +72,37 @@ class PathSafetyTests(unittest.TestCase):
                 audio_qa.safe_audio_path(folder, "linked.mp3")
 
 
+
+
+class AudioTextResolutionTests(unittest.TestCase):
+    def test_legacy_hash_is_pinned_to_version_three(self):
+        import hashlib
+        import json
+        fake_generator = types.SimpleNamespace(GENERATOR_VERSION="4")
+        actual = audio_qa.legacy_hash(fake_generator, "مجدي يعقوب", "voice", "-2%", "+0Hz")
+        expected = hashlib.sha256(json.dumps(
+            [3, "ar", "مجدي يعقوب", "voice", "-2%", "+0Hz"],
+            ensure_ascii=False, separators=(",", ":")
+        ).encode("utf-8")).hexdigest()
+        self.assertEqual(actual, expected)
+
+    def test_audio_text_resolution_uses_reviewed_override(self):
+        fake_generator = types.SimpleNamespace(
+            prepare_arabic_audio_text=lambda original, reviewed=None: reviewed or original
+        )
+        resolved = audio_qa.resolve_audio_text(
+            fake_generator, "مجدي يعقوب", 0, {"0": "مَجْدِي يَعْقُوب"}
+        )
+        self.assertEqual(resolved, "مَجْدِي يَعْقُوب")
+
+    def test_audio_text_resolution_falls_back_to_visible_story_text(self):
+        fake_generator = types.SimpleNamespace(
+            prepare_arabic_audio_text=lambda original, reviewed=None: reviewed or original
+        )
+        resolved = audio_qa.resolve_audio_text(fake_generator, "مجدي يعقوب", 0, {})
+        self.assertEqual(resolved, "مجدي يعقوب")
+
+
 class ReportTests(unittest.TestCase):
     def test_finding_ids_are_unique_within_a_report(self):
         report = audio_qa.Report("science/015")
