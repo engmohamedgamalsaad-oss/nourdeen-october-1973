@@ -105,12 +105,28 @@ def is_original_karma_clip(
     return previous.get("hash") == expected_hash
 
 
+def arabic_word_tokens(text: str) -> list[str]:
+    """Return Arabic/Unicode word tokens without diacritics or punctuation."""
+    normalized = re.sub(
+        r"[\\u0610-\\u061A\\u064B-\\u065F\\u0670\\u06D6-\\u06ED\\u0640]",
+        "",
+        text,
+    ).translate(str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789"))
+    return re.findall(r"[\\w]+", normalized.casefold(), flags=re.UNICODE)
+
+
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
-    """Use a reviewed, story-specific pronunciation script for audio only."""
-    candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
-    candidate = re.sub(r"\s+", " ", candidate).strip()
+    """Allow diacritics/punctuation only; never allow words to change or move."""
+    original = re.sub(r"\\s+", " ", text).strip()
+    candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else original
+    candidate = re.sub(r"\\s+", " ", candidate).strip()
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
+    if arabic_word_tokens(original) != arabic_word_tokens(candidate):
+        raise ValueError(
+            "Arabic audio text rejected: word identity, count, or order differs "
+            "from the visible story text. Only diacritics and punctuation may change."
+        )
     return candidate
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
