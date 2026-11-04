@@ -94,6 +94,36 @@ class ManifestTextComparisonTests(unittest.TestCase):
         )
         self.assertEqual(report["textual_result"], "PASS")
 
+    def test_exact_approved_number_rewrite_is_text_equivalent(self):
+        report = reviewer.review_block(
+            0,
+            {"text": "ولد في 16 نوفمبر 1935", "speaker": "narrator"},
+            [self.make_segment("ولد في السادس عشر من نوفمبر سنة ألف وتسعمية خمسة وتلاتين")],
+            "ولد في السادس عشر من نوفمبر سنة ألف وتسعمية خمسة وتلاتين",
+            {
+                "16": "السادس عشر من",
+                "1935": "سنة ألف وتسعمية خمسة وتلاتين",
+            },
+        )
+        self.assertEqual(
+            report["word_identity_and_order"]["visible_vs_submitted"]["status"],
+            "PASS_APPROVED_NUMBER_REWRITE",
+        )
+        self.assertTrue(report["approved_number_rewrite"])
+        self.assertEqual(report["textual_result"], "PASS")
+        self.assertTrue(report["listening_review_required"])
+
+    def test_unapproved_non_number_rewrite_is_not_text_equivalent(self):
+        report = reviewer.review_block(
+            0,
+            {"text": "ولد عام 1935 في بلبيس", "speaker": "narrator"},
+            [self.make_segment("ولد عام 1935 في القاهرة")],
+            "ولد عام 1935 في القاهرة",
+            {"1935": "ألف وتسعمية خمسة وتلاتين"},
+        )
+        self.assertEqual(report["textual_result"], "FAIL")
+        self.assertFalse(report["approved_number_rewrite"])
+
     def test_manifest_text_mismatch_is_not_hidden(self):
         report = reviewer.review_block(
             0,
