@@ -642,7 +642,7 @@ async def main() -> int:
     return 0 if await generate_story(
         story,
         dry_run=args.dry_run,
-        languages=tuple(args.languages) if args.languages else None,
+        languages=selected_languages or ("ar",),
     ) else 1
 
 
