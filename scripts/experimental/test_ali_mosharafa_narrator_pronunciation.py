@@ -86,8 +86,11 @@ def duration(path):
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     samples = [
-        ("01-baseline-original-text.mp3", BASELINE, "original_unvocalized"),
-        ("02-selective-arabic-diacritics.mp3", SELECTIVELY_VOCALIZED, "selective_manual_diacritics")
+        ("01-baseline-original-text.mp3", BASELINE, "original_unvocalized", False),
+        ("02-selective-arabic-diacritics.mp3", SELECTIVELY_VOCALIZED, "selective_manual_diacritics", False),
+        ("03-phonetic-name-focused.mp3", PHONETIC_NAME_FOCUSED, "name_focused_phonetic_spelling", False),
+        ("04-simplified-wording.mp3", SIMPLIFIED_WORDING, "simpler_natural_wording", False),
+        ("05-multi-speaker-context.mp3", DIALOGUE_TEXT, "single_request_two_approved_voices", True)
     ]
     report = {"story": "ali-mosharafa", "voice_id": VOICE_ID, "model": MODEL,
               "test": "five_strategy_comparison_for_narrator_pronunciation_and_context",
