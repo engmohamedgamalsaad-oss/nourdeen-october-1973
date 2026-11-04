@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 """Isolated Arabic audio production for Ali Mostafa Mosharafa.
 
-Uses the already-approved Fish Audio narrator/Karma identities. Arabic audio text
-is prepared separately with text2tashkeel/rawi-ensemble; visible story text is
-never modified. All outputs stay under artifacts/ and are uploaded by Actions.
+Uses the already-approved Fish Audio narrator/Karma identities. Arabic audio text is sent to Fish Audio in its original, context-bearing wording.
+Automatic full-text diacritization is deliberately disabled because it introduced
+semantic and grammatical pronunciation errors. All outputs stay under artifacts/.
 """
 from __future__ import annotations
 import asyncio, hashlib, json, os, re, subprocess, urllib.request
 from pathlib import Path
-from text2tashkeel import Diacritizer
 
 ROOT = Path(__file__).resolve().parents[2]
 STORY = ROOT / "stories/science/016/story.json"
@@ -76,7 +75,6 @@ async def main():
     story = json.loads(STORY.read_text(encoding="utf-8"))
     assert story.get("slug") == "ali-mosharafa" and story.get("section") == "science"
     blocks = story["i18n"]["ar"]["blocks"]
-    diacritizer = Diacritizer("rawi-ensemble")
     manifest_segments, pronunciation = [], {}
     ordered_files = []
     for block_index, block in enumerate(blocks):
@@ -84,10 +82,11 @@ async def main():
         visible = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
         if speaker not in VOICE_IDS or not visible:
             continue
-        # Rawi is used only to prepare speech text. The source story stays unchanged.
-        speech_text = diacritizer.diacritize(visible)
-        if not isinstance(speech_text, str) or not speech_text.strip():
-            raise RuntimeError(f"Arabic diacritization returned empty text at block {block_index}.")
+        # Preserve the complete sentence context. Do not let an automatic
+        # diacritizer guess word meanings or inject incorrect case endings.
+        speech_text = visible
+        if not speech_text:
+            raise RuntimeError(f"Empty speech text at block {block_index}.")
         pronunciation[str(block_index)] = speech_text
         chunks = split_text(speech_text)
         for chunk_index, chunk in enumerate(chunks):
@@ -111,7 +110,7 @@ async def main():
         raise RuntimeError("No speakable Arabic story blocks were found.")
     (OUT / "audio-pronunciation.json").write_text(json.dumps({
         "version": 1, "story": "ali-mosharafa", "language": "ar",
-        "diacritizer": "text2tashkeel/rawi-ensemble", "blocks": pronunciation
+        "text_preparation": "original_arabic_context_no_auto_diacritization", "blocks": pronunciation
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (OUT / "manifest.json").write_text(json.dumps({
         "version": 1, "engine": "fish-audio+s2.1-pro-free",
@@ -140,7 +139,7 @@ async def main():
         "status": "generated_pending_human_listening_review",
         "story": "ali-mosharafa", "language": "ar",
         "blocks": len(pronunciation), "segments": len(manifest_segments),
-        "voices": VOICE_IDS, "diacritizer": "text2tashkeel/rawi-ensemble",
+        "voices": VOICE_IDS, "text_preparation": "original_arabic_context_no_auto_diacritization",
         "final_file": final.name, "final_duration_seconds": round(probe(final), 2),
         "visible_story_modified": False,
         "audio_postprocessing": ["350ms pauses between chunks", "EBU-style loudness normalization", "24kHz resampling"],
