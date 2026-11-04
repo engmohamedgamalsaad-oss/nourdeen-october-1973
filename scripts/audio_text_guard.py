@@ -5,17 +5,24 @@ import re
 import unicodedata
 from typing import Any
 
-WORD_RE = re.compile(r"[^\\W_]+", re.UNICODE)
+REMOVED_CODEPOINTS = {*range(0x064B, 0x0653), 0x0670, 0x0640}
+REMOVE_MARKS = {codepoint: None for codepoint in REMOVED_CODEPOINTS}
 
 
 def word_tokens(value: str) -> list[str]:
-    """Compare word identity/order while ignoring diacritics and punctuation only."""
-    normalized = unicodedata.normalize("NFKC", value).casefold()
-    normalized = "".join(
-        char for char in normalized
-        if char == "\\u0640" or unicodedata.category(char) != "Mn"
-    ).replace("\\u0640", "")
-    return WORD_RE.findall(normalized)
+    """Ignore only the agreed Arabic marks; preserve every other character identity."""
+    tokens: list[str] = []
+    current: list[str] = []
+    for char in value.translate(REMOVE_MARKS):
+        category = unicodedata.category(char)
+        if char.isalnum() or category.startswith("M"):
+            current.append(char.casefold())
+        elif current:
+            tokens.append("".join(current))
+            current = []
+    if current:
+        tokens.append("".join(current))
+    return tokens
 
 
 def canonicalize_approved_number_rewrites(
