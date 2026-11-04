@@ -2,8 +2,8 @@ name: fish-voice-candidate
 on:
   workflow_dispatch:
     inputs:
-      confirm_paid_generation:
-        description: 'Send one billable Fish Audio sample request'
+      confirm_fish_audio_request:
+        description: 'Send one Fish Audio sample request after explicit approval'
         required: true
         type: boolean
         default: false
@@ -11,7 +11,7 @@ permissions:
   contents: read
 jobs:
   sample:
-    if: inputs.confirm_paid_generation
+    if: inputs.confirm_fish_audio_request
     runs-on: ubuntu-latest
     steps:
       - name: Generate candidate sample

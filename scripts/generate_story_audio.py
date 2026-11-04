@@ -173,7 +173,7 @@ async def synthesize(
 async def synthesize_fish_audio(
     text: str, destination: Path, voice_id: str
 ) -> None:
-    """Make exactly one billable Fish Audio request; never retry ambiguously."""
+    """Make exactly one Fish Audio request; never retry ambiguously."""
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError(
