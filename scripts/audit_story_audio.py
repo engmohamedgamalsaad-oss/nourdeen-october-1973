@@ -19,6 +19,7 @@ ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 sys.path.insert(0, str(ROOT / "scripts"))
 import review_pronunciation as arabic_review  # noqa: E402
+from audio_text_guard import canonicalize_approved_number_rewrites, validate_pronunciation_blocks  # noqa: E402
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -37,11 +38,23 @@ def tokens(text: str, language: str) -> list[str]:
     return re.findall(r"[^\W_]+", text.casefold(), flags=re.UNICODE)
 
 
-def compare_text(visible: str, submitted: str, language: str) -> str:
+def compare_text(
+    visible: str, submitted: str, language: str,
+    approved_number_rewrites: dict[str, Any] | None = None,
+) -> str:
     before = tokens(visible, language)
     after = tokens(submitted, language)
     if before == after:
         return "PASS"
+    if language == "ar" and approved_number_rewrites:
+        try:
+            canonical = canonicalize_approved_number_rewrites(
+                submitted, approved_number_rewrites
+            )
+            if before == canonical:
+                return "PASS_APPROVED_NUMBER_REWRITE"
+        except ValueError:
+            pass
     if language == "ar" and arabic_review.is_number_form_only_difference(before, after):
         return "REVIEW_NUMBER_FORM"
     return "FAIL_WORD_IDENTITY_OR_ORDER"
@@ -108,6 +121,15 @@ def audit_language(
     if not isinstance(pronunciation_blocks, dict):
         errors.append("audio-pronunciation blocks must be an object")
         pronunciation_blocks = {}
+    approved_number_rewrites = pronunciation.get("approved_number_rewrites", {})
+    if not isinstance(approved_number_rewrites, dict):
+        errors.append("approved number rewrites must be an object")
+        approved_number_rewrites = {}
+    if language == "ar":
+        try:
+            validate_pronunciation_blocks(blocks, pronunciation_blocks, approved_number_rewrites)
+        except ValueError as exc:
+            errors.append(str(exc))
 
     grouped: dict[int, list[dict[str, Any]]] = {}
     seen: set[tuple[int, int]] = set()
@@ -144,7 +166,10 @@ def audit_language(
             continue
         expected_indices.add(index)
         candidate = pronunciation_blocks.get(str(index), visible) if language == "ar" else visible
-        source_result = compare_text(visible, str(candidate), language)
+        source_result = compare_text(
+            visible, str(candidate), language,
+            approved_number_rewrites.get(str(index), {}) if language == "ar" else {},
+        )
         segments = sorted(grouped.get(index, []), key=lambda item: int(item.get("chunk_index", 0)))
         if not segments:
             manifest_result = "MISSING_SEGMENT"
