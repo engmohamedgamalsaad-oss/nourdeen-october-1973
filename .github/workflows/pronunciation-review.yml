@@ -44,11 +44,11 @@ jobs:
       - name: Run guarded audio generator without contacting Fish Audio
         run: python scripts/generate_story_audio.py --dry-run
 
-      - name: Run focused unit and pilot integration tests
-        run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
-
       - name: Run shared Arabic pronunciation dictionary tests
         run: python scripts/test_arabic_pronunciation.py
+
+      - name: Run focused unit and pilot integration tests
+        run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
 
       - name: Run the read-only pilot report
         run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
