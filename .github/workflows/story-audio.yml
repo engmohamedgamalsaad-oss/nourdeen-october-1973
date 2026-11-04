@@ -1,10 +1,28 @@
-name: story-audio-magdi-yacoub-pilot
+name: Khaledoon story audio generation
 
 on:
   workflow_dispatch:
     inputs:
+      story_path:
+        description: "Repository path to one published story.json (October is protected)"
+        required: true
+        type: string
+        default: "stories/science/015/story.json"
+      languages:
+        description: "Use the story default, all five languages, or one language"
+        required: true
+        type: choice
+        options:
+          - default
+          - all
+          - ar
+          - en
+          - fr
+          - it
+          - de
+        default: default
       confirm_fish_audio_request:
-        description: "اختر yes فقط بعد الموافقة الصريحة على إرسال طلب توليد إلى Fish Audio"
+        description: "Choose yes only after explicitly approving real audio generation and any Fish Audio credit use"
         required: true
         type: choice
         options:
@@ -16,14 +34,14 @@ permissions:
   contents: write
 
 concurrency:
-  group: magdi-yacoub-arabic-audio-pilot
+  group: khaledoon-story-audio-generation
   cancel-in-progress: false
 
 jobs:
   generate:
     if: inputs.confirm_fish_audio_request == 'yes'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out main
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
@@ -31,34 +49,54 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Install FFmpeg
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
-
       - name: Install Python audio dependency
         run: python -m pip install edge-tts
 
-      - name: Validate the Magdi Yacoub Arabic generator
-        run: python -m py_compile scripts/generate_story_audio.py
+      - name: Validate generator and guard syntax
+        run: python -m py_compile scripts/audio_text_guard.py scripts/generate_story_audio.py
 
-      - name: Generate Magdi Yacoub Arabic audio
+      - name: Generate the selected story and languages
         env:
-          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py --confirm-generation
-
-      - name: Commit only Magdi Yacoub Arabic audio and its manifest
+          FISH_AUDIO_API_KEY: \${{ secrets.FISH_AUDIO_API_KEY }}
+          STORY_PATH: \${{ inputs.story_path }}
+          LANGUAGE_SELECTION: \${{ inputs.languages }}
         shell: bash
         run: |
           set -euo pipefail
+          args=(--story "$STORY_PATH" --confirm-generation)
+          case "$LANGUAGE_SELECTION" in
+            default) ;;
+            all) args+=(--languages ar en fr it de) ;;
+            ar|en|fr|it|de) args+=(--languages "$LANGUAGE_SELECTION") ;;
+            *) echo "Unsupported language selection"; exit 2 ;;
+          esac
+          python scripts/generate_story_audio.py "\${args[@]}"
+
+      - name: Commit only the selected story audio
+        env:
+          STORY_PATH: \${{ inputs.story_path }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          read -r section slug < <(python - "$STORY_PATH" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+          path = Path(sys.argv[1])
+          if not path.is_absolute():
+              path = Path.cwd() / path
+          package = json.loads(path.read_text(encoding="utf-8"))
+          print(package["section"], package["slug"])
+          PY
+          )
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/audio/science/magdi-yacoub/ar/*.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
+          git add "assets/audio/$section/$slug/"
           if git diff --cached --quiet; then
-            echo 'The approved pilot audio is already current.'
+            echo 'The selected story audio is already current.'
             exit 0
           fi
-          git commit -m 'Generate Magdi Yacoub Arabic with approved narrator voice'
+          git commit -m "Generate audio for $section/$slug"
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
