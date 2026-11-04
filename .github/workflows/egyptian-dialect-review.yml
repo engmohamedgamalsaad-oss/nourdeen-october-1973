@@ -31,3 +31,6 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_review_egyptian_dialect.py' -v
       - name: Review Magdi Yacoub audio source (read-only)
         run: python scripts/review_egyptian_dialect.py > "$RUNNER_TEMP/egyptian-dialect-review.json"
+
+      - name: Print read-only dialect report
+        run: cat "$RUNNER_TEMP/egyptian-dialect-review.json"
