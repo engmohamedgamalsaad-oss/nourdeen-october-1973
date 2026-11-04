@@ -158,11 +158,17 @@ class GenerationConfirmationTests(unittest.TestCase):
             story_path = root / "stories" / "science" / "001" / "story.json"
             story_path.parent.mkdir(parents=True)
             text = "يعني مَرْكَز أسوان مش بس بيعالج المرضى؟"
+            blocks = [
+                {"speaker": "other", "text": ""},
+                {"speaker": "other", "text": ""},
+                {"speaker": "other", "text": ""},
+                {"speaker": "karma", "text": text},
+            ]
             package = {
                 "format": "KHALEDOON_STORY",
                 "section": "science",
                 "slug": "magdi-yacoub",
-                "i18n": {"ar": {"blocks": [{"speaker": "karma", "text": text}]}},
+                "i18n": {"ar": {"blocks": blocks}},
             }
             story_path.write_text(json.dumps(package, ensure_ascii=False), encoding="utf-8")
             (story_path.parent / "data.json").write_text(
@@ -172,13 +178,13 @@ class GenerationConfirmationTests(unittest.TestCase):
                 json.dumps({
                     "story": "magdi-yacoub",
                     "language": "ar",
-                    "blocks": {"0": text},
+                    "blocks": {"3": text},
                 }, ensure_ascii=False),
                 encoding="utf-8",
             )
             audio_dir = root / "assets" / "audio" / "science" / "magdi-yacoub" / "ar"
             audio_dir.mkdir(parents=True)
-            destination = audio_dir / "000.mp3"
+            destination = audio_dir / "003.mp3"
             destination.write_bytes(b"o" * 1024)
             original_manifest = {
                 "version": 1,
@@ -187,13 +193,13 @@ class GenerationConfirmationTests(unittest.TestCase):
                 "section": "science",
                 "language": "ar",
                 "segments": [{
-                    "block_index": 0,
+                    "block_index": 3,
                     "chunk_index": 0,
                     "speaker": "karma",
                     "voice": generator.FISH_AUDIO_KARMA_VOICE_ID,
                     "provider": "fish-audio",
                     "model": generator.FISH_AUDIO_MODEL,
-                    "src": "000.mp3",
+                    "src": "003.mp3",
                     "hash": generator.KARMA_ORIGINAL_MANIFEST_HASH[3],
                     "text": text,
                 }],
