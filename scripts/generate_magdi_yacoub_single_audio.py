@@ -7,8 +7,6 @@ import json
 import os
 import re
 import subprocess
-import time
-import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -71,6 +69,7 @@ def text_hash(text: str) -> str:
 
 
 def synthesize(api_key: str, destination: Path) -> None:
+    """Send one Fish Audio request; an ambiguous failure is never retried."""
     payload = json.dumps(
         {
             "text": AUDIO_TEXT,
@@ -85,34 +84,19 @@ def synthesize(api_key: str, destination: Path) -> None:
         "model": MODEL,
     }
     raw_tmp = destination.with_name(".001.generated.tmp.mp3")
-    last_error: Exception | None = None
+    request = urllib.request.Request(
+        "https://api.fish.audio/v1/tts",
+        data=payload,
+        headers=headers,
+        method="POST",
+    )
 
     try:
-        for attempt in range(1, 4):
-            raw_tmp.unlink(missing_ok=True)
-            request = urllib.request.Request(
-                "https://api.fish.audio/v1/tts",
-                data=payload,
-                headers=headers,
-                method="POST",
-            )
-            try:
-                with urllib.request.urlopen(request, timeout=90) as response:
-                    audio = response.read()
-                if len(audio) < 512:
-                    raise RuntimeError("Fish Audio returned an empty or invalid MP3.")
-                raw_tmp.write_bytes(audio)
-                break
-            except urllib.error.HTTPError as exc:
-                detail = exc.read(1000).decode("utf-8", errors="replace")
-                last_error = RuntimeError(f"Fish Audio HTTP {exc.code}: {detail}")
-                if exc.code not in (408, 409, 425, 429, 500, 502, 503, 504):
-                    raise last_error from exc
-            except (urllib.error.URLError, TimeoutError, OSError, RuntimeError) as exc:
-                last_error = exc
-            if attempt == 3:
-                raise RuntimeError(f"Fish Audio failed after 3 attempts: {last_error}") from last_error
-            time.sleep(2 ** attempt)
+        with urllib.request.urlopen(request, timeout=90) as response:
+            audio = response.read()
+        if len(audio) < 512:
+            raise RuntimeError("Fish Audio returned an empty or invalid MP3.")
+        raw_tmp.write_bytes(audio)
 
         probe = subprocess.run(
             [

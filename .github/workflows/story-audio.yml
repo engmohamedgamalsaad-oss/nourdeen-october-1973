@@ -2,11 +2,6 @@ name: story-audio-magdi-yacoub-pilot
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/generate_story_audio.py'
-      - '.github/workflows/story-audio.yml'
 
 permissions:
   contents: write

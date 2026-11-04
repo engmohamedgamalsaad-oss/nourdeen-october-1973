@@ -1,11 +1,6 @@
 name: Magdi Yacoub — one Arabic audio segment
-# A controlled push to this workflow file triggers the one-segment pilot.
-# Generate the pilot using the user's explicitly selected narrator voice B.
+# Manual dispatch only; workflow or script edits must never trigger paid synthesis.
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/magdi-yacoub-single-segment.yml'
   workflow_dispatch:
 permissions:
   contents: write

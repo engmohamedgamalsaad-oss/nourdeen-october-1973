@@ -1,13 +1,17 @@
 name: fish-voice-diagnostic
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/fish-voice-diagnostic.yml'
+  workflow_dispatch:
+    inputs:
+      confirm_paid_generation:
+        description: 'Send two billable Fish Audio comparison requests'
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
   diagnose:
+    if: inputs.confirm_paid_generation
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:

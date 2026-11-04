@@ -1,13 +1,17 @@
 name: fish-voice-candidate
 on:
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/fish-voice-candidate.yml'
+  workflow_dispatch:
+    inputs:
+      confirm_paid_generation:
+        description: 'Send one billable Fish Audio sample request'
+        required: true
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
   sample:
+    if: inputs.confirm_paid_generation
     runs-on: ubuntu-latest
     steps:
       - name: Generate candidate sample
