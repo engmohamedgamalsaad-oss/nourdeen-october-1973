@@ -31,6 +31,13 @@ FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-appro
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 # Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
 FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 4, 6, 8, 10, 11}
+# Exact byte hashes of the three owner-approved original Karma clips.
+# They are immutable in this narrator-only pilot.
+KARMA_ORIGINAL_AUDIO_SHA256 = {
+    0: "3d531998fb878488a7f95d5d5f8dd2b15e4df9007529ea4f3a9d7e53909c9c64",
+    2: "a8c4f80cdf7b59eb8ba2676eef94a109e20c86b51476d4b45c546bdca3e9ea10",
+    3: "88ee90b74d24062258dc1c70a18eec8aaf0430d4043f671addad5d4926a73064",
+}
 VOICE_SETTINGS = {
     "ar": {
         "karma": ("ar-EG-SalmaNeural", "+0%", "+8Hz"),
@@ -75,6 +82,28 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
         fields.insert(1, ARABIC_AUDIO_TEXT_VERSION)
     payload = json.dumps(fields, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def is_original_karma_clip(
+    block_index: int,
+    chunk_index: int,
+    text: str,
+    voice: str,
+    previous: dict[str, Any],
+    destination: Path,
+) -> bool:
+    expected_hash = KARMA_ORIGINAL_AUDIO_SHA256.get(block_index)
+    if (
+        expected_hash is None
+        or chunk_index != 0
+        or previous.get("voice") != voice
+        or previous.get("text") != text
+        or not destination.is_file()
+        or destination.stat().st_size < 512
+    ):
+        return False
+    actual_hash = hashlib.sha256(destination.read_bytes()).hexdigest()
+    return actual_hash == expected_hash
 
 
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
@@ -281,6 +310,20 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                     else FISH_AUDIO_NARRATOR_VOICE_ID
                 )
                 planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
+                if planned_speaker == "karma":
+                    if len(planned_chunks) != 1 or not is_original_karma_clip(
+                        planned_index,
+                        0,
+                        planned_chunks[0],
+                        planned_voice,
+                        old_segments.get((planned_index, 0), {}),
+                        output_dir / f"{planned_index:03d}.mp3",
+                    ):
+                        raise RuntimeError(
+                            "Safety stop before Fish Audio: original Karma audio "
+                            f"block {planned_index} failed its immutable hash check."
+                        )
+                    continue
                 for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
                     planned_previous = old_segments.get(
                         (planned_index, planned_chunk_index), {}
@@ -405,6 +448,20 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 digest = None
                 for candidate_voice in ordered_candidates:
                     candidate_hash = text_hash(chunk_text, candidate_voice, rate, pitch, lang)
+                    if speaker == "karma" and is_original_karma_clip(
+                        block_index,
+                        chunk_index,
+                        chunk_text,
+                        candidate_voice,
+                        previous,
+                        destination,
+                    ):
+                        selected_voice = candidate_voice
+                        digest = previous["hash"]
+                        print(
+                            f"PRESERVED ORIGINAL KARMA {relative.parent}/{lang}/{filename}"
+                        )
+                        break
                     if (
                         previous.get("hash") == candidate_hash
                         and previous_voice in (None, candidate_voice)
