@@ -94,6 +94,51 @@ class GenerationConfirmationTests(unittest.TestCase):
             fish_tts.assert_not_awaited()
 
 
+
+    def test_magdi_preflight_stops_before_tts_for_unapproved_block(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            story_path = root / "stories" / "science" / "001" / "story.json"
+            story_path.parent.mkdir(parents=True)
+            blocks = [
+                {"speaker": "karma", "text": "مرحبا"},
+                {"speaker": "narrator", "text": "النص الأول"},
+                {"speaker": "other", "text": ""},
+                {"speaker": "other", "text": ""},
+                {"speaker": "other", "text": ""},
+                {"speaker": "narrator", "text": "النص الأخير"},
+            ]
+            package = {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "magdi-yacoub",
+                "i18n": {"ar": {"blocks": blocks}},
+            }
+            story_path.write_text(json.dumps(package, ensure_ascii=False), encoding="utf-8")
+            (story_path.parent / "data.json").write_text(
+                json.dumps({"published": True}), encoding="utf-8"
+            )
+            pronunciation = {
+                "story": "magdi-yacoub",
+                "language": "ar",
+                "blocks": {"0": "مرحبا", "1": "النص الأول", "5": "النص الأخير"},
+            }
+            (story_path.parent / "audio-pronunciation.json").write_text(
+                json.dumps(pronunciation, ensure_ascii=False), encoding="utf-8"
+            )
+            audio_dir = root / "assets" / "audio" / "science" / "magdi-yacoub" / "ar"
+            with patch.object(generator, "ROOT", root):
+                with patch.object(generator, "is_original_karma_clip", return_value=True):
+                    with patch.object(generator, "synthesize_fish_audio", new=AsyncMock()) as fish_tts:
+                        with self.assertRaisesRegex(RuntimeError, "unexpected regeneration for block 5"):
+                            asyncio.run(
+                                generator.generate_story(
+                                    story_path, dry_run=False, languages=("ar",)
+                                )
+                            )
+            fish_tts.assert_not_awaited()
+            self.assertFalse(audio_dir.exists())
+
     def test_generator_rejects_story_path_outside_repository(self):
         with tempfile.TemporaryDirectory() as temporary:
             outside = Path(temporary) / "story.json"
