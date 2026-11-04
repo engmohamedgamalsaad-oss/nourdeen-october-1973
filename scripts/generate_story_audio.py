@@ -22,7 +22,7 @@ from typing import Any
 
 import edge_tts
 
-from arabic_pronunciation import load_dictionary, prepare_audio_text as prepare_with_shared_dictionary
+from arabic_pronunciation import lexical_form, load_dictionary, prepare_audio_text as prepare_with_shared_dictionary
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
@@ -33,6 +33,9 @@ FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-appro
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 # Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
 FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 6, 7, 8, 10}
+# One-time owner-approved Karma pronunciation sample; all other Karma clips stay immutable.
+FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS = {0, 2}
+FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS = {3}
 # Original manifest input hashes for the three owner-approved Karma clips.
 # They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
 KARMA_ORIGINAL_MANIFEST_HASH = {
@@ -99,7 +102,7 @@ def is_original_karma_clip(
         expected_hash is None
         or chunk_index != 0
         or previous.get("voice") != voice
-        or previous.get("text") != text
+        or lexical_form(str(previous.get("text") or "")) != lexical_form(text)
         or not destination.is_file()
         or destination.stat().st_size < 512
     ):
@@ -306,7 +309,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 planned_text = prepare_arabic_audio_text(
                     planned_original,
                     pronunciation_blocks.get(str(planned_index)),
-                    use_shared_dictionary=(planned_speaker == "narrator"),
+                    use_shared_dictionary=(planned_speaker == "narrator" or planned_index in FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS),
                 )
                 planned_chunks = split_audio_chunks(planned_text)
                 planned_voice = (
@@ -316,18 +319,46 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 )
                 planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
                 if planned_speaker == "karma":
-                    if len(planned_chunks) != 1 or not is_original_karma_clip(
-                        planned_index,
-                        0,
-                        planned_chunks[0],
-                        planned_voice,
-                        old_segments.get((planned_index, 0), {}),
-                        output_dir / f"{planned_index:03d}.mp3",
+                    planned_previous = old_segments.get((planned_index, 0), {})
+                    planned_destination = output_dir / f"{planned_index:03d}.mp3"
+                    if len(planned_chunks) != 1:
+                        raise RuntimeError(
+                            f"Safety stop before Fish Audio: Karma block {planned_index} must remain one chunk."
+                        )
+                    if planned_index in FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS:
+                        if not is_original_karma_clip(
+                            planned_index, 0, planned_chunks[0], planned_voice,
+                            planned_previous, planned_destination,
+                        ):
+                            raise RuntimeError(
+                                "Safety stop before Fish Audio: immutable Karma audio "
+                                f"block {planned_index} failed its original hash check."
+                            )
+                        continue
+                    if planned_index not in FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS:
+                        raise RuntimeError(
+                            f"Safety stop before Fish Audio: Karma block {planned_index} is not approved for regeneration."
+                        )
+                    planned_hash = text_hash(
+                        planned_chunks[0], planned_voice, planned_rate, planned_pitch, "ar"
+                    )
+                    is_unchanged = (
+                        planned_previous.get("hash") == planned_hash
+                        and planned_previous.get("voice") == planned_voice
+                        and planned_destination.is_file()
+                        and planned_destination.stat().st_size >= 512
+                    )
+                    if is_unchanged:
+                        continue
+                    if not is_original_karma_clip(
+                        planned_index, 0, planned_chunks[0], planned_voice,
+                        planned_previous, planned_destination,
                     ):
                         raise RuntimeError(
-                            "Safety stop before Fish Audio: original Karma audio "
-                            f"block {planned_index} failed its immutable hash check."
+                            "Safety stop before Fish Audio: approved Karma sample "
+                            f"block {planned_index} is neither original nor current."
                         )
+                    planned_regenerations.add(planned_index)
                     continue
                 for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
                     planned_previous = old_segments.get(
@@ -359,16 +390,16 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                             )
                         planned_regenerations.add(planned_index)
 
-            unexpected_regenerations = planned_regenerations - FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+            all_allowed_regenerations = FISH_AUDIO_ALLOWED_REGEN_BLOCKS | FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS
+            unexpected_regenerations = planned_regenerations - all_allowed_regenerations
             if unexpected_regenerations:
                 raise RuntimeError(
                     "Safety stop before Fish Audio: unexpected blocks need regeneration: "
                     f"{sorted(unexpected_regenerations)}."
                 )
             print(
-                "PILOT PREFLIGHT OK: remaining narrator blocks to generate "
-                f"{sorted(planned_regenerations)}; already-current approved blocks "
-                f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
+                "PILOT PREFLIGHT OK: remaining approved narrator/Karma blocks to generate "
+                f"{sorted(planned_regenerations)}; no other blocks may be regenerated."
             )
 
         if dry_run:
@@ -424,7 +455,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 prepare_arabic_audio_text(
                     original_text,
                     pronunciation_blocks.get(str(block_index)),
-                    use_shared_dictionary=(speaker == "narrator"),
+                    use_shared_dictionary=(speaker == "narrator" or block_index in FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS),
                 )
                 if lang == "ar" else original_text
             )
@@ -460,13 +491,17 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 digest = None
                 for candidate_voice in ordered_candidates:
                     candidate_hash = text_hash(chunk_text, candidate_voice, rate, pitch, lang)
-                    if speaker == "karma" and is_original_karma_clip(
-                        block_index,
-                        chunk_index,
-                        chunk_text,
-                        candidate_voice,
-                        previous,
-                        destination,
+                    if (
+                        speaker == "karma"
+                        and block_index in FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS
+                        and is_original_karma_clip(
+                            block_index,
+                            chunk_index,
+                            chunk_text,
+                            candidate_voice,
+                            previous,
+                            destination,
+                        )
                     ):
                         selected_voice = candidate_voice
                         digest = previous["hash"]
