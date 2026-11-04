@@ -157,6 +157,11 @@ class GenerationConfirmationTests(unittest.TestCase):
             )
             voice, rate, pitch = generator.VOICE_SETTINGS["en"]["narrator"]
             old_hash = generator.legacy_text_hash(text, voice, rate, pitch, "en")
+            expected_legacy_hash = __import__("hashlib").sha256(json.dumps(
+                [3, "en", text, voice, rate, pitch],
+                ensure_ascii=False, separators=(",", ":")
+            ).encode("utf-8")).hexdigest()
+            self.assertEqual(old_hash, expected_legacy_hash)
             audio_dir = root / "assets" / "audio" / "science" / "legacy-audio-story" / "en"
             audio_dir.mkdir(parents=True)
             (audio_dir / "000.mp3").write_bytes(b"x" * 1024)
