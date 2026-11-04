@@ -190,7 +190,7 @@ async def synthesize_fish_audio(
         raise
 
 
-async def generate_story(story_path: Path) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -259,7 +259,7 @@ async def generate_story(story_path: Path) -> bool:
         }
 
         # Preflight every existing Arabic segment before making any billable request.
-        # This pilot must regenerate exactly six narrator blocks and nothing else.
+        # This pilot may regenerate only the six approved narrator blocks.
         if lang == "ar" and pronunciation_data:
             planned_regenerations: set[int] = set()
             for planned_index, planned_block in enumerate(blocks):
@@ -322,6 +322,12 @@ async def generate_story(story_path: Path) -> bool:
                 f"{sorted(planned_regenerations)}; already-current approved blocks "
                 f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
             )
+
+        if dry_run:
+            if not pronunciation_data:
+                raise RuntimeError("Dry-run mode requires the approved Arabic pronunciation file.")
+            print("DRY RUN ONLY: no Fish Audio request was sent and no MP3 or manifest was changed.")
+            return True
 
         segments: list[dict[str, Any]] = []
         processed_manifest_segments = {
@@ -469,11 +475,19 @@ async def generate_story(story_path: Path) -> bool:
 
 
 async def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate the approved Khaledoon audio pilot.")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate the Magdi Yacoub Arabic regeneration scope without contacting any TTS provider.",
+    )
+    args = parser.parse_args()
+
     # The only enabled Fish Audio target is Magdi Yacoub Arabic.
     # Existing Karma clips remain unchanged; narrator clips are regenerated
     # with the owner-approved voice because the voice ID is part of the hash.
     story = ROOT / "stories" / "science" / "015" / "story.json"
-    return 0 if await generate_story(story) else 1
+    return 0 if await generate_story(story, dry_run=args.dry_run) else 1
 
 
 if __name__ == "__main__":
