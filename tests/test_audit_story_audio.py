@@ -40,6 +40,54 @@ class AudioTextComparisonTests(unittest.TestCase):
         )
 
 
+
+class RepositoryCoverageTests(unittest.TestCase):
+    def test_reports_missing_translations_for_all_five_languages(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            story_dir = root / "stories" / "science" / "001"
+            story_dir.mkdir(parents=True)
+            package = {
+                "section": "science",
+                "slug": "sample-story",
+                "i18n": {
+                    "ar": {"blocks": [{"speaker": "narrator", "text": "نص تجريبي"}]}
+                },
+            }
+            (story_dir / "story.json").write_text(
+                __import__("json").dumps(package, ensure_ascii=False), encoding="utf-8"
+            )
+            report = audit.audit_repository(root)
+            languages = report["stories"][0]["languages"]
+            self.assertEqual(set(languages), {"ar", "en", "fr", "it", "de"})
+            for language in ("en", "fr", "it", "de"):
+                self.assertEqual(languages[language]["status"], "MISSING_STORY_TRANSLATION")
+
+    def test_custom_root_is_used_for_audio_inventory(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            story_dir = root / "stories" / "science" / "001"
+            story_dir.mkdir(parents=True)
+            audio_dir = root / "assets" / "audio" / "science" / "sample-story" / "ar"
+            audio_dir.mkdir(parents=True)
+            package = {
+                "section": "science",
+                "slug": "sample-story",
+                "i18n": {"ar": {"blocks": [{"speaker": "narrator", "text": "نص"}]}},
+            }
+            story_path = story_dir / "story.json"
+            story_path.write_text(__import__("json").dumps(package, ensure_ascii=False), encoding="utf-8")
+            (audio_dir / "manifest.json").write_text(
+                __import__("json").dumps({
+                    "story": "sample-story", "section": "science", "language": "ar",
+                    "segments": [{"block_index": 0, "chunk_index": 0, "src": "001.mp3", "text": "نص"}],
+                }, ensure_ascii=False), encoding="utf-8"
+            )
+            (audio_dir / "001.mp3").write_bytes(b"x" * 600)
+            result = audit.audit_language(story_path, package, "ar", root=root)
+            self.assertEqual(result["status"], "TEXT_MATCH")
+
+
 class AudioPathSafetyTests(unittest.TestCase):
     def test_rejects_path_traversal(self):
         with tempfile.TemporaryDirectory() as tmp:
