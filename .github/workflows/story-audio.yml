@@ -9,18 +9,17 @@ on:
         type: string
         default: "stories/science/015/story.json"
       languages:
-        description: "Use the story default, all five languages, or one language"
+        description: "Select one language, Arabic by default, or explicitly choose all five"
         required: true
         type: choice
         options:
-          - default
-          - all
           - ar
+          - all
           - en
           - fr
           - it
           - de
-        default: default
+        default: ar
       confirm_fish_audio_request:
         description: "Choose yes only after explicitly approving real audio generation and any Fish Audio credit use"
         required: true
@@ -65,7 +64,6 @@ jobs:
           set -euo pipefail
           args=(--story "$STORY_PATH" --confirm-generation)
           case "$LANGUAGE_SELECTION" in
-            default) ;;
             all) args+=(--languages ar en fr it de) ;;
             ar|en|fr|it|de) args+=(--languages "$LANGUAGE_SELECTION") ;;
             *) echo "Unsupported language selection"; exit 2 ;;
