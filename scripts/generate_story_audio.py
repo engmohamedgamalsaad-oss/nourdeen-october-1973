@@ -154,29 +154,20 @@ def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
 async def synthesize(
     text: str, voice: str, rate: str, pitch: str, destination: Path
 ) -> None:
+    """Make one Edge TTS request; surface failures without automatic resubmission."""
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(destination.stem + ".partial.mp3")
-    last_error: Exception | None = None
-    for attempt in range(1, 4):
-        try:
-            temporary.unlink(missing_ok=True)
-            communicator = edge_tts.Communicate(
-                text, voice, rate=rate, pitch=pitch
-            )
-            await asyncio.wait_for(communicator.save(str(temporary)), timeout=35)
-            if not temporary.is_file() or temporary.stat().st_size < 512:
-                raise RuntimeError("TTS returned an empty or invalid MP3 file")
-            temporary.replace(destination)
-            await asyncio.sleep(1.0)
-            return
-        except Exception as exc:
-            last_error = exc
-            temporary.unlink(missing_ok=True)
-            if attempt < 3:
-                await asyncio.sleep(2 ** attempt)
-    raise RuntimeError(
-        f"Failed after 3 attempts for voice {voice}: {last_error}"
-    ) from last_error
+    try:
+        communicator = edge_tts.Communicate(
+            text, voice, rate=rate, pitch=pitch
+        )
+        await asyncio.wait_for(communicator.save(str(temporary)), timeout=35)
+        if not temporary.is_file() or temporary.stat().st_size < 512:
+            raise RuntimeError("TTS returned an empty or invalid MP3 file")
+        temporary.replace(destination)
+    except Exception:
+        temporary.unlink(missing_ok=True)
+        raise
 
 
 async def synthesize_fish_audio(
