@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Generate static, per-speaker audio for published Khaledoon story packages.
 
+Refresh the Magdi Yacoub Arabic narrator clips using the approved voice B.
+
 The workflow intentionally excludes the October section. Audio is an optional
 enhancement: a failed synthesis never changes the story package or its page.
 """
