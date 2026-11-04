@@ -50,10 +50,35 @@ def file_hash(path: Path) -> str:
 
 
 def legacy_hash(generator, text: str, voice: str, rate: str, pitch: str) -> str:
-    # Historical v3 hash did not include ARABIC_AUDIO_TEXT_VERSION.
-    payload = json.dumps([generator.GENERATOR_VERSION, LANG, text, voice, rate, pitch],
+    # Historical v3 hash used a literal version 3 and omitted ARABIC_AUDIO_TEXT_VERSION.
+    payload = json.dumps([3, LANG, text, voice, rate, pitch],
                          ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def resolve_audio_text(generator, original: str, block_index: int,
+                       pronunciation_blocks: dict[str, str]) -> str:
+    """Use the validated story-specific pronunciation override when present."""
+    return generator.prepare_arabic_audio_text(
+        original, pronunciation_blocks.get(str(block_index))
+    )
+
+
+def load_pronunciation_overrides(story_path: Path, slug: str,
+                                 arabic_blocks: list[dict[str, Any]]) -> dict[str, str]:
+    """Read and validate audio-only Arabic overrides without modifying any file."""
+    path = story_path.with_name("audio-pronunciation.json")
+    if not path.is_file():
+        return {}
+    data = read_json(path)
+    if data.get("story") != slug or data.get("language") != "ar":
+        raise ValueError(f"{path}: story/language metadata mismatch")
+    overrides = data.get("blocks")
+    if not isinstance(overrides, dict):
+        raise ValueError(f"{path}: blocks must be an object")
+    from audio_text_guard import validate_pronunciation_blocks
+    validate_pronunciation_blocks(arabic_blocks, overrides)
+    return overrides
 
 
 def strip_marks(value: str) -> str:
@@ -205,6 +230,7 @@ def analyse(generator, section: str, story_id: str, lexicon: dict[str, Any]) -> 
     blocks = (package.get("i18n") or {}).get(LANG, {}).get("blocks")
     if not isinstance(blocks, list) or not blocks:
         raise ValueError(f"{story_path}: missing Arabic blocks")
+    pronunciation_blocks = load_pronunciation_overrides(story_path, slug, blocks)
     data_path = story_path.with_name("data.json")
     if not data_path.is_file() or read_json(data_path).get("published") is not True:
         raise ValueError("Only published stories are supported")
@@ -245,7 +271,7 @@ def analyse(generator, section: str, story_id: str, lexicon: dict[str, Any]) -> 
         original = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
         if speaker not in SPEAKERS or not original:
             continue
-        audio_text = generator.prepare_arabic_audio_text(original)
+        audio_text = resolve_audio_text(generator, original, block_index, pronunciation_blocks)
         chunks = generator.split_audio_chunks(audio_text)
         _, rate, pitch = generator.VOICE_SETTINGS[LANG][speaker]
         spans, cursor = [], 0
