@@ -109,7 +109,7 @@ class ManifestTextComparisonTests(unittest.TestCase):
             report["word_identity_and_order"]["visible_vs_submitted"]["status"],
             "PASS_APPROVED_NUMBER_REWRITE",
         )
-        self.assertTrue(report["approved_number_rewrite"])
+        self.assertTrue(report["word_identity_and_order"]["visible_vs_submitted"]["approved_number_rewrite"])
         self.assertEqual(report["textual_result"], "PASS")
         self.assertTrue(report["listening_review_required"])
 
@@ -122,7 +122,7 @@ class ManifestTextComparisonTests(unittest.TestCase):
             {"1935": "ألف وتسعمية خمسة وتلاتين"},
         )
         self.assertEqual(report["textual_result"], "FAIL")
-        self.assertFalse(report["approved_number_rewrite"])
+        self.assertFalse(report["word_identity_and_order"]["visible_vs_submitted"]["approved_number_rewrite"])
 
     def test_manifest_text_mismatch_is_not_hidden(self):
         report = reviewer.review_block(
