@@ -1,0 +1,78 @@
+name: Build final Egyptian Arabic listening MP3
+
+on:
+  push:
+    branches:
+      - audio/final-egyptian-20261104
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: "!contains(github.event.head_commit.message, '[audio-generated]')"
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audio/final-egyptian-20261104
+          persist-credentials: true
+
+      - name: Generate full story audio with the selected voices
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, json, urllib.request, pathlib, subprocess
+          key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("FISH_AUDIO_API_KEY is missing")
+          spec = json.loads(pathlib.Path("assets/audio/science/magdi-yacoub/ar/final-listening-script.json").read_text(encoding="utf-8"))
+          narrator = spec["narrator_voice"]
+          karma = spec["karma_voice"]
+          if narrator != "a02a8220d6014812aa5ff73434c54cc0":
+              raise SystemExit("Narrator voice guard failed; refusing to substitute another voice")
+          if karma != "592625f68416462f8b6161ddf5fdbffb":
+              raise SystemExit("Karma voice guard failed; refusing to substitute another voice")
+          out = pathlib.Path("assets/audio/science/magdi-yacoub/ar/final-listening")
+          out.mkdir(parents=True, exist_ok=True)
+          concat = []
+          for segment in spec["segments"]:
+              index = int(segment["index"])
+              voice = karma if segment["speaker"] == "karma" else narrator
+              payload = json.dumps({"text": segment["text"].strip(), "reference_id": voice, "format": "mp3"}, ensure_ascii=False).encode("utf-8")
+              request = urllib.request.Request(
+                  "https://api.fish.audio/v1/tts", data=payload,
+                  headers={"Authorization": "Bearer " + key, "Content-Type": "application/json", "model": "s2.1-pro-free"},
+                  method="POST")
+              try:
+                  with urllib.request.urlopen(request, timeout=150) as response:
+                      audio = response.read()
+              except Exception as exc:
+                  raise SystemExit(f"Fish Audio failed at segment {index}: {exc}")
+              if len(audio) < 1024:
+                  raise SystemExit(f"Fish Audio returned an invalid audio file at segment {index}")
+              target = out / f"segment-{index:02d}.mp3"
+              target.write_bytes(audio)
+              concat.append(target)
+              print(f"GENERATED segment={index:02d} speaker={segment['speaker']} voice={voice} bytes={len(audio)}")
+          concat_file = out / "concat.txt"
+          concat_file.write_text("".join("file '" + f.name + "'\\n" for f in concat), encoding="utf-8")
+          final = pathlib.Path("assets/audio/science/magdi-yacoub/ar/magdi-yacoub-egyptian-final-listening.mp3")
+          subprocess.run(["ffmpeg", "-hide_banner", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", "-y", str(final)], check=True)
+          if not final.exists() or final.stat().st_size < 10000:
+              raise SystemExit("Final combined MP3 missing or unexpectedly small")
+          print(f"FINAL_AUDIO={final} bytes={final.stat().st_size}")
+          PY
+
+      - name: Commit the finished MP3 to this test branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/audio/science/magdi-yacoub/ar/magdi-yacoub-egyptian-final-listening.mp3
+          git diff --cached --quiet && { echo 'No final MP3 was produced'; exit 1; }
+          git commit -m '[audio-generated] Create final Egyptian Arabic listening MP3'
+          git push origin HEAD:refs/heads/audio/final-egyptian-20261104
