@@ -132,7 +132,24 @@ def find_entities(value: str, lexicon: dict[str, Any]) -> list[dict[str, Any]]:
                 end = tokens[i + len(keys) - 1]["end"]
                 hits.setdefault((entity["id"], start), {
                     "entity": entity["id"], "start": start, "end": end, "raw": value[start:end]})
-    return sorted(hits.values(), key=lambda x: x["start"])
+    # Prefer the longest same-entity match when a canonical short form is
+    # also contained inside a configured multi-word variant (e.g. "أسوان"
+    # inside "مدينة أسوان"). Keep overlapping matches for different entities.
+    candidates = sorted(
+        hits.values(),
+        key=lambda x: (x["start"], -(x["end"] - x["start"])),
+    )
+    selected: list[dict[str, Any]] = []
+    for hit in candidates:
+        overlaps_same_entity = any(
+            prior["entity"] == hit["entity"]
+            and hit["start"] < prior["end"]
+            and hit["end"] > prior["start"]
+            for prior in selected
+        )
+        if not overlaps_same_entity:
+            selected.append(hit)
+    return sorted(selected, key=lambda x: x["start"])
 
 
 def find_candidates(value: str, lexicon: dict[str, Any]) -> list[dict[str, str]]:
