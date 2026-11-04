@@ -20,6 +20,8 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
+from audio_text_guard import validate_pronunciation_blocks
+
 import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -250,6 +252,10 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         if not isinstance(pronunciation_blocks, dict):
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
         languages_to_generate = ("ar",)
+        # Fail closed before creating output folders or contacting any TTS provider.
+        validate_pronunciation_blocks(
+            translations.get("ar", {}).get("blocks", []), pronunciation_blocks
+        )
     else:
         pronunciation_blocks = {}
         languages_to_generate = LANGUAGES
