@@ -19,8 +19,10 @@ AUDIO_DIR = ROOT / "assets/audio/science/magdi-yacoub/ar"
 MANIFEST_PATH = AUDIO_DIR / "manifest.json"
 AUDIO_PATH = AUDIO_DIR / "001.mp3"
 
-# Preserve the exact narrator voice already recorded in the published manifest.
-VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
+# The user explicitly selected voice B (the second/new narrator sample).
+VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"
+# The currently published pilot was mistakenly generated with voice A.
+PREVIOUS_PILOT_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
 MODEL = "s2.1-pro-free"
 GENERATOR_VERSION = "3"
 AUDIO_TEXT_VERSION = "manual-word-pronunciation-corrections-only-v1"
@@ -158,7 +160,7 @@ def main() -> None:
     if (
         segment.get("speaker") != "narrator"
         or segment.get("src") != "001.mp3"
-        or segment.get("voice") != VOICE_ID
+        or segment.get("voice") not in (PREVIOUS_PILOT_VOICE_ID, VOICE_ID)
         or segment.get("provider") != "fish-audio"
     ):
         raise RuntimeError("Published segment 001 no longer matches the approved narrator voice; refusing to overwrite.")
@@ -188,6 +190,7 @@ def main() -> None:
     synthesize(api_key, AUDIO_PATH)
 
     # Update only the matching manifest record; preserve every other segment byte-for-byte in meaning.
+    segment["voice"] = VOICE_ID
     segment["hash"] = expected_hash
     segment["text"] = AUDIO_TEXT
     temporary_manifest = MANIFEST_PATH.with_name("manifest.json.tmp")
