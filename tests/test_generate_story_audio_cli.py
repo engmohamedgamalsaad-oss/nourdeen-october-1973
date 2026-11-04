@@ -37,6 +37,19 @@ class GenerationConfirmationTests(unittest.TestCase):
         run.assert_awaited_once()
         self.assertEqual(run.await_args.kwargs["languages"], ("en",))
 
+    def test_confirmed_generation_defaults_to_arabic_only(self):
+        with patch.object(
+            sys, "argv",
+            ["generate_story_audio.py", "--confirm-generation", "--confirm-fish-audio"],
+        ):
+            with patch.object(
+                generator, "generate_story", new=AsyncMock(return_value=True)
+            ) as run:
+                result = asyncio.run(generator.main())
+        self.assertEqual(result, 0)
+        run.assert_awaited_once()
+        self.assertEqual(run.await_args.kwargs["languages"], ("ar",))
+
     def test_real_generation_requires_explicit_confirmation(self):
         with patch.object(sys, "argv", ["generate_story_audio.py"]):
             with patch.object(generator, "generate_story", new=AsyncMock()) as run:
