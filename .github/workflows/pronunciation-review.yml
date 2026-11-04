@@ -56,7 +56,7 @@ jobs:
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add assets/audio/science/015/ar/007.mp3 assets/audio/science/015/ar/manifest.json
+          git add assets/audio/science/magdi-yacoub/ar/007.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
           if git diff --cached --quiet; then
             echo 'No audio changes were generated.'
             exit 1
