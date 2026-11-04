@@ -72,6 +72,20 @@ class PathSafetyTests(unittest.TestCase):
                 audio_qa.safe_audio_path(folder, "linked.mp3")
 
 
+class GenerationDecisionTests(unittest.TestCase):
+    def test_unknown_hash_never_claims_regeneration_even_if_voice_changed(self):
+        self.assertEqual(
+            audio_qa.generation_decision("unmatched_unknown", "old-voice", "new-voice", 2048),
+            ("UNKNOWN_REQUIRES_REVIEW", "hash_unmatched_unknown"),
+        )
+
+    def test_current_matching_hash_and_existing_file_are_kept(self):
+        self.assertEqual(
+            audio_qa.generation_decision("current_hash_match", "voice-a", "voice-a", 2048),
+            ("UNCHANGED", "up_to_date"),
+        )
+
+
 class ReportTests(unittest.TestCase):
     def test_finding_ids_are_unique_within_a_report(self):
         report = audio_qa.Report("science/015")
