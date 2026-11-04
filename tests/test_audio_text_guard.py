@@ -81,6 +81,13 @@ class PronunciationTextGuardTests(unittest.TestCase):
                 {"0": {"1935": "ألف وتسعمية خمسة وتلاتين"}},
             )
 
+    def test_does_not_ignore_unapproved_combining_marks(self):
+        with self.assertRaisesRegex(ValueError, "block 0"):
+            validate_pronunciation_blocks(
+                blocks("آ"),
+                {"0": "ا"},
+            )
+
     def test_rejects_unknown_block(self):
         with self.assertRaisesRegex(ValueError, "outside story.json"):
             validate_pronunciation_blocks(blocks("النص"), {"1": "النص"})
