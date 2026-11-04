@@ -1,0 +1,52 @@
+name: Arabic audio text integrity gate
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'scripts/generate_story_audio.py'
+      - 'tests/test_generate_story_audio.py'
+      - 'stories/**/audio-pronunciation.json'
+      - 'stories/**/story.json'
+      - '.github/workflows/audio-text-integrity.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audio-text-integrity-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  integrity-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install generator dependency for import compatibility
+        run: python -m pip install edge-tts
+      - name: Test Arabic word identity and order gate
+        run: python -m unittest discover -s tests -p 'test_generate_story_audio.py' -v
+      - name: Verify Magdi Yacoub pronunciation text against visible Arabic story
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import sys
+          sys.path.insert(0, "scripts")
+          from generate_story_audio import prepare_arabic_audio_text
+          story = json.loads(Path("stories/science/015/story.json").read_text(encoding="utf-8"))
+          pronunciation = json.loads(Path("stories/science/015/audio-pronunciation.json").read_text(encoding="utf-8"))
+          blocks = story["i18n"]["ar"]["blocks"]
+          for index, block in enumerate(blocks):
+              if block.get("speaker") not in ("karma", "narrator"):
+                  continue
+              candidate = pronunciation["blocks"].get(str(index), block["text"])
+              prepare_arabic_audio_text(block["text"], candidate)
+          print("PASS: every Arabic audio block preserves visible words and order.")
+          PY
