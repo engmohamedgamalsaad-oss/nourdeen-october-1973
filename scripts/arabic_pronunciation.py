@@ -31,11 +31,7 @@ def _tokens(value: str) -> list[str]:
     return [lexical_form(match.group(0)) for match in TOKEN_RE.finditer(value)]
 
 
-def load_dictionary(path: Path = DEFAULT_DICTIONARY) -> dict[str, Any]:
-    try:
-        data = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
-        raise PronunciationDictionaryError(f"Cannot read pronunciation dictionary: {exc}") from exc
+def validate_dictionary(data: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(data, dict) or data.get("schema_version") != 1:
         raise PronunciationDictionaryError("Arabic pronunciation dictionary schema_version must be 1.")
     entries = data.get("entries")
@@ -57,6 +53,10 @@ def load_dictionary(path: Path = DEFAULT_DICTIONARY) -> dict[str, Any]:
             raise PronunciationDictionaryError(
                 f"Entry {entry_id!r} changes lexical letters; only vocalization is allowed."
             )
+        if len(_tokens(match)) == 1 and not (entry.get("before") or entry.get("after")):
+            raise PronunciationDictionaryError(
+                f"Single-word entry {entry_id!r} requires before/after context to prevent homograph errors."
+            )
         for context_key in ("before", "after"):
             context = entry.get(context_key)
             if context is not None and not isinstance(context, str):
@@ -64,11 +64,20 @@ def load_dictionary(path: Path = DEFAULT_DICTIONARY) -> dict[str, Any]:
     return data
 
 
+def load_dictionary(path: Path = DEFAULT_DICTIONARY) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise PronunciationDictionaryError(f"Cannot read pronunciation dictionary: {exc}") from exc
+    return validate_dictionary(data)
+
+
 def apply_dictionary(text: str, dictionary: dict[str, Any]) -> tuple[str, list[str]]:
     """Apply longest exact phrase matches; preserve punctuation and lexical identity."""
     if not isinstance(text, str) or not text.strip():
         raise PronunciationDictionaryError("Audio text must be a non-empty string.")
-    entries = dictionary.get("entries", [])
+    validated = validate_dictionary(dictionary)
+    entries = validated["entries"]
     spans = list(TOKEN_RE.finditer(text))
     if not spans:
         return text, []
