@@ -1,0 +1,43 @@
+name: Ali Mosharafa full story simplified audio trial
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - ".github/workflows/ali-mosharafa-full-simplified-audio.yml"
+      - "scripts/experimental/produce_ali_mosharafa_full_simplified_audio.py"
+      - "stories/science/016/story.json"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  full-story-audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/silma-ali-mosharrafa-20261104
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Validate script
+        run: python -m py_compile scripts/experimental/produce_ali_mosharafa_full_simplified_audio.py
+      - name: Generate full story audio using approved voices
+        env:
+          FISH_AUDIO_API_KEY: \${{ secrets.FISH_AUDIO_API_KEY }}
+        run: python scripts/experimental/produce_ali_mosharafa_full_simplified_audio.py
+      - name: Upload full story trial
+        uses: actions/upload-artifact@v4
+        with:
+          name: ali-mosharafa-full-story-simplified-audio
+          path: artifacts/ali-mosharafa-full-simplified-audio/
+          if-no-files-found: error
+          retention-days: 14
