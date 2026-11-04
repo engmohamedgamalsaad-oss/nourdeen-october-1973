@@ -9,7 +9,7 @@ on:
         type: string
         default: "stories/science/015/story.json"
       languages:
-        description: "Select one language, Arabic by default, or explicitly choose all five"
+        description: "Select one language; Arabic is the default. Choose all five only when explicitly intended."
         required: true
         type: choice
         options:
@@ -19,7 +19,7 @@ on:
           - fr
           - it
           - de
-        default: all
+        default: ar
       confirm_fish_audio_request:
         description: "Choose yes only after explicitly approving real audio generation and any Fish Audio credit use"
         required: true
