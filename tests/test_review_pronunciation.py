@@ -117,17 +117,19 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             reviewer.DEFAULT_BLOCK_INDEX,
         )
         self.assertEqual(report["structural_validation"]["status"], "PASS")
-        # The approved pronunciation source has changed, but the MP3/manifest
-        # still describe the old recording. The reviewer must expose this as FAIL.
-        self.assertEqual(report["overall_textual_result"], "FAIL")
-        self.assertEqual(report["block"]["textual_result"], "FAIL")
+        # The manifest now records the same reviewed text as the pronunciation source.
+        # This is a textual match only; it does not verify what the MP3 actually says.
+        self.assertEqual(report["overall_textual_result"], "PASS")
+        self.assertEqual(report["block"]["textual_result"], "PASS")
+        self.assertTrue(report["block"]["listening_review_required"])
+        self.assertEqual(report["spoken_pronunciation_result"], "NOT_TESTED")
         self.assertEqual(
             report["block"]["word_identity_and_order"]["visible_vs_submitted"]["status"],
             "PASS",
         )
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
-            "FAIL",
+            "PASS",
         )
         self.assertEqual(
             report["block"]["manifest_text_verification"],
@@ -144,11 +146,13 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(report["scope"]["block_count"], 13)
         self.assertEqual(report["summary"]["structural_failures"], 0)
-        # Old manifest text must not be treated as if it matched the new source.
+        # Current manifest text matches the reviewed source; number-form differences
+        # remain REVIEW and must not be collapsed into an overall PASS.
         self.assertEqual(report["summary"]["block_results"]["PASS_SOURCE_ONLY"], 0)
         self.assertGreater(report["summary"]["block_results"]["REVIEW"], 0)
-        self.assertGreater(report["summary"]["block_results"]["FAIL"], 0)
-        self.assertEqual(report["summary"]["overall_textual_result"], "FAIL")
+        self.assertEqual(report["summary"]["block_results"]["FAIL"], 0)
+        self.assertEqual(report["summary"]["overall_textual_result"], "REVIEW")
+        self.assertEqual(report["summary"]["spoken_pronunciation_result"], "NOT_TESTED")
 
 
 if __name__ == "__main__":
