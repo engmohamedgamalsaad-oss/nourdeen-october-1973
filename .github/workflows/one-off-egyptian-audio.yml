@@ -1,0 +1,58 @@
+name: One-off Egyptian Arabic listening sample
+
+on:
+  pull_request_target:
+    types: [synchronize]
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  generate:
+    if: github.event.pull_request.number == 515 && github.event.pull_request.head.ref == 'feat/egyptian-dialect-reviewer-20261104' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Checkout the exact authorized sample branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/egyptian-dialect-reviewer-20261104
+          persist-credentials: true
+      - name: Generate one Egyptian-style narrator sample with Fish Audio
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, urllib.request
+          text = "هل تعرف إن مجدي يعقوب اشتغل في مستشفى هارفيلد سنين طويلة، وكان له دور مهم في تطوير برنامج زراعة القلب والرئتين؟ والبرنامج ده شهد إجراء أكتر من ألفين وخمسمية عملية زراعة، بحسب السيرة المهنية المنشورة لدى مؤسسات أكاديمية."
+          key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("FISH_AUDIO_API_KEY is missing")
+          payload = ('{"text":' + __import__('json').dumps(text, ensure_ascii=False) + ',"reference_id":"b65cfd7ce5e44607aedafeea3dbb01e8","format":"mp3"}').encode()
+          request = urllib.request.Request(
+              "https://api.fish.audio/v1/tts",
+              data=payload,
+              headers={"Authorization": "Bearer " + key, "Content-Type": "application/json", "model": "s2.1-pro-free"},
+              method="POST",
+          )
+          with urllib.request.urlopen(request, timeout=90) as response:
+              audio = response.read()
+          if len(audio) < 512:
+              raise SystemExit("Fish Audio returned an invalid audio file")
+          path = "assets/audio/science/magdi-yacoub/ar/egyptian-review-007.mp3"
+          os.makedirs(os.path.dirname(path), exist_ok=True)
+          with open(path, "wb") as output:
+              output.write(audio)
+          print(f"GENERATED {path}: {len(audio)} bytes")
+          PY
+      - name: Commit only the listening sample to the isolated branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/audio/science/magdi-yacoub/ar/egyptian-review-007.mp3
+          git diff --cached --quiet && { echo 'No audio was generated'; exit 1; }
+          git commit -m 'Add one Egyptian Arabic listening sample'
+          git push origin HEAD:refs/heads/feat/egyptian-dialect-reviewer-20261104
