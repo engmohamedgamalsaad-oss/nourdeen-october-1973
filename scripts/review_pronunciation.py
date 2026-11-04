@@ -517,14 +517,30 @@ def build_report(
     # Explicitly approved audio-only rewrites remain visible as REVIEW, never PASS.
     # The manifest must still match the submitted pronunciation source exactly.
     approved_rewrites = pronunciation.get("approved_audio_only_rewrites", [])
-    if (
-        block_report
-        and str(block_index) in approved_rewrites
-        and block_report["textual_result"] == "FAIL"
-        and not block_report["word_identity_and_order"]["submitted_vs_manifest"]["differences"]
-    ):
-        block_report["textual_result"] = "REVIEW"
-        block_report["approved_audio_only_rewrite"] = True
+    if block_report and str(block_index) in approved_rewrites:
+        word_checks = block_report["word_identity_and_order"]
+        manifest_matches_visible = (
+            block_report["audio_text_from_manifest"] is not None
+            and not sequence_differences(
+                tokenize(block_report["visible_text"]),
+                tokenize(block_report["audio_text_from_manifest"]),
+            )
+        )
+        manifest_matches_submitted = (
+            word_checks["submitted_vs_manifest"]["status"] == "PASS"
+        )
+        # Before regeneration, the existing MP3/manifest may still match the
+        # unchanged visible story. After regeneration, it must match the new
+        # approved audio-only source. Either state is reviewable; anything else fails.
+        if (
+            block_report["textual_result"] == "FAIL"
+            and (manifest_matches_visible or manifest_matches_submitted)
+            and word_checks["visible_vs_submitted"]["differences"]
+        ):
+            block_report["textual_result"] = "REVIEW"
+            block_report["approved_audio_only_rewrite"] = True
+            block_report["manifest_matches_visible_pre_regeneration"] = manifest_matches_visible
+            block_report["manifest_matches_submitted_source"] = manifest_matches_submitted
 
     textual_pass = bool(block_report and block_report["textual_result"] == "PASS")
     return {
