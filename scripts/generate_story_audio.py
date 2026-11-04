@@ -29,6 +29,8 @@ ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
+# Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
+FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 4, 6, 8, 10, 11}
 VOICE_SETTINGS = {
     "ar": {
         "karma": ("ar-EG-SalmaNeural", "+0%", "+8Hz"),
@@ -152,6 +154,7 @@ async def synthesize(
 async def synthesize_fish_audio(
     text: str, destination: Path, voice_id: str
 ) -> None:
+    """Make exactly one billable Fish Audio request; never retry ambiguously."""
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError(
@@ -165,43 +168,26 @@ async def synthesize_fish_audio(
         "reference_id": voice_id,
         "format": "mp3",
     }, ensure_ascii=False).encode("utf-8")
-    last_error: Exception | None = None
-
-    for attempt in range(1, 4):
+    request = urllib.request.Request(
+        "https://api.fish.audio/v1/tts",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "model": FISH_AUDIO_MODEL,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            audio = response.read()
+        if len(audio) < 512:
+            raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
+        temporary.write_bytes(audio)
+        temporary.replace(destination)
+    except Exception:
         temporary.unlink(missing_ok=True)
-        request = urllib.request.Request(
-            "https://api.fish.audio/v1/tts",
-            data=payload,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "model": FISH_AUDIO_MODEL,
-            },
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=90) as response:
-                audio = response.read()
-            if len(audio) < 512:
-                raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
-            temporary.write_bytes(audio)
-            temporary.replace(destination)
-            return
-        except urllib.error.HTTPError as exc:
-            detail = exc.read(1200).decode("utf-8", errors="replace")
-            last_error = RuntimeError(f"Fish Audio API returned HTTP {exc.code}: {detail}")
-            if exc.code not in (408, 409, 425, 429, 500, 502, 503, 504):
-                break
-        except (urllib.error.URLError, TimeoutError, OSError, RuntimeError) as exc:
-            last_error = exc
-
-        temporary.unlink(missing_ok=True)
-        if attempt < 3:
-            await asyncio.sleep(2 ** attempt)
-
-    raise RuntimeError(
-        f"Fish Audio failed after {attempt} attempt(s) for voice {voice_id}: {last_error}"
-    ) from last_error
+        raise
 
 
 async def generate_story(story_path: Path) -> bool:
@@ -272,6 +258,66 @@ async def generate_story(story_path: Path) -> bool:
             if isinstance(item, dict) and str(item.get("block_index", "")).isdigit()
         }
 
+        # Preflight every existing Arabic segment before making any billable request.
+        # This pilot must regenerate exactly six narrator blocks and nothing else.
+        if lang == "ar" and pronunciation_data:
+            planned_regenerations: set[int] = set()
+            for planned_index, planned_block in enumerate(blocks):
+                if not isinstance(planned_block, dict):
+                    continue
+                planned_speaker = planned_block.get("speaker")
+                planned_original = re.sub(
+                    r"\\s+", " ", str(planned_block.get("text") or "")
+                ).strip()
+                if planned_speaker not in ("karma", "narrator") or not planned_original:
+                    continue
+                planned_text = prepare_arabic_audio_text(
+                    planned_original, pronunciation_blocks.get(str(planned_index))
+                )
+                planned_chunks = split_audio_chunks(planned_text)
+                planned_voice = (
+                    FISH_AUDIO_KARMA_VOICE_ID
+                    if planned_speaker == "karma"
+                    else FISH_AUDIO_NARRATOR_VOICE_ID
+                )
+                planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
+                for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
+                    planned_previous = old_segments.get(
+                        (planned_index, planned_chunk_index), {}
+                    )
+                    planned_filename = (
+                        f"{planned_index:03d}.mp3"
+                        if planned_chunk_index == 0
+                        else f"{planned_index:03d}-{planned_chunk_index:02d}.mp3"
+                    )
+                    planned_destination = output_dir / planned_filename
+                    planned_hash = text_hash(
+                        planned_chunk, planned_voice, planned_rate, planned_pitch, "ar"
+                    )
+                    is_unchanged = (
+                        planned_previous.get("hash") == planned_hash
+                        and planned_previous.get("voice") in (None, planned_voice)
+                        and planned_destination.is_file()
+                        and planned_destination.stat().st_size >= 512
+                    )
+                    if not is_unchanged:
+                        if (
+                            planned_speaker != "narrator"
+                            or planned_index not in FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+                        ):
+                            raise RuntimeError(
+                                "Safety stop before Fish Audio: unexpected regeneration "
+                                f"for block {planned_index} ({planned_speaker})."
+                            )
+                        planned_regenerations.add(planned_index)
+
+            if planned_regenerations != FISH_AUDIO_ALLOWED_REGEN_BLOCKS:
+                raise RuntimeError(
+                    "Safety stop before Fish Audio: expected exactly blocks "
+                    f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS)}, found "
+                    f"{sorted(planned_regenerations)}."
+                )
+
         segments: list[dict[str, Any]] = []
         for block_index, block in enumerate(blocks):
             if not isinstance(block, dict):
@@ -334,7 +380,7 @@ async def generate_story(story_path: Path) -> bool:
                         print(f"GENERATED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
                         break
                     except Exception as exc:
-                        print(f"VOICE RETRY {relative.parent}/{lang}/{filename}: {candidate_voice}: {exc}", file=sys.stderr)
+                        print(f"VOICE FAILED {relative.parent}/{lang}/{filename}: {candidate_voice}: {exc}", file=sys.stderr)
 
                 if selected_voice is None or digest is None:
                     raise RuntimeError(
