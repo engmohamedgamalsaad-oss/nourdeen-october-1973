@@ -211,7 +211,11 @@ async def synthesize_fish_audio(
         raise
 
 
-async def generate_story(\n    story_path: Path,\n    dry_run: bool = False,\n    languages: tuple[str, ...] | None = None,\n) -> bool:
+async def generate_story(
+    story_path: Path,
+    dry_run: bool = False,
+    languages: tuple[str, ...] | None = None,
+) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
