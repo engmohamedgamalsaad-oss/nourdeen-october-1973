@@ -30,7 +30,7 @@ FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 # Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
-FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 4, 6, 8, 10, 11}
+FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 6, 7, 8, 10}
 # Original manifest input hashes for the three owner-approved Karma clips.
 # They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
 KARMA_ORIGINAL_MANIFEST_HASH = {
