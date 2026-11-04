@@ -31,12 +31,15 @@ async def main():
             raise RuntimeError(f"Invalid audio output: {target}")
         files.append(target)
         print(f"CREATED {target} ({target.stat().st_size} bytes)")
-    concat = OUT / "concat.txt"
-    concat.write_text("".join(f"file '{p.resolve()}'\\n" for p in files), encoding="utf-8")
     final = OUT / "ali-mosharafa-edge-egyptian-preview.mp3"
+    inputs = []
+    for path in files:
+        inputs.extend(["-i", str(path)])
+    streams = "".join(f"[{i}:a]" for i in range(len(files)))
+    graph = f"{streams}concat=n={len(files)}:v=0:a=1[out]"
     subprocess.run([
-        "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat),
-        "-c", "copy", str(final)
+        "ffmpeg", "-y", *inputs, "-filter_complex", graph,
+        "-map", "[out]", "-c:a", "libmp3lame", "-q:a", "3", str(final)
     ], check=True, capture_output=True)
     if final.stat().st_size < 5000:
         raise RuntimeError("Final MP3 is unexpectedly small")
