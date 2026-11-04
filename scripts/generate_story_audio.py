@@ -268,7 +268,10 @@ async def generate_story(
         # Fail closed before creating output folders or contacting any TTS provider.
         arabic_localized = translations.get("ar")
         arabic_blocks = arabic_localized.get("blocks") if isinstance(arabic_localized, dict) else []
-        validate_pronunciation_blocks(\n            arabic_blocks, pronunciation_blocks,\n            pronunciation_data.get("approved_number_rewrites", {}),\n        )
+        validate_pronunciation_blocks(
+            arabic_blocks, pronunciation_blocks,
+            pronunciation_data.get("approved_number_rewrites", {}),
+        )
     else:
         pronunciation_blocks = {}
 
