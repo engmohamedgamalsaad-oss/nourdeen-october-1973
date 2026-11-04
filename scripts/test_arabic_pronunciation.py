@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Unit tests for the shared Egyptian-Arabic audio pronunciation dictionary."""
+from __future__ import annotations
+
+import unittest
+
+from arabic_pronunciation import (
+    PronunciationDictionaryError,
+    apply_dictionary,
+    lexical_form,
+    prepare_audio_text,
+)
+
+
+DICTIONARY = {
+    "schema_version": 1,
+    "entries": [
+        {"id": "centre", "match": "مركز أسوان", "spoken": "مَرْكَزُ أَسْوَانَ"},
+        {"id": "studies", "match": "وتذكر الدراسات", "spoken": "وَتَذْكُرُ الدِّرَاسَاتُ"},
+    ],
+}
+
+
+class ArabicPronunciationTests(unittest.TestCase):
+    def test_contextual_phrase_centre(self):
+        result, used = apply_dictionary("يعني مركز أسوان مش بس بيعالج المرضى؟", DICTIONARY)
+        self.assertIn("مَرْكَزُ أَسْوَانَ", result)
+        self.assertEqual(used, ["centre"])
+
+    def test_contextual_phrase_studies(self):
+        result, used = apply_dictionary("وتذكر الدراسات المنشورة هذه النتائج.", DICTIONARY)
+        self.assertTrue(result.startswith("وَتَذْكُرُ الدِّرَاسَاتُ"))
+        self.assertEqual(used, ["studies"])
+
+    def test_no_partial_word_match(self):
+        result, used = apply_dictionary("المركز الطبي في أسوان", DICTIONARY)
+        self.assertEqual(result, "المركز الطبي في أسوان")
+        self.assertEqual(used, [])
+
+    def test_lexical_identity_is_preserved(self):
+        source = "وتذكر الدراسات أن مركز أسوان مهم."
+        result, _ = apply_dictionary(source, DICTIONARY)
+        self.assertEqual(lexical_form(result), lexical_form(source))
+
+    def test_story_override_then_shared_dictionary(self):
+        result, used = prepare_audio_text(
+            "النص الأصلي",
+            "وتذكر الدراسات أن مركز أسوان يقدم الرعاية.",
+            DICTIONARY,
+        )
+        self.assertTrue(result.startswith("وَتَذْكُرُ الدِّرَاسَاتُ"))
+        self.assertIn("مَرْكَزُ أَسْوَانَ", result)
+        self.assertEqual(set(used), {"studies", "centre"})
+
+    def test_rejects_lexical_rewrite(self):
+        bad = {"schema_version": 1, "entries": [
+            {"id": "bad", "match": "مركز", "spoken": "مُرَكَّز"}
+        ]}
+        with self.assertRaises(PronunciationDictionaryError):
+            apply_dictionary("مركز", bad)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)
