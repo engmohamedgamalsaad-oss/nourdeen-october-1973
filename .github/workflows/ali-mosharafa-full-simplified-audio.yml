@@ -32,7 +32,7 @@ jobs:
         run: python -m py_compile scripts/experimental/produce_ali_mosharafa_full_simplified_audio.py
       - name: Generate full story audio using approved voices
         env:
-          FISH_AUDIO_API_KEY: \${{ secrets.FISH_AUDIO_API_KEY }}
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: python scripts/experimental/produce_ali_mosharafa_full_simplified_audio.py
       - name: Upload full story trial
         uses: actions/upload-artifact@v4
