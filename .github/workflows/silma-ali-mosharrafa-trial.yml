@@ -1,0 +1,38 @@
+name: Isolated SILMA Ali Mosharrafa Arabic trial
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - "scripts/experimental/silma_trial_ali_mosharrafa.py"
+      - ".github/workflows/silma-ali-mosharrafa-trial.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Install SILMA
+        run: python -m pip install --upgrade pip silma-tts
+      - name: Generate six story segments
+        run: python scripts/experimental/silma_trial_ali_mosharrafa.py
+      - name: Upload trial audio
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: silma-ali-mosharrafa-arabic-trial
+          path: artifacts/silma-trial/ali-mosharrafa/ar/
+          if-no-files-found: warn
+          retention-days: 7
