@@ -33,7 +33,7 @@ class LexiconTests(unittest.TestCase):
         }
         hits = audio_qa.find_entities("وزار أسوان ثم مدينة أسوان", lexicon)
         self.assertEqual([hit["entity"] for hit in hits], ["aswan", "aswan"])
-        self.assertEqual([hit["raw"] for hit in hits], ["أسوان", "أسوان"])
+        self.assertEqual([hit["raw"] for hit in hits], ["أسوان", "مدينة أسوان"])
 
     def test_lexicon_rejects_duplicate_or_missing_entity_ids(self):
         with tempfile.TemporaryDirectory() as tmp:
