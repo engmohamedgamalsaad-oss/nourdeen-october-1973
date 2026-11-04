@@ -44,6 +44,42 @@ jobs:
       - name: Compile audio generator without running it
         run: python -m py_compile scripts/audio_text_guard.py scripts/generate_story_audio.py
 
+      - name: Install dependency for local dry-run only
+        run: python -m pip install edge-tts
+
+      - name: Dry-run every published non-pilot story without writing files or calling TTS
+        run: |
+          python - <<'PY'
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          before = subprocess.check_output(["git", "status", "--porcelain"], text=True)
+          checked = 0
+          for story_path in sorted(Path("stories").glob("*/*/story.json")):
+              package = json.loads(story_path.read_text(encoding="utf-8"))
+              if package.get("section") == "october":
+                  continue
+              if package.get("section") == "science" and story_path.parent.name == "015":
+                  continue  # This pilot is tested separately; its unsafe override must stop.
+              metadata_path = story_path.with_name("data.json")
+              if not metadata_path.is_file():
+                  continue
+              metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+              if metadata.get("published") is not True:
+                  continue
+              subprocess.run(
+                  [sys.executable, "scripts/generate_story_audio.py", "--story", str(story_path), "--dry-run"],
+                  check=True,
+              )
+              checked += 1
+          after = subprocess.check_output(["git", "status", "--porcelain"], text=True)
+          if before != after:
+              raise SystemExit("Dry-run changed repository files.")
+          print(f"Dry-run validated {checked} published non-pilot stories; no TTS calls or file changes.")
+          PY
+
       - name: Build repository-wide audio inventory (no TTS or ASR)
         run: python scripts/audit_story_audio.py --output "$RUNNER_TEMP/story-audio-audit.json"
 
