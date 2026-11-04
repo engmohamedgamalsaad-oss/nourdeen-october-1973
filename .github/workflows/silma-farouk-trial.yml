@@ -1,0 +1,46 @@
+name: Isolated SILMA Arabic TTS trial
+
+on:
+  push:
+    branches:
+      - experiment/silma-farouk-elbaz-20261104
+    paths:
+      - "scripts/experimental/generate_silma_farouk_trial.py"
+      - ".github/workflows/silma-farouk-trial.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out isolated experiment branch
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Install SILMA TTS
+        run: python -m pip install --upgrade pip silma-tts
+
+      - name: Generate three Arabic story segments
+        run: python scripts/experimental/generate_silma_farouk_trial.py
+
+      - name: Upload experimental WAV files and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: silma-farouk-el-baz-arabic-trial
+          path: artifacts/silma-trial/farouk-el-baz/ar/
+          if-no-files-found: warn
+          retention-days: 7
