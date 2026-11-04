@@ -2,6 +2,15 @@ name: story-audio-magdi-yacoub-pilot
 
 on:
   workflow_dispatch:
+    inputs:
+      confirm_paid_generation:
+        description: "اختر yes فقط بعد الموافقة الصريحة على استهلاك رصيد Fish Audio"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+        default: "no"
 
 permissions:
   contents: write
@@ -12,6 +21,7 @@ concurrency:
 
 jobs:
   generate:
+    if: inputs.confirm_paid_generation == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -32,7 +42,7 @@ jobs:
       - name: Validate the Magdi Yacoub Arabic generator
         run: python -m py_compile scripts/generate_story_audio.py
 
-      - name: Generate Magdi Yacoub Arabic audio; only narrator clips with changed voice hash are regenerated
+      - name: Generate Magdi Yacoub Arabic audio
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: python scripts/generate_story_audio.py
