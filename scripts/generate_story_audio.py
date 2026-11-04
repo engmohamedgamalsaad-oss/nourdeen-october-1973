@@ -267,7 +267,7 @@ async def generate_story(story_path: Path) -> bool:
                     continue
                 planned_speaker = planned_block.get("speaker")
                 planned_original = re.sub(
-                    r"\\s+", " ", str(planned_block.get("text") or "")
+                    r"\s+", " ", str(planned_block.get("text") or "")
                 ).strip()
                 if planned_speaker not in ("karma", "narrator") or not planned_original:
                     continue
