@@ -108,6 +108,7 @@ function makeReaderHtml(story, id, coverUrl) {
   const section = story.section;
   let html = '<!doctype html>\n' +
     '<html lang="ar" dir="rtl">\n<head>\n<meta charset="utf-8">' +
+    '<link rel="preload" href="story.json" as="fetch" crossorigin><link rel="preload" href="../../../rebuild/reader.js?v=20261102-canonical-preview-reader-3" as="script">' +
     '<script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script>' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">\n' +
     '<script src="../../../assets/shared/home-language-only.js?v=20261030-v2-language-fix"></script>\n' +
