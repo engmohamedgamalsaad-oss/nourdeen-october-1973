@@ -415,16 +415,21 @@ async def generate_story(
                             )
                         planned_regenerations.add(planned_index)
 
-            unexpected_regenerations = planned_regenerations - FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+            allowed_regeneration_blocks = (
+                FISH_AUDIO_ALLOWED_REGEN_BLOCKS | FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS
+            )
+            unexpected_regenerations = planned_regenerations - allowed_regeneration_blocks
             if unexpected_regenerations:
                 raise RuntimeError(
                     "Safety stop before Fish Audio: unexpected blocks need regeneration: "
                     f"{sorted(unexpected_regenerations)}."
                 )
+            narrator_pending = planned_regenerations & FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+            karma_pending = planned_regenerations & FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS
             print(
                 "PILOT PREFLIGHT OK: remaining narrator blocks to generate "
-                f"{sorted(planned_regenerations)}; already-current approved blocks "
-                f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
+                f"{sorted(narrator_pending)}; approved Karma blocks to repair "
+                f"{sorted(karma_pending)}."
             )
 
         if dry_run:
