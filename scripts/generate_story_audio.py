@@ -31,10 +31,13 @@ ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
-# Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
+# Explicit owner-approved scope for this Magdi Yacoub Arabic pronunciation pilot.
 FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 6, 7, 8, 10}
-# Original manifest input hashes for the three owner-approved Karma clips.
-# They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
+FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS = {0, 2}
+FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS = {3}
+# Original manifest input hashes for Karma clips. Blocks 0 and 2 stay immutable;
+# block 3 may be regenerated once for the approved contextual "مَرْكَز" correction.
+# These are manifest input hashes, not MP3 byte hashes.
 KARMA_ORIGINAL_MANIFEST_HASH = {
     0: "3d531998fb878488a7f95d5d5f8dd2b15e4df9007529ea4f3a9d7e53909c9c64",
     2: "a8c4f80cdf7b59eb8ba2676eef94a109e20c86b51476d4b45c546bdca3e9ea10",
@@ -333,19 +336,52 @@ async def generate_story(
                 )
                 planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
                 if planned_speaker == "karma":
-                    if len(planned_chunks) != 1 or not is_original_karma_clip(
-                        planned_index,
-                        0,
-                        planned_chunks[0],
-                        planned_voice,
-                        old_segments.get((planned_index, 0), {}),
-                        output_dir / f"{planned_index:03d}.mp3",
-                    ):
+                    if len(planned_chunks) != 1:
                         raise RuntimeError(
-                            "Safety stop before Fish Audio: original Karma audio "
-                            f"block {planned_index} failed its immutable hash check."
+                            "Safety stop before Fish Audio: Karma blocks must remain a single chunk."
                         )
-                    continue
+                    planned_previous = old_segments.get((planned_index, 0), {})
+                    planned_destination = output_dir / f"{planned_index:03d}.mp3"
+                    planned_hash = text_hash(
+                        planned_chunks[0], planned_voice, planned_rate, planned_pitch, "ar"
+                    )
+                    planned_legacy_hash = legacy_text_hash(
+                        planned_chunks[0], planned_voice, planned_rate, planned_pitch, "ar"
+                    )
+                    already_current = (
+                        planned_previous.get("hash") in (planned_hash, planned_legacy_hash)
+                        and planned_previous.get("voice") in (None, planned_voice)
+                        and planned_destination.is_file()
+                        and planned_destination.stat().st_size >= 512
+                    )
+                    if planned_index in FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS:
+                        if not is_original_karma_clip(
+                            planned_index, 0, planned_chunks[0], planned_voice,
+                            planned_previous, planned_destination,
+                        ):
+                            raise RuntimeError(
+                                "Safety stop before Fish Audio: original Karma audio "
+                                f"block {planned_index} failed its immutable hash check."
+                            )
+                        continue
+                    if planned_index in FISH_AUDIO_ALLOWED_KARMA_REGEN_BLOCKS:
+                        if already_current:
+                            continue
+                        if is_original_karma_clip(
+                            planned_index, 0, planned_chunks[0], planned_voice,
+                            planned_previous, planned_destination,
+                        ):
+                            planned_regenerations.add(planned_index)
+                            continue
+                        raise RuntimeError(
+                            "Safety stop before Fish Audio: approved Karma block "
+                            f"{planned_index} is neither the verified original nor the "
+                            "already-generated reviewed-text version."
+                        )
+                    raise RuntimeError(
+                        "Safety stop before Fish Audio: Karma block "
+                        f"{planned_index} is outside the approved regeneration scope."
+                    )
                 for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
                     planned_previous = old_segments.get(
                         (planned_index, planned_chunk_index), {}
@@ -498,13 +534,17 @@ async def generate_story(
                     candidate_legacy_hash = legacy_text_hash(
                         chunk_text, candidate_voice, rate, pitch, lang
                     )
-                    if speaker == "karma" and is_original_karma_clip(
-                        block_index,
-                        chunk_index,
-                        chunk_text,
-                        candidate_voice,
-                        previous,
-                        destination,
+                    if (
+                        speaker == "karma"
+                        and block_index in FISH_AUDIO_IMMUTABLE_KARMA_BLOCKS
+                        and is_original_karma_clip(
+                            block_index,
+                            chunk_index,
+                            chunk_text,
+                            candidate_voice,
+                            previous,
+                            destination,
+                        )
                     ):
                         selected_voice = candidate_voice
                         digest = previous["hash"]
