@@ -275,8 +275,9 @@ async def generate_story(
     else:
         pronunciation_blocks = {}
 
-    default_languages = ("ar",) if pronunciation_data else LANGUAGES
-    languages_to_generate = tuple(dict.fromkeys(languages or default_languages))
+    # Fail safe: never infer a five-language generation request from missing metadata.
+    # Arabic is the only implicit default; other languages must be selected explicitly.
+    languages_to_generate = tuple(dict.fromkeys(languages or ("ar",)))
     if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
         raise ValueError(f"Unsupported or empty language selection: {languages_to_generate}")
 
@@ -601,7 +602,7 @@ async def main() -> int:
         nargs="+",
         choices=LANGUAGES,
         default=None,
-        help="Languages to generate (default: Arabic only when an Arabic pronunciation file exists; otherwise all five).",
+        help="Languages to generate (default: Arabic only; select other languages explicitly).",
     )
     parser.add_argument(
         "--dry-run",
