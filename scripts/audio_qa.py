@@ -191,6 +191,21 @@ def safe_audio_path(directory: Path, src: str) -> Path:
     return path
 
 
+def generation_decision(hash_status: str, old_voice: str | None,
+                        current_voice: str, size: int | None) -> tuple[str, str]:
+    """Never infer regeneration from a hash that the audit cannot explain."""
+    if hash_status == "unmatched_unknown":
+        return "UNKNOWN_REQUIRES_REVIEW", "hash_unmatched_unknown"
+    if (hash_status == "current_hash_match" and old_voice == current_voice
+            and size is not None and size >= MIN_BYTES):
+        return "UNCHANGED", "up_to_date"
+    if old_voice and old_voice != current_voice:
+        return "GENERATE", "voice_refresh"
+    if hash_status == "legacy_hash_match":
+        return "GENERATE", "legacy_hash_format_only"
+    return "GENERATE", "audio_file_missing_or_refresh"
+
+
 def analyse(generator, section: str, story_id: str, lexicon: dict[str, Any]) -> dict[str, Any]:
     story_path = STORIES / section / story_id / "story.json"
     resolved = story_path.resolve()
@@ -314,16 +329,9 @@ def analyse(generator, section: str, story_id: str, lexicon: dict[str, Any]) -> 
                         row["hash_status"] = "legacy_hash_match"
                     else:
                         row["hash_status"] = "unmatched_unknown"
-                if row["hash_status"] == "current_hash_match" and old_voice == voices[speaker] and row["size"] and row["size"] >= MIN_BYTES:
-                    row["generator_would"], row["reason"] = "UNCHANGED", "up_to_date"
-                elif old_voice and old_voice != voices[speaker]:
-                    row["reason"] = "voice_refresh"
-                elif row["hash_status"] == "legacy_hash_match":
-                    row["reason"] = "legacy_hash_format_only"
-                elif row["hash_status"] == "unmatched_unknown":
-                    row["reason"] = "hash_unmatched_unknown"
-                else:
-                    row["reason"] = "audio_file_missing_or_refresh"
+                row["generator_would"], row["reason"] = generation_decision(
+                    row["hash_status"], old_voice, voices[speaker], row["size"]
+                )
                 if not row["size"] or row["size"] < MIN_BYTES:
                     report.add("audio_file_missing", "needs_review",
                                f"ملف الصوت {src} غير موجود أو أصغر من الحد المقبول.",
@@ -435,6 +443,7 @@ def summarise(result):
     return {"by_level": levels, "by_kind": kinds, "segments_total": len(rows),
             "generator_would_regenerate": sum(x["generator_would"] == "GENERATE" for x in rows),
             "generator_would_keep": sum(x["generator_would"] == "UNCHANGED" for x in rows),
+            "generation_decisions_unknown": sum(x["generator_would"] == "UNKNOWN_REQUIRES_REVIEW" for x in rows),
             "legacy_hash_matches": sum(x["hash_status"] == "legacy_hash_match" for x in rows),
             "current_hash_matches": sum(x["hash_status"] == "current_hash_match" for x in rows),
             "unmatched_hashes": sum(x["hash_status"] == "unmatched_unknown" for x in rows),
@@ -451,7 +460,7 @@ def to_markdown(result):
              f"- hash حالي مطابق: {s['current_hash_matches']}",
              f"- hash غير محسوم: {s['unmatched_hashes']}",
              f"- أخطاء نطق مثبتة: {s['pronunciation_errors_proven']}",
-             f"- وفق محاكاة المولّد: سيُعاد توليد {s['generator_would_regenerate']} وسيُبقى {s['generator_would_keep']}؛ لم يُشغّل المولّد.", "",
+             f"- وفق محاكاة المولّد: سيُعاد توليد {s['generator_would_regenerate']} وسيُبقى {s['generator_would_keep']}؛ قرارات غير محسومة {s['generation_decisions_unknown']}؛ لم يُشغّل المولّد.", "",
              "## النتائج", "| المستوى | النوع | المقطع | المتحدث | يحتاج | الإثبات | التفصيل |",
              "|---|---|---|---|---|---|---|"]
     for f in result["findings"]:
