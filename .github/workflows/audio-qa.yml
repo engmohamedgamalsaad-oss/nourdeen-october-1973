@@ -36,4 +36,6 @@ jobs:
           test -s "$RUNNER_TEMP/audio-qa-report.md"
           grep -q 'تقرير دفتر النطق' "$RUNNER_TEMP/audio-qa-report.md"
       - name: Verify the report did not modify repository files
-        run: git diff --exit-code -- audio-qa stories assets/audio
+        run: |
+          git diff --exit-code -- audio-qa stories assets/audio
+          test -z "$(git status --porcelain)"
