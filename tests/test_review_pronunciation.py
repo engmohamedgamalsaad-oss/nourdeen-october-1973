@@ -117,15 +117,16 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             reviewer.DEFAULT_BLOCK_INDEX,
         )
         self.assertEqual(report["structural_validation"]["status"], "PASS")
-        # The manifest now records the same reviewed text as the pronunciation source.
-        # This is a textual match only; it does not verify what the MP3 actually says.
-        self.assertEqual(report["overall_textual_result"], "PASS")
-        self.assertEqual(report["block"]["textual_result"], "PASS")
+        # Block 1 intentionally uses an approved audio-only rewrite.
+        # Keep it at REVIEW (not PASS); the manifest must match that source.
+        self.assertEqual(report["overall_textual_result"], "REVIEW")
+        self.assertEqual(report["block"]["textual_result"], "REVIEW")
+        self.assertTrue(report["block"]["approved_audio_only_rewrite"])
         self.assertTrue(report["block"]["listening_review_required"])
         self.assertEqual(report["spoken_pronunciation_result"], "NOT_TESTED")
         self.assertEqual(
             report["block"]["word_identity_and_order"]["visible_vs_submitted"]["status"],
-            "PASS",
+            "FAIL",
         )
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
