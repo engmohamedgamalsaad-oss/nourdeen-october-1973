@@ -514,6 +514,18 @@ def build_report(
             block_index, block, selected_segments, submitted_audio_text
         )
 
+    # Explicitly approved audio-only rewrites remain visible as REVIEW, never PASS.
+    # The manifest must still match the submitted pronunciation source exactly.
+    approved_rewrites = pronunciation.get("approved_audio_only_rewrites", [])
+    if (
+        block_report
+        and str(block_index) in approved_rewrites
+        and block_report["textual_result"] == "FAIL"
+        and not block_report["word_identity_and_order"]["submitted_vs_manifest"]["differences"]
+    ):
+        block_report["textual_result"] = "REVIEW"
+        block_report["approved_audio_only_rewrite"] = True
+
     textual_pass = bool(block_report and block_report["textual_result"] == "PASS")
     return {
         "tool": "review_pronunciation.py",
