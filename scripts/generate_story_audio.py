@@ -29,6 +29,15 @@ ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
+# Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
+FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 4, 6, 8, 10, 11}
+# Original manifest input hashes for the three owner-approved Karma clips.
+# They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
+KARMA_ORIGINAL_MANIFEST_HASH = {
+    0: "3d531998fb878488a7f95d5d5f8dd2b15e4df9007529ea4f3a9d7e53909c9c64",
+    2: "a8c4f80cdf7b59eb8ba2676eef94a109e20c86b51476d4b45c546bdca3e9ea10",
+    3: "88ee90b74d24062258dc1c70a18eec8aaf0430d4043f671addad5d4926a73064",
+}
 VOICE_SETTINGS = {
     "ar": {
         "karma": ("ar-EG-SalmaNeural", "+0%", "+8Hz"),
@@ -73,6 +82,27 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
         fields.insert(1, ARABIC_AUDIO_TEXT_VERSION)
     payload = json.dumps(fields, ensure_ascii=False, separators=(",", ":"))
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def is_original_karma_clip(
+    block_index: int,
+    chunk_index: int,
+    text: str,
+    voice: str,
+    previous: dict[str, Any],
+    destination: Path,
+) -> bool:
+    expected_hash = KARMA_ORIGINAL_MANIFEST_HASH.get(block_index)
+    if (
+        expected_hash is None
+        or chunk_index != 0
+        or previous.get("voice") != voice
+        or previous.get("text") != text
+        or not destination.is_file()
+        or destination.stat().st_size < 512
+    ):
+        return False
+    return previous.get("hash") == expected_hash
 
 
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
@@ -152,6 +182,7 @@ async def synthesize(
 async def synthesize_fish_audio(
     text: str, destination: Path, voice_id: str
 ) -> None:
+    """Make exactly one billable Fish Audio request; never retry ambiguously."""
     api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError(
@@ -165,46 +196,29 @@ async def synthesize_fish_audio(
         "reference_id": voice_id,
         "format": "mp3",
     }, ensure_ascii=False).encode("utf-8")
-    last_error: Exception | None = None
-
-    for attempt in range(1, 4):
+    request = urllib.request.Request(
+        "https://api.fish.audio/v1/tts",
+        data=payload,
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "model": FISH_AUDIO_MODEL,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=90) as response:
+            audio = response.read()
+        if len(audio) < 512:
+            raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
+        temporary.write_bytes(audio)
+        temporary.replace(destination)
+    except Exception:
         temporary.unlink(missing_ok=True)
-        request = urllib.request.Request(
-            "https://api.fish.audio/v1/tts",
-            data=payload,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json",
-                "model": FISH_AUDIO_MODEL,
-            },
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(request, timeout=90) as response:
-                audio = response.read()
-            if len(audio) < 512:
-                raise RuntimeError("Fish Audio returned an empty or invalid MP3 response")
-            temporary.write_bytes(audio)
-            temporary.replace(destination)
-            return
-        except urllib.error.HTTPError as exc:
-            detail = exc.read(1200).decode("utf-8", errors="replace")
-            last_error = RuntimeError(f"Fish Audio API returned HTTP {exc.code}: {detail}")
-            if exc.code not in (408, 409, 425, 429, 500, 502, 503, 504):
-                break
-        except (urllib.error.URLError, TimeoutError, OSError, RuntimeError) as exc:
-            last_error = exc
-
-        temporary.unlink(missing_ok=True)
-        if attempt < 3:
-            await asyncio.sleep(2 ** attempt)
-
-    raise RuntimeError(
-        f"Fish Audio failed after {attempt} attempt(s) for voice {voice_id}: {last_error}"
-    ) from last_error
+        raise
 
 
-async def generate_story(story_path: Path) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -272,7 +286,126 @@ async def generate_story(story_path: Path) -> bool:
             if isinstance(item, dict) and str(item.get("block_index", "")).isdigit()
         }
 
+        # Preflight every existing Arabic segment before making any billable request.
+        # This pilot may regenerate only the six approved narrator blocks.
+        if lang == "ar" and pronunciation_data:
+            planned_regenerations: set[int] = set()
+            for planned_index, planned_block in enumerate(blocks):
+                if not isinstance(planned_block, dict):
+                    continue
+                planned_speaker = planned_block.get("speaker")
+                planned_original = re.sub(
+                    r"\s+", " ", str(planned_block.get("text") or "")
+                ).strip()
+                if planned_speaker not in ("karma", "narrator") or not planned_original:
+                    continue
+                planned_text = prepare_arabic_audio_text(
+                    planned_original, pronunciation_blocks.get(str(planned_index))
+                )
+                planned_chunks = split_audio_chunks(planned_text)
+                planned_voice = (
+                    FISH_AUDIO_KARMA_VOICE_ID
+                    if planned_speaker == "karma"
+                    else FISH_AUDIO_NARRATOR_VOICE_ID
+                )
+                planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
+                if planned_speaker == "karma":
+                    if len(planned_chunks) != 1 or not is_original_karma_clip(
+                        planned_index,
+                        0,
+                        planned_chunks[0],
+                        planned_voice,
+                        old_segments.get((planned_index, 0), {}),
+                        output_dir / f"{planned_index:03d}.mp3",
+                    ):
+                        raise RuntimeError(
+                            "Safety stop before Fish Audio: original Karma audio "
+                            f"block {planned_index} failed its immutable hash check."
+                        )
+                    continue
+                for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
+                    planned_previous = old_segments.get(
+                        (planned_index, planned_chunk_index), {}
+                    )
+                    planned_filename = (
+                        f"{planned_index:03d}.mp3"
+                        if planned_chunk_index == 0
+                        else f"{planned_index:03d}-{planned_chunk_index:02d}.mp3"
+                    )
+                    planned_destination = output_dir / planned_filename
+                    planned_hash = text_hash(
+                        planned_chunk, planned_voice, planned_rate, planned_pitch, "ar"
+                    )
+                    is_unchanged = (
+                        planned_previous.get("hash") == planned_hash
+                        and planned_previous.get("voice") in (None, planned_voice)
+                        and planned_destination.is_file()
+                        and planned_destination.stat().st_size >= 512
+                    )
+                    if not is_unchanged:
+                        if (
+                            planned_speaker != "narrator"
+                            or planned_index not in FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+                        ):
+                            raise RuntimeError(
+                                "Safety stop before Fish Audio: unexpected regeneration "
+                                f"for block {planned_index} ({planned_speaker})."
+                            )
+                        planned_regenerations.add(planned_index)
+
+            unexpected_regenerations = planned_regenerations - FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+            if unexpected_regenerations:
+                raise RuntimeError(
+                    "Safety stop before Fish Audio: unexpected blocks need regeneration: "
+                    f"{sorted(unexpected_regenerations)}."
+                )
+            print(
+                "PILOT PREFLIGHT OK: remaining narrator blocks to generate "
+                f"{sorted(planned_regenerations)}; already-current approved blocks "
+                f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
+            )
+
+        if dry_run:
+            if not pronunciation_data:
+                raise RuntimeError("Dry-run mode requires the approved Arabic pronunciation file.")
+            print("DRY RUN ONLY: no Fish Audio request was sent and no MP3 or manifest was changed.")
+            return True
+
         segments: list[dict[str, Any]] = []
+        processed_manifest_segments = {
+            (int(item["block_index"]), int(item.get("chunk_index", 0))): item
+            for item in old_manifest.get("segments", [])
+            if isinstance(item, dict) and str(item.get("block_index", "")).isdigit()
+        }
+
+        def save_manifest_checkpoint() -> None:
+            # Preserve old entries for unfinished blocks and replace each
+            # successfully generated segment immediately. This makes a rerun
+            # resume completed clips instead of spending credits on them again.
+            checkpoint_segments = dict(processed_manifest_segments)
+            for current_segment in segments:
+                key = (
+                    int(current_segment["block_index"]),
+                    int(current_segment.get("chunk_index", 0)),
+                )
+                checkpoint_segments[key] = current_segment
+            checkpoint_manifest = {
+                "version": 1,
+                "engine": "fish-audio+edge-tts",
+                "story": slug,
+                "section": section,
+                "language": lang,
+                "segments": [
+                    checkpoint_segments[key]
+                    for key in sorted(checkpoint_segments)
+                ],
+            }
+            temporary = manifest_path.with_suffix(".json.partial")
+            temporary.write_text(
+                json.dumps(checkpoint_manifest, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
+            temporary.replace(manifest_path)
         for block_index, block in enumerate(blocks):
             if not isinstance(block, dict):
                 continue
@@ -314,6 +447,20 @@ async def generate_story(story_path: Path) -> bool:
                 digest = None
                 for candidate_voice in ordered_candidates:
                     candidate_hash = text_hash(chunk_text, candidate_voice, rate, pitch, lang)
+                    if speaker == "karma" and is_original_karma_clip(
+                        block_index,
+                        chunk_index,
+                        chunk_text,
+                        candidate_voice,
+                        previous,
+                        destination,
+                    ):
+                        selected_voice = candidate_voice
+                        digest = previous["hash"]
+                        print(
+                            f"PRESERVED ORIGINAL KARMA {relative.parent}/{lang}/{filename}"
+                        )
+                        break
                     if (
                         previous.get("hash") == candidate_hash
                         and previous_voice in (None, candidate_voice)
@@ -334,7 +481,7 @@ async def generate_story(story_path: Path) -> bool:
                         print(f"GENERATED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
                         break
                     except Exception as exc:
-                        print(f"VOICE RETRY {relative.parent}/{lang}/{filename}: {candidate_voice}: {exc}", file=sys.stderr)
+                        print(f"VOICE FAILED {relative.parent}/{lang}/{filename}: {candidate_voice}: {exc}", file=sys.stderr)
 
                 if selected_voice is None or digest is None:
                     raise RuntimeError(
@@ -352,6 +499,8 @@ async def generate_story(story_path: Path) -> bool:
                     "hash": digest,
                     "text": chunk_text,
                 })
+                if use_fish_audio:
+                    save_manifest_checkpoint()
                 completed += 1
 
         if not segments:
@@ -382,11 +531,19 @@ async def generate_story(story_path: Path) -> bool:
 
 
 async def main() -> int:
+    parser = argparse.ArgumentParser(description="Generate the approved Khaledoon audio pilot.")
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Validate the Magdi Yacoub Arabic regeneration scope without contacting any TTS provider.",
+    )
+    args = parser.parse_args()
+
     # The only enabled Fish Audio target is Magdi Yacoub Arabic.
     # Existing Karma clips remain unchanged; narrator clips are regenerated
     # with the owner-approved voice because the voice ID is part of the hash.
     story = ROOT / "stories" / "science" / "015" / "story.json"
-    return 0 if await generate_story(story) else 1
+    return 0 if await generate_story(story, dry_run=args.dry_run) else 1
 
 
 if __name__ == "__main__":

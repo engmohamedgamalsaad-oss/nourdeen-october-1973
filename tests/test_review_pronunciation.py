@@ -117,19 +117,21 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             reviewer.DEFAULT_BLOCK_INDEX,
         )
         self.assertEqual(report["structural_validation"]["status"], "PASS")
-        self.assertEqual(report["overall_textual_result"], "PASS_SOURCE_ONLY")
-        self.assertEqual(report["block"]["textual_result"], "PASS")
+        # The approved pronunciation source has changed, but the MP3/manifest
+        # still describe the old recording. The reviewer must expose this as FAIL.
+        self.assertEqual(report["overall_textual_result"], "FAIL")
+        self.assertEqual(report["block"]["textual_result"], "FAIL")
         self.assertEqual(
-            report["block"]["word_identity_and_order"]["visible_vs_submitted"]["visible_word_count"],
-            33,
+            report["block"]["word_identity_and_order"]["visible_vs_submitted"]["status"],
+            "PASS",
         )
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
-            "NOT_AVAILABLE",
+            "FAIL",
         )
         self.assertEqual(
             report["block"]["manifest_text_verification"],
-            "NOT_STORED_IN_MANIFEST",
+            "AVAILABLE",
         )
         self.assertRegex(report["manifest_sha256"], r"^[0-9a-f]{64}$")
         self.assertRegex(report["block"]["audio_segments"][0]["content_hash"], r"^[0-9a-f]{64}$")
@@ -142,10 +144,11 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(report["scope"]["block_count"], 13)
         self.assertEqual(report["summary"]["structural_failures"], 0)
-        self.assertEqual(report["summary"]["block_results"]["PASS_SOURCE_ONLY"], 7)
-        self.assertEqual(report["summary"]["block_results"]["REVIEW"], 6)
-        self.assertEqual(report["summary"]["block_results"]["FAIL"], 0)
-        self.assertEqual(report["summary"]["overall_textual_result"], "REVIEW")
+        # Old manifest text must not be treated as if it matched the new source.
+        self.assertEqual(report["summary"]["block_results"]["PASS_SOURCE_ONLY"], 0)
+        self.assertGreater(report["summary"]["block_results"]["REVIEW"], 0)
+        self.assertGreater(report["summary"]["block_results"]["FAIL"], 0)
+        self.assertEqual(report["summary"]["overall_textual_result"], "FAIL")
 
 
 if __name__ == "__main__":

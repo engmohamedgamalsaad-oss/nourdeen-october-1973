@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'scripts/review_pronunciation.py'
+      - 'scripts/generate_story_audio.py'
       - 'tests/test_review_pronunciation.py'
       - 'stories/science/015/story.json'
       - 'stories/science/015/audio-pronunciation.json'
@@ -31,8 +32,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile reviewer
-        run: python -m py_compile scripts/review_pronunciation.py
+      - name: Compile reviewer and guarded audio generator
+        run: python -m py_compile scripts/review_pronunciation.py scripts/generate_story_audio.py
+
+      - name: Install generator dependency for no-cost preflight
+        run: python -m pip install edge-tts
+
+      - name: Run guarded audio generator without contacting Fish Audio
+        run: python scripts/generate_story_audio.py --dry-run
 
       - name: Run focused unit and pilot integration tests
         run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
