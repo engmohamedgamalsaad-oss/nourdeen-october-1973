@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import edge_tts
+import review_pronunciation as pronunciation_review
 
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
@@ -106,11 +107,24 @@ def is_original_karma_clip(
 
 
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
-    """Use a reviewed, story-specific pronunciation script for audio only."""
+    """Allow pronunciation marks only; spoken words and their order are immutable."""
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
     candidate = re.sub(r"\s+", " ", candidate).strip()
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
+
+    visible_words = pronunciation_review.tokenize(text)
+    audio_words = pronunciation_review.tokenize(candidate)
+    if visible_words != audio_words:
+        if pronunciation_review.is_number_form_only_difference(visible_words, audio_words):
+            reason = "number/date wording differs and requires editorial correction in the visible story first"
+        else:
+            reason = "spoken words or their order differ from the visible story"
+        raise ValueError(
+            "Unsafe Arabic audio text rejected before TTS: "
+            f"{reason}. Do not rewrite, add, remove, or reorder words; "
+            "only diacritics and punctuation may differ."
+        )
     return candidate
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
