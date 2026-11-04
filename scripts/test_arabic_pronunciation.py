@@ -15,6 +15,8 @@ from arabic_pronunciation import (
 DICTIONARY = {
     "schema_version": 1,
     "entries": [
+        {"id": "centre-after-anna", "match": "مركز أسوان للقلب", "spoken": "مَرْكَزَ أَسْوَانَ لِلْقَلْبِ", "before": "أن"},
+        {"id": "centre-full", "match": "مركز أسوان للقلب", "spoken": "مَرْكَزُ أَسْوَانَ لِلْقَلْبِ"},
         {"id": "centre", "match": "مركز أسوان", "spoken": "مَرْكَزُ أَسْوَانَ"},
         {"id": "studies", "match": "وتذكر الدراسات", "spoken": "وَتَذْكُرُ الدِّرَاسَاتُ"},
     ],
@@ -26,6 +28,16 @@ class ArabicPronunciationTests(unittest.TestCase):
         result, used = apply_dictionary("يعني مركز أسوان مش بس بيعالج المرضى؟", DICTIONARY)
         self.assertIn("مَرْكَزُ أَسْوَانَ", result)
         self.assertEqual(used, ["centre"])
+
+    def test_grammatical_context_selects_accusative_case(self):
+        result, used = apply_dictionary("إلى أن مركز أسوان للقلب يجمع المرضى", DICTIONARY)
+        self.assertIn("مَرْكَزَ أَسْوَانَ", result)
+        self.assertEqual(used, ["centre-after-anna"])
+
+    def test_grammatical_context_keeps_nominative_case(self):
+        result, used = apply_dictionary("بدأ مركز أسوان للقلب استقبال المرضى", DICTIONARY)
+        self.assertIn("مَرْكَزُ أَسْوَانَ", result)
+        self.assertEqual(used, ["centre-full"])
 
     def test_contextual_phrase_studies(self):
         result, used = apply_dictionary("وتذكر الدراسات المنشورة هذه النتائج.", DICTIONARY)
