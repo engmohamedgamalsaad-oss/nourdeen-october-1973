@@ -1,4 +1,5 @@
 name: Magdi Yacoub — one Arabic audio segment
+# A controlled push to this workflow file triggers the one-segment pilot.
 on:
   push:
     branches: [main]
