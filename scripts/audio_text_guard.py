@@ -5,7 +5,7 @@ import re
 import unicodedata
 from typing import Any
 
-WORD_RE = re.compile(r"[^\\W_]+", re.UNICODE)
+WORD_RE = re.compile(r"[^\W_]+", re.UNICODE)
 
 
 def word_tokens(value: str) -> list[str]:
@@ -13,8 +13,8 @@ def word_tokens(value: str) -> list[str]:
     normalized = unicodedata.normalize("NFKC", value).casefold()
     normalized = "".join(
         char for char in normalized
-        if char == "\\u0640" or unicodedata.category(char) != "Mn"
-    ).replace("\\u0640", "")
+        if char == "\u0640" or unicodedata.category(char) != "Mn"
+    ).replace("\u0640", "")
     return WORD_RE.findall(normalized)
 
 
@@ -37,8 +37,8 @@ def validate_pronunciation_blocks(
         if not isinstance(candidate, str) or not candidate.strip():
             raise ValueError(f"Pronunciation override {index} must be non-empty text.")
 
-        visible = re.sub(r"\\s+", " ", str(block.get("text") or "")).strip()
-        submitted = re.sub(r"\\s+", " ", candidate).strip()
+        visible = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
+        submitted = re.sub(r"\s+", " ", candidate).strip()
         if word_tokens(visible) != word_tokens(submitted):
             raise ValueError(
                 "Safety stop before TTS: audio-pronunciation text changes word identity, "
