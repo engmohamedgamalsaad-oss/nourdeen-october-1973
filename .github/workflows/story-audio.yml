@@ -3,8 +3,8 @@ name: story-audio-magdi-yacoub-pilot
 on:
   workflow_dispatch:
     inputs:
-      confirm_paid_generation:
-        description: "اختر yes فقط بعد الموافقة الصريحة على استهلاك رصيد Fish Audio"
+      confirm_fish_audio_request:
+        description: "اختر yes فقط بعد الموافقة الصريحة على إرسال طلب توليد إلى Fish Audio"
         required: true
         type: choice
         options:
@@ -21,7 +21,7 @@ concurrency:
 
 jobs:
   generate:
-    if: inputs.confirm_paid_generation == 'yes'
+    if: inputs.confirm_fish_audio_request == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
