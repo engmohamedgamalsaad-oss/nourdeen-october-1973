@@ -77,7 +77,7 @@ def load_pronunciation_overrides(story_path: Path, slug: str,
     if not isinstance(overrides, dict):
         raise ValueError(f"{path}: blocks must be an object")
     from audio_text_guard import validate_pronunciation_blocks
-    validate_pronunciation_blocks(arabic_blocks, overrides)
+    validate_pronunciation_blocks(\n        arabic_blocks, overrides, data.get("approved_number_rewrites", {})\n    )
     return overrides
 
 
