@@ -55,7 +55,11 @@ jobs:
           from audio_text_guard import validate_pronunciation_blocks
           story = json.loads(Path("stories/science/015/story.json").read_text(encoding="utf-8"))
           pronunciation = json.loads(Path("stories/science/015/audio-pronunciation.json").read_text(encoding="utf-8"))
-          validate_pronunciation_blocks(\n    story["i18n"]["ar"]["blocks"],\n    pronunciation["blocks"],\n    pronunciation.get("approved_number_rewrites", {}),\n)
+          validate_pronunciation_blocks(
+              story["i18n"]["ar"]["blocks"],
+              pronunciation["blocks"],
+              pronunciation.get("approved_number_rewrites", {}),
+          )
           print("PASS: all Arabic audio overrides preserve visible words and order.")
           PY
 
