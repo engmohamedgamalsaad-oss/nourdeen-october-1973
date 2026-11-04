@@ -49,15 +49,6 @@ jobs:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: python scripts/generate_story_audio.py
 
-      - name: Upload the generated MP3 for immediate listening
-        if: github.event.pull_request.head.ref == 'feature/magdi-contextual-pronunciation-20261104'
-        uses: actions/upload-artifact@v4
-        with:
-          name: magdi-yacoub-ar-007-mp3
-          path: assets/audio/science/magdi-yacoub/ar/007.mp3
-          if-no-files-found: error
-          retention-days: 7
-
       - name: Commit only the single regenerated narrator sample
         if: github.event.pull_request.head.ref == 'feature/magdi-contextual-pronunciation-20261104'
         shell: bash
