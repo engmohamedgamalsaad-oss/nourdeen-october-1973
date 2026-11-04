@@ -1,0 +1,39 @@
+name: Arabic pronunciation notebook checks
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/audio_qa.py'
+      - 'audio-qa/**'
+      - 'tests/test_audio_qa.py'
+      - '.github/workflows/audio-qa.yml'
+      - 'scripts/generate_story_audio.py'
+      - 'stories/science/015/**'
+
+permissions:
+  contents: read
+
+jobs:
+  notebook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile notebook and generator
+        run: python -m py_compile scripts/audio_qa.py scripts/generate_story_audio.py
+      - name: Run read-only notebook unit tests
+        run: python -m unittest discover -s tests -p 'test_audio_qa.py' -v
+      - name: Run Magdi Yacoub read-only smoke report
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/audio_qa.py --story science/015 > "$RUNNER_TEMP/audio-qa-report.md"
+          test -s "$RUNNER_TEMP/audio-qa-report.md"
+          grep -q 'تقرير دفتر النطق' "$RUNNER_TEMP/audio-qa-report.md"
+      - name: Verify the report did not modify repository files
+        run: git diff --exit-code -- audio-qa stories assets/audio
