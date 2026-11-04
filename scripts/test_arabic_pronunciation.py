@@ -52,6 +52,27 @@ class ArabicPronunciationTests(unittest.TestCase):
         self.assertIn("مَرْكَزُ أَسْوَانَ", result)
         self.assertEqual(set(used), {"studies", "centre"})
 
+    def test_punctuation_is_not_removed_by_phrase_match(self):
+        result, used = apply_dictionary("وتذكر، الدراسات مهمة", DICTIONARY)
+        self.assertEqual(result, "وتذكر، الدراسات مهمة")
+        self.assertEqual(used, [])
+
+    def test_real_magdi_yacoub_audio_source_keeps_all_letters(self):
+        import json
+        from pathlib import Path
+        root = Path(__file__).resolve().parents[1]
+        story = json.loads((root / "stories/science/015/story.json").read_text(encoding="utf-8"))
+        overrides = json.loads((root / "stories/science/015/audio-pronunciation.json").read_text(encoding="utf-8"))
+        from arabic_pronunciation import load_dictionary
+        dictionary = load_dictionary(root / "audio/pronunciation/ar-EG.json")
+        blocks = story["i18n"]["ar"]["blocks"]
+        for index, block in enumerate(blocks):
+            if block.get("speaker") != "narrator":
+                continue
+            source = overrides.get("blocks", {}).get(str(index), block["text"])
+            result, _ = apply_dictionary(source, dictionary)
+            self.assertEqual(lexical_form(result), lexical_form(source), f"block {index}")
+
     def test_rejects_lexical_rewrite(self):
         bad = {"schema_version": 1, "entries": [
             {"id": "bad", "match": "مركز", "spoken": "مُرَكَّز"}
