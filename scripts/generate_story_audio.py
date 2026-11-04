@@ -119,7 +119,7 @@ def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None)
     """Allow diacritics/punctuation only; never allow words to change or move."""
     original = re.sub(r"\s+", " ", text).strip()
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else original
-    candidate = re.sub(r"\\s+", " ", candidate).strip()
+    candidate = re.sub(r"\s+", " ", candidate).strip()
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
     if arabic_word_tokens(original) != arabic_word_tokens(candidate):
