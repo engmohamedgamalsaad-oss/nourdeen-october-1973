@@ -20,7 +20,7 @@ MANIFEST_PATH = AUDIO_DIR / "manifest.json"
 AUDIO_PATH = AUDIO_DIR / "001.mp3"
 
 # Preserve the exact narrator voice already recorded in the published manifest.
-VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"
+VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"
 MODEL = "s2.1-pro-free"
 GENERATOR_VERSION = "3"
 AUDIO_TEXT_VERSION = "manual-word-pronunciation-corrections-only-v1"
