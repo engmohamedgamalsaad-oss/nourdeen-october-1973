@@ -253,9 +253,9 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
         languages_to_generate = ("ar",)
         # Fail closed before creating output folders or contacting any TTS provider.
-        validate_pronunciation_blocks(
-            translations.get("ar", {}).get("blocks", []), pronunciation_blocks
-        )
+        arabic_localized = translations.get("ar")
+        arabic_blocks = arabic_localized.get("blocks") if isinstance(arabic_localized, dict) else []
+        validate_pronunciation_blocks(arabic_blocks, pronunciation_blocks)
     else:
         pronunciation_blocks = {}
         languages_to_generate = LANGUAGES
@@ -269,7 +269,6 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             raise ValueError(f"{relative}: missing {lang} blocks; refusing partial manifest")
 
         output_dir = story_audio_root / lang
-        output_dir.mkdir(parents=True, exist_ok=True)
         manifest_path = output_dir / "manifest.json"
         old_manifest: dict[str, Any] = {}
         if manifest_path.is_file():
@@ -285,7 +284,12 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
 
         # Preflight every existing Arabic segment before making any billable request.
         # This pilot may regenerate only the five approved narrator blocks.
-        if lang == "ar" and pronunciation_data:
+        if (
+            lang == "ar"
+            and pronunciation_data
+            and section == "science"
+            and slug == "magdi-yacoub"
+        ):
             planned_regenerations: set[int] = set()
             for planned_index, planned_block in enumerate(blocks):
                 if not isinstance(planned_block, dict):
@@ -363,11 +367,31 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             )
 
         if dry_run:
-            if not pronunciation_data:
-                raise RuntimeError("Dry-run mode requires the approved Arabic pronunciation file.")
-            print("DRY RUN ONLY: no Fish Audio request was sent and no MP3 or manifest was changed.")
-            return True
+            planned_segments = 0
+            for planned_block in blocks:
+                if not isinstance(planned_block, dict):
+                    continue
+                planned_speaker = planned_block.get("speaker")
+                planned_original = re.sub(
+                    r"\\s+", " ", str(planned_block.get("text") or "")
+                ).strip()
+                if planned_speaker not in ("karma", "narrator") or not planned_original:
+                    continue
+                planned_text = (
+                    prepare_arabic_audio_text(
+                        planned_original, pronunciation_blocks.get(str(blocks.index(planned_block)))
+                    )
+                    if lang == "ar"
+                    else planned_original
+                )
+                planned_segments += len(split_audio_chunks(planned_text))
+            print(
+                f"DRY RUN ONLY: {relative.parent}/{lang} would produce "
+                f"{planned_segments} segments; no folders, MP3s, manifests, or TTS requests."
+            )
+            continue
 
+        output_dir.mkdir(parents=True, exist_ok=True)
         segments: list[dict[str, Any]] = []
         processed_manifest_segments = {
             (int(item["block_index"]), int(item.get("chunk_index", 0))): item
@@ -523,23 +547,31 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             if old_file.name not in keep:
                 old_file.unlink()
 
+    if dry_run:
+        print(f"DRY RUN COMPLETE: {relative.parent}; no files were changed and no TTS request was sent.")
+        return True
+
     print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {', '.join(languages_to_generate)}")
     return True
 
 
 async def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate the approved Khaledoon audio pilot.")
+    parser = argparse.ArgumentParser(description="Generate audio for one published Khaledoon story.")
+    parser.add_argument(
+        "--story",
+        default="stories/science/015/story.json",
+        help="Repository-relative path to one story.json; October stories remain protected.",
+    )
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Validate the Magdi Yacoub Arabic regeneration scope without contacting any TTS provider.",
+        help="Validate every selected language and estimate segment counts without writing files or contacting TTS.",
     )
     args = parser.parse_args()
 
-    # The only enabled Fish Audio target is Magdi Yacoub Arabic.
-    # Existing Karma clips remain unchanged; narrator clips are regenerated
-    # with the owner-approved voice because the voice ID is part of the hash.
-    story = ROOT / "stories" / "science" / "015" / "story.json"
+    story = Path(args.story).expanduser()
+    if not story.is_absolute():
+        story = ROOT / story
     return 0 if await generate_story(story, dry_run=args.dry_run) else 1
 
 
