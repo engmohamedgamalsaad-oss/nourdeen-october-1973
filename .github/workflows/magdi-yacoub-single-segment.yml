@@ -1,6 +1,6 @@
 name: Magdi Yacoub — one Arabic audio segment
 # A controlled push to this workflow file triggers the one-segment pilot.
-# Voice ID guard is aligned with the currently published narrator manifest.
+# Generate the pilot using the user's explicitly selected narrator voice B.
 on:
   push:
     branches: [main]
