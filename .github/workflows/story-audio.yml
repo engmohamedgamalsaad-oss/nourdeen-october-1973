@@ -45,7 +45,7 @@ jobs:
       - name: Generate Magdi Yacoub Arabic audio
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py
+        run: python scripts/generate_story_audio.py --confirm-generation
 
       - name: Commit only Magdi Yacoub Arabic audio and its manifest
         shell: bash
