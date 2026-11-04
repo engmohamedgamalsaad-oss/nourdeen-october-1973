@@ -139,6 +139,54 @@ class GenerationConfirmationTests(unittest.TestCase):
             fish_tts.assert_not_awaited()
             self.assertFalse(audio_dir.exists())
 
+    def test_legacy_v3_manifest_hash_preserves_existing_audio_without_tts(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            story_path = root / "stories" / "science" / "001" / "story.json"
+            story_path.parent.mkdir(parents=True)
+            text = "A verified narrator sentence."
+            package = {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "legacy-audio-story",
+                "i18n": {"en": {"blocks": [{"speaker": "narrator", "text": text}]}},
+            }
+            story_path.write_text(json.dumps(package), encoding="utf-8")
+            (story_path.parent / "data.json").write_text(
+                json.dumps({"published": True}), encoding="utf-8"
+            )
+            voice, rate, pitch = generator.VOICE_SETTINGS["en"]["narrator"]
+            old_hash = generator.legacy_text_hash(text, voice, rate, pitch, "en")
+            audio_dir = root / "assets" / "audio" / "science" / "legacy-audio-story" / "en"
+            audio_dir.mkdir(parents=True)
+            (audio_dir / "000.mp3").write_bytes(b"x" * 1024)
+            manifest = {
+                "version": 1,
+                "engine": "fish-audio+edge-tts",
+                "story": "legacy-audio-story",
+                "section": "science",
+                "language": "en",
+                "segments": [{
+                    "block_index": 0, "chunk_index": 0, "speaker": "narrator",
+                    "voice": voice, "provider": "edge-tts", "model": "edge-tts",
+                    "src": "000.mp3", "hash": old_hash, "text": text,
+                }],
+            }
+            (audio_dir / "manifest.json").write_text(
+                json.dumps(manifest), encoding="utf-8"
+            )
+            with patch.object(generator, "ROOT", root):
+                with patch.object(generator, "synthesize", new=AsyncMock()) as edge_tts:
+                    with patch.object(generator, "synthesize_fish_audio", new=AsyncMock()) as fish_tts:
+                        result = asyncio.run(generator.generate_story(
+                            story_path, dry_run=False, languages=("en",)
+                        ))
+            self.assertTrue(result)
+            edge_tts.assert_not_awaited()
+            fish_tts.assert_not_awaited()
+            saved = json.loads((audio_dir / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(saved["segments"][0]["hash"], old_hash)
+
     def test_generator_rejects_story_path_outside_repository(self):
         with tempfile.TemporaryDirectory() as temporary:
             outside = Path(temporary) / "story.json"
