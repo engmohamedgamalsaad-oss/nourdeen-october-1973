@@ -1,0 +1,47 @@
+name: Isolated Fish Audio production — Ali Mosharafa
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - ".github/workflows/ali-mosharafa-fish-audio.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ali-mosharafa-fish-audio-experiment
+  cancel-in-progress: false
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/silma-ali-mosharrafa-20261104
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install audio and Arabic diacritization dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install text2tashkeel
+      - name: Compile isolated producer
+        run: python -m py_compile scripts/experimental/produce_ali_mosharafa_fish_audio.py
+      - name: Generate Arabic audio with the two approved Fish Audio voices
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: python scripts/experimental/produce_ali_mosharafa_fish_audio.py
+      - name: Upload final audio, segments, pronunciation source and report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ali-mosharafa-arabic-fish-audio
+          path: artifacts/ali-mosharrafa-audio/ar/
+          if-no-files-found: error
+          retention-days: 14
