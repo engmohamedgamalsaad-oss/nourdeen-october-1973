@@ -57,9 +57,9 @@ jobs:
 
       - name: Generate the selected story and languages
         env:
-          FISH_AUDIO_API_KEY: \${{ secrets.FISH_AUDIO_API_KEY }}
-          STORY_PATH: \${{ inputs.story_path }}
-          LANGUAGE_SELECTION: \${{ inputs.languages }}
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+          STORY_PATH: ${{ inputs.story_path }}
+          LANGUAGE_SELECTION: ${{ inputs.languages }}
         shell: bash
         run: |
           set -euo pipefail
@@ -70,11 +70,11 @@ jobs:
             ar|en|fr|it|de) args+=(--languages "$LANGUAGE_SELECTION") ;;
             *) echo "Unsupported language selection"; exit 2 ;;
           esac
-          python scripts/generate_story_audio.py "\${args[@]}"
+          python scripts/generate_story_audio.py "${args[@]}"
 
       - name: Commit only the selected story audio
         env:
-          STORY_PATH: \${{ inputs.story_path }}
+          STORY_PATH: ${{ inputs.story_path }}
         shell: bash
         run: |
           set -euo pipefail
