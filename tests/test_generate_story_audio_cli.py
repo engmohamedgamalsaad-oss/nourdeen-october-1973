@@ -79,14 +79,15 @@ class GenerationConfirmationTests(unittest.TestCase):
                     asyncio.run(generator.generate_story(outside, dry_run=True))
 
     def test_generator_protects_october_section_aliases(self):
-        with tempfile.TemporaryDirectory() as temporary:
-            root = Path(temporary)
-            story_path = root / "stories" / "october-1973" / "001" / "story.json"
-            story_path.parent.mkdir(parents=True)
-            with patch.object(generator, "ROOT", root):
-                result = asyncio.run(generator.generate_story(story_path, dry_run=True))
-            self.assertFalse(result)
-            self.assertFalse((root / "assets").exists())
+        for alias in ("october", "october-1973", "october1973", "october_1973", "October 1973"):
+            with self.subTest(alias=alias), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                story_path = root / "stories" / alias / "001" / "story.json"
+                story_path.parent.mkdir(parents=True)
+                with patch.object(generator, "ROOT", root):
+                    result = asyncio.run(generator.generate_story(story_path, dry_run=True))
+                self.assertFalse(result)
+                self.assertFalse((root / "assets").exists())
 
     def test_confirmed_generation_passes_selected_story_and_languages(self):
         with patch.object(
