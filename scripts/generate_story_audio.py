@@ -22,6 +22,8 @@ from typing import Any
 
 import edge_tts
 
+from arabic_pronunciation import load_dictionary, prepare_audio_text as prepare_with_shared_dictionary
+
 ROOT = Path(__file__).resolve().parents[1]
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "4"
@@ -105,13 +107,24 @@ def is_original_karma_clip(
     return previous.get("hash") == expected_hash
 
 
-def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
-    """Use a reviewed, story-specific pronunciation script for audio only."""
+def prepare_arabic_audio_text(
+    text: str,
+    reviewed_audio_text: str | None = None,
+    *,
+    use_shared_dictionary: bool = True,
+) -> str:
+    """Prepare audio-only text using story overrides plus the shared Arabic dictionary."""
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
     candidate = re.sub(r"\s+", " ", candidate).strip()
     if not candidate:
         raise ValueError("Arabic audio pronunciation text must not be empty")
-    return candidate
+    if not use_shared_dictionary:
+        return candidate
+    dictionary = load_dictionary(ROOT / "audio" / "pronunciation" / "ar-EG.json")
+    prepared, _used_entries = prepare_with_shared_dictionary(
+        candidate, dictionary=dictionary
+    )
+    return prepared
 
 def split_audio_chunks(text: str, max_chars: int = 440) -> list[str]:
     """Split only at sentence/word boundaries; never cut through a word."""
@@ -291,7 +304,9 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                 if planned_speaker not in ("karma", "narrator") or not planned_original:
                     continue
                 planned_text = prepare_arabic_audio_text(
-                    planned_original, pronunciation_blocks.get(str(planned_index))
+                    planned_original,
+                    pronunciation_blocks.get(str(planned_index)),
+                    use_shared_dictionary=(planned_speaker == "narrator"),
                 )
                 planned_chunks = split_audio_chunks(planned_text)
                 planned_voice = (
@@ -405,7 +420,14 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             if speaker not in ("karma", "narrator") or not original_text:
                 continue
 
-            audio_text = prepare_arabic_audio_text(original_text, pronunciation_blocks.get(str(block_index))) if lang == "ar" else original_text
+            audio_text = (
+                prepare_arabic_audio_text(
+                    original_text,
+                    pronunciation_blocks.get(str(block_index)),
+                    use_shared_dictionary=(speaker == "narrator"),
+                )
+                if lang == "ar" else original_text
+            )
             chunks = split_audio_chunks(audio_text)
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
             use_fish_audio = lang == "ar" and speaker in ("karma", "narrator")
