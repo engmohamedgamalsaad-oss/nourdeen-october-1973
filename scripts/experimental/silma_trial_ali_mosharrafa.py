@@ -11,7 +11,7 @@ BLOCKS = (0, 1, 2, 5, 8, 18)
 
 def main():
     story = json.loads(STORY.read_text(encoding="utf-8"))
-    assert story.get("slug") == "ali-mosharrafa"
+    assert story.get("slug") == "ali-mosharafa"
     blocks = story["i18n"]["ar"]["blocks"]
     manifest = json.loads((REFDIR / "manifest.json").read_text(encoding="utf-8"))
     assert manifest.get("story") == "magdi-yacoub"
