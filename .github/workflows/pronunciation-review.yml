@@ -68,3 +68,30 @@ jobs:
       - name: Print pilot block 001 and all-block summary for review
         run: |
           python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/pronunciation-review.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"summary": r["summary"], "pilot_block_001": r["blocks"][1]}, ensure_ascii=False, indent=2))'
+
+      - name: Block PR when saved audio text differs from visible story
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          report_path = Path(os.environ["RUNNER_TEMP"]) / "pronunciation-review.json"
+          report = json.loads(report_path.read_text(encoding="utf-8"))
+          summary = report["summary"]
+          result = summary["overall_textual_result"]
+          failed = [
+              block for block in report["blocks"]
+              if block.get("overall_textual_result") != "PASS"
+          ]
+          if result != "PASS" or failed:
+              details = [
+                  f"block {block.get('block_index')}: {block.get('overall_textual_result')}"
+                  for block in failed
+              ]
+              print(f"BLOCKED: textual audio integrity result is {result}.")
+              print("Review required: " + ", ".join(details))
+              raise SystemExit(1)
+          print("PASS: every saved manifest text matches the visible story words and order.")
+          print("Note: this check does not test spoken pronunciation.")
+          PY
