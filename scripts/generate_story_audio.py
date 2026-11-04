@@ -225,7 +225,7 @@ async def generate_story(
     if story_path.name != "story.json" or len(relative.parts) != 4 or relative.parts[0] != "stories":
         raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
     section = relative.parts[1]
-    if section == "october":
+    if section.casefold() in {"october", "october-1973", "october1973"}:
         print(f"SKIP protected October story: {relative}")
         return False
 
