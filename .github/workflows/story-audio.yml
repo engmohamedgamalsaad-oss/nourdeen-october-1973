@@ -65,8 +65,9 @@ jobs:
           set -euo pipefail
           args=(--story "$STORY_PATH" --confirm-generation)
           case "$LANGUAGE_SELECTION" in
-            all) args+=(--languages ar en fr it de) ;;
-            ar|en|fr|it|de) args+=(--languages "$LANGUAGE_SELECTION") ;;
+            all) args+=(--languages ar en fr it de --confirm-fish-audio) ;;
+            ar) args+=(--languages ar --confirm-fish-audio) ;;
+            en|fr|it|de) args+=(--languages "$LANGUAGE_SELECTION") ;;
             *) echo "Unsupported language selection"; exit 2 ;;
           esac
           python scripts/generate_story_audio.py "${args[@]}"
