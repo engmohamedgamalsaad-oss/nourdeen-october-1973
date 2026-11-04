@@ -1,0 +1,41 @@
+name: Isolated Fish Audio context-aware production — Ali Mosharafa
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - ".github/workflows/ali-mosharafa-fish-audio-context.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  produce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/silma-ali-mosharrafa-20261104
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install audio dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Compile isolated producer
+        run: python -m py_compile scripts/experimental/produce_ali_mosharafa_fish_audio.py
+      - name: Generate Arabic audio with approved Fish Audio voices
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: python scripts/experimental/produce_ali_mosharafa_fish_audio.py
+      - name: Upload audio and pronunciation manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: ali-mosharafa-context-aware-fish-audio
+          path: artifacts/ali-mosharrafa-audio/ar/
+          if-no-files-found: error
+          retention-days: 14
