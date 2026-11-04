@@ -10,7 +10,7 @@ VOICES = {
     "karma": "592625f68416462f8b6161ddf5fdbffb",
 }
 BLOCKS = (0, 1, 2, 5, 8, 18)
-MAX_REFERENCE_SECONDS = 7.8
+MAX_REFERENCE_SECONDS = 7.8  # Updated reference-selection pass
 
 
 def probe_duration(path):
