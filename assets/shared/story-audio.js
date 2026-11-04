@@ -39,7 +39,7 @@
   var lang = document.documentElement.lang || 'ar';
   var ui = copy[lang] || copy.ar;
   var blocks = story.i18n && story.i18n[lang] && story.i18n[lang].blocks || [];
-  var approvedVoices = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
+  var approvedVoices = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'b65cfd7ce5e44607aedafeea3dbb01e8' };
   var queue = [];
   var index = 0;
   var activeAudio = null;
