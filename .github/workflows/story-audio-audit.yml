@@ -48,7 +48,7 @@ jobs:
       - name: Install dependency for local dry-run only
         run: python -m pip install edge-tts
 
-      - name: Dry-run every published non-pilot story without writing files or calling TTS
+      - name: Dry-run every published story without writing files or calling TTS
         run: |
           python - <<'PY'
           import json
@@ -62,8 +62,6 @@ jobs:
               package = json.loads(story_path.read_text(encoding="utf-8"))
               if package.get("section") == "october":
                   continue
-              if package.get("section") == "science" and story_path.parent.name == "015":
-                  continue  # This pilot is tested separately; its unsafe override must stop.
               metadata_path = story_path.with_name("data.json")
               if not metadata_path.is_file():
                   continue
@@ -78,7 +76,7 @@ jobs:
           after = subprocess.check_output(["git", "status", "--porcelain"], text=True)
           if before != after:
               raise SystemExit("Dry-run changed repository files.")
-          print(f"Dry-run validated {checked} published non-pilot stories; no TTS calls or file changes.")
+          print(f"Dry-run validated {checked} published non-October stories; no TTS calls or file changes.")
           PY
 
       - name: Build repository-wide audio inventory (no TTS or ASR)
