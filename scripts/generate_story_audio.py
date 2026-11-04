@@ -31,9 +31,9 @@ FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-appro
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 # Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
 FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 4, 6, 8, 10, 11}
-# Exact byte hashes of the three owner-approved original Karma clips.
-# They are immutable in this narrator-only pilot.
-KARMA_ORIGINAL_AUDIO_SHA256 = {
+# Original manifest input hashes for the three owner-approved Karma clips.
+# They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
+KARMA_ORIGINAL_MANIFEST_HASH = {
     0: "3d531998fb878488a7f95d5d5f8dd2b15e4df9007529ea4f3a9d7e53909c9c64",
     2: "a8c4f80cdf7b59eb8ba2676eef94a109e20c86b51476d4b45c546bdca3e9ea10",
     3: "88ee90b74d24062258dc1c70a18eec8aaf0430d4043f671addad5d4926a73064",
@@ -92,7 +92,7 @@ def is_original_karma_clip(
     previous: dict[str, Any],
     destination: Path,
 ) -> bool:
-    expected_hash = KARMA_ORIGINAL_AUDIO_SHA256.get(block_index)
+    expected_hash = KARMA_ORIGINAL_MANIFEST_HASH.get(block_index)
     if (
         expected_hash is None
         or chunk_index != 0
@@ -102,8 +102,7 @@ def is_original_karma_clip(
         or destination.stat().st_size < 512
     ):
         return False
-    actual_hash = hashlib.sha256(destination.read_bytes()).hexdigest()
-    return actual_hash == expected_hash
+    return previous.get("hash") == expected_hash
 
 
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
