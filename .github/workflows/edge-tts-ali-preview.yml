@@ -1,0 +1,38 @@
+name: Ali Mosharafa Edge Neural Arabic preview
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - "scripts/experimental/edge_tts_ali_preview.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/silma-ali-mosharrafa-20261104
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install Edge TTS and FFmpeg
+        run: |
+          python -m pip install --disable-pip-version-check edge-tts
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Generate Egyptian Arabic dialogue preview
+        run: python scripts/experimental/edge_tts_ali_preview.py
+      - name: Upload MP3 preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: ali-mosharafa-edge-egyptian-preview
+          path: artifacts/ali-mosharafa-edge-preview/
+          if-no-files-found: error
+          retention-days: 14
