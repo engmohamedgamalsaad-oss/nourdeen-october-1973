@@ -58,7 +58,12 @@ def safe_audio_file(language_dir: Path, source: str) -> Path | None:
     return candidate
 
 
-def audit_language(story_path: Path, package: dict[str, Any], language: str) -> dict[str, Any]:
+def audit_language(
+    story_path: Path,
+    package: dict[str, Any],
+    language: str,
+    root: Path = ROOT,
+) -> dict[str, Any]:
     section = str(package.get("section") or "")
     slug = str(package.get("slug") or "")
     localized = package.get("i18n", {}).get(language, {})
@@ -66,7 +71,7 @@ def audit_language(story_path: Path, package: dict[str, Any], language: str) -> 
     if not isinstance(blocks, list):
         return {"language": language, "status": "MISSING_STORY_TRANSLATION"}
 
-    language_dir = ROOT / "assets" / "audio" / section / slug / language
+    language_dir = root / "assets" / "audio" / section / slug / language
     manifest_path = language_dir / "manifest.json"
     if not manifest_path.is_file():
         return {
@@ -204,8 +209,10 @@ def audit_repository(root: Path = ROOT) -> dict[str, Any]:
             "languages": {},
         }
         for language in LANGUAGES:
-            if isinstance(languages, dict) and language in languages:
-                story_result["languages"][language] = audit_language(story_path, package, language)
+            # Always report all five languages, including absent translations.
+            story_result["languages"][language] = audit_language(
+                story_path, package, language, root=root
+            )
         results.append(story_result)
 
     language_statuses: dict[str, dict[str, int]] = {}
