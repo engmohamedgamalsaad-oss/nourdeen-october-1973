@@ -278,7 +278,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         }
 
         # Preflight every existing Arabic segment before making any billable request.
-        # This pilot may regenerate only the six approved narrator blocks.
+        # This pilot may regenerate only the five approved narrator blocks.
         if lang == "ar" and pronunciation_data:
             planned_regenerations: set[int] = set()
             for planned_index, planned_block in enumerate(blocks):
