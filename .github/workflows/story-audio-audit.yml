@@ -11,6 +11,7 @@ on:
       - 'tests/test_audio_text_guard.py'
       - 'tests/test_audit_story_audio.py'
       - 'stories/**/story.json'
+      - 'stories/**/data.json'
       - 'stories/**/audio-pronunciation.json'
       - 'assets/audio/**/manifest.json'
       - '.github/workflows/story-audio-audit.yml'
@@ -69,7 +70,7 @@ jobs:
               if metadata.get("published") is not True:
                   continue
               subprocess.run(
-                  [sys.executable, "scripts/generate_story_audio.py", "--story", str(story_path), "--dry-run"],
+                  [sys.executable, "scripts/generate_story_audio.py", "--story", str(story_path), "--languages", "ar", "en", "fr", "it", "de", "--dry-run"],
                   check=True,
               )
               checked += 1
