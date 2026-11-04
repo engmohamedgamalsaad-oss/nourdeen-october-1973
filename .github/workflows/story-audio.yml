@@ -2,11 +2,15 @@ name: story-audio-magdi-yacoub-pilot
 
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/generate_story_audio.py'
-      - '.github/workflows/story-audio.yml'
+    inputs:
+      confirm_paid_generation:
+        description: "اكتب yes فقط إذا كنت توافق صراحةً على استهلاك رصيد Fish Audio لتوليد الصوت"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+        default: "no"
 
 permissions:
   contents: write
@@ -17,6 +21,7 @@ concurrency:
 
 jobs:
   generate:
+    if: inputs.confirm_paid_generation == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
