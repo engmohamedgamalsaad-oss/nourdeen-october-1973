@@ -311,14 +311,53 @@ async def generate_story(story_path: Path) -> bool:
                             )
                         planned_regenerations.add(planned_index)
 
-            if planned_regenerations != FISH_AUDIO_ALLOWED_REGEN_BLOCKS:
+            unexpected_regenerations = planned_regenerations - FISH_AUDIO_ALLOWED_REGEN_BLOCKS
+            if unexpected_regenerations:
                 raise RuntimeError(
-                    "Safety stop before Fish Audio: expected exactly blocks "
-                    f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS)}, found "
-                    f"{sorted(planned_regenerations)}."
+                    "Safety stop before Fish Audio: unexpected blocks need regeneration: "
+                    f"{sorted(unexpected_regenerations)}."
                 )
+            print(
+                "PILOT PREFLIGHT OK: remaining narrator blocks to generate "
+                f"{sorted(planned_regenerations)}; already-current approved blocks "
+                f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
+            )
 
         segments: list[dict[str, Any]] = []
+        processed_manifest_segments = {
+            (int(item["block_index"]), int(item.get("chunk_index", 0))): item
+            for item in old_manifest.get("segments", [])
+            if isinstance(item, dict) and str(item.get("block_index", "")).isdigit()
+        }
+
+        def save_manifest_checkpoint() -> None:
+            # Preserve old entries for unfinished blocks and replace each
+            # successfully generated segment immediately. This makes a rerun
+            # resume completed clips instead of spending credits on them again.
+            checkpoint_segments = dict(processed_manifest_segments)
+            for current_segment in segments:
+                key = (
+                    int(current_segment["block_index"]),
+                    int(current_segment.get("chunk_index", 0)),
+                )
+                checkpoint_segments[key] = current_segment
+            checkpoint_manifest = {
+                "version": 1,
+                "engine": "fish-audio+edge-tts",
+                "story": slug,
+                "section": section,
+                "language": lang,
+                "segments": [
+                    checkpoint_segments[key]
+                    for key in sorted(checkpoint_segments)
+                ],
+            }
+            temporary = manifest_path.with_suffix(".json.partial")
+            temporary.write_text(
+                json.dumps(checkpoint_manifest, ensure_ascii=False, indent=2) + "\\n",
+                encoding="utf-8",
+            )
+            temporary.replace(manifest_path)
         for block_index, block in enumerate(blocks):
             if not isinstance(block, dict):
                 continue
@@ -398,6 +437,8 @@ async def generate_story(story_path: Path) -> bool:
                     "hash": digest,
                     "text": chunk_text,
                 })
+                if use_fish_audio:
+                    save_manifest_checkpoint()
                 completed += 1
 
         if not segments:
