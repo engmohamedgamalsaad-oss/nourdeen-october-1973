@@ -1,1 +1,1 @@
-Run the one approved Magdi Yacoub Arabic narrator block 007 sample. No other audio or story content may change.
+Run the isolated Fish Audio sample workflow for the single approved narrator block 007. Updated trigger.
