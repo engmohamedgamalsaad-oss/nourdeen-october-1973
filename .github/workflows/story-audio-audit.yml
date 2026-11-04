@@ -1,0 +1,43 @@
+name: Repository-wide story audio audit
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'scripts/audit_story_audio.py'
+      - 'scripts/review_pronunciation.py'
+      - 'tests/test_audit_story_audio.py'
+      - 'stories/**/story.json'
+      - 'stories/**/audio-pronunciation.json'
+      - 'assets/audio/**/manifest.json'
+      - '.github/workflows/story-audio-audit.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: story-audio-audit-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Run read-only audit unit tests
+        run: python -m unittest discover -s tests -p 'test_audit_story_audio.py' -v
+
+      - name: Build repository-wide audio inventory (no TTS or ASR)
+        run: python scripts/audit_story_audio.py --output "$RUNNER_TEMP/story-audio-audit.json"
+
+      - name: Print concise audit summary
+        run: |
+          python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/story-audio-audit.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"story_count":r["story_count"],"language_status_counts":r["language_status_counts"],"tts_requests_sent":r["tts_requests_sent"],"asr_requests_sent":r["asr_requests_sent"],"spoken_pronunciation":r["spoken_pronunciation"]}, ensure_ascii=False, indent=2))'
