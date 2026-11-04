@@ -1,7 +1,16 @@
 name: Magdi Yacoub — one Arabic audio segment
-# Manual dispatch only; workflow or script edits must never trigger paid synthesis.
+# Manual dispatch only; explicit approval is required before Fish Audio synthesis.
 on:
   workflow_dispatch:
+    inputs:
+      confirm_fish_audio_request:
+        description: "اختر yes فقط بعد الموافقة الصريحة على إرسال طلب توليد إلى Fish Audio"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+        default: "no"
 permissions:
   contents: write
 concurrency:
@@ -9,6 +18,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   generate-one-segment:
+    if: inputs.confirm_fish_audio_request == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
