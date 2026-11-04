@@ -38,4 +38,6 @@ jobs:
       - name: Verify the report did not modify repository files
         run: |
           git diff --exit-code -- audio-qa stories assets/audio
-          test -z "$(git status --porcelain)"
+          test -z "$(git status --porcelain --untracked-files=all -- audio-qa stories assets/audio)"
+          test ! -e audio-qa/report.json
+          test ! -e audio-qa/report.md
