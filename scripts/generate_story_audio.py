@@ -108,16 +108,16 @@ def is_original_karma_clip(
 def arabic_word_tokens(text: str) -> list[str]:
     """Return Arabic/Unicode word tokens without diacritics or punctuation."""
     normalized = re.sub(
-        r"[\\u0610-\\u061A\\u064B-\\u065F\\u0670\\u06D6-\\u06ED\\u0640]",
+        r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]",
         "",
         text,
     ).translate(str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789"))
-    return re.findall(r"[\\w]+", normalized.casefold(), flags=re.UNICODE)
+    return re.findall(r"[\w]+", normalized.casefold(), flags=re.UNICODE)
 
 
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
     """Allow diacritics/punctuation only; never allow words to change or move."""
-    original = re.sub(r"\\s+", " ", text).strip()
+    original = re.sub(r"\s+", " ", text).strip()
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else original
     candidate = re.sub(r"\\s+", " ", candidate).strip()
     if not candidate:
