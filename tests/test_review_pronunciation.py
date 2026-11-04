@@ -117,25 +117,22 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             reviewer.DEFAULT_BLOCK_INDEX,
         )
         self.assertEqual(report["structural_validation"]["status"], "PASS")
-        # Block 1 intentionally uses an approved audio-only rewrite.
-        # Keep it at REVIEW (not PASS); the manifest must match that source.
-        self.assertEqual(report["overall_textual_result"], "REVIEW")
-        self.assertEqual(report["block"]["textual_result"], "REVIEW")
-        self.assertTrue(report["block"]["approved_audio_only_rewrite"])
+        # The submitted audio text now preserves the visible wording, but the
+        # existing MP3 manifest still records the old rewritten request text.
+        self.assertEqual(report["overall_textual_result"], "FAIL")
+        self.assertEqual(report["block"]["textual_result"], "FAIL")
+        self.assertFalse(report["block"].get("approved_audio_only_rewrite", False))
         self.assertTrue(report["block"]["listening_review_required"])
         self.assertEqual(report["spoken_pronunciation_result"], "NOT_TESTED")
         self.assertEqual(
             report["block"]["word_identity_and_order"]["visible_vs_submitted"]["status"],
-            "FAIL",
+            "PASS",
         )
-        # Before regeneration, the existing manifest still matches the unchanged
-        # visible story, not the newly approved audio-only rewrite.
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
             "FAIL",
         )
-        self.assertTrue(report["block"]["manifest_matches_visible_pre_regeneration"])
-        self.assertFalse(report["block"]["manifest_matches_submitted_source"])
+        self.assertEqual(report["block"]["manifest_text_verification"], "AVAILABLE")
         self.assertEqual(
             report["block"]["manifest_text_verification"],
             "AVAILABLE",
@@ -151,12 +148,11 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
         )
         self.assertEqual(report["scope"]["block_count"], 13)
         self.assertEqual(report["summary"]["structural_failures"], 0)
-        # Current manifest text matches the reviewed source; number-form differences
-        # remain REVIEW and must not be collapsed into an overall PASS.
+        # Old generated manifest entries must remain visibly flagged until their
+        # source text and audio are reconciled; no false PASS is allowed.
         self.assertEqual(report["summary"]["block_results"]["PASS_SOURCE_ONLY"], 0)
-        self.assertGreater(report["summary"]["block_results"]["REVIEW"], 0)
-        self.assertEqual(report["summary"]["block_results"]["FAIL"], 0)
-        self.assertEqual(report["summary"]["overall_textual_result"], "REVIEW")
+        self.assertGreater(report["summary"]["block_results"]["FAIL"], 0)
+        self.assertEqual(report["summary"]["overall_textual_result"], "FAIL")
         self.assertEqual(report["summary"]["spoken_pronunciation_result"], "NOT_TESTED")
 
 
