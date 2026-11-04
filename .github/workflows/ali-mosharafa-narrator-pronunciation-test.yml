@@ -1,0 +1,42 @@
+name: Ali Mosharafa narrator pronunciation A-B test
+
+on:
+  push:
+    branches:
+      - experiment/silma-ali-mosharrafa-20261104
+    paths:
+      - ".github/workflows/ali-mosharafa-narrator-pronunciation-test.yml"
+      - "scripts/experimental/test_ali_mosharafa_narrator_pronunciation.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  narrator-pronunciation-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: experiment/silma-ali-mosharrafa-20261104
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Validate test script
+        run: python -m py_compile scripts/experimental/test_ali_mosharafa_narrator_pronunciation.py
+      - name: Generate pronunciation A-B samples with approved narrator
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: python scripts/experimental/test_ali_mosharafa_narrator_pronunciation.py
+      - name: Upload narrator pronunciation samples
+        uses: actions/upload-artifact@v4
+        with:
+          name: ali-mosharafa-narrator-pronunciation-ab-test
+          path: artifacts/ali-mosharrafa-narrator-pronunciation-test/
+          if-no-files-found: error
+          retention-days: 14
