@@ -592,7 +592,20 @@ async def main() -> int:
         action="store_true",
         help="Required for any real TTS request; use only after explicit owner approval.",
     )
+    parser.add_argument(
+        "--confirm-fish-audio",
+        action="store_true",
+        help="Additional explicit confirmation required whenever Arabic generation may call Fish Audio.",
+    )
     args = parser.parse_args()
+
+    selected_languages = tuple(args.languages) if args.languages else None
+    if not args.dry_run and (selected_languages is None or "ar" in selected_languages) and not args.confirm_fish_audio:
+        print(
+            "Safety stop: Arabic generation requires the separate --confirm-fish-audio confirmation.",
+            file=sys.stderr,
+        )
+        return 2
 
     if not args.dry_run and not args.confirm_generation:
         print(
