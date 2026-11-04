@@ -119,7 +119,7 @@ def main() -> None:
     # Import only after all source files and safety checks have passed.
     from silma_tts.api import SilmaTTS
 
-    print("Loading SILMA TTS v1 on CPU. First run downloads model assets.", flush=True)
+    print("Loading SILMA TTS v1 on CPU. First run downloads model assets; output stays in the trial artifact folder.", flush=True)
     tts = SilmaTTS(device="cpu", enable_normalizer=True, force_tashkeel=True)
 
     results = []
