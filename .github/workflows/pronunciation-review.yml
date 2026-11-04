@@ -6,6 +6,9 @@ on:
     paths:
       - 'scripts/review_pronunciation.py'
       - 'scripts/generate_story_audio.py'
+      - 'scripts/arabic_pronunciation.py'
+      - 'scripts/test_arabic_pronunciation.py'
+      - 'audio/pronunciation/**'
       - 'tests/test_review_pronunciation.py'
       - 'stories/science/015/story.json'
       - 'stories/science/015/audio-pronunciation.json'
@@ -43,6 +46,9 @@ jobs:
 
       - name: Run focused unit and pilot integration tests
         run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
+
+      - name: Run shared Arabic pronunciation dictionary tests
+        run: python scripts/test_arabic_pronunciation.py
 
       - name: Run the read-only pilot report
         run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
