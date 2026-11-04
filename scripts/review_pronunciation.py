@@ -17,6 +17,8 @@ import unicodedata
 from pathlib import Path
 from typing import Any
 
+from audio_text_guard import canonicalize_approved_number_rewrites, validate_pronunciation_blocks
+
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STORY = Path("stories/science/015/story.json")
 DEFAULT_MANIFEST = Path("assets/audio/science/magdi-yacoub/ar/manifest.json")
@@ -321,6 +323,7 @@ def validate_manifest(
 def review_block(
     block_index: int, block: dict[str, Any], segments: list[dict[str, Any]],
     submitted_audio_text: str,
+    approved_number_rewrites: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     visible = block.get("text")
     if not isinstance(visible, str) or not visible.strip():
@@ -338,6 +341,15 @@ def review_block(
     submitted = re.sub(r"\s+", " ", submitted_audio_text).strip()
     visible_words = tokenize(visible)
     submitted_words = tokenize(submitted)
+    try:
+        canonical_submitted_words = canonicalize_approved_number_rewrites(
+            submitted, approved_number_rewrites or {}
+        )
+    except ValueError:
+        canonical_submitted_words = submitted_words
+    approved_number_rewrite = bool(approved_number_rewrites) and (
+        canonical_submitted_words == visible_words and submitted_words != visible_words
+    )
     manifest_words = tokenize(audio) if audio is not None else []
     visible_to_submitted = sequence_differences(visible_words, submitted_words)
     submitted_to_manifest = (
@@ -387,11 +399,13 @@ def review_block(
         "word_identity_and_order": {
             "visible_vs_submitted": {
                 "status": (
-                    "PASS" if not visible_to_submitted
+                    "PASS_APPROVED_NUMBER_REWRITE" if approved_number_rewrite
+                    else "PASS" if not visible_to_submitted
                     else "NUMBER_FORM_REVIEW" if is_number_form_only_difference(visible_words, submitted_words)
                     else "FAIL"
                 ),
                 "number_form_only_difference": is_number_form_only_difference(visible_words, submitted_words),
+                "approved_number_rewrite": approved_number_rewrite,
                 "visible_word_count": len(visible_words),
                 "submitted_word_count": len(submitted_words),
                 "differences": visible_to_submitted,
@@ -450,7 +464,7 @@ def review_block(
         "human_review_required": True,
         "textual_result": (
             "FAIL" if submitted_to_manifest
-            else "PASS" if not visible_to_submitted
+            else "PASS" if not visible_to_submitted or approved_number_rewrite
             else "REVIEW" if is_number_form_only_difference(visible_words, submitted_words)
             else "FAIL"
         ),
@@ -492,6 +506,14 @@ def build_report(
     pronunciation_blocks = pronunciation.get("blocks", {}) if pronunciation else {}
     if not isinstance(pronunciation_blocks, dict):
         raise ReviewError("Audio pronunciation 'blocks' must be an object keyed by block index.")
+    approved_number_rewrites = pronunciation.get("approved_number_rewrites", {}) if pronunciation else {}
+    if not isinstance(approved_number_rewrites, dict):
+        structural_errors.append("Approved number rewrites must be an object keyed by block index.")
+        approved_number_rewrites = {}
+    try:
+        validate_pronunciation_blocks(blocks, pronunciation_blocks, approved_number_rewrites)
+    except ValueError as exc:
+        structural_errors.append(str(exc))
     submitted_audio_text = pronunciation_blocks.get(str(block_index))
     if not isinstance(submitted_audio_text, str) or not submitted_audio_text.strip():
         structural_errors.append(
@@ -511,36 +533,14 @@ def build_report(
     block_report = None
     if selected_segments:
         block_report = review_block(
-            block_index, block, selected_segments, submitted_audio_text
+            block_index, block, selected_segments, submitted_audio_text,
+            approved_number_rewrites.get(str(block_index), {}),
         )
 
-    # Explicitly approved audio-only rewrites remain visible as REVIEW, never PASS.
-    # The manifest must still match the submitted pronunciation source exactly.
-    approved_rewrites = pronunciation.get("approved_audio_only_rewrites", [])
-    if block_report and str(block_index) in approved_rewrites:
-        word_checks = block_report["word_identity_and_order"]
-        manifest_matches_visible = (
-            block_report["audio_text_from_manifest"] is not None
-            and not sequence_differences(
-                tokenize(block_report["visible_text"]),
-                tokenize(block_report["audio_text_from_manifest"]),
-            )
+    if block_report:
+        block_report["approved_number_rewrite"] = bool(
+            block_report["word_identity_and_order"]["visible_vs_submitted"].get("approved_number_rewrite")
         )
-        manifest_matches_submitted = (
-            word_checks["submitted_vs_manifest"]["status"] == "PASS"
-        )
-        # Before regeneration, the existing MP3/manifest may still match the
-        # unchanged visible story. After regeneration, it must match the new
-        # approved audio-only source. Either state is reviewable; anything else fails.
-        if (
-            block_report["textual_result"] == "FAIL"
-            and (manifest_matches_visible or manifest_matches_submitted)
-            and word_checks["visible_vs_submitted"]["differences"]
-        ):
-            block_report["textual_result"] = "REVIEW"
-            block_report["approved_audio_only_rewrite"] = True
-            block_report["manifest_matches_visible_pre_regeneration"] = manifest_matches_visible
-            block_report["manifest_matches_submitted_source"] = manifest_matches_submitted
 
     textual_pass = bool(block_report and block_report["textual_result"] == "PASS")
     return {
