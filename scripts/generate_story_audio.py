@@ -86,6 +86,13 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def legacy_text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
+    """Return the historical v3 input hash without the v4 Arabic context field."""
+    fields = [3, lang, text, voice, rate, pitch]
+    payload = json.dumps(fields, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def is_original_karma_clip(
     block_index: int,
     chunk_index: int,
@@ -351,8 +358,11 @@ async def generate_story(
                     planned_hash = text_hash(
                         planned_chunk, planned_voice, planned_rate, planned_pitch, "ar"
                     )
+                    planned_legacy_hash = legacy_text_hash(
+                        planned_chunk, planned_voice, planned_rate, planned_pitch, "ar"
+                    )
                     is_unchanged = (
-                        planned_previous.get("hash") == planned_hash
+                        planned_previous.get("hash") in (planned_hash, planned_legacy_hash)
                         and planned_previous.get("voice") in (None, planned_voice)
                         and planned_destination.is_file()
                         and planned_destination.stat().st_size >= 512
@@ -484,6 +494,9 @@ async def generate_story(
                 digest = None
                 for candidate_voice in ordered_candidates:
                     candidate_hash = text_hash(chunk_text, candidate_voice, rate, pitch, lang)
+                    candidate_legacy_hash = legacy_text_hash(
+                        chunk_text, candidate_voice, rate, pitch, lang
+                    )
                     if speaker == "karma" and is_original_karma_clip(
                         block_index,
                         chunk_index,
@@ -499,14 +512,19 @@ async def generate_story(
                         )
                         break
                     if (
-                        previous.get("hash") == candidate_hash
+                        previous.get("hash") in (candidate_hash, candidate_legacy_hash)
                         and previous_voice in (None, candidate_voice)
                         and destination.is_file()
                         and destination.stat().st_size >= 512
                     ):
                         selected_voice = candidate_voice
-                        digest = candidate_hash
-                        print(f"UNCHANGED {relative.parent}/{lang}/{filename} ({speaker}, {candidate_voice})")
+                        is_legacy_hash = previous.get("hash") == candidate_legacy_hash
+                        digest = previous.get("hash") if is_legacy_hash else candidate_hash
+                        suffix = "legacy v3 hash" if is_legacy_hash else "current hash"
+                        print(
+                            f"UNCHANGED {relative.parent}/{lang}/{filename} "
+                            f"({speaker}, {candidate_voice}; {suffix})"
+                        )
                         break
                     try:
                         if use_fish_audio:
