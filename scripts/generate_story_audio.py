@@ -368,7 +368,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
 
         if dry_run:
             planned_segments = 0
-            for planned_block in blocks:
+            for planned_index, planned_block in enumerate(blocks):
                 if not isinstance(planned_block, dict):
                     continue
                 planned_speaker = planned_block.get("speaker")
@@ -379,7 +379,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                     continue
                 planned_text = (
                     prepare_arabic_audio_text(
-                        planned_original, pronunciation_blocks.get(str(blocks.index(planned_block)))
+                        planned_original, pronunciation_blocks.get(str(planned_index))
                     )
                     if lang == "ar"
                     else planned_original
