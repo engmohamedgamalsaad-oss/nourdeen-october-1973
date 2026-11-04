@@ -1,6 +1,11 @@
 name: Khaledoon story audio generation
 
 on:
+  push:
+    branches:
+      - fix/general-audio-pipeline-2026-11-04
+    paths:
+      - '.github/workflows/story-audio.yml'
   workflow_dispatch:
     inputs:
       story_path:
@@ -39,14 +44,14 @@ concurrency:
 
 jobs:
   generate:
-    if: inputs.confirm_fish_audio_request == 'yes'
+    if: (github.event_name == 'workflow_dispatch' && inputs.confirm_fish_audio_request == 'yes') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[approved-magdi-yacoub-audio]'))
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Check out main
+      - name: Check out the exact approved generator revision
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: main
+          ref: ${{ github.sha }}
           fetch-depth: 0
 
       - name: Install Python audio dependency
@@ -58,8 +63,8 @@ jobs:
       - name: Generate the selected story and languages
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-          STORY_PATH: ${{ inputs.story_path }}
-          LANGUAGE_SELECTION: ${{ inputs.languages }}
+          STORY_PATH: ${{ github.event_name == 'workflow_dispatch' && inputs.story_path || 'stories/science/015/story.json' }}
+          LANGUAGE_SELECTION: ${{ github.event_name == 'workflow_dispatch' && inputs.languages || 'ar' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -74,7 +79,7 @@ jobs:
 
       - name: Open a review PR for the selected story audio
         env:
-          STORY_PATH: ${{ inputs.story_path }}
+          STORY_PATH: ${{ github.event_name == 'workflow_dispatch' && inputs.story_path || 'stories/science/015/story.json' }}
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
