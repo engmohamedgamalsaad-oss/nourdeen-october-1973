@@ -14,6 +14,29 @@ import generate_story_audio as generator
 
 
 class GenerationConfirmationTests(unittest.TestCase):
+    def test_arabic_generation_requires_separate_fish_confirmation(self):
+        with patch.object(
+            sys, "argv",
+            ["generate_story_audio.py", "--languages", "ar", "--confirm-generation"],
+        ):
+            with patch.object(generator, "generate_story", new=AsyncMock()) as run:
+                result = asyncio.run(generator.main())
+        self.assertEqual(result, 2)
+        run.assert_not_awaited()
+
+    def test_non_arabic_generation_does_not_require_fish_confirmation(self):
+        with patch.object(
+            sys, "argv",
+            ["generate_story_audio.py", "--languages", "en", "--confirm-generation"],
+        ):
+            with patch.object(
+                generator, "generate_story", new=AsyncMock(return_value=True)
+            ) as run:
+                result = asyncio.run(generator.main())
+        self.assertEqual(result, 0)
+        run.assert_awaited_once()
+        self.assertEqual(run.await_args.kwargs["languages"], ("en",))
+
     def test_real_generation_requires_explicit_confirmation(self):
         with patch.object(sys, "argv", ["generate_story_audio.py"]):
             with patch.object(generator, "generate_story", new=AsyncMock()) as run:
@@ -97,6 +120,7 @@ class GenerationConfirmationTests(unittest.TestCase):
                 "--story", "stories/science/001/story.json",
                 "--languages", "ar", "fr",
                 "--confirm-generation",
+                "--confirm-fish-audio",
             ],
         ):
             with patch.object(
