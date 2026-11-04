@@ -88,6 +88,9 @@ def apply_dictionary(text: str, dictionary: dict[str, Any]) -> tuple[str, list[s
             actual = [lexical_form(spans[i].group(0)) for i in range(cursor, end_index)]
             if actual != match_tokens:
                 continue
+            # Never consume punctuation or arbitrary text between phrase tokens.
+            if any(text[spans[i].end():spans[i + 1].start()].strip() for i in range(cursor, end_index - 1)):
+                continue
             before = entry.get("before")
             after = entry.get("after")
             if before and (cursor == 0 or lexical_form(spans[cursor - 1].group(0)) != lexical_form(before)):
