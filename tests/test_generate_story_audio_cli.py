@@ -152,6 +152,89 @@ class GenerationConfirmationTests(unittest.TestCase):
             fish_tts.assert_not_awaited()
             self.assertFalse(audio_dir.exists())
 
+    def test_approved_karma_block_3_is_regenerated_once_then_preserved(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            story_path = root / "stories" / "science" / "001" / "story.json"
+            story_path.parent.mkdir(parents=True)
+            text = "يعني مَرْكَز أسوان مش بس بيعالج المرضى؟"
+            package = {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "magdi-yacoub",
+                "i18n": {"ar": {"blocks": [{"speaker": "karma", "text": text}]}},
+            }
+            story_path.write_text(json.dumps(package, ensure_ascii=False), encoding="utf-8")
+            (story_path.parent / "data.json").write_text(
+                json.dumps({"published": True}), encoding="utf-8"
+            )
+            (story_path.parent / "audio-pronunciation.json").write_text(
+                json.dumps({
+                    "story": "magdi-yacoub",
+                    "language": "ar",
+                    "blocks": {"0": text},
+                }, ensure_ascii=False),
+                encoding="utf-8",
+            )
+            audio_dir = root / "assets" / "audio" / "science" / "magdi-yacoub" / "ar"
+            audio_dir.mkdir(parents=True)
+            destination = audio_dir / "000.mp3"
+            destination.write_bytes(b"o" * 1024)
+            original_manifest = {
+                "version": 1,
+                "engine": "fish-audio+edge-tts",
+                "story": "magdi-yacoub",
+                "section": "science",
+                "language": "ar",
+                "segments": [{
+                    "block_index": 0,
+                    "chunk_index": 0,
+                    "speaker": "karma",
+                    "voice": generator.FISH_AUDIO_KARMA_VOICE_ID,
+                    "provider": "fish-audio",
+                    "model": generator.FISH_AUDIO_MODEL,
+                    "src": "000.mp3",
+                    "hash": generator.KARMA_ORIGINAL_MANIFEST_HASH[3],
+                    "text": text,
+                }],
+            }
+            (audio_dir / "manifest.json").write_text(
+                json.dumps(original_manifest, ensure_ascii=False), encoding="utf-8"
+            )
+
+            async def fake_fish_audio(request_text, target, voice_id):
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_bytes(b"n" * 1024)
+
+            with patch.object(generator, "ROOT", root):
+                with patch.object(
+                    generator, "synthesize_fish_audio", new=AsyncMock(side_effect=fake_fish_audio)
+                ) as fish_tts:
+                    first = asyncio.run(
+                        generator.generate_story(story_path, dry_run=False, languages=("ar",))
+                    )
+                    second = asyncio.run(
+                        generator.generate_story(story_path, dry_run=False, languages=("ar",))
+                    )
+
+            self.assertTrue(first)
+            self.assertTrue(second)
+            fish_tts.assert_awaited_once_with(
+                text, destination, generator.FISH_AUDIO_KARMA_VOICE_ID
+            )
+            saved = json.loads((audio_dir / "manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                saved["segments"][0]["hash"],
+                generator.text_hash(
+                    text,
+                    generator.FISH_AUDIO_KARMA_VOICE_ID,
+                    generator.VOICE_SETTINGS["ar"]["karma"][1],
+                    generator.VOICE_SETTINGS["ar"]["karma"][2],
+                    "ar",
+                ),
+            )
+            self.assertEqual(destination.read_bytes(), b"n" * 1024)
+
     def test_legacy_v3_manifest_hash_preserves_existing_audio_without_tts(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
