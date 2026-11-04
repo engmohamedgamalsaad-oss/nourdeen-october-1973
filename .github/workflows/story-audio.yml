@@ -31,6 +31,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: khaledoon-story-audio-generation
@@ -70,9 +71,10 @@ jobs:
           esac
           python scripts/generate_story_audio.py "${args[@]}"
 
-      - name: Commit only the selected story audio
+      - name: Open a review PR for the selected story audio
         env:
           STORY_PATH: ${{ inputs.story_path }}
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
@@ -91,10 +93,14 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "assets/audio/$section/$slug/"
           if git diff --cached --quiet; then
-            echo 'The selected story audio is already current.'
+            echo 'The selected story audio is already current; no PR is needed.'
             exit 0
           fi
+          git switch -c "audio-generation/$section-$slug-$GITHUB_RUN_ID"
           git commit -m "Generate audio for $section/$slug"
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+          git push --set-upstream origin HEAD
+          gh pr create \
+            --base main \
+            --head "audio-generation/$section-$slug-$GITHUB_RUN_ID" \
+            --title "Review generated audio: $section/$slug" \
+            --body "Generated audio for one explicitly selected story and language set. Please review the audio and manifest before merging. This workflow does not merge or publish the result."
