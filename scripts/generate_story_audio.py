@@ -211,7 +211,7 @@ async def synthesize_fish_audio(
         raise
 
 
-async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
+async def generate_story(\n    story_path: Path,\n    dry_run: bool = False,\n    languages: tuple[str, ...] | None = None,\n) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -251,14 +251,17 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         pronunciation_blocks = pronunciation_data.get("blocks")
         if not isinstance(pronunciation_blocks, dict):
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
-        languages_to_generate = ("ar",)
         # Fail closed before creating output folders or contacting any TTS provider.
         arabic_localized = translations.get("ar")
         arabic_blocks = arabic_localized.get("blocks") if isinstance(arabic_localized, dict) else []
         validate_pronunciation_blocks(arabic_blocks, pronunciation_blocks)
     else:
         pronunciation_blocks = {}
-        languages_to_generate = LANGUAGES
+
+    default_languages = ("ar",) if pronunciation_data else LANGUAGES
+    languages_to_generate = tuple(dict.fromkeys(languages or default_languages))
+    if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
+        raise ValueError(f"Unsupported or empty language selection: {languages_to_generate}")
 
     story_audio_root = ROOT / "assets" / "audio" / section / slug
     completed = 0
@@ -289,6 +292,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             and pronunciation_data
             and section == "science"
             and slug == "magdi-yacoub"
+            and not dry_run
         ):
             planned_regenerations: set[int] = set()
             for planned_index, planned_block in enumerate(blocks):
@@ -373,7 +377,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                     continue
                 planned_speaker = planned_block.get("speaker")
                 planned_original = re.sub(
-                    r"\\s+", " ", str(planned_block.get("text") or "")
+                    r"\s+", " ", str(planned_block.get("text") or "")
                 ).strip()
                 if planned_speaker not in ("karma", "narrator") or not planned_original:
                     continue
@@ -563,16 +567,39 @@ async def main() -> int:
         help="Repository-relative path to one story.json; October stories remain protected.",
     )
     parser.add_argument(
+        "--languages",
+        nargs="+",
+        choices=LANGUAGES,
+        default=None,
+        help="Languages to generate (default: Arabic only when an Arabic pronunciation file exists; otherwise all five).",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Validate every selected language and estimate segment counts without writing files or contacting TTS.",
+        help="Validate selected languages and estimate segment counts without writing files or contacting TTS.",
+    )
+    parser.add_argument(
+        "--confirm-generation",
+        action="store_true",
+        help="Required for any real TTS request; use only after explicit owner approval.",
     )
     args = parser.parse_args()
+
+    if not args.dry_run and not args.confirm_generation:
+        print(
+            "Safety stop: real audio generation requires --confirm-generation after explicit owner approval.",
+            file=sys.stderr,
+        )
+        return 2
 
     story = Path(args.story).expanduser()
     if not story.is_absolute():
         story = ROOT / story
-    return 0 if await generate_story(story, dry_run=args.dry_run) else 1
+    return 0 if await generate_story(
+        story,
+        dry_run=args.dry_run,
+        languages=tuple(args.languages) if args.languages else None,
+    ) else 1
 
 
 if __name__ == "__main__":
