@@ -1,0 +1,67 @@
+name: Generate approved Magdi Yacoub MP3 sample
+
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: magdi-approved-audio-sample
+  cancel-in-progress: false
+
+jobs:
+  sample:
+    if: github.event.pull_request.number == 514 && github.event.pull_request.head.ref == 'feature/magdi-contextual-pronunciation-20261104' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out the approved sample branch without running its code
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Generate exactly the approved Arabic narrator MP3
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, urllib.request
+          text = "هل تعلم؟ عمل مَجْدِي يَعْقُوب في مستشفى هارْفِيلْد لسنوات طويلة، وأسهم في بناء برنامج مهم لزراعة القلب والرئتين. وبحسب السيرة المهنية المنشورة لدى مؤسسات أكاديمية، شهد البرنامج إجراء أكثر من ألفين وخمسمائة عملية."
+          payload = ('{"text":' + __import__('json').dumps(text, ensure_ascii=False) + ',"reference_id":"b65cfd7ce5e44607aedafeea3dbb01e8","format":"mp3"}').encode()
+          req = urllib.request.Request(
+              "https://api.fish.audio/v1/tts", data=payload,
+              headers={"Authorization":"Bearer "+os.environ["FISH_AUDIO_API_KEY"],
+                       "Content-Type":"application/json","model":"s2.1-pro-free"},
+              method="POST")
+          with urllib.request.urlopen(req, timeout=90) as response:
+              audio = response.read()
+          if len(audio) < 512 or not (audio.startswith(b"ID3") or audio[:1] == b"\xff"):
+              raise RuntimeError("Fish Audio response is not a valid MP3")
+          path = "assets/audio/science/magdi-yacoub/ar/007.mp3"
+          os.makedirs(os.path.dirname(path), exist_ok=True)
+          with open(path, "wb") as f:
+              f.write(audio)
+          print(f"GENERATED {path}: {len(audio)} bytes")
+          PY
+
+      - name: Upload the generated MP3 as a backup artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: magdi-yacoub-ar-007-mp3
+          path: assets/audio/science/magdi-yacoub/ar/007.mp3
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Save only the approved MP3 to the sample branch
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add assets/audio/science/magdi-yacoub/ar/007.mp3
+          git commit -m 'Save approved Magdi Yacoub narrator MP3 sample'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
