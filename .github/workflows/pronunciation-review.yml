@@ -39,3 +39,7 @@ jobs:
 
       - name: Run the read-only pilot report
         run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
+
+      - name: Print pilot block 001 and all-block summary for review
+        run: |
+          python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/pronunciation-review.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"summary": r["summary"], "pilot_block_001": r["blocks"][1]}, ensure_ascii=False, indent=2))'
