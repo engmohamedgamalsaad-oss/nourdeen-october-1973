@@ -6,6 +6,9 @@ on:
     paths:
       - 'scripts/audit_story_audio.py'
       - 'scripts/review_pronunciation.py'
+      - 'scripts/generate_story_audio.py'
+      - 'scripts/audio_text_guard.py'
+      - 'tests/test_audio_text_guard.py'
       - 'tests/test_audit_story_audio.py'
       - 'stories/**/story.json'
       - 'stories/**/audio-pronunciation.json'
@@ -34,6 +37,12 @@ jobs:
 
       - name: Run read-only audit unit tests
         run: python -m unittest discover -s tests -p 'test_audit_story_audio.py' -v
+
+      - name: Run fail-closed audio text guard tests
+        run: python -m unittest discover -s tests -p 'test_audio_text_guard.py' -v
+
+      - name: Compile audio generator without running it
+        run: python -m py_compile scripts/audio_text_guard.py scripts/generate_story_audio.py
 
       - name: Build repository-wide audio inventory (no TTS or ASR)
         run: python scripts/audit_story_audio.py --output "$RUNNER_TEMP/story-audio-audit.json"
