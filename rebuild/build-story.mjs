@@ -24,7 +24,7 @@ const problems = [
   ...await validateLocalImagePaths(story, root)
 ];
 if (problems.length) {
-  console.error('unified story package rejected (' + problems.length + ' problems):\n- ' + problems.join('\n- '));
+  console.error('unified story package rejected (' + problems.length + ' problems):\\n- ' + problems.join('\\n- '));
   process.exit(1);
 }
 const outDir = path.join(root, 'stories', story.section, storyId);
