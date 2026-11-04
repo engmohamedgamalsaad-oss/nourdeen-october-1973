@@ -50,3 +50,11 @@ jobs:
       - name: Print concise audit summary
         run: |
           python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/story-audio-audit.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"story_count":r["story_count"],"language_status_counts":r["language_status_counts"],"tts_requests_sent":r["tts_requests_sent"],"asr_requests_sent":r["asr_requests_sent"],"spoken_pronunciation":r["spoken_pronunciation"]}, ensure_ascii=False, indent=2))'
+
+      - name: Upload read-only audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: story-audio-audit
+          path: ${{ runner.temp }}/story-audio-audit.json
+          if-no-files-found: error
+          retention-days: 14
