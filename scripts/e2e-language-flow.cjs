@@ -900,13 +900,14 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
     }
     await importButton.click();
-    try {
-      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
-    } catch (waitError) {
-      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; textareaReadOnly=' + await textarea.evaluate((el) => el.readOnly).catch(() => 'unknown') + '; importButtonCount=' + await importButton.count() + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+    // The admin refreshes its list after a successful save, removing the transient
+    // status node and import controls. Assert the persisted mocked record and preview
+    // destination instead of waiting for UI that is intentionally re-rendered away.
+    const popup = await popupPromise;
+    if (!savedRecord || String(savedRecord.title || '') !== storyPackage.i18n.ar.title ||
+        String(savedRecord.body || '') !== storyPackage.i18n.ar.blocks.map((block) => block.text).join('')) {
+      throw new Error('story import did not persist the expected unified draft; savedRecord=' + JSON.stringify(savedRecord) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
     }
-    const importStatus = await page.locator('.ai-status[role="status"]').innerText();
-    if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('story import was rejected: ' + importStatus.slice(-900));
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('story import did not preserve a readable Arabic source organization in the saved draft.');
     }
@@ -914,8 +915,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       hard.push('story source organization was percent-encoded in Arabic instead of remaining readable.');
     }
     if (savedRecord.status === 'published') hard.push('story import unexpectedly published the story instead of saving a draft.');
-    const popup = await popupPromise;
-    if (popup) await popup.waitForURL(/reader\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
+    if (popup) await popup.waitForURL(/package-review\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
     if (popup) {
       await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
       await popup.waitForFunction(() => document.readyState === 'complete' && document.querySelector('#title') && document.querySelector('#title').textContent.trim().length > 0, null, { timeout: 15000 }).catch(() => {});
