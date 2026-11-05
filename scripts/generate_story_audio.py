@@ -594,6 +594,8 @@ async def main() -> int:
         parser.error("--allow-fish-audio is valid only together with --generate")
     if args.plan_all and args.story:
         parser.error("--plan-all cannot be combined with --story")
+    if args.force_block and not args.story:
+        parser.error("--force-block requires an explicit --story")
     if not args.story:
         if args.generate:
             parser.error("--generate requires an explicit --story")
