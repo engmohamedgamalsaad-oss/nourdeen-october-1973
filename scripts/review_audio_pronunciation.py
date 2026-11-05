@@ -88,6 +88,7 @@ def compare_transcript(
     ]
     ratio = matched / denominator
     language_mismatch = bool(detected_language and detected_language != language)
+    language_detection_uncertain = float(language_probability) < 0.60
     return {
         "expected_word_count": len(expected),
         "recognized_word_count": len(actual),
@@ -95,11 +96,12 @@ def compare_transcript(
         "detected_language": detected_language,
         "language_probability": round(float(language_probability), 4),
         "language_mismatch": language_mismatch,
+        "language_detection_uncertain": language_detection_uncertain,
         "mismatches": mismatch_details,
         "low_confidence_words": low_confidence,
         "status": (
             "review_required"
-            if mismatch_details or low_confidence or language_mismatch or ratio < 0.92
+            if mismatch_details or low_confidence or language_mismatch or language_detection_uncertain or ratio < 0.92
             else "likely_match"
         ),
         "needs_human_review": True,
