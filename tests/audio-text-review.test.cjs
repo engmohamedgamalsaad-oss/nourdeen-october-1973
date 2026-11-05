@@ -37,7 +37,7 @@ test('validates exact one-to-one review coverage and requires human approval', (
     proposed_audio_text: item.original_text,
     issue_type: 'none',
     reason: '',
-    needs_human_review: item.lang === 'ar'
+    needs_human_review: true
   }));
   const result = review.validateResult({ format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments }, pkg);
   assert.equal(result.ok, true);
