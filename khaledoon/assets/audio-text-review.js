@@ -107,7 +107,8 @@
       }
       if (ISSUE_TYPES.indexOf(item.issue_type) < 0) errors.push(label + ': نوع المشكلة غير معتمد.');
       if (typeof item.reason !== 'string') errors.push(label + ': سبب الاقتراح غير موجود كنص.');
-      if (typeof item.needs_human_review !== 'boolean') errors.push(label + ': حالة المراجعة البشرية غير محددة.');
+      if (item.issue_type !== 'none' && !item.reason.trim()) errors.push(label + ': سبب الاقتراح مطلوب.');
+      if (item.needs_human_review !== true) errors.push(label + ': يجب إبقاء المراجعة البشرية مطلوبة دائمًا.');
       if (item.issue_type === 'none' && item.proposed_audio_text !== source.original_text) {
         errors.push(label + ': لا يجوز تغيير النص مع issue_type=none.');
       }
