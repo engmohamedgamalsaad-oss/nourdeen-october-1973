@@ -68,6 +68,15 @@ VOICE_FALLBACKS = {
 }
 
 
+def report_orphaned_audio_files(output_dir: Path, keep: set[str]) -> list[str]:
+    """Report stale MP3 files without deleting published or previously generated audio."""
+    return sorted(
+        path.name
+        for path in output_dir.glob("*.mp3")
+        if path.name not in keep
+    )
+
+
 def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
@@ -209,7 +218,7 @@ async def synthesize_fish_audio(
         raise
 
 
-async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish: bool = False) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -253,6 +262,12 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
     else:
         pronunciation_blocks = {}
         languages_to_generate = LANGUAGES
+
+    if not dry_run and "ar" in languages_to_generate and not allow_fish:
+        raise RuntimeError(
+            "Fish Audio is disabled unless this run explicitly includes --allow-fish. "
+            "Use --dry-run to inspect the plan without sending any TTS request."
+        )
 
     story_audio_root = ROOT / "assets" / "audio" / section / slug
     completed = 0
@@ -513,9 +528,12 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         temporary_manifest.replace(manifest_path)
 
         keep = {item["src"] for item in segments}
-        for old_file in output_dir.glob("*.mp3"):
-            if old_file.name not in keep:
-                old_file.unlink()
+        orphaned = report_orphaned_audio_files(output_dir, keep)
+        if orphaned:
+            print(
+                "PRESERVED ORPHANED MP3 FILES (manual review only): "
+                + ", ".join(orphaned)
+            )
 
     print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {', '.join(languages_to_generate)}")
     return True
@@ -528,13 +546,18 @@ async def main() -> int:
         action="store_true",
         help="Validate the Magdi Yacoub Arabic regeneration scope without contacting any TTS provider.",
     )
+    parser.add_argument(
+        "--allow-fish",
+        action="store_true",
+        help="Explicitly authorize Fish Audio requests for this run. Required for every non-dry-run Arabic generation.",
+    )
     args = parser.parse_args()
 
     # The only enabled Fish Audio target is Magdi Yacoub Arabic.
     # Existing Karma clips remain unchanged; narrator clips are regenerated
     # with the owner-approved voice because the voice ID is part of the hash.
     story = ROOT / "stories" / "science" / "015" / "story.json"
-    return 0 if await generate_story(story, dry_run=args.dry_run) else 1
+    return 0 if await generate_story(story, dry_run=args.dry_run, allow_fish=args.allow_fish) else 1
 
 
 if __name__ == "__main__":
