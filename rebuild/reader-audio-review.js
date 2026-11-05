@@ -191,7 +191,12 @@ function gate() {
 function gateSummary() {
   var g = gate();
   if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
-  if (g.loadError) return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إعادة المحاولة والتحقق.';
+  if (g.loadError) {
+    var details = LANGS.filter(function (lang) { return !!manifestErrors[lang]; }).map(function (lang) {
+      return LANG_NAMES[lang] + ': ' + manifestErrors[lang];
+    });
+    return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إصلاح المشكلة.' + (details.length ? ' ' + details.join(' | ') : '');
+  }
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
   if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
