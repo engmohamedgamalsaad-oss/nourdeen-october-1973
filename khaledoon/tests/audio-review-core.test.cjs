@@ -145,6 +145,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
   assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);'), 'preview must require current full playback for every clip in all five languages');
   assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes('core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang])'), 'Arabic audio must be checked against the approved audio-only pronunciation text, and all other languages against current story text');
+  assert.ok(reviewUi.includes('data.approved_audio_only_rewrites.forEach') && reviewUi.includes('return approved[index] ? data.blocks[String(index)] : fallback[index];'), 'only explicitly approved Arabic audio-only rewrites may differ from the visible story text');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes('review = core.cloneReview(meta.audio_review || null);'), 'review decisions must be read only from story_meta.audio_review');
