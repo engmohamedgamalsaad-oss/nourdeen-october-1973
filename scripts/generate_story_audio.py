@@ -479,6 +479,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                         f"No working voice for {lang}/{speaker} block {block_index} chunk {chunk_index}; tried {ordered_candidates}"
                     )
 
+                audio_sha256 = hashlib.sha256(destination.read_bytes()).hexdigest()
                 segments.append({
                     "block_index": block_index,
                     "chunk_index": chunk_index,
@@ -488,6 +489,7 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                     "model": FISH_AUDIO_MODEL if use_fish_audio else "edge-tts",
                     "src": filename,
                     "hash": digest,
+                    "audio_sha256": audio_sha256,
                     "text": chunk_text,
                 })
                 if use_fish_audio:
