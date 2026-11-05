@@ -218,6 +218,57 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0".ljust(600, b"x"))
             self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1".ljust(600, b"x"))
 
+    def test_seeded_legacy_manifest_gets_hashes_only_in_staging(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            (story.parent / "audio-pronunciation.json").unlink()
+            published = root / "assets" / "audio" / "science" / "sample-story" / "ar"
+            published.mkdir(parents=True)
+            segments = []
+            payloads = {}
+            for index, speaker, text in (
+                (0, "narrator", "Narrator ar."),
+                (1, "karma", "Karma ar."),
+            ):
+                voice, rate, pitch = audio.VOICE_SETTINGS["ar"][speaker]
+                selected_voice = (
+                    audio.FISH_AUDIO_NARRATOR_VOICE_ID if speaker == "narrator"
+                    else audio.FISH_AUDIO_KARMA_VOICE_ID
+                )
+                filename = f"{index:03d}.mp3"
+                payload = (f"legacy-audio-{index}".ljust(600, "x")).encode()
+                payloads[filename] = payload
+                (published / filename).write_bytes(payload)
+                segments.append({
+                    "block_index": index,
+                    "chunk_index": 0,
+                    "voice": selected_voice,
+                    "hash": audio.text_hash(text, selected_voice, rate, pitch, "ar"),
+                    "src": filename,
+                })
+            published_manifest = published / "manifest.json"
+            self.write_json(published_manifest, {
+                "story": "sample-story", "section": "science", "language": "ar",
+                "segments": segments,
+            })
+            original_manifest = published_manifest.read_bytes()
+            staging = root / ".audio-staging"
+            with patch.object(audio, "ROOT", root):
+                audio.seed_staging_from_published(story, ("ar",), staging)
+                plan = audio.inspect_generation_plan(
+                    story, staging, languages=("ar",), force_blocks=(1,)
+                )
+            staged_manifest = json.loads(
+                (staging / "science" / "sample-story" / "ar" / "manifest.json").read_text(encoding="utf-8")
+            )
+            for item in staged_manifest["segments"]:
+                expected = hashlib.sha256(payloads[item["src"]]).hexdigest()
+                self.assertEqual(item["audio_sha256"], expected)
+            self.assertEqual(plan["segments_to_generate"], 1)
+            self.assertEqual(published_manifest.read_bytes(), original_manifest)
+            self.assertTrue(all((published / name).read_bytes() == data for name, data in payloads.items()))
+
     def test_arabic_single_block_regeneration_stops_before_fish_without_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
