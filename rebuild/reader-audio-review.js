@@ -80,6 +80,7 @@ async function saveReview(entry, decision) {
     var current = freshRows[0], meta = Object.assign({}, current.story_meta || {});
     var currentReview = core.cloneReview(meta.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decision);
+    if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     meta.audio_review = next;
     var saved = await fetch(rowUrl(), {
       method: 'PATCH',
