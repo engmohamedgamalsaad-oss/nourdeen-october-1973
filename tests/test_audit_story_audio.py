@@ -62,6 +62,28 @@ class AudioInventoryTests(unittest.TestCase):
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
 
+    def test_reports_extra_mp3_when_manifest_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.make_story(root, "science", "001", "sample")
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "ar"
+            audio_dir.mkdir(parents=True)
+            (audio_dir / "orphan.mp3").write_bytes(b"orphan")
+            arabic = audit(root)["stories"][0]["languages"]["ar"]
+            self.assertEqual(arabic["extra_mp3_files"], ["orphan.mp3"])
+            self.assertEqual(arabic["status"], "incomplete")
+
+    def test_invalid_manifest_is_reported_without_crashing_inventory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.make_story(root, "science", "001", "sample")
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "ar"
+            audio_dir.mkdir(parents=True)
+            (audio_dir / "manifest.json").write_text("{invalid", encoding="utf-8")
+            arabic = audit(root)["stories"][0]["languages"]["ar"]
+            self.assertTrue(arabic["manifest_errors"])
+            self.assertEqual(arabic["status"], "incomplete")
+
     def test_detects_missing_audio_and_extra_mp3_without_deleting_either(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
