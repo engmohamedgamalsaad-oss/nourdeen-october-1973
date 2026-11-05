@@ -217,6 +217,20 @@ def review_story_audio(
     for item in segments:
         if not isinstance(item, dict):
             continue
+        block_index = item.get("block_index")
+        if (
+            not isinstance(block_index, int)
+            or block_index < 0
+            or block_index >= len(blocks)
+            or not isinstance(blocks[block_index], dict)
+            or blocks[block_index].get("speaker") != item.get("speaker")
+        ):
+            reports.append({
+                "block_index": block_index,
+                "status": "manifest_block_mismatch",
+                "needs_human_review": True,
+            })
+            continue
         filename = item.get("src")
         if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".mp3"):
             reports.append({"status": "invalid_manifest_path", "needs_human_review": True})
