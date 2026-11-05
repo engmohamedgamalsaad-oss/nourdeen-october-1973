@@ -26,13 +26,18 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.pilotInfo, undefined, 'review core must not gate operation by story slug');
 
   /* A manifest must cover every story block, match its speaker, and keep chunk indexes contiguous. */
-  const coverageBlocks = [{ speaker: 'karma' }, { speaker: 'narrator' }];
+  const coverageBlocks = [
+    { speaker: 'karma', text: 'Karma line.' },
+    { speaker: 'narrator', text: 'First second.' },
+    { speaker: 'title', text: 'Non-spoken heading' }
+  ];
   const coverageSegments = [
-    { block_index: 0, chunk_index: 0, speaker: 'karma' },
-    { block_index: 1, chunk_index: 0, speaker: 'narrator' },
-    { block_index: 1, chunk_index: 1, speaker: 'narrator' }
+    { block_index: 0, chunk_index: 0, speaker: 'karma', text: 'Karma line.' },
+    { block_index: 1, chunk_index: 0, speaker: 'narrator', text: 'First' },
+    { block_index: 1, chunk_index: 1, speaker: 'narrator', text: 'second.' }
   ];
   assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments).ok, true);
+  assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments).segments, 3, 'non-spoken heading blocks must not require MP3 files');
   assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments.slice(0, 1)).ok, false, 'missing a story block must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [{ ...coverageSegments[0], speaker: 'narrator' }, ...coverageSegments.slice(1)]).ok, false, 'speaker mismatch must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [...coverageSegments, coverageSegments[0]]).ok, false, 'duplicate chunk must fail');
