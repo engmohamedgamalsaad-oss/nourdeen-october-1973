@@ -64,31 +64,37 @@ jobs:
             exit 1
           fi
 
-      - name: Regenerate one selected block into isolated staging
+      - name: Regenerate Arabic block into isolated staging
+        if: inputs.language == 'ar'
         env:
           STORY_PATH: ${{ inputs.story_path }}
           LANGUAGE: ${{ inputs.language }}
           BLOCK_INDEX: ${{ inputs.block_index }}
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-          FISH_APPROVAL: ${{ inputs.confirm_fish_audio_request }}
         shell: bash
         run: |
           set -euo pipefail
-          if [ "$LANGUAGE" = "ar" ]; then
-            python scripts/generate_story_audio.py \
-              --story "$STORY_PATH" \
-              --languages "$LANGUAGE" \
-              --force-block "$BLOCK_INDEX" \
-              --generate \
-              --allow-fish-audio
-          else
-            python scripts/generate_story_audio.py \
-              --story "$STORY_PATH" \
-              --languages "$LANGUAGE" \
-              --force-block "$BLOCK_INDEX" \
-              --generate
-          fi
+          python scripts/generate_story_audio.py \
+            --story "$STORY_PATH" \
+            --languages "$LANGUAGE" \
+            --force-block "$BLOCK_INDEX" \
+            --generate \
+            --allow-fish-audio
 
+      - name: Regenerate non-Arabic block into isolated staging
+        if: inputs.language != 'ar'
+        env:
+          STORY_PATH: ${{ inputs.story_path }}
+          LANGUAGE: ${{ inputs.language }}
+          BLOCK_INDEX: ${{ inputs.block_index }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/generate_story_audio.py \
+            --story "$STORY_PATH" \
+            --languages "$LANGUAGE" \
+            --force-block "$BLOCK_INDEX" \
+            --generate
       - name: Upload regenerated clip for manual review only
         uses: actions/upload-artifact@v4
         with:
