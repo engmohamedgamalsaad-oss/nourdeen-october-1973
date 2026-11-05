@@ -8,7 +8,7 @@ test('admin speech-text reviewer is loaded and inline admin JavaScript parses', 
   const html = fs.readFileSync(path.join(__dirname, '../khaledoon/admin.html'), 'utf8');
   assert.match(html, /assets\/audio-text-review\.js\?v=20261105-audio-text-review-2/);
   assert.match(html, /مراجعة النص قبل توليد الصوت/);
-  assert.match(html, /نسخ التعديلات التي وافقت عليها/);
+  assert.match(html, /اعتماد المراجعة وتصدير ملف الصوت/);
   const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   for (const match of scripts) {
     if (/\bsrc\s*=/.test(match[1])) continue;
