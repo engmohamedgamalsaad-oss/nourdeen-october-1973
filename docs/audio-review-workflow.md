@@ -47,7 +47,15 @@ python scripts/generate_story_audio.py --story stories/science/015/story.json --
 python scripts/generate_story_audio.py --story stories/science/015/story.json --languages ar --generate --allow-fish-audio
 \`\`\`
 
-لا تشغّل الأمر الثاني إلا بعد الموافقة الصريحة على إرسال طلبات إلى Fish Audio. الناتج يظل في \`.audio-staging/\` ولا يُنشر.
+لا تشغّل الأمر الثاني إلا بعد الموافقة الصريحة على إرسال طلبات إلى Fish Audio. الناتج يظل في `.audio-staging/` ولا يُنشر.
+
+لإعادة معالجة مقطع واحد بسبب مشكلة في الصوت فقط، استخدم رقمه الصفري كما يظهر في الحكاية. مثال المقطع السابع (فهرس 6) بالعربية:
+
+```bash
+python scripts/generate_story_audio.py --story stories/science/015/story.json --languages ar --force-block 6 --generate --allow-fish-audio
+```
+
+هذا يعيد تجهيز المقطع المحدد في مجلد التجهيز فقط. لا يُشغّل تلقائيًا من قرار الرفض، ولا يُرسل إلى Fish Audio إلا عند وجود موافقة صريحة على الأمر.\`.audio-staging/\` ولا يُنشر.
 
 ## 4. مدقق النص قبل التوليد
 
