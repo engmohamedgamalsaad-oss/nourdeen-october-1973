@@ -23,6 +23,11 @@ async function sha256(str) {
   var buf = await c.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
 }
+async function sha256Bytes(buffer) {
+  var c = root.crypto && root.crypto.subtle ? root.crypto : (typeof require === 'function' ? require('node:crypto').webcrypto : null);
+  var buf = await c.subtle.digest('SHA-256', buffer);
+  return Array.prototype.map.call(new Uint8Array(buf), function (b) { return ('0' + b.toString(16)).slice(-2); }).join('');
+}
 
 /* المفتاح الأساسي: الحكاية + اللغة + المتحدث + الصوت + المزوّد/الموديل + النص المنطوق (بعد تطبيع المسافات) + إصدار المولّد.
    رقم المقطع وترتيبه لا يدخلان فيه. */
@@ -97,11 +102,12 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
   return { ok: true, blocks: blocks.length, segments: segments.length };
 }
 
-function emptyReview() { return { version: 1, regen: {}, clips: {} }; }
+function emptyReview() { return { version: 1, regen: {}, clips: {}, audio_hashes: {} }; }
 function cloneReview(r) {
   var x = r && typeof r === 'object' ? JSON.parse(JSON.stringify(r)) : emptyReview();
   if (!x.regen || typeof x.regen !== 'object') x.regen = {};
   if (!x.clips || typeof x.clips !== 'object') x.clips = {};
+  if (!x.audio_hashes || typeof x.audio_hashes !== 'object') x.audio_hashes = {};
   x.version = 1;
   return x;
 }
@@ -119,8 +125,10 @@ function applyDecision(review, entry, decision, now) {
   });
   var clip = {
     story_id: entry.story_id, lang: entry.lang, block_index: entry.block_index, chunk_index: Number(entry.chunk_index || 0), speaker: entry.speaker,
-    base: entry.base, text: entry.text, status: decision.status, decided_at: at
+    base: entry.base, source_base: entry.source_base || '', audio_sha256: entry.audio_sha256 || '',
+    text: entry.text, status: decision.status, decided_at: at
   };
+  if (entry.source_base && entry.audio_sha256) r.audio_hashes[entry.source_base] = entry.audio_sha256;
   if (decision.status === 'rejected') {
     clip.note = String(decision.note || '').slice(0, 1000);
     clip.suggestion = String(decision.suggestion || '').slice(0, 1000);
@@ -218,7 +226,7 @@ function buildPromptSection(review) {
 var api = {
   VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS,
   norm: norm, strip: strip, engineOf: engineOf,
-  sha256: sha256, baseKey: baseKey, clipKey: clipKey,
+  sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
   evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
