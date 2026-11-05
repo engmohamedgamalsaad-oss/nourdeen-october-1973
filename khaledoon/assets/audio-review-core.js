@@ -30,9 +30,12 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
   var e = engine && typeof engine === 'object' ? {
     voice: String(engine.voice || ''),
     provider: String(engine.provider || ''),
-    model: String(engine.model || '')
+    model: String(engine.model || ''),
+    audio_revision: String(engine.audio_revision || '')
   } : engineOf(lang, speaker);
-  return sha256(['khaudio', GEN_VERSION, storyId, lang, speaker, e.voice, e.provider, e.model, norm(spokenText)].join('\u241F'));
+  var parts = ['khaudio', GEN_VERSION, storyId, lang, speaker, e.voice, e.provider, e.model, norm(spokenText)];
+  if (e.audio_revision) parts.push(e.audio_revision);
+  return sha256(parts.join('\u241F'));
 }
 /* المفتاح النهائي = الأساسي + عدّاد «إعادة الصوت» */
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
