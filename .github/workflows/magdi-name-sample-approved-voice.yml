@@ -1,0 +1,50 @@
+name: Magdi Yacoub name sample (approved narrator voice)
+
+# Manual run only. Generates 2 MP3 samples with the approved narrator voice,
+# checks they are real MP3 files, and uploads them as a downloadable artifact.
+# It does not touch stories, manifests, or published audio.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Generate samples
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          mkdir -p out
+          python - <<'PY'
+          import os, json, urllib.request, pathlib, subprocess
+          key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("FISH_AUDIO_API_KEY is missing")
+          VOICE = "a02a8220d6014812aa5ff73434c54cc0"
+          assert VOICE != "b65cfd7ce5e44607aedafeea3dbb01e8"
+          base = "خلّينا نكمل الحكاية بهدوء. {} ماكانش مجرد جرّاح شاطر؛ ده كان طبيب عنده إصرار كبير، واشتغل سنين طويلة علشان يطوّر جراحات القلب ويساعد مرضى كتير."
+          samples = [
+              ("approved-voice-a-natural.mp3", base.format("مجدي يعقوب")),
+              ("approved-voice-b-light-tashkeel.mp3", base.format("مَجدي يَعقوب")),
+          ]
+          for name, text in samples:
+              payload = json.dumps({"text": text, "reference_id": VOICE, "format": "mp3"}, ensure_ascii=False).encode()
+              req = urllib.request.Request("https://api.fish.audio/v1/tts", data=payload,
+                  headers={"Authorization": "Bearer " + key, "Content-Type": "application/json", "model": "s2.1-pro-free"},
+                  method="POST")
+              with urllib.request.urlopen(req, timeout=120) as r:
+                  audio = r.read()
+              p = pathlib.Path("out") / name
+              p.write_bytes(audio)
+              d = subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","default=nw=1:nk=1",str(p)],
+                                 check=True, capture_output=True, text=True).stdout.strip()
+              print(f"OK {name}: {len(audio)} bytes, {float(d):.2f}s, voice={VOICE}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: magdi-name-samples
+          path: out/*.mp3
