@@ -119,7 +119,7 @@ def validate_required_pronunciation_review(
     for index, block in enumerate(source_blocks):
         if not isinstance(block, dict) or block.get("speaker") not in ("narrator", "karma"):
             continue
-        source_text = re.sub(r"\\s+", " ", str(block.get("text") or "")).strip()
+        source_text = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
         if source_text:
             expected[str(index)] = source_text
 
@@ -139,7 +139,7 @@ def validate_required_pronunciation_review(
         raise ValueError(f"{pronunciation_path}: reviewed source text coverage does not match the story")
     for index, source_text in expected.items():
         stored_text = source_texts.get(index)
-        if not isinstance(stored_text, str) or re.sub(r"\\s+", " ", stored_text).strip() != source_text:
+        if not isinstance(stored_text, str) or re.sub(r"\s+", " ", stored_text).strip() != source_text:
             raise ValueError(
                 f"{pronunciation_path}: Arabic block {index} changed after pronunciation review"
             )
