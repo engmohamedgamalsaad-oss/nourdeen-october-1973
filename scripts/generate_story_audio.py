@@ -179,7 +179,7 @@ async def synthesize_fish_audio(
         raise
 
 
-def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
+def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES) -> dict[str, Any]:
     """Read-only plan for all five languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative = story_path.relative_to(ROOT)
@@ -207,13 +207,16 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT)
     ):
         raise ValueError(f"Invalid story-specific Arabic pronunciation file: {pronunciation_path}")
     pronunciation_blocks = pronunciation.get("blocks", {})
+    selected_languages = tuple(dict.fromkeys(languages))
+    if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
+        raise ValueError(f"Unsupported language selection: {selected_languages}")
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
         "segments_to_generate": 0,
         "fish_segments_to_generate": 0,
     }
-    for lang in LANGUAGES:
+    for lang in selected_languages:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
         if not isinstance(blocks, list) or not blocks:
@@ -304,7 +307,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -348,11 +351,13 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
         pronunciation_blocks = {}
 
     # Pronunciation overrides affect Arabic spoken text only.
-    languages_to_generate = LANGUAGES
+    languages_to_generate = tuple(dict.fromkeys(languages))
+    if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
+        raise ValueError(f"Unsupported language selection: {languages_to_generate}")
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
-    plan = inspect_generation_plan(story_path, STAGING_ROOT)
+    plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate)
     print(
         f"PLAN {relative.parent}: languages={len(plan['languages'])} "
         f"segments_to_generate={plan['segments_to_generate']} "
@@ -572,6 +577,13 @@ async def main() -> int:
         action="store_true",
         help="Explicit approval gate for billable Arabic Fish Audio requests.",
     )
+    parser.add_argument(
+        "--languages",
+        nargs="+",
+        choices=LANGUAGES,
+        default=list(LANGUAGES),
+        help="Languages to plan or generate. Defaults to all five.",
+    )
     args = parser.parse_args()
 
     if args.allow_fish_audio and not args.generate:
@@ -590,6 +602,7 @@ async def main() -> int:
         story,
         dry_run=not args.generate,
         allow_fish_audio=args.allow_fish_audio,
+        languages=tuple(args.languages),
     ) else 1
 
 
