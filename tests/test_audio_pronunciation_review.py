@@ -143,10 +143,12 @@ class AudioPronunciationReviewTests(unittest.TestCase):
                 "approved_audio_only_rewrites": [],
                 "blocks": {"0": "Unapproved audio rewrite."},
             })
-            (audio_dir / "000.mp3").write_bytes(b"audio")
+            audio_bytes = b"audio"
+            (audio_dir / "000.mp3").write_bytes(audio_bytes)
             self.write_json(audio_dir / "manifest.json", {
                 "story": "sample", "section": "science", "language": "ar",
-                "segments": [{"block_index": 0, "chunk_index": 0, "speaker": "narrator", "src": "000.mp3"}],
+                "segments": [{"block_index": 0, "chunk_index": 0, "speaker": "narrator", "src": "000.mp3",
+                              "audio_sha256": hashlib.sha256(audio_bytes).hexdigest()}],
             })
             fake = FakeModel([{"word": "Visible", "start": 0.1, "end": 0.3, "probability": 0.98},
                               {"word": "story", "start": 0.4, "end": 0.6, "probability": 0.98},
@@ -168,11 +170,13 @@ class AudioPronunciationReviewTests(unittest.TestCase):
                 "slug": "sample",
                 "i18n": {"en": {"blocks": [{"speaker": "narrator", "text": "Current story text."}]}},
             })
-            (audio_dir / "000.mp3").write_bytes(b"audio")
+            audio_bytes = b"audio"
+            (audio_dir / "000.mp3").write_bytes(audio_bytes)
             self.write_json(audio_dir / "manifest.json", {
                 "story": "sample", "section": "science", "language": "en",
                 "segments": [{"block_index": 0, "chunk_index": 0, "speaker": "narrator",
-                              "src": "000.mp3", "text": "Stale manifest text."}],
+                              "src": "000.mp3", "text": "Stale manifest text.",
+                              "audio_sha256": hashlib.sha256(audio_bytes).hexdigest()}],
             })
             fake = FakeModel([])
             with patch.object(reviewer, "ROOT", root):
@@ -239,7 +243,7 @@ class AudioPronunciationReviewTests(unittest.TestCase):
                     "speaker": "narrator",
                     "src": "000.mp3",
                     "text": "Hello.",
-                    "audio_sha256": "wrong-hash",
+                    "audio_sha256": "0" * 64,
                 }],
             })
             fake = FakeModel([])
