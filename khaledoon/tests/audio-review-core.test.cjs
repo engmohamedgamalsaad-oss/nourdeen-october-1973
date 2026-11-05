@@ -25,12 +25,13 @@ const core = require('../assets/audio-review-core.js');
   assert.notEqual(await core.clipKey(a, 1), await core.clipKey(a, 2));
 
   /* القبول والرفض متعارضان، وتغيير الترتيب (block_index) لا يلغي قبول نفس المفتاح */
-  const entry = { story_id: S, lang: 'ar', block_index: 3, speaker: 'karma', base: a, key: a, text: 'مرحبا بالعالم' };
+  const entry = { story_id: S, lang: 'ar', block_index: 3, chunk_index: 0, speaker: 'karma', base: a, key: a, text: 'مرحبا بالعالم' };
   let r = core.applyDecision(null, entry, { status: 'accepted' });
   assert.equal(r.clips[a].status, 'accepted');
-  r = core.applyDecision(r, entry, { status: 'rejected', note: 'نطق خاطئ', issue: 'audio_only' });
+  r = core.applyDecision(r, entry, { status: 'rejected', note: 'نطق خاطئ', suggestion: 'صياغة أوضح', issue: 'audio_only' });
   assert.equal(r.clips[a].status, 'rejected');
   assert.equal(r.clips[a].issue, 'audio_only');
+  assert.equal(r.clips[a].suggestion, 'صياغة أوضح');
   assert.equal(Object.keys(r.clips).length, 1);
 
   /* الشرط: لا اعتماد مع مرفوض أو غير مراجَع أو غير جاهز */
@@ -68,6 +69,8 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(sec.includes('(ب) النص صحيح والصوت فقط'));
   assert.ok(sec.includes('مصرية طبيعية'));
   assert.ok(sec.includes('ملاحظة الأدمن: n'));
+  const suggested = core.buildPromptSection(core.applyDecision(null, entry, { status: 'rejected', note: 'ملاحظة', suggestion: 'صياغة مقترحة', issue: 'text' }));
+  assert.ok(suggested.includes('الصياغة المقترحة: صياغة مقترحة'));
   assert.ok(sec.includes('لا تضف أي بيانات قبول'));
   assert.equal(core.buildPromptSection(null), '');
 
