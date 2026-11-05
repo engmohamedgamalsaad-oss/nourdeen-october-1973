@@ -68,6 +68,27 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(report["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
+    def test_language_scoped_plan_does_not_expand_to_other_languages(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(
+                    story, root / ".audio-staging", languages=("ar",)
+                )
+            self.assertEqual(set(plan["languages"]), {"ar"})
+            self.assertEqual(plan["fish_segments_to_generate"], 2)
+
+    def test_rejects_unsupported_language_selection(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(ValueError):
+                    audio.inspect_generation_plan(
+                        story, root / ".audio-staging", languages=("xx",)
+                    )
+
     def test_existing_complete_staging_assets_are_not_planned_again(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
