@@ -56,7 +56,7 @@ async function loadRow() {
   if (!rows.length) throw new Error('لم يتم العثور على سجل الحكاية.');
   row = rows[0];
   var meta = row.story_meta || {};
-  review = core.cloneReview(meta.audio_review || (meta.pending_draft && meta.pending_draft.story_meta && meta.pending_draft.story_meta.audio_review) || null);
+  review = core.cloneReview(meta.audio_review || null);
   return true;
 }
 async function saveReview(next, key) {
