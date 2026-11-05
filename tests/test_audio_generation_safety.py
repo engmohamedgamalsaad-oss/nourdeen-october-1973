@@ -85,6 +85,21 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(report["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
+    def test_non_arabic_plan_does_not_depend_on_arabic_pronunciation_file(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            (story.parent / "audio-pronunciation.json").write_text("{broken", encoding="utf-8")
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(
+                    story, root / ".audio-staging", languages=("en",)
+                )
+                self.assertEqual(set(plan["languages"]), {"en"})
+                with self.assertRaises(ValueError):
+                    audio.inspect_generation_plan(
+                        story, root / ".audio-staging", languages=("ar",)
+                    )
+
     def test_language_scoped_plan_does_not_expand_to_other_languages(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
