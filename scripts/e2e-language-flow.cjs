@@ -904,9 +904,10 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     // status node and import controls. Assert the persisted mocked record and preview
     // destination instead of waiting for UI that is intentionally re-rendered away.
     const popup = await popupPromise;
-    if (!savedRecord || String(savedRecord.title || '') !== storyPackage.i18n.ar.title ||
-        String(savedRecord.body || '') !== storyPackage.i18n.ar.blocks.map((block) => block.text).join('')) {
-      throw new Error('story import did not persist the expected unified draft; savedRecord=' + JSON.stringify(savedRecord) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
+    const persistedPackage = savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package;
+    if (!persistedPackage || persistedPackage.slug !== storyPackage.slug ||
+        JSON.stringify(persistedPackage.i18n?.ar?.blocks) !== JSON.stringify(storyPackage.i18n.ar.blocks)) {
+      throw new Error('story import did not persist the canonical unified package unchanged; savedRecord=' + JSON.stringify(savedRecord) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
     }
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('story import did not preserve a readable Arabic source organization in the saved draft.');
