@@ -1035,7 +1035,7 @@ function pubRow(it){
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',async function(){
      var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
-      var audioReviewSection=(window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
+      var audioReviewSection=(requireUnifiedStoryPackage&&String(it.section||it.section_key||'').toLowerCase()!=='october'&&window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
      var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',cover:it.cover||(it.story_meta&&it.story_meta.cover)||null,map_location:it.story_meta&&it.story_meta.map_location||null,images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
       var schema;
       if(requireUnifiedStoryPackage){
