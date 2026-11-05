@@ -188,7 +188,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                     else audio.FISH_AUDIO_KARMA_VOICE_ID
                 )
                 filename = f"{index:03d}.mp3"
-                payload = (f"audio-{index}").encode()
+                payload = (f"audio-{index}".ljust(600, "x")).encode()
                 (published / filename).write_bytes(payload)
                 segments.append({
                     "block_index": index,
@@ -212,7 +212,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                 )
             self.assertEqual(plan["segments_to_generate"], 1)
             self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
-            self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0")
+            self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0".ljust(600, b"x"))
             self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1")
 
     def test_arabic_single_block_regeneration_stops_before_fish_without_approval(self) -> None:
