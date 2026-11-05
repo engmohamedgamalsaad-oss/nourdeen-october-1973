@@ -77,6 +77,13 @@ def report_orphaned_audio_files(output_dir: Path, keep: set[str]) -> list[str]:
     )
 
 
+def require_fish_authorization(
+    languages_to_generate: tuple[str, ...], dry_run: bool, allow_fish: bool
+) -> None:
+    """Fail before any output or network request unless Fish use was explicitly authorized."""
+    require_fish_authorization(languages_to_generate, dry_run, allow_fish)
+
+
 def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
