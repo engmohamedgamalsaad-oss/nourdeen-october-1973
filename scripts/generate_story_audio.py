@@ -366,15 +366,30 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     selected_languages = tuple(dict.fromkeys(languages))
     if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
         raise ValueError(f"Unsupported language selection: {selected_languages}")
+    metadata_path = story_path.with_name("data.json")
+    metadata = read_json(metadata_path) if metadata_path.is_file() else {}
+    review_required = metadata.get("audio_text_review_required") is True
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    if review_required and not pronunciation_path.is_file():
+        raise ValueError(
+            f"{relative}: new story is blocked until the admin-approved five-language "
+            "audio-pronunciation.json is saved beside story.json."
+        )
     pronunciation = (
         read_json(pronunciation_path)
-        if "ar" in selected_languages and pronunciation_path.is_file()
+        if (review_required or "ar" in selected_languages) and pronunciation_path.is_file()
         else {}
     )
-    pronunciation_blocks = approved_pronunciation_blocks(
-        pronunciation, slug, pronunciation_path
-    )
+    if review_required:
+        approved_text_by_language = validate_required_audio_text_review(
+            pronunciation, package, pronunciation_path
+        )
+    else:
+        approved_text_by_language = {lang: {} for lang in LANGUAGES}
+        if "ar" in selected_languages:
+            approved_text_by_language["ar"] = approved_pronunciation_blocks(
+                pronunciation, slug, pronunciation_path
+            )
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
@@ -430,7 +445,12 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             original = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
             if not original:
                 continue
-            spoken = prepare_arabic_audio_text(original, pronunciation_blocks.get(str(index))) if lang == "ar" else original
+            approved_text = approved_text_by_language.get(lang, {}).get(str(index))
+            spoken = (
+                prepare_arabic_audio_text(original, approved_text)
+                if lang == "ar"
+                else re.sub(r"\\s+", " ", approved_text or original).strip()
+            )
             chunks = split_audio_chunks(spoken)
             if index in forced:
                 found_forced.add(index)
