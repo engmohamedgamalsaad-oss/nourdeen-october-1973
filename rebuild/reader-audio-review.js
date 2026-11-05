@@ -8,7 +8,7 @@ var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
-var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '';
+var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var enabled = false, allManifestsReady = false, canWrite = false;
 
 if (!core) return;
@@ -102,7 +102,7 @@ function manifestUrl(lang) {
   return new URL('../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href).href;
 }
 async function loadManifests() {
-  manifests = {}; manifestErrors = {}; entries = []; readyByKey = {};
+  manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {};
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var res = await fetch(manifestUrl(lang), { cache: 'no-cache' });
@@ -163,6 +163,11 @@ function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
 function play(entry, button) {
   if (!entry || !entry.src) return;
+  played[entry.key] = false;
+  if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
+  var control = button.closest('.kh-audio-review-controls');
+  var stateNode = control && control.querySelector('.kh-audio-review-state');
+  if (stateNode) stateNode.textContent = 'جارٍ الاستماع إلى المقطع…';
   if (!audio) audio = new Audio();
   try { audio.pause(); audio.currentTime = 0; } catch (e) {}
   var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
@@ -172,8 +177,8 @@ function play(entry, button) {
   button.classList.add('kh-audio-review-playing');
   var p = audio.play();
   if (p && p.catch) p.catch(function () { button.classList.remove('kh-audio-review-playing'); });
-  audio.onended = function () { button.classList.remove('kh-audio-review-playing'); };
-  audio.onerror = function () { button.classList.remove('kh-audio-review-playing'); };
+  audio.onended = function () { button.classList.remove('kh-audio-review-playing'); played[entry.key] = true; if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = false; if (stateNode) stateNode.textContent = 'اكتمل الاستماع — يمكنك قبول المقطع أو رفضه.'; };
+  audio.onerror = function () { button.classList.remove('kh-audio-review-playing'); played[entry.key] = false; if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true; if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.'; };
 }
 function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
@@ -196,11 +201,14 @@ function render() {
     text(state, saved ? (saved.status === 'accepted' ? 'مقبول ✓' : 'مرفوض ✕') : 'لم يُراجع بعد');
     var playBtn = makeButton('▶ استماع', 'play', function () { play(entry, playBtn); });
     var acceptBtn = makeButton('✓ قبول', 'accept', async function () {
+      if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل قبوله.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       var next = core.applyDecision(review, entry, { status: 'accepted' });
       state.textContent = 'جارٍ الحفظ…';
       try { await saveReview(next, entry.key); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
+    acceptBtn.disabled = !played[entry.key];
+    acceptButtons[entry.key] = acceptBtn;
     var rejectBtn = makeButton('✕ رفض / ملاحظة', 'reject', function () {
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       editor.hidden = !editor.hidden;
