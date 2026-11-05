@@ -95,7 +95,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                         "hash": audio.text_hash(text, selected_voice, rate, pitch, language),
                         "src": filename,
                     })
-                self.write_json(lang_dir / "manifest.json", {"segments": segments})
+                self.write_json(lang_dir / "manifest.json", {"story": "sample-story", "section": "science", "language": language, "segments": segments})
             with patch.object(audio, "ROOT", root):
                 plan = audio.inspect_generation_plan(story, staging)
             self.assertEqual(plan["segments_to_generate"], 0)
