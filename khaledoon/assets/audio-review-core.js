@@ -26,8 +26,12 @@ async function sha256(str) {
 
 /* المفتاح الأساسي: الحكاية + اللغة + المتحدث + الصوت + المزوّد/الموديل + النص المنطوق (بعد تطبيع المسافات) + إصدار المولّد.
    رقم المقطع وترتيبه لا يدخلان فيه. */
-async function baseKey(storyId, lang, speaker, spokenText) {
-  var e = engineOf(lang, speaker);
+async function baseKey(storyId, lang, speaker, spokenText, engine) {
+  var e = engine && typeof engine === 'object' ? {
+    voice: String(engine.voice || ''),
+    provider: String(engine.provider || ''),
+    model: String(engine.model || '')
+  } : engineOf(lang, speaker);
   return sha256(['khaudio', GEN_VERSION, storyId, lang, speaker, e.voice, e.provider, e.model, norm(spokenText)].join('\u241F'));
 }
 /* المفتاح النهائي = الأساسي + عدّاد «إعادة الصوت» */
