@@ -302,7 +302,7 @@ async function importPronunciationReport(file) {
       throw new Error('ملف التقرير لا يطابق الحكاية أو القسم أو اللغة.');
     }
     var reportEntries = report.reports.filter(function (r) { return r && typeof r.src === 'string'; });
-    if (!reportEntries.length) throw new Error('التقرير لا يحتوي نتائج مقاطع قابلة للربط.');
+    if (!reportEntries.length || reportEntries.length !== report.reports.length) throw new Error('التقرير يحتوي نتائج بلا أسماء ملفات قابلة للربط.');
     var verified = [], seenSources = {};
     for (var i = 0; i < reportEntries.length; i++) {
       var item = reportEntries[i];
