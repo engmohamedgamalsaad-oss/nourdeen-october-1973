@@ -414,14 +414,16 @@ function render() {
   var lang = document.documentElement.lang;
   var host = $('blocks');
   if (!host) return;
-  if (!document.getElementById('kh-audio-asr-import')) {
-    var importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
-    var importLabel = document.createElement('label'); importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
-    var input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
+  var importer = document.getElementById('kh-audio-asr-import');
+  if (!importer) {
+    importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
+    var importLabel = document.createElement('label'); importLabel.htmlFor = 'kh-audio-asr-file';
+    importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    var input = document.createElement('input'); input.id = 'kh-audio-asr-file'; input.type = 'file'; input.accept = '.json,application/json';
     input.addEventListener('change', function () { importPronunciationReport(input.files && input.files[0]); });
     importer.append(importLabel, input); host.parentNode.insertBefore(importer, host);
   } else {
-    var importLabelExisting = document.querySelector('#kh-audio-asr-import label');
+    var importLabelExisting = importer.querySelector('label');
     if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
   }
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
