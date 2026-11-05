@@ -68,6 +68,18 @@ class AudioPronunciationReviewTests(unittest.TestCase):
         self.assertTrue(result["mismatches"])
         self.assertEqual(result["low_confidence_words"][0]["word"], "hard")
 
+    def test_uncertain_language_detection_requires_review_even_when_words_match(self) -> None:
+        result = reviewer.compare_transcript(
+            "bonjour",
+            [{"word": "bonjour", "start": 0.1, "end": 0.6, "probability": 0.99}],
+            "fr",
+            "fr",
+            0.42,
+        )
+        self.assertEqual(result["match_ratio"], 1.0)
+        self.assertTrue(result["language_detection_uncertain"])
+        self.assertEqual(result["status"], "review_required")
+
     def test_review_uses_real_file_hash_and_returns_human_review_result(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
