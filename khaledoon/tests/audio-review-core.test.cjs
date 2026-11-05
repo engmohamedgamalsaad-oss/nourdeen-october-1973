@@ -32,7 +32,16 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(r.clips[a].status, 'rejected');
   assert.equal(r.clips[a].issue, 'audio_only');
   assert.equal(r.clips[a].suggestion, 'صياغة أوضح');
+  assert.equal(r.clips[a].chunk_index, 0);
   assert.equal(Object.keys(r.clips).length, 1);
+
+  /* جزآن من نفس المقطع لا يمسح أحدهما قرار الآخر */
+  const secondChunk = { ...entry, chunk_index: 1, base: 'chunk-2', key: 'chunk-2', text: 'جزء ثانٍ' };
+  let chunkReview = core.applyDecision(null, entry, { status: 'accepted' });
+  chunkReview = core.applyDecision(chunkReview, secondChunk, { status: 'accepted' });
+  assert.equal(Object.keys(chunkReview.clips).length, 2, 'distinct chunks in one block keep independent decisions');
+  assert.equal(chunkReview.clips[a].status, 'accepted');
+  assert.equal(chunkReview.clips['chunk-2'].status, 'accepted');
 
   /* الشرط: لا اعتماد مع مرفوض أو غير مراجَع أو غير جاهز */
   const e1 = { key: 'k1' }, e2 = { key: 'k2' };
