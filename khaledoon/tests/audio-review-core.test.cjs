@@ -21,6 +21,19 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.PILOT, undefined, 'review core must not expose a single-story pilot allowlist');
   assert.equal(core.pilotInfo, undefined, 'review core must not gate operation by story slug');
 
+  /* A manifest must cover every story block, match its speaker, and keep chunk indexes contiguous. */
+  const coverageBlocks = [{ speaker: 'karma' }, { speaker: 'narrator' }];
+  const coverageSegments = [
+    { block_index: 0, chunk_index: 0, speaker: 'karma' },
+    { block_index: 1, chunk_index: 0, speaker: 'narrator' },
+    { block_index: 1, chunk_index: 1, speaker: 'narrator' }
+  ];
+  assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments).ok, true);
+  assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments.slice(0, 2)).ok, false, 'missing a story block must fail');
+  assert.equal(core.validateManifestCoverage(coverageBlocks, [{ ...coverageSegments[0], speaker: 'narrator' }, ...coverageSegments.slice(1)]).ok, false, 'speaker mismatch must fail');
+  assert.equal(core.validateManifestCoverage(coverageBlocks, [...coverageSegments, coverageSegments[0]]).ok, false, 'duplicate chunk must fail');
+  assert.equal(core.validateManifestCoverage(coverageBlocks, [coverageSegments[0], coverageSegments[1], { ...coverageSegments[2], chunk_index: 2 }]).ok, false, 'missing chunk index must fail');
+
   /* العدّاد يغيّر المفتاح */
   assert.equal(await core.clipKey(a, 0), a);
   assert.notEqual(await core.clipKey(a, 1), a);
