@@ -167,13 +167,72 @@
     };
   }
 
+  function buildAudioPronunciationFile(input, pkg, reviewedArabicKeys, approvedKeys) {
+    var checked = validateResult(input, pkg);
+    if (!checked.ok) throw new Error('لا يمكن اعتماد ملف النطق من تقرير غير صالح: ' + checked.errors.slice(0, 3).join(' | '));
+    var result = typeof input === 'string' ? JSON.parse(input) : input;
+    var expected = collectSegments(pkg).filter(function (item) { return item.lang === 'ar'; });
+    if (!expected.length) throw new Error('لا توجد مقاطع عربية قابلة للمراجعة.');
+    var expectedByKey = Object.create(null);
+    expected.forEach(function (item) { expectedByKey['ar:' + item.block_index] = item; });
+    var reviewed = Object.create(null);
+    (Array.isArray(reviewedArabicKeys) ? reviewedArabicKeys : []).forEach(function (key) {
+      reviewed[String(key)] = true;
+    });
+    var approved = Object.create(null);
+    (Array.isArray(approvedKeys) ? approvedKeys : []).forEach(function (key) {
+      approved[String(key)] = true;
+    });
+    var errors = [];
+    Object.keys(reviewed).forEach(function (key) {
+      if (!expectedByKey[key]) errors.push('اختيار مراجعة غير معروف: ' + key);
+    });
+    expected.forEach(function (item) {
+      var key = 'ar:' + item.block_index;
+      if (!reviewed[key]) errors.push('لم تتم مراجعة المقطع العربي رقم ' + (item.block_index + 1) + '.');
+    });
+    var sourceTexts = Object.create(null);
+    var blocks = Object.create(null);
+    var approvedIndexes = [];
+    expected.forEach(function (item) {
+      var key = 'ar:' + item.block_index;
+      sourceTexts[String(item.block_index)] = item.original_text;
+      if (!approved[key]) return;
+      if (!reviewed[key]) errors.push('لا يمكن اعتماد اقتراح قبل مراجعة المقطع: ' + key);
+      if (item.issue_type === 'none' || item.proposed_audio_text === item.original_text) {
+        errors.push('لا يوجد اقتراح مختلف صالح للاعتماد في ' + key);
+        return;
+      }
+      blocks[String(item.block_index)] = item.proposed_audio_text;
+      approvedIndexes.push(String(item.block_index));
+    });
+    Object.keys(approved).forEach(function (key) {
+      if (!expectedByKey[key]) errors.push('اعتماد اقتراح غير عربي أو غير موجود: ' + key);
+    });
+    if (errors.length) throw new Error(errors.slice(0, 5).join(' | '));
+    approvedIndexes.sort(function (a, b) { return Number(a) - Number(b); });
+    var reviewedIndexes = expected.map(function (item) { return String(item.block_index); });
+    return {
+      format: 'KHALEDOON_AUDIO_PRONUNCIATION_V1',
+      story: pkg.slug,
+      language: 'ar',
+      purpose: 'Audio-only Arabic pronunciation review. Visible story text remains unchanged.',
+      review_status: 'human_review_complete',
+      reviewed_audio_only_blocks: reviewedIndexes,
+      source_texts: sourceTexts,
+      approved_audio_only_rewrites: approvedIndexes,
+      blocks: blocks
+    };
+  }
+
   var api = {
     LANGS: LANGS,
     collectSegments: collectSegments,
     diagnose: diagnose,
     buildPrompt: buildPrompt,
     validateResult: validateResult,
-    buildApprovedPatch: buildApprovedPatch
+    buildApprovedPatch: buildApprovedPatch,
+    buildAudioPronunciationFile: buildAudioPronunciationFile
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.KHAudioTextReview = api;
