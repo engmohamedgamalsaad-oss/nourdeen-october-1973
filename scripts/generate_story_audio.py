@@ -242,6 +242,12 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT)
         language_dir = staging_root / section / slug / lang
         manifest_path = language_dir / "manifest.json"
         manifest = read_json(manifest_path) if manifest_path.is_file() else {}
+        if manifest and (
+            manifest.get("story") != slug
+            or manifest.get("section") != section
+            or manifest.get("language") != lang
+        ):
+            raise ValueError(f"{manifest_path}: manifest story/section/language metadata mismatch")
         old = {}
         entries = manifest.get("segments", []) if isinstance(manifest.get("segments"), list) else []
         for item in entries:
