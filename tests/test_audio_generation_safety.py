@@ -175,11 +175,14 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             story = self.make_story(root)
+            # Keep this baseline-seeding test independent from the separate
+            # approved Arabic rewrite path; that path is covered elsewhere.
+            (story.parent / "audio-pronunciation.json").unlink()
             published = root / "assets" / "audio" / "science" / "sample-story" / "ar"
             published.mkdir(parents=True)
             segments = []
             for index, speaker, text in (
-                (0, "narrator", "Narrator pronunciation."),
+                (0, "narrator", "Narrator ar."),
                 (1, "karma", "Karma ar."),
             ):
                 voice, rate, pitch = audio.VOICE_SETTINGS["ar"][speaker]
