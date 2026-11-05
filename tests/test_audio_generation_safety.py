@@ -128,6 +128,60 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["segments_to_generate"], 1)
             self.assertEqual(plan["fish_segments_to_generate"], 1)
 
+    def test_seeds_published_baseline_into_staging_without_mutating_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            published = root / "assets" / "audio" / "science" / "sample-story" / "ar"
+            published.mkdir(parents=True)
+            segments = []
+            for index, speaker, text in (
+                (0, "narrator", "Narrator pronunciation."),
+                (1, "karma", "Karma ar."),
+            ):
+                voice, rate, pitch = audio.VOICE_SETTINGS["ar"][speaker]
+                selected_voice = (
+                    audio.FISH_AUDIO_NARRATOR_VOICE_ID if speaker == "narrator"
+                    else audio.FISH_AUDIO_KARMA_VOICE_ID
+                )
+                filename = f"{index:03d}.mp3"
+                payload = (f"audio-{index}").encode()
+                (published / filename).write_bytes(payload)
+                segments.append({
+                    "block_index": index,
+                    "chunk_index": 0,
+                    "voice": selected_voice,
+                    "hash": audio.text_hash(text, selected_voice, rate, pitch, "ar"),
+                    "src": filename,
+                    "audio_sha256": hashlib.sha256(payload).hexdigest(),
+                })
+            self.write_json(published / "manifest.json", {
+                "story": "sample-story",
+                "section": "science",
+                "language": "ar",
+                "segments": segments,
+            })
+            staging = root / ".audio-staging"
+            with patch.object(audio, "ROOT", root):
+                audio.seed_staging_from_published(story, ("ar",), staging)
+                plan = audio.inspect_generation_plan(
+                    story, staging, languages=("ar",), force_blocks=(1,)
+                )
+            self.assertEqual(plan["segments_to_generate"], 1)
+            self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
+            self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0")
+            self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1")
+
+    def test_single_block_seed_refuses_missing_published_baseline(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(RuntimeError):
+                    audio.seed_staging_from_published(
+                        story, ("ar",), root / ".audio-staging"
+                    )
+
     def test_rejects_forced_block_not_present_in_selected_language(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
