@@ -9,7 +9,7 @@ var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
-var enabled = false, allManifestsReady = false, canWrite = false, manifestLoadFailure = false;
+var enabled = false, allManifestsReady = false, canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 
 if (!core) return;
 
@@ -152,6 +152,7 @@ async function loadManifests() {
   entries = await Promise.all(pendingEntries);
 }
 function gate() {
+  if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (!enabled) return { ok: true, disabled: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages: LANGS.filter(function (l) { return !manifests[l]; }) };
@@ -159,6 +160,7 @@ function gate() {
 }
 function gateSummary() {
   var g = gate();
+  if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
   if (g.disabled) return '';
   if (g.loadError) return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إعادة المحاولة والتحقق.';
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
@@ -264,14 +266,20 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 async function initialize(nextStory) {
-  if (!nextStory || !nextStory.slug || nextStory.section === 'october') return;
+  if (!nextStory || !nextStory.slug || nextStory.section === 'october' || initializing || initialized) return;
+  initializing = true;
   story = nextStory;
   injectStyles();
   try {
     await loadRow();
     await loadManifests();
+    initialized = true;
+    initializing = false;
     render();
   } catch (e) {
+    manifestLoadFailure = true;
+    initialized = true;
+    initializing = false;
     var host = $('blocks');
     if (host) {
       var note = document.createElement('p'); note.className = 'kh-audio-review-gate';
