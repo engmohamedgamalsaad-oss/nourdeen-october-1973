@@ -136,6 +136,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(adminHtml.includes("String(it.section||it.section_key||'').toLowerCase()!=='october'"), 'October story content must remain protected from AI prompt edits');
   assert.ok(reviewActions.includes('if(!window.KHStoryAudioReview){message('), 'approval must fail closed if the audio reviewer did not load');
   assert.ok(!reviewActions.includes("String(draft.section||draft.section_key||'').toLowerCase()!=='october'"), 'the five-language audio gate must also apply to October drafts');
+  assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
 
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });
