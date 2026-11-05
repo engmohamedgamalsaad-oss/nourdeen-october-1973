@@ -31,6 +31,37 @@ function updatePageMeta(){
 }
 document.addEventListener('site-language-change',updatePageMeta);
 
+/* تعليق صورة التشكيل الجوي (القسم الأخير): نصه عربي مباشر بلا مفتاح، فنترجمه هنا دون تغيير شكل الصفحة */
+window.I18N.register('ar',{cap_air_main:'تشكيل جوي مصري خلال حرب أكتوبر بحسب وصف ملف الصورة؛ ليست الصورة بالضرورة للضربة الأولى نفسها.',cap_air_src:'المصدر والترخيص موضحان في',cap_air_link:'صفحة ملف الصورة'});
+window.I18N.register('en',{cap_air_main:'An Egyptian air formation during the October War, according to the image file’s description; the photo is not necessarily of the first strike itself.',cap_air_src:'Source and licence are given on the',cap_air_link:'image file page'});
+window.I18N.register('fr',{cap_air_main:'Formation aérienne égyptienne pendant la guerre d’octobre, selon la description du fichier de l’image ; la photo ne montre pas nécessairement la première frappe elle-même.',cap_air_src:'La source et la licence sont indiquées sur la',cap_air_link:'page du fichier de l’image'});
+window.I18N.register('it',{cap_air_main:'Formazione aerea egiziana durante la guerra d’ottobre, secondo la descrizione del file dell’immagine; la foto non ritrae necessariamente il primo attacco in sé.',cap_air_src:'Fonte e licenza sono indicate nella',cap_air_link:'pagina del file dell’immagine'});
+window.I18N.register('de',{"cap_air_main":"Ägyptische Flugformation im Oktoberkrieg laut Beschreibung der Bilddatei; das Foto zeigt nicht zwingend den ersten Luftschlag selbst.","cap_air_src":"Quelle und Lizenz stehen auf der","cap_air_link":"Seite der Bilddatei"});
+function markAirCaption(){
+  try{
+    document.querySelectorAll('section.story figcaption').forEach(function(fc){
+      if(/^\s*تشكيل جوي مصري/.test(fc.textContent))fc.setAttribute('data-cap-air','1');
+    });
+  }catch(e){}
+}
+function updateAirCaption(){
+  try{
+    var I=window.I18N;
+    if(!I)return;
+    document.querySelectorAll('figcaption[data-cap-air]').forEach(function(fc){
+      var small=fc.querySelector('small'),a=small&&small.querySelector('a');
+      var main=I.t('cap_air_main'),src=I.t('cap_air_src'),link=I.t('cap_air_link');
+      if(!small||!a||main==='cap_air_main')return;
+      if(fc.firstChild&&fc.firstChild.nodeType===3)fc.firstChild.nodeValue=main+' ';
+      if(small.firstChild&&small.firstChild.nodeType===3)small.firstChild.nodeValue=src+' ';
+      a.textContent=link;
+    });
+  }catch(e){}
+}
+markAirCaption();
+document.addEventListener('site-language-change',updateAirCaption);
+
 window.I18N.apply();
 updatePageMeta();
+updateAirCaption();
 })();
