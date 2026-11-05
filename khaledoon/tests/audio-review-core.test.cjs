@@ -81,14 +81,16 @@ const core = require('../assets/audio-review-core.js');
   /* الشرط: لا اعتماد مع مرفوض أو غير مراجَع أو غير جاهز */
   const e1 = { key: 'k1' }, e2 = { key: 'k2' };
   const rev = { clips: { k1: { status: 'accepted' }, k2: { status: 'accepted' } } };
-  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }).ok, true);
-  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'pending' }).ok, false);
-  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'error' }).ok, false);
-  assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }).unreviewed, 1);
-  assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' }, k2: { status: 'rejected' } } }, { k1: 'ready', k2: 'ready' }).ok, false);
-  assert.equal(core.evaluateGate([], rev, {}).ok, false, 'empty must not pass');
+  const listened = { k1: true, k2: true };
+  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
+  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'ready' }, { k1: true }).notListened, 1, 'previous acceptance without current full playback must block approval');
+  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'pending' }, listened).ok, false);
+  assert.equal(core.evaluateGate([e1, e2], rev, { k1: 'ready', k2: 'error' }, listened).ok, false);
+  assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }, listened).unreviewed, 1);
+  assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' }, k2: { status: 'rejected' } } }, { k1: 'ready', k2: 'ready' }, listened).ok, false);
+  assert.equal(core.evaluateGate([], rev, {}, {}).ok, false, 'empty must not pass');
   const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
-  assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }).ok, true);
+  assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
   assert.deepEqual(
     core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }).missingLanguages,
     ['fr', 'it', 'de'],
@@ -139,7 +141,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (!initialized) return { ok: false, loading: true'), 'preview approval must remain blocked while manifests are loading');
   assert.ok(reviewUi.includes('if (!e || !e.isMissingManifest) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
-  assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey);'), 'preview must use the shared five-language gate');
+  assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);'), 'preview must require current full playback for every clip in all five languages');
   assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes('core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang])'), 'Arabic audio must be checked against the approved audio-only pronunciation text, and all other languages against current story text');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
