@@ -67,6 +67,14 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }).unreviewed, 1);
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' }, k2: { status: 'rejected' } } }, { k1: 'ready', k2: 'ready' }).ok, false);
   assert.equal(core.evaluateGate([], rev, {}).ok, false, 'empty must not pass');
+  const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
+  assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }).ok, true);
+  assert.deepEqual(
+    core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }).missingLanguages,
+    ['fr', 'it', 'de'],
+    'any missing language must block preview approval'
+  );
+  assert.equal(core.evaluateFiveLanguageGate({}, [], rev, {}).ok, false, 'no audio manifests must not bypass review');
 
   /* تغيّر نص مقطع واحد: قبوله القديم يسقط والبقية تبقى */
   const other = { story_id: S, lang: 'ar', block_index: 1, speaker: 'narrator', base: 'bX', key: 'bX', text: 'x' };
@@ -110,7 +118,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (manifestLoadFailure) return { ok: false, loadError: true'), 'manifest verification errors must block preview approval');
   assert.ok(reviewUi.includes('if (!initialized) return { ok: false, loading: true'), 'preview approval must remain blocked while manifests are loading');
   assert.ok(reviewUi.includes('if (!e || !e.isMissingManifest) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest');
-  assert.ok(reviewUi.includes('if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages:'), 'approval must fail closed until all five language manifests exist');
+  assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey);'), 'preview must use the shared five-language gate');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
