@@ -1,6 +1,8 @@
 /* Tests: audio review core (clip keys, decisions, gate, AI prompt section). */
 'use strict';
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const core = require('../assets/audio-review-core.js');
 
 (async function () {
@@ -82,6 +84,15 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(suggested.includes('الصياغة المقترحة: صياغة مقترحة'));
   assert.ok(sec.includes('لا تضف أي بيانات قبول'));
   assert.equal(core.buildPromptSection(null), '');
+
+  /* Integration regression: draft preview must publish its story context after rendering,
+     and the reviewer must not allow acceptance before a complete playback. */
+  const reader = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
+  const reviewUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
+  const readerHtml = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.html'), 'utf8');
+  assert.ok(reader.includes("if(isPreview){window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new Event('kh-story-audio-context'))}"), 'draft preview must publish the story context for the audio reviewer');
+  assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل قبوله.'; return; }"), 'a clip cannot be accepted before full playback');
+  assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
 
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });
