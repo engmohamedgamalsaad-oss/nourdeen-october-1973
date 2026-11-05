@@ -264,7 +264,18 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         or not isinstance(pronunciation.get("blocks"), dict)
     ):
         raise ValueError(f"Invalid story-specific Arabic pronunciation file: {pronunciation_path}")
-    pronunciation_blocks = pronunciation.get("blocks", {})
+    raw_pronunciation_blocks = pronunciation.get("blocks", {})
+    approved_rewrites = pronunciation.get("approved_audio_only_rewrites", [])
+    if not isinstance(approved_rewrites, list):
+        raise ValueError(f"{pronunciation_path}: approved_audio_only_rewrites must be a list")
+    approved_indexes = {str(index) for index in approved_rewrites}
+    if any(not index.isdigit() or index not in raw_pronunciation_blocks for index in approved_indexes):
+        raise ValueError(f"{pronunciation_path}: approved rewrite references a missing or invalid block")
+    if any(not isinstance(raw_pronunciation_blocks[index], str) or not raw_pronunciation_blocks[index].strip() for index in approved_indexes):
+        raise ValueError(f"{pronunciation_path}: approved rewrite text must be a non-empty string")
+    pronunciation_blocks = {
+        index: raw_pronunciation_blocks[index] for index in approved_indexes
+    }
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
@@ -443,9 +454,20 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     if pronunciation_data:
         if pronunciation_data.get("story") != slug or pronunciation_data.get("language") != "ar":
             raise ValueError(f"{pronunciation_path}: story/language metadata mismatch")
-        pronunciation_blocks = pronunciation_data.get("blocks")
-        if not isinstance(pronunciation_blocks, dict):
+        raw_pronunciation_blocks = pronunciation_data.get("blocks")
+        if not isinstance(raw_pronunciation_blocks, dict):
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
+        approved_rewrites = pronunciation_data.get("approved_audio_only_rewrites", [])
+        if not isinstance(approved_rewrites, list):
+            raise ValueError(f"{pronunciation_path}: approved_audio_only_rewrites must be a list")
+        approved_indexes = {str(index) for index in approved_rewrites}
+        if any(not index.isdigit() or index not in raw_pronunciation_blocks for index in approved_indexes):
+            raise ValueError(f"{pronunciation_path}: approved rewrite references a missing or invalid block")
+        if any(not isinstance(raw_pronunciation_blocks[index], str) or not raw_pronunciation_blocks[index].strip() for index in approved_indexes):
+            raise ValueError(f"{pronunciation_path}: approved rewrite text must be a non-empty string")
+        pronunciation_blocks = {
+            index: raw_pronunciation_blocks[index] for index in approved_indexes
+        }
     else:
         pronunciation_blocks = {}
     story_audio_root = STAGING_ROOT / section / slug
