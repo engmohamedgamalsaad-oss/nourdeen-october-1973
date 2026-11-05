@@ -1,11 +1,12 @@
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import tempfile
 import unittest
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import AsyncMock, patch
 
 from scripts import generate_story_audio as audio
 
@@ -39,6 +40,21 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "blocks": {"0": "Narrator pronunciation."},
         })
         return story_dir / "story.json"
+
+    def test_dry_run_does_not_call_tts_or_create_staging_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            staging = root / ".audio-staging"
+            fish = AsyncMock()
+            edge = AsyncMock()
+            with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
+                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize_edge_audio", edge):
+                result = asyncio.run(audio.generate_story(story, dry_run=True))
+            self.assertTrue(result)
+            fish.assert_not_awaited()
+            edge.assert_not_awaited()
+            self.assertFalse(staging.exists())
 
     def test_pronunciation_file_does_not_skip_other_languages(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
