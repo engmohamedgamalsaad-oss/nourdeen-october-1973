@@ -213,6 +213,7 @@ function render() {
     acceptBtn.disabled = !played[entry.key];
     acceptButtons[entry.key] = acceptBtn;
     var rejectBtn = makeButton('✕ رفض / ملاحظة', 'reject', function () {
+      if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الملاحظة أو الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       editor.hidden = !editor.hidden;
       rejectBtn.textContent = editor.hidden ? '✕ رفض / ملاحظة' : 'حفظ الرفض';
@@ -226,6 +227,7 @@ function render() {
     var suggestion = document.createElement('textarea'); suggestion.maxLength = 1000; suggestion.placeholder = 'صياغة مقترحة بديلة (اختياري — لا تُطبّق تلقائيًا)';
     if (saved) { note.value = saved.note || ''; suggestion.value = saved.suggestion || ''; issue.value = saved.issue || 'text'; }
     var saveReject = makeButton('حفظ الرفض', 'reject-save', async function () {
+      if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
       var next = core.applyDecision(review, entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value });
