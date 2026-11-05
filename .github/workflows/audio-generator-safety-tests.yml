@@ -1,0 +1,34 @@
+name: Audio generator safety tests
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "scripts/generate_story_audio.py"
+      - "tests/test_generate_story_audio_cli.py"
+      - ".github/workflows/story-audio.yml"
+      - ".github/workflows/audio-generator-safety-tests.yml"
+      - "docs/story-audio-arabic.md"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: audio-generator-safety-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  safety-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile generator
+        run: python -m py_compile scripts/generate_story_audio.py
+      - name: Run safety tests without TTS
+        run: python -m unittest discover -s tests -p "test_generate_story_audio_cli.py" -v
