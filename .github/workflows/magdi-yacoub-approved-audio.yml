@@ -1,0 +1,106 @@
+name: Magdi Yacoub approved voices - standalone audio test
+
+on:
+  push:
+    branches:
+      - audio-test/magdi-yacoub-approved-voices
+    paths:
+      - '.github/workflows/magdi-yacoub-approved-audio.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout isolated test branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Generate all Arabic story segments with the two approved Fish Audio voices
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os, pathlib, urllib.request, subprocess, sys
+          root = pathlib.Path(".")
+          story = json.loads((root / "stories/science/015/story.json").read_text(encoding="utf-8"))
+          pronunciation = json.loads((root / "stories/science/015/audio-pronunciation.json").read_text(encoding="utf-8"))
+          blocks = story["i18n"]["ar"]["blocks"]
+          texts = pronunciation["blocks"]
+          voices = {
+              "narrator": "a02a8220d6014812aa5ff73434c54cc0",
+              "karma": "592625f68416462f8b6161ddf5fdbffb",
+          }
+          api_key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+          if not api_key:
+              raise SystemExit("Missing FISH_AUDIO_API_KEY GitHub Actions secret")
+          out = pathlib.Path("magdi-yacoub-approved-audio")
+          out.mkdir(exist_ok=True)
+          concat = []
+          for i, block in enumerate(blocks):
+              speaker = block.get("speaker")
+              text = texts.get(str(i), "").strip()
+              if speaker not in voices or not text:
+                  raise SystemExit(f"Missing speaker or audio text for block {i}")
+              payload = json.dumps({
+                  "text": text,
+                  "reference_id": voices[speaker],
+                  "format": "mp3"
+              }, ensure_ascii=False).encode("utf-8")
+              request = urllib.request.Request(
+                  "https://api.fish.audio/v1/tts",
+                  data=payload,
+                  headers={
+                      "Authorization": "Bearer " + api_key,
+                      "Content-Type": "application/json",
+                      "model": "s2.1-pro-free",
+                  },
+                  method="POST",
+              )
+              with urllib.request.urlopen(request, timeout=120) as response:
+                  audio = response.read()
+              if len(audio) < 512 or not audio.startswith(b"ID3") and not audio.startswith(b"\xff"):
+                  raise SystemExit(f"Invalid MP3 response for segment {i}: {len(audio)} bytes")
+              filename = out / f"{i:03d}-{speaker}.mp3"
+              filename.write_bytes(audio)
+              concat.append(filename)
+              print(f"OK segment {i:02d} speaker={speaker} bytes={len(audio)}")
+          listing = out / "concat.txt"
+          listing.write_text("".join("file '" + p.resolve().as_posix() + "'\\n" for p in concat), encoding="utf-8")
+          final = out / "magdi-yacoub-full-approved-voices.mp3"
+          subprocess.run([
+              "ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(listing),
+              "-c", "copy", str(final)
+          ], check=True)
+          probe = subprocess.run([
+              "ffprobe", "-v", "error", "-show_entries", "format=duration,size",
+              "-of", "json", str(final)
+          ], check=True, capture_output=True, text=True)
+          info = json.loads(probe.stdout)["format"]
+          if int(info.get("size", 0)) < 10000 or float(info.get("duration", 0)) < 30:
+              raise SystemExit(f"Final MP3 failed validation: {info}")
+          (out / "validation.json").write_text(json.dumps({
+              "story": "magdi-yacoub",
+              "segments": len(concat),
+              "narrator_voice": voices["narrator"],
+              "karma_voice": voices["karma"],
+              "model": "s2.1-pro-free",
+              "duration_seconds": float(info["duration"]),
+              "size_bytes": int(info["size"]),
+              "output": final.name
+          }, ensure_ascii=False, indent=2), encoding="utf-8")
+          print("FINAL MP3 READY:", final, info)
+          PY
+      - name: Upload complete MP3 and segment files
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: magdi-yacoub-approved-voices-full-mp3
+          path: magdi-yacoub-approved-audio/
+          if-no-files-found: error
+          retention-days: 7
