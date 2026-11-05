@@ -1,0 +1,177 @@
+{
+  "stories": [
+    {
+      "story": "001",
+      "ui_keys": {
+        "ar": {
+          "count": 37,
+          "missing_vs_ar": []
+        },
+        "en": {
+          "count": 37,
+          "missing_vs_ar": []
+        },
+        "fr": {
+          "count": 37,
+          "missing_vs_ar": []
+        },
+        "it": {
+          "count": 37,
+          "missing_vs_ar": []
+        },
+        "de": {
+          "count": 37,
+          "missing_vs_ar": []
+        }
+      },
+      "data_json_missing_fields": {
+        "en": [],
+        "fr": [],
+        "it": [],
+        "de": []
+      },
+      "body_blocks": {
+        "arabic_total": 70,
+        "found_verbatim_in_story_body_i18n": 66,
+        "not_found_samples": [
+          "جنود مصريون يرفعون العلم في سيناء. الصورة توضح سياق النصر ال",
+          "باب المندب والبحر الأحمر خريطة توضيحية للموقع الجغرافي. للمق",
+          "مضيق باب المندب من منظور فضائي صورة توضيحية لطبيعة الممر الب",
+          "المدمرة «إيلات»؛ صورة للسفينة نفسها وليست صورة لحظة إغراقها."
+        ]
+      }
+    },
+    {
+      "story": "002",
+      "ui_keys": {
+        "ar": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "en": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "fr": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "it": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "de": {
+          "count": 36,
+          "missing_vs_ar": []
+        }
+      },
+      "data_json_missing_fields": {
+        "en": [],
+        "fr": [],
+        "it": [],
+        "de": []
+      },
+      "body_blocks": {
+        "arabic_total": 64,
+        "found_verbatim_in_story_body_i18n": 62,
+        "not_found_samples": [
+          "صورة أرشيفية لجنود مصريين أثناء عبور خط بارليف في حرب أكتوبر",
+          "جنود مصريون خلال اقتحام خط بارليف في أكتوبر 1973. المصدر: ال"
+        ]
+      }
+    },
+    {
+      "story": "003",
+      "ui_keys": {
+        "ar": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "en": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "fr": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "it": {
+          "count": 36,
+          "missing_vs_ar": []
+        },
+        "de": {
+          "count": 36,
+          "missing_vs_ar": []
+        }
+      },
+      "data_json_missing_fields": {
+        "en": [],
+        "fr": [],
+        "it": [],
+        "de": []
+      },
+      "body_blocks": {
+        "arabic_total": 58,
+        "found_verbatim_in_story_body_i18n": 56,
+        "not_found_samples": [
+          "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقاف",
+          "مشهد من قرية نوبية على النيل، للتعريف بالبيئة الثقافية لا لت"
+        ]
+      }
+    },
+    {
+      "story": "004",
+      "ui_keys": {
+        "ar": {
+          "count": 99,
+          "missing_vs_ar": []
+        },
+        "en": {
+          "count": 99,
+          "missing_vs_ar": []
+        },
+        "fr": {
+          "count": 99,
+          "missing_vs_ar": []
+        },
+        "it": {
+          "count": 99,
+          "missing_vs_ar": []
+        },
+        "de": {
+          "count": 99,
+          "missing_vs_ar": []
+        }
+      },
+      "data_json_missing_fields": {
+        "en": [],
+        "fr": [],
+        "it": [],
+        "de": []
+      },
+      "body_blocks": {
+        "arabic_total": 11,
+        "found_verbatim_in_story_body_i18n": 10,
+        "not_found_samples": [
+          "تشكيل جوي مصري خلال حرب أكتوبر بحسب وصف ملف الصورة؛ ليست الص"
+        ]
+      }
+    }
+  ],
+  "body_file_probe": {
+    "exists": true,
+    "chars": 410400,
+    "lang_key_hits": {
+      "ar": 8,
+      "en": 680,
+      "fr": 671,
+      "it": 673,
+      "de": 672
+    },
+    "slug_snippets": {
+      "001": "Illustration – kein historisches Foto von Ahmed Idris\"}\n});\n\n\nvar pageMeta = {\n '001': {\n  ar:['رجال البحر في أكتوبر | نوردين محمد جمال','حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال'],\n  en:['Men of the Sea in October | Nourdeen Mohamed Gamal','The story of Egyptian Navy heroes in the 1973 Octob",
+      "002": " Oktoberkrieg 1973 — erstellt und präsentiert von Nourdeen Mohamed Gamal']\n },\n '002': {\n  ar:['العقل قبل السلاح | كارما محمد جمال','حكاية باقي زكي يوسف وفكرة المياه لفتح ثغرات في الساتر الترابي في حرب أكتوبر 1973 — إعداد وتقديم كارما محمد جمال'],\n  en:['Brains Before Weapons | Karma Mohamed Gamal','The story of Baqi Z",
+      "003": "urchbrechen des Sandwalls im Oktoberkrieg 1973 — von Karma Mohamed Gamal']\n },\n '003': {\n  ar:['لغة لا يفهمها العدو | مليكة محمد جمال','حكاية اللغة النوبية كشفرة سرية في حرب أكتوبر 1973 — إعداد وتقديم مليكة محمد جمال'],\n  en:['A Language the Enemy Could Not Understand | Malika Mohamed Gamal','The story of the Nubian la"
+    }
+  }
+}

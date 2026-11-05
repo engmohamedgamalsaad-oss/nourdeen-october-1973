@@ -1,0 +1,45 @@
+== October story 001 ==
+  ui ar: 37 keys
+  ui en: 37 keys
+  ui fr: 37 keys
+  ui it: 37 keys
+  ui de: 37 keys
+  body: 70 Arabic blocks, 66 found verbatim in story-body-i18n.js
+== October story 002 ==
+  ui ar: 36 keys
+  ui en: 36 keys
+  ui fr: 36 keys
+  ui it: 36 keys
+  ui de: 36 keys
+  body: 64 Arabic blocks, 62 found verbatim in story-body-i18n.js
+== October story 003 ==
+  ui ar: 36 keys
+  ui en: 36 keys
+  ui fr: 36 keys
+  ui it: 36 keys
+  ui de: 36 keys
+  body: 58 Arabic blocks, 56 found verbatim in story-body-i18n.js
+== October story 004 ==
+  ui ar: 99 keys
+  ui en: 99 keys
+  ui fr: 99 keys
+  ui it: 99 keys
+  ui de: 99 keys
+  body: 11 Arabic blocks, 10 found verbatim in story-body-i18n.js
+== story-body-i18n.js probe ==
+{
+  "exists": true,
+  "chars": 410400,
+  "lang_key_hits": {
+    "ar": 8,
+    "en": 680,
+    "fr": 671,
+    "it": 673,
+    "de": 672
+  },
+  "slug_snippets": {
+    "001": "Illustration – kein historisches Foto von Ahmed Idris\"}\n});\n\n\nvar pageMeta = {\n '001': {\n  ar:['رجال البحر في أكتوبر | نوردين محمد جمال','حكاية رجال البحر في حرب أكتوبر 1973 — إعداد وتقديم نوردين محمد جمال'],\n  en:['Men of the Sea in October | Nourdeen Mohamed Gamal','The story of Egyptian Navy heroes in the 1973 Octob",
+    "002": " Oktoberkrieg 1973 — erstellt und präsentiert von Nourdeen Mohamed Gamal']\n },\n '002': {\n  ar:['العقل قبل السلاح | كارما محمد جمال','حكاية باقي زكي يوسف وفكرة المياه لفتح ثغرات في الساتر الترابي في حرب أكتوبر 1973 — إعداد وتقديم كارما محمد جمال'],\n  en:['Brains Before Weapons | Karma Mohamed Gamal','The story of Baqi Z",
+    "003": "urchbrechen des Sandwalls im Oktoberkrieg 1973 — von Karma Mohamed Gamal']\n },\n '003': {\n  ar:['لغة لا يفهمها العدو | مليكة محمد جمال','حكاية اللغة النوبية كشفرة سرية في حرب أكتوبر 1973 — إعداد وتقديم مليكة محمد جمال'],\n  en:['A Language the Enemy Could Not Understand | Malika Mohamed Gamal','The story of the Nubian la"
+  }
+}
