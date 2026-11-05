@@ -260,8 +260,7 @@ export async function buildStoryFiles(story, options = {}) {
     color: entry.color, order: entry.order, published: true,
     ...(audioTextReviewRequired ? { audio_text_review_required: true } : {}),
     i18n: entry.i18n, id, section: story.section, path: root,
-    cover: coverLocator,
-    audio_text_review_required: !previousPath && !previousId
+    cover: coverLocator
   };
   const sourceMarkdown = '# مصادر الحكاية: ' + story.i18n.ar.title + '\n\n' +
     story.sources.map(s => '- [' + (s.i18n?.ar?.title || s.title) + '](' + s.url + ') — ' + (s.i18n?.ar?.organization || s.organization)).join('\n') + '\n';
