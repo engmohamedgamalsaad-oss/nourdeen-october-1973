@@ -907,7 +907,8 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     const persistedPackage = savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package;
     if (!persistedPackage || persistedPackage.slug !== storyPackage.slug ||
         JSON.stringify(persistedPackage.i18n?.ar?.blocks) !== JSON.stringify(storyPackage.i18n.ar.blocks)) {
-      throw new Error('story import did not persist the canonical unified package unchanged; savedRecord=' + JSON.stringify(savedRecord) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
+      const importDiagnostics = await page.evaluate(() => ({ status: document.querySelector('.ai-status')?.textContent || '', badge: document.querySelector('.ai-badge')?.textContent || '', locked: document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]')?.readOnly ?? null, pasteLength: document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]')?.value?.length ?? null }));
+      throw new Error('story import did not persist the canonical unified package unchanged; diagnostics=' + JSON.stringify(importDiagnostics) + '; savedRecord=' + JSON.stringify(savedRecord) + '; failedRequests=' + JSON.stringify(failedRequests) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
     }
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('story import did not preserve a readable Arabic source organization in the saved draft.');
