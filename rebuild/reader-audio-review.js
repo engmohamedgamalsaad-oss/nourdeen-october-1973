@@ -10,7 +10,7 @@ var core = window.KHAudioReviewCore;
 if (!core) return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
-var allManifestsReady = false, canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
+var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -128,7 +128,6 @@ async function loadManifests() {
       if (!e || !e.isMissingManifest) manifestLoadFailure = true;
     }
   }));
-  allManifestsReady = LANGS.every(function (lang) { return !!manifests[lang]; });
   var pendingEntries = [];
   LANGS.forEach(function (lang) {
     var manifest = manifests[lang];
@@ -152,8 +151,7 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages: LANGS.filter(function (l) { return !manifests[l]; }) };
-  return core.evaluateGate(entries, review, readyByKey);
+  return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey);
 }
 function gateSummary() {
   var g = gate();
