@@ -108,6 +108,9 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
   assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v5 reference');
   assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
+  assert.ok(prompt.includes('بوابة جودة حوار كارما للحكايات الجديدة'));
+  assert.ok(prompt.includes('لا تجربة شخصية مختلقة'));
+  assert.ok(prompt.includes('تعود مرة واحدة على الأقل في النصف الثاني'));
   assert.ok(prompt.includes('## 5) الغلاف والصور'));
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
   assert.ok(!canonical.includes('\\`'), 'canonical v5 prompt must use real Markdown backticks, not escaped backticks');
