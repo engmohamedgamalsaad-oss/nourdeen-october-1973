@@ -102,6 +102,7 @@ const core = require('../assets/audio-review-core.js');
      and the reviewer must not allow acceptance before a complete playback. */
   const reader = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
   const reviewUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
+  const reviewActions = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-review-actions.js'), 'utf8');
   const readerHtml = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.html'), 'utf8');
   const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
   assert.ok(reader.includes("window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new CustomEvent('kh-story-audio-context'"), 'reader must publish story context after rendering for the audio reviewer');
@@ -114,6 +115,8 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(adminHtml.indexOf('assets/audio-review-core.js') < adminHtml.indexOf('var audioReviewSection'), 'admin must load the review core before building AI prompts');
   assert.ok(adminHtml.includes('buildPromptSection(it.story_meta.audio_review)'), 'audio decisions must be included in the AI prompt');
   assert.ok(adminHtml.includes("String(it.section||it.section_key||'').toLowerCase()!=='october'"), 'October must remain excluded from audio prompt integration');
+  assert.ok(reviewActions.includes('if(!window.KHStoryAudioReview){message('), 'approval must fail closed if the non-October audio reviewer did not load');
+  assert.ok(reviewActions.includes("String(draft.section||draft.section_key||'').toLowerCase()!=='october'"), 'October approval must remain outside the audio gate');
 
   console.log('audio-review-core tests passed');
 })().catch(function (e) { console.error(e); process.exit(1); });
