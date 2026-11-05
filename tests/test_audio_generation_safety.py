@@ -213,7 +213,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["segments_to_generate"], 1)
             self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
             self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0".ljust(600, b"x"))
-            self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1")
+            self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1".ljust(600, b"x"))
 
     def test_arabic_single_block_regeneration_stops_before_fish_without_approval(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
