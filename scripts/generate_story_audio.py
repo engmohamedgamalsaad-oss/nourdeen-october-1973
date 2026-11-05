@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""Generate static, per-speaker audio for published Khaledoon story packages.
+"""Plan or stage per-speaker audio for published non-October story packages.
 
-Refresh the Magdi Yacoub Arabic narrator clips using the approved voice B.
-
-The workflow intentionally excludes the October section. Audio is an optional
-enhancement: a failed synthesis never changes the story package or its page.
+Planning is read-only. Generation requires an explicit flag and writes only to
+.gitignored .audio-staging; it never writes to the published audio tree.
+Fish Audio additionally requires a separate explicit approval flag.
 """
 from __future__ import annotations
 
@@ -30,15 +29,6 @@ ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
-# Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
-FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 6, 7, 8, 10}
-# Original manifest input hashes for the three owner-approved Karma clips.
-# They are immutable in this narrator-only pilot; these are not MP3 byte hashes.
-KARMA_ORIGINAL_MANIFEST_HASH = {
-    0: "3d531998fb878488a7f95d5d5f8dd2b15e4df9007529ea4f3a9d7e53909c9c64",
-    2: "a8c4f80cdf7b59eb8ba2676eef94a109e20c86b51476d4b45c546bdca3e9ea10",
-    3: "88ee90b74d24062258dc1c70a18eec8aaf0430d4043f671addad5d4926a73064",
-}
 VOICE_SETTINGS = {
     "ar": {
         "karma": ("ar-EG-SalmaNeural", "+0%", "+8Hz"),
@@ -215,8 +205,17 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT)
     story_path = story_path.resolve()
     relative = story_path.relative_to(ROOT)
     section = relative.parts[1]
+    if story_path.name != "story.json" or len(relative.parts) != 4 or relative.parts[0] != "stories":
+        raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
+    section = relative.parts[1]
+    if section == "october":
+        raise ValueError(f"October stories are excluded from audio planning: {relative}")
     package = read_json(story_path)
+    if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:
+        raise ValueError(f"Invalid story package format or section in {relative}")
     slug = str(package.get("slug") or "").strip()
+    if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug):
+        raise ValueError(f"Invalid story slug in {relative}: {slug!r}")
     translations = package.get("i18n")
     if not isinstance(translations, dict):
         raise ValueError(f"Missing i18n object in {relative}")
