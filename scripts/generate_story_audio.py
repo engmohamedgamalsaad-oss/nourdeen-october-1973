@@ -262,7 +262,7 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
         staged_manifest_data = dict(manifest)
         staged_manifest_data["segments"] = staged_segments
         staged_manifest.write_text(
-            json.dumps(staged_manifest_data, ensure_ascii=False, indent=2) + "\\n",
+            json.dumps(staged_manifest_data, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
         )
 
