@@ -1078,7 +1078,6 @@ function pubRow(it){
      });
      aiPanel.appendChild(audioTextReviewBox);
     }
-    }
     var aiPaste=area('',12,100000),aiPasteLocked=false;aiPaste.placeholder='الصق هنا JSON الناتج من البرومبت الموحد…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج أولًا. اضغط «تعديل» لتنفيذ الاستيراد وقفل الخانة؛ واضغطه مرة أخرى لفتحها للتعديل أو المسح.'));
     var aiClear=el('button','btn ghost','مسح محتوى خانة AI');aiClear.type='button';aiClear.setAttribute('aria-label','مسح محتوى ناتج الذكاء الاصطناعي');aiPanel.appendChild(aiClear);
     /* لا نعرض لوحة الإصلاح؛ نكتفي برسالة الخطأ عند فشل التحقق. */
