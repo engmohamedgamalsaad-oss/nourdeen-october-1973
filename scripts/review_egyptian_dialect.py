@@ -117,53 +117,85 @@ def review_text(text: str, speaker: str | None = None) -> dict[str, Any]:
     }
 
 
-def build_report(story_path: Path, pronunciation_path: Path, language: str) -> dict[str, Any]:
+def build_report(
+    story_path: Path, pronunciation_path: Path | None = None, language: str = "ar"
+) -> dict[str, Any]:
     story = read_object(story_path, "story")
-    pronunciation = read_object(pronunciation_path, "audio pronunciation")
     if story.get("format") != "KHALEDOON_STORY":
         raise ReviewError("Unsupported story format")
-    if pronunciation.get("story") != story.get("slug"):
-        raise ReviewError("Audio pronunciation story does not match story.json")
-    if pronunciation.get("language") != language:
-        raise ReviewError("Audio pronunciation language does not match requested language")
+    section = str(story.get("section") or "").strip().lower()
+    if section == "october" or story_path.parts[-3:-2] == ("october",):
+        raise ReviewError("October stories are explicitly excluded from dialect review")
+
+    candidate = pronunciation_path or story_path.with_name("audio-pronunciation.json")
+    pronunciation = read_object(candidate, "audio pronunciation") if candidate.is_file() else {}
+    if pronunciation_path is not None and not candidate.is_file():
+        raise ReviewError(f"Explicit audio pronunciation file does not exist: {candidate}")
+    if pronunciation:
+        if pronunciation.get("story") != story.get("slug"):
+            raise ReviewError("Audio pronunciation story does not match story.json")
+        if pronunciation.get("language") != language:
+            raise ReviewError("Audio pronunciation language does not match requested language")
+        audio = pronunciation.get("blocks")
+        if not isinstance(audio, dict):
+            raise ReviewError("Audio pronunciation blocks must be an object")
+    else:
+        audio = {}
 
     visible = story.get("i18n", {}).get(language, {}).get("blocks")
-    audio = pronunciation.get("blocks")
-    if not isinstance(visible, list) or not isinstance(audio, dict):
-        raise ReviewError("Missing localized story blocks or audio source blocks")
+    if not isinstance(visible, list) or not visible:
+        raise ReviewError("Missing localized story blocks")
 
     reports = []
-    for raw_index, source_text in audio.items():
-        try:
-            index = int(raw_index)
-        except (TypeError, ValueError):
-            raise ReviewError(f"Invalid audio block index: {raw_index!r}")
-        if index < 0 or index >= len(visible):
-            raise ReviewError(f"Audio block index {index} is outside story block range")
-        block = visible[index]
+    used_audio_indexes = set()
+    for index, block in enumerate(visible):
         if not isinstance(block, dict):
             raise ReviewError(f"Story block {index} is not an object")
+        if block.get("speaker") not in ("narrator", "karma"):
+            continue
+        visible_text = block.get("text")
+        if not isinstance(visible_text, str) or not visible_text.strip():
+            continue
+        source_text = audio.get(str(index), visible_text)
+        source_kind = "audio_pronunciation" if str(index) in audio else "story_text_fallback"
+        if not isinstance(source_text, str) or not source_text.strip():
+            raise ReviewError(f"Audio source for block {index} is empty or invalid")
+        if source_kind == "audio_pronunciation":
+            used_audio_indexes.add(str(index))
         review = review_text(source_text, block.get("speaker"))
         review.update({
             "block_index": index,
+            "source_kind": source_kind,
             "visible_story_text_unchanged": True,
             "audio_source_text": source_text,
         })
         reports.append(review)
 
+    extra_indexes = set(audio) - used_audio_indexes
+    if extra_indexes:
+        raise ReviewError(
+            "Audio pronunciation file contains indexes that are not speakable story blocks: "
+            + ", ".join(sorted(extra_indexes))
+        )
+
     reports.sort(key=lambda item: item["block_index"])
-    counts = {}
+    counts: dict[str, int] = {}
+    source_counts: dict[str, int] = {}
     for item in reports:
         counts[item["register"]] = counts.get(item["register"], 0) + 1
+        source_counts[item["source_kind"]] = source_counts.get(item["source_kind"], 0) + 1
     return {
         "tool": "review_egyptian_dialect.py",
-        "version": 1,
+        "version": 2,
         "mode": "READ_ONLY_ADVISORY",
         "story": story.get("slug"),
+        "section": section,
+        "story_file": str(story_path.relative_to(ROOT)) if story_path.is_relative_to(ROOT) else str(story_path),
         "language": language,
         "summary": {
             "blocks_reviewed": len(reports),
             "register_counts": counts,
+            "source_counts": source_counts,
             "automatic_rewrites": 0,
             "fish_audio_calls": 0,
         },
@@ -171,7 +203,57 @@ def build_report(story_path: Path, pronunciation_path: Path, language: str) -> d
         "limitations": [
             "القواعد اللغوية هنا مؤشرات محافظة وليست فهمًا كاملًا للهجة أو للسياق.",
             "لا يمكن للمدقق النصي معرفة النطق الفعلي أو الوقفات أو الإحساس؛ يلزم الاستماع.",
+            "النص البديل في audio-pronunciation.json هو نص قراءة صوتي فقط ولا يغيّر نص الحكاية الظاهر.",
+            "عند غياب audio-pronunciation.json يستخدم المدقق نص المقطع الظاهر باعتباره مصدر القراءة الافتراضي قبل التوليد.",
             "لا تُحوّل نتائج الفصحى إلى تصحيح تلقائي، ولا تغيّر النص الظاهر.",
+        ],
+    }
+
+
+def discover_stories(stories_root: Path) -> list[Path]:
+    """Find unified non-October story packages without opening or changing other assets."""
+    found = []
+    for path in sorted(stories_root.glob("*/*/story.json")):
+        if path.parent.parent.name.lower() == "october":
+            continue
+        try:
+            package = read_object(path, "story package")
+        except ReviewError:
+            continue
+        if package.get("format") == "KHALEDOON_STORY":
+            found.append(path)
+    return found
+
+
+def build_all_stories_report(stories_root: Path, language: str = "ar") -> dict[str, Any]:
+    paths = discover_stories(stories_root)
+    if not paths:
+        raise ReviewError(f"No eligible non-October unified stories found under {stories_root}")
+    reports = [build_report(path, language=language) for path in paths]
+    counts: dict[str, int] = {}
+    total_blocks = 0
+    for item in reports:
+        total_blocks += item["summary"]["blocks_reviewed"]
+        for key, value in item["summary"]["register_counts"].items():
+            counts[key] = counts.get(key, 0) + value
+    return {
+        "tool": "review_egyptian_dialect.py",
+        "version": 2,
+        "mode": "READ_ONLY_ADVISORY_ALL_STORIES",
+        "language": language,
+        "summary": {
+            "stories_reviewed": len(reports),
+            "blocks_reviewed": total_blocks,
+            "register_counts": counts,
+            "automatic_rewrites": 0,
+            "fish_audio_calls": 0,
+            "october_stories_included": 0,
+        },
+        "stories": reports,
+        "limitations": [
+            "هذه مراجعة استرشادية نصية وليست حكمًا نهائيًا على اللهجة أو جودة الأداء.",
+            "لم يتم تشغيل أي خدمة تحويل نص إلى صوت أو استهلاك رصيد.",
+            "قسم أكتوبر مستثنى صراحةً من الفحص.",
         ],
     }
 
@@ -179,17 +261,21 @@ def build_report(story_path: Path, pronunciation_path: Path, language: str) -> d
 def main() -> int:
     parser = argparse.ArgumentParser(description="Read-only advisory review of Egyptian Arabic audio text.")
     parser.add_argument("--story", default=str(DEFAULT_STORY))
-    parser.add_argument("--pronunciation", default=str(DEFAULT_PRONUNCIATION))
+    parser.add_argument("--pronunciation", default=None)
     parser.add_argument("--language", default="ar", choices=("ar",))
+    parser.add_argument("--all-stories", action="store_true")
     args = parser.parse_args()
-    story_path = Path(args.story)
-    pronunciation_path = Path(args.pronunciation)
-    if not story_path.is_absolute():
-        story_path = ROOT / story_path
-    if not pronunciation_path.is_absolute():
-        pronunciation_path = ROOT / pronunciation_path
     try:
-        report = build_report(story_path, pronunciation_path, args.language)
+        if args.all_stories:
+            report = build_all_stories_report(ROOT / "stories", args.language)
+        else:
+            story_path = Path(args.story)
+            if not story_path.is_absolute():
+                story_path = ROOT / story_path
+            pronunciation_path = Path(args.pronunciation) if args.pronunciation else None
+            if pronunciation_path is not None and not pronunciation_path.is_absolute():
+                pronunciation_path = ROOT / pronunciation_path
+            report = build_report(story_path, pronunciation_path, args.language)
     except ReviewError as exc:
         print(json.dumps({"status": "ERROR", "error": str(exc)}, ensure_ascii=False, indent=2))
         return 2
