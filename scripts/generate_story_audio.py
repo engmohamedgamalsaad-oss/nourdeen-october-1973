@@ -234,6 +234,7 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
         ):
             raise ValueError(f"{published_manifest}: invalid baseline manifest identity or segments")
         staged_dir.mkdir(parents=True, exist_ok=True)
+        staged_segments: list[dict[str, Any]] = []
         for item in manifest["segments"]:
             if not isinstance(item, dict):
                 raise ValueError(f"{published_manifest}: non-object segment")
@@ -247,11 +248,23 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
                 raise ValueError(f"{published_manifest}: audio symlink escapes its directory") from exc
             if not source.is_file():
                 raise FileNotFoundError(f"{source}: baseline audio file is missing")
+            audio_sha256 = hashlib.sha256(source.read_bytes()).hexdigest()
             expected_hash = item.get("audio_sha256")
-            if expected_hash and hashlib.sha256(source.read_bytes()).hexdigest() != expected_hash:
+            if expected_hash and audio_sha256 != expected_hash.lower():
                 raise ValueError(f"{source}: baseline audio hash mismatch")
+            staged_item = dict(item)
+            # Legacy published manifests may not have a byte hash. Add one only
+            # to the isolated staging copy so ASR can verify the exact baseline
+            # bytes without changing the published manifest.
+            staged_item["audio_sha256"] = audio_sha256
+            staged_segments.append(staged_item)
             shutil.copy2(source, staged_dir / filename)
-        shutil.copy2(published_manifest, staged_manifest)
+        staged_manifest_data = dict(manifest)
+        staged_manifest_data["segments"] = staged_segments
+        staged_manifest.write_text(
+            json.dumps(staged_manifest_data, ensure_ascii=False, indent=2) + "\\n",
+            encoding="utf-8",
+        )
 
 
 def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
