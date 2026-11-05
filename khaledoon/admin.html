@@ -164,6 +164,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </section>
 </main>
 <script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
+<script src="assets/audio-review-core.js?v=20261105-review-core-4"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"></script>
 <script>
 (function(){
@@ -1034,6 +1035,7 @@ function pubRow(it){
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',async function(){
      var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
+      var audioReviewSection=(window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
      var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',cover:it.cover||(it.story_meta&&it.story_meta.cover)||null,map_location:it.story_meta&&it.story_meta.map_location||null,images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
       var schema;
       if(requireUnifiedStoryPackage){
@@ -1055,7 +1057,7 @@ function pubRow(it){
       var requestedSection=String(it.section||it.section_key||'').toLowerCase(),sectionAliases={learning:'women',fame:'people',october:'october',history:'history',science:'science',women:'women',people:'people',curriculum:'curriculum',islamic:'islamic',readers:'readers'};
       storyContext={requested_section:sectionAliases[requestedSection]||'',figure_name:inputData.figure_name,title:inputData.title,subtitle:inputData.subtitle,narrator_name:inputData.narrator_name,narrator_grade:inputData.narrator_grade,original_body:inputData.original_body,current_body:inputData.current_body,history_note:inputData.history_note,known_sources:inputData.sources,image_notes:inputData.images_note,existing_cover:inputData.cover,map_location:inputData.map_location,existing_images:inputData.images,existing_translations:inputData.translations,question_bank_reference:inputData.question_bank,previous_visual_hint:inputData.visual_design};
      }
-     var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية / السياق المتاح؛ ليست مخطط الإخراج ===\n'+JSON.stringify(storyContext,null,2)+'\n\n'+(requireUnifiedStoryPackage?'أنشئ أو حدّث الحكاية وفق العقد الرسمي الوحيد والقالب المشترك، مع الحفاظ على original_body حرفيًا.':'هذا سجل من قسم أكتوبر المستثنى من هذا التوحيد؛ حافظ على مساره الحالي دون تغيير.');
+     var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية / السياق المتاح؛ ليست مخطط الإخراج ===\n'+JSON.stringify(storyContext,null,2)+(audioReviewSection?'\n\n'+audioReviewSection:'')+'\n\n'+(requireUnifiedStoryPackage?'أنشئ أو حدّث الحكاية وفق العقد الرسمي الوحيد والقالب المشترك، مع الحفاظ على original_body حرفيًا.':'هذا سجل من قسم أكتوبر المستثنى من هذا التوحيد؛ حافظ على مساره الحالي دون تغيير.');
      function done(ok){if(ok){aiCopy.textContent='✓ تم النسخ';aiCopy.classList.add('copied');aiCopy.setAttribute('aria-label','تم نسخ الحكاية والبرومبت الكامل');say('ok','تم نسخ ملف الحكاية والبرومبت الكامل. افتح الأداة المختارة والصقه هناك.')}else{aiCopy.textContent='١. نسخ الحكاية والبرومبت الكامل';aiCopy.classList.remove('copied');say('err','تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}}
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
     });
