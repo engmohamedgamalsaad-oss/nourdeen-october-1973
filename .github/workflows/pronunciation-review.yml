@@ -130,3 +130,11 @@ jobs:
             --compute-type int8 \
             --output "$RUNNER_TEMP/magdi-yacoub-asr-pilot.json"
           python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/magdi-yacoub-asr-pilot.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"story": r["story"], "language": r["language"], "selected_blocks": r["selected_blocks"], "summary": r["summary"], "clip": r["reports"][0]}, ensure_ascii=False, indent=2))'
+
+      - name: Upload the actual one-clip ASR report for admin preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: magdi-yacoub-audio-review-pilot
+          path: ${{ runner.temp }}/magdi-yacoub-asr-pilot.json
+          if-no-files-found: error
+          retention-days: 7
