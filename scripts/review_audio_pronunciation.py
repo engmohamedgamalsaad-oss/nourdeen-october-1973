@@ -212,8 +212,48 @@ def review_story_audio(
         pronunciation = read_json(pronunciation_path)
         if pronunciation.get("story") != slug or pronunciation.get("language") != "ar":
             raise ValueError(f"{pronunciation_path}: story/language mismatch")
-        if isinstance(pronunciation.get("blocks"), dict):
-            pronunciation_blocks = pronunciation["blocks"]
+        raw_blocks = pronunciation.get("blocks")
+        approved = pronunciation.get("approved_audio_only_rewrites", [])
+        if not isinstance(raw_blocks, dict) or not isinstance(approved, list):
+            raise ValueError(f"{pronunciation_path}: invalid blocks or approved rewrite list")
+        approved_indexes = {str(index) for index in approved}
+        if any(not index.isdigit() or index not in raw_blocks for index in approved_indexes):
+            raise ValueError(f"{pronunciation_path}: approved rewrite references an invalid block")
+        pronunciation_blocks = {
+            index: raw_blocks[index]
+            for index in approved_indexes
+            if isinstance(raw_blocks[index], str) and raw_blocks[index].strip()
+        }
+
+    expected_by_block: dict[int, str] = {}
+    for index, block in enumerate(blocks):
+        if not isinstance(block, dict) or block.get("speaker") not in ("narrator", "karma"):
+            continue
+        original = str(block.get("text") or "").strip()
+        if language == "ar" and str(index) in pronunciation_blocks:
+            original = str(pronunciation_blocks[str(index)]).strip()
+        if original:
+            expected_by_block[index] = original
+
+    grouped: dict[int, list[dict[str, Any]]] = {}
+    for item in segments:
+        if isinstance(item, dict) and isinstance(item.get("block_index"), int):
+            grouped.setdefault(item["block_index"], []).append(item)
+    block_text_status: dict[int, str] = {}
+    for index, group in grouped.items():
+        expected_block = expected_by_block.get(index)
+        if not expected_block:
+            block_text_status[index] = "expected_text_unavailable"
+            continue
+        ordered = sorted(group, key=lambda item: int(item.get("chunk_index", 0)))
+        chunk_texts = [item.get("text") for item in ordered]
+        if all(isinstance(value, str) and value.strip() for value in chunk_texts):
+            joined = re.sub(r"\\s+", " ", " ".join(value.strip() for value in chunk_texts)).strip()
+            expected_normalized = re.sub(r"\\s+", " ", expected_block).strip()
+            if joined != expected_normalized:
+                block_text_status[index] = "manifest_text_mismatch"
+        elif len(ordered) > 1:
+            block_text_status[index] = "expected_text_unavailable"
 
     reports: list[dict[str, Any]] = []
     for item in segments:
@@ -252,6 +292,15 @@ def review_story_audio(
             reports.append({
                 "src": filename,
                 "status": "audio_hash_mismatch",
+                "needs_human_review": True,
+            })
+            continue
+        block_status = block_text_status.get(block_index)
+        if block_status:
+            reports.append({
+                "src": filename,
+                "block_index": block_index,
+                "status": block_status,
                 "needs_human_review": True,
             })
             continue
