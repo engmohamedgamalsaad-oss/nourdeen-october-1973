@@ -179,7 +179,7 @@ async def synthesize_fish_audio(
         raise
 
 
-def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES) -> dict[str, Any]:
+def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
     """Read-only plan for all five languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative = story_path.relative_to(ROOT)
@@ -216,6 +216,9 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         "segments_to_generate": 0,
         "fish_segments_to_generate": 0,
     }
+    forced = set(force_blocks)
+    if any(not isinstance(index, int) or index < 0 for index in forced):
+        raise ValueError(f"Invalid forced block indexes: {sorted(forced)}")
     for lang in selected_languages:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
@@ -237,6 +240,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                 old[(int(item["block_index"]), int(item.get("chunk_index", 0)))] = item
         needed = 0
         fish_needed = 0
+        found_forced: set[int] = set()
         for index, block in enumerate(blocks):
             if not isinstance(block, dict) or block.get("speaker") not in ("karma", "narrator"):
                 continue
@@ -245,6 +249,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                 continue
             spoken = prepare_arabic_audio_text(original, pronunciation_blocks.get(str(index))) if lang == "ar" else original
             chunks = split_audio_chunks(spoken)
+            if index in forced:
+                found_forced.add(index)
             voice, rate, pitch = VOICE_SETTINGS[lang][block["speaker"]]
             selected_voice = (
                 FISH_AUDIO_KARMA_VOICE_ID if block["speaker"] == "karma"
@@ -256,7 +262,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                 target = language_dir / filename
                 digest = text_hash(chunk, selected_voice, rate, pitch, lang)
                 unchanged = (
-                    previous.get("hash") == digest
+                    index not in forced
+                    and previous.get("hash") == digest
                     and previous.get("voice") in (None, selected_voice)
                     and target.is_file()
                     and target.stat().st_size >= 512
@@ -265,6 +272,9 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                     needed += 1
                     if lang == "ar":
                         fish_needed += 1
+        missing_forced = forced - found_forced
+        if missing_forced:
+            raise ValueError(f"{relative}: forced blocks are not speakable in {lang}: {sorted(missing_forced)}")
         plan["languages"][lang] = {
             "segments_to_generate": needed,
             "fish_segments_to_generate": fish_needed,
@@ -307,7 +317,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -357,7 +367,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
-    plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate)
+    plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate, force_blocks)
     print(
         f"PLAN {relative.parent}: languages={len(plan['languages'])} "
         f"segments_to_generate={plan['segments_to_generate']} "
@@ -484,7 +494,8 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
                         )
                         break
                     if (
-                        previous.get("hash") == candidate_hash
+                        block_index not in set(force_blocks)
+                        and previous.get("hash") == candidate_hash
                         and previous_voice in (None, candidate_voice)
                         and destination.is_file()
                         and destination.stat().st_size >= 512
@@ -584,6 +595,13 @@ async def main() -> int:
         default=list(LANGUAGES),
         help="Languages to plan or generate. Defaults to all five.",
     )
+    parser.add_argument(
+        "--force-block",
+        type=int,
+        action="append",
+        default=[],
+        help="Force regeneration of this zero-based spoken block in the selected languages; output remains staged.",
+    )
     args = parser.parse_args()
 
     if args.allow_fish_audio and not args.generate:
@@ -603,6 +621,7 @@ async def main() -> int:
         dry_run=not args.generate,
         allow_fish_audio=args.allow_fish_audio,
         languages=tuple(args.languages),
+        force_blocks=tuple(args.force_block),
     ) else 1
 
 
