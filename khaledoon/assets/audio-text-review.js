@@ -58,7 +58,7 @@
       'راجع الأسماء والأماكن والمصطلحات والأرقام والتواريخ. اكتب طريقة نطق مقترحة في reason عند الحاجة، ولا تغيّر تهجئة الاسم التاريخي داخل النص المرئي.',
       'أخرج JSON خامًا فقط وفق العقد التالي. أعد كل المقاطع دون إسقاط أو تكرار، وبنفس lang وblock_index وspeaker. original_text يجب أن يطابق النص المرسل حرفيًا. إذا لم تحتج الجملة تعديلًا، اجعل proposed_audio_text مساويًا تمامًا لـ original_text وissue_type=none.',
       'العقد: {"format":"KHALEDOON_AUDIO_TEXT_REVIEW_V1","segments":[{"lang":"ar|en|fr|it|de","block_index":0,"speaker":"narrator|karma","original_text":"...","proposed_audio_text":"...","issue_type":"none|pronunciation|heavy_sentence|dialect|number|name|other","reason":"...","needs_human_review":true}]}',
-      'لا تضف حقولًا إلى حزمة الحكاية. لا تعتبر أي اقتراح معتمدًا. كل اقتراح يحتاج مراجعة وموافقة بشرية صريحة.',
+      'لا تضف حقولًا إلى حزمة الحكاية. لا تعتبر أي اقتراح معتمدًا. اجعل needs_human_review=true لكل المقاطع دائمًا؛ لا تعلن اعتمادًا آليًا. كل اقتراح يحتاج مراجعة وموافقة بشرية صريحة.',
       '=== المقاطع الحالية ===',
       JSON.stringify({ story: pkg.slug, section: pkg.section, segments: segments }, null, 2)
     ].join('\n\n');
