@@ -6,8 +6,9 @@ on:
     paths:
       - 'scripts/review_egyptian_dialect.py'
       - 'tests/test_review_egyptian_dialect.py'
-      - 'stories/science/015/story.json'
-      - 'stories/science/015/audio-pronunciation.json'
+      - 'stories/**/story.json'
+      - 'stories/**/audio-pronunciation.json'
+      - '!stories/october/**'
 
 permissions:
   contents: read
@@ -29,8 +30,8 @@ jobs:
         run: python -m py_compile scripts/review_egyptian_dialect.py
       - name: Run focused tests
         run: python -m unittest discover -s tests -p 'test_review_egyptian_dialect.py' -v
-      - name: Review Magdi Yacoub audio source (read-only)
-        run: python scripts/review_egyptian_dialect.py > "$RUNNER_TEMP/egyptian-dialect-review.json"
+      - name: Review every eligible non-October Arabic story (read-only)
+        run: python scripts/review_egyptian_dialect.py --all-stories > "$RUNNER_TEMP/egyptian-dialect-review.json"
 
-      - name: Print read-only dialect report
+      - name: Print read-only all-story dialect report
         run: cat "$RUNNER_TEMP/egyptian-dialect-review.json"
