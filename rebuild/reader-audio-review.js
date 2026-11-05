@@ -108,8 +108,30 @@ async function saveReview(entry, decision) {
 function manifestUrl(lang) {
   return new URL('../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href).href;
 }
+async function loadArabicExpectedTexts(blocks) {
+  var fallback = blocks.map(function (block) { return String(block && block.text || ''); });
+  var url = new URL('../stories/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/audio-pronunciation.json', location.href);
+  var response = await fetch(url.href, { cache: 'no-cache' });
+  if (response.status === 404) return fallback;
+  if (!response.ok) throw new Error('تعذر تحميل ملف نص النطق العربي (' + response.status + ').');
+  var data = await response.json();
+  if (!data || data.version !== 1 || data.story !== story.slug || data.language !== 'ar' || !data.blocks || typeof data.blocks !== 'object') {
+    throw new Error('ملف نص النطق العربي لا يطابق الحكاية الحالية.');
+  }
+  return blocks.map(function (block, index) {
+    var reviewed = data.blocks[String(index)];
+    return typeof reviewed === 'string' && reviewed.trim() ? reviewed : fallback[index];
+  });
+}
 async function loadManifests() {
   manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  var expectedTexts = {};
+  LANGS.forEach(function (lang) {
+    var localized = story.i18n && story.i18n[lang];
+    expectedTexts[lang] = localized && Array.isArray(localized.blocks)
+      ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
+  });
+  expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var res = await fetch(manifestUrl(lang), { cache: 'no-cache' });
@@ -128,7 +150,7 @@ async function loadManifests() {
         }
       });
       var localized = story.i18n && story.i18n[lang];
-      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments);
+      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang]);
       if (!coverage.ok) throw new Error(coverage.error);
       manifests[lang] = data;
     } catch (e) {
