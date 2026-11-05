@@ -113,7 +113,7 @@ def transcribe_clip(
 ) -> dict[str, Any]:
     segments, info = model.transcribe(
         str(audio_path),
-        language=language,
+        language=None,
         beam_size=5,
         word_timestamps=True,
         vad_filter=True,
