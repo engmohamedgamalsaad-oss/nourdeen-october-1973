@@ -243,10 +243,22 @@ export async function buildStoryFiles(story, options = {}) {
   if (mapPlace === null) places[id] = null; else places[id] = mapPlace;
   const coverLocator = story.cover.url || story.cover.path;
   const coverUrl = /^https:\/\//i.test(coverLocator) ? coverLocator : new URL(coverLocator, REPO_ROOT).href;
+  let audioTextReviewRequired = false;
+  if (story.section !== 'october' && existingAt < 0) {
+    audioTextReviewRequired = true;
+  } else if (story.section !== 'october' && existingAt >= 0) {
+    const previousRoot = previousPath || root.replace(/\\/$/, '');
+    const previousDataPath = previousRoot + '/data.json';
+    if (await pathExists(previousDataPath)) {
+      const previousData = await readJson(previousDataPath, 'بيانات الحكاية الحالية');
+      audioTextReviewRequired = previousData.audio_text_review_required === true;
+    }
+  }
   const data = {
     name: entry.name, grade: entry.grade, className: entry.className,
     title: entry.title, subtitle: entry.subtitle, person: entry.person,
     color: entry.color, order: entry.order, published: true,
+    ...(audioTextReviewRequired ? { audio_text_review_required: true } : {}),
     i18n: entry.i18n, id, section: story.section, path: root,
     cover: coverLocator
   };
