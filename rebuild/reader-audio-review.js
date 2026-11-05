@@ -66,7 +66,7 @@ async function loadRow() {
 }
 async function saveReview(entry, decision) {
   var key = entry && entry.key;
-  if (busy) return;
+  if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
   if (!row || !ctx) throw new Error('سجل المراجعة غير متصل بلوحة الإدارة.');
   busy = true;
   try {
