@@ -291,7 +291,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                 lang_dir.mkdir(parents=True)
                 segments = []
                 for index, speaker in enumerate(("narrator", "karma")):
-                    text = f"{speaker.title()} {'Arabic' if language == 'ar' else language}."
+                    text = f"{speaker.title()} {language}."
                     if language == "ar" and index == 0:
                         text = "Narrator pronunciation."
                     voice, rate, pitch = audio.VOICE_SETTINGS[language][speaker]
