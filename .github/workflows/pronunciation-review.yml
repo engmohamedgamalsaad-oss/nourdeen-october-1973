@@ -111,7 +111,7 @@ jobs:
           item["audio_sha256"] = hashlib.sha256(audio_file.read_bytes()).hexdigest()
           manifest["segments"] = [item]
           (destination / "manifest.json").write_text(
-              json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n",
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
           )
           print("Prepared one published MP3 in runner temp storage.")
@@ -120,13 +120,13 @@ jobs:
 
       - name: Run ASR on the published Arabic clip (one selected block, read-only)
         run: |
-          python scripts/review_audio_pronunciation.py \\
-            --story stories/science/015/story.json \\
-            --language ar \\
-            --audio-root "$RUNNER_TEMP/audio-asr-pilot" \\
-            --block-index 1 \\
-            --model base \\
-            --device cpu \\
-            --compute-type int8 \\
+          python scripts/review_audio_pronunciation.py \
+            --story stories/science/015/story.json \
+            --language ar \
+            --audio-root "$RUNNER_TEMP/audio-asr-pilot" \
+            --block-index 1 \
+            --model base \
+            --device cpu \
+            --compute-type int8 \
             --output "$RUNNER_TEMP/magdi-yacoub-asr-pilot.json"
           python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/magdi-yacoub-asr-pilot.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"story": r["story"], "language": r["language"], "selected_blocks": r["selected_blocks"], "summary": r["summary"], "clip": r["reports"][0]}, ensure_ascii=False, indent=2))'
