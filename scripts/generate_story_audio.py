@@ -24,7 +24,7 @@ import edge_tts
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".audio-staging"
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "5"
+GENERATOR_VERSION = "4"
 ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # owner-approved final narrator voice
