@@ -170,6 +170,7 @@ def review_story_audio(
     audio_root: Path,
     model: Any,
     max_clips: int = 0,
+    block_indexes: tuple[int, ...] | None = None,
 ) -> dict[str, Any]:
     story_path = story_path.resolve()
     relative = story_path.relative_to(ROOT)
@@ -201,6 +202,20 @@ def review_story_audio(
     segments = manifest.get("segments")
     if not isinstance(segments, list):
         raise ValueError(f"{manifest_path}: segments must be a list")
+    selected_blocks = None if block_indexes is None else set(block_indexes)
+    if selected_blocks is not None:
+        if any(not isinstance(index, int) or index < 0 or index >= len(blocks) for index in selected_blocks):
+            raise ValueError(f"Invalid selected block indexes: {sorted(selected_blocks)}")
+        if any(
+            not isinstance(blocks[index], dict)
+            or blocks[index].get("speaker") not in ("narrator", "karma")
+            for index in selected_blocks
+        ):
+            raise ValueError("Selected blocks must be speakable narrator/karma blocks.")
+        segments = [
+            item for item in segments
+            if isinstance(item, dict) and item.get("block_index") in selected_blocks
+        ]
 
     counts: dict[int, int] = {}
     for item in segments:
@@ -227,6 +242,8 @@ def review_story_audio(
 
     expected_by_block: dict[int, str] = {}
     for index, block in enumerate(blocks):
+        if selected_blocks is not None and index not in selected_blocks:
+            continue
         if not isinstance(block, dict) or block.get("speaker") not in ("narrator", "karma"):
             continue
         original = str(block.get("text") or "").strip()
@@ -360,6 +377,7 @@ def review_story_audio(
         "story": slug,
         "section": section,
         "language": language,
+        "selected_blocks": sorted(selected_blocks) if selected_blocks is not None else None,
         "model": "faster-whisper",
         "tts_requests": 0,
         "audio_files_modified": 0,
@@ -392,6 +410,12 @@ def main() -> int:
     parser.add_argument("--device", default="cpu", choices=("cpu", "cuda"))
     parser.add_argument("--compute-type", default="int8")
     parser.add_argument("--max-clips", type=int, default=0)
+    parser.add_argument(
+        "--block-index",
+        type=int,
+        action="append",
+        help="Review only this zero-based block index; may be repeated.",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
@@ -399,7 +423,10 @@ def main() -> int:
     audio_root = args.audio_root if args.audio_root.is_absolute() else ROOT / args.audio_root
     from faster_whisper import WhisperModel
     model = WhisperModel(args.model, device=args.device, compute_type=args.compute_type)
-    report = review_story_audio(story, args.language, audio_root, model, args.max_clips)
+    report = review_story_audio(
+        story, args.language, audio_root, model, args.max_clips,
+        tuple(args.block_index) if args.block_index is not None else None,
+    )
     serialized = json.dumps(report, ensure_ascii=False, indent=2)
     if args.output:
         output = args.output if args.output.is_absolute() else ROOT / args.output
