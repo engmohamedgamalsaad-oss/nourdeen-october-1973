@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - "khaledoon/admin.html"
+      - "khaledoon/assets/khaledoon-admin-texts.js"
       - "khaledoon/preview.html"
       - "khaledoon/story-builder.html"
       - "khaledoon/assets/story-workflow.js"
