@@ -350,29 +350,50 @@ function renderPronunciationResult(entry, panel) {
   var report = match.report;
   var summary = document.createElement('div');
   summary.textContent = (match.hashVerified ? 'نتيجة موثقة بالبصمة — ' : 'نتيجة غير موثقة بالبصمة — ') + 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
+    (typeof report.match_ratio === 'number' ? ' | تطابق النص: ' + Math.round(report.match_ratio * 100) + '%' : '') +
     (report.detected_language ? ' | اللغة المكتشفة: ' + report.detected_language : '') +
     (typeof report.language_probability === 'number' ? ' | احتمال اللغة: ' + Math.round(report.language_probability * 100) + '%' : '');
   box.appendChild(summary);
+  if (report.language_mismatch || report.language_detection_uncertain) {
+    var languageWarning = document.createElement('div');
+    languageWarning.textContent = 'تنبيه: تحقق من اللغة المكتشفة يدويًا؛ المدقق لا يعتمد صحة اللغة تلقائيًا.';
+    box.appendChild(languageWarning);
+  }
   var flagged = [];
   (Array.isArray(report.mismatches) ? report.mismatches : []).forEach(function (item) {
-    (item.recognized || []).forEach(function (word) { flagged.push({ word: word, start: item.start, end: item.end, type: 'اختلاف عن النص' }); });
+    var recognized = Array.isArray(item.recognized) ? item.recognized : [];
+    if (recognized.length) {
+      recognized.forEach(function (word) {
+        flagged.push({ word: word, expected: (item.expected || []).join(' '), start: item.start, end: item.end, type: 'اختلاف عن النص', playable: typeof item.start === 'number' });
+      });
+    } else {
+      flagged.push({ word: 'لم يتعرف على: ' + (item.expected || []).join(' '), type: 'جزء متوقع غير موجود في التفريغ', playable: false });
+    }
   });
   (Array.isArray(report.low_confidence_words) ? report.low_confidence_words : []).forEach(function (item) {
-    flagged.push({ word: item.word, start: item.start, end: item.end, probability: item.probability, type: 'احتمال نطق منخفض' });
+    flagged.push({ word: item.word, start: item.start, end: item.end, probability: item.probability, type: 'احتمال نطق منخفض', playable: typeof item.start === 'number' });
   });
   if (!flagged.length) {
-    var clean = document.createElement('div'); clean.textContent = 'لم يرصد المدقق كلمات محددة للمراجعة؛ هذا لا يعني اعتماد النطق تلقائيًا.'; box.appendChild(clean);
+    var clean = document.createElement('div');
+    clean.textContent = Array.isArray(report.words)
+      ? 'لم يرصد المدقق كلمات محددة للمراجعة؛ هذه نتيجة آلية إرشادية ولا تعني اعتماد النطق.'
+      : 'لم ينتج المدقق تفريغًا صالحًا لهذا المقطع؛ راجع حالة التقرير واستمع للمقطع يدويًا.';
+    box.appendChild(clean);
   }
   flagged.forEach(function (item) {
     var line = document.createElement('div'); line.className = 'kh-audio-asr-word';
     var label = document.createElement('span');
-    label.textContent = item.word + ' — ' + item.type +
+    label.textContent = item.word + (item.expected ? ' | المتوقع: ' + item.expected : '') + ' — ' + item.type +
       (typeof item.probability === 'number' ? ' (' + Math.round(item.probability * 100) + '%)' : '') +
       (typeof item.start === 'number' ? ' [' + item.start.toFixed(2) + 's]' : '');
-    var listen = makeButton('▶ موضع الكلمة', 'asr-listen', function () {
-      playPronunciationRange(match, item, listen, panel);
-    });
-    line.append(label, listen); box.appendChild(line);
+    line.appendChild(label);
+    if (item.playable && match.hashVerified && match.blob) {
+      var listen = makeButton('▶ موضع الكلمة', 'asr-listen', function () {
+        playPronunciationRange(match, item, listen, panel);
+      });
+      line.appendChild(listen);
+    }
+    box.appendChild(line);
   });
   panel.appendChild(box);
 }
@@ -380,7 +401,7 @@ async function playPronunciationRange(match, item, button, panel) {
   if (!match || !match.hashVerified || !match.blob || !Number.isFinite(Number(item.start))) return;
   try {
     if (!audio) audio = new Audio();
-    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
+    try { audio.pause(); audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; } catch (e) {}
     if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
     activeObjectUrl = URL.createObjectURL(match.blob);
     audio.src = activeObjectUrl;
