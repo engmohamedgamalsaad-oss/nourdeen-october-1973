@@ -46,6 +46,9 @@ jobs:
       - name: Run focused unit and pilot integration tests
         run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
 
+      - name: Run read-only story audio inventory tests
+        run: python -m unittest discover -s tests -p 'test_audit_story_audio.py' -v
+
       - name: Run the read-only pilot report
         run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
 
