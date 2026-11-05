@@ -30,3 +30,9 @@ The visible story text is the source of truth and is never rewritten by audio ge
 - Fish Audio's current public guidance describes its free plan as personal/non-commercial; paid plans are required for commercial use. The exact usage rights and creator permissions for the two selected community voice IDs have not been independently confirmed. Before monetization, sponsorship, or other commercial use, verify the account plan and each voice's permissions with Fish Audio. Do not use a voice that imitates an identifiable real person without the required consent.
 
 This pipeline affects generated audio assets only. It does not add tashkeel to the visible Arabic story text.
+
+## Manifest integrity and file preservation
+
+- Each generated segment records both the text/voice input hash (`hash`) and the SHA-256 digest of the actual MP3 bytes (`audio_sha256`). These are different values and must not be treated as interchangeable.
+- If a manifest no longer references an existing MP3 file, the generator reports that file for manual review. It never deletes an unreferenced MP3 automatically; removal requires a separate, explicit cleanup decision.
+- Audio generation is never a publish operation. Generated files are reviewed on a separate branch/PR before they can reach the published branch.
