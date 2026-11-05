@@ -16,6 +16,10 @@ on:
       - "rebuild/**"
       - "scripts/e2e-story-preview.cjs"
       - ".github/workflows/story-workflow-tests.yml"
+      - "scripts/generate_story_audio.py"
+      - "tests/test_generate_story_audio.py"
+      - ".github/workflows/story-audio.yml"
+      - "docs/story-audio-arabic.md"
   workflow_dispatch:
 
 permissions:
@@ -28,6 +32,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run audio generator safety tests without TTS
+        run: |
+          python -m py_compile scripts/generate_story_audio.py
+          python -m unittest discover -s tests -p "test_generate_story_audio.py" -v
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
