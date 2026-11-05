@@ -904,6 +904,11 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     // status node and import controls. Assert the persisted mocked record and preview
     // destination instead of waiting for UI that is intentionally re-rendered away.
     const popup = await popupPromise;
+    // window.open resolves before the async import finishes saving through Supabase.
+    // Wait for the mocked PATCH response to update the in-memory record before asserting.
+    for (let attempt = 0; attempt < 200 && !(savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package); attempt++) {
+      await page.waitForTimeout(100);
+    }
     const persistedPackage = savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package;
     if (!persistedPackage || persistedPackage.slug !== storyPackage.slug ||
         JSON.stringify(persistedPackage.i18n?.ar?.blocks) !== JSON.stringify(storyPackage.i18n.ar.blocks)) {
