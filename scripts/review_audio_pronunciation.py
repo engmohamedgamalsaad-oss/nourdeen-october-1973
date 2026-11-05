@@ -1,0 +1,323 @@
+#!/usr/bin/env python3
+"""Read-only ASR review of generated story clips using local faster-whisper."""
+from __future__ import annotations
+
+import argparse
+import difflib
+import hashlib
+import json
+import re
+import sys
+import unicodedata
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+LANGUAGES = ("ar", "en", "fr", "it", "de")
+LOW_WORD_CONFIDENCE = 0.45
+
+
+def read_json(path: Path) -> dict[str, Any]:
+    with path.open("r", encoding="utf-8") as handle:
+        value = json.load(handle)
+    if not isinstance(value, dict):
+        raise ValueError(f"{path}: expected a JSON object")
+    return value
+
+
+def normalize_token(value: str, language: str) -> str:
+    value = unicodedata.normalize("NFKC", str(value or "")).lower()
+    value = "".join(
+        char for char in value
+        if unicodedata.category(char) not in ("Mn", "Me", "Cf")
+    )
+    if language == "ar":
+        value = value.replace("أ", "ا").replace("إ", "ا").replace("آ", "ا")
+        value = value.replace("ى", "ي")
+    return re.sub(r"[^\w\u0600-\u06ff]+", "", value, flags=re.UNICODE)
+
+
+def tokenize(value: str, language: str) -> list[str]:
+    return [
+        token for token in (normalize_token(part, language) for part in re.findall(r"\S+", value))
+        if token
+    ]
+
+
+def compare_transcript(
+    expected_text: str,
+    recognized_words: list[dict[str, Any]],
+    language: str,
+    detected_language: str,
+    language_probability: float,
+) -> dict[str, Any]:
+    expected = tokenize(expected_text, language)
+    actual = [
+        normalize_token(str(item.get("word") or ""), language)
+        for item in recognized_words
+    ]
+    actual_indexes = [index for index, token in enumerate(actual) if token]
+    actual = [actual[index] for index in actual_indexes]
+    words = [recognized_words[index] for index in actual_indexes]
+
+    matcher = difflib.SequenceMatcher(a=expected, b=actual, autojunk=False)
+    matched = sum(block.size for block in matcher.get_matching_blocks())
+    denominator = max(len(expected), len(actual), 1)
+    mismatch_details: list[dict[str, Any]] = []
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
+        if tag == "equal":
+            continue
+        actual_items = words[j1:j2]
+        mismatch_details.append({
+            "type": tag,
+            "expected": expected[i1:i2],
+            "recognized": [str(item.get("word") or "").strip() for item in actual_items],
+            "start": min((float(item.get("start", 0)) for item in actual_items), default=None),
+            "end": max((float(item.get("end", 0)) for item in actual_items), default=None),
+        })
+
+    low_confidence = [
+        {
+            "word": str(item.get("word") or "").strip(),
+            "start": float(item.get("start", 0)),
+            "end": float(item.get("end", 0)),
+            "probability": float(item.get("probability", 0)),
+        }
+        for item in words
+        if float(item.get("probability", 1)) < LOW_WORD_CONFIDENCE
+    ]
+    ratio = matched / denominator
+    language_mismatch = bool(detected_language and detected_language != language)
+    return {
+        "expected_word_count": len(expected),
+        "recognized_word_count": len(actual),
+        "match_ratio": round(ratio, 4),
+        "detected_language": detected_language,
+        "language_probability": round(float(language_probability), 4),
+        "language_mismatch": language_mismatch,
+        "mismatches": mismatch_details,
+        "low_confidence_words": low_confidence,
+        "status": (
+            "review_required"
+            if mismatch_details or low_confidence or language_mismatch or ratio < 0.92
+            else "likely_match"
+        ),
+        "needs_human_review": True,
+    }
+
+
+def transcribe_clip(
+    model: Any,
+    audio_path: Path,
+    language: str,
+) -> dict[str, Any]:
+    segments, info = model.transcribe(
+        str(audio_path),
+        language=language,
+        beam_size=5,
+        word_timestamps=True,
+        vad_filter=True,
+        condition_on_previous_text=False,
+    )
+    recognized_segments = list(segments)
+    recognized_words: list[dict[str, Any]] = []
+    transcript_parts: list[str] = []
+    for segment in recognized_segments:
+        transcript_parts.append(str(getattr(segment, "text", "") or "").strip())
+        for word in getattr(segment, "words", None) or []:
+            recognized_words.append({
+                "word": str(getattr(word, "word", "") or ""),
+                "start": float(getattr(word, "start", 0)),
+                "end": float(getattr(word, "end", 0)),
+                "probability": float(getattr(word, "probability", 0)),
+            })
+    return {
+        "transcript": " ".join(part for part in transcript_parts if part),
+        "words": recognized_words,
+        "detected_language": str(getattr(info, "language", "") or ""),
+        "language_probability": float(getattr(info, "language_probability", 0)),
+    }
+
+
+def expected_text_for_segment(
+    segment: dict[str, Any],
+    block_counts: dict[int, int],
+    blocks: list[Any],
+    language: str,
+    pronunciation_blocks: dict[str, Any],
+) -> str | None:
+    text = segment.get("text")
+    if isinstance(text, str) and text.strip():
+        return text.strip()
+    index = segment.get("block_index")
+    if not isinstance(index, int) or index < 0 or index >= len(blocks):
+        return None
+    if block_counts.get(index) != 1:
+        return None
+    if language == "ar" and isinstance(pronunciation_blocks.get(str(index)), str):
+        return str(pronunciation_blocks[str(index)]).strip()
+    block = blocks[index]
+    if isinstance(block, dict) and isinstance(block.get("text"), str):
+        return block["text"].strip()
+    return None
+
+
+def review_story_audio(
+    story_path: Path,
+    language: str,
+    audio_root: Path,
+    model: Any,
+    max_clips: int = 0,
+) -> dict[str, Any]:
+    story_path = story_path.resolve()
+    relative = story_path.relative_to(ROOT)
+    if story_path.name != "story.json" or len(relative.parts) != 4 or relative.parts[0] != "stories":
+        raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
+    section = relative.parts[1]
+    if section == "october":
+        raise ValueError("October is excluded from audio review.")
+    package = read_json(story_path)
+    slug = str(package.get("slug") or "").strip()
+    if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:
+        raise ValueError(f"Invalid story package format or section: {relative}")
+    localized = package.get("i18n", {}).get(language)
+    blocks = localized.get("blocks") if isinstance(localized, dict) else None
+    if not isinstance(blocks, list):
+        raise ValueError(f"{relative}: missing {language} story blocks")
+
+    language_dir = audio_root / section / slug / language
+    manifest_path = language_dir / "manifest.json"
+    if not manifest_path.is_file():
+        raise FileNotFoundError(f"Audio manifest not found: {manifest_path}")
+    manifest = read_json(manifest_path)
+    if (
+        manifest.get("story") != slug
+        or manifest.get("section") != section
+        or manifest.get("language") != language
+    ):
+        raise ValueError(f"{manifest_path}: manifest identity mismatch")
+    segments = manifest.get("segments")
+    if not isinstance(segments, list):
+        raise ValueError(f"{manifest_path}: segments must be a list")
+
+    counts: dict[int, int] = {}
+    for item in segments:
+        if isinstance(item, dict) and isinstance(item.get("block_index"), int):
+            counts[item["block_index"]] = counts.get(item["block_index"], 0) + 1
+    pronunciation_blocks: dict[str, Any] = {}
+    pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    if language == "ar" and pronunciation_path.is_file():
+        pronunciation = read_json(pronunciation_path)
+        if pronunciation.get("story") != slug or pronunciation.get("language") != "ar":
+            raise ValueError(f"{pronunciation_path}: story/language mismatch")
+        if isinstance(pronunciation.get("blocks"), dict):
+            pronunciation_blocks = pronunciation["blocks"]
+
+    reports: list[dict[str, Any]] = []
+    for item in segments:
+        if not isinstance(item, dict):
+            continue
+        filename = item.get("src")
+        if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".mp3"):
+            reports.append({"status": "invalid_manifest_path", "needs_human_review": True})
+            continue
+        audio_path = language_dir / filename
+        if not audio_path.is_file():
+            reports.append({"src": filename, "status": "missing_audio", "needs_human_review": True})
+            continue
+        actual_hash = hashlib.sha256(audio_path.read_bytes()).hexdigest()
+        expected_hash = item.get("audio_sha256")
+        if expected_hash and actual_hash != expected_hash:
+            reports.append({
+                "src": filename,
+                "status": "audio_hash_mismatch",
+                "needs_human_review": True,
+            })
+            continue
+        expected_text = expected_text_for_segment(
+            item, counts, blocks, language, pronunciation_blocks
+        )
+        if not expected_text:
+            reports.append({
+                "src": filename,
+                "status": "expected_text_unavailable",
+                "needs_human_review": True,
+                "audio_sha256": actual_hash,
+            })
+            continue
+        transcription = transcribe_clip(model, audio_path, language)
+        comparison = compare_transcript(
+            expected_text,
+            transcription["words"],
+            language,
+            transcription["detected_language"],
+            transcription["language_probability"],
+        )
+        reports.append({
+            "src": filename,
+            "block_index": item.get("block_index"),
+            "chunk_index": item.get("chunk_index", 0),
+            "speaker": item.get("speaker"),
+            "expected_text": expected_text,
+            "transcript": transcription["transcript"],
+            "words": transcription["words"],
+            "audio_sha256": actual_hash,
+            **comparison,
+        })
+        if max_clips and len(reports) >= max_clips:
+            break
+
+    return {
+        "format": "KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_V1",
+        "story": slug,
+        "section": section,
+        "language": language,
+        "model": "faster-whisper",
+        "tts_requests": 0,
+        "audio_files_modified": 0,
+        "reports": reports,
+        "summary": {
+            "total": len(reports),
+            "likely_match": sum(item.get("status") == "likely_match" for item in reports),
+            "review_required": sum(item.get("status") == "review_required" for item in reports),
+            "other": sum(item.get("status") not in ("likely_match", "review_required") for item in reports),
+            "human_review_required": True,
+        },
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Read-only local ASR review of one story/language. No TTS or file mutation."
+    )
+    parser.add_argument("--story", type=Path, required=True)
+    parser.add_argument("--language", choices=LANGUAGES, required=True)
+    parser.add_argument(
+        "--audio-root",
+        type=Path,
+        default=ROOT / "assets" / "audio",
+        help="Audio root containing <section>/<slug>/<language>; use .audio-staging for staged audio.",
+    )
+    parser.add_argument("--model", default="small", choices=("base", "small", "medium", "large-v3"))
+    parser.add_argument("--device", default="cpu", choices=("cpu", "cuda"))
+    parser.add_argument("--compute-type", default="int8")
+    parser.add_argument("--max-clips", type=int, default=0)
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+
+    story = args.story if args.story.is_absolute() else ROOT / args.story
+    audio_root = args.audio_root if args.audio_root.is_absolute() else ROOT / args.audio_root
+    from faster_whisper import WhisperModel
+    model = WhisperModel(args.model, device=args.device, compute_type=args.compute_type)
+    report = review_story_audio(story, args.language, audio_root, model, args.max_clips)
+    serialized = json.dumps(report, ensure_ascii=False, indent=2)
+    if args.output:
+        output = args.output if args.output.is_absolute() else ROOT / args.output
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(serialized + "\n", encoding="utf-8")
+    print(serialized)
+    return 1 if report["summary"]["other"] else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
