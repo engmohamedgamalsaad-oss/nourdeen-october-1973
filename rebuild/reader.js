@@ -151,7 +151,7 @@ if(!document.body.dataset.storySlug)document.body.dataset.storySlug=data.slug||'
 story=normalizeStory(data);document.body.dataset.design=data.design&&data.design.variant||'military-history';document.body.dataset.section=data.section||'october';document.body.style.setProperty('--accent',SECTION_PALETTE[story.section]||'#d6ad55');
 if(isPreview){document.body.dataset.previewMode='true';$('preview-banner').hidden=false;$('preview-return').hidden=false;$('reactions-section').hidden=true;$('share-whatsapp').hidden=true;$('share-facebook').hidden=true;$('share-copy').hidden=true}
 var previewBank=isPreview?previewBankFromPackage(data):null;if(previewBank){window.__KH_PREVIEW_QUIZ_BANK=previewBank;try{localStorage.removeItem('kh-story-preview-bank')}catch(e){}}
-return (previewBank?Promise.resolve(true):detectBank()).then(function(ok){bankQuiz=!!ok;show();if(isPreview){window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new Event('kh-story-audio-context'))}if(document.body.hasAttribute('data-start-only'))openIntro();if(!isPreview)initReactions();if(bankQuiz)loadBankQuiz()});
+return (previewBank?Promise.resolve(true):detectBank()).then(function(ok){bankQuiz=!!ok;show();if(document.body.hasAttribute('data-start-only'))openIntro();if(!isPreview)initReactions();if(bankQuiz)loadBankQuiz()});
 }
 if(previewMode){
 try{var previewRaw=localStorage.getItem('kh-story-review-package')||'';if(!previewRaw)throw new Error('لا توجد حزمة معاينة محفوظة. ارجع إلى لوحة الإدارة وأعد فتح المعاينة.');renderStoryPackage(JSON.parse(previewRaw),true).catch(function(e){$('status').textContent='تعذّر فتح المعاينة: '+String(e&&e.message||e)})}
