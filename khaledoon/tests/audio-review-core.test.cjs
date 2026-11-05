@@ -113,6 +113,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages:'), 'approval must fail closed until all five language manifests exist');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
+  assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
   assert.ok(!reviewUi.includes("nextStory.section === 'october'"), 'audio review must cover October drafts as well as every other section');
   assert.ok(reviewUi.includes('banner.hidden = false;'), 'the missing-audio gate must remain visible even when no manifest exists');
   assert.ok(reader.includes("if(story.section==='october'||previewMode||document.getElementById('kh-story-audio-script'))return"), 'October preview receives reviewer context without enabling its public audio player');
