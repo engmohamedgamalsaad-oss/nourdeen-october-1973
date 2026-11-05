@@ -31,7 +31,7 @@ python scripts/generate_story_audio.py --plan-all
 python scripts/generate_story_audio.py --story stories/science/015/story.json
 \`\`\`
 
-وجود \`audio-pronunciation.json\` يغيّر النص الصوتي العربي فقط؛ لا يمنع تخطيط أو توليد الإنجليزية والفرنسية والإيطالية والألمانية.
+وجود \`audio-pronunciation.json\` يغيّر النص الصوتي العربي فقط؛ لا يمنع تخطيط أو توليد الإنجليزية والفرنسية والإيطالية والألمانية. لا يُستخدم من ملف النطق إلا المقطع المدرج صراحةً في `approved_audio_only_rewrites`؛ بقية المقاطع ترجع إلى نص الحكاية.
 
 ## 3. التوليد في مجلد معزول
 
