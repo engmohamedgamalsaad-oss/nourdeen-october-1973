@@ -288,11 +288,28 @@ def review_story_audio(
             continue
         actual_hash = hashlib.sha256(audio_path.read_bytes()).hexdigest()
         expected_hash = item.get("audio_sha256")
-        if expected_hash and actual_hash != expected_hash:
+        if not isinstance(expected_hash, str) or not expected_hash.strip():
+            reports.append({
+                "src": filename,
+                "status": "audio_hash_missing",
+                "needs_human_review": True,
+                "audio_sha256": actual_hash,
+            })
+            continue
+        if not re.fullmatch(r"[0-9a-fA-F]{64}", expected_hash):
+            reports.append({
+                "src": filename,
+                "status": "audio_hash_invalid",
+                "needs_human_review": True,
+                "audio_sha256": actual_hash,
+            })
+            continue
+        if actual_hash != expected_hash.lower():
             reports.append({
                 "src": filename,
                 "status": "audio_hash_mismatch",
                 "needs_human_review": True,
+                "audio_sha256": actual_hash,
             })
             continue
         block_status = block_text_status.get(block_index)
