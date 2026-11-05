@@ -37,6 +37,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ffmpeg
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       - name: Install Python audio dependency
         run: python -m pip install edge-tts
 
@@ -52,6 +57,7 @@ jobs:
         run: python scripts/generate_story_audio.py --allow-fish
 
       - name: Commit only Magdi Yacoub Arabic audio to a review branch
+        id: audio_commit
         shell: bash
         run: |
           set -euo pipefail
@@ -61,12 +67,15 @@ jobs:
           git add assets/audio/science/magdi-yacoub/ar/*.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
           if git diff --cached --quiet; then
             echo 'The approved pilot audio is already current.'
+            echo 'changed=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m 'Generate Magdi Yacoub Arabic with approved narrator voice'
-          git push origin HEAD
+          git push origin "HEAD:refs/heads/audio/magdi-yacoub-arabic-${GITHUB_RUN_ID}"
+          echo 'changed=true' >> "$GITHUB_OUTPUT"
 
       - name: Open an audio review pull request
+        if: steps.audio_commit.outputs.changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
