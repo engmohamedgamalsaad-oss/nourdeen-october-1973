@@ -1037,6 +1037,7 @@ function pubRow(it){
        });
       }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز التدقيق: '+String(error&&error.message||error)}
      });
+     audioTextReviewPaste.addEventListener('input',function(){clearAudioTextReviewCards();audioTextReviewCurrentResult=null;audioTextReviewStatus.textContent='تغير النص الملصوق؛ أعد التحقق قبل اعتماد أي اقتراح.'});
      audioTextReviewValidate.addEventListener('click',function(){
       var pkg=storyReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة موحدة مرتبطة بهذه المسودة.';return}
