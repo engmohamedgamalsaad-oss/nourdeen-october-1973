@@ -1070,7 +1070,7 @@ function pubRow(it){
       try{
        var approvalFile=window.KHAudioTextReview.buildApprovedAudioPronunciation(audioTextReviewCurrentResult,pkg,keys);
        var payload=JSON.stringify(approvalFile,null,2),blob=new Blob([payload],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
-       link.href=url;link.download='audio-pronunciation.json';document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);
+       link.href=url;link.download='audio-pronunciation.json';document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);
        audioTextReviewStatus.textContent='تم تصدير ملف اعتماد مراجعة '+approvalFile.review.total_segments+' مقطعًا في اللغات الخمس. ضع الملف بجوار story.json؛ لم يتغير نص الحكاية أو ملفات الصوت أو قاعدة البيانات.';
       }catch(error){audioTextReviewStatus.textContent='تعذر تصدير التعديلات: '+String(error&&error.message||error)}
      });
