@@ -81,7 +81,11 @@ def require_fish_authorization(
     languages_to_generate: tuple[str, ...], dry_run: bool, allow_fish: bool
 ) -> None:
     """Fail before any output or network request unless Fish use was explicitly authorized."""
-    require_fish_authorization(languages_to_generate, dry_run, allow_fish)
+    if not dry_run and "ar" in languages_to_generate and not allow_fish:
+        raise RuntimeError(
+            "Fish Audio is disabled unless this run explicitly includes --allow-fish. "
+            "Use --dry-run to inspect the plan without sending any TTS request."
+        )
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -270,11 +274,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish: bo
         pronunciation_blocks = {}
         languages_to_generate = LANGUAGES
 
-    if not dry_run and "ar" in languages_to_generate and not allow_fish:
-        raise RuntimeError(
-            "Fish Audio is disabled unless this run explicitly includes --allow-fish. "
-            "Use --dry-run to inspect the plan without sending any TTS request."
-        )
+    require_fish_authorization(languages_to_generate, dry_run, allow_fish)
 
     story_audio_root = ROOT / "assets" / "audio" / section / slug
     completed = 0
