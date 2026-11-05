@@ -204,6 +204,52 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0")
             self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1")
 
+    def test_arabic_single_block_regeneration_stops_before_fish_without_approval(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            published = root / "assets" / "audio" / "science" / "sample-story" / "ar"
+            published.mkdir(parents=True)
+            segments = []
+            for index, speaker, text in (
+                (0, "narrator", "Narrator pronunciation."),
+                (1, "karma", "Karma ar."),
+            ):
+                voice, rate, pitch = audio.VOICE_SETTINGS["ar"][speaker]
+                selected_voice = (
+                    audio.FISH_AUDIO_NARRATOR_VOICE_ID if speaker == "narrator"
+                    else audio.FISH_AUDIO_KARMA_VOICE_ID
+                )
+                filename = f"{index:03d}.mp3"
+                (published / filename).write_bytes(b"p" * 600)
+                segments.append({
+                    "block_index": index,
+                    "chunk_index": 0,
+                    "voice": selected_voice,
+                    "hash": audio.text_hash(text, selected_voice, rate, pitch, "ar"),
+                    "src": filename,
+                })
+            self.write_json(published / "manifest.json", {
+                "story": "sample-story",
+                "section": "science",
+                "language": "ar",
+                "segments": segments,
+            })
+            fish = AsyncMock()
+            edge = AsyncMock()
+            staging = root / ".audio-staging"
+            with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
+                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
+                with self.assertRaises(RuntimeError):
+                    asyncio.run(audio.generate_story(
+                        story, dry_run=False, allow_fish_audio=False,
+                        languages=("ar",), force_blocks=(1,)
+                    ))
+            fish.assert_not_awaited()
+            edge.assert_not_awaited()
+            self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
+            self.assertEqual((published / "000.mp3").read_bytes(), b"p" * 600)
+
     def test_single_block_seed_refuses_missing_published_baseline(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
