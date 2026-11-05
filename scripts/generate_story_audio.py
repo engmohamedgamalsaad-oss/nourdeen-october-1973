@@ -249,8 +249,15 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     translations = package.get("i18n")
     if not isinstance(translations, dict):
         raise ValueError(f"Missing i18n object in {relative}")
+    selected_languages = tuple(dict.fromkeys(languages))
+    if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
+        raise ValueError(f"Unsupported language selection: {selected_languages}")
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
-    pronunciation = read_json(pronunciation_path) if pronunciation_path.is_file() else {}
+    pronunciation = (
+        read_json(pronunciation_path)
+        if "ar" in selected_languages and pronunciation_path.is_file()
+        else {}
+    )
     if pronunciation and (
         pronunciation.get("story") != slug
         or pronunciation.get("language") != "ar"
@@ -258,9 +265,6 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     ):
         raise ValueError(f"Invalid story-specific Arabic pronunciation file: {pronunciation_path}")
     pronunciation_blocks = pronunciation.get("blocks", {})
-    selected_languages = tuple(dict.fromkeys(languages))
-    if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
-        raise ValueError(f"Unsupported language selection: {selected_languages}")
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
@@ -426,8 +430,16 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     if not isinstance(translations, dict):
         raise ValueError(f"Missing i18n object in {relative}")
 
+    # Pronunciation overrides affect Arabic spoken text only.
+    languages_to_generate = tuple(dict.fromkeys(languages))
+    if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
+        raise ValueError(f"Unsupported language selection: {languages_to_generate}")
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
-    pronunciation_data = read_json(pronunciation_path) if pronunciation_path.is_file() else {}
+    pronunciation_data = (
+        read_json(pronunciation_path)
+        if "ar" in languages_to_generate and pronunciation_path.is_file()
+        else {}
+    )
     if pronunciation_data:
         if pronunciation_data.get("story") != slug or pronunciation_data.get("language") != "ar":
             raise ValueError(f"{pronunciation_path}: story/language metadata mismatch")
@@ -436,11 +448,6 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
     else:
         pronunciation_blocks = {}
-
-    # Pronunciation overrides affect Arabic spoken text only.
-    languages_to_generate = tuple(dict.fromkeys(languages))
-    if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
-        raise ValueError(f"Unsupported language selection: {languages_to_generate}")
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
