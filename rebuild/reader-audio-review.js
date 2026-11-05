@@ -11,6 +11,7 @@ if (!core) return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
+var pronunciationReport = null, pronunciationReportStatus = ''; 
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -175,6 +176,16 @@ async function loadManifests() {
   var pendingEntries = [];
   LANGS.forEach(function (lang) {
     var manifest = manifests[lang];
+  if (!document.getElementById('kh-audio-asr-import')) {
+    var importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
+    var importLabel = document.createElement('label'); importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    var input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
+    input.addEventListener('change', function () { importPronunciationReport(input.files && input.files[0]); });
+    importer.append(importLabel, input); host.parentNode.insertBefore(importer, host);
+  } else {
+    var importLabelExisting = document.querySelector('#kh-audio-asr-import label');
+    if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+  }
     if (!manifest) return;
     manifest.segments.forEach(function (seg) {
       pendingEntries.push((async function () {
@@ -290,6 +301,110 @@ async function play(entry, button) {
     if (stateNode) stateNode.textContent = 'تعذر التحقق من الملف الصوتي: ' + (e.message || e);
   }
 }
+async function importPronunciationReport(file) {
+  pronunciationReport = null; pronunciationReportStatus = '';
+  if (!file) return;
+  try {
+    var report = JSON.parse(await file.text());
+    if (!report || report.format !== 'KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_V1' ||
+        report.story !== story.slug || report.section !== story.section ||
+        !LANGS.includes(report.language) || !Array.isArray(report.reports)) {
+      throw new Error('ملف التقرير لا يطابق الحكاية أو القسم أو اللغة.');
+    }
+    var reportEntries = report.reports.filter(function (r) {
+      return r && Number.isInteger(Number(r.block_index)) && typeof r.src === 'string';
+    });
+    if (!reportEntries.length) throw new Error('التقرير لا يحتوي نتائج مقاطع قابلة للربط.');
+    var verified = [];
+    for (var i = 0; i < reportEntries.length; i++) {
+      var item = reportEntries[i];
+      var entry = entries.find(function (e) {
+        return e.lang === report.language && e.block_index === Number(item.block_index) &&
+          e.chunk_index === Number(item.chunk_index || 0) && e.src === item.src;
+      });
+      if (!entry) throw new Error('تعذر مطابقة مقطع في التقرير مع manifest الحالي: ' + item.src);
+      if (!/^[a-f0-9]{64}$/i.test(String(item.audio_sha256 || ''))) {
+        throw new Error('التقرير لا يحمل بصمة SHA-256 صالحة للمقطع: ' + item.src);
+      }
+      var url = new URL(entry.src, manifestUrl(entry.lang));
+      var response = await fetch(url.href, { cache: 'no-store' });
+      if (!response.ok) throw new Error('تعذر التحقق من الملف الصوتي ' + item.src + ' (' + response.status + ').');
+      var blob = await response.blob();
+      var digest = await core.sha256Bytes(await blob.arrayBuffer());
+      if (digest.toLowerCase() !== String(item.audio_sha256).toLowerCase()) {
+        throw new Error('التقرير قديم أو لا يطابق الملف الصوتي الحالي: ' + item.src);
+      }
+      verified.push({ entry: entry, report: item, blob: blob });
+    }
+    pronunciationReport = { language: report.language, items: verified };
+    pronunciationReportStatus = 'تم التحقق من بصمات ' + verified.length + ' مقطعًا. نتائج ASR إرشادية وتحتاج استماعًا بشريًا.';
+  } catch (e) {
+    pronunciationReport = null;
+    pronunciationReportStatus = 'لم يُحمّل التقرير: ' + (e && e.message || e);
+  }
+  render();
+}
+function renderPronunciationResult(entry, panel) {
+  if (!pronunciationReport || pronunciationReport.language !== entry.lang) return;
+  var match = pronunciationReport.items.find(function (item) {
+    return item.entry.block_index === entry.block_index && item.entry.chunk_index === entry.chunk_index && item.entry.src === entry.src;
+  });
+  if (!match) return;
+  var box = document.createElement('div'); box.className = 'kh-audio-asr-result';
+  var report = match.report;
+  var summary = document.createElement('div');
+  summary.textContent = 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
+    (report.detected_language ? ' | اللغة المكتشفة: ' + report.detected_language : '') +
+    (typeof report.language_probability === 'number' ? ' | احتمال اللغة: ' + Math.round(report.language_probability * 100) + '%' : '');
+  box.appendChild(summary);
+  var flagged = [];
+  (Array.isArray(report.mismatches) ? report.mismatches : []).forEach(function (item) {
+    (item.recognized || []).forEach(function (word) { flagged.push({ word: word, start: item.start, end: item.end, type: 'اختلاف عن النص' }); });
+  });
+  (Array.isArray(report.low_confidence_words) ? report.low_confidence_words : []).forEach(function (item) {
+    flagged.push({ word: item.word, start: item.start, end: item.end, probability: item.probability, type: 'احتمال نطق منخفض' });
+  });
+  if (!flagged.length) {
+    var clean = document.createElement('div'); clean.textContent = 'لم يرصد المدقق كلمات محددة للمراجعة؛ هذا لا يعني اعتماد النطق تلقائيًا.'; box.appendChild(clean);
+  }
+  flagged.forEach(function (item) {
+    var line = document.createElement('div'); line.className = 'kh-audio-asr-word';
+    var label = document.createElement('span');
+    label.textContent = item.word + ' — ' + item.type +
+      (typeof item.probability === 'number' ? ' (' + Math.round(item.probability * 100) + '%)' : '') +
+      (typeof item.start === 'number' ? ' [' + item.start.toFixed(2) + 's]' : '');
+    var listen = makeButton('▶ موضع الكلمة', 'asr-listen', function () {
+      playPronunciationRange(match, item, listen, panel);
+    });
+    line.append(label, listen); box.appendChild(line);
+  });
+  panel.appendChild(box);
+}
+async function playPronunciationRange(match, item, button, panel) {
+  if (!match || !match.blob || !Number.isFinite(Number(item.start))) return;
+  try {
+    if (!audio) audio = new Audio();
+    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
+    if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
+    activeObjectUrl = URL.createObjectURL(match.blob);
+    audio.src = activeObjectUrl;
+    audio.load();
+    await new Promise(function (resolve, reject) {
+      audio.onloadedmetadata = resolve; audio.onerror = function () { reject(new Error('تعذر تحميل الصوت')); };
+    });
+    var start = Math.max(0, Number(item.start) - 0.35);
+    var end = Number.isFinite(Number(item.end)) ? Number(item.end) + 0.55 : start + 2;
+    audio.currentTime = Math.min(start, Math.max(0, audio.duration - 0.05));
+    audio.onended = null;
+    await audio.play();
+    audio.ontimeupdate = function () {
+      if (audio.currentTime >= end) { audio.pause(); audio.ontimeupdate = null; }
+    };
+  } catch (e) {
+    var state = panel.querySelector('.kh-audio-review-state');
+    if (state) state.textContent = 'تعذر تشغيل موضع الكلمة: ' + (e.message || e);
+  }
+}
 function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
   b.addEventListener('click', handler); return b;
@@ -346,7 +461,7 @@ function render() {
       try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     editor.append(issue, note, suggestion, saveReject);
-    panel.append(playBtn, acceptBtn, rejectBtn, state, editor);
+    panel.append(playBtn, acceptBtn, rejectBtn, state, editor);\n    renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
   text(banner, gateSummary());
@@ -364,7 +479,7 @@ function injectStyles() {
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
-    '.kh-audio-review-gate[hidden]{display:none!important}',
+    '.kh-audio-review-gate[hidden]{display:none!important}',\n    '.kh-audio-asr-result{display:grid;gap:6px;flex:1 1 100%;padding:8px;margin-top:6px;border-top:1px dashed var(--line);font-size:12px}',\n    '.kh-audio-asr-word{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 0}',
     '@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}',
     '@media(max-width:600px){.kh-audio-review-controls{gap:5px;padding:7px}.kh-audio-review-btn{padding:5px 7px}.kh-audio-review-state{flex-basis:100%;margin:0}}'
   ].join('');
