@@ -55,7 +55,9 @@ python scripts/generate_story_audio.py --story stories/science/015/story.json --
 python scripts/generate_story_audio.py --story stories/science/015/story.json --languages ar --force-block 6 --generate --allow-fish-audio
 ```
 
-هذا يعيد تجهيز المقطع المحدد في مجلد التجهيز فقط. لا يُشغّل تلقائيًا من قرار الرفض، ولا يُرسل إلى Fish Audio إلا عند وجود موافقة صريحة على الأمر.\`.audio-staging/\` ولا يُنشر.
+هذا يعيد تجهيز المقطع المحدد في مجلد التجهيز فقط. لا يُشغّل تلقائيًا من قرار الرفض، ولا يُرسل إلى Fish Audio إلا عند وجود موافقة صريحة على الأمر.
+
+يوجد أيضًا Workflow يدوي عام باسم `story-audio-single-block-staging` يقبل مسار الحكاية واللغة ورقم المقطع، ثم يرفع الناتج كـ Artifact للمراجعة. العربية تتوقف ما لم تختَر `yes` صراحةً لطلب Fish Audio. لا يدمج هذا المسار أي ملف ولا ينشره.\`.audio-staging/\` ولا يُنشر.
 
 ## 4. مدقق النص قبل التوليد
 
