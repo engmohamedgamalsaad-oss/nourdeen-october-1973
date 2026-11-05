@@ -7,14 +7,11 @@
 var VOICES = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
 var GEN_VERSION = 'v1';
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-var PILOT = { 'science/magdi-yacoub': { story_json: 'stories/science/015/story.json', pronunciation: 'stories/science/015/audio-pronunciation.json' } };
+/* لا توجد قائمة حكايات تجريبية: محرك المراجعة مشترك ويستقبل معرّف أي حكاية من القارئ. */
 
 function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
 /* مطابقة بلا تشكيل (للمقارنة فقط، لا تدخل في المفتاح) */
 function strip(s) { return norm(s).replace(/[\u064B-\u065F\u0670\u0640]/g, ''); }
-
-function pilotKey(pkg) { return pkg && pkg.section && pkg.slug ? pkg.section + '/' + pkg.slug : ''; }
-function pilotInfo(pkg) { return PILOT[pilotKey(pkg)] || null; }
 
 function engineOf(lang, speaker) {
   if (lang === 'ar') return { voice: VOICES[speaker] || '', provider: 'fish-audio', model: 's2.1-pro-free' };
@@ -142,8 +139,8 @@ function buildPromptSection(review) {
 }
 
 var api = {
-  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS, PILOT: PILOT,
-  norm: norm, strip: strip, pilotKey: pilotKey, pilotInfo: pilotInfo, engineOf: engineOf,
+  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS,
+  norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, baseKey: baseKey, clipKey: clipKey,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
   evaluateGate: evaluateGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
