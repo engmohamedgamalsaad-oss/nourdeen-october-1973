@@ -75,27 +75,6 @@ def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def is_original_karma_clip(
-    block_index: int,
-    chunk_index: int,
-    text: str,
-    voice: str,
-    previous: dict[str, Any],
-    destination: Path,
-) -> bool:
-    expected_hash = KARMA_ORIGINAL_MANIFEST_HASH.get(block_index)
-    if (
-        expected_hash is None
-        or chunk_index != 0
-        or previous.get("voice") != voice
-        or previous.get("text") != text
-        or not destination.is_file()
-        or destination.stat().st_size < 512
-    ):
-        return False
-    return previous.get("hash") == expected_hash
-
-
 def prepare_arabic_audio_text(text: str, reviewed_audio_text: str | None = None) -> str:
     """Use a reviewed, story-specific pronunciation script for audio only."""
     candidate = reviewed_audio_text if isinstance(reviewed_audio_text, str) else text
