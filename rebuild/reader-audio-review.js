@@ -461,7 +461,8 @@ function render() {
       try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     editor.append(issue, note, suggestion, saveReject);
-    panel.append(playBtn, acceptBtn, rejectBtn, state, editor);\n    renderPronunciationResult(entry, panel);
+    panel.append(playBtn, acceptBtn, rejectBtn, state, editor);
+    renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
   text(banner, gateSummary());
