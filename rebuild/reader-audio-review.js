@@ -7,7 +7,7 @@ var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الف
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
-if (!core) return;
+if (!core || params.get('section') === 'october') return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
