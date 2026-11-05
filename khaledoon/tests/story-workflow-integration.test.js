@@ -109,7 +109,10 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v5 reference');
   assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
   assert.ok(prompt.includes('بوابة جودة حوار كارما للحكايات الجديدة'));
-  assert.ok(prompt.includes('لا تجربة شخصية مختلقة'));
+  assert.ok(prompt.includes('لا ادعاء بزيارة أو مشاهدة شخصية'));
+  assert.ok(prompt.includes('أنا سمعت عن'));
+  assert.ok(prompt.includes('تكون هي صاحبة إغلاق الحكاية في آخر مداخلة'));
+  assert.ok(prompt.includes('الحكمة أو الدرس اللي خرجت به من القصة'));
   assert.ok(prompt.includes('تعود مرة واحدة على الأقل في النصف الثاني'));
   assert.ok(prompt.includes('## 5) الغلاف والصور'));
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
