@@ -41,7 +41,7 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
 
 /* Validate complete one-to-one coverage of every spoken story block by manifest chunks. */
-function validateManifestCoverage(blocks, segments) {
+function validateManifestCoverage(blocks, segments, expectedTexts) {
   if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
     return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
   }
@@ -72,6 +72,17 @@ function validateManifestCoverage(blocks, segments) {
     indexes.sort(function (a, c) { return a - c; });
     for (var n = 0; n < indexes.length; n++) {
       if (indexes[n] !== n) return { ok: false, error: 'يوجد جزء مفقود أو فجوة في ملفات المقطع ' + (b + 1) + '.' };
+    }
+    var expected = Array.isArray(expectedTexts) && typeof expectedTexts[b] === 'string'
+      ? expectedTexts[b] : String(blocks[b].text || '');
+    var actual = indexes.map(function (chunk) {
+      var found = segments.find(function (seg) {
+        return Number(seg.block_index) === b && Number(seg.chunk_index || 0) === chunk;
+      });
+      return String(found && found.text || '');
+    }).join(' ');
+    if (norm(expected) !== norm(actual)) {
+      return { ok: false, error: 'نص الصوت لا يطابق نص الحكاية الحالي عند المقطع ' + (b + 1) + '.' };
     }
   }
   return { ok: true, blocks: blocks.length, segments: segments.length };
