@@ -123,7 +123,7 @@ async function loadManifests() {
         var engineOk = lang === 'ar'
           ? seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected
           : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim();
-        if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim()) {
+        if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim()) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
