@@ -9,7 +9,7 @@ var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
-var enabled = false, allManifestsReady = false, canWrite = false;
+var enabled = false, allManifestsReady = false, canWrite = false, manifestLoadFailure = false;
 
 if (!core) return;
 
@@ -102,7 +102,7 @@ function manifestUrl(lang) {
   return new URL('../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href).href;
 }
 async function loadManifests() {
-  manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {};
+  manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var res = await fetch(manifestUrl(lang), { cache: 'no-cache' });
