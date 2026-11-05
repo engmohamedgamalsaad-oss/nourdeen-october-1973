@@ -74,9 +74,14 @@ async function decide(isApprove){
   if(record.status!=='published')payload.status=isApprove?(table==='submitted_stories'?'pending':'review'):'pending';
   if(record.status==='published'){
    if(isApprove){
-    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type','story_meta'].forEach(function(k){delete pending[k]});
-    pending.story_meta=meta;pending.status='pending';meta.pending_draft=pending;
-   }else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending'}
+    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type','story_meta','audio_review'].forEach(function(k){delete pending[k]});
+    var pendingMeta=Object.assign({},meta);delete pendingMeta.audio_review;
+    pending.story_meta=pendingMeta;pending.status='pending';meta.pending_draft=pending;
+   }else if(meta.pending_draft){
+    meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending';
+    delete meta.pending_draft.audio_review;
+    if(meta.pending_draft.story_meta){meta.pending_draft.story_meta=Object.assign({},meta.pending_draft.story_meta);delete meta.pending_draft.story_meta.audio_review}
+   }
   }
   payload.story_meta=meta;
   var save=await fetch(rowUrl,{method:'PATCH',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=representation'},headers),body:JSON.stringify(payload)});
