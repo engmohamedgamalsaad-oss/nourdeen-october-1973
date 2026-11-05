@@ -7,11 +7,10 @@ var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الف
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
+if (!core) return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
-var enabled = false, allManifestsReady = false, canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
-
-if (!core) return;
+var allManifestsReady = false, canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -129,7 +128,6 @@ async function loadManifests() {
       if (!e || !e.isMissingManifest) manifestLoadFailure = true;
     }
   }));
-  enabled = Object.keys(manifests).length > 0;
   allManifestsReady = LANGS.every(function (lang) { return !!manifests[lang]; });
   var pendingEntries = [];
   LANGS.forEach(function (lang) {
@@ -154,14 +152,12 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  if (!enabled) return { ok: true, disabled: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages: LANGS.filter(function (l) { return !manifests[l]; }) };
   return core.evaluateGate(entries, review, readyByKey);
 }
 function gateSummary() {
   var g = gate();
   if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
-  if (g.disabled) return '';
   if (g.loadError) return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إعادة المحاولة والتحقق.';
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
   if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
@@ -193,8 +189,13 @@ function makeButton(label, cls, handler) {
   b.addEventListener('click', handler); return b;
 }
 function render() {
-  if (!story || !manifests[document.documentElement.lang]) return;
+  if (!story) return;
+  var banner = document.getElementById('kh-audio-review-gate');
+  if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
+  text(banner, gateSummary());
+  banner.hidden = false;
   var lang = document.documentElement.lang;
+  if (!manifests[lang]) return;
   if (activeLang !== lang) activeLang = lang;
   var manifest = manifests[lang], host = $('blocks');
   if (!host) return;
@@ -243,10 +244,8 @@ function render() {
     panel.append(playBtn, acceptBtn, rejectBtn, state, editor);
     block.appendChild(panel);
   });
-  var banner = document.getElementById('kh-audio-review-gate');
-  if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
   text(banner, gateSummary());
-  banner.hidden = !enabled;
+  banner.hidden = false;
 }
 function injectStyles() {
   if ($('kh-audio-review-style')) return;
@@ -266,7 +265,7 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 async function initialize(nextStory) {
-  if (!nextStory || !nextStory.slug || nextStory.section === 'october' || initializing || initialized) return;
+  if (!nextStory || !nextStory.slug || initializing || initialized) return;
   initializing = true;
   story = nextStory;
   injectStyles();
