@@ -1,0 +1,130 @@
+[
+  {
+    "story": "001",
+    "blocks": 55,
+    "languages": {
+      "ar": {
+        "translated": 55,
+        "missing": []
+      },
+      "en": {
+        "translated": 55,
+        "missing": []
+      },
+      "fr": {
+        "translated": 55,
+        "missing": []
+      },
+      "it": {
+        "translated": 55,
+        "missing": []
+      },
+      "de": {
+        "translated": 55,
+        "missing": []
+      }
+    }
+  },
+  {
+    "story": "002",
+    "blocks": 55,
+    "languages": {
+      "ar": {
+        "translated": 55,
+        "missing": []
+      },
+      "en": {
+        "translated": 55,
+        "missing": []
+      },
+      "fr": {
+        "translated": 55,
+        "missing": []
+      },
+      "it": {
+        "translated": 55,
+        "missing": []
+      },
+      "de": {
+        "translated": 55,
+        "missing": []
+      }
+    }
+  },
+  {
+    "story": "003",
+    "blocks": 49,
+    "languages": {
+      "ar": {
+        "translated": 49,
+        "missing": []
+      },
+      "en": {
+        "translated": 48,
+        "missing": [
+          {
+            "index": 15,
+            "tag": "p",
+            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+          }
+        ]
+      },
+      "fr": {
+        "translated": 48,
+        "missing": [
+          {
+            "index": 15,
+            "tag": "p",
+            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+          }
+        ]
+      },
+      "it": {
+        "translated": 48,
+        "missing": [
+          {
+            "index": 15,
+            "tag": "p",
+            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+          }
+        ]
+      },
+      "de": {
+        "translated": 48,
+        "missing": [
+          {
+            "index": 15,
+            "tag": "p",
+            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "story": "004",
+    "blocks": 44,
+    "languages": {
+      "ar": {
+        "translated": 44,
+        "missing": []
+      },
+      "en": {
+        "translated": 44,
+        "missing": []
+      },
+      "fr": {
+        "translated": 44,
+        "missing": []
+      },
+      "it": {
+        "translated": 44,
+        "missing": []
+      },
+      "de": {
+        "translated": 44,
+        "missing": []
+      }
+    }
+  }
+]

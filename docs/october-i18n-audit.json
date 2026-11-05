@@ -123,23 +123,23 @@
       "story": "004",
       "ui_keys": {
         "ar": {
-          "count": 99,
+          "count": 102,
           "missing_vs_ar": []
         },
         "en": {
-          "count": 99,
+          "count": 102,
           "missing_vs_ar": []
         },
         "fr": {
-          "count": 99,
+          "count": 102,
           "missing_vs_ar": []
         },
         "it": {
-          "count": 99,
+          "count": 102,
           "missing_vs_ar": []
         },
         "de": {
-          "count": 99,
+          "count": 102,
           "missing_vs_ar": []
         }
       },

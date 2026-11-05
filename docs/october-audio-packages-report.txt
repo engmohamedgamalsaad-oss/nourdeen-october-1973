@@ -1,0 +1,29 @@
+body maps: 402 translation keys, 116 german-only keys
+== October 001: 55 speakable blocks ==
+  ar: 55/55 translated
+  en: 55/55 translated
+  fr: 55/55 translated
+  it: 55/55 translated
+  de: 55/55 translated
+== October 002: 55 speakable blocks ==
+  ar: 55/55 translated
+  en: 55/55 translated
+  fr: 55/55 translated
+  it: 55/55 translated
+  de: 55/55 translated
+== October 003: 49 speakable blocks ==
+  ar: 49/49 translated
+  en: 48/49 translated
+     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+  fr: 48/49 translated
+     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+  it: 48/49 translated
+     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+  de: 48/49 translated
+     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+== October 004: 44 speakable blocks ==
+  ar: 44/44 translated
+  en: 44/44 translated
+  fr: 44/44 translated
+  it: 44/44 translated
+  de: 44/44 translated

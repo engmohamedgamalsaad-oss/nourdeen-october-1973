@@ -20,11 +20,11 @@
   ui de: 36 keys
   body: 58 Arabic blocks, 56 found verbatim in story-body-i18n.js
 == October story 004 ==
-  ui ar: 99 keys
-  ui en: 99 keys
-  ui fr: 99 keys
-  ui it: 99 keys
-  ui de: 99 keys
+  ui ar: 102 keys
+  ui en: 102 keys
+  ui fr: 102 keys
+  ui it: 102 keys
+  ui de: 102 keys
   body: 11 Arabic blocks, 10 found verbatim in story-body-i18n.js
 == story-body-i18n.js probe ==
 {
