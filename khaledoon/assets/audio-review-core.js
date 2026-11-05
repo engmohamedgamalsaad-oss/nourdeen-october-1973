@@ -37,6 +37,43 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
 /* المفتاح النهائي = الأساسي + عدّاد «إعادة الصوت» */
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
 
+/* Validate complete one-to-one coverage of every spoken story block by manifest chunks. */
+function validateManifestCoverage(blocks, segments) {
+  if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
+    return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
+  }
+  var seen = Object.create(null), chunks = Object.create(null);
+  for (var i = 0; i < segments.length; i++) {
+    var seg = segments[i] || {};
+    var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= blocks.length) {
+      return { ok: false, error: 'يوجد مقطع صوتي مرتبط بترقيم خارج حدود الحكاية.' };
+    }
+    if (!Number.isInteger(chunkIndex) || chunkIndex < 0) {
+      return { ok: false, error: 'ترقيم أجزاء المقطع الصوتي غير صالح.' };
+    }
+    if (!blocks[blockIndex] || blocks[blockIndex].speaker !== seg.speaker) {
+      return { ok: false, error: 'المتحدث في ملف الصوت لا يطابق المتحدث في الحكاية عند المقطع ' + (blockIndex + 1) + '.' };
+    }
+    var key = blockIndex + ':' + chunkIndex;
+    if (seen[key]) return { ok: false, error: 'يوجد جزء صوتي مكرر للمقطع ' + (blockIndex + 1) + '.' };
+    seen[key] = true;
+    if (!chunks[blockIndex]) chunks[blockIndex] = [];
+    chunks[blockIndex].push(chunkIndex);
+  }
+  for (var b = 0; b < blocks.length; b++) {
+    var indexes = chunks[b];
+    if (!indexes || !indexes.length) {
+      return { ok: false, error: 'لا يوجد ملف صوتي للمقطع ' + (b + 1) + '.' };
+    }
+    indexes.sort(function (a, c) { return a - c; });
+    for (var n = 0; n < indexes.length; n++) {
+      if (indexes[n] !== n) return { ok: false, error: 'يوجد جزء مفقود أو فجوة في ملفات المقطع ' + (b + 1) + '.' };
+    }
+  }
+  return { ok: true, blocks: blocks.length, segments: segments.length };
+}
+
 function emptyReview() { return { version: 1, regen: {}, clips: {} }; }
 function cloneReview(r) {
   var x = r && typeof r === 'object' ? JSON.parse(JSON.stringify(r)) : emptyReview();
@@ -148,6 +185,7 @@ var api = {
   VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS,
   norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, baseKey: baseKey, clipKey: clipKey,
+  validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
   evaluateGate: evaluateGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
