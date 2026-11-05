@@ -9,7 +9,7 @@ var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 var story = null, ctx = null, row = null, review = null, entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '';
-var enabled = false, allManifestsReady = false, root = null;
+var enabled = false, allManifestsReady = false, canWrite = false;
 
 if (!core) return;
 
@@ -48,8 +48,9 @@ function rowUrl() {
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
 }
 async function loadRow() {
-  if (!getContext()) return false;
+  if (!getContext()) { canWrite = false; return false; }
   var token = await adminToken();
+  canWrite = true;
   var res = await fetch(rowUrl() + '&select=*', { headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store' });
   if (!res.ok) throw new Error('تعذرت قراءة سجل المراجعة (' + res.status + ').');
   var rows = await res.json();
@@ -123,24 +124,25 @@ async function loadManifests() {
   }));
   enabled = Object.keys(manifests).length > 0;
   allManifestsReady = LANGS.every(function (lang) { return !!manifests[lang]; });
+  var pendingEntries = [];
   LANGS.forEach(function (lang) {
     var manifest = manifests[lang];
     if (!manifest) return;
     manifest.segments.forEach(function (seg) {
-      var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
-      var storyKey = story.section + '/' + story.slug + '#' + blockIndex + ':' + chunkIndex;
-      var base = core.baseKey(storyKey, lang, seg.speaker, seg.text);
-      entries.push({ story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
-        speaker: seg.speaker, base: base, text: seg.text, src: seg.src, manifest: manifest, segment: seg });
+      pendingEntries.push((async function () {
+        var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
+        var storyKey = story.section + '/' + story.slug + '#' + blockIndex + ':' + chunkIndex;
+        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text);
+        var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
+          speaker: seg.speaker, base: base, text: seg.text, src: seg.src, manifest: manifest, segment: seg };
+        var regen = Number(review.regen[base] || 0);
+        entry.key = await core.clipKey(base, regen);
+        readyByKey[entry.key] = 'ready';
+        return entry;
+      })());
     });
   });
-  var resolved = await Promise.all(entries.map(async function (entry) {
-    var regen = Number(review.regen[entry.base] || 0);
-    entry.key = await core.clipKey(entry.base, regen);
-    readyByKey[entry.key] = 'ready';
-    return entry;
-  }));
-  entries = resolved;
+  entries = await Promise.all(pendingEntries);
 }
 function gate() {
   if (!enabled) return { ok: true, disabled: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
@@ -191,11 +193,13 @@ function render() {
     text(state, saved ? (saved.status === 'accepted' ? 'مقبول ✓' : 'مرفوض ✕') : 'لم يُراجع بعد');
     var playBtn = makeButton('▶ استماع', 'play', function () { play(entry, playBtn); });
     var acceptBtn = makeButton('✓ قبول', 'accept', async function () {
+      if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       var next = core.applyDecision(review, entry, { status: 'accepted' });
       state.textContent = 'جارٍ الحفظ…';
       try { await saveReview(next, entry.key); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     var rejectBtn = makeButton('✕ رفض / ملاحظة', 'reject', function () {
+      if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       editor.hidden = !editor.hidden;
       rejectBtn.textContent = editor.hidden ? '✕ رفض / ملاحظة' : 'حفظ الرفض';
     });
@@ -208,6 +212,7 @@ function render() {
     var suggestion = document.createElement('textarea'); suggestion.maxLength = 1000; suggestion.placeholder = 'صياغة مقترحة بديلة (اختياري — لا تُطبّق تلقائيًا)';
     if (saved) { note.value = saved.note || ''; suggestion.value = saved.suggestion || ''; issue.value = saved.issue || 'text'; }
     var saveReject = makeButton('حفظ الرفض', 'reject-save', async function () {
+      if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
       var next = core.applyDecision(review, entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value });
       state.textContent = 'جارٍ حفظ الرفض…';
