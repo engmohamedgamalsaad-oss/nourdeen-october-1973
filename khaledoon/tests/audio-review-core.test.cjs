@@ -14,6 +14,10 @@ const core = require('../assets/audio-review-core.js');
   assert.notEqual(a, c, 'text change must change key');
   assert.notEqual(a, await core.baseKey(S, 'ar', 'karma', 'مرحبا بالعالم'), 'speaker/voice changes key');
   assert.notEqual(a, await core.baseKey(S, 'en', 'narrator', 'مرحبا بالعالم'), 'language changes key');
+  const otherStory = 'history/another-story';
+  assert.notEqual(a, await core.baseKey(otherStory, 'ar', 'narrator', 'مرحبا بالعالم'), 'story identity isolates review keys across all stories');
+  assert.equal(core.PILOT, undefined, 'review core must not expose a single-story pilot allowlist');
+  assert.equal(core.pilotInfo, undefined, 'review core must not gate operation by story slug');
 
   /* العدّاد يغيّر المفتاح */
   assert.equal(await core.clipKey(a, 0), a);
