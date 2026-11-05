@@ -1,0 +1,44 @@
+name: Karma voice pronunciation test
+on:
+  push:
+    branches:
+      - audio-karma-test-20261105
+permissions:
+  contents: read
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Generate Karma sample with Fish Audio
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: |
+          python - <<'PY'
+          import os, json, urllib.request, pathlib, subprocess
+          key = os.environ.get("FISH_AUDIO_API_KEY", "").strip()
+          if not key:
+              raise SystemExit("FISH_AUDIO_API_KEY is missing")
+          voice = "592625f68416462f8b6161ddf5fdbffb"
+          text = "يعني مَرْكَز أَسوان للقلب مش بس بيعالج المرضى؟ ده كمان بيساعد في تدريب الدكاترة؟"
+          payload = json.dumps({"text": text, "reference_id": voice, "format": "mp3"}, ensure_ascii=False).encode()
+          req = urllib.request.Request("https://api.fish.audio/v1/tts", data=payload,
+              headers={"Authorization": "Bearer " + key, "Content-Type": "application/json", "model": "s2.1-pro-free"},
+              method="POST")
+          with urllib.request.urlopen(req, timeout=120) as r:
+              audio = r.read()
+          pathlib.Path("out").mkdir(exist_ok=True)
+          p = pathlib.Path("out/karma-markaz-aswan-test.mp3")
+          p.write_bytes(audio)
+          duration = subprocess.run(["ffprobe","-v","error","-show_entries","format=duration","-of","default=nw=1:nk=1",str(p)],
+              check=True, capture_output=True, text=True).stdout.strip()
+          print(f"OK {p.name}: {len(audio)} bytes, {float(duration):.2f}s, voice={voice}")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: karma-markaz-aswan-test
+          path: out/*.mp3
