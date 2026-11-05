@@ -18,13 +18,18 @@
   style.textContent = [
     /* الدائرة المطوية */
     '.kh-audio-player{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom));z-index:9999;width:48px;height:48px;box-sizing:border-box;margin:0;padding:0;border:0;background:transparent;color:var(--text);isolation:isolate}',
-    '.kh-audio-toggle{display:flex;width:48px;height:48px;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:50%;background:var(--panel);color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.24);cursor:pointer;-webkit-tap-highlight-color:transparent}',
+    '.kh-audio-toggle{display:flex;width:48px;height:48px;align-items:center;justify-content:center;border:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);border-radius:50%;background:var(--panel);color:var(--accent);box-shadow:0 8px 24px rgba(0,0,0,.28),0 0 16px color-mix(in srgb,var(--accent) 30%,transparent);cursor:pointer;-webkit-tap-highlight-color:transparent}',
     '.kh-audio-toggle svg{width:22px;height:22px;display:block}',
-    /* المستطيل: عريض وقصير */
-    '.kh-audio-panel{display:none;width:100%;box-sizing:border-box;padding:8px 10px 9px;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--text);box-shadow:0 12px 34px rgba(0,0,0,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}',
+    /* المستطيل: عريض وقصير، بإطار وتوهّج بلون القسم ليبان عن الصفحة */
+    '.kh-audio-panel{display:none;width:100%;box-sizing:border-box;padding:8px 10px 9px;border:1.5px solid color-mix(in srgb,var(--accent) 75%,transparent);border-radius:14px;background:color-mix(in srgb,var(--accent) 9%,var(--panel));color:var(--text);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent),0 14px 36px rgba(0,0,0,.4),0 0 22px color-mix(in srgb,var(--accent) 30%,transparent);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}',
     '.kh-audio-player.is-expanded{width:min(560px,calc(100vw - 24px));height:auto}',
     '.kh-audio-player.is-expanded .kh-audio-toggle{display:none}',
-    '.kh-audio-player.is-expanded .kh-audio-panel{display:block}',
+    '.kh-audio-player.is-expanded .kh-audio-panel{display:block;animation:khAudioIn .3s ease-out}',
+    '@keyframes khAudioIn{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}',
+    /* حلقة نابضة حول المستطيل (أو الدائرة) أثناء التشغيل */
+    '.kh-audio-player.is-playing::before{content:"";position:absolute;inset:-3px;z-index:-1;border-radius:17px;pointer-events:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 65%,transparent),0 0 28px color-mix(in srgb,var(--accent) 65%,transparent);animation:khAudioPulse 1.8s ease-in-out infinite}',
+    '.kh-audio-player.is-playing:not(.is-expanded)::before{border-radius:50%}',
+    '@keyframes khAudioPulse{0%,100%{opacity:.3;transform:scale(1)}50%{opacity:1;transform:scale(1.025)}}',
     '@media(max-width:640px){.kh-audio-player.is-expanded{left:max(10px,env(safe-area-inset-left));right:max(10px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));width:auto}.kh-audio-toggle{width:46px;height:46px}}',
     '.kh-audio-row{display:flex;align-items:center;gap:10px}',
     '.kh-audio-controls{display:flex;flex:0 0 auto;gap:6px}',
@@ -46,7 +51,7 @@
     '#blocks>.block.kh-audio-current{outline:1px solid color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:3px;background:color-mix(in srgb,var(--accent) 12%,var(--panel));box-shadow:0 8px 24px color-mix(in srgb,var(--accent) 12%,transparent);transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease}',
     INK + '{--kh-audio-ink:var(--accent);color:var(--kh-audio-ink);-webkit-text-stroke:.4px var(--kh-audio-ink);paint-order:stroke fill;text-shadow:0 0 12px color-mix(in srgb,var(--kh-audio-ink) 40%,transparent)}',
     ':root[data-theme="light"] ' + INK + '{--kh-audio-ink:color-mix(in srgb,var(--accent) 40%,#000)}',
-    '@media(prefers-reduced-motion:reduce){#blocks>.block.kh-audio-current{transition:none!important}}'
+    '@media(prefers-reduced-motion:reduce){#blocks>.block.kh-audio-current{transition:none!important}.kh-audio-player.is-playing::before,.kh-audio-player.is-expanded .kh-audio-panel{animation:none!important}}'
   ].join('');
   document.head.appendChild(style);
 
@@ -114,6 +119,7 @@
     setButton(playButton, mode === 'paused' ? ui.resume : ui.play, mode === 'playing');
     setButton(pauseButton, ui.pause, mode !== 'playing');
     setButton(stopButton, ui.stop, mode === 'idle');
+    host.classList.toggle('is-playing', mode === 'playing');
   }
 
   function setExpanded(value) {
