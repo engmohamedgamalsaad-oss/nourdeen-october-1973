@@ -16,7 +16,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
 
-    def make_story(self, root: Path, section: str = "science", story_id: str = "001") -> Path:
+    def make_story(self, root: Path, section: str = "science", story_id: str = "001", require_audio_review: bool = False) -> Path:
         story_dir = root / "stories" / section / story_id
         languages = {
             language: {
@@ -33,7 +33,10 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "slug": "sample-story",
             "i18n": languages,
         })
-        self.write_json(story_dir / "data.json", {"published": True})
+        metadata = {"published": True}
+        if require_audio_review:
+            metadata["audio_pronunciation_review_required"] = True
+        self.write_json(story_dir / "data.json", metadata)
         self.write_json(story_dir / "audio-pronunciation.json", {
             "story": "sample-story",
             "language": "ar",
@@ -41,6 +44,65 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "blocks": {"0": "Narrator pronunciation."},
         })
         return story_dir / "story.json"
+
+    def complete_pronunciation_review(self) -> dict:
+        return {
+            "format": "KHALEDOON_AUDIO_PRONUNCIATION_V1",
+            "story": "sample-story",
+            "language": "ar",
+            "review_status": "human_review_complete",
+            "reviewed_audio_only_blocks": ["0", "1"],
+            "source_texts": {"0": "Narrator ar.", "1": "Karma ar."},
+            "approved_audio_only_rewrites": ["0"],
+            "blocks": {"0": "Narrator pronunciation."},
+        }
+
+    def test_new_story_arabic_plan_requires_completed_human_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_audio_review=True)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "missing or incomplete"):
+                    audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar",))
+
+    def test_new_story_arabic_plan_requires_every_block_and_current_source_text(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_audio_review=True)
+            sidecar = self.complete_pronunciation_review()
+            sidecar["reviewed_audio_only_blocks"] = ["0"]
+            sidecar["source_texts"] = {"0": "Narrator ar."}
+            self.write_json(story.parent / "audio-pronunciation.json", sidecar)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "every spoken Arabic block needs human review"):
+                    audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar",))
+
+            sidecar = self.complete_pronunciation_review()
+            sidecar["source_texts"]["1"] = "Changed source text."
+            self.write_json(story.parent / "audio-pronunciation.json", sidecar)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "changed after pronunciation review"):
+                    audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar",))
+
+    def test_new_story_arabic_plan_passes_only_with_complete_current_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_audio_review=True)
+            self.write_json(story.parent / "audio-pronunciation.json", self.complete_pronunciation_review())
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar",))
+            self.assertEqual(plan["languages"]["ar"]["segments_to_generate"], 2)
+            self.assertEqual(plan["fish_segments_to_generate"], 2)
+
+    def test_new_story_non_arabic_plan_does_not_wait_for_arabic_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_audio_review=True)
+            (story.parent / "audio-pronunciation.json").unlink()
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
+            self.assertEqual(set(plan["languages"]), {"en"})
+            self.assertEqual(plan["fish_segments_to_generate"], 0)
 
     def test_dry_run_does_not_call_tts_or_create_staging_files(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
