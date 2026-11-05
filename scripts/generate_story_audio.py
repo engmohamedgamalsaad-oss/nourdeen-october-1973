@@ -73,6 +73,15 @@ VOICE_FALLBACKS = {
 }
 
 
+def report_orphaned_audio_files(output_dir: Path, keep: set[str]) -> list[str]:
+    """Report stale MP3 files without deleting published or previously generated audio."""
+    return sorted(
+        path.name
+        for path in output_dir.glob("*.mp3")
+        if path.name not in keep
+    )
+
+
 def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
@@ -589,6 +598,7 @@ async def generate_story(
                         f"No working voice for {lang}/{speaker} block {block_index} chunk {chunk_index}; tried {ordered_candidates}"
                     )
 
+                audio_sha256 = hashlib.sha256(destination.read_bytes()).hexdigest()
                 segments.append({
                     "block_index": block_index,
                     "chunk_index": chunk_index,
@@ -598,6 +608,7 @@ async def generate_story(
                     "model": FISH_AUDIO_MODEL if use_fish_audio else "edge-tts",
                     "src": filename,
                     "hash": digest,
+                    "audio_sha256": audio_sha256,
                     "text": chunk_text,
                 })
                 if use_fish_audio:
@@ -623,9 +634,12 @@ async def generate_story(
         temporary_manifest.replace(manifest_path)
 
         keep = {item["src"] for item in segments}
-        for old_file in output_dir.glob("*.mp3"):
-            if old_file.name not in keep:
-                old_file.unlink()
+        orphaned = report_orphaned_audio_files(output_dir, keep)
+        if orphaned:
+            print(
+                "PRESERVED ORPHANED MP3 FILES (manual review only): "
+                + ", ".join(orphaned)
+            )
 
     if dry_run:
         print(f"DRY RUN COMPLETE: {relative.parent}; no files were changed and no TTS request was sent.")
