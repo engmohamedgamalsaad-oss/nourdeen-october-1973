@@ -279,6 +279,11 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         manifest_path = language_dir / "manifest.json"
         asset_dir = language_dir
         if force_blocks and not manifest_path.is_file():
+            if language_dir.exists() and any(language_dir.glob("*.mp3")):
+                raise ValueError(
+                    f"{language_dir}: staged MP3 files exist without a manifest; "
+                    "refusing to guess their baseline."
+                )
             published_dir = ROOT / "assets" / "audio" / section / slug / lang
             published_manifest = published_dir / "manifest.json"
             if published_manifest.is_file():
