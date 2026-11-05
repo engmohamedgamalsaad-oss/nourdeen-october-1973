@@ -40,7 +40,7 @@ concurrency:
 jobs:
   reviewer:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 25
     steps:
       - name: Check out pull request
         uses: actions/checkout@v4
@@ -86,3 +86,47 @@ jobs:
       - name: Print pilot block 001 and all-block summary for review
         run: |
           python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/pronunciation-review.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"summary": r["summary"], "pilot_block_001": r["blocks"][1]}, ensure_ascii=False, indent=2))'
+
+      - name: Install local ASR for one real published Arabic clip
+        run: python -m pip install faster-whisper
+
+      - name: Prepare an isolated one-clip ASR fixture (no repository audio is changed)
+        run: |
+          python - <<'PY'
+          import hashlib, json, os, shutil
+          from pathlib import Path
+
+          source = Path("assets/audio/science/magdi-yacoub/ar")
+          destination = Path(os.environ["RUNNER_TEMP"]) / "audio-asr-pilot/science/magdi-yacoub/ar"
+          destination.mkdir(parents=True, exist_ok=True)
+          manifest = json.loads((source / "manifest.json").read_text(encoding="utf-8"))
+          selected = [item for item in manifest["segments"] if item.get("block_index") == 1]
+          if len(selected) != 1:
+              raise SystemExit(f"Expected exactly one published block 1 clip, found {len(selected)}")
+          item = dict(selected[0])
+          audio_file = source / item["src"]
+          if not audio_file.is_file():
+              raise SystemExit(f"Published audio file missing: {audio_file}")
+          shutil.copy2(audio_file, destination / item["src"])
+          item["audio_sha256"] = hashlib.sha256(audio_file.read_bytes()).hexdigest()
+          manifest["segments"] = [item]
+          (destination / "manifest.json").write_text(
+              json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n",
+              encoding="utf-8",
+          )
+          print("Prepared one published MP3 in runner temp storage.")
+          print("SHA-256 is computed for this run only; the repository manifest remains unchanged.")
+          PY
+
+      - name: Run ASR on the published Arabic clip (one selected block, read-only)
+        run: |
+          python scripts/review_audio_pronunciation.py \\
+            --story stories/science/015/story.json \\
+            --language ar \\
+            --audio-root "$RUNNER_TEMP/audio-asr-pilot" \\
+            --block-index 1 \\
+            --model base \\
+            --device cpu \\
+            --compute-type int8 \\
+            --output "$RUNNER_TEMP/magdi-yacoub-asr-pilot.json"
+          python -c 'import json, pathlib; p=pathlib.Path("'"$RUNNER_TEMP"'/magdi-yacoub-asr-pilot.json"); r=json.loads(p.read_text(encoding="utf-8")); print(json.dumps({"story": r["story"], "language": r["language"], "selected_blocks": r["selected_blocks"], "summary": r["summary"], "clip": r["reports"][0]}, ensure_ascii=False, indent=2))'
