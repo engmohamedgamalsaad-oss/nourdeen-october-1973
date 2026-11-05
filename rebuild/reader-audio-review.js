@@ -480,7 +480,9 @@ function injectStyles() {
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
-    '.kh-audio-review-gate[hidden]{display:none!important}',\n    '.kh-audio-asr-result{display:grid;gap:6px;flex:1 1 100%;padding:8px;margin-top:6px;border-top:1px dashed var(--line);font-size:12px}',\n    '.kh-audio-asr-word{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 0}',
+    '.kh-audio-review-gate[hidden]{display:none!important}',
+    '.kh-audio-asr-result{display:grid;gap:6px;flex:1 1 100%;padding:8px;margin-top:6px;border-top:1px dashed var(--line);font-size:12px}',
+    '.kh-audio-asr-word{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 0}',
     '@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}',
     '@media(max-width:600px){.kh-audio-review-controls{gap:5px;padding:7px}.kh-audio-review-btn{padding:5px 7px}.kh-audio-review-state{flex-basis:100%;margin:0}}'
   ].join('');
