@@ -169,7 +169,7 @@ async function loadManifests() {
         var engine = { voice: seg.voice, provider: seg.provider, model: seg.model };
         var sourceBase = await core.baseKey(storyKey, lang, seg.speaker, seg.text, engine);
         var knownAudioHash = String(seg.audio_sha256 || review.audio_hashes[sourceBase] || '');
-        var revision = String(seg.audio_revision || knownAudioHash || '');
+        var revision = String(knownAudioHash || seg.audio_revision || '');
         var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, Object.assign({}, engine, { audio_revision: revision }));
         var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
           speaker: seg.speaker, base: base, source_base: sourceBase, audio_sha256: knownAudioHash,
@@ -224,7 +224,10 @@ async function play(entry, button) {
       });
       entry.key = await core.clipKey(entry.base, Number(review.regen[entry.base] || 0));
     }
+    entry.segment.audio_sha256 = digest;
+    readyByKey[entry.key] = 'ready';
     if (previousKey !== entry.key) {
+      delete readyByKey[previousKey];
       delete played[previousKey];
       delete acceptButtons[previousKey];
       if (acceptBtn) acceptButtons[entry.key] = acceptBtn;
