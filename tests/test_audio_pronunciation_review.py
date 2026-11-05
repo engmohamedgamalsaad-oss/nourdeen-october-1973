@@ -180,6 +180,41 @@ class AudioPronunciationReviewTests(unittest.TestCase):
             self.assertEqual(fake.calls, 0)
             self.assertEqual(report["reports"][0]["status"], "manifest_text_mismatch")
 
+    def test_skips_transcription_when_manifest_audio_hash_is_missing(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story_dir = root / "stories" / "science" / "001"
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "en"
+            audio_dir.mkdir(parents=True)
+            story_path = story_dir / "story.json"
+            self.write_json(story_path, {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "sample",
+                "i18n": {"en": {"blocks": [{"speaker": "narrator", "text": "Hello."}]}},
+            })
+            (audio_dir / "000.mp3").write_bytes(b"audio-without-manifest-hash")
+            self.write_json(audio_dir / "manifest.json", {
+                "story": "sample",
+                "section": "science",
+                "language": "en",
+                "segments": [{
+                    "block_index": 0,
+                    "chunk_index": 0,
+                    "speaker": "narrator",
+                    "src": "000.mp3",
+                    "text": "Hello.",
+                }],
+            })
+            fake = FakeModel([])
+            with patch.object(reviewer, "ROOT", root):
+                report = reviewer.review_story_audio(
+                    story_path, "en", root / "assets" / "audio", fake
+                )
+            self.assertEqual(fake.calls, 0)
+            self.assertEqual(report["reports"][0]["status"], "audio_hash_missing")
+            self.assertTrue(report["reports"][0]["needs_human_review"])
+
     def test_skips_transcription_when_audio_hash_changed(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
