@@ -132,12 +132,47 @@
     };
   }
 
+  function buildApprovedPatch(input, pkg, approvedKeys) {
+    var checked = validateResult(input, pkg);
+    if (!checked.ok) throw new Error('لا يمكن تصدير اقتراحات من تقرير غير صالح: ' + checked.errors.slice(0, 3).join(' | '));
+    var result = typeof input === 'string' ? JSON.parse(input) : input;
+    var approved = Object.create(null);
+    (Array.isArray(approvedKeys) ? approvedKeys : []).forEach(function (key) {
+      approved[String(key)] = true;
+    });
+    var changes = result.segments.filter(function (item) {
+      var key = item.lang + ':' + item.block_index;
+      return approved[key] === true &&
+        item.issue_type !== 'none' &&
+        item.proposed_audio_text !== item.original_text;
+    }).map(function (item) {
+      return {
+        lang: item.lang,
+        block_index: item.block_index,
+        speaker: item.speaker,
+        original_text: item.original_text,
+        approved_audio_text: item.proposed_audio_text,
+        issue_type: item.issue_type,
+        reason: item.reason
+      };
+    });
+    return {
+      format: 'KHALEDOON_AUDIO_TEXT_APPROVED_PATCH_V1',
+      story: pkg.slug,
+      section: pkg.section,
+      status: 'approved_for_manual_application',
+      applied: false,
+      changes: changes
+    };
+  }
+
   var api = {
     LANGS: LANGS,
     collectSegments: collectSegments,
     diagnose: diagnose,
     buildPrompt: buildPrompt,
-    validateResult: validateResult
+    validateResult: validateResult,
+    buildApprovedPatch: buildApprovedPatch
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.KHAudioTextReview = api;
