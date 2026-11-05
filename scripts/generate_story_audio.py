@@ -23,8 +23,9 @@ from typing import Any
 import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
+STAGING_ROOT = ROOT / ".audio-staging"
 LANGUAGES = ("ar", "en", "fr", "it", "de")
-GENERATOR_VERSION = "4"
+GENERATOR_VERSION = "5"
 ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
 FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # owner-approved final narrator voice
@@ -209,7 +210,84 @@ async def synthesize_fish_audio(
         raise
 
 
-async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
+def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
+    """Read-only plan for all five languages using isolated staging assets."""
+    story_path = story_path.resolve()
+    relative = story_path.relative_to(ROOT)
+    section = relative.parts[1]
+    package = read_json(story_path)
+    slug = str(package.get("slug") or "").strip()
+    translations = package.get("i18n")
+    if not isinstance(translations, dict):
+        raise ValueError(f"Missing i18n object in {relative}")
+    pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    pronunciation = read_json(pronunciation_path) if pronunciation_path.is_file() else {}
+    if pronunciation and (
+        pronunciation.get("story") != slug
+        or pronunciation.get("language") != "ar"
+        or not isinstance(pronunciation.get("blocks"), dict)
+    ):
+        raise ValueError(f"Invalid story-specific Arabic pronunciation file: {pronunciation_path}")
+    pronunciation_blocks = pronunciation.get("blocks", {})
+    plan: dict[str, Any] = {
+        "story": slug,
+        "languages": {},
+        "segments_to_generate": 0,
+        "fish_segments_to_generate": 0,
+    }
+    for lang in LANGUAGES:
+        localized = translations.get(lang)
+        blocks = localized.get("blocks") if isinstance(localized, dict) else None
+        if not isinstance(blocks, list) or not blocks:
+            raise ValueError(f"{relative}: missing {lang} blocks")
+        language_dir = staging_root / section / slug / lang
+        manifest_path = language_dir / "manifest.json"
+        manifest = read_json(manifest_path) if manifest_path.is_file() else {}
+        old = {}
+        entries = manifest.get("segments", []) if isinstance(manifest.get("segments"), list) else []
+        for item in entries:
+            if isinstance(item, dict) and str(item.get("block_index", "")).isdigit():
+                old[(int(item["block_index"]), int(item.get("chunk_index", 0)))] = item
+        needed = 0
+        fish_needed = 0
+        for index, block in enumerate(blocks):
+            if not isinstance(block, dict) or block.get("speaker") not in ("karma", "narrator"):
+                continue
+            original = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
+            if not original:
+                continue
+            spoken = prepare_arabic_audio_text(original, pronunciation_blocks.get(str(index))) if lang == "ar" else original
+            chunks = split_audio_chunks(spoken)
+            voice, rate, pitch = VOICE_SETTINGS[lang][block["speaker"]]
+            selected_voice = (
+                FISH_AUDIO_KARMA_VOICE_ID if block["speaker"] == "karma"
+                else FISH_AUDIO_NARRATOR_VOICE_ID
+            ) if lang == "ar" else voice
+            for chunk_index, chunk in enumerate(chunks):
+                previous = old.get((index, chunk_index), {})
+                filename = f"{index:03d}.mp3" if chunk_index == 0 else f"{index:03d}-{chunk_index:02d}.mp3"
+                target = language_dir / filename
+                digest = text_hash(chunk, selected_voice, rate, pitch, lang)
+                unchanged = (
+                    previous.get("hash") == digest
+                    and previous.get("voice") in (None, selected_voice)
+                    and target.is_file()
+                    and target.stat().st_size >= 512
+                )
+                if not unchanged:
+                    needed += 1
+                    if lang == "ar":
+                        fish_needed += 1
+        plan["languages"][lang] = {
+            "segments_to_generate": needed,
+            "fish_segments_to_generate": fish_needed,
+        }
+        plan["segments_to_generate"] += needed
+        plan["fish_segments_to_generate"] += fish_needed
+    return plan
+
+
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False) -> bool:
     story_path = story_path.resolve()
     try:
         relative = story_path.relative_to(ROOT)
@@ -249,13 +327,29 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         pronunciation_blocks = pronunciation_data.get("blocks")
         if not isinstance(pronunciation_blocks, dict):
             raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
-        languages_to_generate = ("ar",)
     else:
         pronunciation_blocks = {}
-        languages_to_generate = LANGUAGES
 
-    story_audio_root = ROOT / "assets" / "audio" / section / slug
+    # Pronunciation overrides affect Arabic spoken text only.
+    languages_to_generate = LANGUAGES
+    story_audio_root = STAGING_ROOT / section / slug
     completed = 0
+
+    plan = inspect_generation_plan(story_path, STAGING_ROOT)
+    print(
+        f"PLAN {relative.parent}: languages={len(plan['languages'])} "
+        f"segments_to_generate={plan['segments_to_generate']} "
+        f"fish_segments_to_generate={plan['fish_segments_to_generate']} "
+        f"output={STAGING_ROOT.relative_to(ROOT)}"
+    )
+    if dry_run:
+        print("DRY RUN ONLY: no TTS requests, directories, MP3 files, or manifests were created or changed.")
+        return True
+    if plan["fish_segments_to_generate"] and not allow_fish_audio:
+        raise RuntimeError(
+            "Safety stop before any TTS request: Arabic Fish Audio clips need generation. "
+            "Explicit owner approval is required before passing --allow-fish-audio."
+        )
     for lang in languages_to_generate:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
@@ -276,91 +370,6 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
             for item in old_manifest.get("segments", [])
             if isinstance(item, dict) and str(item.get("block_index", "")).isdigit()
         }
-
-        # Preflight every existing Arabic segment before making any billable request.
-        # This pilot may regenerate only the five approved narrator blocks.
-        if lang == "ar" and pronunciation_data:
-            planned_regenerations: set[int] = set()
-            for planned_index, planned_block in enumerate(blocks):
-                if not isinstance(planned_block, dict):
-                    continue
-                planned_speaker = planned_block.get("speaker")
-                planned_original = re.sub(
-                    r"\s+", " ", str(planned_block.get("text") or "")
-                ).strip()
-                if planned_speaker not in ("karma", "narrator") or not planned_original:
-                    continue
-                planned_text = prepare_arabic_audio_text(
-                    planned_original, pronunciation_blocks.get(str(planned_index))
-                )
-                planned_chunks = split_audio_chunks(planned_text)
-                planned_voice = (
-                    FISH_AUDIO_KARMA_VOICE_ID
-                    if planned_speaker == "karma"
-                    else FISH_AUDIO_NARRATOR_VOICE_ID
-                )
-                planned_rate, planned_pitch = VOICE_SETTINGS["ar"][planned_speaker][1:]
-                if planned_speaker == "karma":
-                    if len(planned_chunks) != 1 or not is_original_karma_clip(
-                        planned_index,
-                        0,
-                        planned_chunks[0],
-                        planned_voice,
-                        old_segments.get((planned_index, 0), {}),
-                        output_dir / f"{planned_index:03d}.mp3",
-                    ):
-                        raise RuntimeError(
-                            "Safety stop before Fish Audio: original Karma audio "
-                            f"block {planned_index} failed its immutable hash check."
-                        )
-                    continue
-                for planned_chunk_index, planned_chunk in enumerate(planned_chunks):
-                    planned_previous = old_segments.get(
-                        (planned_index, planned_chunk_index), {}
-                    )
-                    planned_filename = (
-                        f"{planned_index:03d}.mp3"
-                        if planned_chunk_index == 0
-                        else f"{planned_index:03d}-{planned_chunk_index:02d}.mp3"
-                    )
-                    planned_destination = output_dir / planned_filename
-                    planned_hash = text_hash(
-                        planned_chunk, planned_voice, planned_rate, planned_pitch, "ar"
-                    )
-                    is_unchanged = (
-                        planned_previous.get("hash") == planned_hash
-                        and planned_previous.get("voice") in (None, planned_voice)
-                        and planned_destination.is_file()
-                        and planned_destination.stat().st_size >= 512
-                    )
-                    if not is_unchanged:
-                        if (
-                            planned_speaker != "narrator"
-                            or planned_index not in FISH_AUDIO_ALLOWED_REGEN_BLOCKS
-                        ):
-                            raise RuntimeError(
-                                "Safety stop before Fish Audio: unexpected regeneration "
-                                f"for block {planned_index} ({planned_speaker})."
-                            )
-                        planned_regenerations.add(planned_index)
-
-            unexpected_regenerations = planned_regenerations - FISH_AUDIO_ALLOWED_REGEN_BLOCKS
-            if unexpected_regenerations:
-                raise RuntimeError(
-                    "Safety stop before Fish Audio: unexpected blocks need regeneration: "
-                    f"{sorted(unexpected_regenerations)}."
-                )
-            print(
-                "PILOT PREFLIGHT OK: remaining narrator blocks to generate "
-                f"{sorted(planned_regenerations)}; already-current approved blocks "
-                f"{sorted(FISH_AUDIO_ALLOWED_REGEN_BLOCKS - planned_regenerations)}."
-            )
-
-        if dry_run:
-            if not pronunciation_data:
-                raise RuntimeError("Dry-run mode requires the approved Arabic pronunciation file.")
-            print("DRY RUN ONLY: no Fish Audio request was sent and no MP3 or manifest was changed.")
-            return True
 
         segments: list[dict[str, Any]] = []
         processed_manifest_segments = {
@@ -464,6 +473,8 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
                         break
                     try:
                         if use_fish_audio:
+                            if not allow_fish_audio:
+                                raise RuntimeError("Fish Audio generation requires explicit --allow-fish-audio approval.")
                             await synthesize_fish_audio(chunk_text, destination, candidate_voice)
                         else:
                             await synthesize(chunk_text, candidate_voice, rate, pitch, destination)
@@ -514,29 +525,49 @@ async def generate_story(story_path: Path, dry_run: bool = False) -> bool:
         )
         temporary_manifest.replace(manifest_path)
 
-        keep = {item["src"] for item in segments}
-        for old_file in output_dir.glob("*.mp3"):
-            if old_file.name not in keep:
-                old_file.unlink()
+        # Never delete old MP3 files. Cleanup/promotion is a separate reviewed operation.
 
     print(f"READY {relative.parent}: {completed} audio segments across {len(languages_to_generate)} language(s): {', '.join(languages_to_generate)}")
     return True
 
 
 async def main() -> int:
-    parser = argparse.ArgumentParser(description="Generate the approved Khaledoon audio pilot.")
+    parser = argparse.ArgumentParser(
+        description="Safely plan or generate Khaledoon audio into isolated staging only."
+    )
     parser.add_argument(
-        "--dry-run",
+        "--story",
+        type=Path,
+        help="Explicit story.json path. Omit to run the read-only inventory for all published non-October stories.",
+    )
+    parser.add_argument(
+        "--generate",
         action="store_true",
-        help="Validate the Magdi Yacoub Arabic regeneration scope without contacting any TTS provider.",
+        help="Actually request TTS. Output is restricted to .audio-staging, never the published audio tree.",
+    )
+    parser.add_argument(
+        "--allow-fish-audio",
+        action="store_true",
+        help="Explicit approval gate for billable Arabic Fish Audio requests.",
     )
     args = parser.parse_args()
 
-    # The only enabled Fish Audio target is Magdi Yacoub Arabic.
-    # Existing Karma clips remain unchanged; narrator clips are regenerated
-    # with the owner-approved voice because the voice ID is part of the hash.
-    story = ROOT / "stories" / "science" / "015" / "story.json"
-    return 0 if await generate_story(story, dry_run=args.dry_run) else 1
+    if args.allow_fish_audio and not args.generate:
+        parser.error("--allow-fish-audio is valid only together with --generate")
+    if not args.story:
+        if args.generate:
+            parser.error("--generate requires an explicit --story")
+        from audit_story_audio import audit
+        report = audit(ROOT)
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+        return 1 if report["incomplete_stories"] else 0
+
+    story = args.story if args.story.is_absolute() else ROOT / args.story
+    return 0 if await generate_story(
+        story,
+        dry_run=not args.generate,
+        allow_fish_audio=args.allow_fish_audio,
+    ) else 1
 
 
 if __name__ == "__main__":
