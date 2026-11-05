@@ -2,22 +2,24 @@
 
 The visible story text is the source of truth and is never rewritten by audio generation. Arabic speech receives a separate, audio-only reading copy.
 
-## Processing order
+## Processing order currently implemented
 
 1. Read the Arabic block from the published story package.
-2. Split it into sentence-sized pieces for diacritization.
-3. Apply `text2tashkeel==0.1.0` with the `rawi-ensemble` model.
-4. Rejoin the sentence pieces and split long speech into chunks at sentence/word boundaries.
-5. Synthesize each chunk with the configured Fish Audio speaker and pass the Arabic rate as Fish `prosody.speed` (for example, -2% becomes 0.98x). Fish's cloud API does not expose the Edge-style pitch setting used by Edge TTS.
-6. Normalize Arabic Fish MP3s with FFmpeg loudnorm before writing the manifest.
-7. Keep the vocalized text in the manifest so browser speech fallback uses the same reading copy.
-8. Keep a short pause between consecutive audio chunks.
+2. If `audio-pronunciation.json` exists beside the story package, use its reviewed audio-only text for the matching block. Otherwise use the story block text. The visible story text is never rewritten.
+3. Normalize whitespace and split long speech at sentence/word boundaries.
+4. Synthesize Arabic chunks with the approved Fish Audio voice ID and model. The Arabic rate is passed as Fish `prosody.speed` (for example, -2% becomes 0.98x). Fish's cloud API does not expose the Edge-style pitch setting used by Edge TTS.
+5. Keep the exact spoken text, voice, provider, model, chunk index and input hash in the manifest.
+6. The browser player handles pauses between consecutive chunks.
 
-## Failure behavior
+The current generator does **not** run an automatic diacritizer or FFmpeg loudness normalization. Those steps must not be assumed to have happened unless a separate verified tool is added and run.
 
-- Missing diacritizer dependency or a failed/empty diacritization result fails the Arabic generation step. It does not silently send bare Arabic to TTS.
-- Fish Audio retries transient failures up to three times. It does not switch to a different speaker in the middle of a story.
-- The audio commit step runs only after successful generation, so a partial run is not published.
+## Failure and safety behavior
+
+- The generator makes one Fish Audio request per changed Arabic chunk and does not automatically retry or switch to another speaker. A failed request stops that chunk; the manifest checkpoint allows already completed chunks to be reused on a later run.
+- A non-dry-run Arabic generation requires the explicit `--allow-fish` flag. The manual GitHub workflow also requires the operator to select `yes` for its Fish Audio confirmation input.
+- `--dry-run` performs preflight checks without sending TTS requests or changing MP3 files/manifests.
+- MP3 files no longer referenced by the latest manifest are reported and preserved. The generator does not delete them automatically; cleanup requires separate manual review.
+- The GitHub workflow commits generated audio to a dedicated branch and opens a pull request. It must never push generated audio directly to `main`.
 - October stories remain excluded by the generator.
 
 ## Model and licensing notes
