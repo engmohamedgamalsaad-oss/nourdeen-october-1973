@@ -22,13 +22,10 @@ The current generator does **not** run an automatic diacritizer or FFmpeg loudne
 - The GitHub workflow commits generated audio to a dedicated branch and opens a pull request. It must never push generated audio directly to `main`.
 - October stories remain excluded by the generator.
 
-## Model and licensing notes
+## Research and licensing notes
 
-- Package: [text2tashkeel 0.1.0](https://pypi.org/project/text2tashkeel/0.1.0/)
-- Model: [TigreGotico/rawi-ensemble](https://huggingface.co/TigreGotico/rawi-ensemble), marked Apache-2.0 on its model card.
-- The package reports 2.04% diacritic error rate on its own held-out corpus. Treat this as a benchmark claim, not a guarantee for Khaledoon's child-friendly biographies; names, dates, and ambiguous words still need listening review.
-- The package documentation recommends one sentence per diacritization call. Its benchmark documentation also discusses corpus-overlap caveats.
-
+- `text2tashkeel 0.1.0` and the `TigreGotico/rawi-ensemble` model were investigated as possible diacritization tools. They are **not invoked by the current generator**. Their benchmark claims must not be treated as measured performance on Khaledoon stories.
+- Any future diacritization stage must be separately implemented, tested on names/dates, and reviewed before its output is used for TTS.
 - Fish Audio's current public guidance describes its free plan as personal/non-commercial; paid plans are required for commercial use. The exact usage rights and creator permissions for the two selected community voice IDs have not been independently confirmed. Before monetization, sponsorship, or other commercial use, verify the account plan and each voice's permissions with Fish Audio. Do not use a voice that imitates an identifiable real person without the required consent.
 
 This pipeline affects generated audio assets only. It does not add tashkeel to the visible Arabic story text.
