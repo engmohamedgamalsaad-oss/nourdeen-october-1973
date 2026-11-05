@@ -287,6 +287,39 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT)
     return plan
 
 
+def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
+    """Build no-write generation plans for every published non-October story."""
+    stories: list[dict[str, Any]] = []
+    skipped_october = 0
+    for story_path in sorted((root / "stories").glob("*/*/story.json")):
+        relative = story_path.relative_to(root)
+        if relative.parts[1] == "october":
+            skipped_october += 1
+            continue
+        metadata_path = story_path.with_name("data.json")
+        if not metadata_path.is_file():
+            continue
+        try:
+            if read_json(metadata_path).get("published") is not True:
+                continue
+            plan = inspect_generation_plan(story_path, staging_root)
+            plan["path"] = relative.as_posix()
+            stories.append(plan)
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            stories.append({"path": relative.as_posix(), "error": str(exc)})
+    return {
+        "mode": "read-only-generation-plan",
+        "tts_requests": 0,
+        "files_modified": 0,
+        "october_stories_skipped": skipped_october,
+        "published_non_october_stories": len(stories),
+        "stories_with_errors": sum("error" in item for item in stories),
+        "segments_to_generate": sum(item.get("segments_to_generate", 0) for item in stories),
+        "fish_segments_to_generate": sum(item.get("fish_segments_to_generate", 0) for item in stories),
+        "stories": stories,
+    }
+
+
 async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False) -> bool:
     story_path = story_path.resolve()
     try:
@@ -538,7 +571,12 @@ async def main() -> int:
     parser.add_argument(
         "--story",
         type=Path,
-        help="Explicit story.json path. Omit to run the read-only inventory for all published non-October stories.",
+        help="Explicit story.json path. Omit to build a read-only generation plan for all published non-October stories.",
+    )
+    parser.add_argument(
+        "--plan-all",
+        action="store_true",
+        help="Explicitly build a no-write generation plan for every published non-October story.",
     )
     parser.add_argument(
         "--generate",
@@ -554,13 +592,14 @@ async def main() -> int:
 
     if args.allow_fish_audio and not args.generate:
         parser.error("--allow-fish-audio is valid only together with --generate")
+    if args.plan_all and args.story:
+        parser.error("--plan-all cannot be combined with --story")
     if not args.story:
         if args.generate:
             parser.error("--generate requires an explicit --story")
-        from audit_story_audio import audit
-        report = audit(ROOT)
+        report = inspect_all_generation_plans(ROOT, STAGING_ROOT)
         print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 1 if report["incomplete_stories"] else 0
+        return 1 if report["stories_with_errors"] else 0
 
     story = args.story if args.story.is_absolute() else ROOT / args.story
     return 0 if await generate_story(
