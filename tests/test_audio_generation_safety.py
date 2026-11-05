@@ -37,6 +37,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         self.write_json(story_dir / "audio-pronunciation.json", {
             "story": "sample-story",
             "language": "ar",
+            "approved_audio_only_rewrites": ["0"],
             "blocks": {"0": "Narrator pronunciation."},
         })
         return story_dir / "story.json"
