@@ -10,6 +10,12 @@ on:
       - 'scripts/audit_story_audio.py'
       - 'khaledoon/assets/audio-text-review.js'
       - 'khaledoon/admin.html'
+      - 'khaledoon/assets/audio-review-core.js'
+      - 'khaledoon/tests/audio-review-core.test.cjs'
+      - 'rebuild/reader.js'
+      - 'rebuild/reader-audio-review.js'
+      - 'rebuild/reader-review-actions.js'
+      - 'rebuild/reader.html'
       - 'tests/admin-speech-review-ui.test.cjs'
       - 'tests/audio-text-review.test.cjs'
       - 'tests/test_audit_story_audio.py'
@@ -64,6 +70,9 @@ jobs:
 
       - name: Run read-only ASR review logic tests
         run: python -m unittest discover -s tests -p 'test_audio_pronunciation_review.py' -v
+
+      - name: Run existing post-generation audio reviewer regression tests
+        run: node khaledoon/tests/audio-review-core.test.cjs
 
       - name: Run multilingual speech-text reviewer tests
         run: node --test tests/audio-text-review.test.cjs
