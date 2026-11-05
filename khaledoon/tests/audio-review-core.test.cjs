@@ -122,6 +122,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes('review = core.cloneReview(meta.audio_review || null);'), 'review decisions must be read only from story_meta.audio_review');
+  assert.ok(reviewUi.includes('var currentReview = core.cloneReview(meta.audio_review || null);') && reviewUi.includes('var next = core.applyDecision(currentReview, entry, decision);'), 'each save must merge one clip decision into the freshly read review, not overwrite other clips');
   assert.ok(reviewUi.includes('stagedPackage.section !== story.section || stagedPackage.slug !== story.slug'), 'a stale admin context must never save one story review into another story row');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
