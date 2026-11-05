@@ -165,7 +165,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </main>
 <script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
 <script src="assets/audio-review-core.js?v=20261105-review-core-10"></script>
-<script src="assets/audio-text-review.js?v=20261105-audio-text-review-2"></script>
+<script src="assets/audio-text-review.js?v=20261106-audio-pronunciation-gate-1"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"></script>
 <script>
 (function(){
@@ -1021,10 +1021,20 @@ function pubRow(it){
      var audioTextReviewValidate=el('button','btn ghost','٤. التحقق من نتيجة التدقيق');audioTextReviewValidate.type='button';audioTextReviewBox.appendChild(audioTextReviewValidate);
      var audioTextReviewStatus=el('div','fnote','لم يتم تشغيل التدقيق بعد.');audioTextReviewStatus.setAttribute('role','status');audioTextReviewBox.appendChild(audioTextReviewStatus);
      var audioTextReviewResultList=el('div','review-data');audioTextReviewResultList.style.cssText='display:grid;gap:8px';
+     var audioTextReviewArabicReviewList=el('div','review-data');audioTextReviewArabicReviewList.style.cssText='display:grid;gap:8px';
      var audioTextReviewExport=el('button','btn primary','٥. نسخ التعديلات التي وافقت عليها');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
-     audioTextReviewBox.appendChild(audioTextReviewResultList);audioTextReviewBox.appendChild(audioTextReviewExport);
-     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null);
-     function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true}
+     var audioTextReviewPronunciationExport=el('button','btn primary','٦. نسخ ملف اعتماد النطق العربي');audioTextReviewPronunciationExport.type='button';audioTextReviewPronunciationExport.disabled=true;
+     audioTextReviewBox.appendChild(audioTextReviewResultList);
+     audioTextReviewBox.appendChild(audioTextReviewArabicReviewList);
+     audioTextReviewBox.appendChild(audioTextReviewExport);
+     audioTextReviewBox.appendChild(audioTextReviewPronunciationExport);
+     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null),reviewedArabicAudioBlocks=Object.create(null);
+     function clearAudioTextReviewCards(){
+      while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);
+      while(audioTextReviewArabicReviewList.firstChild)audioTextReviewArabicReviewList.removeChild(audioTextReviewArabicReviewList.firstChild);
+      approvedAudioTextChanges=Object.create(null);reviewedArabicAudioBlocks=Object.create(null);
+      audioTextReviewExport.disabled=true;audioTextReviewPronunciationExport.disabled=true;
+     }
      audioTextReviewCopy.addEventListener('click',function(){
       var pkg=storyReviewPackageOf(it);
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
@@ -1048,8 +1058,8 @@ function pubRow(it){
       try{audioTextReviewCurrentResult=JSON.parse(audioTextReviewPaste.value)}catch(ignoreReviewParse){audioTextReviewStatus.textContent='تعذر قراءة تقرير التدقيق بعد التحقق.';return}
       var names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'},speakers={narrator:'الراوي',karma:'كارما'};
       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
-      audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك.';
-      if(!suggestions.length){audioTextReviewResultList.appendChild(el('p','fnote','لا توجد تغييرات مقترحة تحتاج إلى اعتماد.'));return}
+      audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع الاقتراحات، ثم أكّد مراجعة كل مقطع عربي يدويًا.';
+      if(!suggestions.length)audioTextReviewResultList.appendChild(el('p','fnote','لا توجد تغييرات مقترحة تحتاج إلى اعتماد؛ ما زال يلزم تأكيد مراجعة كل مقطع عربي.'));
       suggestions.forEach(function(item){
        var card=el('div','review-data');card.style.cssText='border:1px solid var(--line,#31505a);border-radius:8px;padding:10px;display:grid;gap:6px';
        card.appendChild(el('strong','',(names[item.lang]||item.lang)+' — المقطع '+(item.block_index+1)+' — '+(speakers[item.speaker]||item.speaker)));
@@ -1063,6 +1073,36 @@ function pubRow(it){
        label.appendChild(check);label.appendChild(document.createTextNode(' أوافق على استخدام هذا المقترح في النص الصوتي فقط.'));
        card.appendChild(label);audioTextReviewResultList.appendChild(card);
       });
+      var arabicSegments=audioTextReviewCurrentResult.segments.filter(function(item){return item.lang==='ar'});
+      audioTextReviewArabicReviewList.appendChild(el('strong','','مراجعة واعتماد جميع المقاطع العربية قبل التوليد'));
+      audioTextReviewArabicReviewList.appendChild(el('p','fnote','علّم كل مقطع بعد الاستماع/المراجعة البشرية. إذا لم تعتمد اقتراحًا للمقطع، سيظل النص الأصلي هو المستخدم. لا يُسمح بتوليد العربية للحكاية الجديدة حتى تكتمل هذه القائمة.'));
+      arabicSegments.forEach(function(item){
+       var card=el('div','review-data');card.style.cssText='border:1px solid var(--line,#31505a);border-radius:8px;padding:10px;display:grid;gap:6px';
+       card.appendChild(el('strong','', 'المقطع العربي '+(item.block_index+1)+' — '+(speakers[item.speaker]||item.speaker)));
+       card.appendChild(el('p','fnote','النص الأصلي: '+item.original_text));
+       if(item.proposed_audio_text!==item.original_text)card.appendChild(el('p','fnote','المقترح: '+item.proposed_audio_text));
+       var reviewLabel=el('label','fnote'),reviewCheck=document.createElement('input');reviewCheck.type='checkbox';
+       reviewCheck.addEventListener('change',function(){
+        var key='ar:'+item.block_index;
+        if(reviewCheck.checked)reviewedArabicAudioBlocks[key]=true;else delete reviewedArabicAudioBlocks[key];
+        audioTextReviewPronunciationExport.disabled=!arabicSegments.length||!arabicSegments.every(function(segment){return reviewedArabicAudioBlocks['ar:'+segment.block_index]===true});
+       });
+       reviewLabel.appendChild(reviewCheck);reviewLabel.appendChild(document.createTextNode(' راجعت هذا المقطع بنفسي وأوافق على استخدام النص المحدد له.'));
+       card.appendChild(reviewLabel);audioTextReviewArabicReviewList.appendChild(card);
+      });
+      audioTextReviewPronunciationExport.disabled=!arabicSegments.length;
+     });
+     audioTextReviewPronunciationExport.addEventListener('click',function(){
+      var pkg=storyReviewPackageOf(it),reviewedKeys=Object.keys(reviewedArabicAudioBlocks),approvedKeys=Object.keys(approvedAudioTextChanges);
+      if(!pkg||!audioTextReviewCurrentResult||!reviewedKeys.length){audioTextReviewStatus.textContent='راجع كل المقاطع العربية أولًا، ثم أعد التصدير.';return}
+      try{
+       var pronunciation=window.KHAudioTextReview.buildAudioPronunciationFile(audioTextReviewCurrentResult,pkg,reviewedKeys,approvedKeys);
+       fallbackCopy(JSON.stringify(pronunciation,null,2),function(ok){
+        audioTextReviewStatus.textContent=ok
+         ?'تم نسخ ملف audio-pronunciation.json بعد مراجعة '+pronunciation.reviewed_audio_only_blocks.length+' مقطع عربي. استبدل به الملف المبدئي في مجلد الحكاية الجديدة. لم يتغير نص الحكاية أو الصوت أو ملفات MP3، ولم يُرسل أي طلب TTS.'
+         :'تعذر نسخ ملف اعتماد النطق العربي.';
+       });
+      }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز ملف اعتماد النطق: '+String(error&&error.message||error)}
      });
      audioTextReviewExport.addEventListener('click',function(){
       var pkg=storyReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
