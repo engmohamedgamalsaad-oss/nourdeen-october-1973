@@ -239,7 +239,7 @@ async function play(entry, button) {
   if (stateNode) stateNode.textContent = 'جارٍ تحميل الملف والتحقق من بصمته…';
   if (!audio) audio = new Audio();
   try {
-    try { audio.onended = null; audio.onerror = null; audio.pause(); audio.currentTime = 0; } catch (e) {}
+    try { audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; audio.pause(); audio.currentTime = 0; } catch (e) {}
     if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
     var response = await fetch(url.href, { cache: 'no-store' });
