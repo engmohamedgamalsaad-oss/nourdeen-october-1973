@@ -297,7 +297,8 @@ async function initialize(nextStory) {
   story = nextStory;
   injectStyles();
   try {
-    await loadRow();
+    var connected = await loadRow();
+    if (!connected) { initializing = false; return; }
     await loadManifests();
     initialized = true;
     initializing = false;
