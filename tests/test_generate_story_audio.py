@@ -40,5 +40,14 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertTrue(current.is_file())
 
 
+    def test_manual_workflow_requires_consent_and_never_pushes_to_main(self):
+        workflow = (ROOT / ".github" / "workflows" / "story-audio.yml").read_text(encoding="utf-8")
+        self.assertIn("confirm_fish_audio_request", workflow)
+        self.assertIn("python scripts/generate_story_audio.py --allow-fish", workflow)
+        self.assertIn("gh pr create", workflow)
+        self.assertNotIn("git push origin HEAD:main", workflow)
+        self.assertIn("pull-requests: write", workflow)
+
+
 if __name__ == "__main__":
     unittest.main()
