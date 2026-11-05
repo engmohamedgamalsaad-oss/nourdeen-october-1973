@@ -103,7 +103,7 @@ const core = require('../assets/audio-review-core.js');
   const reader = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.js'), 'utf8');
   const reviewUi = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.js'), 'utf8');
   const readerHtml = fs.readFileSync(path.join(__dirname, '../../rebuild/reader.html'), 'utf8');
-  assert.ok(reader.includes("if(isPreview){window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new Event('kh-story-audio-context'))}"), 'draft preview must publish the story context for the audio reviewer');
+  assert.ok(reader.includes("window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new CustomEvent('kh-story-audio-context'"), 'reader must publish story context after rendering for the audio reviewer');
   assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل قبوله.'; return; }"), 'a clip cannot be accepted before full playback');
   assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
 
