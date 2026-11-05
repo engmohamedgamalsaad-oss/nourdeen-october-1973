@@ -48,6 +48,11 @@ function rowUrl() {
 }
 async function loadRow() {
   if (!getContext()) { canWrite = false; return false; }
+  var stagedPackage = null;
+  try { stagedPackage = JSON.parse(localStorage.getItem('kh-story-review-package') || 'null'); } catch (e) {}
+  if (!stagedPackage || stagedPackage.section !== story.section || stagedPackage.slug !== story.slug) {
+    throw new Error('هوية الحكاية في سياق الأدمن لا تطابق الحكاية المعروضة؛ أعد فتح المعاينة من صف الحكاية الصحيح.');
+  }
   var token = await adminToken();
   canWrite = true;
   var res = await fetch(rowUrl() + '&select=*', { headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store' });
