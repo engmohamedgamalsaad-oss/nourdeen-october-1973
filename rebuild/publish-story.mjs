@@ -250,6 +250,8 @@ export async function buildStoryFiles(story, options = {}) {
     i18n: entry.i18n, id, section: story.section, path: root,
     cover: coverLocator
   };
+  const isNewStory = existingAt < 0;
+  if (isNewStory) data.audio_pronunciation_review_required = true;
   const sourceMarkdown = '# مصادر الحكاية: ' + story.i18n.ar.title + '\n\n' +
     story.sources.map(s => '- [' + (s.i18n?.ar?.title || s.title) + '](' + s.url + ') — ' + (s.i18n?.ar?.organization || s.organization)).join('\n') + '\n';
   const files = [
@@ -262,6 +264,23 @@ export async function buildStoryFiles(story, options = {}) {
     { path: 'stories/index.json', content: JSON.stringify(index, null, 2) + '\n' },
     { path: 'stories/places.json', content: JSON.stringify(places, null, 2) + '\n' }
   ];
+  if (isNewStory) {
+    const pendingPronunciation = {
+      format: 'KHALEDOON_AUDIO_PRONUNCIATION_V1',
+      story: story.slug,
+      language: 'ar',
+      purpose: 'Audio-only Arabic pronunciation review. Visible story text remains unchanged.',
+      review_status: 'pending_human_review',
+      reviewed_audio_only_blocks: [],
+      source_texts: {},
+      approved_audio_only_rewrites: [],
+      blocks: {}
+    };
+    files.splice(3, 0, {
+      path: root + 'audio-pronunciation.json',
+      content: JSON.stringify(pendingPronunciation, null, 2) + '\n'
+    });
+  }
   return { id, section: story.section, path: root, files, format: story.format };
 }
 window.KHStoryPublisher = { buildFiles: buildStoryFiles };
