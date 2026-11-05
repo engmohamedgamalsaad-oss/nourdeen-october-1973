@@ -13,6 +13,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import sys
 import urllib.error
 import urllib.request
@@ -177,6 +178,56 @@ async def synthesize_fish_audio(
     except Exception:
         temporary.unlink(missing_ok=True)
         raise
+
+
+def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], staging_root: Path = STAGING_ROOT) -> None:
+    """Copy a verified published baseline into staging before one-clip regeneration."""
+    relative = story_path.resolve().relative_to(ROOT)
+    package = read_json(story_path)
+    section = relative.parts[1]
+    slug = str(package.get("slug") or "").strip()
+    for lang in languages:
+        staged_dir = staging_root / section / slug / lang
+        staged_manifest = staged_dir / "manifest.json"
+        if staged_manifest.is_file():
+            continue
+        if staged_dir.exists() and any(staged_dir.glob("*.mp3")):
+            raise RuntimeError(
+                f"{staged_dir}: staging MP3 files exist without a manifest; refusing to overwrite."
+            )
+        published_dir = ROOT / "assets" / "audio" / section / slug / lang
+        published_manifest = published_dir / "manifest.json"
+        if not published_manifest.is_file():
+            raise RuntimeError(
+                f"{published_manifest}: no published baseline exists for single-block regeneration."
+            )
+        manifest = read_json(published_manifest)
+        if (
+            manifest.get("story") != slug
+            or manifest.get("section") != section
+            or manifest.get("language") != lang
+            or not isinstance(manifest.get("segments"), list)
+        ):
+            raise ValueError(f"{published_manifest}: invalid baseline manifest identity or segments")
+        staged_dir.mkdir(parents=True, exist_ok=True)
+        for item in manifest["segments"]:
+            if not isinstance(item, dict):
+                raise ValueError(f"{published_manifest}: non-object segment")
+            filename = item.get("src")
+            if not isinstance(filename, str) or Path(filename).name != filename or not filename.endswith(".mp3"):
+                raise ValueError(f"{published_manifest}: unsafe audio path {filename!r}")
+            source = published_dir / filename
+            try:
+                source.resolve().relative_to(published_dir.resolve())
+            except ValueError as exc:
+                raise ValueError(f"{published_manifest}: audio symlink escapes its directory") from exc
+            if not source.is_file():
+                raise FileNotFoundError(f"{source}: baseline audio file is missing")
+            expected_hash = item.get("audio_sha256")
+            if expected_hash and hashlib.sha256(source.read_bytes()).hexdigest() != expected_hash:
+                raise ValueError(f"{source}: baseline audio hash mismatch")
+            shutil.copy2(source, staged_dir / filename)
+        shutil.copy2(published_manifest, staged_manifest)
 
 
 def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
