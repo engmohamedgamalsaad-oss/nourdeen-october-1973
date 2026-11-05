@@ -148,6 +148,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes('review = core.cloneReview(meta.audio_review || null);'), 'review decisions must be read only from story_meta.audio_review');
   assert.ok(reviewUi.includes('var currentReview = core.cloneReview(meta.audio_review || null);') && reviewUi.includes('var next = core.applyDecision(currentReview, entry, decision);'), 'each save must merge one clip decision into the freshly read review, not overwrite other clips');
+  assert.ok(reviewUi.includes("if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.')"), 'overlapping saves must show feedback instead of leaving a clip stuck in saving state');
   assert.ok(reviewUi.includes('stagedPackage.section !== story.section || stagedPackage.slug !== story.slug'), 'a stale admin context must never save one story review into another story row');
   assert.ok(reviewUi.includes('if (!connected) { initializing = false; return; }'), 'audio review controls must not render outside an admin-connected draft');
   assert.ok(reviewUi.includes('seg.audio_sha256 || review.audio_hashes[sourceBase] ||') && reviewUi.includes('knownAudioHash || seg.audio_revision'), 'review identity must reuse a verified MP3 digest across preview sessions');
