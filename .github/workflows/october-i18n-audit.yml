@@ -24,6 +24,7 @@ jobs:
           mkdir -p docs
           python3 scripts/audit_october_i18n.py > docs/october-i18n-audit.txt
           python3 scripts/audit_october_i18n.py --json > docs/october-i18n-audit.json
+          python3 scripts/probe_story_body_i18n.py > docs/story-body-i18n-probe.json
 
       - name: Upload audit reports
         uses: actions/upload-artifact@v4
@@ -40,7 +41,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -- docs/october-i18n-audit.txt docs/october-i18n-audit.json
+          git add -- docs/october-i18n-audit.txt docs/october-i18n-audit.json docs/story-body-i18n-probe.json
           if git diff --cached --quiet; then
             echo "Audit reports are unchanged; no commit needed."
             exit 0
