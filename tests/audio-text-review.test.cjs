@@ -85,6 +85,50 @@ test('exports only the suggestions explicitly approved by the administrator', ()
   assert.equal(empty.changes.length, 0);
 });
 
+test('exports a complete Arabic pronunciation sidecar only after every Arabic block is reviewed', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.lang === 'ar' && item.block_index === 0
+      ? 'صياغة صوتية أسهل.'
+      : item.original_text,
+    issue_type: item.lang === 'ar' && item.block_index === 0 ? 'heavy_sentence' : 'none',
+    reason: item.lang === 'ar' && item.block_index === 0 ? 'تسهيل النطق.' : '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  assert.throws(
+    () => review.buildAudioPronunciationFile(report, pkg, ['ar:0'], ['ar:0']),
+    /لم تتم مراجعة المقطع العربي رقم 2/
+  );
+  const sidecar = review.buildAudioPronunciationFile(
+    report, pkg, ['ar:0', 'ar:1'], ['ar:0']
+  );
+  assert.equal(sidecar.format, 'KHALEDOON_AUDIO_PRONUNCIATION_V1');
+  assert.equal(sidecar.review_status, 'human_review_complete');
+  assert.deepEqual(sidecar.reviewed_audio_only_blocks, ['0', '1']);
+  assert.deepEqual(sidecar.approved_audio_only_rewrites, ['0']);
+  assert.deepEqual(sidecar.blocks, { '0': 'صياغة صوتية أسهل.' });
+  assert.equal(sidecar.source_texts['1'], 'أنا كارما؟');
+  assert.equal(sidecar.blocks['1'], undefined);
+});
+
+test('rejects approval of non-Arabic or unchanged suggestions in pronunciation sidecar', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  assert.throws(
+    () => review.buildAudioPronunciationFile(report, pkg, ['ar:0', 'ar:1'], ['en:0']),
+    /اعتماد اقتراح غير عربي أو غير موجود/
+  );
+});
+
 test('rejects a model report that attempts to waive human review', () => {
   const pkg = packageFixture();
   const segments = review.collectSegments(pkg).map(item => ({
