@@ -165,6 +165,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </main>
 <script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
 <script src="assets/audio-review-core.js?v=20261105-review-core-10"></script>
+<script src="assets/audio-text-review.js?v=20261105-audio-text-review-1"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"></script>
 <script>
 (function(){
@@ -1011,6 +1012,38 @@ function pubRow(it){
     var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
+    if(requireUnifiedStoryPackage&&window.KHAudioTextReview){
+     var audioTextReviewBox=el('div','review-data');audioTextReviewBox.style.cssText='border:1px solid var(--line,#31505a);border-radius:10px;padding:12px;display:grid;gap:8px';
+     audioTextReviewBox.appendChild(el('strong','','مراجعة النص قبل توليد الصوت'));
+     audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق في اللغات الخمس. يراجع اللهجة المصرية للراوي وكارما، ويقترح إعادة صياغة الجمل الثقيلة بطريقة المعالجة رقم 4. لا يغيّر نص الحكاية ولا يعتمد أي اقتراح تلقائيًا.'));
+     var audioTextReviewCopy=el('button','btn ghost','٢. نسخ برومبت مدقق النص الصوتي');audioTextReviewCopy.type='button';audioTextReviewBox.appendChild(audioTextReviewCopy);
+     var audioTextReviewPaste=area('',7,100000);audioTextReviewPaste.placeholder='الصق هنا تقرير KHALEDOON_AUDIO_TEXT_REVIEW_V1 الناتج من أداة الذكاء الاصطناعي…';audioTextReviewPaste.setAttribute('aria-label','الصق نتيجة تدقيق النص الصوتي');audioTextReviewBox.appendChild(fld('٣. نتيجة مدقق النص الصوتي',audioTextReviewPaste,'التحقق هنا بنيوي فقط؛ لا يطبّق أي اقتراح ولا يحفظه في الحكاية.'));
+     var audioTextReviewValidate=el('button','btn ghost','٤. التحقق من نتيجة التدقيق');audioTextReviewValidate.type='button';audioTextReviewBox.appendChild(audioTextReviewValidate);
+     var audioTextReviewStatus=el('div','fnote','لم يتم تشغيل التدقيق بعد.');audioTextReviewStatus.setAttribute('role','status');audioTextReviewBox.appendChild(audioTextReviewStatus);
+     audioTextReviewCopy.addEventListener('click',function(){
+      var pkg=storyReviewPackageOf(it);
+      if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
+      try{
+       var diagnostics=window.KHAudioTextReview.diagnose(pkg),prompt=window.KHAudioTextReview.buildPrompt(pkg);
+       fallbackCopy(prompt,function(ok){
+        audioTextReviewStatus.textContent=ok
+         ?'تم نسخ برومبت التدقيق. عدد المقاطع: '+diagnostics.length+'. التنبيهات البنيوية الأولية: '+diagnostics.filter(function(item){return item.flags.length>0}).length+'. لم يتم إرسال أي طلب صوت أو تعديل الحكاية.'
+         :'تعذر نسخ البرومبت؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.';
+       });
+      }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز التدقيق: '+String(error&&error.message||error)}
+     });
+     audioTextReviewValidate.addEventListener('click',function(){
+      var pkg=storyReviewPackageOf(it);
+      if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة موحدة مرتبطة بهذه المسودة.';return}
+      var result=window.KHAudioTextReview.validateResult(audioTextReviewPaste.value,pkg);
+      if(result.ok){
+       audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. لم يتم تطبيق أو حفظ أي اقتراح؛ يلزم اعتماد بشري لكل تعديل قبل استخدامه في الصوت.';
+      }else{
+       audioTextReviewStatus.textContent='التقرير غير صالح ('+result.errors.length+' ملاحظات): '+result.errors.slice(0,5).join(' | ');
+      }
+     });
+     aiPanel.appendChild(audioTextReviewBox);
+    }
     var aiPaste=area('',12,100000),aiPasteLocked=false;aiPaste.placeholder='الصق هنا JSON الناتج من البرومبت الموحد…';aiPaste.setAttribute('aria-label','الصق ناتج الذكاء الاصطناعي JSON');aiPanel.appendChild(fld('٢. الصق ناتج الذكاء الاصطناعي هنا',aiPaste,'الصق الناتج أولًا. اضغط «تعديل» لتنفيذ الاستيراد وقفل الخانة؛ واضغطه مرة أخرى لفتحها للتعديل أو المسح.'));
     var aiClear=el('button','btn ghost','مسح محتوى خانة AI');aiClear.type='button';aiClear.setAttribute('aria-label','مسح محتوى ناتج الذكاء الاصطناعي');aiPanel.appendChild(aiClear);
     /* لا نعرض لوحة الإصلاح؛ نكتفي برسالة الخطأ عند فشل التحقق. */
