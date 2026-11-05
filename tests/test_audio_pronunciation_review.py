@@ -124,6 +124,56 @@ class AudioPronunciationReviewTests(unittest.TestCase):
             self.assertTrue(report["summary"]["human_review_required"])
             self.assertEqual(audio_path.read_bytes(), b"audio-bytes")
 
+    def test_selected_block_review_ignores_unselected_manifest_clips(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story_dir = root / "stories" / "science" / "001"
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "ar"
+            audio_dir.mkdir(parents=True)
+            story_path = story_dir / "story.json"
+            self.write_json(story_path, {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "sample",
+                "i18n": {"ar": {"blocks": [
+                    {"speaker": "narrator", "text": "First block."},
+                    {"speaker": "karma", "text": "Second block."},
+                ]}},
+            })
+            segments = []
+            for index, filename, text in (
+                (0, "000.mp3", "First block."),
+                (1, "001.mp3", "Second block."),
+            ):
+                payload = f"audio-{index}".encode()
+                (audio_dir / filename).write_bytes(payload)
+                segments.append({
+                    "block_index": index,
+                    "chunk_index": 0,
+                    "speaker": "narrator" if index == 0 else "karma",
+                    "src": filename,
+                    "text": text,
+                    "audio_sha256": hashlib.sha256(payload).hexdigest(),
+                })
+            self.write_json(audio_dir / "manifest.json", {
+                "story": "sample", "section": "science", "language": "ar",
+                "segments": segments,
+            })
+            fake = FakeModel([
+                {"word": "Second", "start": 0.1, "end": 0.3, "probability": 0.98},
+                {"word": "block.", "start": 0.4, "end": 0.7, "probability": 0.98},
+            ])
+            with patch.object(reviewer, "ROOT", root):
+                report = reviewer.review_story_audio(
+                    story_path, "ar", root / "assets" / "audio", fake,
+                    block_indexes=(1,),
+                )
+            self.assertEqual(fake.calls, 1)
+            self.assertEqual(report["selected_blocks"], [1])
+            self.assertEqual(report["missing_blocks"], [])
+            self.assertEqual(len(report["reports"]), 1)
+            self.assertEqual(report["reports"][0]["block_index"], 1)
+
     def test_unapproved_pronunciation_override_is_not_used_as_expected_audio_text(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
