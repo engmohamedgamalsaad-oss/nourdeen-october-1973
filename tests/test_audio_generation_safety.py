@@ -49,7 +49,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             fish = AsyncMock()
             edge = AsyncMock()
             with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
-                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize_edge_audio", edge):
+                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
                 result = asyncio.run(audio.generate_story(story, dry_run=True))
             self.assertTrue(result)
             fish.assert_not_awaited()
