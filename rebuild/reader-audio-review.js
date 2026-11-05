@@ -144,7 +144,7 @@ async function loadManifests() {
       pendingEntries.push((async function () {
         var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
         var storyKey = story.section + '/' + story.slug + '#' + blockIndex + ':' + chunkIndex;
-        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, { voice: seg.voice, provider: seg.provider, model: seg.model });
+        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, { voice: seg.voice, provider: seg.provider, model: seg.model, audio_revision: seg.audio_revision || seg.audio_sha256 || '' });
         var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
           speaker: seg.speaker, base: base, text: seg.text, src: seg.src, manifest: manifest, segment: seg };
         var regen = Number(review.regen[base] || 0);
@@ -180,7 +180,7 @@ function play(entry, button) {
   if (stateNode) stateNode.textContent = 'جارٍ الاستماع إلى المقطع…';
   if (!audio) audio = new Audio();
   try { audio.pause(); audio.currentTime = 0; } catch (e) {}
-  var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
+  var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.segment.audio_revision || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
   audio.src = url.href;
   var old = document.querySelector('.kh-audio-review-playing');
   if (old) old.classList.remove('kh-audio-review-playing');
