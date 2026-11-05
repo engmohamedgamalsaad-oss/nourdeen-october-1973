@@ -1090,13 +1090,14 @@ function pubRow(it){
        reviewLabel.appendChild(reviewCheck);reviewLabel.appendChild(document.createTextNode(' راجعت هذا المقطع بنفسي وأوافق على استخدام النص المحدد له.'));
        card.appendChild(reviewLabel);audioTextReviewArabicReviewList.appendChild(card);
       });
-      audioTextReviewPronunciationExport.disabled=!arabicSegments.length;
+      audioTextReviewPronunciationExport.disabled=true;
      });
      audioTextReviewPronunciationExport.addEventListener('click',function(){
       var pkg=storyReviewPackageOf(it),reviewedKeys=Object.keys(reviewedArabicAudioBlocks),approvedKeys=Object.keys(approvedAudioTextChanges);
       if(!pkg||!audioTextReviewCurrentResult||!reviewedKeys.length){audioTextReviewStatus.textContent='راجع كل المقاطع العربية أولًا، ثم أعد التصدير.';return}
       try{
-       var pronunciation=window.KHAudioTextReview.buildAudioPronunciationFile(audioTextReviewCurrentResult,pkg,reviewedKeys,approvedKeys);
+       var arabicApprovedKeys=approvedKeys.filter(function(key){return key.indexOf('ar:')===0});
+       var pronunciation=window.KHAudioTextReview.buildAudioPronunciationFile(audioTextReviewCurrentResult,pkg,reviewedKeys,arabicApprovedKeys);
        fallbackCopy(JSON.stringify(pronunciation,null,2),function(ok){
         audioTextReviewStatus.textContent=ok
          ?'تم نسخ ملف audio-pronunciation.json بعد مراجعة '+pronunciation.reviewed_audio_only_blocks.length+' مقطع عربي. استبدل به الملف المبدئي في مجلد الحكاية الجديدة. لم يتغير نص الحكاية أو الصوت أو ملفات MP3، ولم يُرسل أي طلب TTS.'
