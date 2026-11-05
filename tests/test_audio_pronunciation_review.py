@@ -124,6 +124,62 @@ class AudioPronunciationReviewTests(unittest.TestCase):
             self.assertTrue(report["summary"]["human_review_required"])
             self.assertEqual(audio_path.read_bytes(), b"audio-bytes")
 
+    def test_unapproved_pronunciation_override_is_not_used_as_expected_audio_text(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story_dir = root / "stories" / "science" / "001"
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "ar"
+            audio_dir.mkdir(parents=True)
+            story_path = story_dir / "story.json"
+            self.write_json(story_path, {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "sample",
+                "i18n": {"ar": {"blocks": [{"speaker": "narrator", "text": "Visible story text."}]}},
+            })
+            self.write_json(story_dir / "audio-pronunciation.json", {
+                "story": "sample",
+                "language": "ar",
+                "approved_audio_only_rewrites": [],
+                "blocks": {"0": "Unapproved audio rewrite."},
+            })
+            (audio_dir / "000.mp3").write_bytes(b"audio")
+            self.write_json(audio_dir / "manifest.json", {
+                "story": "sample", "section": "science", "language": "ar",
+                "segments": [{"block_index": 0, "chunk_index": 0, "speaker": "narrator", "src": "000.mp3"}],
+            })
+            fake = FakeModel([{"word": "Visible", "start": 0.1, "end": 0.3, "probability": 0.98},
+                              {"word": "story", "start": 0.4, "end": 0.6, "probability": 0.98},
+                              {"word": "text.", "start": 0.7, "end": 0.9, "probability": 0.98}])
+            with patch.object(reviewer, "ROOT", root):
+                report = reviewer.review_story_audio(story_path, "ar", root / "assets" / "audio", fake)
+            self.assertEqual(report["reports"][0]["expected_text"], "Visible story text.")
+
+    def test_stale_manifest_text_is_blocked_before_asr(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story_dir = root / "stories" / "science" / "001"
+            audio_dir = root / "assets" / "audio" / "science" / "sample" / "en"
+            audio_dir.mkdir(parents=True)
+            story_path = story_dir / "story.json"
+            self.write_json(story_path, {
+                "format": "KHALEDOON_STORY",
+                "section": "science",
+                "slug": "sample",
+                "i18n": {"en": {"blocks": [{"speaker": "narrator", "text": "Current story text."}]}},
+            })
+            (audio_dir / "000.mp3").write_bytes(b"audio")
+            self.write_json(audio_dir / "manifest.json", {
+                "story": "sample", "section": "science", "language": "en",
+                "segments": [{"block_index": 0, "chunk_index": 0, "speaker": "narrator",
+                              "src": "000.mp3", "text": "Stale manifest text."}],
+            })
+            fake = FakeModel([])
+            with patch.object(reviewer, "ROOT", root):
+                report = reviewer.review_story_audio(story_path, "en", root / "assets" / "audio", fake)
+            self.assertEqual(fake.calls, 0)
+            self.assertEqual(report["reports"][0]["status"], "manifest_text_mismatch")
+
     def test_skips_transcription_when_audio_hash_changed(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
