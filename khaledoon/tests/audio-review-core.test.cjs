@@ -157,6 +157,10 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('seg.audio_sha256 || review.audio_hashes[sourceBase] ||') && reviewUi.includes('knownAudioHash || seg.audio_revision'), 'review identity must reuse a verified MP3 digest across preview sessions');
   assert.ok(reviewUi.includes('core.sha256Bytes(await blob.arrayBuffer())'), 'the actual MP3 bytes played by the reviewer must be hashed and checked');
   assert.ok(reviewUi.includes("report.format !== 'KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_V1'"), 'ASR reports must use the supported report contract');
+  assert.ok(reviewUi.includes("reportEntries.length !== report.reports.length"), 'ASR reports with unmatchable entries must be rejected rather than partially trusted');
+  assert.ok(reviewUi.includes('جزء متوقع غير موجود في التفريغ'), 'ASR review must expose expected words missing from the recognized transcript');
+  assert.ok(reviewUi.includes('تطابق النص:'), 'ASR review must show transcript match ratio alongside language detection');
+
   assert.ok(reviewUi.includes("report.story !== story.slug || report.section !== story.section"), 'ASR reports must match the active story and section');
   assert.ok(reviewUi.includes("digest.toLowerCase() !== String(item.audio_sha256).toLowerCase()"), 'ASR report entries must be rejected when the current MP3 hash differs');
   assert.ok(reviewUi.includes('playPronunciationRange(match, item, listen, panel)'), 'ASR findings must offer targeted word playback without changing the full-listen approval gate');
