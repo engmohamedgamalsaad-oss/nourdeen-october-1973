@@ -5,6 +5,8 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     paths:
       - 'scripts/review_pronunciation.py'
+      - 'scripts/audit_story_audio.py'
+      - 'tests/test_audit_story_audio.py'
       - 'scripts/generate_story_audio.py'
       - 'tests/test_review_pronunciation.py'
       - 'stories/science/015/story.json'
