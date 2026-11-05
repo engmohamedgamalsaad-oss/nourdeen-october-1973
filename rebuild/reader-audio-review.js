@@ -176,16 +176,6 @@ async function loadManifests() {
   var pendingEntries = [];
   LANGS.forEach(function (lang) {
     var manifest = manifests[lang];
-  if (!document.getElementById('kh-audio-asr-import')) {
-    var importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
-    var importLabel = document.createElement('label'); importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
-    var input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
-    input.addEventListener('change', function () { importPronunciationReport(input.files && input.files[0]); });
-    importer.append(importLabel, input); host.parentNode.insertBefore(importer, host);
-  } else {
-    var importLabelExisting = document.querySelector('#kh-audio-asr-import label');
-    if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
-  }
     if (!manifest) return;
     manifest.segments.forEach(function (seg) {
       pendingEntries.push((async function () {
@@ -384,7 +374,7 @@ async function playPronunciationRange(match, item, button, panel) {
   if (!match || !match.blob || !Number.isFinite(Number(item.start))) return;
   try {
     if (!audio) audio = new Audio();
-    try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
+    try { audio.pause(); audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; } catch (e) {}
     if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
     activeObjectUrl = URL.createObjectURL(match.blob);
     audio.src = activeObjectUrl;
@@ -418,6 +408,17 @@ function render() {
   var lang = document.documentElement.lang;
   var host = $('blocks');
   if (!host) return;
+  var importer = document.getElementById('kh-audio-asr-import');
+  if (!importer) {
+    importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
+    var importLabel = document.createElement('label'); importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    var input = document.createElement('input'); input.type = 'file'; input.accept = '.json,application/json';
+    input.addEventListener('change', function () { importPronunciationReport(input.files && input.files[0]); });
+    importer.append(importLabel, input); host.parentNode.insertBefore(importer, host);
+  } else {
+    var importLabelExisting = importer.querySelector('label');
+    if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+  }
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
   blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
   if (!manifests[lang]) return;
