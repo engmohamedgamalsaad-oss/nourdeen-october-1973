@@ -45,12 +45,20 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
   if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
     return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
   }
-  var seen = Object.create(null), chunks = Object.create(null);
+  var seen = Object.create(null), chunks = Object.create(null), speakable = Object.create(null), speakableCount = 0;
+  for (var b = 0; b < blocks.length; b++) {
+    var candidate = blocks[b] || {};
+    if ((candidate.speaker === 'narrator' || candidate.speaker === 'karma') && norm(candidate.text || '')) {
+      speakable[b] = true;
+      speakableCount++;
+    }
+  }
+  if (!speakableCount) return { ok: false, error: 'لا توجد مقاطع راوٍ أو كارما قابلة للمراجعة.' };
   for (var i = 0; i < segments.length; i++) {
     var seg = segments[i] || {};
     var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
-    if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= blocks.length) {
-      return { ok: false, error: 'يوجد مقطع صوتي مرتبط بترقيم خارج حدود الحكاية.' };
+    if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex >= blocks.length || !speakable[blockIndex]) {
+      return { ok: false, error: 'يوجد مقطع صوتي مرتبط بكتلة غير منطوقة أو بترقيم خارج حدود الحكاية.' };
     }
     if (!Number.isInteger(chunkIndex) || chunkIndex < 0) {
       return { ok: false, error: 'ترقيم أجزاء المقطع الصوتي غير صالح.' };
@@ -65,6 +73,7 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
     chunks[blockIndex].push(chunkIndex);
   }
   for (var b = 0; b < blocks.length; b++) {
+    if (!speakable[b]) continue;
     var indexes = chunks[b];
     if (!indexes || !indexes.length) {
       return { ok: false, error: 'لا يوجد ملف صوتي للمقطع ' + (b + 1) + '.' };
