@@ -479,20 +479,6 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
                 digest = None
                 for candidate_voice in ordered_candidates:
                     candidate_hash = text_hash(chunk_text, candidate_voice, rate, pitch, lang)
-                    if speaker == "karma" and is_original_karma_clip(
-                        block_index,
-                        chunk_index,
-                        chunk_text,
-                        candidate_voice,
-                        previous,
-                        destination,
-                    ):
-                        selected_voice = candidate_voice
-                        digest = previous["hash"]
-                        print(
-                            f"PRESERVED ORIGINAL KARMA {relative.parent}/{lang}/{filename}"
-                        )
-                        break
                     if (
                         block_index not in set(force_blocks)
                         and previous.get("hash") == candidate_hash
