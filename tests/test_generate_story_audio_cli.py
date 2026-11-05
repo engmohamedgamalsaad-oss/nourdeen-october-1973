@@ -266,7 +266,10 @@ class GenerationConfirmationTests(unittest.TestCase):
             self.assertEqual(old_hash, expected_legacy_hash)
             audio_dir = root / "assets" / "audio" / "science" / "legacy-audio-story" / "en"
             audio_dir.mkdir(parents=True)
-            (audio_dir / "000.mp3").write_bytes(b"x" * 1024)
+            audio_bytes = b"x" * 1024
+            (audio_dir / "000.mp3").write_bytes(audio_bytes)
+            orphaned_path = audio_dir / "999.mp3"
+            orphaned_path.write_bytes(b"preserve this older clip")
             manifest = {
                 "version": 1,
                 "engine": "fish-audio+edge-tts",
@@ -293,6 +296,11 @@ class GenerationConfirmationTests(unittest.TestCase):
             fish_tts.assert_not_awaited()
             saved = json.loads((audio_dir / "manifest.json").read_text(encoding="utf-8"))
             self.assertEqual(saved["segments"][0]["hash"], old_hash)
+            self.assertEqual(
+                saved["segments"][0]["audio_sha256"],
+                __import__("hashlib").sha256(audio_bytes).hexdigest(),
+            )
+            self.assertTrue(orphaned_path.exists(), "unreferenced MP3 files must be preserved for manual review")
 
     def test_generator_rejects_story_path_outside_repository(self):
         with tempfile.TemporaryDirectory() as temporary:
