@@ -277,6 +277,18 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             raise ValueError(f"{relative}: missing {lang} blocks")
         language_dir = staging_root / section / slug / lang
         manifest_path = language_dir / "manifest.json"
+        asset_dir = language_dir
+        if force_blocks and not manifest_path.is_file():
+            published_dir = ROOT / "assets" / "audio" / section / slug / lang
+            published_manifest = published_dir / "manifest.json"
+            if published_manifest.is_file():
+                manifest_path = published_manifest
+                asset_dir = published_dir
+        if force_blocks and not manifest_path.is_file():
+            raise ValueError(
+                f"{relative}: no existing audio manifest for {lang}; "
+                "single-block regeneration requires a complete baseline."
+            )
         manifest = read_json(manifest_path) if manifest_path.is_file() else {}
         if manifest and (
             manifest.get("story") != slug
@@ -292,6 +304,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         needed = 0
         fish_needed = 0
         found_forced: set[int] = set()
+        unrelated_missing: list[int] = []
         for index, block in enumerate(blocks):
             if not isinstance(block, dict) or block.get("speaker") not in ("karma", "narrator"):
                 continue
@@ -310,7 +323,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             for chunk_index, chunk in enumerate(chunks):
                 previous = old.get((index, chunk_index), {})
                 filename = f"{index:03d}.mp3" if chunk_index == 0 else f"{index:03d}-{chunk_index:02d}.mp3"
-                target = language_dir / filename
+                target = asset_dir / filename
                 digest = text_hash(chunk, selected_voice, rate, pitch, lang)
                 unchanged = (
                     index not in forced
@@ -320,9 +333,17 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                     and target.stat().st_size >= 512
                 )
                 if not unchanged:
-                    needed += 1
-                    if lang == "ar":
-                        fish_needed += 1
+                    if forced and index not in forced:
+                        unrelated_missing.append(index)
+                    else:
+                        needed += 1
+                        if lang == "ar":
+                            fish_needed += 1
+        if unrelated_missing:
+            raise ValueError(
+                f"{relative}: non-selected {lang} blocks need audio too: "
+                f"{sorted(set(unrelated_missing))}; refusing broad regeneration."
+            )
         missing_forced = forced - found_forced
         if missing_forced:
             raise ValueError(f"{relative}: forced blocks are not speakable in {lang}: {sorted(missing_forced)}")
@@ -418,6 +439,8 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
+    if force_blocks and not dry_run:
+        seed_staging_from_published(story_path, languages_to_generate, STAGING_ROOT)
     plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate, force_blocks)
     print(
         f"PLAN {relative.parent}: languages={len(plan['languages'])} "
