@@ -139,19 +139,20 @@ function applyDecision(review, entry, decision, now) {
 }
 
 /* شرط اعتماد المعاينة: كل مقطع (في اللغات الخمس) جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
-function evaluateGate(entries, review, readyByKey) {
-  var r = cloneReview(review), out = { ok: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
+function evaluateGate(entries, review, readyByKey, listenedByKey) {
+  var r = cloneReview(review), listened = listenedByKey || {}, out = { ok: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0 };
   entries.forEach(function (e) {
     var c = r.clips[e.key];
     if (readyByKey[e.key] !== 'ready') out.notReady++;
+    if (listened[e.key] !== true) out.notListened++;
     if (c && c.status === 'accepted') out.accepted++;
     else if (c && c.status === 'rejected') out.rejected++;
     else out.unreviewed++;
   });
-  out.ok = out.total > 0 && out.notReady === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
+  out.ok = out.total > 0 && out.notReady === 0 && out.notListened === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
   return out;
 }
-function evaluateFiveLanguageGate(manifests, entries, review, readyByKey) {
+function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listenedByKey) {
   var missing = LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
   if (missing.length) {
     return {
@@ -159,13 +160,14 @@ function evaluateFiveLanguageGate(manifests, entries, review, readyByKey) {
       accepted: 0, rejected: 0, unreviewed: Array.isArray(entries) ? entries.length : 0, notReady: 0
     };
   }
-  return evaluateGate(entries, review, readyByKey);
+  return evaluateGate(entries, review, readyByKey, listenedByKey);
 }
 
 function gateMessage(g) {
   if (g.ok) return '';
   var parts = [];
   if (g.notReady) parts.push(g.notReady + ' مقطع صوته غير جاهز');
+  if (g.notListened) parts.push(g.notListened + ' مقطع لم يتم الاستماع إليه كاملًا في هذه المعاينة');
   if (g.rejected) parts.push(g.rejected + ' مقطع مرفوض');
   if (g.unreviewed) parts.push(g.unreviewed + ' مقطع لم تتم مراجعته');
   return 'لا يمكن اعتماد المعاينة بعد: ' + (parts.join('، ') || 'لا توجد مقاطع صوتية') + '. راجع كل مقاطع اللغات الخمس واقبلها أولًا.';
