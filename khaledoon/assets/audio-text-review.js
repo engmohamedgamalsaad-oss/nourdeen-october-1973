@@ -167,13 +167,65 @@
     };
   }
 
+  function buildApprovedAudioPronunciation(input, pkg, approvedKeys) {
+    var checked = validateResult(input, pkg);
+    if (!checked.ok) throw new Error('لا يمكن اعتماد مراجعة غير صالحة: ' + checked.errors.slice(0, 3).join(' | '));
+    var result = typeof input === 'string' ? JSON.parse(input) : input;
+    var approved = Object.create(null);
+    (Array.isArray(approvedKeys) ? approvedKeys : []).forEach(function (key) {
+      approved[String(key)] = true;
+    });
+    var suggestions = Object.create(null);
+    result.segments.forEach(function (item) {
+      if (item.issue_type !== 'none' && item.proposed_audio_text !== item.original_text) {
+        suggestions[item.lang + ':' + item.block_index] = item;
+      }
+    });
+    Object.keys(approved).forEach(function (key) {
+      if (!suggestions[key]) throw new Error('تم تحديد اقتراح غير موجود أو غير قابل للاعتماد: ' + key);
+    });
+    var rewrites = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
+    var reviewSegments = result.segments.map(function (item) {
+      var key = item.lang + ':' + item.block_index;
+      var selected = approved[key] === true && suggestions[key];
+      var spoken = selected ? item.proposed_audio_text : item.original_text;
+      if (selected) rewrites[item.lang][String(item.block_index)] = spoken;
+      return {
+        lang: item.lang,
+        block_index: item.block_index,
+        speaker: item.speaker,
+        source_text: item.original_text,
+        approved_audio_text: spoken,
+        decision: selected ? 'approved_rewrite' : 'approved_original'
+      };
+    });
+    var arabicIndexes = Object.keys(rewrites.ar).sort(function (a, b) { return Number(a) - Number(b); });
+    return {
+      format: 'KHALEDOON_AUDIO_PRONUNCIATION_V1',
+      story: pkg.slug,
+      section: pkg.section,
+      language: 'ar',
+      approved_audio_only_rewrites: arabicIndexes,
+      blocks: rewrites.ar,
+      approved_audio_text_rewrites: rewrites,
+      review: {
+        format: 'KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1',
+        status: 'approved_by_admin',
+        languages: LANGS.slice(),
+        total_segments: reviewSegments.length,
+        segments: reviewSegments
+      }
+    };
+  }
+
   var api = {
     LANGS: LANGS,
     collectSegments: collectSegments,
     diagnose: diagnose,
     buildPrompt: buildPrompt,
     validateResult: validateResult,
-    buildApprovedPatch: buildApprovedPatch
+    buildApprovedPatch: buildApprovedPatch,
+    buildApprovedAudioPronunciation: buildApprovedAudioPronunciation
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.KHAudioTextReview = api;

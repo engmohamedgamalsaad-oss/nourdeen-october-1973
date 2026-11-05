@@ -92,6 +92,83 @@ def approved_pronunciation_blocks(
     return {index: raw_blocks[index] for index in approved_indexes}
 
 
+def validate_required_audio_text_review(
+    pronunciation: dict[str, Any],
+    package: dict[str, Any],
+    pronunciation_path: Path,
+) -> dict[str, dict[str, str]]:
+    """Require a human-approved, complete five-language speech-text review for new stories."""
+    slug = str(package.get("slug") or "").strip()
+    if pronunciation.get("format") != "KHALEDOON_AUDIO_PRONUNCIATION_V1":
+        raise ValueError(f"{pronunciation_path}: missing approved audio-pronunciation format")
+    if pronunciation.get("story") != slug or pronunciation.get("section") != package.get("section"):
+        raise ValueError(f"{pronunciation_path}: story/section metadata mismatch")
+    review = pronunciation.get("review")
+    if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
+        raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
+    if review.get("status") != "approved_by_admin" or review.get("languages") != list(LANGUAGES):
+        raise ValueError(f"{pronunciation_path}: five-language admin approval is incomplete")
+    raw_segments = review.get("segments")
+    translations = package.get("i18n")
+    if not isinstance(raw_segments, list) or not isinstance(translations, dict):
+        raise ValueError(f"{pronunciation_path}: invalid review segments or story translations")
+    expected: dict[tuple[str, int], tuple[str, str]] = {}
+    for lang in LANGUAGES:
+        localized = translations.get(lang)
+        blocks = localized.get("blocks") if isinstance(localized, dict) else None
+        if not isinstance(blocks, list) or not blocks:
+            raise ValueError(f"{pronunciation_path}: story is missing {lang} blocks")
+        for index, block in enumerate(blocks):
+            if not isinstance(block, dict) or block.get("speaker") not in ("narrator", "karma"):
+                continue
+            source = str(block.get("text") or "").strip()
+            if source:
+                expected[(lang, index)] = (str(block["speaker"]), source)
+    if review.get("total_segments") != len(expected) or len(raw_segments) != len(expected):
+        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in all five languages")
+    seen: set[tuple[str, int]] = set()
+    rewrites: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
+    for item in raw_segments:
+        if not isinstance(item, dict):
+            raise ValueError(f"{pronunciation_path}: invalid review segment")
+        lang = item.get("lang")
+        index = item.get("block_index")
+        if lang not in LANGUAGES or not isinstance(index, int) or isinstance(index, bool):
+            raise ValueError(f"{pronunciation_path}: invalid review language or block index")
+        key = (lang, index)
+        if key in seen or key not in expected:
+            raise ValueError(f"{pronunciation_path}: duplicate or unknown review segment {key}")
+        seen.add(key)
+        speaker, source = expected[key]
+        spoken = item.get("approved_audio_text")
+        decision = item.get("decision")
+        if item.get("speaker") != speaker or item.get("source_text") != source:
+            raise ValueError(f"{pronunciation_path}: source text/speaker changed for {lang} block {index}")
+        if not isinstance(spoken, str) or not spoken.strip():
+            raise ValueError(f"{pronunciation_path}: empty approved text for {lang} block {index}")
+        if decision == "approved_original":
+            if spoken != source:
+                raise ValueError(f"{pronunciation_path}: original decision changed text for {lang} block {index}")
+        elif decision == "approved_rewrite":
+            if spoken == source:
+                raise ValueError(f"{pronunciation_path}: rewrite decision has no rewrite for {lang} block {index}")
+            rewrites[lang][str(index)] = spoken
+        else:
+            raise ValueError(f"{pronunciation_path}: segment lacks explicit human approval for {lang} block {index}")
+    if seen != set(expected):
+        raise ValueError(f"{pronunciation_path}: some spoken blocks were not approved")
+    declared = pronunciation.get("approved_audio_text_rewrites")
+    if not isinstance(declared, dict):
+        raise ValueError(f"{pronunciation_path}: approved multilingual rewrites are missing")
+    for lang in LANGUAGES:
+        if declared.get(lang) != rewrites[lang]:
+            raise ValueError(f"{pronunciation_path}: approved {lang} rewrites do not match human decisions")
+    arabic_indexes = sorted(rewrites["ar"], key=int)
+    if pronunciation.get("blocks") != rewrites["ar"] or pronunciation.get("approved_audio_only_rewrites") != arabic_indexes:
+        raise ValueError(f"{pronunciation_path}: Arabic compatibility fields do not match approved decisions")
+    return rewrites
+
+
 def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     fields = [GENERATOR_VERSION, lang, text, voice, rate, pitch]
     if lang == "ar":
@@ -289,15 +366,30 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     selected_languages = tuple(dict.fromkeys(languages))
     if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
         raise ValueError(f"Unsupported language selection: {selected_languages}")
+    metadata_path = story_path.with_name("data.json")
+    metadata = read_json(metadata_path) if metadata_path.is_file() else {}
+    review_required = metadata.get("audio_text_review_required") is True
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    if review_required and not pronunciation_path.is_file():
+        raise ValueError(
+            f"{relative}: new story is blocked until the admin-approved five-language "
+            "audio-pronunciation.json is saved beside story.json."
+        )
     pronunciation = (
         read_json(pronunciation_path)
-        if "ar" in selected_languages and pronunciation_path.is_file()
+        if (review_required or "ar" in selected_languages) and pronunciation_path.is_file()
         else {}
     )
-    pronunciation_blocks = approved_pronunciation_blocks(
-        pronunciation, slug, pronunciation_path
-    )
+    if review_required:
+        approved_text_by_language = validate_required_audio_text_review(
+            pronunciation, package, pronunciation_path
+        )
+    else:
+        approved_text_by_language = {lang: {} for lang in LANGUAGES}
+        if "ar" in selected_languages:
+            approved_text_by_language["ar"] = approved_pronunciation_blocks(
+                pronunciation, slug, pronunciation_path
+            )
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
@@ -353,7 +445,12 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             original = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
             if not original:
                 continue
-            spoken = prepare_arabic_audio_text(original, pronunciation_blocks.get(str(index))) if lang == "ar" else original
+            approved_text = approved_text_by_language.get(lang, {}).get(str(index))
+            spoken = (
+                prepare_arabic_audio_text(original, approved_text)
+                if lang == "ar"
+                else re.sub(r"\\s+", " ", approved_text or original).strip()
+            )
             chunks = split_audio_chunks(spoken)
             if index in forced:
                 found_forced.add(index)
@@ -455,27 +552,43 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
         raise ValueError(f"Invalid or missing story slug in {relative}: {slug!r}")
 
     metadata_path = story_path.with_name("data.json")
-    if not metadata_path.is_file() or read_json(metadata_path).get("published") is not True:
+    if not metadata_path.is_file():
         print(f"SKIP unpublished or unverified story: {relative}")
         return False
+    metadata = read_json(metadata_path)
+    if metadata.get("published") is not True:
+        print(f"SKIP unpublished or unverified story: {relative}")
+        return False
+    review_required = metadata.get("audio_text_review_required") is True
 
     translations = package.get("i18n")
     if not isinstance(translations, dict):
         raise ValueError(f"Missing i18n object in {relative}")
 
-    # Pronunciation overrides affect Arabic spoken text only.
     languages_to_generate = tuple(dict.fromkeys(languages))
     if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
         raise ValueError(f"Unsupported language selection: {languages_to_generate}")
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
+    if review_required and not pronunciation_path.is_file():
+        raise ValueError(
+            f"{relative}: new story is blocked until the admin-approved five-language "
+            "audio-pronunciation.json is saved beside story.json."
+        )
     pronunciation_data = (
         read_json(pronunciation_path)
-        if "ar" in languages_to_generate and pronunciation_path.is_file()
+        if (review_required or "ar" in languages_to_generate) and pronunciation_path.is_file()
         else {}
     )
-    pronunciation_blocks = approved_pronunciation_blocks(
-        pronunciation_data, slug, pronunciation_path
-    )
+    if review_required:
+        approved_text_by_language = validate_required_audio_text_review(
+            pronunciation_data, package, pronunciation_path
+        )
+    else:
+        approved_text_by_language = {lang: {} for lang in LANGUAGES}
+        if "ar" in languages_to_generate:
+            approved_text_by_language["ar"] = approved_pronunciation_blocks(
+                pronunciation_data, slug, pronunciation_path
+            )
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
@@ -560,7 +673,12 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             if speaker not in ("karma", "narrator") or not original_text:
                 continue
 
-            audio_text = prepare_arabic_audio_text(original_text, pronunciation_blocks.get(str(block_index))) if lang == "ar" else original_text
+            approved_text = approved_text_by_language.get(lang, {}).get(str(block_index))
+            audio_text = (
+                prepare_arabic_audio_text(original_text, approved_text)
+                if lang == "ar"
+                else re.sub(r"\\s+", " ", approved_text or original_text).strip()
+            )
             chunks = split_audio_chunks(audio_text)
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
             use_fish_audio = lang == "ar" and speaker in ("karma", "narrator")

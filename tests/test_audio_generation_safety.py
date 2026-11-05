@@ -16,7 +16,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
 
-    def make_story(self, root: Path, section: str = "science", story_id: str = "001") -> Path:
+    def make_story(self, root: Path, section: str = "science", story_id: str = "001", require_review: bool = False) -> Path:
         story_dir = root / "stories" / section / story_id
         languages = {
             language: {
@@ -33,7 +33,10 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "slug": "sample-story",
             "i18n": languages,
         })
-        self.write_json(story_dir / "data.json", {"published": True})
+        metadata = {"published": True}
+        if require_review:
+            metadata["audio_text_review_required"] = True
+        self.write_json(story_dir / "data.json", metadata)
         self.write_json(story_dir / "audio-pronunciation.json", {
             "story": "sample-story",
             "language": "ar",
@@ -41,6 +44,43 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "blocks": {"0": "Narrator pronunciation."},
         })
         return story_dir / "story.json"
+
+    def write_approved_audio_review(self, story: Path, rewrites: dict[str, dict[str, str]] | None = None) -> None:
+        package = audio.read_json(story)
+        rewrites = rewrites or {language: {} for language in audio.LANGUAGES}
+        review_segments = []
+        for language in audio.LANGUAGES:
+            blocks = package["i18n"][language]["blocks"]
+            for index, block in enumerate(blocks):
+                if block.get("speaker") not in ("narrator", "karma"):
+                    continue
+                source = block["text"].strip()
+                spoken = rewrites.get(language, {}).get(str(index), source)
+                review_segments.append({
+                    "lang": language,
+                    "block_index": index,
+                    "speaker": block["speaker"],
+                    "source_text": source,
+                    "approved_audio_text": spoken,
+                    "decision": "approved_rewrite" if spoken != source else "approved_original",
+                })
+        arabic = rewrites.get("ar", {})
+        self.write_json(story.parent / "audio-pronunciation.json", {
+            "format": "KHALEDOON_AUDIO_PRONUNCIATION_V1",
+            "story": package["slug"],
+            "section": package["section"],
+            "language": "ar",
+            "approved_audio_only_rewrites": sorted(arabic, key=int),
+            "blocks": arabic,
+            "approved_audio_text_rewrites": rewrites,
+            "review": {
+                "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
+                "status": "approved_by_admin",
+                "languages": list(audio.LANGUAGES),
+                "total_segments": len(review_segments),
+                "segments": review_segments,
+            },
+        })
 
     def test_dry_run_does_not_call_tts_or_create_staging_files(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -384,6 +424,51 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(sentinel.read_bytes(), before)
             self.assertFalse(staging.exists())
 
+
+    def test_new_story_requires_approved_review_before_any_language_generation(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_review=True)
+            (story.parent / "audio-pronunciation.json").unlink()
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved five-language"):
+                    audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
+            self.assertFalse((root / ".audio-staging").exists())
+
+    def test_new_story_review_must_cover_exact_current_source_text(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_review=True)
+            self.write_approved_audio_review(story)
+            approval_path = story.parent / "audio-pronunciation.json"
+            approval = json.loads(approval_path.read_text(encoding="utf-8"))
+            approval["review"]["segments"][0]["source_text"] = "stale source text"
+            self.write_json(approval_path, approval)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaisesRegex(ValueError, "source text/speaker changed"):
+                    audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
+
+    def test_new_story_uses_admin_approved_rewrites_for_selected_languages(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_review=True)
+            self.write_approved_audio_review(story, {
+                "ar": {"0": "صياغة عربية معتمدة."},
+                "en": {"0": "Approved English wording."},
+                "fr": {}, "it": {}, "de": {},
+            })
+            package = audio.read_json(story)
+            approval = audio.read_json(story.parent / "audio-pronunciation.json")
+            with patch.object(audio, "ROOT", root):
+                rewrites = audio.validate_required_audio_text_review(
+                    approval, package, story.parent / "audio-pronunciation.json"
+                )
+                plan = audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar", "en"))
+            self.assertEqual(rewrites["ar"]["0"], "صياغة عربية معتمدة.")
+            self.assertEqual(rewrites["en"]["0"], "Approved English wording.")
+            self.assertEqual(set(plan["languages"]), {"ar", "en"})
+            self.assertEqual(plan["fish_segments_to_generate"], 2)
+            self.assertFalse((root / ".audio-staging").exists())
 
 if __name__ == "__main__":
     unittest.main()

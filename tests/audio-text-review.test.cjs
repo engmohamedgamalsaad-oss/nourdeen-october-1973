@@ -85,6 +85,31 @@ test('exports only the suggestions explicitly approved by the administrator', ()
   assert.equal(empty.changes.length, 0);
 });
 
+test('exports a complete five-language admin-approved audio pronunciation file', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => {
+    const changed = item.block_index === 0;
+    return {
+      ...item,
+      proposed_audio_text: changed ? (item.lang === 'ar' ? 'صياغة عربية أسهل.' : 'An easier spoken sentence.') : item.original_text,
+      issue_type: changed ? 'heavy_sentence' : 'none',
+      reason: changed ? 'تسهيل النطق.' : '',
+      needs_human_review: true
+    };
+  });
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const file = review.buildApprovedAudioPronunciation(report, pkg, review.LANGS.map(lang => lang + ':0'));
+  assert.equal(file.format, 'KHALEDOON_AUDIO_PRONUNCIATION_V1');
+  assert.equal(file.review.status, 'approved_by_admin');
+  assert.deepEqual(file.review.languages, review.LANGS);
+  assert.equal(file.review.total_segments, 10);
+  assert.equal(file.approved_audio_text_rewrites.ar['0'], 'صياغة عربية أسهل.');
+  assert.equal(file.approved_audio_text_rewrites.en['0'], 'An easier spoken sentence.');
+  assert.deepEqual(file.approved_audio_only_rewrites, ['0']);
+  assert.deepEqual(file.blocks, { '0': 'صياغة عربية أسهل.' });
+  assert.equal(file.review.segments.length, 10);
+});
+
 test('rejects a model report that attempts to waive human review', () => {
   const pkg = packageFixture();
   const segments = review.collectSegments(pkg).map(item => ({
