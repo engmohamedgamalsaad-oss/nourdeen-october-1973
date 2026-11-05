@@ -20,6 +20,9 @@ on:
       - 'stories/science/015/audio-pronunciation.json'
       - 'assets/audio/science/magdi-yacoub/ar/manifest.json'
       - '.github/workflows/pronunciation-review.yml'
+      - '.github/workflows/story-audio.yml'
+      - '.github/workflows/story-audio-single-block.yml'
+      - 'docs/audio-review-workflow.md'
 
 permissions:
   contents: read
