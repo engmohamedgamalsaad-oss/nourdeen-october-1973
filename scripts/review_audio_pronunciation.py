@@ -217,7 +217,7 @@ def review_story_audio(
         if not isinstance(raw_blocks, dict) or not isinstance(approved, list):
             raise ValueError(f"{pronunciation_path}: invalid blocks or approved rewrite list")
         approved_indexes = {str(index) for index in approved}
-        if any(not index.isdigit() or index not in raw_blocks for index in approved_indexes):
+        if any(not index.isdigit() or str(int(index)) != index or index not in raw_blocks for index in approved_indexes):
             raise ValueError(f"{pronunciation_path}: approved rewrite references an invalid block")
         pronunciation_blocks = {
             index: raw_blocks[index]
