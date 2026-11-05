@@ -248,8 +248,8 @@ def review_story_audio(
         ordered = sorted(group, key=lambda item: int(item.get("chunk_index", 0)))
         chunk_texts = [item.get("text") for item in ordered]
         if all(isinstance(value, str) and value.strip() for value in chunk_texts):
-            joined = re.sub(r"\\s+", " ", " ".join(value.strip() for value in chunk_texts)).strip()
-            expected_normalized = re.sub(r"\\s+", " ", expected_block).strip()
+            joined = re.sub(r"\s+", " ", " ".join(value.strip() for value in chunk_texts)).strip()
+            expected_normalized = re.sub(r"\s+", " ", expected_block).strip()
             if joined != expected_normalized:
                 block_text_status[index] = "manifest_text_mismatch"
         elif len(ordered) > 1:
