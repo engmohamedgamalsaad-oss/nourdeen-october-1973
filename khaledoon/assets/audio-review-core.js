@@ -49,16 +49,17 @@ function applyDecision(review, entry, decision, now) {
   /* أي قرار قديم لنفس اللغة ورقم المقطع بمفتاح مختلف يُعتبر مستبدلًا */
   Object.keys(r.clips).forEach(function (k) {
     var c = r.clips[k];
-    if (k !== entry.key && c.lang === entry.lang && c.block_index === entry.block_index) {
+    if (k !== entry.key && c.lang === entry.lang && c.block_index === entry.block_index && Number(c.chunk_index || 0) === Number(entry.chunk_index || 0)) {
       if (c.status === 'accepted') delete r.clips[k]; else c.resolved = true;
     }
   });
   var clip = {
-    story_id: entry.story_id, lang: entry.lang, block_index: entry.block_index, speaker: entry.speaker,
+    story_id: entry.story_id, lang: entry.lang, block_index: entry.block_index, chunk_index: Number(entry.chunk_index || 0), speaker: entry.speaker,
     base: entry.base, text: entry.text, status: decision.status, decided_at: at
   };
   if (decision.status === 'rejected') {
     clip.note = String(decision.note || '').slice(0, 1000);
+    clip.suggestion = String(decision.suggestion || '').slice(0, 1000);
     clip.issue = decision.issue === 'audio_only' ? 'audio_only' : 'text';
   }
   r.clips[entry.key] = clip;
@@ -124,10 +125,11 @@ function buildPromptSection(review) {
   L.push('المقاطع المرفوضة (' + rej.length + '):');
   if (!rej.length) L.push('لا يوجد.');
   rej.forEach(function (c, i) {
-    L.push((i + 1) + ') اللغة: ' + (LANG_AR[c.lang] || c.lang) + ' | المقطع رقم ' + (c.block_index + 1) + ' | المتحدث: ' + (SPEAKER_AR[c.speaker] || c.speaker));
+    L.push((i + 1) + ') اللغة: ' + (LANG_AR[c.lang] || c.lang) + ' | المقطع رقم ' + (c.block_index + 1) + ' | الجزء: ' + (Number(c.chunk_index || 0) + 1) + ' | المتحدث: ' + (SPEAKER_AR[c.speaker] || c.speaker));
     L.push('   نوع المعالجة: ' + (c.issue === 'audio_only' ? '(ب) النص صحيح والصوت فقط — لا تغيّر النص' : '(أ) المشكلة في النص أو النطق — أعد الصياغة لتسهيل النطق'));
     L.push('   النص وقت المراجعة: ' + norm(c.text));
     L.push('   ملاحظة الأدمن: ' + (norm(c.note) || 'لا توجد ملاحظة'));
+    if (norm(c.suggestion)) L.push('   الصياغة المقترحة: ' + norm(c.suggestion));
   });
   L.push('');
   L.push('المقاطع المقبولة (' + acc.length + ') — لا تغيّرها:');
