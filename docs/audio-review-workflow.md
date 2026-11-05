@@ -77,13 +77,13 @@ python scripts/generate_story_audio.py --story stories/science/015/story.json --
 ثبّت أداة ASR المحلية. في أول تشغيل، سيُنزّل النموذج المحدد إلى ذاكرة النماذج المحلية؛ الصوت نفسه لا يُرفع إلى خدمة خارجية:
 
 \`\`\`bash
-python -m pip install faster-whisper
+python -m pip install "faster-whisper==1.2.1" "av<19"
 \`\`\`
 
 مثال مراجعة العربية من مجلد التجهيز:
 
 \`\`\`bash
-python scripts/review_audio_pronunciation.py --story stories/science/015/story.json --language ar --audio-root .audio-staging --model small --device cpu --compute-type int8 --output .audio-staging/reports/audio-review-ar.json
+python scripts/review_audio_pronunciation.py --story stories/science/015/story.json --language ar --audio-root .audio-staging --block-index 6 --model small --device cpu --compute-type int8 --output .audio-staging/reports/audio-review-ar.json
 \`\`\`
 
 اللغات المدعومة في الأمر: \`ar\`, \`en\`, \`fr\`, \`it\`, \`de\`. يستخدم المدقق نموذج Whisper متعدد اللغات محليًا، مع توقيتات واحتمال ثقة لكل كلمة متى أعادها النموذج. لا يرسل الصوت إلى خدمة خارجية ولا يغيّر MP3 أو manifest.
