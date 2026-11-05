@@ -92,6 +92,83 @@ def approved_pronunciation_blocks(
     return {index: raw_blocks[index] for index in approved_indexes}
 
 
+def validate_required_audio_text_review(
+    pronunciation: dict[str, Any],
+    package: dict[str, Any],
+    pronunciation_path: Path,
+) -> dict[str, dict[str, str]]:
+    """Require a human-approved, complete five-language speech-text review for new stories."""
+    slug = str(package.get("slug") or "").strip()
+    if pronunciation.get("format") != "KHALEDOON_AUDIO_PRONUNCIATION_V1":
+        raise ValueError(f"{pronunciation_path}: missing approved audio-pronunciation format")
+    if pronunciation.get("story") != slug or pronunciation.get("section") != package.get("section"):
+        raise ValueError(f"{pronunciation_path}: story/section metadata mismatch")
+    review = pronunciation.get("review")
+    if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
+        raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
+    if review.get("status") != "approved_by_admin" or review.get("languages") != list(LANGUAGES):
+        raise ValueError(f"{pronunciation_path}: five-language admin approval is incomplete")
+    raw_segments = review.get("segments")
+    translations = package.get("i18n")
+    if not isinstance(raw_segments, list) or not isinstance(translations, dict):
+        raise ValueError(f"{pronunciation_path}: invalid review segments or story translations")
+    expected: dict[tuple[str, int], tuple[str, str]] = {}
+    for lang in LANGUAGES:
+        localized = translations.get(lang)
+        blocks = localized.get("blocks") if isinstance(localized, dict) else None
+        if not isinstance(blocks, list) or not blocks:
+            raise ValueError(f"{pronunciation_path}: story is missing {lang} blocks")
+        for index, block in enumerate(blocks):
+            if not isinstance(block, dict) or block.get("speaker") not in ("narrator", "karma"):
+                continue
+            source = str(block.get("text") or "").strip()
+            if source:
+                expected[(lang, index)] = (str(block["speaker"]), source)
+    if review.get("total_segments") != len(expected) or len(raw_segments) != len(expected):
+        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in all five languages")
+    seen: set[tuple[str, int]] = set()
+    rewrites: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
+    for item in raw_segments:
+        if not isinstance(item, dict):
+            raise ValueError(f"{pronunciation_path}: invalid review segment")
+        lang = item.get("lang")
+        index = item.get("block_index")
+        if lang not in LANGUAGES or not isinstance(index, int) or isinstance(index, bool):
+            raise ValueError(f"{pronunciation_path}: invalid review language or block index")
+        key = (lang, index)
+        if key in seen or key not in expected:
+            raise ValueError(f"{pronunciation_path}: duplicate or unknown review segment {key}")
+        seen.add(key)
+        speaker, source = expected[key]
+        spoken = item.get("approved_audio_text")
+        decision = item.get("decision")
+        if item.get("speaker") != speaker or item.get("source_text") != source:
+            raise ValueError(f"{pronunciation_path}: source text/speaker changed for {lang} block {index}")
+        if not isinstance(spoken, str) or not spoken.strip():
+            raise ValueError(f"{pronunciation_path}: empty approved text for {lang} block {index}")
+        if decision == "approved_original":
+            if spoken != source:
+                raise ValueError(f"{pronunciation_path}: original decision changed text for {lang} block {index}")
+        elif decision == "approved_rewrite":
+            if spoken == source:
+                raise ValueError(f"{pronunciation_path}: rewrite decision has no rewrite for {lang} block {index}")
+            rewrites[lang][str(index)] = spoken
+        else:
+            raise ValueError(f"{pronunciation_path}: segment lacks explicit human approval for {lang} block {index}")
+    if seen != set(expected):
+        raise ValueError(f"{pronunciation_path}: some spoken blocks were not approved")
+    declared = pronunciation.get("approved_audio_text_rewrites")
+    if not isinstance(declared, dict):
+        raise ValueError(f"{pronunciation_path}: approved multilingual rewrites are missing")
+    for lang in LANGUAGES:
+        if declared.get(lang) != rewrites[lang]:
+            raise ValueError(f"{pronunciation_path}: approved {lang} rewrites do not match human decisions")
+    arabic_indexes = sorted(rewrites["ar"], key=int)
+    if pronunciation.get("blocks") != rewrites["ar"] or pronunciation.get("approved_audio_only_rewrites") != arabic_indexes:
+        raise ValueError(f"{pronunciation_path}: Arabic compatibility fields do not match approved decisions")
+    return rewrites
+
+
 def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     fields = [GENERATOR_VERSION, lang, text, voice, rate, pitch]
     if lang == "ar":
