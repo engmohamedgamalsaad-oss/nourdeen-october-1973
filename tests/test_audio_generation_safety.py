@@ -89,6 +89,55 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                         story, root / ".audio-staging", languages=("xx",)
                     )
 
+    def test_forced_block_plans_only_the_selected_clip(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            staging = root / ".audio-staging"
+            lang_dir = staging / "science" / "sample-story" / "ar"
+            lang_dir.mkdir(parents=True)
+            segments = []
+            for index, speaker, text in (
+                (0, "narrator", "Narrator pronunciation."),
+                (1, "karma", "Karma ar."),
+            ):
+                voice, rate, pitch = audio.VOICE_SETTINGS["ar"][speaker]
+                selected_voice = (
+                    audio.FISH_AUDIO_NARRATOR_VOICE_ID if speaker == "narrator"
+                    else audio.FISH_AUDIO_KARMA_VOICE_ID
+                )
+                filename = f"{index:03d}.mp3"
+                (lang_dir / filename).write_bytes(b"x" * 600)
+                segments.append({
+                    "block_index": index,
+                    "chunk_index": 0,
+                    "voice": selected_voice,
+                    "hash": audio.text_hash(text, selected_voice, rate, pitch, "ar"),
+                    "src": filename,
+                })
+            self.write_json(lang_dir / "manifest.json", {
+                "story": "sample-story",
+                "section": "science",
+                "language": "ar",
+                "segments": segments,
+            })
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(
+                    story, staging, languages=("ar",), force_blocks=(1,)
+                )
+            self.assertEqual(plan["segments_to_generate"], 1)
+            self.assertEqual(plan["fish_segments_to_generate"], 1)
+
+    def test_rejects_forced_block_not_present_in_selected_language(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(ValueError):
+                    audio.inspect_generation_plan(
+                        story, root / ".audio-staging", languages=("ar",), force_blocks=(99,)
+                    )
+
     def test_existing_complete_staging_assets_are_not_planned_again(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
