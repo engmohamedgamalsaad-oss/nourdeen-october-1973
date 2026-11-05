@@ -87,19 +87,14 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertFalse(staging.exists())
 
     def test_unapproved_arabic_rewrite_is_ignored(self) -> None:
-        with tempfile.TemporaryDirectory() as temp:
-            root = Path(temp)
-            story = self.make_story(root)
-            self.write_json(story.parent / "audio-pronunciation.json", {
-                "story": "sample-story", "language": "ar",
-                "approved_audio_only_rewrites": ["1"],
-                "blocks": {"0": "Unapproved.", "1": "Approved."},
-            })
-            with patch.object(audio, "ROOT", root):
-                plan = audio.inspect_generation_plan(
-                    story, root / ".audio-staging", languages=("ar",)
-                )
-            self.assertEqual(plan["languages"]["ar"]["segments_to_generate"], 2)
+        overrides = audio.approved_pronunciation_blocks({
+            "story": "sample-story",
+            "language": "ar",
+            "approved_audio_only_rewrites": ["1"],
+            "blocks": {"0": "Unapproved.", "1": "Approved."},
+        }, "sample-story", Path("audio-pronunciation.json"))
+        self.assertEqual(overrides, {"1": "Approved."})
+        self.assertNotIn("0", overrides)
 
     def test_non_arabic_plan_does_not_depend_on_arabic_pronunciation_file(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
