@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/review_egyptian_dialect.py'
       - 'tests/test_review_egyptian_dialect.py'
+      - '.github/workflows/egyptian-dialect-review.yml'
       - 'stories/**/story.json'
       - 'stories/**/audio-pronunciation.json'
       - '!stories/october/**'
