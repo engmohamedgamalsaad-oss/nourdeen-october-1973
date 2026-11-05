@@ -119,9 +119,22 @@ async function loadArabicExpectedTexts(blocks) {
   if (!data || data.version !== 1 || data.story !== story.slug || data.language !== 'ar' || !data.blocks || typeof data.blocks !== 'object') {
     throw new Error('ملف نص النطق العربي لا يطابق الحكاية الحالية.');
   }
+  if (!Array.isArray(data.approved_audio_only_rewrites)) {
+    throw new Error('قائمة تعديلات النطق الصوتي المعتمدة غير صالحة.');
+  }
+  var approved = {};
+  data.approved_audio_only_rewrites.forEach(function (rawIndex) {
+    var index = Number(rawIndex);
+    if (!Number.isInteger(index) || index < 0 || index >= blocks.length || approved[index]) {
+      throw new Error('قائمة تعديلات النطق الصوتي تحتوي رقم مقطع غير صالح أو مكرر.');
+    }
+    if (typeof data.blocks[String(index)] !== 'string' || !data.blocks[String(index)].trim()) {
+      throw new Error('يوجد تعديل نطق معتمد بلا نص صوتي للمقطع ' + (index + 1) + '.');
+    }
+    approved[index] = true;
+  });
   return blocks.map(function (block, index) {
-    var reviewed = data.blocks[String(index)];
-    return typeof reviewed === 'string' && reviewed.trim() ? reviewed : fallback[index];
+    return approved[index] ? data.blocks[String(index)] : fallback[index];
   });
 }
 async function loadManifests() {
