@@ -80,6 +80,35 @@ class AudioPronunciationReviewTests(unittest.TestCase):
         self.assertTrue(result["language_detection_uncertain"])
         self.assertEqual(result["status"], "review_required")
 
+    def test_transcript_comparison_supports_all_five_project_languages(self) -> None:
+        samples = {
+            "ar": ("مَجْدِي يَعْقُوب", ["مجدي", "يعقوب"]),
+            "en": ("heart surgery", ["heart", "surgery"]),
+            "fr": ("chirurgie cardiaque", ["chirurgie", "cardiaque"]),
+            "it": ("chirurgia cardiaca", ["chirurgia", "cardiaca"]),
+            "de": ("Herzchirurgie", ["Herzchirurgie"]),
+        }
+        for language, (expected, recognized) in samples.items():
+            with self.subTest(language=language):
+                result = reviewer.compare_transcript(
+                    expected,
+                    [
+                        {
+                            "word": word,
+                            "start": index * 0.4,
+                            "end": index * 0.4 + 0.3,
+                            "probability": 0.98,
+                        }
+                        for index, word in enumerate(recognized)
+                    ],
+                    language,
+                    language,
+                    0.99,
+                )
+                self.assertEqual(result["match_ratio"], 1.0)
+                self.assertEqual(result["status"], "likely_match")
+                self.assertTrue(result["needs_human_review"])
+
     def test_review_uses_real_file_hash_and_returns_human_review_result(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
