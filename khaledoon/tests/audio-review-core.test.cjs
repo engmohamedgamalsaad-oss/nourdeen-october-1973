@@ -147,7 +147,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('var currentReview = core.cloneReview(meta.audio_review || null);') && reviewUi.includes('var next = core.applyDecision(currentReview, entry, decision);'), 'each save must merge one clip decision into the freshly read review, not overwrite other clips');
   assert.ok(reviewUi.includes('stagedPackage.section !== story.section || stagedPackage.slug !== story.slug'), 'a stale admin context must never save one story review into another story row');
   assert.ok(reviewUi.includes('if (!connected) { initializing = false; return; }'), 'audio review controls must not render outside an admin-connected draft');
-  assert.ok(reviewUi.includes('seg.audio_revision || seg.audio_sha256 ||'), 'review identity must include the actual generated MP3 digest when available');
+  assert.ok(reviewUi.includes('seg.audio_sha256 || review.audio_hashes[sourceBase] ||') && reviewUi.includes('knownAudioHash || seg.audio_revision'), 'review identity must reuse a verified MP3 digest across preview sessions');
   assert.ok(reviewUi.includes('core.sha256Bytes(await blob.arrayBuffer())'), 'the actual MP3 bytes played by the reviewer must be hashed and checked');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
