@@ -56,8 +56,8 @@ jobs:
 
       - name: Require explicit Fish Audio approval for Arabic
         env:
-          LANGUAGE: \${{ inputs.language }}
-          FISH_APPROVAL: \${{ inputs.confirm_fish_audio_request }}
+          LANGUAGE: ${{ inputs.language }}
+          FISH_APPROVAL: ${{ inputs.confirm_fish_audio_request }}
         run: |
           if [ "$LANGUAGE" = "ar" ] && [ "$FISH_APPROVAL" != "yes" ]; then
             echo "Arabic regeneration stopped: explicit Fish Audio approval was not supplied."
@@ -66,11 +66,11 @@ jobs:
 
       - name: Regenerate one selected block into isolated staging
         env:
-          STORY_PATH: \${{ inputs.story_path }}
-          LANGUAGE: \${{ inputs.language }}
-          BLOCK_INDEX: \${{ inputs.block_index }}
-          FISH_AUDIO_API_KEY: \${{ secrets.FISH_AUDIO_API_KEY }}
-          FISH_APPROVAL: \${{ inputs.confirm_fish_audio_request }}
+          STORY_PATH: ${{ inputs.story_path }}
+          LANGUAGE: ${{ inputs.language }}
+          BLOCK_INDEX: ${{ inputs.block_index }}
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+          FISH_APPROVAL: ${{ inputs.confirm_fish_audio_request }}
         shell: bash
         run: |
           set -euo pipefail
