@@ -337,6 +337,7 @@ def review_story_audio(
         if max_clips and len(reports) >= max_clips:
             break
 
+    missing_blocks = sorted(set(expected_by_block) - set(counts))
     return {
         "format": "KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_V1",
         "story": slug,
@@ -345,12 +346,14 @@ def review_story_audio(
         "model": "faster-whisper",
         "tts_requests": 0,
         "audio_files_modified": 0,
+        "missing_blocks": missing_blocks,
         "reports": reports,
         "summary": {
             "total": len(reports),
             "likely_match": sum(item.get("status") == "likely_match" for item in reports),
             "review_required": sum(item.get("status") == "review_required" for item in reports),
             "other": sum(item.get("status") not in ("likely_match", "review_required") for item in reports),
+            "missing_blocks": len(missing_blocks),
             "human_review_required": True,
         },
     }
@@ -386,7 +389,7 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(serialized + "\n", encoding="utf-8")
     print(serialized)
-    return 1 if report["summary"]["other"] else 0
+    return 1 if report["summary"]["other"] or report["summary"]["missing_blocks"] else 0
 
 
 if __name__ == "__main__":
