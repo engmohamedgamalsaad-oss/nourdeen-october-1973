@@ -63,6 +63,28 @@ test('rejects missing, duplicate, or altered original segments', () => {
   assert.ok(result.errors.some(error => error.includes('غير موجود في التقرير')));
 });
 
+test('exports only the suggestions explicitly approved by the administrator', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.lang === 'ar' && item.block_index === 0
+      ? 'صياغة صوتية أسهل.'
+      : item.original_text,
+    issue_type: item.lang === 'ar' && item.block_index === 0 ? 'heavy_sentence' : 'none',
+    reason: item.lang === 'ar' && item.block_index === 0 ? 'تسهيل النطق.' : '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const patch = review.buildApprovedPatch(report, pkg, ['ar:0']);
+  assert.equal(patch.status, 'approved_for_manual_application');
+  assert.equal(patch.applied, false);
+  assert.equal(patch.changes.length, 1);
+  assert.equal(patch.changes[0].lang, 'ar');
+  assert.equal(patch.changes[0].approved_audio_text, 'صياغة صوتية أسهل.');
+  const empty = review.buildApprovedPatch(report, pkg, []);
+  assert.equal(empty.changes.length, 0);
+});
+
 test('refuses October and rejects invalid review JSON', () => {
   assert.throws(() => review.collectSegments(packageFixture('october')), /أكتوبر/);
   const result = review.validateResult('not json', packageFixture());
