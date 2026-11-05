@@ -33,6 +33,11 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [{ ...coverageSegments[0], speaker: 'narrator' }, ...coverageSegments.slice(1)]).ok, false, 'speaker mismatch must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [...coverageSegments, coverageSegments[0]]).ok, false, 'duplicate chunk must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [coverageSegments[0], coverageSegments[1], { ...coverageSegments[2], chunk_index: 2 }]).ok, false, 'missing chunk index must fail');
+  const textBlocks = [{ speaker: 'narrator', text: 'The current story text.' }];
+  const matchingText = [{ block_index: 0, chunk_index: 0, speaker: 'narrator', text: 'The current story text.' }];
+  assert.equal(core.validateManifestCoverage(textBlocks, matchingText).ok, true);
+  assert.equal(core.validateManifestCoverage(textBlocks, [{ ...matchingText[0], text: 'An outdated story text.' }]).ok, false, 'stale audio text must not pass review');
+  assert.equal(core.validateManifestCoverage(textBlocks, [{ ...matchingText[0], text: 'Reviewed Arabic pronunciation.' }], ['Reviewed Arabic pronunciation.']).ok, true, 'approved Arabic audio-only text may differ from visible story text');
 
   /* العدّاد يغيّر المفتاح */
   assert.equal(await core.clipKey(a, 0), a);
@@ -120,6 +125,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (!e || !e.isMissingManifest) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
   assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey);'), 'preview must use the shared five-language gate');
+  assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes('core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang])'), 'Arabic audio must be checked against the approved audio-only pronunciation text, and all other languages against current story text');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes('review = core.cloneReview(meta.audio_review || null);'), 'review decisions must be read only from story_meta.audio_review');
