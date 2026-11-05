@@ -50,7 +50,7 @@ function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disable
 async function decide(isApprove){
  if(busy)return;
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
- if(isApprove){
+ if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october'){
   if(!window.KHStoryAudioReview){message('تعذر تحميل مدقق الصوت. أعد تحميل المعاينة؛ لا يمكن اعتمادها قبل التحقق من حالة الصوت.',true);return}
   if(!window.KHStoryAudioReview.canApprove()){message(window.KHStoryAudioReview.gateSummary()||'راجع واعتمد كل المقاطع الصوتية باللغات الخمس أولًا.',true);return}
  }
