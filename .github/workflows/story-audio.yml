@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: magdi-yacoub-arabic-audio-pilot
@@ -42,23 +43,35 @@ jobs:
       - name: Validate the Magdi Yacoub Arabic generator
         run: python -m py_compile scripts/generate_story_audio.py
 
+      - name: Run audio generator safety tests
+        run: python -m unittest discover -s tests -p 'test_generate_story_audio.py' -v
+
       - name: Generate Magdi Yacoub Arabic audio
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
-        run: python scripts/generate_story_audio.py
+        run: python scripts/generate_story_audio.py --allow-fish
 
-      - name: Commit only Magdi Yacoub Arabic audio and its manifest
+      - name: Commit only Magdi Yacoub Arabic audio to a review branch
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git switch -c "audio/magdi-yacoub-arabic-${GITHUB_RUN_ID}"
           git add assets/audio/science/magdi-yacoub/ar/*.mp3 assets/audio/science/magdi-yacoub/ar/manifest.json
           if git diff --cached --quiet; then
             echo 'The approved pilot audio is already current.'
             exit 0
           fi
           git commit -m 'Generate Magdi Yacoub Arabic with approved narrator voice'
-          git fetch origin main
-          git rebase origin/main
-          git push origin HEAD:main
+          git push origin HEAD
+
+      - name: Open an audio review pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base main \
+            --head "audio/magdi-yacoub-arabic-${GITHUB_RUN_ID}" \
+            --title "Review generated Magdi Yacoub Arabic audio" \
+            --body "Generated only after the explicit Fish Audio confirmation input. Review the MP3 files and manifest before merging. This workflow never pushes audio directly to main."
