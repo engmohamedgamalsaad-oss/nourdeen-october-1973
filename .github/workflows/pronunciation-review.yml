@@ -6,6 +6,8 @@ on:
     paths:
       - 'scripts/review_pronunciation.py'
       - 'scripts/audit_story_audio.py'
+      - 'khaledoon/assets/audio-text-review.js'
+      - 'tests/audio-text-review.test.cjs'
       - 'tests/test_audit_story_audio.py'
       - 'tests/test_audio_generation_safety.py'
       - 'scripts/generate_story_audio.py'
@@ -52,6 +54,9 @@ jobs:
 
       - name: Run isolated audio generation safety tests
         run: python -m unittest discover -s tests -p 'test_audio_generation_safety.py' -v
+
+      - name: Run multilingual speech-text reviewer tests
+        run: node --test tests/audio-text-review.test.cjs
 
       - name: Run the read-only pilot report
         run: python scripts/review_pronunciation.py --all-blocks --report "$RUNNER_TEMP/pronunciation-review.json"
