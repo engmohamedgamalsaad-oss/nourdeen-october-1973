@@ -301,20 +301,22 @@ async function importPronunciationReport(file) {
         !LANGS.includes(report.language) || !Array.isArray(report.reports)) {
       throw new Error('ملف التقرير لا يطابق الحكاية أو القسم أو اللغة.');
     }
-    var reportEntries = report.reports.filter(function (r) {
-      return r && Number.isInteger(Number(r.block_index)) && typeof r.src === 'string';
-    });
+    var reportEntries = report.reports.filter(function (r) { return r && typeof r.src === 'string'; });
     if (!reportEntries.length) throw new Error('التقرير لا يحتوي نتائج مقاطع قابلة للربط.');
-    var verified = [];
+    var verified = [], seenSources = {};
     for (var i = 0; i < reportEntries.length; i++) {
       var item = reportEntries[i];
+      if (seenSources[item.src]) throw new Error('التقرير يحتوي نتيجة مكررة للملف: ' + item.src);
+      seenSources[item.src] = true;
       var entry = entries.find(function (e) {
-        return e.lang === report.language && e.block_index === Number(item.block_index) &&
-          e.chunk_index === Number(item.chunk_index || 0) && e.src === item.src;
+        return e.lang === report.language && e.src === item.src &&
+          (item.block_index == null || e.block_index === Number(item.block_index)) &&
+          (item.chunk_index == null || e.chunk_index === Number(item.chunk_index));
       });
       if (!entry) throw new Error('تعذر مطابقة مقطع في التقرير مع manifest الحالي: ' + item.src);
       if (!/^[a-f0-9]{64}$/i.test(String(item.audio_sha256 || ''))) {
-        throw new Error('التقرير لا يحمل بصمة SHA-256 صالحة للمقطع: ' + item.src);
+        verified.push({ entry: entry, report: item, blob: null, hashVerified: false });
+        continue;
       }
       var url = new URL(entry.src, manifestUrl(entry.lang));
       var response = await fetch(url.href, { cache: 'no-store' });
@@ -324,10 +326,14 @@ async function importPronunciationReport(file) {
       if (digest.toLowerCase() !== String(item.audio_sha256).toLowerCase()) {
         throw new Error('التقرير قديم أو لا يطابق الملف الصوتي الحالي: ' + item.src);
       }
-      verified.push({ entry: entry, report: item, blob: blob });
+      verified.push({ entry: entry, report: item, blob: blob, hashVerified: true });
     }
     pronunciationReport = { language: report.language, items: verified };
-    pronunciationReportStatus = 'تم التحقق من بصمات ' + verified.length + ' مقطعًا. نتائج ASR إرشادية وتحتاج استماعًا بشريًا.';
+    var verifiedCount = verified.filter(function (item) { return item.hashVerified; }).length;
+    var unverifiedCount = verified.length - verifiedCount;
+    pronunciationReportStatus = 'تم التحقق من بصمات ' + verifiedCount + ' مقطعًا' +
+      (unverifiedCount ? '؛ ' + unverifiedCount + ' نتيجة معروضة دون استماع موضعي لغياب بصمة صالحة' : '') +
+      '. نتائج ASR إرشادية وتحتاج استماعًا بشريًا.';
   } catch (e) {
     pronunciationReport = null;
     pronunciationReportStatus = 'لم يُحمّل التقرير: ' + (e && e.message || e);
@@ -343,7 +349,7 @@ function renderPronunciationResult(entry, panel) {
   var box = document.createElement('div'); box.className = 'kh-audio-asr-result';
   var report = match.report;
   var summary = document.createElement('div');
-  summary.textContent = 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
+  summary.textContent = (match.hashVerified ? 'نتيجة موثقة بالبصمة — ' : 'نتيجة غير موثقة بالبصمة — ') + 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
     (report.detected_language ? ' | اللغة المكتشفة: ' + report.detected_language : '') +
     (typeof report.language_probability === 'number' ? ' | احتمال اللغة: ' + Math.round(report.language_probability * 100) + '%' : '');
   box.appendChild(summary);
@@ -371,7 +377,7 @@ function renderPronunciationResult(entry, panel) {
   panel.appendChild(box);
 }
 async function playPronunciationRange(match, item, button, panel) {
-  if (!match || !match.blob || !Number.isFinite(Number(item.start))) return;
+  if (!match || !match.hashVerified || !match.blob || !Number.isFinite(Number(item.start))) return;
   try {
     if (!audio) audio = new Audio();
     try { audio.pause(); audio.onended = null; audio.onerror = null; } catch (e) {}
