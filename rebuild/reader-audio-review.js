@@ -152,6 +152,7 @@ async function loadManifests() {
   entries = await Promise.all(pendingEntries);
 }
 function gate() {
+  if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (!enabled) return { ok: true, disabled: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (!allManifestsReady) return { ok: false, total: entries.length, missingLanguages: LANGS.filter(function (l) { return !manifests[l]; }) };
   return core.evaluateGate(entries, review, readyByKey);
@@ -159,6 +160,7 @@ function gate() {
 function gateSummary() {
   var g = gate();
   if (g.disabled) return '';
+  if (g.loadError) return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إعادة المحاولة والتحقق.';
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
   if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
