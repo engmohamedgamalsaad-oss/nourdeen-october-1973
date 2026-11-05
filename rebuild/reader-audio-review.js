@@ -282,12 +282,13 @@ function render() {
   text(banner, gateSummary());
   banner.hidden = false;
   var lang = document.documentElement.lang;
-  if (!manifests[lang]) return;
-  if (activeLang !== lang) activeLang = lang;
-  var manifest = manifests[lang], host = $('blocks');
+  var host = $('blocks');
   if (!host) return;
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
   blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
+  if (!manifests[lang]) return;
+  if (activeLang !== lang) activeLang = lang;
+  var manifest = manifests[lang];
   entries.filter(function (e) { return e.lang === lang; }).forEach(function (entry) {
     var block = blocks[entry.block_index];
     if (!block) return;
