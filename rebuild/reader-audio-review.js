@@ -166,9 +166,14 @@ async function loadManifests() {
       pendingEntries.push((async function () {
         var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
         var storyKey = story.section + '/' + story.slug + '#' + blockIndex + ':' + chunkIndex;
-        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, { voice: seg.voice, provider: seg.provider, model: seg.model, audio_revision: seg.audio_revision || seg.audio_sha256 || '' });
+        var engine = { voice: seg.voice, provider: seg.provider, model: seg.model };
+        var sourceBase = await core.baseKey(storyKey, lang, seg.speaker, seg.text, engine);
+        var knownAudioHash = String(seg.audio_sha256 || review.audio_hashes[sourceBase] || '');
+        var revision = String(seg.audio_revision || knownAudioHash || '');
+        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, Object.assign({}, engine, { audio_revision: revision }));
         var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
-          speaker: seg.speaker, base: base, text: seg.text, src: seg.src, manifest: manifest, segment: seg };
+          speaker: seg.speaker, base: base, source_base: sourceBase, audio_sha256: knownAudioHash,
+          text: seg.text, src: seg.src, manifest: manifest, segment: seg };
         var regen = Number(review.regen[base] || 0);
         entry.key = await core.clipKey(base, regen);
         readyByKey[entry.key] = 'ready';
@@ -193,24 +198,74 @@ function gateSummary() {
 }
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
-function play(entry, button) {
+var activeObjectUrl = null;
+async function play(entry, button) {
   if (!entry || !entry.src) return;
-  played[entry.key] = false;
-  if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
   var control = button.closest('.kh-audio-review-controls');
   var stateNode = control && control.querySelector('.kh-audio-review-state');
-  if (stateNode) stateNode.textContent = 'جارٍ الاستماع إلى المقطع…';
+  var acceptBtn = control && control.querySelector('.kh-audio-review-btn.accept');
+  if (acceptBtn) acceptBtn.disabled = true;
+  if (stateNode) stateNode.textContent = 'جارٍ تحميل الملف والتحقق من بصمته…';
   if (!audio) audio = new Audio();
-  try { audio.pause(); audio.currentTime = 0; } catch (e) {}
-  var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.segment.audio_revision || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
-  audio.src = url.href;
-  var old = document.querySelector('.kh-audio-review-playing');
-  if (old) old.classList.remove('kh-audio-review-playing');
-  button.classList.add('kh-audio-review-playing');
-  var p = audio.play();
-  if (p && p.catch) p.catch(function () { button.classList.remove('kh-audio-review-playing'); });
-  audio.onended = function () { button.classList.remove('kh-audio-review-playing'); played[entry.key] = true; if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = false; if (stateNode) stateNode.textContent = 'اكتمل الاستماع — يمكنك قبول المقطع أو رفضه.'; };
-  audio.onerror = function () { button.classList.remove('kh-audio-review-playing'); played[entry.key] = false; if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true; if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.'; };
+  try {
+    try { audio.pause(); audio.currentTime = 0; } catch (e) {}
+    if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
+    var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
+    var response = await fetch(url.href, { cache: 'no-store' });
+    if (!response.ok) throw new Error('تعذر تحميل ملف الصوت (' + response.status + ').');
+    var blob = await response.blob();
+    var digest = await core.sha256Bytes(await blob.arrayBuffer());
+    var previousKey = entry.key;
+    if (entry.audio_sha256 !== digest) {
+      entry.audio_sha256 = digest;
+      entry.segment.audio_sha256 = digest;
+      entry.base = await core.baseKey(entry.story_id, entry.lang, entry.speaker, entry.text, {
+        voice: entry.segment.voice, provider: entry.segment.provider, model: entry.segment.model, audio_revision: digest
+      });
+      entry.key = await core.clipKey(entry.base, Number(review.regen[entry.base] || 0));
+    }
+    if (previousKey !== entry.key) {
+      delete played[previousKey];
+      delete acceptButtons[previousKey];
+      if (acceptBtn) acceptButtons[entry.key] = acceptBtn;
+      if (control) control.dataset.clipKey = entry.key;
+      if (stateNode) stateNode.textContent = 'تم التحقق من نسخة صوت مختلفة؛ يلزم مراجعتها من جديد.';
+    }
+    played[entry.key] = false;
+    if (acceptBtn) acceptBtn.disabled = true;
+    var old = document.querySelector('.kh-audio-review-playing');
+    if (old) old.classList.remove('kh-audio-review-playing');
+    button.classList.add('kh-audio-review-playing');
+    activeObjectUrl = URL.createObjectURL(blob);
+    audio.src = activeObjectUrl;
+    audio.load();
+    audio.onended = function () {
+      button.classList.remove('kh-audio-review-playing');
+      played[entry.key] = true;
+      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = false;
+      if (stateNode) stateNode.textContent = 'اكتمل الاستماع — يمكنك قبول المقطع أو رفضه.';
+      if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
+    };
+    audio.onerror = function () {
+      button.classList.remove('kh-audio-review-playing');
+      played[entry.key] = false;
+      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
+      if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.';
+      if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
+    };
+    var playback = audio.play();
+    if (playback && playback.catch) playback.catch(function () {
+      button.classList.remove('kh-audio-review-playing');
+      played[entry.key] = false;
+      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
+      if (stateNode) stateNode.textContent = 'تعذر بدء تشغيل المقطع؛ حاول مرة أخرى.';
+      if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
+    });
+  } catch (e) {
+    button.classList.remove('kh-audio-review-playing');
+    if (acceptBtn) acceptBtn.disabled = true;
+    if (stateNode) stateNode.textContent = 'تعذر التحقق من الملف الصوتي: ' + (e.message || e);
+  }
 }
 function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
