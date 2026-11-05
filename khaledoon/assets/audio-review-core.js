@@ -120,6 +120,17 @@ function evaluateGate(entries, review, readyByKey) {
   out.ok = out.total > 0 && out.notReady === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
   return out;
 }
+function evaluateFiveLanguageGate(manifests, entries, review, readyByKey) {
+  var missing = LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
+  if (missing.length) {
+    return {
+      ok: false, missingLanguages: missing, total: Array.isArray(entries) ? entries.length : 0,
+      accepted: 0, rejected: 0, unreviewed: Array.isArray(entries) ? entries.length : 0, notReady: 0
+    };
+  }
+  return evaluateGate(entries, review, readyByKey);
+}
+
 function gateMessage(g) {
   if (g.ok) return '';
   var parts = [];
@@ -187,7 +198,7 @@ var api = {
   sha256: sha256, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  evaluateGate: evaluateGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
+  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else root.KHAudioReviewCore = api;
