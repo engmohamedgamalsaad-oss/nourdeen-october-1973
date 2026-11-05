@@ -64,7 +64,8 @@ async function loadRow() {
   review = core.cloneReview(meta.audio_review || null);
   return true;
 }
-async function saveReview(next, key) {
+async function saveReview(entry, decision) {
+  var key = entry && entry.key;
   if (busy) return;
   if (!row || !ctx) throw new Error('سجل المراجعة غير متصل بلوحة الإدارة.');
   busy = true;
@@ -77,6 +78,8 @@ async function saveReview(next, key) {
     var freshRows = await fresh.json();
     if (!freshRows.length) throw new Error('اختفى سجل الحكاية قبل الحفظ.');
     var current = freshRows[0], meta = Object.assign({}, current.story_meta || {});
+    var currentReview = core.cloneReview(meta.audio_review || null);
+    var next = core.applyDecision(currentReview, entry, decision);
     meta.audio_review = next;
     var saved = await fetch(rowUrl(), {
       method: 'PATCH',
@@ -93,7 +96,7 @@ async function saveReview(next, key) {
     if (!verify.ok) throw new Error('تعذر التحقق النهائي من حفظ المراجعة.');
     var verifiedRows = await verify.json();
     var verified = verifiedRows[0] && verifiedRows[0].story_meta && verifiedRows[0].story_meta.audio_review;
-    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== next.clips[key].status) {
+    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== decision.status) {
       throw new Error('فشل التحقق النهائي من قرار المقطع.');
     }
     review = core.cloneReview(verified);
@@ -215,9 +218,8 @@ function render() {
     var acceptBtn = makeButton('✓ قبول', 'accept', async function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل قبوله.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
-      var next = core.applyDecision(review, entry, { status: 'accepted' });
       state.textContent = 'جارٍ الحفظ…';
-      try { await saveReview(next, entry.key); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
+      try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     acceptBtn.disabled = !played[entry.key];
     acceptButtons[entry.key] = acceptBtn;
@@ -239,9 +241,8 @@ function render() {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
-      var next = core.applyDecision(review, entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value });
       state.textContent = 'جارٍ حفظ الرفض…';
-      try { await saveReview(next, entry.key); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
+      try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     editor.append(issue, note, suggestion, saveReject);
     panel.append(playBtn, acceptBtn, rejectBtn, state, editor);
