@@ -7,7 +7,7 @@ var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الف
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
-var story = null, ctx = null, row = null, review = null, entries = [], readyByKey = {};
+var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '';
 var enabled = false, allManifestsReady = false, canWrite = false;
 
@@ -113,8 +113,11 @@ async function loadManifests() {
       }
       data.segments.forEach(function (seg) {
         var expected = seg.speaker === 'karma' ? core.VOICES.karma : seg.speaker === 'narrator' ? core.VOICES.narrator : '';
-        if (!expected || seg.voice !== expected || !seg.src || typeof seg.text !== 'string' || !seg.text.trim()) {
-          throw new Error('مقطع صوتي لا يطابق المتحدث أو الصوت المعتمد.');
+        var engineOk = lang === 'ar'
+          ? seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected
+          : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim();
+        if (!expected || !engineOk || !seg.src || typeof seg.text !== 'string' || !seg.text.trim()) {
+          throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
       manifests[lang] = data;
@@ -132,7 +135,7 @@ async function loadManifests() {
       pendingEntries.push((async function () {
         var blockIndex = Number(seg.block_index), chunkIndex = Number(seg.chunk_index || 0);
         var storyKey = story.section + '/' + story.slug + '#' + blockIndex + ':' + chunkIndex;
-        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text);
+        var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, { voice: seg.voice, provider: seg.provider, model: seg.model });
         var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
           speaker: seg.speaker, base: base, text: seg.text, src: seg.src, manifest: manifest, segment: seg };
         var regen = Number(review.regen[base] || 0);
