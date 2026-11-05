@@ -186,7 +186,7 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey);
+  return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);
 }
 function gateSummary() {
   var g = gate();
@@ -204,6 +204,7 @@ async function play(entry, button) {
   var control = button.closest('.kh-audio-review-controls');
   var stateNode = control && control.querySelector('.kh-audio-review-state');
   var acceptBtn = control && control.querySelector('.kh-audio-review-btn.accept');
+  played[entry.key] = false;
   if (acceptBtn) acceptBtn.disabled = true;
   if (stateNode) stateNode.textContent = 'جارٍ تحميل الملف والتحقق من بصمته…';
   if (!audio) audio = new Audio();
