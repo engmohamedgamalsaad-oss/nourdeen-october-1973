@@ -68,6 +68,30 @@ def read_json(path: Path) -> dict[str, Any]:
     return value
 
 
+def approved_pronunciation_blocks(
+    pronunciation: dict[str, Any],
+    slug: str,
+    pronunciation_path: Path,
+) -> dict[str, str]:
+    if not pronunciation:
+        return {}
+    if pronunciation.get("story") != slug or pronunciation.get("language") != "ar":
+        raise ValueError(f"{pronunciation_path}: story/language metadata mismatch")
+    raw_blocks = pronunciation.get("blocks")
+    approved = pronunciation.get("approved_audio_only_rewrites", [])
+    if not isinstance(raw_blocks, dict) or not isinstance(approved, list):
+        raise ValueError(f"{pronunciation_path}: invalid blocks or approved rewrite list")
+    approved_indexes = {str(index) for index in approved}
+    if any(not index.isdigit() or index not in raw_blocks for index in approved_indexes):
+        raise ValueError(f"{pronunciation_path}: approved rewrite references a missing or invalid block")
+    if any(
+        not isinstance(raw_blocks[index], str) or not raw_blocks[index].strip()
+        for index in approved_indexes
+    ):
+        raise ValueError(f"{pronunciation_path}: approved rewrite text must be a non-empty string")
+    return {index: raw_blocks[index] for index in approved_indexes}
+
+
 def text_hash(text: str, voice: str, rate: str, pitch: str, lang: str) -> str:
     fields = [GENERATOR_VERSION, lang, text, voice, rate, pitch]
     if lang == "ar":
@@ -258,24 +282,9 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         if "ar" in selected_languages and pronunciation_path.is_file()
         else {}
     )
-    if pronunciation and (
-        pronunciation.get("story") != slug
-        or pronunciation.get("language") != "ar"
-        or not isinstance(pronunciation.get("blocks"), dict)
-    ):
-        raise ValueError(f"Invalid story-specific Arabic pronunciation file: {pronunciation_path}")
-    raw_pronunciation_blocks = pronunciation.get("blocks", {})
-    approved_rewrites = pronunciation.get("approved_audio_only_rewrites", [])
-    if not isinstance(approved_rewrites, list):
-        raise ValueError(f"{pronunciation_path}: approved_audio_only_rewrites must be a list")
-    approved_indexes = {str(index) for index in approved_rewrites}
-    if any(not index.isdigit() or index not in raw_pronunciation_blocks for index in approved_indexes):
-        raise ValueError(f"{pronunciation_path}: approved rewrite references a missing or invalid block")
-    if any(not isinstance(raw_pronunciation_blocks[index], str) or not raw_pronunciation_blocks[index].strip() for index in approved_indexes):
-        raise ValueError(f"{pronunciation_path}: approved rewrite text must be a non-empty string")
-    pronunciation_blocks = {
-        index: raw_pronunciation_blocks[index] for index in approved_indexes
-    }
+    pronunciation_blocks = approved_pronunciation_blocks(
+        pronunciation, slug, pronunciation_path
+    )
     plan: dict[str, Any] = {
         "story": slug,
         "languages": {},
@@ -451,25 +460,9 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
         if "ar" in languages_to_generate and pronunciation_path.is_file()
         else {}
     )
-    if pronunciation_data:
-        if pronunciation_data.get("story") != slug or pronunciation_data.get("language") != "ar":
-            raise ValueError(f"{pronunciation_path}: story/language metadata mismatch")
-        raw_pronunciation_blocks = pronunciation_data.get("blocks")
-        if not isinstance(raw_pronunciation_blocks, dict):
-            raise ValueError(f"{pronunciation_path}: blocks must be an object keyed by block index")
-        approved_rewrites = pronunciation_data.get("approved_audio_only_rewrites", [])
-        if not isinstance(approved_rewrites, list):
-            raise ValueError(f"{pronunciation_path}: approved_audio_only_rewrites must be a list")
-        approved_indexes = {str(index) for index in approved_rewrites}
-        if any(not index.isdigit() or index not in raw_pronunciation_blocks for index in approved_indexes):
-            raise ValueError(f"{pronunciation_path}: approved rewrite references a missing or invalid block")
-        if any(not isinstance(raw_pronunciation_blocks[index], str) or not raw_pronunciation_blocks[index].strip() for index in approved_indexes):
-            raise ValueError(f"{pronunciation_path}: approved rewrite text must be a non-empty string")
-        pronunciation_blocks = {
-            index: raw_pronunciation_blocks[index] for index in approved_indexes
-        }
-    else:
-        pronunciation_blocks = {}
+    pronunciation_blocks = approved_pronunciation_blocks(
+        pronunciation_data, slug, pronunciation_path
+    )
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
