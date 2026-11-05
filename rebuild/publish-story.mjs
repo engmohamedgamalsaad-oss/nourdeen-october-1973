@@ -247,7 +247,7 @@ export async function buildStoryFiles(story, options = {}) {
   if (story.section !== 'october' && existingAt < 0) {
     audioTextReviewRequired = true;
   } else if (story.section !== 'october' && existingAt >= 0) {
-    const previousRoot = previousPath || root.replace(/\\/$/, '');
+    const previousRoot = previousPath || root.replace(/\/$/, '');
     const previousDataPath = previousRoot + '/data.json';
     if (await pathExists(previousDataPath)) {
       const previousData = await readJson(previousDataPath, 'بيانات الحكاية الحالية');
