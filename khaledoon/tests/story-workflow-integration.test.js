@@ -10,6 +10,9 @@ var builder = fs.readFileSync('khaledoon/story-builder.html', 'utf8');
 var preview = fs.readFileSync('khaledoon/preview.html', 'utf8');
 var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8');
 var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
+var storyPublisher = fs.readFileSync('rebuild/publish-story.mjs', 'utf8');
+var audioTextReviewer = fs.readFileSync('khaledoon/assets/audio-text-review.js', 'utf8');
+var audioGenerator = fs.readFileSync('scripts/generate_story_audio.py', 'utf8');
 var passed = 0;
 function test(name, fn) {
   try { fn(); passed++; console.log('ok - ' + name); }
@@ -50,6 +53,14 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("treeEntries.push({ path: entry.path, mode: '100644', type: 'blob', sha: null })"));
   assert.ok(publisher.includes("This story has moved."));
   assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
+});
+test('new non-October stories require an admin-approved five-language audio-text review', function () {
+  assert.ok(storyPublisher.includes("story.section !== 'october' && existingAt < 0"), 'only newly created non-October stories receive the mandatory review flag');
+  assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
+  assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
+  assert.ok(admin.includes("link.download='audio-pronunciation.json'"), 'the admin must download the approval file beside story.json');
+  assert.ok(audioGenerator.includes('validate_required_audio_text_review'), 'the generator must validate the approval record');
+  assert.ok(audioGenerator.includes('new story is blocked until the admin-approved five-language'), 'new-story generation must stop when the approval file is missing');
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
