@@ -29,7 +29,7 @@ const core = require('../assets/audio-review-core.js');
     { block_index: 1, chunk_index: 1, speaker: 'narrator' }
   ];
   assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments).ok, true);
-  assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments.slice(0, 2)).ok, false, 'missing a story block must fail');
+  assert.equal(core.validateManifestCoverage(coverageBlocks, coverageSegments.slice(0, 1)).ok, false, 'missing a story block must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [{ ...coverageSegments[0], speaker: 'narrator' }, ...coverageSegments.slice(1)]).ok, false, 'speaker mismatch must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [...coverageSegments, coverageSegments[0]]).ok, false, 'duplicate chunk must fail');
   assert.equal(core.validateManifestCoverage(coverageBlocks, [coverageSegments[0], coverageSegments[1], { ...coverageSegments[2], chunk_index: 2 }]).ok, false, 'missing chunk index must fail');
