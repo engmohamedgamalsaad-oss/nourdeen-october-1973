@@ -69,6 +69,7 @@ def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
             "missing_files": [],
             "extra_mp3_files": [],
             "duplicate_blocks": [],
+            "unexpected_blocks": [],
             "manifest_errors": [],
         }
         if manifest_path.is_file():
@@ -115,6 +116,7 @@ def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
         else:
             details["missing_blocks"] = sorted(expected)
             details["missing_files"] = []
+            details["extra_mp3_files"] = sorted(path.name for path in language_dir.glob("*.mp3"))
             details["unexpected_blocks"] = []
 
         details["status"] = (
