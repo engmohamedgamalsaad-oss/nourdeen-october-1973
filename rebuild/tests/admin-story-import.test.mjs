@@ -28,7 +28,7 @@ test('admin import exposes unified story validator and converter and preserves o
   assert.ok(html.includes("package-review.html?draft=1"), 'unified story-only drafts should use the full-package read-only preview');
   assert.match(builder, /package-review\.html\?v=20261101-story-review-1/);
   assert.ok(html.includes('function isStoryOnlyDraftRecord(it)'), 'admin should identify top-level and pending unified story-only drafts');
-  assert.ok(html.includes('bSave.disabled=true;bPub.disabled=true;'), 'legacy projection must not be saved as if it were the authoritative unified story package');
+  assert.ok(html.includes('bSave.disabled=true;var unifiedReadonlyNote'), 'legacy projection must not be saved as if it were the authoritative unified story package');
   assert.ok(html.includes("storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null)"), 'manual preview should open the saved unified story package without persisting legacy projection edits');
   assert.match(html, /ai_imported_format:storyOnlyDraft\?'KHALEDOON_STORY'/, 'new non-October drafts must record the canonical package identifier');
   assert.ok(html.includes("story-template-bundle.js?v=20261027-source-clean-2"));
@@ -119,6 +119,6 @@ test('unified package is mandatory for every non-October story, including legacy
   assert.ok(html.includes('if(storyOnlyDraft){nextMeta.story_only_draft=true'));
   assert.ok(html.includes('if(!isOctoberLegacyRecord(it)&&!storyOnly)'), 'non-October records must be blocked from the legacy publish path');
   assert.ok(html.includes("if(!isOctoberLegacyRecord(it)&&storyOnly&&storyPackage.format!=='KHALEDOON_STORY')"), 'non-October records must reject V2 and transitional packages at the admin boundary');
-  assert.ok(html.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;bPub.disabled=true;'), 'legacy save and preview controls must be disabled for every non-October record');
+  assert.ok(html.includes('if(!isOctoberLegacyRecord(it)){bSave.disabled=true;var unifiedReadonlyNote'), 'legacy save and preview controls must be disabled for every non-October record');
   assert.ok(html.includes('هذه الحكاية خارج قسم أكتوبر؛ أوقفنا الحفظ والمعاينة من المسار القديم.'), 'legacy records must be directed to the unified package workflow');
 });

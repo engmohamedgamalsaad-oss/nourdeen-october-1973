@@ -42,26 +42,34 @@ jobs:
         run: node khaledoon/tests/ai-json-repair.test.cjs
       - name: Run workflow unit tests
         run: node khaledoon/tests/story-workflow.test.js
+      - name: Run audio review core and preview integration tests
+        run: node khaledoon/tests/audio-review-core.test.cjs
       - name: Run image resource validation tests
         run: node khaledoon/tests/image-resource-validation.test.cjs
       - name: Run mocked integration contract tests
         run: node khaledoon/tests/story-workflow-integration.test.js
       - name: Run collision-safe story ID and template tests
+        if: ${{ !cancelled() }}
         run: node khaledoon/tests/story-template-bundle.test.cjs
       - name: Install Playwright
+        if: ${{ !cancelled() }}
         run: npm install --no-save playwright
       - name: Install Chromium for headless tests
+        if: ${{ !cancelled() }}
         timeout-minutes: 6
         run: |
           # GitHub-hosted Ubuntu runners provide the common Chromium system libraries; avoid apt mirror delays.
           npx playwright install chromium
       - name: Run real-browser unified story preview checks
+        if: ${{ !cancelled() }}
         timeout-minutes: 5
         run: node scripts/e2e-story-preview.cjs
       - name: Run mocked headless preview tests
+        if: ${{ !cancelled() }}
         timeout-minutes: 5
         run: node khaledoon/tests/story-workflow-browser.test.cjs
       - name: Run desktop/mobile admin visual audit with mock data
+        if: ${{ !cancelled() }}
         timeout-minutes: 5
         run: node khaledoon/tests/admin-visual-audit.test.cjs
       - name: Upload admin and generated story preview screenshots

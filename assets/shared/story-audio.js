@@ -328,7 +328,7 @@
           block_index: segment.block_index,
           speaker: segment.speaker,
           text: segment.text || '',
-          url: new URL(segment.src + '?v=' + encodeURIComponent(String(segment.hash || manifest.generated_at || manifest.version)), manifestUrl).href
+          url: new URL(segment.src + '?v=' + encodeURIComponent(String(segment.audio_revision || segment.audio_sha256 || segment.hash || manifest.generated_at || manifest.version)), manifestUrl).href
         };
       });
       if (!nextQueue.length) throw new Error('Empty audio manifest');

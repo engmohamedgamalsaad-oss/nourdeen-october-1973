@@ -50,6 +50,10 @@ function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disable
 async function decide(isApprove){
  if(busy)return;
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
+ if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october'){
+  if(!window.KHStoryAudioReview){message('تعذر تحميل مدقق الصوت. أعد تحميل المعاينة؛ لا يمكن اعتمادها قبل التحقق من حالة الصوت.',true);return}
+  if(!window.KHStoryAudioReview.canApprove()){message(window.KHStoryAudioReview.gateSummary()||'راجع واعتمد كل المقاطع الصوتية باللغات الخمس أولًا.',true);return}
+ }
  var why=String(reason.value||'').trim();
  if(!isApprove&&!why){reason.style.display='block';reason.focus();message('سبب الرفض مطلوب.',true);return}
  setBusy(true);message(isApprove?'جارٍ حفظ الاعتماد والتحقق منه…':'جارٍ حفظ الرفض والتحقق منه…');
@@ -70,9 +74,14 @@ async function decide(isApprove){
   if(record.status!=='published')payload.status=isApprove?(table==='submitted_stories'?'pending':'review'):'pending';
   if(record.status==='published'){
    if(isApprove){
-    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type','story_meta'].forEach(function(k){delete pending[k]});
-    pending.story_meta=meta;pending.status='pending';meta.pending_draft=pending;
-   }else if(meta.pending_draft){meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending'}
+    var pending=Object.assign({},draft);['record_data','submission_id','submission_table','record_type','story_meta','audio_review'].forEach(function(k){delete pending[k]});
+    var pendingMeta=Object.assign({},meta);delete pendingMeta.audio_review;
+    pending.story_meta=pendingMeta;pending.status='pending';meta.pending_draft=pending;
+   }else if(meta.pending_draft){
+    meta.pending_draft.preview_review=meta.preview_review;meta.pending_draft.status='pending';
+    delete meta.pending_draft.audio_review;
+    if(meta.pending_draft.story_meta){meta.pending_draft.story_meta=Object.assign({},meta.pending_draft.story_meta);delete meta.pending_draft.story_meta.audio_review}
+   }
   }
   payload.story_meta=meta;
   var save=await fetch(rowUrl,{method:'PATCH',headers:Object.assign({'Content-Type':'application/json',Prefer:'return=representation'},headers),body:JSON.stringify(payload)});

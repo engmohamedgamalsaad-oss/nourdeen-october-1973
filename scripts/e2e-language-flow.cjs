@@ -900,13 +900,21 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
     }
     await importButton.click();
-    try {
-      await page.waitForFunction(() => { const el = document.querySelector('.ai-status[role="status"]'); return !!el && !el.hidden && /تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة|❌ لم يُنفَّذ التعديل\./.test(el.textContent); }, null, { timeout: 30000 });
-    } catch (waitError) {
-      throw new Error('Timed out waiting for final import status; current status=' + await page.locator('.ai-status[role="status"]').innerText().catch(() => '(missing)') + '; textareaReadOnly=' + await textarea.evaluate((el) => el.readOnly).catch(() => 'unknown') + '; importButtonCount=' + await importButton.count() + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls) + '; failed requests=' + JSON.stringify(failedRequests));
+    // The admin refreshes its list after a successful save, removing the transient
+    // status node and import controls. Assert the persisted mocked record and preview
+    // destination instead of waiting for UI that is intentionally re-rendered away.
+    const popup = await popupPromise;
+    // window.open resolves before the async import finishes saving through Supabase.
+    // Wait for the mocked PATCH response to update the in-memory record before asserting.
+    for (let attempt = 0; attempt < 200 && !(savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package); attempt++) {
+      await page.waitForTimeout(100);
     }
-    const importStatus = await page.locator('.ai-status[role="status"]').innerText();
-    if (!/تم تنفيذ الكود وحُفظت المسودة|حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة/.test(importStatus)) throw new Error('story import was rejected: ' + importStatus.slice(-900));
+    const persistedPackage = savedRecord && savedRecord.story_meta && savedRecord.story_meta.story_package;
+    if (!persistedPackage || persistedPackage.slug !== storyPackage.slug ||
+        JSON.stringify(persistedPackage.i18n?.ar?.blocks) !== JSON.stringify(storyPackage.i18n.ar.blocks)) {
+      const importDiagnostics = await page.evaluate(() => ({ status: document.querySelector('.ai-status')?.textContent || '', badge: document.querySelector('.ai-badge')?.textContent || '', locked: document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]')?.readOnly ?? null, pasteLength: document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]')?.value?.length ?? null }));
+      throw new Error('story import did not persist the canonical unified package unchanged; diagnostics=' + JSON.stringify(importDiagnostics) + '; savedRecord=' + JSON.stringify(savedRecord) + '; failedRequests=' + JSON.stringify(failedRequests) + '; pageErrors=' + JSON.stringify(pageErrors) + '; consoleErrors=' + JSON.stringify(consoleErrors.slice(-12)) + '; API calls=' + JSON.stringify(apiCalls));
+    }
     if (!String(savedRecord.sources || '').includes('[org:المتحف القومي للتاريخ]')) {
       hard.push('story import did not preserve a readable Arabic source organization in the saved draft.');
     }
@@ -914,8 +922,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       hard.push('story source organization was percent-encoded in Arabic instead of remaining readable.');
     }
     if (savedRecord.status === 'published') hard.push('story import unexpectedly published the story instead of saving a draft.');
-    const popup = await popupPromise;
-    if (popup) await popup.waitForURL(/reader\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
+    if (popup) await popup.waitForURL(/package-review\.html\?draft=1/, { timeout: 15000 }).catch(() => {});
     if (popup) {
       await popup.waitForLoadState('domcontentloaded', { timeout: 10000 }).catch(() => {});
       await popup.waitForFunction(() => document.readyState === 'complete' && document.querySelector('#title') && document.querySelector('#title').textContent.trim().length > 0, null, { timeout: 15000 }).catch(() => {});

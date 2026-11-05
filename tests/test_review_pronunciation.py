@@ -128,14 +128,14 @@ class MagdiYacoubPilotIntegrationTests(unittest.TestCase):
             report["block"]["word_identity_and_order"]["visible_vs_submitted"]["status"],
             "FAIL",
         )
-        # Before regeneration, the existing manifest still matches the unchanged
-        # visible story, not the newly approved audio-only rewrite.
+        # The current manifest has been regenerated from the approved audio-only
+        # pronunciation source; it must match that source, not the visible paragraph.
         self.assertEqual(
             report["block"]["word_identity_and_order"]["submitted_vs_manifest"]["status"],
-            "FAIL",
+            "PASS",
         )
-        self.assertTrue(report["block"]["manifest_matches_visible_pre_regeneration"])
-        self.assertFalse(report["block"]["manifest_matches_submitted_source"])
+        self.assertFalse(report["block"]["manifest_matches_visible_pre_regeneration"])
+        self.assertTrue(report["block"]["manifest_matches_submitted_source"])
         self.assertEqual(
             report["block"]["manifest_text_verification"],
             "AVAILABLE",
