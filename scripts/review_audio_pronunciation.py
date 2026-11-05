@@ -222,6 +222,11 @@ def review_story_audio(
             reports.append({"status": "invalid_manifest_path", "needs_human_review": True})
             continue
         audio_path = language_dir / filename
+        try:
+            audio_path.resolve().relative_to(language_dir.resolve())
+        except ValueError:
+            reports.append({"src": filename, "status": "invalid_audio_path", "needs_human_review": True})
+            continue
         if not audio_path.is_file():
             reports.append({"src": filename, "status": "missing_audio", "needs_human_review": True})
             continue
