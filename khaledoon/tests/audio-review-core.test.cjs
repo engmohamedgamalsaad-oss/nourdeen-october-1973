@@ -22,6 +22,8 @@ const core = require('../assets/audio-review-core.js');
   const audioRevisionOne = await core.baseKey(S, 'ar', 'narrator', 'مرحبا بالعالم', engine);
   const audioRevisionTwo = await core.baseKey(S, 'ar', 'narrator', 'مرحبا بالعالم', { ...engine, audio_revision: 'mp3-sha-2' });
   assert.notEqual(audioRevisionOne, audioRevisionTwo, 'replacing the actual MP3 bytes must invalidate its previous approval');
+  assert.equal(await core.sha256Bytes(Buffer.from('abc')), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad', 'binary MP3 digest helper must hash raw bytes');
+
   assert.equal(core.PILOT, undefined, 'review core must not expose a single-story pilot allowlist');
   assert.equal(core.pilotInfo, undefined, 'review core must not gate operation by story slug');
 
@@ -57,6 +59,10 @@ const core = require('../assets/audio-review-core.js');
   const entry = { story_id: S, lang: 'ar', block_index: 3, chunk_index: 0, speaker: 'karma', base: a, key: a, text: 'مرحبا بالعالم' };
   let r = core.applyDecision(null, entry, { status: 'accepted' });
   assert.equal(r.clips[a].status, 'accepted');
+  const hashedEntry = { ...entry, key: 'hashed-key', base: 'hashed-base', source_base: 'stable-source-base', audio_sha256: 'a'.repeat(64) };
+  const hashedReview = core.applyDecision(null, hashedEntry, { status: 'accepted' });
+  assert.equal(hashedReview.audio_hashes['stable-source-base'], 'a'.repeat(64), 'actual MP3 digest must persist across review sessions');
+  assert.equal(hashedReview.clips['hashed-key'].audio_sha256, 'a'.repeat(64));
   r = core.applyDecision(r, entry, { status: 'rejected', note: 'نطق خاطئ', suggestion: 'صياغة أوضح', issue: 'audio_only' });
   assert.equal(r.clips[a].status, 'rejected');
   assert.equal(r.clips[a].issue, 'audio_only');
@@ -142,6 +148,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('stagedPackage.section !== story.section || stagedPackage.slug !== story.slug'), 'a stale admin context must never save one story review into another story row');
   assert.ok(reviewUi.includes('if (!connected) { initializing = false; return; }'), 'audio review controls must not render outside an admin-connected draft');
   assert.ok(reviewUi.includes('seg.audio_revision || seg.audio_sha256 ||'), 'review identity must include the actual generated MP3 digest when available');
+  assert.ok(reviewUi.includes('core.sha256Bytes(await blob.arrayBuffer())'), 'the actual MP3 bytes played by the reviewer must be hashed and checked');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
   assert.ok(reviewUi.includes("nextStory.section === 'october'"), 'October drafts must remain completely outside audio review');
