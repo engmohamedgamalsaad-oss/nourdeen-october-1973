@@ -106,7 +106,7 @@ async function loadManifests() {
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var res = await fetch(manifestUrl(lang), { cache: 'no-cache' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
+      if (!res.ok) { var requestError = new Error('HTTP ' + res.status); requestError.isMissingManifest = res.status === 404; throw requestError; }
       var data = await res.json();
       if (!data || data.version !== 1 || data.story !== story.slug || data.section !== story.section || data.language !== lang || !Array.isArray(data.segments) || !data.segments.length) {
         throw new Error('بيانات manifest غير متوافقة مع الحكاية أو اللغة.');
@@ -126,6 +126,7 @@ async function loadManifests() {
       manifests[lang] = data;
     } catch (e) {
       manifestErrors[lang] = String(e && e.message || e);
+      if (!e || !e.isMissingManifest) manifestLoadFailure = true;
     }
   }));
   enabled = Object.keys(manifests).length > 0;
