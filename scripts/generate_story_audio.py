@@ -27,7 +27,7 @@ LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "4"
 ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
-FISH_AUDIO_NARRATOR_VOICE_ID = "b65cfd7ce5e44607aedafeea3dbb01e8"  # owner-approved final narrator voice
+FISH_AUDIO_NARRATOR_VOICE_ID = "a02a8220d6014812aa5ff73434c54cc0"  # owner-approved final narrator voice
 FISH_AUDIO_MODEL = "s2.1-pro-free"
 # Explicit owner-approved scope for this one-time Arabic pronunciation pilot.
 FISH_AUDIO_ALLOWED_REGEN_BLOCKS = {1, 6, 7, 8, 10}
