@@ -165,7 +165,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </main>
 <script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
 <script src="assets/audio-review-core.js?v=20261105-review-core-10"></script>
-<script src="assets/audio-text-review.js?v=20261105-audio-text-review-2"></script>
+<script src="assets/audio-text-review.js?v=20261106-dictionary-review-3"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"></script>
 <script>
 (function(){
@@ -1019,50 +1019,38 @@ function pubRow(it){
      var audioTextReviewCopy=el('button','btn ghost','٢. نسخ برومبت مدقق النص الصوتي');audioTextReviewCopy.type='button';audioTextReviewBox.appendChild(audioTextReviewCopy);
      var audioTextReviewPaste=area('',7,100000);audioTextReviewPaste.placeholder='الصق هنا تقرير KHALEDOON_AUDIO_TEXT_REVIEW_V1 الناتج من أداة الذكاء الاصطناعي…';audioTextReviewPaste.setAttribute('aria-label','الصق نتيجة تدقيق النص الصوتي');audioTextReviewBox.appendChild(fld('٣. نتيجة مدقق النص الصوتي',audioTextReviewPaste,'التحقق يراجع بنية التقرير ومطابقة النصوص؛ لا يطبّق التعديلات تلقائيًا.'));
      var audioTextReviewValidate=el('button','btn ghost','٤. التحقق من نتيجة التدقيق');audioTextReviewValidate.type='button';audioTextReviewBox.appendChild(audioTextReviewValidate);
+     var audioTextReviewDictionary=el('button','btn ghost','٥. اقتراحات قاموس النطق العربي');audioTextReviewDictionary.type='button';audioTextReviewDictionary.disabled=true;audioTextReviewBox.appendChild(audioTextReviewDictionary);
      var audioTextReviewStatus=el('div','fnote','لم يتم تشغيل التدقيق بعد.');audioTextReviewStatus.setAttribute('role','status');audioTextReviewBox.appendChild(audioTextReviewStatus);
      var audioTextReviewResultList=el('div','review-data');audioTextReviewResultList.style.cssText='display:grid;gap:8px';
-     var audioTextReviewExport=el('button','btn primary','٥. اعتماد المراجعة وتصدير ملف الصوت');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
+     var audioTextReviewExport=el('button','btn primary','٦. اعتماد المراجعة وتصدير ملف الصوت');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
      audioTextReviewBox.appendChild(audioTextReviewResultList);audioTextReviewBox.appendChild(audioTextReviewExport);
      var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null);
-     function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true}
-     audioTextReviewCopy.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);
-      if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
-      try{
-       var diagnostics=window.KHAudioTextReview.diagnose(pkg),prompt=window.KHAudioTextReview.buildPrompt(pkg);
-       fallbackCopy(prompt,function(ok){
-        audioTextReviewStatus.textContent=ok
-         ?'تم نسخ برومبت التدقيق. عدد المقاطع: '+diagnostics.length+'. التنبيهات البنيوية الأولية: '+diagnostics.filter(function(item){return item.flags.length>0}).length+'. لم يتم إرسال أي طلب صوت أو تعديل الحكاية.'
-         :'تعذر نسخ البرومبت؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.';
-       });
-      }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز التدقيق: '+String(error&&error.message||error)}
-     });
-     audioTextReviewPaste.addEventListener('input',function(){clearAudioTextReviewCards();audioTextReviewCurrentResult=null;audioTextReviewStatus.textContent='تغير النص الملصوق؛ أعد التحقق قبل اعتماد أي اقتراح.'});
-     audioTextReviewValidate.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
-      if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة موحدة مرتبطة بهذه المسودة.';return}
-      var result=window.KHAudioTextReview.validateResult(audioTextReviewPaste.value,pkg);
-      if(!result.ok){
-       audioTextReviewStatus.textContent='التقرير غير صالح ('+result.errors.length+' ملاحظات): '+result.errors.slice(0,5).join(' | ');return;
-      }
-      try{audioTextReviewCurrentResult=JSON.parse(audioTextReviewPaste.value)}catch(ignoreReviewParse){audioTextReviewStatus.textContent='تعذر قراءة تقرير التدقيق بعد التحقق.';return}
-      var names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'},speakers={narrator:'الراوي',karma:'كارما'};
-      var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
-      audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك.';audioTextReviewExport.disabled=false;
+     function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true;audioTextReviewDictionary.disabled=true}
+     function renderAudioTextReviewSuggestions(suggestions){
+      while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);
       if(!suggestions.length){audioTextReviewResultList.appendChild(el('p','fnote','لا توجد تغييرات مقترحة تحتاج إلى اعتماد.'));return}
-      suggestions.forEach(function(item){
-       var card=el('div','review-data');card.style.cssText='border:1px solid var(--line,#31505a);border-radius:8px;padding:10px;display:grid;gap:6px';
-       card.appendChild(el('strong','',(names[item.lang]||item.lang)+' — المقطع '+(item.block_index+1)+' — '+(speakers[item.speaker]||item.speaker)));
-       card.appendChild(el('p','fnote','النص الحالي: '+item.original_text));
-       card.appendChild(el('p','fnote','المقترح الصوتي: '+item.proposed_audio_text));
-       card.appendChild(el('p','fnote','سبب الاقتراح: '+(item.reason||'لم يذكر سببًا.')));
-       var label=el('label','fnote');var check=document.createElement('input');check.type='checkbox';check.addEventListener('change',function(){
-        var key=item.lang+':'+item.block_index;if(check.checked)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key];
-        audioTextReviewExport.disabled=Object.keys(approvedAudioTextChanges).length===0;
-       });
-       label.appendChild(check);label.appendChild(document.createTextNode(' أوافق على استخدام هذا المقترح في النص الصوتي فقط.'));
-       card.appendChild(label);audioTextReviewResultList.appendChild(card);
+       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
+       audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك. يمكنك إضافة اقتراحات القاموس العربي بعد ذلك.';audioTextReviewDictionary.disabled=false;audioTextReviewExport.disabled=true;
+       renderAudioTextReviewSuggestions(suggestions);
       });
+     audioTextReviewDictionary.addEventListener('click',async function(){
+      var pkg=storyReviewPackageOf(it);
+      if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير التدقيق أولًا.';return}
+      audioTextReviewDictionary.disabled=true;
+      try{
+       var dictionaryUrl=new URL('../audio/pronunciation/ar-EG.json',location.href);
+       var response=await fetch(dictionaryUrl.href,{cache:'no-cache'});
+       if(!response.ok)throw new Error('تعذر تحميل قاموس النطق ('+response.status+').');
+       var dictionary=await response.json();
+       var outcome=window.KHAudioTextReview.applyDictionarySuggestions(audioTextReviewCurrentResult,pkg,dictionary);
+       audioTextReviewCurrentResult=outcome.report;
+       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
+       renderAudioTextReviewSuggestions(suggestions);
+       audioTextReviewStatus.textContent=outcome.applied.length
+        ?'أضيف '+outcome.applied.length+' اقتراح قاموس إلى قائمة المراجعة. لم يُعتمد أي اقتراح؛ عدّل النص إن لزم وحدد يدويًا ما توافق عليه.'
+        :'لم يجد القاموس عبارة مطابقة جديدة. الاقتراحات السابقة لم تُستبدل.';
+      }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز اقتراحات القاموس: '+String(error&&error.message||error)}
+      finally{audioTextReviewDictionary.disabled=false}
      });
      audioTextReviewExport.addEventListener('click',function(){
       var pkg=storyReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
