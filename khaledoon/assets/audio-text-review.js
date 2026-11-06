@@ -94,45 +94,42 @@
     }
     var replacements = [], applied = false, cursor = 0;
     while (cursor < sourceSpans.length) {
-      var found = false;
-      {
-        var endIndex = cursor + matchTokens.length;
-        if (endIndex > sourceSpans.length) break;
-        var actual = sourceSpans.slice(cursor, endIndex).map(function (item) { return normalizeArabicToken(item.text); });
-        if (actual.some(function (token, index) { return token !== matchTokens[index]; })) break;
-        var cleanGaps = true;
+      var endIndex = cursor + matchTokens.length;
+      if (endIndex > sourceSpans.length) break;
+      var actual = sourceSpans.slice(cursor, endIndex).map(function (item) { return normalizeArabicToken(item.text); });
+      var matches = actual.every(function (token, index) { return token === matchTokens[index]; });
+      if (matches) {
         for (var gapIndex = cursor; gapIndex < endIndex - 1; gapIndex++) {
-          if (source.slice(sourceSpans[gapIndex].end, sourceSpans[gapIndex + 1].start).trim()) cleanGaps = false;
+          if (source.slice(sourceSpans[gapIndex].end, sourceSpans[gapIndex + 1].start).trim()) matches = false;
         }
-        if (!cleanGaps) break;
         if (entry.before) {
-          if (cursor === 0 || source.slice(sourceSpans[cursor - 1].end, sourceSpans[cursor].start).trim() ||
-              normalizeArabicToken(sourceSpans[cursor - 1].text) !== normalizeArabicToken(entry.before)) break;
+          matches = matches && cursor > 0 &&
+            !source.slice(sourceSpans[cursor - 1].end, sourceSpans[cursor].start).trim() &&
+            normalizeArabicToken(sourceSpans[cursor - 1].text) === normalizeArabicToken(entry.before);
         }
         if (entry.after) {
-          if (endIndex >= sourceSpans.length || source.slice(sourceSpans[endIndex - 1].end, sourceSpans[endIndex].start).trim() ||
-              normalizeArabicToken(sourceSpans[endIndex].text) !== normalizeArabicToken(entry.after)) break;
+          matches = matches && endIndex < sourceSpans.length &&
+            !source.slice(sourceSpans[endIndex - 1].end, sourceSpans[endIndex].start).trim() &&
+            normalizeArabicToken(sourceSpans[endIndex].text) === normalizeArabicToken(entry.after);
         }
-        for (var tokenIndex = 0; tokenIndex < spokenTokens.length; tokenIndex++) {
-          replacements.push({
-            start: sourceSpans[cursor + tokenIndex].start,
-            end: sourceSpans[cursor + tokenIndex].end,
-            text: spokenTokens[tokenIndex]
-          });
-        }
-        applied = true;
-        cursor = endIndex;
-        found = true;
-        break;
       }
-      if (!found) cursor++;
+      if (!matches) { cursor++; continue; }
+      for (var tokenIndex = 0; tokenIndex < spokenTokens.length; tokenIndex++) {
+        replacements.push({
+          start: sourceSpans[cursor + tokenIndex].start,
+          end: sourceSpans[cursor + tokenIndex].end,
+          text: spokenTokens[tokenIndex]
+        });
+      }
+      applied = true;
+      cursor = endIndex;
     }
     var result = source;
     replacements.reverse().forEach(function (item) {
       result = result.slice(0, item.start) + item.text + result.slice(item.end);
     });
-    if (normalizeArabicToken(result.replace(/[^\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g, '')) !==
-        normalizeArabicToken(source.replace(/[^\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g, ''))) {
+    if (normalizeArabicToken(result.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, '')) !==
+        normalizeArabicToken(source.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, ''))) {
       throw new Error('تطبيق القاموس غيّر الحروف العربية؛ تم إيقاف الاقتراح.');
     }
     return { text: result, applied: applied };
