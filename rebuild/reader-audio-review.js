@@ -301,6 +301,7 @@ async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
   var control = button.closest('.kh-audio-review-controls');
   var stateNode = control && control.querySelector('.kh-audio-review-state');
+  var audioStateNode = control && control.querySelector('.kh-audio-ready-state');
   var acceptBtn = control && control.querySelector('.kh-audio-review-btn.accept');
   if (!forceRestart && activeEntryKey === entry.key && audio && audio.src) {
     if (!audio.paused) {
@@ -323,6 +324,7 @@ async function play(entry, button, forceRestart) {
   played[entry.key] = false;
   if (acceptBtn) acceptBtn.disabled = true;
   if (stateNode) stateNode.textContent = 'جارٍ تحميل الملف والتحقق من بصمته…';
+  if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state preparing'; audioStateNode.textContent = 'جارٍ تجهيز الصوت للتشغيل'; }
   if (!audio) audio = new Audio();
   try {
     if (activePlayButton && activePlayButton !== button) {
@@ -349,6 +351,7 @@ async function play(entry, button, forceRestart) {
     }
     entry.segment.audio_sha256 = digest;
     readyByKey[entry.key] = 'ready';
+    if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state ready'; audioStateNode.textContent = 'جاهز للاستماع'; }
     if (previousKey !== entry.key) {
       delete readyByKey[previousKey];
       delete played[previousKey];
@@ -385,6 +388,7 @@ async function play(entry, button, forceRestart) {
       activePlayButton = null;
       played[entry.key] = false;
       if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
+      if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state failed'; audioStateNode.textContent = 'فشل تجهيز الصوت للتشغيل'; }
       if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.';
       if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     };
@@ -405,6 +409,7 @@ async function play(entry, button, forceRestart) {
     activeEntryKey = '';
     activePlayButton = null;
     if (acceptBtn) acceptBtn.disabled = true;
+    if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state failed'; audioStateNode.textContent = 'فشل تجهيز الصوت للتشغيل'; }
     if (stateNode) stateNode.textContent = 'تعذر التحقق من الملف الصوتي: ' + (e.message || e);
   }
 }
@@ -656,7 +661,7 @@ function injectStyles() {
     '.kh-audio-review-btn.accept{border-color:#4b9a70;color:#4b9a70}.kh-audio-review-btn.reject,.kh-audio-review-btn.reject-save{border-color:#b66b6b;color:#d88b8b}',
     '.kh-audio-review-btn.kh-audio-review-playing{background:var(--accent);color:#14202a}',
     '.kh-audio-review-state{margin-inline-start:auto;font-size:12px;color:var(--muted)}',
-    '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
+    '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started,.kh-audio-ready-state.preparing{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
