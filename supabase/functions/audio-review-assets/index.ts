@@ -71,6 +71,39 @@ Deno.serve(async (req: Request) => {
   });
   const prefix = section + "/" + slug + "/" + language;
 
+  if (body.action === "review_get") {
+    const { data, error } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (error) return reply(500, { error: "تعذر تحميل سجل مراجعة الصوت.", detail: error.message });
+    if (data) return reply(200, { success: true, audio_review: data.audio_review });
+    const emptyReview = { version: 1, regen: {}, clips: {}, audio_hashes: {} };
+    const created = await service.from("story_audio_reviews")
+      .upsert({ section, slug, audio_review: emptyReview }, { onConflict: "section,slug" })
+      .select("audio_review").single();
+    if (created.error) return reply(500, { error: "تعذر إنشاء سجل مراجعة الصوت.", detail: created.error.message });
+    return reply(200, { success: true, audio_review: created.data.audio_review });
+  }
+
+  if (body.action === "review_save") {
+    const next = body.audio_review;
+    if (!next || next.version !== 1 || !next.clips || typeof next.clips !== "object" ||
+        Array.isArray(next.clips) || !next.regen || typeof next.regen !== "object" ||
+        !next.audio_hashes || typeof next.audio_hashes !== "object" ||
+        JSON.stringify(next).length > 1500000) {
+      return reply(400, { error: "بيانات مراجعة الصوت غير صالحة أو أكبر من الحد المسموح." });
+    }
+    const clipEntries = Object.entries(next.clips);
+    if (clipEntries.length > 1000 || clipEntries.some(([key, clip]: [string, any]) =>
+      !key || key.length > 600 || !clip || !["accepted", "rejected"].includes(clip.status))) {
+      return reply(400, { error: "تحتوي مراجعة الصوت على قرارات مقاطع غير صالحة." });
+    }
+    const saved = await service.from("story_audio_reviews")
+      .upsert({ section, slug, audio_review: next }, { onConflict: "section,slug" })
+      .select("audio_review").single();
+    if (saved.error) return reply(500, { error: "تعذر حفظ مراجعة الصوت.", detail: saved.error.message });
+    return reply(200, { success: true, audio_review: saved.data.audio_review });
+  }
+
   if (body.action === "stage") {
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub الخاص بقراءة الـArtifacts غير متاح." });
     const artifactId = Number(body.artifact_id);
