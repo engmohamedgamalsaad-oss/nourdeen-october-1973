@@ -98,7 +98,16 @@ def locate_story(story_path: Path) -> tuple[Path, str, bool]:
     parts = relative.parts
     if story_path.name == "story.json" and len(parts) == 4 and parts[0] == "stories":
         return relative, parts[1], parts[1] == "october"
-    raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
+    if (
+        story_path.name == "story.json"
+        and len(parts) == 4
+        and parts[:2] == ("rebuild", "october-audio-packages")
+    ):
+        return relative, "october", True
+    raise ValueError(
+        "Expected stories/<section>/<id>/story.json or "
+        "rebuild/october-audio-packages/<id>/story.json, got " + str(relative)
+    )
 
 
 def require_october_readiness(story_path: Path, package: dict[str, Any]) -> None:
