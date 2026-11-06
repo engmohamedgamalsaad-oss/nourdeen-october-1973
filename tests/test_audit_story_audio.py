@@ -34,14 +34,17 @@ class AudioInventoryTests(unittest.TestCase):
         self.write_json(story_dir / "story.json", package)
         return story_dir
 
-    def test_skips_october_and_unpublished_stories(self) -> None:
+    def test_includes_october_and_skips_unpublished_stories(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             self.make_story(root, "october", "001", "october-story")
             self.make_story(root, "science", "002", "draft-story", published=False)
             report = audit(root)
+            self.assertEqual(report["published_stories"], 1)
             self.assertEqual(report["published_non_october_stories"], 0)
-            self.assertEqual(report["october_stories_skipped"], 1)
+            self.assertEqual(report["october_stories_skipped"], 0)
+            self.assertEqual(report["stories_included"], 1)
+            self.assertEqual(report["stories"][0]["section"], "october")
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
 
@@ -126,6 +129,36 @@ class AudioInventoryTests(unittest.TestCase):
             arabic = audit(root)["stories"][0]["languages"]["ar"]
             self.assertEqual(arabic["duplicate_blocks"], [0])
             self.assertTrue(any("invalid src" in error for error in arabic["manifest_errors"]))
+
+
+    def test_includes_ready_october_audio_packages_in_shared_inventory(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            package_dir = root / "rebuild" / "october-audio-packages" / "001"
+            self.write_json(package_dir / "story.json", {
+                "format": "KHALEDOON_STORY",
+                "section": "october",
+                "slug": "october-sample",
+                "i18n": {
+                    language: {"blocks": [
+                        {"speaker": "narrator", "text": f"Text {language}"},
+                        {"speaker": "karma", "text": f"Reply {language}"},
+                    ]}
+                    for language in LANGUAGES
+                },
+            })
+            self.write_json(package_dir / "audio-readiness.json", {
+                "format": "KHALEDOON_OCTOBER_AUDIO_READINESS_V1",
+                "story": "001",
+                "ready": True,
+            })
+            report = audit(root)
+            self.assertEqual(report["october_audio_packages"], 1)
+            self.assertEqual(report["stories_included"], 1)
+            self.assertEqual(report["stories"][0]["section"], "october")
+            self.assertEqual(report["stories"][0]["status"], "incomplete")
+            self.assertEqual(report["tts_requests"], 0)
+            self.assertEqual(report["files_modified"], 0)
 
 
 if __name__ == "__main__":
