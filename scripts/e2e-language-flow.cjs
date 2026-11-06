@@ -905,16 +905,16 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     const editorDisclosure = card.locator('.review-data > details > summary');
     await editorDisclosure.waitFor({ state: 'visible', timeout: 10000 });
     await editorDisclosure.evaluate((summary) => summary.click());
-    const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
+    const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
-    const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
+    const importButton = card.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
     // The current admin explicitly starts the paste field unlocked. Only perform an
     // unlock click when the rendered textarea is actually read-only; never double-submit.
     if (await textarea.evaluate((el) => el.readOnly)) {
       await importButton.click();
-      await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
+      await page.waitForFunction((el) => !!el && !el.readOnly, await textarea.elementHandle(), { timeout: 5000 });
     }
     await importButton.click();
     // The admin refreshes its list after a successful save, removing the transient
