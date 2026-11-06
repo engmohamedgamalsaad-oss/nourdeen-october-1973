@@ -25,7 +25,6 @@ import urllib.request
 from pathlib import Path
 from typing import Any
 
-import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".audio-staging"
@@ -285,6 +284,8 @@ async def synthesize(
     text: str, voice: str, rate: str, pitch: str, destination: Path
 ) -> None:
     """Make one Edge TTS request; surface failures without automatic resubmission."""
+    import edge_tts
+
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(destination.stem + ".partial.mp3")
     try:
