@@ -71,6 +71,10 @@ class OctoberPackageNotReady(ValueError):
     """An October audio package exists but is not complete in all five languages."""
 
 
+class AudioTextApprovalRequired(ValueError):
+    """A story is valid but cannot proceed until its shared human review is approved."""
+
+
 def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
@@ -423,8 +427,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         review_required = metadata.get("audio_text_review_required") is True
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
-        raise ValueError(
-            f"{relative}: new story is blocked until the admin-approved five-language "
+        raise AudioTextApprovalRequired(
+            f"{relative}: blocked until the admin-approved five-language "
             "audio-pronunciation.json is saved beside story.json."
         )
     pronunciation = (
@@ -574,7 +578,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
             plan = inspect_generation_plan(story_path, staging_root)
             plan["path"] = relative.as_posix()
             october.append(plan)
-        except OctoberPackageNotReady as exc:
+        except (OctoberPackageNotReady, AudioTextApprovalRequired) as exc:
             october.append({"path": relative.as_posix(), "blocked": str(exc)})
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             october.append({"path": relative.as_posix(), "error": str(exc)})
