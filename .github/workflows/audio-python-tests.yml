@@ -1,6 +1,8 @@
 name: October audio Python safety tests
 
 on:
+  push:
+    branches: ["ci/october-audio-python-tests-20261106"]
   pull_request:
     branches: [main]
     paths:
@@ -27,7 +29,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-          cache: "pip"
 
       - name: Install the generator's import dependency
         run: python -m pip install --disable-pip-version-check edge-tts
