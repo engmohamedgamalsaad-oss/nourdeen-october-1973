@@ -66,9 +66,12 @@ Deno.serve(async (req: Request) => {
     const artifactId = Number(body.artifact_id);
     const runId = Number(body.run_id);
     const expectedName = String(body.artifact_name ?? "");
+    const canonicalName = section === "history" && slug === "ibn-sina" && language === "ar"
+      ? "ibn-sina-arabic-audio-staging"
+      : "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
     if (!Number.isSafeInteger(artifactId) || artifactId < 1 || !Number.isSafeInteger(runId) || runId < 1 ||
-        expectedName !== "ibn-sina-arabic-audio-staging" || section !== "history" || slug !== "ibn-sina" || language !== "ar") {
-      return reply(400, { error: "بيانات الـArtifact لا تطابق حزمة مراجعة ابن سينا المعتمدة." });
+        expectedName !== canonicalName) {
+      return reply(400, { error: "بيانات الـArtifact لا تطابق اسم الحكاية والقسم واللغة." });
     }
     const existing = await service.storage.from(BUCKET).list(prefix, { limit: 100 });
     if (existing.error) return reply(500, { error: "تعذر فحص التخزين الخاص.", detail: existing.error.message });
@@ -94,8 +97,9 @@ Deno.serve(async (req: Request) => {
     if (!manifestFile) return reply(422, { error: "الـArtifact لا يحتوي manifest.json." });
     const manifest = JSON.parse(await manifestFile.async("string"));
     if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== language ||
-        !Array.isArray(manifest.segments) || manifest.segments.length !== 17) {
-      return reply(422, { error: "بيانات manifest لا تطابق حزمة ابن سينا العربية ذات 17 مقطعًا." });
+        !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
+        (section === "history" && slug === "ibn-sina" && language === "ar" && manifest.segments.length !== 17)) {
+      return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو نطاق المقاطع المسموح." });
     }
     const expectedVoices: Record<string, string> = {
       narrator: "a02a8220d6014812aa5ff73434c54cc0",
@@ -103,9 +107,12 @@ Deno.serve(async (req: Request) => {
     };
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
-      if (!segment || !["narrator", "karma"].includes(segment.speaker) ||
-          segment.provider !== "fish-audio" || segment.model !== "s2.1-pro-free" ||
-          segment.voice !== expectedVoices[segment.speaker] ||
+      const engineOk = language === "ar"
+        ? segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
+          segment?.voice === expectedVoices[segment?.speaker]
+        : segment?.provider === "edge-tts" && segment?.model === "edge-tts" &&
+          typeof segment?.voice === "string" && !!segment.voice.trim();
+      if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
           !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src ?? "")) ||
           !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? "")) ||
           typeof segment.text !== "string" || !segment.text.trim() || seen.has(segment.src)) {
