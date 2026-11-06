@@ -77,21 +77,14 @@ function rowUrl() {
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
 }
 async function loadRow() {
-  if (!getContext()) { canWrite = false; return false; }
   var stagedPackage = null;
   try { stagedPackage = JSON.parse(localStorage.getItem('kh-story-review-package') || 'null'); } catch (e) {}
   if (!stagedPackage || stagedPackage.section !== story.section || stagedPackage.slug !== story.slug) {
     throw new Error('هوية الحكاية في سياق الأدمن لا تطابق الحكاية المعروضة؛ أعد فتح المعاينة من صف الحكاية الصحيح.');
   }
-  var token = await adminToken();
+  var result = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+  review = core.cloneReview(result.audio_review || null);
   canWrite = true;
-  var res = await fetch(rowUrl() + '&select=*', { headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store' });
-  if (!res.ok) throw new Error('تعذرت قراءة سجل المراجعة (' + res.status + ').');
-  var rows = await res.json();
-  if (!rows.length) throw new Error('لم يتم العثور على سجل الحكاية.');
-  row = rows[0];
-  var meta = row.story_meta || {};
-  review = core.cloneReview(meta.audio_review || null);
   return true;
 }
 function pronunciationReviewFor(entry) {
@@ -134,46 +127,23 @@ function pronunciationReviewMatches(clip, expected) {
 async function saveReview(entry, decision) {
   var key = entry && entry.key;
   if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
-  if (!row || !ctx) throw new Error('سجل المراجعة غير متصل بلوحة الإدارة.');
+  if (!canWrite || !story) throw new Error('مراجعة الصوت غير متصلة بسجل الحكاية.');
   busy = true;
   try {
-    var token = await adminToken();
-    var fresh = await fetch(rowUrl() + '&select=id,status,story_meta', {
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store'
-    });
-    if (!fresh.ok) throw new Error('تعذرت إعادة قراءة السجل قبل الحفظ (' + fresh.status + ').');
-    var freshRows = await fresh.json();
-    if (!freshRows.length) throw new Error('اختفى سجل الحكاية قبل الحفظ.');
-    var current = freshRows[0], meta = Object.assign({}, current.story_meta || {});
-    var currentReview = core.cloneReview(meta.audio_review || null);
     var decisionWithAnalysis = Object.assign({}, decision);
     var attachedPronunciationReview = pronunciationReviewFor(entry);
     if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
-    var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    var next = core.applyDecision(core.cloneReview(review), entry, decisionWithAnalysis);
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
-    meta.audio_review = next;
-    var saved = await fetch(rowUrl(), {
-      method: 'PATCH',
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'return=representation' },
-      body: JSON.stringify({ story_meta: meta })
+    var saved = await audioAssetsRequest({
+      action: 'review_save', section: story.section, slug: story.slug, audio_review: next
     });
-    if (!saved.ok) throw new Error('تعذر حفظ مراجعة الصوت (' + saved.status + '): ' + (await saved.text()).slice(0, 180));
-    var savedRows = await saved.json();
-    var savedReview = savedRows[0] && savedRows[0].story_meta && savedRows[0].story_meta.audio_review;
-    if (!savedReview || !savedReview.clips || !savedReview.clips[key]) throw new Error('لم يؤكد الخادم حفظ قرار المقطع.');
-    if (!pronunciationReviewMatches(savedReview.clips[key], expectedPronunciationReview)) {
-      throw new Error('لم يؤكد الخادم حفظ تفاصيل تقرير مدقق النطق كما أُرسلت.');
-    }
-    var verify = await fetch(rowUrl() + '&select=id,story_meta', {
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store'
-    });
-    if (!verify.ok) throw new Error('تعذر التحقق النهائي من حفظ المراجعة.');
-    var verifiedRows = await verify.json();
-    var verified = verifiedRows[0] && verifiedRows[0].story_meta && verifiedRows[0].story_meta.audio_review;
-    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== decision.status ||
+    var verified = saved && saved.audio_review;
+    if (!verified || !verified.clips || !verified.clips[key] ||
+        verified.clips[key].status !== decision.status ||
         !pronunciationReviewMatches(verified.clips[key], expectedPronunciationReview)) {
-      throw new Error('فشل التحقق النهائي من قرار المقطع.');
+      throw new Error('لم يؤكد الخادم حفظ قرار المقطع وتفاصيل مراجعة النطق.');
     }
     review = core.cloneReview(verified);
   } finally {
