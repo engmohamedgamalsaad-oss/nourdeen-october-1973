@@ -222,8 +222,19 @@ test('rejects a model report that attempts to waive human review', () => {
   assert.ok(result.errors.some(error => error.includes('المراجعة البشرية مطلوبة دائمًا')));
 });
 
-test('refuses October and rejects invalid review JSON', () => {
-  assert.throws(() => review.collectSegments(packageFixture('october')), /أكتوبر/);
-  const result = review.validateResult('not json', packageFixture());
-  assert.equal(result.ok, false);
+test('uses the same five-language audio text review for October packages', () => {
+  const pkg = packageFixture('october');
+  const items = review.collectSegments(pkg);
+  assert.equal(items.length, 10);
+  const segments = items.map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const result = review.validateResult({ format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments }, pkg);
+  assert.equal(result.ok, true);
+  const invalid = review.validateResult('not json', pkg);
+  assert.equal(invalid.ok, false);
 });
