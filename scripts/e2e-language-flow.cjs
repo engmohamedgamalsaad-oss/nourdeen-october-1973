@@ -885,6 +885,18 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
+    await page.waitForFunction(() => {
+      const app = document.querySelector('#app');
+      const tabs = document.querySelector('#views');
+      return !!app && !app.hidden && !!tabs && !!tabs.querySelector('button');
+    }, null, { timeout: 20000 });
+    // Explicitly activate the submissions view; the row may already exist in the DOM
+    // while another admin view is selected, so DOM presence alone is not visibility.
+    await page.locator('#views').getByRole('button', { name: 'الحكايات المرسلة', exact: true }).click();
+    await page.waitForFunction(() => {
+      const view = document.querySelector('#viewSubs');
+      return !!view && !view.hidden;
+    }, null, { timeout: 5000 });
     await page.getByText('Existing E2E Draft', { exact: true }).waitFor({ state: 'visible', timeout: 20000 });
     const card = page.locator('details.pubrow:visible').filter({ hasText: 'Existing E2E Draft' }).first();
     await card.locator('summary').click();
