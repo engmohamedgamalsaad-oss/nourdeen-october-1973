@@ -199,7 +199,7 @@ def main(argv: list[str] | None = None) -> int:
         ensure_ascii=False,
         indent=2,
     )
-    sys.stdout.write("\\n")
+    sys.stdout.write("\n")
     return 0
 
 
