@@ -1,0 +1,1873 @@
+{
+  "format": "KHALEDOON_AUDIO_PRONUNCIATION_V1",
+  "story": "004",
+  "section": "october",
+  "language": "ar",
+  "approved_audio_only_rewrites": [
+    "3",
+    "4",
+    "5",
+    "7",
+    "8",
+    "9",
+    "11",
+    "12",
+    "14",
+    "16",
+    "18",
+    "19",
+    "21",
+    "22",
+    "25",
+    "27",
+    "29",
+    "31",
+    "33",
+    "34",
+    "35",
+    "37",
+    "38",
+    "39",
+    "41",
+    "42",
+    "43"
+  ],
+  "blocks": {
+    "3": "في ضهر يوم السبت، ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، الموافق عشرة رمضان سنة ألف وتلتمية وتلاتة وتسعين هجرية، طلعت الطيارات المصرية في مهمة جوية كبيرة، ضمن خطة الحرب. الطيارات ماكانتش بتتحرك عشوائي. كل مجموعة ليها هدف محدد، وميعاد، ومسار، وارتفاع متحسب كويس.",
+    "4": "كانت المهمة إنهم يضربوا مواقع عسكرية مهمة، زي مراكز القيادة والرادار ومواقع الصواريخ والمطارات، عشان يربكوا دفاعات العدو، ويساعدوا القوات المصرية اللي بتستعد لعبور قناة السويس.",
+    "5": "بس ورا الخريطة والخطة كان فيه حقيقة إنسانية: جوه كل طيارة فيه طيار ليه أسرة وأحلام، وعارف إن الرجوع مش مضمون. بعضهم رجع لقاعدته، وبعضهم ماجاش تاني.",
+    "7": "الطيارات طارت على ارتفاعات واطية، عشان تقلل فرصة إن حد يكتشفها، وبعدين اتجهت للأهداف المحددة. وكان على الطيار إنه يلتزم بالخطة، وينفذ المهمة، ويتعامل مع الخطر في ثواني قليلة.",
+    "8": "البيانات العسكرية المصرية أعلنت إن الضربة حققت إصابات مباشرة في أهدافها، وإن معظم الطيارات رجعت. لكن الطيارة اللي ماترجعش مش مجرد رقم؛ وراها إنسان أدّى واجبه لآخر لحظة.",
+    "9": "الشهادة مش مجرد مشهد في السما؛ دي حياة كاملة، صاحبها اختار إنه يحط واجبه فوق سلامته الشخصية.",
+    "11": "عاطف السادات كان طيار مصري، وأخو الرئيس أنور السادات. وفيه روايات منشورة بتقول إنه أصرّ يشارك في الضربة الأولى، ونفّذ هجومه على هدف عسكري في سيناء، وبعدين طيارته اتصابت ومارجعش منها.",
+    "12": "وتختلف بعض الروايات في تفاصيل الطلعات وأعداد الطائرات والطيارين، لذلك نركز هنا على الأسماء والوقائع التي تدعمها المصادر المنشورة.",
+    "14": "المصادر المنشورة محتفظة بصور وأسماء بعض الأبطال. هنا بنعرض صورتين موثقتين، مع احترامنا لاختلاف الروايات التاريخية، ومن غير ما ندّعي إنهم القايمة الكاملة لكل شهداء الضربة.",
+    "16": "شارك في الضربة الجوية الأولى يوم ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، وطيارته مارجعتش بعد ما نفّذ المهمة.",
+    "18": "قائد تشكيل من طيارات سوخوي سبعة، وتقارير صحفية بتذكر إنه استشهد خلال مهمة الضربة الأولى، قريب من مطار المليز.",
+    "19": "والصور هنا بتعرض أسماء أبطال وردت في المصادر المنشورة، من غير ما نزعم إنها قائمة كاملة أو ترتيب نهائي للشهداء.",
+    "21": "الضربة الجوية لوحدها ماأنهتش الحرب، والنصر ماكانش نتيجة سلاح واحد. كانت جزء من خطة أكبر شاركت فيها القوات الجوية والمدفعية والجيش والبحرية والدفاع الجوي، وكل واحد فيهم كان ليه مهمة مختلفة.",
+    "22": "الهجوم الجوي ساعد في إرباك بعض مواقع العدو، وقلل قدرتها على الرد في اللحظات الأولى. وبعده بدأ التمهيد المدفعي، وعبرت مجموعات من الجنود قناة السويس، في واحدة من أهم مراحل الحرب.",
+    "25": "الإنجاز الكبير بيبدأ بتدريب طويل وتفاصيل متحسبة، مش بالصدفة.",
+    "27": "الطيار مابيشتغلش لوحده؛ نجاح المهمة بيعتمد على فرق وخطط وتعاون.",
+    "29": "الشجاعة معناها إنك تأدّي واجبك وإنت فاهم الخطر، مش إنك تتجاهله.",
+    "31": "احترام الشهداء معناه كمان احترام الحقيقة، وإننا مانخترعش تفاصيل عن حياتهم أو عن استشهادهم.",
+    "33": "لما بنفتكر شهداء الضربة الجوية الأولى، مش بنفتكر الطيارات والأهداف بس. بنفتكر ناس شالوا مسؤولية صعبة في لحظة مصيرية، وبنفتكر أسر استنت رجوعهم وماشافتهمش تاني.",
+    "34": "أنا كتبت الحكاية دي عشان أتعلم إن التاريخ مش مجرد تواريخ بنحفظها؛ ده قرارات بشر وتضحيات حقيقية، وإن أحسن طريقة نكرّم بيها أصحابها إننا نعرف قصصهم بأمانة، ونحافظ على ذكراهم.",
+    "35": "رحم الله شهداء مصر، وحفظ لكل وطن أبناءه، وجعل المعرفة طريق لفهم التاريخ، مش لتزيينه.",
+    "37": "الضربة الجوية المنسقة محتاجة أكتر من طيارات بتتحرك في نفس الوقت. قبل الإقلاع بيتحدد الأهداف والمسارات والارتفاعات والتوقيت، وكل مجموعة لازم تعرف مهمتها وعلاقتها بمهام المجموعات التانية. والمفاجأة بتعتمد على التخطيط والانضباط، قد ما بتعتمد على السرعة.",
+    "38": "كان الهدف العام للضربة الأولى إنها تدعم خطة العبور، بإرباك مراكز القيادة والسيطرة وبعض المواقع العسكرية. بس مينفعش نختصر الحرب كلها في دقايق الضربة الأولى. النتايج اللي جت بعدها ارتبطت بشغل القوات البرية والدفاع الجوي والمدفعية والبحرية، وبالتطورات اللي حصلت في الأيام اللي بعدها.",
+    "39": "وعند ذكر أعداد الطائرات أو الأهداف، ننسب كل رقم للمصدر اللي أورده، عشان نفهمه في سياقه بدقة.",
+    "41": "لما بنقرا أسماء الطيارين اللي استشهدوا، مينفعش نشوفهم مجرد قايمة في آخر الحكاية. كل واحد فيهم كان ليه تدريب طويل وأسرة وأصدقاء ومشوار حياة، وبعدين لقى نفسه قدام مهمة عسكرية فيها مخاطر حقيقية.",
+    "42": "وقصة النقيب طيار عاطف السادات بتفكرنا إن الشجاعة مش غياب الخوف، لكنها أداء الواجب في ظروف صعبة.",
+    "43": "الدرس الأوسع إن الإنجاز العسكري مابيصنعوش فرد واحد لوحده؛ ده بيستند على تدريب وتخطيط واتصالات ودعم فني وتنسيق بين وحدات كتير."
+  },
+  "approved_audio_text_rewrites": {
+    "ar": {
+      "3": "في ضهر يوم السبت، ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، الموافق عشرة رمضان سنة ألف وتلتمية وتلاتة وتسعين هجرية، طلعت الطيارات المصرية في مهمة جوية كبيرة، ضمن خطة الحرب. الطيارات ماكانتش بتتحرك عشوائي. كل مجموعة ليها هدف محدد، وميعاد، ومسار، وارتفاع متحسب كويس.",
+      "4": "كانت المهمة إنهم يضربوا مواقع عسكرية مهمة، زي مراكز القيادة والرادار ومواقع الصواريخ والمطارات، عشان يربكوا دفاعات العدو، ويساعدوا القوات المصرية اللي بتستعد لعبور قناة السويس.",
+      "5": "بس ورا الخريطة والخطة كان فيه حقيقة إنسانية: جوه كل طيارة فيه طيار ليه أسرة وأحلام، وعارف إن الرجوع مش مضمون. بعضهم رجع لقاعدته، وبعضهم ماجاش تاني.",
+      "7": "الطيارات طارت على ارتفاعات واطية، عشان تقلل فرصة إن حد يكتشفها، وبعدين اتجهت للأهداف المحددة. وكان على الطيار إنه يلتزم بالخطة، وينفذ المهمة، ويتعامل مع الخطر في ثواني قليلة.",
+      "8": "البيانات العسكرية المصرية أعلنت إن الضربة حققت إصابات مباشرة في أهدافها، وإن معظم الطيارات رجعت. لكن الطيارة اللي ماترجعش مش مجرد رقم؛ وراها إنسان أدّى واجبه لآخر لحظة.",
+      "9": "الشهادة مش مجرد مشهد في السما؛ دي حياة كاملة، صاحبها اختار إنه يحط واجبه فوق سلامته الشخصية.",
+      "11": "عاطف السادات كان طيار مصري، وأخو الرئيس أنور السادات. وفيه روايات منشورة بتقول إنه أصرّ يشارك في الضربة الأولى، ونفّذ هجومه على هدف عسكري في سيناء، وبعدين طيارته اتصابت ومارجعش منها.",
+      "12": "وتختلف بعض الروايات في تفاصيل الطلعات وأعداد الطائرات والطيارين، لذلك نركز هنا على الأسماء والوقائع التي تدعمها المصادر المنشورة.",
+      "14": "المصادر المنشورة محتفظة بصور وأسماء بعض الأبطال. هنا بنعرض صورتين موثقتين، مع احترامنا لاختلاف الروايات التاريخية، ومن غير ما ندّعي إنهم القايمة الكاملة لكل شهداء الضربة.",
+      "16": "شارك في الضربة الجوية الأولى يوم ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، وطيارته مارجعتش بعد ما نفّذ المهمة.",
+      "18": "قائد تشكيل من طيارات سوخوي سبعة، وتقارير صحفية بتذكر إنه استشهد خلال مهمة الضربة الأولى، قريب من مطار المليز.",
+      "19": "والصور هنا بتعرض أسماء أبطال وردت في المصادر المنشورة، من غير ما نزعم إنها قائمة كاملة أو ترتيب نهائي للشهداء.",
+      "21": "الضربة الجوية لوحدها ماأنهتش الحرب، والنصر ماكانش نتيجة سلاح واحد. كانت جزء من خطة أكبر شاركت فيها القوات الجوية والمدفعية والجيش والبحرية والدفاع الجوي، وكل واحد فيهم كان ليه مهمة مختلفة.",
+      "22": "الهجوم الجوي ساعد في إرباك بعض مواقع العدو، وقلل قدرتها على الرد في اللحظات الأولى. وبعده بدأ التمهيد المدفعي، وعبرت مجموعات من الجنود قناة السويس، في واحدة من أهم مراحل الحرب.",
+      "25": "الإنجاز الكبير بيبدأ بتدريب طويل وتفاصيل متحسبة، مش بالصدفة.",
+      "27": "الطيار مابيشتغلش لوحده؛ نجاح المهمة بيعتمد على فرق وخطط وتعاون.",
+      "29": "الشجاعة معناها إنك تأدّي واجبك وإنت فاهم الخطر، مش إنك تتجاهله.",
+      "31": "احترام الشهداء معناه كمان احترام الحقيقة، وإننا مانخترعش تفاصيل عن حياتهم أو عن استشهادهم.",
+      "33": "لما بنفتكر شهداء الضربة الجوية الأولى، مش بنفتكر الطيارات والأهداف بس. بنفتكر ناس شالوا مسؤولية صعبة في لحظة مصيرية، وبنفتكر أسر استنت رجوعهم وماشافتهمش تاني.",
+      "34": "أنا كتبت الحكاية دي عشان أتعلم إن التاريخ مش مجرد تواريخ بنحفظها؛ ده قرارات بشر وتضحيات حقيقية، وإن أحسن طريقة نكرّم بيها أصحابها إننا نعرف قصصهم بأمانة، ونحافظ على ذكراهم.",
+      "35": "رحم الله شهداء مصر، وحفظ لكل وطن أبناءه، وجعل المعرفة طريق لفهم التاريخ، مش لتزيينه.",
+      "37": "الضربة الجوية المنسقة محتاجة أكتر من طيارات بتتحرك في نفس الوقت. قبل الإقلاع بيتحدد الأهداف والمسارات والارتفاعات والتوقيت، وكل مجموعة لازم تعرف مهمتها وعلاقتها بمهام المجموعات التانية. والمفاجأة بتعتمد على التخطيط والانضباط، قد ما بتعتمد على السرعة.",
+      "38": "كان الهدف العام للضربة الأولى إنها تدعم خطة العبور، بإرباك مراكز القيادة والسيطرة وبعض المواقع العسكرية. بس مينفعش نختصر الحرب كلها في دقايق الضربة الأولى. النتايج اللي جت بعدها ارتبطت بشغل القوات البرية والدفاع الجوي والمدفعية والبحرية، وبالتطورات اللي حصلت في الأيام اللي بعدها.",
+      "39": "وعند ذكر أعداد الطائرات أو الأهداف، ننسب كل رقم للمصدر اللي أورده، عشان نفهمه في سياقه بدقة.",
+      "41": "لما بنقرا أسماء الطيارين اللي استشهدوا، مينفعش نشوفهم مجرد قايمة في آخر الحكاية. كل واحد فيهم كان ليه تدريب طويل وأسرة وأصدقاء ومشوار حياة، وبعدين لقى نفسه قدام مهمة عسكرية فيها مخاطر حقيقية.",
+      "42": "وقصة النقيب طيار عاطف السادات بتفكرنا إن الشجاعة مش غياب الخوف، لكنها أداء الواجب في ظروف صعبة.",
+      "43": "الدرس الأوسع إن الإنجاز العسكري مابيصنعوش فرد واحد لوحده؛ ده بيستند على تدريب وتخطيط واتصالات ودعم فني وتنسيق بين وحدات كتير."
+    },
+    "en": {},
+    "fr": {},
+    "it": {},
+    "de": {}
+  },
+  "review": {
+    "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
+    "status": "approved_by_admin",
+    "languages": [
+      "ar",
+      "en",
+      "fr",
+      "it",
+      "de"
+    ],
+    "total_segments": 220,
+    "segments": [
+      {
+        "lang": "ar",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "سماء أكتوبر: شهداء الضربة الجوية الأولى",
+        "approved_audio_text": "سماء أكتوبر: شهداء الضربة الجوية الأولى",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "حكاية الطيارين الذين فتحوا الطريق للعبور",
+        "approved_audio_text": "حكاية الطيارين الذين فتحوا الطريق للعبور",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "في الثانية وخمس دقائق… تغيّر شكل السماء",
+        "approved_audio_text": "في الثانية وخمس دقائق… تغيّر شكل السماء",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "في ظهر السبت 6 أكتوبر 1973، الموافق 10 رمضان 1393 هـ، انطلقت الطائرات المصرية في مهمة جوية كبيرة ضمن خطة الحرب. لم تكن الطائرات تتحرك عشوائيًا؛ لكل مجموعة هدف محدد، ووقت، ومسار، وارتفاع مدروس.",
+        "approved_audio_text": "في ضهر يوم السبت، ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، الموافق عشرة رمضان سنة ألف وتلتمية وتلاتة وتسعين هجرية، طلعت الطيارات المصرية في مهمة جوية كبيرة، ضمن خطة الحرب. الطيارات ماكانتش بتتحرك عشوائي. كل مجموعة ليها هدف محدد، وميعاد، ومسار، وارتفاع متحسب كويس.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "كانت المهمة أن تضرب مواقع عسكرية مهمة، مثل مراكز القيادة والرادار ومواقع الصواريخ والمطارات، حتى تُربك دفاعات العدو وتساعد القوات المصرية التي تستعد لعبور قناة السويس.",
+        "approved_audio_text": "كانت المهمة إنهم يضربوا مواقع عسكرية مهمة، زي مراكز القيادة والرادار ومواقع الصواريخ والمطارات، عشان يربكوا دفاعات العدو، ويساعدوا القوات المصرية اللي بتستعد لعبور قناة السويس.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "لكن خلف الخريطة والخطة كانت هناك حقيقة إنسانية: داخل كل طائرة طيار له أسرة وأحلام، ويعرف أن العودة ليست مضمونة. بعضهم عاد إلى قاعدته، وبعضهم لم يعد.",
+        "approved_audio_text": "بس ورا الخريطة والخطة كان فيه حقيقة إنسانية: جوه كل طيارة فيه طيار ليه أسرة وأحلام، وعارف إن الرجوع مش مضمون. بعضهم رجع لقاعدته، وبعضهم ماجاش تاني.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "لم تكن الشجاعة اندفاعًا",
+        "approved_audio_text": "لم تكن الشجاعة اندفاعًا",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "حلّقت الطائرات على ارتفاعات منخفضة لتقليل فرصة اكتشافها، ثم اتجهت إلى الأهداف المحددة. كان على الطيار أن يلتزم بالخطة، وينفذ المهمة، ويتعامل مع الخطر في ثوانٍ قليلة.",
+        "approved_audio_text": "الطيارات طارت على ارتفاعات واطية، عشان تقلل فرصة إن حد يكتشفها، وبعدين اتجهت للأهداف المحددة. وكان على الطيار إنه يلتزم بالخطة، وينفذ المهمة، ويتعامل مع الخطر في ثواني قليلة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "أعلنت البيانات العسكرية المصرية أن الضربة حققت إصابات مباشرة في أهدافها، وأن معظم الطائرات عادت. لكن الطائرة التي لا تعود ليست رقمًا فقط؛ وراءها إنسان أدّى واجبه حتى النهاية.",
+        "approved_audio_text": "البيانات العسكرية المصرية أعلنت إن الضربة حققت إصابات مباشرة في أهدافها، وإن معظم الطيارات رجعت. لكن الطيارة اللي ماترجعش مش مجرد رقم؛ وراها إنسان أدّى واجبه لآخر لحظة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "الشهادة ليست مشهدًا في السماء فقط؛ إنها حياة كاملة اختار صاحبها أن يضع واجبه فوق سلامته الشخصية.",
+        "approved_audio_text": "الشهادة مش مجرد مشهد في السما؛ دي حياة كاملة، صاحبها اختار إنه يحط واجبه فوق سلامته الشخصية.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "النقيب طيار عاطف السادات",
+        "approved_audio_text": "النقيب طيار عاطف السادات",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "كان عاطف السادات طيارًا مصريًا وشقيق الرئيس أنور السادات. وتذكر روايات منشورة أنه أصرّ على المشاركة في الضربة الأولى، ونفّذ هجومه على هدف عسكري في سيناء، ثم أُصيبت طائرته ولم يعد منها.",
+        "approved_audio_text": "عاطف السادات كان طيار مصري، وأخو الرئيس أنور السادات. وفيه روايات منشورة بتقول إنه أصرّ يشارك في الضربة الأولى، ونفّذ هجومه على هدف عسكري في سيناء، وبعدين طيارته اتصابت ومارجعش منها.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "تختلف بعض الروايات في تفاصيل تسلسل الطلعات وعدد الطائرات والطيارين الذين فقدوا في مراحل اليوم الأول. لذلك لا يصح أن نضع قائمة أسماء أو أرقامًا نهائية من دون سند واضح. الأهم أن نذكر الشهداء باحترام، وأن نتحرّى الدقة في قصصهم.",
+        "approved_audio_text": "وتختلف بعض الروايات في تفاصيل الطلعات وأعداد الطائرات والطيارين، لذلك نركز هنا على الأسماء والوقائع التي تدعمها المصادر المنشورة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "شهداء حملوا أسماءهم إلى التاريخ",
+        "approved_audio_text": "شهداء حملوا أسماءهم إلى التاريخ",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "تحتفظ المصادر المنشورة بصور بعض الأبطال وأسمائهم. نعرض هنا صورتين موثقتين، مع احترام اختلاف الروايات التاريخية وعدم الادعاء بأنهما القائمة الكاملة لكل شهداء الضربة.",
+        "approved_audio_text": "المصادر المنشورة محتفظة بصور وأسماء بعض الأبطال. هنا بنعرض صورتين موثقتين، مع احترامنا لاختلاف الروايات التاريخية، ومن غير ما ندّعي إنهم القايمة الكاملة لكل شهداء الضربة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "النقيب طيار محمد عاطف أنور السادات",
+        "approved_audio_text": "النقيب طيار محمد عاطف أنور السادات",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "شارك في الضربة الجوية الأولى يوم 6 أكتوبر 1973، ولم تعد طائرته بعد تنفيذ المهمة.",
+        "approved_audio_text": "شارك في الضربة الجوية الأولى يوم ستة أكتوبر سنة ألف وتسعمية وتلاتة وسبعين، وطيارته مارجعتش بعد ما نفّذ المهمة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "الطيار زكريا كمال",
+        "approved_audio_text": "الطيار زكريا كمال",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "قائد تشكيل من طائرات سوخوي 7، وتذكر تقارير صحفية استشهاده خلال مهمة الضربة الأولى قرب مطار المليز.",
+        "approved_audio_text": "قائد تشكيل من طيارات سوخوي سبعة، وتقارير صحفية بتذكر إنه استشهد خلال مهمة الضربة الأولى، قريب من مطار المليز.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "تنبيه للدقة: تختلف بعض المصادر في الرتبة والتفاصيل وترتيب الاستشهاد؛ لذلك نذكر الأسماء دون الجزم بترتيب «أول شهيد»، ولا نعرض هذه الصور على أنها سجل كامل لجميع الشهداء.",
+        "approved_audio_text": "والصور هنا بتعرض أسماء أبطال وردت في المصادر المنشورة، من غير ما نزعم إنها قائمة كاملة أو ترتيب نهائي للشهداء.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "الضربة كانت بداية مهمة، لا نهاية الحرب",
+        "approved_audio_text": "الضربة كانت بداية مهمة، لا نهاية الحرب",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "لم تُنهِ الضربة الجوية الحرب وحدها، ولم يكن النصر نتيجة سلاح واحد. لقد كانت جزءًا من خطة أكبر شاركت فيها القوات الجوية والمدفعية والجيش والبحرية والدفاع الجوي، ولكل منها مهمة مختلفة.",
+        "approved_audio_text": "الضربة الجوية لوحدها ماأنهتش الحرب، والنصر ماكانش نتيجة سلاح واحد. كانت جزء من خطة أكبر شاركت فيها القوات الجوية والمدفعية والجيش والبحرية والدفاع الجوي، وكل واحد فيهم كان ليه مهمة مختلفة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "ساعد الهجوم الجوي على إرباك بعض مواقع العدو وتقليل قدرتها على الرد في اللحظات الأولى. وبعده بدأ التمهيد المدفعي وعبرت مجموعات من الجنود قناة السويس، في واحدة من أهم مراحل الحرب.",
+        "approved_audio_text": "الهجوم الجوي ساعد في إرباك بعض مواقع العدو، وقلل قدرتها على الرد في اللحظات الأولى. وبعده بدأ التمهيد المدفعي، وعبرت مجموعات من الجنود قناة السويس، في واحدة من أهم مراحل الحرب.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "أربع رسائل من سماء أكتوبر",
+        "approved_audio_text": "أربع رسائل من سماء أكتوبر",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "الاستعداد",
+        "approved_audio_text": "الاستعداد",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "الإنجاز الكبير يبدأ بتدريب طويل وتفاصيل محسوبة، لا بالصدفة.",
+        "approved_audio_text": "الإنجاز الكبير بيبدأ بتدريب طويل وتفاصيل متحسبة، مش بالصدفة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "العمل الجماعي",
+        "approved_audio_text": "العمل الجماعي",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "الطيار لا يعمل وحده؛ نجاح المهمة يعتمد على فرق وخطط وتعاون.",
+        "approved_audio_text": "الطيار مابيشتغلش لوحده؛ نجاح المهمة بيعتمد على فرق وخطط وتعاون.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "المسؤولية",
+        "approved_audio_text": "المسؤولية",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "الشجاعة تعني أداء الواجب مع فهم الخطر، لا تجاهله.",
+        "approved_audio_text": "الشجاعة معناها إنك تأدّي واجبك وإنت فاهم الخطر، مش إنك تتجاهله.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "الدقة",
+        "approved_audio_text": "الدقة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "احترام الشهداء يشمل احترام الحقيقة وعدم اختراع تفاصيل عن حياتهم أو استشهادهم.",
+        "approved_audio_text": "احترام الشهداء معناه كمان احترام الحقيقة، وإننا مانخترعش تفاصيل عن حياتهم أو عن استشهادهم.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "أسماء لا تختصرها الأرقام",
+        "approved_audio_text": "أسماء لا تختصرها الأرقام",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "حين نتذكر شهداء الضربة الجوية الأولى، لا نتذكر الطائرات والأهداف فقط. نتذكر أشخاصًا حملوا مسؤولية صعبة في لحظة مصيرية، ونتذكر أسرًا انتظرت عودتهم ولم ترهم مرة أخرى.",
+        "approved_audio_text": "لما بنفتكر شهداء الضربة الجوية الأولى، مش بنفتكر الطيارات والأهداف بس. بنفتكر ناس شالوا مسؤولية صعبة في لحظة مصيرية، وبنفتكر أسر استنت رجوعهم وماشافتهمش تاني.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "كتبت هذه الحكاية لأتعلّم أن التاريخ ليس تواريخ محفوظة فحسب؛ إنه قرارات بشرية وتضحيات حقيقية، وأن أفضل طريقة لتكريم أصحابها هي أن نعرف قصصهم بأمانة ونحفظ ذكراهم.",
+        "approved_audio_text": "أنا كتبت الحكاية دي عشان أتعلم إن التاريخ مش مجرد تواريخ بنحفظها؛ ده قرارات بشر وتضحيات حقيقية، وإن أحسن طريقة نكرّم بيها أصحابها إننا نعرف قصصهم بأمانة، ونحافظ على ذكراهم.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "رحم الله شهداء مصر، وحفظ لكل وطن أبناءه، وجعل المعرفة طريقًا لفهم التاريخ لا لتزيينه.",
+        "approved_audio_text": "رحم الله شهداء مصر، وحفظ لكل وطن أبناءه، وجعل المعرفة طريق لفهم التاريخ، مش لتزيينه.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "الطائرة جزء من منظومة كاملة",
+        "approved_audio_text": "الطائرة جزء من منظومة كاملة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "تتطلب الضربة الجوية المنسقة أكثر من طائرات تتحرك في الوقت نفسه. فقبل الإقلاع تُحدد الأهداف والمسارات والارتفاعات والتوقيت، وتحتاج كل مجموعة إلى معرفة مهمتها وما يتصل بها من مهام مجموعات أخرى. كما أن المفاجأة تعتمد على التخطيط والانضباط بقدر اعتمادها على السرعة.",
+        "approved_audio_text": "الضربة الجوية المنسقة محتاجة أكتر من طيارات بتتحرك في نفس الوقت. قبل الإقلاع بيتحدد الأهداف والمسارات والارتفاعات والتوقيت، وكل مجموعة لازم تعرف مهمتها وعلاقتها بمهام المجموعات التانية. والمفاجأة بتعتمد على التخطيط والانضباط، قد ما بتعتمد على السرعة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "كان الهدف العام للضربة الأولى دعم خطة العبور بإرباك مراكز القيادة والسيطرة وبعض المواقع العسكرية، لكن لا يصح اختزال الحرب كلها في دقائق الضربة الأولى. فالنتائج التي تلتها ارتبطت بعمل القوات البرية والدفاع الجوي والمدفعية والبحرية وبالتطورات التي وقعت خلال الأيام التالية.",
+        "approved_audio_text": "كان الهدف العام للضربة الأولى إنها تدعم خطة العبور، بإرباك مراكز القيادة والسيطرة وبعض المواقع العسكرية. بس مينفعش نختصر الحرب كلها في دقايق الضربة الأولى. النتايج اللي جت بعدها ارتبطت بشغل القوات البرية والدفاع الجوي والمدفعية والبحرية، وبالتطورات اللي حصلت في الأيام اللي بعدها.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "وعند قراءة الأرقام المتداولة عن عدد الطائرات أو الأهداف، يجب الانتباه إلى مصدر الرقم وما إذا كان يصف الخطة المعلنة أم التنفيذ الفعلي. قد تختلف الروايات في بعض التفاصيل، لذلك يُذكر الرقم مع نسبته إلى مصدره بدل تقديمه كحقيقة منفصلة عن سياقها.",
+        "approved_audio_text": "وعند ذكر أعداد الطائرات أو الأهداف، ننسب كل رقم للمصدر اللي أورده، عشان نفهمه في سياقه بدقة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "وراء كل اسم حياة كاملة",
+        "approved_audio_text": "وراء كل اسم حياة كاملة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "عندما نقرأ أسماء الطيارين الذين استشهدوا، لا ينبغي أن نراهم مجرد قائمة في نهاية الحكاية. كان لكل واحد منهم تدريب طويل وأسرة وأصدقاء ومسار حياة، ثم وجد نفسه أمام مهمة عسكرية تنطوي على مخاطر حقيقية.",
+        "approved_audio_text": "لما بنقرا أسماء الطيارين اللي استشهدوا، مينفعش نشوفهم مجرد قايمة في آخر الحكاية. كل واحد فيهم كان ليه تدريب طويل وأسرة وأصدقاء ومشوار حياة، وبعدين لقى نفسه قدام مهمة عسكرية فيها مخاطر حقيقية.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "وتساعدنا قصة النقيب طيار عاطف السادات على تذكّر أن الشجاعة ليست غياب الخوف، بل أداء الواجب في ظروف صعبة. وفي الوقت نفسه، يجب التحقق من تفاصيل كل مهمة ومن الروايات المتداولة عنها، خصوصًا عندما تختلف المصادر في وصف ما جرى لحظة بلحظة.",
+        "approved_audio_text": "وقصة النقيب طيار عاطف السادات بتفكرنا إن الشجاعة مش غياب الخوف، لكنها أداء الواجب في ظروف صعبة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "الدرس الأوسع أن الإنجاز العسكري لا يصنعه فرد واحد وحده؛ بل يستند إلى تدريب وتخطيط واتصالات ودعم فني وتنسيق بين وحدات متعددة.",
+        "approved_audio_text": "الدرس الأوسع إن الإنجاز العسكري مابيصنعوش فرد واحد لوحده؛ ده بيستند على تدريب وتخطيط واتصالات ودعم فني وتنسيق بين وحدات كتير.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "en",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "October Skies: The Martyrs of the First Air Strike",
+        "approved_audio_text": "October Skies: The Martyrs of the First Air Strike",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "The pilots who helped open the way for the crossing",
+        "approved_audio_text": "The pilots who helped open the way for the crossing",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "At 2:05 p.m., the sky changed",
+        "approved_audio_text": "At 2:05 p.m., the sky changed",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "On Saturday, 6 October 1973, during Ramadan, Egyptian aircraft took off for a major mission as part of the war plan. They did not fly at random: each formation had a specific target, timing, route, and planned altitude.",
+        "approved_audio_text": "On Saturday, 6 October 1973, during Ramadan, Egyptian aircraft took off for a major mission as part of the war plan. They did not fly at random: each formation had a specific target, timing, route, and planned altitude.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "The mission was to strike important military sites, including command centers, radar stations, missile positions, and airfields. The aim was to disrupt enemy defenses and support Egyptian forces preparing to cross the Suez Canal.",
+        "approved_audio_text": "The mission was to strike important military sites, including command centers, radar stations, missile positions, and airfields. The aim was to disrupt enemy defenses and support Egyptian forces preparing to cross the Suez Canal.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "Behind every map and plan was a human truth: each aircraft carried a pilot with a family and dreams, knowing that a safe return was not guaranteed. Some returned to base; others did not.",
+        "approved_audio_text": "Behind every map and plan was a human truth: each aircraft carried a pilot with a family and dreams, knowing that a safe return was not guaranteed. Some returned to base; others did not.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Courage was not recklessness",
+        "approved_audio_text": "Courage was not recklessness",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "The aircraft flew at low altitude to reduce the chance of detection, then headed for their assigned targets. Each pilot had to follow the plan, complete the mission, and face danger in a matter of seconds.",
+        "approved_audio_text": "The aircraft flew at low altitude to reduce the chance of detection, then headed for their assigned targets. Each pilot had to follow the plan, complete the mission, and face danger in a matter of seconds.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "Egyptian military accounts reported direct hits on the assigned targets and said most aircraft returned. But an aircraft that does not return is not just a number: it carried a person who served until the end.",
+        "approved_audio_text": "Egyptian military accounts reported direct hits on the assigned targets and said most aircraft returned. But an aircraft that does not return is not just a number: it carried a person who served until the end.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Sacrifice is not only a scene in the sky. It is a whole life, whose owner placed duty above personal safety.",
+        "approved_audio_text": "Sacrifice is not only a scene in the sky. It is a whole life, whose owner placed duty above personal safety.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Captain pilot Atef El-Sadat",
+        "approved_audio_text": "Captain pilot Atef El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Atef El-Sadat was an Egyptian pilot and the younger brother of President Anwar El-Sadat. Published accounts say he insisted on joining the first strike, attacked a military target in Sinai, and did not return after his aircraft was hit.",
+        "approved_audio_text": "Atef El-Sadat was an Egyptian pilot and the younger brother of President Anwar El-Sadat. Published accounts say he insisted on joining the first strike, attacked a military target in Sinai, and did not return after his aircraft was hit.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Accounts differ on some details about sortie sequences and the number of aircraft and pilots lost during different stages of the first day. It would be wrong to present a definitive list or total without clear evidence. The right way is to honor the martyrs and check the facts carefully.",
+        "approved_audio_text": "Accounts differ on some details about sortie sequences and the number of aircraft and pilots lost during different stages of the first day. It would be wrong to present a definitive list or total without clear evidence. The right way is to honor the martyrs and check the facts carefully.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Pilots whose names live on",
+        "approved_audio_text": "Pilots whose names live on",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Published sources preserve photographs and accounts of some of these pilots. Here are two sourced portraits; they are not presented as a complete list of everyone who died in the strike.",
+        "approved_audio_text": "Published sources preserve photographs and accounts of some of these pilots. Here are two sourced portraits; they are not presented as a complete list of everyone who died in the strike.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Flight Lieutenant Mohamed Atef Anwar El-Sadat",
+        "approved_audio_text": "Flight Lieutenant Mohamed Atef Anwar El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "He took part in the first air strike on 6 October 1973 and did not return after carrying out his mission.",
+        "approved_audio_text": "He took part in the first air strike on 6 October 1973 and did not return after carrying out his mission.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "Pilot Zakaria Kamal",
+        "approved_audio_text": "Pilot Zakaria Kamal",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "A leader of a Sukhoi-7 formation; press accounts report that he was killed during the first-strike mission near El-Meliz airfield.",
+        "approved_audio_text": "A leader of a Sukhoi-7 formation; press accounts report that he was killed during the first-strike mission near El-Meliz airfield.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Historical note: sources differ on rank, details, and who was first to die. The names are shown without claiming a definitive order, and these portraits are not a complete casualty register.",
+        "approved_audio_text": "Historical note: sources differ on rank, details, and who was first to die. The names are shown without claiming a definitive order, and these portraits are not a complete casualty register.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "The air strike was a beginning, not the end",
+        "approved_audio_text": "The air strike was a beginning, not the end",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "The air strike did not end the war by itself, and victory was not the result of one weapon. It was part of a larger plan involving the air force, artillery, army, navy, and air defense, each with a different task.",
+        "approved_audio_text": "The air strike did not end the war by itself, and victory was not the result of one weapon. It was part of a larger plan involving the air force, artillery, army, navy, and air defense, each with a different task.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "The air attack disrupted some enemy positions and reduced their ability to respond at the opening of the battle. Artillery preparation followed, and groups of Egyptian soldiers crossed the Suez Canal in one of the war’s defining moments.",
+        "approved_audio_text": "The air attack disrupted some enemy positions and reduced their ability to respond at the opening of the battle. Artillery preparation followed, and groups of Egyptian soldiers crossed the Suez Canal in one of the war’s defining moments.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Four lessons from October skies",
+        "approved_audio_text": "Four lessons from October skies",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Preparation",
+        "approved_audio_text": "Preparation",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "Major achievements begin with long training and careful planning, not chance.",
+        "approved_audio_text": "Major achievements begin with long training and careful planning, not chance.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Teamwork",
+        "approved_audio_text": "Teamwork",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "A pilot does not work alone; success depends on teams, plans, and cooperation.",
+        "approved_audio_text": "A pilot does not work alone; success depends on teams, plans, and cooperation.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Responsibility",
+        "approved_audio_text": "Responsibility",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Courage means doing one’s duty while understanding the danger, not ignoring it.",
+        "approved_audio_text": "Courage means doing one’s duty while understanding the danger, not ignoring it.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "Accuracy",
+        "approved_audio_text": "Accuracy",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Honoring the fallen also means respecting the truth and never inventing details about their lives or deaths.",
+        "approved_audio_text": "Honoring the fallen also means respecting the truth and never inventing details about their lives or deaths.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Names that numbers cannot replace",
+        "approved_audio_text": "Names that numbers cannot replace",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "When we remember the martyrs of the first air strike, we remember more than aircraft and targets. We remember people who carried a difficult responsibility at a decisive moment, and families who waited for them and never saw them again.",
+        "approved_audio_text": "When we remember the martyrs of the first air strike, we remember more than aircraft and targets. We remember people who carried a difficult responsibility at a decisive moment, and families who waited for them and never saw them again.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "I wrote this story to learn that history is not just dates to memorize. It is made of human decisions and real sacrifices. The best way to honor those people is to tell their stories honestly and keep their memory alive.",
+        "approved_audio_text": "I wrote this story to learn that history is not just dates to memorize. It is made of human decisions and real sacrifices. The best way to honor those people is to tell their stories honestly and keep their memory alive.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "May God have mercy on Egypt’s martyrs, protect the children of every nation, and make knowledge a path to understanding history—not decorating it.",
+        "approved_audio_text": "May God have mercy on Egypt’s martyrs, protect the children of every nation, and make knowledge a path to understanding history—not decorating it.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "The Aircraft Was Part of a Larger System",
+        "approved_audio_text": "The Aircraft Was Part of a Larger System",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "A coordinated air strike requires more than aircraft moving at the same time. Before takeoff, targets, routes, altitudes, and timing are set. Each group must understand its task and how it connects with other groups’ tasks. Surprise depends on planning and discipline as much as speed.",
+        "approved_audio_text": "A coordinated air strike requires more than aircraft moving at the same time. Before takeoff, targets, routes, altitudes, and timing are set. Each group must understand its task and how it connects with other groups’ tasks. Surprise depends on planning and discipline as much as speed.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "The first strike broadly aimed to support the crossing plan by disrupting command-and-control centers and selected military positions. But the entire war cannot be reduced to those few minutes. What followed also depended on ground forces, air defenses, artillery, the navy, and developments over the next days.",
+        "approved_audio_text": "The first strike broadly aimed to support the crossing plan by disrupting command-and-control centers and selected military positions. But the entire war cannot be reduced to those few minutes. What followed also depended on ground forces, air defenses, artillery, the navy, and developments over the next days.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "When reading figures for aircraft or targets, check the source and whether the number describes the announced plan or the operation as carried out. Accounts may differ, so figures should be attributed to their sources rather than presented without context.",
+        "approved_audio_text": "When reading figures for aircraft or targets, check the source and whether the number describes the announced plan or the operation as carried out. Accounts may differ, so figures should be attributed to their sources rather than presented without context.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Behind Every Name Is a Whole Life",
+        "approved_audio_text": "Behind Every Name Is a Whole Life",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "When we read the names of pilots who died, we should not see them merely as a list at the end of a story. Each had years of training, family, friends, and a life of their own before facing a military mission with real risks.",
+        "approved_audio_text": "When we read the names of pilots who died, we should not see them merely as a list at the end of a story. Each had years of training, family, friends, and a life of their own before facing a military mission with real risks.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "The story of Captain Pilot Atef al-Sadat reminds us that courage is not the absence of fear, but doing one’s duty in difficult circumstances. Details of each mission and accounts of it should also be checked, especially when sources differ about what happened moment by moment.",
+        "approved_audio_text": "The story of Captain Pilot Atef al-Sadat reminds us that courage is not the absence of fear, but doing one’s duty in difficult circumstances. Details of each mission and accounts of it should also be checked, especially when sources differ about what happened moment by moment.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "The broader lesson is that military achievement is never the work of one person alone; it relies on training, planning, communications, technical support, and coordination among many units.",
+        "approved_audio_text": "The broader lesson is that military achievement is never the work of one person alone; it relies on training, planning, communications, technical support, and coordination among many units.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
+        "approved_audio_text": "Le ciel d’octobre : les martyrs de la première frappe aérienne",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "Les pilotes qui ont contribué à ouvrir la voie au franchissement",
+        "approved_audio_text": "Les pilotes qui ont contribué à ouvrir la voie au franchissement",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "À 14 h 05, le ciel a changé",
+        "approved_audio_text": "À 14 h 05, le ciel a changé",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Le samedi 6 octobre 1973, pendant le Ramadan, des avions égyptiens décollèrent pour une grande mission prévue dans le plan de guerre. Chaque formation avait une cible, un horaire, un itinéraire et une altitude définis.",
+        "approved_audio_text": "Le samedi 6 octobre 1973, pendant le Ramadan, des avions égyptiens décollèrent pour une grande mission prévue dans le plan de guerre. Chaque formation avait une cible, un horaire, un itinéraire et une altitude définis.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "La mission consistait à frapper des sites militaires importants : centres de commandement, radars, positions de missiles et aérodromes. Le but était de désorganiser les défenses adverses et d’aider les forces égyptiennes qui se préparaient à franchir le canal de Suez.",
+        "approved_audio_text": "La mission consistait à frapper des sites militaires importants : centres de commandement, radars, positions de missiles et aérodromes. Le but était de désorganiser les défenses adverses et d’aider les forces égyptiennes qui se préparaient à franchir le canal de Suez.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "Derrière chaque carte et chaque plan, il y avait une réalité humaine : chaque avion transportait un pilote avec une famille et des rêves, sachant que le retour n’était pas garanti. Certains revinrent à leur base ; d’autres non.",
+        "approved_audio_text": "Derrière chaque carte et chaque plan, il y avait une réalité humaine : chaque avion transportait un pilote avec une famille et des rêves, sachant que le retour n’était pas garanti. Certains revinrent à leur base ; d’autres non.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Le courage n’était pas l’imprudence",
+        "approved_audio_text": "Le courage n’était pas l’imprudence",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "Les avions volaient à basse altitude pour réduire le risque d’être repérés, puis rejoignaient leurs objectifs. Chaque pilote devait suivre le plan, accomplir sa mission et faire face au danger en quelques secondes.",
+        "approved_audio_text": "Les avions volaient à basse altitude pour réduire le risque d’être repérés, puis rejoignaient leurs objectifs. Chaque pilote devait suivre le plan, accomplir sa mission et faire face au danger en quelques secondes.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "Les comptes rendus militaires égyptiens signalèrent des frappes directes sur les objectifs et indiquèrent que la plupart des avions étaient revenus. Mais un avion qui ne revient pas n’est pas qu’un chiffre : il transportait une personne qui a accompli son devoir jusqu’au bout.",
+        "approved_audio_text": "Les comptes rendus militaires égyptiens signalèrent des frappes directes sur les objectifs et indiquèrent que la plupart des avions étaient revenus. Mais un avion qui ne revient pas n’est pas qu’un chiffre : il transportait une personne qui a accompli son devoir jusqu’au bout.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Le sacrifice n’est pas seulement une scène dans le ciel : c’est toute une vie, dont le propriétaire a placé le devoir au-dessus de sa sécurité.",
+        "approved_audio_text": "Le sacrifice n’est pas seulement une scène dans le ciel : c’est toute une vie, dont le propriétaire a placé le devoir au-dessus de sa sécurité.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Le capitaine pilote Atef El-Sadat",
+        "approved_audio_text": "Le capitaine pilote Atef El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Atef El-Sadat était un pilote égyptien et le frère cadet du président Anouar el-Sadate. Des récits publiés indiquent qu’il insista pour participer à la première frappe, attaqua une cible militaire dans le Sinaï et ne revint pas après que son avion eut été touché.",
+        "approved_audio_text": "Atef El-Sadat était un pilote égyptien et le frère cadet du président Anouar el-Sadate. Des récits publiés indiquent qu’il insista pour participer à la première frappe, attaqua une cible militaire dans le Sinaï et ne revint pas après que son avion eut été touché.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Les récits divergent sur certains détails des sorties et sur le nombre d’avions et de pilotes perdus au cours des différentes phases de cette première journée. Il serait incorrect de donner une liste définitive ou un total sans preuve claire. Il faut honorer les martyrs et vérifier soigneusement les faits.",
+        "approved_audio_text": "Les récits divergent sur certains détails des sorties et sur le nombre d’avions et de pilotes perdus au cours des différentes phases de cette première journée. Il serait incorrect de donner une liste définitive ou un total sans preuve claire. Il faut honorer les martyrs et vérifier soigneusement les faits.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Des pilotes dont les noms demeurent",
+        "approved_audio_text": "Des pilotes dont les noms demeurent",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Des sources publiées conservent les portraits et les récits de certains pilotes. Voici deux portraits sourcés, sans prétendre présenter la liste complète des morts de la frappe.",
+        "approved_audio_text": "Des sources publiées conservent les portraits et les récits de certains pilotes. Voici deux portraits sourcés, sans prétendre présenter la liste complète des morts de la frappe.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Lieutenant pilote Mohamed Atef Anwar El-Sadat",
+        "approved_audio_text": "Lieutenant pilote Mohamed Atef Anwar El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Il a participé à la première frappe aérienne le 6 octobre 1973 et n’est pas revenu après sa mission.",
+        "approved_audio_text": "Il a participé à la première frappe aérienne le 6 octobre 1973 et n’est pas revenu après sa mission.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "Le pilote Zakaria Kamal",
+        "approved_audio_text": "Le pilote Zakaria Kamal",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Chef d’une formation de Sukhoi-7 ; des articles de presse rapportent sa mort pendant la mission près de l’aérodrome d’El-Meliz.",
+        "approved_audio_text": "Chef d’une formation de Sukhoi-7 ; des articles de presse rapportent sa mort pendant la mission près de l’aérodrome d’El-Meliz.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Note historique : les sources divergent sur le grade, certains détails et l’identité du premier mort. Les noms sont présentés sans ordre définitif ; ces portraits ne constituent pas une liste complète des victimes.",
+        "approved_audio_text": "Note historique : les sources divergent sur le grade, certains détails et l’identité du premier mort. Les noms sont présentés sans ordre définitif ; ces portraits ne constituent pas une liste complète des victimes.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "La frappe aérienne était un début, pas une fin",
+        "approved_audio_text": "La frappe aérienne était un début, pas une fin",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "La frappe aérienne n’a pas mis fin à la guerre à elle seule, et la victoire ne fut pas le résultat d’une seule arme. Elle faisait partie d’un plan plus vaste mobilisant l’aviation, l’artillerie, l’armée, la marine et la défense aérienne.",
+        "approved_audio_text": "La frappe aérienne n’a pas mis fin à la guerre à elle seule, et la victoire ne fut pas le résultat d’une seule arme. Elle faisait partie d’un plan plus vaste mobilisant l’aviation, l’artillerie, l’armée, la marine et la défense aérienne.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "L’attaque aérienne désorganisa certaines positions ennemies au début des combats. La préparation d’artillerie suivit, puis des groupes de soldats égyptiens franchirent le canal de Suez, dans l’un des moments décisifs de la guerre.",
+        "approved_audio_text": "L’attaque aérienne désorganisa certaines positions ennemies au début des combats. La préparation d’artillerie suivit, puis des groupes de soldats égyptiens franchirent le canal de Suez, dans l’un des moments décisifs de la guerre.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Quatre leçons du ciel d’octobre",
+        "approved_audio_text": "Quatre leçons du ciel d’octobre",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "La préparation",
+        "approved_audio_text": "La préparation",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "Les grandes réussites reposent sur un long entraînement et une planification précise.",
+        "approved_audio_text": "Les grandes réussites reposent sur un long entraînement et une planification précise.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Le travail d’équipe",
+        "approved_audio_text": "Le travail d’équipe",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Un pilote ne travaille pas seul : la réussite dépend des équipes et de la coopération.",
+        "approved_audio_text": "Un pilote ne travaille pas seul : la réussite dépend des équipes et de la coopération.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "La responsabilité",
+        "approved_audio_text": "La responsabilité",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Le courage consiste à faire son devoir en comprenant le danger, et non en l’ignorant.",
+        "approved_audio_text": "Le courage consiste à faire son devoir en comprenant le danger, et non en l’ignorant.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "La précision",
+        "approved_audio_text": "La précision",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Honorer les morts, c’est aussi respecter la vérité et ne pas inventer les détails de leur vie ou de leur mort.",
+        "approved_audio_text": "Honorer les morts, c’est aussi respecter la vérité et ne pas inventer les détails de leur vie ou de leur mort.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Des noms que les chiffres ne remplacent pas",
+        "approved_audio_text": "Des noms que les chiffres ne remplacent pas",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "Quand nous nous souvenons des martyrs de la première frappe aérienne, nous pensons à plus que des avions et des cibles. Nous nous souvenons de personnes chargées d’une lourde responsabilité à un moment décisif, et de familles qui les ont attendues sans les revoir.",
+        "approved_audio_text": "Quand nous nous souvenons des martyrs de la première frappe aérienne, nous pensons à plus que des avions et des cibles. Nous nous souvenons de personnes chargées d’une lourde responsabilité à un moment décisif, et de familles qui les ont attendues sans les revoir.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "J’ai écrit ce récit pour apprendre que l’histoire n’est pas seulement une suite de dates à mémoriser. Elle est faite de décisions humaines et de sacrifices réels. Pour honorer ces personnes, il faut raconter leur histoire honnêtement et garder leur mémoire vivante.",
+        "approved_audio_text": "J’ai écrit ce récit pour apprendre que l’histoire n’est pas seulement une suite de dates à mémoriser. Elle est faite de décisions humaines et de sacrifices réels. Pour honorer ces personnes, il faut raconter leur histoire honnêtement et garder leur mémoire vivante.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Que Dieu accorde Sa miséricorde aux martyrs d’Égypte, protège les enfants de chaque nation et fasse du savoir un chemin vers la compréhension de l’histoire.",
+        "approved_audio_text": "Que Dieu accorde Sa miséricorde aux martyrs d’Égypte, protège les enfants de chaque nation et fasse du savoir un chemin vers la compréhension de l’histoire.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "L’avion faisait partie d’un système plus vaste",
+        "approved_audio_text": "L’avion faisait partie d’un système plus vaste",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Une frappe aérienne coordonnée exige davantage que des avions agissant au même moment. Avant le décollage, les objectifs, itinéraires, altitudes et horaires sont définis. Chaque groupe doit connaître sa mission et ses liens avec celles des autres. La surprise dépend autant de la planification et de la discipline que de la vitesse.",
+        "approved_audio_text": "Une frappe aérienne coordonnée exige davantage que des avions agissant au même moment. Avant le décollage, les objectifs, itinéraires, altitudes et horaires sont définis. Chaque groupe doit connaître sa mission et ses liens avec celles des autres. La surprise dépend autant de la planification et de la discipline que de la vitesse.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "L’objectif général de la première frappe était de soutenir le franchissement en perturbant les centres de commandement et certains sites militaires. Mais toute la guerre ne peut être réduite à ces quelques minutes. La suite dépendait aussi des forces terrestres, de la défense aérienne, de l’artillerie, de la marine et des événements des jours suivants.",
+        "approved_audio_text": "L’objectif général de la première frappe était de soutenir le franchissement en perturbant les centres de commandement et certains sites militaires. Mais toute la guerre ne peut être réduite à ces quelques minutes. La suite dépendait aussi des forces terrestres, de la défense aérienne, de l’artillerie, de la marine et des événements des jours suivants.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Pour les chiffres concernant les avions ou les objectifs, vérifiez la source et s’ils décrivent le plan annoncé ou l’opération réellement menée. Les récits peuvent diverger ; les chiffres doivent être attribués à leurs sources et replacés dans leur contexte.",
+        "approved_audio_text": "Pour les chiffres concernant les avions ou les objectifs, vérifiez la source et s’ils décrivent le plan annoncé ou l’opération réellement menée. Les récits peuvent diverger ; les chiffres doivent être attribués à leurs sources et replacés dans leur contexte.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Derrière chaque nom, toute une vie",
+        "approved_audio_text": "Derrière chaque nom, toute une vie",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "Lorsque nous lisons les noms des pilotes morts au combat, nous ne devons pas les réduire à une simple liste à la fin d’un récit. Chacun avait suivi une longue formation, avait une famille, des amis et une vie, avant d’affronter une mission militaire comportant de vrais risques.",
+        "approved_audio_text": "Lorsque nous lisons les noms des pilotes morts au combat, nous ne devons pas les réduire à une simple liste à la fin d’un récit. Chacun avait suivi une longue formation, avait une famille, des amis et une vie, avant d’affronter une mission militaire comportant de vrais risques.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "L’histoire du capitaine pilote Atef al-Sadat rappelle que le courage n’est pas l’absence de peur, mais l’accomplissement du devoir dans des circonstances difficiles. Il faut aussi vérifier les détails de chaque mission et les récits qui s’y rapportent, surtout lorsque les sources divergent sur le déroulement des événements.",
+        "approved_audio_text": "L’histoire du capitaine pilote Atef al-Sadat rappelle que le courage n’est pas l’absence de peur, mais l’accomplissement du devoir dans des circonstances difficiles. Il faut aussi vérifier les détails de chaque mission et les récits qui s’y rapportent, surtout lorsque les sources divergent sur le déroulement des événements.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "La leçon générale est qu’un succès militaire n’est jamais l’œuvre d’une seule personne : il repose sur la formation, la planification, les communications, le soutien technique et la coordination de plusieurs unités.",
+        "approved_audio_text": "La leçon générale est qu’un succès militaire n’est jamais l’œuvre d’une seule personne : il repose sur la formation, la planification, les communications, le soutien technique et la coordination de plusieurs unités.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "I cieli di ottobre: i martiri del primo attacco aereo",
+        "approved_audio_text": "I cieli di ottobre: i martiri del primo attacco aereo",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "I piloti che contribuirono ad aprire la strada all’attraversamento",
+        "approved_audio_text": "I piloti che contribuirono ad aprire la strada all’attraversamento",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Alle 14:05, il cielo cambiò",
+        "approved_audio_text": "Alle 14:05, il cielo cambiò",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Sabato 6 ottobre 1973, durante il Ramadan, gli aerei egiziani decollarono per una grande missione prevista dal piano di guerra. Ogni formazione aveva un obiettivo, un orario, una rotta e una quota prestabiliti.",
+        "approved_audio_text": "Sabato 6 ottobre 1973, durante il Ramadan, gli aerei egiziani decollarono per una grande missione prevista dal piano di guerra. Ogni formazione aveva un obiettivo, un orario, una rotta e una quota prestabiliti.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "La missione era colpire importanti siti militari: centri di comando, radar, postazioni missilistiche e aeroporti. Lo scopo era disorganizzare le difese nemiche e sostenere le forze egiziane che si preparavano ad attraversare il Canale di Suez.",
+        "approved_audio_text": "La missione era colpire importanti siti militari: centri di comando, radar, postazioni missilistiche e aeroporti. Lo scopo era disorganizzare le difese nemiche e sostenere le forze egiziane che si preparavano ad attraversare il Canale di Suez.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "Dietro ogni mappa e ogni piano c’era una verità umana: ogni aereo portava un pilota con una famiglia e dei sogni, sapendo che il ritorno non era garantito. Alcuni tornarono alla base; altri no.",
+        "approved_audio_text": "Dietro ogni mappa e ogni piano c’era una verità umana: ogni aereo portava un pilota con una famiglia e dei sogni, sapendo che il ritorno non era garantito. Alcuni tornarono alla base; altri no.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Il coraggio non era imprudenza",
+        "approved_audio_text": "Il coraggio non era imprudenza",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "Gli aerei volarono a bassa quota per ridurre il rischio di essere individuati, poi raggiunsero gli obiettivi assegnati. Ogni pilota doveva seguire il piano, completare la missione e affrontare il pericolo in pochi secondi.",
+        "approved_audio_text": "Gli aerei volarono a bassa quota per ridurre il rischio di essere individuati, poi raggiunsero gli obiettivi assegnati. Ogni pilota doveva seguire il piano, completare la missione e affrontare il pericolo in pochi secondi.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "I resoconti militari egiziani riferirono di colpi diretti sugli obiettivi e dissero che la maggior parte degli aerei era rientrata. Ma un aereo che non torna non è soltanto un numero: trasportava una persona che servì fino alla fine.",
+        "approved_audio_text": "I resoconti militari egiziani riferirono di colpi diretti sugli obiettivi e dissero che la maggior parte degli aerei era rientrata. Ma un aereo che non torna non è soltanto un numero: trasportava una persona che servì fino alla fine.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Il sacrificio non è soltanto una scena nel cielo: è una vita intera, il cui proprietario mise il dovere sopra la propria sicurezza.",
+        "approved_audio_text": "Il sacrificio non è soltanto una scena nel cielo: è una vita intera, il cui proprietario mise il dovere sopra la propria sicurezza.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Il capitano pilota Atef El-Sadat",
+        "approved_audio_text": "Il capitano pilota Atef El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Atef El-Sadat era un pilota egiziano e il fratello minore del presidente Anwar El-Sadat. Secondo resoconti pubblicati, insistette per partecipare al primo attacco, colpì un obiettivo militare nel Sinai e non fece ritorno dopo che il suo aereo fu colpito.",
+        "approved_audio_text": "Atef El-Sadat era un pilota egiziano e il fratello minore del presidente Anwar El-Sadat. Secondo resoconti pubblicati, insistette per partecipare al primo attacco, colpì un obiettivo militare nel Sinai e non fece ritorno dopo che il suo aereo fu colpito.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Le fonti differiscono su alcuni dettagli delle missioni e sul numero di aerei e piloti persi nelle diverse fasi del primo giorno. Non sarebbe corretto presentare un elenco definitivo o un totale senza prove chiare. È importante onorare i martiri e verificare i fatti con attenzione.",
+        "approved_audio_text": "Le fonti differiscono su alcuni dettagli delle missioni e sul numero di aerei e piloti persi nelle diverse fasi del primo giorno. Non sarebbe corretto presentare un elenco definitivo o un totale senza prove chiare. È importante onorare i martiri e verificare i fatti con attenzione.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Piloti i cui nomi restano",
+        "approved_audio_text": "Piloti i cui nomi restano",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Le fonti pubblicate conservano fotografie e racconti di alcuni piloti. Qui presentiamo due ritratti con fonti, senza affermare che siano l’elenco completo dei caduti nell’attacco.",
+        "approved_audio_text": "Le fonti pubblicate conservano fotografie e racconti di alcuni piloti. Qui presentiamo due ritratti con fonti, senza affermare che siano l’elenco completo dei caduti nell’attacco.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Tenente pilota Mohamed Atef Anwar El-Sadat",
+        "approved_audio_text": "Tenente pilota Mohamed Atef Anwar El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Partecipò al primo attacco aereo il 6 ottobre 1973 e non fece ritorno dopo aver compiuto la missione.",
+        "approved_audio_text": "Partecipò al primo attacco aereo il 6 ottobre 1973 e non fece ritorno dopo aver compiuto la missione.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "Il pilota Zakaria Kamal",
+        "approved_audio_text": "Il pilota Zakaria Kamal",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Comandante di una formazione di Sukhoi-7; resoconti giornalistici riferiscono che morì durante la missione vicino all’aeroporto di El-Meliz.",
+        "approved_audio_text": "Comandante di una formazione di Sukhoi-7; resoconti giornalistici riferiscono che morì durante la missione vicino all’aeroporto di El-Meliz.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Nota storica: le fonti differiscono sul grado, sui dettagli e su chi sia stato il primo a morire. I nomi sono riportati senza stabilire un ordine definitivo; questi ritratti non sono un elenco completo delle vittime.",
+        "approved_audio_text": "Nota storica: le fonti differiscono sul grado, sui dettagli e su chi sia stato il primo a morire. I nomi sono riportati senza stabilire un ordine definitivo; questi ritratti non sono un elenco completo delle vittime.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "L’attacco aereo fu l’inizio, non la fine",
+        "approved_audio_text": "L’attacco aereo fu l’inizio, non la fine",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "L’attacco aereo da solo non pose fine alla guerra, e la vittoria non fu il risultato di una sola arma. Faceva parte di un piano più ampio che coinvolgeva aviazione, artiglieria, esercito, marina e difesa aerea.",
+        "approved_audio_text": "L’attacco aereo da solo non pose fine alla guerra, e la vittoria non fu il risultato di una sola arma. Faceva parte di un piano più ampio che coinvolgeva aviazione, artiglieria, esercito, marina e difesa aerea.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "L’attacco aereo disorganizzò alcune posizioni nemiche all’inizio dei combattimenti. Seguì il fuoco preparatorio dell’artiglieria e gruppi di soldati egiziani attraversarono il Canale di Suez, in uno dei momenti decisivi della guerra.",
+        "approved_audio_text": "L’attacco aereo disorganizzò alcune posizioni nemiche all’inizio dei combattimenti. Seguì il fuoco preparatorio dell’artiglieria e gruppi di soldati egiziani attraversarono il Canale di Suez, in uno dei momenti decisivi della guerra.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Quattro lezioni dai cieli di ottobre",
+        "approved_audio_text": "Quattro lezioni dai cieli di ottobre",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Preparazione",
+        "approved_audio_text": "Preparazione",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "I grandi risultati nascono da un lungo addestramento e da una pianificazione attenta.",
+        "approved_audio_text": "I grandi risultati nascono da un lungo addestramento e da una pianificazione attenta.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Lavoro di squadra",
+        "approved_audio_text": "Lavoro di squadra",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Un pilota non lavora da solo: il successo dipende da squadre e collaborazione.",
+        "approved_audio_text": "Un pilota non lavora da solo: il successo dipende da squadre e collaborazione.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Responsabilità",
+        "approved_audio_text": "Responsabilità",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Il coraggio significa compiere il proprio dovere comprendendo il pericolo, non ignorandolo.",
+        "approved_audio_text": "Il coraggio significa compiere il proprio dovere comprendendo il pericolo, non ignorandolo.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "Precisione",
+        "approved_audio_text": "Precisione",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Onorare i caduti significa rispettare la verità e non inventare dettagli sulla loro vita o morte.",
+        "approved_audio_text": "Onorare i caduti significa rispettare la verità e non inventare dettagli sulla loro vita o morte.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Nomi che i numeri non possono sostituire",
+        "approved_audio_text": "Nomi che i numeri non possono sostituire",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "Quando ricordiamo i martiri del primo attacco aereo, ricordiamo più degli aerei e degli obiettivi. Ricordiamo persone che assunsero una responsabilità difficile in un momento decisivo e famiglie che le attesero senza rivederle.",
+        "approved_audio_text": "Quando ricordiamo i martiri del primo attacco aereo, ricordiamo più degli aerei e degli obiettivi. Ricordiamo persone che assunsero una responsabilità difficile in un momento decisivo e famiglie che le attesero senza rivederle.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Ho scritto questo racconto per imparare che la storia non è soltanto un elenco di date da memorizzare. È fatta di decisioni umane e sacrifici reali. Il modo migliore per onorare queste persone è raccontare la loro storia con sincerità e conservarne la memoria.",
+        "approved_audio_text": "Ho scritto questo racconto per imparare che la storia non è soltanto un elenco di date da memorizzare. È fatta di decisioni umane e sacrifici reali. Il modo migliore per onorare queste persone è raccontare la loro storia con sincerità e conservarne la memoria.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Che Dio abbia misericordia dei martiri d’Egitto, protegga i figli di ogni nazione e renda la conoscenza una via per comprendere la storia.",
+        "approved_audio_text": "Che Dio abbia misericordia dei martiri d’Egitto, protegga i figli di ogni nazione e renda la conoscenza una via per comprendere la storia.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "L’aereo faceva parte di un sistema più ampio",
+        "approved_audio_text": "L’aereo faceva parte di un sistema più ampio",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Un attacco aereo coordinato richiede più di aerei che si muovono nello stesso momento. Prima del decollo si definiscono obiettivi, rotte, altitudini e tempi. Ogni gruppo deve conoscere la propria missione e il collegamento con quelle degli altri. La sorpresa dipende dalla pianificazione e dalla disciplina quanto dalla velocità.",
+        "approved_audio_text": "Un attacco aereo coordinato richiede più di aerei che si muovono nello stesso momento. Prima del decollo si definiscono obiettivi, rotte, altitudini e tempi. Ogni gruppo deve conoscere la propria missione e il collegamento con quelle degli altri. La sorpresa dipende dalla pianificazione e dalla disciplina quanto dalla velocità.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "L’obiettivo generale del primo attacco era sostenere l’attraversamento disorganizzando i centri di comando e alcune postazioni militari. Ma l’intera guerra non può essere ridotta a quei pochi minuti. Gli sviluppi successivi dipendevano anche dalle forze terrestri, dalla difesa aerea, dall’artiglieria, dalla marina e dagli eventi dei giorni seguenti.",
+        "approved_audio_text": "L’obiettivo generale del primo attacco era sostenere l’attraversamento disorganizzando i centri di comando e alcune postazioni militari. Ma l’intera guerra non può essere ridotta a quei pochi minuti. Gli sviluppi successivi dipendevano anche dalle forze terrestri, dalla difesa aerea, dall’artiglieria, dalla marina e dagli eventi dei giorni seguenti.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Quando si leggono cifre sul numero di aerei o obiettivi, occorre verificare la fonte e capire se descrivono il piano annunciato o l’operazione effettiva. I resoconti possono differire, quindi i numeri vanno attribuiti alle fonti e contestualizzati.",
+        "approved_audio_text": "Quando si leggono cifre sul numero di aerei o obiettivi, occorre verificare la fonte e capire se descrivono il piano annunciato o l’operazione effettiva. I resoconti possono differire, quindi i numeri vanno attribuiti alle fonti e contestualizzati.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Dietro ogni nome c’è una vita intera",
+        "approved_audio_text": "Dietro ogni nome c’è una vita intera",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "Quando leggiamo i nomi dei piloti caduti, non dobbiamo considerarli soltanto un elenco alla fine del racconto. Ognuno aveva anni di addestramento, una famiglia, amici e una vita propria, prima di affrontare una missione militare con rischi reali.",
+        "approved_audio_text": "Quando leggiamo i nomi dei piloti caduti, non dobbiamo considerarli soltanto un elenco alla fine del racconto. Ognuno aveva anni di addestramento, una famiglia, amici e una vita propria, prima di affrontare una missione militare con rischi reali.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "La storia del capitano pilota Atef al-Sadat ricorda che il coraggio non è assenza di paura, ma compiere il proprio dovere in circostanze difficili. È importante verificare i dettagli di ogni missione e i resoconti, soprattutto quando le fonti divergono sulla sequenza degli eventi.",
+        "approved_audio_text": "La storia del capitano pilota Atef al-Sadat ricorda che il coraggio non è assenza di paura, ma compiere il proprio dovere in circostanze difficili. È importante verificare i dettagli di ogni missione e i resoconti, soprattutto quando le fonti divergono sulla sequenza degli eventi.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "La lezione più ampia è che un risultato militare non è mai opera di una sola persona: richiede addestramento, pianificazione, comunicazioni, supporto tecnico e coordinamento tra più unità.",
+        "approved_audio_text": "La lezione più ampia è che un risultato militare non è mai opera di una sola persona: richiede addestramento, pianificazione, comunicazioni, supporto tecnico e coordinamento tra più unità.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "Oktoberhimmel: Die Gefallenen des ersten Luftschlags",
+        "approved_audio_text": "Oktoberhimmel: Die Gefallenen des ersten Luftschlags",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "Die Piloten, die den Weg für die Überquerung öffnen halfen",
+        "approved_audio_text": "Die Piloten, die den Weg für die Überquerung öffnen halfen",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Um 14:05 Uhr veränderte sich der Himmel",
+        "approved_audio_text": "Um 14:05 Uhr veränderte sich der Himmel",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Am Samstag, dem 6. Oktober 1973, mitten im Ramadan, starteten ägyptische Flugzeuge zu einem großen Einsatz im Rahmen des Kriegsplans. Sie flogen nicht planlos: Jede Formation hatte ein bestimmtes Ziel, einen festgelegten Zeitpunkt, eine Route und eine geplante Flughöhe.",
+        "approved_audio_text": "Am Samstag, dem 6. Oktober 1973, mitten im Ramadan, starteten ägyptische Flugzeuge zu einem großen Einsatz im Rahmen des Kriegsplans. Sie flogen nicht planlos: Jede Formation hatte ein bestimmtes Ziel, einen festgelegten Zeitpunkt, eine Route und eine geplante Flughöhe.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "Der Auftrag bestand darin, wichtige militärische Anlagen anzugreifen, darunter Kommandozentralen, Radarstationen, Raketenstellungen und Flugplätze. Ziel war es, die feindliche Verteidigung zu stören und die ägyptischen Streitkräfte zu unterstützen, die sich auf die Überquerung des Suezkanals vorbereiteten.",
+        "approved_audio_text": "Der Auftrag bestand darin, wichtige militärische Anlagen anzugreifen, darunter Kommandozentralen, Radarstationen, Raketenstellungen und Flugplätze. Ziel war es, die feindliche Verteidigung zu stören und die ägyptischen Streitkräfte zu unterstützen, die sich auf die Überquerung des Suezkanals vorbereiteten.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "Hinter jeder Karte und jedem Plan stand eine menschliche Wahrheit: Jedes Flugzeug trug einen Piloten mit einer Familie und Träumen, der wusste, dass eine sichere Rückkehr nicht garantiert war. Einige kehrten zum Stützpunkt zurück, andere nicht.",
+        "approved_audio_text": "Hinter jeder Karte und jedem Plan stand eine menschliche Wahrheit: Jedes Flugzeug trug einen Piloten mit einer Familie und Träumen, der wusste, dass eine sichere Rückkehr nicht garantiert war. Einige kehrten zum Stützpunkt zurück, andere nicht.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Mut war keine Leichtsinnigkeit",
+        "approved_audio_text": "Mut war keine Leichtsinnigkeit",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "Die Flugzeuge flogen in geringer Höhe, um die Gefahr einer Entdeckung zu verringern, und steuerten dann ihre zugewiesenen Ziele an. Jeder Pilot musste dem Plan folgen, den Auftrag erfüllen und binnen Sekunden der Gefahr begegnen.",
+        "approved_audio_text": "Die Flugzeuge flogen in geringer Höhe, um die Gefahr einer Entdeckung zu verringern, und steuerten dann ihre zugewiesenen Ziele an. Jeder Pilot musste dem Plan folgen, den Auftrag erfüllen und binnen Sekunden der Gefahr begegnen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "Ägyptische Militärberichte meldeten direkte Treffer auf die zugewiesenen Ziele und erklärten, die meisten Flugzeuge seien zurückgekehrt. Aber ein Flugzeug, das nicht zurückkehrt, ist nicht bloß eine Zahl: Es trug einen Menschen, der bis zuletzt seinen Dienst tat.",
+        "approved_audio_text": "Ägyptische Militärberichte meldeten direkte Treffer auf die zugewiesenen Ziele und erklärten, die meisten Flugzeuge seien zurückgekehrt. Aber ein Flugzeug, das nicht zurückkehrt, ist nicht bloß eine Zahl: Es trug einen Menschen, der bis zuletzt seinen Dienst tat.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Opfer ist nicht nur eine Szene am Himmel. Es ist ein ganzes Leben, dessen Besitzer die Pflicht über die eigene Sicherheit stellte.",
+        "approved_audio_text": "Opfer ist nicht nur eine Szene am Himmel. Es ist ein ganzes Leben, dessen Besitzer die Pflicht über die eigene Sicherheit stellte.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Hauptmann und Pilot Atef El-Sadat",
+        "approved_audio_text": "Hauptmann und Pilot Atef El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Atef El-Sadat war ein ägyptischer Pilot und der jüngere Bruder von Präsident Anwar El-Sadat. Veröffentlichten Berichten zufolge bestand er darauf, am ersten Schlag teilzunehmen, griff ein militärisches Ziel im Sinai an und kehrte nicht zurück, nachdem sein Flugzeug getroffen worden war.",
+        "approved_audio_text": "Atef El-Sadat war ein ägyptischer Pilot und der jüngere Bruder von Präsident Anwar El-Sadat. Veröffentlichten Berichten zufolge bestand er darauf, am ersten Schlag teilzunehmen, griff ein militärisches Ziel im Sinai an und kehrte nicht zurück, nachdem sein Flugzeug getroffen worden war.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Die Berichte unterscheiden sich in einigen Einzelheiten zur Abfolge der Einsätze und zur Zahl der Flugzeuge und Piloten, die in den verschiedenen Phasen des ersten Tages verloren gingen. Es wäre falsch, ohne klare Belege eine endgültige Liste oder Gesamtzahl zu präsentieren. Richtig ist es, der Gefallenen zu gedenken und die Fakten sorgfältig zu prüfen.",
+        "approved_audio_text": "Die Berichte unterscheiden sich in einigen Einzelheiten zur Abfolge der Einsätze und zur Zahl der Flugzeuge und Piloten, die in den verschiedenen Phasen des ersten Tages verloren gingen. Es wäre falsch, ohne klare Belege eine endgültige Liste oder Gesamtzahl zu präsentieren. Richtig ist es, der Gefallenen zu gedenken und die Fakten sorgfältig zu prüfen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Piloten, deren Namen fortleben",
+        "approved_audio_text": "Piloten, deren Namen fortleben",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Veröffentlichte Quellen bewahren Fotografien und Berichte über einige dieser Piloten. Hier sind zwei belegte Porträts; sie werden nicht als vollständige Liste aller präsentiert, die bei dem Schlag ums Leben kamen.",
+        "approved_audio_text": "Veröffentlichte Quellen bewahren Fotografien und Berichte über einige dieser Piloten. Hier sind zwei belegte Porträts; sie werden nicht als vollständige Liste aller präsentiert, die bei dem Schlag ums Leben kamen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Oberleutnant Mohamed Atef Anwar El-Sadat",
+        "approved_audio_text": "Oberleutnant Mohamed Atef Anwar El-Sadat",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Er nahm am ersten Luftschlag am 6. Oktober 1973 teil und kehrte nach der Erfüllung seines Auftrags nicht zurück.",
+        "approved_audio_text": "Er nahm am ersten Luftschlag am 6. Oktober 1973 teil und kehrte nach der Erfüllung seines Auftrags nicht zurück.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "Pilot Zakaria Kamal",
+        "approved_audio_text": "Pilot Zakaria Kamal",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Anführer einer Su-7-Formation; Presseberichten zufolge fiel er während des Einsatzes beim ersten Schlag in der Nähe des Flugplatzes El-Meliz.",
+        "approved_audio_text": "Anführer einer Su-7-Formation; Presseberichten zufolge fiel er während des Einsatzes beim ersten Schlag in der Nähe des Flugplatzes El-Meliz.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Historischer Hinweis: Die Quellen unterscheiden sich bei Dienstgrad, Einzelheiten und der Frage, wer als Erster fiel. Die Namen werden ohne Anspruch auf eine endgültige Reihenfolge gezeigt, und diese Porträts sind kein vollständiges Verlustregister.",
+        "approved_audio_text": "Historischer Hinweis: Die Quellen unterscheiden sich bei Dienstgrad, Einzelheiten und der Frage, wer als Erster fiel. Die Namen werden ohne Anspruch auf eine endgültige Reihenfolge gezeigt, und diese Porträts sind kein vollständiges Verlustregister.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "Der Luftschlag war ein Anfang, nicht das Ende",
+        "approved_audio_text": "Der Luftschlag war ein Anfang, nicht das Ende",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "Der Luftschlag beendete den Krieg nicht allein, und der Sieg war nicht das Ergebnis einer einzigen Waffe. Er war Teil eines größeren Plans, an dem Luftwaffe, Artillerie, Heer, Marine und Luftverteidigung mit jeweils unterschiedlichen Aufgaben beteiligt waren.",
+        "approved_audio_text": "Der Luftschlag beendete den Krieg nicht allein, und der Sieg war nicht das Ergebnis einer einzigen Waffe. Er war Teil eines größeren Plans, an dem Luftwaffe, Artillerie, Heer, Marine und Luftverteidigung mit jeweils unterschiedlichen Aufgaben beteiligt waren.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "Der Luftangriff störte einige feindliche Stellungen und verringerte zu Beginn der Schlacht deren Fähigkeit zu reagieren. Es folgte die Artillerievorbereitung, und Gruppen ägyptischer Soldaten überquerten den Suezkanal in einem der entscheidenden Momente des Krieges.",
+        "approved_audio_text": "Der Luftangriff störte einige feindliche Stellungen und verringerte zu Beginn der Schlacht deren Fähigkeit zu reagieren. Es folgte die Artillerievorbereitung, und Gruppen ägyptischer Soldaten überquerten den Suezkanal in einem der entscheidenden Momente des Krieges.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Vier Lehren aus dem Oktoberhimmel",
+        "approved_audio_text": "Vier Lehren aus dem Oktoberhimmel",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Vorbereitung",
+        "approved_audio_text": "Vorbereitung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "Große Leistungen beginnen mit langem Training und sorgfältiger Planung, nicht mit Zufall.",
+        "approved_audio_text": "Große Leistungen beginnen mit langem Training und sorgfältiger Planung, nicht mit Zufall.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Zusammenarbeit",
+        "approved_audio_text": "Zusammenarbeit",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Ein Pilot arbeitet nicht allein; der Erfolg hängt von Teams, Plänen und Kooperation ab.",
+        "approved_audio_text": "Ein Pilot arbeitet nicht allein; der Erfolg hängt von Teams, Plänen und Kooperation ab.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Verantwortung",
+        "approved_audio_text": "Verantwortung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Mut bedeutet, seine Pflicht zu tun und dabei die Gefahr zu verstehen, statt sie zu ignorieren.",
+        "approved_audio_text": "Mut bedeutet, seine Pflicht zu tun und dabei die Gefahr zu verstehen, statt sie zu ignorieren.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "Genauigkeit",
+        "approved_audio_text": "Genauigkeit",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Die Gefallenen zu ehren heißt auch, die Wahrheit zu achten und über ihr Leben oder ihren Tod nie Details zu erfinden.",
+        "approved_audio_text": "Die Gefallenen zu ehren heißt auch, die Wahrheit zu achten und über ihr Leben oder ihren Tod nie Details zu erfinden.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Namen, die Zahlen nicht ersetzen können",
+        "approved_audio_text": "Namen, die Zahlen nicht ersetzen können",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "Wenn wir der Gefallenen des ersten Luftschlags gedenken, erinnern wir uns an mehr als Flugzeuge und Ziele. Wir erinnern uns an Menschen, die in einem entscheidenden Moment eine schwere Verantwortung trugen, und an Familien, die auf sie warteten und sie nie wiedersahen.",
+        "approved_audio_text": "Wenn wir der Gefallenen des ersten Luftschlags gedenken, erinnern wir uns an mehr als Flugzeuge und Ziele. Wir erinnern uns an Menschen, die in einem entscheidenden Moment eine schwere Verantwortung trugen, und an Familien, die auf sie warteten und sie nie wiedersahen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Ich habe diese Geschichte geschrieben, um zu lernen, dass Geschichte nicht nur aus Daten zum Auswendiglernen besteht. Sie besteht aus menschlichen Entscheidungen und wirklichen Opfern. Der beste Weg, diese Menschen zu ehren, ist, ihre Geschichten ehrlich zu erzählen und ihr Andenken lebendig zu halten.",
+        "approved_audio_text": "Ich habe diese Geschichte geschrieben, um zu lernen, dass Geschichte nicht nur aus Daten zum Auswendiglernen besteht. Sie besteht aus menschlichen Entscheidungen und wirklichen Opfern. Der beste Weg, diese Menschen zu ehren, ist, ihre Geschichten ehrlich zu erzählen und ihr Andenken lebendig zu halten.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Möge Gott sich der Gefallenen Ägyptens erbarmen, die Kinder jeder Nation beschützen und Wissen zu einem Weg machen, die Geschichte zu verstehen – nicht sie zu verzieren.",
+        "approved_audio_text": "Möge Gott sich der Gefallenen Ägyptens erbarmen, die Kinder jeder Nation beschützen und Wissen zu einem Weg machen, die Geschichte zu verstehen – nicht sie zu verzieren.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "Das Flugzeug war Teil eines größeren Systems",
+        "approved_audio_text": "Das Flugzeug war Teil eines größeren Systems",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Ein koordinierter Luftangriff erfordert mehr als gleichzeitig fliegende Flugzeuge. Vor dem Start werden Ziele, Routen, Höhen und Zeitpunkte festgelegt. Jede Gruppe muss ihren Auftrag und dessen Verbindung zu den Aufgaben anderer Gruppen kennen. Überraschung hängt ebenso von Planung und Disziplin wie von Geschwindigkeit ab.",
+        "approved_audio_text": "Ein koordinierter Luftangriff erfordert mehr als gleichzeitig fliegende Flugzeuge. Vor dem Start werden Ziele, Routen, Höhen und Zeitpunkte festgelegt. Jede Gruppe muss ihren Auftrag und dessen Verbindung zu den Aufgaben anderer Gruppen kennen. Überraschung hängt ebenso von Planung und Disziplin wie von Geschwindigkeit ab.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "Der erste Angriff sollte den Übergangsplan unterstützen, indem Führungszentren und ausgewählte militärische Stellungen gestört wurden. Doch der gesamte Krieg lässt sich nicht auf diese wenigen Minuten reduzieren. Der weitere Verlauf hing auch von Landstreitkräften, Luftabwehr, Artillerie, Marine und den Entwicklungen der folgenden Tage ab.",
+        "approved_audio_text": "Der erste Angriff sollte den Übergangsplan unterstützen, indem Führungszentren und ausgewählte militärische Stellungen gestört wurden. Doch der gesamte Krieg lässt sich nicht auf diese wenigen Minuten reduzieren. Der weitere Verlauf hing auch von Landstreitkräften, Luftabwehr, Artillerie, Marine und den Entwicklungen der folgenden Tage ab.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Bei Angaben zur Zahl der Flugzeuge oder Ziele sollte man die Quelle prüfen und unterscheiden, ob sie den angekündigten Plan oder den tatsächlichen Einsatz beschreibt. Berichte können abweichen; Zahlen sollten ihrer Quelle zugeordnet und in den Kontext gestellt werden.",
+        "approved_audio_text": "Bei Angaben zur Zahl der Flugzeuge oder Ziele sollte man die Quelle prüfen und unterscheiden, ob sie den angekündigten Plan oder den tatsächlichen Einsatz beschreibt. Berichte können abweichen; Zahlen sollten ihrer Quelle zugeordnet und in den Kontext gestellt werden.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Hinter jedem Namen steht ein ganzes Leben",
+        "approved_audio_text": "Hinter jedem Namen steht ein ganzes Leben",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "Wenn wir die Namen gefallener Piloten lesen, sollten wir sie nicht nur als Liste am Ende einer Geschichte sehen. Jeder hatte eine lange Ausbildung, eine Familie, Freunde und ein eigenes Leben, bevor er einen militärischen Auftrag mit echten Risiken übernahm.",
+        "approved_audio_text": "Wenn wir die Namen gefallener Piloten lesen, sollten wir sie nicht nur als Liste am Ende einer Geschichte sehen. Jeder hatte eine lange Ausbildung, eine Familie, Freunde und ein eigenes Leben, bevor er einen militärischen Auftrag mit echten Risiken übernahm.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "Die Geschichte von Hauptmann und Piloten Atef al-Sadat erinnert daran, dass Mut nicht die Abwesenheit von Angst bedeutet, sondern die Pflicht unter schwierigen Bedingungen zu erfüllen. Einzelheiten jeder Mission und die Berichte darüber müssen geprüft werden, besonders wenn Quellen den Ablauf unterschiedlich schildern.",
+        "approved_audio_text": "Die Geschichte von Hauptmann und Piloten Atef al-Sadat erinnert daran, dass Mut nicht die Abwesenheit von Angst bedeutet, sondern die Pflicht unter schwierigen Bedingungen zu erfüllen. Einzelheiten jeder Mission und die Berichte darüber müssen geprüft werden, besonders wenn Quellen den Ablauf unterschiedlich schildern.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "Die übergeordnete Lehre lautet: Militärischer Erfolg ist nie das Werk einer einzelnen Person. Er beruht auf Ausbildung, Planung, Kommunikation, technischer Unterstützung und der Koordination mehrerer Einheiten.",
+        "approved_audio_text": "Die übergeordnete Lehre lautet: Militärischer Erfolg ist nie das Werk einer einzelnen Person. Er beruht auf Ausbildung, Planung, Kommunikation, technischer Unterstützung und der Koordination mehrerer Einheiten.",
+        "decision": "approved_original"
+      }
+    ]
+  }
+}
