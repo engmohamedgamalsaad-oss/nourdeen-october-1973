@@ -147,22 +147,36 @@ def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
 def audit(root: Path) -> dict[str, Any]:
     stories_root = root / "stories"
     records: list[dict[str, Any]] = []
-    candidates = list(stories_root.glob("*/*/story.json"))
-    published_count = 0
-    published_non_october_count = 0
+    published_pages: set[tuple[str, str]] = set()
+    for data_path in stories_root.glob("*/*/data.json"):
+        try:
+            if read_object(data_path).get("published") is True:
+                relative = data_path.relative_to(stories_root)
+                published_pages.add((relative.parts[0], relative.parts[1]))
+        except (OSError, ValueError, json.JSONDecodeError):
+            continue
+
+    published_count = len(published_pages)
+    published_non_october_count = sum(section != "october" for section, _story_id in published_pages)
     october_count = 0
+
+    # Prefer an extracted canonical package when it exists. Otherwise inspect
+    # the committed October source package; never count both copies of one story.
+    candidates = list(stories_root.glob("*/*/story.json"))
+    source_candidates = sorted((root / "rebuild" / "october-audio-packages").glob("*/story.json"))
+    canonical_october_ids = {
+        path.parent.name for path in candidates
+        if path.parts[-4:-2] == ("stories", "october")
+    }
     for story_path in sorted(set(candidates)):
         relative = story_path.relative_to(root)
         try:
             if relative.parts[0] != "stories":
                 continue
-            data_path = story_path.with_name("data.json")
-            if not data_path.is_file() or read_object(data_path).get("published") is not True:
+            section, story_id = relative.parts[1], relative.parts[2]
+            if (section, story_id) not in published_pages:
                 continue
-            published_count += 1
-            if relative.parts[1] != "october":
-                published_non_october_count += 1
-            else:
+            if section == "october":
                 readiness_path = story_path.with_name("audio-readiness.json")
                 readiness = read_object(readiness_path) if readiness_path.is_file() else {}
                 if readiness.get("format") != "KHALEDOON_OCTOBER_AUDIO_READINESS_V1":
@@ -170,6 +184,27 @@ def audit(root: Path) -> dict[str, Any]:
                 if readiness.get("ready") is not True:
                     raise ValueError(f"{relative}: October package is not ready in all five languages")
                 october_count += 1
+            records.append(inspect_story(story_path, root))
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            records.append({
+                "path": relative.as_posix(),
+                "status": "error",
+                "error": str(exc),
+            })
+
+    for story_path in source_candidates:
+        story_id = story_path.parent.name
+        if story_id in canonical_october_ids or ("october", story_id) not in published_pages:
+            continue
+        relative = story_path.relative_to(root)
+        try:
+            readiness_path = story_path.with_name("audio-readiness.json")
+            readiness = read_object(readiness_path) if readiness_path.is_file() else {}
+            if readiness.get("format") != "KHALEDOON_OCTOBER_AUDIO_READINESS_V1":
+                raise ValueError(f"{relative}: missing or invalid audio readiness report")
+            if readiness.get("ready") is not True:
+                raise ValueError(f"{relative}: October package is not ready in all five languages")
+            october_count += 1
             records.append(inspect_story(story_path, root))
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             records.append({
