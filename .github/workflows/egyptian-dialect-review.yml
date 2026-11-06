@@ -1,0 +1,38 @@
+name: Egyptian Arabic reviewer checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - 'scripts/review_egyptian_dialect.py'
+      - 'tests/test_review_egyptian_dialect.py'
+      - '.github/workflows/egyptian-dialect-review.yml'
+      - 'stories/**/story.json'
+      - 'stories/**/audio-pronunciation.json'
+      - '!stories/october/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: egyptian-dialect-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  reviewer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile reviewer
+        run: python -m py_compile scripts/review_egyptian_dialect.py
+      - name: Run focused tests
+        run: python -m unittest discover -s tests -p 'test_review_egyptian_dialect.py' -v
+      - name: Review every eligible non-October Arabic story (read-only)
+        run: python scripts/review_egyptian_dialect.py --all-stories > "$RUNNER_TEMP/egyptian-dialect-review.json"
+
+      - name: Print read-only all-story dialect report
+        run: cat "$RUNNER_TEMP/egyptian-dialect-review.json"
