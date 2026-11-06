@@ -1,0 +1,26 @@
+name: Arabic pronunciation dictionary tests
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/arabic_pronunciation.py'
+      - 'scripts/test_arabic_pronunciation.py'
+      - 'audio/pronunciation/**'
+      - '.github/workflows/audio-pronunciation-dictionary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated pronunciation dictionary tests
+        run: python -m unittest discover -s scripts -p 'test_arabic_pronunciation.py' -v
