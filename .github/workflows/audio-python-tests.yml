@@ -10,7 +10,8 @@ on:
       - "scripts/generate_story_audio.py"
       - "tests/test_october_audio_packages.py"
       - "tests/test_audio_generation_safety.py"
-      - "rebuild/october-audio-packages/**"
+      - "scripts/build_october_audio_packages.py"
+      - "stories/october/**"
   workflow_dispatch:
 
 permissions:
@@ -36,6 +37,10 @@ jobs:
       - name: Run October package and audio safety tests
         run: |
           python -m unittest tests.test_october_audio_packages tests.test_audio_generation_safety -v
+
+      - name: Extract October source packages into the canonical story tree
+        run: |
+          python3 scripts/build_october_audio_packages.py
 
       - name: Build and verify read-only plan for all stories and October packages
         shell: bash
