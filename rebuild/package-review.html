@@ -17,7 +17,7 @@ label,button,select,input{font:inherit}button,select,input[type=file]{background
 </style>
 </head>
 <body>
-<header><h1>فحص حزمة الحكاية الموحدة</h1><div class="muted">يتم عرض الحكاية بعد الفحص داخل القارئ الحقيقي المستخدم في صفحات الموقع. لا يتم النشر من هذه النافذة.</div><p><a id="back-to-admin" href="../khaledoon/admin.html">العودة إلى لوحة الإدارة لإكمال قرار المراجعة</a></p></header>
+<header><h1>فحص حزمة الحكاية الموحدة</h1><div class="muted">يتم عرض جميع الأقسام، بما فيها أكتوبر، داخل القارئ المشترك المستخدم في صفحات الموقع. المعاينة غير منشورة ولا تنفّذ النشر.</div><p><a id="back-to-admin" href="../khaledoon/admin.html">العودة إلى لوحة الإدارة لإكمال قرار المراجعة</a></p></header>
 <main>
 <section class="panel">
 <h2>١. اختيار الحزمة</h2>
@@ -63,7 +63,7 @@ function listIssues(s){
 function openUnifiedReader(){
  try{localStorage.setItem('kh-story-review-package',JSON.stringify(story));}
  catch(e){$('status').textContent='تعذر حفظ حزمة المعاينة في تخزين المتصفح: '+e.message;$('status').className='status bad';return}
- if(story&&(story.section==='october'||story.section_key==='october')){location.replace('package-review-legacy.html?draft=1&v=20261102-october-legacy-1');return}
+ 
  $('status').textContent='اجتاز الفحص البنيوي. جارٍ فتح الحكاية داخل القارئ الموحد…';
  const params=new URLSearchParams(location.search);const readerUrl=new URL('reader.html',location.href);readerUrl.searchParams.set('draft','1');readerUrl.searchParams.set('v','20261102-canonical-preview-reader-3');['submission','table'].forEach(k=>{const v=params.get(k);if(v)readerUrl.searchParams.set(k,v)});location.replace(readerUrl.toString());
 }
