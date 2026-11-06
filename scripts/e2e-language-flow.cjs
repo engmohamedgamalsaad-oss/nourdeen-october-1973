@@ -897,9 +897,12 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       const view = document.querySelector('#viewSubs');
       return !!view && !view.hidden;
     }, null, { timeout: 5000 });
-    await page.getByText('Existing E2E Draft', { exact: true }).waitFor({ state: 'visible', timeout: 20000 });
-    const card = page.locator('details.pubrow:visible').filter({ hasText: 'Existing E2E Draft' }).first();
-    await card.locator('summary').click();
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
+    const card = page.locator('#viewSubs details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
+    // Expand through the actual summary even if the text locator is treated as hidden
+    // while the details disclosure is closed.
+    await card.locator('summary').evaluate((summary) => summary.click());
+    await card.locator('.pbody').waitFor({ state: 'visible', timeout: 10000 });
     const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
