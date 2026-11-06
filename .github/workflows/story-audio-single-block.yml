@@ -46,7 +46,7 @@ jobs:
       - name: Check out main
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: main
+          ref: ${{ github.ref }}
 
       - name: Install Edge TTS dependency
         run: python -m pip install edge-tts
