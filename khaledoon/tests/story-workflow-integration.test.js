@@ -13,6 +13,7 @@ var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var storyPublisher = fs.readFileSync('rebuild/publish-story.mjs', 'utf8');
 var audioTextReviewer = fs.readFileSync('khaledoon/assets/audio-text-review.js', 'utf8');
 var audioGenerator = fs.readFileSync('scripts/generate_story_audio.py', 'utf8');
+var readerReviewActions = fs.readFileSync('rebuild/reader-review-actions.js', 'utf8');
 var passed = 0;
 function test(name, fn) {
   try { fn(); passed++; console.log('ok - ' + name); }
@@ -59,6 +60,11 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
   assert.ok(admin.includes("link.download='audio-pronunciation.json'"), 'the admin must download the approval file beside story.json');
+  assert.ok(admin.includes('async function audioReviewPackageOf(it)'), 'October legacy records must load their extracted audio source package for the shared review');
+  assert.ok(admin.includes("../rebuild/october-audio-packages/'+storyId+'/story.json"), 'October review must use the shared extracted story package');
+  assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
+  assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
+  assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
   assert.ok(audioGenerator.includes('validate_required_audio_text_review'), 'the generator must validate the approval record');
   assert.ok(audioGenerator.includes('class AudioTextApprovalRequired') && audioGenerator.includes('review_required = True'), 'October packages must use the shared five-language human approval gate');
 });
