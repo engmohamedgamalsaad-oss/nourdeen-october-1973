@@ -1,0 +1,2042 @@
+{
+  "format": "KHALEDOON_AUDIO_PRONUNCIATION_V1",
+  "story": "003",
+  "section": "october",
+  "language": "ar",
+  "approved_audio_only_rewrites": [
+    "3",
+    "4",
+    "6",
+    "7",
+    "9",
+    "11",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "19",
+    "20",
+    "21",
+    "22",
+    "24",
+    "25",
+    "27",
+    "30",
+    "32",
+    "36",
+    "38",
+    "39",
+    "41",
+    "42",
+    "43",
+    "45",
+    "46",
+    "47"
+  ],
+  "blocks": {
+    "3": "قبل حرب أكتوبر، كان لازم الجيش المصري يبعت الأوامر والرسايل بين القادة من غير ما العدو يفهمها. والروايات بتقول إن العدو كان نجح قبل كده في فهم بعض الشفرات.",
+    "4": "فالقادة دوّروا على شفرة جديدة العدو ميقدرش يفهمها بسهولة.",
+    "6": "النوبة منطقة تاريخية في جنوب مصر وشمال السودان، وأهلها عندهم لغات وتنوعات لغوية عريقة. وخلال حرب أكتوبر، استعان الجيش المصري بمعرفة بعض الجنود النوبيين بلغاتهم في نقل رسائل عسكرية.",
+    "7": "ومن هنا ظهرت الفكرة: طب ليه الجنود النوبيين ما يستخدموش لغتهم في نقل الرسائل؟ الجنود اللي يعرفوا اللغة هيقدروا يفهموا الرسائل، أما اللي ما يعرفوهاش فمش هيفهموا معناها بسهولة.",
+    "9": "ومعرفة بعض الجنود النوبيين بلغاتهم ساعدت في نقل الرسائل بين أفراد المجموعة اللي كانوا فاهمين اللغة.",
+    "11": "بعض الروايات بتذكر الكنزية والفاديجا، لكن التنوع اللغوي النوبي أوسع من الاسمين دول.",
+    "13": "المصادر بتنسب الفكرة دي للجندي النوبي أحمد إدريس، ابن محافظة أسوان. وهو لاحظ إن القادة بيدوروا على شفرة جديدة، فاقترح إنهم يستخدموا لغة أهله.",
+    "14": "ومجموعة من الجنود النوبيين اتدربت على نقل الرسايل بلغتهم، واتوزعوا على أماكن مختلفة عشان ينقلوا الرسائل ويحافظوا على سريتها.",
+    "15": "أحمد إدريس عرض فكرته على قادته.",
+    "16": "الجنود النوبيين اتدربوا على استخدام اللغة في الاتصالات.",
+    "17": "ستة أكتوبر ألف وتسعمية وتلاتة وسبعين",
+    "18": "الشفرة النوبية اتستخدمت في الاتصالات خلال الحرب.",
+    "19": "لحد ألف وتسعمية أربعة وتسعين",
+    "20": "بعض الروايات بتذكر إن استخدام الشفرة استمر لحد السنة دي، لكن تفاصيل مدة استخدامها بتختلف بين المصادر.",
+    "21": "الرئيس عبد الفتاح السيسي كرّمه بنجمة سيناء العسكرية.",
+    "22": "رحل وعمره أربعة وتمانين سنة.",
+    "24": "في الحرب العالمية التانية، الأمريكان استخدموا لغة قبيلة «نافاهو» بطريقة شبه كده، واتعرف الجنود دول باسم «حاملي الشفرة». وبعض المقالات قارنت بين الحكايتين.",
+    "25": "واستخدام اللغة النوبية فضل سر سنين طويلة، وبعدين القصة اتعرفت للناس.",
+    "27": "وتذكر بعض التقارير أن عدد المشاركين كان نحو تلتمية وأربعة وأربعين جنديًا، وكانت الشفرة جزءًا من منظومة اتصالات وتخطيط أوسع.",
+    "30": "اختلاف اللغات والثقافات في مصر ثروة بتفيد الوطن.",
+    "32": "اقتراح من جندي واحد ممكن يحل مشكلة كبيرة.",
+    "36": "بنقارن بين المصادر قبل ما نصدّق كل رواية.",
+    "38": "اللغة النوبية كانت جزء من هوية أهلها، وفي أكتوبر بقت كمان وسيلة لحماية رسايل الجيش.",
+    "39": "أحيانًا لغة أهلك اللي بتحبها بتكون هي الكنز اللي الوطن محتاجه.",
+    "41": "بتتحكي قصة أحمد إدريس، الجندي النوبي المصري، على إنها مثال على استخدام المعرفة اللغوية في الاتصالات العسكرية. ووفق روايات صحفية وشهادات متداولة، إدريس اقترح الاستفادة من اللغة النوبية في نقل بعض الرسايل، لأن الخصم اللي مبيعرفش اللغة هيلاقي صعوبة أكبر في فهم محتواها.",
+    "42": "النوبية مش لغة واحدة متطابقة في كل مكان؛ دي فيها تنوعات لغوية ومجتمعات ليها تاريخ طويل في جنوب مصر وشمال السودان. ومعرفة اللغة في القصة دي مش تفصيلة غريبة، لكنها تذكير إن مهارات الناس وخلفياتهم الثقافية ممكن تتحول لمورد عملي وقت الحاجة.",
+    "43": "اللغة النوبية ساعدت في نقل الرسائل، لكن نجاح الاتصالات اعتمد كمان على الانضباط وطرق الإرسال وحماية المعلومات.",
+    "45": "لما بنقرا عن أحمد إدريس، بنقدّر مساهمته ونفتخر بدور النوبيين المصريين في خدمة بلدهم. قصته بتفكرنا إن المعرفة اللي عند الإنسان ممكن تتحول لقوة تحمي ناس كتير.",
+    "46": "وتفضل قصة أحمد إدريس مثالًا على إن المعرفة واللغة ممكن يكون ليهم دور مهم في حماية الوطن وقت الشدة.",
+    "47": "والحكاية بتعلمنا كمان إن حماية المعلومات مش بتعتمد على جهاز أو كلمة سر بس؛ ممكن تبدأ من المعرفة الإنسانية، ومن القدرة على التواصل بوضوح مع الفريق الصح، ومن إدراك إن التنوع اللغوي والثقافي جزء من قوة المجتمع."
+  },
+  "approved_audio_text_rewrites": {
+    "ar": {
+      "3": "قبل حرب أكتوبر، كان لازم الجيش المصري يبعت الأوامر والرسايل بين القادة من غير ما العدو يفهمها. والروايات بتقول إن العدو كان نجح قبل كده في فهم بعض الشفرات.",
+      "4": "فالقادة دوّروا على شفرة جديدة العدو ميقدرش يفهمها بسهولة.",
+      "6": "النوبة منطقة تاريخية في جنوب مصر وشمال السودان، وأهلها عندهم لغات وتنوعات لغوية عريقة. وخلال حرب أكتوبر، استعان الجيش المصري بمعرفة بعض الجنود النوبيين بلغاتهم في نقل رسائل عسكرية.",
+      "7": "ومن هنا ظهرت الفكرة: طب ليه الجنود النوبيين ما يستخدموش لغتهم في نقل الرسائل؟ الجنود اللي يعرفوا اللغة هيقدروا يفهموا الرسائل، أما اللي ما يعرفوهاش فمش هيفهموا معناها بسهولة.",
+      "9": "ومعرفة بعض الجنود النوبيين بلغاتهم ساعدت في نقل الرسائل بين أفراد المجموعة اللي كانوا فاهمين اللغة.",
+      "11": "بعض الروايات بتذكر الكنزية والفاديجا، لكن التنوع اللغوي النوبي أوسع من الاسمين دول.",
+      "13": "المصادر بتنسب الفكرة دي للجندي النوبي أحمد إدريس، ابن محافظة أسوان. وهو لاحظ إن القادة بيدوروا على شفرة جديدة، فاقترح إنهم يستخدموا لغة أهله.",
+      "14": "ومجموعة من الجنود النوبيين اتدربت على نقل الرسايل بلغتهم، واتوزعوا على أماكن مختلفة عشان ينقلوا الرسائل ويحافظوا على سريتها.",
+      "15": "أحمد إدريس عرض فكرته على قادته.",
+      "16": "الجنود النوبيين اتدربوا على استخدام اللغة في الاتصالات.",
+      "17": "ستة أكتوبر ألف وتسعمية وتلاتة وسبعين",
+      "18": "الشفرة النوبية اتستخدمت في الاتصالات خلال الحرب.",
+      "19": "لحد ألف وتسعمية أربعة وتسعين",
+      "20": "بعض الروايات بتذكر إن استخدام الشفرة استمر لحد السنة دي، لكن تفاصيل مدة استخدامها بتختلف بين المصادر.",
+      "21": "الرئيس عبد الفتاح السيسي كرّمه بنجمة سيناء العسكرية.",
+      "22": "رحل وعمره أربعة وتمانين سنة.",
+      "24": "في الحرب العالمية التانية، الأمريكان استخدموا لغة قبيلة «نافاهو» بطريقة شبه كده، واتعرف الجنود دول باسم «حاملي الشفرة». وبعض المقالات قارنت بين الحكايتين.",
+      "25": "واستخدام اللغة النوبية فضل سر سنين طويلة، وبعدين القصة اتعرفت للناس.",
+      "27": "وتذكر بعض التقارير أن عدد المشاركين كان نحو تلتمية وأربعة وأربعين جنديًا، وكانت الشفرة جزءًا من منظومة اتصالات وتخطيط أوسع.",
+      "30": "اختلاف اللغات والثقافات في مصر ثروة بتفيد الوطن.",
+      "32": "اقتراح من جندي واحد ممكن يحل مشكلة كبيرة.",
+      "36": "بنقارن بين المصادر قبل ما نصدّق كل رواية.",
+      "38": "اللغة النوبية كانت جزء من هوية أهلها، وفي أكتوبر بقت كمان وسيلة لحماية رسايل الجيش.",
+      "39": "أحيانًا لغة أهلك اللي بتحبها بتكون هي الكنز اللي الوطن محتاجه.",
+      "41": "بتتحكي قصة أحمد إدريس، الجندي النوبي المصري، على إنها مثال على استخدام المعرفة اللغوية في الاتصالات العسكرية. ووفق روايات صحفية وشهادات متداولة، إدريس اقترح الاستفادة من اللغة النوبية في نقل بعض الرسايل، لأن الخصم اللي مبيعرفش اللغة هيلاقي صعوبة أكبر في فهم محتواها.",
+      "42": "النوبية مش لغة واحدة متطابقة في كل مكان؛ دي فيها تنوعات لغوية ومجتمعات ليها تاريخ طويل في جنوب مصر وشمال السودان. ومعرفة اللغة في القصة دي مش تفصيلة غريبة، لكنها تذكير إن مهارات الناس وخلفياتهم الثقافية ممكن تتحول لمورد عملي وقت الحاجة.",
+      "43": "اللغة النوبية ساعدت في نقل الرسائل، لكن نجاح الاتصالات اعتمد كمان على الانضباط وطرق الإرسال وحماية المعلومات.",
+      "45": "لما بنقرا عن أحمد إدريس، بنقدّر مساهمته ونفتخر بدور النوبيين المصريين في خدمة بلدهم. قصته بتفكرنا إن المعرفة اللي عند الإنسان ممكن تتحول لقوة تحمي ناس كتير.",
+      "46": "وتفضل قصة أحمد إدريس مثالًا على إن المعرفة واللغة ممكن يكون ليهم دور مهم في حماية الوطن وقت الشدة.",
+      "47": "والحكاية بتعلمنا كمان إن حماية المعلومات مش بتعتمد على جهاز أو كلمة سر بس؛ ممكن تبدأ من المعرفة الإنسانية، ومن القدرة على التواصل بوضوح مع الفريق الصح، ومن إدراك إن التنوع اللغوي والثقافي جزء من قوة المجتمع."
+    },
+    "en": {},
+    "fr": {},
+    "it": {},
+    "de": {}
+  },
+  "review": {
+    "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
+    "status": "approved_by_admin",
+    "languages": [
+      "ar",
+      "en",
+      "fr",
+      "it",
+      "de"
+    ],
+    "total_segments": 240,
+    "segments": [
+      {
+        "lang": "ar",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "لغة لا يفهمها العدو",
+        "approved_audio_text": "لغة لا يفهمها العدو",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "حكاية الشفرة النوبية",
+        "approved_audio_text": "حكاية الشفرة النوبية",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "رسائل يجب أن تبقى سرًّا",
+        "approved_audio_text": "رسائل يجب أن تبقى سرًّا",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "قبل حرب أكتوبر كان على الجيش المصري أن يرسل الأوامر والرسائل بين القادة دون أن يفهمها العدو. وتقول الروايات إن بعض الشفرات السابقة كان العدو قد نجح في فهمها.",
+        "approved_audio_text": "قبل حرب أكتوبر، كان لازم الجيش المصري يبعت الأوامر والرسايل بين القادة من غير ما العدو يفهمها. والروايات بتقول إن العدو كان نجح قبل كده في فهم بعض الشفرات.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "فبحث القادة عن شفرة جديدة لا يمكن للعدو أن يفهمها بسهولة.",
+        "approved_audio_text": "فالقادة دوّروا على شفرة جديدة العدو ميقدرش يفهمها بسهولة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "اللغة النوبية",
+        "approved_audio_text": "اللغة النوبية",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "النوبة منطقة تاريخية في جنوب مصر وشمال السودان، ولأهلها لغات وتنوعات لغوية عريقة. وفي زمن حرب أكتوبر، كانت بعض هذه اللغات تنتقل شفهيًا بين أهلها، ولم تكن هناك مرجعية مكتوبة موحّدة للعبارات التي استُخدمت في الاتصالات العسكرية.",
+        "approved_audio_text": "النوبة منطقة تاريخية في جنوب مصر وشمال السودان، وأهلها عندهم لغات وتنوعات لغوية عريقة. وخلال حرب أكتوبر، استعان الجيش المصري بمعرفة بعض الجنود النوبيين بلغاتهم في نقل رسائل عسكرية.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "ومن هنا جاءت الفكرة: ماذا لو استخدم الجنود النوبيون لغتهم في نقل الرسائل؟ سيفهمها المصريون الذين يتحدثونها، أما من لا يعرفها فلن يفهم منها شيئًا.",
+        "approved_audio_text": "ومن هنا ظهرت الفكرة: طب ليه الجنود النوبيين ما يستخدموش لغتهم في نقل الرسائل؟ الجنود اللي يعرفوا اللغة هيقدروا يفهموا الرسائل، أما اللي ما يعرفوهاش فمش هيفهموا معناها بسهولة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "التناقل الشفهي",
+        "approved_audio_text": "التناقل الشفهي",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "ساعدت معرفة اللغة بين أهلها، وعدم وجود قاموس عسكري موحّد للعبارات المستخدمة، على جعل فهم الرسائل أصعب على من لا يعرفها.",
+        "approved_audio_text": "ومعرفة بعض الجنود النوبيين بلغاتهم ساعدت في نقل الرسائل بين أفراد المجموعة اللي كانوا فاهمين اللغة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "تنوع لغوي",
+        "approved_audio_text": "تنوع لغوي",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "تذكر بعض روايات الشفرة الكنزية والفاديجا، لكن التنوع اللغوي النوبي أوسع من هذين الاسمين.",
+        "approved_audio_text": "بعض الروايات بتذكر الكنزية والفاديجا، لكن التنوع اللغوي النوبي أوسع من الاسمين دول.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "أحمد إدريس",
+        "approved_audio_text": "أحمد إدريس",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "تنسب المصادر هذه الفكرة إلى الجندي النوبي أحمد إدريس، ابن محافظة أسوان. لاحظ أن القادة يبحثون عن شفرة جديدة، فاقترح استخدام لغة أهله.",
+        "approved_audio_text": "المصادر بتنسب الفكرة دي للجندي النوبي أحمد إدريس، ابن محافظة أسوان. وهو لاحظ إن القادة بيدوروا على شفرة جديدة، فاقترح إنهم يستخدموا لغة أهله.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "وتُدرَّب مجموعة من الجنود النوبيين على نقل الرسائل بلغتهم، وتوزعوا على أماكن مختلفة ليحملوا سر الشفرة الجديدة.",
+        "approved_audio_text": "ومجموعة من الجنود النوبيين اتدربت على نقل الرسايل بلغتهم، واتوزعوا على أماكن مختلفة عشان ينقلوا الرسائل ويحافظوا على سريتها.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "عرض أحمد إدريس فكرته على قادته.",
+        "approved_audio_text": "أحمد إدريس عرض فكرته على قادته.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "تدرّب الجنود النوبيون على استخدام اللغة في الاتصالات.",
+        "approved_audio_text": "الجنود النوبيين اتدربوا على استخدام اللغة في الاتصالات.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "6 أكتوبر 1973",
+        "approved_audio_text": "ستة أكتوبر ألف وتسعمية وتلاتة وسبعين",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "استُخدمت الشفرة النوبية في الاتصالات خلال الحرب.",
+        "approved_audio_text": "الشفرة النوبية اتستخدمت في الاتصالات خلال الحرب.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "حتى 1994",
+        "approved_audio_text": "لحد ألف وتسعمية أربعة وتسعين",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "تذكر بعض الروايات أن استخدام الشفرة استمر حتى هذا العام، لكن تفاصيل مدة استخدامها تختلف بين المصادر.",
+        "approved_audio_text": "بعض الروايات بتذكر إن استخدام الشفرة استمر لحد السنة دي، لكن تفاصيل مدة استخدامها بتختلف بين المصادر.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "كرّمه الرئيس عبد الفتاح السيسي بنجمة سيناء العسكرية.",
+        "approved_audio_text": "الرئيس عبد الفتاح السيسي كرّمه بنجمة سيناء العسكرية.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "رحل عن عمر 84 عامًا.",
+        "approved_audio_text": "رحل وعمره أربعة وتمانين سنة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "حكاية تشبه حكايات أخرى",
+        "approved_audio_text": "حكاية تشبه حكايات أخرى",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "في الحرب العالمية الثانية استخدم الأمريكيون لغة قبيلة «نافاهو» بطريقة مشابهة، وعُرف هؤلاء الجنود باسم «حاملي الشفرة». وقد قارنت بعض المقالات بين الحكايتين.",
+        "approved_audio_text": "في الحرب العالمية التانية، الأمريكان استخدموا لغة قبيلة «نافاهو» بطريقة شبه كده، واتعرف الجنود دول باسم «حاملي الشفرة». وبعض المقالات قارنت بين الحكايتين.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "وظل استخدام اللغة النوبية سرًّا لسنوات طويلة، ثم عُرفت القصة للناس بعد ذلك.",
+        "approved_audio_text": "واستخدام اللغة النوبية فضل سر سنين طويلة، وبعدين القصة اتعرفت للناس.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "هل تعلم؟",
+        "approved_audio_text": "هل تعلم؟",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "تختلف المصادر في عدد الجنود المشاركين وفي بعض تفاصيل استخدام الشفرة. تذكر بعض التقارير رقمًا يقارب 344 جنديًا، بينما تورد روايات أخرى أرقامًا مختلفة؛ لذلك لا نعرض رقمًا واحدًا على أنه محسوم. وكانت الشفرة جزءًا من منظومة اتصالات وتخطيط أوسع.",
+        "approved_audio_text": "وتذكر بعض التقارير أن عدد المشاركين كان نحو تلتمية وأربعة وأربعين جنديًا، وكانت الشفرة جزءًا من منظومة اتصالات وتخطيط أوسع.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "لغتنا كنز",
+        "approved_audio_text": "لغتنا كنز",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "التنوع قوة",
+        "approved_audio_text": "التنوع قوة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "اختلاف اللغات والثقافات في مصر ثروة تفيد الوطن.",
+        "approved_audio_text": "اختلاف اللغات والثقافات في مصر ثروة بتفيد الوطن.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "فكرة بسيطة",
+        "approved_audio_text": "فكرة بسيطة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "اقتراح من جندي واحد قد يحل مشكلة كبيرة.",
+        "approved_audio_text": "اقتراح من جندي واحد ممكن يحل مشكلة كبيرة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "الكتمان",
+        "approved_audio_text": "الكتمان",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "حفظ السر جزء من المسؤولية.",
+        "approved_audio_text": "حفظ السر جزء من المسؤولية.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "التحقق",
+        "approved_audio_text": "التحقق",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "نقارن بين المصادر قبل أن نصدق كل رواية.",
+        "approved_audio_text": "بنقارن بين المصادر قبل ما نصدّق كل رواية.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "كلمات قليلة حملت أمانة كبيرة",
+        "approved_audio_text": "كلمات قليلة حملت أمانة كبيرة",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "كانت اللغة النوبية جزءًا من هوية أهلها، وفي أكتوبر صارت أيضًا وسيلة لحماية رسائل الجيش.",
+        "approved_audio_text": "اللغة النوبية كانت جزء من هوية أهلها، وفي أكتوبر بقت كمان وسيلة لحماية رسايل الجيش.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "أحيانًا تكون لغة أهلك التي تحبها هي الكنز الذي يحتاجه الوطن.",
+        "approved_audio_text": "أحيانًا لغة أهلك اللي بتحبها بتكون هي الكنز اللي الوطن محتاجه.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "من يتحدث لغة لا يعرفها الخصم؟",
+        "approved_audio_text": "من يتحدث لغة لا يعرفها الخصم؟",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "تُروى قصة أحمد إدريس، الجندي النوبي المصري، بوصفها مثالًا على استخدام المعرفة اللغوية في الاتصالات العسكرية. ووفق روايات صحفية وشهادات متداولة، اقترح إدريس الاستفادة من اللغة النوبية في نقل بعض الرسائل، لأن الخصم الذي لا يعرف اللغة سيواجه صعوبة أكبر في فهم مضمونها.",
+        "approved_audio_text": "بتتحكي قصة أحمد إدريس، الجندي النوبي المصري، على إنها مثال على استخدام المعرفة اللغوية في الاتصالات العسكرية. ووفق روايات صحفية وشهادات متداولة، إدريس اقترح الاستفادة من اللغة النوبية في نقل بعض الرسايل، لأن الخصم اللي مبيعرفش اللغة هيلاقي صعوبة أكبر في فهم محتواها.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "النوبية ليست لغة واحدة متطابقة في كل مكان؛ بل تضم تنوعات لغوية ومجتمعات لها تاريخ طويل في جنوب مصر وشمال السودان. ومعرفة اللغة في هذه القصة ليست تفصيلًا غريبًا، بل تذكير بأن مهارات الناس وخلفياتهم الثقافية يمكن أن تتحول إلى مورد عملي عند الحاجة.",
+        "approved_audio_text": "النوبية مش لغة واحدة متطابقة في كل مكان؛ دي فيها تنوعات لغوية ومجتمعات ليها تاريخ طويل في جنوب مصر وشمال السودان. ومعرفة اللغة في القصة دي مش تفصيلة غريبة، لكنها تذكير إن مهارات الناس وخلفياتهم الثقافية ممكن تتحول لمورد عملي وقت الحاجة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "ومع ذلك، من المهم وصف القصة بدقة: لا ينبغي اعتبار اللغة وحدها نظام تشفير كاملًا أو ضمانًا للسرية المطلقة. أمن الاتصالات يعتمد على الانضباط وطرق الإرسال وحماية المعلومات، كما أن بعض التفاصيل التاريخية في الروايات الصحفية تحتاج إلى المقارنة بمصادر مستقلة قبل الجزم بها.",
+        "approved_audio_text": "اللغة النوبية ساعدت في نقل الرسائل، لكن نجاح الاتصالات اعتمد كمان على الانضباط وطرق الإرسال وحماية المعلومات.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 44,
+        "speaker": "narrator",
+        "source_text": "احترام صاحب القصة واحترام الدليل",
+        "approved_audio_text": "احترام صاحب القصة واحترام الدليل",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "ar",
+        "block_index": 45,
+        "speaker": "narrator",
+        "source_text": "حين نقرأ عن أحمد إدريس، يمكننا تقدير قيمة مساهمته والاعتزاز بدور النوبيين المصريين، وفي الوقت نفسه نسأل: ما الذي تؤكده الشهادات؟ وما التفاصيل التي تختلف من مصدر إلى آخر؟ هذا السؤال لا يقلل من القصة؛ بل يجعل عرضها أكثر مسؤولية.",
+        "approved_audio_text": "لما بنقرا عن أحمد إدريس، بنقدّر مساهمته ونفتخر بدور النوبيين المصريين في خدمة بلدهم. قصته بتفكرنا إن المعرفة اللي عند الإنسان ممكن تتحول لقوة تحمي ناس كتير.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 46,
+        "speaker": "narrator",
+        "source_text": "المقارنة بين روايات الصحف، والشهادات المباشرة إن توفرت، والمصادر التاريخية المستقلة تساعد على التمييز بين الفكرة العامة المدعومة وبين التفاصيل التي قد تحتاج إلى توثيق إضافي.",
+        "approved_audio_text": "وتفضل قصة أحمد إدريس مثالًا على إن المعرفة واللغة ممكن يكون ليهم دور مهم في حماية الوطن وقت الشدة.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 47,
+        "speaker": "narrator",
+        "source_text": "وتعلّمنا الحكاية أيضًا أن حماية المعلومات لا تعتمد على جهاز أو كلمة سر فقط؛ بل قد تبدأ من المعرفة البشرية، ومن القدرة على التواصل بوضوح مع الفريق الصحيح، ومن إدراك أن التنوع اللغوي والثقافي جزء من قوة المجتمع.",
+        "approved_audio_text": "والحكاية بتعلمنا كمان إن حماية المعلومات مش بتعتمد على جهاز أو كلمة سر بس؛ ممكن تبدأ من المعرفة الإنسانية، ومن القدرة على التواصل بوضوح مع الفريق الصح، ومن إدراك إن التنوع اللغوي والثقافي جزء من قوة المجتمع.",
+        "decision": "approved_rewrite"
+      },
+      {
+        "lang": "en",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "A Language the Enemy Could Not Understand",
+        "approved_audio_text": "A Language the Enemy Could Not Understand",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "The story of the Nubian code",
+        "approved_audio_text": "The story of the Nubian code",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Messages That Had to Stay Secret",
+        "approved_audio_text": "Messages That Had to Stay Secret",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Before the October War, the Egyptian army needed to send orders and messages between commanders without the enemy understanding them. Accounts say the enemy had managed to decipher some earlier codes.",
+        "approved_audio_text": "Before the October War, the Egyptian army needed to send orders and messages between commanders without the enemy understanding them. Accounts say the enemy had managed to decipher some earlier codes.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "Commanders therefore looked for a new code that would be difficult for the enemy to understand.",
+        "approved_audio_text": "Commanders therefore looked for a new code that would be difficult for the enemy to understand.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "The Nubian Language",
+        "approved_audio_text": "The Nubian Language",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Nubia is a historic region in southern Egypt and northern Sudan, home to long-standing languages and varieties. During the October War, some were passed down orally, and there was no single written reference for the phrases used in military communications.",
+        "approved_audio_text": "Nubia is a historic region in southern Egypt and northern Sudan, home to long-standing languages and varieties. During the October War, some were passed down orally, and there was no single written reference for the phrases used in military communications.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "This led to an idea: what if Nubian soldiers used their language to transmit messages? Egyptian speakers would understand, while those unfamiliar with it would not.",
+        "approved_audio_text": "This led to an idea: what if Nubian soldiers used their language to transmit messages? Egyptian speakers would understand, while those unfamiliar with it would not.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "Oral Transmission",
+        "approved_audio_text": "Oral Transmission",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Because speakers knew the language and there was no standardized military glossary for the phrases, the messages were harder for outsiders to understand.",
+        "approved_audio_text": "Because speakers knew the language and there was no standardized military glossary for the phrases, the messages were harder for outsiders to understand.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Linguistic Diversity",
+        "approved_audio_text": "Linguistic Diversity",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Some accounts mention Kenzi and Fadija varieties, but Nubian linguistic diversity extends beyond these two names.",
+        "approved_audio_text": "Some accounts mention Kenzi and Fadija varieties, but Nubian linguistic diversity extends beyond these two names.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris",
+        "approved_audio_text": "Ahmed Idris",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Sources attribute the idea to Ahmed Idris, a Nubian soldier from Aswan Governorate. Seeing that commanders were looking for a new code, he suggested using his community’s language.",
+        "approved_audio_text": "Sources attribute the idea to Ahmed Idris, a Nubian soldier from Aswan Governorate. Seeing that commanders were looking for a new code, he suggested using his community’s language.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "A group of Nubian soldiers was trained to relay messages in their language and stationed in different places to protect the secret code.",
+        "approved_audio_text": "A group of Nubian soldiers was trained to relay messages in their language and stationed in different places to protect the secret code.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris presented his idea to his commanders.",
+        "approved_audio_text": "Ahmed Idris presented his idea to his commanders.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Nubian soldiers trained to use the language in communications.",
+        "approved_audio_text": "Nubian soldiers trained to use the language in communications.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "6 October 1973",
+        "approved_audio_text": "6 October 1973",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "The Nubian code was used in communications during the war.",
+        "approved_audio_text": "The Nubian code was used in communications during the war.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Until 1994",
+        "approved_audio_text": "Until 1994",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "Some accounts say the code remained in use until this year, though sources differ on how long it was used.",
+        "approved_audio_text": "Some accounts say the code remained in use until this year, though sources differ on how long it was used.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "President Abdel Fattah el-Sisi honored him with the Military Star of Sinai.",
+        "approved_audio_text": "President Abdel Fattah el-Sisi honored him with the Military Star of Sinai.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "He died at the age of 84.",
+        "approved_audio_text": "He died at the age of 84.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "A Story with Parallels Elsewhere",
+        "approved_audio_text": "A Story with Parallels Elsewhere",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "During World War II, the United States used the Navajo language in a similar way. These soldiers became known as Code Talkers, and some articles compare the two stories.",
+        "approved_audio_text": "During World War II, the United States used the Navajo language in a similar way. These soldiers became known as Code Talkers, and some articles compare the two stories.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "The use of the Nubian language remained secret for many years, and the story became known to the public later.",
+        "approved_audio_text": "The use of the Nubian language remained secret for many years, and the story became known to the public later.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Did You Know?",
+        "approved_audio_text": "Did You Know?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Sources differ on the number of soldiers involved and some details of the code. Some reports mention about 344 soldiers, while others give different figures, so no single number is presented as definitive. The code was part of a broader communications and planning system.",
+        "approved_audio_text": "Sources differ on the number of soldiers involved and some details of the code. Some reports mention about 344 soldiers, while others give different figures, so no single number is presented as definitive. The code was part of a broader communications and planning system.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Our Language Is a Treasure",
+        "approved_audio_text": "Our Language Is a Treasure",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Diversity Is Strength",
+        "approved_audio_text": "Diversity Is Strength",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "Egypt’s linguistic and cultural diversity is a national treasure.",
+        "approved_audio_text": "Egypt’s linguistic and cultural diversity is a national treasure.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "A Simple Idea",
+        "approved_audio_text": "A Simple Idea",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "One soldier’s suggestion can solve a major problem.",
+        "approved_audio_text": "One soldier’s suggestion can solve a major problem.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "Secrecy",
+        "approved_audio_text": "Secrecy",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Keeping a secret is part of responsibility.",
+        "approved_audio_text": "Keeping a secret is part of responsibility.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Verification",
+        "approved_audio_text": "Verification",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "We compare sources before believing every account.",
+        "approved_audio_text": "We compare sources before believing every account.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "A Few Words Carried a Great Responsibility",
+        "approved_audio_text": "A Few Words Carried a Great Responsibility",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "The Nubian language was part of its speakers’ identity, and during October it also became a way to protect army messages.",
+        "approved_audio_text": "The Nubian language was part of its speakers’ identity, and during October it also became a way to protect army messages.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Sometimes the language you love and inherit from your family is the treasure your country needs.",
+        "approved_audio_text": "Sometimes the language you love and inherit from your family is the treasure your country needs.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Who speaks a language the opponent does not know?",
+        "approved_audio_text": "Who speaks a language the opponent does not know?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "The story of Ahmed Idris, an Egyptian Nubian soldier, is often told as an example of linguistic knowledge being used in military communications. According to press accounts and circulating testimonies, Idris suggested using the Nubian language to transmit some messages because an opponent unfamiliar with the language would find them harder to understand.",
+        "approved_audio_text": "The story of Ahmed Idris, an Egyptian Nubian soldier, is often told as an example of linguistic knowledge being used in military communications. According to press accounts and circulating testimonies, Idris suggested using the Nubian language to transmit some messages because an opponent unfamiliar with the language would find them harder to understand.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "Nubian is not a single, uniform language used identically everywhere; it includes linguistic varieties and communities with a long history in southern Egypt and northern Sudan. In this story, language knowledge is not an odd detail but a reminder that people’s skills and cultural backgrounds can become practical resources when needed.",
+        "approved_audio_text": "Nubian is not a single, uniform language used identically everywhere; it includes linguistic varieties and communities with a long history in southern Egypt and northern Sudan. In this story, language knowledge is not an odd detail but a reminder that people’s skills and cultural backgrounds can become practical resources when needed.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "The story must nevertheless be described carefully. Language alone should not be treated as a complete encryption system or a guarantee of absolute secrecy. Secure communications depend on discipline, transmission methods, and information protection. Some historical details in press accounts should also be compared with independent sources before being stated as certain.",
+        "approved_audio_text": "The story must nevertheless be described carefully. Language alone should not be treated as a complete encryption system or a guarantee of absolute secrecy. Secure communications depend on discipline, transmission methods, and information protection. Some historical details in press accounts should also be compared with independent sources before being stated as certain.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 44,
+        "speaker": "narrator",
+        "source_text": "Respecting the person and the evidence",
+        "approved_audio_text": "Respecting the person and the evidence",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 45,
+        "speaker": "narrator",
+        "source_text": "When reading about Ahmed Idris, we can appreciate his contribution and the role of Egyptian Nubians while also asking: What do the testimonies confirm, and which details differ between sources? These questions do not diminish the story; they make its presentation more responsible.",
+        "approved_audio_text": "When reading about Ahmed Idris, we can appreciate his contribution and the role of Egyptian Nubians while also asking: What do the testimonies confirm, and which details differ between sources? These questions do not diminish the story; they make its presentation more responsible.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 46,
+        "speaker": "narrator",
+        "source_text": "Comparing press accounts, direct testimonies where available, and independent historical sources helps distinguish the broadly supported account from details that may need further documentation.",
+        "approved_audio_text": "Comparing press accounts, direct testimonies where available, and independent historical sources helps distinguish the broadly supported account from details that may need further documentation.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "en",
+        "block_index": 47,
+        "speaker": "narrator",
+        "source_text": "The story also teaches us that protecting information does not depend only on a device or password. It can begin with human knowledge, clear communication with the right team, and recognition that linguistic and cultural diversity is part of a community’s strength.",
+        "approved_audio_text": "The story also teaches us that protecting information does not depend only on a device or password. It can begin with human knowledge, clear communication with the right team, and recognition that linguistic and cultural diversity is part of a community’s strength.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "Une langue que l’ennemi ne comprenait pas",
+        "approved_audio_text": "Une langue que l’ennemi ne comprenait pas",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "L’histoire du code nubien",
+        "approved_audio_text": "L’histoire du code nubien",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Des messages qui devaient rester secrets",
+        "approved_audio_text": "Des messages qui devaient rester secrets",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Avant la guerre d’octobre, l’armée égyptienne devait transmettre des ordres entre les commandants sans que l’ennemi les comprenne. Selon certains récits, l’ennemi avait réussi à déchiffrer des codes antérieurs.",
+        "approved_audio_text": "Avant la guerre d’octobre, l’armée égyptienne devait transmettre des ordres entre les commandants sans que l’ennemi les comprenne. Selon certains récits, l’ennemi avait réussi à déchiffrer des codes antérieurs.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "Les commandants cherchèrent donc un nouveau code difficile à comprendre pour l’ennemi.",
+        "approved_audio_text": "Les commandants cherchèrent donc un nouveau code difficile à comprendre pour l’ennemi.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "La langue nubienne",
+        "approved_audio_text": "La langue nubienne",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "La Nubie est une région historique du sud de l’Égypte et du nord du Soudan, où existent des langues et variétés anciennes. Pendant la guerre d’octobre, certaines se transmettaient oralement et il n’existait pas de référence écrite unique pour les expressions utilisées dans les communications militaires.",
+        "approved_audio_text": "La Nubie est une région historique du sud de l’Égypte et du nord du Soudan, où existent des langues et variétés anciennes. Pendant la guerre d’octobre, certaines se transmettaient oralement et il n’existait pas de référence écrite unique pour les expressions utilisées dans les communications militaires.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "L’idée fut alors proposée : et si les soldats nubiens utilisaient leur langue pour transmettre les messages ? Les Égyptiens qui la parlaient comprendraient, contrairement à ceux qui ne la connaissaient pas.",
+        "approved_audio_text": "L’idée fut alors proposée : et si les soldats nubiens utilisaient leur langue pour transmettre les messages ? Les Égyptiens qui la parlaient comprendraient, contrairement à ceux qui ne la connaissaient pas.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "La transmission orale",
+        "approved_audio_text": "La transmission orale",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "La connaissance de la langue par ses locuteurs et l’absence de glossaire militaire standardisé rendaient les messages plus difficiles à comprendre pour les non-initiés.",
+        "approved_audio_text": "La connaissance de la langue par ses locuteurs et l’absence de glossaire militaire standardisé rendaient les messages plus difficiles à comprendre pour les non-initiés.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "La diversité linguistique",
+        "approved_audio_text": "La diversité linguistique",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Certains récits mentionnent les variétés kenzi et fadija, mais la diversité linguistique nubienne est plus large.",
+        "approved_audio_text": "Certains récits mentionnent les variétés kenzi et fadija, mais la diversité linguistique nubienne est plus large.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris",
+        "approved_audio_text": "Ahmed Idris",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Les sources attribuent cette idée au soldat nubien Ahmed Idris, originaire du gouvernorat d’Assouan. Voyant que les commandants cherchaient un nouveau code, il proposa d’utiliser la langue de sa communauté.",
+        "approved_audio_text": "Les sources attribuent cette idée au soldat nubien Ahmed Idris, originaire du gouvernorat d’Assouan. Voyant que les commandants cherchaient un nouveau code, il proposa d’utiliser la langue de sa communauté.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Un groupe de soldats nubiens fut entraîné à transmettre les messages dans leur langue et réparti à différents endroits pour préserver le secret du code.",
+        "approved_audio_text": "Un groupe de soldats nubiens fut entraîné à transmettre les messages dans leur langue et réparti à différents endroits pour préserver le secret du code.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris présenta son idée à ses commandants.",
+        "approved_audio_text": "Ahmed Idris présenta son idée à ses commandants.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Les soldats nubiens s’entraînèrent à utiliser la langue dans les communications.",
+        "approved_audio_text": "Les soldats nubiens s’entraînèrent à utiliser la langue dans les communications.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "6 octobre 1973",
+        "approved_audio_text": "6 octobre 1973",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Le code nubien fut utilisé dans les communications pendant la guerre.",
+        "approved_audio_text": "Le code nubien fut utilisé dans les communications pendant la guerre.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Jusqu’en 1994",
+        "approved_audio_text": "Jusqu’en 1994",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "Certains récits indiquent que le code fut utilisé jusqu’à cette année, mais les sources divergent sur la durée exacte.",
+        "approved_audio_text": "Certains récits indiquent que le code fut utilisé jusqu’à cette année, mais les sources divergent sur la durée exacte.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "Le président Abdel Fattah al-Sissi lui décerna l’Étoile militaire du Sinaï.",
+        "approved_audio_text": "Le président Abdel Fattah al-Sissi lui décerna l’Étoile militaire du Sinaï.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "Il est décédé à l’âge de 84 ans.",
+        "approved_audio_text": "Il est décédé à l’âge de 84 ans.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Une histoire qui en rappelle d’autres",
+        "approved_audio_text": "Une histoire qui en rappelle d’autres",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Pendant la Seconde Guerre mondiale, les États-Unis utilisèrent de façon similaire la langue navajo. Ces soldats furent appelés « Code Talkers », et certains articles comparent les deux histoires.",
+        "approved_audio_text": "Pendant la Seconde Guerre mondiale, les États-Unis utilisèrent de façon similaire la langue navajo. Ces soldats furent appelés « Code Talkers », et certains articles comparent les deux histoires.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "L’utilisation de la langue nubienne resta secrète pendant de nombreuses années, avant que l’histoire ne soit révélée au public.",
+        "approved_audio_text": "L’utilisation de la langue nubienne resta secrète pendant de nombreuses années, avant que l’histoire ne soit révélée au public.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Le saviez-vous ?",
+        "approved_audio_text": "Le saviez-vous ?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Les sources divergent sur le nombre de soldats impliqués et certains détails du code. Certains rapports évoquent environ 344 soldats, tandis que d’autres avancent des chiffres différents ; aucun chiffre unique n’est donc présenté comme définitif. Le code faisait partie d’un système plus large de communications et de planification.",
+        "approved_audio_text": "Les sources divergent sur le nombre de soldats impliqués et certains détails du code. Certains rapports évoquent environ 344 soldats, tandis que d’autres avancent des chiffres différents ; aucun chiffre unique n’est donc présenté comme définitif. Le code faisait partie d’un système plus large de communications et de planification.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Notre langue est un trésor",
+        "approved_audio_text": "Notre langue est un trésor",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "La diversité est une force",
+        "approved_audio_text": "La diversité est une force",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "La diversité linguistique et culturelle de l’Égypte est une richesse pour le pays.",
+        "approved_audio_text": "La diversité linguistique et culturelle de l’Égypte est une richesse pour le pays.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Une idée simple",
+        "approved_audio_text": "Une idée simple",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "La suggestion d’un seul soldat peut résoudre un grand problème.",
+        "approved_audio_text": "La suggestion d’un seul soldat peut résoudre un grand problème.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "La discrétion",
+        "approved_audio_text": "La discrétion",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Garder un secret fait partie des responsabilités.",
+        "approved_audio_text": "Garder un secret fait partie des responsabilités.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Vérification",
+        "approved_audio_text": "Vérification",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "Nous comparons les sources avant de croire chaque récit.",
+        "approved_audio_text": "Nous comparons les sources avant de croire chaque récit.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Quelques mots portaient une grande responsabilité",
+        "approved_audio_text": "Quelques mots portaient une grande responsabilité",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "La langue nubienne faisait partie de l’identité de ses locuteurs et, en octobre, elle servit aussi à protéger les messages de l’armée.",
+        "approved_audio_text": "La langue nubienne faisait partie de l’identité de ses locuteurs et, en octobre, elle servit aussi à protéger les messages de l’armée.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Parfois, la langue que vous aimez et recevez de votre famille est le trésor dont votre pays a besoin.",
+        "approved_audio_text": "Parfois, la langue que vous aimez et recevez de votre famille est le trésor dont votre pays a besoin.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Qui parle une langue que l’adversaire ne connaît pas ?",
+        "approved_audio_text": "Qui parle une langue que l’adversaire ne connaît pas ?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "L’histoire d’Ahmed Idris, soldat nubien égyptien, est souvent présentée comme un exemple de l’utilisation des connaissances linguistiques dans les communications militaires. Selon des articles de presse et des témoignages relayés, Idris aurait proposé d’utiliser la langue nubienne pour transmettre certains messages, car un adversaire qui ne la connaissait pas aurait plus de difficulté à en comprendre le contenu.",
+        "approved_audio_text": "L’histoire d’Ahmed Idris, soldat nubien égyptien, est souvent présentée comme un exemple de l’utilisation des connaissances linguistiques dans les communications militaires. Selon des articles de presse et des témoignages relayés, Idris aurait proposé d’utiliser la langue nubienne pour transmettre certains messages, car un adversaire qui ne la connaissait pas aurait plus de difficulté à en comprendre le contenu.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "Le nubien n’est pas une langue unique et uniforme, identique partout : il comprend différentes variétés linguistiques et des communautés dont l’histoire est ancienne dans le sud de l’Égypte et le nord du Soudan. Dans ce récit, la connaissance de la langue n’est pas un détail insolite ; elle rappelle que les compétences et les origines culturelles des personnes peuvent devenir des ressources concrètes en cas de besoin.",
+        "approved_audio_text": "Le nubien n’est pas une langue unique et uniforme, identique partout : il comprend différentes variétés linguistiques et des communautés dont l’histoire est ancienne dans le sud de l’Égypte et le nord du Soudan. Dans ce récit, la connaissance de la langue n’est pas un détail insolite ; elle rappelle que les compétences et les origines culturelles des personnes peuvent devenir des ressources concrètes en cas de besoin.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "Il importe néanmoins de présenter cette histoire avec précision : une langue ne constitue pas à elle seule un système de chiffrement complet ni une garantie de secret absolu. La sécurité des communications dépend de la discipline, des méthodes de transmission et de la protection des informations. Certains détails historiques rapportés par la presse doivent également être confrontés à des sources indépendantes avant d’être affirmés avec certitude.",
+        "approved_audio_text": "Il importe néanmoins de présenter cette histoire avec précision : une langue ne constitue pas à elle seule un système de chiffrement complet ni une garantie de secret absolu. La sécurité des communications dépend de la discipline, des méthodes de transmission et de la protection des informations. Certains détails historiques rapportés par la presse doivent également être confrontés à des sources indépendantes avant d’être affirmés avec certitude.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 44,
+        "speaker": "narrator",
+        "source_text": "Respecter la personne et les preuves",
+        "approved_audio_text": "Respecter la personne et les preuves",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 45,
+        "speaker": "narrator",
+        "source_text": "En lisant l’histoire d’Ahmed Idris, nous pouvons apprécier sa contribution et le rôle des Nubiens d’Égypte tout en nous demandant : que confirment les témoignages et quels détails varient selon les sources ? Ces questions ne diminuent pas la portée du récit ; elles permettent de le présenter avec davantage de responsabilité.",
+        "approved_audio_text": "En lisant l’histoire d’Ahmed Idris, nous pouvons apprécier sa contribution et le rôle des Nubiens d’Égypte tout en nous demandant : que confirment les témoignages et quels détails varient selon les sources ? Ces questions ne diminuent pas la portée du récit ; elles permettent de le présenter avec davantage de responsabilité.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 46,
+        "speaker": "narrator",
+        "source_text": "Comparer les récits de presse, les témoignages directs lorsqu’ils existent et les sources historiques indépendantes permet de distinguer l’idée générale étayée des détails qui nécessitent peut-être des preuves supplémentaires.",
+        "approved_audio_text": "Comparer les récits de presse, les témoignages directs lorsqu’ils existent et les sources historiques indépendantes permet de distinguer l’idée générale étayée des détails qui nécessitent peut-être des preuves supplémentaires.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "fr",
+        "block_index": 47,
+        "speaker": "narrator",
+        "source_text": "Ce récit nous apprend aussi que la protection de l’information ne dépend pas uniquement d’un appareil ou d’un mot de passe. Elle peut commencer par les connaissances humaines, une communication claire avec la bonne équipe et la reconnaissance de la diversité linguistique et culturelle comme une force de la société.",
+        "approved_audio_text": "Ce récit nous apprend aussi que la protection de l’information ne dépend pas uniquement d’un appareil ou d’un mot de passe. Elle peut commencer par les connaissances humaines, une communication claire avec la bonne équipe et la reconnaissance de la diversité linguistique et culturelle comme une force de la société.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "Una lingua che il nemico non capiva",
+        "approved_audio_text": "Una lingua che il nemico non capiva",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "La storia del codice nubiano",
+        "approved_audio_text": "La storia del codice nubiano",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Messaggi che dovevano restare segreti",
+        "approved_audio_text": "Messaggi che dovevano restare segreti",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Prima della guerra d’ottobre, l’esercito egiziano doveva inviare ordini tra i comandanti senza che il nemico li capisse. Secondo alcuni resoconti, il nemico era riuscito a decifrare alcuni codici precedenti.",
+        "approved_audio_text": "Prima della guerra d’ottobre, l’esercito egiziano doveva inviare ordini tra i comandanti senza che il nemico li capisse. Secondo alcuni resoconti, il nemico era riuscito a decifrare alcuni codici precedenti.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "I comandanti cercarono quindi un nuovo codice difficile da capire per il nemico.",
+        "approved_audio_text": "I comandanti cercarono quindi un nuovo codice difficile da capire per il nemico.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "La lingua nubiana",
+        "approved_audio_text": "La lingua nubiana",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "La Nubia è una regione storica nel sud dell’Egitto e nel nord del Sudan, con lingue e varietà linguistiche antiche. Durante la guerra d’ottobre alcune venivano trasmesse oralmente e non esisteva un unico riferimento scritto per le espressioni usate nelle comunicazioni militari.",
+        "approved_audio_text": "La Nubia è una regione storica nel sud dell’Egitto e nel nord del Sudan, con lingue e varietà linguistiche antiche. Durante la guerra d’ottobre alcune venivano trasmesse oralmente e non esisteva un unico riferimento scritto per le espressioni usate nelle comunicazioni militari.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "Nacque così l’idea: perché non usare la lingua nubiana per trasmettere messaggi? Gli egiziani che la parlavano li avrebbero capiti, mentre gli altri no.",
+        "approved_audio_text": "Nacque così l’idea: perché non usare la lingua nubiana per trasmettere messaggi? Gli egiziani che la parlavano li avrebbero capiti, mentre gli altri no.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "La trasmissione orale",
+        "approved_audio_text": "La trasmissione orale",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "La conoscenza della lingua da parte dei parlanti e l’assenza di un glossario militare standardizzato rendevano i messaggi più difficili da capire per gli estranei.",
+        "approved_audio_text": "La conoscenza della lingua da parte dei parlanti e l’assenza di un glossario militare standardizzato rendevano i messaggi più difficili da capire per gli estranei.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "La diversità linguistica",
+        "approved_audio_text": "La diversità linguistica",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Alcuni resoconti menzionano le varietà kenzi e fadija, ma la diversità linguistica nubiana è più ampia.",
+        "approved_audio_text": "Alcuni resoconti menzionano le varietà kenzi e fadija, ma la diversità linguistica nubiana è più ampia.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris",
+        "approved_audio_text": "Ahmed Idris",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Le fonti attribuiscono l’idea al soldato nubiano Ahmed Idris, originario del governatorato di Assuan. Vedendo che i comandanti cercavano un nuovo codice, propose di usare la lingua della sua comunità.",
+        "approved_audio_text": "Le fonti attribuiscono l’idea al soldato nubiano Ahmed Idris, originario del governatorato di Assuan. Vedendo che i comandanti cercavano un nuovo codice, propose di usare la lingua della sua comunità.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Un gruppo di soldati nubiani fu addestrato a trasmettere messaggi nella propria lingua e distribuito in diverse posizioni per custodire il codice segreto.",
+        "approved_audio_text": "Un gruppo di soldati nubiani fu addestrato a trasmettere messaggi nella propria lingua e distribuito in diverse posizioni per custodire il codice segreto.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris presentò la sua idea ai comandanti.",
+        "approved_audio_text": "Ahmed Idris presentò la sua idea ai comandanti.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "I soldati nubiani si addestrarono a usare la lingua nelle comunicazioni.",
+        "approved_audio_text": "I soldati nubiani si addestrarono a usare la lingua nelle comunicazioni.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "6 ottobre 1973",
+        "approved_audio_text": "6 ottobre 1973",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Il codice nubiano fu usato nelle comunicazioni durante la guerra.",
+        "approved_audio_text": "Il codice nubiano fu usato nelle comunicazioni durante la guerra.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Fino al 1994",
+        "approved_audio_text": "Fino al 1994",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "Alcuni resoconti affermano che il codice rimase in uso fino a quell’anno, ma le fonti differiscono sulla durata esatta.",
+        "approved_audio_text": "Alcuni resoconti affermano che il codice rimase in uso fino a quell’anno, ma le fonti differiscono sulla durata esatta.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "Il presidente Abdel Fattah al-Sisi lo onorò con la Stella militare del Sinai.",
+        "approved_audio_text": "Il presidente Abdel Fattah al-Sisi lo onorò con la Stella militare del Sinai.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "È morto all’età di 84 anni.",
+        "approved_audio_text": "È morto all’età di 84 anni.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Una storia che richiama altri racconti",
+        "approved_audio_text": "Una storia che richiama altri racconti",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Durante la Seconda guerra mondiale, gli Stati Uniti usarono in modo simile la lingua Navajo. Questi soldati furono chiamati «Code Talkers» e alcuni articoli confrontano le due storie.",
+        "approved_audio_text": "Durante la Seconda guerra mondiale, gli Stati Uniti usarono in modo simile la lingua Navajo. Questi soldati furono chiamati «Code Talkers» e alcuni articoli confrontano le due storie.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "L’uso della lingua nubiana rimase segreto per molti anni, finché la storia non divenne nota al pubblico.",
+        "approved_audio_text": "L’uso della lingua nubiana rimase segreto per molti anni, finché la storia non divenne nota al pubblico.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Lo sapevi?",
+        "approved_audio_text": "Lo sapevi?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Le fonti differiscono sul numero di soldati coinvolti e su alcuni dettagli del codice. Alcuni rapporti parlano di circa 344 soldati, altri riportano cifre diverse; quindi nessun numero viene presentato come definitivo. Il codice faceva parte di un sistema più ampio di comunicazione e pianificazione.",
+        "approved_audio_text": "Le fonti differiscono sul numero di soldati coinvolti e su alcuni dettagli del codice. Alcuni rapporti parlano di circa 344 soldati, altri riportano cifre diverse; quindi nessun numero viene presentato come definitivo. Il codice faceva parte di un sistema più ampio di comunicazione e pianificazione.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "La nostra lingua è un tesoro",
+        "approved_audio_text": "La nostra lingua è un tesoro",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "La diversità è forza",
+        "approved_audio_text": "La diversità è forza",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "La diversità linguistica e culturale dell’Egitto è una ricchezza per il Paese.",
+        "approved_audio_text": "La diversità linguistica e culturale dell’Egitto è una ricchezza per il Paese.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Un’idea semplice",
+        "approved_audio_text": "Un’idea semplice",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Il suggerimento di un solo soldato può risolvere un grande problema.",
+        "approved_audio_text": "Il suggerimento di un solo soldato può risolvere un grande problema.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "La segretezza",
+        "approved_audio_text": "La segretezza",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Mantenere un segreto fa parte della responsabilità.",
+        "approved_audio_text": "Mantenere un segreto fa parte della responsabilità.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Verifica",
+        "approved_audio_text": "Verifica",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "Confrontiamo le fonti prima di credere a ogni racconto.",
+        "approved_audio_text": "Confrontiamo le fonti prima di credere a ogni racconto.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Poche parole portavano una grande responsabilità",
+        "approved_audio_text": "Poche parole portavano una grande responsabilità",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "La lingua nubiana faceva parte dell’identità dei suoi parlanti e, durante ottobre, divenne anche un mezzo per proteggere i messaggi dell’esercito.",
+        "approved_audio_text": "La lingua nubiana faceva parte dell’identità dei suoi parlanti e, durante ottobre, divenne anche un mezzo per proteggere i messaggi dell’esercito.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "A volte la lingua che ami e che erediti dalla tua famiglia è il tesoro di cui il tuo paese ha bisogno.",
+        "approved_audio_text": "A volte la lingua che ami e che erediti dalla tua famiglia è il tesoro di cui il tuo paese ha bisogno.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Chi parla una lingua che l’avversario non conosce?",
+        "approved_audio_text": "Chi parla una lingua che l’avversario non conosce?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "La storia di Ahmed Idris, soldato nubiano egiziano, viene spesso raccontata come esempio dell’uso delle competenze linguistiche nelle comunicazioni militari. Secondo resoconti giornalistici e testimonianze diffuse, Idris propose di usare la lingua nubiana per trasmettere alcuni messaggi, poiché un avversario che non la conosceva avrebbe avuto maggiori difficoltà a comprenderli.",
+        "approved_audio_text": "La storia di Ahmed Idris, soldato nubiano egiziano, viene spesso raccontata come esempio dell’uso delle competenze linguistiche nelle comunicazioni militari. Secondo resoconti giornalistici e testimonianze diffuse, Idris propose di usare la lingua nubiana per trasmettere alcuni messaggi, poiché un avversario che non la conosceva avrebbe avuto maggiori difficoltà a comprenderli.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "Il nubiano non è una lingua unica e uniforme, identica ovunque: comprende varietà linguistiche e comunità con una lunga storia nel sud dell’Egitto e nel nord del Sudan. In questo racconto, conoscere la lingua non è un dettaglio curioso, ma ricorda che le capacità delle persone e il loro retroterra culturale possono diventare risorse pratiche quando servono.",
+        "approved_audio_text": "Il nubiano non è una lingua unica e uniforme, identica ovunque: comprende varietà linguistiche e comunità con una lunga storia nel sud dell’Egitto e nel nord del Sudan. In questo racconto, conoscere la lingua non è un dettaglio curioso, ma ricorda che le capacità delle persone e il loro retroterra culturale possono diventare risorse pratiche quando servono.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "È comunque importante raccontare la vicenda con precisione: una lingua da sola non costituisce un sistema di cifratura completo né garantisce la segretezza assoluta. La sicurezza delle comunicazioni dipende dalla disciplina, dai metodi di trasmissione e dalla protezione delle informazioni. Alcuni dettagli storici riportati dalla stampa devono inoltre essere confrontati con fonti indipendenti prima di considerarli certi.",
+        "approved_audio_text": "È comunque importante raccontare la vicenda con precisione: una lingua da sola non costituisce un sistema di cifratura completo né garantisce la segretezza assoluta. La sicurezza delle comunicazioni dipende dalla disciplina, dai metodi di trasmissione e dalla protezione delle informazioni. Alcuni dettagli storici riportati dalla stampa devono inoltre essere confrontati con fonti indipendenti prima di considerarli certi.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 44,
+        "speaker": "narrator",
+        "source_text": "Rispettare la persona e le prove",
+        "approved_audio_text": "Rispettare la persona e le prove",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 45,
+        "speaker": "narrator",
+        "source_text": "Leggendo la storia di Ahmed Idris possiamo apprezzare il suo contributo e il ruolo dei nubiani egiziani, chiedendoci allo stesso tempo: che cosa confermano le testimonianze e quali dettagli cambiano da una fonte all’altra? Queste domande non sminuiscono il racconto, ma lo rendono più responsabile.",
+        "approved_audio_text": "Leggendo la storia di Ahmed Idris possiamo apprezzare il suo contributo e il ruolo dei nubiani egiziani, chiedendoci allo stesso tempo: che cosa confermano le testimonianze e quali dettagli cambiano da una fonte all’altra? Queste domande non sminuiscono il racconto, ma lo rendono più responsabile.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 46,
+        "speaker": "narrator",
+        "source_text": "Confrontare i resoconti della stampa, le testimonianze dirette quando disponibili e le fonti storiche indipendenti aiuta a distinguere il quadro generale supportato dai dettagli che potrebbero richiedere ulteriori prove.",
+        "approved_audio_text": "Confrontare i resoconti della stampa, le testimonianze dirette quando disponibili e le fonti storiche indipendenti aiuta a distinguere il quadro generale supportato dai dettagli che potrebbero richiedere ulteriori prove.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "it",
+        "block_index": 47,
+        "speaker": "narrator",
+        "source_text": "La storia insegna anche che proteggere le informazioni non dipende soltanto da un dispositivo o da una password. Tutto può iniziare dalle conoscenze umane, dalla capacità di comunicare chiaramente con il gruppo giusto e dalla consapevolezza che la diversità linguistica e culturale è una risorsa per la comunità.",
+        "approved_audio_text": "La storia insegna anche che proteggere le informazioni non dipende soltanto da un dispositivo o da una password. Tutto può iniziare dalle conoscenze umane, dalla capacità di comunicare chiaramente con il gruppo giusto e dalla consapevolezza che la diversità linguistica e culturale è una risorsa per la comunità.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 0,
+        "speaker": "narrator",
+        "source_text": "Eine Sprache, die der Feind nicht verstand",
+        "approved_audio_text": "Eine Sprache, die der Feind nicht verstand",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "Die Geschichte des nubischen Codes",
+        "approved_audio_text": "Die Geschichte des nubischen Codes",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 2,
+        "speaker": "narrator",
+        "source_text": "Nachrichten, die geheim bleiben mussten",
+        "approved_audio_text": "Nachrichten, die geheim bleiben mussten",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 3,
+        "speaker": "narrator",
+        "source_text": "Vor dem Oktoberkrieg musste die ägyptische Armee Befehle und Nachrichten zwischen den Kommandeuren übermitteln, ohne dass der Feind sie verstand. Berichten zufolge war es dem Feind gelungen, einige frühere Codes zu entschlüsseln.",
+        "approved_audio_text": "Vor dem Oktoberkrieg musste die ägyptische Armee Befehle und Nachrichten zwischen den Kommandeuren übermitteln, ohne dass der Feind sie verstand. Berichten zufolge war es dem Feind gelungen, einige frühere Codes zu entschlüsseln.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 4,
+        "speaker": "narrator",
+        "source_text": "Die Kommandeure suchten daher nach einem neuen Code, den der Feind nur schwer verstehen konnte.",
+        "approved_audio_text": "Die Kommandeure suchten daher nach einem neuen Code, den der Feind nur schwer verstehen konnte.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 5,
+        "speaker": "narrator",
+        "source_text": "Die nubische Sprache",
+        "approved_audio_text": "Die nubische Sprache",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 6,
+        "speaker": "narrator",
+        "source_text": "Nubien ist eine historische Region im Süden Ägyptens und im Norden des Sudan, Heimat alter Sprachen und Sprachvarietäten. Zur Zeit des Oktoberkrieges wurden einige davon mündlich überliefert, und es gab keine einheitliche schriftliche Referenz für die im Militärfunk verwendeten Ausdrücke.",
+        "approved_audio_text": "Nubien ist eine historische Region im Süden Ägyptens und im Norden des Sudan, Heimat alter Sprachen und Sprachvarietäten. Zur Zeit des Oktoberkrieges wurden einige davon mündlich überliefert, und es gab keine einheitliche schriftliche Referenz für die im Militärfunk verwendeten Ausdrücke.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 7,
+        "speaker": "narrator",
+        "source_text": "Daraus entstand eine Idee: Was wäre, wenn nubische Soldaten ihre Sprache nutzten, um Nachrichten zu übermitteln? Ägyptische Sprecher würden sie verstehen, wer die Sprache nicht kannte, dagegen nicht.",
+        "approved_audio_text": "Daraus entstand eine Idee: Was wäre, wenn nubische Soldaten ihre Sprache nutzten, um Nachrichten zu übermitteln? Ägyptische Sprecher würden sie verstehen, wer die Sprache nicht kannte, dagegen nicht.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 8,
+        "speaker": "narrator",
+        "source_text": "Mündliche Überlieferung",
+        "approved_audio_text": "Mündliche Überlieferung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 9,
+        "speaker": "narrator",
+        "source_text": "Weil die Sprecher die Sprache beherrschten und es kein standardisiertes Militärglossar für die Ausdrücke gab, waren die Nachrichten für Außenstehende schwerer zu verstehen.",
+        "approved_audio_text": "Weil die Sprecher die Sprache beherrschten und es kein standardisiertes Militärglossar für die Ausdrücke gab, waren die Nachrichten für Außenstehende schwerer zu verstehen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 10,
+        "speaker": "narrator",
+        "source_text": "Sprachenvielfalt",
+        "approved_audio_text": "Sprachenvielfalt",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 11,
+        "speaker": "narrator",
+        "source_text": "Einige Berichte erwähnen die Varietäten Kenzi und Fadidscha, doch die nubische Sprachenvielfalt reicht über diese beiden Namen hinaus.",
+        "approved_audio_text": "Einige Berichte erwähnen die Varietäten Kenzi und Fadidscha, doch die nubische Sprachenvielfalt reicht über diese beiden Namen hinaus.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 12,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris",
+        "approved_audio_text": "Ahmed Idris",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 13,
+        "speaker": "narrator",
+        "source_text": "Quellen schreiben die Idee Ahmed Idris zu, einem nubischen Soldaten aus dem Gouvernement Assuan. Als er sah, dass die Kommandeure einen neuen Code suchten, schlug er vor, die Sprache seiner Gemeinschaft zu verwenden.",
+        "approved_audio_text": "Quellen schreiben die Idee Ahmed Idris zu, einem nubischen Soldaten aus dem Gouvernement Assuan. Als er sah, dass die Kommandeure einen neuen Code suchten, schlug er vor, die Sprache seiner Gemeinschaft zu verwenden.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 14,
+        "speaker": "narrator",
+        "source_text": "Eine Gruppe nubischer Soldaten wurde darin geschult, Nachrichten in ihrer Sprache weiterzugeben, und an verschiedenen Orten stationiert, um den geheimen Code zu schützen.",
+        "approved_audio_text": "Eine Gruppe nubischer Soldaten wurde darin geschult, Nachrichten in ihrer Sprache weiterzugeben, und an verschiedenen Orten stationiert, um den geheimen Code zu schützen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 15,
+        "speaker": "narrator",
+        "source_text": "Ahmed Idris stellte seinen Vorgesetzten seine Idee vor.",
+        "approved_audio_text": "Ahmed Idris stellte seinen Vorgesetzten seine Idee vor.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 16,
+        "speaker": "narrator",
+        "source_text": "Nubische Soldaten, die darin geschult wurden, die Sprache im Funkverkehr zu verwenden.",
+        "approved_audio_text": "Nubische Soldaten, die darin geschult wurden, die Sprache im Funkverkehr zu verwenden.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 17,
+        "speaker": "narrator",
+        "source_text": "6. Oktober 1973",
+        "approved_audio_text": "6. Oktober 1973",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 18,
+        "speaker": "narrator",
+        "source_text": "Der nubische Code wurde während des Krieges im Funkverkehr eingesetzt.",
+        "approved_audio_text": "Der nubische Code wurde während des Krieges im Funkverkehr eingesetzt.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 19,
+        "speaker": "narrator",
+        "source_text": "Bis 1994",
+        "approved_audio_text": "Bis 1994",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 20,
+        "speaker": "narrator",
+        "source_text": "Einige Berichte besagen, dass der Code bis zu diesem Jahr in Gebrauch blieb, doch die Quellen unterscheiden sich darin, wie lange er verwendet wurde.",
+        "approved_audio_text": "Einige Berichte besagen, dass der Code bis zu diesem Jahr in Gebrauch blieb, doch die Quellen unterscheiden sich darin, wie lange er verwendet wurde.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 21,
+        "speaker": "narrator",
+        "source_text": "Präsident Abdel Fattah el-Sisi ehrte ihn mit dem Militärstern des Sinai.",
+        "approved_audio_text": "Präsident Abdel Fattah el-Sisi ehrte ihn mit dem Militärstern des Sinai.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 22,
+        "speaker": "narrator",
+        "source_text": "Er starb im Alter von 84 Jahren.",
+        "approved_audio_text": "Er starb im Alter von 84 Jahren.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 23,
+        "speaker": "narrator",
+        "source_text": "Eine Geschichte mit Parallelen anderswo",
+        "approved_audio_text": "Eine Geschichte mit Parallelen anderswo",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 24,
+        "speaker": "narrator",
+        "source_text": "Im Zweiten Weltkrieg nutzten die Vereinigten Staaten die Navajo-Sprache auf ähnliche Weise. Diese Soldaten wurden als Code Talkers bekannt, und einige Artikel vergleichen die beiden Geschichten.",
+        "approved_audio_text": "Im Zweiten Weltkrieg nutzten die Vereinigten Staaten die Navajo-Sprache auf ähnliche Weise. Diese Soldaten wurden als Code Talkers bekannt, und einige Artikel vergleichen die beiden Geschichten.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 25,
+        "speaker": "narrator",
+        "source_text": "Die Verwendung der nubischen Sprache blieb viele Jahre geheim, und die Geschichte wurde der Öffentlichkeit erst später bekannt.",
+        "approved_audio_text": "Die Verwendung der nubischen Sprache blieb viele Jahre geheim, und die Geschichte wurde der Öffentlichkeit erst später bekannt.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 26,
+        "speaker": "narrator",
+        "source_text": "Schon gewusst?",
+        "approved_audio_text": "Schon gewusst?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 27,
+        "speaker": "narrator",
+        "source_text": "Die Quellen unterscheiden sich in der Zahl der beteiligten Soldaten und in einigen Details des Codes. Einige Berichte nennen etwa 344 Soldaten, andere geben abweichende Zahlen an, daher wird keine einzelne Zahl als verbindlich dargestellt. Der Code war Teil eines umfassenderen Kommunikations- und Planungssystems.",
+        "approved_audio_text": "Die Quellen unterscheiden sich in der Zahl der beteiligten Soldaten und in einigen Details des Codes. Einige Berichte nennen etwa 344 Soldaten, andere geben abweichende Zahlen an, daher wird keine einzelne Zahl als verbindlich dargestellt. Der Code war Teil eines umfassenderen Kommunikations- und Planungssystems.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 28,
+        "speaker": "narrator",
+        "source_text": "Unsere Sprache ist ein Schatz",
+        "approved_audio_text": "Unsere Sprache ist ein Schatz",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 29,
+        "speaker": "narrator",
+        "source_text": "Vielfalt ist Stärke",
+        "approved_audio_text": "Vielfalt ist Stärke",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 30,
+        "speaker": "narrator",
+        "source_text": "Ägyptens sprachliche und kulturelle Vielfalt ist ein nationaler Schatz.",
+        "approved_audio_text": "Ägyptens sprachliche und kulturelle Vielfalt ist ein nationaler Schatz.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 31,
+        "speaker": "narrator",
+        "source_text": "Eine einfache Idee",
+        "approved_audio_text": "Eine einfache Idee",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 32,
+        "speaker": "narrator",
+        "source_text": "Der Vorschlag eines einzelnen Soldaten kann ein großes Problem lösen.",
+        "approved_audio_text": "Der Vorschlag eines einzelnen Soldaten kann ein großes Problem lösen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 33,
+        "speaker": "narrator",
+        "source_text": "Geheimhaltung",
+        "approved_audio_text": "Geheimhaltung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 34,
+        "speaker": "narrator",
+        "source_text": "Ein Geheimnis zu wahren, gehört zur Verantwortung.",
+        "approved_audio_text": "Ein Geheimnis zu wahren, gehört zur Verantwortung.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 35,
+        "speaker": "narrator",
+        "source_text": "Überprüfung",
+        "approved_audio_text": "Überprüfung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 36,
+        "speaker": "narrator",
+        "source_text": "Wir vergleichen Quellen, bevor wir jeder Darstellung glauben.",
+        "approved_audio_text": "Wir vergleichen Quellen, bevor wir jeder Darstellung glauben.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 37,
+        "speaker": "narrator",
+        "source_text": "Wenige Worte trugen große Verantwortung",
+        "approved_audio_text": "Wenige Worte trugen große Verantwortung",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 38,
+        "speaker": "narrator",
+        "source_text": "Die nubische Sprache war Teil der Identität ihrer Sprecher, und im Oktober wurde sie auch zu einem Mittel, die Nachrichten der Armee zu schützen.",
+        "approved_audio_text": "Die nubische Sprache war Teil der Identität ihrer Sprecher, und im Oktober wurde sie auch zu einem Mittel, die Nachrichten der Armee zu schützen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 39,
+        "speaker": "narrator",
+        "source_text": "Manchmal ist die Sprache, die du liebst und von deiner Familie geerbt hast, der Schatz, den dein Land braucht.",
+        "approved_audio_text": "Manchmal ist die Sprache, die du liebst und von deiner Familie geerbt hast, der Schatz, den dein Land braucht.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 40,
+        "speaker": "narrator",
+        "source_text": "Wer spricht eine Sprache, die der Gegner nicht kennt?",
+        "approved_audio_text": "Wer spricht eine Sprache, die der Gegner nicht kennt?",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 41,
+        "speaker": "narrator",
+        "source_text": "Die Geschichte von Ahmed Idris, einem ägyptischen nubischen Soldaten, wird häufig als Beispiel dafür erzählt, wie Sprachkenntnisse in der militärischen Kommunikation eingesetzt wurden. Presseberichten und verbreiteten Zeugenaussagen zufolge schlug Idris vor, für bestimmte Nachrichten die nubische Sprache zu nutzen, da ein Gegner ohne diese Sprachkenntnisse ihren Inhalt schwerer verstehen würde.",
+        "approved_audio_text": "Die Geschichte von Ahmed Idris, einem ägyptischen nubischen Soldaten, wird häufig als Beispiel dafür erzählt, wie Sprachkenntnisse in der militärischen Kommunikation eingesetzt wurden. Presseberichten und verbreiteten Zeugenaussagen zufolge schlug Idris vor, für bestimmte Nachrichten die nubische Sprache zu nutzen, da ein Gegner ohne diese Sprachkenntnisse ihren Inhalt schwerer verstehen würde.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 42,
+        "speaker": "narrator",
+        "source_text": "Nubisch ist keine einheitliche Sprache, die überall gleich verwendet wird. Es umfasst verschiedene Sprachvarianten und Gemeinschaften mit einer langen Geschichte im Süden Ägyptens und im Norden des Sudan. Sprachkenntnisse sind in dieser Geschichte kein ungewöhnliches Detail, sondern erinnern daran, dass Fähigkeiten und kulturelle Hintergründe bei Bedarf zu praktischen Ressourcen werden können.",
+        "approved_audio_text": "Nubisch ist keine einheitliche Sprache, die überall gleich verwendet wird. Es umfasst verschiedene Sprachvarianten und Gemeinschaften mit einer langen Geschichte im Süden Ägyptens und im Norden des Sudan. Sprachkenntnisse sind in dieser Geschichte kein ungewöhnliches Detail, sondern erinnern daran, dass Fähigkeiten und kulturelle Hintergründe bei Bedarf zu praktischen Ressourcen werden können.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 43,
+        "speaker": "narrator",
+        "source_text": "Die Geschichte muss dennoch sorgfältig dargestellt werden: Eine Sprache allein ist weder ein vollständiges Verschlüsselungssystem noch eine Garantie für absolute Geheimhaltung. Sichere Kommunikation hängt von Disziplin, Übertragungsmethoden und dem Schutz von Informationen ab. Einige historische Einzelheiten aus Presseberichten sollten zudem mit unabhängigen Quellen verglichen werden, bevor man sie als gesichert darstellt.",
+        "approved_audio_text": "Die Geschichte muss dennoch sorgfältig dargestellt werden: Eine Sprache allein ist weder ein vollständiges Verschlüsselungssystem noch eine Garantie für absolute Geheimhaltung. Sichere Kommunikation hängt von Disziplin, Übertragungsmethoden und dem Schutz von Informationen ab. Einige historische Einzelheiten aus Presseberichten sollten zudem mit unabhängigen Quellen verglichen werden, bevor man sie als gesichert darstellt.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 44,
+        "speaker": "narrator",
+        "source_text": "Die Person und die Belege respektieren",
+        "approved_audio_text": "Die Person und die Belege respektieren",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 45,
+        "speaker": "narrator",
+        "source_text": "Beim Lesen über Ahmed Idris können wir seinen Beitrag und die Rolle der ägyptischen Nubier würdigen und zugleich fragen: Was bestätigen die Zeugnisse, und welche Einzelheiten unterscheiden sich von Quelle zu Quelle? Diese Fragen schmälern die Geschichte nicht, sondern ermöglichen eine verantwortungsvollere Darstellung.",
+        "approved_audio_text": "Beim Lesen über Ahmed Idris können wir seinen Beitrag und die Rolle der ägyptischen Nubier würdigen und zugleich fragen: Was bestätigen die Zeugnisse, und welche Einzelheiten unterscheiden sich von Quelle zu Quelle? Diese Fragen schmälern die Geschichte nicht, sondern ermöglichen eine verantwortungsvollere Darstellung.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 46,
+        "speaker": "narrator",
+        "source_text": "Der Vergleich von Presseberichten, direkten Zeugenaussagen – sofern vorhanden – und unabhängigen historischen Quellen hilft dabei, die grundsätzlich belegte Darstellung von Einzelheiten zu unterscheiden, die zusätzliche Nachweise benötigen.",
+        "approved_audio_text": "Der Vergleich von Presseberichten, direkten Zeugenaussagen – sofern vorhanden – und unabhängigen historischen Quellen hilft dabei, die grundsätzlich belegte Darstellung von Einzelheiten zu unterscheiden, die zusätzliche Nachweise benötigen.",
+        "decision": "approved_original"
+      },
+      {
+        "lang": "de",
+        "block_index": 47,
+        "speaker": "narrator",
+        "source_text": "Die Geschichte lehrt uns auch, dass Informationsschutz nicht nur von einem Gerät oder Passwort abhängt. Er kann mit menschlichem Wissen, klarer Kommunikation mit dem richtigen Team und der Erkenntnis beginnen, dass sprachliche und kulturelle Vielfalt eine Stärke der Gesellschaft ist.",
+        "approved_audio_text": "Die Geschichte lehrt uns auch, dass Informationsschutz nicht nur von einem Gerät oder Passwort abhängt. Er kann mit menschlichem Wissen, klarer Kommunikation mit dem richtigen Team und der Erkenntnis beginnen, dass sprachliche und kulturelle Vielfalt eine Stärke der Gesellschaft ist.",
+        "decision": "approved_original"
+      }
+    ]
+  }
+}
