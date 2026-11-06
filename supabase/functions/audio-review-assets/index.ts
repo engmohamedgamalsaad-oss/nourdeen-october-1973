@@ -62,7 +62,10 @@ Deno.serve(async (req: Request) => {
   const section = body?.section;
   const slug = body?.slug;
   const language = body?.language;
-  if (!validKey(section) || !validKey(slug) || !["ar", "en", "fr", "it", "de"].includes(language)) {
+  const action = body?.action;
+  const languageRequired = action === "stage" || action === "manifest";
+  if (!validKey(section) || !validKey(slug) ||
+      (languageRequired && !["ar", "en", "fr", "it", "de"].includes(language))) {
     return reply(400, { error: "هوية الحكاية أو اللغة غير صالحة." });
   }
 
