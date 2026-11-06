@@ -97,7 +97,7 @@ test('adds exact Arabic dictionary suggestions to the existing review report wit
 
 test('exports a dictionary candidate only when the administrator explicitly approves it', () => {
   const pkg = packageFixture();
-  pkg.i18n.ar.blocks[0].text = 'وتذكر الدراسات المنشورة ذلك.';
+  pkg.i18n.ar.blocks[0].text = 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.';
   const segments = review.collectSegments(pkg).map(item => ({
     ...item,
     proposed_audio_text: item.original_text,
