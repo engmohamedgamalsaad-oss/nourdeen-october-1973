@@ -968,9 +968,9 @@ function pubRow(it){
   var openReview=el('button','btn primary',hasPendingDraft?'معاينة المسودة بعد النقل':(isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ'));openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
   openReview.addEventListener('click',async function(e){
    e.preventDefault();e.stopPropagation();
+   var win=window.open('about:blank','_blank');
+   if(!win){say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');return}
    var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
-   var meta=it.story_meta&&typeof it.story_meta==='object'?it.story_meta:{};
-   var pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
    var url;
    try{
     /* أكتوبر يحتفظ بمسار تحريره القديم، لكن المعاينة ومراجعة الصوت تستخدمان دائمًا القارئ المشترك. */
@@ -983,8 +983,8 @@ function pubRow(it){
     }else{
      url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;
     }
-    var win=window.open(url,'_blank');if(win)win.opener=null;else say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');
-   }catch(err){say('err','تعذر تجهيز بيانات المعاينة: '+(err&&err.message?err.message:'خطأ غير معروف'));}
+    win.opener=null;win.location.href=url;
+   }catch(err){try{win.close()}catch(ignoreReviewPopup){}say('err','تعذر تجهيز بيانات المعاينة: '+(err&&err.message?err.message:'خطأ غير معروف'));}
   });
   actions.appendChild(openReview);
  }
