@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Plan or stage per-speaker audio for published non-October story packages.
+"""Plan or stage per-speaker audio for published story packages across all sections.
 
-October stories are handled only through their audio packages in
-rebuild/october-audio-packages/<id>/ (story.json + audio-readiness.json); the
-published October pages under stories/october are never read or written here.
+October page content is extracted without changing its published HTML/CSS into
+stories/october/<id>/ (story.json + audio-readiness.json). Every section uses
+this canonical story-package directory and the same planning/review pipeline.
 
 Planning is read-only. Generation requires an explicit flag and writes only to
 .gitignored .audio-staging; it never writes to the published audio tree.
-Fish Audio additionally requires a separate explicit approval flag, and October
-packages additionally require --allow-october-generation.
+Fish Audio additionally requires a separate explicit approval flag. October uses the
+same five-language human audio-text approval record as every other section.
 """
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".audio-staging"
-OCTOBER_PACKAGES_DIR = ("rebuild", "october-audio-packages")
+OCTOBER_PACKAGES_DIR = ("stories", "october")
 OCTOBER_READINESS_FORMAT = "KHALEDOON_OCTOBER_AUDIO_READINESS_V1"
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "4"
@@ -71,6 +71,10 @@ class OctoberPackageNotReady(ValueError):
     """An October audio package exists but is not complete in all five languages."""
 
 
+class AudioTextApprovalRequired(ValueError):
+    """A story is valid but cannot proceed until its shared human review is approved."""
+
+
 def read_json(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         value = json.load(handle)
@@ -82,10 +86,9 @@ def read_json(path: Path) -> dict[str, Any]:
 def locate_story(story_path: Path) -> tuple[Path, str, bool]:
     """Return (path relative to ROOT, section, is_october_package).
 
-    Accepts stories/<section>/<id>/story.json (published tree; October pages are
-    reported with section "october" and is_october_package False so callers can
-    refuse them) and rebuild/october-audio-packages/<id>/story.json (October
-    audio packages, section "october", is_october_package True).
+    Every section uses stories/<section>/<id>/story.json. October source packages
+    live beside their published page and require the same human review plus the
+    five-language source-readiness check; published HTML is never rewritten here.
     """
     story_path = story_path.resolve()
     try:
@@ -94,12 +97,16 @@ def locate_story(story_path: Path) -> tuple[Path, str, bool]:
         raise ValueError(f"Story path must be inside the repository: {story_path}") from exc
     parts = relative.parts
     if story_path.name == "story.json" and len(parts) == 4 and parts[0] == "stories":
-        return relative, parts[1], False
-    if story_path.name == "story.json" and len(parts) == 4 and parts[:2] == OCTOBER_PACKAGES_DIR:
+        return relative, parts[1], parts[1] == "october"
+    if (
+        story_path.name == "story.json"
+        and len(parts) == 4
+        and parts[:2] == ("rebuild", "october-audio-packages")
+    ):
         return relative, "october", True
     raise ValueError(
-        f"Expected stories/<section>/<id>/story.json or "
-        f"{'/'.join(OCTOBER_PACKAGES_DIR)}/<id>/story.json, got {relative}"
+        "Expected stories/<section>/<id>/story.json or "
+        "rebuild/october-audio-packages/<id>/story.json, got " + str(relative)
     )
 
 
@@ -332,8 +339,8 @@ async def synthesize_fish_audio(
         raise
 
 
-def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], staging_root: Path = STAGING_ROOT) -> None:
-    """Copy a verified published baseline into staging before one-clip regeneration."""
+def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], staging_root: Path = STAGING_ROOT, require_all: bool = True) -> None:
+    """Copy verified published baselines into staging without touching published assets."""
     _relative, section, _is_package = locate_story(story_path)
     package = read_json(story_path)
     slug = str(package.get("slug") or "").strip()
@@ -349,9 +356,11 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
         published_dir = ROOT / "assets" / "audio" / section / slug / lang
         published_manifest = published_dir / "manifest.json"
         if not published_manifest.is_file():
-            raise RuntimeError(
-                f"{published_manifest}: no published baseline exists for single-block regeneration."
-            )
+            if require_all:
+                raise RuntimeError(
+                    f"{published_manifest}: no published baseline exists for single-block regeneration."
+                )
+            continue
         manifest = read_json(published_manifest)
         if (
             manifest.get("story") != slug
@@ -398,8 +407,6 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     """Read-only plan for all five languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
-    if section == "october" and not is_october_package:
-        raise ValueError(f"October stories are excluded from audio planning: {relative}")
     package = read_json(story_path)
     if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:
         raise ValueError(f"Invalid story package format or section in {relative}")
@@ -413,18 +420,18 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
         raise ValueError(f"Unsupported language selection: {selected_languages}")
     if is_october_package:
-        # October audio packages have no admin registry record; the page text is fixed,
-        # so completeness (audio-readiness.json) replaces the registry review gate.
+        # The extraction readiness report is only a source-completeness check;
+        # human approval still uses the exact shared five-language audio review gate.
         require_october_readiness(story_path, package)
-        review_required = False
+        review_required = True
     else:
         metadata_path = story_path.with_name("data.json")
         metadata = read_json(metadata_path) if metadata_path.is_file() else {}
         review_required = metadata.get("audio_text_review_required") is True
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
-        raise ValueError(
-            f"{relative}: new story is blocked until the admin-approved five-language "
+        raise AudioTextApprovalRequired(
+            f"{relative}: blocked until the admin-approved five-language "
             "audio-pronunciation.json is saved beside story.json."
         )
     pronunciation = (
@@ -459,8 +466,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         language_dir = staging_root / section / slug / lang
         manifest_path = language_dir / "manifest.json"
         asset_dir = language_dir
-        if force_blocks and not manifest_path.is_file():
-            if language_dir.exists() and any(language_dir.glob("*.mp3")):
+        if not manifest_path.is_file():
+            if force_blocks and language_dir.exists() and any(language_dir.glob("*.mp3")):
                 raise ValueError(
                     f"{language_dir}: staged MP3 files exist without a manifest; "
                     "refusing to guess their baseline."
@@ -548,46 +555,55 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
 
 
 def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
-    """Build no-write generation plans for every published non-October story and every October audio package."""
+    """Build a complete no-write plan for every published story, including missing packages."""
     stories: list[dict[str, Any]] = []
     october: list[dict[str, Any]] = []
-    skipped_october = 0
-    for story_path in sorted((root / "stories").glob("*/*/story.json")):
-        relative = story_path.relative_to(root)
-        if relative.parts[1] == "october":
-            skipped_october += 1
-            continue
-        metadata_path = story_path.with_name("data.json")
-        if not metadata_path.is_file():
-            continue
+    published_count = 0
+    metadata_paths = sorted((root / "stories").glob("*/*/data.json"))
+    for metadata_path in metadata_paths:
         try:
-            if read_json(metadata_path).get("published") is not True:
+            metadata = read_json(metadata_path)
+            if metadata.get("published") is not True:
                 continue
-            plan = inspect_generation_plan(story_path, staging_root)
-            plan["path"] = relative.as_posix()
-            stories.append(plan)
         except (OSError, ValueError, json.JSONDecodeError) as exc:
-            stories.append({"path": relative.as_posix(), "error": str(exc)})
-    for story_path in sorted(root.joinpath(*OCTOBER_PACKAGES_DIR).glob("*/story.json")):
-        relative = story_path.relative_to(root)
+            relative = metadata_path.relative_to(root)
+            section = relative.parts[1] if len(relative.parts) > 2 else ""
+            target = october if section == "october" else stories
+            target.append({"path": relative.as_posix(), "error": f"published metadata cannot be read: {exc}"})
+            continue
+        relative = metadata_path.relative_to(root)
+        section = relative.parts[1]
+        story_path = metadata_path.with_name("story.json")
+        target = october if section == "october" else stories
+        published_count += 1
+        if not story_path.is_file():
+            target.append({
+                "path": story_path.relative_to(root).as_posix(),
+                "error": "published story has no canonical story.json package; audio generation is blocked",
+            })
+            continue
         try:
             plan = inspect_generation_plan(story_path, staging_root)
-            plan["path"] = relative.as_posix()
-            october.append(plan)
-        except OctoberPackageNotReady as exc:
-            october.append({"path": relative.as_posix(), "blocked": str(exc)})
+            plan["path"] = story_path.relative_to(root).as_posix()
+            target.append(plan)
+        except (OctoberPackageNotReady, AudioTextApprovalRequired) as exc:
+            target.append({"path": story_path.relative_to(root).as_posix(), "blocked": str(exc)})
         except (OSError, ValueError, json.JSONDecodeError) as exc:
-            october.append({"path": relative.as_posix(), "error": str(exc)})
+            target.append({"path": story_path.relative_to(root).as_posix(), "error": str(exc)})
     everything = stories + october
+    blocked = sum("blocked" in item for item in everything)
+    errors = sum("error" in item for item in everything)
     return {
         "mode": "read-only-generation-plan",
         "tts_requests": 0,
         "files_modified": 0,
-        "october_stories_skipped": skipped_october,
+        "published_stories": published_count,
         "published_non_october_stories": len(stories),
         "october_audio_packages": len(october),
+        "october_stories_skipped": 0,
+        "blocked_stories": blocked,
         "october_audio_packages_blocked": sum("blocked" in item for item in october),
-        "stories_with_errors": sum("error" in item for item in everything),
+        "stories_with_errors": errors,
         "segments_to_generate": sum(item.get("segments_to_generate", 0) for item in everything),
         "fish_segments_to_generate": sum(item.get("fish_segments_to_generate", 0) for item in everything),
         "stories": stories,
@@ -595,13 +611,9 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = (), allow_october_generation: bool = False) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = (), seed_published_baseline: bool = False) -> bool:
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
-    if section == "october" and not is_october_package:
-        print(f"SKIP protected October story: {relative}")
-        return False
-
     package = read_json(story_path)
     if package.get("format") != "KHALEDOON_STORY":
         raise ValueError(f"Unsupported story package format: {relative}")
@@ -613,12 +625,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
 
     if is_october_package:
         require_october_readiness(story_path, package)
-        if not dry_run and not allow_october_generation:
-            raise RuntimeError(
-                "Safety stop before any TTS request: October audio generation needs its own "
-                "explicit owner approval. Pass --allow-october-generation only after that approval."
-            )
-        review_required = False
+        review_required = True
     else:
         metadata_path = story_path.with_name("data.json")
         if not metadata_path.is_file():
@@ -663,6 +670,10 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
 
     if force_blocks and not dry_run:
         seed_staging_from_published(story_path, languages_to_generate, STAGING_ROOT)
+    elif seed_published_baseline and not dry_run:
+        seed_staging_from_published(
+            story_path, languages_to_generate, STAGING_ROOT, require_all=False
+        )
     plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate, force_blocks)
     print(
         f"PLAN {relative.parent}: languages={len(plan['languages'])} "
@@ -823,8 +834,9 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
                     "audio_sha256": audio_sha256,
                     "text": chunk_text,
                 })
-                if use_fish_audio:
-                    save_manifest_checkpoint()
+                # Checkpoint every provider after each clip so a failed all-story
+                # run can resume without re-requesting completed Edge TTS clips.
+                save_manifest_checkpoint()
                 completed += 1
 
         if not segments:
@@ -860,14 +872,14 @@ async def main() -> int:
         type=Path,
         help=(
             "Explicit story.json path (stories/<section>/<id>/story.json or "
-            "rebuild/october-audio-packages/<id>/story.json). Omit to build a read-only "
-            "generation plan for all published non-October stories and all October audio packages."
+            "stories/october/<id>/story.json). Omit to build a read-only "
+            "generation plan for all published stories and October source packages in the canonical story tree."
         ),
     )
     parser.add_argument(
         "--plan-all",
         action="store_true",
-        help="Explicitly build a no-write generation plan for every published non-October story and October audio package.",
+        help="Explicitly build a no-write generation plan for every published story and extracted October audio package.",
     )
     parser.add_argument(
         "--generate",
@@ -875,14 +887,14 @@ async def main() -> int:
         help="Actually request TTS. Output is restricted to .audio-staging, never the published audio tree.",
     )
     parser.add_argument(
+        "--generate-all",
+        action="store_true",
+        help="Generate all published stories in all five languages after a complete, unblocked read-only preflight; output remains in .audio-staging.",
+    )
+    parser.add_argument(
         "--allow-fish-audio",
         action="store_true",
         help="Explicit approval gate for billable Arabic Fish Audio requests.",
-    )
-    parser.add_argument(
-        "--allow-october-generation",
-        action="store_true",
-        help="Separate owner-approval gate for generating audio from October audio packages.",
     )
     parser.add_argument(
         "--languages",
@@ -900,20 +912,39 @@ async def main() -> int:
     )
     args = parser.parse_args()
 
-    if args.allow_fish_audio and not args.generate:
-        parser.error("--allow-fish-audio is valid only together with --generate")
-    if args.allow_october_generation and not args.generate:
-        parser.error("--allow-october-generation is valid only together with --generate")
-    if args.plan_all and args.story:
-        parser.error("--plan-all cannot be combined with --story")
+    if args.allow_fish_audio and not (args.generate or args.generate_all):
+        parser.error("--allow-fish-audio is valid only together with --generate or --generate-all")
+    if args.generate_all and not args.allow_fish_audio:
+        parser.error("--generate-all requires explicit --allow-fish-audio approval because it includes billable Arabic requests")
+    if args.plan_all and (args.story or args.generate or args.generate_all):
+        parser.error("--plan-all cannot be combined with --story or generation flags")
+    if args.generate_all and (args.story or args.force_block or tuple(args.languages) != LANGUAGES):
+        parser.error("--generate-all handles every published story and all five languages; do not combine it with story, language, or block filters")
+    if args.generate and not args.story:
+        parser.error("--generate requires an explicit --story; use --generate-all for the complete published library")
     if args.force_block and not args.story:
         parser.error("--force-block requires an explicit --story")
-    if not args.story:
-        if args.generate:
-            parser.error("--generate requires an explicit --story")
+    if args.generate_all or not args.story:
         report = inspect_all_generation_plans(ROOT, STAGING_ROOT)
+        if args.generate_all:
+            print("COMPLETE PREFLIGHT")
         print(json.dumps(report, ensure_ascii=False, indent=2))
-        return 1 if report["stories_with_errors"] else 0
+        if report["stories_with_errors"] or report["blocked_stories"] or report["published_stories"] == 0:
+            print("SAFETY STOP: at least one published story is missing a valid package or human-approved audio text; no TTS requests were sent.", file=sys.stderr)
+            return 0 if args.plan_all else 2
+        if args.generate_all:
+            for item in report["stories"] + report["october_packages"]:
+                story_path = ROOT / item["path"]
+                await generate_story(
+                    story_path,
+                    dry_run=False,
+                    allow_fish_audio=True,
+                    languages=LANGUAGES,
+                    seed_published_baseline=True,
+                )
+            print("ALL PUBLISHED STORY AUDIO GENERATED TO .audio-staging; NOTHING WAS PUBLISHED.")
+            return 0
+        return 0
 
     story = args.story if args.story.is_absolute() else ROOT / args.story
     return 0 if await generate_story(
@@ -922,7 +953,6 @@ async def main() -> int:
         allow_fish_audio=args.allow_fish_audio,
         languages=tuple(args.languages),
         force_blocks=tuple(args.force_block),
-        allow_october_generation=args.allow_october_generation,
     ) else 1
 
 

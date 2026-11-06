@@ -10,9 +10,6 @@
     if (!pkg || pkg.format !== 'KHALEDOON_STORY' || !pkg.i18n || typeof pkg.i18n !== 'object') {
       throw new Error('الحزمة الموحدة غير صالحة أو لا تحتوي على i18n.');
     }
-    if (pkg.section === 'october') {
-      throw new Error('مدقق النص الصوتي لا يعمل على قسم أكتوبر.');
-    }
     var out = [];
     LANGS.forEach(function (lang) {
       var localized = pkg.i18n[lang];
@@ -62,6 +59,109 @@
       '=== المقاطع الحالية ===',
       JSON.stringify({ story: pkg.slug, section: pkg.section, segments: segments }, null, 2)
     ].join('\n\n');
+  }
+
+  function normalizeArabicToken(value) {
+    return String(value || '').normalize('NFC').replace(/[\u064B-\u065F\u0670\u0640]/g, '');
+  }
+
+  function arabicTokenSpans(value) {
+    var pattern = /[\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g;
+    var spans = [], match;
+    while ((match = pattern.exec(value)) !== null) {
+      spans.push({ start: match.index, end: match.index + match[0].length, text: match[0] });
+    }
+    return spans;
+  }
+
+  function applyDictionaryText(source, entry) {
+    var sourceSpans = arabicTokenSpans(source);
+    var matchTokens = arabicTokenSpans(entry.match).map(function (item) { return normalizeArabicToken(item.text); });
+    var spokenTokens = arabicTokenSpans(entry.spoken).map(function (item) { return item.text; });
+    if (matchTokens.length === 1 && !entry.before && !entry.after) {
+      throw new Error('قاعدة قاموس غير آمنة: الكلمة المفردة تحتاج إلى سياق محدد.');
+    }
+    if ((entry.before && arabicTokenSpans(entry.before).length !== 1) ||
+        (entry.after && arabicTokenSpans(entry.after).length !== 1)) {
+      throw new Error('قاعدة قاموس غير آمنة: سياق القاعدة يجب أن يكون كلمة واحدة.');
+    }
+    if (!matchTokens.length || matchTokens.length !== spokenTokens.length ||
+        spokenTokens.some(function (token, index) { return normalizeArabicToken(token) !== matchTokens[index]; })) {
+      throw new Error('قاعدة قاموس غير آمنة: يجب الحفاظ على الحروف وترتيب الكلمات.');
+    }
+    var replacements = [], applied = false, cursor = 0;
+    while (cursor < sourceSpans.length) {
+      var endIndex = cursor + matchTokens.length;
+      if (endIndex > sourceSpans.length) break;
+      var actual = sourceSpans.slice(cursor, endIndex).map(function (item) { return normalizeArabicToken(item.text); });
+      var matches = actual.every(function (token, index) { return token === matchTokens[index]; });
+      if (matches) {
+        for (var gapIndex = cursor; gapIndex < endIndex - 1; gapIndex++) {
+          if (source.slice(sourceSpans[gapIndex].end, sourceSpans[gapIndex + 1].start).trim()) matches = false;
+        }
+        if (entry.before) {
+          matches = matches && cursor > 0 &&
+            !source.slice(sourceSpans[cursor - 1].end, sourceSpans[cursor].start).trim() &&
+            normalizeArabicToken(sourceSpans[cursor - 1].text) === normalizeArabicToken(entry.before);
+        }
+        if (entry.after) {
+          matches = matches && endIndex < sourceSpans.length &&
+            !source.slice(sourceSpans[endIndex - 1].end, sourceSpans[endIndex].start).trim() &&
+            normalizeArabicToken(sourceSpans[endIndex].text) === normalizeArabicToken(entry.after);
+        }
+      }
+      if (!matches) { cursor++; continue; }
+      for (var tokenIndex = 0; tokenIndex < spokenTokens.length; tokenIndex++) {
+        replacements.push({
+          start: sourceSpans[cursor + tokenIndex].start,
+          end: sourceSpans[cursor + tokenIndex].end,
+          text: spokenTokens[tokenIndex]
+        });
+      }
+      applied = true;
+      cursor = endIndex;
+    }
+    var result = source;
+    replacements.reverse().forEach(function (item) {
+      result = result.slice(0, item.start) + item.text + result.slice(item.end);
+    });
+    if (normalizeArabicToken(result.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, '')) !==
+        normalizeArabicToken(source.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, ''))) {
+      throw new Error('تطبيق القاموس غيّر الحروف العربية؛ تم إيقاف الاقتراح.');
+    }
+    return { text: result, applied: applied };
+  }
+
+  function applyDictionarySuggestions(input, pkg, dictionary) {
+    var checked = validateResult(input, pkg);
+    if (!checked.ok) throw new Error('تحقق من تقرير اللغات الخمس أولًا: ' + checked.errors.slice(0, 3).join(' | '));
+    if (!dictionary || dictionary.schema_version !== 1 || !Array.isArray(dictionary.entries)) {
+      throw new Error('ملف قاموس النطق غير صالح أو غير مدعوم.');
+    }
+    var result = typeof input === 'string' ? JSON.parse(input) : JSON.parse(JSON.stringify(input));
+    var entries = dictionary.entries.slice().sort(function (a, b) {
+      return arabicTokenSpans(b.match || '').length - arabicTokenSpans(a.match || '').length;
+    });
+    var applied = [];
+    result.segments.forEach(function (item) {
+      if (item.lang !== 'ar' || item.issue_type !== 'none' || item.proposed_audio_text !== item.original_text) return;
+      entries.forEach(function (entry) {
+        if (!entry || typeof entry.id !== 'string' || typeof entry.match !== 'string' || typeof entry.spoken !== 'string') {
+          throw new Error('يوجد مدخل غير صالح في قاموس النطق.');
+        }
+      });
+      for (var index = 0; index < entries.length; index++) {
+        var candidate = applyDictionaryText(item.original_text, entries[index]);
+        if (!candidate.applied || candidate.text === item.original_text) continue;
+        item.proposed_audio_text = candidate.text;
+        item.issue_type = 'pronunciation';
+        item.reason = 'اقتراح من قاموس النطق العربي (' + entries[index].id + '). راجع التشكيل والسياق النحوي، وعدّل النص قبل الموافقة إذا لزم.';
+        item.suggestion_source = 'ar-EG-pronunciation-dictionary';
+        applied.push({ lang: item.lang, block_index: item.block_index, entry_id: entries[index].id });
+        break;
+      }
+    });
+    return { report: result, applied: applied, requires_human_approval: true, applied_to_story: false };
   }
 
   function validateResult(input, pkg) {
@@ -224,6 +324,7 @@
     diagnose: diagnose,
     buildPrompt: buildPrompt,
     validateResult: validateResult,
+    applyDictionarySuggestions: applyDictionarySuggestions,
     buildApprovedPatch: buildApprovedPatch,
     buildApprovedAudioPronunciation: buildApprovedAudioPronunciation
   };

@@ -885,19 +885,37 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   page.on('requestfailed', (request) => failedRequests.push({ url: request.url(), error: request.failure()?.errorText || '' }));
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
-    await page.waitForFunction(() => !!document.querySelector('details.pubrow'), null, { timeout: 15000 });
-    const card = page.locator('details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
-    await card.locator('summary').click();
-    const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
+    await page.waitForFunction(() => {
+      const app = document.querySelector('#app');
+      const tabs = document.querySelector('#views');
+      return !!app && !app.hidden && !!tabs && !!tabs.querySelector('button');
+    }, null, { timeout: 20000 });
+    // Explicitly activate the submissions view; the row may already exist in the DOM
+    // while another admin view is selected, so DOM presence alone is not visibility.
+    await page.locator('#views').getByRole('button', { name: 'الحكايات المرسلة', exact: true }).click();
+    await page.waitForFunction(() => {
+      const view = document.querySelector('#viewSubs');
+      return !!view && !view.hidden;
+    }, null, { timeout: 5000 });
+    await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
+    const card = page.locator('#viewSubs details.pubrow:has(button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"])')
+      .filter({ hasText: 'Existing E2E Draft' })
+      .first();
+    // Trigger the row disclosure, then invoke the row's real edit handler. The
+    // browser audit can report the summary as hidden while its parent disclosure is
+    // collapsed, so dispatch the native click on the same elements directly.
+    await card.locator('summary').evaluate((summary) => summary.click());
+    await card.locator('button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"]').evaluate((button) => button.click());
+    const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
-    const importButton = page.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
+    const importButton = card.getByRole('button', { name: 'تعديل ناتج الذكاء الاصطناعي أو تطبيقه وقفل الخانة' });
     const popupPromise = page.waitForEvent('popup', { timeout: 20000 }).catch(() => null);
     // The current admin explicitly starts the paste field unlocked. Only perform an
     // unlock click when the rendered textarea is actually read-only; never double-submit.
     if (await textarea.evaluate((el) => el.readOnly)) {
       await importButton.click();
-      await page.waitForFunction(() => { const el = document.querySelector('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]'); return !!el && !el.readOnly; }, null, { timeout: 5000 });
+      await page.waitForFunction((el) => !!el && !el.readOnly, await textarea.elementHandle(), { timeout: 5000 });
     }
     await importButton.click();
     // The admin refreshes its list after a successful save, removing the transient

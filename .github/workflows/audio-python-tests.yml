@@ -8,9 +8,12 @@ on:
     paths:
       - ".github/workflows/audio-python-tests.yml"
       - "scripts/generate_story_audio.py"
+      - "scripts/audit_story_audio.py"
+      - "tests/test_audit_story_audio.py"
       - "tests/test_october_audio_packages.py"
       - "tests/test_audio_generation_safety.py"
-      - "rebuild/october-audio-packages/**"
+      - "scripts/build_october_audio_packages.py"
+      - "stories/october/**"
   workflow_dispatch:
 
 permissions:
@@ -35,7 +38,11 @@ jobs:
 
       - name: Run October package and audio safety tests
         run: |
-          python -m unittest tests.test_october_audio_packages tests.test_audio_generation_safety -v
+          python -m unittest tests.test_october_audio_packages tests.test_audio_generation_safety tests.test_audit_story_audio -v
+
+      - name: Extract October source packages into the canonical story tree
+        run: |
+          python3 scripts/build_october_audio_packages.py
 
       - name: Build and verify read-only plan for all stories and October packages
         shell: bash
@@ -50,7 +57,7 @@ jobs:
           expected = {
               "mode": "read-only-generation-plan",
               "october_audio_packages": 4,
-              "october_audio_packages_blocked": 0,
+              "october_audio_packages_blocked": 4,
               "stories_with_errors": 0,
               "tts_requests": 0,
               "files_modified": 0,
@@ -64,8 +71,12 @@ jobs:
           if len(packages) != 4:
               failures.append(f"october_packages list: expected 4, got {len(packages)}")
           for package in packages:
-              if "error" in package or "blocked" in package:
-                  failures.append(f"{package.get('path', 'unknown package')}: {package.get('error') or package.get('blocked')}")
+              if "error" in package:
+                  failures.append(f"{package.get('path', 'unknown package')}: {package.get('error')}")
+              if "blocked" not in package or "admin-approved five-language" not in package.get("blocked", ""):
+                  failures.append(f"{package.get('path', 'unknown package')}: missing shared human audio-text approval gate")
+          if any("segments_to_generate" in package for package in packages):
+              failures.append("unapproved October packages must not produce generation plans")
           if failures:
               raise SystemExit("PLAN ASSERTIONS FAILED:\\n- " + "\\n- ".join(failures))
 
@@ -77,7 +88,7 @@ jobs:
                   f"fish_segments_to_generate={package.get('fish_segments_to_generate', 0)}"
               )
           print(
-              "\\nVERIFIED: 4 October packages, 0 blocked, 0 errors, "
+              "\\nVERIFIED: 4 October packages blocked pending shared five-language human approval, "
               "0 TTS requests, 0 files modified."
           )
           PY
@@ -91,7 +102,7 @@ jobs:
             echo "## October audio Python checks"
             echo
             echo "- **Job status:** ${JOB_STATUS}"
-            echo "- **Unit tests:** `tests.test_october_audio_packages` and `tests.test_audio_generation_safety`"
+            echo "- **Unit tests:** tests.test_october_audio_packages, tests.test_audio_generation_safety, and tests.test_audit_story_audio"
             if [ -f plan-all.json ]; then
               python3 - <<'PY'
           import json

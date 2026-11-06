@@ -165,7 +165,7 @@ input:focus,select:focus,button:focus-visible,a:focus-visible{outline-color:var(
 </main>
 <script src="assets/story-workflow.js?v=20261026-cover-contract-1"></script><script src="assets/story-template-bundle.js?v=20261027-source-clean-2"></script><script src="assets/ai-json-repair.js?v=20261021-3"></script>
 <script src="assets/audio-review-core.js?v=20261105-review-core-10"></script>
-<script src="assets/audio-text-review.js?v=20261105-audio-text-review-2"></script>
+<script src="assets/audio-text-review.js?v=20261106-dictionary-review-3"></script>
 <script src="assets/khaledoon-admin-texts.js?v=20261102-story-prompt-v5"></script>
 <script>
 (function(){
@@ -428,6 +428,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
 }
 /* مساعدات مشتركة للمعاينة والاعتماد (بدل نسخ الكود في كل زر). */
 function storyReviewPackageOf(it){var m=it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;return p&&(p.story_only_draft||p.v2_only_draft)?(p.story_package||p.v2_package):((m.story_only_draft||m.v2_only_draft)?(m.story_package||m.v2_package):null)}
+async function audioReviewPackageOf(it){var pkg=storyReviewPackageOf(it);if(pkg)return pkg;if(!isOctoberLegacyRecord(it))return null;var meta=it.story_meta||{},review=meta.preview_review||{},staticPath=String(review.static_story_path||meta.static_story_path||it.static_story_path||''),match=staticPath.match(/(?:^|\/)stories\/october\/(\d{3})(?:\/|$)/),storyId=match?match[1]:String(review.static_story_id||meta.static_story_id||it.story_id||it.slug||it.id||'');if(/^\d{1,3}$/.test(storyId))storyId=storyId.padStart(3,'0');if(!/^\d{3}$/.test(storyId))return null;try{var response=await fetch('../rebuild/october-audio-packages/'+storyId+'/story.json',{cache:'no-store'});if(!response.ok)return null;var source=await response.json();if(source.format!=='KHALEDOON_STORY'||source.section!=='october'||String(source.slug)!==storyId)return null;return source}catch(ignoreOctoberAudioPackageFetch){return null}}
 function stageStoryReview(it,pkg){var meta=it.story_meta||{},pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;try{localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions',record_type:'modern',status:it.status||'pending',story_meta:meta,record_data:Object.assign({},pending||it)}));var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank')}catch(ignoreStoryReviewStore){}}
 function shouldRecordPreview(it){var st=window.KHWorkflow.stateOf(it).state;return st!=='preview_sent'&&st!=='awaiting_publish'}
 async function recordPreviewSent(it){
@@ -438,6 +439,27 @@ async function recordPreviewSent(it){
  if(!saved.ok)throw new Error('تعذر تسجيل إرسال المعاينة ('+saved.status+').');
  var rows=await saved.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد إرسال المعاينة.');
  if(rows[0])Object.assign(it,rows[0]);return rows[0];
+}
+function revisionStableValue(value){
+ if(Array.isArray(value))return value.map(revisionStableValue);
+ if(value&&typeof value==='object'){var out={};Object.keys(value).sort().forEach(function(key){out[key]=revisionStableValue(value[key])});return out}
+ return value;
+}
+function appendStoryRevision(meta,before,after,source,now){
+ var out=Object.assign({},meta||{}),keys=['section','figure_name','student_name','narrator_name','grade','narrator_grade','title','subtitle','body','sources','history_note','images_note','translations','images','cover','map_location','question_bank_json','karma_text'],changes=[];
+ function compact(value){if(value===undefined)return null;var raw=typeof value==='string'?value:JSON.stringify(value);return raw.length>1200?raw.slice(0,1200)+'…':raw}
+ keys.forEach(function(key){
+  var oldValue=before&&before[key]!==undefined?before[key]:null,newValue=after&&after[key]!==undefined?after[key]:null;
+  if(JSON.stringify(revisionStableValue(oldValue))!==JSON.stringify(revisionStableValue(newValue)))changes.push({field:key,before:compact(oldValue),after:compact(newValue)});
+ });
+ if(!changes.length)return out;
+ var history=Array.isArray(out.revision_history)?out.revision_history.slice():[];
+ var entry={saved_at:(now instanceof Date?now:new Date(now||Date.now())).toISOString(),source:String(source||'admin_edit'),changes:changes};
+ var previousRaw=before&&before.story_meta&&before.story_meta.ai_package_raw;
+ if(typeof previousRaw==='string'&&previousRaw&&previousRaw!==out.ai_package_raw)entry.previous_ai_package_raw=previousRaw.slice(0,100000);
+ history.push(entry);
+ out.revision_history=history.slice(-10);
+ return out;
 }
 /* تعديل نص بعد اعتماد المعاينة يُسقط الاعتماد (markEdited)؛ الحفظ بلا تغيير في النص لا يمسّه. */
 function dropApprovalIfEdited(it,fields,meta){
@@ -495,7 +517,7 @@ function legacyCard(it){
   var requestedStatus=nextStatus||status.value;
   var translations=collectLegacyTranslations();var storyMeta=Object.assign({},it.story_meta||{});storyMeta.karma_text=karma.value.trim();storyMeta.question_bank_json=quizJson.value.trim();storyMeta.translations=translations;storyMeta=dropApprovalIfEdited(it,{student_name:name.value,grade:grade.value,title:title.value,subtitle:subtitle.value,body:body.value,sources:sources.value,history_note:hist.value,images_note:imagesNote.value,karma_text:karma.value,question_bank_json:quizJson.value,translations:translations},storyMeta);
   var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:requestedStatus,story_number:it.story_number||null,story_meta:storyMeta};
-  d.story_meta.original_body=legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim();d.story_meta.pending_draft=Object.assign({},d,{figure_name:title.value.trim(),section:'october',section_key:'october',original_body:d.story_meta.original_body,history_note:hist.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),translations:translations});delete d.story_meta.pending_draft.story_meta;
+  d.story_meta.original_body=legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim();d.story_meta.pending_draft=Object.assign({},d,{figure_name:title.value.trim(),section:'october',section_key:'october',original_body:d.story_meta.original_body,history_note:hist.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),translations:translations});delete d.story_meta.pending_draft.story_meta;d.story_meta=appendStoryRevision(d.story_meta,it,d,'october_legacy_edit',new Date());
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return false}
   if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return false}
   if(d.status==='published')d.status='pending';
@@ -518,7 +540,7 @@ function legacyCard(it){
   var popup=window.open('about:blank','_blank');if(!popup){say('err','اسمح بالنوافذ المنبثقة ثم حاول المعاينة مرة أخرى.');return}
   var currentMeta=Object.assign({},it.story_meta||{}),currentTranslations=collectLegacyTranslations();currentMeta.karma_text=karma.value.trim();currentMeta.question_bank_json=quizJson.value.trim();currentMeta.translations=currentTranslations;
   var draft={title:title.value.trim(),subtitle:subtitle.value.trim(),section_label:'حكايات أكتوبر 1973',section_key:'october',figure_name:title.value.trim(),student_name:name.value.trim(),grade:grade.value.trim(),narrator_name:name.value.trim(),narrator_grade:grade.value.trim(),body:body.value.trim(),history_note:hist.value.trim(),sources:sources.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),original_body:legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim(),translations:currentTranslations,status_label:'مسودة — معاينة غير منشورة',submission_id:it.id,submission_table:'submitted_stories',record_type:'legacy',record_data:{student_name:name.value.trim(),grade:grade.value.trim(),title:title.value.trim(),subtitle:subtitle.value.trim(),body:body.value.trim(),sources:sources.value.trim(),status:it.status==='published'?'published':'pending',story_number:it.story_number||null,story_meta:currentMeta},story_meta:currentMeta};
-  try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ تجهيز معاينة الحكاية…</body></html>');popup.document.close();var saved=await persistLegacy('pending',saveBtn);if(!saved){popup.close();return}localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));if(shouldRecordPreview(it))await recordPreviewSent(it);popup.location.href='preview.html?story=1'}catch(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+e.message)}
+  try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة المشتركة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ تجهيز القارئ المشترك وأدوات مراجعة الصوت…</body></html>');popup.document.close();var saved=await persistLegacy('pending',saveBtn);if(!saved){popup.close();return}var sharedOctoberPackage=await audioReviewPackageOf(it);if(!sharedOctoberPackage)throw new Error('لا توجد حزمة صوت موحدة مرتبطة بهذه الحكاية؛ لم أفتح صفحة المعاينة القديمة.');stageStoryReview(it,sharedOctoberPackage);if(shouldRecordPreview(it))await recordPreviewSent(it);popup.opener=null;popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table=submitted_stories&v=20261106-shared-october-reader-preview-2'}catch(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة المشتركة: '+e.message)}
  });
  rejBtn.addEventListener('click',function(){if(confirm('تأكيد رفض الحكاية؟ ستظل محفوظة.'))persistLegacy('rejected',rejBtn)});
  delBtn.addEventListener('click',function(){if(!confirmDelete(it))return;removeItem(it,delBtn)});
@@ -594,17 +616,20 @@ function makePreviewDraft(statusForPreview){
   return {title:d.title,subtitle:d.subtitle,section_label:SEC[d.section]||d.section,section_key:d.section,figure_name:d.figure_name,body:d.body,karma_text:d.story_meta&&d.story_meta.karma_text||'',question_bank_json:d.story_meta&&d.story_meta.question_bank_json||'',preview_source_url:d.story_meta&&d.story_meta.preview_source_url||'',history_note:d.history_note||'',sources:d.sources||'',images_note:d.images_note||'',cover:d.cover||(d.story_meta&&d.story_meta.cover)||null,images:d.images||(d.story_meta&&d.story_meta.images)||[],original_body:d.original_body||'',translations:d.translations||{},status_label:'مسودة — معاينة غير منشورة',submission_id:it.id||null,submission_table:'khaledoon_submissions',record_type:'modern',record_data:d,story_meta:d.story_meta||{},provider_key:providerSelect.value};
  }
  function openPreviewAfterSave(btn){
-  var storyMetaDirect=it.story_meta||{},storyPendingDirect=storyMetaDirect.pending_draft&&typeof storyMetaDirect.pending_draft==='object'?storyMetaDirect.pending_draft:null,storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null);if(storyPackageDirect){var directStoryWindow=window.open('about:blank','_blank');if(!directStoryWindow){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. افتح صفحة معاينة الحزمة الموحدة يدويًا.');return}directStoryWindow.opener=null;(async function(){try{if(shouldRecordPreview(it))await recordPreviewSent(it);stageStoryReview(it,storyPackageDirect);directStoryWindow.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3'}catch(directError){try{directStoryWindow.close()}catch(ignoreDirectClose){}say('err',directError.message||'تعذر تسجيل إرسال المعاينة.')}})();return}
+  var storyMetaDirect=it.story_meta||{},storyPendingDirect=storyMetaDirect.pending_draft&&typeof storyMetaDirect.pending_draft==='object'?storyMetaDirect.pending_draft:null,storyPackageDirect=storyPendingDirect&&(storyPendingDirect.story_only_draft||storyPendingDirect.v2_only_draft)?(storyPendingDirect.story_package||storyPendingDirect.v2_package):((storyMetaDirect.story_only_draft||storyMetaDirect.v2_only_draft)?(storyMetaDirect.story_package||storyMetaDirect.v2_package):null);if(storyPackageDirect){var directStoryWindow=window.open('about:blank','_blank');if(!directStoryWindow){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. افتح صفحة معاينة الحزمة الموحدة يدويًا.');return}directStoryWindow.opener=null;(async function(){try{if(shouldRecordPreview(it))await recordPreviewSent(it);stageStoryReview(it,storyPackageDirect);directStoryWindow.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-1'}catch(directError){try{directStoryWindow.close()}catch(ignoreDirectClose){}say('err',directError.message||'تعذر تسجيل إرسال المعاينة.')}})();return}
   var popup=window.open('about:blank','_blank');
   if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة. اسمح بالنوافذ المنبثقة ثم حاول مرة أخرى.');return}
   try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><title>تجهيز المعاينة</title><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ حفظ المسودة وتجهيز معاينة الحكاية…</body></html>');popup.document.close()}catch(e){}
   var saveStatus=(!isNew&&it.status==='published')?'published':'pending';
   sendingToPreview=true;var savePromise=persist(saveStatus,btn);sendingToPreview=false;
-  savePromise.then(function(ok){
+  savePromise.then(async function(ok){
    if(!ok){try{popup.close()}catch(e){}return}
    try{
     var draft=makePreviewDraft(saveStatus);draft.submission_id=it.id||null;draft.story_meta=it.story_meta||{};draft.karma_text=draft.karma_text||'';draft.question_bank_json=draft.question_bank_json||'';
-    var storyMetaForPreview=it.story_meta||{},storyPendingForPreview=storyMetaForPreview.pending_draft&&typeof storyMetaForPreview.pending_draft==='object'?storyMetaForPreview.pending_draft:null,storyPackageForPreview=storyPendingForPreview&&(storyPendingForPreview.story_only_draft||storyPendingForPreview.v2_only_draft)?(storyPendingForPreview.story_package||storyPendingForPreview.v2_package):((storyMetaForPreview.story_only_draft||storyMetaForPreview.v2_only_draft)?(storyMetaForPreview.story_package||storyMetaForPreview.v2_package):null);if(storyPackageForPreview){stageStoryReview(it,storyPackageForPreview);localStorage.setItem('kh-story-review-package',JSON.stringify(storyPackageForPreview));var previewBankForStory=(storyPendingForPreview&&storyPendingForPreview.question_bank_json)||storyMetaForPreview.question_bank_json||draft.question_bank_json||storyPackageForPreview.question_bank_json||'';if(previewBankForStory)localStorage.setItem('kh-story-preview-bank',typeof previewBankForStory==='string'?previewBankForStory:JSON.stringify(previewBankForStory));else localStorage.removeItem('kh-story-preview-bank');popup.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3'}else{localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));popup.location.href='preview.html?story=1&submission='+encodeURIComponent(it.id)}
+    var storyMetaForPreview=it.story_meta||{},storyPendingForPreview=storyMetaForPreview.pending_draft&&typeof storyMetaForPreview.pending_draft==='object'?storyMetaForPreview.pending_draft:null,storyPackageForPreview=storyPendingForPreview&&(storyPendingForPreview.story_only_draft||storyPendingForPreview.v2_only_draft)?(storyPendingForPreview.story_package||storyPendingForPreview.v2_package):((storyMetaForPreview.story_only_draft||storyMetaForPreview.v2_only_draft)?(storyMetaForPreview.story_package||storyMetaForPreview.v2_package):null);
+    if(storyPackageForPreview){stageStoryReview(it,storyPackageForPreview);localStorage.setItem('kh-story-review-package',JSON.stringify(storyPackageForPreview));var previewBankForStory=(storyPendingForPreview&&storyPendingForPreview.question_bank_json)||storyMetaForPreview.question_bank_json||draft.question_bank_json||storyPackageForPreview.question_bank_json||'';if(previewBankForStory)localStorage.setItem('kh-story-preview-bank',typeof previewBankForStory==='string'?previewBankForStory:JSON.stringify(previewBankForStory));else localStorage.removeItem('kh-story-preview-bank');popup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'}
+    else if(isOctoberLegacyRecord(it)){var octoberPackageForPreview=await audioReviewPackageOf(it);if(!octoberPackageForPreview)throw new Error('لا توجد حزمة صوت موحدة مرتبطة بحكاية أكتوبر؛ لم أفتح صفحة المعاينة القديمة.');stageStoryReview(it,octoberPackageForPreview);popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261106-shared-october-reader-preview-2'}
+    else{localStorage.setItem('kh-story-preview-draft',JSON.stringify(draft));localStorage.setItem('kh-story-preview-context',JSON.stringify(draft));popup.location.href='preview.html?story=1&submission='+encodeURIComponent(it.id)}
    }catch(e){try{popup.close()}catch(ignore){}say('err','حُفظت المسودة، لكن تعذر تجهيز بيانات المعاينة: '+e.message)}
   }).catch(function(e){try{popup.close()}catch(ignore){}say('err','تعذر تجهيز المعاينة: '+(e.message||'حدث خطأ'))});
  }
@@ -746,7 +771,7 @@ if(!isNew&&isOctoberLegacyRecord(it)){
   return true;
  }
  async function persist(status,btn){
-  var d=collect(status);if(!sendingToPreview)d.story_meta=dropApprovalIfEdited(it,d,d.story_meta);
+  var d=collect(status);if(!isNew)d.story_meta=appendStoryRevision(d.story_meta,it,d,'admin_edit',new Date());if(!sendingToPreview)d.story_meta=dropApprovalIfEdited(it,d,d.story_meta);
   saveMsg.hidden=true;
   if(!valid(d))return false;
   var ok=false,oldLabel=btn.textContent;btn.disabled=true;btn.textContent='جارٍ الحفظ…';
@@ -944,25 +969,25 @@ function pubRow(it){
  if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish'||hasPendingDraft)){
   var isSentForPreview=itemState(it)==='preview_sent';
   var openReview=el('button','btn primary',hasPendingDraft?'معاينة المسودة بعد النقل':(isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ'));openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
-  openReview.addEventListener('click',function(e){
+  openReview.addEventListener('click',async function(e){
    e.preventDefault();e.stopPropagation();
+   var win=window.open('about:blank','_blank');
+   if(!win){say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');return}
    var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
-   var meta=it.story_meta&&typeof it.story_meta==='object'?it.story_meta:{};
-   var pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
-   var pkg=pending&&(pending.story_only_draft||pending.v2_only_draft)?(pending.story_package||pending.v2_package):((meta.story_only_draft||meta.v2_only_draft)?(meta.story_package||meta.v2_package):null);
    var url;
    try{
+    /* أكتوبر يحتفظ بمسار تحريره القديم، لكن المعاينة ومراجعة الصوت تستخدمان دائمًا القارئ المشترك. */
+    var pkg=await audioReviewPackageOf(it);
     if(pkg){
-     localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));
-     localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:table,record_type:'modern',status:pending?'pending':(it.status||'pending'),story_meta:meta,record_data:Object.assign({},pending||it)}));
-     var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';
-     if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank');
-     url='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3';
+     stageStoryReview(it,pkg);
+     url='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(table)+'&v=20261106-shared-october-reader-preview-2';
+    }else if(isOctoberLegacyRecord(it)){
+     throw new Error('تعذر العثور على حزمة الصوت الموحدة لهذه الحكاية؛ لم أفتح صفحة المعاينة القديمة حتى لا تُتجاوز أدوات مراجعة الصوت.');
     }else{
      url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;
     }
-    var win=window.open(url,'_blank');if(win)win.opener=null;else say('err','المتصفح منع فتح المعاينة؛ اسمح بالنوافذ المنبثقة ثم اضغط الزر مرة أخرى.');
-   }catch(err){say('err','تعذر تجهيز بيانات المعاينة: '+(err&&err.message?err.message:'خطأ غير معروف'));}
+    win.opener=null;win.location.href=url;
+   }catch(err){try{win.close()}catch(ignoreReviewPopup){}say('err','تعذر تجهيز بيانات المعاينة: '+(err&&err.message?err.message:'خطأ غير معروف'));}
   });
   actions.appendChild(openReview);
  }
@@ -1012,21 +1037,41 @@ function pubRow(it){
     var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
-    if(requireUnifiedStoryPackage&&window.KHAudioTextReview){
+    if((requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview){
      var audioTextReviewBox=el('div','review-data');audioTextReviewBox.style.cssText='border:1px solid var(--line,#31505a);border-radius:10px;padding:12px;display:grid;gap:8px';
      audioTextReviewBox.appendChild(el('strong','','مراجعة النص قبل توليد الصوت'));
      audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق في اللغات الخمس. بعد مراجعة التقرير والموافقة على الاقتراحات أو الإبقاء على الأصل، صدّر ملف audio-pronunciation.json وضعه بجوار story.json قبل توليد أي صوت. لا يغيّر نص الحكاية المرئية.'));
      var audioTextReviewCopy=el('button','btn ghost','٢. نسخ برومبت مدقق النص الصوتي');audioTextReviewCopy.type='button';audioTextReviewBox.appendChild(audioTextReviewCopy);
      var audioTextReviewPaste=area('',7,100000);audioTextReviewPaste.placeholder='الصق هنا تقرير KHALEDOON_AUDIO_TEXT_REVIEW_V1 الناتج من أداة الذكاء الاصطناعي…';audioTextReviewPaste.setAttribute('aria-label','الصق نتيجة تدقيق النص الصوتي');audioTextReviewBox.appendChild(fld('٣. نتيجة مدقق النص الصوتي',audioTextReviewPaste,'التحقق يراجع بنية التقرير ومطابقة النصوص؛ لا يطبّق التعديلات تلقائيًا.'));
      var audioTextReviewValidate=el('button','btn ghost','٤. التحقق من نتيجة التدقيق');audioTextReviewValidate.type='button';audioTextReviewBox.appendChild(audioTextReviewValidate);
+     var audioTextReviewDictionary=el('button','btn ghost','٥. اقتراحات قاموس النطق العربي');audioTextReviewDictionary.type='button';audioTextReviewDictionary.disabled=true;audioTextReviewBox.appendChild(audioTextReviewDictionary);
      var audioTextReviewStatus=el('div','fnote','لم يتم تشغيل التدقيق بعد.');audioTextReviewStatus.setAttribute('role','status');audioTextReviewBox.appendChild(audioTextReviewStatus);
      var audioTextReviewResultList=el('div','review-data');audioTextReviewResultList.style.cssText='display:grid;gap:8px';
-     var audioTextReviewExport=el('button','btn primary','٥. اعتماد المراجعة وتصدير ملف الصوت');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
+     var audioTextReviewExport=el('button','btn primary','٦. اعتماد المراجعة وتصدير ملف الصوت');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
      audioTextReviewBox.appendChild(audioTextReviewResultList);audioTextReviewBox.appendChild(audioTextReviewExport);
-     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null);
-     function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true}
-     audioTextReviewCopy.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);
+     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null),audioTextReviewDictionaryApplied=false;var audioReviewPackagePromise=audioReviewPackageOf(it);
+     function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true;audioTextReviewDictionary.disabled=true;audioTextReviewDictionaryApplied=false}
+     function renderAudioTextReviewSuggestions(suggestions){
+      while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);
+      if(!suggestions.length){audioTextReviewResultList.appendChild(el('p','fnote','لا توجد تغييرات مقترحة تحتاج إلى اعتماد.'));return}
+      var names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'},speakers={narrator:'الراوي',karma:'كارما'};
+      suggestions.forEach(function(item){
+       var card=el('div','review-data');card.style.cssText='border:1px solid var(--line,#31505a);border-radius:8px;padding:10px;display:grid;gap:6px';
+       card.appendChild(el('strong','',(names[item.lang]||item.lang)+' — المقطع '+(item.block_index+1)+' — '+(speakers[item.speaker]||item.speaker)));
+       card.appendChild(el('p','fnote','النص الأصلي: '+item.original_text));
+       var proposed=area('',3,12000);proposed.value=item.proposed_audio_text;proposed.setAttribute('aria-label','النص الصوتي المقترح القابل للتعديل');card.appendChild(fld('المقترح الصوتي — يمكنك تعديله قبل الموافقة',proposed,'لن يُستخدم إلا النص الذي تراجعه وتحدده للموافقة.'));
+       card.appendChild(el('p','fnote','سبب الاقتراح: '+(item.reason||'لم يذكر سببًا.')));
+       var label=el('label','fnote'),check=document.createElement('input');check.type='checkbox';
+       var key=item.lang+':'+item.block_index;
+       function syncApproval(){var changed=proposed.value.trim()!==item.original_text;check.disabled=!changed;if(!changed){check.checked=false;delete approvedAudioTextChanges[key]}if(check.checked)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key]}
+       proposed.addEventListener('input',function(){item.proposed_audio_text=proposed.value;syncApproval()});
+       check.addEventListener('change',function(){if(check.checked&&proposed.value.trim()!==item.original_text)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key]});
+       label.appendChild(check);label.appendChild(document.createTextNode(' أوافق على استخدام هذا النص في الصوت فقط.'));
+       card.appendChild(label);syncApproval();audioTextReviewResultList.appendChild(card);
+      });
+     }
+     audioTextReviewCopy.addEventListener('click',async function(){
+      var pkg=await audioReviewPackagePromise;
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
       try{
        var diagnostics=window.KHAudioTextReview.diagnose(pkg),prompt=window.KHAudioTextReview.buildPrompt(pkg);
@@ -1038,34 +1083,38 @@ function pubRow(it){
       }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز التدقيق: '+String(error&&error.message||error)}
      });
      audioTextReviewPaste.addEventListener('input',function(){clearAudioTextReviewCards();audioTextReviewCurrentResult=null;audioTextReviewStatus.textContent='تغير النص الملصوق؛ أعد التحقق قبل اعتماد أي اقتراح.'});
-     audioTextReviewValidate.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
+     audioTextReviewValidate.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة موحدة مرتبطة بهذه المسودة.';return}
       var result=window.KHAudioTextReview.validateResult(audioTextReviewPaste.value,pkg);
-      if(!result.ok){
-       audioTextReviewStatus.textContent='التقرير غير صالح ('+result.errors.length+' ملاحظات): '+result.errors.slice(0,5).join(' | ');return;
-      }
+      if(!result.ok){audioTextReviewStatus.textContent='التقرير غير صالح ('+result.errors.length+' ملاحظات): '+result.errors.slice(0,5).join(' | ');return}
       try{audioTextReviewCurrentResult=JSON.parse(audioTextReviewPaste.value)}catch(ignoreReviewParse){audioTextReviewStatus.textContent='تعذر قراءة تقرير التدقيق بعد التحقق.';return}
-      var names={ar:'العربية',en:'الإنجليزية',fr:'الفرنسية',it:'الإيطالية',de:'الألمانية'},speakers={narrator:'الراوي',karma:'كارما'};
       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
-      audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك.';audioTextReviewExport.disabled=false;
-      if(!suggestions.length){audioTextReviewResultList.appendChild(el('p','fnote','لا توجد تغييرات مقترحة تحتاج إلى اعتماد.'));return}
-      suggestions.forEach(function(item){
-       var card=el('div','review-data');card.style.cssText='border:1px solid var(--line,#31505a);border-radius:8px;padding:10px;display:grid;gap:6px';
-       card.appendChild(el('strong','',(names[item.lang]||item.lang)+' — المقطع '+(item.block_index+1)+' — '+(speakers[item.speaker]||item.speaker)));
-       card.appendChild(el('p','fnote','النص الحالي: '+item.original_text));
-       card.appendChild(el('p','fnote','المقترح الصوتي: '+item.proposed_audio_text));
-       card.appendChild(el('p','fnote','سبب الاقتراح: '+(item.reason||'لم يذكر سببًا.')));
-       var label=el('label','fnote');var check=document.createElement('input');check.type='checkbox';check.addEventListener('change',function(){
-        var key=item.lang+':'+item.block_index;if(check.checked)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key];
-        audioTextReviewExport.disabled=Object.keys(approvedAudioTextChanges).length===0;
-       });
-       label.appendChild(check);label.appendChild(document.createTextNode(' أوافق على استخدام هذا المقترح في النص الصوتي فقط.'));
-       card.appendChild(label);audioTextReviewResultList.appendChild(card);
-      });
+      audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك. يمكنك إضافة اقتراحات القاموس العربي بعد ذلك.';
+      audioTextReviewDictionaryApplied=false;audioTextReviewDictionary.disabled=false;audioTextReviewExport.disabled=false;
+      renderAudioTextReviewSuggestions(suggestions);
      });
-     audioTextReviewExport.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
+     audioTextReviewDictionary.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it);
+      if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير التدقيق أولًا.';return}
+      audioTextReviewDictionary.disabled=true;
+      try{
+       var dictionaryUrl=new URL('../audio/pronunciation/ar-EG.json',location.href);
+       var response=await fetch(dictionaryUrl.href,{cache:'no-cache'});
+       if(!response.ok)throw new Error('تعذر تحميل قاموس النطق ('+response.status+').');
+       var dictionary=await response.json();
+       var outcome=window.KHAudioTextReview.applyDictionarySuggestions(audioTextReviewCurrentResult,pkg,dictionary);
+       audioTextReviewCurrentResult=outcome.report;audioTextReviewDictionaryApplied=true;
+       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
+       renderAudioTextReviewSuggestions(suggestions);
+       audioTextReviewStatus.textContent=outcome.applied.length
+        ?'أضيف '+outcome.applied.length+' اقتراح قاموس إلى قائمة المراجعة. لم يُعتمد أي اقتراح؛ عدّل النص إن لزم وحدد يدويًا ما توافق عليه.'
+        :'لم يجد القاموس عبارة مطابقة جديدة. الاقتراحات السابقة لم تُستبدل.';
+      }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز اقتراحات القاموس: '+String(error&&error.message||error)}
+      finally{audioTextReviewDictionary.disabled=audioTextReviewDictionaryApplied}
+     });
+     audioTextReviewExport.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
       if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير اللغات الخمس أولًا.';return}
       try{
        var approvalFile=window.KHAudioTextReview.buildApprovedAudioPronunciation(audioTextReviewCurrentResult,pkg,keys);
@@ -1099,9 +1148,9 @@ function pubRow(it){
     aiPaint();if(aiResults[aiLockKey])aiShow(aiResults[aiLockKey].kind,aiResults[aiLockKey].text,false);
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',async function(){
-     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
-      var audioReviewSection=(requireUnifiedStoryPackage&&String(it.section||it.section_key||'').toLowerCase()!=='october'&&window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
-     var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',cover:it.cover||(it.story_meta&&it.story_meta.cover)||null,map_location:it.story_meta&&it.story_meta.map_location||null,images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
+     var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');var canonicalStoryPackage=await audioReviewPackageOf(it);
+      var audioReviewSection=(window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
+     var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',cover:it.cover||(it.story_meta&&it.story_meta.cover)||null,map_location:it.story_meta&&it.story_meta.map_location||null,images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||'',current_story_package:canonicalStoryPackage};
       var schema;
       if(requireUnifiedStoryPackage){
        try{
@@ -1120,9 +1169,9 @@ function pubRow(it){
      var storyContext=inputData;
      if(requireUnifiedStoryPackage){
       var requestedSection=String(it.section||it.section_key||'').toLowerCase(),sectionAliases={learning:'women',fame:'people',october:'october',history:'history',science:'science',women:'women',people:'people',curriculum:'curriculum',islamic:'islamic',readers:'readers'};
-      storyContext={requested_section:sectionAliases[requestedSection]||'',figure_name:inputData.figure_name,title:inputData.title,subtitle:inputData.subtitle,narrator_name:inputData.narrator_name,narrator_grade:inputData.narrator_grade,original_body:inputData.original_body,current_body:inputData.current_body,history_note:inputData.history_note,known_sources:inputData.sources,image_notes:inputData.images_note,existing_cover:inputData.cover,map_location:inputData.map_location,existing_images:inputData.images,existing_translations:inputData.translations,question_bank_reference:inputData.question_bank,previous_visual_hint:inputData.visual_design};
+      storyContext={requested_section:sectionAliases[requestedSection]||'',figure_name:inputData.figure_name,title:inputData.title,subtitle:inputData.subtitle,narrator_name:inputData.narrator_name,narrator_grade:inputData.narrator_grade,original_body:inputData.original_body,current_body:inputData.current_body,history_note:inputData.history_note,known_sources:inputData.sources,image_notes:inputData.images_note,existing_cover:inputData.cover,map_location:inputData.map_location,existing_images:inputData.images,existing_translations:inputData.translations,question_bank_reference:inputData.question_bank,previous_visual_hint:inputData.visual_design,current_story_package:inputData.current_story_package};
      }
-     var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية / السياق المتاح؛ ليست مخطط الإخراج ===\n'+JSON.stringify(storyContext,null,2)+(audioReviewSection?'\n\n'+audioReviewSection:'')+'\n\n'+(requireUnifiedStoryPackage?'أنشئ أو حدّث الحكاية وفق العقد الرسمي الوحيد والقالب المشترك، مع الحفاظ على original_body حرفيًا.':'هذا سجل من قسم أكتوبر المستثنى من هذا التوحيد؛ حافظ على مساره الحالي دون تغيير.');
+     var text=basePrompt+'\n\n=== بروتوكول إخراج إلزامي ===\n'+schema+'\n\n=== بيانات الحكاية / السياق المتاح؛ ليست مخطط الإخراج ===\n'+JSON.stringify(storyContext,null,2)+(audioReviewSection?'\n\n'+audioReviewSection:'')+'\n\n'+(requireUnifiedStoryPackage?'أنشئ أو حدّث الحكاية وفق العقد الرسمي الوحيد والقالب المشترك، مع الحفاظ على original_body حرفيًا.':'هذا سجل أكتوبر؛ حافظ على خصوصية تصميمه وصياغته التحريرية، مع تطبيق نظام مراجعة النص الصوتي واعتماده الموحد باللغات الخمس مثل بقية الحكايات.');
      function done(ok){if(ok){aiCopy.textContent='✓ تم النسخ';aiCopy.classList.add('copied');aiCopy.setAttribute('aria-label','تم نسخ الحكاية والبرومبت الكامل');say('ok','تم نسخ ملف الحكاية والبرومبت الكامل. افتح الأداة المختارة والصقه هناك.')}else{aiCopy.textContent='١. نسخ الحكاية والبرومبت الكامل';aiCopy.classList.remove('copied');say('err','تعذر النسخ؛ اسمح للمتصفح بالنسخ ثم حاول مرة أخرى.')}}
      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(text).then(function(){done(true)}).catch(function(){fallbackCopy(text,done)});else fallbackCopy(text,done);
     });
@@ -1176,6 +1225,7 @@ function pubRow(it){
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
       var visibleSourceLength=String(pkg.sources||'').replace(/\s+—\s+\[org:[^\]]+\]\s+—/g,'').length;if(aiInputFormat==='KHALEDOON_STORY'&&visibleSourceLength>3000){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignoreSourceLimitPopup){}}aiFail('المصادر المعروضة أطول من الحد المسموح (3000 حرف، دون احتساب علامة الربط الداخلية). اختصرها مع الحفاظ على جميع المراجع ثم أعد المحاولة؛ لم يتم حفظ المسودة.');return}
        var payload={section:chosenSection,figure_name:String(pkg.figure_name||it.figure_name||it.person||'شخصية تاريخية').trim().slice(0,120),title:String(pkg.title).trim().slice(0,140),subtitle:String(pkg.subtitle||'').slice(0,200),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||'كارما').trim().slice(0,40),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||'').slice(0,60),body:String(pkg.body).trim().slice(0,12000),history_note:String(pkg.history_note||'').slice(0,12000),sources:aiInputFormat==='KHALEDOON_STORY'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000),images_note:String(pkg.images_note||'').slice(0,1500),original_body:nextMeta.original_body,translations:translations,status:'pending',story_meta:nextMeta};
+      var previousRevisionRecord=Object.assign({},oldMeta.pending_draft&&typeof oldMeta.pending_draft==='object'?oldMeta.pending_draft:it,{story_meta:oldMeta});nextMeta=appendStoryRevision(nextMeta,previousRevisionRecord,payload,'ai_import',new Date());payload.story_meta=nextMeta;
       /* لا نغيّر حالة سجل منشور ولا نستبدل نص الصفحة الحية؛ نضع ناتج AI في مسودة معلّقة. */
       var expectedAiTitle=payload.title,expectedAiBody=payload.body;
       if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload);delete nextMeta.pending_draft.story_meta;nextMeta.pending_draft.status='pending';if(storyOnlyDraft){nextMeta.pending_draft.story_only_draft=true;nextMeta.pending_draft.story_package=storyPackageRaw;nextMeta.pending_draft.story_review_state='needs_review';delete nextMeta.pending_draft.v2_only_draft;delete nextMeta.pending_draft.v2_package;delete nextMeta.pending_draft.v2_review_state;delete nextMeta.story_only_draft;delete nextMeta.story_package;delete nextMeta.story_review_state;delete nextMeta.v2_only_draft;delete nextMeta.v2_package;delete nextMeta.v2_review_state}payload={story_meta:nextMeta}}
@@ -1184,20 +1234,20 @@ function pubRow(it){
       if(!saved.ok){var detail='';try{detail=await saved.text()}catch(ignore){}throw new Error('فشل حفظ المسودة في قاعدة البيانات (HTTP '+saved.status+'). '+detail.slice(0,700));}
       var rows=await saved.json();if(!rows.length)throw new Error('الخادم لم يؤكد حفظ أي سجل. احتفظ بالناتج في المربع وحاول مرة أخرى.');
       var savedDraft=it.status==='published'?(rows[0].story_meta&&rows[0].story_meta.pending_draft):rows[0];if(!savedDraft||String(savedDraft.title||'')!==expectedAiTitle||String(savedDraft.body||'')!==expectedAiBody)throw new Error('الخادم لم يُرجع المسودة المحفوظة مطابقة للناتج. لم أمسح النص من المربع؛ راجع الاتصال والصلاحيات.');
-      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();var previewRecordError='';if(storyOnlyDraft){if(shouldRecordPreview(it)){try{await recordPreviewSent(it)}catch(recordError){previewRecordError=recordError.message||'تعذر تسجيل مرحلة المعاينة.'}}stageStoryReview(it,storyPackageRaw)}if(aiPreviewPopup){aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية وفتحت المعاينة، لكن تعذر تسجيل مرحلة المعاينة: '+previewRecordError:storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد وفتحت معاينتها المخصصة. يمكن نشرها من مسار القالب الموحد بعد اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية، لكن تعذر تسجيل مرحلة المعاينة: '+previewRecordError:storyOnlyDraft?'✅ حُفظت الحكاية بالقالب الموحد. استخدم زر «فتح معاينة الحكاية» لعرضها؛ لا يتم النشر قبل اعتماد المعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
+      Object.assign(it,rows[0]);draftNew=false;openIds['k:'+String(it.id)]=true;fStatus='all';fSec='all';try{localStorage.setItem(aiPasteStorageKey,raw);localStorage.setItem(aiLockStorageKey,'1')}catch(ignoreAiCacheClear){}aiPaste.value=raw;aiLockNow();var previewRecordError='',octoberAiPackage=null;if(storyOnlyDraft){if(shouldRecordPreview(it)){try{await recordPreviewSent(it)}catch(recordError){previewRecordError=recordError.message||'تعذر تسجيل مرحلة المعاينة.'}}stageStoryReview(it,storyPackageRaw)}else if(isOctoberLegacyRecord(it)){octoberAiPackage=await audioReviewPackageOf(it);if(octoberAiPackage){stageStoryReview(it,octoberAiPackage);if(shouldRecordPreview(it)){try{await recordPreviewSent(it)}catch(octoberRecordError){previewRecordError=octoberRecordError.message||'تعذر تسجيل مرحلة المعاينة.'}}}else previewRecordError='لا توجد حزمة صوت موحدة مرتبطة بحكاية أكتوبر؛ لم أفتح صفحة المعاينة القديمة.'}if(aiPreviewPopup){if(storyOnlyDraft)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2';else if(octoberAiPackage)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261106-shared-october-reader-preview-2';else if(isOctoberLegacyRecord(it)){try{aiPreviewPopup.close()}catch(ignoreOctoberPreviewClose){}}else aiPreviewPopup.location.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id));aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية، لكن تعذر تجهيز المعاينة المشتركة: '+previewRecordError:storyOnlyDraft||octoberAiPackage?'✅ حُفظت الحكاية وفتحت المعاينة في القارئ المشترك. لا يتم النشر قبل اعتماد مراجعة الصوت والمعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، وفُتحت المعاينة في نافذة جديدة. الخانة مقفلة. لم يتم النشر.')}else aiSay(previewRecordError?'err':'ok',previewRecordError?'حُفظت الحكاية، لكن تعذر تجهيز المعاينة المشتركة: '+previewRecordError:storyOnlyDraft||octoberAiPackage?'✅ حُفظت الحكاية بالقالب الموحد. استخدم زر «فتح معاينة الحكاية» لعرضها؛ لا يتم النشر قبل اعتماد مراجعة الصوت والمعاينة.':'✅ تم تنفيذ الكود وحُفظت المسودة، والخانة مقفلة. منع المتصفح فتح المعاينة تلقائيًا؛ استخدم زر «فتح معاينة الحكاية». لم يتم النشر.');await loadList();
      }catch(e){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignorePreviewClose){}}aiFail(e.message||'تعذر استيراد ناتج AI.')}finally{aiImport.disabled=false}
     });
     b.appendChild(aiPanel);
    }
    if(it._t!=='site'){
 var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
-  var preview=el('a','btn primary',itemState(it)==='preview_sent'?'فتح المعاينة المرسلة':'فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+encodeURIComponent(previewTable);preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var storyReviewPackage=storyReviewPackageOf(it);var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{if(shouldRecordPreview(it))await recordPreviewSent(it);if(storyReviewPackage){stageStoryReview(it,storyReviewPackage);popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261102-unified-reader-preview-4'}else popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
+  var preview=el('a','btn primary',itemState(it)==='preview_sent'?'فتح المعاينة المرسلة':'فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+encodeURIComponent(previewTable);preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}var storyReviewPackage=await audioReviewPackageOf(it);try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{if(shouldRecordPreview(it))await recordPreviewSent(it);if(storyReviewPackage){stageStoryReview(it,storyReviewPackage);popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261106-shared-october-reader-preview-2'}else if(isOctoberLegacyRecord(it)){throw new Error('تعذر العثور على حزمة الصوت الموحدة لهذه الحكاية؛ لم أفتح صفحة المعاينة القديمة حتى لا تُتجاوز أدوات مراجعة الصوت.')}else popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
   var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
   var summary=el('summary','','بيانات القارئ والحكاية');summary.style.cssText='cursor:pointer;font-weight:800;min-height:38px';data.appendChild(summary);
   var close=el('button','btn ghost','× إغلاق البيانات');close.type='button';close.style.margin='10px 0';close.addEventListener('click',function(){data.open=false});data.appendChild(close);
   var readerData=el('div','reader-submission-data');readerData.style.cssText='display:grid;gap:10px;margin-top:8px';
   function dataLine(label,value,pre){var line=el('div','reader-data-line');line.style.cssText='border-top:1px solid var(--line,#31505a);padding:9px 0';line.appendChild(el('b','',label));var val=el(pre?'pre':'p','',String(value||'غير مسجل'));val.style.cssText=pre?'white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin:6px 0 0':'margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere';line.appendChild(val);readerData.appendChild(line)}
-  dataLine('عنوان الحكاية',it.title);dataLine('صاحب الاقتراح / الراوي',it.student_name||it.narrator_name);dataLine('الصف',it.grade||it.narrator_grade);dataLine('النص الذي وصل',it.original_body||it.body,true);dataLine('المصادر التي أرسلها القارئ',it.sources,true);dataLine('تاريخ الإرسال',it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'غير مسجل');dataLine('موافقة ولي الأمر',it.consent===true?'مسجلة':it.consent===false?'غير مسجلة':'غير محددة');
+  dataLine('عنوان الحكاية',it.title);dataLine('صاحب الاقتراح / الراوي',it.student_name||it.narrator_name);dataLine('الصف',it.grade||it.narrator_grade);var revisionRows=it.story_meta&&Array.isArray(it.story_meta.revision_history)?it.story_meta.revision_history:[];dataLine('سجل التغييرات',revisionRows.length?revisionRows.map(function(row){return String(row.saved_at||'')+' | '+String(row.source||'تعديل')+' | '+(Array.isArray(row.changes)?row.changes.map(function(change){return change.field}).join('، '):'')+(row.previous_ai_package_raw?' | نسخة AI سابقة محفوظة':'')}).join('\n'):'لا توجد تغييرات مسجلة',true);dataLine('النص الذي وصل',it.original_body||it.body,true);dataLine('المصادر التي أرسلها القارئ',it.sources,true);dataLine('تاريخ الإرسال',it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'غير مسجل');dataLine('موافقة ولي الأمر',it.consent===true?'مسجلة':it.consent===false?'غير مسجلة':'غير محددة');
   data.appendChild(readerData);
   var editDetails=document.createElement('details');editDetails.style.cssText='border-top:1px solid var(--line,#31505a);margin-top:12px;padding-top:10px';
   editDetails.appendChild(el('summary','','فتح أدوات المراجعة والتحرير'));var editor=el('div','pbody');editor.appendChild(card(it));editDetails.appendChild(editor);data.appendChild(editDetails);

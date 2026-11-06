@@ -6,6 +6,7 @@ on:
     paths:
       - 'scripts/review_egyptian_dialect.py'
       - 'tests/test_review_egyptian_dialect.py'
+      - 'rebuild/october-audio-packages/**'
       - '.github/workflows/egyptian-dialect-review.yml'
       - 'stories/**/story.json'
       - 'stories/**/audio-pronunciation.json'
@@ -31,7 +32,7 @@ jobs:
         run: python -m py_compile scripts/review_egyptian_dialect.py
       - name: Run focused tests
         run: python -m unittest discover -s tests -p 'test_review_egyptian_dialect.py' -v
-      - name: Review every eligible non-October Arabic story (read-only)
+      - name: Review all eligible Arabic story packages, including October audio packages (read-only)
         run: python scripts/review_egyptian_dialect.py --all-stories > "$RUNNER_TEMP/egyptian-dialect-review.json"
 
       - name: Print read-only all-story dialect report

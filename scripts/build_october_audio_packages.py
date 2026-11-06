@@ -7,9 +7,9 @@ block's en/fr/it/de text the same way the pages do: data-i18n keys from i18n.js 
 i18n-extra.js, otherwise assets/shared/story-body-i18n.js (translations + germanStoryText).
 
 Read-only for the site. No TTS, no network, no Supabase. Writes only:
-  rebuild/october-audio-packages/<story>/story.json            (KHALEDOON_STORY, five languages, the
+  stories/october/<story>/story.json            (KHALEDOON_STORY, five languages, the
                                                                same shape generate_story_audio.py reads)
-  rebuild/october-audio-packages/<story>/audio-readiness.json  (ready only if every block has a clean
+  stories/october/<story>/audio-readiness.json  (ready only if every block has a clean
                                                                text in all 5 languages)
   docs/october-audio-packages-report.{txt,json}
 Narrator reads everything (Karma is not invented; mark Karma blocks by hand later).
@@ -28,6 +28,7 @@ import argparse
 import json
 import re
 import subprocess
+import shutil
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -274,11 +275,13 @@ def main(argv=None):
         package, readiness, report = build_story(d, ui, trans, german)
         reports.append(report)
         if not args.no_write:
-            out = root / "rebuild/october-audio-packages" / d.name
+            out = root / "stories/october" / d.name
             out.mkdir(parents=True, exist_ok=True)
             (out / "story.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             (out / "audio-readiness.json").write_text(json.dumps(readiness, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            (out / "story.draft.json").unlink(missing_ok=True)  # superseded by story.json
+            approved_audio_text = root / "rebuild" / "october-audio-packages" / d.name / "audio-pronunciation.json"
+            if approved_audio_text.is_file():
+                shutil.copy2(approved_audio_text, out / "audio-pronunciation.json")
     lines = ["body maps: %d translation keys, %d german-only keys" % (len(trans), len(german))]
     if warnings:
         lines.append("WARNINGS (%d):" % len(warnings))

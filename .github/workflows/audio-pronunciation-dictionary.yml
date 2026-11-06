@@ -1,0 +1,37 @@
+name: Arabic pronunciation dictionary and admin review tests
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/arabic_pronunciation.py'
+      - 'scripts/test_arabic_pronunciation.py'
+      - 'khaledoon/admin.html'
+      - 'khaledoon/assets/audio-text-review.js'
+      - 'tests/audio-text-review.test.cjs'
+      - 'tests/admin-speech-review-ui.test.cjs'
+      - 'audio/pronunciation/**'
+      - 'docs/audio-review-workflow.md'
+      - '.github/workflows/audio-pronunciation-dictionary.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out pull request
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Run isolated pronunciation dictionary tests
+        run: python -m unittest discover -s scripts -p 'test_arabic_pronunciation.py' -v
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run browser review helper and admin UI tests
+        run: node --test tests/audio-text-review.test.cjs tests/admin-speech-review-ui.test.cjs

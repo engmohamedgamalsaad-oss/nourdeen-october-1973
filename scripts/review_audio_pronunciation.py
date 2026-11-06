@@ -174,11 +174,17 @@ def review_story_audio(
 ) -> dict[str, Any]:
     story_path = story_path.resolve()
     relative = story_path.relative_to(ROOT)
-    if story_path.name != "story.json" or len(relative.parts) != 4 or relative.parts[0] != "stories":
-        raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
-    section = relative.parts[1]
-    if section == "october":
-        raise ValueError("October is excluded from audio review.")
+    is_published_story = len(relative.parts) == 4 and relative.parts[0] == "stories"
+    is_october_audio_package = (
+        len(relative.parts) == 4
+        and relative.parts[:2] == ("rebuild", "october-audio-packages")
+    )
+    if story_path.name != "story.json" or not (is_published_story or is_october_audio_package):
+        raise ValueError(
+            "Expected stories/<section>/<id>/story.json or "
+            "rebuild/october-audio-packages/<id>/story.json, got " + str(relative)
+        )
+    section = "october" if is_october_audio_package else relative.parts[1]
     package = read_json(story_path)
     slug = str(package.get("slug") or "").strip()
     if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:

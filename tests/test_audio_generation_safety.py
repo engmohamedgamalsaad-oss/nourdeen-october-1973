@@ -111,21 +111,28 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
-    def test_all_story_plan_skips_october_and_never_writes(self) -> None:
+    def test_all_story_plan_includes_october_and_never_writes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            story = self.make_story(root)
-            self.make_story(root, section="october", story_id="002")
+            self.make_story(root)
+            october = self.make_story(root, section="october", story_id="002")
+            self.write_json(october.parent / "audio-readiness.json", {
+                "format": audio.OCTOBER_READINESS_FORMAT,
+                "story": "sample-story",
+                "ready": True,
+            })
+            self.write_approved_audio_review(october)
             staging = root / ".audio-staging"
             with patch.object(audio, "ROOT", root):
                 report = audio.inspect_all_generation_plans(root, staging)
             self.assertEqual(report["published_non_october_stories"], 1)
-            self.assertEqual(report["october_stories_skipped"], 1)
+            self.assertEqual(report["october_audio_packages"], 1)
+            self.assertEqual(report["october_audio_packages_blocked"], 0)
+            self.assertEqual(report["october_stories_skipped"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
-            self.assertEqual(report["fish_segments_to_generate"], 2)
+            self.assertEqual(report["fish_segments_to_generate"], 4)
             self.assertFalse(staging.exists())
-
     def test_unapproved_arabic_rewrite_is_ignored(self) -> None:
         overrides = audio.approved_pronunciation_blocks({
             "story": "sample-story",
@@ -469,6 +476,18 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(set(plan["languages"]), {"ar", "en"})
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse((root / ".audio-staging").exists())
+
+    def test_all_stories_workflow_supports_preflight_without_tts_approval(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        workflow = (root / ".github" / "workflows" / "story-audio-all-stories-staging.yml").read_text(encoding="utf-8")
+        jobs = workflow.split("jobs:", 1)[1].split("steps:", 1)[0]
+        self.assertNotIn("if: inputs.confirm_fish_audio_request == 'yes'", jobs)
+        self.assertIn("python scripts/generate_story_audio.py --plan-all", workflow)
+        self.assertIn("if: inputs.confirm_fish_audio_request != 'yes'", workflow)
+        generation = workflow.split("- name: Generate all five languages into isolated staging", 1)[1]
+        self.assertIn("if: inputs.confirm_fish_audio_request == 'yes'", generation.split("- name: Record preflight-only completion", 1)[0])
+        self.assertIn("--generate-all --allow-fish-audio", generation.split("- name: Record preflight-only completion", 1)[0])
+
 
 if __name__ == "__main__":
     unittest.main()

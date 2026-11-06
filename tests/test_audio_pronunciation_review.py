@@ -334,5 +334,44 @@ class AudioPronunciationReviewTests(unittest.TestCase):
             self.assertEqual(report["reports"][0]["status"], "audio_hash_mismatch")
 
 
+    def test_october_audio_package_uses_the_shared_read_only_asr_review(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story_dir = root / "stories" / "october" / "001"
+            audio_dir = root / "assets" / "audio" / "october" / "sample" / "ar"
+            audio_dir.mkdir(parents=True)
+            story_path = story_dir / "story.json"
+            self.write_json(story_path, {
+                "format": "KHALEDOON_STORY",
+                "section": "october",
+                "slug": "sample",
+                "i18n": {"ar": {"blocks": [
+                    {"speaker": "narrator", "text": "رجال البحر."}
+                ]}},
+            })
+            audio_bytes = b"october-audio"
+            (audio_dir / "000.mp3").write_bytes(audio_bytes)
+            self.write_json(audio_dir / "manifest.json", {
+                "story": "sample", "section": "october", "language": "ar",
+                "segments": [{
+                    "block_index": 0, "chunk_index": 0, "speaker": "narrator",
+                    "src": "000.mp3", "text": "رجال البحر.",
+                    "audio_sha256": hashlib.sha256(audio_bytes).hexdigest(),
+                }],
+            })
+            fake = FakeModel([
+                {"word": "رجال", "start": 0.1, "end": 0.3, "probability": 0.98},
+                {"word": "البحر.", "start": 0.4, "end": 0.7, "probability": 0.98},
+            ])
+            with patch.object(reviewer, "ROOT", root):
+                report = reviewer.review_story_audio(
+                    story_path, "ar", root / "assets" / "audio", fake
+                )
+            self.assertEqual(fake.calls, 1)
+            self.assertEqual(report["section"], "october")
+            self.assertEqual(report["summary"]["likely_match"], 1)
+            self.assertEqual(report["tts_requests"], 0)
+
+
 if __name__ == "__main__":
     unittest.main()

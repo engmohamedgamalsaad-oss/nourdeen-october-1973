@@ -5,7 +5,6 @@ import vm from 'node:vm';
 
 const html = await readFile(new URL('../package-review.html', import.meta.url), 'utf8');
 const readerHtml = await readFile(new URL('../reader.html', import.meta.url), 'utf8');
-const legacyHtml = await readFile(new URL('../package-review-legacy.html', import.meta.url), 'utf8');
 const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)].map(m => m[1]);
 
 test('package review page has one syntactically valid local script', () => {
@@ -38,10 +37,9 @@ test('package review hands canonical packages to the real five-language reader',
   assert.match(readerHtml, /id="quiz-section"/);
 });
 
-test('October packages stay in the isolated legacy preview while non-October packages use the shared reader', () => {
-  assert.match(scripts[0], /story\.section==='october'\|\|story\.section_key==='october'/);
-  assert.match(scripts[0], /package-review-legacy\.html\?draft=1/);
+test('October and non-October packages use the same canonical reader', () => {
+  assert.doesNotMatch(scripts[0], /package-review-legacy\.html/);
+  assert.match(scripts[0], /new URL\('reader\.html'/);
   assert.match(scripts[0], /readerUrl\.searchParams\.set\('draft','1'\)/);
-  assert.match(legacyHtml, /parsed\.section!=='october'/);
-  assert.match(legacyHtml, /preview/);
+  assert.match(readerHtml, /id="blocks"/);
 });

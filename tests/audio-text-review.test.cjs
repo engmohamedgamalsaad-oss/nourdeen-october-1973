@@ -63,6 +63,104 @@ test('rejects missing, duplicate, or altered original segments', () => {
   assert.ok(result.errors.some(error => error.includes('غير موجود في التقرير')));
 });
 
+test('adds exact Arabic dictionary suggestions to the existing review report without approval', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{
+      id: 'studies',
+      match: 'وتذكر الدراسات',
+      spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ'
+    }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const arabic = outcome.report.segments.find(item => item.lang === 'ar' && item.block_index === 0);
+  assert.equal(arabic.original_text, 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.');
+  assert.equal(arabic.proposed_audio_text, 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
+  assert.equal(arabic.issue_type, 'pronunciation');
+  assert.equal(arabic.needs_human_review, true);
+  assert.equal(arabic.suggestion_source, 'ar-EG-pronunciation-dictionary');
+  assert.deepEqual(outcome.applied, [{ lang: 'ar', block_index: 0, entry_id: 'studies' }]);
+  assert.equal(outcome.requires_human_approval, true);
+  assert.equal(outcome.applied_to_story, false);
+  assert.equal(outcome.report.segments.find(item => item.lang === 'en' && item.block_index === 0).proposed_audio_text, 'First sentence.');
+});
+
+test('exports a dictionary candidate only when the administrator explicitly approves it', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{
+      id: 'studies',
+      match: 'وتذكر الدراسات',
+      spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ'
+    }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const approved = review.buildApprovedAudioPronunciation(outcome.report, pkg, ['ar:0']);
+  const rejected = review.buildApprovedAudioPronunciation(outcome.report, pkg, []);
+  assert.equal(approved.approved_audio_text_rewrites.ar['0'], 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
+  assert.equal(approved.blocks['0'], 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
+  assert.equal(rejected.blocks['0'], undefined);
+  assert.equal(rejected.review.segments.find(item => item.lang === 'ar' && item.block_index === 0).decision, 'approved_original');
+});
+
+test('dictionary does not match partial words or overwrite an existing human review suggestion', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'وتذكرت الدراسات المنشورة.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.lang === 'ar' && item.block_index === 0 ? 'صياغة راجعها الإنسان.' : item.original_text,
+    issue_type: item.lang === 'ar' && item.block_index === 0 ? 'heavy_sentence' : 'none',
+    reason: item.lang === 'ar' && item.block_index === 0 ? 'اقتراح سابق.' : '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{ id: 'studies', match: 'وتذكر الدراسات', spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ' }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const arabic = outcome.report.segments.find(item => item.lang === 'ar' && item.block_index === 0);
+  assert.equal(arabic.proposed_audio_text, 'صياغة راجعها الإنسان.');
+  assert.equal(outcome.applied.length, 0);
+});
+
+test('rejects dictionary rules that change Arabic letters', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{ id: 'unsafe', match: 'مركز', spoken: 'مراكز', before: 'في' }]
+  };
+  assert.throws(() => review.applyDictionarySuggestions(report, pkg, dictionary), /قاعدة قاموس غير آمنة/);
+});
+
 test('exports only the suggestions explicitly approved by the administrator', () => {
   const pkg = packageFixture();
   const segments = review.collectSegments(pkg).map(item => ({
@@ -124,8 +222,19 @@ test('rejects a model report that attempts to waive human review', () => {
   assert.ok(result.errors.some(error => error.includes('المراجعة البشرية مطلوبة دائمًا')));
 });
 
-test('refuses October and rejects invalid review JSON', () => {
-  assert.throws(() => review.collectSegments(packageFixture('october')), /أكتوبر/);
-  const result = review.validateResult('not json', packageFixture());
-  assert.equal(result.ok, false);
+test('uses the same five-language audio text review for October packages', () => {
+  const pkg = packageFixture('october');
+  const items = review.collectSegments(pkg);
+  assert.equal(items.length, 10);
+  const segments = items.map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const result = review.validateResult({ format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments }, pkg);
+  assert.equal(result.ok, true);
+  const invalid = review.validateResult('not json', pkg);
+  assert.equal(invalid.ok, false);
 });

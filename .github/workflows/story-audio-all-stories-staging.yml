@@ -1,0 +1,102 @@
+name: all-published-stories-audio-staging
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_fish_audio_request:
+        description: "اختر yes للموافقة الصريحة على طلبات Fish Audio العربية المدفوعة لكل الحكايات"
+        required: true
+        type: choice
+        options:
+          - "no"
+          - "yes"
+        default: "no"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: khaledoon-all-stories-audio-staging
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - name: Check out the selected branch
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.ref }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js for October source extraction
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pinned audio generation dependency
+        run: python -m pip install --disable-pip-version-check "edge-tts==7.2.0"
+
+      - name: Build read-only October story packages
+        run: python scripts/build_october_audio_packages.py
+
+      - name: Preflight every published story and all five languages
+        run: |
+          set -euo pipefail
+          python scripts/generate_story_audio.py --plan-all | tee plan-all.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("plan-all.json").read_text(encoding="utf-8"))
+          problems = []
+          if report.get("published_stories", 0) < 1:
+              problems.append("No published stories were found for audio generation")
+          if report.get("blocked_stories", 0):
+              problems.append(f"{report['blocked_stories']} stories are blocked by missing human approvals/readiness")
+          if report.get("stories_with_errors", 0):
+              problems.append(f"{report['stories_with_errors']} stories have package or metadata errors")
+          if report.get("tts_requests") != 0 or report.get("files_modified") != 0:
+              problems.append("Preflight unexpectedly made TTS requests or modified files")
+          if problems:
+              raise SystemExit("AUDIO PREFLIGHT FAILED:\n- " + "\n- ".join(problems))
+          print(
+              f"Preflight complete: {report['published_stories']} published stories, "
+              f"{report['segments_to_generate']} segments, "
+              f"{report['fish_segments_to_generate']} Arabic Fish Audio segments."
+          )
+          PY
+
+      - name: Generate all five languages into isolated staging
+        if: inputs.confirm_fish_audio_request == 'yes'
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+        run: python scripts/generate_story_audio.py --generate-all --allow-fish-audio
+
+      - name: Record preflight-only completion
+        if: inputs.confirm_fish_audio_request != 'yes'
+        run: echo "Preflight completed without TTS requests; no audio was generated."
+
+      - name: Upload all generated MP3 files and manifests for review only
+        if: always() && inputs.confirm_fish_audio_request == 'yes'
+        uses: actions/upload-artifact@v4
+        with:
+          name: khaledoon-all-stories-audio-staging
+          path: .audio-staging/
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Upload preflight report
+        if: always() && hashFiles('plan-all.json') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: khaledoon-all-stories-audio-preflight
+          path: plan-all.json
+          if-no-files-found: error
+          retention-days: 14

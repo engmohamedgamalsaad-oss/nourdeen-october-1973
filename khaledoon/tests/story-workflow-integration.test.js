@@ -13,6 +13,7 @@ var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var storyPublisher = fs.readFileSync('rebuild/publish-story.mjs', 'utf8');
 var audioTextReviewer = fs.readFileSync('khaledoon/assets/audio-text-review.js', 'utf8');
 var audioGenerator = fs.readFileSync('scripts/generate_story_audio.py', 'utf8');
+var readerReviewActions = fs.readFileSync('rebuild/reader-review-actions.js', 'utf8');
 var passed = 0;
 function test(name, fn) {
   try { fn(); passed++; console.log('ok - ' + name); }
@@ -54,13 +55,18 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("This story has moved."));
   assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
 });
-test('new non-October stories require an admin-approved five-language audio-text review', function () {
-  assert.ok(storyPublisher.includes("story.section !== 'october' && existingAt < 0"), 'only newly created non-October stories receive the mandatory review flag');
+test('new stories in every section require an admin-approved five-language audio-text review', function () {
+  assert.ok(storyPublisher.includes("let audioTextReviewRequired = existingAt < 0"), 'new stories in every section receive the mandatory review flag');
   assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
   assert.ok(admin.includes("link.download='audio-pronunciation.json'"), 'the admin must download the approval file beside story.json');
+  assert.ok(admin.includes('async function audioReviewPackageOf(it)'), 'October legacy records must load their audio source package from the canonical story folder');
+  assert.ok(admin.includes("../rebuild/october-audio-packages/'+storyId+'/story.json"), 'October review must load the committed source package used by the live admin');
+  assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
+  assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
+  assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
   assert.ok(audioGenerator.includes('validate_required_audio_text_review'), 'the generator must validate the approval record');
-  assert.ok(audioGenerator.includes('new story is blocked until the admin-approved five-language'), 'new-story generation must stop when the approval file is missing');
+  assert.ok(audioGenerator.includes('class AudioTextApprovalRequired') && audioGenerator.includes('review_required = True'), 'October packages must use the shared five-language human approval gate');
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
@@ -610,8 +616,9 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
-  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261102-unified-reader-preview-3'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
+  assert.ok(admin.includes("if(storyOnlyDraft)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'story-only drafts must use the full-package reviewer');
+  assert.ok(admin.includes("else aiPreviewPopup.location.href='preview.html?story=1&submission='"), 'legacy imports must retain the compatibility preview');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
