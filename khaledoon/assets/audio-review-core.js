@@ -104,6 +104,7 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
 
 function boundedText(value, max) { return String(value == null ? '' : value).slice(0, max); }
 function finiteNumber(value) {
+  if (value == null || value === '') return null;
   var n = Number(value);
   return Number.isFinite(n) ? n : null;
 }
