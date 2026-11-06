@@ -1,0 +1,132 @@
+from __future__ import annotations
+
+import asyncio
+import json
+import tempfile
+import unittest
+from pathlib import Path
+from unittest.mock import AsyncMock, patch
+
+from scripts import generate_story_audio as audio
+
+
+class OctoberAudioPackageTests(unittest.TestCase):
+    def write_json(self, path: Path, value: dict) -> None:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
+
+    def make_package(self, root: Path, story_id: str = "001", ready: bool = True) -> Path:
+        directory = root / "rebuild" / "october-audio-packages" / story_id
+        self.write_json(directory / "story.json", {
+            "format": "KHALEDOON_STORY",
+            "section": "october",
+            "slug": story_id,
+            "i18n": {
+                lang: {"blocks": [
+                    {"type": "heading", "speaker": "narrator", "text": f"Title {lang}"},
+                    {"type": "paragraph", "speaker": "narrator", "text": f"Body {lang}"},
+                ]}
+                for lang in audio.LANGUAGES
+            },
+        })
+        self.write_json(directory / "audio-readiness.json", {
+            "format": audio.OCTOBER_READINESS_FORMAT,
+            "story": story_id,
+            "ready": ready,
+        })
+        return directory / "story.json"
+
+    def test_ready_package_is_planned_for_all_five_languages_without_writes(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root)
+            staging = root / ".audio-staging"
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(story, staging)
+            self.assertEqual(set(plan["languages"]), set(audio.LANGUAGES))
+            self.assertEqual(plan["segments_to_generate"], 10)
+            self.assertEqual(plan["fish_segments_to_generate"], 2)
+            self.assertFalse(staging.exists())
+
+    def test_not_ready_package_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root, ready=False)
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(audio.OctoberPackageNotReady):
+                    audio.inspect_generation_plan(story, root / ".audio-staging")
+
+    def test_missing_readiness_file_is_blocked(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root)
+            (story.parent / "audio-readiness.json").unlink()
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(audio.OctoberPackageNotReady):
+                    audio.inspect_generation_plan(story, root / ".audio-staging")
+
+    def test_plan_all_reports_october_packages_and_blocked_ones(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.make_package(root, "001")
+            self.make_package(root, "002", ready=False)
+            staging = root / ".audio-staging"
+            with patch.object(audio, "ROOT", root):
+                report = audio.inspect_all_generation_plans(root, staging)
+            self.assertEqual(report["october_audio_packages"], 2)
+            self.assertEqual(report["october_audio_packages_blocked"], 1)
+            self.assertEqual(report["stories_with_errors"], 0)
+            self.assertEqual(report["tts_requests"], 0)
+            self.assertEqual(report["segments_to_generate"], 10)
+            self.assertFalse(staging.exists())
+
+    def test_generation_needs_separate_october_approval_before_any_tts(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root)
+            staging = root / ".audio-staging"
+            fish, edge = AsyncMock(), AsyncMock()
+            with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
+                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
+                with self.assertRaises(RuntimeError):
+                    asyncio.run(audio.generate_story(story, dry_run=False, allow_fish_audio=True))
+            fish.assert_not_awaited()
+            edge.assert_not_awaited()
+            self.assertFalse(staging.exists())
+
+    def test_dry_run_of_package_makes_no_requests_or_files(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root)
+            staging = root / ".audio-staging"
+            fish, edge = AsyncMock(), AsyncMock()
+            with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
+                 patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
+                self.assertTrue(asyncio.run(audio.generate_story(story, dry_run=True)))
+            fish.assert_not_awaited()
+            edge.assert_not_awaited()
+            self.assertFalse(staging.exists())
+
+    def test_published_october_pages_remain_protected(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            page = root / "stories" / "october" / "001" / "story.json"
+            self.write_json(page, {"format": "KHALEDOON_STORY", "section": "october", "slug": "001", "i18n": {}})
+            with patch.object(audio, "ROOT", root):
+                with self.assertRaises(ValueError):
+                    audio.inspect_generation_plan(page, root / ".audio-staging")
+                self.assertFalse(asyncio.run(audio.generate_story(page, dry_run=True)))
+
+    def test_package_staging_path_is_october_slug_language(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_package(root)
+            with patch.object(audio, "ROOT", root):
+                relative, section, is_package = audio.locate_story(story)
+            self.assertEqual(section, "october")
+            self.assertTrue(is_package)
+            self.assertEqual(relative.parts[:2], audio.OCTOBER_PACKAGES_DIR)
+
+
+if __name__ == "__main__":
+    unittest.main()
