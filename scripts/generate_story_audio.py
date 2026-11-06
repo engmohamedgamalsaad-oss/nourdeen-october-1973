@@ -860,13 +860,13 @@ async def main() -> int:
         help=(
             "Explicit story.json path (stories/<section>/<id>/story.json or "
             "rebuild/october-audio-packages/<id>/story.json). Omit to build a read-only "
-            "generation plan for all published non-October stories and all October audio packages."
+            "generation plan for all published stories and extracted October audio packages."
         ),
     )
     parser.add_argument(
         "--plan-all",
         action="store_true",
-        help="Explicitly build a no-write generation plan for every published non-October story and October audio package.",
+        help="Explicitly build a no-write generation plan for every published story and extracted October audio package.",
     )
     parser.add_argument(
         "--generate",
