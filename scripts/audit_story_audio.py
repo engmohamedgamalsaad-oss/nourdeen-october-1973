@@ -151,6 +151,7 @@ def audit(root: Path) -> dict[str, Any]:
     candidates = list(stories_root.glob("*/*/story.json"))
     candidates.extend(october_packages.glob("*/story.json"))
     published_count = 0
+    published_non_october_count = 0
     october_count = 0
     for story_path in sorted(set(candidates)):
         relative = story_path.relative_to(root)
@@ -160,6 +161,8 @@ def audit(root: Path) -> dict[str, Any]:
                 if not data_path.is_file() or read_object(data_path).get("published") is not True:
                     continue
                 published_count += 1
+                if relative.parts[1] != "october":
+                    published_non_october_count += 1
             elif relative.parts[:2] == ("rebuild", "october-audio-packages"):
                 readiness_path = story_path.with_name("audio-readiness.json")
                 readiness = read_object(readiness_path) if readiness_path.is_file() else {}
@@ -183,7 +186,8 @@ def audit(root: Path) -> dict[str, Any]:
         "tts_requests": 0,
         "files_modified": 0,
         "october_stories_skipped": 0,
-        "published_non_october_stories": published_count,
+        "published_stories": published_count,
+        "published_non_october_stories": published_non_october_count,
         "october_audio_packages": october_count,
         "stories_included": len(records),
         "complete_stories": sum(item.get("status") == "complete" for item in records),
