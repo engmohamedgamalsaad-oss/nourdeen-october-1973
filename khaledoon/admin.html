@@ -408,7 +408,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
    if(table==='submitted_stories'&&storyPackage.section!=='october')throw new Error('سجل أكتوبر لا يمكنه اعتماد حكاية من قسم آخر.');
    if(table!=='submitted_stories')payload.section=storyPackage.section;
    payload.title=storyPackage.i18n.ar.title;payload.subtitle=storyPackage.i18n.ar.subtitle;
-   payload.body=storyPackage.i18n.ar.blocks.filter(function(b){return b.speaker==='narrator'}).map(function(b){return b.text}).join('\\n\\n');
+   payload.body=storyPackage.i18n.ar.blocks.filter(function(b){return b.speaker==='narrator'}).map(function(b){return b.text}).join('\n\n');
    payload.figure_name=storyPackage.i18n.ar.figure_name||storyPackage.i18n.ar.person||storyPackage.i18n.ar.title;payload.color=storyPackage.design.accent;
    meta.original_body=storyPackage.original_body;meta.story_package=storyPackage;meta.story_only_draft=true;meta.story_review_state='published';delete meta.v2_package;delete meta.v2_only_draft;delete meta.v2_review_state;
   }
@@ -665,7 +665,7 @@ function makePreviewDraft(statusForPreview){
     var tx=String(p.text).trim();
     var legacy=tx.length>2500||tx.indexOf('البرومبت الرئيسي النهائي')>=0||tx.indexOf('بوابة الجودة الإلزامية للحكاية — إصدار 2026-10-21-هـ')>=0||tx.indexOf('عقد التنفيذ التلقائي لكل حكاية جديدة')>=0;
     return !legacy&&workflowPrompt.indexOf(tx)<0&&selectedAIInstructions.indexOf(tx)<0;
-  }).map(function(p){return '--- '+String(p.name).trim()+' ---\\n'+String(p.text).trim()}).join('\\n\\n');
+  }).map(function(p){return '--- '+String(p.name).trim()+' ---\\n'+String(p.text).trim()}).join('\n\n');
   if(managedExtras){L.push('');L.push('================ إضافات قصيرة غير مكررة ================');L.push(managedExtras);}
   L.push('');
   L.push('=== بيانات الحكاية ===');
@@ -1486,9 +1486,9 @@ async function deleteHiddenStory(s,btn){
 /* إنشاء سجل إدارة مرتبط بصفحة منشورة عند الحاجة فقط؛ لا يغيّر ملفات الموقع أو الفهرس. */
 async function ensurePublishedStoryAdminRecord(story){
  var storyId=String(story&&story.id||'').padStart(3,'0');
- if(!/^\\d{3}$/.test(storyId))throw new Error('رقم الحكاية غير صالح؛ لم يتم إنشاء سجل.');
+ if(!/^\d{3}$/.test(storyId))throw new Error('رقم الحكاية غير صالح؛ لم يتم إنشاء سجل.');
  if(String(story.section||'')==='october')throw new Error('قسم أكتوبر له مسار تحرير وصوت مستقل، ولم أغيّر ملفات أو حزم هذا القسم.');
- var storyPath=String(story.path||'').replace(/\\/?$/,'/')+'story.json';
+ var storyPath=String(story.path||'').replace(/\/+$/,'')+'/'+'story.json';
  var sourceResponse=await fetch('../'+storyPath,{cache:'no-store'});
  if(!sourceResponse.ok)throw new Error('تعذر تحميل حزمة الحكاية المنشورة ('+sourceResponse.status+').');
  var pkg=await sourceResponse.json(),ar=pkg&&pkg.i18n&&pkg.i18n.ar;
@@ -1501,7 +1501,7 @@ async function ensurePublishedStoryAdminRecord(story){
   if(!hasPackage){
    if(existing.status!=='published')throw new Error('يوجد سجل مراجعة مرتبط بالحكاية لكنه يحتوي تعديلات غير منشورة ولا توجد له حزمة موحدة؛ لم أستبدل بياناته.');
    existingMeta.story_package=pkg;existingMeta.story_only_draft=true;existingMeta.story_review_state='published';
-   existingMeta.preview_review=Object.assign({},existingMeta.preview_review||{},{static_story_id:storyId,static_story_path:storyPath.replace(/story\\.json$/,'index.html')});
+   existingMeta.preview_review=Object.assign({},existingMeta.preview_review||{},{static_story_id:storyId,static_story_path:storyPath.replace(/story\.json$/,'index.html')});
    var attached=await rest('khaledoon_submissions?id=eq.'+encodeURIComponent(existing.id),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({story_meta:existingMeta})});
    if(!attached.ok)throw new Error('تعذر إرفاق الحزمة المنشورة بسجلها الإداري ('+attached.status+').');
    var attachedRows=await attached.json();if(!attachedRows.length)throw new Error('لم يؤكد الخادم تحديث سجل الحكاية.');
@@ -1510,9 +1510,9 @@ async function ensurePublishedStoryAdminRecord(story){
   return existing;
  }
  var narratorBlocks=ar.blocks.filter(function(block){return block&&block.speaker==='narrator'&&typeof block.text==='string'});
- var body=narratorBlocks.map(function(block){return block.text}).join('\\n\\n');
+ var body=narratorBlocks.map(function(block){return block.text}).join('\n\n');
  if(body.trim().length<50)throw new Error('نص الراوي في الحزمة أقصر من الحد المطلوب؛ لم أنشئ سجلًا.');
- var sourceText=Array.isArray(pkg.sources)?pkg.sources.map(function(source){return typeof source==='string'?source:(source.title||source.name||source.url||JSON.stringify(source))}).join('\\n'):String(pkg.sources||'');
+ var sourceText=Array.isArray(pkg.sources)?pkg.sources.map(function(source){return typeof source==='string'?source:(source.title||source.name||source.url||JSON.stringify(source))}).join('\n'):String(pkg.sources||'');
  var row={
   section:pkg.section,stage:null,school_grade:null,subject:null,
   figure_name:String(ar.figure_name||ar.person||story.person||ar.title||story.title).slice(0,120),
@@ -1526,7 +1526,7 @@ async function ensurePublishedStoryAdminRecord(story){
   consent:true,status:'published',translations:pkg.i18n,
   story_meta:{
    story_package:pkg,story_only_draft:true,story_review_state:'published',
-   preview_review:{decision:'published',static_story_id:storyId,static_story_path:storyPath.replace(/story\\.json$/,'index.html'),note:'سجل إداري مرتبط بحكاية منشورة موجودة؛ لا يمثل تعديلًا على النسخة المنشورة.'}
+   preview_review:{decision:'published',static_story_id:storyId,static_story_path:storyPath.replace(/story\.json$/,'index.html'),note:'سجل إداري مرتبط بحكاية منشورة موجودة؛ لا يمثل تعديلًا على النسخة المنشورة.'}
   }
  };
  var saved=await rest('khaledoon_submissions',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(row)});
