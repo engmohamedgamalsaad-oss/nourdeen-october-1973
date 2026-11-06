@@ -16,6 +16,9 @@
     'details.kh-acc>.kh-acc-body{padding:14px}' +
     'details.kh-acc>.kh-acc-body>:last-child{margin-bottom:0}' +
     '.kh-acc-tools{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}' +
+    'details.kh-acc>summary .kh-acc-title{display:flex;flex-direction:column;min-width:0;flex:1}' +
+    'details.kh-acc>summary .kh-acc-title small{color:var(--muted);font-weight:400;font-size:.8rem}' +
+    'details.kh-acc>summary .kh-acc-count{flex:none;padding:2px 12px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;color:var(--gold)}' +
     '@media(prefers-reduced-motion:reduce){details.kh-acc>summary::after{transition:none}}';
   var st = document.createElement('style');
   st.id = 'kh-acc-style';
@@ -153,11 +156,62 @@
     b.appendChild(note);
   }
 
+  // تفاعلات الحكايات: كل حكاية تصبح زرًا فيه العنوان وإجمالي التفاعلات، وتفتح لتعرض الأعداد التفصيلية.
+  function enhanceReaction(box) {
+    if (box.getAttribute('data-kh-acc')) return;
+    box.setAttribute('data-kh-acc', '1');
+    var head = box.querySelector(':scope > .reaction-review-head'), grid = box.querySelector(':scope > .reaction-count-grid');
+    if (!head || !grid || !box.parentNode) return;
+    var h3 = head.querySelector('h3'), meta = head.querySelector('.reaction-review-meta');
+    var total = 0, nums = grid.querySelectorAll('strong');
+    for (var i = 0; i < nums.length; i++) total += Number(nums[i].textContent) || 0;
+    var d = document.createElement('details');
+    d.className = 'kh-acc kh-react';
+    var s = document.createElement('summary');
+    var t = document.createElement('span');
+    t.className = 'kh-acc-title';
+    t.appendChild(document.createTextNode(h3 ? h3.textContent : ''));
+    if (meta && meta.textContent) { var sm = document.createElement('small'); sm.textContent = meta.textContent; t.appendChild(sm); }
+    s.appendChild(t);
+    var c = document.createElement('span');
+    c.className = 'kh-acc-count';
+    c.textContent = total + ' تفاعل';
+    s.appendChild(c);
+    d.appendChild(s);
+    var b = document.createElement('div');
+    b.className = 'kh-acc-body';
+    b.appendChild(grid);
+    d.appendChild(b);
+    box.parentNode.insertBefore(d, box);
+    box.parentNode.removeChild(box);
+    var list = d.parentNode;
+    if (list && list.id === 'rlist' && !document.getElementById('khReactTools')) {
+      var tools = document.createElement('div');
+      tools.id = 'khReactTools';
+      tools.className = 'kh-acc-tools';
+      [['فتح الكل', true], ['إغلاق الكل', false]].forEach(function (p) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'btn ghost';
+        btn.textContent = p[0];
+        btn.addEventListener('click', function () {
+          var all = list.querySelectorAll('details.kh-react');
+          for (var k = 0; k < all.length; k++) all[k].open = p[1];
+        });
+        tools.appendChild(btn);
+      });
+      list.parentNode.insertBefore(tools, list);
+    }
+  }
+
   function scan(root) {
     if (!root || root.nodeType !== 1) return;
-    if (root.matches && root.matches('article.fcard')) enhanceEditor(root);
+    if (root.matches && root.matches('article.reaction-review-card')) enhanceReaction(root);
+    else if (root.matches && root.matches('article.fcard')) enhanceEditor(root);
     var found = root.querySelectorAll ? root.querySelectorAll('article.fcard:not([data-kh-acc])') : [];
     for (var i = 0; i < found.length; i++) enhanceEditor(found[i]);
+    var rx = root.querySelectorAll ? root.querySelectorAll('article.reaction-review-card:not([data-kh-acc])') : [];
+    for (var j = 0; j < rx.length; j++) enhanceReaction(rx[j]);
     enhanceTools();
   }
 
