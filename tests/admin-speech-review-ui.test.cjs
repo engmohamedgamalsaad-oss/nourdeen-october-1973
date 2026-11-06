@@ -13,7 +13,7 @@ test('admin speech-text reviewer is loaded and inline admin JavaScript parses', 
   assert.match(html, /اقتراحات قاموس النطق العربي/);
   assert.match(html, /\(requireUnifiedStoryPackage\|\|isOctoberLegacyRecord\(it\)\)&&window\.KHAudioTextReview/);
   assert.match(html, /async function audioReviewPackageOf\(it\)/);
-  assert.match(html, /rebuild\/october-audio-packages/);
+  assert.match(html, /stories\/october\//);
   assert.match(html, /المقترح الصوتي — يمكنك تعديله قبل الموافقة/);
   const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   for (const match of scripts) {
