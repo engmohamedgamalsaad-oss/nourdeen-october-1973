@@ -546,15 +546,12 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
 
 
 def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
-    """Build no-write generation plans for every published story and October audio source package."""
+    """Build no-write generation plans for every published story in the canonical tree."""
     stories: list[dict[str, Any]] = []
     october: list[dict[str, Any]] = []
     skipped_october = 0
     for story_path in sorted((root / "stories").glob("*/*/story.json")):
         relative = story_path.relative_to(root)
-        if relative.parts[1] == "october":
-            skipped_october += 1
-            continue
         metadata_path = story_path.with_name("data.json")
         if not metadata_path.is_file():
             continue
@@ -563,19 +560,11 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
                 continue
             plan = inspect_generation_plan(story_path, staging_root)
             plan["path"] = relative.as_posix()
-            stories.append(plan)
-        except (OSError, ValueError, json.JSONDecodeError) as exc:
-            stories.append({"path": relative.as_posix(), "error": str(exc)})
-    for story_path in sorted(root.joinpath(*OCTOBER_PACKAGES_DIR).glob("*/story.json")):
-        relative = story_path.relative_to(root)
-        try:
-            plan = inspect_generation_plan(story_path, staging_root)
-            plan["path"] = relative.as_posix()
-            october.append(plan)
+            (october if relative.parts[1] == "october" else stories).append(plan)
         except (OctoberPackageNotReady, AudioTextApprovalRequired) as exc:
-            october.append({"path": relative.as_posix(), "blocked": str(exc)})
+            (october if relative.parts[1] == "october" else stories).append({"path": relative.as_posix(), "blocked": str(exc)})
         except (OSError, ValueError, json.JSONDecodeError) as exc:
-            october.append({"path": relative.as_posix(), "error": str(exc)})
+            (october if relative.parts[1] == "october" else stories).append({"path": relative.as_posix(), "error": str(exc)})
     everything = stories + october
     return {
         "mode": "read-only-generation-plan",
