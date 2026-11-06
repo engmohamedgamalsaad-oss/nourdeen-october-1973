@@ -99,6 +99,19 @@ class OctoberAudioPackageTests(unittest.TestCase):
             self.assertEqual(report["segments_to_generate"], 10)
             self.assertFalse(staging.exists())
 
+    def test_ready_source_without_human_approval_is_blocked_in_plan_all(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            self.make_package(root, approved=False)
+            with patch.object(audio, "ROOT", root):
+                report = audio.inspect_all_generation_plans(root, root / ".audio-staging")
+            self.assertEqual(report["october_audio_packages"], 1)
+            self.assertEqual(report["october_audio_packages_blocked"], 1)
+            self.assertEqual(report["october_packages"][0]["path"], "rebuild/october-audio-packages/001/story.json")
+            self.assertIn("admin-approved five-language", report["october_packages"][0]["blocked"])
+            self.assertEqual(report["segments_to_generate"], 0)
+            self.assertEqual(report["tts_requests"], 0)
+            self.assertEqual(report["files_modified"], 0)
     def test_generation_uses_the_shared_human_approval_gate_before_any_tts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
