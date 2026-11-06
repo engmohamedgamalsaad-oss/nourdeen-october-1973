@@ -186,3 +186,7 @@ python scripts/arabic_pronunciation.py --input-file /path/to/audio-text.txt
 - الناتج لكل الحكايات واللغات الخمس يبقى في `.audio-staging/` ويرفع كـ Artifact للمراجعة فقط. لا يكتب إلى `assets/audio/` المنشور، ولا يرفع ملفات إلى `main`، ولا ينشر أي حكاية.
 - الأمر المكافئ بعد تجهيز حزم أكتوبر هو `python scripts/generate_story_audio.py --generate-all --allow-fish-audio`. هذا الأمر يجري فحصًا شاملًا ثانيًا قبل أول طلب صوت، ويرفض العمل إذا بقيت أي حكاية منشورة ناقصة أو محجوبة.
 - لا تُشغّل آلية التوليد الآن لمجرد وجودها. تشغيلها يرسل طلبات فعلية إلى خدمات TTS، وقد يستهلك رصيد Fish Audio؛ لا بد من موافقة المالك عند التشغيل اليدوي.
+
+### مسار اعتماد النص الصوتي لحكايات أكتوبر
+
+تُحمّل لوحة الإدارة حزمة أكتوبر من `rebuild/october-audio-packages/<id>/story.json`. بعد مراجعة المقاطع الخمسة اللغات وتصدير ملف `audio-pronunciation.json`، احفظ الملف بجوار الحزمة المصدرية في `rebuild/october-audio-packages/<id>/`. عند تجهيز حزم التوليد، ينسخ `scripts/build_october_audio_packages.py` ملف الاعتماد إلى `stories/october/<id>/` بجوار `story.json` حتى يقرأه المدقق والمولّد من المسار القياسي. لا تعدّل ملفات صفحات أكتوبر المنشورة.
