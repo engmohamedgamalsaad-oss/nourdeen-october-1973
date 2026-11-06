@@ -1,29 +1,116 @@
 body maps: 402 translation keys, 116 german-only keys
+WARNINGS (2):
+  ! 002: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/002/i18n-extra.js: file not found
+  ! 003: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/003/i18n-extra.js: file not found
 == October 001: 55 speakable blocks ==
-  ar: 55/55 translated
-  en: 55/55 translated
-  fr: 55/55 translated
-  it: 55/55 translated
-  de: 55/55 translated
+  ar: 55/55 translated, 0 suspect
+  en: 55/55 translated, 0 suspect
+  fr: 55/55 translated, 0 suspect
+  it: 55/55 translated, 0 suspect
+  de: 55/55 translated, 0 suspect
+  NOT in narration: 17 visible Arabic text pieces
+     <div.author> إعداد وتقديم
+     <strong> نوردين محمد جمال
+     <span s_grade_only> الصف الأول الإعدادي
+     <div.scroll s_scroll> انزل لتبدأ الحكاية ↓
+     <div.kicker> البداية
+     <div.kicker> الطريق إلى الحرب
+     <div.kicker> البحر الأحمر
+     <div.kicker> رجال الضفادع البشرية
+     <div.kicker> الصورة الأكبر
+     <div.lesson-number> ١
+     <div.lesson-number> ٢
+     <div.lesson-number> ٣
+     <div.lesson-number> ٤
+     <div.kicker> نوردين تحكي
+     <a.home-button> ← العودة إلى حكايات أكتوبر
+     <div.kicker> صورة من المعركة البحرية
+     <div.kicker> كيف تُقرأ الخريطة البحرية؟
 == October 002: 55 speakable blocks ==
-  ar: 55/55 translated
-  en: 55/55 translated
-  fr: 55/55 translated
-  it: 55/55 translated
-  de: 55/55 translated
+  ar: 55/55 translated, 0 suspect
+  en: 55/55 translated, 0 suspect
+  fr: 55/55 translated, 0 suspect
+  it: 55/55 translated, 0 suspect
+  de: 55/55 translated, 0 suspect
+  NOT in narration: 22 visible Arabic text pieces
+     <text> مضخة المياه
+     <text> الساتر الترابي
+     <text> قناة السويس
+     <div.author> إعداد وتقديم
+     <strong> كارما محمد جمال
+     <div.scroll s_scroll> انزل لتبدأ الحكاية ↓
+     <div.kicker> المشكلة
+     <div.kicker> الفكرة
+     <b> ١
+     <b> ٢
+     <b> ٣
+     <div.kicker> صاحب الفكرة
+     <div.kicker> ماذا نتعلم؟
+     <div.lesson-number> ١
+     <div.lesson-number> ٢
+     <div.lesson-number> ٣
+     <div.lesson-number> ٤
+     <div.kicker> كارما تحكي
+     <a.home-button> ← العودة إلى حكايات أكتوبر
+     <div.kicker> صورة أرشيفية
+     <div.kicker> من الفكرة إلى التنفيذ
+     <div.kicker> ما وراء الحكاية
 == October 003: 49 speakable blocks ==
-  ar: 49/49 translated
-  en: 48/49 translated
+  ar: 49/49 translated, 0 suspect
+  en: 48/49 translated, 0 suspect
      missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  fr: 48/49 translated
+  fr: 48/49 translated, 0 suspect
      missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  it: 48/49 translated
+  it: 48/49 translated, 0 suspect
      missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  de: 48/49 translated
+  de: 48/49 translated, 0 suspect
      missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+  NOT in narration: 18 visible Arabic text pieces
+     <div.author> إعداد وتقديم
+     <strong> مليكة محمد جمال
+     <div.scroll s_scroll> انزل لتبدأ الحكاية ↓
+     <div.kicker> المشكلة
+     <div.kicker> الفكرة
+     <div.kicker> صاحب الفكرة
+     <b> أوشريا
+     <span> كلمة وردت في روايات الشفرة بمعنى «اضرب»، وكانت من أشهر كلماتها
+     <div.kicker> سر دام طويلًا
+     <div.kicker> ماذا نتعلم؟
+     <div.lesson-number> ١
+     <div.lesson-number> ٢
+     <div.lesson-number> ٣
+     <div.lesson-number> ٤
+     <div.kicker> مليكة تحكي
+     <a.home-button> ← العودة إلى حكايات أكتوبر
+     <div.kicker> اللغة والهوية
+     <div.kicker> كيف نتحقق من الرواية؟
 == October 004: 44 speakable blocks ==
-  ar: 44/44 translated
-  en: 44/44 translated
-  fr: 44/44 translated
-  it: 44/44 translated
-  de: 44/44 translated
+  ar: 44/44 translated, 0 suspect
+  en: 44/44 translated, 0 suspect
+  fr: 44/44 translated, 0 suspect
+  it: 44/44 translated, 0 suspect
+  de: 44/44 translated, 0 suspect
+  NOT in narration: 23 visible Arabic text pieces
+     <span s_author> إعداد وتقديم
+     <strong s_author_name> نوردين محمد جمال
+     <span s_grade> الصف الأول الإعدادي
+     <div.scroll s_scroll> انزل لتبدأ الحكاية ↓
+     <div.kicker k1> قبل أن تبدأ الحكاية
+     <span aircraft> طائرة تقريبًا
+     <span fact1> تشكيلات جوية شاركت في الضربة بحسب الرواية الرسمية المصرية.
+     <span fact2> التوقيت الذي تذكره الهيئة العامة للاستعلامات لبداية الضربة الجوية.
+     <span fact3> يوم بدء حرب أكتوبر، الموافق 10 رمضان 1393 هـ.
+     <div.kicker k2> مهمة دقيقة
+     <div.kicker k3> من بين الأسماء التي بقيت في الذاكرة
+     <div.note source-caution> ملاحظة تاريخية: بعض المصادر تتحدث عن خسائر الضربة الأولى وحدها، وأخرى 
+     <div.kicker g_kicker> وجوه من ذاكرة أكتوبر
+     <span.memorial-label g_label> من شهداء اليوم الأول
+     <a g_photo_source1> مصدر الصورة وترخيصها
+     <span.memorial-label g_label> من شهداء اليوم الأول
+     <a g_photo_source2> مصدر الصورة والتفاصيل
+     <div.kicker k4> كيف نفهم ما حدث؟
+     <div.kicker k5> ما الذي نتعلمه من الشهداء؟
+     <div.kicker k6> الخاتمة
+     <a.home-button s_back> ← العودة إلى حكايات أكتوبر
+     <div.kicker> صورة وسياق
+     <div.kicker> الطيار والإنسان

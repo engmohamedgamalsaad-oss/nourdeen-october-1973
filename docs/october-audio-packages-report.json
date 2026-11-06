@@ -1,130 +1,644 @@
-[
-  {
-    "story": "001",
-    "blocks": 55,
-    "languages": {
-      "ar": {
-        "translated": 55,
-        "missing": []
+{
+  "warnings": [
+    "002: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/002/i18n-extra.js: file not found",
+    "003: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/003/i18n-extra.js: file not found"
+  ],
+  "stories": [
+    {
+      "story": "001",
+      "blocks": 55,
+      "languages": {
+        "ar": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "en": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "fr": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "it": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "de": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        }
       },
-      "en": {
-        "translated": 55,
-        "missing": []
+      "uncaptured_arabic": [
+        {
+          "tag": "div",
+          "class": "author",
+          "key": null,
+          "ar": "إعداد وتقديم"
+        },
+        {
+          "tag": "strong",
+          "class": "",
+          "key": null,
+          "ar": "نوردين محمد جمال"
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "s_grade_only",
+          "ar": "الصف الأول الإعدادي"
+        },
+        {
+          "tag": "div",
+          "class": "scroll",
+          "key": "s_scroll",
+          "ar": "انزل لتبدأ الحكاية ↓"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "البداية"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "الطريق إلى الحرب"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "البحر الأحمر"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "رجال الضفادع البشرية"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "الصورة الأكبر"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "١"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٢"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٣"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٤"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "نوردين تحكي"
+        },
+        {
+          "tag": "a",
+          "class": "home-button",
+          "key": null,
+          "ar": "← العودة إلى حكايات أكتوبر"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "صورة من المعركة البحرية"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "كيف تُقرأ الخريطة البحرية؟"
+        }
+      ]
+    },
+    {
+      "story": "002",
+      "blocks": 55,
+      "languages": {
+        "ar": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "en": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "fr": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "it": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        },
+        "de": {
+          "translated": 55,
+          "missing": [],
+          "suspect": []
+        }
       },
-      "fr": {
-        "translated": 55,
-        "missing": []
+      "uncaptured_arabic": [
+        {
+          "tag": "text",
+          "class": "",
+          "key": null,
+          "ar": "مضخة المياه"
+        },
+        {
+          "tag": "text",
+          "class": "",
+          "key": null,
+          "ar": "الساتر الترابي"
+        },
+        {
+          "tag": "text",
+          "class": "",
+          "key": null,
+          "ar": "قناة السويس"
+        },
+        {
+          "tag": "div",
+          "class": "author",
+          "key": null,
+          "ar": "إعداد وتقديم"
+        },
+        {
+          "tag": "strong",
+          "class": "",
+          "key": null,
+          "ar": "كارما محمد جمال"
+        },
+        {
+          "tag": "div",
+          "class": "scroll",
+          "key": "s_scroll",
+          "ar": "انزل لتبدأ الحكاية ↓"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "المشكلة"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "الفكرة"
+        },
+        {
+          "tag": "b",
+          "class": "",
+          "key": null,
+          "ar": "١"
+        },
+        {
+          "tag": "b",
+          "class": "",
+          "key": null,
+          "ar": "٢"
+        },
+        {
+          "tag": "b",
+          "class": "",
+          "key": null,
+          "ar": "٣"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "صاحب الفكرة"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "ماذا نتعلم؟"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "١"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٢"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٣"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٤"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "كارما تحكي"
+        },
+        {
+          "tag": "a",
+          "class": "home-button",
+          "key": null,
+          "ar": "← العودة إلى حكايات أكتوبر"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "صورة أرشيفية"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "من الفكرة إلى التنفيذ"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "ما وراء الحكاية"
+        }
+      ]
+    },
+    {
+      "story": "003",
+      "blocks": 49,
+      "languages": {
+        "ar": {
+          "translated": 49,
+          "missing": [],
+          "suspect": []
+        },
+        "en": {
+          "translated": 48,
+          "missing": [
+            {
+              "index": 15,
+              "tag": "p",
+              "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+            }
+          ],
+          "suspect": []
+        },
+        "fr": {
+          "translated": 48,
+          "missing": [
+            {
+              "index": 15,
+              "tag": "p",
+              "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+            }
+          ],
+          "suspect": []
+        },
+        "it": {
+          "translated": 48,
+          "missing": [
+            {
+              "index": 15,
+              "tag": "p",
+              "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+            }
+          ],
+          "suspect": []
+        },
+        "de": {
+          "translated": 48,
+          "missing": [
+            {
+              "index": 15,
+              "tag": "p",
+              "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
+            }
+          ],
+          "suspect": []
+        }
       },
-      "it": {
-        "translated": 55,
-        "missing": []
+      "uncaptured_arabic": [
+        {
+          "tag": "div",
+          "class": "author",
+          "key": null,
+          "ar": "إعداد وتقديم"
+        },
+        {
+          "tag": "strong",
+          "class": "",
+          "key": null,
+          "ar": "مليكة محمد جمال"
+        },
+        {
+          "tag": "div",
+          "class": "scroll",
+          "key": "s_scroll",
+          "ar": "انزل لتبدأ الحكاية ↓"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "المشكلة"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "الفكرة"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "صاحب الفكرة"
+        },
+        {
+          "tag": "b",
+          "class": "",
+          "key": null,
+          "ar": "أوشريا"
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": null,
+          "ar": "كلمة وردت في روايات الشفرة بمعنى «اضرب»، وكانت من أشهر كلماتها"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "سر دام طويلًا"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "ماذا نتعلم؟"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "١"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٢"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٣"
+        },
+        {
+          "tag": "div",
+          "class": "lesson-number",
+          "key": null,
+          "ar": "٤"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "مليكة تحكي"
+        },
+        {
+          "tag": "a",
+          "class": "home-button",
+          "key": null,
+          "ar": "← العودة إلى حكايات أكتوبر"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "اللغة والهوية"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "كيف نتحقق من الرواية؟"
+        }
+      ]
+    },
+    {
+      "story": "004",
+      "blocks": 44,
+      "languages": {
+        "ar": {
+          "translated": 44,
+          "missing": [],
+          "suspect": []
+        },
+        "en": {
+          "translated": 44,
+          "missing": [],
+          "suspect": []
+        },
+        "fr": {
+          "translated": 44,
+          "missing": [],
+          "suspect": []
+        },
+        "it": {
+          "translated": 44,
+          "missing": [],
+          "suspect": []
+        },
+        "de": {
+          "translated": 44,
+          "missing": [],
+          "suspect": []
+        }
       },
-      "de": {
-        "translated": 55,
-        "missing": []
-      }
+      "uncaptured_arabic": [
+        {
+          "tag": "span",
+          "class": "",
+          "key": "s_author",
+          "ar": "إعداد وتقديم"
+        },
+        {
+          "tag": "strong",
+          "class": "",
+          "key": "s_author_name",
+          "ar": "نوردين محمد جمال"
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "s_grade",
+          "ar": "الصف الأول الإعدادي"
+        },
+        {
+          "tag": "div",
+          "class": "scroll",
+          "key": "s_scroll",
+          "ar": "انزل لتبدأ الحكاية ↓"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k1",
+          "ar": "قبل أن تبدأ الحكاية"
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "aircraft",
+          "ar": "طائرة تقريبًا"
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "fact1",
+          "ar": "تشكيلات جوية شاركت في الضربة بحسب الرواية الرسمية المصرية."
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "fact2",
+          "ar": "التوقيت الذي تذكره الهيئة العامة للاستعلامات لبداية الضربة الجوية."
+        },
+        {
+          "tag": "span",
+          "class": "",
+          "key": "fact3",
+          "ar": "يوم بدء حرب أكتوبر، الموافق 10 رمضان 1393 هـ."
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k2",
+          "ar": "مهمة دقيقة"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k3",
+          "ar": "من بين الأسماء التي بقيت في الذاكرة"
+        },
+        {
+          "tag": "div",
+          "class": "note",
+          "key": "source-caution",
+          "ar": "ملاحظة تاريخية: بعض المصادر تتحدث عن خسائر الضربة الأولى وحدها، وأخرى "
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "g_kicker",
+          "ar": "وجوه من ذاكرة أكتوبر"
+        },
+        {
+          "tag": "span",
+          "class": "memorial-label",
+          "key": "g_label",
+          "ar": "من شهداء اليوم الأول"
+        },
+        {
+          "tag": "a",
+          "class": "",
+          "key": "g_photo_source1",
+          "ar": "مصدر الصورة وترخيصها"
+        },
+        {
+          "tag": "span",
+          "class": "memorial-label",
+          "key": "g_label",
+          "ar": "من شهداء اليوم الأول"
+        },
+        {
+          "tag": "a",
+          "class": "",
+          "key": "g_photo_source2",
+          "ar": "مصدر الصورة والتفاصيل"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k4",
+          "ar": "كيف نفهم ما حدث؟"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k5",
+          "ar": "ما الذي نتعلمه من الشهداء؟"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": "k6",
+          "ar": "الخاتمة"
+        },
+        {
+          "tag": "a",
+          "class": "home-button",
+          "key": "s_back",
+          "ar": "← العودة إلى حكايات أكتوبر"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "صورة وسياق"
+        },
+        {
+          "tag": "div",
+          "class": "kicker",
+          "key": null,
+          "ar": "الطيار والإنسان"
+        }
+      ]
     }
-  },
-  {
-    "story": "002",
-    "blocks": 55,
-    "languages": {
-      "ar": {
-        "translated": 55,
-        "missing": []
-      },
-      "en": {
-        "translated": 55,
-        "missing": []
-      },
-      "fr": {
-        "translated": 55,
-        "missing": []
-      },
-      "it": {
-        "translated": 55,
-        "missing": []
-      },
-      "de": {
-        "translated": 55,
-        "missing": []
-      }
-    }
-  },
-  {
-    "story": "003",
-    "blocks": 49,
-    "languages": {
-      "ar": {
-        "translated": 49,
-        "missing": []
-      },
-      "en": {
-        "translated": 48,
-        "missing": [
-          {
-            "index": 15,
-            "tag": "p",
-            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
-          }
-        ]
-      },
-      "fr": {
-        "translated": 48,
-        "missing": [
-          {
-            "index": 15,
-            "tag": "p",
-            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
-          }
-        ]
-      },
-      "it": {
-        "translated": 48,
-        "missing": [
-          {
-            "index": 15,
-            "tag": "p",
-            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
-          }
-        ]
-      },
-      "de": {
-        "translated": 48,
-        "missing": [
-          {
-            "index": 15,
-            "tag": "p",
-            "ar": "للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "story": "004",
-    "blocks": 44,
-    "languages": {
-      "ar": {
-        "translated": 44,
-        "missing": []
-      },
-      "en": {
-        "translated": 44,
-        "missing": []
-      },
-      "fr": {
-        "translated": 44,
-        "missing": []
-      },
-      "it": {
-        "translated": 44,
-        "missing": []
-      },
-      "de": {
-        "translated": 44,
-        "missing": []
-      }
-    }
-  }
-]
+  ]
+}
