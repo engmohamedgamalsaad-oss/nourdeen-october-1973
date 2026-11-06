@@ -224,6 +224,8 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(adminHtml.includes('var requireUnifiedStoryPackage=!isOctoberLegacyRecord(it)'), 'October editorial and story-content workflow must remain distinct');
   assert.ok(adminHtml.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October audio text review must use the shared review UI without changing its story editor');
   assert.ok(adminHtml.includes('var storyReviewPackage=await audioReviewPackageOf(it)'), 'October preview must open its extracted package in the shared audio review preview');
+  const octoberPreviewClick = adminHtml.slice(adminHtml.indexOf("preview.addEventListener('click'"), adminHtml.indexOf('actions.appendChild(preview)', adminHtml.indexOf("preview.addEventListener('click'")));
+  assert.ok(octoberPreviewClick.indexOf("window.open('about:blank'") < octoberPreviewClick.indexOf('await audioReviewPackageOf(it)'), 'open the preview popup synchronously before fetching October audio source data');
   assert.ok(reviewActions.includes('if(!window.KHStoryAudioReview){message('), 'approval must fail closed if the audio reviewer did not load');
   assert.ok(reviewActions.includes('if(isApprove){'), 'all sections, including October, must pass the shared audio approval gate');
   assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
