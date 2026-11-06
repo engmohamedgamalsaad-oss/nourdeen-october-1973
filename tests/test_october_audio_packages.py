@@ -16,7 +16,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
         path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
 
     def make_package(self, root: Path, story_id: str = "001", ready: bool = True, approved: bool = True) -> Path:
-        directory = root / "rebuild" / "october-audio-packages" / story_id
+        directory = root / "stories" / "october" / story_id
         self.write_json(directory / "story.json", {
             "format": "KHALEDOON_STORY",
             "section": "october",
@@ -29,6 +29,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
                 for lang in audio.LANGUAGES
             },
         })
+        self.write_json(directory / "data.json", {"published": True, "audio_text_review_required": True})
         self.write_json(directory / "audio-readiness.json", {
             "format": audio.OCTOBER_READINESS_FORMAT,
             "story": story_id,
@@ -107,7 +108,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
                 report = audio.inspect_all_generation_plans(root, root / ".audio-staging")
             self.assertEqual(report["october_audio_packages"], 1)
             self.assertEqual(report["october_audio_packages_blocked"], 1)
-            self.assertEqual(report["october_packages"][0]["path"], "rebuild/october-audio-packages/001/story.json")
+            self.assertEqual(report["october_packages"][0]["path"], "stories/october/001/story.json")
             self.assertIn("admin-approved five-language", report["october_packages"][0]["blocked"])
             self.assertEqual(report["segments_to_generate"], 0)
             self.assertEqual(report["tts_requests"], 0)
@@ -139,17 +140,17 @@ class OctoberAudioPackageTests(unittest.TestCase):
             edge.assert_not_awaited()
             self.assertFalse(staging.exists())
 
-    def test_published_october_pages_remain_protected(self) -> None:
+    def test_published_october_html_remains_protected(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            page = root / "stories" / "october" / "001" / "story.json"
-            self.write_json(page, {"format": "KHALEDOON_STORY", "section": "october", "slug": "001", "i18n": {}})
+            page = root / "stories" / "october" / "001" / "index.html"
+            page.parent.mkdir(parents=True)
+            page.write_text("<html>published page</html>", encoding="utf-8")
             with patch.object(audio, "ROOT", root):
                 with self.assertRaises(ValueError):
-                    audio.inspect_generation_plan(page, root / ".audio-staging")
-                self.assertFalse(asyncio.run(audio.generate_story(page, dry_run=True)))
+                    audio.locate_story(page)
 
-    def test_package_staging_path_is_october_slug_language(self) -> None:
+    def test_october_uses_the_canonical_story_directory(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             story = self.make_package(root)
@@ -157,7 +158,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
                 relative, section, is_package = audio.locate_story(story)
             self.assertEqual(section, "october")
             self.assertTrue(is_package)
-            self.assertEqual(relative.parts[:2], audio.OCTOBER_PACKAGES_DIR)
+            self.assertEqual(relative.parts[:2], ("stories", "october"))
 
 
 if __name__ == "__main__":
