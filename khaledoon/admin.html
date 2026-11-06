@@ -446,7 +446,7 @@ function revisionStableValue(value){
  return value;
 }
 function appendStoryRevision(meta,before,after,source,now){
- var out=Object.assign({},meta||{}),keys=['section','figure_name','title','subtitle','body','sources','history_note','images_note','translations','images','cover','map_location','question_bank_json','karma_text'],changes=[];
+ var out=Object.assign({},meta||{}),keys=['section','figure_name','student_name','narrator_name','grade','narrator_grade','title','subtitle','body','sources','history_note','images_note','translations','images','cover','map_location','question_bank_json','karma_text'],changes=[];
  function compact(value){if(value===undefined)return null;var raw=typeof value==='string'?value:JSON.stringify(value);return raw.length>1200?raw.slice(0,1200)+'…':raw}
  keys.forEach(function(key){
   var oldValue=before&&before[key]!==undefined?before[key]:null,newValue=after&&after[key]!==undefined?after[key]:null;
@@ -517,7 +517,7 @@ function legacyCard(it){
   var requestedStatus=nextStatus||status.value;
   var translations=collectLegacyTranslations();var storyMeta=Object.assign({},it.story_meta||{});storyMeta.karma_text=karma.value.trim();storyMeta.question_bank_json=quizJson.value.trim();storyMeta.translations=translations;storyMeta=dropApprovalIfEdited(it,{student_name:name.value,grade:grade.value,title:title.value,subtitle:subtitle.value,body:body.value,sources:sources.value,history_note:hist.value,images_note:imagesNote.value,karma_text:karma.value,question_bank_json:quizJson.value,translations:translations},storyMeta);
   var d={student_name:name.value.trim(),grade:grade.value.trim()||null,title:title.value.trim(),subtitle:subtitle.value.trim()||null,body:body.value.trim(),sources:sources.value.trim()||null,status:requestedStatus,story_number:it.story_number||null,story_meta:storyMeta};
-  d.story_meta.original_body=legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim();d.story_meta.pending_draft=Object.assign({},d,{figure_name:title.value.trim(),section:'october',section_key:'october',original_body:d.story_meta.original_body,history_note:hist.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),translations:translations});delete d.story_meta.pending_draft.story_meta;
+  d.story_meta.original_body=legacySaved.original_body||legacyMeta.original_body||it.original_body||it.body||body.value.trim();d.story_meta.pending_draft=Object.assign({},d,{figure_name:title.value.trim(),section:'october',section_key:'october',original_body:d.story_meta.original_body,history_note:hist.value.trim(),images_note:imagesNote.value.trim(),karma_text:karma.value.trim(),question_bank_json:quizJson.value.trim(),translations:translations});delete d.story_meta.pending_draft.story_meta;d.story_meta=appendStoryRevision(d.story_meta,it,d,'october_legacy_edit',new Date());
   if(d.student_name.length<2||d.title.length<3||d.body.length<50){say('err','راجع الاسم والعنوان والنص؛ الاسم حرفان على الأقل والعنوان 3 أحرف والنص 50 حرفًا على الأقل.');return false}
   if(d.body.length>12000||(d.sources&&d.sources.length>2000)){say('err','تجاوز النص أو المصادر الحد المسموح.');return false}
   if(d.status==='published')d.status='pending';
