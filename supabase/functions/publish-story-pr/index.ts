@@ -40,67 +40,137 @@ function validateAudioReviewGate(
 ): string | null {
   const languages = ["ar", "en", "fr", "it", "de"];
   const slug = String(packageData?.slug ?? "");
+  const storyKey = section + "/" + slug;
   if (!slug || !packageData?.i18n || !audioReview || typeof audioReview !== "object" ||
       !audioReview.clips || typeof audioReview.clips !== "object") {
     return "لا يوجد سجل مراجعة صوت محفوظ للحكاية؛ لا يمكن اعتماد النشر.";
   }
-  const pronunciationFile = files.find((file: any) =>
-    file.path === "stories/" + section + "/" + storyId + "/audio-pronunciation.json"
-  );
-  let approvedArabic: Record<string, string> = {};
-  if (pronunciationFile) {
-    try {
-      const pronunciation = JSON.parse(contentForSafetyScan(pronunciationFile));
-      if (pronunciation.version !== 1 || pronunciation.story !== slug ||
-          pronunciation.language !== "ar" || !pronunciation.blocks ||
-          !Array.isArray(pronunciation.approved_audio_only_rewrites)) {
-        return "ملف نص النطق العربي لا يطابق الحكاية؛ تعذر التحقق من اعتماد الصوت.";
-      }
-      for (const rawIndex of pronunciation.approved_audio_only_rewrites) {
-        const index = Number(rawIndex);
-        const value = pronunciation.blocks[String(index)];
-        if (!Number.isInteger(index) || index < 0 || typeof value !== "string" || !value.trim()) {
-          return "ملف نص النطق العربي يحتوي اعتمادًا غير صالح.";
-        }
-        approvedArabic[String(index)] = value;
-      }
-    } catch {
-      return "تعذر قراءة ملف نص النطق العربي قبل النشر.";
-    }
-  }
-  const clips = Object.values(audioReview.clips) as any[];
-  if (clips.some((clip: any) => clip && clip.story_id === section + "/" + slug &&
-      clip.status === "rejected" && clip.resolved !== true)) {
-    return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
-  }
+
+  const expectedByLanguage: Record<string, Array<{ index: number; speaker: string; source: string }>> = {};
   for (const lang of languages) {
     const localized = packageData.i18n[lang];
     if (!localized || !Array.isArray(localized.blocks) || !localized.blocks.length) {
       return "ترجمة " + lang + " غير متاحة للتحقق من مراجعة الصوت.";
     }
-    const currentClips = clips.filter((clip: any) =>
-      clip && clip.story_id === section + "/" + slug && clip.lang === lang
+    expectedByLanguage[lang] = [];
+    localized.blocks.forEach((block: any, index: number) => {
+      if (block && ["karma", "narrator"].includes(block.speaker) && String(block.text ?? "").trim()) {
+        expectedByLanguage[lang].push({ index, speaker: block.speaker, source: String(block.text).trim() });
+      }
+    });
+    if (!expectedByLanguage[lang].length) {
+      return "لا توجد مقاطع منطوقة قابلة للتحقق في اللغة " + lang + ".";
+    }
+  }
+
+  const pronunciationFile = files.find((file: any) =>
+    file.path === "stories/" + section + "/" + storyId + "/audio-pronunciation.json"
+  );
+  const approvedTextByLanguage: Record<string, Record<string, string>> = {
+    ar: {}, en: {}, fr: {}, it: {}, de: {},
+  };
+  if (pronunciationFile) {
+    try {
+      const pronunciation = JSON.parse(contentForSafetyScan(pronunciationFile));
+      const review = pronunciation?.review;
+      if (pronunciation.format !== "KHALEDOON_AUDIO_PRONUNCIATION_V1" ||
+          pronunciation.story !== slug || pronunciation.section !== section ||
+          pronunciation.language !== "ar" ||
+          !pronunciation.blocks || typeof pronunciation.blocks !== "object" ||
+          !Array.isArray(pronunciation.approved_audio_only_rewrites) ||
+          !pronunciation.approved_audio_text_rewrites ||
+          !review || review.format !== "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1" ||
+          review.status !== "approved_by_admin" ||
+          stableJson(review.languages) !== stableJson(languages) ||
+          !Array.isArray(review.segments)) {
+        return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
+      }
+
+      const expectedKeys = new Set<string>();
+      for (const lang of languages) {
+        for (const block of expectedByLanguage[lang]) expectedKeys.add(lang + ":" + block.index);
+      }
+      if (review.total_segments !== expectedKeys.size || review.segments.length !== expectedKeys.size) {
+        return "اعتماد النص الصوتي لا يغطي جميع المقاطع المنطوقة في اللغات الخمس.";
+      }
+
+      const seen = new Set<string>();
+      const rewrites: Record<string, Record<string, string>> = {
+        ar: {}, en: {}, fr: {}, it: {}, de: {},
+      };
+      for (const item of review.segments) {
+        if (!item || !languages.includes(item.lang) ||
+            !Number.isInteger(item.block_index) || item.block_index < 0) {
+          return "ملف اعتماد النص الصوتي يحتوي مقطعًا أو لغة غير صالحة.";
+        }
+        const key = item.lang + ":" + item.block_index;
+        const expected = expectedByLanguage[item.lang].find((block) => block.index === item.block_index);
+        if (!expected || seen.has(key) || item.speaker !== expected.speaker ||
+            item.source_text !== expected.source ||
+            typeof item.approved_audio_text !== "string" || !item.approved_audio_text.trim()) {
+          return "اعتماد النص الصوتي لا يطابق النص أو المتحدث الحالي في " + item.lang + "، المقطع " + (item.block_index + 1) + ".";
+        }
+        if (item.decision === "approved_original") {
+          if (item.approved_audio_text !== expected.source) {
+            return "قرار الإبقاء على النص الأصلي يحتوي تغييرًا غير مصرح به.";
+          }
+        } else if (item.decision === "approved_rewrite") {
+          if (item.approved_audio_text === expected.source) {
+            return "قرار إعادة الصياغة لا يحتوي نصًا صوتيًا مختلفًا.";
+          }
+          rewrites[item.lang][String(item.block_index)] = item.approved_audio_text;
+        } else {
+          return "يوجد مقطع بلا قرار اعتماد بشري صريح.";
+        }
+        seen.add(key);
+      }
+      if (seen.size !== expectedKeys.size || stableJson(pronunciation.approved_audio_text_rewrites) !== stableJson(rewrites)) {
+        return "قائمة إعادة الصياغة لا تطابق قرارات الاعتماد البشرية.";
+      }
+      const arabicIndexes = Object.keys(rewrites.ar).sort((a, b) => Number(a) - Number(b));
+      if (stableJson(pronunciation.blocks) !== stableJson(rewrites.ar) ||
+          stableJson(pronunciation.approved_audio_only_rewrites) !== stableJson(arabicIndexes)) {
+        return "حقول التوافق العربية لا تطابق النصوص الصوتية المعتمدة.";
+      }
+      for (const lang of languages) approvedTextByLanguage[lang] = rewrites[lang];
+    } catch {
+      return "تعذر قراءة ملف اعتماد النص الصوتي قبل النشر.";
+    }
+  }
+
+  const clips = Object.values(audioReview.clips) as any[];
+  const storyClips = clips.filter((clip: any) => clip && clip.story_id === storyKey);
+  if (storyClips.some((clip: any) => clip.status === "rejected" && clip.resolved !== true)) {
+    return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
+  }
+
+  const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
+  for (const lang of languages) {
+    const expectedBlocks = expectedByLanguage[lang];
+    const currentClips = storyClips.filter((clip: any) =>
+      clip.lang === lang && !(clip.status === "rejected" && clip.resolved === true)
     );
-    for (let blockIndex = 0; blockIndex < localized.blocks.length; blockIndex++) {
-      const block = localized.blocks[blockIndex];
-      if (!block || !["karma", "narrator"].includes(block.speaker) || !String(block.text ?? "").trim()) continue;
-      const expected = lang === "ar" && approvedArabic[String(blockIndex)]
-        ? approvedArabic[String(blockIndex)]
-        : String(block.text);
+    for (const clip of currentClips) {
+      const expected = expectedBlocks.find((block) =>
+        block.index === Number(clip.block_index) && block.speaker === clip.speaker
+      );
+      if (!expected) return "سجل الصوت يحتوي مقطعًا زائدًا أو متصلًا بمتحدث غير مطابق في " + lang + ".";
+    }
+    for (const block of expectedBlocks) {
       const blockClips = currentClips.filter((clip: any) =>
-        Number(clip.block_index) === blockIndex && clip.speaker === block.speaker
+        Number(clip.block_index) === block.index && clip.speaker === block.speaker
       ).sort((a: any, b: any) => Number(a.chunk_index || 0) - Number(b.chunk_index || 0));
       if (!blockClips.length || blockClips.some((clip: any, index: number) =>
         clip.status !== "accepted" || Number(clip.chunk_index || 0) !== index ||
         typeof clip.audio_sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(clip.audio_sha256) ||
         typeof clip.text !== "string" || !clip.text.trim()
       )) {
-        return "اللغة " + lang + "، المقطع " + (blockIndex + 1) + ": الصوت غير جاهز أو لم يُقبل بالكامل بعد الاستماع.";
+        return "اللغة " + lang + "، المقطع " + (block.index + 1) + ": الصوت غير جاهز أو لم يُقبل بالكامل بعد الاستماع.";
       }
-      const joined = blockClips.map((clip: any) => String(clip.text).replace(/\\s+/g, " ").trim()).join(" ");
-      const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
-      if (normalize(joined) !== normalize(expected)) {
-        return "اللغة " + lang + "، المقطع " + (blockIndex + 1) + ": نص الصوت المقبول لا يطابق النص الحالي للحكاية.";
+      const joined = blockClips.map((clip: any) => normalize(String(clip.text))).join(" ");
+      const expectedText = approvedTextByLanguage[lang][String(block.index)] || block.source;
+      if (normalize(joined) !== normalize(expectedText)) {
+        return "اللغة " + lang + "، المقطع " + (block.index + 1) + ": نص الصوت المقبول لا يطابق النص الحالي أو إعادة الصياغة المعتمدة.";
       }
     }
   }
