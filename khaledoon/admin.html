@@ -1038,9 +1038,9 @@ function pubRow(it){
        card.appendChild(el('p','fnote','سبب الاقتراح: '+(item.reason||'لم يذكر سببًا.')));
        var label=el('label','fnote'),check=document.createElement('input');check.type='checkbox';
        var key=item.lang+':'+item.block_index;
-       function syncApproval(){var changed=proposed.value.trim()!==item.original_text;check.disabled=!changed;if(!changed){check.checked=false;delete approvedAudioTextChanges[key]}if(check.checked)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key];audioTextReviewExport.disabled=Object.keys(approvedAudioTextChanges).length===0}
+       function syncApproval(){var changed=proposed.value.trim()!==item.original_text;check.disabled=!changed;if(!changed){check.checked=false;delete approvedAudioTextChanges[key]}if(check.checked)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key]}
        proposed.addEventListener('input',function(){item.proposed_audio_text=proposed.value;syncApproval()});
-       check.addEventListener('change',function(){if(check.checked&&proposed.value.trim()!==item.original_text)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key];audioTextReviewExport.disabled=Object.keys(approvedAudioTextChanges).length===0});
+       check.addEventListener('change',function(){if(check.checked&&proposed.value.trim()!==item.original_text)approvedAudioTextChanges[key]=true;else delete approvedAudioTextChanges[key]});
        label.appendChild(check);label.appendChild(document.createTextNode(' أوافق على استخدام هذا النص في الصوت فقط.'));
        card.appendChild(label);syncApproval();audioTextReviewResultList.appendChild(card);
       });
@@ -1066,7 +1066,7 @@ function pubRow(it){
       try{audioTextReviewCurrentResult=JSON.parse(audioTextReviewPaste.value)}catch(ignoreReviewParse){audioTextReviewStatus.textContent='تعذر قراءة تقرير التدقيق بعد التحقق.';return}
       var suggestions=audioTextReviewCurrentResult.segments.filter(function(item){return item.issue_type!=='none'&&item.proposed_audio_text!==item.original_text});
       audioTextReviewStatus.textContent='التقرير سليم بنيويًا: '+result.total+' مقطع، '+result.suggestions+' اقتراحًا. راجع كل اقتراح وحدد ما توافق عليه بنفسك. يمكنك إضافة اقتراحات القاموس العربي بعد ذلك.';
-      audioTextReviewDictionary.disabled=false;audioTextReviewExport.disabled=true;
+      audioTextReviewDictionary.disabled=false;audioTextReviewExport.disabled=false;
       renderAudioTextReviewSuggestions(suggestions);
      });
      audioTextReviewDictionary.addEventListener('click',async function(){
