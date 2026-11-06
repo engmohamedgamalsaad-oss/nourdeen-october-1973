@@ -7,8 +7,8 @@ published October pages under stories/october are never read or written here.
 
 Planning is read-only. Generation requires an explicit flag and writes only to
 .gitignored .audio-staging; it never writes to the published audio tree.
-Fish Audio additionally requires a separate explicit approval flag, and October
-packages additionally require --allow-october-generation.
+Fish Audio additionally requires a separate explicit approval flag. October uses the
+same five-language human audio-text approval record as every other section.
 """
 from __future__ import annotations
 
@@ -413,10 +413,10 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
         raise ValueError(f"Unsupported language selection: {selected_languages}")
     if is_october_package:
-        # October audio packages have no admin registry record; the page text is fixed,
-        # so completeness (audio-readiness.json) replaces the registry review gate.
+        # The extraction readiness report is only a source-completeness check;
+        # human approval still uses the exact shared five-language audio review gate.
         require_october_readiness(story_path, package)
-        review_required = False
+        review_required = True
     else:
         metadata_path = story_path.with_name("data.json")
         metadata = read_json(metadata_path) if metadata_path.is_file() else {}
@@ -613,12 +613,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
 
     if is_october_package:
         require_october_readiness(story_path, package)
-        if not dry_run and not allow_october_generation:
-            raise RuntimeError(
-                "Safety stop before any TTS request: October audio generation needs its own "
-                "explicit owner approval. Pass --allow-october-generation only after that approval."
-            )
-        review_required = False
+        review_required = True
     else:
         metadata_path = story_path.with_name("data.json")
         if not metadata_path.is_file():
@@ -880,11 +875,6 @@ async def main() -> int:
         help="Explicit approval gate for billable Arabic Fish Audio requests.",
     )
     parser.add_argument(
-        "--allow-october-generation",
-        action="store_true",
-        help="Separate owner-approval gate for generating audio from October audio packages.",
-    )
-    parser.add_argument(
         "--languages",
         nargs="+",
         choices=LANGUAGES,
@@ -902,8 +892,6 @@ async def main() -> int:
 
     if args.allow_fish_audio and not args.generate:
         parser.error("--allow-fish-audio is valid only together with --generate")
-    if args.allow_october_generation and not args.generate:
-        parser.error("--allow-october-generation is valid only together with --generate")
     if args.plan_all and args.story:
         parser.error("--plan-all cannot be combined with --story")
     if args.force_block and not args.story:
@@ -922,7 +910,6 @@ async def main() -> int:
         allow_fish_audio=args.allow_fish_audio,
         languages=tuple(args.languages),
         force_blocks=tuple(args.force_block),
-        allow_october_generation=args.allow_october_generation,
     ) else 1
 
 
