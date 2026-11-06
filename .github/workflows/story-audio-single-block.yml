@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       story_path:
-        description: "مسار story.json داخل stories/ (يُرفض أكتوبر تلقائيًا)"
+        description: "مسار stories/<section>/<id>/story.json أو rebuild/october-audio-packages/<id>/story.json"
         required: true
         type: string
       language:
