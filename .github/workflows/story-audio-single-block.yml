@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
-      - name: Check out main
+      - name: Check out the selected branch
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: ${{ github.ref }}
@@ -75,7 +75,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ ! "$STORY_PATH" =~ ^stories/[a-z0-9-]+/[0-9]{3}/story\\.json$ ]]; then
+          if [[ ! "$STORY_PATH" =~ ^stories/[a-z0-9-]+/[0-9]{3}/story\.json$ ]]; then
             echo "Invalid canonical story path."
             exit 1
           fi
