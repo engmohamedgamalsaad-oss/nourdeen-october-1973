@@ -278,7 +278,6 @@ def main(argv=None):
             out.mkdir(parents=True, exist_ok=True)
             (out / "story.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             (out / "audio-readiness.json").write_text(json.dumps(readiness, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            (out / "story.draft.json").unlink(missing_ok=True)  # superseded by story.json
     lines = ["body maps: %d translation keys, %d german-only keys" % (len(trans), len(german))]
     if warnings:
         lines.append("WARNINGS (%d):" % len(warnings))
