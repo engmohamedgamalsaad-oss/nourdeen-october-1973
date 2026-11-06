@@ -86,10 +86,9 @@ def read_json(path: Path) -> dict[str, Any]:
 def locate_story(story_path: Path) -> tuple[Path, str, bool]:
     """Return (path relative to ROOT, section, is_october_package).
 
-    Accepts stories/<section>/<id>/story.json (published tree; October pages are
-    reported with section "october" and is_october_package False so callers can
-    refuse them) and rebuild/october-audio-packages/<id>/story.json (October
-    audio packages, section "october", is_october_package True).
+    Every section uses stories/<section>/<id>/story.json. October source packages
+    live beside their published page and require the same human review plus the
+    five-language source-readiness check; published HTML is never rewritten here.
     """
     story_path = story_path.resolve()
     try:
@@ -98,13 +97,8 @@ def locate_story(story_path: Path) -> tuple[Path, str, bool]:
         raise ValueError(f"Story path must be inside the repository: {story_path}") from exc
     parts = relative.parts
     if story_path.name == "story.json" and len(parts) == 4 and parts[0] == "stories":
-        return relative, parts[1], False
-    if story_path.name == "story.json" and len(parts) == 4 and parts[:2] == OCTOBER_PACKAGES_DIR:
-        return relative, "october", True
-    raise ValueError(
-        f"Expected stories/<section>/<id>/story.json or "
-        f"{'/'.join(OCTOBER_PACKAGES_DIR)}/<id>/story.json, got {relative}"
-    )
+        return relative, parts[1], parts[1] == "october"
+    raise ValueError(f"Expected stories/<section>/<id>/story.json, got {relative}")
 
 
 def require_october_readiness(story_path: Path, package: dict[str, Any]) -> None:
