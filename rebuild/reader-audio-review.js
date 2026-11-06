@@ -65,6 +65,29 @@ async function loadRow() {
   review = core.cloneReview(meta.audio_review || null);
   return true;
 }
+function pronunciationReviewFor(entry) {
+  if (!pronunciationReport || pronunciationReport.language !== entry.lang) return null;
+  var match = pronunciationReport.items.find(function (item) {
+    return item.entry.block_index === entry.block_index &&
+      item.entry.chunk_index === entry.chunk_index && item.entry.src === entry.src;
+  });
+  if (!match) return null;
+  var report = match.report || {};
+  return {
+    engine: 'faster-whisper-local',
+    status: report.status || 'unknown',
+    audio_sha256: report.audio_sha256 || '',
+    hash_verified: match.hashVerified === true,
+    match_ratio: report.match_ratio,
+    detected_language: report.detected_language,
+    language_probability: report.language_probability,
+    expected_word_count: report.expected_word_count,
+    recognized_word_count: report.recognized_word_count,
+    transcript: report.transcript || '',
+    mismatches: report.mismatches || [],
+    low_confidence_words: report.low_confidence_words || []
+  };
+}
 async function saveReview(entry, decision) {
   var key = entry && entry.key;
   if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
@@ -80,7 +103,10 @@ async function saveReview(entry, decision) {
     if (!freshRows.length) throw new Error('اختفى سجل الحكاية قبل الحفظ.');
     var current = freshRows[0], meta = Object.assign({}, current.story_meta || {});
     var currentReview = core.cloneReview(meta.audio_review || null);
-    var next = core.applyDecision(currentReview, entry, decision);
+    var decisionWithAnalysis = Object.assign({}, decision);
+    var attachedPronunciationReview = pronunciationReviewFor(entry);
+    if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
+    var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     meta.audio_review = next;
     var saved = await fetch(rowUrl(), {
@@ -341,15 +367,28 @@ async function importPronunciationReport(file) {
   render();
 }
 function renderPronunciationResult(entry, panel) {
-  if (!pronunciationReport || pronunciationReport.language !== entry.lang) return;
-  var match = pronunciationReport.items.find(function (item) {
-    return item.entry.block_index === entry.block_index && item.entry.chunk_index === entry.chunk_index && item.entry.src === entry.src;
-  });
+  var match = null;
+  if (pronunciationReport && pronunciationReport.language === entry.lang) {
+    match = pronunciationReport.items.find(function (item) {
+      return item.entry.block_index === entry.block_index && item.entry.chunk_index === entry.chunk_index && item.entry.src === entry.src;
+    }) || null;
+  }
+  if (!match) {
+    var savedClip = review.clips[entry.key];
+    if (savedClip && savedClip.pronunciation_review) {
+      match = { entry: entry, report: savedClip.pronunciation_review, blob: null, hashVerified: false, stored: true };
+    }
+  }
   if (!match) return;
   var box = document.createElement('div'); box.className = 'kh-audio-asr-result';
   var report = match.report;
   var summary = document.createElement('div');
-  summary.textContent = (match.hashVerified ? 'نتيجة موثقة بالبصمة — ' : 'نتيجة غير موثقة بالبصمة — ') + 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
+  var evidenceLabel = match.stored
+    ? (report.hash_verified && report.audio_sha256 === entry.audio_sha256
+      ? 'نتيجة محفوظة — بصمتها تطابق manifest، ويجب التحقق الحي عند الاستماع — '
+      : 'نتيجة محفوظة ببصمة غير متحققة أو غير مطابقة — ')
+    : (match.hashVerified ? 'نتيجة موثقة بالبصمة — ' : 'نتيجة غير موثقة بالبصمة — ');
+  summary.textContent = evidenceLabel + 'مدقق النطق: ' + String(report.status || 'نتيجة غير محددة') +
     (typeof report.match_ratio === 'number' ? ' | تطابق النص: ' + Math.round(report.match_ratio * 100) + '%' : '') +
     (report.detected_language ? ' | اللغة المكتشفة: ' + report.detected_language : '') +
     (typeof report.language_probability === 'number' ? ' | احتمال اللغة: ' + Math.round(report.language_probability * 100) + '%' : '');
