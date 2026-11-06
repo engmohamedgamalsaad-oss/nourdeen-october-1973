@@ -81,6 +81,8 @@ function pronunciationReviewFor(entry) {
     match_ratio: report.match_ratio,
     detected_language: report.detected_language,
     language_probability: report.language_probability,
+    language_mismatch: report.language_mismatch === true,
+    language_detection_uncertain: report.language_detection_uncertain === true,
     expected_word_count: report.expected_word_count,
     recognized_word_count: report.recognized_word_count,
     transcript: report.transcript || '',
