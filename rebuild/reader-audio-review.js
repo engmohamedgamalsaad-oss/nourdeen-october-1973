@@ -90,6 +90,18 @@ function pronunciationReviewFor(entry) {
     low_confidence_words: report.low_confidence_words || []
   };
 }
+function stableReviewJson(value) {
+  if (Array.isArray(value)) return '[' + value.map(stableReviewJson).join(',') + ']';
+  if (value && typeof value === 'object') {
+    return '{' + Object.keys(value).sort().map(function (key) {
+      return JSON.stringify(key) + ':' + stableReviewJson(value[key]);
+    }).join(',') + '}';
+  }
+  return JSON.stringify(value);
+}
+function pronunciationReviewMatches(clip, expected) {
+  return stableReviewJson(clip && clip.pronunciation_review || null) === stableReviewJson(expected || null);
+}
 async function saveReview(entry, decision) {
   var key = entry && entry.key;
   if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
@@ -109,6 +121,7 @@ async function saveReview(entry, decision) {
     var attachedPronunciationReview = pronunciationReviewFor(entry);
     if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     meta.audio_review = next;
     var saved = await fetch(rowUrl(), {
@@ -120,13 +133,17 @@ async function saveReview(entry, decision) {
     var savedRows = await saved.json();
     var savedReview = savedRows[0] && savedRows[0].story_meta && savedRows[0].story_meta.audio_review;
     if (!savedReview || !savedReview.clips || !savedReview.clips[key]) throw new Error('لم يؤكد الخادم حفظ قرار المقطع.');
+    if (!pronunciationReviewMatches(savedReview.clips[key], expectedPronunciationReview)) {
+      throw new Error('لم يؤكد الخادم حفظ تفاصيل تقرير مدقق النطق كما أُرسلت.');
+    }
     var verify = await fetch(rowUrl() + '&select=id,story_meta', {
       headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store'
     });
     if (!verify.ok) throw new Error('تعذر التحقق النهائي من حفظ المراجعة.');
     var verifiedRows = await verify.json();
     var verified = verifiedRows[0] && verifiedRows[0].story_meta && verifiedRows[0].story_meta.audio_review;
-    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== decision.status) {
+    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== decision.status ||
+        !pronunciationReviewMatches(verified.clips[key], expectedPronunciationReview)) {
       throw new Error('فشل التحقق النهائي من قرار المقطع.');
     }
     review = core.cloneReview(verified);
