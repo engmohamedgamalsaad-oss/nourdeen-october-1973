@@ -195,11 +195,11 @@ Deno.serve(async (req: Request) => {
     const manifest = JSON.parse(await manifestFile.text());
     const signedSources: Record<string, string> = {};
     for (const segment of manifest.segments ?? []) {
-      const { data, error } = await service.storage.from(BUCKET).createSignedUrl(prefix + "/" + segment.src, 14400);
+      const { data, error } = await service.storage.from(BUCKET).createSignedUrl(prefix + "/" + segment.src, 3600);
       if (error || !data?.signedUrl) return reply(500, { error: "تعذر إنشاء رابط مؤقت لأحد المقاطع.", file: segment.src });
       signedSources[segment.src] = new URL(data.signedUrl, SUPABASE_URL + "/storage/v1/").href;
     }
-    return reply(200, { success: true, manifest, signed_sources: signedSources, expires_in: 14400 });
+    return reply(200, { success: true, manifest, signed_sources: signedSources, expires_in: 3600 });
   }
 
   return reply(400, { error: "إجراء غير معروف." });
