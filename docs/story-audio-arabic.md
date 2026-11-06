@@ -1,32 +1,42 @@
 # Arabic story-audio pronunciation pipeline
 
-The visible story text is the source of truth and is never rewritten by audio generation. Arabic speech receives a separate, audio-only reading copy.
+The visible story text is the source of truth and is never rewritten by audio generation. Speech may use a separately reviewed, audio-only reading copy; this does not alter the visible story.
+
+## Shared story workflow
+
+All sections, including October, use the same story-audio workflow: canonical story packages, five-language audio-text approval where required, generation planning, isolated staging, manifests, ASR review, dialect review, and human listening/acceptance.
+
+October's only special handling is source extraction and presentation:
+- Its published HTML/CSS and visible story wording are preserved.
+- Its canonical audio source package is stories/october/<id>/story.json, accompanied by audio-readiness.json.
+- The readiness file confirms that the extracted source text and five translations are complete. It does not prove that MP3 files were generated, that manifests exist, or that a human accepted any clip.
+- October audio is stored and audited under the same assets/audio/october/<story-slug>/<language>/ layout as other sections.
 
 ## Processing order
 
-1. Read the Arabic block from the published story package.
+1. Read the Arabic block from the canonical story package.
 2. Split it into sentence-sized pieces for diacritization.
-3. Apply `text2tashkeel==0.1.0` with the `rawi-ensemble` model.
+3. Apply text2tashkeel==0.1.0 with the rawi-ensemble model.
 4. Rejoin the sentence pieces and split long speech into chunks at sentence/word boundaries.
-5. Synthesize each chunk with the configured Fish Audio speaker and pass the Arabic rate as Fish `prosody.speed` (for example, -2% becomes 0.98x). Fish's cloud API does not expose the Edge-style pitch setting used by Edge TTS.
-6. Normalize Arabic Fish MP3s with FFmpeg loudnorm before writing the manifest.
-7. Keep the vocalized text in the manifest so browser speech fallback uses the same reading copy.
+5. Use only the configured, owner-approved speaker identity and model. No automatic speaker substitution is permitted.
+6. Normalize generated MP3 audio as configured before writing the manifest.
+7. Keep the audio reading text in the manifest so browser speech fallback can use the same reading copy.
 8. Keep a short pause between consecutive audio chunks.
 
-## Failure behavior
+## Failure and approval behavior
 
 - Missing diacritizer dependency or a failed/empty diacritization result fails the Arabic generation step. It does not silently send bare Arabic to TTS.
-- Fish Audio retries transient failures up to three times. It does not switch to a different speaker in the middle of a story.
-- The audio commit step runs only after successful generation, so a partial run is not published.
-- October page content is extracted into `rebuild/october-audio-packages/<id>/story.json` without changing its published HTML/CSS. Those packages use the same Arabic diacritization, Fish Audio voice, manifests, staging, ASR review, and human approval gates as every other section.
+- A failed TTS request is surfaced as a failure; the generator does not silently retry or switch speakers.
+- Generation writes to isolated, ignored staging. It does not replace published MP3 files as part of planning or review.
+- Generation requires an explicit invocation. Fish Audio additionally requires its separate explicit approval flag; this documentation change does not invoke TTS.
+- A complete source package is not an audio-complete story. Every required language must have valid manifests and actual MP3 files, every clip must be listened to in full, and every clip must receive explicit human acceptance before final audio approval.
+- ASR and dialect reports are advisory only. Neither can replace human listening or approve a clip.
 
 ## Model and licensing notes
 
-- Package: [text2tashkeel 0.1.0](https://pypi.org/project/text2tashkeel/0.1.0/)
-- Model: [TigreGotico/rawi-ensemble](https://huggingface.co/TigreGotico/rawi-ensemble), marked Apache-2.0 on its model card.
+- Package: https://pypi.org/project/text2tashkeel/0.1.0/
+- Model: https://huggingface.co/TigreGotico/rawi-ensemble, marked Apache-2.0 on its model card.
 - The package reports 2.04% diacritic error rate on its own held-out corpus. Treat this as a benchmark claim, not a guarantee for Khaledoon's child-friendly biographies; names, dates, and ambiguous words still need listening review.
-- The package documentation recommends one sentence per diacritization call. Its benchmark documentation also discusses corpus-overlap caveats.
+- Fish Audio's public guidance and voice permissions must be checked against the account plan and the permissions for each selected voice before commercial use. Do not use a voice that imitates an identifiable real person without the required consent.
 
-- Fish Audio's current public guidance describes its free plan as personal/non-commercial; paid plans are required for commercial use. The exact usage rights and creator permissions for the two selected community voice IDs have not been independently confirmed. Before monetization, sponsorship, or other commercial use, verify the account plan and each voice's permissions with Fish Audio. Do not use a voice that imitates an identifiable real person without the required consent.
-
-This pipeline affects generated audio assets only. It does not add tashkeel to the visible Arabic story text.
+This pipeline affects generated audio assets only. It does not add tashkeel to the visible Arabic story text or change the published October page design/content.
