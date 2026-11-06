@@ -63,6 +63,33 @@ const core = require('../assets/audio-review-core.js');
   const hashedReview = core.applyDecision(null, hashedEntry, { status: 'accepted' });
   assert.equal(hashedReview.audio_hashes['stable-source-base'], 'a'.repeat(64), 'actual MP3 digest must persist across review sessions');
   assert.equal(hashedReview.clips['hashed-key'].audio_sha256, 'a'.repeat(64));
+  const validatorResult = {
+    engine: 'faster-whisper-local', status: 'review_required',
+    audio_sha256: 'a'.repeat(64), hash_verified: true,
+    match_ratio: 0.8, detected_language: 'ar', language_probability: 0.97,
+    expected_word_count: 5, recognized_word_count: 4, transcript: 'نص مسموع',
+    mismatches: [{ type: 'replace', expected: ['الكلمة'], recognized: ['كلمة'], start: 1.2, end: 1.8 }],
+    low_confidence_words: [{ word: 'كلمة', start: 1.2, end: 1.8, probability: 0.31 }]
+  };
+  const withValidator = core.applyDecision(null, hashedEntry, {
+    status: 'accepted', pronunciation_review: validatorResult
+  }, '2026-11-06T00:00:00.000Z');
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.format, 'KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_RESULT_V1');
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.hash_verified, true);
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.mismatches[0].start, 1.2);
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.low_confidence_words[0].probability, 0.31);
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.attached_at, '2026-11-06T00:00:00.000Z');
+  const preservedValidator = core.applyDecision(withValidator, hashedEntry, {
+    status: 'rejected', note: 'مراجعة بشرية'
+  }, '2026-11-06T00:01:00.000Z');
+  assert.equal(preservedValidator.clips['hashed-key'].pronunciation_review.status, 'review_required',
+    'a later admin decision without a newly imported report must preserve the ASR evidence for the same audio hash');
+  const unverifiedValidator = core.applyDecision(null, hashedEntry, {
+    status: 'accepted',
+    pronunciation_review: { ...validatorResult, audio_sha256: 'b'.repeat(64), hash_verified: true }
+  });
+  assert.equal(unverifiedValidator.clips['hashed-key'].pronunciation_review.hash_verified, false,
+    'ASR evidence must not be marked verified when its hash differs from the reviewed MP3');
   r = core.applyDecision(r, entry, { status: 'rejected', note: 'نطق خاطئ', suggestion: 'صياغة أوضح', issue: 'audio_only' });
   assert.equal(r.clips[a].status, 'rejected');
   assert.equal(r.clips[a].issue, 'audio_only');
@@ -156,6 +183,9 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (!connected) { initializing = false; return; }'), 'audio review controls must not render outside an admin-connected draft');
   assert.ok(reviewUi.includes('seg.audio_sha256 || review.audio_hashes[sourceBase] ||') && reviewUi.includes('knownAudioHash || seg.audio_revision'), 'review identity must reuse a verified MP3 digest across preview sessions');
   assert.ok(reviewUi.includes('core.sha256Bytes(await blob.arrayBuffer())'), 'the actual MP3 bytes played by the reviewer must be hashed and checked');
+  assert.ok(reviewUi.includes('function pronunciationReviewFor(entry)'), 'ASR report data must be collected for the exact clip before saving an admin decision');
+  assert.ok(reviewUi.includes('decisionWithAnalysis.pronunciation_review = attachedPronunciationReview'), 'the admin decision must carry the matching ASR result into persisted review metadata');
+  assert.ok(reviewUi.includes('savedClip.pronunciation_review'), 'previously saved ASR findings must remain visible when the admin reopens the preview');
   assert.ok(reviewUi.includes("report.format !== 'KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_V1'"), 'ASR reports must use the supported report contract');
   assert.ok(reviewUi.includes("reportEntries.length !== report.reports.length"), 'ASR reports with unmatchable entries must be rejected rather than partially trusted');
   assert.ok(reviewUi.includes('جزء متوقع غير موجود في التفريغ'), 'ASR review must expose expected words missing from the recognized transcript');
