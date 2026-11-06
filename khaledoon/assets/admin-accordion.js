@@ -19,6 +19,10 @@
     'details.kh-acc>summary .kh-acc-title{display:flex;flex-direction:column;min-width:0;flex:1}' +
     'details.kh-acc>summary .kh-acc-title small{color:var(--muted);font-weight:400;font-size:.8rem}' +
     'details.kh-acc>summary .kh-acc-count{flex:none;padding:2px 12px;border:1px solid var(--line);border-radius:99px;font-size:.85rem;color:var(--gold)}' +
+    'details.kh-sec{border-inline-start:5px solid var(--c,var(--line))}' +
+    'details.kh-sec>summary{font-size:1.05rem}' +
+    'details.kh-sec>.kh-acc-body{padding:10px}' +
+    'details.kh-sec>.kh-acc-body>:last-child{margin-bottom:0}' +
     '@media(prefers-reduced-motion:reduce){details.kh-acc>summary::after{transition:none}}';
   var st = document.createElement('style');
   st.id = 'kh-acc-style';
@@ -167,6 +171,7 @@
     for (var i = 0; i < nums.length; i++) total += Number(nums[i].textContent) || 0;
     var d = document.createElement('details');
     d.className = 'kh-acc kh-react';
+    d.setAttribute('data-meta', meta ? meta.textContent : '');
     var s = document.createElement('summary');
     var t = document.createElement('span');
     t.className = 'kh-acc-title';
@@ -184,24 +189,111 @@
     d.appendChild(b);
     box.parentNode.insertBefore(d, box);
     box.parentNode.removeChild(box);
-    var list = d.parentNode;
-    if (list && list.id === 'rlist' && !document.getElementById('khReactTools')) {
-      var tools = document.createElement('div');
-      tools.id = 'khReactTools';
-      tools.className = 'kh-acc-tools';
-      [['فتح الكل', true], ['إغلاق الكل', false]].forEach(function (p) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'btn ghost';
-        btn.textContent = p[0];
-        btn.addEventListener('click', function () {
-          var all = list.querySelectorAll('details.kh-react');
-          for (var k = 0; k < all.length; k++) all[k].open = p[1];
-        });
-        tools.appendChild(btn);
-      });
-      list.parentNode.insertBefore(tools, list);
-    }
+  }
+
+  // ===== التدرج: قسم ← حكاية ← خيارات الحكاية =====
+  var SEC_ALIAS = { learning: 'women', knowledge: 'women', fame: 'people' };
+  var secTitle = {}, secOrder = [], idSec = {}, secLoaded = null, secOpen = {}, gPending = false;
+  var SEARCH_OF = { list: 'search', vlist: 'vsearch', rlist: 'rsearch' };
+
+  function fetchJson(u) {
+    try {
+      return fetch(u, { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; });
+    } catch (e) { return Promise.resolve(null); }
+  }
+  function loadSecData() {
+    if (secLoaded) return secLoaded;
+    secLoaded = Promise.all([fetchJson('../stories/sections.json'), fetchJson('../stories/index.json')]).then(function (a) {
+      var secs = a[0] && a[0].sections;
+      if (Array.isArray(secs)) secs.forEach(function (x) { if (x && x.id) { secTitle[x.id] = x.title || x.id; secOrder.push(x.id); } });
+      if (Array.isArray(a[1])) a[1].forEach(function (x) { if (x && x.id != null) idSec[String(x.id)] = x.section || ''; });
+    });
+    return secLoaded;
+  }
+  function secLabel(key) {
+    if (key === 'other') return 'أقسام أخرى';
+    return secTitle[key] || secTitle[SEC_ALIAS[key]] || key;
+  }
+  function idFromText(txt) {
+    var m = /رقم\s+(\S+)/.exec(txt || '');
+    return m ? m[1] : '';
+  }
+  // كل صف يُصنَّف لقسمه: الحكايات المرسلة من اللون sec-xxx في الصف نفسه، والباقي من رقم الحكاية في ملف الموقع.
+  var KINDS = {
+    list: { rows: 'details.pubrow', key: function (r) { var m = /(?:^|\s)sec-([a-z0-9-]+)/.exec(r.className); return m ? m[1] : 'other'; } },
+    vlist: { rows: 'div.vrow', key: function (r) { var sm = r.querySelector('small'); return idSec[idFromText(sm && sm.textContent)] || 'other'; } },
+    rlist: { rows: 'details.kh-react', key: function (r) { return idSec[idFromText(r.getAttribute('data-meta'))] || 'other'; } }
+  };
+
+  function ensureTools(list) {
+    var id = 'khTools-' + list.id;
+    if (document.getElementById(id) || !list.parentNode) return;
+    var tools = document.createElement('div');
+    tools.id = id;
+    tools.className = 'kh-acc-tools';
+    [['فتح كل الأقسام', function () { var a = list.querySelectorAll('details.kh-sec'); for (var i = 0; i < a.length; i++) a[i].open = true; }],
+     ['إغلاق الكل', function () { var a = list.querySelectorAll('details'); for (var i = 0; i < a.length; i++) a[i].open = false; }]].forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn ghost';
+      b.textContent = p[0];
+      b.addEventListener('click', p[1]);
+      tools.appendChild(b);
+    });
+    list.parentNode.insertBefore(tools, list);
+  }
+
+  function groupList(list, kind) {
+    var rows = Array.prototype.filter.call(list.children, function (n) { return n.matches(kind.rows); });
+    if (!rows.length) return;
+    var groups = {}, order = [];
+    rows.forEach(function (r) {
+      var k = kind.key(r), g = groups[k];
+      if (!g) { g = groups[k] = { key: k, rows: [], idx: order.length }; order.push(g); }
+      g.rows.push(r);
+    });
+    function rank(g) { var i = secOrder.indexOf(g.key); if (i < 0) i = secOrder.indexOf(SEC_ALIAS[g.key]); return i < 0 ? 1000 + g.idx : i; }
+    order.sort(function (a, b) { return rank(a) - rank(b); });
+    var si = document.getElementById(SEARCH_OF[list.id]);
+    var searching = !!(si && String(si.value || '').trim());
+    order.forEach(function (g) {
+      var d = document.createElement('details');
+      d.className = 'kh-acc kh-sec' + (/^[a-z0-9-]+$/.test(g.key) ? ' sec-' + g.key : '');
+      d.setAttribute('data-kh-sec', g.key);
+      var s = document.createElement('summary');
+      var t = document.createElement('span');
+      t.className = 'kh-acc-title';
+      t.textContent = secLabel(g.key);
+      s.appendChild(t);
+      var c = document.createElement('span');
+      c.className = 'kh-acc-count';
+      c.textContent = g.rows.length + ' حكاية';
+      s.appendChild(c);
+      d.appendChild(s);
+      var b = document.createElement('div');
+      b.className = 'kh-acc-body';
+      g.rows.forEach(function (r) { b.appendChild(r); });
+      d.appendChild(b);
+      var memo = list.id + ':' + g.key;
+      var hasOpenRow = g.rows.some(function (r) { return r.open; });
+      if (secOpen[memo] || hasOpenRow || searching) d.open = true;
+      s.addEventListener('click', function () { setTimeout(function () { secOpen[memo] = d.open; }, 0); });
+      list.appendChild(d);
+    });
+    ensureTools(list);
+  }
+
+  function groupAll() {
+    gPending = false;
+    Object.keys(KINDS).forEach(function (id) {
+      var list = document.getElementById(id);
+      if (list) groupList(list, KINDS[id]);
+    });
+  }
+  function scheduleGroup() {
+    if (gPending) return;
+    gPending = true;
+    loadSecData().then(groupAll, groupAll);
   }
 
   function scan(root) {
@@ -213,6 +305,7 @@
     var rx = root.querySelectorAll ? root.querySelectorAll('article.reaction-review-card:not([data-kh-acc])') : [];
     for (var j = 0; j < rx.length; j++) enhanceReaction(rx[j]);
     enhanceTools();
+    scheduleGroup();
   }
 
   var pending = false, queue = [];
