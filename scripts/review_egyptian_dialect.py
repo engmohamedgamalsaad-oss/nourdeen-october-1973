@@ -124,9 +124,6 @@ def build_report(
     if story.get("format") != "KHALEDOON_STORY":
         raise ReviewError("Unsupported story format")
     section = str(story.get("section") or "").strip().lower()
-    if section == "october" or story_path.parts[-3:-2] == ("october",):
-        raise ReviewError("October stories are explicitly excluded from dialect review")
-
     candidate = pronunciation_path or story_path.with_name("audio-pronunciation.json")
     pronunciation = read_object(candidate, "audio pronunciation") if candidate.is_file() else {}
     if pronunciation_path is not None and not candidate.is_file():
@@ -226,13 +223,24 @@ def build_report(
 
 
 def discover_stories(stories_root: Path) -> list[Path]:
-    """Find unified non-October story packages without opening or changing other assets."""
+    """Find published-tree and October audio-source packages without changing assets."""
+    candidates = list(stories_root.glob("*/*/story.json"))
+    candidates.extend(
+        (stories_root.parent / "rebuild" / "october-audio-packages").glob("*/story.json")
+    )
     found = []
-    for path in sorted(stories_root.glob("*/*/story.json")):
-        if path.parent.parent.name.lower() == "october":
-            continue
+    for path in sorted(set(candidates)):
         package = read_object(path, "story package")
-        if package.get("format") == "KHALEDOON_STORY":
+        relative = path.relative_to(stories_root.parent)
+        if package.get("format") != "KHALEDOON_STORY":
+            continue
+        if relative.parts[0] == "stories" and len(relative.parts) == 4:
+            section = relative.parts[1]
+        elif relative.parts[:2] == ("rebuild", "october-audio-packages") and len(relative.parts) == 4:
+            section = "october"
+        else:
+            continue
+        if package.get("section") == section:
             found.append(path)
     return found
 
@@ -240,7 +248,7 @@ def discover_stories(stories_root: Path) -> list[Path]:
 def build_all_stories_report(stories_root: Path, language: str = "ar") -> dict[str, Any]:
     paths = discover_stories(stories_root)
     if not paths:
-        raise ReviewError(f"No eligible non-October unified stories found under {stories_root}")
+        raise ReviewError(f"No eligible unified story packages found under {stories_root}")
     reports = [build_report(path, language=language) for path in paths]
     counts: dict[str, int] = {}
     total_blocks = 0
@@ -259,13 +267,13 @@ def build_all_stories_report(stories_root: Path, language: str = "ar") -> dict[s
             "register_counts": counts,
             "automatic_rewrites": 0,
             "fish_audio_calls": 0,
-            "october_stories_included": 0,
+            "october_stories_included": sum(item["section"] == "october" for item in reports),
         },
         "stories": reports,
         "limitations": [
             "هذه مراجعة استرشادية نصية وليست حكمًا نهائيًا على اللهجة أو جودة الأداء.",
             "لم يتم تشغيل أي خدمة تحويل نص إلى صوت أو استهلاك رصيد.",
-            "قسم أكتوبر مستثنى صراحةً من الفحص.",
+            "يشمل الفحص حزم أكتوبر الصوتية؛ يظل التقييم استرشاديًا ولا يغني عن الاستماع البشري.",
         ],
     }
 
