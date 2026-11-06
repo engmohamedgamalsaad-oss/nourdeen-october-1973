@@ -213,7 +213,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.indexOf("blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });") < reviewUi.indexOf('if (!manifests[lang]) return;'), 'switching to a language without a manifest must clear stale controls');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
-  assert.ok(reviewUi.includes("nextStory.section === 'october'"), 'October drafts must remain completely outside audio review');
+  assert.ok(!reviewUi.includes("nextStory.section === 'october'"), 'October drafts must use the shared audio review UI');
   assert.ok(reviewUi.includes('banner.hidden = false;'), 'the missing-audio gate must remain visible even when no manifest exists');
   assert.ok(reader.includes("if(story.section==='october'||previewMode||document.getElementById('kh-story-audio-script'))return"), 'preserve the existing October reader/player flow while preventing the audio reviewer from initializing for October');
   assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
@@ -223,7 +223,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(fs.readFileSync(path.join(__dirname, '../../scripts/generate_story_audio.py'), 'utf8').includes('"audio_sha256": audio_sha256'), 'audio manifests must store the digest of the actual generated MP3 bytes');
   assert.ok(adminHtml.includes("String(it.section||it.section_key||'').toLowerCase()!=='october'"), 'October story content must remain protected from AI prompt edits');
   assert.ok(reviewActions.includes('if(!window.KHStoryAudioReview){message('), 'approval must fail closed if the audio reviewer did not load');
-  assert.ok(reviewActions.includes("isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october'"), 'October approval flow must remain unchanged');
+  assert.ok(reviewActions.includes('if(isApprove){'), 'all sections, including October, must pass the shared audio approval gate');
   assert.ok(reviewActions.includes('delete pendingMeta.audio_review') && reviewActions.includes('delete meta.pending_draft.story_meta.audio_review'), 'approval must not duplicate audio_review inside pending_draft metadata');
 
   console.log('audio-review-core tests passed');
