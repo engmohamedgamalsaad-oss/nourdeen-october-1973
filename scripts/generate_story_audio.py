@@ -930,7 +930,7 @@ async def main() -> int:
             print("COMPLETE PREFLIGHT")
         print(json.dumps(report, ensure_ascii=False, indent=2))
         if report["stories_with_errors"] or report["blocked_stories"] or report["published_stories"] == 0:
-            print("SAFETY STOP: at least one published story is missing a valid package or human-approved audio text; no TTS requests were sent.")
+            print("SAFETY STOP: at least one published story is missing a valid package or human-approved audio text; no TTS requests were sent.", file=sys.stderr)
             return 2
         if args.generate_all:
             for item in report["stories"] + report["october_packages"]:
