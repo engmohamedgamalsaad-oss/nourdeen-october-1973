@@ -428,6 +428,7 @@ async function confirmStoryPublishAfterUpload(it,btn){
 }
 /* مساعدات مشتركة للمعاينة والاعتماد (بدل نسخ الكود في كل زر). */
 function storyReviewPackageOf(it){var m=it.story_meta||{},p=m.pending_draft&&typeof m.pending_draft==='object'?m.pending_draft:null;return p&&(p.story_only_draft||p.v2_only_draft)?(p.story_package||p.v2_package):((m.story_only_draft||m.v2_only_draft)?(m.story_package||m.v2_package):null)}
+async function audioReviewPackageOf(it){var pkg=storyReviewPackageOf(it);if(pkg)return pkg;if(!isOctoberLegacyRecord(it))return null;var meta=it.story_meta||{},review=meta.preview_review||{},staticPath=String(review.static_story_path||''),match=staticPath.match(/(?:^|\/)stories\/october\/(\d{3})(?:\/|$)/),storyId=match?match[1]:String(review.static_story_id||'');if(!/^\d{3}$/.test(storyId))return null;var response=await fetch('../rebuild/october-audio-packages/'+storyId+'/story.json',{cache:'no-store'});if(!response.ok)return null;var source=await response.json();if(source.format!=='KHALEDOON_STORY'||source.section!=='october'||String(source.slug)!==storyId)return null;return source}
 function stageStoryReview(it,pkg){var meta=it.story_meta||{},pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;try{localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:it._t==='o'?'submitted_stories':'khaledoon_submissions',record_type:'modern',status:it.status||'pending',story_meta:meta,record_data:Object.assign({},pending||it)}));var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank')}catch(ignoreStoryReviewStore){}}
 function shouldRecordPreview(it){var st=window.KHWorkflow.stateOf(it).state;return st!=='preview_sent'&&st!=='awaiting_publish'}
 async function recordPreviewSent(it){
@@ -1012,7 +1013,7 @@ function pubRow(it){
     var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
-    if(requireUnifiedStoryPackage&&String(it.section||it.section_key||'').toLowerCase()!=='october'&&window.KHAudioTextReview){
+    if((requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview){
      var audioTextReviewBox=el('div','review-data');audioTextReviewBox.style.cssText='border:1px solid var(--line,#31505a);border-radius:10px;padding:12px;display:grid;gap:8px';
      audioTextReviewBox.appendChild(el('strong','','مراجعة النص قبل توليد الصوت'));
      audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق في اللغات الخمس. بعد مراجعة التقرير والموافقة على الاقتراحات أو الإبقاء على الأصل، صدّر ملف audio-pronunciation.json وضعه بجوار story.json قبل توليد أي صوت. لا يغيّر نص الحكاية المرئية.'));
@@ -1045,8 +1046,8 @@ function pubRow(it){
        card.appendChild(label);syncApproval();audioTextReviewResultList.appendChild(card);
       });
      }
-     audioTextReviewCopy.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);
+     audioTextReviewCopy.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it);
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
       try{
        var diagnostics=window.KHAudioTextReview.diagnose(pkg),prompt=window.KHAudioTextReview.buildPrompt(pkg);
@@ -1058,8 +1059,8 @@ function pubRow(it){
       }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز التدقيق: '+String(error&&error.message||error)}
      });
      audioTextReviewPaste.addEventListener('input',function(){clearAudioTextReviewCards();audioTextReviewCurrentResult=null;audioTextReviewStatus.textContent='تغير النص الملصوق؛ أعد التحقق قبل اعتماد أي اقتراح.'});
-     audioTextReviewValidate.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
+     audioTextReviewValidate.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it);clearAudioTextReviewCards();audioTextReviewCurrentResult=null;
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة موحدة مرتبطة بهذه المسودة.';return}
       var result=window.KHAudioTextReview.validateResult(audioTextReviewPaste.value,pkg);
       if(!result.ok){audioTextReviewStatus.textContent='التقرير غير صالح ('+result.errors.length+' ملاحظات): '+result.errors.slice(0,5).join(' | ');return}
@@ -1070,7 +1071,7 @@ function pubRow(it){
       renderAudioTextReviewSuggestions(suggestions);
      });
      audioTextReviewDictionary.addEventListener('click',async function(){
-      var pkg=storyReviewPackageOf(it);
+      var pkg=await audioReviewPackageOf(it);
       if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير التدقيق أولًا.';return}
       audioTextReviewDictionary.disabled=true;
       try{
@@ -1088,8 +1089,8 @@ function pubRow(it){
       }catch(error){audioTextReviewStatus.textContent='تعذر تجهيز اقتراحات القاموس: '+String(error&&error.message||error)}
       finally{audioTextReviewDictionary.disabled=audioTextReviewDictionaryApplied}
      });
-     audioTextReviewExport.addEventListener('click',function(){
-      var pkg=storyReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
+     audioTextReviewExport.addEventListener('click',async function(){
+      var pkg=await audioReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
       if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير اللغات الخمس أولًا.';return}
       try{
        var approvalFile=window.KHAudioTextReview.buildApprovedAudioPronunciation(audioTextReviewCurrentResult,pkg,keys);
@@ -1124,7 +1125,7 @@ function pubRow(it){
     aiPanel.appendChild(el('p','fnote','لن يتم النشر تلقائيًا. بعد الاستيراد ستعود الحكاية إلى «تحت التحرير»، حيث يمكنك فتح أدوات التحرير ثم معاينة الحكاية قبل اعتمادها.'));
     aiCopy.addEventListener('click',async function(){
      var provider=aiProvider.value,basePrompt=buildNewStoryPrompt(provider,'package');
-      var audioReviewSection=(requireUnifiedStoryPackage&&String(it.section||it.section_key||'').toLowerCase()!=='october'&&window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
+      var audioReviewSection=(window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review)?window.KHAudioReviewCore.buildPromptSection(it.story_meta.audio_review):'';
      var inputData={section_key:it.section||it.section_key||'',figure_name:it.figure_name||it.person||'',title:it.title||'',subtitle:it.subtitle||'',narrator_name:it.narrator_name||it.student_name||'',narrator_grade:it.narrator_grade||it.grade||'',original_body:it.original_body||it.body||'',current_body:it.body||'',karma_text:it.karma_text||(it.story_meta&&it.story_meta.karma_text)||'',history_note:it.history_note||'',sources:it.sources||'',images_note:it.images_note||'',visual_design:it.visual_design||(it.story_meta&&it.story_meta.visual_design)||'',cover:it.cover||(it.story_meta&&it.story_meta.cover)||null,map_location:it.story_meta&&it.story_meta.map_location||null,images:it.images||(it.story_meta&&it.story_meta.images)||[],translations:it.translations||(it.story_meta&&it.story_meta.translations)||{},question_bank:it.question_bank_json||(it.story_meta&&it.story_meta.question_bank_json)||''};
       var schema;
       if(requireUnifiedStoryPackage){
