@@ -210,7 +210,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes("item.playable && match.hashVerified && match.blob"), 'word playback controls must require a verified current MP3 file');
   assert.ok(reviewUi.includes('audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; audio.pause();'), 'switching clips must detach stale playback events before revoking the previous audio URL');
   assert.ok(reviewUi.includes('readyByKey[entry.key] = \'ready\';') && reviewUi.includes('played[entry.key] = true;'), 'verified audio must be ready and count as listened only after playback ends');
-  assert.ok(reviewUi.indexOf("blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });") < reviewUi.indexOf('if (!manifests[lang]) return;'), 'switching to a language without a manifest must clear stale controls');
+  assert.ok(reviewUi.indexOf("blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });") < reviewUi.indexOf('if (!manifests[lang]) {'), 'switching to a language without a manifest must clear stale controls');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
   assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
   assert.ok(!reviewUi.includes("nextStory.section === 'october'"), 'October drafts must use the shared audio review UI');
