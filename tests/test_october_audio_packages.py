@@ -160,6 +160,21 @@ class OctoberAudioPackageTests(unittest.TestCase):
             self.assertTrue(is_package)
             self.assertEqual(relative.parts[:2], ("stories", "october"))
 
+    def test_committed_october_source_package_is_accepted_by_generator(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            generated_story = self.make_package(root)
+            source_dir = root / "rebuild" / "october-audio-packages" / "001"
+            source_dir.parent.mkdir(parents=True)
+            generated_story.parent.rename(source_dir)
+            story = source_dir / "story.json"
+            with patch.object(audio, "ROOT", root):
+                relative, section, is_package = audio.locate_story(story)
+                audio.require_october_readiness(story, audio.read_json(story))
+            self.assertEqual(section, "october")
+            self.assertTrue(is_package)
+            self.assertEqual(relative.parts[:3], ("rebuild", "october-audio-packages", "001"))
+
 
 if __name__ == "__main__":
     unittest.main()
