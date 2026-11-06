@@ -6,8 +6,10 @@ files, manifests, and MP3 files. It only returns prepared text to its caller.
 """
 from __future__ import annotations
 
+import argparse
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
 from typing import Any
@@ -161,3 +163,45 @@ def prepare_audio_text(
         raise PronunciationDictionaryError("Audio pronunciation text must not be empty.")
     loaded = dictionary if dictionary is not None else load_dictionary()
     return apply_dictionary(candidate, loaded)
+
+
+def main(argv: list[str] | None = None) -> int:
+    """Print a review-only candidate; never edits files or starts audio generation."""
+    parser = argparse.ArgumentParser(
+        description="Prepare an Arabic audio-text candidate for human review (no TTS)."
+    )
+    source_group = parser.add_mutually_exclusive_group()
+    source_group.add_argument("--text", help="Arabic text to prepare.")
+    source_group.add_argument("--input-file", type=Path, help="UTF-8 text file to read.")
+    args = parser.parse_args(argv)
+
+    try:
+        if args.input_file is not None:
+            source_text = args.input_file.read_text(encoding="utf-8")
+        elif args.text is not None:
+            source_text = args.text
+        else:
+            source_text = sys.stdin.read()
+        candidate, applied_entries = prepare_audio_text(source_text)
+    except (OSError, UnicodeError, PronunciationDictionaryError) as exc:
+        parser.error(str(exc))
+
+    json.dump(
+        {
+            "source_text": source_text,
+            "candidate_audio_text": candidate,
+            "applied_entries": applied_entries,
+            "review_status": "REQUIRES_HUMAN_APPROVAL",
+            "audio_generation_performed": False,
+            "files_written": False,
+        },
+        sys.stdout,
+        ensure_ascii=False,
+        indent=2,
+    )
+    sys.stdout.write("\\n")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
