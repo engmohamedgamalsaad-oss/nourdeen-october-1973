@@ -10,10 +10,6 @@ on:
       - 'tests/audio-text-review.test.cjs'
       - 'tests/admin-speech-review-ui.test.cjs'
       - 'audio/pronunciation/**'
-      - 'khaledoon/assets/audio-text-review.js'
-      - 'khaledoon/admin.html'
-      - 'tests/audio-text-review.test.cjs'
-      - 'tests/admin-speech-review-ui.test.cjs'
       - 'docs/audio-review-workflow.md'
       - '.github/workflows/audio-pronunciation-dictionary.yml'
 
@@ -21,7 +17,7 @@ permissions:
   contents: read
 
 jobs:
-  python-dictionary:
+  test:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -38,17 +34,4 @@ jobs:
         with:
           node-version: '22'
       - name: Run browser review helper and admin UI tests
-        run: node --test tests/audio-text-review.test.cjs tests/admin-speech-review-ui.test.cjs
-
-  admin-review:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out pull request
-        uses: actions/checkout@v4
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-      - name: Test pronunciation dictionary integration in admin review
         run: node --test tests/audio-text-review.test.cjs tests/admin-speech-review-ui.test.cjs
