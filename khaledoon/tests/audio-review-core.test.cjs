@@ -67,6 +67,7 @@ const core = require('../assets/audio-review-core.js');
     engine: 'faster-whisper-local', status: 'review_required',
     audio_sha256: 'a'.repeat(64), hash_verified: true,
     match_ratio: 0.8, detected_language: 'ar', language_probability: 0.97,
+    language_mismatch: false, language_detection_uncertain: true,
     expected_word_count: 5, recognized_word_count: 4, transcript: 'نص مسموع',
     mismatches: [{ type: 'replace', expected: ['الكلمة'], recognized: ['كلمة'], start: 1.2, end: 1.8 }],
     low_confidence_words: [{ word: 'كلمة', start: 1.2, end: 1.8, probability: 0.31 }]
@@ -78,6 +79,8 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(withValidator.clips['hashed-key'].pronunciation_review.hash_verified, true);
   assert.equal(withValidator.clips['hashed-key'].pronunciation_review.mismatches[0].start, 1.2);
   assert.equal(withValidator.clips['hashed-key'].pronunciation_review.low_confidence_words[0].probability, 0.31);
+  assert.equal(withValidator.clips['hashed-key'].pronunciation_review.language_detection_uncertain, true,
+    'language uncertainty must survive persistence so the admin sees the warning after reopening');
   assert.equal(withValidator.clips['hashed-key'].pronunciation_review.attached_at, '2026-11-06T00:00:00.000Z');
   const preservedValidator = core.applyDecision(withValidator, hashedEntry, {
     status: 'rejected', note: 'مراجعة بشرية'
