@@ -898,15 +898,14 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       return !!view && !view.hidden;
     }, null, { timeout: 5000 });
     await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
-    const card = page.locator('#viewSubs details.pubrow')
+    const card = page.locator('#viewSubs details.pubrow:has(button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"])')
       .filter({ hasText: 'Existing E2E Draft' })
-      .filter({ has: page.locator('button').filter({ hasText: /^تعديل$/ }) })
       .first();
     // Trigger the row disclosure, then invoke the row's real edit handler. The
     // browser audit can report the summary as hidden while its parent disclosure is
     // collapsed, so dispatch the native click on the same elements directly.
     await card.locator('summary').evaluate((summary) => summary.click());
-    await card.getByRole('button', { name: 'تعديل', exact: true }).evaluate((button) => button.click());
+    await card.locator('button[title="فتح محرر الحكاية لتعديل النص والترجمات والصور والمصادر في أي وقت"]').evaluate((button) => button.click());
     const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
