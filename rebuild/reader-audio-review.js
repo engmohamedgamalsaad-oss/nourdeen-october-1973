@@ -43,26 +43,48 @@ async function adminToken() {
   }
   return s.access_token;
 }
+async function audioAssetsRequest(payload) {
+  var token = await adminToken();
+  var response = await fetch(SUPA + '/functions/v1/audio-review-assets', {
+    method: 'POST',
+    headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+    cache: 'no-store'
+  });
+  var data = null;
+  try { data = await response.json(); } catch (e) {}
+  if (!response.ok) {
+    var error = new Error(data && data.error || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
+    error.status = response.status;
+    throw error;
+  }
+  return data || {};
+}
+async function ensureArabicAudioStaged() {
+  if (story.section !== 'history' || story.slug !== 'ibn-sina') return;
+  await audioAssetsRequest({
+    action: 'stage',
+    section: 'history',
+    slug: 'ibn-sina',
+    language: 'ar',
+    artifact_id: 13540083314,
+    run_id: 42292463580,
+    artifact_name: 'ibn-sina-arabic-audio-staging'
+  });
+}
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
 }
 async function loadRow() {
-  if (!getContext()) { canWrite = false; return false; }
   var stagedPackage = null;
   try { stagedPackage = JSON.parse(localStorage.getItem('kh-story-review-package') || 'null'); } catch (e) {}
   if (!stagedPackage || stagedPackage.section !== story.section || stagedPackage.slug !== story.slug) {
     throw new Error('هوية الحكاية في سياق الأدمن لا تطابق الحكاية المعروضة؛ أعد فتح المعاينة من صف الحكاية الصحيح.');
   }
-  var token = await adminToken();
+  var result = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+  review = core.cloneReview(result.audio_review || null);
   canWrite = true;
-  var res = await fetch(rowUrl() + '&select=*', { headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store' });
-  if (!res.ok) throw new Error('تعذرت قراءة سجل المراجعة (' + res.status + ').');
-  var rows = await res.json();
-  if (!rows.length) throw new Error('لم يتم العثور على سجل الحكاية.');
-  row = rows[0];
-  var meta = row.story_meta || {};
-  review = core.cloneReview(meta.audio_review || null);
   return true;
 }
 function pronunciationReviewFor(entry) {
@@ -105,46 +127,23 @@ function pronunciationReviewMatches(clip, expected) {
 async function saveReview(entry, decision) {
   var key = entry && entry.key;
   if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
-  if (!row || !ctx) throw new Error('سجل المراجعة غير متصل بلوحة الإدارة.');
+  if (!canWrite || !story) throw new Error('مراجعة الصوت غير متصلة بسجل الحكاية.');
   busy = true;
   try {
-    var token = await adminToken();
-    var fresh = await fetch(rowUrl() + '&select=id,status,story_meta', {
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store'
-    });
-    if (!fresh.ok) throw new Error('تعذرت إعادة قراءة السجل قبل الحفظ (' + fresh.status + ').');
-    var freshRows = await fresh.json();
-    if (!freshRows.length) throw new Error('اختفى سجل الحكاية قبل الحفظ.');
-    var current = freshRows[0], meta = Object.assign({}, current.story_meta || {});
-    var currentReview = core.cloneReview(meta.audio_review || null);
     var decisionWithAnalysis = Object.assign({}, decision);
     var attachedPronunciationReview = pronunciationReviewFor(entry);
     if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
-    var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    var next = core.applyDecision(core.cloneReview(review), entry, decisionWithAnalysis);
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
-    meta.audio_review = next;
-    var saved = await fetch(rowUrl(), {
-      method: 'PATCH',
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json', Prefer: 'return=representation' },
-      body: JSON.stringify({ story_meta: meta })
+    var saved = await audioAssetsRequest({
+      action: 'review_save', section: story.section, slug: story.slug, audio_review: next
     });
-    if (!saved.ok) throw new Error('تعذر حفظ مراجعة الصوت (' + saved.status + '): ' + (await saved.text()).slice(0, 180));
-    var savedRows = await saved.json();
-    var savedReview = savedRows[0] && savedRows[0].story_meta && savedRows[0].story_meta.audio_review;
-    if (!savedReview || !savedReview.clips || !savedReview.clips[key]) throw new Error('لم يؤكد الخادم حفظ قرار المقطع.');
-    if (!pronunciationReviewMatches(savedReview.clips[key], expectedPronunciationReview)) {
-      throw new Error('لم يؤكد الخادم حفظ تفاصيل تقرير مدقق النطق كما أُرسلت.');
-    }
-    var verify = await fetch(rowUrl() + '&select=id,story_meta', {
-      headers: { apikey: KEY, Authorization: 'Bearer ' + token }, cache: 'no-store'
-    });
-    if (!verify.ok) throw new Error('تعذر التحقق النهائي من حفظ المراجعة.');
-    var verifiedRows = await verify.json();
-    var verified = verifiedRows[0] && verifiedRows[0].story_meta && verifiedRows[0].story_meta.audio_review;
-    if (!verified || !verified.clips || !verified.clips[key] || verified.clips[key].status !== decision.status ||
+    var verified = saved && saved.audio_review;
+    if (!verified || !verified.clips || !verified.clips[key] ||
+        verified.clips[key].status !== decision.status ||
         !pronunciationReviewMatches(verified.clips[key], expectedPronunciationReview)) {
-      throw new Error('فشل التحقق النهائي من قرار المقطع.');
+      throw new Error('لم يؤكد الخادم حفظ قرار المقطع وتفاصيل مراجعة النطق.');
     }
     review = core.cloneReview(verified);
   } finally {
@@ -157,12 +156,24 @@ function manifestUrl(lang) {
 }
 async function loadArabicExpectedTexts(blocks) {
   var fallback = blocks.map(function (block) { return String(block && block.text || ''); });
-  var url = new URL('../stories/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/audio-pronunciation.json', location.href);
+  var indexUrl = new URL('../stories/index.json', location.href);
+  var indexResponse = await fetch(indexUrl.href, { cache: 'no-cache' });
+  if (!indexResponse.ok) throw new Error('تعذر تحميل فهرس الحكايات لتحديد ملف نص النطق العربي.');
+  var storyIndex = await indexResponse.json();
+  var indexedStory = Array.isArray(storyIndex) ? storyIndex.find(function (item) {
+    return item && item.section === story.section && item.title === (story.i18n && story.i18n.ar && story.i18n.ar.title);
+  }) : null;
+  if (!indexedStory || typeof indexedStory.path !== 'string' || !indexedStory.path.startsWith('stories/')) {
+    throw new Error('تعذر مطابقة الحكاية الحالية مع مسار ملف نص النطق المعتمد في الفهرس.');
+  }
+  var url = new URL('../' + indexedStory.path + 'audio-pronunciation.json', location.href);
   var response = await fetch(url.href, { cache: 'no-cache' });
   if (response.status === 404) return fallback;
   if (!response.ok) throw new Error('تعذر تحميل ملف نص النطق العربي (' + response.status + ').');
   var data = await response.json();
-  if (!data || data.version !== 1 || data.story !== story.slug || data.language !== 'ar' || !data.blocks || typeof data.blocks !== 'object') {
+  if (!data || (data.version !== 1 && data.format !== 'KHALEDOON_AUDIO_PRONUNCIATION_V1') ||
+      data.story !== story.slug || data.section !== story.section || data.language !== 'ar' ||
+      !data.blocks || typeof data.blocks !== 'object') {
     throw new Error('ملف نص النطق العربي لا يطابق الحكاية الحالية.');
   }
   if (!Array.isArray(data.approved_audio_only_rewrites)) {
@@ -185,6 +196,7 @@ async function loadArabicExpectedTexts(blocks) {
 }
 async function loadManifests() {
   manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  await ensureArabicAudioStaged();
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
     var localized = story.i18n && story.i18n[lang];
@@ -194,9 +206,21 @@ async function loadManifests() {
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
-      var res = await fetch(manifestUrl(lang), { cache: 'no-cache' });
-      if (!res.ok) { var requestError = new Error('HTTP ' + res.status); requestError.isMissingManifest = res.status === 404; throw requestError; }
-      var data = await res.json();
+      var privateResult;
+      try {
+        privateResult = await audioAssetsRequest({
+          action: 'manifest', section: story.section, slug: story.slug, language: lang
+        });
+      } catch (requestError) {
+        if (requestError.status === 404) requestError.isMissingManifest = true;
+        throw requestError;
+      }
+      var data = privateResult.manifest;
+      if (!data || !privateResult.signed_sources) throw new Error('استجابة مخزن الصوت الخاص لا تحتوي manifest أو روابطًا مؤقتة.');
+      data.segments.forEach(function (segment) {
+        segment.signed_src = privateResult.signed_sources[segment.src] || '';
+        if (!segment.signed_src) throw new Error('لم يُنشأ رابط مؤقت للمقطع ' + segment.src + '.');
+      });
       if (!data || data.version !== 1 || data.story !== story.slug || data.section !== story.section || data.language !== lang || !Array.isArray(data.segments) || !data.segments.length) {
         throw new Error('بيانات manifest غير متوافقة مع الحكاية أو اللغة.');
       }
@@ -233,7 +257,7 @@ async function loadManifests() {
         var base = await core.baseKey(storyKey, lang, seg.speaker, seg.text, Object.assign({}, engine, { audio_revision: revision }));
         var entry = { story_id: story.section + '/' + story.slug, lang: lang, block_index: blockIndex, chunk_index: chunkIndex,
           speaker: seg.speaker, base: base, source_base: sourceBase, audio_sha256: knownAudioHash,
-          text: seg.text, src: seg.src, manifest: manifest, segment: seg };
+          text: seg.text, src: seg.src, signed_src: seg.signed_src, manifest: manifest, segment: seg };
         var regen = Number(review.regen[base] || 0);
         entry.key = await core.clipKey(base, regen);
         readyByKey[entry.key] = 'ready';
@@ -335,7 +359,8 @@ async function play(entry, button, forceRestart) {
     if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     activeEntryKey = '';
     activePlayButton = null;
-    var url = new URL(entry.src + '?v=' + encodeURIComponent(String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version)), manifestUrl(entry.lang));
+    var url = new URL(entry.signed_src || entry.src, manifestUrl(entry.lang));
+    url.searchParams.set('v', String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version));
     var response = await fetch(url.href, { cache: 'no-store' });
     if (!response.ok) throw new Error('تعذر تحميل ملف الصوت (' + response.status + ').');
     var blob = await response.blob();
@@ -440,7 +465,7 @@ async function importPronunciationReport(file) {
         verified.push({ entry: entry, report: item, blob: null, hashVerified: false });
         continue;
       }
-      var url = new URL(entry.src, manifestUrl(entry.lang));
+      var url = new URL(entry.signed_src || entry.src, manifestUrl(entry.lang));
       var response = await fetch(url.href, { cache: 'no-store' });
       if (!response.ok) throw new Error('تعذر التحقق من الملف الصوتي ' + item.src + ' (' + response.status + ').');
       var blob = await response.blob();
