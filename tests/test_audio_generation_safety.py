@@ -477,5 +477,17 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse((root / ".audio-staging").exists())
 
+    def test_all_stories_workflow_supports_preflight_without_tts_approval(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        workflow = (root / ".github" / "workflows" / "story-audio-all-stories-staging.yml").read_text(encoding="utf-8")
+        jobs = workflow.split("jobs:", 1)[1].split("steps:", 1)[0]
+        self.assertNotIn("if: inputs.confirm_fish_audio_request == 'yes'", jobs)
+        self.assertIn("python scripts/generate_story_audio.py --plan-all", workflow)
+        self.assertIn("if: inputs.confirm_fish_audio_request != 'yes'", workflow)
+        generation = workflow.split("- name: Generate all five languages into isolated staging", 1)[1]
+        self.assertIn("if: inputs.confirm_fish_audio_request == 'yes'", generation.split("- name: Record preflight-only completion", 1)[0])
+        self.assertIn("--generate-all --allow-fish-audio", generation.split("- name: Record preflight-only completion", 1)[0])
+
+
 if __name__ == "__main__":
     unittest.main()
