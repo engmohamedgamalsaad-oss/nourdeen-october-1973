@@ -600,6 +600,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
         "published_stories": published_count,
         "published_non_october_stories": len(stories),
         "october_audio_packages": len(october),
+        "october_stories_skipped": 0,
         "blocked_stories": blocked,
         "october_audio_packages_blocked": sum("blocked" in item for item in october),
         "stories_with_errors": errors,
