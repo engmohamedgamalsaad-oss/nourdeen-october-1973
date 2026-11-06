@@ -29,7 +29,7 @@ import edge_tts
 
 ROOT = Path(__file__).resolve().parents[1]
 STAGING_ROOT = ROOT / ".audio-staging"
-OCTOBER_PACKAGES_DIR = ("rebuild", "october-audio-packages")
+OCTOBER_PACKAGES_DIR = ("stories", "october")
 OCTOBER_READINESS_FORMAT = "KHALEDOON_OCTOBER_AUDIO_READINESS_V1"
 LANGUAGES = ("ar", "en", "fr", "it", "de")
 GENERATOR_VERSION = "4"
@@ -396,8 +396,6 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     """Read-only plan for all five languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
-    if section == "october" and not is_october_package:
-        raise ValueError(f"October page assets are not generator input; use the extracted shared audio package: {relative}")
     package = read_json(story_path)
     if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:
         raise ValueError(f"Invalid story package format or section in {relative}")
@@ -585,10 +583,6 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
 async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> bool:
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
-    if section == "october" and not is_october_package:
-        print(f"SKIP protected October story: {relative}")
-        return False
-
     package = read_json(story_path)
     if package.get("format") != "KHALEDOON_STORY":
         raise ValueError(f"Unsupported story package format: {relative}")
@@ -842,8 +836,8 @@ async def main() -> int:
         type=Path,
         help=(
             "Explicit story.json path (stories/<section>/<id>/story.json or "
-            "rebuild/october-audio-packages/<id>/story.json). Omit to build a read-only "
-            "generation plan for all published stories and extracted October audio packages."
+            "stories/october/<id>/story.json). Omit to build a read-only "
+            "generation plan for all published stories and October source packages in the canonical story tree."
         ),
     )
     parser.add_argument(
