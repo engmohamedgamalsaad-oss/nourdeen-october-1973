@@ -24,6 +24,7 @@ on:
       - 'tests/test_audit_story_audio.py'
       - 'tests/test_audio_generation_safety.py'
       - 'scripts/generate_story_audio.py'
+      - 'rebuild/october-audio-packages/**'
       - 'tests/test_review_pronunciation.py'
       - 'stories/science/015/story.json'
       - 'stories/science/015/audio-pronunciation.json'
