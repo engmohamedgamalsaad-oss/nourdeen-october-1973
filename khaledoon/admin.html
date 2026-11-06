@@ -966,20 +966,20 @@ function pubRow(it){
  if(it._t!=='site'&&(itemState(it)==='preview_sent'||itemState(it)==='awaiting_publish'||hasPendingDraft)){
   var isSentForPreview=itemState(it)==='preview_sent';
   var openReview=el('button','btn primary',hasPendingDraft?'معاينة المسودة بعد النقل':(isSentForPreview?'فتح المعاينة المرسلة':'فتح معاينة القارئ'));openReview.type='button';openReview.title=isSentForPreview?'فتح المعاينة الحالية بالحزمة والبيانات المرتبطة بسجل الإرسال.':'فتح الحكاية بالقالب الفعلي مع بيانات المراجعة';
-  openReview.addEventListener('click',function(e){
+  openReview.addEventListener('click',async function(e){
    e.preventDefault();e.stopPropagation();
    var table=it._t==='o'?'submitted_stories':'khaledoon_submissions';
    var meta=it.story_meta&&typeof it.story_meta==='object'?it.story_meta:{};
    var pending=meta.pending_draft&&typeof meta.pending_draft==='object'?meta.pending_draft:null;
-   var pkg=pending&&(pending.story_only_draft||pending.v2_only_draft)?(pending.story_package||pending.v2_package):((meta.story_only_draft||meta.v2_only_draft)?(meta.story_package||meta.v2_package):null);
    var url;
    try{
+    /* أكتوبر يحتفظ بمسار تحريره القديم، لكن المعاينة ومراجعة الصوت تستخدمان دائمًا القارئ المشترك. */
+    var pkg=await audioReviewPackageOf(it);
     if(pkg){
-     localStorage.setItem('kh-story-review-package',JSON.stringify(pkg));
-     localStorage.setItem('kh-story-review-context',JSON.stringify({submission_id:it.id||null,submission_table:table,record_type:'modern',status:pending?'pending':(it.status||'pending'),story_meta:meta,record_data:Object.assign({},pending||it)}));
-     var bank=(pending&&pending.question_bank_json)||meta.question_bank_json||pkg.question_bank_json||'';
-     if(bank)localStorage.setItem('kh-story-preview-bank',typeof bank==='string'?bank:JSON.stringify(bank));else localStorage.removeItem('kh-story-preview-bank');
-     url='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-1';
+     stageStoryReview(it,pkg);
+     url='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(table)+'&v=20261106-shared-october-reader-preview-2';
+    }else if(isOctoberLegacyRecord(it)){
+     throw new Error('تعذر العثور على حزمة الصوت الموحدة لهذه الحكاية؛ لم أفتح صفحة المعاينة القديمة حتى لا تُتجاوز أدوات مراجعة الصوت.');
     }else{
      url='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+table;
     }
@@ -1238,7 +1238,7 @@ function pubRow(it){
    }
    if(it._t!=='site'){
 var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:12px 0';
-  var preview=el('a','btn primary',itemState(it)==='preview_sent'?'فتح المعاينة المرسلة':'فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+encodeURIComponent(previewTable);preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}var storyReviewPackage=await audioReviewPackageOf(it);try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{if(shouldRecordPreview(it))await recordPreviewSent(it);if(storyReviewPackage){stageStoryReview(it,storyReviewPackage);popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261102-unified-reader-preview-4'}else popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
+  var preview=el('a','btn primary',itemState(it)==='preview_sent'?'فتح المعاينة المرسلة':'فتح معاينة الحكاية');preview.style.cssText='min-height:64px;white-space:normal;text-align:center';var previewTable=it._t==='o'?'submitted_stories':'khaledoon_submissions';preview.href='preview.html?story=1&submission='+encodeURIComponent(String(it.id))+'&table='+encodeURIComponent(previewTable);preview.target='_blank';preview.rel='noopener';preview.addEventListener('click',async function(ev){ev.preventDefault();var popup=window.open('about:blank','_blank');if(!popup){say('err','المعاينة لم تُفتح لأن المتصفح منع النافذة المنبثقة.');return}var storyReviewPackage=await audioReviewPackageOf(it);try{popup.document.write('<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><body style="font-family:Arial;padding:24px;background:#07141b;color:#f5f0e6">جارٍ إرسال الحكاية إلى المعاينة…</body></html>');popup.document.close()}catch(ignorePopup){}try{if(shouldRecordPreview(it))await recordPreviewSent(it);if(storyReviewPackage){stageStoryReview(it,storyReviewPackage);popup.location.href='../rebuild/package-review.html?draft=1&submission='+encodeURIComponent(String(it.id||''))+'&table='+encodeURIComponent(it._t==='o'?'submitted_stories':'khaledoon_submissions')+'&v=20261106-shared-october-reader-preview-2'}else if(isOctoberLegacyRecord(it)){throw new Error('تعذر العثور على حزمة الصوت الموحدة لهذه الحكاية؛ لم أفتح صفحة المعاينة القديمة حتى لا تُتجاوز أدوات مراجعة الصوت.')}else popup.location.href=preview.href;await loadList()}catch(error){try{popup.close()}catch(ignoreClose){}say('err',error.message||'تعذر إرسال الحكاية إلى المعاينة.')}});actions.appendChild(preview);
   var data=document.createElement('details');data.className='review-data';data.style.cssText='border:1px solid var(--line,#31505a);border-radius:12px;padding:12px;background:var(--panel,#10242c)';
   var summary=el('summary','','بيانات القارئ والحكاية');summary.style.cssText='cursor:pointer;font-weight:800;min-height:38px';data.appendChild(summary);
   var close=el('button','btn ghost','× إغلاق البيانات');close.type='button';close.style.margin='10px 0';close.addEventListener('click',function(){data.open=false});data.appendChild(close);
