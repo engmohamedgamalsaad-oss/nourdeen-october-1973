@@ -147,23 +147,22 @@ def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
 def audit(root: Path) -> dict[str, Any]:
     stories_root = root / "stories"
     records: list[dict[str, Any]] = []
-    october_packages = root / "rebuild" / "october-audio-packages"
     candidates = list(stories_root.glob("*/*/story.json"))
-    candidates.extend(october_packages.glob("*/story.json"))
     published_count = 0
     published_non_october_count = 0
     october_count = 0
     for story_path in sorted(set(candidates)):
         relative = story_path.relative_to(root)
         try:
-            if relative.parts[0] == "stories":
-                data_path = story_path.with_name("data.json")
-                if not data_path.is_file() or read_object(data_path).get("published") is not True:
-                    continue
-                published_count += 1
-                if relative.parts[1] != "october":
-                    published_non_october_count += 1
-            elif relative.parts[:2] == ("rebuild", "october-audio-packages"):
+            if relative.parts[0] != "stories":
+                continue
+            data_path = story_path.with_name("data.json")
+            if not data_path.is_file() or read_object(data_path).get("published") is not True:
+                continue
+            published_count += 1
+            if relative.parts[1] != "october":
+                published_non_october_count += 1
+            else:
                 readiness_path = story_path.with_name("audio-readiness.json")
                 readiness = read_object(readiness_path) if readiness_path.is_file() else {}
                 if readiness.get("format") != "KHALEDOON_OCTOBER_AUDIO_READINESS_V1":
@@ -171,8 +170,6 @@ def audit(root: Path) -> dict[str, Any]:
                 if readiness.get("ready") is not True:
                     raise ValueError(f"{relative}: October package is not ready in all five languages")
                 october_count += 1
-            else:
-                continue
             records.append(inspect_story(story_path, root))
         except (OSError, ValueError, json.JSONDecodeError) as exc:
             records.append({
