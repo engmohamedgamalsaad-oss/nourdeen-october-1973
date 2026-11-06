@@ -149,6 +149,28 @@ class AudioInventoryTests(unittest.TestCase):
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
 
+    def test_includes_committed_october_source_when_canonical_copy_is_absent(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            canonical = self.make_story(root, "october", "001", "october-sample")
+            source = root / "rebuild" / "october-audio-packages" / "001"
+            self.write_json(source / "story.json", json.loads((canonical / "story.json").read_text(encoding="utf-8")))
+            self.write_json(source / "audio-readiness.json", json.loads((canonical / "audio-readiness.json").read_text(encoding="utf-8")))
+            (canonical / "story.json").unlink()
+            (canonical / "audio-readiness.json").unlink()
+
+            report = audit(root)
+
+            self.assertEqual(report["published_stories"], 1)
+            self.assertEqual(report["october_audio_packages"], 1)
+            self.assertEqual(report["stories_included"], 1)
+            self.assertEqual(
+                report["stories"][0]["path"],
+                "rebuild/october-audio-packages/001/story.json",
+            )
+            self.assertEqual(report["tts_requests"], 0)
+            self.assertEqual(report["files_modified"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()
