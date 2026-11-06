@@ -111,21 +111,28 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
-    def test_all_story_plan_skips_october_and_never_writes(self) -> None:
+    def test_all_story_plan_includes_october_and_never_writes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            story = self.make_story(root)
-            self.make_story(root, section="october", story_id="002")
+            self.make_story(root)
+            october = self.make_story(root, section="october", story_id="002")
+            self.write_json(october.parent / "audio-readiness.json", {
+                "format": audio.OCTOBER_READINESS_FORMAT,
+                "story": "sample-story",
+                "ready": True,
+            })
+            self.write_approved_audio_review(october)
             staging = root / ".audio-staging"
             with patch.object(audio, "ROOT", root):
                 report = audio.inspect_all_generation_plans(root, staging)
             self.assertEqual(report["published_non_october_stories"], 1)
-            self.assertEqual(report["october_stories_skipped"], 1)
+            self.assertEqual(report["october_audio_packages"], 1)
+            self.assertEqual(report["october_audio_packages_blocked"], 0)
+            self.assertEqual(report["october_stories_skipped"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
-            self.assertEqual(report["fish_segments_to_generate"], 2)
+            self.assertEqual(report["fish_segments_to_generate"], 4)
             self.assertFalse(staging.exists())
-
     def test_unapproved_arabic_rewrite_is_ignored(self) -> None:
         overrides = audio.approved_pronunciation_blocks({
             "story": "sample-story",
