@@ -54,8 +54,8 @@ html[lang=ar] #blocks[data-motif=num] .block::before{content:counter(khn,arabic-
 .block.kh-card-in .block-timeline li{opacity:1;transform:none;transition:opacity .55s ease,transform .6s cubic-bezier(.2,.8,.2,1);transition-delay:calc(.25s + var(--i,0) * .09s)}
 #blocks > figure,#gallery figure{position:relative;overflow:hidden}
 #blocks > figure.kh-card-pending img,#gallery figure.kh-card-pending img{transform:scale(1.07)}
-#blocks > figure.kh-card-in:not(.kh-card-done) img,#gallery figure.kh-card-in:not(.kh-card-done) img{transform:scale(1);transition:transform 1.5s cubic-bezier(.2,.8,.2,1);transition-delay:var(--kh-d,0s)}
 #blocks > figure.kh-card-pending figcaption,#gallery figure.kh-card-pending figcaption{opacity:0;transform:translate3d(0,10px,0)}
+#blocks > figure.kh-card-in:not(.kh-card-done) img,#gallery figure.kh-card-in:not(.kh-card-done) img{transform:scale(1);transition:transform 1.5s cubic-bezier(.2,.8,.2,1);transition-delay:var(--kh-d,0s)}
 #blocks > figure.kh-card-in:not(.kh-card-done) figcaption,#gallery figure.kh-card-in:not(.kh-card-done) figcaption{opacity:1;transform:none;transition:opacity .7s .35s ease,transform .7s .35s ease}
 @keyframes kh-img-sweep{from{transform:translateX(-130%)}to{transform:translateX(130%)}}
 #blocks > figure.kh-card-in:not(.kh-card-done):after,#gallery figure.kh-card-in:not(.kh-card-done):after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.18) 50%,transparent 62%);animation:kh-img-sweep 1.2s .4s ease-out both}
@@ -150,4 +150,21 @@ a{color:#111!important;text-decoration:underline}
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ===== Reading focus (2026-11-06) =====
+   1) Paragraph cards are a gradient BETWEEN the section's two colours (accent tint over the panel colour),
+      so they always differ from the page background and make the text easy to follow.
+   2) The card currently being read aloud (.kh-audio-current, added by story-audio.js) gets a clearly
+      stronger tint, a solid ring and a soft glow in the section colour.
+   Scope: every story that uses this shared reader, EXCEPT October (its design is left untouched).
+   No !important in (1), so print rules and per-story theme.css that really need to win still can. */
+body[data-section]:not([data-section=october]){--kh-hl:var(--kh-section-accent,var(--accent))}
+html body[data-section]:not([data-section=october]) #blocks>.block:not([data-type=did_you_know]){background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl) 20%,var(--panel)),color-mix(in srgb,var(--kh-hl) 8%,var(--panel)));border-color:color-mix(in srgb,var(--kh-hl) 38%,transparent)}
+html body[data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:not([data-type=did_you_know]){background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl) 30%,var(--panel)),color-mix(in srgb,var(--kh-hl) 14%,var(--panel)))}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block:not([data-type=did_you_know]){background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl) 22%,#fff),color-mix(in srgb,var(--kh-hl) 9%,#fff))}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:not([data-type=did_you_know]){background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl) 30%,#fff),color-mix(in srgb,var(--kh-hl) 14%,#fff))}
+@media screen{
+html body[data-section] #blocks>.block.kh-audio-current{background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl,var(--accent)) 46%,var(--panel)),color-mix(in srgb,var(--kh-hl,var(--accent)) 26%,var(--panel)))!important;border-color:var(--kh-hl,var(--accent))!important;outline:2px solid color-mix(in srgb,var(--kh-hl,var(--accent)) 85%,transparent);outline-offset:4px;box-shadow:0 0 0 7px color-mix(in srgb,var(--kh-hl,var(--accent)) 18%,transparent),0 12px 34px color-mix(in srgb,var(--kh-hl,var(--accent)) 34%,transparent)!important;transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease}
+html body[data-theme=light][data-section] #blocks>.block.kh-audio-current{background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl,var(--accent)) 38%,#fff),color-mix(in srgb,var(--kh-hl,var(--accent)) 20%,#fff))!important}
 }
