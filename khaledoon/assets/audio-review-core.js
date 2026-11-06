@@ -102,6 +102,55 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
   return { ok: true, blocks: blocks.length, segments: segments.length };
 }
 
+function boundedText(value, max) { return String(value == null ? '' : value).slice(0, max); }
+function finiteNumber(value) {
+  var n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+function normalizePronunciationReview(input, entry, attachedAt) {
+  if (!input || typeof input !== 'object') return null;
+  var digest = boundedText(input.audio_sha256, 64).toLowerCase();
+  var entryDigest = boundedText(entry && entry.audio_sha256, 64).toLowerCase();
+  var hashValid = /^[a-f0-9]{64}$/.test(digest) && digest === entryDigest && input.hash_verified === true;
+  function words(items) {
+    return (Array.isArray(items) ? items : []).slice(0, 30).map(function (item) {
+      if (!item || typeof item !== 'object') return null;
+      return {
+        word: boundedText(item.word, 120),
+        start: finiteNumber(item.start),
+        end: finiteNumber(item.end),
+        probability: finiteNumber(item.probability)
+      };
+    }).filter(Boolean);
+  }
+  var mismatches = (Array.isArray(input.mismatches) ? input.mismatches : []).slice(0, 30).map(function (item) {
+    if (!item || typeof item !== 'object') return null;
+    return {
+      type: boundedText(item.type, 24),
+      expected: (Array.isArray(item.expected) ? item.expected : []).slice(0, 30).map(function (v) { return boundedText(v, 120); }),
+      recognized: (Array.isArray(item.recognized) ? item.recognized : []).slice(0, 30).map(function (v) { return boundedText(v, 120); }),
+      start: finiteNumber(item.start),
+      end: finiteNumber(item.end)
+    };
+  }).filter(Boolean);
+  return {
+    format: 'KHALEDOON_AUDIO_PRONUNCIATION_REVIEW_RESULT_V1',
+    engine: boundedText(input.engine || 'faster-whisper-local', 48),
+    status: boundedText(input.status || 'unknown', 48),
+    audio_sha256: digest,
+    hash_verified: hashValid,
+    attached_at: attachedAt,
+    match_ratio: finiteNumber(input.match_ratio),
+    detected_language: boundedText(input.detected_language, 8),
+    language_probability: finiteNumber(input.language_probability),
+    expected_word_count: finiteNumber(input.expected_word_count),
+    recognized_word_count: finiteNumber(input.recognized_word_count),
+    transcript: boundedText(input.transcript, 4000),
+    mismatches: mismatches,
+    low_confidence_words: words(input.low_confidence_words)
+  };
+}
+
 function emptyReview() { return { version: 1, regen: {}, clips: {}, audio_hashes: {} }; }
 function cloneReview(r) {
   var x = r && typeof r === 'object' ? JSON.parse(JSON.stringify(r)) : emptyReview();
@@ -123,11 +172,17 @@ function applyDecision(review, entry, decision, now) {
       if (c.status === 'accepted') delete r.clips[k]; else c.resolved = true;
     }
   });
+  var previousClip = r.clips[entry.key];
   var clip = {
     story_id: entry.story_id, lang: entry.lang, block_index: entry.block_index, chunk_index: Number(entry.chunk_index || 0), speaker: entry.speaker,
     base: entry.base, source_base: entry.source_base || '', audio_sha256: entry.audio_sha256 || '',
     text: entry.text, status: decision.status, decided_at: at
   };
+  if (decision.pronunciation_review) {
+    clip.pronunciation_review = normalizePronunciationReview(decision.pronunciation_review, entry, at);
+  } else if (previousClip && previousClip.pronunciation_review) {
+    clip.pronunciation_review = previousClip.pronunciation_review;
+  }
   if (entry.source_base && entry.audio_sha256) r.audio_hashes[entry.source_base] = entry.audio_sha256;
   if (decision.status === 'rejected') {
     clip.note = String(decision.note || '').slice(0, 1000);
