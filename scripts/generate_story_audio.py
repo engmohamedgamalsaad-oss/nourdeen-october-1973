@@ -339,8 +339,8 @@ async def synthesize_fish_audio(
         raise
 
 
-def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], staging_root: Path = STAGING_ROOT) -> None:
-    """Copy a verified published baseline into staging before one-clip regeneration."""
+def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], staging_root: Path = STAGING_ROOT, require_all: bool = True) -> None:
+    """Copy verified published baselines into staging without touching published assets."""
     _relative, section, _is_package = locate_story(story_path)
     package = read_json(story_path)
     slug = str(package.get("slug") or "").strip()
@@ -356,9 +356,11 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
         published_dir = ROOT / "assets" / "audio" / section / slug / lang
         published_manifest = published_dir / "manifest.json"
         if not published_manifest.is_file():
-            raise RuntimeError(
-                f"{published_manifest}: no published baseline exists for single-block regeneration."
-            )
+            if require_all:
+                raise RuntimeError(
+                    f"{published_manifest}: no published baseline exists for single-block regeneration."
+                )
+            continue
         manifest = read_json(published_manifest)
         if (
             manifest.get("story") != slug
@@ -464,8 +466,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         language_dir = staging_root / section / slug / lang
         manifest_path = language_dir / "manifest.json"
         asset_dir = language_dir
-        if force_blocks and not manifest_path.is_file():
-            if language_dir.exists() and any(language_dir.glob("*.mp3")):
+        if not manifest_path.is_file():
+            if force_blocks and language_dir.exists() and any(language_dir.glob("*.mp3")):
                 raise ValueError(
                     f"{language_dir}: staged MP3 files exist without a manifest; "
                     "refusing to guess their baseline."
@@ -608,7 +610,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = (), seed_published_baseline: bool = False) -> bool:
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
     package = read_json(story_path)
@@ -667,6 +669,10 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
 
     if force_blocks and not dry_run:
         seed_staging_from_published(story_path, languages_to_generate, STAGING_ROOT)
+    elif seed_published_baseline and not dry_run:
+        seed_staging_from_published(
+            story_path, languages_to_generate, STAGING_ROOT, require_all=False
+        )
     plan = inspect_generation_plan(story_path, STAGING_ROOT, languages_to_generate, force_blocks)
     print(
         f"PLAN {relative.parent}: languages={len(plan['languages'])} "
@@ -932,6 +938,7 @@ async def main() -> int:
                     dry_run=False,
                     allow_fish_audio=True,
                     languages=LANGUAGES,
+                    seed_published_baseline=True,
                 )
             print("ALL PUBLISHED STORY AUDIO GENERATED TO .audio-staging; NOTHING WAS PUBLISHED.")
             return 0
