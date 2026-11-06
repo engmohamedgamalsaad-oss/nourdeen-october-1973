@@ -223,11 +223,8 @@ def build_report(
 
 
 def discover_stories(stories_root: Path) -> list[Path]:
-    """Find published-tree and October audio-source packages without changing assets."""
+    """Find canonical published-tree story packages without changing assets."""
     candidates = list(stories_root.glob("*/*/story.json"))
-    candidates.extend(
-        (stories_root.parent / "rebuild" / "october-audio-packages").glob("*/story.json")
-    )
     found = []
     for path in sorted(set(candidates)):
         package = read_object(path, "story package")
@@ -236,8 +233,6 @@ def discover_stories(stories_root: Path) -> list[Path]:
             continue
         if relative.parts[0] == "stories" and len(relative.parts) == 4:
             section = relative.parts[1]
-        elif relative.parts[:2] == ("rebuild", "october-audio-packages") and len(relative.parts) == 4:
-            section = "october"
         else:
             continue
         if package.get("section") == section:
