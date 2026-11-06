@@ -1588,7 +1588,7 @@ function renderVis(){
      var linkedMoveRow=pubRow(record);moveHost.textContent='';moveHost.appendChild(linkedMoveRow);moveHost.hidden=false;linkedMoveRow.open=true;
      var actualMove=Array.prototype.slice.call(linkedMoveRow.querySelectorAll('button')).find(function(control){return control.textContent.trim()==='نقل الحكاية'});
      if(!actualMove)throw new Error('تم تجهيز السجل، لكن تعذر فتح إجراء النقل؛ حدّث لوحة الإدارة وأعد المحاولة.');
-     movePublished.textContent='فتح إجراء النقل';actualMove.click();moveHost.scrollIntoView({behavior:'smooth',block:'nearest'});
+     movePublished.disabled=false;movePublished.textContent='إعادة فتح النقل';actualMove.click();moveHost.scrollIntoView({behavior:'smooth',block:'nearest'});
     }catch(error){say('err',error.message||'تعذر تجهيز سجل النقل.');movePublished.disabled=false;movePublished.textContent=oldLabel}
    });
   }else{
