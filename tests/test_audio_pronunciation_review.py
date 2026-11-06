@@ -337,7 +337,7 @@ class AudioPronunciationReviewTests(unittest.TestCase):
     def test_october_audio_package_uses_the_shared_read_only_asr_review(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            story_dir = root / "rebuild" / "october-audio-packages" / "001"
+            story_dir = root / "stories" / "october" / "001"
             audio_dir = root / "assets" / "audio" / "october" / "sample" / "ar"
             audio_dir.mkdir(parents=True)
             story_path = story_dir / "story.json"
