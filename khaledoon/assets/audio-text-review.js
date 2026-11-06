@@ -81,6 +81,13 @@
     var sourceSpans = arabicTokenSpans(source);
     var matchTokens = arabicTokenSpans(entry.match).map(function (item) { return normalizeArabicToken(item.text); });
     var spokenTokens = arabicTokenSpans(entry.spoken).map(function (item) { return item.text; });
+    if (matchTokens.length === 1 && !entry.before && !entry.after) {
+      throw new Error('قاعدة قاموس غير آمنة: الكلمة المفردة تحتاج إلى سياق محدد.');
+    }
+    if ((entry.before && arabicTokenSpans(entry.before).length !== 1) ||
+        (entry.after && arabicTokenSpans(entry.after).length !== 1)) {
+      throw new Error('قاعدة قاموس غير آمنة: سياق القاعدة يجب أن يكون كلمة واحدة.');
+    }
     if (!matchTokens.length || matchTokens.length !== spokenTokens.length ||
         spokenTokens.some(function (token, index) { return normalizeArabicToken(token) !== matchTokens[index]; })) {
       throw new Error('قاعدة قاموس غير آمنة: يجب الحفاظ على الحروف وترتيب الكلمات.');
