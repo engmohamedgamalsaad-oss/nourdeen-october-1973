@@ -616,7 +616,8 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("aiPreviewPopup.location.href=storyOnlyDraft?'../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2':'preview.html?story=1&submission='"), 'story-only drafts must use the full-package reviewer while legacy imports retain the compatibility preview');
+  assert.ok(admin.includes("if(storyOnlyDraft)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'story-only drafts must use the full-package reviewer');
+  assert.ok(admin.includes("else aiPreviewPopup.location.href='preview.html?story=1&submission='"), 'legacy imports must retain the compatibility preview');
   assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
