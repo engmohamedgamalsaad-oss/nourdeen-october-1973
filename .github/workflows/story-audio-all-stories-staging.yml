@@ -21,7 +21,6 @@ concurrency:
 
 jobs:
   generate:
-    if: inputs.confirm_fish_audio_request == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 360
     steps:
@@ -75,12 +74,17 @@ jobs:
           PY
 
       - name: Generate all five languages into isolated staging
+        if: inputs.confirm_fish_audio_request == 'yes'
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: python scripts/generate_story_audio.py --generate-all --allow-fish-audio
 
+      - name: Record preflight-only completion
+        if: inputs.confirm_fish_audio_request != 'yes'
+        run: echo "Preflight completed without TTS requests; no audio was generated."
+
       - name: Upload all generated MP3 files and manifests for review only
-        if: always()
+        if: always() && inputs.confirm_fish_audio_request == 'yes'
         uses: actions/upload-artifact@v4
         with:
           name: khaledoon-all-stories-audio-staging
