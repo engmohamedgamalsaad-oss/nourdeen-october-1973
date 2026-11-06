@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build DRAFT narration packages for the October stories and report exact translation coverage.
+"""Build the narration audio packages for the October stories and report exact translation coverage.
 
 For each stories/october/00N it takes the speakable Arabic blocks (title, headings,
 paragraphs, timeline years, quotes) from index.html, in reading order, and looks up each
@@ -7,7 +7,10 @@ block's en/fr/it/de text the same way the pages do: data-i18n keys from i18n.js 
 i18n-extra.js, otherwise assets/shared/story-body-i18n.js (translations + germanStoryText).
 
 Read-only for the site. No TTS, no network, no Supabase. Writes only:
-  rebuild/october-audio-packages/<story>/story.draft.json
+  rebuild/october-audio-packages/<story>/story.json            (KHALEDOON_STORY, five languages, the
+                                                               same shape generate_story_audio.py reads)
+  rebuild/october-audio-packages/<story>/audio-readiness.json  (ready only if every block has a clean
+                                                               text in all 5 languages)
   docs/october-audio-packages-report.{txt,json}
 Narrator reads everything (Karma is not invented; mark Karma blocks by hand later).
 Needs `node` (to evaluate the JS data files).  Usage:
@@ -36,6 +39,9 @@ SKIP_TAGS = {"figure", "small", "header", "footer", "script", "style", "nav", "h
 VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 CAPTURE = {"h1", "h2", "h3", "p"}
 CAPTURE_DIV = {"year", "hero-subtitle"}
+# Source / photo-credit lines that sit inside story sections but are not narration.
+EXCLUDE_PREFIXES = ("للاطلاع على صور",)
+READINESS_FORMAT = "KHALEDOON_OCTOBER_AUDIO_READINESS_V1"
 
 
 def norm(s):
@@ -142,6 +148,7 @@ class Collector(HTMLParser):
         self.cur_depth = 0
         self.buf = []
         self.blocks = []
+        self.excluded = []
         self.stack = []         # (tag, class-string, data-i18n) of open non-void elements
         self.uncaptured = []
 
@@ -165,7 +172,9 @@ class Collector(HTMLParser):
                 self.cur_depth += 1
         elif not self.sec_skip and not self.skip_depth:
             if tag in CAPTURE or (tag == "div" and cls & CAPTURE_DIV):
-                self.cur = (tag, a.get("data-i18n"))
+                kind = "heading" if tag in ("h1", "h2", "h3") else (
+                    "timeline" if "year" in cls else ("subtitle" if tag == "div" else "paragraph"))
+                self.cur = (tag, a.get("data-i18n"), kind)
                 self.cur_depth = 1
                 self.buf = []
 
@@ -185,7 +194,10 @@ class Collector(HTMLParser):
             if self.cur_depth == 0:
                 text = norm("".join(self.buf))
                 if text and (AR.search(text) or self.cur[1]):
-                    self.blocks.append({"tag": self.cur[0], "key": self.cur[1], "ar": text})
+                    if text.startswith(EXCLUDE_PREFIXES):
+                        self.excluded.append({"tag": self.cur[0], "ar": text[:70]})
+                    else:
+                        self.blocks.append({"tag": self.cur[0], "key": self.cur[1], "kind": self.cur[2], "ar": text})
                 self.cur = None
 
     def handle_data(self, data):
@@ -216,15 +228,10 @@ def build_story(story_dir, ui, trans, german):
     parser = Collector()
     parser.feed((story_dir / "index.html").read_text(encoding="utf-8"))
     blocks = parser.blocks
-    package = {
-        "format": "KHALEDOON_STORY",
-        "section": "october",
-        "slug": story_dir.name,
-        "status": "DRAFT_NOT_FOR_GENERATION",
-        "note": "Narration draft built from the published page; Karma blocks are not invented. Review before use.",
-        "i18n": {},
-    }
-    report = {"story": story_dir.name, "blocks": len(blocks), "languages": {}, "uncaptured_arabic": parser.uncaptured}
+    # Peer-format package (same shape scripts/generate_story_audio.py reads for the other stories).
+    package = {"format": "KHALEDOON_STORY", "section": "october", "slug": story_dir.name, "i18n": {}}
+    report = {"story": story_dir.name, "blocks": len(blocks), "languages": {}, "uncaptured_arabic": parser.uncaptured,
+              "excluded": parser.excluded}
     for lang in LANGS:
         out, missing, suspect = [], [], []
         for i, b in enumerate(blocks):
@@ -233,10 +240,22 @@ def build_story(story_dir, ui, trans, german):
                 missing.append({"index": i, "tag": b["tag"], "ar": b["ar"][:70]})
             elif lang != "ar" and (AR.search(text) or norm(text) == b["ar"]):
                 suspect.append({"index": i, "tag": b["tag"], "ar": b["ar"][:70], "text": text[:70]})
-            out.append({"index": i, "speaker": "narrator", "kind": b["tag"], "text": text or "", "missing": not text})
+            out.append({"type": b["kind"], "speaker": "narrator", "text": norm(text) if text else ""})
         package["i18n"][lang] = {"blocks": out}
         report["languages"][lang] = {"translated": len(blocks) - len(missing), "missing": missing, "suspect": suspect}
-    return package, report
+    langs = report["languages"]
+    readiness = {
+        "format": READINESS_FORMAT,
+        "story": story_dir.name,
+        "ready": bool(blocks) and all(not langs[l]["missing"] and not langs[l]["suspect"] for l in LANGS),
+        "blocks": len(blocks),
+        "missing": {l: [m["index"] for m in langs[l]["missing"]] for l in LANGS},
+        "suspect": {l: [m["index"] for m in langs[l]["suspect"]] for l in LANGS},
+        "excluded_source_lines": len(parser.excluded),
+        "generated_by": "scripts/build_october_audio_packages.py",
+    }
+    report["ready"] = readiness["ready"]
+    return package, readiness, report
 
 
 def main(argv=None):
@@ -252,12 +271,14 @@ def main(argv=None):
     for d in sorted(p for p in (root / "stories/october").glob("*") if (p / "index.html").exists()):
         ui, w = eval_ui([d / "i18n.js", d / "i18n-extra.js"])
         warnings += ["%s: %s" % (d.name, x) for x in w]
-        package, report = build_story(d, ui, trans, german)
+        package, readiness, report = build_story(d, ui, trans, german)
         reports.append(report)
         if not args.no_write:
             out = root / "rebuild/october-audio-packages" / d.name
             out.mkdir(parents=True, exist_ok=True)
-            (out / "story.draft.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            (out / "story.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            (out / "audio-readiness.json").write_text(json.dumps(readiness, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            (out / "story.draft.json").unlink(missing_ok=True)  # superseded by story.json
     lines = ["body maps: %d translation keys, %d german-only keys" % (len(trans), len(german))]
     if warnings:
         lines.append("WARNINGS (%d):" % len(warnings))
@@ -265,7 +286,10 @@ def main(argv=None):
     else:
         lines.append("warnings: none")
     for r in reports:
-        lines.append("== October %s: %d speakable blocks ==" % (r["story"], r["blocks"]))
+        lines.append("== October %s: %d speakable blocks, audio package %s ==" % (
+            r["story"], r["blocks"], "READY" if r["ready"] else "NOT READY"))
+        for x in r["excluded"]:
+            lines.append("  excluded source line <%s> %s" % (x["tag"], x["ar"]))
         for lang in LANGS:
             info = r["languages"][lang]
             lines.append("  %s: %d/%d translated, %d suspect" % (lang, info["translated"], r["blocks"], len(info["suspect"])))
