@@ -261,6 +261,39 @@ function gateSummary() {
   if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
 }
+function renderGateBanner(banner) {
+  var g = gate();
+  banner.replaceChildren();
+  var message = document.createElement('div');
+  text(message, gateSummary());
+  banner.appendChild(message);
+  if (!entries.length) return;
+  var total = entries.length;
+  var ready = entries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
+  var accepted = entries.filter(function (entry) {
+    var clip = review.clips[entry.key];
+    return clip && clip.status === 'accepted';
+  }).length;
+  function progressRow(label, value) {
+    var row = document.createElement('div');
+    row.className = 'kh-audio-progress-row';
+    var caption = document.createElement('span');
+    text(caption, label + ': ' + value + '/' + total);
+    var bar = document.createElement('progress');
+    bar.max = total;
+    bar.value = value;
+    bar.setAttribute('aria-label', label);
+    row.append(caption, bar);
+    banner.appendChild(row);
+  }
+  progressRow('المقاطع الجاهزة للاستماع', ready);
+  progressRow('المقاطع المقبولة بعد الاستماع', accepted);
+  if (g.missingLanguages || g.loadError) {
+    var partial = document.createElement('small');
+    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests اللغات الخمس.');
+    banner.appendChild(partial);
+  }
+}
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
@@ -527,7 +560,7 @@ function render() {
   if (!story) return;
   var banner = document.getElementById('kh-audio-review-gate');
   if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
-  text(banner, gateSummary());
+  renderGateBanner(banner);
   banner.hidden = false;
   var lang = document.documentElement.lang;
   var host = $('blocks');
@@ -610,7 +643,7 @@ function render() {
     renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
-  text(banner, gateSummary());
+  renderGateBanner(banner);
   banner.hidden = false;
 }
 function injectStyles() {
@@ -628,6 +661,7 @@ function injectStyles() {
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate[hidden]{display:none!important}',
+    '.kh-audio-progress-row{display:grid;grid-template-columns:minmax(170px,auto) minmax(100px,1fr);align-items:center;gap:10px;margin-top:7px;font-size:12px}.kh-audio-progress-row progress{width:100%;height:10px;accent-color:#4b9a70}',
     '.kh-audio-asr-result{display:grid;gap:6px;flex:1 1 100%;padding:8px;margin-top:6px;border-top:1px dashed var(--line);font-size:12px}',
     '.kh-audio-asr-word{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 0}',
     '@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}',
