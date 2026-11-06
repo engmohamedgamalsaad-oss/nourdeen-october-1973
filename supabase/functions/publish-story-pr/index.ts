@@ -31,6 +31,81 @@ function stableJson(value: any): string {
   return JSON.stringify(value) ?? "null";
 }
 
+function validateAudioReviewGate(
+  packageData: any,
+  audioReview: any,
+  files: any[],
+  section: string,
+): string | null {
+  const languages = ["ar", "en", "fr", "it", "de"];
+  const slug = String(packageData?.slug ?? "");
+  if (!slug || !packageData?.i18n || !audioReview || typeof audioReview !== "object" ||
+      !audioReview.clips || typeof audioReview.clips !== "object") {
+    return "لا يوجد سجل مراجعة صوت محفوظ للحكاية؛ لا يمكن اعتماد النشر.";
+  }
+  const pronunciationFile = files.find((file: any) =>
+    file.path === "stories/" + section + "/" + String(packageData.id ?? "").padStart(3, "0") + "/audio-pronunciation.json"
+  );
+  let approvedArabic: Record<string, string> = {};
+  if (pronunciationFile) {
+    try {
+      const pronunciation = JSON.parse(contentForSafetyScan(pronunciationFile));
+      if (pronunciation.version !== 1 || pronunciation.story !== slug ||
+          pronunciation.language !== "ar" || !pronunciation.blocks ||
+          !Array.isArray(pronunciation.approved_audio_only_rewrites)) {
+        return "ملف نص النطق العربي لا يطابق الحكاية؛ تعذر التحقق من اعتماد الصوت.";
+      }
+      for (const rawIndex of pronunciation.approved_audio_only_rewrites) {
+        const index = Number(rawIndex);
+        const value = pronunciation.blocks[String(index)];
+        if (!Number.isInteger(index) || index < 0 || typeof value !== "string" || !value.trim()) {
+          return "ملف نص النطق العربي يحتوي اعتمادًا غير صالح.";
+        }
+        approvedArabic[String(index)] = value;
+      }
+    } catch {
+      return "تعذر قراءة ملف نص النطق العربي قبل النشر.";
+    }
+  }
+  const clips = Object.values(audioReview.clips) as any[];
+  if (clips.some((clip: any) => clip && clip.story_id === section + "/" + slug &&
+      clip.status === "rejected" && clip.resolved !== true)) {
+    return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
+  }
+  for (const lang of languages) {
+    const localized = packageData.i18n[lang];
+    if (!localized || !Array.isArray(localized.blocks) || !localized.blocks.length) {
+      return "ترجمة " + lang + " غير متاحة للتحقق من مراجعة الصوت.";
+    }
+    const currentClips = clips.filter((clip: any) =>
+      clip && clip.story_id === section + "/" + slug && clip.lang === lang
+    );
+    for (let blockIndex = 0; blockIndex < localized.blocks.length; blockIndex++) {
+      const block = localized.blocks[blockIndex];
+      if (!block || !["karma", "narrator"].includes(block.speaker) || !String(block.text ?? "").trim()) continue;
+      const expected = lang === "ar" && approvedArabic[String(blockIndex)]
+        ? approvedArabic[String(blockIndex)]
+        : String(block.text);
+      const blockClips = currentClips.filter((clip: any) =>
+        Number(clip.block_index) === blockIndex && clip.speaker === block.speaker
+      ).sort((a: any, b: any) => Number(a.chunk_index || 0) - Number(b.chunk_index || 0));
+      if (!blockClips.length || blockClips.some((clip: any, index: number) =>
+        clip.status !== "accepted" || Number(clip.chunk_index || 0) !== index ||
+        typeof clip.audio_sha256 !== "string" || !/^[a-f0-9]{64}$/i.test(clip.audio_sha256) ||
+        typeof clip.text !== "string" || !clip.text.trim()
+      )) {
+        return "اللغة " + lang + "، المقطع " + (blockIndex + 1) + ": الصوت غير جاهز أو لم يُقبل بالكامل بعد الاستماع.";
+      }
+      const joined = blockClips.map((clip: any) => String(clip.text).replace(/\\s+/g, " ").trim()).join(" ");
+      const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
+      if (normalize(joined) !== normalize(expected)) {
+        return "اللغة " + lang + "، المقطع " + (blockIndex + 1) + ": نص الصوت المقبول لا يطابق النص الحالي للحكاية.";
+      }
+    }
+  }
+  return null;
+}
+
 function allowedPath(path: unknown): path is string {
   if (typeof path !== "string" || path.length > 240 || path.startsWith("/") ||
       path.includes("\\") || path.split("/").some((part) => part === "" || part === "." || part === "..")) return false;
@@ -204,16 +279,17 @@ Deno.serve(async (req: Request) => {
       const storySection = pageMatch?.[1], storyId = pageMatch?.[2];
       const storyRoot = storySection && storyId ? "stories/" + storySection + "/" + storyId + "/" : "";
       const pageHtml = contentForSafetyScan(pageFile);
-      if (storySection !== "october" &&
-          (isV2OnlyDraft || savedStoryPackageRaw?.format === "KHALEDOON_STORY_V2" ||
-           packageData.format !== "KHALEDOON_STORY" ||
-           packageFile.path !== storyRoot + "story.json" ||
-           !pageHtml.includes("data-kh-story-reader") ||
-           !pageHtml.includes('data-story-path="story.json"') ||
-           pageHtml.includes("data-kh-v2-reader") ||
-           pageHtml.includes('data-story-path="data.v2.json"'))) {
-        return reply(409, { error: "الحكايات خارج قسم أكتوبر يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
+      if (isV2OnlyDraft || savedStoryPackageRaw?.format === "KHALEDOON_STORY_V2" ||
+          packageData.format !== "KHALEDOON_STORY" ||
+          packageFile.path !== storyRoot + "story.json" ||
+          !pageHtml.includes("data-kh-story-reader") ||
+          !pageHtml.includes('data-story-path="story.json"') ||
+          pageHtml.includes("data-kh-v2-reader") ||
+          pageHtml.includes('data-story-path="data.v2.json"')) {
+        return reply(409, { error: "كل الأقسام، بما فيها أكتوبر، يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
       }
+      const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection);
+      if (audioGateError) return reply(409, { error: audioGateError });
 
       if (!storyRoot || packageData.section !== storySection ||
           !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
