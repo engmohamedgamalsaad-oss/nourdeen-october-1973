@@ -65,11 +65,11 @@
   }
 
   function normalizeArabicToken(value) {
-    return String(value || '').normalize('NFC').replace(/[\\u064B-\\u065F\\u0670\\u0640]/g, '');
+    return String(value || '').normalize('NFC').replace(/[\u064B-\u065F\u0670\u0640]/g, '');
   }
 
   function arabicTokenSpans(value) {
-    var pattern = /[\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g;
+    var pattern = /[\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g;
     var spans = [], match;
     while ((match = pattern.exec(value)) !== null) {
       spans.push({ start: match.index, end: match.index + match[0].length, text: match[0] });
@@ -95,7 +95,7 @@
     var replacements = [], applied = false, cursor = 0;
     while (cursor < sourceSpans.length) {
       var found = false;
-      for (var e = 0; e < matchTokens.length + 1; e++) {
+      {
         var endIndex = cursor + matchTokens.length;
         if (endIndex > sourceSpans.length) break;
         var actual = sourceSpans.slice(cursor, endIndex).map(function (item) { return normalizeArabicToken(item.text); });
@@ -131,8 +131,8 @@
     replacements.reverse().forEach(function (item) {
       result = result.slice(0, item.start) + item.text + result.slice(item.end);
     });
-    if (normalizeArabicToken(result.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, '')) !==
-        normalizeArabicToken(source.replace(/[^\\u0621-\\u064A\\u066E-\\u06D3\\u06FA-\\u06FC\\u064B-\\u065F\\u0670]+/g, ''))) {
+    if (normalizeArabicToken(result.replace(/[^\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g, '')) !==
+        normalizeArabicToken(source.replace(/[^\u0621-\u064A\u066E-\u06D3\u06FA-\u06FC\u064B-\u065F\u0670]+/g, ''))) {
       throw new Error('تطبيق القاموس غيّر الحروف العربية؛ تم إيقاف الاقتراح.');
     }
     return { text: result, applied: applied };
