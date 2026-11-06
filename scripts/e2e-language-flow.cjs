@@ -886,7 +886,7 @@ async function adminStoryActualImportRegression(browser, base, origin) {
   try {
     await page.goto(base + '/khaledoon/admin.html', { waitUntil: 'load', timeout: 20000 });
     await page.waitForFunction(() => !!document.querySelector('details.pubrow'), null, { timeout: 15000 });
-    const card = page.locator('details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
+    const card = page.locator('details.pubrow:visible').filter({ hasText: 'Existing E2E Draft' }).first();
     await card.locator('summary').click();
     const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
