@@ -1012,7 +1012,7 @@ function pubRow(it){
     var aiProvider=document.createElement('select');aiProvider.className='btn ghost';aiProvider.setAttribute('aria-label','اختيار أداة الذكاء الاصطناعي');
     [['chatgpt','ChatGPT'],['gemini','Gemini'],['claude','Claude'],['deepseek','DeepSeek']].forEach(function(p){var o=el('option','',p[1]);o.value=p[0];aiProvider.appendChild(o)});aiPanel.appendChild(aiProvider);
     var aiCopy=el('button','btn primary','١. نسخ الحكاية والبرومبت الكامل');aiCopy.type='button';aiPanel.appendChild(aiCopy);
-    if(requireUnifiedStoryPackage&&window.KHAudioTextReview){
+    if(requireUnifiedStoryPackage&&String(it.section||it.section_key||'').toLowerCase()!=='october'&&window.KHAudioTextReview){
      var audioTextReviewBox=el('div','review-data');audioTextReviewBox.style.cssText='border:1px solid var(--line,#31505a);border-radius:10px;padding:12px;display:grid;gap:8px';
      audioTextReviewBox.appendChild(el('strong','','مراجعة النص قبل توليد الصوت'));
      audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق في اللغات الخمس. بعد مراجعة التقرير والموافقة على الاقتراحات أو الإبقاء على الأصل، صدّر ملف audio-pronunciation.json وضعه بجوار story.json قبل توليد أي صوت. لا يغيّر نص الحكاية المرئية.'));
