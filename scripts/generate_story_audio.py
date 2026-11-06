@@ -833,8 +833,9 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
                     "audio_sha256": audio_sha256,
                     "text": chunk_text,
                 })
-                if use_fish_audio:
-                    save_manifest_checkpoint()
+                # Checkpoint every provider after each clip so a failed all-story
+                # run can resume without re-requesting completed Edge TTS clips.
+                save_manifest_checkpoint()
                 completed += 1
 
         if not segments:
