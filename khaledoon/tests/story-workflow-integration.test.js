@@ -54,13 +54,13 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes("This story has moved."));
   assert.ok(publisher.includes('published_to_main: true'), 'approved moves are committed directly to main');
 });
-test('new non-October stories require an admin-approved five-language audio-text review', function () {
-  assert.ok(storyPublisher.includes("story.section !== 'october' && existingAt < 0"), 'only newly created non-October stories receive the mandatory review flag');
+test('new stories in every section require an admin-approved five-language audio-text review', function () {
+  assert.ok(storyPublisher.includes("let audioTextReviewRequired = existingAt < 0"), 'new stories in every section receive the mandatory review flag');
   assert.ok(storyPublisher.includes("previousData.audio_text_review_required === true"), 'updates and moves must preserve an existing new-story review requirement');
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
   assert.ok(admin.includes("link.download='audio-pronunciation.json'"), 'the admin must download the approval file beside story.json');
   assert.ok(audioGenerator.includes('validate_required_audio_text_review'), 'the generator must validate the approval record');
-  assert.ok(audioGenerator.includes('new story is blocked until the admin-approved five-language'), 'new-story generation must stop when the approval file is missing');
+  assert.ok(audioGenerator.includes('class AudioTextApprovalRequired') && audioGenerator.includes('review_required = True'), 'October packages must use the shared five-language human approval gate');
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
