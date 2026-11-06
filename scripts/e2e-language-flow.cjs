@@ -899,8 +899,9 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     }, null, { timeout: 5000 });
     await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
     const card = page.locator('#viewSubs details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
-    // Use the same edit action as an administrator; it opens the outer row and
-    // nested review/editor disclosures before exposing the AI import field.
+    // Open the row first so its action bar is visible, then use the same edit
+    // action an administrator uses to expose the nested AI import field.
+    await card.locator('summary').click();
     await card.getByRole('button', { name: 'تعديل', exact: true }).click();
     const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
