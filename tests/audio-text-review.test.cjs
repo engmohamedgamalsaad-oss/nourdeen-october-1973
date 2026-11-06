@@ -65,7 +65,7 @@ test('rejects missing, duplicate, or altered original segments', () => {
 
 test('adds exact Arabic dictionary suggestions to the existing review report without approval', () => {
   const pkg = packageFixture();
-  pkg.i18n.ar.blocks[0].text = 'وتذكر الدراسات المنشورة ذلك.';
+  pkg.i18n.ar.blocks[0].text = 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.';
   const segments = review.collectSegments(pkg).map(item => ({
     ...item,
     proposed_audio_text: item.original_text,
@@ -84,8 +84,8 @@ test('adds exact Arabic dictionary suggestions to the existing review report wit
   };
   const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
   const arabic = outcome.report.segments.find(item => item.lang === 'ar' && item.block_index === 0);
-  assert.equal(arabic.original_text, 'وتذكر الدراسات المنشورة ذلك.');
-  assert.equal(arabic.proposed_audio_text, 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
+  assert.equal(arabic.original_text, 'في هذا السياق وتذكر الدراسات المنشورة ذلك، ثم وتذكر الدراسات النتائج.');
+  assert.equal(arabic.proposed_audio_text, 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
   assert.equal(arabic.issue_type, 'pronunciation');
   assert.equal(arabic.needs_human_review, true);
   assert.equal(arabic.suggestion_source, 'ar-EG-pronunciation-dictionary');
@@ -117,8 +117,8 @@ test('exports a dictionary candidate only when the administrator explicitly appr
   const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
   const approved = review.buildApprovedAudioPronunciation(outcome.report, pkg, ['ar:0']);
   const rejected = review.buildApprovedAudioPronunciation(outcome.report, pkg, []);
-  assert.equal(approved.approved_audio_text_rewrites.ar['0'], 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
-  assert.equal(approved.blocks['0'], 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
+  assert.equal(approved.approved_audio_text_rewrites.ar['0'], 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
+  assert.equal(approved.blocks['0'], 'في هذا السياق وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك، ثم وَتَذْكُرُ الدِّرَاسَاتُ النتائج.');
   assert.equal(rejected.blocks['0'], undefined);
   assert.equal(rejected.review.segments.find(item => item.lang === 'ar' && item.block_index === 0).decision, 'approved_original');
 });
