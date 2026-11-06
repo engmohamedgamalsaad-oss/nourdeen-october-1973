@@ -113,23 +113,33 @@ class EgyptianDialectReviewTests(unittest.TestCase):
             self.assertEqual(report["summary"]["blocks_reviewed"], 2)
             self.assertTrue(all(item["source_kind"] == "story_text_fallback" for item in report["blocks"]))
 
-    def test_all_story_report_scans_non_october_packages_and_excludes_october(self):
+    def test_all_story_report_includes_october_audio_packages(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "stories"
             self.make_story(root, "science", "one")
             self.make_story(root, "people", "two")
-            self.make_story(root, "october", "protected")
+            october_package = root.parent / "rebuild" / "october-audio-packages" / "001" / "story.json"
+            october_package.parent.mkdir(parents=True)
+            october_package.write_text(json.dumps({
+                "format": "KHALEDOON_STORY", "section": "october", "slug": "october-one",
+                "i18n": {"ar": {"blocks": [
+                    {"speaker": "narrator", "text": "إزاي نقدر نساعد الناس؟ ده سؤال مهم."},
+                    {"speaker": "karma", "text": "مش عارفة الإجابة، وعايزة أفهم أكتر."},
+                ]}},
+            }, ensure_ascii=False), encoding="utf-8")
             report = dialect.build_all_stories_report(root)
-            self.assertEqual(report["summary"]["stories_reviewed"], 2)
-            self.assertEqual(report["summary"]["blocks_reviewed"], 4)
-            self.assertEqual(report["summary"]["october_stories_included"], 0)
-            self.assertEqual({item["section"] for item in report["stories"]}, {"science", "people"})
+            self.assertEqual(report["summary"]["stories_reviewed"], 3)
+            self.assertEqual(report["summary"]["blocks_reviewed"], 6)
+            self.assertEqual(report["summary"]["october_stories_included"], 1)
+            self.assertEqual({item["section"] for item in report["stories"]}, {"science", "people", "october"})
 
-    def test_explicit_october_story_is_rejected(self):
+    def test_explicit_october_story_is_reviewed_by_the_shared_tool(self):
         with tempfile.TemporaryDirectory() as directory:
-            path = self.make_story(Path(directory), "october", "protected")
-            with self.assertRaisesRegex(dialect.ReviewError, "October"):
-                dialect.build_report(path)
+            path = self.make_story(Path(directory), "october", "october-story")
+            report = dialect.build_report(path)
+            self.assertEqual(report["section"], "october")
+            self.assertEqual(report["summary"]["blocks_reviewed"], 2)
+            self.assertEqual(report["summary"]["fish_audio_calls"], 0)
 
     def test_unapproved_audio_pronunciation_indexes_are_ignored(self):
         with tempfile.TemporaryDirectory() as directory:
