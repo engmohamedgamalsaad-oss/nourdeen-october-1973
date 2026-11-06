@@ -5,6 +5,10 @@ on:
     paths:
       - 'scripts/arabic_pronunciation.py'
       - 'scripts/test_arabic_pronunciation.py'
+      - 'khaledoon/admin.html'
+      - 'khaledoon/assets/audio-text-review.js'
+      - 'tests/audio-text-review.test.cjs'
+      - 'tests/admin-speech-review-ui.test.cjs'
       - 'audio/pronunciation/**'
       - 'khaledoon/assets/audio-text-review.js'
       - 'khaledoon/admin.html'
@@ -29,6 +33,12 @@ jobs:
           python-version: '3.12'
       - name: Run isolated pronunciation dictionary tests
         run: python -m unittest discover -s scripts -p 'test_arabic_pronunciation.py' -v
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run browser review helper and admin UI tests
+        run: node --test tests/audio-text-review.test.cjs tests/admin-speech-review-ui.test.cjs
 
   admin-review:
     runs-on: ubuntu-latest
