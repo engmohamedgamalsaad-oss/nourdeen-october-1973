@@ -12,6 +12,14 @@ Read-only for the site. No TTS, no network, no Supabase. Writes only:
 Narrator reads everything (Karma is not invented; mark Karma blocks by hand later).
 Needs `node` (to evaluate the JS data files).  Usage:
   python3 scripts/build_october_audio_packages.py [--root DIR] [--no-write]
+
+Report guarantees (v2):
+  * "translated" counts only non-empty text for the captured blocks.
+  * "suspect" lists en/fr/it/de texts that still contain Arabic letters or equal the Arabic.
+  * "uncaptured_arabic" lists visible Arabic text on the page that is NOT in any block
+    (kickers, fact boxes, notes, link texts...), so "complete" never hides skipped content.
+  * "warnings" lists JS files that failed to evaluate and body-map assignment patterns
+    the parser cannot read. Nothing fails silently.
 """
 import argparse
 import json
@@ -24,7 +32,8 @@ from pathlib import Path
 LANGS = ["ar", "en", "fr", "it", "de"]
 AR = re.compile(r"[\u0600-\u06FF]")
 SKIP_SECTIONS = {"sources", "reactions-section", "story-quiz-section", "kh-dialogue-section"}
-SKIP_TAGS = {"figure", "small", "header", "footer", "script", "style", "nav"}
+SKIP_TAGS = {"figure", "small", "header", "footer", "script", "style", "nav", "head"}
+VOID_TAGS = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "param", "source", "track", "wbr"}
 CAPTURE = {"h1", "h2", "h3", "p"}
 CAPTURE_DIV = {"year", "hero-subtitle"}
 
@@ -33,9 +42,8 @@ def norm(s):
     return " ".join(s.split())
 
 
-def node_eval(code, *args):
-    out = subprocess.run(["node", "-e", code, *args], capture_output=True, text=True, check=True, encoding="utf-8")
-    return json.loads(out.stdout)
+def run_node(args, stdin=None):
+    return subprocess.run(["node", *args], input=stdin, capture_output=True, text=True, encoding="utf-8")
 
 
 EVAL_LITERAL = "const s=require('fs').readFileSync(0,'utf8');" \
@@ -43,18 +51,31 @@ EVAL_LITERAL = "const s=require('fs').readFileSync(0,'utf8');" \
 
 
 def eval_literal(src):
-    out = subprocess.run(["node", "-e", EVAL_LITERAL], input=src, capture_output=True, text=True, check=True, encoding="utf-8")
-    return json.loads(out.stdout)
+    """Evaluate one JS object literal. Returns (obj, error_text)."""
+    out = run_node(["-e", EVAL_LITERAL], stdin=src)
+    if out.returncode != 0:
+        return None, (out.stderr.strip().splitlines() or ["node failed"])[-1][:200]
+    return json.loads(out.stdout), None
 
 
 EVAL_UI = (
-    "const vm=require('vm'),fs=require('fs');const files=JSON.parse(process.argv[1]);const dict={};"
+    "const vm=require('vm'),fs=require('fs');const files=JSON.parse(process.argv[1]);const dict={};const errs=[];"
     "const win={};win.I18N={register(l,e){dict[l]=Object.assign(dict[l]||{},e)},apply(){},t(k){return k},lang(){return 'ar'}};"
     "const doc={addEventListener(){},querySelector(){return null},querySelectorAll(){return []},readyState:'complete'};"
     "const ctx={window:win,document:doc,setTimeout(){},console:{log(){},error(){}}};vm.createContext(ctx);"
-    "for(const f of files){if(!fs.existsSync(f))continue;try{vm.runInContext(fs.readFileSync(f,'utf8'),ctx)}"
-    "catch(e){process.stderr.write(f+': '+e.message+'\\n')}}process.stdout.write(JSON.stringify(dict));"
+    "for(const f of files){if(!fs.existsSync(f)){errs.push(f+': file not found');continue;}"
+    "try{vm.runInContext(fs.readFileSync(f,'utf8'),ctx,{timeout:5000})}"
+    "catch(e){errs.push(f+': '+e.message)}}process.stdout.write(JSON.stringify({dict:dict,errors:errs}));"
 )
+
+
+def eval_ui(files):
+    """Evaluate the story i18n files. Returns (dict lang->key->text, warnings)."""
+    out = run_node(["-e", EVAL_UI, json.dumps([str(f) for f in files])])
+    if out.returncode != 0:
+        return {}, ["i18n evaluation crashed: " + ((out.stderr.strip().splitlines() or ["?"])[-1][:200])]
+    data = json.loads(out.stdout)
+    return data["dict"], data["errors"]
 
 
 def literal_at(text, i):
@@ -81,63 +102,100 @@ def literal_at(text, i):
 
 
 LIT = re.compile(r"(?:var\s+(translations|germanStoryText)\s*=\s*|Object\.assign\(\s*(translations|germanStoryText)\s*,\s*)\{")
+# Any other way of writing into the maps would be missed silently, so detect and report it.
+OTHER_ASSIGN = re.compile(r"\b(?:translations|germanStoryText)\s*(?:\[[^\]]+\]\s*=(?!=)|\.\w+\s*=(?!=))")
 
 
 def load_body_maps(path):
-    """Return (translations: norm_key -> {lang: text}, german: norm_key -> text)."""
+    """Return (translations: norm_key -> {lang: text}, german: norm_key -> text, warnings)."""
     text = path.read_text(encoding="utf-8")
-    trans, german = {}, {}
+    trans, german, warnings = {}, {}, []
     for m in LIT.finditer(text):
         kind = m.group(1) or m.group(2)
-        obj = eval_literal(literal_at(text, m.end() - 1))
+        try:
+            obj, err = eval_literal(literal_at(text, m.end() - 1))
+        except ValueError as e:
+            obj, err = None, str(e)
+        if obj is None:
+            warnings.append("story-body-i18n.js: %s literal at char %d not read (%s)" % (kind, m.start(), err))
+            continue
         for key, val in obj.items():
             k = norm(key)
             if kind == "translations" and isinstance(val, dict):
                 trans.setdefault(k, {}).update({l: t for l, t in val.items() if isinstance(t, str) and t.strip()})
             elif kind == "germanStoryText":
-                de = val if isinstance(val, str) else (val or {}).get("de")
+                de = val if isinstance(val, str) else (val or {}).get("de") if isinstance(val, dict) else None
                 if isinstance(de, str) and de.strip():
                     german[k] = de
-    return trans, german
+    extra = len(OTHER_ASSIGN.findall(text))
+    if extra:
+        warnings.append("story-body-i18n.js: %d assignment(s) of another form (map[key]=... / map.key=...) are NOT read" % extra)
+    return trans, german, warnings
 
 
 class Collector(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
-        self.skip_sec = False
-        self.skip_depth = 0
-        self.cur = None
+        self.sec_skip = 0       # >0 while inside a skipped <section> (nesting-aware)
+        self.skip_depth = 0     # >0 while inside a SKIP_TAGS element
+        self.cur = None         # (tag, data-i18n) of the block being captured
+        self.cur_depth = 0
         self.buf = []
         self.blocks = []
+        self.stack = []         # (tag, class-string, data-i18n) of open non-void elements
+        self.uncaptured = []
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         cls = set((a.get("class") or "").split())
+        if tag == "br" and self.cur:
+            self.buf.append(" ")
+        if tag not in VOID_TAGS:
+            self.stack.append((tag, " ".join(sorted(cls)), a.get("data-i18n")))
         if tag == "section":
-            self.skip_sec = bool(cls & SKIP_SECTIONS)
+            if self.sec_skip:
+                self.sec_skip += 1
+            elif cls & SKIP_SECTIONS:
+                self.sec_skip = 1
         if tag in SKIP_TAGS:
             self.skip_depth += 1
             return
-        if self.cur is None and not self.skip_sec and not self.skip_depth:
+        if self.cur is not None:
+            if tag == self.cur[0]:
+                self.cur_depth += 1
+        elif not self.sec_skip and not self.skip_depth:
             if tag in CAPTURE or (tag == "div" and cls & CAPTURE_DIV):
                 self.cur = (tag, a.get("data-i18n"))
+                self.cur_depth = 1
                 self.buf = []
 
     def handle_endtag(self, tag):
-        if tag == "section":
-            self.skip_sec = False
+        if tag not in VOID_TAGS:
+            for i in range(len(self.stack) - 1, -1, -1):
+                if self.stack[i][0] == tag:
+                    del self.stack[i:]
+                    break
+        if tag == "section" and self.sec_skip:
+            self.sec_skip -= 1
         if tag in SKIP_TAGS:
             self.skip_depth = max(0, self.skip_depth - 1)
             return
         if self.cur and tag == self.cur[0]:
-            text = norm("".join(self.buf))
-            if text and (AR.search(text) or self.cur[1]):
-                self.blocks.append({"tag": self.cur[0], "key": self.cur[1], "ar": text})
-            self.cur = None
+            self.cur_depth -= 1
+            if self.cur_depth == 0:
+                text = norm("".join(self.buf))
+                if text and (AR.search(text) or self.cur[1]):
+                    self.blocks.append({"tag": self.cur[0], "key": self.cur[1], "ar": text})
+                self.cur = None
 
     def handle_data(self, data):
-        if self.cur and not self.skip_depth:
+        if self.skip_depth:
+            return
+        if self.cur:
             self.buf.append(data)
+        elif not self.sec_skip and AR.search(data):
+            tag, cls, key = self.stack[-1] if self.stack else ("", "", None)
+            self.uncaptured.append({"tag": tag, "class": cls, "key": key, "ar": norm(data)[:70]})
 
 
 def lookup(block, lang, ui, trans, german):
@@ -166,16 +224,18 @@ def build_story(story_dir, ui, trans, german):
         "note": "Narration draft built from the published page; Karma blocks are not invented. Review before use.",
         "i18n": {},
     }
-    report = {"story": story_dir.name, "blocks": len(blocks), "languages": {}}
+    report = {"story": story_dir.name, "blocks": len(blocks), "languages": {}, "uncaptured_arabic": parser.uncaptured}
     for lang in LANGS:
-        out, missing = [], []
+        out, missing, suspect = [], [], []
         for i, b in enumerate(blocks):
             text = lookup(b, lang, ui, trans, german)
             if not text:
                 missing.append({"index": i, "tag": b["tag"], "ar": b["ar"][:70]})
+            elif lang != "ar" and (AR.search(text) or norm(text) == b["ar"]):
+                suspect.append({"index": i, "tag": b["tag"], "ar": b["ar"][:70], "text": text[:70]})
             out.append({"index": i, "speaker": "narrator", "kind": b["tag"], "text": text or "", "missing": not text})
         package["i18n"][lang] = {"blocks": out}
-        report["languages"][lang] = {"translated": len(blocks) - len(missing), "missing": missing}
+        report["languages"][lang] = {"translated": len(blocks) - len(missing), "missing": missing, "suspect": suspect}
     return package, report
 
 
@@ -185,10 +245,13 @@ def main(argv=None):
     ap.add_argument("--no-write", action="store_true")
     args = ap.parse_args(argv)
     root = Path(args.root)
-    trans, german = load_body_maps(root / "assets/shared/story-body-i18n.js")
+    warnings = []
+    trans, german, w = load_body_maps(root / "assets/shared/story-body-i18n.js")
+    warnings += w
     reports = []
     for d in sorted(p for p in (root / "stories/october").glob("*") if (p / "index.html").exists()):
-        ui = node_eval(EVAL_UI, json.dumps([str(d / "i18n.js"), str(d / "i18n-extra.js")]))
+        ui, w = eval_ui([d / "i18n.js", d / "i18n-extra.js"])
+        warnings += ["%s: %s" % (d.name, x) for x in w]
         package, report = build_story(d, ui, trans, german)
         reports.append(report)
         if not args.no_write:
@@ -196,20 +259,33 @@ def main(argv=None):
             out.mkdir(parents=True, exist_ok=True)
             (out / "story.draft.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     lines = ["body maps: %d translation keys, %d german-only keys" % (len(trans), len(german))]
+    if warnings:
+        lines.append("WARNINGS (%d):" % len(warnings))
+        lines += ["  ! " + x for x in warnings]
+    else:
+        lines.append("warnings: none")
     for r in reports:
         lines.append("== October %s: %d speakable blocks ==" % (r["story"], r["blocks"]))
         for lang in LANGS:
             info = r["languages"][lang]
-            lines.append("  %s: %d/%d translated" % (lang, info["translated"], r["blocks"]))
+            lines.append("  %s: %d/%d translated, %d suspect" % (lang, info["translated"], r["blocks"], len(info["suspect"])))
             for m in info["missing"][:12]:
                 lines.append("     missing #%d <%s> %s" % (m["index"], m["tag"], m["ar"]))
+            for m in info["suspect"][:12]:
+                lines.append("     suspect #%d <%s> %s => %s" % (m["index"], m["tag"], m["ar"], m["text"]))
+        unc = r["uncaptured_arabic"]
+        lines.append("  NOT in narration: %d visible Arabic text pieces" % len(unc))
+        for u in unc[:25]:
+            lines.append("     <%s%s%s> %s" % (u["tag"], "." + u["class"].replace(" ", ".") if u["class"] else "",
+                                             " " + u["key"] if u["key"] else "", u["ar"]))
     text = "\n".join(lines) + "\n"
     print(text)
     if not args.no_write:
         docs = root / "docs"
         docs.mkdir(exist_ok=True)
         (docs / "october-audio-packages-report.txt").write_text(text, encoding="utf-8")
-        (docs / "october-audio-packages-report.json").write_text(json.dumps(reports, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        (docs / "october-audio-packages-report.json").write_text(
+            json.dumps({"warnings": warnings, "stories": reports}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return 0
 
 
