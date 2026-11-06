@@ -10,6 +10,8 @@ test('admin speech-text reviewer is loaded and inline admin JavaScript parses', 
   assert.match(html, /مراجعة النص قبل توليد الصوت/);
   assert.match(html, /audio-pronunciation\.json/);
   assert.match(html, /اعتماد المراجعة وتصدير ملف الصوت/);
+  assert.match(html, /اقتراحات قاموس النطق العربي/);
+  assert.match(html, /المقترح الصوتي — يمكنك تعديله قبل الموافقة/);
   const scripts = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)];
   for (const match of scripts) {
     if (/\bsrc\s*=/.test(match[1])) continue;
