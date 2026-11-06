@@ -243,10 +243,8 @@ export async function buildStoryFiles(story, options = {}) {
   if (mapPlace === null) places[id] = null; else places[id] = mapPlace;
   const coverLocator = story.cover.url || story.cover.path;
   const coverUrl = /^https:\/\//i.test(coverLocator) ? coverLocator : new URL(coverLocator, REPO_ROOT).href;
-  let audioTextReviewRequired = false;
-  if (story.section !== 'october' && existingAt < 0) {
-    audioTextReviewRequired = true;
-  } else if (story.section !== 'october' && existingAt >= 0) {
+  let audioTextReviewRequired = existingAt < 0;
+  if (existingAt >= 0) {
     const previousRoot = previousPath || root.replace(/\/$/, '');
     const previousDataPath = previousRoot + '/data.json';
     if (await pathExists(previousDataPath)) {
