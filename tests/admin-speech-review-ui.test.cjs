@@ -6,7 +6,7 @@ const vm = require('node:vm');
 
 test('admin speech-text reviewer is loaded and inline admin JavaScript parses', () => {
   const html = fs.readFileSync(path.join(__dirname, '../khaledoon/admin.html'), 'utf8');
-  assert.match(html, /assets\/audio-text-review\.js\?v=20261105-audio-text-review-2/);
+  assert.match(html, /assets\/audio-text-review\.js\?v=20261106-dictionary-review-3/);
   assert.match(html, /مراجعة النص قبل توليد الصوت/);
   assert.match(html, /audio-pronunciation\.json/);
   assert.match(html, /اعتماد المراجعة وتصدير ملف الصوت/);
