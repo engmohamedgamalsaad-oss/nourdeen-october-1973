@@ -440,6 +440,27 @@ async function recordPreviewSent(it){
  var rows=await saved.json();if(!rows.length)throw new Error('لم يرجع الخادم سجل الحكاية بعد إرسال المعاينة.');
  if(rows[0])Object.assign(it,rows[0]);return rows[0];
 }
+function revisionStableValue(value){
+ if(Array.isArray(value))return value.map(revisionStableValue);
+ if(value&&typeof value==='object'){var out={};Object.keys(value).sort().forEach(function(key){out[key]=revisionStableValue(value[key])});return out}
+ return value;
+}
+function appendStoryRevision(meta,before,after,source,now){
+ var out=Object.assign({},meta||{}),keys=['section','figure_name','title','subtitle','body','sources','history_note','images_note','translations','images','cover','map_location','question_bank_json','karma_text'],changes=[];
+ function compact(value){if(value===undefined)return null;var raw=typeof value==='string'?value:JSON.stringify(value);return raw.length>1200?raw.slice(0,1200)+'…':raw}
+ keys.forEach(function(key){
+  var oldValue=before&&before[key]!==undefined?before[key]:null,newValue=after&&after[key]!==undefined?after[key]:null;
+  if(JSON.stringify(revisionStableValue(oldValue))!==JSON.stringify(revisionStableValue(newValue)))changes.push({field:key,before:compact(oldValue),after:compact(newValue)});
+ });
+ if(!changes.length)return out;
+ var history=Array.isArray(out.revision_history)?out.revision_history.slice():[];
+ var entry={saved_at:(now instanceof Date?now:new Date(now||Date.now())).toISOString(),source:String(source||'admin_edit'),changes:changes};
+ var previousRaw=before&&before.story_meta&&before.story_meta.ai_package_raw;
+ if(typeof previousRaw==='string'&&previousRaw&&previousRaw!==out.ai_package_raw)entry.previous_ai_package_raw=previousRaw.slice(0,100000);
+ history.push(entry);
+ out.revision_history=history.slice(-10);
+ return out;
+}
 /* تعديل نص بعد اعتماد المعاينة يُسقط الاعتماد (markEdited)؛ الحفظ بلا تغيير في النص لا يمسّه. */
 function dropApprovalIfEdited(it,fields,meta){
  var pr=it.story_meta&&it.story_meta.preview_review;if(!pr||pr.decision!=='approved_waiting_for_github_upload')return meta;
@@ -747,7 +768,7 @@ if(!isNew&&isOctoberLegacyRecord(it)){
   return true;
  }
  async function persist(status,btn){
-  var d=collect(status);if(!sendingToPreview)d.story_meta=dropApprovalIfEdited(it,d,d.story_meta);
+  var d=collect(status);if(!isNew)d.story_meta=appendStoryRevision(d.story_meta,it,d,'admin_edit',new Date());if(!sendingToPreview)d.story_meta=dropApprovalIfEdited(it,d,d.story_meta);
   saveMsg.hidden=true;
   if(!valid(d))return false;
   var ok=false,oldLabel=btn.textContent;btn.disabled=true;btn.textContent='جارٍ الحفظ…';
@@ -1201,6 +1222,7 @@ function pubRow(it){
       var allowedSections=Object.keys(SEC),chosenSection=String(pkg.section_key||'');if(!allowedSections.includes(chosenSection))chosenSection=String(it.section||'curriculum');if(!allowedSections.includes(chosenSection))chosenSection='curriculum';
       var visibleSourceLength=String(pkg.sources||'').replace(/\s+—\s+\[org:[^\]]+\]\s+—/g,'').length;if(aiInputFormat==='KHALEDOON_STORY'&&visibleSourceLength>3000){if(aiPreviewPopup){try{aiPreviewPopup.close()}catch(ignoreSourceLimitPopup){}}aiFail('المصادر المعروضة أطول من الحد المسموح (3000 حرف، دون احتساب علامة الربط الداخلية). اختصرها مع الحفاظ على جميع المراجع ثم أعد المحاولة؛ لم يتم حفظ المسودة.');return}
        var payload={section:chosenSection,figure_name:String(pkg.figure_name||it.figure_name||it.person||'شخصية تاريخية').trim().slice(0,120),title:String(pkg.title).trim().slice(0,140),subtitle:String(pkg.subtitle||'').slice(0,200),narrator_name:String(pkg.narrator_name||it.narrator_name||it.student_name||'كارما').trim().slice(0,40),narrator_grade:String(pkg.narrator_grade||it.narrator_grade||it.grade||'').slice(0,60),body:String(pkg.body).trim().slice(0,12000),history_note:String(pkg.history_note||'').slice(0,12000),sources:aiInputFormat==='KHALEDOON_STORY'?String(pkg.sources||''):String(pkg.sources||'').slice(0,3000),images_note:String(pkg.images_note||'').slice(0,1500),original_body:nextMeta.original_body,translations:translations,status:'pending',story_meta:nextMeta};
+      var previousRevisionRecord=oldMeta.pending_draft&&typeof oldMeta.pending_draft==='object'?oldMeta.pending_draft:it;nextMeta=appendStoryRevision(nextMeta,previousRevisionRecord,payload,'ai_import',new Date());payload.story_meta=nextMeta;
       /* لا نغيّر حالة سجل منشور ولا نستبدل نص الصفحة الحية؛ نضع ناتج AI في مسودة معلّقة. */
       var expectedAiTitle=payload.title,expectedAiBody=payload.body;
       if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload);delete nextMeta.pending_draft.story_meta;nextMeta.pending_draft.status='pending';if(storyOnlyDraft){nextMeta.pending_draft.story_only_draft=true;nextMeta.pending_draft.story_package=storyPackageRaw;nextMeta.pending_draft.story_review_state='needs_review';delete nextMeta.pending_draft.v2_only_draft;delete nextMeta.pending_draft.v2_package;delete nextMeta.pending_draft.v2_review_state;delete nextMeta.story_only_draft;delete nextMeta.story_package;delete nextMeta.story_review_state;delete nextMeta.v2_only_draft;delete nextMeta.v2_package;delete nextMeta.v2_review_state}payload={story_meta:nextMeta}}
@@ -1222,7 +1244,7 @@ var actions=el('div','review-actions');actions.style.cssText='display:grid;grid-
   var close=el('button','btn ghost','× إغلاق البيانات');close.type='button';close.style.margin='10px 0';close.addEventListener('click',function(){data.open=false});data.appendChild(close);
   var readerData=el('div','reader-submission-data');readerData.style.cssText='display:grid;gap:10px;margin-top:8px';
   function dataLine(label,value,pre){var line=el('div','reader-data-line');line.style.cssText='border-top:1px solid var(--line,#31505a);padding:9px 0';line.appendChild(el('b','',label));var val=el(pre?'pre':'p','',String(value||'غير مسجل'));val.style.cssText=pre?'white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin:6px 0 0':'margin:4px 0 0;white-space:pre-wrap;overflow-wrap:anywhere';line.appendChild(val);readerData.appendChild(line)}
-  dataLine('عنوان الحكاية',it.title);dataLine('صاحب الاقتراح / الراوي',it.student_name||it.narrator_name);dataLine('الصف',it.grade||it.narrator_grade);dataLine('سبب اختيار الحكاية',it.story_meta&&it.story_meta.proposal_reason,true);dataLine('الهدف التعليمي',it.story_meta&&it.story_meta.educational_goal,true);dataLine('النص الذي وصل',it.original_body||it.body,true);dataLine('المصادر التي أرسلها القارئ',it.sources,true);dataLine('تاريخ الإرسال',it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'غير مسجل');dataLine('موافقة ولي الأمر',it.consent===true?'مسجلة':it.consent===false?'غير مسجلة':'غير محددة');
+  dataLine('عنوان الحكاية',it.title);dataLine('صاحب الاقتراح / الراوي',it.student_name||it.narrator_name);dataLine('الصف',it.grade||it.narrator_grade);dataLine('سبب اختيار الحكاية',it.story_meta&&it.story_meta.proposal_reason,true);dataLine('الهدف التعليمي',it.story_meta&&it.story_meta.educational_goal,true);var revisionRows=it.story_meta&&Array.isArray(it.story_meta.revision_history)?it.story_meta.revision_history:[];dataLine('سجل التغييرات',revisionRows.length?revisionRows.map(function(row){return String(row.saved_at||'')+' | '+String(row.source||'تعديل')+' | '+(Array.isArray(row.changes)?row.changes.map(function(change){return change.field}).join('، '):'')+(row.previous_ai_package_raw?' | نسخة AI سابقة محفوظة':'')}).join('\n'):'لا توجد تغييرات مسجلة',true);dataLine('النص الذي وصل',it.original_body||it.body,true);dataLine('المصادر التي أرسلها القارئ',it.sources,true);dataLine('تاريخ الإرسال',it.created_at?new Date(it.created_at).toLocaleString('ar-EG'):'غير مسجل');dataLine('موافقة ولي الأمر',it.consent===true?'مسجلة':it.consent===false?'غير مسجلة':'غير محددة');
   data.appendChild(readerData);
   var editDetails=document.createElement('details');editDetails.style.cssText='border-top:1px solid var(--line,#31505a);margin-top:12px;padding-top:10px';
   editDetails.appendChild(el('summary','','فتح أدوات المراجعة والتحرير'));var editor=el('div','pbody');editor.appendChild(card(it));editDetails.appendChild(editor);data.appendChild(editDetails);
