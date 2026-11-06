@@ -208,10 +208,10 @@ def main() -> int:
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
         print(
-            f"READ-ONLY | stories={report['published_non_october_stories']} "
+            f"READ-ONLY | published_stories={report.get('published_stories', 0)} "
             f"complete={report['complete_stories']} "
             f"incomplete={report['incomplete_stories']} "
-            f"october_skipped={report['october_stories_skipped']} "
+            f"october_audio_packages={report.get('october_audio_packages', 0)} "
             f"tts_requests=0 files_modified=0"
         )
         for story in report["stories"]:
