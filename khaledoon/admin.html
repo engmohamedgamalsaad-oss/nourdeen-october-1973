@@ -1025,7 +1025,7 @@ function pubRow(it){
      var audioTextReviewResultList=el('div','review-data');audioTextReviewResultList.style.cssText='display:grid;gap:8px';
      var audioTextReviewExport=el('button','btn primary','٦. اعتماد المراجعة وتصدير ملف الصوت');audioTextReviewExport.type='button';audioTextReviewExport.disabled=true;
      audioTextReviewBox.appendChild(audioTextReviewResultList);audioTextReviewBox.appendChild(audioTextReviewExport);
-     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null),audioTextReviewDictionaryApplied=false;
+     var audioTextReviewCurrentResult=null,approvedAudioTextChanges=Object.create(null),audioTextReviewDictionaryApplied=false;var audioReviewPackagePromise=audioReviewPackageOf(it);
      function clearAudioTextReviewCards(){while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);approvedAudioTextChanges=Object.create(null);audioTextReviewExport.disabled=true;audioTextReviewDictionary.disabled=true;audioTextReviewDictionaryApplied=false}
      function renderAudioTextReviewSuggestions(suggestions){
       while(audioTextReviewResultList.firstChild)audioTextReviewResultList.removeChild(audioTextReviewResultList.firstChild);
@@ -1047,7 +1047,7 @@ function pubRow(it){
       });
      }
      audioTextReviewCopy.addEventListener('click',async function(){
-      var pkg=await audioReviewPackageOf(it);
+      var pkg=await audioReviewPackagePromise;
       if(!pkg){audioTextReviewStatus.textContent='لا توجد حزمة KHALEDOON_STORY موحدة في سجل هذه المسودة. استورد الحزمة الموحدة أولًا، ثم أعد فتح الأدمن.';return}
       try{
        var diagnostics=window.KHAudioTextReview.diagnose(pkg),prompt=window.KHAudioTextReview.buildPrompt(pkg);
