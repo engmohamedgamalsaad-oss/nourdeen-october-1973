@@ -118,15 +118,7 @@ class EgyptianDialectReviewTests(unittest.TestCase):
             root = Path(directory) / "stories"
             self.make_story(root, "science", "one")
             self.make_story(root, "people", "two")
-            october_package = root.parent / "rebuild" / "october-audio-packages" / "001" / "story.json"
-            october_package.parent.mkdir(parents=True)
-            october_package.write_text(json.dumps({
-                "format": "KHALEDOON_STORY", "section": "october", "slug": "october-one",
-                "i18n": {"ar": {"blocks": [
-                    {"speaker": "narrator", "text": "إزاي نقدر نساعد الناس؟ ده سؤال مهم."},
-                    {"speaker": "karma", "text": "مش عارفة الإجابة، وعايزة أفهم أكتر."},
-                ]}},
-            }, ensure_ascii=False), encoding="utf-8")
+            self.make_story(root, "october", "october-one")
             report = dialect.build_all_stories_report(root)
             self.assertEqual(report["summary"]["stories_reviewed"], 3)
             self.assertEqual(report["summary"]["blocks_reviewed"], 6)
