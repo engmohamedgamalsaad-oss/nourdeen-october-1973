@@ -36,6 +36,7 @@ function validateAudioReviewGate(
   audioReview: any,
   files: any[],
   section: string,
+  storyId: string,
 ): string | null {
   const languages = ["ar", "en", "fr", "it", "de"];
   const slug = String(packageData?.slug ?? "");
@@ -44,7 +45,7 @@ function validateAudioReviewGate(
     return "لا يوجد سجل مراجعة صوت محفوظ للحكاية؛ لا يمكن اعتماد النشر.";
   }
   const pronunciationFile = files.find((file: any) =>
-    file.path === "stories/" + section + "/" + String(packageData.id ?? "").padStart(3, "0") + "/audio-pronunciation.json"
+    file.path === "stories/" + section + "/" + storyId + "/audio-pronunciation.json"
   );
   let approvedArabic: Record<string, string> = {};
   if (pronunciationFile) {
@@ -288,7 +289,7 @@ Deno.serve(async (req: Request) => {
           pageHtml.includes('data-story-path="data.v2.json"')) {
         return reply(409, { error: "كل الأقسام، بما فيها أكتوبر، يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
       }
-      const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection);
+      const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection, storyId);
       if (audioGateError) return reply(409, { error: audioGateError });
 
       if (!storyRoot || packageData.section !== storySection ||
