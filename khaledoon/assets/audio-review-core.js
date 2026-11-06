@@ -144,6 +144,8 @@ function normalizePronunciationReview(input, entry, attachedAt) {
     match_ratio: finiteNumber(input.match_ratio),
     detected_language: boundedText(input.detected_language, 8),
     language_probability: finiteNumber(input.language_probability),
+    language_mismatch: input.language_mismatch === true,
+    language_detection_uncertain: input.language_detection_uncertain === true,
     expected_word_count: finiteNumber(input.expected_word_count),
     recognized_word_count: finiteNumber(input.recognized_word_count),
     transcript: boundedText(input.transcript, 4000),
