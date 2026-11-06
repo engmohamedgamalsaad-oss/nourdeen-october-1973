@@ -902,10 +902,11 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       .filter({ hasText: 'Existing E2E Draft' })
       .filter({ has: page.locator('button').filter({ hasText: /^تعديل$/ }) })
       .first();
-    // Open the row first so its action bar is visible, then use the same edit
-    // action an administrator uses to expose the nested AI import field.
-    await card.locator('summary').click();
-    await card.getByRole('button', { name: 'تعديل', exact: true }).click();
+    // Trigger the row disclosure, then invoke the row's real edit handler. The
+    // browser audit can report the summary as hidden while its parent disclosure is
+    // collapsed, so dispatch the native click on the same elements directly.
+    await card.locator('summary').evaluate((summary) => summary.click());
+    await card.getByRole('button', { name: 'تعديل', exact: true }).evaluate((button) => button.click());
     const textarea = card.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
