@@ -3,8 +3,18 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.0";
 import JSZip from "npm:jszip@3.10.1";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL") ?? "";
-const ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY") ?? "";
-const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+function envKey(name: string, dictionaryName: string): string {
+  const legacy = Deno.env.get(name);
+  if (legacy) return legacy;
+  try {
+    const dictionary = JSON.parse(Deno.env.get(dictionaryName) ?? "{}");
+    return typeof dictionary.default === "string" ? dictionary.default : "";
+  } catch {
+    return "";
+  }
+}
+const ANON_KEY = envKey("SUPABASE_ANON_KEY", "SUPABASE_PUBLISHABLE_KEYS");
+const SERVICE_KEY = envKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
 const GITHUB_TOKEN = Deno.env.get("GITHUB_PUBLISH_TOKEN") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const OWNER = "engmohamedgamalsaad-oss";
