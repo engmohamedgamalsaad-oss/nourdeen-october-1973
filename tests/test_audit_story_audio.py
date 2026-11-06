@@ -32,6 +32,12 @@ class AudioInventoryTests(unittest.TestCase):
             },
         }
         self.write_json(story_dir / "story.json", package)
+        if section == "october":
+            self.write_json(story_dir / "audio-readiness.json", {
+                "format": "KHALEDOON_OCTOBER_AUDIO_READINESS_V1",
+                "story": story_id,
+                "ready": True,
+            })
         return story_dir
 
     def test_includes_october_and_skips_unpublished_stories(self) -> None:
@@ -134,24 +140,7 @@ class AudioInventoryTests(unittest.TestCase):
     def test_includes_ready_october_audio_packages_in_shared_inventory(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            package_dir = root / "rebuild" / "october-audio-packages" / "001"
-            self.write_json(package_dir / "story.json", {
-                "format": "KHALEDOON_STORY",
-                "section": "october",
-                "slug": "october-sample",
-                "i18n": {
-                    language: {"blocks": [
-                        {"speaker": "narrator", "text": f"Text {language}"},
-                        {"speaker": "karma", "text": f"Reply {language}"},
-                    ]}
-                    for language in LANGUAGES
-                },
-            })
-            self.write_json(package_dir / "audio-readiness.json", {
-                "format": "KHALEDOON_OCTOBER_AUDIO_READINESS_V1",
-                "story": "001",
-                "ready": True,
-            })
+            self.make_story(root, "october", "001", "october-sample")
             report = audit(root)
             self.assertEqual(report["october_audio_packages"], 1)
             self.assertEqual(report["stories_included"], 1)
