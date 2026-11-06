@@ -61,7 +61,7 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(audioTextReviewer.includes('buildApprovedAudioPronunciation'), 'the admin must export the generator-compatible approval artifact');
   assert.ok(admin.includes("link.download='audio-pronunciation.json'"), 'the admin must download the approval file beside story.json');
   assert.ok(admin.includes('async function audioReviewPackageOf(it)'), 'October legacy records must load their extracted audio source package for the shared review');
-  assert.ok(admin.includes("../rebuild/october-audio-packages/'+storyId+'/story.json"), 'October review must use the shared extracted story package');
+  assert.ok(admin.includes("../stories/october/'+storyId+'/story.json"), 'October review must use the canonical shared story package');
   assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
   assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
   assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
