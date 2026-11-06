@@ -902,7 +902,6 @@ async function adminStoryActualImportRegression(browser, base, origin) {
     // Expand through the actual summary even if the text locator is treated as hidden
     // while the details disclosure is closed.
     await card.locator('summary').evaluate((summary) => summary.click());
-    await card.locator('.pbody').waitFor({ state: 'visible', timeout: 10000 });
     const textarea = page.locator('textarea[aria-label="الصق ناتج الذكاء الاصطناعي JSON"]');
     await textarea.waitFor({ state: 'visible', timeout: 10000 });
     await textarea.fill(JSON.stringify(storyPackage));
