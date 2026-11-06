@@ -595,7 +595,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = (), allow_october_generation: bool = False) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> bool:
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
     if section == "october" and not is_october_package:
