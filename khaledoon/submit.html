@@ -37,6 +37,8 @@
 </div>
 <label class="fl">عنوان الحكاية *<input id="title" maxlength="140" required></label>
 <label class="fl">عنوان فرعي <small>اختياري</small><input id="subtitle" maxlength="200"></label>
+<label class="fl">سبب اختيار الحكاية * <small>لماذا ترى أن هذه الشخصية تستحق أن نروي قصتها؟</small><textarea id="proposalReason" rows="3" maxlength="1500" required></textarea></label>
+<label class="fl">الهدف التعليمي من الحكاية * <small>ما الفكرة أو القيمة أو المعرفة التي تريد أن يتعلمها القارئ؟</small><textarea id="educationalGoal" rows="3" maxlength="1500" required></textarea></label>
 <label class="fl">الحكاية بصوتك * <small>اكتبها بأسلوبك وكلماتك، 50 حرفًا على الأقل. افصل الفقرات بسطر فارغ.</small><textarea id="body" rows="10" maxlength="12000" required></textarea><span class="cnt" id="cnt">0 / 12000</span></label>
 <label class="fl">المصادر <small>اختياري لكنه مهم: كتب أو مواقع اعتمدت عليها، سطر لكل مصدر</small><textarea id="sources" rows="3" maxlength="3000"></textarea></label>
 <label class="fl">الصور <small>اختياري: هل عندك صورة مناسبة؟ اذكر مصدرها وحقوق استخدامها (لا ترسل صورًا هنا)</small><textarea id="images" rows="2" maxlength="1500"></textarea></label>
@@ -76,10 +78,12 @@ f.addEventListener('submit',async function(e){
  var cur=sec.value==='curriculum';
  if(!sec.value||v('figure').length<2||v('title').length<3||v('narrator').length<2){say('err','أكمل الحقول المطلوبة: القسم والشخصية والعنوان واسم الراوي.');return}
  if(cur&&(!stage.value||!grade.value)){say('err','اختر المرحلة والصف لشخصيات المناهج.');return}
+ if(v('proposalReason').length<10){say('err','اكتب سبب اختيار الحكاية في 10 أحرف على الأقل.');return}
+ if(v('educationalGoal').length<10){say('err','اكتب الهدف التعليمي في 10 أحرف على الأقل.');return}
  if(v('body').length<50){say('err','الحكاية قصيرة؛ اكتب 50 حرفًا على الأقل.');return}
  if(!$('consent').checked){say('err','لا بد من الموافقة على عرض الاسم الأول والصف بعد المراجعة.');return}
  try{var last=+localStorage.getItem('kh_last_submit')||0;if(Date.now()-last<60000){say('err','انتظر دقيقة قبل إرسال حكاية أخرى.');return}}catch(x){}
- var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),original_body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending',story_meta:{}};
+ var d={section:sec.value,stage:cur?stage.value:null,school_grade:cur?+grade.value:null,subject:cur?nul(v('subject')):null,figure_name:v('figure'),narrator_name:v('narrator'),narrator_grade:nul(v('ngrade')),title:v('title'),subtitle:nul(v('subtitle')),body:v('body'),original_body:v('body'),sources:nul(v('sources')),images_note:nul(v('images')),consent:true,status:'pending',story_meta:{proposal_reason:v('proposalReason'),educational_goal:v('educationalGoal')}};
  btn.disabled=true;
  try{
   var r=await fetch(API+'/rest/v1/khaledoon_submissions',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+ANON_JWT,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify(d)});
