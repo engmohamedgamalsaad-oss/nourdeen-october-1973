@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Plan or stage per-speaker audio for published non-October story packages.
+"""Plan or stage per-speaker audio for published story packages across all sections.
 
-October stories are handled only through their audio packages in
-rebuild/october-audio-packages/<id>/ (story.json + audio-readiness.json); the
-published October pages under stories/october are never read or written here.
+October page content is extracted without changing its published HTML/CSS into
+rebuild/october-audio-packages/<id>/ (story.json + audio-readiness.json). Those
+packages then use the same planning, approval, generation, and review pipeline.
 
 Planning is read-only. Generation requires an explicit flag and writes only to
 .gitignored .audio-staging; it never writes to the published audio tree.
@@ -403,7 +403,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
     if section == "october" and not is_october_package:
-        raise ValueError(f"October stories are excluded from audio planning: {relative}")
+        raise ValueError(f"October page assets are not generator input; use the extracted shared audio package: {relative}")
     package = read_json(story_path)
     if package.get("format") != "KHALEDOON_STORY" or package.get("section") != section:
         raise ValueError(f"Invalid story package format or section in {relative}")
@@ -552,7 +552,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
 
 
 def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING_ROOT) -> dict[str, Any]:
-    """Build no-write generation plans for every published non-October story and every October audio package."""
+    """Build no-write generation plans for every published story and October audio source package."""
     stories: list[dict[str, Any]] = []
     october: list[dict[str, Any]] = []
     skipped_october = 0
