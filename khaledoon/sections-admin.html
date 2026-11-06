@@ -35,7 +35,8 @@ details.acc>.acc-body{padding:14px}
 var KEY='kh_sections_admin_draft_v2',data=null,colors={},touched={},publishedStories=null,openIds={};
 var langs=[['en','الإنجليزية'],['fr','الفرنسية'],['it','الإيطالية'],['de','الألمانية']];
 /* الألوان الفعلية لبوابات الرئيسية (من collection-visuals.css): outer = لون الإبراز، inner = بداية تدرّج الخلفية */
-var SITE={october:{outer:'#f0c878',inner:'#163e49'},science:{outer:'#8ad9e8',inner:'#123d4a'},women:{outer:'#e7a1c1',inner:'#4b2944'},people:{outer:'#f3c17b',inner:'#29415c'},history:{outer:'#d4b7ff',inner:'#342b56'},curriculum:{outer:'#9bb7ff',inner:'#1f3560'}};
+/* islamic: same green as rebuild/reader-enhance.css and assets/shared/story-section-bg.js (no entry in collection-visuals.css) */
+var SITE={october:{outer:'#f0c878',inner:'#163e49'},science:{outer:'#8ad9e8',inner:'#123d4a'},women:{outer:'#e7a1c1',inner:'#4b2944'},people:{outer:'#f3c17b',inner:'#29415c'},history:{outer:'#d4b7ff',inner:'#342b56'},curriculum:{outer:'#9bb7ff',inner:'#1f3560'},islamic:{outer:'#78c59a',inner:'#1f4a3a'}};
 /* أقسام غير معرّفة في CSS (مثل الجديدة): ألوان مبدئية متمايزة بدل لون واحد للجميع */
 var FALLBACK=[['#7fd1b0','#143d33'],['#f08a8a','#4a2020'],['#8fd3ff','#16364d'],['#e6d37a','#3d3514'],['#c4a0ff','#2f2350'],['#ff9fd0','#4b1f3a']];
 function defaultColors(id,index){if(SITE[id])return{outer:SITE[id].outer,inner:SITE[id].inner};var f=FALLBACK[index%FALLBACK.length];return{outer:f[0],inner:f[1]}}
