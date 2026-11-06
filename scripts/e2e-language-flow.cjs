@@ -898,7 +898,10 @@ async function adminStoryActualImportRegression(browser, base, origin) {
       return !!view && !view.hidden;
     }, null, { timeout: 5000 });
     await page.waitForFunction(() => Array.from(document.querySelectorAll('#viewSubs details.pubrow')).some((row) => row.textContent.includes('Existing E2E Draft')), null, { timeout: 20000 });
-    const card = page.locator('#viewSubs details.pubrow').filter({ hasText: 'Existing E2E Draft' }).first();
+    const card = page.locator('#viewSubs details.pubrow')
+      .filter({ hasText: 'Existing E2E Draft' })
+      .filter({ has: page.locator('button').filter({ hasText: /^تعديل$/ }) })
+      .first();
     // Open the row first so its action bar is visible, then use the same edit
     // action an administrator uses to expose the nested AI import field.
     await card.locator('summary').click();
