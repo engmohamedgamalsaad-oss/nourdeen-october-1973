@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only inventory of audio assets for published, non-October stories.
+"""Read-only inventory of audio assets for published stories and October audio packages.
 
 This command never invokes TTS and never writes, renames, or deletes files.
 """
@@ -40,7 +40,12 @@ def speakable_blocks(package: dict[str, Any], language: str) -> set[int]:
 
 def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
     relative = story_path.relative_to(root)
-    section = relative.parts[1]
+    if len(relative.parts) == 4 and relative.parts[0] == "stories":
+        section = relative.parts[1]
+    elif len(relative.parts) == 4 and relative.parts[:2] == ("rebuild", "october-audio-packages"):
+        section = "october"
+    else:
+        raise ValueError(f"{relative}: unsupported story package path")
     package = read_object(story_path)
     slug = str(package.get("slug") or "").strip()
     if package.get("format") != "KHALEDOON_STORY":
@@ -142,17 +147,28 @@ def inspect_story(story_path: Path, root: Path) -> dict[str, Any]:
 def audit(root: Path) -> dict[str, Any]:
     stories_root = root / "stories"
     records: list[dict[str, Any]] = []
-    skipped = 0
-    for story_path in sorted(stories_root.glob("*/*/story.json")):
+    october_packages = root / "rebuild" / "october-audio-packages"
+    candidates = list(stories_root.glob("*/*/story.json"))
+    candidates.extend(october_packages.glob("*/story.json"))
+    published_count = 0
+    october_count = 0
+    for story_path in sorted(set(candidates)):
         relative = story_path.relative_to(root)
-        if relative.parts[1] == "october":
-            skipped += 1
-            continue
-        data_path = story_path.with_name("data.json")
-        if not data_path.is_file():
-            continue
         try:
-            if read_object(data_path).get("published") is not True:
+            if relative.parts[0] == "stories":
+                data_path = story_path.with_name("data.json")
+                if not data_path.is_file() or read_object(data_path).get("published") is not True:
+                    continue
+                published_count += 1
+            elif relative.parts[:2] == ("rebuild", "october-audio-packages"):
+                readiness_path = story_path.with_name("audio-readiness.json")
+                readiness = read_object(readiness_path) if readiness_path.is_file() else {}
+                if readiness.get("format") != "KHALEDOON_OCTOBER_AUDIO_READINESS_V1":
+                    raise ValueError(f"{relative}: missing or invalid audio readiness report")
+                if readiness.get("ready") is not True:
+                    raise ValueError(f"{relative}: October package is not ready in all five languages")
+                october_count += 1
+            else:
                 continue
             records.append(inspect_story(story_path, root))
         except (OSError, ValueError, json.JSONDecodeError) as exc:
@@ -166,8 +182,10 @@ def audit(root: Path) -> dict[str, Any]:
         "mode": "read-only",
         "tts_requests": 0,
         "files_modified": 0,
-        "october_stories_skipped": skipped,
-        "published_non_october_stories": len(records),
+        "october_stories_skipped": 0,
+        "published_non_october_stories": published_count,
+        "october_audio_packages": october_count,
+        "stories_included": len(records),
         "complete_stories": sum(item.get("status") == "complete" for item in records),
         "incomplete_stories": sum(item.get("status") != "complete" for item in records),
         "stories": records,
@@ -176,7 +194,7 @@ def audit(root: Path) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Inventory published non-October story audio without changing files."
+        description="Inventory published story audio and October audio packages without changing files."
     )
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--json", action="store_true", help="Print machine-readable JSON.")
