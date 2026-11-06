@@ -507,13 +507,31 @@ function render() {
   }
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
   blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
-  if (!manifests[lang]) return;
+  if (!manifests[lang]) {
+    var missingManifest = /HTTP 404/.test(String(manifestErrors[lang] || ''));
+    blocks.forEach(function (block, index) {
+      var localizedBlock = story.i18n && story.i18n[lang] && story.i18n[lang].blocks && story.i18n[lang].blocks[index];
+      if (!localizedBlock || !['narrator', 'karma'].includes(localizedBlock.speaker) || !String(localizedBlock.text || '').trim()) return;
+      var panel = document.createElement('div');
+      panel.className = 'kh-audio-review-controls';
+      panel.dataset.audioState = missingManifest ? 'not-started' : 'unavailable';
+      var playBtn = makeButton('▶ الصوت غير جاهز', 'play', function () {});
+      playBtn.disabled = true;
+      var audioState = document.createElement('span');
+      audioState.className = 'kh-audio-ready-state ' + (missingManifest ? 'not-started' : 'failed');
+      text(audioState, missingManifest ? 'لم يبدأ إنتاج الصوت' : 'تعذر التحقق من تجهيز الصوت: ' + String(manifestErrors[lang] || 'خطأ غير محدد'));
+      panel.append(playBtn, audioState);
+      block.appendChild(panel);
+    });
+    return;
+  }
   if (activeLang !== lang) activeLang = lang;
   var manifest = manifests[lang];
   entries.filter(function (e) { return e.lang === lang; }).forEach(function (entry) {
     var block = blocks[entry.block_index];
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls'; panel.dataset.clipKey = entry.key;
+    var audioState = document.createElement('span'); audioState.className = 'kh-audio-ready-state ready'; text(audioState, 'جاهز للاستماع');
     var saved = review.clips[entry.key];
     var state = document.createElement('span'); state.className = 'kh-audio-review-state';
     text(state, saved ? (saved.status === 'accepted' ? 'مقبول ✓' : 'مرفوض ✕') : 'لم يُراجع بعد');
@@ -548,7 +566,7 @@ function render() {
       try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     editor.append(issue, note, suggestion, saveReject);
-    panel.append(playBtn, acceptBtn, rejectBtn, state, editor);
+    panel.append(playBtn, acceptBtn, rejectBtn, audioState, state, editor);
     renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
@@ -564,6 +582,7 @@ function injectStyles() {
     '.kh-audio-review-btn.accept{border-color:#4b9a70;color:#4b9a70}.kh-audio-review-btn.reject,.kh-audio-review-btn.reject-save{border-color:#b66b6b;color:#d88b8b}',
     '.kh-audio-review-btn.kh-audio-review-playing{background:var(--accent);color:#14202a}',
     '.kh-audio-review-state{margin-inline-start:auto;font-size:12px;color:var(--muted)}',
+    '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
