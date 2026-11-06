@@ -2,12 +2,16 @@
 """Tests for the isolated audio-only Arabic pronunciation dictionary."""
 from __future__ import annotations
 
+import io
+import json
 import unittest
+from unittest.mock import patch
 
 from arabic_pronunciation import (
     PronunciationDictionaryError,
     apply_dictionary,
     lexical_form,
+    main,
     prepare_audio_text,
 )
 
@@ -72,6 +76,22 @@ class ArabicPronunciationTests(unittest.TestCase):
         )
         self.assertTrue(result.startswith("وَتَذْكُرُ الدِّرَاسَاتُ"))
         self.assertEqual(used, ["studies"])
+
+    def test_cli_emits_candidate_without_approval_or_file_writes(self):
+        output = io.StringIO()
+        with patch("sys.stdout", output):
+            self.assertEqual(
+                main(["--text", "وتذكر الدراسات المنشورة."]),
+                0,
+            )
+        payload = json.loads(output.getvalue())
+        self.assertEqual(
+            payload["candidate_audio_text"],
+            "وَتَذْكُرُ الدِّرَاسَاتُ المنشورة.",
+        )
+        self.assertEqual(payload["review_status"], "REQUIRES_HUMAN_APPROVAL")
+        self.assertFalse(payload["audio_generation_performed"])
+        self.assertFalse(payload["files_written"])
 
     def test_rejects_lexical_rewrite(self):
         bad = {
