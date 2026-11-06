@@ -10,9 +10,6 @@
     if (!pkg || pkg.format !== 'KHALEDOON_STORY' || !pkg.i18n || typeof pkg.i18n !== 'object') {
       throw new Error('الحزمة الموحدة غير صالحة أو لا تحتوي على i18n.');
     }
-    if (pkg.section === 'october') {
-      throw new Error('مدقق النص الصوتي لا يعمل على قسم أكتوبر.');
-    }
     var out = [];
     LANGS.forEach(function (lang) {
       var localized = pkg.i18n[lang];
