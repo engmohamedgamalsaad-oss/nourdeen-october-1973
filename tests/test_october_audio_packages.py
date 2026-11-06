@@ -15,7 +15,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(value, ensure_ascii=False), encoding="utf-8")
 
-    def make_package(self, root: Path, story_id: str = "001", ready: bool = True) -> Path:
+    def make_package(self, root: Path, story_id: str = "001", ready: bool = True, approved: bool = True) -> Path:
         directory = root / "rebuild" / "october-audio-packages" / story_id
         self.write_json(directory / "story.json", {
             "format": "KHALEDOON_STORY",
@@ -34,6 +34,25 @@ class OctoberAudioPackageTests(unittest.TestCase):
             "story": story_id,
             "ready": ready,
         })
+        if approved:
+            review_segments = []
+            for language in audio.LANGUAGES:
+                for index, text in enumerate((f"Title {language}", f"Body {language}")):
+                    review_segments.append({
+                        "lang": language, "block_index": index, "speaker": "narrator",
+                        "source_text": text, "approved_audio_text": text, "decision": "approved_original",
+                    })
+            self.write_json(directory / "audio-pronunciation.json", {
+                "format": "KHALEDOON_AUDIO_PRONUNCIATION_V1",
+                "story": story_id, "section": "october",
+                "review": {
+                    "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
+                    "status": "approved_by_admin", "languages": list(audio.LANGUAGES),
+                    "total_segments": len(review_segments), "segments": review_segments,
+                },
+                "approved_audio_text_rewrites": {language: {} for language in audio.LANGUAGES},
+                "blocks": {}, "approved_audio_only_rewrites": [],
+            })
         return directory / "story.json"
 
     def test_ready_package_is_planned_for_all_five_languages_without_writes(self) -> None:
@@ -80,15 +99,15 @@ class OctoberAudioPackageTests(unittest.TestCase):
             self.assertEqual(report["segments_to_generate"], 10)
             self.assertFalse(staging.exists())
 
-    def test_generation_needs_separate_october_approval_before_any_tts(self) -> None:
+    def test_generation_uses_the_shared_human_approval_gate_before_any_tts(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
-            story = self.make_package(root)
+            story = self.make_package(root, approved=False)
             staging = root / ".audio-staging"
             fish, edge = AsyncMock(), AsyncMock()
             with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
                  patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
-                with self.assertRaises(RuntimeError):
+                with self.assertRaisesRegex(ValueError, "admin-approved five-language"):
                     asyncio.run(audio.generate_story(story, dry_run=False, allow_fish_audio=True))
             fish.assert_not_awaited()
             edge.assert_not_awaited()
