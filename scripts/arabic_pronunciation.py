@@ -127,7 +127,7 @@ def apply_dictionary(
                 gap = text[spans[end_index - 1].end():spans[end_index].start()]
                 if gap.strip() or lexical_form(spans[end_index].group(0)) != lexical_form(after):
                     continue
-            spoken_tokens = _tokens(entry["spoken"])
+            spoken_tokens = [match.group(0) for match in TOKEN_RE.finditer(entry["spoken"])]
             selected = (entry, end_index, spoken_tokens)
             break
 
