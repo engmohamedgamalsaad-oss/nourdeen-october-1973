@@ -97,7 +97,7 @@ class ArabicPronunciationTests(unittest.TestCase):
         bad = {
             "schema_version": 1,
             "entries": [
-                {"id": "bad", "match": "مركز", "spoken": "مُرَكَّز"}
+                {"id": "bad", "match": "مركز", "spoken": "مراكز", "before": "في"}
             ],
         }
         with self.assertRaises(PronunciationDictionaryError):
