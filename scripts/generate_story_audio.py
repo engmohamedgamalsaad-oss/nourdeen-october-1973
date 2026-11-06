@@ -2,8 +2,8 @@
 """Plan or stage per-speaker audio for published story packages across all sections.
 
 October page content is extracted without changing its published HTML/CSS into
-rebuild/october-audio-packages/<id>/ (story.json + audio-readiness.json). Those
-packages then use the same planning, approval, generation, and review pipeline.
+stories/october/<id>/ (story.json + audio-readiness.json). Every section uses
+this canonical story-package directory and the same planning/review pipeline.
 
 Planning is read-only. Generation requires an explicit flag and writes only to
 .gitignored .audio-staging; it never writes to the published audio tree.
