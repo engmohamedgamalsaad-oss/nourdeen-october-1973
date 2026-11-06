@@ -18,7 +18,7 @@ The visible story text is the source of truth and is never rewritten by audio ge
 - Missing diacritizer dependency or a failed/empty diacritization result fails the Arabic generation step. It does not silently send bare Arabic to TTS.
 - Fish Audio retries transient failures up to three times. It does not switch to a different speaker in the middle of a story.
 - The audio commit step runs only after successful generation, so a partial run is not published.
-- October stories remain excluded by the generator.
+- October page content is extracted into `rebuild/october-audio-packages/<id>/story.json` without changing its published HTML/CSS. Those packages use the same Arabic diacritization, Fish Audio voice, manifests, staging, ASR review, and human approval gates as every other section.
 
 ## Model and licensing notes
 
