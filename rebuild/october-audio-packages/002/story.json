@@ -1,0 +1,1402 @@
+{
+  "format": "KHALEDOON_STORY",
+  "section": "october",
+  "slug": "002",
+  "i18n": {
+    "ar": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "العقل قبل السلاح"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "كيف فتحت المياه طريق العبور"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "جدار من الرمال"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بعد عام 1967 أقامت إسرائيل على الضفة الشرقية لقناة السويس ساترًا ترابيًا ضخمًا، وخلفه نقاط حصينة. عُرف هذا الخط باسم «خط بارليف»، وكان هدفه منع القوات المصرية من العبور."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وكان على المهندسين المصريين أن يفكروا: كيف تفتح مصر ثغرات في هذا الساتر بسرعة، حتى تعبر الدبابات والمعدات؟"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "ماذا لو استخدمنا الماء؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "درس المصريون خيارات عديدة لفتح الساتر، منها الحفر والتفجير. لكن الساتر كان ضخمًا ومتماسكًا، وكان المطلوب حلًّا أسرع وأبسط."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الطريقة التقليدية"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "حفر أو تفجير في كتلة كبيرة من الرمال، وهذا يحتاج وقتًا ومجهودًا كبيرًا."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "فكرة المياه"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "استخدام مياه القناة نفسها بقوة عالية، فتجرف الرمال وتفتح ممرًا للعبور."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الماء"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "نأخذ الماء من القناة نفسها."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الضغط"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "مضخات قوية تدفع الماء بضغط عالٍ."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الثغرة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الماء يجرف الرمال فيتكوّن ممر للعبور."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "المهندس باقي زكي يوسف"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تذكر أغلب المصادر اسم المهندس العسكري باقي زكي يوسف، وُلد عام 1931، وتخرج في كلية الهندسة بجامعة عين شمس، ثم عمل مهندسًا في الجيش."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي ستينيات القرن العشرين شارك في بناء السد العالي في أسوان. هناك رأى كيف تُستخدم نفاثات المياه القوية لتحريك كميات هائلة من الرمال. وتذكر روايات منشورة عنه أن خبرته في مشروع السد العالي ساعدته على التفكير في استخدام الماء لفتح ثغرات في ساتر من الرمال."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تخرج في كلية الهندسة بجامعة عين شمس والتحق بالجيش مهندسًا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "عمل في مشروع السد العالي، وشاهد قوة المياه في تحريك الرمال."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "قبل الحرب"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "عُرضت الفكرة ودرستها الجهات العسكرية، ثم خضعت للتجربة والتطوير قبل أن تُستخدم في العبور."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "6 أكتوبر 1973"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "استخدم المهندسون العسكريون مضخات قوية لضخ مياه القناة، ففتحوا ثغرات في الساتر وعبرت القوات المصرية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "مُنح وسام الجمهورية العسكري تقديرًا لدوره."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "توفي عام 2018، وبقي اسمه مرتبطًا بحل هندسي مهم في حرب أكتوبر."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "هل تعلم؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تختلف الروايات في بعض تفاصيل الفكرة ومراحل اختبارها وارتفاع الساتر. لذلك نعرض الخطوط العامة للقصة، ونتجنب تقديم كل تاريخ أو رقم مختلف عليه باعتباره حقيقة محسومة."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "العقل قبل السلاح"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الملاحظة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "فكرة كبيرة قد تبدأ من شيء رآه شخص في عمله اليومي."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "البساطة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "أحيانًا يكون الحل الأبسط هو الأذكى."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "التجربة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لا تُنفَّذ الفكرة إلا بعد اختبارها والتدريب عليها."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "العمل الجماعي"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الفكرة تحتاج مهندسين وجنودًا وتخطيطًا حتى تنجح."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "كان الماء سلاحًا غير متوقع"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في حرب أكتوبر لم تكن القوة وحدها هي التي صنعت النصر، بل الفكرة الذكية والتدريب والعمل المنظم."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الفكرة الصحيحة في الوقت المناسب قد تفتح طريقًا لم يكن أحد يراه."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "عبور خط بارليف"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "لماذا كان الساتر صعبًا؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لم تكن المشكلة مجرد إزالة كمية من الرمال؛ فقد كان الساتر طويلًا ومرتفعًا، وكان فتح ممرات كثيرة في وقت قصير ضروريًا لعبور الأفراد والمركبات والمعدات. وأي تأخير في تجهيز الممرات كان سيؤثر في حركة القوات التي تنتظر العبور."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تُنسب الفكرة الشهيرة إلى المهندس المصري باقي زكي يوسف، الذي اقترح الاستفادة من مضخات المياه ذات التدفق القوي لتجريف أجزاء من الساتر بدل الاعتماد على التفجير أو الحفر اليدوي وحدهما. وتكمن قيمة الفكرة في تحويل عائق ضخم إلى مشكلة هندسية يمكن التعامل معها على مراحل."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لكن نجاح الفكرة لم يكن عمل شخص واحد فقط: احتاج التطبيق إلى معدات مناسبة، وتجارب وتقدير للتربة والمياه، وتنظيم فرق العمل، وتحديد مواقع فتح الثغرات وتوقيت تجهيزها. هذه هي الصلة بين الابتكار الفردي والإنجاز الجماعي."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "المبدأ"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تدفق الماء يزيل حبيبات التربة وينقلها بعيدًا عن موضع العمل، فتتكون ثغرة يمكن توسيعها وتجهيزها."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "التحدي العملي"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لا يكفي وجود مضخة؛ يجب ضبط تدفق المياه ومكانها وتنظيم العمل حتى يصبح الممر مناسبًا لعبور القوات والمعدات."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "العلم ليس معادلة على الورق فقط"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تُظهر القصة كيف يمكن لمبدأ فيزيائي معروف أن يصبح حلًا مهمًا عندما يُستخدم في المكان والوقت المناسبين. فالماء الذي نراه عادة وسيلة للشرب أو الري أصبح هنا أداة هندسية لمعالجة عائق عسكري."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ومن الإنصاف عند رواية الحدث أن نذكر الفكرة المنسوبة إلى باقي زكي يوسف ضمن منظومة أوسع من المهندسين والجنود والمشغلين. فالتاريخ لا ينتقص من صاحب الفكرة حين يوضح أيضًا أن تنفيذها احتاج إلى عمل جماعي."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "والدرس الذي يمكن نقله إلى حياتنا اليومية هو أن المشكلة الكبيرة قد تُحل عندما نفهم طبيعتها أولًا، ثم نقارن أكثر من حل، ونجرب الحل المناسب، وننظم تنفيذ العمل بدل الاعتماد على القوة وحدها."
+        }
+      ]
+    },
+    "en": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Brains Before Weapons"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "How water opened a passage across the canal"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "A Wall of Sand"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "After 1967, Israel built a massive earthen embankment on the eastern bank of the Suez Canal, with fortified positions behind it. Known as the Bar Lev Line, it was intended to prevent Egyptian forces from crossing."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egyptian engineers had to solve a problem: how could they quickly open breaches in the embankment so tanks and equipment could cross?"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "What If We Used Water?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egyptian planners studied several ways to breach the embankment, including digging and explosives. But it was huge and compact, so a faster, simpler solution was needed."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The Traditional Method"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Digging or blasting a huge mass of sand would take considerable time and effort."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The Water-Pump Idea"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Using powerful jets of canal water to wash away the sand and open a passage for crossing."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Water"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The water is drawn directly from the canal."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Pressure"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Powerful pumps force the water out at high pressure."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The Breach"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The water washes away the sand, creating a passage for the crossing."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Engineer Baqi Zaki Youssef"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Most sources identify the military engineer as Baqi Zaki Youssef. Born in 1931, he graduated from Ain Shams University’s Faculty of Engineering and then served as an army engineer."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In the 1960s, he helped build the Aswan High Dam, where he saw how powerful water jets could move huge amounts of sand. Published accounts say this experience helped him consider using water to breach a sand embankment."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He graduated from Ain Shams University’s Faculty of Engineering and joined the army as an engineer."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "While working on the High Dam project, he saw how powerfully water could move sand."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "Before the War"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The idea was reviewed by military authorities, then tested and developed before being used in the crossing."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "6 October 1973"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Military engineers used powerful pumps to force canal water against the embankment, opening breaches through which Egyptian forces crossed."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He was awarded the Order of the Republic (Military Class) in recognition of his role."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "He died in 2018, leaving his name associated with an important engineering solution in the October War."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Did You Know?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Accounts differ on some details of the idea, its testing stages, and the embankment’s height. We therefore present the broad outline and avoid treating disputed dates or figures as settled facts."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Brains Before Weapons"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Observation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A major idea can begin with something someone notices in everyday work."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Simplicity"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sometimes the simplest solution is the smartest."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Testing"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "An idea is put into practice only after testing and training."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Teamwork"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "An idea needs engineers, soldiers, and planning to succeed."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Water Was an Unexpected Weapon"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In the October War, victory came not from strength alone, but also from a clever idea, training, and organized teamwork."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The right idea at the right time can open a path no one saw."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Crossing the Bar Lev Line"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Why was the embankment difficult to breach?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The challenge was not simply to remove sand. The embankment was long and high, and many passages had to be opened quickly so that personnel, vehicles, and equipment could cross. Any delay in preparing the routes would affect the movement of the forces waiting to cross."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The well-known idea is attributed to Egyptian engineer Baki Zaki Youssef, who proposed using powerful water pumps to erode sections of the embankment rather than relying only on explosives or manual digging. The idea’s value lay in turning a huge obstacle into an engineering problem that could be tackled in stages."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The idea’s success was not the work of one person alone. Its implementation required suitable equipment, testing and assessment of the soil and water, organized teams, and careful decisions about where and when to open the breaches. This is the link between individual innovation and collective achievement."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The principle"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The flowing water loosens soil particles and carries them away from the work area, creating a breach that can then be widened and prepared."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The practical challenge"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Having a pump is not enough. Water flow and placement must be controlled, and the work organized so the passage is suitable for troops and equipment."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Science is more than an equation on paper"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The story shows how a familiar physical principle can become an important solution when applied in the right place and at the right time. Water, usually used for drinking or irrigation, became an engineering tool for overcoming a military obstacle."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A fair account should place the idea attributed to Baki Zaki Youssef within the wider effort of engineers, soldiers, and equipment operators. Recognizing that its implementation required teamwork does not diminish the person credited with the idea."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A lesson for everyday life is that a major problem may be solved by first understanding its nature, comparing possible solutions, testing the most suitable one, and organizing the work instead of relying on force alone."
+        }
+      ]
+    },
+    "fr": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’intelligence avant les armes"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "Comment l’eau a ouvert un passage à travers le canal"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Un mur de sable"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Après 1967, Israël construisit un immense remblai sur la rive orientale du canal de Suez, avec des positions fortifiées derrière. Cette ligne, appelée ligne Bar-Lev, visait à empêcher le passage des forces égyptiennes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les ingénieurs égyptiens devaient résoudre un problème : comment ouvrir rapidement des brèches dans le remblai pour laisser passer les chars et le matériel ?"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Et si nous utilisions l’eau ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les Égyptiens étudièrent plusieurs moyens d’ouvrir le remblai, dont le creusement et les explosifs. Mais il était massif et compact ; une solution plus rapide et plus simple était nécessaire."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La méthode traditionnelle"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Creuser ou faire exploser une énorme masse de sable demanderait beaucoup de temps et d’efforts."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’idée des pompes à eau"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Utiliser de puissants jets d’eau du canal pour emporter le sable et ouvrir un passage."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’eau"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’eau est prélevée directement dans le canal."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La pression"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "De puissantes pompes propulsent l’eau à haute pression."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La brèche"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’eau emporte le sable et crée un passage pour le franchissement."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’ingénieur Baqi Zaki Youssef"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La plupart des sources citent l’ingénieur militaire Baqi Zaki Youssef. Né en 1931, il obtint son diplôme de la faculté d’ingénierie de l’université Ain Shams, puis travailla comme ingénieur dans l’armée."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dans les années 1960, il participa à la construction du haut barrage d’Assouan, où il observa comment de puissants jets d’eau pouvaient déplacer d’énormes quantités de sable. Selon des récits publiés, cette expérience lui donna l’idée d’utiliser l’eau pour ouvrir des brèches dans un remblai de sable."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il obtint son diplôme de la faculté d’ingénierie de l’université Ain Shams et rejoignit l’armée comme ingénieur."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Sur le chantier du haut barrage, il observa la force de l’eau pour déplacer le sable."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "Avant la guerre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les autorités militaires étudièrent l’idée, qui fut ensuite testée et améliorée avant d’être utilisée lors du franchissement."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "6 octobre 1973"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les ingénieurs militaires utilisèrent de puissantes pompes pour projeter l’eau du canal contre le remblai, ouvrant des brèches par lesquelles les forces égyptiennes passèrent."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il reçut l’Ordre de la République, classe militaire, en reconnaissance de son rôle."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il mourut en 2018, son nom restant associé à une solution d’ingénierie importante de la guerre d’octobre."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le saviez-vous ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les récits divergent sur certains détails de l’idée, ses phases d’essai et la hauteur du remblai. Nous présentons donc les grandes lignes sans considérer les dates ou chiffres contestés comme des faits établis."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’intelligence avant les armes"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Observation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Une grande idée peut naître d’une observation faite dans le travail quotidien."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Simplicité"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Parfois, la solution la plus simple est la plus ingénieuse."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Expérimentation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Une idée n’est mise en pratique qu’après des essais et un entraînement."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Travail d’équipe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Pour réussir, une idée a besoin d’ingénieurs, de soldats et de planification."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’eau, une arme inattendue"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Pendant la guerre d’octobre, la victoire ne vint pas seulement de la force, mais aussi d’une idée ingénieuse, de l’entraînement et d’un travail organisé."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La bonne idée au bon moment peut ouvrir une voie que personne ne voyait."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Franchir la ligne Bar-Lev"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Pourquoi le remblai était-il difficile à franchir ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le défi ne consistait pas simplement à enlever du sable. Le remblai était long et élevé, et il fallait ouvrir rapidement de nombreux passages pour permettre le franchissement aux soldats, aux véhicules et au matériel. Tout retard dans leur préparation aurait ralenti les forces en attente."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Cette idée célèbre est attribuée à l’ingénieur égyptien Baki Zaki Youssef, qui proposa d’utiliser des pompes à eau puissantes pour éroder certaines parties du remblai plutôt que de compter uniquement sur les explosifs ou le creusement manuel. L’intérêt de cette idée était de transformer un obstacle immense en un problème d’ingénierie pouvant être résolu par étapes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La réussite de cette idée ne fut pas l’œuvre d’une seule personne. Sa mise en œuvre nécessitait du matériel adapté, des essais et une évaluation du sol et de l’eau, l’organisation des équipes ainsi que le choix des emplacements et du moment pour ouvrir les brèches. C’est le lien entre l’innovation individuelle et la réussite collective."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le principe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’eau en mouvement détache les particules du sol et les emporte loin de la zone de travail, créant une brèche qui peut ensuite être élargie et aménagée."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le défi pratique"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La présence d’une pompe ne suffit pas. Il faut régler le débit et orienter l’eau, puis organiser le travail pour que le passage puisse accueillir les soldats et le matériel."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La science ne se limite pas à une équation sur le papier"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ce récit montre comment un principe physique connu peut devenir une solution importante lorsqu’il est appliqué au bon endroit et au bon moment. L’eau, généralement utilisée pour boire ou irriguer, est devenue ici un outil d’ingénierie pour surmonter un obstacle militaire."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Pour raconter cet événement avec justesse, il faut replacer l’idée attribuée à Baki Zaki Youssef dans l’effort plus large des ingénieurs, des soldats et des opérateurs. Souligner que sa mise en œuvre exigeait un travail collectif ne diminue pas le mérite de celui à qui l’idée est attribuée."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La leçon à retenir dans la vie quotidienne est qu’un grand problème peut être résolu en comprenant d’abord sa nature, en comparant plusieurs solutions, en testant la plus adaptée et en organisant le travail plutôt qu’en comptant uniquement sur la force."
+        }
+      ]
+    },
+    "it": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’ingegno prima delle armi"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "Come l’acqua ha aperto un passaggio attraverso il canale"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Un muro di sabbia"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dopo il 1967, Israele costruì un enorme terrapieno sulla riva orientale del Canale di Suez, con postazioni fortificate alle spalle. Nota come linea Bar-Lev, doveva impedire l’attraversamento alle forze egiziane."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Gli ingegneri egiziani dovevano risolvere un problema: come aprire rapidamente varchi nel terrapieno per far passare carri armati e attrezzature?"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "E se usassimo l’acqua?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Gli egiziani studiarono diversi modi per aprire il terrapieno, tra cui scavare e usare esplosivi. Ma era enorme e compatto, quindi serviva una soluzione più rapida e semplice."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il metodo tradizionale"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Scavare o far esplodere un’enorme massa di sabbia richiederebbe molto tempo e fatica."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’idea delle pompe ad acqua"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Usare potenti getti d’acqua del canale per rimuovere la sabbia e aprire un passaggio."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’acqua"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’acqua viene prelevata direttamente dal canale."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La pressione"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Potenti pompe spingono l’acqua ad alta pressione."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il varco"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’acqua trascina via la sabbia e crea un passaggio per l’attraversamento."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’ingegnere Baqi Zaki Youssef"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La maggior parte delle fonti indica l’ingegnere militare Baqi Zaki Youssef. Nato nel 1931, si laureò alla facoltà d’ingegneria dell’Università Ain Shams e poi lavorò come ingegnere nell’esercito."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Negli anni Sessanta partecipò alla costruzione della diga di Assuan, dove vide come potenti getti d’acqua potessero spostare enormi quantità di sabbia. Secondo resoconti pubblicati, questa esperienza gli suggerì di usare l’acqua per aprire varchi in un terrapieno."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Si laureò alla facoltà d’ingegneria dell’Università Ain Shams ed entrò nell’esercito come ingegnere."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Lavorando al progetto della diga di Assuan, vide la forza dell’acqua nello spostare la sabbia."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "Prima della guerra"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’idea fu esaminata dalle autorità militari, poi sperimentata e perfezionata prima di essere usata nell’attraversamento."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "6 ottobre 1973"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Gli ingegneri militari usarono potenti pompe per spingere l’acqua del canale contro il terrapieno, aprendo varchi attraverso cui passarono le forze egiziane."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ricevette l’Ordine della Repubblica, classe militare, in riconoscimento del suo contributo."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Morì nel 2018, lasciando il suo nome legato a un’importante soluzione ingegneristica della guerra d’ottobre."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Lo sapevi?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I resoconti differiscono su alcuni dettagli dell’idea, sulle fasi di prova e sull’altezza del terrapieno. Presentiamo quindi il quadro generale senza trattare date o cifre controverse come fatti certi."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’ingegno prima delle armi"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Osservazione"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Una grande idea può nascere da qualcosa osservato nel lavoro quotidiano."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Semplicità"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A volte la soluzione più semplice è la più intelligente."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Sperimentazione"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Un’idea viene messa in pratica solo dopo prove e addestramento."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Lavoro di squadra"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Per riuscire, un’idea ha bisogno di ingegneri, soldati e pianificazione."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’acqua fu un’arma inaspettata"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nella guerra d’ottobre, la vittoria non venne solo dalla forza, ma anche da un’idea ingegnosa, dall’addestramento e dal lavoro organizzato."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’idea giusta al momento giusto può aprire una strada che nessuno vedeva."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Superare la linea Bar-Lev"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Perché era difficile aprire un varco nel terrapieno?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il problema non era soltanto rimuovere della sabbia. Il terrapieno era lungo e alto e occorreva aprire molti varchi in poco tempo per far passare uomini, veicoli e attrezzature. Qualsiasi ritardo nella preparazione dei passaggi avrebbe rallentato le forze in attesa di attraversare."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La nota idea è attribuita all’ingegnere egiziano Baki Zaki Youssef, che propose di usare potenti pompe ad acqua per erodere parti del terrapieno invece di affidarsi soltanto agli esplosivi o allo scavo manuale. Il valore dell’idea consisteva nel trasformare un ostacolo enorme in un problema ingegneristico affrontabile per fasi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il successo dell’idea non fu opera di una sola persona. La sua applicazione richiese attrezzature adeguate, prove e valutazioni del terreno e dell’acqua, squadre ben organizzate e decisioni accurate su dove e quando aprire i varchi. Questo è il legame tra innovazione individuale e risultato collettivo."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il principio"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’acqua in movimento stacca le particelle di terreno e le trasporta lontano dall’area di lavoro, creando un varco che può essere ampliato e preparato."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La sfida pratica"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Non basta avere una pompa. Occorre regolare il flusso e la direzione dell’acqua e organizzare il lavoro affinché il passaggio sia adatto a uomini e attrezzature."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La scienza non è solo un’equazione sulla carta"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La storia mostra come un principio fisico noto possa diventare una soluzione importante se applicato nel luogo e nel momento giusti. L’acqua, che di solito usiamo per bere o irrigare, divenne qui uno strumento ingegneristico per superare un ostacolo militare."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Per raccontare l’evento con equilibrio, bisogna collocare l’idea attribuita a Baki Zaki Youssef nel più ampio lavoro di ingegneri, soldati e operatori. Riconoscere che la sua realizzazione richiese un lavoro di squadra non sminuisce il merito di chi ebbe l’idea."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Una lezione utile nella vita quotidiana è che un grande problema può essere risolto comprendendone prima la natura, confrontando diverse soluzioni, provando quella più adatta e organizzando il lavoro invece di affidarsi soltanto alla forza."
+        }
+      ]
+    },
+    "de": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Verstand vor Waffen"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "Wie Wasser einen Weg über den Kanal öffnete"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Eine Mauer aus Sand"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nach 1967 errichtete Israel am Ostufer des Suezkanals einen gewaltigen Erdwall mit befestigten Stellungen dahinter. Er ist als Bar-Lev-Linie bekannt und sollte verhindern, dass ägyptische Streitkräfte den Kanal überquerten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ägyptische Ingenieure mussten ein Problem lösen: Wie konnten sie schnell Breschen in den Wall schlagen, damit Panzer und Ausrüstung hinübergelangen konnten?"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Und wenn wir Wasser benutzten?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ägyptische Planer prüften mehrere Möglichkeiten, den Wall zu durchbrechen, darunter Graben und Sprengungen. Der Wall war jedoch riesig und verdichtet, daher brauchte man eine schnellere, einfachere Lösung."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die herkömmliche Methode"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine riesige Sandmasse auszugraben oder zu sprengen, würde viel Zeit und Mühe kosten."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die Idee mit der Wasserpumpe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Starke Strahlen aus Kanalwasser einsetzen, um den Sand wegzuspülen und eine Schneise für die Überquerung zu öffnen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Wasser"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das Wasser wird direkt aus dem Kanal entnommen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Druck"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Leistungsstarke Pumpen drücken das Wasser mit hohem Druck heraus."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Der Durchbruch"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das Wasser spült den Sand weg und schafft so eine Schneise für die Überquerung."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Ingenieur Baqi Zaki Youssef"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die meisten Quellen nennen Baqi Zaki Youssef als den Militäringenieur. Er wurde 1931 geboren, schloss die Ingenieurfakultät der Ain-Schams-Universität ab und diente dann als Ingenieur in der Armee."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In den 1960er-Jahren half er beim Bau des Assuan-Hochdamms, wo er sah, wie starke Wasserstrahlen riesige Mengen Sand bewegen können. Veröffentlichten Berichten zufolge half ihm diese Erfahrung, auf den Gedanken zu kommen, Wasser zum Durchbrechen eines Sandwalls zu nutzen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Er schloss die Ingenieurfakultät der Ain-Schams-Universität ab und trat als Ingenieur in die Armee ein."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Bei der Arbeit am Projekt des Hochdamms sah er, wie kraftvoll Wasser Sand bewegen kann."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "Vor dem Krieg"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Idee wurde von den Militärbehörden geprüft, dann getestet und weiterentwickelt, bevor sie bei der Überquerung eingesetzt wurde."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "6. Oktober 1973"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Militäringenieure drückten mit leistungsstarken Pumpen Kanalwasser gegen den Wall und öffneten so Breschen, durch die die ägyptischen Streitkräfte übersetzten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Für seine Rolle wurde er mit dem Orden der Republik (Militärklasse) ausgezeichnet."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Er starb 2018; sein Name bleibt mit einer wichtigen technischen Lösung im Oktoberkrieg verbunden."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Schon gewusst?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Berichte unterscheiden sich in einigen Details der Idee, in den Erprobungsphasen und in der Höhe des Walls. Wir stellen daher den groben Ablauf dar und behandeln umstrittene Daten oder Zahlen nicht als gesicherte Tatsachen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Verstand vor Waffen"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Beobachtung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine große Idee kann mit etwas beginnen, das jemand bei der alltäglichen Arbeit bemerkt."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Einfachheit"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Manchmal ist die einfachste Lösung die klügste."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Erprobung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Idee wird erst nach Erprobung und Training in die Tat umgesetzt."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Teamarbeit"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Idee braucht Ingenieure, Soldaten und Planung, um zu gelingen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Wasser war eine unerwartete Waffe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Im Oktoberkrieg kam der Sieg nicht allein durch Stärke, sondern auch durch eine kluge Idee, Training und organisierte Zusammenarbeit."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die richtige Idee zur richtigen Zeit kann einen Weg öffnen, den niemand gesehen hat."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Durchbruch durch die Bar-Lev-Linie"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Warum war der Erdwall schwer zu durchbrechen?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Aufgabe bestand nicht nur darin, Sand zu entfernen. Der Erdwall war lang und hoch, und in kurzer Zeit mussten zahlreiche Durchgänge geöffnet werden, damit Soldaten, Fahrzeuge und Ausrüstung passieren konnten. Jede Verzögerung bei der Vorbereitung hätte die wartenden Truppen aufgehalten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die bekannte Idee wird dem ägyptischen Ingenieur Baki Zaki Youssef zugeschrieben. Er schlug vor, mit leistungsstarken Wasserpumpen Teile des Erdwalles abzutragen, statt sich allein auf Sprengungen oder manuelles Graben zu verlassen. Der Wert der Idee lag darin, ein riesiges Hindernis in ein technisches Problem zu verwandeln, das schrittweise gelöst werden konnte."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Der Erfolg der Idee war nicht das Werk einer einzelnen Person. Die Umsetzung erforderte geeignete Ausrüstung, Versuche und die Bewertung von Boden und Wasser, organisierte Arbeitsteams sowie genaue Entscheidungen darüber, wo und wann die Durchbrüche geschaffen werden sollten. Darin zeigt sich die Verbindung zwischen individueller Innovation und gemeinschaftlicher Leistung."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Das Prinzip"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das strömende Wasser löst Bodenpartikel und trägt sie vom Arbeitsbereich fort. So entsteht eine Öffnung, die anschließend verbreitert und vorbereitet werden kann."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die praktische Herausforderung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Pumpe allein reicht nicht aus. Wasserstrom und Position müssen richtig eingestellt und die Arbeit organisiert werden, damit der Durchgang für Truppen und Ausrüstung geeignet ist."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Wissenschaft ist mehr als eine Gleichung auf Papier"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Geschichte zeigt, wie ein bekanntes physikalisches Prinzip zu einer wichtigen Lösung werden kann, wenn es am richtigen Ort und zur richtigen Zeit eingesetzt wird. Wasser, das wir gewöhnlich zum Trinken oder Bewässern nutzen, wurde hier zu einem technischen Mittel, um ein militärisches Hindernis zu überwinden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine faire Darstellung sollte die Baki Zaki Youssef zugeschriebene Idee in die umfassendere Leistung von Ingenieuren, Soldaten und Gerätebedienern einordnen. Dass ihre Umsetzung Teamarbeit erforderte, schmälert nicht das Verdienst desjenigen, dem die Idee zugeschrieben wird."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Lehre für den Alltag lautet: Ein großes Problem lässt sich möglicherweise lösen, wenn man zunächst seine Art versteht, mehrere Lösungen vergleicht, die passende erprobt und die Arbeit organisiert, statt sich allein auf Kraft zu verlassen."
+        }
+      ]
+    }
+  }
+}

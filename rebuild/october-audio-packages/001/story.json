@@ -1,0 +1,1402 @@
+{
+  "format": "KHALEDOON_STORY",
+  "section": "october",
+  "slug": "001",
+  "i18n": {
+    "ar": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "رجال البحر في أكتوبر"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "المعركة التي لم يرها معظم الناس"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الحكاية التي لم تبدأ في السادس من أكتوبر"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "عندما نتحدث عن حرب أكتوبر 1973، نتذكر عبور قناة السويس وتحطيم خط بارليف وتقدم الجنود المصريين شرقًا. لكن في الوقت نفسه كانت هناك معركة أخرى تجري بعيدًا عن عيون معظم الناس."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كانت القوات البحرية المصرية تؤدي مهامها في البحر المتوسط والبحر الأحمر، وتؤمّن الأجناب البحرية للقوات المصرية، وتضرب أهدافًا للعدو، وتنفذ عمليات خاصة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ولهذا فإن قصة رجال البحر ليست قصة جانبية؛ إنها جزء من قصة النصر نفسها."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "سنوات من التدريب والخبرة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لم تبدأ الاستعدادات للحرب في أكتوبر فقط. خلال حرب الاستنزاف خاضت القوات البحرية المصرية عمليات وتجارب مهمة، واكتسب رجالها خبرة في العمل قرب سواحل العدو وفي تنفيذ المهام الخاصة."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "21 أكتوبر 1967"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "أغرقت زوارق الصواريخ المصرية المدمرة الإسرائيلية «إيلات» بصواريخ سطح–سطح. وكان ذلك حدثًا بارزًا في تاريخ الحرب البحرية الحديثة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "نفذت الضفادع البشرية المصرية ثلاث عمليات في ميناء إيلات خلال حرب الاستنزاف، استهدفت سفنًا وأهدافًا حيوية داخل الميناء."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "8 مارس 1970"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "نجحت عناصر الضفادع البشرية في تفجير وإغراق حفار النفط «كنتينج» في أبيدجان، في عملية بعيدة عن أرض المعركة المباشرة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "تحولت سنوات الخبرة والتدريب إلى استعداد لحرب واسعة متعددة الجبهات."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "في اليوم الأول للحرب"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "عندما بدأت القوات المصرية عبور قناة السويس، كانت القوات البحرية تؤدي مهامها في الوقت نفسه. وبحسب بيانات القيادة العامة، قامت البحرية بحماية الجانب الأيسر للقوات المصرية على ساحل البحر المتوسط، وضربت أهدافًا مهمة للعدو على الساحل الشمالي لسيناء."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي مجمل قتال يوم 6 أكتوبر، أعلنت القيادة العامة أن القوات البحرية دمرت خمس قطع بحرية للعدو في البحر المتوسط، وقصفت مناطق معادية على الشاطئ الشرقي لخليج السويس."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "حماية الأجناب"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "كان على البحرية منع القوات البحرية الإسرائيلية من التأثير في عملية العبور وحماية أجناب القوات المصرية."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الهجوم والضغط"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "نفذت وحدات بحرية قصفًا لأهداف ساحلية وبحرية، وشاركت في الضغط على العدو من أكثر من اتجاه."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "باب المندب: المعركة البعيدة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في جنوب البحر الأحمر يقع مضيق باب المندب، وهو ممر بحري استراتيجي. وكان طريق البحر الأحمر مهمًا للملاحة المتجهة إلى ميناء إيلات."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "لذلك بدأت مصر التخطيط لهذه المهمة قبل الحرب بوقت طويل. وتذكر مصادر صحفية عسكرية أن خبراء بحريين درسوا المنطقة منذ عام 1971، ثم خرجت قوة بحرية في بداية أكتوبر 1973 في تحرك أُعلن عنه على أنه رحلة إلى باكستان، بينما كان الهدف الحقيقي اتخاذ أوضاع القتال عند باب المندب."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "بعد بدء الحرب في 6 أكتوبر وصلت الإشارة إلى القوة البحرية لتبدأ مهمتها، ففرضت السيطرة على المضيق وقيّدت حركة السفن التي تحمل العلم الإسرائيلي."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "المعركة لا تكون دائمًا عند المكان الذي تسمعين فيه صوت المدافع؛ أحيانًا يكون الطريق البعيد جزءًا من المعركة."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الربان نبيل عبد الوهاب"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "من الأسماء البارزة في تاريخ الضفادع البشرية المصرية الربان نبيل عبد الوهاب. تخرج في الكلية البحرية عام 1966، وشارك في عمليتين من العمليات الثلاث التي نفذتها الضفادع البشرية المصرية في ميناء إيلات خلال حرب الاستنزاف."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي إحدى عمليات الضفادع البشرية عام 1970، تروي الصحافة المصرية أنه رفض ترك زميله بعد استشهاده في مياه العدو، وسحبه حتى وصل إلى ميناء العقبة الأردني. وتختلف المصادر في بعض تفاصيل العملية والمسافة، لذلك نعرض القصة بوصفها رواية منشورة لا رقمًا محسومًا."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي حرب أكتوبر نفسها شارك مع قوة الضفادع البشرية في مهام ضد أهداف استولى عليها العدو في منطقة البترول، لتستمر مشاركته في القتال بعد سنوات من العمليات والتدريب."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "ما الذي يجعل قصته مختلفة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ليست البطولة هنا في تنفيذ المهمة فقط، بل في المسؤولية عن الزميل حتى بعد انتهاء المهمة. لقد كان يستطيع أن ينسحب، لكنه اختار أن يحمل زميله ويعود به."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "البحرية لم تكن على هامش النصر"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "توضح بيانات القيادة العامة وتقارير عن حرب أكتوبر أن مهام البحرية شملت حماية أجناب القوات، وقصف أهداف ساحلية، ومواجهة محاولات العدو البحرية، وزرع الألغام في بعض الممرات، وتنفيذ عمليات خاصة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وفي البحر الأحمر كان باب المندب جبهة استراتيجية بعيدة، بينما كانت في البحر المتوسط وخليج السويس أهداف أخرى تحت ضغط القوات البحرية."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الاستعداد"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "النجاح الذي ظهر في أكتوبر سبقه تدريب وخبرة وعمليات خلال سنوات الاستنزاف."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "العمل الجماعي"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "النصر لم يكن نتيجة فرع واحد؛ البرية والجوية والبحرية عملت ضمن خطة واحدة."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "المسؤولية"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الجندي يؤدي مهمته من أجل زملائه ووطنه، وليس من أجل نفسه فقط."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الشجاعة المنضبطة"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "الشجاعة الحقيقية هي مواجهة الخطر بالتدريب والخطة والانضباط."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "رجال البحر في أكتوبر"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في السادس من أكتوبر 1973 بدأت مصر حربها لتحرير سيناء. وبينما كان الجنود المصريون يعبرون قناة السويس، كانت القوات البحرية المصرية تتحرك في البحر المتوسط والبحر الأحمر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "حمت البحرية أجناب القوات المصرية، وضربت أهدافًا للعدو، ونفذت عمليات خاصة، وتحركت في جبهة بعيدة عند باب المندب لتقييد الملاحة الإسرائيلية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وكان وراء هذه العمليات رجال تدربوا لسنوات، عرفوا أن البحر قد يكون طريقًا للعدو، لكنه يمكن أن يكون أيضًا طريقًا للنصر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "النصر لا يصنعه بطل واحد، بل يصنعه جيش كامل، وكل فرد فيه يؤدي مهمته بإخلاص وشجاعة وانضباط."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "المدمرة «إيلات»: لماذا كانت واقعة مهمة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "في 21 أكتوبر 1967، بعد أشهر من حرب يونيو، هاجمت زوارق صواريخ مصرية المدمرة «إيلات» قبالة ساحل بورسعيد. وتُعد الواقعة من الأحداث البارزة في تاريخ استخدام الصواريخ سطح–سطح ضد سفينة حربية كبيرة؛ فقد أظهرت أن حجم السفينة وحده لا يحسم المواجهة، وأن التدريب والاستطلاع واختيار السلاح المناسب قد تغيّر ميزان القوة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "من المهم ألا نخلط بين هذه الواقعة وحرب أكتوبر 1973: إغراق «إيلات» حدث قبل الحرب بست سنوات تقريبًا، لكنه جزء من الخبرة التي تراكمت لدى البحرية المصرية خلال مرحلة الصراع التي سبقت أكتوبر."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "الممرات البحرية جزء من خطة الحرب"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "البحر ليس مساحة فارغة بين دولتين؛ فالمضائق والموانئ وخطوط الملاحة تؤثر في نقل الوقود والبضائع والإمدادات. ويقع باب المندب عند المدخل الجنوبي للبحر الأحمر، بينه وبين خليج عدن، ولذلك فإن التأثير في حركة السفن المتجهة إلى إيلات كان له معنى استراتيجي يتجاوز المسافة الجغرافية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "توضح هذه المهمة أن العمليات العسكرية لا تقتصر على خط الجبهة الذي تظهره الصور عادة. فقد تعمل قوة في مكان بعيد لتقييد حركة الخصم أو لحماية خطوط الإمداد، وتحتاج هذه المهمة إلى تخطيط مسبق واتصالات منضبطة وفهم دقيق للممرات البحرية."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "وعند دراسة هذه الوقائع، ينبغي التمييز بين ما تؤكده الوثائق والروايات المتعددة وبين التفاصيل التي تختلف فيها المصادر، خصوصًا عند الحديث عن مدى السيطرة على الممرات أو نتائج العمليات."
+        }
+      ]
+    },
+    "en": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Men of the Sea in October"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "The battle most people never saw"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The Story That Began Before 6 October"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "When we talk about the 1973 October War, we remember the crossing of the Suez Canal, the breaching of the Bar Lev Line, and Egyptian troops advancing east. At the same time, another battle was taking place beyond the sight of most people."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The Egyptian Navy was carrying out missions in the Mediterranean and Red Seas, protecting the maritime flanks of Egyptian forces, striking enemy targets, and conducting special operations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "That is why the story of the men at sea is not a side story; it is part of the story of victory itself."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Years of Training and Experience"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Preparations for war did not begin in October. During the War of Attrition, the Egyptian Navy carried out important operations and gained experience working near enemy shores and conducting special missions."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "21 October 1967"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egyptian missile boats sank the Israeli destroyer Eilat with surface-to-surface missiles. This was a landmark event in modern naval warfare."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egyptian combat divers carried out three operations at Eilat port during the War of Attrition, targeting ships and key facilities inside the port."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "8 March 1970"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Combat divers successfully sabotaged and sank the oil rig Kenting in Abidjan, in an operation far from the main battlefield."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Years of experience and training became preparation for a large war fought on several fronts."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "On the First Day of the War"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "As Egyptian forces began crossing the Suez Canal, the Navy was operating at the same time. According to General Command statements, it protected the left flank of Egyptian forces along the Mediterranean coast and struck important enemy targets on northern Sinai’s coast."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In its account of the fighting on 6 October, General Command said the Navy destroyed five enemy naval vessels in the Mediterranean and shelled hostile areas on the eastern shore of the Gulf of Suez."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Protecting the Flanks"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The Navy had to prevent Israeli naval forces from disrupting the crossing and protect the flanks of Egyptian troops."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Attacking and Applying Pressure"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Naval units shelled coastal and maritime targets and helped pressure the enemy from more than one direction."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Bab el-Mandeb: The Distant Front"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The Bab el-Mandeb Strait lies in the southern Red Sea and is a strategic sea passage. The Red Sea route was important for shipping bound for the port of Eilat."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Egypt therefore began planning this mission well before the war. Military press accounts say naval experts had studied the area since 1971. In early October 1973, a naval force set out on a movement publicly described as a trip to Pakistan, while its actual objective was to take up combat positions at Bab el-Mandeb."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "After the war began on 6 October, the naval force received the signal to begin its mission. It took control of the strait and restricted the movement of ships flying the Israeli flag."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A battle does not always take place where you hear gunfire; sometimes a distant route is part of the battle."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Captain Nabil Abdel Wahab"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Captain Nabil Abdel Wahab is a notable figure in the history of Egyptian combat divers. He graduated from the Naval Academy in 1966 and took part in two of the three operations carried out by Egyptian combat divers at Eilat port during the War of Attrition."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In one combat-diver operation in 1970, Egyptian press accounts say he refused to leave a fallen comrade in enemy waters and pulled him to the Jordanian port of Aqaba. Sources differ on some details and the distance, so this is presented as a published account rather than a settled measurement."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "During the October War itself, he served with a combat-diver unit on missions against enemy-held targets in the oil-field area, continuing his combat service after years of operations and training."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "What Makes His Story Different?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The heroism here lies not only in completing a mission, but also in taking responsibility for a comrade after it ends. He could have withdrawn, but chose to carry his comrade back."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The Navy Was Not on the Sidelines of Victory"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "General Command statements and accounts of the October War indicate that naval missions included protecting the forces’ flanks, shelling coastal targets, countering enemy naval activity, laying mines in some passages, and carrying out special operations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In the Red Sea, Bab el-Mandeb was a distant strategic front, while other targets in the Mediterranean and Gulf of Suez faced pressure from Egyptian naval forces."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Preparation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The successes seen in October were preceded by years of training, experience, and operations during the War of Attrition."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Teamwork"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Victory was not the work of one service alone; the army, air force, and navy operated as part of one plan."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Responsibility"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "A soldier carries out a mission for comrades and country, not only for himself."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Disciplined Courage"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "True courage means facing danger with training, planning, and discipline."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Men of the Sea in October"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "On 6 October 1973, Egypt began its war to liberate Sinai. As Egyptian soldiers crossed the Suez Canal, the Egyptian Navy was operating in the Mediterranean and Red Seas."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The Navy protected the flanks of Egyptian forces, struck enemy targets, carried out special operations, and operated at the distant Bab el-Mandeb front to restrict Israeli shipping."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Behind these operations were men trained for years, who knew the sea could be a route for the enemy—but also a path to victory."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Victory is not made by one hero alone, but by an entire army in which everyone does their duty with dedication, courage, and discipline."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "The destroyer Eilat: why did the incident matter?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "On 21 October 1967, months after the June War, Egyptian missile boats attacked the destroyer Eilat off Port Said. The incident became a notable example in the history of using surface-to-surface missiles against a large warship. It showed that a ship’s size alone does not determine the outcome; training, reconnaissance, and choosing the right weapon can shift the balance of power."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "This incident should not be confused with the October War of 1973. The sinking of Eilat took place about six years earlier, but it formed part of the experience accumulated by the Egyptian Navy during the period of conflict leading up to October."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Sea routes are part of a war plan"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The sea is not an empty space between two countries. Straits, ports, and shipping lanes affect the movement of fuel, goods, and supplies. Bab el-Mandeb lies at the southern entrance to the Red Sea, between it and the Gulf of Aden, so influencing ships bound for Eilat had strategic significance beyond geographic distance."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "This example shows that military operations are not limited to the front line usually seen in photographs. A force may operate far away to restrict an opponent’s movement or protect supply routes. Such a mission requires advance planning, disciplined communications, and a precise understanding of maritime passages."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "When studying these events, it is important to distinguish what is supported by documents and multiple accounts from details on which sources differ, especially claims about control of the passages or the outcomes of operations."
+        }
+      ]
+    },
+    "fr": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Les hommes de la mer en octobre"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "La bataille que la plupart des gens n’ont pas vue"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "L’histoire qui a commencé avant le 6 octobre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Quand on parle de la guerre d’octobre 1973, on se souvient du franchissement du canal de Suez, de la percée de la ligne Bar-Lev et de l’avancée des soldats égyptiens vers l’est. Mais une autre bataille se déroulait alors loin des regards."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La marine égyptienne menait des missions en Méditerranée et en mer Rouge, protégeait les flancs maritimes des forces égyptiennes, frappait des objectifs ennemis et réalisait des opérations spéciales."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "C’est pourquoi l’histoire des hommes de la mer n’est pas secondaire : elle fait partie intégrante de la victoire."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Des années d’entraînement et d’expérience"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les préparatifs de la guerre n’ont pas commencé en octobre. Pendant la guerre d’usure, la marine égyptienne a mené des opérations importantes et acquis de l’expérience près des côtes ennemies et dans les missions spéciales."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "21 octobre 1967"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Des vedettes lance-missiles égyptiennes ont coulé le destroyer israélien Eilat avec des missiles mer-mer. Ce fut un événement marquant de l’histoire de la guerre navale moderne."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les nageurs de combat égyptiens ont mené trois opérations dans le port d’Eilat pendant la guerre d’usure, visant des navires et des installations importantes."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "8 mars 1970"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Des nageurs de combat ont saboté et coulé la plateforme pétrolière Kenting à Abidjan, lors d’une opération éloignée du champ de bataille principal."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Des années d’expérience et d’entraînement ont préparé les forces à une guerre de grande ampleur sur plusieurs fronts."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le premier jour de la guerre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Lorsque les forces égyptiennes ont commencé à franchir le canal de Suez, la marine menait ses missions en parallèle. Selon les communiqués du commandement général, elle protégeait le flanc gauche des forces égyptiennes sur la côte méditerranéenne et frappait des objectifs ennemis importants sur la côte nord du Sinaï."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dans son bilan des combats du 6 octobre, le commandement général a déclaré que la marine avait détruit cinq navires ennemis en Méditerranée et bombardé des zones adverses sur la rive orientale du golfe de Suez."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Protéger les flancs"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La marine devait empêcher les forces navales israéliennes de perturber le franchissement et protéger les flancs des troupes égyptiennes."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Attaquer et exercer une pression"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Des unités navales ont bombardé des objectifs côtiers et maritimes et exercé une pression sur l’ennemi depuis plusieurs directions."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Bab el-Mandeb : le front lointain"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le détroit de Bab el-Mandeb se trouve au sud de la mer Rouge et constitue un passage maritime stratégique. La route de la mer Rouge était importante pour les navires à destination du port d’Eilat."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’Égypte a donc planifié cette mission longtemps avant la guerre. Selon des sources de presse militaire, des experts navals étudiaient la région depuis 1971. Début octobre 1973, une force navale partit pour une mission présentée publiquement comme un voyage au Pakistan, alors que son véritable objectif était de prendre position à Bab el-Mandeb."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Après le début de la guerre, le 6 octobre, la force navale reçut le signal de commencer sa mission. Elle prit le contrôle du détroit et limita le passage des navires battant pavillon israélien."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Une bataille ne se déroule pas toujours là où l’on entend les canons ; parfois, une route lointaine fait partie du combat."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le capitaine Nabil Abdel Wahab"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le capitaine Nabil Abdel Wahab est une figure importante de l’histoire des nageurs de combat égyptiens. Diplômé de l’Académie navale en 1966, il participa à deux des trois opérations menées par les nageurs de combat égyptiens dans le port d’Eilat pendant la guerre d’usure."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Lors d’une opération de nageurs de combat en 1970, la presse égyptienne raconte qu’il refusa d’abandonner un camarade tombé dans les eaux ennemies et le tira jusqu’au port jordanien d’Aqaba. Les sources divergent sur certains détails et sur la distance ; nous présentons donc ce récit comme un témoignage publié, et non comme une mesure établie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Pendant la guerre d’octobre, il participa avec une unité de nageurs de combat à des missions contre des objectifs occupés par l’ennemi dans la zone pétrolière, poursuivant ainsi son engagement après des années d’opérations et d’entraînement."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Qu’est-ce qui rend son histoire particulière ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’héroïsme ne réside pas seulement dans l’accomplissement de la mission, mais aussi dans la responsabilité envers un camarade après celle-ci. Il aurait pu se retirer, mais il a choisi de porter son compagnon pour le ramener."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La marine n’était pas en marge de la victoire"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les communiqués du commandement général et les récits de la guerre d’octobre indiquent que les missions navales comprenaient la protection des flancs, le bombardement d’objectifs côtiers, la lutte contre les activités navales ennemies, la pose de mines dans certains passages et des opérations spéciales."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "En mer Rouge, Bab el-Mandeb constituait un front stratégique éloigné, tandis que d’autres objectifs en Méditerranée et dans le golfe de Suez étaient soumis à la pression des forces navales égyptiennes."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Préparation"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Les succès d’octobre ont été précédés par des années d’entraînement, d’expérience et d’opérations pendant la guerre d’usure."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Travail d’équipe"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La victoire ne fut pas l’œuvre d’une seule armée : les forces terrestres, aériennes et navales agirent dans le cadre d’un même plan."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La responsabilité"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Un soldat accomplit sa mission pour ses camarades et son pays, et pas seulement pour lui-même."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le courage discipliné"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le vrai courage consiste à affronter le danger avec entraînement, planification et discipline."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Les hommes de la mer en octobre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le 6 octobre 1973, l’Égypte lança sa guerre pour libérer le Sinaï. Pendant que les soldats égyptiens franchissaient le canal de Suez, la marine opérait en Méditerranée et en mer Rouge."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La marine protégea les flancs des forces égyptiennes, frappa des objectifs ennemis, mena des opérations spéciales et agit sur le front lointain de Bab el-Mandeb pour limiter la navigation israélienne."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Derrière ces opérations se trouvaient des hommes entraînés pendant des années, qui savaient que la mer pouvait servir l’ennemi, mais aussi mener à la victoire."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La victoire n’est pas l’œuvre d’un seul héros, mais celle d’une armée entière où chacun accomplit sa mission avec dévouement, courage et discipline."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le destroyer Eilat : pourquoi cet événement était-il important ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le 21 octobre 1967, quelques mois après la guerre de juin, des vedettes lance-missiles égyptiennes attaquèrent le destroyer Eilat au large de Port-Saïd. Cet événement est devenu un épisode marquant de l’utilisation de missiles mer-mer contre un grand navire de guerre. Il a montré que la taille du navire ne suffit pas à déterminer l’issue d’un affrontement : l’entraînement, le renseignement et le choix de l’arme adaptée peuvent modifier le rapport de forces."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il ne faut pas confondre cet événement avec la guerre d’octobre 1973. Le naufrage de l’Eilat eut lieu environ six ans auparavant, mais il faisait partie de l’expérience acquise par la marine égyptienne durant la période de conflit qui précéda octobre."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Les voies maritimes font partie du plan de guerre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La mer n’est pas un espace vide entre deux pays : les détroits, les ports et les voies maritimes influencent le transport du carburant, des marchandises et des approvisionnements. Bab el-Mandeb se trouve à l’entrée sud de la mer Rouge, entre celle-ci et le golfe d’Aden. Agir sur le trafic des navires à destination d’Eilat avait donc une portée stratégique qui dépassait la seule distance géographique."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Cet exemple montre que les opérations militaires ne se limitent pas à la ligne de front généralement visible sur les photographies. Une force peut agir loin du front pour limiter les mouvements de l’adversaire ou protéger les voies de ravitaillement. Une telle mission exige une planification préalable, des communications rigoureuses et une bonne connaissance des passages maritimes."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Lorsqu’on étudie ces événements, il faut distinguer ce que confirment les documents et plusieurs témoignages des détails sur lesquels les sources divergent, notamment en ce qui concerne le degré de contrôle des passages ou les résultats des opérations."
+        }
+      ]
+    },
+    "it": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Gli uomini del mare in ottobre"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "La battaglia che la maggior parte delle persone non ha visto"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La storia iniziata prima del 6 ottobre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Quando parliamo della guerra d’ottobre 1973, ricordiamo l’attraversamento del Canale di Suez, la breccia nella linea Bar-Lev e l’avanzata verso est dei soldati egiziani. Nello stesso momento, un’altra battaglia si svolgeva lontano dagli occhi della maggior parte delle persone."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La Marina egiziana svolgeva missioni nel Mediterraneo e nel Mar Rosso, proteggeva i fianchi marittimi delle forze egiziane, colpiva obiettivi nemici e conduceva operazioni speciali."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Per questo la storia degli uomini del mare non è secondaria: è parte integrante della vittoria."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Anni di addestramento ed esperienza"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I preparativi per la guerra non iniziarono a ottobre. Durante la guerra d’attrito, la Marina egiziana svolse operazioni importanti e acquisì esperienza vicino alle coste nemiche e nelle missioni speciali."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "21 ottobre 1967"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le imbarcazioni lanciamissili egiziane affondarono il cacciatorpediniere israeliano Eilat con missili superficie-superficie. Fu un evento importante nella storia della guerra navale moderna."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I sommozzatori da combattimento egiziani condussero tre operazioni nel porto di Eilat durante la guerra d’attrito, prendendo di mira navi e strutture importanti."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "8 marzo 1970"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I sommozzatori da combattimento riuscirono a sabotare e affondare la piattaforma petrolifera Kenting ad Abidjan, in un’operazione lontana dal campo di battaglia principale."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Anni di esperienza e addestramento prepararono le forze a una guerra ampia su più fronti."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il primo giorno di guerra"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Mentre le forze egiziane iniziavano ad attraversare il Canale di Suez, la Marina operava contemporaneamente. Secondo i comunicati del comando generale, proteggeva il fianco sinistro delle forze egiziane lungo la costa mediterranea e colpiva importanti obiettivi nemici sulla costa settentrionale del Sinai."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nel resoconto dei combattimenti del 6 ottobre, il comando generale dichiarò che la Marina aveva distrutto cinque unità navali nemiche nel Mediterraneo e bombardato aree ostili sulla costa orientale del Golfo di Suez."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Proteggere i fianchi"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La Marina doveva impedire alle forze navali israeliane di ostacolare l’attraversamento e proteggere i fianchi delle truppe egiziane."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Attaccare ed esercitare pressione"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Le unità navali bombardarono obiettivi costieri e marittimi e contribuirono a mettere sotto pressione il nemico da più direzioni."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Bab el-Mandeb: il fronte lontano"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Lo stretto di Bab el-Mandeb si trova nella parte meridionale del Mar Rosso ed è un passaggio marittimo strategico. La rotta del Mar Rosso era importante per le navi dirette al porto di Eilat."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’Egitto iniziò quindi a pianificare questa missione molto prima della guerra. Secondo fonti della stampa militare, esperti navali studiavano l’area dal 1971. All’inizio di ottobre 1973 una forza navale partì per una missione descritta pubblicamente come un viaggio in Pakistan, mentre il vero obiettivo era assumere posizioni di combattimento a Bab el-Mandeb."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dopo l’inizio della guerra, il 6 ottobre, la forza navale ricevette il segnale di avviare la missione. Prese il controllo dello stretto e limitò il movimento delle navi battenti bandiera israeliana."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Una battaglia non si svolge sempre dove si sente il rumore dei cannoni; a volte una rotta lontana è parte della battaglia."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il capitano Nabil Abdel Wahab"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il capitano Nabil Abdel Wahab è una figura importante nella storia dei sommozzatori da combattimento egiziani. Si diplomò all’Accademia navale nel 1966 e partecipò a due delle tre operazioni condotte dai sommozzatori egiziani nel porto di Eilat durante la guerra d’attrito."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Durante un’operazione dei sommozzatori nel 1970, secondo la stampa egiziana rifiutò di abbandonare un compagno caduto nelle acque nemiche e lo trascinò fino al porto giordano di Aqaba. Le fonti differiscono su alcuni dettagli e sulla distanza, perciò il racconto è presentato come resoconto pubblicato, non come misura certa."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Durante la guerra d’ottobre partecipò con un’unità di sommozzatori a missioni contro obiettivi occupati dal nemico nella zona petrolifera, continuando a combattere dopo anni di operazioni e addestramento."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Cosa rende speciale la sua storia?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’eroismo non consiste solo nel completare una missione, ma anche nel sentirsi responsabili di un compagno dopo la sua conclusione. Avrebbe potuto ritirarsi, ma scelse di riportare indietro il compagno sulle spalle."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "La Marina non fu ai margini della vittoria"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I comunicati del comando generale e i resoconti della guerra d’ottobre indicano che le missioni navali comprendevano la protezione dei fianchi, il bombardamento di obiettivi costieri, il contrasto alle attività navali nemiche, la posa di mine in alcuni passaggi e operazioni speciali."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nel Mar Rosso, Bab el-Mandeb era un fronte strategico lontano, mentre altri obiettivi nel Mediterraneo e nel Golfo di Suez erano sotto pressione delle forze navali egiziane."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Preparazione"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "I successi dell’ottobre furono preceduti da anni di addestramento, esperienza e operazioni durante la guerra d’attrito."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Lavoro di squadra"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La vittoria non fu opera di una sola forza: esercito, aviazione e marina agirono nell’ambito di un unico piano."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Responsabilità"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Un soldato svolge la propria missione per i compagni e per il Paese, non solo per sé stesso."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il coraggio disciplinato"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il vero coraggio significa affrontare il pericolo con addestramento, pianificazione e disciplina."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Gli uomini del mare in ottobre"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il 6 ottobre 1973 l’Egitto iniziò la guerra per liberare il Sinai. Mentre i soldati attraversavano il Canale di Suez, la Marina egiziana operava nel Mediterraneo e nel Mar Rosso."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La Marina protesse i fianchi delle forze egiziane, colpì obiettivi nemici, svolse operazioni speciali e operò sul fronte lontano di Bab el-Mandeb per limitare la navigazione israeliana."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dietro queste operazioni c’erano uomini addestrati per anni, consapevoli che il mare poteva essere una via per il nemico, ma anche verso la vittoria."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "La vittoria non è opera di un solo eroe, ma di un intero esercito in cui ognuno svolge il proprio compito con dedizione, coraggio e disciplina."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Il cacciatorpediniere Eilat: perché fu importante?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il 21 ottobre 1967, alcuni mesi dopo la guerra di giugno, motosiluranti missilistiche egiziane attaccarono il cacciatorpediniere Eilat al largo di Port Said. L’episodio è diventato un caso importante nella storia dell’impiego di missili superficie-superficie contro una grande nave da guerra. Dimostrò che le dimensioni della nave da sole non determinano l’esito dello scontro: addestramento, ricognizione e scelta dell’arma adatta possono cambiare gli equilibri di forza."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "È importante non confondere questo episodio con la guerra dell’ottobre 1973. L’affondamento dell’Eilat avvenne circa sei anni prima, ma faceva parte dell’esperienza accumulata dalla Marina egiziana durante il periodo di conflitto precedente all’ottobre."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Le rotte marittime fanno parte del piano di guerra"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Il mare non è uno spazio vuoto tra due paesi: stretti, porti e rotte marittime incidono sul trasporto di carburante, merci e rifornimenti. Bab el-Mandeb si trova all’ingresso meridionale del Mar Rosso, tra questo e il Golfo di Aden; influenzare il traffico delle navi dirette a Eilat aveva quindi un significato strategico che andava oltre la distanza geografica."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Questo esempio mostra che le operazioni militari non si limitano alla linea del fronte che appare di solito nelle fotografie. Una forza può operare lontano per limitare i movimenti dell’avversario o proteggere le linee di rifornimento. Una missione simile richiede pianificazione preventiva, comunicazioni disciplinate e una conoscenza precisa dei passaggi marittimi."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nello studio di questi eventi occorre distinguere ciò che è confermato da documenti e testimonianze multiple dai dettagli su cui le fonti divergono, soprattutto riguardo al controllo dei passaggi o agli esiti delle operazioni."
+        }
+      ]
+    },
+    "de": {
+      "blocks": [
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die Männer des Meeres im Oktober"
+        },
+        {
+          "type": "subtitle",
+          "speaker": "narrator",
+          "text": "Die Schlacht, die die meisten Menschen nie sahen"
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die Geschichte, die schon vor dem 6. Oktober begann"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Wenn wir vom Oktoberkrieg 1973 sprechen, denken wir an die Überquerung des Suezkanals, den Durchbruch der Bar-Lev-Linie und das Vorrücken der ägyptischen Truppen nach Osten. Zur gleichen Zeit fand jedoch ein weiterer Kampf statt, den die meisten Menschen nicht sahen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die ägyptische Marine führte Einsätze im Mittelmeer und im Roten Meer durch, schützte die Seeflanken der ägyptischen Streitkräfte, griff feindliche Ziele an und führte Spezialoperationen durch."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Deshalb ist die Geschichte der Männer auf See keine Nebengeschichte, sondern Teil der Geschichte des Sieges selbst."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Jahre des Trainings und der Erfahrung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Vorbereitungen auf den Krieg begannen nicht erst im Oktober. Während des Abnutzungskrieges führte die ägyptische Marine wichtige Operationen durch und sammelte Erfahrung beim Einsatz nahe feindlichen Küsten und bei Spezialmissionen."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "21. Oktober 1967"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ägyptische Raketenboote versenkten den israelischen Zerstörer Eilat mit Boden-Boden-Raketen. Das war ein Meilenstein in der modernen Seekriegsführung."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ägyptische Kampfschwimmer führten während des Abnutzungskrieges drei Operationen im Hafen von Eilat durch und nahmen dabei Schiffe und wichtige Einrichtungen im Hafen ins Visier."
+        },
+        {
+          "type": "timeline",
+          "speaker": "narrator",
+          "text": "8. März 1970"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Kampfschwimmern gelang es, die Ölplattform Kenting in Abidjan zu sabotieren und zu versenken – bei einer Operation weit entfernt vom unmittelbaren Schlachtfeld."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Jahre der Erfahrung und des Trainings wurden zur Vorbereitung auf einen großen Krieg, der an mehreren Fronten geführt wurde."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Am ersten Kriegstag"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Als die ägyptischen Streitkräfte mit der Überquerung des Suezkanals begannen, war zugleich die Marine im Einsatz. Nach Angaben des Generalkommandos schützte sie die linke Flanke der ägyptischen Streitkräfte entlang der Mittelmeerküste und griff wichtige feindliche Ziele an der Küste des nördlichen Sinai an."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "In ihrem Bericht über die Kämpfe vom 6. Oktober erklärte das Generalkommando, die Marine habe im Mittelmeer fünf feindliche Kriegsschiffe zerstört und feindliche Gebiete am Ostufer des Golfs von Suez beschossen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die Flanken schützen"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Marine musste verhindern, dass israelische Seestreitkräfte die Überquerung störten, und die Flanken der ägyptischen Truppen schützen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Angreifen und Druck ausüben"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Marineeinheiten beschossen Küsten- und Seeziele und trugen dazu bei, den Feind aus mehr als einer Richtung unter Druck zu setzen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Bab al-Mandab: Die ferne Front"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Meerenge Bab al-Mandab liegt im südlichen Roten Meer und ist eine strategische Seepassage. Die Route durch das Rote Meer war wichtig für die Schifffahrt zum Hafen von Eilat."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ägypten begann deshalb schon lange vor dem Krieg mit der Planung dieses Einsatzes. Militärische Presseberichte besagen, dass Marineexperten das Gebiet seit 1971 untersucht hatten. Anfang Oktober 1973 brach ein Marineverband zu einer Fahrt auf, die öffentlich als Reise nach Pakistan beschrieben wurde, während sein eigentliches Ziel darin bestand, Kampfstellungen bei Bab al-Mandab einzunehmen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nach Kriegsbeginn am 6. Oktober erhielt der Marineverband das Signal, seinen Einsatz zu beginnen. Er übernahm die Kontrolle über die Meerenge und schränkte die Bewegungen von Schiffen unter israelischer Flagge ein."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Eine Schlacht findet nicht immer dort statt, wo man Schüsse hört; manchmal ist ein entfernter Seeweg Teil der Schlacht."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Kapitän Nabil Abdel Wahab"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Kapitän Nabil Abdel Wahab ist eine bedeutende Gestalt in der Geschichte der ägyptischen Kampfschwimmer. Er schloss 1966 die Marineakademie ab und nahm an zwei der drei Operationen teil, die ägyptische Kampfschwimmer während des Abnutzungskrieges im Hafen von Eilat durchführten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Bei einer Kampfschwimmer-Operation im Jahr 1970 weigerte er sich, wie ägyptische Presseberichte erzählen, einen gefallenen Kameraden in feindlichen Gewässern zurückzulassen, und zog ihn bis zum jordanischen Hafen Akaba. Die Quellen unterscheiden sich in einigen Details und bei der Entfernung, daher wird dies als veröffentlichter Bericht und nicht als gesicherte Messung dargestellt."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Im Oktoberkrieg selbst diente er in einer Kampfschwimmereinheit bei Einsätzen gegen feindlich gehaltene Ziele im Ölfeldgebiet und setzte damit nach Jahren von Operationen und Training seinen Kampfeinsatz fort."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Was macht seine Geschichte besonders?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das Heldentum liegt hier nicht nur darin, einen Auftrag zu erfüllen, sondern auch darin, nach dessen Ende Verantwortung für einen Kameraden zu übernehmen. Er hätte sich zurückziehen können, entschied sich aber dafür, seinen Kameraden zurückzutragen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Die Marine stand beim Sieg nicht abseits"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Erklärungen des Generalkommandos und Berichte über den Oktoberkrieg zeigen, dass zu den Einsätzen der Marine der Schutz der Flanken der Streitkräfte, der Beschuss von Küstenzielen, die Abwehr feindlicher Marineaktivitäten, das Legen von Minen in einigen Passagen und Spezialoperationen gehörten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Im Roten Meer war Bab al-Mandab eine ferne strategische Front, während andere Ziele im Mittelmeer und im Golf von Suez dem Druck der ägyptischen Seestreitkräfte ausgesetzt waren."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Vorbereitung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Den Erfolgen im Oktober gingen Jahre des Trainings, der Erfahrung und der Operationen während des Abnutzungskrieges voraus."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Teamarbeit"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Der Sieg war nicht das Werk einer einzelnen Teilstreitkraft; Heer, Luftwaffe und Marine handelten im Rahmen eines gemeinsamen Plans."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Verantwortung"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ein Soldat erfüllt einen Auftrag für seine Kameraden und sein Land, nicht nur für sich selbst."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Disziplinierter Mut"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Wahrer Mut bedeutet, der Gefahr mit Training, Planung und Disziplin zu begegnen."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Männer der See im Oktober"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Am 6. Oktober 1973 begann Ägypten seinen Krieg zur Befreiung des Sinai. Während ägyptische Soldaten den Suezkanal überquerten, war die ägyptische Marine im Mittelmeer und im Roten Meer im Einsatz."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Die Marine schützte die Flanken der ägyptischen Streitkräfte, griff feindliche Ziele an, führte Spezialoperationen durch und war an der fernen Front von Bab al-Mandab im Einsatz, um die israelische Schifffahrt einzuschränken."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Hinter diesen Einsätzen standen Männer, die jahrelang ausgebildet worden waren und wussten, dass das Meer ein Weg für den Feind sein konnte – aber auch ein Weg zum Sieg."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ein Sieg entsteht nicht durch einen einzelnen Helden allein, sondern durch eine ganze Armee, in der jeder mit Hingabe, Mut und Disziplin seine Pflicht erfüllt."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Der Zerstörer Eilat: Warum war der Vorfall bedeutsam?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Am 21. Oktober 1967, Monate nach dem Junikrieg, griffen ägyptische Raketenboote den Zerstörer Eilat vor Port Said an. Der Vorfall wurde zu einem bedeutenden Beispiel für den Einsatz von Seezielflugkörpern gegen ein großes Kriegsschiff. Er zeigte, dass die Größe eines Schiffes allein nicht über den Ausgang entscheidet: Ausbildung, Aufklärung und die Wahl der geeigneten Waffe können das Kräfteverhältnis verändern."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dieser Vorfall darf nicht mit dem Oktoberkrieg von 1973 verwechselt werden. Die Versenkung der Eilat ereignete sich etwa sechs Jahre zuvor, gehörte aber zu den Erfahrungen, welche die ägyptische Marine während der Konfliktphase vor dem Oktober sammelte."
+        },
+        {
+          "type": "heading",
+          "speaker": "narrator",
+          "text": "Seewege sind Teil eines Kriegsplans"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Das Meer ist kein leerer Raum zwischen zwei Staaten: Meerengen, Häfen und Schifffahrtsrouten beeinflussen den Transport von Treibstoff, Waren und Versorgungsgütern. Bab al-Mandab liegt am südlichen Eingang des Roten Meeres zwischen diesem und dem Golf von Aden. Die Bewegung der nach Eilat fahrenden Schiffe zu beeinflussen, hatte daher eine strategische Bedeutung, die über die geografische Entfernung hinausging."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Dieses Beispiel zeigt, dass militärische Operationen nicht auf die Frontlinie beschränkt sind, die auf Bildern meist zu sehen ist. Eine Streitkraft kann weit entfernt eingesetzt werden, um die Bewegungsfreiheit des Gegners einzuschränken oder Nachschubwege zu schützen. Eine solche Aufgabe erfordert vorausschauende Planung, disziplinierte Kommunikation und genaue Kenntnisse der Seewege."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Bei der Untersuchung dieser Ereignisse muss man zwischen Angaben unterscheiden, die durch Dokumente und mehrere Berichte gestützt werden, und Einzelheiten, bei denen die Quellen voneinander abweichen – insbesondere beim Ausmaß der Kontrolle über die Seewege und bei den Ergebnissen der Operationen."
+        }
+      ]
+    }
+  }
+}

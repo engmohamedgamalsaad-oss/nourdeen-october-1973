@@ -2,7 +2,7 @@ body maps: 402 translation keys, 116 german-only keys
 WARNINGS (2):
   ! 002: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/002/i18n-extra.js: file not found
   ! 003: /home/runner/work/nourdeen-october-1973/nourdeen-october-1973/stories/october/003/i18n-extra.js: file not found
-== October 001: 55 speakable blocks ==
+== October 001: 55 speakable blocks, audio package READY ==
   ar: 55/55 translated, 0 suspect
   en: 55/55 translated, 0 suspect
   fr: 55/55 translated, 0 suspect
@@ -26,7 +26,7 @@ WARNINGS (2):
      <a.home-button> ← العودة إلى حكايات أكتوبر
      <div.kicker> صورة من المعركة البحرية
      <div.kicker> كيف تُقرأ الخريطة البحرية؟
-== October 002: 55 speakable blocks ==
+== October 002: 55 speakable blocks, audio package READY ==
   ar: 55/55 translated, 0 suspect
   en: 55/55 translated, 0 suspect
   fr: 55/55 translated, 0 suspect
@@ -55,16 +55,13 @@ WARNINGS (2):
      <div.kicker> صورة أرشيفية
      <div.kicker> من الفكرة إلى التنفيذ
      <div.kicker> ما وراء الحكاية
-== October 003: 49 speakable blocks ==
-  ar: 49/49 translated, 0 suspect
-  en: 48/49 translated, 0 suspect
-     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  fr: 48/49 translated, 0 suspect
-     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  it: 48/49 translated, 0 suspect
-     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
-  de: 48/49 translated, 0 suspect
-     missing #15 <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+== October 003: 48 speakable blocks, audio package READY ==
+  excluded source line <p> للاطلاع على صور البطل أحمد إدريس: الهيئة العامة لقصور الثقافة — صاحب ا
+  ar: 48/48 translated, 0 suspect
+  en: 48/48 translated, 0 suspect
+  fr: 48/48 translated, 0 suspect
+  it: 48/48 translated, 0 suspect
+  de: 48/48 translated, 0 suspect
   NOT in narration: 18 visible Arabic text pieces
      <div.author> إعداد وتقديم
      <strong> مليكة محمد جمال
@@ -84,7 +81,7 @@ WARNINGS (2):
      <a.home-button> ← العودة إلى حكايات أكتوبر
      <div.kicker> اللغة والهوية
      <div.kicker> كيف نتحقق من الرواية؟
-== October 004: 44 speakable blocks ==
+== October 004: 44 speakable blocks, audio package READY ==
   ar: 44/44 translated, 0 suspect
   en: 44/44 translated, 0 suspect
   fr: 44/44 translated, 0 suspect

@@ -1,0 +1,22 @@
+{
+  "format": "KHALEDOON_OCTOBER_AUDIO_READINESS_V1",
+  "story": "001",
+  "ready": true,
+  "blocks": 55,
+  "missing": {
+    "ar": [],
+    "en": [],
+    "fr": [],
+    "it": [],
+    "de": []
+  },
+  "suspect": {
+    "ar": [],
+    "en": [],
+    "fr": [],
+    "it": [],
+    "de": []
+  },
+  "excluded_source_lines": 0,
+  "generated_by": "scripts/build_october_audio_packages.py"
+}
