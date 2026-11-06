@@ -576,7 +576,7 @@ function injectStyles() {
   document.head.appendChild(style);
 }
 async function initialize(nextStory) {
-  if (!nextStory || !nextStory.slug || nextStory.section === 'october' || initializing || initialized) return;
+  if (!nextStory || !nextStory.slug || initializing || initialized) return;
   initializing = true;
   story = nextStory;
   injectStyles();
