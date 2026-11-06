@@ -128,7 +128,7 @@ test('rejects dictionary rules that change Arabic letters', () => {
   const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
   const dictionary = {
     schema_version: 1,
-    entries: [{ id: 'unsafe', match: 'مركز', spoken: 'مركّز' }]
+    entries: [{ id: 'unsafe', match: 'مركز', spoken: 'مراكز', before: 'في' }]
   };
   assert.throws(() => review.applyDictionarySuggestions(report, pkg, dictionary), /قاعدة قاموس غير آمنة/);
 });
