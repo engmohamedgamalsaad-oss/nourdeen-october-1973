@@ -63,6 +63,76 @@ test('rejects missing, duplicate, or altered original segments', () => {
   assert.ok(result.errors.some(error => error.includes('غير موجود في التقرير')));
 });
 
+test('adds exact Arabic dictionary suggestions to the existing review report without approval', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'وتذكر الدراسات المنشورة ذلك.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{
+      id: 'studies',
+      match: 'وتذكر الدراسات',
+      spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ'
+    }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const arabic = outcome.report.segments.find(item => item.lang === 'ar' && item.block_index === 0);
+  assert.equal(arabic.original_text, 'وتذكر الدراسات المنشورة ذلك.');
+  assert.equal(arabic.proposed_audio_text, 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
+  assert.equal(arabic.issue_type, 'pronunciation');
+  assert.equal(arabic.needs_human_review, true);
+  assert.equal(arabic.suggestion_source, 'ar-EG-pronunciation-dictionary');
+  assert.deepEqual(outcome.applied, [{ lang: 'ar', block_index: 0, entry_id: 'studies' }]);
+  assert.equal(outcome.requires_human_approval, true);
+  assert.equal(outcome.applied_to_story, false);
+  assert.equal(outcome.report.segments.find(item => item.lang === 'en' && item.block_index === 0).proposed_audio_text, 'First sentence.');
+});
+
+test('dictionary does not match partial words or overwrite an existing human review suggestion', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'وتذكرت الدراسات المنشورة.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.lang === 'ar' && item.block_index === 0 ? 'صياغة راجعها الإنسان.' : item.original_text,
+    issue_type: item.lang === 'ar' && item.block_index === 0 ? 'heavy_sentence' : 'none',
+    reason: item.lang === 'ar' && item.block_index === 0 ? 'اقتراح سابق.' : '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{ id: 'studies', match: 'وتذكر الدراسات', spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ' }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const arabic = outcome.report.segments.find(item => item.lang === 'ar' && item.block_index === 0);
+  assert.equal(arabic.proposed_audio_text, 'صياغة راجعها الإنسان.');
+  assert.equal(outcome.applied.length, 0);
+});
+
+test('rejects dictionary rules that change Arabic letters', () => {
+  const pkg = packageFixture();
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{ id: 'unsafe', match: 'مركز', spoken: 'مركّز' }]
+  };
+  assert.throws(() => review.applyDictionarySuggestions(report, pkg, dictionary), /قاعدة قاموس غير آمنة/);
+});
+
 test('exports only the suggestions explicitly approved by the administrator', () => {
   const pkg = packageFixture();
   const segments = review.collectSegments(pkg).map(item => ({
