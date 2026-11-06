@@ -95,6 +95,34 @@ test('adds exact Arabic dictionary suggestions to the existing review report wit
   assert.equal(outcome.report.segments.find(item => item.lang === 'en' && item.block_index === 0).proposed_audio_text, 'First sentence.');
 });
 
+test('exports a dictionary candidate only when the administrator explicitly approves it', () => {
+  const pkg = packageFixture();
+  pkg.i18n.ar.blocks[0].text = 'وتذكر الدراسات المنشورة ذلك.';
+  const segments = review.collectSegments(pkg).map(item => ({
+    ...item,
+    proposed_audio_text: item.original_text,
+    issue_type: 'none',
+    reason: '',
+    needs_human_review: true
+  }));
+  const report = { format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments };
+  const dictionary = {
+    schema_version: 1,
+    entries: [{
+      id: 'studies',
+      match: 'وتذكر الدراسات',
+      spoken: 'وَتَذْكُرُ الدِّرَاسَاتُ'
+    }]
+  };
+  const outcome = review.applyDictionarySuggestions(report, pkg, dictionary);
+  const approved = review.buildApprovedAudioPronunciation(outcome.report, pkg, ['ar:0']);
+  const rejected = review.buildApprovedAudioPronunciation(outcome.report, pkg, []);
+  assert.equal(approved.approved_audio_text_rewrites.ar['0'], 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
+  assert.equal(approved.blocks['0'], 'وَتَذْكُرُ الدِّرَاسَاتُ المنشورة ذلك.');
+  assert.equal(rejected.blocks['0'], undefined);
+  assert.equal(rejected.review.segments.find(item => item.lang === 'ar' && item.block_index === 0).decision, 'approved_original');
+});
+
 test('dictionary does not match partial words or overwrite an existing human review suggestion', () => {
   const pkg = packageFixture();
   pkg.i18n.ar.blocks[0].text = 'وتذكرت الدراسات المنشورة.';
