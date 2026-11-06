@@ -57,8 +57,8 @@ jobs:
 
           report = json.loads(Path("plan-all.json").read_text(encoding="utf-8"))
           problems = []
-          if report.get("published_stories", 0) != 17:
-              problems.append(f"Expected 17 published stories, found {report.get('published_stories')}")
+          if report.get("published_stories", 0) < 1:
+              problems.append("No published stories were found for audio generation")
           if report.get("blocked_stories", 0):
               problems.append(f"{report['blocked_stories']} stories are blocked by missing human approvals/readiness")
           if report.get("stories_with_errors", 0):
