@@ -28,6 +28,7 @@ import argparse
 import json
 import re
 import subprocess
+import shutil
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
@@ -278,6 +279,9 @@ def main(argv=None):
             out.mkdir(parents=True, exist_ok=True)
             (out / "story.json").write_text(json.dumps(package, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
             (out / "audio-readiness.json").write_text(json.dumps(readiness, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            approved_audio_text = root / "rebuild" / "october-audio-packages" / d.name / "audio-pronunciation.json"
+            if approved_audio_text.is_file():
+                shutil.copy2(approved_audio_text, out / "audio-pronunciation.json")
     lines = ["body maps: %d translation keys, %d german-only keys" % (len(trans), len(german))]
     if warnings:
         lines.append("WARNINGS (%d):" % len(warnings))
