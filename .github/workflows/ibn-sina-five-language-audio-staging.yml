@@ -1,10 +1,10 @@
-name: ibn-sina-five-language-audio-staging
+name: ibn-sina-arabic-audio-staging
 
 on:
   workflow_dispatch:
     inputs:
       confirm_fish_audio_request:
-        description: "اختر yes للموافقة الصريحة على إرسال 17 مقطعًا عربيًا إلى Fish Audio"
+        description: "اختر yes للموافقة على إعادة توليد 17 مقطعًا عربيًا لابن سينا"
         required: true
         type: choice
         options:
@@ -16,16 +16,16 @@ permissions:
   contents: read
 
 concurrency:
-  group: ibn-sina-five-language-audio-staging
+  group: ibn-sina-arabic-audio-staging
   cancel-in-progress: false
 
 jobs:
   generate:
     if: inputs.confirm_fish_audio_request == 'yes'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 30
     steps:
-      - name: Check out approved story and audio text
+      - name: Check out approved Ibn Sina story and audio text
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: main
@@ -36,26 +36,23 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install pinned Edge TTS dependency
-        run: python -m pip install --disable-pip-version-check "edge-tts==7.2.0"
-
       - name: Verify generator syntax
         run: python -m py_compile scripts/generate_story_audio.py
 
-      - name: Generate Ibn Sina in all five languages into isolated staging
+      - name: Generate Arabic only into isolated staging
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: >-
           python scripts/generate_story_audio.py
           --story stories/history/005/story.json
-          --languages ar en fr it de
+          --languages ar
           --generate
           --allow-fish-audio
 
-      - name: Upload staged audio and manifests for listening review only
+      - name: Upload Arabic audio and manifest for listening review only
         uses: actions/upload-artifact@v4
         with:
-          name: ibn-sina-five-language-audio-staging
-          path: .audio-staging/history/ibn-sina/
+          name: ibn-sina-arabic-audio-staging
+          path: .audio-staging/history/ibn-sina/ar/
           if-no-files-found: error
           retention-days: 14
