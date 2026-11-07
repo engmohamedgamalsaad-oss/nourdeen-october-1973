@@ -361,6 +361,16 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
                 raise RuntimeError(
                     f"{published_manifest}: no published baseline exists for single-block regeneration."
                 )
+            staged_dir.mkdir(parents=True, exist_ok=True)
+            empty_manifest = {
+                "version": 1, "engine": "fish-audio+edge-tts",
+                "story": slug, "section": section, "language": lang,
+                "complete": False, "segments": [],
+            }
+            staged_manifest.write_text(
+                json.dumps(empty_manifest, ensure_ascii=False, indent=2) + "\n",
+                encoding="utf-8",
+            )
             continue
         manifest = read_json(published_manifest)
         if (
@@ -538,11 +548,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                         needed += 1
                         if lang == "ar":
                             fish_needed += 1
-        if unrelated_missing:
-            raise ValueError(
-                f"{relative}: non-selected {lang} blocks need audio too: "
-                f"{sorted(set(unrelated_missing))}; refusing broad regeneration."
-            )
+        # A partial baseline is valid for sequential single-block generation.
+        # Only the requested block is generated; other missing blocks remain pending.
         missing_forced = forced - found_forced
         if missing_forced:
             raise ValueError(f"{relative}: forced blocks are not speakable in {lang}: {sorted(missing_forced)}")
@@ -670,7 +677,9 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     completed = 0
 
     if force_blocks and not dry_run:
-        seed_staging_from_published(story_path, languages_to_generate, STAGING_ROOT)
+        seed_staging_from_published(
+            story_path, languages_to_generate, STAGING_ROOT, require_all=False
+        )
     elif seed_published_baseline and not dry_run:
         seed_staging_from_published(
             story_path, languages_to_generate, STAGING_ROOT, require_all=False
@@ -747,6 +756,8 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             )
             temporary.replace(manifest_path)
         for block_index, block in enumerate(blocks):
+            if force_blocks and block_index not in set(force_blocks):
+                continue
             if not isinstance(block, dict):
                 continue
             speaker = block.get("speaker")
@@ -843,13 +854,32 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
         if not segments:
             raise ValueError(f"{relative}: no speakable segments found for {lang}")
 
+        final_segments = dict(processed_manifest_segments)
+        for current_segment in segments:
+            key = (
+                int(current_segment["block_index"]),
+                int(current_segment.get("chunk_index", 0)),
+            )
+            final_segments[key] = current_segment
+        expected_blocks = {
+            index for index, block in enumerate(blocks)
+            if isinstance(block, dict)
+            and block.get("speaker") in ("karma", "narrator")
+            and re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
+        }
+        completed_blocks = {
+            index for index, _chunk in final_segments
+        }
         manifest = {
             "version": 1,
             "engine": "fish-audio+edge-tts",
             "story": slug,
             "section": section,
             "language": lang,
-            "segments": segments,
+            "complete": expected_blocks.issubset(completed_blocks),
+            "segments": [
+                final_segments[key] for key in sorted(final_segments)
+            ],
         }
         temporary_manifest = manifest_path.with_suffix(".json.partial")
         temporary_manifest.write_text(
