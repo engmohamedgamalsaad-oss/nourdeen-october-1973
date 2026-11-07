@@ -1,4 +1,5 @@
 name: story-audio-single-block-staging
+run-name: "Khaledoon audio ${{ inputs.request_id }} ${{ inputs.story_path }} ${{ inputs.language }} block ${{ inputs.block_index }}"
 
 on:
   workflow_dispatch:
@@ -23,8 +24,12 @@ on:
         type: number
         default: 0
       source_run_id:
-        description: "اختياري: رقم تشغيل all-stories الذي يحتوي Artifact التجهيز السابق؛ مطلوب عند إعادة مقطع أكتوبر أو أي حكاية لم يُنشر لها صوت بعد"
+        description: "اختياري: آخر تشغيل يحتوي مساحة التجهيز السابقة للحفاظ على المقاطع المقبولة"
         required: false
+        type: string
+      request_id:
+        description: "معرّف طلب فريد لمطابقة نتيجة التوليد مع طلب صفحة المراجعة"
+        required: true
         type: string
       confirm_fish_audio_request:
         description: "للعربية فقط: اختر yes بعد الموافقة الصريحة على طلب Fish Audio"
@@ -88,11 +93,11 @@ jobs:
             exit 1
           fi
 
-      - name: Restore the previous all-stories staging artifact
+      - name: Restore the previous single-block staging artifact
         if: inputs.source_run_id != ''
         uses: actions/download-artifact@v4
         with:
-          name: khaledoon-all-stories-audio-staging
+          name: khaledoon-single-block-audio-staging
           run-id: ${{ inputs.source_run_id }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path: .audio-staging/
@@ -144,7 +149,7 @@ jobs:
             --languages "$LANGUAGE" \
             --force-block "$BLOCK_INDEX" \
             --generate
-      - name: Upload regenerated clip for manual review only
+      - name: Upload updated staging package for manual review only
         uses: actions/upload-artifact@v4
         with:
           name: khaledoon-single-block-audio-staging
