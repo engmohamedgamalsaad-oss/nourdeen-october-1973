@@ -3,7 +3,7 @@ name: Ibn Sina Arabic and English CPU voice pilot
 on:
   push:
     branches:
-      - audio/ibn-sina-namaa-cpu-pilot
+      - audio/ibn-sina-namaa-cpu-pilot-v2
   pull_request:
     branches:
       - main
