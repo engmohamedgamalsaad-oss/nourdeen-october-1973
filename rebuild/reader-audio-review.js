@@ -64,18 +64,17 @@ async function audioAssetsRequest(payload) {
 async function ensureArabicAudioStaged(expectedTexts) {
   if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
   initialArabicStageAttempted = true;
-  // Preserve any newer private staging artifact. Only restore the restart baseline
-  // when the currently staged manifest does not match the approved speech text.
+  // Never overwrite audio that is already staged. Opening the review page used to
+  // restore the pinned restart baseline whenever the staged manifest text did not match
+  // the current approved speech text. That silently replaced newer private MP3s and the
+  // manifest with the old baseline (whose hashes carry older review decisions).
+  // A text mismatch is now reported by validateManifestCoverage in loadManifests instead.
+  // The baseline is only staged here when no private manifest exists yet (404).
   try {
-    var current = await audioAssetsRequest({
+    await audioAssetsRequest({
       action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
     });
-    var coverage = current && current.manifest && core.validateManifestCoverage(
-      story.i18n && story.i18n.ar && story.i18n.ar.blocks,
-      current.manifest.segments,
-      expectedTexts
-    );
-    if (coverage && coverage.ok) return;
+    return;
   } catch (error) {
     if (!error || error.status !== 404) throw error;
   }
