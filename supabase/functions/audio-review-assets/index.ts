@@ -262,8 +262,11 @@ Deno.serve(async (req: Request) => {
     if (!manifestFile) return reply(422, { error: "الـArtifact لا يحتوي manifest.json." });
     const manifest = JSON.parse(await manifestFile.async("string"));
     if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== language ||
-        !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000) {
-      return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو نطاق المقاطع المسموح." });
+        !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
+        (body.request_id && !manifest.segments.some((segment: any) =>
+          Number(segment?.block_index) === Number(body.block_index)
+        ))) {
+      return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو لا تحتوي المقطع المطلوب." });
     }
     // The pinned restart artifact predates the corrected opening order.
     // Its first two audio files are valid but their block indices must follow
