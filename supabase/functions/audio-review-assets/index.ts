@@ -218,7 +218,14 @@ Deno.serve(async (req: Request) => {
     if (artifact.expired || artifact.name !== expectedName || Number(artifact.workflow_run?.id) !== runId) {
       return reply(403, { error: "الـArtifact منتهي أو لا يطابق تشغيل التوليد المحدد." });
     }
-    if (section === "history" && slug === "ibn-sina" && language === "ar" && body.request_id) {
+    const isIbnSinaArabic = section === "history" && slug === "ibn-sina" && language === "ar";
+    // The restart baseline is the newly generated, approved-text Arabic package
+    // from run #42344425713. It may replace an older private manifest, but only
+    // when the review page explicitly requests this exact pinned artifact.
+    const isPinnedRestartBaseline = isIbnSinaArabic &&
+      body.baseline_restore === true && !body.request_id &&
+      artifactId === 13563200242 && runId === 42344425713;
+    if (isIbnSinaArabic && body.request_id) {
       const requestId = String(body.request_id ?? "");
       const blockIndex = Number(body.block_index);
       if (!/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 1 || blockIndex > 16) {
@@ -231,11 +238,10 @@ Deno.serve(async (req: Request) => {
       if (runData.display_title !== expectedTitle || runData.status !== "completed" || runData.conclusion !== "success") {
         return reply(403, { error: "تشغيل التوليد لا يطابق طلب المقطع المحدد أو لم ينجح." });
       }
-    } else if (section === "history" && slug === "ibn-sina" && language === "ar" &&
-        (artifactId !== 13540083314 || runId !== 42292463580)) {
-      return reply(403, { error: "تحميل الحزمة الأساسية مسموح فقط للـArtifact المرجعي المحدد." });
+    } else if (isIbnSinaArabic && !isPinnedRestartBaseline) {
+      return reply(403, { error: "تحميل الحزمة الأساسية مسموح فقط لحزمة إعادة التشغيل المرجعية المحددة." });
     }
-    if (!body.request_id) {
+    if (!body.request_id && !isPinnedRestartBaseline) {
       const existing = await service.storage.from(BUCKET).list(prefix, { limit: 100 });
       if (existing.error) return reply(500, { error: "تعذر فحص التخزين الخاص.", detail: existing.error.message });
       if (existing.data?.some((item: any) => item.name === "manifest.json")) {
