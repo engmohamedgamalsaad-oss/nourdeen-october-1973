@@ -289,6 +289,24 @@ async function loadManifests() {
     });
   });
   entries = await Promise.all(pendingEntries);
+
+  // A review decision belongs to the exact audio bytes, not merely the
+  // story slot or a previously cached key. If the current manifest hash differs
+  // from the hash recorded with an older decision, keep that historical record
+  // in the database but exclude it from this preview's active review state.
+  entries.forEach(function (entry) {
+    if (!entry.audio_sha256) return;
+    Object.keys(review.clips).forEach(function (key) {
+      var saved = review.clips[key];
+      if (!saved || saved.lang !== entry.lang ||
+          Number(saved.block_index) !== entry.block_index ||
+          Number(saved.chunk_index || 0) !== entry.chunk_index ||
+          !saved.audio_sha256) return;
+      if (String(saved.audio_sha256).toLowerCase() !== String(entry.audio_sha256).toLowerCase()) {
+        delete review.clips[key];
+      }
+    });
+  });
 }
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
