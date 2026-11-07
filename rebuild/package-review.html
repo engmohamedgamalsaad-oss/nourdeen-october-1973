@@ -74,7 +74,8 @@ function loadPackage(parsed,fromDraft){
  $('status').textContent=issues.length?'الفحص وجد '+issues.length+' ملاحظة.':(fromDraft?'تم تحميل مسودة KHALEDOON_STORY المحفوظة.':'الفحص البنيوي الأولي اجتاز الشروط الأساسية.');
  $('status').className='status '+(issues.length?'bad':'good');
  if(!issues.length)$('issues').appendChild(node('li','لا توجد أخطاء بنيوية أولية.','good'));
- if(!issues.length)openUnifiedReader();
+ try{localStorage.setItem('kh-story-preview-audit',JSON.stringify(issues));}catch(e){}
+ openUnifiedReader();
 }
 $('file').addEventListener('change',async e=>{story=null;$('audit').classList.remove('hidden');$('issues').replaceChildren();const file=e.target.files&&e.target.files[0];if(!file)return;
  try{loadPackage(JSON.parse(await file.text()),false)}
