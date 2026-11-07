@@ -82,7 +82,8 @@ async function ensureArabicAudioStaged(expectedTexts) {
   await audioAssetsRequest({
     action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
     artifact_id: 13563200242, run_id: 42344425713,
-    artifact_name: 'ibn-sina-arabic-audio-staging'
+    artifact_name: 'ibn-sina-arabic-audio-staging',
+    baseline_restore: true
   });
 }
 function rowUrl() {
