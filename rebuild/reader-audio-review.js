@@ -707,6 +707,11 @@ function render() {
     if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
   }
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
+  var blockByIndex = Object.create(null);
+  blocks.forEach(function (block, position) {
+    var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
+    blockByIndex[index] = block;
+  });
   blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
   if (!manifests[lang]) {
     var missingManifest = /HTTP 404/.test(String(manifestErrors[lang] || ''));
@@ -728,8 +733,10 @@ function render() {
   }
   if (activeLang !== lang) activeLang = lang;
   var manifest = manifests[lang];
-  entries.filter(function (e) { return e.lang === lang; }).forEach(function (entry) {
-    var block = blocks[entry.block_index];
+  entries.filter(function (e) { return e.lang === lang; }).sort(function (a, b) {
+    return a.block_index - b.block_index || a.chunk_index - b.chunk_index;
+  }).forEach(function (entry) {
+    var block = blockByIndex[entry.block_index];
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls'; panel.dataset.clipKey = entry.key;
     var audioState = document.createElement('span'); audioState.className = 'kh-audio-ready-state ready'; text(audioState, 'جاهز للاستماع');
