@@ -238,7 +238,7 @@ async function loadManifests() {
         throw requestError;
       }
       var data = privateResult.manifest;
-      if (!data || !privateResult.signed_sources) throw new Error('استجابة مخزن الصوت الخاص لا تحتوي على manifest أو روابطًا مؤقتة.');
+      if (!data || !privateResult.signed_sources) throw new Error('استجابة مخزن الصوت الخاص لا تحتوي manifest أو روابطًا مؤقتة.');
       data.segments.forEach(function (segment) {
         segment.signed_src = privateResult.signed_sources[segment.src] || '';
         if (!segment.signed_src) throw new Error('لم يُنشأ رابط مؤقت للمقطع ' + segment.src + '.');
@@ -734,7 +734,7 @@ function render() {
     var audioState = document.createElement('span'); audioState.className = 'kh-audio-ready-state ready'; text(audioState, 'جاهز للاستماع');
     var saved = review.clips[entry.key];
     var state = document.createElement('span'); state.className = 'kh-audio-review-state';
-    text(state, saved ? (saved.status === 'accepted' ? 'مقبول ✓' : 'مرفوض ✕') : 'لم ُراجع بعد');
+    text(state, saved ? (saved.status === 'accepted' ? 'مقبول ✓' : 'مرفوض ✕') : 'لم يُراجع بعد');
     var playBtn = makeButton('▶ استماع', 'play', function () { play(entry, playBtn); });
     var replayBtn = makeButton('↻ من البداية', 'replay', function () { play(entry, playBtn, true); });
     var acceptBtn = makeButton('✓ قبول', 'accept', async function () {
