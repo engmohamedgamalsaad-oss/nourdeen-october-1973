@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - audio/ibn-sina-namaa-cpu-pilot
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:
