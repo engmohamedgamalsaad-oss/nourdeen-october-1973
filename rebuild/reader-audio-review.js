@@ -61,12 +61,27 @@ async function audioAssetsRequest(payload) {
   }
   return data || {};
 }
-async function ensureArabicAudioStaged() {
+async function ensureArabicAudioStaged(expectedTexts) {
   if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
   initialArabicStageAttempted = true;
+  // Preserve any newer private staging artifact. Only restore the restart baseline
+  // when the currently staged manifest does not match the approved speech text.
+  try {
+    var current = await audioAssetsRequest({
+      action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
+    });
+    var coverage = current && current.manifest && core.validateManifestCoverage(
+      story.i18n && story.i18n.ar && story.i18n.ar.blocks,
+      current.manifest.segments,
+      expectedTexts
+    );
+    if (coverage && coverage.ok) return;
+  } catch (error) {
+    if (!error || error.status !== 404) throw error;
+  }
   await audioAssetsRequest({
     action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
-    artifact_id: 13540083314, run_id: 42292463580,
+    artifact_id: 13563200242, run_id: 42344425713,
     artifact_name: 'ibn-sina-arabic-audio-staging'
   });
 }
@@ -203,7 +218,6 @@ async function loadArabicExpectedTexts(blocks) {
 }
 async function loadManifests() {
   manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
-  await ensureArabicAudioStaged();
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
     var localized = story.i18n && story.i18n[lang];
@@ -211,6 +225,7 @@ async function loadManifests() {
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
+  await ensureArabicAudioStaged(expectedTexts.ar);
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
