@@ -1,10 +1,11 @@
 # Claude instructions — Khaledoon / Nourdeen project
 
-**Read `PROJECT_INSTRUCTIONS.md` completely before doing project work.** It is the canonical guide to the project's purpose, current constraints, content standards, technical safety, and approval rules.
+**Before every reply or action on this project, read `AGENTS.md`, `PROJECT_INSTRUCTIONS.md`, and `docs/KHALEDOON_CONTROL_TOWER.md` completely.** The Control Tower is the current decision log and restart point; re-check the live repository state because its audit timestamp may be stale. For any new story, also read `docs/khaledoon-story-production-workflow.md` completely.
 
 For any new story, also read `docs/khaledoon-story-production-workflow.md` completely. For code changes, inspect the actual files and relevant story pages before editing.
 
 ## Required first steps for every task
+0. Read `docs/KHALEDOON_CONTROL_TOWER.md` completely before discussing or doing project work. Do not ask the owner to repeat decisions already documented there. Verify its status claims against current GitHub/Supabase state before acting.
 1. Confirm the current branch and inspect the repository tree and working changes.
 2. Read `PROJECT_INSTRUCTIONS.md` and the relevant existing files. Do not assume paths from memory.
 3. Determine the smallest safe change that meets the request; preserve existing pages, assets, links, QR codes, reactions, print/share behavior, and shared code.
@@ -23,5 +24,7 @@ For any new story, also read `docs/khaledoon-story-production-workflow.md` compl
 - Every new story must include a story cover, a title-related start-screen/cover-popup image, and contextual in-story images where useful, with sources and usage rights checked. Review spelling, names, dates, and language in text appearing inside images.
 - Preserve Arabic RTL and check all five languages: Arabic, English, French, Italian, and German. Karma opens with a natural childlike introduction; a knowledgeable narrator then deepens, explains, and verifies the story. Do not make the story a Q&A transcript.
 - Ask only one focused question if essential information cannot be verified or safely inferred. Otherwise proceed without unnecessary questions.
+
+After material changes, update the Control Tower on a preview branch with verified facts, PR/commit links, remaining work, and the next restart point. Never mark a proposal as completed.
 
 The owner is an engineer, not a specialist developer. Execute directly where tools permit; do not respond with a plan or theoretical code when the requested change can safely be performed.
