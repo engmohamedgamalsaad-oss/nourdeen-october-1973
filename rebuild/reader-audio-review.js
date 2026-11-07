@@ -12,6 +12,7 @@ var story = null, ctx = null, row = null, review = core.emptyReview(), entries =
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
+var initialArabicStageAttempted = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -59,6 +60,15 @@ async function audioAssetsRequest(payload) {
     throw error;
   }
   return data || {};
+}
+async function ensureArabicAudioStaged() {
+  if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
+  initialArabicStageAttempted = true;
+  await audioAssetsRequest({
+    action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
+    artifact_id: 13540083314, run_id: 42292463580,
+    artifact_name: 'ibn-sina-arabic-audio-staging'
+  });
 }
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
@@ -184,6 +194,7 @@ async function loadArabicExpectedTexts(blocks) {
 }
 async function loadManifests() {
   manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  await ensureArabicAudioStaged();
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
     var localized = story.i18n && story.i18n[lang];
