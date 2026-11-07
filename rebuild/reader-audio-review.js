@@ -139,11 +139,18 @@ async function saveReview(entry, decision) {
     var saved = await audioAssetsRequest({
       action: 'review_save', section: story.section, slug: story.slug, audio_review: next
     });
-    var verified = saved && saved.audio_review;
+    var savedReview = saved && saved.audio_review;
+    if (!savedReview || !savedReview.clips || !savedReview.clips[key] ||
+        savedReview.clips[key].status !== decision.status ||
+        !pronunciationReviewMatches(savedReview.clips[key], expectedPronunciationReview)) {
+      throw new Error('استجابة الحفظ لم تتضمن قرار المقطع وتفاصيل مراجعة النطق كاملة.');
+    }
+    var verifyResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+    var verified = verifyResult && verifyResult.audio_review;
     if (!verified || !verified.clips || !verified.clips[key] ||
         verified.clips[key].status !== decision.status ||
         !pronunciationReviewMatches(verified.clips[key], expectedPronunciationReview)) {
-      throw new Error('لم يؤكد الخادم حفظ قرار المقطع وتفاصيل مراجعة النطق.');
+      throw new Error('لم يؤكد الخادم بقاء قرار المقطع وتفاصيل مراجعة النطق في سجل المراجعة.');
     }
     review = core.cloneReview(verified);
   } finally {
