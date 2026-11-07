@@ -12,6 +12,7 @@ var story = null, ctx = null, row = null, review = core.emptyReview(), entries =
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
+var initialArabicStageAttempted = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -61,14 +62,11 @@ async function audioAssetsRequest(payload) {
   return data || {};
 }
 async function ensureArabicAudioStaged() {
-  if (story.section !== 'history' || story.slug !== 'ibn-sina') return;
+  if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
+  initialArabicStageAttempted = true;
   await audioAssetsRequest({
-    action: 'stage',
-    section: 'history',
-    slug: 'ibn-sina',
-    language: 'ar',
-    artifact_id: 13540083314,
-    run_id: 42292463580,
+    action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
+    artifact_id: 13540083314, run_id: 42292463580,
     artifact_name: 'ibn-sina-arabic-audio-staging'
   });
 }
@@ -133,17 +131,26 @@ async function saveReview(entry, decision) {
     var decisionWithAnalysis = Object.assign({}, decision);
     var attachedPronunciationReview = pronunciationReviewFor(entry);
     if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
-    var next = core.applyDecision(core.cloneReview(review), entry, decisionWithAnalysis);
+    var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+    var currentReview = core.cloneReview(currentResult.audio_review || null);
+    var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     var saved = await audioAssetsRequest({
       action: 'review_save', section: story.section, slug: story.slug, audio_review: next
     });
-    var verified = saved && saved.audio_review;
+    var savedReview = saved && saved.audio_review;
+    if (!savedReview || !savedReview.clips || !savedReview.clips[key] ||
+        savedReview.clips[key].status !== decision.status ||
+        !pronunciationReviewMatches(savedReview.clips[key], expectedPronunciationReview)) {
+      throw new Error('استجابة الحفظ لم تتضمن قرار المقطع وتفاصيل مراجعة النطق كاملة.');
+    }
+    var verifyResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+    var verified = verifyResult && verifyResult.audio_review;
     if (!verified || !verified.clips || !verified.clips[key] ||
         verified.clips[key].status !== decision.status ||
         !pronunciationReviewMatches(verified.clips[key], expectedPronunciationReview)) {
-      throw new Error('لم يؤكد الخادم حفظ قرار المقطع وتفاصيل مراجعة النطق.');
+      throw new Error('لم يؤكد الخادم بقاء قرار المقطع وتفاصيل مراجعة النطق في سجل المراجعة.');
     }
     review = core.cloneReview(verified);
   } finally {
@@ -586,6 +593,82 @@ function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
   b.addEventListener('click', handler); return b;
 }
+var generationBusy = false, generationMessage = '';
+async function generateNextArabicBlock(statusNode, button) {
+  if (generationBusy) return;
+  var byBlock = {};
+  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
+    (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
+  });
+  var nextBlock = -1;
+  for (var i = 1; i < 17; i++) {
+    var clips = byBlock[i] || [];
+    if (!clips.length || !clips.every(function (entry) {
+      var saved = review.clips[entry.key];
+      return saved && saved.status === 'accepted';
+    })) { nextBlock = i; break; }
+  }
+  if (nextBlock < 1) {
+    text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
+    return;
+  }
+  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام Fish Audio، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
+  generationBusy = true;
+  button.disabled = true;
+  text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + '…');
+  try {
+    var started = await audioAssetsRequest({
+      action: 'generate',
+      section: 'history', slug: 'ibn-sina', language: 'ar',
+      block_index: nextBlock, confirm_fish_audio_request: 'yes'
+    });
+    if (!started || !started.request_id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
+    var result = null;
+    for (var attempt = 0; attempt < 120; attempt++) {
+      await new Promise(function (resolve) { setTimeout(resolve, 5000); });
+      result = await audioAssetsRequest({
+        action: 'generation_status', section: 'history', slug: 'ibn-sina', language: 'ar',
+        request_id: started.request_id, block_index: nextBlock
+      });
+      if (result.status === 'completed' && result.conclusion === 'success' && result.artifact_id) break;
+      if (result.status === 'completed' || result.error) throw new Error(result.error || ('انتهى Workflow بنتيجة: ' + (result.conclusion || 'غير معروفة')));
+      text(statusNode, result.status === 'queued' ? 'طلب التوليد في قائمة الانتظار…' : 'جارٍ توليد المقطع ' + (nextBlock + 1) + '…');
+    }
+    if (!result || result.status !== 'completed' || result.conclusion !== 'success' || !result.artifact_id) {
+      throw new Error('لم يكتمل التوليد خلال المهلة المحددة. لم يتم اعتماد أو نشر أي صوت.');
+    }
+    text(statusNode, 'اكتمل التوليد؛ جارٍ نقل الصوت إلى مساحة المراجعة الخاصة…');
+    await audioAssetsRequest({
+      action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
+      artifact_id: result.artifact_id, run_id: result.run_id,
+      artifact_name: 'ibn-sina-arabic-audio-staging',
+      request_id: started.request_id, block_index: nextBlock
+    });
+    text(statusNode, 'الصوت الجديد جاهز. جارٍ تحديث المقاطع للاستماع…');
+    await loadManifests();
+    generationMessage = 'تم تجهيز المقطع ' + (nextBlock + 1) + ' للمراجعة فقط؛ لم يُنشر.';
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر تجهيز المقطع: ' + (error && error.message || error));
+  } finally {
+    generationBusy = false;
+    button.disabled = false;
+  }
+}
+function renderGenerationControls(banner) {
+  if (!story || story.section !== 'history' || story.slug !== 'ibn-sina' || document.documentElement.lang !== 'ar') return;
+  var panel = document.createElement('div');
+  panel.className = 'kh-audio-review-controls kh-audio-generation-controls';
+  var status = document.createElement('span');
+  status.className = 'kh-audio-review-state';
+  text(status, generationMessage || 'التوليد متاح لمقطع عربي واحد في كل مرة، بعد موافقة صريحة.');
+  var button = makeButton('توليد المقطع العربي التالي', 'generate', function () {
+    generateNextArabicBlock(status, button);
+  });
+  button.disabled = generationBusy;
+  panel.append(button, status);
+  banner.appendChild(panel);
+}
 function render() {
   if (!story) return;
   var banner = document.getElementById('kh-audio-review-gate');
@@ -674,6 +757,7 @@ function render() {
     block.appendChild(panel);
   });
   renderGateBanner(banner);
+  renderGenerationControls(banner);
   banner.hidden = false;
 }
 function injectStyles() {
@@ -684,6 +768,7 @@ function injectStyles() {
     '.kh-audio-review-btn{border:1px solid var(--accent);border-radius:8px;padding:5px 9px;background:transparent;color:inherit;font:700 12px Cairo,Arial,sans-serif;cursor:pointer;min-height:32px}',
     '.kh-audio-review-btn.play{border-color:#4b9a70;color:#4b9a70}.kh-audio-review-btn.replay{border-color:var(--accent);color:var(--text)}',
     '.kh-audio-review-btn.accept{border-color:#4b9a70;color:#4b9a70}.kh-audio-review-btn.reject,.kh-audio-review-btn.reject-save{border-color:#b66b6b;color:#d88b8b}',
+    '.kh-audio-review-btn.generate{border-color:#c17d3a;color:#c17d3a}.kh-audio-generation-controls{margin:8px 0;background:color-mix(in srgb,var(--accent) 8%,var(--panel))}',
     '.kh-audio-review-btn.kh-audio-review-playing{background:var(--accent);color:#14202a}',
     '.kh-audio-review-state{margin-inline-start:auto;font-size:12px;color:var(--muted)}',
     '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started,.kh-audio-ready-state.preparing{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
