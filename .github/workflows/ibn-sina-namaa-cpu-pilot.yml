@@ -45,6 +45,24 @@ jobs:
           git clone https://huggingface.co/spaces/omarelshehy/NAMAA-Egyptian-Voice "$RUNNER_TEMP/namaa-space"
           git -C "$RUNNER_TEMP/namaa-space" checkout 4a71cd1f43edd2f916f2204de88f0392cac21315
 
+      - name: Patch pretrained checkpoint loading for CPU-only runners
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path("$RUNNER_TEMP/namaa-space/src/chatterbox/mtl_tts.py")
+          source = p.read_text(encoding="utf-8")
+          replacements = {
+              'torch.load(ckpt_dir / "ve.pt", weights_only=True)': 'torch.load(ckpt_dir / "ve.pt", map_location=torch.device(device), weights_only=True)',
+              'torch.load(ckpt_dir / "s3gen.pt", weights_only=True)': 'torch.load(ckpt_dir / "s3gen.pt", map_location=torch.device(device), weights_only=True)',
+          }
+          for old, new in replacements.items():
+              if old not in source:
+                  raise SystemExit(f"Expected CPU-incompatible load call not found: {old}")
+              source = source.replace(old, new)
+          p.write_text(source, encoding="utf-8")
+          print("Patched both pretrained torch.load calls to map CUDA tensors onto CPU.")
+          PY
+
       - name: Install NAMAA runtime dependencies
         run: |
           python -m pip install \
