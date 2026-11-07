@@ -205,9 +205,11 @@ Deno.serve(async (req: Request) => {
     const artifactId = Number(body.artifact_id);
     const runId = Number(body.run_id);
     const expectedName = String(body.artifact_name ?? "");
-    const canonicalName = section === "history" && slug === "ibn-sina" && language === "ar"
-      ? "ibn-sina-arabic-audio-staging"
-      : "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
+    const canonicalName = body.request_id
+      ? "khaledoon-single-block-audio-staging"
+      : section === "history" && slug === "ibn-sina" && language === "ar"
+        ? "ibn-sina-arabic-audio-staging"
+        : "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
     if (!Number.isSafeInteger(artifactId) || artifactId < 1 || !Number.isSafeInteger(runId) || runId < 1 ||
         expectedName !== canonicalName) {
       return reply(400, { error: "بيانات الـArtifact لا تطابق اسم الحكاية والقسم واللغة." });
