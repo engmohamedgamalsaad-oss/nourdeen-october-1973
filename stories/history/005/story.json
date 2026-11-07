@@ -20,94 +20,93 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "لو كان ابن سينا طبيبًا بارعًا، فهل كان يكتب عن الطب فقط؟"
+          "text": "يا ترى إزاي عالم عاش من أكتر من ألف سنة قدر يسيب أثر لسه بنتكلم عنه لحد النهارده؟"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "بداية الحكاية",
-          "text": "وأنا أبحث عن العلماء الذين تركوا أثرًا كبيرًا في التاريخ، لفت انتباهي عالم عاش منذ أكثر من ألف عام، واستطاع أن يجمع بين حب المعرفة والطب والفلسفة. إنه ابن سينا، الذي عُرف بلقب «الشيخ الرئيس»."
+          "text": "الحكاية تبدأ مع ابن سينا، واسمه أبو علي الحسين بن عبد الله بن سينا. وُلد نحو عام 980 ميلاديًا في منطقة بخارى، في أوزبكستان حاليًا. وعُرف بعد ذلك بلقب «الشيخ الرئيس»، وصار واحدًا من أشهر علماء عصره.",
+          "heading": "بداية الحكاية"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "لا، ودي من الحاجات المميزة في حكايته. كتب كمان في الفلسفة والمنطق وموضوعات أخرى؛ لأنه كان يرى أن فهم الإنسان والعالم يحتاج إلى أكثر من علم واحد."
+          "text": "من صغره كان شغوفًا بالعلم والقراءة. درس القرآن واللغة وموضوعات مختلفة، ثم اتجه إلى الطب والفلسفة والمنطق. لم يحصر اهتمامه في مجال واحد؛ كان يسعى إلى فهم الإنسان والعالم من زوايا متعددة."
         },
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "وليه كتاب «القانون في الطب» فضل معروفًا لقرون طويلة؟"
+          "text": "يعني هو ما كانش طبيب وبس؟ كان مهتم كمان بأسئلة التفكير والفلسفة؟"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "لأنه جمع معارف طبية من عصور سابقة، ونظّمها وأضاف إليها ابن سينا من دراسته وخبرته. وده بيوضح قيمة الكتاب في تاريخ الطب، من غير ما نعتبره بديلًا عن العلم الطبي الحديث."
+          "text": "بالضبط. كتب ابن سينا في الطب، وكتب أيضًا في الفلسفة والمنطق والطبيعة. وده يوضح اتساع اهتمامه، لكنه لا يعني إنه كان يعرف كل شيء؛ الأهم إننا نحدد الأعمال والأفكار الموثقة المنسوبة إليه."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "وُلد ابن سينا، واسمه أبو علي الحسين بن عبد الله بن سينا، نحو عام 980 ميلاديًا في منطقة بخارى، الواقعة في أوزبكستان حاليًا. اهتم منذ صغره بالتعلم، ودرس القرآن واللغة والفلسفة والعلوم، ثم اتجه إلى الطب حتى أصبح طبيبًا معروفًا في عصره."
+          "text": "من أشهر أعماله كتاب «القانون في الطب». جمع فيه معارف طبية كانت معروفة في عصره، ورتبها في أبواب واضحة، وأضاف إليها ما توصل إليه من دراسة وخبرة. فبقى الكتاب مرجعًا مهمًا لمن أراد دراسة الطب في ذلك الزمن.",
+          "heading": "«القانون في الطب»"
         },
         {
+          "type": "paragraph",
           "speaker": "karma",
-          "type": "paragraph",
-          "text": "يعني ابن سينا كان بيشوف الطب علمًا قائمًا على الملاحظة، مش مجرد وصفات محفوظة؟"
-        },
-        {
-          "speaker": "narrator",
-          "type": "paragraph",
-          "text": "نعم؛ كتب في الطب عن التشخيص والعلاج، وجمع خبرات عصره ونظمها. لكن من المهم ألا ننسب إليه كل فكرة طبية قديمة؛ نقرأ كتبه في سياق زمنها ونقارنها بالمعرفة الحديثة."
+          "text": "طب إيه اللي خلّى الكتاب ده يفضل مهم ومشهور كل السنين دي؟"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "«القانون في الطب»",
-          "text": "لم يكن أثر ابن سينا في الطب وحده؛ فقد ألّف كتبًا في الفلسفة والمنطق وموضوعات أخرى. ومن أشهر مؤلفاته كتاب «القانون في الطب»، الذي نظّم فيه معارف طبية من عصره وأضاف إليها ما توصل إليه من دراسة وخبرة.",
+          "text": "قيمة الكتاب كانت في تنظيم المعلومات الطبية وتقديمها بطريقة تساعد الدارسين على الرجوع إليها. تناول موضوعات زي الأمراض والأعراض والأدوية وأجزاء الجسم وطرق التشخيص والعلاج وفق المعرفة المتاحة وقتها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ومع مرور الوقت، انتقل الكتاب إلى أوروبا بعد ترجمته إلى اللغة اللاتينية في القرن الثاني عشر. واستخدمته مؤسسات تعليمية مرجعًا في دراسة الطب لقرون. وبهذا وصلت أفكار ابن سينا إلى طلاب وعلماء في أماكن بعيدة عن العالم الذي عاش فيه.",
           "image_after": "folio"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "انتقل تأثير الكتاب إلى أوروبا بعد ترجمته إلى اللاتينية في القرن الثاني عشر، وأصبح مرجعًا مهمًا في التعليم الطبي لقرون طويلة. وهكذا تجاوز أثر ابن سينا حدود المكان الذي عاش فيه، ووصلت أفكاره إلى أجيال من الدارسين في مناطق مختلفة من العالم."
+          "speaker": "karma",
+          "text": "يعني كتابه كان مؤثرًا جدًا، لكن هل كل اللي فيه لسه بنستخدمه في الطب دلوقتي؟"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "توفي ابن سينا عام 1037 ميلاديًا، لكن كتبه بقيت شاهدًا على رحلة عقل أحب المعرفة وسعى إلى فهم الإنسان والعالم من حوله."
+          "text": "هنا لازم نفرّق بين القيمة التاريخية والقيمة الطبية الحالية. الكتاب مهم لأنه يوضح كيف كان الناس يفهمون الطب في زمن ابن سينا، لكن مش كل وصفة أو نظرية قديمة تصلح اليوم. الطب الحديث بيتطور بالأبحاث والتجارب والأدلة الجديدة."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "عشان كده بندرس كتب الطب القديمة لفهم تاريخ العلم، مش علشان نستبدل بيها العلاج الحديث أو نصيحة الطبيب. وكل معلومة طبية لازم تتفهم في سياق عصرها، وتتقارن بما توصل إليه العلم حاليًا.",
           "heading": "ماذا نتعلم من حكايته؟",
-          "text": "تذكّرني حكاية ابن سينا بأن حب التعلم لا يقتصر على مادة واحدة؛ فقد يفتح لنا بابًا إلى علوم كثيرة، ويجعل أثرنا ممتدًا إلى أجيال لم نلتقِ بها قط.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "كيف نتخيّل عالمًا عاش قبل ألف سنة؟",
-          "text": "لا توجد صورة فوتوغرافية لابن سينا؛ فقد عاش في القرن العاشر الميلادي، قبل اختراع التصوير بقرون طويلة. لذلك ينبغي التعامل مع الصور المتداولة له باعتبارها رسومًا أو صورًا فنية أُنتجت في عصور لاحقة، لا ملامح مؤكدة لوجهه."
+          "speaker": "karma",
+          "text": "وأنا شايفة إن أجمل حاجة في حكايته إنه ما اكتفاش بعلم واحد، وفضل يتعلم ويسأل."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "عاش ابن سينا في عالم كانت فيه الكتب والنسخ اليدوي ومجالس العلماء وطرق السفر بين المدن وسائل أساسية لانتقال المعرفة. وكانت حياة العالم تعتمد على القراءة والمناقشة والملاحظة، وعلى الوصول إلى الكتب والمعلمين والرعاية التي تتيح له متابعة البحث."
+          "text": "وده درس مهم من سيرة ابن سينا: حب المعرفة ممكن يفتح قدام الإنسان أبوابًا لمجالات كتير. لكن الاجتهاد الحقيقي كمان محتاج دقة؛ ننسب لكل عالم ما ثبت عنه، ونعرف إن المعرفة بتتغير وتتطور مع الزمن."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "ماذا كان يعني أن تكون طبيبًا قبل ألف سنة؟",
-          "text": "جمع كتاب «القانون في الطب» معارف طبية كانت معروفة في عصر ابن سينا، ونظمها في أبواب تساعد على دراستها والرجوع إليها. وتناول الكتاب موضوعات مثل وصف الأمراض، وملاحظة الأعراض، والأدوية، وأجزاء الجسم، وطرق التفكير في التشخيص والعلاج وفق المعرفة المتاحة آنذاك."
+          "text": "ابن سينا عاش في القرن العاشر الميلادي، قبل اختراع التصوير الفوتوغرافي بقرون طويلة. لذلك لا توجد صورة فوتوغرافية مؤكدة له. الصور المتداولة عنه هي رسوم أو تمثيلات فنية ظهرت في عصور لاحقة، وليست تسجيلًا حقيقيًا لملامح وجهه.",
+          "heading": "كيف نتخيّل عالمًا عاش قبل ألف سنة؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "غريبة فكرة إننا نعرف كتبه وأفكاره، لكن ما نقدرش نعرف شكله الحقيقي على وجه اليقين!"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "لكن أهمية الكتاب التاريخية لا تعني أن كل وصفة أو نظرية وردت فيه تصلح للطب الحديث. فالعلم يتغير عندما تظهر أدوات قياس وتجارب وأدلة جديدة؛ لذلك ندرس كتب الطب القديمة لفهم تاريخ المعرفة، ولا نستخدمها بديلًا عن النصيحة الطبية الحديثة المبنية على الأدلة."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "كما أن ابن سينا لم يكن طبيبًا فقط؛ فقد كتب في المنطق والفلسفة والطبيعة، وهو ما يعكس اتساع اهتمام بعض العلماء في عصره بمجالات متعددة. ومع ذلك، من الأفضل أن ننسب إليه الأعمال والأفكار الموثقة بدل إطلاق أوصاف مطلقة لا يمكن اختبارها."
+          "text": "توفي ابن سينا عام 1037 ميلاديًا، لكن مؤلفاته استمرت في الانتقال بين الأجيال والبلدان. وتبقى حكايته تذكيرًا بأن أثر الإنسان قد يعيش طويلًا من خلال العلم والكتابة، وأن السؤال والبحث والتعلم يمكن أن يتركوا أثرًا يتجاوز زمن صاحبه."
         }
       ],
       "figure_name": "ابن سينا"
@@ -124,94 +123,93 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "If Ibn Sina was a skilled physician, did he write only about medicine?"
+          "text": "How could a scholar who lived more than a thousand years ago leave an influence that people still discuss today?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "The beginning",
-          "text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”"
+          "text": "The story begins with Ibn Sina, whose full name was Abu Ali al-Husayn ibn Abd Allah ibn Sina. He was born around 980 CE in the region of Bukhara, in present-day Uzbekistan. Later known by the title al-Shaykh al-Ra’is, he became one of the best-known scholars of his age.",
+          "heading": "The beginning"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "No, and that is one of the remarkable things about his story. He also wrote about philosophy, logic, and other subjects. He believed that understanding people and the world required more than one field of knowledge."
+          "text": "From an early age, he was devoted to learning and reading. He studied the Quran, language, and several fields of knowledge before turning to medicine, philosophy, and logic. He did not limit his curiosity to one subject; he sought to understand people and the world from many perspectives."
         },
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Why did The Canon of Medicine remain well known for so many centuries?"
+          "text": "So he was not only a physician. He was also interested in big questions about thought and philosophy?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "It gathered medical knowledge from earlier periods, organized it, and included what Ibn Sina added through his study and experience. This explains its place in medical history, without treating it as a substitute for modern medicine."
+          "text": "Exactly. Ibn Sina wrote about medicine, but also about philosophy, logic, and the natural world. This shows the range of his interests, not that he knew everything. It is important to distinguish documented works and ideas from claims that cannot be verified."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina, whose full name was Abu Ali al-Husayn ibn Abd Allah ibn Sina, was born around 980 CE in the region of Bukhara, in present-day Uzbekistan. He pursued learning from an early age and later became a well-known physician of his time."
+          "text": "One of his best-known works was The Canon of Medicine. It gathered medical knowledge available in his time, arranged it into an organized work, and included insights from his own study and experience. It became an important reference for people studying medicine in that era.",
+          "heading": "The Canon of Medicine"
         },
         {
+          "type": "paragraph",
           "speaker": "karma",
-          "type": "paragraph",
-          "text": "So Ibn Sina saw medicine as a science based on observation, not simply a collection of memorized remedies?"
-        },
-        {
-          "speaker": "narrator",
-          "type": "paragraph",
-          "text": "Yes. He wrote about diagnosis and treatment and organized the medical knowledge of his era. We should not attribute every old medical idea to him; we read his work in its historical context and compare it with modern knowledge."
+          "text": "What made this book so important that people kept studying it for so long?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "The Canon of Medicine",
-          "text": "Ibn Sina’s legacy extended beyond medicine. He wrote about philosophy, logic, and other subjects. One of his best-known works, The Canon of Medicine, organized medical knowledge of his era and included insights drawn from his study and experience.",
+          "text": "Its value lay in the way it organized medical information and made it easier for students to consult. It covered illnesses, symptoms, medicines, parts of the body, and approaches to diagnosis and treatment based on the knowledge available at the time."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Over time, the book reached Europe after being translated into Latin in the twelfth century. It was used as a reference in medical education for centuries. In this way, Ibn Sina’s ideas reached students and scholars far beyond the world in which he had lived.",
           "image_after": "folio"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "The book’s influence reached Europe after it was translated into Latin in the twelfth century. It became an important part of medical education for centuries. Ibn Sina’s ideas reached generations of students in different parts of the world."
+          "speaker": "karma",
+          "text": "So the book had a huge influence. But do doctors still use everything in it today?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina died in 1037 CE, but his books remain evidence of a mind devoted to learning and understanding people and the world."
+          "text": "This is where we must separate historical importance from present-day medical value. The book helps us understand how medicine was studied in Ibn Sina’s time, but not every old remedy or theory is suitable today. Modern medicine develops through research, experiments, and new evidence."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "That is why we study old medical books to understand the history of science, not to replace modern treatment or a doctor's advice. Medical ideas must be understood in the context of their time and compared with what research has established today.",
           "heading": "What can we learn from his story?",
-          "text": "His story reminds me that learning need not stay within one subject. Curiosity can open doors to many fields and allow our work to reach people we will never meet.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "How can we picture a scholar who lived a thousand years ago?",
-          "text": "No photograph of Ibn Sina exists: he lived in the tenth century, many centuries before photography was invented. Images of him should therefore be understood as drawings or artistic representations made later, not as confirmed likenesses of his face."
+          "speaker": "karma",
+          "text": "I think the best part of his story is that he did not stop at one subject. He kept learning and asking questions."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina lived in a world where books, handwritten copying, scholarly gatherings, and travel between cities were essential ways of sharing knowledge. A scholar’s work depended on reading, discussion, observation, and access to books, teachers, and support for continued study."
+          "text": "That is an important lesson from Ibn Sina’s life: curiosity can open doors to many fields. Real scholarship also requires care and accuracy. We should credit each scholar for what is supported by evidence, while remembering that knowledge changes and develops over time."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "What did it mean to be a physician a thousand years ago?",
-          "text": "The Canon of Medicine organized medical knowledge known in Ibn Sina’s time into sections that could be studied and consulted. It covered topics such as describing illnesses, observing symptoms, medicines, parts of the body, and approaches to diagnosis and treatment based on the knowledge then available."
+          "text": "Ibn Sina lived in the tenth century, many centuries before photography was invented. There is no confirmed photograph of him. Images shared today are later drawings or artistic representations, not reliable records of his actual appearance.",
+          "heading": "How can we picture a scholar who lived a thousand years ago?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "It is interesting that we can know his books and ideas, but cannot be certain what he really looked like!"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "The book’s historical importance does not mean that every remedy or theory in it is suitable for modern medicine. Science changes as new measurement tools, experiments, and evidence emerge. We study old medical books to understand the history of knowledge, not as substitutes for evidence-based medical advice today."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina was not only a physician: he also wrote about logic, philosophy, and the natural world, reflecting the wide-ranging interests of some scholars of his era. Still, it is best to credit him with documented works and ideas rather than make absolute claims that cannot be verified."
+          "text": "Ibn Sina died in 1037 CE, but his writings continued to travel across generations and countries. His story reminds us that a person's influence can live on through learning and writing, and that questions, research, and curiosity can leave a mark beyond one's own lifetime."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -228,94 +226,93 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?"
+          "text": "Comment un savant qui a vécu il y a plus de mille ans a-t-il pu laisser une influence dont on parle encore aujourd’hui ?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Le début du récit",
-          "text": "En découvrant les savants qui ont marqué l’histoire, j’ai rencontré un penseur qui vivait il y a plus de mille ans et réunissait l’amour du savoir, de la médecine et de la philosophie. C’était Ibn Sina, connu sous le titre d’« al-Shaykh al-Ra’is »."
+          "text": "L’histoire commence avec Ibn Sina, de son nom complet Abu Ali al-Husayn ibn Abd Allah ibn Sina. Il serait né vers 980 dans la région de Boukhara, dans l’actuel Ouzbékistan. Connu plus tard sous le titre d’al-Shaykh al-Ra’is, il devint l’un des savants les plus réputés de son époque.",
+          "heading": "Le début du récit"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Non, et c’est l’un des aspects remarquables de son parcours. Il a également écrit sur la philosophie, la logique et d’autres sujets. Il pensait que comprendre l’être humain et le monde demandait plusieurs domaines de connaissance."
+          "text": "Dès son jeune âge, il se consacra à l’étude et à la lecture. Il étudia le Coran, la langue et plusieurs domaines du savoir, avant de s’intéresser à la médecine, à la philosophie et à la logique. Sa curiosité ne se limitait pas à une seule matière : il cherchait à comprendre l’être humain et le monde sous différents angles."
         },
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Pourquoi Le Canon de la médecine est-il resté célèbre pendant tant de siècles ?"
+          "text": "Il n’était donc pas seulement médecin. Il s’intéressait aussi aux grandes questions de la pensée et de la philosophie ?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Il rassemblait des connaissances médicales antérieures, les organisait et y ajoutait les apports d’Ibn Sina issus de ses études et de son expérience. Cela explique sa place dans l’histoire de la médecine, sans le considérer comme un substitut à la médecine moderne."
+          "text": "Exactement. Ibn Sina écrivit sur la médecine, mais aussi sur la philosophie, la logique et la nature. Cela montre la diversité de ses intérêts, sans signifier qu’il savait tout. Il faut distinguer les œuvres et les idées attestées des affirmations impossibles à vérifier."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina, de son nom complet Abu Ali al-Husayn ibn Abd Allah ibn Sina, serait né vers 980 dans la région de Boukhara, aujourd’hui en Ouzbékistan. Il s’intéressa tôt au savoir, puis devint un médecin reconnu à son époque."
+          "text": "L’un de ses ouvrages les plus connus est le Canon de la médecine. Il rassemblait les connaissances médicales disponibles à son époque, les organisait et y intégrait les apports de ses études et de son expérience. Il devint une référence importante pour l’étude de la médecine à cette époque.",
+          "heading": "Le Canon de la médecine"
         },
         {
+          "type": "paragraph",
           "speaker": "karma",
-          "type": "paragraph",
-          "text": "Ibn Sina considérait-il donc la médecine comme une science fondée sur l’observation, et non comme un simple ensemble de remèdes à mémoriser ?"
-        },
-        {
-          "speaker": "narrator",
-          "type": "paragraph",
-          "text": "Oui. Il a écrit sur le diagnostic et le traitement, et organisé les connaissances médicales de son époque. Il ne faut pas lui attribuer toutes les anciennes idées médicales : nous lisons ses travaux dans leur contexte historique et les comparons aux connaissances actuelles."
+          "text": "Qu’est-ce qui a rendu ce livre si important pour qu’on l’étudie pendant si longtemps ?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Le Canon de la médecine",
-          "text": "L’héritage d’Ibn Sina ne se limitait pas à la médecine. Il écrivit aussi sur la philosophie, la logique et d’autres sujets. Le Canon de la médecine organisait les connaissances médicales de son époque et y ajoutait les conclusions de ses études et de son expérience.",
+          "text": "Sa valeur tenait à la manière dont il organisait les informations médicales et facilitait leur consultation par les étudiants. Il abordait les maladies, les symptômes, les médicaments, le corps humain ainsi que les méthodes de diagnostic et de traitement connues à l’époque."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Au fil du temps, le livre arriva en Europe après sa traduction en latin au XIIe siècle. Il servit de référence dans l’enseignement médical pendant plusieurs siècles. Les idées d’Ibn Sina atteignirent ainsi des étudiants et des savants bien au-delà du monde où il avait vécu.",
           "image_after": "folio"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "L’influence du livre atteignit l’Europe après sa traduction en latin au XIIe siècle. Il devint une référence importante dans l’enseignement médical pendant plusieurs siècles."
+          "speaker": "karma",
+          "text": "Son livre a donc eu une grande influence. Mais les médecins utilisent-ils encore tout ce qu’il contient aujourd’hui ?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina mourut en 1037, mais ses livres témoignent encore d’un esprit consacré au savoir et à la compréhension du monde."
+          "text": "Il faut ici distinguer l’importance historique de la valeur médicale actuelle. Le livre nous aide à comprendre la médecine à l’époque d’Ibn Sina, mais tous les anciens remèdes ou toutes les théories ne conviennent pas aujourd’hui. La médecine moderne progresse grâce à la recherche, aux expériences et aux nouvelles preuves."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "Nous étudions donc les anciens ouvrages médicaux pour comprendre l’histoire des sciences, et non pour remplacer les traitements modernes ou les conseils d’un médecin. Les idées médicales doivent être replacées dans leur époque et comparées aux connaissances établies aujourd’hui.",
           "heading": "Que retenir de son histoire ?",
-          "text": "Son histoire me rappelle que l’apprentissage ne se limite pas à une matière. La curiosité peut ouvrir la porte à de nombreux domaines et transmettre nos idées à des personnes que nous ne rencontrerons jamais.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Comment imaginer un savant qui a vécu il y a mille ans ?",
-          "text": "Il n’existe aucune photographie d’Ibn Sina : il a vécu au Xe siècle, plusieurs siècles avant l’invention de la photographie. Les images diffusées aujourd’hui doivent donc être considérées comme des dessins ou des représentations artistiques réalisées plus tard, et non comme des portraits fidèles et confirmés de son visage."
+          "speaker": "karma",
+          "text": "Ce que je trouve le plus intéressant, c’est qu’il ne s’est pas limité à une seule matière. Il a continué à apprendre et à poser des questions."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina vivait dans un monde où les livres, la copie manuscrite, les réunions de savants et les voyages entre les villes étaient essentiels à la circulation du savoir. Le travail d’un savant dépendait de la lecture, des échanges, de l’observation et de l’accès aux livres, aux enseignants et au soutien nécessaire à la recherche."
+          "text": "C’est une leçon importante de la vie d’Ibn Sina : la curiosité peut ouvrir la voie à de nombreux domaines. Le véritable travail savant exige aussi de la rigueur. Il faut attribuer à chaque savant ce que les sources permettent d’établir, tout en se rappelant que les connaissances évoluent."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Que signifiait être médecin il y a mille ans ?",
-          "text": "Le Canon de la médecine organisait les connaissances médicales de l’époque d’Ibn Sina en chapitres que l’on pouvait étudier et consulter. Il abordait notamment la description des maladies, l’observation des symptômes, les médicaments, le corps humain et les méthodes de diagnostic et de traitement fondées sur les connaissances alors disponibles."
+          "text": "Ibn Sina a vécu au Xe siècle, plusieurs siècles avant l’invention de la photographie. Il n’existe aucune photographie authentifiée de lui. Les images diffusées aujourd’hui sont des dessins ou des représentations artistiques plus tardives, et non des témoignages certains de son apparence.",
+          "heading": "Comment imaginer un savant qui a vécu il y a mille ans ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "C’est étonnant : nous pouvons connaître ses livres et ses idées, sans savoir avec certitude à quoi il ressemblait !"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "L’importance historique de cet ouvrage ne signifie pas que chaque remède ou théorie qu’il contient convient à la médecine moderne. La science évolue grâce aux nouveaux instruments de mesure, aux expériences et aux preuves. Nous étudions les anciens livres médicaux pour comprendre l’histoire du savoir, et non pour remplacer les conseils médicaux actuels fondés sur des preuves."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina n’était pas seulement médecin : il a aussi écrit sur la logique, la philosophie et la nature, ce qui illustre la diversité des intérêts de certains savants de son époque. Il vaut toutefois mieux lui attribuer des œuvres et des idées documentées que formuler des affirmations absolues impossibles à vérifier."
+          "text": "Ibn Sina mourut en 1037, mais ses écrits continuèrent à circuler entre les générations et les pays. Son histoire rappelle que l’influence d’une personne peut perdurer grâce au savoir et à l’écriture, et que la recherche et la curiosité peuvent laisser une trace bien après sa vie."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -332,94 +329,93 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?"
+          "text": "Come ha fatto uno studioso vissuto più di mille anni fa a lasciare un’influenza di cui si parla ancora oggi?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "L’inizio della storia",
-          "text": "Mentre cercavo studiosi che hanno lasciato un segno duraturo nella storia, ho scoperto un pensatore vissuto più di mille anni fa, capace di unire l’amore per il sapere, la medicina e la filosofia. Era Ibn Sina, conosciuto con il titolo di «al-Shaykh al-Ra’is»."
+          "text": "La storia comincia con Ibn Sina, il cui nome completo era Abu Ali al-Husayn ibn Abd Allah ibn Sina. Nacque intorno al 980 d.C. nella regione di Bukhara, nell’attuale Uzbekistan. In seguito fu conosciuto con il titolo di al-Shaykh al-Ra’is e diventò uno degli studiosi più noti del suo tempo.",
+          "heading": "L’inizio della storia"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "No, ed è uno degli aspetti più interessanti della sua storia. Scrisse anche di filosofia, logica e altri argomenti. Riteneva che per comprendere le persone e il mondo servisse conoscere più discipline."
+          "text": "Fin da giovane si dedicò allo studio e alla lettura. Studiò il Corano, la lingua e diversi campi del sapere, per poi interessarsi alla medicina, alla filosofia e alla logica. La sua curiosità non si fermava a una sola materia: cercava di comprendere le persone e il mondo da più punti di vista."
         },
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Perché il Canone della medicina rimase famoso per tanti secoli?"
+          "text": "Quindi non era soltanto un medico. Si interessava anche alle grandi domande del pensiero e della filosofia?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Raccolse conoscenze mediche precedenti, le organizzò e vi aggiunse ciò che Ibn Sina aveva elaborato attraverso lo studio e l’esperienza. Questo spiega il suo posto nella storia della medicina, senza considerarlo un sostituto della medicina moderna."
+          "text": "Esatto. Ibn Sina scrisse di medicina, ma anche di filosofia, logica e natura. Questo mostra l’ampiezza dei suoi interessi, non che sapesse tutto. È importante distinguere le opere e le idee documentate dalle affermazioni che non si possono verificare."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina, il cui nome completo era Abu Ali al-Husayn ibn Abd Allah ibn Sina, nacque intorno al 980 d.C. nella regione di Bukhara, nell’attuale Uzbekistan. Si dedicò presto allo studio e in seguito divenne un medico noto ai suoi tempi."
+          "text": "Una delle sue opere più famose è il Canone della medicina. Raccolse le conoscenze mediche disponibili ai suoi tempi, le organizzò e vi incluse ciò che aveva maturato attraverso lo studio e l’esperienza. Divenne un importante riferimento per chi studiava medicina in quell’epoca.",
+          "heading": "Il Canone della medicina"
         },
         {
+          "type": "paragraph",
           "speaker": "karma",
-          "type": "paragraph",
-          "text": "Quindi Ibn Sina considerava la medicina una scienza basata sull’osservazione, non soltanto un insieme di rimedi da memorizzare?"
-        },
-        {
-          "speaker": "narrator",
-          "type": "paragraph",
-          "text": "Sì. Scrisse di diagnosi e cura e organizzò le conoscenze mediche del suo tempo. Non dobbiamo attribuirgli ogni antica idea medica: leggiamo le sue opere nel loro contesto storico e le confrontiamo con le conoscenze moderne."
+          "text": "Che cosa rese questo libro così importante da essere studiato per così tanti secoli?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Il Canone della medicina",
-          "text": "L’eredità di Ibn Sina non riguardava soltanto la medicina: scrisse anche di filosofia, logica e altri argomenti. Il Canone della medicina organizzava le conoscenze mediche del suo tempo e includeva idee maturate attraverso lo studio e l’esperienza.",
+          "text": "Il suo valore stava nel modo in cui organizzava le informazioni mediche e le rendeva più facili da consultare per gli studenti. Trattava malattie, sintomi, medicinali, parti del corpo e metodi di diagnosi e cura secondo le conoscenze disponibili allora."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Con il tempo, il libro arrivò in Europa dopo essere stato tradotto in latino nel XII secolo. Per molti secoli fu un riferimento nell’insegnamento della medicina. In questo modo, le idee di Ibn Sina raggiunsero studenti e studiosi molto lontani dal mondo in cui era vissuto.",
           "image_after": "folio"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "L’influenza del libro raggiunse l’Europa dopo la traduzione in latino nel XII secolo. Divenne un importante riferimento per l’insegnamento medico per molti secoli."
+          "speaker": "karma",
+          "text": "Il libro ebbe quindi una grande influenza. Ma oggi i medici usano ancora tutto quello che contiene?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina morì nel 1037, ma i suoi libri restano la testimonianza di una mente dedita al sapere e alla comprensione del mondo."
+          "text": "Qui dobbiamo distinguere l’importanza storica dal valore medico attuale. Il libro ci aiuta a capire come veniva studiata la medicina ai tempi di Ibn Sina, ma non tutti i rimedi o le teorie antiche sono adatti oggi. La medicina moderna progredisce grazie alla ricerca, agli esperimenti e a nuove prove scientifiche."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "Per questo studiamo gli antichi testi medici per comprendere la storia della scienza, non per sostituire le cure moderne o il parere di un medico. Le idee mediche vanno comprese nel contesto della loro epoca e confrontate con ciò che la ricerca ha stabilito oggi.",
           "heading": "Che cosa possiamo imparare?",
-          "text": "La sua storia mi ricorda che l’apprendimento non deve fermarsi a una sola materia. La curiosità può aprire le porte a molti campi e far arrivare le nostre idee a persone che non incontreremo mai.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Come possiamo immaginare uno studioso vissuto mille anni fa?",
-          "text": "Non esistono fotografie di Ibn Sina: visse nel X secolo, molti secoli prima dell’invenzione della fotografia. Le immagini che circolano oggi vanno quindi considerate disegni o rappresentazioni artistiche realizzate in epoche successive, non raffigurazioni certe del suo volto."
+          "speaker": "karma",
+          "text": "La cosa che mi colpisce di più è che non si è fermato a una sola materia. Ha continuato a imparare e a fare domande."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina visse in un mondo in cui libri, copie manoscritte, incontri tra studiosi e viaggi fra città erano strumenti essenziali per trasmettere il sapere. Il lavoro di uno studioso dipendeva dalla lettura, dal confronto, dall’osservazione e dall’accesso a libri, insegnanti e sostegno per continuare la ricerca."
+          "text": "È una lezione importante della vita di Ibn Sina: la curiosità può aprire la strada a molti campi. Il vero studio richiede anche precisione. Dobbiamo attribuire a ogni studioso ciò che è documentato, ricordando che le conoscenze cambiano e si sviluppano nel tempo."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Che cosa significava essere medico mille anni fa?",
-          "text": "Il Canone della medicina organizzava le conoscenze mediche note ai tempi di Ibn Sina in sezioni da studiare e consultare. Trattava temi come la descrizione delle malattie, l’osservazione dei sintomi, i medicinali, le parti del corpo e i metodi di diagnosi e cura secondo le conoscenze allora disponibili."
+          "text": "Ibn Sina visse nel X secolo, molti secoli prima dell’invenzione della fotografia. Non esiste una sua fotografia autentica e confermata. Le immagini diffuse oggi sono disegni o rappresentazioni artistiche realizzate in epoche successive, non testimonianze certe del suo aspetto.",
+          "heading": "Come possiamo immaginare uno studioso vissuto mille anni fa?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "È curioso: possiamo conoscere i suoi libri e le sue idee, ma non sapere con certezza che aspetto avesse!"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "L’importanza storica del libro non significa che ogni rimedio o teoria contenuti sia adatto alla medicina moderna. La scienza cambia grazie a nuovi strumenti di misurazione, esperimenti e prove. Studiamo gli antichi testi medici per capire la storia del sapere, non per sostituire i consigli medici moderni basati su prove scientifiche."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina non fu soltanto un medico: scrisse anche di logica, filosofia e natura, mostrando l’ampiezza degli interessi di alcuni studiosi del suo tempo. È comunque preferibile attribuirgli opere e idee documentate, evitando affermazioni assolute che non possono essere verificate."
+          "text": "Ibn Sina morì nel 1037, ma i suoi scritti continuarono a viaggiare tra generazioni e paesi. La sua storia ci ricorda che l’influenza di una persona può durare grazie allo studio e alla scrittura, e che la ricerca e la curiosità possono lasciare un segno oltre la vita di chi le coltiva."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -436,94 +432,93 @@
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?"
+          "text": "Wie konnte ein Gelehrter, der vor mehr als tausend Jahren lebte, einen Einfluss hinterlassen, über den wir noch heute sprechen?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Der Anfang",
-          "text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“."
+          "text": "Die Geschichte beginnt mit Ibn Sina, dessen vollständiger Name Abu Ali al-Husain ibn Abd Allah ibn Sina lautete. Er wurde um 980 n. Chr. in der Region Buchara im heutigen Usbekistan geboren. Später war er unter dem Titel al-Scheich al-Ra’is bekannt und wurde zu einem der angesehensten Gelehrten seiner Zeit.",
+          "heading": "Der Anfang"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Nein, und das ist eine Besonderheit seiner Geschichte. Er schrieb auch über Philosophie, Logik und andere Themen. Er war überzeugt, dass man Menschen und die Welt nur mit Wissen aus mehreren Fachgebieten verstehen kann."
+          "text": "Schon früh widmete er sich dem Lernen und Lesen. Er studierte den Koran, Sprache und verschiedene Wissensgebiete, bevor er sich der Medizin, Philosophie und Logik zuwandte. Seine Neugier beschränkte sich nicht auf ein einziges Fach: Er wollte Menschen und Welt aus unterschiedlichen Blickwinkeln verstehen."
         },
         {
           "type": "paragraph",
           "speaker": "karma",
-          "text": "Warum blieb der Kanon der Medizin über viele Jahrhunderte bekannt?"
+          "text": "Er war also nicht nur Arzt. Er beschäftigte sich auch mit grundlegenden Fragen des Denkens und der Philosophie?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Er sammelte medizinisches Wissen früherer Zeiten, ordnete es und ergänzte es um Erkenntnisse aus Ibn Sinas Studium und Erfahrung. Das erklärt seine Bedeutung in der Medizingeschichte, ohne ihn als Ersatz für die moderne Medizin zu betrachten."
+          "text": "Genau. Ibn Sina schrieb über Medizin, aber auch über Philosophie, Logik und die Natur. Das zeigt die Vielfalt seiner Interessen, bedeutet jedoch nicht, dass er alles wusste. Wir sollten belegte Werke und Gedanken von Behauptungen unterscheiden, die sich nicht überprüfen lassen."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina, mit vollem Namen Abu Ali al-Husain ibn Abd Allah ibn Sina, wurde um 980 n. Chr. in der Region Buchara im heutigen Usbekistan geboren. Er widmete sich schon früh dem Lernen und wurde später zu einem bekannten Arzt seiner Zeit."
+          "text": "Eines seiner bekanntesten Werke war der Kanon der Medizin. Darin sammelte er das medizinische Wissen seiner Zeit, ordnete es und ergänzte es um Erkenntnisse aus seinem Studium und seiner Erfahrung. Das Werk wurde zu einer wichtigen Grundlage für Menschen, die damals Medizin studierten.",
+          "heading": "Der Kanon der Medizin"
         },
         {
+          "type": "paragraph",
           "speaker": "karma",
-          "type": "paragraph",
-          "text": "Betrachtete Ibn Sina die Medizin also als eine auf Beobachtung beruhende Wissenschaft und nicht nur als eine Sammlung auswendig gelernter Heilmittel?"
-        },
-        {
-          "speaker": "narrator",
-          "type": "paragraph",
-          "text": "Ja. Er schrieb über Diagnose und Behandlung und ordnete das medizinische Wissen seiner Zeit. Wir sollten ihm nicht jede alte medizinische Idee zuschreiben, sondern seine Werke im historischen Zusammenhang lesen und mit heutigem Wissen vergleichen."
+          "text": "Was machte dieses Buch so bedeutend, dass es über so viele Jahrhunderte studiert wurde?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Der Kanon der Medizin",
-          "text": "Ibn Sinas Vermächtnis reichte über die Medizin hinaus. Er schrieb über Philosophie, Logik und andere Themen. Eines seiner bekanntesten Werke, der Kanon der Medizin, ordnete das medizinische Wissen seiner Zeit und enthielt Erkenntnisse aus seinem Studium und seiner Erfahrung.",
+          "text": "Seine Bedeutung lag darin, medizinische Informationen zu ordnen und für Lernende leichter zugänglich zu machen. Das Werk behandelte Krankheiten, Symptome, Arzneimittel, den menschlichen Körper sowie Diagnose- und Behandlungsmethoden auf Grundlage des damaligen Wissens."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Im Laufe der Zeit gelangte das Buch nach Europa, nachdem es im zwölften Jahrhundert ins Lateinische übersetzt worden war. Über viele Jahrhunderte diente es als wichtige Referenz in der medizinischen Ausbildung. So erreichten Ibn Sinas Gedanken Studierende und Gelehrte weit über die Welt hinaus, in der er gelebt hatte.",
           "image_after": "folio"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Der Einfluss des Buches erreichte Europa, nachdem es im zwölften Jahrhundert ins Lateinische übersetzt worden war. Es wurde über Jahrhunderte zu einem wichtigen Bestandteil der medizinischen Ausbildung. Ibn Sinas Ideen erreichten Generationen von Studierenden in verschiedenen Teilen der Welt."
+          "speaker": "karma",
+          "text": "Das Buch hatte also großen Einfluss. Aber verwenden Ärztinnen und Ärzte heute noch alles daraus?"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina starb im Jahr 1037 n. Chr., doch seine Bücher bleiben ein Zeugnis eines Geistes, der sich dem Lernen und dem Verständnis der Menschen und der Welt widmete."
+          "text": "Hier müssen wir zwischen historischer Bedeutung und heutiger medizinischer Gültigkeit unterscheiden. Das Buch hilft uns zu verstehen, wie Medizin zu Ibn Sinas Zeit betrachtet wurde. Aber nicht jedes alte Heilmittel und nicht jede Theorie ist heute noch geeignet. Die moderne Medizin entwickelt sich durch Forschung, Experimente und neue Belege weiter."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
+          "text": "Deshalb lesen wir alte medizinische Werke, um die Geschichte der Wissenschaft zu verstehen, nicht um moderne Behandlungen oder ärztlichen Rat zu ersetzen. Medizinische Vorstellungen müssen im Zusammenhang ihrer Zeit betrachtet und mit dem heutigen Forschungsstand verglichen werden.",
           "heading": "Was können wir aus seiner Geschichte lernen?",
-          "text": "Seine Geschichte erinnert mich daran, dass Lernen nicht auf ein einziges Fach beschränkt bleiben muss. Neugier kann Türen zu vielen Gebieten öffnen und dafür sorgen, dass unsere Arbeit Menschen erreicht, denen wir nie begegnen werden.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Wie können wir uns einen Gelehrten vorstellen, der vor tausend Jahren lebte?",
-          "text": "Es gibt keine Fotografie von Ibn Sina: Er lebte im 10. Jahrhundert, viele Jahrhunderte vor der Erfindung der Fotografie. Die heute verbreiteten Bilder sind daher als spätere Zeichnungen oder künstlerische Darstellungen zu verstehen, nicht als gesicherte Abbildungen seines Gesichts."
+          "speaker": "karma",
+          "text": "Am interessantesten finde ich, dass er sich nicht auf ein einziges Fach beschränkt hat. Er hat immer weiter gelernt und Fragen gestellt."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina lebte in einer Welt, in der Bücher, handschriftliche Abschriften, Gelehrtenkreise und Reisen zwischen Städten wichtige Wege zur Weitergabe von Wissen waren. Die Arbeit eines Gelehrten beruhte auf Lesen, Austausch, Beobachtung und dem Zugang zu Büchern, Lehrern und Unterstützung für weitere Forschung."
+          "text": "Das ist eine wichtige Lehre aus Ibn Sinas Leben: Neugier kann Türen zu vielen Wissensgebieten öffnen. Wissenschaftliches Arbeiten braucht aber auch Genauigkeit. Wir sollten Gelehrten nur das zuschreiben, was belegt ist, und daran denken, dass Wissen sich im Laufe der Zeit verändert und weiterentwickelt."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Was bedeutete es, vor tausend Jahren Arzt zu sein?",
-          "text": "Der Kanon der Medizin ordnete das medizinische Wissen aus Ibn Sinas Zeit in Abschnitte, die studiert und nachgeschlagen werden konnten. Das Werk behandelte unter anderem die Beschreibung von Krankheiten, die Beobachtung von Symptomen, Arzneimittel, Körperteile sowie Diagnose- und Behandlungsansätze auf Grundlage des damaligen Wissens."
+          "text": "Ibn Sina lebte im zehnten Jahrhundert, viele Jahrhunderte vor der Erfindung der Fotografie. Ein bestätigtes Foto von ihm gibt es nicht. Die heute verbreiteten Bilder sind spätere Zeichnungen oder künstlerische Darstellungen und keine gesicherten Aufnahmen seines tatsächlichen Aussehens.",
+          "heading": "Wie können wir uns einen Gelehrten vorstellen, der vor tausend Jahren lebte?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Das ist erstaunlich: Wir können seine Bücher und Gedanken kennenlernen, aber nicht sicher wissen, wie er wirklich aussah!"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Die historische Bedeutung des Buches bedeutet nicht, dass jedes darin beschriebene Heilmittel oder jede Theorie für die moderne Medizin geeignet ist. Wissenschaft verändert sich durch neue Messinstrumente, Experimente und Belege. Wir lesen alte medizinische Bücher, um die Geschichte des Wissens zu verstehen, nicht als Ersatz für heutige evidenzbasierte medizinische Beratung."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina war nicht nur Arzt: Er schrieb auch über Logik, Philosophie und Natur und zeigte damit die breite Interessenvielfalt mancher Gelehrter seiner Zeit. Dennoch sollten wir ihm dokumentierte Werke und Ideen zuschreiben, statt absolute Behauptungen aufzustellen, die sich nicht überprüfen lassen."
+          "text": "Ibn Sina starb im Jahr 1037, doch seine Schriften wurden über Generationen und Länder hinweg weitergegeben. Seine Geschichte erinnert uns daran, dass der Einfluss eines Menschen durch Wissen und Schreiben lange weiterleben kann und dass Forschung und Neugier Spuren hinterlassen, die über das eigene Leben hinausreichen."
         }
       ],
       "figure_name": "Ibn Sina"
