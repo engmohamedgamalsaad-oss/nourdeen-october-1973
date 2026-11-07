@@ -131,7 +131,9 @@ async function saveReview(entry, decision) {
     var decisionWithAnalysis = Object.assign({}, decision);
     var attachedPronunciationReview = pronunciationReviewFor(entry);
     if (attachedPronunciationReview) decisionWithAnalysis.pronunciation_review = attachedPronunciationReview;
-    var next = core.applyDecision(core.cloneReview(review), entry, decisionWithAnalysis);
+    var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+    var currentReview = core.cloneReview(currentResult.audio_review || null);
+    var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     var saved = await audioAssetsRequest({
