@@ -4,7 +4,7 @@
   "section": "history",
   "language": "ar",
   "approved_audio_only_rewrites": [
-    "1",
+    "0",
     "2",
     "3",
     "4",
@@ -22,7 +22,7 @@
     "16"
   ],
   "blocks": {
-    "1": "يعني ابن سينا كان طبيب شاطر، هو كان بيكتب عن الطب وبس؟",
+    "0": "يعني ابن سينا كان طبيب شاطر، هو كان بيكتب عن الطب وبس؟",
     "2": "لأ، ودي من الحاجات المميزة في حكايته. هو كمان كتب في الفلسفة والمنطق وموضوعات تانية؛ لأنه كان شايف إن فهم الإنسان والعالم محتاج أكتر من علم واحد.",
     "3": "طب ليه كتاب القانون في الطب فضل معروف كل السنين دي؟",
     "4": "لأنه جمع معارف طبية من عصور قبله، ونظّمها، وأضاف لها من دراسته وخبرته. وده يوضح أهمية الكتاب في تاريخ الطب، لكن طبعًا مش معناه إنه بديل عن الطب الحديث.",
@@ -41,7 +41,7 @@
   },
   "approved_audio_text_rewrites": {
     "ar": {
-      "1": "يعني ابن سينا كان طبيب شاطر، هو كان بيكتب عن الطب وبس؟",
+      "0": "يعني ابن سينا كان طبيب شاطر، هو كان بيكتب عن الطب وبس؟",
       "2": "لأ، ودي من الحاجات المميزة في حكايته. هو كمان كتب في الفلسفة والمنطق وموضوعات تانية؛ لأنه كان شايف إن فهم الإنسان والعالم محتاج أكتر من علم واحد.",
       "3": "طب ليه كتاب القانون في الطب فضل معروف كل السنين دي؟",
       "4": "لأنه جمع معارف طبية من عصور قبله، ونظّمها، وأضاف لها من دراسته وخبرته. وده يوضح أهمية الكتاب في تاريخ الطب، لكن طبعًا مش معناه إنه بديل عن الطب الحديث.",
@@ -78,18 +78,18 @@
       {
         "lang": "ar",
         "block_index": 0,
-        "speaker": "narrator",
-        "source_text": "وأنا أبحث عن العلماء الذين تركوا أثرًا كبيرًا في التاريخ، لفت انتباهي عالم عاش منذ أكثر من ألف عام، واستطاع أن يجمع بين حب المعرفة والطب والفلسفة. إنه ابن سينا، الذي عُرف بلقب «الشيخ الرئيس».",
-        "approved_audio_text": "وأنا أبحث عن العلماء الذين تركوا أثرًا كبيرًا في التاريخ، لفت انتباهي عالم عاش منذ أكثر من ألف عام، واستطاع أن يجمع بين حب المعرفة والطب والفلسفة. إنه ابن سينا، الذي عُرف بلقب «الشيخ الرئيس».",
-        "decision": "approved_original"
-      },
-      {
-        "lang": "ar",
-        "block_index": 1,
         "speaker": "karma",
         "source_text": "لو كان ابن سينا طبيبًا بارعًا، فهل كان يكتب عن الطب فقط؟",
         "approved_audio_text": "يعني ابن سينا كان طبيب شاطر، هو كان بيكتب عن الطب وبس؟",
         "decision": "approved_rewrite"
+      },
+      {
+        "lang": "ar",
+        "block_index": 1,
+        "speaker": "narrator",
+        "source_text": "وأنا أبحث عن العلماء الذين تركوا أثرًا كبيرًا في التاريخ، لفت انتباهي عالم عاش منذ أكثر من ألف عام، واستطاع أن يجمع بين حب المعرفة والطب والفلسفة. إنه ابن سينا، الذي عُرف بلقب «الشيخ الرئيس».",
+        "approved_audio_text": "وأنا أبحث عن العلماء الذين تركوا أثرًا كبيرًا في التاريخ، لفت انتباهي عالم عاش منذ أكثر من ألف عام، واستطاع أن يجمع بين حب المعرفة والطب والفلسفة. إنه ابن سينا، الذي عُرف بلقب «الشيخ الرئيس».",
+        "decision": "approved_original"
       },
       {
         "lang": "ar",
@@ -214,17 +214,17 @@
       {
         "lang": "en",
         "block_index": 0,
-        "speaker": "narrator",
-        "source_text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”",
-        "approved_audio_text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”",
+        "speaker": "karma",
+        "source_text": "If Ibn Sina was a skilled physician, did he write only about medicine?",
+        "approved_audio_text": "If Ibn Sina was a skilled physician, did he write only about medicine?",
         "decision": "approved_original"
       },
       {
         "lang": "en",
         "block_index": 1,
-        "speaker": "karma",
-        "source_text": "If Ibn Sina was a skilled physician, did he write only about medicine?",
-        "approved_audio_text": "If Ibn Sina was a skilled physician, did he write only about medicine?",
+        "speaker": "narrator",
+        "source_text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”",
+        "approved_audio_text": "While exploring scholars who left a lasting mark on history, I came across a thinker who lived more than a thousand years ago and brought together a love of learning, medicine, and philosophy. He was Ibn Sina, known by the title “al-Shaykh al-Ra’is.”",
         "decision": "approved_original"
       },
       {
@@ -350,17 +350,17 @@
       {
         "lang": "fr",
         "block_index": 0,
-        "speaker": "narrator",
-        "source_text": "En découvrant les savants qui ont marqué l’histoire, j’ai rencontré un penseur qui vivait il y a plus de mille ans et réunissait l’amour du savoir, de la médecine et de la philosophie. C’était Ibn Sina, connu sous le titre d’« al-Shaykh al-Ra’is ».",
-        "approved_audio_text": "En découvrant les savants qui ont marqué l’histoire, j’ai rencontré un penseur qui vivait il y a plus de mille ans et réunissait l’amour du savoir, de la médecine et de la philosophie. C’était Ibn Sina, connu sous le titre d’« al-Shaykh al-Ra’is ».",
+        "speaker": "karma",
+        "source_text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?",
+        "approved_audio_text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?",
         "decision": "approved_original"
       },
       {
         "lang": "fr",
         "block_index": 1,
-        "speaker": "karma",
-        "source_text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?",
-        "approved_audio_text": "Si Ibn Sina était un médecin réputé, écrivait-il uniquement sur la médecine ?",
+        "speaker": "narrator",
+        "source_text": "En découvrant les savants qui ont marqué l’histoire, j’ai rencontré un penseur qui vivait il y a plus de mille ans et réunissait l’amour du savoir, de la médecine et de la philosophie. C’était Ibn Sina, connu sous le titre d’« al-Shaykh al-Ra’is ».",
+        "approved_audio_text": "En découvrant les savants qui ont marqué l’histoire, j’ai rencontré un penseur qui vivait il y a plus de mille ans et réunissait l’amour du savoir, de la médecine et de la philosophie. C’était Ibn Sina, connu sous le titre d’« al-Shaykh al-Ra’is ».",
         "decision": "approved_original"
       },
       {
@@ -486,17 +486,17 @@
       {
         "lang": "it",
         "block_index": 0,
-        "speaker": "narrator",
-        "source_text": "Mentre cercavo studiosi che hanno lasciato un segno duraturo nella storia, ho scoperto un pensatore vissuto più di mille anni fa, capace di unire l’amore per il sapere, la medicina e la filosofia. Era Ibn Sina, conosciuto con il titolo di «al-Shaykh al-Ra’is».",
-        "approved_audio_text": "Mentre cercavo studiosi che hanno lasciato un segno duraturo nella storia, ho scoperto un pensatore vissuto più di mille anni fa, capace di unire l’amore per il sapere, la medicina e la filosofia. Era Ibn Sina, conosciuto con il titolo di «al-Shaykh al-Ra’is».",
+        "speaker": "karma",
+        "source_text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?",
+        "approved_audio_text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?",
         "decision": "approved_original"
       },
       {
         "lang": "it",
         "block_index": 1,
-        "speaker": "karma",
-        "source_text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?",
-        "approved_audio_text": "Se Ibn Sina era un medico famoso, scriveva soltanto di medicina?",
+        "speaker": "narrator",
+        "source_text": "Mentre cercavo studiosi che hanno lasciato un segno duraturo nella storia, ho scoperto un pensatore vissuto più di mille anni fa, capace di unire l’amore per il sapere, la medicina e la filosofia. Era Ibn Sina, conosciuto con il titolo di «al-Shaykh al-Ra’is».",
+        "approved_audio_text": "Mentre cercavo studiosi che hanno lasciato un segno duraturo nella storia, ho scoperto un pensatore vissuto più di mille anni fa, capace di unire l’amore per il sapere, la medicina e la filosofia. Era Ibn Sina, conosciuto con il titolo di «al-Shaykh al-Ra’is».",
         "decision": "approved_original"
       },
       {
@@ -622,17 +622,17 @@
       {
         "lang": "de",
         "block_index": 0,
-        "speaker": "narrator",
-        "source_text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“.",
-        "approved_audio_text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“.",
+        "speaker": "karma",
+        "source_text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?",
+        "approved_audio_text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?",
         "decision": "approved_original"
       },
       {
         "lang": "de",
         "block_index": 1,
-        "speaker": "karma",
-        "source_text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?",
-        "approved_audio_text": "Wenn Ibn Sina ein berühmter Arzt war, schrieb er dann nur über Medizin?",
+        "speaker": "narrator",
+        "source_text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“.",
+        "approved_audio_text": "Auf der Suche nach Gelehrten, die in der Geschichte bleibende Spuren hinterlassen haben, stieß ich auf einen Denker, der vor mehr als tausend Jahren lebte und die Liebe zum Wissen, die Medizin und die Philosophie in sich vereinte. Es war Ibn Sina, bekannt unter dem Titel „al-Scheich al-Ra’is“.",
         "decision": "approved_original"
       },
       {

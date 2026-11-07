@@ -617,14 +617,14 @@ async function generateNextArabicBlock(statusNode, button) {
     (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
   });
   var nextBlock = -1;
-  for (var i = 1; i < 17; i++) {
+  for (var i = 0; i < 17; i++) {
     var clips = byBlock[i] || [];
     if (!clips.length || !clips.every(function (entry) {
       var saved = review.clips[entry.key];
       return saved && saved.status === 'accepted';
     })) { nextBlock = i; break; }
   }
-  if (nextBlock < 1) {
+  if (nextBlock < 0) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
     return;
   }

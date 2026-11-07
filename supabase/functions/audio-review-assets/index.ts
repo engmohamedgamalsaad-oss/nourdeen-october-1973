@@ -77,7 +77,7 @@ Deno.serve(async (req: Request) => {
   if (body.action === "generate") {
     if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
         body.confirm_fish_audio_request !== "yes" ||
-        !Number.isInteger(body.block_index) || body.block_index < 1 || body.block_index > 16) {
+        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
       return reply(400, { error: "طلب التوليد يجب أن يكون لمقطع عربي واحد محدد من حكاية ابن سينا، مع تأكيد استهلاك Fish Audio." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
@@ -129,7 +129,7 @@ Deno.serve(async (req: Request) => {
   if (body.action === "generation_status") {
     if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
         typeof body.request_id !== "string" || !/^[a-f0-9-]{36}$/.test(body.request_id) ||
-        !Number.isInteger(body.block_index) || body.block_index < 1 || body.block_index > 16) {
+        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
       return reply(400, { error: "بيانات متابعة طلب التوليد غير صالحة." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لمتابعة التوليد." });
@@ -228,7 +228,7 @@ Deno.serve(async (req: Request) => {
     if (isIbnSinaArabic && body.request_id) {
       const requestId = String(body.request_id ?? "");
       const blockIndex = Number(body.block_index);
-      if (!/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 1 || blockIndex > 16) {
+      if (!/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex > 16) {
         return reply(400, { error: "لا يمكن استبدال حزمة ابن سينا دون هوية طلب التوليد ورقم المقطع." });
       }
       const runResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${runId}`, { headers: apiHeaders });
@@ -258,6 +258,16 @@ Deno.serve(async (req: Request) => {
         !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
         (section === "history" && slug === "ibn-sina" && language === "ar" && manifest.segments.length !== 17)) {
       return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو نطاق المقاطع المسموح." });
+    }
+    // The pinned restart artifact predates the corrected opening order.
+    // Its first two audio files are valid but their block indices must follow
+    // the corrected story sequence: Karma first, narrator second.
+    if (isPinnedRestartBaseline) {
+      const first = manifest.segments.find((segment: any) => segment.block_index === 0);
+      const second = manifest.segments.find((segment: any) => segment.block_index === 1);
+      if (!first || !second) return reply(422, { error: "حزمة البداية لا تحتوي المقطعين الأول والثاني المطلوبين لإصلاح الترتيب." });
+      first.block_index = 1;
+      second.block_index = 0;
     }
     const expectedVoices: Record<string, string> = {
       narrator: "a02a8220d6014812aa5ff73434c54cc0",
