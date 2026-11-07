@@ -11,6 +11,7 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -76,7 +77,11 @@ def main() -> None:
     started = time.time()
     refs = {speaker: prepare_reference(speaker) for speaker in ("narrator", "karma")}
     print("Loading official Chatterbox multilingual base model on CPU...", flush=True)
-    from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+    source_dir = Path(os.environ["NAMAA_SOURCE_DIR"])
+    if not (source_dir / "src/chatterbox/mtl_tts.py").is_file():
+        raise FileNotFoundError(f"NAMAA-compatible Chatterbox source missing: {source_dir}")
+    sys.path.insert(0, str(source_dir))
+    from src.chatterbox.mtl_tts import ChatterboxMultilingualTTS
     model = ChatterboxMultilingualTTS.from_pretrained(device="cpu")
 
     records = []
