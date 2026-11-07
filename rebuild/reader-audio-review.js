@@ -254,7 +254,7 @@ async function loadManifests() {
         }
       });
       var localized = story.i18n && story.i18n[lang];
-      if (data.complete === true) {
+      if (data.complete !== false) {
         var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang]);
         if (!coverage.ok) throw new Error(coverage.error);
       } else {
