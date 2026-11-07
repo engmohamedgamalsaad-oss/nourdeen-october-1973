@@ -163,8 +163,11 @@ def validate_required_audio_text_review(
     review = pronunciation.get("review")
     if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
         raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
-    if review.get("status") != "approved_by_admin" or review.get("languages") != list(LANGUAGES):
-        raise ValueError(f"{pronunciation_path}: five-language admin approval is incomplete")
+    if (review.get("status") != "approved_by_admin" or
+            review.get("languages") != list(LANGUAGES) or
+            review.get("human_approved_languages") != ["ar"] or
+            review.get("prepared_languages") != ["en", "fr", "it", "de"]):
+        raise ValueError(f"{pronunciation_path}: Arabic owner approval or four-language assistant preparation is incomplete")
     raw_segments = review.get("segments")
     translations = package.get("i18n")
     if not isinstance(raw_segments, list) or not isinstance(translations, dict):
@@ -203,15 +206,19 @@ def validate_required_audio_text_review(
             raise ValueError(f"{pronunciation_path}: source text/speaker changed for {lang} block {index}")
         if not isinstance(spoken, str) or not spoken.strip():
             raise ValueError(f"{pronunciation_path}: empty approved text for {lang} block {index}")
-        if decision == "approved_original":
-            if spoken != source:
-                raise ValueError(f"{pronunciation_path}: original decision changed text for {lang} block {index}")
-        elif decision == "approved_rewrite":
-            if spoken == source:
-                raise ValueError(f"{pronunciation_path}: rewrite decision has no rewrite for {lang} block {index}")
-            rewrites[lang][str(index)] = spoken
+        if lang == "ar":
+            if decision == "approved_original":
+                if spoken != source:
+                    raise ValueError(f"{pronunciation_path}: original decision changed text for {lang} block {index}")
+            elif decision == "approved_rewrite":
+                if spoken == source:
+                    raise ValueError(f"{pronunciation_path}: rewrite decision has no rewrite for {lang} block {index}")
+                rewrites[lang][str(index)] = spoken
+            else:
+                raise ValueError(f"{pronunciation_path}: Arabic segment lacks owner approval for block {index}")
         else:
-            raise ValueError(f"{pronunciation_path}: segment lacks explicit human approval for {lang} block {index}")
+            if decision != "prepared_by_assistant" or spoken != source:
+                raise ValueError(f"{pronunciation_path}: non-Arabic text must remain assistant-prepared from the current source for {lang} block {index}")
     if seen != set(expected):
         raise ValueError(f"{pronunciation_path}: some spoken blocks were not approved")
     declared = pronunciation.get("approved_audio_text_rewrites")

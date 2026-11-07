@@ -82,6 +82,8 @@ function validateAudioReviewGate(
           !review || review.format !== "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1" ||
           review.status !== "approved_by_admin" ||
           stableJson(review.languages) !== stableJson(languages) ||
+          stableJson(review.human_approved_languages) !== stableJson(["ar"]) ||
+          stableJson(review.prepared_languages) !== stableJson(["en", "fr", "it", "de"]) ||
           !Array.isArray(review.segments)) {
         return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
       }
@@ -110,17 +112,21 @@ function validateAudioReviewGate(
             typeof item.approved_audio_text !== "string" || !item.approved_audio_text.trim()) {
           return "اعتماد النص الصوتي لا يطابق النص أو المتحدث الحالي في " + item.lang + "، المقطع " + (item.block_index + 1) + ".";
         }
-        if (item.decision === "approved_original") {
-          if (item.approved_audio_text !== expected.source) {
-            return "قرار الإبقاء على النص الأصلي يحتوي تغييرًا غير مصرح به.";
+        if (item.lang === "ar") {
+          if (item.decision === "approved_original") {
+            if (item.approved_audio_text !== expected.source) {
+              return "قرار الإبقاء على النص العربي الأصلي يحتوي تغييرًا غير مصرح به.";
+            }
+          } else if (item.decision === "approved_rewrite") {
+            if (item.approved_audio_text === expected.source) {
+              return "قرار إعادة الصياغة العربية لا يحتوي نصًا صوتيًا مختلفًا.";
+            }
+            rewrites.ar[String(item.block_index)] = item.approved_audio_text;
+          } else {
+            return "يوجد مقطع عربي بلا اعتماد صريح من المسؤول.";
           }
-        } else if (item.decision === "approved_rewrite") {
-          if (item.approved_audio_text === expected.source) {
-            return "قرار إعادة الصياغة لا يحتوي نصًا صوتيًا مختلفًا.";
-          }
-          rewrites[item.lang][String(item.block_index)] = item.approved_audio_text;
-        } else {
-          return "يوجد مقطع بلا قرار اعتماد بشري صريح.";
+        } else if (item.decision !== "prepared_by_assistant" || item.approved_audio_text !== expected.source) {
+          return "يجب أن تظل نصوص اللغات غير العربية مجهزة من النص الحالي دون نسب اعتماد بشري إليها.";
         }
         seen.add(key);
       }
