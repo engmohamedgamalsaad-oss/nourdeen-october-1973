@@ -23,6 +23,11 @@
     'details.kh-sec>summary{font-size:1.05rem}' +
     'details.kh-sec>.kh-acc-body{padding:10px}' +
     'details.kh-sec>.kh-acc-body>:last-child{margin-bottom:0}' +
+    '.kh-help-group{display:flex;gap:8px;flex-wrap:wrap;margin-inline-start:auto}' +
+    '.kh-help-group .btn{background:rgba(120,140,220,.12);border:1px dashed rgba(150,170,235,.5);color:#c9d3f5;font-size:.9rem}' +
+    '.kh-help-group .btn:hover,.kh-help-group .btn[aria-expanded="true"]{background:rgba(120,140,220,.24)}' +
+    '.kh-help-panel{margin:12px 0 0;margin-inline-start:auto;max-width:520px;padding:12px 14px;border:1px dashed rgba(150,170,235,.5);border-radius:12px;background:rgba(120,140,220,.09);color:#c9d3f5}' +
+    '.kh-help-panel[hidden]{display:none}' +
     '@media(prefers-reduced-motion:reduce){details.kh-acc>summary::after{transition:none}}';
   var st = document.createElement('style');
   st.id = 'kh-acc-style';
@@ -141,23 +146,39 @@
     box.insertBefore(tools, first);
   }
 
-  // الملاحظة الطويلة في أدوات الأدمن تصبح زرًا بدل أن تحتل أعلى الصفحة.
+  // بطاقة «أدوات تجهيز ومراجعة الموقع»: أزرار الصفحات على اليمين، والتعليمات فقط (شرح أدوات الأدمن + شرح الدمج في GitHub)
+  // تنزل بجانب بعض على الشمال بلون مختلف شوية، وشرح الأدوات يفتح تحتها عند الضغط.
   function enhanceTools() {
     var card = document.getElementById('adminTools');
     if (!card || card.getAttribute('data-kh-acc')) return;
-    var note = card.querySelector(':scope > p.fnote');
-    if (!note) return;
+    var note = card.querySelector(':scope > p.fnote'), row = card.querySelector(':scope > .admin-tool-links');
+    if (!note || !row) return;
     card.setAttribute('data-kh-acc', '1');
-    var d = document.createElement('details');
-    d.className = 'kh-acc';
-    var s = document.createElement('summary');
-    s.textContent = 'ℹ️ شرح أدوات الأدمن';
-    var b = document.createElement('div');
-    b.className = 'kh-acc-body';
-    note.parentNode.insertBefore(d, note);
-    d.appendChild(s);
-    d.appendChild(b);
-    b.appendChild(note);
+    if (!row.querySelector('a[href="preview.html"]')) {
+      var pv = document.createElement('a');
+      pv.className = 'btn ghost';
+      pv.href = 'preview.html';
+      pv.textContent = 'المعاينة المرئية';
+      row.appendChild(pv);
+    }
+    var help = document.createElement('div');
+    help.className = 'kh-help-group';
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'btn ghost';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.textContent = 'ℹ️ شرح أدوات الأدمن';
+    help.appendChild(toggle);
+    var gh = row.querySelector('a[href*="GITHUB-MERGE-GUIDE"]');
+    if (gh) help.appendChild(gh);
+    row.appendChild(help);
+    note.classList.add('kh-help-panel');
+    note.hidden = true;
+    card.appendChild(note);
+    toggle.addEventListener('click', function () {
+      note.hidden = !note.hidden;
+      toggle.setAttribute('aria-expanded', note.hidden ? 'false' : 'true');
+    });
   }
 
   // تفاعلات الحكايات: كل حكاية تصبح زرًا فيه العنوان وإجمالي التفاعلات، وتفتح لتعرض الأعداد التفصيلية.
