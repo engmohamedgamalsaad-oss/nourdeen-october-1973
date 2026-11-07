@@ -19,6 +19,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: ibn-sina-arabic-audio-staging
@@ -33,7 +34,7 @@ jobs:
       - name: Check out approved Ibn Sina story and audio text
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: main
+          ref: ${{ github.sha }}
           fetch-depth: 1
 
       - name: Set up Python
