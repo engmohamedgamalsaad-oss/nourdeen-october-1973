@@ -666,7 +666,6 @@ function render() {
   if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
   renderGateBanner(banner);
   banner.hidden = false;
-  renderGenerationControls(banner);
   var lang = document.documentElement.lang;
   var host = $('blocks');
   if (!host) return;
@@ -749,6 +748,7 @@ function render() {
     block.appendChild(panel);
   });
   renderGateBanner(banner);
+  renderGenerationControls(banner);
   banner.hidden = false;
 }
 function injectStyles() {
