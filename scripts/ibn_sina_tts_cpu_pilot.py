@@ -25,7 +25,7 @@ REFS = OUT / "references"
 OUT.mkdir(parents=True, exist_ok=True)
 REFS.mkdir(parents=True, exist_ok=True)
 
-torch.set_num_threads(min(4, os.cpu_count() or 1))
+torch.set_num_threads(min(4, os.cpu_count() or 1))  # Match the standard hosted runner CPU allotment
 torch.manual_seed(2026)
 
 REFERENCE_SOURCES = {
