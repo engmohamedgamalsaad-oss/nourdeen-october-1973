@@ -23,7 +23,9 @@
     'details.kh-sec>summary{font-size:1.05rem}' +
     'details.kh-sec>.kh-acc-body{padding:10px}' +
     'details.kh-sec>.kh-acc-body>:last-child{margin-bottom:0}' +
-    '.kh-help-group{display:flex;gap:8px;flex-wrap:wrap;margin-inline-start:auto}' +
+    '.kh-tools-row{flex-wrap:nowrap!important;gap:6px!important;align-items:center;overflow-x:auto;padding-bottom:2px}' +
+    '.kh-tools-row .btn{white-space:nowrap;flex:none;padding:6px 11px;font-size:.88rem;min-height:38px}' +
+    '.kh-help-group{display:flex;gap:6px;flex-wrap:nowrap;flex:none;margin-inline-start:auto}' +
     '.kh-help-group .btn{background:rgba(120,140,220,.12);border:1px dashed rgba(150,170,235,.5);color:#c9d3f5;font-size:.9rem}' +
     '.kh-help-group .btn:hover,.kh-help-group .btn[aria-expanded="true"]{background:rgba(120,140,220,.24)}' +
     '.kh-help-panel{margin:12px 0 0;margin-inline-start:auto;max-width:520px;padding:12px 14px;border:1px dashed rgba(150,170,235,.5);border-radius:12px;background:rgba(120,140,220,.09);color:#c9d3f5}' +
@@ -172,6 +174,7 @@
     var gh = row.querySelector('a[href*="GITHUB-MERGE-GUIDE"]');
     if (gh) help.appendChild(gh);
     row.appendChild(help);
+    row.classList.add('kh-tools-row');
     note.classList.add('kh-help-panel');
     note.hidden = true;
     card.appendChild(note);
