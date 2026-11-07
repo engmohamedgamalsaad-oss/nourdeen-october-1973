@@ -1,4 +1,4 @@
-import './admin-accordion.js?v=20261106-accordion-1';
+import './admin-accordion.js?v=20261106-accordion-2';
 import './admin-vis-stories.js?v=20261106-vis-1';
 import { storyToLegacy, storyToAdminDraft, normalizeStoryFormat, STORY_FORMAT } from '../../rebuild/adapters/story-package-adapter.mjs?v=20261102-story-package-adapter-3';
 import { validateForAdminBridge, validateStory as validateCanonicalStory } from '../../rebuild/validate-story.mjs?v=20261102-story-package-adapter-3';
