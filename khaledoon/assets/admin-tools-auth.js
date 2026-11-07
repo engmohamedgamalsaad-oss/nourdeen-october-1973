@@ -47,3 +47,4 @@ async function run(){
 }
 run().catch(function(){go()});
 })();
+(function(){try{var s=document.createElement('script');s.src='assets/admin-nav.js?v=20261106-nav-1';s.defer=true;document.head.appendChild(s)}catch(e){}})();
