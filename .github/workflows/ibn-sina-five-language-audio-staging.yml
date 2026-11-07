@@ -4,16 +4,22 @@ on:
   workflow_dispatch:
     inputs:
       confirm_fish_audio_request:
-        description: "اختر yes للموافقة على إعادة توليد 17 مقطعًا عربيًا لابن سينا"
+        description: "اختر yes للموافقة على طلب Fish Audio لمقطع عربي واحد فقط"
         required: true
         type: choice
         options:
           - "no"
           - "yes"
         default: "no"
+      block_index:
+        description: "رقم المقطع المطلوب (يبدأ من 0). استخدم 0 للمقطع الأول"
+        required: true
+        type: number
+        default: 0
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: ibn-sina-arabic-audio-staging
@@ -28,7 +34,7 @@ jobs:
       - name: Check out approved Ibn Sina story and audio text
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: main
+          ref: ${{ github.sha }}
           fetch-depth: 1
 
       - name: Set up Python
@@ -39,13 +45,22 @@ jobs:
       - name: Verify generator syntax
         run: python -m py_compile scripts/generate_story_audio.py
 
-      - name: Generate Arabic only into isolated staging
+      - name: Restore existing staged audio as the baseline
+        uses: actions/download-artifact@v4
+        with:
+          name: ibn-sina-arabic-audio-staging
+          run-id: 42292463580
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: .audio-staging/history/ibn-sina/ar/
+
+      - name: Generate only the selected Arabic block into isolated staging
         env:
           FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
         run: >-
           python scripts/generate_story_audio.py
           --story stories/history/005/story.json
           --languages ar
+          --force-block "${{ inputs.block_index }}"
           --generate
           --allow-fish-audio
 
