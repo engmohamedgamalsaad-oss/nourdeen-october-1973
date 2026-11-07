@@ -23,6 +23,7 @@
     'details.kh-sec>summary{font-size:1.05rem}' +
     'details.kh-sec>.kh-acc-body{padding:10px}' +
     'details.kh-sec>.kh-acc-body>:last-child{margin-bottom:0}' +
+    '#tabs{display:none!important}' +
     '.kh-tools-row{flex-wrap:nowrap!important;gap:6px!important;align-items:center;overflow-x:auto;padding-bottom:2px}' +
     '.kh-tools-row .btn{white-space:nowrap;flex:none;padding:6px 11px;font-size:.88rem;min-height:38px}' +
     '.kh-help-group{display:flex;gap:6px;flex-wrap:nowrap;flex:none;margin-inline-start:auto}' +
@@ -320,6 +321,49 @@
     loadSecData().then(groupAll, groupAll);
   }
 
+  // «سجلات الأدمن بحالة منشورة» و«مرفوضة» تنتقل من صف الفلاتر السفلي إلى أزرار الإحصاء العلوية بجانب باقي الأزرار،
+  // ويُخفى الصف السفلي لأن باقي أزراره مكررة فوق. الأزرار الجديدة تضغط على الفلتر الأصلي نفسه فلا يتغير أي منطق.
+  var EXTRA_STATS = [
+    { key: 'published', label: 'سجلات الأدمن بحالة «منشورة»', test: function (t) { return t.indexOf('سجلات الأدمن بحالة') === 0; } },
+    { key: 'rejected', label: 'مرفوضة', test: function (t) { return /^مرفوضة\s*\(/.test(t); } }
+  ];
+  function chipFor(def) {
+    var cs = document.querySelectorAll('#tabs > .chip');
+    for (var i = 0; i < cs.length; i++) if (def.test(String(cs[i].textContent || '').trim())) return cs[i];
+    return null;
+  }
+  function syncStatusStats() {
+    var box = document.getElementById('stats');
+    if (!box || !box.children.length) return;
+    EXTRA_STATS.forEach(function (def) {
+      var chip = chipFor(def);
+      if (!chip) return;
+      var m = /\((\d+)\)\s*$/.exec(String(chip.textContent || ''));
+      var count = m ? m[1] : '0';
+      var btn = box.querySelector('[data-kh-stat="' + def.key + '"]');
+      if (!btn) {
+        btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'stat stat-button';
+        btn.setAttribute('data-kh-stat', def.key);
+        btn.appendChild(document.createElement('span')).textContent = def.label;
+        btn.appendChild(document.createElement('strong'));
+        btn.addEventListener('click', function () {
+          var c = chipFor(def);
+          if (!c) return;
+          c.click();
+          var list = document.getElementById('list');
+          if (list) list.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        var base = null;
+        for (var i = box.children.length - 1; i >= 0; i--) if (!box.children[i].hasAttribute('data-kh-stat')) { base = box.children[i]; break; }
+        box.insertBefore(btn, base);
+      }
+      btn.querySelector('strong').textContent = count;
+      btn.setAttribute('aria-pressed', chip.getAttribute('aria-pressed') === 'true' ? 'true' : 'false');
+    });
+  }
+
   function scan(root) {
     if (!root || root.nodeType !== 1) return;
     if (root.matches && root.matches('article.reaction-review-card')) enhanceReaction(root);
@@ -329,6 +373,7 @@
     var rx = root.querySelectorAll ? root.querySelectorAll('article.reaction-review-card:not([data-kh-acc])') : [];
     for (var j = 0; j < rx.length; j++) enhanceReaction(rx[j]);
     enhanceTools();
+    syncStatusStats();
     scheduleGroup();
   }
 
