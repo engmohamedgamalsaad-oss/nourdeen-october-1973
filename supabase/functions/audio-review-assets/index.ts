@@ -218,7 +218,7 @@ Deno.serve(async (req: Request) => {
     if (artifact.expired || artifact.name !== expectedName || Number(artifact.workflow_run?.id) !== runId) {
       return reply(403, { error: "الـArtifact منتهي أو لا يطابق تشغيل التوليد المحدد." });
     }
-    if (section === "history" && slug === "ibn-sina" && language === "ar") {
+    if (section === "history" && slug === "ibn-sina" && language === "ar" && body.request_id) {
       const requestId = String(body.request_id ?? "");
       const blockIndex = Number(body.block_index);
       if (!/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 1 || blockIndex > 16) {
@@ -230,6 +230,16 @@ Deno.serve(async (req: Request) => {
       const expectedTitle = "ابن سينا audio " + requestId + " block " + blockIndex;
       if (runData.display_title !== expectedTitle || runData.status !== "completed" || runData.conclusion !== "success") {
         return reply(403, { error: "تشغيل التوليد لا يطابق طلب المقطع المحدد أو لم ينجح." });
+      }
+    } else if (section === "history" && slug === "ibn-sina" && language === "ar" &&
+        (artifactId !== 13540083314 || runId !== 42292463580)) {
+      return reply(403, { error: "تحميل الحزمة الأساسية مسموح فقط للـArtifact المرجعي المحدد." });
+    }
+    if (!body.request_id) {
+      const existing = await service.storage.from(BUCKET).list(prefix, { limit: 100 });
+      if (existing.error) return reply(500, { error: "تعذر فحص التخزين الخاص.", detail: existing.error.message });
+      if (existing.data?.some((item: any) => item.name === "manifest.json")) {
+        return reply(200, { success: true, already_staged: true, bucket: BUCKET, prefix });
       }
     }
     const zipResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/artifacts/${artifactId}/zip`, { headers: apiHeaders });
