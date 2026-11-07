@@ -1,6 +1,10 @@
 # Agent instructions — خالدون عبر التاريخ (ChatGPT and other assistants)
 
-هذا الملف يوجّه أي مساعد ذكي يعمل على المستودع، بما في ذلك ChatGPT. اقرأه أولًا، ثم اقرأ `PROJECT_INSTRUCTIONS.md`. عند العمل على حكاية جديدة، اقرأ أيضًا `docs/khaledoon-story-production-workflow.md`. هذه الملفات مرجع دائم، لكنها لا تغني عن فحص الملفات الحالية.
+هذا الملف يوجّه أي مساعد ذكي يعمل على المستودع، بما في ذلك ChatGPT. اقرأه أولًا، ثم اقرأ `PROJECT_INSTRUCTIONS.md` و`docs/KHALEDOON_CONTROL_TOWER.md`. عند العمل على حكاية جديدة، اقرأ أيضًا `docs/khaledoon-story-production-workflow.md`. هذه الملفات مرجع دائم، لكنها لا تغني عن فحص الملفات الحالية.
+
+## المرجع التنفيذي الحاكم — إلزامي قبل كل مهمة
+
+اقرأ `docs/KHALEDOON_CONTROL_TOWER.md` كاملًا قبل الرد أو اقتراح أو تنفيذ أي عمل. بعد قراءته أعد التحقق من الفرع والملفات وPRs؛ المرجع يسجل آخر حالة مراجعة ولا يضمن أن الحالة لم تتغير. حدّثه بعد كل تغيير جوهري على فرع مراجعة، ولا تدمج تحديثه إلى `main` دون موافقة صريحة.
 
 ## قبل كل مهمة
 
@@ -59,6 +63,7 @@
 
 - المستودع: https://github.com/engmohamedgamalsaad-oss/nourdeen-october-1973
 - الموقع المنشور: https://engmohamedgamalsaad-oss.github.io/nourdeen-october-1973/
+- المرجع التنفيذي الحاكم: [docs/KHALEDOON_CONTROL_TOWER.md](docs/KHALEDOON_CONTROL_TOWER.md)
 - تعليمات المشروع: [PROJECT_INSTRUCTIONS.md](PROJECT_INSTRUCTIONS.md)
 - تعليمات Claude: [CLAUDE.md](CLAUDE.md)
 - آلية تجهيز الحكايات: [docs/khaledoon-story-production-workflow.md](docs/khaledoon-story-production-workflow.md)
