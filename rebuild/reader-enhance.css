@@ -168,3 +168,23 @@ html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.b
 html body[data-section] #blocks>.block.kh-audio-current{background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl,var(--accent)) 46%,var(--panel)),color-mix(in srgb,var(--kh-hl,var(--accent)) 26%,var(--panel)))!important;border-color:var(--kh-hl,var(--accent))!important;outline:2px solid color-mix(in srgb,var(--kh-hl,var(--accent)) 85%,transparent);outline-offset:4px;box-shadow:0 0 0 7px color-mix(in srgb,var(--kh-hl,var(--accent)) 18%,transparent),0 12px 34px color-mix(in srgb,var(--kh-hl,var(--accent)) 34%,transparent)!important;transition:background .35s ease,box-shadow .35s ease,outline-color .35s ease}
 html body[data-theme=light][data-section] #blocks>.block.kh-audio-current{background:linear-gradient(135deg,color-mix(in srgb,var(--kh-hl,var(--accent)) 38%,#fff),color-mix(in srgb,var(--kh-hl,var(--accent)) 20%,#fff))!important}
 }
+
+/* ===== Reading focus v2 (2026-11-07) — refines the block above; the audio highlight above is untouched =====
+   a) The gradient now runs between the section's TWO colours: --kh-in (inner, dark: same value as the home-page gate / admin)
+      -> --kh-out (outer, light). Light theme blends outer colour into white.
+   b) Odd/even cards alternate lighter / darker so the eye can follow line to line. Karma cards stay a step stronger.
+   No !important: print rules and .kh-audio-current (which uses !important) still win. October is excluded. */
+body[data-section=history]{--kh-in:#342b56;--kh-out:#d4b7ff}
+body[data-section=science]{--kh-in:#123d4a;--kh-out:#8ad9e8}
+body[data-section=women]{--kh-in:#4b2944;--kh-out:#e7a1c1}
+body[data-section=people]{--kh-in:#29415c;--kh-out:#f3c17b}
+body[data-section=curriculum]{--kh-in:#1f3560;--kh-out:#9bb7ff}
+body[data-section=islamic]{--kh-in:#1f4a3a;--kh-out:#78c59a}
+html body[data-section]:not([data-section=october]) #blocks>.block:not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 12%,var(--kh-in,var(--panel)));--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 30%,var(--kh-in,var(--panel)));background:linear-gradient(135deg,var(--kh-a),var(--kh-b))}
+html body[data-section]:not([data-section=october]) #blocks>.block:nth-child(even):not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 3%,var(--kh-in,var(--panel)));--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 16%,var(--kh-in,var(--panel)))}
+html body[data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 16%,var(--kh-in,var(--panel)));--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 34%,var(--kh-in,var(--panel)));background:linear-gradient(135deg,var(--kh-a),var(--kh-b))}
+html body[data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:nth-child(even):not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 6%,var(--kh-in,var(--panel)));--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 20%,var(--kh-in,var(--panel)))}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block:not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 14%,#fff);--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 34%,#fff);background:linear-gradient(135deg,var(--kh-a),var(--kh-b))}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block:nth-child(even):not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 5%,#fff);--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 20%,#fff)}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 20%,#fff);--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 42%,#fff);background:linear-gradient(135deg,var(--kh-a),var(--kh-b))}
+html body[data-theme=light][data-section]:not([data-section=october]) #blocks>.block[data-speaker=karma]:nth-child(even):not([data-type=did_you_know]){--kh-a:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 9%,#fff);--kh-b:color-mix(in srgb,var(--kh-out,var(--kh-hl)) 28%,#fff)}
