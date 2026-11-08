@@ -169,8 +169,8 @@ def validate_required_audio_text_review(
     if (
         review.get("status") != "approved_by_admin"
         or not isinstance(review_languages, list)
+        or any(not isinstance(lang, str) or lang not in LANGUAGES for lang in review_languages)
         or len(review_languages) != len(set(review_languages))
-        or any(lang not in LANGUAGES for lang in review_languages)
         or not set(required_languages).issubset(review_languages)
     ):
         raise ValueError(f"{pronunciation_path}: admin approval is incomplete for {list(required_languages)}")
