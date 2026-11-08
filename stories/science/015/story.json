@@ -88,6 +88,11 @@
           "speaker": "narrator",
           "text": "تعلّمنا حكاية مجدي يعقوب أن الرحمة وحدها لا تكفي إذا لم نصحبها بالعلم والعمل، وأن الطبيب لا يعمل بمفرده؛ فخلف كل عملية فريق من الأطباء والممرضين والباحثين. وقد حصل على تكريمات علمية وإنسانية عديدة، منها وسام الاستحقاق البريطاني عام 2014. وتبقى رسالته للأطفال واضحة: اسألوا، وتعلموا، واجتهدوا، واجعلوا معرفتكم وسيلة لمساعدة الآخرين.",
           "image_after": "magdi-yacoub-lister-medal-2015"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني مساعدة الناس محتاجة علم ورحمة وتعاون؛ ولما فريق كامل يتعلم ويشتغل مع بعض، يقدر يساعد مرضى أكتر."
         }
       ]
     },
@@ -171,6 +176,11 @@
           "speaker": "narrator",
           "text": "Yacoub’s story teaches us that kindness needs to be joined with knowledge and hard work, and that a doctor never works alone: every operation depends on a team of doctors, nurses and researchers. He has received many scientific and humanitarian honours, including the UK Order of Merit in 2014. His message to children remains clear: ask questions, learn, work hard and use your knowledge to help others.",
           "image_after": "magdi-yacoub-lister-medal-2015"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So helping people takes knowledge, compassion, and teamwork. When a whole team learns and works together, it can help more patients."
         }
       ]
     },
@@ -254,6 +264,11 @@
           "speaker": "narrator",
           "text": "L’histoire de Yacoub nous apprend que la compassion doit s’accompagner de connaissances et de travail, et qu’un médecin ne travaille jamais seul : derrière chaque opération se trouve une équipe de médecins, d’infirmiers et de chercheurs. Il a reçu de nombreuses distinctions scientifiques et humanitaires, dont l’Ordre du Mérite britannique en 2014. Son message aux enfants reste clair : posez des questions, apprenez, faites des efforts et utilisez vos connaissances pour aider les autres.",
           "image_after": "magdi-yacoub-lister-medal-2015"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Aider les autres demande donc des connaissances, de la compassion et du travail d’équipe. Lorsqu’une équipe entière apprend et travaille ensemble, elle peut aider davantage de patients."
         }
       ]
     },
@@ -337,6 +352,11 @@
           "speaker": "narrator",
           "text": "La storia di Yacoub ci insegna che la compassione deve essere accompagnata dalla conoscenza e dall’impegno, e che un medico non lavora mai da solo: dietro ogni intervento c’è una squadra di medici, infermieri e ricercatori. Ha ricevuto numerosi riconoscimenti scientifici e umanitari, tra cui l’Ordine al Merito britannico nel 2014. Il suo messaggio ai bambini è chiaro: fate domande, imparate, impegnatevi e usate ciò che sapete per aiutare gli altri.",
           "image_after": "magdi-yacoub-lister-medal-2015"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Aiutare gli altri richiede quindi conoscenza, compassione e lavoro di squadra. Quando un’intera équipe impara e lavora insieme, può aiutare più pazienti."
         }
       ]
     },
@@ -420,6 +440,11 @@
           "speaker": "narrator",
           "text": "Yacoubs Geschichte zeigt uns, dass Mitgefühl Wissen und harte Arbeit braucht und dass ein Arzt niemals allein arbeitet: Hinter jeder Operation steht ein Team aus Ärzten, Pflegekräften und Forschenden. Er erhielt zahlreiche wissenschaftliche und humanitäre Auszeichnungen, darunter 2014 den britischen Order of Merit. Seine Botschaft an Kinder bleibt klar: Stellt Fragen, lernt, strengt euch an und nutzt euer Wissen, um anderen zu helfen.",
           "image_after": "magdi-yacoub-lister-medal-2015"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Menschen zu helfen braucht also Wissen, Mitgefühl und Zusammenarbeit. Wenn ein ganzes Team gemeinsam lernt und arbeitet, kann es mehr Patientinnen und Patienten helfen."
         }
       ]
     }
