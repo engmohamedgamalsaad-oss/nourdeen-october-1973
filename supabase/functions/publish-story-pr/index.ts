@@ -14,6 +14,17 @@ const headers = {
 const reply = (status: number, data: Record<string, unknown>) =>
   new Response(JSON.stringify(data), { status, headers });
 
+function envKey(name: string, dictionaryName: string): string {
+  const direct = Deno.env.get(name);
+  if (direct) return direct;
+  try {
+    const dictionary = JSON.parse(Deno.env.get(dictionaryName) ?? "{}");
+    return typeof dictionary.default === "string" ? dictionary.default : "";
+  } catch {
+    return "";
+  }
+}
+
 function contentForSafetyScan(file: { content: string; encoding?: string }): string {
   if (file.encoding !== "base64") return file.content;
   // GitHub accepts base64 content for binary assets, but V1 must not let
@@ -334,7 +345,7 @@ Deno.serve(async (req: Request) => {
 
   const url = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
-  const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
+  const serviceRoleKey = envKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
   const githubToken = Deno.env.get("GITHUB_PUBLISH_TOKEN");
   if (!url || !anonKey) return reply(500, { error: "إعدادات التحقق في Supabase غير مكتملة." });
   if (!githubToken) return reply(503, { error: "يلزم إضافة السر GITHUB_PUBLISH_TOKEN في Supabase Secrets." });
