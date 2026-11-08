@@ -175,7 +175,7 @@ function validateAudioReviewGate(
     return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
   }
 
-  const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
+  const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
   for (const lang of languages) {
     const expectedBlocks = expectedByLanguage[lang];
     const currentClips = storyClips.filter((clip: any) =>
@@ -219,7 +219,7 @@ async function collectPrivateAudioForPublish(
   const languages = Array.isArray(audioReview?.audio_languages) ? audioReview.audio_languages : ["ar", "en", "fr", "it", "de"];
   const storyKey = section + "/" + slug;
   const reviewClips = Object.values(audioReview?.clips ?? {}) as any[];
-  const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
+  const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
   const output: any[] = [];
   let totalBytes = 0;
   for (const lang of languages) {
