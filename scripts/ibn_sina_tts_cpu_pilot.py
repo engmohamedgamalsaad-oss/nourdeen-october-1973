@@ -112,7 +112,22 @@ def main() -> None:
         allow_patterns=["t3_mtl23ls_v2.safetensors"],
     ))
     namaa_state = load_file(str(namaa_dir / "t3_mtl23ls_v2.safetensors"), device="cpu")
-    model.t3.load_state_dict(namaa_state, strict=True)
+    load_result = model.t3.load_state_dict(namaa_state, strict=False)
+    non_alias_missing = [
+        key for key in load_result.missing_keys
+        if not key.startswith("patched_model.model.")
+    ]
+    if load_result.unexpected_keys or non_alias_missing:
+        raise RuntimeError(
+            "NAMAA checkpoint mismatch beyond the duplicated patched_model alias: "
+            f"unexpected={load_result.unexpected_keys[:10]}, "
+            f"missing={non_alias_missing[:10]}"
+        )
+    print(
+        "NAMAA checkpoint loaded; only duplicated patched_model.model aliases "
+        f"were absent ({len(load_result.missing_keys)} keys).",
+        flush=True,
+    )
     model.t3.to("cpu").eval()
 
     for speaker in ("narrator", "karma"):
