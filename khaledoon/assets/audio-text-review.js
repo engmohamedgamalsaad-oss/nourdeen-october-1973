@@ -287,16 +287,20 @@
     var rewrites = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
     var reviewSegments = result.segments.map(function (item) {
       var key = item.lang + ':' + item.block_index;
-      var selected = approved[key] === true && suggestions[key];
+      // Only Arabic is submitted for owner approval. Other languages are prepared
+      // by the assistant and retain their current source text unless separately revised.
+      var selected = item.lang === 'ar' && approved[key] === true && suggestions[key];
       var spoken = selected ? item.proposed_audio_text : item.original_text;
-      if (selected) rewrites[item.lang][String(item.block_index)] = spoken;
+      if (selected) rewrites.ar[String(item.block_index)] = spoken;
       return {
         lang: item.lang,
         block_index: item.block_index,
         speaker: item.speaker,
         source_text: item.original_text,
         approved_audio_text: spoken,
-        decision: selected ? 'approved_rewrite' : 'approved_original'
+        decision: item.lang === 'ar'
+          ? (selected ? 'approved_rewrite' : 'approved_original')
+          : 'prepared_by_assistant'
       };
     });
     var arabicIndexes = Object.keys(rewrites.ar).sort(function (a, b) { return Number(a) - Number(b); });
@@ -312,6 +316,8 @@
         format: 'KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1',
         status: 'approved_by_admin',
         languages: LANGS.slice(),
+        human_approved_languages: ['ar'],
+        prepared_languages: ['en', 'fr', 'it', 'de'],
         total_segments: reviewSegments.length,
         segments: reviewSegments
       }
