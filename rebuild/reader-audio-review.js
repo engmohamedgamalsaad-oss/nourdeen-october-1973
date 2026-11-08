@@ -271,7 +271,13 @@ async function loadManifests() {
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
-  await ensureArabicAudioStaged(expectedTexts.ar);
+  var stagingError = '';
+  try {
+    await ensureArabicAudioStaged(expectedTexts.ar);
+  } catch (error) {
+    // A missing/failed audio artifact must not block speech-text editing.
+    stagingError = String(error && error.message || error);
+  }
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
@@ -309,6 +315,7 @@ async function loadManifests() {
       manifests[lang] = data;
     } catch (e) {
       manifestErrors[lang] = String(e && e.message || e);
+      if (lang === 'ar' && stagingError) manifestErrors[lang] += ' — تعذر تجهيز ملف الصوت الأول: ' + stagingError;
       if (!e || !e.isMissingManifest) manifestLoadFailure = true;
     }
   }));
@@ -1039,18 +1046,26 @@ async function initialize(nextStory) {
   try {
     var connected = await loadRow();
     if (!connected) { initializing = false; return; }
-    await loadManifests();
+    // Show the speech-text editor as soon as the authenticated review record loads.
+    // Audio staging/manifests are independent and must never hide the text workflow.
     initialized = true;
     initializing = false;
     render();
+    try {
+      await loadManifests();
+      render();
+    } catch (audioError) {
+      manifestLoadFailure = true;
+      manifestErrors[document.documentElement.lang || 'ar'] =
+        'تعذر تحميل معاينة الصوت: ' + (audioError && audioError.message || audioError);
+      render();
+    }
   } catch (e) {
-    manifestLoadFailure = true;
-    initialized = true;
     initializing = false;
     var host = $('blocks');
     if (host) {
       var note = document.createElement('p'); note.className = 'kh-audio-review-gate';
-      text(note, 'تعذر تحميل مراجعة الصوت: ' + (e.message || e));
+      text(note, 'تعذر الاتصال بسجل مراجعة النص: ' + (e.message || e));
       host.parentNode.insertBefore(note, host);
     }
   }
