@@ -83,7 +83,10 @@ Deno.serve(async (req: Request) => {
       return reply(400, { error: "طلب التوليد يحتاج موافقة صريحة ومقطعًا واحدًا محددًا من الحكاية." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
-    const rawStoryUrl = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/stories/${section}/${storyId}/story.json`;
+    const storyPackagePath = section === "october"
+      ? `rebuild/october-audio-packages/${storyId}/story.json`
+      : `stories/${section}/${storyId}/story.json`;
+    const rawStoryUrl = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${storyPackagePath}`;
     const storyResponse = await fetch(rawStoryUrl, { headers: { "Accept": "application/vnd.github.raw+json" } });
     if (!storyResponse.ok) return reply(404, { error: "تعذر العثور على حزمة الحكاية المنشورة في المسار المعتمد." });
     const storyPackage = await storyResponse.json();
@@ -109,7 +112,7 @@ Deno.serve(async (req: Request) => {
       body: JSON.stringify({
         ref: "main",
         inputs: {
-          section, slug, story_path: `stories/${section}/${storyId}/story.json`,
+          section, slug, story_path: storyPackagePath,
           language, block_index: String(blockIndex),
           confirm_fish_audio_request: "yes", request_id,
         },
