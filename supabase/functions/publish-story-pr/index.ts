@@ -361,6 +361,58 @@ Deno.serve(async (req: Request) => {
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "بيانات الطلب ليست JSON صالحًا." }); }
+  let audioOnlyPublish = false;
+  let audioFilesForPublish: any[] = [];
+  let audioOnlySection = "", audioOnlySlug = "", audioOnlyStoryId = "";
+  let audioOnlyReview: any = null, audioOnlyService: any = null;
+  if (body?.action === "publish_audio_only") {
+    const section = String(body.section ?? ""), slug = String(body.slug ?? ""), storyId = String(body.story_id ?? "");
+    if (!/^[a-z0-9-]{1,80}$/.test(section) || !/^[a-z0-9-]{1,80}$/.test(slug) || !/^[0-9]{3}$/.test(storyId)) {
+      return reply(400, { error: "هوية الحكاية المطلوبة لنشر الصوت غير صالحة." });
+    }
+    if (!serviceRoleKey) return reply(503, { error: "مفتاح التخزين الخاص غير متاح للتحقق ونشر ملفات الصوت." });
+    const packagePath = section === "october"
+      ? `rebuild/october-audio-packages/${storyId}/story.json`
+      : `stories/${section}/${storyId}/story.json`;
+    const rawBase = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/`;
+    const packageResponse = await fetch(rawBase + packagePath);
+    if (!packageResponse.ok) return reply(404, { error: "حزمة الحكاية المنشورة غير موجودة في المسار المعتمد." });
+    const packageData = await packageResponse.json();
+    if (packageData?.format !== "KHALEDOON_STORY" || packageData.section !== section || packageData.slug !== slug) {
+      return reply(409, { error: "حزمة الحكاية المنشورة لا تطابق القسم والرقم والاسم المطلوبين." });
+    }
+    const pageResponse = await fetch(rawBase + `stories/${section}/${storyId}/index.html`);
+    if (!pageResponse.ok) return reply(404, { error: "صفحة الحكاية المنشورة غير موجودة؛ لن يتم نشر ملفات صوت بلا صفحة." });
+    const pronunciationPath = packagePath.replace(/story\\.json$/, "audio-pronunciation.json");
+    const pronunciationResponse = await fetch(rawBase + pronunciationPath);
+    const pronunciationFiles: any[] = [];
+    if (pronunciationResponse.ok) {
+      pronunciationFiles.push({ path: pronunciationPath, content: await pronunciationResponse.text(), encoding: "utf-8" });
+    } else if (pronunciationResponse.status !== 404) {
+      return reply(502, { error: "تعذر قراءة ملف اعتماد نص الصوت من مستودع الحكاية." });
+    }
+    const service = createClient(url, serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الصوت المحفوظ.", detail: reviewError.message });
+    const audioReview = reviewRow?.audio_review;
+    const gateError = validateAudioReviewGate(packageData, audioReview, pronunciationFiles, section, storyId);
+    if (gateError) return reply(409, { error: gateError });
+    try {
+      audioFilesForPublish = await collectPrivateAudioForPublish(service, packageData, audioReview, section);
+    } catch (audioError) {
+      const detail = audioError instanceof Error ? audioError.message : "تعذر تجهيز ملفات الصوت.";
+      return reply(409, { error: detail.slice(0, 500) });
+    }
+    if (!audioFilesForPublish.length) return reply(409, { error: "لا توجد ملفات صوت معتمدة للنشر." });
+    audioOnlyPublish = true;
+    audioOnlySection = section;
+    audioOnlySlug = slug;
+    audioOnlyStoryId = storyId;
+    audioOnlyReview = audioReview;
+    audioOnlyService = service;
+    body.files = [];
+  }
   if (body?.action === "capabilities") {
     return reply(200, { success: true, publisher_mode: "direct_main", version: "2026-11-02-direct-main-publisher-1", story_publish_version: "2026-11-02-canonical-story-publish-1", writes_main_directly: true, supports_story_move: true, requires_submission_id: true, rejects_story_only_drafts: true, supports_story_package_publish: true, rejects_v2_only_drafts: true, supports_v2_publish: false });
   }
@@ -390,6 +442,7 @@ Deno.serve(async (req: Request) => {
       return reply(502, { error: "تعذر التحقق من حالة طلب الدمج.", detail: detail.slice(0, 500) });
     }
   }
+  if (!audioOnlyPublish) {
   if (!Array.isArray(body?.files) || body.files.length < 1 || body.files.length > 50)
     return reply(400, { error: "أرسل من 1 إلى 50 ملفًا." });
   const seen = new Set<string>();
@@ -414,7 +467,6 @@ Deno.serve(async (req: Request) => {
   if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل إنشاء طلب المراجعة." });
   if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
-  let audioFilesForPublish: any[] = [];
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
@@ -571,6 +623,7 @@ Deno.serve(async (req: Request) => {
   } else if (submittedStorySection && submittedStorySection !== "october") {
     return reply(409, { error: "مسار النشر القديم متاح لقسم أكتوبر فقط؛ يجب إعادة تجهيز الحكايات الأخرى بحزمة KHALEDOON_STORY المعتمدة." });
   }
+  }
 
   const title = typeof body.title === "string" ? body.title.trim().slice(0, 120) : "نشر حكاية جديدة — خالدون عبر التاريخ";
   const description = typeof body.body === "string" ? body.body.slice(0, 5000) : "راجع الملفات ومعاينة GitHub Pages قبل الدمج. لم يتم النشر على main.";
@@ -603,6 +656,46 @@ Deno.serve(async (req: Request) => {
     const ref = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
     const baseSha = ref.object.sha;
     const baseCommit = await github(`/repos/${OWNER}/${REPO}/git/commits/${baseSha}`, githubToken);
+    if (audioOnlyPublish) {
+      const audioTreeEntries: any[] = [];
+      for (const file of audioFilesForPublish) {
+        const blob = await github(`/repos/${OWNER}/${REPO}/git/blobs`, githubToken, {
+          method: "POST",
+          body: JSON.stringify({ content: file.content, encoding: file.encoding === "base64" ? "base64" : "utf-8" }),
+        });
+        audioTreeEntries.push({ path: file.path, mode: "100644", type: "blob", sha: blob.sha });
+      }
+      const audioTree = await github(`/repos/${OWNER}/${REPO}/git/trees`, githubToken, {
+        method: "POST", body: JSON.stringify({ base_tree: baseCommit.tree.sha, tree: audioTreeEntries }),
+      });
+      const audioCommit = await github(`/repos/${OWNER}/${REPO}/git/commits`, githubToken, {
+        method: "POST", body: JSON.stringify({
+          message: `Publish approved story audio: ${audioOnlySection}/${audioOnlySlug}`,
+          tree: audioTree.sha, parents: [baseSha],
+        }),
+      });
+      const latestAudioRef = await github(`/repos/${OWNER}/${REPO}/git/ref/heads/${BASE}`, githubToken);
+      if (latestAudioRef.object.sha !== baseSha) throw new Error("تغير main أثناء تجهيز ملفات الصوت؛ أوقفت النشر لتجنب استبدال تحديث أحدث. أعد المحاولة.");
+      await github(`/repos/${OWNER}/${REPO}/git/refs/heads/${BASE}`, githubToken, {
+        method: "PATCH", body: JSON.stringify({ sha: audioCommit.sha, force: false }),
+      });
+      const publishedReview = {
+        ...audioOnlyReview,
+        audio_published_commit_sha: audioCommit.sha,
+        audio_published_at: new Date().toISOString(),
+      };
+      const { error: reviewUpdateError } = await audioOnlyService.from("story_audio_reviews")
+        .update({ audio_review: publishedReview }).eq("section", audioOnlySection).eq("slug", audioOnlySlug);
+      await releaseStoryLock();
+      return reply(200, {
+        success: true, published_to_main: true, audio_only: true,
+        commit_sha: audioCommit.sha, story_id: audioOnlyStoryId,
+        story_path: "stories/" + audioOnlySection + "/" + audioOnlyStoryId,
+        audio_files: audioFilesForPublish.length,
+        review_status_saved: !reviewUpdateError,
+        message: "تم نشر ملفات الصوت المعتمدة فقط؛ لم يتغير نص الحكاية أو تصميم صفحتها. حدّث صفحة الحكاية للاستماع.",
+      });
+    }
     const treeEntries = [];
     const storyPage = body.files.find((file: any) => /^stories\/[a-z0-9-]+\/[0-9]{3}\/index\.html$/.test(file.path));
     if (!storyPage) throw new Error('Missing generated story page index.html.');
@@ -793,7 +886,7 @@ Deno.serve(async (req: Request) => {
     await releaseStoryLock();
     const detail = error instanceof Error ? error.message : "Unknown error";
     return reply(502, {
-      error: "تعذر نشر الحكاية مباشرة إلى main؛ لم تُسجّل كحكاية منشورة.",
+      error: audioOnlyPublish ? "تعذر نشر ملفات الصوت المعتمدة إلى main." : "تعذر نشر الحكاية مباشرة إلى main؛ لم تُسجّل كحكاية منشورة.",
       detail: detail.slice(0, 500),
     });
   }
