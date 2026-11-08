@@ -39,7 +39,7 @@ function isOwnIllus(im){return !!im&&im.kind==='illustration'&&OWN_ILLUS.test(im
 function isRealPhoto(im){return !!im&&(im.kind==='photograph'||im.kind==='archival')&&!!(im.path||im.url)}
 function normalizeStory(d){try{var slug=String(document.body.dataset.storySlug||d.slug||'');var imgs=d.images.slice(),removed={},pick=null;var forced=COVER_PICK[slug];
 if(forced)pick=imgs.find(function(x){return x.id===forced&&isRealPhoto(x)})||null;
-if(!pick&&!isRealPhoto(d.cover))pick=EXTRA_COVERS[slug]||imgs.find(isRealPhoto)||null;
+if(!pick&&!isRealPhoto(d.cover)&&!isOwnIllus(d.cover))pick=EXTRA_COVERS[slug]||imgs.find(isRealPhoto)||null;
 if(pick){d.cover=pick;imgs=imgs.filter(function(x){if(x===pick||x.id===pick.id){removed[x.id]=1;return false}return true})}
 var keep=!isOwnIllus(d.cover);imgs=imgs.filter(function(x){if(!isOwnIllus(x))return true;if(keep){keep=false;return true}removed[x.id]=1;return false});
 d.images=imgs;Object.keys(d.i18n).forEach(function(l){(d.i18n[l].blocks||[]).forEach(function(b){if(b.image_after&&removed[b.image_after])delete b.image_after})})}catch(e){}return d}
