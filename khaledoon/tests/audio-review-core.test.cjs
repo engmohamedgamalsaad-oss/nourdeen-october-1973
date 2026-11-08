@@ -240,7 +240,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(generator.includes('if force_blocks and index not in forced:'), 'single-block generation must skip every non-selected block');
   assert.ok(generator.includes('checkpoint_segments = {} if force_blocks else dict(processed_manifest_segments)'), 'a one-block workflow artifact must contain only its new block so the private staging service can merge it safely');
   const audioAssets = fs.readFileSync(path.join(__dirname, '../../supabase/functions/audio-review-assets/index.ts'), 'utf8');
-  assert.ok(audioAssets.includes('story-audio-segment-staging.yml') && !audioAssets.includes('slug !== "ibn-sina"'), 'audio generation dispatch must use the generic story workflow');
+  assert.ok(audioAssets.includes('story-audio-segment-staging.yml') && audioAssets.includes('namaa-voice-sample-staging.yml') && audioAssets.includes('confirm_namaa_audio_request'), 'English generation uses the generic story workflow while Arabic review samples use the restricted NAMAA workflow');
   const publisher = fs.readFileSync(path.join(__dirname, '../../supabase/functions/publish-story-pr/index.ts'), 'utf8');
   assert.ok(publisher.includes('audioReview.audio_languages') && publisher.includes('collectPrivateAudioForPublish'), 'publishing must honor the selected-language gate and include reviewed private MP3 files plus manifests in the public commit');
   assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
