@@ -445,9 +445,14 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         else {}
     )
     if review_required:
-        approved_text_by_language = validate_required_audio_text_review(
-            pronunciation, package, pronunciation_path, AUDIO_PHASE_LANGUAGES
-        )
+        try:
+            approved_text_by_language = validate_required_audio_text_review(
+                pronunciation, package, pronunciation_path, AUDIO_PHASE_LANGUAGES
+            )
+        except ValueError as exc:
+            raise AudioTextApprovalRequired(
+                f"{relative}: audio-text approval must be renewed for the current Arabic-English phase: {exc}"
+            ) from exc
     else:
         approved_text_by_language = {lang: {} for lang in LANGUAGES}
         if "ar" in selected_languages:
