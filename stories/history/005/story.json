@@ -1353,6 +1353,15 @@
       "fr": "Village d’Afshona, district de Peshku, région de Boukhara, Ouzbékistan",
       "it": "Villaggio di Afshona, distretto di Peshku, regione di Bukhara, Uzbekistan",
       "de": "Dorf Afshona, Bezirk Peshku, Region Buchara, Usbekistan"
-    }
+    },
+    "source_name": {
+      "ar": "بوابة أوزبكستان للسياحة",
+      "en": "Uzbekistan Travel",
+      "fr": "Portail touristique de l’Ouzbékistan",
+      "it": "Portale turistico dell’Uzbekistan",
+      "de": "Tourismusportal Usbekistan"
+    },
+    "source_url": "https://uzbekistan.travel/en/o/abu-ali-Ibn-sina/",
+    "approximate": true
   }
 }
