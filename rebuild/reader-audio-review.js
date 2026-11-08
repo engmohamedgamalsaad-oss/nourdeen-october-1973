@@ -127,6 +127,8 @@ async function saveReview(entry, decision) {
     var currentReview = core.cloneReview(currentResult.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
     next.audio_languages = LANGS.slice();
+    next.audio_published_commit_sha = null;
+    next.audio_published_at = null;
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     var saved = await audioAssetsRequest({
@@ -338,7 +340,66 @@ function renderGateBanner(banner) {
     text(partial, 'الحزمة الحالية جزئية للمراجعة فقط؛ لا يكتمل الاعتماد النهائي إلا بعد تجهيز كل المقاطع في العربية والإنجليزية وقبولها.');
     banner.appendChild(partial);
   }
+  renderAudioPublishControl(banner, g);
 }
+async function publishApprovedAudio(statusNode, button) {
+  if (audioPublishBusy) return;
+  if (!gate().ok) { text(statusNode, gateSummary()); return; }
+  var storyId = currentStoryId();
+  if (!storyId) { text(statusNode, 'تعذر تحديد رقم الحكاية المنشورة؛ لم يبدأ النشر.'); return; }
+  if (!window.confirm('سيتم نشر ملفات الصوت العربية والإنجليزية التي استمعت إليها وقبلتها فقط، على صفحة الحكاية المنشورة. لن يتغير نص الحكاية أو تصميمها. هل توافق على النشر الآن؟')) return;
+  audioPublishBusy = true;
+  button.disabled = true;
+  text(statusNode, 'جارٍ التحقق النهائي ونشر ملفات الصوت المعتمدة فقط…');
+  try {
+    var token = await adminToken();
+    var response = await fetch(SUPA + '/functions/v1/publish-story-pr', {
+      method: 'POST',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'publish_audio_only',
+        section: story.section,
+        slug: story.slug,
+        story_id: storyId
+      }),
+      cache: 'no-store'
+    });
+    var data = null;
+    try { data = await response.json(); } catch (ignorePublishJson) {}
+    if (!response.ok || !data || data.success !== true || !data.commit_sha) {
+      throw new Error(data && data.error || 'تعذر نشر ملفات الصوت (' + response.status + ').');
+    }
+    review.audio_published_commit_sha = data.commit_sha;
+    review.audio_published_at = data.audio_published_at || new Date().toISOString();
+    generationMessage = 'تم نشر الصوت المعتمد على الصفحة المنشورة. حدّث صفحة الحكاية للاستماع.';
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر نشر الصوت: ' + (error && error.message || error));
+    button.disabled = false;
+  } finally {
+    audioPublishBusy = false;
+  }
+}
+function renderAudioPublishControl(banner, g) {
+  if (!g || !g.ok || !canWrite) return;
+  var panel = document.createElement('div');
+  panel.className = 'kh-audio-review-controls kh-audio-publish-controls';
+  var status = document.createElement('span');
+  status.className = 'kh-audio-review-state';
+  if (review.audio_published_commit_sha) {
+    text(status, 'الصوت منشور على الصفحة العامة. حدّث صفحة الحكاية للاستماع.');
+    panel.appendChild(status);
+  } else {
+    text(status, 'اكتملت مراجعة العربية والإنجليزية؛ النشر يحتاج موافقتك الصريحة.');
+    var button = makeButton('نشر الصوت على الصفحة المنشورة', 'publish-audio', function () {
+      publishApprovedAudio(status, button);
+    });
+    button.disabled = audioPublishBusy;
+    panel.append(button, status);
+  }
+  banner.appendChild(panel);
+}
+
 function canApprove() { return gate().ok; }
 window.KHStoryAudioReview = { canApprove: canApprove, gateSummary: gateSummary, gate: gate };
 var activeObjectUrl = null, activeEntryKey = '', activePlayButton = null;
@@ -607,7 +668,7 @@ function makeButton(label, cls, handler) {
   var b = document.createElement('button'); b.type = 'button'; b.className = 'kh-audio-review-btn ' + (cls || ''); b.textContent = label;
   b.addEventListener('click', handler); return b;
 }
-var generationBusy = false, generationMessage = '';
+var generationBusy = false, generationMessage = '', audioPublishBusy = false;
 function currentStoryId() {
   var params = new URLSearchParams(location.search), direct = params.get('story_id') || '';
   if (/^\d{3}$/.test(direct)) return direct;
