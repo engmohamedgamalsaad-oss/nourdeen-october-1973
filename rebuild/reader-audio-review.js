@@ -227,7 +227,8 @@ async function loadManifests() {
       data.segments.forEach(function (seg) {
         var expected = seg.speaker === 'karma' ? core.VOICES.karma : seg.speaker === 'narrator' ? core.VOICES.narrator : '';
         var engineOk = lang === 'ar'
-          ? seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected
+          ? ((seg.provider === 'namaa' && seg.model === 'NAMAA-Egyptian-TTS' && seg.voice === 'namaa-' + seg.speaker) ||
+             (seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected))
           : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim();
         if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
@@ -653,9 +654,9 @@ async function generateNextStoryBlock(statusNode, button) {
   var storyId = currentStoryId();
   if (!storyId) { text(statusNode, 'تعذر تحديد رقم الحكاية من مسار الصفحة؛ لم يبدأ التوليد.'); return; }
   var language = target.lang, nextBlock = target.block_index;
-  var fish = language === 'ar';
+  var namaa = language === 'ar';
   if (!window.confirm('سيتم توليد مقطع واحد فقط: ' + LANG_NAMES[language] + '، رقم ' + (nextBlock + 1) + '. ' +
-      (fish ? 'سيُستخدم Fish Audio وقد يستهلك رصيدًا.' : 'سيُستخدم Edge TTS. ') +
+      (namaa ? 'سيُستخدم NAMAA مع التسجيل المرجعي المعتمد.' : 'سيُستخدم Edge TTS. ') +
       'لن يبدأ المقطع التالي قبل الاستماع الكامل وقبول هذا المقطع. هل توافق؟')) return;
   generationBusy = true;
   button.disabled = true;
@@ -664,7 +665,7 @@ async function generateNextStoryBlock(statusNode, button) {
     var started = await audioAssetsRequest({
       action: 'generate', section: story.section, slug: story.slug, story_id: storyId,
       language: language, block_index: nextBlock, confirm_audio_request: 'yes',
-      confirm_fish_audio_request: fish ? 'yes' : 'no'
+      confirm_namaa_audio_request: namaa ? 'yes' : 'no'
     });
     if (!started || !started.request_id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
     var result = null;
