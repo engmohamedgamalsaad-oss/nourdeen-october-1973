@@ -174,8 +174,8 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
     'Questa versione linguistica è stata generata utilizzando l’intelligenza artificiale.',
     'Diese Sprachfassung wurde mithilfe künstlicher Intelligenz erstellt.'
   ]) assert.ok(reader.includes(disclosure), 'shared reader AI disclosure missing: ' + disclosure);
-  assert.match(reader, /!isRealPhoto\\(d\\.cover\\)&&!isOwnIllus\\(d\\.cover\\)/,
   assert.match(reader, /!isRealPhoto\(d\.cover\)&&!isOwnIllus\(d\.cover\)/,
+    'the shared reader must preserve an explicitly declared original illustration cover');
   assert.equal(story.cover.path, 'stories/history/006/cover.svg', 'Ahmed Urabi cover object must remain canonical');
   assert.ok(page.includes('/stories/history/006/cover.svg'), 'social preview must use the same canonical cover image');
   assert.match(reader, /className='ai-disclosure'/, 'AI disclosure must be a separate element after the final story block');
