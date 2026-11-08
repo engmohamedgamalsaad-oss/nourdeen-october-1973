@@ -968,6 +968,12 @@ function injectStyles() {
     '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started,.kh-audio-ready-state.preparing{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
+    '.kh-speech-text-controls{display:grid;grid-template-columns:1fr;align-items:stretch;gap:8px;margin:10px 0;padding:12px;border-style:dashed;background:color-mix(in srgb,var(--accent) 5%,var(--panel))}',
+    '.kh-speech-text-controls strong{font-size:14px;color:var(--accent)}.kh-speech-text-controls p{margin:0;white-space:pre-wrap;line-height:1.8}',
+    '.kh-speech-source{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}',
+    '.kh-speech-text-controls textarea{box-sizing:border-box;width:100%;min-width:0;resize:vertical;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:14px/1.8 Cairo,Arial,sans-serif}',
+    '.kh-speech-notes{display:grid;gap:4px;font-size:12px;color:var(--muted)}',
+
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate[hidden]{display:none!important}',
     '.kh-audio-progress-row{display:grid;grid-template-columns:minmax(170px,auto) minmax(100px,1fr);align-items:center;gap:10px;margin-top:7px;font-size:12px}.kh-audio-progress-row progress{width:100%;height:10px;accent-color:#4b9a70}',
