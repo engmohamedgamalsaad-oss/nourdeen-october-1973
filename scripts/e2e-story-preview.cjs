@@ -272,7 +272,7 @@ async function main() {
     assert.equal(await urabiPage.locator('#blocks .block').last().getAttribute('data-speaker'), 'karma', lang + ' should keep Karma as the final speaker');
   }
   await urabiPage.locator('#theme-toggle').click();
-  assert.equal(await urabiPage.locator('body').getAttribute('data-theme'), 'light', 'Ahmed Urabi should support light mode');
+  assert.equal(await urabiPage.locator('html').getAttribute('data-theme'), 'light', 'Ahmed Urabi should support light mode');
   await urabiPage.screenshot({ path: path.join(artifactDir, 'ahmed-urabi-desktop-de-light.png'), fullPage: true, animations: 'disabled' });
   await urabiPage.setViewportSize({ width: 390, height: 844 });
   const urabiOverflow = await urabiPage.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
