@@ -108,7 +108,7 @@ function makeReaderHtml(story, id, coverUrl) {
   const section = story.section;
   let html = '<!doctype html>\n' +
     '<html lang="ar" dir="rtl">\n<head>\n<meta charset="utf-8">' +
-    '<link rel="preload" href="story.json" as="fetch" crossorigin><link rel="preload" href="../../../rebuild/reader.js?v=20261102-canonical-preview-reader-3" as="script">' +
+    '<link rel="preload" href="story.json" as="fetch" crossorigin><link rel="preload" href="../../../rebuild/reader.js?v=20261108-ai-disclosure-1" as="script">' +
     '<script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script>' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">\n' +
     '<script src="../../../assets/shared/home-language-only.js?v=20261030-v2-language-fix"></script>\n' +
@@ -140,7 +140,7 @@ function makeReaderHtml(story, id, coverUrl) {
     '<p class="reaction-status" id="reaction-status" role="status" aria-live="polite"></p><span class="reaction-count-line" id="reaction-limit">يمكن تسجيل إعجاب واحد ورد فعل واحد لكل حكاية من المتصفح نفسه.</span></div></section>' +
     '<section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section></article></main>\n' +
     '<div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>\n' +
-    '<script src="../../../rebuild/reader.js?v=20261102-canonical-preview-reader-3" data-kh-story-reader data-story-path="story.json"></script>' +
+    '<script src="../../../rebuild/reader.js?v=20261108-ai-disclosure-1" data-kh-story-reader data-story-path="story.json"></script>' +
     '<script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script></body></html>\n';
   return html;
 }
