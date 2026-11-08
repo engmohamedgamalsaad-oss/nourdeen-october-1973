@@ -312,7 +312,7 @@ Deno.serve(async (req: Request) => {
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (error) return reply(500, { error: "تعذر تحميل سجل مراجعة الصوت.", detail: error.message });
     if (data) return reply(200, { success: true, audio_review: data.audio_review });
-    const emptyReview = { version: 1, regen: {}, clips: {}, audio_hashes: {} };
+    const emptyReview = { version: 1, regen: {}, clips: {}, audio_hashes: {}, speech_texts: {} };
     const created = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: emptyReview }, { onConflict: "section,slug" })
       .select("audio_review").single();
