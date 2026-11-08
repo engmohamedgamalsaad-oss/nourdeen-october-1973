@@ -366,6 +366,7 @@ Deno.serve(async (req: Request) => {
   let audioOnlySection = "", audioOnlySlug = "", audioOnlyStoryId = "";
   let audioOnlyReview: any = null, audioOnlyService: any = null;
   if (body?.action === "publish_audio_only") {
+    if (body?.confirm_audio_publish !== "yes") return reply(400, { error: "يتطلب نشر الصوت تأكيدًا صريحًا من صاحب المشروع." });
     const section = String(body.section ?? ""), slug = String(body.slug ?? ""), storyId = String(body.story_id ?? "");
     if (!/^[a-z0-9-]{1,80}$/.test(section) || !/^[a-z0-9-]{1,80}$/.test(slug) || !/^[0-9]{3}$/.test(storyId)) {
       return reply(400, { error: "هوية الحكاية المطلوبة لنشر الصوت غير صالحة." });
