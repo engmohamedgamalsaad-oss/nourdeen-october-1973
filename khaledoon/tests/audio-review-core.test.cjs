@@ -230,6 +230,12 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(!publicAudioPlayer.includes("story.section !== 'science'"), 'the public audio player must not be hardcoded to Magdi Yacoub');
   assert.ok(publicAudioPlayer.includes("lang !== 'ar' && lang !== 'en'"), 'the first public rollout must support Arabic and English while leaving other languages extensible');
   assert.ok(publicAudioPlayer.includes("segment.provider !== 'edge-tts'"), 'English public playback must validate its Edge TTS manifest contract');
+  assert.ok(publicAudioPlayer.includes('else document.body.appendChild(host)'), 'legacy story pages without the V2 blocks container must still receive the shared player');
+  for (const octoberId of ['001', '002', '003', '004']) {
+    const octoberHtml = fs.readFileSync(path.join(__dirname, '../../stories/october/' + octoberId + '/index.html'), 'utf8');
+    assert.ok(octoberHtml.includes("window.__KH_STORY_PACKAGE={section:'october',slug:slug}"), 'October story ' + octoberId + ' must load the shared player using its existing slug');
+    assert.ok(octoberHtml.includes('story-audio.js?v=20261108-universal-ar-en-1'), 'October story ' + octoberId + ' must use the shared audio player without changing its visual template');
+  }
   const genericWorkflow = fs.readFileSync(path.join(__dirname, '../../.github/workflows/story-audio-segment-staging.yml'), 'utf8');
   assert.ok(genericWorkflow.includes('inputs.section') && genericWorkflow.includes('inputs.slug') && genericWorkflow.includes('inputs.language') && genericWorkflow.includes('inputs.block_index'), 'the segment workflow must accept a generic story identity, language, and block');
   assert.ok(genericWorkflow.includes('rebuild/october-audio-packages'), 'October source packages must use the same one-segment workflow');
