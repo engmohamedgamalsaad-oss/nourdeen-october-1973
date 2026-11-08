@@ -110,6 +110,7 @@ function validateAudioReviewGate(
         return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
       }
 
+      if (review) {
       const selectedReviewSegments = review.segments.filter((item: any) => item && languages.includes(item.lang));
       const expectedKeys = new Set<string>();
       for (const lang of languages) {
@@ -162,16 +163,10 @@ function validateAudioReviewGate(
         return "حقول التوافق العربية لا تطابق النصوص الصوتية المعتمدة.";
       }
       for (const lang of languages) approvedTextByLanguage[lang] = rewrites[lang];
+      }
     } catch {
       return "تعذر قراءة ملف اعتماد النص الصوتي قبل النشر.";
     }
-  }
-
-  const supportedLanguages = ["ar", "en", "fr", "it", "de"];
-  const languages = Array.isArray(audioReview.audio_languages) ? audioReview.audio_languages : supportedLanguages;
-  if (!languages.length || languages.some((lang: any) => !supportedLanguages.includes(lang)) ||
-      new Set(languages).size !== languages.length || !languages.includes("ar")) {
-    return "نطاق لغات الصوت المعتمد غير صالح؛ يجب أن يتضمن العربية ويقتصر على اللغات المدعومة.";
   }
 
   const clips = Object.values(audioReview.clips) as any[];
