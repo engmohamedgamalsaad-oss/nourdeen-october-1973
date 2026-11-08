@@ -42,7 +42,7 @@ test('publisher moves a story directly and preserves the previous story URL with
   assert.ok(publisher.includes('new TextDecoder().decode(bytes)'), 'base64-encoded story markers must be decoded before the legacy artifact guard');
   assert.ok(publisher.includes('file.content.replace(/' + String.fromCharCode(92) + 's/g, "")'), 'base64 whitespace must be removed with a real whitespace regex before decoding');
   assert.ok(publisher.includes('contentForSafetyScan(file)'), 'legacy-format rejection must scan decoded content, not only the submitted base64 string');
-  assert.ok(publisher.includes('2026-11-02-direct-main-publisher-1'), 'publisher capability version must identify the direct-main implementation');
+  assert.ok(publisher.includes('2026-11-08-audio-only-publish-1') && publisher.includes('story_publish_version: "2026-11-02-canonical-story-publish-1"'), 'publisher capability version must identify the direct-main implementation');
   assert.ok(publisher.includes('supports_v2_publish: false'), 'V2 publishing must not be advertised as a current general capability');
   assert.ok(publisher.includes('submittedStorySection && submittedStorySection !== "october"'), 'legacy V1 publishing must be limited to October');
   assert.ok(publisher.includes("let previousRoot = ''"));
@@ -616,9 +616,9 @@ test('AI import failures preserve pasted text and preview records the provider',
   assert.ok(admin.includes('hw.title=reason'));
   assert.ok(admin.includes("if(it.status==='published'){nextMeta.pending_draft=Object.assign({},payload)"));
   assert.ok(admin.includes("if(lastReview.decision==='rejected'&&lastReview.reason)"));
-  assert.ok(admin.includes("if(storyOnlyDraft)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'story-only drafts must use the full-package reviewer');
+  assert.ok(admin.includes("if(storyOnlyDraft)aiPreviewPopup.location.href='../rebuild/package-review.html?draft=1&v=20261108-universal-segment-review-1'"), 'story-only drafts must use the full-package reviewer');
   assert.ok(admin.includes("else aiPreviewPopup.location.href='preview.html?story=1&submission='"), 'legacy imports must retain the compatibility preview');
-  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261106-shared-october-reader-preview-2'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
+  assert.ok(admin.includes("popup.location.href='../rebuild/package-review.html?draft=1&v=20261108-universal-segment-review-1'"), 'manual save-and-preview must also route unified story-only drafts to the full-package reviewer');
   assert.ok(admin.includes("['gemini','Gemini']"));
   assert.ok(preview.includes('id="aiVersionBadge"'));
   assert.ok(preview.includes("aiMeta.ai_imported_provider_label"));
