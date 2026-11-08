@@ -2,6 +2,7 @@
 'use strict';
 var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
+var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
@@ -14,12 +15,31 @@ var canWrite = false, manifestLoadFailure = false, initialized = false, initiali
 var pronunciationReport = null, pronunciationReportStatus = ''; 
 var initialArabicStageAttempted = false;
 var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
-var PLAY_LABEL = '▶ تشغيل', PAUSE_LABEL = '⏸ إيقاف مؤقت';
+var loadedAudio = {};
 var activeControl = null;
+
+/* أيقونات SVG ثابتة (لا تحتوي أي بيانات خارجية) */
+var ICONS = {
+  play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>',
+  pause: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>',
+  replay: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5V2L7 6l5 4V7a5 5 0 1 1-5 5H5a7 7 0 1 0 7-7z"/></svg>',
+  check: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>',
+  x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.4 17.6 5 12 10.6 6.4 5 5 6.4 10.6 12 5 17.6 6.4 19 12 13.4 17.6 19 19 17.6 13.4 12z"/></svg>',
+  lock: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 8h-1V6a5 5 0 0 0-10 0v2H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2zM9 6a3 3 0 0 1 6 0v2H9z"/></svg>',
+  spinner: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 10 10h-3a7 7 0 1 1-7-7z"/></svg>',
+  spark: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/></svg>'
+};
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
 function speakerLabel(speaker) { return speaker === 'karma' ? 'كارما' : speaker === 'narrator' ? 'الراوي' : String(speaker || ''); }
+function speakerAvatar(speaker) {
+  var a = document.createElement('span');
+  a.className = 'kh-avatar';
+  a.setAttribute('aria-hidden', 'true');
+  a.textContent = speaker === 'karma' ? '👧' : '🎙️';
+  return a;
+}
 function fmtTime(sec) {
   sec = Number(sec);
   if (!isFinite(sec) || sec < 0) sec = 0;
@@ -27,7 +47,11 @@ function fmtTime(sec) {
   return m + ':' + (s < 10 ? '0' : '') + s;
 }
 /* حالة المشغّل البصرية للبطاقة: idle | loading | playing | paused | ended | error | unavailable */
-function setPlayerState(control, state) { if (control) control.dataset.player = state; }
+function setPlayerState(control, state) {
+  if (!control) return;
+  control.dataset.player = state;
+  if (state !== 'loading') control.dataset.indeterminate = '0';
+}
 function resetProgress(control) {
   if (!control) return;
   var fill = control.querySelector('.kh-audio-progress-fill');
@@ -42,6 +66,123 @@ function updateProgress(control) {
   var d = audio.duration, c = audio.currentTime;
   if (fill) fill.style.width = (isFinite(d) && d > 0 ? Math.min(100, (c / d) * 100) : 0) + '%';
   if (time) time.textContent = fmtTime(c) + ' / ' + fmtTime(isFinite(d) ? d : 0);
+}
+function markProgressDone(control) {
+  if (!control) return;
+  var fill = control.querySelector('.kh-audio-progress-fill');
+  var time = control.querySelector('.kh-audio-time');
+  if (fill) fill.style.width = '100%';
+  if (time) time.textContent = 'اكتمل الاستماع';
+}
+/* نسبة التحميل أثناء جلب ملف الصوت؛ null تعني أن حجم الملف غير معروف */
+function showLoadProgress(control, ratio) {
+  if (!control) return;
+  var fill = control.querySelector('.kh-audio-progress-fill');
+  var time = control.querySelector('.kh-audio-time');
+  if (ratio == null) {
+    control.dataset.indeterminate = '1';
+    if (time) time.textContent = 'جارٍ التحميل…';
+    return;
+  }
+  control.dataset.indeterminate = '0';
+  var pct = Math.max(0, Math.min(100, Math.round(ratio * 100)));
+  if (fill) fill.style.width = pct + '%';
+  if (time) time.textContent = 'تحميل ' + pct + '%';
+}
+/* سطر حالة الصوت: idle قبل التحميل، preparing أثناءه، ready بعده، ثم playing/paused/ended/failed */
+function setAudioStatus(control, kind, message) {
+  var node = control && control.querySelector('.kh-audio-ready-state');
+  if (!node) return;
+  node.className = 'kh-audio-ready-state ' + kind;
+  node.textContent = message;
+}
+function iconButton(iconKey, label, cls, handler) {
+  var b = document.createElement('button');
+  b.type = 'button';
+  b.className = 'kh-audio-review-btn ' + (cls || '');
+  var ico = document.createElement('span');
+  ico.className = 'kh-btn-ico';
+  ico.innerHTML = ICONS[iconKey] || '';
+  var lbl = document.createElement('span');
+  lbl.className = 'kh-btn-lbl';
+  lbl.textContent = label;
+  b.append(ico, lbl);
+  b.addEventListener('click', handler);
+  return b;
+}
+function setButtonFace(btn, iconKey, label) {
+  if (!btn) return;
+  var ico = btn.querySelector('.kh-btn-ico'), lbl = btn.querySelector('.kh-btn-lbl');
+  if (ico && iconKey) ico.innerHTML = ICONS[iconKey] || '';
+  if (lbl && label != null) lbl.textContent = label;
+}
+function setPlayButton(button, mode) {
+  var face = mode === 'pause' ? ['pause', 'إيقاف مؤقت']
+    : mode === 'resume' ? ['play', 'استئناف']
+    : mode === 'loading' ? ['spinner', 'جارٍ التحميل…']
+    : ['play', 'تشغيل'];
+  setButtonFace(button, face[0], face[1]);
+  button.dataset.mode = mode;
+}
+function setAcceptState(btn, enabled, hasSaved) {
+  if (!btn) return;
+  btn.disabled = !enabled;
+  if (enabled) setButtonFace(btn, 'check', 'موافقة على الصوت');
+  else setButtonFace(btn, 'lock', hasSaved ? 'تم حفظ القرار — استمع مجددًا لتغييره' : 'استمع للنهاية لتفعيل الموافقة');
+}
+function buildSteps(labels) {
+  var ol = document.createElement('ol');
+  ol.className = 'kh-audio-steps';
+  labels.forEach(function (label, i) {
+    var li = document.createElement('li');
+    li.dataset.n = String(i + 1);
+    li.textContent = label;
+    ol.appendChild(li);
+  });
+  return ol;
+}
+function syncSteps(control) {
+  if (!control) return;
+  var items = control.querySelectorAll('.kh-audio-steps li');
+  if (items.length < 2) return;
+  var listened = control.dataset.listened === '1';
+  var decided = control.dataset.review === 'accepted' || control.dataset.review === 'rejected';
+  items[0].className = (listened || decided) ? 'done' : 'active';
+  items[1].className = decided ? 'done' : (listened ? 'active' : '');
+}
+/* يعيد بطاقة متوقفة/غير نشطة إلى شكلها الهادئ مع الاحتفاظ بحالة "تم الاستماع" */
+function settleControl(ctrl) {
+  if (!ctrl) return;
+  var done = played[ctrl.dataset.clipKey] === true;
+  var loaded = ctrl.dataset.loaded === '1';
+  setPlayerState(ctrl, done ? 'ended' : 'idle');
+  if (done) markProgressDone(ctrl); else resetProgress(ctrl);
+  setAudioStatus(ctrl, done ? 'ended' : (loaded ? 'ready' : 'idle'),
+    done ? 'اكتمل الاستماع' : (loaded ? 'تم التحميل · جاهز للتشغيل' : 'لم يُحمَّل بعد — اضغط تشغيل'));
+  var btn = ctrl.querySelector('.kh-audio-review-btn.play');
+  if (btn) setPlayButton(btn, 'play');
+}
+async function fetchBlobWithProgress(href, onProgress) {
+  var response = await fetch(href, { cache: 'no-store' });
+  if (!response.ok) throw new Error('تعذر تحميل ملف الصوت (' + response.status + ').');
+  var total = Number(response.headers.get('content-length')) || 0;
+  var type = response.headers.get('content-type') || '';
+  if (type.indexOf('audio/') !== 0) type = 'audio/mpeg';
+  if (!response.body || typeof response.body.getReader !== 'function') {
+    onProgress(null);
+    return await response.blob();
+  }
+  var reader = response.body.getReader(), chunks = [], received = 0;
+  onProgress(total ? 0 : null);
+  for (;;) {
+    var step = await reader.read();
+    if (step.done) break;
+    chunks.push(step.value);
+    received += step.value.length;
+    onProgress(total ? Math.min(1, received / total) : null);
+  }
+  onProgress(1);
+  return new Blob(chunks, { type: type });
 }
 function getContext() {
   try { ctx = JSON.parse(localStorage.getItem('kh-story-review-context') || 'null'); } catch (e) { ctx = null; }
@@ -292,6 +433,7 @@ async function loadArabicExpectedTexts(blocks) {
 }
 async function loadManifests() {
   manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  loadedAudio = {};
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
     var localized = story.i18n && story.i18n[lang];
@@ -411,10 +553,26 @@ function gateSummary() {
 function renderGateBanner(banner) {
   var g = gate();
   banner.replaceChildren();
+  banner.dataset.state = g.loading ? 'loading' : (g.loadError ? 'error' : (g.ok ? 'ok' : 'pending'));
+  var head = document.createElement('div');
+  head.className = 'kh-gate-head';
+  var title = document.createElement('div');
+  title.className = 'kh-gate-title';
+  var avatar = document.createElement('span');
+  avatar.className = 'kh-avatar';
+  avatar.setAttribute('aria-hidden', 'true');
+  avatar.textContent = '🎧';
+  var titleText = document.createElement('span');
+  text(titleText, 'مراجعة الصوت قبل اعتماد المعاينة');
+  title.append(avatar, titleText);
+  var pill = document.createElement('span');
+  pill.className = 'kh-gate-pill';
+  text(pill, g.loading ? 'جارٍ الفحص…' : g.loadError ? 'خطأ في التحميل' : g.ok ? 'جاهز للاعتماد ✓' : 'المراجعة غير مكتملة');
+  head.append(title, pill);
   var message = document.createElement('div');
   message.className = 'kh-gate-message';
   text(message, gateSummary());
-  banner.appendChild(message);
+  banner.append(head, message);
   if (!entries.length) return;
   var total = entries.length;
   var ready = entries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
@@ -422,20 +580,47 @@ function renderGateBanner(banner) {
     var clip = review.clips[entry.key];
     return clip && clip.status === 'accepted';
   }).length;
-  function progressRow(label, value) {
-    var row = document.createElement('div');
-    row.className = 'kh-audio-progress-row';
-    var caption = document.createElement('span');
-    text(caption, label + ': ' + value + '/' + total);
-    var bar = document.createElement('progress');
-    bar.max = total;
-    bar.value = value;
+  function meterRow(label, value, kind) {
+    var rowEl = document.createElement('div');
+    rowEl.className = 'kh-meter-row';
+    rowEl.dataset.kind = kind;
+    var caption = document.createElement('div');
+    caption.className = 'kh-meter-cap';
+    var captionLabel = document.createElement('span');
+    text(captionLabel, label);
+    var captionValue = document.createElement('strong');
+    text(captionValue, value + '/' + total);
+    caption.append(captionLabel, captionValue);
+    var bar = document.createElement('div');
+    bar.className = 'kh-meter';
+    bar.setAttribute('role', 'progressbar');
     bar.setAttribute('aria-label', label);
-    row.append(caption, bar);
-    banner.appendChild(row);
+    bar.setAttribute('aria-valuemin', '0');
+    bar.setAttribute('aria-valuemax', String(total));
+    bar.setAttribute('aria-valuenow', String(value));
+    var fill = document.createElement('span');
+    fill.style.width = (total ? Math.round(value / total * 100) : 0) + '%';
+    bar.appendChild(fill);
+    rowEl.append(caption, bar);
+    banner.appendChild(rowEl);
   }
-  progressRow('المقاطع الجاهزة للاستماع', ready);
-  progressRow('المقاطع المقبولة بعد الاستماع', accepted);
+  meterRow('المقاطع الجاهزة للاستماع', ready, 'ready');
+  meterRow('المقاطع المقبولة بعد الاستماع', accepted, 'accepted');
+  var chips = document.createElement('div');
+  chips.className = 'kh-lang-chips';
+  LANGS.forEach(function (lang) {
+    var list = entries.filter(function (entry) { return entry.lang === lang; });
+    var acc = list.filter(function (entry) {
+      var clip = review.clips[entry.key];
+      return clip && clip.status === 'accepted';
+    }).length;
+    var chip = document.createElement('span');
+    chip.className = 'kh-lang-chip';
+    chip.dataset.state = !list.length ? 'none' : (acc === list.length ? 'done' : 'part');
+    text(chip, LANG_NAMES[lang] + ' ' + (list.length ? acc + '/' + list.length : '—'));
+    chips.appendChild(chip);
+  });
+  banner.appendChild(chips);
   if (g.missingLanguages || g.loadError) {
     var partial = document.createElement('small');
     text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests اللغات الخمس.');
@@ -449,7 +634,6 @@ async function play(entry, button, forceRestart) {
   if (!entry || !entry.src) return;
   var control = button.closest('.kh-audio-review-controls');
   var stateNode = control && control.querySelector('.kh-audio-review-state');
-  var audioStateNode = control && control.querySelector('.kh-audio-ready-state');
   var acceptBtn = control && control.querySelector('.kh-audio-review-btn.accept');
   if (control && control.dataset.player === 'loading') return;
   if (activeEntryKey === entry.key && audio && audio.src) {
@@ -457,9 +641,9 @@ async function play(entry, button, forceRestart) {
       try {
         audio.currentTime = 0;
         await audio.play();
-        button.classList.add('kh-audio-review-playing');
-        button.textContent = PAUSE_LABEL;
+        setPlayButton(button, 'pause');
         setPlayerState(control, 'playing');
+        setAudioStatus(control, 'playing', 'يعمل الآن من البداية');
         updateProgress(control);
         if (stateNode) stateNode.textContent = 'أُعيد تشغيل المقطع من البداية…';
       } catch (e) {
@@ -469,16 +653,16 @@ async function play(entry, button, forceRestart) {
     }
     if (!audio.paused) {
       audio.pause();
-      button.classList.remove('kh-audio-review-playing');
-      button.textContent = PLAY_LABEL;
+      setPlayButton(button, 'resume');
       setPlayerState(control, 'paused');
+      setAudioStatus(control, 'paused', 'متوقف مؤقتًا');
       if (stateNode) stateNode.textContent = 'تم إيقاف المقطع مؤقتًا.';
     } else {
       try {
         await audio.play();
-        button.classList.add('kh-audio-review-playing');
-        button.textContent = PAUSE_LABEL;
+        setPlayButton(button, 'pause');
         setPlayerState(control, 'playing');
+        setAudioStatus(control, 'playing', 'يعمل الآن');
         if (stateNode) stateNode.textContent = 'المقطع يعمل الآن…';
       } catch (e) {
         if (stateNode) stateNode.textContent = 'تعذر استكمال التشغيل: ' + (e.message || e);
@@ -487,29 +671,35 @@ async function play(entry, button, forceRestart) {
     return;
   }
   played[entry.key] = false;
-  if (acceptBtn) acceptBtn.disabled = true;
-  if (activeControl && activeControl !== control) setPlayerState(activeControl, 'idle');
+  if (control) control.dataset.listened = '0';
+  syncSteps(control);
+  if (acceptBtn) setAcceptState(acceptBtn, false, false);
+  if (activeControl && activeControl !== control) settleControl(activeControl);
   activeControl = control;
   setPlayerState(control, 'loading');
   resetProgress(control);
+  setPlayButton(button, 'loading');
   if (stateNode) stateNode.textContent = 'جارٍ تحميل الملف والتحقق من بصمته…';
-  if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state preparing'; audioStateNode.textContent = 'جارٍ تجهيز الصوت للتشغيل'; }
+  setAudioStatus(control, 'preparing', 'جارٍ تحميل الصوت…');
   if (!audio) audio = new Audio();
   try {
-    if (activePlayButton && activePlayButton !== button) {
-      activePlayButton.classList.remove('kh-audio-review-playing');
-      activePlayButton.textContent = PLAY_LABEL;
-    }
     try { audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; audio.onloadedmetadata = null; audio.pause(); audio.currentTime = 0; } catch (e) {}
     if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     activeEntryKey = '';
     activePlayButton = null;
-    var url = new URL(entry.signed_src || entry.src, manifestUrl(entry.lang));
-    url.searchParams.set('v', String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version));
-    var response = await fetch(url.href, { cache: 'no-store' });
-    if (!response.ok) throw new Error('تعذر تحميل ملف الصوت (' + response.status + ').');
-    var blob = await response.blob();
-    var digest = await core.sha256Bytes(await blob.arrayBuffer());
+    var cacheId = entry.lang + '|' + entry.src;
+    var cached = loadedAudio[cacheId];
+    var blob, digest;
+    if (cached && cached.blob && cached.digest && (!entry.audio_sha256 || entry.audio_sha256 === cached.digest)) {
+      blob = cached.blob;
+      digest = cached.digest;
+    } else {
+      var url = new URL(entry.signed_src || entry.src, manifestUrl(entry.lang));
+      url.searchParams.set('v', String(entry.audio_sha256 || entry.segment.audio_sha256 || entry.segment.hash || entry.manifest.generated_at || entry.manifest.version));
+      blob = await fetchBlobWithProgress(url.href, function (ratio) { showLoadProgress(control, ratio); });
+      digest = await core.sha256Bytes(await blob.arrayBuffer());
+      loadedAudio[cacheId] = { blob: blob, digest: digest };
+    }
     var previousKey = entry.key;
     if (entry.audio_sha256 !== digest) {
       entry.audio_sha256 = digest;
@@ -521,7 +711,9 @@ async function play(entry, button, forceRestart) {
     }
     entry.segment.audio_sha256 = digest;
     readyByKey[entry.key] = 'ready';
-    if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state ready'; audioStateNode.textContent = 'جاهز للاستماع'; }
+    if (control) control.dataset.loaded = '1';
+    setAudioStatus(control, 'ready', 'تم التحميل والتحقق من البصمة');
+    resetProgress(control);
     if (previousKey !== entry.key) {
       delete readyByKey[previousKey];
       delete played[previousKey];
@@ -531,9 +723,7 @@ async function play(entry, button, forceRestart) {
       if (stateNode) stateNode.textContent = 'تم التحقق من نسخة صوت مختلفة؛ يلزم مراجعتها من جديد.';
     }
     played[entry.key] = false;
-    if (acceptBtn) acceptBtn.disabled = true;
-    var old = document.querySelector('.kh-audio-review-playing');
-    if (old) old.classList.remove('kh-audio-review-playing');
+    if (acceptBtn) setAcceptState(acceptBtn, false, false);
     activeObjectUrl = URL.createObjectURL(blob);
     activeEntryKey = entry.key;
     activePlayButton = button;
@@ -541,53 +731,53 @@ async function play(entry, button, forceRestart) {
     audio.onloadedmetadata = function () { updateProgress(control); };
     audio.ontimeupdate = function () { updateProgress(control); };
     audio.load();
-    button.classList.add('kh-audio-review-playing');
-    button.textContent = PAUSE_LABEL;
+    setPlayButton(button, 'pause');
     setPlayerState(control, 'playing');
+    setAudioStatus(control, 'playing', 'يعمل الآن');
     audio.onended = function () {
-      button.classList.remove('kh-audio-review-playing');
-      button.textContent = PLAY_LABEL;
+      setPlayButton(button, 'play');
       setPlayerState(control, 'ended');
       updateProgress(control);
+      setAudioStatus(control, 'ended', 'اكتمل الاستماع');
       activeEntryKey = '';
       activePlayButton = null;
       played[entry.key] = true;
-      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = false;
+      if (control) control.dataset.listened = '1';
+      syncSteps(control);
+      if (acceptButtons[entry.key]) setAcceptState(acceptButtons[entry.key], true, false);
       if (stateNode) stateNode.textContent = 'اكتمل الاستماع — يمكنك الموافقة على المقطع أو رفضه.';
       if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     };
     audio.onerror = function () {
-      button.classList.remove('kh-audio-review-playing');
-      button.textContent = PLAY_LABEL;
+      setPlayButton(button, 'play');
       setPlayerState(control, 'error');
       activeEntryKey = '';
       activePlayButton = null;
       played[entry.key] = false;
-      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
-      if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state failed'; audioStateNode.textContent = 'فشل تجهيز الصوت للتشغيل'; }
+      if (acceptButtons[entry.key]) setAcceptState(acceptButtons[entry.key], false, false);
+      setAudioStatus(control, 'failed', 'فشل تجهيز الصوت للتشغيل');
       if (stateNode) stateNode.textContent = 'تعذر تشغيل المقطع؛ لم يتم تسجيل الاستماع.';
       if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     };
     var playback = audio.play();
     if (playback && playback.catch) playback.catch(function () {
-      button.classList.remove('kh-audio-review-playing');
-      button.textContent = PLAY_LABEL;
+      setPlayButton(button, 'play');
       setPlayerState(control, 'error');
       activeEntryKey = '';
       activePlayButton = null;
       played[entry.key] = false;
-      if (acceptButtons[entry.key]) acceptButtons[entry.key].disabled = true;
+      if (acceptButtons[entry.key]) setAcceptState(acceptButtons[entry.key], false, false);
+      setAudioStatus(control, 'failed', 'تعذر بدء التشغيل');
       if (stateNode) stateNode.textContent = 'تعذر بدء تشغيل المقطع؛ حاول مرة أخرى.';
       if (activeObjectUrl) { URL.revokeObjectURL(activeObjectUrl); activeObjectUrl = null; }
     });
   } catch (e) {
-    button.classList.remove('kh-audio-review-playing');
-    button.textContent = PLAY_LABEL;
+    setPlayButton(button, 'play');
     setPlayerState(control, 'error');
     activeEntryKey = '';
     activePlayButton = null;
-    if (acceptBtn) acceptBtn.disabled = true;
-    if (audioStateNode) { audioStateNode.className = 'kh-audio-ready-state failed'; audioStateNode.textContent = 'فشل تجهيز الصوت للتشغيل'; }
+    if (acceptBtn) setAcceptState(acceptBtn, false, false);
+    setAudioStatus(control, 'failed', 'فشل تجهيز الصوت للتشغيل');
     if (stateNode) stateNode.textContent = 'تعذر التحقق من الملف الصوتي: ' + (e.message || e);
   }
 }
@@ -715,6 +905,9 @@ async function playPronunciationRange(match, item, button, panel) {
   try {
     if (!audio) audio = new Audio();
     try { audio.pause(); audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; } catch (e) {}
+    activeEntryKey = '';
+    activePlayButton = null;
+    if (activeControl) settleControl(activeControl);
     if (activeObjectUrl) URL.revokeObjectURL(activeObjectUrl);
     activeObjectUrl = URL.createObjectURL(match.blob);
     audio.src = activeObjectUrl;
@@ -809,7 +1002,7 @@ function renderGenerationControls(banner) {
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
   text(status, generationMessage || 'الترتيب: جميع مقاطع كارما أولًا، ثم مقاطع الراوي؛ ولا يُولد المقطع إلا بعد اعتماد نص قراءته.');
-  var button = makeButton('توليد المقطع العربي التالي', 'generate', function () {
+  var button = iconButton('spark', 'توليد المقطع العربي التالي', 'generate', function () {
     generateNextArabicBlock(status, button);
   });
   button.disabled = generationBusy;
@@ -916,15 +1109,26 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   panel.dataset.status = statusKey;
   panel.dataset.speaker = localizedBlock.speaker;
   var head = document.createElement('div');
-  head.className = 'kh-speech-head';
+  head.className = 'kh-card-head';
+  var who = document.createElement('div');
+  who.className = 'kh-who';
   var heading = document.createElement('strong');
   heading.className = 'kh-audio-speaker';
-  heading.textContent = 'نص القراءة الصوتية — ' + speakerLabel(localizedBlock.speaker);
+  heading.textContent = 'نص القراءة الصوتية — ' + speakerLabel(localizedBlock.speaker) + ' · مقطع ' + (index + 1);
+  who.append(speakerAvatar(localizedBlock.speaker), heading);
   var badge = document.createElement('span');
   badge.className = 'kh-audio-badge';
   badge.dataset.status = statusKey;
   badge.textContent = speechBadgeText(statusKey);
-  head.append(heading, badge);
+  head.append(who, badge);
+  var flow = document.createElement('ol');
+  flow.className = 'kh-flow';
+  ['اقتراح Gemini', 'مراجعتك وتعديلك', 'الاعتماد'].forEach(function (label, i) {
+    var li = document.createElement('li');
+    li.dataset.n = String(i + 1);
+    li.textContent = label;
+    flow.appendChild(li);
+  });
   var grid = document.createElement('div');
   grid.className = 'kh-speech-grid';
   var originalCol = document.createElement('div');
@@ -981,10 +1185,10 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     badge.textContent = speechBadgeText('dirty');
     status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
   });
-  var suggest = makeButton(record.suggested_text ? '↻ إعادة اقتراح من Gemini' : '✨ تجهيز النص بـ Gemini', 'generate', function () {
+  var suggest = iconButton('spark', record.suggested_text ? 'إعادة اقتراح من Gemini' : 'تجهيز النص بـ Gemini', 'generate', function () {
     prepareSpeechText(index, status, suggest);
   });
-  var approve = makeButton(record.status === 'approved' ? '✓ حفظ واعتماد التعديل' : '✓ اعتماد نص القراءة', 'accept', function () {
+  var approve = iconButton('check', record.status === 'approved' ? 'حفظ واعتماد التعديل' : 'اعتماد نص القراءة', 'accept', function () {
     approveSpeechText(index, textarea, status, approve);
   });
   approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
@@ -992,29 +1196,32 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var actions = document.createElement('div');
   actions.className = 'kh-audio-actions';
   actions.append(suggest, approve);
-  panel.append(head, grid, notes, actions, status);
+  panel.append(head, flow, grid, notes, actions, status);
   block.appendChild(panel);
 }
-function render() {
+function renderBlocks() {
   if (!story) return;
   var banner = document.getElementById('kh-audio-review-gate');
   if (!banner) { banner = document.createElement('div'); banner.id = 'kh-audio-review-gate'; banner.className = 'kh-audio-review-gate'; var first = document.querySelector('#blocks'); if (first && first.parentNode) first.parentNode.insertBefore(banner, first); }
-  renderGateBanner(banner);
   banner.hidden = false;
   var lang = document.documentElement.lang;
   var host = $('blocks');
   if (!host) return;
   var importer = document.getElementById('kh-audio-asr-import');
   if (!importer) {
-    importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate';
-    var importLabel = document.createElement('label'); importLabel.htmlFor = 'kh-audio-asr-file';
-    importLabel.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    importer = document.createElement('div'); importer.id = 'kh-audio-asr-import'; importer.className = 'kh-audio-review-gate kh-drop';
+    importer.style.setProperty('--tone', 'var(--accent, #c9a45c)');
+    var importLabel = document.createElement('label'); importLabel.htmlFor = 'kh-audio-asr-file'; importLabel.className = 'kh-drop-label';
+    var importIcon = document.createElement('span'); importIcon.setAttribute('aria-hidden', 'true'); importIcon.textContent = '📄';
+    var importText = document.createElement('span'); importText.className = 'kh-drop-text';
+    importText.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    importLabel.append(importIcon, importText);
     var input = document.createElement('input'); input.id = 'kh-audio-asr-file'; input.type = 'file'; input.accept = '.json,application/json';
     input.addEventListener('change', function () { importPronunciationReport(input.files && input.files[0]); });
     importer.append(importLabel, input); host.parentNode.insertBefore(importer, host);
   } else {
-    var importLabelExisting = importer.querySelector('label');
-    if (importLabelExisting) importLabelExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
+    var importTextExisting = importer.querySelector('.kh-drop-text');
+    if (importTextExisting) importTextExisting.textContent = 'تحميل تقرير مدقق النطق (JSON) — ' + (pronunciationReportStatus || 'اختياري');
   }
   var blocks = Array.prototype.slice.call(host.querySelectorAll(':scope > .block'));
   var blockByIndex = Object.create(null);
@@ -1032,7 +1239,6 @@ function render() {
       renderSpeechTextPanel(block, index, localizedBlock);
     });
   }
-  renderGenerationControls(banner);
   if (!manifests[lang]) {
     var missingManifest = /HTTP 404/.test(String(manifestErrors[lang] || ''));
     blocks.forEach(function (block, index) {
@@ -1044,60 +1250,77 @@ function render() {
       panel.dataset.player = 'unavailable';
       panel.dataset.speaker = localizedBlock.speaker;
       var missingHead = document.createElement('div');
-      missingHead.className = 'kh-audio-card-head';
+      missingHead.className = 'kh-card-head';
+      var missingWho = document.createElement('div');
+      missingWho.className = 'kh-who';
       var missingSpeaker = document.createElement('span');
       missingSpeaker.className = 'kh-audio-speaker';
       text(missingSpeaker, speakerLabel(localizedBlock.speaker) + ' · مقطع ' + (index + 1));
-      missingHead.appendChild(missingSpeaker);
-      var playBtn = makeButton('▶ الصوت غير جاهز', 'play', function () {});
+      missingWho.append(speakerAvatar(localizedBlock.speaker), missingSpeaker);
+      missingHead.appendChild(missingWho);
+      var playBtn = iconButton('play', 'الصوت غير جاهز', 'play', function () {});
       playBtn.disabled = true;
       var audioState = document.createElement('span');
       audioState.className = 'kh-audio-ready-state ' + (missingManifest ? 'not-started' : 'failed');
       text(audioState, missingManifest ? 'لم يبدأ إنتاج الصوت' : 'تعذر التحقق من تجهيز الصوت: ' + String(manifestErrors[lang] || 'خطأ غير محدد'));
+      var missingTrack = document.createElement('div');
+      missingTrack.className = 'kh-audio-track';
+      missingTrack.appendChild(audioState);
       var missingRow = document.createElement('div');
       missingRow.className = 'kh-audio-player';
-      missingRow.append(playBtn, audioState);
+      missingRow.append(playBtn, missingTrack);
       panel.append(missingHead, missingRow);
       block.appendChild(panel);
     });
     return;
   }
   if (activeLang !== lang) activeLang = lang;
-  var manifest = manifests[lang];
   entries.filter(function (e) { return e.lang === lang; }).sort(function (a, b) {
     return a.block_index - b.block_index || a.chunk_index - b.chunk_index;
   }).forEach(function (entry) {
     var block = blockByIndex[entry.block_index];
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key;
-    panel.dataset.player = 'idle';
-    panel.dataset.speaker = entry.speaker;
     var saved = review.clips[entry.key];
-    var cardHead = document.createElement('div'); cardHead.className = 'kh-audio-card-head';
+    var wasListened = played[entry.key] === true;
+    var cacheHit = !!loadedAudio[entry.lang + '|' + entry.src];
+    panel.dataset.player = wasListened ? 'ended' : 'idle';
+    panel.dataset.listened = wasListened ? '1' : '0';
+    panel.dataset.loaded = cacheHit ? '1' : '0';
+    panel.dataset.indeterminate = '0';
+    panel.dataset.review = saved ? saved.status : 'none';
+    panel.dataset.speaker = entry.speaker;
+    var cardHead = document.createElement('div'); cardHead.className = 'kh-card-head';
+    var who = document.createElement('div'); who.className = 'kh-who';
     var speakerTag = document.createElement('span'); speakerTag.className = 'kh-audio-speaker';
-    text(speakerTag, speakerLabel(entry.speaker) + ' · مقطع ' + (entry.block_index + 1));
+    text(speakerTag, speakerLabel(entry.speaker) + ' · مقطع ' + (entry.block_index + 1) + (entry.chunk_index > 0 ? ' · جزء ' + (entry.chunk_index + 1) : ''));
+    who.append(speakerAvatar(entry.speaker), speakerTag);
     var reviewBadge = document.createElement('span'); reviewBadge.className = 'kh-audio-badge';
     reviewBadge.dataset.status = saved ? saved.status : 'none';
     text(reviewBadge, saved ? (saved.status === 'accepted' ? 'تمت الموافقة ✓' : 'مرفوض ✕') : 'بانتظار المراجعة');
-    cardHead.append(speakerTag, reviewBadge);
-    var audioState = document.createElement('span'); audioState.className = 'kh-audio-ready-state ready'; text(audioState, 'جاهز للاستماع');
+    cardHead.append(who, reviewBadge);
+    var steps = buildSteps(['استمع للمقطع كاملًا', 'وافق أو سجّل ملاحظة']);
+    var audioState = document.createElement('span');
+    audioState.className = 'kh-audio-ready-state ' + (wasListened ? 'ended' : (cacheHit ? 'ready' : 'idle'));
+    text(audioState, wasListened ? 'اكتمل الاستماع' : (cacheHit ? 'تم التحميل · جاهز للتشغيل' : 'لم يُحمَّل بعد — اضغط تشغيل'));
     var state = document.createElement('span'); state.className = 'kh-audio-review-state';
     text(state, saved ? '' : 'استمع إلى المقطع كاملًا لتفعيل زر الموافقة.');
-    var playBtn = makeButton(PLAY_LABEL, 'play', function () { play(entry, playBtn); });
-    var replayBtn = makeButton('↻ من البداية', 'replay', function () { play(entry, playBtn, true); });
-    var acceptBtn = makeButton('✓ موافقة على الصوت', 'accept', async function () {
+    var playBtn = iconButton('play', 'تشغيل', 'play', function () { play(entry, playBtn); });
+    playBtn.dataset.mode = 'play';
+    var replayBtn = iconButton('replay', 'من البداية', 'replay', function () { play(entry, playBtn, true); });
+    var acceptBtn = iconButton('check', 'موافقة على الصوت', 'accept', async function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل الموافقة عليه.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       state.textContent = 'جارٍ الحفظ…';
       try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
-    acceptBtn.disabled = !played[entry.key];
+    setAcceptState(acceptBtn, !!played[entry.key], !!saved);
     acceptButtons[entry.key] = acceptBtn;
-    var rejectBtn = makeButton('✕ رفض / ملاحظة', 'reject', function () {
+    var rejectBtn = iconButton('x', 'رفض / ملاحظة', 'reject', function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الملاحظة أو الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       editor.hidden = !editor.hidden;
-      rejectBtn.textContent = editor.hidden ? '✕ رفض / ملاحظة' : 'إغلاق الملاحظة';
+      setButtonFace(rejectBtn, editor.hidden ? 'x' : 'x', editor.hidden ? 'رفض / ملاحظة' : 'إغلاق الملاحظة');
     });
     var editor = document.createElement('div'); editor.className = 'kh-audio-review-editor'; editor.hidden = true;
     var issue = document.createElement('select');
@@ -1107,7 +1330,7 @@ function render() {
     var note = document.createElement('textarea'); note.maxLength = 1000; note.placeholder = 'ملاحظتك على هذا المقطع (مطلوبة عند الرفض)';
     var suggestion = document.createElement('textarea'); suggestion.maxLength = 1000; suggestion.placeholder = 'صياغة مقترحة بديلة (اختياري — لا تُطبّق تلقائيًا)';
     if (saved) { note.value = saved.note || ''; suggestion.value = saved.suggestion || ''; issue.value = saved.issue || 'text'; }
-    var saveReject = makeButton('حفظ الرفض', 'reject-save', async function () {
+    var saveReject = iconButton('x', 'حفظ الرفض', 'reject-save', async function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
@@ -1124,90 +1347,36 @@ function render() {
     meta.append(audioState, timeLabel);
     track.append(progress, meta);
     var player = document.createElement('div'); player.className = 'kh-audio-player';
-    player.append(playBtn, track);
+    player.append(playBtn, track, replayBtn);
     var actions = document.createElement('div'); actions.className = 'kh-audio-actions';
-    actions.append(replayBtn, acceptBtn, rejectBtn);
-    panel.append(cardHead, player, actions, state, editor);
+    actions.append(acceptBtn, rejectBtn);
+    panel.append(cardHead, steps, player, actions, state, editor);
+    if (wasListened) markProgressDone(panel);
+    syncSteps(panel);
     renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
-  renderGateBanner(banner);
-  banner.hidden = false;
+}
+function render() {
+  if (!story) return;
+  renderBlocks();
+  var banner = document.getElementById('kh-audio-review-gate');
+  if (banner) {
+    renderGateBanner(banner);
+    renderGenerationControls(banner);
+    banner.hidden = false;
+  }
+  try { document.dispatchEvent(new CustomEvent('kh-audio-review-updated')); } catch (e) {}
 }
 function injectStyles() {
   if ($('kh-audio-review-style')) return;
-  var style = document.createElement('style'); style.id = 'kh-audio-review-style';
-  style.textContent = [
-    '.kh-audio-review-controls{--kh-ok:#2fa36b;--kh-warn:#d28a2d;--kh-bad:#d0605e;--kh-edge:color-mix(in srgb,var(--accent,#c9a45c) 38%,var(--line,#3a4654));display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:14px 0 0;padding:14px;border:1px solid var(--kh-edge);border-radius:18px;background:color-mix(in srgb,var(--panel,#16202b) 94%,transparent);box-shadow:0 8px 22px rgba(0,0,0,.16);font:600 13px/1.6 Cairo,Arial,sans-serif;color:var(--text,inherit)}',
-    '.kh-audio-card,.kh-speech-text-controls{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}',
-    '.kh-audio-card-head,.kh-speech-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}',
-    '.kh-audio-speaker{display:inline-flex;align-items:center;gap:8px;font:800 14px Cairo,Arial,sans-serif;color:var(--text,inherit)}',
-    '.kh-audio-speaker::before{content:"";width:11px;height:11px;border-radius:50%;background:var(--accent,#c9a45c);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#c9a45c) 25%,transparent)}',
-    '.kh-audio-review-controls[data-speaker="karma"] .kh-audio-speaker::before{background:#e07aa0;box-shadow:0 0 0 3px rgba(224,122,160,.25)}',
-    '.kh-audio-review-controls[data-speaker="narrator"] .kh-audio-speaker::before{background:#5aa0e0;box-shadow:0 0 0 3px rgba(90,160,224,.25)}',
-    '.kh-audio-badge{display:inline-flex;align-items:center;padding:3px 12px;border-radius:999px;border:1px solid currentColor;font:800 12px Cairo,Arial,sans-serif;color:var(--muted,#9aa7b4)}',
-    '.kh-audio-badge[data-status="accepted"],.kh-audio-badge[data-status="approved"]{color:var(--kh-ok);background:color-mix(in srgb,var(--kh-ok) 14%,transparent)}',
-    '.kh-audio-badge[data-status="rejected"]{color:var(--kh-bad);background:color-mix(in srgb,var(--kh-bad) 14%,transparent)}',
-    '.kh-audio-badge[data-status="suggested"],.kh-audio-badge[data-status="dirty"]{color:var(--kh-warn);background:color-mix(in srgb,var(--kh-warn) 14%,transparent)}',
-    '.kh-audio-player{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:14px;padding:12px;border-radius:14px;border:1px solid color-mix(in srgb,var(--accent,#c9a45c) 22%,transparent);background:color-mix(in srgb,var(--accent,#c9a45c) 7%,transparent)}',
-    '.kh-audio-review-btn{border:1.5px solid var(--accent,#c9a45c);border-radius:12px;padding:8px 14px;background:transparent;color:inherit;font:800 13px Cairo,Arial,sans-serif;cursor:pointer;min-height:42px;transition:transform .12s ease,box-shadow .2s ease,background .2s ease,opacity .2s ease}',
-    '.kh-audio-review-btn:hover:not(:disabled){transform:translateY(-1px)}',
-    '.kh-audio-review-btn:disabled{opacity:.45;cursor:not-allowed}',
-    '.kh-audio-review-btn.play{min-width:130px;min-height:50px;padding:10px 22px;border-radius:999px;border-color:var(--kh-ok);background:linear-gradient(135deg,#2fa36b,#238a58);color:#fff;font-size:14px;box-shadow:0 6px 16px rgba(47,163,107,.35)}',
-    '.kh-audio-review-btn.play:disabled{background:transparent;color:var(--muted,#9aa7b4);border-color:var(--line,#3a4654);box-shadow:none}',
-    '.kh-audio-card[data-player="playing"] .kh-audio-review-btn.play{border-color:var(--kh-warn);background:linear-gradient(135deg,#d28a2d,#b8731f);box-shadow:0 6px 16px rgba(210,138,45,.4);animation:khpulse 1.6s ease-in-out infinite}',
-    '.kh-audio-card[data-player="loading"] .kh-audio-review-btn.play{opacity:.85;cursor:progress}',
-    '.kh-audio-card[data-player="loading"] .kh-audio-review-btn.play::before{content:"";display:inline-block;width:13px;height:13px;margin-inline-end:8px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;vertical-align:-2px;animation:khspin .8s linear infinite}',
-    '.kh-audio-card[data-player="error"] .kh-audio-review-btn.play{background:transparent;color:var(--kh-bad);border-color:var(--kh-bad);box-shadow:none}',
-    '.kh-audio-review-btn.replay{border-color:var(--kh-edge)}',
-    '.kh-audio-review-btn.accept{flex:1 1 170px;min-height:46px;border-color:var(--kh-ok);background:linear-gradient(135deg,#2fa36b,#238a58);color:#fff;font-size:14px}',
-    '.kh-audio-review-btn.accept:disabled{background:transparent;color:var(--muted,#9aa7b4);border-color:var(--line,#3a4654)}',
-    '.kh-audio-review-btn.reject,.kh-audio-review-btn.reject-save{border-color:var(--kh-bad);color:#e58a88}',
-    '.kh-audio-review-btn.generate{border-color:var(--kh-warn);background:linear-gradient(135deg,#d28a2d,#b8731f);color:#fff}',
-    '.kh-speech-text-controls .kh-audio-review-btn.generate{background:transparent;color:var(--kh-warn)}',
-    '.kh-audio-review-btn.kh-audio-review-playing{color:#fff}',
-    '.kh-audio-track{display:grid;gap:8px;min-width:0}',
-    '.kh-audio-progress{position:relative;direction:ltr;height:10px;border-radius:999px;background:color-mix(in srgb,var(--text,#fff) 14%,transparent);overflow:hidden}',
-    '.kh-audio-progress-fill{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#2fa36b,#6fd3a1);transition:width .2s linear}',
-    '.kh-audio-card[data-player="loading"] .kh-audio-progress::after{content:"";position:absolute;top:0;bottom:0;left:0;width:35%;border-radius:999px;background:linear-gradient(90deg,transparent,var(--accent,#c9a45c),transparent);animation:khslide 1.1s ease-in-out infinite}',
-    '.kh-audio-card[data-player="ended"] .kh-audio-progress-fill{background:linear-gradient(90deg,#2fa36b,#2fa36b)}',
-    '.kh-audio-meta{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px}',
-    '.kh-audio-time{direction:ltr;font-variant-numeric:tabular-nums;color:var(--muted,#9aa7b4)}',
-    '.kh-audio-ready-state{font-size:12px;font-weight:800;margin:0}',
-    '.kh-audio-ready-state.ready{color:var(--kh-ok)}.kh-audio-ready-state.ready::before{content:"✓ "}',
-    '.kh-audio-ready-state.not-started,.kh-audio-ready-state.preparing{color:var(--kh-warn)}.kh-audio-ready-state.failed{color:var(--kh-bad)}',
-    '.kh-audio-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px}',
-    '.kh-audio-review-state{flex-basis:100%;margin:0;font-size:12px;color:var(--muted,#9aa7b4)}',
-    '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:8px;flex:1 1 100%;min-width:0;padding-top:8px}',
-    '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:9px;border:1px solid var(--line,#3a4654);border-radius:10px;background:var(--panel,#16202b);color:var(--text,inherit);font:13px/1.6 Cairo,Arial,sans-serif}',
-    '.kh-speech-text-controls[data-status="approved"]{border-color:var(--kh-ok)}',
-    '.kh-speech-text-controls[data-status="suggested"]{border-color:var(--kh-warn)}',
-    '.kh-speech-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}',
-    '.kh-speech-col{display:grid;gap:6px;align-content:start;min-width:0}',
-    '.kh-speech-label{font:800 12px Cairo,Arial,sans-serif;color:var(--muted,#9aa7b4)}',
-    '.kh-speech-source{margin:0;padding:10px 12px;border:1px dashed var(--line,#3a4654);border-radius:12px;background:color-mix(in srgb,var(--text,#fff) 4%,transparent);line-height:1.9;white-space:pre-wrap}',
-    '.kh-speech-text-controls textarea{box-sizing:border-box;width:100%;min-width:0;resize:vertical;padding:10px 12px;border:1.5px solid var(--kh-edge);border-radius:12px;background:var(--panel,#16202b);color:var(--text,inherit);font:14px/1.9 Cairo,Arial,sans-serif}',
-    '.kh-speech-text-controls textarea:focus{outline:none;border-color:var(--accent,#c9a45c);box-shadow:0 0 0 3px color-mix(in srgb,var(--accent,#c9a45c) 25%,transparent)}',
-    '.kh-speech-notes{display:grid;gap:6px}',
-    '.kh-speech-notes:empty{display:none}',
-    '.kh-speech-notes p{margin:0;padding:7px 11px;border-radius:10px;background:color-mix(in srgb,var(--accent,#c9a45c) 10%,transparent);font-size:12px;line-height:1.7;white-space:pre-wrap}',
-    '.kh-audio-review-gate{max-width:1100px;margin:10px auto;padding:12px 16px;border:1px solid color-mix(in srgb,var(--accent,#c9a45c) 45%,transparent);border-radius:16px;background:color-mix(in srgb,var(--panel,#16202b) 94%,transparent);box-shadow:0 6px 18px rgba(0,0,0,.14);color:var(--text,inherit);font:600 13px/1.7 Cairo,Arial,sans-serif}',
-    '.kh-audio-review-gate[hidden]{display:none!important}',
-    '.kh-gate-message{font-weight:800}',
-    '.kh-audio-generation-controls{margin:10px 0 0;border-style:dashed;background:color-mix(in srgb,var(--kh-warn,#d28a2d) 8%,var(--panel,#16202b))}',
-    '.kh-gen-title{flex-basis:100%;font:800 14px Cairo,Arial,sans-serif}',
-    '.kh-audio-progress-row{display:grid;grid-template-columns:minmax(170px,auto) minmax(100px,1fr);align-items:center;gap:10px;margin-top:8px;font-size:12px}.kh-audio-progress-row progress{width:100%;height:10px;accent-color:#2fa36b}',
-    '.kh-audio-asr-result{display:grid;gap:6px;padding:8px;margin-top:2px;border-top:1px dashed var(--line,#3a4654);font-size:12px}',
-    '.kh-audio-asr-word{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 0}',
-    '@keyframes khspin{to{transform:rotate(360deg)}}',
-    '@keyframes khslide{0%{transform:translateX(-100%)}100%{transform:translateX(300%)}}',
-    '@keyframes khpulse{0%,100%{box-shadow:0 6px 16px rgba(210,138,45,.4)}50%{box-shadow:0 6px 26px rgba(210,138,45,.75)}}',
-    '@media (prefers-reduced-motion:reduce){.kh-audio-card *,.kh-audio-card *::before,.kh-audio-card *::after{animation:none!important;transition:none!important}}',
-    '@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}',
-    '@media(max-width:720px){.kh-speech-grid{grid-template-columns:minmax(0,1fr)}}',
-    '@media(max-width:600px){.kh-audio-review-controls{padding:12px;border-radius:16px}.kh-audio-player{grid-template-columns:minmax(0,1fr)}.kh-audio-review-btn.play{width:100%}.kh-audio-actions .kh-audio-review-btn{flex:1 1 100%}.kh-audio-progress-row{grid-template-columns:minmax(0,1fr)}}'
-  ].join('');
-  document.head.appendChild(style);
+  var href = 'reader-audio-review.css?v=20261108-review-design-1';
+  try { href = new URL('reader-audio-review.css?v=20261108-review-design-1', SCRIPT_SRC).href; } catch (e) {}
+  var link = document.createElement('link');
+  link.id = 'kh-audio-review-style';
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
 }
 async function initialize(nextStory) {
   if (!nextStory || !nextStory.slug || initializing || initialized) return;
@@ -1235,7 +1404,7 @@ async function initialize(nextStory) {
     initializing = false;
     var host = $('blocks');
     if (host) {
-      var note = document.createElement('p'); note.className = 'kh-audio-review-gate';
+      var note = document.createElement('p'); note.className = 'kh-audio-review-gate'; note.dataset.state = 'error';
       text(note, 'تعذر الاتصال بسجل مراجعة النص: ' + (e.message || e));
       host.parentNode.insertBefore(note, host);
     }
