@@ -309,7 +309,7 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  return core.evaluateAudioPhaseGate(manifests, entries, review, readyByKey, played;
+  return core.evaluateAudioPhaseGate(manifests, entries, review, readyByKey, played);
 }
 function gateSummary() {
   var g = gate();
