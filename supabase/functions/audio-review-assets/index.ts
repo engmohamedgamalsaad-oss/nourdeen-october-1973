@@ -246,6 +246,22 @@ Deno.serve(async (req: Request) => {
         typeof speechRecord.approved_text !== "string" || !speechRecord.approved_text.trim()) {
       return reply(409, { error: "لن يبدأ NAMAA قبل اعتماد نص القراءة لهذا المقطع من صفحة المعاينة." });
     }
+    const acceptedBlocks = new Set(
+      Object.values(reviewRow?.audio_review?.clips ?? {})
+        .filter((clip: any) => clip?.lang === "ar" && clip?.status === "accepted")
+        .map((clip: any) => Number(clip.block_index))
+    );
+    const karmaIndexes = source.blocks.map((item: any, index: number) => item?.speaker === "karma" ? index : -1).filter((index: number) => index >= 0);
+    const narratorIndexes = source.blocks.map((item: any, index: number) => item?.speaker === "narrator" ? index : -1).filter((index: number) => index >= 0);
+    const targetSpeaker = source.block.speaker;
+    const requiredPrior = targetSpeaker === "karma"
+      ? karmaIndexes.filter((index: number) => index < body.block_index)
+      : karmaIndexes.concat(narratorIndexes.filter((index: number) => index < body.block_index));
+    if (requiredPrior.some((index: number) => !acceptedBlocks.has(index))) {
+      return reply(409, { error: targetSpeaker === "narrator"
+        ? "لا يبدأ الراوي قبل اكتمال اعتماد جميع مقاطع كارما، ثم المقاطع السابقة للراوي."
+        : "لا يبدأ مقطع كارما التالي قبل اعتماد مقاطع كارما السابقة." });
+    }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
     const apiHeaders = {
       "Accept": "application/vnd.github+json",
