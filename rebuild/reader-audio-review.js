@@ -2,8 +2,8 @@
 'use strict';
 var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
-var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
+var LANGS = ['ar', 'en'];
+var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
