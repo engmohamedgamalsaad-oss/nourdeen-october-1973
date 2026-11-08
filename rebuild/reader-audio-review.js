@@ -353,7 +353,7 @@ function renderGateBanner(banner) {
   progressRow('المقاطع المقبولة بعد الاستماع', accepted);
   if (g.missingLanguages || g.loadError) {
     var partial = document.createElement('small');
-    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests اللغات الخمس.');
+    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests العربية والإنجليزية.');
     banner.appendChild(partial);
   }
 }
