@@ -4,11 +4,12 @@ var params=new URLSearchParams(location.search);
 if(params.get('draft')!=='1')return;
 var SUPA='https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,busy=false,draft=null,ctx=null;
+var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,gateDetails=null,gateDetailsBody=null,busy=false,draft=null,ctx=null;
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.dataset.tone=bad?'bad':'ok'}}
+/* اللوحة عادية (غير ثابتة) كي لا تغطي الصفحة مهما طال نص الخطأ؛ تثبت أعلى الصفحة فقط على الشاشات الواسعة وبعد اكتمال شرط الصوت. */
 var PANEL_CSS=[
-'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:sticky;top:8px;z-index:1000;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif;backdrop-filter:blur(8px)}',
+'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:relative;z-index:20;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif}',
 '#kh-preview-decision-panel .khd-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}',
 '#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;font:800 16px/1.4 Cairo,Arial,sans-serif}',
 '#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:18px}',
@@ -19,6 +20,10 @@ var PANEL_CSS=[
 '#kh-preview-decision-panel .khd-meter{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;direction:ltr}',
 '#kh-preview-decision-panel .khd-meter span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#2fbf80,#7fe0b4);transition:width .4s ease}',
 '#kh-preview-decision-panel .khd-note{margin:0;font-size:12px;color:#aebcc2}',
+'#kh-preview-decision-panel .khd-note:empty{display:none}',
+'#kh-preview-decision-panel .khd-details{margin:0;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.04)}',
+'#kh-preview-decision-panel .khd-details summary{cursor:pointer;padding:8px 12px;font:700 12px/1.6 Cairo,Arial,sans-serif;color:#d7ad66}',
+'#kh-preview-decision-panel .khd-details div{max-height:140px;overflow:auto;padding:2px 12px 10px;font:500 12px/1.8 Cairo,Arial,sans-serif;color:#aebcc2;white-space:pre-wrap;overflow-wrap:anywhere}',
 '#kh-preview-decision-panel .khd-actions{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,1fr);gap:10px}',
 '#kh-preview-decision-panel button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:10px 16px;border:1.5px solid rgba(255,255,255,.18);border-radius:14px;background:transparent;color:#f5f0e6;font:800 14px/1.3 Cairo,Arial,sans-serif;cursor:pointer;transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease}',
 '#kh-preview-decision-panel button:hover:not(:disabled){transform:translateY(-1px)}',
@@ -33,7 +38,9 @@ var PANEL_CSS=[
 '#kh-preview-decision-status{font:13px/1.8 Cairo,Arial,sans-serif;color:#b9efc9}',
 '#kh-preview-decision-status[data-tone="bad"]{color:#ffb8b8}',
 '#kh-preview-decision-status:empty{display:none}',
-'@media(max-width:640px){#kh-preview-decision-panel{top:4px;margin:8px;padding:12px;border-radius:18px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
+'.kh-audio-review-gate .kh-gate-message{max-height:110px;overflow:auto;overflow-wrap:anywhere}',
+'@media(min-width:900px){#kh-preview-decision-panel[data-gate="ok"]{position:sticky;top:8px}}',
+'@media(max-width:640px){#kh-preview-decision-panel{margin:8px;padding:12px;border-radius:18px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
 '@media print{#kh-preview-decision-panel{display:none!important}}'
 ].join('');
 function addControls(){
@@ -51,6 +58,10 @@ function addControls(){
  head.append(title,gatePill);
  var meter=document.createElement('div');meter.className='khd-meter';gateFill=document.createElement('span');meter.appendChild(gateFill);
  gateText=document.createElement('p');gateText.className='khd-note';gateText.id='kh-preview-gate-note';
+ gateDetails=document.createElement('details');gateDetails.className='khd-details';gateDetails.hidden=true;
+ var detailsSummary=document.createElement('summary');detailsSummary.textContent='عرض تفاصيل مشكلة الصوت';
+ gateDetailsBody=document.createElement('div');
+ gateDetails.append(detailsSummary,gateDetailsBody);
  var actions=document.createElement('div');actions.className='khd-actions';
  approve=document.createElement('button');approve.id='kh-preview-approve';approve.type='button';approve.textContent='✓ قبول المعاينة';
  reject=document.createElement('button');reject.id='kh-preview-reject';reject.type='button';reject.textContent='✕ رفض المعاينة';
@@ -58,12 +69,18 @@ function addControls(){
  actions.append(approve,reject,back);
  reason=document.createElement('textarea');reason.id='kh-preview-reason';reason.maxLength=1000;reason.placeholder='اكتب سبب رفض المعاينة (مطلوب قبل تسجيل الرفض)';
  status=document.createElement('div');status.id='kh-preview-decision-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- panel.append(head,meter,gateText,actions,reason,status);
+ panel.append(head,meter,gateText,gateDetails,actions,reason,status);
  var header=document.querySelector('header');
  if(header&&header.parentNode)header.parentNode.insertBefore(panel,header.nextSibling);else document.body.insertBefore(panel,document.body.firstChild);
  approve.addEventListener('click',function(){decide(true)});
  reject.addEventListener('click',function(){if(reason.style.display==='block'){decide(false)}else{reason.style.display='block';reason.focus();message('اكتب سبب الرفض ثم اضغط «رفض المعاينة» مرة أخرى.')}});
  back.addEventListener('click',function(){var id=draft&&draft.submission_id?encodeURIComponent(draft.submission_id):'';location.href='../khaledoon/admin.html?returnfrompreview=1'+(id?'&submission='+id:'')});
+}
+/* سطر قصير ظاهر + تفاصيل كاملة داخل عنصر قابل للطي، فلا يطول نص الخطأ اللوحة */
+function setNote(short,full){
+ gateText.textContent=short||'';
+ if(full&&full!==short){gateDetails.hidden=false;gateDetailsBody.textContent=full}
+ else{gateDetails.hidden=true;gateDetails.open=false;gateDetailsBody.textContent=''}
 }
 /* يعكس حالة مراجعة الصوت على اللوحة: لا يغيّر منطق القرار، فقط العرض */
 function refreshGate(){
@@ -71,17 +88,21 @@ function refreshGate(){
  var api=window.KHStoryAudioReview,g=null;
  if(!api||typeof api.gate!=='function'){
   panel.dataset.gate='wait';gatePill.textContent='مدقق الصوت لم يُحمَّل بعد';gateFill.style.width='0%';
-  gateText.textContent='لا يمكن قبول المعاينة قبل تحميل مدقق الصوت.';return;
+  setNote('لا يمكن قبول المعاينة قبل تحميل مدقق الصوت.');return;
  }
  try{g=api.gate()}catch(e){g=null}
- if(!g){panel.dataset.gate='bad';gatePill.textContent='تعذر فحص الصوت';gateText.textContent='تعذر قراءة حالة مراجعة الصوت.';return}
+ if(!g){panel.dataset.gate='bad';gatePill.textContent='تعذر فحص الصوت';setNote('تعذر قراءة حالة مراجعة الصوت.');return}
  var total=Number(g.total)||0,accepted=Number(g.accepted)||0;
  gateFill.style.width=(total?Math.round(accepted/total*100):0)+'%';
  if(g.loading){panel.dataset.gate='wait';gatePill.textContent='جارٍ فحص ملفات الصوت…'}
  else if(g.loadError){panel.dataset.gate='bad';gatePill.textContent='خطأ في تحميل الصوت'}
  else if(g.ok){panel.dataset.gate='ok';gatePill.textContent='الصوت: كل المقاطع مقبولة ✓ ('+accepted+'/'+total+')'}
  else{panel.dataset.gate='warn';gatePill.textContent='الصوت: '+accepted+'/'+total+' مقبول'}
- try{gateText.textContent=api.gateSummary()||''}catch(e){gateText.textContent=''}
+ var full='';
+ try{full=String(api.gateSummary()||'')}catch(e){full=''}
+ if(g.loadError){setNote('تعذر التحقق من ملفات الصوت، ولا يمكن قبول المعاينة قبل إصلاح المشكلة.',full)}
+ else if(full.length>160){setNote(full.slice(0,157)+'…',full)}
+ else{setNote(full)}
 }
 function getContext(){
  try{ctx=JSON.parse(localStorage.getItem('kh-story-review-context')||'null')}catch(e){ctx=null}
