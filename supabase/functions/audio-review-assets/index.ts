@@ -34,7 +34,9 @@ function validKey(value: unknown): value is string {
   return typeof value === "string" && /^[a-z0-9-]{1,80}$/.test(value);
 }
 function sha256Hex(bytes: Uint8Array): Promise<string> {
-  return crypto.subtle.digest("SHA-256", bytes).then((digest) =>
+  const stableBytes = new Uint8Array(bytes.byteLength);
+  stableBytes.set(bytes);
+  return crypto.subtle.digest("SHA-256", stableBytes.buffer).then((digest) =>
     Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
   );
 }
@@ -114,7 +116,7 @@ Deno.serve(async (req: Request) => {
         inputs: {
           section, slug, story_path: storyPackagePath,
           language, block_index: String(blockIndex),
-          confirm_fish_audio_request: "yes", request_id,
+          confirm_fish_audio_request: "yes", request_id: requestId,
         },
       }),
     });
