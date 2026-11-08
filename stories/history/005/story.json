@@ -100,13 +100,13 @@
         },
         {
           "type": "paragraph",
-          "speaker": "karma",
-          "text": "غريبة! نقدر نقرأ كتبه ونعرف أفكاره، لكن الصورة اللي بتوصلنا عنه مش بالضرورة تكون شكله الحقيقي."
+          "speaker": "narrator",
+          "text": "والأعمال الفنية دي بتساعدنا نتخيل صورته، لكنها ما تثبتش إن ملامحه كانت بالشكل ده فعلًا."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "توفي ابن سينا سنة 1037 ميلادية في همدان، في إيران الحالية. ورغم مرور قرون على وفاته، فضلت مؤلفاته جزءًا مهمًا من تاريخ الطب والفلسفة. حكايته بتفكرنا إن أثر الإنسان ممكن يكمل من خلال أفكاره وكتاباته، وإن العلم رحلة مستمرة؛ كل جيل بيضيف فيها وبيصحح."
+          "speaker": "karma",
+          "text": "أنا فهمت إن العلم ما بيقفش عند عالم واحد؛ كل جيل بيتعلم من اللي قبله، ويضيف حاجة تساعد اللي بعده."
         }
       ],
       "figure_name": "ابن سينا"
@@ -203,13 +203,13 @@
         },
         {
           "type": "paragraph",
-          "speaker": "karma",
-          "text": "That is surprising! We can read his books and learn about his ideas, but the image passed down to us is not necessarily what he really looked like."
+          "speaker": "narrator",
+          "text": "These works of art can help us imagine him, but they cannot prove that he really looked this way."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina died in 1037 CE in Hamadan, in present-day Iran. Although centuries have passed since his death, his writings remain an important part of the history of medicine and philosophy. His story reminds us that a person’s influence can continue through ideas and writing, and that science is an ongoing journey in which every generation adds to knowledge and corrects it."
+          "speaker": "karma",
+          "text": "I think I understand now: knowledge does not stop with one person. Each generation learns from the one before it and adds something for the next."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -306,13 +306,13 @@
         },
         {
           "type": "paragraph",
-          "speaker": "karma",
-          "text": "C’est étonnant ! Nous pouvons lire ses livres et connaître ses idées, mais l’image qui nous est parvenue ne représente pas forcément son apparence réelle."
+          "speaker": "narrator",
+          "text": "Ces œuvres d’art nous aident à imaginer son apparence, mais elles ne prouvent pas qu’il ressemblait réellement à cela."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina est mort en 1037 à Hamadan, dans l’actuel Iran. Malgré les siècles écoulés depuis sa mort, ses écrits restent une partie importante de l’histoire de la médecine et de la philosophie. Son histoire nous rappelle que l’influence d’une personne peut se poursuivre à travers ses idées et ses écrits, et que la science est un cheminement continu auquel chaque génération apporte quelque chose et qu’elle contribue à corriger."
+          "speaker": "karma",
+          "text": "Je crois que j’ai compris : le savoir ne s’arrête pas à une seule personne. Chaque génération apprend de la précédente et apporte quelque chose à la suivante."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -409,13 +409,13 @@
         },
         {
           "type": "paragraph",
-          "speaker": "karma",
-          "text": "È sorprendente! Possiamo leggere i suoi libri e conoscere le sue idee, ma l’immagine che ci è arrivata non è necessariamente il suo vero aspetto."
+          "speaker": "narrator",
+          "text": "Queste opere d’arte ci aiutano a immaginare il suo aspetto, ma non dimostrano che fosse davvero così."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina morì nel 1037 a Hamadan, nell’attuale Iran. Nonostante siano passati molti secoli, le sue opere restano una parte importante della storia della medicina e della filosofia. La sua storia ci ricorda che l’influenza di una persona può continuare attraverso le sue idee e i suoi scritti e che la scienza è un percorso continuo, al quale ogni generazione aggiunge qualcosa e contribuisce a correggere ciò che si sapeva prima."
+          "speaker": "karma",
+          "text": "Credo di aver capito: la conoscenza non si ferma a una sola persona. Ogni generazione impara da quella precedente e aggiunge qualcosa per la successiva."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -512,13 +512,13 @@
         },
         {
           "type": "paragraph",
-          "speaker": "karma",
-          "text": "Erstaunlich! Wir können seine Bücher lesen und seine Gedanken kennenlernen, aber das Bild, das überliefert wurde, muss nicht unbedingt zeigen, wie er wirklich aussah."
+          "speaker": "narrator",
+          "text": "Diese Kunstwerke helfen uns, uns sein Aussehen vorzustellen, aber sie beweisen nicht, dass er tatsächlich so ausgesehen hat."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Ibn Sina starb 1037 n. Chr. in Hamadan im heutigen Iran. Obwohl seit seinem Tod viele Jahrhunderte vergangen sind, gehören seine Schriften weiterhin zur Geschichte der Medizin und Philosophie. Seine Geschichte erinnert uns daran, dass der Einfluss eines Menschen durch seine Gedanken und Schriften fortbestehen kann und dass Wissenschaft eine fortlaufende Reise ist, zu der jede Generation etwas beiträgt und auf der sie frühere Erkenntnisse auch korrigiert."
+          "speaker": "karma",
+          "text": "Ich glaube, ich habe verstanden: Wissen endet nicht bei einem einzigen Menschen. Jede Generation lernt von der vorherigen und gibt etwas an die nächste weiter."
         }
       ],
       "figure_name": "Ibn Sina"
