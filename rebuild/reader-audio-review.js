@@ -728,7 +728,7 @@ async function generateNextStoryBlock(statusNode, button) {
     var started = await audioAssetsRequest({
       action: 'generate', section: story.section, slug: story.slug, story_id: storyId,
       language: language, block_index: nextBlock, confirm_audio_request: 'yes',
-      confirm_fish_audio_request: 'yes'
+      confirm_fish_audio_request: fishArabic ? 'yes' : 'no'
     });
     if (!started || !started.request_id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
     var result = null;
