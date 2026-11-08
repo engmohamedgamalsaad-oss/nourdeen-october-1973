@@ -60,6 +60,12 @@ async function adminToken() {
   }
   return s.access_token;
 }
+/* اسم الخدمة الخارجية التي أصدرت upstream_status بحسب الإجراء المطلوب، لا افتراض أنها Gemini دائمًا. */
+function upstreamServiceName(action) {
+  if (action === 'prepare_speech_text') return 'Gemini';
+  if (action === 'generate' || action === 'generation_status' || action === 'stage') return 'GitHub Actions';
+  return 'خدمة خارجية';
+}
 async function audioAssetsRequest(payload) {
   var token = await adminToken();
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
@@ -83,7 +89,11 @@ async function audioAssetsRequest(payload) {
   try { data = await response.json(); } catch (e) {}
   if (!response.ok) {
     var detail = data && (data.error || data.message);
-    if (data && data.upstream_status) detail = (detail || 'تعذر الاتصال بـ Gemini') + ' (رمز Gemini: ' + data.upstream_status + ')';
+    if (data && data.upstream_status) {
+      var upstreamService = upstreamServiceName(payload && payload.action);
+      detail = (detail || ('تعذر الاتصال بخدمة ' + upstreamService)) +
+        ' (الخدمة: ' + upstreamService + ' — رمز HTTP: ' + data.upstream_status + ')';
+    }
     var error = new Error(detail || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
     error.status = response.status;
     throw error;
