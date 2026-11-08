@@ -279,6 +279,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "وعند دراسة هذه الوقائع، ينبغي التمييز بين ما تؤكده الوثائق والروايات المتعددة وبين التفاصيل التي تختلف فيها المصادر، خصوصًا عند الحديث عن مدى السيطرة على الممرات أو نتائج العمليات."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني مش كل اللي بيحصل في الحرب بيكون قدام الناس؛ ساعات التخطيط وفهم البحر وخطوط الملاحة بيكون لهم أثر كبير في المهمة."
         }
       ]
     },
@@ -558,6 +563,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "When studying these events, it is important to distinguish what is supported by documents and multiple accounts from details on which sources differ, especially claims about control of the passages or the outcomes of operations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So not everything that happens in a war is visible to everyone. Sometimes planning and understanding the sea and its shipping routes play a major role in a mission."
         }
       ]
     },
@@ -837,6 +847,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Lorsqu’on étudie ces événements, il faut distinguer ce que confirment les documents et plusieurs témoignages des détails sur lesquels les sources divergent, notamment en ce qui concerne le degré de contrôle des passages ou les résultats des opérations."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Tout ce qui se passe pendant une guerre n’est donc pas visible de tous. Parfois, la planification et la connaissance de la mer et des routes maritimes jouent un rôle essentiel dans une mission."
         }
       ]
     },
@@ -1116,6 +1131,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Nello studio di questi eventi occorre distinguere ciò che è confermato da documenti e testimonianze multiple dai dettagli su cui le fonti divergono, soprattutto riguardo al controllo dei passaggi o agli esiti delle operazioni."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Non tutto ciò che accade durante una guerra è visibile a tutti. A volte la pianificazione e la conoscenza del mare e delle rotte marittime hanno un ruolo decisivo in una missione."
         }
       ]
     },
@@ -1395,6 +1415,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Bei der Untersuchung dieser Ereignisse muss man zwischen Angaben unterscheiden, die durch Dokumente und mehrere Berichte gestützt werden, und Einzelheiten, bei denen die Quellen voneinander abweichen – insbesondere beim Ausmaß der Kontrolle über die Seewege und bei den Ergebnissen der Operationen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Nicht alles, was in einem Krieg geschieht, ist für alle sichtbar. Manchmal spielen Planung und genaue Kenntnisse des Meeres und der Schifffahrtswege eine entscheidende Rolle."
         }
       ]
     }
