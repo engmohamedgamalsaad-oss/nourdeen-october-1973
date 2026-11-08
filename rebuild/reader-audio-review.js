@@ -93,32 +93,24 @@ async function audioAssetsRequest(payload) {
 async function ensureArabicAudioStaged(expectedArabicTexts) {
   if (story.section !== 'history' || story.slug !== 'ibn-sina' ||
       document.documentElement.lang !== 'ar') return;
-  // Stage only the already-generated first Karma clip for this preview.
-  // The private bucket receives it; nothing is published to story visitors.
-  var requestId = '00000000-0000-4000-8000-000000000001';
+  // Restore the verified restart-baseline package into private review storage.
+  // The pinned artifact is the successful Arabic Ibn Sina package; it is not public.
   var artifact = {
     action: 'stage',
     section: 'history',
     slug: 'ibn-sina',
     language: 'ar',
-    artifact_id: 13623512539,
-    run_id: 42496796923,
+    artifact_id: 13563200242,
+    run_id: 42344425713,
     artifact_name: 'ibn-sina-arabic-audio-staging',
-    request_id: requestId,
-    block_index: 0
+    baseline_restore: true
   };
   try {
     var current = await audioAssetsRequest({
       action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
     });
     var existing = current && current.manifest;
-    if (existing && existing.request_id === requestId &&
-        Array.isArray(existing.segments) &&
-        existing.segments.some(function (segment) {
-          return Number(segment.block_index) === 0 &&
-            segment.provider === 'huggingface-space' &&
-            segment.speaker === 'karma';
-        })) return;
+    if (existing && Array.isArray(existing.segments) && existing.segments.length) return;
   } catch (error) {
     if (!error || error.status !== 404) throw error;
   }
