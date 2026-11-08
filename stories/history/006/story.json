@@ -37,7 +37,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "هل تعلم؟ | بداية عسكرية غير متوقعة",
-          "text": "التحق أحمد عرابي بالجيش في 6 ديسمبر 1854 جنديًا عاديًا، قبل أن يصبح بعد سنوات واحدًا من أبرز قادته."
+          "text": "هل تعلم؟ التحق أحمد عرابي بالجيش في 6 ديسمبر 1854 جنديًا عاديًا، قبل أن يصبح بعد سنوات واحدًا من أبرز قادته."
         },
         {
           "type": "paragraph",
@@ -68,7 +68,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "هل تعلم؟ | حركة لها مؤيدون",
-          "text": "لم تقتصر مساندة حركة عرابي على ضباط الجيش؛ فقد أيد تحركهم بعض كبار ملاك الأراضي، ووجدت الحركة دعمًا لدى أشخاص من خلفيات اجتماعية متنوعة."
+          "text": "هل تعلم؟ لم تقتصر مساندة حركة عرابي على ضباط الجيش؛ فقد أيد تحركهم بعض كبار ملاك الأراضي، ووجدت الحركة دعمًا لدى أشخاص من خلفيات اجتماعية متنوعة."
         },
         {
           "type": "paragraph",
@@ -92,7 +92,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "هل تعلم؟ | منصب عرابي",
-          "text": "تولى أحمد عرابي منصب وزير الحربية في الوزارة الوطنية التي رأسها محمود سامي البارودي سنة 1882."
+          "text": "هل تعلم؟ تولى أحمد عرابي منصب وزير الحربية في الوزارة الوطنية التي رأسها محمود سامي البارودي سنة 1882."
         },
         {
           "type": "paragraph",
@@ -162,13 +162,13 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Urabi did not continue his studies at Al-Azhar for long. During the rule of Sa'id Pasha, the army opened its doors to the sons of village sheikhs. Urabi left his studies and joined the army as an ordinary soldier in December 1854. He did not begin as a senior commander; he started at the lowest rank and gradually rose through the ranks over the years.",
+          "text": "Urabi did not continue his studies at Al-Azhar for long. During the rule of Sa'id Pasha, the army opened its doors to the sons of village headmen. Urabi left his studies and joined the army as an ordinary soldier in December 1854. He did not begin as a senior commander; he started at the lowest rank and gradually rose through the ranks over the years.",
           "heading": "The Beginning of a Military Career"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Ahmed Urabi joined the army as an ordinary soldier on 6 December 1854. Years later, he would become one of its most prominent leaders.",
+          "text": "Did you know? Ahmed Urabi joined the army as an ordinary soldier on 6 December 1854. Years later, he would become one of its most prominent leaders.",
           "heading": "Did You Know? | An Unexpected Start in the Army"
         },
         {
@@ -193,14 +193,14 @@
           "speaker": "narrator",
           "type": "paragraph",
           "text": "On 9 September 1881, Urabi moved with officers and soldiers to Abdeen Square in Cairo, where they presented their demands to Khedive Tawfiq. This was not simply a confrontation between one man and a ruler. Complaints and political activity had come before the demonstration; some influential people supported it, and different groups in society later expressed support for the movement.",
-          "heading": "Abdeen Square — 9 September 1881"
+          "heading": "Abdeen Square — 9 September 1881",
+          "image_after": "historical-portrait"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Did You Know? | Support for the Movement",
-          "text": "Support for the Urabi movement did not come only from army officers. Some major landowners supported their actions, and the movement found supporters from different parts of society.",
-          "image_after": "historical-portrait"
+          "text": "Did you know? Support for the Urabi movement did not come only from army officers. Some major landowners supported their actions, and the movement found supporters from different parts of society."
         },
         {
           "type": "paragraph",
@@ -224,7 +224,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Did You Know? | Urabi’s Government Role",
-          "text": "In 1882, Ahmed Urabi became Minister of War in the national government headed by Mahmoud Sami al-Barudi."
+          "text": "Did you know? In 1882, Ahmed Urabi became Minister of War in the national government headed by Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
@@ -236,14 +236,14 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "The Battle of Tel el-Kebir — September 1882",
-          "text": "On 13 September 1882, the Egyptian army fought British forces at the Battle of Tel el-Kebir. The Egyptian army was defeated, and British forces advanced towards Cairo, beginning the British occupation of Egypt. This was a major turning point. The movement did not end only in military defeat; the country entered a long period of British military presence."
+          "text": "On 13 September 1882, the Egyptian army fought British forces at the Battle of Tel el-Kebir. The Egyptian army was defeated, and British forces advanced towards Cairo, beginning the British occupation of Egypt. This was a major turning point. The movement did not end only in military defeat; the country entered a long period of British military presence.",
+          "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "karma",
           "heading": "Karma | The Consequences",
-          "text": "I understand now that major events can begin with people asking for something to be put right, but the path events take can lead to very difficult results—especially when more powerful forces enter the conflict.",
-          "image_after": "urabi-timeline"
+          "text": "I understand now that major events can begin with people asking for something to be put right, but the path events take can lead to very difficult results—especially when more powerful forces enter the conflict."
         },
         {
           "type": "paragraph",
@@ -294,13 +294,13 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Urabi n’a pas poursuivi longtemps ses études à Al-Azhar. Sous le règne de Saïd Pacha, l’armée a ouvert ses portes aux fils des cheikhs des villages. Urabi a quitté ses études et s’est engagé comme simple soldat en décembre 1854. Il n’a pas commencé sa carrière comme haut commandant : il est parti du premier échelon et a progressivement gravi les grades.",
+          "text": "Urabi n’a pas poursuivi longtemps ses études à Al-Azhar. Sous le règne de Saïd Pacha, l’armée a ouvert ses portes aux fils des chefs de village. Urabi a quitté ses études et s’est engagé comme simple soldat en décembre 1854. Il n’a pas commencé sa carrière comme haut commandant : il est parti du premier échelon et a progressivement gravi les grades.",
           "heading": "Les débuts dans l’armée"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Ahmed Urabi s’est engagé dans l’armée comme simple soldat le 6 décembre 1854. Quelques années plus tard, il en est devenu l’un des chefs les plus connus.",
+          "text": "Le saviez-vous ? Ahmed Urabi s’est engagé dans l’armée comme simple soldat le 6 décembre 1854. Quelques années plus tard, il en est devenu l’un des chefs les plus connus.",
           "heading": "Le saviez-vous ? | Des débuts inattendus"
         },
         {
@@ -325,14 +325,14 @@
           "speaker": "narrator",
           "type": "paragraph",
           "text": "Le 9 septembre 1881, Urabi se rendit avec des officiers et des soldats sur la place Abdeen, au Caire, où ils présentèrent leurs revendications au khédive Tawfiq. Il ne s’agissait pas simplement d’un face-à-face entre un homme et un souverain. Des plaintes et des actions politiques avaient précédé la manifestation ; certaines personnes influentes la soutenaient, puis différents groupes de la société exprimèrent leur appui au mouvement.",
-          "heading": "La place Abdeen — 9 septembre 1881"
+          "heading": "La place Abdeen — 9 septembre 1881",
+          "image_after": "historical-portrait"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Le saviez-vous ? | Un mouvement soutenu",
-          "text": "Le soutien au mouvement d’Urabi ne venait pas seulement des officiers de l’armée. Certains grands propriétaires terriens appuyaient leur action, et le mouvement a trouvé des soutiens dans différents milieux sociaux.",
-          "image_after": "historical-portrait"
+          "text": "Le saviez-vous ? Le soutien au mouvement d’Urabi ne venait pas seulement des officiers de l’armée. Certains grands propriétaires terriens appuyaient leur action, et le mouvement a trouvé des soutiens dans différents milieux sociaux."
         },
         {
           "type": "paragraph",
@@ -356,7 +356,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Le saviez-vous ? | Le rôle d’Urabi au gouvernement",
-          "text": "En 1882, Ahmed Urabi est devenu ministre de la Guerre dans le gouvernement national dirigé par Mahmoud Sami al-Baroudi."
+          "text": "Le saviez-vous ? En 1882, Ahmed Urabi est devenu ministre de la Guerre dans le gouvernement national dirigé par Mahmoud Sami al-Baroudi."
         },
         {
           "type": "paragraph",
@@ -368,14 +368,14 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "La bataille de Tel el-Kébir — septembre 1882",
-          "text": "Le 13 septembre 1882, l’armée égyptienne affronta les forces britanniques lors de la bataille de Tel el-Kébir. L’armée égyptienne fut vaincue et les troupes britanniques avancèrent vers Le Caire, marquant le début de l’occupation britannique de l’Égypte. Ce fut un tournant majeur : le mouvement ne s’acheva pas seulement par une défaite militaire, le pays entra ensuite dans une longue période de présence militaire britannique."
+          "text": "Le 13 septembre 1882, l’armée égyptienne affronta les forces britanniques lors de la bataille de Tel el-Kébir. L’armée égyptienne fut vaincue et les troupes britanniques avancèrent vers Le Caire, marquant le début de l’occupation britannique de l’Égypte. Ce fut un tournant majeur : le mouvement ne s’acheva pas seulement par une défaite militaire, le pays entra ensuite dans une longue période de présence militaire britannique.",
+          "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "karma",
           "heading": "Karma | Les conséquences",
-          "text": "Je comprends maintenant que de grands événements peuvent commencer lorsque des personnes demandent que quelque chose soit réparé, mais que leur déroulement peut mener à des résultats très difficiles, surtout lorsque des puissances plus fortes entrent dans le conflit.",
-          "image_after": "urabi-timeline"
+          "text": "Je comprends maintenant que de grands événements peuvent commencer lorsque des personnes demandent que quelque chose soit réparé, mais que leur déroulement peut mener à des résultats très difficiles, surtout lorsque des puissances plus fortes entrent dans le conflit."
         },
         {
           "type": "paragraph",
@@ -426,13 +426,13 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Urabi non proseguì a lungo gli studi ad Al-Azhar. Durante il governo di Sa'id Pascià, l’esercito aprì le porte ai figli degli sceicchi dei villaggi. Urabi lasciò gli studi e si arruolò come semplice soldato nel dicembre 1854. Non iniziò la carriera come comandante di alto grado: partì dal livello più basso e salì gradualmente di grado nel corso degli anni.",
+          "text": "Urabi non proseguì a lungo gli studi ad Al-Azhar. Durante il governo di Sa'id Pascià, l’esercito aprì le porte ai figli dei capi dei villaggi. Urabi lasciò gli studi e si arruolò come semplice soldato nel dicembre 1854. Non iniziò la carriera come comandante di alto grado: partì dal livello più basso e salì gradualmente di grado nel corso degli anni.",
           "heading": "L’inizio della carriera nell’esercito"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Ahmed Urabi entrò nell’esercito come semplice soldato il 6 dicembre 1854. Anni dopo sarebbe diventato uno dei suoi comandanti più importanti.",
+          "text": "Lo sapevi? Ahmed Urabi entrò nell’esercito come semplice soldato il 6 dicembre 1854. Anni dopo sarebbe diventato uno dei suoi comandanti più importanti.",
           "heading": "Lo sapevi? | Un inizio inatteso"
         },
         {
@@ -457,14 +457,14 @@
           "speaker": "narrator",
           "type": "paragraph",
           "text": "Il 9 settembre 1881 Urabi si recò con ufficiali e soldati in piazza Abdeen al Cairo, dove presentarono le loro richieste al khedivè Tawfiq. Non fu semplicemente uno scontro tra un uomo e un sovrano. Prima della manifestazione c’erano state lamentele e iniziative politiche; alcune persone influenti la sostenevano e in seguito diversi gruppi della società espressero il proprio appoggio al movimento.",
-          "heading": "Piazza Abdeen — 9 settembre 1881"
+          "heading": "Piazza Abdeen — 9 settembre 1881",
+          "image_after": "historical-portrait"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Lo sapevi? | Il sostegno al movimento",
-          "text": "Il sostegno al movimento di Urabi non veniva soltanto dagli ufficiali dell’esercito. Alcuni grandi proprietari terrieri appoggiarono la loro iniziativa e il movimento trovò sostenitori in diversi ambienti sociali.",
-          "image_after": "historical-portrait"
+          "text": "Lo sapevi? Il sostegno al movimento di Urabi non veniva soltanto dagli ufficiali dell’esercito. Alcuni grandi proprietari terrieri appoggiarono la loro iniziativa e il movimento trovò sostenitori in diversi ambienti sociali."
         },
         {
           "type": "paragraph",
@@ -488,7 +488,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Lo sapevi? | Il ruolo di Urabi nel governo",
-          "text": "Nel 1882 Ahmed Urabi divenne ministro della Guerra nel governo nazionale guidato da Mahmoud Sami al-Barudi."
+          "text": "Lo sapevi? Nel 1882 Ahmed Urabi divenne ministro della Guerra nel governo nazionale guidato da Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
@@ -500,14 +500,14 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "La battaglia di Tel el-Kebir — settembre 1882",
-          "text": "Il 13 settembre 1882 l’esercito egiziano affrontò le forze britanniche nella battaglia di Tel el-Kebir. L’esercito egiziano fu sconfitto e le truppe britanniche avanzarono verso il Cairo, dando inizio all’occupazione britannica dell’Egitto. Fu una svolta importante: il movimento non terminò soltanto con una sconfitta militare, perché il paese entrò in un lungo periodo di presenza militare britannica."
+          "text": "Il 13 settembre 1882 l’esercito egiziano affrontò le forze britanniche nella battaglia di Tel el-Kebir. L’esercito egiziano fu sconfitto e le truppe britanniche avanzarono verso il Cairo, dando inizio all’occupazione britannica dell’Egitto. Fu una svolta importante: il movimento non terminò soltanto con una sconfitta militare, perché il paese entrò in un lungo periodo di presenza militare britannica.",
+          "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "karma",
           "heading": "Karma | Le conseguenze",
-          "text": "Ora capisco che i grandi eventi possono cominciare con persone che chiedono di correggere qualcosa, ma il corso degli avvenimenti può portare a risultati molto difficili, soprattutto quando nel conflitto entrano potenze più forti.",
-          "image_after": "urabi-timeline"
+          "text": "Ora capisco che i grandi eventi possono cominciare con persone che chiedono di correggere qualcosa, ma il corso degli avvenimenti può portare a risultati molto difficili, soprattutto quando nel conflitto entrano potenze più forti."
         },
         {
           "type": "paragraph",
@@ -564,7 +564,7 @@
         {
           "type": "did_you_know",
           "speaker": "narrator",
-          "text": "Ahmed Urabi trat am 6. Dezember 1854 als einfacher Soldat in die Armee ein. Jahre später wurde er einer ihrer bekanntesten Anführer.",
+          "text": "Wusstest du? Ahmed Urabi trat am 6. Dezember 1854 als einfacher Soldat in die Armee ein. Jahre später wurde er einer ihrer bekanntesten Anführer.",
           "heading": "Schon gewusst? | Ein ungewöhnlicher Anfang"
         },
         {
@@ -589,14 +589,14 @@
           "speaker": "narrator",
           "type": "paragraph",
           "text": "Am 9. September 1881 zog Urabi gemeinsam mit Offizieren und Soldaten zum Abdin-Platz in Kairo. Dort trugen sie ihre Forderungen dem Khediven Tawfiq vor. Es war nicht einfach eine Auseinandersetzung zwischen einem Mann und einem Herrscher. Der Demonstration waren Beschwerden und politische Aktivitäten vorausgegangen. Einige einflussreiche Personen unterstützten sie, später bekundeten auch verschiedene gesellschaftliche Gruppen ihre Unterstützung für die Bewegung.",
-          "heading": "Der Abdin-Platz — 9. September 1881"
+          "heading": "Der Abdin-Platz — 9. September 1881",
+          "image_after": "historical-portrait"
         },
         {
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Schon gewusst? | Unterstützung für die Bewegung",
-          "text": "Die Urabi-Bewegung wurde nicht nur von Armeeoffizieren unterstützt. Auch einige große Landbesitzer befürworteten ihr Vorgehen, und die Bewegung fand Unterstützer in unterschiedlichen Teilen der Gesellschaft.",
-          "image_after": "historical-portrait"
+          "text": "Wusstest du? Die Urabi-Bewegung wurde nicht nur von Armeeoffizieren unterstützt. Auch einige große Landbesitzer befürworteten ihr Vorgehen, und die Bewegung fand Unterstützer in unterschiedlichen Teilen der Gesellschaft."
         },
         {
           "type": "paragraph",
@@ -620,7 +620,7 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "heading": "Schon gewusst? | Urabis Regierungsamt",
-          "text": "1882 wurde Ahmed Urabi Kriegsminister in der nationalen Regierung unter dem Vorsitz von Mahmoud Sami al-Barudi."
+          "text": "Wusstest du? 1882 wurde Ahmed Urabi Kriegsminister in der nationalen Regierung unter dem Vorsitz von Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
@@ -632,14 +632,14 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Die Schlacht von Tell el-Kebir — September 1882",
-          "text": "Am 13. September 1882 kämpfte die ägyptische Armee in der Schlacht von Tell el-Kebir gegen britische Truppen. Die ägyptische Armee wurde besiegt, und die britischen Truppen rückten in Richtung Kairo vor. Damit begann die britische Besatzung Ägyptens. Das war ein großer Wendepunkt: Die Bewegung endete nicht nur mit einer militärischen Niederlage; für das Land begann eine lange Zeit britischer Militärpräsenz."
+          "text": "Am 13. September 1882 kämpfte die ägyptische Armee in der Schlacht von Tell el-Kebir gegen britische Truppen. Die ägyptische Armee wurde besiegt, und die britischen Truppen rückten in Richtung Kairo vor. Damit begann die britische Besatzung Ägyptens. Das war ein großer Wendepunkt: Die Bewegung endete nicht nur mit einer militärischen Niederlage; für das Land begann eine lange Zeit britischer Militärpräsenz.",
+          "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "karma",
           "heading": "Karma | Die Folgen",
-          "text": "Jetzt verstehe ich, dass große Ereignisse damit beginnen können, dass Menschen etwas verändern wollen. Doch wie sich die Ereignisse entwickeln, kann zu sehr schwierigen Folgen führen – besonders wenn stärkere Mächte in den Konflikt eingreifen.",
-          "image_after": "urabi-timeline"
+          "text": "Jetzt verstehe ich, dass große Ereignisse damit beginnen können, dass Menschen etwas verändern wollen. Doch wie sich die Ereignisse entwickeln, kann zu sehr schwierigen Folgen führen – besonders wenn stärkere Mächte in den Konflikt eingreifen."
         },
         {
           "type": "paragraph",
