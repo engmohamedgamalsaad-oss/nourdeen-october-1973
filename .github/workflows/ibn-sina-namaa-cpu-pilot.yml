@@ -6,10 +6,6 @@ on:
       - audio/ibn-sina-namaa-cpu-pilot
     paths:
       - "scripts/ibn_sina_tts_cpu_pilot.py"
-      - ".github/workflows/ibn-sina-namaa-cpu-pilot.yml"
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
