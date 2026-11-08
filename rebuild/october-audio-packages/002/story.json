@@ -279,6 +279,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "والدرس الذي يمكن نقله إلى حياتنا اليومية هو أن المشكلة الكبيرة قد تُحل عندما نفهم طبيعتها أولًا، ثم نقارن أكثر من حل، ونجرب الحل المناسب، وننظم تنفيذ العمل بدل الاعتماد على القوة وحدها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني أوقات المشكلة الكبيرة مش محتاجة قوة أكتر؛ محتاجة نفهمها كويس، ونختار فكرة مناسبة، ونتعاون عشان ننفذها."
         }
       ]
     },
@@ -558,6 +563,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "A lesson for everyday life is that a major problem may be solved by first understanding its nature, comparing possible solutions, testing the most suitable one, and organizing the work instead of relying on force alone."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So a big problem does not always need more force. Sometimes we need to understand it, choose a suitable idea, and work together to put it into practice."
         }
       ]
     },
@@ -837,6 +847,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "La leçon à retenir dans la vie quotidienne est qu’un grand problème peut être résolu en comprenant d’abord sa nature, en comparant plusieurs solutions, en testant la plus adaptée et en organisant le travail plutôt qu’en comptant uniquement sur la force."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un grand problème ne demande donc pas toujours plus de force. Il faut parfois bien le comprendre, choisir une idée adaptée et coopérer pour la mettre en œuvre."
         }
       ]
     },
@@ -1116,6 +1131,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Una lezione utile nella vita quotidiana è che un grande problema può essere risolto comprendendone prima la natura, confrontando diverse soluzioni, provando quella più adatta e organizzando il lavoro invece di affidarsi soltanto alla forza."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un grande problema non richiede sempre più forza. A volte bisogna capirlo bene, scegliere un’idea adatta e collaborare per realizzarla."
         }
       ]
     },
@@ -1395,6 +1415,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Eine Lehre für den Alltag lautet: Ein großes Problem lässt sich möglicherweise lösen, wenn man zunächst seine Art versteht, mehrere Lösungen vergleicht, die passende erprobt und die Arbeit organisiert, statt sich allein auf Kraft zu verlassen."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ein großes Problem braucht also nicht immer mehr Kraft. Manchmal müssen wir es erst verstehen, eine passende Idee finden und gemeinsam umsetzen."
         }
       ]
     }
