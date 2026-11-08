@@ -38,7 +38,7 @@ const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp
 // Per-section colour and design differences live in reader-base.css / reader-enhance.css,
 // keyed by body[data-section] and body[data-design]; never in the page itself.
 const page = `<!doctype html>
-<html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="preload" href="story.json" as="fetch" crossorigin><link rel="preload" href="../../../rebuild/reader.js?v=20261102-canonical-preview-reader-3" as="script"><script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><link rel="preload" href="story.json" as="fetch" crossorigin><link rel="preload" href="../../../rebuild/reader.js?v=20261108-universal-audio-reader-1" as="script"><script>(function(){try{var d=document.documentElement,t=localStorage.getItem("kh-theme")||(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark"),l=localStorage.getItem("kh-lang")||localStorage.getItem("lang")||"ar";d.setAttribute("data-theme",t==="light"?"light":"dark");if(["en","fr","it","de"].indexOf(l)>=0){d.lang=l;d.dir="ltr"}else{d.lang="ar";d.dir="rtl"}}catch(e){document.documentElement.setAttribute("data-theme","dark")}})();</script><meta name="viewport" content="width=device-width,initial-scale=1">
 <script src="../../../assets/shared/home-language-only.js?v=20261030-v2-language-fix"></script>
 <title>${escape(ar.title)} | خالدون عبر التاريخ</title>
 <meta name="description" content="${escape(ar.summary)}">
@@ -65,7 +65,7 @@ const page = `<!doctype html>
 <section class="section sources"><h2 id="sources-heading">المصادر والتحقق</h2><ol id="sources"></ol><p id="history-note"></p></section>
 </article></main>
 <div id="image-lightbox" class="image-lightbox" hidden role="dialog" aria-modal="true" aria-label="عرض الصورة المكبرة"><button type="button" id="lightbox-close" aria-label="إغلاق الصورة">×</button><img id="lightbox-image" alt=""><p id="lightbox-caption"></p></div>
-<script src="../../../rebuild/reader.js?v=20261102-canonical-preview-reader-3" data-kh-story-reader data-story-path="story.json"></script>
+<script src="../../../rebuild/reader.js?v=20261108-universal-audio-reader-1" data-kh-story-reader data-story-path="story.json"></script>
 <script src="../../../khaledoon/assets/khaledoon-story-map-link.js?v=20261030-map-link-1"></script>
 </body></html>`;
 await mkdir(outDir, { recursive: true });
