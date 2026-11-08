@@ -14,6 +14,11 @@ on:
       - "khaledoon/assets/ai-json-repair.js"
       - "khaledoon/tests/**"
       - "supabase/functions/publish-story-pr/index.ts"
+      - "supabase/functions/audio-review-assets/index.ts"
+      - "assets/shared/story-audio.js"
+      - "stories/october/**"
+      - "scripts/generate_story_audio.py"
+      - ".github/workflows/story-audio-segment-staging.yml"
       - "rebuild/**"
       - "scripts/e2e-story-preview.cjs"
       - ".github/workflows/story-workflow-tests.yml"
@@ -39,6 +44,15 @@ jobs:
           deno-version: v2.x
       - name: Type-check publish Edge Function
         run: deno check supabase/functions/publish-story-pr/index.ts
+      - name: Type-check private audio staging Edge Function
+        run: deno check supabase/functions/audio-review-assets/index.ts
+      - name: Compile the audio generator without invoking TTS
+        run: python -m py_compile scripts/generate_story_audio.py
+      - name: Check public audio player and reader JavaScript syntax
+        run: |
+          node --check assets/shared/story-audio.js
+          node --check rebuild/reader.js
+          node --check rebuild/reader-audio-review.js
       - name: Run AI JSON repair tests
         run: node khaledoon/tests/ai-json-repair.test.cjs
       - name: Run workflow unit tests

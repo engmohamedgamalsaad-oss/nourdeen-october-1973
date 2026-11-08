@@ -171,7 +171,7 @@ for (const file of translationMaps) {
         'stories/history/006/translations.js'
       ].map(read).join('\n');
       const missingSources = entries.filter(([key]) => !sourcePages.includes(key));
-      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match source text in stories 001–003.');
+      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match any active source page.');
       if (!bad.length && !missingSources.length) console.log('germanStoryText: verified ' + entries.length + ' German additions for October stories 001–003.');
     } catch (e) {
       problems.push('germanStoryText: could not parse the map: ' + e.message);

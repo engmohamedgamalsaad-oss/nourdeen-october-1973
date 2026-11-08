@@ -57,7 +57,7 @@ jobs:
           expected = {
               "mode": "read-only-generation-plan",
               "october_audio_packages": 4,
-              "october_audio_packages_blocked": 4,
+              "october_audio_packages_blocked": 0,
               "stories_with_errors": 0,
               "tts_requests": 0,
               "files_modified": 0,
@@ -73,10 +73,13 @@ jobs:
           for package in packages:
               if "error" in package:
                   failures.append(f"{package.get('path', 'unknown package')}: {package.get('error')}")
-              if "blocked" not in package or "admin-approved five-language" not in package.get("blocked", ""):
-                  failures.append(f"{package.get('path', 'unknown package')}: missing shared human audio-text approval gate")
-          if any("segments_to_generate" in package for package in packages):
-              failures.append("unapproved October packages must not produce generation plans")
+              blocked = package.get("blocked")
+              if blocked and "selected-language audio-text approval" not in blocked:
+                  failures.append(f"{package.get('path', 'unknown package')}: unexpected block reason: {blocked}")
+              if not blocked and "segments_to_generate" not in package:
+                  failures.append(f"{package.get('path', 'unknown package')}: missing read-only generation plan or explicit approval block")
+          if report.get("tts_requests") != 0 or report.get("files_modified") != 0:
+              failures.append("read-only plan must perform zero TTS requests and modify zero files")
           if failures:
               raise SystemExit("PLAN ASSERTIONS FAILED:\\n- " + "\\n- ".join(failures))
 
@@ -88,8 +91,8 @@ jobs:
                   f"fish_segments_to_generate={package.get('fish_segments_to_generate', 0)}"
               )
           print(
-              "\\nVERIFIED: 4 October packages blocked pending shared five-language human approval, "
-              "0 TTS requests, 0 files modified."
+              "\\nVERIFIED: 4 October packages were inspected with the shared selected-language approval gate; "
+              "the report is read-only with 0 TTS requests and 0 files modified."
           )
           PY
 
