@@ -49,7 +49,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         package = audio.read_json(story)
         rewrites = rewrites or {language: {} for language in audio.LANGUAGES}
         review_segments = []
-        for language in audio.LANGUAGES:
+        for language in audio.AUDIO_PHASE_LANGUAGES:
             blocks = package["i18n"][language]["blocks"]
             for index, block in enumerate(blocks):
                 if block.get("speaker") not in ("narrator", "karma"):
@@ -76,7 +76,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "review": {
                 "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
                 "status": "approved_by_admin",
-                "languages": list(audio.LANGUAGES),
+                "languages": list(audio.AUDIO_PHASE_LANGUAGES),
                 "total_segments": len(review_segments),
                 "segments": review_segments,
             },
@@ -104,10 +104,9 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             staging = root / ".audio-staging"
             with patch.object(audio, "ROOT", root):
                 plan = audio.inspect_generation_plan(story, staging)
-            self.assertEqual(set(plan["languages"]), set(audio.LANGUAGES))
+            self.assertEqual(set(plan["languages"]), set(audio.AUDIO_PHASE_LANGUAGES))
             self.assertEqual(plan["languages"]["ar"]["segments_to_generate"], 2)
-            for language in ("en", "fr", "it", "de"):
-                self.assertEqual(plan["languages"][language]["segments_to_generate"], 2)
+            self.assertEqual(plan["languages"]["en"]["segments_to_generate"], 2)
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
