@@ -57,7 +57,7 @@ function validateAudioReviewGate(
   }
 
   const supportedLanguages = ["ar", "en", "fr", "it", "de"];
-  const languages = Array.isArray(audioReview.audio_languages) ? audioReview.audio_languages : supportedLanguages;
+  const languages = Array.isArray(audioReview.audio_languages) ? audioReview.audio_languages : ["ar", "en"];
   if (!languages.length || languages.some((lang: any) => !supportedLanguages.includes(lang)) ||
       new Set(languages).size !== languages.length || !languages.includes("ar")) {
     return "نطاق لغات الصوت المعتمد غير صالح؛ يجب أن يتضمن العربية ويقتصر على اللغات المدعومة.";
@@ -227,7 +227,7 @@ async function collectPrivateAudioForPublish(
   section: string,
 ): Promise<any[]> {
   const slug = String(packageData?.slug ?? "");
-  const languages = Array.isArray(audioReview?.audio_languages) ? audioReview.audio_languages : ["ar", "en", "fr", "it", "de"];
+  const languages = Array.isArray(audioReview?.audio_languages) ? audioReview.audio_languages : ["ar", "en"];
   const storyKey = section + "/" + slug;
   const reviewClips = Object.values(audioReview?.clips ?? {}) as any[];
   const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
