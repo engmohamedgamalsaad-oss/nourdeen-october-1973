@@ -80,6 +80,7 @@ jobs:
           name: workflow-visual-audit-screenshots
           path: |
             artifacts/admin-visual-audit/*.png
+            artifacts/story-preview/*.png
             artifacts/story-template-preview/*.png
             artifacts/v2-story-preview/*.png
           if-no-files-found: warn
