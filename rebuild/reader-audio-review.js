@@ -224,7 +224,6 @@ async function loadManifests() {
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
-  await ensureArabicAudioStaged(expectedTexts.ar);
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
@@ -255,8 +254,23 @@ async function loadManifests() {
         }
       });
       var localized = story.i18n && story.i18n[lang];
-      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang]);
-      if (!coverage.ok) throw new Error(coverage.error);
+      if (data.complete !== false) {
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang]);
+        if (!coverage.ok) throw new Error(coverage.error);
+      } else {
+        var partialSeen = Object.create(null);
+        data.segments.forEach(function (seg) {
+          var index = Number(seg.block_index), chunk = Number(seg.chunk_index || 0);
+          var block = localized && localized.blocks && localized.blocks[index];
+          var key = index + ':' + chunk;
+          if (!Number.isInteger(index) || index < 0 || !block ||
+              !['narrator', 'karma'].includes(block.speaker) || block.speaker !== seg.speaker ||
+              !Number.isInteger(chunk) || chunk < 0 || partialSeen[key]) {
+            throw new Error('ملف الصوت المرحلي يحتوي مقطعًا خارج ترتيب الحكاية أو مكررًا.');
+          }
+          partialSeen[key] = true;
+        });
+      }
       manifests[lang] = data;
     } catch (e) {
       manifestErrors[lang] = String(e && e.message || e);
@@ -626,14 +640,20 @@ function makeButton(label, cls, handler) {
   b.addEventListener('click', handler); return b;
 }
 var generationBusy = false, generationMessage = '';
-async function generateNextArabicBlock(statusNode, button) {
+async function generateNextAudioBlock(statusNode, button) {
   if (generationBusy) return;
+  var lang = document.documentElement.lang || 'ar';
+  if (LANGS.indexOf(lang) < 0) lang = 'ar';
+  var localized = story && story.i18n && story.i18n[lang];
+  var blocks = localized && Array.isArray(localized.blocks) ? localized.blocks : [];
   var byBlock = {};
-  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
+  entries.filter(function (entry) { return entry.lang === lang; }).forEach(function (entry) {
     (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
   });
   var nextBlock = -1;
-  for (var i = 0; i < 17; i++) {
+  for (var i = 0; i < blocks.length; i++) {
+    var block = blocks[i];
+    if (!block || !['narrator', 'karma'].includes(block.speaker) || !String(block.text || '').trim()) continue;
     var clips = byBlock[i] || [];
     if (!clips.length || !clips.every(function (entry) {
       var saved = review.clips[entry.key];
@@ -641,25 +661,24 @@ async function generateNextArabicBlock(statusNode, button) {
     })) { nextBlock = i; break; }
   }
   if (nextBlock < 0) {
-    text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
+    text(statusNode, 'كل مقاطع ' + LANG_NAMES[lang] + ' مقبولة بالفعل.');
     return;
   }
-  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام Fish Audio، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
+  if (lang === 'ar' && !window.confirm('سيتم توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام Fish Audio. هل توافق على استهلاك رصيد التوليد؟')) return;
   generationBusy = true;
   button.disabled = true;
-  text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + '…');
+  text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + ' باللغة ' + LANG_NAMES[lang] + '…');
   try {
     var started = await audioAssetsRequest({
-      action: 'generate',
-      section: 'history', slug: 'ibn-sina', language: 'ar',
-      block_index: nextBlock, confirm_fish_audio_request: 'yes'
+      action: 'generate', section: story.section, slug: story.slug, language: lang,
+      block_index: nextBlock, confirm_fish_audio_request: lang === 'ar' ? 'yes' : 'no'
     });
     if (!started || !started.request_id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
     var result = null;
     for (var attempt = 0; attempt < 120; attempt++) {
       await new Promise(function (resolve) { setTimeout(resolve, 5000); });
       result = await audioAssetsRequest({
-        action: 'generation_status', section: 'history', slug: 'ibn-sina', language: 'ar',
+        action: 'generation_status', section: story.section, slug: story.slug, language: lang,
         request_id: started.request_id, block_index: nextBlock
       });
       if (result.status === 'completed' && result.conclusion === 'success' && result.artifact_id) break;
@@ -667,18 +686,18 @@ async function generateNextArabicBlock(statusNode, button) {
       text(statusNode, result.status === 'queued' ? 'طلب التوليد في قائمة الانتظار…' : 'جارٍ توليد المقطع ' + (nextBlock + 1) + '…');
     }
     if (!result || result.status !== 'completed' || result.conclusion !== 'success' || !result.artifact_id) {
-      throw new Error('لم يكتمل التوليد خلال المهلة المحددة. لم يتم اعتماد أو نشر أي صوت.');
+      throw new Error('لم يكتمل التوليد خلال المهلة. لم يتم اعتماد أو نشر أي صوت.');
     }
     text(statusNode, 'اكتمل التوليد؛ جارٍ نقل الصوت إلى مساحة المراجعة الخاصة…');
     await audioAssetsRequest({
-      action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
+      action: 'stage', section: story.section, slug: story.slug, language: lang,
       artifact_id: result.artifact_id, run_id: result.run_id,
-      artifact_name: 'ibn-sina-arabic-audio-staging',
+      artifact_name: 'khaledoon-single-block-audio-staging',
       request_id: started.request_id, block_index: nextBlock
     });
     text(statusNode, 'الصوت الجديد جاهز. جارٍ تحديث المقاطع للاستماع…');
     await loadManifests();
-    generationMessage = 'تم تجهيز المقطع ' + (nextBlock + 1) + ' للمراجعة فقط؛ لم يُنشر.';
+    generationMessage = 'تم تجهيز المقطع ' + (nextBlock + 1) + ' للغة ' + LANG_NAMES[lang] + ' للمراجعة فقط؛ لم يُنشر.';
     render();
   } catch (error) {
     text(statusNode, 'تعذر تجهيز المقطع: ' + (error && error.message || error));
@@ -688,14 +707,16 @@ async function generateNextArabicBlock(statusNode, button) {
   }
 }
 function renderGenerationControls(banner) {
-  if (!story || story.section !== 'history' || story.slug !== 'ibn-sina' || document.documentElement.lang !== 'ar') return;
+  if (!story) return;
+  var lang = document.documentElement.lang || 'ar';
+  if (LANGS.indexOf(lang) < 0) lang = 'ar';
   var panel = document.createElement('div');
   panel.className = 'kh-audio-review-controls kh-audio-generation-controls';
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
-  text(status, generationMessage || 'التوليد متاح لمقطع عربي واحد في كل مرة، بعد موافقة صريحة.');
-  var button = makeButton('توليد المقطع العربي التالي', 'generate', function () {
-    generateNextArabicBlock(status, button);
+  text(status, generationMessage || 'التوليد متاح لمقطع واحد في كل مرة للغة ' + LANG_NAMES[lang] + '، ولا ينتقل للمقطع التالي قبل قبول الحالي.');
+  var button = makeButton('توليد المقطع التالي — ' + LANG_NAMES[lang], 'generate', function () {
+    generateNextAudioBlock(status, button);
   });
   button.disabled = generationBusy;
   panel.append(button, status);
