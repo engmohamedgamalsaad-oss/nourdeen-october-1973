@@ -264,7 +264,7 @@ async function collectPrivateAudioForPublish(
       if (!block || !clip || clip.speaker !== segment.speaker || !engineOk ||
           normalize(String(clip.text || "")) !== normalize(String(segment.text || "")) ||
           String(clip.audio_sha256 || "").toLowerCase() !== String(segment.audio_sha256 || "").toLowerCase() ||
-          !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || "")) ||
+          !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src || "")) ||
           seen.has(String(segment.src)) || seenClipKeys.has(clipKey)) {
         throw new Error("ملف صوت لا يطابق قرار القبول أو الصوت المعتمد وبصمة المقطع " + (blockIndex + 1) + " في " + lang + ".");
       }
@@ -383,7 +383,7 @@ Deno.serve(async (req: Request) => {
     }
     const pageResponse = await fetch(rawBase + `stories/${section}/${storyId}/index.html`);
     if (!pageResponse.ok) return reply(404, { error: "صفحة الحكاية المنشورة غير موجودة؛ لن يتم نشر ملفات صوت بلا صفحة." });
-    const pronunciationPath = packagePath.replace(/story\\.json$/, "audio-pronunciation.json");
+    const pronunciationPath = packagePath.replace(/story\.json$/, "audio-pronunciation.json");
     const pronunciationResponse = await fetch(rawBase + pronunciationPath);
     const pronunciationFiles: any[] = [];
     if (pronunciationResponse.ok) {
