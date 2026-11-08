@@ -61,29 +61,7 @@ async function audioAssetsRequest(payload) {
   }
   return data || {};
 }
-async function ensureArabicAudioStaged(expectedTexts) {
-  if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
-  initialArabicStageAttempted = true;
-  // Never overwrite private staged audio from the page. The restart baseline is
-  // staged only when no private manifest exists yet (404). A manifest that fails
-  // text coverage is left untouched: loadManifests() reports the coverage error
-  // and blocks approval, instead of silently restoring older audio whose hashes
-  // would revive old review decisions.
-  try {
-    await audioAssetsRequest({
-      action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
-    });
-    return;
-  } catch (error) {
-    if (!error || error.status !== 404) throw error;
-  }
-  await audioAssetsRequest({
-    action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
-    artifact_id: 13563200242, run_id: 42344425713,
-    artifact_name: 'ibn-sina-arabic-audio-staging',
-    baseline_restore: true
-  });
-}
+async function ensureArabicAudioStaged() { return; }
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
@@ -248,14 +226,14 @@ async function loadManifests() {
       data.segments.forEach(function (seg) {
         var expected = seg.speaker === 'karma' ? core.VOICES.karma : seg.speaker === 'narrator' ? core.VOICES.narrator : '';
         var engineOk = lang === 'ar'
-          ? seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected
+          ? seg.provider === 'huggingface-space' && seg.model === 'NAMAA-Space/NAMAA-Egyptian-TTS' && seg.voice === expected
           : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim();
         if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
       var localized = story.i18n && story.i18n[lang];
-      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang]);
+      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], lang === 'ar' && data.provider === 'huggingface-space');
       if (!coverage.ok) throw new Error(coverage.error);
       manifests[lang] = data;
     } catch (e) {
@@ -644,7 +622,7 @@ async function generateNextArabicBlock(statusNode, button) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
     return;
   }
-  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام Fish Audio، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
+  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام NAMAA على Hugging Face، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
   generationBusy = true;
   button.disabled = true;
   text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + '…');
@@ -652,7 +630,7 @@ async function generateNextArabicBlock(statusNode, button) {
     var started = await audioAssetsRequest({
       action: 'generate',
       section: 'history', slug: 'ibn-sina', language: 'ar',
-      block_index: nextBlock, confirm_fish_audio_request: 'yes'
+      block_index: nextBlock
     });
     if (!started || !started.request_id) throw new Error('لم يرجع الخادم رقم طلب التوليد.');
     var result = null;
