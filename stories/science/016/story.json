@@ -137,6 +137,11 @@
           "speaker": "narrator",
           "heading": "الخاتمة: أثر يبقى",
           "text": "توفي علي مصطفى مشرفة في القاهرة يوم 15 يناير 1950. بقيت سيرته تذكيرًا بأن الفضول والاجتهاد والتعليم يمكن أن يصنعوا أثرًا يتجاوز عمر صاحبه، وأن العلم يكبر حين نطرح أسئلة دقيقة ونبحث عن أدلة، لا حين نكتفي بالحكايات المثيرة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني العالم مش بس بيكتشف حاجة جديدة؛ كمان يقدر يعلّم غيره إزاي يفكر ويدوّر على الدليل، وساعتها أثره يفضل مكمل."
         }
       ]
     },
@@ -269,6 +274,11 @@
           "speaker": "narrator",
           "heading": "Conclusion: A lasting impact",
           "text": "Mosharafa died in Cairo on 15 January 1950. His life reminds us that curiosity, effort, and education can leave an impact beyond one lifetime—and that science grows when we ask precise questions and look for evidence instead of relying on sensational stories."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So a scientist does more than make discoveries. They can also teach others how to think and look for evidence, allowing their influence to continue."
         }
       ]
     },
@@ -401,6 +411,11 @@
           "speaker": "narrator",
           "heading": "Conclusion : Une trace durable",
           "text": "Mosharafa mourut au Caire le 15 janvier 1950. Son parcours rappelle que la curiosité, l’effort et l’éducation peuvent laisser une trace au-delà d’une vie, et que la science avance grâce aux questions précises et aux preuves, non aux récits sensationnels."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un scientifique ne fait donc pas que découvrir de nouvelles choses. Il peut aussi apprendre aux autres à réfléchir et à chercher des preuves, et son influence continue ainsi."
         }
       ]
     },
@@ -533,6 +548,11 @@
           "speaker": "narrator",
           "heading": "Conclusione: Un’eredità duratura",
           "text": "Mosharafa morì al Cairo il 15 gennaio 1950. La sua vita ricorda che curiosità, impegno e istruzione possono lasciare un segno oltre la vita di una persona e che la scienza cresce con domande precise e prove, non con racconti sensazionali."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Uno scienziato non si limita quindi a fare nuove scoperte. Può anche insegnare agli altri a ragionare e a cercare prove, così la sua influenza continua."
         }
       ]
     },
@@ -665,6 +685,11 @@
           "speaker": "narrator",
           "heading": "Schluss: Eine bleibende Wirkung",
           "text": "Mosharafa starb am 15. Januar 1950 in Kairo. Sein Leben zeigt, dass Neugier, Einsatz und Bildung über ein einzelnes Leben hinaus wirken können – und dass Wissenschaft durch genaue Fragen und Belege wächst, nicht durch sensationelle Geschichten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ein Wissenschaftler entdeckt also nicht nur Neues. Er kann anderen auch beibringen, wie man denkt und Belege sucht – so wirkt sein Einfluss weiter."
         }
       ]
     }
