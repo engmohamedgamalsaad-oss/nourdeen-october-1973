@@ -34,10 +34,25 @@ async function adminToken() {
   try { s = JSON.parse(localStorage.getItem('kh_adm_session') || sessionStorage.getItem('kh_adm_session') || 'null'); } catch (e) {}
   if (!s || !s.access_token) throw new Error('سجّل الدخول إلى لوحة الإدارة أولًا.');
   if (s.expires_at && s.expires_at - Date.now() / 1000 < 60 && s.refresh_token) {
-    var rr = await fetch(SUPA + '/auth/v1/token?grant_type=refresh_token', {
-      method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: s.refresh_token })
-    });
+    var refreshController = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var refreshTimeout = refreshController ? setTimeout(function () { refreshController.abort(); }, 15000) : null;
+    var rr;
+    try {
+      rr = await fetch(SUPA + '/auth/v1/token?grant_type=refresh_token', {
+        method: 'POST',
+        headers: { apikey: KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: s.refresh_token }),
+        cache: 'no-store',
+        signal: refreshController ? refreshController.signal : undefined
+      });
+    } catch (refreshError) {
+      if (refreshError && refreshError.name === 'AbortError') {
+        throw new Error('انتهت مهلة تجديد جلسة الإدارة بعد 15 ثانية. سجّل الدخول إلى لوحة الإدارة من جديد ثم أعد فتح المعاينة.');
+      }
+      throw new Error('تعذر تجديد جلسة الإدارة: ' + (refreshError && refreshError.message || refreshError));
+    } finally {
+      if (refreshTimeout) clearTimeout(refreshTimeout);
+    }
     if (!rr.ok) throw new Error('انتهت جلسة المسؤول. سجّل الدخول مرة أخرى.');
     var rd = await rr.json();
     s = { access_token: rd.access_token, refresh_token: rd.refresh_token, expires_at: Math.floor(Date.now() / 1000) + rd.expires_in };
