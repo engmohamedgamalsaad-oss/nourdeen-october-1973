@@ -389,7 +389,7 @@ Deno.serve(async (req: Request) => {
     if (!pageHtml.includes('data-story-slug="' + storyId + '"') || !hasSharedPlayer) {
       return reply(409, { error: "صفحة الحكاية لا تحمل هوية الحكاية أو مشغل الصوت المشترك؛ لم يتم نشر الملفات." });
     }
-    const pronunciationPath = packagePath.replace(/story\\.json$/, "audio-pronunciation.json");
+    const pronunciationPath = packagePath.replace(/story\.json$/, "audio-pronunciation.json");
     const pronunciationResponse = await fetch(rawBase + pronunciationPath);
     const pronunciationFiles: any[] = [];
     if (pronunciationResponse.ok) {
