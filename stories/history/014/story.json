@@ -100,6 +100,11 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "text": "هل تعلم؟ بطاقة 3: كانت الرسائل الأدبية فنًا مهمًا في العصر العباسي، وكان الكاتب الماهر يجمع بين المعرفة باللغة والقدرة على صياغة الأفكار بأسلوب مؤثر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني ممكن شخصين يكون عندهم اسم متشابه، لكنهم مش نفس العالم؛ عشان كده لازم نتأكد من الأسماء والتفاصيل قبل ما ننسب إنجاز لحد."
         }
       ]
     },
@@ -195,6 +200,11 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "text": "Did you know? Card 3: Literary correspondence was an important art in the Abbasid era. Skilled writers combined knowledge of language with the ability to present ideas in an influential style."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So two people can have similar names without being the same scholar. That is why we should check names and details before attributing an achievement to someone."
         }
       ]
     },
@@ -290,6 +300,11 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "text": "Le saviez-vous ? Carte 3 : La correspondance littéraire était un art important à l'époque abbasside. Les écrivains habiles associaient la connaissance de la langue à la capacité de présenter leurs idées de manière persuasive."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Deux personnes peuvent donc avoir des noms semblables sans être le même savant. Il faut vérifier les noms et les détails avant d’attribuer une découverte à quelqu’un."
         }
       ]
     },
@@ -385,6 +400,11 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "text": "Lo sapevi? Scheda 3: La corrispondenza letteraria era un'arte importante nell'epoca abbaside. Gli scrittori esperti univano la conoscenza della lingua alla capacità di presentare le idee in modo efficace."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Due persone possono avere nomi simili senza essere lo stesso studioso. Per questo dobbiamo verificare nomi e dettagli prima di attribuire un risultato a qualcuno."
         }
       ]
     },
@@ -480,6 +500,11 @@
           "type": "did_you_know",
           "speaker": "narrator",
           "text": "Wusstest du? Karte 3: Literarische Briefe waren eine wichtige Kunst in der Abbasidenzeit. Geschickte Schriftsteller verbanden Sprachkenntnisse mit der Fähigkeit, Gedanken wirkungsvoll auszudrücken."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Zwei Menschen können also ähnliche Namen haben, ohne dieselbe gelehrte Person zu sein. Deshalb müssen wir Namen und Einzelheiten prüfen, bevor wir jemandem eine Leistung zuschreiben."
         }
       ]
     }
