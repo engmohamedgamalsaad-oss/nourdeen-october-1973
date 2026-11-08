@@ -13,6 +13,7 @@ var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang 
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
 var initialArabicStageAttempted = false;
+var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -110,6 +111,8 @@ async function loadRow() {
   }
   var result = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
   review = core.cloneReview(result.audio_review || null);
+  speechTexts = result.audio_review && result.audio_review.speech_texts && typeof result.audio_review.speech_texts === 'object'
+    ? result.audio_review.speech_texts : {};
   canWrite = true;
   return true;
 }
@@ -162,6 +165,7 @@ async function saveReview(entry, decision) {
     var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
     var currentReview = core.cloneReview(currentResult.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    next.speech_texts = speechTexts;
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     var saved = await audioAssetsRequest({
@@ -181,6 +185,7 @@ async function saveReview(entry, decision) {
       throw new Error('لم يؤكد الخادم بقاء قرار المقطع وتفاصيل مراجعة النطق في سجل المراجعة.');
     }
     review = core.cloneReview(verified);
+    speechTexts = verified.speech_texts && typeof verified.speech_texts === 'object' ? verified.speech_texts : speechTexts;
   } finally {
     busy = false;
   }
@@ -660,7 +665,12 @@ async function generateNextArabicBlock(statusNode, button) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
     return;
   }
-  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام NAMAA على Hugging Face، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
+  var speechRecord = speechTexts[speechTextKey(nextBlock)];
+  if (!speechRecord || speechRecord.status !== 'approved' || !speechRecord.approved_text || speechTextDirty[nextBlock]) {
+    text(statusNode, 'المقطع ' + (nextBlock + 1) + ' متوقف: جهّز نص القراءة في بطاقة المقطع ثم راجعه واعتمده قبل توليد الصوت.');
+    return;
+  }
+  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام NAMAA، من نص القراءة الذي اعتمدته. هل توافق على استهلاك رصيد التوليد؟')) return;
   generationBusy = true;
   button.disabled = true;
   text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + '…');
@@ -717,6 +727,126 @@ function renderGenerationControls(banner) {
   panel.append(button, status);
   banner.appendChild(panel);
 }
+function speechTextKey(index) { return 'ar:' + String(index); }
+async function prepareSpeechText(index, statusNode, button) {
+  var key = speechTextKey(index);
+  if (speechTextBusy[key]) return;
+  speechTextBusy[key] = true;
+  if (button) button.disabled = true;
+  text(statusNode, 'جارٍ تجهيز نص القراءة باستخدام Gemini…');
+  try {
+    var proposal = await audioAssetsRequest({
+      action: 'prepare_speech_text', section: 'history', slug: 'ibn-sina',
+      language: 'ar', block_index: index
+    });
+    if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
+    var saved = await audioAssetsRequest({
+      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      block_index: index, decision: 'suggested', speech_text: proposal.speech_text,
+      source_text_hash: proposal.source_text_hash, model: proposal.model,
+      changes_summary: proposal.changes_summary,
+      pronunciation_notes: proposal.pronunciation_notes, review_flags: proposal.review_flags
+    });
+    speechTexts[key] = saved.speech_text;
+    speechTextDirty[index] = false;
+    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى NAMAA.');
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
+  } finally {
+    speechTextBusy[key] = false;
+    if (button) button.disabled = false;
+  }
+}
+async function approveSpeechText(index, textarea, statusNode, button) {
+  var key = speechTextKey(index);
+  var record = speechTexts[key];
+  if (!record || !record.source_text_hash) {
+    text(statusNode, 'جهّز اقتراح Gemini أولًا قبل اعتماد نص القراءة.');
+    return;
+  }
+  var value = String(textarea.value || '').trim();
+  if (!value) { text(statusNode, 'نص القراءة لا يمكن أن يكون فارغًا.'); return; }
+  if (speechTextBusy[key]) return;
+  speechTextBusy[key] = true;
+  if (button) button.disabled = true;
+  text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
+  try {
+    var saved = await audioAssetsRequest({
+      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      block_index: index, decision: 'approved', speech_text: value,
+      source_text_hash: record.source_text_hash
+    });
+    speechTexts[key] = saved.speech_text;
+    speechTextDirty[index] = false;
+    text(statusNode, 'تم اعتماد نص القراءة لهذا المقطع. يمكن الآن توليد صوته عند وصول دوره.');
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر اعتماد النص: ' + (error && error.message || error));
+  } finally {
+    speechTextBusy[key] = false;
+    if (button) button.disabled = false;
+  }
+}
+function renderSpeechTextPanel(block, index, localizedBlock) {
+  if (!block || !localizedBlock || !['karma', 'narrator'].includes(localizedBlock.speaker) ||
+      typeof localizedBlock.text !== 'string' || !localizedBlock.text.trim()) return;
+  var key = speechTextKey(index);
+  var record = speechTexts[key] || {};
+  var panel = document.createElement('section');
+  panel.className = 'kh-audio-review-controls kh-speech-text-controls';
+  var heading = document.createElement('strong');
+  heading.textContent = 'نص القراءة الصوتية — ' + (localizedBlock.speaker === 'karma' ? 'كارما' : 'الراوي');
+  var sourceLabel = document.createElement('div');
+  sourceLabel.textContent = 'النص الأصلي المعتمد';
+  var source = document.createElement('p');
+  source.className = 'kh-speech-source';
+  source.textContent = localizedBlock.text;
+  var proposalLabel = document.createElement('label');
+  proposalLabel.textContent = 'صياغة القراءة المقترحة (يمكنك تعديلها قبل الاعتماد)';
+  var textarea = document.createElement('textarea');
+  textarea.rows = 4;
+  textarea.maxLength = 6000;
+  textarea.value = record.status === 'approved' ? (record.approved_text || '') : (record.suggested_text || '');
+  textarea.placeholder = 'اضغط «تجهيز النص باستخدام Gemini» لاقتراح صياغة صوتية منفصلة…';
+  var status = document.createElement('span');
+  status.className = 'kh-audio-review-state';
+  status.textContent = speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
+    record.status === 'approved' ? 'نص القراءة معتمد ✓' :
+    record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
+    'لم يُجهز نص القراءة بعد.';
+  var notes = document.createElement('div');
+  notes.className = 'kh-speech-notes';
+  if (record.changes_summary) {
+    var summary = document.createElement('p');
+    summary.textContent = 'ملخص التغيير: ' + record.changes_summary;
+    notes.appendChild(summary);
+  }
+  if (Array.isArray(record.pronunciation_notes) && record.pronunciation_notes.length) {
+    var pronunciation = document.createElement('p');
+    pronunciation.textContent = 'ملاحظات النطق: ' + record.pronunciation_notes.join('؛ ');
+    notes.appendChild(pronunciation);
+  }
+  if (Array.isArray(record.review_flags) && record.review_flags.length) {
+    var flags = document.createElement('p');
+    flags.textContent = 'تنبيهات للمراجعة: ' + record.review_flags.join('؛ ');
+    notes.appendChild(flags);
+  }
+  textarea.addEventListener('input', function () {
+    speechTextDirty[index] = true;
+    status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
+  });
+  var suggest = makeButton(record.suggested_text ? 'إعادة اقتراح من Gemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+    prepareSpeechText(index, status, suggest);
+  });
+  var approve = makeButton(record.status === 'approved' ? 'حفظ واعتماد التعديل' : 'اعتماد نص القراءة', 'accept', function () {
+    approveSpeechText(index, textarea, status, approve);
+  });
+  approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key];
+  suggest.disabled = !canWrite || !!speechTextBusy[key];
+  panel.append(heading, sourceLabel, source, proposalLabel, textarea, notes, suggest, approve, status);
+  block.appendChild(panel);
+}
 function render() {
   if (!story) return;
   var banner = document.getElementById('kh-audio-review-gate');
@@ -744,7 +874,17 @@ function render() {
     var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
     blockByIndex[index] = block;
   });
-  blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
+  blocks.forEach(function (block) {
+    Array.prototype.slice.call(block.querySelectorAll(':scope > .kh-audio-review-controls')).forEach(function (old) { old.remove(); });
+  });
+  if (story.section === 'history' && story.slug === 'ibn-sina' && lang === 'ar') {
+    blocks.forEach(function (block, position) {
+      var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
+      var localizedBlock = story.i18n && story.i18n.ar && story.i18n.ar.blocks && story.i18n.ar.blocks[index];
+      renderSpeechTextPanel(block, index, localizedBlock);
+    });
+  }
+  renderGenerationControls(banner);
   if (!manifests[lang]) {
     var missingManifest = /HTTP 404/.test(String(manifestErrors[lang] || ''));
     blocks.forEach(function (block, index) {
@@ -812,7 +952,6 @@ function render() {
     block.appendChild(panel);
   });
   renderGateBanner(banner);
-  renderGenerationControls(banner);
   banner.hidden = false;
 }
 function injectStyles() {
