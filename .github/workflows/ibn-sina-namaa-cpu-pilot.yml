@@ -1,26 +1,31 @@
-name: Ibn Sina Arabic and English CPU voice pilot
+name: Ibn Sina NAMAA first Arabic preview
+run-name: ابن سينا NAMAA audio ${{ inputs.request_id }} block ${{ inputs.block_index }}
 
 on:
-  push:
-    branches:
-      - audio/ibn-sina-namaa-cpu-pilot-v3
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+    inputs:
+      request_id:
+        description: Review request UUID
+        required: true
+        type: string
+      block_index:
+        description: Ibn Sina Arabic block index (only 0 is enabled)
+        required: true
+        default: "0"
+        type: string
 
 permissions:
   contents: read
 
 concurrency:
-  group: ibn-sina-namaa-cpu-pilot
+  group: ibn-sina-namaa-first-clip
   cancel-in-progress: false
 
 jobs:
   generate-preview:
-    name: Generate four private preview clips on CPU
+    name: Generate one private Arabic Karma preview via NAMAA Space
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,43 +40,22 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install CPU PyTorch
+      - name: Install Gradio client
         run: |
           python -m pip install --upgrade pip
-          python -m pip install torch==2.6.0 torchaudio==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install gradio_client==1.7.1 soundfile numpy requests
 
-      - name: Install Chatterbox runtime
-        run: |
-          python -m pip install --no-deps chatterbox-tts==0.1.7
-          python -m pip install \
-            numpy==1.26.4 \
-            librosa==0.11.0 \
-            s3tokenizer \
-            transformers==5.2.0 \
-            diffusers==0.29.0 \
-            git+https://github.com/resemble-ai/Perth.git@master \
-            conformer==0.3.2 \
-            safetensors==0.5.3 \
-            spacy-pkuseg \
-            pykakasi==2.3.0 \
-            pyloudnorm \
-            omegaconf \
-            huggingface_hub \
-            soundfile
-
-      - name: Generate Arabic and English voice previews
+      - name: Generate only the first Arabic Karma segment
         env:
-          HF_HOME: ${{ runner.temp }}/huggingface
-          TOKENIZERS_PARALLELISM: "false"
-          OMP_NUM_THREADS: "4"
-          MKL_NUM_THREADS: "4"
+          REQUEST_ID: ${{ inputs.request_id }}
+          BLOCK_INDEX: ${{ inputs.block_index }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python scripts/ibn_sina_tts_cpu_pilot.py
 
       - name: Upload private review artifact
-        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ibn-sina-namaa-cpu-pilot
-          path: artifacts/ibn-sina-tts-pilot/
-          if-no-files-found: ignore
+          name: ibn-sina-arabic-audio-staging
+          path: artifacts/ibn-sina-audio-staging/
+          if-no-files-found: error
           retention-days: 7
