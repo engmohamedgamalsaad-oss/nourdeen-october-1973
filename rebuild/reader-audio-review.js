@@ -226,7 +226,9 @@ async function loadManifests() {
       data.segments.forEach(function (seg) {
         var expected = seg.speaker === 'karma' ? core.VOICES.karma : seg.speaker === 'narrator' ? core.VOICES.narrator : '';
         var engineOk = lang === 'ar'
-          ? seg.provider === 'huggingface-space' && seg.model === 'NAMAA-Space/NAMAA-Egyptian-TTS' && seg.voice === expected
+          ? ((seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected) ||
+             (seg.provider === 'huggingface-space' && seg.model === 'NAMAA-Space/NAMAA-Egyptian-TTS' &&
+              seg.voice === (seg.speaker === 'karma' ? 'magdi-yacoub-karma-reference' : 'magdi-yacoub-narrator-reference')))
           : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim();
         if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
