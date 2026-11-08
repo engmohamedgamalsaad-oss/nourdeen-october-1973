@@ -653,16 +653,28 @@ async function generateNextArabicBlock(statusNode, button) {
   entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
     (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
   });
+  var karmaOrder = [], narratorOrder = [];
+  var sourceBlocks = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+  sourceBlocks.forEach(function (block, index) {
+    if (block && block.speaker === 'karma') karmaOrder.push(index);
+    else if (block && block.speaker === 'narrator') narratorOrder.push(index);
+  });
   var nextBlock = -1;
-  for (var i = 0; i < 17; i++) {
-    var clips = byBlock[i] || [];
+  var orderedBlocks = karmaOrder.concat(narratorOrder);
+  for (var i = 0; i < orderedBlocks.length; i++) {
+    var blockIndex = orderedBlocks[i];
+    var clips = byBlock[blockIndex] || [];
     if (!clips.length || !clips.every(function (entry) {
       var saved = review.clips[entry.key];
       return saved && saved.status === 'accepted';
-    })) { nextBlock = i; break; }
+    })) { nextBlock = blockIndex; break; }
   }
   if (nextBlock < 0) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
+    return;
+  }
+  if (Object.keys(speechTextBusy).some(function (key) { return speechTextBusy[key]; })) {
+    text(statusNode, 'انتظر حتى ينتهي تجهيز أو اعتماد نص القراءة الحالي.');
     return;
   }
   var speechRecord = speechTexts[speechTextKey(nextBlock)];
@@ -719,7 +731,7 @@ function renderGenerationControls(banner) {
   panel.className = 'kh-audio-review-controls kh-audio-generation-controls';
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
-  text(status, generationMessage || 'التوليد متاح لمقطع عربي واحد في كل مرة، بعد موافقة صريحة.');
+  text(status, generationMessage || 'الترتيب: جميع مقاطع كارما أولًا، ثم مقاطع الراوي؛ ولا يُولد المقطع إلا بعد اعتماد نص قراءته.');
   var button = makeButton('توليد المقطع العربي التالي', 'generate', function () {
     generateNextArabicBlock(status, button);
   });
