@@ -115,7 +115,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
-    def test_all_story_plan_includes_october_and_never_writes(self) -> None:
+    def test_all_story_plan_excludes_october_from_bulk_plan_and_never_writes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             self.make_story(root)
@@ -135,7 +135,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.assertEqual(report["october_stories_skipped"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
-            self.assertEqual(report["fish_segments_to_generate"], 4)
+            self.assertEqual(report["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
     def test_unapproved_arabic_rewrite_is_ignored(self) -> None:
         overrides = audio.approved_pronunciation_blocks({
