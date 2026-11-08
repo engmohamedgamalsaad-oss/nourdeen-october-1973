@@ -45,11 +45,16 @@ class AudioGenerationSafetyTests(unittest.TestCase):
         })
         return story_dir / "story.json"
 
-    def write_approved_audio_review(self, story: Path, rewrites: dict[str, dict[str, str]] | None = None) -> None:
+    def write_approved_audio_review(
+        self,
+        story: Path,
+        rewrites: dict[str, dict[str, str]] | None = None,
+        languages: tuple[str, ...] = audio.AUDIO_PHASE_LANGUAGES,
+    ) -> None:
         package = audio.read_json(story)
         rewrites = rewrites or {language: {} for language in audio.LANGUAGES}
         review_segments = []
-        for language in audio.LANGUAGES:
+        for language in languages:
             blocks = package["i18n"][language]["blocks"]
             for index, block in enumerate(blocks):
                 if block.get("speaker") not in ("narrator", "karma"):
@@ -76,7 +81,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             "review": {
                 "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
                 "status": "approved_by_admin",
-                "languages": list(audio.LANGUAGES),
+                "languages": list(languages),
                 "total_segments": len(review_segments),
                 "segments": review_segments,
             },
@@ -104,14 +109,13 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             staging = root / ".audio-staging"
             with patch.object(audio, "ROOT", root):
                 plan = audio.inspect_generation_plan(story, staging)
-            self.assertEqual(set(plan["languages"]), set(audio.LANGUAGES))
+            self.assertEqual(set(plan["languages"]), set(audio.AUDIO_PHASE_LANGUAGES))
             self.assertEqual(plan["languages"]["ar"]["segments_to_generate"], 2)
-            for language in ("en", "fr", "it", "de"):
-                self.assertEqual(plan["languages"][language]["segments_to_generate"], 2)
+            self.assertEqual(plan["languages"]["en"]["segments_to_generate"], 2)
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
-    def test_all_story_plan_includes_october_and_never_writes(self) -> None:
+    def test_all_story_plan_excludes_october_from_bulk_plan_and_never_writes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             self.make_story(root)
@@ -127,11 +131,11 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                 report = audio.inspect_all_generation_plans(root, staging)
             self.assertEqual(report["published_non_october_stories"], 1)
             self.assertEqual(report["october_audio_packages"], 1)
-            self.assertEqual(report["october_audio_packages_blocked"], 0)
+            self.assertEqual(report["october_audio_packages_blocked"], 1)
             self.assertEqual(report["october_stories_skipped"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
-            self.assertEqual(report["fish_segments_to_generate"], 4)
+            self.assertEqual(report["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
     def test_unapproved_arabic_rewrite_is_ignored(self) -> None:
         overrides = audio.approved_pronunciation_blocks({
@@ -438,7 +442,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             story = self.make_story(root, require_review=True)
             (story.parent / "audio-pronunciation.json").unlink()
             with patch.object(audio, "ROOT", root):
-                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved five-language"):
+                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved Arabic-English"):
                     audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
             self.assertFalse((root / ".audio-staging").exists())
 
@@ -454,6 +458,16 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             with patch.object(audio, "ROOT", root):
                 with self.assertRaisesRegex(ValueError, "source text/speaker changed"):
                     audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
+
+    def test_current_phase_accepts_legacy_five_language_approval_when_all_sources_match(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            story = self.make_story(root, require_review=True)
+            self.write_approved_audio_review(story, languages=audio.LANGUAGES)
+            with patch.object(audio, "ROOT", root):
+                plan = audio.inspect_generation_plan(story, root / ".audio-staging", languages=("ar", "en"))
+            self.assertEqual(set(plan["languages"]), {"ar", "en"})
+            self.assertEqual(plan["fish_segments_to_generate"], 2)
 
     def test_new_story_uses_admin_approved_rewrites_for_selected_languages(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

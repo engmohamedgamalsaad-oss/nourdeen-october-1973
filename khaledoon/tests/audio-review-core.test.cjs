@@ -119,14 +119,14 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' } } }, { k1: 'ready', k2: 'ready' }, listened).unreviewed, 1);
   assert.equal(core.evaluateGate([e1, e2], { clips: { k1: { status: 'accepted' }, k2: { status: 'rejected' } } }, { k1: 'ready', k2: 'ready' }, listened).ok, false);
   assert.equal(core.evaluateGate([], rev, {}, {}).ok, false, 'empty must not pass');
-  const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
-  assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
+  const currentPhase = { ar: {}, en: {} };
+  assert.equal(core.evaluateAudioPhaseGate(currentPhase, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
   assert.deepEqual(
-    core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }).missingLanguages,
-    ['fr', 'it', 'de'],
+    core.evaluateAudioPhaseGate({ ar: {} }, [e1], rev, { k1: 'ready' }).missingLanguages,
+    ['en'],
     'any missing language must block preview approval'
   );
-  assert.equal(core.evaluateFiveLanguageGate({}, [], rev, {}).ok, false, 'no audio manifests must not bypass review');
+  assert.equal(core.evaluateAudioPhaseGate({}, [], rev, {}).ok, false, 'no audio manifests must not bypass review');
 
   /* تغيّر نص مقطع واحد: قبوله القديم يسقط والبقية تبقى */
   const other = { story_id: S, lang: 'ar', block_index: 1, speaker: 'narrator', base: 'bX', key: 'bX', text: 'x' };
@@ -173,10 +173,10 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes('if (!initialized) return { ok: false, loading: true'), 'preview approval must remain blocked while manifests are loading');
   assert.ok(reviewUi.includes('if (!e || !e.isMissingManifest) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
-  assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);'), 'preview must require current full playback for every clip in all five languages');
+  assert.ok(reviewUi.includes('return core.evaluateAudioPhaseGate(manifests, entries, review, readyByKey, played);'), 'preview must require current full playback for every Arabic and English clip');
   assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes('core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang])'), 'Arabic audio must be checked against the approved audio-only pronunciation text, and all other languages against current story text');
   assert.ok(reviewUi.includes('data.approved_audio_only_rewrites.forEach') && reviewUi.includes('return approved[index] ? data.blocks[String(index)] : fallback[index];'), 'only explicitly approved Arabic audio-only rewrites may differ from the visible story text');
-  assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
+  assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the Arabic-English gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
   assert.ok(reviewUi.includes("action: 'review_get'") && reviewUi.includes('review = core.cloneReview(result.audio_review || null);'), 'review decisions must be loaded from the dedicated audio review record returned by review_get');
   assert.ok(reviewUi.includes("var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });") && reviewUi.includes('var currentReview = core.cloneReview(currentResult.audio_review || null);') && reviewUi.includes('var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);'), 'each save must merge one clip decision into the freshly read review, not overwrite other clips');

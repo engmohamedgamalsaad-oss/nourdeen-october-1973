@@ -2,7 +2,8 @@
 (function (root) {
   'use strict';
 
-  var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
+  var LANGS = ['ar', 'en'];
+  var SUPPORTED_LANGS = ['ar', 'en', 'fr', 'it', 'de'];
   var SPEAKERS = ['narrator', 'karma'];
   var ISSUE_TYPES = ['none', 'pronunciation', 'heavy_sentence', 'dialect', 'number', 'name', 'other'];
 
@@ -51,10 +52,10 @@
       'المطلوب مراجعة النص المنطوق فقط قبل توليد الصوت. لا تعدّل الحكاية المرئية ولا تعِد كتابة الحزمة الأصلية.',
       'العربية: راجع اللهجة المصرية الطبيعية كما يتحدث بها أهل مصر، دون فصحى ثقيلة أو ميل للصعيدية. الراوي واضح ودافئ وغير إذاعي، وكارما طفلة مصرية فضولية.',
       'طبّق طريقة المعالجة رقم 4: أعد صياغة الجملة الثقيلة أو الصعبة على النطق لتصبح أسهل في السماع، مع الحفاظ الحرفي على المعنى والوقائع والأسماء والتواريخ. لا تحذف معلومة ولا تضف معلومة أو اقتباسًا.',
-      'راجع اللغات الخمس كلٌّ بلغتها الطبيعية. لا تفرض العامية المصرية على غير العربية. إذا لم تكن واثقًا من النطق أو سلامة الصياغة في لغة ما، اذكر ذلك واجعل needs_human_review=true.',
+      'راجع العربية والإنجليزية كلٌّ بلغتها الطبيعية. لا تفرض العامية المصرية على غير العربية. إذا لم تكن واثقًا من النطق أو سلامة الصياغة في لغة ما، اذكر ذلك واجعل needs_human_review=true.',
       'راجع الأسماء والأماكن والمصطلحات والأرقام والتواريخ. اكتب طريقة نطق مقترحة في reason عند الحاجة، ولا تغيّر تهجئة الاسم التاريخي داخل النص المرئي.',
       'أخرج JSON خامًا فقط وفق العقد التالي. أعد كل المقاطع دون إسقاط أو تكرار، وبنفس lang وblock_index وspeaker. original_text يجب أن يطابق النص المرسل حرفيًا. إذا لم تحتج الجملة تعديلًا، اجعل proposed_audio_text مساويًا تمامًا لـ original_text وissue_type=none.',
-      'العقد: {"format":"KHALEDOON_AUDIO_TEXT_REVIEW_V1","segments":[{"lang":"ar|en|fr|it|de","block_index":0,"speaker":"narrator|karma","original_text":"...","proposed_audio_text":"...","issue_type":"none|pronunciation|heavy_sentence|dialect|number|name|other","reason":"...","needs_human_review":true}]}',
+      'العقد: {"format":"KHALEDOON_AUDIO_TEXT_REVIEW_V1","segments":[{"lang":"ar|en","block_index":0,"speaker":"narrator|karma","original_text":"...","proposed_audio_text":"...","issue_type":"none|pronunciation|heavy_sentence|dialect|number|name|other","reason":"...","needs_human_review":true}]}',
       'لا تضف حقولًا إلى حزمة الحكاية. لا تعتبر أي اقتراح معتمدًا. اجعل needs_human_review=true لكل المقاطع دائمًا؛ لا تعلن اعتمادًا آليًا. كل اقتراح يحتاج مراجعة وموافقة بشرية صريحة.',
       '=== المقاطع الحالية ===',
       JSON.stringify({ story: pkg.slug, section: pkg.section, segments: segments }, null, 2)
@@ -134,7 +135,7 @@
 
   function applyDictionarySuggestions(input, pkg, dictionary) {
     var checked = validateResult(input, pkg);
-    if (!checked.ok) throw new Error('تحقق من تقرير اللغات الخمس أولًا: ' + checked.errors.slice(0, 3).join(' | '));
+    if (!checked.ok) throw new Error('تحقق من تقرير العربية والإنجليزية أولًا: ' + checked.errors.slice(0, 3).join(' | '));
     if (!dictionary || dictionary.schema_version !== 1 || !Array.isArray(dictionary.entries)) {
       throw new Error('ملف قاموس النطق غير صالح أو غير مدعوم.');
     }
@@ -320,6 +321,7 @@
 
   var api = {
     LANGS: LANGS,
+    SUPPORTED_LANGS: SUPPORTED_LANGS,
     collectSegments: collectSegments,
     diagnose: diagnose,
     buildPrompt: buildPrompt,

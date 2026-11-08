@@ -37,7 +37,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
         })
         if approved:
             review_segments = []
-            for language in audio.LANGUAGES:
+            for language in audio.AUDIO_PHASE_LANGUAGES:
                 for index, text in enumerate((f"Title {language}", f"Body {language}")):
                     review_segments.append({
                         "lang": language, "block_index": index, "speaker": "narrator",
@@ -48,7 +48,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
                 "story": story_id, "section": "october",
                 "review": {
                     "format": "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1",
-                    "status": "approved_by_admin", "languages": list(audio.LANGUAGES),
+                    "status": "approved_by_admin", "languages": list(audio.AUDIO_PHASE_LANGUAGES),
                     "total_segments": len(review_segments), "segments": review_segments,
                 },
                 "approved_audio_text_rewrites": {language: {} for language in audio.LANGUAGES},
@@ -56,15 +56,15 @@ class OctoberAudioPackageTests(unittest.TestCase):
             })
         return directory / "story.json"
 
-    def test_ready_package_is_planned_for_all_five_languages_without_writes(self) -> None:
+    def test_ready_package_is_planned_for_current_audio_languages_without_writes(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
             story = self.make_package(root)
             staging = root / ".audio-staging"
             with patch.object(audio, "ROOT", root):
                 plan = audio.inspect_generation_plan(story, staging)
-            self.assertEqual(set(plan["languages"]), set(audio.LANGUAGES))
-            self.assertEqual(plan["segments_to_generate"], 10)
+            self.assertEqual(set(plan["languages"]), set(audio.AUDIO_PHASE_LANGUAGES))
+            self.assertEqual(plan["segments_to_generate"], 4)
             self.assertEqual(plan["fish_segments_to_generate"], 2)
             self.assertFalse(staging.exists())
 
@@ -94,10 +94,10 @@ class OctoberAudioPackageTests(unittest.TestCase):
             with patch.object(audio, "ROOT", root):
                 report = audio.inspect_all_generation_plans(root, staging)
             self.assertEqual(report["october_audio_packages"], 2)
-            self.assertEqual(report["october_audio_packages_blocked"], 1)
+            self.assertEqual(report["october_audio_packages_blocked"], 2)
             self.assertEqual(report["stories_with_errors"], 0)
             self.assertEqual(report["tts_requests"], 0)
-            self.assertEqual(report["segments_to_generate"], 10)
+            self.assertEqual(report["segments_to_generate"], 0)
             self.assertFalse(staging.exists())
 
     def test_ready_source_without_human_approval_is_blocked_in_plan_all(self) -> None:
@@ -109,7 +109,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
             self.assertEqual(report["october_audio_packages"], 1)
             self.assertEqual(report["october_audio_packages_blocked"], 1)
             self.assertEqual(report["october_packages"][0]["path"], "stories/october/001/story.json")
-            self.assertIn("admin-approved five-language", report["october_packages"][0]["blocked"])
+            self.assertIn("select one October story explicitly", report["october_packages"][0]["blocked"])
             self.assertEqual(report["segments_to_generate"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
@@ -121,7 +121,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
             fish, edge = AsyncMock(), AsyncMock()
             with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
                  patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
-                with self.assertRaisesRegex(ValueError, "admin-approved five-language"):
+                with self.assertRaisesRegex(ValueError, "admin-approved Arabic-English"):
                     asyncio.run(audio.generate_story(story, dry_run=False, allow_fish_audio=True))
             fish.assert_not_awaited()
             edge.assert_not_awaited()

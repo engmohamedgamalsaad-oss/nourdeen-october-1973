@@ -2,8 +2,8 @@
 'use strict';
 var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
-var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
-var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
+var LANGS = ['ar', 'en'];
+var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
@@ -12,7 +12,6 @@ var story = null, ctx = null, row = null, review = core.emptyReview(), entries =
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
-var initialArabicStageAttempted = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -61,29 +60,7 @@ async function audioAssetsRequest(payload) {
   }
   return data || {};
 }
-async function ensureArabicAudioStaged(expectedTexts) {
-  if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
-  initialArabicStageAttempted = true;
-  // Never overwrite private staged audio from the page. The restart baseline is
-  // staged only when no private manifest exists yet (404). A manifest that fails
-  // text coverage is left untouched: loadManifests() reports the coverage error
-  // and blocks approval, instead of silently restoring older audio whose hashes
-  // would revive old review decisions.
-  try {
-    await audioAssetsRequest({
-      action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
-    });
-    return;
-  } catch (error) {
-    if (!error || error.status !== 404) throw error;
-  }
-  await audioAssetsRequest({
-    action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
-    artifact_id: 13563200242, run_id: 42344425713,
-    artifact_name: 'ibn-sina-arabic-audio-staging',
-    baseline_restore: true
-  });
-}
+/* لا نستورد Artifact قديمًا تلقائيًا: أي صوت لا يطابق نص الحكاية الحالية يجب أن يبقى خارج المراجعة. */
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
@@ -200,6 +177,48 @@ async function loadArabicExpectedTexts(blocks) {
   if (!Array.isArray(data.approved_audio_only_rewrites)) {
     throw new Error('قائمة تعديلات النطق الصوتي المعتمدة غير صالحة.');
   }
+  if (data.review) {
+    var sourceBlocks = story.i18n && story.i18n.ar && Array.isArray(story.i18n.ar.blocks)
+      ? story.i18n.ar.blocks : [];
+    var spokenBlocks = sourceBlocks.map(function (block, index) {
+      return { block_index: index, speaker: block && block.speaker, source_text: String(block && block.text || '').trim() };
+    }).filter(function (block) {
+      return (block.speaker === 'narrator' || block.speaker === 'karma') && !!block.source_text;
+    });
+    var review = data.review;
+    var reviewedSegments = Array.isArray(review.segments)
+      ? review.segments.filter(function (item) { return item && item.lang === 'ar'; }) : [];
+    var reviewedByIndex = Object.create(null);
+    if (review.format !== 'KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1' ||
+        review.status !== 'approved_by_admin' ||
+        !Array.isArray(review.languages) || review.languages.indexOf('ar') < 0 ||
+        reviewedSegments.length !== spokenBlocks.length) {
+      throw new Error('اعتماد النص الصوتي العربي غير مكتمل أو لا يطابق عدد مقاطع الحكاية الحالية.');
+    }
+    reviewedSegments.forEach(function (item) {
+      var index = Number(item.block_index);
+      if (!Number.isInteger(index) || reviewedByIndex[index]) {
+        throw new Error('اعتماد النص الصوتي العربي يحتوي مقطعًا مكررًا أو رقمًا غير صالح.');
+      }
+      var source = spokenBlocks.find(function (block) { return block.block_index === index; });
+      if (!source || item.speaker !== source.speaker || item.source_text !== source.source_text ||
+          typeof item.approved_audio_text !== 'string' || !item.approved_audio_text.trim()) {
+        throw new Error('اعتماد النص الصوتي العربي قديم ولا يطابق النص المنشور الحالي عند المقطع ' + (index + 1) + '؛ أعد مراجعته قبل استخدام الصوت.');
+      }
+      reviewedByIndex[index] = item;
+    });
+    spokenBlocks.forEach(function (block) {
+      if (!reviewedByIndex[block.block_index]) {
+        throw new Error('اعتماد النص الصوتي العربي لا يغطي المقطع ' + (block.block_index + 1) + ' من الحكاية الحالية.');
+      }
+    });
+    data.approved_audio_only_rewrites.forEach(function (rawIndex) {
+      var index = Number(rawIndex), reviewed = reviewedByIndex[index];
+      if (!reviewed || data.blocks[String(index)] !== reviewed.approved_audio_text) {
+        throw new Error('نص النطق المعتمد للمقطع ' + (index + 1) + ' لا يطابق قرار المراجعة البشرية الحالية.');
+      }
+    });
+  }
   var approved = {};
   data.approved_audio_only_rewrites.forEach(function (rawIndex) {
     var index = Number(rawIndex);
@@ -224,7 +243,6 @@ async function loadManifests() {
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
-  await ensureArabicAudioStaged(expectedTexts.ar);
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
@@ -309,7 +327,7 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);
+  return core.evaluateAudioPhaseGate(manifests, entries, review, readyByKey, played);
 }
 function gateSummary() {
   var g = gate();
@@ -353,7 +371,7 @@ function renderGateBanner(banner) {
   progressRow('المقاطع المقبولة بعد الاستماع', accepted);
   if (g.missingLanguages || g.loadError) {
     var partial = document.createElement('small');
-    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests اللغات الخمس.');
+    text(partial, 'هذه الأعداد تخص ملفات اللغات التي أمكن تحميلها فقط؛ الإجمالي النهائي لا يكتمل قبل توفر manifests العربية والإنجليزية.');
     banner.appendChild(partial);
   }
 }

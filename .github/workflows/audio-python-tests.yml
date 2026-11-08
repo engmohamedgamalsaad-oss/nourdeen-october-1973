@@ -73,7 +73,7 @@ jobs:
           for package in packages:
               if "error" in package:
                   failures.append(f"{package.get('path', 'unknown package')}: {package.get('error')}")
-              if "blocked" not in package or "admin-approved five-language" not in package.get("blocked", ""):
+              if "blocked" not in package or "Arabic-English phase" not in package.get("blocked", ""):
                   failures.append(f"{package.get('path', 'unknown package')}: missing shared human audio-text approval gate")
           if any("segments_to_generate" in package for package in packages):
               failures.append("unapproved October packages must not produce generation plans")
@@ -88,7 +88,7 @@ jobs:
                   f"fish_segments_to_generate={package.get('fish_segments_to_generate', 0)}"
               )
           print(
-              "\\nVERIFIED: 4 October packages blocked pending shared five-language human approval, "
+              "\\nVERIFIED: 4 October packages blocked pending shared Arabic-English human approval, "
               "0 TTS requests, 0 files modified."
           )
           PY

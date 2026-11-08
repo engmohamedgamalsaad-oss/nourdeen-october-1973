@@ -15,9 +15,9 @@ function packageFixture(section = 'science') {
   return { format: 'KHALEDOON_STORY', slug: 'sample-story', section, i18n };
 }
 
-test('collects all spoken blocks in the five supported languages', () => {
+test('collects spoken blocks in the current Arabic-English audio phase', () => {
   const items = review.collectSegments(packageFixture());
-  assert.equal(items.length, 10);
+  assert.equal(items.length, 4);
   assert.deepEqual(new Set(items.map(item => item.lang)), new Set(review.LANGS));
 });
 
@@ -41,7 +41,7 @@ test('validates exact one-to-one review coverage and requires human approval', (
   }));
   const result = review.validateResult({ format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments }, pkg);
   assert.equal(result.ok, true);
-  assert.equal(result.total, 10);
+  assert.equal(result.total, 4);
   assert.equal(result.applied, false);
   assert.equal(result.requires_human_approval, true);
 });
@@ -183,7 +183,7 @@ test('exports only the suggestions explicitly approved by the administrator', ()
   assert.equal(empty.changes.length, 0);
 });
 
-test('exports a complete five-language admin-approved audio pronunciation file', () => {
+test('exports a complete Arabic-English admin-approved audio pronunciation file', () => {
   const pkg = packageFixture();
   const segments = review.collectSegments(pkg).map(item => {
     const changed = item.block_index === 0;
@@ -200,12 +200,12 @@ test('exports a complete five-language admin-approved audio pronunciation file',
   assert.equal(file.format, 'KHALEDOON_AUDIO_PRONUNCIATION_V1');
   assert.equal(file.review.status, 'approved_by_admin');
   assert.deepEqual(file.review.languages, review.LANGS);
-  assert.equal(file.review.total_segments, 10);
+  assert.equal(file.review.total_segments, 4);
   assert.equal(file.approved_audio_text_rewrites.ar['0'], 'صياغة عربية أسهل.');
   assert.equal(file.approved_audio_text_rewrites.en['0'], 'An easier spoken sentence.');
   assert.deepEqual(file.approved_audio_only_rewrites, ['0']);
   assert.deepEqual(file.blocks, { '0': 'صياغة عربية أسهل.' });
-  assert.equal(file.review.segments.length, 10);
+  assert.equal(file.review.segments.length, 4);
 });
 
 test('rejects a model report that attempts to waive human review', () => {
@@ -222,10 +222,10 @@ test('rejects a model report that attempts to waive human review', () => {
   assert.ok(result.errors.some(error => error.includes('المراجعة البشرية مطلوبة دائمًا')));
 });
 
-test('uses the same five-language audio text review for October packages', () => {
+test('uses the same Arabic-English audio text review for October packages', () => {
   const pkg = packageFixture('october');
   const items = review.collectSegments(pkg);
-  assert.equal(items.length, 10);
+  assert.equal(items.length, 4);
   const segments = items.map(item => ({
     ...item,
     proposed_audio_text: item.original_text,

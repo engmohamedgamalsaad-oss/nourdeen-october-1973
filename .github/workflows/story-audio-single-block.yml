@@ -8,15 +8,12 @@ on:
         required: true
         type: string
       language:
-        description: "لغة المقطع"
+        description: "لغة المقطع في المرحلة الحالية (العربية أو الإنجليزية)"
         required: true
         type: choice
         options:
           - ar
           - en
-          - fr
-          - it
-          - de
       block_index:
         description: "رقم المقطع بفهرس يبدأ من صفر"
         required: true
