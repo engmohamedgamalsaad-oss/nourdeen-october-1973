@@ -68,7 +68,7 @@ VOICE_FALLBACKS = {
 
 
 class OctoberPackageNotReady(ValueError):
-    """An October audio package exists but is not complete in all five languages."""
+    """An October audio package exists but is not complete in the configured audio languages."""
 
 
 class AudioTextApprovalRequired(ValueError):
@@ -436,7 +436,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
         raise AudioTextApprovalRequired(
-            f"{relative}: blocked until the admin-approved five-language "
+            f"{relative}: blocked until the admin-approved Arabic-English "
             "audio-pronunciation.json is saved beside story.json."
         )
     pronunciation = (
