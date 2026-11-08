@@ -122,12 +122,47 @@ const core = require('../assets/audio-review-core.js');
   assert.equal(core.evaluateGate([], rev, {}, {}).ok, false, 'empty must not pass');
   const allFive = { ar: {}, en: {}, fr: {}, it: {}, de: {} };
   assert.equal(core.evaluateFiveLanguageGate(allFive, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true);
+  assert.deepEqual(core.REQUIRED_LANGS, ['ar', 'en'], 'current stage requires Arabic and English audio only');
+  assert.equal(core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1, e2], rev, { k1: 'ready', k2: 'ready' }, listened).ok, true, 'missing French/Italian/German audio must not block approval');
   assert.deepEqual(
-    core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }).missingLanguages,
-    ['fr', 'it', 'de'],
-    'any missing language must block preview approval'
+    core.evaluateFiveLanguageGate({ ar: {} }, [e1], rev, { k1: 'ready' }, listened).missingLanguages,
+    ['en'],
+    'a missing required language must block preview approval'
+  );
+  assert.deepEqual(
+    core.evaluateFiveLanguageGate({ ar: {}, en: {} }, [e1], rev, { k1: 'ready' }, listened, ['ar', 'en', 'fr']).missingLanguages,
+    ['fr'],
+    'callers may widen the required language set'
   );
   assert.equal(core.evaluateFiveLanguageGate({}, [], rev, {}).ok, false, 'no audio manifests must not bypass review');
+
+  /* النص المتوقع للصوت: نص القراءة المعتمد أولًا، ثم نص النطق، ثم نص الحكاية */
+  assert.equal(core.expectedSpokenText('story', 'pron', { status: 'approved', approved_text: 'egyptian' }), 'egyptian', 'approved speech text sent to generation wins');
+  assert.equal(core.expectedSpokenText('story', 'pron', { status: 'suggested', approved_text: 'egyptian', suggested_text: 'draft' }), 'pron', 'an unapproved suggestion must never become the expected text');
+  assert.equal(core.expectedSpokenText('story', '', null), 'story');
+  assert.equal(core.expectedSpokenText('story', 'pron', {}), 'pron');
+
+  /* الصوت القديم يُفصل ولا يُقبل بصمت، وسجل الموافقة لا يُمس */
+  const staleBlocks = [
+    { speaker: 'karma', text: 'story one' },
+    { speaker: 'narrator', text: 'story two' },
+    { speaker: 'title', text: 'heading' }
+  ];
+  const staleSegs = [
+    { block_index: 0, chunk_index: 0, speaker: 'karma', text: 'egyptian one' },
+    { block_index: 1, chunk_index: 0, speaker: 'narrator', text: 'old text' }
+  ];
+  const staleSplit = core.splitStaleSegments(staleBlocks, staleSegs, ['egyptian one', 'egyptian two']);
+  assert.deepEqual(staleSplit.stale, [1], 'clip whose recorded text differs from the approved speech text is stale');
+  assert.equal(staleSplit.fresh.length, 1);
+  assert.equal(staleSplit.fresh[0].block_index, 0, 'a clip matching the approved Egyptian text is fresh even though it differs from the story text');
+  assert.deepEqual(core.uncoveredBlocks(staleBlocks, staleSplit.fresh), [1], 'a stale block has no usable audio, so approval stays blocked');
+  assert.deepEqual(core.uncoveredBlocks(staleBlocks, staleSegs), [], 'non-spoken heading blocks never need audio');
+  const multiChunk = core.splitStaleSegments([{ speaker: 'narrator', text: 'a b' }], [
+    { block_index: 0, chunk_index: 1, text: 'b' }, { block_index: 0, chunk_index: 0, text: 'a' }
+  ], ['a b']);
+  assert.deepEqual(multiChunk.stale, [], 'chunks are joined in chunk order before comparing');
+  assert.equal(core.validateManifestCoverage(staleBlocks, staleSplit.fresh, ['egyptian one', 'egyptian two'], true).ok, true, 'fresh clips validate once stale ones are separated');
 
   /* تغيّر نص مقطع واحد: قبوله القديم يسقط والبقية تبقى */
   const other = { story_id: S, lang: 'ar', block_index: 1, speaker: 'narrator', base: 'bX', key: 'bX', text: 'x' };
@@ -168,14 +203,14 @@ const core = require('../assets/audio-review-core.js');
   assert.doesNotThrow(function () { new Function(reviewUi); }, 'draft audio review UI must remain valid JavaScript');
   const adminHtml = fs.readFileSync(path.join(__dirname, '../admin.html'), 'utf8');
   assert.ok(reader.includes("window.__KH_STORY_PACKAGE=story;document.dispatchEvent(new CustomEvent('kh-story-audio-context'"), 'reader must publish story context after rendering for the audio reviewer');
-  assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل قبوله.'; return; }"), 'a clip cannot be accepted before full playback');
+  assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل الموافقة عليه.'; return; }"), 'a clip cannot be accepted before full playback');
   assert.ok(reviewUi.includes('if (manifestLoadFailure) return { ok: false, loadError: true'), 'manifest verification errors must block preview approval');
   assert.ok(reviewUi.includes('details.length ? \' \' + details.join(\' | \') : \'\''), 'manifest errors must identify the affected language and reason for the admin');
   assert.ok(reviewUi.includes('if (!initialized) return { ok: false, loading: true'), 'preview approval must remain blocked while manifests are loading');
-  assert.ok(reviewUi.includes('if (!e || !e.isMissingManifest) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest');
+  assert.ok(reviewUi.includes('if (e && e.isMissingManifest) manifestMissing[lang] = true;') && reviewUi.includes('else if (REQUIRED_LANGS.indexOf(lang) >= 0) manifestLoadFailure = true;'), 'only a confirmed 404 may be treated as a missing language manifest, and only a failure in a required audio language may block approval');
   assert.ok(reviewUi.includes(String.raw`/^[A-Za-z0-9_-]+\.mp3$/`), 'manifest MP3 filenames must match a normal .mp3 extension');
-  assert.ok(reviewUi.includes('return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);'), 'preview must require current full playback for every clip in all five languages');
-  assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes("core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], lang === 'ar' && data.provider === 'huggingface-space')"), 'Arabic audio must be checked against the approved audio-only pronunciation text, and all other languages against current story text');
+  assert.ok(reviewUi.includes('core.evaluateFiveLanguageGate(manifests, requiredEntries, review, readyByKey, played, REQUIRED_LANGS)'), 'preview must require current full playback for every clip in the required audio languages (Arabic and English in the current stage)');
+  assert.ok(reviewUi.includes('loadArabicExpectedTexts') && reviewUi.includes("core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0)") && reviewUi.includes('core.expectedSpokenText(') && reviewUi.includes('core.splitStaleSegments('), 'Arabic audio must be checked against the approved speech text that was sent to generation (falling back to the approved pronunciation text), and all other languages against current story text; stale audio is separated, never silently accepted');
   assert.ok(reviewUi.includes('data.approved_audio_only_rewrites.forEach') && reviewUi.includes('return approved[index] ? data.blocks[String(index)] : fallback[index];'), 'only explicitly approved Arabic audio-only rewrites may differ from the visible story text');
   assert.ok(!reviewUi.includes('if (!enabled) return { ok: true'), 'an entirely missing audio set must never bypass the five-language gate');
   assert.ok(reviewUi.includes("params.get('draft') !== '1'"), 'audio review must run only in draft preview mode');
@@ -202,18 +237,19 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(reviewUi.includes("digest.toLowerCase() !== String(item.audio_sha256).toLowerCase()"), 'ASR report entries must be rejected when the current MP3 hash differs');
   assert.ok(reviewUi.includes('playPronunciationRange(match, item, listen, panel)'), 'ASR findings must offer targeted word playback without changing the full-listen approval gate');
   const loadManifestSection = reviewUi.slice(reviewUi.indexOf('async function loadManifests'), reviewUi.indexOf('function gate()'));
-  const renderSection = reviewUi.slice(reviewUi.indexOf('function render()'), reviewUi.indexOf('function injectStyles()'));
+  const renderSection = reviewUi.slice(reviewUi.indexOf('function renderBlocks()'), reviewUi.indexOf('function injectStyles()'));
   assert.ok(!loadManifestSection.includes('kh-audio-asr-import'), 'ASR report file input must not be created during manifest loading');
   assert.ok(renderSection.includes("host.parentNode.insertBefore(importer, host)"), 'ASR report importer must be mounted from the preview render lifecycle');
   assert.ok(reviewUi.includes('audio.ontimeupdate = null;'), 'targeted ASR playback must detach its seek handler before normal clip playback');
   assert.ok(reviewUi.includes("blob: null, hashVerified: false"), 'ASR findings without a verifiable MP3 hash may be shown only as unverified');
   assert.ok(reviewUi.includes("if (!match || !match.hashVerified || !match.blob"), 'targeted word playback must be blocked for unverified ASR reports');
   assert.ok(reviewUi.includes("item.playable && match.hashVerified && match.blob"), 'word playback controls must require a verified current MP3 file');
-  assert.ok(reviewUi.includes('audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; audio.pause();'), 'switching clips must detach stale playback events before revoking the previous audio URL');
+  assert.ok(reviewUi.includes('audio.onended = null; audio.onerror = null; audio.ontimeupdate = null; audio.onloadedmetadata = null; audio.pause(); audio.currentTime = 0;'), 'switching clips must detach stale playback events before revoking the previous audio URL');
   assert.ok(reviewUi.includes('readyByKey[entry.key] = \'ready\';') && reviewUi.includes('played[entry.key] = true;'), 'verified audio must be ready and count as listened only after playback ends');
-  assert.ok(reviewUi.indexOf("blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });") < reviewUi.indexOf('if (!manifests[lang]) {'), 'switching to a language without a manifest must clear stale controls');
+  assert.ok(reviewUi.indexOf("Array.prototype.slice.call(block.querySelectorAll(':scope > .kh-audio-review-controls')).forEach(function (old) { old.remove(); });") < reviewUi.indexOf('if (!manifests[lang]) {'), 'switching to a language without a manifest must clear stale controls');
   assert.ok(!reviewUi.includes('meta.pending_draft.story_meta.audio_review'), 'review decisions must not be duplicated inside pending_draft');
-  assert.ok(reviewUi.includes('@media print{.kh-audio-review-controls,.kh-audio-review-gate{display:none!important}}'), 'audio review controls and gate must never appear in print');
+  const reviewCss = fs.readFileSync(path.join(__dirname, '../../rebuild/reader-audio-review.css'), 'utf8');
+  assert.ok(/@media print\s*\{\s*\.kh-audio-review-controls,\s*\.kh-audio-review-gate\s*\{\s*display:\s*none\s*!important;?\s*\}\s*\}/.test(reviewCss), 'audio review controls and gate must never appear in print');
   assert.ok(!reviewUi.includes("nextStory.section === 'october'"), 'October drafts must use the shared audio review UI');
   assert.ok(reviewUi.includes('banner.hidden = false;'), 'the missing-audio gate must remain visible even when no manifest exists');
   assert.ok(reader.includes("if(story.section==='october'||previewMode||document.getElementById('kh-story-audio-script'))return"), 'preserve the existing October reader/player flow while preventing the audio reviewer from initializing for October');
