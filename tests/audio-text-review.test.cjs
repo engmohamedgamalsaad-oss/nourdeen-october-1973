@@ -15,9 +15,9 @@ function packageFixture(section = 'science') {
   return { format: 'KHALEDOON_STORY', slug: 'sample-story', section, i18n };
 }
 
-test('collects all spoken blocks in the five supported languages', () => {
+test('collects spoken blocks in the current Arabic-English audio phase', () => {
   const items = review.collectSegments(packageFixture());
-  assert.equal(items.length, 10);
+  assert.equal(items.length, 4);
   assert.deepEqual(new Set(items.map(item => item.lang)), new Set(review.LANGS));
 });
 
