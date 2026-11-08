@@ -1,9 +1,6 @@
 name: Ibn Sina Arabic and English CPU voice pilot
 
 on:
-  push:
-    branches:
-      - audio/ibn-sina-namaa-cpu-pilot
   pull_request:
     branches:
       - main
@@ -13,8 +10,8 @@ permissions:
   contents: read
 
 concurrency:
-  group: ibn-sina-namaa-cpu-pilot
-  cancel-in-progress: false
+  group: ibn-sina-namaa-cpu-pilot-current
+  cancel-in-progress: true
 
 jobs:
   generate-preview:
