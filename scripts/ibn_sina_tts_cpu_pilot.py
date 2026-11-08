@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Generate exactly one Arabic Ibn Sina segment through the hosted NAMAA Space."""
+# Retry after correcting the Gradio Client constructor keyword to hf_token.
 # This run uses Gradio file upload and the supported Hugging Face token parameter.
 from __future__ import annotations
 
