@@ -399,6 +399,19 @@ Deno.serve(async (req: Request) => {
     const manifestFile = zip.file("manifest.json");
     if (!manifestFile) return reply(422, { error: "الـArtifact لا يحتوي manifest.json." });
     const manifest = JSON.parse(await manifestFile.async("string"));
+    if (isIbnSinaArabic && body.request_id) {
+      const index = Number(body.block_index);
+      const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
+        .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+      if (reviewReadError) return reply(500, { error: "تعذر التحقق من نص القراءة المعتمد قبل حفظ الصوت.", detail: reviewReadError.message });
+      const speechRecord = reviewRow?.audio_review?.speech_texts?.["ar:" + index];
+      if (!speechRecord || speechRecord.status !== "approved" ||
+          !Array.isArray(manifest.segments) || manifest.segments.length !== 1 ||
+          manifest.segments[0]?.block_index !== index ||
+          manifest.segments[0]?.text !== speechRecord.approved_text) {
+        return reply(409, { error: "ملف NAMAA لا يطابق نص القراءة المعتمد لهذا المقطع؛ لم يُنقل إلى التخزين الخاص." });
+      }
+    }
     if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== language ||
         !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
         (section === "history" && slug === "ibn-sina" && language === "ar" && ![1, 17].includes(manifest.segments.length))) {
