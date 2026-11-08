@@ -153,8 +153,12 @@ def validate_required_audio_text_review(
     pronunciation: dict[str, Any],
     package: dict[str, Any],
     pronunciation_path: Path,
+    languages: tuple[str, ...] = LANGUAGES,
 ) -> dict[str, dict[str, str]]:
-    """Require a human-approved, complete five-language speech-text review for new stories."""
+    """Require approved speech text for every spoken block in the selected languages."""
+    selected_languages = tuple(dict.fromkeys(languages))
+    if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
+        raise ValueError(f"{pronunciation_path}: invalid selected audio languages")
     slug = str(package.get("slug") or "").strip()
     if pronunciation.get("format") != "KHALEDOON_AUDIO_PRONUNCIATION_V1":
         raise ValueError(f"{pronunciation_path}: missing approved audio-pronunciation format")
@@ -163,14 +167,14 @@ def validate_required_audio_text_review(
     review = pronunciation.get("review")
     if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
         raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
-    if review.get("status") != "approved_by_admin" or review.get("languages") != list(LANGUAGES):
-        raise ValueError(f"{pronunciation_path}: five-language admin approval is incomplete")
+    if review.get("status") != "approved_by_admin" or not set(selected_languages).issubset(set(review.get("languages") or [])):
+        raise ValueError(f"{pronunciation_path}: admin approval is incomplete for selected languages")
     raw_segments = review.get("segments")
     translations = package.get("i18n")
     if not isinstance(raw_segments, list) or not isinstance(translations, dict):
         raise ValueError(f"{pronunciation_path}: invalid review segments or story translations")
     expected: dict[tuple[str, int], tuple[str, str]] = {}
-    for lang in LANGUAGES:
+    for lang in selected_languages:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
         if not isinstance(blocks, list) or not blocks:
@@ -181,16 +185,17 @@ def validate_required_audio_text_review(
             source = str(block.get("text") or "").strip()
             if source:
                 expected[(lang, index)] = (str(block["speaker"]), source)
-    if review.get("total_segments") != len(expected) or len(raw_segments) != len(expected):
-        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in all five languages")
+    selected_segments = [item for item in raw_segments if isinstance(item, dict) and item.get("lang") in selected_languages]
+    if len(selected_segments) != len(expected):
+        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in selected languages")
     seen: set[tuple[str, int]] = set()
     rewrites: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
-    for item in raw_segments:
+    for item in selected_segments:
         if not isinstance(item, dict):
             raise ValueError(f"{pronunciation_path}: invalid review segment")
         lang = item.get("lang")
         index = item.get("block_index")
-        if lang not in LANGUAGES or not isinstance(index, int) or isinstance(index, bool):
+        if lang not in selected_languages or not isinstance(index, int) or isinstance(index, bool):
             raise ValueError(f"{pronunciation_path}: invalid review language or block index")
         key = (lang, index)
         if key in seen or key not in expected:
@@ -217,12 +222,13 @@ def validate_required_audio_text_review(
     declared = pronunciation.get("approved_audio_text_rewrites")
     if not isinstance(declared, dict):
         raise ValueError(f"{pronunciation_path}: approved multilingual rewrites are missing")
-    for lang in LANGUAGES:
+    for lang in selected_languages:
         if declared.get(lang) != rewrites[lang]:
             raise ValueError(f"{pronunciation_path}: approved {lang} rewrites do not match human decisions")
-    arabic_indexes = sorted(rewrites["ar"], key=int)
-    if pronunciation.get("blocks") != rewrites["ar"] or pronunciation.get("approved_audio_only_rewrites") != arabic_indexes:
-        raise ValueError(f"{pronunciation_path}: Arabic compatibility fields do not match approved decisions")
+    if "ar" in selected_languages:
+        arabic_indexes = sorted(rewrites["ar"], key=int)
+        if pronunciation.get("blocks") != rewrites["ar"] or pronunciation.get("approved_audio_only_rewrites") != arabic_indexes:
+            raise ValueError(f"{pronunciation_path}: Arabic compatibility fields do not match approved decisions")
     return rewrites
 
 
@@ -442,7 +448,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     )
     if review_required:
         approved_text_by_language = validate_required_audio_text_review(
-            pronunciation, package, pronunciation_path
+            pronunciation, package, pronunciation_path, selected_languages
         )
     else:
         approved_text_by_language = {lang: {} for lang in LANGUAGES}
@@ -478,11 +484,6 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             if published_manifest.is_file():
                 manifest_path = published_manifest
                 asset_dir = published_dir
-        if force_blocks and not manifest_path.is_file():
-            raise ValueError(
-                f"{relative}: no existing audio manifest for {lang}; "
-                "single-block regeneration requires a complete baseline."
-            )
         manifest = read_json(manifest_path) if manifest_path.is_file() else {}
         if manifest and (
             manifest.get("story") != slug
@@ -500,6 +501,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         found_forced: set[int] = set()
         unrelated_missing: list[int] = []
         for index, block in enumerate(blocks):
+            if force_blocks and index not in forced:
+                continue
             if not isinstance(block, dict) or block.get("speaker") not in ("karma", "narrator"):
                 continue
             original = re.sub(r"\s+", " ", str(block.get("text") or "")).strip()
@@ -532,10 +535,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                     and target.stat().st_size >= 512
                 )
                 if not unchanged:
-                    if forced and index not in forced:
-                        unrelated_missing.append(index)
-                    else:
-                        needed += 1
+                    needed += 1
                         if lang == "ar":
                             fish_needed += 1
         if unrelated_missing:
@@ -658,7 +658,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     )
     if review_required:
         approved_text_by_language = validate_required_audio_text_review(
-            pronunciation_data, package, pronunciation_path
+            pronunciation_data, package, pronunciation_path, languages_to_generate
         )
     else:
         approved_text_by_language = {lang: {} for lang in LANGUAGES}
@@ -669,9 +669,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     story_audio_root = STAGING_ROOT / section / slug
     completed = 0
 
-    if force_blocks and not dry_run:
-        seed_staging_from_published(story_path, languages_to_generate, STAGING_ROOT)
-    elif seed_published_baseline and not dry_run:
+    if seed_published_baseline and not dry_run:
         seed_staging_from_published(
             story_path, languages_to_generate, STAGING_ROOT, require_all=False
         )
@@ -722,7 +720,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             # Preserve old entries for unfinished blocks and replace each
             # successfully generated segment immediately. This makes a rerun
             # resume completed clips instead of spending credits on them again.
-            checkpoint_segments = dict(processed_manifest_segments)
+            checkpoint_segments = {} if force_blocks else dict(processed_manifest_segments)
             for current_segment in segments:
                 key = (
                     int(current_segment["block_index"]),
@@ -747,6 +745,8 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             )
             temporary.replace(manifest_path)
         for block_index, block in enumerate(blocks):
+            if force_blocks and block_index not in set(force_blocks):
+                continue
             if not isinstance(block, dict):
                 continue
             speaker = block.get("speaker")
@@ -841,7 +841,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
                 completed += 1
 
         if not segments:
-            raise ValueError(f"{relative}: no speakable segments found for {lang}")
+            raise ValueError(f"{relative}: selected block(s) produced no speakable segments for {lang}")
 
         manifest = {
             "version": 1,
