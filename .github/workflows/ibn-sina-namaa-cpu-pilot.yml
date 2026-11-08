@@ -1,6 +1,12 @@
 name: Ibn Sina Arabic and English CPU voice pilot
 
 on:
+  push:
+    branches:
+      - audio/ibn-sina-namaa-cpu-pilot
+    paths:
+      - "scripts/ibn_sina_tts_cpu_pilot.py"
+      - ".github/workflows/ibn-sina-namaa-cpu-pilot.yml"
   pull_request:
     branches:
       - main
@@ -17,7 +23,7 @@ jobs:
   generate-preview:
     name: Generate four private preview clips on CPU
     runs-on: ubuntu-latest
-    timeout-minutes: 240
+    timeout-minutes: 350
     steps:
       - name: Checkout
         uses: actions/checkout@v4
