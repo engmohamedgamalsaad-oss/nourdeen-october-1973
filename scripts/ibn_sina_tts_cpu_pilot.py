@@ -12,7 +12,7 @@ from pathlib import Path
 
 import numpy as np
 import soundfile as sf
-from gradio_client import Client
+from gradio_client import Client, handle_file
 
 ROOT = Path(__file__).resolve().parents[1]
 STORY_FILE = ROOT / "stories/history/005/story.json"
@@ -77,10 +77,10 @@ def main() -> None:
         ], check=True)
 
         print(f"Connecting to hosted NAMAA Space: {SPACE_ID}", flush=True)
-        client = Client(SPACE_ID, hf_token=os.getenv("HF_TOKEN") or None, verbose=True)
+        client = Client(SPACE_ID, token=os.getenv("HF_TOKEN") or None, verbose=True)
         print(f"Generating Arabic block {BLOCK_INDEX} ({speaker}) only...", flush=True)
         result = client.predict(
-            block["text"], str(reference),
+            block["text"], handle_file(str(reference)),
             0.45 if speaker == "karma" else 0.35,
             0.8, 0, 0.5,
             api_name="/generate_tts_audio",
