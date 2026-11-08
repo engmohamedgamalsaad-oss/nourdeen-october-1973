@@ -8,7 +8,7 @@ this canonical story-package directory and the same planning/review pipeline.
 Planning is read-only. Generation requires an explicit flag and writes only to
 .gitignored .audio-staging; it never writes to the published audio tree.
 Fish Audio additionally requires a separate explicit approval flag. October uses the
-same five-language human audio-text approval record as every other section.
+same Arabic-English human audio-text approval record as every other section.
 """
 from __future__ import annotations
 
@@ -654,7 +654,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
         raise ValueError(
-            f"{relative}: new story is blocked until the admin-approved five-language "
+            f"{relative}: new story is blocked until the admin-approved Arabic-English "
             "audio-pronunciation.json is saved beside story.json."
         )
     pronunciation_data = (
