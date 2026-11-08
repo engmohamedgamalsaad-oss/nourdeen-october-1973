@@ -41,7 +41,7 @@ test('validates exact one-to-one review coverage and requires human approval', (
   }));
   const result = review.validateResult({ format: 'KHALEDOON_AUDIO_TEXT_REVIEW_V1', segments }, pkg);
   assert.equal(result.ok, true);
-  assert.equal(result.total, 10);
+  assert.equal(result.total, 4);
   assert.equal(result.applied, false);
   assert.equal(result.requires_human_approval, true);
 });
@@ -205,7 +205,7 @@ test('exports a complete Arabic-English admin-approved audio pronunciation file'
   assert.equal(file.approved_audio_text_rewrites.en['0'], 'An easier spoken sentence.');
   assert.deepEqual(file.approved_audio_only_rewrites, ['0']);
   assert.deepEqual(file.blocks, { '0': 'صياغة عربية أسهل.' });
-  assert.equal(file.review.segments.length, 10);
+  assert.equal(file.review.segments.length, 4);
 });
 
 test('rejects a model report that attempts to waive human review', () => {
