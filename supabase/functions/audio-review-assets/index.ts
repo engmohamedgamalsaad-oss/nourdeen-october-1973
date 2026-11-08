@@ -228,6 +228,18 @@ Deno.serve(async (req: Request) => {
         !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
       return reply(400, { error: "التوليد متاح لمقطع عربي واحد محدد من حكاية ابن سينا." });
     }
+    let source;
+    try { source = await ibnSinaArabicBlock(body.block_index); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من المقطع." }); }
+    const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewReadError) return reply(500, { error: "تعذر التحقق من اعتماد نص القراءة.", detail: reviewReadError.message });
+    const speechRecord = reviewRow?.audio_review?.speech_texts?.["ar:" + body.block_index];
+    if (!speechRecord || speechRecord.status !== "approved" ||
+        speechRecord.source_text_hash !== source.sourceTextHash ||
+        typeof speechRecord.approved_text !== "string" || !speechRecord.approved_text.trim()) {
+      return reply(409, { error: "لن يبدأ NAMAA قبل اعتماد نص القراءة لهذا المقطع من صفحة المعاينة." });
+    }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
     const apiHeaders = {
       "Accept": "application/vnd.github+json",
@@ -240,7 +252,11 @@ Deno.serve(async (req: Request) => {
       method: "POST", headers: apiHeaders,
       body: JSON.stringify({
         ref: "main",
-        inputs: { request_id: requestId, block_index: String(body.block_index) },
+        inputs: {
+          request_id: requestId,
+          block_index: String(body.block_index),
+          speech_text_b64: encodeBase64Utf8(speechRecord.approved_text),
+        },
       }),
     });
     if (dispatchResponse.status !== 204) {
