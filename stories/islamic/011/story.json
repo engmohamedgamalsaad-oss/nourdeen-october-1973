@@ -91,8 +91,18 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "والي مصر",
-          "text": "وتولى عمرو بن العاص ولاية مصر في فترتين، في عهد عمر بن الخطاب ثم في عهد معاوية بن أبي سفيان. وتختلف المصادر في بعض تفاصيل حياته ووفاته، لذلك نتعامل مع التواريخ التي لا تتفق عليها الروايات بحذر. ما بقي واضحًا في أثره بمصر هو ارتباط اسمه بفتحها في العصر الإسلامي المبكر، وبالفسطاط، وبالجامع الذي حمل اسمه.",
+          "text": "وتولى عمرو بن العاص ولاية مصر في فترتين، في عهد عمر بن الخطاب ثم في عهد معاوية بن أبي سفيان. وتختلف المصادر في بعض تفاصيل حياته ووفاته، لذلك نتعامل مع التواريخ التي لا تتفق عليها الروايات بحذر."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "ما بقي واضحًا في أثره بمصر هو ارتباط اسمه بفتحها في العصر الإسلامي المبكر، وبالفسطاط، وبالجامع الذي حمل اسمه.",
           "image_after": "amr-mosque-interior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني المكان اللي بنشوفه النهارده ممكن يكون اتغير عبر قرون؛ لما نعرف تاريخه نفهم إزاي الناس بنته ووسعته وحافظت عليه."
         }
       ]
     },
@@ -179,8 +189,18 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Governor of Egypt",
-          "text": "Amr ibn al-As governed Egypt in two periods: under Umar ibn al-Khattab and later under Muawiya ibn Abi Sufyan. Sources differ on some details of his life and death, so dates that are not consistently reported should be treated with care. His lasting association with Egypt is clear: the early Islamic conquest, Fustat, and the mosque that bears his name.",
+          "text": "Amr ibn al-As governed Egypt in two periods: under Umar ibn al-Khattab and later under Muawiya ibn Abi Sufyan. Sources differ on some details of his life and death, so dates that are not agreed upon should be treated with caution."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "What remains clear about his legacy in Egypt is his connection with its conquest in the early Islamic period, with Fustat, and with the mosque that bears his name.",
           "image_after": "amr-mosque-interior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So a place we see today may have changed over many centuries. Knowing its history helps us understand how people built it, expanded it, and preserved it."
         }
       ]
     },
@@ -267,8 +287,18 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Gouverneur d’Égypte",
-          "text": "Amr ibn al-As gouverna l’Égypte à deux périodes : sous Umar ibn al-Khattab, puis sous Muawiya ibn Abi Sufyan. Les sources divergent sur certains détails de sa vie et de sa mort ; les dates qui ne font pas consensus doivent donc être présentées avec prudence. Son lien durable avec l’Égypte reste clair : la conquête au début de l’époque islamique, Fustat et la mosquée qui porte son nom.",
+          "text": "Amr ibn al-As gouverna l’Égypte à deux périodes : sous Umar ibn al-Khattab, puis sous Muawiya ibn Abi Sufyan. Les sources divergent sur certains détails de sa vie et de sa mort ; les dates qui ne font pas consensus doivent donc être considérées avec prudence."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ce qui demeure clair dans son héritage en Égypte, c’est son lien avec la conquête du pays au début de la période islamique, avec Fustat et avec la mosquée qui porte son nom.",
           "image_after": "amr-mosque-interior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un lieu que nous voyons aujourd’hui a donc pu changer au fil des siècles. Connaître son histoire nous aide à comprendre comment les gens l’ont construit, agrandi et préservé."
         }
       ]
     },
@@ -355,8 +385,18 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Governatore d’Egitto",
-          "text": "Amr ibn al-As governò l’Egitto in due periodi: sotto Umar ibn al-Khattab e poi sotto Muawiya ibn Abi Sufyan. Le fonti divergono su alcuni dettagli della sua vita e della sua morte, quindi le date non concordanti vanno trattate con cautela. Il suo legame duraturo con l’Egitto è chiaro: la conquista nella prima epoca islamica, Fustat e la moschea che porta il suo nome.",
+          "text": "Amr ibn al-As governò l’Egitto in due periodi: sotto Umar ibn al-Khattab e poi sotto Muawiya ibn Abi Sufyan. Le fonti divergono su alcuni dettagli della sua vita e della sua morte; perciò le date non concordanti vanno considerate con cautela."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Ciò che resta chiaro della sua eredità in Egitto è il legame con la conquista del paese nel primo periodo islamico, con Fustat e con la moschea che porta il suo nome.",
           "image_after": "amr-mosque-interior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un luogo che vediamo oggi può quindi essere cambiato nel corso dei secoli. Conoscerne la storia ci aiuta a capire come le persone lo hanno costruito, ampliato e conservato."
         }
       ]
     },
@@ -443,8 +483,18 @@
           "type": "paragraph",
           "speaker": "narrator",
           "heading": "Gouverneur von Ägypten",
-          "text": "Amr ibn al-As regierte Ägypten in zwei Zeitabschnitten: unter Umar ibn al-Khattab und später unter Muawiya ibn Abi Sufyan. Die Quellen unterscheiden sich bei einigen Einzelheiten seines Lebens und Todes; nicht einheitlich überlieferte Daten sollten daher vorsichtig behandelt werden. Seine bleibende Verbindung mit Ägypten ist deutlich: die Eroberung in der frühen islamischen Zeit, Fustat und die Moschee, die seinen Namen trägt.",
+          "text": "Amr ibn al-As regierte Ägypten in zwei Zeitabschnitten: unter Umar ibn al-Khattab und später unter Muawiya ibn Abi Sufyan. Die Quellen unterscheiden sich in einigen Einzelheiten seines Lebens und Todes. Daher sollten nicht einheitlich überlieferte Daten mit Vorsicht behandelt werden."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Klar bleibt sein Einfluss in Ägypten durch die Verbindung mit der Eroberung des Landes in der frühen islamischen Zeit, mit Fustat und mit der Moschee, die seinen Namen trägt.",
           "image_after": "amr-mosque-interior"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ein Ort, den wir heute sehen, kann sich im Laufe vieler Jahrhunderte verändert haben. Seine Geschichte hilft uns zu verstehen, wie Menschen ihn gebaut, erweitert und erhalten haben."
         }
       ]
     }
