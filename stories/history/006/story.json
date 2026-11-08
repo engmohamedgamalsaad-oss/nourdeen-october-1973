@@ -720,32 +720,32 @@
         "ar": {
           "alt": "صورة تاريخية لأحمد عرابي باشا",
           "caption": "صورة منشورة عام 1882 لأحمد عرابي باشا، قائد الحركة العرابية.",
-          "source_name": "Wikimedia Commons — Portrait of Ahmed Orabi",
-          "rights": "Public domain according to the Wikimedia Commons file page; published in 1882."
+          "source_name": "مجلة سفوتزور، العدد 28 لعام 1882؛ نسخة رقمية من الأكاديمية التشيكية للعلوم عبر ويكيميديا كومنز",
+          "rights": "تُدرج صفحة الملف في ويكيميديا كومنز الصورة ضمن الملكية العامة؛ استنادًا إلى نشرها عام 1882 وكون مؤلفها مجهولًا. يُرجى مراعاة قوانين حقوق النشر المحلية."
         },
         "en": {
           "alt": "Historical portrait of Ahmed Urabi Pasha",
           "caption": "Portrait of Ahmed Urabi Pasha published in 1882, associated with the Urabi movement.",
-          "source_name": "Wikimedia Commons — Portrait of Ahmed Orabi",
-          "rights": "Public domain according to the Wikimedia Commons file page; published in 1882."
+          "source_name": "Světozor, issue 28 (1882), digitized by the Czech Academy of Sciences via Wikimedia Commons",
+          "rights": "Wikimedia Commons lists the image as public domain based on its 1882 publication and anonymous authorship. Check applicable local copyright law."
         },
         "fr": {
           "alt": "Portrait historique d’Ahmed Urabi Pacha",
           "caption": "Portrait d’Ahmed Urabi Pacha publié en 1882, associé au mouvement d’Urabi.",
-          "source_name": "Wikimedia Commons — Portrait of Ahmed Orabi",
-          "rights": "Public domain according to the Wikimedia Commons file page; published in 1882."
+          "source_name": "Revue Světozor, numéro 28 (1882), numérisée par l’Académie tchèque des sciences via Wikimedia Commons",
+          "rights": "Wikimedia Commons classe l’image dans le domaine public en raison de sa publication en 1882 et de l’anonymat de son auteur. Vérifier la législation locale applicable."
         },
         "it": {
           "alt": "Ritratto storico di Ahmed Urabi Pascià",
           "caption": "Ritratto di Ahmed Urabi Pascià pubblicato nel 1882 e legato al movimento di Urabi.",
-          "source_name": "Wikimedia Commons — Portrait of Ahmed Orabi",
-          "rights": "Public domain according to the Wikimedia Commons file page; published in 1882."
+          "source_name": "Rivista Světozor, numero 28 (1882), digitalizzata dall’Accademia delle scienze ceca tramite Wikimedia Commons",
+          "rights": "Wikimedia Commons indica l’immagine come di pubblico dominio in base alla pubblicazione nel 1882 e all’autore anonimo. Verificare la normativa locale applicabile."
         },
         "de": {
           "alt": "Historisches Porträt von Ahmed Urabi Pascha",
           "caption": "1882 veröffentlichtes Porträt von Ahmed Urabi Pascha im Zusammenhang mit der Urabi-Bewegung.",
-          "source_name": "Wikimedia Commons — Portrait of Ahmed Orabi",
-          "rights": "Public domain according to the Wikimedia Commons file page; published in 1882."
+          "source_name": "Zeitschrift Světozor, Ausgabe 28 (1882), digitalisiert von der Tschechischen Akademie der Wissenschaften über Wikimedia Commons",
+          "rights": "Wikimedia Commons führt das Bild aufgrund seiner Veröffentlichung im Jahr 1882 und der unbekannten Urheberschaft als gemeinfrei. Die jeweils geltenden lokalen Urheberrechtsgesetze sind zu beachten."
         }
       }
     },
@@ -760,32 +760,32 @@
         "ar": {
           "alt": "مخطط زمني مبسط لأبرز محطات الحركة العرابية",
           "caption": "رسم توضيحي أصلي من مشروع خالدون.",
-          "source_name": "Khaledoon project original timeline illustration",
-          "rights": "Original explanatory diagram created for the Khaledoon project."
+          "source_name": "رسم الخط الزمني الأصلي من مشروع خالدون",
+          "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون."
         },
         "en": {
           "alt": "A simplified timeline of key moments in the Urabi movement",
           "caption": "Original explanatory illustration from the Khaledoon project.",
-          "source_name": "Khaledoon project original timeline illustration",
+          "source_name": "Original timeline illustration from the Khaledoon project",
           "rights": "Original explanatory diagram created for the Khaledoon project."
         },
         "fr": {
           "alt": "Frise simplifiée des moments clés du mouvement d’Urabi",
           "caption": "Illustration explicative originale du projet Khaledoon.",
-          "source_name": "Khaledoon project original timeline illustration",
-          "rights": "Original explanatory diagram created for the Khaledoon project."
+          "source_name": "Frise chronologique originale du projet Khaledoon",
+          "rights": "Schéma explicatif original créé pour le projet Khaledoon."
         },
         "it": {
           "alt": "Linea del tempo semplificata dei momenti chiave del movimento di Urabi",
           "caption": "Illustrazione esplicativa originale del progetto Khaledoon.",
-          "source_name": "Khaledoon project original timeline illustration",
-          "rights": "Original explanatory diagram created for the Khaledoon project."
+          "source_name": "Illustrazione cronologica originale del progetto Khaledoon",
+          "rights": "Schema esplicativo originale creato per il progetto Khaledoon."
         },
         "de": {
           "alt": "Vereinfachter Zeitstrahl zu wichtigen Momenten der Urabi-Bewegung",
           "caption": "Originale erklärende Illustration des Khaledoon-Projekts.",
-          "source_name": "Khaledoon project original timeline illustration",
-          "rights": "Original explanatory diagram created for the Khaledoon project."
+          "source_name": "Originale Zeitleistenillustration des Khaledoon-Projekts",
+          "rights": "Originales erklärendes Diagramm, erstellt für das Khaledoon-Projekt."
         }
       }
     }
