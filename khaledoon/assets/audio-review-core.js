@@ -4,7 +4,7 @@
 (function (root) {
 'use strict';
 
-var VOICES = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
+var VOICES = { karma: 'magdi-yacoub-karma-reference', narrator: 'magdi-yacoub-narrator-reference' };
 var GEN_VERSION = 'v1';
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 /* لا توجد قائمة حكايات تجريبية: محرك المراجعة مشترك ويستقبل معرّف أي حكاية من القارئ. */
@@ -14,7 +14,7 @@ function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim()
 function strip(s) { return norm(s).replace(/[\u064B-\u065F\u0670\u0640]/g, ''); }
 
 function engineOf(lang, speaker) {
-  if (lang === 'ar') return { voice: VOICES[speaker] || '', provider: 'fish-audio', model: 's2.1-pro-free' };
+  if (lang === 'ar') return { voice: VOICES[speaker] || '', provider: 'huggingface-space', model: 'NAMAA-Space/NAMAA-Egyptian-TTS' };
   return { voice: 'edge-tts', provider: 'edge-tts', model: 'default' };
 }
 
@@ -46,7 +46,7 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
 
 /* Validate complete one-to-one coverage of every spoken story block by manifest chunks. */
-function validateManifestCoverage(blocks, segments, expectedTexts) {
+function validateManifestCoverage(blocks, segments, expectedTexts, allowPartial) {
   if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
     return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
   }
@@ -81,6 +81,7 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
     if (!speakable[b]) continue;
     var indexes = chunks[b];
     if (!indexes || !indexes.length) {
+      if (allowPartial === true) continue;
       return { ok: false, error: 'لا يوجد ملف صوتي للمقطع ' + (b + 1) + '.' };
     }
     indexes.sort(function (a, c) { return a - c; });
