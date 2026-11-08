@@ -1062,7 +1062,7 @@ function pubRow(it){
     if((requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview){
      var audioTextReviewBox=el('div','review-data');audioTextReviewBox.style.cssText='border:1px solid var(--line,#31505a);border-radius:10px;padding:12px;display:grid;gap:8px';
      audioTextReviewBox.appendChild(el('strong','','مراجعة النص قبل توليد الصوت'));
-     audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق في اللغات الخمس. بعد مراجعة التقرير والموافقة على الاقتراحات أو الإبقاء على الأصل، صدّر ملف audio-pronunciation.json وضعه بجوار story.json قبل توليد أي صوت. لا يغيّر نص الحكاية المرئية.'));
+     audioTextReviewBox.appendChild(el('p','fnote','تدقيق منفصل للنص المنطوق بالعربية والإنجليزية في المرحلة الحالية. تظل الفرنسية والإيطالية والألمانية محفوظة للتوسع لاحقًا. بعد مراجعة التقرير والموافقة على الاقتراحات أو الإبقاء على الأصل، صدّر ملف audio-pronunciation.json وضعه بجوار story.json قبل توليد أي صوت. لا يغيّر نص الحكاية المرئية.'));
      var audioTextReviewCopy=el('button','btn ghost','٢. نسخ برومبت مدقق النص الصوتي');audioTextReviewCopy.type='button';audioTextReviewBox.appendChild(audioTextReviewCopy);
      var audioTextReviewPaste=area('',7,100000);audioTextReviewPaste.placeholder='الصق هنا تقرير KHALEDOON_AUDIO_TEXT_REVIEW_V1 الناتج من أداة الذكاء الاصطناعي…';audioTextReviewPaste.setAttribute('aria-label','الصق نتيجة تدقيق النص الصوتي');audioTextReviewBox.appendChild(fld('٣. نتيجة مدقق النص الصوتي',audioTextReviewPaste,'التحقق يراجع بنية التقرير ومطابقة النصوص؛ لا يطبّق التعديلات تلقائيًا.'));
      var audioTextReviewValidate=el('button','btn ghost','٤. التحقق من نتيجة التدقيق');audioTextReviewValidate.type='button';audioTextReviewBox.appendChild(audioTextReviewValidate);
@@ -1137,12 +1137,12 @@ function pubRow(it){
      });
      audioTextReviewExport.addEventListener('click',async function(){
       var pkg=await audioReviewPackageOf(it),keys=Object.keys(approvedAudioTextChanges);
-      if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير اللغات الخمس أولًا.';return}
+      if(!pkg||!audioTextReviewCurrentResult){audioTextReviewStatus.textContent='تحقق من تقرير العربية والإنجليزية أولًا.';return}
       try{
        var approvalFile=window.KHAudioTextReview.buildApprovedAudioPronunciation(audioTextReviewCurrentResult,pkg,keys);
        var payload=JSON.stringify(approvalFile,null,2),blob=new Blob([payload],{type:'application/json;charset=utf-8'}),url=URL.createObjectURL(blob),link=document.createElement('a');
        link.href=url;link.download='audio-pronunciation.json';document.body.appendChild(link);link.click();link.remove();setTimeout(function(){URL.revokeObjectURL(url)},1000);
-       audioTextReviewStatus.textContent='تم تصدير ملف اعتماد مراجعة '+approvalFile.review.total_segments+' مقطعًا في اللغات الخمس. ضع الملف بجوار story.json؛ لم يتغير نص الحكاية أو ملفات الصوت أو قاعدة البيانات.';
+       audioTextReviewStatus.textContent='تم تصدير ملف اعتماد مراجعة '+approvalFile.review.total_segments+' مقطعًا بالعربية والإنجليزية. ضع الملف بجوار story.json؛ لم يتغير نص الحكاية أو ملفات الصوت أو قاعدة البيانات.';
       }catch(error){audioTextReviewStatus.textContent='تعذر تصدير التعديلات: '+String(error&&error.message||error)}
      });
      aiPanel.appendChild(audioTextReviewBox);
