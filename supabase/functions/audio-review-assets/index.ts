@@ -316,11 +316,25 @@ Deno.serve(async (req: Request) => {
     });
     if (dispatchResponse.status !== 204) {
       const detail = await dispatchResponse.text();
-      return reply(dispatchResponse.status === 403 ? 503 : 502, {
-        error: dispatchResponse.status === 403
-          ? "مفتاح GitHub الحالي لا يملك صلاحية Actions: write؛ لم يبدأ التوليد."
-          : "فشل إطلاق Workflow NAMAA من صفحة المراجعة.",
-        upstream_status: dispatchResponse.status, detail: detail.slice(0, 500),
+      let reason = "";
+      try { reason = String(JSON.parse(detail).message || ""); } catch { reason = detail; }
+      reason = reason.replace(/\\s+/g, " ").slice(0, 220);
+      const retryAfter = dispatchResponse.headers.get("retry-after");
+      const rateLimited = dispatchResponse.status === 429 ||
+        (dispatchResponse.status === 403 && /rate limit|abuse|too many/i.test(reason));
+      let error = "فشل إطلاق Workflow NAMAA من صفحة المراجعة.";
+      if (rateLimited) {
+        error = "GitHub رفض الطلب مؤقتًا بسبب كثرة الطلبات؛ انتظر دقائق" + (retryAfter ? " (نحو " + retryAfter + " ثانية)" : "") + " ثم أعد المحاولة.";
+      } else if (dispatchResponse.status === 403) {
+        error = "GitHub رفض الطلب (403) — يلزم أن يملك المفتاح صلاحية Actions: write على هذا الريبو، أو أن يكون الـ Workflow مفعّلًا.";
+      } else if (dispatchResponse.status === 401) {
+        error = "مفتاح GitHub غير صالح أو منتهي؛ حدّث GITHUB_PUBLISH_TOKEN في أسرار Supabase.";
+      } else if (dispatchResponse.status === 404 || dispatchResponse.status === 422) {
+        error = "GitHub لم يجد الـ Workflow أو الفرع main أو مدخلاته (" + dispatchResponse.status + ").";
+      }
+      if (reason) error += " [سبب GitHub: " + reason + "]";
+      return reply(dispatchResponse.status === 403 || dispatchResponse.status === 429 ? 503 : 502, {
+        error, upstream_status: dispatchResponse.status, detail: detail.slice(0, 500),
       });
     }
     return reply(200, { success: true, request_id: requestId, block_index: body.block_index });
