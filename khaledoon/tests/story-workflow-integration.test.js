@@ -125,7 +125,7 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   var canonical = fs.readFileSync('docs/khaledoon-story-production-workflow.md', 'utf8').trim();
   assert.equal(prompt.trim(), canonical, 'active admin prompt must exactly match the canonical v5 reference');
   assert.ok(prompt.includes('الإصدار: 2026-11-02-v5'));
-  assert.ok(prompt.includes('بوابة جودة حوار كارما للحكايات الجديدة'));
+  assert.ok(prompt.includes('بوابة جودة حوار كارما — إلزامية للحكايات الجديدة وعند مراجعة الحكايات القديمة'));
   assert.ok(prompt.includes('لا ادعاء بزيارة أو مشاهدة شخصية'));
   assert.ok(prompt.includes('أنا سمعت عن'));
   assert.ok(prompt.includes('تكون هي صاحبة إغلاق الحكاية في آخر مداخلة'));
