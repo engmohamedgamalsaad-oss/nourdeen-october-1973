@@ -16,6 +16,7 @@ on:
       - "supabase/functions/publish-story-pr/index.ts"
       - "supabase/functions/audio-review-assets/index.ts"
       - "assets/shared/story-audio.js"
+      - "stories/october/**"
       - "scripts/generate_story_audio.py"
       - ".github/workflows/story-audio-segment-staging.yml"
       - "rebuild/**"
