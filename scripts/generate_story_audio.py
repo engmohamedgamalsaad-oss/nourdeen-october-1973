@@ -438,7 +438,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
         raise AudioTextApprovalRequired(
-            f"{relative}: blocked until the admin-approved five-language "
+            f"{relative}: blocked until the selected-language audio-text approval "
             "audio-pronunciation.json is saved beside story.json."
         )
     pronunciation = (
@@ -536,8 +536,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
                 )
                 if not unchanged:
                     needed += 1
-                        if lang == "ar":
-                            fish_needed += 1
+                    if lang == "ar":
+                        fish_needed += 1
         if unrelated_missing:
             raise ValueError(
                 f"{relative}: non-selected {lang} blocks need audio too: "
