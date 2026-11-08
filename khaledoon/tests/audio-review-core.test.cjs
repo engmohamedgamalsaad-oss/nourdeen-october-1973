@@ -249,6 +249,8 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(audioAssets.includes('story-audio-segment-staging.yml') && audioAssets.includes('namaa-voice-sample-staging.yml') && audioAssets.includes('confirm_namaa_audio_request'), 'English generation uses the generic story workflow while Arabic review samples use the restricted NAMAA workflow');
   const publisher = fs.readFileSync(path.join(__dirname, '../../supabase/functions/publish-story-pr/index.ts'), 'utf8');
   assert.ok(publisher.includes('audioReview.audio_languages') && publisher.includes('collectPrivateAudioForPublish'), 'publishing must honor the selected-language gate and include reviewed private MP3 files plus manifests in the public commit');
+  assert.ok(publisher.includes('body?.action === "publish_audio_only"') && publisher.includes('audioOnlyPublish'), 'an already-published story must have a separate, explicit audio-only publication path');
+  assert.ok(reviewUi.includes("action: 'publish_audio_only'") && reviewUi.includes('نشر الصوت على الصفحة المنشورة'), 'the review page must expose audio publication only after the selected-language gate passes and the owner confirms');
   assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
   assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الملاحظة أو الرفض.'; return; }"), 'a clip cannot be rejected before full playback');
   assert.ok(adminHtml.indexOf('assets/audio-review-core.js') < adminHtml.indexOf('var audioReviewSection'), 'admin must load the review core before building AI prompts');
