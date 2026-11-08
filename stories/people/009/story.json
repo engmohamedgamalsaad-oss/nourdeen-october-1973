@@ -109,6 +109,11 @@
           "speaker": "narrator",
           "heading": "ما الذي نتعلمه؟",
           "text": "تعلّمنا حكاية نجيب محفوظ أن مراقبة الحياة بفضول، والقراءة المستمرة، والصبر على تطوير الموهبة يمكن أن تفتح أبوابًا لم تكن تبدو قريبة في البداية. لقد كتب عن أناس وأماكن عرفها، لكنه لمس في حكاياتهم أسئلة يفهمها البشر في بلدان مختلفة: كيف نعيش معًا؟ وكيف نواجه الظلم؟ وكيف تؤثر اختياراتنا في مستقبلنا؟"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أنا فهمت إن القراءة وملاحظة الناس والصبر على الكتابة ممكن يحوّلوا أفكار بسيطة لحكايات تفضل قريبة من ناس كتير."
         }
       ]
     },
@@ -213,6 +218,11 @@
           "speaker": "narrator",
           "heading": "What can we learn?",
           "text": "The story of Naguib Mahfouz teaches us that observing life with curiosity, reading regularly, and patiently developing a talent can open doors that once seemed far away. He wrote about people and places he knew, yet their stories touched questions that people in different countries can understand: How can we live together? How can we confront injustice? And how do our choices affect our future?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "I understand now that reading, observing people, and writing patiently can turn simple ideas into stories that stay close to many people."
         }
       ]
     },
@@ -317,6 +327,11 @@
           "speaker": "narrator",
           "heading": "Que pouvons-nous apprendre ?",
           "text": "L’histoire de Naguib Mahfouz nous apprend que l’observation curieuse de la vie, la lecture régulière et le développement patient d’un talent peuvent ouvrir des portes qui semblaient lointaines. Il écrivait sur les personnes et les lieux qu’il connaissait, mais leurs histoires touchaient à des questions comprises dans de nombreux pays : comment vivre ensemble, comment combattre l’injustice et comment nos choix influencent-ils notre avenir ?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Je comprends maintenant que lire, observer les gens et écrire avec patience peuvent transformer de simples idées en histoires qui touchent beaucoup de personnes."
         }
       ]
     },
@@ -421,6 +436,11 @@
           "speaker": "narrator",
           "heading": "Che cosa possiamo imparare?",
           "text": "La storia di Naguib Mahfouz ci insegna che osservare la vita con curiosità, leggere regolarmente e sviluppare un talento con pazienza può aprire porte che inizialmente sembravano lontane. Scrisse di persone e luoghi che conosceva, ma le loro storie toccavano domande comprensibili in molti paesi: come possiamo vivere insieme? Come possiamo affrontare l’ingiustizia? E in che modo le nostre scelte influenzano il futuro?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ora ho capito che leggere, osservare le persone e scrivere con pazienza possono trasformare idee semplici in storie che restano vicine a tante persone."
         }
       ]
     },
@@ -525,6 +545,11 @@
           "speaker": "narrator",
           "heading": "Was können wir lernen?",
           "text": "Die Geschichte von Naguib Mahfouz zeigt uns, dass neugieriges Beobachten des Lebens, regelmäßiges Lesen und geduldiges Entwickeln einer Begabung Türen öffnen können, die zunächst weit entfernt scheinen. Er schrieb über Menschen und Orte, die er kannte, berührte dabei aber Fragen, die Menschen in vielen Ländern verstehen: Wie können wir zusammenleben? Wie können wir Ungerechtigkeit begegnen? Und wie beeinflussen unsere Entscheidungen unsere Zukunft?"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ich verstehe jetzt: Lesen, Menschen beobachten und geduldig schreiben können einfache Gedanken in Geschichten verwandeln, die vielen Menschen nahebleiben."
         }
       ]
     }
