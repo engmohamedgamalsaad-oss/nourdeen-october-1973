@@ -261,7 +261,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                     story, staging, languages=("ar",), force_blocks=(1,)
                 )
             self.assertEqual(plan["segments_to_generate"], 1)
-            self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
+            self.assertFalse((staging / "science" / "sample-story" / "ar" / "000.mp3").exists(), "a refused one-block request must not seed or copy any baseline files")
             self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0".ljust(600, b"x"))
             self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1".ljust(600, b"x"))
 
@@ -438,7 +438,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             story = self.make_story(root, require_review=True)
             (story.parent / "audio-pronunciation.json").unlink()
             with patch.object(audio, "ROOT", root):
-                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved five-language"):
+                with self.assertRaisesRegex(ValueError, "blocked until the selected-language audio-text approval"):
                     audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
             self.assertFalse((root / ".audio-staging").exists())
 
@@ -449,7 +449,8 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             self.write_approved_audio_review(story)
             approval_path = story.parent / "audio-pronunciation.json"
             approval = json.loads(approval_path.read_text(encoding="utf-8"))
-            approval["review"]["segments"][0]["source_text"] = "stale source text"
+            english_segment = next(item for item in approval["review"]["segments"] if item["lang"] == "en")
+            english_segment["source_text"] = "stale source text"
             self.write_json(approval_path, approval)
             with patch.object(audio, "ROOT", root):
                 with self.assertRaisesRegex(ValueError, "source text/speaker changed"):
