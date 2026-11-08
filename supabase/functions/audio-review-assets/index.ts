@@ -273,7 +273,12 @@ Deno.serve(async (req: Request) => {
     }
     const priorDownload = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
     let priorSegments: any[] = [];
-    if (!priorDownload.error && priorDownload.data) {
+    if (priorDownload.error) {
+      const missing = String((priorDownload.error as any)?.statusCode ?? (priorDownload.error as any)?.status ?? "");
+      if (missing !== "404" && !/not found/i.test(priorDownload.error.message || "")) {
+        return reply(500, { error: "تعذر قراءة الحزمة الخاصة السابقة؛ لم يتم استبدالها.", detail: priorDownload.error.message });
+      }
+    } else if (priorDownload.data) {
       const priorManifest = JSON.parse(await priorDownload.data.text());
       if (priorManifest.version !== 1 || priorManifest.section !== section || priorManifest.story !== slug || priorManifest.language !== language || !Array.isArray(priorManifest.segments)) {
         return reply(422, { error: "الحزمة الخاصة الموجودة لا تطابق الحكاية؛ لم يتم استبدالها." });
