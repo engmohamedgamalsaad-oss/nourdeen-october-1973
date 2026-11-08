@@ -121,7 +121,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
             fish, edge = AsyncMock(), AsyncMock()
             with patch.object(audio, "ROOT", root), patch.object(audio, "STAGING_ROOT", staging), \
                  patch.object(audio, "synthesize_fish_audio", fish), patch.object(audio, "synthesize", edge):
-                with self.assertRaisesRegex(ValueError, "admin-approved five-language"):
+                with self.assertRaisesRegex(ValueError, "admin-approved Arabic-English"):
                     asyncio.run(audio.generate_story(story, dry_run=False, allow_fish_audio=True))
             fish.assert_not_awaited()
             edge.assert_not_awaited()
