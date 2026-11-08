@@ -758,32 +758,32 @@
       "rights": "Original explanatory diagram created for the Khaledoon project.",
       "i18n": {
         "ar": {
-          "alt": "مخطط زمني مبسط لأبرز محطات الحركة العرابية",
-          "caption": "رسم توضيحي أصلي من مشروع خالدون.",
+          "alt": "رسم خط زمني زخرفي بثلاث محطات متصلة",
+          "caption": "خط زمني يربط ثلاث محطات: ميلاد أحمد عرابي سنة 1841، ومظاهرة عابدين سنة 1881، ومعركة التل الكبير والاحتلال البريطاني سنة 1882.",
           "source_name": "رسم الخط الزمني الأصلي من مشروع خالدون",
           "rights": "رسم توضيحي أصلي أُعدّ لمشروع خالدون."
         },
         "en": {
-          "alt": "A simplified timeline of key moments in the Urabi movement",
-          "caption": "Original explanatory illustration from the Khaledoon project.",
+          "alt": "Decorative timeline graphic with three connected milestones",
+          "caption": "A timeline linking three milestones: Ahmed Urabi’s birth in 1841, the Abdeen demonstration in 1881, and the Battle of Tel el-Kebir and British occupation in 1882.",
           "source_name": "Original timeline illustration from the Khaledoon project",
           "rights": "Original explanatory diagram created for the Khaledoon project."
         },
         "fr": {
-          "alt": "Frise simplifiée des moments clés du mouvement d’Urabi",
-          "caption": "Illustration explicative originale du projet Khaledoon.",
+          "alt": "Frise chronologique décorative avec trois étapes reliées",
+          "caption": "Une frise reliant trois étapes : la naissance d’Ahmed Urabi en 1841, la manifestation d’Abdeen en 1881, puis la bataille de Tel el-Kébir et l’occupation britannique en 1882.",
           "source_name": "Frise chronologique originale du projet Khaledoon",
           "rights": "Schéma explicatif original créé pour le projet Khaledoon."
         },
         "it": {
-          "alt": "Linea del tempo semplificata dei momenti chiave del movimento di Urabi",
-          "caption": "Illustrazione esplicativa originale del progetto Khaledoon.",
+          "alt": "Grafica cronologica decorativa con tre tappe collegate",
+          "caption": "Una linea del tempo che collega tre tappe: la nascita di Ahmed Urabi nel 1841, la manifestazione di Abdeen nel 1881 e la battaglia di Tell el-Kebir con l’occupazione britannica nel 1882.",
           "source_name": "Illustrazione cronologica originale del progetto Khaledoon",
           "rights": "Schema esplicativo originale creato per il progetto Khaledoon."
         },
         "de": {
-          "alt": "Vereinfachter Zeitstrahl zu wichtigen Momenten der Urabi-Bewegung",
-          "caption": "Originale erklärende Illustration des Khaledoon-Projekts.",
+          "alt": "Dekorative Zeitleistengrafik mit drei verbundenen Stationen",
+          "caption": "Ein Zeitstrahl mit drei Stationen: Ahmed Urabis Geburt 1841, die Demonstration am Abdin-Palast 1881 und die Schlacht von Tell el-Kebir mit der britischen Besetzung 1882.",
           "source_name": "Originale Zeitleistenillustration des Khaledoon-Projekts",
           "rights": "Originales erklärendes Diagramm, erstellt für das Khaledoon-Projekt."
         }
