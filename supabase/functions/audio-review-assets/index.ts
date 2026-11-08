@@ -318,7 +318,7 @@ Deno.serve(async (req: Request) => {
       const detail = await dispatchResponse.text();
       let reason = "";
       try { reason = String(JSON.parse(detail).message || ""); } catch { reason = detail; }
-      reason = reason.replace(/\\s+/g, " ").slice(0, 220);
+      reason = reason.replace(/\s+/g, " ").slice(0, 220);
       const retryAfter = dispatchResponse.headers.get("retry-after");
       const rateLimited = dispatchResponse.status === 429 ||
         (dispatchResponse.status === 403 && /rate limit|abuse|too many/i.test(reason));
