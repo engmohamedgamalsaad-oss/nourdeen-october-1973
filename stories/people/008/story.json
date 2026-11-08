@@ -106,6 +106,11 @@
           "speaker": "narrator",
           "heading": "محطات من أعماله",
           "text": "هل تعلم؟ من المحطات البارزة في أعماله: أهل الكهف عام 1933، وشهرزاد عام 1934، ويوميات نائب في الأرياف عام 1937."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أنا فهمت إن المسرح والكتابة مش مجرد حكايات؛ ممكن يخلّونا نفكر ونسأل ونشوف الحياة من زاوية مختلفة."
         }
       ]
     },
@@ -207,6 +212,11 @@
           "speaker": "narrator",
           "heading": "Works and dates",
           "text": "Did you know? Three notable milestones in his writing are The People of the Cave (1933), Shahrazad (1934), and Diary of a Country Prosecutor (1937)."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "I understand now that theatre and writing are more than stories. They can make us think, ask questions, and see life from a different point of view."
         }
       ]
     },
@@ -308,6 +318,11 @@
           "speaker": "narrator",
           "heading": "Œuvres et dates",
           "text": "Le saviez-vous ? Trois étapes marquantes de son œuvre sont Les Gens de la caverne (1933), Schéhérazade (1934) et Journal d’un substitut de campagne (1937)."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Je comprends maintenant que le théâtre et l’écriture ne sont pas de simples histoires. Ils peuvent nous faire réfléchir, poser des questions et voir la vie autrement."
         }
       ]
     },
@@ -409,6 +424,11 @@
           "speaker": "narrator",
           "heading": "Opere e date",
           "text": "Lo sapevi? Tre tappe importanti della sua produzione sono La gente della caverna (1933), Shahrazad (1934) e Diario di un procuratore di campagna (1937)."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ora ho capito che il teatro e la scrittura non sono soltanto storie. Possono farci riflettere, porre domande e guardare la vita da un’altra prospettiva."
         }
       ]
     },
@@ -510,6 +530,11 @@
           "speaker": "narrator",
           "heading": "Werke und Daten",
           "text": "Wusstest du? Drei wichtige Stationen seines Werks sind Die Leute der Höhle (1933), Scheherazade (1934) und Tagebuch eines Staatsanwalts auf dem Lande (1937)."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ich verstehe jetzt: Theater und Schreiben sind mehr als Geschichten. Sie können uns zum Nachdenken und Fragenstellen bringen und uns das Leben aus einem anderen Blickwinkel zeigen."
         }
       ]
     }
