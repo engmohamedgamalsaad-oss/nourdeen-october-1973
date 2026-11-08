@@ -78,7 +78,7 @@ def main() -> None:
         ], check=True)
 
         print(f"Connecting to hosted NAMAA Space: {SPACE_ID}", flush=True)
-        client = Client(SPACE_ID, token=os.getenv("HF_TOKEN") or None, verbose=True)
+        client = Client(SPACE_ID, hf_token=os.getenv("HF_TOKEN") or None, verbose=True)
         print(f"Generating Arabic block {BLOCK_INDEX} ({speaker}) only...", flush=True)
         result = client.predict(
             block["text"], handle_file(str(reference)),
