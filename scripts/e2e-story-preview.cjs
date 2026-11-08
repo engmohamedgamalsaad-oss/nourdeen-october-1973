@@ -234,6 +234,10 @@ async function main() {
   const urabiStory = JSON.parse(fs.readFileSync(path.join(urabiDir, 'story.json'), 'utf8'));
   assert.equal(await urabiPage.locator('#title').textContent(), urabiStory.i18n.ar.title);
   assert.equal(await urabiPage.locator('#story-intro-modal').isVisible(), true, 'Ahmed Urabi should open on its own start screen');
+  const urabiIntroCover = await urabiPage.locator('#intro-cover').getAttribute('src');
+  const urabiHeroCover = await urabiPage.locator('#cover img').getAttribute('src');
+  assert.ok(urabiIntroCover.endsWith('/stories/history/006/cover.svg'), 'start screen must use the canonical story cover');
+  assert.equal(urabiHeroCover, urabiIntroCover, 'hero and start screen must use the same canonical cover');
   await urabiPage.locator('#intro-start').click();
   await urabiPage.locator('#story-intro-modal').waitFor({ state: 'hidden' });
   assert.equal(await urabiPage.locator('#blocks .block').count(), 20, 'Ahmed Urabi should render all 20 Arabic story blocks');
