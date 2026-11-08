@@ -407,7 +407,7 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
 
 
 def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = AUDIO_PHASE_LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
-    """Read-only plan for all five languages using isolated staging assets."""
+    """Read-only plan for the currently enabled audio languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
     package = read_json(story_path)
@@ -426,7 +426,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
         raise ValueError(f"Audio generation is currently enabled only for {list(AUDIO_PHASE_LANGUAGES)}; translations in other languages are preserved for later expansion.")
     if is_october_package:
         # The extraction readiness report is only a source-completeness check;
-        # human approval still uses the exact shared five-language audio review gate.
+        # human approval still uses the exact shared Arabic-English audio review gate.
         require_october_readiness(story_path, package)
         review_required = True
     else:
@@ -926,7 +926,7 @@ async def main() -> int:
     if args.plan_all and (args.story or args.generate or args.generate_all):
         parser.error("--plan-all cannot be combined with --story or generation flags")
     if args.generate_all and (args.story or args.force_block or tuple(args.languages) != AUDIO_PHASE_LANGUAGES):
-        parser.error("--generate-all handles every published story and all five languages; do not combine it with story, language, or block filters")
+        parser.error("--generate-all handles every published story and the current audio phase languages; do not combine it with story, language, or block filters")
     if args.generate and not args.story:
         parser.error("--generate requires an explicit --story; use --generate-all for the complete published library")
     if args.force_block and not args.story:
