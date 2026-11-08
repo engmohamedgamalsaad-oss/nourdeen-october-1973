@@ -128,9 +128,8 @@ test('active admin prompt is synchronized with the unified v5 story contract', f
   assert.ok(prompt.includes('بوابة جودة حوار كارما للحكايات الجديدة'));
   assert.ok(prompt.includes('لا ادعاء بزيارة أو مشاهدة شخصية'));
   assert.ok(prompt.includes('أنا سمعت عن'));
-  assert.ok(prompt.includes('تكون هي صاحبة إغلاق الحكاية وآخر متحدث فيها'));
-  assert.ok(prompt.includes('تقول في آخر مداخلة كلامًا طفوليًا طبيعيًا مرتبطًا بأحداث القصة'));
-  assert.ok(prompt.includes('المعنى أو الحكمة التي خرجت بها من كلامها من غير تصريح مباشر'));
+  assert.ok(prompt.includes('تكون هي صاحبة إغلاق الحكاية في آخر مداخلة'));
+  assert.ok(prompt.includes('الحكمة أو الدرس اللي خرجت به من القصة'));
   assert.ok(prompt.includes('تعود مرة واحدة على الأقل في النصف الثاني'));
   assert.ok(prompt.includes('## 5) الغلاف والصور'));
   assert.ok(prompt.includes('## 8) الموقع على الخريطة'));
