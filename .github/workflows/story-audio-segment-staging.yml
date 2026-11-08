@@ -1,0 +1,113 @@
+name: khaledoon-story-audio-segment-staging
+run-name: story audio ${{ inputs.request_id }} ${{ inputs.section }}/${{ inputs.slug }} ${{ inputs.language }} block ${{ inputs.block_index }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      section:
+        description: "Canonical story section"
+        required: true
+        type: string
+      slug:
+        description: "Canonical story slug"
+        required: true
+        type: string
+      story_path:
+        description: "Story package path resolved and validated by the admin Edge Function"
+        required: true
+        type: string
+      language:
+        description: "One language and one block per run"
+        required: true
+        type: choice
+        options: [ar, en, fr, it, de]
+      block_index:
+        description: "Zero-based spoken block index"
+        required: true
+        type: number
+      confirm_fish_audio_request:
+        description: "Explicit owner approval for this single segment request"
+        required: true
+        type: choice
+        options: ["no", "yes"]
+        default: "no"
+      request_id:
+        description: "Request ID created by the authenticated review page"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: khaledoon-audio-${{ inputs.section }}-${{ inputs.slug }}-${{ inputs.language }}-${{ inputs.block_index }}
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    if: inputs.confirm_fish_audio_request == 'yes'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out the approved story package and audio generator
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+
+      - name: Validate workflow inputs and story path
+        env:
+          STORY_SECTION: ${{ inputs.section }}
+          STORY_SLUG: ${{ inputs.slug }}
+          STORY_PATH: ${{ inputs.story_path }}
+          LANGUAGE: ${{ inputs.language }}
+          BLOCK_INDEX: ${{ inputs.block_index }}
+        run: |
+          python - <<'PY'
+          import json, os, re
+          from pathlib import Path
+          section, slug = os.environ["STORY_SECTION"], os.environ["STORY_SLUG"]
+          path = os.environ["STORY_PATH"]
+          language = os.environ["LANGUAGE"]
+          index = int(os.environ["BLOCK_INDEX"])
+          if not re.fullmatch(r"[a-z0-9-]{1,80}", section) or not re.fullmatch(r"[a-z0-9-]{1,80}", slug):
+              raise SystemExit("Invalid story identity")
+          if language not in {"ar", "en", "fr", "it", "de"} or index < 0:
+              raise SystemExit("Invalid language or block index")
+          if not re.fullmatch(r"stories/[a-z0-9-]+/[0-9]{3}/story\.json", path):
+              raise SystemExit("Story path is outside the canonical story package tree")
+          package = json.loads(Path(path).read_text(encoding="utf-8"))
+          if package.get("section") != section or package.get("slug") != slug:
+              raise SystemExit("Story path does not match requested identity")
+          blocks = package.get("i18n", {}).get(language, {}).get("blocks", [])
+          if index >= len(blocks) or blocks[index].get("speaker") not in {"karma", "narrator"} or not str(blocks[index].get("text", "")).strip():
+              raise SystemExit("Requested block is not speakable")
+          PY
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify generator syntax
+        run: python -m py_compile scripts/generate_story_audio.py
+
+      - name: Generate exactly one selected block into isolated staging
+        env:
+          FISH_AUDIO_API_KEY: ${{ secrets.FISH_AUDIO_API_KEY }}
+          STORY_PATH: ${{ inputs.story_path }}
+          LANGUAGE: ${{ inputs.language }}
+          BLOCK_INDEX: ${{ inputs.block_index }}
+        run: |
+          args=(--story "$STORY_PATH" --languages "$LANGUAGE" --force-block "$BLOCK_INDEX" --generate)
+          if [ "$LANGUAGE" = "ar" ]; then args+=(--allow-fish-audio); fi
+          python scripts/generate_story_audio.py "${args[@]}"
+
+      - name: Upload the single-block private review artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: khaledoon-${{ inputs.section }}-${{ inputs.slug }}-${{ inputs.language }}-audio-staging
+          path: .audio-staging/${{ inputs.section }}/${{ inputs.slug }}/${{ inputs.language }}/
+          if-no-files-found: error
+          retention-days: 14
