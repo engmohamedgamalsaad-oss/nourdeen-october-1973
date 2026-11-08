@@ -81,6 +81,7 @@ test('Ibn Sina unified story package validates and preserves its five-language r
   assert.equal(story.quiz.length, 10, 'keep the ten questions already translated in all five languages');
   assert.equal(story.sources.length, 3);
   assert.equal(story.images.length, 2);
+  assert.equal(story.quiz.length, 10, 'Ahmed Urabi must contain ten quiz questions');
   for (const lang of langs) {
     assert.ok(story.i18n[lang].blocks.length >= 11, 'story block count below the established minimum in ' + lang);
     assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
