@@ -236,7 +236,7 @@ Deno.serve(async (req: Request) => {
     const manifest = JSON.parse(await manifestFile.async("string"));
     if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== language ||
         !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
-        (section === "history" && slug === "ibn-sina" && language === "ar" && manifest.segments.length !== 1)) {
+        (section === "history" && slug === "ibn-sina" && language === "ar" && ![1, 17].includes(manifest.segments.length))) {
       return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو نطاق المقاطع المسموح." });
     }
     // The pinned restart artifact predates the corrected opening order.
@@ -249,15 +249,23 @@ Deno.serve(async (req: Request) => {
       first.block_index = 1;
       second.block_index = 0;
     }
-    const expectedVoices: Record<string, string> = {
+    const expectedFishVoices: Record<string, string> = {
+      narrator: "a02a8220d6014812aa5ff73434c54cc0",
+      karma: "592625f68416462f8b6161ddf5fdbffb",
+    };
+    const expectedNamaaVoices: Record<string, string> = {
       narrator: "magdi-yacoub-narrator-reference",
       karma: "magdi-yacoub-karma-reference",
     };
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
+      const fishOk = segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
+        segment?.voice === expectedFishVoices[segment?.speaker];
+      const namaaOk = segment?.provider === "huggingface-space" &&
+        segment?.model === "NAMAA-Space/NAMAA-Egyptian-TTS" &&
+        segment?.voice === expectedNamaaVoices[segment?.speaker];
       const engineOk = language === "ar"
-        ? segment?.provider === "huggingface-space" && segment?.model === "NAMAA-Space/NAMAA-Egyptian-TTS" &&
-          segment?.voice === expectedVoices[segment?.speaker]
+        ? fishOk || namaaOk
         : segment?.provider === "edge-tts" && segment?.model === "edge-tts" &&
           typeof segment?.voice === "string" && !!segment.voice.trim();
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
