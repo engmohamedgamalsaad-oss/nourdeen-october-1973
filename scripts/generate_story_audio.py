@@ -27,6 +27,7 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# One-block workflow artifacts are deltas; the private audio service merges them into immutable staged assets.
 STAGING_ROOT = ROOT / ".audio-staging"
 OCTOBER_PACKAGES_DIR = ("stories", "october")
 OCTOBER_READINESS_FORMAT = "KHALEDOON_OCTOBER_AUDIO_READINESS_V1"
