@@ -13,6 +13,7 @@ var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang 
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
 var initialArabicStageAttempted = false;
+var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -110,6 +111,8 @@ async function loadRow() {
   }
   var result = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
   review = core.cloneReview(result.audio_review || null);
+  speechTexts = result.audio_review && result.audio_review.speech_texts && typeof result.audio_review.speech_texts === 'object'
+    ? result.audio_review.speech_texts : {};
   canWrite = true;
   return true;
 }
@@ -162,6 +165,7 @@ async function saveReview(entry, decision) {
     var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
     var currentReview = core.cloneReview(currentResult.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    next.speech_texts = speechTexts;
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
     var saved = await audioAssetsRequest({
@@ -181,6 +185,7 @@ async function saveReview(entry, decision) {
       throw new Error('لم يؤكد الخادم بقاء قرار المقطع وتفاصيل مراجعة النطق في سجل المراجعة.');
     }
     review = core.cloneReview(verified);
+    speechTexts = verified.speech_texts && typeof verified.speech_texts === 'object' ? verified.speech_texts : speechTexts;
   } finally {
     busy = false;
   }
@@ -644,23 +649,21 @@ function makeButton(label, cls, handler) {
 var generationBusy = false, generationMessage = '';
 async function generateNextArabicBlock(statusNode, button) {
   if (generationBusy) return;
-  var byBlock = {};
-  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
-    (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
-  });
-  var nextBlock = -1;
-  for (var i = 0; i < 17; i++) {
-    var clips = byBlock[i] || [];
-    if (!clips.length || !clips.every(function (entry) {
-      var saved = review.clips[entry.key];
-      return saved && saved.status === 'accepted';
-    })) { nextBlock = i; break; }
-  }
+  var nextBlock = nextArabicBlockIndex();
   if (nextBlock < 0) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
     return;
   }
-  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام NAMAA على Hugging Face، مع الاحتفاظ بباقي المقاطع. هل توافق على استهلاك رصيد التوليد؟')) return;
+  if (Object.keys(speechTextBusy).some(function (key) { return speechTextBusy[key]; })) {
+    text(statusNode, 'انتظر حتى ينتهي تجهيز أو اعتماد نص القراءة الحالي.');
+    return;
+  }
+  var speechRecord = speechTexts[speechTextKey(nextBlock)];
+  if (!speechRecord || speechRecord.status !== 'approved' || !speechRecord.approved_text || speechTextDirty[nextBlock]) {
+    text(statusNode, 'المقطع ' + (nextBlock + 1) + ' متوقف: جهّز نص القراءة في بطاقة المقطع ثم راجعه واعتمده قبل توليد الصوت.');
+    return;
+  }
+  if (!window.confirm('سيتم الآن توليد المقطع العربي رقم ' + (nextBlock + 1) + ' فقط باستخدام NAMAA، من نص القراءة الذي اعتمدته. هل توافق على استهلاك رصيد التوليد؟')) return;
   generationBusy = true;
   button.disabled = true;
   text(statusNode, 'جارٍ إرسال طلب توليد المقطع ' + (nextBlock + 1) + '…');
@@ -709,13 +712,159 @@ function renderGenerationControls(banner) {
   panel.className = 'kh-audio-review-controls kh-audio-generation-controls';
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
-  text(status, generationMessage || 'التوليد متاح لمقطع عربي واحد في كل مرة، بعد موافقة صريحة.');
+  text(status, generationMessage || 'الترتيب: جميع مقاطع كارما أولًا، ثم مقاطع الراوي؛ ولا يُولد المقطع إلا بعد اعتماد نص قراءته.');
   var button = makeButton('توليد المقطع العربي التالي', 'generate', function () {
     generateNextArabicBlock(status, button);
   });
   button.disabled = generationBusy;
   panel.append(button, status);
   banner.appendChild(panel);
+}
+function nextArabicBlockIndex() {
+  var byBlock = {};
+  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
+    (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
+  });
+  var karmaOrder = [], narratorOrder = [];
+  var sourceBlocks = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+  sourceBlocks.forEach(function (block, index) {
+    if (block && block.speaker === 'karma') karmaOrder.push(index);
+    else if (block && block.speaker === 'narrator') narratorOrder.push(index);
+  });
+  var orderedBlocks = karmaOrder.concat(narratorOrder);
+  for (var i = 0; i < orderedBlocks.length; i++) {
+    var blockIndex = orderedBlocks[i];
+    var clips = byBlock[blockIndex] || [];
+    if (!clips.length || !clips.every(function (entry) {
+      var saved = review.clips[entry.key];
+      return saved && saved.status === 'accepted';
+    })) return blockIndex;
+  }
+  return -1;
+}
+function speechTextKey(index) { return 'ar:' + String(index); }
+async function prepareSpeechText(index, statusNode, button) {
+  var key = speechTextKey(index);
+  if (speechTextBusy[key]) return;
+  speechTextBusy[key] = true;
+  if (button) button.disabled = true;
+  text(statusNode, 'جارٍ تجهيز نص القراءة باستخدام Gemini…');
+  try {
+    var proposal = await audioAssetsRequest({
+      action: 'prepare_speech_text', section: 'history', slug: 'ibn-sina',
+      language: 'ar', block_index: index
+    });
+    if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
+    var saved = await audioAssetsRequest({
+      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      block_index: index, decision: 'suggested', speech_text: proposal.speech_text,
+      source_text_hash: proposal.source_text_hash, model: proposal.model,
+      changes_summary: proposal.changes_summary,
+      pronunciation_notes: proposal.pronunciation_notes, review_flags: proposal.review_flags
+    });
+    speechTexts[key] = saved.speech_text;
+    speechTextDirty[index] = false;
+    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى NAMAA.');
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
+  } finally {
+    speechTextBusy[key] = false;
+    if (button) button.disabled = false;
+  }
+}
+async function approveSpeechText(index, textarea, statusNode, button) {
+  var key = speechTextKey(index);
+  var record = speechTexts[key];
+  if (!record || !record.source_text_hash) {
+    text(statusNode, 'جهّز اقتراح Gemini أولًا قبل اعتماد نص القراءة.');
+    return;
+  }
+  var value = String(textarea.value || '').trim();
+  if (!value) { text(statusNode, 'نص القراءة لا يمكن أن يكون فارغًا.'); return; }
+  if (speechTextBusy[key]) return;
+  speechTextBusy[key] = true;
+  if (button) button.disabled = true;
+  text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
+  try {
+    var saved = await audioAssetsRequest({
+      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      block_index: index, decision: 'approved', speech_text: value,
+      source_text_hash: record.source_text_hash
+    });
+    speechTexts[key] = saved.speech_text;
+    speechTextDirty[index] = false;
+    text(statusNode, 'تم اعتماد نص القراءة لهذا المقطع. يمكن الآن توليد صوته عند وصول دوره.');
+    render();
+  } catch (error) {
+    text(statusNode, 'تعذر اعتماد النص: ' + (error && error.message || error));
+  } finally {
+    speechTextBusy[key] = false;
+    if (button) button.disabled = false;
+  }
+}
+function renderSpeechTextPanel(block, index, localizedBlock) {
+  if (!block || !localizedBlock || !['karma', 'narrator'].includes(localizedBlock.speaker) ||
+      typeof localizedBlock.text !== 'string' || !localizedBlock.text.trim()) return;
+  var key = speechTextKey(index);
+  var record = speechTexts[key] || {};
+  var panel = document.createElement('section');
+  panel.className = 'kh-audio-review-controls kh-speech-text-controls';
+  var heading = document.createElement('strong');
+  heading.textContent = 'نص القراءة الصوتية — ' + (localizedBlock.speaker === 'karma' ? 'كارما' : 'الراوي');
+  var sourceLabel = document.createElement('div');
+  sourceLabel.textContent = 'النص الأصلي المعتمد';
+  var source = document.createElement('p');
+  source.className = 'kh-speech-source';
+  source.textContent = localizedBlock.text;
+  var proposalLabel = document.createElement('label');
+  proposalLabel.textContent = 'صياغة القراءة المقترحة (يمكنك تعديلها قبل الاعتماد)';
+  var textarea = document.createElement('textarea');
+  textarea.rows = 4;
+  textarea.maxLength = 6000;
+  textarea.value = record.status === 'approved' ? (record.approved_text || '') : (record.suggested_text || '');
+  textarea.placeholder = 'اضغط «تجهيز النص باستخدام Gemini» لاقتراح صياغة صوتية منفصلة…';
+  var status = document.createElement('span');
+  status.className = 'kh-audio-review-state';
+  var currentBlockIndex = nextArabicBlockIndex();
+  var isCurrentBlock = currentBlockIndex === index;
+  status.textContent = !isCurrentBlock
+    ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق في ترتيب كارما ثم الراوي.')
+    : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
+      record.status === 'approved' ? 'نص القراءة معتمد ✓' :
+      record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
+      'لم يُجهز نص القراءة بعد.';
+  var notes = document.createElement('div');
+  notes.className = 'kh-speech-notes';
+  if (record.changes_summary) {
+    var summary = document.createElement('p');
+    summary.textContent = 'ملخص التغيير: ' + record.changes_summary;
+    notes.appendChild(summary);
+  }
+  if (Array.isArray(record.pronunciation_notes) && record.pronunciation_notes.length) {
+    var pronunciation = document.createElement('p');
+    pronunciation.textContent = 'ملاحظات النطق: ' + record.pronunciation_notes.join('؛ ');
+    notes.appendChild(pronunciation);
+  }
+  if (Array.isArray(record.review_flags) && record.review_flags.length) {
+    var flags = document.createElement('p');
+    flags.textContent = 'تنبيهات للمراجعة: ' + record.review_flags.join('؛ ');
+    notes.appendChild(flags);
+  }
+  textarea.addEventListener('input', function () {
+    speechTextDirty[index] = true;
+    status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
+  });
+  var suggest = makeButton(record.suggested_text ? 'إعادة اقتراح من Gemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+    prepareSpeechText(index, status, suggest);
+  });
+  var approve = makeButton(record.status === 'approved' ? 'حفظ واعتماد التعديل' : 'اعتماد نص القراءة', 'accept', function () {
+    approveSpeechText(index, textarea, status, approve);
+  });
+  approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  suggest.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  panel.append(heading, sourceLabel, source, proposalLabel, textarea, notes, suggest, approve, status);
+  block.appendChild(panel);
 }
 function render() {
   if (!story) return;
@@ -744,7 +893,17 @@ function render() {
     var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
     blockByIndex[index] = block;
   });
-  blocks.forEach(function (block) { var old = block.querySelector(':scope > .kh-audio-review-controls'); if (old) old.remove(); });
+  blocks.forEach(function (block) {
+    Array.prototype.slice.call(block.querySelectorAll(':scope > .kh-audio-review-controls')).forEach(function (old) { old.remove(); });
+  });
+  if (story.section === 'history' && story.slug === 'ibn-sina' && lang === 'ar') {
+    blocks.forEach(function (block, position) {
+      var index = Number.isInteger(Number(block.dataset.blockIndex)) ? Number(block.dataset.blockIndex) : position;
+      var localizedBlock = story.i18n && story.i18n.ar && story.i18n.ar.blocks && story.i18n.ar.blocks[index];
+      renderSpeechTextPanel(block, index, localizedBlock);
+    });
+  }
+  renderGenerationControls(banner);
   if (!manifests[lang]) {
     var missingManifest = /HTTP 404/.test(String(manifestErrors[lang] || ''));
     blocks.forEach(function (block, index) {
@@ -812,7 +971,6 @@ function render() {
     block.appendChild(panel);
   });
   renderGateBanner(banner);
-  renderGenerationControls(banner);
   banner.hidden = false;
 }
 function injectStyles() {
@@ -829,6 +987,12 @@ function injectStyles() {
     '.kh-audio-ready-state{font-size:12px;font-weight:800;margin-inline-start:auto}.kh-audio-ready-state.ready{color:#4b9a70}.kh-audio-ready-state.not-started,.kh-audio-ready-state.preparing{color:#c17d3a}.kh-audio-ready-state.failed{color:#d88b8b}',
     '.kh-audio-review-editor{display:grid;grid-template-columns:1fr;gap:7px;flex:1 1 100%;min-width:0;padding-top:8px}',
     '.kh-audio-review-editor[hidden]{display:none!important}.kh-audio-review-editor textarea,.kh-audio-review-editor select{box-sizing:border-box;width:100%;min-width:0;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:13px/1.6 Cairo,Arial,sans-serif}',
+    '.kh-speech-text-controls{display:grid;grid-template-columns:1fr;align-items:stretch;gap:8px;margin:10px 0;padding:12px;border-style:dashed;background:color-mix(in srgb,var(--accent) 5%,var(--panel))}',
+    '.kh-speech-text-controls strong{font-size:14px;color:var(--accent)}.kh-speech-text-controls p{margin:0;white-space:pre-wrap;line-height:1.8}',
+    '.kh-speech-source{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}',
+    '.kh-speech-text-controls textarea{box-sizing:border-box;width:100%;min-width:0;resize:vertical;padding:9px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--text);font:14px/1.8 Cairo,Arial,sans-serif}',
+    '.kh-speech-notes{display:grid;gap:4px;font-size:12px;color:var(--muted)}',
+
     '.kh-audio-review-gate{max-width:1100px;margin:8px auto;padding:8px 12px;border:1px solid var(--accent);border-radius:10px;color:var(--text);font:600 13px/1.6 Cairo,Arial,sans-serif}',
     '.kh-audio-review-gate[hidden]{display:none!important}',
     '.kh-audio-progress-row{display:grid;grid-template-columns:minmax(170px,auto) minmax(100px,1fr);align-items:center;gap:10px;margin-top:7px;font-size:12px}.kh-audio-progress-row progress{width:100%;height:10px;accent-color:#4b9a70}',

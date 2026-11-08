@@ -13,6 +13,10 @@ on:
         required: true
         default: "0"
         type: string
+      speech_text_b64:
+        description: Base64 UTF-8 approved speech text from the private review record
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -49,6 +53,7 @@ jobs:
         env:
           REQUEST_ID: ${{ inputs.request_id || '00000000-0000-4000-8000-000000000001' }}
           BLOCK_INDEX: ${{ inputs.block_index || '0' }}
+          SPEECH_TEXT_B64: ${{ inputs.speech_text_b64 }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python scripts/ibn_sina_tts_cpu_pilot.py
 
