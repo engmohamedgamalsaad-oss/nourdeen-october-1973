@@ -82,6 +82,11 @@
           "type": "paragraph",
           "heading": "ماذا بقي منه؟",
           "speaker": "narrator"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني السفر مش بس إننا نروح أماكن بعيدة؛ كمان نلاحظ ونسجل اللي نتعلمه، عشان غيرنا يقدر يعرف العالم من خلال الحكايات."
         }
       ],
       "summary": "حكاية ابن بطوطة، الذي خرج من طنجة عام 1325م ليؤدي الحج، ثم واصل السفر عبر آسيا وأفريقيا نحو ثلاثين سنة، وأملى كتاب «الرحلة».",
@@ -174,6 +179,11 @@
           "type": "paragraph",
           "heading": "Was bleibt von ihm?",
           "speaker": "narrator"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Reisen bedeutet also nicht nur, weit entfernte Orte zu erreichen. Es bedeutet auch, aufmerksam zu beobachten und festzuhalten, was man lernt, damit andere die Welt durch diese Berichte entdecken können."
         }
       ],
       "summary": "Die Geschichte von Ibn Battuta, der 1325 Tanger verließ, um den Hadsch zu vollziehen, und danach etwa dreißig Jahre durch Asien und Afrika reiste. Sein Reisebericht, die Rihla, wurde diktiert.",
@@ -266,6 +276,11 @@
           "type": "paragraph",
           "heading": "What remains of him?",
           "speaker": "narrator"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So travelling is not only about reaching faraway places. It is also about noticing and recording what we learn, so others can discover the world through those stories."
         }
       ],
       "summary": "The story of Ibn Battuta, who left Tangier in 1325 to perform the Hajj, then kept traveling across Asia and Africa for about thirty years and dictated the book known as the Rihla.",
@@ -358,6 +373,11 @@
           "type": "paragraph",
           "heading": "Que reste-t-il de lui ?",
           "speaker": "narrator"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Voyager, ce n’est donc pas seulement aller loin. C’est aussi observer et raconter ce que l’on apprend, pour permettre aux autres de découvrir le monde à travers ces récits."
         }
       ],
       "summary": "L'histoire d'Ibn Battuta, parti de Tanger en 1325 pour accomplir le hajj, puis resté en voyage à travers l'Asie et l'Afrique pendant une trentaine d'années, et auteur dicté de la Rihla.",
@@ -450,6 +470,11 @@
           "type": "paragraph",
           "heading": "Che cosa resta di lui?",
           "speaker": "narrator"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Viaggiare non significa soltanto raggiungere luoghi lontani. Significa anche osservare e raccontare ciò che impariamo, così che gli altri possano scoprire il mondo attraverso quei racconti."
         }
       ],
       "summary": "La storia di Ibn Battuta, partito da Tangeri nel 1325 per compiere l'hajj e rimasto poi in viaggio per circa trent'anni in Asia e in Africa, autore per dettatura della Rihla.",
