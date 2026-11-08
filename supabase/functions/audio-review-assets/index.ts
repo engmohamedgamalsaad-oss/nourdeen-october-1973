@@ -68,6 +68,25 @@ function encodeBase64Utf8(value: string): string {
   }
   return btoa(binary);
 }
+function acceptedArabicBlockIndexes(audioReview: any): Set<number> {
+  return new Set(
+    Object.values(audioReview?.clips ?? {})
+      .filter((clip: any) => clip?.lang === "ar" && clip?.status === "accepted")
+      .map((clip: any) => Number(clip.block_index))
+  );
+}
+function requiredEarlierIbnSinaBlocks(blocks: any[], targetIndex: number): number[] {
+  const karma: number[] = [];
+  const narrator: number[] = [];
+  blocks.forEach((block: any, index: number) => {
+    if (block?.speaker === "karma") karma.push(index);
+    else if (block?.speaker === "narrator") narrator.push(index);
+  });
+  const targetSpeaker = blocks[targetIndex]?.speaker;
+  return targetSpeaker === "karma"
+    ? karma.filter((index) => index < targetIndex)
+    : karma.concat(narrator.filter((index) => index < targetIndex));
+}
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
@@ -113,6 +132,13 @@ Deno.serve(async (req: Request) => {
     try { source = await ibnSinaArabicBlock(Number(body.block_index)); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
     const index = Number(body.block_index);
+    const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (progressError) return reply(500, { error: "تعذر قراءة ترتيب مراجعة المقاطع.", detail: progressError.message });
+    const accepted = acceptedArabicBlockIndexes(progressRow?.audio_review);
+    if (accepted.has(index) || requiredEarlierIbnSinaBlocks(source.blocks, index).some((prior) => !accepted.has(prior))) {
+      return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد مقاطع كارما بالترتيب، ثم مقاطع الراوي." });
+    }
     const previous = index > 0 ? source.blocks[index - 1] : null;
     const next = index + 1 < source.blocks.length ? source.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
@@ -196,6 +222,13 @@ Deno.serve(async (req: Request) => {
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من النص الأصلي." }); }
     if (source.sourceTextHash !== body.source_text_hash.toLowerCase()) {
       return reply(409, { error: "تغير النص الأصلي للحكاية؛ أعد تجهيز نص القراءة قبل اعتماده." });
+    }
+    const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (progressError) return reply(500, { error: "تعذر قراءة ترتيب اعتماد المقاطع.", detail: progressError.message });
+    const accepted = acceptedArabicBlockIndexes(progressRow?.audio_review);
+    if (accepted.has(index) || requiredEarlierIbnSinaBlocks(source.blocks, index).some((prior) => !accepted.has(prior))) {
+      return reply(409, { error: "لا يمكن اعتماد نص مقطع خارج دوره؛ الترتيب هو مقاطع كارما أولًا ثم مقاطع الراوي." });
     }
     const { data: existing, error: readError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
