@@ -251,6 +251,7 @@ const core = require('../assets/audio-review-core.js');
   const publisher = fs.readFileSync(path.join(__dirname, '../../supabase/functions/publish-story-pr/index.ts'), 'utf8');
   assert.ok(publisher.includes('audioReview.audio_languages') && publisher.includes('collectPrivateAudioForPublish'), 'publishing must honor the selected-language gate and include reviewed private MP3 files plus manifests in the public commit');
   assert.ok(publisher.includes('body?.action === "publish_audio_only"') && publisher.includes('audioOnlyPublish'), 'an already-published story must have a separate, explicit audio-only publication path');
+  assert.ok(publisher.includes('body?.confirm_audio_publish !== "yes"') && reviewUi.includes("confirm_audio_publish: 'yes'"), 'audio-only publication must be blocked server-side unless the review page sends explicit owner confirmation');
   assert.ok(publisher.includes('hasSharedPlayer') && publisher.includes('audio_only_requires_submission_id: false'), 'audio-only publication must verify the existing public page player and must not require a new story submission');
   assert.ok(publisher.includes('audioReview.audio_languages) ? audioReview.audio_languages : ["ar", "en"]'), 'legacy pilot reviews without a stored scope must default to Arabic and English, not require three ungenerated languages');
   assert.ok(reviewUi.includes("action: 'publish_audio_only'") && reviewUi.includes('نشر الصوت على الصفحة المنشورة'), 'the review page must expose audio publication only after the selected-language gate passes and the owner confirms');
