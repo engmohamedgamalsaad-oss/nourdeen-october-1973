@@ -79,12 +79,10 @@ Deno.serve(async (req: Request) => {
   if (body.action === "generate") {
     const storyId = String(body.story_id ?? "");
     const blockIndex = Number(body.block_index);
-    const namaaSample = language === "ar";
     if (!/^[0-9]{3}$/.test(storyId) || body.confirm_audio_request !== "yes" ||
         !Number.isInteger(blockIndex) || blockIndex < 0 ||
-        (namaaSample && (section !== "history" || slug !== "ibn-sina" || storyId !== "005" ||
-          ![0, 1].includes(blockIndex) || body.confirm_namaa_audio_request !== "yes"))) {
-      return reply(400, { error: "العربية في هذه المرحلة مخصصة لعينتي NAMAA المعتمدتين لابن سينا: كارما والراوي فقط." });
+        (language === "ar" && body.confirm_fish_audio_request !== "yes")) {
+      return reply(400, { error: "توليد العربية يتطلب تأكيد Fish Audio للمقطع المحدد." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
     const storyPackagePath = section === "october"
@@ -104,7 +102,7 @@ Deno.serve(async (req: Request) => {
       return reply(400, { error: "المقطع المحدد غير موجود أو غير قابل للتوليد في هذه اللغة." });
     }
     const requestId = crypto.randomUUID();
-    const workflow = language === "ar" ? "namaa-voice-sample-staging.yml" : "story-audio-segment-staging.yml";
+    const workflow = "story-audio-segment-staging.yml";
     const apiHeaders = {
       "Accept": "application/vnd.github+json",
       "Authorization": "Bearer " + GITHUB_TOKEN,
@@ -118,7 +116,7 @@ Deno.serve(async (req: Request) => {
         inputs: {
           section, slug, story_path: storyPackagePath,
           language, block_index: String(blockIndex),
-          ...(language === "ar" ? { confirm_namaa_audio_request: "yes" } : { confirm_fish_audio_request: "yes" }), request_id: requestId,
+          confirm_fish_audio_request: "yes", request_id: requestId,
         },
       }),
     });
@@ -147,7 +145,7 @@ Deno.serve(async (req: Request) => {
       "Authorization": "Bearer " + GITHUB_TOKEN,
       "X-GitHub-Api-Version": "2022-11-28",
     };
-    const workflow = language === "ar" ? "namaa-voice-sample-staging.yml" : "story-audio-segment-staging.yml";
+    const workflow = "story-audio-segment-staging.yml";
     const runsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/runs?event=workflow_dispatch&per_page=30`, { headers: apiHeaders });
     if (!runsResponse.ok) return reply(502, { error: "تعذر متابعة تشغيل التوليد.", upstream_status: runsResponse.status });
     const runsData = await runsResponse.json();
@@ -257,10 +255,8 @@ Deno.serve(async (req: Request) => {
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
       const engineOk = language === "ar"
-        ? ((segment?.provider === "namaa" && segment?.model === "NAMAA-Egyptian-TTS" &&
-            segment?.voice === "namaa-" + segment?.speaker) ||
-          (segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
-            segment?.voice === expectedVoices[segment?.speaker]))
+        ? segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
+          segment?.voice === expectedVoices[segment?.speaker]
         : segment?.provider === "edge-tts" && segment?.model === "edge-tts" &&
           typeof segment?.voice === "string" && !!segment.voice.trim();
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
