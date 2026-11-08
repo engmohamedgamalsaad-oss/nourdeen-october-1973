@@ -115,7 +115,7 @@ def main() -> None:
     load_result = model.t3.load_state_dict(namaa_state, strict=False)
     non_alias_missing = [
         key for key in load_result.missing_keys
-        if not key.startswith("patched_model.model.")
+        if not key.startswith("patched_model.")
     ]
     if load_result.unexpected_keys or non_alias_missing:
         raise RuntimeError(
