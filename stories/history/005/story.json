@@ -1129,9 +1129,9 @@
             "شرح طريقة بناء الطائرات",
             "كتب تاريخ حرب أكتوبر",
             "وصف اختراع الإنترنت",
-            "نظّم معارف طبية من عصره وأضاف إليها من دراسته وخبرته"
+            "نظّم المعرفة الطبية المتاحة في عصره في مرجع واحد"
           ],
-          "explanation": "نظّم الكتاب معارف الطب في عصره وضم ما توصل إليه من دراسة وخبرة."
+          "explanation": "جمع الكتاب المعرفة الطبية المتاحة في عصر ابن سينا ونظمها في مرجع واحد."
         },
         "en": {
           "question": "What did Ibn Sina do in The Canon of Medicine?",
@@ -1139,9 +1139,9 @@
             "Explained how to build aircraft",
             "Wrote a history of the October War",
             "Described the invention of the internet",
-            "Organized medical knowledge of his time and added insights from study and experience"
+            "He organized the medical knowledge available in his time into a single reference work"
           ],
-          "explanation": "The book organized medical knowledge of his era and included his learning and experience."
+          "explanation": "The book brought together and organized the medical knowledge available in Ibn Sina’s time."
         },
         "fr": {
           "question": "Qu’a fait Ibn Sina dans le Canon de la médecine ?",
@@ -1149,9 +1149,9 @@
             "Il a expliqué comment construire des avions",
             "Il a écrit l’histoire de la guerre d’octobre",
             "Il a décrit l’invention d’Internet",
-            "Il a organisé les connaissances médicales de son époque et y a ajouté le fruit de ses études et de son expérience"
+            "Il a rassemblé et organisé les connaissances médicales disponibles à son époque dans un ouvrage de référence"
           ],
-          "explanation": "L’ouvrage a organisé les connaissances médicales de son époque et intégré ses études et son expérience."
+          "explanation": "L’ouvrage réunissait et organisait les connaissances médicales disponibles à l’époque d’Ibn Sina."
         },
         "it": {
           "question": "Che cosa fece Ibn Sina nel Canone della medicina?",
@@ -1159,9 +1159,9 @@
             "Spiegò come costruire aerei",
             "Scrisse la storia della guerra d’ottobre",
             "Descrisse l’invenzione di Internet",
-            "Organizzò le conoscenze mediche del suo tempo e vi aggiunse ciò che apprese con lo studio e l’esperienza"
+            "Organizzò in un’unica opera di riferimento le conoscenze mediche disponibili ai suoi tempi"
           ],
-          "explanation": "Il libro organizzava le conoscenze mediche dell’epoca e comprendeva studi ed esperienza."
+          "explanation": "L’opera riuniva e organizzava le conoscenze mediche disponibili all’epoca di Ibn Sina."
         },
         "de": {
           "question": "Was tat Ibn Sina im Kanon der Medizin?",
@@ -1169,9 +1169,9 @@
             "Er erklärte den Bau von Flugzeugen",
             "Er schrieb eine Geschichte des Oktoberkriegs",
             "Er beschrieb die Erfindung des Internets",
-            "Er ordnete das medizinische Wissen seiner Zeit und ergänzte es durch Studium und Erfahrung"
+            "Er ordnete das medizinische Wissen seiner Zeit in einem einzigen Nachschlagewerk"
           ],
-          "explanation": "Das Buch ordnete das medizinische Wissen seiner Zeit und bezog seine Studien und Erfahrungen ein."
+          "explanation": "Das Werk führte das medizinische Wissen aus Ibn Sinas Zeit zusammen und ordnete es."
         }
       }
     },
