@@ -237,18 +237,28 @@ async function collectPrivateAudioForPublish(
     const clipSegments = reviewClips.filter((clip) => clip && clip.story_id === storyKey && clip.lang === lang && clip.status === "accepted");
     if (clipSegments.length !== expectedSegments) throw new Error("عدد قرارات القبول لا يطابق ملفات الصوت في " + lang + ".");
     const seen = new Set<string>();
+    const seenClipKeys = new Set<string>();
+    const approvedVoices: Record<string, string> = {
+      narrator: "a02a8220d6014812aa5ff73434c54cc0",
+      karma: "592625f68416462f8b6161ddf5fdbffb",
+    };
     for (const segment of segments) {
       const blockIndex = Number(segment.block_index), chunkIndex = Number(segment.chunk_index || 0);
       const block = expectedBlocks[blockIndex];
+      const clipKey = blockIndex + ":" + chunkIndex;
       const clip = clipSegments.find((item) => Number(item.block_index) === blockIndex && Number(item.chunk_index || 0) === chunkIndex);
-      if (!block || !clip || clip.speaker !== segment.speaker ||
+      const engineOk = lang === "ar"
+        ? segment.provider === "fish-audio" && segment.model === "s2.1-pro-free" && segment.voice === approvedVoices[segment.speaker]
+        : segment.provider === "edge-tts" && segment.model === "edge-tts" && typeof segment.voice === "string" && !!segment.voice.trim();
+      if (!block || !clip || clip.speaker !== segment.speaker || !engineOk ||
           normalize(String(clip.text || "")) !== normalize(String(segment.text || "")) ||
           String(clip.audio_sha256 || "").toLowerCase() !== String(segment.audio_sha256 || "").toLowerCase() ||
           !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || "")) ||
-          seen.has(String(segment.src))) {
-        throw new Error("ملف صوت لا يطابق قرار القبول وبصمة المقطع " + (blockIndex + 1) + " في " + lang + ".");
+          seen.has(String(segment.src)) || seenClipKeys.has(clipKey)) {
+        throw new Error("ملف صوت لا يطابق قرار القبول أو الصوت المعتمد وبصمة المقطع " + (blockIndex + 1) + " في " + lang + ".");
       }
       seen.add(String(segment.src));
+      seenClipKeys.add(clipKey);
       const { data: audioBlob, error: audioError } = await service.storage.from("khaledoon-audio-review").download(prefix + "/" + segment.src);
       if (audioError || !audioBlob) throw new Error("ملف MP3 مفقود من التخزين الخاص: " + lang + "/" + segment.src);
       const bytes = new Uint8Array(await audioBlob.arrayBuffer());
@@ -266,6 +276,7 @@ async function collectPrivateAudioForPublish(
         content: btoa(binary), encoding: "base64",
       });
     }
+    if (seenClipKeys.size !== clipSegments.length) throw new Error("توجد قرارات قبول لا يقابلها ملف صوت فريد في " + lang + ".");
     output.push({
       path: "assets/audio/" + section + "/" + slug + "/" + lang + "/manifest.json",
       content: JSON.stringify(manifest, null, 2) + "\n", encoding: "utf-8",
