@@ -726,6 +726,17 @@
           "organization": "PubMed Central"
         }
       }
+    },
+    {
+      "title": "Avicenna (Ibn Sina)",
+      "organization": "Internet Encyclopedia of Philosophy",
+      "url": "https://iep.utm.edu/avicenna-ibn-sina/",
+      "i18n": {
+        "ar": {
+          "title": "ابن سينا (أفيسينا)",
+          "organization": "موسوعة الفلسفة على الإنترنت"
+        }
+      }
     }
   ],
   "quiz": [
