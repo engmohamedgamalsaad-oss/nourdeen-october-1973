@@ -608,8 +608,22 @@ function makeButton(label, cls, handler) {
 }
 var generationBusy = false, generationMessage = '';
 function currentStoryId() {
+  var params = new URLSearchParams(location.search), direct = params.get('story_id') || '';
+  if (/^\d{3}$/.test(direct)) return direct;
   var match = String(location.pathname || '').match(/\/stories\/[a-z0-9-]+\/(\d{3})(?:\/|$)/i);
-  return match ? match[1] : '';
+  if (match) return match[1];
+  try {
+    var context = JSON.parse(localStorage.getItem('kh-story-review-context') || '{}');
+    var stored = String(context.story_id || '');
+    if (/^\d{3}$/.test(stored)) return stored;
+    var meta = context.story_meta || {}, record = context.record_data || {}, preview = meta.preview_review || {};
+    var staticPath = String(preview.static_story_path || meta.static_story_path || record.static_story_path || '');
+    var storedMatch = staticPath.match(/(?:^|\/)stories\/[a-z0-9-]+\/(\d{3})(?:\/|$)/i);
+    if (storedMatch) return storedMatch[1];
+    var fallback = String(preview.static_story_id || meta.static_story_id || record.static_story_id || record.story_id || '');
+    if (/^\d{1,3}$/.test(fallback)) return fallback.padStart(3, '0');
+  } catch (ignoreStoryIdContext) {}
+  return '';
 }
 function nextGenerationTarget() {
   for (var li = 0; li < LANGS.length; li++) {
