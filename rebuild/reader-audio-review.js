@@ -4,12 +4,14 @@ var params = new URLSearchParams(location.search);
 if (params.get('draft') !== '1') return;
 var SCRIPT_SRC = document.currentScript && document.currentScript.src ? document.currentScript.src : location.href;
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
+var REQUIRED_LANGS = ['ar', 'en'];
 var LANG_NAMES = { ar: 'العربية', en: 'الإنجليزية', fr: 'الفرنسية', it: 'الإيطالية', de: 'الألمانية' };
 var SUPA = 'https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY = 'sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
 var core = window.KHAudioReviewCore;
 if (!core) return;
 var story = null, ctx = null, row = null, review = core.emptyReview(), entries = [], readyByKey = {};
+var manifestStale = {}, manifestGaps = {}, manifestMissing = {};
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
@@ -432,7 +434,7 @@ async function loadArabicExpectedTexts(blocks) {
   });
 }
 async function loadManifests() {
-  manifests = {}; manifestErrors = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
+  manifests = {}; manifestErrors = {}; manifestStale = {}; manifestGaps = {}; manifestMissing = {}; entries = []; readyByKey = {}; played = {}; acceptButtons = {}; manifestLoadFailure = false;
   loadedAudio = {};
   var expectedTexts = {};
   LANGS.forEach(function (lang) {
@@ -440,7 +442,12 @@ async function loadManifests() {
     expectedTexts[lang] = localized && Array.isArray(localized.blocks)
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
+  var storyArabicTexts = expectedTexts.ar.slice();
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
+  /* الصوت العربي يُقارن بنص القراءة المعتمد الذي أُرسل للتوليد (إن وُجد)، لا بنص الحكاية الأصلي. */
+  expectedTexts.ar = expectedTexts.ar.map(function (pron, index) {
+    return core.expectedSpokenText(storyArabicTexts[index], pron, speechTexts[speechTextKey(index)]);
+  });
   var stagingError = '';
   try {
     await ensureArabicAudioStaged(expectedTexts.ar);
@@ -480,13 +487,20 @@ async function loadManifests() {
         }
       });
       var localized = story.i18n && story.i18n[lang];
-      var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], lang === 'ar' && data.provider === 'huggingface-space');
-      if (!coverage.ok) throw new Error(coverage.error);
+      var split = core.splitStaleSegments(localized && localized.blocks, data.segments, expectedTexts[lang]);
+      manifestStale[lang] = split.stale;
+      data.segments = split.fresh;
+      if (data.segments.length) {
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
+        if (!coverage.ok) throw new Error(coverage.error);
+      }
+      manifestGaps[lang] = core.uncoveredBlocks(localized && localized.blocks, data.segments);
       manifests[lang] = data;
     } catch (e) {
       manifestErrors[lang] = String(e && e.message || e);
       if (lang === 'ar' && stagingError) manifestErrors[lang] += ' — تعذر تجهيز ملف الصوت الأول: ' + stagingError;
-      if (!e || !e.isMissingManifest) manifestLoadFailure = true;
+      if (e && e.isMissingManifest) manifestMissing[lang] = true;
+      else if (REQUIRED_LANGS.indexOf(lang) >= 0) manifestLoadFailure = true;
     }
   }));
   var pendingEntries = [];
@@ -535,19 +549,30 @@ async function loadManifests() {
 function gate() {
   if (!initialized) return { ok: false, loading: true, total: 0, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
   if (manifestLoadFailure) return { ok: false, loadError: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0 };
-  return core.evaluateFiveLanguageGate(manifests, entries, review, readyByKey, played);
+  var requiredEntries = entries.filter(function (entry) { return REQUIRED_LANGS.indexOf(entry.lang) >= 0; });
+  var g = core.evaluateFiveLanguageGate(manifests, requiredEntries, review, readyByKey, played, REQUIRED_LANGS);
+  var stale = 0, gaps = 0;
+  REQUIRED_LANGS.forEach(function (lang) {
+    stale += (manifestStale[lang] || []).length;
+    gaps += (manifestGaps[lang] || []).length;
+  });
+  g.staleBlocks = stale; g.uncoveredBlocks = gaps;
+  if (stale || gaps) g.ok = false;
+  return g;
 }
 function gateSummary() {
   var g = gate();
   if (g.loading) return 'جارٍ تحميل وفحص ملفات الصوت؛ لن يتاح اعتماد المعاينة قبل اكتمال الفحص.';
   if (g.loadError) {
-    var details = LANGS.filter(function (lang) { return !!manifestErrors[lang]; }).map(function (lang) {
+    var details = REQUIRED_LANGS.filter(function (lang) { return !!manifestErrors[lang]; }).map(function (lang) {
       return LANG_NAMES[lang] + ': ' + manifestErrors[lang];
     });
     return 'تعذر التحقق من ملفات الصوت بسبب خطأ تحميل أو بيانات غير صالحة. لا يمكن اعتماد المعاينة قبل إصلاح المشكلة.' + (details.length ? ' ' + details.join(' | ') : '');
   }
   if (g.missingLanguages) return 'مراجعة الصوت غير مكتملة: ملفات الصوت غير جاهزة للغات ' + g.missingLanguages.map(function (l) { return LANG_NAMES[l]; }).join('، ') + '.';
   if (g.ok) return 'تم قبول كل المقاطع الصوتية (' + g.accepted + '/' + g.total + ').';
+  if (g.staleBlocks) return 'يوجد ' + g.staleBlocks + ' مقطع صوته قديم ولا يطابق نص القراءة المعتمد؛ أعد توليد صوته من النص المعتمد قبل الاعتماد.';
+  if (g.uncoveredBlocks) return 'يوجد ' + g.uncoveredBlocks + ' مقطع بلا ملف صوتي بعد؛ ولّد صوته قبل الاعتماد.';
   return core.gateMessage(g) + ' المقبول: ' + g.accepted + '/' + g.total + '.';
 }
 function renderGateBanner(banner) {
@@ -1275,6 +1300,18 @@ function renderBlocks() {
     return;
   }
   if (activeLang !== lang) activeLang = lang;
+  (manifestStale[lang] || []).forEach(function (index) {
+    var staleBlock = blockByIndex[index], staleLocal = story.i18n && story.i18n[lang] && story.i18n[lang].blocks && story.i18n[lang].blocks[index];
+    if (!staleBlock || !staleLocal) return;
+    var stalePanel = document.createElement('div');
+    stalePanel.className = 'kh-audio-review-controls kh-audio-card';
+    stalePanel.dataset.audioState = 'stale'; stalePanel.dataset.player = 'unavailable'; stalePanel.dataset.speaker = staleLocal.speaker;
+    var staleNote = document.createElement('span');
+    staleNote.className = 'kh-audio-ready-state failed';
+    text(staleNote, speakerLabel(staleLocal.speaker) + ' · مقطع ' + (index + 1) + ': الصوت المسجّل قديم ولا يطابق نص القراءة المعتمد؛ يلزم إعادة توليد صوت هذا المقطع. لم يُقبل ولم يُعدَّل أي قرار سابق.');
+    stalePanel.appendChild(staleNote);
+    staleBlock.appendChild(stalePanel);
+  });
   entries.filter(function (e) { return e.lang === lang; }).sort(function (a, b) {
     return a.block_index - b.block_index || a.chunk_index - b.chunk_index;
   }).forEach(function (entry) {
