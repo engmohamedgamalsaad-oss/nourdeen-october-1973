@@ -75,7 +75,9 @@ jobs:
               raise SystemExit("Invalid story identity")
           if language not in {"ar", "en", "fr", "it", "de"} or index < 0:
               raise SystemExit("Invalid language or block index")
-          if not re.fullmatch(r"stories/[a-z0-9-]+/[0-9]{3}/story\.json", path):
+          valid_story_path = re.fullmatch(r"stories/[a-z0-9-]+/[0-9]{3}/story\.json", path)
+          valid_october_path = re.fullmatch(r"rebuild/october-audio-packages/[0-9]{3}/story\.json", path)
+          if not (valid_story_path or valid_october_path):
               raise SystemExit("Story path is outside the canonical story package tree")
           package = json.loads(Path(path).read_text(encoding="utf-8"))
           if package.get("section") != section or package.get("slug") != slug:
