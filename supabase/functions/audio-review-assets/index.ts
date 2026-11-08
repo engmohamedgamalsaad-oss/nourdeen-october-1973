@@ -264,17 +264,23 @@ Deno.serve(async (req: Request) => {
     }
     const uploaded: string[] = [];
     for (const segment of manifest.segments) {
-      const file = zip.file(segment.src);
-      if (!file) return reply(422, { error: "ملف MP3 مفقود من الـArtifact: " + segment.src });
+      const artifactSrc = String(segment.src);
+      const file = zip.file(artifactSrc);
+      if (!file) return reply(422, { error: "ملف MP3 مفقود من الـArtifact: " + artifactSrc });
       const bytes = new Uint8Array(await file.async("uint8array"));
       if (await sha256Hex(bytes) !== String(segment.audio_sha256).toLowerCase()) {
-        return reply(422, { error: "بصمة MP3 لا تطابق manifest: " + segment.src });
+        return reply(422, { error: "بصمة MP3 لا تطابق manifest: " + artifactSrc });
       }
-      const path = prefix + "/" + segment.src;
+      // Immutable private filenames prevent a failed manifest write from replacing
+      // bytes still referenced by the previous manifest and accepted review hashes.
+      const chunkIndex = Number(segment.chunk_index || 0);
+      const stagedSrc = String(blockIndex).padStart(3, "0") + "-" + requestId.slice(0, 8) + "-" + String(chunkIndex).padStart(2, "0") + ".mp3";
+      segment.src = stagedSrc;
+      const path = prefix + "/" + stagedSrc;
       const { error } = await service.storage.from(BUCKET).upload(path, bytes, {
-        contentType: "audio/mpeg", upsert: true, cacheControl: "60",
+        contentType: "audio/mpeg", upsert: false, cacheControl: "60",
       });
-      if (error) return reply(500, { error: "تعذر حفظ ملف صوتي في التخزين الخاص.", file: segment.src, detail: error.message });
+      if (error) return reply(500, { error: "تعذر حفظ ملف صوتي في التخزين الخاص.", file: stagedSrc, detail: error.message });
       uploaded.push(path);
     }
     const priorDownload = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
