@@ -25,8 +25,14 @@ on:
         description: "Zero-based spoken block index"
         required: true
         type: number
-      confirm_fish_audio_request:
+      confirm_audio_request:
         description: "Explicit owner approval for this single segment request"
+        required: true
+        type: choice
+        options: ["no", "yes"]
+        default: "no"
+      confirm_fish_audio_request:
+        description: "Additional explicit approval for Fish Audio Arabic generation"
         required: true
         type: choice
         options: ["no", "yes"]
@@ -46,7 +52,7 @@ concurrency:
 
 jobs:
   generate:
-    if: inputs.confirm_fish_audio_request == 'yes'
+    if: inputs.confirm_audio_request == 'yes'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -62,6 +68,7 @@ jobs:
           STORY_SLUG: ${{ inputs.slug }}
           STORY_PATH: ${{ inputs.story_path }}
           LANGUAGE: ${{ inputs.language }}
+          CONFIRM_FISH_AUDIO: ${{ inputs.confirm_fish_audio_request }}
           BLOCK_INDEX: ${{ inputs.block_index }}
         run: |
           python - <<'PY'
@@ -70,7 +77,10 @@ jobs:
           section, slug = os.environ["STORY_SECTION"], os.environ["STORY_SLUG"]
           path = os.environ["STORY_PATH"]
           language = os.environ["LANGUAGE"]
+          fish_confirmation = os.environ.get("CONFIRM_FISH_AUDIO", "no")
           index = int(os.environ["BLOCK_INDEX"])
+          if language == "ar" and fish_confirmation != "yes":
+              raise SystemExit("Arabic generation requires explicit Fish Audio approval")
           if not re.fullmatch(r"[a-z0-9-]{1,80}", section) or not re.fullmatch(r"[a-z0-9-]{1,80}", slug):
               raise SystemExit("Invalid story identity")
           if language not in {"ar", "en", "fr", "it", "de"} or index < 0:
