@@ -649,26 +649,7 @@ function makeButton(label, cls, handler) {
 var generationBusy = false, generationMessage = '';
 async function generateNextArabicBlock(statusNode, button) {
   if (generationBusy) return;
-  var byBlock = {};
-  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
-    (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
-  });
-  var karmaOrder = [], narratorOrder = [];
-  var sourceBlocks = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
-  sourceBlocks.forEach(function (block, index) {
-    if (block && block.speaker === 'karma') karmaOrder.push(index);
-    else if (block && block.speaker === 'narrator') narratorOrder.push(index);
-  });
-  var nextBlock = -1;
-  var orderedBlocks = karmaOrder.concat(narratorOrder);
-  for (var i = 0; i < orderedBlocks.length; i++) {
-    var blockIndex = orderedBlocks[i];
-    var clips = byBlock[blockIndex] || [];
-    if (!clips.length || !clips.every(function (entry) {
-      var saved = review.clips[entry.key];
-      return saved && saved.status === 'accepted';
-    })) { nextBlock = blockIndex; break; }
-  }
+  var nextBlock = nextArabicBlockIndex();
   if (nextBlock < 0) {
     text(statusNode, 'كل المقاطع العربية من 1 إلى 17 مقبولة بالفعل.');
     return;
@@ -738,6 +719,28 @@ function renderGenerationControls(banner) {
   button.disabled = generationBusy;
   panel.append(button, status);
   banner.appendChild(panel);
+}
+function nextArabicBlockIndex() {
+  var byBlock = {};
+  entries.filter(function (entry) { return entry.lang === 'ar'; }).forEach(function (entry) {
+    (byBlock[entry.block_index] || (byBlock[entry.block_index] = [])).push(entry);
+  });
+  var karmaOrder = [], narratorOrder = [];
+  var sourceBlocks = story && story.i18n && story.i18n.ar && story.i18n.ar.blocks || [];
+  sourceBlocks.forEach(function (block, index) {
+    if (block && block.speaker === 'karma') karmaOrder.push(index);
+    else if (block && block.speaker === 'narrator') narratorOrder.push(index);
+  });
+  var orderedBlocks = karmaOrder.concat(narratorOrder);
+  for (var i = 0; i < orderedBlocks.length; i++) {
+    var blockIndex = orderedBlocks[i];
+    var clips = byBlock[blockIndex] || [];
+    if (!clips.length || !clips.every(function (entry) {
+      var saved = review.clips[entry.key];
+      return saved && saved.status === 'accepted';
+    })) return blockIndex;
+  }
+  return -1;
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
 async function prepareSpeechText(index, statusNode, button) {
@@ -823,10 +826,14 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   textarea.placeholder = 'اضغط «تجهيز النص باستخدام Gemini» لاقتراح صياغة صوتية منفصلة…';
   var status = document.createElement('span');
   status.className = 'kh-audio-review-state';
-  status.textContent = speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
-    record.status === 'approved' ? 'نص القراءة معتمد ✓' :
-    record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
-    'لم يُجهز نص القراءة بعد.';
+  var currentBlockIndex = nextArabicBlockIndex();
+  var isCurrentBlock = currentBlockIndex === index;
+  status.textContent = !isCurrentBlock
+    ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق في ترتيب كارما ثم الراوي.')
+    : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
+      record.status === 'approved' ? 'نص القراءة معتمد ✓' :
+      record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
+      'لم يُجهز نص القراءة بعد.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
   if (record.changes_summary) {
@@ -854,8 +861,8 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var approve = makeButton(record.status === 'approved' ? 'حفظ واعتماد التعديل' : 'اعتماد نص القراءة', 'accept', function () {
     approveSpeechText(index, textarea, status, approve);
   });
-  approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key];
-  suggest.disabled = !canWrite || !!speechTextBusy[key];
+  approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  suggest.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
   panel.append(heading, sourceLabel, source, proposalLabel, textarea, notes, suggest, approve, status);
   block.appendChild(panel);
 }
