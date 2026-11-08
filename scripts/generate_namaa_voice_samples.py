@@ -77,12 +77,12 @@ def main() -> int:
         token = os.environ.get("HF_TOKEN", "").strip() or None
         client = Client(SPACE, token=token, verbose=False)
         result = client.predict(
-            text_input=text,
-            audio_prompt_path_input=str(reference),
-            exaggeration_input=0.5,
-            temperature_input=0.8,
-            seed_num_input=0,
-            cfgw_input=0.5,
+            text,
+            str(reference),
+            0.5,
+            0.8,
+            0,
+            0.5,
             api_name="/generate_tts_audio",
         )
         generated = output_path(result)
