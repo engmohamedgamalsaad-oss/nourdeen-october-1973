@@ -4,6 +4,7 @@
 # This run uses Gradio file upload and the supported Hugging Face token parameter.
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import os
@@ -27,6 +28,7 @@ OUT.mkdir(parents=True, exist_ok=True)
 SPACE_ID = "omarelshehy/NAMAA-Egyptian-Voice"
 REQUEST_ID = os.environ["REQUEST_ID"]
 BLOCK_INDEX = int(os.environ.get("BLOCK_INDEX", "0"))
+SPEECH_TEXT_B64 = os.environ.get("SPEECH_TEXT_B64", "").strip()
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -63,8 +65,17 @@ def main() -> None:
         raise ValueError(f"Arabic block index out of range: {BLOCK_INDEX}")
     block = blocks[BLOCK_INDEX]
     speaker = block.get("speaker")
-    if speaker not in REFERENCE_SOURCES or not block.get("text", "").strip():
+    source_text = str(block.get("text") or "").strip()
+    if speaker not in REFERENCE_SOURCES or not source_text:
         raise ValueError(f"Arabic block {BLOCK_INDEX} is missing an approved speaker or text.")
+    if not SPEECH_TEXT_B64:
+        raise ValueError("Approved Gemini speech text is required; no audio was generated.")
+    try:
+        speech_text = base64.b64decode(SPEECH_TEXT_B64, validate=True).decode("utf-8").strip()
+    except Exception as exc:
+        raise ValueError("Approved speech text is not valid base64 UTF-8.") from exc
+    if not speech_text or len(speech_text) > 6000:
+        raise ValueError("Approved speech text is empty or exceeds the allowed length.")
     reference_source = REFERENCE_SOURCES[speaker]
     if not reference_source.is_file():
         raise FileNotFoundError(f"Approved {speaker} reference audio is missing: {reference_source}")
@@ -82,7 +93,7 @@ def main() -> None:
         client = Client(SPACE_ID, hf_token=os.getenv("HF_TOKEN") or None, verbose=True)
         print(f"Generating Arabic block {BLOCK_INDEX} ({speaker}) only...", flush=True)
         result = client.predict(
-            block["text"], handle_file(str(reference)),
+            speech_text, handle_file(str(reference)),
             0.45 if speaker == "karma" else 0.35,
             0.8, 0, 0.5,
             api_name="/generate_tts_audio",
@@ -105,7 +116,9 @@ def main() -> None:
             "voice": f"magdi-yacoub-{speaker}-reference",
             "provider": "huggingface-space", "model": "NAMAA-Space/NAMAA-Egyptian-TTS",
             "src": mp3_path.name, "audio_sha256": sha256(mp3_path),
-            "text": block["text"], "reference_sha256": sha256(reference_source),
+            "text": speech_text, "source_text": source_text,
+            "source_text_sha256": hashlib.sha256(source_text.encode("utf-8")).hexdigest(),
+            "reference_sha256": sha256(reference_source),
         }],
     }
     (OUT / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
