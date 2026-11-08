@@ -40,6 +40,7 @@ async function main() {
   const urabiImageDir = path.join(temp, 'assets/images/stories');
   fs.mkdirSync(urabiImageDir, { recursive: true });
   fs.copyFileSync(path.join(root, 'assets/images/stories/Portrait_of_Ahmed_Orabi.jpg'), path.join(urabiImageDir, 'Portrait_of_Ahmed_Orabi.jpg'));
+  fs.mkdirSync(path.join(temp, 'assets/shared'), { recursive: true });
   for (const asset of ['home-language-only.js', 'story-audio.js']) {
     fs.copyFileSync(path.join(root, 'assets/shared', asset), path.join(temp, 'assets/shared', asset));
   }
