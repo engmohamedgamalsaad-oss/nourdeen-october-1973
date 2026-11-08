@@ -117,6 +117,11 @@
           "speaker": "narrator",
           "heading": "كما قالت مليكة",
           "text": "حكاية أحمد زويل بتعلّمنا إن النجاح محتاج صبر واجتهاد وإيمان بالحلم، وإن الطالب الصغير ممكن يكبر ويصبح عالمًا عظيمًا يخدم بلده والإنسانية كلها."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني الحلم الكبير محتاج صبر وتعلّم خطوة خطوة، وممكن كمان يسيب أثر يساعد ناس كتير حتى بعد ما صاحبه يرحل."
         }
       ]
     },
@@ -229,6 +234,11 @@
           "speaker": "narrator",
           "heading": "In Malika’s words",
           "text": "Ahmed Zewail’s story teaches us that success takes patience, hard work and faith in a dream, and that a young student can grow up to become a great scientist who serves their country and all of humanity."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So a big dream takes patience and learning one step at a time. It can also leave an impact that helps many people, even after its owner is gone."
         }
       ]
     },
@@ -341,6 +351,11 @@
           "speaker": "narrator",
           "heading": "Dans les mots de Malika",
           "text": "L’histoire d’Ahmed Zewail nous apprend que la réussite demande de la patience, de l’effort et la foi dans son rêve, et qu’un petit élève peut devenir un grand savant au service de son pays et de toute l’humanité."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un grand rêve demande donc de la patience et des apprentissages pas à pas. Il peut aussi laisser un héritage qui aide beaucoup de personnes, même après la disparition de celui qui l’a porté."
         }
       ]
     },
@@ -453,6 +468,11 @@
           "speaker": "narrator",
           "heading": "Con le parole di Malika",
           "text": "La storia di Ahmed Zewail ci insegna che il successo richiede pazienza, impegno e fede nel proprio sogno, e che un piccolo studente può crescere e diventare un grande scienziato al servizio del suo paese e di tutta l’umanità."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Un grande sogno richiede quindi pazienza e apprendimento passo dopo passo. Può anche lasciare un’eredità capace di aiutare molte persone, anche dopo la scomparsa di chi lo ha realizzato."
         }
       ]
     },
@@ -565,6 +585,11 @@
           "speaker": "narrator",
           "heading": "In Malikas Worten",
           "text": "Ahmed Zewails Geschichte lehrt uns, dass Erfolg Geduld, Fleiß und Vertrauen in einen Traum braucht. Auch ein junger Schüler kann zu einem großen Wissenschaftler heranwachsen, der seinem Land und der ganzen Menschheit dient."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ein großer Traum braucht also Geduld und Lernen Schritt für Schritt. Er kann auch Spuren hinterlassen, die vielen Menschen helfen, selbst wenn der Mensch dahinter nicht mehr lebt."
         }
       ]
     }
