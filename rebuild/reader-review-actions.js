@@ -25,15 +25,29 @@ function addControls(){
  reject.addEventListener('click',function(){if(reason.style.display==='block'){decide(false)}else{reason.style.display='block';reason.focus();message('اكتب سبب الرفض ثم اضغط «رفض المعاينة» مرة أخرى.')}});
  back.addEventListener('click',function(){var id=draft&&draft.submission_id?encodeURIComponent(draft.submission_id):'';location.href='../khaledoon/admin.html?returnfrompreview=1'+(id?'&submission='+id:'')});
 }
+function readStoredContext(key){
+ try{var value=JSON.parse(localStorage.getItem(key)||'null');return value&&typeof value==='object'?value:null}catch(e){return null}
+}
 function getContext(){
- try{ctx=JSON.parse(localStorage.getItem('kh-story-review-context')||'null')}catch(e){ctx=null}
- if(!ctx){try{ctx=JSON.parse(localStorage.getItem('kh-story-preview-context')||localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){ctx=null}}
+ var primary=readStoredContext('kh-story-review-context');
+ if(primary&&(primary.submission_id||primary.record_type==='published_site_story'))ctx=primary;
+ else{
+  var candidates=[readStoredContext('kh-story-preview-context'),readStoredContext('kh-story-preview-draft')];
+  ctx=candidates.find(function(value){return value&&value.submission_id})||null;
+ }
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
- if(urlId&&(!ctx||String(ctx.submission_id)!==String(urlId))){ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}}
+ if(urlId){
+  ctx=Object.assign({},ctx||{},{submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':(urlTable==='khaledoon_submissions'?'khaledoon_submissions':((ctx&&ctx.submission_table)||'khaledoon_submissions')),record_type:'modern'});
+  try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}
+ }
+ if(ctx&&ctx.record_type==='published_site_story'&&!ctx.submission_id){
+  draft=Object.assign({},ctx);
+  return 'published_site_story';
+ }
  if(!ctx||!ctx.submission_id)return false;
  var source=ctx.record_data&&typeof ctx.record_data==='object'?ctx.record_data:ctx;
  draft=Object.assign({},source,{submission_id:ctx.submission_id,submission_table:ctx.submission_table||'khaledoon_submissions',record_type:ctx.record_type||'modern',story_meta:ctx.story_meta||source.story_meta||{}});
- return true;
+ return 'submission';
 }
 async function adminToken(){
  var s=null;try{s=JSON.parse(localStorage.getItem('kh_adm_session')||sessionStorage.getItem('kh_adm_session')||'null')}catch(e){}
@@ -49,6 +63,7 @@ async function adminToken(){
 function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disabled=on})}
 async function decide(isApprove){
  if(busy)return;
+ if(draft&&draft.record_type==='published_site_story'){message('هذه الصفحة مخصصة لمراجعة صوت الحكاية المنشورة، وليس لاعتماد سجل محتوى.',true);return}
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
  if(isApprove){
   if(!window.KHStoryAudioReview){message('تعذر تحميل مدقق الصوت. أعد تحميل المعاينة؛ لا يمكن اعتمادها قبل التحقق من حالة الصوت.',true);return}
@@ -106,7 +121,13 @@ async function decide(isApprove){
  }catch(e){message('لم يتم تأكيد القرار: '+(e&&e.message||'خطأ غير معروف')+' — لم يتم اعتبار المعاينة معتمدة.',true);setBusy(false)}
 }
 addControls();
-if(!getContext()){
+var contextType=getContext();
+if(contextType==='published_site_story'){
+ approve.hidden=true;
+ reject.hidden=true;
+ reason.hidden=true;
+ message('هذه مراجعة صوت لحكاية منشورة؛ لا يلزم سجل اعتماد محتوى هنا. استخدم أزرار الاستماع والمراجعة بجوار المقاطع الصوتية.',false);
+}else if(!contextType){
  approve.disabled=true;reject.disabled=true;message('لا توجد بيانات سجل مرتبطة بهذه المعاينة. افتح المعاينة من داخل لوحة الإدارة حتى تظهر أزرار القرار وتعمل.',true);
 }
 })();
