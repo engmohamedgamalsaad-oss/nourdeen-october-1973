@@ -111,15 +111,50 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   assert.equal(story.section, 'history');
   assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10);
-  assert.equal(story.sources.length, 4, 'retain the four verified historical sources added during the review');
+  assert.equal(story.sources.length, 4, 'retain four verified historical sources');
   assert.equal(story.images.length, 2);
+  assert.equal(story.original_body.length, 2827, 'preserve the original source text unchanged');
+  assert.ok(story.map_location && Number.isFinite(story.map_location.lat) && Number.isFinite(story.map_location.lng),
+    'the story map must retain verified birthplace coordinates');
+  const allImages = [story.cover, ...story.images];
+  for (const image of allImages) {
+    assert.ok(image.source_url?.startsWith('https://'), 'image source URL missing');
+    assert.ok(image.rights?.trim(), 'image rights statement missing');
+    for (const lang of langs) {
+      for (const field of ['alt', 'caption', 'source_name', 'rights']) {
+        assert.ok(image.i18n?.[lang]?.[field]?.trim(), 'localized image ' + field + ' missing for ' + lang);
+        if (lang !== 'ar') assert.equal(arabicScript.test(image.i18n[lang][field]), false,
+          'Arabic fallback in image ' + field + ' for ' + lang);
+      }
+    }
+  }
   for (const lang of langs) {
-    assert.ok(story.i18n[lang].blocks.length >= 14, 'story block count below the established minimum in ' + lang);
-    assert.equal(story.i18n[lang].blocks.length, story.i18n.ar.blocks.length, 'story block count differs from Arabic in ' + lang);
+    assert.equal(story.i18n[lang].blocks.length, 20, 'Ahmed Urabi must contain 20 story blocks in ' + lang);
+    assert.equal(story.i18n[lang].blocks.filter(block => block.speaker === 'karma').length, 4,
+      'Karma must have four childlike contributions in ' + lang);
+    assert.equal(story.i18n[lang].blocks.filter(block => block.type === 'did_you_know').length, 3,
+      'three did-you-know cards are required in ' + lang);
+    assert.equal(story.i18n[lang].blocks.at(-1).speaker, 'karma', 'Karma must be the final story speaker in ' + lang);
+    assert.deepEqual(
+      story.i18n[lang].blocks.map(block => block.image_after || null),
+      story.i18n.ar.blocks.map(block => block.image_after || null),
+      'image placements must match Arabic in ' + lang
+    );
     assert.ok(story.i18n[lang].history_note?.trim(), 'historical note missing in ' + lang);
+    assert.ok(story.map_location.place[lang]?.trim(), 'localized map place missing in ' + lang);
     for (const question of story.quiz) {
       assert.ok(question.i18n[lang].question?.trim(), 'quiz question missing in ' + lang);
       assert.equal(question.i18n[lang].options.length, 4, 'quiz options incomplete in ' + lang);
+      assert.ok(question.i18n[lang].explanation?.trim(), 'quiz explanation missing in ' + lang);
+    }
+    for (const source of story.sources) {
+      assert.ok(source.url?.startsWith('https://'), 'source URL must use HTTPS');
+      assert.ok(source.i18n[lang].title?.trim(), 'source title missing in ' + lang);
+      assert.ok(source.i18n[lang].organization?.trim(), 'source organization missing in ' + lang);
+      if (lang !== 'ar') {
+        assert.equal(arabicScript.test(source.i18n[lang].title), false, 'Arabic fallback in source title for ' + lang);
+        assert.equal(arabicScript.test(source.i18n[lang].organization), false, 'Arabic fallback in source organization for ' + lang);
+      }
     }
   }
   const page = await readFile(path.join(root, 'stories/history/006/index.html'), 'utf8');
