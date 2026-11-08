@@ -111,7 +111,7 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   assert.equal(story.section, 'history');
   assert.ok(story.i18n.ar.blocks.length >= 14, 'Arabic story block count below the established minimum');
   assert.equal(story.quiz.length, 10);
-  assert.equal(story.sources.length, 3);
+  assert.equal(story.sources.length, 4, 'retain the four verified historical sources added during the review');
   assert.equal(story.images.length, 2);
   for (const lang of langs) {
     assert.ok(story.i18n[lang].blocks.length >= 14, 'story block count below the established minimum in ' + lang);
