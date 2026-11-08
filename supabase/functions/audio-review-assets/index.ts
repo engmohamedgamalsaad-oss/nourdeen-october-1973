@@ -75,42 +75,43 @@ Deno.serve(async (req: Request) => {
   const prefix = section + "/" + slug + "/" + language;
 
   if (body.action === "generate") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
-        body.confirm_fish_audio_request !== "yes" ||
-        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
-      return reply(400, { error: "طلب التوليد يجب أن يكون لمقطع عربي واحد محدد من حكاية ابن سينا، مع تأكيد استهلاك Fish Audio." });
+    const storyId = String(body.story_id ?? "");
+    const blockIndex = Number(body.block_index);
+    if (!/^[0-9]{3}$/.test(storyId) || body.confirm_audio_request !== "yes" ||
+        !Number.isInteger(blockIndex) || blockIndex < 0 ||
+        (language === "ar" && body.confirm_fish_audio_request !== "yes")) {
+      return reply(400, { error: "طلب التوليد يحتاج موافقة صريحة ومقطعًا واحدًا محددًا من الحكاية." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
+    const rawStoryUrl = `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/stories/${section}/${storyId}/story.json`;
+    const storyResponse = await fetch(rawStoryUrl, { headers: { "Accept": "application/vnd.github.raw+json" } });
+    if (!storyResponse.ok) return reply(404, { error: "تعذر العثور على حزمة الحكاية المنشورة في المسار المعتمد." });
+    const storyPackage = await storyResponse.json();
+    if (storyPackage?.format !== "KHALEDOON_STORY" || storyPackage.section !== section || storyPackage.slug !== slug) {
+      return reply(403, { error: "معرّف الحكاية لا يطابق الحزمة المنشورة؛ تم إيقاف الطلب." });
+    }
+    const blocks = storyPackage?.i18n?.[language]?.blocks;
+    if (!Array.isArray(blocks) || blockIndex >= blocks.length ||
+        !["narrator", "karma"].includes(blocks[blockIndex]?.speaker) ||
+        !String(blocks[blockIndex]?.text ?? "").trim()) {
+      return reply(400, { error: "المقطع المحدد غير موجود أو غير قابل للتوليد في هذه اللغة." });
+    }
+    const requestId = crypto.randomUUID();
+    const workflow = "story-audio-segment-staging.yml";
     const apiHeaders = {
       "Accept": "application/vnd.github+json",
       "Authorization": "Bearer " + GITHUB_TOKEN,
       "X-GitHub-Api-Version": "2022-11-28",
       "Content-Type": "application/json",
     };
-    const workflow = "ibn-sina-five-language-audio-staging.yml";
-    const runsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/runs?status=success&per_page=20`, { headers: apiHeaders });
-    if (!runsResponse.ok) return reply(502, { error: "تعذر تحديد آخر حزمة صوت ناجحة لاستكمالها.", upstream_status: runsResponse.status });
-    const runsData = await runsResponse.json();
-    let baselineRunId = 42292463580;
-    for (const run of (runsData.workflow_runs ?? [])) {
-      const artifactsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${run.id}/artifacts?per_page=100`, { headers: apiHeaders });
-      if (!artifactsResponse.ok) continue;
-      const artifactsData = await artifactsResponse.json();
-      const baseline = (artifactsData.artifacts ?? []).find((item: any) =>
-        item.name === "ibn-sina-arabic-audio-staging" && item.expired !== true
-      );
-      if (baseline) { baselineRunId = Number(run.id); break; }
-    }
-    const requestId = crypto.randomUUID();
     const dispatchResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/dispatches`, {
       method: "POST", headers: apiHeaders,
       body: JSON.stringify({
         ref: "main",
         inputs: {
-          confirm_fish_audio_request: "yes",
-          block_index: String(body.block_index),
-          baseline_run_id: String(baselineRunId),
-          request_id: requestId,
+          section, slug, story_path: `stories/${section}/${storyId}/story.json`,
+          language, block_index: String(blockIndex),
+          confirm_fish_audio_request: "yes", request_id,
         },
       }),
     });
@@ -118,18 +119,19 @@ Deno.serve(async (req: Request) => {
       const detail = await dispatchResponse.text();
       return reply(dispatchResponse.status === 403 ? 503 : 502, {
         error: dispatchResponse.status === 403
-          ? "مفتاح GitHub الحالي لا يملك صلاحية Actions: write؛ لم يبدأ التوليد ولم يُستهلك رصيد Fish Audio."
+          ? "مفتاح GitHub لا يملك صلاحية Actions: write؛ لم يبدأ التوليد."
           : "فشل إطلاق Workflow من صفحة المراجعة.",
         upstream_status: dispatchResponse.status, detail: detail.slice(0, 500),
       });
     }
-    return reply(200, { success: true, request_id: requestId, block_index: body.block_index, baseline_run_id: baselineRunId });
+    return reply(200, { success: true, request_id: requestId, block_index: blockIndex, language, artifact_name: "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging" });
   }
 
   if (body.action === "generation_status") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
-        typeof body.request_id !== "string" || !/^[a-f0-9-]{36}$/.test(body.request_id) ||
-        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
+    const blockIndex = Number(body.block_index);
+    const requestId = String(body.request_id ?? "");
+    if (typeof body.story_id !== "string" || !/^[0-9]{3}$/.test(body.story_id) ||
+        !/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 0) {
       return reply(400, { error: "بيانات متابعة طلب التوليد غير صالحة." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لمتابعة التوليد." });
@@ -138,11 +140,11 @@ Deno.serve(async (req: Request) => {
       "Authorization": "Bearer " + GITHUB_TOKEN,
       "X-GitHub-Api-Version": "2022-11-28",
     };
-    const workflow = "ibn-sina-five-language-audio-staging.yml";
-    const runsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/runs?event=workflow_dispatch&per_page=20`, { headers: apiHeaders });
+    const workflow = "story-audio-segment-staging.yml";
+    const runsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/runs?event=workflow_dispatch&per_page=30`, { headers: apiHeaders });
     if (!runsResponse.ok) return reply(502, { error: "تعذر متابعة تشغيل التوليد.", upstream_status: runsResponse.status });
     const runsData = await runsResponse.json();
-    const expectedTitle = "ابن سينا audio " + body.request_id + " block " + body.block_index;
+    const expectedTitle = "story audio " + requestId + " " + section + "/" + slug + " " + language + " block " + blockIndex;
     const run = (runsData.workflow_runs ?? []).find((item: any) => item.display_title === expectedTitle);
     if (!run) return reply(200, { success: true, status: "queued" });
     if (run.status !== "completed") return reply(200, { success: true, status: run.status || "in_progress", run_id: run.id });
@@ -152,9 +154,8 @@ Deno.serve(async (req: Request) => {
     const artifactsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${run.id}/artifacts?per_page=100`, { headers: apiHeaders });
     if (!artifactsResponse.ok) return reply(502, { error: "انتهى التوليد لكن تعذر جلب بيانات ملف المراجعة.", upstream_status: artifactsResponse.status });
     const artifactsData = await artifactsResponse.json();
-    const artifact = (artifactsData.artifacts ?? []).find((item: any) =>
-      item.name === "ibn-sina-arabic-audio-staging" && item.expired !== true
-    );
+    const artifactName = "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
+    const artifact = (artifactsData.artifacts ?? []).find((item: any) => item.name === artifactName && item.expired !== true);
     if (!artifact) return reply(422, { error: "انتهى Workflow بنجاح لكن لم يُعثر على Artifact الصوت." });
     return reply(200, {
       success: true, status: "completed", conclusion: "success",
@@ -199,13 +200,13 @@ Deno.serve(async (req: Request) => {
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub الخاص بقراءة الـArtifacts غير متاح." });
     const artifactId = Number(body.artifact_id);
     const runId = Number(body.run_id);
-    const expectedName = String(body.artifact_name ?? "");
-    const canonicalName = section === "history" && slug === "ibn-sina" && language === "ar"
-      ? "ibn-sina-arabic-audio-staging"
-      : "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
+    const blockIndex = Number(body.block_index);
+    const requestId = String(body.request_id ?? "");
+    const expectedName = "khaledoon-" + section + "-" + slug + "-" + language + "-audio-staging";
     if (!Number.isSafeInteger(artifactId) || artifactId < 1 || !Number.isSafeInteger(runId) || runId < 1 ||
-        expectedName !== canonicalName) {
-      return reply(400, { error: "بيانات الـArtifact لا تطابق اسم الحكاية والقسم واللغة." });
+        String(body.artifact_name ?? "") !== expectedName ||
+        !/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 0) {
+      return reply(400, { error: "بيانات الـArtifact لا تطابق هوية الحكاية واللغة والمقطع." });
     }
     const apiHeaders = {
       "Accept": "application/vnd.github+json",
@@ -218,35 +219,12 @@ Deno.serve(async (req: Request) => {
     if (artifact.expired || artifact.name !== expectedName || Number(artifact.workflow_run?.id) !== runId) {
       return reply(403, { error: "الـArtifact منتهي أو لا يطابق تشغيل التوليد المحدد." });
     }
-    const isIbnSinaArabic = section === "history" && slug === "ibn-sina" && language === "ar";
-    // The restart baseline is the newly generated, approved-text Arabic package
-    // from run #42344425713. It may replace an older private manifest, but only
-    // when the review page explicitly requests this exact pinned artifact.
-    const isPinnedRestartBaseline = isIbnSinaArabic &&
-      body.baseline_restore === true && !body.request_id &&
-      artifactId === 13563200242 && runId === 42344425713;
-    if (isIbnSinaArabic && body.request_id) {
-      const requestId = String(body.request_id ?? "");
-      const blockIndex = Number(body.block_index);
-      if (!/^[a-f0-9-]{36}$/.test(requestId) || !Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex > 16) {
-        return reply(400, { error: "لا يمكن استبدال حزمة ابن سينا دون هوية طلب التوليد ورقم المقطع." });
-      }
-      const runResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${runId}`, { headers: apiHeaders });
-      if (!runResponse.ok) return reply(502, { error: "تعذر التحقق من تشغيل التوليد قبل نقل الصوت.", upstream_status: runResponse.status });
-      const runData = await runResponse.json();
-      const expectedTitle = "ابن سينا audio " + requestId + " block " + blockIndex;
-      if (runData.display_title !== expectedTitle || runData.status !== "completed" || runData.conclusion !== "success") {
-        return reply(403, { error: "تشغيل التوليد لا يطابق طلب المقطع المحدد أو لم ينجح." });
-      }
-    } else if (isIbnSinaArabic && !isPinnedRestartBaseline) {
-      return reply(403, { error: "تحميل الحزمة الأساسية مسموح فقط لحزمة إعادة التشغيل المرجعية المحددة." });
-    }
-    if (!body.request_id && !isPinnedRestartBaseline) {
-      const existing = await service.storage.from(BUCKET).list(prefix, { limit: 100 });
-      if (existing.error) return reply(500, { error: "تعذر فحص التخزين الخاص.", detail: existing.error.message });
-      if (existing.data?.some((item: any) => item.name === "manifest.json")) {
-        return reply(200, { success: true, already_staged: true, bucket: BUCKET, prefix });
-      }
+    const runResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${runId}`, { headers: apiHeaders });
+    if (!runResponse.ok) return reply(502, { error: "تعذر التحقق من تشغيل التوليد قبل نقل الصوت.", upstream_status: runResponse.status });
+    const runData = await runResponse.json();
+    const expectedTitle = "story audio " + requestId + " " + section + "/" + slug + " " + language + " block " + blockIndex;
+    if (runData.display_title !== expectedTitle || runData.status !== "completed" || runData.conclusion !== "success") {
+      return reply(403, { error: "تشغيل التوليد لا يطابق طلب المقطع المحدد أو لم ينجح." });
     }
     const zipResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/artifacts/${artifactId}/zip`, { headers: apiHeaders });
     if (!zipResponse.ok) return reply(502, { error: "تعذر تنزيل الـArtifact من GitHub.", upstream_status: zipResponse.status });
@@ -256,18 +234,8 @@ Deno.serve(async (req: Request) => {
     const manifest = JSON.parse(await manifestFile.async("string"));
     if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== language ||
         !Array.isArray(manifest.segments) || !manifest.segments.length || manifest.segments.length > 1000 ||
-        (section === "history" && slug === "ibn-sina" && language === "ar" && manifest.segments.length !== 17)) {
-      return reply(422, { error: "بيانات manifest لا تطابق الحكاية أو نطاق المقاطع المسموح." });
-    }
-    // The pinned restart artifact predates the corrected opening order.
-    // Its first two audio files are valid but their block indices must follow
-    // the corrected story sequence: Karma first, narrator second.
-    if (isPinnedRestartBaseline) {
-      const first = manifest.segments.find((segment: any) => segment.block_index === 0);
-      const second = manifest.segments.find((segment: any) => segment.block_index === 1);
-      if (!first || !second) return reply(422, { error: "حزمة البداية لا تحتوي المقطعين الأول والثاني المطلوبين لإصلاح الترتيب." });
-      first.block_index = 1;
-      second.block_index = 0;
+        manifest.segments.some((segment: any) => Number(segment.block_index) !== blockIndex)) {
+      return reply(422, { error: "ملف المقطع لا يطابق الحكاية واللغة ورقم المقطع المطلوب." });
     }
     const expectedVoices: Record<string, string> = {
       narrator: "a02a8220d6014812aa5ff73434c54cc0",
@@ -303,6 +271,16 @@ Deno.serve(async (req: Request) => {
       if (error) return reply(500, { error: "تعذر حفظ ملف صوتي في التخزين الخاص.", file: segment.src, detail: error.message });
       uploaded.push(path);
     }
+    const priorDownload = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
+    let priorSegments: any[] = [];
+    if (!priorDownload.error && priorDownload.data) {
+      const priorManifest = JSON.parse(await priorDownload.data.text());
+      if (priorManifest.version !== 1 || priorManifest.section !== section || priorManifest.story !== slug || priorManifest.language !== language || !Array.isArray(priorManifest.segments)) {
+        return reply(422, { error: "الحزمة الخاصة الموجودة لا تطابق الحكاية؛ لم يتم استبدالها." });
+      }
+      priorSegments = priorManifest.segments.filter((segment: any) => Number(segment.block_index) !== blockIndex);
+    }
+    manifest.segments = priorSegments.concat(manifest.segments).sort((a: any, b: any) => Number(a.block_index) - Number(b.block_index) || Number(a.chunk_index || 0) - Number(b.chunk_index || 0));
     const manifestBytes = new TextEncoder().encode(JSON.stringify(manifest));
     const manifestUpload = await service.storage.from(BUCKET).upload(prefix + "/manifest.json", manifestBytes, {
       contentType: "application/json", upsert: true, cacheControl: "60",
