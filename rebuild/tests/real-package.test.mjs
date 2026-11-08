@@ -127,6 +127,23 @@ test('Ahmed Urabi unified story package validates with five-language blocks, ima
   assert.match(page, /data-story-path="story\.json"/);
   assert.doesNotMatch(page, /name="robots" content="noindex,nofollow"/, "approved story page must be indexable after publication");
   assert.match(page, /rebuild\/reader\.js/);
+  assert.match(page, /reader\.js\\?v=20261108-ai-disclosure-1/, 'Ahmed Urabi page must load the refreshed shared reader');
+  assert.match(page, /reader-base\\.css\\?v=20261108-ai-disclosure-1/, 'Ahmed Urabi page must load the refreshed disclosure styling');
+  const reader = await readFile(path.join(root, 'rebuild/reader.js'), 'utf8');
+  const readerCss = await readFile(path.join(root, 'rebuild/reader-base.css'), 'utf8');
+  for (const disclosure of [
+    'تم توليد هذه النسخة اللغوية باستخدام الذكاء الاصطناعي.',
+    'This language version was generated using artificial intelligence.',
+    'Cette version linguistique a été générée à l’aide de l’intelligence artificielle.',
+    'Questa versione linguistica è stata generata utilizzando l’intelligenza artificiale.',
+    'Diese Sprachfassung wurde mithilfe künstlicher Intelligenz erstellt.'
+  ]) assert.ok(reader.includes(disclosure), 'shared reader AI disclosure missing: ' + disclosure);
+  assert.match(reader, /className='ai-disclosure'/, 'AI disclosure must be a separate element after the final story block');
+  assert.match(readerCss, /\\.ai-disclosure\\{/, 'AI disclosure needs shared reader styling');
+  for (const lang of langs) {
+    assert.doesNotMatch(story.i18n[lang].history_note, /الذكاء الاصطناعي|artificial intelligence|intelligence artificielle|intelligenza artificiale|künstlicher Intelligenz/,
+      'AI disclosure must not be duplicated in story JSON/history note (' + lang + ')');
+  }
 });
 
 test('Tawfiq al-Hakim unified story package validates with five-language text, archival image rights, sources, and quiz', async () => {
