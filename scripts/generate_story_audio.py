@@ -31,6 +31,7 @@ STAGING_ROOT = ROOT / ".audio-staging"
 OCTOBER_PACKAGES_DIR = ("stories", "october")
 OCTOBER_READINESS_FORMAT = "KHALEDOON_OCTOBER_AUDIO_READINESS_V1"
 LANGUAGES = ("ar", "en", "fr", "it", "de")
+AUDIO_PHASE_LANGUAGES = ("ar", "en")
 GENERATOR_VERSION = "4"
 ARABIC_AUDIO_TEXT_VERSION = "story-specific-contextual-pronunciation-v1"
 FISH_AUDIO_KARMA_VOICE_ID = "592625f68416462f8b6161ddf5fdbffb"
@@ -153,8 +154,9 @@ def validate_required_audio_text_review(
     pronunciation: dict[str, Any],
     package: dict[str, Any],
     pronunciation_path: Path,
+    required_languages: tuple[str, ...] = AUDIO_PHASE_LANGUAGES,
 ) -> dict[str, dict[str, str]]:
-    """Require a human-approved, complete five-language speech-text review for new stories."""
+    """Require human approval for every spoken block in the configured audio phase."""
     slug = str(package.get("slug") or "").strip()
     if pronunciation.get("format") != "KHALEDOON_AUDIO_PRONUNCIATION_V1":
         raise ValueError(f"{pronunciation_path}: missing approved audio-pronunciation format")
@@ -163,14 +165,14 @@ def validate_required_audio_text_review(
     review = pronunciation.get("review")
     if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
         raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
-    if review.get("status") != "approved_by_admin" or review.get("languages") != list(LANGUAGES):
-        raise ValueError(f"{pronunciation_path}: five-language admin approval is incomplete")
+    if review.get("status") != "approved_by_admin" or review.get("languages") != list(required_languages):
+        raise ValueError(f"{pronunciation_path}: admin approval is incomplete for {list(required_languages)}")
     raw_segments = review.get("segments")
     translations = package.get("i18n")
     if not isinstance(raw_segments, list) or not isinstance(translations, dict):
         raise ValueError(f"{pronunciation_path}: invalid review segments or story translations")
     expected: dict[tuple[str, int], tuple[str, str]] = {}
-    for lang in LANGUAGES:
+    for lang in required_languages:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
         if not isinstance(blocks, list) or not blocks:
@@ -182,7 +184,7 @@ def validate_required_audio_text_review(
             if source:
                 expected[(lang, index)] = (str(block["speaker"]), source)
     if review.get("total_segments") != len(expected) or len(raw_segments) != len(expected):
-        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in all five languages")
+        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in the configured audio languages")
     seen: set[tuple[str, int]] = set()
     rewrites: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
     for item in raw_segments:
@@ -404,7 +406,7 @@ def seed_staging_from_published(story_path: Path, languages: tuple[str, ...], st
         )
 
 
-def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
+def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT, languages: tuple[str, ...] = AUDIO_PHASE_LANGUAGES, force_blocks: tuple[int, ...] = ()) -> dict[str, Any]:
     """Read-only plan for all five languages using isolated staging assets."""
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
@@ -420,6 +422,8 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     selected_languages = tuple(dict.fromkeys(languages))
     if not selected_languages or any(lang not in LANGUAGES for lang in selected_languages):
         raise ValueError(f"Unsupported language selection: {selected_languages}")
+    if any(lang not in AUDIO_PHASE_LANGUAGES for lang in selected_languages):
+        raise ValueError(f"Audio generation is currently enabled only for {list(AUDIO_PHASE_LANGUAGES)}; translations in other languages are preserved for later expansion.")
     if is_october_package:
         # The extraction readiness report is only a source-completeness check;
         # human approval still uses the exact shared five-language audio review gate.
@@ -442,7 +446,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
     )
     if review_required:
         approved_text_by_language = validate_required_audio_text_review(
-            pronunciation, package, pronunciation_path
+            pronunciation, package, pronunciation_path, AUDIO_PHASE_LANGUAGES
         )
     else:
         approved_text_by_language = {lang: {} for lang in LANGUAGES}
@@ -612,7 +616,7 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
     }
 
 
-async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = LANGUAGES, force_blocks: tuple[int, ...] = (), seed_published_baseline: bool = False) -> bool:
+async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_audio: bool = False, languages: tuple[str, ...] = AUDIO_PHASE_LANGUAGES, force_blocks: tuple[int, ...] = (), seed_published_baseline: bool = False) -> bool:
     story_path = story_path.resolve()
     relative, section, is_october_package = locate_story(story_path)
     package = read_json(story_path)
@@ -645,6 +649,8 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
     languages_to_generate = tuple(dict.fromkeys(languages))
     if not languages_to_generate or any(lang not in LANGUAGES for lang in languages_to_generate):
         raise ValueError(f"Unsupported language selection: {languages_to_generate}")
+    if any(lang not in AUDIO_PHASE_LANGUAGES for lang in languages_to_generate):
+        raise ValueError(f"Audio generation is currently enabled only for {list(AUDIO_PHASE_LANGUAGES)}; translations in other languages are preserved for later expansion.")
     pronunciation_path = story_path.with_name("audio-pronunciation.json")
     if review_required and not pronunciation_path.is_file():
         raise ValueError(
@@ -901,8 +907,8 @@ async def main() -> int:
         "--languages",
         nargs="+",
         choices=LANGUAGES,
-        default=list(LANGUAGES),
-        help="Languages to plan or generate. Defaults to all five.",
+        default=list(AUDIO_PHASE_LANGUAGES),
+        help="Languages to plan or generate in the current phase (Arabic and English).",
     )
     parser.add_argument(
         "--force-block",
@@ -919,7 +925,7 @@ async def main() -> int:
         parser.error("--generate-all requires explicit --allow-fish-audio approval because it includes billable Arabic requests")
     if args.plan_all and (args.story or args.generate or args.generate_all):
         parser.error("--plan-all cannot be combined with --story or generation flags")
-    if args.generate_all and (args.story or args.force_block or tuple(args.languages) != LANGUAGES):
+    if args.generate_all and (args.story or args.force_block or tuple(args.languages) != AUDIO_PHASE_LANGUAGES):
         parser.error("--generate-all handles every published story and all five languages; do not combine it with story, language, or block filters")
     if args.generate and not args.story:
         parser.error("--generate requires an explicit --story; use --generate-all for the complete published library")
@@ -940,7 +946,7 @@ async def main() -> int:
                     story_path,
                     dry_run=False,
                     allow_fish_audio=True,
-                    languages=LANGUAGES,
+                    languages=AUDIO_PHASE_LANGUAGES,
                     seed_published_baseline=True,
                 )
             print("ALL PUBLISHED STORY AUDIO GENERATED TO .audio-staging; NOTHING WAS PUBLISHED.")
