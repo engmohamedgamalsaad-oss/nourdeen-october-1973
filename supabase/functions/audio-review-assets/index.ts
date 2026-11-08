@@ -289,7 +289,16 @@ Deno.serve(async (req: Request) => {
       const { error } = await service.storage.from(BUCKET).upload(path, bytes, {
         contentType: "audio/mpeg", upsert: false, cacheControl: "60",
       });
-      if (error) return reply(500, { error: "تعذر حفظ ملف صوتي في التخزين الخاص.", file: stagedSrc, detail: error.message });
+      if (error) {
+        const existing = await service.storage.from(BUCKET).download(path);
+        if (existing.error || !existing.data) {
+          return reply(500, { error: "تعذر حفظ ملف صوتي في التخزين الخاص.", file: stagedSrc, detail: error.message });
+        }
+        const existingBytes = new Uint8Array(await existing.data.arrayBuffer());
+        if (await sha256Hex(existingBytes) !== String(segment.audio_sha256).toLowerCase()) {
+          return reply(409, { error: "يوجد ملف سابق بالاسم نفسه وبمحتوى مختلف؛ لم يتم استبداله.", file: stagedSrc });
+        }
+      }
       uploaded.push(path);
     }
     const priorDownload = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
