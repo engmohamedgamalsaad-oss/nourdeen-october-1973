@@ -224,6 +224,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "الدرس الأوسع أن الإنجاز العسكري لا يصنعه فرد واحد وحده؛ بل يستند إلى تدريب وتخطيط واتصالات ودعم فني وتنسيق بين وحدات متعددة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني الشجاعة مش معناها إن الواحد يشتغل لوحده؛ كل مهمة صعبة وراها تدريب وتخطيط وفريق بيسند بعضه."
         }
       ]
     },
@@ -448,6 +453,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "The broader lesson is that military achievement is never the work of one person alone; it relies on training, planning, communications, technical support, and coordination among many units."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So courage does not mean working alone. Every difficult mission depends on training, planning, and a team that supports one another."
         }
       ]
     },
@@ -672,6 +682,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "La leçon générale est qu’un succès militaire n’est jamais l’œuvre d’une seule personne : il repose sur la formation, la planification, les communications, le soutien technique et la coordination de plusieurs unités."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Le courage ne signifie donc pas agir seul. Chaque mission difficile repose sur l’entraînement, la préparation et une équipe qui se soutient."
         }
       ]
     },
@@ -896,6 +911,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "La lezione più ampia è che un risultato militare non è mai opera di una sola persona: richiede addestramento, pianificazione, comunicazioni, supporto tecnico e coordinamento tra più unità."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Il coraggio non significa quindi agire da soli. Ogni missione difficile si basa sull’addestramento, sulla pianificazione e su una squadra che si sostiene a vicenda."
         }
       ]
     },
@@ -1120,6 +1140,11 @@
           "type": "paragraph",
           "speaker": "narrator",
           "text": "Die übergeordnete Lehre lautet: Militärischer Erfolg ist nie das Werk einer einzelnen Person. Er beruht auf Ausbildung, Planung, Kommunikation, technischer Unterstützung und der Koordination mehrerer Einheiten."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Mut bedeutet also nicht, allein zu handeln. Jede schwierige Mission braucht Ausbildung, Planung und ein Team, das sich gegenseitig unterstützt."
         }
       ]
     }
