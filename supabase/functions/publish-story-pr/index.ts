@@ -14,6 +14,17 @@ const headers = {
 const reply = (status: number, data: Record<string, unknown>) =>
   new Response(JSON.stringify(data), { status, headers });
 
+function envKey(name: string, dictionaryName: string): string {
+  const direct = Deno.env.get(name);
+  if (direct) return direct;
+  try {
+    const dictionary = JSON.parse(Deno.env.get(dictionaryName) ?? "{}");
+    return typeof dictionary.default === "string" ? dictionary.default : "";
+  } catch {
+    return "";
+  }
+}
+
 function contentForSafetyScan(file: { content: string; encoding?: string }): string {
   if (file.encoding !== "base64") return file.content;
   // GitHub accepts base64 content for binary assets, but V1 must not let
@@ -38,7 +49,6 @@ function validateAudioReviewGate(
   section: string,
   storyId: string,
 ): string | null {
-  const languages = ["ar", "en", "fr", "it", "de"];
   const slug = String(packageData?.slug ?? "");
   const storyKey = section + "/" + slug;
   if (!slug || !packageData?.i18n || !audioReview || typeof audioReview !== "object" ||
@@ -46,6 +56,12 @@ function validateAudioReviewGate(
     return "لا يوجد سجل مراجعة صوت محفوظ للحكاية؛ لا يمكن اعتماد النشر.";
   }
 
+  const supportedLanguages = ["ar", "en", "fr", "it", "de"];
+  const languages = Array.isArray(audioReview.audio_languages) ? audioReview.audio_languages : supportedLanguages;
+  if (!languages.length || languages.some((lang: any) => !supportedLanguages.includes(lang)) ||
+      new Set(languages).size !== languages.length || !languages.includes("ar")) {
+    return "نطاق لغات الصوت المعتمد غير صالح؛ يجب أن يتضمن العربية ويقتصر على اللغات المدعومة.";
+  }
   const expectedByLanguage: Record<string, Array<{ index: number; speaker: string; source: string }>> = {};
   for (const lang of languages) {
     const localized = packageData.i18n[lang];
@@ -73,7 +89,26 @@ function validateAudioReviewGate(
     try {
       const pronunciation = JSON.parse(contentForSafetyScan(pronunciationFile));
       const review = pronunciation?.review;
-      if (pronunciation.format !== "KHALEDOON_AUDIO_PRONUNCIATION_V1" ||
+      if (!review) {
+        const legacyRewrites = pronunciation.blocks && typeof pronunciation.blocks === "object" ? pronunciation.blocks : {};
+        const declaredArabic = pronunciation.approved_audio_text_rewrites?.ar;
+        const indexes = Array.isArray(pronunciation.approved_audio_only_rewrites) ? pronunciation.approved_audio_only_rewrites.map(String) : [];
+        const rewriteKeys = Object.keys(legacyRewrites).sort((a, b) => Number(a) - Number(b));
+        if (languages.length !== 2 || languages[0] !== "ar" || languages[1] !== "en" ||
+            pronunciation.format !== "KHALEDOON_AUDIO_PRONUNCIATION_V1" ||
+            pronunciation.story !== slug || pronunciation.section !== section || pronunciation.language !== "ar" ||
+            stableJson(legacyRewrites) !== stableJson(declaredArabic || {}) ||
+            stableJson(indexes.sort((a: string, b: string) => Number(a) - Number(b))) !== stableJson(rewriteKeys)) {
+          return "ملف نص النطق القديم لا يطابق نطاق التجربة العربية والإنجليزية أو بيانات الاعتماد الصوتي.";
+        }
+        for (const index of rewriteKeys) {
+          const block = expectedByLanguage.ar.find((item) => String(item.index) === index);
+          if (!block || typeof legacyRewrites[index] !== "string" || !legacyRewrites[index].trim() || legacyRewrites[index] === block.source) {
+            return "إعادة صياغة عربية قديمة لا تطابق مقطعًا منطوقًا صالحًا في الحكاية.";
+          }
+        }
+        approvedTextByLanguage.ar = { ...legacyRewrites };
+      } else if (pronunciation.format !== "KHALEDOON_AUDIO_PRONUNCIATION_V1" ||
           pronunciation.story !== slug || pronunciation.section !== section ||
           pronunciation.language !== "ar" ||
           !pronunciation.blocks || typeof pronunciation.blocks !== "object" ||
@@ -81,16 +116,18 @@ function validateAudioReviewGate(
           !pronunciation.approved_audio_text_rewrites ||
           !review || review.format !== "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1" ||
           review.status !== "approved_by_admin" ||
-          stableJson(review.languages) !== stableJson(languages) ||
+          !Array.isArray(review.languages) || !languages.every((lang: string) => review.languages.includes(lang)) ||
           !Array.isArray(review.segments)) {
         return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
       }
 
+      if (review) {
+      const selectedReviewSegments = review.segments.filter((item: any) => item && languages.includes(item.lang));
       const expectedKeys = new Set<string>();
       for (const lang of languages) {
         for (const block of expectedByLanguage[lang]) expectedKeys.add(lang + ":" + block.index);
       }
-      if (review.total_segments !== expectedKeys.size || review.segments.length !== expectedKeys.size) {
+      if (selectedReviewSegments.length !== expectedKeys.size) {
         return "اعتماد النص الصوتي لا يغطي جميع المقاطع المنطوقة في اللغات الخمس.";
       }
 
@@ -98,7 +135,7 @@ function validateAudioReviewGate(
       const rewrites: Record<string, Record<string, string>> = {
         ar: {}, en: {}, fr: {}, it: {}, de: {},
       };
-      for (const item of review.segments) {
+      for (const item of selectedReviewSegments) {
         if (!item || !languages.includes(item.lang) ||
             !Number.isInteger(item.block_index) || item.block_index < 0) {
           return "ملف اعتماد النص الصوتي يحتوي مقطعًا أو لغة غير صالحة.";
@@ -124,15 +161,20 @@ function validateAudioReviewGate(
         }
         seen.add(key);
       }
-      if (seen.size !== expectedKeys.size || stableJson(pronunciation.approved_audio_text_rewrites) !== stableJson(rewrites)) {
+      const selectedDeclaredRewrites: Record<string, any> = {};
+      for (const lang of languages) selectedDeclaredRewrites[lang] = pronunciation.approved_audio_text_rewrites?.[lang] ?? {};
+      const selectedCalculatedRewrites: Record<string, any> = {};
+      for (const lang of languages) selectedCalculatedRewrites[lang] = rewrites[lang];
+      if (seen.size !== expectedKeys.size || stableJson(selectedDeclaredRewrites) !== stableJson(selectedCalculatedRewrites)) {
         return "قائمة إعادة الصياغة لا تطابق قرارات الاعتماد البشرية.";
       }
       const arabicIndexes = Object.keys(rewrites.ar).sort((a, b) => Number(a) - Number(b));
-      if (stableJson(pronunciation.blocks) !== stableJson(rewrites.ar) ||
-          stableJson(pronunciation.approved_audio_only_rewrites) !== stableJson(arabicIndexes)) {
+      if (languages.includes("ar") && (stableJson(pronunciation.blocks) !== stableJson(rewrites.ar) ||
+          stableJson(pronunciation.approved_audio_only_rewrites) !== stableJson(arabicIndexes))) {
         return "حقول التوافق العربية لا تطابق النصوص الصوتية المعتمدة.";
       }
       for (const lang of languages) approvedTextByLanguage[lang] = rewrites[lang];
+      }
     } catch {
       return "تعذر قراءة ملف اعتماد النص الصوتي قبل النشر.";
     }
@@ -144,7 +186,7 @@ function validateAudioReviewGate(
     return "يوجد مقطع صوت مرفوض لم تتم معالجته؛ لا يمكن النشر.";
   }
 
-  const normalize = (value: string) => value.normalize("NFKC").replace(/\\s+/g, " ").trim();
+  const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
   for (const lang of languages) {
     const expectedBlocks = expectedByLanguage[lang];
     const currentClips = storyClips.filter((clip: any) =>
@@ -175,6 +217,83 @@ function validateAudioReviewGate(
     }
   }
   return null;
+}
+
+
+async function collectPrivateAudioForPublish(
+  service: any,
+  packageData: any,
+  audioReview: any,
+  section: string,
+): Promise<any[]> {
+  const slug = String(packageData?.slug ?? "");
+  const languages = Array.isArray(audioReview?.audio_languages) ? audioReview.audio_languages : ["ar", "en", "fr", "it", "de"];
+  const storyKey = section + "/" + slug;
+  const reviewClips = Object.values(audioReview?.clips ?? {}) as any[];
+  const normalize = (value: string) => value.normalize("NFKC").replace(/\s+/g, " ").trim();
+  const output: any[] = [];
+  let totalBytes = 0;
+  for (const lang of languages) {
+    const prefix = section + "/" + slug + "/" + lang;
+    const { data: manifestBlob, error: manifestError } = await service.storage.from("khaledoon-audio-review").download(prefix + "/manifest.json");
+    if (manifestError || !manifestBlob) throw new Error("لا توجد حزمة صوت خاصة مكتملة للغة " + lang + ".");
+    const manifest = JSON.parse(await manifestBlob.text());
+    if (manifest.version !== 1 || manifest.section !== section || manifest.story !== slug || manifest.language !== lang || !Array.isArray(manifest.segments)) {
+      throw new Error("بيانات manifest لا تطابق الحكاية واللغة " + lang + ".");
+    }
+    const expectedBlocks = packageData.i18n?.[lang]?.blocks;
+    if (!Array.isArray(expectedBlocks)) throw new Error("ترجمة الصوت غير موجودة للغة " + lang + ".");
+    const segments = manifest.segments;
+    const expectedSegments = segments.length;
+    const clipSegments = reviewClips.filter((clip) => clip && clip.story_id === storyKey && clip.lang === lang && clip.status === "accepted");
+    if (clipSegments.length !== expectedSegments) throw new Error("عدد قرارات القبول لا يطابق ملفات الصوت في " + lang + ".");
+    const seen = new Set<string>();
+    const seenClipKeys = new Set<string>();
+    const approvedVoices: Record<string, string> = {
+      narrator: "a02a8220d6014812aa5ff73434c54cc0",
+      karma: "592625f68416462f8b6161ddf5fdbffb",
+    };
+    for (const segment of segments) {
+      const blockIndex = Number(segment.block_index), chunkIndex = Number(segment.chunk_index || 0);
+      const block = expectedBlocks[blockIndex];
+      const clipKey = blockIndex + ":" + chunkIndex;
+      const clip = clipSegments.find((item) => Number(item.block_index) === blockIndex && Number(item.chunk_index || 0) === chunkIndex);
+      const engineOk = lang === "ar"
+        ? segment.provider === "fish-audio" && segment.model === "s2.1-pro-free" && segment.voice === approvedVoices[segment.speaker]
+        : segment.provider === "edge-tts" && segment.model === "edge-tts" && typeof segment.voice === "string" && !!segment.voice.trim();
+      if (!block || !clip || clip.speaker !== segment.speaker || !engineOk ||
+          normalize(String(clip.text || "")) !== normalize(String(segment.text || "")) ||
+          String(clip.audio_sha256 || "").toLowerCase() !== String(segment.audio_sha256 || "").toLowerCase() ||
+          !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || "")) ||
+          seen.has(String(segment.src)) || seenClipKeys.has(clipKey)) {
+        throw new Error("ملف صوت لا يطابق قرار القبول أو الصوت المعتمد وبصمة المقطع " + (blockIndex + 1) + " في " + lang + ".");
+      }
+      seen.add(String(segment.src));
+      seenClipKeys.add(clipKey);
+      const { data: audioBlob, error: audioError } = await service.storage.from("khaledoon-audio-review").download(prefix + "/" + segment.src);
+      if (audioError || !audioBlob) throw new Error("ملف MP3 مفقود من التخزين الخاص: " + lang + "/" + segment.src);
+      const bytes = new Uint8Array(await audioBlob.arrayBuffer());
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      const actualHash = Array.from(new Uint8Array(digest), (value) => value.toString(16).padStart(2, "0")).join("");
+      if (actualHash !== String(segment.audio_sha256).toLowerCase()) throw new Error("بصمة MP3 لا تطابق manifest: " + lang + "/" + segment.src);
+      totalBytes += bytes.length;
+      if (totalBytes > 100_000_000) throw new Error("حجم ملفات الصوت يتجاوز حد النشر الآمن (100 MB).");
+      let binary = "";
+      for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+        binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+      }
+      output.push({
+        path: "assets/audio/" + section + "/" + slug + "/" + lang + "/" + segment.src,
+        content: btoa(binary), encoding: "base64",
+      });
+    }
+    if (seenClipKeys.size !== clipSegments.length) throw new Error("توجد قرارات قبول لا يقابلها ملف صوت فريد في " + lang + ".");
+    output.push({
+      path: "assets/audio/" + section + "/" + slug + "/" + lang + "/manifest.json",
+      content: JSON.stringify(manifest, null, 2) + "\n", encoding: "utf-8",
+    });
+  }
+  return output;
 }
 
 function allowedPath(path: unknown): path is string {
@@ -226,6 +345,7 @@ Deno.serve(async (req: Request) => {
 
   const url = Deno.env.get("SUPABASE_URL");
   const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+  const serviceRoleKey = envKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
   const githubToken = Deno.env.get("GITHUB_PUBLISH_TOKEN");
   if (!url || !anonKey) return reply(500, { error: "إعدادات التحقق في Supabase غير مكتملة." });
   if (!githubToken) return reply(503, { error: "يلزم إضافة السر GITHUB_PUBLISH_TOKEN في Supabase Secrets." });
@@ -294,6 +414,7 @@ Deno.serve(async (req: Request) => {
   if (sourceRecordError) return reply(500, { error: "تعذر التحقق من سجل الحكاية قبل إنشاء طلب المراجعة." });
   if (!sourceRecord) return reply(404, { error: "سجل الحكاية المطلوب غير موجود أو غير متاح للأدمن الحالي." });
   const sourceMeta = sourceRecord.story_meta && typeof sourceRecord.story_meta === "object" ? sourceRecord.story_meta as Record<string, unknown> : {};
+  let audioFilesForPublish: any[] = [];
   const pendingMeta = sourceMeta.pending_draft && typeof sourceMeta.pending_draft === "object" ? sourceMeta.pending_draft as Record<string, unknown> : {};
   const isStoryOnlyDraft = sourceMeta.story_only_draft === true || pendingMeta.story_only_draft === true ||
     sourceMeta.v2_only_draft === true || pendingMeta.v2_only_draft === true;
@@ -359,8 +480,20 @@ Deno.serve(async (req: Request) => {
           pageHtml.includes('data-story-path="data.v2.json"')) {
         return reply(409, { error: "كل الأقسام، بما فيها أكتوبر، يجب أن تُنشر من KHALEDOON_STORY وstory.json والقارئ المشترك فقط." });
       }
-      const audioGateError = validateAudioReviewGate(packageData, sourceMeta.audio_review, body.files, storySection, storyId);
+      if (!serviceRoleKey) return reply(503, { error: "مفتاح التخزين الخاص غير متاح للتحقق ونشر ملفات الصوت." });
+      const service = createClient(url, serviceRoleKey, { auth: { persistSession: false, autoRefreshToken: false } });
+      const { data: audioReviewRow, error: audioReviewError } = await service.from("story_audio_reviews")
+        .select("audio_review").eq("section", storySection).eq("slug", packageData.slug).maybeSingle();
+      if (audioReviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الصوت المحفوظ.", detail: audioReviewError.message });
+      const audioReview = audioReviewRow?.audio_review ?? sourceMeta.audio_review;
+      const audioGateError = validateAudioReviewGate(packageData, audioReview, body.files, storySection, storyId);
       if (audioGateError) return reply(409, { error: audioGateError });
+      try {
+        audioFilesForPublish = await collectPrivateAudioForPublish(service, packageData, audioReview, storySection);
+      } catch (audioError) {
+        const detail = audioError instanceof Error ? audioError.message : "تعذر تجهيز ملفات الصوت.";
+        return reply(409, { error: detail.slice(0, 500) });
+      }
 
       if (!storyRoot || packageData.section !== storySection ||
           !(pageHtml.includes("data-kh-story-reader") || pageHtml.includes("data-kh-v2-reader")) ||
@@ -603,7 +736,7 @@ Deno.serve(async (req: Request) => {
       if (file.path === 'stories/index.json') return { ...file, content: JSON.stringify(currentIndex, null, 2) + '\n' };
       if (file.path === 'stories/places.json') return { ...file, content: mergedPlacesContent };
       return file;
-    });
+    }).concat(audioFilesForPublish);
     // A section move updates the index and removes the previous story assets in the same review PR.
     // Keep the old index URL as a redirect so saved links/QR codes do not immediately break.
     if (previousRoot) {
