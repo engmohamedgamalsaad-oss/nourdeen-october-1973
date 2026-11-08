@@ -197,5 +197,16 @@
   <script src="../../../assets/shared/story.js?v=20261026-transition"></script>
 <script src="../../../assets/shared/reactions.js?v=20261022-restore-bg"></script>
 
-<script src="../../../assets/shared/story-quiz.js?v=20261017"></script></body>
+<script src="../../../assets/shared/story-quiz.js?v=20261017"></script><script>
+(function(){
+  var slug=document.body.getAttribute('data-story-slug');
+  if(!slug)return;
+  window.__KH_STORY_PACKAGE={section:'october',slug:slug};
+  var audioScript=document.createElement('script');
+  audioScript.src='../../../assets/shared/story-audio.js?v=20261108-universal-ar-en-1';
+  audioScript.async=true;
+  document.body.appendChild(audioScript);
+})();
+</script>
+</body>
 </html>
