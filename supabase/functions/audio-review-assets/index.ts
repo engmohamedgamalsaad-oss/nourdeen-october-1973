@@ -130,9 +130,9 @@ Deno.serve(async (req: Request) => {
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
     ].join("\n\n");
-    const geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY), {
+    const geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: "أنت محرر نصوص أداء صوتي لحكايات تعليمية مصرية. التزم بالنص والحقائق، ولا تعتمد النص نيابة عن صاحب المشروع." }] },
         contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -205,6 +205,7 @@ Deno.serve(async (req: Request) => {
     const speechTexts = current.speech_texts && typeof current.speech_texts === "object" ? current.speech_texts : {};
     const key = "ar:" + index;
     const old = speechTexts[key] && typeof speechTexts[key] === "object" ? speechTexts[key] : {};
+    const invalidatesAudioDecision = decision === "suggested" || old.approved_text !== speechText;
     speechTexts[key] = decision === "approved"
       ? { ...old, language: "ar", block_index: index, speaker: source.block.speaker,
           source_text_hash: source.sourceTextHash, suggested_text: old.suggested_text || speechText,
@@ -215,6 +216,11 @@ Deno.serve(async (req: Request) => {
           changes_summary: String(body.changes_summary || "").slice(0, 1200),
           pronunciation_notes: Array.isArray(body.pronunciation_notes) ? body.pronunciation_notes.filter((v: any) => typeof v === "string").slice(0, 20) : [],
           review_flags: Array.isArray(body.review_flags) ? body.review_flags.filter((v: any) => typeof v === "string").slice(0, 20) : [] };
+    if (invalidatesAudioDecision && current.clips && typeof current.clips === "object") {
+      for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
+        if (clip?.lang === "ar" && Number(clip.block_index) === index) delete current.clips[clipKey];
+      }
+    }
     current.speech_texts = speechTexts;
     const { data: saved, error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
