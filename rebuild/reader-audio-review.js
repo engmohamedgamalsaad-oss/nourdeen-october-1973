@@ -357,6 +357,7 @@ async function publishApprovedAudio(statusNode, button) {
       headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         action: 'publish_audio_only',
+        confirm_audio_publish: 'yes',
         section: story.section,
         slug: story.slug,
         story_id: storyId
