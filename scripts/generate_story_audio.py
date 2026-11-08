@@ -901,7 +901,7 @@ async def main() -> int:
     parser.add_argument(
         "--generate-all",
         action="store_true",
-        help="Generate all published stories in all five languages after a complete, unblocked read-only preflight; output remains in .audio-staging.",
+        help="Generate all published stories in the current audio phase languages after a complete, unblocked read-only preflight; output remains in .audio-staging.",
     )
     parser.add_argument(
         "--allow-fish-audio",
