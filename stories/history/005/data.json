@@ -9,6 +9,7 @@
   "color": "#d5b7ff",
   "order": 5,
   "published": true,
+  "audio_text_review_required": true,
   "i18n": {
     "en": {
       "name": "Nourdeen Mohamed Gamal",
