@@ -46,7 +46,7 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
 
 /* Validate complete one-to-one coverage of every spoken story block by manifest chunks. */
-function validateManifestCoverage(blocks, segments, expectedTexts) {
+function validateManifestCoverage(blocks, segments, expectedTexts, allowPartial) {
   if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
     return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
   }
@@ -81,6 +81,7 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
     if (!speakable[b]) continue;
     var indexes = chunks[b];
     if (!indexes || !indexes.length) {
+      if (allowPartial === true) continue;
       return { ok: false, error: 'لا يوجد ملف صوتي للمقطع ' + (b + 1) + '.' };
     }
     indexes.sort(function (a, c) { return a - c; });
