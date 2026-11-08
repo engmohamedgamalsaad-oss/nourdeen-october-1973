@@ -82,7 +82,7 @@ Deno.serve(async (req: Request) => {
     if (!/^[0-9]{3}$/.test(storyId) || body.confirm_audio_request !== "yes" ||
         !Number.isInteger(blockIndex) || blockIndex < 0 ||
         (language === "ar" && body.confirm_fish_audio_request !== "yes")) {
-      return reply(400, { error: "توليد العربية يتطلب تأكيد Fish Audio للمقطع المحدد." });
+      return reply(400, { error: "توليد المقطع يتطلب موافقة صريحة؛ وتوليد العربية يتطلب أيضًا تأكيد Fish Audio." });
     }
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
     const storyPackagePath = section === "october"
