@@ -17,7 +17,7 @@ permissions:
 
 concurrency:
   group: ibn-sina-namaa-cpu-pilot-current
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   generate-preview:
