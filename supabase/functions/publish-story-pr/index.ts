@@ -38,7 +38,7 @@ function validateAudioReviewGate(
   section: string,
   storyId: string,
 ): string | null {
-  const languages = ["ar", "en", "fr", "it", "de"];
+  const languages = ["ar", "en"];
   const slug = String(packageData?.slug ?? "");
   const storyKey = section + "/" + slug;
   if (!slug || !packageData?.i18n || !audioReview || typeof audioReview !== "object" ||
@@ -83,7 +83,7 @@ function validateAudioReviewGate(
           review.status !== "approved_by_admin" ||
           stableJson(review.languages) !== stableJson(languages) ||
           !Array.isArray(review.segments)) {
-        return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
+        return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للعربية والإنجليزية.";
       }
 
       const expectedKeys = new Set<string>();
@@ -91,7 +91,7 @@ function validateAudioReviewGate(
         for (const block of expectedByLanguage[lang]) expectedKeys.add(lang + ":" + block.index);
       }
       if (review.total_segments !== expectedKeys.size || review.segments.length !== expectedKeys.size) {
-        return "اعتماد النص الصوتي لا يغطي جميع المقاطع المنطوقة في اللغات الخمس.";
+        return "اعتماد النص الصوتي لا يغطي جميع المقاطع المنطوقة في العربية والإنجليزية.";
       }
 
       const seen = new Set<string>();
