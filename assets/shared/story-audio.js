@@ -1,7 +1,7 @@
 (function () {
   'use strict';
   var story = window.__KH_STORY_PACKAGE;
-  if (!story || story.section !== 'science' || story.slug !== 'magdi-yacoub') return;
+  if (!story || !story.section || !story.slug) return;
 
   var copy = {
     ar: { title: 'استمع للحكاية', play: 'تشغيل', pause: 'إيقاف مؤقت', resume: 'استكمال', stop: 'إيقاف', loading: 'جارٍ تجهيز الصوت…', noVoice: 'التسجيلات الصوتية المختارة غير متاحة حاليًا.', done: 'انتهت الحكاية الصوتية.', karma: 'كارما', narrator: 'الراوي', progress: 'المقطع', open: 'فتح أدوات الصوت', close: 'إغلاق أدوات الصوت', volume: 'مستوى الصوت' },
@@ -312,7 +312,7 @@
     stop();
     setLanguage();
     var thisLoad = ++manifestRun;
-    if (lang !== 'ar') { host.hidden = true; queue = []; manifestState = 'failed'; return; }
+    if (lang !== 'ar' && lang !== 'en') { host.hidden = true; queue = []; manifestState = 'failed'; return; }
     host.hidden = false;
     manifestState = 'loading';
     manifestUrl = new URL('../../../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href);
@@ -322,7 +322,11 @@
       return response.json();
     }).then(function (manifest) {
       if (!manifest || manifest.version !== 1 || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
-      if (manifest.segments.some(function (segment) { return !approvedVoices[segment.speaker] || segment.voice !== approvedVoices[segment.speaker]; })) throw new Error('Audio manifest does not match the approved pilot voices');
+      if (manifest.segments.some(function (segment) {
+        if (!approvedVoices[segment.speaker]) return true;
+        if (lang === 'ar') return segment.provider !== 'fish-audio' || segment.model !== 's2.1-pro-free' || segment.voice !== approvedVoices[segment.speaker];
+        return segment.provider !== 'edge-tts' || segment.model !== 'edge-tts' || typeof segment.voice !== 'string' || !segment.voice.trim();
+      })) throw new Error('Audio manifest does not match the approved language voice contract');
       var nextQueue = manifest.segments.map(function (segment) {
         return {
           block_index: segment.block_index,
