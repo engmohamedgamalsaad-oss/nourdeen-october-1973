@@ -437,7 +437,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
             story = self.make_story(root, require_review=True)
             (story.parent / "audio-pronunciation.json").unlink()
             with patch.object(audio, "ROOT", root):
-                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved five-language"):
+                with self.assertRaisesRegex(ValueError, "blocked until the admin-approved Arabic-English"):
                     audio.inspect_generation_plan(story, root / ".audio-staging", languages=("en",))
             self.assertFalse((root / ".audio-staging").exists())
 
