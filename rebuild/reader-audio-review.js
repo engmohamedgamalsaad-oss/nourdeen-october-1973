@@ -614,7 +614,7 @@ function currentStoryId() {
   var match = String(location.pathname || '').match(/\/stories\/[a-z0-9-]+\/(\d{3})(?:\/|$)/i);
   if (match) return match[1];
   var packageSlug = String(story && story.slug || '');
-  if (/^\\d{3}$/.test(packageSlug)) return packageSlug;
+  if (/^\d{3}$/.test(packageSlug)) return packageSlug;
   try {
     var context = JSON.parse(localStorage.getItem('kh-story-review-context') || '{}');
     var stored = String(context.story_id || '');
