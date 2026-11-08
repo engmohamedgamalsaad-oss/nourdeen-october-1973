@@ -47,16 +47,29 @@ async function adminToken() {
 }
 async function audioAssetsRequest(payload) {
   var token = await adminToken();
-  var response = await fetch(SUPA + '/functions/v1/audio-review-assets', {
-    method: 'POST',
-    headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    cache: 'no-store'
-  });
+  var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+  var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && payload.action === 'prepare_speech_text' ? 90000 : 25000) : null;
+  var response;
+  try {
+    response = await fetch(SUPA + '/functions/v1/audio-review-assets', {
+      method: 'POST',
+      headers: { apikey: KEY, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+      signal: controller ? controller.signal : undefined
+    });
+  } catch (networkError) {
+    if (networkError && networkError.name === 'AbortError') throw new Error('انتهت مهلة الاتصال أثناء تجهيز النص. أعد المحاولة؛ لم يتم اعتماد أي نص.');
+    throw new Error('تعذر الاتصال بخدمة تجهيز النص: ' + (networkError && networkError.message || networkError));
+  } finally {
+    if (timeout) clearTimeout(timeout);
+  }
   var data = null;
   try { data = await response.json(); } catch (e) {}
   if (!response.ok) {
-    var error = new Error(data && data.error || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
+    var detail = data && (data.error || data.message);
+    if (data && data.upstream_status) detail = (detail || 'تعذر الاتصال بـ Gemini') + ' (رمز Gemini: ' + data.upstream_status + ')';
+    var error = new Error(detail || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
     error.status = response.status;
     throw error;
   }
