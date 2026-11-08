@@ -792,56 +792,29 @@
   ],
   "sources": [
     {
-      "title": "Ahmad ʿUrābī",
-      "organization": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/biography/Ahmad-Urabi",
+      "title": "'Urabi, Ahmad Muhammad (1841–1911)",
+      "organization": "Oxford Dictionary of National Biography",
+      "url": "https://academic.oup.com/oxford-dictionary-of-national-biography/reference/63486/reference-article-abstract/582943630",
       "i18n": {
         "ar": {
-          "title": "أحمد عرابي",
-          "organization": "الموسوعة البريطانية"
+          "title": "أحمد محمد عرابي (1841–1911)",
+          "organization": "قاموس أكسفورد للسير الوطنية"
         },
         "en": {
-          "title": "Ahmad Urabi",
-          "organization": "Encyclopaedia Britannica"
+          "title": "Ahmad Muhammad Urabi (1841–1911)",
+          "organization": "Oxford Dictionary of National Biography"
         },
         "fr": {
-          "title": "Ahmad Urabi",
-          "organization": "Encyclopaedia Britannica"
+          "title": "Ahmad Muhammad Urabi (1841–1911)",
+          "organization": "Oxford Dictionary of National Biography"
         },
         "it": {
-          "title": "Ahmad Urabi",
-          "organization": "Encyclopaedia Britannica"
+          "title": "Ahmad Muhammad Urabi (1841–1911)",
+          "organization": "Oxford Dictionary of National Biography"
         },
         "de": {
-          "title": "Ahmad Urabi",
-          "organization": "Encyclopaedia Britannica"
-        }
-      }
-    },
-    {
-      "title": "ʿUrābī Revolt",
-      "organization": "Encyclopaedia Britannica",
-      "url": "https://www.britannica.com/event/Urabi-Revolt",
-      "i18n": {
-        "ar": {
-          "title": "الثورة العرابية",
-          "organization": "الموسوعة البريطانية"
-        },
-        "en": {
-          "title": "The Urabi Revolt",
-          "organization": "Encyclopaedia Britannica"
-        },
-        "fr": {
-          "title": "La révolte d’Urabi",
-          "organization": "Encyclopaedia Britannica"
-        },
-        "it": {
-          "title": "La rivolta di Urabi",
-          "organization": "Encyclopaedia Britannica"
-        },
-        "de": {
-          "title": "Die Urabi-Revolte",
-          "organization": "Encyclopaedia Britannica"
+          "title": "Ahmad Muhammad Urabi (1841–1911)",
+          "organization": "Oxford Dictionary of National Biography"
         }
       }
     },
@@ -873,29 +846,56 @@
       }
     },
     {
-      "title": "'Urabi, Ahmad Muhammad (1841–1911)",
-      "organization": "Oxford Dictionary of National Biography",
-      "url": "https://academic.oup.com/oxford-dictionary-of-national-biography/reference/63486/reference-article-abstract/582943630",
+      "title": "Ahmed Urabi",
+      "organization": "Egyptian State Information Service",
+      "url": "https://sis.gov.eg/en/egypt/egyptian-figures/ahmed-urabi/",
       "i18n": {
         "ar": {
-          "title": "أحمد محمد عرابي (1841–1911)",
-          "organization": "قاموس أكسفورد للسير الوطنية"
+          "title": "أحمد عرابي",
+          "organization": "الهيئة العامة للاستعلامات المصرية"
         },
         "en": {
-          "title": "Ahmad Muhammad Urabi (1841–1911)",
-          "organization": "Oxford Dictionary of National Biography"
+          "title": "Ahmed Urabi",
+          "organization": "Egyptian State Information Service"
         },
         "fr": {
-          "title": "Ahmad Muhammad Urabi (1841–1911)",
-          "organization": "Oxford Dictionary of National Biography"
+          "title": "Ahmed Urabi",
+          "organization": "Service d’information de l’État égyptien"
         },
         "it": {
-          "title": "Ahmad Muhammad Urabi (1841–1911)",
-          "organization": "Oxford Dictionary of National Biography"
+          "title": "Ahmed Urabi",
+          "organization": "Servizio d’informazione dello Stato egiziano"
         },
         "de": {
-          "title": "Ahmad Muhammad Urabi (1841–1911)",
-          "organization": "Oxford Dictionary of National Biography"
+          "title": "Ahmed Urabi",
+          "organization": "Ägyptischer Staatsinformationsdienst"
+        }
+      }
+    },
+    {
+      "title": "Egypt and Sudan, 1882–1887",
+      "organization": "Cambridge University Press",
+      "url": "https://www.cambridge.org/core/books/imperial-incarceration/egypt-and-sudan-18821887/CC2378753E9E3317864D2A32E1E1DA1F",
+      "i18n": {
+        "ar": {
+          "title": "مصر والسودان، 1882–1887",
+          "organization": "مطبعة جامعة كامبريدج"
+        },
+        "en": {
+          "title": "Egypt and Sudan, 1882–1887",
+          "organization": "Cambridge University Press"
+        },
+        "fr": {
+          "title": "L’Égypte et le Soudan, 1882–1887",
+          "organization": "Cambridge University Press"
+        },
+        "it": {
+          "title": "Egitto e Sudan, 1882–1887",
+          "organization": "Cambridge University Press"
+        },
+        "de": {
+          "title": "Ägypten und Sudan, 1882–1887",
+          "organization": "Cambridge University Press"
         }
       }
     }
