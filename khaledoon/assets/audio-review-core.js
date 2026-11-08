@@ -46,8 +46,8 @@ async function baseKey(storyId, lang, speaker, spokenText, engine) {
 async function clipKey(base, regen) { return regen ? sha256(base + '\u241Fr' + regen) : base; }
 
 /* Validate complete one-to-one coverage of every spoken story block by manifest chunks. */
-function validateManifestCoverage(blocks, segments, expectedTexts) {
-  if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || !segments.length) {
+function validateManifestCoverage(blocks, segments, expectedTexts, allowPartial) {
+  if (!Array.isArray(blocks) || !blocks.length || !Array.isArray(segments) || (!segments.length && !allowPartial)) {
     return { ok: false, error: 'الحكاية أو ملف الصوت لا يحتوي على مقاطع قابلة للمراجعة.' };
   }
   var seen = Object.create(null), chunks = Object.create(null), speakable = Object.create(null), speakableCount = 0;
@@ -77,10 +77,12 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
     if (!chunks[blockIndex]) chunks[blockIndex] = [];
     chunks[blockIndex].push(chunkIndex);
   }
+  var missingBlocks = [];
   for (var b = 0; b < blocks.length; b++) {
     if (!speakable[b]) continue;
     var indexes = chunks[b];
     if (!indexes || !indexes.length) {
+      if (allowPartial) { missingBlocks.push(b); continue; }
       return { ok: false, error: 'لا يوجد ملف صوتي للمقطع ' + (b + 1) + '.' };
     }
     indexes.sort(function (a, c) { return a - c; });
@@ -99,7 +101,7 @@ function validateManifestCoverage(blocks, segments, expectedTexts) {
       return { ok: false, error: 'نص الصوت لا يطابق نص الحكاية الحالي عند المقطع ' + (b + 1) + '.' };
     }
   }
-  return { ok: true, blocks: blocks.length, segments: segments.length };
+  return { ok: true, complete: missingBlocks.length === 0, missingBlocks: missingBlocks, blocks: blocks.length, segments: segments.length };
 }
 
 function boundedText(value, max) { return String(value == null ? '' : value).slice(0, max); }
@@ -210,6 +212,19 @@ function evaluateGate(entries, review, readyByKey, listenedByKey) {
   out.ok = out.total > 0 && out.notReady === 0 && out.notListened === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
   return out;
 }
+function evaluateLanguageGate(manifests, coverageByLanguage, selectedLanguages, entries, review, readyByKey, listenedByKey) {
+  var selected = Array.isArray(selectedLanguages) && selectedLanguages.length ? selectedLanguages : ['ar', 'en'];
+  var missing = selected.filter(function (lang) { return !manifests || !manifests[lang]; });
+  var missingSegments = selected.reduce(function (total, lang) {
+    var coverage = coverageByLanguage && coverageByLanguage[lang];
+    return total + (coverage && Array.isArray(coverage.missingBlocks) ? coverage.missingBlocks.length : 0);
+  }, 0);
+  var result = evaluateGate(entries, review, readyByKey, listenedByKey);
+  result.missingLanguages = missing;
+  result.missingSegments = missingSegments;
+  result.ok = result.ok && missing.length === 0 && missingSegments === 0;
+  return result;
+}
 function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listenedByKey) {
   var missing = LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
   if (missing.length) {
@@ -225,6 +240,7 @@ function gateMessage(g) {
   if (g.ok) return '';
   var parts = [];
   if (g.notReady) parts.push(g.notReady + ' مقطع صوته غير جاهز');
+  if (g.missingSegments) parts.push(g.missingSegments + ' مقطع لم يُولّد صوته بعد');
   if (g.notListened) parts.push(g.notListened + ' مقطع لم يتم الاستماع إليه كاملًا في هذه المعاينة');
   if (g.rejected) parts.push(g.rejected + ' مقطع مرفوض');
   if (g.unreviewed) parts.push(g.unreviewed + ' مقطع لم تتم مراجعته');
@@ -289,7 +305,7 @@ var api = {
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
+  evaluateGate: evaluateGate, evaluateLanguageGate: evaluateLanguageGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else root.KHAudioReviewCore = api;
