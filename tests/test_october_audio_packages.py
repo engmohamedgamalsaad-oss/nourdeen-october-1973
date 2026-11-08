@@ -109,7 +109,7 @@ class OctoberAudioPackageTests(unittest.TestCase):
             self.assertEqual(report["october_audio_packages"], 1)
             self.assertEqual(report["october_audio_packages_blocked"], 1)
             self.assertEqual(report["october_packages"][0]["path"], "stories/october/001/story.json")
-            self.assertIn("admin-approved five-language", report["october_packages"][0]["blocked"])
+            self.assertIn("selected-language audio-text approval", report["october_packages"][0]["blocked"])
             self.assertEqual(report["segments_to_generate"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
