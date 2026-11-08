@@ -61,7 +61,43 @@ async function audioAssetsRequest(payload) {
   }
   return data || {};
 }
-async function ensureArabicAudioStaged() { return; }
+async function ensureArabicAudioStaged(expectedArabicTexts) {
+  if (story.section !== 'history' || story.slug !== 'ibn-sina' ||
+      document.documentElement.lang !== 'ar') return;
+  // Stage only the already-generated first Karma clip for this preview.
+  // The private bucket receives it; nothing is published to story visitors.
+  var requestId = '00000000-0000-4000-8000-000000000001';
+  var artifact = {
+    action: 'stage',
+    section: 'history',
+    slug: 'ibn-sina',
+    language: 'ar',
+    artifact_id: 13623512539,
+    run_id: 42496796923,
+    artifact_name: 'ibn-sina-arabic-audio-staging',
+    request_id: requestId,
+    block_index: 0
+  };
+  try {
+    var current = await audioAssetsRequest({
+      action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
+    });
+    var existing = current && current.manifest;
+    if (existing && existing.request_id === requestId &&
+        Array.isArray(existing.segments) &&
+        existing.segments.some(function (segment) {
+          return Number(segment.block_index) === 0 &&
+            segment.provider === 'huggingface-space' &&
+            segment.speaker === 'karma';
+        })) return;
+  } catch (error) {
+    if (!error || error.status !== 404) throw error;
+  }
+  var staged = await audioAssetsRequest(artifact);
+  if (!staged || staged.success !== true || staged.staged !== true) {
+    throw new Error('لم يؤكد مخزن الصوت الخاص استلام المقطع الأول.');
+  }
+}
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
