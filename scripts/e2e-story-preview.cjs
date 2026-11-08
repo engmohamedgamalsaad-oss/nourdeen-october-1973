@@ -246,6 +246,13 @@ async function main() {
   assert.equal(await urabiPage.locator('#blocks .block').last().evaluate(node => node.nextElementSibling.className), 'ai-disclosure',
     'the AI disclosure must be a separate interface element immediately after Karma, not a story block');
   assert.equal(await urabiPage.locator('#sources a').count(), 4, 'all four historical sources should render');
+  const urabiImages = urabiPage.locator('#blocks img');
+  assert.equal(await urabiImages.count(), 2, 'both story illustrations should render in their assigned positions');
+  for (let imageIndex = 0; imageIndex < 2; imageIndex++) {
+    const image = urabiImages.nth(imageIndex);
+    await image.scrollIntoViewIfNeeded();
+    await image.evaluate(node => node.decode());
+  }
   const urabiImageFigures = await urabiPage.locator('#blocks').evaluate(node => Array.from(node.querySelectorAll('figure')).map(figure => ({
     image: figure.querySelector('img')?.getAttribute('src') || null,
     fallback: Boolean(figure.querySelector('.kh-image-fallback')),
@@ -253,7 +260,7 @@ async function main() {
   })));
   console.log('Ahmed Urabi image render:', JSON.stringify(urabiImageFigures));
   assert.equal(urabiImageFigures.length, 2, 'both story illustrations should render in their assigned positions');
-  assert.ok(urabiImageFigures.every(item => item.imageLoaded), 'both Ahmed Urabi story images must load successfully');
+  assert.ok(urabiImageFigures.every(item => item.imageLoaded && !item.fallback), 'both Ahmed Urabi story images must load successfully');
   assert.equal(await urabiPage.locator('#map-section').isVisible(), true, 'the verified birthplace map location should render');
   assert.equal(await urabiPage.locator('#quiz .q').count(), 1, 'the story quiz should show one question at a time');
   const disclosures = {
