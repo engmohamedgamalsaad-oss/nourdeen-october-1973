@@ -5,7 +5,10 @@
   "title": "ابن سينا — الشيخ الرئيس",
   "subtitle": "رحلة قصيرة مع عالم جمع بين الطب والفلسفة، وترك كتابًا قرأه الدارسون لقرون.",
   "person": "ابن سينا",
-  "personAliases": ["Avicenna", "Avicenne"],
+  "personAliases": [
+    "Avicenna",
+    "Avicenne"
+  ],
   "color": "#d5b7ff",
   "order": 5,
   "published": true,
@@ -42,5 +45,6 @@
       "subtitle": "Eine kurze Reise mit einem Gelehrten der Medizin und der Philosophie, dessen Buch jahrhundertelang studiert wurde.",
       "person": "Ibn Sina"
     }
-  }
+  },
+  "audio_text_review_required": true
 }
