@@ -131,7 +131,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                 report = audio.inspect_all_generation_plans(root, staging)
             self.assertEqual(report["published_non_october_stories"], 1)
             self.assertEqual(report["october_audio_packages"], 1)
-            self.assertEqual(report["october_audio_packages_blocked"], 0)
+            self.assertEqual(report["october_audio_packages_blocked"], 1)
             self.assertEqual(report["october_stories_skipped"], 0)
             self.assertEqual(report["tts_requests"], 0)
             self.assertEqual(report["files_modified"], 0)
