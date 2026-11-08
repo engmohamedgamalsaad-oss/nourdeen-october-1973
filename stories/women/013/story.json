@@ -85,6 +85,11 @@
           "speaker": "narrator",
           "heading": "لماذا مُحيت بعض أسمائها؟",
           "text": "هل تعلم؟ بعد وفاة حتشبسوت، مُحيت بعض صورها وأسمائها من معابد؛ ويختلف المؤرخون حول السبب، ومن التفسيرات المطروحة دوافع سياسية مرتبطة بانتقال الحكم إلى أمنحتب الثاني."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "أنا فهمت إن التاريخ مش مجرد صور وأسماء بنشوفها؛ لازم نسأل عن الأدلة ونفكر في أكتر من تفسير قبل ما نحكم على اللي حصل."
         }
       ]
     },
@@ -165,6 +170,11 @@
           "speaker": "narrator",
           "heading": "Why were some of her names erased?",
           "text": "Did you know? After Hatshepsut’s death, some of her images and names were erased from temples. Historians debate why; one influential explanation points to political motives linked to the succession of Amenhotep II."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "I understand now that history is more than the names and images we see. We need to look for evidence and consider different explanations before deciding what happened."
         }
       ]
     },
@@ -245,6 +255,11 @@
           "speaker": "narrator",
           "heading": "Pourquoi certains de ses noms ont-ils été effacés ?",
           "text": "Le saviez-vous ? Après la mort d’Hatchepsout, certaines de ses images et de ses inscriptions furent effacées de temples. Les historiens en débattent ; une explication importante évoque des motifs politiques liés à la succession d’Amenhotep II."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Je comprends maintenant que l’histoire ne se résume pas aux noms et aux images. Il faut chercher des preuves et envisager plusieurs explications avant de juger ce qui s’est passé."
         }
       ]
     },
@@ -325,6 +340,11 @@
           "speaker": "narrator",
           "heading": "Perché alcuni dei suoi nomi furono cancellati?",
           "text": "Lo sapevi? Dopo la morte di Hatshepsut, alcune sue immagini e iscrizioni furono cancellate dai templi. Gli storici discutono il motivo; una spiegazione influente richiama ragioni politiche legate alla successione di Amenhotep II."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ora ho capito che la storia non è fatta soltanto di nomi e immagini. Dobbiamo cercare le prove e considerare spiegazioni diverse prima di giudicare ciò che è accaduto."
         }
       ]
     },
@@ -405,6 +425,11 @@
           "speaker": "narrator",
           "heading": "Warum wurden einige ihrer Namen getilgt?",
           "text": "Wusstest du? Nach Hatschepsuts Tod wurden einige ihrer Darstellungen und Namen aus Tempeln getilgt. Historiker diskutieren die Gründe; eine wichtige Erklärung verweist auf politische Motive im Zusammenhang mit der Nachfolge Amenophis’ II."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ich verstehe jetzt: Geschichte besteht nicht nur aus Namen und Bildern. Wir müssen nach Belegen suchen und verschiedene Erklärungen bedenken, bevor wir urteilen."
         }
       ]
     }
