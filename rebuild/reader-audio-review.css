@@ -1,0 +1,528 @@
+/* =====================================================================
+   rebuild/reader-audio-review.css
+   تصميم أدوات مراجعة الأدمن في صفحة المعاينة (?draft=1):
+   - لوحة مراجعة الصوت (الإجمالي + اللغات)
+   - بطاقة نص القراءة الصوتية (Gemini → مراجعتك → اعتماد)
+   - بطاقة المقطع الصوتي: مشغّل بحالات (قبل التحميل / أثناء التحميل /
+     بعد التحميل / تشغيل / إيقاف مؤقت / اكتمل / خطأ) + موافقة / رفض
+   يعتمد على متغيرات الصفحة: --accent --panel --line --text --muted
+   ===================================================================== */
+
+.kh-audio-review-controls {
+  --ok: #2fbf80;
+  --warn: #f0a53a;
+  --bad: #ef6b6b;
+  --karma: #e879a6;
+  --narr: #5aa7ef;
+  --ink: var(--text, #e9eef3);
+  --mut: var(--muted, #9aa7b4);
+  --surface: color-mix(in srgb, var(--panel, #16202b) 96%, transparent);
+  --edge: color-mix(in srgb, var(--accent, #c9a45c) 30%, var(--line, #3a4654));
+  --tone: var(--accent, #c9a45c);
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin: 16px 0 0;
+  padding: 16px;
+  border: 1px solid var(--edge);
+  border-inline-start: 5px solid var(--tone);
+  border-radius: 20px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--tone) 8%, var(--surface)), var(--surface) 60%);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .18);
+  color: var(--ink);
+  font: 600 13px/1.7 Cairo, Arial, sans-serif;
+  transition: border-color .25s ease, box-shadow .25s ease;
+}
+.kh-audio-review-controls[data-speaker="karma"] { --tone: var(--karma); }
+.kh-audio-review-controls[data-speaker="narrator"] { --tone: var(--narr); }
+.kh-audio-review-controls[data-review="accepted"] {
+  --edge: color-mix(in srgb, var(--ok) 70%, transparent);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .18), 0 0 0 1px color-mix(in srgb, var(--ok) 40%, transparent);
+}
+.kh-audio-review-controls[data-review="rejected"] {
+  --edge: color-mix(in srgb, var(--bad) 70%, transparent);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, .18), 0 0 0 1px color-mix(in srgb, var(--bad) 40%, transparent);
+}
+
+/* ---------- رأس البطاقة ---------- */
+.kh-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.kh-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.kh-avatar {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1.5px solid var(--tone);
+  background: color-mix(in srgb, var(--tone) 20%, transparent);
+  font-size: 20px;
+  line-height: 1;
+}
+.kh-audio-speaker { font: 800 15px/1.4 Cairo, Arial, sans-serif; color: var(--ink); }
+.kh-audio-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 13px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  color: var(--mut);
+  font: 800 12px/1.4 Cairo, Arial, sans-serif;
+}
+.kh-audio-badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.kh-audio-badge[data-status="accepted"],
+.kh-audio-badge[data-status="approved"] { color: var(--ok); background: color-mix(in srgb, var(--ok) 14%, transparent); }
+.kh-audio-badge[data-status="rejected"] { color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, transparent); }
+.kh-audio-badge[data-status="suggested"],
+.kh-audio-badge[data-status="dirty"] { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+
+/* ---------- خطوات المراجعة ---------- */
+.kh-audio-steps, .kh-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.kh-audio-steps li, .kh-flow li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 14px 4px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--edge);
+  color: var(--mut);
+  font: 700 12px/1.4 Cairo, Arial, sans-serif;
+  transition: all .25s ease;
+}
+.kh-audio-steps li::before, .kh-flow li::before {
+  content: attr(data-n);
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 12%, transparent);
+  font: 800 12px/1 Cairo, Arial, sans-serif;
+}
+.kh-audio-steps li.active, .kh-flow li.active {
+  color: var(--ink);
+  border-color: var(--warn);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
+.kh-audio-steps li.active::before, .kh-flow li.active::before { background: var(--warn); color: #1b1305; }
+.kh-audio-steps li.done, .kh-flow li.done {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 60%, transparent);
+  background: color-mix(in srgb, var(--ok) 10%, transparent);
+}
+.kh-audio-steps li.done::before, .kh-flow li.done::before { content: "✓"; background: var(--ok); color: #fff; }
+
+/* ---------- الأزرار ---------- */
+.kh-audio-review-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 9px 16px;
+  border: 1.5px solid var(--edge);
+  border-radius: 14px;
+  background: transparent;
+  color: inherit;
+  font: 800 13px/1.3 Cairo, Arial, sans-serif;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease, border-color .2s ease;
+}
+.kh-audio-review-btn:hover:not(:disabled) { transform: translateY(-1px); }
+.kh-audio-review-btn:active:not(:disabled) { transform: translateY(0) scale(.98); }
+.kh-audio-review-btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent, #c9a45c) 60%, transparent); outline-offset: 2px; }
+.kh-audio-review-btn:disabled { cursor: not-allowed; }
+.kh-btn-ico { display: inline-flex; flex: none; }
+.kh-btn-ico svg { display: block; width: 20px; height: 20px; fill: currentColor; }
+
+/* ---------- المشغّل ---------- */
+.kh-audio-player {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas: "play track replay";
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--tone) 28%, transparent);
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+}
+.kh-audio-review-btn.play {
+  grid-area: play;
+  min-width: 150px;
+  min-height: 54px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  border-color: transparent;
+  background: linear-gradient(135deg, #2fbf80, #1f9d66);
+  color: #fff;
+  font-size: 14px;
+  box-shadow: 0 8px 20px rgba(47, 191, 128, .35);
+}
+.kh-audio-review-btn.play:disabled {
+  background: transparent;
+  border: 1.5px dashed var(--edge);
+  color: var(--mut);
+  box-shadow: none;
+}
+.kh-audio-review-btn.replay { grid-area: replay; min-height: 46px; border-radius: 999px; border-color: var(--edge); }
+.kh-audio-review-btn.replay:disabled { opacity: .4; }
+
+.kh-audio-card[data-player="loading"] .kh-audio-review-btn.play {
+  background: linear-gradient(135deg, #64748b, #475569);
+  box-shadow: none;
+  cursor: progress;
+}
+.kh-audio-card[data-player="loading"] .kh-btn-ico svg { animation: khspin .9s linear infinite; }
+.kh-audio-card[data-player="loading"] .kh-audio-review-btn.replay { opacity: .4; pointer-events: none; }
+.kh-audio-card[data-player="playing"] .kh-audio-review-btn.play {
+  background: linear-gradient(135deg, #f0a53a, #d38a1f);
+  box-shadow: 0 8px 20px rgba(240, 165, 58, .4);
+  animation: khpulse 1.6s ease-in-out infinite;
+}
+.kh-audio-card[data-player="ended"] .kh-audio-review-btn.play {
+  background: transparent;
+  color: var(--ok);
+  border: 1.5px solid var(--ok);
+  box-shadow: none;
+}
+.kh-audio-card[data-player="error"] .kh-audio-review-btn.play {
+  background: transparent;
+  color: var(--bad);
+  border: 1.5px solid var(--bad);
+  box-shadow: none;
+}
+
+.kh-audio-track { grid-area: track; display: grid; gap: 8px; min-width: 0; }
+.kh-audio-progress {
+  position: relative;
+  direction: ltr;
+  height: 12px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ink) 15%, transparent);
+  overflow: hidden;
+}
+.kh-audio-progress-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #2fbf80, #7fe0b4);
+  transition: width .2s linear;
+}
+.kh-audio-card[data-player="loading"] .kh-audio-progress-fill {
+  background: repeating-linear-gradient(45deg, var(--warn) 0 10px, color-mix(in srgb, var(--warn) 62%, #fff) 10px 20px);
+  background-size: 28px 28px;
+  animation: khstripes .8s linear infinite;
+  transition: width .15s ease;
+}
+.kh-audio-card[data-player="loading"][data-indeterminate="1"] .kh-audio-progress-fill {
+  width: 40% !important;
+  animation: khstripes .8s linear infinite, khslide 1.2s ease-in-out infinite;
+}
+.kh-audio-card[data-player="ended"] .kh-audio-progress-fill { background: var(--ok); }
+.kh-audio-card[data-player="error"] .kh-audio-progress-fill { background: var(--bad); }
+
+.kh-audio-meta { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 12px; }
+.kh-audio-time { direction: ltr; font-variant-numeric: tabular-nums; color: var(--mut); white-space: nowrap; }
+
+/* حالة المقطع: قبل التحميل / أثناءه / بعده */
+.kh-audio-ready-state { display: inline-flex; align-items: center; gap: 7px; margin: 0; font-size: 12px; font-weight: 800; color: var(--mut); }
+.kh-audio-ready-state::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.kh-audio-ready-state.idle { color: var(--mut); }
+.kh-audio-ready-state.preparing { color: var(--warn); }
+.kh-audio-ready-state.preparing::before { animation: khblink 1s ease-in-out infinite; }
+.kh-audio-ready-state.ready { color: var(--ok); }
+.kh-audio-ready-state.ready::before {
+  content: "✓";
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  background: var(--ok);
+  color: #fff;
+  font-size: 11px;
+  animation: khpop .35s ease;
+}
+.kh-audio-ready-state.playing { color: var(--warn); }
+.kh-audio-ready-state.playing::before { animation: khblink .8s ease-in-out infinite; }
+.kh-audio-ready-state.paused { color: var(--narr); }
+.kh-audio-ready-state.ended { color: var(--ok); }
+.kh-audio-ready-state.ended::before {
+  content: "✓";
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  background: var(--ok);
+  color: #fff;
+  font-size: 11px;
+}
+.kh-audio-ready-state.failed { color: var(--bad); }
+.kh-audio-ready-state.not-started { color: var(--warn); }
+
+/* ---------- الموافقة والرفض ---------- */
+.kh-audio-actions { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; }
+.kh-audio-card .kh-audio-actions { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); }
+.kh-audio-review-btn.accept {
+  flex: 1 1 190px;
+  min-height: 52px;
+  border-color: transparent;
+  background: linear-gradient(135deg, #2fbf80, #1f9d66);
+  color: #fff;
+  font-size: 15px;
+  box-shadow: 0 8px 20px rgba(47, 191, 128, .3);
+}
+.kh-audio-review-btn.accept:disabled {
+  background: transparent;
+  border: 1.5px dashed var(--edge);
+  color: var(--mut);
+  box-shadow: none;
+  font-size: 13px;
+}
+.kh-audio-card[data-listened="1"][data-review="none"] .kh-audio-review-btn.accept:not(:disabled) { animation: khglow 1.8s ease-in-out infinite; }
+.kh-audio-review-btn.reject,
+.kh-audio-review-btn.reject-save {
+  border-color: color-mix(in srgb, var(--bad) 70%, transparent);
+  color: var(--bad);
+  background: color-mix(in srgb, var(--bad) 8%, transparent);
+}
+.kh-audio-review-btn.reject:disabled { opacity: .5; }
+.kh-audio-review-btn.generate {
+  border-color: transparent;
+  background: linear-gradient(135deg, #f0a53a, #d38a1f);
+  color: #fff;
+}
+.kh-audio-review-btn.generate:disabled { opacity: .5; }
+.kh-audio-review-btn.asr-listen { min-height: 34px; padding: 4px 12px; font-size: 12px; border-radius: 999px; }
+
+.kh-audio-review-state { flex-basis: 100%; margin: 0; font-size: 12px; color: var(--mut); }
+.kh-audio-review-state:empty { display: none; }
+
+.kh-audio-review-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 10px;
+  min-width: 0;
+  padding: 14px;
+  border-radius: 16px;
+  border: 1px dashed color-mix(in srgb, var(--bad) 55%, transparent);
+  background: color-mix(in srgb, var(--bad) 6%, transparent);
+}
+.kh-audio-review-editor[hidden] { display: none !important; }
+.kh-audio-review-editor textarea,
+.kh-audio-review-editor select {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1.5px solid var(--edge);
+  border-radius: 12px;
+  background: var(--panel, #16202b);
+  color: var(--ink);
+  font: 14px/1.8 Cairo, Arial, sans-serif;
+}
+.kh-audio-review-editor textarea { min-height: 70px; resize: vertical; }
+
+/* ---------- نص القراءة الصوتية ---------- */
+.kh-speech-text-controls[data-status="approved"] { --edge: color-mix(in srgb, var(--ok) 65%, transparent); }
+.kh-speech-text-controls[data-status="suggested"] { --edge: color-mix(in srgb, var(--warn) 65%, transparent); }
+.kh-speech-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; }
+.kh-speech-col { display: grid; gap: 8px; align-content: start; min-width: 0; }
+.kh-speech-label { display: block; font: 800 12px/1.5 Cairo, Arial, sans-serif; color: var(--mut); }
+.kh-speech-source {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px dashed var(--edge);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ink) 5%, transparent);
+  line-height: 1.95;
+  white-space: pre-wrap;
+}
+.kh-speech-text-controls textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 120px;
+  resize: vertical;
+  padding: 12px 14px;
+  border: 1.5px solid var(--edge);
+  border-radius: 14px;
+  background: var(--panel, #16202b);
+  color: var(--ink);
+  font: 14px/1.95 Cairo, Arial, sans-serif;
+}
+.kh-speech-text-controls textarea:focus {
+  outline: none;
+  border-color: var(--accent, #c9a45c);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #c9a45c) 28%, transparent);
+}
+.kh-speech-notes { display: grid; gap: 8px; }
+.kh-speech-notes:empty { display: none; }
+.kh-speech-notes p {
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border-inline-start: 4px solid var(--warn);
+  background: color-mix(in srgb, var(--warn) 9%, transparent);
+  font-size: 12px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+.kh-speech-text-controls[data-status="empty"] .kh-flow li:nth-child(1) { color: var(--ink); border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.kh-speech-text-controls[data-status="empty"] .kh-flow li:nth-child(1)::before { background: var(--warn); color: #1b1305; }
+.kh-speech-text-controls[data-status="suggested"] .kh-flow li:nth-child(1),
+.kh-speech-text-controls[data-status="approved"] .kh-flow li:nth-child(1),
+.kh-speech-text-controls[data-status="approved"] .kh-flow li:nth-child(2),
+.kh-speech-text-controls[data-status="approved"] .kh-flow li:nth-child(3) {
+  color: var(--ok);
+  border-color: color-mix(in srgb, var(--ok) 60%, transparent);
+  background: color-mix(in srgb, var(--ok) 10%, transparent);
+}
+.kh-speech-text-controls[data-status="suggested"] .kh-flow li:nth-child(1)::before,
+.kh-speech-text-controls[data-status="approved"] .kh-flow li::before { content: "✓"; background: var(--ok); color: #fff; }
+.kh-speech-text-controls[data-status="suggested"] .kh-flow li:nth-child(2) { color: var(--ink); border-color: var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); }
+.kh-speech-text-controls[data-status="suggested"] .kh-flow li:nth-child(2)::before { background: var(--warn); color: #1b1305; }
+
+/* ---------- لوحة مراجعة الصوت العليا ---------- */
+.kh-audio-review-gate {
+  --ok: #2fbf80;
+  --warn: #f0a53a;
+  --bad: #ef6b6b;
+  --tone: var(--warn);
+  max-width: 1100px;
+  margin: 12px auto;
+  padding: 16px 18px;
+  border: 1px solid color-mix(in srgb, var(--tone) 55%, transparent);
+  border-inline-start: 5px solid var(--tone);
+  border-radius: 20px;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--tone) 9%, var(--panel, #16202b)), var(--panel, #16202b) 65%);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, .16);
+  color: var(--text, inherit);
+  font: 600 13px/1.7 Cairo, Arial, sans-serif;
+}
+.kh-audio-review-gate[hidden] { display: none !important; }
+.kh-audio-review-gate[data-state="ok"] { --tone: var(--ok); }
+.kh-audio-review-gate[data-state="error"] { --tone: var(--bad); }
+.kh-audio-review-gate[data-state="loading"] { --tone: #64748b; }
+.kh-gate-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.kh-gate-title { display: flex; align-items: center; gap: 10px; font: 800 16px/1.4 Cairo, Arial, sans-serif; }
+.kh-gate-title .kh-avatar { width: 38px; height: 38px; border-color: var(--tone); background: color-mix(in srgb, var(--tone) 20%, transparent); }
+.kh-gate-pill {
+  padding: 4px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--tone);
+  background: color-mix(in srgb, var(--tone) 14%, transparent);
+  color: var(--tone);
+  font: 800 12px/1.5 Cairo, Arial, sans-serif;
+}
+.kh-gate-message { margin: 4px 0 10px; font-weight: 700; color: var(--muted, #9aa7b4); }
+.kh-meter-row { display: grid; gap: 5px; margin-top: 10px; }
+.kh-meter-cap { display: flex; justify-content: space-between; gap: 10px; font-size: 12px; }
+.kh-meter-cap strong { font-variant-numeric: tabular-nums; direction: ltr; }
+.kh-meter { height: 10px; border-radius: 999px; background: color-mix(in srgb, var(--text, #fff) 14%, transparent); overflow: hidden; direction: ltr; }
+.kh-meter > span { display: block; height: 100%; border-radius: 999px; background: linear-gradient(90deg, #2fbf80, #7fe0b4); transition: width .4s ease; }
+.kh-meter-row[data-kind="ready"] .kh-meter > span { background: linear-gradient(90deg, #5aa7ef, #9cc8f5); }
+.kh-lang-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.kh-lang-chip {
+  padding: 3px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line, #3a4654);
+  color: var(--muted, #9aa7b4);
+  font: 700 12px/1.6 Cairo, Arial, sans-serif;
+}
+.kh-lang-chip[data-state="part"] { color: var(--warn); border-color: var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); }
+.kh-lang-chip[data-state="done"] { color: var(--ok); border-color: var(--ok); background: color-mix(in srgb, var(--ok) 12%, transparent); }
+.kh-audio-review-gate small { display: block; margin-top: 10px; color: var(--muted, #9aa7b4); }
+
+/* استيراد تقرير مدقق النطق */
+.kh-drop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.kh-drop-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1.5px dashed color-mix(in srgb, var(--accent, #c9a45c) 60%, transparent);
+  border-radius: 14px;
+  cursor: pointer;
+  font-weight: 800;
+  transition: background .2s ease;
+}
+.kh-drop-label:hover { background: color-mix(in srgb, var(--accent, #c9a45c) 10%, transparent); }
+.kh-drop input[type="file"] { max-width: 100%; color: var(--muted, #9aa7b4); font: 12px Cairo, Arial, sans-serif; }
+
+/* توليد الصوت */
+.kh-audio-generation-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; border-style: dashed; --tone: var(--warn); }
+.kh-gen-title { flex-basis: 100%; font: 800 15px/1.4 Cairo, Arial, sans-serif; }
+
+/* نتيجة مدقق النطق داخل البطاقة */
+.kh-audio-asr-result {
+  display: grid;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px dashed var(--edge);
+  background: color-mix(in srgb, var(--ink) 4%, transparent);
+  font-size: 12px;
+}
+.kh-audio-asr-word { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 3px 0; }
+
+/* ---------- حركة ---------- */
+@keyframes khspin { to { transform: rotate(360deg); } }
+@keyframes khstripes { to { background-position: 28px 0; } }
+@keyframes khslide { 0% { transform: translateX(-110%); } 100% { transform: translateX(260%); } }
+@keyframes khblink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@keyframes khpop { 0% { transform: scale(.3); } 70% { transform: scale(1.25); } 100% { transform: scale(1); } }
+@keyframes khpulse { 0%, 100% { box-shadow: 0 8px 20px rgba(240, 165, 58, .4); } 50% { box-shadow: 0 8px 30px rgba(240, 165, 58, .8); } }
+@keyframes khglow { 0%, 100% { box-shadow: 0 8px 20px rgba(47, 191, 128, .3); } 50% { box-shadow: 0 8px 32px rgba(47, 191, 128, .75); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .kh-audio-review-controls *, .kh-audio-review-controls *::before, .kh-audio-review-controls *::after,
+  .kh-audio-review-gate *, .kh-audio-review-gate *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media print {
+  .kh-audio-review-controls, .kh-audio-review-gate { display: none !important; }
+}
+@media (max-width: 720px) {
+  .kh-speech-grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 600px) {
+  .kh-audio-review-controls { padding: 13px; border-radius: 17px; }
+  .kh-audio-player {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "play replay" "track track";
+    gap: 12px;
+  }
+  .kh-audio-review-btn.play { min-width: 0; width: 100%; }
+  .kh-audio-card .kh-audio-actions { grid-template-columns: minmax(0, 1fr); }
+  .kh-audio-review-gate { margin: 10px; padding: 14px; }
+}
