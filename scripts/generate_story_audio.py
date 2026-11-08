@@ -512,7 +512,7 @@ def inspect_generation_plan(story_path: Path, staging_root: Path = STAGING_ROOT,
             spoken = (
                 prepare_arabic_audio_text(original, approved_text)
                 if lang == "ar"
-                else re.sub(r"\\s+", " ", approved_text or original).strip()
+                else re.sub(r"\s+", " ", approved_text or original).strip()
             )
             chunks = split_audio_chunks(spoken)
             if index in forced:
@@ -758,7 +758,7 @@ async def generate_story(story_path: Path, dry_run: bool = False, allow_fish_aud
             audio_text = (
                 prepare_arabic_audio_text(original_text, approved_text)
                 if lang == "ar"
-                else re.sub(r"\\s+", " ", approved_text or original_text).strip()
+                else re.sub(r"\s+", " ", approved_text or original_text).strip()
             )
             chunks = split_audio_chunks(audio_text)
             primary_voice, rate, pitch = VOICE_SETTINGS[lang][speaker]
