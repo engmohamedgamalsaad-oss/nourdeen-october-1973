@@ -106,7 +106,12 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "توفي ابن سينا سنة 1037 ميلادية في همدان، في إيران الحالية. ورغم مرور قرون على وفاته، فضلت مؤلفاته جزءًا مهمًا من تاريخ الطب والفلسفة. حكايته بتفكرنا إن أثر الإنسان ممكن يكمل من خلال أفكاره وكتاباته، وإن العلم رحلة مستمرة؛ كل جيل بيضيف فيها وبيصحح."
+          "text": "توفي ابن سينا سنة 1037 ميلادية في همدان، في إيران الحالية. ورغم مرور قرون على وفاته، فضلت مؤلفاته جزءًا مهمًا من تاريخ الطب والفلسفة."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "يعني حتى لو كتاب مهم زي كتاب ابن سينا ساعد الناس زمان، ده مش معناه إننا نقف عند اللي عرفوه. نفضل نتعلم ونسأل ونراجع، وكل جيل يكمّل على اللي قبله."
         }
       ],
       "figure_name": "ابن سينا"
@@ -209,7 +214,12 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina died in 1037 CE in Hamadan, in present-day Iran. Although centuries have passed since his death, his writings remain an important part of the history of medicine and philosophy. His story reminds us that a person’s influence can continue through ideas and writing, and that science is an ongoing journey in which every generation adds to knowledge and corrects it."
+          "text": "Ibn Sina died in 1037 CE in Hamadan, in present-day Iran. Centuries later, his writings remain an important part of the history of medicine and philosophy."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "So even though a book like Ibn Sina’s helped people learn long ago, that doesn’t mean we stop there. We can keep learning, asking questions, and checking new evidence, with each generation building on the one before it."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -312,7 +322,12 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina est mort en 1037 à Hamadan, dans l’actuel Iran. Malgré les siècles écoulés depuis sa mort, ses écrits restent une partie importante de l’histoire de la médecine et de la philosophie. Son histoire nous rappelle que l’influence d’une personne peut se poursuivre à travers ses idées et ses écrits, et que la science est un cheminement continu auquel chaque génération apporte quelque chose et qu’elle contribue à corriger."
+          "text": "Ibn Sina est mort en 1037 à Hamadan, dans l’actuel Iran. Des siècles plus tard, ses écrits restent une partie importante de l’histoire de la médecine et de la philosophie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Alors, même si un livre comme celui d’Ibn Sina a aidé les gens à apprendre autrefois, cela ne veut pas dire qu’il faut s’arrêter là. On peut continuer à apprendre, à poser des questions et à vérifier les nouvelles découvertes. Chaque génération poursuit le travail de la précédente."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -415,7 +430,12 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina morì nel 1037 a Hamadan, nell’attuale Iran. Nonostante siano passati molti secoli, le sue opere restano una parte importante della storia della medicina e della filosofia. La sua storia ci ricorda che l’influenza di una persona può continuare attraverso le sue idee e i suoi scritti e che la scienza è un percorso continuo, al quale ogni generazione aggiunge qualcosa e contribuisce a correggere ciò che si sapeva prima."
+          "text": "Ibn Sina morì nel 1037 a Hamadan, nell’attuale Iran. A distanza di secoli, le sue opere restano una parte importante della storia della medicina e della filosofia."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Quindi, anche se un libro come quello di Ibn Sina ha aiutato le persone a imparare tanto tempo fa, non significa che dobbiamo fermarci lì. Possiamo continuare a imparare, a fare domande e a verificare nuove prove. Ogni generazione costruisce su ciò che ha imparato quella precedente."
         }
       ],
       "figure_name": "Ibn Sina"
@@ -518,7 +538,12 @@
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Ibn Sina starb 1037 n. Chr. in Hamadan im heutigen Iran. Obwohl seit seinem Tod viele Jahrhunderte vergangen sind, gehören seine Schriften weiterhin zur Geschichte der Medizin und Philosophie. Seine Geschichte erinnert uns daran, dass der Einfluss eines Menschen durch seine Gedanken und Schriften fortbestehen kann und dass Wissenschaft eine fortlaufende Reise ist, zu der jede Generation etwas beiträgt und auf der sie frühere Erkenntnisse auch korrigiert."
+          "text": "Ibn Sina starb 1037 n. Chr. in Hamadan im heutigen Iran. Auch viele Jahrhunderte später gehören seine Schriften weiterhin zur Geschichte der Medizin und Philosophie."
+        },
+        {
+          "type": "paragraph",
+          "speaker": "karma",
+          "text": "Ein Buch wie das von Ibn Sina hat den Menschen früher also beim Lernen geholfen. Aber wir müssen deshalb nicht beim Wissen von damals stehen bleiben. Wir können weiterlernen, Fragen stellen und neue Belege prüfen. Jede Generation baut auf dem Wissen der vorherigen auf."
         }
       ],
       "figure_name": "Ibn Sina"
