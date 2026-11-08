@@ -1,151 +1,130 @@
 #!/usr/bin/env python3
-"""One-story CPU TTS pilot for Khaledoon: Arabic (NAMAA) + English (Chatterbox).
-
-Uses only the approved Magdi Yacoub narrator/Karma reference clips already in
-this repository. Generates four short preview clips for Ibn Sina; it does not
-publish audio or modify story content.
-"""
+"""Generate only Ibn Sina's first Arabic (Karma) preview through the hosted NAMAA Space."""
 from __future__ import annotations
 
 import hashlib
 import json
 import os
+import shutil
 import subprocess
-import time
+import tempfile
 from pathlib import Path
 
+import numpy as np
 import soundfile as sf
-import torch
-from huggingface_hub import snapshot_download
-from safetensors.torch import load_file
+from gradio_client import Client
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "artifacts" / "ibn-sina-tts-pilot"
-REFS = OUT / "references"
+STORY_FILE = ROOT / "stories/history/005/story.json"
+REFERENCE_SOURCE = ROOT / "assets/audio/science/magdi-yacoub/ar/000.mp3"
+OUT = ROOT / "artifacts/ibn-sina-audio-staging"
 OUT.mkdir(parents=True, exist_ok=True)
-REFS.mkdir(parents=True, exist_ok=True)
 
-torch.set_num_threads(min(4, os.cpu_count() or 1))  # Match the standard hosted runner CPU allotment
-torch.manual_seed(2026)
-
-REFERENCE_SOURCES = {
-    "karma": ROOT / "assets/audio/science/magdi-yacoub/ar/000.mp3",
-    "narrator": ROOT / "assets/audio/science/magdi-yacoub/ar/001.mp3",
-}
-
-TEXTS = {
-    "ar": {
-        "narrator": "الحكاية تبدأ مع ابن سينا، واسمه أبو علي الحسين بن عبد الله بن سينا. اتولد حوالي سنة تسعمية وتمانين ميلادية في منطقة بخارى، اللي موجودة دلوقتي في أوزبكستان. واتعرف بعد كده بلقب الشيخ الرئيس.",
-        "karma": "يا ترى إزاي عالم عاش من أكتر من ألف سنة قدر يسيب أثر لسه بنتكلم عنه لحد النهارده؟",
-    },
-    "en": {
-        "narrator": "The story begins with Ibn Sina, whose full name was Abu Ali al-Husayn ibn Abd Allah ibn Sina. He was born around 980 CE in the region of Bukhara, in present-day Uzbekistan. Later, he became known as al-Shaykh al-Ra’is.",
-        "karma": "How could a scholar who lived more than a thousand years ago leave an influence that people still discuss today?",
-    },
-}
+SPACE_ID = "omarelshehy/NAMAA-Egyptian-Voice"
+EXPECTED_REQUEST_ID = os.environ["REQUEST_ID"]
+BLOCK_INDEX = int(os.environ.get("BLOCK_INDEX", "0"))
+if BLOCK_INDEX != 0:
+    raise ValueError("This pilot is deliberately limited to Ibn Sina's first Arabic segment (block 0).")
 
 def sha256(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
-def prepare_reference(speaker: str) -> Path:
-    source = REFERENCE_SOURCES[speaker]
+def audio_output_to_file(result, destination: Path) -> None:
+    """Normalize Gradio Audio output variants to a local WAV file."""
+    if isinstance(result, (tuple, list)) and len(result) == 2:
+        sample_rate, audio_data = result
+        if isinstance(audio_data, np.ndarray):
+            sf.write(destination, audio_data.squeeze(), int(sample_rate))
+            return
+    if isinstance(result, dict):
+        candidate = result.get("path") or result.get("name") or result.get("url")
+    else:
+        candidate = result
+    if not isinstance(candidate, str) or not candidate:
+        raise TypeError(f"Unexpected NAMAA Space audio response: {type(result).__name__}")
+    if candidate.startswith("http://") or candidate.startswith("https://"):
+        import requests
+        response = requests.get(candidate, timeout=180)
+        response.raise_for_status()
+        temporary = destination.with_suffix(".download")
+        temporary.write_bytes(response.content)
+        candidate = str(temporary)
+    source = Path(candidate)
     if not source.is_file():
-        raise FileNotFoundError(f"Approved reference clip missing: {source}")
-    target = REFS / f"{speaker}_reference.wav"
-    subprocess.run([
-        "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-        "-i", str(source), "-t", "10" if speaker == "narrator" else "9",
-        "-ac", "1", "-ar", "24000", "-c:a", "pcm_s16le", str(target)
-    ], check=True)
-    return target
-
-def save_audio(audio: torch.Tensor, path: Path, sample_rate: int) -> None:
-    data = audio.squeeze().detach().cpu().numpy()
-    sf.write(path, data, sample_rate, subtype="PCM_16")
-    mp3 = path.with_suffix(".mp3")
-    subprocess.run([
-        "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-        "-i", str(path), "-codec:a", "libmp3lame", "-b:a", "128k", str(mp3)
-    ], check=True)
+        raise FileNotFoundError(f"NAMAA Space returned no accessible audio file: {candidate}")
+    shutil.copyfile(source, destination)
 
 def main() -> None:
-    started = time.time()
-    refs = {speaker: prepare_reference(speaker) for speaker in ("narrator", "karma")}
-    print("Loading official Chatterbox multilingual base model on CPU...", flush=True)
-    from chatterbox.mtl_tts import ChatterboxMultilingualTTS
-    model = ChatterboxMultilingualTTS.from_pretrained(device="cpu")
+    story = json.loads(STORY_FILE.read_text(encoding="utf-8"))
+    blocks = story["i18n"]["ar"]["blocks"]
+    first = blocks[0]
+    if first.get("speaker") != "karma" or not first.get("text", "").strip():
+        raise ValueError("The first Arabic Ibn Sina block is not the approved Karma segment.")
+    if not REFERENCE_SOURCE.is_file():
+        raise FileNotFoundError(f"Approved Karma reference audio is missing: {REFERENCE_SOURCE}")
 
-    records = []
-    # English uses the official multilingual base checkpoint.
-    for speaker in ("narrator", "karma"):
-        print(f"Generating English preview for {speaker}...", flush=True)
-        audio = model.generate(
-            TEXTS["en"][speaker], language_id="en",
-            audio_prompt_path=str(refs[speaker]),
-            exaggeration=0.35 if speaker == "narrator" else 0.45,
-            cfg_weight=0.5, temperature=0.8,
+    with tempfile.TemporaryDirectory(prefix="namaa-ibn-sina-") as temp_dir:
+        temp = Path(temp_dir)
+        reference = temp / "karma_reference.wav"
+        subprocess.run([
+            "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+            "-i", str(REFERENCE_SOURCE), "-t", "9", "-ac", "1", "-ar", "24000",
+            "-c:a", "pcm_s16le", str(reference)
+        ], check=True)
+
+        print(f"Connecting to hosted NAMAA Space: {SPACE_ID}", flush=True)
+        token = os.getenv("HF_TOKEN") or None
+        client = Client(SPACE_ID, hf_token=token, verbose=True)
+        print("Generating only Arabic block 0 (Karma)...", flush=True)
+        result = client.predict(
+            first["text"],
+            str(reference),
+            0.45,  # restrained expressiveness for a natural child voice
+            0.8,
+            0,
+            0.5,
+            api_name="/generate_tts_audio",
         )
-        path = OUT / f"en_{speaker}.wav"
-        save_audio(audio, path, model.sr)
-        records.append({
-            "language": "en", "speaker": speaker, "text": TEXTS["en"][speaker],
-            "wav": path.name, "mp3": path.with_suffix(".mp3").name,
-            "sha256": sha256(path),
-        })
-        del audio
+        wav_path = temp / "namaa_output.wav"
+        audio_output_to_file(result, wav_path)
 
-    # Arabic uses NAMAA's Egyptian fine-tuned T3 weights on the same
-    # multilingual Chatterbox architecture and the same approved voice refs.
-    print("Downloading NAMAA Egyptian TTS checkpoint...", flush=True)
-    namaa_dir = Path(snapshot_download(
-        repo_id="NAMAA-Space/NAMAA-Egyptian-TTS",
-        repo_type="model",
-        allow_patterns=["t3_mtl23ls_v2.safetensors"],
-    ))
-    namaa_state = load_file(str(namaa_dir / "t3_mtl23ls_v2.safetensors"), device="cpu")
-    model.t3.load_state_dict(namaa_state, strict=True)
-    model.t3.to("cpu").eval()
-
-    for speaker in ("narrator", "karma"):
-        print(f"Generating Egyptian Arabic preview for {speaker}...", flush=True)
-        audio = model.generate(
-            TEXTS["ar"][speaker], language_id="ar",
-            audio_prompt_path=str(refs[speaker]),
-            exaggeration=0.35 if speaker == "narrator" else 0.45,
-            cfg_weight=0.5, temperature=0.8,
-        )
-        path = OUT / f"ar_{speaker}.wav"
-        save_audio(audio, path, model.sr)
-        records.append({
-            "language": "ar", "speaker": speaker, "text": TEXTS["ar"][speaker],
-            "wav": path.name, "mp3": path.with_suffix(".mp3").name,
-            "sha256": sha256(path),
-        })
-        del audio
+        mp3_path = OUT / "000.mp3"
+        subprocess.run([
+            "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
+            "-i", str(wav_path), "-codec:a", "libmp3lame", "-b:a", "128k",
+            str(mp3_path)
+        ], check=True)
 
     manifest = {
-        "story": "history/ibn-sina",
-        "scope": "four short preview clips only; not publish-ready",
-        "models": {
-            "english": "ResembleAI/Chatterbox multilingual base",
-            "arabic": "NAMAA-Space/NAMAA-Egyptian-TTS (T3 fine-tune)",
-        },
-        "device": "cpu",
-        "reference_sources": {
-            speaker: str(path.relative_to(ROOT)) for speaker, path in REFERENCE_SOURCES.items()
-        },
-        "reference_sha256": {speaker: sha256(path) for speaker, path in refs.items()},
-        "clips": records,
-        "elapsed_seconds": round(time.time() - started, 2),
+        "version": 1,
+        "story": "ibn-sina",
+        "section": "history",
+        "language": "ar",
+        "request_id": EXPECTED_REQUEST_ID,
+        "provider": "huggingface-space",
+        "model": "NAMAA-Space/NAMAA-Egyptian-TTS",
+        "segments": [{
+            "block_index": 0,
+            "chunk_index": 0,
+            "speaker": "karma",
+            "voice": "magdi-yacoub-karma-reference",
+            "provider": "huggingface-space",
+            "model": "NAMAA-Space/NAMAA-Egyptian-TTS",
+            "src": "000.mp3",
+            "audio_sha256": sha256(mp3_path),
+            "text": first["text"],
+            "reference_sha256": sha256(REFERENCE_SOURCE),
+        }],
     }
-    (OUT / "pilot_manifest.json").write_text(
+    (OUT / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print(json.dumps(manifest, ensure_ascii=False, indent=2), flush=True)
+    print(f"READY: {mp3_path} ({mp3_path.stat().st_size} bytes)", flush=True)
 
 if __name__ == "__main__":
     main()
