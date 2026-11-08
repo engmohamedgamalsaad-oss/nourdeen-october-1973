@@ -7,6 +7,8 @@
 var VOICES = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
 var GEN_VERSION = 'v1';
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
+/* المرحلة الحالية: الصوت مطلوب للعربية والإنجليزية فقط؛ غياب باقي اللغات لا يمنع الاعتماد. */
+var REQUIRED_LANGS = ['ar', 'en'];
 /* لا توجد قائمة حكايات تجريبية: محرك المراجعة مشترك ويستقبل معرّف أي حكاية من القارئ. */
 
 function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
@@ -101,6 +103,44 @@ function validateManifestCoverage(blocks, segments, expectedTexts, allowPartial)
     }
   }
   return { ok: true, blocks: blocks.length, segments: segments.length };
+}
+
+/* النص الذي يجب أن يطابقه الصوت: نص القراءة المعتمد الذي أُرسل للتوليد، ثم نص النطق المعتمد، ثم نص الحكاية. */
+function expectedSpokenText(storyText, pronunciationText, speechRecord) {
+  if (speechRecord && speechRecord.status === 'approved' && typeof speechRecord.approved_text === 'string' && norm(speechRecord.approved_text)) {
+    return speechRecord.approved_text;
+  }
+  if (typeof pronunciationText === 'string' && norm(pronunciationText)) return pronunciationText;
+  return String(storyText || '');
+}
+function isSpeakable(block) {
+  return !!block && (block.speaker === 'narrator' || block.speaker === 'karma') && !!norm(block.text || '');
+}
+/* يفصل المقاطع القديمة: كتلة نص صوتها المسجّل لا يطابق النص المتوقع الحالي. لا يُعدَّل سجل الموافقة ولا يُقبل الصوت القديم بصمت. */
+function splitStaleSegments(blocks, segments, expectedTexts) {
+  var byBlock = Object.create(null), fresh = [], stale = [];
+  (Array.isArray(segments) ? segments : []).forEach(function (seg) {
+    var b = Number(seg && seg.block_index);
+    if (!Number.isInteger(b) || !Array.isArray(blocks) || !isSpeakable(blocks[b])) { fresh.push(seg); return; }
+    (byBlock[b] || (byBlock[b] = [])).push(seg);
+  });
+  Object.keys(byBlock).forEach(function (key) {
+    var b = Number(key), list = byBlock[key].slice().sort(function (x, y) { return Number(x.chunk_index || 0) - Number(y.chunk_index || 0); });
+    var expected = Array.isArray(expectedTexts) && typeof expectedTexts[b] === 'string' ? expectedTexts[b] : String(blocks[b].text || '');
+    var actual = list.map(function (s) { return String(s.text || ''); }).join(' ');
+    if (norm(expected) === norm(actual)) fresh = fresh.concat(list); else stale.push(b);
+  });
+  stale.sort(function (x, y) { return x - y; });
+  return { fresh: fresh, stale: stale };
+}
+/* كتل منطوقة بلا أي مقطع صوتي (تُحسب بعد استبعاد القديم). */
+function uncoveredBlocks(blocks, segments) {
+  var covered = Object.create(null), out = [];
+  (Array.isArray(segments) ? segments : []).forEach(function (seg) { covered[Number(seg && seg.block_index)] = true; });
+  (Array.isArray(blocks) ? blocks : []).forEach(function (block, index) {
+    if (isSpeakable(block) && !covered[index]) out.push(index);
+  });
+  return out;
 }
 
 function boundedText(value, max) { return String(value == null ? '' : value).slice(0, max); }
@@ -211,8 +251,9 @@ function evaluateGate(entries, review, readyByKey, listenedByKey) {
   out.ok = out.total > 0 && out.notReady === 0 && out.notListened === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
   return out;
 }
-function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listenedByKey) {
-  var missing = LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
+function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listenedByKey, requiredLangs) {
+  var required = Array.isArray(requiredLangs) && requiredLangs.length ? requiredLangs : REQUIRED_LANGS;
+  var missing = required.filter(function (lang) { return !manifests || !manifests[lang]; });
   if (missing.length) {
     return {
       ok: false, missingLanguages: missing, total: Array.isArray(entries) ? entries.length : 0,
@@ -229,7 +270,7 @@ function gateMessage(g) {
   if (g.notListened) parts.push(g.notListened + ' مقطع لم يتم الاستماع إليه كاملًا في هذه المعاينة');
   if (g.rejected) parts.push(g.rejected + ' مقطع مرفوض');
   if (g.unreviewed) parts.push(g.unreviewed + ' مقطع لم تتم مراجعته');
-  return 'لا يمكن اعتماد المعاينة بعد: ' + (parts.join('، ') || 'لا توجد مقاطع صوتية') + '. راجع كل مقاطع اللغات الخمس واقبلها أولًا.';
+  return 'لا يمكن اعتماد المعاينة بعد: ' + (parts.join('، ') || 'لا توجد مقاطع صوتية') + '. راجع كل مقاطع اللغات المطلوبة واقبلها أولًا.';
 }
 
 /* قبل النسخ للذكاء الاصطناعي: المقاطع المرفوضة بنوع «الصوت فقط» يرتفع لها عدّاد إعادة الصوت مرة واحدة،
@@ -285,7 +326,8 @@ function buildPromptSection(review) {
 }
 
 var api = {
-  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS,
+  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS, REQUIRED_LANGS: REQUIRED_LANGS,
+  expectedSpokenText: expectedSpokenText, splitStaleSegments: splitStaleSegments, uncoveredBlocks: uncoveredBlocks,
   norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
