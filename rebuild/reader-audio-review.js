@@ -608,7 +608,7 @@ function makeButton(label, cls, handler) {
 }
 var generationBusy = false, generationMessage = '';
 function currentStoryId() {
-  var match = String(location.pathname || '').match(/\\/stories\\/[a-z0-9-]+\\/(\\d{3})(?:\\/|$)/i);
+  var match = String(location.pathname || '').match(/\/stories\/[a-z0-9-]+\/(\d{3})(?:\/|$)/i);
   return match ? match[1] : '';
 }
 function nextGenerationTarget() {
