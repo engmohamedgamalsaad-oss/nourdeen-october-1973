@@ -29,13 +29,12 @@ function readStoredContext(key){
  try{var value=JSON.parse(localStorage.getItem(key)||'null');return value&&typeof value==='object'?value:null}catch(e){return null}
 }
 function getContext(){
- var candidates=[
-  readStoredContext('kh-story-review-context'),
-  readStoredContext('kh-story-preview-context'),
-  readStoredContext('kh-story-preview-draft')
- ];
- ctx=candidates.find(function(value){return value&&value.submission_id})||
-  candidates.find(function(value){return value&&value.record_type==='published_site_story'})||null;
+ var primary=readStoredContext('kh-story-review-context');
+ if(primary&&(primary.submission_id||primary.record_type==='published_site_story'))ctx=primary;
+ else{
+  var candidates=[readStoredContext('kh-story-preview-context'),readStoredContext('kh-story-preview-draft')];
+  ctx=candidates.find(function(value){return value&&value.submission_id})||null;
+ }
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
  if(urlId){
   ctx=Object.assign({},ctx||{},{submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':(urlTable==='khaledoon_submissions'?'khaledoon_submissions':((ctx&&ctx.submission_table)||'khaledoon_submissions')),record_type:'modern'});
