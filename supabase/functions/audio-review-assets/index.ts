@@ -184,6 +184,12 @@ Deno.serve(async (req: Request) => {
         JSON.stringify(next).length > 1500000) {
       return reply(400, { error: "بيانات مراجعة الصوت غير صالحة أو أكبر من الحد المسموح." });
     }
+    if (next.audio_languages !== undefined &&
+        (!Array.isArray(next.audio_languages) || !next.audio_languages.length ||
+         next.audio_languages.some((lang: any) => !["ar", "en", "fr", "it", "de"].includes(lang)) ||
+         new Set(next.audio_languages).size !== next.audio_languages.length || !next.audio_languages.includes("ar"))) {
+      return reply(400, { error: "نطاق لغات مراجعة الصوت غير صالح." });
+    }
     const clipEntries = Object.entries(next.clips);
     if (clipEntries.length > 1000 || clipEntries.some(([key, clip]: [string, any]) =>
       !key || key.length > 600 || !clip || !["accepted", "rejected"].includes(clip.status))) {
