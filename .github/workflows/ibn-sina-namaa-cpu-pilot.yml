@@ -2,9 +2,6 @@ name: Ibn Sina NAMAA first Arabic preview
 run-name: ابن سينا audio ${{ inputs.request_id || '00000000-0000-4000-8000-000000000001' }} block ${{ inputs.block_index || '0' }}
 
 on:
-  push:
-    branches:
-      - audio/ibn-sina-namaa-space-first-clip
   workflow_dispatch:
     inputs:
       request_id:
@@ -46,7 +43,7 @@ jobs:
       - name: Install Gradio client
         run: |
           python -m pip install --upgrade pip
-          python -m pip install gradio_client==1.7.1 soundfile numpy requests
+          python -m pip install gradio_client==1.10.2 soundfile numpy requests
 
       - name: Generate one Arabic segment
         env:
