@@ -141,485 +141,529 @@
       "figure_name": "أحمد عرابي"
     },
     "en": {
-      "title": "Ahmed Urabi — When He Raised His Voice",
-      "subtitle": "A journey to nineteenth-century Egypt, where the demands of officers and soldiers grew into a political movement that changed the country’s course.",
-      "summary": "A journey to nineteenth-century Egypt, where the demands of officers and soldiers grew into a political movement that changed the country’s course.",
+      "title": "Ahmed Urabi — When He Raised His Voice for Change",
+      "subtitle": "The story of an Egyptian officer from the village of Hirriyet Razna who rose through the army and became one of the leading figures in a movement calling for reform and a greater role in government.",
+      "summary": "The story of an Egyptian officer from Hirriyet Razna who rose through the army and became a leading figure in a movement for reform and political participation, before military defeat, British occupation and years of exile.",
       "history_note": "This is a simplified educational text. Some well-known sayings are presented as attributed accounts, with a note that details differ across sources.",
       "images_note": "The historical portrait was published in 1882 and is classified as public domain; the timeline graphic is an original explanatory illustration from the Khaledoon project.",
       "blocks": [
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "From Hirriyet Razna to the Army",
-          "text": "Ahmed Urabi was born in 1841 in the village of Hirriyet Razna in Egypt’s Sharqia Governorate. He joined the Egyptian army during the rule of Muhammad Sa'id Pasha and advanced through military service. In his time, unequal treatment of Egyptian and non-Egyptian officers was one source of tension and resentment among some officers."
-        },
-        {
-          "type": "paragraph",
           "speaker": "karma",
-          "text": "So did the Urabi movement begin simply because Ahmed Urabi was angry?"
+          "heading": "Karma | Opening",
+          "text": "When I first heard the name Ahmed Urabi, I thought he was simply an officer who stood before the khedive in Abdeen Square. But the more I learn, the more I discover that his story is connected to an army and a country facing a serious crisis—and that what happened was not caused by one person alone."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Not exactly. Officers and soldiers had grievances and demands, while Egypt was also facing financial and political crises. Urabi became one of the movement’s leading figures, but we must look at all these circumstances—not just one person—to understand it."
+          "text": "Ahmed Urabi was born in 1841 in Hirriyet Razna, a village in Egypt’s Sharqia Governorate near Zagazig. He grew up in the countryside, received basic religious instruction as a child, and later went to Cairo to study at Al-Azhar. Egypt was then ruled by the Muhammad Ali dynasty within the Ottoman Empire, and the army was one of the state’s most important institutions, with great political influence.",
+          "heading": "From Hirriyet Razna to Cairo"
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Urabi did not continue his studies at Al-Azhar for long. During the rule of Sa'id Pasha, the army opened its doors to the sons of village sheikhs. Urabi left his studies and joined the army as an ordinary soldier in December 1854. He did not begin as a senior commander; he started at the lowest rank and gradually rose through the ranks over the years.",
+          "heading": "The Beginning of a Military Career"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Ahmed Urabi joined the army as an ordinary soldier on 6 December 1854. Years later, he would become one of its most prominent leaders.",
+          "heading": "Did You Know? | An Unexpected Start in the Army"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "The Egyptian army included officers from different backgrounds, but senior military positions remained in the hands of particular groups. Egyptian officers complained that it was difficult for them to reach higher ranks and leadership positions. As these complaints grew, the issue became more than one officer’s promotion: it raised the question of who had the right to help lead the army and manage the country’s affairs.",
+          "heading": "An Army in Change, and New Demands"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "At the same time, Egypt was facing a severe financial crisis. Debts increased, and European pressure on government decisions grew. Britain and France had considerable influence over financial and political affairs. Many Egyptians felt that the country’s interests were not always being served. As a result, demands to reform the army became connected to wider questions about government, representation and sovereignty.",
+          "heading": "A Crisis Beyond the Army"
+        },
+        {
           "speaker": "karma",
-          "text": "Why should we consult more than one account when studying the Urabi movement?"
-        },
-        {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "It unfolded amid a political crisis, foreign intervention, and a struggle over how Egypt should be governed. Comparing sources helps us understand the officers’ demands and the wider circumstances without reducing every cause to one person."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "The Urabi movement did not emerge without warning. Demands about promotions, representation, and army spending had accumulated alongside a financial and political crisis affecting Egypt’s government."
-        },
-        {
-          "speaker": "karma",
-          "type": "paragraph",
-          "text": "So it is not enough to say the Urabi movement was about one person; we need to understand the army, the country and people's demands?"
+          "text": "So the officers were not talking only about their jobs inside the army. Things were happening across the whole country, and each problem affected the others.",
+          "heading": "Karma | A Thought"
         },
         {
           "speaker": "narrator",
           "type": "paragraph",
-          "text": "Exactly. The movement involved demands concerning Egyptian officers' influence, political representation and oversight of government. Accounts differ in how they explain its causes and consequences, so we study more than one source."
+          "text": "On 9 September 1881, Urabi moved with officers and soldiers to Abdeen Square in Cairo, where they presented their demands to Khedive Tawfiq. This was not simply a confrontation between one man and a ruler. Complaints and political activity had come before the demonstration; some influential people supported it, and different groups in society later expressed support for the movement.",
+          "heading": "Abdeen Square — 9 September 1881"
         },
         {
-          "type": "paragraph",
+          "type": "did_you_know",
           "speaker": "narrator",
-          "heading": "A Moment of Confrontation",
-          "text": "Urabi is associated with confronting Khedive Tawfiq at Abdeen Square on 9 September 1881, when officers and crowds presented their demands. The phrase “God created us free, not as an inheritance or property” became famous in Egyptian memory, but accounts differ on its exact wording. We therefore present it as the best-known phrase attributed to the event, not as an agreed verbatim transcript.",
+          "heading": "Did You Know? | Support for the Movement",
+          "text": "Support for the Urabi movement did not come only from army officers. Some major landowners supported their actions, and the movement found supporters from different parts of society.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "“God created us free”",
-          "text": "The confrontation was more than a scene in a square; it expressed a struggle over power, representation, and the army’s role in the state."
+          "heading": "What Were the Demands?",
+          "text": "The demands included dismissing the government of Mustafa Riyad, forming a national government, and creating a new representative council that would allow broader participation in discussing the affairs of state. There were also demands concerning the army, its organization and the rights of Egyptian officers. The khedive accepted some demands at that moment, but the political disagreement did not end. It continued and widened over the following months."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1881 — Urabi’s demands",
-          "text": "The movement expanded from military complaints to political demands amid conflict between the khedive and his opponents, and a deepening financial crisis."
+          "heading": "A Famous Phrase, with Different Accounts",
+          "text": "In Egyptian memory, Urabi became associated with a famous phrase about freedom and refusing to be treated like inherited property. However, sources do not agree on one exact wording of what was said in Abdeen Square. It is therefore more accurate to describe it as a phrase attributed to that event, not as a confirmed word-for-word record. What matters most is understanding the demands and events around the confrontation, rather than reducing the whole story to one sentence."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1882 — War and British intervention",
-          "text": "Tensions escalated into military conflict. The Battle of Tel el-Kebir ended in September 1882 with a British victory and the entry of British forces into Cairo, beginning the period of British occupation."
+          "heading": "From the Movement to Government",
+          "text": "The political crisis continued into 1882. Urabi joined the national government led by Mahmoud Sami al-Barudi and became its Minister of War. He had moved from leading demands within the army to taking responsibility for part of the government, while the country faced growing pressures at home and from abroad."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Did You Know? | Urabi’s Government Role",
+          "text": "In 1882, Ahmed Urabi became Minister of War in the national government headed by Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "After the defeat — exile",
-          "text": "Urabi was captured, tried, and exiled to Ceylon, now known as Sri Lanka. He returned to Egypt many years later."
+          "text": "Britain closely followed events in Egypt because of its financial and political interests and the country’s important position on the route to India through the Suez Canal. As the crisis deepened, the British fleet bombarded Alexandria on 11 July 1882. Events then developed into a large-scale military intervention. The confrontation was not the result of Urabi’s decision alone: the crisis of government, debt, European rivalry and the interests of powerful countries all played a part.",
+          "heading": "British Intervention"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "This period calls for a balanced reading. The Urabi movement combined reform demands with intertwined political and military interests, and historians differ in their assessments of its leadership and outcomes."
+          "heading": "The Battle of Tel el-Kebir — September 1882",
+          "text": "On 13 September 1882, the Egyptian army fought British forces at the Battle of Tel el-Kebir. The Egyptian army was defeated, and British forces advanced towards Cairo, beginning the British occupation of Egypt. This was a major turning point. The movement did not end only in military defeat; the country entered a long period of British military presence."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "History Is More Than One Hero",
-          "text": "Urabi’s story helps us see how major events grow from intertwined social, economic, and political conditions. It also reminds us to distinguish established facts from phrases that became popular in public memory, and to separate describing an event from judging it."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Did You Know?",
-          "text": "“The Urabi Revolt” refers to the movement of 1879–1882. The Abdeen demonstration on 9 September 1881 is considered one of its most prominent moments.",
+          "speaker": "karma",
+          "heading": "Karma | The Consequences",
+          "text": "I understand now that major events can begin with people asking for something to be put right, but the path events take can lead to very difficult results—especially when more powerful forces enter the conflict.",
           "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Why did the Urabi movement expand?",
-          "text": "Several crises overlapped in the late nineteenth century: complaints within the army about unequal promotions, demands for a wider role in government, financial pressure on the state, and growing European influence. The movement cannot be explained by one cause or reduced to a dispute between an officer and a ruler."
+          "heading": "Trial and Exile",
+          "text": "After the defeat, Urabi was arrested and tried for rebellion. He was sentenced to death, but the sentence was reduced to lifelong exile. In late December 1882, he left Egypt for Ceylon, now known as Sri Lanka, where he lived for many years far from his country."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "After the 1881 Abdeen demonstration, political and military conflict intensified. Britain intervened militarily in 1882; the conflict culminated in the Battle of Tel el-Kebir and the occupation of Cairo. Urabi was captured and exiled to Ceylon, now Sri Lanka, before returning to Egypt years later."
+          "text": "Urabi returned to Egypt after years in exile. He spent the rest of his life away from the political and military leadership he had known when he was younger. He died in Cairo on 21 September 1911. His life was closely connected to one of the most complicated periods in modern Egyptian history.",
+          "heading": "Return to Egypt"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Historians differ in their assessments. Some emphasize the movement’s national and reformist demands; others examine leadership mistakes and the conditions that led to defeat. A sound historical reading considers both perspectives and separates established facts from interpretations and judgments."
+          "text": "Historians differ in how they describe and assess the Urabi movement. Some focus on its national and constitutional demands and the broad participation it attracted. Others examine the leadership’s mistakes and the military and political decisions that came before the defeat. Historical studies help us see the movement in its full setting: demands within the army, a financial crisis, a struggle over the form of government, European influence, and then military intervention that ended in occupation. We do not need to choose one description and ignore the other facts. We need to distinguish what happened from historians’ interpretations of it.",
+          "heading": "How Should We Understand the Urabi Movement?"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "When we hear the famous phrase attributed to Urabi, “God created us free,” we should remember that its popularity does not make every version an agreed verbatim record. This story presents it as one of the best-known sayings associated with Abdeen while noting that accounts differ."
+          "speaker": "karma",
+          "text": "I used to think Urabi’s whole story was one moment in Abdeen Square. But it turned out to be the story of an entire country trying to decide who should take part in governing it and how it could protect its right to make its own decisions. I also learned that knowing someone was brave is not enough; we must understand the circumstances, the choices and the results that followed.",
+          "heading": "Karma | The End of the Story"
         }
       ],
       "figure_name": "Ahmed Urabi"
     },
     "fr": {
-      "title": "Ahmed Urabi — Quand il a fait entendre sa voix",
-      "subtitle": "Voyage dans l’Égypte du XIXe siècle, où les revendications des officiers et des soldats sont devenues un mouvement politique qui a changé le cours du pays.",
-      "summary": "Voyage dans l’Égypte du XIXe siècle, où les revendications des officiers et des soldats sont devenues un mouvement politique qui a changé le cours du pays.",
+      "title": "Ahmed Urabi — Quand il a fait entendre sa voix pour le changement",
+      "subtitle": "L’histoire d’un officier égyptien originaire du village de Hirriyet Razna, qui gravit les échelons de l’armée et devint l’une des principales figures d’un mouvement réclamant des réformes et une plus grande participation au gouvernement.",
+      "summary": "L’histoire d’un officier égyptien de Hirriyet Razna devenu une figure majeure d’un mouvement pour les réformes et la participation politique, avant la défaite militaire, l’occupation britannique et de longues années d’exil.",
       "history_note": "Ce texte est une présentation pédagogique simplifiée. Certaines paroles célèbres sont présentées comme des propos attribués, car les sources divergent sur les détails.",
       "images_note": "Le portrait historique a été publié en 1882 et est classé dans le domaine public ; la frise chronologique est une illustration explicative originale du projet Khaledoon.",
       "blocks": [
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Du village de Hirriyet Razna à l’armée",
-          "text": "Ahmed Urabi est né en 1841 dans le village de Hirriyet Razna, dans le gouvernorat égyptien de Sharqia. Il a rejoint l’armée égyptienne sous le règne de Muhammad Sa'id Pacha et a progressé dans la carrière militaire. À son époque, les inégalités entre officiers égyptiens et autres officiers furent l’une des sources de tension et de mécontentement."
-        },
-        {
-          "type": "paragraph",
           "speaker": "karma",
-          "text": "Le mouvement d’Urabi a-t-il donc commencé simplement parce qu’Ahmed Urabi était en colère ?"
+          "heading": "Karma | Ouverture",
+          "text": "Quand j’ai entendu le nom d’Ahmed Urabi pour la première fois, j’ai pensé qu’il était simplement un officier qui s’était tenu devant le khédive sur la place Abdeen. Mais plus j’en apprends, plus je découvre que son histoire est liée à une armée et à un pays qui traversaient une grave crise, et que les événements ne sont pas dus à une seule personne."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Pas exactement. Des officiers et des soldats avaient des revendications, tandis que l’Égypte traversait aussi des crises financières et politiques. Urabi est devenu l’un des principaux dirigeants du mouvement, mais il faut examiner toutes ces circonstances, et pas seulement une personne, pour le comprendre."
+          "text": "Ahmed Urabi est né en 1841 dans le village de Hirriyet Razna, dans le gouvernorat de Sharqia, près de Zagazig. Il a grandi à la campagne, reçu une première instruction religieuse pendant son enfance, puis est parti au Caire pour étudier à Al-Azhar. L’Égypte était alors gouvernée par la dynastie de Muhammad Ali, au sein de l’Empire ottoman. L’armée était l’une des institutions les plus importantes de l’État et exerçait une grande influence politique.",
+          "heading": "De Hirriyet Razna au Caire"
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Urabi n’a pas poursuivi longtemps ses études à Al-Azhar. Sous le règne de Saïd Pacha, l’armée a ouvert ses portes aux fils des cheikhs des villages. Urabi a quitté ses études et s’est engagé comme simple soldat en décembre 1854. Il n’a pas commencé sa carrière comme haut commandant : il est parti du premier échelon et a progressivement gravi les grades.",
+          "heading": "Les débuts dans l’armée"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Ahmed Urabi s’est engagé dans l’armée comme simple soldat le 6 décembre 1854. Quelques années plus tard, il en est devenu l’un des chefs les plus connus.",
+          "heading": "Le saviez-vous ? | Des débuts inattendus"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’armée égyptienne comptait des officiers d’origines diverses, mais les postes militaires les plus élevés restaient entre les mains de certains groupes. Des officiers égyptiens se plaignaient de la difficulté d’accéder aux grades supérieurs et aux postes de commandement. À mesure que ces plaintes se multipliaient, la question dépassait la promotion d’un seul officier : elle concernait le droit de participer à la direction de l’armée et aux affaires du pays.",
+          "heading": "Une armée en changement et de nouvelles revendications"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Au même moment, l’Égypte traversait une grave crise financière. Les dettes augmentaient et les pressions européennes sur les décisions du gouvernement se renforçaient. La Grande-Bretagne et la France exerçaient une grande influence sur les affaires financières et politiques. De nombreux Égyptiens estimaient que les intérêts du pays n’étaient pas toujours défendus. Les demandes de réforme de l’armée se sont donc mêlées à des questions plus larges sur le gouvernement, la représentation et la souveraineté.",
+          "heading": "Une crise qui dépasse l’armée"
+        },
+        {
           "speaker": "karma",
-          "text": "Pourquoi faut-il consulter plusieurs récits pour étudier le mouvement d’Urabi ?"
-        },
-        {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Il s’est déroulé dans un contexte de crise politique, d’intervention étrangère et de lutte sur la forme du gouvernement égyptien. Comparer les sources aide à comprendre les revendications des officiers et le contexte général sans attribuer toutes les causes à une seule personne."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Le mouvement d’Urabi n’est pas apparu sans signes précurseurs. Les revendications concernant les promotions, la représentation et les dépenses de l’armée se sont accumulées, sur fond de crise financière et politique."
-        },
-        {
-          "speaker": "karma",
-          "type": "paragraph",
-          "text": "Il ne suffit donc pas de présenter le mouvement d’Urabi comme l’affaire d’un seul homme : il faut comprendre l’armée, le pays et les revendications de la population ?"
+          "text": "Les officiers ne parlaient donc pas seulement de leur travail dans l’armée. Des événements touchaient tout le pays, et chaque problème avait des conséquences sur les autres.",
+          "heading": "Karma | Une réflexion"
         },
         {
           "speaker": "narrator",
           "type": "paragraph",
-          "text": "Exactement. Le mouvement était lié aux revendications concernant l’influence des officiers égyptiens, la représentation politique et le contrôle du gouvernement. Les récits divergent sur ses causes et ses conséquences ; il faut donc consulter plusieurs sources."
+          "text": "Le 9 septembre 1881, Urabi se rendit avec des officiers et des soldats sur la place Abdeen, au Caire, où ils présentèrent leurs revendications au khédive Tawfiq. Il ne s’agissait pas simplement d’un face-à-face entre un homme et un souverain. Des plaintes et des actions politiques avaient précédé la manifestation ; certaines personnes influentes la soutenaient, puis différents groupes de la société exprimèrent leur appui au mouvement.",
+          "heading": "La place Abdeen — 9 septembre 1881"
         },
         {
-          "type": "paragraph",
+          "type": "did_you_know",
           "speaker": "narrator",
-          "heading": "Un moment de confrontation",
-          "text": "Le nom d’Urabi est associé à sa confrontation avec le khédive Tawfiq sur la place Abdeen, le 9 septembre 1881, lorsque les officiers et la foule ont présenté leurs revendications. La phrase « Dieu nous a créés libres, non comme un héritage ou un bien » est restée célèbre en Égypte, mais les récits diffèrent sur ses mots exacts. Nous la présentons donc comme la formule la plus connue attribuée à cet épisode, et non comme une transcription incontestée.",
+          "heading": "Le saviez-vous ? | Un mouvement soutenu",
+          "text": "Le soutien au mouvement d’Urabi ne venait pas seulement des officiers de l’armée. Certains grands propriétaires terriens appuyaient leur action, et le mouvement a trouvé des soutiens dans différents milieux sociaux.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "« Dieu nous a créés libres »",
-          "text": "Cette confrontation dépassait la scène d’une place : elle exprimait une lutte pour le pouvoir, la représentation et le rôle de l’armée dans l’État."
+          "heading": "Quelles étaient les revendications ?",
+          "text": "Les revendications comprenaient le renvoi du gouvernement de Mustafa Riyad, la formation d’un gouvernement national et la création d’un nouveau conseil représentatif permettant une participation plus large aux discussions sur les affaires de l’État. D’autres demandes concernaient l’armée, son organisation et les droits des officiers égyptiens. Le khédive accepta certaines demandes à ce moment-là, mais le désaccord politique ne prit pas fin ; il se poursuivit et s’amplifia au cours des mois suivants."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1881 — Les revendications d’Urabi",
-          "text": "Le mouvement est passé de plaintes militaires à des revendications politiques, dans un contexte de conflit entre le khédive et ses adversaires et d’aggravation de la crise financière."
+          "heading": "Une phrase célèbre, des récits différents",
+          "text": "Dans la mémoire égyptienne, Urabi est associé à une phrase célèbre sur la liberté et le refus d’être traité comme un bien transmis en héritage. Cependant, les sources ne s’accordent pas sur les mots exacts prononcés sur la place Abdeen. Il est donc plus juste de la présenter comme une phrase attribuée à cet épisode, et non comme une transcription mot pour mot certaine. L’essentiel est de comprendre les revendications et les événements qui entouraient cette confrontation, sans réduire toute l’histoire à une seule phrase."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1882 — Guerre et intervention britannique",
-          "text": "Les tensions ont dégénéré en conflit armé. La bataille de Tel el-Kebir s’est achevée en septembre 1882 par une victoire britannique et l’entrée des troupes au Caire, marquant le début de l’occupation britannique."
+          "heading": "Du mouvement aux responsabilités gouvernementales",
+          "text": "La crise politique s’est poursuivie en 1882. Urabi a rejoint le gouvernement national dirigé par Mahmoud Sami al-Baroudi et en est devenu le ministre de la Guerre. Il est ainsi passé de la direction des revendications au sein de l’armée à une fonction de responsabilité dans le gouvernement, alors que le pays subissait des pressions intérieures et extérieures croissantes."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Le saviez-vous ? | Le rôle d’Urabi au gouvernement",
+          "text": "En 1882, Ahmed Urabi est devenu ministre de la Guerre dans le gouvernement national dirigé par Mahmoud Sami al-Baroudi."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Après la défaite — l’exil",
-          "text": "Urabi a été capturé, jugé puis exilé à Ceylan, aujourd’hui le Sri Lanka. Il est rentré en Égypte de nombreuses années plus tard."
+          "text": "La Grande-Bretagne suivait de près les événements en Égypte en raison de ses intérêts financiers et politiques et de la position stratégique du pays sur la route des Indes, via le canal de Suez. Alors que la crise s’aggravait, la flotte britannique bombarda Alexandrie le 11 juillet 1882. Les événements évoluèrent ensuite vers une intervention militaire de grande ampleur. La confrontation ne résultait pas de la seule décision d’Urabi : la crise du pouvoir, les dettes, la rivalité européenne et les intérêts des grandes puissances s’y mêlaient.",
+          "heading": "L’intervention britannique"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Cette période demande une lecture équilibrée : le mouvement associait des demandes de réforme à des intérêts politiques et militaires imbriqués, et les historiens divergent sur sa direction et ses résultats."
+          "heading": "La bataille de Tel el-Kébir — septembre 1882",
+          "text": "Le 13 septembre 1882, l’armée égyptienne affronta les forces britanniques lors de la bataille de Tel el-Kébir. L’armée égyptienne fut vaincue et les troupes britanniques avancèrent vers Le Caire, marquant le début de l’occupation britannique de l’Égypte. Ce fut un tournant majeur : le mouvement ne s’acheva pas seulement par une défaite militaire, le pays entra ensuite dans une longue période de présence militaire britannique."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "L’histoire ne se résume pas à un héros",
-          "text": "L’histoire d’Urabi montre que les grands événements naissent de conditions sociales, économiques et politiques imbriquées. Elle rappelle aussi qu’il faut distinguer les faits établis des formules passées dans la mémoire populaire, et la description d’un événement de son jugement."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Le saviez-vous ?",
-          "text": "L’expression « révolte d’Urabi » désigne le mouvement de 1879 à 1882. La manifestation d’Abdeen du 9 septembre 1881 en est l’un des moments les plus marquants.",
+          "speaker": "karma",
+          "heading": "Karma | Les conséquences",
+          "text": "Je comprends maintenant que de grands événements peuvent commencer lorsque des personnes demandent que quelque chose soit réparé, mais que leur déroulement peut mener à des résultats très difficiles, surtout lorsque des puissances plus fortes entrent dans le conflit.",
           "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Pourquoi le mouvement d’Urabi s’est-il étendu ?",
-          "text": "À la fin du XIXe siècle, plusieurs crises se sont croisées : plaintes contre les inégalités de promotion dans l’armée, demandes de participation plus large au gouvernement, pression financière sur l’État et influence européenne croissante. Le mouvement ne peut être expliqué par une seule cause ni réduit à un conflit entre un officier et un souverain."
+          "heading": "Le procès et l’exil",
+          "text": "Après la défaite, Urabi fut arrêté et jugé pour rébellion. Il fut condamné à mort, puis sa peine fut commuée en exil à vie. À la fin de décembre 1882, il quitta l’Égypte pour Ceylan, aujourd’hui le Sri Lanka, où il vécut de longues années loin de son pays."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Après la manifestation d’Abdeen en 1881, le conflit politique et militaire s’est intensifié. La Grande-Bretagne est intervenue militairement en 1882 ; l’affrontement a culminé avec la bataille de Tel el-Kébir puis l’occupation du Caire. Urabi a été capturé et exilé à Ceylan, aujourd’hui le Sri Lanka, avant de revenir en Égypte plusieurs années plus tard."
+          "text": "Urabi revint en Égypte après plusieurs années d’exil. Il passa le reste de sa vie loin des responsabilités politiques et militaires qu’il avait connues dans sa jeunesse. Il mourut au Caire le 21 septembre 1911. Sa vie fut liée à l’une des périodes les plus complexes de l’histoire moderne de l’Égypte.",
+          "heading": "Le retour en Égypte"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Les historiens divergent dans leur évaluation. Certains soulignent les revendications nationales et réformatrices du mouvement ; d’autres étudient les erreurs de sa direction et les conditions de la défaite. Une lecture historique rigoureuse considère les deux perspectives et distingue les faits établis des interprétations et des jugements."
+          "text": "Les historiens ne décrivent ni n’évaluent tous le mouvement d’Urabi de la même manière. Certains mettent l’accent sur ses revendications nationales et constitutionnelles ainsi que sur la large participation qu’il a suscitée. D’autres étudient les erreurs de sa direction et les décisions militaires et politiques qui ont précédé la défaite. Les études historiques nous aident à replacer le mouvement dans son contexte : revendications au sein de l’armée, crise financière, lutte sur la forme du gouvernement, influence européenne, puis intervention militaire qui s’est terminée par l’occupation. Il n’est pas nécessaire de choisir une seule description et d’oublier les autres faits ; il faut distinguer les événements des interprétations des historiens.",
+          "heading": "Comment comprendre le mouvement d’Urabi ?"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Lorsque nous entendons la phrase célèbre attribuée à Urabi, « Dieu nous a créés libres », rappelons que sa popularité ne fait pas de chaque version une transcription littérale reconnue. Ce récit la présente comme l’une des formules les plus connues associées à Abdeen, tout en signalant les divergences entre les récits."
+          "speaker": "karma",
+          "text": "Je pensais que toute l’histoire d’Urabi se résumait à un seul moment sur la place Abdeen. J’ai découvert qu’il s’agissait de l’histoire d’un pays entier qui cherchait à décider qui participerait à son gouvernement et comment préserver son droit de prendre ses propres décisions. J’ai aussi compris que connaître le courage d’une personne ne suffit pas : il faut comprendre les circonstances, les choix et leurs conséquences.",
+          "heading": "Karma | La fin de l’histoire"
         }
       ],
       "figure_name": "Ahmed Urabi"
     },
     "it": {
-      "title": "Ahmed Urabi — Quando fece sentire la sua voce",
-      "subtitle": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste di ufficiali e soldati divennero un movimento politico che cambiò il corso del paese.",
-      "summary": "Un viaggio nell’Egitto dell’Ottocento, dove le richieste di ufficiali e soldati divennero un movimento politico che cambiò il corso del paese.",
+      "title": "Ahmed Urabi — Quando fece sentire la sua voce per il cambiamento",
+      "subtitle": "La storia di un ufficiale egiziano del villaggio di Hirriyet Razna, che avanzò nei ranghi dell’esercito e divenne una delle figure principali di un movimento che chiedeva riforme e una maggiore partecipazione al governo.",
+      "summary": "La storia di un ufficiale egiziano di Hirriyet Razna, diventato una figura importante di un movimento per le riforme e la partecipazione politica, prima della sconfitta militare, dell’occupazione britannica e di lunghi anni di esilio.",
       "history_note": "Questo è un testo didattico semplificato. Alcune frasi note sono presentate come attribuite, poiché le fonti divergono sui dettagli.",
       "images_note": "Il ritratto storico fu pubblicato nel 1882 ed è classificato come di pubblico dominio; la linea del tempo è un’illustrazione esplicativa originale del progetto Khaledoon.",
       "blocks": [
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Dal villaggio di Hirriyet Razna all’esercito",
-          "text": "Ahmed Urabi nacque nel 1841 nel villaggio di Hirriyet Razna, nel governatorato egiziano di Sharqia. Entrò nell’esercito egiziano durante il governo di Muhammad Sa'id Pascià e avanzò nella carriera militare. Ai suoi tempi, il trattamento diseguale degli ufficiali egiziani rispetto agli altri fu una fonte di tensione e malcontento."
-        },
-        {
-          "type": "paragraph",
           "speaker": "karma",
-          "text": "Quindi il movimento di Urabi nacque soltanto perché Ahmed Urabi era arrabbiato?"
+          "heading": "Karma | Apertura",
+          "text": "Quando ho sentito per la prima volta il nome di Ahmed Urabi, pensavo che fosse soltanto un ufficiale che si era presentato davanti al khedivè in piazza Abdeen. Ma più imparo, più scopro che la sua storia è legata a un esercito e a un paese attraversati da una grave crisi, e che ciò che accadde non fu causato da una sola persona."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Non proprio. Ufficiali e soldati avevano rimostranze e richieste, mentre l’Egitto affrontava anche crisi finanziarie e politiche. Urabi divenne uno dei principali leader del movimento, ma per capirlo dobbiamo considerare tutte queste circostanze, non una sola persona."
+          "text": "Ahmed Urabi nacque nel 1841 nel villaggio di Hirriyet Razna, nel governatorato egiziano di Sharqia, vicino a Zagazig. Crebbe in campagna, ricevette da bambino una prima istruzione religiosa e in seguito si trasferì al Cairo per studiare ad Al-Azhar. All’epoca l’Egitto era governato dalla dinastia di Muhammad Ali all’interno dell’Impero ottomano. L’esercito era una delle istituzioni più importanti dello Stato e aveva una forte influenza sulla politica.",
+          "heading": "Da Hirriyet Razna al Cairo"
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Urabi non proseguì a lungo gli studi ad Al-Azhar. Durante il governo di Sa'id Pascià, l’esercito aprì le porte ai figli degli sceicchi dei villaggi. Urabi lasciò gli studi e si arruolò come semplice soldato nel dicembre 1854. Non iniziò la carriera come comandante di alto grado: partì dal livello più basso e salì gradualmente di grado nel corso degli anni.",
+          "heading": "L’inizio della carriera nell’esercito"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Ahmed Urabi entrò nell’esercito come semplice soldato il 6 dicembre 1854. Anni dopo sarebbe diventato uno dei suoi comandanti più importanti.",
+          "heading": "Lo sapevi? | Un inizio inatteso"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "L’esercito egiziano comprendeva ufficiali di origini e ambienti diversi, ma le cariche militari più alte restavano nelle mani di gruppi specifici. Gli ufficiali egiziani si lamentavano delle difficoltà nel raggiungere i gradi superiori e i posti di comando. Con il crescere delle proteste, la questione non riguardò più soltanto la promozione di un ufficiale: riguardava chi avesse il diritto di partecipare alla guida dell’esercito e alla gestione del paese.",
+          "heading": "Un esercito che cambia e nuove richieste"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Nello stesso periodo l’Egitto affrontava una grave crisi finanziaria. I debiti aumentavano e crescevano le pressioni europee sulle decisioni del governo. Gran Bretagna e Francia esercitavano una forte influenza sugli affari finanziari e politici. Molti egiziani ritenevano che gli interessi del paese non fossero sempre tutelati. Per questo le richieste di riforma dell’esercito si intrecciarono con questioni più ampie sul governo, la rappresentanza e la sovranità.",
+          "heading": "Una crisi che va oltre l’esercito"
+        },
+        {
           "speaker": "karma",
-          "text": "Perché, per studiare il movimento di Urabi, dobbiamo consultare più di un resoconto?"
-        },
-        {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Si sviluppò durante una crisi politica, un intervento straniero e un conflitto sulla forma di governo dell’Egitto. Confrontare le fonti aiuta a comprendere le richieste degli ufficiali e il contesto più ampio, senza attribuire ogni causa a una sola persona."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Il movimento di Urabi non nacque all’improvviso. Si accumularono richieste su promozioni, rappresentanza e spese militari, insieme a una crisi finanziaria e politica che influenzò il governo egiziano."
-        },
-        {
-          "speaker": "karma",
-          "type": "paragraph",
-          "text": "Quindi non basta dire che il movimento di Urabi riguardava un solo uomo: dobbiamo capire l’esercito, il paese e le richieste della popolazione?"
+          "text": "Quindi gli ufficiali non parlavano soltanto del loro lavoro nell’esercito. In tutto il paese stavano accadendo molte cose e ogni problema influiva sugli altri.",
+          "heading": "Karma | Una riflessione"
         },
         {
           "speaker": "narrator",
           "type": "paragraph",
-          "text": "Esatto. Il movimento era legato a richieste riguardanti l’influenza degli ufficiali egiziani, la rappresentanza politica e il controllo del governo. Le ricostruzioni differiscono sulle cause e sulle conseguenze, quindi consultiamo più fonti."
+          "text": "Il 9 settembre 1881 Urabi si recò con ufficiali e soldati in piazza Abdeen al Cairo, dove presentarono le loro richieste al khedivè Tawfiq. Non fu semplicemente uno scontro tra un uomo e un sovrano. Prima della manifestazione c’erano state lamentele e iniziative politiche; alcune persone influenti la sostenevano e in seguito diversi gruppi della società espressero il proprio appoggio al movimento.",
+          "heading": "Piazza Abdeen — 9 settembre 1881"
         },
         {
-          "type": "paragraph",
+          "type": "did_you_know",
           "speaker": "narrator",
-          "heading": "Un momento di confronto",
-          "text": "Il nome di Urabi è legato al confronto con il khedivè Tawfiq in piazza Abdeen il 9 settembre 1881, quando ufficiali e folla presentarono le loro richieste. La frase «Dio ci ha creati liberi, non come eredità o proprietà» è diventata celebre nella memoria egiziana, ma le fonti divergono sulla formulazione esatta. La riportiamo quindi come la frase più nota attribuita all’episodio, non come una trascrizione letterale condivisa.",
+          "heading": "Lo sapevi? | Il sostegno al movimento",
+          "text": "Il sostegno al movimento di Urabi non veniva soltanto dagli ufficiali dell’esercito. Alcuni grandi proprietari terrieri appoggiarono la loro iniziativa e il movimento trovò sostenitori in diversi ambienti sociali.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "«Dio ci ha creati liberi»",
-          "text": "Il confronto non fu solo una scena in piazza: esprimeva una lotta per il potere, la rappresentanza e il ruolo dell’esercito nello Stato."
+          "heading": "Quali erano le richieste?",
+          "text": "Le richieste comprendevano la destituzione del governo di Mustafa Riyad, la formazione di un governo nazionale e la creazione di un nuovo consiglio rappresentativo che permettesse una partecipazione più ampia alle discussioni sugli affari dello Stato. C’erano anche richieste riguardanti l’esercito, la sua organizzazione e i diritti degli ufficiali egiziani. In quel momento il khedivè accolse alcune richieste, ma il contrasto politico non finì: continuò e si allargò nei mesi successivi."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1881 — Le richieste di Urabi",
-          "text": "Il movimento passò dalle lamentele militari a richieste politiche, tra il conflitto fra il khedivè e i suoi avversari e una crisi finanziaria in peggioramento."
+          "heading": "Una frase famosa, racconti diversi",
+          "text": "Nella memoria egiziana, Urabi è legato a una frase famosa sulla libertà e sul rifiuto di essere trattati come beni ereditati. Tuttavia, le fonti non concordano sulle parole esatte pronunciate in piazza Abdeen. È quindi più corretto presentarla come una frase attribuita a quell’episodio, non come una trascrizione certa parola per parola. La cosa più importante è capire le richieste e gli eventi che circondarono lo scontro, senza ridurre tutta la storia a una sola frase."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1882 — Guerra e intervento britannico",
-          "text": "Le tensioni sfociarono in un conflitto armato. La battaglia di Tel el-Kebir terminò nel settembre 1882 con la vittoria britannica e l’ingresso delle truppe al Cairo, dando inizio all’occupazione britannica."
+          "heading": "Dal movimento alle responsabilità di governo",
+          "text": "La crisi politica continuò nel 1882. Urabi entrò nel governo nazionale guidato da Mahmoud Sami al-Barudi e ne divenne ministro della Guerra. Passò così dalla guida delle richieste all’interno dell’esercito a un incarico di responsabilità nel governo, mentre il paese affrontava pressioni interne ed esterne sempre più forti."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Lo sapevi? | Il ruolo di Urabi nel governo",
+          "text": "Nel 1882 Ahmed Urabi divenne ministro della Guerra nel governo nazionale guidato da Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Dopo la sconfitta — l’esilio",
-          "text": "Urabi fu catturato, processato ed esiliato a Ceylon, oggi Sri Lanka. Tornò in Egitto molti anni dopo."
+          "text": "La Gran Bretagna seguiva da vicino gli avvenimenti in Egitto per i suoi interessi finanziari e politici e per la posizione strategica del paese sulla rotta verso l’India attraverso il Canale di Suez. Con l’aggravarsi della crisi, la flotta britannica bombardò Alessandria l’11 luglio 1882. Gli eventi portarono poi a un ampio intervento militare. Lo scontro non fu il risultato della sola decisione di Urabi: vi si intrecciarono la crisi del governo, i debiti, la rivalità europea e gli interessi delle grandi potenze.",
+          "heading": "L’intervento britannico"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Questo periodo richiede una lettura equilibrata: il movimento di Urabi unì richieste di riforma e interessi politici e militari intrecciati, e gli storici ne valutano diversamente la leadership e i risultati."
+          "heading": "La battaglia di Tel el-Kebir — settembre 1882",
+          "text": "Il 13 settembre 1882 l’esercito egiziano affrontò le forze britanniche nella battaglia di Tel el-Kebir. L’esercito egiziano fu sconfitto e le truppe britanniche avanzarono verso il Cairo, dando inizio all’occupazione britannica dell’Egitto. Fu una svolta importante: il movimento non terminò soltanto con una sconfitta militare, perché il paese entrò in un lungo periodo di presenza militare britannica."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "La storia è più di un solo eroe",
-          "text": "La storia di Urabi mostra che i grandi eventi nascono da condizioni sociali, economiche e politiche intrecciate. Ci ricorda anche di distinguere i fatti accertati dalle frasi entrate nella memoria popolare e la descrizione di un evento dal suo giudizio."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Lo sapevi?",
-          "text": "L’espressione «rivolta di Urabi» indica il movimento del 1879–1882. La manifestazione di Abdeen del 9 settembre 1881 è considerata uno dei suoi momenti più importanti.",
+          "speaker": "karma",
+          "heading": "Karma | Le conseguenze",
+          "text": "Ora capisco che i grandi eventi possono cominciare con persone che chiedono di correggere qualcosa, ma il corso degli avvenimenti può portare a risultati molto difficili, soprattutto quando nel conflitto entrano potenze più forti.",
           "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Perché il movimento di Urabi si ampliò?",
-          "text": "Alla fine dell’Ottocento si intrecciarono diverse crisi: proteste nell’esercito contro le disparità nelle promozioni, richieste di maggiore partecipazione al governo, pressione finanziaria sullo Stato e crescente influenza europea. Il movimento non può essere spiegato con una sola causa né ridotto a una disputa tra un ufficiale e un sovrano."
+          "heading": "Il processo e l’esilio",
+          "text": "Dopo la sconfitta, Urabi fu arrestato e processato per ribellione. Fu condannato a morte, ma la pena venne commutata in esilio a vita. Alla fine di dicembre 1882 lasciò l’Egitto per Ceylon, oggi Sri Lanka, dove visse per molti anni lontano dal suo paese."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Dopo la manifestazione di Abdeen del 1881, il conflitto politico e militare si intensificò. Nel 1882 la Gran Bretagna intervenne militarmente; lo scontro culminò nella battaglia di Tell el-Kebir e nell’occupazione del Cairo. Urabi fu catturato ed esiliato a Ceylon, oggi Sri Lanka, prima di tornare in Egitto anni dopo."
+          "text": "Urabi tornò in Egitto dopo anni di esilio. Trascorse il resto della sua vita lontano dai ruoli di guida politica e militare che aveva conosciuto da giovane. Morì al Cairo il 21 settembre 1911. La sua vita fu legata a uno dei periodi più complessi della storia egiziana moderna.",
+          "heading": "Il ritorno in Egitto"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Gli storici valutano il movimento in modi diversi. Alcuni sottolineano le richieste nazionali e riformatrici; altri esaminano gli errori della leadership e le condizioni che portarono alla sconfitta. Una lettura storica accurata considera entrambe le prospettive e distingue i fatti accertati dalle interpretazioni e dai giudizi."
+          "text": "Gli storici descrivono e valutano il movimento di Urabi in modi diversi. Alcuni si concentrano sulle sue richieste nazionali e costituzionali e sull’ampia partecipazione che suscitò. Altri esaminano gli errori della leadership e le decisioni militari e politiche che precedettero la sconfitta. Gli studi storici ci aiutano a vedere il movimento nel suo contesto: richieste nell’esercito, crisi finanziaria, conflitto sulla forma del governo, influenza europea e poi intervento militare che terminò con l’occupazione. Non dobbiamo scegliere una sola descrizione e dimenticare gli altri fatti; dobbiamo distinguere ciò che accadde dalle interpretazioni degli storici.",
+          "heading": "Come comprendere il movimento di Urabi?"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Quando sentiamo la celebre frase attribuita a Urabi, «Dio ci ha creati liberi», ricordiamo che la sua notorietà non rende ogni versione una trascrizione letterale concordata. Questo racconto la presenta come una delle frasi più note associate ad Abdeen, segnalando però le differenze tra le fonti."
+          "speaker": "karma",
+          "text": "Pensavo che tutta la storia di Urabi fosse un solo momento in piazza Abdeen. Invece era la storia di un intero paese che cercava di decidere chi dovesse partecipare al governo e come proteggere il proprio diritto di prendere decisioni. Ho capito anche che sapere che una persona era coraggiosa non basta: dobbiamo comprendere le circostanze, le scelte e i risultati che ne seguirono.",
+          "heading": "Karma | La fine della storia"
         }
       ],
       "figure_name": "Ahmed Urabi"
     },
     "de": {
-      "title": "Ahmed Urabi — Als er seine Stimme erhob",
-      "subtitle": "Eine Reise ins Ägypten des 19. Jahrhunderts, wo aus den Forderungen von Offizieren und Soldaten eine politische Bewegung wurde, die den Kurs des Landes veränderte.",
-      "summary": "Eine Reise ins Ägypten des 19. Jahrhunderts, wo aus den Forderungen von Offizieren und Soldaten eine politische Bewegung wurde, die den Kurs des Landes veränderte.",
+      "title": "Ahmed Urabi — Als er seine Stimme für Veränderung erhob",
+      "subtitle": "Die Geschichte eines ägyptischen Offiziers aus dem Dorf Hirriyet Razna, der in der Armee aufstieg und zu einer der führenden Persönlichkeiten einer Bewegung für Reformen und mehr Mitsprache in der Regierung wurde.",
+      "summary": "Die Geschichte eines ägyptischen Offiziers aus Hirriyet Razna, der zu einer führenden Persönlichkeit einer Reformbewegung wurde, bevor militärische Niederlage, britische Besatzung und lange Jahre im Exil folgten.",
       "history_note": "Dies ist ein vereinfachter Lerntext. Einige bekannte Aussprüche werden als zugeschriebene Berichte dargestellt, mit dem Hinweis, dass sich die Einzelheiten je nach Quelle unterscheiden.",
       "images_note": "Das historische Porträt wurde 1882 veröffentlicht und ist als gemeinfrei eingestuft; die Zeitleiste ist eine originale erklärende Illustration des Khaledoon-Projekts.",
       "blocks": [
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Von Hirriyet Razna zur Armee",
-          "text": "Ahmed Urabi wurde 1841 im Dorf Hirriyet Razna im ägyptischen Gouvernement Scharkija geboren. Er trat unter der Herrschaft von Muhammad Said Pascha in die ägyptische Armee ein und stieg im Militärdienst auf. Zu seiner Zeit war die Ungleichbehandlung ägyptischer und nichtägyptischer Offiziere eine Quelle von Spannungen und Groll unter einigen Offizieren."
-        },
-        {
-          "type": "paragraph",
           "speaker": "karma",
-          "text": "Begann die Urabi-Bewegung also nur, weil Ahmed Urabi wütend war?"
+          "heading": "Karma | Auftakt",
+          "text": "Als ich den Namen Ahmed Urabi zum ersten Mal hörte, dachte ich, er sei einfach ein Offizier gewesen, der sich auf dem Abdin-Platz dem Khediven entgegengestellt hatte. Je mehr ich erfahre, desto deutlicher wird mir aber, dass seine Geschichte mit einer Armee und einem Land verbunden ist, die eine schwere Krise durchlebten – und dass nicht eine einzelne Person alles verursacht hat."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Nicht ganz. Offiziere und Soldaten hatten Beschwerden und Forderungen, während Ägypten zugleich finanzielle und politische Krisen durchlebte. Urabi wurde zu einer der führenden Persönlichkeiten der Bewegung. Um sie zu verstehen, müssen wir jedoch alle Umstände betrachten, nicht nur eine Person."
+          "text": "Ahmed Urabi wurde 1841 im Dorf Hirriyet Razna im ägyptischen Gouvernement Scharkija in der Nähe von Zagazig geboren. Er wuchs auf dem Land auf, erhielt als Kind eine erste religiöse Ausbildung und ging später nach Kairo, um an der Al-Azhar zu lernen. Ägypten wurde damals von der Dynastie Muhammad Alis innerhalb des Osmanischen Reiches regiert. Das Heer gehörte zu den wichtigsten Einrichtungen des Staates und hatte großen politischen Einfluss.",
+          "heading": "Von Hirriyet Razna nach Kairo"
         },
         {
           "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Urabi setzte sein Studium an der Al-Azhar nicht lange fort. Unter Sa'id Pascha öffnete die Armee ihre Reihen für die Söhne von Dorf-Scheichs. Urabi brach sein Studium ab und trat im Dezember 1854 als einfacher Soldat ein. Er begann seine militärische Laufbahn nicht als hoher Befehlshaber, sondern auf der untersten Stufe und stieg im Laufe der Jahre nach und nach auf.",
+          "heading": "Der Beginn einer Laufbahn beim Militär"
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "text": "Ahmed Urabi trat am 6. Dezember 1854 als einfacher Soldat in die Armee ein. Jahre später wurde er einer ihrer bekanntesten Anführer.",
+          "heading": "Schon gewusst? | Ein ungewöhnlicher Anfang"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Im ägyptischen Heer dienten Offiziere mit unterschiedlichen Herkünften und Hintergründen. Die höchsten militärischen Ämter blieben jedoch bestimmten Gruppen vorbehalten. Ägyptische Offiziere beklagten, dass sie nur schwer höhere Dienstgrade und Führungspositionen erreichen konnten. Mit der Zeit ging es nicht mehr nur um die Beförderung eines einzelnen Offiziers. Es ging auch darum, wer das Recht hatte, an der Führung des Heeres und an den Angelegenheiten des Landes mitzuwirken.",
+          "heading": "Eine Armee im Wandel und neue Forderungen"
+        },
+        {
+          "type": "paragraph",
+          "speaker": "narrator",
+          "text": "Gleichzeitig befand sich Ägypten in einer schweren Finanzkrise. Die Schulden nahmen zu, und der Druck Europas auf die Entscheidungen der Regierung wuchs. Großbritannien und Frankreich hatten großen Einfluss auf finanzielle und politische Angelegenheiten. Viele Ägypter fanden, dass die Interessen des Landes nicht immer gewahrt wurden. Deshalb verbanden sich die Forderungen nach einer Reform des Heeres mit größeren Fragen über Regierung, Vertretung und Selbstbestimmung.",
+          "heading": "Eine Krise, die über das Heer hinausging"
+        },
+        {
           "speaker": "karma",
-          "text": "Warum sollten wir bei der Beschäftigung mit der Urabi-Bewegung mehrere Darstellungen heranziehen?"
-        },
-        {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Sie entwickelte sich inmitten einer politischen Krise, ausländischer Einmischung und eines Konflikts um die Regierungsform Ägyptens. Ein Quellenvergleich hilft, die Forderungen der Offiziere und die größeren Zusammenhänge zu verstehen, ohne alle Ursachen auf eine Person zu reduzieren."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Die Urabi-Bewegung entstand nicht ohne Vorwarnung. Forderungen zu Beförderungen, Mitsprache und Heeresausgaben hatten sich neben einer finanziellen und politischen Krise der ägyptischen Regierung angesammelt."
-        },
-        {
-          "speaker": "karma",
-          "type": "paragraph",
-          "text": "Es reicht also nicht, die Urabi-Bewegung als Angelegenheit eines einzelnen Mannes darzustellen; wir müssen Armee, Land und Forderungen der Bevölkerung verstehen?"
+          "text": "Die Offiziere sprachen also nicht nur über ihre Arbeit im Heer. Im ganzen Land geschah vieles, und jedes Problem wirkte sich auf die anderen aus.",
+          "heading": "Karma | Ein Gedanke"
         },
         {
           "speaker": "narrator",
           "type": "paragraph",
-          "text": "Genau. Die Bewegung war mit Forderungen nach mehr Einfluss ägyptischer Offiziere, politischer Vertretung und Kontrolle der Regierung verbunden. Die Darstellungen unterscheiden sich bei Ursachen und Folgen; deshalb vergleichen wir mehrere Quellen."
+          "text": "Am 9. September 1881 zog Urabi gemeinsam mit Offizieren und Soldaten zum Abdin-Platz in Kairo. Dort trugen sie ihre Forderungen dem Khediven Tawfiq vor. Es war nicht einfach eine Auseinandersetzung zwischen einem Mann und einem Herrscher. Der Demonstration waren Beschwerden und politische Aktivitäten vorausgegangen. Einige einflussreiche Personen unterstützten sie, später bekundeten auch verschiedene gesellschaftliche Gruppen ihre Unterstützung für die Bewegung.",
+          "heading": "Der Abdin-Platz — 9. September 1881"
         },
         {
-          "type": "paragraph",
+          "type": "did_you_know",
           "speaker": "narrator",
-          "heading": "Ein Moment der Konfrontation",
-          "text": "Urabi wird mit der Konfrontation mit Khedive Tawfiq auf dem Abdin-Platz am 9. September 1881 in Verbindung gebracht, als Offiziere und Menschenmengen ihre Forderungen vortrugen. Der Satz „Gott hat uns frei geschaffen, nicht als Erbe oder Besitz“ wurde im ägyptischen Gedächtnis berühmt, doch die Berichte unterscheiden sich im genauen Wortlaut. Wir stellen ihn daher als den bekanntesten Satz dar, der dem Ereignis zugeschrieben wird, nicht als übereinstimmend überliefertes Wortprotokoll.",
+          "heading": "Schon gewusst? | Unterstützung für die Bewegung",
+          "text": "Die Urabi-Bewegung wurde nicht nur von Armeeoffizieren unterstützt. Auch einige große Landbesitzer befürworteten ihr Vorgehen, und die Bewegung fand Unterstützer in unterschiedlichen Teilen der Gesellschaft.",
           "image_after": "historical-portrait"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "„Gott hat uns frei geschaffen“",
-          "text": "Die Konfrontation war mehr als eine Szene auf einem Platz; sie drückte einen Kampf um Macht, Mitsprache und die Rolle der Armee im Staat aus."
+          "heading": "Was waren die Forderungen?",
+          "text": "Zu den Forderungen gehörten die Entlassung der Regierung Mustafa Riyads, die Bildung einer nationalen Regierung und die Einrichtung eines neuen Vertretungsrats, der eine breitere Beteiligung an Beratungen über Staatsangelegenheiten ermöglichen sollte. Weitere Forderungen betrafen das Heer, seine Organisation und die Rechte ägyptischer Offiziere. Der Khedive erfüllte in diesem Moment einige Forderungen, doch der politische Streit endete nicht. Er setzte sich fort und weitete sich in den folgenden Monaten aus."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1881 — Urabis Forderungen",
-          "text": "Die Bewegung weitete sich von militärischen Beschwerden zu politischen Forderungen aus, inmitten des Konflikts zwischen dem Khediven und seinen Gegnern und einer sich vertiefenden Finanzkrise."
+          "heading": "Ein berühmter Satz und unterschiedliche Berichte",
+          "text": "Im ägyptischen Gedächtnis wird Urabi mit einem berühmten Satz über Freiheit und die Ablehnung verbunden, Menschen wie vererbten Besitz zu behandeln. Die Quellen stimmen jedoch nicht in einem genauen Wortlaut dessen überein, was auf dem Abdin-Platz gesagt wurde. Deshalb ist es genauer, den Satz als eine Äußerung zu bezeichnen, die diesem Ereignis zugeschrieben wird, und nicht als gesichertes Wortprotokoll. Wichtiger ist, die Forderungen und Ereignisse rund um die Konfrontation zu verstehen, statt die ganze Geschichte auf einen einzigen Satz zu verkürzen."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "1882 — Krieg und britisches Eingreifen",
-          "text": "Die Spannungen eskalierten zu einem militärischen Konflikt. Die Schlacht von Tell el-Kebir endete im September 1882 mit einem britischen Sieg und dem Einmarsch britischer Truppen in Kairo, womit die Zeit der britischen Besatzung begann."
+          "heading": "Von der Bewegung in Regierungsverantwortung",
+          "text": "Die politische Krise dauerte 1882 an. Urabi trat in die von Mahmoud Sami al-Barudi geführte nationale Regierung ein und wurde ihr Kriegsminister. Damit wechselte er von der Führung von Forderungen innerhalb des Heeres zu einer verantwortlichen Position in der Regierung, während das Land immer stärkerem inneren und äußeren Druck ausgesetzt war."
+        },
+        {
+          "type": "did_you_know",
+          "speaker": "narrator",
+          "heading": "Schon gewusst? | Urabis Regierungsamt",
+          "text": "1882 wurde Ahmed Urabi Kriegsminister in der nationalen Regierung unter dem Vorsitz von Mahmoud Sami al-Barudi."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Nach der Niederlage — das Exil",
-          "text": "Urabi wurde gefangen genommen, vor Gericht gestellt und nach Ceylon, das heutige Sri Lanka, verbannt. Viele Jahre später kehrte er nach Ägypten zurück."
+          "text": "Großbritannien verfolgte die Entwicklungen in Ägypten aufmerksam – wegen seiner finanziellen und politischen Interessen und wegen der wichtigen Lage des Landes auf dem Weg nach Indien durch den Suezkanal. Als sich die Krise zuspitzte, beschoss die britische Flotte am 11. Juli 1882 Alexandria. Danach entwickelte sich die Lage zu einem umfassenden militärischen Eingreifen. Die Auseinandersetzung war nicht allein das Ergebnis von Urabis Entscheidung: Die Regierungskrise, die Schulden, die Rivalität europäischer Mächte und die Interessen der Großmächte spielten zusammen.",
+          "heading": "Das britische Eingreifen"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Diese Zeit verlangt eine ausgewogene Betrachtung. Die Urabi-Bewegung verband Reformforderungen mit verflochtenen politischen und militärischen Interessen, und Historiker beurteilen ihre Führung und ihre Ergebnisse unterschiedlich."
+          "heading": "Die Schlacht von Tell el-Kebir — September 1882",
+          "text": "Am 13. September 1882 kämpfte die ägyptische Armee in der Schlacht von Tell el-Kebir gegen britische Truppen. Die ägyptische Armee wurde besiegt, und die britischen Truppen rückten in Richtung Kairo vor. Damit begann die britische Besatzung Ägyptens. Das war ein großer Wendepunkt: Die Bewegung endete nicht nur mit einer militärischen Niederlage; für das Land begann eine lange Zeit britischer Militärpräsenz."
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Geschichte ist mehr als ein einziger Held",
-          "text": "Urabis Geschichte hilft uns zu sehen, wie große Ereignisse aus miteinander verflochtenen gesellschaftlichen, wirtschaftlichen und politischen Bedingungen wachsen. Sie erinnert uns auch daran, gesicherte Tatsachen von Sätzen zu unterscheiden, die im öffentlichen Gedächtnis populär wurden, und das Beschreiben eines Ereignisses vom Urteilen darüber zu trennen."
-        },
-        {
-          "type": "paragraph",
-          "speaker": "narrator",
-          "heading": "Schon gewusst?",
-          "text": "„Die Urabi-Revolte“ bezeichnet die Bewegung der Jahre 1879–1882. Die Demonstration auf dem Abdin-Platz am 9. September 1881 gilt als einer ihrer markantesten Momente.",
+          "speaker": "karma",
+          "heading": "Karma | Die Folgen",
+          "text": "Jetzt verstehe ich, dass große Ereignisse damit beginnen können, dass Menschen etwas verändern wollen. Doch wie sich die Ereignisse entwickeln, kann zu sehr schwierigen Folgen führen – besonders wenn stärkere Mächte in den Konflikt eingreifen.",
           "image_after": "urabi-timeline"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "heading": "Warum weitete sich die Urabi-Bewegung aus?",
-          "text": "Im späten 19. Jahrhundert überschnitten sich mehrere Krisen: Beschwerden über ungleiche Beförderungen im Heer, Forderungen nach stärkerer Beteiligung an der Regierung, finanzieller Druck auf den Staat und wachsender europäischer Einfluss. Die Bewegung lässt sich weder auf eine einzige Ursache noch auf einen Streit zwischen einem Offizier und einem Herrscher reduzieren."
+          "heading": "Prozess und Verbannung",
+          "text": "Nach der Niederlage wurde Urabi festgenommen und wegen Aufruhrs vor Gericht gestellt. Er wurde zum Tode verurteilt, doch das Urteil wurde in lebenslange Verbannung umgewandelt. Ende Dezember 1882 verließ er Ägypten und ging nach Ceylon, dem heutigen Sri Lanka. Dort lebte er viele Jahre fern seiner Heimat."
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Nach der Abdin-Demonstration von 1881 verschärfte sich der politische und militärische Konflikt. 1882 griff Großbritannien militärisch ein; die Auseinandersetzung gipfelte in der Schlacht von Tell el-Kebir und der Besetzung Kairos. Urabi wurde gefangen genommen und nach Ceylon, dem heutigen Sri Lanka, verbannt, bevor er Jahre später nach Ägypten zurückkehrte."
+          "text": "Nach vielen Jahren im Exil kehrte Urabi nach Ägypten zurück. Den Rest seines Lebens verbrachte er fern von den politischen und militärischen Führungspositionen, die er in jungen Jahren gekannt hatte. Er starb am 21. September 1911 in Kairo. Sein Leben war mit einer der kompliziertesten Zeiten der modernen ägyptischen Geschichte verbunden.",
+          "heading": "Die Rückkehr nach Ägypten"
         },
         {
           "type": "paragraph",
           "speaker": "narrator",
-          "text": "Historiker beurteilen die Bewegung unterschiedlich. Einige betonen ihre nationalen und reformorientierten Forderungen; andere untersuchen Führungsfehler und die Umstände der Niederlage. Eine fundierte historische Betrachtung berücksichtigt beide Perspektiven und trennt gesicherte Tatsachen von Deutungen und Urteilen."
+          "text": "Historiker beschreiben und bewerten die Urabi-Bewegung unterschiedlich. Einige betonen ihre nationalen und verfassungsbezogenen Forderungen und die breite Beteiligung, die sie fand. Andere untersuchen Fehler der Führung sowie militärische und politische Entscheidungen vor der Niederlage. Historische Studien helfen uns, die Bewegung in ihrem Zusammenhang zu sehen: Forderungen innerhalb des Heeres, eine Finanzkrise, ein Streit über die Regierungsform, europäischer Einfluss und schließlich ein militärisches Eingreifen, das mit der Besatzung endete. Wir müssen uns nicht für eine einzige Beschreibung entscheiden und andere Tatsachen vergessen. Wichtig ist, zwischen dem Geschehenen und den Deutungen der Historiker zu unterscheiden.",
+          "heading": "Wie lässt sich die Urabi-Bewegung verstehen?"
         },
         {
           "type": "paragraph",
-          "speaker": "narrator",
-          "text": "Wenn wir den Urabi zugeschriebenen Satz „Gott hat uns frei geschaffen“ hören, sollten wir bedenken, dass seine Bekanntheit nicht jede Fassung zu einem bestätigten Wortprotokoll macht. Diese Geschichte stellt ihn als einen der bekanntesten Aussprüche im Zusammenhang mit Abdin dar und weist zugleich auf unterschiedliche Berichte hin."
+          "speaker": "karma",
+          "text": "Ich dachte früher, Urabis ganze Geschichte sei ein einziger Augenblick auf dem Abdin-Platz. Doch es war die Geschichte eines ganzen Landes, das herausfinden wollte, wer an seiner Regierung mitwirken und wie es sein Recht auf eigene Entscheidungen schützen sollte. Außerdem habe ich gelernt: Es reicht nicht, nur zu wissen, dass jemand mutig war. Wir müssen auch die Umstände, die Entscheidungen und ihre Folgen verstehen.",
+          "heading": "Karma | Das Ende der Geschichte"
         }
       ],
       "figure_name": "Ahmed Urabi"
