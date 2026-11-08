@@ -7,6 +7,7 @@
 var VOICES = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
 var GEN_VERSION = 'v1';
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
+var AUDIO_PHASE_LANGS = ['ar', 'en'];
 /* لا توجد قائمة حكايات تجريبية: محرك المراجعة مشترك ويستقبل معرّف أي حكاية من القارئ. */
 
 function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim(); }
@@ -196,7 +197,7 @@ function applyDecision(review, entry, decision, now) {
   return r;
 }
 
-/* شرط اعتماد المعاينة: كل مقطع (في اللغات الخمس) جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
+/* شرط اعتماد المعاينة: كل مقطع عربي وإنجليزي جاهز ومقبول، ولا مرفوض ولا غير مراجَع. */
 function evaluateGate(entries, review, readyByKey, listenedByKey) {
   var r = cloneReview(review), listened = listenedByKey || {}, out = { ok: true, total: entries.length, accepted: 0, rejected: 0, unreviewed: 0, notReady: 0, notListened: 0 };
   entries.forEach(function (e) {
@@ -210,8 +211,8 @@ function evaluateGate(entries, review, readyByKey, listenedByKey) {
   out.ok = out.total > 0 && out.notReady === 0 && out.notListened === 0 && out.rejected === 0 && out.unreviewed === 0 && out.accepted === out.total;
   return out;
 }
-function evaluateFiveLanguageGate(manifests, entries, review, readyByKey, listenedByKey) {
-  var missing = LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
+function evaluateAudioPhaseGate(manifests, entries, review, readyByKey, listenedByKey) {
+  var missing = AUDIO_PHASE_LANGS.filter(function (lang) { return !manifests || !manifests[lang]; });
   if (missing.length) {
     return {
       ok: false, missingLanguages: missing, total: Array.isArray(entries) ? entries.length : 0,
@@ -228,7 +229,7 @@ function gateMessage(g) {
   if (g.notListened) parts.push(g.notListened + ' مقطع لم يتم الاستماع إليه كاملًا في هذه المعاينة');
   if (g.rejected) parts.push(g.rejected + ' مقطع مرفوض');
   if (g.unreviewed) parts.push(g.unreviewed + ' مقطع لم تتم مراجعته');
-  return 'لا يمكن اعتماد المعاينة بعد: ' + (parts.join('، ') || 'لا توجد مقاطع صوتية') + '. راجع كل مقاطع اللغات الخمس واقبلها أولًا.';
+  return 'لا يمكن اعتماد المعاينة بعد: ' + (parts.join('، ') || 'لا توجد مقاطع صوتية') + '. راجع كل مقاطع العربية والإنجليزية واقبلها أولًا.';
 }
 
 /* قبل النسخ للذكاء الاصطناعي: المقاطع المرفوضة بنوع «الصوت فقط» يرتفع لها عدّاد إعادة الصوت مرة واحدة،
@@ -284,12 +285,12 @@ function buildPromptSection(review) {
 }
 
 var api = {
-  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS,
+  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS, AUDIO_PHASE_LANGS: AUDIO_PHASE_LANGS,
   norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
   validateManifestCoverage: validateManifestCoverage,
   emptyReview: emptyReview, cloneReview: cloneReview, applyDecision: applyDecision,
-  evaluateGate: evaluateGate, evaluateFiveLanguageGate: evaluateFiveLanguageGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
+  evaluateGate: evaluateGate, evaluateAudioPhaseGate: evaluateAudioPhaseGate, gateMessage: gateMessage, bumpAudioOnly: bumpAudioOnly, buildPromptSection: buildPromptSection
 };
 if (typeof module !== 'undefined' && module.exports) module.exports = api;
 else root.KHAudioReviewCore = api;
