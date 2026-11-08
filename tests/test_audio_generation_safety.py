@@ -261,7 +261,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                     story, staging, languages=("ar",), force_blocks=(1,)
                 )
             self.assertEqual(plan["segments_to_generate"], 1)
-            self.assertFalse((staging / "science" / "sample-story" / "ar" / "000.mp3").exists(), "a refused one-block request must not seed or copy any baseline files")
+            self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
             self.assertEqual((published / "000.mp3").read_bytes(), b"audio-0".ljust(600, b"x"))
             self.assertEqual((published / "001.mp3").read_bytes(), b"audio-1".ljust(600, b"x"))
 
@@ -359,7 +359,7 @@ class AudioGenerationSafetyTests(unittest.TestCase):
                     ))
             fish.assert_not_awaited()
             edge.assert_not_awaited()
-            self.assertTrue((staging / "science" / "sample-story" / "ar" / "000.mp3").is_file())
+            self.assertFalse((staging / "science" / "sample-story" / "ar" / "000.mp3").exists(), "a refused one-block request must not seed or copy any baseline files")
             self.assertEqual((published / "000.mp3").read_bytes(), b"p" * 600)
 
     def test_single_block_seed_refuses_missing_published_baseline(self) -> None:
