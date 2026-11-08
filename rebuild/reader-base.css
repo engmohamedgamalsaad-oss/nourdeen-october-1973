@@ -398,3 +398,6 @@ header{
   .langs button{padding:5px 8px;font-size:.73rem}
   #theme-toggle{padding:6px 8px;font-size:.73rem}
 }
+
+/* Preserve intentional paragraph separation in localized story notes and end credits. */
+#history-note{white-space:pre-line}
