@@ -8,7 +8,7 @@ var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePi
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.dataset.tone=bad?'bad':'ok'}}
 var PANEL_CSS=[
-'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:sticky;top:8px;z-index:1000;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif;backdrop-filter:blur(8px)}',
+'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:static;z-index:1000;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif;backdrop-filter:blur(8px)}',
 '#kh-preview-decision-panel .khd-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}',
 '#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;font:800 16px/1.4 Cairo,Arial,sans-serif}',
 '#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:18px}',
@@ -34,6 +34,7 @@ var PANEL_CSS=[
 '#kh-preview-decision-status[data-tone="bad"]{color:#ffb8b8}',
 '#kh-preview-decision-status:empty{display:none}',
 '@media(max-width:640px){#kh-preview-decision-panel{top:4px;margin:8px;padding:12px;border-radius:18px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
+'@media(min-width:900px) and (min-height:760px){#kh-preview-decision-panel{position:sticky;top:8px}}',
 '@media print{#kh-preview-decision-panel{display:none!important}}'
 ].join('');
 function addControls(){
