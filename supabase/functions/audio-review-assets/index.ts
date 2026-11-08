@@ -116,7 +116,9 @@ Deno.serve(async (req: Request) => {
         inputs: {
           section, slug, story_path: storyPackagePath,
           language, block_index: String(blockIndex),
-          confirm_fish_audio_request: "yes", request_id: requestId,
+          confirm_audio_request: "yes",
+          confirm_fish_audio_request: language === "ar" ? "yes" : "no",
+          request_id: requestId,
         },
       }),
     });
