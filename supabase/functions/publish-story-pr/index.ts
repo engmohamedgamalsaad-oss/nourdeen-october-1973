@@ -87,7 +87,7 @@ function validateAudioReviewGate(
             pronunciation.format !== "KHALEDOON_AUDIO_PRONUNCIATION_V1" ||
             pronunciation.story !== slug || pronunciation.section !== section || pronunciation.language !== "ar" ||
             stableJson(legacyRewrites) !== stableJson(declaredArabic || {}) ||
-            stableJson(indexes.sort((a, b) => Number(a) - Number(b))) !== stableJson(rewriteKeys)) {
+            stableJson(indexes.sort((a: string, b: string) => Number(a) - Number(b))) !== stableJson(rewriteKeys)) {
           return "ملف نص النطق القديم لا يطابق نطاق التجربة العربية والإنجليزية أو بيانات الاعتماد الصوتي.";
         }
         for (const index of rewriteKeys) {
@@ -105,7 +105,7 @@ function validateAudioReviewGate(
           !pronunciation.approved_audio_text_rewrites ||
           !review || review.format !== "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1" ||
           review.status !== "approved_by_admin" ||
-          !Array.isArray(review.languages) || !languages.every((lang) => review.languages.includes(lang)) ||
+          !Array.isArray(review.languages) || !languages.every((lang: string) => review.languages.includes(lang)) ||
           !Array.isArray(review.segments)) {
         return "ملف اعتماد النص الصوتي لا يطابق عقد المراجعة البشرية للغات الخمس.";
       }
