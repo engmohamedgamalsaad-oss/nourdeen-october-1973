@@ -16,6 +16,7 @@ function envKey(name: string, dictionaryName: string): string {
 const ANON_KEY = envKey("SUPABASE_ANON_KEY", "SUPABASE_PUBLISHABLE_KEYS");
 const SERVICE_KEY = envKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
 const GITHUB_TOKEN = Deno.env.get("GITHUB_PUBLISH_TOKEN") ?? "";
+const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
@@ -37,6 +38,35 @@ function sha256Hex(bytes: Uint8Array): Promise<string> {
   return crypto.subtle.digest("SHA-256", bytes).then((digest) =>
     Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
   );
+}
+async function ibnSinaArabicBlock(blockIndex: number) {
+  if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex > 16) {
+    throw new Error("رقم مقطع ابن سينا غير صالح.");
+  }
+  const response = await fetch("https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/main/stories/history/005/story.json", {
+    headers: { "Accept": "application/vnd.github.raw+json" },
+  });
+  if (!response.ok) throw new Error("تعذر تحميل نص ابن سينا المعتمد من المستودع.");
+  const story = await response.json();
+  if (story?.format !== "KHALEDOON_STORY" || story.section !== "history" || story.slug !== "ibn-sina") {
+    throw new Error("حزمة ابن سينا لا تطابق هوية التجربة.");
+  }
+  const blocks = story?.i18n?.ar?.blocks;
+  const block = Array.isArray(blocks) ? blocks[blockIndex] : null;
+  if (!block || !["narrator", "karma"].includes(block.speaker) || typeof block.text !== "string" || !block.text.trim()) {
+    throw new Error("المقطع المحدد غير موجود أو لا يحتوي نصًا صالحًا.");
+  }
+  const sourceText = block.text.trim();
+  const sourceTextHash = await sha256Hex(new TextEncoder().encode(sourceText));
+  return { block, sourceText, sourceTextHash, blocks };
+}
+function encodeBase64Utf8(value: string): string {
+  const bytes = new TextEncoder().encode(value);
+  let binary = "";
+  for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+  }
+  return btoa(binary);
 }
 
 Deno.serve(async (req: Request) => {
