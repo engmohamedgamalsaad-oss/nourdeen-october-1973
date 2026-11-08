@@ -383,7 +383,13 @@ Deno.serve(async (req: Request) => {
     }
     const pageResponse = await fetch(rawBase + `stories/${section}/${storyId}/index.html`);
     if (!pageResponse.ok) return reply(404, { error: "صفحة الحكاية المنشورة غير موجودة؛ لن يتم نشر ملفات صوت بلا صفحة." });
-    const pronunciationPath = packagePath.replace(/story\.json$/, "audio-pronunciation.json");
+    const pageHtml = await pageResponse.text();
+    const hasSharedPlayer = pageHtml.includes("reader.js?v=20261108-universal-audio-reader-1") ||
+      pageHtml.includes("story-audio.js?v=20261108-universal-ar-en-1");
+    if (!pageHtml.includes('data-story-slug="' + storyId + '"') || !hasSharedPlayer) {
+      return reply(409, { error: "صفحة الحكاية لا تحمل هوية الحكاية أو مشغل الصوت المشترك؛ لم يتم نشر الملفات." });
+    }
+    const pronunciationPath = packagePath.replace(/story\\.json$/, "audio-pronunciation.json");
     const pronunciationResponse = await fetch(rawBase + pronunciationPath);
     const pronunciationFiles: any[] = [];
     if (pronunciationResponse.ok) {
