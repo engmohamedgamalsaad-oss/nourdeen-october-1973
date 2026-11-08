@@ -1,7 +1,10 @@
 name: Ibn Sina NAMAA first Arabic preview
-run-name: ابن سينا audio ${{ inputs.request_id }} block ${{ inputs.block_index }}
+run-name: ابن سينا audio ${{ inputs.request_id || '00000000-0000-4000-8000-000000000001' }} block ${{ inputs.block_index || '0' }}
 
 on:
+  push:
+    branches:
+      - audio/ibn-sina-namaa-space-first-clip
   workflow_dispatch:
     inputs:
       request_id:
@@ -47,8 +50,8 @@ jobs:
 
       - name: Generate one Arabic segment
         env:
-          REQUEST_ID: ${{ inputs.request_id }}
-          BLOCK_INDEX: ${{ inputs.block_index }}
+          REQUEST_ID: ${{ inputs.request_id || '00000000-0000-4000-8000-000000000001' }}
+          BLOCK_INDEX: ${{ inputs.block_index || '0' }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: python scripts/ibn_sina_tts_cpu_pilot.py
 
