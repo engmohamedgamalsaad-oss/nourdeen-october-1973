@@ -104,6 +104,125 @@ Deno.serve(async (req: Request) => {
   });
   const prefix = section + "/" + slug + "/" + language;
 
+  if (body.action === "prepare_speech_text") {
+    if (section !== "history" || slug !== "ibn-sina" || language !== "ar") {
+      return reply(400, { error: "تجهيز نص القراءة عبر Gemini متاح حاليًا للتجربة العربية في ابن سينا فقط." });
+    }
+    if (!GEMINI_API_KEY) return reply(503, { error: "مفتاح Gemini غير متاح في أسرار دالة Supabase؛ لم يُرسل أي نص." });
+    let source;
+    try { source = await ibnSinaArabicBlock(Number(body.block_index)); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
+    const index = Number(body.block_index);
+    const previous = index > 0 ? source.blocks[index - 1] : null;
+    const next = index + 1 < source.blocks.length ? source.blocks[index + 1] : null;
+    const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
+    const prompt = [
+      "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من حكاية ابن سينا.",
+      "المتحدث: " + speakerName + ".",
+      "قواعد ثابتة: عامية مصرية طبيعية غير صعيدية، لا فصحى مذيعين ولا مبالغة في العامية.",
+      source.block.speaker === "karma"
+        ? "كارما طفلة عمرها 12 سنة: كلام طبيعي وفضولي وبسيط، لا تتكلم كخبيرة أو راوية بالغة، ولا تدّعي أنها زارت أماكن أو قابلت شخصيات."
+        : "الراوي: أداء لغوي دافئ وهادئ وواثق، بصياغة مصرية مسموعة ورصينة دون تكلف.",
+      "حافظ على كل الحقائق والأسماء والتواريخ والأرقام والعلاقات وتسلسل الأحداث والمعنى. ممنوع الإضافة أو الحذف أو التلخيص أو اختراع حوار.",
+      "حسّن فقط قابلية النطق والاستماع، وعلامات الوقف والتنفس، وكتابة الأسماء والألفاظ الصعبة عند الحاجة. إذا كان النص طبيعيًا بالفعل فغيّر أقل قدر ممكن.",
+      "أعد JSON فقط بالحقول: speech_text, changes_summary, pronunciation_notes, review_flags.",
+      "السياق السابق (للفهم فقط، لا تعِد صياغته): " + (previous?.text ?? "لا يوجد"),
+      "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
+      "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
+    ].join("\n\n");
+    const geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=" + encodeURIComponent(GEMINI_API_KEY), {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: "أنت محرر نصوص أداء صوتي لحكايات تعليمية مصرية. التزم بالنص والحقائق، ولا تعتمد النص نيابة عن صاحب المشروع." }] },
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 1200,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: "OBJECT",
+            properties: {
+              speech_text: { type: "STRING" },
+              changes_summary: { type: "STRING" },
+              pronunciation_notes: { type: "ARRAY", items: { type: "STRING" } },
+              review_flags: { type: "ARRAY", items: { type: "STRING" } },
+            },
+            required: ["speech_text", "changes_summary", "pronunciation_notes", "review_flags"],
+          },
+        },
+      }),
+    });
+    if (!geminiResponse.ok) {
+      return reply(502, { error: "تعذر الحصول على اقتراح من Gemini.", upstream_status: geminiResponse.status });
+    }
+    const geminiData = await geminiResponse.json();
+    const candidateText = (geminiData?.candidates?.[0]?.content?.parts ?? [])
+      .map((part: any) => typeof part.text === "string" ? part.text : "").join("").trim();
+    let proposal: any;
+    try { proposal = JSON.parse(candidateText); }
+    catch { return reply(502, { error: "أعاد Gemini نتيجة لا تطابق صيغة JSON المطلوبة؛ لم يتم حفظها." }); }
+    if (typeof proposal.speech_text !== "string" || !proposal.speech_text.trim() ||
+        proposal.speech_text.length > 6000 ||
+        typeof proposal.changes_summary !== "string" ||
+        !Array.isArray(proposal.pronunciation_notes) || !Array.isArray(proposal.review_flags)) {
+      return reply(502, { error: "اقتراح Gemini ناقص أو غير صالح؛ لم يتم حفظه." });
+    }
+    return reply(200, {
+      success: true, language: "ar", block_index: index, speaker: source.block.speaker,
+      source_text: source.sourceText, source_text_hash: source.sourceTextHash,
+      speech_text: proposal.speech_text.trim(),
+      changes_summary: proposal.changes_summary,
+      pronunciation_notes: proposal.pronunciation_notes.filter((item: any) => typeof item === "string").slice(0, 20),
+      review_flags: proposal.review_flags.filter((item: any) => typeof item === "string").slice(0, 20),
+      model: "gemini-3.8-flash",
+    });
+  }
+
+  if (body.action === "speech_text_save") {
+    if (section !== "history" || slug !== "ibn-sina" || language !== "ar") {
+      return reply(400, { error: "حفظ نص القراءة متاح حاليًا للتجربة العربية في ابن سينا فقط." });
+    }
+    const index = Number(body.block_index);
+    const decision = body.decision;
+    const speechText = String(body.speech_text ?? "").trim();
+    if (!Number.isInteger(index) || index < 0 || index > 16 ||
+        !["suggested", "approved"].includes(decision) || !speechText || speechText.length > 6000 ||
+        typeof body.source_text_hash !== "string" || !/^[a-f0-9]{64}$/i.test(body.source_text_hash)) {
+      return reply(400, { error: "بيانات نص القراءة أو قرار اعتماده غير صالحة." });
+    }
+    let source;
+    try { source = await ibnSinaArabicBlock(index); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من النص الأصلي." }); }
+    if (source.sourceTextHash !== body.source_text_hash.toLowerCase()) {
+      return reply(409, { error: "تغير النص الأصلي للحكاية؛ أعد تجهيز نص القراءة قبل اعتماده." });
+    }
+    const { data: existing, error: readError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (readError) return reply(500, { error: "تعذر تحميل سجل نص القراءة.", detail: readError.message });
+    const current = existing?.audio_review && typeof existing.audio_review === "object"
+      ? existing.audio_review : { version: 1, regen: {}, clips: {}, audio_hashes: {} };
+    const speechTexts = current.speech_texts && typeof current.speech_texts === "object" ? current.speech_texts : {};
+    const key = "ar:" + index;
+    const old = speechTexts[key] && typeof speechTexts[key] === "object" ? speechTexts[key] : {};
+    speechTexts[key] = decision === "approved"
+      ? { ...old, language: "ar", block_index: index, speaker: source.block.speaker,
+          source_text_hash: source.sourceTextHash, suggested_text: old.suggested_text || speechText,
+          approved_text: speechText, status: "approved", approved_at: new Date().toISOString() }
+      : { ...old, language: "ar", block_index: index, speaker: source.block.speaker,
+          source_text_hash: source.sourceTextHash, suggested_text: speechText,
+          approved_text: null, status: "suggested", model: String(body.model || "gemini-3.8-flash"),
+          changes_summary: String(body.changes_summary || "").slice(0, 1200),
+          pronunciation_notes: Array.isArray(body.pronunciation_notes) ? body.pronunciation_notes.filter((v: any) => typeof v === "string").slice(0, 20) : [],
+          review_flags: Array.isArray(body.review_flags) ? body.review_flags.filter((v: any) => typeof v === "string").slice(0, 20) : [] };
+    current.speech_texts = speechTexts;
+    const { data: saved, error: saveError } = await service.from("story_audio_reviews")
+      .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
+      .select("audio_review").single();
+    if (saveError) return reply(500, { error: "تعذر حفظ نص القراءة في سجل المراجعة.", detail: saveError.message });
+    return reply(200, { success: true, speech_text: speechTexts[key] });
+  }
+
   if (body.action === "generate") {
     if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
         !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
