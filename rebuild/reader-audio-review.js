@@ -12,7 +12,6 @@ var story = null, ctx = null, row = null, review = core.emptyReview(), entries =
 var manifests = {}, manifestErrors = {}, audio = null, busy = false, activeLang = '', played = {}, acceptButtons = {};
 var canWrite = false, manifestLoadFailure = false, initialized = false, initializing = false;
 var pronunciationReport = null, pronunciationReportStatus = ''; 
-var initialArabicStageAttempted = false;
 
 function $(id) { return document.getElementById(id); }
 function text(el, value) { el.textContent = value == null ? '' : String(value); }
@@ -61,29 +60,7 @@ async function audioAssetsRequest(payload) {
   }
   return data || {};
 }
-async function ensureArabicAudioStaged(expectedTexts) {
-  if (story.section !== 'history' || story.slug !== 'ibn-sina' || initialArabicStageAttempted) return;
-  initialArabicStageAttempted = true;
-  // Never overwrite private staged audio from the page. The restart baseline is
-  // staged only when no private manifest exists yet (404). A manifest that fails
-  // text coverage is left untouched: loadManifests() reports the coverage error
-  // and blocks approval, instead of silently restoring older audio whose hashes
-  // would revive old review decisions.
-  try {
-    await audioAssetsRequest({
-      action: 'manifest', section: 'history', slug: 'ibn-sina', language: 'ar'
-    });
-    return;
-  } catch (error) {
-    if (!error || error.status !== 404) throw error;
-  }
-  await audioAssetsRequest({
-    action: 'stage', section: 'history', slug: 'ibn-sina', language: 'ar',
-    artifact_id: 13563200242, run_id: 42344425713,
-    artifact_name: 'ibn-sina-arabic-audio-staging',
-    baseline_restore: true
-  });
-}
+/* لا نستورد Artifact قديمًا تلقائيًا: أي صوت لا يطابق نص الحكاية الحالية يجب أن يبقى خارج المراجعة. */
 function rowUrl() {
   var table = ctx.submission_table === 'submitted_stories' ? 'submitted_stories' : 'khaledoon_submissions';
   return SUPA + '/rest/v1/' + table + '?id=eq.' + encodeURIComponent(ctx.submission_id);
@@ -224,7 +201,6 @@ async function loadManifests() {
       ? localized.blocks.map(function (block) { return String(block && block.text || ''); }) : [];
   });
   expectedTexts.ar = await loadArabicExpectedTexts(expectedTexts.ar.map(function (text) { return { text: text }; }));
-  await ensureArabicAudioStaged(expectedTexts.ar);
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
