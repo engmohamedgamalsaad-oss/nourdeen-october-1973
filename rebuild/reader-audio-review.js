@@ -177,6 +177,48 @@ async function loadArabicExpectedTexts(blocks) {
   if (!Array.isArray(data.approved_audio_only_rewrites)) {
     throw new Error('قائمة تعديلات النطق الصوتي المعتمدة غير صالحة.');
   }
+  if (data.review) {
+    var sourceBlocks = story.i18n && story.i18n.ar && Array.isArray(story.i18n.ar.blocks)
+      ? story.i18n.ar.blocks : [];
+    var spokenBlocks = sourceBlocks.map(function (block, index) {
+      return { block_index: index, speaker: block && block.speaker, source_text: String(block && block.text || '').trim() };
+    }).filter(function (block) {
+      return (block.speaker === 'narrator' || block.speaker === 'karma') && !!block.source_text;
+    });
+    var review = data.review;
+    var reviewedSegments = Array.isArray(review.segments)
+      ? review.segments.filter(function (item) { return item && item.lang === 'ar'; }) : [];
+    var reviewedByIndex = Object.create(null);
+    if (review.format !== 'KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1' ||
+        review.status !== 'approved_by_admin' ||
+        !Array.isArray(review.languages) || review.languages.indexOf('ar') < 0 ||
+        reviewedSegments.length !== spokenBlocks.length) {
+      throw new Error('اعتماد النص الصوتي العربي غير مكتمل أو لا يطابق عدد مقاطع الحكاية الحالية.');
+    }
+    reviewedSegments.forEach(function (item) {
+      var index = Number(item.block_index);
+      if (!Number.isInteger(index) || reviewedByIndex[index]) {
+        throw new Error('اعتماد النص الصوتي العربي يحتوي مقطعًا مكررًا أو رقمًا غير صالح.');
+      }
+      var source = spokenBlocks.find(function (block) { return block.block_index === index; });
+      if (!source || item.speaker !== source.speaker || item.source_text !== source.source_text ||
+          typeof item.approved_audio_text !== 'string' || !item.approved_audio_text.trim()) {
+        throw new Error('اعتماد النص الصوتي العربي قديم ولا يطابق النص المنشور الحالي عند المقطع ' + (index + 1) + '؛ أعد مراجعته قبل استخدام الصوت.');
+      }
+      reviewedByIndex[index] = item;
+    });
+    spokenBlocks.forEach(function (block) {
+      if (!reviewedByIndex[block.block_index]) {
+        throw new Error('اعتماد النص الصوتي العربي لا يغطي المقطع ' + (block.block_index + 1) + ' من الحكاية الحالية.');
+      }
+    });
+    data.approved_audio_only_rewrites.forEach(function (rawIndex) {
+      var index = Number(rawIndex), reviewed = reviewedByIndex[index];
+      if (!reviewed || data.blocks[String(index)] !== reviewed.approved_audio_text) {
+        throw new Error('نص النطق المعتمد للمقطع ' + (index + 1) + ' لا يطابق قرار المراجعة البشرية الحالية.');
+      }
+    });
+  }
   var approved = {};
   data.approved_audio_only_rewrites.forEach(function (rawIndex) {
     var index = Number(rawIndex);
