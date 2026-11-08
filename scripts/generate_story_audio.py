@@ -165,14 +165,21 @@ def validate_required_audio_text_review(
     review = pronunciation.get("review")
     if not isinstance(review, dict) or review.get("format") != "KHALEDOON_AUDIO_TEXT_REVIEW_APPROVAL_V1":
         raise ValueError(f"{pronunciation_path}: complete admin review record is missing")
-    if review.get("status") != "approved_by_admin" or review.get("languages") != list(required_languages):
+    review_languages = review.get("languages")
+    if (
+        review.get("status") != "approved_by_admin"
+        or not isinstance(review_languages, list)
+        or len(review_languages) != len(set(review_languages))
+        or any(lang not in LANGUAGES for lang in review_languages)
+        or not set(required_languages).issubset(review_languages)
+    ):
         raise ValueError(f"{pronunciation_path}: admin approval is incomplete for {list(required_languages)}")
     raw_segments = review.get("segments")
     translations = package.get("i18n")
     if not isinstance(raw_segments, list) or not isinstance(translations, dict):
         raise ValueError(f"{pronunciation_path}: invalid review segments or story translations")
     expected: dict[tuple[str, int], tuple[str, str]] = {}
-    for lang in required_languages:
+    for lang in review_languages:
         localized = translations.get(lang)
         blocks = localized.get("blocks") if isinstance(localized, dict) else None
         if not isinstance(blocks, list) or not blocks:
@@ -184,7 +191,7 @@ def validate_required_audio_text_review(
             if source:
                 expected[(lang, index)] = (str(block["speaker"]), source)
     if review.get("total_segments") != len(expected) or len(raw_segments) != len(expected):
-        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in the configured audio languages")
+        raise ValueError(f"{pronunciation_path}: review does not cover every spoken block in its declared languages")
     seen: set[tuple[str, int]] = set()
     rewrites: dict[str, dict[str, str]] = {lang: {} for lang in LANGUAGES}
     for item in raw_segments:
@@ -590,6 +597,15 @@ def inspect_all_generation_plans(root: Path = ROOT, staging_root: Path = STAGING
             target.append({
                 "path": story_path.relative_to(root).as_posix(),
                 "error": "published story has no canonical story.json package; audio generation is blocked",
+            })
+            continue
+        if section == "october":
+            target.append({
+                "path": story_path.relative_to(root).as_posix(),
+                "blocked": (
+                    "October packages are excluded from bulk planning in the current Arabic-English phase; "
+                    "select one October story explicitly to plan or generate it."
+                ),
             })
             continue
         try:
