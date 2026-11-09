@@ -257,7 +257,7 @@ Deno.serve(async (req: Request) => {
         }
         lastFailure = {
           status: geminiResponse.status,
-          message: String(failureMessage).replace(/\\s+/g, " ").slice(0, 300),
+          message: String(failureMessage).replace(/\s+/g, " ").slice(0, 300),
           model,
           attempt,
         };
