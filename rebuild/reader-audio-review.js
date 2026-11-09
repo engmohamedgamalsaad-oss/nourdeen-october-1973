@@ -1053,6 +1053,7 @@ async function prepareSpeechText(index, statusNode, button) {
     });
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
+    speechTextBusy[key] = false;
     text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى NAMAA.');
     render();
   } catch (error) {
@@ -1083,6 +1084,7 @@ async function approveSpeechText(index, textarea, statusNode, button) {
     });
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
+    speechTextBusy[key] = false;
     text(statusNode, 'تم اعتماد نص القراءة لهذا المقطع. يمكن الآن توليد صوته عند وصول دوره.');
     render();
   } catch (error) {
