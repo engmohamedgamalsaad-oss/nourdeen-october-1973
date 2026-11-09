@@ -95,7 +95,7 @@ def main() -> None:
         result = client.predict(
             speech_text, handle_file(str(reference)),
             0.45 if speaker == "karma" else 0.35,
-            0.8, 0, 0.35,  # Lower CFG weight for slower, more deliberate pacing.
+            0.8, 0, 0.25,  # Further lower CFG weight to encourage slower, more deliberate pacing.
             api_name="/generate_tts_audio",
         )
         wav_path = temp / "namaa_output.wav"
