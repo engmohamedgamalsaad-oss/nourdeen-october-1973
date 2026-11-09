@@ -224,7 +224,17 @@ Deno.serve(async (req: Request) => {
       clearTimeout(geminiTimeout);
     }
     if (!geminiResponse.ok) {
-      return reply(502, { error: "تعذر الحصول على اقتراح من Gemini.", upstream_status: geminiResponse.status });
+      const upstreamBody = await geminiResponse.text();
+      let upstreamMessage = geminiResponse.statusText || "استجابة غير متاحة";
+      try {
+        const parsedError = JSON.parse(upstreamBody);
+        upstreamMessage = parsedError?.error?.message || parsedError?.message || upstreamMessage;
+      } catch { /* Keep the HTTP status text when Gemini does not return JSON. */ }
+      return reply(502, {
+        error: "تعذر الحصول على اقتراح من Gemini بعد إعادة المحاولة.",
+        upstream_status: geminiResponse.status,
+        upstream_message: String(upstreamMessage).slice(0, 400),
+      });
     }
     const geminiData = await geminiResponse.json();
     const candidateText = (geminiData?.candidates?.[0]?.content?.parts ?? [])
