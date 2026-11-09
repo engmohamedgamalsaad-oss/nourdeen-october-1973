@@ -175,86 +175,128 @@ Deno.serve(async (req: Request) => {
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
     ].join("\n\n");
-    const geminiController = new AbortController();
-    const geminiTimeout = setTimeout(() => geminiController.abort(), 105000);
-    let geminiResponse: Response;
+    const totalDeadlineMs = 78000;
+    const perAttemptTimeoutMs = 22000;
+    const startedAt = Date.now();
+    const deadlineAt = startedAt + totalDeadlineMs;
+    let geminiResponse: Response | null = null;
+    let geminiResponseText = "";
+    let successfulModel = "";
     let lastFailure = { status: 0, message: "", model: "", attempt: 0 };
     const attemptTrace: string[] = [];
-    try {
-      const requestBody = JSON.stringify({
-        systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
-        contents: [{ role: "user", parts: [{ text: prompt }] }],
-        generationConfig: {
-          maxOutputTokens: 2400,
-          thinkingConfig: { thinkingLevel: "HIGH" },
-          responseMimeType: "application/json",
-          responseSchema: {
-            type: "OBJECT",
-            properties: {
-              speech_text: { type: "STRING" },
-              changes_summary: { type: "STRING" },
-              pronunciation_notes: { type: "ARRAY", items: { type: "STRING" } },
-              review_flags: { type: "ARRAY", items: { type: "STRING" } },
-            },
-            required: ["speech_text", "changes_summary", "pronunciation_notes", "review_flags"],
+    const geminiModels = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];
+    const requestBody = JSON.stringify({
+      systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
+      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      generationConfig: {
+        maxOutputTokens: 2200,
+        thinkingConfig: { thinkingLevel: "MEDIUM" },
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: "OBJECT",
+          properties: {
+            speech_text: { type: "STRING" },
+            changes_summary: { type: "STRING" },
+            pronunciation_notes: { type: "ARRAY", items: { type: "STRING" } },
+            review_flags: { type: "ARRAY", items: { type: "STRING" } },
           },
+          required: ["speech_text", "changes_summary", "pronunciation_notes", "review_flags"],
         },
-      });
-      const retryableStatuses = new Set([429, 500, 502, 503, 504]);
-      const geminiModels = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];
-      for (let modelIndex = 0; modelIndex < geminiModels.length; modelIndex++) {
-        const model = geminiModels[modelIndex];
-        for (let attempt = 1; attempt <= 2; attempt++) {
+      },
+    });
+    const retryableStatuses = new Set([429, 500, 502, 503, 504]);
+    let timedOut = false;
+    let hadTimeout = false;
+    for (let modelIndex = 0; modelIndex < geminiModels.length; modelIndex++) {
+      const model = geminiModels[modelIndex];
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        const remainingMs = deadlineAt - Date.now();
+        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 20000;
+        const availableMs = remainingMs - reserveForFallbackMs;
+        if (availableMs < 1000) break;
+        const attemptTimeoutMs = Math.min(perAttemptTimeoutMs, availableMs);
+        const attemptController = new AbortController();
+        const attemptTimeout = setTimeout(() => attemptController.abort(), attemptTimeoutMs);
+        try {
           geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent", {
             method: "POST",
             headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
-            signal: geminiController.signal,
+            signal: attemptController.signal,
             body: requestBody,
           });
-          if (geminiResponse.ok) break;
-          const failureBody = await geminiResponse.text();
-          let failureMessage = geminiResponse.statusText || "Gemini returned an empty error.";
-          try {
-            const parsedFailure = JSON.parse(failureBody);
-            failureMessage = parsedFailure?.error?.message || parsedFailure?.message || failureMessage;
-          } catch {
-            failureMessage = failureBody || failureMessage;
+          geminiResponseText = await geminiResponse.text();
+        } catch (requestError) {
+          if (requestError instanceof Error && requestError.name === "AbortError") {
+            timedOut = true;
+            hadTimeout = true;
+            lastFailure = { status: 0, message: "انتهت مهلة المحاولة قبل استجابة Gemini.", model, attempt };
+            attemptTrace.push(model + " #" + attempt + ": TIMEOUT (" + attemptTimeoutMs + "ms)");
+            console.error("gemini_timeout " + JSON.stringify(lastFailure));
+            break;
           }
           lastFailure = {
-            status: geminiResponse.status,
-            message: String(failureMessage).replace(/\s+/g, " ").slice(0, 300),
+            status: 0,
+            message: requestError instanceof Error ? requestError.message.slice(0, 300) : String(requestError).slice(0, 300),
             model,
             attempt,
           };
-          attemptTrace.push(model + " #" + attempt + ": HTTP " + geminiResponse.status);
-          console.error("gemini_failure " + JSON.stringify(lastFailure));
-          if (!retryableStatuses.has(geminiResponse.status) || geminiResponse.status === 429 || attempt === 2) break;
-          const retryAfter = Number(geminiResponse.headers.get("Retry-After"));
-          const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
-            ? Math.min(retryAfter * 1000, 5000)
-            : attempt * 1200;
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
+          attemptTrace.push(model + " #" + attempt + ": NETWORK_ERROR");
+          console.error("gemini_network_failure " + JSON.stringify(lastFailure));
+          break;
+        } finally {
+          clearTimeout(attemptTimeout);
         }
-        if (geminiResponse.ok) break;
-        // Preserve the original Gemini error while trying the next model.
-        if (![429, 503].includes(geminiResponse.status) || modelIndex === geminiModels.length - 1) break;
+        if (geminiResponse.ok) {
+          successfulModel = model;
+          break;
+        }
+        let failureMessage = geminiResponse.statusText || "Gemini returned an empty error.";
+        try {
+          const parsedFailure = JSON.parse(geminiResponseText);
+          failureMessage = parsedFailure?.error?.message || parsedFailure?.message || failureMessage;
+        } catch {
+          failureMessage = geminiResponseText || failureMessage;
+        }
+        lastFailure = {
+          status: geminiResponse.status,
+          message: String(failureMessage).replace(/\s+/g, " ").slice(0, 300),
+          model,
+          attempt,
+        };
+        attemptTrace.push(model + " #" + attempt + ": HTTP " + geminiResponse.status);
+        console.error("gemini_failure " + JSON.stringify(lastFailure));
+        if (geminiResponse.status === 429 || !retryableStatuses.has(geminiResponse.status) || attempt === 2) break;
+        const retryAfter = Number(geminiResponse.headers.get("Retry-After"));
+        const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
+          ? Math.min(retryAfter * 1000, 2500)
+          : 800;
+        if (deadlineAt - Date.now() - delayMs - reserveForFallbackMs < 1000) break;
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
       }
-    } catch (geminiError) {
-      if (geminiError instanceof Error && geminiError.name === "AbortError") {
-        return reply(504, {
-          error: "تجاوز Gemini مهلة 105 ثوانٍ؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة.",
-          last_upstream_failure: lastFailure.status ? lastFailure : undefined,
-          attempt_trace: attemptTrace,
-        });
+      if (successfulModel) break;
+      if (Date.now() >= deadlineAt) break;
+      // Try the next model after quota exhaustion, service unavailability, or a timed-out request.
+      if (timedOut || !geminiResponse || [429, 503].includes(geminiResponse.status) ||
+          (lastFailure.status === 0 && lastFailure.model === model)) {
+        timedOut = false;
+        continue;
       }
-      return reply(502, {
-        error: "تعذر الاتصال بخدمة Gemini.",
-        detail: geminiError instanceof Error ? geminiError.message : String(geminiError),
-        last_upstream_failure: lastFailure.status ? lastFailure : undefined,
+      // Preserve the existing behavior for non-fallback HTTP failures.
+      break;
+    }
+    if (!successfulModel) {
+      const elapsedSeconds = Math.round((Date.now() - startedAt) / 1000);
+      return reply(hadTimeout || Date.now() >= deadlineAt ? 504 : 502, {
+        error: hadTimeout || Date.now() >= deadlineAt
+          ? "لم يستجب Gemini ضمن المهلة المحددة؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة."
+          : "تعذر الحصول على اقتراح صالح من Gemini؛ لم يتم حفظ أو اعتماد أي نص.",
+        elapsed_seconds: elapsedSeconds,
+        last_upstream_failure: lastFailure.status || lastFailure.message ? lastFailure : undefined,
         attempt_trace: attemptTrace,
       });
-    } finally {
-      clearTimeout(geminiTimeout);
+    }
+    if (!geminiResponse) {
+      return reply(502, { error: "لم تصل استجابة من Gemini؛ لم يتم حفظ أو اعتماد أي نص.", attempt_trace: attemptTrace });
     }
     if (!geminiResponse.ok) {
       return reply(502, {
@@ -266,7 +308,7 @@ Deno.serve(async (req: Request) => {
         attempt_trace: attemptTrace,
       });
     }
-    const geminiData = await geminiResponse.json();
+    const geminiData = JSON.parse(geminiResponseText);
     const candidateText = (geminiData?.candidates?.[0]?.content?.parts ?? [])
       .map((part: any) => typeof part.text === "string" ? part.text : "").join("").trim();
     let proposal: any;
@@ -285,7 +327,7 @@ Deno.serve(async (req: Request) => {
       changes_summary: proposal.changes_summary,
       pronunciation_notes: proposal.pronunciation_notes.filter((item: any) => typeof item === "string").slice(0, 20),
       review_flags: proposal.review_flags.filter((item: any) => typeof item === "string").slice(0, 20),
-      model: "gemini-3.8-flash",
+      model: successfulModel,
     });
   }
 
