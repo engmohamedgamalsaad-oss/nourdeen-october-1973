@@ -67,9 +67,17 @@
   .tools > input,
   .tools > select,
   .tools > .fbar { width: 100%; min-width: 0; }
+  /* .tools صار عمودًا على الهاتف، فـ flex-basis:220px القادم من khaledoon-forms.css كان يصبح «ارتفاع» 220px لمربع البحث. */
+  .tools > input[type="search"] {
+    flex: 0 0 auto !important;
+    max-width: 100% !important;
+    min-height: 42px;
+    padding: 8px 12px;
+  }
+  .tools { gap: 8px; margin-bottom: 10px; }
   .fbar {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
     gap: 8px;
     align-items: stretch;
     min-width: 0;
@@ -139,7 +147,8 @@
 @media (max-width: 420px) {
   .topbar .ctl, #adminTools .ctl { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .topbar .ctl #th { grid-column: 1 / -1; }
-  .fbar { grid-template-columns: minmax(0, 1fr); }
+  /* زرّا «تحديث» و«حكاية جديدة» يبقيان جنبًا إلى جنب بدل سطرين، لتقصير منطقة البحث. */
+  .tools .fbar > button, .tools .fbar > a { min-height: 40px; padding: 6px 8px; }
   /* ستة عدادات في ثلاث صفوف بدل عمود طويل، مع إبقاء النص واضحًا على الهاتف. */
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   #viewSubs > .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
