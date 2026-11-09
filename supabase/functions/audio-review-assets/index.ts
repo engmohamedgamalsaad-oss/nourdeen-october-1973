@@ -295,7 +295,10 @@ Deno.serve(async (req: Request) => {
         attempt_trace: attemptTrace,
       });
     }
-    if (!geminiResponse || !geminiResponse.ok) {
+    if (!geminiResponse) {
+      return reply(502, { error: "لم تصل استجابة من Gemini؛ لم يتم حفظ أو اعتماد أي نص.", attempt_trace: attemptTrace });
+    }
+    if (!geminiResponse.ok) {
       return reply(502, {
         error: "تعذر الحصول على اقتراح من Gemini بعد إعادة المحاولة.",
         upstream_status: lastFailure.status || geminiResponse.status,
