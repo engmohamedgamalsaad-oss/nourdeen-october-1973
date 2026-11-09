@@ -178,6 +178,8 @@ Deno.serve(async (req: Request) => {
     const geminiController = new AbortController();
     const geminiTimeout = setTimeout(() => geminiController.abort(), 105000);
     let geminiResponse: Response;
+    let lastFailure = { status: 0, message: "", model: "", attempt: 0 };
+    const attemptTrace: string[] = [];
     try {
       const requestBody = JSON.stringify({
         systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
@@ -209,39 +211,59 @@ Deno.serve(async (req: Request) => {
             signal: geminiController.signal,
             body: requestBody,
           });
+          if (geminiResponse.ok) break;
+          const failureBody = await geminiResponse.text();
+          let failureMessage = geminiResponse.statusText || "Gemini returned an empty error.";
+          try {
+            const parsedFailure = JSON.parse(failureBody);
+            failureMessage = parsedFailure?.error?.message || parsedFailure?.message || failureMessage;
+          } catch {
+            failureMessage = failureBody || failureMessage;
+          }
+          lastFailure = {
+            status: geminiResponse.status,
+            message: String(failureMessage).replace(/\s+/g, " ").slice(0, 300),
+            model,
+            attempt,
+          };
+          attemptTrace.push(model + " #" + attempt + ": HTTP " + geminiResponse.status);
+          console.error("gemini_failure " + JSON.stringify(lastFailure));
           if (!retryableStatuses.has(geminiResponse.status) || attempt === 2) break;
           const retryAfter = Number(geminiResponse.headers.get("Retry-After"));
-          await geminiResponse.text();
           const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
             ? Math.min(retryAfter * 1000, 5000)
             : attempt * 1200;
           await new Promise((resolve) => setTimeout(resolve, delayMs));
         }
         if (geminiResponse.ok) break;
-        // A 503 is an upstream capacity/availability failure. Retry once, then
-        // fail over to the next documented stable Flash model before giving up.
+        // Preserve the original Gemini error while trying the next model.
         if (geminiResponse.status !== 503 || modelIndex === geminiModels.length - 1) break;
-        await geminiResponse.text();
       }
     } catch (geminiError) {
       if (geminiError instanceof Error && geminiError.name === "AbortError") {
-        return reply(504, { error: "تجاوز Gemini مهلة 105 ثوانٍ؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة." });
+        return reply(504, {
+          error: "تجاوز Gemini مهلة 105 ثوانٍ؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة.",
+          last_upstream_failure: lastFailure.status ? lastFailure : undefined,
+          attempt_trace: attemptTrace,
+        });
       }
-      return reply(502, { error: "تعذر الاتصال بخدمة Gemini.", detail: geminiError instanceof Error ? geminiError.message : String(geminiError) });
+      return reply(502, {
+        error: "تعذر الاتصال بخدمة Gemini.",
+        detail: geminiError instanceof Error ? geminiError.message : String(geminiError),
+        last_upstream_failure: lastFailure.status ? lastFailure : undefined,
+        attempt_trace: attemptTrace,
+      });
     } finally {
       clearTimeout(geminiTimeout);
     }
     if (!geminiResponse.ok) {
-      const upstreamBody = await geminiResponse.text();
-      let upstreamMessage = geminiResponse.statusText || "استجابة غير متاحة";
-      try {
-        const parsedError = JSON.parse(upstreamBody);
-        upstreamMessage = parsedError?.error?.message || parsedError?.message || upstreamMessage;
-      } catch { /* Keep the HTTP status text when Gemini does not return JSON. */ }
       return reply(502, {
         error: "تعذر الحصول على اقتراح من Gemini بعد إعادة المحاولة.",
-        upstream_status: geminiResponse.status,
-        upstream_message: String(upstreamMessage).slice(0, 400),
+        upstream_status: lastFailure.status || geminiResponse.status,
+        upstream_message: lastFailure.message || "Gemini لم يُرجع تفاصيل خطأ قابلة للقراءة.",
+        upstream_model: lastFailure.model || "unknown",
+        upstream_attempt: lastFailure.attempt || 0,
+        attempt_trace: attemptTrace,
       });
     }
     const geminiData = await geminiResponse.json();
