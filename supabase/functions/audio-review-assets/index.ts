@@ -291,7 +291,7 @@ Deno.serve(async (req: Request) => {
         attempt_trace: attemptTrace,
       });
     }
-    if (!geminiResponse.ok) {
+    if (!geminiResponse || !geminiResponse.ok) {
       return reply(502, {
         error: "تعذر الحصول على اقتراح من Gemini بعد إعادة المحاولة.",
         upstream_status: lastFailure.status || geminiResponse.status,
