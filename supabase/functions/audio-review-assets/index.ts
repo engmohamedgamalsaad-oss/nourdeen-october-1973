@@ -228,7 +228,7 @@ Deno.serve(async (req: Request) => {
           };
           attemptTrace.push(model + " #" + attempt + ": HTTP " + geminiResponse.status);
           console.error("gemini_failure " + JSON.stringify(lastFailure));
-          if (!retryableStatuses.has(geminiResponse.status) || attempt === 2) break;
+          if (!retryableStatuses.has(geminiResponse.status) || geminiResponse.status === 429 || attempt === 2) break;
           const retryAfter = Number(geminiResponse.headers.get("Retry-After"));
           const delayMs = Number.isFinite(retryAfter) && retryAfter > 0
             ? Math.min(retryAfter * 1000, 5000)
@@ -237,7 +237,7 @@ Deno.serve(async (req: Request) => {
         }
         if (geminiResponse.ok) break;
         // Preserve the original Gemini error while trying the next model.
-        if (geminiResponse.status !== 503 || modelIndex === geminiModels.length - 1) break;
+        if (![429, 503].includes(geminiResponse.status) || modelIndex === geminiModels.length - 1) break;
       }
     } catch (geminiError) {
       if (geminiError instanceof Error && geminiError.name === "AbortError") {
