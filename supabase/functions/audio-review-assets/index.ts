@@ -206,6 +206,7 @@ Deno.serve(async (req: Request) => {
     });
     const retryableStatuses = new Set([429, 500, 502, 503, 504]);
     let timedOut = false;
+    let hadTimeout = false;
     for (let modelIndex = 0; modelIndex < geminiModels.length; modelIndex++) {
       const model = geminiModels[modelIndex];
       for (let attempt = 1; attempt <= 2; attempt++) {
@@ -227,6 +228,7 @@ Deno.serve(async (req: Request) => {
         } catch (requestError) {
           if (requestError instanceof Error && requestError.name === "AbortError") {
             timedOut = true;
+            hadTimeout = true;
             lastFailure = { status: 0, message: "انتهت مهلة المحاولة قبل استجابة Gemini.", model, attempt };
             attemptTrace.push(model + " #" + attempt + ": TIMEOUT (" + attemptTimeoutMs + "ms)");
             console.error("gemini_timeout " + JSON.stringify(lastFailure));
@@ -284,8 +286,10 @@ Deno.serve(async (req: Request) => {
     }
     if (!successfulModel) {
       const elapsedSeconds = Math.round((Date.now() - startedAt) / 1000);
-      return reply(504, {
-        error: "لم يستجب Gemini ضمن المهلة المحددة؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة.",
+      return reply(hadTimeout || Date.now() >= deadlineAt ? 504 : 502, {
+        error: hadTimeout || Date.now() >= deadlineAt
+          ? "لم يستجب Gemini ضمن المهلة المحددة؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة."
+          : "تعذر الحصول على اقتراح صالح من Gemini؛ لم يتم حفظ أو اعتماد أي نص.",
         elapsed_seconds: elapsedSeconds,
         last_upstream_failure: lastFailure.status || lastFailure.message ? lastFailure : undefined,
         attempt_trace: attemptTrace,
