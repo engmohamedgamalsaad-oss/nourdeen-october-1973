@@ -261,6 +261,7 @@ async function audioAssetsRequest(payload) {
     if (data && data.upstream_status) {
       var upstreamService = upstreamServiceName(payload && payload.action);
       detail = (detail || ('تعذر الاتصال بخدمة ' + upstreamService)) +
+        (data.upstream_message ? ' — ' + data.upstream_message : '') +
         ' (الخدمة: ' + upstreamService + ' — رمز HTTP: ' + data.upstream_status + ')';
     }
     var error = new Error(detail || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
