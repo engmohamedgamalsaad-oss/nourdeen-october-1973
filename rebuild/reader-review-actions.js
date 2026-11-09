@@ -8,8 +8,13 @@ var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePi
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.dataset.tone=bad?'bad':'ok'}}
 var PANEL_CSS=[
-'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:static;z-index:1000;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif;backdrop-filter:blur(8px)}',
-'#kh-preview-decision-panel .khd-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}',
+'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:relative;z-index:1000;display:block;max-width:1100px;margin:10px auto;padding:7px 14px;border:1px solid rgba(215,173,102,.55);border-radius:16px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif;backdrop-filter:blur(8px)}',
+'#kh-preview-decision-panel .khd-head{display:flex;flex-wrap:nowrap;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;min-height:36px}',
+'#kh-preview-decision-panel .khd-head::after{content:"▾";color:#d7ad66;transition:transform .2s}',
+'#kh-preview-decision-panel:hover .khd-head::after,#kh-preview-decision-panel:focus-within .khd-head::after,#kh-preview-decision-panel.khd-open .khd-head::after{transform:rotate(180deg)}',
+'#kh-preview-decision-panel .khd-body{display:none;gap:12px;position:absolute;top:100%;inset-inline:-1px;padding:12px 16px 16px;border:1px solid rgba(215,173,102,.55);border-top:0;border-radius:0 0 16px 16px;background:linear-gradient(160deg,rgb(18,40,50),rgb(7,20,27));box-shadow:0 18px 34px rgba(0,0,0,.45)}',
+'#kh-preview-decision-panel:hover .khd-body,#kh-preview-decision-panel:focus-within .khd-body,#kh-preview-decision-panel.khd-open .khd-body{display:grid}',
+'#kh-preview-decision-panel:hover,#kh-preview-decision-panel:focus-within,#kh-preview-decision-panel.khd-open{border-bottom-left-radius:0;border-bottom-right-radius:0}',
 '#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;font:800 16px/1.4 Cairo,Arial,sans-serif}',
 '#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:18px}',
 '#kh-preview-decision-panel .khd-pill{padding:4px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.5 Cairo,Arial,sans-serif;white-space:nowrap}',
@@ -33,7 +38,7 @@ var PANEL_CSS=[
 '#kh-preview-decision-status{font:13px/1.8 Cairo,Arial,sans-serif;color:#b9efc9}',
 '#kh-preview-decision-status[data-tone="bad"]{color:#ffb8b8}',
 '#kh-preview-decision-status:empty{display:none}',
-'@media(max-width:640px){#kh-preview-decision-panel{top:4px;margin:8px;padding:12px;border-radius:18px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
+'@media(max-width:640px){#kh-preview-decision-panel{top:4px;margin:8px;padding:6px 12px;border-radius:16px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
 '@media(min-width:900px) and (min-height:760px){#kh-preview-decision-panel{position:sticky;top:8px}}',
 '@media print{#kh-preview-decision-panel{display:none!important}}'
 ].join('');
@@ -59,7 +64,9 @@ function addControls(){
  actions.append(approve,reject,back);
  reason=document.createElement('textarea');reason.id='kh-preview-reason';reason.maxLength=1000;reason.placeholder='اكتب سبب رفض المعاينة (مطلوب قبل تسجيل الرفض)';
  status=document.createElement('div');status.id='kh-preview-decision-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- panel.append(head,meter,gateText,actions,reason,status);
+ var body=document.createElement('div');body.className='khd-body';body.append(meter,gateText,actions,reason,status);
+ panel.append(head,body);
+ head.addEventListener('click',function(){panel.classList.toggle('khd-open')});
  var header=document.querySelector('header');
  if(header&&header.parentNode)header.parentNode.insertBefore(panel,header.nextSibling);else document.body.insertBefore(panel,document.body.firstChild);
  approve.addEventListener('click',function(){decide(true)});
