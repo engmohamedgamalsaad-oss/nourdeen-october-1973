@@ -175,9 +175,14 @@ Deno.serve(async (req: Request) => {
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
     ].join("\n\n");
-    const geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
+    const geminiController = new AbortController();
+    const geminiTimeout = setTimeout(() => geminiController.abort(), 105000);
+    let geminiResponse: Response;
+    try {
+      geminiResponse = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-goog-api-key": GEMINI_API_KEY },
+      signal: geminiController.signal,
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
         contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -198,7 +203,15 @@ Deno.serve(async (req: Request) => {
           },
         },
       }),
-    });
+      });
+    } catch (geminiError) {
+      if (geminiError instanceof Error && geminiError.name === "AbortError") {
+        return reply(504, { error: "تجاوز Gemini مهلة 105 ثوانٍ؛ لم يتم حفظ أو اعتماد أي نص. أعد المحاولة." });
+      }
+      return reply(502, { error: "تعذر الاتصال بخدمة Gemini.", detail: geminiError instanceof Error ? geminiError.message : String(geminiError) });
+    } finally {
+      clearTimeout(geminiTimeout);
+    }
     if (!geminiResponse.ok) {
       return reply(502, { error: "تعذر الحصول على اقتراح من Gemini.", upstream_status: geminiResponse.status });
     }
