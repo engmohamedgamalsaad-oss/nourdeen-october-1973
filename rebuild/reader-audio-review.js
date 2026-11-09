@@ -238,7 +238,7 @@ function upstreamServiceName(action) {
 async function audioAssetsRequest(payload) {
   var token = await adminToken();
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && payload.action === 'prepare_speech_text' ? 90000 : 25000) : null;
+  var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && payload.action === 'prepare_speech_text' ? 125000 : 25000) : null;
   var response;
   try {
     response = await fetch(SUPA + '/functions/v1/audio-review-assets', {
@@ -249,7 +249,7 @@ async function audioAssetsRequest(payload) {
       signal: controller ? controller.signal : undefined
     });
   } catch (networkError) {
-    if (networkError && networkError.name === 'AbortError') throw new Error('انتهت مهلة الاتصال أثناء تجهيز النص. أعد المحاولة؛ لم يتم اعتماد أي نص.');
+    if (networkError && networkError.name === 'AbortError') throw new Error('تجاوز تجهيز نص القراءة 125 ثانية من دون استجابة. لم يتم اعتماد أي نص؛ أعد المحاولة بعد قليل.');
     throw new Error('تعذر الاتصال بخدمة تجهيز النص: ' + (networkError && networkError.message || networkError));
   } finally {
     if (timeout) clearTimeout(timeout);
@@ -261,6 +261,7 @@ async function audioAssetsRequest(payload) {
     if (data && data.upstream_status) {
       var upstreamService = upstreamServiceName(payload && payload.action);
       detail = (detail || ('تعذر الاتصال بخدمة ' + upstreamService)) +
+        (data.upstream_message ? ' — ' + data.upstream_message : '') +
         ' (الخدمة: ' + upstreamService + ' — رمز HTTP: ' + data.upstream_status + ')';
     }
     var error = new Error(detail || 'تعذر الاتصال بمخزن الصوت الخاص (' + response.status + ').');
