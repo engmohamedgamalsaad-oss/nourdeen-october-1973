@@ -4,19 +4,28 @@ var params=new URLSearchParams(location.search);
 if(params.get('draft')!=='1')return;
 var SUPA='https://ypwprddkscnfblhftkeb.supabase.co';
 var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn';
-var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,gateDetails=null,gateDetailsBody=null,busy=false,draft=null,ctx=null;
+var panel=null,approve=null,reject=null,back=null,reason=null,status=null,gatePill=null,gateFill=null,gateText=null,gateDetails=null,gateDetailsBody=null,bar=null,drop=null,flag=null,isOpen=false,pinned=false,closeTimer=null,busy=false,draft=null,ctx=null;
 function $(id){return document.getElementById(id)}
 function message(s,bad){if(status){status.textContent=s;status.dataset.tone=bad?'bad':'ok'}}
-/* اللوحة عادية (غير ثابتة) كي لا تغطي الصفحة مهما طال نص الخطأ؛ تثبت أعلى الصفحة فقط على الشاشات الواسعة وبعد اكتمال شرط الصوت. */
+/* اللوحة شريط رفيع واحد ثابت أعلى الصفحة؛ تنفتح تفاصيلها وأزرارها عند تقريب الماوس منها (أو بالضغط عليها في الهاتف) وتنطوي ثانية عند الابتعاد.
+   المحتوى المفتوح يطفو فوق الصفحة ولا يدفعها، فلا يحدث اهتزاز في التخطيط. */
 var PANEL_CSS=[
-'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:relative;z-index:20;display:grid;gap:12px;max-width:1100px;margin:12px auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:22px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));color:#f5f0e6;box-shadow:0 14px 34px rgba(0,0,0,.4);font:600 14px/1.7 Cairo,Arial,sans-serif}',
-'#kh-preview-decision-panel .khd-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}',
-'#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;font:800 16px/1.4 Cairo,Arial,sans-serif}',
-'#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:18px}',
-'#kh-preview-decision-panel .khd-pill{padding:4px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.5 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:sticky;top:8px;z-index:900;display:block;max-width:1100px;margin:8px auto;padding:0;color:#f5f0e6;font:600 14px/1.7 Cairo,Arial,sans-serif}',
+'#kh-preview-decision-panel .khd-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:6px 8px 6px 14px;border:1px solid rgba(215,173,102,.55);border-radius:999px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));box-shadow:0 8px 22px rgba(0,0,0,.35);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}',
+'#kh-preview-decision-panel .khd-bar:focus-visible{outline:3px solid rgba(215,173,102,.7);outline-offset:2px}',
+'#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;min-width:0;font:800 14px/1.4 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:15px}',
+'#kh-preview-decision-panel .khd-end{display:flex;align-items:center;gap:8px;min-width:0}',
+'#kh-preview-decision-panel .khd-flag{display:none;padding:2px 10px;border-radius:999px;border:1px solid var(--bad);background:rgba(239,107,107,.15);color:#ffb8b8;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel[data-ctx="missing"] .khd-flag{display:inline-block}',
+'#kh-preview-decision-panel .khd-pill{max-width:min(46vw,420px);overflow:hidden;text-overflow:ellipsis;padding:3px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel[data-gate="ok"] .khd-pill{border-color:var(--ok);background:rgba(47,191,128,.15);color:var(--ok)}',
 '#kh-preview-decision-panel[data-gate="bad"] .khd-pill{border-color:var(--bad);background:rgba(239,107,107,.15);color:var(--bad)}',
 '#kh-preview-decision-panel[data-gate="wait"] .khd-pill{border-color:#64748b;background:rgba(100,116,139,.2);color:#cbd5e1}',
+'#kh-preview-decision-panel .khd-chev{display:grid;place-items:center;flex:none;width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.08);font-size:12px;transition:transform .2s ease}',
+'#kh-preview-decision-panel[data-open="1"] .khd-chev{transform:rotate(180deg)}',
+'#kh-preview-decision-panel .khd-drop{position:absolute;top:calc(100% + 4px);inset-inline:0;display:grid;gap:12px;box-sizing:border-box;max-height:min(72vh,560px);overflow:auto;padding:14px 16px;border:1px solid rgba(215,173,102,.55);border-radius:20px;background:linear-gradient(160deg,rgba(18,40,50,.98),rgba(7,20,27,.98));box-shadow:0 18px 40px rgba(0,0,0,.5);visibility:hidden;opacity:0;transform:translateY(-6px);pointer-events:none;transition:opacity .18s ease,transform .18s ease,visibility 0s linear .18s}',
+'#kh-preview-decision-panel[data-open="1"] .khd-drop{visibility:visible;opacity:1;transform:none;pointer-events:auto;transition:opacity .18s ease,transform .18s ease,visibility 0s}',
 '#kh-preview-decision-panel .khd-meter{height:8px;border-radius:999px;background:rgba(255,255,255,.12);overflow:hidden;direction:ltr}',
 '#kh-preview-decision-panel .khd-meter span{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#2fbf80,#7fe0b4);transition:width .4s ease}',
 '#kh-preview-decision-panel .khd-note{margin:0;font-size:12px;color:#aebcc2}',
@@ -39,23 +48,49 @@ var PANEL_CSS=[
 '#kh-preview-decision-status[data-tone="bad"]{color:#ffb8b8}',
 '#kh-preview-decision-status:empty{display:none}',
 '.kh-audio-review-gate .kh-gate-message{max-height:110px;overflow:auto;overflow-wrap:anywhere}',
-'@media(min-width:900px){#kh-preview-decision-panel[data-gate="ok"]{position:sticky;top:8px}}',
-'@media(max-width:640px){#kh-preview-decision-panel{margin:8px;padding:12px;border-radius:18px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
+'@media(max-width:640px){#kh-preview-decision-panel{top:6px;margin:6px}#kh-preview-decision-panel .khd-actions{grid-template-columns:minmax(0,1fr)}}',
+'@media(max-width:480px){#kh-preview-decision-panel .khd-title span{display:none}}',
+'@media(prefers-reduced-motion:reduce){#kh-preview-decision-panel *{transition:none!important}}',
 '@media print{#kh-preview-decision-panel{display:none!important}}'
 ].join('');
+/* يبقى المحتوى مفتوحًا ما دام المسؤول يتعامل معه: مثبّت بالضغط، أو عملية حفظ جارية، أو خانة سبب الرفض ظاهرة، أو التركيز على عنصر داخله */
+function holdOpen(){
+ if(pinned||busy)return true;
+ if(reason&&reason.style.display==='block')return true;
+ var a=document.activeElement;
+ return !!(a&&a!==bar&&panel&&panel.contains(a));
+}
+function setOpen(on){
+ isOpen=!!on;
+ if(panel)panel.dataset.open=isOpen?'1':'0';
+ if(bar)bar.setAttribute('aria-expanded',isOpen?'true':'false');
+}
+function scheduleClose(){
+ clearTimeout(closeTimer);
+ closeTimer=setTimeout(function(){if(!holdOpen())setOpen(false)},280);
+}
+function togglePinned(){
+ if(pinned){pinned=false;if(!busy)setOpen(false)}
+ else{pinned=true;setOpen(true)}
+}
 function addControls(){
  if($('kh-preview-decision-panel'))return;
  var style=document.createElement('style');
  style.textContent=PANEL_CSS;
  document.head.appendChild(style);
- panel=document.createElement('section');panel.id='kh-preview-decision-panel';panel.setAttribute('aria-label','قرارات مراجعة المعاينة');panel.dataset.gate='wait';
- var head=document.createElement('div');head.className='khd-head';
+ panel=document.createElement('section');panel.id='kh-preview-decision-panel';panel.setAttribute('aria-label','قرارات مراجعة المعاينة');panel.dataset.gate='wait';panel.dataset.open='0';panel.dataset.ctx='ok';
+ bar=document.createElement('div');bar.className='khd-bar';bar.setAttribute('role','button');bar.tabIndex=0;bar.setAttribute('aria-expanded','false');bar.setAttribute('aria-controls','kh-preview-decision-drop');bar.setAttribute('aria-label','قرار مراجعة المعاينة — اضغط لفتح أو إغلاق التفاصيل');
  var title=document.createElement('div');title.className='khd-title';
  var icon=document.createElement('i');icon.textContent='🛡️';
  var titleText=document.createElement('span');titleText.textContent='قرار مراجعة المعاينة';
  title.append(icon,titleText);
+ var end=document.createElement('div');end.className='khd-end';
+ flag=document.createElement('span');flag.className='khd-flag';flag.id='kh-preview-ctx-flag';
  gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='جارٍ فحص الصوت…';
- head.append(title,gatePill);
+ var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
+ end.append(flag,gatePill,chev);
+ bar.append(title,end);
+ drop=document.createElement('div');drop.className='khd-drop';drop.id='kh-preview-decision-drop';
  var meter=document.createElement('div');meter.className='khd-meter';gateFill=document.createElement('span');meter.appendChild(gateFill);
  gateText=document.createElement('p');gateText.className='khd-note';gateText.id='kh-preview-gate-note';
  gateDetails=document.createElement('details');gateDetails.className='khd-details';gateDetails.hidden=true;
@@ -69,9 +104,21 @@ function addControls(){
  actions.append(approve,reject,back);
  reason=document.createElement('textarea');reason.id='kh-preview-reason';reason.maxLength=1000;reason.placeholder='اكتب سبب رفض المعاينة (مطلوب قبل تسجيل الرفض)';
  status=document.createElement('div');status.id='kh-preview-decision-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');
- panel.append(head,meter,gateText,gateDetails,actions,reason,status);
+ drop.append(meter,gateText,gateDetails,actions,reason,status);
+ panel.append(bar,drop);
  var header=document.querySelector('header');
  if(header&&header.parentNode)header.parentNode.insertBefore(panel,header.nextSibling);else document.body.insertBefore(panel,document.body.firstChild);
+ /* فتح/إغلاق: ماوس (تقريب)، ضغط/لمس، لوحة مفاتيح، Escape، والضغط خارج اللوحة */
+ panel.addEventListener('pointerenter',function(e){if(e.pointerType==='touch')return;clearTimeout(closeTimer);setOpen(true)});
+ panel.addEventListener('pointerleave',function(e){if(e.pointerType==='touch')return;scheduleClose()});
+ bar.addEventListener('click',togglePinned);
+ bar.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePinned()}});
+ panel.addEventListener('keydown',function(e){if(e.key==='Escape'&&!busy){pinned=false;setOpen(false);try{bar.focus()}catch(x){}}});
+ document.addEventListener('pointerdown',function(e){
+  if(!panel||panel.contains(e.target)||!isOpen)return;
+  pinned=false;
+  if(!holdOpen())setOpen(false);
+ });
  approve.addEventListener('click',function(){decide(true)});
  reject.addEventListener('click',function(){if(reason.style.display==='block'){decide(false)}else{reason.style.display='block';reason.focus();message('اكتب سبب الرفض ثم اضغط «رفض المعاينة» مرة أخرى.')}});
  back.addEventListener('click',function(){var id=draft&&draft.submission_id?encodeURIComponent(draft.submission_id):'';location.href='../khaledoon/admin.html?returnfrompreview=1'+(id?'&submission='+id:'')});
@@ -125,7 +172,7 @@ async function adminToken(){
  }
  return s.access_token;
 }
-function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disabled=on})}
+function setBusy(on){busy=on;[approve,reject].forEach(function(b){if(b)b.disabled=on});if(on)setOpen(true)}
 async function decide(isApprove){
  if(busy)return;
  if(!draft||!draft.submission_id){message('لا يوجد رقم سجل مرتبط بهذه المعاينة. افتحها من لوحة الإدارة مرة أخرى.',true);return}
@@ -190,6 +237,8 @@ document.addEventListener('kh-audio-review-updated',refreshGate);
 document.addEventListener('kh-story-audio-context',refreshGate);
 setTimeout(refreshGate,1500);
 if(!getContext()){
- approve.disabled=true;reject.disabled=true;message('لا توجد بيانات سجل مرتبطة بهذه المعاينة. افتح المعاينة من داخل لوحة الإدارة حتى تظهر أزرار القرار وتعمل.',true);
+ approve.disabled=true;reject.disabled=true;
+ panel.dataset.ctx='missing';flag.textContent='غير مرتبطة بسجل';
+ message('لا توجد بيانات سجل مرتبطة بهذه المعاينة. افتح المعاينة من داخل لوحة الإدارة حتى تظهر أزرار القرار وتعمل.',true);
 }
 })();
