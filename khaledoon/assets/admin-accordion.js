@@ -24,6 +24,12 @@
     'details.kh-sec>.kh-acc-body{padding:10px}' +
     'details.kh-sec>.kh-acc-body>:last-child{margin-bottom:0}' +
     '#tabs{display:none!important}' +
+    // كل عدادات الحالة (٨) فوق في شبكة واحدة: صفّان متساويان على الشاشات الكبيرة.
+    '@media(min-width:761px){#viewSubs>.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}' +
+    // فاصل واضح بين عدادات الحالة وفلتر الأقسام، مع لون خفيف مختلف لأزرار الأقسام.
+    '#secs{position:relative;margin-top:22px;padding-top:36px;border-top:1px dashed var(--line)}' +
+    '#secs::before{content:"تصفية حسب القسم";position:absolute;top:9px;inset-inline-start:0;font-size:.82rem;font-weight:800;color:var(--muted)}' +
+    '#secs .chip[aria-pressed="false"]{background:color-mix(in srgb,var(--gold) 8%,transparent);border-style:dashed}' +
     '.kh-tools-row{flex-wrap:nowrap!important;gap:6px!important;align-items:center;overflow-x:auto;padding-bottom:2px}' +
     '.kh-tools-row .btn{white-space:nowrap;flex:none;padding:6px 11px;font-size:.88rem;min-height:38px}' +
     '.kh-help-group{display:flex;gap:6px;flex-wrap:nowrap;flex:none;margin-inline-start:auto}' +
