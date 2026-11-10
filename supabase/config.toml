@@ -1,2 +1,5 @@
 [functions.story-audio-worker]
 verify_jwt = false
+
+[functions.audio-review-assets]
+verify_jwt = false
