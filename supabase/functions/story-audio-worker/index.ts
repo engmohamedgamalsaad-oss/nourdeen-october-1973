@@ -141,6 +141,41 @@ Deno.serve(async (req: Request) => {
   });
   if (uploadError) return reply(500, { error: "Unable to store generated audio privately.", detail: uploadError.message });
 
+  const manifestPath = [job.section, job.slug, job.language, "manifest.json"].join("/");
+  let manifest: any = { version: 1, section: job.section, story: job.slug, language: job.language, provider: "omnivoice", model: "VoiceTut Egyptian Tashkeel", segments: [] };
+  const { data: oldManifestFile } = await service.storage.from(BUCKET).download(manifestPath);
+  if (oldManifestFile) {
+    try {
+      const oldManifest = JSON.parse(await oldManifestFile.text());
+      if (oldManifest?.version === 1 && oldManifest.section === job.section && oldManifest.story === job.slug &&
+          oldManifest.language === job.language && Array.isArray(oldManifest.segments)) manifest = oldManifest;
+    } catch { /* start a fresh manifest if the old one is malformed */ }
+  }
+  const segmentName = path.split("/").pop()!;
+  const voiceName = job.speaker === "karma" ? "omnivoice-karma-reference" : "omnivoice-narrator-reference";
+  const segment = {
+    src: segmentName,
+    block_index: job.block_index,
+    chunk_index: 0,
+    speaker: job.speaker,
+    text: String(job.payload?.text ?? ""),
+    provider: "omnivoice",
+    model: "VoiceTut Egyptian Tashkeel",
+    voice: voiceName,
+    audio_sha256: digest,
+  };
+  manifest.segments = manifest.segments.filter((item: any) => !(Number(item.block_index) === Number(job.block_index) && Number(item.chunk_index || 0) === 0));
+  manifest.segments.push(segment);
+  manifest.segments.sort((a: any, b: any) => Number(a.block_index) - Number(b.block_index));
+  manifest.provider = "omnivoice";
+  manifest.model = "VoiceTut Egyptian Tashkeel";
+  const manifestUpload = await service.storage.from(BUCKET).upload(manifestPath, new TextEncoder().encode(JSON.stringify(manifest)), {
+    contentType: "application/json", upsert: true, cacheControl: "60",
+  });
+  if (manifestUpload.error) {
+    await service.storage.from(BUCKET).remove([path]);
+    return reply(500, { error: "Unable to update the private story manifest.", detail: manifestUpload.error.message });
+  }
   const result = {
     bucket: BUCKET,
     path,
