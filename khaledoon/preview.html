@@ -89,6 +89,10 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 <header class="top"><div class="wrap"><div class="brand">خالدون عبر التاريخ</div><div class="sub">مساحة معاينة مرئية قبل اعتماد التعديلات</div></div></header>
 <main class="wrap">
 <div class="note" id="introNote">هذه صفحة HTML للمعاينة وليست صفحة نشر. عرض الموقع في الإطار يعرض النسخة المنشورة الحالية؛ أما «معاينة شكل حكاية» فتتيح رؤية شكل صفحة الحكاية وتعديل نموذجها محليًا قبل اعتمادها. لا تحفظ هذه الصفحة أي تغييرات في الموقع.</div>
+<section class="panel" id="audioWorkerPanel" aria-live="polite" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
+ <div style="min-width:220px;flex:1"><strong style="color:var(--gold)">عامل توليد الصوت</strong><div id="audioWorkerState" style="font-weight:800;color:#ff9d9d">جارٍ التحقق من الاتصال…</div><small id="audioWorkerDetail" class="sub">يتحدث المؤشر تلقائيًا. عند انقطاع العامل افتح Colab وأعد تشغيل الدفتر.</small></div>
+ <a class="btn" id="audioWorkerOpen" href="https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_VoiceTut_Colab_Worker.ipynb" target="_blank" rel="noopener" style="font-weight:900;border:2px solid #b94b4b;background:#4a2025;color:#ffe6e6">العامل مفصول — فتح Colab</a>
+</section>
 <nav class="tabs" aria-label="اختيار المعاينة">
 <button class="btn active" type="button" data-view="site">معاينة الموقع</button>
 <button class="btn" type="button" data-view="story">معاينة شكل حكاية</button>
@@ -538,6 +542,31 @@ function returnToAdminDashboard(){var target='admin.html';if(window.opener&&!win
 $('returnToAdminTopBtn').addEventListener('click',returnToAdminDashboard);
 $('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewTopBtn').addEventListener('click',function(){window.print()});
+
+// مراقبة اتصال عامل الصوت دون كشف أي مفتاح في المتصفح.
+var workerState=$('audioWorkerState'),workerDetail=$('audioWorkerDetail'),workerOpen=$('audioWorkerOpen');
+var workerStatusUrl='https://ypwprddkscnfblhftkeb.supabase.co/functions/v1/story-audio-worker';
+async function refreshAudioWorkerStatus(){
+ try{
+  var response=await fetch(workerStatusUrl,{method:'GET',cache:'no-store'});
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  var state=await response.json();
+  if(state.online){
+   workerState.textContent='عامل الصوت متصل وجاهز ✓';workerState.style.color='#7fe0ad';
+   workerDetail.textContent='آخر إشارة اتصال حديثة. لا تحتاج لفتح Colab الآن.';
+   workerOpen.textContent='فتح دفتر العامل في Colab';workerOpen.style.background='#173b2b';workerOpen.style.borderColor='#45a875';workerOpen.style.color='#d9ffea';
+  }else{
+   workerState.textContent='عامل الصوت مفصول';workerState.style.color='#ff9d9d';
+   workerDetail.textContent='اضغط لفتح Colab، ثم اختر Runtime ← Run all لتشغيل العامل. المهام المحفوظة ستظل في الانتظار.';
+   workerOpen.textContent='العامل مفصول — فتح Colab';workerOpen.style.background='#4a2025';workerOpen.style.borderColor='#b94b4b';workerOpen.style.color='#ffe6e6';
+  }
+ }catch(e){
+  workerState.textContent='تعذر التحقق من حالة العامل';workerState.style.color='#f0d08a';
+  workerDetail.textContent='تعذر الوصول إلى خدمة الحالة؛ جرّب تحديث الصفحة. لا يعني ذلك بالضرورة أن Colab متوقف.';
+ }
+}
+refreshAudioWorkerStatus();setInterval(refreshAudioWorkerStatus,20000);
+
 if(params.has('story')||params.has('submission'))startReview();
 })();
 </script></body></html>
