@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>رابط مراجعة صوت مؤقت | خالدون عبر التاريخ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark;--bg:#060d1f;--panel:#0f1c3d;--line:#2e4274;--gold:#d7ad66;--text:#f5f0e6;--muted:#b8c3de}*{box-sizing:border-box}
+body{margin:0;background:radial-gradient(ellipse at top,#14224a,var(--bg) 65%);color:var(--text);font:16px/1.8 Cairo,Arial,sans-serif}
+.wrap{width:min(760px,calc(100% - 28px));margin:auto;padding-bottom:40px}
+h1{color:var(--gold);font:700 1.5rem Marhey,Cairo,sans-serif;margin:22px 0 6px}
+.panel{margin:16px 0;padding:18px;border:1px solid var(--line);border-radius:18px;background:#0a1633}
+.note{padding:12px 15px;border:1px solid #725b38;background:#2b251a;border-radius:12px;color:#f0d8aa;margin:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+label{display:flex;flex-direction:column;gap:5px;font-weight:600}
+input,select,textarea{width:100%;min-width:0;padding:10px;border:1px solid var(--line);border-radius:10px;background:#050b1b;color:var(--text);font:inherit}
+textarea{direction:ltr;text-align:left;font-size:.8rem;line-height:1.5;resize:vertical}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:1px solid var(--line);border-radius:11px;background:#16264d;color:var(--text);font:inherit;cursor:pointer}
+.btn:disabled{opacity:.5;cursor:not-allowed}.primary{background:var(--gold);color:#17232a;border-color:var(--gold);font-weight:800}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.status{margin-top:12px;color:var(--muted);min-height:1.6em}.status.err{color:#ffb4b4}
+.meta{display:grid;gap:4px;margin:12px 0;color:var(--muted);font-size:.92rem}.meta b{color:var(--text)}
+audio{width:100%;margin-top:10px}
+.timer{color:var(--gold);font-weight:800}
+[hidden]{display:none!important}
+</style>
+<style>html{visibility:hidden}</style><script src="assets/admin-tools-auth.js" defer></script></head>
+<body><main class="wrap">
+<h1>رابط مراجعة صوت مؤقت</h1>
+<p class="note">ينشئ رابطًا مؤقتًا لمقطع واحد فقط من مقاطع المراجعة الخاصة، ليستمع إليه مراجع من خارج متصفحك. لا ينشر الصوت ولا يغيّر الطابور ولا يعتمد شيئًا. التخزين يبقى خاصًا، والرابط يعمل لمن يملكه حتى ينتهي وقته، فلا ترسله إلا لمراجع تثق به.</p>
+
+<section class="panel">
+<div class="grid">
+<label>القسم<input id="section" value="history" dir="ltr" maxlength="80"></label>
+<label>معرّف الحكاية<input id="slug" value="ibn-sina" dir="ltr" maxlength="80"></label>
+<label>اللغة<select id="language"><option value="ar" selected>العربية</option><option value="en">English</option><option value="fr">Français</option><option value="it">Italiano</option><option value="de">Deutsch</option></select></label>
+<label>رقم المقطع (يبدأ من 0)<input id="block" type="number" min="0" max="999" value="0"></label>
+<label>مدة الرابط<select id="ttl"><option value="300">5 دقائق</option><option value="600" selected>10 دقائق</option><option value="900">15 دقيقة</option></select></label>
+</div>
+<div class="actions"><button class="btn primary" id="make" type="button">إنشاء رابط مراجعة مؤقت</button></div>
+<div id="status" class="status" role="status"></div>
+</section>
+
+<section class="panel" id="result" hidden>
+<div class="meta" id="meta"></div>
+<audio id="player" controls preload="none"></audio>
+<label style="margin-top:12px">الرابط المؤقت<textarea id="link" rows="4" readonly></textarea></label>
+<div class="actions">
+<button class="btn" id="copyLink" type="button">نسخ الرابط</button>
+<button class="btn primary" id="copyMsg" type="button">نسخ رسالة جاهزة للمراجع</button>
+</div>
+<div id="copyStatus" class="status" role="status"></div>
+</section>
+</main>
+<script>
+(function(){
+'use strict';
+var SUPA='https://ypwprddkscnfblhftkeb.supabase.co';
+var KEY='sb_publishable_JJnVwx8HQAJNxSok32L-qg_83fXk5Qn'; /* publishable key, same one admin-tools-auth.js uses */
+var SK='kh_adm_session';
+var $=function(id){return document.getElementById(id)};
+var current=null,timer=null;
+function say(t,err){var s=$('status');s.textContent=t||'';s.className='status'+(err?' err':'')}
+function token(){
+ var s=null;try{s=JSON.parse(localStorage.getItem(SK)||sessionStorage.getItem(SK)||'null')}catch(e){}
+ if(!s||!s.access_token)throw new Error('جلسة الأدمن غير موجودة. سجّل الدخول من لوحة الإدارة.');
+ if(Number(s.expires_at||0)-Date.now()/1000<30)throw new Error('انتهت جلسة الأدمن. حدّث الصفحة ثم حاول مرة أخرى.');
+ return s.access_token;
+}
+function clearResult(){
+ if(timer){clearInterval(timer);timer=null}
+ current=null;
+ var p=$('player');try{p.pause()}catch(e){}p.removeAttribute('src');p.load();
+ $('link').value='';$('result').hidden=true;$('copyStatus').textContent='';
+}
+function row(label,value){var d=document.createElement('div'),b=document.createElement('b');b.textContent=label+': ';d.appendChild(b);d.appendChild(document.createTextNode(value));return d}
+function fmt(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',')}
+function tick(){
+ if(!current)return;
+ var left=Math.max(0,Math.round((current.expiresAt-Date.now())/1000));
+ var t=$('timer');if(t)t.textContent=Math.floor(left/60)+':'+String(left%60).padStart(2,'0');
+ if(left<=0){clearResult();say('انتهى وقت الرابط وتم مسحه. أنشئ رابطًا جديدًا عند الحاجة.')}
+}
+function showResult(d){
+ var c=d.clip||{};
+ current={url:d.url,clip:c,expiresAt:Date.parse(d.expires_at)||Date.now()+d.expires_in*1000,ttl:d.expires_in};
+ var m=$('meta');m.textContent='';
+ m.appendChild(row('المتحدث',c.speaker||'—'));
+ m.appendChild(row('الحكاية',c.section+'/'+c.slug+' — '+c.language+' — المقطع '+c.block_index));
+ m.appendChild(row('الملف','audio/mpeg — '+fmt(c.bytes)+' بايت'));
+ m.appendChild(row('SHA-256 (تم التحقق منها من الخادم)',c.sha256||'—'));
+ var left=document.createElement('div'),b=document.createElement('b');b.textContent='ينتهي بعد: ';left.appendChild(b);var sp=document.createElement('span');sp.id='timer';sp.className='timer';left.appendChild(sp);m.appendChild(left);
+ $('link').value=d.url;
+ var p=$('player');p.src=d.url;
+ $('result').hidden=false;$('copyStatus').textContent='';
+ tick();timer=setInterval(tick,1000);
+}
+function message(){
+ var c=current.clip,mins=Math.round(current.ttl/60);
+ return ['ملف صوت للمراجعة الفعلية — رابط مؤقت لمقطع واحد، ينتهي بعد '+mins+' دقيقة تقريبًا:',current.url,'',
+  'الحكاية: '+c.section+'/'+c.slug+' — اللغة: '+c.language+' — المقطع: '+c.block_index+' — المتحدث: '+c.speaker,
+  'النوع: audio/mpeg — الحجم: '+c.bytes+' بايت',
+  'SHA-256: '+c.sha256,'',
+  'النص المنطوق المعتمد:',c.spoken_text||'(غير متاح)','',
+  'المطلوب: الاستماع إلى الملف نفسه وتقييم النطق واللهجة والأداء. لا تقيّم من النص وحده. إذا لم تتمكن من جلب الملف أو الاستماع إليه فعليًا، فاذكر ذلك صراحة ولا تفترض نتيجة.'].join('\n');
+}
+function copy(text,label){
+ var done=function(){$('copyStatus').className='status';$('copyStatus').textContent='تم نسخ '+label+'.'};
+ var fail=function(){$('copyStatus').className='status err';$('copyStatus').textContent='تعذر النسخ تلقائيًا. حدّد النص يدويًا وانسخه.'};
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(done,fail)}
+ else{try{var t=$('link');t.select();document.execCommand('copy')?done():fail()}catch(e){fail()}}
+}
+$('make').addEventListener('click',async function(){
+ var btn=this;clearResult();say('جارٍ التحقق من الملف وإنشاء الرابط…');btn.disabled=true;
+ try{
+  var body={action:'review_share_link',section:$('section').value.trim(),slug:$('slug').value.trim(),language:$('language').value,block_index:Number($('block').value),ttl_seconds:Number($('ttl').value)};
+  var r=await fetch(SUPA+'/functions/v1/audio-review-share',{method:'POST',headers:{apikey:KEY,Authorization:'Bearer '+token(),'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});
+  var d=null;try{d=await r.json()}catch(e){}
+  if(!r.ok||!d||d.success!==true)throw new Error((d&&d.error)||('رفض الخادم الطلب ('+r.status+').'));
+  showResult(d);say('الرابط جاهز. يمكنك الاستماع هنا أيضًا قبل إرساله.');
+ }catch(e){say(String(e&&e.message||e),true)}
+ finally{btn.disabled=false}
+});
+$('copyLink').addEventListener('click',function(){if(current)copy(current.url,'الرابط')});
+$('copyMsg').addEventListener('click',function(){if(current)copy(message(),'الرسالة الجاهزة')});
+window.addEventListener('pagehide',clearResult);
+})();
+</script></body></html>
