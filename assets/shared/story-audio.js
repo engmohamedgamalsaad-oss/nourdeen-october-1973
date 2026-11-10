@@ -87,6 +87,7 @@
   var host = document.createElement('section');
   host.className = 'kh-audio-player';
   host.id = 'kh-audio-player';
+  host.hidden = true;
   host.innerHTML =
     '<button type="button" class="kh-audio-toggle" id="kh-audio-toggle" aria-expanded="false">' + ICON_VOLUME + '</button>' +
     '<div class="kh-audio-panel">' +
@@ -320,14 +321,21 @@
     setLanguage();
     var thisLoad = ++manifestRun;
     if (lang !== 'ar' && lang !== 'en') { host.hidden = true; queue = []; manifestState = 'failed'; return; }
-    host.hidden = false;
+    host.hidden = true;
     manifestState = 'loading';
     manifestUrl = new URL(encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', PUBLIC_AUDIO_ROOT);
+    var publicManifestUrl = manifestUrl;
+    var legacyManifestUrl = new URL('../../../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href);
     status.textContent = ui.loading;
-    fetch(manifestUrl.href, { cache: 'no-cache' }).then(function (response) {
-      if (!response.ok) throw new Error('Audio manifest unavailable');
-      return response.json();
-    }).then(function (manifest) {
+    fetch(publicManifestUrl.href, { cache: 'no-cache' }).then(function (response) {
+      if (response.ok) return response.json().then(function (manifest) { return { manifest: manifest, url: publicManifestUrl }; });
+      return fetch(legacyManifestUrl.href, { cache: 'no-cache' }).then(function (legacyResponse) {
+        if (!legacyResponse.ok) throw new Error('Audio manifest unavailable');
+        return legacyResponse.json().then(function (manifest) { return { manifest: manifest, url: legacyManifestUrl }; });
+      });
+    }).then(function (loaded) {
+      var manifest = loaded.manifest;
+      manifestUrl = loaded.url;
       if (!manifest || manifest.version !== 1 || manifest.section !== story.section || manifest.story !== story.slug || manifest.language !== lang || !Array.isArray(manifest.segments)) throw new Error('Invalid audio manifest');
       if (manifest.segments.some(function (segment) { return !validPublicSegment(segment) || !/^[A-Za-z0-9_-]+\\.mp3$/.test(String(segment.src || '')); })) throw new Error('Audio manifest does not match the approved voices');
       var nextQueue = manifest.segments.map(function (segment) {
@@ -341,11 +349,13 @@
       if (!nextQueue.length) throw new Error('Empty audio manifest');
       if (thisLoad !== manifestRun) return;
       queue = nextQueue;
+      host.hidden = false;
       manifestState = 'ready';
       if (mode === 'idle') status.textContent = '';
     }).catch(function () {
       if (thisLoad !== manifestRun) return;
       queue = [];
+      host.hidden = true;
       manifestState = 'failed';
       status.textContent = ui.noVoice;
     });
