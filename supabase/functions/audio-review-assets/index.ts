@@ -60,6 +60,54 @@ async function ibnSinaArabicBlock(blockIndex: number) {
   const sourceTextHash = await sha256Hex(new TextEncoder().encode(sourceText));
   return { block, sourceText, sourceTextHash, blocks };
 }
+const storyPathCache = new Map<string, string>();
+async function resolveStoryBlock(section: string, slug: string, language: string, blockIndex: number) {
+  const identity = section + "/" + slug;
+  let path = storyPathCache.get(identity);
+  if (!path) {
+    const treeResponse = await fetch("https://api.github.com/repos/" + OWNER + "/" + REPO + "/git/trees/main?recursive=1", {
+      headers: { "Accept": "application/vnd.github+json", "Authorization": "Bearer " + GITHUB_TOKEN, "X-GitHub-Api-Version": "2022-11-28" },
+    });
+    if (!treeResponse.ok) throw new Error("تعذر البحث عن ملف الحكاية في المستودع.");
+    const tree = await treeResponse.json();
+    const candidates = (tree.tree ?? []).filter((item: any) =>
+      item.type === "blob" && item.path.startsWith("stories/" + section + "/") && item.path.endsWith("/story.json"));
+    for (const item of candidates) {
+      const response = await fetch("https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/main/" + item.path);
+      if (!response.ok) continue;
+      const candidate = await response.json();
+      if (candidate?.format === "KHALEDOON_STORY" && candidate.section === section && candidate.slug === slug) {
+        path = item.path;
+        storyPathCache.set(identity, path);
+        break;
+      }
+    }
+  }
+  if (!path) throw new Error("لم يتم العثور على ملف الحكاية المطابق لهويتها.");
+  const response = await fetch("https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/main/" + path);
+  if (!response.ok) throw new Error("تعذر تحميل النص المعتمد للحكاية.");
+  const story = await response.json();
+  const block = story?.i18n?.[language]?.blocks?.[blockIndex];
+  if (!block || !["narrator", "karma"].includes(block.speaker) || typeof block.text !== "string" || !block.text.trim()) {
+    throw new Error("المقطع المحدد غير موجود في لغة الحكاية أو لا يحتوي نصًا صالحًا.");
+  }
+  const sourceText = block.text.trim();
+  const sourceTextHash = await sha256Hex(new TextEncoder().encode(sourceText));
+  return { story, block, sourceText, sourceTextHash };
+}
+function acceptedBlockIndexes(audioReview: any, language: string): Set<number> {
+  return new Set(Object.values(audioReview?.clips ?? {})
+    .filter((clip: any) => clip?.lang === language && clip?.status === "accepted")
+    .map((clip: any) => Number(clip.block_index)));
+}
+function orderedStoryBlockIndexes(blocks: any[]): number[] {
+  const karma: number[] = [], narrator: number[] = [];
+  blocks.forEach((block: any, index: number) => {
+    if (block?.speaker === "karma") karma.push(index);
+    else if (block?.speaker === "narrator") narrator.push(index);
+  });
+  return karma.concat(narrator);
+}
 function encodeBase64Utf8(value: string): string {
   const bytes = new TextEncoder().encode(value);
   let binary = "";
@@ -112,7 +160,7 @@ Deno.serve(async (req: Request) => {
   const slug = body?.slug;
   const language = body?.language;
   const action = body?.action;
-  const languageRequired = action === "stage" || action === "manifest" || action === "generate" || action === "generation_status";
+  const languageRequired = ["stage", "manifest", "generate", "generation_status", "enqueue", "queue_status"].includes(action);
   if (!validKey(section) || !validKey(slug) ||
       (languageRequired && !["ar", "en", "fr", "it", "de"].includes(language))) {
     return reply(400, { error: "هوية الحكاية أو اللغة غير صالحة." });
@@ -123,27 +171,95 @@ Deno.serve(async (req: Request) => {
   });
   const prefix = section + "/" + slug + "/" + language;
 
-  if (body.action === "prepare_speech_text") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar") {
-      return reply(400, { error: "تجهيز نص القراءة عبر Gemini متاح حاليًا للتجربة العربية في ابن سينا فقط." });
+  if (body.action === "enqueue") {
+    const blockIndex = Number(body.block_index);
+    if (!Number.isInteger(blockIndex) || blockIndex < 0) return reply(400, { error: "رقم المقطع غير صالح." });
+    if (!["ar", "en"].includes(language)) return reply(400, { error: "التوليد متاح حاليًا للعربية والإنجليزية فقط." });
+    let source;
+    try { source = await resolveStoryBlock(section, slug, language, blockIndex); }
+    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة سجل مراجعة الحكاية.", detail: reviewError.message });
+    const audioReview = reviewRow?.audio_review ?? {};
+    const accepted = acceptedBlockIndexes(audioReview, language);
+    const ordered = orderedStoryBlockIndexes(source.story.i18n[language].blocks);
+    const targetPosition = ordered.indexOf(blockIndex);
+    if (targetPosition < 0 || ordered.slice(0, targetPosition).some((index) => !accepted.has(index))) {
+      return reply(409, { error: "يجب إكمال المقاطع السابقة واعتمادها أولًا، بترتيب كارما ثم الراوي." });
     }
+    if (accepted.has(blockIndex)) return reply(409, { error: "هذا المقطع معتمد بالفعل." });
+    let spokenText = source.sourceText;
+    if (language === "ar") {
+      const speechRecord = audioReview?.speech_texts?.["ar:" + blockIndex];
+      if (!speechRecord || speechRecord.status !== "approved" || typeof speechRecord.approved_text !== "string" ||
+          !speechRecord.approved_text.trim() || speechRecord.source_text_hash !== source.sourceTextHash) {
+        return reply(409, { error: "اعتمد نص القراءة الصوتية لهذا المقطع أولًا." });
+      }
+      spokenText = speechRecord.approved_text.trim();
+    }
+    const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
+    const relatedBases = Object.values(audioReview?.clips ?? {})
+      .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === blockIndex)
+      .map((clip: any) => String(clip.base ?? "")).filter(Boolean);
+    const regenRevision = relatedBases.reduce((max, base) => Math.max(max, Number(audioReview?.regen?.[base] ?? 0) || 0), 0);
+    const idempotencyKey = await sha256Hex(new TextEncoder().encode([section, slug, language, blockIndex, source.sourceTextHash, spokenHash, regenRevision].join(":")));
+    const payload = {
+      text: spokenText,
+      speaker: source.block.speaker,
+      source_text: source.sourceText,
+      source_text_hash: source.sourceTextHash,
+      spoken_text_hash: spokenHash,
+      regeneration_revision: regenRevision,
+      language_code: language === "ar" ? "arz" : "eng",
+      reference_role: source.block.speaker,
+      sample_rate: 24000,
+    };
+    const { data: inserted, error: insertError } = await service.from("story_audio_generation_queue").insert({
+      section, slug, language, block_index: blockIndex, speaker: source.block.speaker,
+      engine: "omnivoice-voicetut", payload, source_text_hash: idempotencyKey,
+      idempotency_key: idempotencyKey, status: "pending",
+    }).select("id,status,section,slug,language,block_index,speaker,created_at").maybeSingle();
+    if (insertError && insertError.code !== "23505") return reply(500, { error: "تعذر إضافة المقطع إلى طابور التوليد.", detail: insertError.message });
+    if (!inserted) {
+      const { data: existing, error: existingError } = await service.from("story_audio_generation_queue")
+        .select("id,status,section,slug,language,block_index,speaker,created_at")
+        .eq("idempotency_key", idempotencyKey).maybeSingle();
+      if (existingError || !existing) return reply(500, { error: "تعذر استرجاع طلب التوليد الموجود." });
+      return reply(200, { success: true, already_queued: true, job: existing });
+    }
+    return reply(200, { success: true, queued: true, job: inserted });
+  }
+
+  if (body.action === "queue_status") {
+    const { data, error } = await service.from("story_audio_generation_queue")
+      .select("id,language,block_index,speaker,status,attempts,last_error,result,created_at,updated_at,completed_at")
+      .eq("section", section).eq("slug", slug).order("created_at", { ascending: false }).limit(100);
+    if (error) return reply(500, { error: "تعذر قراءة حالة طابور الحكاية.", detail: error.message });
+    return reply(200, { success: true, jobs: data ?? [] });
+  }
+
+  if (body.action === "prepare_speech_text") {
+    if (language !== "ar") return reply(400, { error: "تجهيز النص الصوتي متاح حاليًا للمقاطع العربية فقط." });
     if (!GEMINI_API_KEY) return reply(503, { error: "مفتاح Gemini غير متاح في أسرار دالة Supabase؛ لم يُرسل أي نص." });
     let source;
-    try { source = await ibnSinaArabicBlock(Number(body.block_index)); }
+    try { source = await resolveStoryBlock(section, slug, "ar", Number(body.block_index)); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر تحديد المقطع." }); }
     const index = Number(body.block_index);
     const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (progressError) return reply(500, { error: "تعذر قراءة ترتيب مراجعة المقاطع.", detail: progressError.message });
-    const accepted = acceptedArabicBlockIndexes(progressRow?.audio_review);
-    if (accepted.has(index) || requiredEarlierIbnSinaBlocks(source.blocks, index).some((prior) => !accepted.has(prior))) {
+    const accepted = acceptedBlockIndexes(progressRow?.audio_review, "ar");
+    const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
+    const targetPosition = ordered.indexOf(index);
+    if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد مقاطع كارما بالترتيب، ثم مقاطع الراوي." });
     }
-    const previous = index > 0 ? source.blocks[index - 1] : null;
-    const next = index + 1 < source.blocks.length ? source.blocks[index + 1] : null;
+    const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
+    const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
     const prompt = [
-      "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من حكاية ابن سينا.",
+      "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من الحكاية.",
       "المتحدث: " + speakerName + ".",
       "قواعد ثابتة: عامية مصرية طبيعية غير صعيدية، لا فصحى مذيعين ولا مبالغة في العامية.",
       source.block.speaker === "karma"
@@ -332,19 +448,17 @@ Deno.serve(async (req: Request) => {
   }
 
   if (body.action === "speech_text_save") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar") {
-      return reply(400, { error: "حفظ نص القراءة متاح حاليًا للتجربة العربية في ابن سينا فقط." });
-    }
+    if (language !== "ar") return reply(400, { error: "حفظ نص القراءة الصوتية متاح حاليًا للمقاطع العربية فقط." });
     const index = Number(body.block_index);
     const decision = body.decision;
     const speechText = String(body.speech_text ?? "").trim();
-    if (!Number.isInteger(index) || index < 0 || index > 16 ||
+    if (!Number.isInteger(index) || index < 0 ||
         !["suggested", "approved"].includes(decision) || !speechText || speechText.length > 6000 ||
         typeof body.source_text_hash !== "string" || !/^[a-f0-9]{64}$/i.test(body.source_text_hash)) {
       return reply(400, { error: "بيانات نص القراءة أو قرار اعتماده غير صالحة." });
     }
     let source;
-    try { source = await ibnSinaArabicBlock(index); }
+    try { source = await resolveStoryBlock(section, slug, "ar", index); }
     catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من النص الأصلي." }); }
     if (source.sourceTextHash !== body.source_text_hash.toLowerCase()) {
       return reply(409, { error: "تغير النص الأصلي للحكاية؛ أعد تجهيز نص القراءة قبل اعتماده." });
@@ -352,8 +466,10 @@ Deno.serve(async (req: Request) => {
     const { data: progressRow, error: progressError } = await service.from("story_audio_reviews")
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (progressError) return reply(500, { error: "تعذر قراءة ترتيب اعتماد المقاطع.", detail: progressError.message });
-    const accepted = acceptedArabicBlockIndexes(progressRow?.audio_review);
-    if (accepted.has(index) || requiredEarlierIbnSinaBlocks(source.blocks, index).some((prior) => !accepted.has(prior))) {
+    const accepted = acceptedBlockIndexes(progressRow?.audio_review, "ar");
+    const ordered = orderedStoryBlockIndexes(source.story.i18n.ar.blocks);
+    const targetPosition = ordered.indexOf(index);
+    if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "لا يمكن اعتماد نص مقطع خارج دوره؛ الترتيب هو مقاطع كارما أولًا ثم مقاطع الراوي." });
     }
     const { data: existing, error: readError } = await service.from("story_audio_reviews")
@@ -386,6 +502,10 @@ Deno.serve(async (req: Request) => {
       .select("audio_review").single();
     if (saveError) return reply(500, { error: "تعذر حفظ نص القراءة في سجل المراجعة.", detail: saveError.message });
     return reply(200, { success: true, speech_text: speechTexts[key] });
+  }
+
+  if (["generate", "generation_status", "stage"].includes(action)) {
+    return reply(410, { error: "مسار التوليد القديم معطّل. استخدم طابور VoiceTut الدائم." });
   }
 
   if (body.action === "generate") {
