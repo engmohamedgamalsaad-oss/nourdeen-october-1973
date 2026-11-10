@@ -38,3 +38,10 @@ Open `notebooks/Khaledoon_VoiceTut_Colab_Worker.ipynb` in Google Colab and run i
 The model card's documented Python API uses `OmniVoice.from_pretrained(...)` and `model.generate(text=..., language="arz", ref_audio=..., ref_text=...)`, returning audio at 24 kHz. English generation uses the model's English language selector; validate the first English clip by listening before continuing a story.
 
 A Colab runtime that has been terminated cannot be started remotely. The queue remains durable while it is offline; once the notebook is opened and the worker cell is run again, it resumes by polling the queue.
+
+
+## Publishing approved audio to story pages
+
+The private worker manifest is never public by default. After every Arabic and English clip has been listened to and accepted in the review page, the admin can use **نشر الصوت المعتمد على صفحة الحكاية**. The authenticated `publish_audio` action verifies complete block coverage, accepted decisions, exact audio SHA-256 values, and the approved speech text before copying files to the public `khaledoon-story-audio-public` bucket and writing its public manifests.
+
+The public story player reads only those public manifests. It supports Arabic and English for every story, including October. Existing legacy static audio remains a fallback where no public VoiceTut manifest exists. Rejected or unreviewed clips are never copied by the publication action.
