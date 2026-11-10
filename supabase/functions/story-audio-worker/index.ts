@@ -133,7 +133,7 @@ Deno.serve(async (req: Request) => {
     return reply(422, { error: "Audio SHA-256 does not match the uploaded bytes." });
   }
   const safeIndex = String(job.block_index).padStart(4, "0");
-  const path = [job.section, job.slug, job.language, "omnivoice", "block-" + safeIndex + "-" + digest.slice(0, 16) + "." + extension].join("/");
+  const path = [job.section, job.slug, job.language, "block-" + safeIndex + "-" + digest.slice(0, 16) + "." + extension].join("/");
   const { error: uploadError } = await service.storage.from(BUCKET).upload(path, bytes, {
     contentType,
     upsert: true,
