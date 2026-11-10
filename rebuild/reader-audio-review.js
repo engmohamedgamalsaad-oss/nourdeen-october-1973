@@ -449,13 +449,7 @@ async function loadManifests() {
   expectedTexts.ar = expectedTexts.ar.map(function (pron, index) {
     return core.expectedSpokenText(storyArabicTexts[index], pron, speechTexts[speechTextKey(index)]);
   });
-  var stagingError = '';
-  try {
-    await ensureArabicAudioStaged(expectedTexts.ar);
-  } catch (error) {
-    // A missing/failed audio artifact must not block speech-text editing.
-    stagingError = String(error && error.message || error);
-  }
+  // Audio is now produced only by the persistent VoiceTut queue; do not stage legacy NAMAA artifacts.
   var results = await Promise.all(LANGS.map(async function (lang) {
     try {
       var privateResult;
@@ -501,7 +495,6 @@ async function loadManifests() {
       manifests[lang] = data;
     } catch (e) {
       manifestErrors[lang] = String(e && e.message || e);
-      if (lang === 'ar' && stagingError) manifestErrors[lang] += ' — تعذر تجهيز ملف الصوت الأول: ' + stagingError;
       if (e && e.isMissingManifest) manifestMissing[lang] = true;
       else if (REQUIRED_LANGS.indexOf(lang) >= 0) manifestLoadFailure = true;
     }
