@@ -78,6 +78,45 @@ Deno.serve(async (req: Request) => {
 
   if (action === "claim") {
     const lease = Math.max(180, Math.min(1800, Number(body.lease_seconds) || 900));
+
+    // Optional exact-ID claim for controlled one-clip pilots. The conditional
+    // update makes the claim single-winner without invoking the general queue RPC.
+    if (body.job_id !== undefined) {
+      if (!validUuid(body.job_id)) return reply(400, { error: "A valid target job_id is required." });
+      const { data: candidate, error: candidateError } = await service
+        .from("story_audio_generation_queue")
+        .select("id,status,attempts,max_attempts,available_at")
+        .eq("id", body.job_id)
+        .maybeSingle();
+      if (candidateError) return reply(500, { error: "Unable to read target queue item.", detail: candidateError.message });
+      if (!candidate || candidate.status !== "pending" ||
+          Number(candidate.attempts) >= Number(candidate.max_attempts) ||
+          Date.parse(candidate.available_at) > Date.now()) {
+        return reply(200, { success: true, job: null, idle: true, target_unavailable: true });
+      }
+      const now = new Date().toISOString();
+      const lockToken = crypto.randomUUID();
+      const { data: exactJob, error: exactClaimError } = await service
+        .from("story_audio_generation_queue")
+        .update({
+          status: "processing",
+          attempts: Number(candidate.attempts) + 1,
+          locked_at: now,
+          lock_token: lockToken,
+          worker_id: workerId,
+          updated_at: now,
+          last_error: null,
+        })
+        .eq("id", body.job_id)
+        .eq("status", "pending")
+        .eq("attempts", Number(candidate.attempts))
+        .lte("available_at", now)
+        .select("*")
+        .maybeSingle();
+      if (exactClaimError) return reply(500, { error: "Unable to claim exact queue item.", detail: exactClaimError.message });
+      return reply(200, { success: true, job: exactJob ?? null, idle: !exactJob });
+    }
+
     const { data, error } = await service.rpc("claim_story_audio_generation_job", {
       p_worker_id: workerId,
       p_lease_seconds: lease,
