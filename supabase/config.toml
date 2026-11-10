@@ -1,0 +1,2 @@
+[functions.story-audio-worker]
+verify_jwt = false
