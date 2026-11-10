@@ -101,6 +101,18 @@ function acceptedBlockIndexes(audioReview: any, language: string): Set<number> {
     .filter((clip: any) => clip?.lang === language && clip?.status === "accepted")
     .map((clip: any) => Number(clip.block_index)));
 }
+async function invalidatePublicStoryAudio(service: any, section: string, slug: string) {
+  for (const language of ["ar", "en"]) {
+    const prefix = section + "/" + slug + "/" + language;
+    const { data, error } = await service.storage.from(PUBLIC_AUDIO_BUCKET).list(prefix, { limit: 1000 });
+    if (error) throw new Error("تعذر التحقق من ملفات الصوت المنشورة قبل تحديث المراجعة: " + error.message);
+    const paths = (data ?? []).filter((item: any) => item?.name).map((item: any) => prefix + "/" + item.name);
+    if (paths.length) {
+      const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
+      if (removeError) throw new Error("تعذر إلغاء نشر نسخة الصوت السابقة: " + removeError.message);
+    }
+  }
+}
 function orderedStoryBlockIndexes(blocks: any[]): number[] {
   const karma: number[] = [], narrator: number[] = [];
   blocks.forEach((block: any, index: number) => {
@@ -199,6 +211,8 @@ Deno.serve(async (req: Request) => {
       }
       spokenText = speechRecord.approved_text.trim();
     }
+    try { await invalidatePublicStoryAudio(service, section, slug); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const spokenHash = await sha256Hex(new TextEncoder().encode(spokenText));
     const relatedBases = Object.values(audioReview?.clips ?? {})
       .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === blockIndex)
@@ -572,6 +586,8 @@ Deno.serve(async (req: Request) => {
       }
     }
     current.speech_texts = speechTexts;
+    try { await invalidatePublicStoryAudio(service, section, slug); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const { data: saved, error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
       .select("audio_review").single();
@@ -723,6 +739,8 @@ Deno.serve(async (req: Request) => {
       !key || key.length > 600 || !clip || !["accepted", "rejected"].includes(clip.status))) {
       return reply(400, { error: "تحتوي مراجعة الصوت على قرارات مقاطع غير صالحة." });
     }
+    try { await invalidatePublicStoryAudio(service, section, slug); }
+    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const saved = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: next }, { onConflict: "section,slug" })
       .select("audio_review").single();
