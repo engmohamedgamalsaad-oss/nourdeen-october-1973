@@ -37,15 +37,23 @@ function validUuid(value: unknown): value is string {
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers });
-  if (req.method !== "POST") return reply(405, { error: "Method not allowed" });
   if (!SUPABASE_URL || !SERVICE_KEY) return reply(500, { error: "Server credentials are not configured." });
+  const service = createClient(SUPABASE_URL, SERVICE_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  if (req.method === "GET") {
+    const { data, error } = await service.from("story_audio_worker_credentials")
+      .select("last_seen_at").eq("name", "colab-omnivoice-worker").eq("active", true).limit(1).maybeSingle();
+    if (error) return reply(500, { error: "Unable to read worker status." });
+    const lastSeenAt = data?.last_seen_at ?? null;
+    const ageMs = lastSeenAt ? Date.now() - Date.parse(lastSeenAt) : Number.POSITIVE_INFINITY;
+    return reply(200, { online: ageMs >= 0 && ageMs <= 90000, last_seen_at: lastSeenAt });
+  }
+  if (req.method !== "POST") return reply(405, { error: "Method not allowed" });
 
   const supplied = req.headers.get("x-khaledoon-worker-token") ?? "";
   if (!/^[a-f0-9]{64}$/.test(supplied)) return reply(401, { error: "Worker authentication required." });
   const suppliedHash = await sha256(new TextEncoder().encode(supplied));
-  const service = createClient(SUPABASE_URL, SERVICE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
   const { data: credentials, error: credentialError } = await service
     .from("story_audio_worker_credentials")
     .select("id")
@@ -55,6 +63,10 @@ Deno.serve(async (req: Request) => {
     .limit(1);
   if (credentialError) return reply(500, { error: "Unable to verify worker credential." });
   if (!credentials?.length) return reply(401, { error: "Worker credential is invalid or revoked." });
+  const presence = await service.from("story_audio_worker_credentials")
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq("name", "colab-omnivoice-worker").eq("active", true);
+  if (presence.error) return reply(500, { error: "Unable to update worker presence." });
 
   let body: any;
   try { body = await req.json(); } catch { return reply(400, { error: "Invalid JSON body." }); }
