@@ -18,6 +18,7 @@ const SERVICE_KEY = envKey("SUPABASE_SERVICE_ROLE_KEY", "SUPABASE_SECRET_KEYS");
 const GITHUB_TOKEN = Deno.env.get("GITHUB_PUBLISH_TOKEN") ?? "";
 const GEMINI_API_KEY = Deno.env.get("GEMINI_API_KEY") ?? "";
 const BUCKET = "khaledoon-audio-review";
+const PUBLIC_AUDIO_BUCKET = "khaledoon-story-audio-public";
 const OWNER = "engmohamedgamalsaad-oss";
 const REPO = "nourdeen-october-1973";
 const ALLOWED_ORIGIN = "https://engmohamedgamalsaad-oss.github.io";
@@ -237,6 +238,80 @@ Deno.serve(async (req: Request) => {
       .eq("section", section).eq("slug", slug).order("created_at", { ascending: false }).limit(100);
     if (error) return reply(500, { error: "تعذر قراءة حالة طابور الحكاية.", detail: error.message });
     return reply(200, { success: true, jobs: data ?? [] });
+  }
+
+  if (body.action === "publish_audio") {
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة قرارات مراجعة الصوت.", detail: reviewError.message });
+    const audioReview = reviewRow?.audio_review ?? {};
+    const published = [];
+    for (const lang of ["ar", "en"]) {
+      let source;
+      try { source = await resolveStoryBlock(section, slug, lang, 0); }
+      catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
+      const blocks = source.story?.i18n?.[lang]?.blocks;
+      if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
+      const prefix = section + "/" + slug + "/" + lang;
+      const { data: manifestFile, error: manifestError } = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
+      if (manifestError || !manifestFile) return reply(409, { error: "لا توجد حزمة صوت خاصة مكتملة باللغة " + lang + "." });
+      let manifest: any;
+      try { manifest = JSON.parse(await manifestFile.text()); }
+      catch { return reply(422, { error: "ملف manifest غير صالح باللغة " + lang + "." }); }
+      if (manifest?.version !== 1 || manifest.section !== section || manifest.story !== slug ||
+          manifest.language !== lang || !Array.isArray(manifest.segments) || manifest.segments.length !== blocks.length) {
+        return reply(409, { error: "حزمة الصوت لا تغطي جميع مقاطع الحكاية باللغة " + lang + "." });
+      }
+      const seen = new Set<number>();
+      for (const segment of manifest.segments) {
+        const index = Number(segment?.block_index);
+        const block = Number.isInteger(index) ? blocks[index] : null;
+        if (!block || seen.has(index) || segment.speaker !== block.speaker ||
+            segment.provider !== "omnivoice" || segment.model !== "VoiceTut Egyptian Tashkeel" ||
+            segment.voice !== (block.speaker === "karma" ? "omnivoice-karma-reference" : "omnivoice-narrator-reference") ||
+            typeof segment.src !== "string" || !/^[A-Za-z0-9_-]+\.mp3$/.test(segment.src) ||
+            !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? ""))) {
+          return reply(422, { error: "أحد مقاطع الصوت لا يطابق عقد VoiceTut أو نص الحكاية باللغة " + lang + "." });
+        }
+        const savedClip = Object.values(audioReview?.clips ?? {}).find((clip: any) =>
+          clip?.lang === lang && Number(clip.block_index) === index && clip?.status === "accepted" &&
+          String(clip.audio_sha256 ?? "").toLowerCase() === String(segment.audio_sha256).toLowerCase());
+        if (!savedClip) return reply(409, { error: "لم تعتمد كل المقاطع الصوتية أو تغير ملف أحدها باللغة " + lang + "." });
+        const expectedText = lang === "ar"
+          ? audioReview?.speech_texts?.["ar:" + index]?.approved_text
+          : block.text;
+        if (typeof expectedText !== "string" || expectedText.trim() !== String(segment.text ?? "").trim()) {
+          return reply(409, { error: "نص المقطع الصوتي لا يطابق النص المعتمد باللغة " + lang + "." });
+        }
+        seen.add(index);
+      }
+      if (seen.size !== blocks.length) return reply(409, { error: "هناك مقاطع مفقودة من حزمة الصوت باللغة " + lang + "." });
+      for (const segment of manifest.segments) {
+        const path = prefix + "/" + segment.src;
+        const { data: audioFile, error: audioError } = await service.storage.from(BUCKET).download(path);
+        if (audioError || !audioFile) return reply(500, { error: "تعذر قراءة ملف صوت معتمد للنشر.", file: segment.src });
+        const bytes = new Uint8Array(await audioFile.arrayBuffer());
+        if (await sha256Hex(bytes) !== String(segment.audio_sha256).toLowerCase()) {
+          return reply(422, { error: "بصمة ملف الصوت لا تطابق manifest قبل النشر.", file: segment.src });
+        }
+        const { error: uploadError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(path, bytes, {
+          contentType: "audio/mpeg", upsert: true, cacheControl: "31536000",
+        });
+        if (uploadError) return reply(500, { error: "تعذر نشر ملف صوت معتمد.", file: segment.src, detail: uploadError.message });
+      }
+      const publicManifest = {
+        version: 1, section, story: slug, language: lang, provider: "omnivoice",
+        model: "VoiceTut Egyptian Tashkeel", published_at: new Date().toISOString(),
+        segments: manifest.segments,
+      };
+      const { error: publicManifestError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(
+        prefix + "/manifest.json", new TextEncoder().encode(JSON.stringify(publicManifest)),
+        { contentType: "application/json", upsert: true, cacheControl: "60" },
+      );
+      if (publicManifestError) return reply(500, { error: "تعذر نشر manifest الصوت العام.", language: lang, detail: publicManifestError.message });
+      published.push({ language: lang, segments: manifest.segments.length });
+    }
+    return reply(200, { success: true, published: true, section, slug, languages: published });
   }
 
   if (body.action === "prepare_speech_text") {
