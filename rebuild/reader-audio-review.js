@@ -488,7 +488,7 @@ async function loadManifests() {
       manifestStale[lang] = split.stale;
       data.segments = split.fresh;
       if (data.segments.length) {
-        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
         if (!coverage.ok) throw new Error(coverage.error);
       }
       manifestGaps[lang] = core.uncoveredBlocks(localized && localized.blocks, data.segments);
