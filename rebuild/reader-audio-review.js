@@ -238,7 +238,7 @@ function upstreamServiceName(action) {
 async function audioAssetsRequest(payload) {
   var token = await adminToken();
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
-  var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && payload.action === 'prepare_speech_text' ? 125000 : 25000) : null;
+  var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && (payload.action === 'prepare_speech_text' || payload.action === 'publish_audio') ? 125000 : 25000) : null;
   var response;
   try {
     response = await fetch(SUPA + '/functions/v1/audio-review-assets', {
@@ -1021,7 +1021,29 @@ function renderGenerationControls(banner) {
   var button = iconButton('spark', language === 'ar' ? 'إرسال المقطع التالي للتوليد' : 'Queue next English clip', 'generate', function () {
     generateNextQueuedBlock(language, status, button);
   });
-  button.disabled = generationBusy; panel.append(title, button, status); banner.appendChild(panel);
+  button.disabled = generationBusy;
+  var publishButton = document.createElement('button');
+  publishButton.type = 'button';
+  publishButton.className = 'kh-audio-publish-button';
+  publishButton.textContent = 'نشر الصوت المعتمد على صفحة الحكاية';
+  publishButton.disabled = !gate().ok || generationBusy;
+  publishButton.addEventListener('click', async function () {
+    if (!gate().ok || generationBusy) return;
+    publishButton.disabled = true;
+    text(status, 'جارٍ نشر المقاطع المعتمدة للعربية والإنجليزية…');
+    try {
+      var result = await audioAssetsRequest({ action: 'publish_audio', section: story.section, slug: story.slug });
+      if (!result || result.success !== true || result.published !== true) throw new Error('لم يؤكد الخادم نشر حزمة الصوت.');
+      generationMessage = 'تم نشر الصوت المعتمد للعربية والإنجليزية على صفحة الحكاية.';
+      text(status, generationMessage);
+    } catch (error) {
+      text(status, 'تعذر نشر الصوت: ' + (error && error.message || error));
+    } finally {
+      publishButton.disabled = !gate().ok;
+    }
+  });
+  publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة.';
+  panel.append(title, button, publishButton, status); banner.appendChild(panel);
 }
 function nextArabicBlockIndex() {
   var byBlock = {};
