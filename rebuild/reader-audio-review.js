@@ -1084,7 +1084,7 @@ async function prepareSpeechText(index, statusNode, button) {
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى NAMAA.');
+    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
     render();
   } catch (error) {
     text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
@@ -1108,7 +1108,7 @@ async function approveSpeechText(index, textarea, statusNode, button) {
   text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
   try {
     var saved = await audioAssetsRequest({
-      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      action: 'speech_text_save', section: story.section, slug: story.slug, language: 'ar',
       block_index: index, decision: 'approved', speech_text: value,
       source_text_hash: record.source_text_hash
     });
