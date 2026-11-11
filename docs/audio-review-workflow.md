@@ -1,3 +1,5 @@
+> **وثيقة تاريخية لمسار التوليد السابق — غير صالحة للتشغيل الحالي.** أوامر `scripts/generate_story_audio.py` وWorkflows التي تستخدم Fish Audio/Edge TTS أُزيلت من الفرع النشط. لا تنفّذ أي أمر أدناه. المسار الحالي هو OmniVoice/VoiceTut عبر عامل Colab وطابور `story_audio_generation_queue`؛ راجع `docs/STORY_AUDIO_WORKER.md` و`docs/STATUS.md`.
+
 # دليل تشغيل مراجعة الصوت — خالدون عبر التاريخ
 
 ## ضمانات ثابتة
