@@ -24,7 +24,7 @@ class VoiceSettings:
 
 
 # Karma: exactly the generation call used in Khaledoon_Karma_Listen_Test_Explained.ipynb.
-KARMA_SETTINGS = VoiceSettings(num_step=36, guidance_scale=3.0, speed=0.90, version="karma-approved-0.90-2026-11-11")
+KARMA_SETTINGS = VoiceSettings(num_step=36, guidance_scale=3.0, speed=0.97, version="karma-listen-test-2026-11-11")
 
 # Narrator: values recorded in docs/KHALEDOON_CONTROL_TOWER.md (10-11-2026).
 NARRATOR_SETTINGS = VoiceSettings(num_step=48, guidance_scale=3.0, speed=1.05, version="narrator-control-tower-2026-11-10")
