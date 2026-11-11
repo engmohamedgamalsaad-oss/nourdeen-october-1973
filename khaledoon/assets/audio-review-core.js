@@ -15,8 +15,7 @@ function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim()
 function strip(s) { return norm(s).replace(/[\u064B-\u065F\u0670\u0640]/g, ''); }
 
 function engineOf(lang, speaker) {
-  if (lang === 'ar') return { voice: speaker === 'karma' ? 'omnivoice-karma-reference' : speaker === 'narrator' ? 'omnivoice-narrator-reference' : '', provider: 'omnivoice', model: 'VoiceTut Egyptian Tashkeel' };
-  return { voice: 'edge-tts', provider: 'edge-tts', model: 'default' };
+  return { voice: speaker === 'karma' ? 'omnivoice-karma-reference' : speaker === 'narrator' ? 'omnivoice-narrator-reference' : '', provider: 'omnivoice', model: 'VoiceTut Egyptian Tashkeel' };
 }
 
 async function sha256(str) {
