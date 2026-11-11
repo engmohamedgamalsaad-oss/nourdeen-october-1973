@@ -835,25 +835,12 @@ Deno.serve(async (req: Request) => {
       first.block_index = 1;
       second.block_index = 0;
     }
-    const expectedFishVoices: Record<string, string> = {
-      narrator: "a02a8220d6014812aa5ff73434c54cc0",
-      karma: "592625f68416462f8b6161ddf5fdbffb",
-    };
-    const expectedNamaaVoices: Record<string, string> = {
-      narrator: "magdi-yacoub-narrator-reference",
-      karma: "magdi-yacoub-karma-reference",
-    };
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
-      const fishOk = segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
-        segment?.voice === expectedFishVoices[segment?.speaker];
-      const namaaOk = segment?.provider === "huggingface-space" &&
-        segment?.model === "NAMAA-Space/NAMAA-Egyptian-TTS" &&
-        segment?.voice === expectedNamaaVoices[segment?.speaker];
-      const engineOk = language === "ar"
-        ? fishOk || namaaOk
-        : segment?.provider === "edge-tts" && segment?.model === "edge-tts" &&
-          typeof segment?.voice === "string" && !!segment.voice.trim();
+      const engineOk = segment?.provider === "omnivoice" &&
+        segment?.model === "VoiceTut Egyptian Tashkeel" &&
+        segment?.voice === (segment?.speaker === "karma"
+          ? "omnivoice-karma-reference" : "omnivoice-narrator-reference");
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
           !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src ?? "")) ||
           !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? "")) ||
