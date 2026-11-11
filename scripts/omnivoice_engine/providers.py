@@ -7,6 +7,7 @@ reference text and generation settings. The OmniVoice model object is shared
 from __future__ import annotations
 
 import hashlib
+import json
 import os
 from typing import Callable, Dict
 
@@ -74,11 +75,59 @@ class KarmaProvider(ReferenceVoiceProvider):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
 
 
+_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title")
+_AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "audio_file", "wav")
+_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text")
+
+
+def load_library_reference(refs_dir: str, name: str, alt_names=()):
+    """Find a built-in library voice (e.g. 'kareem') in ``references.json``.
+
+    ``refs_dir`` is the ``reference_speakers`` folder of the VoiceTut-TTS snapshot.
+    Returns (audio_path, ref_text). Raises ProviderError listing what exists if the
+    voice or its audio/text fields cannot be resolved.
+    """
+    index_path = os.path.join(refs_dir, "references.json")
+    if not os.path.isfile(index_path):
+        raise ProviderError(f"references.json not found in {refs_dir!r}")
+    with open(index_path, encoding="utf-8") as handle:
+        data = json.load(handle)
+    items = data if isinstance(data, list) else list(data.values()) if isinstance(data, dict) else []
+    wanted_all = [n.strip().lower() for n in (name, *alt_names) if n]
+
+    def labels(item):
+        return [str(item[k]).strip().lower() for k in _NAME_KEYS if isinstance(item, dict) and item.get(k)]
+
+    found = next((i for i in items if isinstance(i, dict) and any(w in labels(i) for w in wanted_all)), None)
+    if found is None and isinstance(data, dict) and isinstance(data.get(name), dict):
+        found = data[name]
+    if found is None:
+        known = [labels(i)[:1] for i in items if isinstance(i, dict)]
+        raise ProviderError(f"Library voice {name!r} not found. Available: {known}")
+    audio = next((found[k] for k in _AUDIO_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
+    text = next((found[k] for k in _TEXT_KEYS if isinstance(found.get(k), str) and found[k].strip()), None)
+    if not text:
+        raise ProviderError(f"Library voice {name!r} has no reference text field: {sorted(found)}")
+    audio = audio or f"{wanted_all[-1]}.wav"
+    candidates = [audio, os.path.join(refs_dir, audio), os.path.join(os.path.dirname(refs_dir), audio),
+                  os.path.join(refs_dir, os.path.basename(audio))]
+    path = next((c for c in candidates if os.path.isfile(c)), None)
+    if path is None:
+        raise ProviderError(f"Library voice {name!r}: audio file {audio!r} not found under {refs_dir!r}")
+    return path, text
+
+
 class NarratorProvider(ReferenceVoiceProvider):
     speaker = "narrator"
 
     def __init__(self, ref_audio_path, ref_text, settings=NARRATOR_SETTINGS, **kwargs):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
+
+    @classmethod
+    def from_library(cls, refs_dir, name="karim", speaker_id="spk_04_male", **kwargs):
+        """Narrator = library voice Karim (spk_04_male, reference_speakers/karim.wav); no Drive or secret."""
+        path, text = load_library_reference(refs_dir, speaker_id, (name,))
+        return cls(path, text, **kwargs)
 
 
 class ProviderRegistry:

@@ -97,7 +97,7 @@ class EngineTests(unittest.TestCase):
         self.karma().generate(model, "مرحبا", "ar")
         call = model.calls[0]
         self.assertEqual(call["language"], "arz")
-        self.assertEqual((call["num_step"], call["guidance_scale"], call["speed"]), (36, 3.0, 0.97))
+        self.assertEqual((call["num_step"], call["guidance_scale"], call["speed"]), (36, 3.0, 0.90))
         self.assertEqual(call["ref_text"], KARMA_TEXT)
         self.assertTrue(call["ref_audio"].endswith("karma_ref_24k.wav"))
 
@@ -154,6 +154,20 @@ class EngineTests(unittest.TestCase):
         )
         self.assertEqual(done, 1)
         self.assertEqual(len(client.failed), 1)
+
+    def test_narrator_from_library_voice_karim(self):
+        import json
+        refs = os.path.join(self.tmp.name, "reference_speakers")
+        os.makedirs(refs)
+        with open(os.path.join(refs, "karim.wav"), "wb") as handle:
+            handle.write(b"x")
+        with open(os.path.join(refs, "references.json"), "w", encoding="utf-8") as handle:
+            json.dump([{"name": "Aly", "audio": "aly.wav", "text": "x"},
+                       {"name": "Karim", "speaker_id": "spk_04_male", "audio": "reference_speakers/karim.wav", "text": "نص كريم"}], handle)
+        provider = NarratorProvider.from_library(refs, "karim", workdir=self.tmp.name, converter=fake_convert)
+        self.assertEqual(provider.ref_text, "نص كريم")
+        with self.assertRaises(ProviderError):
+            NarratorProvider.from_library(refs, "nobody", speaker_id="spk_99_x", workdir=self.tmp.name, converter=fake_convert)
 
     def test_client_requires_credentials(self):
         with self.assertRaises(ValueError):
