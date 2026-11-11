@@ -58,13 +58,11 @@
   /* ---------- State ---------- */
   var lang = document.documentElement.lang || 'ar';
   var ui = copy[lang] || copy.ar;
-  var approvedVoices = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
   var PUBLIC_AUDIO_ROOT = 'https://ypwprddkscnfblhftkeb.supabase.co/storage/v1/object/public/khaledoon-story-audio-public/';
   function validPublicSegment(segment) {
-    if (segment && segment.provider === 'omnivoice' && segment.model === 'VoiceTut Egyptian Tashkeel') {
-      return segment.voice === (segment.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
-    }
-    return !!approvedVoices[segment && segment.speaker] && segment.voice === approvedVoices[segment.speaker];
+    return !!segment && segment.provider === 'omnivoice' &&
+      segment.model === 'VoiceTut Egyptian Tashkeel' &&
+      segment.voice === (segment.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
   }
   var queue = [];
   var index = 0;
@@ -325,14 +323,10 @@
     manifestState = 'loading';
     manifestUrl = new URL(encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', PUBLIC_AUDIO_ROOT);
     var publicManifestUrl = manifestUrl;
-    var legacyManifestUrl = new URL('../../../assets/audio/' + encodeURIComponent(story.section) + '/' + encodeURIComponent(story.slug) + '/' + encodeURIComponent(lang) + '/manifest.json', location.href);
     status.textContent = ui.loading;
     fetch(publicManifestUrl.href, { cache: 'no-cache' }).then(function (response) {
       if (response.ok) return response.json().then(function (manifest) { return { manifest: manifest, url: publicManifestUrl }; });
-      return fetch(legacyManifestUrl.href, { cache: 'no-cache' }).then(function (legacyResponse) {
-        if (!legacyResponse.ok) throw new Error('Audio manifest unavailable');
-        return legacyResponse.json().then(function (manifest) { return { manifest: manifest, url: legacyManifestUrl }; });
-      });
+      throw new Error('Audio manifest unavailable');
     }).then(function (loaded) {
       var manifest = loaded.manifest;
       manifestUrl = loaded.url;
