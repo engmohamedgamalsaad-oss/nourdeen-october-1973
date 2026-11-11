@@ -325,7 +325,7 @@ function buildPromptSection(review) {
 }
 
 var api = {
-  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS, REQUIRED_LANGS: REQUIRED_LANGS,
+  GEN_VERSION: GEN_VERSION, LANGS: LANGS, REQUIRED_LANGS: REQUIRED_LANGS,
   expectedSpokenText: expectedSpokenText, splitStaleSegments: splitStaleSegments, uncoveredBlocks: uncoveredBlocks,
   norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,
