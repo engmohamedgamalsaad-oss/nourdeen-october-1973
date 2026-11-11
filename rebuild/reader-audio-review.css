@@ -526,3 +526,31 @@
   .kh-audio-card .kh-audio-actions { grid-template-columns: minmax(0, 1fr); }
   .kh-audio-review-gate { margin: 10px; padding: 14px; }
 }
+
+/* ===== Engine step (3) + compact per-block flow ===== */
+.kh-engine-controls { padding: 10px 14px; margin-top: 8px; }
+.kh-engine-body { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 6px; }
+.kh-engine-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 999px;
+  font-size: .8rem; font-weight: 700; border: 1px solid var(--line, rgba(255,255,255,.18)); color: var(--ink);
+}
+.kh-engine-chip::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: currentColor; opacity: .7; }
+.kh-engine-chip[data-state="pending"] { color: var(--warn); }
+.kh-engine-chip[data-state="processing"] { color: var(--warn); }
+.kh-engine-chip[data-state="processing"]::before { animation: khblink 1s infinite; opacity: 1; }
+.kh-engine-chip[data-state="completed"], .kh-engine-chip[data-state="accepted"] { color: var(--ok); }
+.kh-engine-chip[data-state="failed"] { color: var(--bad); }
+.kh-engine-controls[data-engine="failed"] { --edge: color-mix(in srgb, var(--bad) 65%, transparent); }
+.kh-engine-controls[data-engine="completed"], .kh-engine-controls[data-engine="accepted"] { --edge: color-mix(in srgb, var(--ok) 65%, transparent); }
+.kh-engine-msg { flex: 1 1 220px; }
+
+/* Shrink the page: only the block currently in turn keeps its full editor open */
+.kh-speech-text-controls .kh-speech-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 720px) { .kh-speech-text-controls .kh-speech-grid { grid-template-columns: 1fr; } }
+.kh-speech-text-controls[data-current="false"] .kh-flow,
+.kh-speech-text-controls[data-current="false"] .kh-speech-grid,
+.kh-speech-text-controls[data-current="false"] .kh-speech-notes,
+.kh-speech-text-controls[data-current="false"] .kh-audio-actions { display: none; }
+.kh-speech-text-controls[data-current="false"],
+.kh-engine-controls, .kh-audio-card { margin-block: 6px; }
+.kh-audio-generation-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
