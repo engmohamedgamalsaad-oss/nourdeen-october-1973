@@ -69,6 +69,15 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(audioWorker.includes('story-audio-jobs') || audioWorker.includes('claim'), 'the unified worker must consume queued audio jobs rather than the retired batch generator');
   assert.ok(!fs.existsSync('scripts/generate_story_audio.py'), 'the retired Fish Audio generator must not be restored');
 });
+test('admin preview mounts the ordered audio review flow and links to the unified OmniVoice worker', function () {
+  assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
+  assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js')"), 'the preview must mount the ordered text-to-generation status flow');
+  assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
+  assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
+  assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
+});
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));
   assert.ok(admin.includes('window.KHWorkflow.counters(visibleAdminRecords,sitePageItems)'));
