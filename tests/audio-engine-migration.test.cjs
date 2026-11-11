@@ -45,3 +45,26 @@ test('Colab notebook loads the unified engine from the active migration branch',
   assert.match(source, /ENGINE_BRANCH = 'main'/);
   assert.doesNotMatch(source, /feat\/omnivoice-unified-audio|feat\/omnivoice-only-audio-cleanup/);
 });
+
+test('audio-only rejection advances the regeneration revision for that exact clip', () => {
+  const entry = {
+    key: 'clip-original', story_id: 'history/ibn-sina', lang: 'ar',
+    block_index: 4, chunk_index: 0, speaker: 'narrator',
+    base: 'base-hash-4', text: 'approved speech text', audio_sha256: 'a'.repeat(64)
+  };
+  const rejected = core.applyDecision(core.emptyReview(), entry, {
+    status: 'rejected', issue: 'audio_only', note: 'الصوت غير مناسب'
+  });
+  const bumped = core.bumpAudioOnly(rejected);
+  assert.equal(bumped.bumped, 1);
+  assert.equal(bumped.review.regen['base-hash-4'], 1);
+  assert.equal(bumped.review.clips['clip-original'].bumped, true);
+  assert.equal(bumped.review.clips['clip-original'].text, 'approved speech text');
+});
+
+test('admin review exposes a same-block regeneration action after audio-only rejection', () => {
+  const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
+  assert.match(source, /next = core\.bumpAudioOnly\(next\)\.review/);
+  assert.match(source, /generateNextQueuedBlock\(entry\.lang, state, regenerateBtn, entry\.block_index\)/);
+  assert.match(source, /إعادة توليد هذا المقطع/);
+});
