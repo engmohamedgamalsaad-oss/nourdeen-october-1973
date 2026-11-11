@@ -473,7 +473,7 @@ async function loadManifests() {
       data.segments.forEach(function (seg) {
         var engineOk = seg.provider === 'omnivoice' && seg.model === 'VoiceTut Egyptian Tashkeel' &&
           seg.voice === (seg.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
-        if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
+        if (!engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
