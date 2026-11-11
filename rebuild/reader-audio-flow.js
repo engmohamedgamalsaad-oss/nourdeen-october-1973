@@ -68,7 +68,7 @@
     var index = Number(box.dataset.index), L = lang();
     var speech = box.querySelector('.kh-speech-text-controls');
     var cards = box.querySelectorAll('.kh-audio-card[data-review]');
-    var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card').length > 0;
+    var job = jobOf(index), hasCard = box.querySelectorAll('.kh-audio-card[data-clip-key]').length > 0;
     var s2;
     if (L !== 'ar') s2 = { s: 'na', t: 'لا يلزم' };
     else {
