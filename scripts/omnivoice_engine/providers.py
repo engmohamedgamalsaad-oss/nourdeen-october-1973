@@ -75,9 +75,9 @@ class KarmaProvider(ReferenceVoiceProvider):
         super().__init__(ref_audio_path, ref_text, settings, **kwargs)
 
 
-_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title")
+_NAME_KEYS = ("name", "id", "speaker", "voice", "label", "title", "speaker_id", "speaker_name")
 _AUDIO_KEYS = ("audio", "audio_path", "ref_audio", "path", "file", "filename", "audio_file", "wav")
-_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text")
+_TEXT_KEYS = ("ref_text", "text", "transcript", "transcription", "prompt_text", "reference_text")
 
 
 def load_library_reference(refs_dir: str, name: str, alt_names=()):
