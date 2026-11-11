@@ -22,16 +22,12 @@ on:
       - 'tests/admin-speech-review-ui.test.cjs'
       - 'tests/audio-text-review.test.cjs'
       - 'tests/test_audit_story_audio.py'
-      - 'tests/test_audio_generation_safety.py'
-      - 'scripts/generate_story_audio.py'
       - 'rebuild/october-audio-packages/**'
       - 'tests/test_review_pronunciation.py'
       - 'stories/science/015/story.json'
       - 'stories/science/015/audio-pronunciation.json'
       - 'assets/audio/science/magdi-yacoub/ar/manifest.json'
       - '.github/workflows/pronunciation-review.yml'
-      - '.github/workflows/story-audio.yml'
-      - '.github/workflows/story-audio-single-block.yml'
       - 'docs/audio-review-workflow.md'
 
 permissions:
@@ -54,23 +50,14 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile reviewer and guarded audio generator
-        run: python -m py_compile scripts/review_pronunciation.py scripts/review_audio_pronunciation.py scripts/generate_story_audio.py scripts/audit_story_audio.py
-
-      - name: Install generator dependency for no-cost preflight
-        run: python -m pip install edge-tts
-
-      - name: Run guarded audio generator without contacting Fish Audio
-        run: python scripts/generate_story_audio.py --story stories/science/015/story.json
+      - name: Compile read-only reviewers and audio auditor
+        run: python -m py_compile scripts/review_pronunciation.py scripts/review_audio_pronunciation.py scripts/audit_story_audio.py
 
       - name: Run focused unit and pilot integration tests
         run: python -m unittest discover -s tests -p 'test_review_pronunciation.py' -v
 
       - name: Run read-only story audio inventory tests
         run: python -m unittest discover -s tests -p 'test_audit_story_audio.py' -v
-
-      - name: Run isolated audio generation safety tests
-        run: python -m unittest discover -s tests -p 'test_audio_generation_safety.py' -v
 
       - name: Run read-only ASR review logic tests
         run: python -m unittest discover -s tests -p 'test_audio_pronunciation_review.py' -v
