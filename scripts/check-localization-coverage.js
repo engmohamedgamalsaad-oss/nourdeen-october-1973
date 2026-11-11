@@ -167,11 +167,13 @@ for (const file of translationMaps) {
         'stories/science/007/story.json',
         // unified story prose is stored in JSON data; the old page is retained as a legacy archive.
         'stories/history/005/story.json', 'stories/history/006/story.json',
+        // Ibn Sina German additions are keyed to the canonical unified story package.
+        'stories/history/005/story.json',
         // This legacy German source paragraph is retained in the Orabi translation module.
         'stories/history/006/translations.js'
       ].map(read).join('\n');
       const missingSources = entries.filter(([key]) => !sourcePages.includes(key));
-      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match source text in stories 001–003.');
+      if (missingSources.length) problems.push('germanStoryText: ' + missingSources.length + ' keys do not match any configured source story.');
       if (!bad.length && !missingSources.length) console.log('germanStoryText: verified ' + entries.length + ' German additions for October stories 001–003.');
     } catch (e) {
       problems.push('germanStoryText: could not parse the map: ' + e.message);
