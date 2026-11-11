@@ -365,6 +365,9 @@ async function saveReview(entry, decision) {
     var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
     var currentReview = core.cloneReview(currentResult.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    if (decision.status === 'rejected' && decision.issue === 'audio_only') {
+      next = core.bumpAudioOnly(next).review;
+    }
     next.speech_texts = speechTexts;
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
@@ -963,9 +966,10 @@ function nextBlockIndexForLanguage(language) {
   for (var i = 0; i < ordered.length; i++) if (!accepted.has(ordered[i])) return ordered[i];
   return -1;
 }
-async function generateNextQueuedBlock(language, statusNode, button) {
+async function generateNextQueuedBlock(language, statusNode, button, forcedBlockIndex) {
   if (generationBusy) return;
-  var nextBlock = nextBlockIndexForLanguage(language);
+  var nextBlock = forcedBlockIndex !== undefined && Number.isInteger(Number(forcedBlockIndex))
+    ? Number(forcedBlockIndex) : nextBlockIndexForLanguage(language);
   if (nextBlock < 0) { text(statusNode, 'كل مقاطع هذه اللغة معتمدة بالفعل.'); return; }
   if (language === 'ar') {
     if (Object.keys(speechTextBusy).some(function (key) { return speechTextBusy[key]; })) {
@@ -1394,6 +1398,14 @@ function renderBlocks() {
     player.append(playBtn, track, replayBtn);
     var actions = document.createElement('div'); actions.className = 'kh-audio-actions';
     actions.append(acceptBtn, rejectBtn);
+    if (saved && saved.status === 'rejected' && saved.issue === 'audio_only') {
+      var regenerateBtn = iconButton('spark', 'إعادة توليد هذا المقطع', 'generate', function () {
+        if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل إعادة التوليد.'; return; }
+        generateNextQueuedBlock(entry.lang, state, regenerateBtn, entry.block_index);
+      });
+      regenerateBtn.title = 'يعيد توليد هذا المقطع وحده؛ لا يغيّر نص الحكاية ولا المقاطع الأخرى.';
+      actions.appendChild(regenerateBtn);
+    }
     panel.append(cardHead, steps, player, actions, state, editor);
     if (wasListened) markProgressDone(panel);
     syncSteps(panel);
