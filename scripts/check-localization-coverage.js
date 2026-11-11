@@ -167,8 +167,8 @@ for (const file of translationMaps) {
         'stories/science/007/story.json',
         // unified story prose is stored in JSON data; the old page is retained as a legacy archive.
         'stories/history/005/story.json', 'stories/history/006/story.json',
-        // Ibn Sina German additions are keyed to the canonical unified story package.
-        'stories/history/005/story.json',
+        // Ibn Sina German additions are keyed to its canonical rebuild package.
+        'rebuild/story-packages/ibn-sina.json',
         // This legacy German source paragraph is retained in the Orabi translation module.
         'stories/history/006/translations.js'
       ].map(read).join('\n');
