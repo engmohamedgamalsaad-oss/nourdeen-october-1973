@@ -1,4 +1,4 @@
-name: October audio Python safety tests
+name: October package and OmniVoice Python tests
 
 on:
   push:
@@ -7,12 +7,11 @@ on:
     branches: [main]
     paths:
       - ".github/workflows/audio-python-tests.yml"
-      - "scripts/generate_story_audio.py"
-      - "scripts/audit_story_audio.py"
-      - "tests/test_audit_story_audio.py"
-      - "tests/test_october_audio_packages.py"
-      - "tests/test_audio_generation_safety.py"
       - "scripts/build_october_audio_packages.py"
+      - "scripts/omnivoice_engine/**"
+      - "tests/test_october_audio_packages.py"
+      - "tests/test_omnivoice_engine.py"
+      - "tests/test_audit_story_audio.py"
       - "stories/october/**"
   workflow_dispatch:
 
@@ -21,7 +20,7 @@ permissions:
 
 jobs:
   audio-python-tests:
-    name: Unit tests and read-only October plan
+    name: October package and OmniVoice tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -33,104 +32,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install the generator's import dependency
-        run: python -m pip install --disable-pip-version-check edge-tts
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check numpy
 
-      - name: Run October package and audio safety tests
-        run: |
-          python -m unittest tests.test_october_audio_packages tests.test_audio_generation_safety tests.test_audit_story_audio -v
+      - name: Run October package and read-only audio inventory tests
+        run: python -m unittest tests.test_october_audio_packages tests.test_audit_story_audio -v
 
-      - name: Extract October source packages into the canonical story tree
-        run: |
-          python3 scripts/build_october_audio_packages.py
+      - name: Run unified OmniVoice worker unit tests
+        run: python -m unittest tests.test_omnivoice_engine -v
 
-      - name: Build and verify read-only plan for all stories and October packages
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 scripts/generate_story_audio.py --plan-all | tee plan-all.json
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          report = json.loads(Path("plan-all.json").read_text(encoding="utf-8"))
-          expected = {
-              "mode": "read-only-generation-plan",
-              "october_audio_packages": 4,
-              "october_audio_packages_blocked": 4,
-              "stories_with_errors": 0,
-              "tts_requests": 0,
-              "files_modified": 0,
-          }
-          failures = [
-              f"{key}: expected {value!r}, got {report.get(key)!r}"
-              for key, value in expected.items()
-              if report.get(key) != value
-          ]
-          packages = report.get("october_packages", [])
-          if len(packages) != 4:
-              failures.append(f"october_packages list: expected 4, got {len(packages)}")
-          for package in packages:
-              if "error" in package:
-                  failures.append(f"{package.get('path', 'unknown package')}: {package.get('error')}")
-              if "blocked" not in package or "admin-approved five-language" not in package.get("blocked", ""):
-                  failures.append(f"{package.get('path', 'unknown package')}: missing shared human audio-text approval gate")
-          if any("segments_to_generate" in package for package in packages):
-              failures.append("unapproved October packages must not produce generation plans")
-          if failures:
-              raise SystemExit("PLAN ASSERTIONS FAILED:\\n- " + "\\n- ".join(failures))
-
-          print("\\nOCTOBER PACKAGE SEGMENT COUNTS")
-          for package in packages:
-              print(
-                  f"{package['path']}: "
-                  f"segments_to_generate={package.get('segments_to_generate', 0)}, "
-                  f"fish_segments_to_generate={package.get('fish_segments_to_generate', 0)}"
-              )
-          print(
-              "\\nVERIFIED: 4 October packages blocked pending shared five-language human approval, "
-              "0 TTS requests, 0 files modified."
-          )
-          PY
-
-      - name: Write GitHub Actions summary
-        if: always()
-        env:
-          JOB_STATUS: ${{ job.status }}
-        run: |
-          {
-            echo "## October audio Python checks"
-            echo
-            echo "- **Job status:** ${JOB_STATUS}"
-            echo "- **Unit tests:** tests.test_october_audio_packages, tests.test_audio_generation_safety, and tests.test_audit_story_audio"
-            if [ -f plan-all.json ]; then
-              python3 - <<'PY'
-          import json
-          from pathlib import Path
-          report = json.loads(Path("plan-all.json").read_text(encoding="utf-8"))
-          print(f"- **October packages:** {report.get('october_audio_packages', 'n/a')}")
-          print(f"- **Blocked packages:** {report.get('october_audio_packages_blocked', 'n/a')}")
-          print(f"- **Stories with errors:** {report.get('stories_with_errors', 'n/a')}")
-          print(f"- **TTS requests:** {report.get('tts_requests', 'n/a')}")
-          print(f"- **Files modified:** {report.get('files_modified', 'n/a')}")
-          print(f"- **Segments to generate (all):** {report.get('segments_to_generate', 'n/a')}")
-          print(f"- **Fish Audio segments (all):** {report.get('fish_segments_to_generate', 'n/a')}")
-          print()
-          print("### October package segment counts")
-          for item in report.get("october_packages", []):
-              print(f"- `{item.get('path', 'unknown')}`: {item.get('segments_to_generate', 0)} segments; {item.get('fish_segments_to_generate', 0)} Fish Audio segments")
-          PY
-            else
-              echo
-              echo "The plan-all report was not produced."
-            fi
-          } >> "$GITHUB_STEP_SUMMARY"
-
-      - name: Upload read-only plan report
-        if: always() && hashFiles('plan-all.json') != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: october-audio-plan-all
-          path: plan-all.json
-          if-no-files-found: error
-          retention-days: 14
+      - name: Verify October package extraction without writing
+        run: python3 scripts/build_october_audio_packages.py --no-write

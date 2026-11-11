@@ -365,6 +365,9 @@ async function saveReview(entry, decision) {
     var currentResult = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
     var currentReview = core.cloneReview(currentResult.audio_review || null);
     var next = core.applyDecision(currentReview, entry, decisionWithAnalysis);
+    if (decision.status === 'rejected' && decision.issue === 'audio_only') {
+      next = core.bumpAudioOnly(next).review;
+    }
     next.speech_texts = speechTexts;
     var expectedPronunciationReview = next.clips[key] && next.clips[key].pronunciation_review || null;
     if (entry.source_base && entry.audio_sha256) next.audio_hashes[entry.source_base] = entry.audio_sha256;
@@ -471,15 +474,9 @@ async function loadManifests() {
         throw new Error('بيانات manifest غير متوافقة مع الحكاية أو اللغة.');
       }
       data.segments.forEach(function (seg) {
-        var expected = seg.speaker === 'karma' ? core.VOICES.karma : seg.speaker === 'narrator' ? core.VOICES.narrator : '';
-        var engineOk = (seg.provider === 'omnivoice' && seg.model === 'VoiceTut Egyptian Tashkeel' &&
-          seg.voice === (seg.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference')) ||
-          (lang === 'ar'
-            ? ((seg.provider === 'fish-audio' && seg.model === 's2.1-pro-free' && seg.voice === expected) ||
-               (seg.provider === 'huggingface-space' && seg.model === 'NAMAA-Space/NAMAA-Egyptian-TTS' &&
-                seg.voice === (seg.speaker === 'karma' ? 'magdi-yacoub-karma-reference' : 'magdi-yacoub-narrator-reference')))
-            : seg.provider === 'edge-tts' && seg.model === 'edge-tts' && typeof seg.voice === 'string' && !!seg.voice.trim());
-        if (!expected || !engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
+        var engineOk = seg.provider === 'omnivoice' && seg.model === 'VoiceTut Egyptian Tashkeel' &&
+          seg.voice === (seg.speaker === 'karma' ? 'omnivoice-karma-reference' : 'omnivoice-narrator-reference');
+        if (!engineOk || typeof seg.src !== 'string' || !/^[A-Za-z0-9_-]+\.mp3$/.test(seg.src) || typeof seg.text !== 'string' || !seg.text.trim() || (seg.audio_sha256 != null && !/^[a-f0-9]{64}$/i.test(String(seg.audio_sha256)))) {
           throw new Error('مقطع صوتي لا يطابق المتحدث أو مزوّد/صوت اللغة المعتمد.');
         }
       });
@@ -488,7 +485,7 @@ async function loadManifests() {
       manifestStale[lang] = split.stale;
       data.segments = split.fresh;
       if (data.segments.length) {
-        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || split.stale.length > 0);
         if (!coverage.ok) throw new Error(coverage.error);
       }
       manifestGaps[lang] = core.uncoveredBlocks(localized && localized.blocks, data.segments);
@@ -969,9 +966,10 @@ function nextBlockIndexForLanguage(language) {
   for (var i = 0; i < ordered.length; i++) if (!accepted.has(ordered[i])) return ordered[i];
   return -1;
 }
-async function generateNextQueuedBlock(language, statusNode, button) {
+async function generateNextQueuedBlock(language, statusNode, button, forcedBlockIndex) {
   if (generationBusy) return;
-  var nextBlock = nextBlockIndexForLanguage(language);
+  var nextBlock = forcedBlockIndex !== undefined && Number.isInteger(Number(forcedBlockIndex))
+    ? Number(forcedBlockIndex) : nextBlockIndexForLanguage(language);
   if (nextBlock < 0) { text(statusNode, 'كل مقاطع هذه اللغة معتمدة بالفعل.'); return; }
   if (language === 'ar') {
     if (Object.keys(speechTextBusy).some(function (key) { return speechTextBusy[key]; })) {
@@ -1090,7 +1088,7 @@ async function prepareSpeechText(index, statusNode, button) {
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى NAMAA.');
+    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
     render();
   } catch (error) {
     text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
@@ -1114,7 +1112,7 @@ async function approveSpeechText(index, textarea, statusNode, button) {
   text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
   try {
     var saved = await audioAssetsRequest({
-      action: 'speech_text_save', section: 'history', slug: 'ibn-sina', language: 'ar',
+      action: 'speech_text_save', section: story.section, slug: story.slug, language: 'ar',
       block_index: index, decision: 'approved', speech_text: value,
       source_text_hash: record.source_text_hash
     });
@@ -1400,6 +1398,14 @@ function renderBlocks() {
     player.append(playBtn, track, replayBtn);
     var actions = document.createElement('div'); actions.className = 'kh-audio-actions';
     actions.append(acceptBtn, rejectBtn);
+    if (saved && saved.status === 'rejected' && saved.issue === 'audio_only') {
+      var regenerateBtn = iconButton('spark', 'إعادة توليد هذا المقطع', 'generate', function () {
+        if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل إعادة التوليد.'; return; }
+        generateNextQueuedBlock(entry.lang, state, regenerateBtn, entry.block_index);
+      });
+      regenerateBtn.title = 'يعيد توليد هذا المقطع وحده؛ لا يغيّر نص الحكاية ولا المقاطع الأخرى.';
+      actions.appendChild(regenerateBtn);
+    }
     panel.append(cardHead, steps, player, actions, state, editor);
     if (wasListened) markProgressDone(panel);
     syncSteps(panel);

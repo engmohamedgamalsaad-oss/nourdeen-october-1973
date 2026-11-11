@@ -91,7 +91,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 <div class="note" id="introNote">هذه صفحة HTML للمعاينة وليست صفحة نشر. عرض الموقع في الإطار يعرض النسخة المنشورة الحالية؛ أما «معاينة شكل حكاية» فتتيح رؤية شكل صفحة الحكاية وتعديل نموذجها محليًا قبل اعتمادها. لا تحفظ هذه الصفحة أي تغييرات في الموقع.</div>
 <section class="panel" id="audioWorkerPanel" aria-live="polite" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
  <div style="min-width:220px;flex:1"><strong style="color:var(--gold)">عامل توليد الصوت</strong><div id="audioWorkerState" style="font-weight:800;color:#ff9d9d">جارٍ التحقق من الاتصال…</div><small id="audioWorkerDetail" class="sub">يتحدث المؤشر تلقائيًا. عند انقطاع العامل افتح Colab وأعد تشغيل الدفتر.</small></div>
- <a class="btn" id="audioWorkerOpen" href="https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_VoiceTut_Colab_Worker.ipynb" target="_blank" rel="noopener" style="font-weight:900;border:2px solid #b94b4b;background:#4a2025;color:#ffe6e6">العامل مفصول — فتح Colab</a>
+ <a class="btn" id="audioWorkerOpen" href="https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb" target="_blank" rel="noopener" style="font-weight:900;border:2px solid #b94b4b;background:#4a2025;color:#ffe6e6">العامل مفصول — فتح Colab</a>
 </section>
 <nav class="tabs" aria-label="اختيار المعاينة">
 <button class="btn active" type="button" data-view="site">معاينة الموقع</button>
@@ -379,19 +379,44 @@ function applyTitles(doc,d){
 }
 function derivePagePath(url){var m=String(url||'').match(/\/stories\/([a-z0-9-]+)\/(\d{3})(?:\/|$)/i);return m?{id:m[2],path:'stories/'+m[1]+'/'+m[2]+'/'}:null}
 
+/* أضف أدوات مراجعة الصوت إلى صفحة القارئ داخل إطار المعاينة فقط.
+   الإطار من نفس النطاق ومقيّد بالمعاينة draft=1؛ لذلك لا يُحمّل مشغل الزوار ولا يغيّر الصفحة المنشورة. */
+function installAudioReview(doc){
+ if(!doc.querySelector('[data-kh-story-reader]'))return Promise.resolve(false);
+ function addStyle(path){
+  return new Promise(function(resolve,reject){
+   var link=doc.createElement('link');link.rel='stylesheet';link.href=new URL(path,location.href).href;
+   link.onload=function(){resolve()};link.onerror=function(){reject(new Error('تعذر تحميل تنسيق '+path))};doc.head.appendChild(link);
+  });
+ }
+ function addScript(path){
+  return new Promise(function(resolve,reject){
+   var script=doc.createElement('script');script.src=new URL(path,location.href).href;script.async=false;
+   script.onload=function(){resolve()};script.onerror=function(){reject(new Error('تعذر تحميل أداة '+path))};doc.body.appendChild(script);
+  });
+ }
+ return addStyle('../rebuild/reader-audio-review.css')
+  .then(function(){return addStyle('../rebuild/reader-audio-flow.css')})
+  .then(function(){return addScript('../khaledoon/assets/audio-review-core.js')})
+  .then(function(){return addScript('../rebuild/reader-audio-review.js')})
+  .then(function(){return addScript('../rebuild/reader-audio-flow.js')});
+}
+
 /* صفحة منشورة على موقع GitHub Pages نفسه: تُعرض مباشرة من الموقع (نفس النطاق) بتنسيقها وسكربتاتها الصحيحة. */
 function loadSitePage(url,d){
  var u;try{u=new URL(url)}catch(e){return Promise.reject(new Error('رابط الصفحة غير صالح.'))}
  var rel=u.pathname.replace(/^\/nourdeen-october-1973\/?/,'');
  if(!rel||/^index\.html?$/i.test(rel))return Promise.reject(new Error('حدد رابط صفحة حكاية داخل الموقع، وليس الصفحة الرئيسية.'));
  u.searchParams.set('previewMode','1');
+ u.searchParams.set('draft','1');
  return new Promise(function(resolve,reject){
   frame.setAttribute('sandbox',SAME_ORIGIN_SANDBOX);
   frame.addEventListener('load',function(){
    try{
     var doc=frame.contentDocument;
     if(!doc||!doc.body||/not found/i.test(doc.title||''))throw new Error('الصفحة غير موجودة على الموقع بعد.');
-    d.source_preview_loaded=pageHasFeatures(doc);applyTitles(doc,d);addNotice(doc);fitHeight(doc);resolve();
+    d.source_preview_loaded=pageHasFeatures(doc);applyTitles(doc,d);addNotice(doc);
+    installAudioReview(doc).then(function(){fitHeight(doc);resolve();}).catch(function(e){fitHeight(doc);say('تعذر تشغيل أدوات مراجعة الصوت داخل المعاينة: '+(e&&e.message||e)+' — صفحة الحكاية ما زالت للعرض فقط.');resolve();});
    }catch(e){reject(e)}
   },{once:true});
   var clean=new URL(u.href);clean.searchParams.delete('previewMode');visitorTabHtml='';visitorTabUrl=clean.href;

@@ -173,7 +173,7 @@ Deno.serve(async (req: Request) => {
   const slug = body?.slug;
   const language = body?.language;
   const action = body?.action;
-  const languageRequired = ["stage", "manifest", "generate", "generation_status", "enqueue", "queue_status"].includes(action);
+  const languageRequired = ["stage", "manifest", "enqueue", "queue_status"].includes(action);
   if (!validKey(section) || !validKey(slug) ||
       (languageRequired && !["ar", "en", "fr", "it", "de"].includes(language))) {
     return reply(400, { error: "هوية الحكاية أو اللغة غير صالحة." });
@@ -599,155 +599,6 @@ Deno.serve(async (req: Request) => {
     return reply(410, { error: "مسار التوليد القديم معطّل. استخدم طابور VoiceTut الدائم." });
   }
 
-  if (body.action === "generate") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
-        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
-      return reply(400, { error: "التوليد متاح لمقطع عربي واحد محدد من حكاية ابن سينا." });
-    }
-    let source;
-    try { source = await ibnSinaArabicBlock(body.block_index); }
-    catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر التحقق من المقطع." }); }
-    const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (reviewReadError) return reply(500, { error: "تعذر التحقق من اعتماد نص القراءة.", detail: reviewReadError.message });
-    const speechRecord = reviewRow?.audio_review?.speech_texts?.["ar:" + body.block_index];
-    if (!speechRecord || speechRecord.status !== "approved" ||
-        speechRecord.source_text_hash !== source.sourceTextHash ||
-        typeof speechRecord.approved_text !== "string" || !speechRecord.approved_text.trim()) {
-      return reply(409, { error: "لن يبدأ NAMAA قبل اعتماد نص القراءة لهذا المقطع من صفحة المعاينة." });
-    }
-    const acceptedBlocks = new Set(
-      Object.values(reviewRow?.audio_review?.clips ?? {})
-        .filter((clip: any) => clip?.lang === "ar" && clip?.status === "accepted")
-        .map((clip: any) => Number(clip.block_index))
-    );
-    const karmaIndexes = source.blocks.map((item: any, index: number) => item?.speaker === "karma" ? index : -1).filter((index: number) => index >= 0);
-    const narratorIndexes = source.blocks.map((item: any, index: number) => item?.speaker === "narrator" ? index : -1).filter((index: number) => index >= 0);
-    const targetSpeaker = source.block.speaker;
-    const requiredPrior = targetSpeaker === "karma"
-      ? karmaIndexes.filter((index: number) => index < body.block_index)
-      : karmaIndexes.concat(narratorIndexes.filter((index: number) => index < body.block_index));
-    if (requiredPrior.some((index: number) => !acceptedBlocks.has(index))) {
-      return reply(409, { error: targetSpeaker === "narrator"
-        ? "لا يبدأ الراوي قبل اكتمال اعتماد جميع مقاطع كارما، ثم المقاطع السابقة للراوي."
-        : "لا يبدأ مقطع كارما التالي قبل اعتماد مقاطع كارما السابقة." });
-    }
-    if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لإطلاق التوليد من صفحة المراجعة." });
-    const apiHeaders = {
-      "Accept": "application/vnd.github+json",
-      "Authorization": "Bearer " + GITHUB_TOKEN,
-      "X-GitHub-Api-Version": "2022-11-28",
-      "Content-Type": "application/json",
-    };
-    const requestId = crypto.randomUUID();
-    const dispatchResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/ibn-sina-namaa-cpu-pilot.yml/dispatches`, {
-      method: "POST", headers: apiHeaders,
-      body: JSON.stringify({
-        ref: "main",
-        inputs: {
-          request_id: requestId,
-          block_index: String(body.block_index),
-          speech_text_b64: encodeBase64Utf8(speechRecord.approved_text),
-        },
-      }),
-    });
-    if (dispatchResponse.status !== 204) {
-      const detail = await dispatchResponse.text();
-      let reason = "";
-      try { reason = String(JSON.parse(detail).message || ""); } catch { reason = detail; }
-      reason = reason.replace(/\s+/g, " ").slice(0, 220);
-      const retryAfter = dispatchResponse.headers.get("retry-after");
-      const rateLimited = dispatchResponse.status === 429 ||
-        (dispatchResponse.status === 403 && /rate limit|abuse|too many/i.test(reason));
-      let error = "فشل إطلاق Workflow NAMAA من صفحة المراجعة.";
-      if (rateLimited) {
-        error = "GitHub رفض الطلب مؤقتًا بسبب كثرة الطلبات؛ انتظر دقائق" + (retryAfter ? " (نحو " + retryAfter + " ثانية)" : "") + " ثم أعد المحاولة.";
-      } else if (dispatchResponse.status === 403) {
-        error = "GitHub رفض الطلب (403) — يلزم أن يملك المفتاح صلاحية Actions: write على هذا الريبو، أو أن يكون الـ Workflow مفعّلًا.";
-      } else if (dispatchResponse.status === 401) {
-        error = "مفتاح GitHub غير صالح أو منتهي؛ حدّث GITHUB_PUBLISH_TOKEN في أسرار Supabase.";
-      } else if (dispatchResponse.status === 404 || dispatchResponse.status === 422) {
-        error = "GitHub لم يجد الـ Workflow أو الفرع main أو مدخلاته (" + dispatchResponse.status + ").";
-      }
-      if (reason) error += " [سبب GitHub: " + reason + "]";
-      return reply(dispatchResponse.status === 403 || dispatchResponse.status === 429 ? 503 : 502, {
-        error, upstream_status: dispatchResponse.status, detail: detail.slice(0, 500),
-      });
-    }
-    return reply(200, { success: true, request_id: requestId, block_index: body.block_index });
-  }
-
-  if (body.action === "generation_status") {
-    if (section !== "history" || slug !== "ibn-sina" || language !== "ar" ||
-        typeof body.request_id !== "string" || !/^[a-f0-9-]{36}$/.test(body.request_id) ||
-        !Number.isInteger(body.block_index) || body.block_index < 0 || body.block_index > 16) {
-      return reply(400, { error: "بيانات متابعة طلب التوليد غير صالحة." });
-    }
-    if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub غير متاح لمتابعة التوليد." });
-    const apiHeaders = {
-      "Accept": "application/vnd.github+json",
-      "Authorization": "Bearer " + GITHUB_TOKEN,
-      "X-GitHub-Api-Version": "2022-11-28",
-    };
-    const workflow = "ibn-sina-namaa-cpu-pilot.yml";
-    const runsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/workflows/${workflow}/runs?event=workflow_dispatch&per_page=20`, { headers: apiHeaders });
-    if (!runsResponse.ok) return reply(502, { error: "تعذر متابعة تشغيل التوليد.", upstream_status: runsResponse.status });
-    const runsData = await runsResponse.json();
-    const expectedTitle = "ابن سينا audio " + body.request_id + " block " + body.block_index;
-    const run = (runsData.workflow_runs ?? []).find((item: any) => item.display_title === expectedTitle);
-    if (!run) return reply(200, { success: true, status: "queued" });
-    if (run.status !== "completed") return reply(200, { success: true, status: run.status || "in_progress", run_id: run.id });
-    if (run.conclusion !== "success") {
-      return reply(200, { success: true, status: "completed", conclusion: run.conclusion || "failure", run_id: run.id });
-    }
-    const artifactsResponse = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/actions/runs/${run.id}/artifacts?per_page=100`, { headers: apiHeaders });
-    if (!artifactsResponse.ok) return reply(502, { error: "انتهى التوليد لكن تعذر جلب بيانات ملف المراجعة.", upstream_status: artifactsResponse.status });
-    const artifactsData = await artifactsResponse.json();
-    const artifact = (artifactsData.artifacts ?? []).find((item: any) =>
-      item.name === "ibn-sina-arabic-audio-staging" && item.expired !== true
-    );
-    if (!artifact) return reply(422, { error: "انتهى Workflow بنجاح لكن لم يُعثر على Artifact الصوت." });
-    return reply(200, {
-      success: true, status: "completed", conclusion: "success",
-      run_id: run.id, artifact_id: artifact.id, artifact_name: artifact.name,
-    });
-  }
-
-  if (body.action === "review_get") {
-    const { data, error } = await service.from("story_audio_reviews")
-      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
-    if (error) return reply(500, { error: "تعذر تحميل سجل مراجعة الصوت.", detail: error.message });
-    if (data) return reply(200, { success: true, audio_review: data.audio_review });
-    const emptyReview = { version: 1, regen: {}, clips: {}, audio_hashes: {}, speech_texts: {} };
-    const created = await service.from("story_audio_reviews")
-      .upsert({ section, slug, audio_review: emptyReview }, { onConflict: "section,slug" })
-      .select("audio_review").single();
-    if (created.error) return reply(500, { error: "تعذر إنشاء سجل مراجعة الصوت.", detail: created.error.message });
-    return reply(200, { success: true, audio_review: created.data.audio_review });
-  }
-
-  if (body.action === "review_save") {
-    const next = body.audio_review;
-    if (!next || next.version !== 1 || !next.clips || typeof next.clips !== "object" ||
-        Array.isArray(next.clips) || !next.regen || typeof next.regen !== "object" ||
-        !next.audio_hashes || typeof next.audio_hashes !== "object" ||
-        JSON.stringify(next).length > 1500000) {
-      return reply(400, { error: "بيانات مراجعة الصوت غير صالحة أو أكبر من الحد المسموح." });
-    }
-    const clipEntries = Object.entries(next.clips);
-    if (clipEntries.length > 1000 || clipEntries.some(([key, clip]: [string, any]) =>
-      !key || key.length > 600 || !clip || !["accepted", "rejected"].includes(clip.status))) {
-      return reply(400, { error: "تحتوي مراجعة الصوت على قرارات مقاطع غير صالحة." });
-    }
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
-    const saved = await service.from("story_audio_reviews")
-      .upsert({ section, slug, audio_review: next }, { onConflict: "section,slug" })
-      .select("audio_review").single();
-    if (saved.error) return reply(500, { error: "تعذر حفظ مراجعة الصوت.", detail: saved.error.message });
-    return reply(200, { success: true, audio_review: saved.data.audio_review });
-  }
-
   if (body.action === "stage") {
     if (!GITHUB_TOKEN) return reply(503, { error: "سر GitHub الخاص بقراءة الـArtifacts غير متاح." });
     const artifactId = Number(body.artifact_id);
@@ -835,25 +686,12 @@ Deno.serve(async (req: Request) => {
       first.block_index = 1;
       second.block_index = 0;
     }
-    const expectedFishVoices: Record<string, string> = {
-      narrator: "a02a8220d6014812aa5ff73434c54cc0",
-      karma: "592625f68416462f8b6161ddf5fdbffb",
-    };
-    const expectedNamaaVoices: Record<string, string> = {
-      narrator: "magdi-yacoub-narrator-reference",
-      karma: "magdi-yacoub-karma-reference",
-    };
     const seen = new Set<string>();
     for (const segment of manifest.segments) {
-      const fishOk = segment?.provider === "fish-audio" && segment?.model === "s2.1-pro-free" &&
-        segment?.voice === expectedFishVoices[segment?.speaker];
-      const namaaOk = segment?.provider === "huggingface-space" &&
-        segment?.model === "NAMAA-Space/NAMAA-Egyptian-TTS" &&
-        segment?.voice === expectedNamaaVoices[segment?.speaker];
-      const engineOk = language === "ar"
-        ? fishOk || namaaOk
-        : segment?.provider === "edge-tts" && segment?.model === "edge-tts" &&
-          typeof segment?.voice === "string" && !!segment.voice.trim();
+      const engineOk = segment?.provider === "omnivoice" &&
+        segment?.model === "VoiceTut Egyptian Tashkeel" &&
+        segment?.voice === (segment?.speaker === "karma"
+          ? "omnivoice-karma-reference" : "omnivoice-narrator-reference");
       if (!segment || !["narrator", "karma"].includes(segment.speaker) || !engineOk ||
           !/^[A-Za-z0-9_-]+\.mp3$/.test(String(segment.src ?? "")) ||
           !/^[a-f0-9]{64}$/i.test(String(segment.audio_sha256 ?? "")) ||

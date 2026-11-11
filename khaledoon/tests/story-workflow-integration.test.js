@@ -12,7 +12,7 @@ var bundle = fs.readFileSync('khaledoon/assets/story-template-bundle.js', 'utf8'
 var favicon = fs.readFileSync('khaledoon/assets/admin-favicon.svg', 'utf8');
 var storyPublisher = fs.readFileSync('rebuild/publish-story.mjs', 'utf8');
 var audioTextReviewer = fs.readFileSync('khaledoon/assets/audio-text-review.js', 'utf8');
-var audioGenerator = fs.readFileSync('scripts/generate_story_audio.py', 'utf8');
+var audioWorker = fs.readFileSync('supabase/functions/story-audio-worker/index.ts', 'utf8');
 var readerReviewActions = fs.readFileSync('rebuild/reader-review-actions.js', 'utf8');
 var passed = 0;
 function test(name, fn) {
@@ -65,8 +65,18 @@ test('new stories in every section require an admin-approved five-language audio
   assert.ok(admin.includes('(requireUnifiedStoryPackage||isOctoberLegacyRecord(it))&&window.KHAudioTextReview'), 'October must expose the same five-language text review UI');
   assert.ok(admin.includes('window.KHAudioReviewCore&&it.story_meta&&it.story_meta.audio_review'), 'October audio review metadata must not be excluded from the shared review prompt');
   assert.ok(readerReviewActions.includes('if(isApprove){') && !readerReviewActions.includes("if(isApprove&&String(draft.section||draft.section_key||'').toLowerCase()!=='october')"), 'preview approval must enforce the same audio gate for October');
-  assert.ok(audioGenerator.includes('validate_required_audio_text_review'), 'the generator must validate the approval record');
-  assert.ok(audioGenerator.includes('class AudioTextApprovalRequired') && audioGenerator.includes('review_required = True'), 'October packages must use the shared five-language human approval gate');
+  assert.ok(audioWorker.includes('provider: "omnivoice"') && audioWorker.includes('VoiceTut Egyptian Tashkeel'), 'the persistent VoiceTut worker must create the active audio manifests');
+  assert.ok(audioWorker.includes('story-audio-jobs') || audioWorker.includes('claim'), 'the unified worker must consume queued audio jobs rather than the retired batch generator');
+  assert.ok(!fs.existsSync('scripts/generate_story_audio.py'), 'the retired Fish Audio generator must not be restored');
+});
+test('admin preview mounts the ordered audio review flow and links to the unified OmniVoice worker', function () {
+  assert.ok(preview.includes("u.searchParams.set('draft','1')"), 'the live story iframe must enter authenticated draft audio-review mode');
+  assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
+  assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js')"), 'the preview must mount the ordered text-to-generation status flow');
+  assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
+  assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
+  assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
 });
 test('admin imports the workflow module and derives status counters', function () {
   assert.ok(admin.includes('src="assets/story-workflow.js?v=20261026-cover-contract-1"'));

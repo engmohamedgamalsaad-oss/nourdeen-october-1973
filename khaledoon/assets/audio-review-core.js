@@ -4,7 +4,6 @@
 (function (root) {
 'use strict';
 
-var VOICES = { karma: '592625f68416462f8b6161ddf5fdbffb', narrator: 'a02a8220d6014812aa5ff73434c54cc0' };
 var GEN_VERSION = 'v1';
 var LANGS = ['ar', 'en', 'fr', 'it', 'de'];
 /* المرحلة الحالية: الصوت مطلوب للعربية والإنجليزية فقط؛ غياب باقي اللغات لا يمنع الاعتماد. */
@@ -16,8 +15,7 @@ function norm(s) { return String(s == null ? '' : s).replace(/\s+/g, ' ').trim()
 function strip(s) { return norm(s).replace(/[\u064B-\u065F\u0670\u0640]/g, ''); }
 
 function engineOf(lang, speaker) {
-  if (lang === 'ar') return { voice: VOICES[speaker] || '', provider: 'fish-audio', model: 's2.1-pro-free' };
-  return { voice: 'edge-tts', provider: 'edge-tts', model: 'default' };
+  return { voice: speaker === 'karma' ? 'omnivoice-karma-reference' : speaker === 'narrator' ? 'omnivoice-narrator-reference' : '', provider: 'omnivoice', model: 'VoiceTut Egyptian Tashkeel' };
 }
 
 async function sha256(str) {
@@ -326,7 +324,7 @@ function buildPromptSection(review) {
 }
 
 var api = {
-  VOICES: VOICES, GEN_VERSION: GEN_VERSION, LANGS: LANGS, REQUIRED_LANGS: REQUIRED_LANGS,
+  GEN_VERSION: GEN_VERSION, LANGS: LANGS, REQUIRED_LANGS: REQUIRED_LANGS,
   expectedSpokenText: expectedSpokenText, splitStaleSegments: splitStaleSegments, uncoveredBlocks: uncoveredBlocks,
   norm: norm, strip: strip, engineOf: engineOf,
   sha256: sha256, sha256Bytes: sha256Bytes, baseKey: baseKey, clipKey: clipKey,

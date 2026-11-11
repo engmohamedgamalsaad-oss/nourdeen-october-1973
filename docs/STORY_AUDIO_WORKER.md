@@ -26,7 +26,7 @@ The function intentionally does not expose the Supabase secret key to the notebo
 
 ## Colab notebook setup
 
-Open `notebooks/Khaledoon_VoiceTut_Colab_Worker.ipynb` in Google Colab and run its cells in order.
+Open `notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb` in Google Colab and run its cells in order.
 
 - The notebook installs OmniVoice from `k2-fsa/OmniVoice` and loads `masterofaudio2077/voicetut-egyptian-tashkeel`.
 - It reads the Karma reference from the configured Drive path and asks for the narrator reference audio if no path is configured.
@@ -44,4 +44,4 @@ A Colab runtime that has been terminated cannot be started remotely. The queue r
 
 The private worker manifest is never public by default. After every Arabic and English clip has been listened to and accepted in the review page, the admin can use **نشر الصوت المعتمد على صفحة الحكاية**. The authenticated `publish_audio` action verifies complete block coverage, accepted decisions, exact audio SHA-256 values, and the approved speech text before copying files to the public `khaledoon-story-audio-public` bucket and writing its public manifests.
 
-The public story player reads only those public manifests. It supports Arabic and English for every story, including October. Existing legacy static audio remains a fallback where no public VoiceTut manifest exists. Rejected or unreviewed clips are never copied by the publication action.
+The public story player reads only those public manifests. It supports Arabic and English for every story, including October. The public player accepts VoiceTut manifests only. Legacy static manifests and legacy Fish Audio voice IDs are not fallback sources; they remain preserved in the `archive/audio-legacy` branch and are not deleted from the archive. Rejected or unreviewed clips are never copied by the publication action.
