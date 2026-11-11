@@ -1015,11 +1015,14 @@ function renderGenerationControls(banner) {
   var title = document.createElement('strong'); title.className = 'kh-gen-title';
   text(title, language === 'ar' ? '🎙️ توليد الصوت — VoiceTut' : '🎙️ Generate audio — VoiceTut');
   var status = document.createElement('span'); status.className = 'kh-audio-review-state';
-  text(status, generationMessage || (language === 'ar' ? 'يُجهّز مقطع واحد في كل مرة؛ العربية تتطلب اعتماد نص القراءة أولًا.' : 'يُرسل مقطع واحد في كل مرة إلى طابور التوليد.'));
-  var button = iconButton('spark', language === 'ar' ? 'إرسال المقطع التالي للتوليد' : 'Queue next English clip', 'generate', function () {
-    generateNextQueuedBlock(language, status, button);
-  });
-  button.disabled = generationBusy;
+  text(status, generationMessage || (language === 'ar' ? 'يُرسل المقطع العربي تلقائيًا إلى الطابور فور اعتماد نص القراءة.' : 'يُرسل مقطع واحد في كل مرة إلى طابور التوليد.'));
+  var button = null;
+  if (language === 'en') {
+    button = iconButton('spark', 'Queue next English clip', 'generate', function () {
+      generateNextQueuedBlock(language, status, button);
+    });
+    button.disabled = generationBusy;
+  }
   var publishButton = document.createElement('button');
   publishButton.type = 'button';
   publishButton.className = 'kh-audio-publish-button';
@@ -1041,7 +1044,7 @@ function renderGenerationControls(banner) {
     }
   });
   publishButton.title = 'لا يتاح النشر إلا بعد الاستماع الكامل واعتماد كل المقاطع المطلوبة.';
-  panel.append(title, button, publishButton, status); banner.appendChild(panel);
+  panel.append(title); if (button) panel.appendChild(button); panel.append(publishButton, status); banner.appendChild(panel);
 }
 function nextArabicBlockIndex() {
   var byBlock = {};
@@ -1119,7 +1122,8 @@ async function approveSpeechText(index, textarea, statusNode, button) {
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'تم اعتماد نص القراءة لهذا المقطع. يمكن الآن توليد صوته عند وصول دوره.');
+    text(statusNode, 'تم اعتماد نص القراءة. جارٍ إرسال هذا المقطع تلقائيًا إلى طابور الصوت…');
+    await generateNextQueuedBlock('ar', statusNode, button, index);
     render();
   } catch (error) {
     text(statusNode, 'تعذر اعتماد النص: ' + (error && error.message || error));
