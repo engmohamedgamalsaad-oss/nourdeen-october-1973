@@ -252,7 +252,7 @@ const core = require('../assets/audio-review-core.js');
   assert.ok(/@media print\s*\{\s*\.kh-audio-review-controls,\s*\.kh-audio-review-gate\s*\{\s*display:\s*none\s*!important;?\s*\}\s*\}/.test(reviewCss), 'audio review controls and gate must never appear in print');
   assert.ok(!reviewUi.includes("nextStory.section === 'october'"), 'October drafts must use the shared audio review UI');
   assert.ok(reviewUi.includes('banner.hidden = false;'), 'the missing-audio gate must remain visible even when no manifest exists');
-  assert.ok(reader.includes("if(story.section==='october'||previewMode||document.getElementById('kh-story-audio-script'))return"), 'preserve the existing October reader/player flow while preventing the audio reviewer from initializing for October');
+  assert.ok(reader.includes("if(previewMode||document.getElementById('kh-story-audio-script'))return"), 'the shared public player remains disabled in draft preview, while October uses the shared audio review flow');
   assert.ok(readerHtml.indexOf('audio-review-core.js') < readerHtml.indexOf('reader-audio-review.js'), 'review core must load before its UI');
   assert.ok(reviewUi.includes("if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الملاحظة أو الرفض.'; return; }"), 'a clip cannot be rejected before full playback');
   assert.ok(adminHtml.indexOf('assets/audio-review-core.js') < adminHtml.indexOf('var audioReviewSection'), 'admin must load the review core before building AI prompts');
