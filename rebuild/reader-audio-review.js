@@ -1170,7 +1170,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   head.append(who, badge);
   var flow = document.createElement('ol');
   flow.className = 'kh-flow';
-  ['انسخ النص إلى Google AI Studio', 'الصق الصياغة وراجعها', 'اعتماد وإرسال تلقائي للصوت'].forEach(function (label, i) {
+  ['Gemini يفهم الحكاية ويجهز نص القراءة', 'راجع النص وعدّله إذا لزم', 'اعتماد وإرسال تلقائي لطابور الصوت'].forEach(function (label, i) {
     var li = document.createElement('li');
     li.dataset.n = String(i + 1);
     li.textContent = label;
@@ -1191,12 +1191,12 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   proposalCol.className = 'kh-speech-col';
   var proposalLabel = document.createElement('label');
   proposalLabel.className = 'kh-speech-label';
-  proposalLabel.textContent = 'الصياغة الصوتية المنقحة من Google AI Studio (الصقها هنا وراجعها)';
+  proposalLabel.textContent = 'نص القراءة الذي جهزه Gemini — راجعه وعدّله هنا';
   var textarea = document.createElement('textarea');
   textarea.rows = 4;
   textarea.maxLength = 6000;
   textarea.value = record.status === 'approved' ? (record.approved_text || '') : (record.suggested_text || '');
-  textarea.placeholder = 'انسخ النص الأصلي إلى Google AI Studio، اطلب إعادة صياغته للقراءة الصوتية، ثم الصق الناتج هنا…';
+  textarea.placeholder = 'اضغط «تجهيز النص باستخدام Gemini»، ثم راجع الصياغة هنا وعدّلها إذا احتجت…';
   proposalCol.append(proposalLabel, textarea);
   grid.append(originalCol, proposalCol);
   var status = document.createElement('span');
@@ -1208,7 +1208,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
       record.status === 'approved' ? 'نص القراءة معتمد ✓' :
       record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
-      'الصق النص المنقح من Google AI Studio ثم راجعه واعتمده.';
+      'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
   if (record.changes_summary) {
@@ -1232,27 +1232,17 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     badge.textContent = speechBadgeText('dirty');
     status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
   });
-  var copyOriginal = iconButton('spark', 'نسخ النص الأصلي', 'generate', function () {
-    var copyText = String(localizedBlock.text || '').trim();
-    if (!copyText) return;
-    if (!navigator.clipboard || !navigator.clipboard.writeText) {
-      status.textContent = 'انسخ النص الأصلي يدويًا من العمود المقابل.';
-      return;
-    }
-    navigator.clipboard.writeText(copyText).then(function () {
-      status.textContent = 'تم نسخ النص الأصلي؛ الصقه في Google AI Studio ثم أعد الصياغة.';
-    }).catch(function () {
-      status.textContent = 'تعذر النسخ التلقائي؛ انسخ النص الأصلي يدويًا.';
-    });
+  var prepare = iconButton('spark', record.status === 'suggested' || record.status === 'approved' ? 'إعادة تجهيز النص بـGemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+    prepareSpeechText(index, status, prepare);
   });
+  prepare.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
   var approve = iconButton('check', record.status === 'approved' ? 'حفظ التعديل وإعادة الإرسال' : 'اعتماد النص وإرساله للصوت', 'accept', function () {
     approveSpeechText(index, textarea, status, approve, localizedBlock.text);
   });
   approve.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
-  copyOriginal.disabled = !isCurrentBlock;
   var actions = document.createElement('div');
   actions.className = 'kh-audio-actions';
-  actions.append(copyOriginal, approve);
+  actions.append(prepare, approve);
   panel.append(head, flow, grid, notes, actions, status);
   block.appendChild(panel);
 }
