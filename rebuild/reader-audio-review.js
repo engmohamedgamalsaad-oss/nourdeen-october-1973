@@ -1100,13 +1100,19 @@ async function prepareSpeechText(index, statusNode, button) {
     if (button) button.disabled = false;
   }
 }
-async function approveSpeechText(index, textarea, statusNode, button) {
-  var key = speechTextKey(index);
-  var record = speechTexts[key];
-  if (!record || !record.source_text_hash) {
-    text(statusNode, 'جهّز اقتراح Gemini أولًا قبل اعتماد نص القراءة.');
-    return;
+async function speechSourceHash(sourceText) {
+  if (!window.crypto || !window.crypto.subtle || typeof TextEncoder === 'undefined') {
+    throw new Error('المتصفح لا يدعم التحقق الآمن من بصمة النص. افتح الصفحة في متصفح حديث.');
   }
+  var bytes = new TextEncoder().encode(String(sourceText || '').trim());
+  var digest = await window.crypto.subtle.digest('SHA-256', bytes);
+  return Array.prototype.map.call(new Uint8Array(digest), function (value) {
+    return value.toString(16).padStart(2, '0');
+  }).join('');
+}
+async function approveSpeechText(index, textarea, statusNode, button, sourceText) {
+  var key = speechTextKey(index);
+  var record = speechTexts[key] || {};
   var value = String(textarea.value || '').trim();
   if (!value) { text(statusNode, 'نص القراءة لا يمكن أن يكون فارغًا.'); return; }
   if (speechTextBusy[key]) return;
@@ -1114,10 +1120,11 @@ async function approveSpeechText(index, textarea, statusNode, button) {
   if (button) button.disabled = true;
   text(statusNode, 'جارٍ حفظ اعتماد نص القراءة…');
   try {
+    var sourceHash = record.source_text_hash || await speechSourceHash(sourceText);
     var saved = await audioAssetsRequest({
       action: 'speech_text_save', section: story.section, slug: story.slug, language: 'ar',
       block_index: index, decision: 'approved', speech_text: value,
-      source_text_hash: record.source_text_hash
+      source_text_hash: sourceHash
     });
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
@@ -1163,7 +1170,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   head.append(who, badge);
   var flow = document.createElement('ol');
   flow.className = 'kh-flow';
-  ['اقتراح Gemini', 'مراجعتك وتعديلك', 'الاعتماد'].forEach(function (label, i) {
+  ['انسخ النص إلى Google AI Studio', 'الصق الصياغة وراجعها', 'اعتماد وإرسال تلقائي للصوت'].forEach(function (label, i) {
     var li = document.createElement('li');
     li.dataset.n = String(i + 1);
     li.textContent = label;
@@ -1184,12 +1191,12 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   proposalCol.className = 'kh-speech-col';
   var proposalLabel = document.createElement('label');
   proposalLabel.className = 'kh-speech-label';
-  proposalLabel.textContent = 'صياغة القراءة المقترحة (يمكنك تعديلها قبل الاعتماد)';
+  proposalLabel.textContent = 'الصياغة الصوتية المنقحة من Google AI Studio (الصقها هنا وراجعها)';
   var textarea = document.createElement('textarea');
   textarea.rows = 4;
   textarea.maxLength = 6000;
   textarea.value = record.status === 'approved' ? (record.approved_text || '') : (record.suggested_text || '');
-  textarea.placeholder = 'اضغط «تجهيز النص بـ Gemini» لاقتراح صياغة صوتية منفصلة…';
+  textarea.placeholder = 'انسخ النص الأصلي إلى Google AI Studio، اطلب إعادة صياغته للقراءة الصوتية، ثم الصق الناتج هنا…';
   proposalCol.append(proposalLabel, textarea);
   grid.append(originalCol, proposalCol);
   var status = document.createElement('span');
@@ -1201,7 +1208,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
       record.status === 'approved' ? 'نص القراءة معتمد ✓' :
       record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
-      'لم يُجهز نص القراءة بعد.';
+      'الصق النص المنقح من Google AI Studio ثم راجعه واعتمده.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
   if (record.changes_summary) {
@@ -1225,17 +1232,27 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     badge.textContent = speechBadgeText('dirty');
     status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
   });
-  var suggest = iconButton('spark', record.suggested_text ? 'إعادة اقتراح من Gemini' : 'تجهيز النص بـ Gemini', 'generate', function () {
-    prepareSpeechText(index, status, suggest);
+  var copyOriginal = iconButton('spark', 'نسخ النص الأصلي', 'generate', function () {
+    var copyText = String(localizedBlock.text || '').trim();
+    if (!copyText) return;
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      status.textContent = 'انسخ النص الأصلي يدويًا من العمود المقابل.';
+      return;
+    }
+    navigator.clipboard.writeText(copyText).then(function () {
+      status.textContent = 'تم نسخ النص الأصلي؛ الصقه في Google AI Studio ثم أعد الصياغة.';
+    }).catch(function () {
+      status.textContent = 'تعذر النسخ التلقائي؛ انسخ النص الأصلي يدويًا.';
+    });
   });
-  var approve = iconButton('check', record.status === 'approved' ? 'حفظ واعتماد التعديل' : 'اعتماد نص القراءة', 'accept', function () {
-    approveSpeechText(index, textarea, status, approve);
+  var approve = iconButton('check', record.status === 'approved' ? 'حفظ التعديل وإعادة الإرسال' : 'اعتماد النص وإرساله للصوت', 'accept', function () {
+    approveSpeechText(index, textarea, status, approve, localizedBlock.text);
   });
-  approve.disabled = !record.suggested_text || !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
-  suggest.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  approve.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
+  copyOriginal.disabled = !isCurrentBlock;
   var actions = document.createElement('div');
   actions.className = 'kh-audio-actions';
-  actions.append(suggest, approve);
+  actions.append(copyOriginal, approve);
   panel.append(head, flow, grid, notes, actions, status);
   block.appendChild(panel);
 }
