@@ -13,7 +13,14 @@
   var SPEAKERS = { karma: 'كارما', narrator: 'الراوي' };
   var ICONS = { done: '✅', wait: '⏳', busy: '🔄', fail: '❌', warn: '✋', todo: '⬜', na: '—' };
 
-  var jobs = {}, previousJobs = {}, openMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false;
+  var st0 = document.createElement('style');
+  st0.textContent = '.kh-flow-order{margin:14px 0;padding:13px 15px;border:1px solid rgba(194,157,93,.45);border-radius:14px;background:rgba(194,157,93,.08)}' +
+    '.kh-order-title{display:block;margin-bottom:6px;color:#d8b878}.kh-order-line{margin:4px 0;line-height:1.7}.kh-order-hint{margin:8px 0 0;opacity:.85;font-size:.88rem;line-height:1.6}' +
+    '.kh-order-go{margin-top:6px;padding:8px 14px;border:1px solid rgba(194,157,93,.7);border-radius:10px;background:transparent;color:inherit;font:inherit;cursor:pointer}' +
+    '.kh-flow-box[data-locked="1"]>summary .kh-flow-title{opacity:.75}';
+  document.head.appendChild(st0);
+
+  var jobs = {}, previousJobs = {}, openMemo = {}, topOpen = false, timer = null, polling = false, queueError = '', queueKnown = false, currentIndex = -1, currentSpeaker = '';
 
   function $(id) { return document.getElementById(id); }
   function story() { return window.__KH_STORY_PACKAGE || null; }
@@ -64,6 +71,7 @@
   }
 
   /* ---------- حالات الخطوات الأربع لمقطع ---------- */
+  function isLocked(box) { return box.dataset.locked === '1'; }
   function chipStates(box) {
     var index = Number(box.dataset.index), L = lang();
     var speech = box.querySelector('.kh-speech-text-controls');
@@ -75,8 +83,11 @@
       var st = speech ? speech.dataset.status : '';
       s2 = st === 'approved' ? { s: 'done', t: 'معتمد' } : st === 'suggested' ? { s: 'warn', t: 'بانتظار اعتمادك' } : { s: 'todo', t: 'لم يُجهّز' };
     }
+    var locked = isLocked(box) && !job && !hasCard && !(speech && speech.dataset.status === 'approved');
+    if (locked && L === 'ar') s2 = { s: 'todo', t: 'مقفول — بعد اعتماد مقطع ' + (currentIndex + 1) };
     var s3;
-    if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
+    if (locked) s3 = { s: 'todo', t: 'مقفول' };
+    else if (!job) s3 = hasCard ? { s: 'done', t: 'تم سابقًا' } : (queueKnown ? { s: 'todo', t: 'لم يُرسل' } : { s: 'todo', t: 'الحالة غير معروفة' });
     else if (job.status === 'pending') s3 = { s: 'wait', t: 'في الطابور' };
     else if (job.status === 'processing') s3 = { s: 'busy', t: 'بيتم الآن' };
     else if (job.status === 'completed') s3 = { s: 'done', t: hasCard ? 'تم' : 'تم — حدّث الصفحة' };
@@ -92,6 +103,9 @@
   }
   function genNote(box) {
     var job = jobOf(Number(box.dataset.index));
+    if (isLocked(box) && !job && !box.querySelector('.kh-audio-card[data-clip-key]')) {
+      return 'مقفول حاليًا. الترتيب: كل مقاطع كارما أولًا ثم الراوي، والمقطع الحالي هو مقطع ' + (currentIndex + 1) + (currentSpeaker ? ' · ' + currentSpeaker : '') + '. يُفتح هذا المقطع بعد اعتماد صوت المقاطع التي قبله في هذا الترتيب.';
+    }
     if (!job) return queueKnown ? 'لم يُرسل هذا المقطع للتوليد بعد.' : 'تعذر معرفة حالة التوليد الآن (سجّل الدخول من لوحة الإدارة أو حدّث الصفحة).';
     var age = ageText(job);
     if (job.status === 'pending') return 'المقطع في الطابور بانتظار اتصال Colab' + (age ? ' (' + age + ')' : '') + '.';
@@ -145,6 +159,28 @@
     if (importer && importer.parentNode !== tbody) tbody.appendChild(importer);
     top.open = topOpen;
   }
+  function goCurrent() {
+    var box = document.querySelector('.kh-flow-box[data-index="' + currentIndex + '"]');
+    if (!box) return;
+    box.open = true; openMemo[lang() + ':' + currentIndex] = true;
+    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function renderOrderNote(host, karma, narrator) {
+    var L = lang(), note = $('kh-flow-order');
+    if (L !== 'ar' && L !== 'en') { if (note) note.remove(); return; }
+    if (!note) { note = el('section', 'kh-flow-order'); note.id = 'kh-flow-order'; host.insertAdjacentElement('beforebegin', note); }
+    note.replaceChildren();
+    note.appendChild(el('strong', 'kh-order-title', 'ترتيب العمل على الصوت'));
+    function nums(list) { return list.map(function (i) { return i + 1; }).join('، ') || '—'; }
+    note.appendChild(el('p', 'kh-order-line', 'كارما أولًا: مقاطع ' + nums(karma) + '. ثم الراوي: مقاطع ' + nums(narrator) + '.'));
+    if (currentIndex < 0) {
+      note.appendChild(el('p', 'kh-order-line', '✅ اكتمل اعتماد صوت كل المقاطع.'));
+    } else {
+      note.appendChild(el('p', 'kh-order-line', 'المقطع الحالي: مقطع ' + (currentIndex + 1) + (currentSpeaker ? ' · ' + currentSpeaker : '') + '.'));
+      var go = el('button', 'kh-order-go', 'انتقل للمقطع الحالي'); go.type = 'button'; go.addEventListener('click', goCurrent); note.appendChild(go);
+    }
+    note.appendChild(el('p', 'kh-order-hint', 'المقطع يُحسب معتمدًا لما تعتمد صوته في الخطوة 4، وليس نص القراءة وحده. وبعدها يُفتح المقطع التالي في الترتيب.'));
+  }
   function updateTopSummary() {
     var top = $('kh-flow-top'); if (!top) return;
     var pill = document.querySelector('#kh-audio-review-gate .kh-gate-pill');
@@ -169,12 +205,17 @@
     sb.forEach(function (b, i) { if (b && b.speaker === 'karma') karma.push(i); else if (b && b.speaker === 'narrator') narrator.push(i); });
     var order = karma.concat(narrator), current = -1;
     for (var k = 0; k < order.length; k++) { var rec = byIndex[order[k]]; if (!rec || !rec.accepted) { current = order[k]; break; } }
+    currentIndex = current;
+    var curLocal = current >= 0 ? sb[current] : null;
+    currentSpeaker = curLocal && SPEAKERS[curLocal.speaker] ? SPEAKERS[curLocal.speaker] : '';
+    renderOrderNote(host, karma, narrator);
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
     info.forEach(function (rec) {
       if (!rec.panels.length && (L !== 'ar' && L !== 'en')) return;
       var local = sb[rec.index], speaker = local && local.speaker;
       var box = el('details', 'kh-flow-box'); box.dataset.index = String(rec.index);
+      if (current >= 0 && rec.index !== current && !rec.accepted) box.dataset.locked = '1';
       var sum = el('summary', 'kh-flow-summary');
       sum.appendChild(el('span', 'kh-flow-title', 'مقطع ' + (rec.index + 1) + (SPEAKERS[speaker] ? ' · ' + SPEAKERS[speaker] : '')));
       sum.appendChild(el('ol', 'kh-flowbar'));
