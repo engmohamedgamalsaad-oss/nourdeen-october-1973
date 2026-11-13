@@ -173,6 +173,13 @@ function encodeBase64Utf8(value: string): string {
   }
   return btoa(binary);
 }
+function encodeBase64Bytes(bytes: Uint8Array): string {
+  let binary = "";
+  for (let offset = 0; offset < bytes.length; offset += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(offset, Math.min(offset + 0x8000, bytes.length)));
+  }
+  return btoa(binary);
+}
 function acceptedArabicBlockIndexes(audioReview: any): Set<number> {
   return new Set(
     Object.values(audioReview?.clips ?? {})
@@ -651,7 +658,58 @@ Deno.serve(async (req: Request) => {
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
+
+    // Gemini must hear the rejected MP3 itself; a text-only prompt cannot diagnose pronunciation.
+    const audioSrc = String(body.audio_src ?? "");
+    const audioChunkIndex = Number(body.chunk_index ?? 0);
+    if (!/^[A-Za-z0-9_-]+\\.mp3$/.test(audioSrc) ||
+        !Number.isInteger(audioChunkIndex) || audioChunkIndex < 0 || audioChunkIndex > 50) {
+      return reply(400, { error: "لم يُرسل ملف الصوت المحدد للمراجعة؛ أعد تحميل المقطع وحاول مرة أخرى." });
+    }
+    const { data: audioManifestFile, error: audioManifestError } = await service.storage.from(BUCKET)
+      .download(prefix + "/manifest.json");
+    if (audioManifestError || !audioManifestFile) {
+      return reply(404, { error: "تعذر العثور على manifest الصوت الخاص لإرساله إلى Gemini." });
+    }
+    let audioManifest: any;
+    try { audioManifest = JSON.parse(await audioManifestFile.text()); }
+    catch { return reply(422, { error: "ملف manifest الصوت الخاص غير صالح." }); }
+    const audioSegment = (audioManifest?.segments ?? []).find((segment: any) =>
+      Number(segment?.block_index) === index &&
+      Number(segment?.chunk_index || 0) === audioChunkIndex &&
+      segment?.src === audioSrc &&
+      segment?.speaker === source.block.speaker);
+    if (!audioSegment) {
+      return reply(409, { error: "ملف الصوت المرسل لا يطابق المتحدث والمقطع الحاليين؛ أعد تحميل المعاينة." });
+    }
+    const { data: audioFile, error: audioDownloadError } = await service.storage.from(BUCKET)
+      .download(prefix + "/" + audioSrc);
+    if (audioDownloadError || !audioFile) {
+      return reply(404, { error: "ملف MP3 المطلوب غير موجود في التخزين الخاص؛ لم يُرسل نص بديل إلى Gemini." });
+    }
+    const audioBytes = new Uint8Array(await audioFile.arrayBuffer());
+    if (!audioBytes.length || audioBytes.length > 20 * 1024 * 1024) {
+      return reply(413, { error: "حجم ملف الصوت غير صالح أو يتجاوز الحد المسموح لتحليله." });
+    }
+    const actualAudioHash = await sha256Hex(audioBytes);
+    const manifestAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
+    const requestedAudioHash = String(body.audio_sha256 ?? "").toLowerCase();
+    if (!manifestAudioHash || actualAudioHash !== manifestAudioHash ||
+        (requestedAudioHash && requestedAudioHash !== manifestAudioHash)) {
+      return reply(409, { error: "بصمة ملف الصوت لا تطابق النسخة المعروضة للمراجعة؛ أعد تحميل المقطع." });
+    }
+    const audioBase64 = encodeBase64Bytes(audioBytes);
     const prompt = [
+      "ملف MP3 مرفق مع هذا الطلب. استمع إليه فعليًا قبل كتابة أي اقتراح؛ لا تعتمد على النص وحده.",
+      "حلّل ما نُطق في الصوت مقارنةً بالنص الأصلي: حدّد الكلمات التي نُطقت خطأ، أو تغيّر معناها، أو سقطت، أو ابتُلعت نهايتها، وكذلك مواضع السرعة أو الوقف غير الطبيعي. لا تخترع أخطاء غير مسموعة.",
+      "استخدم ملاحظة الرفض والتصحيح المقترح المسجلين أدناه لمعالجة المشكلة المحددة. إذا كان البديل صريحًا فطبّقه حرفيًا ما دام يحافظ على المعنى التاريخي. لا تكتفِ بإعادة النص كما هو إذا كان الصوت يثبت وجود مشكلة نطق قابلة للعلاج.",
+      "إذا كانت المشكلة في جودة الصوت أو خامة الصوت فقط وليست في النص أو النطق، فلا تغيّر النص لمجرد إظهار اختلاف؛ اذكر ذلك في review_flags.",
+      "الصوت المرفق هو مرجع التشخيص، وليس مصدرًا لتغيير الحقائق أو اختلاق محتوى.",
+      ...rejectedCorrections.length ? [
+        "تصحيحات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — طبّقها صراحةً في نص القراءة الجديد، ولا تتجاهلها:",
+        ...rejectedCorrections,
+        "إذا حدد صاحب المشروع استبدالًا مباشرًا لكلمة أو عبارة، استخدم البديل المحدد كما طلبه ولا تُعد الكلمة المرفوضة. راجع الجملة كاملةً للتأكد من سلامة المعنى والنحو والنطق. هذه التصحيحات ملزمة لهذا المقطع فقط؛ لا تنقلها إلى مقاطع أخرى، ولا تغيّر أي حقيقة تاريخية أو تضف معلومة جديدة."
+      ] : [],
       ...(rejectedCorrections.length ? [
         "تصحيحات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — طبّقها صراحةً في نص القراءة الجديد، ولا تتجاهلها:",
         ...rejectedCorrections,
@@ -713,7 +771,10 @@ Deno.serve(async (req: Request) => {
     const geminiModels = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3.6-flash"];
     const requestBody = JSON.stringify({
       systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. افهم الجملة كاملةً، لكن لا تُشكّلها كاملةً أبدًا؛ ضع أقل قدر لازم من الحركات على الكلمة الملتبسة وحدها، واترك سائر الكلمات بلا تشكيل. لا تضف تشكيلًا إعرابيًا أو تجميليًا. إذا لم يحسم السياق القراءة، فلا تخمّن واذكر الالتباس في pronunciation_notes أو review_flags. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
+      contents: [{ role: "user", parts: [
+        { text: prompt },
+        { inlineData: { mimeType: "audio/mpeg", data: audioBase64 } },
+      ] }],
       generationConfig: {
         maxOutputTokens: 2200,
         thinkingConfig: { thinkingLevel: "MEDIUM" },
@@ -848,6 +909,7 @@ Deno.serve(async (req: Request) => {
     }
     return reply(200, {
       success: true, language: "ar", block_index: index, speaker: source.block.speaker,
+      audio_analyzed: true, audio_src: audioSrc, audio_sha256: actualAudioHash,
       source_text: source.sourceText, source_text_hash: source.sourceTextHash,
       speech_text: proposal.speech_text.trim(),
       changes_summary: proposal.changes_summary,
