@@ -1119,7 +1119,7 @@ Deno.serve(async (req: Request) => {
       Number(clip.block_index) === Number(acceptedClip.block_index) &&
       Number(clip.chunk_index || 0) === Number(acceptedClip.chunk_index || 0) &&
       clip?.replacement_cleanup?.status === "pending");
-    if (!oldClip) return reply(200, { success: true, cleaned: true, already_clean: true });
+    if (!oldClip) return reply(200, { success: true, cleaned: false, already_clean: true });
     const cleanup = (oldClip as any).replacement_cleanup;
     const langPrefix = section + "/" + slug + "/" + acceptedClip.lang;
     if (cleanup.language !== acceptedClip.lang ||
