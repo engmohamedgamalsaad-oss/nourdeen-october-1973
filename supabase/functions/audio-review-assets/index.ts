@@ -1001,9 +1001,11 @@ Deno.serve(async (req: Request) => {
       }
       seen.add(segment.src);
     }
+    // Merge a single replacement segment into the existing package; never discard the other story segments.
+    let priorSegmentsForMerge: any[] | null = null;
     // Never overwrite the rejected file in place: it must remain available until
     // the replacement has been listened to and explicitly accepted.
-    if (isIbnSinaArabic && body.request_id) {
+    if (isIbnSinaArabic && body.request_id && Number(body.block_index) === 4) {
       const index = Number(body.block_index);
       const { data: oldReviewRow, error: oldReviewError } = await service.from("story_audio_reviews")
         .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
@@ -1025,6 +1027,8 @@ Deno.serve(async (req: Request) => {
       const newSegment = manifest.segments.find((segment: any) => Number(segment.block_index) === index);
       const oldSegment = (oldManifest.segments ?? []).find((segment: any) =>
         Number(segment.block_index) === index && Number(segment.chunk_index || 0) === Number(newSegment?.chunk_index || 0));
+      priorSegmentsForMerge = (oldManifest.segments ?? []).filter((segment: any) =>
+        !(Number(segment.block_index) === index && Number(segment.chunk_index || 0) === Number(newSegment?.chunk_index || 0)));
       if (!newSegment || !oldSegment || !oldSegment.src || !oldSegment.audio_sha256 ||
           oldSegment.src === newSegment.src) {
         return reply(409, { error: "تعذر تحديد ملف قديم وملف بديل مختلفين للمقطع؛ لم يتم استبدال أي ملف." });
@@ -1062,15 +1066,29 @@ Deno.serve(async (req: Request) => {
         { section, slug, audio_review: currentReview }, { onConflict: "section,slug" });
       if (saveCleanupError) return reply(500, { error: "تعذر حفظ مرجع الصوت القديم قبل الاستبدال.", detail: saveCleanupError.message });
     }
+    if (priorSegmentsForMerge) {
+      manifest.segments = [...priorSegmentsForMerge, ...manifest.segments]
+        .sort((a: any, b: any) => Number(a.block_index) - Number(b.block_index) ||
+          Number(a.chunk_index || 0) - Number(b.chunk_index || 0));
+    }
     const uploaded: string[] = [];
     for (const segment of manifest.segments) {
       const file = zip.file(segment.src);
-      if (!file) return reply(422, { error: "ملف MP3 مفقود من الـArtifact: " + segment.src });
+      const path = prefix + "/" + segment.src;
+      if (!file) {
+        const { data: existingFile, error: existingFileError } = await service.storage.from(BUCKET).download(path);
+        if (existingFileError || !existingFile) return reply(422, { error: "ملف صوت محفوظ سابقًا مفقود أثناء دمج المقطع: " + segment.src });
+        const existingBytes = new Uint8Array(await existingFile.arrayBuffer());
+        if (await sha256Hex(existingBytes) !== String(segment.audio_sha256).toLowerCase()) {
+          return reply(422, { error: "بصمة ملف صوت محفوظ سابقًا لا تطابق manifest أثناء الدمج: " + segment.src });
+        }
+        uploaded.push(path);
+        continue;
+      }
       const bytes = new Uint8Array(await file.async("uint8array"));
       if (await sha256Hex(bytes) !== String(segment.audio_sha256).toLowerCase()) {
         return reply(422, { error: "بصمة MP3 لا تطابق manifest: " + segment.src });
       }
-      const path = prefix + "/" + segment.src;
       const { error } = await service.storage.from(BUCKET).upload(path, bytes, {
         contentType: "audio/mpeg", upsert: true, cacheControl: "60",
       });
