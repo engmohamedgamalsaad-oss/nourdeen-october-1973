@@ -124,6 +124,33 @@ async function invalidatePublicStoryAudio(service: any, section: string, slug: s
     }
   }
 }
+
+async function invalidatePublicClipAudio(service: any, section: string, slug: string, language: string, blockIndex: number, chunkIndex?: number) {
+  const prefix = section + "/" + slug + "/" + language;
+  const manifestPath = prefix + "/manifest.json";
+  const { data: file, error: downloadError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).download(manifestPath);
+  if (downloadError || !file) return;
+  let manifest: any;
+  try { manifest = JSON.parse(await file.text()); }
+  catch { throw new Error("manifest الصوت المنشور غير صالح؛ لم يتم حذف أي ملف."); }
+  if (!Array.isArray(manifest.segments)) throw new Error("manifest الصوت المنشور لا يحتوي قائمة مقاطع صالحة.");
+  const removed = manifest.segments.filter((segment: any) =>
+    Number(segment?.block_index) === blockIndex &&
+    (chunkIndex === undefined || Number(segment?.chunk_index || 0) === chunkIndex));
+  if (!removed.length) return;
+  const removedSet = new Set(removed.map((segment: any) => segment.src));
+  const nextManifest = { ...manifest, segments: manifest.segments.filter((segment: any) => !removedSet.has(segment.src)) };
+  const { error: manifestError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(
+    manifestPath, new TextEncoder().encode(JSON.stringify(nextManifest)),
+    { contentType: "application/json", upsert: true, cacheControl: "60" });
+  if (manifestError) throw new Error("تعذر تحديث manifest العام لاستبعاد المقطع المرفوض: " + manifestError.message);
+  const paths = removed.filter((segment: any) => typeof segment.src === "string" && /^[A-Za-z0-9_-]+\\.mp3$/.test(segment.src))
+    .map((segment: any) => prefix + "/" + segment.src);
+  if (paths.length) {
+    const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
+    if (removeError) throw new Error("تم استبعاد المقطع من manifest لكن تعذر حذف نسخته العامة: " + removeError.message);
+  }
+}
 function orderedStoryBlockIndexes(blocks: any[]): number[] {
   // Review order follows the story itself (block order), not speaker groups.
   const ordered: number[] = [];
@@ -368,8 +395,13 @@ Deno.serve(async (req: Request) => {
     // Rejecting a clip immediately removes the currently published story audio.
     // Private staging files and the old manifest remain untouched for rollback.
     if (newlyRejected) {
-      try { await invalidatePublicStoryAudio(service, section, slug); }
-      catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف إتاحة الصوت المنشور بعد الرفض." }); }
+      try {
+        for (const clip of Object.values(incoming.clips) as any[]) {
+          if (clip?.lang === "ar" && Number(clip.block_index) === 4 && clip.status === "rejected") {
+            await invalidatePublicClipAudio(service, section, slug, "ar", 4, Number(clip.chunk_index || 0));
+          }
+        }
+      } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف إتاحة المقطع المنشور بعد الرفض." }); }
     }
     const { error } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview },
@@ -850,8 +882,13 @@ Deno.serve(async (req: Request) => {
       }
     }
     current.speech_texts = speechTexts;
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
+    try {
+      if (section === "history" && slug === "ibn-sina" && index === 4) {
+        await invalidatePublicClipAudio(service, section, slug, "ar", index);
+      } else {
+        await invalidatePublicStoryAudio(service, section, slug);
+      }
+    } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const { data: saved, error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
       .select("audio_review").single();
