@@ -322,6 +322,49 @@ Deno.serve(async (req: Request) => {
   });
   const prefix = section + "/" + slug + "/" + language;
 
+  // Read/write the per-story audio review record used by the preview UI.
+  // These actions remain behind the same authenticated-admin gate as every
+  // other mutating audio workflow action in this function.
+  if (body.action === "review_get") {
+    const { data, error } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (error) return reply(500, { error: "تعذر قراءة سجل مراجعة الصوت.", detail: error.message });
+    const audioReview = data?.audio_review && typeof data.audio_review === "object"
+      ? data.audio_review : { version: 1, regen: {}, clips: {}, audio_hashes: {}, speech_texts: {} };
+    return reply(200, { success: true, audio_review: audioReview });
+  }
+
+  if (body.action === "review_save") {
+    const incoming = body.audio_review;
+    if (!incoming || typeof incoming !== "object" || Array.isArray(incoming) ||
+        (incoming.version !== undefined && incoming.version !== 1) ||
+        !incoming.clips || typeof incoming.clips !== "object" || Array.isArray(incoming.clips) ||
+        !incoming.regen || typeof incoming.regen !== "object" || Array.isArray(incoming.regen) ||
+        !incoming.audio_hashes || typeof incoming.audio_hashes !== "object" || Array.isArray(incoming.audio_hashes) ||
+        (incoming.speech_texts !== undefined &&
+          (!incoming.speech_texts || typeof incoming.speech_texts !== "object" || Array.isArray(incoming.speech_texts)))) {
+      return reply(400, { error: "بنية سجل مراجعة الصوت غير صالحة؛ لم يتم حفظ أي تغيير." });
+    }
+    const serialized = JSON.stringify(incoming);
+    if (serialized.length > 2_000_000) {
+      return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
+    }
+    const audioReview = {
+      ...incoming,
+      version: 1,
+      regen: incoming.regen,
+      clips: incoming.clips,
+      audio_hashes: incoming.audio_hashes,
+      speech_texts: incoming.speech_texts ?? {},
+    };
+    const { error } = await service.from("story_audio_reviews").upsert(
+      { section, slug, audio_review: audioReview },
+      { onConflict: "section,slug" },
+    );
+    if (error) return reply(500, { error: "تعذر حفظ سجل مراجعة الصوت.", detail: error.message });
+    return reply(200, { success: true, audio_review: audioReview });
+  }
+
   if (body.action === "reconcile") {
     const snap = storyFromSnapshot(body.story_snapshot, section, slug);
     if (!snap) return reply(400, { error: "لقطة الحكاية الحالية غير صالحة؛ أعد فتح المعاينة من لوحة الإدارة." });
