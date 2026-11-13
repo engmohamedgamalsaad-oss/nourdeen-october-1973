@@ -74,6 +74,8 @@ test('admin preview mounts the ordered audio review flow and links to the unifie
   assert.ok(preview.includes("addScript('../khaledoon/assets/audio-review-core.js')"), 'the preview must load the shared audio review core');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-review.js')"), 'the preview must mount the audio generation and listening controls');
   assert.ok(preview.includes("addScript('../rebuild/reader-audio-flow.js')"), 'the preview must mount the ordered text-to-generation status flow');
+  assert.ok(preview.includes("scriptUrl.searchParams.set('v','20261113-review-state-cache-1')"), 'preview audio-review scripts must bypass stale browser caches after workflow fixes');
+  assert.ok(reader.includes('reader-audio-review.js?v=20261113-review-state-cache-1') && reader.includes('reader-audio-flow.js?v=20261113-review-state-cache-1'), 'the story reader must load the current audio-review workflow scripts');
   assert.ok(preview.includes("addStyle('../rebuild/reader-audio-flow.css')"), 'the preview must load the compact ordered-flow layout');
   assert.ok(preview.includes('Khaledoon_OmniVoice_Unified_Worker.ipynb'), 'the worker panel must open the unified Colab notebook');
   assert.ok(!preview.includes('Khaledoon_VoiceTut_Colab_Worker.ipynb'), 'the obsolete single-clip worker link must not remain');
