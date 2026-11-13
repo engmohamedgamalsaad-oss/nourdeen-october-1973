@@ -688,8 +688,8 @@ Deno.serve(async (req: Request) => {
       return reply(404, { error: "ملف MP3 المطلوب غير موجود في التخزين الخاص؛ لم يُرسل نص بديل إلى Gemini." });
     }
     const audioBytes = new Uint8Array(await audioFile.arrayBuffer());
-    if (!audioBytes.length || audioBytes.length > 20 * 1024 * 1024) {
-      return reply(413, { error: "حجم ملف الصوت غير صالح أو يتجاوز الحد المسموح لتحليله." });
+    if (!audioBytes.length || audioBytes.length > 14 * 1024 * 1024) {
+      return reply(413, { error: "حجم ملف الصوت يتجاوز الحد الآمن لإرساله إلى Gemini أو أنه غير صالح." });
     }
     const actualAudioHash = await sha256Hex(audioBytes);
     const manifestAudioHash = String(audioSegment.audio_sha256 ?? "").toLowerCase();
