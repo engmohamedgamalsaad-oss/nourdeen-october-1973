@@ -98,7 +98,7 @@ function addControls(){
  var end=document.createElement('div');end.className='khd-end';
  flag=document.createElement('span');flag.className='khd-flag';flag.id='kh-preview-ctx-flag';
  gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='جارٍ فحص الصوت…';
- var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='فتح Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
+ var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='تشغيل Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
 
  var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
  end.append(flag,gatePill,colabLink,chev);
