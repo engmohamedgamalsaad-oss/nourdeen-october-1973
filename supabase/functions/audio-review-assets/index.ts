@@ -144,7 +144,7 @@ async function invalidatePublicClipAudio(service: any, section: string, slug: st
     manifestPath, new TextEncoder().encode(JSON.stringify(nextManifest)),
     { contentType: "application/json", upsert: true, cacheControl: "60" });
   if (manifestError) throw new Error("تعذر تحديث manifest العام لاستبعاد المقطع المرفوض: " + manifestError.message);
-  const paths = removed.filter((segment: any) => typeof segment.src === "string" && /^[A-Za-z0-9_-]+\\.mp3$/.test(segment.src))
+  const paths = removed.filter((segment: any) => typeof segment.src === "string" && /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src))
     .map((segment: any) => prefix + "/" + segment.src);
   if (paths.length) {
     const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
