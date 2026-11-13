@@ -349,6 +349,12 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
+    const { data: previousRow, error: previousError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (previousError) return reply(500, { error: "تعذر قراءة قرار الصوت السابق قبل تحديثه.", detail: previousError.message });
+    const previousReview = previousRow?.audio_review && typeof previousRow.audio_review === "object" ? previousRow.audio_review : {};
+    const newlyRejected = Object.entries(incoming.clips).some(([key, clip]: [string, any]) =>
+      clip?.status === "rejected" && previousReview?.clips?.[key]?.status !== "rejected");
     const audioReview = {
       ...incoming,
       version: 1,
@@ -357,12 +363,18 @@ Deno.serve(async (req: Request) => {
       audio_hashes: incoming.audio_hashes,
       speech_texts: incoming.speech_texts ?? {},
     };
+    // Rejecting a clip immediately removes the currently published story audio.
+    // Private staging files and the old manifest remain untouched for rollback.
+    if (newlyRejected) {
+      try { await invalidatePublicStoryAudio(service, section, slug); }
+      catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف إتاحة الصوت المنشور بعد الرفض." }); }
+    }
     const { error } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview },
       { onConflict: "section,slug" },
     );
     if (error) return reply(500, { error: "تعذر حفظ سجل مراجعة الصوت.", detail: error.message });
-    return reply(200, { success: true, audio_review: audioReview });
+    return reply(200, { success: true, audio_review: audioReview, public_audio_invalidated: newlyRejected });
   }
 
   if (body.action === "reconcile") {
@@ -580,10 +592,19 @@ Deno.serve(async (req: Request) => {
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
+    const rejectedNotes = Object.values(progressRow?.audio_review?.clips ?? {})
+      .filter((clip: any) => clip?.lang === "ar" && Number(clip.block_index) === index &&
+        clip?.status === "rejected" && clip?.issue !== "audio_only" && typeof clip?.note === "string" && clip.note.trim())
+      .map((clip: any) => clip.note.trim()).slice(0, 5);
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
     const prompt = [
+      ...(rejectedNotes.length ? [
+        "ملاحظات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — عالجها صراحةً في نص القراءة، ولا تتجاهلها:",
+        ...rejectedNotes.map((note: string, i: number) => (i + 1) + ") " + note),
+        "هذه الملاحظات توجيهات تحريرية ملزمة لهذا الاقتراح. لا تغيّر أي حقيقة تاريخية ولا تضف معلومة جديدة."
+      ] : []),
       "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من الحكاية.",
       "المتحدث: " + speakerName + ".",
       "قواعد ثابتة: عامية مصرية طبيعية غير صعيدية، لا فصحى مذيعين ولا مبالغة في العامية.",
@@ -935,6 +956,21 @@ Deno.serve(async (req: Request) => {
         return reply(422, { error: "أحد المقاطع لا يطابق عقد الصوت العربي أو بصمة الملف." });
       }
       seen.add(segment.src);
+    }
+    // Never overwrite the rejected file in place: it must remain available until
+    // the replacement has been listened to and explicitly accepted.
+    if (isIbnSinaArabic && body.request_id) {
+      const index = Number(body.block_index);
+      const { data: oldReviewRow, error: oldReviewError } = await service.from("story_audio_reviews")
+        .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+      if (oldReviewError) return reply(500, { error: "تعذر فحص ملف الصوت المرفوض قبل الاستبداله.", detail: oldReviewError.message });
+      const oldSources = Object.values(oldReviewRow?.audio_review?.clips ?? {})
+        .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === index &&
+          clip?.status === "rejected" && typeof clip?.src === "string" && clip.src)
+        .map((clip: any) => clip.src);
+      if (manifest.segments.some((segment: any) => oldSources.includes(segment.src))) {
+        return reply(409, { error: "اسم ملف الصوت الجديد يطابق الملف المرفوض. أُوقف الاستبدال حتى لا يُمحى الصوت القديم قبل اعتماد البديل؛ يلزم Artifact باسم ملف جديد." });
+      }
     }
     const uploaded: string[] = [];
     for (const segment of manifest.segments) {
