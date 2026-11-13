@@ -632,19 +632,30 @@ Deno.serve(async (req: Request) => {
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
-    const rejectedNotes = Object.values(progressRow?.audio_review?.clips ?? {})
-      .filter((clip: any) => section === "history" && slug === "ibn-sina" && index === 4 &&
-        clip?.lang === "ar" && Number(clip.block_index) === index &&
-        clip?.status === "rejected" && clip?.issue !== "audio_only" && typeof clip?.note === "string" && clip.note.trim())
-      .map((clip: any) => clip.note.trim()).slice(0, 5);
+    // Apply the user's saved rejection correction to the exact block being prepared,
+    // for every story (not only the historical Ibn Sina test block).
+    const rejectedCorrections = Object.values(progressRow?.audio_review?.clips ?? {})
+      .filter((clip: any) => clip?.lang === "ar" && Number(clip?.block_index) === index &&
+        clip?.status === "rejected" && clip?.issue !== "audio_only")
+      .slice(0, 10)
+      .map((clip: any, i: number) => {
+        const note = typeof clip?.note === "string" ? clip.note.trim() : "";
+        const suggestion = typeof clip?.suggestion === "string" ? clip.suggestion.trim() : "";
+        if (!note && !suggestion) return "";
+        return [
+          "رفض سابق للمقطع (" + (i + 1) + "):",
+          note ? "ملاحظة صاحب المشروع: " + note : "",
+          suggestion ? "التصحيح/الصياغة البديلة المطلوبة: " + suggestion : "",
+        ].filter(Boolean).join("\n");
+      }).filter(Boolean);
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
     const prompt = [
-      ...(rejectedNotes.length ? [
-        "ملاحظات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — عالجها صراحةً في نص القراءة، ولا تتجاهلها:",
-        ...rejectedNotes.map((note: string, i: number) => (i + 1) + ") " + note),
-        "هذه الملاحظات توجيهات تحريرية ملزمة لهذا الاقتراح. لا تغيّر أي حقيقة تاريخية ولا تضف معلومة جديدة."
+      ...(rejectedCorrections.length ? [
+        "تصحيحات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — طبّقها صراحةً في نص القراءة الجديد، ولا تتجاهلها:",
+        ...rejectedCorrections,
+        "إذا حدد صاحب المشروع استبدالًا مباشرًا لكلمة أو عبارة، استخدم البديل المحدد كما طلبه ولا تُعد الكلمة المرفوضة. راجع الجملة كاملةً للتأكد من سلامة المعنى والنحو والنطق. هذه التصحيحات ملزمة لهذا المقطع فقط؛ لا تنقلها إلى مقاطع أخرى، ولا تغيّر أي حقيقة تاريخية أو تضف معلومة جديدة."
       ] : []),
       "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من الحكاية.",
       "المتحدث: " + speakerName + ".",
