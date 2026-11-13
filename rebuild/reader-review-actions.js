@@ -95,7 +95,7 @@ function addControls(){
  var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='فتح Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
 
  var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
- end.append(flag,gatePill,chev);
+ end.append(flag,gatePill,colabLink,chev);
  bar.append(title,end);
  drop=document.createElement('div');drop.className='khd-drop';drop.id='kh-preview-decision-drop';
  var meter=document.createElement('div');meter.className='khd-meter';gateFill=document.createElement('span');meter.appendChild(gateFill);
