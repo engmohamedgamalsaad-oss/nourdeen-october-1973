@@ -1118,13 +1118,10 @@ Deno.serve(async (req: Request) => {
     if (!acceptedClip || acceptedClip.status !== "accepted" || !["ar", "en"].includes(acceptedClip.lang)) {
       return reply(409, { error: "لا يمكن حذف الصوت القديم قبل قبول المقطع البديل." });
     }
-    const oldClip = Object.values(audioReview.clips ?? {}).find((clip: any) =>
-      clip?.status === "rejected" && clip?.lang === acceptedClip.lang &&
-      Number(clip.block_index) === Number(acceptedClip.block_index) &&
-      Number(clip.chunk_index || 0) === Number(acceptedClip.chunk_index || 0) &&
-      clip?.replacement_cleanup?.status === "pending");
-    if (!oldClip) return reply(200, { success: true, cleaned: false, already_clean: true });
-    const cleanup = (oldClip as any).replacement_cleanup;
+    const cleanup = acceptedClip.replacement_cleanup;
+    if (!cleanup || cleanup.status !== "pending") {
+      return reply(200, { success: true, cleaned: cleanup?.status === "complete", already_clean: cleanup?.status === "complete" });
+    }
     const langPrefix = section + "/" + slug + "/" + acceptedClip.lang;
     if (cleanup.language !== acceptedClip.lang ||
         Number(cleanup.block_index) !== Number(acceptedClip.block_index) ||
@@ -1162,7 +1159,7 @@ Deno.serve(async (req: Request) => {
       return reply(500, { error: "تعذر التحقق من وجود ملف الصوت القديم؛ لم يُحذف شيء.", detail: oldFileError.message });
     }
     if (!oldFile) {
-      (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString(), already_missing: true };
+      acceptedClip.replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString(), already_missing: true };
       const { error: saveMissingStateError } = await service.from("story_audio_reviews").upsert(
         { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
       if (saveMissingStateError) return reply(500, { error: "الملف القديم غير موجود لكن تعذر تسجيل حالة التنظيف.", detail: saveMissingStateError.message });
@@ -1179,11 +1176,11 @@ Deno.serve(async (req: Request) => {
     if (oldCheckError && !storageObjectNotFound(oldCheckError)) {
       return reply(500, { error: "تعذر التحقق من اختفاء ملف الصوت القديم بعد الحذف.", detail: oldCheckError.message });
     }
-    (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString() };
+    acceptedClip.replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString() };
     const { error: saveStateError } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
     if (saveStateError) return reply(500, { error: "تم حذف الملف القديم لكن تعذر تسجيل حالة التنظيف.", detail: saveStateError.message });
-    return reply(200, { success: true, cleaned: true, old_file_missing: true, new_file_verified: true, completed_at: (oldClip as any).replacement_cleanup.completed_at });
+    return reply(200, { success: true, cleaned: true, old_file_missing: true, new_file_verified: true, completed_at: acceptedClip.replacement_cleanup.completed_at });
   }
 
   if (body.action === "manifest") {
