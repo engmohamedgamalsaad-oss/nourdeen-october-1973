@@ -68,3 +68,8 @@ test('admin review exposes a same-block regeneration action after audio-only rej
   assert.match(source, /generateNextQueuedBlock\(entry\.lang, state, regenerateBtn, entry\.block_index\)/);
   assert.match(source, /إعادة توليد هذا المقطع/);
 });
+
+test('generateNextQueuedBlock is defined, not only called', () => {
+  const source = fs.readFileSync(path.join(root, 'rebuild/reader-audio-review.js'), 'utf8');
+  assert.match(source, /async function generateNextQueuedBlock\(language, statusNode, button, index\)/);
+});
