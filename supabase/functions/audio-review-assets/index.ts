@@ -1155,6 +1155,10 @@ Deno.serve(async (req: Request) => {
     const oldPath = langPrefix + "/" + cleanup.old_src;
     const { data: oldFile, error: oldFileError } = await service.storage.from(BUCKET).download(oldPath);
     if (oldFileError || !oldFile) {
+      (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString(), already_missing: true };
+      const { error: saveMissingStateError } = await service.from("story_audio_reviews").upsert(
+        { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
+      if (saveMissingStateError) return reply(500, { error: "الملف القديم غير موجود لكن تعذر تسجيل حالة التنظيف.", detail: saveMissingStateError.message });
       return reply(200, { success: true, cleaned: true, already_missing: true, old_file_missing: true, new_file_verified: true });
     }
     const oldBytes = new Uint8Array(await oldFile.arrayBuffer());
