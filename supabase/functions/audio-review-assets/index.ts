@@ -133,7 +133,9 @@ async function invalidatePublicClipAudio(service: any, section: string, slug: st
   const prefix = section + "/" + slug + "/" + language;
   const manifestPath = prefix + "/manifest.json";
   const { data: file, error: downloadError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).download(manifestPath);
-  if (downloadError || !file) return;
+  if (downloadError && storageObjectNotFound(downloadError)) return;
+  if (downloadError) throw new Error("تعذر قراءة manifest الصوت العام للتحقق من إيقاف المقطع: " + downloadError.message);
+  if (!file) return;
   let manifest: any;
   try { manifest = JSON.parse(await file.text()); }
   catch { throw new Error("manifest الصوت المنشور غير صالح؛ لم يتم حذف أي ملف."); }
