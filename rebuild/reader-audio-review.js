@@ -19,6 +19,7 @@ var initialArabicStageAttempted = false;
 var speechTexts = {}, speechTextBusy = {}, speechTextDirty = {};
 var loadedAudio = {};
 var activeControl = null;
+var reconcileNotice = '', reconcileBlocked = false;
 
 /* أيقونات SVG ثابتة (لا تحتوي أي بيانات خارجية) */
 var ICONS = {
@@ -235,8 +236,46 @@ function upstreamServiceName(action) {
   if (action === 'generate' || action === 'generation_status' || action === 'stage') return 'GitHub Actions';
   return 'خدمة خارجية';
 }
+var SNAPSHOT_ACTIONS = ['enqueue', 'prepare_speech_text', 'speech_text_save', 'publish_audio', 'queue_status', 'reconcile'];
+/* الحكاية كما تظهر في المعاينة الآن (المتحدث والنص فقط)؛ الخادم يعتمدها بدل نسخة main. */
+function storySnapshot() {
+  if (!story || !story.i18n) return null;
+  var blocks = {};
+  ['ar', 'en'].forEach(function (lang) {
+    var localized = story.i18n[lang];
+    if (localized && Array.isArray(localized.blocks)) {
+      blocks[lang] = localized.blocks.map(function (b) {
+        return { speaker: b && typeof b.speaker === 'string' ? b.speaker : '', text: b && typeof b.text === 'string' ? b.text : '' };
+      });
+    }
+  });
+  return { section: story.section, slug: story.slug, blocks: blocks };
+}
+/* عند فتح المعاينة: طابِق سجل المراجعة والنصوص المعتمدة وملفات الصوت مع ترتيب الحكاية الحالي ومحتواها. */
+async function reconcileStory() {
+  reconcileNotice = ''; reconcileBlocked = false;
+  try {
+    var result = await audioAssetsRequest({ action: 'reconcile', section: story.section, slug: story.slug });
+    if (result && result.changed) {
+      var s = result.summary || {}, parts = [];
+      if (s.speech_moved) parts.push('نُقل نص قراءة معتمد لـ ' + s.speech_moved + ' مقطع');
+      if (s.speech_dropped) parts.push('أُسقط نص قراءة لـ ' + s.speech_dropped + ' مقطع تغيّر أو حُذف');
+      if (s.segments_moved) parts.push('نُقل ' + s.segments_moved + ' ملف صوت لمكانه الجديد');
+      if (s.segments_dropped) parts.push('أُسقط ' + s.segments_dropped + ' ملف صوت لمقطع حُذف أو تغيّر');
+      if (s.clips_dropped) parts.push('أُلغي ' + s.clips_dropped + ' قرار مراجعة لمقطع تغيّر مكانه أو نصه');
+      reconcileNotice = 'تمت مطابقة المراجعة مع صياغة الحكاية الحالية: ' + (parts.join('، ') || 'تحديثات داخلية') + '.';
+    }
+  } catch (e) {
+    reconcileNotice = 'تعذرت مطابقة المراجعة مع الحكاية الحالية: ' + (e && e.message || e);
+    if (e && e.status === 409) reconcileBlocked = true;
+  }
+}
 async function audioAssetsRequest(payload) {
   var token = await adminToken();
+  if (payload && SNAPSHOT_ACTIONS.indexOf(payload.action) >= 0 && story) {
+    var snapshot = storySnapshot();
+    if (snapshot) payload = Object.assign({}, payload, { story_snapshot: snapshot });
+  }
   var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
   var timeout = controller ? setTimeout(function () { controller.abort(); }, payload && (payload.action === 'prepare_speech_text' || payload.action === 'publish_audio') ? 125000 : 25000) : null;
   var response;
@@ -591,6 +630,12 @@ function renderGateBanner(banner) {
   message.className = 'kh-gate-message';
   text(message, gateSummary());
   banner.append(head, message);
+  if (reconcileNotice) {
+    var notice = document.createElement('small');
+    notice.className = 'kh-gate-notice';
+    text(notice, reconcileNotice);
+    banner.appendChild(notice);
+  }
   if (!entries.length) return;
   var total = entries.length;
   var ready = entries.filter(function (entry) { return readyByKey[entry.key] === 'ready'; }).length;
@@ -952,8 +997,7 @@ function makeButton(label, cls, handler) {
 }
 var generationBusy = false, generationMessage = '';
 var jobsByBlock = {}, jobPollTimer = null, jobSendBusy = {};
-function jobKey(language, index) { return language + ':' + index; }
-async function loadQueueStatus(language) {
+function jobKey(language, index) { return language + ':' + index; }async function loadQueueStatus(language) {
   var res = await audioAssetsRequest({ action: 'queue_status', section: story.section, slug: story.slug, language: language });
   Object.keys(jobsByBlock).forEach(function (k) { if (k.indexOf(language + ':') === 0) delete jobsByBlock[k]; });
   (res && res.jobs || []).forEach(function (job) {
@@ -983,8 +1027,9 @@ function engineView(language, index) {
   return view;
 }
 function engineBlockReason(language, index) {
+  if (reconcileBlocked) return 'تغيّرت الحكاية وهناك مقاطع قيد التوليد؛ انتظر اكتمالها ثم أعد فتح المعاينة.';
   var current = nextBlockIndexForLanguage(language);
-  if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (كارما ثم الراوي).';
+  if (current !== index) return current < 0 ? 'كل المقاطع معتمدة.' : 'يُفتح بعد اعتماد المقطع السابق (بترتيب الحكاية).';
   if (language === 'ar') {
     var rec = speechTexts[speechTextKey(index)];
     if (!rec || rec.status !== 'approved' || !rec.approved_text) return 'اعتمد نص القراءة أولًا (الخطوة ٢).';
@@ -1021,6 +1066,21 @@ async function sendBlockToEngine(language, index) {
     jobsByBlock[k] = { status: 'failed', attempts: 0, last_error: 'تعذر الإرسال: ' + (error && error.message || error), block_index: index, language: language };
   } finally { jobSendBusy[k] = false; }
   updateEnginePanels(); updateGenerationSummary(); schedulePoll();
+}
+/* يرسل مقطعًا واحدًا إلى طابور الصوت بعد اعتماد نصه (أو لإعادة توليده)، ويكتب النتيجة في سطر الحالة. */
+async function generateNextQueuedBlock(language, statusNode, button, index) {
+  var reason = engineBlockReason(language, index);
+  if (reason) { if (statusNode) text(statusNode, reason); return false; }
+  if (button) button.disabled = true;
+  try {
+    await sendBlockToEngine(language, index);
+    var job = jobsByBlock[jobKey(language, index)];
+    var ok = !!job && ['pending', 'processing', 'completed'].indexOf(job.status) >= 0;
+    if (statusNode) text(statusNode, ok ? 'أُرسل المقطع إلى طابور الصوت.' : String(job && job.last_error || 'تعذر إرسال المقطع إلى الطابور.'));
+    return ok;
+  } finally {
+    if (button) button.disabled = false;
+  }
 }
 function anyJobActive(language) {
   return Object.keys(jobsByBlock).some(function (k) {
@@ -1071,7 +1131,7 @@ function nextBlockIndexForLanguage(language) {
     if (block && block.speaker === 'karma') karma.push(index);
     else if (block && block.speaker === 'narrator') narrator.push(index);
   });
-  var ordered = karma.concat(narrator);
+  var ordered = karma.concat(narrator).sort(function (a, b) { return a - b; });
   var accepted = new Set(Object.values(review.clips || {}).filter(function (clip) {
     return clip && clip.lang === language && clip.status === 'accepted';
   }).map(function (clip) { return Number(clip.block_index); }));
@@ -1130,7 +1190,7 @@ function nextArabicBlockIndex() {
     if (block && block.speaker === 'karma') karmaOrder.push(index);
     else if (block && block.speaker === 'narrator') narratorOrder.push(index);
   });
-  var orderedBlocks = karmaOrder.concat(narratorOrder);
+  var orderedBlocks = karmaOrder.concat(narratorOrder).sort(function (a, b) { return a - b; });
   for (var i = 0; i < orderedBlocks.length; i++) {
     var blockIndex = orderedBlocks[i];
     var clips = byBlock[blockIndex] || [];
@@ -1278,7 +1338,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   var currentBlockIndex = nextBlockIndexForLanguage('ar');
   var isCurrentBlock = currentBlockIndex === index;
   status.textContent = !isCurrentBlock
-    ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق في ترتيب كارما ثم الراوي.')
+    ? (currentBlockIndex < 0 ? 'اكتملت مراجعة المقاطع السابقة.' : 'سيُفتح هذا المقطع بعد اعتماد المقطع السابق بترتيب الحكاية.')
     : speechTextDirty[index] ? 'يوجد تعديل غير معتمد.' :
       record.status === 'approved' ? 'نص القراءة معتمد ✓' :
       record.status === 'suggested' ? 'اقتراح محفوظ — بانتظار مراجعتك واعتمادك.' :
@@ -1531,6 +1591,7 @@ async function initialize(nextStory) {
   story = nextStory;
   injectStyles();
   try {
+    await reconcileStory();
     var connected = await loadRow();
     if (!connected) { initializing = false; return; }
     // Show the speech-text editor as soon as the authenticated review record loads.
