@@ -247,7 +247,8 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
       const exp = expectedFor(lang, i);
       if (!exp) continue;
       for (const [old, g] of info) {
-        if (usedOld.has(old)) continue;        if (g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, old); usedOld.add(old); break; }
+        if (usedOld.has(old)) continue;
+        if (g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, old); usedOld.add(old); break; }
       }
     }
     const next: any[] = [];
@@ -496,7 +497,8 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const published = [];
     for (const lang of ["ar", "en"]) {
-      let source;      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
+      let source;
+      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       const blocks = source.story?.i18n?.[lang]?.blocks;
       if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
@@ -745,7 +747,8 @@ Deno.serve(async (req: Request) => {
         upstream_model: lastFailure.model || "unknown",
         upstream_attempt: lastFailure.attempt || 0,
         attempt_trace: attemptTrace,
-      });    }
+      });
+    }
     const geminiData = JSON.parse(geminiResponseText);
     const candidateText = (geminiData?.candidates?.[0]?.content?.parts ?? [])
       .map((part: any) => typeof part.text === "string" ? part.text : "").join("").trim();
