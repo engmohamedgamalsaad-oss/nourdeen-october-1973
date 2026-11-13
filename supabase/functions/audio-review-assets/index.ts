@@ -40,6 +40,10 @@ function sha256Hex(bytes: Uint8Array): Promise<string> {
     Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
   );
 }
+function storageObjectNotFound(error: any): boolean {
+  const status = Number(error?.statusCode ?? error?.status ?? 0);
+  return status === 404 || /not found|object does not exist/i.test(String(error?.message ?? ""));
+}
 async function ibnSinaArabicBlock(blockIndex: number) {
   if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex > 16) {
     throw new Error("رقم مقطع ابن سينا غير صالح.");
@@ -122,6 +126,35 @@ async function invalidatePublicStoryAudio(service: any, section: string, slug: s
       const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
       if (removeError) throw new Error("تعذر إلغاء نشر نسخة الصوت السابقة: " + removeError.message);
     }
+  }
+}
+
+async function invalidatePublicClipAudio(service: any, section: string, slug: string, language: string, blockIndex: number, chunkIndex?: number) {
+  const prefix = section + "/" + slug + "/" + language;
+  const manifestPath = prefix + "/manifest.json";
+  const { data: file, error: downloadError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).download(manifestPath);
+  if (downloadError && storageObjectNotFound(downloadError)) return;
+  if (downloadError) throw new Error("تعذر قراءة manifest الصوت العام للتحقق من إيقاف المقطع: " + downloadError.message);
+  if (!file) return;
+  let manifest: any;
+  try { manifest = JSON.parse(await file.text()); }
+  catch { throw new Error("manifest الصوت المنشور غير صالح؛ لم يتم حذف أي ملف."); }
+  if (!Array.isArray(manifest.segments)) throw new Error("manifest الصوت المنشور لا يحتوي قائمة مقاطع صالحة.");
+  const removed = manifest.segments.filter((segment: any) =>
+    Number(segment?.block_index) === blockIndex &&
+    (chunkIndex === undefined || Number(segment?.chunk_index || 0) === chunkIndex));
+  if (!removed.length) return;
+  const removedSet = new Set(removed.map((segment: any) => segment.src));
+  const nextManifest = { ...manifest, segments: manifest.segments.filter((segment: any) => !removedSet.has(segment.src)) };
+  const { error: manifestError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).upload(
+    manifestPath, new TextEncoder().encode(JSON.stringify(nextManifest)),
+    { contentType: "application/json", upsert: true, cacheControl: "60" });
+  if (manifestError) throw new Error("تعذر تحديث manifest العام لاستبعاد المقطع المرفوض: " + manifestError.message);
+  const paths = removed.filter((segment: any) => typeof segment.src === "string" && /^[A-Za-z0-9_-]+\.mp3$/.test(segment.src))
+    .map((segment: any) => prefix + "/" + segment.src);
+  if (paths.length) {
+    const { error: removeError } = await service.storage.from(PUBLIC_AUDIO_BUCKET).remove(paths);
+    if (removeError) throw new Error("تم استبعاد المقطع من manifest لكن تعذر حذف نسخته العامة: " + removeError.message);
   }
 }
 function orderedStoryBlockIndexes(blocks: any[]): number[] {
@@ -349,6 +382,14 @@ Deno.serve(async (req: Request) => {
     if (serialized.length > 2_000_000) {
       return reply(413, { error: "سجل مراجعة الصوت أكبر من الحد المسموح." });
     }
+    const { data: previousRow, error: previousError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (previousError) return reply(500, { error: "تعذر قراءة قرار الصوت السابق قبل تحديثه.", detail: previousError.message });
+    const previousReview = previousRow?.audio_review && typeof previousRow.audio_review === "object" ? previousRow.audio_review : {};
+    const newlyRejected = section === "history" && slug === "ibn-sina" &&
+      Object.entries(incoming.clips).some(([key, clip]: [string, any]) =>
+        clip?.lang === "ar" && Number(clip?.block_index) === 4 &&
+        clip?.status === "rejected" && previousReview?.clips?.[key]?.status !== "rejected");
     const audioReview = {
       ...incoming,
       version: 1,
@@ -357,12 +398,23 @@ Deno.serve(async (req: Request) => {
       audio_hashes: incoming.audio_hashes,
       speech_texts: incoming.speech_texts ?? {},
     };
+    // Rejecting a clip immediately removes the currently published story audio.
+    // Private staging files and the old manifest remain untouched for rollback.
+    if (newlyRejected) {
+      try {
+        for (const clip of Object.values(incoming.clips) as any[]) {
+          if (clip?.lang === "ar" && Number(clip.block_index) === 4 && clip.status === "rejected") {
+            await invalidatePublicClipAudio(service, section, slug, "ar", 4, Number(clip.chunk_index || 0));
+          }
+        }
+      } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إيقاف إتاحة المقطع المنشور بعد الرفض." }); }
+    }
     const { error } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview },
       { onConflict: "section,slug" },
     );
     if (error) return reply(500, { error: "تعذر حفظ سجل مراجعة الصوت.", detail: error.message });
-    return reply(200, { success: true, audio_review: audioReview });
+    return reply(200, { success: true, audio_review: audioReview, public_audio_invalidated: newlyRejected });
   }
 
   if (body.action === "reconcile") {
@@ -580,10 +632,20 @@ Deno.serve(async (req: Request) => {
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
+    const rejectedNotes = Object.values(progressRow?.audio_review?.clips ?? {})
+      .filter((clip: any) => section === "history" && slug === "ibn-sina" && index === 4 &&
+        clip?.lang === "ar" && Number(clip.block_index) === index &&
+        clip?.status === "rejected" && clip?.issue !== "audio_only" && typeof clip?.note === "string" && clip.note.trim())
+      .map((clip: any) => clip.note.trim()).slice(0, 5);
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
     const prompt = [
+      ...(rejectedNotes.length ? [
+        "ملاحظات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — عالجها صراحةً في نص القراءة، ولا تتجاهلها:",
+        ...rejectedNotes.map((note: string, i: number) => (i + 1) + ") " + note),
+        "هذه الملاحظات توجيهات تحريرية ملزمة لهذا الاقتراح. لا تغيّر أي حقيقة تاريخية ولا تضف معلومة جديدة."
+      ] : []),
       "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من الحكاية.",
       "المتحدث: " + speakerName + ".",
       "قواعد ثابتة: عامية مصرية طبيعية غير صعيدية، لا فصحى مذيعين ولا مبالغة في العامية.",
@@ -818,12 +880,21 @@ Deno.serve(async (req: Request) => {
           review_flags: Array.isArray(body.review_flags) ? body.review_flags.filter((v: any) => typeof v === "string").slice(0, 20) : [] };
     if (invalidatesAudioDecision && current.clips && typeof current.clips === "object") {
       for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
-        if (clip?.lang === "ar" && Number(clip.block_index) === index) delete current.clips[clipKey];
+        // Keep rejected records: they contain the admin's correction note and
+        // the private old-file reference needed for post-acceptance cleanup.
+        if (clip?.lang === "ar" && Number(clip.block_index) === index && clip?.status !== "rejected") {
+          delete current.clips[clipKey];
+        }
       }
     }
     current.speech_texts = speechTexts;
-    try { await invalidatePublicStoryAudio(service, section, slug); }
-    catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
+    try {
+      if (section === "history" && slug === "ibn-sina" && index === 4) {
+        await invalidatePublicClipAudio(service, section, slug, "ar", index);
+      } else {
+        await invalidatePublicStoryAudio(service, section, slug);
+      }
+    } catch (error) { return reply(500, { error: error instanceof Error ? error.message : "تعذر إلغاء نشر النسخة السابقة." }); }
     const { data: saved, error: saveError } = await service.from("story_audio_reviews")
       .upsert({ section, slug, audio_review: current }, { onConflict: "section,slug" })
       .select("audio_review").single();
@@ -894,7 +965,7 @@ Deno.serve(async (req: Request) => {
     const manifestFile = zip.file("manifest.json");
     if (!manifestFile) return reply(422, { error: "الـArtifact لا يحتوي manifest.json." });
     const manifest = JSON.parse(await manifestFile.async("string"));
-    if (isIbnSinaArabic && body.request_id) {
+    if (isIbnSinaArabic && body.request_id && Number(body.block_index) === 4) {
       const index = Number(body.block_index);
       const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
         .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
@@ -936,15 +1007,94 @@ Deno.serve(async (req: Request) => {
       }
       seen.add(segment.src);
     }
+    // Merge a single replacement segment into the existing package; never discard the other story segments.
+    let priorSegmentsForMerge: any[] | null = null;
+    // Never overwrite the rejected file in place: it must remain available until
+    // the replacement has been listened to and explicitly accepted.
+    if (isIbnSinaArabic && body.request_id && Number(body.block_index) === 4) {
+      const index = Number(body.block_index);
+      const { data: oldReviewRow, error: oldReviewError } = await service.from("story_audio_reviews")
+        .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+      if (oldReviewError) return reply(500, { error: "تعذر فحص ملف الصوت المرفوض قبل الاستبداله.", detail: oldReviewError.message });
+      const oldSources = Object.values(oldReviewRow?.audio_review?.clips ?? {})
+        .filter((clip: any) => clip?.lang === language && Number(clip.block_index) === index &&
+          clip?.status === "rejected" && typeof clip?.src === "string" && clip.src)
+        .map((clip: any) => clip.src);
+      if (manifest.segments.some((segment: any) => oldSources.includes(segment.src))) {
+        return reply(409, { error: "اسم ملف الصوت الجديد يطابق الملف المرفوض. أُوقف الاستبدال حتى لا يُمحى الصوت القديم قبل اعتماد البديل؛ يلزم Artifact باسم ملف جديد." });
+      }
+      const oldManifestResult = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
+      if (oldManifestResult.error || !oldManifestResult.data) {
+        return reply(409, { error: "لا يمكن ضمان الاحتفاظ بالصوت القديم: تعذر قراءة manifest السابق قبل الاستبدال." });
+      }
+      let oldManifest: any;
+      try { oldManifest = JSON.parse(await oldManifestResult.data.text()); }
+      catch { return reply(422, { error: "manifest السابق غير صالح؛ أُوقف الاستبدال حفاظًا على الصوت القديم." }); }
+      const newSegment = manifest.segments.find((segment: any) => Number(segment.block_index) === index);
+      const oldSegment = (oldManifest.segments ?? []).find((segment: any) =>
+        Number(segment.block_index) === index && Number(segment.chunk_index || 0) === Number(newSegment?.chunk_index || 0));
+      priorSegmentsForMerge = (oldManifest.segments ?? []).filter((segment: any) =>
+        !(Number(segment.block_index) === index && Number(segment.chunk_index || 0) === Number(newSegment?.chunk_index || 0)));
+      if (!newSegment || !oldSegment || !oldSegment.src || !oldSegment.audio_sha256 ||
+          oldSegment.src === newSegment.src) {
+        return reply(409, { error: "تعذر تحديد ملف قديم وملف بديل مختلفين للمقطع؛ لم يتم استبدال أي ملف." });
+      }
+      const oldFileResult = await service.storage.from(BUCKET).download(prefix + "/" + oldSegment.src);
+      if (oldFileResult.error || !oldFileResult.data) {
+        return reply(409, { error: "ملف الصوت القديم غير موجود في التخزين الخاص؛ أُوقف الاستبدال." });
+      }
+      const oldFileBytes = new Uint8Array(await oldFileResult.data.arrayBuffer());
+      if (await sha256Hex(oldFileBytes) !== String(oldSegment.audio_sha256).toLowerCase()) {
+        return reply(422, { error: "بصمة الصوت القديم لا تطابق manifest؛ أُوقف الاستبدال حفاظًا على النسخة القديمة." });
+      }
+      const currentReview = oldReviewRow?.audio_review && typeof oldReviewRow.audio_review === "object"
+        ? oldReviewRow.audio_review : null;
+      if (!currentReview || !currentReview.clips || typeof currentReview.clips !== "object") {
+        return reply(409, { error: "لا يوجد قرار رفض محفوظ للمقطع؛ أُوقف الاستبدال." });
+      }
+      let matchedRejected = false;
+      for (const clip of Object.values(currentReview.clips) as any[]) {
+        if (clip?.lang === language && Number(clip.block_index) === index &&
+            Number(clip.chunk_index || 0) === Number(oldSegment.chunk_index || 0) && clip.status === "rejected") {
+          clip.src = oldSegment.src;
+          clip.replacement_cleanup = {
+            status: "pending", old_src: oldSegment.src,
+            old_sha256: String(oldSegment.audio_sha256).toLowerCase(),
+            new_src: newSegment.src,
+            new_sha256: String(newSegment.audio_sha256).toLowerCase(),
+            language, block_index: index, chunk_index: Number(oldSegment.chunk_index || 0),
+          };
+          matchedRejected = true;
+        }
+      }
+      if (!matchedRejected) return reply(409, { error: "المقطع لم يُسجل كمرفوض؛ لم يتم استبدال الصوت." });
+      const { error: saveCleanupError } = await service.from("story_audio_reviews").upsert(
+        { section, slug, audio_review: currentReview }, { onConflict: "section,slug" });
+      if (saveCleanupError) return reply(500, { error: "تعذر حفظ مرجع الصوت القديم قبل الاستبدال.", detail: saveCleanupError.message });
+    }
+    if (priorSegmentsForMerge) {
+      manifest.segments = [...priorSegmentsForMerge, ...manifest.segments]
+        .sort((a: any, b: any) => Number(a.block_index) - Number(b.block_index) ||
+          Number(a.chunk_index || 0) - Number(b.chunk_index || 0));
+    }
     const uploaded: string[] = [];
     for (const segment of manifest.segments) {
       const file = zip.file(segment.src);
-      if (!file) return reply(422, { error: "ملف MP3 مفقود من الـArtifact: " + segment.src });
+      const path = prefix + "/" + segment.src;
+      if (!file) {
+        const { data: existingFile, error: existingFileError } = await service.storage.from(BUCKET).download(path);
+        if (existingFileError || !existingFile) return reply(422, { error: "ملف صوت محفوظ سابقًا مفقود أثناء دمج المقطع: " + segment.src });
+        const existingBytes = new Uint8Array(await existingFile.arrayBuffer());
+        if (await sha256Hex(existingBytes) !== String(segment.audio_sha256).toLowerCase()) {
+          return reply(422, { error: "بصمة ملف صوت محفوظ سابقًا لا تطابق manifest أثناء الدمج: " + segment.src });
+        }
+        uploaded.push(path);
+        continue;
+      }
       const bytes = new Uint8Array(await file.async("uint8array"));
       if (await sha256Hex(bytes) !== String(segment.audio_sha256).toLowerCase()) {
         return reply(422, { error: "بصمة MP3 لا تطابق manifest: " + segment.src });
       }
-      const path = prefix + "/" + segment.src;
       const { error } = await service.storage.from(BUCKET).upload(path, bytes, {
         contentType: "audio/mpeg", upsert: true, cacheControl: "60",
       });
@@ -957,6 +1107,82 @@ Deno.serve(async (req: Request) => {
     });
     if (manifestUpload.error) return reply(500, { error: "تعذر حفظ manifest في التخزين الخاص.", detail: manifestUpload.error.message });
     return reply(200, { success: true, staged: true, bucket: BUCKET, prefix, segments: uploaded.length });
+  }
+
+  if (body.action === "cleanup_replaced_audio") {
+    const clipKey = String(body.clip_key ?? "");
+    if (!clipKey || clipKey.length > 256) return reply(400, { error: "مفتاح المقطع غير صالح." });
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة سجل المراجعة قبل تنظيف الصوت القديم.", detail: reviewError.message });
+    const audioReview = reviewRow?.audio_review;
+    const acceptedClip = audioReview?.clips?.[clipKey];
+    if (!acceptedClip || acceptedClip.status !== "accepted" || !["ar", "en"].includes(acceptedClip.lang)) {
+      return reply(409, { error: "لا يمكن حذف الصوت القديم قبل قبول المقطع البديل." });
+    }
+    const cleanup = acceptedClip.replacement_cleanup;
+    if (!cleanup || cleanup.status !== "pending") {
+      return reply(200, { success: true, cleaned: cleanup?.status === "complete", already_clean: cleanup?.status === "complete" });
+    }
+    const langPrefix = section + "/" + slug + "/" + acceptedClip.lang;
+    if (cleanup.language !== acceptedClip.lang ||
+        Number(cleanup.block_index) !== Number(acceptedClip.block_index) ||
+        Number(cleanup.chunk_index || 0) !== Number(acceptedClip.chunk_index || 0) ||
+        cleanup.old_src === cleanup.new_src || acceptedClip.src !== cleanup.new_src ||
+        String(acceptedClip.audio_sha256 ?? "").toLowerCase() !== cleanup.new_sha256 ||
+        !/^[A-Za-z0-9_-]+\.mp3$/.test(String(cleanup.old_src)) ||
+        !/^[A-Za-z0-9_-]+\.mp3$/.test(String(cleanup.new_src))) {
+      return reply(409, { error: "بيانات استبدال الصوت لا تطابق المقطع المقبول؛ لم يُحذف الملف القديم." });
+    }
+    const { data: activeJobs, error: jobsError } = await service.from("story_audio_generation_queue")
+      .select("id").eq("section", section).eq("slug", slug)
+      .eq("language", acceptedClip.lang).eq("block_index", acceptedClip.block_index)
+      .in("status", ["pending", "processing"]);
+    if (jobsError) return reply(500, { error: "تعذر فحص طابور التوليد قبل الحذف.", detail: jobsError.message });
+    if ((activeJobs ?? []).length) return reply(409, { error: "يوجد طلب توليد نشط للمقطع؛ لم يُحذف الصوت القديم." });
+    const { data: manifestFile, error: manifestError } = await service.storage.from(BUCKET).download(langPrefix + "/manifest.json");
+    if (manifestError || !manifestFile) return reply(409, { error: "لا يوجد manifest جديد يمكن التحقق منه؛ لم يُحذف الصوت القديم." });
+    let manifest: any;
+    try { manifest = JSON.parse(await manifestFile.text()); }
+    catch { return reply(422, { error: "manifest الجديد غير صالح؛ لم يُحذف الصوت القديم." }); }
+    const newSegment = (manifest.segments ?? []).find((segment: any) =>
+      Number(segment.block_index) === Number(acceptedClip.block_index) &&
+      Number(segment.chunk_index || 0) === Number(acceptedClip.chunk_index || 0) &&
+      segment.src === cleanup.new_src &&
+      String(segment.audio_sha256 ?? "").toLowerCase() === cleanup.new_sha256);
+    if (!newSegment) return reply(409, { error: "manifest لا يشير إلى ملف الصوت البديل المقبول؛ لم يُحذف القديم." });
+    const { data: newFile, error: newFileError } = await service.storage.from(BUCKET).download(langPrefix + "/" + cleanup.new_src);
+    if (newFileError || !newFile) return reply(409, { error: "ملف الصوت البديل غير موجود؛ لم يُحذف القديم." });
+    const newBytes = new Uint8Array(await newFile.arrayBuffer());
+    if (await sha256Hex(newBytes) !== cleanup.new_sha256) return reply(422, { error: "بصمة الصوت البديل غير مطابقة؛ لم يُحذف القديم." });
+    const oldPath = langPrefix + "/" + cleanup.old_src;
+    const { data: oldFile, error: oldFileError } = await service.storage.from(BUCKET).download(oldPath);
+    if (oldFileError && !storageObjectNotFound(oldFileError)) {
+      return reply(500, { error: "تعذر التحقق من وجود ملف الصوت القديم؛ لم يُحذف شيء.", detail: oldFileError.message });
+    }
+    if (!oldFile) {
+      acceptedClip.replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString(), already_missing: true };
+      const { error: saveMissingStateError } = await service.from("story_audio_reviews").upsert(
+        { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
+      if (saveMissingStateError) return reply(500, { error: "الملف القديم غير موجود لكن تعذر تسجيل حالة التنظيف.", detail: saveMissingStateError.message });
+      return reply(200, { success: true, cleaned: true, already_missing: true, old_file_missing: true, new_file_verified: true });
+    }
+    const oldBytes = new Uint8Array(await oldFile.arrayBuffer());
+    if (await sha256Hex(oldBytes) !== cleanup.old_sha256) {
+      return reply(409, { error: "ملف الصوت القديم تغيرت بصمته؛ لم يُحذف حفاظًا على سلامة التخزين." });
+    }
+    const { error: removeError } = await service.storage.from(BUCKET).remove([oldPath]);
+    if (removeError) return reply(500, { error: "تعذر حذف ملف الصوت القديم؛ سيظل محفوظًا.", detail: removeError.message });
+    const { data: oldAfter, error: oldCheckError } = await service.storage.from(BUCKET).download(oldPath);
+    if (!oldCheckError && oldAfter) return reply(500, { error: "لم يؤكد التخزين اختفاء ملف الصوت القديم بعد الحذف." });
+    if (oldCheckError && !storageObjectNotFound(oldCheckError)) {
+      return reply(500, { error: "تعذر التحقق من اختفاء ملف الصوت القديم بعد الحذف.", detail: oldCheckError.message });
+    }
+    acceptedClip.replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString() };
+    const { error: saveStateError } = await service.from("story_audio_reviews").upsert(
+      { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
+    if (saveStateError) return reply(500, { error: "تم حذف الملف القديم لكن تعذر تسجيل حالة التنظيف.", detail: saveStateError.message });
+    return reply(200, { success: true, cleaned: true, old_file_missing: true, new_file_verified: true, completed_at: acceptedClip.replacement_cleanup.completed_at });
   }
 
   if (body.action === "manifest") {

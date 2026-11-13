@@ -428,6 +428,20 @@ async function saveReview(entry, decision) {
     }
     review = core.cloneReview(verified);
     speechTexts = verified.speech_texts && typeof verified.speech_texts === 'object' ? verified.speech_texts : speechTexts;
+    if (decision.status === 'accepted' && story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4) {
+      try {
+        var cleanup = await audioAssetsRequest({ action: 'cleanup_replaced_audio', section: story.section, slug: story.slug, clip_key: key });
+        if (cleanup && cleanup.cleaned) {
+          var cleanupNotice = 'تم حذف ملف الصوت المرفوض بعد اعتماد البديل والتحقق منه.';
+          var acceptedClip = review.clips[key];
+          if (acceptedClip) acceptedClip.replacement_cleanup = { status: 'complete', completed_at: cleanup.completed_at || new Date().toISOString() };
+        }
+      } catch (cleanupError) {
+        var pendingClip = review.clips[key];
+        if (pendingClip) pendingClip.replacement_cleanup = { status: 'pending', error: cleanupError.message || String(cleanupError) };
+        throw new Error('تم اعتماد الصوت الجديد، لكن تعذر تأكيد حذف الصوت القديم: ' + (cleanupError.message || cleanupError));
+      }
+    }
   } finally {
     busy = false;
   }
@@ -524,7 +538,7 @@ async function loadManifests() {
       manifestStale[lang] = split.stale;
       data.segments = split.fresh;
       if (data.segments.length) {
-        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || split.stale.length > 0);
+        var coverage = core.validateManifestCoverage(localized && localized.blocks, data.segments, expectedTexts[lang], data.provider === 'omnivoice' || (lang === 'ar' && data.provider === 'huggingface-space') || split.stale.length > 0);
         if (!coverage.ok) throw new Error(coverage.error);
       }
       manifestGaps[lang] = core.uncoveredBlocks(localized && localized.blocks, data.segments);
@@ -1345,6 +1359,14 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
       'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
+  var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
+    .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && story.section === 'history' && story.slug === 'ibn-sina' && index === 4 && String(clip.note || '').trim(); });
+  rejectionNotes.forEach(function (clip) {
+    var rejection = document.createElement('p');
+    rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
+    notes.appendChild(rejection);
+  });
   if (record.changes_summary) {
     var summary = document.createElement('p');
     summary.textContent = 'ملخص التغيير: ' + record.changes_summary;
@@ -1481,6 +1503,33 @@ function renderBlocks() {
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key;
     var saved = review.clips[entry.key];
+    if (saved && saved.status === 'rejected' && story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4) {
+      var rejectedPanel = document.createElement('div');
+      rejectedPanel.className = 'kh-audio-review-controls kh-audio-card';
+      rejectedPanel.dataset.clipKey = entry.key;
+      rejectedPanel.dataset.review = 'rejected';
+      rejectedPanel.dataset.player = 'unavailable';
+      rejectedPanel.dataset.speaker = entry.speaker;
+      var rejectedHead = document.createElement('div');
+      rejectedHead.className = 'kh-card-head';
+      var rejectedTitle = document.createElement('strong');
+      rejectedTitle.className = 'kh-audio-speaker';
+      rejectedTitle.textContent = speakerLabel(entry.speaker) + ' · مقطع ' + (entry.block_index + 1) + ' — مرفوض';
+      var rejectedBadge = document.createElement('span');
+      rejectedBadge.className = 'kh-audio-badge';
+      rejectedBadge.dataset.status = 'rejected';
+      rejectedBadge.textContent = 'مرفوض ✕';
+      rejectedHead.append(rejectedTitle, rejectedBadge);
+      var rejectedMessage = document.createElement('p');
+      rejectedMessage.className = 'kh-audio-review-state';
+      rejectedMessage.textContent = 'تم استبعاد الصوت القديم من الاستماع والمراجعة. الملف محفوظ مؤقتًا ولن يُحذف إلا بعد اعتماد الصوت البديل.';
+      var rejectedNote = document.createElement('p');
+      rejectedNote.className = 'kh-audio-review-state';
+      rejectedNote.textContent = 'ملاحظتك: ' + (saved.note || 'لا توجد ملاحظة مسجلة.');
+      rejectedPanel.append(rejectedHead, rejectedMessage, rejectedNote);
+      block.appendChild(rejectedPanel);
+      return;
+    }
     var wasListened = played[entry.key] === true;
     var cacheHit = !!loadedAudio[entry.lang + '|' + entry.src];
     panel.dataset.player = wasListened ? 'ended' : 'idle';
@@ -1511,7 +1560,7 @@ function renderBlocks() {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل الموافقة عليه.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       state.textContent = 'جارٍ الحفظ…';
-      try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
+      try { await saveReview(entry, { status: 'accepted' }); } catch (e) { state.textContent = e.message || 'تعذر حفظ القرار.'; }
     });
     setAcceptState(acceptBtn, !!played[entry.key], !!saved);
     acceptButtons[entry.key] = acceptBtn;
@@ -1549,6 +1598,39 @@ function renderBlocks() {
     player.append(playBtn, track, replayBtn);
     var actions = document.createElement('div'); actions.className = 'kh-audio-actions';
     actions.append(acceptBtn, rejectBtn);
+    var pendingReplacementCleanup = saved && saved.status === 'accepted' &&
+      story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4 &&
+      Object.keys(review.clips || {}).some(function (clipKey) {
+        var oldClip = review.clips[clipKey];
+        return oldClip && oldClip.status === 'rejected' && oldClip.lang === entry.lang &&
+          Number(oldClip.block_index) === Number(entry.block_index) &&
+          Number(oldClip.chunk_index || 0) === Number(entry.chunk_index || 0) &&
+          oldClip.replacement_cleanup && oldClip.replacement_cleanup.status === 'pending';
+      });
+    if (pendingReplacementCleanup) {
+      var retryCleanupBtn = iconButton('replay', 'إعادة محاولة حذف الصوت القديم', 'cleanup-retry', async function () {
+        retryCleanupBtn.disabled = true;
+        state.textContent = 'جارٍ التحقق من الصوت البديل وحذف الملف القديم…';
+        try {
+          var cleanupResult = await audioAssetsRequest({
+            action: 'cleanup_replaced_audio', section: story.section, slug: story.slug, clip_key: entry.key
+          });
+          if (cleanupResult && cleanupResult.cleaned) {
+            state.textContent = 'تم التحقق من الصوت البديل وحذف الملف القديم.';
+            var refreshed = await audioAssetsRequest({ action: 'review_get', section: story.section, slug: story.slug });
+            review = core.cloneReview(refreshed.audio_review || null);
+            render();
+          } else {
+            state.textContent = 'لم يُؤكد حذف ملف قديم مرتبط بهذا المقطع.';
+          }
+        } catch (cleanupError) {
+          state.textContent = 'تعذر حذف الصوت القديم: ' + (cleanupError.message || cleanupError);
+        } finally {
+          retryCleanupBtn.disabled = false;
+        }
+      });
+      actions.appendChild(retryCleanupBtn);
+    }
     if (saved && saved.status === 'rejected' && saved.issue === 'audio_only') {
       var regenerateBtn = iconButton('spark', 'إعادة توليد هذا المقطع', 'generate', function () {
         if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل إعادة التوليد.'; return; }
@@ -1563,6 +1645,19 @@ function renderBlocks() {
     renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
+
+  // Keep Ibn Sina Arabic clip 5 playback directly above Gemini's generated
+  // reading text so the user can listen while following the visible wording.
+  if (story.section === 'history' && story.slug === 'ibn-sina' && lang === 'ar') {
+    var ibnSinaBlock = blockByIndex[4];
+    var speechPanel = ibnSinaBlock && ibnSinaBlock.querySelector(':scope > .kh-speech-text-controls');
+    var audioPanel = ibnSinaBlock && ibnSinaBlock.querySelector(':scope > .kh-audio-review-controls.kh-audio-card');
+    var speechGrid = speechPanel && speechPanel.querySelector('.kh-speech-grid');
+    if (speechPanel && audioPanel && speechGrid &&
+        (audioPanel.querySelector('.kh-audio-player') || audioPanel.dataset.review === 'rejected')) {
+      speechPanel.insertBefore(audioPanel, speechGrid);
+    }
+  }
 }
 function render() {
   if (!story) return;
