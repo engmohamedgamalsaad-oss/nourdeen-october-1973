@@ -40,6 +40,10 @@ function sha256Hex(bytes: Uint8Array): Promise<string> {
     Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("")
   );
 }
+function storageObjectNotFound(error: any): boolean {
+  const status = Number(error?.statusCode ?? error?.status ?? 0);
+  return status === 404 || /not found|object does not exist/i.test(String(error?.message ?? ""));
+}
 async function ibnSinaArabicBlock(blockIndex: number) {
   if (!Number.isInteger(blockIndex) || blockIndex < 0 || blockIndex > 16) {
     throw new Error("رقم مقطع ابن سينا غير صالح.");
@@ -1154,7 +1158,10 @@ Deno.serve(async (req: Request) => {
     if (await sha256Hex(newBytes) !== cleanup.new_sha256) return reply(422, { error: "بصمة الصوت البديل غير مطابقة؛ لم يُحذف القديم." });
     const oldPath = langPrefix + "/" + cleanup.old_src;
     const { data: oldFile, error: oldFileError } = await service.storage.from(BUCKET).download(oldPath);
-    if (oldFileError || !oldFile) {
+    if (oldFileError && !storageObjectNotFound(oldFileError)) {
+      return reply(500, { error: "تعذر التحقق من وجود ملف الصوت القديم؛ لم يُحذف شيء.", detail: oldFileError.message });
+    }
+    if (!oldFile) {
       (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString(), already_missing: true };
       const { error: saveMissingStateError } = await service.from("story_audio_reviews").upsert(
         { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
@@ -1169,6 +1176,9 @@ Deno.serve(async (req: Request) => {
     if (removeError) return reply(500, { error: "تعذر حذف ملف الصوت القديم؛ سيظل محفوظًا.", detail: removeError.message });
     const { data: oldAfter, error: oldCheckError } = await service.storage.from(BUCKET).download(oldPath);
     if (!oldCheckError && oldAfter) return reply(500, { error: "لم يؤكد التخزين اختفاء ملف الصوت القديم بعد الحذف." });
+    if (oldCheckError && !storageObjectNotFound(oldCheckError)) {
+      return reply(500, { error: "تعذر التحقق من اختفاء ملف الصوت القديم بعد الحذف.", detail: oldCheckError.message });
+    }
     (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString() };
     const { error: saveStateError } = await service.from("story_audio_reviews").upsert(
       { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
