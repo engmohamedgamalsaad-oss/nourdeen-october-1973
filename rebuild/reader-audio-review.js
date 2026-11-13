@@ -428,6 +428,19 @@ async function saveReview(entry, decision) {
     }
     review = core.cloneReview(verified);
     speechTexts = verified.speech_texts && typeof verified.speech_texts === 'object' ? verified.speech_texts : speechTexts;
+    if (decision.status === 'accepted') {
+      try {
+        var cleanup = await audioAssetsRequest({ action: 'cleanup_replaced_audio', section: story.section, slug: story.slug, clip_key: key });
+        if (cleanup && cleanup.cleaned) {
+          var cleanupNotice = 'تم حذف ملف الصوت المرفوض بعد اعتماد البديل والتحقق منه.';
+          var acceptedClip = review.clips[key];
+          if (acceptedClip) acceptedClip.replacement_cleanup = { status: 'complete', completed_at: cleanup.completed_at || new Date().toISOString() };
+        }
+      } catch (cleanupError) {
+        var pendingClip = review.clips[key];
+        if (pendingClip) pendingClip.replacement_cleanup = { status: 'pending', error: cleanupError.message || String(cleanupError) };
+      }
+    }
   } finally {
     busy = false;
   }
@@ -1345,6 +1358,14 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
       'اضغط تجهيز النص باستخدام Gemini ليقترح صياغة مفهومة ومشكولة جزئيًا عند الحاجة فقط.';
   var notes = document.createElement('div');
   notes.className = 'kh-speech-notes';
+  var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
+    .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && String(clip.note || '').trim(); });
+  rejectionNotes.forEach(function (clip) {
+    var rejection = document.createElement('p');
+    rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
+    notes.appendChild(rejection);
+  });
   if (record.changes_summary) {
     var summary = document.createElement('p');
     summary.textContent = 'ملخص التغيير: ' + record.changes_summary;
@@ -1481,6 +1502,33 @@ function renderBlocks() {
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key;
     var saved = review.clips[entry.key];
+    if (saved && saved.status === 'rejected') {
+      var rejectedPanel = document.createElement('div');
+      rejectedPanel.className = 'kh-audio-review-controls kh-audio-card';
+      rejectedPanel.dataset.clipKey = entry.key;
+      rejectedPanel.dataset.review = 'rejected';
+      rejectedPanel.dataset.player = 'unavailable';
+      rejectedPanel.dataset.speaker = entry.speaker;
+      var rejectedHead = document.createElement('div');
+      rejectedHead.className = 'kh-card-head';
+      var rejectedTitle = document.createElement('strong');
+      rejectedTitle.className = 'kh-audio-speaker';
+      rejectedTitle.textContent = speakerLabel(entry.speaker) + ' · مقطع ' + (entry.block_index + 1) + ' — مرفوض';
+      var rejectedBadge = document.createElement('span');
+      rejectedBadge.className = 'kh-audio-badge';
+      rejectedBadge.dataset.status = 'rejected';
+      rejectedBadge.textContent = 'مرفوض ✕';
+      rejectedHead.append(rejectedTitle, rejectedBadge);
+      var rejectedMessage = document.createElement('p');
+      rejectedMessage.className = 'kh-audio-review-state';
+      rejectedMessage.textContent = 'تم استبعاد الصوت القديم من الاستماع والمراجعة. الملف محفوظ مؤقتًا ولن يُحذف إلا بعد اعتماد الصوت البديل.';
+      var rejectedNote = document.createElement('p');
+      rejectedNote.className = 'kh-audio-review-state';
+      rejectedNote.textContent = 'ملاحظتك: ' + (saved.note || 'لا توجد ملاحظة مسجلة.');
+      rejectedPanel.append(rejectedHead, rejectedMessage, rejectedNote);
+      block.appendChild(rejectedPanel);
+      return;
+    }
     var wasListened = played[entry.key] === true;
     var cacheHit = !!loadedAudio[entry.lang + '|' + entry.src];
     panel.dataset.player = wasListened ? 'ended' : 'idle';
