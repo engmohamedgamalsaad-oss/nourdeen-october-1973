@@ -16,6 +16,11 @@ var PANEL_CSS=[
 '#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;min-width:0;font:800 14px/1.4 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:15px}',
 '#kh-preview-decision-panel .khd-end{display:flex;align-items:center;gap:8px;min-width:0}',
+'#kh-preview-decision-panel .khd-end{flex-wrap:nowrap;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-colab-link{display:inline-flex;align-items:center;justify-content:center;flex:none;padding:3px 10px;border:1px solid #d7ad66;border-radius:999px;background:rgba(215,173,102,.13);color:#f5dcae;text-decoration:none;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-colab-link:focus-visible{outline:2px solid #d7ad66;outline-offset:2px}',
+'@media(max-width:600px){#kh-preview-decision-panel{margin:6px 5px}#kh-preview-decision-panel .khd-title{display:none}#kh-preview-decision-panel .khd-bar{justify-content:center;gap:5px;padding:5px 6px;min-height:42px}#kh-preview-decision-panel .khd-end{width:100%;justify-content:center;gap:5px}#kh-preview-decision-panel .khd-flag{padding:2px 6px;font-size:10px}#kh-preview-decision-panel .khd-pill{max-width:none;flex:0 1 auto;padding:2px 7px;font-size:10px}#kh-preview-decision-panel .khd-colab-link{padding:2px 8px;font-size:10px}#kh-preview-decision-panel .khd-chev{width:20px;height:24px}}',
+
 '#kh-preview-decision-panel .khd-flag{display:none;padding:2px 10px;border-radius:999px;border:1px solid var(--bad);background:rgba(239,107,107,.15);color:#ffb8b8;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel[data-ctx="missing"] .khd-flag{display:inline-block}',
 '#kh-preview-decision-panel .khd-pill{max-width:min(46vw,420px);overflow:hidden;text-overflow:ellipsis;padding:3px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
@@ -87,6 +92,8 @@ function addControls(){
  var end=document.createElement('div');end.className='khd-end';
  flag=document.createElement('span');flag.className='khd-flag';flag.id='kh-preview-ctx-flag';
  gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='جارٍ فحص الصوت…';
+ var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='فتح Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
+
  var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
  end.append(flag,gatePill,chev);
  bar.append(title,end);
