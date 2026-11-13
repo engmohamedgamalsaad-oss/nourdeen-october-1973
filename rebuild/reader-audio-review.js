@@ -392,7 +392,7 @@ function stableReviewJson(value) {
 function pronunciationReviewMatches(clip, expected) {
   return stableReviewJson(clip && clip.pronunciation_review || null) === stableReviewJson(expected || null);
 }
-async function saveReview(entry, decision) {
+async function saveReview(entry, decision, followupStatusNode, followupButton) {
   var key = entry && entry.key;
   if (busy) throw new Error('انتظر حتى يكتمل حفظ قرار المقطع السابق.');
   if (!canWrite || !story) throw new Error('مراجعة الصوت غير متصلة بسجل الحكاية.');
@@ -444,6 +444,12 @@ async function saveReview(entry, decision) {
     }
   } finally {
     busy = false;
+  }
+  // A saved text/pronunciation rejection must immediately return to Gemini.
+  // Audio-only rejection is deliberately excluded: it does not request a text rewrite.
+  if (decision.status === 'rejected' && decision.issue !== 'audio_only' && entry && entry.lang === 'ar' &&
+      (String(decision.note || '').trim() || String(decision.suggestion || '').trim())) {
+    await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null);
   }
   render();
 }
@@ -1578,12 +1584,12 @@ function renderBlocks() {
     var note = document.createElement('textarea'); note.maxLength = 1000; note.placeholder = 'ملاحظتك على هذا المقطع (مطلوبة عند الرفض)';
     var suggestion = document.createElement('textarea'); suggestion.maxLength = 1000; suggestion.placeholder = 'صياغة مقترحة بديلة (اختياري — لا تُطبّق تلقائيًا)';
     if (saved) { note.value = saved.note || ''; suggestion.value = saved.suggestion || ''; issue.value = saved.issue || 'text'; }
-    var saveReject = iconButton('x', 'حفظ الرفض', 'reject-save', async function () {
+    var saveReject = iconButton('x', 'حفظ الملاحظة وإرسالها إلى Gemini', 'reject-save', async function () {
       if (!played[entry.key]) { state.textContent = 'استمع إلى المقطع كاملًا قبل تسجيل الرفض.'; return; }
       if (!canWrite) { state.textContent = 'افتح المعاينة من لوحة الإدارة لتسجيل القرار.'; return; }
       if (!note.value.trim()) { note.focus(); state.textContent = 'اكتب ملاحظة قبل حفظ الرفض.'; return; }
       state.textContent = 'جارٍ حفظ الرفض…';
-      try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
+      try { await saveReview(entry, { status: 'rejected', note: note.value, suggestion: suggestion.value, issue: issue.value }, state, saveReject); } catch (e) { state.textContent = 'تعذر الحفظ: ' + (e.message || e); }
     });
     editor.append(issue, note, suggestion, saveReject);
     var track = document.createElement('div'); track.className = 'kh-audio-track';
