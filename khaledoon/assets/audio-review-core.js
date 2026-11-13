@@ -215,6 +215,14 @@ function applyDecision(review, entry, decision, now) {
     }
   });
   var previousClip = r.clips[entry.key];
+  if (!previousClip || !previousClip.replacement_cleanup) {
+    var matchingRejected = Object.keys(r.clips).map(function (key) { return r.clips[key]; }).find(function (candidate) {
+      return candidate && candidate.status === 'rejected' && candidate.replacement_cleanup &&
+        candidate.lang === entry.lang && Number(candidate.block_index) === Number(entry.block_index) &&
+        Number(candidate.chunk_index || 0) === Number(entry.chunk_index || 0);
+    });
+    if (matchingRejected) previousClip = matchingRejected;
+  }
   var clip = {
     story_id: entry.story_id, lang: entry.lang, block_index: entry.block_index, chunk_index: Number(entry.chunk_index || 0), speaker: entry.speaker,
     base: entry.base, source_base: entry.source_base || '', src: entry.src || '', audio_sha256: entry.audio_sha256 || '',
