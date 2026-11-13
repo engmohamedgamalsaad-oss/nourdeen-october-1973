@@ -353,8 +353,10 @@ Deno.serve(async (req: Request) => {
       .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
     if (previousError) return reply(500, { error: "تعذر قراءة قرار الصوت السابق قبل تحديثه.", detail: previousError.message });
     const previousReview = previousRow?.audio_review && typeof previousRow.audio_review === "object" ? previousRow.audio_review : {};
-    const newlyRejected = Object.entries(incoming.clips).some(([key, clip]: [string, any]) =>
-      clip?.status === "rejected" && previousReview?.clips?.[key]?.status !== "rejected");
+    const newlyRejected = section === "history" && slug === "ibn-sina" &&
+      Object.entries(incoming.clips).some(([key, clip]: [string, any]) =>
+        clip?.lang === "ar" && Number(clip?.block_index) === 4 &&
+        clip?.status === "rejected" && previousReview?.clips?.[key]?.status !== "rejected");
     const audioReview = {
       ...incoming,
       version: 1,
