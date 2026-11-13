@@ -428,7 +428,7 @@ async function saveReview(entry, decision) {
     }
     review = core.cloneReview(verified);
     speechTexts = verified.speech_texts && typeof verified.speech_texts === 'object' ? verified.speech_texts : speechTexts;
-    if (decision.status === 'accepted') {
+    if (decision.status === 'accepted' && story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4) {
       try {
         var cleanup = await audioAssetsRequest({ action: 'cleanup_replaced_audio', section: story.section, slug: story.slug, clip_key: key });
         if (cleanup && cleanup.cleaned) {
@@ -1360,7 +1360,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
   notes.className = 'kh-speech-notes';
   var rejectionNotes = Object.keys(review.clips || {}).map(function (clipKey) { return review.clips[clipKey]; })
     .filter(function (clip) { return clip && clip.lang === 'ar' && Number(clip.block_index) === index &&
-      clip.status === 'rejected' && clip.issue !== 'audio_only' && String(clip.note || '').trim(); });
+      clip.status === 'rejected' && clip.issue !== 'audio_only' && story.section === 'history' && story.slug === 'ibn-sina' && index === 4 && String(clip.note || '').trim(); });
   rejectionNotes.forEach(function (clip) {
     var rejection = document.createElement('p');
     rejection.textContent = 'ملاحظة الرفض التي ستصل إلى Gemini: ' + clip.note;
@@ -1502,7 +1502,7 @@ function renderBlocks() {
     if (!block) return;
     var panel = document.createElement('div'); panel.className = 'kh-audio-review-controls kh-audio-card'; panel.dataset.clipKey = entry.key;
     var saved = review.clips[entry.key];
-    if (saved && saved.status === 'rejected') {
+    if (saved && saved.status === 'rejected' && story.section === 'history' && story.slug === 'ibn-sina' && entry.lang === 'ar' && Number(entry.block_index) === 4) {
       var rejectedPanel = document.createElement('div');
       rejectedPanel.className = 'kh-audio-review-controls kh-audio-card';
       rejectedPanel.dataset.clipKey = entry.key;
