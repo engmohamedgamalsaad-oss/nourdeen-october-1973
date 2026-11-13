@@ -167,7 +167,7 @@
     var byIndex = {}; info.forEach(function (i) { byIndex[i.index] = i; });
     var sb = st && st.i18n && st.i18n[L] && st.i18n[L].blocks || [], karma = [], narrator = [];
     sb.forEach(function (b, i) { if (b && b.speaker === 'karma') karma.push(i); else if (b && b.speaker === 'narrator') narrator.push(i); });
-    var order = karma.concat(narrator), current = -1;
+    var order = karma.concat(narrator).sort(function (a, b) { return a - b; }), current = -1;
     for (var k = 0; k < order.length; k++) { var rec = byIndex[order[k]]; if (!rec || !rec.accepted) { current = order[k]; break; } }
     var genButton = gp && gp.querySelector('button:not(.kh-audio-publish-button)');
     var genStatus = gp && gp.querySelector('.kh-audio-review-state');
