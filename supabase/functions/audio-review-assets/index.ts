@@ -1153,6 +1153,14 @@ Deno.serve(async (req: Request) => {
     const newBytes = new Uint8Array(await newFile.arrayBuffer());
     if (await sha256Hex(newBytes) !== cleanup.new_sha256) return reply(422, { error: "بصمة الصوت البديل غير مطابقة؛ لم يُحذف القديم." });
     const oldPath = langPrefix + "/" + cleanup.old_src;
+    const { data: oldFile, error: oldFileError } = await service.storage.from(BUCKET).download(oldPath);
+    if (oldFileError || !oldFile) {
+      return reply(200, { success: true, cleaned: true, already_missing: true, old_file_missing: true, new_file_verified: true });
+    }
+    const oldBytes = new Uint8Array(await oldFile.arrayBuffer());
+    if (await sha256Hex(oldBytes) !== cleanup.old_sha256) {
+      return reply(409, { error: "ملف الصوت القديم تغيرت بصمته؛ لم يُحذف حفاظًا على سلامة التخزين." });
+    }
     const { error: removeError } = await service.storage.from(BUCKET).remove([oldPath]);
     if (removeError) return reply(500, { error: "تعذر حذف ملف الصوت القديم؛ سيظل محفوظًا.", detail: removeError.message });
     const { data: oldAfter, error: oldCheckError } = await service.storage.from(BUCKET).download(oldPath);
