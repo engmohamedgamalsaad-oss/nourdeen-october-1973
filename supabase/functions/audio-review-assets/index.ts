@@ -632,19 +632,30 @@ Deno.serve(async (req: Request) => {
     if (targetPosition < 0 || accepted.has(index) || ordered.slice(0, targetPosition).some((prior) => !accepted.has(prior))) {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
-    const rejectedNotes = Object.values(progressRow?.audio_review?.clips ?? {})
-      .filter((clip: any) => section === "history" && slug === "ibn-sina" && index === 4 &&
-        clip?.lang === "ar" && Number(clip.block_index) === index &&
-        clip?.status === "rejected" && clip?.issue !== "audio_only" && typeof clip?.note === "string" && clip.note.trim())
-      .map((clip: any) => clip.note.trim()).slice(0, 5);
+    // Apply the user's saved rejection correction to the exact block being prepared,
+    // for every story (not only the historical Ibn Sina test block).
+    const rejectedCorrections = Object.values(progressRow?.audio_review?.clips ?? {})
+      .filter((clip: any) => clip?.lang === "ar" && Number(clip?.block_index) === index &&
+        clip?.status === "rejected" && clip?.issue !== "audio_only")
+      .slice(0, 10)
+      .map((clip: any, i: number) => {
+        const note = typeof clip?.note === "string" ? clip.note.trim() : "";
+        const suggestion = typeof clip?.suggestion === "string" ? clip.suggestion.trim() : "";
+        if (!note && !suggestion) return "";
+        return [
+          "رفض سابق للمقطع (" + (i + 1) + "):",
+          note ? "ملاحظة صاحب المشروع: " + note : "",
+          suggestion ? "التصحيح/الصياغة البديلة المطلوبة: " + suggestion : "",
+        ].filter(Boolean).join("\n");
+      }).filter(Boolean);
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
     const next = index + 1 < source.story.i18n.ar.blocks.length ? source.story.i18n.ar.blocks[index + 1] : null;
     const speakerName = source.block.speaker === "karma" ? "كارما" : "الراوي";
     const prompt = [
-      ...(rejectedNotes.length ? [
-        "ملاحظات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — عالجها صراحةً في نص القراءة، ولا تتجاهلها:",
-        ...rejectedNotes.map((note: string, i: number) => (i + 1) + ") " + note),
-        "هذه الملاحظات توجيهات تحريرية ملزمة لهذا الاقتراح. لا تغيّر أي حقيقة تاريخية ولا تضف معلومة جديدة."
+      ...(rejectedCorrections.length ? [
+        "تصحيحات الرفض المسجلة من صاحب المشروع على نسخة الصوت السابقة لهذا المقطع — طبّقها صراحةً في نص القراءة الجديد، ولا تتجاهلها:",
+        ...rejectedCorrections,
+        "إذا حدد صاحب المشروع استبدالًا مباشرًا لكلمة أو عبارة، استخدم البديل المحدد كما طلبه ولا تُعد الكلمة المرفوضة. راجع الجملة كاملةً للتأكد من سلامة المعنى والنحو والنطق. هذه التصحيحات ملزمة لهذا المقطع فقط؛ لا تنقلها إلى مقاطع أخرى، ولا تغيّر أي حقيقة تاريخية أو تضف معلومة جديدة."
       ] : []),
       "جهّز نص قراءة صوتية منفصلًا للمقطع التالي من الحكاية.",
       "المتحدث: " + speakerName + ".",
@@ -678,6 +689,14 @@ Deno.serve(async (req: Request) => {
       "حسّن كتابة الأسماء والمصطلحات والألفاظ التي قد يخطئ محرك الصوت في قراءتها. استخدم التشكيل الجزئي للكلمة الملتبسة أو صياغة بديلة طبيعية إذا كان ذلك أوضح، ولا تضف تشكيلًا شاملًا للنص.",
       "لا تضف نقاطًا متتابعة أو فواصل مصطنعة أو مدودًا كتابية. المطلوب نص مصري سليم المعنى، واضح النطق، وإيقاعه أبطأ ومتزن من البداية إلى آخر كلمة.",
       "أعد JSON فقط بالحقول: speech_text, changes_summary, pronunciation_notes, review_flags.",
+      "تعليمات التشكيل الجزئي المعتمدة من صاحب المشروع — نفّذها حرفيًا على speech_text فقط:",
+      "أنت مدقق لغوي خبير متخصص في تجهيز النصوص لأدوات توليد الصوت بالذكاء الاصطناعي (TTS). راجع النص التاريخي وجهّزه بتشكيل جزئي فقط، وليس تشكيلًا كليًا.",
+      "ممنوع التشكيل الكلي. لا تشكّل أواخر الكلمات الإعرابية المتوقعة مثل الفاعل والمفعول العادي إلا إذا كان ذلك ضروريًا فعلًا لمنع خطأ في النطق أو المعنى.",
+      "ركّز التشكيل فقط على: الكلمات التي تحتمل أكثر من قراءة أو معنى لإزالة اللبس؛ الكلمات العامية أو المعرّبة؛ أسماء الأعلام التاريخية النادرة التي قد يخطئ محرك الصوت في نطقها؛ والحروف المشددة أو مواضع الشدة والفتحة والكسرة في الكلمات الصعبة عندما تؤثر في النطق.",
+      "ضع أقل عدد ممكن من الحركات على موضع الالتباس وحده. لا تشكّل بقية الجملة لمجرد أنها قابلة للتشكيل، ولا تضف حركات إعرابية متوقعة في أواخر الكلمات.",
+      "حافظ على سلاسة النص تمامًا ليُنطقه الراوي بصوت وقور ومريح وطبيعي، من دون تكلف أو افتعال أو إبطاء مصطنع. لا تجعل التشكيل يقطع انسياب القراءة.",
+      "لا تغيّر الحقائق التاريخية أو الأسماء أو التواريخ أو الأرقام. لا تستبدل كلمة صحيحة لمجرد تفضيل أسلوبي. إذا احتاج النطق إلى توضيح، فالأولوية لتشكيل موضعي دقيق، ثم لصياغة بديلة فقط إذا تعذّر حسم النطق بالتشكيل.",
+      "افحص الناتج قبل إرساله: تأكد أنه غير مشكّل بالكامل، وأن كل حركة مضافة لها سبب واضح متعلق بلبس القراءة أو صعوبة النطق، وأن الجمل ما زالت سلسة ومريحة عند القراءة بصوت مرتفع.",
       "السياق السابق (للفهم فقط، لا تعِد صياغته): " + (previous?.text ?? "لا يوجد"),
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,

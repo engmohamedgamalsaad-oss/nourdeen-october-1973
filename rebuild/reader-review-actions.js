@@ -13,9 +13,20 @@ var PANEL_CSS=[
 '#kh-preview-decision-panel{--ok:#2fbf80;--warn:#f0a53a;--bad:#ef6b6b;position:sticky;top:8px;z-index:900;display:block;max-width:1100px;margin:8px auto;padding:0;color:#f5f0e6;font:600 14px/1.7 Cairo,Arial,sans-serif}',
 '#kh-preview-decision-panel .khd-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:46px;padding:6px 8px 6px 14px;border:1px solid rgba(215,173,102,.55);border-radius:999px;background:linear-gradient(160deg,rgba(18,40,50,.97),rgba(7,20,27,.97));box-shadow:0 8px 22px rgba(0,0,0,.35);cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}',
 '#kh-preview-decision-panel .khd-bar:focus-visible{outline:3px solid rgba(215,173,102,.7);outline-offset:2px}',
-'#kh-preview-decision-panel .khd-title{display:flex;align-items:center;gap:10px;min-width:0;font:800 14px/1.4 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-title{display:none}',
+'#kh-preview-decision-panel .khd-bar{justify-content:center}',
+'#kh-preview-decision-panel .khd-end{width:100%;justify-content:center;flex-wrap:nowrap;white-space:nowrap;gap:6px;min-width:0}',
+'#kh-preview-decision-panel .khd-flag{flex:0 1 auto;min-width:0}',
+'#kh-preview-decision-panel .khd-pill{flex:0 1 auto;min-width:0}',
+'#kh-preview-decision-panel .khd-colab-link{flex:0 0 auto}',
+
 '#kh-preview-decision-panel .khd-title i{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:rgba(215,173,102,.2);border:1.5px solid #d7ad66;font-style:normal;font-size:15px}',
 '#kh-preview-decision-panel .khd-end{display:flex;align-items:center;gap:8px;min-width:0}',
+'#kh-preview-decision-panel .khd-end{flex-wrap:nowrap;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-colab-link{display:inline-flex;align-items:center;justify-content:center;flex:none;padding:3px 10px;border:1px solid #d7ad66;border-radius:999px;background:rgba(215,173,102,.13);color:#f5dcae;text-decoration:none;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
+'#kh-preview-decision-panel .khd-colab-link:focus-visible{outline:2px solid #d7ad66;outline-offset:2px}',
+'@media(max-width:600px){#kh-preview-decision-panel{margin:6px 5px}#kh-preview-decision-panel .khd-bar{justify-content:center;gap:3px;padding:5px 4px;min-height:42px}#kh-preview-decision-panel .khd-end{width:100%;justify-content:center;gap:3px;flex-wrap:nowrap;white-space:nowrap;overflow:hidden}#kh-preview-decision-panel .khd-flag{flex:0 1 auto;min-width:0;padding:2px 5px;font-size:9px}#kh-preview-decision-panel .khd-pill{flex:0 1 auto;min-width:0;max-width:48%;padding:2px 5px;font-size:9px}#kh-preview-decision-panel .khd-colab-link{flex:0 0 auto;padding:2px 6px;font-size:9px}#kh-preview-decision-panel .khd-chev{flex:0 0 18px;width:18px;height:22px}}',
+
 '#kh-preview-decision-panel .khd-flag{display:none;padding:2px 10px;border-radius:999px;border:1px solid var(--bad);background:rgba(239,107,107,.15);color:#ffb8b8;font:800 11px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
 '#kh-preview-decision-panel[data-ctx="missing"] .khd-flag{display:inline-block}',
 '#kh-preview-decision-panel .khd-pill{max-width:min(46vw,420px);overflow:hidden;text-overflow:ellipsis;padding:3px 14px;border-radius:999px;border:1px solid var(--warn);background:rgba(240,165,58,.14);color:var(--warn);font:800 12px/1.6 Cairo,Arial,sans-serif;white-space:nowrap}',
@@ -87,8 +98,10 @@ function addControls(){
  var end=document.createElement('div');end.className='khd-end';
  flag=document.createElement('span');flag.className='khd-flag';flag.id='kh-preview-ctx-flag';
  gatePill=document.createElement('span');gatePill.className='khd-pill';gatePill.id='kh-preview-gate-pill';gatePill.textContent='جارٍ فحص الصوت…';
+ var colabLink=document.createElement('a');colabLink.className='khd-colab-link';colabLink.href='https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb';colabLink.target='_blank';colabLink.rel='noopener noreferrer';colabLink.textContent='تشغيل Colab';colabLink.setAttribute('aria-label','فتح دفتر Colab لإعادة تشغيل عامل الصوت');colabLink.addEventListener('click',function(event){event.stopPropagation()});
+
  var chev=document.createElement('span');chev.className='khd-chev';chev.setAttribute('aria-hidden','true');chev.textContent='▾';
- end.append(flag,gatePill,chev);
+ end.append(flag,gatePill,colabLink,chev);
  bar.append(title,end);
  drop=document.createElement('div');drop.className='khd-drop';drop.id='kh-preview-decision-drop';
  var meter=document.createElement('div');meter.className='khd-meter';gateFill=document.createElement('span');meter.appendChild(gateFill);
@@ -152,10 +165,14 @@ function refreshGate(){
  else{setNote(full)}
 }
 function getContext(){
- try{ctx=JSON.parse(localStorage.getItem('kh-story-review-context')||'null')}catch(e){ctx=null}
- if(!ctx){try{ctx=JSON.parse(localStorage.getItem('kh-story-preview-context')||localStorage.getItem('kh-story-preview-draft')||'null')}catch(e){ctx=null}}
  var params=new URLSearchParams(location.search),urlId=params.get('submission'),urlTable=params.get('table');
- if(urlId&&(!ctx||String(ctx.submission_id)!==String(urlId))){ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}}
+ function read(key){try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}}
+ var candidates=[read('kh-story-review-context'),read('kh-story-preview-context'),read('kh-story-preview-draft')];
+ ctx=candidates.find(function(item){return item&&typeof item==='object'&&item.submission_id&&(!urlId||String(item.submission_id)===String(urlId))})||null;
+ if(urlId&&(!ctx||String(ctx.submission_id)!==String(urlId))){
+  ctx={submission_id:urlId,submission_table:urlTable==='submitted_stories'?'submitted_stories':'khaledoon_submissions',record_type:'modern'};
+  try{localStorage.setItem('kh-story-review-context',JSON.stringify(ctx))}catch(e){}
+ }
  if(!ctx||!ctx.submission_id)return false;
  var source=ctx.record_data&&typeof ctx.record_data==='object'?ctx.record_data:ctx;
  draft=Object.assign({},source,{submission_id:ctx.submission_id,submission_table:ctx.submission_table||'khaledoon_submissions',record_type:ctx.record_type||'modern',story_meta:ctx.story_meta||source.story_meta||{}});
