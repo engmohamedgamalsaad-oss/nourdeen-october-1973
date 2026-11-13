@@ -593,7 +593,8 @@ Deno.serve(async (req: Request) => {
       return reply(409, { error: "هذا المقطع لم يحن دوره بعد؛ أكمل اعتماد المقاطع بترتيب الحكاية." });
     }
     const rejectedNotes = Object.values(progressRow?.audio_review?.clips ?? {})
-      .filter((clip: any) => clip?.lang === "ar" && Number(clip.block_index) === index &&
+      .filter((clip: any) => section === "history" && slug === "ibn-sina" && index === 4 &&
+        clip?.lang === "ar" && Number(clip.block_index) === index &&
         clip?.status === "rejected" && clip?.issue !== "audio_only" && typeof clip?.note === "string" && clip.note.trim())
       .map((clip: any) => clip.note.trim()).slice(0, 5);
     const previous = index > 0 ? source.story.i18n.ar.blocks[index - 1] : null;
@@ -839,7 +840,11 @@ Deno.serve(async (req: Request) => {
           review_flags: Array.isArray(body.review_flags) ? body.review_flags.filter((v: any) => typeof v === "string").slice(0, 20) : [] };
     if (invalidatesAudioDecision && current.clips && typeof current.clips === "object") {
       for (const [clipKey, clip] of Object.entries(current.clips) as [string, any][]) {
-        if (clip?.lang === "ar" && Number(clip.block_index) === index) delete current.clips[clipKey];
+        // Keep rejected records: they contain the admin's correction note and
+        // the private old-file reference needed for post-acceptance cleanup.
+        if (clip?.lang === "ar" && Number(clip.block_index) === index && clip?.status !== "rejected") {
+          delete current.clips[clipKey];
+        }
       }
     }
     current.speech_texts = speechTexts;
@@ -915,7 +920,7 @@ Deno.serve(async (req: Request) => {
     const manifestFile = zip.file("manifest.json");
     if (!manifestFile) return reply(422, { error: "الـArtifact لا يحتوي manifest.json." });
     const manifest = JSON.parse(await manifestFile.async("string"));
-    if (isIbnSinaArabic && body.request_id) {
+    if (isIbnSinaArabic && body.request_id && Number(body.block_index) === 4) {
       const index = Number(body.block_index);
       const { data: reviewRow, error: reviewReadError } = await service.from("story_audio_reviews")
         .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
@@ -984,6 +989,14 @@ Deno.serve(async (req: Request) => {
       if (!newSegment || !oldSegment || !oldSegment.src || !oldSegment.audio_sha256 ||
           oldSegment.src === newSegment.src) {
         return reply(409, { error: "تعذر تحديد ملف قديم وملف بديل مختلفين للمقطع؛ لم يتم استبدال أي ملف." });
+      }
+      const oldFileResult = await service.storage.from(BUCKET).download(prefix + "/" + oldSegment.src);
+      if (oldFileResult.error || !oldFileResult.data) {
+        return reply(409, { error: "ملف الصوت القديم غير موجود في التخزين الخاص؛ أُوقف الاستبدال." });
+      }
+      const oldFileBytes = new Uint8Array(await oldFileResult.data.arrayBuffer());
+      if (await sha256Hex(oldFileBytes) !== String(oldSegment.audio_sha256).toLowerCase()) {
+        return reply(422, { error: "بصمة الصوت القديم لا تطابق manifest؛ أُوقف الاستبدال حفاظًا على النسخة القديمة." });
       }
       const currentReview = oldReviewRow?.audio_review && typeof oldReviewRow.audio_review === "object"
         ? oldReviewRow.audio_review : null;
