@@ -92,6 +92,7 @@ button,a,input,textarea{font:inherit}button,a{cursor:pointer}
 <section class="panel" id="audioWorkerPanel" aria-live="polite" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px">
  <div style="min-width:220px;flex:1"><strong style="color:var(--gold)">عامل توليد الصوت</strong><div id="audioWorkerState" style="font-weight:800;color:#ff9d9d">جارٍ التحقق من الاتصال…</div><small id="audioWorkerDetail" class="sub">يتحدث المؤشر تلقائيًا. عند انقطاع العامل افتح Colab وأعد تشغيل الدفتر.</small></div>
  <a class="btn" id="audioWorkerOpen" href="https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/feat/omnivoice-unified-audio/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb" target="_blank" rel="noopener" style="font-weight:900;border:2px solid #b94b4b;background:#4a2025;color:#ffe6e6">العامل مفصول — فتح Colab</a>
+ <button class="btn" type="button" id="audioWorkerCheck" style="font-weight:900;border:2px solid #b8874b">تحقق من الاتصال الآن</button>
 </section>
 <nav class="tabs" aria-label="اختيار المعاينة">
 <button class="btn active" type="button" data-view="site">معاينة الموقع</button>
@@ -569,27 +570,38 @@ $('returnToEditTopBtn').addEventListener('click',returnToAdminForEdit);
 $('printReviewTopBtn').addEventListener('click',function(){window.print()});
 
 // مراقبة اتصال عامل الصوت دون كشف أي مفتاح في المتصفح.
-var workerState=$('audioWorkerState'),workerDetail=$('audioWorkerDetail'),workerOpen=$('audioWorkerOpen');
+var workerState=$('audioWorkerState'),workerDetail=$('audioWorkerDetail'),workerOpen=$('audioWorkerOpen'),workerCheck=$('audioWorkerCheck');
 var workerStatusUrl='https://ypwprddkscnfblhftkeb.supabase.co/functions/v1/story-audio-worker';
+var workerStatusBusy=false;
 async function refreshAudioWorkerStatus(){
+ if(workerStatusBusy)return;
+ workerStatusBusy=true;
+ if(workerCheck){workerCheck.disabled=true;workerCheck.textContent='جارٍ فحص الاتصال…';}
  try{
   var response=await fetch(workerStatusUrl,{method:'GET',cache:'no-store'});
   if(!response.ok)throw new Error('HTTP '+response.status);
   var state=await response.json();
   if(state.online){
    workerState.textContent='عامل الصوت متصل وجاهز ✓';workerState.style.color='#7fe0ad';
-   workerDetail.textContent='آخر إشارة اتصال حديثة. لا تحتاج لفتح Colab الآن.';
+   workerDetail.textContent='وصلت إشارة حديثة من Colab. يمكنك الآن إرسال طلب توليد من صفحة الحكاية.';
    workerOpen.textContent='فتح دفتر العامل في Colab';workerOpen.style.background='#173b2b';workerOpen.style.borderColor='#45a875';workerOpen.style.color='#d9ffea';
+   if(workerCheck)workerCheck.textContent='إعادة فحص الاتصال';
   }else{
    workerState.textContent='عامل الصوت مفصول';workerState.style.color='#ff9d9d';
-   workerDetail.textContent='اضغط لفتح Colab، ثم اختر Runtime ← Run all لتشغيل العامل. المهام المحفوظة ستظل في الانتظار.';
-   workerOpen.textContent='العامل مفصول — فتح Colab';workerOpen.style.background='#4a2025';workerOpen.style.borderColor='#b94b4b';workerOpen.style.color='#ffe6e6';
+   workerDetail.textContent='اضغط «فتح Colab»، ثم اضغط Connect إذا ظهر، وبعدها شغّل خلايا الدفتر بالترتيب حتى خلية التشغيل الأخيرة. ارجع هنا واضغط «تحقق من الاتصال الآن». لا يمكن للصفحة الضغط على Connect أو Run بدلًا منك.';
+   workerOpen.textContent='فتح Colab لإعادة الاتصال';workerOpen.style.background='#4a2025';workerOpen.style.borderColor='#b94b4b';workerOpen.style.color='#ffe6e6';
+   if(workerCheck)workerCheck.textContent='تحقق من الاتصال الآن';
   }
  }catch(e){
   workerState.textContent='تعذر التحقق من حالة العامل';workerState.style.color='#f0d08a';
-  workerDetail.textContent='تعذر الوصول إلى خدمة الحالة؛ جرّب تحديث الصفحة. لا يعني ذلك بالضرورة أن Colab متوقف.';
+  workerDetail.textContent='تعذر الوصول إلى خدمة الحالة؛ جرّب إعادة الفحص. لا يعني ذلك بالضرورة أن Colab متوقف.';
+  if(workerCheck)workerCheck.textContent='أعد فحص الاتصال';
+ }finally{
+  workerStatusBusy=false;
+  if(workerCheck)workerCheck.disabled=false;
  }
 }
+if(workerCheck)workerCheck.addEventListener('click',refreshAudioWorkerStatus);
 refreshAudioWorkerStatus();setInterval(refreshAudioWorkerStatus,20000);
 
 if(params.has('story')||params.has('submission'))startReview();
