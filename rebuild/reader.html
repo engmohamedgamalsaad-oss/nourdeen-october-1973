@@ -7,20 +7,11 @@
 <title>معاينة الحكاية الموحدة | خالدون عبر التاريخ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Marhey:wght@500;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./reader-base.css?v=20261101-story-reader-1"><link rel="stylesheet" href="./reader-audio-flow.css?v=20261111-flow-1">\n<style>.kh-worker-tools{max-width:1000px;margin:10px auto;padding:12px 14px;border:1px solid #b8874b;border-radius:12px;background:#132a33;display:flex;gap:10px;align-items:center;flex-wrap:wrap}.kh-worker-tools[hidden]{display:none!important}.kh-worker-actions{display:flex;gap:8px;flex-wrap:wrap}.kh-worker-tools a,.kh-worker-tools button{padding:7px 11px;border:1px solid #b8874b;border-radius:9px;background:#203b43;color:#f5e5c5;text-decoration:none;font:inherit;font-weight:700}.kh-worker-tools small{flex-basis:100%}</style>\n</head>
+<link rel="stylesheet" href="./reader-base.css?v=20261101-story-reader-1"><link rel="stylesheet" href="./reader-audio-flow.css?v=20261111-flow-1"></head>
 <body data-start-only data-gallery="unplaced">
 <header><div class="bar"><div class="brand" id="site-brand">خالدون عبر التاريخ</div><a id="preview-return" hidden href="../khaledoon/admin.html?returnfrompreview=1">العودة إلى لوحة الإدارة</a><nav class="langs" aria-label="Language">
 <button data-lang="ar" aria-pressed="true">العربية</button><button data-lang="en" aria-pressed="false">English</button><button data-lang="fr" aria-pressed="false">Français</button><button data-lang="it" aria-pressed="false">Italiano</button><button data-lang="de" aria-pressed="false">Deutsch</button>
 </nav><button type="button" id="theme-toggle" aria-pressed="false">الوضع الفاتح</button></div></header>
-<section id="kh-colab-worker-tools" class="kh-worker-tools" hidden aria-live="polite">
- <strong>عامل الصوت — Colab</strong>
- <span id="kh-worker-status" class="muted">لم يتم فحص الاتصال بعد.</span>
- <div class="kh-worker-actions">
-  <a href="https://colab.research.google.com/github/engmohamedgamalsaad-oss/nourdeen-october-1973/blob/main/notebooks/Khaledoon_OmniVoice_Unified_Worker.ipynb" target="_blank" rel="noopener noreferrer">فتح دفتر Colab لإعادة تشغيل العامل ↗</a>
-  <button type="button" id="kh-worker-check">تحقق من حالة العامل</button>
- </div>
- <small class="muted">ملاحظة: فتح Colab لا يعيد تشغيل الجلسة تلقائيًا؛ إذا كانت الجلسة متوقفة، شغّل خلايا الدفتر هناك ثم ارجع واضغط «تحقق».</small>
-</section>
 <div id="preview-banner" hidden role="status"><span id="preview-banner-text">معاينة غير منشورة — التفاعلات والنشر معطلان.</span><div id="preview-audit-notes" hidden></div></div>
 <div id="story-intro-modal" class="story-intro-modal" hidden role="dialog" aria-modal="true" aria-labelledby="intro-title">
 <div class="intro-card"><button id="intro-close" class="intro-close" type="button" aria-label="Close introduction">×</button>
@@ -57,22 +48,4 @@
 <script src="./reader-review-actions.js?v=20261109-decision-bar-1"></script>
 <script src="../khaledoon/assets/audio-review-core.js?v=20261113-review-state-cache-1"></script>
 <script src="./reader-audio-review.js?v=20261113-review-state-cache-1"></script><script src="./reader-audio-flow.js?v=20261113-review-state-cache-1"></script>
-<script src="../khaledoon/assets/khaledoon-story-map-link.js?v=20261102-single-reader-motion-1"></script><script>
-(function(){
- var p=new URLSearchParams(location.search),panel=document.getElementById('kh-colab-worker-tools');
- if(!panel||p.get('draft')!=='1')return;
- panel.hidden=false;
- var status=document.getElementById('kh-worker-status'),button=document.getElementById('kh-worker-check');
- button.addEventListener('click',async function(){
-  button.disabled=true;status.textContent='جارٍ فحص حالة خدمة العامل…';
-  try{
-   var r=await fetch('https://ypwprddkscnfblhftkeb.supabase.co/functions/v1/story-audio-worker',{method:'GET',cache:'no-store'});
-   if(!r.ok)throw new Error('HTTP '+r.status);
-   status.textContent='الخدمة استجابت بنجاح (HTTP '+r.status+').';
-   status.className='good';
-  }catch(e){status.textContent='تعذر الوصول إلى خدمة العامل: '+e.message+' — افتح Colab وشغّل العامل ثم أعد الفحص.';status.className='bad'}
-  finally{button.disabled=false}
- });
-})();
-</script>
-</body></html>
+<script src="../khaledoon/assets/khaledoon-story-map-link.js?v=20261102-single-reader-motion-1"></script></body></html>
