@@ -220,6 +220,10 @@ function applyDecision(review, entry, decision, now) {
     base: entry.base, source_base: entry.source_base || '', src: entry.src || '', audio_sha256: entry.audio_sha256 || '',
     text: entry.text, status: decision.status, decided_at: at
   };
+  if (previousClip && previousClip.replacement_cleanup) {
+    // Carry the private old-file pointer forward when rejection is replaced by acceptance.
+    clip.replacement_cleanup = previousClip.replacement_cleanup;
+  }
   if (decision.pronunciation_review) {
     clip.pronunciation_review = normalizePronunciationReview(decision.pronunciation_review, entry, at);
   } else if (previousClip && previousClip.pronunciation_review) {
