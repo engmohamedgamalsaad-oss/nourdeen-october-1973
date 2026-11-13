@@ -247,8 +247,7 @@ async function reconcilePlan(review: any, snap: any, manifests: Record<string, a
       const exp = expectedFor(lang, i);
       if (!exp) continue;
       for (const [old, g] of info) {
-        if (usedOld.has(old)) continue;
-        if (g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, old); usedOld.add(old); break; }
+        if (usedOld.has(old)) continue;        if (g.text === exp && g.speaker === blocks[i].speaker) { assign.set(i, old); usedOld.add(old); break; }
       }
     }
     const next: any[] = [];
@@ -497,8 +496,7 @@ Deno.serve(async (req: Request) => {
     const audioReview = reviewRow?.audio_review ?? {};
     const published = [];
     for (const lang of ["ar", "en"]) {
-      let source;
-      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
+      let source;      try { source = await resolveStoryBlock(section, slug, lang, 0, body.story_snapshot); }
       catch (error) { return reply(400, { error: error instanceof Error ? error.message : "تعذر قراءة الحكاية قبل نشر الصوت." }); }
       const blocks = source.story?.i18n?.[lang]?.blocks;
       if (!Array.isArray(blocks) || !blocks.length) return reply(409, { error: "الحكاية لا تحتوي مقاطع صالحة باللغة " + lang + "." });
@@ -616,7 +614,7 @@ Deno.serve(async (req: Request) => {
       "السياق التالي (للفهم فقط، لا تعِد صياغته): " + (next?.text ?? "لا يوجد"),
       "النص الأصلي المطلوب تجهيزه فقط:\n" + source.sourceText,
     ].join("\n\n");
-    const totalDeadlineMs = 58000;
+    const totalDeadlineMs = 78000;
     const perAttemptTimeoutMs = 22000;
     const startedAt = Date.now();
     const deadlineAt = startedAt + totalDeadlineMs;
@@ -625,7 +623,7 @@ Deno.serve(async (req: Request) => {
     let successfulModel = "";
     let lastFailure = { status: 0, message: "", model: "", attempt: 0 };
     const attemptTrace: string[] = [];
-    const geminiModels = ["gemini-3.8-flash", "gemini-3.7-flash", "gemini-3.6-flash"];
+    const geminiModels = ["gemini-3.8-flash", "gemini-3.5-flash-lite", "gemini-3.7-flash", "gemini-3.6-flash"];
     const requestBody = JSON.stringify({
       systemInstruction: { parts: [{ text: "أنت محرر لغوي ومخرج أداء صوتي متخصص في الحكايات التعليمية المصرية. لا تنفّذ استبدالًا آليًا للفصحى بالعامية: افهم المعنى والسياق الكامل أولًا، وميّز الكلمات المتشابهة بحسب معناها داخل الجملة، ثم اضبط كتابتها ونطقها بالتشكيل الجزئي أو بإعادة صياغة طبيعية عند الحاجة. مثال لازم للفهم: (عالِم) شخص صاحب علم، و(عالَم) الدنيا أو الكون؛ السياق هو الذي يحسم، وليس شكل الكلمة منفردًا. مهمتك تجهيز نص القراءة فقط، لا توليد الصوت ولا اعتماد النص نيابة عن صاحب المشروع. لا تغيّر الحقائق أو الأسماء أو الأرقام أو ترتيب الأحداث. اجعل الأداء المستهدف هادئًا ومتمهلًا بوضوح، أبطأ من القراءة الحوارية العادية، مع وحدات نطق قصيرة ومتوسطة ووقفات دلالية طبيعية، ومن دون ضغط أو ابتلاع آخر الكلمات. راجع نهاية كل جملة خصوصًا حتى تُنطق كاملة وبنفس الهدوء. عند تحرير مقاطع كارما، حافظ حرفيًا على هوية الشخصية الثابتة: طفلة مصرية عمرها 12 سنة، ذكية وفضولية وعفوية وودودة، تتحدث بعامية مصرية بيضاء طبيعية، لا كمذيعة أو معلمة أو امرأة بالغة أو طفلة متصنعة. يجب أن يظل أسلوبها واحدًا عبر جميع المقاطع والحكايات؛ لا تغيّر شخصيتها أو درجة نضجها أو طريقة مخاطبتها من مقطع لآخر. لا تختلق تجارب شخصية أو زيارات." }] },
       contents: [{ role: "user", parts: [{ text: prompt }] }],
@@ -652,7 +650,7 @@ Deno.serve(async (req: Request) => {
       const model = geminiModels[modelIndex];
       for (let attempt = 1; attempt <= 2; attempt++) {
         const remainingMs = deadlineAt - Date.now();
-        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 12000;
+        const reserveForFallbackMs = (geminiModels.length - modelIndex - 1) * 16000;
         const availableMs = remainingMs - reserveForFallbackMs;
         if (availableMs < 1000) break;
         const attemptTimeoutMs = Math.min(perAttemptTimeoutMs, availableMs);
@@ -747,8 +745,7 @@ Deno.serve(async (req: Request) => {
         upstream_model: lastFailure.model || "unknown",
         upstream_attempt: lastFailure.attempt || 0,
         attempt_trace: attemptTrace,
-      });
-    }
+      });    }
     const geminiData = JSON.parse(geminiResponseText);
     const candidateText = (geminiData?.candidates?.[0]?.content?.parts ?? [])
       .map((part: any) => typeof part.text === "string" ? part.text : "").join("").trim();
