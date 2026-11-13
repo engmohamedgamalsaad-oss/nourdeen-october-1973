@@ -449,7 +449,7 @@ async function saveReview(entry, decision, followupStatusNode, followupButton) {
   // Audio-only rejection is deliberately excluded: it does not request a text rewrite.
   if (decision.status === 'rejected' && decision.issue !== 'audio_only' && entry && entry.lang === 'ar' &&
       (String(decision.note || '').trim() || String(decision.suggestion || '').trim())) {
-    await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null);
+    await prepareSpeechText(Number(entry.block_index), followupStatusNode || null, followupButton || null, entry);
   }
   render();
 }
@@ -1222,16 +1222,24 @@ function nextArabicBlockIndex() {
   return -1;
 }
 function speechTextKey(index) { return 'ar:' + String(index); }
-async function prepareSpeechText(index, statusNode, button) {
+async function prepareSpeechText(index, statusNode, button, audioEntry) {
   var key = speechTextKey(index);
   if (speechTextBusy[key]) return;
+  audioEntry = audioEntry || entries.find(function (item) {
+    return item.lang === 'ar' && Number(item.block_index) === Number(index) && Number(item.chunk_index || 0) === 0;
+  });
+  if (!audioEntry || !audioEntry.src) {
+    text(statusNode, 'تعذر إرسال الصوت إلى Gemini: لم يُعثر على ملف الصوت العربي لهذا المقطع.');
+    return;
+  }
   speechTextBusy[key] = true;
   if (button) button.disabled = true;
-  text(statusNode, 'جارٍ تجهيز نص القراءة باستخدام Gemini…');
+  text(statusNode, 'جارٍ إرسال الصوت الفعلي وملاحظة الرفض إلى Gemini لتحليل النطق وتجهيز النص…');
   try {
     var proposal = await audioAssetsRequest({
       action: 'prepare_speech_text', section: story.section, slug: story.slug,
-      language: 'ar', block_index: index
+      language: 'ar', block_index: index, chunk_index: Number(audioEntry.chunk_index || 0),
+      audio_src: audioEntry.src, audio_sha256: audioEntry.audio_sha256 || ''
     });
     if (!proposal || !proposal.speech_text || !proposal.source_text_hash) throw new Error('لم يرجع Gemini نصًا صالحًا للمقطع.');
     var saved = await audioAssetsRequest({
@@ -1244,7 +1252,7 @@ async function prepareSpeechText(index, statusNode, button) {
     speechTexts[key] = saved.speech_text;
     speechTextDirty[index] = false;
     speechTextBusy[key] = false;
-    text(statusNode, 'وصل اقتراح Gemini وتم حفظه كمسودة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
+    text(statusNode, 'استمع Gemini إلى ملف الصوت الفعلي، وحلّل النطق مع ملاحظتك. تم حفظ اقتراحه كمسودة للمراجعة — لم يُعتمد ولم يُرسل إلى محرك الصوت.');
     render();
   } catch (error) {
     text(statusNode, 'تعذر تجهيز نص القراءة: ' + (error && error.message || error));
@@ -1394,7 +1402,7 @@ function renderSpeechTextPanel(block, index, localizedBlock) {
     badge.textContent = speechBadgeText('dirty');
     status.textContent = 'يوجد تعديل غير معتمد؛ لن يُستخدم في التوليد حتى تحفظ اعتماده.';
   });
-  var prepare = iconButton('spark', record.status === 'suggested' || record.status === 'approved' ? 'إعادة تجهيز النص بـGemini' : 'تجهيز النص باستخدام Gemini', 'generate', function () {
+  var prepare = iconButton('spark', record.status === 'suggested' || record.status === 'approved' ? 'إعادة تحليل الصوت وتجهيز النص بـGemini' : 'إرسال الصوت إلى Gemini وتجهيز النص', 'generate', function () {
     prepareSpeechText(index, status, prepare);
   });
   prepare.disabled = !canWrite || !!speechTextBusy[key] || !isCurrentBlock;
