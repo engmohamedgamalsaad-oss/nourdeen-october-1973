@@ -971,6 +971,44 @@ Deno.serve(async (req: Request) => {
       if (manifest.segments.some((segment: any) => oldSources.includes(segment.src))) {
         return reply(409, { error: "اسم ملف الصوت الجديد يطابق الملف المرفوض. أُوقف الاستبدال حتى لا يُمحى الصوت القديم قبل اعتماد البديل؛ يلزم Artifact باسم ملف جديد." });
       }
+      const oldManifestResult = await service.storage.from(BUCKET).download(prefix + "/manifest.json");
+      if (oldManifestResult.error || !oldManifestResult.data) {
+        return reply(409, { error: "لا يمكن ضمان الاحتفاظ بالصوت القديم: تعذر قراءة manifest السابق قبل الاستبدال." });
+      }
+      let oldManifest: any;
+      try { oldManifest = JSON.parse(await oldManifestResult.data.text()); }
+      catch { return reply(422, { error: "manifest السابق غير صالح؛ أُوقف الاستبدال حفاظًا على الصوت القديم." }); }
+      const newSegment = manifest.segments.find((segment: any) => Number(segment.block_index) === index);
+      const oldSegment = (oldManifest.segments ?? []).find((segment: any) =>
+        Number(segment.block_index) === index && Number(segment.chunk_index || 0) === Number(newSegment?.chunk_index || 0));
+      if (!newSegment || !oldSegment || !oldSegment.src || !oldSegment.audio_sha256 ||
+          oldSegment.src === newSegment.src) {
+        return reply(409, { error: "تعذر تحديد ملف قديم وملف بديل مختلفين للمقطع؛ لم يتم استبدال أي ملف." });
+      }
+      const currentReview = oldReviewRow?.audio_review && typeof oldReviewRow.audio_review === "object"
+        ? oldReviewRow.audio_review : null;
+      if (!currentReview || !currentReview.clips || typeof currentReview.clips !== "object") {
+        return reply(409, { error: "لا يوجد قرار رفض محفوظ للمقطع؛ أُوقف الاستبدال." });
+      }
+      let matchedRejected = false;
+      for (const clip of Object.values(currentReview.clips) as any[]) {
+        if (clip?.lang === language && Number(clip.block_index) === index &&
+            Number(clip.chunk_index || 0) === Number(oldSegment.chunk_index || 0) && clip.status === "rejected") {
+          clip.src = oldSegment.src;
+          clip.replacement_cleanup = {
+            status: "pending", old_src: oldSegment.src,
+            old_sha256: String(oldSegment.audio_sha256).toLowerCase(),
+            new_src: newSegment.src,
+            new_sha256: String(newSegment.audio_sha256).toLowerCase(),
+            language, block_index: index, chunk_index: Number(oldSegment.chunk_index || 0),
+          };
+          matchedRejected = true;
+        }
+      }
+      if (!matchedRejected) return reply(409, { error: "المقطع لم يُسجل كمرفوض؛ لم يتم استبدال الصوت." });
+      const { error: saveCleanupError } = await service.from("story_audio_reviews").upsert(
+        { section, slug, audio_review: currentReview }, { onConflict: "section,slug" });
+      if (saveCleanupError) return reply(500, { error: "تعذر حفظ مرجع الصوت القديم قبل الاستبدال.", detail: saveCleanupError.message });
     }
     const uploaded: string[] = [];
     for (const segment of manifest.segments) {
@@ -993,6 +1031,67 @@ Deno.serve(async (req: Request) => {
     });
     if (manifestUpload.error) return reply(500, { error: "تعذر حفظ manifest في التخزين الخاص.", detail: manifestUpload.error.message });
     return reply(200, { success: true, staged: true, bucket: BUCKET, prefix, segments: uploaded.length });
+  }
+
+  if (body.action === "cleanup_replaced_audio") {
+    const clipKey = String(body.clip_key ?? "");
+    if (!clipKey || clipKey.length > 256) return reply(400, { error: "مفتاح المقطع غير صالح." });
+    const { data: reviewRow, error: reviewError } = await service.from("story_audio_reviews")
+      .select("audio_review").eq("section", section).eq("slug", slug).maybeSingle();
+    if (reviewError) return reply(500, { error: "تعذر قراءة سجل المراجعة قبل تنظيف الصوت القديم.", detail: reviewError.message });
+    const audioReview = reviewRow?.audio_review;
+    const acceptedClip = audioReview?.clips?.[clipKey];
+    if (!acceptedClip || acceptedClip.status !== "accepted" || !["ar", "en"].includes(acceptedClip.lang)) {
+      return reply(409, { error: "لا يمكن حذف الصوت القديم قبل قبول المقطع البديل." });
+    }
+    const oldClip = Object.values(audioReview.clips ?? {}).find((clip: any) =>
+      clip?.status === "rejected" && clip?.lang === acceptedClip.lang &&
+      Number(clip.block_index) === Number(acceptedClip.block_index) &&
+      Number(clip.chunk_index || 0) === Number(acceptedClip.chunk_index || 0) &&
+      clip?.replacement_cleanup?.status === "pending");
+    if (!oldClip) return reply(200, { success: true, cleaned: true, already_clean: true });
+    const cleanup = (oldClip as any).replacement_cleanup;
+    const langPrefix = section + "/" + slug + "/" + acceptedClip.lang;
+    if (cleanup.language !== acceptedClip.lang ||
+        Number(cleanup.block_index) !== Number(acceptedClip.block_index) ||
+        Number(cleanup.chunk_index || 0) !== Number(acceptedClip.chunk_index || 0) ||
+        cleanup.old_src === cleanup.new_src || acceptedClip.src !== cleanup.new_src ||
+        String(acceptedClip.audio_sha256 ?? "").toLowerCase() !== cleanup.new_sha256 ||
+        !/^[A-Za-z0-9_-]+\.mp3$/.test(String(cleanup.old_src)) ||
+        !/^[A-Za-z0-9_-]+\.mp3$/.test(String(cleanup.new_src))) {
+      return reply(409, { error: "بيانات استبدال الصوت لا تطابق المقطع المقبول؛ لم يُحذف الملف القديم." });
+    }
+    const { data: activeJobs, error: jobsError } = await service.from("story_audio_generation_queue")
+      .select("id").eq("section", section).eq("slug", slug)
+      .eq("language", acceptedClip.lang).eq("block_index", acceptedClip.block_index)
+      .in("status", ["pending", "processing"]);
+    if (jobsError) return reply(500, { error: "تعذر فحص طابور التوليد قبل الحذف.", detail: jobsError.message });
+    if ((activeJobs ?? []).length) return reply(409, { error: "يوجد طلب توليد نشط للمقطع؛ لم يُحذف الصوت القديم." });
+    const { data: manifestFile, error: manifestError } = await service.storage.from(BUCKET).download(langPrefix + "/manifest.json");
+    if (manifestError || !manifestFile) return reply(409, { error: "لا يوجد manifest جديد يمكن التحقق منه؛ لم يُحذف الصوت القديم." });
+    let manifest: any;
+    try { manifest = JSON.parse(await manifestFile.text()); }
+    catch { return reply(422, { error: "manifest الجديد غير صالح؛ لم يُحذف الصوت القديم." }); }
+    const newSegment = (manifest.segments ?? []).find((segment: any) =>
+      Number(segment.block_index) === Number(acceptedClip.block_index) &&
+      Number(segment.chunk_index || 0) === Number(acceptedClip.chunk_index || 0) &&
+      segment.src === cleanup.new_src &&
+      String(segment.audio_sha256 ?? "").toLowerCase() === cleanup.new_sha256);
+    if (!newSegment) return reply(409, { error: "manifest لا يشير إلى ملف الصوت البديل المقبول؛ لم يُحذف القديم." });
+    const { data: newFile, error: newFileError } = await service.storage.from(BUCKET).download(langPrefix + "/" + cleanup.new_src);
+    if (newFileError || !newFile) return reply(409, { error: "ملف الصوت البديل غير موجود؛ لم يُحذف القديم." });
+    const newBytes = new Uint8Array(await newFile.arrayBuffer());
+    if (await sha256Hex(newBytes) !== cleanup.new_sha256) return reply(422, { error: "بصمة الصوت البديل غير مطابقة؛ لم يُحذف القديم." });
+    const oldPath = langPrefix + "/" + cleanup.old_src;
+    const { error: removeError } = await service.storage.from(BUCKET).remove([oldPath]);
+    if (removeError) return reply(500, { error: "تعذر حذف ملف الصوت القديم؛ سيظل محفوظًا.", detail: removeError.message });
+    const { data: oldAfter, error: oldCheckError } = await service.storage.from(BUCKET).download(oldPath);
+    if (!oldCheckError && oldAfter) return reply(500, { error: "لم يؤكد التخزين اختفاء ملف الصوت القديم بعد الحذف." });
+    (oldClip as any).replacement_cleanup = { ...cleanup, status: "complete", completed_at: new Date().toISOString() };
+    const { error: saveStateError } = await service.from("story_audio_reviews").upsert(
+      { section, slug, audio_review: audioReview }, { onConflict: "section,slug" });
+    if (saveStateError) return reply(500, { error: "تم حذف الملف القديم لكن تعذر تسجيل حالة التنظيف.", detail: saveStateError.message });
+    return reply(200, { success: true, cleaned: true, old_file_missing: true, new_file_verified: true, completed_at: (oldClip as any).replacement_cleanup.completed_at });
   }
 
   if (body.action === "manifest") {
