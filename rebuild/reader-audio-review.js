@@ -1645,6 +1645,19 @@ function renderBlocks() {
     renderPronunciationResult(entry, panel);
     block.appendChild(panel);
   });
+
+  // Keep Ibn Sina Arabic clip 5 playback directly above Gemini's generated
+  // reading text so the user can listen while following the visible wording.
+  if (story.section === 'history' && story.slug === 'ibn-sina' && lang === 'ar') {
+    var ibnSinaBlock = blockByIndex[4];
+    var speechPanel = ibnSinaBlock && ibnSinaBlock.querySelector(':scope > .kh-speech-text-controls');
+    var audioPanel = ibnSinaBlock && ibnSinaBlock.querySelector(':scope > .kh-audio-review-controls.kh-audio-card');
+    var speechGrid = speechPanel && speechPanel.querySelector('.kh-speech-grid');
+    if (speechPanel && audioPanel && speechGrid &&
+        (audioPanel.querySelector('.kh-audio-player') || audioPanel.dataset.review === 'rejected')) {
+      speechPanel.insertBefore(audioPanel, speechGrid);
+    }
+  }
 }
 function render() {
   if (!story) return;
